@@ -15,5 +15,17 @@
   "bugs": {
     "url": "https://github.com/globoi/player/issues"
   },
-  "homepage": "https://github.com/globoi/player"
+  "homepage": "https://github.com/globoi/player",
+  "devDependencies": {
+    "gulp-rename": "~1.0.0",
+    "chai": "~1.9.0",
+    "sinon": "~1.8.2",
+    "gulp-uglify": "~0.2.1",
+    "gulp-mocha": "~0.4.1",
+    "gulp-browserify": "~0.4.4"
+  },
+  "dependencies": {
+    "underscore": "~1.6.0",
+    "jquery": "~2.1.0"
+  }
 }
