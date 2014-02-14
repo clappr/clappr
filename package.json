@@ -1,0 +1,19 @@
+{
+  "name": "Player",
+  "version": "3.0.0-pre-0",
+  "description": "Globo.com video player",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:globoi/player.git"
+  },
+  "author": "Globo.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/globoi/player/issues"
+  },
+  "homepage": "https://github.com/globoi/player"
+}
