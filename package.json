@@ -22,7 +22,8 @@
     "sinon": "~1.8.2",
     "gulp-uglify": "~0.2.1",
     "gulp-mocha": "~0.4.1",
-    "gulp-browserify": "~0.4.4"
+    "gulp-browserify": "~0.4.4",
+    "gulp": "~3.5.2"
   },
   "dependencies": {
     "underscore": "~1.6.0",
