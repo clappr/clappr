@@ -21,7 +21,7 @@ gulp.task('build', function() {
   gulp.src(paths.main)
     .pipe(browserify({standalone: namespace}))
     .pipe(rename(distFile))
-    .pipe(gulp.dest('dist/'));
+    .pipe(gulp.dest(paths.dist));
 });
 
 gulp.task('dist', function() {
