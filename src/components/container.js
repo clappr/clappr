@@ -2,9 +2,9 @@
  * Container is responsible for the video rendering and state
  */
 
-var Component = require('../base/component');
+var BaseObject = require('../base/base_object');
 
-var Container = Component.extend({
+var Container = BaseObject.extend({
   events: {
     'click': 'clicked'
   },
