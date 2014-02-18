@@ -3,6 +3,7 @@ var uglify = require('gulp-uglify');
 var mocha = require('gulp-mocha');
 var jshint = require('gulp-jshint');
 var stylish = require('jshint-stylish');
+var istanbul = require('gulp-istanbul');
 var rename = require('gulp-rename');
 var browserify = require('gulp-browserify');
 
@@ -23,7 +24,7 @@ gulp.task('default', ['build']);
 
 gulp.task('build', function() {
   gulp.src(paths.main)
-    .pipe(browserify({standalone: namespace}))
+    .pipe(browserify())
     .pipe(rename(distFile))
     .pipe(gulp.dest(paths.dist));
 });
@@ -40,6 +41,16 @@ gulp.task('test', function() {
   gulp.src(paths.tests)
     .pipe(mocha({reporter: 'nyan'}))
     .on('error', noop);
+});
+
+gulp.task('coverage', function() {
+  gulp.src(paths.files)
+    .pipe(istanbul())
+    .on('end', function() {
+      gulp.src(paths.tests)
+        .pipe(mocha())
+        .pipe(istanbul.writeReports());
+    });
 });
 
 gulp.task('lint', function() {
