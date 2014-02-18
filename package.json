@@ -25,7 +25,8 @@
     "gulp-browserify": "~0.4.4",
     "gulp": "~3.5.2",
     "gulp-jshint": "~1.4.2",
-    "jshint-stylish": "~0.1.5"
+    "jshint-stylish": "~0.1.5",
+    "jsdom": "~0.10.1"
   },
   "dependencies": {
     "underscore": "~1.6.0",
