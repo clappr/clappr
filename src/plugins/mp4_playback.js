@@ -33,7 +33,7 @@ var MP4PlaybackPlugin = PlaybackPlugin.extend({
     this.el.volume = 1;
   },
   isMuted: function() {
-    return !!this.el.volume
+    return !!this.el.volume;
   },
   ended: function() {
     this.trigger('container:timeupdate', 0);

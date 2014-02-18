@@ -32,7 +32,8 @@ module.exports = Events = {
     names = name ? [name] : _.keys(this._events);
     for (i = 0, l = names.length; i < l; i++) {
       name = names[i];
-      if (events = this._events[name]) {
+      events = this._events[name];
+      if (events) {
         this._events[name] = retain = [];
         if (callback || context) {
           for (j = 0, k = events.length; j < k; j++) {
