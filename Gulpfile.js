@@ -9,7 +9,7 @@ var noop = function(){};
 var paths = {
   files: ['src/**/*.js'],
   main: ['src/main.js'],
-  tests: ['test/**/*.js'],
+  tests: ['test/spec_helper.js', 'test/**/*spec.js'],
   dist: 'dist'
 };
 
