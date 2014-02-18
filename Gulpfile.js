@@ -4,6 +4,8 @@ var mocha = require('gulp-mocha');
 var rename = require('gulp-rename');
 var browserify = require('gulp-browserify');
 
+var noop = function(){};
+
 var paths = {
   files: ['src/**/*.js'],
   main: ['src/main.js'],
@@ -35,7 +37,7 @@ gulp.task('dist', function() {
 gulp.task('test', function() {
   gulp.src(paths.tests)
     .pipe(mocha({reporter: 'nyan'}))
-    .on('error', function(){});
+    .on('error', noop);
 });
 
 gulp.task('watch', function() {
