@@ -1,6 +1,8 @@
 var gulp   = require('gulp');
 var uglify = require('gulp-uglify');
 var mocha = require('gulp-mocha');
+var jshint = require('gulp-jshint');
+var stylish = require('jshint-stylish');
 var rename = require('gulp-rename');
 var browserify = require('gulp-browserify');
 
@@ -9,7 +11,7 @@ var noop = function(){};
 var paths = {
   files: ['src/**/*.js'],
   main: ['src/main.js'],
-  tests: ['test/spec_helper.js', 'test/**/*spec.js'],
+  tests: ['test/spec_helper.js', 'test/**/*_spec.js'],
   dist: 'dist'
 };
 
@@ -38,6 +40,12 @@ gulp.task('test', function() {
   gulp.src(paths.tests)
     .pipe(mocha({reporter: 'nyan'}))
     .on('error', noop);
+});
+
+gulp.task('lint', function() {
+  gulp.src(paths.files)
+    .pipe(jshint('.jshintrc'))
+    .pipe(jshint.reporter(stylish));
 });
 
 gulp.task('watch', function() {
