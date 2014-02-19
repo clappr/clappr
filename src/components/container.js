@@ -17,6 +17,9 @@ var Container = BaseObject.extend({
   play: function() {
     this.trigger('container:play');
   },
+  stop: function() {
+    this.trigger('container:stop');
+  },
   pause: function() {
     this.trigger('container:pause');
   },
