@@ -7,8 +7,6 @@ var istanbul = require('gulp-istanbul');
 var rename = require('gulp-rename');
 var browserify = require('gulp-browserify');
 
-var noop = function(){};
-
 var paths = {
   files: ['src/**/*.js'],
   main: ['src/main.js'],
@@ -20,7 +18,7 @@ var distFile = 'api.min.js';
 
 var namespace = 'WP3';
 
-gulp.task('default', ['build']);
+gulp.task('default', ['lint', 'build']);
 
 gulp.task('build', function() {
   gulp.src(paths.main)
@@ -31,7 +29,7 @@ gulp.task('build', function() {
 
 gulp.task('dist', function() {
   gulp.src(paths.main)
-    .pipe(browserify({standalone: namespace}))
+    .pipe(browserify())
     .pipe(uglify())
     .pipe(rename(distFile))
     .pipe(gulp.dest(paths.dist));
@@ -40,7 +38,9 @@ gulp.task('dist', function() {
 gulp.task('test', function() {
   gulp.src(paths.tests)
     .pipe(mocha({reporter: 'nyan'}))
-    .on('error', noop);
+    .on('error', function(err) {
+      throw err;
+    });
 });
 
 gulp.task('coverage', function() {
