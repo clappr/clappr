@@ -14,7 +14,7 @@ module.exports = MediaControl = BaseObject.extend({
     'click [data-seekbar]': 'seek'
   },
   //should we use a default template? if so, should it be an external file or inline?
-  template: _.template('<div>MediaControl</div>'), 
+  template: _.template('<div>MediaControl</div>'),
   initialize: function() {
     this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar);
   },
