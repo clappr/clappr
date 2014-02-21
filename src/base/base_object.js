@@ -14,7 +14,7 @@ var BaseObject = function(options) {
 
 var delegateEventSplitter = /^(\S+)\s*(.*)$/;
 
-var viewOptions = ['container', 'playback', 'src', 'el', 'id', 'attributes', 'className', 'tagName', 'events'];
+var viewOptions = ['container', 'el', 'id', 'attributes', 'className', 'tagName', 'events'];
 
 _.extend(BaseObject.prototype, Events, {
 
