@@ -1,20 +1,20 @@
 var PlaybackPlugin = require('../base/playback_plugin');
 
-var MP4PlaybackPlugin = PlaybackPlugin.extend({
+var HTML5VideoPlaybackPlugin = PlaybackPlugin.extend({
   events: {
     'timeupdate': 'timeUpdated',
     'ended': 'ended'
   },
   tagName: 'video',
   className: 'container',
-  initialize: function(args) {
-    this.container = args.container;
-    this.el.src = args.src;
+  initialize: function(options) {
+    this.el.src = options.src;
 
     this.listenTo(this.container, 'container:play', this.play);
     this.listenTo(this.container, 'container:pause', this.pause);
     this.listenTo(this.container, 'container:seek', this.seek);
-    this.listenTo(this.container, 'container:fullscreen', this.fullscreen);
+    //this.listenTo(this.container, 'container:fullscreen', this.fullscreen);
+    this.listenTo(this.container, 'container:volume', this.volume);
     this.render(); // it should render when the container trigger 'ready'
   },
   play: function() {
@@ -24,7 +24,11 @@ var MP4PlaybackPlugin = PlaybackPlugin.extend({
     this.el.pause();
   },
   fullscreen: function() {
+    //this is not right, the player goes fullscreen, not the playback.
     this.el.webkitRequestFullscreen();
+  },
+  volume: function(value) {
+    this.el.volume = value / 100;
   },
   mute: function() {
     this.el.volume = 0;
@@ -58,4 +62,4 @@ var MP4PlaybackPlugin = PlaybackPlugin.extend({
   }
 });
 
-module.exports = MP4PlaybackPlugin;
+module.exports = HTML5VideoPlaybackPlugin;
