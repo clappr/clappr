@@ -24,7 +24,10 @@ gulp.task('build', function() {
   gulp.src(paths.main)
     .pipe(browserify())
     .pipe(rename(distFile))
-    .pipe(gulp.dest(paths.dist));
+    .pipe(gulp.dest(paths.dist))
+    .on("error", function(err) {
+      throw err;
+    });
 });
 
 gulp.task('dist', function() {
