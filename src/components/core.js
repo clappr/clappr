@@ -4,7 +4,8 @@
  */
 
 var BaseObject = require('../base/base_object');
-var PlaybackHandler = require('../components/playback_handler');
+var PlaybackHandler = require('./playback_handler');
+var MediaControl = require('./playback_handler');
 
 var Core = BaseObject.extend({
   initialize: function(params) {
