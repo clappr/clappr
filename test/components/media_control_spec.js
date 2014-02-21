@@ -69,12 +69,21 @@ describe('MediaControl', function() {
     });
 
     it('should react for clicks on the seekbar', function() {
-      this.control.template = _.template('<input data-seekbar value="10"></input>');
+      this.control.template = _.template('<input data-seekbar value="10" />');
       var spy = sinon.spy(this.container, 'setCurrentTime');
       this.control.render();
       this.control.$('[data-seekbar]').click();
       spy.called.should.be.true;
       spy.withArgs("10").calledOnce.should.be.true;
+    });
+
+    it("should change the container's volume", function() {
+      this.control.template = _.template('<input data-volume value="5" />');
+      var spy = sinon.spy(this.container, 'setVolume');
+      this.control.render();
+      this.control.$('[data-volume]').click();
+      spy.called.should.be.true;
+      spy.withArgs("5").calledOnce.should.be.true;
     });
 
     it('should react for clicks on the fullscreen button', function() {

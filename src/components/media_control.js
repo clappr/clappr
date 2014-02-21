@@ -11,7 +11,8 @@ module.exports = MediaControl = BaseObject.extend({
     'click [data-pause]': 'pause',
     'click [data-stop]': 'stop',
     'click [data-fullscreen]': 'toggleFullscreen',
-    'click [data-seekbar]': 'seek'
+    'click [data-seekbar]': 'seek',
+    'click [data-volume]': 'volume'
   },
   //should we use a default template? if so, should it be an external file or inline?
   template: _.template('<div>MediaControl</div>'),
@@ -26,6 +27,9 @@ module.exports = MediaControl = BaseObject.extend({
   },
   stop: function() {
     this.container.stop();
+  },
+  volume: function() {
+    this.container.setVolume(this.$('[data-volume]').val());
   },
   toggleFullscreen: function() {
     this.trigger('mediacontrol:fullscreen');

@@ -29,7 +29,8 @@ var Container = BaseObject.extend({
   setCurrentTime: function(time) {
     this.trigger('container:seek', time);
   },
-  getCurrentTime: function() {
+  setVolume: function(value) {
+    this.trigger('container:volume', value);
   },
   requestFullscreen: function() {
     this.trigger('container:fullscreen');
