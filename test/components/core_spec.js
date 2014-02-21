@@ -7,4 +7,9 @@ describe('Core', function() {
     core.embedParams.should.have.property("width");
     core.embedParams.should.have.property("height");
   });
+
+  it('should create a playbackhandler', function() {
+    var core = new Core({'src': 'http://globo.com/video.mp4'});
+    expect(core.playbackHandler).to.be.a('object');
+  });
 });

@@ -12,6 +12,7 @@ var Container = require('components/container');
 var MediaControl = require('components/media_control');
 
 chai.should();
+expect = chai.expect;
 
 module.exports = {
   BaseObject: BaseObject,
