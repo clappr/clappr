@@ -4,6 +4,7 @@
 
 var BaseObject = require('../base/base_object');
 var Container = require('../components/container');
+var PosterPlugin = require('../plugins/poster');
 
 var HTML5VideoPlaybackPlugin = require('../plugins/html5_video_playback');
 var HTML5AudioPlaybackPlugin = require('../plugins/html5_audio_playback');
@@ -30,6 +31,7 @@ var PlaybackHandler = BaseObject.extend({
   },
   createHTML5VideoContainer: function() {
     var container = new Container({className: 'html5-video-container'});
+    var poster = new PosterPlugin({container: container, src: 'image.png'});
     var playback = new HTML5VideoPlaybackPlugin({container: container, src: this.params.src});
     return container;
   },
