@@ -14,13 +14,15 @@ var PlaybackHandler = BaseObject.extend({
   createContainers: function() {
     var containers = [];
     if ('src' in this.params) {
-      var HTML5VideoContainer = new Container({className: 'HTML5VideoContainer'});
-      var HTML5VideoPlayback = new HTML5VideoPlaybackPlugin({container: HTML5VideoContainer, src: this.params['src']});
-      containers.push(HTML5VideoContainer);
+      containers.push(this.createHTML5VideoContainer());
     }
     return containers;
-  }
-
+  },
+  createHTML5VideoContainer: function() {
+    var HTML5VideoContainer = new Container({className: 'HTML5VideoContainer'});
+    var HTML5VideoPlayback = new HTML5VideoPlaybackPlugin({container: HTML5VideoContainer, src: this.params.src});
+    return HTML5VideoContainer;
+  },
 });
 
 module.exports = PlaybackHandler;

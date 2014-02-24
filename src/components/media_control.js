@@ -18,6 +18,7 @@ module.exports = MediaControl = BaseObject.extend({
   template: _.template('<% _.each(settings, function(setting) { %> <% if(setting === "seekbar" || setting === "volume") { %> <input type="range" value="0" data-<%= setting %> /><% } else { %> <button data-<%= setting %>><%= setting %></button> <% }}) %>'),
   initialize: function() {
     this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar);
+    this.defaultSettings = ['play', 'stop', 'pause', 'seekbar', 'volume'];
   },
   play: function() {
     this.container.play();
@@ -46,7 +47,9 @@ module.exports = MediaControl = BaseObject.extend({
     this.container.setCurrentTime(this.$('[data-seekbar]').val());
   },
   render: function() {
-    this.$el.html(this.template({settings: this.container.settings}));
+    var settings = this.container.settings || this.defaultSettings;
+    this.$el.html(this.template({settings: settings}));
+    this.$('[data-volume]').val(100);
     return this;
   }
 });

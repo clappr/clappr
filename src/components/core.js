@@ -14,7 +14,7 @@ var Core = BaseObject.extend({
     this.createMediaControl(this.getCurrentContainer());
   },
   createMediaControl: function(container) {
-    this.mediaControl = new MediaControl({container: container, className: "media-control"});
+    this.mediaControl = new MediaControl({container: container, className: 'media-control'});
   },
   getCurrentContainer: function() {
     return this.containers[0];
