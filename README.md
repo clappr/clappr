@@ -1,5 +1,6 @@
-### Player 3
+## Player 3
 
+### Installing for development
 
 Clone the project and install gulp:
 
@@ -8,3 +9,19 @@ Clone the project and install gulp:
 Then enter the project directory and install the dependencies:
 
 `npm install`
+
+
+### Embedding the player
+
+Put this on your HTML:
+
+```html
+  <body>
+    <div id="player-wrapper"></div>
+    <script>
+      var playerElement = document.getElementById("player-wrapper");
+      var player = new WP3.Player({src: "http://video.globo.com/video.mp4"});
+      player.attachTo(playerElement);
+    </script>
+  </body>
+```
