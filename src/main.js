@@ -8,8 +8,8 @@ var Player = BaseObject.extend({
   },
 
   attachTo: function(element) {
-    this.params["el"] = element;
     this.core = new Core(this.params);
+    this.core.render().$el.appendTo(element);
   }
 });
 
