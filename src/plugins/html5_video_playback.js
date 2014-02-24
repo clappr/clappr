@@ -16,6 +16,7 @@ var HTML5VideoPlaybackPlugin = PlaybackPlugin.extend({
     this.listenTo(this.container, 'container:seek', this.seek);
     //this.listenTo(this.container, 'container:fullscreen', this.fullscreen);
     this.listenTo(this.container, 'container:volume', this.volume);
+    this.listenTo(this.container, 'container:stop', this.stop);
     this.render(); // it should render when the container trigger 'ready'
   },
   play: function() {
@@ -23,6 +24,10 @@ var HTML5VideoPlaybackPlugin = PlaybackPlugin.extend({
   },
   pause: function() {
     this.el.pause();
+  },
+  stop: function() {
+    this.pause();
+    this.el.currentTime = 0;
   },
   fullscreen: function() {
     //this is not right, the player goes fullscreen, not the playback.
