@@ -12,6 +12,7 @@ var HTML5AudioPlayback = BaseObject.extend({
     this.listenTo(this.container, 'container:pause', this.pause);
     this.listenTo(this.container, 'container:seek', this.seek);
     this.listenTo(this.container, 'container:volume', this.volume);
+    this.listenTo(this.container, 'container:stop', this.stop);
     this.render(); // it should render when the container trigger 'ready'
   },
   play: function() {
@@ -19,6 +20,10 @@ var HTML5AudioPlayback = BaseObject.extend({
   },
   pause: function() {
     this.el.pause();
+  },
+  stop: function() {
+    this.pause();
+    this.el.currentTime = 0;
   },
   volume: function(value) {
     this.el.volume = value / 100;

@@ -20,8 +20,8 @@ var Core = BaseObject.extend({
     return this.containers[0];
   },
   render: function() {
-    this.$el.append(this.mediaControl.render().el);
     this.$el.append(this.getCurrentContainer().render().el);
+    this.$el.append(this.mediaControl.render().el);
     return this;
   }
 });
