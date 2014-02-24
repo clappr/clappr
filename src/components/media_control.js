@@ -15,7 +15,7 @@ module.exports = MediaControl = BaseObject.extend({
     'click [data-volume]': 'volume'
   },
   //should we use a default template? if so, should it be an external file or inline?
-  template: _.template('<div>MediaControl</div>'),
+  template: _.template('<% _.each(settings, function(setting) { %> <% if(setting === "seekbar" || setting === "volume") { %> <input type="range" value="0" data-<%= setting %> /><% } else { %> <button data-<%= setting %>><%= setting %></button> <% }}) %>'),
   initialize: function() {
     this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar);
   },
@@ -46,7 +46,7 @@ module.exports = MediaControl = BaseObject.extend({
     this.container.setCurrentTime(this.$('[data-seekbar]').val());
   },
   render: function() {
-    this.$el.html(this.template());
+    this.$el.html(this.template({settings: this.container.settings}));
     return this;
   }
 });

@@ -9,7 +9,8 @@ var HTML5VideoPlaybackPlugin = PlaybackPlugin.extend({
   className: 'container',
   initialize: function(options) {
     this.el.src = options.src;
-
+    this.settings = ['play', 'stop', 'pause', 'seekbar', 'volume'];
+    this.container.settings = this.settings;
     this.listenTo(this.container, 'container:play', this.play);
     this.listenTo(this.container, 'container:pause', this.pause);
     this.listenTo(this.container, 'container:seek', this.seek);
@@ -59,7 +60,7 @@ var HTML5VideoPlaybackPlugin = PlaybackPlugin.extend({
   render: function() {
     this.container.$el.append(this.el);
     return this;
-  }
+  },
 });
 
 module.exports = HTML5VideoPlaybackPlugin;
