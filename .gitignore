@@ -1,4 +1,5 @@
 node_modules
+src/base/jst.js
 .DS_Store
 coverage
 dist
