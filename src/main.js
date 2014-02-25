@@ -11,8 +11,8 @@ var Player = BaseObject.extend({
     this.params = params;
   },
   attachTo: function(element) {
+    this.params.parentElement = element;
     this.core = new Core(this.params);
-    this.core.render().$el.appendTo(element);
   },
 });
 
