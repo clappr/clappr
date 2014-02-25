@@ -21,7 +21,14 @@ var namespace = 'WP3';
 
 gulp.task('default', ['lint', 'build']);
 
-gulp.task('build', ['pre-build'], function() {
+gulp.task('generate-jst', function() {
+  exec('node bin/jst_generator.js', function(err, stdout, stderr) {
+    console.log(stdout);
+    console.log(stderr);
+  });
+});
+
+gulp.task('build', ['generate-jst'], function() {
   gulp.src(paths.main)
     .pipe(browserify())
     .pipe(rename(distFile))
@@ -31,14 +38,7 @@ gulp.task('build', ['pre-build'], function() {
     });
 });
 
-gulp.task('pre-build', function() {
-  exec('node bin/jst_generator.js', function(err, stdout, stderr) {
-    console.log(stdout);
-    console.log(stderr);
-  });
-});
-
-gulp.task('dist', function() {
+gulp.task('dist', ['generate-jst'], function() {
   gulp.src(paths.main)
     .pipe(browserify())
     .pipe(uglify())
