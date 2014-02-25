@@ -15,9 +15,11 @@ var StatsPlugin = BaseObject.extend({
     this.firstPlay = true;
     this.startupTime = 0;
     this.rebufferingTime = 0;
+    this.watchingTime = 0;
     this.rebuffers = 0;
   },
   onPlay: function() {
+    this.watchingTimeInit = Date.now();
   },
   onBuffering: function() {
     if (this.firstPlay) {
@@ -34,8 +36,19 @@ var StatsPlugin = BaseObject.extend({
     } else {
       this.rebufferingTime += Date.now() - this.rebufferingTimeInit;
     }
-
   },
+  getWatchingTime: function() {
+    var totalTime = (Date.now() - this.watchingTimeInit);
+    return totalTime - this.rebufferingTime - this.startupTime;
+  },
+  getStats: function() {
+    return {
+      startupTime:     this.startupTime,
+      rebuffers:       this.rebuffers,
+      rebufferingTime: this.rebufferingTime,
+      watchingTime:    this.getWatchingTime()
+    };
+  }
 });
 
 module.exports = StatsPlugin;
