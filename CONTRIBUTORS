@@ -1,0 +1,15 @@
+# This is the official list of people who have contributed code to
+# Globo.com Player.
+# The AUTHORS file lists the copyright holders; this file lists people.
+# For example, Globo.com employees are listed here but not in AUTHORS,
+# because Globo.com holds the copyright.
+#
+# You can update this list using the following command:
+#
+#   % git shortlog -se | awk '{$1=""; print $0}' | sed -e 's/^ //'
+#
+# Please keep this file sorted, and group users with multiple emails.
+
+Bruno Torres <me@brunotorr.es>
+Flávio Ribeiro <email@flavioribeiro.com>
+Thiago Pontes <thiagopnts@gmail.com>
