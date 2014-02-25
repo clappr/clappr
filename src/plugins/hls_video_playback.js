@@ -49,7 +49,7 @@ var HLSVideoPlaybackPlugin = PlaybackPlugin.extend({
       this.currentState = "PLAYING_BUFFERING";
 
     } else if (this.currentState === "PLAYING_BUFFERING" && this.el.getState() === "PLAYING") {
-      this.container.playing();
+      this.container.bufferfull();
       this.currentState = "PLAYING";
 
     } else if (this.currentState === "PLAYING" && this.el.getState() === "IDLE") {

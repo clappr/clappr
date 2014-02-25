@@ -38,8 +38,8 @@ var Container = BaseObject.extend({
   buffering: function() {
     this.trigger('container:state:buffering');
   },
-  playing: function() {
-    this.trigger('container:state:playing');
+  bufferfull: function() {
+    this.trigger('container:state:bufferfull');
   }
 });
 
