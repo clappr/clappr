@@ -9,19 +9,32 @@ var StatsPlugin = BaseObject.extend({
     this.listenTo(this.container, 'container:play', this.onPlay);
     this.listenTo(this.container, 'container:state:buffering', this.onBuffering);
     this.listenTo(this.container, 'container:state:bufferfull', this.onBufferFull);
+    this.setInitialAttrs();
+  },
+  setInitialAttrs: function() {
     this.firstPlay = true;
     this.startupTime = 0;
+    this.rebufferingTime = 0;
+    this.rebuffers = 0;
   },
   onPlay: function() {
   },
   onBuffering: function() {
     if (this.firstPlay) {
       this.startupTimeInit = Date.now();
+    } else {
+      this.rebufferingTimeInit = Date.now();
     }
+    this.rebuffers++;
   },
   onBufferFull: function() {
-    this.firstPlay = false;
-    this.startupTime = Date.now() - this.startupTimeInit;
+    if (this.firstPlay) {
+      this.firstPlay = false;
+      this.startupTime = Date.now() - this.startupTimeInit;
+    } else {
+      this.rebufferingTime += Date.now() - this.rebufferingTimeInit;
+    }
+
   },
 });
 
