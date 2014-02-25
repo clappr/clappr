@@ -42,6 +42,7 @@ var PlaybackHandler = BaseObject.extend({
   },
   createHLSVideoContainer: function() {
     var container = new Container({className: 'hls-video-container'});
+    var poster = new PosterPlugin({container: container, src: 'image.png'});
     var playback = new HLSVideoPlaybackPlugin({container: container, src: this.params.src});
     return container;
   }

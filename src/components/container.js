@@ -34,6 +34,12 @@ var Container = BaseObject.extend({
   },
   requestFullscreen: function() {
     this.trigger('container:fullscreen');
+  },
+  buffering: function() {
+    this.trigger('container:state:buffering');
+  },
+  playing: function() {
+    this.trigger('container:state:playing');
   }
 });
 

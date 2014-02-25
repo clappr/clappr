@@ -21,6 +21,8 @@ var HLSVideoPlaybackPlugin = PlaybackPlugin.extend({
     this.listenTo(this.container, 'container:volume', this.volume);
     this.listenTo(this.container, 'container:fullscreen', this.fullscreen);
     this.render();
+    this.currentState = "IDLE";
+    this.timedCheckState();
   },
   updateTime: function(interval) {
     return setInterval(function() {
@@ -36,6 +38,22 @@ var HLSVideoPlaybackPlugin = PlaybackPlugin.extend({
       this.el.resume();
     } else {
       this.firstPlay();
+    }
+  },
+  timedCheckState: function() {
+    setInterval(this.checkState.bind(this), 250);
+  },
+  checkState: function() {
+    if (this.currentState === "IDLE" && this.el.getState() === "PLAYING_BUFFERING") {
+      this.container.buffering();
+      this.currentState = "PLAYING_BUFFERING";
+
+    } else if (this.currentState === "PLAYING_BUFFERING" && this.el.getState() === "PLAYING") {
+      this.container.playing();
+      this.currentState = "PLAYING";
+
+    } else if (this.currentState === "PLAYING" && this.el.getState() === "IDLE") {
+      this.currentState = "IDLE";
     }
   },
   firstPlay: function() {
