@@ -6,6 +6,7 @@ var stylish = require('jshint-stylish');
 var istanbul = require('gulp-istanbul');
 var rename = require('gulp-rename');
 var browserify = require('gulp-browserify');
+var exec = require('child_process').exec;
 
 var paths = {
   files: ['src/**/*.js'],
@@ -20,7 +21,7 @@ var namespace = 'WP3';
 
 gulp.task('default', ['lint', 'build']);
 
-gulp.task('build', function() {
+gulp.task('build', ['pre-build'], function() {
   gulp.src(paths.main)
     .pipe(browserify())
     .pipe(rename(distFile))
@@ -28,6 +29,13 @@ gulp.task('build', function() {
     .on("error", function(err) {
       throw err;
     });
+});
+
+gulp.task('pre-build', function() {
+  exec('node bin/jst_generator.js', function(err, stdout, stderr) {
+    console.log(stdout);
+    console.log(stderr);
+  });
 });
 
 gulp.task('dist', function() {
