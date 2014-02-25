@@ -10,6 +10,7 @@ var Core = require('components/core');
 var BaseObject = require('base/base_object');
 var Container = require('components/container');
 var MediaControl = require('components/media_control');
+var StatsPlugin = require('plugins/stats');
 
 chai.should();
 expect = chai.expect;
@@ -18,5 +19,6 @@ module.exports = {
   BaseObject: BaseObject,
   MediaControl: MediaControl,
   Container: Container,
-  Core: Core
+  Core: Core,
+  StatsPlugin: StatsPlugin
 };
