@@ -13,9 +13,15 @@ var MediaControl = require('./media_control');
 
 var Core = BaseObject.extend({
   initialize: function(params) {
+    this.parentElement = params.parentElement;
     this.playbackHandler = new PlaybackHandler(params);
-    this.containers = this.playbackHandler.createContainers();
+    this.playbackHandler.createContainers(this.onContainersCreated.bind(this));
+  },
+  onContainersCreated: function(containers) {
+    this.containers = containers;
     this.createMediaControl(this.getCurrentContainer());
+    this.render();
+    this.$el.appendTo(this.parentElement);
   },
   createMediaControl: function(container) {
     this.mediaControl = new MediaControl({container: container, className: 'media-control'});

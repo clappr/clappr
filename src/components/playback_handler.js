@@ -20,7 +20,7 @@ var PlaybackHandler = BaseObject.extend({
     this.params = params;
   },
 
-  createContainers: function() {
+  createContainers: function(callback) {
     var containers = [];
     if ('src' in this.params && this.params.src.match(/(.*).mp4/)) {
       containers.push(this.createHTML5VideoContainer());
@@ -32,7 +32,7 @@ var PlaybackHandler = BaseObject.extend({
       containers.push(this.createHLSVideoContainer());
     }
 
-    return containers;
+    callback(containers);
   },
   createHTML5VideoContainer: function() {
     var container = new Container({className: 'html5-video-container'});
