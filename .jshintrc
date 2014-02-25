@@ -1,6 +1,6 @@
 {
   "trailing": true,
-  "quotmark": "single",
+  "quotmark": false,
   "asi": true,
   "expr": true
 }
