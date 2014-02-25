@@ -13,7 +13,7 @@ describe('StatsPlugin', function() {
     this.clock.tick(1000);
     this.container.bufferfull();
 
-    expect(stats.startupTime).to.equal(1000);
+    expect(stats.getStats().startupTime).to.equal(1000);
   });
 
   it('should calculate rebuffer events', function() {
@@ -24,7 +24,7 @@ describe('StatsPlugin', function() {
     this.container.buffering();
     this.container.bufferfull();
 
-    expect(stats.rebuffers).to.equal(2);
+    expect(stats.getStats().rebuffers).to.equal(2);
   });
 
   it('should calculate total rebuffer time', function() {
@@ -42,6 +42,24 @@ describe('StatsPlugin', function() {
     this.clock.tick(500);
     this.container.bufferfull();
 
-    expect(stats.rebufferingTime).to.equal(1500);
+    expect(stats.getStats().rebufferingTime).to.equal(1500);
+  });
+
+  it('should calculate total watching time', function() {
+    var stats = new StatsPlugin({container: this.container});
+    this.container.play();
+    this.container.buffering(); // startup time
+    this.clock.tick(1000);
+    this.container.bufferfull();
+
+    this.clock.tick(2000); // watching for 2 secs
+    expect(stats.getStats().watchingTime).to.equal(2000);
+
+    this.container.buffering();
+    this.clock.tick(500);
+    this.container.bufferfull();
+
+    this.clock.tick(2000); // watching for 2 secs
+    expect(stats.getStats().watchingTime).to.equal(4000);
   });
 });
