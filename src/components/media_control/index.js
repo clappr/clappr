@@ -7,9 +7,14 @@
  */
 
 var _ = require('underscore');
+var JST = require('../../base/jst');
+var Styler = require('../../base/styler');
 var UIObject = require('../../base/ui_object');
 
 module.exports = MediaControl = UIObject.extend({
+  attributes: {
+    'data-media-control': ''
+  },
   events: {
     'click [data-play]': 'play',
     'click [data-pause]': 'pause',
@@ -18,8 +23,7 @@ module.exports = MediaControl = UIObject.extend({
     'click [data-seekbar]': 'seek',
     'click [data-volume]': 'volume'
   },
-  //should we use a default template? if so, should it be an external file or inline?
-  template: _.template('<% _.each(settings, function(setting) { %> <% if(setting === "seekbar" || setting === "volume") { %> <input type="range" value="0" data-<%= setting %> /><% } else { %> <button data-<%= setting %>><%= setting %></button> <% }}) %>'),
+  template: JST.media_control,
   initialize: function() {
     this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar);
     this.defaultSettings = ['play', 'stop', 'pause', 'seekbar', 'volume'];
@@ -51,8 +55,10 @@ module.exports = MediaControl = UIObject.extend({
     this.container.setCurrentTime(this.$('[data-seekbar]').val());
   },
   render: function() {
+    var style = Styler.getStyleFor('media_control');
     var settings = this.container.settings || this.defaultSettings;
     this.$el.html(this.template({settings: settings}));
+    this.$el.append(style);
     this.$('[data-volume]').val(100);
     return this;
   }

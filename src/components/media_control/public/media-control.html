@@ -1,0 +1,6 @@
+<% _.each(settings, function(setting) { %> 
+  <% if(setting === "seekbar" || setting === "volume") { %>
+    <input type="range" value="0" data-<%= setting %> />
+  <% } else { %>
+    <button data-<%= setting %>><%= setting %></button>
+  <% }}) %>
