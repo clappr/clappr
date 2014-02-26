@@ -1,0 +1,6 @@
+[data-container] {
+  position: absolute;
+  background-color: red;
+  height: 100%;
+  width: 100%;
+}

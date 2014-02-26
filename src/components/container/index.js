@@ -7,12 +7,18 @@
  */
 
 var UIObject = require('../../base/ui_object');
+var Styler = require('../../base/styler');
 
 var Container = UIObject.extend({
+  attributes: {
+    'data-container': ''
+  },
   events: {
     'click': 'clicked'
   },
   initialize: function() {
+    var style = Styler.getStyleFor('container');
+    this.$el.append(style);
     this.trigger('container:ready');
   },
   timeUpdated: function(time) {
