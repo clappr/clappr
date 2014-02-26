@@ -46,7 +46,7 @@ gulp.task('dist', ['generate-jst'], function() {
     .pipe(gulp.dest(paths.dist));
 });
 
-gulp.task('test', function() {
+gulp.task('test', ['build'], function() {
   gulp.src(paths.tests)
     .pipe(mocha({reporter: 'nyan'}))
     .on('error', function(err) {
