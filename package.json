@@ -27,7 +27,8 @@
     "gulp-jshint": "~1.4.2",
     "jshint-stylish": "~0.1.5",
     "jsdom": "~0.10.1",
-    "gulp-istanbul": "~0.1.1"
+    "gulp-istanbul": "~0.1.1",
+    "glob": "~3.2.8"
   },
   "dependencies": {
     "underscore": "~1.6.0",
