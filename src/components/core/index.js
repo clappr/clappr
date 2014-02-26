@@ -9,9 +9,13 @@
 
 var UIObject = require('../../base/ui_object');
 var PlaybackHandler = require('../playback_handler');
+var Styler = require('../../base/styler');
 var MediaControl = require('../media_control');
 
 var Core = UIObject.extend({
+  attributes: {
+    'data-player': ''
+  },
   initialize: function(params) {
     this.parentElement = params.parentElement;
     this.playbackHandler = new PlaybackHandler(params);
@@ -30,6 +34,8 @@ var Core = UIObject.extend({
     return this.containers[0];
   },
   render: function() {
+    var style = Styler.getStyleFor('core');
+    this.$el.append(style);
     this.$el.append(this.getCurrentContainer().render().el);
     this.$el.append(this.mediaControl.render().el);
     return this;
