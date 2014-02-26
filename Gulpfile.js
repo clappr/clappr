@@ -55,7 +55,7 @@ gulp.task('test', ['build'], function() {
 });
 
 gulp.task('coverage', function() {
-  gulp.src(paths.files)
+  gulp.src(paths.files[0])
     .pipe(istanbul())
     .on('end', function() {
       gulp.src(paths.tests)
@@ -65,7 +65,7 @@ gulp.task('coverage', function() {
 });
 
 gulp.task('lint', function() {
-  gulp.src(paths.files)
+  gulp.src(paths.files[0])
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter(stylish));
 });
