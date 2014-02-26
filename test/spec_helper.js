@@ -7,7 +7,7 @@ global.sinon = require('sinon');
 global.window = jsdom('<html><body></body></html>').createWindow();
 
 var Core = require('components/core');
-var BaseObject = require('base/base_object');
+var UIObject = require('base/ui_object');
 var Container = require('components/container');
 var MediaControl = require('components/media_control');
 var StatsPlugin = require('plugins/stats');
@@ -16,7 +16,7 @@ chai.should();
 expect = chai.expect;
 
 module.exports = {
-  BaseObject: BaseObject,
+  UIObject: UIObject,
   MediaControl: MediaControl,
   Container: Container,
   Core: Core,
