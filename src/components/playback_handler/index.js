@@ -6,14 +6,14 @@
  * The PlaybackHandler is responsible for manage playback bootstrap and swapping sources.
  */
 
-var BaseObject = require('../base/base_object');
-var Container = require('../components/container');
-var PosterPlugin = require('../plugins/poster');
+var BaseObject = require('../../base/base_object');
+var Container = require('../container');
+var PosterPlugin = require('../../plugins/poster');
 
-var HTML5VideoPlaybackPlugin = require('../plugins/html5_video_playback');
-var HTML5AudioPlaybackPlugin = require('../plugins/html5_audio_playback');
-var HLSVideoPlaybackPlugin = require('../plugins/hls_playback');
-var SpinnerThreeBouncePlugin = require('../plugins/spinner_three_bounce');
+var HTML5VideoPlaybackPlugin = require('../../plugins/html5_video_playback');
+var HTML5AudioPlaybackPlugin = require('../../plugins/html5_audio_playback');
+var HLSVideoPlaybackPlugin = require('../../plugins/hls_playback');
+var SpinnerThreeBouncePlugin = require('../../plugins/spinner_three_bounce');
 
 var PlaybackHandler = BaseObject.extend({
   initialize: function(params) {

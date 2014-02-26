@@ -7,9 +7,9 @@
  * and the player state.
  */
 
-var UIObject = require('../base/ui_object');
-var PlaybackHandler = require('./playback_handler');
-var MediaControl = require('./media_control');
+var UIObject = require('../../base/ui_object');
+var PlaybackHandler = require('../playback_handler');
+var MediaControl = require('../media_control');
 
 var Core = UIObject.extend({
   initialize: function(params) {
