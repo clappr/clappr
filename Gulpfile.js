@@ -70,7 +70,7 @@ gulp.task('lint', function() {
     .pipe(jshint.reporter(stylish));
 });
 
-gulp.task('watch', function() {
+gulp.task('watch', ['build'], function() {
   gulp.watch(paths.files, function() {
     gulp.run('build');
   });
