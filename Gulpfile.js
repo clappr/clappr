@@ -9,7 +9,7 @@ var browserify = require('gulp-browserify');
 var exec = require('child_process').exec;
 
 var paths = {
-  files: ['src/**/*.js'],
+  files: ['src/**/*.js', 'src/**/*.css', 'src/**/*.html'],
   main: ['src/main.js'],
   tests: ['test/spec_helper.js', 'test/**/*_spec.js'],
   dist: 'dist'
