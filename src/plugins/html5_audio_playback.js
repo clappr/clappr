@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var BaseObject = require('../base/base_object');
+var PlaybackPlugin = require('../base/playback_plugin');
 
-var HTML5AudioPlayback = BaseObject.extend({
+var HTML5AudioPlayback = PlaybackPlugin.extend({
   events: {
     'timeupdate': 'timeUpdated',
     'ended': 'ended'

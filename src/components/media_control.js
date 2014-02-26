@@ -7,9 +7,9 @@
  */
 
 var _ = require('underscore');
-var BaseObject = require('../base/base_object');
+var UIObject = require('../base/ui_object');
 
-module.exports = MediaControl = BaseObject.extend({
+module.exports = MediaControl = UIObject.extend({
   events: {
     'click [data-play]': 'play',
     'click [data-pause]': 'pause',

@@ -1,8 +1,8 @@
-var BaseObject = require('../../base/base_object');
+var UIObject = require('../../base/UI_object');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 
-var SpinnerThreeBouncePlugin = BaseObject.extend({
+var SpinnerThreeBouncePlugin = UIObject.extend({
   pluginName: 'spinner_three_bounce',
   attributes: {
     "data-spinner":""

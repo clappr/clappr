@@ -7,11 +7,11 @@
  * and the player state.
  */
 
-var BaseObject = require('../base/base_object');
+var UIObject = require('../base/ui_object');
 var PlaybackHandler = require('./playback_handler');
 var MediaControl = require('./media_control');
 
-var Core = BaseObject.extend({
+var Core = UIObject.extend({
   initialize: function(params) {
     this.parentElement = params.parentElement;
     this.playbackHandler = new PlaybackHandler(params);

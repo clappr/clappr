@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var BaseObject = require('../base/base_object');
+var UIObject = require('../base/ui_object');
 
-var PosterPlugin = BaseObject.extend({
+var PosterPlugin = UIObject.extend({
   tagName: 'img',
   initialize: function(options) {
     this.listenTo(this.container, 'container:play', this.onPlay);

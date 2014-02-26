@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var BaseObject = require('./base_object');
+var UIObject = require('./ui_object');
 
-var PlaybackPlugin = BaseObject.extend({});
+var PlaybackPlugin = UIObject.extend({});
 
 module.exports = PlaybackPlugin;
