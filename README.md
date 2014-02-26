@@ -1,5 +1,7 @@
 ## Player 3
 
+[![Build Status](https://drone.io/github.com/globocom/player/status.png)](https://drone.io/github.com/globocom/player/latest)
+
 ### Installing for development
 
 Clone the project and install gulp:
