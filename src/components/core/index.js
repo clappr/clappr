@@ -13,6 +13,9 @@ var Styler = require('../../base/styler');
 var MediaControl = require('../media_control');
 
 var Core = UIObject.extend({
+  events: {
+    'webkitfullscreenchange': 'exit'
+  },
   attributes: {
     'data-player': ''
   },
@@ -21,6 +24,11 @@ var Core = UIObject.extend({
     this.playbackHandler = new PlaybackHandler(params);
     this.playbackHandler.createContainers(this.onContainersCreated.bind(this));
   },
+  exit: function() {
+    if(!document.webkitIsFullScreen) {
+      this.$el.css({height: '360px', width: '640px'});
+    }
+  },
   onContainersCreated: function(containers) {
     this.containers = containers;
     this.createMediaControl(this.getCurrentContainer());
@@ -28,10 +36,15 @@ var Core = UIObject.extend({
     this.$el.appendTo(this.parentElement);
   },
   createMediaControl: function(container) {
-    this.mediaControl = new MediaControl({container: container, className: 'media-control'});
+    this.mediaControl = new MediaControl({container: container});
+    this.listenTo(this.mediaControl, 'mediacontrol:fullscreen', this.fullscreen);
   },
   getCurrentContainer: function() {
     return this.containers[0];
+  },
+  fullscreen: function() {
+    this.el.webkitRequestFullscreen();
+    this.$el.css({height: '100%', width: '100%'});
   },
   render: function() {
     var style = Styler.getStyleFor('core');
