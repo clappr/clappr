@@ -12,13 +12,14 @@ var HTML5VideoPlaybackPlugin = PlaybackPlugin.extend({
   },
   events: {
     'timeupdate': 'timeUpdated',
+    'loadeddata': 'loaded',
     'ended': 'ended'
   },
   tagName: 'video',
   initialize: function(options) {
     this.firstPlay = true;
     this.el.src = options.src;
-    this.container.settings = ['play', 'pause', 'seekbar', 'fullscreen', 'volume'];
+    this.container.settings = ['play', 'pause', 'stop', 'seekbar', 'fullscreen', 'volume'];
     this.listenTo(this.container, 'container:play', this.play);
     this.listenTo(this.container, 'container:pause', this.pause);
     this.listenTo(this.container, 'container:seek', this.seek);
@@ -27,12 +28,16 @@ var HTML5VideoPlaybackPlugin = PlaybackPlugin.extend({
     this.listenTo(this.container, 'container:stop', this.stop);
   },
   play: function() {
+    this.container.buffering();
     if(this.firstPlay) {
       this.render();
       this.$el.show();
       this.firstPlay = false;
     }
     this.el.play();
+  },
+  loaded: function() {
+    this.container.bufferfull();
   },
   pause: function() {
     this.el.pause();
