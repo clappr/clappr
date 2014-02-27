@@ -104,6 +104,7 @@ describe('StatsPlugin', function() {
   it('should announce statistics periodically', function() {
     var spy = sinon.spy(this.container, 'statsAnnounce');
     var stats = new StatsPlugin({container: this.container, announceInterval: 10});
+    this.container.play();
     this.clock.tick(25);
     spy.calledTwice.should.be.true;
   });
@@ -111,10 +112,17 @@ describe('StatsPlugin', function() {
   it('should stop announce when transmission stop', function() {
     var spy = sinon.spy(this.container, 'statsAnnounce');
     var stats = new StatsPlugin({container: this.container, announceInterval: 10});
+    this.container.play();
     this.clock.tick(25);
     this.container.stop();
     this.clock.tick(15);
     spy.calledTwice.should.be.true;
   });
 
+  it("should only announce if user hits play", function() {
+    var spy = sinon.spy(this.container, 'statsAnnounce');
+    var stats = new StatsPlugin({container: this.container, announceInterval: 10});
+    this.clock.tick(20);
+    spy.called.should.be.false;
+  });
 });
