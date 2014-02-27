@@ -101,4 +101,11 @@ describe('StatsPlugin', function() {
     expect(stats.getStats().p2pChunks).to.equal(30);
   });
 
+  it('should announce statistics periodically', function() {
+    var spy = sinon.spy(this.container, 'statsAnnounce');
+    var stats = new StatsPlugin({container: this.container, announceInterval: 10});
+    this.clock.tick(25);
+    spy.calledTwice.should.be.true;
+  });
+
 });

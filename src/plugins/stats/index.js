@@ -13,6 +13,7 @@ var StatsPlugin = BaseObject.extend({
     this.listenTo(this.container, 'container:state:bufferfull', this.onBufferFull);
     this.listenTo(this.container, 'container:stats:add', this.onStatsAdd);
     this.setInitialAttrs();
+    this.intervalId = setInterval(function() { this.announce() }.bind(this), options.announceInterval || 60000);
   },
   setInitialAttrs: function() {
     this.firstPlay = true;
@@ -64,6 +65,9 @@ var StatsPlugin = BaseObject.extend({
     };
     $.extend(metrics, this.externalMetrics);
     return metrics;
+  },
+  announce: function() {
+    this.container.statsAnnounce(this.getStats());
   }
 });
 
