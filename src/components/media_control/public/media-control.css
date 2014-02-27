@@ -9,4 +9,5 @@
   margin-right: auto;
   width: 500px;
   height: 100px;
+  z-index: 1000;
 }
