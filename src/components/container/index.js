@@ -50,6 +50,9 @@ var Container = UIObject.extend({
   },
   bufferfull: function() {
     this.trigger('container:state:bufferfull');
+  },
+  statsAdd: function(metric) {
+    this.trigger('container:stats:add', metric);
   }
 });
 
