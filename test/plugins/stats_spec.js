@@ -17,6 +17,8 @@ describe('StatsPlugin', function() {
   });
 
   it('should calculate rebuffer events', function() {
+    // to maintain compatibility with the first ping version
+    // we'll increment rebuffers even on the startup rebuffer event
     var stats = new StatsPlugin({container: this.container});
     this.container.buffering();
     this.container.bufferfull();
@@ -61,6 +63,26 @@ describe('StatsPlugin', function() {
 
     this.clock.tick(2000); // watching for 2 secs
     expect(stats.getStats().watchingTime).to.equal(4000);
+  });
+
+  it('should consider current rebuffering state', function() {
+    var stats = new StatsPlugin({container: this.container});
+    this.container.play();
+    this.container.buffering(); // startup time
+    this.clock.tick(1000);
+    this.container.bufferfull();
+
+    this.container.buffering();
+    this.clock.tick(1000);
+    this.container.bufferfull();
+    this.clock.tick(10000);
+
+    this.container.buffering();
+    this.clock.tick(500);
+    // still rebuffering
+
+    expect(stats.getStats().rebufferingTime).to.equal(1500);
+    expect(stats.getStats().watchingTime).to.equal(10000);
   });
 
   it('should be able to add custom metric', function() {
