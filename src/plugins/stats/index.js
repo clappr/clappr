@@ -38,22 +38,29 @@ var StatsPlugin = BaseObject.extend({
       this.firstPlay = false;
       this.startupTime = Date.now() - this.startupTimeInit;
     } else {
-      this.rebufferingTime += Date.now() - this.rebufferingTimeInit;
+      this.rebufferingTime += this.getRebufferingTime();
     }
+    this.rebufferingTimeInit = undefined;
   },
-  onStatsAdd: function(metric) {
-    $.extend(this.externalMetrics, metric);
+  getRebufferingTime: function() {
+    return Date.now() - this.rebufferingTimeInit;
   },
   getWatchingTime: function() {
     var totalTime = (Date.now() - this.watchingTimeInit);
     return totalTime - this.rebufferingTime - this.startupTime;
   },
+  isRebuffering: function() {
+    return !!this.rebufferingTimeInit;
+  },
+  onStatsAdd: function(metric) {
+    $.extend(this.externalMetrics, metric);
+  },
   getStats: function() {
     var metrics = {
       startupTime:     this.startupTime,
       rebuffers:       this.rebuffers,
-      rebufferingTime: this.rebufferingTime,
-      watchingTime:    this.getWatchingTime()
+      rebufferingTime: this.isRebuffering()? this.rebufferingTime + this.getRebufferingTime(): this.rebufferingTime,
+      watchingTime:    this.isRebuffering()? this.getWatchingTime() - this.getRebufferingTime(): this.getWatchingTime()
     };
     $.extend(metrics, this.externalMetrics);
     return metrics;
