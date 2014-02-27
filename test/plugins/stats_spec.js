@@ -108,4 +108,13 @@ describe('StatsPlugin', function() {
     spy.calledTwice.should.be.true;
   });
 
+  it('should stop announce when transmission stop', function() {
+    var spy = sinon.spy(this.container, 'statsAnnounce');
+    var stats = new StatsPlugin({container: this.container, announceInterval: 10});
+    this.clock.tick(25);
+    this.container.stop();
+    this.clock.tick(15);
+    spy.calledTwice.should.be.true;
+  });
+
 });
