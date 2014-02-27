@@ -54,8 +54,8 @@ var Container = UIObject.extend({
   statsAdd: function(metric) {
     this.trigger('container:stats:add', metric);
   },
-  statsAnnounce: function(metrics) {
-    this.trigger('container:stats:announce', metrics);
+  statsReport: function(metrics) {
+    this.trigger('container:stats:report', metrics);
   }
 });
 

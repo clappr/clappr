@@ -50,7 +50,7 @@ var PlaybackHandler = BaseObject.extend({
     var container = new Container({className: 'hls-video-container'});
     var poster = new PosterPlugin({container: container, src: 'image.png'});
     var spinner = new SpinnerThreeBouncePlugin({container: container});
-    var stats = new StatsPlugin({container: container, announceInterval: 10000});
+    var stats = new StatsPlugin({container: container, reportInterval: 10000});
     var playback = new HLSVideoPlaybackPlugin({container: container, src: this.params.src});
     return container;
   }
