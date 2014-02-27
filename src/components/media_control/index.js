@@ -21,7 +21,10 @@ module.exports = MediaControl = UIObject.extend({
     'click [data-stop]': 'stop',
     'click [data-fullscreen]': 'toggleFullscreen',
     'click [data-seekbar]': 'seek',
-    'click [data-volume]': 'volume'
+    'click input[data-volume]': 'volume',
+    'mouseover span[data-volume]': 'showVolumeBar',
+    'mouseover input[data-volume]': 'keepVolumeBar',
+    'mouseleave [data-volume]': 'hideVolumeBar'
   },
   template: JST.media_control,
   initialize: function() {
@@ -38,7 +41,7 @@ module.exports = MediaControl = UIObject.extend({
     this.container.stop();
   },
   volume: function() {
-    this.container.setVolume(this.$('[data-volume]').val());
+    this.container.setVolume(this.$el.find('input[data-volume]').val());
   },
   toggleFullscreen: function() {
     this.trigger('mediacontrol:fullscreen');
@@ -47,6 +50,26 @@ module.exports = MediaControl = UIObject.extend({
     this.stopListening(this.container);
     this.container = container;
     this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar);
+  },
+  showVolumeBar: function() {
+    if(this.hideId) {
+      clearTimeout(this.hideId);
+    }
+    this.$el.find('input[data-volume]').show();
+  },
+  hideVolumeBar: function() {
+    if(this.hideId) {
+      clearTimeout(this.hideId);
+    }
+    this.hideId = setTimeout(function() {
+      this.$el.find('input[data-volume]').hide();
+    }.bind(this), 1500);
+  },
+  keepVolumeBar: function() {
+    console.log('hover');
+    if(this.hideId) {
+      clearTimeout(this.hideId);
+    }
   },
   updateSeekBar: function(time) {
     this.$('[data-seekbar]').val(time);
@@ -65,7 +88,8 @@ module.exports = MediaControl = UIObject.extend({
     var settings = this.container.settings || this.defaultSettings;
     this.$el.html(this.template({settings: settings}));
     this.$el.append(style);
-    this.$('[data-volume]').val(100);
+    this.$el.find('input[data-volume]').val(100);
+    this.$el.find('input[data-volume]').hide();
     return this;
   }
 });

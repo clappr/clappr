@@ -1,6 +1,12 @@
-<% _.each(settings, function(setting) { %> 
-  <% if(setting === "seekbar" || setting === "volume") { %>
-    <input type="range" value="0" data-<%= setting %> />
-  <% } else { %>
-    <button data-<%= setting %>><%= setting %></button>
-  <% }}) %>
+<div data-controls>
+  <% _.each(settings, function(setting) { %>
+    <% if(setting === "seekbar") { %>
+      <input type="range" value="0" data-<%= setting %> />
+    <% } else if(setting === "volume") { %>
+      <span data-volume><||
+        <input type="range" value="0" data-<%= setting %> />
+      </span>
+    <% } else { %>
+      <button data-<%= setting %>><%= setting %></button>
+    <% }}) %>
+</div>
