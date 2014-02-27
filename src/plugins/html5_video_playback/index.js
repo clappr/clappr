@@ -3,18 +3,22 @@
 // license that can be found in the LICENSE file.
 
 var PlaybackPlugin = require('../../base/playback_plugin');
+var Styler = require('../../base/styler');
 
 var HTML5VideoPlaybackPlugin = PlaybackPlugin.extend({
+  pluginName: 'html5_video_playback',
+  attributes: {
+    'data-html5-video': ''
+  },
   events: {
     'timeupdate': 'timeUpdated',
     'ended': 'ended'
   },
   tagName: 'video',
-  className: 'container',
   initialize: function(options) {
     this.firstPlay = true;
     this.el.src = options.src;
-    this.container.settings = this.settings;
+    this.container.settings = ['play', 'pause', 'seekbar', 'fullscreen', 'volume'];
     this.listenTo(this.container, 'container:play', this.play);
     this.listenTo(this.container, 'container:pause', this.pause);
     this.listenTo(this.container, 'container:seek', this.seek);
@@ -73,6 +77,8 @@ var HTML5VideoPlaybackPlugin = PlaybackPlugin.extend({
     this.container.timeUpdated(time);
   },
   render: function() {
+    var style = Styler.getStyleFor(this.pluginName);
+    this.container.$el.append(style);
     this.container.$el.append(this.el);
     return this;
   },
