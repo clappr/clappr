@@ -62,4 +62,21 @@ describe('StatsPlugin', function() {
     this.clock.tick(2000); // watching for 2 secs
     expect(stats.getStats().watchingTime).to.equal(4000);
   });
+
+  it('should be able to add custom metric', function() {
+    var stats = new StatsPlugin({container: this.container});
+    this.container.statsAdd({"skippedPreRoll": true});
+    expect(stats.getStats()).to.have.property('skippedPreRoll');
+    stats.getStats().skippedPreRoll.should.be.true;
+  });
+
+  it('should overwrite metric if added twice', function() {
+    var stats = new StatsPlugin({container: this.container});
+    this.container.statsAdd({"p2pChunks": 20});
+    expect(stats.getStats().p2pChunks).to.equal(20);
+
+    this.container.statsAdd({"p2pChunks": 30});
+    expect(stats.getStats().p2pChunks).to.equal(30);
+  });
+
 });
