@@ -9,6 +9,7 @@ var StatsPlugin = BaseObject.extend({
   initialize: function(options) {
     this.container = options.container;
     this.listenTo(this.container, 'container:play', this.onPlay);
+    this.listenTo(this.container, 'container:stop', this.onStop);
     this.listenTo(this.container, 'container:state:buffering', this.onBuffering);
     this.listenTo(this.container, 'container:state:bufferfull', this.onBufferFull);
     this.listenTo(this.container, 'container:stats:add', this.onStatsAdd);
@@ -25,6 +26,9 @@ var StatsPlugin = BaseObject.extend({
   },
   onPlay: function() {
     this.watchingTimeInit = Date.now();
+  },
+  onStop: function() {
+    clearInterval(this.intervalId);
   },
   onBuffering: function() {
     if (this.firstPlay) {
