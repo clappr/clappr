@@ -101,17 +101,17 @@ describe('StatsPlugin', function() {
     expect(stats.getStats().p2pChunks).to.equal(30);
   });
 
-  it('should announce statistics periodically', function() {
-    var spy = sinon.spy(this.container, 'statsAnnounce');
-    var stats = new StatsPlugin({container: this.container, announceInterval: 10});
+  it('should report statistics periodically', function() {
+    var spy = sinon.spy(this.container, 'statsReport');
+    var stats = new StatsPlugin({container: this.container, reportInterval: 10});
     this.container.play();
     this.clock.tick(25);
     spy.calledTwice.should.be.true;
   });
 
-  it('should stop announce when transmission stop', function() {
-    var spy = sinon.spy(this.container, 'statsAnnounce');
-    var stats = new StatsPlugin({container: this.container, announceInterval: 10});
+  it('should stop report when transmission stop', function() {
+    var spy = sinon.spy(this.container, 'statsReport');
+    var stats = new StatsPlugin({container: this.container, reportInterval: 10});
     this.container.play();
     this.clock.tick(25);
     this.container.stop();
@@ -119,9 +119,9 @@ describe('StatsPlugin', function() {
     spy.calledTwice.should.be.true;
   });
 
-  it("should only announce if user hits play", function() {
-    var spy = sinon.spy(this.container, 'statsAnnounce');
-    var stats = new StatsPlugin({container: this.container, announceInterval: 10});
+  it("should only report if user hits play", function() {
+    var spy = sinon.spy(this.container, 'statsReport');
+    var stats = new StatsPlugin({container: this.container, reportInterval: 10});
     this.clock.tick(20);
     spy.called.should.be.false;
   });
