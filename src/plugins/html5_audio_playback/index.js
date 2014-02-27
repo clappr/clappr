@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var PlaybackPlugin = require('../base/playback_plugin');
+var PlaybackPlugin = require('../../base/playback_plugin');
 
 var HTML5AudioPlayback = PlaybackPlugin.extend({
   events: {
