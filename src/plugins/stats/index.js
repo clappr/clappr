@@ -2,10 +2,11 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var UIObject = require('../base/ui_object');
+var BaseObject = require('../../base/base_object');
 
-var StatsPlugin = UIObject.extend({
+var StatsPlugin = BaseObject.extend({
   initialize: function(options) {
+    this.container = options.container;
     this.listenTo(this.container, 'container:play', this.onPlay);
     this.listenTo(this.container, 'container:state:buffering', this.onBuffering);
     this.listenTo(this.container, 'container:state:bufferfull', this.onBufferFull);
