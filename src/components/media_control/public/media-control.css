@@ -1,3 +1,7 @@
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
 [data-media-control] {
   position: absolute;
   background-color: rgba(2, 2, 2, 0.5);
@@ -7,7 +11,13 @@
   right: 0;
   margin-left: auto;
   margin-right: auto;
-  width: 500px;
-  height: 100px;
+  width: 400px;
+  height: 50px;
   z-index: 1000;
+}
+
+[data-controls] {
+  position: relative;
+  top: 30%;
+  left: 12%;
 }

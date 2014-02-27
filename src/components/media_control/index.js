@@ -54,6 +54,12 @@ module.exports = MediaControl = UIObject.extend({
   seek: function() {
     this.container.setCurrentTime(this.$('[data-seekbar]').val());
   },
+  fadeIn: function() {
+    this.$el.fadeIn();
+  },
+  fadeOut: function() {
+    this.$el.fadeOut();
+  },
   render: function() {
     var style = Styler.getStyleFor('media_control');
     var settings = this.container.settings || this.defaultSettings;

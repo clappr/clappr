@@ -14,7 +14,10 @@ var MediaControl = require('../media_control');
 
 var Core = UIObject.extend({
   events: {
-    'webkitfullscreenchange': 'exit'
+    'webkitfullscreenchange': 'exit',
+    'mouseover': 'showMediaControl',
+    'mouseleave': 'hideMediaControl',
+    'mousemove': 'mediaControlTimeout'
   },
   attributes: {
     'data-player': ''
@@ -45,6 +48,29 @@ var Core = UIObject.extend({
   fullscreen: function() {
     this.el.webkitRequestFullscreen();
     this.$el.css({height: '100%', width: '100%'});
+  },
+  showMediaControl: function() {
+    if(this.hideId) {
+      clearTimeout(this.hideId);
+    }
+    this.mediaControl.fadeIn();
+  },
+  hideMediaControl: function() {
+    if(this.hideId) {
+      clearTimeout(this.hideId);
+    }
+    this.hideId = setTimeout(function() {
+      this.mediaControl.fadeOut();
+    }.bind(this), 2000);
+  },
+  mediaControlTimeout: function() {
+    if(this.id) {
+      clearTimeout(this.id);
+      this.showMediaControl();
+    }
+    this.id = setTimeout(function() {
+      this.hideMediaControl();
+    }.bind(this), 3000);
   },
   render: function() {
     var style = Styler.getStyleFor('core');
