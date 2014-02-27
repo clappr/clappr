@@ -4,19 +4,22 @@
 
 //FIXME review this require approach.
 var PlaybackPlugin = require('../../base/playback_plugin');
+var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var _ = require("underscore");
 
 var HLSVideoPlaybackPlugin = PlaybackPlugin.extend({
+  pluginName: 'hls_playback',
+  attributes: {
+    'data-hls-playback': ''
+  },
   tagName: 'object',
-  template: JST['hls_playback'],
+  template: JST.hls_playback,
   initialize: function(options) {
     this.el.src = options.src;
     this.el.id = this.cid;
-    this.el.width = options.width || 640;
-    this.el.height = options.width || 360;
-    this.swfPath = "HLSPlayer.swf";
-    this.container.settings = ["play", "stop", "volume"];
+    this.swfPath = "dist/HLSPlayer.swf"; //FIXME
+    this.container.settings = ["play", "stop", "volume", "fullscreen"];
 
     this.listenTo(this.container, 'container:play', this.play);
     this.listenTo(this.container, 'container:pause', this.pause);
@@ -83,11 +86,10 @@ var HLSVideoPlaybackPlugin = PlaybackPlugin.extend({
   timeUpdate: function(time) {
     this.container.timeUpdated(time);
   },
-  //TODO: it depends a lot on css stuff.
-  fullscreen: function() {
-  },
   render: function() {
+    var style = Styler.getStyleFor(this.pluginName);
     this.$el.html(this.template({swfPath: this.swfPath}));
+    this.$el.append(style);
     this.container.$el.append(this.el);
     return this;
   }
