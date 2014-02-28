@@ -18,7 +18,7 @@ var HLSVideoPlaybackPlugin = PlaybackPlugin.extend({
   initialize: function(options) {
     this.el.src = options.src;
     this.el.id = this.cid;
-    this.swfPath = "dist/HLSPlayer.swf"; //FIXME
+    this.swfPath = "swf/HLSPlayer.swf"; //FIXME
     this.container.settings = ["play", "stop", "volume", "fullscreen"];
 
     this.listenTo(this.container, 'container:play', this.play);
@@ -51,7 +51,7 @@ var HLSVideoPlaybackPlugin = PlaybackPlugin.extend({
     setInterval(this.checkState.bind(this), 250);
   },
   checkState: function() {
-    if (this.currentState === "IDLE" && this.el.getState() === "PLAYING_BUFFERING") {
+    if (this.el.getState() === "PLAYING_BUFFERING" && this.el.getbufferLength() < 1) {
       this.container.buffering();
       this.currentState = "PLAYING_BUFFERING";
 
@@ -59,7 +59,7 @@ var HLSVideoPlaybackPlugin = PlaybackPlugin.extend({
       this.container.bufferfull();
       this.currentState = "PLAYING";
 
-    } else if (this.currentState === "PLAYING" && this.el.getState() === "IDLE") {
+    } else if (this.el.getState() === "IDLE") {
       this.currentState = "IDLE";
     }
   },
