@@ -12,7 +12,6 @@ var HTML5VideoPlaybackPlugin = PlaybackPlugin.extend({
   },
   events: {
     'timeupdate': 'timeUpdated',
-    'loadeddata': 'loaded',
     'ended': 'ended'
   },
   tagName: 'video',
@@ -35,9 +34,6 @@ var HTML5VideoPlaybackPlugin = PlaybackPlugin.extend({
       this.firstPlay = false;
     }
     this.el.play();
-  },
-  loaded: function() {
-    this.container.bufferfull();
   },
   pause: function() {
     this.el.pause();
