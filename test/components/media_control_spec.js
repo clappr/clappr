@@ -76,8 +76,9 @@ describe('MediaControl', function() {
 
     it("should change the container's volume", function() {
       var spy = sinon.spy(this.container, 'setVolume');
+      this.container.settings = ['volume'];
       this.control.render();
-      this.control.$('[data-volume]').click();
+      this.control.$('input[data-volume]').click();
       spy.called.should.be.true;
     });
 
