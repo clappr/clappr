@@ -51,7 +51,10 @@ var PlaybackHandler = BaseObject.extend({
     var container = new Container();
     var poster = new PosterPlugin({container: container, src: this.params.poster});
     var spinner = new SpinnerThreeBouncePlugin({container: container});
-    var watermark = new WaterMarkPlugin({container: container});
+
+    // position can be "top-left", "top-right", "bottom-right" or  "bottom-left".
+    var watermark = new WaterMarkPlugin({container: container, imageUrl: "watermark.png", position: "bottom-right"});
+
     var stats = new StatsPlugin({container: container, reportInterval: 10000});
     var playback = new HLSVideoPlaybackPlugin({container: container, src: this.params.src, autoPlay: !!this.params.autoPlay});
     return container;

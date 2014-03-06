@@ -12,6 +12,8 @@ var WaterMarkPlugin = UIObject.extend({
     this.template = JST[this.pluginName];
     this.listenTo(this.container, 'container:play', this.onPlay);
     this.listenTo(this.container, 'container:stop', this.onStop);
+    this.position = options.position? options.position: "bottom-right";
+    this.imageUrl = options.imageUrl;
     this.render();
   },
   onPlay: function() {
@@ -22,7 +24,8 @@ var WaterMarkPlugin = UIObject.extend({
   },
   render: function() {
     this.$el.hide();
-    this.$el.html(this.template());
+    var templateOptions = {position: this.position, imageUrl: this.imageUrl};
+    this.$el.html(this.template(templateOptions));
     var style = Styler.getStyleFor(this.pluginName);
     this.container.$el.append(style);
     this.container.$el.append(this.$el);

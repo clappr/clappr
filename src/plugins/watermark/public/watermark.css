@@ -4,10 +4,27 @@
   width: 70px;
   text-align: center;
   z-index: 10;
-  top: 44%;
-  left: 430;
-  right: 0;
   margin-left: auto;
   margin-right: auto;
+}
+
+[data-watermark-bottom-left] {
+  bottom: 10px;
+  left: 10px;
+}
+
+[data-watermark-bottom-right] {
+  bottom: 10px;
+  right: 42px;
+}
+
+[data-watermark-top-left] {
+  top: -95px;
+  left: 10px;
+}
+
+[data-watermark-top-right] {
+  top: -95px;
+  right: 37px;
 }
 
