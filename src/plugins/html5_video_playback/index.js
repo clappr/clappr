@@ -22,7 +22,6 @@ var HTML5VideoPlaybackPlugin = PlaybackPlugin.extend({
     this.listenTo(this.container, 'container:play', this.play);
     this.listenTo(this.container, 'container:pause', this.pause);
     this.listenTo(this.container, 'container:seek', this.seek);
-    //this.listenTo(this.container, 'container:fullscreen', this.fullscreen);
     this.listenTo(this.container, 'container:volume', this.volume);
     this.listenTo(this.container, 'container:stop', this.stop);
     this.render();
@@ -36,10 +35,6 @@ var HTML5VideoPlaybackPlugin = PlaybackPlugin.extend({
   stop: function() {
     this.pause();
     this.el.currentTime = 0;
-  },
-  fullscreen: function() {
-    //this is not right, the player goes fullscreen, not the playback.
-    this.el.webkitRequestFullscreen();
   },
   volume: function(value) {
     this.el.volume = value / 100;
