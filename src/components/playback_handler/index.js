@@ -37,18 +37,18 @@ var PlaybackHandler = BaseObject.extend({
     callback(containers);
   },
   createHTML5VideoContainer: function() {
-    var container = new Container({className: 'html5-video-container'});
+    var container = new Container();
     var poster = new PosterPlugin({container: container, src: 'image.png'});
     var playback = new HTML5VideoPlaybackPlugin({container: container, src: this.params.src});
     return container;
   },
   createHTML5AudioContainer: function() {
-    var container = new Container({className: 'html5-audio-container'});
+    var container = new Container();
     var playback = new HTML5AudioPlaybackPlugin({container: container, src: this.params.src});
     return container;
   },
   createHLSVideoContainer: function() {
-    var container = new Container({className: 'hls-video-container'});
+    var container = new Container();
     var poster = new PosterPlugin({container: container, src: 'image.png'});
     var spinner = new SpinnerThreeBouncePlugin({container: container});
     var watermark = new WaterMarkPlugin({container: container});
