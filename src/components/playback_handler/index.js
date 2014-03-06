@@ -38,7 +38,7 @@ var PlaybackHandler = BaseObject.extend({
   },
   createHTML5VideoContainer: function() {
     var container = new Container();
-    var poster = new PosterPlugin({container: container, src: 'image.png'});
+    var poster = new PosterPlugin({container: container, src: this.params.poster});
     var playback = new HTML5VideoPlaybackPlugin({container: container, src: this.params.src});
     return container;
   },
@@ -49,7 +49,7 @@ var PlaybackHandler = BaseObject.extend({
   },
   createHLSVideoContainer: function() {
     var container = new Container();
-    var poster = new PosterPlugin({container: container, src: 'image.png'});
+    var poster = new PosterPlugin({container: container, src: this.params.poster});
     var spinner = new SpinnerThreeBouncePlugin({container: container});
     var watermark = new WaterMarkPlugin({container: container});
     var stats = new StatsPlugin({container: container, reportInterval: 10000});
