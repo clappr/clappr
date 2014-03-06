@@ -30,6 +30,7 @@ var HLSVideoPlaybackPlugin = PlaybackPlugin.extend({
     this.render();
     this.currentState = "IDLE";
     this.timedCheckState();
+    options.autoPlay && this.container.play();
   },
   updateTime: function(interval) {
     return setInterval(function() {

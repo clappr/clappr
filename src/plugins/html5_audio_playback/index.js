@@ -18,6 +18,7 @@ var HTML5AudioPlayback = PlaybackPlugin.extend({
     this.listenTo(this.container, 'container:volume', this.volume);
     this.listenTo(this.container, 'container:stop', this.stop);
     this.render(); // it should render when the container trigger 'ready'
+    options.autoPlay && this.container.play();
   },
   play: function() {
     this.el.play();

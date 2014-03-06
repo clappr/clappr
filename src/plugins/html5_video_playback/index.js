@@ -16,7 +16,6 @@ var HTML5VideoPlaybackPlugin = PlaybackPlugin.extend({
   },
   tagName: 'video',
   initialize: function(options) {
-    this.firstPlay = true;
     this.el.src = options.src;
     this.container.settings = ['play', 'pause', 'stop', 'seekbar', 'fullscreen', 'volume'];
     this.listenTo(this.container, 'container:play', this.play);
@@ -25,6 +24,7 @@ var HTML5VideoPlaybackPlugin = PlaybackPlugin.extend({
     this.listenTo(this.container, 'container:volume', this.volume);
     this.listenTo(this.container, 'container:stop', this.stop);
     this.render();
+    options.autoPlay && this.container.play();
   },
   play: function() {
     this.el.play();
