@@ -1,6 +1,8 @@
 ## Player 3
 
 [![Build Status](https://drone.io/github.com/globocom/player/status.png)](https://drone.io/github.com/globocom/player/latest)
+[![Dependency Status](https://gemnasium.com/globocom/player.png)](https://gemnasium.com/globocom/player)
+
 
 ### Installing for development
 
