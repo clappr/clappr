@@ -25,14 +25,9 @@ var HTML5VideoPlaybackPlugin = PlaybackPlugin.extend({
     //this.listenTo(this.container, 'container:fullscreen', this.fullscreen);
     this.listenTo(this.container, 'container:volume', this.volume);
     this.listenTo(this.container, 'container:stop', this.stop);
+    this.render();
   },
   play: function() {
-    this.container.buffering();
-    if(this.firstPlay) {
-      this.render();
-      this.$el.show();
-      this.firstPlay = false;
-    }
     this.el.play();
   },
   pause: function() {
@@ -41,8 +36,6 @@ var HTML5VideoPlaybackPlugin = PlaybackPlugin.extend({
   stop: function() {
     this.pause();
     this.el.currentTime = 0;
-    this.firstPlay = true;
-    this.$el.hide();
   },
   fullscreen: function() {
     //this is not right, the player goes fullscreen, not the playback.
