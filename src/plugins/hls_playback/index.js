@@ -20,7 +20,7 @@ var HLSVideoPlaybackPlugin = PlaybackPlugin.extend({
     this.el.id = this.cid;
     this.swfPath = "swf/HLSPlayer.swf"; //FIXME
     this.container.settings = ["play", "stop", "volume", "fullscreen"];
-
+    this.autoPlay = options.autoPlay;
     this.listenTo(this.container, 'container:play', this.play);
     this.listenTo(this.container, 'container:pause', this.pause);
     this.listenTo(this.container, 'container:stop', this.stop);
@@ -28,9 +28,20 @@ var HLSVideoPlaybackPlugin = PlaybackPlugin.extend({
     this.listenTo(this.container, 'container:volume', this.volume);
     this.listenTo(this.container, 'container:fullscreen', this.fullscreen);
     this.render();
+    this.checkIfFlashIsReady();
+  },
+  bootstrap: function() {
+    clearInterval(this.bootstrapId);
     this.currentState = "IDLE";
     this.timedCheckState();
-    options.autoPlay && this.container.play();
+    this.autoPlay && this.container.play();
+  },
+  checkIfFlashIsReady: function() {
+    this.bootstrapId = setInterval(function() {
+      if(this.el.getState) {
+        this.bootstrap();
+      }
+    }.bind(this), 50);
   },
   updateTime: function(interval) {
     return setInterval(function() {
