@@ -18,7 +18,7 @@ var HLSVideoPlaybackPlugin = PlaybackPlugin.extend({
   initialize: function(options) {
     this.el.src = options.src;
     this.el.id = this.cid;
-    this.swfPath = "swf/HLSPlayer.swf"; //FIXME
+    this.swfPath = options.swfPath || "assets/HLSPlayer.swf";
     this.container.settings = ["play", "stop", "volume", "fullscreen"];
     this.autoPlay = options.autoPlay;
     this.listenTo(this.container, 'container:play', this.play);

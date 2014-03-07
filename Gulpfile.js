@@ -8,6 +8,8 @@ var rename = require('gulp-rename');
 var browserify = require('gulp-browserify');
 var exec = require('child_process').exec;
 
+var noop = function() {};
+
 var paths = {
   files: ['src/**/*.js', 'src/**/*.css', 'src/**/*.html'],
   main: ['src/main.js'],
@@ -21,14 +23,11 @@ var namespace = 'WP3';
 
 gulp.task('default', ['lint', 'build']);
 
-gulp.task('generate-jst', function() {
-  exec('node bin/jst_generator.js', function(err, stdout, stderr) {
-    console.log(stdout);
-    console.log(stderr);
-  });
+gulp.task('pre-build-hook', function() {
+  exec('node bin/hook.js', noop);
 });
 
-gulp.task('build', ['generate-jst'], function() {
+gulp.task('build', ['pre-build-hook'], function() {
   gulp.src(paths.main)
     .pipe(browserify())
     .pipe(rename(distFile))
@@ -38,7 +37,7 @@ gulp.task('build', ['generate-jst'], function() {
     });
 });
 
-gulp.task('dist', ['generate-jst'], function() {
+gulp.task('dist', ['pre-build-hook'], function() {
   gulp.src(paths.main)
     .pipe(browserify())
     .pipe(uglify())

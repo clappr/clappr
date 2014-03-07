@@ -56,7 +56,7 @@ var PlaybackHandler = BaseObject.extend({
     var spinner = new SpinnerThreeBouncePlugin({container: container});
 
     // position can be "top-left", "top-right", "bottom-right" or  "bottom-left".
-    var watermark = new WaterMarkPlugin({container: container, imageUrl: "watermark.png", position: "top-right"});
+    var watermark = new WaterMarkPlugin({container: container, position: "bottom-right"});
     var stats = new StatsPlugin({container: container, reportInterval: 10000});
     var playback = new HLSVideoPlaybackPlugin({container: container, src: src, autoPlay: !!this.params.autoPlay});
     return container;
