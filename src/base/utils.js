@@ -27,6 +27,11 @@ var extend = function(protoProps, staticProps) {
   return child;
 };
 
+var zeroPad = function(number, size) {
+  return (new Array(size + 1 - number.toString().length)).join('0') + number;
+};
+
 module.exports = {
-  extend: extend
+  extend: extend,
+  zeroPad: zeroPad
 };
