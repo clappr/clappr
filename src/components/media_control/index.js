@@ -66,7 +66,6 @@ module.exports = MediaControl = UIObject.extend({
     }.bind(this), 1500);
   },
   keepVolumeBar: function() {
-    console.log('hover');
     if(this.hideId) {
       clearTimeout(this.hideId);
     }
