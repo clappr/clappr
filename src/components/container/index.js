@@ -21,6 +21,9 @@ var Container = UIObject.extend({
     this.$el.append(style);
     this.trigger('container:ready');
   },
+  setStyle: function(style) {
+    this.$el.css(style);
+  },
   timeUpdated: function(time) {
     this.trigger('container:timeupdate', time);
   },
