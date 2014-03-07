@@ -7,10 +7,13 @@
  * and the player state.
  */
 
+var _ = require('underscore');
 var UIObject = require('../../base/ui_object');
 var PlaybackHandler = require('../playback_handler');
 var Styler = require('../../base/styler');
 var MediaControl = require('../media_control');
+
+var PipPlugin = require("../../plugins/pip");
 
 var Core = UIObject.extend({
   events: {
@@ -23,13 +26,14 @@ var Core = UIObject.extend({
     'data-player': ''
   },
   initialize: function(params) {
+    this.params = params;
     this.parentElement = params.parentElement;
     this.playbackHandler = new PlaybackHandler(params);
     this.playbackHandler.createContainers(this.onContainersCreated.bind(this));
   },
   exit: function() {
     if(!document.webkitIsFullScreen) {
-      this.$el.css({height: '360px', width: '640px'});
+      this.$el.css({height: '593px', width: '1055px'});
     }
   },
   onContainersCreated: function(containers) {
@@ -37,10 +41,18 @@ var Core = UIObject.extend({
     this.createMediaControl(this.getCurrentContainer());
     this.render();
     this.$el.appendTo(this.parentElement);
+    this.loadPlayerPlugins(this.params);
   },
   createMediaControl: function(container) {
     this.mediaControl = new MediaControl({container: container});
     this.listenTo(this.mediaControl, 'mediacontrol:fullscreen', this.fullscreen);
+  },
+  loadPlayerPlugins: function(params) {
+    _.each(params, function(value, key) {
+      if (key === 'pip') {
+        new PipPlugin(this.mediaControl, this.containers);
+      }
+    }, this);
   },
   getCurrentContainer: function() {
     return this.containers[0];
@@ -75,7 +87,11 @@ var Core = UIObject.extend({
   render: function() {
     var style = Styler.getStyleFor('core');
     this.$el.append(style);
-    this.$el.append(this.getCurrentContainer().render().el);
+
+    _.each(this.containers, function(container) {
+      this.$el.append(container.render().el);
+    }, this);
+
     this.$el.append(this.mediaControl.render().el);
     return this;
   }
