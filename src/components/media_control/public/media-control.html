@@ -3,10 +3,10 @@
     <% if(setting === "seekbar") { %>
       <input type="range" value="0" data-<%= setting %> />
     <% } else if(setting === "volume") { %>
-      <span data-volume>&lt;||
+      <div data-volume>
         <input type="range" value="0" data-<%= setting %> />
       </span>
     <% } else { %>
-      <button data-<%= setting %>><%= setting %></button>
+      <button class="media-control" data-<%= setting %>></button>
     <% }}) %>
 </div>
