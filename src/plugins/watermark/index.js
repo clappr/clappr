@@ -13,7 +13,7 @@ var WaterMarkPlugin = UIObject.extend({
     this.listenTo(this.container, 'container:play', this.onPlay);
     this.listenTo(this.container, 'container:stop', this.onStop);
     this.position = options.position? options.position: "bottom-right";
-    this.imageUrl = options.imageUrl;
+    this.imageUrl = options.imageUrl || 'assets/watermark';
     this.render();
   },
   onPlay: function() {
