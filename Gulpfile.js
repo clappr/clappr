@@ -2,13 +2,18 @@ var gulp   = require('gulp');
 var uglify = require('gulp-uglify');
 var mocha = require('gulp-mocha');
 var jshint = require('gulp-jshint');
+var utils = require('gulp-util');
 var stylish = require('jshint-stylish');
 var istanbul = require('gulp-istanbul');
 var rename = require('gulp-rename');
 var browserify = require('gulp-browserify');
 var exec = require('child_process').exec;
+var express = require('express');
 
 var noop = function() {};
+var server = express();
+
+server.use(express.static('./dist'));
 
 var paths = {
   files: ['src/**/*.js', 'src/**/*.css', 'src/**/*.html'],
@@ -16,6 +21,8 @@ var paths = {
   tests: ['test/spec_helper.js', 'test/**/*_spec.js'],
   dist: 'dist'
 };
+
+var port = 3000;
 
 var distFile = 'api.min.js';
 
@@ -35,6 +42,11 @@ gulp.task('build', ['pre-build-hook'], function() {
     .on("error", function(err) {
       throw err;
     });
+});
+
+gulp.task('serve', ['watch'], function() {
+  server.listen(port);
+  utils.log(utils.colors.cyan('Listening on port ' + port))
 });
 
 gulp.task('dist', ['pre-build-hook'], function() {
