@@ -41,7 +41,7 @@ var PlaybackHandler = BaseObject.extend({
   },
   createHTML5VideoContainer: function() {
     var container = new Container();
-    var poster = new PosterPlugin({container: container, src: "image2.png"});
+    var poster = new PosterPlugin({container: container});
     var playback = new HTML5VideoPlaybackPlugin({container: container, src: this.params.src, autoPlay: !!this.params.autoPlay});
     return container;
   },
