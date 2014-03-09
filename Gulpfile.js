@@ -8,6 +8,8 @@ var istanbul = require('gulp-istanbul');
 var rename = require('gulp-rename');
 var browserify = require('gulp-browserify');
 var exec = require('child_process').exec;
+var changed = require('gulp-changed');
+var cache = require('gulp-cached');
 var express = require('express');
 
 var noop = function() {};
@@ -19,7 +21,7 @@ var paths = {
   files: ['src/**/*.js', 'src/**/*.css', 'src/**/*.html'],
   main: ['src/main.js'],
   tests: ['test/spec_helper.js', 'test/**/*_spec.js'],
-  dist: 'dist'
+  dest: 'dist'
 };
 
 var port = 3000;
@@ -36,17 +38,19 @@ gulp.task('pre-build-hook', function() {
 
 gulp.task('build', ['pre-build-hook'], function() {
   gulp.src(paths.main)
+    .pipe(cache('build'))
+    .pipe(changed(paths.dest))
     .pipe(browserify())
     .pipe(rename(distFile))
-    .pipe(gulp.dest(paths.dist))
+    .pipe(gulp.dest(paths.dest))
     .on("error", function(err) {
       throw err;
     });
 });
 
 gulp.task('serve', ['watch'], function() {
+  utils.log(utils.colors.green('*****  Listening on port ' + port + '  *****'))
   server.listen(port);
-  utils.log(utils.colors.cyan('Listening on port ' + port))
 });
 
 gulp.task('dist', ['pre-build-hook'], function() {
@@ -54,7 +58,7 @@ gulp.task('dist', ['pre-build-hook'], function() {
     .pipe(browserify())
     .pipe(uglify())
     .pipe(rename(distFile))
-    .pipe(gulp.dest(paths.dist));
+    .pipe(gulp.dest(paths.dest));
 });
 
 gulp.task('test', ['build'], function() {
