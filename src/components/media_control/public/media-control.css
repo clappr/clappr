@@ -45,6 +45,12 @@ button[data-play] {
   background-position: 50% 50%;
   background-repeat: no-repeat;
 }
+button[data-play]:focus,
+button[data-pause]:focus,
+button[data-stop]:focus,
+button[data-fullscreen]:focus {
+  outline: none;
+}
 button[data-pause] {
   position: absolute;
   top:0;
