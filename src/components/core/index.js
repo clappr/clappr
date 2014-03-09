@@ -33,7 +33,7 @@ var Core = UIObject.extend({
   },
   exit: function() {
     if(!document.webkitIsFullScreen) {
-      this.$el.css({height: '593px', width: '1055px'});
+      this.$el.css({height: '360px', width: '640px'});
     }
   },
   onContainersCreated: function(containers) {
