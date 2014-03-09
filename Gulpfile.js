@@ -9,7 +9,6 @@ var rename = require('gulp-rename');
 var browserify = require('gulp-browserify');
 var exec = require('child_process').exec;
 var changed = require('gulp-changed');
-var cache = require('gulp-cached');
 var express = require('express');
 
 var noop = function() {};
@@ -38,7 +37,6 @@ gulp.task('pre-build-hook', function() {
 
 gulp.task('build', ['pre-build-hook'], function() {
   gulp.src(paths.main)
-    .pipe(cache('build'))
     .pipe(changed(paths.dest))
     .pipe(browserify())
     .pipe(rename(distFile))
