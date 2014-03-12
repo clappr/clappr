@@ -1,4 +1,6 @@
 var Container = require('../spec_helper').Container;
+var BaseObject = require('../spec_helper').BaseObject;
+var StatsPlugin = require('../spec_helper').StatsPlugin;
 
 describe('Container', function() {
   beforeEach(function() {
@@ -63,6 +65,52 @@ describe('Container', function() {
     it('#click', function() {
       this.container.clicked();
       expect(this.spy.withArgs('container:click', this.container).calledOnce).to.be.true;
+    });
+  });
+  describe('plugins', function() {
+    it('#addPlugin', function() {
+      expect(this.container.plugins.length).to.equal(0);
+      this.container.addPlugin({plugin: {}, type: 'ui'});
+      expect(this.container.plugins.length).to.equal(1);
+    });
+
+    it('#disablePlugins', function() {
+      var disable = sinon.spy();
+      var plugin = {disable: disable};
+      this.container.addPlugin(plugin);
+      this.container.disablePlugins();
+      expect(disable.calledOnce).to.be.true;
+    });
+
+    it('disable plugins by type', function() {
+      var disable = sinon.spy();
+      var plugin1 = {disable: disable, type: 'ui'};
+      var plugin2 = {disable: disable, type: 'stats'};
+      this.container.addPlugin(plugin1);
+      this.container.addPlugin(plugin2);
+      this.container.disablePlugins('ui');
+      expect(disable.calledOnce).to.be.true;
+    });
+
+    it('#enablePlugins', function() {
+      var disable = sinon.spy();
+      var enable = sinon.spy();
+      var plugin = {enable: enable, disable: disable};
+      this.container.addPlugin(plugin);
+      this.container.disablePlugins();
+      this.container.enablePlugins();
+      expect(enable.calledOnce).to.be.true;
+    });
+
+    it('enable plugins by type', function() {
+      var disable = sinon.spy();
+      var enable = sinon.spy();
+      var plugin = {enable: enable, disable: disable, type: 'ui'};
+      var plugin2 = {enable: enable, disable: disable, type: 'ui'};
+      this.container.addPlugin(plugin);
+      this.container.disablePlugins('ui');
+      this.container.enablePlugins('ui');
+      expect(enable.calledOnce).to.be.true;
     });
   });
 });
