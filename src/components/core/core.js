@@ -17,7 +17,6 @@ var PipPlugin = require("../../plugins/pip");
 
 var Core = UIObject.extend({
   events: {
-    'webkitfullscreenchange': 'exit',
     'mouseover': 'showMediaControl',
     'mouseleave': 'hideMediaControl',
     'mousemove': 'mediaControlTimeout'
@@ -38,11 +37,6 @@ var Core = UIObject.extend({
     this.params.videoId = videoId;
     this.playbackHandler.createContainers(this.onContainersCreated.bind(this));
   },
-  exit: function() {
-    if(!document.webkitIsFullScreen) {
-      this.$el.css({height: '360px', width: '640px'});
-    }
-  },
   onContainersCreated: function(containers) {
     this.containers = containers;
     this.createMediaControl(this.getCurrentContainer());
@@ -52,7 +46,7 @@ var Core = UIObject.extend({
   },
   createMediaControl: function(container) {
     this.mediaControl = new MediaControl({container: container});
-    this.listenTo(this.mediaControl, 'mediacontrol:fullscreen', this.fullscreen);
+    this.listenTo(this.mediaControl, 'mediacontrol:fullscreen', this.toggleFullscreen);
   },
   loadPlayerPlugins: function(params) {
     _.each(params, function(value, key) {
@@ -64,9 +58,14 @@ var Core = UIObject.extend({
   getCurrentContainer: function() {
     return this.containers[0];
   },
-  fullscreen: function() {
-    this.el.webkitRequestFullscreen();
-    this.$el.css({height: '100%', width: '100%'});
+  toggleFullscreen: function() {
+    if (!document.webkitIsFullScreen) {
+      this.el.webkitRequestFullscreen();
+      this.$el.addClass('fullscreen');
+    } else {
+      document.webkitCancelFullScreen();
+      this.$el.removeClass('fullscreen');
+    }
   },
   showMediaControl: function() {
     if(this.hideId) {

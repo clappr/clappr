@@ -4,3 +4,7 @@
   height: 360px;
   width: 640px;
 }
+[data-player].fullscreen {
+  width: 100%;
+  height: 100%;
+}
