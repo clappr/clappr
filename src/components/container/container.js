@@ -8,6 +8,7 @@
 
 var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
+var _ = require('underscore');
 
 var Container = UIObject.extend({
   attributes: {
@@ -19,6 +20,7 @@ var Container = UIObject.extend({
   initialize: function() {
     var style = Styler.getStyleFor('container');
     this.$el.append(style);
+    this.plugins = [];
     this.trigger('container:ready');
   },
   destroy: function() {
@@ -56,6 +58,28 @@ var Container = UIObject.extend({
   },
   bufferfull: function() {
     this.trigger('container:state:bufferfull');
+  },
+  addPlugin: function(plugin) {
+    this.plugins.push(plugin);
+  },
+  disablePlugins: function(type) {
+    if(type) {
+      this._byType(type, 'disable');
+    } else {
+      _(this.plugins).invoke('disable');
+    }
+  },
+  _byType: function(type, action) {
+    _(this.plugins).each(function(plugin) {
+      if(plugin.type == type) plugin[action]();
+    });
+  },
+  enablePlugins: function(type) {
+    if(type) {
+      this._byType(type, 'enable');
+    } else {
+      _(this.plugins).invoke('enable');
+    }
   }
 });
 
