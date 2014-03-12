@@ -11,6 +11,7 @@ var UIObject = require('base/ui_object');
 var Container = require('components/container');
 var MediaControl = require('components/media_control');
 var StatsPlugin = require('plugins/stats');
+var StatsEvents = require('plugins/stats/stats_events');
 
 chai.should();
 expect = chai.expect;
@@ -20,5 +21,6 @@ module.exports = {
   MediaControl: MediaControl,
   Container: Container,
   Core: Core,
-  StatsPlugin: StatsPlugin
+  StatsPlugin: StatsPlugin,
+  StatsEvents: StatsEvents
 };

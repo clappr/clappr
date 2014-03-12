@@ -1,9 +1,10 @@
 var StatsPlugin = require('../spec_helper').StatsPlugin;
+var StatsEvents = require('../spec_helper').StatsEvents;
 var Container = require('../spec_helper').Container;
 
 describe('StatsPlugin', function() {
   beforeEach(function() {
-    this.container = new Container({settings: ['play', 'pause']});
+    this.container = new (Container.extend(StatsEvents))({settings: ['play', 'pause']});
     this.clock = sinon.useFakeTimers();
   });
 
