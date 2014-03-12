@@ -31,6 +31,13 @@ var Core = UIObject.extend({
     this.playbackHandler = new PlaybackHandler(params);
     this.playbackHandler.createContainers(this.onContainersCreated.bind(this));
   },
+  load: function(videoId) {
+    _(this.containers).each(function(container) {
+      container.destroy();
+    });
+    this.params.videoId = videoId;
+    this.playbackHandler.createContainers(this.onContainersCreated.bind(this));
+  },
   exit: function() {
     if(!document.webkitIsFullScreen) {
       this.$el.css({height: '360px', width: '640px'});
