@@ -29,9 +29,12 @@
   right: 5px;
   height: 100%;
 }
-[data-controls] > button.media-control {
+button.media-control {
   background-color: transparent;
   border: 0;
+}
+button.media-control:focus {
+  outline: none;
 }
 button[data-play] {
   float: left;
