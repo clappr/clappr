@@ -1,12 +1,29 @@
 <div data-controls>
-  <% _.each(settings, function(setting) { %>
-    <% if(setting === "seekbar") { %>
-      <input type="range" value="0" data-<%= setting %> />
-    <% } else if(setting === "volume") { %>
-      <div data-volume>
-        <input type="range" value="0" data-<%= setting %> />
+  <%
+    var render = function(settings) {
+      _.each(settings, function(setting) {
+        if(setting === "seekbar") { %>
+          <input type="range" value="0" data-<%= setting %> />
+      <% } else if(setting === "volume") { %>
+      <span data-volume>
+        <input type="range" value="0" data-<%= setting %> orient="vertical" />
       </span>
-    <% } else { %>
-      <button class="media-control" data-<%= setting %>></button>
-    <% }}) %>
+      <% } else { %>
+        <button class="media-control" data-<%= setting %>></button>
+      <% }});
+    };
+    %>
+  <% if (settings.left && settings.left.length) { %>
+  <div data-left-controls>
+    <% render(settings.left); %>
+  </div>
+  <% } %>
+  <% if (settings.right && settings.right.length) { %>
+  <div data-right-controls>
+    <% render(settings.right); %>
+  </div>
+  <% } %>
+  <% if (settings.default && settings.default.length) { %>
+    <% render(settings.default); %>
+  <% } %>
 </div>

@@ -29,7 +29,11 @@ module.exports = MediaControl = UIObject.extend({
   template: JST.media_control,
   initialize: function() {
     this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar);
-    this.defaultSettings = ['play', 'stop', 'pause', 'seekbar', 'volume'];
+    this.defaultSettings = {
+      left: ['play', 'stop', 'pause'],
+      right: ['volume'],
+      default: ['seekbar']
+    };
   },
   play: function() {
     this.container.play();

@@ -17,7 +17,11 @@ var HTML5VideoPlaybackPlugin = PlaybackPlugin.extend({
   tagName: 'video',
   initialize: function(options) {
     this.el.src = options.src;
-    this.container.settings = ['play', 'pause', 'stop', 'seekbar', 'fullscreen', 'volume'];
+    this.container.settings = {
+      left: ['play', 'pause', 'stop'],
+      right: ['fullscreen', 'volume'],
+      default: ['seekbar']
+    };
     this.listenTo(this.container, 'container:play', this.play);
     this.listenTo(this.container, 'container:pause', this.pause);
     this.listenTo(this.container, 'container:seek', this.seek);

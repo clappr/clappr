@@ -19,7 +19,10 @@ var HLSVideoPlaybackPlugin = PlaybackPlugin.extend({
     this.el.src = options.src;
     this.el.id = this.cid;
     this.swfPath = options.swfPath || "assets/HLSPlayer.swf";
-    this.container.settings = ["play", "stop", "volume", "fullscreen"];
+    this.container.settings = {
+      left: ["play", "stop"],
+      right: ["fullscreen", "volume"]
+    };
     this.autoPlay = options.autoPlay;
     this.listenTo(this.container, 'container:play', this.play);
     this.listenTo(this.container, 'container:pause', this.pause);
