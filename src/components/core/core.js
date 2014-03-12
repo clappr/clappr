@@ -17,8 +17,8 @@ var PipPlugin = require("../../plugins/pip");
 
 var Core = UIObject.extend({
   events: {
-    'mouseover': 'showMediaControl',
-    'mouseleave': 'hideMediaControl',
+    'mouseover[data-controls]': 'showMediaControl',
+    'mouseleave[data-controls]': 'hideMediaControl',
     'mousemove': 'mediaControlTimeout'
   },
   attributes: {
@@ -82,13 +82,15 @@ var Core = UIObject.extend({
     }.bind(this), 2000);
   },
   mediaControlTimeout: function() {
-    if(this.id) {
-      clearTimeout(this.id);
+    if(this.hideId) {
+      clearTimeout(this.hideId);
       this.showMediaControl();
     }
-    this.id = setTimeout(function() {
-      this.hideMediaControl();
-    }.bind(this), 3000);
+    if (this.$el.find('[data-controls]:hover').length === 0) {
+      this.hideId = setTimeout(function() {
+        this.hideMediaControl();
+      }.bind(this), 3000);
+    }
   },
   render: function() {
     var style = Styler.getStyleFor('core');
