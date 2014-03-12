@@ -60,16 +60,6 @@ describe('Container', function() {
       expect(this.spy.withArgs('container:state:bufferfull').calledOnce).to.be.true;
     });
 
-    it('#statsAdd', function() {
-      this.container.statsAdd('random value');
-      expect(this.spy.withArgs('container:stats:add', 'random value').calledOnce).to.be.true;
-    });
-
-    it('#statsReport', function() {
-      this.container.statsReport('some metrics');
-      expect(this.spy.withArgs('container:stats:report', 'some metrics').calledOnce).to.be.true;
-    });
-
     it('#click', function() {
       this.container.clicked();
       expect(this.spy.withArgs('container:click', this.container).calledOnce).to.be.true;
