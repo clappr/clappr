@@ -12,6 +12,11 @@ var HTML5AudioPlayback = PlaybackPlugin.extend({
   tagName: 'audio',
   initialize: function(options) {
     this.el.src = options.src;
+    this.container.settings = {
+      left: ['playpause'],
+      right: ['volume'],
+      default: ['seekbar']
+    };
     this.listenTo(this.container, 'container:play', this.play);
     this.listenTo(this.container, 'container:pause', this.pause);
     this.listenTo(this.container, 'container:seek', this.seek);

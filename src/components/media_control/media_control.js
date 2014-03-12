@@ -18,7 +18,9 @@ module.exports = MediaControl = UIObject.extend({
   events: {
     'click [data-play]': 'play',
     'click [data-pause]': 'pause',
+    'click [data-playpause]': 'togglePlayPause',
     'click [data-stop]': 'stop',
+    'click [data-playstop]': 'togglePlayStop',
     'click [data-fullscreen]': 'toggleFullscreen',
     'click [data-seekbar]': 'seek',
     'click input[data-volume]': 'volume',
@@ -43,6 +45,24 @@ module.exports = MediaControl = UIObject.extend({
   },
   stop: function() {
     this.container.stop();
+  },
+  togglePlayPause: function() {
+    var playPauseButton = this.$el.find('button[data-playpause]');
+    if (playPauseButton.hasClass('playing')) {
+      this.container.pause();
+    } else {
+      this.container.play();
+    }
+    playPauseButton.toggleClass('playing paused');
+  },
+  togglePlayStop: function() {
+    var playStopButton = this.$el.find('button[data-playstop]');
+    if (playStopButton.hasClass('playing')) {
+      this.container.stop();
+    } else {
+      this.container.play();
+    }
+    playStopButton.toggleClass('playing stopped');
   },
   volume: function() {
     this.container.setVolume(this.$el.find('input[data-volume]').val());
@@ -93,6 +113,8 @@ module.exports = MediaControl = UIObject.extend({
     this.$el.append(style);
     this.$el.find('input[data-volume]').val(100);
     this.$el.find('input[data-volume]').hide();
+    this.$el.find('button[data-playpause]').addClass('paused');
+    this.$el.find('button[data-playstop]').addClass('stopped');
     return this;
   }
 });
