@@ -37,7 +37,7 @@ describe('MediaControl', function() {
     this.control.setContainer(newContainer);
 
     stopListening.withArgs(this.container).calledOnce.should.be.true;
-    listenTo.calledOnce.should.be.true;
+    listenTo.withArgs(newContainer, 'container:timeupdate').calledOnce.should.be.true;
   });
 
   describe('events', function() {
