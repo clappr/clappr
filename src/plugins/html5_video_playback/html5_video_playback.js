@@ -20,7 +20,7 @@ var HTML5VideoPlaybackPlugin = PlaybackPlugin.extend({
     this.container.settings = {
       left: ['playpause'],
       right: ['fullscreen', 'volume'],
-      default: ['seekbar']
+      default: ['position', 'seekbar', 'duration']
     };
     this.listenTo(this.container, 'container:play', this.play);
     this.listenTo(this.container, 'container:pause', this.pause);
@@ -66,8 +66,7 @@ var HTML5VideoPlaybackPlugin = PlaybackPlugin.extend({
     return this.el.duration;
   },
   timeUpdated: function() {
-    var time = (100 / this.el.duration) * this.el.currentTime;
-    this.container.timeUpdated(time);
+    this.container.timeUpdated(this.el.currentTime, this.el.duration);
   },
   render: function() {
     var style = Styler.getStyleFor(this.pluginName);

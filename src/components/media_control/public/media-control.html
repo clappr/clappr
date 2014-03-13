@@ -8,6 +8,8 @@
       <span data-volume>
         <input type="range" value="0" data-<%= setting %> orient="vertical" />
       </span>
+      <% } else if (setting === "duration" || setting === "position") { %>
+        <div data-<%= setting %>></div>
       <% } else { %>
         <button class="media-control" data-<%= setting %>></button>
       <% }});
@@ -24,6 +26,8 @@
   </div>
   <% } %>
   <% if (settings.default && settings.default.length) { %>
+  <div data-default-controls>
     <% render(settings.default); %>
+  </div>
   <% } %>
 </div>

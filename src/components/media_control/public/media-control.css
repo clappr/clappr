@@ -93,11 +93,21 @@ button[data-playstop].playing {
 button[data-playstop].stopped {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAyCAMAAADGIxO9AAAABGdBTUEAALGPC/xhBQAAAJ9QTFRF9fX19fX10tLS6enp+/v7sbGx9fX1qqqq+vr66Ojo1tbW+vr61dXV/Pz8/f39HBwcZmZm6urq1dXV6Ojo+vr6/f39////9PT01dXV/Pz8gICA+/v78fHx/v7+vLy8////3Nzc9/f3/v7+////7u7uMzMz/f399PT0kpKS////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////J6BIXAAAADR0Uk5TaJQzO8wXmRi7WDjFK7XdCQ9iMVm94/aIKrMSyn/0Iv5Bpuz7aQrokRX5CAUGBwQJAgMBAKhVSvQAAADFSURBVEjH7dRHEsIwDAXQ0HvvHdKAFGObf/+zQdaxxYgNLOz9G0kefXlP/vOcceaXRmvNNVoqJTXPSDHo54JWJZPjfr1lSjOMSgDEYZQSpUrmgeLtzkSDFoPT5ZjZPsNmgMN+nJrHshtg2EmMDVIGaFdNY9EGQaUhJNMAvlcq9NHUa9w6fhgJ3jxBs2XaIsr0ujnzr+PJyLJ0NkMtt8XMp5wdLbKwmCWCkYV35parbcrKnBSbdaZ42f7mhnxzq9yNd+bfzAvnQ/WiuCMqXwAAAABJRU5ErkJggg==);
 }
+div[data-default-controls] {
+  height: 100%;
+  vertical-align: middle;
+  line-height: 32px;
+}
+div[data-position], div[data-duration] {
+  display: inline-block;
+  color: white;
+  margin: 0 5px;
+}
 input[data-seekbar] {
   position: relative;
   margin: auto;
   width: 40%;
-  height: 100%;
+  height: 10px;
 }
 span[data-volume] {
   float: right;

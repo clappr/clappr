@@ -10,6 +10,7 @@ var _ = require('underscore');
 var JST = require('../../base/jst');
 var Styler = require('../../base/styler');
 var UIObject = require('../../base/ui_object');
+var Utils = require('../../base/utils');
 
 module.exports = MediaControl = UIObject.extend({
   attributes: {
@@ -34,7 +35,7 @@ module.exports = MediaControl = UIObject.extend({
     this.defaultSettings = {
       left: ['play', 'stop', 'pause'],
       right: ['volume'],
-      default: ['seekbar']
+      default: ['position', 'seekbar', 'duration']
     };
   },
   play: function() {
@@ -94,8 +95,11 @@ module.exports = MediaControl = UIObject.extend({
       clearTimeout(this.hideId);
     }
   },
-  updateSeekBar: function(time) {
-    this.$('[data-seekbar]').val(time);
+  updateSeekBar: function(position, duration) {
+    var seekbarValue = (100 / duration) * position;
+    this.$('[data-seekbar]').val(seekbarValue);
+    this.$('[data-position]').html(Utils.formatTime(position));
+    this.$('[data-duration]').html(Utils.formatTime(duration));
   },
   seek: function() {
     this.container.setCurrentTime(this.$('[data-seekbar]').val());

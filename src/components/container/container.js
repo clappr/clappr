@@ -30,8 +30,8 @@ var Container = UIObject.extend({
   setStyle: function(style) {
     this.$el.css(style);
   },
-  timeUpdated: function(time) {
-    this.trigger('container:timeupdate', time);
+  timeUpdated: function(position, duration) {
+    this.trigger('container:timeupdate', position, duration);
   },
   play: function() {
     this.trigger('container:play');
