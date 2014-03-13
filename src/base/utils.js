@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 var _ = require('underscore');
+var Moment = require('moment');
 
 var extend = function(protoProps, staticProps) {
   var parent = this;
@@ -31,7 +32,18 @@ var zeroPad = function(number, size) {
   return (new Array(size + 1 - number.toString().length)).join('0') + number;
 };
 
+var formatTime = function(time, showMillis) {
+  var duration = Moment.duration(time * 1000);
+  var str = duration.minutes() + ':' + zeroPad(duration.seconds(), 2);
+  if (duration.hours())
+    str = duration.hours() + ':' + str;
+  if (showMillis)
+    str += '.' + duration.milliseconds();
+  return str;
+};
+
 module.exports = {
   extend: extend,
-  zeroPad: zeroPad
+  zeroPad: zeroPad,
+  formatTime: formatTime
 };
