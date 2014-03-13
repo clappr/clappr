@@ -14,6 +14,9 @@ var Player = BaseObject.extend({
     this.params.parentElement = element;
     this.core = new Core(this.params);
   },
+  load: function(params) {
+    this.core.load(params);
+  }
 });
 
 module.exports = WP3 = { Player: Player };
