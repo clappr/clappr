@@ -25,29 +25,27 @@ var PlaybackHandler = BaseObject.extend({
   },
   createContainers: function(callback) {
     var containers = [];
-    _.each(this.params, function(value, key) {
-      if (key === "src" || key === "pip") {
-        if (value.match(/(.*).mp4/)) {
-          containers.push(this.createHTML5VideoContainer());
-        } else if (value.match(/(.*).mp3/)) {
-          containers.push(this.createHTML5AudioContainer());
-        } else if (value.match(/(.*).m3u8/)) {
+    _.each(this.params.sources, function(value) {
+        if (HTML5VideoPlaybackPlugin.canPlay(value)) {
+          containers.push(this.createHTML5VideoContainer(value));
+        } else if (HTML5AudioPlaybackPlugin.canPlay(value)) {
+          containers.push(this.createHTML5AudioContainer(value));
+        } else if (HLSVideoPlaybackPlugin.canPlay(value)) {
           containers.push(this.createHLSVideoContainer(value));
         }
-      }
     }, this);
 
     callback(containers);
   },
-  createHTML5VideoContainer: function() {
+  createHTML5VideoContainer: function(src) {
     var container = new Container();
     var poster = new PosterPlugin({container: container});
-    var playback = new HTML5VideoPlaybackPlugin({container: container, src: this.params.src, autoPlay: !!this.params.autoPlay});
+    var playback = new HTML5VideoPlaybackPlugin({container: container, src: src, autoPlay: !!this.params.autoPlay});
     return container;
   },
-  createHTML5AudioContainer: function() {
+  createHTML5AudioContainer: function(src) {
     var container = new Container();
-    var playback = new HTML5AudioPlaybackPlugin({container: container, src: this.params.src, autoPlay: !!this.params.autoPlay});
+    var playback = new HTML5AudioPlaybackPlugin({container: container, src: src, autoPlay: !!this.params.autoPlay});
     return container;
   },
   createHLSVideoContainer: function(src) {
