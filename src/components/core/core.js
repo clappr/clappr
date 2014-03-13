@@ -30,11 +30,11 @@ var Core = UIObject.extend({
     this.playbackHandler = new PlaybackHandler(params);
     this.playbackHandler.createContainers(this.onContainersCreated.bind(this));
   },
-  load: function(videoId) {
+  load: function(params) {
     _(this.containers).each(function(container) {
       container.destroy();
     });
-    this.params.videoId = videoId;
+    this.playbackHandler.params = _(this.params).extend(params);
     this.playbackHandler.createContainers(this.onContainersCreated.bind(this));
   },
   onContainersCreated: function(containers) {
@@ -94,6 +94,7 @@ var Core = UIObject.extend({
   },
   render: function() {
     var style = Styler.getStyleFor('core');
+    this.$el.html('');
     this.$el.append(style);
 
     _.each(this.containers, function(container) {

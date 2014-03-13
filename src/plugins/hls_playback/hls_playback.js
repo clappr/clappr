@@ -30,6 +30,7 @@ var HLSVideoPlaybackPlugin = PlaybackPlugin.extend({
     this.listenTo(this.container, 'container:seek', this.seek);
     this.listenTo(this.container, 'container:volume', this.volume);
     this.listenTo(this.container, 'container:fullscreen', this.fullscreen);
+    this.listenTo(this.container, 'container:destroyed', this.containerDestroyed);
     this.render();
     this.checkIfFlashIsReady();
   },
@@ -63,7 +64,7 @@ var HLSVideoPlaybackPlugin = PlaybackPlugin.extend({
     }
   },
   timedCheckState: function() {
-    setInterval(this.checkState.bind(this), 250);
+    this.checkStateId = setInterval(this.checkState.bind(this), 250);
   },
   checkState: function() {
     if (this.el.getState() === "PLAYING_BUFFERING" && this.el.getbufferLength() < 1) {
@@ -100,6 +101,11 @@ var HLSVideoPlaybackPlugin = PlaybackPlugin.extend({
   },
   timeUpdate: function(time) {
     this.container.timeUpdated(time);
+  },
+  containerDestroyed: function() {
+    console.log('container destroyed');
+    clearInterval(this.id);
+    clearInterval(this.checkStateId);
   },
   render: function() {
     var style = Styler.getStyleFor(this.pluginName);
