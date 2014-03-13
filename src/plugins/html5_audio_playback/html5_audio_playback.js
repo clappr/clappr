@@ -67,6 +67,9 @@ var HTML5AudioPlayback = PlaybackPlugin.extend({
   render: function() {
     this.container.$el.append(this.el);
     return this;
+  },
+  canPlay: function(resource) {
+    return !!resource.match(/(.*).mp3/);
   }
 });
 
