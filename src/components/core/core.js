@@ -15,6 +15,7 @@ var MediaControl = require('../media_control');
 
 var Core = UIObject.extend({
   events: {
+    'webkitfullscreenchange': 'exit',
     'mouseover[data-controls]': 'showMediaControl',
     'mouseleave[data-controls]': 'hideMediaControl',
     'mousemove': 'mediaControlTimeout'
@@ -34,6 +35,11 @@ var Core = UIObject.extend({
     });
     this.playbackHandler.params = _(this.params).extend(params);
     this.playbackHandler.createContainers(this.onContainersCreated.bind(this));
+  },
+  exit: function() {
+    if(!document.webkitIsFullScreen) {
+      this.$el.removeClass('fullscreen');
+    }
   },
   onContainersCreated: function(containers) {
     this.containers = containers;
