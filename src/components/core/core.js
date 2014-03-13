@@ -13,8 +13,6 @@ var PlaybackHandler = require('../playback_handler');
 var Styler = require('../../base/styler');
 var MediaControl = require('../media_control');
 
-var PipPlugin = require("../../plugins/pip");
-
 var Core = UIObject.extend({
   events: {
     'mouseover[data-controls]': 'showMediaControl',
@@ -42,18 +40,10 @@ var Core = UIObject.extend({
     this.createMediaControl(this.getCurrentContainer());
     this.render();
     this.$el.appendTo(this.parentElement);
-    this.loadPlayerPlugins(this.params);
   },
   createMediaControl: function(container) {
     this.mediaControl = new MediaControl({container: container});
     this.listenTo(this.mediaControl, 'mediacontrol:fullscreen', this.toggleFullscreen);
-  },
-  loadPlayerPlugins: function(params) {
-    _.each(params, function(value, key) {
-      if (key === 'pip') {
-        new PipPlugin(this.mediaControl, this.containers);
-      }
-    }, this);
   },
   getCurrentContainer: function() {
     return this.containers[0];

@@ -23,7 +23,6 @@ var PlaybackHandler = BaseObject.extend({
   initialize: function(params) {
     this.params = params;
   },
-
   createContainers: function(callback) {
     var containers = [];
     _.each(this.params, function(value, key) {
