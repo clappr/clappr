@@ -24,6 +24,7 @@ var Container = UIObject.extend({
     this.trigger('container:ready');
   },
   destroy: function() {
+    this.trigger('container:destroyed');
     this.$el.remove();
   },
   setStyle: function(style) {
