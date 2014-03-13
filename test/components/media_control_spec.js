@@ -18,7 +18,7 @@ describe('MediaControl', function() {
   });
 
   it('should render the template into the element', function() {
-    this.control.container.settings = ['play'];
+    this.control.container.settings = {left: ['play']};
     this.control.render();
     this.control.$el.find('button').attr('data-play').should.not.be.equal(undefined);
   });
@@ -76,7 +76,7 @@ describe('MediaControl', function() {
 
     it("should change the container's volume", function() {
       var spy = sinon.spy(this.container, 'setVolume');
-      this.container.settings = ['volume'];
+      this.container.settings = {left: ['volume']};
       this.control.render();
       this.control.$('input[data-volume]').click();
       spy.called.should.be.true;
