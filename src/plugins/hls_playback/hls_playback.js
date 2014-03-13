@@ -113,10 +113,12 @@ var HLSVideoPlaybackPlugin = PlaybackPlugin.extend({
     this.$el.append(style);
     this.container.$el.append(this.el);
     return this;
-  },
-  canPlay: function(resource) {
-    return !!resource.match(/(.*).m3u8/);
   }
 });
+
+HLSVideoPlaybackPlugin.canPlay = function(resource) {
+  return !!resource.match(/(.*).m3u8/);
+}
+
 
 module.exports = HLSVideoPlaybackPlugin;

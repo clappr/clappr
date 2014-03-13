@@ -73,10 +73,12 @@ var HTML5VideoPlaybackPlugin = PlaybackPlugin.extend({
     this.container.$el.append(style);
     this.container.$el.append(this.el);
     return this;
-  },
-  canPlay: function(resource) {
-    return !!resource.match(/(.*).mp4/);
   }
 });
+
+HTML5VideoPlaybackPlugin.canPlay = function(resource) {
+    return !!resource.match(/(.*).mp4/);
+}
+
 
 module.exports = HTML5VideoPlaybackPlugin;

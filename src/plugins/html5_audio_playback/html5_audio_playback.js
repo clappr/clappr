@@ -4,7 +4,7 @@
 
 var PlaybackPlugin = require('../../base/playback_plugin');
 
-var HTML5AudioPlayback = PlaybackPlugin.extend({
+var HTML5AudioPlaybackPlugin = PlaybackPlugin.extend({
   events: {
     'timeupdate': 'timeUpdated',
     'ended': 'ended'
@@ -67,10 +67,12 @@ var HTML5AudioPlayback = PlaybackPlugin.extend({
   render: function() {
     this.container.$el.append(this.el);
     return this;
-  },
-  canPlay: function(resource) {
-    return !!resource.match(/(.*).mp3/);
   }
-});
+ });
 
-module.exports = HTML5AudioPlayback;
+HTML5AudioPlaybackPlugin.canPlay = function(resource) {
+  return !!resource.match(/(.*).mp3/);
+}
+
+
+module.exports = HTML5AudioPlaybackPlugin;
