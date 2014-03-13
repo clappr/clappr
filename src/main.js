@@ -4,7 +4,6 @@
 
 var Core = require('./components/core');
 var BaseObject = require('./base/base_object');
-var $ = require('jquery');
 
 var Player = BaseObject.extend({
   initialize: function(params) {
