@@ -16,7 +16,6 @@ var HTML5AudioPlaybackPlugin = require('../../plugins/html5_audio_playback');
 var HLSVideoPlaybackPlugin = require('../../plugins/hls_playback');
 var SpinnerThreeBouncePlugin = require('../../plugins/spinner_three_bounce');
 var StatsPlugin = require('../../plugins/stats');
-var StatsEvents = require('../../plugins/stats/stats_events');
 var WaterMarkPlugin = require('../../plugins/watermark');
 
 var PlaybackHandler = BaseObject.extend({
@@ -49,7 +48,7 @@ var PlaybackHandler = BaseObject.extend({
     return container;
   },
   createHLSVideoContainer: function(src) {
-    var container = new (Container.extend(StatsEvents))();
+    var container = new Container();
     var poster = new PosterPlugin({container: container, src: this.params.poster});
     var spinner = new SpinnerThreeBouncePlugin({container: container});
 
