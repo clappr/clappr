@@ -13,7 +13,7 @@ var PosterPlugin = UIObject.extend({
   initialize: function(options) {
     this.listenTo(this.container, 'container:play', this.onPlay);
     this.listenTo(this.container, 'container:stop', this.onStop);
-    this.el.src = options.src || 'assets/default.png';
+    this.el.src = options.poster || 'assets/default.png';
     this.render();
   },
   onPlay: function() {
