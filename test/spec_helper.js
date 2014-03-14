@@ -16,5 +16,6 @@ module.exports = {
   Container: require('components/container'),
   Core: require('components/core'),
   StatsPlugin: require('plugins/stats'),
-  StatsEvents: require('plugins/stats/stats_events')
+  StatsEvents: require('plugins/stats/stats_events'),
+  Plugin: require('base/plugin')
 };
