@@ -77,7 +77,7 @@ var Core = UIObject.extend({
     }
     this.hideId = setTimeout(function() {
       this.mediaControl.fadeOut();
-    }.bind(this), 2000);
+    }.bind(this), 1000);
   },
   mediaControlTimeout: function() {
     if(this.hideId) {
@@ -87,7 +87,7 @@ var Core = UIObject.extend({
     if (this.$el.find('[data-controls]:hover').length === 0) {
       this.hideId = setTimeout(function() {
         this.hideMediaControl();
-      }.bind(this), 3000);
+      }.bind(this), 1200);
     }
   },
   render: function() {
