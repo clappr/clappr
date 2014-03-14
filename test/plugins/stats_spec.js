@@ -4,7 +4,7 @@ var Container = require('../spec_helper').Container;
 
 describe('StatsPlugin', function() {
   beforeEach(function() {
-    this.container = new (Container.extend(StatsEvents))({settings: ['play', 'pause']});
+    this.container = new Container({settings: ['play', 'pause']});
     this.clock = sinon.useFakeTimers();
   });
 
@@ -103,16 +103,16 @@ describe('StatsPlugin', function() {
   });
 
   it('should report statistics periodically', function() {
-    var spy = sinon.spy(this.container, 'statsReport');
     var stats = new StatsPlugin({container: this.container, reportInterval: 10});
+    var spy = sinon.spy(this.container, 'statsReport');
     this.container.play();
     this.clock.tick(25);
     spy.calledTwice.should.be.true;
   });
 
   it('should stop report when transmission stop', function() {
-    var spy = sinon.spy(this.container, 'statsReport');
     var stats = new StatsPlugin({container: this.container, reportInterval: 10});
+    var spy = sinon.spy(this.container, 'statsReport');
     this.container.play();
     this.clock.tick(25);
     this.container.stop();
@@ -121,8 +121,8 @@ describe('StatsPlugin', function() {
   });
 
   it("should only report if user hits play", function() {
-    var spy = sinon.spy(this.container, 'statsReport');
     var stats = new StatsPlugin({container: this.container, reportInterval: 10});
+    var spy = sinon.spy(this.container, 'statsReport');
     this.clock.tick(20);
     spy.called.should.be.false;
   });
