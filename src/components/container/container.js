@@ -23,6 +23,9 @@ var Container = UIObject.extend({
     this.plugins = [];
     this.trigger('container:ready');
   },
+  with: function(klass) {
+    _.extend(this, klass);
+  },
   destroy: function() {
     this.trigger('container:destroyed');
     this.$el.remove();
