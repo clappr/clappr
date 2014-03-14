@@ -10,6 +10,7 @@
 var _ = require('underscore');
 var UIObject = require('../../base/ui_object');
 var PlaybackHandler = require('../playback_handler');
+var GlobalPluginsHandler = require('../global_plugins_handler');
 var Loader = require('../loader');
 var Styler = require('../../base/styler');
 var MediaControl = require('../media_control');
@@ -48,6 +49,8 @@ var Core = UIObject.extend({
     this.createMediaControl(this.getCurrentContainer());
     this.render();
     this.$el.appendTo(this.parentElement);
+    this.globalPluginsHandler = new GlobalPluginsHandler(this);
+    this.globalPluginsHandler.loadPlugins();
   },
   createMediaControl: function(container) {
     this.mediaControl = new MediaControl({container: container});
