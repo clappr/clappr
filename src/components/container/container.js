@@ -25,6 +25,7 @@ var Container = UIObject.extend({
   },
   with: function(klass) {
     _.extend(this, klass);
+    return this;
   },
   destroy: function() {
     this.trigger('container:destroyed');
