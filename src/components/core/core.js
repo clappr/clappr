@@ -10,6 +10,7 @@
 var _ = require('underscore');
 var UIObject = require('../../base/ui_object');
 var PlaybackHandler = require('../playback_handler');
+var Loader = require('../loader');
 var Styler = require('../../base/styler');
 var MediaControl = require('../media_control');
 
@@ -26,7 +27,8 @@ var Core = UIObject.extend({
   initialize: function(params) {
     this.params = params;
     this.parentElement = params.parentElement;
-    this.playbackHandler = new PlaybackHandler(params);
+    this.loader = new Loader(params);
+    this.playbackHandler = new PlaybackHandler(params, this.loader);
     this.playbackHandler.createContainers(this.onContainersCreated.bind(this));
   },
   load: function(params) {

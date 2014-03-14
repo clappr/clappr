@@ -9,54 +9,34 @@
 var _ = require('underscore');
 var BaseObject = require('../../base/base_object');
 var Container = require('../container');
-var PosterPlugin = require('../../plugins/poster');
-
-var HTML5VideoPlaybackPlugin = require('../../plugins/html5_video_playback');
-var HTML5AudioPlaybackPlugin = require('../../plugins/html5_audio_playback');
-var HLSVideoPlaybackPlugin = require('../../plugins/hls_playback');
-var SpinnerThreeBouncePlugin = require('../../plugins/spinner_three_bounce');
-var StatsPlugin = require('../../plugins/stats');
-var WaterMarkPlugin = require('../../plugins/watermark');
 
 var PlaybackHandler = BaseObject.extend({
-  initialize: function(params) {
+  initialize: function(params, loader) {
     this.params = params;
+    this.loader = loader;
   },
   createContainers: function(callback) {
     var containers = [];
-    _.each(this.params.sources, function(value) {
-        if (HTML5VideoPlaybackPlugin.canPlay(value)) {
-          containers.push(this.createHTML5VideoContainer(value));
-        } else if (HTML5AudioPlaybackPlugin.canPlay(value)) {
-          containers.push(this.createHTML5AudioContainer(value));
-        } else if (HLSVideoPlaybackPlugin.canPlay(value)) {
-          containers.push(this.createHLSVideoContainer(value));
-        }
+    _.each(this.params.sources, function(source) {
+      var playbackPlugin = this.findPlaybackPlugin(source);
+      containers.push(this.createContainer(playbackPlugin, source));
     }, this);
 
     callback(containers);
   },
-  createHTML5VideoContainer: function(src) {
+  findPlaybackPlugin: function(source) {
+    return _.find(this.loader.playbackPlugins, function(p) { return p.canPlay(source) }, this);
+  },
+  createContainer: function(playbackPlugin, source) {
     var container = new Container();
-    var poster = new PosterPlugin({container: container});
-    var playback = new HTML5VideoPlaybackPlugin({container: container, src: src, autoPlay: !!this.params.autoPlay});
+    new playbackPlugin({container: container, src: source, autoPlay: !!this.params.autoPlay});
+    this.addContainerPlugins(container);
     return container;
   },
-  createHTML5AudioContainer: function(src) {
-    var container = new Container();
-    var playback = new HTML5AudioPlaybackPlugin({container: container, src: src, autoPlay: !!this.params.autoPlay});
-    return container;
-  },
-  createHLSVideoContainer: function(src) {
-    var container = new Container();
-    var poster = new PosterPlugin({container: container, src: this.params.poster});
-    var spinner = new SpinnerThreeBouncePlugin({container: container});
-
-    // position can be "top-left", "top-right", "bottom-right" or  "bottom-left".
-    var watermark = new WaterMarkPlugin({container: container, position: "bottom-right"});
-    var stats = new StatsPlugin({container: container, reportInterval: 10000});
-    var playback = new HLSVideoPlaybackPlugin({container: container, src: src, autoPlay: !!this.params.autoPlay});
-    return container;
+  addContainerPlugins: function(container) {
+    _.each(this.loader.containerPlugins, function(plugin) {
+      new plugin(_.extend(this.params, {container: container}));
+    }, this);
   }
 });
 
