@@ -12,6 +12,15 @@ describe('Container', function() {
     expect(this.container.$el.attr('data-container')).to.equal('');
   });
 
+  it('is extensible', function() {
+    var foo = sinon.spy();
+    expect(this.container.foo).to.not.exists;
+    this.container.with({foo: foo});
+    expect(this.container.foo).to.exists;
+    this.container.foo();
+    expect(foo.called).to.be.true;
+  });
+
   describe('events', function() {
     beforeEach(function() {
       this.spy = sinon.spy(this.container, 'trigger');
