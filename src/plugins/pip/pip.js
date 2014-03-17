@@ -7,8 +7,24 @@ var $ = require("jquery");
 
 var PipPlugin = BaseObject.extend({
   initialize: function(mediaControl, containers) {
-    var pipContainer = containers[1];
-    pipContainer.setStyle({width: "25%", height: "25%", zindex: 10, bottom: "7px", right: "7px"});
+    this.masterContainer = containers[0];
+    this.pipContainer = containers[1];
+
+    this.pipContainer.setStyle({width: "30%", height: "30%", zindex: 10001, bottom: "7px", right: "7px"});
+    this.listenTo(this.pipContainer, 'container:click', this.onClick);
+    this.listenTo(this.masterContainer, 'container:hover', this.masterHover);
+    this.listenTo(this.pipContainer, 'container:hover', this.pipHover);
+  },
+  masterHover: function() {
+    this.pipContainer.setVolume(0);
+    this.masterContainer.setVolume(100);
+  },
+  pipHover: function() {
+    this.masterContainer.setVolume(0);
+    this.pipContainer.setVolume(100);
+  },
+  onClick: function() {
+    this.pipContainer.play();
   }
 });
 

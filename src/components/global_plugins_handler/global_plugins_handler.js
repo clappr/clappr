@@ -6,6 +6,7 @@
  * The Global Plugins Handler is responsible for instantiate global plugins.
  */
 
+var _ = require('underscore');
 var BaseObject = require('../../base/base_object');
 
 var GlobalPluginsHandler = BaseObject.extend({
@@ -16,6 +17,10 @@ var GlobalPluginsHandler = BaseObject.extend({
     this.globalPlugins = core.loader.globalPlugins;
   },
   loadPlugins: function() {
+    _.each(this.globalPlugins, function(plugin) {
+      new plugin(this.mediaControl, this.containers);
+    }, this);
+
   }
 });
 

@@ -24,7 +24,11 @@ var Loader = BaseObject.extend({
     this.params = params;
     this.playbackPlugins = [HTML5VideoPlaybackPlugin, HTML5AudioPlaybackPlugin, HLSVideoPlaybackPlugin];
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin];
-    this.globalPlugins = [PipPlugin];
+    if (this.params.sources.length === 2) {
+      this.globalPlugins = [PipPlugin];
+    } else {
+      this.globalPlugins = [];
+    }
   },
 });
 

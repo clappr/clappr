@@ -3,12 +3,12 @@
 // license that can be found in the LICENSE file.
 
 //FIXME review this require approach.
-var Plugin = require('../../base/plugin');
+var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var _ = require("underscore");
 
-var HLSVideoPlaybackPlugin = Plugin.extend({
+var HLSVideoPlaybackPlugin = UIObject.extend({
   pluginName: 'hls_playback',
   attributes: {
     'data-hls-playback': ''
