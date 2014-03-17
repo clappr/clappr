@@ -65,14 +65,16 @@ var Core = UIObject.extend({
       this.$el.addClass('fullscreen');
     } else {
       document.webkitCancelFullScreen();
-      this.$el.removeClass('fullscreen');
+      this.$el.removeClass('fullscreen nocursor');
     }
+    setTimeout(this.hideMediaControl.bind(this), 1000);
   },
   showMediaControl: function() {
     if(this.hideId) {
       clearTimeout(this.hideId);
     }
     this.mediaControl.fadeIn();
+    this.$el.removeClass('nocursor');
   },
   hideMediaControl: function() {
     if(this.hideId) {
@@ -80,6 +82,7 @@ var Core = UIObject.extend({
     }
     this.hideId = setTimeout(function() {
       this.mediaControl.fadeOut();
+      this.$el.addClass('nocursor');
     }.bind(this), 1000);
   },
   mediaControlTimeout: function() {
