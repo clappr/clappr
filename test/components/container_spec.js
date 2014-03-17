@@ -75,6 +75,12 @@ describe('Container', function() {
       this.container.clicked();
       expect(this.spy.withArgs('container:click', this.container).calledOnce).to.be.true;
     });
+
+    it('#mouseover', function() {
+      this.container.hover();
+      expect(this.spy.withArgs('container:hover', this.container).calledOnce).to.be.true;
+    });
+
   });
   describe('plugins', function() {
     it('#addPlugin', function() {

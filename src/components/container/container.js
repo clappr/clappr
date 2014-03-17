@@ -15,7 +15,9 @@ var Container = UIObject.extend({
     'data-container': ''
   },
   events: {
-    'click': 'clicked'
+    'click': 'clicked',
+    'hover': 'hover',
+    'mouseover': 'hover'
   },
   initialize: function() {
     var style = Styler.getStyleFor('container');
@@ -48,6 +50,9 @@ var Container = UIObject.extend({
   },
   clicked: function() {
     this.trigger('container:click', this);
+  },
+  hover: function(e) {
+    this.trigger('container:hover', this);
   },
   setCurrentTime: function(time) {
     this.trigger('container:seek', time);
