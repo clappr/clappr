@@ -72,24 +72,10 @@ var Container = UIObject.extend({
   addPlugin: function(plugin) {
     this.plugins.push(plugin);
   },
-  disablePlugins: function(type) {
-    if(type) {
-      this._byType(type, 'disable');
-    } else {
-      _(this.plugins).invoke('disable');
-    }
-  },
-  _byType: function(type, action) {
-    _(this.plugins).each(function(plugin) {
-      if(plugin.type == type) plugin[action]();
-    });
-  },
-  enablePlugins: function(type) {
-    if(type) {
-      this._byType(type, 'enable');
-    } else {
-      _(this.plugins).invoke('enable');
-    }
+  getPluginByName: function(name) {
+    var plugin = _(this.plugins).find(function(plugin) { return plugin.name === name });
+    if(!plugin) { throw Error('Plugin ' + name + ' not found'); }
+    return plugin.instance;
   }
 });
 

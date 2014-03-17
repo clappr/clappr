@@ -89,43 +89,16 @@ describe('Container', function() {
       expect(this.container.plugins.length).to.equal(1);
     });
 
-    it('#disablePlugins', function() {
-      var disable = sinon.spy();
-      var plugin = {disable: disable};
-      this.container.addPlugin(plugin);
-      this.container.disablePlugins();
-      expect(disable.calledOnce).to.be.true;
-    });
+    describe('#getPluginByName', function() {
+      it('find by name', function() {
+        var plugin = {};
+        this.container.addPlugin({type: 'foo', name: 'olar', instance: plugin});
+        expect(this.container.getPluginByName('olar')).to.equal(plugin);
+      });
 
-    it('disable plugins by type', function() {
-      var disable = sinon.spy();
-      var plugin1 = {disable: disable, type: 'ui'};
-      var plugin2 = {disable: disable, type: 'stats'};
-      this.container.addPlugin(plugin1);
-      this.container.addPlugin(plugin2);
-      this.container.disablePlugins('ui');
-      expect(disable.calledOnce).to.be.true;
-    });
-
-    it('#enablePlugins', function() {
-      var disable = sinon.spy();
-      var enable = sinon.spy();
-      var plugin = {enable: enable, disable: disable};
-      this.container.addPlugin(plugin);
-      this.container.disablePlugins();
-      this.container.enablePlugins();
-      expect(enable.calledOnce).to.be.true;
-    });
-
-    it('enable plugins by type', function() {
-      var disable = sinon.spy();
-      var enable = sinon.spy();
-      var plugin = {enable: enable, disable: disable, type: 'ui'};
-      var plugin2 = {enable: enable, disable: disable, type: 'ui'};
-      this.container.addPlugin(plugin);
-      this.container.disablePlugins('ui');
-      this.container.enablePlugins('ui');
-      expect(enable.calledOnce).to.be.true;
+      it('throws error when plugin not found', function() {
+        expect(this.container.getPluginByName).to.throw(/Plugin .* not found/);
+      });
     });
   });
 });
