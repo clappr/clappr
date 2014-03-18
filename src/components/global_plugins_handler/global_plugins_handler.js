@@ -11,14 +11,13 @@ var BaseObject = require('../../base/base_object');
 
 var GlobalPluginsHandler = BaseObject.extend({
   initialize: function(core) {
-    this.params = core.params;
-    this.mediaControl = core.mediaControl;
+    this.core = core;
     this.containers = core.containers;
     this.globalPlugins = core.loader.globalPlugins;
   },
   loadPlugins: function() {
     _.each(this.globalPlugins, function(plugin) {
-      new plugin(this.mediaControl, this.containers);
+      new plugin(this.core);
     }, this);
 
   }

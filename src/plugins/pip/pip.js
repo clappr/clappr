@@ -6,9 +6,10 @@ var BaseObject = require('../../base/base_object');
 var $ = require("jquery");
 
 var PipPlugin = BaseObject.extend({
-  initialize: function(mediaControl, containers) {
-    this.masterContainer = containers[0];
-    this.pipContainer = containers[1];
+  initialize: function(core) {
+    this.core = core;
+    this.masterContainer = this.core.containers[0];
+    this.pipContainer = this.core.containers[1];
     this.pipContainer.setStyle({width: "30%", height: "30%", "z-index": 4, bottom: "7px", right: "7px"});
     this.listenTo(this.pipContainer, 'container:click', this.onClick);
     this.listenTo(this.masterContainer, 'container:hover', this.masterHover);
