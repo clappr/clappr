@@ -28,7 +28,7 @@ var extend = function(protoProps, staticProps) {
   child.prototype.super = function(name, params) {
     if (child.__super__[name])
       return child.__super__[name].call(this, params);
-    if (child.__super__.super)
+    else if (child.__super__.super)
       child.__super__.super(name, params);
   };
 
