@@ -16,6 +16,7 @@ module.exports = {
   Container: require('components/container'),
   Core: require('components/core'),
   StatsPlugin: require('plugins/stats'),
+  PipPlugin: require('plugins/pip'),
   StatsEvents: require('plugins/stats/stats_events'),
   UIPlugin: require('base/ui_plugin'),
   WaterMarkPlugin: require('plugins/watermark'),
