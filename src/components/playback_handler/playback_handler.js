@@ -18,8 +18,7 @@ var PlaybackHandler = BaseObject.extend({
   createContainers: function(callback) {
     var containers = [];
     _.each(this.params.sources, function(source) {
-      var playbackPlugin = this.findPlaybackPlugin(source);
-      containers.push(this.createContainer(playbackPlugin, source));
+      containers.push(this.createContainer(source));
     }, this);
 
     callback(containers);
@@ -27,7 +26,8 @@ var PlaybackHandler = BaseObject.extend({
   findPlaybackPlugin: function(source) {
     return _.find(this.loader.playbackPlugins, function(p) { return p.canPlay(source) }, this);
   },
-  createContainer: function(playbackPlugin, source) {
+  createContainer: function(source) {
+    var playbackPlugin = this.findPlaybackPlugin(source);
     var container = new Container();
     new playbackPlugin({container: container, src: source, autoPlay: !!this.params.autoPlay});
     this.addContainerPlugins(container);
