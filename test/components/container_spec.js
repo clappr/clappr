@@ -91,8 +91,8 @@ describe('Container', function() {
 
     describe('#getPluginByName', function() {
       it('find by name', function() {
-        var plugin = {};
-        this.container.addPlugin({type: 'foo', name: 'olar', instance: plugin});
+        var plugin = {name: 'olar'};
+        this.container.addPlugin(plugin);
         expect(this.container.getPluginByName('olar')).to.equal(plugin);
       });
 
