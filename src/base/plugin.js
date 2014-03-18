@@ -2,18 +2,10 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var Plugin = {
-  initialize: function() {
-    this.container.addPlugin(this);
-    this.bindEvents();
-  },
-  enable: function() {
-    this.bindEvents();
-  },
-  disable: function() {
-    this.stopListening();
-  }
-};
+var PluginMixin = require('./plugin_mixin');
+var BaseObject = require('./base_object');
+
+var Plugin = BaseObject.extend(PluginMixin).extend({});
 
 module.exports = Plugin;
 

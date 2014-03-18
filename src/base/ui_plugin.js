@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var Plugin = require('./plugin');
+var PluginMixin = require('./plugin_mixin');
 var UIObject = require('./ui_object');
 
-var UIPlugin = UIObject.extend(Plugin).extend({
+var UIPlugin = UIObject.extend(PluginMixin).extend({
   type: 'ui',
   enable: function() {
     UIPlugin.prototype.super.call(this, 'enable');
