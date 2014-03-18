@@ -9,13 +9,14 @@ var PipPlugin = BaseObject.extend({
   initialize: function(mediaControl, containers) {
     this.masterContainer = containers[0];
     this.pipContainer = containers[1];
-
-    this.pipContainer.setStyle({width: "30%", height: "30%", zindex: 10001, bottom: "7px", right: "7px"});
+    this.pipContainer.setStyle({width: "30%", height: "30%", "z-index": 4, bottom: "7px", right: "7px"});
     this.listenTo(this.pipContainer, 'container:click', this.onClick);
     this.listenTo(this.masterContainer, 'container:hover', this.masterHover);
     this.listenTo(this.pipContainer, 'container:hover', this.pipHover);
+    this.pipState = 'idle';
   },
   masterHover: function() {
+    console.log("master hover");
     this.pipContainer.setVolume(0);
     this.masterContainer.setVolume(100);
   },
@@ -24,7 +25,34 @@ var PipPlugin = BaseObject.extend({
     this.pipContainer.setVolume(100);
   },
   onClick: function() {
-    this.pipContainer.play();
+    if (this.pipState === 'idle') {
+      this.pipContainer.play();
+      this.pipState = 'playing';
+    } else if (this.pipState === 'playing') {
+      this.switchContainers();
+    }
+  },
+  switchContainers: function() {
+    this.pipContainer.animate({width: "100%", height: "100%", bottom: "0px", right: "0px"}, 500);
+    setTimeout(this.endAnimation.bind(this), 500);
+
+  },
+  endAnimation: function() {
+    this.masterContainer.setStyle({width: "30%", height: "30%", "z-index": 4, bottom: "7px", right: "7px"});
+    this.pipContainer.setStyle({"z-index": 1});
+
+    this.stopListening(this.pipContainer, 'container:click', this.onClick);
+    this.stopListening(this.masterContainer, 'container:hover', this.masterHover);
+    this.stopListening(this.pipContainer, 'container:click', this.pipHover);
+
+    var tmp = this.pipContainer;
+    this.pipContainer = this.masterContainer;
+    this.masterContainer = tmp;
+
+    this.listenTo(this.pipContainer, 'container:click', this.onClick);
+    this.listenTo(this.masterContainer, 'container:hover', this.masterHover);
+    this.listenTo(this.pipContainer, 'container:hover', this.pipHover);
+
   }
 });
 

@@ -14,7 +14,6 @@ var HTML5AudioPlaybackPlugin = require('../../plugins/html5_audio_playback');
 var HLSVideoPlaybackPlugin = require('../../plugins/hls_playback');
 var SpinnerThreeBouncePlugin = require('../../plugins/spinner_three_bounce');
 var StatsPlugin = require('../../plugins/stats');
-var StatsEvents = require('../../plugins/stats/stats_events');
 var WaterMarkPlugin = require('../../plugins/watermark');
 var PosterPlugin = require('../../plugins/poster');
 var PipPlugin = require('../../plugins/pip');
