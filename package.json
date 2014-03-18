@@ -26,7 +26,7 @@
     "gulp": "~3.5.2",
     "gulp-jshint": "~1.4.2",
     "jshint-stylish": "~0.1.5",
-    "jsdom": "~0.10.1",
+    "jsdom": "~0.10.3",
     "gulp-istanbul": "~0.1.1",
     "glob": "~3.2.8",
     "mkdirp": "~0.3.5",
