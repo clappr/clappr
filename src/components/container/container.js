@@ -36,6 +36,9 @@ var Container = UIObject.extend({
   setStyle: function(style) {
     this.$el.css(style);
   },
+  animate: function(style, duration) {
+    this.$el.animate(style, duration);
+  },
   timeUpdated: function(position, duration) {
     this.trigger('container:timeupdate', position, duration);
   },
