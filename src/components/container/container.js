@@ -75,7 +75,7 @@ var Container = UIObject.extend({
   getPluginByName: function(name) {
     var plugin = _(this.plugins).find(function(plugin) { return plugin.name === name });
     if(!plugin) { throw Error('Plugin ' + name + ' not found'); }
-    return plugin.instance;
+    return plugin;
   }
 });
 
