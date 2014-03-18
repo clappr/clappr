@@ -1,0 +1,52 @@
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+var Player = require('../spec_helper');
+
+describe('WaterMarkPlugin', function() {
+  beforeEach(function() {
+    this.container = new Player.Container();
+    this.plugin = new Player.WaterMarkPlugin({container: this.container});
+  });
+
+  it('adds itself to the container', function() {
+    expect(this.container.plugins.length).to.equal(1);
+    expect(this.container.getPluginByName('watermark').type).to.equal('ui');
+  });
+
+  describe('#bindEvents', function() {
+    beforeEach(function() {
+      this.plugin.onPlay = sinon.spy();
+      this.plugin.onStop = sinon.spy();
+      //re-bind events to use the spied callbacks
+      this.plugin.bindEvents();
+    });
+
+    it('container:play event', function() {
+      this.container.play();
+      expect(this.plugin.onPlay.called).to.be.true;
+    });
+
+    it('container:stop event', function() {
+      this.container.stop();
+      expect(this.plugin.onStop.called).to.be.true;
+    });
+
+    it('#disable', function() {
+      this.plugin.disable();
+      this.container.stop();
+      expect(this.plugin.onStop.called).to.be.false;
+    });
+
+    it('#enable', function() {
+      this.plugin.$el = {show: function() {}, hide: function(){}}; //FIXME
+      this.plugin.disable();
+      this.plugin.enable();
+      this.container.play();
+      expect(this.plugin.onPlay.called).to.be.true;
+    });
+  });
+
+});
+
