@@ -2,13 +2,14 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var Plugin = require('../../base/plugin');
+var BaseObject = require('../../base/base_object');
 var StatsEvents = require('./stats_events');
 var $ = require("jquery");
 
-var StatsPlugin = Plugin.extend({
+var StatsPlugin = BaseObject.extend({
   type: 'stats',
   initialize: function(options) {
+    this.container = options.container; //FIXME
     this.container.with(StatsEvents);
     this.listenTo(this.container, 'container:play', this.onPlay);
     this.listenTo(this.container, 'container:stop', this.onStop);

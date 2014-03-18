@@ -2,19 +2,23 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var UIObject = require('../../base/ui_object');
+var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 
-var WaterMarkPlugin = UIObject.extend({
-  pluginName: 'watermark',
+var WaterMarkPlugin = UIPlugin.extend({
+  name: 'watermark',
+  type: 'ui',
   initialize: function(options) {
-    this.template = JST[this.pluginName];
-    this.listenTo(this.container, 'container:play', this.onPlay);
-    this.listenTo(this.container, 'container:stop', this.onStop);
-    this.position = options.position? options.position: "bottom-right";
+    this.super('initialize');
+    this.template = JST[this.name];
+    this.position = options.position || "bottom-right";
     this.imageUrl = options.imageUrl || 'assets/watermark.png';
     this.render();
+  },
+  bindEvents: function() {
+    this.listenTo(this.container, 'container:play', this.onPlay);
+    this.listenTo(this.container, 'container:stop', this.onStop);
   },
   onPlay: function() {
     this.$el.show();
@@ -26,7 +30,7 @@ var WaterMarkPlugin = UIObject.extend({
     this.$el.hide();
     var templateOptions = {position: this.position, imageUrl: this.imageUrl};
     this.$el.html(this.template(templateOptions));
-    var style = Styler.getStyleFor(this.pluginName);
+    var style = Styler.getStyleFor(this.name);
     this.container.$el.append(style);
     this.container.$el.append(this.$el);
     return this;
