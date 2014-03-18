@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var Plugin = require('../../base/plugin');
+var UIPlugin = require('../../base/ui_object'); //FIXME
 
-var HTML5AudioPlaybackPlugin = Plugin.extend({
+var HTML5AudioPlaybackPlugin = UIPlugin.extend({
   events: {
     'timeupdate': 'timeUpdated',
     'ended': 'ended'

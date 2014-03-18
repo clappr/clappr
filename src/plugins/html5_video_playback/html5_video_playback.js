@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var Plugin = require('../../base/plugin');
+var UIPlugin = require('../../base/ui_object'); //FIXME
 var Styler = require('../../base/styler');
 
-var HTML5VideoPlaybackPlugin = Plugin.extend({
+var HTML5VideoPlaybackPlugin = UIPlugin.extend({
   pluginName: 'html5_video_playback',
   attributes: {
     'data-html5-video': ''
