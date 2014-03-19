@@ -2,22 +2,25 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var BaseObject = require('../../base/base_object');
+var Plugin = require('../../base/plugin');
 var StatsEvents = require('./stats_events');
 var $ = require("jquery");
 
-var StatsPlugin = BaseObject.extend({
+var StatsPlugin = Plugin.extend({
+  name: 'stats',
   type: 'stats',
   initialize: function(options) {
-    this.container = options.container; //FIXME
+    this.super('initialize');
     this.container.with(StatsEvents);
+    this.setInitialAttrs();
+    this.reportInterval = options.reportInterval || 60000;
+  },
+  bindEvents: function() {
     this.listenTo(this.container, 'container:play', this.onPlay);
     this.listenTo(this.container, 'container:stop', this.onStop);
     this.listenTo(this.container, 'container:state:buffering', this.onBuffering);
     this.listenTo(this.container, 'container:state:bufferfull', this.onBufferFull);
     this.listenTo(this.container, 'container:stats:add', this.onStatsAdd);
-    this.setInitialAttrs();
-    this.reportInterval = options.reportInterval || 60000;
   },
   setInitialAttrs: function() {
     this.firstPlay = true;
