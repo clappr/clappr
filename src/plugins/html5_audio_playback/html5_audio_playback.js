@@ -19,7 +19,7 @@ var HTML5AudioPlaybackPlugin = UIPlugin.extend({
     this.container.settings = {
       left: ['playpause'],
       right: ['volume'],
-      default: ['seekbar']
+      default: ['position', 'seekbar', 'duration']
     };
     this.render(); // it should render when the container trigger 'ready'
     options.autoPlay && this.container.play();
@@ -80,8 +80,7 @@ var HTML5AudioPlaybackPlugin = UIPlugin.extend({
   },
 
   timeUpdated: function() {
-    var time = (100 / this.el.duration) * this.el.currentTime;
-    this.container.timeUpdated(time);
+    this.container.timeUpdated(this.el.currentTime, this.el.duration);
   },
 
   render: function() {
