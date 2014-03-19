@@ -2,17 +2,18 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var UIObject = require('../../base/ui_object');
+var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 
-var SpinnerThreeBouncePlugin = UIObject.extend({
-  pluginName: 'spinner_three_bounce',
+var SpinnerThreeBouncePlugin = UIPlugin.extend({
+  name: 'spinner_three_bounce',
   attributes: {
     "data-spinner":""
   },
   initialize: function(options) {
-    this.template = JST[this.pluginName];
+    this.super('initialize');
+    this.template = JST[this.name];
     this.listenTo(this.container, 'container:state:buffering', this.onBuffering);
     this.listenTo(this.container, 'container:state:bufferfull', this.onBufferFull);
     this.render();
@@ -26,7 +27,7 @@ var SpinnerThreeBouncePlugin = UIObject.extend({
   render: function() {
     this.$el.hide();
     this.$el.html(this.template());
-    var style = Styler.getStyleFor(this.pluginName);
+    var style = Styler.getStyleFor(this.name);
     this.container.$el.append(style);
     this.container.$el.append(this.$el);
     return this;
