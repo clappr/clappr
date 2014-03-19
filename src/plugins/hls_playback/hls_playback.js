@@ -2,20 +2,21 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//FIXME review this require approach.
-var UIObject = require('../../base/ui_object');
+var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var _ = require("underscore");
 
-var HLSVideoPlaybackPlugin = UIObject.extend({
-  pluginName: 'hls_playback',
+var HLSVideoPlaybackPlugin = UIPlugin.extend({
+  name: 'hls_playback',
+  tagName: 'object',
+  template: JST.hls_playback,
   attributes: {
     'data-hls-playback': ''
   },
-  tagName: 'object',
-  template: JST.hls_playback,
+
   initialize: function(options) {
+    this.super('initialize');
     this.el.src = options.src;
     this.el.id = this.cid;
     this.swfPath = options.swfPath || "assets/HLSPlayer.swf";
@@ -24,6 +25,11 @@ var HLSVideoPlaybackPlugin = UIObject.extend({
       right: ["fullscreen", "volume"]
     };
     this.autoPlay = options.autoPlay;
+    this.render();
+    this.checkIfFlashIsReady();
+  },
+
+  bindEvents: function() {
     this.listenTo(this.container, 'container:play', this.play);
     this.listenTo(this.container, 'container:pause', this.pause);
     this.listenTo(this.container, 'container:stop', this.stop);
@@ -31,15 +37,15 @@ var HLSVideoPlaybackPlugin = UIObject.extend({
     this.listenTo(this.container, 'container:volume', this.volume);
     this.listenTo(this.container, 'container:fullscreen', this.fullscreen);
     this.listenTo(this.container, 'container:destroyed', this.containerDestroyed);
-    this.render();
-    this.checkIfFlashIsReady();
   },
+
   bootstrap: function() {
     clearInterval(this.bootstrapId);
     this.currentState = "IDLE";
     this.timedCheckState();
     this.autoPlay && this.container.play();
   },
+
   checkIfFlashIsReady: function() {
     this.bootstrapId = setInterval(function() {
       if(this.el.getState) {
@@ -47,12 +53,14 @@ var HLSVideoPlaybackPlugin = UIObject.extend({
       }
     }.bind(this), 50);
   },
+
   updateTime: function(interval) {
     return setInterval(function() {
       var time = (100 / (this.el.getDuration() || 1)) * (this.el.getPosition() || 0);
       this.container.timeUpdated(time);
     }.bind(this), interval);
   },
+
   play: function() {
     if(this.el.getState() === 'IDLE') {
       this.id = this.updateTime(1000);
@@ -63,9 +71,11 @@ var HLSVideoPlaybackPlugin = UIObject.extend({
       this.firstPlay();
     }
   },
+
   timedCheckState: function() {
     this.checkStateId = setInterval(this.checkState.bind(this), 250);
   },
+
   checkState: function() {
     if (this.el.getState() === "PLAYING_BUFFERING" && this.el.getbufferLength() < 1) {
       this.container.buffering();
@@ -77,36 +87,44 @@ var HLSVideoPlaybackPlugin = UIObject.extend({
       this.currentState = "IDLE";
     }
   },
+
   firstPlay: function() {
     this.el.load(this.el.src);
     this.el.play();
   },
+
   volume: function(value) {
     this.el.volume(value);
   },
+
   pause: function() {
     this.el.pause();
   },
+
   stop: function() {
     this.el.stop();
     clearInterval(this.id);
     this.container.timeUpdated(0);
   },
+
   seek: function(time) {
     clearInterval(this.id);
     this.el.seek(this.el.getDuration() * (time / 100));
     this.id = this.updateTime(1000);
   },
+
   timeUpdate: function(time) {
     this.container.timeUpdated(time);
   },
+
   containerDestroyed: function() {
     console.log('container destroyed');
     clearInterval(this.id);
     clearInterval(this.checkStateId);
   },
+
   render: function() {
-    var style = Styler.getStyleFor(this.pluginName);
+    var style = Styler.getStyleFor(this.name);
     this.$el.html(this.template({swfPath: this.swfPath}));
     this.$el.append(style);
     this.container.$el.append(this.el);
