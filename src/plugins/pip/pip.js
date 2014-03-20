@@ -44,6 +44,11 @@ var PipPlugin = BaseObject.extend({
       this.core.containers = _.without(this.core.containers, _.findWhere(this.core.containers, container));
       container.destroy();
     }
+  },
+  masterToPip: function() {
+    this.discardPip();
+    this.pipContainer = this.masterContainer;
+    this.setPipStyle(this.pipContainer);
   }
 });
 

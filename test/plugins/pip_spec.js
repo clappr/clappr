@@ -79,4 +79,14 @@ describe('PipPlugin', function() {
     pip.should.not.have.property('masterContainer');
     expect(core.containers).to.have.length(1);
   });
+
+  it('should be possible to move master to pip and discard pip', function() {
+    var core = new Core({sources: ['http://globo.com/master.mp4','http://globo.com/pip.mp4']});
+    var pip = new PipPlugin(core);
+    pip.masterToPip();
+    expect(pip.pipContainer.getPluginByName('html5_video_playback').el.src).to.equal('http://globo.com/master.mp4');
+    expect(core.containers).to.have.length(1);
+    assertPipStyle(pip.pipContainer);
+  });
+
 });
