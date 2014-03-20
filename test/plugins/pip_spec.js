@@ -50,6 +50,7 @@ describe('PipPlugin', function() {
     pip.addPip('http://globo.com/video2.mp4');
     expect(pip.pipContainer.getPluginByName('html5_video_playback').el.src).to.equal('http://globo.com/video2.mp4');
     expect(core.containers).to.have.length(2);
+    assertPipStyle(pip.pipContainer);
   });
 
   it('should put principal on pip and discard pip when adding another master', function() {
@@ -63,5 +64,15 @@ describe('PipPlugin', function() {
     expect(pip.pipContainer.getPluginByName('html5_video_playback').el.src).to.equal('http://globo.com/master.mp4');
     expect(pip.masterContainer.getPluginByName('html5_video_playback').el.src).to.equal('http://globo.com/newMaster.mp4');
     expect(core.containers).to.have.length(2);
+    assertPipStyle(pip.pipContainer);
+  });
+
+  it('should turn off pip', function() {
+    var core = new Core({sources: ['http://globo.com/master.mp4',
+                                   'http://globo.com/pip.mp4']});
+    var pip = new PipPlugin(core);
+    pip.discardPip();
+    pip.should.not.have.property('pipContainer');
+    expect(core.containers).to.have.length(1);
   });
 });
