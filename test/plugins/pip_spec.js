@@ -25,8 +25,7 @@ describe('PipPlugin', function() {
   });
 
   it('should modify style of pip when receive two sources', function() {
-    var core = new Core({sources: ['http://globo.com/video.mp4',
-                                   'http://bem.tv/test.mp4']});
+    var core = new Core({sources: ['http://globo.com/video.mp4', 'http://bem.tv/test.mp4']});
     var pip = new PipPlugin(core);
     assertPipStyle(pip.pipContainer);
   });
@@ -41,8 +40,7 @@ describe('PipPlugin', function() {
   });
 
   it('should drop current pip when adding another pip', function() {
-    var core = new Core({sources: ['http://globo.com/video.mp4',
-                                   'http://bem.tv/test.mp4']});
+    var core = new Core({sources: ['http://globo.com/video.mp4', 'http://bem.tv/test.mp4']});
     var pip = new PipPlugin(core);
     expect(pip.pipContainer.getPluginByName('html5_video_playback').el.src).to.equal('http://bem.tv/test.mp4');
     expect(core.containers).to.have.length(2);
@@ -54,8 +52,7 @@ describe('PipPlugin', function() {
   });
 
   it('should put principal on pip and discard pip when adding another master', function() {
-    var core = new Core({sources: ['http://globo.com/master.mp4',
-                                   'http://globo.com/pip.mp4']});
+    var core = new Core({sources: ['http://globo.com/master.mp4', 'http://globo.com/pip.mp4']});
     var pip = new PipPlugin(core);
     expect(pip.pipContainer.getPluginByName('html5_video_playback').el.src).to.equal('http://globo.com/pip.mp4');
     expect(core.containers).to.have.length(2);
@@ -68,11 +65,18 @@ describe('PipPlugin', function() {
   });
 
   it('should turn off pip', function() {
-    var core = new Core({sources: ['http://globo.com/master.mp4',
-                                   'http://globo.com/pip.mp4']});
+    var core = new Core({sources: ['http://globo.com/master.mp4','http://globo.com/pip.mp4']});
     var pip = new PipPlugin(core);
     pip.discardPip();
     pip.should.not.have.property('pipContainer');
+    expect(core.containers).to.have.length(1);
+  });
+
+  it('should be possible to turn off master', function() {
+    var core = new Core({sources: ['http://globo.com/master.mp4','http://globo.com/pip.mp4']});
+    var pip = new PipPlugin(core);
+    pip.discardMaster();
+    pip.should.not.have.property('masterContainer');
     expect(core.containers).to.have.length(1);
   });
 });

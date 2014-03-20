@@ -32,14 +32,19 @@ var PipPlugin = BaseObject.extend({
     this.core.containers.push(this.masterContainer);
   },
   discardPip: function() {
-    if (this.pipContainer) {
-      if (this.core.containers.length === 2) {
-        this.core.containers = _.without(this.core.containers, _.findWhere(this.core.containers, this.pipContainer));
-      }
-      this.pipContainer.destroy();
-      delete this.pipContainer;
-    }
+    this.discardContainer(this.pipContainer);
+    delete this.pipContainer;
   },
+  discardMaster: function() {
+    this.discardContainer(this.masterContainer);
+    delete this.masterContainer;
+  },
+  discardContainer: function(container) {
+    if (container) {
+      this.core.containers = _.without(this.core.containers, _.findWhere(this.core.containers, container));
+      container.destroy();
+    }
+  }
 });
 
 module.exports = PipPlugin;
