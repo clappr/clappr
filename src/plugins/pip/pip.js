@@ -27,6 +27,7 @@ var PipPlugin = BaseObject.extend({
     this.setPipStyle(this.pipContainer);
     this.core.containers.push(this.pipContainer);
     this.core.$el.append(this.pipContainer.render().el);
+    this.masterContainer.getPluginByName('watermark').disable();
   },
   addMaster: function(source) {
     if (this.pipContainer) {
@@ -39,6 +40,7 @@ var PipPlugin = BaseObject.extend({
     this.masterContainer = this.core.playbackHandler.createContainer(source);
     this.core.containers.push(this.masterContainer);
     this.core.$el.append(this.masterContainer.render().el);
+    this.masterContainer.getPluginByName('watermark').enable();
   },
   discardPip: function() {
     if (this.pipContainer) {
@@ -61,12 +63,14 @@ var PipPlugin = BaseObject.extend({
     this.pipContainer = this.masterContainer;
     this.setPipStyle(this.pipContainer);
     delete this.masterContainer;
+    this.pipContainer.getPluginByName('watermark').disable();
   },
   pipToMaster: function() {
     this.discardMaster();
     this.masterContainer = this.pipContainer;
     this.setMasterStyle(this.masterContainer);
     delete this.pipContainer;
+    this.masterContainer.getPluginByName('watermark').enable();
   }
 
 });
