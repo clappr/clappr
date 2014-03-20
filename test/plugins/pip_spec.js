@@ -9,6 +9,14 @@ describe('PipPlugin', function() {
     expect(container.$el.css('bottom')).to.equal("7px");
     expect(container.$el.css('right')).to.equal("7px");
   };
+  var assertMasterStyle = function(container) {
+    expect(container.$el.css('width')).to.equal("100%");
+    expect(container.$el.css('height')).to.equal("100%");
+    expect(container.$el.css('z-index')).to.equal("1");
+    expect(container.$el.css('bottom')).to.equal("0px");
+    expect(container.$el.css('right')).to.equal("0px");
+  };
+
 
   it('should have only masterContainer for one source', function() {
     var core = new Core({sources: ['http://globo.com/video.mp4']});
@@ -88,5 +96,15 @@ describe('PipPlugin', function() {
     expect(core.containers).to.have.length(1);
     assertPipStyle(pip.pipContainer);
   });
+
+  it('should be possible to move pip to master and discard master', function() {
+    var core = new Core({sources: ['http://globo.com/master.mp4','http://globo.com/pip.mp4']});
+    var pip = new PipPlugin(core);
+    pip.pipToMaster();
+    expect(pip.masterContainer.getPluginByName('html5_video_playback').el.src).to.equal('http://globo.com/pip.mp4');
+    expect(core.containers).to.have.length(1);
+    assertMasterStyle(pip.pipContainer);
+  });
+
 
 });

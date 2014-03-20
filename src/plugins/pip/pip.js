@@ -18,6 +18,9 @@ var PipPlugin = BaseObject.extend({
   setPipStyle: function(container) {
     container.setStyle({width: "30%", height: "30%", "z-index": 2, bottom: "7px", right: "7px"});
   },
+  setMasterStyle: function(container) {
+    container.setStyle({width: "100%", height: "100%", "z-index": 1, bottom: "0px", right: "0px"});
+  },
   addPip: function(source) {
     this.discardPip();
     this.pipContainer = this.core.playbackHandler.createContainer(source);
@@ -49,7 +52,13 @@ var PipPlugin = BaseObject.extend({
     this.discardPip();
     this.pipContainer = this.masterContainer;
     this.setPipStyle(this.pipContainer);
+  },
+  pipToMaster: function() {
+    this.discardMaster();
+    this.masterContainer = this.pipContainer;
+    this.setMasterStyle(this.masterContainer);
   }
+
 });
 
 module.exports = PipPlugin;
