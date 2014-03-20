@@ -51,4 +51,17 @@ describe('PipPlugin', function() {
     expect(pip.pipContainer.getPluginByName('html5_video_playback').el.src).to.equal('http://globo.com/video2.mp4');
     expect(core.containers).to.have.length(2);
   });
+
+  it('should put principal on pip and discard pip when adding another master', function() {
+    var core = new Core({sources: ['http://globo.com/master.mp4',
+                                   'http://globo.com/pip.mp4']});
+    var pip = new PipPlugin(core);
+    expect(pip.pipContainer.getPluginByName('html5_video_playback').el.src).to.equal('http://globo.com/pip.mp4');
+    expect(core.containers).to.have.length(2);
+    pip.addMaster("http://globo.com/newMaster.mp4");
+
+    expect(pip.pipContainer.getPluginByName('html5_video_playback').el.src).to.equal('http://globo.com/master.mp4');
+    expect(pip.masterContainer.getPluginByName('html5_video_playback').el.src).to.equal('http://globo.com/newMaster.mp4');
+    expect(core.containers).to.have.length(2);
+  });
 });
