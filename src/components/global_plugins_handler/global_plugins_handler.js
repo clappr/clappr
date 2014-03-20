@@ -14,10 +14,11 @@ var GlobalPluginsHandler = BaseObject.extend({
     this.core = core;
     this.containers = core.containers;
     this.globalPlugins = core.loader.globalPlugins;
+    this.pluginInstances = [];
   },
   loadPlugins: function() {
     _.each(this.globalPlugins, function(plugin) {
-      new plugin(this.core);
+      this.pluginInstances.push(new plugin(this.core));
     }, this);
 
   }
