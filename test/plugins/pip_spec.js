@@ -5,7 +5,7 @@ describe('PipPlugin', function() {
   var assertPipStyle = function(container) {
     expect(container.$el.css('width')).to.equal("30%");
     expect(container.$el.css('height')).to.equal("30%");
-    expect(container.$el.css('z-index')).to.equal("2");
+    expect(container.$el.css('z-index')).to.equal("20");
     expect(container.$el.css('bottom')).to.equal("7px");
     expect(container.$el.css('right')).to.equal("7px");
   };
@@ -72,6 +72,24 @@ describe('PipPlugin', function() {
     assertPipStyle(pip.pipContainer);
   });
 
+  it('should only discard pip on addMaster() if it exists', function() {
+    var core = new Core({sources: ['http://globo.com/master.mp4']});
+    var pip = new PipPlugin(core);
+    var spy = sinon.spy(pip, 'discardPip');
+    pip.addMaster("http://globo.com/newMaster.mp4");
+    spy.called.should.be.false;
+  });
+
+  it('should only put master on pip on addMaster() if it exists', function() {
+    var core = new Core({sources: ['http://globo.com/master.mp4']});
+    var pip = new PipPlugin(core);
+    var spy = sinon.spy(pip, 'setPipStyle');
+    pip.discardMaster();
+    pip.addMaster("http://globo.com/newMaster.mp4");
+    spy.called.should.be.false;
+  });
+
+
   it('should turn off pip', function() {
     var core = new Core({sources: ['http://globo.com/master.mp4','http://globo.com/pip.mp4']});
     var pip = new PipPlugin(core);
@@ -103,7 +121,7 @@ describe('PipPlugin', function() {
     pip.pipToMaster();
     expect(pip.masterContainer.getPluginByName('html5_video_playback').el.src).to.equal('http://globo.com/pip.mp4');
     expect(core.containers).to.have.length(1);
-    assertMasterStyle(pip.pipContainer);
+    assertMasterStyle(pip.masterContainer);
   });
 
 
