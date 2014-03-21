@@ -1,7 +1,7 @@
 ## Player 3
 
-[![Browser Support](https://ci.testling.com/globocom/player.png)](https://ci.testling.com/globocom/player)
-[![Build Status](https://drone.io/github.com/globocom/player/status.png?testing)](https://drone.io/github.com/globocom/player/latest)
+[![Browser Support](https://ci.testling.com/globocom/player.png?a)](https://ci.testling.com/globocom/player)
+[![Build Status](https://drone.io/github.com/globocom/player/status.png?a)](https://drone.io/github.com/globocom/player/latest)
 [![Dependency Status](https://gemnasium.com/globocom/player.png)](https://gemnasium.com/globocom/player)
 
 
