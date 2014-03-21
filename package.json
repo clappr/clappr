@@ -42,7 +42,7 @@
       "chrome/22..latest",
       "firefox/16..latest",
       "safari/latest",
-      "opera/11.0..latest",
+      "opera/11.0..latest"
     ]
   },
   "dependencies": {
