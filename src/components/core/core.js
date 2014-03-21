@@ -19,7 +19,7 @@ var MediaControl = require('../media_control');
 var Core = UIObject.extend({
   events: {
     'webkitfullscreenchange': 'exit',
-    'mouseover[data-controls]': 'showMediaControl',
+    'mouseover[data-controls]': 'mediaControlTimeout',
     'mouseleave[data-controls]': 'hideMediaControl',
     'mousemove': 'mediaControlTimeout'
   },
@@ -74,30 +74,26 @@ var Core = UIObject.extend({
     setTimeout(this.hideMediaControl.bind(this), 1000);
   },
   showMediaControl: function() {
-    if(this.hideId) {
-      clearTimeout(this.hideId);
-    }
     this.mediaControl.fadeIn();
     this.$el.removeClass('nocursor');
   },
   hideMediaControl: function() {
-    if(this.hideId) {
-      clearTimeout(this.hideId);
-    }
-    this.hideId = setTimeout(function() {
+    if (this.$el.find('[data-controls]:hover').length === 0) {
       this.mediaControl.fadeOut();
       this.$el.addClass('nocursor');
-    }.bind(this), 1000);
+    }
   },
   mediaControlTimeout: function() {
-    if(this.hideId) {
-      clearTimeout(this.hideId);
+    if (event.x !== this.lastMouseX && event.y !== this.lastMouseY) {
+      if (this.hideId) {
+        clearTimeout(this.hideId);
+      }
       this.showMediaControl();
-    }
-    if (this.$el.find('[data-controls]:hover').length === 0) {
       this.hideId = setTimeout(function() {
         this.hideMediaControl();
-      }.bind(this), 1200);
+      }.bind(this), 2000);
+      this.lastMouseX = event.x;
+      this.lastMouseY = event.y;
     }
   },
   render: function() {
@@ -110,6 +106,9 @@ var Core = UIObject.extend({
     }, this);
 
     this.$el.append(this.mediaControl.render().el);
+    this.hideId = setTimeout(function() {
+      this.hideMediaControl();
+    }.bind(this), 2000);
     return this;
   }
 });
