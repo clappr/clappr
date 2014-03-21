@@ -12,7 +12,7 @@ var SpinnerThreeBouncePlugin = UIPlugin.extend({
     "data-spinner":""
   },
   initialize: function(options) {
-    this.super('initialize');
+    SpinnerThreeBouncePlugin.super('initialize').call(this, options);
     this.template = JST[this.name];
     this.listenTo(this.container, 'container:state:buffering', this.onBuffering);
     this.listenTo(this.container, 'container:state:bufferfull', this.onBufferFull);

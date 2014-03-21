@@ -13,7 +13,7 @@ var PosterPlugin = UIPlugin.extend({
   },
 
   initialize: function(options) {
-    this.super('initialize');
+    PosterPlugin.super('initialize').call(this, options);
     this.el.src = options.poster || 'assets/default.png';
     this.render();
   },
