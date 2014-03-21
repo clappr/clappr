@@ -16,7 +16,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   },
 
   initialize: function(options) {
-    this.super('initialize');
+    HLSVideoPlaybackPlugin.super('initialize').call(this, options);
     this.src = options.src;
     this.el.id = this.cid;
     this.swfPath = options.swfPath || "assets/HLSPlayer.swf";

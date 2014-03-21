@@ -25,12 +25,13 @@ var extend = function(protoProps, staticProps) {
 
   child.__super__ = parent.prototype;
 
-  child.prototype.super = function(name, params) {
-    if (child.__super__[name])
-      return child.__super__[name].call(this, params);
-    else if (child.__super__.super)
-      child.__super__.super(name, params);
+  child.super = function(name) {
+    return parent.prototype[name];
   };
+
+  child.prototype.getClass = function() {
+    return child;
+  }
 
   return child;
 };

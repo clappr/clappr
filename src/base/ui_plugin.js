@@ -8,11 +8,11 @@ var UIObject = require('./ui_object');
 var UIPlugin = UIObject.extend(PluginMixin).extend({
   type: 'ui',
   enable: function() {
-    UIPlugin.prototype.super.call(this, 'enable');
+    UIPlugin.super('enable').call(this);
     this.$el.show();
   },
   disable: function() {
-    UIPlugin.prototype.super.call(this, 'disable');
+    UIPlugin.super('disable').call(this);
     this.$el.hide();
   },
   bindEvents: function() {}

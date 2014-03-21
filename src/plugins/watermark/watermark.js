@@ -10,7 +10,7 @@ var WaterMarkPlugin = UIPlugin.extend({
   name: 'watermark',
   type: 'ui',
   initialize: function(options) {
-    this.super('initialize');
+    WaterMarkPlugin.super('initialize').call(this, options);
     this.template = JST[this.name];
     this.position = options.position || "bottom-right";
     this.imageUrl = options.imageUrl || 'assets/watermark.png';

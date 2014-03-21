@@ -19,7 +19,7 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
   },
 
   initialize: function(options) {
-    this.super('initialize');
+    HTML5VideoPlaybackPlugin.super('initialize').call(this, options);
     this.el.src = options.src;
     this.container.settings = {
       left: ['playpause'],

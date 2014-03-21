@@ -10,7 +10,7 @@ var StatsPlugin = Plugin.extend({
   name: 'stats',
   type: 'stats',
   initialize: function(options) {
-    this.super('initialize');
+    StatsPlugin.super('initialize').call(this, options);
     this.container.with(StatsEvents);
     this.setInitialAttrs();
     this.reportInterval = options.reportInterval || 60000;

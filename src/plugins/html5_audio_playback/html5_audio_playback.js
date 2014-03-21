@@ -14,7 +14,7 @@ var HTML5AudioPlaybackPlugin = UIPlugin.extend({
   },
 
   initialize: function(options) {
-    this.super('initialize');
+    HTML5AudioPlaybackPlugin.super('initialize').call(this, options);
     this.el.src = options.src;
     this.container.settings = {
       left: ['playpause'],
