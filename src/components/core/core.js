@@ -10,6 +10,7 @@
 var _ = require('underscore');
 var UIObject = require('../../base/ui_object');
 var PlaybackHandler = require('../playback_handler');
+var Fullscreen = require('../../base/utils').Fullscreen;
 var GlobalPluginsHandler = require('../global_plugins_handler');
 var Loader = require('../loader');
 var Styler = require('../../base/styler');
@@ -31,6 +32,8 @@ var Core = UIObject.extend({
     this.loader = new Loader(params);
     this.playbackHandler = new PlaybackHandler(params, this.loader);
     this.playbackHandler.createContainers(this.onContainersCreated.bind(this));
+    //FIXME fullscreen api sucks
+    document.addEventListener('mozfullscreenchange', this.exit.bind(this));
   },
   load: function(params) {
     _(this.containers).each(function(container) {
@@ -40,7 +43,7 @@ var Core = UIObject.extend({
     this.playbackHandler.createContainers(this.onContainersCreated.bind(this));
   },
   exit: function() {
-    if(!document.webkitIsFullScreen) {
+    if(!Fullscreen.isFullscreen()) {
       this.$el.removeClass('fullscreen');
     }
   },
@@ -60,11 +63,12 @@ var Core = UIObject.extend({
     return this.containers[0];
   },
   toggleFullscreen: function() {
-    if (!document.webkitIsFullScreen) {
-      this.el.webkitRequestFullscreen();
+    if (!Fullscreen.isFullscreen()) {
+      Fullscreen.requestFullscreen(this.el);
       this.$el.addClass('fullscreen');
     } else {
-      document.webkitCancelFullScreen();
+      Fullscreen.cancelFullscreen();
+
       this.$el.removeClass('fullscreen nocursor');
     }
     setTimeout(this.hideMediaControl.bind(this), 1000);

@@ -49,8 +49,37 @@ var formatTime = function(time, showMillis) {
   return str;
 };
 
+var Fullscreen = {
+  isFullscreen: function() {
+    return document.webkitIsFullScreen || document.mozFullScreen;
+  },
+  requestFullscreen: function(el) {
+    if(el.requestFullscreen) {
+      el.requestFullscreen();
+    } else if(el.webkitRequestFullscreen) {
+      el.webkitRequestFullscreen();
+    } else if(el.mozRequestFullScreen) {
+      el.mozRequestFullScreen();
+    } else if(el.msRequestFullscreen) {
+      el.msRequestFullscreen();
+    }
+  },
+  cancelFullscreen: function() {
+    if(document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if(document.webkitCancelFullScreen) {
+      document.webkitCancelFullScreen();
+    } else if(document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if(document.msExitFullscreen) {
+      document.msExitFullscreen();
+    }
+  }
+}
+
 module.exports = {
   extend: extend,
   zeroPad: zeroPad,
-  formatTime: formatTime
+  formatTime: formatTime,
+  Fullscreen: Fullscreen
 };
