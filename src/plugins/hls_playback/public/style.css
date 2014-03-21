@@ -4,4 +4,5 @@
   width: 100%;
   background-color: black;
   display: block;
+  pointer-events: none;
 }
