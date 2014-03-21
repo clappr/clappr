@@ -33,7 +33,7 @@ var Core = UIObject.extend({
     this.playbackHandler = new PlaybackHandler(params, this.loader);
     this.playbackHandler.createContainers(this.onContainersCreated.bind(this));
     //FIXME fullscreen api sucks
-    document.addEventListener('mozfullscreenchange', this.exit.bind(this));
+    window['document'].addEventListener('mozfullscreenchange', this.exit.bind(this));
   },
   load: function(params) {
     _(this.containers).each(function(container) {
