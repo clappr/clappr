@@ -16,12 +16,16 @@ var SpinnerThreeBouncePlugin = UIPlugin.extend({
     this.template = JST[this.name];
     this.listenTo(this.container, 'container:state:buffering', this.onBuffering);
     this.listenTo(this.container, 'container:state:bufferfull', this.onBufferFull);
+    this.listenTo(this.container, 'container:stop', this.onStop);
     this.render();
   },
   onBuffering: function() {
     this.$el.show();
   },
   onBufferFull: function() {
+    this.$el.hide();
+  },
+  onStop: function() {
     this.$el.hide();
   },
   render: function() {
