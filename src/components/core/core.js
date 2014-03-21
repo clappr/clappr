@@ -8,6 +8,8 @@
  */
 
 var _ = require('underscore');
+var $ = require('jquery');
+
 var UIObject = require('../../base/ui_object');
 var PlaybackHandler = require('../playback_handler');
 var Fullscreen = require('../../base/utils').Fullscreen;
@@ -83,8 +85,8 @@ var Core = UIObject.extend({
       this.$el.addClass('nocursor');
     }
   },
-  mediaControlTimeout: function() {
-    if (event.x !== this.lastMouseX && event.y !== this.lastMouseY) {
+  mediaControlTimeout: function(event) {
+    if (event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY) {
       if (this.hideId) {
         clearTimeout(this.hideId);
       }
@@ -92,8 +94,8 @@ var Core = UIObject.extend({
       this.hideId = setTimeout(function() {
         this.hideMediaControl();
       }.bind(this), 2000);
-      this.lastMouseX = event.x;
-      this.lastMouseY = event.y;
+      this.lastMouseX = event.clientX;
+      this.lastMouseY = event.clientY;
     }
   },
   render: function() {
