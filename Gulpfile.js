@@ -8,6 +8,7 @@ var istanbul = require('gulp-istanbul');
 var rename = require('gulp-rename');
 var browserify = require('gulp-browserify');
 var exec = require('child_process').exec;
+var spawn = require('child_process').spawn;
 var changed = require('gulp-changed');
 var express = require('express');
 var fs = require('fs');
@@ -68,13 +69,23 @@ gulp.task('dist', ['pre-build-hook'], function() {
     .pipe(gulp.dest(paths.dest));
 });
 
+gulp.task('headless-test', ['build-tests'], function() {
+  setTimeout(function() {
+    spawn('node_modules/mocha-phantomjs/bin/mocha-phantomjs', ['test/headless.html'])
+      .stdout.pipe(process.stdout);
+  }, 1000);
+});
+
 gulp.task('test', ['watch-tests'], function() {
   server.get('/tests', function(req, res) {
     res.sendfile('./test/runner.html');
   });
   server.listen(port);
-  utils.log(utils.colors.green('*****  Testing running on localhost:'+ port +'/tests  *****'))
-  exec('open http://localhost:3000/tests');
+  utils.log(utils.colors.green('*****  Testing running on localhost:' + port + '/tests  *****'))
+  setTimeout(function() {
+    exec('open http://localhost:3000/tests');
+  }, 2000);
+
 });
 
 gulp.task('coverage', function() {

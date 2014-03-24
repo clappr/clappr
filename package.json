@@ -33,7 +33,8 @@
     "express": "~3.5.0",
     "gulp-changed": "~0.2.1",
     "moment": "~2.5.1",
-    "mocha": "~1.18.2"
+    "mocha": "~1.18.2",
+    "mocha-phantomjs": "~3.3.2"
   },
   "testling": {
     "files": "test/*.js",
