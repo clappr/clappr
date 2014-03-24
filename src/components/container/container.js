@@ -53,6 +53,9 @@ var Container = UIObject.extend({
   pause: function() {
     this.trigger('container:pause');
   },
+  ended: function() {
+    this.trigger('container:ended', this);
+  },
   clicked: function() {
     this.trigger('container:click', this);
   },

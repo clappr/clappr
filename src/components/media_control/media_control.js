@@ -95,6 +95,10 @@ module.exports = MediaControl = UIObject.extend({
       clearTimeout(this.hideId);
     }
   },
+  ended: function() {
+    this.togglePlayStop();
+    this.togglePlayPause();
+  },
   updateSeekBar: function(position, duration) {
     var seekbarValue = (100 / duration) * position;
     this.$('[data-seekbar]').val(seekbarValue);

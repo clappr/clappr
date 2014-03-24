@@ -69,7 +69,8 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
   },
 
   ended: function() {
-    this.trigger('container:timeupdate', 0);
+    this.container.ended();
+    this.container.timeUpdated(0, this.el.duration);
   },
 
   seek: function(seekBarValue) {
