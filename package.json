@@ -33,7 +33,8 @@
     "gulp-util": "~2.2.14",
     "express": "~3.5.0",
     "gulp-changed": "~0.2.1",
-    "moment": "~2.5.1"
+    "moment": "~2.5.1",
+    "mocha": "~1.18.2"
   },
   "testling": {
     "files": "test/*.js",
