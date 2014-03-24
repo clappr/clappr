@@ -10,22 +10,26 @@ var browserify = require('gulp-browserify');
 var exec = require('child_process').exec;
 var changed = require('gulp-changed');
 var express = require('express');
+var fs = require('fs');
 
 var noop = function() {};
 var server = express();
 
 server.use(express.static('./dist'));
+server.use(express.static('./test'));
+server.use(express.static('./node_modules/mocha'));
 
 var paths = {
   files: ['src/**/*.js', 'src/**/*.css', 'src/**/*.html'],
   main: ['src/main.js'],
-  tests: ['test/spec_helper.js', 'test/**/*_spec.js'],
+  tests: ['test/**/*.js'],
   dest: 'dist'
 };
 
 var port = 3000;
 
 var distFile = 'api.min.js';
+var distTestFile = 'tests_bundle.js';
 
 var namespace = 'WP3';
 
@@ -33,6 +37,11 @@ gulp.task('default', ['lint', 'build']);
 
 gulp.task('pre-build-hook', function() {
   exec('node bin/hook.js', noop);
+});
+
+gulp.task('build-tests', ['build'], function() {
+  //FIXME looks like gulp-browserify can't handle /**/* globs
+  exec('browserify test/**/*.js -o dist/tests_bundle.js');
 });
 
 gulp.task('build', ['pre-build-hook'], function() {
@@ -59,12 +68,13 @@ gulp.task('dist', ['pre-build-hook'], function() {
     .pipe(gulp.dest(paths.dest));
 });
 
-gulp.task('test', ['build'], function() {
-  gulp.src(paths.tests)
-    .pipe(mocha({reporter: 'nyan'}))
-    .on('error', function(err) {
-      throw err;
-    });
+gulp.task('test', ['watch-tests'], function() {
+  server.get('/tests', function(req, res) {
+    res.sendfile('./test/runner.html');
+  });
+  server.listen(port);
+  utils.log(utils.colors.green('*****  Testing running on localhost:'+ port +'/tests  *****'))
+  exec('open http://localhost:3000/tests');
 });
 
 gulp.task('coverage', function() {
@@ -86,5 +96,11 @@ gulp.task('lint', function() {
 gulp.task('watch', ['build'], function() {
   gulp.watch(paths.files, function() {
     gulp.run('build');
+  });
+});
+
+gulp.task('watch-tests', ['build-tests'], function() {
+  gulp.watch(paths.files.concat(paths.tests), function() {
+    gulp.run('build-tests');
   });
 });

@@ -1,9 +1,5 @@
-//var jsdom = require('jsdom').jsdom;
 global.chai = require('chai');
 global.sinon = require('sinon');
-
-// bootstrap a "DOM" so jquery can work in the test env.
-//global.window = jsdom('<html><body></body></html>').createWindow();
 
 chai.should();
 expect = chai.expect;
