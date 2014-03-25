@@ -2,9 +2,9 @@
   "name": "Player",
   "version": "3.0.0-pre-0",
   "description": "Globo.com video player",
-  "main": "src/main.js",
+  "main": "src/lib.js",
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp headless-test"
   },
   "repository": {
     "type": "git",
@@ -32,7 +32,6 @@
     "gulp-util": "~2.2.14",
     "express": "~3.5.0",
     "gulp-changed": "~0.2.1",
-    "moment": "~2.5.1",
     "mocha": "~1.18.2",
     "mocha-phantomjs": "~3.3.2",
     "browserify": "~3.33.0",
@@ -50,6 +49,7 @@
   },
   "dependencies": {
     "underscore": "~1.6.0",
-    "jquery": "~2.1.0"
+    "jquery": "~2.1.0",
+    "moment": "~2.5.1"
   }
 }
