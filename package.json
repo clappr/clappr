@@ -34,7 +34,8 @@
     "gulp-changed": "~0.2.1",
     "moment": "~2.5.1",
     "mocha": "~1.18.2",
-    "mocha-phantomjs": "~3.3.2"
+    "mocha-phantomjs": "~3.3.2",
+    "browserify": "~3.33.0"
   },
   "testling": {
     "files": "test/*.js",
