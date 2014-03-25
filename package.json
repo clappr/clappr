@@ -35,7 +35,8 @@
     "moment": "~2.5.1",
     "mocha": "~1.18.2",
     "mocha-phantomjs": "~3.3.2",
-    "browserify": "~3.33.0"
+    "browserify": "~3.33.0",
+    "phantomjs": "~1.9.7-1"
   },
   "testling": {
     "files": "test/*.js",
