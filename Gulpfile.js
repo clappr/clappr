@@ -71,7 +71,7 @@ gulp.task('dist', ['pre-build-hook'], function() {
 
 gulp.task('headless-test', ['build-tests'], function() {
   setTimeout(function() {
-    spawn('node_modules/mocha-phantomjs/bin/mocha-phantomjs', ['test/headless.html'])
+    spawn('node_modules/mocha-phantomjs/bin/mocha-phantomjs', ['-p', 'node_modules/phantomjs/lib/phantom/bin/phantomjs', 'test/headless.html'])
       .stdout.pipe(process.stdout);
   }, 1000);
 });
