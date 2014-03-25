@@ -42,7 +42,7 @@ gulp.task('pre-build-hook', function() {
 
 gulp.task('build-tests', ['build'], function() {
   //FIXME looks like gulp-browserify can't handle /**/* globs
-  exec('browserify test/**/*.js -o dist/tests_bundle.js');
+  exec('node_modules/browserify/bin/cmd.js test/**/*.js -o dist/tests_bundle.js');
 });
 
 gulp.task('build', ['pre-build-hook'], function() {
