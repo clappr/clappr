@@ -1,21 +1,21 @@
 {
-  "name": "player",
+  "name": "Player",
   "version": "3.0.0-pre-0",
   "description": "Globo.com video player",
-  "main": "src/lib.js",
+  "main": "src/main.js",
   "scripts": {
-    "test": "gulp headless-test"
+    "test": "gulp test"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:globocom/player.git"
+    "url": "git@github.com:globoi/player.git"
   },
   "author": "Globo.com",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/globocom/player/issues"
+    "url": "https://github.com/globoi/player/issues"
   },
-  "homepage": "https://github.com/globocom/player",
+  "homepage": "https://github.com/globoi/player",
   "devDependencies": {
     "gulp-rename": "~1.0.0",
     "chai": "~1.9.0",
@@ -32,6 +32,7 @@
     "gulp-util": "~2.2.14",
     "express": "~3.5.0",
     "gulp-changed": "~0.2.1",
+    "moment": "~2.5.1",
     "mocha": "~1.18.2",
     "mocha-phantomjs": "~3.3.2",
     "browserify": "~3.33.0",
@@ -49,7 +50,6 @@
   },
   "dependencies": {
     "underscore": "~1.6.0",
-    "jquery": "~2.1.0",
-    "moment": "~2.5.1"
+    "jquery": "~2.1.0"
   }
 }
