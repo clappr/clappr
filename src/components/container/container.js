@@ -23,7 +23,6 @@ var Container = UIObject.extend({
     var style = Styler.getStyleFor('container');
     this.$el.append(style);
     this.plugins = [];
-    this.trigger('container:ready');
   },
   with: function(klass) {
     _.extend(this, klass);
@@ -38,6 +37,9 @@ var Container = UIObject.extend({
   },
   animate: function(style, duration) {
     this.$el.animate(style, duration);
+  },
+  ready: function() {
+    this.trigger('container:ready');
   },
   timeUpdated: function(position, duration) {
     this.trigger('container:timeupdate', position, duration);

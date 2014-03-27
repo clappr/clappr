@@ -47,6 +47,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   },
 
   checkIfFlashIsReady: function() {
+    this.container.ready();
     this.bootstrapId = setInterval(function() {
       if(this.el.getState) {
         this.bootstrap();
@@ -118,7 +119,6 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   },
 
   containerDestroyed: function() {
-    console.log('container destroyed');
     clearInterval(this.id);
     clearInterval(this.checkStateId);
   },

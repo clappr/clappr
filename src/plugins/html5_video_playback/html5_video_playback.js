@@ -27,6 +27,7 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
       default: ['position', 'seekbar', 'duration']
     };
     this.render();
+    this.container.ready();
     options.autoPlay && this.container.play();
   },
 
@@ -50,7 +51,7 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
     this.pause();
     this.el.currentTime = 0;
   },
-  
+
   volume: function(value) {
     this.el.volume = value / 100;
   },

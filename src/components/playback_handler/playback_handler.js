@@ -26,11 +26,14 @@ var PlaybackHandler = BaseObject.extend({
   findPlaybackPlugin: function(source) {
     return _.find(this.loader.playbackPlugins, function(p) { return p.canPlay(source) }, this);
   },
-  createContainer: function(source) {
+  createContainer: function(source, callback) {
     var playbackPlugin = this.findPlaybackPlugin(source);
     var container = new Container();
-    new playbackPlugin({container: container, src: source, autoPlay: !!this.params.autoPlay});
+    if (callback) {
+      this.listenTo(container, 'container:ready', function() { callback(container); });
+    }
     this.addContainerPlugins(container);
+    new playbackPlugin({container: container, src: source, autoPlay: !!this.params.autoPlay});
     return container;
   },
   addContainerPlugins: function(container) {
