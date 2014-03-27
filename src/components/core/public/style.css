@@ -1,8 +1,8 @@
 [data-player] {
   position: relative;
   margin: 0;
-  height: 360px;
-  width: 640px;
+  height: 506px;
+  width: 900px;
 }
 [data-player].fullscreen {
   width: 100%;
