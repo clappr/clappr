@@ -36,15 +36,13 @@ function copyAssets(asset) {
 }
 
 var pluginsTemplates = _(glob('src/plugins/**/*.html')).map(format);
-var templates = pluginsTemplates.concat(_(glob('src/components/**/*.html')).map(format))
-  .concat(glob('node_modules/*/public/*.html').map(format));
-var pluginsStyles = _(glob('src/plugins/**/*.css')).map(format)
-  .concat(glob('node_modules/*/public/*.css').map(format));
-var styles = pluginsStyles.concat(_(glob('src/components/**/*.css')).map(format)).concat();
+var templates = pluginsTemplates.concat(_(glob('src/components/**/*.html')).map(format));
+var pluginsStyles = _(glob('src/plugins/**/*.css')).map(format);
+var styles = pluginsStyles.concat(_(glob('src/components/**/*.css')).map(format));
 
 fs.writeFileSync(jstFile, codeTemplate({templates: templates, styles: styles}));
 
 mkdirp('dist/assets/');
 
 glob('src/{plugins,components}/**/*.{png,jpeg,jpg,gif,swf}').map(copyAssets);
-glob('node_modules/*/public/*.{png,jpeg,jpg,gif,swf}').map(copyAssets);
+
