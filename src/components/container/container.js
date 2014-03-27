@@ -78,9 +78,15 @@ var Container = UIObject.extend({
     this.plugins.push(plugin);
   },
   getPluginByName: function(name) {
-    var plugin = _(this.plugins).find(function(plugin) { return plugin.name === name });
+    var plugin = this.getPlugin(name);
     if(!plugin) { throw Error('Plugin ' + name + ' not found'); }
     return plugin;
+  },
+  hasPlugin: function(name) {
+    return !!this.getPlugin(name);
+  },
+  getPlugin: function(name) {
+    return _(this.plugins).find(function(plugin) { return plugin.name === name });
   }
 });
 

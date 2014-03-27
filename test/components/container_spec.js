@@ -89,6 +89,12 @@ describe('Container', function() {
       expect(this.container.plugins.length).to.equal(1);
     });
 
+    it('#hasPlugin', function() {
+      expect(this.container.hasPlugin('olar')).to.be.false;
+      this.container.addPlugin({name: 'olar'});
+      expect(this.container.hasPlugin('olar')).to.be.true;
+    });
+
     describe('#getPluginByName', function() {
       it('find by name', function() {
         var plugin = {name: 'olar'};
@@ -97,7 +103,7 @@ describe('Container', function() {
       });
 
       it('throws error when plugin not found', function() {
-        expect(this.container.getPluginByName).to.throw(/Plugin .* not found/);
+        expect(this.container.getPluginByName.bind(this.container)).to.throw(/Plugin .* not found/);
       });
     });
   });
