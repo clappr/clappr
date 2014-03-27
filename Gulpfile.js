@@ -42,7 +42,7 @@ gulp.task('pre-build-hook', function() {
 
 gulp.task('build-tests', ['build'], function() {
   //FIXME looks like gulp-browserify can't handle /**/* globs
-  exec('node_modules/browserify/bin/cmd.js test/**/*.js -o dist/tests_bundle.js');
+  exec('node_modules/.bin/browserify test/**/*.js -o dist/tests_bundle.js');
 });
 
 gulp.task('build', ['pre-build-hook'], function() {
@@ -71,9 +71,9 @@ gulp.task('dist', ['pre-build-hook'], function() {
 
 gulp.task('headless-test', ['build-tests'], function() {
   setTimeout(function() {
-    spawn('node_modules/mocha-phantomjs/bin/mocha-phantomjs', ['-p', 'node_modules/phantomjs/lib/phantom/bin/phantomjs', 'test/headless.html'])
+    spawn('node_modules/.bin/mocha-phantomjs', ['-p', 'node_modules/.bin/phantomjs', 'test/headless.html'])
       .stdout.pipe(process.stdout);
-  }, 1000);
+  }, 1500);
 });
 
 gulp.task('test', ['watch-tests'], function() {
