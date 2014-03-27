@@ -1,13 +1,13 @@
 [data-media-control] {
   position: absolute;
   background-color: rgba(2, 2, 2, 0.5);
-  border-radius: 5px;
-  bottom: 7%;
+  border-radius: 0px;
+  bottom: 0%;
   left: 0;
   right: 0;
   margin-left: auto;
   margin-right: auto;
-  max-width: 90%;
+  max-width: 100%;
   min-width: 60%;
   height: 40px;
   z-index: 1000;
