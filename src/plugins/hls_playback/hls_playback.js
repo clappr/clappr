@@ -40,6 +40,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   },
 
   bootstrap: function() {
+    this.container.ready();
     clearInterval(this.bootstrapId);
     this.currentState = "IDLE";
     this.timedCheckState();
@@ -47,7 +48,6 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   },
 
   checkIfFlashIsReady: function() {
-    this.container.ready();
     this.bootstrapId = setInterval(function() {
       if(this.el.getState) {
         this.bootstrap();
