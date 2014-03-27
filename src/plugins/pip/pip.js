@@ -9,8 +9,10 @@ var _ = require('underscore');
 var PipPlugin = BaseObject.extend({
   initialize: function(core) {
     this.core = core;
-    this.pipStyle = {width: "24%", height: "24%", "z-index": 20, bottom: "47px", right: "7px"};
-    this.masterStyle = {width: "100%", height: "100%", "z-index": 20, bottom: "0px", right: "0px"};
+    this.pipStyle = {width: "24%", height: "24%", "z-index": 20, bottom: "47px", right: "7px",
+                     "border-width": "3px", "border-style": "solid", "border-color": "rgba(255,255,255, .3)",
+                     "background-clip": "padding-box", "-webkit-background-clip": "padding-box"};
+    this.masterStyle = {width: "100%", height: "100%", "z-index": 20, bottom: "0px", right: "0px", border: "none"};
     this.masterContainer = core.containers[0];
     if (core.containers.length === 2) {
       this.pipContainer = core.containers[1];
