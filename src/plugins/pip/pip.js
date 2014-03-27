@@ -29,7 +29,6 @@ var PipPlugin = BaseObject.extend({
     this.discardPip();
     this.pipContainer = this.core.playbackHandler.createContainer(source, this.addPipCallback.bind(this));
     this.pipContainer.setStyle({'z-index': -1}); //we need to put this container behind everything until flash dispatch on:ready
-    window.pip = this.pipContainer;
     this.core.$el.append(this.pipContainer.render().el);
   },
   addPipCallback: function(container) {
