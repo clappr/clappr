@@ -36,7 +36,8 @@
     "mocha": "~1.18.2",
     "mocha-phantomjs": "~3.3.2",
     "browserify": "~3.33.0",
-    "phantomjs": "~1.9.7-1"
+    "phantomjs": "~1.9.7-1",
+    "chai-as-promised": "~4.1.1"
   },
   "testling": {
     "files": "test/*.js",
@@ -50,6 +51,7 @@
   },
   "dependencies": {
     "underscore": "~1.6.0",
-    "jquery": "~2.1.0"
+    "jquery": "~2.1.0",
+    "rsvp": "~3.0.6"
   }
 }
