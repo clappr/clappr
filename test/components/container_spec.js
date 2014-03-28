@@ -1,6 +1,10 @@
 var Container = require('../spec_helper').Container;
 var BaseObject = require('../spec_helper').BaseObject;
 var StatsPlugin = require('../spec_helper').StatsPlugin;
+var RSVP = require('rsvp');
+var chaiAsPromised = require('chai-as-promised');
+
+chai.use(chaiAsPromised);
 
 describe('Container', function() {
   beforeEach(function() {
@@ -19,6 +23,17 @@ describe('Container', function() {
     expect(this.container.foo).to.exists;
     this.container.foo();
     expect(foo.called).to.be.true;
+  });
+
+  it('async creation', function(done) {
+    var playback = {
+      setContainer: function(container) {
+        container.ready();
+      }
+    };
+    var promise = Container.create(playback);
+    promise.should.be.instanceOf(RSVP.Promise);
+    promise.should.be.fulfilled.notify(done);
   });
 
   describe('events', function() {

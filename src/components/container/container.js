@@ -8,6 +8,7 @@
 
 var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
+var RSVP = require('rsvp');
 var _ = require('underscore');
 
 var Container = UIObject.extend({
@@ -92,5 +93,16 @@ var Container = UIObject.extend({
     return _(this.plugins).find(function(plugin) { return plugin.name === name });
   }
 });
+
+Container.create = function(playback) {
+  var promise = new RSVP.Promise(function(resolve, reject) {
+    var container = new Container();
+    container.on('container:ready', function() {
+      resolve(container);
+    });
+    playback.setContainer(container);
+  });
+  return promise;
+}
 
 module.exports = Container;
