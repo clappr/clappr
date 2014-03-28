@@ -9,7 +9,7 @@ var _ = require('underscore');
 var PipPlugin = BaseObject.extend({
   initialize: function(core) {
     this.core = core;
-    this.pipStyle = {width: "24%", height: "24%", "z-index": 20, bottom: "47px", right: "7px",
+    this.pipStyle = {width: "24%", height: "24%", "z-index": 20, bottom: "7px", right: "7px",
                      "border-width": "3px", "border-style": "solid", "border-color": "rgba(255,255,255, .3)",
                      "background-clip": "padding-box", "-webkit-background-clip": "padding-box"};
     this.masterStyle = {width: "100%", height: "100%", bottom: "0px", right: "0px", border: "none"};
@@ -18,6 +18,8 @@ var PipPlugin = BaseObject.extend({
       this.pipContainer = core.containers[1];
       this.pipContainer.setStyle(this.pipStyle);
     }
+    this.listenTo(this.core.mediaControl, 'mediacontrol:show', this.onMediaControlShow.bind(this));
+    this.listenTo(this.core.mediaControl, 'mediacontrol:hide', this.onMediaControlHide.bind(this));
     this.setupApi();
   },
   setupApi: function() {
@@ -102,6 +104,14 @@ var PipPlugin = BaseObject.extend({
     this.masterContainer = this.pipContainer;
     this.masterContainer.setStyle({"z-index": 1});
     delete this.pipContainer;
+  },
+  onMediaControlShow: function () {
+    if (this.pipContainer)
+      this.pipContainer.$el.animate({ bottom: 47 }, { duration: 400, easing: 'linear', queue: true });
+  },
+  onMediaControlHide: function () {
+    if (this.pipContainer)
+      this.pipContainer.$el.animate({ bottom: 7 }, { duration: 400, easing: 'linear', queue: true });
   }
 });
 
