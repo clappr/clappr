@@ -34,6 +34,7 @@ module.exports = MediaControl = UIObject.extend({
     this.params = params;
     this.container = params.container;
     this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar);
+    this.listenTo(this.container, 'container:play', this.changeTogglePlay);
     this.defaultSettings = {
       left: ['play', 'stop', 'pause'],
       right: ['volume'],
@@ -49,6 +50,12 @@ module.exports = MediaControl = UIObject.extend({
   stop: function() {
     this.container.stop();
   },
+  changeTogglePlay: function() {
+    var playPauseButton = this.$el.find('button[data-playpause]');
+    playPauseButton.toggleClass('playing paused');
+    var playStopButton = this.$el.find('button[data-playstop]');
+    playStopButton.toggleClass('playing stopped');
+  },
   togglePlayPause: function() {
     var playPauseButton = this.$el.find('button[data-playpause]');
     if (playPauseButton.hasClass('playing')) {
@@ -56,7 +63,6 @@ module.exports = MediaControl = UIObject.extend({
     } else {
       this.container.play();
     }
-    window.playPauseButton = playPauseButton;
     playPauseButton.toggleClass('playing paused');
   },
   togglePlayStop: function() {

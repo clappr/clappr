@@ -11,7 +11,9 @@ var PosterPlugin = UIPlugin.extend({
   attributes: {
     'data-poster': ''
   },
-
+  events: {
+    'click': 'clicked'
+  },
   initialize: function(options) {
     PosterPlugin.super('initialize').call(this, options);
     this.el.src = options.poster || 'assets/default.png';
@@ -32,6 +34,9 @@ var PosterPlugin = UIPlugin.extend({
     this.container.$el.append(style);
     this.container.$el.append(this.el);
     return this;
+  },
+  clicked: function() {
+    this.container.play();
   }
 });
 
