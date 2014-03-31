@@ -40,7 +40,7 @@ var PipPlugin = BaseObject.extend({
     this.core.$el.append(this.pipContainer.render().el);
   },
   addPipCallback: function(container) {
-    window.pipContainer = container;
+    this.pipContainer = container;
     container.setVolume(0);
     container.getPluginByName('watermark').disable();
     container.play();
