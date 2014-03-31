@@ -58,7 +58,8 @@ var Core = UIObject.extend({
     this.globalPluginsHandler.loadPlugins();
   },
   createMediaControl: function(container) {
-    this.mediaControl = new MediaControl({container: container});
+    var params = _.extend({container: container}, this.params);
+    this.mediaControl = new MediaControl(_.extend({container: container}, this.params));
     this.listenTo(this.mediaControl, 'mediacontrol:fullscreen', this.toggleFullscreen);
   },
   getCurrentContainer: function() {
