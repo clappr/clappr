@@ -30,7 +30,9 @@ module.exports = MediaControl = UIObject.extend({
     'mouseleave [data-volume]': 'hideVolumeBar'
   },
   template: JST.media_control,
-  initialize: function() {
+  initialize: function(params) {
+    this.params = params;
+    this.container = params.container;
     this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar);
     this.defaultSettings = {
       left: ['play', 'stop', 'pause'],
@@ -54,6 +56,7 @@ module.exports = MediaControl = UIObject.extend({
     } else {
       this.container.play();
     }
+    window.playPauseButton = playPauseButton;
     playPauseButton.toggleClass('playing paused');
   },
   togglePlayStop: function() {
@@ -123,6 +126,11 @@ module.exports = MediaControl = UIObject.extend({
     this.$el.find('input[data-volume]').hide();
     this.$el.find('button[data-playpause]').addClass('paused');
     this.$el.find('button[data-playstop]').addClass('stopped');
+    if (this.params.autoPlay) {
+      this.togglePlayPause();
+      this.togglePlayStop();
+    }
+
     return this;
   }
 });

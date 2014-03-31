@@ -21,7 +21,6 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
   initialize: function(options) {
 //    HTML5VideoPlaybackPlugin.super('initialize').call(this, options);
     this.el.src = options.src;
-    this.autoPlay = options.autoPlay;
   },
 
   setContainer: function(container) {
@@ -35,7 +34,6 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
       default: ['position', 'seekbar', 'duration']
     };
     this.container.ready();
-    //play if autoPlay === true?
   },
 
   bindEvents: function() {

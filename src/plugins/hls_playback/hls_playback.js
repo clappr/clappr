@@ -18,7 +18,6 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   initialize: function(options) {
     this.src = options.src;
     this.swfPath = options.swfPath || "assets/HLSPlayer.swf";
-    this.autoPlay = options.autoPlay;
   },
   setContainer: function(container) {
     this.container = container;
@@ -44,7 +43,6 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     clearInterval(this.bootstrapId);
     this.currentState = "IDLE";
     this.timedCheckState();
-    this.autoPlay && this.container.play();
   },
 
   checkIfFlashIsReady: function() {
