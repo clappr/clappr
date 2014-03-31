@@ -118,9 +118,11 @@ module.exports = MediaControl = UIObject.extend({
     this.container.setCurrentTime(this.$('[data-seekbar]').val());
   },
   fadeIn: function() {
+    this.trigger('mediacontrol:show');
     this.$el.fadeIn();
   },
   fadeOut: function() {
+    this.trigger('mediacontrol:hide');
     this.$el.fadeOut();
   },
   render: function() {
