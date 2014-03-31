@@ -14,17 +14,18 @@ var HTML5AudioPlaybackPlugin = UIPlugin.extend({
   },
 
   initialize: function(options) {
-    HTML5AudioPlaybackPlugin.super('initialize').call(this, options);
     this.el.src = options.src;
+    this.render(); // it should render when the container trigger 'ready'
+  },
+
+  setContainer: function() {
     this.container.settings = {
       left: ['playpause'],
       right: ['volume'],
       default: ['position', 'seekbar', 'duration']
     };
-    this.render(); // it should render when the container trigger 'ready'
-    options.autoPlay && this.container.play();
+    this.render();
   },
-
   bindEvents: function() {
     this.listenTo(this.container, 'container:play', this.play);
     this.listenTo(this.container, 'container:pause', this.pause);

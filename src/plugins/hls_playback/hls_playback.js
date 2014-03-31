@@ -16,19 +16,20 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   },
 
   initialize: function(options) {
-    HLSVideoPlaybackPlugin.super('initialize').call(this, options);
     this.src = options.src;
-    this.el.id = this.cid;
     this.swfPath = options.swfPath || "assets/HLSPlayer.swf";
+    this.autoPlay = options.autoPlay;
+  },
+  setContainer: function(container) {
+    this.container = container;
+    this.bindEvents();
     this.container.settings = {
       left: ["playstop"],
       right: ["fullscreen", "volume"]
     };
-    this.autoPlay = options.autoPlay;
     this.render();
     this.checkIfFlashIsReady();
   },
-
   bindEvents: function() {
     this.listenTo(this.container, 'container:play', this.play);
     this.listenTo(this.container, 'container:pause', this.pause);
@@ -40,7 +41,6 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   },
 
   bootstrap: function() {
-    this.container.ready();
     clearInterval(this.bootstrapId);
     this.currentState = "IDLE";
     this.timedCheckState();
@@ -133,10 +133,12 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     var style = Styler.getStyleFor(this.name);
     this.$el.html(this.template({swfPath: this.swfPath}));
     this.$el.append(style);
+    this.el.id = this.cid;
     this.container.$el.append(this.el);
     if(navigator.userAgent.match(/firefox/i)) { //FIXME remove it from here
       this.setupFirefox();
     }
+    this.container.ready();
     return this;
   }
 });

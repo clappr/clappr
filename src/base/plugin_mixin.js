@@ -4,7 +4,6 @@
 
 var PluginMixin = {
   initialize: function() {
-    this.container.addPlugin(this);
     this.bindEvents();
   },
   enable: function() {

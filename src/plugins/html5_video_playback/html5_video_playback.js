@@ -19,16 +19,23 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
   },
 
   initialize: function(options) {
-    HTML5VideoPlaybackPlugin.super('initialize').call(this, options);
+//    HTML5VideoPlaybackPlugin.super('initialize').call(this, options);
     this.el.src = options.src;
+    this.autoPlay = options.autoPlay;
+  },
+
+  setContainer: function(container) {
+    this.container = container;
+    this.container.addPlugin(this);
+    this.bindEvents();
+    this.render();
     this.container.settings = {
       left: ['playpause'],
       right: ['fullscreen', 'volume'],
       default: ['position', 'seekbar', 'duration']
     };
-    this.render();
     this.container.ready();
-    options.autoPlay && this.container.play();
+    //play if autoPlay === true?
   },
 
   bindEvents: function() {

@@ -10,11 +10,6 @@ describe('WaterMarkPlugin', function() {
     this.plugin = new Player.WaterMarkPlugin({container: this.container});
   });
 
-  it('adds itself to the container', function() {
-    expect(this.container.plugins.length).to.equal(1);
-    expect(this.container.getPluginByName('watermark').type).to.equal('ui');
-  });
-
   describe('#bindEvents', function() {
     beforeEach(function() {
       this.plugin.onPlay = sinon.spy();
