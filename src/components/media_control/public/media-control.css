@@ -97,6 +97,7 @@ div[data-default-controls] {
   height: 100%;
   vertical-align: middle;
   line-height: 32px;
+  text-align: center;
 }
 div[data-position], div[data-duration] {
   display: inline-block;
