@@ -1,6 +1,8 @@
 [data-player] {
   position: relative;
   margin: 0;
+  height: 506px;
+  width: 900px;
   text-align: center;
   -webkit-user-select: none;  /* Chrome all / Safari all */
   -moz-user-select: none;     /* Firefox all */
