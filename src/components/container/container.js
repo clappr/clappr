@@ -20,10 +20,15 @@ var Container = UIObject.extend({
     'hover': 'hover',
     'mouseover': 'hover'
   },
-  initialize: function() {
-    var style = Styler.getStyleFor('container');
-    this.$el.append(style);
-    this.plugins = [];
+  initialize: function(options) {
+    this.playback = options.playback;
+    this.settings = this.playback.getSettings();
+    this.listenTo(this.playback, 'playback:timeupdate', this.timeUpdated);
+    this.listenTo(this.playback, 'playback:ready', this.ready);
+    this.listenTo(this.playback, 'playback:buffering', this.buffering);
+    this.listenTo(this.playback, 'playback:bufferfull', this.bufferfull);
+    this.isReady = false;
+    this.plugins = [this.playback];
   },
   with: function(klass) {
     _.extend(this, klass);
@@ -31,6 +36,7 @@ var Container = UIObject.extend({
   },
   destroy: function() {
     this.trigger('container:destroyed');
+    this.playback.destroy();
     this.$el.remove();
   },
   setStyle: function(style) {
@@ -40,6 +46,7 @@ var Container = UIObject.extend({
     this.$el.animate(style, duration);
   },
   ready: function() {
+    this.isReady = true;
     this.trigger('container:ready');
   },
   timeUpdated: function(position, duration) {
@@ -47,12 +54,15 @@ var Container = UIObject.extend({
   },
   play: function() {
     this.trigger('container:play');
+    this.playback.play();
   },
   stop: function() {
     this.trigger('container:stop');
+    this.playback.stop();
   },
   pause: function() {
     this.trigger('container:pause');
+    this.playback.pause();
   },
   ended: function() {
     this.trigger('container:ended', this);
@@ -65,9 +75,11 @@ var Container = UIObject.extend({
   },
   setCurrentTime: function(time) {
     this.trigger('container:seek', time);
+    this.playback.seek(time);
   },
   setVolume: function(value) {
     this.trigger('container:volume', value);
+    this.playback.volume(value);
   },
   requestFullscreen: function() {
     this.trigger('container:fullscreen');
@@ -91,18 +103,13 @@ var Container = UIObject.extend({
   },
   getPlugin: function(name) {
     return _(this.plugins).find(function(plugin) { return plugin.name === name });
+  },
+  render: function() {
+    var style = Styler.getStyleFor('container');
+    this.$el.append(style);
+    this.$el.append(this.playback.render().el);
+    return this;
   }
 });
-
-Container.create = function(playback) {
-  var promise = new RSVP.Promise(function(resolve, reject) {
-    var container = new Container();
-    container.on('container:ready', function() {
-      resolve(container);
-    });
-    playback.setContainer(container);
-  });
-  return promise;
-}
 
 module.exports = Container;

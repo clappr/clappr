@@ -33,7 +33,7 @@ var Core = UIObject.extend({
     this.parentElement = params.parentElement;
     this.loader = new Loader(params);
     this.playbackHandler = new PlaybackHandler(params, this.loader);
-    this.playbackHandler.createContainers().then(this.onContainersCreated.bind(this));
+    this.playbackHandler.createContainers(this.onContainersCreated.bind(this));
     //FIXME fullscreen api sucks
     window['document'].addEventListener('mozfullscreenchange', this.exit.bind(this));
   },
@@ -42,7 +42,7 @@ var Core = UIObject.extend({
       container.destroy();
     });
     this.playbackHandler.params = _(this.params).extend(params);
-    this.playbackHandler.createContainers().then(this.onContainersCreated.bind(this));
+    this.playbackHandler.createContainers(this.onContainersCreated.bind(this));
   },
   exit: function() {
     if(!Fullscreen.isFullscreen()) {
@@ -51,11 +51,13 @@ var Core = UIObject.extend({
   },
   onContainersCreated: function(containers) {
     this.containers = containers;
+    this.getCurrentContainer().on('container:ready', function() {
+      this.globalPluginsHandler = new GlobalPluginsHandler(this);
+      this.globalPluginsHandler.loadPlugins();
+    }.bind(this));
     this.createMediaControl(this.getCurrentContainer());
     this.render();
     this.$el.appendTo(this.parentElement);
-    this.globalPluginsHandler = new GlobalPluginsHandler(this);
-    this.globalPluginsHandler.loadPlugins();
   },
   createMediaControl: function(container) {
     var params = _.extend({container: container}, this.params);
