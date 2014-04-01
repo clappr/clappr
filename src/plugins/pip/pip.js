@@ -105,12 +105,12 @@ var PipPlugin = BaseObject.extend({
     delete this.pipContainer;
   },
   onMediaControlShow: function () {
-    if (this.pipContainer)
-      this.pipContainer.$el.animate({ bottom: 47 }, { duration: 400, easing: 'linear', queue: true });
+    if (!this.pipContainer || this.pipContainer.$el.is(':animated')) return;
+    this.pipContainer.animate({ bottom: 47 }, 400);
   },
   onMediaControlHide: function () {
-    if (this.pipContainer)
-      this.pipContainer.$el.animate({ bottom: 7 }, { duration: 400, easing: 'linear', queue: true });
+    if (!this.pipContainer || this.pipContainer.$el.is(':animated')) return;
+    this.pipContainer.animate({ bottom: 7 }, 400);
   }
 });
 
