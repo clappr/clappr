@@ -59,6 +59,10 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
     return !!this.el.volume;
   },
 
+  isPlaying: function() {
+    return !this.el.paused && !this.el.ended;
+  },
+
   ended: function() {
     this.trigger('playback:ended')
     this.trigger('playback:timeupdate', 0, this.el.duration);

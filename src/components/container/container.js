@@ -49,6 +49,9 @@ var Container = UIObject.extend({
     this.isReady = true;
     this.trigger('container:ready');
   },
+  isPlaying: function() {
+    return this.playback.isPlaying();
+  },
   timeUpdated: function(position, duration) {
     this.trigger('container:timeupdate', position, duration);
   },

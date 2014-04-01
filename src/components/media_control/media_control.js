@@ -58,21 +58,28 @@ module.exports = MediaControl = UIObject.extend({
   },
   togglePlayPause: function() {
     var playPauseButton = this.$el.find('button[data-playpause]');
-    if (playPauseButton.hasClass('playing')) {
+    if (this.container.isPlaying()) {
       this.container.pause();
+      playPauseButton.addClass('paused');
+      playPauseButton.removeClass('playing');
     } else {
       this.container.play();
+      playPauseButton.removeClass('paused');
+      playPauseButton.addClass('playing');
     }
-    playPauseButton.toggleClass('playing paused');
   },
   togglePlayStop: function() {
     var playStopButton = this.$el.find('button[data-playstop]');
-    if (playStopButton.hasClass('playing')) {
+    debugger
+    if (this.container.isPlaying()) {
       this.container.stop();
+      playStopButton.addClass('stopped');
+      playStopButton.removeClass('playing');
     } else {
       this.container.play();
+      playStopButton.removeClass('stopped');
+      playStopButton.addClass('playing');
     }
-    playStopButton.toggleClass('playing stopped');
   },
   volume: function() {
     this.container.setVolume(this.$el.find('input[data-volume]').val());
@@ -83,6 +90,19 @@ module.exports = MediaControl = UIObject.extend({
   setContainer: function(container) {
     this.stopListening(this.container);
     this.container = container;
+    var playPauseButton = this.$el.find('button[data-playpause]');
+    var playStopButton = this.$el.find('button[data-playstop]');
+    if (this.container.isPlaying()) {
+      playPauseButton.removeClass('paused');
+      playPauseButton.addClass('playing');
+      playStopButton.removeClass('stopped');
+      playStopButton.addClass('playing');
+    } else {
+      playPauseButton.addClass('paused');
+      playPauseButton.removeClass('playing');
+      playStopButton.addClass('stopped');
+      playStopButton.removeClass('playing');
+    }
     this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar);
   },
   showVolumeBar: function() {
