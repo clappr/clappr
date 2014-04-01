@@ -16,29 +16,25 @@ var PlaybackHandler = BaseObject.extend({
     this.params = params;
     this.loader = loader;
   },
-  createContainers: function() {
-    var promise = new RSVP.Promise(function(resolve, reject) {
-      var promises = [];
+  createContainers: function(callback) {
+      var containers = [];
       _.each(this.params.sources, function(source) {
-        promises.push(this.createContainer(source));
+        var container = this.createContainer(source);
+        containers.push(container);
       }, this);
 
-      RSVP.all(promises).then(function(containers) {
-        _.each(containers, this.addContainerPlugins, this);
-        resolve(containers);
-      }.bind(this));
-    }.bind(this));
-
-    return promise;
+    callback(containers);
   },
   findPlaybackPlugin: function(source) {
     return _.find(this.loader.playbackPlugins, function(p) { return p.canPlay(source) }, this);
   },
-  createContainer: function(source) {
+  createContainer: function(source, callback) {
     var playbackPlugin = this.findPlaybackPlugin(source);
     var playback = new playbackPlugin({src: source, autoPlay: !!this.params.autoPlay});
-    var promise = Container.create(playback);
-    return promise;
+    var container = new Container({playback: playback});
+    this.addContainerPlugins(container);
+    callback && callback(container);
+    return container;
   },
   addContainerPlugins: function(container) {
     _.each(this.loader.containerPlugins, function(plugin) {

@@ -19,29 +19,15 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
   },
 
   initialize: function(options) {
-//    HTML5VideoPlaybackPlugin.super('initialize').call(this, options);
     this.el.src = options.src;
   },
 
-  setContainer: function(container) {
-    this.container = container;
-    this.container.addPlugin(this);
-    this.bindEvents();
-    this.render();
-    this.container.settings = {
+  getSettings: function() {
+    return {
       left: ['playpause'],
       right: ['fullscreen', 'volume'],
       default: ['position', 'seekbar', 'duration']
     };
-    this.container.ready();
-  },
-
-  bindEvents: function() {
-    this.listenTo(this.container, 'container:play', this.play);
-    this.listenTo(this.container, 'container:pause', this.pause);
-    this.listenTo(this.container, 'container:seek', this.seek);
-    this.listenTo(this.container, 'container:volume', this.volume);
-    this.listenTo(this.container, 'container:stop', this.stop);
   },
 
   play: function() {
@@ -74,8 +60,14 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
   },
 
   ended: function() {
-    this.container.ended();
-    this.container.timeUpdated(0, this.el.duration);
+    this.trigger('playback:ended')
+    this.trigger('playback:timeupdate', 0, this.el.duration);
+  },
+
+  destroy: function() {
+    this.stop();
+    this.el.src = '';
+    this.$el.remove();
   },
 
   seek: function(seekBarValue) {
@@ -92,13 +84,13 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
   },
 
   timeUpdated: function() {
-    this.container.timeUpdated(this.el.currentTime, this.el.duration);
+    this.trigger('playback:timeupdate', this.el.currentTime, this.el.duration);
   },
 
   render: function() {
     var style = Styler.getStyleFor(this.name);
-    this.container.$el.append(style);
-    this.container.$el.append(this.el);
+    this.$el.append(style);
+    this.trigger('playback:ready');
     return this;
   }
 });

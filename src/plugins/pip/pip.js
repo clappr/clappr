@@ -41,11 +41,13 @@ var PipPlugin = BaseObject.extend({
   },
   addPipCallback: function(container) {
     this.pipContainer = container;
-    container.setVolume(0);
-    container.getPluginByName('watermark').disable();
-    container.play();
-    container.setStyle(this.pipStyle);
-    this.core.containers.push(container);
+    this.pipContainer.on('container:ready', function() {
+      this.pipContainer.setVolume(0);
+      this.pipContainer.getPluginByName('watermark').disable();
+      this.pipContainer.play();
+      this.pipContainer.setStyle(this.pipStyle);
+      this.core.containers.push(container);
+    }.bind(this));
   },
   discardPip: function() {
     if (this.pipContainer) {
@@ -68,26 +70,23 @@ var PipPlugin = BaseObject.extend({
   },
   addMasterCallback: function(container) {
     this.masterContainer = container;
+    this.masterContainer.on('container:ready', function() {
+      this.discardPip();
+      this.masterContainer.play();
+      this.pipContainer = this.tmpContainer;
+      delete this.tmpContainer;
+      this.pipContainer.setVolume(0);
+      this.pipContainer.getPluginByName('watermark').disable();
+      if (this.pipContainer.hasPlugin('hls_playback')) { //flash breaks on animate
+        this.pipContainer.setStyle(this.pipStyle);
+      } else {
+        this.pipContainer.animate(this.pipStyle, 400);
+      }
+    }.bind(this));
     this.core.$el.append(this.masterContainer.render().el);
-    this.masterContainer.play();
-    this.discardPip();
-    this.pipContainer = this.tmpContainer;
-    delete this.tmpContainer;
-    this.pipContainer.setVolume(0);
-    this.pipContainer.getPluginByName('watermark').disable();
-    if (this.pipContainer.hasPlugin('hls_playback')) { //flash breaks on animate
-      this.pipContainer.setStyle(this.pipStyle);
-    } else {
-      this.pipContainer.animate(this.pipStyle, 400);
-      setTimeout(function() { this.pipContainer.setStyle(this.pipStyle); }.bind(this), 400); //workaround to persist borders after the animation
-    }
     this.core.containers.splice(0, 0, this.masterContainer);
   },
   discardContainer: function(container) {
-    if (container.hasPlugin('html5_video_playback')) {
-      container.stop();
-      container.getPluginByName('html5_video_playback').el.src = '';
-    }
     container.destroy();
     this.core.containers = _.without(this.core.containers, _.findWhere(this.core.containers, container));
   },
