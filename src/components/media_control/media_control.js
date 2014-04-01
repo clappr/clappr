@@ -129,7 +129,7 @@ module.exports = MediaControl = UIObject.extend({
   },
   updateSeekBar: function(position, duration) {
     var seekbarValue = (100 / duration) * position;
-    this.$('[data-seekbar]').val(seekbarValue);
+    this.$('div.seekbar-position[data-seekbar]').css({ width: seekbarValue + '%' });
     this.$('[data-position]').html(Utils.formatTime(position));
     this.$('[data-duration]').html(Utils.formatTime(duration));
   },
@@ -153,11 +153,12 @@ module.exports = MediaControl = UIObject.extend({
     this.$el.find('input[data-volume]').hide();
     this.$el.find('button[data-playpause]').addClass('paused');
     this.$el.find('button[data-playstop]').addClass('stopped');
+    this.$el.find('div.seekbar-position[data-seekbar]').css({width: 0});
+    this.$el.find('div.seekbar-loaded[data-seekbar]').css({width: 0});
     if (this.params.autoPlay) {
       this.togglePlayPause();
       this.togglePlayStop();
     }
-
     return this;
   }
 });

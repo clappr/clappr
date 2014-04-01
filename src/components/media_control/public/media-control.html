@@ -3,7 +3,14 @@
     var render = function(settings) {
       _.each(settings, function(setting) {
         if(setting === "seekbar") { %>
-          <input type="range" value="0" data-<%= setting %> />
+          <div class="seekbar" data-seekbar>
+            <div class="seekbar-loaded-wrapper" data-seekbar>
+              <div class="seekbar-loaded" data-seekbar></div>
+            </div>
+            <div class="seekbar-position" data-seekbar>
+              <div class="media-control-icon elipse" data-seekbar></div>
+            </div>
+          </div>
       <% } else if(setting === "volume") { %>
       <span data-volume>
         <input type="range" value="0" data-<%= setting %> orient="vertical" />
