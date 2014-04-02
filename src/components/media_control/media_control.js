@@ -175,14 +175,14 @@ module.exports = MediaControl = UIObject.extend({
     if(this.hideId) {
       clearTimeout(this.hideId);
     }
-    this.$el.find('.volume-bar[data-volume]').fadeIn('fast');
+    this.$el.find('.volume-bar-wrapper[data-volume]').fadeIn('fast');
   },
   hideVolumeBar: function() {
     if(this.hideId) {
       clearTimeout(this.hideId);
     }
     this.hideId = setTimeout(function() {
-      this.$el.find('.volume-bar[data-volume]').fadeOut('fast');
+      this.$el.find('.volume-bar-wrapper[data-volume]').fadeOut('fast');
     }.bind(this), 750);
   },
   keepVolumeBar: function() {
@@ -201,7 +201,7 @@ module.exports = MediaControl = UIObject.extend({
     this.$('[data-position]').html(Utils.formatTime(position));
     this.$('[data-duration]').html(Utils.formatTime(duration));
   },
-  seek: function() {
+  seek: function(event) {
     var $element = this.$el.find('div.seekbar[data-seekbar]');
     var offsetX = event.pageX - $element.offset().left;
     var pos = offsetX / $element.width() * 100;
@@ -221,7 +221,7 @@ module.exports = MediaControl = UIObject.extend({
     var settings = this.container.settings || this.defaultSettings;
     this.$el.html(this.template({settings: settings}));
     this.$el.append(style);
-    this.$el.find('.volume-bar[data-volume]').hide();
+    this.$el.find('.volume-bar-wrapper[data-volume]').hide();
     this.$el.find('button[data-playpause]').addClass('paused');
     this.$el.find('button[data-playstop]').addClass('stopped');
     this.$el.find('div.volume-current[data-volume]').css({height: 100 + '%'});

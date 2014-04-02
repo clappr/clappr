@@ -152,10 +152,19 @@ div.seekbar-position[data-seekbar] {
 div.volume-wrapper[data-volume] {
   float: right;
 }
+div.volume-bar-wrapper[data-volume] {
+  position: relative;
+  left: 0;
+  bottom: 126px;
+  background: rgba(2, 2, 2, 0.5);
+  border-radius: 4px;
+  width: 100%;
+  height: 88px;
+}
 div.volume-bar[data-volume] {
   position: relative;
   left: 12px;
-  bottom: 100px;
+  top: 12px;
   background: #bdbdbd;
   border-radius: 4px;
   width: 8px;
