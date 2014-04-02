@@ -70,7 +70,6 @@ module.exports = MediaControl = UIObject.extend({
   },
   togglePlayStop: function() {
     var playStopButton = this.$el.find('button[data-playstop]');
-    debugger
     if (this.container.isPlaying()) {
       this.container.stop();
       playStopButton.addClass('stopped');
