@@ -25,13 +25,6 @@ describe('MediaControl', function() {
     this.control.$el.find('button').attr('data-play').should.not.be.equal(undefined);
   });
 
-  it('should be able to update seekbar', function() {
-      this.control.template = _.template('<input data-seekbar value="0"></input>');
-      this.control.render();
-      this.control.updateSeekBar(10, 100);
-      this.control.$('[data-seekbar]').val().should.be.equal('10');
-  });
-
   it('should switch between containers', function() {
     var stopListening = sinon.spy(this.control, 'stopListening');
     var listenTo = sinon.spy(this.control, 'listenTo');
@@ -82,9 +75,9 @@ describe('MediaControl', function() {
 
     it("should change the container's volume", function() {
       var spy = sinon.spy(this.container, 'setVolume');
-      this.container.settings = {left: ['volume']};
+      this.control.container.settings = {left: ['volume']};
       this.control.render();
-      this.control.$('input[data-volume]').click();
+      this.control.$('[data-volume]').click();
       spy.called.should.be.true;
     });
 
