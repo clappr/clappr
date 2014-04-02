@@ -4,10 +4,11 @@
 
 var UIPlugin = require('../spec_helper').UIPlugin;
 var Container = require('../spec_helper').Container;
+var HTML5Playback = require('../spec_helper').HTML5VideoPlayback;
 
 describe('UIPlugin', function() {
   beforeEach(function() {
-    this.container = new Container();
+    this.container = new Container({playback: new HTML5Playback({src: 'foo.mp4'})});
   });
 
   describe('default behavior', function() {

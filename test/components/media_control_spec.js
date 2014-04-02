@@ -1,10 +1,12 @@
 var MediaControl = require('../spec_helper').MediaControl;
 var Container = require('../spec_helper').Container;
+var FakePlayback = require('../spec_helper').FakePlayback;
 var _ = require('underscore');
 
 describe('MediaControl', function() {
   beforeEach(function() {
-    this.container = new Container({settings: ['play', 'pause']});
+    this.playback = new FakePlayback();
+    this.container = new Container({settings: ['play', 'pause'], playback: this.playback});
     this.control = new MediaControl({container: this.container});
   });
 
@@ -33,7 +35,7 @@ describe('MediaControl', function() {
   it('should switch between containers', function() {
     var stopListening = sinon.spy(this.control, 'stopListening');
     var listenTo = sinon.spy(this.control, 'listenTo');
-    var newContainer = new Container();
+    var newContainer = new Container({playback: this.playback});
     this.control.setContainer(newContainer);
 
     stopListening.withArgs(this.container).calledOnce.should.be.true;
@@ -42,12 +44,13 @@ describe('MediaControl', function() {
 
   describe('events', function() {
     beforeEach(function() {
-      this.container = new Container();
+      this.container = new Container({playback: this.playback});
       this.control = new MediaControl({container: this.container});
     });
 
     it('should react for clicks on play', function() {
       var spy = sinon.spy(this.container, 'play');
+      this.control.container.settings = {left: ['play']}
       this.control.render();
       this.control.$('[data-play]').click();
       spy.called.should.be.true;
@@ -55,20 +58,23 @@ describe('MediaControl', function() {
 
     it('should react for clicks on pause', function() {
       var spy = sinon.spy(this.container, 'pause');
+      this.control.container.settings = {left: ['pause']};
       this.control.render();
       this.control.$('[data-pause]').click();
       spy.called.should.be.true;
     });
 
     it('should react for clicks on stop', function() {
-      var spy = sinon.spy(this.container, 'stop');
+      var spy = sinon.stub(this.container, 'stop');
+      this.control.container.settings = {left: ['stop']}
       this.control.render();
       this.control.$('[data-stop]').click();
       spy.called.should.be.true;
     });
 
     it('should react for clicks on the seekbar', function() {
-      var spy = sinon.spy(this.container, 'setCurrentTime');
+      var spy = sinon.stub(this.container, 'setCurrentTime');
+      this.control.container.settings = {left: ['seekbar']};
       this.control.render();
       this.control.$('[data-seekbar]').click();
       spy.called.should.be.true;

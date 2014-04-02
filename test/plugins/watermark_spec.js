@@ -6,7 +6,7 @@ var Player = require('../spec_helper');
 
 describe('WaterMarkPlugin', function() {
   beforeEach(function() {
-    this.container = new Player.Container();
+    this.container = new Player.Container({playback: new Player.FakePlayback()});
     this.plugin = new Player.WaterMarkPlugin({container: this.container});
   });
 
@@ -35,7 +35,6 @@ describe('WaterMarkPlugin', function() {
     });
 
     it('#enable', function() {
-      this.plugin.$el = {show: function() {}, hide: function(){}}; //FIXME
       this.plugin.disable();
       this.plugin.enable();
       this.container.play();
