@@ -134,7 +134,11 @@ module.exports = MediaControl = UIObject.extend({
     this.$('[data-duration]').html(Utils.formatTime(duration));
   },
   seek: function() {
-    this.container.setCurrentTime(this.$('[data-seekbar]').val());
+    var $element = this.$el.find('div.seekbar[data-seekbar]');
+    var offsetX = event.pageX - $element.offset().left;
+    var pos = offsetX / $element.width() * 100;
+    pos = Math.min(100, Math.max(pos, 0));
+    this.container.setCurrentTime(pos);
   },
   fadeIn: function() {
     this.trigger('mediacontrol:show');
