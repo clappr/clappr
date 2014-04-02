@@ -21,7 +21,7 @@ var Container = UIObject.extend({
   },
   initialize: function(options) {
     this.playback = options.playback;
-    this.settings = this.playback.getSettings();
+    this.settings = this.playback.settings;
     this.listenTo(this.playback, 'playback:progress', this.progress);
     this.listenTo(this.playback, 'playback:timeupdate', this.timeUpdated);
     this.listenTo(this.playback, 'playback:ready', this.ready);
