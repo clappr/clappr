@@ -27,7 +27,9 @@ module.exports = MediaControl = UIObject.extend({
     'click .volume-bar[data-volume]': 'volume',
     'mouseover .volume-wrapper[data-volume]': 'showVolumeBar',
     'mouseover .volume-bar[data-volume]': 'keepVolumeBar',
-    'mouseleave [data-volume]': 'hideVolumeBar'
+    'mouseleave [data-volume]': 'hideVolumeBar',
+    'mousedown .media-control-icon[data-seekbar]': 'startSeekDrag',
+    'mousedown .volume-scrubber[data-volume]': 'startVolumeDrag',
   },
   template: JST.media_control,
   initialize: function(params) {
@@ -40,6 +42,9 @@ module.exports = MediaControl = UIObject.extend({
       right: ['volume'],
       default: ['position', 'seekbar', 'duration']
     };
+    this.currentVolume = 100;
+    $(document).bind('mouseup', this.stopDrag.bind(this));
+    $(document).bind('mousemove', this.updateDrag.bind(this));
   },
   play: function() {
     this.container.play();
@@ -78,6 +83,40 @@ module.exports = MediaControl = UIObject.extend({
       this.container.play();
       playStopButton.removeClass('stopped');
       playStopButton.addClass('playing');
+    }
+  },
+  startSeekDrag: function(event) {
+    this.draggingSeekBar = true;
+    event.preventDefault();
+  },
+  startVolumeDrag: function(event) {
+    this.draggingVolumeBar = true;
+    event.preventDefault();
+  },
+  stopDrag: function(event) {
+    if (this.draggingSeekBar) {
+      this.seek(event);
+    }
+    this.draggingSeekBar = false;
+    this.draggingVolumeBar = false;
+  },
+  updateDrag: function(event) {
+    event.preventDefault();
+    if (this.draggingSeekBar) {
+      var $element = this.$el.find('div.seekbar[data-seekbar]');
+      var offsetX = event.pageX - $element.offset().left;
+      var pos = offsetX / $element.width() * 100;
+      pos = Math.min(100, Math.max(pos, 0));
+      var $overlayEl = this.$el.find('div.seekbar-position[data-seekbar]');
+      $overlayEl.css({width: pos + '%'});
+    } else if (this.draggingVolumeBar) {
+      var $element = this.$el.find('div.volume-bar[data-volume]');
+      var offsetY = event.pageY - $element.offset().top;
+      var pos = (1 - (offsetY / $element.height())) * 100;
+      pos = Math.min(100, Math.max(pos, 0));
+      var $overlayEl = this.$el.find('div.volume-current[data-volume]');
+      $overlayEl.css({height: pos + '%'});
+      this.volume(event);
     }
   },
   volume: function() {
@@ -133,6 +172,7 @@ module.exports = MediaControl = UIObject.extend({
     this.togglePlayPause();
   },
   updateSeekBar: function(position, duration) {
+    if (this.draggingSeekBar) return;
     var seekbarValue = (100 / duration) * position;
     this.$('div.seekbar-position[data-seekbar]').css({ width: seekbarValue + '%' });
     this.$('[data-position]').html(Utils.formatTime(position));
