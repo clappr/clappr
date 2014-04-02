@@ -8,7 +8,6 @@
 
 var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
-var RSVP = require('rsvp');
 var _ = require('underscore');
 
 var Container = UIObject.extend({
