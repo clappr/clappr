@@ -25,6 +25,7 @@ module.exports = MediaControl = UIObject.extend({
     'click [data-fullscreen]': 'toggleFullscreen',
     'click [data-seekbar]': 'seek',
     'click .volume-bar[data-volume]': 'volume',
+    'click .volume-mute-toggle[data-volume]': 'toggleMute',
     'mouseover .volume-wrapper[data-volume]': 'showVolumeBar',
     'mouseover .volume-bar[data-volume]': 'keepVolumeBar',
     'mouseleave [data-volume]': 'hideVolumeBar',
@@ -119,13 +120,35 @@ module.exports = MediaControl = UIObject.extend({
       this.volume(event);
     }
   },
-  volume: function() {
+  volume: function(event) {
     var $element = this.$el.find('div.volume-bar[data-volume]');
     var offsetY = event.pageY - $element.offset().top;
     this.currentVolume = (1 - (offsetY / $element.height())) * 100;
     this.currentVolume = Math.min(100, Math.max(this.currentVolume, 0));
     this.$el.find('div.volume-current[data-volume]').css({height: this.currentVolume + '%'});
     this.container.setVolume(this.currentVolume);
+    var $iconEl = this.$el.find('.media-control-icon[data-volume]');
+    if (this.currentVolume) {
+      $iconEl.removeClass('muted');
+    } else {
+      $iconEl.addClass('muted');
+    }
+  },
+  toggleMute: function() {
+    var $iconEl = this.$el.find('.media-control-icon[data-volume]');
+    var $overlayEl = this.$el.find('div.volume-current[data-volume]');
+    if (!!this.mute) {
+      $iconEl.removeClass('muted');
+      $overlayEl.css({height: this.currentVolume + '%'});
+      this.container.setVolume(this.currentVolume);
+      this.mute = false;
+    } else {
+      var $element = this.$el.find('div.volume-bar[data-volume]');
+      $overlayEl.css({height: 0});
+      this.container.setVolume(0);
+      $iconEl.addClass('muted');
+      this.mute = true;
+    }
   },
   toggleFullscreen: function() {
     this.trigger('mediacontrol:fullscreen');

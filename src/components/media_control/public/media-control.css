@@ -195,6 +195,9 @@ div.volume-scrubber[data-volume] {
   background-position: 50% 50%;
   background-repeat: no-repeat;
 }
+.media-control-icon[data-volume].muted {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAaCAMAAADhRa4NAAAABGdBTUEAALGPC/xhBQAAAGxQTFRF8fHx6urq/Pz88fHx/v7+/v7+////8fHx6Ojo2NjY/v7+/v7+////3d3d4+Pj7e3tAAAAFRUV8fHx3d3d6+vr/Pz8AAAA/v7+6urqAAAAAAAA/v7+AAAAAAAAAAAAAAAAAAAAAAAAAAAA////7VtZzgAAACN0Uk5Tbz2ocfTg/YBXGvPk/B5ScAoMcDU/qQjiPgUE7wcGCQIDAQBGfmAiAAAAmklEQVQoz9WS2RLCIAxFcd+3SgutgSTy//9oplacoYLPvc8nzM0J6vknaoIAM5cARtoh5wEmd1+1+BuQYepguwxA3CcBZLjxt806BN8JShiJAUAXhvh2bmFWYwJQEwGnjTKaUsB/AahCBVR4wZqFsTTq8JC8O9Qa7KiDbAH+ejlmtxAPKB7O+5yHaPKQM/nReSrdoj8mT/FPvgCKympobsspnQAAAABJRU5ErkJggg==)
+}
 button[data-fullscreen] {
   float: right;
   background-color: transparent;
