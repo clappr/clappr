@@ -8,13 +8,20 @@
               <div class="seekbar-loaded" data-seekbar></div>
             </div>
             <div class="seekbar-position" data-seekbar>
-              <div class="media-control-icon elipse" data-seekbar></div>
+              <div class="media-control-icon" data-seekbar></div>
             </div>
           </div>
       <% } else if(setting === "volume") { %>
-      <span data-volume>
-        <input type="range" value="0" data-<%= setting %> orient="vertical" />
-      </span>
+        <div class="volume-wrapper" data-volume>
+          <div class="volume-mute-toggle" data-volume>
+            <div class="media-control-icon" data-volume></div>
+          </div>
+          <div class="volume-bar" data-volume>
+            <div class="volume-current" data-volume>
+              <div class="volume-scrubber" data-volume></div>
+            </div>
+          </div>
+        </div>
       <% } else if (setting === "duration" || setting === "position") { %>
         <div data-<%= setting %>></div>
       <% } else { %>

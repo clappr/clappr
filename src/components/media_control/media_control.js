@@ -24,9 +24,9 @@ module.exports = MediaControl = UIObject.extend({
     'click [data-playstop]': 'togglePlayStop',
     'click [data-fullscreen]': 'toggleFullscreen',
     'click [data-seekbar]': 'seek',
-    'click input[data-volume]': 'volume',
-    'mouseover span[data-volume]': 'showVolumeBar',
-    'mouseover input[data-volume]': 'keepVolumeBar',
+    'click .volume-bar[data-volume]': 'volume',
+    'mouseover .volume-wrapper[data-volume]': 'showVolumeBar',
+    'mouseover .volume-bar[data-volume]': 'keepVolumeBar',
     'mouseleave [data-volume]': 'hideVolumeBar'
   },
   template: JST.media_control,
@@ -81,7 +81,12 @@ module.exports = MediaControl = UIObject.extend({
     }
   },
   volume: function() {
-    this.container.setVolume(this.$el.find('input[data-volume]').val());
+    var $element = this.$el.find('div.volume-bar[data-volume]');
+    var offsetY = event.pageY - $element.offset().top;
+    this.currentVolume = (1 - (offsetY / $element.height())) * 100;
+    this.currentVolume = Math.min(100, Math.max(this.currentVolume, 0));
+    this.$el.find('div.volume-current[data-volume]').css({height: this.currentVolume + '%'});
+    this.container.setVolume(this.currentVolume);
   },
   toggleFullscreen: function() {
     this.trigger('mediacontrol:fullscreen');
@@ -108,15 +113,15 @@ module.exports = MediaControl = UIObject.extend({
     if(this.hideId) {
       clearTimeout(this.hideId);
     }
-    this.$el.find('input[data-volume]').show();
+    this.$el.find('.volume-bar[data-volume]').fadeIn('fast');
   },
   hideVolumeBar: function() {
     if(this.hideId) {
       clearTimeout(this.hideId);
     }
     this.hideId = setTimeout(function() {
-      this.$el.find('input[data-volume]').hide();
-    }.bind(this), 1500);
+      this.$el.find('.volume-bar[data-volume]').fadeOut('fast');
+    }.bind(this), 750);
   },
   keepVolumeBar: function() {
     if(this.hideId) {
@@ -153,10 +158,10 @@ module.exports = MediaControl = UIObject.extend({
     var settings = this.container.settings || this.defaultSettings;
     this.$el.html(this.template({settings: settings}));
     this.$el.append(style);
-    this.$el.find('input[data-volume]').val(100);
-    this.$el.find('input[data-volume]').hide();
+    this.$el.find('.volume-bar[data-volume]').hide();
     this.$el.find('button[data-playpause]').addClass('paused');
     this.$el.find('button[data-playstop]').addClass('stopped');
+    this.$el.find('div.volume-current[data-volume]').css({height: 100 + '%'});
     this.$el.find('div.seekbar-position[data-seekbar]').css({width: 0});
     this.$el.find('div.seekbar-loaded[data-seekbar]').css({width: 0});
     if (this.params.autoPlay) {

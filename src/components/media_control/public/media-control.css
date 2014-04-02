@@ -138,7 +138,7 @@ div.seekbar-position[data-seekbar] {
   background-color: white;
   border-radius: 4px;
 }
-.media-control-icon.elipse[data-seekbar] {
+.media-control-icon[data-seekbar] {
   position: absolute;
   right: -6px;
   top: -2px;
@@ -149,8 +149,43 @@ div.seekbar-position[data-seekbar] {
   background-color: white;
   z-index: 9;
 }
-span[data-volume] {
+div.volume-wrapper[data-volume] {
   float: right;
+}
+div.volume-bar[data-volume] {
+  position: relative;
+  left: 12px;
+  bottom: 100px;
+  background: #bdbdbd;
+  border-radius: 4px;
+  width: 8px;
+  height: 64px;
+}
+div.volume-current[data-volume] {
+  position: absolute;
+  left: 0;
+  bottom: 0px;
+  background: white;
+  border-radius: 4px;
+  width: 8px;
+  height: 100%;
+}
+div.volume-scrubber[data-volume] {
+  width: 12px;
+  height: 12px;
+  left: -2px;
+  top: -6px;
+  position: relative;
+  overflow: hidden;
+  z-index: 2;
+  border-radius: 6px;
+  background-color: white;
+  border: 1px solid #d3d3d3;
+}
+.volume-mute-toggle[data-volume] {
+  z-index: 9;
+}
+.media-control-icon[data-volume] {
   background-color: transparent;
   border: 0;
   width: 32px;
@@ -159,15 +194,6 @@ span[data-volume] {
   background-size: 100% 100%;
   background-position: 50% 50%;
   background-repeat: no-repeat;
-}
-input[data-volume] {
-  position: absolute;
-  left: 0;
-  bottom: 27px;
-  width: 32px;
-  height: 64px;
-  writing-mode: bt-lr; /* IE */
-  -webkit-appearance: slider-vertical; /* WebKit */
 }
 button[data-fullscreen] {
   float: right;
