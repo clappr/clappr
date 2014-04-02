@@ -20,10 +20,7 @@ var MediaControl = require('../media_control');
 
 var Core = UIObject.extend({
   events: {
-    'webkitfullscreenchange': 'exit',
-    'mouseover[data-controls]': 'mediaControlTimeout',
-    'mouseleave[data-controls]': 'hideMediaControl',
-    'mousemove': 'mediaControlTimeout'
+    'webkitfullscreenchange': 'exit'
   },
   attributes: {
     'data-player': ''
@@ -63,6 +60,8 @@ var Core = UIObject.extend({
     var params = _.extend({container: container}, this.params);
     this.mediaControl = new MediaControl(_.extend({container: container}, this.params));
     this.listenTo(this.mediaControl, 'mediacontrol:fullscreen', this.toggleFullscreen);
+    this.listenTo(this.mediaControl, 'mediacontrol:show', this.onMediaControlShow.bind(this, true));
+    this.listenTo(this.mediaControl, 'mediacontrol:hide', this.onMediaControlShow.bind(this, false));
   },
   getCurrentContainer: function() {
     return this.containers[0];
@@ -78,28 +77,11 @@ var Core = UIObject.extend({
     }
     setTimeout(this.hideMediaControl.bind(this), 1000);
   },
-  showMediaControl: function() {
-    this.mediaControl.fadeIn();
-    this.$el.removeClass('nocursor');
-  },
-  hideMediaControl: function() {
-    if (this.$el.find('[data-controls]:hover').length === 0) {
-      this.mediaControl.fadeOut();
+  onMediaControlShow: function(showing) {
+    if (showing)
+      this.$el.removeClass('nocursor');
+    else
       this.$el.addClass('nocursor');
-    }
-  },
-  mediaControlTimeout: function(event) {
-    if (event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY) {
-      if (this.hideId) {
-        clearTimeout(this.hideId);
-      }
-      this.showMediaControl();
-      this.hideId = setTimeout(function() {
-        this.hideMediaControl();
-      }.bind(this), 2000);
-      this.lastMouseX = event.clientX;
-      this.lastMouseY = event.clientY;
-    }
   },
   render: function() {
     var style = Styler.getStyleFor('core');
@@ -111,9 +93,6 @@ var Core = UIObject.extend({
     }, this);
 
     this.$el.append(this.mediaControl.render().el);
-    this.hideId = setTimeout(function() {
-      this.hideMediaControl();
-    }.bind(this), 2000);
     return this;
   }
 });

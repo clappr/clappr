@@ -31,6 +31,7 @@ module.exports = MediaControl = UIObject.extend({
     'mouseleave [data-volume]': 'hideVolumeBar',
     'mousedown .media-control-icon[data-seekbar]': 'startSeekDrag',
     'mousedown .volume-scrubber[data-volume]': 'startVolumeDrag',
+    'mouseover[data-controls]': 'show',
   },
   template: JST.media_control,
   initialize: function(params) {
@@ -172,22 +173,22 @@ module.exports = MediaControl = UIObject.extend({
     this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar);
   },
   showVolumeBar: function() {
-    if(this.hideId) {
-      clearTimeout(this.hideId);
+    if(this.hideVolumeId) {
+      clearTimeout(this.hideVolumeId);
     }
     this.$el.find('.volume-bar-wrapper[data-volume]').fadeIn('fast');
   },
   hideVolumeBar: function() {
-    if(this.hideId) {
-      clearTimeout(this.hideId);
+    if(this.hideVolumeId) {
+      clearTimeout(this.hideVolumeId);
     }
-    this.hideId = setTimeout(function() {
+    this.hideVolumeId = setTimeout(function() {
       this.$el.find('.volume-bar-wrapper[data-volume]').fadeOut('fast');
     }.bind(this), 750);
   },
   keepVolumeBar: function() {
-    if(this.hideId) {
-      clearTimeout(this.hideId);
+    if(this.hideVolumeId) {
+      clearTimeout(this.hideVolumeId);
     }
   },
   ended: function() {
@@ -208,15 +209,37 @@ module.exports = MediaControl = UIObject.extend({
     pos = Math.min(100, Math.max(pos, 0));
     this.container.setCurrentTime(pos);
   },
-  fadeIn: function() {
-    this.trigger('mediacontrol:show');
-    this.$el.fadeIn();
+  show: function(event) {
+    var timeout = 2000;
+    if (event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY) {
+      if (this.hideId) {
+        clearTimeout(this.hideId);
+      }
+      this.trigger('mediacontrol:show');
+      this.$el.fadeIn();
+      this.hideId = setTimeout(function() {
+        this.hide();
+      }.bind(this), timeout);
+      this.lastMouseX = event.clientX;
+      this.lastMouseY = event.clientY;
+    }
   },
-  fadeOut: function() {
-    this.trigger('mediacontrol:hide');
-    this.$el.fadeOut();
+  hide: function() {
+    var timeout = 2000;
+    if (this.hideId) {
+      clearTimeout(this.hideId);
+    }
+    if (!this.draggingVolumeBar && !this.draggingSeekBar && this.$el.find('[data-controls]:hover').length === 0) {
+      this.trigger('mediacontrol:hide');
+      this.$el.fadeOut();
+    } else {
+      this.hideId = setTimeout(function() {
+        this.hide();
+      }.bind(this), timeout);
+    }
   },
   render: function() {
+    var timeout = 2000;
     var style = Styler.getStyleFor('media_control');
     var settings = this.container.settings || this.defaultSettings;
     this.$el.html(this.template({settings: settings}));
@@ -231,6 +254,10 @@ module.exports = MediaControl = UIObject.extend({
       this.togglePlayPause();
       this.togglePlayStop();
     }
+    this.hideId = setTimeout(function() {
+      $('div[data-player]').bind('mousemove', this.show.bind(this));
+      this.hide();
+    }.bind(this), timeout);
     return this;
   }
 });
