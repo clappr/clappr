@@ -1,14 +1,11 @@
 var Container = require('../spec_helper').Container;
 var BaseObject = require('../spec_helper').BaseObject;
 var StatsPlugin = require('../spec_helper').StatsPlugin;
-var RSVP = require('rsvp');
-var chaiAsPromised = require('chai-as-promised');
-
-chai.use(chaiAsPromised);
+var FakePlayback = require('../spec_helper').FakePlayback;
 
 describe('Container', function() {
   beforeEach(function() {
-    this.container = new Container();
+    this.container = new Container({playback: new FakePlayback()});
   });
 
   it('has a data-container attribute', function() {
@@ -23,17 +20,6 @@ describe('Container', function() {
     expect(this.container.foo).to.exists;
     this.container.foo();
     expect(foo.called).to.be.true;
-  });
-
-  it('async creation', function(done) {
-    var playback = {
-      setContainer: function(container) {
-        container.ready();
-      }
-    };
-    var promise = Container.create(playback);
-    promise.should.be.instanceOf(RSVP.Promise);
-    promise.should.be.fulfilled.notify(done);
   });
 
   describe('events', function() {
@@ -52,8 +38,10 @@ describe('Container', function() {
     });
 
     it('#stop', function() {
+      var spy = sinon.stub(this.container.playback, 'stop');
       this.container.stop();
       expect(this.spy.withArgs('container:stop').calledOnce).to.be.true;
+      expect(spy.calledOnce).to.be.true;
     });
 
     it('#pause', function() {
@@ -62,8 +50,10 @@ describe('Container', function() {
     });
 
     it('#setCurrentTime', function() {
+      var spy = sinon.stub(this.container.playback, 'seek');
       this.container.setCurrentTime(300);
       expect(this.spy.withArgs('container:seek', 300).calledOnce).to.be.true;
+      expect(spy.calledOnce).to.be.true;
     });
 
     it('#setVolume', function() {
@@ -99,9 +89,9 @@ describe('Container', function() {
   });
   describe('plugins', function() {
     it('#addPlugin', function() {
-      expect(this.container.plugins.length).to.equal(0);
-      this.container.addPlugin({plugin: {}, type: 'ui'});
       expect(this.container.plugins.length).to.equal(1);
+      this.container.addPlugin({name: 'foo'});
+      expect(this.container.plugins.length).to.equal(2);
     });
 
     it('#hasPlugin', function() {
@@ -118,7 +108,7 @@ describe('Container', function() {
       });
 
       it('throws error when plugin not found', function() {
-        expect(this.container.getPluginByName.bind(this.container)).to.throw(/Plugin .* not found/);
+        expect(this.container.getPluginByName.bind(this.container, 'foo')).to.throw(/Plugin .* not found/);
       });
     });
   });
