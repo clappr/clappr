@@ -18,13 +18,11 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     this.src = options.src;
     this.swfPath = options.swfPath || "assets/HLSPlayer.swf";
     this.autoPlay = options.autoPlay;
-    this.checkIfFlashIsReady();
-  },
-  getSettings: function() {
-    return {
+    this.settings = {
       left: ["playstop"],
       right: ["fullscreen", "volume"]
     };
+    this.checkIfFlashIsReady();
   },
   bootstrap: function() {
     this.trigger('playback:ready');

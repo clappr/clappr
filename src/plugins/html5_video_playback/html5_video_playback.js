@@ -21,10 +21,7 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
 
   initialize: function(options) {
     this.el.src = options.src;
-  },
-
-  getSettings: function() {
-    return {
+    this.settings = {
       left: ['playpause'],
       right: ['fullscreen', 'volume'],
       default: ['position', 'seekbar', 'duration']
