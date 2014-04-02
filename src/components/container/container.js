@@ -22,6 +22,7 @@ var Container = UIObject.extend({
   initialize: function(options) {
     this.playback = options.playback;
     this.settings = this.playback.getSettings();
+    this.listenTo(this.playback, 'playback:progress', this.progress);
     this.listenTo(this.playback, 'playback:timeupdate', this.timeUpdated);
     this.listenTo(this.playback, 'playback:ready', this.ready);
     this.listenTo(this.playback, 'playback:buffering', this.buffering);
@@ -53,6 +54,9 @@ var Container = UIObject.extend({
   },
   timeUpdated: function(position, duration) {
     this.trigger('container:timeupdate', position, duration);
+  },
+  progress: function(startPosition, endPosition, duration) {
+    this.trigger('container:progress', startPosition, endPosition, duration);
   },
   play: function() {
     this.trigger('container:play');

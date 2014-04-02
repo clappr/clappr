@@ -15,6 +15,7 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
 
   events: {
     'timeupdate': 'timeUpdated',
+    'progress': 'progress',
     'ended': 'ended'
   },
 
@@ -89,6 +90,18 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
 
   timeUpdated: function() {
     this.trigger('playback:timeupdate', this.el.currentTime, this.el.duration);
+  },
+
+  progress: function() {
+    if (!this.el.buffered.length) return;
+    var bufferedPos = 0;
+    for (var i = 0;  i < this.el.buffered.length; i++) {
+      if (this.el.currentTime >= this.el.buffered.start(i) && this.el.currentTime <= this.el.buffered.end(i)) {
+        bufferedPos = i;
+        break;
+      }
+    }
+    this.trigger('playback:progress', this.el.buffered.start(bufferedPos), this.el.buffered.end(bufferedPos), this.el.duration);
   },
 
   render: function() {

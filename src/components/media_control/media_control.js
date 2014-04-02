@@ -37,8 +37,9 @@ module.exports = MediaControl = UIObject.extend({
   initialize: function(params) {
     this.params = params;
     this.container = params.container;
-    this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar);
     this.listenTo(this.container, 'container:play', this.changeTogglePlay);
+    this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar.bind(this));
+    this.listenTo(this.container, 'container:progress', this.updateProgressBar);
     this.defaultSettings = {
       left: ['play', 'stop', 'pause'],
       right: ['volume'],
@@ -194,6 +195,11 @@ module.exports = MediaControl = UIObject.extend({
   ended: function() {
     this.togglePlayStop();
     this.togglePlayPause();
+  },
+  updateProgressBar: function(startPosition, endPosition, duration) {
+    var loadedStart = startPosition / duration * 100;
+    var loadedEnd = endPosition / duration * 100;
+    this.$el.find('div.seekbar-loaded[data-seekbar]').css({ left: loadedStart + '%', width: (loadedEnd - loadedStart) + '%' });
   },
   updateSeekBar: function(position, duration) {
     if (this.draggingSeekBar) return;
