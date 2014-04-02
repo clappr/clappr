@@ -9,7 +9,6 @@
 var _ = require('underscore');
 var BaseObject = require('../../base/base_object');
 var Container = require('../container');
-var RSVP = require('rsvp');
 
 var PlaybackHandler = BaseObject.extend({
   initialize: function(params, loader) {
