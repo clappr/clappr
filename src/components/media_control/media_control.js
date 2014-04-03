@@ -246,7 +246,7 @@ module.exports = MediaControl = UIObject.extend({
     }
   },
   render: function() {
-    var timeout = 2000;
+    var timeout = 1000;
     var style = Styler.getStyleFor('media_control');
     var settings = this.container.settings || this.defaultSettings;
     this.$el.html(this.template({settings: settings}));

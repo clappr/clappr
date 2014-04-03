@@ -85,6 +85,8 @@ var PipPlugin = BaseObject.extend({
     }.bind(this));
     this.core.$el.append(this.masterContainer.render().el);
     this.core.containers.splice(0, 0, this.masterContainer);
+    this.core.mediaControl.setContainer(this.masterContainer);
+    this.core.mediaControl.render();
   },
   discardContainer: function(container) {
     container.destroy();
@@ -93,16 +95,18 @@ var PipPlugin = BaseObject.extend({
   pipToMaster: function() {
     if (this.pipContainer) {
       this.pipContainer.animate(this.masterStyle, 400);
-      setTimeout(this.afterPipToMaster.bind(this), 400);
+      setTimeout(this.pipToMasterCallback.bind(this), 400);
     }
   },
-  afterPipToMaster: function() {
+  pipToMasterCallback: function() {
     this.pipContainer.setVolume(100);
     this.pipContainer.getPluginByName('watermark').enable();
     this.discardMaster();
     this.masterContainer = this.pipContainer;
     this.masterContainer.setStyle({"z-index": 1});
     delete this.pipContainer;
+    this.core.mediaControl.setContainer(this.masterContainer);
+    this.core.mediaControl.render();
   },
   onMediaControlShow: function () {
     if (!this.pipContainer || this.pipContainer.$el.is(':animated')) return;
