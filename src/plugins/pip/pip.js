@@ -80,7 +80,7 @@ var PipPlugin = BaseObject.extend({
       if (this.pipContainer.hasPlugin('hls_playback')) { //flash breaks on animate
         this.pipContainer.setStyle(this.pipStyle);
       } else {
-        this.pipContainer.animate(this.pipStyle, 400);
+        this.pipContainer.animate(this.pipStyle, {complete: function() { this.pipContainer.setStyle(this.pipStyle); }.bind(this)});
       }
     }.bind(this));
     this.core.$el.append(this.masterContainer.render().el);
