@@ -96,7 +96,6 @@ var PipPlugin = BaseObject.extend({
   discardContainer: function(container) {
     container.destroy();
     this.core.containers = _.without(this.core.containers, _.findWhere(this.core.containers, container));
-    window.containers = this.core.containers;
   },
   pipToMaster: function() {
     if (this.pipContainer) {
