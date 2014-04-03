@@ -48,7 +48,7 @@ var PipPlugin = BaseObject.extend({
       this.pipContainer.setStyle(this.pipStyle);
       this.core.containers[1] = this.pipContainer;
       this.stopListening(this.pipContainer);
-      this.listenTo(this.pipContainer, "container:click", this.pipToMaster);
+      this.listenToPipClick();
     }.bind(this));
   },
   discardPip: function() {
@@ -90,8 +90,13 @@ var PipPlugin = BaseObject.extend({
     }.bind(this));
     this.core.$el.append(this.masterContainer.render().el);
     this.core.containers.splice(0, 0, this.masterContainer);
-    this.stopListening(this.pipContainer);
-    this.listenTo(this.pipContainer, "container:click", this.pipToMaster.bind(this));
+    this.listenToPipClick();
+  },
+  listenToPipClick: function() {
+    if (this.pipContainer) {
+      this.stopListening(this.pipContainer);
+      this.listenTo(this.pipContainer, "container:click", this.pipToMaster.bind(this));
+    }
   },
   discardContainer: function(container) {
     container.destroy();
