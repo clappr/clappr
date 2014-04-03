@@ -20,15 +20,14 @@ var PipPlugin = BaseObject.extend({
     }
     this.listenTo(this.core.mediaControl, 'mediacontrol:show', this.onMediaControlShow);
     this.listenTo(this.core.mediaControl, 'mediacontrol:hide', this.onMediaControlHide);
-    this.setupApi();
   },
-  setupApi: function() {
-    //FIXME we need to figure out how to manage player API (issue #51)
-    window.WP3.addPip = this.addPip.bind(this);
-    window.WP3.discardPip = this.discardPip.bind(this);
-    window.WP3.addMaster = this.addMaster.bind(this);
-    window.WP3.pipToMaster = this.pipToMaster.bind(this);
-    window.containers = this.core.containers;
+  getExternalInterface: function() {
+    return {
+      addPip: this.addPip,
+      discardPip: this.discardPip,
+      addMaster: this.addMaster,
+      pipToMaster: this.pipToMaster
+    };
   },
   addPip: function(source) {
     this.discardPip();

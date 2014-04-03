@@ -12,15 +12,22 @@ var BaseObject = require('../../base/base_object');
 var GlobalPluginsHandler = BaseObject.extend({
   initialize: function(core) {
     this.core = core;
+    this.player = core.params.player;
     this.containers = core.containers;
     this.globalPlugins = core.loader.globalPlugins;
     this.pluginInstances = [];
   },
   loadPlugins: function() {
-    _.each(this.globalPlugins, function(plugin) {
-      this.pluginInstances.push(new plugin(this.core));
+    _.each(this.globalPlugins, function(Plugin) {
+      var plugin = new Plugin(this.core);
+      this.pluginInstances.push(plugin);
+      this.setupExternalInterface(plugin);
     }, this);
-
+  },
+  setupExternalInterface: function(plugin) {
+    _.each(plugin.getExternalInterface(), function(value, key) {
+      this.player[key] = value.bind(plugin);
+    }, this);
   }
 });
 
