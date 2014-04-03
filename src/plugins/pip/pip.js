@@ -18,8 +18,8 @@ var PipPlugin = BaseObject.extend({
       this.pipContainer = core.containers[1];
       this.pipContainer.setStyle(this.pipStyle);
     }
-    this.listenTo(this.core.mediaControl, 'mediacontrol:show', this.onMediaControlShow.bind(this));
-    this.listenTo(this.core.mediaControl, 'mediacontrol:hide', this.onMediaControlHide.bind(this));
+    this.listenTo(this.core.mediaControl, 'mediacontrol:show', this.onMediaControlShow);
+    this.listenTo(this.core.mediaControl, 'mediacontrol:hide', this.onMediaControlHide);
     this.setupApi();
   },
   setupApi: function() {
@@ -28,6 +28,7 @@ var PipPlugin = BaseObject.extend({
     window.WP3.discardPip = this.discardPip.bind(this);
     window.WP3.addMaster = this.addMaster.bind(this);
     window.WP3.pipToMaster = this.pipToMaster.bind(this);
+    window.containers = this.core.containers;
   },
   addPip: function(source) {
     this.discardPip();
@@ -46,19 +47,22 @@ var PipPlugin = BaseObject.extend({
       this.pipContainer.getPluginByName('watermark').disable();
       this.pipContainer.play();
       this.pipContainer.setStyle(this.pipStyle);
-      this.core.containers.push(container);
+      this.core.containers[1] = this.pipContainer;
+      this.stopListening(this.pipContainer);
+      this.listenTo(this.pipContainer, "container:click", this.pipToMaster);
     }.bind(this));
   },
   discardPip: function() {
     if (this.pipContainer) {
+      this.stopListening(this.pipContainer);
       this.discardContainer(this.pipContainer);
-      delete this.pipContainer;
+      this.pipContainer = undefined;
     }
   },
   discardMaster: function() {
     if (this.masterContainer) {
       this.discardContainer(this.masterContainer);
-      delete this.masterContainer;
+      this.masterContainer = undefined;
     }
   },
   addMaster: function(source) {
@@ -74,7 +78,7 @@ var PipPlugin = BaseObject.extend({
       this.discardPip();
       this.masterContainer.play();
       this.pipContainer = this.tmpContainer;
-      delete this.tmpContainer;
+      this.tmpContainer = undefined;
       this.pipContainer.setVolume(0);
       this.pipContainer.getPluginByName('watermark').disable();
       if (this.pipContainer.hasPlugin('hls_playback')) { //flash breaks on animate
@@ -82,29 +86,31 @@ var PipPlugin = BaseObject.extend({
       } else {
         this.pipContainer.animate(this.pipStyle, {complete: function() { this.pipContainer.setStyle(this.pipStyle); }.bind(this)});
       }
+      this.core.mediaControl.setContainer(this.masterContainer);
+      this.core.mediaControl.render();
     }.bind(this));
     this.core.$el.append(this.masterContainer.render().el);
     this.core.containers.splice(0, 0, this.masterContainer);
-    this.core.mediaControl.setContainer(this.masterContainer);
-    this.core.mediaControl.render();
+    this.stopListening(this.pipContainer);
+    this.listenTo(this.pipContainer, "container:click", this.pipToMaster.bind(this));
   },
   discardContainer: function(container) {
     container.destroy();
     this.core.containers = _.without(this.core.containers, _.findWhere(this.core.containers, container));
+    window.containers = this.core.containers;
   },
   pipToMaster: function() {
     if (this.pipContainer) {
-      this.pipContainer.animate(this.masterStyle, 400);
-      setTimeout(this.pipToMasterCallback.bind(this), 400);
+      this.pipContainer.animate(this.masterStyle, {complete: this.pipToMasterCallback.bind(this)});
     }
   },
   pipToMasterCallback: function() {
+    this.discardMaster();
     this.pipContainer.setVolume(100);
     this.pipContainer.getPluginByName('watermark').enable();
-    this.discardMaster();
     this.masterContainer = this.pipContainer;
     this.masterContainer.setStyle({"z-index": 1});
-    delete this.pipContainer;
+    this.pipContainer = undefined;
     this.core.mediaControl.setContainer(this.masterContainer);
     this.core.mediaControl.render();
   },
