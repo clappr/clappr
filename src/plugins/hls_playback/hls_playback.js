@@ -40,8 +40,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   },
   updateTime: function(interval) {
     return setInterval(function() {
-      var time = (100 / (this.el.getDuration() || 1)) * (this.el.getPosition() || 0);
-      this.trigger('playback:timeupdate', time);
+      this.trigger('playback:timeupdate', this.el.getPosition(), this.el.getDuration());
     }.bind(this), interval);
   },
   play: function() {
