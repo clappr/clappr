@@ -11,8 +11,8 @@ var PipPlugin = BaseObject.extend({
     this.core = core;
     this.pipStyle = {width: "24%", height: "24%", "z-index": 20, bottom: "7px", right: "7px",
                      "border-width": "3px", "border-style": "solid", "border-color": "rgba(255,255,255, .3)",
-                     "background-clip": "padding-box", "-webkit-background-clip": "padding-box"};
-    this.masterStyle = {width: "100%", height: "100%", bottom: "0px", right: "0px", border: "none"};
+                     "background-clip": "padding-box", "-webkit-background-clip": "padding-box", "cursor": "pointer"};
+    this.masterStyle = {width: "100%", height: "100%", bottom: "0px", right: "0px", border: "none", "cursor" : "default"};
     this.masterContainer = core.containers[0];
     if (core.containers.length === 2) {
       this.pipContainer = core.containers[1];
@@ -20,9 +20,11 @@ var PipPlugin = BaseObject.extend({
       if (!this.pipContainer.isReady) {
         this.pipContainer.on('container:ready', function() {
           this.pipContainer.play();
+          this.pipContainer.setVolume(0);
         }.bind(this));
       } else {
         this.pipContainer.play();
+        this.pipContainer.setVolume(0);
       }
       this.listenToPipClick();
       this.core.mediaControl.setContainer(this.masterContainer);
