@@ -24,6 +24,7 @@ var PipPlugin = BaseObject.extend({
       } else {
         this.pipContainer.play();
       }
+      this.listenToPipClick();
       this.core.mediaControl.setContainer(this.masterContainer);
       this.core.mediaControl.render();
     }
