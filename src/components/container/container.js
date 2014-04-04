@@ -28,6 +28,7 @@ var Container = UIObject.extend({
     this.listenTo(this.playback, 'playback:buffering', this.buffering);
     this.listenTo(this.playback, 'playback:bufferfull', this.bufferfull);
     this.listenTo(this.playback, 'playback:settingsupdate', this.settingsUpdate);
+    this.listenTo(this.playback, 'playback:ended', this.ended);
     this.isReady = false;
     this.plugins = [this.playback];
   },
