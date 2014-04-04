@@ -45,6 +45,15 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+#title {
+	display: inline;
+	float: left;
+}
+
+#player-wrapper {
+	margin-left: 24px;
+	padding-bottom: 40px;
+}
 
 /* LAYOUT STYLES */
 body {
@@ -150,17 +159,15 @@ a.button span {
   height: 23px;
 }
 
-#download-zip span {
-  background: transparent url(../images/zip-icon.png) 12px 50% no-repeat;
-}
-#download-tar-gz span {
-  background: transparent url(../images/tar-gz-icon.png) 12px 50% no-repeat;
-}
 #view-on-github span {
   background: transparent url(../images/octocat-icon.png) 12px 50% no-repeat;
 }
 #view-on-github {
   margin-right: 0;
+}
+
+#download {
+  float: right;
 }
 
 code, pre {

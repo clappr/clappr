@@ -19,14 +19,16 @@
       <div class="inner">
 
         <header>
-          <h1>Player</h1>
-          <h2>New Globo.com Video Player</h2>
+          <div id="title" >
+            <h1>Player</h1>
+            <h2 >New Globo.com Video Player</h2>
+          </div>
+          <div id="download">
+            <a href="https://github.com/globocom/player" id="view-on-github" class="button"><span>View on GitHub</span></a>
+          </div>
         </header>
 
         <section id="downloads" class="clearfix">
-          <a href="https://github.com/globocom/player/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
-          <a href="https://github.com/globocom/player/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
-          <a href="https://github.com/globocom/player" id="view-on-github" class="button"><span>View on GitHub</span></a>
         </section>
 
         <hr>
@@ -74,7 +76,9 @@ $ git checkout gh-pages
 
         <script>
           var playerEl = document.getElementById("player-wrapper");
-          var player = new WP3.Player({sources: ["http://bem.tv/superMisto3.mp4"], poster: "http://mundonaressi.files.wordpress.com/2013/05/globo2013-1.jpg"});
+          var player = new WP3.Player({
+                                       sources: ["http://bem.tv/superMisto3.mp4","http://cdn.bem.tv/stream/soccer4sec/soccer/playlist.m3u8"],
+                                       poster: "http://mundonaressi.files.wordpress.com/2013/05/globo2013-1.jpg"});
           player.attachTo(playerEl);
         </script>
 
