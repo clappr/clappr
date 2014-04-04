@@ -4,6 +4,7 @@
 
 var Core = require('./components/core');
 var BaseObject = require('./base/base_object');
+var Log = require('./plugins/log');
 
 var Player = BaseObject.extend({
   initialize: function(params) {
@@ -18,5 +19,7 @@ var Player = BaseObject.extend({
     this.core.load(params);
   }
 });
+
+global.DEBUG = false;
 
 module.exports = WP3 = { Player: Player };
