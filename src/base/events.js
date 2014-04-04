@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 var _ = require('underscore');
+var Log = require('../plugins/log');
 
 var slice = Array.prototype.slice;
 
@@ -55,6 +56,10 @@ module.exports = Events = {
   },
 
   trigger: function(name) {
+    var klass = arguments[arguments.length - 1];
+    if(global.DEBUG) {
+      Log.info(klass, 'event ' + name + ' triggered');
+    }
     if (!this._events) return this;
     var args = slice.call(arguments, 1);
     if (!eventsApi(this, 'trigger', name, args)) return this;
