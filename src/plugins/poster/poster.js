@@ -16,6 +16,9 @@ var PosterPlugin = UIPlugin.extend({
   },
   initialize: function(options) {
     PosterPlugin.super('initialize').call(this, options);
+    this.options = options;
+    if (this.options.disableControlsOnPoster)
+      this.container.disableMediaControl();
     this.el.src = options.poster || 'assets/default.png';
     this.render();
   },
@@ -26,9 +29,15 @@ var PosterPlugin = UIPlugin.extend({
   },
   onPlay: function() {
     this.$el.hide();
+    if (this.options.disableControlsOnPoster) {
+      this.container.enableMediaControl();
+    }
   },
   onStop: function() {
     this.$el.show();
+    if (this.options.disableControlsOnPoster) {
+      this.container.disableMediaControl();
+    }
   },
   render: function() {
     var style = Styler.getStyleFor(this.name);
