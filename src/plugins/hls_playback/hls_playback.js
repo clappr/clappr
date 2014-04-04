@@ -20,6 +20,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     this.autoPlay = options.autoPlay;
     this.settings = {
       left: ["playstop"],
+      default: ["position", "seekbar", "duration"],
       right: ["fullscreen", "volume"]
     };
     this.checkIfFlashIsReady();
@@ -57,6 +58,11 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     this.checkStateId = setInterval(this.checkState.bind(this), 250);
   },
   checkState: function() {
+    if (!this.playbackType) {
+      this.playbackType = this.el.getType()
+      if (this.playbackType)
+        this.updateSettings();
+    }
     if (this.el.getState() === "PLAYING_BUFFERING" && this.el.getbufferLength() < 1) {
       this.trigger('playback:buffering');
       this.currentState = "PLAYING_BUFFERING";
@@ -90,8 +96,8 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     this.el.seek(this.el.getDuration() * (time / 100));
     this.id = this.updateTime(1000);
   },
-  timeUpdate: function(time) {
-    this.trigger('playback:timeupdate', time);
+  timeUpdate: function(time, duration) {
+    this.trigger('playback:timeupdate', time, duration);
   },
 
   destroy: function() {
@@ -103,6 +109,15 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     var $el = this.$('embed');
     $el.attr('data-hls-playback', '');
     this.setElement($el[0]);
+  },
+
+  updateSettings: function() {
+    this.settings = {
+      left: [(this.playbackType === "VOD" ? "playpause" : "playstop")],
+      default: ["position", "seekbar", "duration"],
+      right: ["fullscreen", "volume"]
+    };
+    this.trigger('playback:settingsupdate');
   },
 
   render: function() {
