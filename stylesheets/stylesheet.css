@@ -1,4 +1,4 @@
-/* http://meyerweb.com/eric/tools/css/reset/ 
+/* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
 */
@@ -11,8 +11,8 @@ b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
 	margin: 0;
@@ -23,7 +23,7 @@ time, mark, audio, video {
 	vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
+article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
@@ -49,8 +49,7 @@ table {
 /* LAYOUT STYLES */
 body {
   font-size: 1em;
-  line-height: 1.5; 
-  background: #e7e7e7 url(../images/body-bg.png) 0 0 repeat;
+  line-height: 1.5;
   font-family: 'Helvetica Neue', Helvetica, Arial, serif;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
   color: #6d6d6d;
@@ -69,10 +68,10 @@ header {
 }
 
 header h1 {
-  font-family: 'Chivo', 'Helvetica Neue', Helvetica, Arial, serif; font-weight: 900;
+  font-family: 'Domine', 'Helvetica Neue', Helvetica, Arial, serif; font-weight: 900;
   letter-spacing: -1px;
   font-size: 48px;
-  color: #303030;
+  color: #006fe0;
   line-height: 1.2;
 }
 
@@ -85,12 +84,11 @@ header h2 {
 }
 
 #container {
-  background: transparent url(../images/highlight-bg.jpg) 50% 0 no-repeat;
   min-height: 595px;
 }
 
 .inner {
-  width: 620px;
+  width: 700px;
   margin: 0 auto;
 }
 
@@ -104,7 +102,7 @@ header h2 {
 
 a.button {
   -moz-border-radius: 30px;
-  -webkit-border-radius: 30px;                     
+  -webkit-border-radius: 30px;
   border-radius: 30px;
   border-top: solid 1px #cbcbcb;
   border-left: solid 1px #b7b7b7;
@@ -118,7 +116,7 @@ a.button {
   display: block;
   float: left;
   width: 179px;
-  margin-right: 14px;  
+  margin-right: 14px;
   background: #fdfdfd; /* Old browsers */
   background: -moz-linear-gradient(top,  #fdfdfd 0%, #f2f2f2 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fdfdfd), color-stop(100%,#f2f2f2)); /* Chrome,Safari4+ */
@@ -227,14 +225,14 @@ th {
 
 td {
   border: 1px solid #ebebeb;
-  text-align: center; 
+  text-align: center;
   font-weight: 300;
 }
 
 form {
   background: #f2f2f2;
   padding: 20px;
-  
+
 }
 
 
@@ -242,43 +240,43 @@ form {
 
 h1 {
   font-size: 32px;
-} 
+}
 
 h2 {
   font-size: 22px;
   font-weight: bold;
   color: #303030;
   margin-bottom: 8px;
-} 
+}
 
 h3 {
-  color: #d5000d;
+  color: #006fe0;
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 8px;
-} 
- 
+}
+
 h4 {
   font-size: 16px;
   color: #303030;
   font-weight: bold;
-} 
+}
 
 h5 {
   font-size: 1em;
   color: #303030;
-} 
+}
 
 h6 {
   font-size: .8em;
   color: #303030;
-} 
+}
 
 p {
   font-weight: 300;
   margin-bottom: 20px;
 }
- 
+
 a {
   text-decoration: none;
 }
