@@ -66,16 +66,16 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
   },
 
   ended: function() {
-    this.trigger('playback:ended');
-    this.trigger('playback:timeupdate', 0, this.el.duration);
+    this.trigger('playback:ended', this.name);
+    this.trigger('playback:timeupdate', 0, this.el.duration, this.name);
   },
 
   buffering: function() {
-    this.trigger('playback:buffering');
+    this.trigger('playback:buffering', this.name);
   },
 
   bufferFull: function() {
-    this.trigger('playback:bufferfull');
+    this.trigger('playback:bufferfull', this.name);
   },
 
   destroy: function() {
@@ -98,7 +98,7 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
   },
 
   timeUpdated: function() {
-    this.trigger('playback:timeupdate', this.el.currentTime, this.el.duration);
+    this.trigger('playback:timeupdate', this.el.currentTime, this.el.duration, this.name);
   },
 
   progress: function() {
@@ -110,7 +110,7 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
         break;
       }
     }
-    this.trigger('playback:progress', this.el.buffered.start(bufferedPos), this.el.buffered.end(bufferedPos), this.el.duration);
+    this.trigger('playback:progress', this.el.buffered.start(bufferedPos), this.el.buffered.end(bufferedPos), this.el.duration, this.name);
   },
 
   playing: function() {
@@ -120,7 +120,7 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
   render: function() {
     var style = Styler.getStyleFor(this.name);
     this.$el.append(style);
-    this.trigger('playback:ready');
+    this.trigger('playback:ready', this.name);
     return this;
   }
 });

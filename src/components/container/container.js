@@ -11,6 +11,7 @@ var Styler = require('../../base/styler');
 var _ = require('underscore');
 
 var Container = UIObject.extend({
+  name: 'Container',
   attributes: {
     'data-container': ''
   },
@@ -39,7 +40,7 @@ var Container = UIObject.extend({
     return this;
   },
   destroy: function() {
-    this.trigger('container:destroyed');
+    this.trigger('container:destroyed', this.name);
     this.playback.destroy();
     this.$el.remove();
   },
@@ -51,57 +52,57 @@ var Container = UIObject.extend({
   },
   ready: function() {
     this.isReady = true;
-    this.trigger('container:ready');
+    this.trigger('container:ready', this.name);
   },
   isPlaying: function() {
     return this.playback.isPlaying();
   },
   timeUpdated: function(position, duration) {
-    this.trigger('container:timeupdate', position, duration);
+    this.trigger('container:timeupdate', position, duration, this.name);
   },
   progress: function(startPosition, endPosition, duration) {
-    this.trigger('container:progress', startPosition, endPosition, duration);
+    this.trigger('container:progress', startPosition, endPosition, duration, this.name);
   },
   playing: function() {
     this.trigger('container:playing');
   },
   play: function() {
-    this.trigger('container:play');
+    this.trigger('container:play', this.name);
     this.playback.play();
   },
   stop: function() {
-    this.trigger('container:stop');
+    this.trigger('container:stop', this.name);
     this.playback.stop();
   },
   pause: function() {
-    this.trigger('container:pause');
+    this.trigger('container:pause', this.name);
     this.playback.pause();
   },
   ended: function() {
-    this.trigger('container:ended', this);
+    this.trigger('container:ended', this, this.name);
   },
   clicked: function() {
-    this.trigger('container:click', this);
+    this.trigger('container:click', this, this.name);
   },
   hover: function(e) {
-    this.trigger('container:hover', this);
+    this.trigger('container:hover', this, this.name);
   },
   setCurrentTime: function(time) {
-    this.trigger('container:seek', time);
+    this.trigger('container:seek', time, this.name);
     this.playback.seek(time);
   },
   setVolume: function(value) {
-    this.trigger('container:volume', value);
+    this.trigger('container:volume', value, this.name);
     this.playback.volume(value);
   },
   requestFullscreen: function() {
-    this.trigger('container:fullscreen');
+    this.trigger('container:fullscreen', this.name);
   },
   buffering: function() {
-    this.trigger('container:state:buffering');
+    this.trigger('container:state:buffering', this.name);
   },
   bufferfull: function() {
-    this.trigger('container:state:bufferfull');
+    this.trigger('container:state:bufferfull', this.name);
   },
   addPlugin: function(plugin) {
     this.plugins.push(plugin);

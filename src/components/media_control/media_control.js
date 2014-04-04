@@ -14,6 +14,7 @@ var UIObject = require('../../base/ui_object');
 var Utils = require('../../base/utils');
 
 module.exports = MediaControl = UIObject.extend({
+  name: 'MediaControl',
   attributes: {
     'data-media-control': ''
   },
@@ -191,7 +192,7 @@ module.exports = MediaControl = UIObject.extend({
     }
   },
   toggleFullscreen: function() {
-    this.trigger('mediacontrol:fullscreen');
+    this.trigger('mediacontrol:fullscreen', this.name);
   },
   setContainer: function(container) {
     this.stopListening(this.container);
@@ -250,7 +251,7 @@ module.exports = MediaControl = UIObject.extend({
       if (this.hideId) {
         clearTimeout(this.hideId);
       }
-      this.trigger('mediacontrol:show');
+      this.trigger('mediacontrol:show', this.name);
       this.$el.fadeIn();
       this.hideId = setTimeout(function() {
         this.hide();
@@ -267,7 +268,7 @@ module.exports = MediaControl = UIObject.extend({
       clearTimeout(this.hideId);
     }
     if (this.disabled || (!this.draggingVolumeBar && !this.draggingSeekBar && this.$el.find('[data-controls]:hover').length === 0)) {
-      this.trigger('mediacontrol:hide');
+      this.trigger('mediacontrol:hide', this.name);
       this.$el.fadeOut();
     } else {
       this.hideId = setTimeout(function() {

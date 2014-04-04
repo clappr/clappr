@@ -26,7 +26,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     this.checkIfFlashIsReady();
   },
   bootstrap: function() {
-    this.trigger('playback:ready');
+    this.trigger('playback:ready', this.name);
     clearInterval(this.bootstrapId);
     this.currentState = "IDLE";
     this.timedCheckState();
@@ -40,7 +40,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   },
   updateTime: function(interval) {
     return setInterval(function() {
-      this.trigger('playback:timeupdate', this.el.getPosition(), this.el.getDuration());
+      this.trigger('playback:timeupdate', this.el.getPosition(), this.el.getDuration(), this.name);
     }.bind(this), interval);
   },
   play: function() {
@@ -63,10 +63,10 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
         this.updateSettings();
     }
     if (this.el.getState() === "PLAYING_BUFFERING" && this.el.getbufferLength() < 1) {
-      this.trigger('playback:buffering');
+      this.trigger('playback:buffering', this.name);
       this.currentState = "PLAYING_BUFFERING";
     } else if (this.currentState === "PLAYING_BUFFERING" && this.el.getState() === "PLAYING") {
-      this.trigger('playback:bufferfull');
+      this.trigger('playback:bufferfull', this.name);
       this.currentState = "PLAYING";
     } else if (this.el.getState() === "IDLE") {
       this.currentState = "IDLE";
@@ -85,7 +85,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   stop: function() {
     this.el.playerStop();
     clearInterval(this.id);
-    this.trigger('playback:timeupdate', 0);
+    this.trigger('playback:timeupdate', 0, this.name);
   },
   isPlaying: function() {
     return !!this.el.getState().match(/playing/i);
@@ -96,9 +96,8 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     this.id = this.updateTime(1000);
   },
   timeUpdate: function(time, duration) {
-    this.trigger('playback:timeupdate', time, duration);
+    this.trigger('playback:timeupdate', time, duration, this.name);
   },
-
   destroy: function() {
     clearInterval(this.id);
     clearInterval(this.checkStateId);
@@ -116,7 +115,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
       default: ["position", "seekbar", "duration"],
       right: ["fullscreen", "volume"]
     };
-    this.trigger('playback:settingsupdate');
+    this.trigger('playback:settingsupdate', this.name);
   },
 
   render: function() {
