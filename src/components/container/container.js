@@ -30,6 +30,7 @@ var Container = UIObject.extend({
     this.listenTo(this.playback, 'playback:settingsupdate', this.settingsUpdate);
     this.listenTo(this.playback, 'playback:ended', this.ended);
     this.isReady = false;
+    this.mediaControlDisabled = false;
     this.plugins = [this.playback];
   },
   with: function(klass) {
@@ -115,6 +116,14 @@ var Container = UIObject.extend({
   settingsUpdate: function() {
     this.settings = this.playback.settings;
     this.trigger('container:settingsupdate');
+  },
+  disableMediaControl: function() {
+    this.mediaControlDisabled = true;
+    this.trigger('container:mediacontrol:disable');
+  },
+  enableMediaControl: function() {
+    this.mediaControlDisabled = false;
+    this.trigger('container:mediacontrol:enable');
   },
   render: function() {
     var style = Styler.getStyleFor('container');

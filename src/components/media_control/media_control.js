@@ -196,9 +196,9 @@ module.exports = MediaControl = UIObject.extend({
     this.stopListening(this.container);
     this.container = container;
     this.changeTogglePlay();
-    this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar);
-    this.listenTo(this.container, 'container:progress', this.updateProgressBar);
-    this.listenTo(this.container, 'container:settingsupdate', this.settingsUpdate);
+    this.addEventListeners();
+    if (this.container.mediaControlDisabled)
+      this.disable();
   },
   showVolumeBar: function() {
     if(this.hideVolumeId) {
@@ -243,8 +243,9 @@ module.exports = MediaControl = UIObject.extend({
     this.container.setCurrentTime(pos);
   },
   show: function(event) {
+    if (this.disabled) return;
     var timeout = 2000;
-    if (event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY) {
+    if (!event || (event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY)) {
       if (this.hideId) {
         clearTimeout(this.hideId);
       }
@@ -253,8 +254,10 @@ module.exports = MediaControl = UIObject.extend({
       this.hideId = setTimeout(function() {
         this.hide();
       }.bind(this), timeout);
-      this.lastMouseX = event.clientX;
-      this.lastMouseY = event.clientY;
+      if (event) {
+        this.lastMouseX = event.clientX;
+        this.lastMouseY = event.clientY;
+      }
     }
   },
   hide: function() {
@@ -262,7 +265,7 @@ module.exports = MediaControl = UIObject.extend({
     if (this.hideId) {
       clearTimeout(this.hideId);
     }
-    if (!this.draggingVolumeBar && !this.draggingSeekBar && this.$el.find('[data-controls]:hover').length === 0) {
+    if (this.disabled || (!this.draggingVolumeBar && !this.draggingSeekBar && this.$el.find('[data-controls]:hover').length === 0)) {
       this.trigger('mediacontrol:hide');
       this.$el.fadeOut();
     } else {
@@ -295,6 +298,8 @@ module.exports = MediaControl = UIObject.extend({
     this.hideId = setTimeout(function() {
       this.hide();
     }.bind(this), timeout);
+    if (this.disabled)
+      this.$el.hide();
     return this;
   }
 });

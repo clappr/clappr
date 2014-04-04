@@ -84,7 +84,7 @@ var Core = UIObject.extend({
   onMediaControlShow: function(showing) {
     if (showing)
       this.$el.removeClass('nocursor');
-    else
+    else if (!this.mediaControl.disabled)
       this.$el.addClass('nocursor');
   },
   render: function() {
