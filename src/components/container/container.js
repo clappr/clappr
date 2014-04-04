@@ -27,6 +27,7 @@ var Container = UIObject.extend({
     this.listenTo(this.playback, 'playback:ready', this.ready);
     this.listenTo(this.playback, 'playback:buffering', this.buffering);
     this.listenTo(this.playback, 'playback:bufferfull', this.bufferfull);
+    this.listenTo(this.playback, 'playback:settingsupdate', this.settingsUpdate);
     this.isReady = false;
     this.plugins = [this.playback];
   },
@@ -109,6 +110,10 @@ var Container = UIObject.extend({
   },
   getPlugin: function(name) {
     return _(this.plugins).find(function(plugin) { return plugin.name === name });
+  },
+  settingsUpdate: function() {
+    this.settings = this.playback.settings;
+    this.trigger('container:settingsupdate');
   },
   render: function() {
     var style = Styler.getStyleFor('container');
