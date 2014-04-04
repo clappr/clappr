@@ -22,6 +22,7 @@ var PosterPlugin = UIPlugin.extend({
   bindEvents: function() {
     this.listenTo(this.container, 'container:play', this.onPlay);
     this.listenTo(this.container, 'container:stop', this.onStop);
+    this.listenTo(this.container, 'container:ended', this.onStop);
   },
   onPlay: function() {
     this.$el.hide();
