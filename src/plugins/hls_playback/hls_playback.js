@@ -48,7 +48,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
       this.id = this.updateTime(1000);
     }
     if(this.el.getState() === 'PAUSED') {
-      this.el.resume();
+      this.el.playerResume();
     } else {
       this.firstPlay();
     }
@@ -73,17 +73,17 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     }
   },
   firstPlay: function() {
-    this.el.load(this.src);
-    this.el.play();
+    this.el.playerLoad(this.src);
+    this.el.playerPlay();
   },
   volume: function(value) {
-    this.el.volume(value);
+    this.el.playerVolume(value);
   },
   pause: function() {
-    this.el.pause();
+    this.el.playerPause();
   },
   stop: function() {
-    this.el.stop();
+    this.el.playerStop();
     clearInterval(this.id);
     this.trigger('playback:timeupdate', 0);
   },
@@ -92,7 +92,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   },
   seek: function(time) {
     clearInterval(this.id);
-    this.el.seek(this.el.getDuration() * (time / 100));
+    this.el.playerSeek(this.el.getDuration() * (time / 100));
     this.id = this.updateTime(1000);
   },
   timeUpdate: function(time, duration) {
