@@ -17,6 +17,7 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
     'timeupdate': 'timeUpdated',
     'progress': 'progress',
     'ended': 'ended',
+    'playing': 'playing',
     'stalled': 'buffering',
     'waiting': 'buffering',
     'canplaythrough': 'bufferFull'
@@ -110,6 +111,10 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
       }
     }
     this.trigger('playback:progress', this.el.buffered.start(bufferedPos), this.el.buffered.end(bufferedPos), this.el.duration);
+  },
+
+  playing: function() {
+    this.trigger('playback:playing');
   },
 
   render: function() {
