@@ -16,7 +16,10 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
   events: {
     'timeupdate': 'timeUpdated',
     'progress': 'progress',
-    'ended': 'ended'
+    'ended': 'ended',
+    'stalled': 'buffering',
+    'waiting': 'buffering',
+    'canplaythrough': 'bufferFull'
   },
 
   initialize: function(options) {
@@ -64,6 +67,14 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
   ended: function() {
     this.trigger('playback:ended');
     this.trigger('playback:timeupdate', 0, this.el.duration);
+  },
+
+  buffering: function() {
+    this.trigger('playback:buffering');
+  },
+
+  bufferFull: function() {
+    this.trigger('playback:bufferfull');
   },
 
   destroy: function() {
