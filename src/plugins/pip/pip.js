@@ -97,6 +97,7 @@ var PipPlugin = BaseObject.extend({
       }
       this.core.mediaControl.setContainer(this.masterContainer);
       this.core.mediaControl.render();
+      this.listenToPipClick();
     }.bind(this));
     this.core.$el.append(this.masterContainer.render().el);
     this.core.containers.splice(0, 0, this.masterContainer);
