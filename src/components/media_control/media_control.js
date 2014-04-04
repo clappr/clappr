@@ -39,8 +39,9 @@ module.exports = MediaControl = UIObject.extend({
     this.params = params;
     this.container = params.container;
     this.listenTo(this.container, 'container:play', this.changeTogglePlay);
-    this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar.bind(this));
+    this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar);
     this.listenTo(this.container, 'container:progress', this.updateProgressBar);
+    this.listenTo(this.container, 'container:settingsupdate', this.settingsUpdate);
     this.defaultSettings = {
       left: ['play', 'stop', 'pause'],
       right: ['volume'],
@@ -61,9 +62,18 @@ module.exports = MediaControl = UIObject.extend({
   },
   changeTogglePlay: function() {
     var playPauseButton = this.$el.find('button[data-playpause]');
-    playPauseButton.toggleClass('playing paused');
     var playStopButton = this.$el.find('button[data-playstop]');
-    playStopButton.toggleClass('playing stopped');
+    if (this.container.isPlaying()) {
+      playPauseButton.removeClass('paused');
+      playPauseButton.addClass('playing');
+      playStopButton.removeClass('stopped');
+      playStopButton.addClass('playing');
+    } else {
+      playPauseButton.addClass('paused');
+      playPauseButton.removeClass('playing');
+      playStopButton.addClass('stopped');
+      playStopButton.removeClass('playing');
+    }
   },
   togglePlayPause: function() {
     var playPauseButton = this.$el.find('button[data-playpause]');
@@ -159,20 +169,10 @@ module.exports = MediaControl = UIObject.extend({
   setContainer: function(container) {
     this.stopListening(this.container);
     this.container = container;
-    var playPauseButton = this.$el.find('button[data-playpause]');
-    var playStopButton = this.$el.find('button[data-playstop]');
-    if (this.container.isPlaying()) {
-      playPauseButton.removeClass('paused');
-      playPauseButton.addClass('playing');
-      playStopButton.removeClass('stopped');
-      playStopButton.addClass('playing');
-    } else {
-      playPauseButton.addClass('paused');
-      playPauseButton.removeClass('playing');
-      playStopButton.addClass('stopped');
-      playStopButton.removeClass('playing');
-    }
+    this.changeTogglePlay();
     this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar);
+    this.listenTo(this.container, 'container:progress', this.updateProgressBar);
+    this.listenTo(this.container, 'container:settingsupdate', this.settingsUpdate);
   },
   showVolumeBar: function() {
     if(this.hideVolumeId) {
@@ -245,6 +245,10 @@ module.exports = MediaControl = UIObject.extend({
       }.bind(this), timeout);
     }
   },
+  settingsUpdate: function() {
+    console.log('settings update!');
+    this.render();
+  },
   render: function() {
     var timeout = 1000;
     var style = Styler.getStyleFor('media_control');
@@ -261,6 +265,7 @@ module.exports = MediaControl = UIObject.extend({
       this.togglePlayPause();
       this.togglePlayStop();
     }
+    this.changeTogglePlay();
     this.hideId = setTimeout(function() {
       $('div[data-player]').bind('mousemove', this.show.bind(this));
       this.hide();
