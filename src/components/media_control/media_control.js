@@ -32,25 +32,50 @@ module.exports = MediaControl = UIObject.extend({
     'mouseleave [data-volume]': 'hideVolumeBar',
     'mousedown .media-control-icon[data-seekbar]': 'startSeekDrag',
     'mousedown .volume-scrubber[data-volume]': 'startVolumeDrag',
-    'mouseover[data-controls]': 'show',
+    'mouseover[data-controls]': 'show'
   },
   template: JST.media_control,
   initialize: function(params) {
+    console.log('mediacontrol :: initialize');
     this.params = params;
     this.container = params.container;
-    this.listenTo(this.container, 'container:play', this.changeTogglePlay);
-    this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar);
-    this.listenTo(this.container, 'container:progress', this.updateProgressBar);
-    this.listenTo(this.container, 'container:settingsupdate', this.settingsUpdate);
+    this.addEventListeners();
     this.defaultSettings = {
       left: ['play', 'stop', 'pause'],
       right: ['volume'],
       default: ['position', 'seekbar', 'duration']
     };
+    this.disabled = false;
+    if (this.container.mediaControlDisabled)
+      this.disable();
     this.currentVolume = 100;
     $(document).bind('mouseup', this.stopDrag.bind(this));
     $(document).bind('mousemove', this.updateDrag.bind(this));
   },
+
+  addEventListeners: function() {
+    console.log('mediacontrol :: addEventListeners');
+    this.listenTo(this.container, 'container:play', this.changeTogglePlay);
+    this.listenTo(this.container, 'container:playing', this.changeTogglePlay);
+    this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar);
+    this.listenTo(this.container, 'container:progress', this.updateProgressBar);
+    this.listenTo(this.container, 'container:settingsupdate', this.settingsUpdate);
+    this.listenTo(this.container, 'container:mediacontrol:disable', this.disable);
+    this.listenTo(this.container, 'container:mediacontrol:enable', this.enable);
+  },
+
+  disable: function() {
+    console.log('mediacontrol -> disabled');
+    this.disabled = true;
+    this.hide();
+  },
+
+  enable: function() {
+    console.log('mediacontrol -> enabled');
+    this.disabled = false;
+    this.show();
+  },
+
   play: function() {
     this.container.play();
   },
@@ -61,6 +86,7 @@ module.exports = MediaControl = UIObject.extend({
     this.container.stop();
   },
   changeTogglePlay: function() {
+    console.log('mediacontrol :: changeTogglePlay');
     var playPauseButton = this.$el.find('button[data-playpause]');
     var playStopButton = this.$el.find('button[data-playstop]');
     if (this.container.isPlaying()) {
@@ -267,7 +293,6 @@ module.exports = MediaControl = UIObject.extend({
     }
     this.changeTogglePlay();
     this.hideId = setTimeout(function() {
-      $('div[data-player]').bind('mousemove', this.show.bind(this));
       this.hide();
     }.bind(this), timeout);
     return this;
