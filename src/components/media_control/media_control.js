@@ -46,7 +46,7 @@ module.exports = MediaControl = UIObject.extend({
       default: ['position', 'seekbar', 'duration']
     };
     this.disabled = false;
-    if (this.container.mediaControlDisabled)
+    if (this.container.mediaControlDisabled || this.params.chromeless)
       this.disable();
     this.currentVolume = 100;
     $(document).bind('mouseup', this.stopDrag.bind(this));
@@ -71,6 +71,7 @@ module.exports = MediaControl = UIObject.extend({
   },
 
   enable: function() {
+    if (this.params.chromeless) return;
     console.log('mediacontrol -> enabled');
     this.disabled = false;
     this.show();
