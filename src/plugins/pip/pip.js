@@ -17,6 +17,9 @@ var PipPlugin = BaseObject.extend({
     if (core.containers.length === 2) {
       this.pipContainer = core.containers[1];
       this.pipContainer.setStyle(this.pipStyle);
+      this.pipContainer.play();
+      this.core.mediaControl.setContainer(this.masterContainer);
+      this.core.mediaControl.render();
     }
     this.listenTo(this.core.mediaControl, 'mediacontrol:show', this.onMediaControlShow);
     this.listenTo(this.core.mediaControl, 'mediacontrol:hide', this.onMediaControlHide);
