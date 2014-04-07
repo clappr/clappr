@@ -89,7 +89,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     this.trigger('playback:timeupdate', 0, this.name);
   },
   isPlaying: function() {
-    return !!this.el.getState().match(/playing/i);
+    return !!(this.isReady && this.el.getState().match(/playing/i));
   },
   seek: function(time) {
     clearInterval(this.id);
