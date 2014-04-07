@@ -31,6 +31,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     this.currentState = "IDLE";
     this.timedCheckState();
     this.el.playerSetflushLiveURLCache(true);
+    this.el.playerSetstartFromLowestLevel(true); // decreases startup time
   },
   checkIfFlashIsReady: function() {
     this.bootstrapId = setInterval(function() {
