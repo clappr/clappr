@@ -63,7 +63,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
       if (this.playbackType)
         this.updateSettings();
     }
-    if (this.el.getState() === "PLAYING_BUFFERING" && this.el.getbufferLength() < 1) {
+    if (this.el.getState() === "PLAYING_BUFFERING" && this.el.getbufferLength() < 1 && this.currentState !== "PLAYING_BUFFERING") {
       this.trigger('playback:buffering', this.name);
       this.currentState = "PLAYING_BUFFERING";
     } else if (this.currentState === "PLAYING_BUFFERING" && this.el.getState() === "PLAYING") {

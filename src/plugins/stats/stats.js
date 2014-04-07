@@ -18,6 +18,7 @@ var StatsPlugin = Plugin.extend({
   bindEvents: function() {
     this.listenTo(this.container, 'container:play', this.onPlay);
     this.listenTo(this.container, 'container:stop', this.onStop);
+    this.listenTo(this.container, 'container:destroyed', this.onStop);
     this.listenTo(this.container, 'container:state:buffering', this.onBuffering);
     this.listenTo(this.container, 'container:state:bufferfull', this.onBufferFull);
     this.listenTo(this.container, 'container:stats:add', this.onStatsAdd);
