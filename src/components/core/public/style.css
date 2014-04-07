@@ -1,3 +1,16 @@
+[data-player] * {
+  margin: 0;
+	padding: 0;
+	border: 0;
+	font-style: normal;
+	font-weight: normal;
+	text-align: center;
+  font-size: 100%;
+  color: #000;
+  font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+  text-shadow: 0 0 0;
+}
+
 [data-player] {
   position: relative;
   margin: 0;
