@@ -37,7 +37,6 @@ module.exports = MediaControl = UIObject.extend({
   },
   template: JST.media_control,
   initialize: function(params) {
-    console.log('mediacontrol :: initialize');
     this.params = params;
     this.container = params.container;
     this.addEventListeners();
@@ -55,7 +54,6 @@ module.exports = MediaControl = UIObject.extend({
   },
 
   addEventListeners: function() {
-    console.log('mediacontrol :: addEventListeners');
     this.listenTo(this.container, 'container:play', this.changeTogglePlay);
     this.listenTo(this.container, 'container:playing', this.changeTogglePlay);
     this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar);
@@ -66,14 +64,12 @@ module.exports = MediaControl = UIObject.extend({
   },
 
   disable: function() {
-    console.log('mediacontrol -> disabled');
     this.disabled = true;
     this.hide();
   },
 
   enable: function() {
     if (this.params.chromeless) return;
-    console.log('mediacontrol -> enabled');
     this.disabled = false;
     this.show();
   },
