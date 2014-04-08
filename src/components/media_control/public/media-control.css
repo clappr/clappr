@@ -142,7 +142,7 @@ div.seekbar-position[data-seekbar] {
 .media-control-icon[data-seekbar] {
   position: absolute;
   right: -6px;
-  top: -2px;
+  top: -3px;
   width: 12px;
   height: 12px;
   border-radius: 6px;
