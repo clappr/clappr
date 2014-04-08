@@ -10,6 +10,7 @@
 var BaseObject = require('../../base/base_object');
 
 var HTML5VideoPlaybackPlugin = require('../../plugins/html5_video_playback');
+var FlashVideoPlaybackPlugin = require('../../plugins/flash_playback');
 var HTML5AudioPlaybackPlugin = require('../../plugins/html5_audio_playback');
 var HLSVideoPlaybackPlugin = require('../../plugins/hls_playback');
 var SpinnerThreeBouncePlugin = require('../../plugins/spinner_three_bounce');
@@ -21,7 +22,7 @@ var PipPlugin = require('../../plugins/pip');
 var Loader = BaseObject.extend({
   initialize: function(params) {
     this.params = params;
-    this.playbackPlugins = [HTML5VideoPlaybackPlugin, HTML5AudioPlaybackPlugin, HLSVideoPlaybackPlugin];
+    this.playbackPlugins = [FlashVideoPlaybackPlugin, HTML5VideoPlaybackPlugin, HTML5AudioPlaybackPlugin, HLSVideoPlaybackPlugin];
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin];
     this.globalPlugins = [PipPlugin];
   },
