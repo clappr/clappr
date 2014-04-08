@@ -35,6 +35,11 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
   checkIfFlashIsReady: function() {
     setTimeout(this.bootstrap.bind(this), 1000);
   },
+  setupFirefox: function() {
+    var $el = this.$('embed');
+    $el.attr('data-flash-playback', '');
+    this.setElement($el[0]);
+  },
   updateTime: function(interval) {
     return setInterval(function() {
       this.trigger('playback:timeupdate', this.el.getPosition(), this.el.getDuration(), this.name);
@@ -98,6 +103,9 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
     this.$el.html(this.template({swfPath: this.swfPath}));
     this.$el.append(style);
     this.el.id = this.cid;
+    if(navigator.userAgent.match(/firefox/i)) { //FIXME remove it from here
+      this.setupFirefox();
+    }
     return this;
   }
 });
