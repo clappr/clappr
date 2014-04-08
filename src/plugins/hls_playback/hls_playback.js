@@ -31,9 +31,12 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     this.checkIfFlashIsReady();
   },
   hiddenCallback: function() {
-    this.el.playerSmoothSetLevel(0);
+    this.hiddenId = setTimeout(function() { this.el.playerSmoothSetLevel(0) }.bind(this), 10000);
   },
   visibleCallback: function() {
+    if (this.hiddenId) {
+      clearTimeout(this.hiddenId);
+    }
     this.el.playerSmoothSetLevel(-1);
   },
   bootstrap: function() {
