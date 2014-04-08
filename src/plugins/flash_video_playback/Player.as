@@ -1,7 +1,7 @@
 package
 {
   import flash.external.ExternalInterface;
-	import flash.display.MovieClip;
+  import flash.display.*;
 	import flash.geom.Rectangle;
 	import flash.events.StageVideoAvailabilityEvent;
 	import flash.media.StageVideoAvailability;
@@ -11,7 +11,6 @@ package
 	import flash.net.NetStream;
 
 	public class Player extends MovieClip {
-		private const _videoURL:String = "2698715-web480.mp4";
 		private var _video:Video;
 		private var _stageVideo:StageVideo;
 		private var _ns:NetStream;
@@ -23,6 +22,10 @@ package
 			_ns = new NetStream(_nc);
 			_ns.client = this;
 			_video = new Video();
+      stage.scaleMode = StageScaleMode.NO_SCALE;
+      stage.align = StageAlign.TOP_LEFT;
+      stage.fullScreenSourceRect = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
+      stage.displayState = StageDisplayState.NORMAL;
 			stage.addEventListener(StageVideoAvailabilityEvent.STAGE_VIDEO_AVAILABILITY, _onStageVideoAvailability);
       setupCallbacks();
 		}
@@ -31,14 +34,14 @@ package
       ExternalInterface.addCallback("playerPlay", playerPlay);
     }
 
-    private function playerPlay():void {
-      _ns.play(_videoURL);
+    private function playerPlay(url:String):void {
+      _ns.play(url);
     }
 
 		private function _enableStageVideo():void {
 			if (_stageVideo == null) {
 				_stageVideo = stage.stageVideos[0];
-				_stageVideo.viewPort = new Rectangle(0, 0, 320, 240);
+				_stageVideo.viewPort = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
 			}
 			if (_video.parent) {
 				removeChild(_video);
