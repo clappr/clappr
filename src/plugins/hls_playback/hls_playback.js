@@ -7,6 +7,8 @@ var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var _ = require("underscore");
 
+var Visibility = require('visibility');
+
 var HLSVideoPlaybackPlugin = UIPlugin.extend({
   name: 'hls_playback',
   tagName: 'object',
@@ -18,12 +20,20 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     this.src = options.src;
     this.swfPath = options.swfPath || "assets/HLSPlayer.swf";
     this.autoPlay = options.autoPlay;
+    this.visibility = new Visibility();
+    this.visible = true;
     this.settings = {
       left: ["playstop"],
       default: ["position", "seekbar", "duration"],
       right: ["fullscreen", "volume"]
     };
     this.checkIfFlashIsReady();
+  },
+  hiddenCallback: function() {
+    this.el.playerSmoothSetLevel(0);
+  },
+  visibleCallback: function() {
+    this.el.playerSmoothSetLevel(-1);
   },
   bootstrap: function() {
     this.trigger('playback:ready', this.name);
@@ -59,11 +69,8 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     this.checkStateId = setInterval(this.checkState.bind(this), 250);
   },
   checkState: function() {
-    if (!this.playbackType) {
-      this.playbackType = this.el.getType()
-      if (this.playbackType)
-        this.updateSettings();
-    }
+    this.updatePlaybackType();
+    this.updatePlayerVisibility();
     if (this.el.getState() === "PLAYING_BUFFERING" && this.el.getbufferLength() < 1 && this.currentState !== "PLAYING_BUFFERING") {
       this.trigger('playback:buffering', this.name);
       this.currentState = "PLAYING_BUFFERING";
@@ -72,6 +79,22 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
       this.currentState = "PLAYING";
     } else if (this.el.getState() === "IDLE") {
       this.currentState = "IDLE";
+    }
+  },
+  updatePlayerVisibility: function() {
+    if (this.visible && this.visibility.hidden()) {
+      this.visible = false;
+      this.hiddenCallback();
+    } else if (!this.visible && this.visibility.visible()) {
+      this.visible = true;
+      this.visibleCallback();
+    }
+  },
+  updatePlaybackType: function() {
+    if (!this.playbackType) {
+      this.playbackType = this.el.getType()
+      if (this.playbackType)
+        this.updateSettings();
     }
   },
   firstPlay: function() {
