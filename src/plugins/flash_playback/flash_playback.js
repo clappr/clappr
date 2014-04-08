@@ -33,7 +33,7 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
     this.timedCheckState();
   },
   checkIfFlashIsReady: function() {
-    this.bootstrap();
+    setTimeout(this.bootstrap.bind(this), 1000);
   },
   updateTime: function(interval) {
     return setInterval(function() {
@@ -49,6 +49,9 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
     } else {
       this.firstPlay();
     }
+  },
+  timedCheckState: function() {
+    this.checkStateId = setInterval(this.checkState.bind(this), 250);
   },
   checkState: function() {
     if (this.el.getState() === "PLAYING_BUFFERING" && this.el.getbufferLength() < 1 && this.currentState !== "PLAYING_BUFFERING") {

@@ -29,15 +29,42 @@ package
 			stage.addEventListener(StageVideoAvailabilityEvent.STAGE_VIDEO_AVAILABILITY, _onStageVideoAvailability);
       setupCallbacks();
 		}
-
     private function setupCallbacks():void {
       ExternalInterface.addCallback("playerPlay", playerPlay);
+      ExternalInterface.addCallback("playerPause", playerPause);
+      ExternalInterface.addCallback("playerStop", playerStop);
+      ExternalInterface.addCallback("playerSeek", playerSeek);
+      ExternalInterface.addCallback("playerVolume", playerVolume);
+      ExternalInterface.addCallback("playerResume", playerResume);
+      ExternalInterface.addCallback("getState", getState);
+      ExternalInterface.addCallback("getPosition", getPosition);
+      ExternalInterface.addCallback("getDuration", getDuration);
     }
-
     private function playerPlay(url:String):void {
       _ns.play(url);
     }
-
+    private function playerPause():void {
+      _ns.pause();
+    }
+    private function playerStop():void {
+    }
+    private function playerSeek(position:Number):void {
+      _ns.seek(position);
+    }
+    private function playerVolume(level:Number):void {
+    }
+    private function playerResume():void {
+      _ns.resume();
+    }
+    private function getState():String {
+      return "IDLE";
+    }
+    private function getPosition():Number {
+      return 0;
+    }
+    private function getDuration():Number {
+      return 60;
+    }
 		private function _enableStageVideo():void {
 			if (_stageVideo == null) {
 				_stageVideo = stage.stageVideos[0];
@@ -48,12 +75,10 @@ package
       }
 			_stageVideo.attachNetStream(_ns);
 		}
-
 		private function _disableStageVideo():void {
 			_video.attachNetStream(_ns);
 			addChild(_video);
 		}
-
 		private function _onStageVideoAvailability(evt:StageVideoAvailabilityEvent):void {
 			if (evt.availability) {
 				_enableStageVideo();
