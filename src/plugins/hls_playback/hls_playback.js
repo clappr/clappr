@@ -22,6 +22,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     this.autoPlay = options.autoPlay;
     this.visibility = new Visibility();
     this.visible = true;
+    this.highDefinition = "unavailable"; // this will be changed on checkHighDefinition()
     this.settings = {
       left: ["playstop"],
       default: ["position", "seekbar", "duration"],
@@ -65,12 +66,42 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
       this.firstPlay();
     }
   },
+  isHighDefinitionAvailable: function(levels) {
+    return !!(levels.length > 0 && levels[levels.length-1].bitrate >= 3500000);
+  },
+  checkHighDefinition: function() {
+    // this function is responsible to change media contorl settings
+    // regarding the availability of HD level and if it's being used or not.
+    // highDefinition attribute have 3 states: "available", "available-in-use", "unavailable"
+    var changed = false;
+    var levels = this.el.getLevels();
+    if (this.isHighDefinitionAvailable(levels)) {
+      lastLevel = levels.length -1;
+      if (this.el.getLevel() === lastLevel && this.highDefinition !== "available-in-use") {
+        console.log("high definition available and in use");
+        this.highDefinition = "available-in-use";
+        changed = true;
+      } else if (this.el.getLevel() !== lastLevel && this.highDefinition === "available-in-use") {
+        console.log("oops we're not in hd anymore");
+        this.highDefinition = "available";
+        changed = true;
+      } else if (this.highDefinition === "unavailable") {
+        console.log("high definition available");
+        this.highDefinition = "available";
+        changed = true;
+      }
+    }
+    if (changed) {
+      this.updateSettings();
+    }
+  },
   timedCheckState: function() {
     this.checkStateId = setInterval(this.checkState.bind(this), 250);
   },
   checkState: function() {
     this.updatePlaybackType();
     this.updatePlayerVisibility();
+    this.checkHighDefinition();
     if (this.el.getState() === "PLAYING_BUFFERING" && this.el.getbufferLength() < 1 && this.currentState !== "PLAYING_BUFFERING") {
       this.trigger('playback:buffering', this.name);
       this.currentState = "PLAYING_BUFFERING";
@@ -140,6 +171,12 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
       default: ["position", "seekbar", "duration"],
       right: ["fullscreen", "volume"]
     };
+    this.settings.right = _.without(this.settings.right, "available", "available-in-use");
+    if (this.highDefinition == "available") {
+      this.settings.right.push("high-definition");
+    } if (this.highDefinition == "available-in-use") {
+      this.settings.right.push("high-definition-in-use");
+    }
     this.trigger('playback:settingsupdate', this.name);
   },
 

@@ -277,7 +277,6 @@ module.exports = MediaControl = UIObject.extend({
     }
   },
   settingsUpdate: function() {
-    console.log('settings update!');
     this.render();
   },
   render: function() {
