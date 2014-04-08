@@ -1,7 +1,8 @@
 package
 {
-	import flash.display.MovieClip ;
-	import flash.geom.Rectangle ;
+  import flash.external.ExternalInterface;
+	import flash.display.MovieClip;
+	import flash.geom.Rectangle;
 	import flash.events.StageVideoAvailabilityEvent;
 	import flash.media.StageVideoAvailability;
 	import flash.media.StageVideo;
@@ -10,26 +11,29 @@ package
 	import flash.net.NetStream;
 
 	public class Player extends MovieClip {
-		private const _videoURL:String = "2698715-web480.mp4" ;
-
-		public function Player( ) {
-			_init();
-		}
-
+		private const _videoURL:String = "2698715-web480.mp4";
 		private var _video:Video;
 		private var _stageVideo:StageVideo;
 		private var _ns:NetStream;
 		private var _nc:NetConnection;
 
-		private function _init ( ):void {
+		public function Player() {
 			_nc = new NetConnection();
-			_nc.connect ( null ) ;
-			_ns = new NetStream (_nc);
-			_ns.client = this ;
-			_ns.play (_videoURL);
+			_nc.connect(null);
+			_ns = new NetStream(_nc);
+			_ns.client = this;
 			_video = new Video();
 			stage.addEventListener(StageVideoAvailabilityEvent.STAGE_VIDEO_AVAILABILITY, _onStageVideoAvailability);
+      setupCallbacks();
 		}
+
+    private function setupCallbacks():void {
+      ExternalInterface.addCallback("playerPlay", playerPlay);
+    }
+
+    private function playerPlay():void {
+      _ns.play(_videoURL);
+    }
 
 		private function _enableStageVideo():void {
 			if (_stageVideo == null) {
@@ -47,7 +51,7 @@ package
 			addChild(_video);
 		}
 
-		private function _onStageVideoAvailability ( evt:StageVideoAvailabilityEvent ):void {
+		private function _onStageVideoAvailability(evt:StageVideoAvailabilityEvent):void {
 			if (evt.availability) {
 				_enableStageVideo();
 			} else {
