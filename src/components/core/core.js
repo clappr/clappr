@@ -78,8 +78,8 @@ var Core = UIObject.extend({
     }
     setTimeout(this.hideMediaControl.bind(this), 1000);
   },
-  showMediaControl: function() {
-    this.mediaControl.show();
+  showMediaControl: function(event) {
+    this.mediaControl.show(event);
   },
   onMediaControlShow: function(showing) {
     if (showing)
