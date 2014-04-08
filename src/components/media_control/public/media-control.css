@@ -199,7 +199,7 @@ div.volume-scrubber[data-volume] {
   background-color: transparent;
   border: 0;
   width: 32px;
-  height: 100%;
+  height: 32px;
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAaCAMAAADhRa4NAAAABGdBTUEAALGPC/xhBQAAAOpQTFRF9PT06+vrra2t7u7u7+/vyMjI/////v7+5+fn8PDwhoaG8/Pz9/f37u7u+vr6m5ubwsLC9/f34eHh+/v77e3t6Ojo+/v7////+fn50NDQ5eXl/f396Ojo/v7+/v7+5OTk+/v7wcHBgICAycnJ/v7++vr6+fn5/v7+j4+P/v7+gICA4+Pj9fX19fX15ubmxcXF8/Pz4uLi/v7+/v7+2NjY/v7+/v7+6Ojo8fHx3d3d4+Pj7e3tFRUV////////3d3dAAAAAAAA/v7+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////gp7LJQAAAE10Uk5Tdk4ZZ3Ml9NhVaRN9l0mjFyqiTb1WTMv2hBtE1i3r9UK+HQoT6Jad8RDtCD96ZT0fWCzg9Brk81eAHlJwDP38NQsI7woFCQcEBgMCAQDL5vVuAAAA7ElEQVQoz83S2VbCMBAG4IIIKC6AK27I6i4ouFtobZJmZpz3fx0TT1Hb0x5vO7f5Mjkzf5zPf8rJKSCiTGDPCAGQUoE5miIRDG40UAog0PN7gdg95GuNCWD7huppwioEsbk7uwopBsxlX74/u8xSHK3L+t7pokUEUHNUgdooL3sNtwMxAP4vKHAtWOKd6I0FkD/AL/KaV+XtBPjTweGVoMTtOED9YcoCqfcrq97WyTkkp1AyeJvZKXot2eRhYgqzBzR7eH1kBSgOji9GQOmbfBBIl/2zW4EZWbzYLMZ3IVJqmvSdpnkuI828ftovkZvpq506G9EAAAAASUVORK5CYII=);
   background-size: 100% 100%;
   background-position: 50% 50%;
