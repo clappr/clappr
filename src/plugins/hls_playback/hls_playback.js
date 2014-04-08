@@ -78,15 +78,12 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     if (this.isHighDefinitionAvailable(levels)) {
       lastLevel = levels.length -1;
       if (this.el.getLevel() === lastLevel && this.highDefinition !== "available-in-use") {
-        console.log("high definition available and in use");
         this.highDefinition = "available-in-use";
         changed = true;
       } else if (this.el.getLevel() !== lastLevel && this.highDefinition === "available-in-use") {
-        console.log("oops we're not in hd anymore");
         this.highDefinition = "available";
         changed = true;
       } else if (this.highDefinition === "unavailable") {
-        console.log("high definition available");
         this.highDefinition = "available";
         changed = true;
       }
