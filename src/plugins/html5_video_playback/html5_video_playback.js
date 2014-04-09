@@ -20,16 +20,22 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
     'playing': 'playing',
     'stalled': 'buffering',
     'waiting': 'buffering',
-    'canplaythrough': 'bufferFull'
+    'canplaythrough': 'bufferFull',
+    'loadedmetadata': 'loadedMetadata'
   },
 
   initialize: function(options) {
+    this.src = options.src;
     this.el.src = options.src;
     this.settings = {
       left: ['playpause'],
       right: ['fullscreen', 'volume'],
       default: ['position', 'seekbar', 'duration']
     };
+  },
+
+  loadedMetadata: function(e) {
+    this.trigger('playback:loadedmetadata', e.target.duration);
   },
 
   play: function() {

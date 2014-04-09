@@ -29,6 +29,7 @@ var Container = UIObject.extend({
     this.listenTo(this.playback, 'playback:buffering', this.buffering);
     this.listenTo(this.playback, 'playback:bufferfull', this.bufferfull);
     this.listenTo(this.playback, 'playback:settingsupdate', this.settingsUpdate);
+    this.listenTo(this.playback, 'playback:loadedmetadata', this.loadedMetadata);
     this.listenTo(this.playback, 'playback:ended', this.ended);
     this.listenTo(this.playback, 'playback:playing', this.playing);
     this.isReady = false;
@@ -56,6 +57,9 @@ var Container = UIObject.extend({
   },
   isPlaying: function() {
     return this.playback.isPlaying();
+  },
+  loadedMetadata: function(duration) {
+    this.trigger('container:loadedmetadata', duration);
   },
   timeUpdated: function(position, duration) {
     this.trigger('container:timeupdate', position, duration, this.name);
