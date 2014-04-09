@@ -116,7 +116,7 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
 
 FlashVideoPlaybackPlugin.canPlay = function(resource) {
   //http://help.adobe.com/en_US/flashmediaserver/techoverview/WS07865d390fac8e1f-4c43d6e71321ec235dd-7fff.html
-  return !!resource.match(/(.*).(mp4|mov|f4v|3gpp)/);
+  return navigator.userAgent.match(/firefox/i)? !!resource.match(/(.*).(mp4|mov|f4v|3gpp)/) : false;
 }
 
 module.exports = FlashVideoPlaybackPlugin;
