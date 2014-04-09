@@ -66,6 +66,7 @@ module.exports = MediaControl = UIObject.extend({
   disable: function() {
     this.disabled = true;
     this.hide();
+    this.$el.hide();
   },
 
   enable: function() {
