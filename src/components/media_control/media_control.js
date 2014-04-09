@@ -84,7 +84,6 @@ module.exports = MediaControl = UIObject.extend({
     this.container.stop();
   },
   changeTogglePlay: function() {
-    console.log('mediacontrol :: changeTogglePlay');
     var playPauseButton = this.$el.find('button[data-playpause]');
     var playStopButton = this.$el.find('button[data-playstop]');
     if (this.container.isPlaying()) {
