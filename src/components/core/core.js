@@ -46,6 +46,7 @@ var Core = UIObject.extend({
     if(!Fullscreen.isFullscreen()) {
       this.$el.removeClass('fullscreen');
     }
+    this.mediaControl.show();
   },
   onContainersCreated: function(containers) {
     this.containers = containers;
@@ -76,7 +77,7 @@ var Core = UIObject.extend({
 
       this.$el.removeClass('fullscreen nocursor');
     }
-    setTimeout(this.hideMediaControl.bind(this), 1000);
+    this.mediaControl.show();
   },
   showMediaControl: function(event) {
     this.mediaControl.show(event);
