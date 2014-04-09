@@ -6,6 +6,7 @@ package
   import flash.events.StageVideoAvailabilityEvent;
   import flash.media.StageVideoAvailability;
   import flash.media.StageVideo;
+  import flash.media.SoundTransform;
   import flash.media.Video;
   import flash.net.NetConnection;
   import flash.net.NetStream;
@@ -17,14 +18,18 @@ package
     private var _nc:NetConnection;
     private var totalTime:Number;
     private var playbackState:String;
+    private var videoVolumeTransform:SoundTransform;
 
     public function Player() {
+      videoVolumeTransform = new SoundTransform();
+      videoVolumeTransform.volume = 1;
       playbackState = "IDLE";
       _nc = new NetConnection();
       _nc.connect(null);
       _ns = new NetStream(_nc);
       _ns.client = this;
       _video = new Video();
+      _ns.soundTransform = videoVolumeTransform;
       stage.scaleMode = StageScaleMode.NO_SCALE;
       stage.align = StageAlign.TOP_LEFT;
       stage.fullScreenSourceRect = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
@@ -61,6 +66,8 @@ package
       _ns.resume();
     }
     private function playerVolume(level:Number):void {
+      videoVolumeTransform.volume = level/100;
+      _ns.soundTransform = videoVolumeTransform;
     }
     private function getState():String {
       return playbackState;
