@@ -27,7 +27,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     this.settings = {
       left: ["playstop"],
       default: ["position", "seekbar", "duration"],
-      right: ["fullscreen", "volume"]
+      right: ["fullscreen", "volume", "hd"]
     };
     this.checkIfFlashIsReady();
   },
@@ -80,6 +80,10 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     return !!(levels.length > 0 && levels[levels.length-1].bitrate >= 3500000);
   },
 
+  isHighDefinitionInUse: function() {
+    return this.highDefinition === "available-in-use";
+  },
+
   checkHighDefinition: function() {
     // this function is responsible to change media contorl settings
     // regarding the availability of HD level and if it's being used or not.
@@ -100,7 +104,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
       }
     }
     if (changed) {
-      this.updateSettings();
+      this.trigger('playback:highdefinitionupdate');
     }
   },
 
@@ -189,14 +193,8 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     this.settings = {
       left: [(this.playbackType === "VOD" ? "playpause" : "playstop")],
       default: ["position", "seekbar", "duration"],
-      right: ["fullscreen", "volume"]
+      right: ["fullscreen", "volume", "hd"]
     };
-    this.settings.right = _.without(this.settings.right, "available", "available-in-use");
-    if (this.highDefinition == "available") {
-      this.settings.right.push("high-definition");
-    } if (this.highDefinition == "available-in-use") {
-      this.settings.right.push("high-definition-in-use");
-    }
     this.trigger('playback:settingsupdate', this.name);
   },
 

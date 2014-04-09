@@ -59,6 +59,7 @@ module.exports = MediaControl = UIObject.extend({
     this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar);
     this.listenTo(this.container, 'container:progress', this.updateProgressBar);
     this.listenTo(this.container, 'container:settingsupdate', this.settingsUpdate);
+    this.listenTo(this.container, 'container:highdefinitionupdate', this.highDefinitionUpdate);
     this.listenTo(this.container, 'container:mediacontrol:disable', this.disable);
     this.listenTo(this.container, 'container:mediacontrol:enable', this.enable);
   },
@@ -274,6 +275,14 @@ module.exports = MediaControl = UIObject.extend({
   },
   settingsUpdate: function() {
     this.render();
+  },
+  highDefinitionUpdate: function() {
+    console.log('hd update');
+    var $element = this.$el.find('button[data-hd]');
+    $element.removeClass('enabled');
+    if (this.container.isHighDefinitionInUse()) {
+      $element.addClass('enabled');
+    }
   },
   render: function() {
     var timeout = 1000;

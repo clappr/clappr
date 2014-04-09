@@ -30,6 +30,7 @@ var Container = UIObject.extend({
     this.listenTo(this.playback, 'playback:bufferfull', this.bufferfull);
     this.listenTo(this.playback, 'playback:settingsupdate', this.settingsUpdate);
     this.listenTo(this.playback, 'playback:loadedmetadata', this.loadedMetadata);
+    this.listenTo(this.playback, 'playback:highdefinitionupdate', this.highDefinitionUpdate);
     this.listenTo(this.playback, 'playback:ended', this.ended);
     this.listenTo(this.playback, 'playback:playing', this.playing);
     this.isReady = false;
@@ -125,6 +126,12 @@ var Container = UIObject.extend({
   settingsUpdate: function() {
     this.settings = this.playback.settings;
     this.trigger('container:settingsupdate');
+  },
+  highDefinitionUpdate: function() {
+    this.trigger('container:highdefinitionupdate');
+  },
+  isHighDefinitionInUse: function() {
+    return this.playback.isHighDefinitionInUse();
   },
   disableMediaControl: function() {
     this.mediaControlDisabled = true;
