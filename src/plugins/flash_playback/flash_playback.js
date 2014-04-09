@@ -59,7 +59,7 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
     this.checkStateId = setInterval(this.checkState.bind(this), 250);
   },
   checkState: function() {
-    if (this.el.getState() === "PLAYING_BUFFERING" && this.el.getbufferLength() < 1 && this.currentState !== "PLAYING_BUFFERING") {
+    if (this.el.getState() === "PLAYING_BUFFERING" && this.currentState !== "PLAYING_BUFFERING") {
       this.trigger('playback:buffering', this.name);
       this.currentState = "PLAYING_BUFFERING";
     } else if (this.currentState === "PLAYING_BUFFERING" && this.el.getState() === "PLAYING") {

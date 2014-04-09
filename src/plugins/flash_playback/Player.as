@@ -2,8 +2,8 @@ package
 {
   import flash.external.ExternalInterface;
   import flash.display.*;
+  import flash.events.*;
   import flash.geom.Rectangle;
-  import flash.events.StageVideoAvailabilityEvent;
   import flash.media.StageVideoAvailability;
   import flash.media.StageVideo;
   import flash.media.SoundTransform;
@@ -35,6 +35,7 @@ package
       stage.fullScreenSourceRect = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
       stage.displayState = StageDisplayState.NORMAL;
       stage.addEventListener(StageVideoAvailabilityEvent.STAGE_VIDEO_AVAILABILITY, _onStageVideoAvailability);
+      _ns.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler);
       setupCallbacks();
     }
     private function setupCallbacks():void {
@@ -48,8 +49,14 @@ package
       ExternalInterface.addCallback("getPosition", getPosition);
       ExternalInterface.addCallback("getDuration", getDuration);
     }
+    private function netStatusHandler(event:NetStatusEvent):void {
+      if (event.info.code === "NetStream.Play.Start" || event.info.code === "NetStream.Buffer.Full") {
+        playbackState = "PLAYING";
+      } else if (event.info.code === "NetStream.Buffer.Empty") {
+        playbackState = "PLAYING_BUFFERING";
+      }
+    }
     private function playerPlay(url:String):void {
-      playbackState = "PLAYING";
       _ns.play(url);
     }
     private function playerPause():void {
