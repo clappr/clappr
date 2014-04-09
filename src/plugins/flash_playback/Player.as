@@ -21,23 +21,36 @@ package
     private var videoVolumeTransform:SoundTransform;
 
     public function Player() {
-      videoVolumeTransform = new SoundTransform();
-      videoVolumeTransform.volume = 1;
       playbackState = "IDLE";
-      _nc = new NetConnection();
-      _nc.connect(null);
-      _ns = new NetStream(_nc);
-      _ns.client = this;
+      setupNetConnection();
+      setupNetStream();
+      setupStage();
+      setupCallbacks();
       _video = new Video();
-      _ns.soundTransform = videoVolumeTransform;
+    }
+    private function setupStage():void {
       stage.scaleMode = StageScaleMode.NO_SCALE;
       stage.align = StageAlign.TOP_LEFT;
       stage.fullScreenSourceRect = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
       stage.displayState = StageDisplayState.NORMAL;
       stage.addEventListener(StageVideoAvailabilityEvent.STAGE_VIDEO_AVAILABILITY, _onStageVideoAvailability);
-      _ns.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler);
-      setupCallbacks();
     }
+    private function setupNetConnection():void {
+      _nc = new NetConnection();
+      _nc.connect(null);
+    }
+    private function setupNetStream():void {
+      videoVolumeTransform = new SoundTransform();
+      videoVolumeTransform.volume = 1;
+      _ns = new NetStream(_nc);
+      _ns.client = this;
+      _ns.soundTransform = videoVolumeTransform;
+      _ns.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler);
+      _ns.bufferTime = 4;
+      _ns.inBufferSeek = true;
+      _ns.maxPauseBufferTime = 3600;
+    }
+
     private function setupCallbacks():void {
       ExternalInterface.addCallback("playerPlay", playerPlay);
       ExternalInterface.addCallback("playerPause", playerPause);
@@ -52,8 +65,10 @@ package
     private function netStatusHandler(event:NetStatusEvent):void {
       if (event.info.code === "NetStream.Play.Start" || event.info.code === "NetStream.Buffer.Full") {
         playbackState = "PLAYING";
-      } else if (event.info.code === "NetStream.Buffer.Empty") {
+      } else if (event.info.code === "NetStream.Buffer.Empty" || event.info.code == "NetStream.SeekStart.Notify") {
         playbackState = "PLAYING_BUFFERING";
+      } else {
+        ExternalInterface.call("console.log", event.info.code);
       }
     }
     private function playerPlay(url:String):void {
@@ -65,6 +80,7 @@ package
     private function playerStop():void {
       _ns.pause();
       _ns.seek(0);
+      playbackState = "IDLE";
     }
     private function playerSeek(position:Number):void {
       _ns.seek(position);

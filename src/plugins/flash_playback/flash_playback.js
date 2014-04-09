@@ -33,7 +33,11 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
     this.timedCheckState();
   },
   checkIfFlashIsReady: function() {
-    setTimeout(this.bootstrap.bind(this), 1000);
+    this.bootstrapId = setInterval(function() {
+      if(this.el.getState) {
+        this.bootstrap();
+      }
+    }.bind(this), 50);
   },
   setupFirefox: function() {
     var $el = this.$('embed');
@@ -111,7 +115,8 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
 });
 
 FlashVideoPlaybackPlugin.canPlay = function(resource) {
-  return !!resource.match(/(.*).mp4/);
+  //http://help.adobe.com/en_US/flashmediaserver/techoverview/WS07865d390fac8e1f-4c43d6e71321ec235dd-7fff.html
+  return !!resource.match(/(.*).(mp4|mov|f4v|3gpp)/);
 }
 
 module.exports = FlashVideoPlaybackPlugin;
