@@ -49,7 +49,7 @@ package
       _ns.client = this;
       _ns.soundTransform = videoVolumeTransform;
       _ns.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler);
-      _ns.bufferTime = 2;
+      _ns.bufferTime = 10;
       _ns.inBufferSeek = true;
       _ns.maxPauseBufferTime = 3600;
       _ns.backBufferTime = 3600;
@@ -77,11 +77,18 @@ package
     private function netStatusHandler(event:NetStatusEvent):void {
       if (event.info.code === "NetStream.Buffer.Full") {
         playbackState = "PLAYING";
-      } else if (event.info.code === "NetStream.Buffer.Empty" || event.info.code == "NetStream.SeekStart.Notify" || event.info.code == "NetStream.Play.Start") {
+      } else if (isBuffering(event.info.code)) {
         playbackState = "PLAYING_BUFFERING";
       } else if (event.info.code == "NetStream.Video.DimensionChange") {
         setVideoSize(stage.stageWidth, stage.stageHeight);
+      } else if (event.info.code == "NetStream.Play.Stop") {
+        playbackState = "ENDED";
       }
+    }
+    private function isBuffering(code:String):Boolean {
+      return Boolean(code == "NetStream.Buffer.Empty" && playbackState != "ENDED" ||
+                     code == "NetStream.SeekStart.Notify" ||
+                     code == "NetStream.Play.Start");
     }
     private function _onResize(event:Event):void {
       setVideoSize(stage.stageWidth, stage.stageHeight);

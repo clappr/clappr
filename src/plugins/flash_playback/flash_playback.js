@@ -20,10 +20,11 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
     this.swfPath = options.swfPath || "assets/Player.swf";
     this.autoPlay = options.autoPlay;
     this.settings = {
-      left: ["playstop"],
+      left: ["playpause"],
       default: ["position", "seekbar", "duration"],
       right: ["fullscreen", "volume"]
     };
+    this.isReady = false;
     this.checkIfFlashIsReady();
   },
   bootstrap: function() {
@@ -37,6 +38,8 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
       if(this.el.getState) {
         this.el.width = "100%";
         this.el.height = "100%";
+        this.isReady = true;
+        this.trigger('playback:timeupdate', 0, this.el.getDuration(), this.name);
         this.bootstrap();
       }
     }.bind(this), 50);
@@ -63,6 +66,7 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
   },
   timedCheckState: function() {
     this.checkStateId = setInterval(this.checkState.bind(this), 250);
+    this.progressId = setInterval(this.progress.bind(this), 1000);
   },
   checkState: function() {
     if (this.el.getState() === "PLAYING_BUFFERING" && this.currentState !== "PLAYING_BUFFERING") {
@@ -73,11 +77,17 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
       this.currentState = "PLAYING";
     } else if (this.el.getState() === "IDLE") {
       this.currentState = "IDLE";
+    } else if (this.el.getState() === "ENDED") {
+      this.trigger('playback:ended', this.name);
+      this.trigger('playback:timeupdate', 0, this.el.getDuration(), this.name);
+      clearInterval(this.id);
+      this.currentState = "ENDED";
     }
-    this.progress();
   },
   progress: function() {
-    this.trigger('playback:progress', 0, this.el.getBytesLoaded(), this.el.getBytesTotal(), this.name);
+    if (this.currentState !== "IDLE" && this.currentState !== "ENDED") {
+      this.trigger('playback:progress', 0, this.el.getBytesLoaded(), this.el.getBytesTotal(), this.name);
+    }
   },
   firstPlay: function() {
     this.el.playerPlay(this.src);
@@ -98,7 +108,9 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
   },
   seek: function(time) {
     clearInterval(this.id);
-    this.el.playerSeek(this.el.getDuration() * (time / 100));
+    var seekTo = this.el.getDuration() * (time / 100);
+    this.el.playerSeek(seekTo);
+    this.timeUpdate(seekTo, this.el.getDuration());
     this.id = this.updateTime(1000);
   },
   timeUpdate: function(time, duration) {
@@ -107,6 +119,7 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
   destroy: function() {
     clearInterval(this.id);
     clearInterval(this.checkStateId);
+    clearInterval(this.progressId);
   },
   render: function() {
     var style = Styler.getStyleFor(this.name);
