@@ -87,8 +87,8 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
       this.id = this.updateTime(1000);
     }
     if(this.el.getState() === 'PAUSED') {
-      this.el.playerResume();
       this.currentState = "PLAYING";
+      this.el.playerResume();
     } else {
       this.firstPlay();
     }
