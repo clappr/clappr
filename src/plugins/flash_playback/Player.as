@@ -24,10 +24,10 @@ package
 
     public function Player() {
       playbackState = "IDLE";
+      setupCallbacks();
       setupNetConnection();
       setupNetStream();
       setupStage();
-      setupCallbacks();
       _video = new Video();
     }
     private function setupStage():void {
@@ -49,12 +49,12 @@ package
       _ns.client = this;
       _ns.soundTransform = videoVolumeTransform;
       _ns.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler);
-      _ns.bufferTime = 4;
+      _ns.bufferTime = 2;
       _ns.inBufferSeek = true;
       _ns.maxPauseBufferTime = 3600;
+      _ns.backBufferTime = 3600;
     }
     private function setupCallbacks():void {
-      ExternalInterface.addCallback("getInfos", getInfos);
       ExternalInterface.addCallback("setVideoSize", setVideoSize);
       ExternalInterface.addCallback("playerPlay", playerPlay);
       ExternalInterface.addCallback("playerPause", playerPause);
