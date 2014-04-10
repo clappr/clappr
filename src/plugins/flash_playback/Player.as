@@ -2,7 +2,9 @@ package
 {
   import flash.external.ExternalInterface;
   import flash.display.*;
-  import flash.events.*;
+  import flash.events.Event;
+  import flash.events.NetStatusEvent;
+  import flash.events.StageVideoAvailabilityEvent;
   import flash.geom.Rectangle;
   import flash.media.StageVideoAvailability;
   import flash.media.StageVideo;
@@ -34,6 +36,7 @@ package
       stage.fullScreenSourceRect = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
       stage.displayState = StageDisplayState.NORMAL;
       stage.addEventListener(StageVideoAvailabilityEvent.STAGE_VIDEO_AVAILABILITY, _onStageVideoAvailability);
+      stage.addEventListener(Event.RESIZE, _onResize);
     }
     private function setupNetConnection():void {
       _nc = new NetConnection();
@@ -50,8 +53,9 @@ package
       _ns.inBufferSeek = true;
       _ns.maxPauseBufferTime = 3600;
     }
-
     private function setupCallbacks():void {
+      ExternalInterface.addCallback("getInfos", getInfos);
+      ExternalInterface.addCallback("setVideoSize", setVideoSize);
       ExternalInterface.addCallback("playerPlay", playerPlay);
       ExternalInterface.addCallback("playerPause", playerPause);
       ExternalInterface.addCallback("playerStop", playerStop);
@@ -67,9 +71,14 @@ package
         playbackState = "PLAYING";
       } else if (event.info.code === "NetStream.Buffer.Empty" || event.info.code == "NetStream.SeekStart.Notify") {
         playbackState = "PLAYING_BUFFERING";
+      } else if (event.info.code == "NetStream.Video.DimensionChange") {
+        setVideoSize(stage.stageWidth, stage.stageHeight);
       } else {
         ExternalInterface.call("console.log", event.info.code);
       }
+    }
+    private function _onResize(event:Event):void {
+      setVideoSize(stage.stageWidth, stage.stageHeight);
     }
     private function playerPlay(url:String):void {
       _ns.play(url);
@@ -100,6 +109,32 @@ package
     }
     private function getDuration():Number {
       return totalTime;
+    }
+    private function setVideoSize(width:Number, height:Number):void {
+      stage.fullScreenSourceRect = new Rectangle(0, 0, width, height);
+      var rect:Rectangle = new Rectangle(0,0, width, height);// resizeRectangle(stage.stageWidth, stage.stageHeight, width, height);
+      _video.width = rect.width;
+      _video.height = rect.height;
+      _video.x = rect.x;
+      _video.y = rect.y;
+      _stageVideo.viewPort = rect;
+    }
+    public static function resizeRectangle(videoWidth : Number, videoHeight : Number, containerWidth : Number, containerHeight : Number) : Rectangle {
+      var rect : Rectangle = new Rectangle();
+      var xscale : Number = containerWidth / videoWidth;
+      var yscale : Number = containerHeight / videoHeight;
+      if (xscale >= yscale) {
+          rect.width = Math.min(videoWidth * yscale, containerWidth);
+          rect.height = videoHeight * yscale;
+      } else {
+          rect.width = Math.min(videoWidth * xscale, containerWidth);
+          rect.height = videoHeight * xscale;
+      }
+      rect.width = Math.ceil(rect.width);
+      rect.height = Math.ceil(rect.height);
+      rect.x = Math.round((containerWidth - rect.width) / 2);
+      rect.y = Math.round((containerHeight - rect.height) / 2);
+      return rect;
     }
     private function _enableStageVideo():void {
       if (_stageVideo == null) {

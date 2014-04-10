@@ -35,6 +35,8 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
   checkIfFlashIsReady: function() {
     this.bootstrapId = setInterval(function() {
       if(this.el.getState) {
+        this.el.width = "100%";
+        this.el.height = "100%";
         this.bootstrap();
       }
     }.bind(this), 50);
