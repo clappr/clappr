@@ -53,22 +53,12 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
       this.trigger('playback:timeupdate', this.el.getPosition(), this.el.getDuration(), this.name);
     }.bind(this), interval);
   },
-  play: function() {
-    if(this.el.getState() === 'IDLE') {
-      this.id = this.updateTime(1000);
-    }
-    if(this.el.getState() === 'PAUSED') {
-      this.el.playerResume();
-    } else {
-      this.firstPlay();
-    }
-  },
   timedCheckState: function() {
     this.checkStateId = setInterval(this.checkState.bind(this), 250);
     this.progressId = setInterval(this.progress.bind(this), 1000);
   },
   checkState: function() {
-    if (this.el.getState() === "PLAYING_BUFFERING" && this.currentState !== "PLAYING_BUFFERING") {
+    if (this.currentState !== "PLAYING_BUFFERING" && this.el.getState() === "PLAYING_BUFFERING") {
       this.trigger('playback:buffering', this.name);
       this.currentState = "PLAYING_BUFFERING";
     } else if (this.currentState === "PLAYING_BUFFERING" && this.el.getState() === "PLAYING") {
@@ -90,6 +80,16 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
   },
   firstPlay: function() {
     this.el.playerPlay(this.src);
+  },
+  play: function() {
+    if(this.el.getState() === 'IDLE') {
+      this.id = this.updateTime(1000);
+    }
+    if(this.el.getState() === 'PAUSED') {
+      this.el.playerResume();
+    } else {
+      this.firstPlay();
+    }
   },
   volume: function(value) {
     this.el.playerVolume(value);

@@ -98,6 +98,7 @@ package
     }
     private function playerPause():void {
       _ns.pause();
+      playbackState = "PAUSED";
     }
     private function playerStop():void {
       _ns.pause();
@@ -108,6 +109,7 @@ package
       _ns.seek(position);
     }
     private function playerResume():void {
+      playbackState = "PLAYING";
       _ns.resume();
     }
     private function playerVolume(level:Number):void {
