@@ -19,9 +19,13 @@ var StatsPlugin = Plugin.extend({
     this.listenTo(this.container, 'container:play', this.onPlay);
     this.listenTo(this.container, 'container:stop', this.onStop);
     this.listenTo(this.container, 'container:destroyed', this.onStop);
+    this.listenTo(this.container, 'container:setreportinterval', this.setReportInterval);
     this.listenTo(this.container, 'container:state:buffering', this.onBuffering);
     this.listenTo(this.container, 'container:state:bufferfull', this.onBufferFull);
     this.listenTo(this.container, 'container:stats:add', this.onStatsAdd);
+  },
+  setReportInterval: function(reportInterval) {
+    this.reportInterval = reportInterval;
   },
   setInitialAttrs: function() {
     this.firstPlay = true;

@@ -111,6 +111,15 @@ describe('StatsPlugin', function() {
     spy.calledTwice.should.be.true;
   });
 
+  it('should be possible to set report period through event', function() {
+    var stats = new StatsPlugin({container: this.container, reportInterval: 1000});
+    this.container.trigger("container:setreportinterval", 5); // change from 1000 to 5
+    var spy = sinon.spy(this.container, 'statsReport');
+    this.container.play();
+    this.clock.tick(18);
+    expect(spy.callCount).to.equal(3);
+  });
+
   it('should stop report when transmission stop', function() {
     var stats = new StatsPlugin({container: this.container, reportInterval: 10});
     var spy = sinon.spy(this.container, 'statsReport');
