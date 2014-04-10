@@ -88,6 +88,7 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
     }
     if(this.el.getState() === 'PAUSED') {
       this.el.playerResume();
+      this.currentState = "PLAYING";
     } else {
       this.firstPlay();
     }
@@ -113,6 +114,9 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
     this.el.playerSeek(seekTo);
     this.timeUpdate(seekTo, this.el.getDuration());
     this.id = this.updateTime(1000);
+    if (this.currentState == "PAUSED") {
+      this.pause();
+    }
   },
   timeUpdate: function(time, duration) {
     this.trigger('playback:timeupdate', time, duration, this.name);
