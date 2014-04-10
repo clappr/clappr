@@ -62,6 +62,7 @@ module.exports = MediaControl = UIObject.extend({
     this.listenTo(this.container, 'container:highdefinitionupdate', this.highDefinitionUpdate);
     this.listenTo(this.container, 'container:mediacontrol:disable', this.disable);
     this.listenTo(this.container, 'container:mediacontrol:enable', this.enable);
+    this.listenTo(this.container, 'container:hover', this.show);
   },
 
   disable: function() {
@@ -244,7 +245,7 @@ module.exports = MediaControl = UIObject.extend({
   show: function(event) {
     if (this.disabled) return;
     var timeout = 2000;
-    if (!event || (event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY)) {
+    if (!event || (event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY) || navigator.userAgent.match(/firefox/i)) {
       if (this.hideId) {
         clearTimeout(this.hideId);
       }
