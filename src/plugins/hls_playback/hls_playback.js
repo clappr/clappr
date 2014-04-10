@@ -55,6 +55,8 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   checkIfFlashIsReady: function() {
     this.bootstrapId = setInterval(function() {
       if(this.el.getState) {
+        this.el.width = "100%";
+        this.el.height = "100%";
         this.bootstrap();
       }
     }.bind(this), 50);
@@ -177,7 +179,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   timeUpdate: function(time, duration) {
     this.trigger('playback:timeupdate', time, duration, this.name);
   },
-  
+
   destroy: function() {
     clearInterval(this.id);
     clearInterval(this.checkStateId);
