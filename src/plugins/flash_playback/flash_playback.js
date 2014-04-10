@@ -79,6 +79,7 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
     }
   },
   firstPlay: function() {
+    this.currentState = "PLAYING";
     this.el.playerPlay(this.src);
   },
   play: function() {
@@ -95,6 +96,7 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
     this.el.playerVolume(value);
   },
   pause: function() {
+    this.currentState = "PAUSED";
     this.el.playerPause();
   },
   stop: function() {
@@ -103,7 +105,7 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
     this.trigger('playback:timeupdate', 0, this.name);
   },
   isPlaying: function() {
-    return !!(this.isReady && this.el.getState().match(/playing/i));
+    return !!(this.isReady && this.currentState == "PLAYING");
   },
   seek: function(time) {
     clearInterval(this.id);

@@ -72,8 +72,8 @@ var Container = UIObject.extend({
     this.trigger('container:playing');
   },
   play: function() {
-    this.trigger('container:play', this.name);
     this.playback.play();
+    this.trigger('container:play', this.name);
   },
   stop: function() {
     this.trigger('container:stop', this.name);
