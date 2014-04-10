@@ -24,11 +24,11 @@ package
 
     public function Player() {
       playbackState = "IDLE";
-      setupCallbacks();
       setupNetConnection();
       setupNetStream();
       setupStage();
       _video = new Video();
+      setupCallbacks();
     }
     private function setupStage():void {
       stage.scaleMode = StageScaleMode.NO_SCALE;
@@ -67,14 +67,12 @@ package
       ExternalInterface.addCallback("getDuration", getDuration);
     }
     private function netStatusHandler(event:NetStatusEvent):void {
-      if (event.info.code === "NetStream.Play.Start" || event.info.code === "NetStream.Buffer.Full") {
+      if (event.info.code === "NetStream.Buffer.Full") {
         playbackState = "PLAYING";
-      } else if (event.info.code === "NetStream.Buffer.Empty" || event.info.code == "NetStream.SeekStart.Notify") {
+      } else if (event.info.code === "NetStream.Buffer.Empty" || event.info.code == "NetStream.SeekStart.Notify" || event.info.code == "NetStream.Play.Start") {
         playbackState = "PLAYING_BUFFERING";
       } else if (event.info.code == "NetStream.Video.DimensionChange") {
         setVideoSize(stage.stageWidth, stage.stageHeight);
-      } else {
-        ExternalInterface.call("console.log", event.info.code);
       }
     }
     private function _onResize(event:Event):void {
