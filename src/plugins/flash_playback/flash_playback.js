@@ -74,6 +74,10 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
     } else if (this.el.getState() === "IDLE") {
       this.currentState = "IDLE";
     }
+    this.progress();
+  },
+  progress: function() {
+    this.trigger('playback:progress', 0, this.el.getBytesLoaded(), this.el.getBytesTotal(), this.name);
   },
   firstPlay: function() {
     this.el.playerPlay(this.src);

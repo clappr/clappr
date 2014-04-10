@@ -65,6 +65,14 @@ package
       ExternalInterface.addCallback("getState", getState);
       ExternalInterface.addCallback("getPosition", getPosition);
       ExternalInterface.addCallback("getDuration", getDuration);
+      ExternalInterface.addCallback("getBytesLoaded", getBytesLoaded);
+      ExternalInterface.addCallback("getBytesTotal", getBytesTotal);
+    }
+    private function getBytesTotal():Number {
+      return _ns.bytesTotal;
+    }
+    private function getBytesLoaded():Number {
+      return _ns.bytesLoaded;
     }
     private function netStatusHandler(event:NetStatusEvent):void {
       if (event.info.code === "NetStream.Buffer.Full") {
