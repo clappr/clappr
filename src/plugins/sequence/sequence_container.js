@@ -63,6 +63,10 @@ var SequenceContainer = BaseObject.extend({
     this.getCurrentContainer().playback.play();
     this.trigger('container:play', this.name);
   },
+  setVolume: function(value) {
+    this.trigger('container:volume', value, this.name);
+    this.getCurrentContainer().setVolume(value);
+  },
   pause: function() {
     this.getCurrentContainer().pause();
     this.trigger('container:pause', this.name);
