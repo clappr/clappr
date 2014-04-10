@@ -63,6 +63,7 @@ module.exports = MediaControl = UIObject.extend({
     this.listenTo(this.container, 'container:mediacontrol:disable', this.disable);
     this.listenTo(this.container, 'container:mediacontrol:enable', this.enable);
     this.listenTo(this.container, 'container:hover', this.show);
+    this.listenTo(this.container, 'container:ended', this.ended);
   },
 
   disable: function() {
