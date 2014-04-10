@@ -28,6 +28,9 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
     this.checkIfFlashIsReady();
   },
   bootstrap: function() {
+    this.el.width = "100%";
+    this.el.height = "100%";
+    this.isReady = true;
     this.trigger('playback:ready', this.name);
     clearInterval(this.bootstrapId);
     this.currentState = "IDLE";
@@ -35,12 +38,8 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
   },
   checkIfFlashIsReady: function() {
     this.bootstrapId = setInterval(function() {
-      if(this.el.getState) {
-        this.el.width = "100%";
-        this.el.height = "100%";
-        this.isReady = true;
-        this.trigger('playback:timeupdate', 0, this.el.getDuration(), this.name);
-        this.bootstrap();
+      if(this.el.getState && this.el.getState() === "IDLE") {
+           this.bootstrap();
       }
     }.bind(this), 50);
   },
@@ -80,8 +79,8 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
     } else if (this.el.getState() === "ENDED") {
       this.trigger('playback:ended', this.name);
       this.trigger('playback:timeupdate', 0, this.el.getDuration(), this.name);
-      clearInterval(this.id);
       this.currentState = "ENDED";
+      clearInterval(this.id);
     }
   },
   progress: function() {
@@ -108,7 +107,7 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
   },
   seek: function(time) {
     clearInterval(this.id);
-    var seekTo = this.el.getDuration() * (time / 100);
+    var seekTo = this.el.getDuration()* (time / 100);
     this.el.playerSeek(seekTo);
     this.timeUpdate(seekTo, this.el.getDuration());
     this.id = this.updateTime(1000);
