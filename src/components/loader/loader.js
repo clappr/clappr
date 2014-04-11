@@ -18,14 +18,19 @@ var StatsPlugin = require('../../plugins/stats');
 var WaterMarkPlugin = require('../../plugins/watermark');
 var PosterPlugin = require('../../plugins/poster');
 var PipPlugin = require('../../plugins/pip');
+var Sequence = require('../../plugins/sequence');
 
 var Loader = BaseObject.extend({
+  displayPlugins: {
+    'sequence': Sequence,
+    'pip': PipPlugin
+  },
   initialize: function(params) {
     this.params = params;
     this.playbackPlugins = [FlashVideoPlaybackPlugin, HTML5VideoPlaybackPlugin, HTML5AudioPlaybackPlugin, HLSVideoPlaybackPlugin];
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin];
-    this.globalPlugins = [PipPlugin];
-  },
+    this.globalPlugins = [this.displayPlugins[this.params.displayType]];
+  }
 });
 
 module.exports = Loader;
