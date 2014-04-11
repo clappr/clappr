@@ -42,9 +42,13 @@ var zeroPad = function(number, size) {
 
 var formatTime = function(time, showMillis) {
   var duration = Moment.duration(time * 1000);
-  var str = duration.minutes() + ':' + zeroPad(duration.seconds(), 2);
-  if (duration.hours())
+  var str = zeroPad(duration.seconds(), 2);
+  if (duration.hours()) {
+    str = zeroPad(duration.minutes(), 2) + ':' + str;
     str = duration.hours() + ':' + str;
+  } else {
+    str = duration.minutes() + ':' + str;
+  }
   if (showMillis)
     str += '.' + duration.milliseconds();
   return str;
