@@ -28,6 +28,7 @@ var Core = UIObject.extend({
   },
   initialize: function(params) {
     this.params = params;
+    this.setupExternalInterface();
     this.parentElement = params.parentElement;
     this.loader = new Loader(params);
     this.playbackHandler = new PlaybackHandler(params, this.loader);
@@ -35,12 +36,21 @@ var Core = UIObject.extend({
     //FIXME fullscreen api sucks
     window['document'].addEventListener('mozfullscreenchange', this.exit.bind(this));
   },
+  setupExternalInterface: function() {
+    this.params.player.destroy = this.destroy.bind(this);
+  },
   load: function(params) {
     _(this.containers).each(function(container) {
       container.destroy();
     });
     this.playbackHandler.params = _(this.params).extend(params);
     this.playbackHandler.createContainers(this.onContainersCreated.bind(this));
+  },
+  destroy: function() {
+    _(this.containers).each(function(container) {
+      container.destroy();
+    });
+    this.$el.remove();
   },
   exit: function() {
     if(!Fullscreen.isFullscreen()) {
