@@ -6,40 +6,61 @@ var SequenceContainer = BaseObject.extend({
   initialize: function(containers) {
     this.containers = containers;
     this.plugins = [];
+    this.containersRange = [];
     this.currentContainer = 0;
     this.checkpoint = 0;
     this.duration = 0;
     _.each(this.containers, this._setupContainers, this);
-    this.listenTo(this.getCurrentContainer(), 'container:ended', this.playNextContainer);
-    this.listenTo(this.getCurrentContainer(), 'container:timeupdate', this.timeUpdateProxy);
+    this.containersToSetup = this.containers.length;
+    this._bindChildEvents(this.getCurrentContainer());
     this.getCurrentContainer().$el.show();
     this.settings = this.getCurrentContainer().settings;
   },
+  _bindChildEvents: function(container) {
+    this.listenTo(container, 'container:ended', this.playNextContainer);
+    this.listenTo(container, 'container:timeupdate', this.timeUpdateProxy);
+    this.listenTo(container, 'container:progress', this.progressProxy);
+  },
   _setupContainers: function(container) {
     container.$el.hide();
+    this._injectInChildPlugins(container.plugins);
     this.listenTo(container, 'container:loadedmetadata', this._setupDuration);
+  },
+  _injectInChildPlugins: function(plugins) {
+    _.each(plugins, function(plugin) {
+      plugin.container = this;
+      plugin.bindEvents();
+    }, this);
   },
   _setupDuration: function(duration) {
     this.duration += duration;
     this.trigger('container:timeupdate', 0, this.duration);
+    if(--this.containersToSetup === 0) {
+      this._setupSeek();
+    }
+  },
+  _setupSeek: function() {
+    _.each(this.containers, function(container) {
+      var containerDuration = container.playback.getDuration();
+      var totalPercent = (containerDuration * 100)  / this.duration;
+      this.containersRange.push(totalPercent);
+    }, this);
   },
   playNextContainer: function() {
     this.getCurrentContainer().$el.hide();
     this.stopListening(this.getCurrentContainer());
     var nextContainer = this.getNextContainer();
-    this.listenTo(nextContainer, 'container:ended', this.playNextContainer);
-    this.listenTo(nextContainer, 'container:timeupdate', this.timeUpdateProxy);
-    this.listenTo(nextContainer, 'container:progress', this.progressProxy);
-    this.sequencePosition = 0;
-    if(this.currentContainer !== 0) {
-      nextContainer.play();
-      this.trigger('container:play');
-      nextContainer.$el.show();
-    } else {
+    this._bindChildEvents(nextContainer);
+    if(this.currentContainer === 0) {
       this.checkpoint = 0;
-      this.stop();
       nextContainer.$el.show();
       this.trigger('container:ended');
+    } else {
+      nextContainer.play();
+      this.trigger('container:play');
+      this.trigger('container:settingsupdate');
+      this.trigger('container:timeupdate', this.checkpoint, this.duration);
+      nextContainer.$el.show();
     }
   },
   timeUpdateProxy: function(position, duration) {
@@ -52,11 +73,10 @@ var SequenceContainer = BaseObject.extend({
     return this.containers[this.currentContainer];
   },
   getNextContainer: function() {
-    this.checkpoint = this.getCurrentContainer().playback.getDuration();
+    this.checkpoint += this.getCurrentContainer().playback.getDuration();
     this.currentContainer = ++this.currentContainer % this.containers.length;
     var nextContainer = this.containers[this.currentContainer];
     this.settings = nextContainer.settings;
-    this.trigger('container:settingsupdate');
     return nextContainer;
   },
   play: function() {
@@ -78,13 +98,54 @@ var SequenceContainer = BaseObject.extend({
   playing: function() {
     this.trigger('container:playing', this.name);
   },
-//  timeUpdated: function(position, duration) {
-//    var sequencePosition = (position * this.duration) / duration
-//    this.trigger('container:timeupdate', sequencePosition, this.duration, this.name);
-//  },
   progress: function(startPosition, endPosition, duration) {
-    console.log('container progress?');
     this.trigger('container:progress', startPosition, endPosition, duration);
+  },
+  _matchContainerIndex: function(percent) {
+    var total = 0;
+    for(var i = 0, l = this.containers.length; i < l; i++) {
+      total += this.containersRange[i];
+      if(total >= percent) {
+        return i;
+      }
+    }
+    return this.containers.length - 1;
+  },
+  setCurrentTime: function(time) {
+    var containerIndex = this._matchContainerIndex(time);
+    this._seekToContainer(containerIndex, time);
+  },
+  _seekToContainer: function(containerIndex, time) {
+    if(containerIndex === 0) {
+      this.checkpoint = 0;
+    } else {
+      var slice = this.containers.slice(0, containerIndex);
+      this.checkpoint = _.reduce(slice, function(duration, container) {
+        return duration + container.playback.getDuration();
+      }, 0);
+      var pastRange = _.reduce(this.containersRange.slice(0, containerIndex), function(total, percent) {
+        return percent + total;
+      }, 0);
+      time = time - pastRange;
+      console.log('reduced checkpoint', this.checkpoint);
+      console.log('reduced range', pastRange);
+      console.log('container index', containerIndex);
+    }
+    var containerSeek = time * 100 / this.containersRange[containerIndex];
+    var currentContainer = this.getCurrentContainer();
+    currentContainer.$el.hide();
+    this.stopListening(currentContainer);
+    currentContainer.stop();
+    this.currentContainer = containerIndex;
+    var newContainer = this.containers[containerIndex];
+    this.listenTo(newContainer, 'container:ended', this.playNextContainer);
+    this.listenTo(newContainer, 'container:timeupdate', this.timeUpdateProxy);
+    this.listenTo(newContainer, 'container:progress', this.progressProxy);
+    newContainer.play();
+    this.trigger('container:settingsupdate');
+    this.trigger('container:play');
+    newContainer.setCurrentTime(containerSeek);
+    newContainer.$el.show();
   },
   settingsUpdate: function() {
     this.settings = this.getCurrentContainer().settings;
