@@ -279,7 +279,6 @@ module.exports = MediaControl = UIObject.extend({
     this.render();
   },
   highDefinitionUpdate: function() {
-    console.log('hd update');
     var $element = this.$el.find('button[data-hd]');
     $element.removeClass('enabled');
     if (this.container.isHighDefinitionInUse()) {
