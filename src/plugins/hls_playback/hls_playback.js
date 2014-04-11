@@ -33,7 +33,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   },
 
   hiddenCallback: function() {
-    this.hiddenId = setTimeout(function() { this.el.playerSmoothSetLevel(0) }.bind(this), 3000);
+    this.hiddenId = setTimeout(function() { this.el.playerSmoothSetLevel(0) }.bind(this), 10000);
   },
 
   visibleCallback: function() {
