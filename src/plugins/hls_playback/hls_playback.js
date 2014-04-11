@@ -69,6 +69,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   },
   play: function() {
     if(this.el.getState() === 'IDLE') {
+      clearInterval(this.id)
       this.id = this.updateTime(1000);
     }
     if(this.el.getState() === 'PAUSED') {
