@@ -29,6 +29,7 @@ var Core = UIObject.extend({
   initialize: function(params) {
     this.params = params;
     this.setupExternalInterface();
+    this.params.displayType || (this.params.displayType = 'sequence');
     this.parentElement = params.parentElement;
     this.loader = new Loader(params);
     this.playbackHandler = new PlaybackHandler(params, this.loader);
