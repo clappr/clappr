@@ -46,6 +46,12 @@ var SequenceContainer = BaseObject.extend({
       this.containersRange.push(totalPercent);
     }, this);
   },
+  getPlaybackType: function() {
+    return this.getCurrentContainer().getPlaybackType();
+  },
+  length: function() {
+    return this.containers.length;
+  },
   playNextContainer: function() {
     this.getCurrentContainer().$el.hide();
     this.stopListening(this.getCurrentContainer());
