@@ -28,6 +28,7 @@ var SequenceContainer = BaseObject.extend({
   },
   _injectInChildPlugins: function(plugins) {
     _.each(plugins, function(plugin) {
+      plugin.stopListening();
       plugin.container = this;
       plugin.bindEvents();
     }, this);
@@ -56,11 +57,13 @@ var SequenceContainer = BaseObject.extend({
     this.getCurrentContainer().$el.hide();
     this.stopListening(this.getCurrentContainer());
     var nextContainer = this.getNextContainer();
+    this.trigger('container:next', this.currentContainer);
     this._bindChildEvents(nextContainer);
     if(this.currentContainer === 0) {
       this.checkpoint = 0;
       nextContainer.$el.show();
       this.trigger('container:ended');
+      nextContainer.stop();
     } else {
       nextContainer.play();
       this.trigger('container:play');
@@ -117,11 +120,19 @@ var SequenceContainer = BaseObject.extend({
     }
     return this.containers.length - 1;
   },
+  jumpToContainer: function(index) {
+    if(index === 0) {
+      this.seekToContainer(index, 0);
+    } else {
+      var value = _.reduce(this.containersRange.slice(0, index), function(total, percent) { return total + percent });
+      this.seekToContainer(index, value);
+    }
+  },
   setCurrentTime: function(time) {
     var containerIndex = this._matchContainerIndex(time);
-    this._seekToContainer(containerIndex, time);
+    this.seekToContainer(containerIndex, time);
   },
-  _seekToContainer: function(containerIndex, time) {
+  seekToContainer: function(containerIndex, time) {
     if(containerIndex === 0) {
       this.checkpoint = 0;
     } else {
@@ -133,9 +144,6 @@ var SequenceContainer = BaseObject.extend({
         return percent + total;
       }, 0);
       time = time - pastRange;
-      console.log('reduced checkpoint', this.checkpoint);
-      console.log('reduced range', pastRange);
-      console.log('container index', containerIndex);
     }
     var containerSeek = time * 100 / this.containersRange[containerIndex];
     var currentContainer = this.getCurrentContainer();
