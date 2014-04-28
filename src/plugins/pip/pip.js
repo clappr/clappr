@@ -38,6 +38,7 @@ var PipPlugin = BaseObject.extend({
       addPip: this.addPip,
       discardPip: this.discardPip,
       addMaster: this.addMaster,
+      addMasterContainer: this.addMasterContainer,
       pipToMaster: this.pipToMaster
     };
   },
@@ -81,6 +82,13 @@ var PipPlugin = BaseObject.extend({
       this.tmpContainer = this.masterContainer;
       this.tmpContainer.setStyle({'z-index': 20});
       this.core.playbackHandler.createContainer(source, this.addMasterCallback.bind(this));
+    }
+  },
+  addMasterContainer: function(container) {
+    if (this.masterContainer) {
+      this.tmpContainer = this.masterContainer;
+      this.tmpContainer.setStyle({'z-index': 20});
+      this.addMasterCallback(container);
     }
   },
   addMasterCallback: function(container) {
