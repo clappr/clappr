@@ -134,9 +134,11 @@ var Playlist = BaseObject.extend({
     _.invoke(this.containers, 'destroy');
   },
   render: function() {
-    //fixme
+    this.el = _.map(this.containers, function(container) {
+      return container.render().el;
+    });
     this.trigger('container:ready');
-    return { el: '' };
+    return this;
   }
 });
 
