@@ -48,7 +48,9 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
 
   stop: function() {
     this.pause();
-    this.el.currentTime = 0;
+    if(this.el.readyState !== 0) {
+      this.el.currentTime = 0;
+    }
   },
 
   volume: function(value) {
