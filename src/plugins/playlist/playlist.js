@@ -6,20 +6,10 @@ var Playlist = BaseObject.extend({
   initialize: function(options) {
     this.containers = options.containers || [];
     this.current = options.current || 0;
-    if(this.containers.length > 0) {
-      this.settings = this.getCurrentContainer().settings;
-      _.each(this.containers, this._setupContainers, this);
-      this.getCurrentContainer().$el.show();
-      this._bindContainerEvents(this.getCurrentContainer());
-    }
-  },
-  setContainers: function(containers) {
-    this.containers = containers;
     this.settings = this.getCurrentContainer().settings;
     _.each(this.containers, this._setupContainers, this);
     this.getCurrentContainer().$el.show();
     this._bindContainerEvents(this.getCurrentContainer());
-    this.trigger('playlist:change');
   },
   getCurrentContainer: function() {
     return this.containers[this.current];
@@ -43,7 +33,6 @@ var Playlist = BaseObject.extend({
   _setupContainers: function(container) {
     container.$el.hide();
     this._injectInChildPlugins(container.plugins);
-    this.listenTo(container, 'container:loadedmetadata', this._setupDuration);
   },
   _injectInChildPlugins: function(plugins) {
     _.each(plugins, function(plugin) {
@@ -127,7 +116,6 @@ var Playlist = BaseObject.extend({
     return this.getCurrentContainer().isPlaying();
   },
   destroy: function() {
-    this.stop();
     this.current = 0;
     this.trigger('container:next', 0);
     this.trigger('container:destroy');
