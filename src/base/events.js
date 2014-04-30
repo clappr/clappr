@@ -58,7 +58,8 @@ module.exports = Events = {
   trigger: function(name) {
     var klass = arguments[arguments.length - 1];
     if(global.DEBUG) {
-      Log.info(klass, 'event ' + name + ' triggered');
+      if(Log.BLACKLIST.indexOf(name) < 0)
+        Log.info(klass, 'event ' + name + ' triggered');
     }
     if (!this._events) return this;
     var args = slice.call(arguments, 1);
