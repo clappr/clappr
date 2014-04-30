@@ -17,6 +17,7 @@ var Log = function(klass) {
   this.klass = klass || 'Logger';
 }
 
+
 Log.info = function(klass, msg) {
     console.log('%s %cINFO%c [%s] %s', (new Date()).toLocaleTimeString(), INFO, DEFAULT, klass, msg);
 }
@@ -24,6 +25,8 @@ Log.info = function(klass, msg) {
 Log.error = function(klass, msg) {
     console.log('%s %cINFO%c [%s] %s', (new Date()).toLocaleTimeString(), INFO, DEFAULT, klass, msg);
 }
+
+Log.BLACKLIST = ['mediacontrol:show', 'mediacontrol:hide', 'playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress'];
 
 Log.prototype = {
   log: function(msg) {
