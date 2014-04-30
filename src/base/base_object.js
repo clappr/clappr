@@ -9,6 +9,7 @@ var Events = require('./events');
 var pluginOptions = ['container'];
 
 var BaseObject = function(options) {
+  options || (options = {});
   _.extend(this, _.pick(options, pluginOptions));
   this.initialize.apply(this, arguments);
 };
