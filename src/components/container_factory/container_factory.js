@@ -3,14 +3,14 @@
 // license that can be found in the LICENSE file.
 
 /**
- * The PlaybackHandler is responsible for manage playback bootstrap and swapping sources.
+ * The ContainerFactory is responsible for manage playback bootstrap and create containers.
  */
 
 var _ = require('underscore');
 var BaseObject = require('../../base/base_object');
 var Container = require('../container');
 
-var PlaybackHandler = BaseObject.extend({
+var ContainerFactory = BaseObject.extend({
   initialize: function(params, loader) {
     this.params = params;
     this.loader = loader;
@@ -42,4 +42,4 @@ var PlaybackHandler = BaseObject.extend({
   }
 });
 
-module.exports = PlaybackHandler;
+module.exports = ContainerFactory;
