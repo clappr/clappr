@@ -17,15 +17,8 @@ var PipPlugin = BaseObject.extend({
     if (core.containers.length === 2) {
       this.pipContainer = core.containers[1];
       this.pipContainer.setStyle(this.pipStyle);
-      if (!this.pipContainer.isReady) {
-        this.pipContainer.on('container:ready', function() {
-          this.pipContainer.play();
-          this.pipContainer.setVolume(0);
-        }.bind(this));
-      } else {
-        this.pipContainer.play();
-        this.pipContainer.setVolume(0);
-      }
+      this.pipContainer.play();
+      this.pipContainer.setVolume(0);
       this.listenToPipClick();
       this.core.mediaControl.setContainer(this.masterContainer);
       this.core.mediaControl.render();
@@ -39,30 +32,32 @@ var PipPlugin = BaseObject.extend({
       discardPip: this.discardPip,
       addMaster: this.addMaster,
       addMasterContainer: this.addMasterContainer,
-      pipToMaster: this.pipToMaster
+      pipToMaster: this.pipToMaster,
+      hasPip: this.hasPip
     };
+  },
+  hasPip: function() {
+    return !!this.pipContainer;
   },
   addPip: function(source) {
     this.discardPip();
-    this.pipContainer = this.core.playbackHandler.createContainer(source, this.addPipCallback.bind(this));
+    this.core.createContainer(source).then(this.addPipCallback.bind(this));
+  },
+  addPipCallback: function(container) {
+    this.pipContainer = _(container).isArray() ? container[0] : container;
     if (this.pipContainer.hasPlugin('hls_playback')) {
       // html5 players dispatches on:ready instantly, causing this style to be set after addPipCallback.
       // For flash players, we need to put it behind everything until flash dispatch on:ready.
       this.pipContainer.setStyle({'z-index': -1});
     }
-    this.core.$el.append(this.pipContainer.render().el);
+    this.onContainerReady();
   },
-  addPipCallback: function(container) {
-    this.pipContainer = container;
-    this.pipContainer.on('container:ready', function() {
-      this.pipContainer.setVolume(0);
-      this.pipContainer.play();
-      this.pipContainer.setStyle(this.pipStyle);
-      this.core.containers[1] = this.pipContainer;
-      this.stopListening(this.pipContainer);
-      this.listenToPipClick();
-      this.pipContainer.trigger("container:pip", true);
-    }.bind(this));
+  onContainerReady: function() {
+    this.pipContainer.setVolume(0);
+    this.pipContainer.play();
+    this.pipContainer.setStyle(this.pipStyle);
+    this.stopListening(this.pipContainer);
+    this.listenToPipClick();
   },
   discardPip: function() {
     if (this.pipContainer) {
@@ -80,37 +75,40 @@ var PipPlugin = BaseObject.extend({
   addMaster: function(source) {
     if (this.masterContainer) {
       this.tmpContainer = this.masterContainer;
-      this.tmpContainer.setStyle({'z-index': 20});
-      this.core.playbackHandler.createContainer(source, this.addMasterCallback.bind(this));
+      this.tmpContainer.setStyle({'z-index': 2000});
+      this.core.createContainer(source).then(this.addMasterCallback.bind(this));
     }
   },
   addMasterContainer: function(container) {
     if (this.masterContainer) {
       this.tmpContainer = this.masterContainer;
-      this.tmpContainer.setStyle({'z-index': 20});
+      this.tmpContainer.setStyle({'z-index': 2000});
       this.addMasterCallback(container);
     }
   },
   addMasterCallback: function(container) {
     this.masterContainer = container;
-    this.masterContainer.on('container:ready', function() {
+    if(this.pipContainer) {
       this.discardPip();
-      this.masterContainer.play();
-      this.pipContainer = this.tmpContainer;
-      this.tmpContainer = undefined;
-      this.pipContainer.setVolume(0);
-      this.pipContainer.trigger("container:pip", true);
-      if (this.pipContainer.hasPlugin('hls_playback')) { //flash breaks on animate
-        this.pipContainer.setStyle(this.pipStyle);
-      } else {
-        this.pipContainer.animate(this.pipStyle, {complete: function() { this.pipContainer.setStyle(this.pipStyle); }.bind(this)});
-      }
-      this.core.mediaControl.setContainer(this.masterContainer);
-      this.core.mediaControl.render();
-      this.listenToPipClick();
-    }.bind(this));
-    this.core.$el.append(this.masterContainer.render().el);
-    this.core.containers.splice(0, 0, this.masterContainer);
+    }
+    this.masterContainer.play();
+    this.pipContainer = this.tmpContainer;
+    this.tmpContainer = undefined;
+    this.pipContainer.setVolume(0);
+    this.pipContainer.trigger("container:pip", true);
+    if (this.pipContainer.hasPlugin('hls_playback')) { //flash breaks on animate
+      this.pipContainer.setStyle(this.pipStyle);
+    } else {
+      this.pipContainer.animate(this.pipStyle, {
+        complete: function() {
+          if(this.pipContainer) {
+            this.pipContainer.setStyle(this.pipStyle);
+          }
+        }.bind(this)
+      });
+    }
+    this.core.mediaControl.setContainer(this.masterContainer);
+    this.core.mediaControl.render();
     this.listenToPipClick();
   },
   listenToPipClick: function() {
@@ -121,19 +119,20 @@ var PipPlugin = BaseObject.extend({
   },
   discardContainer: function(container) {
     container.destroy();
-    this.core.containers = _.without(this.core.containers, _.findWhere(this.core.containers, container));
   },
   pipToMaster: function() {
     if (this.pipContainer) {
       this.pipContainer.animate(this.masterStyle, {complete: this.pipToMasterCallback.bind(this)});
     }
+    return this;
   },
   pipToMasterCallback: function() {
     this.discardMaster();
     this.pipContainer.setVolume(100);
     this.pipContainer.trigger("container:pip", false);
+    this.pipContainer.trigger('container:play');
     this.masterContainer = this.pipContainer;
-    this.masterContainer.setStyle({"z-index": 1});
+    this.masterContainer.setStyle({"z-index": 20});
     this.pipContainer = undefined;
     this.core.mediaControl.setContainer(this.masterContainer);
     this.core.mediaControl.render();
