@@ -9,30 +9,34 @@
 var _ = require('underscore');
 var BaseObject = require('../../base/base_object');
 var Container = require('../container');
+var $ = require('jquery');
 
 var ContainerFactory = BaseObject.extend({
   initialize: function(params, loader) {
     this.params = params;
     this.loader = loader;
   },
-  createContainers: function(callback) {
-      var containers = [];
-      _.each(this.params.sources, function(source) {
-        var container = this.createContainer(source);
-        containers.push(container);
-      }, this);
-
-    callback(containers);
+  createContainers: function() {
+    return $.Deferred(function(promise) {
+      promise.resolve( _.map(this.params.sources, function(source) {
+        return this.createContainer(source);
+      }, this)
+        );
+    }.bind(this));
   },
   findPlaybackPlugin: function(source) {
     return _.find(this.loader.playbackPlugins, function(p) { return p.canPlay(source) }, this);
   },
-  createContainer: function(source, callback) {
+  createContainer: function(source) {
     var playbackPlugin = this.findPlaybackPlugin(source);
     var playback = new playbackPlugin({src: source, autoPlay: !!this.params.autoPlay});
     var container = new Container({playback: playback});
-    this.addContainerPlugins(container);
-    callback && callback(container);
+    var defer = $.Deferred();
+    defer.promise(container);
+    this.listenTo(container, 'container:ready', function() {
+      defer.resolve(container);
+      this.addContainerPlugins(container);
+    }.bind(this));
     return container;
   },
   addContainerPlugins: function(container) {

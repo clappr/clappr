@@ -2,24 +2,26 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var Core = require('./components/core');
 var BaseObject = require('./base/base_object');
-var Log = require('./plugins/log');
+var CoreFactory = require('./components/core_factory');
+var Loader = require('./components/loader');
 
 var Player = BaseObject.extend({
   initialize: function(params) {
+    params.displayType || (params.displayType = 'pip');
     this.params = params;
+    this.loader = new Loader(this.params);
+    this.coreFactory = new CoreFactory(this, this.loader);
   },
   attachTo: function(element) {
     this.params.parentElement = element;
-    this.params.player = this;
-    this.core = new Core(this.params);
+    this.core = this.coreFactory.createCore();
   },
   load: function(params) {
     this.core.load(params);
   }
 });
 
-global.DEBUG = false;
+global.DEBUG = true;
 
 module.exports = WP3 = { Player: Player };

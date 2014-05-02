@@ -42,7 +42,7 @@ var Container = UIObject.extend({
     return this;
   },
   destroy: function() {
-    this.trigger('container:destroyed', this.name);
+    this.trigger('container:destroyed', this, this.name);
     this.playback.destroy();
     this.$el.remove();
   },
@@ -53,6 +53,7 @@ var Container = UIObject.extend({
     this.$el.animate(style, duration);
   },
   ready: function() {
+    console.log('container is ready');
     this.isReady = true;
     this.trigger('container:ready', this.name);
   },
@@ -111,11 +112,6 @@ var Container = UIObject.extend({
   },
   addPlugin: function(plugin) {
     this.plugins.push(plugin);
-  },
-  getPluginByName: function(name) {
-    var plugin = this.getPlugin(name);
-    if(!plugin) { throw Error('Plugin ' + name + ' not found'); }
-    return plugin;
   },
   hasPlugin: function(name) {
     return !!this.getPlugin(name);
