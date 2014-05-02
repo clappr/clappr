@@ -36,7 +36,6 @@ var StatsPlugin = Plugin.extend({
     this.externalMetrics = {};
   },
   onPlay: function() {
-    this.watchingTimeInit = Date.now();
     this.intervalId = setInterval(this.report.bind(this), this.reportInterval);
   },
   onStop: function() {
@@ -54,6 +53,7 @@ var StatsPlugin = Plugin.extend({
     if (this.firstPlay) {
       this.firstPlay = false;
       this.startupTime = Date.now() - this.startupTimeInit;
+      this.watchingTimeInit = Date.now();
     } else {
       this.rebufferingTime += this.getRebufferingTime();
     }
