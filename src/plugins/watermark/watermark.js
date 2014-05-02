@@ -10,7 +10,7 @@ var WaterMarkPlugin = UIPlugin.extend({
   name: 'watermark',
   type: 'ui',
   initialize: function(options) {
-//    WaterMarkPlugin.super('initialize').call(this, options);
+    WaterMarkPlugin.super('initialize').call(this, options);
     this.template = JST[this.name];
     this.position = options.position || "bottom-right";
     this.imageUrl = options.imageUrl || 'assets/watermark.png';
@@ -19,12 +19,20 @@ var WaterMarkPlugin = UIPlugin.extend({
   bindEvents: function() {
     this.listenTo(this.container, 'container:play', this.onPlay);
     this.listenTo(this.container, 'container:stop', this.onStop);
+    this.listenTo(this.container, 'container:pip', this.onPip);
   },
   onPlay: function() {
     this.$el.show();
   },
   onStop: function() {
     this.$el.hide();
+  },
+  onPip: function(isPip) {
+    if (isPip) {
+      this.$el.hide();
+    } else {
+      this.$el.show();
+    }
   },
   render: function() {
     this.$el.hide();

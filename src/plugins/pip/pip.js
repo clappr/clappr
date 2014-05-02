@@ -55,12 +55,12 @@ var PipPlugin = BaseObject.extend({
     this.pipContainer = container;
     this.pipContainer.on('container:ready', function() {
       this.pipContainer.setVolume(0);
-      this.pipContainer.getPluginByName('watermark').disable();
       this.pipContainer.play();
       this.pipContainer.setStyle(this.pipStyle);
       this.core.containers[1] = this.pipContainer;
       this.stopListening(this.pipContainer);
       this.listenToPipClick();
+      this.pipContainer.trigger("container:pip", true);
     }.bind(this));
   },
   discardPip: function() {
@@ -91,7 +91,7 @@ var PipPlugin = BaseObject.extend({
       this.pipContainer = this.tmpContainer;
       this.tmpContainer = undefined;
       this.pipContainer.setVolume(0);
-      this.pipContainer.getPluginByName('watermark').disable();
+      this.pipContainer.trigger("container:pip", true);
       if (this.pipContainer.hasPlugin('hls_playback')) { //flash breaks on animate
         this.pipContainer.setStyle(this.pipStyle);
       } else {
@@ -123,7 +123,7 @@ var PipPlugin = BaseObject.extend({
   pipToMasterCallback: function() {
     this.discardMaster();
     this.pipContainer.setVolume(100);
-    this.pipContainer.getPluginByName('watermark').enable();
+    this.pipContainer.trigger("container:pip", false);
     this.masterContainer = this.pipContainer;
     this.masterContainer.setStyle({"z-index": 1});
     this.pipContainer = undefined;
