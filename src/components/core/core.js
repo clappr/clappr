@@ -13,7 +13,6 @@ var $ = require('jquery');
 var UIObject = require('../../base/ui_object');
 var ContainerFactory = require('../container_factory');
 var Fullscreen = require('../../base/utils').Fullscreen;
-var GlobalPluginsHandler = require('../global_plugins_handler');
 var Loader = require('../loader');
 var Styler = require('../../base/styler');
 var MediaControl = require('../media_control');
@@ -27,13 +26,21 @@ var Core = UIObject.extend({
     'data-player': ''
   },
   initialize: function(params) {
+    window.$ = $;
+    this.defer = $.Deferred();
+    this.defer.promise(this);
+    this.plugins = [];
+    this.containers = [];
     this.params = params;
-    this.setupExternalInterface();
+    //this.setupExternalInterface();
     this.params.displayType || (this.params.displayType = 'pip');
     this.parentElement = params.parentElement;
     this.loader = new Loader(params);
     this.containerFactory = new ContainerFactory(params, this.loader);
-    this.containerFactory.createContainers(this.onContainersCreated.bind(this));
+    this.containerFactory
+      .createContainers()
+      .then(this.setupContainers.bind(this))
+      .then(this.defer.resolve.bind(this, this));
     if (this.params.width) {
       this.$el.css({ width: this.params.width });
     }
@@ -43,15 +50,25 @@ var Core = UIObject.extend({
     //FIXME fullscreen api sucks
     window['document'].addEventListener('mozfullscreenchange', this.exit.bind(this));
   },
-  setupExternalInterface: function() {
-    this.params.player.destroy = this.destroy.bind(this);
+  addPlugin: function(plugin) {
+    this.plugins.push(plugin);
   },
+  hasPlugin: function(name) {
+    return !!this.getPlugin(name);
+  },
+  getPlugin: function(name) {
+    return _(this.plugins).find(function(plugin) { return plugin.name === name });
+  },
+  //setupExternalInterface: function() {
+  //  this.params.player.destroy = this.destroy.bind(this);
+  //},
   load: function(params) {
     _(this.containers).each(function(container) {
       container.destroy();
     });
     this.containerFactory.params = _(this.params).extend(params);
-    this.containerFactory.createContainers(this.onContainersCreated.bind(this));
+    this.containerFactory.createContainers()
+      .then(this.setupContainers.bind(this));
   },
   destroy: function() {
     _(this.containers).each(function(container) {
@@ -65,15 +82,34 @@ var Core = UIObject.extend({
     }
     this.mediaControl.show();
   },
-  onContainersCreated: function(containers) {
-    this.containers = containers;
-    this.getCurrentContainer().on('container:ready', function() {
-      this.globalPluginsHandler = new GlobalPluginsHandler(this);
-      this.globalPluginsHandler.loadPlugins();
-    }.bind(this));
+  removeContainer: function(container) {
+    console.log('container being removed');
+    this.stopListening(container);
+    this.containers = _.without(this.containers, container);
+  },
+  appendContainer: function(container) {
+    this.listenTo(container, 'container:destroyed', this.removeContainer);
+    this.$el.append(container.render().el);
+    this.containers.push(container);
+  },
+  prependContainer: function(container) {
+    this.listenTo(container, 'container:destroyed', this.removeContainer);
+    this.$el.append(container.render().el);
+    this.containers.unshift(container);
+  },
+  setupContainers: function(containers) {
+    console.log('setupContainers');
+    _.map(containers, this.appendContainer, this);
     this.createMediaControl(this.getCurrentContainer());
     this.render();
     this.$el.appendTo(this.parentElement);
+    return containers;
+  },
+  createContainer: function(source) {
+    var container = this.containerFactory.createContainer(source);
+    this.appendContainer(container);
+    this.containerFactory.addContainerPlugins(container);
+    return container;
   },
   createMediaControl: function(container) {
     var params = _.extend({container: container}, this.params);
@@ -107,12 +143,9 @@ var Core = UIObject.extend({
   },
   render: function() {
     var style = Styler.getStyleFor('core');
-    this.$el.html('');
+    //FIXME
+    //this.$el.empty();
     this.$el.append(style);
-
-    _.each(this.containers, function(container) {
-      this.$el.append(container.render().el);
-    }, this);
 
     this.$el.append(this.mediaControl.render().el);
     return this;
