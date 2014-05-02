@@ -8,6 +8,7 @@
  */
 
 var BaseObject = require('../../base/base_object');
+var _ = require('underscore');
 
 var HTML5VideoPlaybackPlugin = require('../../plugins/html5_video_playback');
 var FlashVideoPlaybackPlugin = require('../../plugins/flash_playback');
@@ -30,6 +31,9 @@ var Loader = BaseObject.extend({
     this.playbackPlugins = [FlashVideoPlaybackPlugin, HTML5VideoPlaybackPlugin, HTML5AudioPlaybackPlugin, HLSVideoPlaybackPlugin];
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin];
     this.globalPlugins = [this.displayPlugins[this.params.displayType]];
+  },
+  getPlugin: function(name) {
+    return _.find(_.union(this.containerPlugins, this.playbackPlugins, this.globalPlugins), function(plugin) { return plugin.prototype.name === name });
   }
 });
 
