@@ -11,7 +11,7 @@ var _ = require('underscore');
 var $ = require('jquery');
 
 var UIObject = require('../../base/ui_object');
-var PlaybackHandler = require('../playback_handler');
+var ContainerFactory = require('../container_factory');
 var Fullscreen = require('../../base/utils').Fullscreen;
 var GlobalPluginsHandler = require('../global_plugins_handler');
 var Loader = require('../loader');
@@ -32,8 +32,8 @@ var Core = UIObject.extend({
     this.params.displayType || (this.params.displayType = 'pip');
     this.parentElement = params.parentElement;
     this.loader = new Loader(params);
-    this.playbackHandler = new PlaybackHandler(params, this.loader);
-    this.playbackHandler.createContainers(this.onContainersCreated.bind(this));
+    this.containerFactory = new ContainerFactory(params, this.loader);
+    this.containerFactory.createContainers(this.onContainersCreated.bind(this));
     if (this.params.width) {
       this.$el.css({ width: this.params.width });
     }
@@ -50,8 +50,8 @@ var Core = UIObject.extend({
     _(this.containers).each(function(container) {
       container.destroy();
     });
-    this.playbackHandler.params = _(this.params).extend(params);
-    this.playbackHandler.createContainers(this.onContainersCreated.bind(this));
+    this.containerFactory.params = _(this.params).extend(params);
+    this.containerFactory.createContainers(this.onContainersCreated.bind(this));
   },
   destroy: function() {
     _(this.containers).each(function(container) {
