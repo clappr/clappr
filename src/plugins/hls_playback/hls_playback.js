@@ -46,6 +46,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   bootstrap: function() {
     this.el.width = "100%";
     this.el.height = "100%";
+    console.log('flash is ready');
     this.trigger('playback:ready', this.name);
     clearInterval(this.bootstrapId);
     this.currentState = "IDLE";

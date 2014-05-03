@@ -33,9 +33,9 @@ var ContainerFactory = BaseObject.extend({
     var container = new Container({playback: playback});
     var defer = $.Deferred();
     defer.promise(container);
+    this.addContainerPlugins(container);
     this.listenTo(container, 'container:ready', function() {
       defer.resolve(container);
-      this.addContainerPlugins(container);
     }.bind(this));
     return container;
   },

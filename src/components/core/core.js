@@ -40,7 +40,11 @@ var Core = UIObject.extend({
     this.containerFactory
       .createContainers()
       .then(this.setupContainers.bind(this))
-      .then(this.defer.resolve.bind(this, this));
+      .then(function(containers) {
+        $.when.apply($, containers).done(function() {
+          this.defer.resolve(this);
+        }.bind(this));
+      }.bind(this));
     if (this.params.width) {
       this.$el.css({ width: this.params.width });
     }
@@ -107,8 +111,8 @@ var Core = UIObject.extend({
   },
   createContainer: function(source) {
     var container = this.containerFactory.createContainer(source);
+    //this.containerFactory.addContainerPlugins(container);
     this.appendContainer(container);
-    this.containerFactory.addContainerPlugins(container);
     return container;
   },
   createMediaControl: function(container) {
