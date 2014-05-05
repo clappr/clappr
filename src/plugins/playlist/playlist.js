@@ -121,10 +121,10 @@ var Playlist = BaseObject.extend({
     this.trigger('container:destroy');
     _.invoke(this.containers, 'destroy');
   },
+  statsReport: function() {
+    //fix me
+  },
   render: function() {
-    this.el = _.map(this.containers, function(container) {
-      return container.render().el;
-    });
     this.trigger('container:ready');
     return this;
   }
