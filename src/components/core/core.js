@@ -86,6 +86,10 @@ var Core = UIObject.extend({
     }
     this.mediaControl.show();
   },
+  setMediaControlContainer: function(container) {
+    this.mediaControl.setContainer(container);
+    this.mediaControl.render();
+  },
   removeContainer: function(container) {
     console.log('container being removed');
     this.stopListening(container);
@@ -111,7 +115,6 @@ var Core = UIObject.extend({
   },
   createContainer: function(source) {
     var container = this.containerFactory.createContainer(source);
-    //this.containerFactory.addContainerPlugins(container);
     this.appendContainer(container);
     return container;
   },
