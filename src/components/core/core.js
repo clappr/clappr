@@ -91,6 +91,13 @@ var Core = UIObject.extend({
     this.mediaControl.setContainer(container);
     this.mediaControl.render();
   },
+  disableMediaControl: function() {
+    this.mediaControl.disable();
+    this.$el.removeClass('nocursor');
+  },
+  enableMediaControl: function() {
+    this.mediaControl.enable();
+  },
   removeContainer: function(container) {
     console.log('container being removed');
     this.stopListening(container);
