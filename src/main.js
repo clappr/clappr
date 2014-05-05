@@ -6,6 +6,7 @@ var BaseObject = require('./base/base_object');
 var CoreFactory = require('./components/core_factory');
 var Loader = require('./components/loader');
 
+
 var Player = BaseObject.extend({
   initialize: function(params) {
     params.displayType || (params.displayType = 'pip');
@@ -22,6 +23,7 @@ var Player = BaseObject.extend({
   }
 });
 
-global.DEBUG = true;
+
+global.DEBUG = false;
 
 module.exports = WP3 = { Player: Player };
