@@ -40,11 +40,7 @@ var Core = UIObject.extend({
     this.containerFactory
       .createContainers()
       .then(this.setupContainers.bind(this))
-      .then(function(containers) {
-        $.when.apply($, containers).done(function() {
-          this.defer.resolve(this);
-        }.bind(this));
-      }.bind(this));
+      .then(this.resolveOnContainersReady.bind(this));
     if (this.params.width) {
       this.$el.css({ width: this.params.width });
     }
@@ -53,6 +49,11 @@ var Core = UIObject.extend({
     }
     //FIXME fullscreen api sucks
     window['document'].addEventListener('mozfullscreenchange', this.exit.bind(this));
+  },
+  resolveOnContainersReady: function(containers) {
+    $.when.apply($, containers).done(function() {
+      this.defer.resolve(this);
+    }.bind(this));
   },
   addPlugin: function(plugin) {
     this.plugins.push(plugin);
