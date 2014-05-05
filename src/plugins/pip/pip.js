@@ -7,6 +7,7 @@ var $ = require("jquery");
 var _ = require('underscore');
 
 var PipPlugin = BaseObject.extend({
+  name: 'pip',
   initialize: function(core) {
     this.core = core;
     this.pipStyle = {width: "24%", height: "24%", "z-index": 20, bottom: "7px", right: "7px",
@@ -45,17 +46,12 @@ var PipPlugin = BaseObject.extend({
   },
   addPipCallback: function(container) {
     this.pipContainer = _(container).isArray() ? container[0] : container;
-    if (this.pipContainer.hasPlugin('hls_playback')) {
-      // html5 players dispatches on:ready instantly, causing this style to be set after addPipCallback.
-      // For flash players, we need to put it behind everything until flash dispatch on:ready.
-      this.pipContainer.setStyle({'z-index': -1});
-    }
     this.onContainerReady();
   },
   onContainerReady: function() {
     this.pipContainer.setVolume(0);
-    this.pipContainer.play();
     this.pipContainer.setStyle(this.pipStyle);
+    this.pipContainer.play();
     this.stopListening(this.pipContainer);
     this.listenToPipClick();
   },
