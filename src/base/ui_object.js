@@ -8,7 +8,7 @@ var extend = require('./utils').extend;
 var BaseObject = require('./base_object');
 
 var UIObject = function(options) {
-  this.cid = _.uniqueId('c');
+  this.id = _.uniqueId('c');
   options || (options = {});
   _.extend(this, _.pick(options, viewOptions));
   this._ensureElement();
