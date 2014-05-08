@@ -5,7 +5,6 @@
 var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
-var Environment = require('../../components/environment');
 var $ = require('jquery');
 
 var PosterPlugin = UIPlugin.extend({
