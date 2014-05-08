@@ -11,10 +11,10 @@ var BaseObject = require('../../base/base_object');
 var _ = require('underscore');
 
 /* Playback Plugins */
-var HTML5VideoPlaybackPlugin = require('../../plugins/html5_video_playback');
-var FlashVideoPlaybackPlugin = require('../../plugins/flash_playback');
-var HTML5AudioPlaybackPlugin = require('../../plugins/html5_audio_playback');
-var HLSVideoPlaybackPlugin = require('../../plugins/hls_playback');
+var HTML5VideoPlaybackPlugin = require('../../playbacks/html5_video');
+var FlashVideoPlaybackPlugin = require('../../playbacks/flash_vod');
+var HTML5AudioPlaybackPlugin = require('../../playbacks/html5_audio');
+var HLSVideoPlaybackPlugin = require('../../playbacks/hls');
 
 /* Container Plugins */
 var SpinnerThreeBouncePlugin = require('../../plugins/spinner_three_bounce');
