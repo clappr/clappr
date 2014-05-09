@@ -53,6 +53,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     this.timedCheckState();
     this.el.playerSetflushLiveURLCache(true);
     this.el.playerSetstartFromLowestLevel(true); // decreases startup time
+    this.autoPlay && this.play();
   },
 
   checkIfFlashIsReady: function() {
@@ -78,6 +79,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     } else {
       this.firstPlay();
     }
+    this.trigger('playback:play', this.name);
   },
 
   isHighDefinitionAvailable: function(levels) {
