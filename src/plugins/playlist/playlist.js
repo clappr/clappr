@@ -27,6 +27,15 @@ var Playlist = UIObject.extend({
     //fixme
     return false;
   },
+  ready: function() {
+    this.trigger('container:ready');
+  },
+  enableMediaControl: function() {
+    this.trigger('container:mediacontrol:enable');
+  },
+  disableMediaControl: function() {
+    this.trigger('container:mediacontrol:disable');
+  },
   animate: function(style, duration) {
     this.getCurrentContainer().$el.animate(style, duration);
   },
