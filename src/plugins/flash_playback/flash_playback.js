@@ -26,7 +26,7 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
     };
     this.isReady = false;
     this.checkIfFlashIsReady();
-    this.params.autoPlay && this.play();
+    this.autoPlay && this.play();
   },
   bootstrap: function() {
     this.el.width = "100%";
