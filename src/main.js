@@ -20,10 +20,13 @@ var Player = BaseObject.extend({
   },
   load: function(params) {
     this.core.load(params);
+  },
+  destroy: function() {
+    this.core.destroy();
   }
 });
 
 
-global.DEBUG = false;
+global.DEBUG = true;
 
 module.exports = WP3 = { Player: Player };
