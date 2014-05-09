@@ -32,7 +32,7 @@ var Container = UIObject.extend({
     this.listenTo(this.playback, 'playback:loadedmetadata', this.loadedMetadata);
     this.listenTo(this.playback, 'playback:highdefinitionupdate', this.highDefinitionUpdate);
     this.listenTo(this.playback, 'playback:ended', this.ended);
-    this.listenTo(this.playback, 'playback:playing', this.playing);
+    this.listenTo(this.playback, 'playback:play', this.playing);
     this.isReady = false;
     this.mediaControlDisabled = false;
     this.plugins = [this.playback];
@@ -70,11 +70,10 @@ var Container = UIObject.extend({
     this.trigger('container:progress', startPosition, endPosition, duration, this.name);
   },
   playing: function() {
-    this.trigger('container:playing');
+    this.trigger('container:play', this.name);
   },
   play: function() {
     this.playback.play();
-    this.trigger('container:play', this.name);
   },
   stop: function() {
     this.trigger('container:stop', this.name);
