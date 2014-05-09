@@ -32,7 +32,7 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
       right: ['fullscreen', 'volume'],
       default: ['position', 'seekbar', 'duration']
     };
-    this.params.autoPlay && this.play();
+    options.autoPlay && this.play();
   },
 
   loadedMetadata: function(e) {
