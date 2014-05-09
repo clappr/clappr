@@ -32,6 +32,7 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
       right: ['fullscreen', 'volume'],
       default: ['position', 'seekbar', 'duration']
     };
+    this.params.autoPlay && this.play();
   },
 
   loadedMetadata: function(e) {
@@ -122,7 +123,7 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
   },
 
   playing: function() {
-    this.trigger('playback:playing');
+    this.trigger('playback:play', this.name);
   },
 
   render: function() {
@@ -138,4 +139,3 @@ HTML5VideoPlaybackPlugin.canPlay = function(resource) {
 }
 
 module.exports = HTML5VideoPlaybackPlugin;
-
