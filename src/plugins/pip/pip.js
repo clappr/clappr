@@ -92,7 +92,7 @@ var PipPlugin = BaseObject.extend({
     this.tmpContainer = undefined;
     this.pipContainer.setVolume(0);
     this.pipContainer.trigger("container:pip", true);
-    if (this.pipContainer.hasPlugin('hls_playback')) { //flash breaks on animate
+    if (this.pipContainer.playback.name === 'hls_playback') { //flash breaks on animate
       this.pipContainer.setStyle(this.pipStyle);
     } else {
       this.pipContainer.animate(this.pipStyle, {
