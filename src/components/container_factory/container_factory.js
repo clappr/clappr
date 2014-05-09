@@ -29,7 +29,8 @@ var ContainerFactory = BaseObject.extend({
   },
   createContainer: function(source) {
     var playbackPlugin = this.findPlaybackPlugin(source);
-    var playback = new playbackPlugin({src: source, autoPlay: !!this.params.autoPlay});
+    var params = _.extend({}, this.params, {src: source, autoPlay: !!this.params.autoPlay});
+    var playback = new playbackPlugin(params);
     var container = new Container({playback: playback});
     var defer = $.Deferred();
     defer.promise(container);
