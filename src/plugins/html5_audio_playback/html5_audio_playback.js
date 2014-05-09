@@ -25,6 +25,7 @@ var HTML5AudioPlaybackPlugin = UIPlugin.extend({
       default: ['position', 'seekbar', 'duration']
     };
     this.render();
+    this.params.autoPlay && this.play();
   },
   bindEvents: function() {
     this.listenTo(this.container, 'container:play', this.play);
