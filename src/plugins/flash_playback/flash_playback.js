@@ -26,6 +26,7 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
     };
     this.isReady = false;
     this.checkIfFlashIsReady();
+    this.params.autoPlay && this.play();
   },
   bootstrap: function() {
     this.el.width = "100%";
@@ -92,6 +93,7 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
     } else {
       this.firstPlay();
     }
+    this.trigger('playback:play', this.name);
   },
   volume: function(value) {
     this.el.playerVolume(value);
