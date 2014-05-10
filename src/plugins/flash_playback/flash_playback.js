@@ -114,14 +114,11 @@ var FlashVideoPlaybackPlugin = UIPlugin.extend({
     clearInterval(this.id);
     var seekTo = this.el.getDuration()* (time / 100);
     this.el.playerSeek(seekTo);
-    this.timeUpdate(seekTo, this.el.getDuration());
+    this.trigger('playback:timeupdate', seekTo, this.el.getDuration(), this.name);
     this.id = this.updateTime(1000);
     if (this.currentState == "PAUSED") {
       this.pause();
     }
-  },
-  timeUpdate: function(time, duration) {
-    this.trigger('playback:timeupdate', time, duration, this.name);
   },
   destroy: function() {
     clearInterval(this.id);
