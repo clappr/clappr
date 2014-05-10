@@ -1,6 +1,6 @@
-[data-spinner] {
+div[data-spinner] {
   position: absolute;
-  margin: 13%;
+  margin: 0 auto;
   width: 70px;
   text-align: center;
   z-index: 10;
