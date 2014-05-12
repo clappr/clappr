@@ -16,7 +16,7 @@ var Player = BaseObject.extend({
   },
   attachTo: function(element) {
     this.params.parentElement = element;
-    this.core = this.coreFactory.createCore();
+    this.core = this.coreFactory.create();
   },
   load: function(params) {
     this.core.load(params);
@@ -27,6 +27,6 @@ var Player = BaseObject.extend({
 });
 
 
-global.DEBUG = true;
+global.DEBUG = false;
 
 module.exports = WP3 = { Player: Player };
