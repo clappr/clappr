@@ -16,7 +16,7 @@ var CoreFactory = BaseObject.extend({
     this.params = player.params;
     this.loader = loader;
   },
-  createCore: function() {
+  create: function() {
     this.core = new Core(this.params);
     this.core.then(this.addCorePlugins.bind(this));
     return this.core;
