@@ -64,9 +64,6 @@ var Core = UIObject.extend({
   getPlugin: function(name) {
     return _(this.plugins).find(function(plugin) { return plugin.name === name });
   },
-  //setupExternalInterface: function() {
-  //  this.params.player.destroy = this.destroy.bind(this);
-  //},
   load: function(params) {
     _(this.containers).each(function(container) {
       container.destroy();
