@@ -20,8 +20,7 @@ var ContainerFactory = BaseObject.extend({
     return $.Deferred(function(promise) {
       promise.resolve( _.map(this.params.sources, function(source) {
         return this.createContainer(source);
-      }, this)
-        );
+      }, this));
     }.bind(this));
   },
   findPlaybackPlugin: function(source) {
@@ -35,7 +34,7 @@ var ContainerFactory = BaseObject.extend({
     var defer = $.Deferred();
     defer.promise(container);
     this.addContainerPlugins(container);
-    this.listenTo(container, 'container:ready', function() {
+    this.listenToOnce(container, 'container:ready', function() {
       defer.resolve(container);
     }.bind(this));
     return container;
