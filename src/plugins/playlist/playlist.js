@@ -4,13 +4,10 @@ var _ = require('underscore');
 var Playlist = UIObject.extend({
   name: 'Playlist',
   initialize: function(options) {
-    this.defer = $.Deferred();
     this.containers = options.containers || [];
     this.current = options.current || 0;
     this.settings = this.getCurrentContainer().settings;
-    $.when.apply(_.map(this.containers, this._setupContainers, this)).done(function() {
-      this.trigger('container:ready');
-    }.bind(this));
+    _.each(this.containers, this._setupContainers, this);
     this.getCurrentContainer().$el.show();
     this._bindContainerEvents(this.getCurrentContainer());
   },
@@ -43,10 +40,6 @@ var Playlist = UIObject.extend({
     this.getCurrentContainer().$el.css(style);
   },
   _setupContainers: function(container) {
-    this.defer.promise(container);
-    this.listenToOnce(container, 'container:ready', function() {
-      this.defer.resolve(container);
-    }.bind(this));
     container.$el.hide();
     this._injectInChildPlugins(container.plugins);
     return container;
@@ -142,10 +135,6 @@ var Playlist = UIObject.extend({
     //fix me
   },
   render: function() {
-    this.$el.empty();
-    _.each(this.containers, function(container) {
-      this.$el.append(container.render().el);
-    }, this);
     return this;
   }
 });
