@@ -91,7 +91,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   },
 
   checkHighDefinition: function() {
-    // this function is responsible to change media contorl settings
+    // this function is responsible to change media control settings
     // regarding the availability of HD level and if it's being used or not.
     // highDefinition attribute have 3 states: "available", "available-in-use", "unavailable"
     var changed = false;
