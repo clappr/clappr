@@ -10,7 +10,6 @@ var StatsPlugin = Plugin.extend({
   name: 'stats',
   type: 'stats',
   initialize: function(options) {
-    console.log("initializing stats");
     StatsPlugin.super('initialize').call(this, options);
     this.container.with(StatsEvents);
     this.setInitialAttrs();
@@ -31,7 +30,6 @@ var StatsPlugin = Plugin.extend({
     this.reportInterval = reportInterval;
   },
   setInitialAttrs: function() {
-    console.log("setou aqui initial attrs");
     this.firstPlay = true;
     this.startupTime = 0;
     this.rebufferingTime = 0;
@@ -50,10 +48,8 @@ var StatsPlugin = Plugin.extend({
   },
   onBuffering: function() {
     if (this.firstPlay) {
-      console.log("first buffer");
       this.startupTimeInit = Date.now();
     } else {
-      console.log("not first buffer");
       this.rebufferingTimeInit = Date.now();
     }
     this.state = "BUFFERING";
@@ -63,12 +59,10 @@ var StatsPlugin = Plugin.extend({
     if (this.state !== "BUFFERING") return;
 
     if (this.firstPlay) {
-      console.log("first buffer full");
       this.firstPlay = false;
       this.startupTime = Date.now() - this.startupTimeInit;
       this.watchingTimeInit = Date.now();
     } else {
-      console.log("not first buffer full");
       this.rebufferingTime += this.getRebufferingTime();
     }
     this.rebufferingTimeInit = undefined;
@@ -98,7 +92,6 @@ var StatsPlugin = Plugin.extend({
     return metrics;
   },
   report: function() {
-    console.log(this.getStats());
     this.container.statsReport(this.getStats());
   }
 });
