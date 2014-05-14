@@ -75,13 +75,17 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     }
     this.trigger('playback:play', this.name);
   },
-  isHighDefinitionAvailable: function(levels) {
-    return !!(levels.length > 0 && levels[levels.length-1].bitrate >= 3500000);
-  },
   getPlaybackType: function() {
     if (this.playbackType)
       return this.playbackType;
     return null;
+  },
+  getCurrentBitrate: function() {
+    var currentLevel = this.getLevels()[this.el.getLevel()];
+    return currentLevel.bitrate;
+  },
+  isHighDefinitionAvailable: function(levels) {
+    return !!(levels.length > 0 && levels[levels.length-1].bitrate >= 3500000);
   },
   isHighDefinitionInUse: function() {
     return this.highDefinition === "available-in-use";
@@ -91,9 +95,8 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     // regarding the availability of HD level and if it's being used or not.
     // highDefinition attribute have 3 states: "available", "available-in-use", "unavailable"
     var changed = false;
-    if (!this.levels || this.levels.length === 0) {
-      this.levels = this.el.getLevels();
-    } else if (this.isHighDefinitionAvailable(this.levels)) {
+    this.levels = this.getLevels();
+    if (this.isHighDefinitionAvailable(this.levels)) {
       var lastLevel = this.levels.length -1;
       var currentLevel = this.el.getLevel();
       if (currentLevel === lastLevel && this.highDefinition !== "available-in-use") {
@@ -110,6 +113,12 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     if (changed) {
       this.trigger('playback:highdefinitionupdate');
     }
+  },
+  getLevels: function() {
+    if (!this.levels || this.levels.length === 0) {
+      this.levels = this.el.getLevels();
+    }
+    return this.levels;
   },
   timedCheckState: function() {
     this.checkStateId = setInterval(this.checkState.bind(this), 250);
