@@ -16,7 +16,6 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   attributes: {
     'data-hls-playback': ''
   },
-
   initialize: function(options) {
     this.src = options.src;
     this.swfPath = options.swfPath || "assets/HLSPlayer.swf";
@@ -31,18 +30,15 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     };
     this.checkIfFlashIsReady();
   },
-
   hiddenCallback: function() {
     this.hiddenId = setTimeout(function() { this.el.playerSmoothSetLevel(0) }.bind(this), 10000);
   },
-
   visibleCallback: function() {
     if (this.hiddenId) {
       clearTimeout(this.hiddenId);
     }
     this.el.playerSmoothSetLevel(-1);
   },
-
   bootstrap: function() {
     this.el.width = "100%";
     this.el.height = "100%";
@@ -55,7 +51,6 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     this.el.playerSetstartFromLowestLevel(true); // decreases startup time
     this.autoPlay && this.play();
   },
-
   checkIfFlashIsReady: function() {
     this.bootstrapId = setInterval(function() {
       if(this.el.getState) {
@@ -63,7 +58,6 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
       }
     }.bind(this), 50);
   },
-
   updateTime: function(interval) {
     return setInterval(function() {
       this.trigger('playback:timeupdate', this.el.getPosition(), this.el.getDuration(), this.name);
@@ -81,15 +75,17 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     }
     this.trigger('playback:play', this.name);
   },
-
   isHighDefinitionAvailable: function(levels) {
     return !!(levels.length > 0 && levels[levels.length-1].bitrate >= 3500000);
   },
-
+  getPlaybackType: function() {
+    if (this.playbackType)
+      return this.playbackType;
+    return null;
+  },
   isHighDefinitionInUse: function() {
     return this.highDefinition === "available-in-use";
   },
-
   checkHighDefinition: function() {
     // this function is responsible to change media control settings
     // regarding the availability of HD level and if it's being used or not.
@@ -115,12 +111,10 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
       this.trigger('playback:highdefinitionupdate');
     }
   },
-
   timedCheckState: function() {
     this.checkStateId = setInterval(this.checkState.bind(this), 250);
     this.checkHighDefinitionId = setInterval(this.checkHighDefinition.bind(this), 3000);
   },
-
   checkState: function() {
     this.updatePlaybackType();
     this.updatePlayerVisibility();
@@ -134,7 +128,6 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
       this.currentState = "IDLE";
     }
   },
-
   updatePlayerVisibility: function() {
     if (this.visible && this.visibility.hidden()) {
       this.visible = false;
@@ -144,7 +137,6 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
       this.visibleCallback();
     }
   },
-
   updatePlaybackType: function() {
     if (!this.playbackType) {
       this.playbackType = this.el.getType()
@@ -152,52 +144,42 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
         this.updateSettings();
     }
   },
-
   firstPlay: function() {
     this.el.playerLoad(this.src);
     this.el.playerPlay();
   },
-
   volume: function(value) {
     this.el.playerVolume(value);
   },
-
   pause: function() {
     this.el.playerPause();
   },
-
   stop: function() {
     this.el.playerStop();
     clearInterval(this.id);
     this.trigger('playback:timeupdate', 0, this.name);
   },
-
   isPlaying: function() {
     return !!(this.isReady && this.el.getState().match(/playing/i));
   },
-
   seek: function(time) {
     clearInterval(this.id);
     this.el.playerSeek(this.el.getDuration() * (time / 100));
     this.id = this.updateTime(1000);
   },
-
   timeUpdate: function(time, duration) {
     this.trigger('playback:timeupdate', time, duration, this.name);
   },
-
   destroy: function() {
     clearInterval(this.id);
     clearInterval(this.checkStateId);
     clearInterval(this.checkHighDefinitionId);
   },
-
   setupFirefox: function() {
     var $el = this.$('embed');
     $el.attr('data-hls-playback', '');
     this.setElement($el[0]);
   },
-
   updateSettings: function() {
     this.settings = {
       left: [(this.playbackType === "VOD" ? "playpause" : "playstop")],
@@ -206,7 +188,6 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     };
     this.trigger('playback:settingsupdate', this.name);
   },
-
   render: function() {
     var style = Styler.getStyleFor(this.name);
     this.$el.html(this.template({swfPath: this.swfPath}));
