@@ -10,14 +10,19 @@
 var BaseObject = require('../../base/base_object');
 var _ = require('underscore');
 
+/* Playback Plugins */
 var HTML5VideoPlaybackPlugin = require('../../plugins/html5_video_playback');
 var FlashVideoPlaybackPlugin = require('../../plugins/flash_playback');
 var HTML5AudioPlaybackPlugin = require('../../plugins/html5_audio_playback');
 var HLSVideoPlaybackPlugin = require('../../plugins/hls_playback');
+
+/* Container Plugins */
 var SpinnerThreeBouncePlugin = require('../../plugins/spinner_three_bounce');
 var StatsPlugin = require('../../plugins/stats');
 var WaterMarkPlugin = require('../../plugins/watermark');
 var PosterPlugin = require('../../plugins/poster');
+
+/* Player Plugins */
 var PipPlugin = require('../../plugins/pip');
 var Sequence = require('../../plugins/sequence');
 
