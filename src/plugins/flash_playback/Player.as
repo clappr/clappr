@@ -12,6 +12,7 @@ package
   import flash.media.Video;
   import flash.net.NetConnection;
   import flash.net.NetStream;
+  import flash.system.Security;
 
   public class Player extends MovieClip {
     private var _video:Video;
@@ -23,6 +24,8 @@ package
     private var videoVolumeTransform:SoundTransform;
 
     public function Player() {
+      Security.allowDomain('*');
+      Security.allowInsecureDomain('*');
       playbackState = "IDLE";
       setupNetConnection();
       setupNetStream();
