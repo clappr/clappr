@@ -41,14 +41,23 @@ var Core = UIObject.extend({
       .createContainers()
       .then(this.setupContainers.bind(this))
       .then(this.resolveOnContainersReady.bind(this));
-    if (this.params.width) {
-      this.$el.css({ width: this.params.width });
-    }
-    if (this.params.height) {
-      this.$el.css({ height: this.params.height });
-    }
+    this.updateSize();
     //FIXME fullscreen api sucks
     window['document'].addEventListener('mozfullscreenchange', this.exit.bind(this));
+  },
+  updateSize: function() {
+    if(Fullscreen.isFullscreen()) {
+      this.$el.addClass('fullscreen');
+      this.$el.removeAttr('style');
+    } else {
+      if (this.params.width) {
+        this.$el.css({ width: this.params.width });
+      }
+      if (this.params.height) {
+        this.$el.css({ height: this.params.height });
+      }
+      this.$el.removeClass('fullscreen');
+    }
   },
   resolveOnContainersReady: function(containers) {
     $.when.apply($, containers).done(function() {
@@ -79,9 +88,7 @@ var Core = UIObject.extend({
     this.$el.remove();
   },
   exit: function() {
-    if(!Fullscreen.isFullscreen()) {
-      this.$el.removeClass('fullscreen');
-    }
+    this.updateSize();
     this.mediaControl.show();
   },
   setMediaControlContainer: function(container) {
