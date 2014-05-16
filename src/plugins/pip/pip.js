@@ -145,7 +145,7 @@ var PipPlugin = BaseObject.extend({
     this.masterContainer.setStyle({"z-index": 20});
     this.pipContainer = undefined;
     this.core.mediaControl.setContainer(this.masterContainer);
-    this.core.mediaControl.render();
+    this.core.enableMediaControl();
   },
   onMediaControlShow: function () {
     if (!this.pipContainer || this.pipContainer.$el.is(':animated')) return;
