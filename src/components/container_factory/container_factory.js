@@ -33,15 +33,16 @@ var ContainerFactory = BaseObject.extend({
     var container = new Container({playback: playback});
     var defer = $.Deferred();
     defer.promise(container);
-    this.addContainerPlugins(container);
+    this.addContainerPlugins(container, source);
     this.listenToOnce(container, 'container:ready', function() {
       defer.resolve(container);
     }.bind(this));
     return container;
   },
-  addContainerPlugins: function(container) {
+  addContainerPlugins: function(container, source) {
     _.each(this.loader.containerPlugins, function(plugin) {
-      container.addPlugin(new plugin(_.extend(this.params, {container: container})));
+      var params = _.extend(this.params, {container: container, src: source});
+      container.addPlugin(new plugin(params));
     }, this);
   }
 });
