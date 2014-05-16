@@ -33,6 +33,7 @@ var PipPlugin = BaseObject.extend({
       discardPip: this.discardPip,
       addMaster: this.addMaster,
       addMasterContainer: this.addMasterContainer,
+      changeMaster: this.changeMaster,
       pipToMaster: this.pipToMaster,
       hasPip: this.hasPip
     };
@@ -104,8 +105,21 @@ var PipPlugin = BaseObject.extend({
       });
     }
     this.core.mediaControl.setContainer(this.masterContainer);
-    this.core.mediaControl.render();
     this.listenToPipClick();
+  },
+  changeMaster: function(source) {
+    if (this.masterContainer) {
+      this.tmpContainer = this.masterContainer;
+      this.tmpContainer.setStyle({'z-index': 2000});
+      this.core.createContainer(source).then(this.changeMasterCallback.bind(this));
+    }
+  },
+  changeMasterCallback: function(container) {
+    this.masterContainer.destroy();
+    this.masterContainer = container;
+    this.masterContainer.play();
+    this.tmpContainer = undefined;
+    this.core.mediaControl.setContainer(this.masterContainer);
   },
   listenToPipClick: function() {
     if (this.pipContainer) {
