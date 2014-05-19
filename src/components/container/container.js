@@ -16,9 +16,7 @@ var Container = UIObject.extend({
     'data-container': ''
   },
   events: {
-    'click': 'clicked',
-    'hover': 'hover',
-    'mouseover': 'hover'
+    'click': 'clicked'
   },
   initialize: function(options) {
     this.playback = options.playback;
@@ -88,9 +86,6 @@ var Container = UIObject.extend({
   },
   clicked: function() {
     this.trigger('container:click', this, this.name);
-  },
-  hover: function(e) {
-    this.trigger('container:hover', this, this.name);
   },
   setCurrentTime: function(time) {
     this.trigger('container:seek', time, this.name);
