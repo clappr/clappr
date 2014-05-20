@@ -154,11 +154,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
       } else if (this.el.getState() === "IDLE") {
         this.trigger('playback:ended', this.name);
         this.trigger('playback:timeupdate', 0, this.el.getDuration(), this.name);
-<<<<<<< HEAD
         clearInterval(this.checkStateId);
-=======
-        clearInterval(this.id);
->>>>>>> 893ce1a... core: :pray: workaround for flash dont take front of other elements in firefox :pray:
         this.currentState = "IDLE";
       }
     });
@@ -220,20 +216,12 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   },
   seek: function(time) {
     this.safe(function() {
-<<<<<<< HEAD
-=======
-      clearInterval(this.id);
->>>>>>> 893ce1a... core: :pray: workaround for flash dont take front of other elements in firefox :pray:
       if (time < 0)
         this.el.playerSeek(time);
       else
         this.el.playerSeek((this.el.getDuration() - 20) * time / 100);
-<<<<<<< HEAD
       clearInterval(this.checkStateId);
       this.checkStateId = this.updateTime(1000);
-=======
-      this.id = this.updateTime(1000);
->>>>>>> 893ce1a... core: :pray: workaround for flash dont take front of other elements in firefox :pray:
     });
   },
   timeUpdate: function(time, duration) {
