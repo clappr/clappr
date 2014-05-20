@@ -154,6 +154,8 @@ var PipPlugin = BaseObject.extend({
     this.pipContainer = undefined;
     this.core.mediaControl.setContainer(this.masterContainer);
     this.core.enableMediaControl();
+    if (this.core.params.onPipToMaster)
+      this.core.params.onPipToMaster(this.masterContainer.playback.src);
   },
   onMediaControlShow: function () {
     if (!this.pipContainer || this.pipContainer.$el.is(':animated')) return;
