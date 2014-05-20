@@ -68,6 +68,9 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     }.bind(this), 50);
   },
   updateTime: function(interval) {
+    if(this.id) {
+      clearInterval(this.id);
+    }
     this.safe(function() {
       return setInterval(function() {
         this.trigger('playback:timeupdate', this.el.getPosition(), this.el.getDuration(), this.name);
@@ -152,6 +155,9 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
         this.trigger('playback:bufferfull', this.name);
         this.currentState = "PLAYING";
       } else if (this.el.getState() === "IDLE") {
+        this.trigger('playback:ended', this.name);
+        this.trigger('playback:timeupdate', 0, this.el.getDuration(), this.name);
+        clearInterval(this.id);
         this.currentState = "IDLE";
       }
     });
@@ -212,9 +218,14 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     });
   },
   seek: function(time) {
-    clearInterval(this.id);
-    this.el.playerSeek(this.el.getDuration() * (time / 100));
-    this.id = this.updateTime(1000);
+    this.safe(function() {
+      clearInterval(this.id);
+      if (time < 0)
+        this.el.playerSeek(time);
+      else
+        this.el.playerSeek((this.el.getDuration() - 20) * time / 100);
+      this.id = this.updateTime(1000);
+    });
   },
   timeUpdate: function(time, duration) {
     this.trigger('playback:timeupdate', time, duration, this.name);
@@ -223,6 +234,8 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     clearInterval(this.id);
     clearInterval(this.checkStateId);
     clearInterval(this.checkHighDefinitionId);
+    this.stopListening()
+    this.$el.remove()
   },
   setupFirefox: function() {
     var $el = this.$('embed');
