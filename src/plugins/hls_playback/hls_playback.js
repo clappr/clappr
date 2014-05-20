@@ -68,10 +68,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     }.bind(this), 50);
   },
   updateTime: function(interval) {
-    if(this.id) {
-      clearInterval(this.id);
-    }
-    this.safe(function() {
+    return this.safe(function() {
       return setInterval(function() {
         this.safe(function() { this.trigger('playback:timeupdate', this.el.getPosition(), this.el.getDuration(), this.name); });
       }.bind(this), interval);
@@ -80,8 +77,8 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   play: function() {
     this.safe(function() {
       if(this.el.getState() === 'IDLE') {
-        clearInterval(this.id)
-        this.id = this.updateTime(1000);
+        clearInterval(this.checkStateId)
+        this.checkStateId = this.updateTime(1000);
       }
       if(this.el.getState() === 'PAUSED') {
         this.el.playerResume();
@@ -157,7 +154,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
       } else if (this.el.getState() === "IDLE") {
         this.trigger('playback:ended', this.name);
         this.trigger('playback:timeupdate', 0, this.el.getDuration(), this.name);
-        clearInterval(this.id);
+        clearInterval(this.checkStateId);
         this.currentState = "IDLE";
       }
     });
@@ -201,7 +198,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   stop: function() {
     this.safe(function() {
       this.el.playerStop();
-      clearInterval(this.id);
+      clearInterval(this.checkStateId);
       this.trigger('playback:timeupdate', 0, this.name);
     })
   },
@@ -219,19 +216,19 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   },
   seek: function(time) {
     this.safe(function() {
-      clearInterval(this.id);
       if (time < 0)
         this.el.playerSeek(time);
       else
         this.el.playerSeek((this.el.getDuration() - 20) * time / 100);
-      this.id = this.updateTime(1000);
+      clearInterval(this.checkStateId);
+      this.checkStateId = this.updateTime(1000);
     });
   },
   timeUpdate: function(time, duration) {
     this.trigger('playback:timeupdate', time, duration, this.name);
   },
   destroy: function() {
-    clearInterval(this.id);
+    clearInterval(this.checkStateId);
     clearInterval(this.checkStateId);
     clearInterval(this.checkHighDefinitionId);
     this.stopListening()
