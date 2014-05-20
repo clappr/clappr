@@ -73,7 +73,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     }
     this.safe(function() {
       return setInterval(function() {
-        this.trigger('playback:timeupdate', this.el.getPosition(), this.el.getDuration(), this.name);
+        this.safe(function() { this.trigger('playback:timeupdate', this.el.getPosition(), this.el.getDuration(), this.name); });
       }.bind(this), interval);
     });
   },
