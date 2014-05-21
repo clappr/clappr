@@ -197,6 +197,7 @@ module.exports = MediaControl = UIObject.extend({
     this.container = container;
     this.changeTogglePlay();
     this.addEventListeners();
+    this.settingsUpdate();
     if (this.container.mediaControlDisabled)
       this.disable();
   },
