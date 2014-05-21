@@ -24,7 +24,7 @@ var ContainerFactory = BaseObject.extend({
     }.bind(this));
   },
   findPlaybackPlugin: function(source) {
-    return _.find(this.loader.playbackPlugins, function(p) { return p.canPlay(source) }, this);
+    return _.find(this.loader.playbackPlugins, function(p) { return p.canPlay("" + source) }, this);
   },
   createContainer: function(source) {
     var playbackPlugin = this.findPlaybackPlugin(source);
