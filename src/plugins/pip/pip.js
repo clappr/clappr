@@ -10,7 +10,7 @@ var PipPlugin = BaseObject.extend({
   name: 'pip',
   initialize: function(core) {
     this.core = core;
-    this.pipStyle = {width: "24%", height: "24%", "z-index": 20, bottom: "7px", right: "7px",
+    this.pipStyle = {width: "24%", height: "24%", "z-index": 999, bottom: "7px", right: "7px",
                      "border-width": "3px", "border-style": "solid", "border-color": "rgba(255,255,255, .3)",
                      "background-clip": "padding-box", "-webkit-background-clip": "padding-box", "cursor": "pointer"};
     this.masterStyle = {width: "100%", height: "100%", bottom: "0px", right: "0px", border: "none", "cursor" : "default"};
