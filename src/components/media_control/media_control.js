@@ -220,8 +220,7 @@ module.exports = MediaControl = UIObject.extend({
     }
   },
   ended: function() {
-    this.togglePlayStop();
-    this.togglePlayPause();
+    this.changeTogglePlay();
   },
   updateProgressBar: function(startPosition, endPosition, duration) {
     var loadedStart = startPosition / duration * 100;
