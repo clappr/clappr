@@ -78,18 +78,17 @@ var LazyPlaylist = UIObject.extend({
 
     var nextContainer = this.getNextContainer();
     nextContainer.$el.show();
+    if(this.current === 0) {
+      nextContainer.stop();
+      this.trigger('container:ended', this.name);
+    }
     this.listenToOnce(nextContainer.playback, 'playback:ready', function() {
       this.trigger('container:next', this.current);
       this._bindContainerEvents(nextContainer);
-      if(this.current === 0) {
-        this.core.appendContainer(nextContainer);
-        nextContainer.stop();
-      } else {
-        nextContainer.play();
-        this.trigger('container:play', this.name);
-        this.trigger('container:settingsupdate', this.name);
-        this.trigger('container:timeupdate', 0, nextContainer.playback.getDuration());
-      }
+      nextContainer.play();
+      this.trigger('container:play', this.name);
+      this.trigger('container:settingsupdate', this.name);
+      this.trigger('container:timeupdate', 0, nextContainer.playback.getDuration());
     }.bind(this));
     this.core.appendContainer(nextContainer);
   },
@@ -97,7 +96,6 @@ var LazyPlaylist = UIObject.extend({
     this.trigger('container:timeupdate', position, duration, this.name);
   },
   jumpToContainer: function(index) {
-    console.log('jumping');
     var container = this.getCurrentContainer();
     this.stopListening(container);
     container.stop();
@@ -111,7 +109,6 @@ var LazyPlaylist = UIObject.extend({
       nextContainer.playback.checkIfFlashIsReady();
     }
     this.listenToOnce(nextContainer.playback, 'playback:ready', function() {
-      console.log('playback ready');
       nextContainer.play();
     });
     this.core.appendContainer(nextContainer);
