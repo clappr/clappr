@@ -22,6 +22,7 @@ package
     private var totalTime:Number;
     private var playbackState:String;
     private var videoVolumeTransform:SoundTransform;
+    private var isOnStageVideo:Boolean = false;
 
     public function Player() {
       Security.allowDomain('*');
@@ -135,7 +136,9 @@ package
       _video.height = rect.height;
       _video.x = rect.x;
       _video.y = rect.y;
-      _stageVideo.viewPort = rect;
+      if (isOnStageVideo) {
+        _stageVideo.viewPort = rect;
+      }
     }
     public static function resizeRectangle(videoWidth : Number, videoHeight : Number, containerWidth : Number, containerHeight : Number) : Rectangle {
       var rect : Rectangle = new Rectangle();
@@ -166,11 +169,13 @@ package
     }
     private function _disableStageVideo():void {
       _video.attachNetStream(_ns);
+      _video.smoothing = true;
       addChild(_video);
     }
     private function _onStageVideoAvailability(evt:StageVideoAvailabilityEvent):void {
-      if (evt.availability) {
+      if (evt.availability && stage.stageVideos.length > 0) {
         _enableStageVideo();
+        isOnStageVideo = true;
       } else {
         _disableStageVideo();
       }
