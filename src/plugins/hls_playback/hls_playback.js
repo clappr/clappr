@@ -213,14 +213,14 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   },
   isPlaying: function() {
     return this.safe(function() {
-      if (this.el.globoPlayerGetState)
-        return !!(this.el.globoPlayerGetState().match(/playing/i));
+      if (this.el.globoGetState())
+        return !!(this.el.globoGetState().match(/playing/i));
       return false;
     })
   },
   getDuration: function() {
     return this.safe(function() {
-      return this.el.globoPlayerGetDuration();
+      return this.el.globoGetDuration();
     });
   },
   seek: function(time) {
