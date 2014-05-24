@@ -205,7 +205,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   },
   stop: function() {
     this.safe(function() {
-      this.el.playerStop();
+      this.el.globoPlayerStop();
       clearInterval(this.checkStateId);
       this.trigger('playback:timeupdate', 0, this.name);
     })
