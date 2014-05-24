@@ -31,13 +31,14 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     this.checkIfFlashIsReady();
   },
   safe: function(fn) {
-    if(this.el.getState && this.el.getDuration && this.el.getPosition && this.el.playerSmoothSetLevel && this.el.playerSetflushLiveURLCache && this.el.playerSetstartFromLowestLevel) {
+    if(this.el.globoGetState && this.el.globoGetDuration && this.el.globoGetPosition &&
+       this.el.globoPlayerSmoothSetLevel && this.el.globoPlayerSetflushLiveURLCache && this.el.globoPlayerSetstartFromLowestLevel) {
       return fn.apply(this);
     }
   },
   hiddenCallback: function() {
     this.hiddenId = this.safe(function() {
-      return setTimeout(function() { this.el.playerSmoothSetLevel(0) }.bind(this), 10000);
+      return setTimeout(function() { this.el.globoPlayerSmoothSetLevel(0) }.bind(this), 10000);
     });
   },
   visibleCallback: function() {
@@ -45,7 +46,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
       if (this.hiddenId) {
         clearTimeout(this.hiddenId);
       }
-      this.el.playerSmoothSetLevel(-1);
+      this.el.globoPlayerSmoothSetLevel(-1);
     });
   },
   bootstrap: function() {
@@ -56,13 +57,13 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     clearInterval(this.bootstrapId);
     this.currentState = "IDLE";
     this.timedCheckState();
-    this.el.playerSetflushLiveURLCache(true);
-    this.el.playerSetstartFromLowestLevel(true); // decreases startup time
+    this.el.globoPlayerSetflushLiveURLCache(true);
+    this.el.globoPlayerSetstartFromLowestLevel(true); // decreases startup time
     this.autoPlay && this.play();
   },
   checkIfFlashIsReady: function() {
     this.bootstrapId = setInterval(function() {
-      if(this.el.getState) {
+      if(this.el.globoGetState) {
         this.bootstrap();
       }
     }.bind(this), 50);
@@ -70,18 +71,18 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   updateTime: function(interval) {
     return this.safe(function() {
       return setInterval(function() {
-        this.safe(function() { this.trigger('playback:timeupdate', this.el.getPosition(), this.el.getDuration(), this.name); });
+        this.safe(function() { this.trigger('playback:timeupdate', this.el.globoGetPosition(), this.el.globoGetDuration(), this.name); });
       }.bind(this), interval);
     });
   },
   play: function() {
     this.safe(function() {
-      if(this.el.getState() === 'IDLE') {
+      if(this.el.globoGetState() === 'IDLE') {
         clearInterval(this.checkStateId)
         this.checkTimeId = this.updateTime(1000);
       }
-      if(this.el.getState() === 'PAUSED') {
-        this.el.playerResume();
+      if(this.el.globoGetState() === 'PAUSED') {
+        this.el.globoPlayerResume();
       } else {
         this.firstPlay();
       }
@@ -94,8 +95,15 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     return null;
   },
   getCurrentBitrate: function() {
-    var currentLevel = this.getLevels()[this.el.getLevel()];
-    return currentLevel.bitrate;
+    return this.safe(function() {
+      var currentLevel = this.getLevels()[this.el.globoGetLevel()];
+      return currentLevel.bitrate;
+    });
+  },
+  getLastProgramDate: function() {
+    var programDate = this.el.globoGetLastProgramDate();
+    // normalizing for BRT
+    return programDate - 1.08e+7;
   },
   isHighDefinitionAvailable: function(levels) {
     return !!(levels.length > 0 && levels[levels.length-1].bitrate >= 3500000);
@@ -112,7 +120,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
       this.levels = this.getLevels();
       if (this.isHighDefinitionAvailable(this.levels)) {
         var lastLevel = this.levels.length -1;
-        var currentLevel = this.el.getLevel();
+        var currentLevel = this.el.globoGetLevel();
         if (currentLevel === lastLevel && this.highDefinition !== "available-in-use") {
           this.highDefinition = "available-in-use";
           changed = true;
@@ -132,7 +140,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   getLevels: function() {
     return this.safe(function() {
       if (!this.levels || this.levels.length === 0) {
-        this.levels = this.el.getLevels();
+        this.levels = this.el.globoGetLevels();
       }
       return this.levels;
     });
@@ -145,15 +153,15 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     this.safe(function() {
       this.updatePlaybackType();
       this.updatePlayerVisibility();
-      if (this.el.getState() === "PLAYING_BUFFERING" && this.el.getbufferLength() < 1 && this.currentState !== "PLAYING_BUFFERING") {
+      if (this.el.globoGetState() === "PLAYING_BUFFERING" && this.el.globoGetbufferLength() < 1 && this.currentState !== "PLAYING_BUFFERING") {
         this.trigger('playback:buffering', this.name);
         this.currentState = "PLAYING_BUFFERING";
-      } else if (this.currentState === "PLAYING_BUFFERING" && this.el.getState() === "PLAYING") {
+      } else if (this.currentState === "PLAYING_BUFFERING" && this.el.globoGetState() === "PLAYING") {
         this.trigger('playback:bufferfull', this.name);
         this.currentState = "PLAYING";
-      } else if (this.el.getState() === "IDLE") {
+      } else if (this.el.globoGetState() === "IDLE") {
         this.trigger('playback:ended', this.name);
-        this.trigger('playback:timeupdate', 0, this.el.getDuration(), this.name);
+        this.trigger('playback:timeupdate', 0, this.el.globoGetDuration(), this.name);
         clearInterval(this.checkStateId);
         this.currentState = "IDLE";
       }
@@ -171,7 +179,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   updatePlaybackType: function() {
     this.safe(function() {
       if (!this.playbackType) {
-        this.playbackType = this.el.getType();
+        this.playbackType = this.el.globoGetType();
         if (this.playbackType) {
           this.playbackType = this.playbackType.toLowerCase();
           this.updateSettings();
@@ -181,18 +189,18 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   },
   firstPlay: function() {
     this.safe(function() {
-      this.el.playerLoad(this.src);
-      this.el.playerPlay();
+      this.el.globoPlayerLoad(this.src);
+      this.el.globoPlayerPlay();
     });
   },
   volume: function(value) {
     this.safe(function() {
-      this.el.playerVolume(value);
+      this.el.globoPlayerVolume(value);
     });
   },
   pause: function() {
     this.safe(function() {
-      this.el.playerPause();
+      this.el.globoPlayerPause();
     });
   },
   stop: function() {
@@ -204,22 +212,22 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   },
   isPlaying: function() {
     return this.safe(function() {
-      if (this.el.getState)
-        return !!(this.el.getState().match(/playing/i));
+      if (this.el.playerGetState)
+        return !!(this.el.playerGetState().match(/playing/i));
       return false;
     })
   },
   getDuration: function() {
     return this.safe(function() {
-      return this.el.getDuration();
+      return this.el.playerGetDuration();
     });
   },
   seek: function(time) {
     this.safe(function() {
       if (time < 0)
-        this.el.playerSeek(time);
+        this.el.globoPlayerSeek(time);
       else
-        this.el.playerSeek((this.el.getDuration() - 20) * time / 100);
+        this.el.globoPlayerSeek(this.el.globoGetDuration() * time / 100);
       clearInterval(this.checkStateId);
       this.checkTimeId = this.updateTime(1000);
     });
