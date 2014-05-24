@@ -9,12 +9,14 @@ var _ = require("underscore");
 
 var Visibility = require('visibility');
 
+var objectIE = '<object id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls-playback=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> </object>';
+
 var HLSVideoPlaybackPlugin = UIPlugin.extend({
   name: 'hls_playback',
   tagName: 'object',
   template: JST.hls_playback,
   attributes: {
-    'data-hls-playback': ''
+    'data-hls-playback': '',
   },
   initialize: function(options) {
     this.src = options.src;
@@ -52,7 +54,6 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   bootstrap: function() {
     this.el.width = "100%";
     this.el.height = "100%";
-    console.log('flash is ready');
     this.trigger('playback:ready', this.name);
     clearInterval(this.bootstrapId);
     this.currentState = "IDLE";
@@ -247,6 +248,9 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     $el.attr('data-hls-playback', '');
     this.setElement($el[0]);
   },
+  setupIE: function() {
+    this.setElement($(_.template(objectIE)({cid: this.cid, swfPath: this.swfPath})));
+  },
   updateSettings: function() {
     this.settings = {
       left: [(this.playbackType === "VOD" ? "playpause" : "playstop")],
@@ -262,6 +266,8 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     this.el.id = this.cid;
     if(navigator.userAgent.match(/firefox/i)) { //FIXME remove it from here
       this.setupFirefox();
+    } else if(window.ActiveXObject) {
+      this.setupIE();
     }
     return this;
   }
