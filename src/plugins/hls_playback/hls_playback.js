@@ -17,6 +17,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   template: JST.hls_playback,
   attributes: {
     'data-hls-playback': '',
+    'type': 'application/x-shockwave-flash'
   },
   initialize: function(options) {
     this.src = options.src;
@@ -266,7 +267,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     this.el.id = this.cid;
     if(navigator.userAgent.match(/firefox/i)) { //FIXME remove it from here
       this.setupFirefox();
-    } else if(window.ActiveXObject) {
+    } else if(window.ActiveXObject || navigator.userAgent.match(/Trident.*rv[ :]*11\./)) {
       this.setupIE();
     }
     return this;
