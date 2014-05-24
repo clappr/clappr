@@ -78,7 +78,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     this.safe(function() {
       if(this.el.getState() === 'IDLE') {
         clearInterval(this.checkStateId)
-        this.checkStateId = this.updateTime(1000);
+        this.checkTimeId = this.updateTime(1000);
       }
       if(this.el.getState() === 'PAUSED') {
         this.el.playerResume();
@@ -221,7 +221,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
       else
         this.el.playerSeek((this.el.getDuration() - 20) * time / 100);
       clearInterval(this.checkStateId);
-      this.checkStateId = this.updateTime(1000);
+      this.checkTimeId = this.updateTime(1000);
     });
   },
   timeUpdate: function(time, duration) {
@@ -229,7 +229,7 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
   },
   destroy: function() {
     clearInterval(this.checkStateId);
-    clearInterval(this.checkStateId);
+    clearInterval(this.checkTimeId);
     clearInterval(this.checkHighDefinitionId);
     this.stopListening()
     this.$el.remove()
