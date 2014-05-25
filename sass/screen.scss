@@ -1,0 +1,137 @@
+@import "compass/css3";
+@import "compass/css3/text-shadow";
+@import "compass/css3/border-radius";
+@import "compass/css3/box-shadow";
+@import "compass/css3/filter";
+
+@import url(http://fonts.googleapis.com/css?family=Oxygen:400,700);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300italic,700);
+
+$default-text-shadow-color: rgba(black, 0.9);
+
+
+.blur {
+  @include filter(blur(3px));
+}
+
+body {
+  font-family: "Open Sans Condensed";
+  height: 100%;
+  width: 100%;
+}
+
+a {
+  text-decoration: none;
+}
+
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  min-height: 99%;
+}
+
+.front {
+  position: relative;
+  left: -10px;
+  top: -10px;
+  .headline {
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 100px;
+    color: white;
+    z-index: 10000;
+    line-height: 30px;
+    p {
+      font-size: 5em;
+      @include single-text-shadow;
+    }
+
+    p:nth-child(2) {
+      font-weight: bold;
+    }
+    
+    a {
+      position: relative;
+      display: inline-block;
+      width: 160px;
+      line-height: 60px;
+      font-weight: bold;
+      color: #333;
+      vertical-align: middle;
+      background-color: shade(white, 1%);
+      top: auto;
+      @include single-box-shadow;
+      @include border-radius(3px);
+      @include transition-property(color);
+      @include transition-duration(1s);
+    }
+
+    a:hover {
+      color: #4576a1;
+    }
+
+    a:active {
+      top: 5px;
+    }
+    a:first-child {
+      margin-right: 150px;
+    }
+  }
+}
+
+
+.content {
+  display: block;
+  text-align: center;
+  position: relative;
+  top: 50px;
+  height: 250px;
+  width: 100%;
+  margin: 0 auto;
+  .box {
+    position: relative;
+    display: inline-block;
+    height: auto;
+    text-align: justify;
+    color: #555;
+    width: 30%;
+    .title {
+      text-align: center;
+      font-size: 2em;
+    }
+    p {
+      font-size: 1.2em;
+    }
+  }
+  .box:nth-child(2) {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+}
+
+footer {
+  text-align: center;
+  position: relative;
+  top: 200px;
+  color: white;
+  width: 100%;
+  height: 100px;
+  background: #4576a1;
+  bottom: 3px;
+  width: inherit;
+  a {
+    color: white;
+  }
+  li {
+    display: inline;
+  }
+}
+.row {
+
+  display: inline-block;
+}

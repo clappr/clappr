@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>New Globo.com Player</title>
+  <script src="api.min.js"></script>
+  <script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.1.min.js"> </script>
+  <link rel="stylesheet" href="stylesheets/screen.css">
+  <script type="text/javascript" charset="utf-8">
+  function toggle() {
+    var d = player.core.mediaControl.disabled;
+    player.core.mediaControl.disabled = !d;
+    player.core.mediaControl.show();
+  }
+  $(document).scroll(function() {
+    if($(this).scrollTop() > 0) {
+      $('[data-container]').addClass('blur');
+    } else {
+      $('[data-container]').removeClass('blur');
+    }
+  });
+  window.onload = function() {
+    player = new WP3.Player({
+      sources: ['events.webm'],
+      chromeless: true,
+      autoPlay: true,
+      loop: true,
+      height: window.innerHeight + 11,
+      width: window.screen.availWidth
+    });
+    player.attachTo(document.getElementById('player-wrapper'));
+  }
+  </script>
+</head>
+<body>
+<div class="container">
+  <div class="front">
+    <div class="headline">
+      <p>NEW</p>
+      <p>GLOBO.COM</p><p> PLAYER</p>
+      <div class="buttons">
+        <a href="https://github.com/globocom/player" target="_blank" >VIEW SOURCE</a>
+        <a href="javascript:void(0)" onclick="toggle()">SHOW CONTROLS</a>
+      </div>
+    </div>
+    <div id="player-wrapper"></div>
+  </div>
+  <section class="content">
+    <div class="box">
+      <h4 class="title">FEATURES</h4>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    </div>
+    <div class="box">
+      <h4 class="title">FEATURES</h4>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    </div>
+    <div class="box">
+      <h4 class="title">FEATURES</h4>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    </div>
+  </section>
+  <footer>
+    <div class="row">
+      <div class="logo">
+        <a href="http://www.globo.com">globo.com</a>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="http://g1.globo.com" title="notícias">notícias</a></li>
+          <li><a href="http://globoesporte.globo.com" title="esportes">esportes</a></li>
+          <li><a href="http://entretenimento.globo.com" title="entretenimento">entretenimento</a></li>
+          <li><a href="http://globotv.globo.com" title="vídeos">vídeos</a></li>
+        </ul>
+        <p><a href="http://www.globo.com/Globo.com/sites/0,,5623,00.html" title="todos os sites">todos os sites</a></p>
+      </nav>
+    </div>
+    <div class="row">
+      <div class="copyright">
+        <p>© Copyright 2000-2014 Globo Comunicação e Participações S.A.<a href="http://www.globo.com/Globo.com/homev6/0,,PL0-0,00-POLITICA+DE+PRIVACIDADE.html">Política de Privacidade</a></p>
+        <ul>
+          <li><a href="https://login.globo.com/login/464" title="central globo.com">central globo.com</a></li>
+          <li><a href="http://atendimento.globo.com/Portal/ISP/assineja/panfletos/panfleto_home_globo" title="assine a globo.com">assine a globo.com</a></li>
+          <li class="last"><a href="http://www.globo.com/Portal/anuncie/glb_anuncie_panfleto" title="anuncie conosco">anuncie conosco</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+</div>
+</body>
+</html>

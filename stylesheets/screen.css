@@ -1,0 +1,157 @@
+@import url(http://fonts.googleapis.com/css?family=Oxygen:400,700);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300italic,700);
+/* line 13, ../sass/screen.scss */
+.blur {
+  -webkit-filter: blur(3px);
+  -moz-filter: blur(3px);
+  filter: blur(3px);
+}
+
+/* line 17, ../sass/screen.scss */
+body {
+  font-family: "Open Sans Condensed";
+  height: 100%;
+  width: 100%;
+}
+
+/* line 23, ../sass/screen.scss */
+a {
+  text-decoration: none;
+}
+
+/* line 27, ../sass/screen.scss */
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  min-height: 99%;
+}
+
+/* line 35, ../sass/screen.scss */
+.front {
+  position: relative;
+  left: -10px;
+  top: -10px;
+}
+/* line 39, ../sass/screen.scss */
+.front .headline {
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: 100px;
+  color: white;
+  z-index: 10000;
+  line-height: 30px;
+}
+/* line 49, ../sass/screen.scss */
+.front .headline p {
+  font-size: 5em;
+  text-shadow: 0px 0px 1px rgba(0, 0, 0, 0.9);
+}
+/* line 54, ../sass/screen.scss */
+.front .headline p:nth-child(2) {
+  font-weight: bold;
+}
+/* line 58, ../sass/screen.scss */
+.front .headline a {
+  position: relative;
+  display: inline-block;
+  width: 160px;
+  line-height: 60px;
+  font-weight: bold;
+  color: #333;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  top: auto;
+  -webkit-box-shadow: 0px 0px 5px #333333;
+  -moz-box-shadow: 0px 0px 5px #333333;
+  box-shadow: 0px 0px 5px #333333;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-transition-property: color;
+  -moz-transition-property: color;
+  -o-transition-property: color;
+  transition-property: color;
+  -webkit-transition-duration: 1s;
+  -moz-transition-duration: 1s;
+  -o-transition-duration: 1s;
+  transition-duration: 1s;
+}
+/* line 74, ../sass/screen.scss */
+.front .headline a:hover {
+  color: #4576a1;
+}
+/* line 78, ../sass/screen.scss */
+.front .headline a:active {
+  top: 5px;
+}
+/* line 81, ../sass/screen.scss */
+.front .headline a:first-child {
+  margin-right: 150px;
+}
+
+/* line 88, ../sass/screen.scss */
+.content {
+  display: block;
+  text-align: center;
+  position: relative;
+  top: 50px;
+  height: 250px;
+  width: 100%;
+  margin: 0 auto;
+}
+/* line 96, ../sass/screen.scss */
+.content .box {
+  position: relative;
+  display: inline-block;
+  height: auto;
+  text-align: justify;
+  color: #555;
+  width: 30%;
+}
+/* line 103, ../sass/screen.scss */
+.content .box .title {
+  text-align: center;
+  font-size: 2em;
+}
+/* line 107, ../sass/screen.scss */
+.content .box p {
+  font-size: 1.2em;
+}
+/* line 111, ../sass/screen.scss */
+.content .box:nth-child(2) {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+/* line 117, ../sass/screen.scss */
+footer {
+  text-align: center;
+  position: relative;
+  top: 200px;
+  color: white;
+  width: 100%;
+  height: 100px;
+  background: #4576a1;
+  bottom: 3px;
+  width: inherit;
+}
+/* line 127, ../sass/screen.scss */
+footer a {
+  color: white;
+}
+/* line 130, ../sass/screen.scss */
+footer li {
+  display: inline;
+}
+
+/* line 134, ../sass/screen.scss */
+.row {
+  display: inline-block;
+}
