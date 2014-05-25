@@ -27,6 +27,7 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
   initialize: function(options) {
     this.src = options.src;
     this.el.src = options.src;
+    this.el.loop = options.loop;
     this.settings = {
       left: ['playpause'],
       right: ['fullscreen', 'volume'],
@@ -135,7 +136,7 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
 });
 
 HTML5VideoPlaybackPlugin.canPlay = function(resource) {
-    return !!resource.match(/(.*).mp4/);
+    return !!resource.match(/(.*).mp4|webm/);
 }
 
 module.exports = HTML5VideoPlaybackPlugin;
