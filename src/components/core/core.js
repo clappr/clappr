@@ -157,7 +157,7 @@ var Core = UIObject.extend({
   onMediaControlShow: function(showing) {
     if (showing)
       this.$el.removeClass('nocursor');
-    else if (!this.mediaControl.disabled)
+    else if (Fullscreen.isFullscreen())
       this.$el.addClass('nocursor');
   },
   render: function() {
