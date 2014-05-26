@@ -140,6 +140,7 @@ var PipPlugin = BaseObject.extend({
   },
   pipToMaster: function() {
     if (this.pipContainer) {
+      this.pipContainer.setStyle({ 'z-index': 2000 });
       this.pipContainer.animate(this.masterStyle, {complete: this.pipToMasterCallback.bind(this)});
     }
     return this;
