@@ -42,6 +42,12 @@ var PipPlugin = BaseObject.extend({
     return !!this.pipContainer;
   },
   addPip: function(source) {
+    if (this.masterContainer.playback.name === "auditude") {
+      if (this.core.params.onLoadPipFailed)
+        this.core.params.onLoadPipFailed(source);
+      return;
+    }
+    this.stopListening(this.pipContainer);
     this.discardPip();
     this.core.createContainer(source).then(this.addPipCallback.bind(this));
   },
@@ -57,6 +63,8 @@ var PipPlugin = BaseObject.extend({
     this.pipContainer.play();
     this.stopListening(this.pipContainer);
     this.listenToPipClick();
+    this.listenTo(this.pipContainer, "container:ended", this.discardPip);
+    this.pipContainer.trigger("container:pip", true);
   },
   discardPip: function() {
     if (this.pipContainer) {
@@ -128,6 +136,7 @@ var PipPlugin = BaseObject.extend({
         }.bind(this)
       });
     }
+    this.listenTo(this.masterContainer, "container:ended", this.pipToMaster);
     this.core.mediaControl.setContainer(this.masterContainer);
     this.listenToPipClick();
   },
@@ -149,6 +158,7 @@ var PipPlugin = BaseObject.extend({
     this.masterContainer = container;
     this.masterContainer.play();
     this.tmpContainer = undefined;
+    this.listenTo(this.masterContainer, "container:ended", this.pipToMaster);
     this.core.mediaControl.setContainer(this.masterContainer);
     if (this.core.params.onMasterLoaded)
       this.core.params.onMasterLoaded(this.masterContainer.playback.params.src);
