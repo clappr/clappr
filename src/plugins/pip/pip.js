@@ -73,6 +73,12 @@ var PipPlugin = BaseObject.extend({
   },
   addMaster: function(source) {
     if (this.masterContainer) {
+      if (this.masterContainer.playback && this.masterContainer.playback.name === "auditude") {
+        if (this.core.params.onLoadMasterFailed)
+          this.core.params.onLoadMasterFailed(source);
+        return;
+      }
+      this.stopListening(this.masterContainer);
       this.tmpContainer = this.masterContainer;
       this.tmpContainer.setStyle({'z-index': 2000});
       this.core.createContainer(source).then(this.addMasterCallback.bind(this));
@@ -80,6 +86,11 @@ var PipPlugin = BaseObject.extend({
   },
   addMasterContainer: function(container) {
     if (this.masterContainer) {
+      if (this.masterContainer.playback && this.masterContainer.playback.name === "auditude") {
+        if (this.core.params.onLoadMasterFailed)
+          this.core.params.onLoadMasterFailed(source);
+        return;
+      }
       this.tmpContainer = this.masterContainer;
       this.tmpContainer.setStyle({'z-index': 2000});
       this.addMasterCallback(container);
@@ -96,9 +107,16 @@ var PipPlugin = BaseObject.extend({
     this.pipContainer.setVolume(0);
     this.pipContainer.trigger("container:pip", true);
     if (this.pipContainer.playback.name === 'hls_playback') { //flash breaks on animate
+    if (this.masterContainer.hasPlugin('poster')) {
+//      this.masterContainer.getPlugin('poster').hidePlayButton();
+        this.masterContainer.getPlugin('poster').onPlay();
+    }
+    if (this.pipContainer.hasPlugin('watermark'))
+      this.pipContainer.getPlugin('watermark').disable();
+    if (this.pipContainer.playback && this.pipContainer.playback.name === 'hls_playback') { //flash breaks on animate
       this.pipContainer.setStyle(this.pipStyle);
       if (this.core.params.onMasterLoaded)
-        this.core.params.onMasterLoaded(this.masterContainer.playback.src);
+        this.core.params.onMasterLoaded(this.masterContainer.playback.params.src);
     } else {
       this.pipContainer.animate(this.pipStyle, {
         complete: function() {
@@ -106,7 +124,7 @@ var PipPlugin = BaseObject.extend({
             this.pipContainer.setStyle(this.pipStyle);
           }
           if (this.core.params.onMasterLoaded)
-            this.core.params.onMasterLoaded(this.masterContainer.playback.src);
+            this.core.params.onMasterLoaded(this.masterContainer.playback.params.src);
         }.bind(this)
       });
     }
@@ -115,6 +133,12 @@ var PipPlugin = BaseObject.extend({
   },
   changeMaster: function(source) {
     if (this.masterContainer) {
+      if (this.masterContainer.playback && this.masterContainer.playback.name === "auditude") {
+        if (this.core.params.onLoadMasterFailed)
+          this.core.params.onLoadMasterFailed(source);
+        return;
+      }
+      this.stopListening(this.masterContainer);
       this.tmpContainer = this.masterContainer;
       this.tmpContainer.setStyle({'z-index': 2000});
       this.core.createContainer(source).then(this.changeMasterCallback.bind(this));
@@ -127,7 +151,7 @@ var PipPlugin = BaseObject.extend({
     this.tmpContainer = undefined;
     this.core.mediaControl.setContainer(this.masterContainer);
     if (this.core.params.onMasterLoaded)
-      this.core.params.onMasterLoaded(this.masterContainer.playback.src);
+      this.core.params.onMasterLoaded(this.masterContainer.playback.params.src);
   },
   listenToPipClick: function() {
     if (this.pipContainer) {
@@ -156,7 +180,7 @@ var PipPlugin = BaseObject.extend({
     this.core.mediaControl.setContainer(this.masterContainer);
     this.core.enableMediaControl();
     if (this.core.params.onPipToMaster)
-      this.core.params.onPipToMaster(this.masterContainer.playback.src);
+      this.core.params.onPipToMaster(this.masterContainer.playback.params.src);
   },
   onMediaControlShow: function () {
     if (!this.pipContainer || this.pipContainer.$el.is(':animated')) return;
