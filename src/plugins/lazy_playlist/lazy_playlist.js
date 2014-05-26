@@ -50,6 +50,7 @@ var LazyPlaylist = UIObject.extend({
     this.getCurrentContainer().$el.css(style);
   },
   _setupContainers: function(container) {
+    container.stop();
     container.$el.hide();
     //this._injectInChildPlugins(container.plugins);
   },

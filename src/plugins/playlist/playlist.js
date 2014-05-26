@@ -41,6 +41,7 @@ var Playlist = UIObject.extend({
   },
   _setupContainers: function(container) {
     container.$el.hide();
+    container.stop();
     //this._injectInChildPlugins(container.plugins);
   },
   _injectInChildPlugins: function(plugins) {
