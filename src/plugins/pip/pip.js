@@ -6,6 +6,8 @@ var BaseObject = require('../../base/base_object');
 var $ = require("jquery");
 var _ = require('underscore');
 
+var Loading = require('../loading');
+
 var PipPlugin = BaseObject.extend({
   name: 'pip',
   initialize: function(core) {
@@ -15,6 +17,8 @@ var PipPlugin = BaseObject.extend({
                      "background-clip": "padding-box", "-webkit-background-clip": "padding-box", "cursor": "pointer"};
     this.masterStyle = {width: "100%", height: "100%", bottom: "0px", right: "0px", border: "none", "cursor" : "default"};
     this.masterContainer = core.containers[0];
+    this.loading = new Loading({message: 'Carregando...', style: {left:'25px', top: '15px', position: 'relative', 'float': 'left', 'z-index': 3001,color: 'white'}});
+    this.core.$el.append(this.loading.render().el);
     if (core.containers.length === 2) {
       this.pipContainer = core.containers[1];
       this.pipContainer.setStyle(this.pipStyle);
@@ -75,6 +79,7 @@ var PipPlugin = BaseObject.extend({
   },
   discardMaster: function() {
     if (this.masterContainer) {
+      this.stopListening(this.masterContainer);
       this.discardContainer(this.masterContainer);
       this.masterContainer = undefined;
     }
@@ -86,6 +91,7 @@ var PipPlugin = BaseObject.extend({
           this.core.params.onLoadMasterFailed(source);
         return;
       }
+      this.loading.show();
       this.stopListening(this.masterContainer);
       this.tmpContainer = this.masterContainer;
       this.tmpContainer.setStyle({'z-index': 2000});
@@ -109,18 +115,17 @@ var PipPlugin = BaseObject.extend({
     if(this.pipContainer) {
       this.discardPip();
     }
+    this.listenToOnce(this.masterContainer, "container:play", this.animateMasterToPip);
     this.masterContainer.play();
     this.pipContainer = this.tmpContainer;
     this.tmpContainer = undefined;
     this.pipContainer.setVolume(0);
     this.pipContainer.trigger("container:pip", true);
-    if (this.pipContainer.playback.name === 'hls_playback') { //flash breaks on animate
-    if (this.masterContainer.hasPlugin('poster')) {
-//      this.masterContainer.getPlugin('poster').hidePlayButton();
-        this.masterContainer.getPlugin('poster').onPlay();
-    }
+  },
+  animateMasterToPip: function() {
+    this.loading.hide();
+    this.listenTo(this.masterContainer, "container:ended", this.pipToMaster);
     if (this.pipContainer.playback && this.pipContainer.playback.name === 'hls') { //flash breaks on animate
-      console.log('OPA CHEFE');
       this.pipContainer.setStyle(this.pipStyle);
       if (this.core.params.onMasterLoaded)
         this.core.params.onMasterLoaded(this.masterContainer.playback.params.src);
@@ -135,7 +140,6 @@ var PipPlugin = BaseObject.extend({
         }.bind(this)
       });
     }
-    this.listenTo(this.masterContainer, "container:ended", this.pipToMaster);
     this.core.mediaControl.setContainer(this.masterContainer);
     this.listenToPipClick();
   },
@@ -172,9 +176,10 @@ var PipPlugin = BaseObject.extend({
     container.destroy();
   },
   pipToMaster: function() {
+    this.stopListening(this.masterContainer);
     if (this.pipContainer) {
-      this.pipContainer.setStyle({ 'z-index': 2000 });
-      this.pipContainer.animate(this.masterStyle, {complete: this.pipToMasterCallback.bind(this)});
+      this.pipContainer.setStyle({ 'z-index': 999 });
+      this.pipContainer.animate(this.masterStyle).then(this.pipToMasterCallback.bind(this));
     }
     return this;
   },
@@ -182,7 +187,7 @@ var PipPlugin = BaseObject.extend({
     this.discardMaster();
     this.pipContainer.setVolume(100);
     this.pipContainer.trigger("container:pip", false);
-    this.pipContainer.trigger('container:play');
+    this.pipContainer.play();
     this.masterContainer = this.pipContainer;
     this.masterContainer.setStyle({"z-index": 20});
     this.pipContainer = undefined;

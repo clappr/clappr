@@ -48,7 +48,7 @@ var Container = UIObject.extend({
     this.$el.css(style);
   },
   animate: function(style, duration) {
-    this.$el.animate(style, duration);
+    return this.$el.animate(style, duration).promise();
   },
   ready: function() {
     console.log('container is ready');
