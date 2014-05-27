@@ -234,6 +234,13 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
       this.checkTimeId = this.updateTime(1000);
     });
   },
+  isPip: function(pipStatus) {
+    if (pipStatus == true && this.getCurrentBitrate() > 750000) {
+      this.player.globoPlayerSmoothSetLevel(2);
+    } else if (!this.player.globoGetAutoLevel()) {
+      this.player.globoPlayerSetLevel(-1);
+    }
+  },
   timeUpdate: function(time, duration) {
     this.trigger('playback:timeupdate', time, duration, this.name);
   },
