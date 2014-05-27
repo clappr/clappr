@@ -26,9 +26,13 @@ var PosterPlugin = UIPlugin.extend({
     this.render();
   },
   bindEvents: function() {
+    this.listenTo(this.container, 'container:state:buffering', this.onBuffering);
     this.listenTo(this.container, 'container:play', this.onPlay);
     this.listenTo(this.container, 'container:stop', this.onStop);
     this.listenTo(this.container, 'container:ended', this.onStop);
+  },
+  onBuffering: function() {
+    this.hidePlayButton();
   },
   onPlay: function() {
     this.$el.hide();
@@ -41,6 +45,22 @@ var PosterPlugin = UIPlugin.extend({
     if (this.options.disableControlsOnPoster) {
       this.container.disableMediaControl();
     }
+    if (!this.options.hidePlayButton) {
+      this.showPlayButton();
+    }
+  },
+  onPipStateChanged: function(isPip) {
+    if (isPip) {
+      this.hidePlayButton();
+    } else if (!this.options.hidePlayButton) {
+      this.showPlayButton();
+    }
+  },
+  hidePlayButton: function() {
+    this.$playButton.hide();
+  },
+  showPlayButton: function() {
+    this.$playButton.show();
   },
   render: function() {
     var style = Styler.getStyleFor(this.name);
