@@ -25,6 +25,7 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
   },
 
   initialize: function(options) {
+    this.options = options;
     this.src = options.src;
     this.el.src = options.src;
     this.el.loop = options.loop;
@@ -33,7 +34,6 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
       right: ['fullscreen', 'volume'],
       default: ['position', 'seekbar', 'duration']
     };
-    options.autoPlay && this.play();
   },
 
   loadedMetadata: function(e) {
@@ -131,6 +131,7 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
     var style = Styler.getStyleFor(this.name);
     this.$el.append(style);
     this.trigger('playback:ready', this.name);
+    this.options.autoPlay && this.play();
     return this;
   }
 });
