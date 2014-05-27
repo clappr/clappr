@@ -1,0 +1,46 @@
+@font-face {
+  font-family: "Player";
+  src: url("<%= playerBaseUrl %>/assets/Player-Regular.eot");
+  src: url("<%= playerBaseUrl %>/assets/Player-Regular.eot?#iefix") format("embedded-opentype"),
+       url("<%= playerBaseUrl %>/assets/Player-Regular.ttf") format("truetype"),
+       url("<%= playerBaseUrl %>/assets/Player-Regular.svg#player") format("svg");
+}
+.poster-icon[data-poster] {
+  font-family:"Player";
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: 0;
+  speak: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: white;
+  opacity: 0.75;
+}
+.poster-icon.play {
+  font-size: 100px;
+}
+.poster-icon:hover {
+  opacity: 1.0;
+}
+.poster-icon.play[data-poster]:before{content:"\\e008"}
+div[data-poster] {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 998;
+  top: 0;
+}
+img[data-poster] {
+  width: 100%;
+  height: 100%;
+}
+div.play-wrapper[data-poster] {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100px;
+  top: -50%;
+  margin-top: -43px;
+  text-align: center;
+}

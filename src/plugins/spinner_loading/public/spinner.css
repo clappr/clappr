@@ -6,7 +6,7 @@ div[data-spinner] {
   margin-right: auto;
   right: 0;
   left: 0;
-  z-index: 10;
+  z-index: 999;
   top: 45%;
 }
 
