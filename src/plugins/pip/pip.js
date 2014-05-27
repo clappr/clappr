@@ -119,8 +119,6 @@ var PipPlugin = BaseObject.extend({
 //      this.masterContainer.getPlugin('poster').hidePlayButton();
         this.masterContainer.getPlugin('poster').onPlay();
     }
-    if (this.pipContainer.hasPlugin('watermark'))
-      this.pipContainer.getPlugin('watermark').disable();
     if (this.pipContainer.playback && this.pipContainer.playback.name === 'hls_playback') { //flash breaks on animate
       this.pipContainer.setStyle(this.pipStyle);
       if (this.core.params.onMasterLoaded)
