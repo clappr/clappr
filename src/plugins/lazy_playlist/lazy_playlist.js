@@ -75,6 +75,7 @@ var LazyPlaylist = UIObject.extend({
   playNextContainer: function() {
     var container = this.getCurrentContainer();
     this.stopListening(container);
+    container.stop();
     container.destroy();
 
     var nextContainer = this.getNextContainer();
@@ -83,14 +84,23 @@ var LazyPlaylist = UIObject.extend({
       nextContainer.stop();
       this.trigger('container:ended', this.name);
     }
-    this.listenToOnce(nextContainer.playback, 'playback:ready', function() {
-      this.trigger('container:next', this.current);
-      this._bindContainerEvents(nextContainer);
-      nextContainer.play();
-      this.trigger('container:play', this.name);
-      this.trigger('container:settingsupdate', this.name);
-      this.trigger('container:timeupdate', 0, nextContainer.playback.getDuration());
-    }.bind(this));
+    if(['hls_playback', 'flash_playback'].indexOf(nextContainer.playback.name) >= 0) {
+      this.listenToOnce(nextContainer.playback, 'playback:ready', function() {
+        this.trigger('container:next', this.current);
+        this._bindContainerEvents(nextContainer);
+        nextContainer.play();
+        this.trigger('container:play', this.name);
+        this.trigger('container:settingsupdate', this.name);
+        this.trigger('container:timeupdate', 0, nextContainer.playback.getDuration());
+      }.bind(this));
+    } else {
+        this.trigger('container:next', this.current);
+        this._bindContainerEvents(nextContainer);
+        nextContainer.play();
+        this.trigger('container:play', this.name);
+        this.trigger('container:settingsupdate', this.name);
+        this.trigger('container:timeupdate', 0, nextContainer.playback.getDuration());
+    }
     this.core.appendContainer(nextContainer);
   },
   timeUpdateProxy: function(position, duration) {
