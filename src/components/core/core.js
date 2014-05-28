@@ -109,7 +109,7 @@ var Core = UIObject.extend({
   },
   appendContainer: function(container) {
     this.listenTo(container, 'container:destroyed', this.removeContainer);
-    this.$el.append(container.render().el);
+    this.el.appendChild(container.render().el);
     this.containers.push(container);
   },
   prependContainer: function(container) {
