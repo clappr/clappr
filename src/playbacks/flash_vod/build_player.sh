@@ -1,0 +1,1 @@
+/Users/flavio.barbosa/Library/Sprouts/1.1/cache/flex4/4.6.0.23201/bin/mxmlc -default-background-color=0x000000 -default-size=640,360 -incremental -language=as3 -output=public/Player.swf -static-link-runtime-shared-libraries=true -target-player=11.1 -use-network=false Player.as
