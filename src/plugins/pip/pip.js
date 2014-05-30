@@ -119,7 +119,8 @@ var PipPlugin = BaseObject.extend({
 //      this.masterContainer.getPlugin('poster').hidePlayButton();
         this.masterContainer.getPlugin('poster').onPlay();
     }
-    if (this.pipContainer.playback && this.pipContainer.playback.name === 'hls_playback') { //flash breaks on animate
+    if (this.pipContainer.playback && this.pipContainer.playback.name === 'hls') { //flash breaks on animate
+      console.log('OPA CHEFE');
       this.pipContainer.setStyle(this.pipStyle);
       if (this.core.params.onMasterLoaded)
         this.core.params.onMasterLoaded(this.masterContainer.playback.params.src);

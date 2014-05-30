@@ -35,9 +35,9 @@ function copyAssets(asset) {
     .pipe(fs.createWriteStream('dist/assets/' + path.basename(asset)));
 }
 
-var pluginsTemplates = _(glob('src/plugins/**/*.html')).map(format);
+var pluginsTemplates = _(glob('src/{plugins,playbacks}/**/*.html')).map(format);
 var templates = pluginsTemplates.concat(_(glob('src/components/**/*.html')).map(format));
-var pluginsStyles = _(glob('src/plugins/**/*.css')).map(format);
+var pluginsStyles = _(glob('src/{plugins,playbacks}/**/*.css')).map(format);
 var styles = pluginsStyles.concat(_(glob('src/components/**/*.css')).map(format));
 
 fs.writeFileSync(jstFile, codeTemplate({templates: templates, styles: styles}));

@@ -4,8 +4,8 @@
 
 var UIPlugin = require('../../base/ui_plugin');
 
-var HTML5AudioPlaybackPlugin = UIPlugin.extend({
-  name: 'html5_audio_playback',
+var HTML5Audio = UIPlugin.extend({
+  name: 'html5_audio',
   type: 'playback',
   tagName: 'audio',
   events: {
@@ -91,9 +91,9 @@ var HTML5AudioPlaybackPlugin = UIPlugin.extend({
   }
  });
 
-HTML5AudioPlaybackPlugin.canPlay = function(resource) {
+HTML5Audio.canPlay = function(resource) {
   return !!resource.match(/(.*).mp3/);
 }
 
 
-module.exports = HTML5AudioPlaybackPlugin;
+module.exports = HTML5Audio;

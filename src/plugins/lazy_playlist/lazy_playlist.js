@@ -84,7 +84,7 @@ var LazyPlaylist = UIObject.extend({
       nextContainer.stop();
       this.trigger('container:ended', this.name);
     }
-    if(['hls_playback', 'flash_playback'].indexOf(nextContainer.playback.name) >= 0) {
+    if(['hls', 'flash_vod'].indexOf(nextContainer.playback.name) >= 0) {
       this.listenToOnce(nextContainer.playback, 'playback:ready', function() {
         this.trigger('container:next', this.current);
         this._bindContainerEvents(nextContainer);
@@ -116,7 +116,7 @@ var LazyPlaylist = UIObject.extend({
     this._bindContainerEvents(nextContainer);
     nextContainer.$el.show();
     nextContainer.playback.isReady = false;
-    if(nextContainer.playback.name === 'flash_playback') {
+    if(['flash_vod', 'hls'].indexOf(nextContainer.playback.name) !== -1) {
       nextContainer.playback.checkIfFlashIsReady();
     }
     this.listenToOnce(nextContainer.playback, 'playback:ready', function() {

@@ -5,8 +5,8 @@
 var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
 
-var HTML5VideoPlaybackPlugin = UIPlugin.extend({
-  name: 'html5_video_playback',
+var HTML5Video = UIPlugin.extend({
+  name: 'html5_video',
   type: 'playback',
   tagName: 'video',
   attributes: {
@@ -136,8 +136,8 @@ var HTML5VideoPlaybackPlugin = UIPlugin.extend({
   }
 });
 
-HTML5VideoPlaybackPlugin.canPlay = function(resource) {
-    return !!resource.match(/(.*).mp4|webm/);
+HTML5Video.canPlay = function(resource) {
+    return !!resource.match(/(.*).mp4/);
 }
 
-module.exports = HTML5VideoPlaybackPlugin;
+module.exports = HTML5Video;

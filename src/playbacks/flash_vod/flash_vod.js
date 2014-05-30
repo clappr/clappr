@@ -7,14 +7,10 @@ var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var _ = require("underscore");
 
-var FlashVideoPlaybackPlugin = UIObject.extend({
-  name: 'flash_playback',
-  tagName: 'object',
-  template: JST.flash_playback,
-  attributes: {
-    'data-flash-playback': ''
-  },
-
+var FlashVOD = UIObject.extend({
+  name: 'flash_vod',
+  tagName: 'div',
+  template: JST.flash_vod,
   initialize: function(options) {
     this.src = options.src;
     this.swfPath = options.swfPath || "assets/Player.swf";
@@ -162,11 +158,14 @@ var FlashVideoPlaybackPlugin = UIObject.extend({
     if(navigator.userAgent.match(/firefox/i)) { //FIXME remove it from here
       this.setupFirefox();
     }
+    this.player.id = this.cid;
+    this.$el.css({height: 0, width: 0});
+    $(this.player).attr('data-flash-vod', '');
     return this;
   }
 });
 
-FlashVideoPlaybackPlugin.canPlay = function(resource) {
+FlashVOD.canPlay = function(resource) {
   //http://help.adobe.com/en_US/flashmediaserver/techoverview/WS07865d390fac8e1f-4c43d6e71321ec235dd-7fff.html
   if (navigator.userAgent.match(/firefox/i)) {
     return _.isString(resource) && !!resource.match(/(.*).(mp4|mov|f4v|3gpp|3gp)/);
@@ -175,4 +174,4 @@ FlashVideoPlaybackPlugin.canPlay = function(resource) {
   }
 }
 
-module.exports = FlashVideoPlaybackPlugin;
+module.exports = FlashVOD;

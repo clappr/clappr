@@ -9,16 +9,10 @@ var _ = require("underscore");
 
 var Visibility = require('visibility');
 
-var objectIE = '<object id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls-playback=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> </object>';
-
-var HLSVideoPlaybackPlugin = UIPlugin.extend({
-  name: 'hls_playback',
-  tagName: 'object',
-  template: JST.hls_playback,
-  attributes: {
-    'data-hls-playback': '',
-    'type': 'application/x-shockwave-flash'
-  },
+var HLS = UIPlugin.extend({
+  name: 'hls',
+  tagName: 'div',
+  template: JST.hls,
   initialize: function(options) {
     this.src = options.src;
     this.swfPath = options.swfPath || "assets/HLSPlayer.swf";
@@ -277,13 +271,16 @@ var HLSVideoPlaybackPlugin = UIPlugin.extend({
     } else if(window.ActiveXObject || navigator.userAgent.match(/Trident.*rv[ :]*11\./)) {
       this.setupIE();
     }
+    this.$el.css({height: 0, width: 0});
+    $(this.player).attr('data-hls', '');
+    this.player.id = this.cid;
     return this;
   }
 });
 
-HLSVideoPlaybackPlugin.canPlay = function(resource) {
+HLS.canPlay = function(resource) {
   return !!resource.match(/(.*).m3u8/);
 }
 
 
-module.exports = HLSVideoPlaybackPlugin;
+module.exports = HLS;
