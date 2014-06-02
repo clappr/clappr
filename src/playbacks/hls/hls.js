@@ -16,6 +16,7 @@ var HLS = UIPlugin.extend({
   initialize: function(options) {
     this.src = options.src;
     this.swfPath = options.swfPath || "assets/HLSPlayer.swf";
+    this.isLegacyIE = window.ActiveXObject;
     this.autoPlay = options.autoPlay;
     this.visibility = new Visibility();
     this.visible = true;
@@ -265,11 +266,9 @@ var HLS = UIPlugin.extend({
     var style = Styler.getStyleFor(this.name);
     this.$el.html(this.template({swfPath: this.swfPath}));
     this.$el.append(style);
-    this.el.id = this.cid;
-    if(navigator.userAgent.match(/firefox/i)) { //FIXME remove it from here
-      this.setupFirefox();
-    } else if(window.ActiveXObject || navigator.userAgent.match(/Trident.*rv[ :]*11\./)) {
-      this.setupIE();
+    this.player = this.$el.find('embed')[0];
+    if(this.isLegacyIE) { //FIXME remove it from here
+      this.player = this.$el.find('object')[0];
     }
     this.$el.css({height: 0, width: 0});
     $(this.player).attr('data-hls', '');
