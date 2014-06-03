@@ -8,15 +8,19 @@ var JST = require('../../base/jst');
 var _ = require("underscore");
 
 var Visibility = require('visibility');
+var objectIE = '<object id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> </object>';
 
 var HLS = UIPlugin.extend({
   name: 'hls',
-  tagName: 'div',
+  tagName: 'object',
   template: JST.hls,
   initialize: function(options) {
     this.src = options.src;
     this.swfPath = options.swfPath || "assets/HLSPlayer.swf";
     this.isLegacyIE = window.ActiveXObject;
+    this.isChrome = navigator.userAgent.match(/chrome/i);
+    this.isFirefox = navigator.userAgent.match(/firefox/i);
+    this.isSafari = navigator.userAgent.match(/safari/i);
     this.autoPlay = options.autoPlay;
     this.visibility = new Visibility();
     this.visible = true;
@@ -30,7 +34,7 @@ var HLS = UIPlugin.extend({
   },
   safe: function(fn) {
     if(this.el.globoGetState && this.el.globoGetDuration && this.el.globoGetPosition &&
-       this.el.globoPlayerSmoothSetLevel && this.el.globoPlayerSetflushLiveURLCache && this.el.globoPlayerSetstartFromLowestLevel) {
+       this.el.globoPlayerSmoothSetLevel && this.el.globoPlayerSetflushLiveURLCache) {
       return fn.apply(this);
     }
   },
@@ -221,19 +225,24 @@ var HLS = UIPlugin.extend({
   },
   seek: function(time) {
     this.safe(function() {
-      if (time < 0)
+      if (time < 0) {
+        this.updateDVRStatus(false);
         this.el.globoPlayerSeek(time);
-      else
+      } else {
+        if (this.getPlaybackType() == "live") {
+          this.updateDVRStatus(true);
+        }
         this.el.globoPlayerSeek(this.el.globoGetDuration() * time / 100);
+      }
       clearInterval(this.checkStateId);
       this.checkTimeId = this.updateTime(1000);
     });
   },
   isPip: function(pipStatus) {
     if (pipStatus == true && this.getCurrentBitrate() > 750000) {
-      this.player.globoPlayerSmoothSetLevel(2);
-    } else if (!this.player.globoGetAutoLevel()) {
-      this.player.globoPlayerSmoothSetLevel(-1);
+      this.el.globoPlayerSmoothSetLevel(2);
+    } else if (!this.el.globoGetAutoLevel()) {
+      this.el.globoPlayerSmoothSetLevel(-1);
     }
   },
   timeUpdate: function(time, duration) {
@@ -266,13 +275,15 @@ var HLS = UIPlugin.extend({
     var style = Styler.getStyleFor(this.name);
     this.$el.html(this.template({swfPath: this.swfPath}));
     this.$el.append(style);
-    this.player = this.$el.find('embed')[0];
     if(this.isLegacyIE) { //FIXME remove it from here
-      this.player = this.$el.find('object')[0];
-    }
-    this.$el.css({height: 0, width: 0});
-    $(this.player).attr('data-hls', '');
-    this.player.id = this.cid;
+      this.setElement($(_.template(objectIE)({cid: this.cid, swfPath: this.swfPath})));
+    } else if(this.isChrome || this.isFirefox) {
+      this.setElement(this.$el.find('embed')[0]);
+      this.$el.attr('data-hls', '');
+    } 
+   // this.$el.css({height: 0, width: 0});
+   // $(this.el).attr('data-hls', '');
+    this.el.id = this.cid;
     return this;
   }
 });
