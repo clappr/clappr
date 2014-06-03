@@ -277,7 +277,7 @@ var HLS = UIPlugin.extend({
     this.$el.append(style);
     if(this.isLegacyIE) { //FIXME remove it from here
       this.setElement($(_.template(objectIE)({cid: this.cid, swfPath: this.swfPath})));
-    } else if(this.isChrome || this.isFirefox) {
+    } else if(this.isChrome || this.isFirefox || this.isSafari) {
       this.setElement(this.$el.find('embed')[0]);
       this.$el.attr('data-hls', '');
     } 
