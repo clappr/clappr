@@ -233,7 +233,7 @@ var HLS = UIPlugin.extend({
     if (pipStatus == true && this.getCurrentBitrate() > 750000) {
       this.player.globoPlayerSmoothSetLevel(2);
     } else if (!this.player.globoGetAutoLevel()) {
-      this.player.globoPlayerSetLevel(-1);
+      this.player.globoPlayerSmoothSetLevel(-1);
     }
   },
   timeUpdate: function(time, duration) {
