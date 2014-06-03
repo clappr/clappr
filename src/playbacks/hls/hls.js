@@ -15,7 +15,8 @@ var HLS = UIPlugin.extend({
   tagName: 'object',
   template: JST.hls,
   attributes: {
-    'data-hls': ''
+    'data-hls': '',
+    'type': 'application/x-shockwave-flash'
   },
   initialize: function(options) {
     this.src = options.src;
