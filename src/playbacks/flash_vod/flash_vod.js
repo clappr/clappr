@@ -7,9 +7,11 @@ var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var _ = require("underscore");
 
+var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> </object>';
+
 var FlashVOD = UIObject.extend({
   name: 'flash_vod',
-  tagName: 'div',
+  tagName: 'object',
   template: JST.flash_vod,
   initialize: function(options) {
     this.src = options.src;
@@ -39,15 +41,18 @@ var FlashVOD = UIObject.extend({
   },
   checkIfFlashIsReady: function() {
     this.bootstrapId = setInterval(function() {
-      if(this.el.getDuration && this.el.getState && this.el.getState() === "IDLE") {
+      if(this.el.getState && this.el.getState() === "IDLE") {
         this.bootstrap();
       }
     }.bind(this), 500);
   },
   setupFirefox: function() {
     var $el = this.$('embed');
-    $el.attr('data-flash-playback', '');
+    $el.attr('data-flash-vod', '');
     this.setElement($el[0]);
+  },
+  getPlaybackType: function() {
+    return "vod";
   },
   updateTime: function(interval) {
     return this.safe(function() {
@@ -150,24 +155,25 @@ var FlashVOD = UIObject.extend({
     this.stopListening();
     this.$el.remove();
   },
+  setupIE: function() {
+    this.setElement($(_.template(objectIE)({cid: this.cid, swfPath: this.swfPath})));
+  },
   render: function() {
     var style = Styler.getStyleFor(this.name);
-    this.$el.html(this.template({swfPath: this.swfPath}));
+    this.$el.html(this.template({cid: this.cid, swfPath: this.swfPath}));
     this.$el.append(style);
-    this.el.id = this.cid;
     if(navigator.userAgent.match(/firefox/i)) { //FIXME remove it from here
       this.setupFirefox();
+    } else if(window.ActiveXObject) {
+      this.setupIE();
     }
-    this.player.id = this.cid;
-    this.$el.css({height: 0, width: 0});
-    $(this.player).attr('data-flash-vod', '');
     return this;
   }
 });
 
 FlashVOD.canPlay = function(resource) {
   //http://help.adobe.com/en_US/flashmediaserver/techoverview/WS07865d390fac8e1f-4c43d6e71321ec235dd-7fff.html
-  if (navigator.userAgent.match(/firefox/i)) {
+  if (navigator.userAgent.match(/firefox/i) || window.ActiveXObject) {
     return _.isString(resource) && !!resource.match(/(.*).(mp4|mov|f4v|3gpp|3gp)/);
   } else {
     return _.isString(resource) && !!resource.match(/(.*).(mov|f4v|3gpp|3gp)/);
