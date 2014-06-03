@@ -115,9 +115,11 @@ var PipPlugin = BaseObject.extend({
     if(this.pipContainer) {
       this.discardPip();
     }
-    this.listenToOnce(this.masterContainer, "container:play", this.animateMasterToPip);
-    this.masterContainer.play();
+    //this.listenToOnce(this.masterContainer, "container:play", this.animateMasterToPip);
+    
     this.pipContainer = this.tmpContainer;
+    this.masterContainer.play();
+    this.animateMasterToPip();
     this.tmpContainer = undefined;
     this.pipContainer.setVolume(0);
     this.pipContainer.trigger("container:pip", true);
@@ -127,8 +129,9 @@ var PipPlugin = BaseObject.extend({
     this.listenTo(this.masterContainer, "container:ended", this.pipToMaster);
     if (this.pipContainer.playback && this.pipContainer.playback.name === 'hls') { //flash breaks on animate
       this.pipContainer.setStyle(this.pipStyle);
-      if (this.core.params.onMasterLoaded)
-        this.core.params.onMasterLoaded(this.masterContainer.playback.params.src);
+      if (this.core.params.onMasterLoaded) {
+        this.core.params.onMasterLoaded(this.masterContainer.getSource());
+      }
     } else {
       this.pipContainer.animate(this.pipStyle, {
         complete: function() {
@@ -140,6 +143,7 @@ var PipPlugin = BaseObject.extend({
         }.bind(this)
       });
     }
+    window.masterContainer = this.masterContainer;
     this.core.mediaControl.setContainer(this.masterContainer);
     this.listenToPipClick();
   },
