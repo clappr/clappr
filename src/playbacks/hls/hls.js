@@ -8,12 +8,15 @@ var JST = require('../../base/jst');
 var _ = require("underscore");
 
 var Visibility = require('visibility');
-var objectIE = '<object id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> </object>';
+var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> </object>';
 
 var HLS = UIPlugin.extend({
   name: 'hls',
   tagName: 'object',
   template: JST.hls,
+  attributes: {
+    'data-hls': ''
+  },
   initialize: function(options) {
     this.src = options.src;
     this.swfPath = options.swfPath || "assets/HLSPlayer.swf";
@@ -242,7 +245,7 @@ var HLS = UIPlugin.extend({
     if (pipStatus == true && this.getCurrentBitrate() > 750000) {
       this.el.globoPlayerSmoothSetLevel(2);
     } else if (!this.el.globoGetAutoLevel()) {
-      this.el.globoPlayerSmoothSetLevel(-1);
+      this.el.globoPlayerSetLevel(-1);
     }
   },
   timeUpdate: function(time, duration) {
@@ -255,9 +258,9 @@ var HLS = UIPlugin.extend({
     this.stopListening()
     this.$el.remove()
   },
-  setupFirefox: function() {
+  setupFirefox:function() {
     var $el = this.$('embed');
-    $el.attr('data-hls-playback', '');
+    $el.attr('data-hls', '');
     this.setElement($el[0]);
   },
   setupIE: function() {
@@ -273,17 +276,14 @@ var HLS = UIPlugin.extend({
   },
   render: function() {
     var style = Styler.getStyleFor(this.name);
-    this.$el.html(this.template({swfPath: this.swfPath}));
+    this.$el.html(this.template({cid: this.cid, swfPath: this.swfPath}));
     this.$el.append(style);
-    if(this.isLegacyIE) { //FIXME remove it from here
-      this.setElement($(_.template(objectIE)({cid: this.cid, swfPath: this.swfPath})));
-    } else if(this.isChrome || this.isFirefox || this.isSafari) {
-      this.setElement(this.$el.find('embed')[0]);
-      this.$el.attr('data-hls', '');
-    } 
-   // this.$el.css({height: 0, width: 0});
-   // $(this.el).attr('data-hls', '');
     this.el.id = this.cid;
+    if(navigator.userAgent.match(/firefox/i)) { //FIXME remove it from here
+      this.setupFirefox();
+    } else if(window.ActiveXObject) {
+      this.setupIE();
+    }
     return this;
   }
 });
