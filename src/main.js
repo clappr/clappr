@@ -9,6 +9,7 @@ var Loader = require('./components/loader');
 
 var Player = BaseObject.extend({
   initialize: function(params) {
+    window.p = this;
     params.displayType || (params.displayType = 'pip');
     this.params = params;
     this.loader = new Loader(this.params);
