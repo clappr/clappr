@@ -30,7 +30,7 @@ var HLS = UIPlugin.extend({
     this.visible = true;
     this.highDefinition = "unavailable"; // this will be changed on checkHighDefinition()
     this.settings = {
-      left: ["playstop"],
+      left: ["playstop", "volume"],
       default: ["position", "seekbar", "duration"],
       right: ["fullscreen", "volume", "hd"]
     };
@@ -76,7 +76,15 @@ var HLS = UIPlugin.extend({
   updateTime: function(interval) {
     return this.safe(function() {
       return setInterval(function() {
-        this.safe(function() { this.trigger('playback:timeupdate', this.el.globoGetPosition(), this.el.globoGetDuration(), this.name); });
+        this.safe(function() {
+          var previousDvrEnabled = this.dvrEnabled;
+          var duration = this.el.globoGetDuration();
+          this.dvrEnabled = (this.playbackType === 'live' && duration > 240);
+          this.trigger('playback:timeupdate', this.el.globoGetPosition(), duration, this.name);
+          if (this.dvrEnabled != previousDvrEnabled) {
+            this.updateSettings();
+          }
+        });
       }.bind(this), interval);
     });
   },
@@ -269,9 +277,9 @@ var HLS = UIPlugin.extend({
   },
   updateSettings: function() {
     this.settings = {
-      left: [(this.playbackType === "VOD" ? "playpause" : "playstop")],
-      default: ["position", "seekbar", "duration"],
-      right: ["fullscreen", "volume", "hd"]
+      left: [((this.playbackType === "vod" || this.dvrEnabled) ? "playpause" : "playstop"), "volume"],
+      default: ["position", "seekbar", (this.playbackType === "vod" ? "duration" : "live")],
+      right: ["fullscreen", "hd"]
     };
     this.trigger('playback:settingsupdate', this.name);
   },
