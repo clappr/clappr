@@ -5,6 +5,9 @@
        url("<%= playerBaseUrl %>/assets/Player-Regular.ttf") format("truetype"),
        url("<%= playerBaseUrl %>/assets/Player-Regular.svg#player") format("svg");
 }
+div[data-poster] {
+  cursor: pointer;
+}
 .poster-icon[data-poster] {
   font-family:"Player";
   font-weight: normal;
