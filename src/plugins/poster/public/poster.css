@@ -1,9 +1,9 @@
 @font-face {
   font-family: "Player";
-  src: url("<%= playerBaseUrl %>/assets/Player-Regular.eot");
-  src: url("<%= playerBaseUrl %>/assets/Player-Regular.eot?#iefix") format("embedded-opentype"),
-       url("<%= playerBaseUrl %>/assets/Player-Regular.ttf") format("truetype"),
-       url("<%= playerBaseUrl %>/assets/Player-Regular.svg#player") format("svg");
+  src: url("assets/Player-Regular.eot");
+  src: url("assets/Player-Regular.eot?#iefix") format("embedded-opentype"),
+       url("assets/Player-Regular.ttf") format("truetype"),
+       url("assets/Player-Regular.svg#player") format("svg");
 }
 div[data-poster] {
   cursor: pointer;
