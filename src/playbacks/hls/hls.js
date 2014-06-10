@@ -252,8 +252,10 @@ var HLS = UIPlugin.extend({
   },
   isPip: function(pipStatus) {
     if (pipStatus == true && this.getCurrentBitrate() > 750000) {
+      this.el.globoPlayerSetStageScaleMode("exactFit");
       this.el.globoPlayerSmoothSetLevel(2);
     } else if (!this.el.globoGetAutoLevel()) {
+      this.el.globoPlayerSetStageScaleMode("noScale");
       this.el.globoPlayerSetLevel(-1);
     }
   },
