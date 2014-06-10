@@ -44,18 +44,35 @@ var Core = UIObject.extend({
     this.updateSize();
     //FIXME fullscreen api sucks
     window['document'].addEventListener('mozfullscreenchange', this.exit.bind(this));
+    $(window).resize(this.updateSize.bind(this));
   },
   updateSize: function() {
    if(Fullscreen.isFullscreen()) {
       this.$el.addClass('fullscreen');
       this.$el.removeAttr('style');
     } else {
-      if (this.params.width) {
-        this.$el.css({ width: this.params.width });
+      var width = 0;
+      var height = 0;
+      if (this.params.stretchWidth && this.params.stretchHeight && this.params.stretchWidth <= window.innerWidth && this.params.stretchHeight <= (window.innerHeight * 0.73)) {
+        width = this.params.stretchWidth;
+        height = this.params.stretchHeight;
+      } else {
+        if (this.params.width) {
+          width = this.params.width;
+        }
+        if (this.params.height) {
+          height = this.params.height;
+        }
       }
-      if (this.params.height) {
-        this.$el.css({ height: this.params.height });
+
+      if (width > 0) {
+        this.$el.css({ width: width });
       }
+
+      if (height > 0) {
+        this.$el.css({ height: height });
+      }
+
       this.$el.removeClass('fullscreen');
     }
   },
