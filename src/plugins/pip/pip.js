@@ -12,10 +12,25 @@ var PipPlugin = BaseObject.extend({
   name: 'pip',
   initialize: function(core) {
     this.core = core;
-    this.pipStyle = {width: "24%", height: "24%", "z-index": 999, bottom: "7px", right: "7px",
-                     "border-width": "3px", "border-style": "solid", "border-color": "rgba(255,255,255, .3)",
-                     "background-clip": "padding-box", "-webkit-background-clip": "padding-box", "cursor": "pointer"};
-    this.masterStyle = {width: "100%", height: "100%", bottom: "0px", right: "0px", border: "none", "cursor" : "default"};
+    this.pipStyle = {width: "24%",
+                     height: "24%",
+                     "z-index": 2000,
+                     right: "23px",
+                     "border-width": "2px",
+                     "border-radius": "3px",
+                     "border-style": "solid",
+                     "border-color": "rgba(255,255,255, .25)",
+                     "background-clip": "padding-box",
+                     "-webkit-background-clip": "padding-box",
+                     "cursor": "pointer"};
+
+    this.masterStyle = {width: "100%",
+                        height: "100%",
+                        bottom: "0px",
+                        right: "0px",
+                        border: "none",
+                        "cursor" : "default"};
+
     this.masterContainer = core.containers[0];
     this.loading = new Loading({message: 'Carregando...', style: {left:'25px', top: '15px', position: 'relative', 'float': 'left', 'z-index': 3001,color: 'white'}});
     this.core.$el.append(this.loading.render().el);
@@ -116,7 +131,7 @@ var PipPlugin = BaseObject.extend({
       this.discardPip();
     }
     //this.listenToOnce(this.masterContainer, "container:play", this.animateMasterToPip);
-    
+
     this.pipContainer = this.tmpContainer;
     this.masterContainer.play();
     this.animateMasterToPip();
@@ -202,11 +217,11 @@ var PipPlugin = BaseObject.extend({
   },
   onMediaControlShow: function () {
     if (!this.pipContainer || this.pipContainer.$el.is(':animated')) return;
-    this.pipContainer.animate({ bottom: 47 }, 400);
+    this.pipContainer.animate({ bottom: 63 }, 400);
   },
   onMediaControlHide: function () {
     if (!this.pipContainer || this.pipContainer.$el.is(':animated')) return;
-    this.pipContainer.animate({ bottom: 7 }, 400);
+    this.pipContainer.animate({ bottom: 23 }, 400);
   }
 });
 
