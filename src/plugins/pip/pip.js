@@ -158,7 +158,6 @@ var PipPlugin = BaseObject.extend({
         }.bind(this)
       });
     }
-    window.masterContainer = this.masterContainer;
     this.core.mediaControl.setContainer(this.masterContainer);
     this.listenToPipClick();
   },
