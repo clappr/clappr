@@ -196,7 +196,7 @@ var PipPlugin = BaseObject.extend({
   pipToMaster: function() {
     this.stopListening(this.masterContainer);
     if (this.pipContainer) {
-      this.pipContainer.setStyle({ 'z-index': 999 });
+      this.pipContainer.setStyle({ 'z-index': 995 });
       this.pipContainer.animate(this.masterStyle).then(this.pipToMasterCallback.bind(this));
     }
     return this;
