@@ -119,7 +119,7 @@ var HLS = UIPlugin.extend({
     return programDate - 1.08e+7;
   },
   isHighDefinitionAvailable: function(levels) {
-    return !!(levels.length > 0 && levels[levels.length-1].bitrate >= 3500000);
+    return !!(levels.length > 0 && levels[levels.length-1].bitrate >= 2500000);
   },
   isHighDefinitionInUse: function() {
     return this.highDefinition === "available-in-use";
