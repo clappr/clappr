@@ -99,6 +99,13 @@ var PipPlugin = BaseObject.extend({
       this.masterContainer = undefined;
     }
   },
+  setMasterContainer: function(container) {
+    this.discardContainer(this.masterContainer);
+    this.masterContainer = container;
+    this.masterContainer.setStyle(this.masterStyle);
+    this.listenTo(this.masterContainer, "container:ended", this.pipToMaster);
+    this.masterContainer.play();
+  },
   addMaster: function(source) {
     if (this.masterContainer) {
       if (this.masterContainer.playback && this.masterContainer.playback.name === "auditude") {
