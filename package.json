@@ -40,16 +40,6 @@
     "sinon": "^1.10.2",
     "yargs": "latest"
   },
-  "testling": {
-    "files": "test/*.js",
-    "browsers": [
-      "ie/6..latest",
-      "chrome/22..latest",
-      "firefox/16..latest",
-      "safari/latest",
-      "opera/11.0..latest"
-    ]
-  },
   "dependencies": {
     "underscore": "~1.6.0",
     "jquery": "~2.1.0",
