@@ -13,6 +13,10 @@ var changed = require('gulp-changed');
 var express = require('express');
 var fs = require('fs');
 
+var sass = require('gulp-sass');
+var minifyCSS = require('gulp-minify-css');
+var minifyHTML = require('gulp-minify-html');
+
 var noop = function() {};
 var server = express();
 
@@ -21,8 +25,8 @@ server.use(express.static('./test'));
 server.use(express.static('./node_modules/mocha'));
 
 var paths = {
-  files: ['src/**/*.js', 'src/**/*.css', 'src/**/*.html'],
-  main: ['src/main.js'],
+  files: ['src/**/*.js', 'src/**/*.css', 'src/**/*.html', 'src/**/*.scss'],
+  main: ['build/main.js'],
   tests: ['test/**/*.js'],
   dest: 'dist'
 };
@@ -36,8 +40,26 @@ var namespace = 'WP3';
 
 gulp.task('default', ['lint', 'build']);
 
-gulp.task('pre-build-hook', function() {
+gulp.task('pre-build-hook', ['sass', 'copy-html', 'copy-sources'], function() {
   exec('node bin/hook.js', noop);
+});
+
+gulp.task('sass', function () {
+    return gulp.src(paths.files[3])
+        .pipe(sass())
+        .pipe(minifyCSS())
+        .pipe(gulp.dest("build"));
+});
+
+gulp.task("copy-html", function() {
+  return gulp.src(paths.files[2])
+    // .pipe(minifyHTML())
+    .pipe(gulp.dest('build'));
+});
+
+gulp.task("copy-sources", function() {
+  return gulp.src(paths.files.slice(0, 2))
+    .pipe(gulp.dest('build'));
 });
 
 gulp.task('build-tests', ['build'], function() {
