@@ -16,6 +16,7 @@ var Utils = require('../../base/utils');
 var MediaControl = UIObject.extend({
   name: 'MediaControl',
   attributes: {
+    class: 'media-control',
     'data-media-control': ''
   },
   events: {
