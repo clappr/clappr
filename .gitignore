@@ -3,4 +3,5 @@ src/base/jst.js
 .DS_Store
 coverage
 dist
+build/
 *.cache

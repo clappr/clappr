@@ -38,7 +38,10 @@
     "phantomjs": "latest",
     "scp": "latest",
     "sinon": "^1.10.2",
-    "yargs": "latest"
+    "yargs": "latest",
+    "gulp-minify-css": "~0.3.5",
+    "gulp-minify-html": "~0.1.3",
+    "gulp-sass": "~0.7.2"
   },
   "dependencies": {
     "underscore": "~1.6.0",
