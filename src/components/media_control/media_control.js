@@ -13,7 +13,7 @@ var Styler = require('../../base/styler');
 var UIObject = require('../../base/ui_object');
 var Utils = require('../../base/utils');
 
-module.exports = MediaControl = UIObject.extend({
+var MediaControl = UIObject.extend({
   name: 'MediaControl',
   attributes: {
     'data-media-control': ''
@@ -309,3 +309,5 @@ module.exports = MediaControl = UIObject.extend({
     return this;
   }
 });
+
+module.exports = MediaControl;

@@ -6,9 +6,11 @@ var $ = require('jquery');
 var _ = require('underscore');
 var JST = require('./jst');
 
-module.exports = Styler = {
+var Styler = {
   getStyleFor: function(name, options) {
     options = options || {};
     return $('<style></style>').html(_.template(JST.CSS[name])(options));
   }
-}
+};
+
+module.exports = Styler;

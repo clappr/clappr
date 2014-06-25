@@ -30,4 +30,6 @@ var Player = BaseObject.extend({
 
 global.DEBUG = false;
 
-module.exports = WP3 = { Player: Player };
+window.WP3 = { Player: Player };
+
+module.exports = window.WP3;
