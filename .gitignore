@@ -5,3 +5,4 @@ coverage
 dist
 build/
 *.cache
+build/
