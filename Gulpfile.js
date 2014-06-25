@@ -6,16 +6,23 @@ var utils = require('gulp-util');
 var stylish = require('jshint-stylish');
 var istanbul = require('gulp-istanbul');
 var rename = require('gulp-rename');
-var browserify = require('gulp-browserify');
+var browserify = require('browserify');
 var exec = require('child_process').exec;
 var spawn = require('child_process').spawn;
 var changed = require('gulp-changed');
 var express = require('express');
 var fs = require('fs');
+var glob = require('glob').sync;
+
+var streamify = require('gulp-streamify')
+
+var source = require('vinyl-source-stream');
 
 var sass = require('gulp-sass');
 var minifyCSS = require('gulp-minify-css');
 var minifyHTML = require('gulp-minify-html');
+
+var es6ify = require('es6ify');
 
 var noop = function() {};
 var server = express();
@@ -26,7 +33,7 @@ server.use(express.static('./node_modules/mocha'));
 
 var paths = {
   files: ['src/**/*.js', 'src/**/*.css', 'src/**/*.html', 'src/**/*.scss'],
-  main: ['build/main.js'],
+  main: ['src/main.js'],
   tests: ['test/**/*.js'],
   dest: 'dist'
 };
@@ -40,7 +47,7 @@ var namespace = 'WP3';
 
 gulp.task('default', ['lint', 'build']);
 
-gulp.task('pre-build-hook', ['sass', 'copy-html', 'copy-sources'], function() {
+gulp.task('pre-build-hook', ['sass', 'copy-html', 'copy-css'], function() {
   exec('node bin/hook.js', noop);
 });
 
@@ -51,26 +58,32 @@ gulp.task('sass', function () {
         .pipe(gulp.dest("build"));
 });
 
+gulp.task("copy-css", function() {
+  return gulp.src(paths.files[1])
+    .pipe(minifyCSS())
+    .pipe(gulp.dest('build'));
+});
+
 gulp.task("copy-html", function() {
   return gulp.src(paths.files[2])
     // .pipe(minifyHTML())
     .pipe(gulp.dest('build'));
 });
 
-gulp.task("copy-sources", function() {
-  return gulp.src(paths.files.slice(0, 2))
-    .pipe(gulp.dest('build'));
-});
-
 gulp.task('build-tests', ['build'], function() {
   //FIXME looks like gulp-browserify can't handle /**/* globs
-  exec('node_modules/.bin/browserify test/**/*.js -o dist/tests_bundle.js');
+  exec('node node_modules/.bin/browserify test/**/*.js -o dist/tests_bundle.js');
 });
 
 gulp.task('build', ['pre-build-hook'], function() {
-  gulp.src(paths.main)
+  var bundle = browserify()
+    .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
+    .add(es6ify.runtime)
+    .require(require.resolve('./src/main.js'), { entry: true })
+    .bundle();
+
+  return bundle.pipe(source('main.js'))
     .pipe(changed(paths.dest))
-    .pipe(browserify())
     .pipe(rename(distFile))
     .pipe(gulp.dest(paths.dest))
     .on("error", function(err) {
@@ -84,9 +97,14 @@ gulp.task('serve', ['watch'], function() {
 });
 
 gulp.task('dist', ['pre-build-hook'], function() {
-  gulp.src(paths.main)
-    .pipe(browserify())
-    .pipe(uglify())
+  var bundle = browserify()
+    .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
+    .add(es6ify.runtime)
+    .require(require.resolve('./src/main.js'), { entry: true })
+    .bundle();
+
+  return bundle.pipe(source('main.js'))
+    .pipe(streamify(uglify()))
     .pipe(rename(distFile))
     .pipe(gulp.dest(paths.dest));
 });
