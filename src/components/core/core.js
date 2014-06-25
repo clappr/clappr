@@ -43,7 +43,7 @@ var Core = UIObject.extend({
       .then(this.resolveOnContainersReady.bind(this));
     this.updateSize();
     //FIXME fullscreen api sucks
-    window['document'].addEventListener('mozfullscreenchange', this.exit.bind(this));
+    document.addEventListener('mozfullscreenchange', this.exit.bind(this));
     $(window).resize(this.updateSize.bind(this));
   },
   updateSize: function() {

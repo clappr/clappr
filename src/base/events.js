@@ -7,7 +7,7 @@ var Log = require('../plugins/log');
 
 var slice = Array.prototype.slice;
 
-module.exports = Events = {
+var Events = {
   on: function(name, callback, context) {
     if (!eventsApi(this, 'on', name, [callback, context]) || !callback) return this;
     this._events || (this._events = {});
@@ -135,3 +135,5 @@ _.each(listenMethods, function(implementation, method) {
     return this;
   };
 });
+
+module.exports = Events;
