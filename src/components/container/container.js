@@ -60,12 +60,6 @@ var Container = UIObject.extend({
   isPlaying: function() {
     return this.playback.isPlaying();
   },
-  disableMediaControl: function() {
-    this.trigger('container:mediacontrol:disable');
-  },
-  enableMediaControl: function() {
-    this.trigger('container:mediacontrol:enable');
-  },
   error: function(errorObj) {
     this.trigger('container:error', errorObj, this.name);
   },
