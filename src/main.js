@@ -7,25 +7,28 @@ var CoreFactory = require('./components/core_factory');
 var Loader = require('./components/loader');
 
 
-var Player = BaseObject.extend({
-  initialize: function(params) {
+class Player extends BaseObject {
+  initialize(params) {
     window.p = this;
     params.displayType || (params.displayType = 'pip');
     this.params = params;
     this.loader = new Loader(this.params);
     this.coreFactory = new CoreFactory(this, this.loader);
-  },
-  attachTo: function(element) {
+  }
+
+  attachTo(element) {
     this.params.parentElement = element;
     this.core = this.coreFactory.create();
-  },
-  load: function(params) {
+  }
+
+  load(params) {
     this.core.load(params);
-  },
-  destroy: function() {
+  }
+
+  destroy() {
     this.core.destroy();
   }
-});
+}
 
 
 global.DEBUG = false;
