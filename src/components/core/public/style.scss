@@ -1,0 +1,52 @@
+@import 'reset';
+
+
+@mixin font-smoothing($value: antialiased) {
+  @if $value == antialiased {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  @else {
+    -webkit-font-smoothing: subpixel-antialiased;
+    -moz-osx-font-smoothing: auto;
+  }
+}
+
+[data-player] * {
+  @include nested-reset;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-style: normal;
+  font-weight: normal;
+  text-align: center;
+  font-size: 100%;
+  color: #000;
+  font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+  text-shadow: 0 0 0;
+  box-sizing: border-box;
+}
+
+[data-player] {
+  position: relative;
+  margin: 0;
+  height: 594px;
+  width: 1055px;
+  text-align: center;
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  /* No support for these yet, use at own risk */
+  -o-user-select: none;
+  user-select: none;
+  overflow: hidden;
+  transform: translate3d(0,0,0);
+  @include font-smoothing;
+}
+[data-player].fullscreen {
+  width: 100%;
+  height: 100%;
+}
+[data-player].nocursor {
+  cursor: none;
+}
