@@ -1,8 +1,17 @@
+@mixin transition($transition-property, $transition-time, $method) {
+  -webkit-transition: $transition-property $transition-time $method;
+  -moz-transition: $transition-property $transition-time $method;
+  -ms-transition: $transition-property $transition-time $method;
+  -o-transition: $transition-property $transition-time $method;
+  transition: $transition-property $transition-time $method;
+}
+
+
 .media-control[data-media-control] {
   position: absolute;
   background-color: rgba(2, 2, 2, 0.5);
   border-radius: 0px;
-  bottom: 0%;
+  bottom: 0;
   left: 0;
   right: 0;
   margin-left: auto;
@@ -10,7 +19,13 @@
   max-width: 100%;
   min-width: 60%;
   height: 40px;
-  z-index: 1000;
+  z-index: 9999;
+
+  @include transition(all, 0.4s, ease-out);
+
+  &.media-control-hide {
+    bottom: -40px;
+  }
 
   .media-control-layer[data-controls] {
     position: relative;
@@ -157,7 +172,7 @@
     }
 
     .bar-container[data-seekbar] {
-      // position: relative;
+      position: relative;
       display: inline-block;
       vertical-align: middle;
       width: 40%;
@@ -168,7 +183,7 @@
         height: 8px;
         position: relative;
         top: 12px;
-        background-color: #a0a0a0;
+        background-color: #6f6f6f;
         border-radius: 4px;
         overflow: hidden;
 
@@ -178,7 +193,7 @@
           left: 0;
           width: 80%;
           height: 100%;
-          background-color: #e5e5e5;
+          background-color: #bebebe;
         }
 
         .bar-fill-2[data-seekbar] {
@@ -193,19 +208,19 @@
 
       .bar-scrubber[data-seekbar] {
         position: absolute;
-        top: 8px;
+        top: 6px;
         left: 49%;
         width: 20px;
         height: 20px;
 
         .bar-scrubber-icon[data-seekbar] {
           position: absolute;
-          left: 4px;
+          left: 3px;
           top: 3px;
-          width: 12px;
-          height: 12px;
+          width: 14px;
+          height: 14px;
           border-radius: 6px;
-          border: 1px solid #d3d3d3;
+          border: 1px solid #6f6f6f;
           background-color: white;
         }
       }
@@ -214,12 +229,8 @@
     .drawer-container[data-volume] {
       float: right;
       display: inline-block;
-      position: relative;
-      bottom: 68px;
-      background: rgba(2, 2, 2, 0.5);
-      border-radius: 4px;
       width: 32px;
-      height: 100px;
+      height: 32px;
 
       .drawer-icon-container[data-volume] {
         position: absolute;
@@ -242,37 +253,55 @@
       }
 
       .bar-container[data-volume] {
-        position: relative;
-        top: 6px;
         width: 32px;
-        height: 64px;
+        height: 88px;
+        position: absolute;
+        bottom: 38px;
+        background: rgba(2,2,2,.5);
+        border-radius: 4px;
+
+        @include transition(all, 0.2s, ease-out);
+
+        &.volume-bar-hide {
+          opacity: 0;
+        }
 
         .bar-background[data-volume] {
           margin-left: 12px;
-          background: #bdbdbd;
+          background: #6f6f6f;
           border-radius: 4px;
           width: 8px;
-          height: 100%;
+          height: 72px;
+          position: relative;
+          top: 8px;
+          overflow: hidden;
 
           .bar-fill-1[data-volume] {
+            position: absolute;
+            bottom: 0;
             background: white;
-            border-radius: 4px;
-            width: 8px;
-            height: 100%;
+            width: 100%;
+            height: 50%;
           }
         }
 
-        .volume-scrubber[data-volume] {
-          width: 12px;
-          height: 12px;
-          left: -3px;
-          top: -6px;
-          position: relative;
-          overflow: hidden;
-          z-index: 2;
-          border-radius: 6px;
-          background-color: white;
-          border: 1px solid #d3d3d3;
+        .bar-scrubber[data-volume] {
+          position: absolute;
+          bottom: 40%;
+          left: 6px;
+          width: 20px;
+          height: 20px;
+
+          .bar-scrubber-icon[data-volume] {
+            position: absolute;
+            left: 4px;
+            top: 4px;
+            width: 12px;
+            height: 12px;
+            border-radius: 6px;
+            border: 1px solid #6f6f6f;
+            background-color: white;
+          }
         }
       }
     }

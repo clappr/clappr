@@ -6,21 +6,23 @@
  * The MediaControl is responsible for displaying the Player controls.
  */
 
-var _ = require('underscore');
-var $ = require('jquery');
-var JST = require('../../base/jst');
-var Styler = require('../../base/styler');
-var UIObject = require('../../base/ui_object');
-var Utils = require('../../base/utils');
+var _ = require('underscore')
+var $ = require('jquery')
+var JST = require('../../base/jst')
+var Styler = require('../../base/styler')
+var UIObject = require('../../base/ui_object')
+var Utils = require('../../base/utils')
 
 class MediaControl extends UIObject {
   get name() { return 'MediaControl' }
+
   get attributes() {
     return {
       class: 'media-control',
       'data-media-control': ''
     }
   }
+
   get events() {
     return {
       'click [data-play]': 'play',
@@ -30,17 +32,19 @@ class MediaControl extends UIObject {
       'click [data-playstop]': 'togglePlayStop',
       'click [data-fullscreen]': 'toggleFullscreen',
       'click [data-seekbar]': 'seek',
-      'click .volume-bar[data-volume]': 'volume',
-      'click .volume-mute-toggle[data-volume]': 'toggleMute',
-      'mouseover .volume-wrapper[data-volume]': 'showVolumeBar',
-      'mouseover .volume-bar[data-volume]': 'keepVolumeBar',
+      'click .bar-background[data-volume]': 'volume',
+      'click .drawer-icon[data-volume]': 'toggleMute',
+      'mouseover .drawer-container[data-volume]': 'showVolumeBar',
+      'mouseover .bar-container[data-volume]': 'keepVolumeBar',
       'mouseleave [data-volume]': 'hideVolumeBar',
-      'mousedown .media-control-icon[data-seekbar]': 'startSeekDrag',
-      'mousedown .volume-scrubber[data-volume]': 'startVolumeDrag',
+      'mousedown .bar-scrubber[data-seekbar]': 'startSeekDrag',
+      'mousedown .bar-scrubber[data-volume]': 'startVolumeDrag',
       'mouseover[data-controls]': 'show'
     }
   }
+
   get template() { return JST.media_control }
+
   initialize(params) {
     this.params = params
     this.container = params.container
@@ -54,8 +58,8 @@ class MediaControl extends UIObject {
     if (this.container.mediaControlDisabled || this.params.chromeless)
       this.disable()
     this.currentVolume = 100
-    $(document).bind('mouseup', () => this.stopDrag())
-    $(document).bind('mousemove', () => this.updateDrag())
+    $(document).bind('mouseup', (event) => this.stopDrag(event))
+    $(document).bind('mousemove', (event) => this.updateDrag(event))
   }
 
   addEventListeners() {
@@ -73,7 +77,6 @@ class MediaControl extends UIObject {
   disable() {
     this.disabled = true
     this.hide()
-    this.$el.hide()
   }
 
   enable() {
@@ -95,45 +98,31 @@ class MediaControl extends UIObject {
   }
 
   changeTogglePlay() {
-    var playPauseButton = this.$el.find('button[data-playpause]')
-    var playStopButton = this.$el.find('button[data-playstop]')
     if (this.container.isPlaying()) {
-      playPauseButton.removeClass('paused')
-      playPauseButton.addClass('playing')
-      playStopButton.removeClass('stopped')
-      playStopButton.addClass('playing')
+      this.$playPauseToggle.removeClass('paused').addClass('playing')
+      this.$playStopToggle.removeClass('stopped').addClass('playing')
     } else {
-      playPauseButton.addClass('paused')
-      playPauseButton.removeClass('playing')
-      playStopButton.addClass('stopped')
-      playStopButton.removeClass('playing')
+      this.$playPauseToggle.removeClass('playing').addClass('paused')
+      this.$playStopToggle.removeClass('playing').addClass('stopped')
     }
   }
 
   togglePlayPause() {
-    var playPauseButton = this.$el.find('button[data-playpause]')
     if (this.container.isPlaying()) {
       this.container.pause()
-      playPauseButton.addClass('paused')
-      playPauseButton.removeClass('playing')
     } else {
       this.container.play()
-      playPauseButton.removeClass('paused')
-      playPauseButton.addClass('playing')
     }
+    this.changeTogglePlay()
   }
 
   togglePlayStop() {
-    var playStopButton = this.$el.find('button[data-playstop]')
     if (this.container.isPlaying()) {
       this.container.stop()
-      playStopButton.addClass('stopped')
-      playStopButton.removeClass('playing')
     } else {
       this.container.play()
-      playStopButton.removeClass('stopped')
-      playStopButton.addClass('playing')
     }
+    this.changeTogglePlay()
   }
 
   startSeekDrag(event) {
@@ -163,51 +152,31 @@ class MediaControl extends UIObject {
       event.preventDefault()
     }
     if (this.draggingSeekBar) {
-      var $element = this.$el.find('div.seekbar[data-seekbar]')
-      var offsetX = event.pageX - $element.offset().left
-      var pos = offsetX / $element.width() * 100
+      var offsetX = event.pageX - this.$seekBarContainer.offset().left
+      var pos = offsetX / this.$seekBarContainer.width() * 100
       pos = Math.min(100, Math.max(pos, 0))
-      var $overlayEl = this.$el.find('div.seekbar-position[data-seekbar]')
-      $overlayEl.css({width: pos + '%'})
+      this.setSeekPercentage(pos)
     } else if (this.draggingVolumeBar) {
-      var $element = this.$el.find('div.volume-bar[data-volume]')
-      var offsetY = event.pageY - $element.offset().top
-      var pos = (1 - (offsetY / $element.height())) * 100
-      pos = Math.min(100, Math.max(pos, 0))
-      var $overlayEl = this.$el.find('div.volume-current[data-volume]')
-      $overlayEl.css({height: pos + '%'})
       this.volume(event)
     }
   }
 
   volume(event) {
-    var $element = this.$el.find('div.volume-bar[data-volume]')
-    var offsetY = event.pageY - $element.offset().top
-    this.currentVolume = (1 - (offsetY / $element.height())) * 100
+    var offsetY = event.pageY - this.$volumeBarContainer.offset().top
+    this.currentVolume = (1 - (offsetY / this.$volumeBarContainer.height())) * 100
     this.currentVolume = Math.min(100, Math.max(this.currentVolume, 0))
-    this.$el.find('div.volume-current[data-volume]').css({height: this.currentVolume + '%'})
     this.container.setVolume(this.currentVolume)
-    var $iconEl = this.$el.find('.media-control-icon[data-volume]')
-    if (this.currentVolume) {
-      $iconEl.removeClass('muted')
-    } else {
-      $iconEl.addClass('muted')
-    }
+    this.setVolumeLevel(this.currentVolume)
   }
 
   toggleMute() {
-    var $iconEl = this.$el.find('.media-control-icon[data-volume]')
-    var $overlayEl = this.$el.find('div.volume-current[data-volume]')
     if (!!this.mute) {
-      $iconEl.removeClass('muted')
-      $overlayEl.css({height: this.currentVolume + '%'})
       this.container.setVolume(this.currentVolume)
+      this.setVolumeLevel(this.currentVolume)
       this.mute = false
     } else {
-      var $element = this.$el.find('div.volume-bar[data-volume]')
-      $overlayEl.css({height: 0})
       this.container.setVolume(0)
-      $iconEl.addClass('muted')
+      this.setVolumeLevel(0)
       this.mute = true
     }
   }
@@ -230,15 +199,20 @@ class MediaControl extends UIObject {
     if(this.hideVolumeId) {
       clearTimeout(this.hideVolumeId)
     }
-    this.$el.find('.volume-bar-wrapper[data-volume]').fadeIn('fast')
+    this.$volumeBarContainer.show()
+    this.$volumeBarContainer.removeClass('volume-bar-hide')
   }
 
   hideVolumeBar() {
     if(this.hideVolumeId) {
       clearTimeout(this.hideVolumeId)
     }
+    this.$volumeBarContainer.one(
+      'webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',
+      () => this.$volumeBarContainer.hide()
+    )
     this.hideVolumeId = setTimeout(
-      () => this.$el.find('.volume-bar-wrapper[data-volume]').fadeOut('fast'),
+      () => this.$volumeBarContainer.addClass('volume-bar-hide'),
       750
     )
   }
@@ -256,21 +230,20 @@ class MediaControl extends UIObject {
   updateProgressBar(startPosition, endPosition, duration) {
     var loadedStart = startPosition / duration * 100
     var loadedEnd = endPosition / duration * 100
-    this.$el.find('div.seekbar-loaded[data-seekbar]').css({ left: loadedStart + '%', width: (loadedEnd - loadedStart) + '%' })
+    this.$seekBarLoaded.css({ left: loadedStart + '%', width: (loadedEnd - loadedStart) + '%' })
   }
 
   updateSeekBar(position, duration) {
     if (this.draggingSeekBar) return
     var seekbarValue = (100 / duration) * position
-    this.$('div.seekbar-position[data-seekbar]').css({ width: seekbarValue + '%' })
+    this.setSeekPercentage(seekbarValue)
     this.$('[data-position]').html(Utils.formatTime(position))
     this.$('[data-duration]').html(Utils.formatTime(duration))
   }
 
   seek(event) {
-    var $element = this.$el.find('div.seekbar[data-seekbar]')
-    var offsetX = event.pageX - $element.offset().left
-    var pos = offsetX / $element.width() * 100
+    var offsetX = event.pageX - this.$seekBarContainer.offset().left
+    var pos = offsetX / this.$seekBarContainer.width() * 100
     pos = Math.min(100, Math.max(pos, 0))
     this.container.setCurrentTime(pos)
   }
@@ -283,7 +256,7 @@ class MediaControl extends UIObject {
         clearTimeout(this.hideId)
       }
       this.trigger('mediacontrol:show', this.name)
-      this.$el.fadeIn()
+      this.$el.removeClass('media-control-hide')
       this.hideId = setTimeout(() => this.hide(), timeout)
       if (event) {
         this.lastMouseX = event.clientX
@@ -299,7 +272,7 @@ class MediaControl extends UIObject {
     }
     if (this.disabled || (!this.draggingVolumeBar && !this.draggingSeekBar && this.$el.find('[data-controls]:hover').length === 0)) {
       this.trigger('mediacontrol:hide', this.name)
-      this.$el.fadeOut()
+      this.$el.addClass('media-control-hide')
     } else {
       this.hideId = setTimeout(() => this.hide(), timeout)
     }
@@ -317,18 +290,56 @@ class MediaControl extends UIObject {
     }
   }
 
+  createCachedElements() {
+    this.$playPauseToggle = this.$el.find('button.media-control-button[data-playpause]')
+    this.$playStopToggle = this.$el.find('button.media-control-button[data-playstop]')
+    this.$seekBarContainer = this.$el.find('.bar-container[data-seekbar]')
+    this.$seekBarLoaded = this.$el.find('.bar-fill-1[data-seekbar]')
+    this.$seekBarPosition = this.$el.find('.bar-fill-2[data-seekbar]')
+    this.$seekBarScrubber = this.$el.find('.bar-scrubber[data-seekbar]')
+    this.$volumeBarContainer = this.$el.find('.bar-container[data-volume]')
+    this.$volumeBarBackground = this.$el.find('.bar-background[data-volume]')
+    this.$volumeBarFill = this.$el.find('.bar-fill-1[data-volume]')
+    this.$volumeBarScrubber = this.$el.find('.bar-scrubber[data-volume]')
+    this.$volumeIcon = this.$el.find('.drawer-icon[data-volume]')
+  }
+
+  setVolumeLevel(value) {
+    var containerHeight = this.$volumeBarContainer.height()
+    var barHeight = this.$volumeBarBackground.height()
+    var offset = (containerHeight - barHeight) / 2.0
+    var pos = barHeight * value / 100.0 - this.$volumeBarScrubber.height() / 2.0 + offset
+    this.$volumeBarFill.css({ height: value + '%' })
+    this.$volumeBarScrubber.css({ bottom: pos })
+    if (value > 0) {
+      this.$volumeIcon.removeClass('muted')
+    } else {
+      this.$volumeIcon.addClass('muted')
+    }
+  }
+
+  setSeekPercentage(value) {
+    var pos = this.$seekBarContainer.width() * value / 100.0 - this.$seekBarScrubber.width() / 2.0
+    this.$seekBarPosition.css({ width: value + '%' })
+    this.$seekBarScrubber.css({ left: pos })
+  }
+
   render() {
     var timeout = 1000
     var style = Styler.getStyleFor('media_control')
     var settings = this.container.settings || this.defaultSettings
-    this.$el.html(this.template({settings: settings}))
+    this.$el.html(this.template({ settings: settings }))
     this.$el.append(style)
-    this.$el.find('.volume-bar-wrapper[data-volume]').hide()
-    this.$el.find('button[data-playpause]').addClass('paused')
-    this.$el.find('button[data-playstop]').addClass('stopped')
-    this.$el.find('div.volume-current[data-volume]').css({height: 100 + '%'})
-    this.$el.find('div.seekbar-position[data-seekbar]').css({width: 0})
-    this.$el.find('div.seekbar-loaded[data-seekbar]').css({width: 0})
+    this.createCachedElements()
+    this.$playPauseToggle.addClass('paused')
+    this.$playStopToggle.addClass('stopped')
+    this.currentVolume = 100
+    this.setVolumeLevel(this.currentVolume)
+    this.setSeekPercentage(0)
+
+    this.$volumeBarContainer.hide()
+    this.hideVolumeBar()
+
     if (this.params.autoPlay) {
       this.togglePlayPause()
       this.togglePlayStop()
@@ -336,7 +347,7 @@ class MediaControl extends UIObject {
     this.changeTogglePlay()
     this.hideId = setTimeout(() => this.hide(), timeout)
     if (this.disabled)
-      this.$el.hide()
+      this.hide()
     return this
   }
 }
