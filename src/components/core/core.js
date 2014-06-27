@@ -20,7 +20,8 @@ var MediaControl = require('../media_control');
 var Core = UIObject.extend({
   events: {
     'webkitfullscreenchange': 'exit',
-    'mousemove': 'showMediaControl'
+    'mousemove': 'showMediaControl',
+    'mouseleave': 'hideMediaControl'
   },
   attributes: {
     'data-player': ''
@@ -170,6 +171,9 @@ var Core = UIObject.extend({
   },
   showMediaControl: function(event) {
     this.mediaControl.show(event);
+  },
+  hideMediaControl: function(event) {
+    this.mediaControl.hide(event);
   },
   onMediaControlShow: function(showing) {
     if (showing)
