@@ -184,15 +184,6 @@ var Core = UIObject.extend({
     this.$el.append(style);
 
     this.$el.append(this.mediaControl.render().el);
-    if(navigator.userAgent.match(/firefox/i)) {
-      var div = $('<div>').css({
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        'z-index': 998
-      });
-      this.$el.append(div);
-    }
     return this;
   }
 });
