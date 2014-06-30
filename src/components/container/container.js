@@ -10,15 +10,12 @@ var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
 var _ = require('underscore');
 
-var Container = UIObject.extend({
-  name: 'Container',
-  attributes: {
-    'data-container': ''
-  },
-  events: {
-    'click': 'clicked'
-  },
-  initialize: function(options) {
+class Container extends UIObject {
+  get name() { return 'Container' }
+  get attributes() { return { 'data-container': '' } }
+  get events() { return {'click': 'clicked'} }
+
+  initialize(options) {
     this.playback = options.playback;
     this.settings = this.playback.settings;
     this.listenTo(this.playback, 'playback:progress', this.progress);
@@ -36,112 +33,142 @@ var Container = UIObject.extend({
     this.isReady = false;
     this.mediaControlDisabled = false;
     this.plugins = [this.playback];
-  },
-  with: function(klass) {
+  }
+
+  with(klass) {
     _.extend(this, klass);
     return this;
-  },
-  destroy: function() {
+  }
+
+  destroy() {
     this.trigger('container:destroyed', this, this.name);
     this.playback.destroy();
     this.$el.remove();
-  },
-  setStyle: function(style) {
+  }
+
+  setStyle(style) {
     this.$el.css(style);
-  },
-  animate: function(style, duration) {
+  }
+
+  animate(style, duration) {
     return this.$el.animate(style, duration).promise();
-  },
-  ready: function() {
+  }
+
+  ready() {
     console.log('container is ready');
     this.isReady = true;
     this.trigger('container:ready', this.name);
-  },
-  isPlaying: function() {
+  }
+
+  isPlaying() {
     return this.playback.isPlaying();
-  },
-  error: function(errorObj) {
+  }
+
+  error(errorObj) {
     this.trigger('container:error', errorObj, this.name);
-  },
-  loadedMetadata: function(duration) {
+  }
+
+  loadedMetadata(duration) {
     this.trigger('container:loadedmetadata', duration);
-  },
-  timeUpdated: function(position, duration) {
+  }
+
+  timeUpdated(position, duration) {
     this.trigger('container:timeupdate', position, duration, this.name);
-  },
-  progress: function(startPosition, endPosition, duration) {
+  }
+
+  progress(startPosition, endPosition, duration) {
     this.trigger('container:progress', startPosition, endPosition, duration, this.name);
-  },
-  playing: function() {
+  }
+
+  playing() {
     this.trigger('container:play', this.name);
-  },
-  play: function() {
+  }
+
+  play() {
     this.playback.play();
-  },
-  stop: function() {
+  }
+
+  stop() {
     this.trigger('container:stop', this.name);
     this.playback.stop();
-  },
-  pause: function() {
+  }
+
+  pause() {
     this.trigger('container:pause', this.name);
     this.playback.pause();
-  },
-  ended: function() {
+  }
+
+  ended() {
     this.trigger('container:ended', this, this.name);
-  },
-  clicked: function() {
+  }
+
+  clicked() {
     this.trigger('container:click', this, this.name);
-  },
-  setCurrentTime: function(time) {
+  }
+
+  setCurrentTime(time) {
     this.trigger('container:seek', time, this.name);
     this.playback.seek(time);
-  },
-  setVolume: function(value) {
+  }
+
+  setVolume(value) {
     this.trigger('container:volume', value, this.name);
     this.playback.volume(value);
-  },
-  requestFullscreen: function() {
+  }
+
+  requestFullscreen() {
     this.trigger('container:fullscreen', this.name);
-  },
-  buffering: function() {
+  }
+
+  buffering() {
     this.trigger('container:state:buffering', this.name);
-  },
-  bufferfull: function() {
+  }
+
+  bufferfull() {
     this.trigger('container:state:bufferfull', this.name);
-  },
-  addPlugin: function(plugin) {
+  }
+
+  addPlugin(plugin) {
     this.plugins.push(plugin);
-  },
-  hasPlugin: function(name) {
+  }
+
+  hasPlugin(name) {
     return !!this.getPlugin(name);
-  },
-  getPlugin: function(name) {
+  }
+
+  getPlugin(name) {
     return _(this.plugins).find(function(plugin) { return plugin.name === name });
-  },
-  settingsUpdate: function() {
+  }
+
+  settingsUpdate() {
     this.settings = this.playback.settings;
     this.trigger('container:settingsupdate');
-  },
-  highDefinitionUpdate: function() {
+  }
+
+  highDefinitionUpdate() {
     this.trigger('container:highdefinitionupdate');
-  },
-  isHighDefinitionInUse: function() {
+  }
+
+  isHighDefinitionInUse() {
     return this.playback.isHighDefinitionInUse();
-  },
-  disableMediaControl: function() {
+  }
+
+  disableMediaControl() {
     this.mediaControlDisabled = true;
     this.trigger('container:mediacontrol:disable');
-  },
-  enableMediaControl: function() {
+  }
+
+  enableMediaControl() {
     this.mediaControlDisabled = false;
     this.trigger('container:mediacontrol:enable');
-  },
-  render: function() {
+  }
+
+  render() {
     var style = Styler.getStyleFor('container');
     this.$el.append(style);
     this.$el.append(this.playback.render().el);
     return this;
   }
-});
+};
 
 module.exports = Container;
