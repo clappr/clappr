@@ -11,22 +11,25 @@ var BaseObject = require('../../base/base_object');
 var Container = require('../container');
 var $ = require('jquery');
 
-var ContainerFactory = BaseObject.extend({
-  initialize: function(params, loader) {
+class ContainerFactory extends BaseObject {
+  initialize(params, loader) {
     this.params = params;
     this.loader = loader;
-  },
-  createContainers: function() {
+  }
+
+  createContainers() {
     return $.Deferred(function(promise) {
       promise.resolve( _.map(this.params.sources, function(source) {
         return this.createContainer(source);
       }, this));
     }.bind(this));
-  },
-  findPlaybackPlugin: function(source) {
-    return _.find(this.loader.playbackPlugins, function(p) { return p.canPlay("" + source) }, this);
-  },
-  createContainer: function(source) {
+  }
+
+  findPlaybackPlugin(source) {
+    return _.find(this.loader.playbackPlugins, (p) => { return p.canPlay("" + source) }, this);
+  }
+
+  createContainer(source) {
     var playbackPlugin = this.findPlaybackPlugin(source);
     var params = _.extend({}, this.params, {src: source, autoPlay: !!this.params.autoPlay});
     var playback = new playbackPlugin(params);
@@ -34,17 +37,16 @@ var ContainerFactory = BaseObject.extend({
     var defer = $.Deferred();
     defer.promise(container);
     this.addContainerPlugins(container, source);
-    this.listenToOnce(container, 'container:ready', function() {
-      defer.resolve(container);
-    }.bind(this));
+    this.listenToOnce(container, 'container:ready', () => defer.resolve(container) );
     return container;
-  },
-  addContainerPlugins: function(container, source) {
+  }
+
+  addContainerPlugins(container, source) {
     _.each(this.loader.containerPlugins, function(plugin) {
       var params = _.extend(this.params, {container: container, src: source});
       container.addPlugin(new plugin(params));
     }, this);
   }
-});
+};
 
 module.exports = ContainerFactory;
