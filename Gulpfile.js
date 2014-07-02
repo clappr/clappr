@@ -70,11 +70,6 @@ gulp.task("copy-html", function() {
     .pipe(gulp.dest('build'));
 });
 
-gulp.task('build-tests', ['build'], function() {
-  //FIXME looks like gulp-browserify can't handle /**/* globs
-  exec('node node_modules/.bin/browserify test/**/*.js -o dist/tests_bundle.js');
-});
-
 gulp.task('build', ['pre-build-hook'], function() {
   var bundle = browserify()
     .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
@@ -109,40 +104,17 @@ gulp.task('dist', ['pre-build-hook'], function() {
     .pipe(gulp.dest(paths.dest));
 });
 
-gulp.task('headless-test', ['build-tests'], function() {
-  setTimeout(function() {
-    spawn('node_modules/.bin/mocha-phantomjs', ['-p', 'node_modules/.bin/phantomjs', 'test/headless.html'])
-      .stdout.pipe(process.stdout);
-  }, 1500);
+
+gulp.task('test', function(done) {
+  karma.start({
+    browsers: ['Chrome'],
+    files: ['test/**/*.js'],
+    frameworks: ['browserify', 'traceur', 'mocha'],
+    singleRun: true
+  }, done)
 });
 
-gulp.task('test', ['watch-tests'], function() {
-  server.get('/tests', function(req, res) {
-    res.sendfile('./test/runner.html');
-  });
-  server.listen(port);
-  utils.log(utils.colors.green('*****  Testing running on localhost:' + port + '/tests  *****'))
-  setTimeout(function() {
-    exec('open http://localhost:3000/tests');
-  }, 2000);
 
-});
-
-gulp.task('coverage', function() {
-  gulp.src(paths.files[0])
-    .pipe(istanbul())
-    .on('end', function() {
-      gulp.src(paths.tests)
-        .pipe(mocha())
-        .pipe(istanbul.writeReports());
-    });
-});
-
-gulp.task('lint', function() {
-  gulp.src(paths.files[0])
-    .pipe(jshint('.jshintrc'))
-    .pipe(jshint.reporter(stylish));
-});
 
 gulp.task('watch', ['build'], function() {
   gulp.watch(paths.files, function() {
@@ -150,8 +122,3 @@ gulp.task('watch', ['build'], function() {
   });
 });
 
-gulp.task('watch-tests', ['build-tests'], function() {
-  gulp.watch(paths.files.concat(paths.tests), function() {
-    gulp.run('build-tests');
-  });
-});
