@@ -10,9 +10,11 @@ var browserify = require('browserify');
 var exec = require('child_process').exec;
 var spawn = require('child_process').spawn;
 var changed = require('gulp-changed');
+var path = require('path');
 var express = require('express');
 var fs = require('fs');
 var glob = require('glob').sync;
+var karma = require('karma').server;
 
 var streamify = require('gulp-streamify')
 
@@ -106,12 +108,7 @@ gulp.task('dist', ['pre-build-hook'], function() {
 
 
 gulp.task('test', function(done) {
-  karma.start({
-    browsers: ['Chrome'],
-    files: ['test/**/*.js'],
-    frameworks: ['browserify', 'traceur', 'mocha'],
-    singleRun: true
-  }, done)
+  karma.start({configFile: path.resolve('karma.conf.js')}, done);
 });
 
 
