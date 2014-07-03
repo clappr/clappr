@@ -2,6 +2,9 @@
 // Generated on Wed Jul 02 2014 11:05:24 GMT-0300 (BRT)
 
 
+var dotenv = require('dotenv');
+dotenv.load();
+
 module.exports = function(config) {
   config.set({
 
