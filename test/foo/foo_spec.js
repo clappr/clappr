@@ -1,14 +1,10 @@
 var assert = require('assert');
 var BaseObject = require('../../src/base/base_object');
+var $ = require('jquery');
 
 describe('First spec', () => {
   it('should work', () => {
-    $(document).click(() => {
-      console.log('EEEEPA')
-      console.log('EEEEPA')
-      console.log('EEEEPA')
-      console.log('EEEEPA')
-    });
+    $(document).click(() => { });
     $(document).click();
     assert.equal(true, true)
   });
