@@ -19,6 +19,7 @@
   "devDependencies": {
     "browserify": "^4.1.10",
     "chai": "latest",
+    "dotenv": "^0.4.0",
     "es6ify": "~1.2.0",
     "express": "^4.4.3",
     "glob": "^4.0.2",
