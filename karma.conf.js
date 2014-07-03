@@ -29,8 +29,7 @@ module.exports = function(config) {
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
       'src/**/*.js': ['traceur'],
-      'test/**/*.js': ['traceur'],
-      'test/**/*.js': ['browserify'] 
+      'test/**/*.js': ['traceur', 'browserify']
     },
 
     traceurPreprocessor: {
