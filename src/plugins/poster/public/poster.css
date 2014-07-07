@@ -26,7 +26,7 @@ div[data-poster] {
 .poster-icon:hover {
   opacity: 1.0;
 }
-.poster-icon.play[data-poster]:before{content:"\\e008"}
+.poster-icon.play[data-poster]:before{content:"\\e001"}
 div[data-poster] {
   position: absolute;
   height: 100%;
