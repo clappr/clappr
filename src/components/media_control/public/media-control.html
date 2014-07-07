@@ -13,7 +13,7 @@
   <% var renderDrawer = function(name, renderContent) { %>
       <div class="drawer-container" data-<%= name %>>
         <div class="drawer-icon-container" data-<%= name %>>
-          <div class="drawer-icon" data-<%= name %>></div>
+          <div class="drawer-icon media-control-icon" data-<%= name %>></div>
           <span class="drawer-text" data-<%= name %>></span>
         </div>
         <% renderContent(name); %>
@@ -23,7 +23,7 @@
       <div class="media-control-indicator" data-<%= name %>></div>
   <% }; %>
   <% var renderButton = function(name) { %>
-      <button class="media-control-button" data-<%= name %>></button>
+      <button class="media-control-button media-control-icon" data-<%= name %>></button>
   <% }; %>
   <% var render = function(settings) {
       _.each(settings, function(setting) {
