@@ -1,3 +1,6 @@
+@import '../../../base/scss/keyframes';
+@import '../../../base/scss/transform';
+
 .spinner-three-bounce[data-spinner] {
   position: absolute;
   margin: 0 auto;
@@ -34,17 +37,7 @@
   }
 }
 
-@-webkit-keyframes bouncedelay {
-  0%, 80%, 100% { -webkit-transform: scale(0.0) }
-  40% { -webkit-transform: scale(1.0) }
-}
-
-@keyframes bouncedelay {
-  0%, 80%, 100% {
-    transform: scale(0.0);
-    -webkit-transform: scale(0.0);
-  } 40% {
-    transform: scale(1.0);
-    -webkit-transform: scale(1.0);
-  }
+@include keyframes(bouncedelay) {
+  0%, 80%, 100% { @include transform(scale(0.0)); }
+  40% { @include transform(scale(1.0)); }
 }
