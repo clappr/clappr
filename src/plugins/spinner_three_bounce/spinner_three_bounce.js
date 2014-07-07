@@ -9,7 +9,8 @@ var JST = require('../../base/jst');
 var SpinnerThreeBouncePlugin = UIPlugin.extend({
   name: 'spinner_three_bounce',
   attributes: {
-    "data-spinner":""
+    'data-spinner':'',
+    'class': 'spinner-three-bounce'
   },
   initialize: function(options) {
     SpinnerThreeBouncePlugin.super('initialize').call(this, options);
@@ -39,4 +40,3 @@ var SpinnerThreeBouncePlugin = UIPlugin.extend({
 });
 
 module.exports = SpinnerThreeBouncePlugin;
-
