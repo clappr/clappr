@@ -88,6 +88,22 @@ gulp.task('build', ['pre-build-hook'], function() {
     });
 });
 
+gulp.task('build-lib', ['pre-build-hook'], function() {
+  var bundle = browserify('./src/lib')
+    .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
+    .add(es6ify.runtime)
+    .require('./src/lib.js', {expose: 'player'})
+    .bundle()
+    .pipe(fs.createWriteStream('./dist/lib.js'));
+
+//  return bundle.pipe(source('lib.js'))
+//    .pipe(rename('lib.js'))
+//    .pipe(gulp.dest(paths.dest))
+//    .on("error", function(err) {
+//      throw err;
+//    });
+});
+
 gulp.task('serve', ['watch'], function() {
   utils.log(utils.colors.green('*****  Listening on port ' + port + '  *****'))
   server.listen(port);
