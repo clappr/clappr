@@ -1,5 +1,5 @@
 {
-  "name": "Player",
+  "name": "player",
   "version": "3.0.0-pre-0",
   "description": "Globo.com video player",
   "main": "dist/lib.js",
