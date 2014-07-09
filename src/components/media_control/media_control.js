@@ -35,11 +35,12 @@ class MediaControl extends UIObject {
       'click .bar-background[data-volume]': 'volume',
       'click .drawer-icon[data-volume]': 'toggleMute',
       'mouseover .drawer-container[data-volume]': 'showVolumeBar',
-      'mouseover .bar-container[data-volume]': 'keepVolumeBar',
-      'mouseleave [data-volume]': 'hideVolumeBar',
+      'mouseover [data-volume]': 'keepVolumeBar',
+      'mouseleave .drawer-container[data-volume]': 'hideVolumeBar',
       'mousedown .bar-scrubber[data-seekbar]': 'startSeekDrag',
       'mousedown .bar-scrubber[data-volume]': 'startVolumeDrag',
-      'mouseover[data-controls]': 'show'
+      'mouseenter .media-control-layer[data-controls]': 'setKeepVisible',
+      'mouseleave .media-control-layer[data-controls]': 'resetKeepVisible'
     }
   }
 
@@ -48,6 +49,7 @@ class MediaControl extends UIObject {
   initialize(params) {
     this.params = params
     this.container = params.container
+    this.keepVisible = false
     this.addEventListeners()
     this.defaultSettings = {
       left: ['play', 'stop', 'pause'],
@@ -191,12 +193,13 @@ class MediaControl extends UIObject {
     this.changeTogglePlay()
     this.addEventListeners()
     this.settingsUpdate()
+    this.container.volume(this.currentVolume)
     if (this.container.mediaControlDisabled)
       this.disable()
   }
 
   showVolumeBar() {
-    if(this.hideVolumeId) {
+    if (this.hideVolumeId) {
       clearTimeout(this.hideVolumeId)
     }
     this.$volumeBarContainer.show()
@@ -204,7 +207,8 @@ class MediaControl extends UIObject {
   }
 
   hideVolumeBar() {
-    if(this.hideVolumeId) {
+    if (!this.$volumeBarContainer) return
+    if (this.hideVolumeId) {
       clearTimeout(this.hideVolumeId)
     }
     this.$volumeBarContainer.one(
@@ -248,6 +252,14 @@ class MediaControl extends UIObject {
     this.container.setCurrentTime(pos)
   }
 
+  setKeepVisible() {
+    this.keepVisible = true
+  }
+
+  resetKeepVisible() {
+    this.keepVisible = false
+  }
+
   show(event) {
     if (this.disabled) return
     var timeout = 2000
@@ -270,11 +282,15 @@ class MediaControl extends UIObject {
     if (this.hideId) {
       clearTimeout(this.hideId)
     }
-    if (this.disabled || (!this.draggingVolumeBar && !this.draggingSeekBar && this.$el.find('[data-controls]:hover').length === 0)) {
+    if (this.keepVisible || this.draggingVolumeBar || this.draggingSeekBar) {
+      this.hideId = setTimeout(() => this.hide(), timeout)
+    } else {
+      if (this.$volumeBarContainer) {
+        this.$volumeBarContainer.hide()
+        this.hideVolumeBar()
+      }
       this.trigger('mediacontrol:hide', this.name)
       this.$el.addClass('media-control-hide')
-    } else {
-      this.hideId = setTimeout(() => this.hide(), timeout)
     }
   }
 
@@ -333,9 +349,7 @@ class MediaControl extends UIObject {
     this.createCachedElements()
     this.$playPauseToggle.addClass('paused')
     this.$playStopToggle.addClass('stopped')
-    this.currentVolume = 100
-    this.setVolumeLevel(this.currentVolume)
-    this.setSeekPercentage(0)
+    this.currentVolume = this.currentVolume || 100
 
     this.$volumeBarContainer.hide()
     this.hideVolumeBar()
@@ -348,6 +362,12 @@ class MediaControl extends UIObject {
     this.hideId = setTimeout(() => this.hide(), timeout)
     if (this.disabled)
       this.hide()
+
+    this.$el.ready(() => {
+      this.setVolumeLevel(this.currentVolume)
+      this.setSeekPercentage(0)
+    })
+
     return this
   }
 }
