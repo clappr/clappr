@@ -30,7 +30,7 @@ class FlashVOD extends UIObject {
 
   safe(fn) {
     if(this.el.getState && this.el.getDuration && this.el.getPosition && this.el.getBytesLoaded && this.el.getBytesTotal) {
-      return fn.apply(this);
+      return fn.apply(this)
     }
   }
 
@@ -50,7 +50,7 @@ class FlashVOD extends UIObject {
       if(this.el.getState && this.el.getState() === "IDLE") {
         this.bootstrap()
       }
-    }, 500);
+    }, 500)
   }
 
   setupFirefox() {
@@ -110,7 +110,7 @@ class FlashVOD extends UIObject {
 
   firstPlay() {
     this.safe(() => {
-      this.currentState = "PLAYING";
+      this.currentState = "PLAYING"
       this.el.playerPlay(this.src)
     })
   }
