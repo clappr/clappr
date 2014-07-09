@@ -5,6 +5,7 @@ package
   import flash.events.Event;
   import flash.events.NetStatusEvent;
   import flash.events.StageVideoAvailabilityEvent;
+  import flash.events.TimerEvent;
   import flash.geom.Rectangle;
   import flash.media.StageVideoAvailability;
   import flash.media.StageVideo;
@@ -13,6 +14,7 @@ package
   import flash.net.NetConnection;
   import flash.net.NetStream;
   import flash.system.Security;
+  import flash.utils.Timer;
 
   public class Player extends MovieClip {
     private var _video:Video;
@@ -20,9 +22,11 @@ package
     private var _ns:NetStream;
     private var _nc:NetConnection;
     private var totalTime:Number;
+    private var playbackId:String;
     private var playbackState:String;
     private var videoVolumeTransform:SoundTransform;
     private var isOnStageVideo:Boolean = false;
+    private var heartbeat:Timer = new Timer(500);
 
     public function Player() {
       Security.allowDomain('*');
@@ -59,6 +63,7 @@ package
       _ns.backBufferTime = 3600;
     }
     private function setupCallbacks():void {
+      ExternalInterface.addCallback("setPlaybackId", setPlaybackId);
       ExternalInterface.addCallback("setVideoSize", setVideoSize);
       ExternalInterface.addCallback("playerPlay", playerPlay);
       ExternalInterface.addCallback("playerPause", playerPause);
@@ -87,7 +92,9 @@ package
         setVideoSize(stage.stageWidth, stage.stageHeight);
       } else if (event.info.code == "NetStream.Play.Stop") {
         playbackState = "ENDED";
+        heartbeat.stop();
       }
+      _triggerEvent('statechanged');
     }
     private function isBuffering(code:String):Boolean {
       return Boolean(code == "NetStream.Buffer.Empty" && playbackState != "ENDED" ||
@@ -97,16 +104,24 @@ package
     private function _onResize(event:Event):void {
       setVideoSize(stage.stageWidth, stage.stageHeight);
     }
+    private function onHeartbeat( event:TimerEvent ):void {
+      _triggerEvent('progress');
+      _triggerEvent('timeupdate');
+    }
     private function playerPlay(url:String):void {
       _ns.play(url);
+      heartbeat.addEventListener( TimerEvent.TIMER, onHeartbeat );
+      heartbeat.start();
     }
     private function playerPause():void {
       _ns.pause();
+      if (_ns.bytesLoaded == _ns.bytesTotal) heartbeat.stop();
       playbackState = "PAUSED";
     }
     private function playerStop():void {
       _ns.pause();
       _ns.seek(0);
+      heartbeat.stop();
       playbackState = "IDLE";
     }
     private function playerSeek(position:Number):void {
@@ -115,6 +130,7 @@ package
     private function playerResume():void {
       playbackState = "PLAYING";
       _ns.resume();
+      heartbeat.start();
     }
     private function playerVolume(level:Number):void {
       videoVolumeTransform.volume = level/100;
@@ -128,6 +144,9 @@ package
     }
     private function getDuration():Number {
       return totalTime;
+    }
+    private function setPlaybackId(playbackId: String):void {
+      this.playbackId = playbackId;
     }
     private function setVideoSize(width:Number, height:Number):void {
       stage.fullScreenSourceRect = new Rectangle(0, 0, width, height);
@@ -157,6 +176,9 @@ package
       rect.y = Math.round((containerHeight - rect.height) / 2);
       return rect;
     }
+    private function _triggerEvent(name: String):void {
+      ExternalInterface.call('WP3.Mediator.trigger("' + playbackId + ':' + name +'")');
+    }
     private function _enableStageVideo():void {
       if (_stageVideo == null) {
         _stageVideo = stage.stageVideos[0];
@@ -182,6 +204,7 @@ package
     }
     public function onMetaData(info:Object):void {
       totalTime = info.duration;
+      _triggerEvent('timeupdate');
     }
   }
 }
