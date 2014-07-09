@@ -77,6 +77,9 @@ gulp.task('build', ['pre-build-hook'], function() {
     .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
     .add(es6ify.runtime)
     .require(require.resolve('./src/main.js'), { entry: true })
+    .require('./src/base/ui_plugin', { expose: 'ui_plugin' })
+    .require('./src/base/base_object', { expose: 'base_object' })
+    .require('./src/base/ui_object', { expose: 'ui_object' })
     .bundle();
 
   return bundle.pipe(source('main.js'))
@@ -91,7 +94,6 @@ gulp.task('build', ['pre-build-hook'], function() {
 gulp.task('build-lib', ['pre-build-hook'], function() {
   return browserify({ entries: [es6ify.runtime, './src/lib.js'] })
     .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
-    .require('./src/lib.js', {expose: 'player'})
     .bundle()
     .pipe(fs.createWriteStream('./dist/lib.js'));
 
