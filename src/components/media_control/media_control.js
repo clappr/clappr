@@ -35,7 +35,6 @@ class MediaControl extends UIObject {
       'click .bar-background[data-volume]': 'volume',
       'click .drawer-icon[data-volume]': 'toggleMute',
       'mouseover .drawer-container[data-volume]': 'showVolumeBar',
-      'mouseover [data-volume]': 'keepVolumeBar',
       'mouseleave .drawer-container[data-volume]': 'hideVolumeBar',
       'mousedown .bar-scrubber[data-seekbar]': 'startSeekDrag',
       'mousedown .bar-scrubber[data-volume]': 'startVolumeDrag',
@@ -211,20 +210,14 @@ class MediaControl extends UIObject {
     if (this.hideVolumeId) {
       clearTimeout(this.hideVolumeId)
     }
-    this.$volumeBarContainer.one(
-      'webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',
-      () => this.$volumeBarContainer.hide()
-    )
     this.hideVolumeId = setTimeout(
-      () => this.$volumeBarContainer.addClass('volume-bar-hide'),
-      750
-    )
-  }
-
-  keepVolumeBar() {
-    if(this.hideVolumeId) {
-      clearTimeout(this.hideVolumeId)
-    }
+      () => {
+        this.$volumeBarContainer.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', () => {
+          this.$volumeBarContainer.off('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend')
+          this.$volumeBarContainer.hide()
+        })
+        this.$volumeBarContainer.addClass('volume-bar-hide')
+      }, 750)
   }
 
   ended() {
@@ -287,7 +280,6 @@ class MediaControl extends UIObject {
     } else {
       if (this.$volumeBarContainer) {
         this.$volumeBarContainer.hide()
-        this.hideVolumeBar()
       }
       this.trigger('mediacontrol:hide', this.name)
       this.$el.addClass('media-control-hide')
@@ -352,7 +344,6 @@ class MediaControl extends UIObject {
     this.currentVolume = this.currentVolume || 100
 
     this.$volumeBarContainer.hide()
-    this.hideVolumeBar()
 
     if (this.params.autoPlay) {
       this.togglePlayPause()
