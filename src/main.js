@@ -5,6 +5,7 @@
 var BaseObject = require('./base/base_object')
 var CoreFactory = require('./components/core_factory')
 var Loader = require('./components/loader')
+var Mediator = require('./components/mediator')
 
 
 class Player extends BaseObject {
@@ -31,8 +32,8 @@ class Player extends BaseObject {
 }
 
 
-global.DEBUG = true
+global.DEBUG = false
 
-window.WP3 = { Player: Player }
+window.WP3 = { Player: Player, Mediator: Mediator }
 
 module.exports = window.WP3
