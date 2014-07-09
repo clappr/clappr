@@ -84,7 +84,7 @@ gulp.task('build', ['pre-build-hook'], function() {
 
   return bundle.pipe(source('main.js'))
     .pipe(changed(paths.dest))
-    .pipe(rename(distFile))
+    .pipe(rename('player.js'))
     .pipe(gulp.dest(paths.dest))
     .on("error", function(err) {
       throw err;
