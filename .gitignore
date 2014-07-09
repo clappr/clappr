@@ -4,5 +4,3 @@ node_modules
 coverage
 build/
 *.cache
-dist/
-**/jst.js
