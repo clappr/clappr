@@ -1,0 +1,28 @@
+@mixin animation($params) {
+  -webkit-animation: $params;
+  -moz-animation: $params;
+  -o-animation: $params;
+  animation: $params;
+}
+
+@mixin animation-fill-mode($value) {
+  -webkit-animation-fill-mode: $value;
+  -moz-animation-fill-mode: $value;
+  -o-animation-fill-mode: $value;
+  animation-fill-mode: $value;
+}
+
+@mixin keyframes($name) {
+  @-webkit-keyframes #{$name} {
+    @content;
+  }
+  @-moz-keyframes #{$name} {
+    @content;
+  }
+  @-ms-keyframes #{$name} {
+    @content;
+  }
+  @keyframes #{$name} {
+    @content;
+  }
+}
