@@ -2,21 +2,27 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var PluginMixin = require('./plugin_mixin');
-var UIObject = require('./ui_object');
+var PluginMixin = require('./plugin_mixin')
+var UIObject = require('./ui_object')
 
-var UIPlugin = UIObject.extend(PluginMixin).extend({
-  type: 'ui',
-  enable: function() {
-    UIPlugin.super('enable').call(this);
-    this.$el.show();
-  },
-  disable: function() {
-    UIPlugin.super('disable').call(this);
-    this.$el.hide();
-  },
-  bindEvents: function() {}
-}); 
+var _ = require('underscore')
 
-module.exports = UIPlugin;
+class UIPlugin extends UIObject {
+  get type() { return 'ui' }
 
+  enable() {
+    UIPlugin.super('enable').call(this)
+    this.$el.show()
+  }
+
+  disable() {
+    UIPlugin.super('disable').call(this)
+    this.$el.hide()
+  }
+
+  bindEvents() {}
+}
+
+_.extend(UIPlugin.prototype, PluginMixin);
+
+module.exports = UIPlugin
