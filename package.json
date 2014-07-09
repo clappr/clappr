@@ -2,7 +2,7 @@
   "name": "player",
   "version": "3.0.0-pre-0",
   "description": "Globo.com video player",
-  "main": "dist/lib.js",
+  "main": "dist/player.js",
   "scripts": {
     "test": "gulp test"
   },
