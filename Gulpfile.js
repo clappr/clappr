@@ -89,9 +89,8 @@ gulp.task('build', ['pre-build-hook'], function() {
 });
 
 gulp.task('build-lib', ['pre-build-hook'], function() {
-  var bundle = browserify('./src/lib')
+  return browserify({ entries: [es6ify.runtime, './src/lib.js'] })
     .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
-    .add(es6ify.runtime)
     .require('./src/lib.js', {expose: 'player'})
     .bundle()
     .pipe(fs.createWriteStream('./dist/lib.js'));
