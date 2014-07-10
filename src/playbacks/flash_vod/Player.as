@@ -39,6 +39,7 @@ package
       _video = new Video();
       setupCallbacks();
       setTimeout(flashReady, 50);
+      playbackId = LoaderInfo(this.root.loaderInfo).parameters.playbackId;
     }
 
     private function flashReady(): void {
@@ -70,7 +71,6 @@ package
       _ns.backBufferTime = 3600;
     }
     private function setupCallbacks():void {
-      ExternalInterface.addCallback("setPlaybackId", setPlaybackId);
       ExternalInterface.addCallback("setVideoSize", setVideoSize);
       ExternalInterface.addCallback("playerPlay", playerPlay);
       ExternalInterface.addCallback("playerPause", playerPause);
@@ -151,9 +151,6 @@ package
     }
     private function getDuration():Number {
       return totalTime;
-    }
-    private function setPlaybackId(playbackId: String):void {
-      this.playbackId = playbackId;
     }
     private function setVideoSize(width:Number, height:Number):void {
       stage.fullScreenSourceRect = new Rectangle(0, 0, width, height);
