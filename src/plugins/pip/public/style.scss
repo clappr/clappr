@@ -1,0 +1,46 @@
+@import '../../../base/scss/transition';
+
+.pip-loading[data-pip] {
+  left: 25px;
+  top: 15px;
+  position: relative;
+  float: left;
+  z-index: 3001;
+  color: white;
+}
+
+.pip-transition[data-pip] {
+  @include transition(all, 0.4s, ease-out);
+}
+
+.master-container[data-pip] {
+  cursor: default;
+  width: 100%;
+  height: 100%;
+  font-size: 100%;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border: none;
+}
+
+.pip-container[data-pip] {
+  cursor: pointer;
+  width: 24%;
+  height: 24%;
+  font-size: 24%;
+  z-index: 2000;
+  position: absolute;
+  right: 23px;
+  bottom: 23px;
+  border-width: 2px;
+  border-radius: 3px;
+  border-style: solid;
+  border-color: rgba(255,255,255, .25);
+  background-clip: padding-box;
+  -webkit-background-clip: padding-box;
+
+  &.over-media-control {
+    bottom: 63px;
+  }
+}
