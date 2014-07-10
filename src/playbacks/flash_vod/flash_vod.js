@@ -25,7 +25,6 @@ class FlashVOD extends UIObject {
       right: ["fullscreen", "volume"]
     }
     this.isReady = false
-    this.checkIfFlashIsReady()
   }
 
   safe(fn) {
@@ -35,7 +34,6 @@ class FlashVOD extends UIObject {
   }
 
   bootstrap() {
-    clearInterval(this.bootstrapId)
     this.el.width = "100%"
     this.el.height = "100%"
     this.el.setPlaybackId(this.uniqueId)
@@ -43,14 +41,6 @@ class FlashVOD extends UIObject {
     this.isReady = true
     this.trigger('playback:ready', this.name)
     this.currentState = "IDLE"
-  }
-
-  checkIfFlashIsReady() {
-    this.bootstrapId = setInterval(() => {
-      if(this.el.getState && this.el.getState() === "IDLE") {
-        this.bootstrap()
-      }
-    }, 500)
   }
 
   setupFirefox() {
@@ -73,6 +63,7 @@ class FlashVOD extends UIObject {
     Mediator.on(this.uniqueId + ':progress', () => this.progress())
     Mediator.on(this.uniqueId + ':timeupdate', () => this.updateTime())
     Mediator.on(this.uniqueId + ':statechanged', () => this.checkState())
+    Mediator.on(this.uniqueId + ':flashready', () => this.bootstrap())
   }
 
   stopListening() {
@@ -181,12 +172,12 @@ class FlashVOD extends UIObject {
   render() {
     var style = Styler.getStyleFor(this.name)
     this.$el.html(this.template({cid: this.cid, swfPath: this.swfPath}))
-    this.$el.append(style)
     if(navigator.userAgent.match(/firefox/i)) { //FIXME remove it from here
       this.setupFirefox()
     } else if(window.ActiveXObject) {
       this.setupIE()
     }
+    this.$el.append(style)
     return this
   }
 }
