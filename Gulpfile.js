@@ -104,7 +104,7 @@ gulp.task('build', ['pre-build-hook'], function() {
 
   return bundle.pipe(source('main.js'))
     .pipe(changed(paths.dest))
-    .pipe(rename('player.js'))
+    .pipe(rename(distFile))
     .pipe(gulp.dest(paths.dest))
     .on("error", function(err) {
       throw err;
@@ -121,6 +121,9 @@ gulp.task('dist', ['pre-build-hook'], function() {
     .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
     .add(es6ify.runtime)
     .require(require.resolve('./src/main.js'), { entry: true })
+    .require('./src/base/ui_plugin', { expose: 'ui_plugin' })
+    .require('./src/base/base_object', { expose: 'base_object' })
+    .require('./src/base/ui_object', { expose: 'ui_object' })
     .bundle();
 
   return bundle.pipe(source('main.js'))
