@@ -15,9 +15,13 @@
   "bugs": {
     "url": "https://github.com/globoi/player/issues"
   },
+  "browserify-shim": {
+    "jquery": "global:jQuery"
+  },
   "homepage": "https://github.com/globoi/player",
   "devDependencies": {
     "browserify": "^4.1.10",
+    "browserify-shim": "^3.6.0",
     "chai": "latest",
     "dotenv": "^0.4.0",
     "es6ify": "~1.2.0",
