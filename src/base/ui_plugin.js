@@ -5,6 +5,8 @@
 var PluginMixin = require('./plugin_mixin')
 var UIObject = require('./ui_object')
 
+var extend = require('./utils').extend
+
 var _ = require('underscore')
 
 class UIPlugin extends UIObject {
@@ -24,5 +26,7 @@ class UIPlugin extends UIObject {
 }
 
 _.extend(UIPlugin.prototype, PluginMixin);
+
+UIPlugin.extend = extend
 
 module.exports = UIPlugin
