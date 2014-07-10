@@ -70,7 +70,6 @@ class HLS extends UIPlugin {
     this.currentState = "IDLE"
     this.timedCheckState()
     this.el.globoPlayerSetflushLiveURLCache(true)
-    this.el.globoPlayerSetstartFromLowestLevel(true); // decreases startup time
     this.autoPlay && this.play()
   }
 
