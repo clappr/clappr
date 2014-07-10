@@ -42,7 +42,7 @@ var paths = {
 
 var port = 3000;
 
-var distFile = 'api.min.js';
+var distFile = 'player.js';
 var distTestFile = 'tests_bundle.js';
 
 var namespace = 'WP3';
@@ -70,6 +70,26 @@ gulp.task("copy-html", function() {
   return gulp.src(paths.files[2])
     // .pipe(minifyHTML())
     .pipe(gulp.dest('build'));
+});
+
+gulp.task('build-light', ['pre-build-hook'], function() {
+  var bundle = browserify()
+    .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
+    .transform(require('browserify-shim'))
+    .add(es6ify.runtime)
+    .require(require.resolve('./src/main.js'), { entry: true })
+    .require('./src/base/ui_plugin', { expose: 'ui_plugin' })
+    .require('./src/base/base_object', { expose: 'base_object' })
+    .require('./src/base/ui_object', { expose: 'ui_object' })
+    .external('jquery')
+    .bundle();
+
+  return bundle.pipe(source('main.js'))
+    .pipe(rename(distFile))
+    .pipe(gulp.dest(paths.dest))
+    .on("error", function(err) {
+      throw err;
+    });
 });
 
 gulp.task('build', ['pre-build-hook'], function() {
@@ -109,12 +129,31 @@ gulp.task('dist', ['pre-build-hook'], function() {
     .pipe(gulp.dest(paths.dest));
 });
 
+gulp.task('dist-light', ['pre-build-hook'], function() {
+  var bundle = browserify()
+    .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
+    .transform(require('browserify-shim'))
+    .add(es6ify.runtime)
+    .require(require.resolve('./src/main.js'), { entry: true })
+    .require('./src/base/ui_plugin', { expose: 'ui_plugin' })
+    .require('./src/base/base_object', { expose: 'base_object' })
+    .require('./src/base/ui_object', { expose: 'ui_object' })
+    .external('jquery')
+    .bundle();
+
+  return bundle.pipe(source('main.js'))
+    .pipe(streamify(uglify()))
+    .pipe(rename(distFile))
+    .pipe(gulp.dest(paths.dest))
+    .on("error", function(err) {
+      throw err;
+    });
+});
+
 
 gulp.task('test', function(done) {
   karma.start({configFile: path.resolve('karma.conf.js')}, done);
 });
-
-
 
 gulp.task('watch', ['build'], function() {
   gulp.watch(paths.files, function() {
