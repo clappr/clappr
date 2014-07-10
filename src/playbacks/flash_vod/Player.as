@@ -15,6 +15,7 @@ package
   import flash.net.NetStream;
   import flash.system.Security;
   import flash.utils.Timer;
+  import flash.utils.setTimeout;
 
   public class Player extends MovieClip {
     private var _video:Video;
@@ -37,7 +38,13 @@ package
       setupStage();
       _video = new Video();
       setupCallbacks();
+      setTimeout(flashReady, 50);
     }
+
+    private function flashReady(): void {
+      _triggerEvent('flashready');
+    }
+
     private function setupStage():void {
       stage.scaleMode = StageScaleMode.NO_SCALE;
       stage.align = StageAlign.TOP_LEFT;

@@ -1,1 +1,1 @@
-$(find $HOME/Library/Sprouts/ -name mxmlc | head -n1) -default-background-color=0x000000 -default-size=640,360 -incremental -language=as3 -output=public/Player.swf -static-link-runtime-shared-libraries=true -target-player=11.1 -use-network=false Player.as
+$(find $HOME/airsdk/ -name mxmlc | head -n1) -default-background-color=0x000000 -default-size=640,360 -language=as3 -output=public/Player.swf -optimize=true -compress=true -use-gpu=true -target-player=11.1 -use-network=false Player.as
