@@ -17,6 +17,7 @@ class FlashVOD extends UIObject {
   get template() { return JST.flash_vod }
 
   initialize(options) {
+    super(options)
     this.src = options.src
     this.swfPath = options.swfPath || "assets/Player.swf"
     this.autoPlay = options.autoPlay
@@ -26,6 +27,7 @@ class FlashVOD extends UIObject {
       right: ["fullscreen", "volume"]
     }
     this.isReady = false
+    this.addListeners()
   }
 
   safe(fn) {
@@ -37,8 +39,6 @@ class FlashVOD extends UIObject {
   bootstrap() {
     this.el.width = "100%"
     this.el.height = "100%"
-    this.el.setPlaybackId(this.uniqueId)
-    this.addListeners()
     this.isReady = true
     this.trigger('playback:ready', this.name)
     this.currentState = "IDLE"
@@ -173,7 +173,7 @@ class FlashVOD extends UIObject {
 
   render() {
     var style = Styler.getStyleFor(this.name)
-    this.$el.html(this.template({cid: this.cid, swfPath: this.swfPath}))
+    this.$el.html(this.template({ cid: this.cid, swfPath: this.swfPath, playbackId: this.uniqueId }))
     if(navigator.userAgent.match(/firefox/i)) { //FIXME remove it from here
       this.setupFirefox()
     } else if(window.ActiveXObject) {

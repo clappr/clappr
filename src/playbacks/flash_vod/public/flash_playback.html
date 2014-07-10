@@ -6,6 +6,7 @@
   <param name="allowFullScreen" value="false">
   <param name="wmode" value="gpu">
   <param name="tabindex" value="1">
+  <param name=FlashVars value="playbackId=<%= playbackId %>" />
   <embed
     type="application/x-shockwave-flash"
     disabled="disabled"
@@ -19,5 +20,6 @@
     type="application/x-shockwave-flash"
     allowfullscreen="false"
     bgcolor="#000000"
+    FlashVars="playbackId=<%= playbackId %>"
     src="<%= swfPath %>">
   </embed>
