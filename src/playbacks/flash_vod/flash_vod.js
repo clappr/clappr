@@ -6,9 +6,10 @@ var UIObject = require('../../base/ui_object')
 var Styler = require('../../base/styler')
 var JST = require('../../base/jst')
 var Mediator = require('../../components/mediator')
-var _ = require("underscore")
+var _ = require('underscore')
+var $ = require('jquery')
 
-var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> </object>'
+var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> </object>'
 
 class FlashVOD extends UIObject {
   get name() { return 'flash_vod' }
@@ -41,6 +42,7 @@ class FlashVOD extends UIObject {
     this.isReady = true
     this.trigger('playback:ready', this.name)
     this.currentState = "IDLE"
+    $('<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%" />').insertAfter(this.$el)
   }
 
   setupFirefox() {
