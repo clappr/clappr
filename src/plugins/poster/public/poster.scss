@@ -1,0 +1,53 @@
+@font-face {
+  font-family: "Player";
+  src: url("assets/Player-Regular.eot");
+  src: url("assets/Player-Regular.eot?#iefix") format("embedded-opentype"),
+       url("assets/Player-Regular.ttf") format("truetype"),
+       url("assets/Player-Regular.svg#player") format("svg");
+}
+.player-poster[data-poster] {
+  cursor: pointer;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 998;
+  top: 0;
+
+  .poster-background[data-poster] {
+    width: 100%;
+    height: 100%;
+  }
+
+  .play-wrapper[data-poster] {
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    height: 20%;
+    line-height: 100%;
+    font-size: 20%;
+    top: 50%;
+    margin-top: -5%;
+    text-align: center;
+
+    .poster-icon[data-poster] {
+      font-family:"Player";
+      font-weight: normal;
+      font-style: normal;
+      line-height: 1;
+      letter-spacing: 0;
+      speak: none;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      color: white;
+      opacity: 0.75;
+
+      &.play[data-poster]:before{
+        content:"\\e001";
+      }
+
+      &:hover {
+        opacity: 1.0;
+      }
+    }
+  }
+}
