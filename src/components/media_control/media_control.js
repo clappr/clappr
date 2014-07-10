@@ -192,7 +192,7 @@ class MediaControl extends UIObject {
     this.changeTogglePlay()
     this.addEventListeners()
     this.settingsUpdate()
-    this.container.volume(this.currentVolume)
+    this.container.setVolume(this.currentVolume)
     if (this.container.mediaControlDisabled)
       this.disable()
   }
