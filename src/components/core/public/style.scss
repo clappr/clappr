@@ -5,6 +5,7 @@
 
 [data-player] * {
   @include nested-reset;
+  @include no-select;
   margin: 0;
   padding: 0;
   border: 0;
@@ -19,7 +20,6 @@
 }
 
 [data-player] {
-  @include no-select;
   @include font-smoothing;
   @include transform(translate3d(0,0,0));
   position: relative;
@@ -33,7 +33,7 @@
     width: 100%;
     height: 100%;
   }
-  
+
   &.nocursor {
     cursor: none;
   }
