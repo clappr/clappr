@@ -32,6 +32,7 @@ package
     public function Player() {
       Security.allowDomain('*');
       Security.allowInsecureDomain('*');
+      playbackId = LoaderInfo(this.root.loaderInfo).parameters.playbackId;
       playbackState = "IDLE";
       setupNetConnection();
       setupNetStream();
@@ -39,7 +40,6 @@ package
       _video = new Video();
       setupCallbacks();
       setTimeout(flashReady, 50);
-      playbackId = LoaderInfo(this.root.loaderInfo).parameters.playbackId;
     }
 
     private function flashReady(): void {
