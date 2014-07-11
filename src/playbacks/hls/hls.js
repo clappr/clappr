@@ -45,6 +45,7 @@ class HLS extends UIPlugin {
   addListeners() {
     Mediator.on(this.uniqueId + ':flashready', () => this.bootstrap())
     Mediator.on(this.uniqueId + ':timeupdate', (params) => this.updateTime(params))
+    Mediator.on(this.uniqueId + ':playbackstate', (params) => this.setPlaybackState(params))
   }
 
   stopListening() {
@@ -98,10 +99,10 @@ class HLS extends UIPlugin {
 
   play() {
     this.safe(() => {
-      if(this.el.globoGetState() === 'IDLE') {
+      if(this.currentState === 'IDLE') {
         clearInterval(this.checkStateId)
       }
-      if(this.el.globoGetState() === 'PAUSED') {
+      if(this.el.currentState === 'PAUSED') {
         this.el.globoPlayerResume()
       } else {
         this.firstPlay()
@@ -178,22 +179,22 @@ class HLS extends UIPlugin {
     this.checkHighDefinitionId = setInterval(() => this.checkHighDefinition(), 3000)
   }
 
+  setPlaybackState(params) {
+    if (params.state === "PLAYING_BUFFERING" && this.el.globoGetbufferLength() < 1 && this.currentState !== "PLAYING_BUFFERING")  {
+      this.trigger('playback:buffering', this.name)
+    } else if (params.state === "PLAYING" && this.currentState === "PLAYING_BUFFERING") {
+      this.trigger('playback:bufferfull', this.name)
+    } else if (params.state === "IDLE") {
+      this.trigger('playback:ended', this.name)
+      this.trigger('playback:timeupdate', 0, this.el.globoGetDuration(), this.name)
+    }
+    this.currentState = params.state;
+  }
+
   checkState() {
     this.safe(() => {
       this.updatePlaybackType()
       this.updatePlayerVisibility()
-      if (this.el.globoGetState() === "PLAYING_BUFFERING" && this.el.globoGetbufferLength() < 1 && this.currentState !== "PLAYING_BUFFERING") {
-        this.trigger('playback:buffering', this.name)
-        this.currentState = "PLAYING_BUFFERING"
-      } else if (this.currentState === "PLAYING_BUFFERING" && this.el.globoGetState() === "PLAYING") {
-        this.trigger('playback:bufferfull', this.name)
-        this.currentState = "PLAYING"
-      } else if (this.el.globoGetState() === "IDLE") {
-        this.trigger('playback:ended', this.name)
-        this.trigger('playback:timeupdate', 0, this.el.globoGetDuration(), this.name)
-        clearInterval(this.checkStateId)
-        this.currentState = "IDLE"
-      }
     })
   }
 
@@ -248,8 +249,8 @@ class HLS extends UIPlugin {
 
   isPlaying() {
     return this.safe(() => {
-      if (this.el.globoGetState())
-        return !!(this.el.globoGetState().match(/playing/i))
+      if (this.currentState)
+        return !!(this.currentState.match(/playing/i))
       return false
     })
   }
