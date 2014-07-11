@@ -6,8 +6,9 @@ var UIPlugin = require('../../base/ui_plugin')
 var Styler = require('../../base/styler')
 var JST = require('../../base/jst')
 var _ = require("underscore")
-
+var Mediator = require('../../components/mediator')
 var Visibility = require('visibility')
+
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> </object>'
 
 class HLS extends UIPlugin {
@@ -22,6 +23,7 @@ class HLS extends UIPlugin {
   }
 
   initialize(options) {
+    super(options)
     this.src = options.src
     this.swfPath = options.swfPath || "assets/HLSPlayer.swf"
     this.isLegacyIE = window.ActiveXObject
@@ -37,7 +39,17 @@ class HLS extends UIPlugin {
       default: ["position", "seekbar", "duration"],
       right: ["fullscreen", "volume", "hd"]
     }
-    this.checkIfFlashIsReady()
+    console.log("Meu uniqueID: " + this.uniqueId);
+    this.addListeners()
+  }
+
+  addListeners() {
+    Mediator.on(this.uniqueId + ':flashready', () => this.bootstrap())
+  }
+
+  stopListening() {
+    super()
+    Mediator.off(this.uniqueId + ':flashready', () => this.bootstrap())
   }
 
   safe(fn) {
@@ -66,19 +78,10 @@ class HLS extends UIPlugin {
     this.el.width = "100%"
     this.el.height = "100%"
     this.trigger('playback:ready', this.name)
-    clearInterval(this.bootstrapId)
     this.currentState = "IDLE"
     this.timedCheckState()
     this.el.globoPlayerSetflushLiveURLCache(true)
     this.autoPlay && this.play()
-  }
-
-  checkIfFlashIsReady() {
-    this.bootstrapId = setInterval(() => {
-      if(this.el.globoGetState) {
-        this.bootstrap()
-      }
-    }, 50)
   }
 
   updateTime(interval) {
@@ -319,7 +322,7 @@ class HLS extends UIPlugin {
 
   render() {
     var style = Styler.getStyleFor(this.name)
-    this.$el.html(this.template({cid: this.cid, swfPath: this.swfPath}))
+    this.$el.html(this.template({cid: this.cid, swfPath: this.swfPath, playbackId: this.uniqueId}))
     this.$el.append(style)
     this.el.id = this.cid
     if(navigator.userAgent.match(/firefox/i)) { //FIXME remove it from here
