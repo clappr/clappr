@@ -39,7 +39,6 @@ class HLS extends UIPlugin {
       default: ["position", "seekbar", "duration"],
       right: ["fullscreen", "volume", "hd"]
     }
-    console.log("Meu uniqueID: " + this.uniqueId);
     this.addListeners()
   }
 
