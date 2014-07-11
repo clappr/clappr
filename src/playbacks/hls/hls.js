@@ -93,7 +93,16 @@ class HLS extends UIPlugin {
     return this.safe(() => {
       var previousDvrEnabled = this.dvrEnabled
       this.dvrEnabled = (this.playbackType === 'live' && params.duration > 240)
-      this.trigger('playback:timeupdate', params.position, params.duration, this.name)
+      var duration = this.getDuration()
+      if (this.playbackType === 'live') {
+        var position = this.el.globoGetPosition()
+        if (position >= duration) {
+          position = duration
+        }
+        this.trigger('playback:timeupdate', position, duration, this.name)
+      } else {
+        this.trigger('playback:timeupdate', this.el.globoGetPosition(), duration, this.name)
+      }
       if (this.dvrEnabled != previousDvrEnabled) {
         this.updateSettings()
       }
@@ -234,19 +243,27 @@ class HLS extends UIPlugin {
   }
 
   getDuration() {
-    return this.safe(() => this.el.globoGetDuration())
+    return this.safe(() => {
+      var duration = this.el.globoGetDuration()
+      if (this.playbackType === 'live') {
+        // estimate 10 seconds of buffer time for live streams for seek positions
+        duration = duration - 10
+      }
+      return duration
+    })
   }
 
   seek(time) {
     this.safe(() => {
       if (time < 0) {
-        this.updateDVRStatus(false)
         this.el.globoPlayerSeek(time)
       } else {
-        if (this.getPlaybackType() == "live") {
-          this.updateDVRStatus(true)
-        }
-        this.el.globoPlayerSeek(this.el.globoGetDuration() * time / 100)
+        var duration = this.getDuration()
+        time = duration * time / 100
+        // seek operations to a time within 2 seconds from live stream will position playhead back to live
+        if (this.playbackType === 'live' && duration - time < 2)
+          time = -1
+        this.el.globoPlayerSeek(time)
       }
     })
   }
