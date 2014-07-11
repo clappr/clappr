@@ -35,11 +35,12 @@ class HLS extends UIPlugin {
     this.visibility.on('show', () => this.visibleCallback());
     this.visibility.on('hide', () => this.hiddenCallback());
     this.highDefinition = "unavailable"; // this will be changed on checkHighDefinition()
-    this.settings = {
-      left: ["playstop", "volume"],
-      default: ["position", "seekbar", "duration"],
-      right: ["fullscreen", "volume", "hd"]
+    this.defaultSettings = {
+      left: ["playstop"],
+      default: [],
+      right: ["fullscreen", "volume", "hd-indicator"]
     }
+    this.settings = _.extend({}, this.defaultSettings)
     this.addListeners()
   }
 
@@ -53,6 +54,7 @@ class HLS extends UIPlugin {
     super()
     Mediator.off(this.uniqueId + ':flashready')
     Mediator.off(this.uniqueId + ':timeupdate')
+    Mediator.off(this.uniqueId + ':playbackstate')
   }
 
   safe(fn) {
@@ -299,10 +301,10 @@ class HLS extends UIPlugin {
   }
 
   updateSettings() {
-    this.settings = {
-      left: [((this.playbackType === "vod" || this.dvrEnabled) ? "playpause" : "playstop")],
-      default: [(this.playbackType === "vod" ? "position" : ""), "seekbar", (this.playbackType === "vod" ? "duration" : "")],
-      right: ["fullscreen", "volume", "hd-indicator"]
+    this.settings = _.extend({}, this.defaultSettings)
+    if (this.playbackType === "vod" || this.dvrEnabled) {
+      this.settings.left = ["playpause", "position", "duration"]
+      this.settings.default = ["seekbar"]
     }
     this.trigger('playback:settingsupdate', this.name)
   }
