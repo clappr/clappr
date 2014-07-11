@@ -22,8 +22,8 @@ class Player extends BaseObject {
     this.core = this.coreFactory.create()
   }
 
-  load(params) {
-    this.core.load(params)
+  load(sources) {
+    this.core.load(sources)
   }
 
   destroy() {
