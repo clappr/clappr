@@ -43,12 +43,21 @@
 
   &.media-control-hide {
     bottom: -40px;
+
+    .media-control-layer[data-controls] {
+      .bar-container[data-seekbar]{
+        .bar-scrubber[data-seekbar] {
+          opacity: 0;
+        }
+      }
+    }
   }
 
   .media-control-layer[data-controls] {
     position: relative;
     top: 10%;
     height: 80%;
+    vertical-align: middle;
 
     .media-control-left-panel[data-media-control] {
       position: absolute;
@@ -59,7 +68,6 @@
 
     .media-control-center-panel[data-media-control] {
       height: 100%;
-      vertical-align: middle;
       text-align: center;
       line-height: 32px;
     }
@@ -76,6 +84,7 @@
       border: 0;
       margin: 0 8px;
       cursor: pointer;
+      display: inline-block;
 
       &:focus {
         outline: none;
@@ -161,24 +170,22 @@
         display: inline-block;
         font-size: 13px;
         color: #fff;
-        width: 60px;
         cursor: default;
-      }
-      &[data-position] {
-        text-align: right;
-        margin-right: 5px;
+        line-height: 32px;
+        position: relative;
       }
       &[data-duration] {
-        text-align: left;
-        margin-left: 5px;
+        &:before { content: "/"; margin-right: 3px; }
       }
     }
 
     .bar-container[data-seekbar] {
-      position: relative;
+      position: absolute;
+      top: -20px;
+      left: 0;
       display: inline-block;
       vertical-align: middle;
-      width: 40%;
+      width: 100%;
       height: 32px;
       cursor: pointer;
 
@@ -188,7 +195,6 @@
         position: relative;
         top: 12px;
         background-color: #6f6f6f;
-        border-radius: 4px;
         overflow: hidden;
 
         .bar-fill-1[data-seekbar] {
@@ -198,6 +204,7 @@
           width: 0;
           height: 100%;
           background-color: #bebebe;
+          @include transition(all, 0.1s, ease-out);
         }
 
         .bar-fill-2[data-seekbar] {
@@ -207,15 +214,18 @@
           width: 0;
           height: 100%;
           background-color: white;
+          @include transition(all, 0.1s, ease-out);
         }
       }
 
       .bar-scrubber[data-seekbar] {
         position: absolute;
         top: 6px;
-        left: 49%;
+        left: 0;
         width: 20px;
         height: 20px;
+        opacity: 1;
+        @include transition(all, 0.1s, ease-out);
 
         .bar-scrubber-icon[data-seekbar] {
           position: absolute;
@@ -258,7 +268,7 @@
         width: 32px;
         height: 88px;
         position: absolute;
-        bottom: 38px;
+        bottom: 40px;
         background: rgba(2,2,2,.5);
         border-radius: 4px;
 

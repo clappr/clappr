@@ -9,7 +9,7 @@ class HTML5Video extends UIPlugin {
   get name() { return 'html5_video' }
   get type() { return 'playback' }
   get tagName() { return 'video' }
-  
+
   get attributes() {
     return {
       'data-html5-video': ''
@@ -35,9 +35,9 @@ class HTML5Video extends UIPlugin {
     this.el.src = options.src
     this.el.loop = options.loop
     this.settings = {
-      left: ['playpause'],
+      left: ['playpause','position', 'duration'],
       right: ['fullscreen', 'volume'],
-      default: ['position', 'seekbar', 'duration']
+      default: ['seekbar']
     }
   }
 

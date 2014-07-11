@@ -22,8 +22,8 @@ class FlashVOD extends UIObject {
     this.swfPath = options.swfPath || "assets/Player.swf"
     this.autoPlay = options.autoPlay
     this.settings = {
-      left: ["playpause"],
-      default: ["position", "seekbar", "duration"],
+      left: ["playpause", "position", "duration"],
+      default: ["seekbar"],
       right: ["fullscreen", "volume"]
     }
     this.isReady = false
