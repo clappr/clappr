@@ -96,10 +96,11 @@ class Core extends UIObject {
     return _(this.plugins).find((plugin) => plugin.name === name)
   }
 
-  load(params) {
+  load(sources) {
+    sources = _.isString(sources) ? [sources]: sources;
     _(this.containers).each((container) => container.destroy())
-    this.containerFactory.params = _(this.params).extend(params)
-    this.containerFactory.createContainers().then(() => this.setupContainers())
+    this.containerFactory.params = _(this.params).extend({sources})
+    this.containerFactory.createContainers().then((containers) => this.setupContainers(containers))
   }
 
   destroy() {
@@ -147,7 +148,7 @@ class Core extends UIObject {
   setupContainers(containers) {
     console.log('setupContainers')
     _.map(containers, this.appendContainer, this)
-    this.createMediaControl(this.getCurrentContainer())
+    this.setupMediaControl(this.getCurrentContainer())
     this.render()
     this.$el.appendTo(this.parentElement)
     return containers
@@ -159,12 +160,16 @@ class Core extends UIObject {
     return container
   }
 
-  createMediaControl(container) {
+  setupMediaControl(container) {
     var params = _.extend({container: container}, this.params)
-    this.mediaControl = new MediaControl(_.extend({container: container}, this.params))
-    this.listenTo(this.mediaControl, 'mediacontrol:fullscreen', this.toggleFullscreen)
-    this.listenTo(this.mediaControl, 'mediacontrol:show', this.onMediaControlShow.bind(this, true))
-    this.listenTo(this.mediaControl, 'mediacontrol:hide', this.onMediaControlShow.bind(this, false))
+    if (this.mediaControl) {
+      this.mediaControl.setContainer(container)
+    } else {
+      this.mediaControl = new MediaControl(_.extend({container: container}, this.params))
+      this.listenTo(this.mediaControl, 'mediacontrol:fullscreen', this.toggleFullscreen)
+      this.listenTo(this.mediaControl, 'mediacontrol:show', this.onMediaControlShow.bind(this, true))
+      this.listenTo(this.mediaControl, 'mediacontrol:hide', this.onMediaControlShow.bind(this, false))
+    }
   }
 
   getCurrentContainer() {
