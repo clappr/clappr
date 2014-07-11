@@ -44,11 +44,13 @@ class HLS extends UIPlugin {
 
   addListeners() {
     Mediator.on(this.uniqueId + ':flashready', () => this.bootstrap())
+    Mediator.on(this.uniqueId + ':timeupdate', (params) => this.updateTime(params))
   }
 
   stopListening() {
     super()
-    Mediator.off(this.uniqueId + ':flashready', () => this.bootstrap())
+    Mediator.off(this.uniqueId + ':flashready')
+    Mediator.off(this.uniqueId + ':timeupdate')
   }
 
   safe(fn) {
@@ -83,19 +85,14 @@ class HLS extends UIPlugin {
     this.autoPlay && this.play()
   }
 
-  updateTime(interval) {
+  updateTime(params) {
     return this.safe(() => {
-      return setInterval(() => {
-        this.safe(() => {
-          var previousDvrEnabled = this.dvrEnabled
-          var duration = this.el.globoGetDuration()
-          this.dvrEnabled = (this.playbackType === 'live' && duration > 240)
-          this.trigger('playback:timeupdate', this.el.globoGetPosition(), duration, this.name)
-          if (this.dvrEnabled != previousDvrEnabled) {
-            this.updateSettings()
-          }
-        })
-      }, interval)
+      var previousDvrEnabled = this.dvrEnabled
+      this.dvrEnabled = (this.playbackType === 'live' && params.duration > 240)
+      this.trigger('playback:timeupdate', params.position, params.duration, this.name)
+      if (this.dvrEnabled != previousDvrEnabled) {
+        this.updateSettings()
+      }
     })
   }
 
@@ -103,7 +100,6 @@ class HLS extends UIPlugin {
     this.safe(() => {
       if(this.el.globoGetState() === 'IDLE') {
         clearInterval(this.checkStateId)
-        this.checkTimeId = this.updateTime(1000)
       }
       if(this.el.globoGetState() === 'PAUSED') {
         this.el.globoPlayerResume()
@@ -274,7 +270,6 @@ class HLS extends UIPlugin {
         this.el.globoPlayerSeek(this.el.globoGetDuration() * time / 100)
       }
       clearInterval(this.checkStateId)
-      this.checkTimeId = this.updateTime(1000)
     })
   }
 
@@ -294,7 +289,6 @@ class HLS extends UIPlugin {
 
   destroy() {
     clearInterval(this.checkStateId)
-    clearInterval(this.checkTimeId)
     clearInterval(this.checkHighDefinitionId)
     this.stopListening()
     this.$el.remove()
