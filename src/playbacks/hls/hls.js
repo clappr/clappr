@@ -32,7 +32,8 @@ class HLS extends UIPlugin {
     this.isSafari = navigator.userAgent.match(/safari/i)
     this.autoPlay = options.autoPlay
     this.visibility = new Visibility()
-    this.visible = true
+    this.visibility.on('show', () => this.visibleCallback());
+    this.visibility.on('hide', () => this.hiddenCallback());
     this.highDefinition = "unavailable"; // this will be changed on checkHighDefinition()
     this.settings = {
       left: ["playstop", "volume"],
@@ -72,7 +73,9 @@ class HLS extends UIPlugin {
       if (this.hiddenId) {
         clearTimeout(this.hiddenId)
       }
-      this.el.globoPlayerSmoothSetLevel(-1)
+      if (!this.el.globoGetAutoLevel()) {
+        this.el.globoPlayerSmoothSetLevel(-1)
+      }
     })
   }
 
@@ -81,7 +84,7 @@ class HLS extends UIPlugin {
     this.el.height = "100%"
     this.trigger('playback:ready', this.name)
     this.currentState = "IDLE"
-    this.timedCheckState()
+    this.checkHighDefinitionId = setInterval(() => this.checkHighDefinition(), 3000)
     this.el.globoPlayerSetflushLiveURLCache(true)
     this.autoPlay && this.play()
   }
@@ -99,9 +102,6 @@ class HLS extends UIPlugin {
 
   play() {
     this.safe(() => {
-      if(this.currentState === 'IDLE') {
-        clearInterval(this.checkStateId)
-      }
       if(this.el.currentState === 'PAUSED') {
         this.el.globoPlayerResume()
       } else {
@@ -174,11 +174,6 @@ class HLS extends UIPlugin {
     })
   }
 
-  timedCheckState() {
-    this.checkStateId = setInterval(() => this.checkState(), 250)
-    this.checkHighDefinitionId = setInterval(() => this.checkHighDefinition(), 3000)
-  }
-
   setPlaybackState(params) {
     if (params.state === "PLAYING_BUFFERING" && this.el.globoGetbufferLength() < 1 && this.currentState !== "PLAYING_BUFFERING")  {
       this.trigger('playback:buffering', this.name)
@@ -189,23 +184,7 @@ class HLS extends UIPlugin {
       this.trigger('playback:timeupdate', 0, this.el.globoGetDuration(), this.name)
     }
     this.currentState = params.state;
-  }
-
-  checkState() {
-    this.safe(() => {
-      this.updatePlaybackType()
-      this.updatePlayerVisibility()
-    })
-  }
-
-  updatePlayerVisibility() {
-    if (this.visible && this.visibility.hidden()) {
-      this.visible = false
-      this.hiddenCallback()
-    } else if (!this.visible && this.visibility.visible()) {
-      this.visible = true
-      this.visibleCallback()
-    }
+    this.updatePlaybackType()
   }
 
   updatePlaybackType() {
@@ -242,7 +221,6 @@ class HLS extends UIPlugin {
   stop() {
     this.safe(() => {
       this.el.globoPlayerStop()
-      clearInterval(this.checkStateId)
       this.trigger('playback:timeupdate', 0, this.name)
     })
   }
@@ -270,7 +248,6 @@ class HLS extends UIPlugin {
         }
         this.el.globoPlayerSeek(this.el.globoGetDuration() * time / 100)
       }
-      clearInterval(this.checkStateId)
     })
   }
 
@@ -289,7 +266,6 @@ class HLS extends UIPlugin {
   }
 
   destroy() {
-    clearInterval(this.checkStateId)
     clearInterval(this.checkHighDefinitionId)
     this.stopListening()
     this.$el.remove()
