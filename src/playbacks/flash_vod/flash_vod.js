@@ -42,6 +42,7 @@ class FlashVOD extends UIObject {
     this.isReady = true
     this.trigger('playback:ready', this.name)
     this.currentState = "IDLE"
+    this.autoPlay && this.play()
     $('<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%" />').insertAfter(this.$el)
   }
 
