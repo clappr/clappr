@@ -108,6 +108,11 @@ class MediaControl extends UIObject {
     }
   }
 
+  onKeyDown(event) {
+    if (event.keyCode === 32) // space bar
+      this.togglePlayPause()
+  }
+
   togglePlayPause() {
     if (this.container.isPlaying()) {
       this.container.pause()
@@ -332,6 +337,17 @@ class MediaControl extends UIObject {
     this.$seekBarScrubber.css({ left: pos })
   }
 
+  bindKeyEvents() {
+    if (this.keydownHandlerFn) {
+      $(document).unbind('keydown', this.keydownHandlerFn)
+    } else {
+      this.keydownHandlerFn = (event) => this.onKeyDown(event)
+    }
+    if (this.$playPauseToggle.length > 0) {
+      $(document).bind('keydown', this.keydownHandlerFn)
+    }
+  }
+
   render() {
     var timeout = 1000
     var style = Styler.getStyleFor('media_control')
@@ -357,6 +373,7 @@ class MediaControl extends UIObject {
     this.$el.ready(() => {
       this.setVolumeLevel(this.currentVolume)
       this.setSeekPercentage(0)
+      this.bindKeyEvents()
     })
 
     return this
