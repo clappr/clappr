@@ -27,63 +27,14 @@ var distTestFile = 'tests_bundle.js';
 
 require('./tasks/assets');
 require('./tasks/pre-build');
+require('./tasks/common');
 require('./tasks/build');
-
-gulp.task('build-light', ['pre-build-hook'], function() {
-  var bundle = browserify()
-    .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
-    .transform(require('browserify-shim'))
-    .add(es6ify.runtime)
-    .require(require.resolve('./src/main.js'), { entry: true })
-    .require('./src/base/ui_plugin', { expose: 'ui_plugin' })
-    .require('./src/base/base_object', { expose: 'base_object' })
-    .require('./src/base/ui_object', { expose: 'ui_object' })
-    .external('jquery')
-    .bundle();
-
-  return bundle.pipe(source('main.js'))
-    .pipe(rename(distFile))
-    .pipe(gulp.dest(paths.dest))
-    .on("error", function(err) {
-      throw err;
-    });
-});
-
-
-gulp.task('serve', ['watch'], function() {
-  utils.log(utils.colors.green('*****  Listening on port ' + port + '  *****'))
-  server.listen(port);
-});
-
-gulp.task('dist-light', ['pre-build-hook'], function() {
-  var bundle = browserify()
-    .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
-    .transform(require('browserify-shim'))
-    .add(es6ify.runtime)
-    .require(require.resolve('./src/main.js'), { entry: true })
-    .require('./src/base/ui_plugin', { expose: 'ui_plugin' })
-    .require('./src/base/base_object', { expose: 'base_object' })
-    .require('./src/base/ui_object', { expose: 'ui_object' })
-    .external('jquery')
-    .bundle();
-
-  return bundle.pipe(source('main.js'))
-    .pipe(streamify(uglify()))
-    .pipe(rename(distFile))
-    .pipe(gulp.dest(paths.dest))
-    .on("error", function(err) {
-      throw err;
-    });
-});
-
+require('./tasks/no-jquery-build');
+require('./tasks/watch');
+require('./tasks/serve');
 
 gulp.task('test', function(done) {
   karma.start({configFile: path.resolve('karma.conf.js')}, done);
 });
 
-gulp.task('watch', ['build'], function() {
-  gulp.watch(paths.files, function() {
-    gulp.run('build');
-  });
-});
 
