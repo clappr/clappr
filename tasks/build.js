@@ -12,9 +12,9 @@ gulp.task('build', ['pre-build'], function(b) {
   var isProd = ['prod', 'production'].indexOf(args.env) !== -1 ? true : false;
 
   var stream = browserify()
-  .bundle()
-  .pipe(source('main.js'))
-  .pipe(rename(isProd ? 'player.min.js' : 'player.js'));
+    .bundle()
+    .pipe(source('main.js'))
+    .pipe(rename(isProd ? 'player.min.js' : 'player.js'));
 
   if(isProd) {
     stream.pipe(streamify(uglify()));
