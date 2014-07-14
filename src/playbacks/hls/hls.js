@@ -26,28 +26,37 @@ class HLS extends UIPlugin {
     super(options)
     this.src = options.src
     this.swfPath = options.swfPath || "assets/HLSPlayer.swf"
+    this.setupBrowser()
+    this.setupVisibility()
+    this.highDefinition = false
+    this.autoPlay = options.autoPlay
+    this.settings = {
+      left: ["playstop", "volume"],
+      default: ["position", "seekbar", "duration"],
+      right: ["fullscreen", "volume", "hd"]
+    }
+    this.settings = _.extend({}, this.defaultSettings)
+    this.addListeners()
+  }
+
+  setupBrowser() {
     this.isLegacyIE = window.ActiveXObject
     this.isChrome = navigator.userAgent.match(/chrome/i)
     this.isFirefox = navigator.userAgent.match(/firefox/i)
     this.isSafari = navigator.userAgent.match(/safari/i)
-    this.autoPlay = options.autoPlay
+  }
+
+  setupVisibility() {
     this.visibility = new Visibility()
     this.visibility.on('show', () => this.visibleCallback());
     this.visibility.on('hide', () => this.hiddenCallback());
-    this.highDefinition = "unavailable"; // this will be changed on checkHighDefinition()
-    this.defaultSettings = {
-      left: ["playstop"],
-      default: [],
-      right: ["fullscreen", "volume", "hd-indicator"]
-    }
-    this.settings = _.extend({}, this.defaultSettings)
-    this.addListeners()
   }
 
   addListeners() {
     Mediator.on(this.uniqueId + ':flashready', () => this.bootstrap())
     Mediator.on(this.uniqueId + ':timeupdate', (params) => this.updateTime(params))
     Mediator.on(this.uniqueId + ':playbackstate', (params) => this.setPlaybackState(params))
+    Mediator.on(this.uniqueId + ':highdefinition', (params) => this.updateHighDefinition(params))
   }
 
   stopListening() {
@@ -55,6 +64,7 @@ class HLS extends UIPlugin {
     Mediator.off(this.uniqueId + ':flashready')
     Mediator.off(this.uniqueId + ':timeupdate')
     Mediator.off(this.uniqueId + ':playbackstate')
+    Mediator.off(this.uniqueId + ':highdefinition')
   }
 
   safe(fn) {
@@ -86,9 +96,13 @@ class HLS extends UIPlugin {
     this.el.height = "100%"
     this.trigger('playback:ready', this.name)
     this.currentState = "IDLE"
-    this.checkHighDefinitionId = setInterval(() => this.checkHighDefinition(), 3000)
     this.el.globoPlayerSetflushLiveURLCache(true)
     this.autoPlay && this.play()
+  }
+
+  updateHighDefinition(params) {
+    this.highDefinition = params.isHD;
+    this.trigger('playback:highdefinitionupdate')
   }
 
   updateTime(params) {
@@ -141,39 +155,8 @@ class HLS extends UIPlugin {
     return programDate - 1.08e+7
   }
 
-  isHighDefinitionAvailable(levels) {
-    return !!(levels.length > 0 && levels[levels.length-1].bitrate >= 2500000)
-  }
-
-  isHighDefinitionInUse() {
-    return this.highDefinition === "available-in-use"
-  }
-
-  checkHighDefinition() {
-    this.safe(() => {
-      // this function is responsible to change media control settings
-      // regarding the availability of HD level and if it's being used or not.
-      // highDefinition attribute have 3 states: "available", "available-in-use", "unavailable"
-      var changed = false
-      this.levels = this.getLevels()
-      if (this.isHighDefinitionAvailable(this.levels)) {
-        var lastLevel = this.levels.length -1
-        var currentLevel = this.el.globoGetLevel()
-        if (currentLevel === lastLevel && this.highDefinition !== "available-in-use") {
-          this.highDefinition = "available-in-use"
-          changed = true
-        } else if (currentLevel !== lastLevel && this.highDefinition === "available-in-use") {
-          this.highDefinition = "available"
-          changed = true
-        } else if (this.highDefinition === "unavailable") {
-          this.highDefinition = "available"
-          changed = true
-        }
-      }
-      if (changed) {
-        this.trigger('playback:highdefinitionupdate')
-      }
-    })
+  isHighDefinition() {
+    return this.highDefinition
   }
 
   getLevels() {
@@ -285,7 +268,6 @@ class HLS extends UIPlugin {
   }
 
   destroy() {
-    clearInterval(this.checkHighDefinitionId)
     this.stopListening()
     this.$el.remove()
   }
