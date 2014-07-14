@@ -1,7 +1,6 @@
 var gulp = require('gulp');
 var util = require('gulp-util');
 var livereload = require('gulp-livereload');
-var watchify = require('gulp-watchify');
 
 gulp.task('watch', function() {
   var reloadServer = livereload();
