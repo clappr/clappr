@@ -88,7 +88,9 @@ class PosterPlugin extends UIPlugin {
     this.$el.html(this.template())
     this.$el.append(style)
     this.container.$el.append(this.el)
-    this.$el.css({ fontSize: this.options.height })
+    this.$el.ready(() => {
+      this.$el.css({ fontSize: this.options.height || this.$el.height() })
+    })
     var imgEl = this.$el.find('img')[0]
     imgEl.src = this.options.poster || 'assets/default.png'
     this.$playButton = $(this.$el.find('.play-wrapper'))
