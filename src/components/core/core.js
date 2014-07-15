@@ -63,12 +63,8 @@ class Core extends UIObject {
         width = this.params.stretchWidth
         height = this.params.stretchHeight
       } else {
-        if (this.params.width) {
-          width = this.params.width
-        }
-        if (this.params.height) {
-          height = this.params.height
-        }
+        width = this.params.width || width
+        height = this.params.height || height
       }
       if (width > 0) {
         this.$el.css({ width: width })
