@@ -78,6 +78,7 @@ class MediaControl extends UIObject {
   disable() {
     this.disabled = true
     this.hide()
+    this.$el.hide()
   }
 
   enable() {
@@ -265,6 +266,7 @@ class MediaControl extends UIObject {
       if (this.hideId) {
         clearTimeout(this.hideId)
       }
+      this.$el.show()
       this.trigger('mediacontrol:show', this.name)
       this.$el.removeClass('media-control-hide')
       this.hideId = setTimeout(() => this.hide(), timeout)
