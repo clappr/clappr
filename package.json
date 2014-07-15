@@ -1,8 +1,8 @@
 {
   "name": "player",
-  "version": "3.0.0-pre-0",
+  "version": "0.0.1",
   "description": "Globo.com video player",
-  "main": "dist/player.js",
+  "main": "dist/player.min.js",
   "scripts": {
     "test": "gulp test"
   },
