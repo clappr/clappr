@@ -36,6 +36,18 @@ var Loader = BaseObject.extend({
     this.playbackPlugins = [FlashVideoPlaybackPlugin, HTML5VideoPlaybackPlugin, HTML5AudioPlaybackPlugin, HLSVideoPlaybackPlugin];
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin];
     this.globalPlugins = [this.displayPlugins[this.params.displayType]];
+    this.addExternalPlugins(params.plugins || []);
+  },
+  addExternalPlugins: function(plugins) {
+    if(plugins.playback) {
+      this.playbackPlugins = plugins.playback.concat(this.playbackPlugins);
+    }
+    if(plugins.container) {
+      this.containerPlugins = plugins.container.concat(this.containerPlugins);
+    }
+    if(plugins.core) {
+      this.globalPlugins = plugins.core.concat(this.globalPlugins);
+    }
   },
   getPlugin: function(name) {
     return _.find(_.union(this.containerPlugins, this.playbackPlugins, this.globalPlugins), function(plugin) { return plugin.prototype.name === name });
