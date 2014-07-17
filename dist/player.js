@@ -15400,8 +15400,6 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],"base_object":[function(require,module,exports){
-module.exports=require('2HNVgz');
 },{}],"2HNVgz":[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
@@ -15421,7 +15419,9 @@ BaseObject.extend = extend;
 module.exports = BaseObject;
 
 
-},{"./events":11,"./utils":20,"underscore":6}],11:[function(require,module,exports){
+},{"./events":11,"./utils":20,"underscore":6}],"base_object":[function(require,module,exports){
+module.exports=require('2HNVgz');
+},{}],11:[function(require,module,exports){
 (function (global){
 "use strict";
 var _ = require('underscore');
@@ -15598,20 +15598,21 @@ module.exports = Events;
 var _ = require('underscore');
 module.exports = {
   'media_control': _.template('<div class="media-control-layer" data-controls>  <% var renderBar = function(name) { %>      <div class="bar-container" data-<%= name %>>        <div class="bar-background" data-<%= name %>>          <div class="bar-fill-1" data-<%= name %>></div>          <div class="bar-fill-2" data-<%= name %>></div>        </div>        <div class="bar-scrubber" data-<%= name %>>          <div class="bar-scrubber-icon" data-<%= name %>></div>        </div>      </div>  <% }; %>  <% var renderDrawer = function(name, renderContent) { %>      <div class="drawer-container" data-<%= name %>>        <div class="drawer-icon-container" data-<%= name %>>          <div class="drawer-icon media-control-icon" data-<%= name %>></div>          <span class="drawer-text" data-<%= name %>></span>        </div>        <% renderContent(name); %>      </div>  <% }; %>  <% var renderIndicator = function(name) { %>      <div class="media-control-indicator" data-<%= name %>></div>  <% }; %>  <% var renderButton = function(name) { %>      <button class="media-control-button media-control-icon" data-<%= name %>></button>  <% }; %>  <% var render = function(settings) {      _.each(settings, function(setting) {        if(setting === "seekbar") {          renderBar(setting);        } else if (setting === "volume") {          renderDrawer(setting, renderBar);        } else if (setting === "duration" || setting === "position") {          renderIndicator(setting);        } else {          renderButton(setting);        }      });    }; %>  <% if (settings.left && settings.left.length) { %>  <div class="media-control-left-panel" data-media-control>    <% render(settings.left); %>  </div>  <% } %>  <% if (settings.right && settings.right.length) { %>  <div class="media-control-right-panel" data-media-control>    <% render(settings.right); %>  </div>  <% } %>  <% if (settings.default && settings.default.length) { %>  <div class="media-control-center-panel" data-media-control>    <% render(settings.default); %>  </div>  <% } %></div>'),
-  'flash_vod': _.template('  <param name="movie" value="<%= swfPath %>">  <param name="quality" value="autohigh">  <param name="swliveconnect" value="true">  <param name="allowScriptAccess" value="always">  <param name="bgcolor" value="#001122">  <param name="allowFullScreen" value="false">  <param name="wmode" value="transparent">  <param name="tabindex" value="1">  <embed    type="application/x-shockwave-flash"    disabled="disabled"    tabindex="-1"    enablecontextmenu="false"    allowScriptAccess="always"    quality="autohight"    pluginspage="http://www.macromedia.com/go/getflashplayer"    wmode="transparent"    swliveconnect="true"    type="application/x-shockwave-flash"    allowfullscreen="false"    bgcolor="#000000"    src="<%= swfPath %>">  </embed>'),
-  'hls': _.template('  <param name="movie" value="<%= swfPath %>?inline=1">  <param name="quality" value="autohigh">  <param name="swliveconnect" value="true">  <param name="allowScriptAccess" value="always">  <param name="bgcolor" value="#001122">  <param name="allowFullScreen" value="false">  <param name="wmode" value="transparent">  <param name="tabindex" value="1">  <embed    type="application/x-shockwave-flash"    tabindex="1"    enablecontextmenu="false"    allowScriptAccess="always"    quality="autohight"    pluginspage="http://www.macromedia.com/go/getflashplayer"    wmode="transparent"    swliveconnect="true"    type="application/x-shockwave-flash"    allowfullscreen="false"    bgcolor="#000000"    src="<%= swfPath %>">  </embed>'),
-  'poster': _.template('<img data-poster src="" /><div class="play-wrapper" data-poster>  <span class="poster-icon play" data-poster /></div>'),
+  'flash_vod': _.template('  <param name="movie" value="<%= swfPath %>">  <param name="quality" value="autohigh">  <param name="swliveconnect" value="true">  <param name="allowScriptAccess" value="always">  <param name="bgcolor" value="#001122">  <param name="allowFullScreen" value="false">  <param name="wmode" value="gpu">  <param name="tabindex" value="1">  <param name=FlashVars value="playbackId=<%= playbackId %>" />  <embed    type="application/x-shockwave-flash"    disabled="disabled"    tabindex="-1"    enablecontextmenu="false"    allowScriptAccess="always"    quality="autohight"    pluginspage="http://www.macromedia.com/go/getflashplayer"    wmode="gpu"    swliveconnect="true"    type="application/x-shockwave-flash"    allowfullscreen="false"    bgcolor="#000000"    FlashVars="playbackId=<%= playbackId %>"    src="<%= swfPath %>">  </embed>'),
+  'hls': _.template('  <param name="movie" value="<%= swfPath %>?inline=1">  <param name="quality" value="autohigh">  <param name="swliveconnect" value="true">  <param name="allowScriptAccess" value="always">  <param name="bgcolor" value="#001122">  <param name="allowFullScreen" value="false">  <param name="wmode" value="transparent">  <param name="tabindex" value="1">  <param name=FlashVars value="playbackId=<%= playbackId %>" />  <embed    type="application/x-shockwave-flash"    tabindex="1"    enablecontextmenu="false"    allowScriptAccess="always"    quality="autohight"    pluginspage="http://www.macromedia.com/go/getflashplayer"    wmode="transparent"    swliveconnect="true"    type="application/x-shockwave-flash"    allowfullscreen="false"    bgcolor="#000000"    FlashVars="playbackId=<%= playbackId %>"    src="<%= swfPath %>">  </embed>'),
+  'poster': _.template('<img class="poster-background" data-poster src="" /><div class="play-wrapper" data-poster>  <span class="poster-icon play" data-poster /></div>'),
   'spinner_loading': _.template('<div data-spinner-container class="spin-container1">  <div data-circle1></div>  <div data-circle2></div>  <div data-circle3></div>  <div data-circle4></div></div><div data-spinner-container class="spin-container2">  <div data-circle1></div>  <div data-circle2></div>  <div data-circle3></div>  <div data-circle4></div></div><div data-spinner-container class="spin-container3">  <div data-circle1></div>  <div data-circle2></div>  <div data-circle3></div>  <div data-circle4></div></div>'),
   'spinner_three_bounce': _.template('<div data-bounce1></div><div data-bounce2></div><div data-bounce3></div>'),
   'watermark': _.template('<div data-watermark data-watermark-<%=position %>><img src="<%= imageUrl %>"></div>'),
   CSS: {
     'container': '[data-container]{position:absolute;background-color:#000;height:100%;width:100%}',
-    'core': '[data-player] *{margin:0;padding:0;border:0;font-style:normal;font-weight:400;text-align:center;font-size:100%;color:#000;font-family:"lucida grande",tahoma,verdana,arial,sans-serif;text-shadow:0 0 0;box-sizing:border-box}[data-player] * a,[data-player] * abbr,[data-player] * acronym,[data-player] * address,[data-player] * applet,[data-player] * article,[data-player] * aside,[data-player] * audio,[data-player] * b,[data-player] * big,[data-player] * blockquote,[data-player] * canvas,[data-player] * caption,[data-player] * center,[data-player] * cite,[data-player] * code,[data-player] * dd,[data-player] * del,[data-player] * details,[data-player] * dfn,[data-player] * div,[data-player] * dl,[data-player] * dt,[data-player] * em,[data-player] * embed,[data-player] * fieldset,[data-player] * figcaption,[data-player] * figure,[data-player] * footer,[data-player] * form,[data-player] * h1,[data-player] * h2,[data-player] * h3,[data-player] * h4,[data-player] * h5,[data-player] * h6,[data-player] * header,[data-player] * hgroup,[data-player] * i,[data-player] * iframe,[data-player] * img,[data-player] * ins,[data-player] * kbd,[data-player] * label,[data-player] * legend,[data-player] * li,[data-player] * mark,[data-player] * menu,[data-player] * nav,[data-player] * object,[data-player] * ol,[data-player] * output,[data-player] * p,[data-player] * pre,[data-player] * q,[data-player] * ruby,[data-player] * s,[data-player] * samp,[data-player] * section,[data-player] * small,[data-player] * span,[data-player] * strike,[data-player] * strong,[data-player] * sub,[data-player] * summary,[data-player] * sup,[data-player] * table,[data-player] * tbody,[data-player] * td,[data-player] * tfoot,[data-player] * th,[data-player] * thead,[data-player] * time,[data-player] * tr,[data-player] * tt,[data-player] * u,[data-player] * ul,[data-player] * var,[data-player] * video{margin:0;padding:0;border:0;font:inherit;font-size:100%;vertical-align:baseline}[data-player] * table{border-collapse:collapse;border-spacing:0}[data-player] * caption,[data-player] * td,[data-player] * th{text-align:left;font-weight:400;vertical-align:middle}[data-player] * blockquote,[data-player] * q{quotes:none}[data-player] * blockquote:after,[data-player] * blockquote:before,[data-player] * q:after,[data-player] * q:before{content:"";content:none}[data-player] * a img{border:none}[data-player]{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;-o-user-select:none;user-select:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-webkit-transform:translate3d(0,0,0);-moz-transform:translate3d(0,0,0);transform:translate3d(0,0,0);position:relative;margin:0;height:594px;width:1055px;text-align:center;overflow:hidden}[data-player].fullscreen{width:100%;height:100%}[data-player].nocursor{cursor:none}',
-    'media_control': '@font-face{font-family:Player;src:url(assets/Player-Regular.eot);src:url(assets/Player-Regular.eot?#iefix) format("embedded-opentype"),url(assets/Player-Regular.ttf) format("truetype"),url(assets/Player-Regular.svg#player) format("svg")}.media-control[data-media-control]{position:absolute;background-color:rgba(2,2,2,.5);border-radius:0;bottom:0;left:0;right:0;margin-left:auto;margin-right:auto;max-width:100%;min-width:60%;height:40px;z-index:9999;-webkit-transition:all .4s ease-out;-moz-transition:all .4s ease-out;-ms-transition:all .4s ease-out;-o-transition:all .4s ease-out;transition:all .4s ease-out}.media-control[data-media-control] .media-control-icon{font-family:Player;font-weight:400;font-style:normal;font-size:26px;line-height:32px;letter-spacing:0;speak:none;color:#fff;vertical-align:middle;text-align:left;padding:0 6px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.media-control[data-media-control].media-control-hide{bottom:-40px}.media-control[data-media-control] .media-control-layer[data-controls]{position:relative;top:10%;height:80%}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control]{position:absolute;top:0;left:5px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control]{height:100%;vertical-align:middle;text-align:center;line-height:32px}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control]{position:absolute;top:0;right:5px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button{background-color:transparent;border:0;margin:0 8px;cursor:pointer}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus{outline:0}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]:before{content:"\\e002"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]:before{content:"\\e003"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]{float:right;background-color:transparent;border:0;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]:before{content:"\\e006"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]{cursor:default;float:right;background-color:transparent;border:0;width:32px;height:100%;opacity:0}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]:before{content:"\\e007"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled{opacity:1}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].playing:before{content:"\\e002"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].paused:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].playing:before{content:"\\e003"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].stopped:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration],.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position]{display:inline-block;font-size:13px;color:#fff;width:60px;cursor:default}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position]{text-align:right;margin-right:5px}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]{text-align:left;margin-left:5px}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]{position:relative;display:inline-block;vertical-align:middle;width:40%;height:32px;cursor:pointer}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar]{width:100%;height:8px;position:relative;top:12px;background-color:#6f6f6f;border-radius:4px;overflow:hidden}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar]{position:absolute;top:0;left:0;width:0;height:100%;background-color:#bebebe}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar]{position:absolute;top:0;left:0;width:0;height:100%;background-color:#fff}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar]{position:absolute;top:6px;left:49%;width:20px;height:20px}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar]{position:absolute;left:3px;top:3px;width:14px;height:14px;border-radius:6px;border:1px solid #6f6f6f;background-color:#fff}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume]{float:right;display:inline-block;width:32px;height:32px;cursor:pointer}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume]{position:absolute;bottom:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]{background-color:transparent;border:0;width:32px;height:32px}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:before{content:"\\e004"}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted:before{content:"\\e005"}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume]{width:32px;height:88px;position:absolute;bottom:38px;background:rgba(2,2,2,.5);border-radius:4px;-webkit-transition:all .2s ease-out;-moz-transition:all .2s ease-out;-ms-transition:all .2s ease-out;-o-transition:all .2s ease-out;transition:all .2s ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide{opacity:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume]{margin-left:12px;background:#6f6f6f;border-radius:4px;width:8px;height:72px;position:relative;top:8px;overflow:hidden}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume]{position:absolute;bottom:0;background:#fff;width:100%;height:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume]{position:absolute;bottom:40%;left:6px;width:20px;height:20px}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume]{position:absolute;left:4px;top:4px;width:12px;height:12px;border-radius:6px;border:1px solid #6f6f6f;background-color:#fff}',
+    'core': '[data-player] *{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;-o-user-select:none;user-select:none;margin:0;padding:0;border:0;font-style:normal;font-weight:400;text-align:center;font-size:100%;color:#000;font-family:"lucida grande",tahoma,verdana,arial,sans-serif;text-shadow:0 0 0;box-sizing:border-box}[data-player] * a,[data-player] * abbr,[data-player] * acronym,[data-player] * address,[data-player] * applet,[data-player] * article,[data-player] * aside,[data-player] * audio,[data-player] * b,[data-player] * big,[data-player] * blockquote,[data-player] * canvas,[data-player] * caption,[data-player] * center,[data-player] * cite,[data-player] * code,[data-player] * dd,[data-player] * del,[data-player] * details,[data-player] * dfn,[data-player] * div,[data-player] * dl,[data-player] * dt,[data-player] * em,[data-player] * embed,[data-player] * fieldset,[data-player] * figcaption,[data-player] * figure,[data-player] * footer,[data-player] * form,[data-player] * h1,[data-player] * h2,[data-player] * h3,[data-player] * h4,[data-player] * h5,[data-player] * h6,[data-player] * header,[data-player] * hgroup,[data-player] * i,[data-player] * iframe,[data-player] * img,[data-player] * ins,[data-player] * kbd,[data-player] * label,[data-player] * legend,[data-player] * li,[data-player] * mark,[data-player] * menu,[data-player] * nav,[data-player] * object,[data-player] * ol,[data-player] * output,[data-player] * p,[data-player] * pre,[data-player] * q,[data-player] * ruby,[data-player] * s,[data-player] * samp,[data-player] * section,[data-player] * small,[data-player] * span,[data-player] * strike,[data-player] * strong,[data-player] * sub,[data-player] * summary,[data-player] * sup,[data-player] * table,[data-player] * tbody,[data-player] * td,[data-player] * tfoot,[data-player] * th,[data-player] * thead,[data-player] * time,[data-player] * tr,[data-player] * tt,[data-player] * u,[data-player] * ul,[data-player] * var,[data-player] * video{margin:0;padding:0;border:0;font:inherit;font-size:100%;vertical-align:baseline}[data-player] * table{border-collapse:collapse;border-spacing:0}[data-player] * caption,[data-player] * td,[data-player] * th{text-align:left;font-weight:400;vertical-align:middle}[data-player] * blockquote,[data-player] * q{quotes:none}[data-player] * blockquote:after,[data-player] * blockquote:before,[data-player] * q:after,[data-player] * q:before{content:"";content:none}[data-player] * a img{border:none}[data-player]{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-webkit-transform:translate3d(0,0,0);-moz-transform:translate3d(0,0,0);transform:translate3d(0,0,0);position:relative;margin:0;height:594px;width:1055px;text-align:center;overflow:hidden}[data-player].fullscreen{width:100%;height:100%}[data-player].nocursor{cursor:none}',
+    'media_control': '@font-face{font-family:Player;src:url(assets/Player-Regular.eot);src:url(assets/Player-Regular.eot?#iefix) format("embedded-opentype"),url(assets/Player-Regular.ttf) format("truetype"),url(assets/Player-Regular.svg#player) format("svg")}.media-control[data-media-control]{position:absolute;background-color:rgba(2,2,2,.5);border-radius:0;bottom:0;left:0;right:0;margin-left:auto;margin-right:auto;max-width:100%;min-width:60%;height:40px;z-index:9999;-webkit-transition:all .4s ease-out;-moz-transition:all .4s ease-out;-ms-transition:all .4s ease-out;-o-transition:all .4s ease-out;transition:all .4s ease-out}.media-control[data-media-control] .media-control-icon{font-family:Player;font-weight:400;font-style:normal;font-size:26px;line-height:32px;letter-spacing:0;speak:none;color:#fff;vertical-align:middle;text-align:left;padding:0 6px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.media-control[data-media-control].media-control-hide{bottom:-40px}.media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar]{opacity:0}.media-control[data-media-control] .media-control-layer[data-controls]{position:relative;top:10%;height:80%;vertical-align:middle}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control]{position:absolute;top:0;left:5px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control]{height:100%;text-align:center;line-height:32px}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control]{position:absolute;top:0;right:5px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button{background-color:transparent;border:0;margin:0 8px;cursor:pointer;display:inline-block}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus{outline:0}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]:before{content:"\\e002"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]:before{content:"\\e003"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]{float:right;background-color:transparent;border:0;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]:before{content:"\\e006"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]{cursor:default;float:right;background-color:transparent;border:0;width:32px;height:100%;opacity:0}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]:before{content:"\\e007"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled{opacity:1}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].playing:before{content:"\\e002"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].paused:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].playing:before{content:"\\e003"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].stopped:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration],.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position]{display:inline-block;font-size:13px;color:#fff;cursor:default;line-height:32px;position:relative}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before{content:"/";margin-right:3px}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]{position:absolute;top:-20px;left:0;display:inline-block;vertical-align:middle;width:100%;height:32px;cursor:pointer}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar]{width:100%;height:8px;position:relative;top:12px;background-color:#6f6f6f;overflow:hidden}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar]{position:absolute;top:0;left:0;width:0;height:100%;background-color:#bebebe;-webkit-transition:all .1s ease-out;-moz-transition:all .1s ease-out;-ms-transition:all .1s ease-out;-o-transition:all .1s ease-out;transition:all .1s ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar]{position:absolute;top:0;left:0;width:0;height:100%;background-color:#fff;-webkit-transition:all .1s ease-out;-moz-transition:all .1s ease-out;-ms-transition:all .1s ease-out;-o-transition:all .1s ease-out;transition:all .1s ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar]{position:absolute;top:6px;left:0;width:20px;height:20px;opacity:1;-webkit-transition:all .1s ease-out;-moz-transition:all .1s ease-out;-ms-transition:all .1s ease-out;-o-transition:all .1s ease-out;transition:all .1s ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar]{position:absolute;left:3px;top:3px;width:14px;height:14px;border-radius:6px;border:1px solid #6f6f6f;background-color:#fff}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume]{float:right;display:inline-block;width:32px;height:32px;cursor:pointer}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume]{position:absolute;bottom:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]{background-color:transparent;border:0;width:32px;height:32px}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:before{content:"\\e004"}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted:before{content:"\\e005"}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume]{width:32px;height:88px;position:absolute;bottom:40px;background:rgba(2,2,2,.5);border-radius:4px;-webkit-transition:all .2s ease-out;-moz-transition:all .2s ease-out;-ms-transition:all .2s ease-out;-o-transition:all .2s ease-out;transition:all .2s ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide{opacity:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume]{margin-left:12px;background:#6f6f6f;border-radius:4px;width:8px;height:72px;position:relative;top:8px;overflow:hidden}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume]{position:absolute;bottom:0;background:#fff;width:100%;height:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume]{position:absolute;bottom:40%;left:6px;width:20px;height:20px}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume]{position:absolute;left:4px;top:4px;width:12px;height:12px;border-radius:6px;border:1px solid #6f6f6f;background-color:#fff}',
     'flash_vod': '[data-flash-vod]{position:absolute;height:100%;width:100%;background-color:#000;display:block;pointer-events:none}',
     'hls': '[data-hls]{position:absolute;height:100%;width:100%;background-color:#000;display:block;pointer-events:none}',
     'html5_video': '[data-html5-video]{position:absolute;height:100%;width:100%;display:block}',
-    'poster': '@font-face{font-family:Player;src:url(assets/Player-Regular.eot);src:url(assets/Player-Regular.eot?#iefix) format("embedded-opentype"),url(assets/Player-Regular.ttf) format("truetype"),url(assets/Player-Regular.svg#player) format("svg")}div[data-poster]{cursor:pointer}.poster-icon[data-poster]{font-family:Player;font-weight:400;font-style:normal;line-height:1;letter-spacing:0;speak:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;color:#fff;opacity:.75}.poster-icon.play{font-size:100px}.poster-icon:hover{opacity:1}.poster-icon.play[data-poster]:before{content:"\\e001"}div[data-poster]{position:absolute;height:100%;width:100%;z-index:998;top:0}img[data-poster]{width:100%;height:100%}div.play-wrapper[data-poster]{position:relative;overflow:hidden;width:100%;height:100px;top:-50%;margin-top:-43px;text-align:center}',
+    'pip': '.pip-loading[data-pip]{left:25px;top:15px;position:relative;float:left;z-index:3001;color:#fff}.pip-transition[data-pip]{-webkit-transition:all .4s ease-out;-moz-transition:all .4s ease-out;-ms-transition:all .4s ease-out;-o-transition:all .4s ease-out;transition:all .4s ease-out}.master-container[data-pip]{cursor:default;width:100%;height:100%;font-size:100%;position:absolute;bottom:0;right:0;border:none}.pip-container[data-pip]{cursor:pointer;width:24%;height:24%;font-size:24%;z-index:2000;position:absolute;right:23px;bottom:23px;border-width:2px;border-radius:3px;border-style:solid;border-color:rgba(255,255,255,.25);background-clip:padding-box;-webkit-background-clip:padding-box}.pip-container[data-pip].over-media-control{bottom:63px}',
+    'poster': '@font-face{font-family:Player;src:url(assets/Player-Regular.eot);src:url(assets/Player-Regular.eot?#iefix) format("embedded-opentype"),url(assets/Player-Regular.ttf) format("truetype"),url(assets/Player-Regular.svg#player) format("svg")}.player-poster[data-poster]{cursor:pointer;position:absolute;height:100%;width:100%;z-index:998;top:0}.player-poster[data-poster] .poster-background[data-poster]{width:100%;height:100%}.player-poster[data-poster] .play-wrapper[data-poster]{position:absolute;overflow:hidden;width:100%;height:20%;line-height:100%;font-size:20%;top:50%;margin-top:-5%;text-align:center}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]{font-family:Player;font-weight:400;font-style:normal;line-height:1;letter-spacing:0;speak:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;color:#fff;opacity:.75}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster].play[data-poster]:before{content:"\\e001"}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]:hover{opacity:1}',
     'spinner_loading': 'div[data-spinner]{width:50px;height:50px;position:relative;margin-left:auto;margin-right:auto;right:0;left:0;z-index:999;top:45%}.spin-container1>div,.spin-container2>div,.spin-container3>div{width:13px;height:13px;background-color:#fff;border-radius:100%;position:absolute;-webkit-animation:bouncedelay 1.2s infinite ease-in-out;animation:bouncedelay 1.2s infinite ease-in-out;-webkit-animation-fill-mode:both;animation-fill-mode:both}[data-spinner] [data-spinner-container]{position:absolute;width:100%;height:100%}.spin-container2{-webkit-transform:rotateZ(45deg);transform:rotateZ(45deg)}.spin-container3{-webkit-transform:rotateZ(90deg);transform:rotateZ(90deg)}[data-circle1]{top:0;left:0}[data-circle2]{top:0;right:0}[data-circle3]{right:0;bottom:0}[data-circle4]{left:0;bottom:0}.spin-container2 [data-circle1]{-webkit-animation-delay:-1.1s;animation-delay:-1.1s}.spin-container3 [data-circle1]{-webkit-animation-delay:-1s;animation-delay:-1s}.spin-container1 [data-circle2]{-webkit-animation-delay:-.9s;animation-delay:-.9s}.spin-container2 [data-circle2]{-webkit-animation-delay:-.8s;animation-delay:-.8s}.spin-container3 [data-circle2]{-webkit-animation-delay:-.7s;animation-delay:-.7s}.spin-container1 [data-circle3]{-webkit-animation-delay:-.6s;animation-delay:-.6s}.spin-container2 [data-circle3]{-webkit-animation-delay:-.5s;animation-delay:-.5s}.spin-container3 [data-circle3]{-webkit-animation-delay:-.4s;animation-delay:-.4s}.spin-container1 [data-circle4]{-webkit-animation-delay:-.3s;animation-delay:-.3s}.spin-container2 [data-circle4]{-webkit-animation-delay:-.2s;animation-delay:-.2s}.spin-container3 [data-circle4]{-webkit-animation-delay:-.1s;animation-delay:-.1s}@-webkit-keyframes bouncedelay{0%,100%,80%{-webkit-transform:scale(0)}40%{-webkit-transform:scale(1)}}@keyframes bouncedelay{0%,100%,80%{transform:scale(0);-webkit-transform:scale(0)}40%{transform:scale(1);-webkit-transform:scale(1)}}',
     'spinner_three_bounce': '.spinner-three-bounce[data-spinner]{position:absolute;margin:0 auto;width:70px;text-align:center;z-index:10;top:20%;left:0;right:0}.spinner-three-bounce[data-spinner]>div{width:18px;height:18px;background-color:#FFF;border-radius:100%;display:inline-block;-webkit-animation:bouncedelay 1.4s infinite ease-in-out;-moz-animation:bouncedelay 1.4s infinite ease-in-out;-o-animation:bouncedelay 1.4s infinite ease-in-out;animation:bouncedelay 1.4s infinite ease-in-out;-webkit-animation-fill-mode:both;-moz-animation-fill-mode:both;-o-animation-fill-mode:both;animation-fill-mode:both}.spinner-three-bounce[data-spinner] [data-bounce1]{-webkit-animation-delay:-.32s;animation-delay:-.32s}.spinner-three-bounce[data-spinner] [data-bounce2]{-webkit-animation-delay:-.16s;animation-delay:-.16s}@-webkit-keyframes bouncedelay{0%,100%,80%{-webkit-transform:scale(0);-moz-transform:scale(0);transform:scale(0)}40%{-webkit-transform:scale(1);-moz-transform:scale(1);transform:scale(1)}}@-moz-keyframes bouncedelay{0%,100%,80%{-webkit-transform:scale(0);-moz-transform:scale(0);transform:scale(0)}40%{-webkit-transform:scale(1);-moz-transform:scale(1);transform:scale(1)}}@-ms-keyframes bouncedelay{0%,100%,80%{-webkit-transform:scale(0);-moz-transform:scale(0);transform:scale(0)}40%{-webkit-transform:scale(1);-moz-transform:scale(1);transform:scale(1)}}@keyframes bouncedelay{0%,100%,80%{-webkit-transform:scale(0);-moz-transform:scale(0);transform:scale(0)}40%{-webkit-transform:scale(1);-moz-transform:scale(1);transform:scale(1)}}',
     'watermark': '[data-watermark]{position:absolute;margin:100px auto 0;width:70px;text-align:center;z-index:10}[data-watermark-bottom-left]{bottom:10px;left:10px}[data-watermark-bottom-right]{bottom:10px;right:42px}[data-watermark-top-left]{top:-95px;left:10px}[data-watermark-top-right]{top:-95px;right:37px}'
@@ -15742,10 +15743,13 @@ UIObject.extend = extend;
 module.exports = UIObject;
 
 
-},{"./base_object":"2HNVgz","./utils":20,"jquery":4,"underscore":6}],"Z7u8cr":[function(require,module,exports){
+},{"./base_object":"2HNVgz","./utils":20,"jquery":4,"underscore":6}],"ui_plugin":[function(require,module,exports){
+module.exports=require('Z7u8cr');
+},{}],"Z7u8cr":[function(require,module,exports){
 "use strict";
 var PluginMixin = require('./plugin_mixin');
 var UIObject = require('./ui_object');
+var extend = require('./utils').extend;
 var _ = require('underscore');
 var UIPlugin = function UIPlugin() {
   $traceurRuntime.defaultSuperCall(this, $UIPlugin.prototype, arguments);
@@ -15766,12 +15770,11 @@ var $UIPlugin = UIPlugin;
   bindEvents: function() {}
 }, {}, UIObject);
 _.extend(UIPlugin.prototype, PluginMixin);
+UIPlugin.extend = extend;
 module.exports = UIPlugin;
 
 
-},{"./plugin_mixin":14,"./ui_object":"8lqCAT","underscore":6}],"ui_plugin":[function(require,module,exports){
-module.exports=require('Z7u8cr');
-},{}],20:[function(require,module,exports){
+},{"./plugin_mixin":14,"./ui_object":"8lqCAT","./utils":20,"underscore":6}],20:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var Moment = require('moment');
@@ -15982,7 +15985,7 @@ var $Container = Container;
     this.trigger('container:highdefinitionupdate');
   },
   isHighDefinitionInUse: function() {
-    return this.playback.isHighDefinitionInUse();
+    return this.playback.isHighDefinition();
   },
   disableMediaControl: function() {
     this.mediaControlDisabled = true;
@@ -16080,15 +16083,23 @@ var Fullscreen = require('../../base/utils').Fullscreen;
 var Loader = require('../loader');
 var Styler = require('../../base/styler');
 var MediaControl = require('../media_control');
-var Core = UIObject.extend({
-  events: {
-    'webkitfullscreenchange': 'exit',
-    'mousemove': 'showMediaControl',
-    'mouseleave': 'hideMediaControl'
+var Core = function Core() {
+  $traceurRuntime.defaultSuperCall(this, $Core.prototype, arguments);
+};
+var $Core = Core;
+($traceurRuntime.createClass)(Core, {
+  get events() {
+    return {
+      'webkitfullscreenchange': 'exit',
+      'mousemove': 'showMediaControl',
+      'mouseleave': 'hideMediaControl'
+    };
   },
-  attributes: {'data-player': ''},
+  get attributes() {
+    return {'data-player': ''};
+  },
   initialize: function(params) {
-    window.$ = $;
+    var $__0 = this;
     this.defer = $.Deferred();
     this.defer.promise(this);
     this.plugins = [];
@@ -16098,10 +16109,18 @@ var Core = UIObject.extend({
     this.parentElement = params.parentElement;
     this.loader = new Loader(params);
     this.containerFactory = new ContainerFactory(params, this.loader);
-    this.containerFactory.createContainers().then(this.setupContainers.bind(this)).then(this.resolveOnContainersReady.bind(this));
+    this.containerFactory.createContainers().then((function(containers) {
+      return $__0.setupContainers(containers);
+    })).then((function(containers) {
+      return $__0.resolveOnContainersReady(containers);
+    }));
     this.updateSize();
-    document.addEventListener('mozfullscreenchange', this.exit.bind(this));
-    $(window).resize(this.updateSize.bind(this));
+    document.addEventListener('mozfullscreenchange', (function() {
+      return $__0.exit();
+    }));
+    $(window).resize((function() {
+      return $__0.updateSize();
+    }));
   },
   updateSize: function() {
     if (Fullscreen.isFullscreen()) {
@@ -16114,12 +16133,8 @@ var Core = UIObject.extend({
         width = this.params.stretchWidth;
         height = this.params.stretchHeight;
       } else {
-        if (this.params.width) {
-          width = this.params.width;
-        }
-        if (this.params.height) {
-          height = this.params.height;
-        }
+        width = this.params.width || width;
+        height = this.params.height || height;
       }
       if (width > 0) {
         this.$el.css({width: width});
@@ -16131,9 +16146,10 @@ var Core = UIObject.extend({
     }
   },
   resolveOnContainersReady: function(containers) {
-    $.when.apply($, containers).done(function() {
-      this.defer.resolve(this);
-    }.bind(this));
+    var $__0 = this;
+    $.when.apply($, containers).done((function() {
+      return $__0.defer.resolve($__0);
+    }));
   },
   addPlugin: function(plugin) {
     this.plugins.push(plugin);
@@ -16142,21 +16158,25 @@ var Core = UIObject.extend({
     return !!this.getPlugin(name);
   },
   getPlugin: function(name) {
-    return _(this.plugins).find(function(plugin) {
+    return _(this.plugins).find((function(plugin) {
       return plugin.name === name;
-    });
+    }));
   },
-  load: function(params) {
-    _(this.containers).each(function(container) {
-      container.destroy();
-    });
-    this.containerFactory.params = _(this.params).extend(params);
-    this.containerFactory.createContainers().then(this.setupContainers.bind(this));
+  load: function(sources) {
+    var $__0 = this;
+    sources = _.isString(sources) ? [sources] : sources;
+    _(this.containers).each((function(container) {
+      return container.destroy();
+    }));
+    this.containerFactory.params = _(this.params).extend({sources: sources});
+    this.containerFactory.createContainers().then((function(containers) {
+      return $__0.setupContainers(containers);
+    }));
   },
   destroy: function() {
-    _(this.containers).each(function(container) {
-      container.destroy();
-    });
+    _(this.containers).each((function(container) {
+      return container.destroy();
+    }));
     this.$el.remove();
   },
   exit: function() {
@@ -16192,7 +16212,7 @@ var Core = UIObject.extend({
   setupContainers: function(containers) {
     console.log('setupContainers');
     _.map(containers, this.appendContainer, this);
-    this.createMediaControl(this.getCurrentContainer());
+    this.setupMediaControl(this.getCurrentContainer());
     this.render();
     this.$el.appendTo(this.parentElement);
     return containers;
@@ -16202,12 +16222,16 @@ var Core = UIObject.extend({
     this.appendContainer(container);
     return container;
   },
-  createMediaControl: function(container) {
+  setupMediaControl: function(container) {
     var params = _.extend({container: container}, this.params);
-    this.mediaControl = new MediaControl(_.extend({container: container}, this.params));
-    this.listenTo(this.mediaControl, 'mediacontrol:fullscreen', this.toggleFullscreen);
-    this.listenTo(this.mediaControl, 'mediacontrol:show', this.onMediaControlShow.bind(this, true));
-    this.listenTo(this.mediaControl, 'mediacontrol:hide', this.onMediaControlShow.bind(this, false));
+    if (this.mediaControl) {
+      this.mediaControl.setContainer(container);
+    } else {
+      this.mediaControl = new MediaControl(_.extend({container: container}, this.params));
+      this.listenTo(this.mediaControl, 'mediacontrol:fullscreen', this.toggleFullscreen);
+      this.listenTo(this.mediaControl, 'mediacontrol:show', this.onMediaControlShow.bind(this, true));
+      this.listenTo(this.mediaControl, 'mediacontrol:hide', this.onMediaControlShow.bind(this, false));
+    }
   },
   getCurrentContainer: function() {
     return this.containers[0];
@@ -16235,12 +16259,18 @@ var Core = UIObject.extend({
       this.$el.addClass('nocursor');
   },
   render: function() {
+    var $__0 = this;
     var style = Styler.getStyleFor('core');
     this.$el.append(style);
     this.$el.append(this.mediaControl.render().el);
+    this.$el.ready((function() {
+      $__0.params.width = $__0.params.width || $__0.$el.width();
+      $__0.params.height = $__0.params.height || $__0.$el.height();
+      $__0.updateSize();
+    }));
     return this;
   }
-});
+}, {}, UIObject);
 module.exports = Core;
 
 
@@ -16317,6 +16347,18 @@ var Loader = BaseObject.extend({
     this.playbackPlugins = [FlashVideoPlaybackPlugin, HTML5VideoPlaybackPlugin, HTML5AudioPlaybackPlugin, HLSVideoPlaybackPlugin];
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin];
     this.globalPlugins = [this.displayPlugins[this.params.displayType]];
+    this.addExternalPlugins(params.plugins || []);
+  },
+  addExternalPlugins: function(plugins) {
+    if (plugins.playback) {
+      this.playbackPlugins = plugins.playback.concat(this.playbackPlugins);
+    }
+    if (plugins.container) {
+      this.containerPlugins = plugins.container.concat(this.containerPlugins);
+    }
+    if (plugins.core) {
+      this.globalPlugins = plugins.core.concat(this.globalPlugins);
+    }
   },
   getPlugin: function(name) {
     return _.find(_.union(this.containerPlugins, this.playbackPlugins, this.globalPlugins), function(plugin) {
@@ -16366,11 +16408,11 @@ var $MediaControl = MediaControl;
       'click .bar-background[data-volume]': 'volume',
       'click .drawer-icon[data-volume]': 'toggleMute',
       'mouseover .drawer-container[data-volume]': 'showVolumeBar',
-      'mouseover .bar-container[data-volume]': 'keepVolumeBar',
-      'mouseleave [data-volume]': 'hideVolumeBar',
+      'mouseleave .drawer-container[data-volume]': 'hideVolumeBar',
       'mousedown .bar-scrubber[data-seekbar]': 'startSeekDrag',
       'mousedown .bar-scrubber[data-volume]': 'startVolumeDrag',
-      'mouseover[data-controls]': 'show'
+      'mouseenter .media-control-layer[data-controls]': 'setKeepVisible',
+      'mouseleave .media-control-layer[data-controls]': 'resetKeepVisible'
     };
   },
   get template() {
@@ -16380,6 +16422,7 @@ var $MediaControl = MediaControl;
     var $__0 = this;
     this.params = params;
     this.container = params.container;
+    this.keepVisible = false;
     this.addEventListeners();
     this.defaultSettings = {
       left: ['play', 'stop', 'pause'],
@@ -16411,6 +16454,7 @@ var $MediaControl = MediaControl;
   disable: function() {
     this.disabled = true;
     this.hide();
+    this.$el.hide();
   },
   enable: function() {
     if (this.params.chromeless)
@@ -16435,6 +16479,10 @@ var $MediaControl = MediaControl;
       this.$playPauseToggle.removeClass('playing').addClass('paused');
       this.$playStopToggle.removeClass('playing').addClass('stopped');
     }
+  },
+  onKeyDown: function(event) {
+    if (event.keyCode === 32)
+      this.togglePlayPause();
   },
   togglePlayPause: function() {
     if (this.container.isPlaying()) {
@@ -16511,6 +16559,7 @@ var $MediaControl = MediaControl;
     this.changeTogglePlay();
     this.addEventListeners();
     this.settingsUpdate();
+    this.container.setVolume(this.currentVolume);
     if (this.container.mediaControlDisabled)
       this.disable();
   },
@@ -16523,20 +16572,18 @@ var $MediaControl = MediaControl;
   },
   hideVolumeBar: function() {
     var $__0 = this;
+    if (!this.$volumeBarContainer)
+      return;
     if (this.hideVolumeId) {
       clearTimeout(this.hideVolumeId);
     }
-    this.$volumeBarContainer.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', (function() {
-      return $__0.$volumeBarContainer.hide();
-    }));
     this.hideVolumeId = setTimeout((function() {
-      return $__0.$volumeBarContainer.addClass('volume-bar-hide');
+      $__0.$volumeBarContainer.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', (function() {
+        $__0.$volumeBarContainer.off('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend');
+        $__0.$volumeBarContainer.hide();
+      }));
+      $__0.$volumeBarContainer.addClass('volume-bar-hide');
     }), 750);
-  },
-  keepVolumeBar: function() {
-    if (this.hideVolumeId) {
-      clearTimeout(this.hideVolumeId);
-    }
   },
   ended: function() {
     this.changeTogglePlay();
@@ -16563,6 +16610,12 @@ var $MediaControl = MediaControl;
     pos = Math.min(100, Math.max(pos, 0));
     this.container.setCurrentTime(pos);
   },
+  setKeepVisible: function() {
+    this.keepVisible = true;
+  },
+  resetKeepVisible: function() {
+    this.keepVisible = false;
+  },
   show: function(event) {
     var $__0 = this;
     if (this.disabled)
@@ -16572,6 +16625,7 @@ var $MediaControl = MediaControl;
       if (this.hideId) {
         clearTimeout(this.hideId);
       }
+      this.$el.show();
       this.trigger('mediacontrol:show', this.name);
       this.$el.removeClass('media-control-hide');
       this.hideId = setTimeout((function() {
@@ -16589,13 +16643,16 @@ var $MediaControl = MediaControl;
     if (this.hideId) {
       clearTimeout(this.hideId);
     }
-    if (this.disabled || (!this.draggingVolumeBar && !this.draggingSeekBar && this.$el.find('[data-controls]:hover').length === 0)) {
-      this.trigger('mediacontrol:hide', this.name);
-      this.$el.addClass('media-control-hide');
-    } else {
+    if (this.keepVisible || this.draggingVolumeBar || this.draggingSeekBar) {
       this.hideId = setTimeout((function() {
         return $__0.hide();
       }), timeout);
+    } else {
+      if (this.$volumeBarContainer) {
+        this.$volumeBarContainer.hide();
+      }
+      this.trigger('mediacontrol:hide', this.name);
+      this.$el.addClass('media-control-hide');
     }
   },
   settingsUpdate: function() {
@@ -16639,6 +16696,19 @@ var $MediaControl = MediaControl;
     this.$seekBarPosition.css({width: value + '%'});
     this.$seekBarScrubber.css({left: pos});
   },
+  bindKeyEvents: function() {
+    var $__0 = this;
+    if (this.keydownHandlerFn) {
+      $(document).unbind('keydown', this.keydownHandlerFn);
+    } else {
+      this.keydownHandlerFn = (function(event) {
+        return $__0.onKeyDown(event);
+      });
+    }
+    if (this.$playPauseToggle.length > 0) {
+      $(document).bind('keydown', this.keydownHandlerFn);
+    }
+  },
   render: function() {
     var $__0 = this;
     var timeout = 1000;
@@ -16649,11 +16719,8 @@ var $MediaControl = MediaControl;
     this.createCachedElements();
     this.$playPauseToggle.addClass('paused');
     this.$playStopToggle.addClass('stopped');
-    this.currentVolume = 100;
-    this.setVolumeLevel(this.currentVolume);
-    this.setSeekPercentage(0);
+    this.currentVolume = this.currentVolume || 100;
     this.$volumeBarContainer.hide();
-    this.hideVolumeBar();
     if (this.params.autoPlay) {
       this.togglePlayPause();
       this.togglePlayStop();
@@ -16664,6 +16731,11 @@ var $MediaControl = MediaControl;
     }), timeout);
     if (this.disabled)
       this.hide();
+    this.$el.ready((function() {
+      $__0.setVolumeLevel($__0.currentVolume);
+      $__0.setSeekPercentage(0);
+      $__0.bindKeyEvents();
+    }));
     return this;
   }
 }, {}, UIObject);
@@ -16699,8 +16771,8 @@ var $Player = Player;
     this.params.parentElement = element;
     this.core = this.coreFactory.create();
   },
-  load: function(params) {
-    this.core.load(params);
+  load: function(sources) {
+    this.core.load(sources);
   },
   destroy: function() {
     this.core.destroy();
@@ -16721,8 +16793,9 @@ var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var Mediator = require('../../components/mediator');
-var _ = require("underscore");
-var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> </object>';
+var _ = require('underscore');
+var $ = require('jquery');
+var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> </object>';
 var FlashVOD = function FlashVOD() {
   $traceurRuntime.defaultSuperCall(this, $FlashVOD.prototype, arguments);
 };
@@ -16738,16 +16811,17 @@ var $FlashVOD = FlashVOD;
     return JST.flash_vod;
   },
   initialize: function(options) {
+    $traceurRuntime.superCall(this, $FlashVOD.prototype, "initialize", [options]);
     this.src = options.src;
     this.swfPath = options.swfPath || "assets/Player.swf";
     this.autoPlay = options.autoPlay;
     this.settings = {
-      left: ["playpause"],
-      default: ["position", "seekbar", "duration"],
+      left: ["playpause", "position", "duration"],
+      default: ["seekbar"],
       right: ["fullscreen", "volume"]
     };
     this.isReady = false;
-    this.checkIfFlashIsReady();
+    this.addListeners();
   },
   safe: function(fn) {
     if (this.el.getState && this.el.getDuration && this.el.getPosition && this.el.getBytesLoaded && this.el.getBytesTotal) {
@@ -16755,22 +16829,13 @@ var $FlashVOD = FlashVOD;
     }
   },
   bootstrap: function() {
-    clearInterval(this.bootstrapId);
     this.el.width = "100%";
     this.el.height = "100%";
-    this.el.setPlaybackId(this.uniqueId);
-    this.addListeners();
     this.isReady = true;
     this.trigger('playback:ready', this.name);
     this.currentState = "IDLE";
-  },
-  checkIfFlashIsReady: function() {
-    var $__0 = this;
-    this.bootstrapId = setInterval((function() {
-      if ($__0.el.getState && $__0.el.getState() === "IDLE") {
-        $__0.bootstrap();
-      }
-    }), 500);
+    this.autoPlay && this.play();
+    $('<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%" />').insertAfter(this.$el);
   },
   setupFirefox: function() {
     var $el = this.$('embed');
@@ -16796,6 +16861,9 @@ var $FlashVOD = FlashVOD;
     }));
     Mediator.on(this.uniqueId + ':statechanged', (function() {
       return $__0.checkState();
+    }));
+    Mediator.on(this.uniqueId + ':flashready', (function() {
+      return $__0.bootstrap();
     }));
   },
   stopListening: function() {
@@ -16904,14 +16972,15 @@ var $FlashVOD = FlashVOD;
     var style = Styler.getStyleFor(this.name);
     this.$el.html(this.template({
       cid: this.cid,
-      swfPath: this.swfPath
+      swfPath: this.swfPath,
+      playbackId: this.uniqueId
     }));
-    this.$el.append(style);
     if (navigator.userAgent.match(/firefox/i)) {
       this.setupFirefox();
     } else if (window.ActiveXObject) {
       this.setupIE();
     }
+    this.$el.append(style);
     return this;
   }
 }, {}, UIObject);
@@ -16925,7 +16994,7 @@ FlashVOD.canPlay = function(resource) {
 module.exports = FlashVOD;
 
 
-},{"../../base/jst":12,"../../base/styler":15,"../../base/ui_object":"8lqCAT","../../components/mediator":33,"underscore":6}],36:[function(require,module,exports){
+},{"../../base/jst":12,"../../base/styler":15,"../../base/ui_object":"8lqCAT","../../components/mediator":33,"jquery":4,"underscore":6}],36:[function(require,module,exports){
 "use strict";
 module.exports = require('./flash_vod');
 
@@ -16936,6 +17005,7 @@ var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var _ = require("underscore");
+var Mediator = require('../../components/mediator');
 var Visibility = require('visibility');
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> </object>';
 var HLS = function HLS() {
@@ -16959,22 +17029,58 @@ var $HLS = HLS;
     };
   },
   initialize: function(options) {
+    $traceurRuntime.superCall(this, $HLS.prototype, "initialize", [options]);
     this.src = options.src;
     this.swfPath = options.swfPath || "assets/HLSPlayer.swf";
-    this.isLegacyIE = window.ActiveXObject;
-    this.isChrome = navigator.userAgent.match(/chrome/i);
-    this.isFirefox = navigator.userAgent.match(/firefox/i);
-    this.isSafari = navigator.userAgent.match(/safari/i);
+    this.setupBrowser();
+    this.setupVisibility();
+    this.highDefinition = false;
     this.autoPlay = options.autoPlay;
-    this.visibility = new Visibility();
-    this.visible = true;
-    this.highDefinition = "unavailable";
     this.settings = {
       left: ["playstop", "volume"],
       default: ["position", "seekbar", "duration"],
       right: ["fullscreen", "volume", "hd"]
     };
-    this.checkIfFlashIsReady();
+    this.settings = _.extend({}, this.defaultSettings);
+    this.addListeners();
+  },
+  setupBrowser: function() {
+    this.isLegacyIE = window.ActiveXObject;
+    this.isChrome = navigator.userAgent.match(/chrome/i);
+    this.isFirefox = navigator.userAgent.match(/firefox/i);
+    this.isSafari = navigator.userAgent.match(/safari/i);
+  },
+  setupVisibility: function() {
+    var $__0 = this;
+    this.visibility = new Visibility();
+    this.visibility.on('show', (function() {
+      return $__0.visibleCallback();
+    }));
+    this.visibility.on('hide', (function() {
+      return $__0.hiddenCallback();
+    }));
+  },
+  addListeners: function() {
+    var $__0 = this;
+    Mediator.on(this.uniqueId + ':flashready', (function() {
+      return $__0.bootstrap();
+    }));
+    Mediator.on(this.uniqueId + ':timeupdate', (function(params) {
+      return $__0.updateTime(params);
+    }));
+    Mediator.on(this.uniqueId + ':playbackstate', (function(params) {
+      return $__0.setPlaybackState(params);
+    }));
+    Mediator.on(this.uniqueId + ':highdefinition', (function(params) {
+      return $__0.updateHighDefinition(params);
+    }));
+  },
+  stopListening: function() {
+    $traceurRuntime.superCall(this, $HLS.prototype, "stopListening", []);
+    Mediator.off(this.uniqueId + ':flashready');
+    Mediator.off(this.uniqueId + ':timeupdate');
+    Mediator.off(this.uniqueId + ':playbackstate');
+    Mediator.off(this.uniqueId + ':highdefinition');
   },
   safe: function(fn) {
     if (this.el.globoGetState && this.el.globoGetDuration && this.el.globoGetPosition && this.el.globoPlayerSmoothSetLevel && this.el.globoPlayerSetflushLiveURLCache) {
@@ -16995,52 +17101,47 @@ var $HLS = HLS;
       if ($__0.hiddenId) {
         clearTimeout($__0.hiddenId);
       }
-      $__0.el.globoPlayerSmoothSetLevel(-1);
+      if (!$__0.el.globoGetAutoLevel()) {
+        $__0.el.globoPlayerSmoothSetLevel(-1);
+      }
     }));
   },
   bootstrap: function() {
     this.el.width = "100%";
     this.el.height = "100%";
     this.trigger('playback:ready', this.name);
-    clearInterval(this.bootstrapId);
     this.currentState = "IDLE";
-    this.timedCheckState();
     this.el.globoPlayerSetflushLiveURLCache(true);
-    this.el.globoPlayerSetstartFromLowestLevel(true);
     this.autoPlay && this.play();
   },
-  checkIfFlashIsReady: function() {
-    var $__0 = this;
-    this.bootstrapId = setInterval((function() {
-      if ($__0.el.globoGetState) {
-        $__0.bootstrap();
-      }
-    }), 50);
+  updateHighDefinition: function(params) {
+    this.highDefinition = params.isHD;
+    this.trigger('playback:highdefinitionupdate');
   },
-  updateTime: function(interval) {
+  updateTime: function(params) {
     var $__0 = this;
     return this.safe((function() {
-      return setInterval((function() {
-        $__0.safe((function() {
-          var previousDvrEnabled = $__0.dvrEnabled;
-          var duration = $__0.el.globoGetDuration();
-          $__0.dvrEnabled = ($__0.playbackType === 'live' && duration > 240);
-          $__0.trigger('playback:timeupdate', $__0.el.globoGetPosition(), duration, $__0.name);
-          if ($__0.dvrEnabled != previousDvrEnabled) {
-            $__0.updateSettings();
-          }
-        }));
-      }), interval);
+      var previousDvrEnabled = $__0.dvrEnabled;
+      $__0.dvrEnabled = ($__0.playbackType === 'live' && params.duration > 240);
+      var duration = $__0.getDuration();
+      if ($__0.playbackType === 'live') {
+        var position = $__0.el.globoGetPosition();
+        if (position >= duration) {
+          position = duration;
+        }
+        $__0.trigger('playback:timeupdate', position, duration, $__0.name);
+      } else {
+        $__0.trigger('playback:timeupdate', $__0.el.globoGetPosition(), duration, $__0.name);
+      }
+      if ($__0.dvrEnabled != previousDvrEnabled) {
+        $__0.updateSettings();
+      }
     }));
   },
   play: function() {
     var $__0 = this;
     this.safe((function() {
-      if ($__0.el.globoGetState() === 'IDLE') {
-        clearInterval($__0.checkStateId);
-        $__0.checkTimeId = $__0.updateTime(1000);
-      }
-      if ($__0.el.globoGetState() === 'PAUSED') {
+      if ($__0.el.currentState === 'PAUSED') {
         $__0.el.globoPlayerResume();
       } else {
         $__0.firstPlay();
@@ -17063,35 +17164,8 @@ var $HLS = HLS;
     var programDate = this.el.globoGetLastProgramDate();
     return programDate - 1.08e+7;
   },
-  isHighDefinitionAvailable: function(levels) {
-    return !!(levels.length > 0 && levels[levels.length - 1].bitrate >= 2500000);
-  },
-  isHighDefinitionInUse: function() {
-    return this.highDefinition === "available-in-use";
-  },
-  checkHighDefinition: function() {
-    var $__0 = this;
-    this.safe((function() {
-      var changed = false;
-      $__0.levels = $__0.getLevels();
-      if ($__0.isHighDefinitionAvailable($__0.levels)) {
-        var lastLevel = $__0.levels.length - 1;
-        var currentLevel = $__0.el.globoGetLevel();
-        if (currentLevel === lastLevel && $__0.highDefinition !== "available-in-use") {
-          $__0.highDefinition = "available-in-use";
-          changed = true;
-        } else if (currentLevel !== lastLevel && $__0.highDefinition === "available-in-use") {
-          $__0.highDefinition = "available";
-          changed = true;
-        } else if ($__0.highDefinition === "unavailable") {
-          $__0.highDefinition = "available";
-          changed = true;
-        }
-      }
-      if (changed) {
-        $__0.trigger('playback:highdefinitionupdate');
-      }
-    }));
+  isHighDefinition: function() {
+    return this.highDefinition;
   },
   getLevels: function() {
     var $__0 = this;
@@ -17102,42 +17176,17 @@ var $HLS = HLS;
       return $__0.levels;
     }));
   },
-  timedCheckState: function() {
-    var $__0 = this;
-    this.checkStateId = setInterval((function() {
-      return $__0.checkState();
-    }), 250);
-    this.checkHighDefinitionId = setInterval((function() {
-      return $__0.checkHighDefinition();
-    }), 3000);
-  },
-  checkState: function() {
-    var $__0 = this;
-    this.safe((function() {
-      $__0.updatePlaybackType();
-      $__0.updatePlayerVisibility();
-      if ($__0.el.globoGetState() === "PLAYING_BUFFERING" && $__0.el.globoGetbufferLength() < 1 && $__0.currentState !== "PLAYING_BUFFERING") {
-        $__0.trigger('playback:buffering', $__0.name);
-        $__0.currentState = "PLAYING_BUFFERING";
-      } else if ($__0.currentState === "PLAYING_BUFFERING" && $__0.el.globoGetState() === "PLAYING") {
-        $__0.trigger('playback:bufferfull', $__0.name);
-        $__0.currentState = "PLAYING";
-      } else if ($__0.el.globoGetState() === "IDLE") {
-        $__0.trigger('playback:ended', $__0.name);
-        $__0.trigger('playback:timeupdate', 0, $__0.el.globoGetDuration(), $__0.name);
-        clearInterval($__0.checkStateId);
-        $__0.currentState = "IDLE";
-      }
-    }));
-  },
-  updatePlayerVisibility: function() {
-    if (this.visible && this.visibility.hidden()) {
-      this.visible = false;
-      this.hiddenCallback();
-    } else if (!this.visible && this.visibility.visible()) {
-      this.visible = true;
-      this.visibleCallback();
+  setPlaybackState: function(params) {
+    if (params.state === "PLAYING_BUFFERING" && this.el.globoGetbufferLength() < 1 && this.currentState !== "PLAYING_BUFFERING") {
+      this.trigger('playback:buffering', this.name);
+    } else if (params.state === "PLAYING" && this.currentState === "PLAYING_BUFFERING") {
+      this.trigger('playback:bufferfull', this.name);
+    } else if (params.state === "IDLE") {
+      this.trigger('playback:ended', this.name);
+      this.trigger('playback:timeupdate', 0, this.el.globoGetDuration(), this.name);
     }
+    this.currentState = params.state;
+    this.updatePlaybackType();
   },
   updatePlaybackType: function() {
     var $__0 = this;
@@ -17174,38 +17223,39 @@ var $HLS = HLS;
     var $__0 = this;
     this.safe((function() {
       $__0.el.globoPlayerStop();
-      clearInterval($__0.checkStateId);
       $__0.trigger('playback:timeupdate', 0, $__0.name);
     }));
   },
   isPlaying: function() {
     var $__0 = this;
     return this.safe((function() {
-      if ($__0.el.globoGetState())
-        return !!($__0.el.globoGetState().match(/playing/i));
+      if ($__0.currentState)
+        return !!($__0.currentState.match(/playing/i));
       return false;
     }));
   },
   getDuration: function() {
     var $__0 = this;
     return this.safe((function() {
-      return $__0.el.globoGetDuration();
+      var duration = $__0.el.globoGetDuration();
+      if ($__0.playbackType === 'live') {
+        duration = duration - 10;
+      }
+      return duration;
     }));
   },
   seek: function(time) {
     var $__0 = this;
     this.safe((function() {
       if (time < 0) {
-        $__0.updateDVRStatus(false);
         $__0.el.globoPlayerSeek(time);
       } else {
-        if ($__0.getPlaybackType() == "live") {
-          $__0.updateDVRStatus(true);
-        }
-        $__0.el.globoPlayerSeek($__0.el.globoGetDuration() * time / 100);
+        var duration = $__0.getDuration();
+        time = duration * time / 100;
+        if ($__0.playbackType === 'live' && duration - time < 2)
+          time = -1;
+        $__0.el.globoPlayerSeek(time);
       }
-      clearInterval($__0.checkStateId);
-      $__0.checkTimeId = $__0.updateTime(1000);
     }));
   },
   isPip: function(pipStatus) {
@@ -17221,9 +17271,6 @@ var $HLS = HLS;
     this.trigger('playback:timeupdate', time, duration, this.name);
   },
   destroy: function() {
-    clearInterval(this.checkStateId);
-    clearInterval(this.checkTimeId);
-    clearInterval(this.checkHighDefinitionId);
     this.stopListening();
     this.$el.remove();
   },
@@ -17239,18 +17286,19 @@ var $HLS = HLS;
     })));
   },
   updateSettings: function() {
-    this.settings = {
-      left: [((this.playbackType === "vod" || this.dvrEnabled) ? "playpause" : "playstop")],
-      default: [(this.playbackType === "vod" ? "position" : ""), "seekbar", (this.playbackType === "vod" ? "duration" : "")],
-      right: ["fullscreen", "volume", "hd-indicator"]
-    };
+    this.settings = _.extend({}, this.defaultSettings);
+    if (this.playbackType === "vod" || this.dvrEnabled) {
+      this.settings.left = ["playpause", "position", "duration"];
+      this.settings.default = ["seekbar"];
+    }
     this.trigger('playback:settingsupdate', this.name);
   },
   render: function() {
     var style = Styler.getStyleFor(this.name);
     this.$el.html(this.template({
       cid: this.cid,
-      swfPath: this.swfPath
+      swfPath: this.swfPath,
+      playbackId: this.uniqueId
     }));
     this.$el.append(style);
     this.el.id = this.cid;
@@ -17268,7 +17316,7 @@ HLS.canPlay = function(resource) {
 module.exports = HLS;
 
 
-},{"../../base/jst":12,"../../base/styler":15,"../../base/ui_plugin":"Z7u8cr","underscore":6,"visibility":7}],38:[function(require,module,exports){
+},{"../../base/jst":12,"../../base/styler":15,"../../base/ui_plugin":"Z7u8cr","../../components/mediator":33,"underscore":6,"visibility":7}],38:[function(require,module,exports){
 "use strict";
 module.exports = require('./hls');
 
@@ -17276,13 +17324,25 @@ module.exports = require('./hls');
 },{"./hls":37}],39:[function(require,module,exports){
 "use strict";
 var UIPlugin = require('../../base/ui_plugin');
-var HTML5Audio = UIPlugin.extend({
-  name: 'html5_audio',
-  type: 'playback',
-  tagName: 'audio',
-  events: {
-    'timeupdate': 'timeUpdated',
-    'ended': 'ended'
+var HTML5Audio = function HTML5Audio() {
+  $traceurRuntime.defaultSuperCall(this, $HTML5Audio.prototype, arguments);
+};
+var $HTML5Audio = HTML5Audio;
+($traceurRuntime.createClass)(HTML5Audio, {
+  get name() {
+    return 'html5_audio';
+  },
+  get type() {
+    return 'playback';
+  },
+  get tagName() {
+    return 'audio';
+  },
+  get events() {
+    return {
+      'timeupdate': 'timeUpdated',
+      'ended': 'ended'
+    };
   },
   initialize: function(options) {
     this.el.src = options.src;
@@ -17346,7 +17406,7 @@ var HTML5Audio = UIPlugin.extend({
     this.container.$el.append(this.el);
     return this;
   }
-});
+}, {}, UIPlugin);
 HTML5Audio.canPlay = function(resource) {
   return !!resource.match(/(.*).mp3/);
 };
@@ -17397,9 +17457,9 @@ var $HTML5Video = HTML5Video;
     this.el.src = options.src;
     this.el.loop = options.loop;
     this.settings = {
-      left: ['playpause'],
+      left: ['playpause', 'position', 'duration'],
       right: ['fullscreen', 'volume'],
-      default: ['position', 'seekbar', 'duration']
+      default: ['seekbar']
     };
   },
   loadedMetadata: function(e) {
@@ -17504,13 +17564,21 @@ module.exports = require('./loading');
 var UIObject = require('../../base/ui_object');
 var _ = require('underscore');
 var defaultImage = "data:image/gif;base64,R0lGODlhGQAZAPMAAP////f39+/v7+bm5t7e3tbW1szMzMXFxb29vbW1ta2traWlpZmZmYyMjISEhHNzcyH/C05FVFNDQVBFMi4wAwEAAAAh+QQFCAAQACwAAAAAGQAZAAAFjCAkjiTkPE6pqssyPvBIECu5MIwLwY881yMcQ8QTzX5AiNBVPNJWiUQQt4sdSU9IQsEV3XA8p/Gq5XKlOB3k6kSKzN1aOzvaxldiYBToHhX+gAVJa3OBgINzBIZ/iHMqfSWQkWR4lFh5lZiOlGxtY0iJeZpZnTSWdJc/paiZn5+sqU+ckpM+pLBJlishACH5BAUIABAALAAAAAAUAA4AAAVRICSOJLQwS6lCSTIy8Og4aqIoLgQz4/PQpZtCtBP5fiqhq+g4jgqEkVAXc4oK2ILIhts1fc8sFnLLQb4qsXbFFrPfkDEcQqjbo3P6vZ7X7/shACH5BAUIABAALAEAAAAXAAsAAAVQICSOZKIkZKoSxai847KoY2G30KuMDDPTkJtIJ+r5gEEhcWFckZSw5sgBIVgJoltBx+yJHI+H43pN4iBdCDgsFpGxQHaYOiIj2fQVnAZOhQAAIfkEBQgAEAAsBQAAABQADgAABUogJI5FOZ4oRJCmmCQpIa9QWYyKAqOzaIs5Xaz3SwRTIqLpOFqcZgSbUQhhWJ2jnisHWVivyNQXHEaNy0gvuvxoux1rkXseh8zdIQAh+QQFCAAQACwLAAAADgAUAAAFSyAhQmRpQiJRFsWJjiTbmmksn7U80+NdJqSUjpRQKIArFqRoPLogTSPS1Zw+i08XY8tdPLngL3jrcjyypofagYao3+ysGd6mtyHxEAAh+QQFCAAQACwOAAEACwAXAAAFTiAkEoRonmR5jukKperamgVLikVetnlf074fMOeCEIsihXKZOC2fzqeiKVowkBCGdlHUerkQx+MBsX7DY4foDBmTTWD0GOlWF9NIh/0UAgAh+QQFCAAQACwLAAUADgAUAAAFTiAkjiRElCihoqPqnukLxysr1vZY7HzB9rwf0FdKJHIjhfKYUzqZowWDAUk4FceHVspYiJ4Q7QMypY6YYgjXTEqTp962dgQvudVx+RgZAgAh+QQFCAAQACwFAAsAFAAOAAAFUSAkjuRInChRrmKKsqt7wmRR0LRt46uul4+HY5RQKCC+ncgRfDCeRUVC5Bs1IU8GxHgc3ZbBYRYSna6u2KeIax4xhaLxWrpyDONqUaJNW+RpIQAh+QQFCAAQACwBAA4AFwALAAAFUiAkio4zniJBoKPzvOyoquhrx+lMu/YDMYzFqECE6FQ8H2QBZCiexKJxBimNmpCnAhI9rVBNRvbJ7eJ+QJFWFP2ymEE1mS2NLYTyLf3MSigSfCEAIfkEBQgAEAAsAAALABQADgAABU6g84wkZJ7oSa5pa66lK5/LMrsLo9+p7vOmnI8BUSgSJ4ISJSRCEkZFYapc0mymKGRagFRl0ON26v22tONumTBIhZHppBWVgMdN8xm3FQIAIfkEBQgAEAAsAAAFAA4AFAAABUsgBDmOaJ6i86woqq5P2ZowO6fwfZLtwvzAGXAoHP50p0QCmVA4dc7orBldFq5JKeR6JXhFShMX4iW0uAXyFzVWm09oUfmclq915RAAIfkECQgAEAAsAAAAABkAGQAABVwgJI5kaZ6j46Bs6TzP2s7wM9OwfI/LMtY7HmMoesGCkMVw6MshRUvik6SUTqm+Z0LB7V674OsWrLiaCgWzCI1Ws9vTd5tAR75F9Lo9jdeb8wRqEHmCgIKDgYdmIQA7";
-var Loading = UIObject.extend({
-  template: _.template('<img src=<%= base64Image %> <h3> <%= message %> </h3>'),
-  defaultImage: defaultImage,
+var Loading = function Loading() {
+  $traceurRuntime.defaultSuperCall(this, $Loading.prototype, arguments);
+};
+var $Loading = Loading;
+($traceurRuntime.createClass)(Loading, {
+  get template() {
+    return _.template('<img src=<%= base64Image %> <h3> <%= message %> </h3>');
+  },
+  get defaultImage() {
+    return defaultImage;
+  },
   initialize: function(options) {
     this.message = options.message || '';
     this.base64Image = options.base64Image || this.defaultImage;
-    this.customStyle = options.style || '';
+    this.customStyle = options.style || {};
   },
   show: function() {
     return this.$el.show().promise();
@@ -17527,7 +17595,7 @@ var Loading = UIObject.extend({
     this.$el.hide();
     return this;
   }
-});
+}, {}, UIObject);
 module.exports = Loading;
 
 
@@ -17582,58 +17650,28 @@ module.exports = require('./pip');
 },{"./pip":48}],48:[function(require,module,exports){
 "use strict";
 var BaseObject = require('../../base/base_object');
+var Styler = require('../../base/styler');
 var $ = require("jquery");
 var _ = require('underscore');
 var Loading = require('../loading');
-var PipPlugin = BaseObject.extend({
-  name: 'pip',
+var PipPlugin = function PipPlugin() {
+  $traceurRuntime.defaultSuperCall(this, $PipPlugin.prototype, arguments);
+};
+var $PipPlugin = PipPlugin;
+($traceurRuntime.createClass)(PipPlugin, {
+  get name() {
+    return 'pip';
+  },
   initialize: function(core) {
     this.core = core;
-    this.pipStyle = {
-      width: "24%",
-      height: "24%",
-      "z-index": 2000,
-      right: "23px",
-      "border-width": "2px",
-      "border-radius": "3px",
-      "border-style": "solid",
-      "border-color": "rgba(255,255,255, .25)",
-      "background-clip": "padding-box",
-      "-webkit-background-clip": "padding-box",
-      "cursor": "pointer"
-    };
-    this.masterStyle = {
-      width: "100%",
-      height: "100%",
-      bottom: "0px",
-      right: "0px",
-      border: "none",
-      "cursor": "default"
-    };
-    this.masterContainer = core.containers[0];
-    this.loading = new Loading({
-      message: 'Carregando...',
-      style: {
-        left: '25px',
-        top: '15px',
-        position: 'relative',
-        'float': 'left',
-        'z-index': 3001,
-        color: 'white'
-      }
-    });
+    this.addListeners();
+    this.loading = new Loading({message: 'Carregando...'});
     this.core.$el.append(this.loading.render().el);
-    if (core.containers.length === 2) {
-      this.pipContainer = core.containers[1];
-      this.pipContainer.setStyle(this.pipStyle);
-      this.pipContainer.play();
-      this.pipContainer.setVolume(0);
-      this.listenToPipClick();
-      this.core.mediaControl.setContainer(this.masterContainer);
-      this.core.mediaControl.render();
-    }
-    this.listenTo(this.core.mediaControl, 'mediacontrol:show', this.onMediaControlShow);
-    this.listenTo(this.core.mediaControl, 'mediacontrol:hide', this.onMediaControlHide);
+    var style = Styler.getStyleFor('pip');
+    this.core.$el.append(style);
+    this.loading.$el.attr('data-pip', '');
+    this.loading.$el.addClass('pip-loading');
+    this.setupContainers();
   },
   getExternalInterface: function() {
     return {
@@ -17646,15 +17684,29 @@ var PipPlugin = BaseObject.extend({
       hasPip: this.hasPip
     };
   },
+  addListeners: function() {
+    this.listenTo(this.core.mediaControl, 'mediacontrol:show', this.onMediaControlShow);
+    this.listenTo(this.core.mediaControl, 'mediacontrol:hide', this.onMediaControlHide);
+  },
+  setupContainers: function() {
+    this.masterContainer = this.core.containers[0];
+    this.setMasterStyle(this.masterContainer, false);
+    this.core.mediaControl.setContainer(this.masterContainer);
+    this.core.mediaControl.render();
+    if (this.core.containers.length === 2) {
+      this.pipContainer = this.core.containers[1];
+      this.setPipStyle(this.pipContainer, false);
+      this.masterContainer.play();
+      this.pipContainer.play();
+      this.pipContainer.setVolume(0);
+      this.pipContainer.trigger("container:pip", true);
+      this.listenToPipClick();
+    }
+  },
   hasPip: function() {
     return !!this.pipContainer;
   },
   addPip: function(source) {
-    if (this.masterContainer.playback.name === "auditude") {
-      if (this.core.params.onLoadPipFailed)
-        this.core.params.onLoadPipFailed(source);
-      return;
-    }
     this.stopListening(this.pipContainer);
     this.discardPip();
     this.core.createContainer(source).then(this.addPipCallback.bind(this));
@@ -17667,7 +17719,7 @@ var PipPlugin = BaseObject.extend({
   },
   onContainerReady: function() {
     this.pipContainer.setVolume(0);
-    this.pipContainer.setStyle(this.pipStyle);
+    this.setPipStyle(this.pipContainer);
     this.pipContainer.play();
     this.stopListening(this.pipContainer);
     this.listenToPipClick();
@@ -17691,17 +17743,12 @@ var PipPlugin = BaseObject.extend({
   setMasterContainer: function(container) {
     this.discardContainer(this.masterContainer);
     this.masterContainer = container;
-    this.masterContainer.setStyle(this.masterStyle);
+    this.setMasterStyle(this.masterContainer);
     this.listenTo(this.masterContainer, "container:ended", this.pipToMaster);
     this.masterContainer.play();
   },
   addMaster: function(source) {
     if (this.masterContainer) {
-      if (this.masterContainer.playback && this.masterContainer.playback.name === "auditude") {
-        if (this.core.params.onLoadMasterFailed)
-          this.core.params.onLoadMasterFailed(source);
-        return;
-      }
       this.loading.show();
       this.stopListening(this.masterContainer);
       this.tmpContainer = this.masterContainer;
@@ -17711,11 +17758,6 @@ var PipPlugin = BaseObject.extend({
   },
   addMasterContainer: function(container) {
     if (this.masterContainer) {
-      if (this.masterContainer.playback && this.masterContainer.playback.name === "auditude") {
-        if (this.core.params.onLoadMasterFailed)
-          this.core.params.onLoadMasterFailed(source);
-        return;
-      }
       this.tmpContainer = this.masterContainer;
       this.tmpContainer.setStyle({'z-index': 2000});
       this.addMasterCallback(container);
@@ -17727,39 +17769,29 @@ var PipPlugin = BaseObject.extend({
       this.discardPip();
     }
     this.pipContainer = this.tmpContainer;
+    this.setPipStyle(this.pipContainer);
+    this.setMasterStyle(this.masterContainer);
     this.masterContainer.play();
     this.animateMasterToPip();
     this.tmpContainer = undefined;
     this.pipContainer.setVolume(0);
-    this.pipContainer.trigger("container:pip", true);
   },
   animateMasterToPip: function() {
+    var $__0 = this;
     this.loading.hide();
     this.listenTo(this.masterContainer, "container:ended", this.pipToMaster);
-    if (this.pipContainer.playback && this.pipContainer.playback.name === 'hls') {
-      this.pipContainer.setStyle(this.pipStyle);
-      if (this.core.params.onMasterLoaded) {
-        this.core.params.onMasterLoaded(this.masterContainer.getSource());
+    this.pipContainer.$el.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', (function() {
+      $__0.pipContainer.trigger("container:pip", true);
+      if ($__0.core.params.onMasterLoaded) {
+        $__0.core.params.onMasterLoaded($__0.masterContainer.getSource());
       }
-    } else {
-      this.pipContainer.animate(this.pipStyle, {complete: function() {
-          if (this.pipContainer) {
-            this.pipContainer.setStyle(this.pipStyle);
-          }
-          if (this.core.params.onMasterLoaded)
-            this.core.params.onMasterLoaded(this.masterContainer.playback.params.src);
-        }.bind(this)});
-    }
+    }));
+    this.setPipStyle(this.pipContainer);
     this.core.mediaControl.setContainer(this.masterContainer);
     this.listenToPipClick();
   },
   changeMaster: function(source) {
     if (this.masterContainer) {
-      if (this.masterContainer.playback && this.masterContainer.playback.name === "auditude") {
-        if (this.core.params.onLoadMasterFailed)
-          this.core.params.onLoadMasterFailed(source);
-        return;
-      }
       this.stopListening(this.masterContainer);
       this.tmpContainer = this.masterContainer;
       this.tmpContainer.setStyle({'z-index': 2000});
@@ -17771,6 +17803,7 @@ var PipPlugin = BaseObject.extend({
     this.masterContainer = container;
     this.masterContainer.play();
     this.tmpContainer = undefined;
+    this.setMasterStyle(this.masterContainer);
     this.listenTo(this.masterContainer, "container:ended", this.pipToMaster);
     this.core.mediaControl.setContainer(this.masterContainer);
     if (this.core.params.onMasterLoaded)
@@ -17786,10 +17819,16 @@ var PipPlugin = BaseObject.extend({
     container.destroy();
   },
   pipToMaster: function() {
+    var $__0 = this;
     this.stopListening(this.masterContainer);
+    this.stopListening(this.pipContainer, "container:click");
     if (this.pipContainer) {
       this.pipContainer.setStyle({'z-index': 998});
-      this.pipContainer.animate(this.masterStyle).then(this.pipToMasterCallback.bind(this));
+      this.setMasterStyle(this.pipContainer);
+      this.pipContainer.$el.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', (function() {
+        $__0.pipContainer.$el.off('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend');
+        $__0.pipToMasterCallback();
+      }));
     }
     return this;
   },
@@ -17807,20 +17846,43 @@ var PipPlugin = BaseObject.extend({
       this.core.params.onPipToMaster(this.masterContainer.playback.params.src);
   },
   onMediaControlShow: function() {
-    if (!this.pipContainer || this.pipContainer.$el.is(':animated'))
-      return;
-    this.pipContainer.animate({bottom: 63}, 400);
+    if (this.pipContainer) {
+      this.pipContainer.$el.addClass('pip-transition over-media-control');
+    }
   },
   onMediaControlHide: function() {
-    if (!this.pipContainer || this.pipContainer.$el.is(':animated'))
-      return;
-    this.pipContainer.animate({bottom: 23}, 400);
+    this.masterContainer.$el.removeClass('over-media-control');
+    if (this.pipContainer) {
+      this.pipContainer.$el.addClass('pip-transition');
+      this.pipContainer.$el.removeClass('over-media-control');
+    }
+  },
+  setAnimatedTransition: function(container, animated) {
+    if (animated) {
+      container.$el.addClass('pip-transition');
+    } else {
+      container.$el.removeClass('pip-transition');
+    }
+  },
+  setPipStyle: function(container) {
+    var animated = arguments[1] !== (void 0) ? arguments[1] : true;
+    this.setAnimatedTransition(container, animated);
+    container.$el.attr('data-pip', '');
+    container.$el.addClass('pip-container');
+    container.$el.removeClass('over-media-control master-container');
+  },
+  setMasterStyle: function(container) {
+    var animated = arguments[1] !== (void 0) ? arguments[1] : true;
+    this.setAnimatedTransition(container, animated);
+    container.$el.attr('data-pip', '');
+    container.$el.addClass('master-container');
+    container.$el.removeClass('over-media-control pip-container');
   }
-});
+}, {}, BaseObject);
 module.exports = PipPlugin;
 
 
-},{"../../base/base_object":"2HNVgz","../loading":43,"jquery":4,"underscore":6}],49:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../../base/styler":15,"../loading":43,"jquery":4,"underscore":6}],49:[function(require,module,exports){
 "use strict";
 module.exports = require('./poster');
 
@@ -17831,14 +17893,28 @@ var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var $ = require('jquery');
-var PosterPlugin = UIPlugin.extend({
-  name: 'poster',
-  tagName: 'div',
-  attributes: {'data-poster': ''},
-  events: {'click': 'clicked'},
-  template: JST.poster,
+var PosterPlugin = function PosterPlugin() {
+  $traceurRuntime.defaultSuperCall(this, $PosterPlugin.prototype, arguments);
+};
+var $PosterPlugin = PosterPlugin;
+($traceurRuntime.createClass)(PosterPlugin, {
+  get name() {
+    return 'poster';
+  },
+  get template() {
+    return JST.poster;
+  },
+  get attributes() {
+    return {
+      'class': 'player-poster',
+      'data-poster': ''
+    };
+  },
+  get events() {
+    return {'click': 'clicked'};
+  },
   initialize: function(options) {
-    PosterPlugin.super('initialize').call(this, options);
+    $traceurRuntime.superCall(this, $PosterPlugin.prototype, "initialize", [options]);
     if (options.disableControlsOnPoster === undefined)
       options.disableControlsOnPoster = true;
     this.options = options;
@@ -17872,9 +17948,8 @@ var PosterPlugin = UIPlugin.extend({
     }
   },
   onPipStateChanged: function(isPip) {
-    if (isPip) {
-      this.hidePlayButton();
-    } else if (!this.options.hidePlayButton) {
+    this.$el.css({fontSize: this.$el.height()});
+    if (!this.options.hidePlayButton) {
       this.showPlayButton();
     }
   },
@@ -17882,16 +17957,21 @@ var PosterPlugin = UIPlugin.extend({
     this.$playButton.hide();
   },
   showPlayButton: function() {
+    this.$el.css({fontSize: this.$el.height()});
     this.$playButton.show();
   },
   clicked: function() {
     this.container.play();
   },
   render: function() {
+    var $__0 = this;
     var style = Styler.getStyleFor(this.name);
     this.$el.html(this.template());
     this.$el.append(style);
     this.container.$el.append(this.el);
+    this.$el.ready((function() {
+      $__0.$el.css({fontSize: $__0.options.height || $__0.$el.height()});
+    }));
     var imgEl = this.$el.find('img')[0];
     imgEl.src = this.options.poster || 'assets/default.png';
     this.$playButton = $(this.$el.find('.play-wrapper'));
@@ -17899,7 +17979,7 @@ var PosterPlugin = UIPlugin.extend({
       this.$playButton.hide();
     return this;
   }
-});
+}, {}, UIPlugin);
 module.exports = PosterPlugin;
 
 
@@ -18281,11 +18361,19 @@ module.exports = require('./watermark');
 var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
-var WaterMarkPlugin = UIPlugin.extend({
-  name: 'watermark',
-  type: 'ui',
+var WaterMarkPlugin = function WaterMarkPlugin() {
+  $traceurRuntime.defaultSuperCall(this, $WaterMarkPlugin.prototype, arguments);
+};
+var $WaterMarkPlugin = WaterMarkPlugin;
+($traceurRuntime.createClass)(WaterMarkPlugin, {
+  get name() {
+    return 'watermark';
+  },
+  get type() {
+    return 'ui';
+  },
   initialize: function(options) {
-    WaterMarkPlugin.super('initialize').call(this, options);
+    $traceurRuntime.superCall(this, $WaterMarkPlugin.prototype, "initialize", [options]);
     this.template = JST[this.name];
     this.position = options.position || "bottom-right";
     this.imageUrl = options.imageUrl || 'assets/watermark.png';
@@ -18297,12 +18385,14 @@ var WaterMarkPlugin = UIPlugin.extend({
     this.listenTo(this.container, 'container:pip', this.onPip);
   },
   onPlay: function() {
-    this.$el.show();
+    if (!this.hidden)
+      this.$el.show();
   },
   onStop: function() {
     this.$el.hide();
   },
   onPip: function(isPip) {
+    this.hidden = !!isPip;
     if (isPip) {
       this.$el.hide();
     } else {
@@ -18321,7 +18411,7 @@ var WaterMarkPlugin = UIPlugin.extend({
     this.container.$el.append(this.$el);
     return this;
   }
-});
+}, {}, UIPlugin);
 module.exports = WaterMarkPlugin;
 
 
