@@ -2158,7 +2158,7 @@ System.register("traceur-runtime@0.0.42/src/runtime/polyfill-import", [], functi
 System.get("traceur-runtime@0.0.42/src/runtime/polyfill-import" + '');
 
 }).call(this,require("FWaASH"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"FWaASH":2}],4:[function(require,module,exports){
+},{"FWaASH":2}],"HlZQrA":[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.1
  * http://jquery.com/
@@ -11350,7 +11350,9 @@ return jQuery;
 
 }));
 
-},{}],5:[function(require,module,exports){
+},{}],"jquery":[function(require,module,exports){
+module.exports=require('HlZQrA');
+},{}],6:[function(require,module,exports){
 (function (global){
 //! moment.js
 //! version : 2.7.0
@@ -13964,7 +13966,7 @@ return jQuery;
 }).call(this);
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 //     Underscore.js 1.6.0
 //     http://underscorejs.org
 //     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -15309,7 +15311,7 @@ return jQuery;
   }
 }).call(this);
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 var EventEmitter = require('events').EventEmitter
 var inherits = require('inherits')
 
@@ -15375,7 +15377,7 @@ Visibility.prototype.visible = function() {
   return this.supported ? !document[hidden] : shimvis
 }
 
-},{"events":1,"inherits":8}],8:[function(require,module,exports){
+},{"events":1,"inherits":9}],9:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -15419,9 +15421,9 @@ BaseObject.extend = extend;
 module.exports = BaseObject;
 
 
-},{"./events":11,"./utils":20,"underscore":6}],"base_object":[function(require,module,exports){
+},{"./events":12,"./utils":21,"underscore":7}],"base_object":[function(require,module,exports){
 module.exports=require('2HNVgz');
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 (function (global){
 "use strict";
 var _ = require('underscore');
@@ -15593,7 +15595,7 @@ module.exports = Events;
 
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../plugins/log":45,"underscore":6}],12:[function(require,module,exports){
+},{"../plugins/log":46,"underscore":7}],13:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 module.exports = {
@@ -15620,7 +15622,7 @@ module.exports = {
 };
 
 
-},{"underscore":6}],13:[function(require,module,exports){
+},{"underscore":7}],14:[function(require,module,exports){
 "use strict";
 var PluginMixin = require('./plugin_mixin');
 var BaseObject = require('./base_object');
@@ -15628,7 +15630,7 @@ var Plugin = BaseObject.extend(PluginMixin).extend({});
 module.exports = Plugin;
 
 
-},{"./base_object":"2HNVgz","./plugin_mixin":14}],14:[function(require,module,exports){
+},{"./base_object":"2HNVgz","./plugin_mixin":15}],15:[function(require,module,exports){
 "use strict";
 var PluginMixin = {
   initialize: function() {
@@ -15644,7 +15646,7 @@ var PluginMixin = {
 module.exports = PluginMixin;
 
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var _ = require('underscore');
@@ -15656,7 +15658,7 @@ var Styler = {getStyleFor: function(name, options) {
 module.exports = Styler;
 
 
-},{"./jst":12,"jquery":4,"underscore":6}],"ui_object":[function(require,module,exports){
+},{"./jst":13,"jquery":"HlZQrA","underscore":7}],"ui_object":[function(require,module,exports){
 module.exports=require('8lqCAT');
 },{}],"8lqCAT":[function(require,module,exports){
 "use strict";
@@ -15743,7 +15745,7 @@ UIObject.extend = extend;
 module.exports = UIObject;
 
 
-},{"./base_object":"2HNVgz","./utils":20,"jquery":4,"underscore":6}],"ui_plugin":[function(require,module,exports){
+},{"./base_object":"2HNVgz","./utils":21,"jquery":"HlZQrA","underscore":7}],"ui_plugin":[function(require,module,exports){
 module.exports=require('Z7u8cr');
 },{}],"Z7u8cr":[function(require,module,exports){
 "use strict";
@@ -15774,7 +15776,7 @@ UIPlugin.extend = extend;
 module.exports = UIPlugin;
 
 
-},{"./plugin_mixin":14,"./ui_object":"8lqCAT","./utils":20,"underscore":6}],20:[function(require,module,exports){
+},{"./plugin_mixin":15,"./ui_object":"8lqCAT","./utils":21,"underscore":7}],21:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var Moment = require('moment');
@@ -15856,7 +15858,7 @@ module.exports = {
 };
 
 
-},{"moment":5,"underscore":6}],21:[function(require,module,exports){
+},{"moment":6,"underscore":7}],22:[function(require,module,exports){
 "use strict";
 var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
@@ -16006,12 +16008,12 @@ var $Container = Container;
 module.exports = Container;
 
 
-},{"../../base/styler":15,"../../base/ui_object":"8lqCAT","underscore":6}],22:[function(require,module,exports){
+},{"../../base/styler":16,"../../base/ui_object":"8lqCAT","underscore":7}],23:[function(require,module,exports){
 "use strict";
 module.exports = require('./container');
 
 
-},{"./container":21}],23:[function(require,module,exports){
+},{"./container":22}],24:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var BaseObject = require('../../base/base_object');
@@ -16068,12 +16070,12 @@ var $ContainerFactory = ContainerFactory;
 module.exports = ContainerFactory;
 
 
-},{"../../base/base_object":"2HNVgz","../container":22,"jquery":4,"underscore":6}],24:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../container":23,"jquery":"HlZQrA","underscore":7}],25:[function(require,module,exports){
 "use strict";
 module.exports = require('./container_factory');
 
 
-},{"./container_factory":23}],25:[function(require,module,exports){
+},{"./container_factory":24}],26:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('jquery');
@@ -16274,12 +16276,12 @@ var $Core = Core;
 module.exports = Core;
 
 
-},{"../../base/styler":15,"../../base/ui_object":"8lqCAT","../../base/utils":20,"../container_factory":24,"../loader":29,"../media_control":31,"jquery":4,"underscore":6}],26:[function(require,module,exports){
+},{"../../base/styler":16,"../../base/ui_object":"8lqCAT","../../base/utils":21,"../container_factory":25,"../loader":30,"../media_control":32,"jquery":"HlZQrA","underscore":7}],27:[function(require,module,exports){
 "use strict";
 module.exports = require('./core');
 
 
-},{"./core":25}],27:[function(require,module,exports){
+},{"./core":26}],28:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var BaseObject = require('../../base/base_object');
@@ -16313,17 +16315,17 @@ var CoreFactory = BaseObject.extend({
 module.exports = CoreFactory;
 
 
-},{"../../base/base_object":"2HNVgz","../core":26,"underscore":6}],28:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../core":27,"underscore":7}],29:[function(require,module,exports){
 "use strict";
 module.exports = require('./core_factory');
 
 
-},{"./core_factory":27}],29:[function(require,module,exports){
+},{"./core_factory":28}],30:[function(require,module,exports){
 "use strict";
 module.exports = require('./loader');
 
 
-},{"./loader":30}],30:[function(require,module,exports){
+},{"./loader":31}],31:[function(require,module,exports){
 "use strict";
 var BaseObject = require('../../base/base_object');
 var _ = require('underscore');
@@ -16369,12 +16371,12 @@ var Loader = BaseObject.extend({
 module.exports = Loader;
 
 
-},{"../../base/base_object":"2HNVgz","../../playbacks/flash_vod":36,"../../playbacks/hls":38,"../../playbacks/html5_audio":40,"../../playbacks/html5_video":42,"../../plugins/pip":47,"../../plugins/poster":49,"../../plugins/sequence":51,"../../plugins/spinner_three_bounce":54,"../../plugins/stats":56,"../../plugins/watermark":59,"underscore":6}],31:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../../playbacks/flash_vod":37,"../../playbacks/hls":39,"../../playbacks/html5_audio":41,"../../playbacks/html5_video":43,"../../plugins/pip":48,"../../plugins/poster":50,"../../plugins/sequence":52,"../../plugins/spinner_three_bounce":55,"../../plugins/stats":57,"../../plugins/watermark":60,"underscore":7}],32:[function(require,module,exports){
 "use strict";
 module.exports = require('./media_control');
 
 
-},{"./media_control":32}],32:[function(require,module,exports){
+},{"./media_control":33}],33:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('jquery');
@@ -16742,13 +16744,13 @@ var $MediaControl = MediaControl;
 module.exports = MediaControl;
 
 
-},{"../../base/jst":12,"../../base/styler":15,"../../base/ui_object":"8lqCAT","../../base/utils":20,"jquery":4,"underscore":6}],33:[function(require,module,exports){
+},{"../../base/jst":13,"../../base/styler":16,"../../base/ui_object":"8lqCAT","../../base/utils":21,"jquery":"HlZQrA","underscore":7}],34:[function(require,module,exports){
 "use strict";
 var Events = require('../base/events');
 module.exports = new Events();
 
 
-},{"../base/events":11}],34:[function(require,module,exports){
+},{"../base/events":12}],35:[function(require,module,exports){
 (function (global){
 "use strict";
 var BaseObject = require('./base/base_object');
@@ -16787,7 +16789,7 @@ module.exports = window.WP3;
 
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./base/base_object":"2HNVgz","./components/core_factory":28,"./components/loader":29,"./components/mediator":33}],35:[function(require,module,exports){
+},{"./base/base_object":"2HNVgz","./components/core_factory":29,"./components/loader":30,"./components/mediator":34}],36:[function(require,module,exports){
 "use strict";
 var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
@@ -16994,12 +16996,12 @@ FlashVOD.canPlay = function(resource) {
 module.exports = FlashVOD;
 
 
-},{"../../base/jst":12,"../../base/styler":15,"../../base/ui_object":"8lqCAT","../../components/mediator":33,"jquery":4,"underscore":6}],36:[function(require,module,exports){
+},{"../../base/jst":13,"../../base/styler":16,"../../base/ui_object":"8lqCAT","../../components/mediator":34,"jquery":"HlZQrA","underscore":7}],37:[function(require,module,exports){
 "use strict";
 module.exports = require('./flash_vod');
 
 
-},{"./flash_vod":35}],37:[function(require,module,exports){
+},{"./flash_vod":36}],38:[function(require,module,exports){
 "use strict";
 var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
@@ -17316,12 +17318,12 @@ HLS.canPlay = function(resource) {
 module.exports = HLS;
 
 
-},{"../../base/jst":12,"../../base/styler":15,"../../base/ui_plugin":"Z7u8cr","../../components/mediator":33,"underscore":6,"visibility":7}],38:[function(require,module,exports){
+},{"../../base/jst":13,"../../base/styler":16,"../../base/ui_plugin":"Z7u8cr","../../components/mediator":34,"underscore":7,"visibility":8}],39:[function(require,module,exports){
 "use strict";
 module.exports = require('./hls');
 
 
-},{"./hls":37}],39:[function(require,module,exports){
+},{"./hls":38}],40:[function(require,module,exports){
 "use strict";
 var UIPlugin = require('../../base/ui_plugin');
 var HTML5Audio = function HTML5Audio() {
@@ -17413,12 +17415,12 @@ HTML5Audio.canPlay = function(resource) {
 module.exports = HTML5Audio;
 
 
-},{"../../base/ui_plugin":"Z7u8cr"}],40:[function(require,module,exports){
+},{"../../base/ui_plugin":"Z7u8cr"}],41:[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_audio');
 
 
-},{"./html5_audio":39}],41:[function(require,module,exports){
+},{"./html5_audio":40}],42:[function(require,module,exports){
 "use strict";
 var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
@@ -17549,17 +17551,17 @@ HTML5Video.canPlay = function(resource) {
 module.exports = HTML5Video;
 
 
-},{"../../base/styler":15,"../../base/ui_plugin":"Z7u8cr"}],42:[function(require,module,exports){
+},{"../../base/styler":16,"../../base/ui_plugin":"Z7u8cr"}],43:[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_video');
 
 
-},{"./html5_video":41}],43:[function(require,module,exports){
+},{"./html5_video":42}],44:[function(require,module,exports){
 "use strict";
 module.exports = require('./loading');
 
 
-},{"./loading":44}],44:[function(require,module,exports){
+},{"./loading":45}],45:[function(require,module,exports){
 "use strict";
 var UIObject = require('../../base/ui_object');
 var _ = require('underscore');
@@ -17599,12 +17601,12 @@ var $Loading = Loading;
 module.exports = Loading;
 
 
-},{"../../base/ui_object":"8lqCAT","underscore":6}],45:[function(require,module,exports){
+},{"../../base/ui_object":"8lqCAT","underscore":7}],46:[function(require,module,exports){
 "use strict";
 module.exports = require('./log');
 
 
-},{"./log":46}],46:[function(require,module,exports){
+},{"./log":47}],47:[function(require,module,exports){
 "use strict";
 var BaseObject = require('../../base/base_object');
 var $ = require('jquery');
@@ -17642,12 +17644,12 @@ Log.prototype = {
 module.exports = Log;
 
 
-},{"../../base/base_object":"2HNVgz","jquery":4}],47:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","jquery":"HlZQrA"}],48:[function(require,module,exports){
 "use strict";
 module.exports = require('./pip');
 
 
-},{"./pip":48}],48:[function(require,module,exports){
+},{"./pip":49}],49:[function(require,module,exports){
 "use strict";
 var BaseObject = require('../../base/base_object');
 var Styler = require('../../base/styler');
@@ -17882,12 +17884,12 @@ var $PipPlugin = PipPlugin;
 module.exports = PipPlugin;
 
 
-},{"../../base/base_object":"2HNVgz","../../base/styler":15,"../loading":43,"jquery":4,"underscore":6}],49:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../../base/styler":16,"../loading":44,"jquery":"HlZQrA","underscore":7}],50:[function(require,module,exports){
 "use strict";
 module.exports = require('./poster');
 
 
-},{"./poster":50}],50:[function(require,module,exports){
+},{"./poster":51}],51:[function(require,module,exports){
 "use strict";
 var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
@@ -17983,12 +17985,12 @@ var $PosterPlugin = PosterPlugin;
 module.exports = PosterPlugin;
 
 
-},{"../../base/jst":12,"../../base/styler":15,"../../base/ui_plugin":"Z7u8cr","jquery":4}],51:[function(require,module,exports){
+},{"../../base/jst":13,"../../base/styler":16,"../../base/ui_plugin":"Z7u8cr","jquery":"HlZQrA"}],52:[function(require,module,exports){
 "use strict";
 module.exports = require('./sequence');
 
 
-},{"./sequence":52}],52:[function(require,module,exports){
+},{"./sequence":53}],53:[function(require,module,exports){
 "use strict";
 var BaseObject = require('../../base/base_object');
 var SequenceContainer = require('./sequence_container');
@@ -18007,7 +18009,7 @@ var Sequence = BaseObject.extend({
 module.exports = Sequence;
 
 
-},{"../../base/base_object":"2HNVgz","../../base/utils":20,"./sequence_container":53,"underscore":6}],53:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../../base/utils":21,"./sequence_container":54,"underscore":7}],54:[function(require,module,exports){
 "use strict";
 var BaseObject = require('../../base/base_object');
 var _ = require('underscore');
@@ -18191,12 +18193,12 @@ var SequenceContainer = BaseObject.extend({
 module.exports = SequenceContainer;
 
 
-},{"../../base/base_object":"2HNVgz","underscore":6}],54:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","underscore":7}],55:[function(require,module,exports){
 "use strict";
 module.exports = require('./spinner_three_bounce');
 
 
-},{"./spinner_three_bounce":55}],55:[function(require,module,exports){
+},{"./spinner_three_bounce":56}],56:[function(require,module,exports){
 "use strict";
 var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
@@ -18236,12 +18238,12 @@ var SpinnerThreeBouncePlugin = UIPlugin.extend({
 module.exports = SpinnerThreeBouncePlugin;
 
 
-},{"../../base/jst":12,"../../base/styler":15,"../../base/ui_plugin":"Z7u8cr"}],56:[function(require,module,exports){
+},{"../../base/jst":13,"../../base/styler":16,"../../base/ui_plugin":"Z7u8cr"}],57:[function(require,module,exports){
 "use strict";
 module.exports = require('./stats');
 
 
-},{"./stats":57}],57:[function(require,module,exports){
+},{"./stats":58}],58:[function(require,module,exports){
 "use strict";
 var Plugin = require('../../base/plugin');
 var StatsEvents = require('./stats_events');
@@ -18338,7 +18340,7 @@ var StatsPlugin = Plugin.extend({
 module.exports = StatsPlugin;
 
 
-},{"../../base/plugin":13,"./stats_events":58,"jquery":4}],58:[function(require,module,exports){
+},{"../../base/plugin":14,"./stats_events":59,"jquery":"HlZQrA"}],59:[function(require,module,exports){
 "use strict";
 var StatsEvents = {
   statsAdd: function(metric) {
@@ -18351,12 +18353,12 @@ var StatsEvents = {
 module.exports = StatsEvents;
 
 
-},{}],59:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 "use strict";
 module.exports = require('./watermark');
 
 
-},{"./watermark":60}],60:[function(require,module,exports){
+},{"./watermark":61}],61:[function(require,module,exports){
 "use strict";
 var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
@@ -18415,4 +18417,4 @@ var $WaterMarkPlugin = WaterMarkPlugin;
 module.exports = WaterMarkPlugin;
 
 
-},{"../../base/jst":12,"../../base/styler":15,"../../base/ui_plugin":"Z7u8cr"}]},{},[3,34])
+},{"../../base/jst":13,"../../base/styler":16,"../../base/ui_plugin":"Z7u8cr"}]},{},[3,35])
