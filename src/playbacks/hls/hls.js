@@ -30,9 +30,9 @@ class HLS extends UIPlugin {
     this.setupVisibility()
     this.highDefinition = false
     this.autoPlay = options.autoPlay
-    this.settings = {
-      left: ["playstop", "volume"],
-      default: ["position", "seekbar", "duration"],
+    this.defaultSettings = {
+      left: ["playstop"],
+      default: [],
       right: ["fullscreen", "volume", "hd"]
     }
     this.settings = _.extend({}, this.defaultSettings)
