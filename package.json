@@ -1,24 +1,24 @@
 {
-  "name": "player",
+  "name": "clappr",
   "version": "0.0.1",
-  "description": "Globo.com video player",
-  "main": "dist/player.min.js",
+  "description": "An extensible media player for the web",
+  "main": "dist/clappr.min.js",
   "scripts": {
     "test": "./node_modules/.bin/karma start --single-run"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:globoi/player.git"
+    "url": "git@github.com:globocom/clappr.git"
   },
   "author": "Globo.com",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/globoi/player/issues"
+    "url": "https://github.com/globocom/clappr/issues"
   },
   "browserify-shim": {
     "jquery": "global:jQuery"
   },
-  "homepage": "https://github.com/globoi/player",
+  "homepage": "https://github.com/globocom/clappr",
   "devDependencies": {
     "browserify": "^4.1.10",
     "browserify-shim": "^3.6.0",
