@@ -296,9 +296,9 @@ class HLS extends UIPlugin {
     this.$el.html(this.template({cid: this.cid, swfPath: this.swfPath, playbackId: this.uniqueId}))
     this.$el.append(style)
     this.el.id = this.cid
-    if(navigator.userAgent.match(/firefox/i)) { //FIXME remove it from here
+    if(this.isFirefox) {
       this.setupFirefox()
-    } else if(window.ActiveXObject) {
+    } else if(this.isLegacyIE) {
       this.setupIE()
     }
     return this
