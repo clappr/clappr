@@ -13,7 +13,7 @@ gulp.task('no-jquery-build', ['pre-build'], function() {
     .external('jquery')
     .bundle()
     .pipe(source('main.js'))
-    .pipe(rename(isProd ? 'player.min.js' : 'player.js'));
+    .pipe(rename(isProd ? 'clappr.min.js' : 'clappr.js'));
 
   if(isProd) {
     stream.pipe(streamify(uglify()));

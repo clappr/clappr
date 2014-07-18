@@ -14,7 +14,7 @@ gulp.task('build', ['pre-build'], function(b) {
   var stream = browserify()
     .bundle()
     .pipe(source('main.js'))
-    .pipe(rename(isProd ? 'player.min.js' : 'player.js'));
+    .pipe(rename(isProd ? 'clappr.min.js' : 'clappr.js'));
 
   if(isProd) {
     stream.pipe(streamify(uglify()));

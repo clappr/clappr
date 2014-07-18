@@ -19,8 +19,8 @@ module.exports.browserify = function() {
 gulp.task('compile-js', function() {
   return module.exports.browserify()
   .bundle()
-  .pipe(source('player.js'))
-  .pipe(rename('player.js'))
+  .pipe(source('clappr.js'))
+  .pipe(rename('clappr.js'))
   .pipe(gulp.dest('./dist'))
 });
 
