@@ -306,7 +306,7 @@ class HLS extends UIPlugin {
 }
 
 HLS.canPlay = function(resource) {
-  return !!resource.match(/(.*).m3u8/)
+  return !!resource.match(/^http(.*).m3u8/)
 }
 
 module.exports = HLS
