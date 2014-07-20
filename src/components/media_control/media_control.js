@@ -353,7 +353,7 @@ class MediaControl extends UIObject {
   render() {
     var timeout = 1000
     var style = Styler.getStyleFor('media_control')
-    var settings = this.container.settings || this.defaultSettings
+    var settings = _.isEmpty(this.container.settings)? this.defaultSettings:this.container.settings
     this.$el.html(this.template({ settings: settings }))
     this.$el.append(style)
     this.createCachedElements()
