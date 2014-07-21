@@ -55,7 +55,6 @@ class Container extends UIObject {
   }
 
   ready() {
-    console.log('container is ready');
     this.isReady = true;
     this.trigger('container:ready', this.name);
   }

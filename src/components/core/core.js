@@ -142,7 +142,6 @@ class Core extends UIObject {
   }
 
   setupContainers(containers) {
-    console.log('setupContainers')
     _.map(containers, this.appendContainer, this)
     this.setupMediaControl(this.getCurrentContainer())
     this.render()
