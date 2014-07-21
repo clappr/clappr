@@ -22,7 +22,6 @@ var CoreFactory = BaseObject.extend({
     return this.core;
   },
   addCorePlugins: function() {
-    console.log('core is ready');
     _.each(this.loader.globalPlugins, function(Plugin) {
       var plugin = new Plugin(this.core);
       this.core.addPlugin(plugin);
