@@ -8,4 +8,34 @@
 
 var Events = require('../base/events')
 
-module.exports = new Events()
+var events = new Events()
+
+class Mediator {
+}
+
+Mediator.on = function(name, callback, context) {
+  events.on(name, callback, context)
+  return
+}
+
+Mediator.once = function(name, callback, context) {
+  events.once(name, callback, context)
+  return
+}
+
+Mediator.off = function(name, callback, context) {
+  events.off(name, callback, context)
+  return
+}
+
+Mediator.trigger = function(name, opts) {
+  events.trigger(name, opts)
+  return
+}
+
+Mediator.stopListening = function(obj, name, callback) {
+  events.stopListening(obj, name, callback)
+  return
+}
+
+module.exports = Mediator
