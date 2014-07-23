@@ -35,6 +35,7 @@
     "gulp-streamify": "0.0.5",
     "gulp-uglify": "^0.3.0",
     "gulp-util": "latest",
+    "karma": "^0.12.17",
     "karma-bro": "^0.6.0",
     "karma-chrome-launcher": "^0.1.4",
     "karma-cli": "0.0.4",
