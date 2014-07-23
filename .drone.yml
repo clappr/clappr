@@ -1,0 +1,6 @@
+image: node0.10
+script:
+  - sudo start xvfb
+  - npm update -g npm
+  - npm -d install --silent
+  - npm test
