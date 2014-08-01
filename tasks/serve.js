@@ -5,6 +5,7 @@ var express = require('express');
 gulp.task('serve', ['watch'], function() {
   express()
     .use(express.static('./public'))
+    .use(express.static('./dist'))
     .listen(3000);
 });
 
