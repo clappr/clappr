@@ -16,7 +16,8 @@
     "url": "https://github.com/globocom/clappr/issues"
   },
   "browserify-shim": {
-    "jquery": "global:jQuery"
+    "jquery": "global:jQuery",
+    "underscore": "global:_"
   },
   "homepage": "https://github.com/globocom/clappr",
   "devDependencies": {
