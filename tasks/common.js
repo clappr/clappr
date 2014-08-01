@@ -14,7 +14,6 @@ module.exports.browserify = function() {
     .require('./src/base/ui_plugin', { expose: 'ui_plugin' })
     .require('./src/base/base_object', { expose: 'base_object' })
     .require('./src/base/ui_object', { expose: 'ui_object' })
-    .require('jquery', { expose: 'jquery' });
 };
 
 gulp.task('compile-js', function() {
