@@ -2,7 +2,7 @@
   "name": "clappr",
   "version": "0.0.2",
   "description": "An extensible media player for the web",
-  "main": "dist/clappr.min.js",
+  "main": "dist/clappr.light.min.js",
   "scripts": {
     "test": "./node_modules/.bin/karma start --single-run"
   },
@@ -15,9 +15,9 @@
   "bugs": {
     "url": "https://github.com/globocom/clappr/issues"
   },
-  "browserify-shim": {
-    "jquery": "global:jQuery",
-    "underscore": "global:_"
+  "browserify-shim": "src/shim.js",
+  "browserify": {
+    "transform": ["browserify-shim"]
   },
   "homepage": "https://github.com/globocom/clappr",
   "devDependencies": {
