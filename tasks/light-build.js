@@ -7,13 +7,14 @@ var source = require('vinyl-source-stream');
 var browserify = require('./common').browserify;
 
 
-gulp.task('no-jquery-build', ['pre-build'], function() {
+gulp.task('light-build', ['pre-build'], function() {
   var isProd = ['prod', 'production'].indexOf(args.env) !== -1 ? true : false;
   var stream = browserify()
     .external('jquery')
+    .external('underscore')
     .bundle()
     .pipe(source('main.js'))
-    .pipe(rename(isProd ? 'clappr.min.js' : 'clappr.js'));
+    .pipe(rename(isProd ? 'clappr.light.min.js' : 'clappr.light.js'));
 
   if(isProd) {
     stream.pipe(streamify(uglify()));
