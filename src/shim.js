@@ -1,5 +1,7 @@
 var args = require('yargs').argv;
-['prod', 'production'].indexOf(args.env) !== -1 ? {
-  "jquery": "global:$",
-  "underscore": "global:_"
+var config = true ? {
+  "jquery": { exports: "global:$" },
+  "underscore": { exports: "global:_" },
 } : {};
+
+module.exports = config;
