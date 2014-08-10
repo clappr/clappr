@@ -56,8 +56,6 @@ var StatsPlugin = Plugin.extend({
     this.rebuffers++;
   },
   onBufferFull: function() {
-    if (this.state !== "BUFFERING") return;
-
     if (this.firstPlay) {
       this.firstPlay = false;
       this.startupTime = Date.now() - this.startupTimeInit;
