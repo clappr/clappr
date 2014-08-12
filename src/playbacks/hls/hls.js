@@ -8,6 +8,7 @@ var JST = require('../../base/jst')
 var _ = require("underscore")
 var Mediator = require('../../components/mediator')
 var Visibility = require('visibility')
+var Browser = require('../../components/browser')
 
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> </object>'
 
@@ -26,7 +27,6 @@ class HLS extends UIPlugin {
     super(options)
     this.src = options.src
     this.swfPath = options.swfPath || "assets/HLSPlayer.swf"
-    this.setupBrowser()
     this.setupVisibility()
     this.highDefinition = false
     this.autoPlay = options.autoPlay
@@ -37,13 +37,6 @@ class HLS extends UIPlugin {
     }
     this.settings = _.extend({}, this.defaultSettings)
     this.addListeners()
-  }
-
-  setupBrowser() {
-    this.isLegacyIE = window.ActiveXObject
-    this.isChrome = navigator.userAgent.match(/chrome/i)
-    this.isFirefox = navigator.userAgent.match(/firefox/i)
-    this.isSafari = navigator.userAgent.match(/safari/i)
   }
 
   setupVisibility() {
@@ -296,9 +289,9 @@ class HLS extends UIPlugin {
     this.$el.html(this.template({cid: this.cid, swfPath: this.swfPath, playbackId: this.uniqueId}))
     this.$el.append(style)
     this.el.id = this.cid
-    if(this.isFirefox) {
+    if(Browser.isFirefox) {
       this.setupFirefox()
-    } else if(this.isLegacyIE) {
+    } else if(Browser.isLegacyIE) {
       this.setupIE()
     }
     return this
