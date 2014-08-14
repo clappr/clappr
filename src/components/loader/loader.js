@@ -23,13 +23,11 @@ var WaterMarkPlugin = require('../../plugins/watermark');
 var PosterPlugin = require('../../plugins/poster');
 
 /* Player Plugins */
-var PipPlugin = require('../../plugins/pip');
 var Sequence = require('../../plugins/sequence');
 
 var Loader = BaseObject.extend({
   displayPlugins: {
     'sequence': Sequence,
-    'pip': PipPlugin
   },
   initialize: function(params) {
     this.params = params;
