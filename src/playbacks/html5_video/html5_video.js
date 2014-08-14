@@ -4,6 +4,7 @@
 
 var UIPlugin = require('../../base/ui_plugin')
 var Styler = require('../../base/styler')
+var Browser = require('../../components/browser')
 
 class HTML5Video extends UIPlugin {
   get name() { return 'html5_video' }
@@ -22,8 +23,8 @@ class HTML5Video extends UIPlugin {
       'progress': 'progress',
       'ended': 'ended',
       'playing': 'playing',
-      'stalled': 'buffering',
-      'waiting': 'buffering',
+      'stalled': 'stalled',
+      'waiting': 'waiting',
       'canplaythrough': 'bufferFull',
       'loadedmetadata': 'loadedMetadata'
     }
@@ -35,14 +36,19 @@ class HTML5Video extends UIPlugin {
     this.el.src = options.src
     this.el.loop = options.loop
     this.settings = {
-      left: ['playpause','position', 'duration'],
-      right: ['fullscreen', 'volume'],
-      default: ['seekbar']
+      left: ['playpause', 'volume'],
+      right: ['fullscreen'],
+      default: ['position', 'seekbar', 'duration']
     }
   }
 
   loadedMetadata(e) {
     this.trigger('playback:loadedmetadata', e.target.duration)
+  }
+
+  getPlaybackType() {
+    var type = this.src.indexOf("m3u8") > -1?'live':'vod'
+    return type
   }
 
   play() {
@@ -85,7 +91,13 @@ class HTML5Video extends UIPlugin {
     this.trigger('playback:timeupdate', 0, this.el.duration, this.name)
   }
 
-  buffering() {
+  stalled() {
+    if (this.getPlaybackType() == 'vod') {
+      this.trigger('playback:buffering', this.name)
+    }
+  }
+
+  waiting() {
     this.trigger('playback:buffering', this.name)
   }
 
@@ -142,7 +154,7 @@ class HTML5Video extends UIPlugin {
 }
 
 HTML5Video.canPlay = function(resource) {
-    return !!resource.match(/(.*).mp4/)
+    return (!!resource.match(/(.*).mp4/) || Browser.isSafari)
 }
 
 module.exports = HTML5Video
