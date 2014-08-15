@@ -21,7 +21,6 @@ class WaterMarkPlugin extends UIPlugin {
   bindEvents() {
     this.listenTo(this.container, 'container:play', this.onPlay)
     this.listenTo(this.container, 'container:stop', this.onStop)
-    this.listenTo(this.container, 'container:pip', this.onPip)
   }
 
   onPlay() {
@@ -31,15 +30,6 @@ class WaterMarkPlugin extends UIPlugin {
 
   onStop() {
     this.$el.hide()
-  }
-
-  onPip(isPip) {
-    this.hidden = !!isPip
-    if (isPip) {
-      this.$el.hide()
-    } else {
-      this.$el.show()
-    }
   }
 
   render() {
