@@ -39,7 +39,6 @@ class PosterPlugin extends UIPlugin {
     this.listenTo(this.container, 'container:play', this.onPlay)
     this.listenTo(this.container, 'container:stop', this.onStop)
     this.listenTo(this.container, 'container:ended', this.onStop)
-    this.listenTo(this.container, 'container:pip', this.onPipStateChanged)
   }
 
   onBuffering() {
@@ -58,13 +57,6 @@ class PosterPlugin extends UIPlugin {
     if (this.options.disableControlsOnPoster) {
       this.container.disableMediaControl()
     }
-    if (!this.options.hidePlayButton) {
-      this.showPlayButton()
-    }
-  }
-
-  onPipStateChanged(isPip) {
-    this.$el.css({ fontSize: this.$el.height() })
     if (!this.options.hidePlayButton) {
       this.showPlayButton()
     }

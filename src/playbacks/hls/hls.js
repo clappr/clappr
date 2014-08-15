@@ -246,16 +246,6 @@ class HLS extends UIPlugin {
     })
   }
 
-  isPip(pipStatus) {
-    if (pipStatus == true && this.getCurrentBitrate() > 750000) {
-      this.el.globoPlayerSetStageScaleMode("exactFit")
-      this.el.globoPlayerSmoothSetLevel(2)
-    } else if (!this.el.globoGetAutoLevel()) {
-      this.el.globoPlayerSetStageScaleMode("noScale")
-      this.el.globoPlayerSetLevel(-1)
-    }
-  }
-
   timeUpdate(time, duration) {
     this.trigger('playback:timeupdate', time, duration, this.name)
   }
