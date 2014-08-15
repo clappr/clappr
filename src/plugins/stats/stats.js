@@ -6,92 +6,106 @@ var Plugin = require('../../base/plugin');
 var StatsEvents = require('./stats_events');
 var $ = require("jquery");
 
-var StatsPlugin = Plugin.extend({
-  name: 'stats',
-  type: 'stats',
-  initialize: function(options) {
-    StatsPlugin.super('initialize').call(this, options);
-    this.container.with(StatsEvents);
-    this.setInitialAttrs();
-    this.reportInterval = options.reportInterval || 5000;
-    this.state = "IDLE";
-  },
-  bindEvents: function() {
-    this.listenTo(this.container, 'container:play', this.onPlay);
-    this.listenTo(this.container, 'container:stop', this.onStop);
-    this.listenTo(this.container, 'container:destroyed', this.onStop);
-    this.listenTo(this.container, 'container:setreportinterval', this.setReportInterval);
-    this.listenTo(this.container, 'container:state:buffering', this.onBuffering);
-    this.listenTo(this.container, 'container:state:bufferfull', this.onBufferFull);
-    this.listenTo(this.container, 'container:stats:add', this.onStatsAdd);
-    this.listenTo(this.container.playback, 'playback:stats:add', this.onStatsAdd);
-  },
-  setReportInterval: function(reportInterval) {
-    this.reportInterval = reportInterval;
-  },
-  setInitialAttrs: function() {
-    this.firstPlay = true;
-    this.startupTime = 0;
-    this.rebufferingTime = 0;
-    this.watchingTime = 0;
-    this.rebuffers = 0;
-    this.externalMetrics = {};
-  },
-  onPlay: function() {
-    this.state = "PLAYING";
-    this.watchingTimeInit = Date.now();
-    this.intervalId = setInterval(this.report.bind(this), this.reportInterval);
-  },
-  onStop: function() {
-    clearInterval(this.intervalId);
-    this.state = "STOPPED";
-  },
-  onBuffering: function() {
+class StatsPlugin extends Plugin {
+  get name() { return 'stats' }
+  get type() { return 'stats' }
+
+  initialize(options) {
+    super(options)
+    this.container.with(StatsEvents)
+    this.setInitialAttrs()
+    this.reportInterval = options.reportInterval || 5000
+    this.state = "IDLE"
+  }
+
+  bindEvents() {
+    this.listenTo(this.container, 'container:play', this.onPlay)
+    this.listenTo(this.container, 'container:stop', this.onStop)
+    this.listenTo(this.container, 'container:destroyed', this.onStop)
+    this.listenTo(this.container, 'container:setreportinterval', this.setReportInterval)
+    this.listenTo(this.container, 'container:state:buffering', this.onBuffering)
+    this.listenTo(this.container, 'container:state:bufferfull', this.onBufferFull)
+    this.listenTo(this.container, 'container:stats:add', this.onStatsAdd)
+    this.listenTo(this.container.playback, 'playback:stats:add', this.onStatsAdd)
+  }
+
+  setReportInterval(reportInterval) {
+    this.reportInterval = reportInterval
+  }
+
+  setInitialAttrs() {
+    this.firstPlay = true
+    this.startupTime = 0
+    this.rebufferingTime = 0
+    this.watchingTime = 0
+    this.rebuffers = 0
+    this.externalMetrics = {}
+  }
+
+  onPlay() {
+    this.state = "PLAYING"
+    this.watchingTimeInit = Date.now()
+    this.intervalId = setInterval(this.report.bind(this), this.reportInterval)
+  }
+
+  onStop() {
+    clearInterval(this.intervalId)
+    this.state = "STOPPED"
+  }
+
+  onBuffering() {
     if (this.firstPlay) {
-      this.startupTimeInit = Date.now();
+      this.startupTimeInit = Date.now()
     } else {
-      this.rebufferingTimeInit = Date.now();
+      this.rebufferingTimeInit = Date.now()
     }
-    this.state = "BUFFERING";
-    this.rebuffers++;
-  },
-  onBufferFull: function() {
+    this.state = "BUFFERING"
+    this.rebuffers++
+  }
+
+  onBufferFull() {
     if (this.firstPlay) {
-      this.firstPlay = false;
-      this.startupTime = Date.now() - this.startupTimeInit;
-      this.watchingTimeInit = Date.now();
+      this.firstPlay = false
+      this.startupTime = Date.now() - this.startupTimeInit
+      this.watchingTimeInit = Date.now()
     } else {
-      this.rebufferingTime += this.getRebufferingTime();
+      this.rebufferingTime += this.getRebufferingTime()
     }
-    this.rebufferingTimeInit = undefined;
-    this.state = "PLAYING";
-  },
-  getRebufferingTime: function() {
-    return Date.now() - this.rebufferingTimeInit;
-  },
-  getWatchingTime: function() {
-    var totalTime = (Date.now() - this.watchingTimeInit);
-    return totalTime - this.rebufferingTime - this.startupTime;
-  },
-  isRebuffering: function() {
-    return !!this.rebufferingTimeInit;
-  },
-  onStatsAdd: function(metric) {
-    $.extend(this.externalMetrics, metric);
-  },
-  getStats: function() {
+    this.rebufferingTimeInit = undefined
+    this.state = "PLAYING"
+  }
+
+  getRebufferingTime() {
+    return Date.now() - this.rebufferingTimeInit
+  }
+
+  getWatchingTime() {
+    var totalTime = (Date.now() - this.watchingTimeInit)
+    return totalTime - this.rebufferingTime - this.startupTime
+  }
+
+  isRebuffering() {
+    return !!this.rebufferingTimeInit
+  }
+
+  onStatsAdd(metric) {
+    $.extend(this.externalMetrics, metric)
+  }
+
+  getStats() {
     var metrics = {
       startupTime:     this.startupTime,
       rebuffers:       this.rebuffers,
       rebufferingTime: this.isRebuffering()? this.rebufferingTime + this.getRebufferingTime(): this.rebufferingTime,
       watchingTime:    this.isRebuffering()? this.getWatchingTime() - this.getRebufferingTime(): this.getWatchingTime()
-    };
-    $.extend(metrics, this.externalMetrics);
-    return metrics;
-  },
-  report: function() {
-    this.container.statsReport(this.getStats());
+    }
+    $.extend(metrics, this.externalMetrics)
+    return metrics
   }
-});
+  
+  report() {
+    this.container.statsReport(this.getStats())
+  }
+}
 
 module.exports = StatsPlugin;
