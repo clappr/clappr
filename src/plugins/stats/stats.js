@@ -4,7 +4,6 @@
 
 var Plugin = require('../../base/plugin');
 var $ = require("jquery");
-var _ = require("underscore");
 
 class StatsPlugin extends Plugin {
   get name() { return 'stats' }
