@@ -40,6 +40,13 @@ class Container extends UIObject {
     return this;
   }
 
+  statsAdd(metric) {
+    this.trigger('container:stats:add', metric)
+  }
+  statsReport(metrics) {
+    this.trigger('container:stats:report', metrics)
+  }
+
   destroy() {
     this.trigger('container:destroyed', this, this.name);
     this.playback.destroy();

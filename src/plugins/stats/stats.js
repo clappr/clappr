@@ -3,8 +3,8 @@
 // license that can be found in the LICENSE file.
 
 var Plugin = require('../../base/plugin');
-var StatsEvents = require('./stats_events');
 var $ = require("jquery");
+var _ = require("underscore");
 
 class StatsPlugin extends Plugin {
   get name() { return 'stats' }
@@ -12,7 +12,6 @@ class StatsPlugin extends Plugin {
 
   initialize(options) {
     super(options)
-    this.container.with(StatsEvents)
     this.setInitialAttrs()
     this.reportInterval = options.reportInterval || 5000
     this.state = "IDLE"
