@@ -112,7 +112,7 @@ class HLS extends UIPlugin {
       } else {
         this.trigger('playback:timeupdate', this.el.globoGetPosition(), duration, this.name)
       }
-      if (this.dvrEnabled != previousDvrEnabled) {
+      if (this.dvrEnabled !== previousDvrEnabled) {
         this.updateSettings()
       }
     })
