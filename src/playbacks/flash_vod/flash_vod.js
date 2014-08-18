@@ -142,7 +142,7 @@ class FlashVOD extends UIObject {
   }
 
   isPlaying() {
-    return !!(this.isReady && this.currentState == "PLAYING")
+    return !!(this.isReady && this.currentState === "PLAYING")
   }
 
   getDuration() {
@@ -156,7 +156,7 @@ class FlashVOD extends UIObject {
       var seekTo = this.el.getDuration() * (time / 100)
       this.el.playerSeek(seekTo)
       this.trigger('playback:timeupdate', seekTo, this.el.getDuration(), this.name)
-      if (this.currentState == "PAUSED") {
+      if (this.currentState === "PAUSED") {
         this.pause()
       }
     })

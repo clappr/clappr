@@ -4,8 +4,6 @@
 
 var BaseObject = require('../../base/base_object');
 var SequenceContainer = require('./sequence_container');
-var _ = require('underscore');
-var Utils = require('../../base/utils');
 
 var Sequence = BaseObject.extend({
   initialize: function(core) {
