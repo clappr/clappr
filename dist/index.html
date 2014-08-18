@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script type="text/javascript" charset="utf-8" src="jquery.js"></script>
+  <script type="text/javascript" charset="utf-8" src="underscore.js"></script>
+  <script type="text/javascript" charset="utf-8" src="clappr.light.min.js"></script>
+  <title>p2phls Test Page</title>
+  <script type="text/javascript" charset="utf-8">
+window.onload = function() {
+  player = new WP3.Player({sources: ['http://cdn.bem.tv/stream/soccer2sec/playlist.m3u8'],
+                            width: 640, height: 360,
+                            poster: "http://www.bem.tv/assets/poster.png",
+                            watermark: "http://bem.tv/assets/watermark3.png"
+                          });
+  player.attachTo(document.getElementById('player-wrapper'));
+}
+  </script>
+</head>
+<body>
+  <div align=center>
+    <div id="player-wrapper"></div>
+  </div>
+</body>
+</html>
+
