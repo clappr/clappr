@@ -175,6 +175,6 @@ class Container extends UIObject {
     this.$el.append(this.playback.render().el);
     return this;
   }
-};
+}
 
 module.exports = Container;

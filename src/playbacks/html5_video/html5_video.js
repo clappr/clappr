@@ -92,7 +92,7 @@ class HTML5Video extends UIPlugin {
   }
 
   stalled() {
-    if (this.getPlaybackType() == 'vod') {
+    if (this.getPlaybackType() === 'vod') {
       this.trigger('playback:buffering', this.name)
     }
   }

@@ -9,8 +9,6 @@ var BaseObject = require('./base_object')
 
 var delegateEventSplitter = /^(\S+)\s*(.*)$/
 
-var viewOptions = ['container', 'el', 'id', 'attributes', 'className', 'tagName', 'events']
-
 class UIObject extends BaseObject {
 
   get tagName() { return 'div' }

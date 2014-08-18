@@ -47,6 +47,6 @@ class ContainerFactory extends BaseObject {
       container.addPlugin(new plugin(params));
     }, this);
   }
-};
+}
 
 module.exports = ContainerFactory;

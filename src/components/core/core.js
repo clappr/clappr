@@ -156,7 +156,6 @@ class Core extends UIObject {
   }
 
   setupMediaControl(container) {
-    var params = _.extend({container: container}, this.params)
     if (this.mediaControl) {
       this.mediaControl.setContainer(container)
     } else {

@@ -1,4 +1,3 @@
-var BaseObject = require('../../base/base_object');
 var $ = require('jquery');
 
 var BOLD = 'font-weight: bold; font-size: 13px;';
