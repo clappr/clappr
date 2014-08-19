@@ -25,18 +25,20 @@ var PosterPlugin = require('../../plugins/poster');
 /* Player Plugins */
 var Sequence = require('../../plugins/sequence');
 
-var Loader = BaseObject.extend({
-  displayPlugins: {
-    'sequence': Sequence,
-  },
-  initialize: function(params) {
+class Loader extends BaseObject {
+  get displayPlugins() {
+    return {'sequence': Sequence}
+  }
+
+  initialize(params) {
     this.params = params;
     this.playbackPlugins = [FlashVideoPlaybackPlugin, HTML5VideoPlaybackPlugin, HTML5AudioPlaybackPlugin, HLSVideoPlaybackPlugin];
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin];
     this.globalPlugins = [this.displayPlugins[this.params.displayType]];
     this.addExternalPlugins(params.plugins || []);
-  },
-  addExternalPlugins: function(plugins) {
+  }
+
+  addExternalPlugins(plugins) {
     if(plugins.playback) {
       this.playbackPlugins = plugins.playback.concat(this.playbackPlugins);
     }
@@ -46,10 +48,12 @@ var Loader = BaseObject.extend({
     if(plugins.core) {
       this.globalPlugins = plugins.core.concat(this.globalPlugins);
     }
-  },
-  getPlugin: function(name) {
-    return _.find(_.union(this.containerPlugins, this.playbackPlugins, this.globalPlugins), function(plugin) { return plugin.prototype.name === name });
   }
-});
+
+  getPlugin(name) {
+    var allPlugins = _.union(this.containerPlugins, this.playbackPlugins, this.globalPlugins)
+    return _.find(allPlugins, function(plugin) { return plugin.prototype.name === name })
+  }
+}
 
 module.exports = Loader;
