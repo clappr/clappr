@@ -8,6 +8,7 @@ var JST = require('../../base/jst')
 var Mediator = require('../../components/mediator')
 var _ = require('underscore')
 var $ = require('jquery')
+var Browser = require('../../components/browser')
 
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> </object>'
 
@@ -175,9 +176,9 @@ class FlashVOD extends UIObject {
   render() {
     var style = Styler.getStyleFor(this.name)
     this.$el.html(this.template({ cid: this.cid, swfPath: this.swfPath, playbackId: this.uniqueId }))
-    if(navigator.userAgent.match(/firefox/i)) { //FIXME remove it from here
+    if(Browser.isFirefox) {
       this.setupFirefox()
-    } else if(window.ActiveXObject) {
+    } else if(Browser.isLegacyIE) {
       this.setupIE()
     }
     this.$el.append(style)
@@ -187,7 +188,7 @@ class FlashVOD extends UIObject {
 
 FlashVOD.canPlay = function(resource) {
   //http://help.adobe.com/en_US/flashmediaserver/techoverview/WS07865d390fac8e1f-4c43d6e71321ec235dd-7fff.html
-  if (navigator.userAgent.match(/firefox/i) || window.ActiveXObject) {
+  if (Browser.isFirefox || Browser.isLegacyIE) {
     return _.isString(resource) && !!resource.match(/(.*).(mp4|mov|f4v|3gpp|3gp)/)
   } else {
     return _.isString(resource) && !!resource.match(/(.*).(mov|f4v|3gpp|3gp)/)
