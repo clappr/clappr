@@ -32,22 +32,25 @@ class Loader extends BaseObject {
   }
 
   initialize(params) {
-    this.params = params;
-    this.playbackPlugins = [FlashVideoPlaybackPlugin, HTML5VideoPlaybackPlugin, HTML5AudioPlaybackPlugin, HLSVideoPlaybackPlugin];
-    this.containerPlugins = [SpinnerThreeBouncePlugin, SpinnerLoading, WaterMarkPlugin, PosterPlugin, StatsPlugin];
-    this.globalPlugins = [this.displayPlugins[this.params.displayType]];
-    this.addExternalPlugins(params.plugins || []);
+    this.params = params
+    this.playbackPlugins = [FlashVideoPlaybackPlugin, HTML5VideoPlaybackPlugin, HTML5AudioPlaybackPlugin, HLSVideoPlaybackPlugin]
+    this.containerPlugins = [SpinnerThreeBouncePlugin, SpinnerLoading, WaterMarkPlugin, PosterPlugin, StatsPlugin]
+    this.globalPlugins = []
+    if (this.params.displayPlugins && this.displayPlugins[this.params.displayType]) {
+      this.globalPlugins.push(this.displayPlugins[this.params.displayType])
+    }
+    this.addExternalPlugins(params.plugins || [])
   }
 
   addExternalPlugins(plugins) {
     if(plugins.playback) {
-      this.playbackPlugins = plugins.playback.concat(this.playbackPlugins);
+      this.playbackPlugins = plugins.playback.concat(this.playbackPlugins)
     }
     if(plugins.container) {
-      this.containerPlugins = plugins.container.concat(this.containerPlugins);
+      this.containerPlugins = plugins.container.concat(this.containerPlugins)
     }
     if(plugins.core) {
-      this.globalPlugins = plugins.core.concat(this.globalPlugins);
+      this.globalPlugins = plugins.core.concat(this.globalPlugins)
     }
   }
 
