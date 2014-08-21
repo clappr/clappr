@@ -1,6 +1,16 @@
 {
   "trailing": true,
+  "node": true,
   "quotmark": false,
   "asi": true,
-  "expr": true
+  "expr": true,
+  "esnext": true,
+  "eqeqeq": true,
+  "noempty": true,
+  "unused": true,
+  "unused": true,
+  "trailing": true,
+  "smarttabs": true,
+  "white": true
 }
+
