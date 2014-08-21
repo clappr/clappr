@@ -14,8 +14,12 @@ class WaterMarkPlugin extends UIPlugin {
     super(options)
     this.template = JST[this.name]
     this.position = options.position || "bottom-right"
-    this.imageUrl = options.watermark || 'assets/watermark.png'
-    this.render()
+    if (options.watermark) {
+      this.imageUrl = options.watermark
+      this.render()
+    } else {
+      this.$el.remove()
+    }
   }
 
   bindEvents() {
