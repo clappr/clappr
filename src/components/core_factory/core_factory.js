@@ -17,6 +17,7 @@ var CoreFactory = BaseObject.extend({
     this.loader = loader;
   },
   create: function() {
+    this.params.loader = this.loader
     this.core = new Core(this.params);
     this.core.then(this.addCorePlugins.bind(this));
     return this.core;

@@ -13,7 +13,6 @@ var $ = require('jquery')
 var UIObject = require('../../base/ui_object')
 var ContainerFactory = require('../container_factory')
 var Fullscreen = require('../../base/utils').Fullscreen
-var Loader = require('../loader')
 var Styler = require('../../base/styler')
 var MediaControl = require('../media_control')
 
@@ -40,7 +39,7 @@ class Core extends UIObject {
     this.params = params
     this.params.displayType || (this.params.displayType = 'pip')
     this.parentElement = params.parentElement
-    this.loader = new Loader(params)
+    this.loader = this.params.loader
     this.containerFactory = new ContainerFactory(params, this.loader)
     this.containerFactory
       .createContainers()
