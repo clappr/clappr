@@ -29,6 +29,38 @@ class Player extends BaseObject {
   destroy() {
     this.core.destroy()
   }
+
+  play() {
+    this.core.mediaControl.container.play();
+  }
+
+  pause() {
+    this.core.mediaControl.container.pause();
+  }
+
+  stop() {
+    this.core.mediaControl.container.stop();
+  }
+
+  seek(time) {
+    this.core.mediaControl.container.setCurrentTime(time);
+  }
+
+  setVolume(volume) {
+    this.core.mediaControl.container.volume(volume);
+  }
+
+  mute() {
+    this.core.mediaControl.container.volume(0);
+  }
+
+  unmute() {
+    this.core.mediaControl.container.volume(100);
+  }
+
+  isPlaying() {
+    return this.core.mediaControl.container.isPlaying();
+  }
 }
 
 
