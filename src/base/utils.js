@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 var _ = require('underscore');
+var $ = require('jquery');
 var Moment = require('moment');
 
 var extend = function(protoProps, staticProps) {
@@ -40,17 +41,27 @@ var zeroPad = function(number, size) {
   return (new Array(size + 1 - number.toString().length)).join('0') + number;
 };
 
-var formatTime = function(time, showMillis) {
+var formatTime = function(time, options) {
+  options = options || {};
+  var separator = options.humanFriendly ? 'm' : ':';
   var duration = Moment.duration(time * 1000);
   var str = zeroPad(duration.seconds(), 2);
   if (duration.hours()) {
-    str = zeroPad(duration.minutes(), 2) + ':' + str;
-    str = duration.hours() + ':' + str;
+    str = zeroPad(duration.minutes(), 2) + separator + (options.humanFriendly ? '' : str);
+    if (options.humanFriendly) {
+      separator = 'h';
+    }
+    str = duration.hours() + separator + str;
   } else {
-    str = duration.minutes() + ':' + str;
+    var minutes = duration.minutes();
+    str = (!options.humanFriendly || minutes > 0 ? minutes + separator : '') + str;
+    if (options.humanFriendly) {
+      str += 's';
+    }
   }
-  if (showMillis)
-    str += '.' + duration.milliseconds();
+  if (options.showMillis && !options.humanFriendly) {
+    str += separator + duration.milliseconds();
+  }
   return str;
 };
 
@@ -80,11 +91,95 @@ var Fullscreen = {
       document.msExitFullscreen();
     }
   }
-}
+};
+
+var HEX_TAB = "0123456789abcdef";
+var B64_TAB = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+var b64pad = "";
+
+var rstr2b64 = function(input) {
+  var output = "";
+  var len = input.length;
+  for (var i = 0; i < len; i += 3) {
+    var triplet = (input.charCodeAt(i) << 16) | (i + 1 < len ? input.charCodeAt(i + 1) << 8: 0) | (i + 2 < len ? input.charCodeAt(i + 2) : 0);
+    for (var j = 0; j < 4; j++) {
+      if (i * 8 + j * 6 > input.length * 8) output += b64pad;
+      else output += B64_TAB.charAt((triplet >>> 6 * (3 - j)) & 0x3F);
+    }
+  }
+  return output;
+};
+
+var rstr2hex = function(input) {
+  var output = "";
+
+  for (var i = 0; i < input.length; i++) {
+    var x = input.charCodeAt(i);
+    output += HEX_TAB.charAt((x >>> 4) & 0x0F) +  HEX_TAB.charAt(x & 0x0F);
+  }
+
+  return output;
+};
+
+var getHostname = function() {
+  return location.hostname;
+};
+
+var Ajax = {
+  jsonp: function(settings) {
+    var defer = new $.Deferred();
+    settings.callbackName = settings.callbackName || "json_callback";
+    settings.timeout = settings.timeout || 15000;
+
+    window[settings.callbackName] = function (data) {
+      if (!Ajax.isErrorObject(data)) {
+        defer.resolve(data);
+      } else {
+        defer.reject(data);
+      }
+    };
+
+    var head = $("head")[0];
+    var script = document.createElement("script");
+    script.setAttribute("src", settings.url);
+    script.setAttribute("async", "async");
+
+    script.onload = script.onreadystatechange = function(eventLoad) {
+      if (!script.readyState || /loaded|complete/.test(script.readyState)) {
+
+        if (settings.timeoutId) {
+          window.clearTimeout(settings.timeoutId);
+        }
+
+        // Handling memory leak in IE, removing and dereference the script
+        script.onload = script.onreadystatechange = null;
+        if (head && script.parentNode) head.removeChild(script);
+        script = undefined;
+      }
+    };
+
+    // Use insertBefore instead of appendChild to circumvent an IE6 bug.
+    head.insertBefore(script, head.firstChild);
+
+    if (settings.error) {
+      settings.timeoutId = window.setTimeout(settings.error, settings.timeout);
+    }
+
+    return defer.promise();
+  },
+
+  isErrorObject: function (data) {
+    return data && data.http_status_code && data.http_status_code != 200;
+  }
+};
 
 module.exports = {
   extend: extend,
   zeroPad: zeroPad,
   formatTime: formatTime,
-  Fullscreen: Fullscreen
+  Fullscreen: Fullscreen,
+  Ajax: Ajax,
+  rstr2b64: rstr2b64,
+  rstr2hex: rstr2hex,
+  getHostname: getHostname
 };
