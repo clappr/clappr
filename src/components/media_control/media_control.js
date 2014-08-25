@@ -298,10 +298,11 @@ class MediaControl extends UIObject {
   }
 
   highDefinitionUpdate() {
-    var $element = this.$el.find('button[data-hd]')
-    $element.removeClass('enabled')
+    var $element = this.$el.find('button[data-hd-indicator]')
     if (this.container.isHighDefinitionInUse()) {
       $element.addClass('enabled')
+    } else {
+      $element.removeClass('enabled')
     }
   }
 

@@ -33,7 +33,7 @@ class HLS extends UIPlugin {
     this.defaultSettings = {
       left: ["playstop"],
       default: [],
-      right: ["fullscreen", "volume", "hd"]
+      right: ["fullscreen", "volume", "hd-indicator"]
     }
     this.settings = _.extend({}, this.defaultSettings)
     this.addListeners()
@@ -48,7 +48,7 @@ class HLS extends UIPlugin {
   addListeners() {
     Mediator.on(this.uniqueId + ':flashready', () => this.bootstrap())
     Mediator.on(this.uniqueId + ':timeupdate', (params) => this.updateTime(params))
-    Mediator.on(this.uniqueId + ':playbackstate', (params) => this.setPlaybackState(params))
+    Mediator.on(this.uniqueId + ':playbackstate', (state) => this.setPlaybackState(state))
     Mediator.on(this.uniqueId + ':highdefinition', (params) => this.updateHighDefinition(params))
   }
 
@@ -93,8 +93,8 @@ class HLS extends UIPlugin {
     this.autoPlay && this.play()
   }
 
-  updateHighDefinition(params) {
-    this.highDefinition = params.isHD;
+  updateHighDefinition(isHD) {
+    this.highDefinition = (isHD === "true");
     this.trigger('playback:highdefinitionupdate')
   }
 
@@ -148,7 +148,7 @@ class HLS extends UIPlugin {
     return programDate - 1.08e+7
   }
 
-  isHighDefinition() {
+  isHighDefinitionInUse() {
     return this.highDefinition
   }
 
@@ -161,16 +161,16 @@ class HLS extends UIPlugin {
     })
   }
 
-  setPlaybackState(params) {
-    if (params.state === "PLAYING_BUFFERING" && this.el.globoGetbufferLength() < 1 && this.currentState !== "PLAYING_BUFFERING")  {
+  setPlaybackState(state) {
+    if (state === "PLAYING_BUFFERING" && this.el.globoGetbufferLength() < 1)  {
       this.trigger('playback:buffering', this.name)
-    } else if (params.state === "PLAYING" && this.currentState === "PLAYING_BUFFERING") {
+    } else if (state === "PLAYING" && (this.currentState === "PLAYING_BUFFERING" || this.currentState === "IDLE")) {
       this.trigger('playback:bufferfull', this.name)
-    } else if (params.state === "IDLE") {
+    } else if (state === "IDLE") {
       this.trigger('playback:ended', this.name)
       this.trigger('playback:timeupdate', 0, this.el.globoGetDuration(), this.name)
     }
-    this.currentState = params.state;
+    this.currentState = state;
     this.updatePlaybackType()
   }
 
@@ -214,8 +214,9 @@ class HLS extends UIPlugin {
 
   isPlaying() {
     return this.safe(() => {
-      if (this.currentState)
+      if (this.currentState) {
         return !!(this.currentState.match(/playing/i))
+      }
       return false
     })
   }
