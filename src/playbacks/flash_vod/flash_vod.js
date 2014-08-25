@@ -57,6 +57,10 @@ class FlashVOD extends UIObject {
     return "vod"
   }
 
+  isHighDefinitionInUse() {
+    return false
+  }
+
   updateTime() {
     this.safe(() => {
       this.trigger('playback:timeupdate', this.el.getPosition(), this.el.getDuration(), this.name)
