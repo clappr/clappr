@@ -23,12 +23,9 @@ var StatsPlugin = require('../../plugins/stats');
 var WaterMarkPlugin = require('../../plugins/watermark');
 var PosterPlugin = require('../../plugins/poster');
 
-/* Player Plugins */
-var Sequence = require('../../plugins/sequence');
-
 class Loader extends BaseObject {
   get displayPlugins() {
-    return {'sequence': Sequence}
+    return {};
   }
 
   initialize(params) {
