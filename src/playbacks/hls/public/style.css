@@ -5,4 +5,5 @@
   background-color: black;
   display: block;
   pointer-events: none;
+  top: 0;
 }

@@ -51,6 +51,10 @@ class HTML5Video extends UIPlugin {
     return type
   }
 
+  isHighDefinitionInUse() {
+    return false
+  }
+
   play() {
     this.el.play()
   }
