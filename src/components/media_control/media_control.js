@@ -298,11 +298,10 @@ class MediaControl extends UIObject {
   }
 
   highDefinitionUpdate() {
-    var $element = this.$el.find('button[data-hd-indicator]')
     if (this.container.isHighDefinitionInUse()) {
-      $element.addClass('enabled')
+      this.$el.find('button[data-hd-indicator]').addClass("enabled")
     } else {
-      $element.removeClass('enabled')
+      this.$el.find('button[data-hd-indicator]').removeClass("enabled")
     }
   }
 
@@ -370,13 +369,15 @@ class MediaControl extends UIObject {
     }
     this.changeTogglePlay()
     this.hideId = setTimeout(() => this.hide(), timeout)
-    if (this.disabled)
+    if (this.disabled) {
       this.hide()
+    }
 
     this.$el.ready(() => {
       this.setVolumeLevel(this.currentVolume)
       this.setSeekPercentage(0)
       this.bindKeyEvents()
+      this.highDefinitionUpdate()
     })
 
     return this
