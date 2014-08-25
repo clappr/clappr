@@ -15,6 +15,8 @@ class Player extends BaseObject {
     this.params = params
     this.loader = new Loader(this.params)
     this.coreFactory = new CoreFactory(this, this.loader)
+    params.height || (params.height = 480);
+    params.width || (params.width = 720);
   }
 
   attachTo(element) {
