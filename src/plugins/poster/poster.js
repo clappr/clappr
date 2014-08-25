@@ -83,11 +83,12 @@ class PosterPlugin extends UIPlugin {
     this.$el.ready(() => {
       this.$el.css({ fontSize: this.options.height || this.$el.height() })
     })
-    var imgEl = this.$el.find('img')[0]
-    imgEl.src = this.options.poster || 'assets/default.png'
     this.$playButton = $(this.$el.find('.play-wrapper'))
-    if (this.options.hidePlayButton)
-      this.$playButton.hide()
+    if(this.options.poster !== undefined) {
+      var imgEl = $('<img data-poster class="poster-background"></img>');
+      imgEl.attr('src', this.options.poster);
+      this.$el.prepend(imgEl);
+    }
     return this
   }
 }
