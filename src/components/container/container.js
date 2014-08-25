@@ -162,7 +162,7 @@ class Container extends UIObject {
   }
 
   isHighDefinitionInUse() {
-    return this.playback.isHighDefinition();
+    return this.playback.isHighDefinitionInUse()
   }
 
   disableMediaControl() {
