@@ -68,6 +68,6 @@ class Player extends BaseObject {
 
 global.DEBUG = false
 
-window.WP3 = { Player: Player, Mediator: Mediator }
+window.Clappr = { Player: Player, Mediator: Mediator }
 
-module.exports = window.WP3
+module.exports = window.Clappr
