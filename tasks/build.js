@@ -19,5 +19,5 @@ gulp.task('build', ['pre-build'], function(b) {
   if(isProd) {
     stream.pipe(streamify(uglify()));
   }
-  stream.pipe(gulp.dest('./dist'))
+  return stream.pipe(gulp.dest('./dist'));
 });
