@@ -1,7 +1,4 @@
-var args = require('yargs').argv;
-var config = args.env === 'prod' ? {
+module.exports = process.argv[2] === 'release' ? {
   "jquery": { exports: "global:$" },
   "underscore": { exports: "global:_" },
 } : {};
-
-module.exports = config;
