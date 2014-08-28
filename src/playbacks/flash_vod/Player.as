@@ -181,7 +181,7 @@ package
       return rect;
     }
     private function _triggerEvent(name: String):void {
-      ExternalInterface.call('WP3.Mediator.trigger("' + playbackId + ':' + name +'")');
+      ExternalInterface.call('Clappr.Mediator.trigger("' + playbackId + ':' + name +'")');
     }
     private function _enableStageVideo():void {
       if (_stageVideo == null) {
