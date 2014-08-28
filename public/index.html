@@ -2,12 +2,14 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-  <script type="text/javascript" charset="utf-8" src="clappr.js"> </script>
-  <title>HLS test</title>
+  <script type="text/javascript" charset="utf-8" src="underscore.js"> </script>
+  <script type="text/javascript" charset="utf-8" src="jquery.js"> </script>
+  <script type="text/javascript" charset="utf-8" src="clappr.min.js"> </script>
+  <title>hls test</title>
   <script type="text/javascript" charset="utf-8">
 window.onload = function() {
-    p = new WP3.Player({
-      sources: ['https://f6bf900731eca2eaaff6ab0934b9f2554b638a7f.googledrive.com/host/0B9wX51CJ98nndHdOdmR6eWpWdkk/trecho.mp4']
+    p = new Clappr.Player({
+      sources: ['https://googledrive.com/host/0B9wX51CJ98nndHdOdmR6eWpWdkk/surf.mp4']
     });
 
     p.attachTo(document.getElementById('player-wrapper'));
