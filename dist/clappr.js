@@ -15598,8 +15598,6 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],"base_object":[function(require,module,exports){
-module.exports=require('2HNVgz');
 },{}],"2HNVgz":[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
@@ -15619,7 +15617,9 @@ BaseObject.extend = extend;
 module.exports = BaseObject;
 
 
-},{"./events":11,"./utils":20,"underscore":6}],11:[function(require,module,exports){
+},{"./events":11,"./utils":20,"underscore":6}],"base_object":[function(require,module,exports){
+module.exports=require('2HNVgz');
+},{}],11:[function(require,module,exports){
 (function (global){
 "use strict";
 var _ = require('underscore');
@@ -15798,7 +15798,7 @@ module.exports = {
   'media_control': _.template('<div class="media-control-layer" data-controls>  <% var renderBar = function(name) { %>      <div class="bar-container" data-<%= name %>>        <div class="bar-background" data-<%= name %>>          <div class="bar-fill-1" data-<%= name %>></div>          <div class="bar-fill-2" data-<%= name %>></div>        </div>        <div class="bar-scrubber" data-<%= name %>>          <div class="bar-scrubber-icon" data-<%= name %>></div>        </div>      </div>  <% }; %>  <% var renderDrawer = function(name, renderContent) { %>      <div class="drawer-container" data-<%= name %>>        <div class="drawer-icon-container" data-<%= name %>>          <div class="drawer-icon media-control-icon" data-<%= name %>></div>          <span class="drawer-text" data-<%= name %>></span>        </div>        <% renderContent(name); %>      </div>  <% }; %>  <% var renderIndicator = function(name) { %>      <div class="media-control-indicator" data-<%= name %>></div>  <% }; %>  <% var renderButton = function(name) { %>      <button class="media-control-button media-control-icon" data-<%= name %>></button>  <% }; %>  <% var render = function(settings) {      _.each(settings, function(setting) {        if(setting === "seekbar") {          renderBar(setting);        } else if (setting === "volume") {          renderDrawer(setting, renderBar);        } else if (setting === "duration" || setting === "position") {          renderIndicator(setting);        } else {          renderButton(setting);        }      });    }; %>  <% if (settings.left && settings.left.length) { %>  <div class="media-control-left-panel" data-media-control>    <% render(settings.left); %>  </div>  <% } %>  <% if (settings.right && settings.right.length) { %>  <div class="media-control-right-panel" data-media-control>    <% render(settings.right); %>  </div>  <% } %>  <% if (settings.default && settings.default.length) { %>  <div class="media-control-center-panel" data-media-control>    <% render(settings.default); %>  </div>  <% } %></div>'),
   'flash_vod': _.template('  <param name="movie" value="<%= swfPath %>">  <param name="quality" value="autohigh">  <param name="swliveconnect" value="true">  <param name="allowScriptAccess" value="always">  <param name="bgcolor" value="#001122">  <param name="allowFullScreen" value="false">  <param name="wmode" value="gpu">  <param name="tabindex" value="1">  <param name=FlashVars value="playbackId=<%= playbackId %>" />  <embed    type="application/x-shockwave-flash"    disabled="disabled"    tabindex="-1"    enablecontextmenu="false"    allowScriptAccess="always"    quality="autohight"    pluginspage="http://www.macromedia.com/go/getflashplayer"    wmode="gpu"    swliveconnect="true"    type="application/x-shockwave-flash"    allowfullscreen="false"    bgcolor="#000000"    FlashVars="playbackId=<%= playbackId %>"    src="<%= swfPath %>">  </embed>'),
   'hls': _.template('  <param name="movie" value="<%= swfPath %>?inline=1">  <param name="quality" value="autohigh">  <param name="swliveconnect" value="true">  <param name="allowScriptAccess" value="always">  <param name="bgcolor" value="#001122">  <param name="allowFullScreen" value="false">  <param name="wmode" value="transparent">  <param name="tabindex" value="1">  <param name=FlashVars value="playbackId=<%= playbackId %>" />  <embed    type="application/x-shockwave-flash"    tabindex="1"    enablecontextmenu="false"    allowScriptAccess="always"    quality="autohigh"    pluginspage="http://www.macromedia.com/go/getflashplayer"    wmode="transparent"    swliveconnect="true"    type="application/x-shockwave-flash"    allowfullscreen="false"    bgcolor="#000000"    FlashVars="playbackId=<%= playbackId %>"    src="<%= swfPath %>">  </embed>'),
-  'poster': _.template('<img class="poster-background" data-poster src="" /><div class="play-wrapper" data-poster>  <span class="poster-icon play" data-poster /></div>'),
+  'poster': _.template('<div class="play-wrapper" data-poster>  <span class="poster-icon play" data-poster /></div>'),
   'spinner_loading': _.template('<div data-spinner-container class="spin-container1">  <div data-circle1></div>  <div data-circle2></div>  <div data-circle3></div>  <div data-circle4></div></div><div data-spinner-container class="spin-container2">  <div data-circle1></div>  <div data-circle2></div>  <div data-circle3></div>  <div data-circle4></div></div><div data-spinner-container class="spin-container3">  <div data-circle1></div>  <div data-circle2></div>  <div data-circle3></div>  <div data-circle4></div></div>'),
   'spinner_three_bounce': _.template('<div data-bounce1></div><div data-bounce2></div><div data-bounce3></div>'),
   'watermark': _.template('<div data-watermark data-watermark-<%=position %>><img src="<%= imageUrl %>"></div>'),
@@ -15807,7 +15807,7 @@ module.exports = {
     'core': '[data-player] *{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;-o-user-select:none;user-select:none;margin:0;padding:0;border:0;font-style:normal;font-weight:400;text-align:center;font-size:100%;color:#000;font-family:"lucida grande",tahoma,verdana,arial,sans-serif;text-shadow:0 0 0;box-sizing:border-box}[data-player] * a,[data-player] * abbr,[data-player] * acronym,[data-player] * address,[data-player] * applet,[data-player] * article,[data-player] * aside,[data-player] * audio,[data-player] * b,[data-player] * big,[data-player] * blockquote,[data-player] * canvas,[data-player] * caption,[data-player] * center,[data-player] * cite,[data-player] * code,[data-player] * dd,[data-player] * del,[data-player] * details,[data-player] * dfn,[data-player] * div,[data-player] * dl,[data-player] * dt,[data-player] * em,[data-player] * embed,[data-player] * fieldset,[data-player] * figcaption,[data-player] * figure,[data-player] * footer,[data-player] * form,[data-player] * h1,[data-player] * h2,[data-player] * h3,[data-player] * h4,[data-player] * h5,[data-player] * h6,[data-player] * header,[data-player] * hgroup,[data-player] * i,[data-player] * iframe,[data-player] * img,[data-player] * ins,[data-player] * kbd,[data-player] * label,[data-player] * legend,[data-player] * li,[data-player] * mark,[data-player] * menu,[data-player] * nav,[data-player] * object,[data-player] * ol,[data-player] * output,[data-player] * p,[data-player] * pre,[data-player] * q,[data-player] * ruby,[data-player] * s,[data-player] * samp,[data-player] * section,[data-player] * small,[data-player] * span,[data-player] * strike,[data-player] * strong,[data-player] * sub,[data-player] * summary,[data-player] * sup,[data-player] * table,[data-player] * tbody,[data-player] * td,[data-player] * tfoot,[data-player] * th,[data-player] * thead,[data-player] * time,[data-player] * tr,[data-player] * tt,[data-player] * u,[data-player] * ul,[data-player] * var,[data-player] * video{margin:0;padding:0;border:0;font:inherit;font-size:100%;vertical-align:baseline}[data-player] * table{border-collapse:collapse;border-spacing:0}[data-player] * caption,[data-player] * td,[data-player] * th{text-align:left;font-weight:400;vertical-align:middle}[data-player] * blockquote,[data-player] * q{quotes:none}[data-player] * blockquote:after,[data-player] * blockquote:before,[data-player] * q:after,[data-player] * q:before{content:"";content:none}[data-player] * a img{border:none}[data-player]{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-webkit-transform:translate3d(0,0,0);-moz-transform:translate3d(0,0,0);transform:translate3d(0,0,0);position:relative;margin:0;height:594px;width:1055px;text-align:center;overflow:hidden}[data-player].fullscreen{width:100%;height:100%}[data-player].nocursor{cursor:none}',
     'media_control': '@font-face{font-family:Player;src:url(assets/Player-Regular.eot);src:url(assets/Player-Regular.eot?#iefix) format("embedded-opentype"),url(assets/Player-Regular.ttf) format("truetype"),url(assets/Player-Regular.svg#player) format("svg")}.media-control[data-media-control]{position:absolute;background-color:rgba(2,2,2,.5);border-radius:0;bottom:0;left:0;right:0;margin-left:auto;margin-right:auto;max-width:100%;min-width:60%;height:40px;z-index:9999;-webkit-transition:all .4s ease-out;-moz-transition:all .4s ease-out;-ms-transition:all .4s ease-out;-o-transition:all .4s ease-out;transition:all .4s ease-out}.media-control[data-media-control] .media-control-icon{font-family:Player;font-weight:400;font-style:normal;font-size:26px;line-height:32px;letter-spacing:0;speak:none;color:#fff;vertical-align:middle;text-align:left;padding:0 6px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.media-control[data-media-control].media-control-hide{bottom:-40px}.media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar]{opacity:0}.media-control[data-media-control] .media-control-layer[data-controls]{position:relative;top:10%;height:80%;vertical-align:middle}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control]{position:absolute;top:0;left:5px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control]{height:100%;text-align:center;line-height:32px}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control]{position:absolute;top:0;right:5px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button{background-color:transparent;border:0;margin:0 8px;cursor:pointer;display:inline-block}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus{outline:0}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]:before{content:"\\e002"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]:before{content:"\\e003"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]{float:right;background-color:transparent;border:0;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]:before{content:"\\e006"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]{cursor:default;float:right;background-color:transparent;border:0;width:32px;height:100%;opacity:0}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]:before{content:"\\e007"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled{opacity:1}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].playing:before{content:"\\e002"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].paused:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].playing:before{content:"\\e003"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].stopped:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration],.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position]{display:inline-block;font-size:13px;color:#fff;cursor:default;line-height:32px;position:relative}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before{content:"/";margin-right:3px}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]{position:absolute;top:-20px;left:0;display:inline-block;vertical-align:middle;width:100%;height:32px;cursor:pointer}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar]{width:100%;height:8px;position:relative;top:12px;background-color:#6f6f6f;overflow:hidden}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar]{position:absolute;top:0;left:0;width:0;height:100%;background-color:#bebebe;-webkit-transition:all .1s ease-out;-moz-transition:all .1s ease-out;-ms-transition:all .1s ease-out;-o-transition:all .1s ease-out;transition:all .1s ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar]{position:absolute;top:0;left:0;width:0;height:100%;background-color:#fff;-webkit-transition:all .1s ease-out;-moz-transition:all .1s ease-out;-ms-transition:all .1s ease-out;-o-transition:all .1s ease-out;transition:all .1s ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar]{position:absolute;top:6px;left:0;width:20px;height:20px;opacity:1;-webkit-transition:all .1s ease-out;-moz-transition:all .1s ease-out;-ms-transition:all .1s ease-out;-o-transition:all .1s ease-out;transition:all .1s ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar]{position:absolute;left:3px;top:3px;width:14px;height:14px;border-radius:6px;border:1px solid #6f6f6f;background-color:#fff}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume]{float:right;display:inline-block;width:32px;height:32px;cursor:pointer}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume]{position:absolute;bottom:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]{background-color:transparent;border:0;width:32px;height:32px}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:before{content:"\\e004"}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted:before{content:"\\e005"}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume]{width:32px;height:88px;position:absolute;bottom:40px;background:rgba(2,2,2,.5);border-radius:4px;-webkit-transition:all .2s ease-out;-moz-transition:all .2s ease-out;-ms-transition:all .2s ease-out;-o-transition:all .2s ease-out;transition:all .2s ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide{opacity:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume]{margin-left:12px;background:#6f6f6f;border-radius:4px;width:8px;height:72px;position:relative;top:8px;overflow:hidden}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume]{position:absolute;bottom:0;background:#fff;width:100%;height:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume]{position:absolute;bottom:40%;left:6px;width:20px;height:20px}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume]{position:absolute;left:4px;top:4px;width:12px;height:12px;border-radius:6px;border:1px solid #6f6f6f;background-color:#fff}',
     'flash_vod': '[data-flash-vod]{position:absolute;height:100%;width:100%;background-color:#000;display:block;pointer-events:none}',
-    'hls': '[data-hls]{position:absolute;height:100%;width:100%;background-color:#000;display:block;pointer-events:none}',
+    'hls': '[data-hls]{position:absolute;height:100%;width:100%;background-color:#000;display:block;pointer-events:none;top:0}',
     'html5_video': '[data-html5-video]{position:absolute;height:100%;width:100%;display:block}',
     'pip': '.pip-loading[data-pip]{left:25px;top:15px;position:relative;float:left;z-index:3001;color:#fff}.pip-transition[data-pip]{-webkit-transition:all .4s ease-out;-moz-transition:all .4s ease-out;-ms-transition:all .4s ease-out;-o-transition:all .4s ease-out;transition:all .4s ease-out}.master-container[data-pip]{cursor:default;width:100%;height:100%;font-size:100%;position:absolute;bottom:0;right:0;border:none}.pip-container[data-pip]{cursor:pointer;width:24%;height:24%;font-size:24%;z-index:2000;position:absolute;right:23px;bottom:23px;border-width:2px;border-radius:3px;border-style:solid;border-color:rgba(255,255,255,.25);background-clip:padding-box;-webkit-background-clip:padding-box}.pip-container[data-pip].over-media-control{bottom:63px}',
     'poster': '@font-face{font-family:Player;src:url(assets/Player-Regular.eot);src:url(assets/Player-Regular.eot?#iefix) format("embedded-opentype"),url(assets/Player-Regular.ttf) format("truetype"),url(assets/Player-Regular.svg#player) format("svg")}.player-poster[data-poster]{cursor:pointer;position:absolute;height:100%;width:100%;z-index:998;top:0}.player-poster[data-poster] .poster-background[data-poster]{width:100%;height:100%}.player-poster[data-poster] .play-wrapper[data-poster]{position:absolute;overflow:hidden;width:100%;height:20%;line-height:100%;font-size:20%;top:50%;margin-top:-5%;text-align:center}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]{font-family:Player;font-weight:400;font-style:normal;line-height:1;letter-spacing:0;speak:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;color:#fff;opacity:.75}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster].play[data-poster]:before{content:"\\e001"}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]:hover{opacity:1}',
@@ -15854,16 +15854,13 @@ var Styler = {getStyleFor: function(name, options) {
 module.exports = Styler;
 
 
-},{"./jst":12,"jquery":4,"underscore":6}],"ui_object":[function(require,module,exports){
-module.exports=require('8lqCAT');
-},{}],"8lqCAT":[function(require,module,exports){
+},{"./jst":12,"jquery":4,"underscore":6}],"8lqCAT":[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var _ = require('underscore');
 var extend = require('./utils').extend;
 var BaseObject = require('./base_object');
 var delegateEventSplitter = /^(\S+)\s*(.*)$/;
-var viewOptions = ['container', 'el', 'id', 'attributes', 'className', 'tagName', 'events'];
 var UIObject = function UIObject(options) {
   this.cid = _.uniqueId('c');
   this._ensureElement();
@@ -15941,7 +15938,9 @@ UIObject.extend = extend;
 module.exports = UIObject;
 
 
-},{"./base_object":"2HNVgz","./utils":20,"jquery":4,"underscore":6}],"Z7u8cr":[function(require,module,exports){
+},{"./base_object":"2HNVgz","./utils":20,"jquery":4,"underscore":6}],"ui_object":[function(require,module,exports){
+module.exports=require('8lqCAT');
+},{}],"Z7u8cr":[function(require,module,exports){
 "use strict";
 var PluginMixin = require('./plugin_mixin');
 var UIObject = require('./ui_object');
@@ -15975,6 +15974,7 @@ module.exports=require('Z7u8cr');
 },{}],20:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
+var $ = require('jquery');
 var Moment = require('moment');
 var extend = function(protoProps, staticProps) {
   var parent = this;
@@ -16006,17 +16006,27 @@ var extend = function(protoProps, staticProps) {
 var zeroPad = function(number, size) {
   return (new Array(size + 1 - number.toString().length)).join('0') + number;
 };
-var formatTime = function(time, showMillis) {
+var formatTime = function(time, options) {
+  options = options || {};
+  var separator = options.humanFriendly ? 'm' : ':';
   var duration = Moment.duration(time * 1000);
   var str = zeroPad(duration.seconds(), 2);
   if (duration.hours()) {
-    str = zeroPad(duration.minutes(), 2) + ':' + str;
-    str = duration.hours() + ':' + str;
+    str = zeroPad(duration.minutes(), 2) + separator + (options.humanFriendly ? '' : str);
+    if (options.humanFriendly) {
+      separator = 'h';
+    }
+    str = duration.hours() + separator + str;
   } else {
-    str = duration.minutes() + ':' + str;
+    var minutes = duration.minutes();
+    str = (!options.humanFriendly || minutes > 0 ? minutes + separator : '') + str;
+    if (options.humanFriendly) {
+      str += 's';
+    }
   }
-  if (showMillis)
-    str += '.' + duration.milliseconds();
+  if (options.showMillis && !options.humanFriendly) {
+    str += separator + duration.milliseconds();
+  }
   return str;
 };
 var Fullscreen = {
@@ -16046,17 +16056,84 @@ var Fullscreen = {
     }
   }
 };
+var HEX_TAB = "0123456789abcdef";
+var B64_TAB = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+var b64pad = "";
+var rstr2b64 = function(input) {
+  var output = "";
+  var len = input.length;
+  for (var i = 0; i < len; i += 3) {
+    var triplet = (input.charCodeAt(i) << 16) | (i + 1 < len ? input.charCodeAt(i + 1) << 8 : 0) | (i + 2 < len ? input.charCodeAt(i + 2) : 0);
+    for (var j = 0; j < 4; j++) {
+      if (i * 8 + j * 6 > input.length * 8)
+        output += b64pad;
+      else
+        output += B64_TAB.charAt((triplet >>> 6 * (3 - j)) & 0x3F);
+    }
+  }
+  return output;
+};
+var rstr2hex = function(input) {
+  var output = "";
+  for (var i = 0; i < input.length; i++) {
+    var x = input.charCodeAt(i);
+    output += HEX_TAB.charAt((x >>> 4) & 0x0F) + HEX_TAB.charAt(x & 0x0F);
+  }
+  return output;
+};
+var getHostname = function() {
+  return location.hostname;
+};
+var Ajax = {
+  jsonp: function(settings) {
+    var defer = new $.Deferred();
+    settings.callbackName = settings.callbackName || "json_callback";
+    settings.timeout = settings.timeout || 15000;
+    window[settings.callbackName] = function(data) {
+      if (!Ajax.isErrorObject(data)) {
+        defer.resolve(data);
+      } else {
+        defer.reject(data);
+      }
+    };
+    var head = $("head")[0];
+    var script = document.createElement("script");
+    script.setAttribute("src", settings.url);
+    script.setAttribute("async", "async");
+    script.onload = script.onreadystatechange = function(eventLoad) {
+      if (!script.readyState || /loaded|complete/.test(script.readyState)) {
+        if (settings.timeoutId) {
+          window.clearTimeout(settings.timeoutId);
+        }
+        script.onload = script.onreadystatechange = null;
+        if (head && script.parentNode)
+          head.removeChild(script);
+        script = undefined;
+      }
+    };
+    head.insertBefore(script, head.firstChild);
+    if (settings.error) {
+      settings.timeoutId = window.setTimeout(settings.error, settings.timeout);
+    }
+    return defer.promise();
+  },
+  isErrorObject: function(data) {
+    return data && data.http_status_code && data.http_status_code != 200;
+  }
+};
 module.exports = {
   extend: extend,
   zeroPad: zeroPad,
   formatTime: formatTime,
-  Fullscreen: Fullscreen
+  Fullscreen: Fullscreen,
+  Ajax: Ajax,
+  rstr2b64: rstr2b64,
+  rstr2hex: rstr2hex,
+  getHostname: getHostname
 };
 
 
-},{"moment":5,"underscore":6}],"browser":[function(require,module,exports){
-module.exports=require('195Wj5');
-},{}],"195Wj5":[function(require,module,exports){
+},{"jquery":4,"moment":5,"underscore":6}],"195Wj5":[function(require,module,exports){
 "use strict";
 var Browser = function Browser() {};
 ($traceurRuntime.createClass)(Browser, {}, {});
@@ -16067,6 +16144,8 @@ Browser.isLegacyIE = !!(window.ActiveXObject);
 module.exports = Browser;
 
 
+},{}],"browser":[function(require,module,exports){
+module.exports=require('195Wj5');
 },{}],23:[function(require,module,exports){
 "use strict";
 var UIObject = require('../../base/ui_object');
@@ -16114,6 +16193,9 @@ var $Container = Container;
   },
   statsReport: function(metrics) {
     this.trigger('container:stats:report', metrics);
+  },
+  getPlaybackType: function() {
+    return this.playback.getPlaybackType();
   },
   destroy: function() {
     this.trigger('container:destroyed', this, this.name);
@@ -16201,7 +16283,7 @@ var $Container = Container;
     this.trigger('container:highdefinitionupdate');
   },
   isHighDefinitionInUse: function() {
-    return this.playback.isHighDefinition();
+    return this.playback.isHighDefinitionInUse();
   },
   disableMediaControl: function() {
     this.mediaControlDisabled = true;
@@ -16218,7 +16300,6 @@ var $Container = Container;
     return this;
   }
 }, {}, UIObject);
-;
 module.exports = Container;
 
 
@@ -16271,16 +16352,15 @@ var $ContainerFactory = ContainerFactory;
     return container;
   },
   addContainerPlugins: function(container, source) {
-    _.each(this.loader.containerPlugins, function(plugin) {
+    _.each(this.loader.containerPlugins, function(Plugin) {
       var params = _.extend(this.params, {
         container: container,
         src: source
       });
-      container.addPlugin(new plugin(params));
+      container.addPlugin(new Plugin(params));
     }, this);
   }
 }, {}, BaseObject);
-;
 module.exports = ContainerFactory;
 
 
@@ -16296,7 +16376,6 @@ var $ = require('jquery');
 var UIObject = require('../../base/ui_object');
 var ContainerFactory = require('../container_factory');
 var Fullscreen = require('../../base/utils').Fullscreen;
-var Loader = require('../loader');
 var Styler = require('../../base/styler');
 var MediaControl = require('../media_control');
 var Core = function Core() {
@@ -16323,7 +16402,7 @@ var $Core = Core;
     this.params = params;
     this.params.displayType || (this.params.displayType = 'pip');
     this.parentElement = params.parentElement;
-    this.loader = new Loader(params);
+    this.loader = this.params.loader;
     this.containerFactory = new ContainerFactory(params, this.loader);
     this.containerFactory.createContainers().then((function(containers) {
       return $__0.setupContainers(containers);
@@ -16438,7 +16517,6 @@ var $Core = Core;
     return container;
   },
   setupMediaControl: function(container) {
-    var params = _.extend({container: container}, this.params);
     if (this.mediaControl) {
       this.mediaControl.setContainer(container);
     } else {
@@ -16489,7 +16567,7 @@ var $Core = Core;
 module.exports = Core;
 
 
-},{"../../base/styler":15,"../../base/ui_object":"8lqCAT","../../base/utils":20,"../container_factory":26,"../loader":31,"../media_control":33,"jquery":4,"underscore":6}],28:[function(require,module,exports){
+},{"../../base/styler":15,"../../base/ui_object":"8lqCAT","../../base/utils":20,"../container_factory":26,"../media_control":33,"jquery":4,"underscore":6}],28:[function(require,module,exports){
 "use strict";
 module.exports = require('./core');
 
@@ -16499,11 +16577,16 @@ module.exports = require('./core');
 var _ = require('underscore');
 var BaseObject = require('../../base/base_object');
 var Core = require('../core');
-var CoreFactory = BaseObject.extend({
+var CoreFactory = function CoreFactory() {
+  $traceurRuntime.defaultSuperCall(this, $CoreFactory.prototype, arguments);
+};
+var $CoreFactory = CoreFactory;
+($traceurRuntime.createClass)(CoreFactory, {
   initialize: function(player, loader) {
     this.player = player;
     this.params = player.params;
     this.loader = loader;
+    this.params.loader = this.loader;
   },
   create: function() {
     this.core = new Core(this.params);
@@ -16523,7 +16606,7 @@ var CoreFactory = BaseObject.extend({
       this.player[key] = value.bind(plugin);
     }, this);
   }
-});
+}, {}, BaseObject);
 module.exports = CoreFactory;
 
 
@@ -16549,14 +16632,22 @@ var SpinnerThreeBouncePlugin = require('../../plugins/spinner_three_bounce');
 var StatsPlugin = require('../../plugins/stats');
 var WaterMarkPlugin = require('../../plugins/watermark');
 var PosterPlugin = require('../../plugins/poster');
-var Sequence = require('../../plugins/sequence');
-var Loader = BaseObject.extend({
-  displayPlugins: {'sequence': Sequence},
+var Loader = function Loader() {
+  $traceurRuntime.defaultSuperCall(this, $Loader.prototype, arguments);
+};
+var $Loader = Loader;
+($traceurRuntime.createClass)(Loader, {
+  get displayPlugins() {
+    return {};
+  },
   initialize: function(params) {
     this.params = params;
     this.playbackPlugins = [FlashVideoPlaybackPlugin, HTML5VideoPlaybackPlugin, HTML5AudioPlaybackPlugin, HLSVideoPlaybackPlugin];
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin];
-    this.globalPlugins = [this.displayPlugins[this.params.displayType]];
+    this.globalPlugins = [];
+    if (this.params.displayPlugins && this.displayPlugins[this.params.displayType]) {
+      this.globalPlugins.push(this.displayPlugins[this.params.displayType]);
+    }
     this.addExternalPlugins(params.plugins || []);
   },
   addExternalPlugins: function(plugins) {
@@ -16571,15 +16662,16 @@ var Loader = BaseObject.extend({
     }
   },
   getPlugin: function(name) {
-    return _.find(_.union(this.containerPlugins, this.playbackPlugins, this.globalPlugins), function(plugin) {
+    var allPlugins = _.union(this.containerPlugins, this.playbackPlugins, this.globalPlugins);
+    return _.find(allPlugins, function(plugin) {
       return plugin.prototype.name === name;
     });
   }
-});
+}, {}, BaseObject);
 module.exports = Loader;
 
 
-},{"../../base/base_object":"2HNVgz","../../playbacks/flash_vod":38,"../../playbacks/hls":40,"../../playbacks/html5_audio":42,"../../playbacks/html5_video":44,"../../plugins/poster":47,"../../plugins/sequence":49,"../../plugins/spinner_three_bounce":52,"../../plugins/stats":54,"../../plugins/watermark":56,"underscore":6}],33:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../../playbacks/flash_vod":38,"../../playbacks/hls":40,"../../playbacks/html5_audio":42,"../../playbacks/html5_video":44,"../../plugins/poster":47,"../../plugins/spinner_three_bounce":49,"../../plugins/stats":51,"../../plugins/watermark":53,"underscore":6}],33:[function(require,module,exports){
 "use strict";
 module.exports = require('./media_control');
 
@@ -16869,10 +16961,10 @@ var $MediaControl = MediaControl;
     this.render();
   },
   highDefinitionUpdate: function() {
-    var $element = this.$el.find('button[data-hd]');
-    $element.removeClass('enabled');
     if (this.container.isHighDefinitionInUse()) {
-      $element.addClass('enabled');
+      this.$el.find('button[data-hd-indicator]').addClass("enabled");
+    } else {
+      this.$el.find('button[data-hd-indicator]').removeClass("enabled");
     }
   },
   createCachedElements: function() {
@@ -16939,12 +17031,14 @@ var $MediaControl = MediaControl;
     this.hideId = setTimeout((function() {
       return $__0.hide();
     }), timeout);
-    if (this.disabled)
+    if (this.disabled) {
       this.hide();
+    }
     this.$el.ready((function() {
       $__0.setVolumeLevel($__0.currentVolume);
       $__0.setSeekPercentage(0);
       $__0.bindKeyEvents();
+      $__0.highDefinitionUpdate();
     }));
     return this;
   }
@@ -16999,6 +17093,8 @@ var $Player = Player;
     this.params = params;
     this.loader = new Loader(this.params);
     this.coreFactory = new CoreFactory(this, this.loader);
+    params.height || (params.height = 480);
+    params.width || (params.width = 720);
   },
   attachTo: function(element) {
     this.params.parentElement = element;
@@ -17009,14 +17105,38 @@ var $Player = Player;
   },
   destroy: function() {
     this.core.destroy();
+  },
+  play: function() {
+    this.core.mediaControl.container.play();
+  },
+  pause: function() {
+    this.core.mediaControl.container.pause();
+  },
+  stop: function() {
+    this.core.mediaControl.container.stop();
+  },
+  seek: function(time) {
+    this.core.mediaControl.container.setCurrentTime(time);
+  },
+  setVolume: function(volume) {
+    this.core.mediaControl.container.volume(volume);
+  },
+  mute: function() {
+    this.core.mediaControl.container.volume(0);
+  },
+  unmute: function() {
+    this.core.mediaControl.container.volume(100);
+  },
+  isPlaying: function() {
+    return this.core.mediaControl.container.isPlaying();
   }
 }, {}, BaseObject);
 global.DEBUG = false;
-window.WP3 = {
+window.Clappr = {
   Player: Player,
   Mediator: Mediator
 };
-module.exports = window.WP3;
+module.exports = window.Clappr;
 
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
@@ -17028,6 +17148,7 @@ var JST = require('../../base/jst');
 var Mediator = require('../../components/mediator');
 var _ = require('underscore');
 var $ = require('jquery');
+var Browser = require('../../components/browser');
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> </object>';
 var FlashVOD = function FlashVOD() {
   $traceurRuntime.defaultSuperCall(this, $FlashVOD.prototype, arguments);
@@ -17077,6 +17198,9 @@ var $FlashVOD = FlashVOD;
   },
   getPlaybackType: function() {
     return "vod";
+  },
+  isHighDefinitionInUse: function() {
+    return false;
   },
   updateTime: function() {
     var $__0 = this;
@@ -17171,7 +17295,7 @@ var $FlashVOD = FlashVOD;
     }));
   },
   isPlaying: function() {
-    return !!(this.isReady && this.currentState == "PLAYING");
+    return !!(this.isReady && this.currentState === "PLAYING");
   },
   getDuration: function() {
     var $__0 = this;
@@ -17185,7 +17309,7 @@ var $FlashVOD = FlashVOD;
       var seekTo = $__0.el.getDuration() * (time / 100);
       $__0.el.playerSeek(seekTo);
       $__0.trigger('playback:timeupdate', seekTo, $__0.el.getDuration(), $__0.name);
-      if ($__0.currentState == "PAUSED") {
+      if ($__0.currentState === "PAUSED") {
         $__0.pause();
       }
     }));
@@ -17208,9 +17332,9 @@ var $FlashVOD = FlashVOD;
       swfPath: this.swfPath,
       playbackId: this.uniqueId
     }));
-    if (navigator.userAgent.match(/firefox/i)) {
+    if (Browser.isFirefox) {
       this.setupFirefox();
-    } else if (window.ActiveXObject) {
+    } else if (Browser.isLegacyIE) {
       this.setupIE();
     }
     this.$el.append(style);
@@ -17218,7 +17342,7 @@ var $FlashVOD = FlashVOD;
   }
 }, {}, UIObject);
 FlashVOD.canPlay = function(resource) {
-  if (navigator.userAgent.match(/firefox/i) || window.ActiveXObject) {
+  if (Browser.isFirefox || Browser.isLegacyIE) {
     return _.isString(resource) && !!resource.match(/(.*).(mp4|mov|f4v|3gpp|3gp)/);
   } else {
     return _.isString(resource) && !!resource.match(/(.*).(mov|f4v|3gpp|3gp)/);
@@ -17227,7 +17351,7 @@ FlashVOD.canPlay = function(resource) {
 module.exports = FlashVOD;
 
 
-},{"../../base/jst":12,"../../base/styler":15,"../../base/ui_object":"8lqCAT","../../components/mediator":35,"jquery":4,"underscore":6}],38:[function(require,module,exports){
+},{"../../base/jst":12,"../../base/styler":15,"../../base/ui_object":"8lqCAT","../../components/browser":"195Wj5","../../components/mediator":35,"jquery":4,"underscore":6}],38:[function(require,module,exports){
 "use strict";
 module.exports = require('./flash_vod');
 
@@ -17270,9 +17394,9 @@ var $HLS = HLS;
     this.highDefinition = false;
     this.autoPlay = options.autoPlay;
     this.defaultSettings = {
-      left: ["playstop"],
+      left: ["playstop", "volume"],
       default: [],
-      right: ["fullscreen", "volume", "hd"]
+      right: ["fullscreen", "hd-indicator"]
     };
     this.settings = _.extend({}, this.defaultSettings);
     this.addListeners();
@@ -17295,8 +17419,8 @@ var $HLS = HLS;
     Mediator.on(this.uniqueId + ':timeupdate', (function(params) {
       return $__0.updateTime(params);
     }));
-    Mediator.on(this.uniqueId + ':playbackstate', (function(params) {
-      return $__0.setPlaybackState(params);
+    Mediator.on(this.uniqueId + ':playbackstate', (function(state) {
+      return $__0.setPlaybackState(state);
     }));
     Mediator.on(this.uniqueId + ':highdefinition', (function(params) {
       return $__0.updateHighDefinition(params);
@@ -17341,8 +17465,8 @@ var $HLS = HLS;
     this.el.globoPlayerSetflushLiveURLCache(true);
     this.autoPlay && this.play();
   },
-  updateHighDefinition: function(params) {
-    this.highDefinition = params.isHD;
+  updateHighDefinition: function(isHD) {
+    this.highDefinition = (isHD === "true");
     this.trigger('playback:highdefinitionupdate');
   },
   updateTime: function(params) {
@@ -17360,7 +17484,7 @@ var $HLS = HLS;
       } else {
         $__0.trigger('playback:timeupdate', $__0.el.globoGetPosition(), duration, $__0.name);
       }
-      if ($__0.dvrEnabled != previousDvrEnabled) {
+      if ($__0.dvrEnabled !== previousDvrEnabled) {
         $__0.updateSettings();
       }
     }));
@@ -17391,7 +17515,7 @@ var $HLS = HLS;
     var programDate = this.el.globoGetLastProgramDate();
     return programDate - 1.08e+7;
   },
-  isHighDefinition: function() {
+  isHighDefinitionInUse: function() {
     return this.highDefinition;
   },
   getLevels: function() {
@@ -17403,16 +17527,16 @@ var $HLS = HLS;
       return $__0.levels;
     }));
   },
-  setPlaybackState: function(params) {
-    if (params.state === "PLAYING_BUFFERING" && this.el.globoGetbufferLength() < 1 && this.currentState !== "PLAYING_BUFFERING") {
+  setPlaybackState: function(state) {
+    if (state === "PLAYING_BUFFERING" && this.el.globoGetbufferLength() < 1) {
       this.trigger('playback:buffering', this.name);
-    } else if (params.state === "PLAYING" && this.currentState === "PLAYING_BUFFERING") {
+    } else if (state === "PLAYING" && (this.currentState === "PLAYING_BUFFERING" || this.currentState === "IDLE")) {
       this.trigger('playback:bufferfull', this.name);
-    } else if (params.state === "IDLE") {
+    } else if (state === "IDLE") {
       this.trigger('playback:ended', this.name);
       this.trigger('playback:timeupdate', 0, this.el.globoGetDuration(), this.name);
     }
-    this.currentState = params.state;
+    this.currentState = state;
     this.updatePlaybackType();
   },
   updatePlaybackType: function() {
@@ -17456,8 +17580,9 @@ var $HLS = HLS;
   isPlaying: function() {
     var $__0 = this;
     return this.safe((function() {
-      if ($__0.currentState)
+      if ($__0.currentState) {
         return !!($__0.currentState.match(/playing/i));
+      }
       return false;
     }));
   },
@@ -17688,6 +17813,9 @@ var $HTML5Video = HTML5Video;
     var type = this.src.indexOf("m3u8") > -1 ? 'live' : 'vod';
     return type;
   },
+  isHighDefinitionInUse: function() {
+    return false;
+  },
   play: function() {
     this.el.play();
   },
@@ -17720,7 +17848,7 @@ var $HTML5Video = HTML5Video;
     this.trigger('playback:timeupdate', 0, this.el.duration, this.name);
   },
   stalled: function() {
-    if (this.getPlaybackType() == 'vod') {
+    if (this.getPlaybackType() === 'vod') {
       this.trigger('playback:buffering', this.name);
     }
   },
@@ -17789,7 +17917,6 @@ module.exports = require('./log');
 
 },{"./log":46}],46:[function(require,module,exports){
 "use strict";
-var BaseObject = require('../../base/base_object');
 var $ = require('jquery');
 var BOLD = 'font-weight: bold; font-size: 13px;';
 var INFO = 'color: green;' + BOLD;
@@ -17825,7 +17952,7 @@ Log.prototype = {
 module.exports = Log;
 
 
-},{"../../base/base_object":"2HNVgz","jquery":4}],47:[function(require,module,exports){
+},{"jquery":4}],47:[function(require,module,exports){
 "use strict";
 module.exports = require('./poster');
 
@@ -17908,11 +18035,12 @@ var $PosterPlugin = PosterPlugin;
     this.$el.ready((function() {
       $__0.$el.css({fontSize: $__0.options.height || $__0.$el.height()});
     }));
-    var imgEl = this.$el.find('img')[0];
-    imgEl.src = this.options.poster || 'assets/default.png';
     this.$playButton = $(this.$el.find('.play-wrapper'));
-    if (this.options.hidePlayButton)
-      this.$playButton.hide();
+    if (this.options.poster !== undefined) {
+      var imgEl = $('<img data-poster class="poster-background"></img>');
+      imgEl.attr('src', this.options.poster);
+      this.$el.prepend(imgEl);
+    }
     return this;
   }
 }, {}, UIPlugin);
@@ -17921,230 +18049,30 @@ module.exports = PosterPlugin;
 
 },{"../../base/jst":12,"../../base/styler":15,"../../base/ui_plugin":"Z7u8cr","jquery":4}],49:[function(require,module,exports){
 "use strict";
-module.exports = require('./sequence');
-
-
-},{"./sequence":50}],50:[function(require,module,exports){
-"use strict";
-var BaseObject = require('../../base/base_object');
-var SequenceContainer = require('./sequence_container');
-var _ = require('underscore');
-var Utils = require('../../base/utils');
-var Sequence = BaseObject.extend({
-  initialize: function(core) {
-    this.core = core;
-    this.sequenceContainer = new SequenceContainer(this.core.containers);
-    this.core.mediaControl.setContainer(this.sequenceContainer);
-  },
-  getExternalInterface: function() {
-    return {};
-  }
-});
-module.exports = Sequence;
-
-
-},{"../../base/base_object":"2HNVgz","../../base/utils":20,"./sequence_container":51,"underscore":6}],51:[function(require,module,exports){
-"use strict";
-var BaseObject = require('../../base/base_object');
-var _ = require('underscore');
-var SequenceContainer = BaseObject.extend({
-  name: 'SequenceContainer',
-  initialize: function(containers) {
-    this.containers = containers;
-    this.plugins = [];
-    this.containersRange = [];
-    this.currentContainer = 0;
-    this.checkpoint = 0;
-    this.duration = 0;
-    _.each(this.containers, this._setupContainers, this);
-    this.containersToSetup = this.containers.length;
-    this._bindChildEvents(this.getCurrentContainer());
-    this.getCurrentContainer().$el.show();
-    this.settings = this.getCurrentContainer().settings;
-  },
-  _bindChildEvents: function(container) {
-    this.listenTo(container, 'container:ended', this.playNextContainer);
-    this.listenTo(container, 'container:timeupdate', this.timeUpdateProxy);
-    this.listenTo(container, 'container:progress', this.progressProxy);
-  },
-  _setupContainers: function(container) {
-    container.$el.hide();
-    this._injectInChildPlugins(container.plugins);
-    this.listenTo(container, 'container:loadedmetadata', this._setupDuration);
-  },
-  _injectInChildPlugins: function(plugins) {
-    _.each(plugins, function(plugin) {
-      plugin.stopListening();
-      plugin.container = this;
-      plugin.bindEvents();
-    }, this);
-  },
-  _setupDuration: function(duration) {
-    this.duration += duration;
-    this.trigger('container:timeupdate', 0, this.duration);
-    if (--this.containersToSetup === 0) {
-      this._setupSeek();
-    }
-  },
-  _setupSeek: function() {
-    _.each(this.containers, function(container) {
-      var containerDuration = container.playback.getDuration();
-      var totalPercent = (containerDuration * 100) / this.duration;
-      this.containersRange.push(totalPercent);
-    }, this);
-  },
-  getPlaybackType: function() {
-    return this.getCurrentContainer().getPlaybackType();
-  },
-  length: function() {
-    return this.containers.length;
-  },
-  playNextContainer: function() {
-    this.getCurrentContainer().$el.hide();
-    this.stopListening(this.getCurrentContainer());
-    var nextContainer = this.getNextContainer();
-    this.trigger('container:next', this.currentContainer);
-    this._bindChildEvents(nextContainer);
-    if (this.currentContainer === 0) {
-      this.checkpoint = 0;
-      nextContainer.$el.show();
-      this.trigger('container:ended');
-      nextContainer.stop();
-    } else {
-      nextContainer.play();
-      this.trigger('container:play');
-      this.trigger('container:settingsupdate');
-      this.trigger('container:timeupdate', this.checkpoint, this.duration);
-      nextContainer.$el.show();
-    }
-  },
-  timeUpdateProxy: function(position, duration) {
-    this.trigger('container:timeupdate', position + this.checkpoint, this.duration, this.name);
-  },
-  progressProxy: function(startPosition, endPosition, duration) {
-    this.trigger('container:progress', startPosition, endPosition, this.duration, this.name);
-  },
-  getCurrentContainer: function() {
-    return this.containers[this.currentContainer];
-  },
-  getNextContainer: function() {
-    this.checkpoint += this.getCurrentContainer().playback.getDuration();
-    this.currentContainer = ++this.currentContainer % this.containers.length;
-    var nextContainer = this.containers[this.currentContainer];
-    this.settings = nextContainer.settings;
-    return nextContainer;
-  },
-  play: function() {
-    this.getCurrentContainer().playback.play();
-    this.trigger('container:play', this.name);
-  },
-  setVolume: function(value) {
-    this.trigger('container:volume', value, this.name);
-    this.getCurrentContainer().setVolume(value);
-  },
-  pause: function() {
-    this.getCurrentContainer().pause();
-    this.trigger('container:pause', this.name);
-  },
-  stop: function() {
-    this.getCurrentContainer().stop();
-    this.trigger('container:stop', this.name);
-  },
-  playing: function() {
-    this.trigger('container:playing', this.name);
-  },
-  progress: function(startPosition, endPosition, duration) {
-    this.trigger('container:progress', startPosition, endPosition, duration);
-  },
-  _matchContainerIndex: function(percent) {
-    var total = 0;
-    for (var i = 0,
-        l = this.containers.length; i < l; i++) {
-      total += this.containersRange[i];
-      if (total >= percent) {
-        return i;
-      }
-    }
-    return this.containers.length - 1;
-  },
-  jumpToContainer: function(index) {
-    if (index === 0) {
-      this.seekToContainer(index, 0);
-    } else {
-      var value = _.reduce(this.containersRange.slice(0, index), function(total, percent) {
-        return total + percent;
-      });
-      this.seekToContainer(index, value);
-    }
-  },
-  setCurrentTime: function(time) {
-    var containerIndex = this._matchContainerIndex(time);
-    this.seekToContainer(containerIndex, time);
-  },
-  seekToContainer: function(containerIndex, time) {
-    if (containerIndex === 0) {
-      this.checkpoint = 0;
-    } else {
-      var slice = this.containers.slice(0, containerIndex);
-      this.checkpoint = _.reduce(slice, function(duration, container) {
-        return duration + container.playback.getDuration();
-      }, 0);
-      var pastRange = _.reduce(this.containersRange.slice(0, containerIndex), function(total, percent) {
-        return percent + total;
-      }, 0);
-      time = time - pastRange;
-    }
-    var containerSeek = time * 100 / this.containersRange[containerIndex];
-    var currentContainer = this.getCurrentContainer();
-    currentContainer.$el.hide();
-    this.stopListening(currentContainer);
-    currentContainer.stop();
-    this.currentContainer = containerIndex;
-    var newContainer = this.containers[containerIndex];
-    this.listenTo(newContainer, 'container:ended', this.playNextContainer);
-    this.listenTo(newContainer, 'container:timeupdate', this.timeUpdateProxy);
-    this.listenTo(newContainer, 'container:progress', this.progressProxy);
-    newContainer.play();
-    this.trigger('container:settingsupdate');
-    this.trigger('container:play');
-    newContainer.setCurrentTime(containerSeek);
-    newContainer.$el.show();
-  },
-  settingsUpdate: function() {
-    this.settings = this.getCurrentContainer().settings;
-    this.trigger('container:settingsupdate');
-  },
-  isPlaying: function() {
-    return this.getCurrentContainer().isPlaying();
-  },
-  render: function() {
-    this.el = _.map(this.containers, function(container) {
-      return container.render().el;
-    });
-    return this;
-  }
-});
-module.exports = SequenceContainer;
-
-
-},{"../../base/base_object":"2HNVgz","underscore":6}],52:[function(require,module,exports){
-"use strict";
 module.exports = require('./spinner_three_bounce');
 
 
-},{"./spinner_three_bounce":53}],53:[function(require,module,exports){
+},{"./spinner_three_bounce":50}],50:[function(require,module,exports){
 "use strict";
 var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
-var SpinnerThreeBouncePlugin = UIPlugin.extend({
-  name: 'spinner_three_bounce',
-  attributes: {
-    'data-spinner': '',
-    'class': 'spinner-three-bounce'
+var SpinnerThreeBouncePlugin = function SpinnerThreeBouncePlugin() {
+  $traceurRuntime.defaultSuperCall(this, $SpinnerThreeBouncePlugin.prototype, arguments);
+};
+var $SpinnerThreeBouncePlugin = SpinnerThreeBouncePlugin;
+($traceurRuntime.createClass)(SpinnerThreeBouncePlugin, {
+  get name() {
+    return 'spinner_three_bounce';
+  },
+  get attributes() {
+    return {
+      'data-spinner': '',
+      'class': 'spinner-three-bounce'
+    };
   },
   initialize: function(options) {
-    SpinnerThreeBouncePlugin.super('initialize').call(this, options);
+    $traceurRuntime.superCall(this, $SpinnerThreeBouncePlugin.prototype, "initialize", [options]);
     this.template = JST[this.name];
     this.listenTo(this.container, 'container:state:buffering', this.onBuffering);
     this.listenTo(this.container, 'container:state:bufferfull', this.onBufferFull);
@@ -18168,16 +18096,16 @@ var SpinnerThreeBouncePlugin = UIPlugin.extend({
     this.container.$el.append(this.$el);
     return this;
   }
-});
+}, {}, UIPlugin);
 module.exports = SpinnerThreeBouncePlugin;
 
 
-},{"../../base/jst":12,"../../base/styler":15,"../../base/ui_plugin":"Z7u8cr"}],54:[function(require,module,exports){
+},{"../../base/jst":12,"../../base/styler":15,"../../base/ui_plugin":"Z7u8cr"}],51:[function(require,module,exports){
 "use strict";
 module.exports = require('./stats');
 
 
-},{"./stats":55}],55:[function(require,module,exports){
+},{"./stats":52}],52:[function(require,module,exports){
 "use strict";
 var Plugin = require('../../base/plugin');
 var $ = require("jquery");
@@ -18278,12 +18206,12 @@ var $StatsPlugin = StatsPlugin;
 module.exports = StatsPlugin;
 
 
-},{"../../base/plugin":13,"jquery":4}],56:[function(require,module,exports){
+},{"../../base/plugin":13,"jquery":4}],53:[function(require,module,exports){
 "use strict";
 module.exports = require('./watermark');
 
 
-},{"./watermark":57}],57:[function(require,module,exports){
+},{"./watermark":54}],54:[function(require,module,exports){
 "use strict";
 var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
@@ -18303,8 +18231,12 @@ var $WaterMarkPlugin = WaterMarkPlugin;
     $traceurRuntime.superCall(this, $WaterMarkPlugin.prototype, "initialize", [options]);
     this.template = JST[this.name];
     this.position = options.position || "bottom-right";
-    this.imageUrl = options.watermark || 'assets/watermark.png';
-    this.render();
+    if (options.watermark) {
+      this.imageUrl = options.watermark;
+      this.render();
+    } else {
+      this.$el.remove();
+    }
   },
   bindEvents: function() {
     this.listenTo(this.container, 'container:play', this.onPlay);
