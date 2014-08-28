@@ -42,18 +42,10 @@ class ContainerFactory extends BaseObject {
   }
 
   addContainerPlugins(container, source) {
-    this.containerPlugins = this.filterContainerPlugins(this.loader.containerPlugins)
-    _.each(this.containerPlugins, function(Plugin) {
+    _.each(this.loader.containerPlugins, function(Plugin) {
       var params = _.extend(this.params, {container: container, src: source});
       container.addPlugin(new Plugin(params));
     }, this);
-  }
-
-  filterContainerPlugins(containerPlugins) {
-    var isSpinner = function (p) { return p.name.indexOf("Spinner") === 0 }
-    var spinner = _(containerPlugins).find(isSpinner)
-    var plugins = _(containerPlugins).reject(isSpinner)
-    return [spinner].concat(plugins)
   }
 }
 

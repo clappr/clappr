@@ -18,7 +18,6 @@ var HLSVideoPlaybackPlugin = require('../../playbacks/hls');
 
 /* Container Plugins */
 var SpinnerThreeBouncePlugin = require('../../plugins/spinner_three_bounce');
-var SpinnerLoading = require('../../plugins/spinner_loading');
 var StatsPlugin = require('../../plugins/stats');
 var WaterMarkPlugin = require('../../plugins/watermark');
 var PosterPlugin = require('../../plugins/poster');
@@ -31,7 +30,7 @@ class Loader extends BaseObject {
   initialize(params) {
     this.params = params
     this.playbackPlugins = [FlashVideoPlaybackPlugin, HTML5VideoPlaybackPlugin, HTML5AudioPlaybackPlugin, HLSVideoPlaybackPlugin]
-    this.containerPlugins = [SpinnerThreeBouncePlugin, SpinnerLoading, WaterMarkPlugin, PosterPlugin, StatsPlugin]
+    this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin]
     this.globalPlugins = []
     if (this.params.displayPlugins && this.displayPlugins[this.params.displayType]) {
       this.globalPlugins.push(this.displayPlugins[this.params.displayType])
