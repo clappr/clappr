@@ -3,6 +3,8 @@
 
 
 var dotenv = require('dotenv');
+var exec = require('child_process').exec;
+exec('node bin/hook.js');
 dotenv.load();
 
 module.exports = function(config) {
