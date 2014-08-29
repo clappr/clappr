@@ -18,6 +18,13 @@ class Container extends UIObject {
   initialize(options) {
     this.playback = options.playback;
     this.settings = this.playback.settings;
+    this.isReady = false;
+    this.mediaControlDisabled = false;
+    this.plugins = [this.playback];
+    this.bindEvents();
+  }
+
+  bindEvents() {
     this.listenTo(this.playback, 'playback:progress', this.progress);
     this.listenTo(this.playback, 'playback:timeupdate', this.timeUpdated);
     this.listenTo(this.playback, 'playback:ready', this.ready);
@@ -30,9 +37,6 @@ class Container extends UIObject {
     this.listenTo(this.playback, 'playback:mediacontrol:enable', this.enableMediaControl);
     this.listenTo(this.playback, 'playback:ended', this.ended);
     this.listenTo(this.playback, 'playback:play', this.playing);
-    this.isReady = false;
-    this.mediaControlDisabled = false;
-    this.plugins = [this.playback];
   }
 
   with(klass) {
