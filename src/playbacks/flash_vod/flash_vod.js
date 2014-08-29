@@ -17,7 +17,7 @@ class FlashVOD extends UIObject {
   get tagName() { return 'object' }
   get template() { return JST.flash_vod }
 
-  initialize(options) {
+  constructor(options) {
     super(options)
     this.src = options.src
     this.swfPath = options.swfPath || "assets/Player.swf"

@@ -30,7 +30,8 @@ class HTML5Video extends UIPlugin {
     }
   }
 
-  initialize(options) {
+  constructor(options) {
+    super(options);
     this.options = options
     this.src = options.src
     this.el.src = options.src
