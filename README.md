@@ -1,6 +1,6 @@
 ## Clappr Player
 
-[![Build Status](https://drone.io/github.com/globocom/player/status.png?a)](https://drone.io/github.com/globocom/player/latest)
+[![Build Status](https://drone.io/github.com/globocom/clappr/status.png)](https://drone.io/github.com/globocom/clappr/latest)
 [![Dependency Status](https://gemnasium.com/globocom/player.png)](https://gemnasium.com/globocom/player)
 
 
