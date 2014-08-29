@@ -17,7 +17,9 @@
   },
   "browserify-shim": "./src/shim.js",
   "browserify": {
-    "transform": ["browserify-shim"]
+    "transform": [
+      "browserify-shim"
+    ]
   },
   "homepage": "https://github.com/globocom/clappr",
   "devDependencies": {
@@ -38,12 +40,14 @@
     "gulp-util": "latest",
     "karma": "^0.12.17",
     "karma-bro": "^0.6.0",
+    "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^0.1.4",
     "karma-cli": "0.0.4",
     "karma-firefox-launcher": "^0.1.3",
     "karma-jasmine": "^0.1.5",
     "karma-mocha": "^0.1.4",
     "karma-safari-launcher": "^0.1.1",
+    "karma-sinon": "^1.0.3",
     "karma-traceur-preprocessor": "^0.2.2",
     "mkdirp": "^0.5.0",
     "scp": "latest",
