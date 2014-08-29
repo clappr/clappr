@@ -27,15 +27,16 @@ class Loader extends BaseObject {
     return {};
   }
 
-  initialize(params) {
-    this.params = params
+  constructor(options) {
+    super(options);
+    this.options = options
     this.playbackPlugins = [FlashVideoPlaybackPlugin, HTML5VideoPlaybackPlugin, HTML5AudioPlaybackPlugin, HLSVideoPlaybackPlugin]
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin]
     this.globalPlugins = []
-    if (this.params.displayPlugins && this.displayPlugins[this.params.displayType]) {
-      this.globalPlugins.push(this.displayPlugins[this.params.displayType])
+    if (this.options.displayPlugins && this.displayPlugins[this.options.displayType]) {
+      this.globalPlugins.push(this.displayPlugins[this.options.displayType])
     }
-    this.addExternalPlugins(params.plugins || [])
+    this.addExternalPlugins(options.plugins || [])
   }
 
   addExternalPlugins(plugins) {

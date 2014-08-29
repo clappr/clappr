@@ -14,17 +14,15 @@ class UIObject extends BaseObject {
   get tagName() { return 'div' }
 
   constructor(options) {
+    super(options)
     this.cid = _.uniqueId('c');
     this._ensureElement();
-    super(options)
     this.delegateEvents();
   }
 
   $(selector) {
     return this.$el.find(selector)
   }
-
-  initialize(){}
 
   render() {
     return this

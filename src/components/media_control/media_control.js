@@ -45,9 +45,10 @@ class MediaControl extends UIObject {
 
   get template() { return JST.media_control }
 
-  initialize(params) {
-    this.params = params
-    this.container = params.container
+  constructor(options) {
+    super(options);
+    this.options = options
+    this.container = options.container
     this.keepVisible = false
     this.addEventListeners()
     this.defaultSettings = {
@@ -56,8 +57,9 @@ class MediaControl extends UIObject {
       default: ['position', 'seekbar', 'duration']
     }
     this.disabled = false
-    if (this.container.mediaControlDisabled || this.params.chromeless)
+    if (this.container.mediaControlDisabled || this.options.chromeless) {
       this.disable()
+    }
     this.currentVolume = 100
     $(document).bind('mouseup', (event) => this.stopDrag(event))
     $(document).bind('mousemove', (event) => this.updateDrag(event))
@@ -82,7 +84,7 @@ class MediaControl extends UIObject {
   }
 
   enable() {
-    if (this.params.chromeless) return
+    if (this.options.chromeless) return
     this.disabled = false
     this.show()
   }
@@ -363,7 +365,7 @@ class MediaControl extends UIObject {
 
     this.$volumeBarContainer.hide()
 
-    if (this.params.autoPlay) {
+    if (this.options.autoPlay) {
       this.togglePlayPause()
       this.togglePlayStop()
     }

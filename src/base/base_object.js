@@ -13,9 +13,6 @@ class BaseObject extends Events {
     this.uniqueId = _.uniqueId('o')
     options || (options = {})
     _.extend(this, _.pick(options, pluginOptions))
-    if (this.initialize) {
-      this.initialize.apply(this, arguments)
-    }
   }
 }
 

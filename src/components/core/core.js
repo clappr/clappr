@@ -31,16 +31,17 @@ class Core extends UIObject {
     }
   }
 
-  initialize(params) {
+  constructor(options) {
+    super(options)
     this.defer = $.Deferred()
     this.defer.promise(this)
     this.plugins = []
     this.containers = []
-    this.params = params
-    this.params.displayType || (this.params.displayType = 'pip')
-    this.parentElement = params.parentElement
-    this.loader = this.params.loader
-    this.containerFactory = new ContainerFactory(params, this.loader)
+    this.options = options 
+    this.options.displayType || (this.options.displayType = 'pip')
+    this.parentElement = options.parentElement
+    this.loader = this.options.loader
+    this.containerFactory = new ContainerFactory(options, this.loader)
     this.containerFactory
       .createContainers()
       .then((containers) => this.setupContainers(containers))
@@ -58,12 +59,12 @@ class Core extends UIObject {
     } else {
       var width = 0
       var height = 0
-      if (this.params.stretchWidth && this.params.stretchHeight && this.params.stretchWidth <= window.innerWidth && this.params.stretchHeight <= (window.innerHeight * 0.73)) {
-        width = this.params.stretchWidth
-        height = this.params.stretchHeight
+      if (this.options.stretchWidth && this.options.stretchHeight && this.options.stretchWidth <= window.innerWidth && this.options.stretchHeight <= (window.innerHeight * 0.73)) {
+        width = this.options.stretchWidth
+        height = this.options.stretchHeight
       } else {
-        width = this.params.width || width
-        height = this.params.height || height
+        width = this.options.width || width
+        height = this.options.height || height
       }
       if (width > 0) {
         this.$el.css({ width: width })
@@ -94,7 +95,7 @@ class Core extends UIObject {
   load(sources) {
     sources = _.isString(sources) ? [sources]: sources;
     _(this.containers).each((container) => container.destroy())
-    this.containerFactory.params = _(this.params).extend({sources})
+    this.containerFactory.options = _(this.options).extend({sources})
     this.containerFactory.createContainers().then((containers) => this.setupContainers(containers))
   }
 
@@ -158,7 +159,7 @@ class Core extends UIObject {
     if (this.mediaControl) {
       this.mediaControl.setContainer(container)
     } else {
-      this.mediaControl = new MediaControl(_.extend({container: container}, this.params))
+      this.mediaControl = new MediaControl(_.extend({container: container}, this.options))
       this.listenTo(this.mediaControl, 'mediacontrol:fullscreen', this.toggleFullscreen)
       this.listenTo(this.mediaControl, 'mediacontrol:show', this.onMediaControlShow.bind(this, true))
       this.listenTo(this.mediaControl, 'mediacontrol:hide', this.onMediaControlShow.bind(this, false))
@@ -203,8 +204,8 @@ class Core extends UIObject {
     this.$el.append(this.mediaControl.render().el)
 
     this.$el.ready(() => {
-      this.params.width = this.params.width || this.$el.width()
-      this.params.height = this.params.height || this.$el.height()
+      this.options.width = this.options.width || this.$el.width()
+      this.options.height = this.options.height || this.$el.height()
       this.updateSize()
     })
 

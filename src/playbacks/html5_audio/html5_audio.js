@@ -15,7 +15,8 @@ class HTML5Audio extends UIPlugin {
     }
   }
 
-  initialize(options) {
+  constructor(options) {
+    super(options);
     this.el.src = options.src
     this.render() // it should render when the container trigger 'ready'
   }

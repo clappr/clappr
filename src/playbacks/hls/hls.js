@@ -23,7 +23,7 @@ class HLS extends UIPlugin {
     }
   }
 
-  initialize(options) {
+  constructor(options) {
     super(options)
     this.src = options.src
     this.swfPath = options.swfPath || "assets/HLSPlayer.swf"

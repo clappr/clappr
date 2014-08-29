@@ -15,7 +15,8 @@ class Container extends UIObject {
   get attributes() { return { 'data-container': '' } }
   get events() { return {'click': 'clicked'} }
 
-  initialize(options) {
+  constructor(options) {
+    super(options);
     this.playback = options.playback;
     this.settings = this.playback.settings;
     this.isReady = false;
@@ -101,6 +102,7 @@ class Container extends UIObject {
   }
 
   play() {
+    console.log('Container#play');
     this.playback.play();
   }
 

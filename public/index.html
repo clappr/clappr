@@ -4,12 +4,13 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <script type="text/javascript" charset="utf-8" src="underscore.js"> </script>
   <script type="text/javascript" charset="utf-8" src="jquery.js"> </script>
-  <script type="text/javascript" charset="utf-8" src="clappr.min.js"> </script>
+  <script type="text/javascript" charset="utf-8" src="clappr.js"> </script>
   <title>hls test</title>
   <script type="text/javascript" charset="utf-8">
 window.onload = function() {
     p = new Clappr.Player({
-      sources: ['https://googledrive.com/host/0B9wX51CJ98nndHdOdmR6eWpWdkk/surf.mp4']
+//      sources: ['http://bem.tv/superMisto.mp4'],
+      sources: ['http://cdn.bem.tv/stream/soccer2sec/playlist.m3u8']
     });
 
     p.attachTo(document.getElementById('player-wrapper'));

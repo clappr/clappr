@@ -11,15 +11,15 @@ var BaseObject = require('../../base/base_object');
 var Core = require('../core');
 
 class CoreFactory extends BaseObject {
-  initialize(player, loader) {
+  constructor(player, loader) {
     this.player = player
-    this.params = player.params
+    this.options = player.options
     this.loader = loader
-    this.params.loader = this.loader
+    this.options.loader = this.loader
   }
 
   create() {
-    this.core = new Core(this.params)
+    this.core = new Core(this.options)
     this.core.then(this.addCorePlugins.bind(this))
     return this.core
   }

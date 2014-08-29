@@ -10,7 +10,7 @@ class WaterMarkPlugin extends UIPlugin {
   get name() { return 'watermark' }
   get type() { return 'ui' }
 
-  initialize(options) {
+  constructor(options) {
     super(options)
     this.template = JST[this.name]
     this.position = options.position || "bottom-right"
