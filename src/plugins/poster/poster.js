@@ -24,7 +24,7 @@ class PosterPlugin extends UIPlugin {
     }
   }
 
-  initialize(options) {
+  constructor(options) {
     super(options)
     if (options.disableControlsOnPoster === undefined)
       options.disableControlsOnPoster = true
@@ -32,6 +32,7 @@ class PosterPlugin extends UIPlugin {
     if (this.options.disableControlsOnPoster)
       this.container.disableMediaControl()
     this.render()
+    this.bindEvents();
   }
 
   bindEvents() {

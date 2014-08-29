@@ -15,7 +15,7 @@ class SpinnerThreeBouncePlugin extends UIPlugin {
     }
   }
 
-  initialize(options) {
+  constructor(options) {
     super(options)
     this.template = JST[this.name]
     this.listenTo(this.container, 'container:state:buffering', this.onBuffering)

@@ -9,7 +9,7 @@ class StatsPlugin extends Plugin {
   get name() { return 'stats' }
   get type() { return 'stats' }
 
-  initialize(options) {
+  constructor(options) {
     super(options)
     this.setInitialAttrs()
     this.reportInterval = options.reportInterval || 5000
