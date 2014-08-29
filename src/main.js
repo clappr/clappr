@@ -9,18 +9,19 @@ var Mediator = require('./components/mediator')
 
 
 class Player extends BaseObject {
-  initialize(params) {
+  constructor(options) {
+    super(options);
     window.p = this
-    params.displayType || (params.displayType = 'pip')
-    this.params = params
-    this.loader = new Loader(this.params)
+    options.displayType || (options.displayType = 'pip')
+    this.options = options
+    this.loader = new Loader(this.options)
     this.coreFactory = new CoreFactory(this, this.loader)
-    params.height || (params.height = 480);
-    params.width || (params.width = 720);
+    options.height || (options.height = 480);
+    options.width || (options.width = 720);
   }
 
   attachTo(element) {
-    this.params.parentElement = element
+    this.options.parentElement = element
     this.core = this.coreFactory.create()
   }
 

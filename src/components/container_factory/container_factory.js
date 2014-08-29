@@ -12,14 +12,15 @@ var Container = require('../container');
 var $ = require('jquery');
 
 class ContainerFactory extends BaseObject {
-  initialize(params, loader) {
-    this.params = params;
+  constructor(options, loader) {
+    super(options);
+    this.options = options;
     this.loader = loader;
   }
 
   createContainers() {
     return $.Deferred(function(promise) {
-      promise.resolve( _.map(this.params.sources, function(source) {
+      promise.resolve( _.map(this.options.sources, function(source) {
         return this.createContainer(source);
       }, this));
     }.bind(this));
@@ -31,8 +32,8 @@ class ContainerFactory extends BaseObject {
 
   createContainer(source) {
     var playbackPlugin = this.findPlaybackPlugin(source);
-    var params = _.extend({}, this.params, {src: source, autoPlay: !!this.params.autoPlay});
-    var playback = new playbackPlugin(params);
+    var options = _.extend({}, this.options, {src: source, autoPlay: !!this.options.autoPlay});
+    var playback = new playbackPlugin(options);
     var container = new Container({playback: playback});
     var defer = $.Deferred();
     defer.promise(container);
@@ -43,8 +44,8 @@ class ContainerFactory extends BaseObject {
 
   addContainerPlugins(container, source) {
     _.each(this.loader.containerPlugins, function(Plugin) {
-      var params = _.extend(this.params, {container: container, src: source});
-      container.addPlugin(new Plugin(params));
+      var options = _.extend(this.options, {container: container, src: source});
+      container.addPlugin(new Plugin(options));
     }, this);
   }
 }
