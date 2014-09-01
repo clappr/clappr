@@ -145,10 +145,6 @@ class HTML5Video extends UIPlugin {
     this.trigger('playback:progress', this.el.buffered.start(bufferedPos), this.el.buffered.end(bufferedPos), this.el.duration, this.name)
   }
 
-  playing() {
-    this.trigger('playback:play', this.name)
-  }
-
   render() {
     var style = Styler.getStyleFor(this.name)
     this.$el.append(style)
