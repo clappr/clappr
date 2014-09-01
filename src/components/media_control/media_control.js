@@ -375,6 +375,10 @@ class MediaControl extends UIObject {
       this.hide()
     }
 
+    if(this.options.mediacontrol && this.options.mediacontrol.style) {
+      this.$el.css(this.options.mediacontrol.style)
+    }
+
     this.$el.ready(() => {
       this.setVolumeLevel(this.currentVolume)
       this.setSeekPercentage(0)
