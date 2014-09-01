@@ -24,7 +24,7 @@ Put this on your HTML:
     <div id="player-wrapper"></div>
     <script>
       var playerElement = document.getElementById("player-wrapper");
-      var player = new WP3.Player({sources: ["http://video.globo.com/video.mp4"]});
+      var player = new Clappr.Player({sources: ["http://video.globo.com/video.mp4"]});
       player.attachTo(playerElement);
     </script>
   </body>
