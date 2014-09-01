@@ -80,7 +80,7 @@ class StatsPlugin extends BaseObject {
 
   getWatchingTime() {
     var totalTime = (Date.now() - this.watchingTimeInit)
-    return totalTime - this.rebufferingTime - this.startupTime
+    return totalTime - this.rebufferingTime
   }
 
   isRebuffering() {
