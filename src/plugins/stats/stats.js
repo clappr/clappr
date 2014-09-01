@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var Plugin = require('../../base/plugin');
+var BaseObject = require('../../base/base_object');
 var $ = require("jquery");
 
-class StatsPlugin extends Plugin {
+class StatsPlugin extends BaseObject {
   get name() { return 'stats' }
   get type() { return 'stats' }
 
@@ -14,6 +14,7 @@ class StatsPlugin extends Plugin {
     this.setInitialAttrs()
     this.reportInterval = options.reportInterval || 5000
     this.state = "IDLE"
+    this.bindEvents()
   }
 
   bindEvents() {

@@ -12,6 +12,10 @@ class FakePlayback extends Events {
   getPlaybackType() {
     return 'fake';
   }
+
+  play() {
+    this.trigger('playback:play', this.name)
+  }
 }
 
 module.exports = FakePlayback;
