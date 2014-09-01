@@ -48,6 +48,19 @@ describe('StatsPlugin', function() {
     expect(this.stats.getStats().rebufferingTime).to.equal(1500);
   });
 
+  it('should avoid NaN on watching time and rebuffering time when more than one bufferfull is dispatched', () => {
+    this.container.play();
+    this.container.buffering(); // startup time
+    this.clock.tick(1000);
+    this.container.bufferfull();
+    this.container.bufferfull();
+
+    this.clock.tick(2000); // watching for 2 secs
+    expect(this.stats.getStats().watchingTime).to.equal(2000);
+    expect(this.stats.getStats().rebufferingTime).to.equal(0);
+    expect(this.stats.getStats().startupTime).to.equal(1000);
+  });
+
   it('should calculate total watching time', () => {
     this.container.play();
     this.container.buffering(); // startup time
@@ -105,7 +118,6 @@ describe('StatsPlugin', function() {
     container.addPlugin(stats);
     container.play();
     this.clock.tick(25);
-    console.log(spy.callCount);
     spy.calledTwice.should.be.true;
   });
 

@@ -18,7 +18,7 @@ class StatsPlugin extends BaseObject {
   }
 
   bindEvents() {
-    this.listenTo(this.container, 'container:play', this.onPlay)
+    this.listenTo(this.container.playback, 'playback:play', this.onPlay)
     this.listenTo(this.container, 'container:stop', this.onStop)
     this.listenTo(this.container, 'container:destroyed', this.onStop)
     this.listenTo(this.container, 'container:setreportinterval', this.setReportInterval)
@@ -67,7 +67,7 @@ class StatsPlugin extends BaseObject {
       this.firstPlay = false
       this.startupTime = Date.now() - this.startupTimeInit
       this.watchingTimeInit = Date.now()
-    } else {
+    } else if (!!this.rebufferingTimeInit) {
       this.rebufferingTime += this.getRebufferingTime()
     }
     this.rebufferingTimeInit = undefined
@@ -103,6 +103,7 @@ class StatsPlugin extends BaseObject {
   }
   
   report() {
+    var stats = this.getStats()
     this.container.statsReport(this.getStats())
   }
 }
