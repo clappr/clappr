@@ -159,10 +159,18 @@ class Core extends UIObject {
     if (this.mediaControl) {
       this.mediaControl.setContainer(container)
     } else {
-      this.mediaControl = new MediaControl(_.extend({container: container}, this.options))
+      this.mediaControl = this.createMediaControl(_.extend({container: container}, this.options))
       this.listenTo(this.mediaControl, 'mediacontrol:fullscreen', this.toggleFullscreen)
       this.listenTo(this.mediaControl, 'mediacontrol:show', this.onMediaControlShow.bind(this, true))
       this.listenTo(this.mediaControl, 'mediacontrol:hide', this.onMediaControlShow.bind(this, false))
+    }
+  }
+
+  createMediaControl(options) {
+    if(this.options.mediacontrol && this.options.mediacontrol.external) {
+      return new this.options.mediacontrol.external(options);
+    } else {
+      return new MediaControl(options);
     }
   }
 
