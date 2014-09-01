@@ -97,8 +97,11 @@ class Container extends UIObject {
     this.trigger('container:progress', startPosition, endPosition, duration, this.name);
   }
 
-  play() {
+  playing() {
     this.trigger('container:play', this.name);
+  }
+
+  play() {
     this.playback.play();
   }
 
