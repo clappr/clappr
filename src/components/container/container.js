@@ -102,7 +102,6 @@ class Container extends UIObject {
   }
 
   play() {
-    console.log('Container#play');
     this.playback.play();
   }
 
