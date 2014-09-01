@@ -49,7 +49,7 @@ class HLS extends UIPlugin {
     Mediator.on(this.uniqueId + ':flashready', () => this.bootstrap())
     Mediator.on(this.uniqueId + ':timeupdate', (params) => this.updateTime(params))
     Mediator.on(this.uniqueId + ':playbackstate', (state) => this.setPlaybackState(state))
-    Mediator.on(this.uniqueId + ':highdefinition', (params) => this.updateHighDefinition(params))
+    Mediator.on(this.uniqueId + ':playbackerror', () => this.flashPlaybackError())
   }
 
   stopListening() {
@@ -58,6 +58,7 @@ class HLS extends UIPlugin {
     Mediator.off(this.uniqueId + ':timeupdate')
     Mediator.off(this.uniqueId + ':playbackstate')
     Mediator.off(this.uniqueId + ':highdefinition')
+    Mediator.off(this.uniqueId + ':playbackerror')
   }
 
   safe(fn) {
@@ -245,6 +246,10 @@ class HLS extends UIPlugin {
         this.el.globoPlayerSeek(time)
       }
     })
+  }
+
+  flashPlaybackError() {
+    this.trigger('playback:stop')
   }
 
   timeUpdate(time, duration) {
