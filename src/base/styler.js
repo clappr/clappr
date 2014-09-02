@@ -10,7 +10,7 @@ var Styler = {
   getStyleFor: function(name, options) {
     options = options || {};
     console.log('~~~~~ underscore', _);
-    console.log(JST.CSS[name]);
+    console.log(JST.CSS);
     return $('<style></style>').html(_.template(JST.CSS[name])(options));
   }
 };
