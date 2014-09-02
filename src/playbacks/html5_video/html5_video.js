@@ -58,6 +58,8 @@ class HTML5Video extends UIPlugin {
 
   play() {
     this.el.play()
+    //FIXME: I don't think playback:{play,pause,etc} events are necessary.
+    this.trigger('playback:play');
   }
 
   pause() {
