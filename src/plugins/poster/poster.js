@@ -6,6 +6,7 @@ var UIPlugin = require('../../base/ui_plugin')
 var Styler = require('../../base/styler')
 var JST = require('../../base/jst')
 var $ = require('jquery')
+var _ = require('underscore')
 
 class PosterPlugin extends UIPlugin {
   get name() { return 'poster' }
@@ -26,11 +27,11 @@ class PosterPlugin extends UIPlugin {
 
   constructor(options) {
     super(options)
-    if (options.disableControlsOnPoster === undefined)
-      options.disableControlsOnPoster = true
-    this.options = options
-    if (this.options.disableControlsOnPoster)
+    this.options = options;
+    _.defaults(this.options, {disableControlsOnPoster: true});
+    if (this.options.disableControlsOnPoster) {
       this.container.disableMediaControl()
+    }
     this.render()
     this.bindEvents();
   }
