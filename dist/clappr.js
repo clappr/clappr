@@ -14163,7 +14163,7 @@ return jQuery;
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],6:[function(require,module,exports){
-//     Underscore.js 1.6.0
+//     Underscore.js 1.7.0
 //     http://underscorejs.org
 //     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 //     Underscore may be freely distributed under the MIT license.
@@ -14179,9 +14179,6 @@ return jQuery;
   // Save the previous value of the `_` variable.
   var previousUnderscore = root._;
 
-  // Establish the object that gets returned to break out of a loop iteration.
-  var breaker = {};
-
   // Save bytes in the minified (but not gzipped) version:
   var ArrayProto = Array.prototype, ObjProto = Object.prototype, FuncProto = Function.prototype;
 
@@ -14196,15 +14193,6 @@ return jQuery;
   // All **ECMAScript 5** native function implementations that we hope to use
   // are declared here.
   var
-    nativeForEach      = ArrayProto.forEach,
-    nativeMap          = ArrayProto.map,
-    nativeReduce       = ArrayProto.reduce,
-    nativeReduceRight  = ArrayProto.reduceRight,
-    nativeFilter       = ArrayProto.filter,
-    nativeEvery        = ArrayProto.every,
-    nativeSome         = ArrayProto.some,
-    nativeIndexOf      = ArrayProto.indexOf,
-    nativeLastIndexOf  = ArrayProto.lastIndexOf,
     nativeIsArray      = Array.isArray,
     nativeKeys         = Object.keys,
     nativeBind         = FuncProto.bind;
@@ -14218,8 +14206,7 @@ return jQuery;
 
   // Export the Underscore object for **Node.js**, with
   // backwards-compatibility for the old `require()` API. If we're in
-  // the browser, add `_` as a global object via a string identifier,
-  // for Closure Compiler "advanced" mode.
+  // the browser, add `_` as a global object.
   if (typeof exports !== 'undefined') {
     if (typeof module !== 'undefined' && module.exports) {
       exports = module.exports = _;
@@ -14230,98 +14217,125 @@ return jQuery;
   }
 
   // Current version.
-  _.VERSION = '1.6.0';
+  _.VERSION = '1.7.0';
+
+  // Internal function that returns an efficient (for current engines) version
+  // of the passed-in callback, to be repeatedly applied in other Underscore
+  // functions.
+  var createCallback = function(func, context, argCount) {
+    if (context === void 0) return func;
+    switch (argCount == null ? 3 : argCount) {
+      case 1: return function(value) {
+        return func.call(context, value);
+      };
+      case 2: return function(value, other) {
+        return func.call(context, value, other);
+      };
+      case 3: return function(value, index, collection) {
+        return func.call(context, value, index, collection);
+      };
+      case 4: return function(accumulator, value, index, collection) {
+        return func.call(context, accumulator, value, index, collection);
+      };
+    }
+    return function() {
+      return func.apply(context, arguments);
+    };
+  };
+
+  // A mostly-internal function to generate callbacks that can be applied
+  // to each element in a collection, returning the desired result — either
+  // identity, an arbitrary callback, a property matcher, or a property accessor.
+  _.iteratee = function(value, context, argCount) {
+    if (value == null) return _.identity;
+    if (_.isFunction(value)) return createCallback(value, context, argCount);
+    if (_.isObject(value)) return _.matches(value);
+    return _.property(value);
+  };
 
   // Collection Functions
   // --------------------
 
   // The cornerstone, an `each` implementation, aka `forEach`.
-  // Handles objects with the built-in `forEach`, arrays, and raw objects.
-  // Delegates to **ECMAScript 5**'s native `forEach` if available.
-  var each = _.each = _.forEach = function(obj, iterator, context) {
+  // Handles raw objects in addition to array-likes. Treats all
+  // sparse array-likes as if they were dense.
+  _.each = _.forEach = function(obj, iteratee, context) {
     if (obj == null) return obj;
-    if (nativeForEach && obj.forEach === nativeForEach) {
-      obj.forEach(iterator, context);
-    } else if (obj.length === +obj.length) {
-      for (var i = 0, length = obj.length; i < length; i++) {
-        if (iterator.call(context, obj[i], i, obj) === breaker) return;
+    iteratee = createCallback(iteratee, context);
+    var i, length = obj.length;
+    if (length === +length) {
+      for (i = 0; i < length; i++) {
+        iteratee(obj[i], i, obj);
       }
     } else {
       var keys = _.keys(obj);
-      for (var i = 0, length = keys.length; i < length; i++) {
-        if (iterator.call(context, obj[keys[i]], keys[i], obj) === breaker) return;
+      for (i = 0, length = keys.length; i < length; i++) {
+        iteratee(obj[keys[i]], keys[i], obj);
       }
     }
     return obj;
   };
 
-  // Return the results of applying the iterator to each element.
-  // Delegates to **ECMAScript 5**'s native `map` if available.
-  _.map = _.collect = function(obj, iterator, context) {
-    var results = [];
-    if (obj == null) return results;
-    if (nativeMap && obj.map === nativeMap) return obj.map(iterator, context);
-    each(obj, function(value, index, list) {
-      results.push(iterator.call(context, value, index, list));
-    });
+  // Return the results of applying the iteratee to each element.
+  _.map = _.collect = function(obj, iteratee, context) {
+    if (obj == null) return [];
+    iteratee = _.iteratee(iteratee, context);
+    var keys = obj.length !== +obj.length && _.keys(obj),
+        length = (keys || obj).length,
+        results = Array(length),
+        currentKey;
+    for (var index = 0; index < length; index++) {
+      currentKey = keys ? keys[index] : index;
+      results[index] = iteratee(obj[currentKey], currentKey, obj);
+    }
     return results;
   };
 
   var reduceError = 'Reduce of empty array with no initial value';
 
   // **Reduce** builds up a single result from a list of values, aka `inject`,
-  // or `foldl`. Delegates to **ECMAScript 5**'s native `reduce` if available.
-  _.reduce = _.foldl = _.inject = function(obj, iterator, memo, context) {
-    var initial = arguments.length > 2;
+  // or `foldl`.
+  _.reduce = _.foldl = _.inject = function(obj, iteratee, memo, context) {
     if (obj == null) obj = [];
-    if (nativeReduce && obj.reduce === nativeReduce) {
-      if (context) iterator = _.bind(iterator, context);
-      return initial ? obj.reduce(iterator, memo) : obj.reduce(iterator);
+    iteratee = createCallback(iteratee, context, 4);
+    var keys = obj.length !== +obj.length && _.keys(obj),
+        length = (keys || obj).length,
+        index = 0, currentKey;
+    if (arguments.length < 3) {
+      if (!length) throw new TypeError(reduceError);
+      memo = obj[keys ? keys[index++] : index++];
     }
-    each(obj, function(value, index, list) {
-      if (!initial) {
-        memo = value;
-        initial = true;
-      } else {
-        memo = iterator.call(context, memo, value, index, list);
-      }
-    });
-    if (!initial) throw new TypeError(reduceError);
+    for (; index < length; index++) {
+      currentKey = keys ? keys[index] : index;
+      memo = iteratee(memo, obj[currentKey], currentKey, obj);
+    }
     return memo;
   };
 
   // The right-associative version of reduce, also known as `foldr`.
-  // Delegates to **ECMAScript 5**'s native `reduceRight` if available.
-  _.reduceRight = _.foldr = function(obj, iterator, memo, context) {
-    var initial = arguments.length > 2;
+  _.reduceRight = _.foldr = function(obj, iteratee, memo, context) {
     if (obj == null) obj = [];
-    if (nativeReduceRight && obj.reduceRight === nativeReduceRight) {
-      if (context) iterator = _.bind(iterator, context);
-      return initial ? obj.reduceRight(iterator, memo) : obj.reduceRight(iterator);
+    iteratee = createCallback(iteratee, context, 4);
+    var keys = obj.length !== + obj.length && _.keys(obj),
+        index = (keys || obj).length,
+        currentKey;
+    if (arguments.length < 3) {
+      if (!index) throw new TypeError(reduceError);
+      memo = obj[keys ? keys[--index] : --index];
     }
-    var length = obj.length;
-    if (length !== +length) {
-      var keys = _.keys(obj);
-      length = keys.length;
+    while (index--) {
+      currentKey = keys ? keys[index] : index;
+      memo = iteratee(memo, obj[currentKey], currentKey, obj);
     }
-    each(obj, function(value, index, list) {
-      index = keys ? keys[--length] : --length;
-      if (!initial) {
-        memo = obj[index];
-        initial = true;
-      } else {
-        memo = iterator.call(context, memo, obj[index], index, list);
-      }
-    });
-    if (!initial) throw new TypeError(reduceError);
     return memo;
   };
 
   // Return the first value which passes a truth test. Aliased as `detect`.
   _.find = _.detect = function(obj, predicate, context) {
     var result;
-    any(obj, function(value, index, list) {
-      if (predicate.call(context, value, index, list)) {
+    predicate = _.iteratee(predicate, context);
+    _.some(obj, function(value, index, list) {
+      if (predicate(value, index, list)) {
         result = value;
         return true;
       }
@@ -14330,61 +14344,58 @@ return jQuery;
   };
 
   // Return all the elements that pass a truth test.
-  // Delegates to **ECMAScript 5**'s native `filter` if available.
   // Aliased as `select`.
   _.filter = _.select = function(obj, predicate, context) {
     var results = [];
     if (obj == null) return results;
-    if (nativeFilter && obj.filter === nativeFilter) return obj.filter(predicate, context);
-    each(obj, function(value, index, list) {
-      if (predicate.call(context, value, index, list)) results.push(value);
+    predicate = _.iteratee(predicate, context);
+    _.each(obj, function(value, index, list) {
+      if (predicate(value, index, list)) results.push(value);
     });
     return results;
   };
 
   // Return all the elements for which a truth test fails.
   _.reject = function(obj, predicate, context) {
-    return _.filter(obj, function(value, index, list) {
-      return !predicate.call(context, value, index, list);
-    }, context);
+    return _.filter(obj, _.negate(_.iteratee(predicate)), context);
   };
 
   // Determine whether all of the elements match a truth test.
-  // Delegates to **ECMAScript 5**'s native `every` if available.
   // Aliased as `all`.
   _.every = _.all = function(obj, predicate, context) {
-    predicate || (predicate = _.identity);
-    var result = true;
-    if (obj == null) return result;
-    if (nativeEvery && obj.every === nativeEvery) return obj.every(predicate, context);
-    each(obj, function(value, index, list) {
-      if (!(result = result && predicate.call(context, value, index, list))) return breaker;
-    });
-    return !!result;
+    if (obj == null) return true;
+    predicate = _.iteratee(predicate, context);
+    var keys = obj.length !== +obj.length && _.keys(obj),
+        length = (keys || obj).length,
+        index, currentKey;
+    for (index = 0; index < length; index++) {
+      currentKey = keys ? keys[index] : index;
+      if (!predicate(obj[currentKey], currentKey, obj)) return false;
+    }
+    return true;
   };
 
   // Determine if at least one element in the object matches a truth test.
-  // Delegates to **ECMAScript 5**'s native `some` if available.
   // Aliased as `any`.
-  var any = _.some = _.any = function(obj, predicate, context) {
-    predicate || (predicate = _.identity);
-    var result = false;
-    if (obj == null) return result;
-    if (nativeSome && obj.some === nativeSome) return obj.some(predicate, context);
-    each(obj, function(value, index, list) {
-      if (result || (result = predicate.call(context, value, index, list))) return breaker;
-    });
-    return !!result;
+  _.some = _.any = function(obj, predicate, context) {
+    if (obj == null) return false;
+    predicate = _.iteratee(predicate, context);
+    var keys = obj.length !== +obj.length && _.keys(obj),
+        length = (keys || obj).length,
+        index, currentKey;
+    for (index = 0; index < length; index++) {
+      currentKey = keys ? keys[index] : index;
+      if (predicate(obj[currentKey], currentKey, obj)) return true;
+    }
+    return false;
   };
 
   // Determine if the array or object contains a given value (using `===`).
   // Aliased as `include`.
   _.contains = _.include = function(obj, target) {
     if (obj == null) return false;
-    if (nativeIndexOf && obj.indexOf === nativeIndexOf) return obj.indexOf(target) != -1;
-    return any(obj, function(value) {
-      return value === target;
-    });
+    if (obj.length !== +obj.length) obj = _.values(obj);
+    return _.indexOf(obj, target) >= 0;
   };
 
   // Invoke a method (with arguments) on every item in a collection.
@@ -14413,51 +14424,67 @@ return jQuery;
     return _.find(obj, _.matches(attrs));
   };
 
-  // Return the maximum element or (element-based computation).
-  // Can't optimize arrays of integers longer than 65,535 elements.
-  // See [WebKit Bug 80797](https://bugs.webkit.org/show_bug.cgi?id=80797)
-  _.max = function(obj, iterator, context) {
-    if (!iterator && _.isArray(obj) && obj[0] === +obj[0] && obj.length < 65535) {
-      return Math.max.apply(Math, obj);
-    }
-    var result = -Infinity, lastComputed = -Infinity;
-    each(obj, function(value, index, list) {
-      var computed = iterator ? iterator.call(context, value, index, list) : value;
-      if (computed > lastComputed) {
-        result = value;
-        lastComputed = computed;
+  // Return the maximum element (or element-based computation).
+  _.max = function(obj, iteratee, context) {
+    var result = -Infinity, lastComputed = -Infinity,
+        value, computed;
+    if (iteratee == null && obj != null) {
+      obj = obj.length === +obj.length ? obj : _.values(obj);
+      for (var i = 0, length = obj.length; i < length; i++) {
+        value = obj[i];
+        if (value > result) {
+          result = value;
+        }
       }
-    });
+    } else {
+      iteratee = _.iteratee(iteratee, context);
+      _.each(obj, function(value, index, list) {
+        computed = iteratee(value, index, list);
+        if (computed > lastComputed || computed === -Infinity && result === -Infinity) {
+          result = value;
+          lastComputed = computed;
+        }
+      });
+    }
     return result;
   };
 
   // Return the minimum element (or element-based computation).
-  _.min = function(obj, iterator, context) {
-    if (!iterator && _.isArray(obj) && obj[0] === +obj[0] && obj.length < 65535) {
-      return Math.min.apply(Math, obj);
-    }
-    var result = Infinity, lastComputed = Infinity;
-    each(obj, function(value, index, list) {
-      var computed = iterator ? iterator.call(context, value, index, list) : value;
-      if (computed < lastComputed) {
-        result = value;
-        lastComputed = computed;
+  _.min = function(obj, iteratee, context) {
+    var result = Infinity, lastComputed = Infinity,
+        value, computed;
+    if (iteratee == null && obj != null) {
+      obj = obj.length === +obj.length ? obj : _.values(obj);
+      for (var i = 0, length = obj.length; i < length; i++) {
+        value = obj[i];
+        if (value < result) {
+          result = value;
+        }
       }
-    });
+    } else {
+      iteratee = _.iteratee(iteratee, context);
+      _.each(obj, function(value, index, list) {
+        computed = iteratee(value, index, list);
+        if (computed < lastComputed || computed === Infinity && result === Infinity) {
+          result = value;
+          lastComputed = computed;
+        }
+      });
+    }
     return result;
   };
 
-  // Shuffle an array, using the modern version of the
+  // Shuffle a collection, using the modern version of the
   // [Fisher-Yates shuffle](http://en.wikipedia.org/wiki/Fisher–Yates_shuffle).
   _.shuffle = function(obj) {
-    var rand;
-    var index = 0;
-    var shuffled = [];
-    each(obj, function(value) {
-      rand = _.random(index++);
-      shuffled[index - 1] = shuffled[rand];
-      shuffled[rand] = value;
-    });
+    var set = obj && obj.length === +obj.length ? obj : _.values(obj);
+    var length = set.length;
+    var shuffled = Array(length);
+    for (var index = 0, rand; index < length; index++) {
+      rand = _.random(0, index);
+      if (rand !== index) shuffled[index] = shuffled[rand];
+      shuffled[rand] = set[index];
+    }
     return shuffled;
   };
 
@@ -14472,21 +14499,14 @@ return jQuery;
     return _.shuffle(obj).slice(0, Math.max(0, n));
   };
 
-  // An internal function to generate lookup iterators.
-  var lookupIterator = function(value) {
-    if (value == null) return _.identity;
-    if (_.isFunction(value)) return value;
-    return _.property(value);
-  };
-
-  // Sort the object's values by a criterion produced by an iterator.
-  _.sortBy = function(obj, iterator, context) {
-    iterator = lookupIterator(iterator);
+  // Sort the object's values by a criterion produced by an iteratee.
+  _.sortBy = function(obj, iteratee, context) {
+    iteratee = _.iteratee(iteratee, context);
     return _.pluck(_.map(obj, function(value, index, list) {
       return {
         value: value,
         index: index,
-        criteria: iterator.call(context, value, index, list)
+        criteria: iteratee(value, index, list)
       };
     }).sort(function(left, right) {
       var a = left.criteria;
@@ -14501,12 +14521,12 @@ return jQuery;
 
   // An internal function used for aggregate "group by" operations.
   var group = function(behavior) {
-    return function(obj, iterator, context) {
+    return function(obj, iteratee, context) {
       var result = {};
-      iterator = lookupIterator(iterator);
-      each(obj, function(value, index) {
-        var key = iterator.call(context, value, index, obj);
-        behavior(result, key, value);
+      iteratee = _.iteratee(iteratee, context);
+      _.each(obj, function(value, index) {
+        var key = iteratee(value, index, obj);
+        behavior(result, value, key);
       });
       return result;
     };
@@ -14514,32 +14534,32 @@ return jQuery;
 
   // Groups the object's values by a criterion. Pass either a string attribute
   // to group by, or a function that returns the criterion.
-  _.groupBy = group(function(result, key, value) {
-    _.has(result, key) ? result[key].push(value) : result[key] = [value];
+  _.groupBy = group(function(result, value, key) {
+    if (_.has(result, key)) result[key].push(value); else result[key] = [value];
   });
 
   // Indexes the object's values by a criterion, similar to `groupBy`, but for
   // when you know that your index values will be unique.
-  _.indexBy = group(function(result, key, value) {
+  _.indexBy = group(function(result, value, key) {
     result[key] = value;
   });
 
   // Counts instances of an object that group by a certain criterion. Pass
   // either a string attribute to count by, or a function that returns the
   // criterion.
-  _.countBy = group(function(result, key) {
-    _.has(result, key) ? result[key]++ : result[key] = 1;
+  _.countBy = group(function(result, value, key) {
+    if (_.has(result, key)) result[key]++; else result[key] = 1;
   });
 
   // Use a comparator function to figure out the smallest index at which
   // an object should be inserted so as to maintain order. Uses binary search.
-  _.sortedIndex = function(array, obj, iterator, context) {
-    iterator = lookupIterator(iterator);
-    var value = iterator.call(context, obj);
+  _.sortedIndex = function(array, obj, iteratee, context) {
+    iteratee = _.iteratee(iteratee, context, 1);
+    var value = iteratee(obj);
     var low = 0, high = array.length;
     while (low < high) {
-      var mid = (low + high) >>> 1;
-      iterator.call(context, array[mid]) < value ? low = mid + 1 : high = mid;
+      var mid = low + high >>> 1;
+      if (iteratee(array[mid]) < value) low = mid + 1; else high = mid;
     }
     return low;
   };
@@ -14555,7 +14575,18 @@ return jQuery;
   // Return the number of elements in an object.
   _.size = function(obj) {
     if (obj == null) return 0;
-    return (obj.length === +obj.length) ? obj.length : _.keys(obj).length;
+    return obj.length === +obj.length ? obj.length : _.keys(obj).length;
+  };
+
+  // Split a collection into two arrays: one whose elements all satisfy the given
+  // predicate, and one whose elements all do not satisfy the predicate.
+  _.partition = function(obj, predicate, context) {
+    predicate = _.iteratee(predicate, context);
+    var pass = [], fail = [];
+    _.each(obj, function(value, key, obj) {
+      (predicate(value, key, obj) ? pass : fail).push(value);
+    });
+    return [pass, fail];
   };
 
   // Array Functions
@@ -14566,7 +14597,7 @@ return jQuery;
   // allows it to work with `_.map`.
   _.first = _.head = _.take = function(array, n, guard) {
     if (array == null) return void 0;
-    if ((n == null) || guard) return array[0];
+    if (n == null || guard) return array[0];
     if (n < 0) return [];
     return slice.call(array, 0, n);
   };
@@ -14576,14 +14607,14 @@ return jQuery;
   // the array, excluding the last N. The **guard** check allows it to work with
   // `_.map`.
   _.initial = function(array, n, guard) {
-    return slice.call(array, 0, array.length - ((n == null) || guard ? 1 : n));
+    return slice.call(array, 0, Math.max(0, array.length - (n == null || guard ? 1 : n)));
   };
 
   // Get the last element of an array. Passing **n** will return the last N
   // values in the array. The **guard** check allows it to work with `_.map`.
   _.last = function(array, n, guard) {
     if (array == null) return void 0;
-    if ((n == null) || guard) return array[array.length - 1];
+    if (n == null || guard) return array[array.length - 1];
     return slice.call(array, Math.max(array.length - n, 0));
   };
 
@@ -14592,7 +14623,7 @@ return jQuery;
   // the rest N values in the array. The **guard**
   // check allows it to work with `_.map`.
   _.rest = _.tail = _.drop = function(array, n, guard) {
-    return slice.call(array, (n == null) || guard ? 1 : n);
+    return slice.call(array, n == null || guard ? 1 : n);
   };
 
   // Trim out all falsy values from an array.
@@ -14601,23 +14632,26 @@ return jQuery;
   };
 
   // Internal implementation of a recursive `flatten` function.
-  var flatten = function(input, shallow, output) {
+  var flatten = function(input, shallow, strict, output) {
     if (shallow && _.every(input, _.isArray)) {
       return concat.apply(output, input);
     }
-    each(input, function(value) {
-      if (_.isArray(value) || _.isArguments(value)) {
-        shallow ? push.apply(output, value) : flatten(value, shallow, output);
+    for (var i = 0, length = input.length; i < length; i++) {
+      var value = input[i];
+      if (!_.isArray(value) && !_.isArguments(value)) {
+        if (!strict) output.push(value);
+      } else if (shallow) {
+        push.apply(output, value);
       } else {
-        output.push(value);
+        flatten(value, shallow, strict, output);
       }
-    });
+    }
     return output;
   };
 
   // Flatten out an array, either recursively (by default), or just one level.
   _.flatten = function(array, shallow) {
-    return flatten(array, shallow, []);
+    return flatten(array, shallow, false, []);
   };
 
   // Return a version of the array that does not contain the specified value(s).
@@ -14625,68 +14659,77 @@ return jQuery;
     return _.difference(array, slice.call(arguments, 1));
   };
 
-  // Split an array into two arrays: one whose elements all satisfy the given
-  // predicate, and one whose elements all do not satisfy the predicate.
-  _.partition = function(array, predicate) {
-    var pass = [], fail = [];
-    each(array, function(elem) {
-      (predicate(elem) ? pass : fail).push(elem);
-    });
-    return [pass, fail];
-  };
-
   // Produce a duplicate-free version of the array. If the array has already
   // been sorted, you have the option of using a faster algorithm.
   // Aliased as `unique`.
-  _.uniq = _.unique = function(array, isSorted, iterator, context) {
-    if (_.isFunction(isSorted)) {
-      context = iterator;
-      iterator = isSorted;
+  _.uniq = _.unique = function(array, isSorted, iteratee, context) {
+    if (array == null) return [];
+    if (!_.isBoolean(isSorted)) {
+      context = iteratee;
+      iteratee = isSorted;
       isSorted = false;
     }
-    var initial = iterator ? _.map(array, iterator, context) : array;
-    var results = [];
+    if (iteratee != null) iteratee = _.iteratee(iteratee, context);
+    var result = [];
     var seen = [];
-    each(initial, function(value, index) {
-      if (isSorted ? (!index || seen[seen.length - 1] !== value) : !_.contains(seen, value)) {
-        seen.push(value);
-        results.push(array[index]);
+    for (var i = 0, length = array.length; i < length; i++) {
+      var value = array[i];
+      if (isSorted) {
+        if (!i || seen !== value) result.push(value);
+        seen = value;
+      } else if (iteratee) {
+        var computed = iteratee(value, i, array);
+        if (_.indexOf(seen, computed) < 0) {
+          seen.push(computed);
+          result.push(value);
+        }
+      } else if (_.indexOf(result, value) < 0) {
+        result.push(value);
       }
-    });
-    return results;
+    }
+    return result;
   };
 
   // Produce an array that contains the union: each distinct element from all of
   // the passed-in arrays.
   _.union = function() {
-    return _.uniq(_.flatten(arguments, true));
+    return _.uniq(flatten(arguments, true, true, []));
   };
 
   // Produce an array that contains every item shared between all the
   // passed-in arrays.
   _.intersection = function(array) {
-    var rest = slice.call(arguments, 1);
-    return _.filter(_.uniq(array), function(item) {
-      return _.every(rest, function(other) {
-        return _.contains(other, item);
-      });
-    });
+    if (array == null) return [];
+    var result = [];
+    var argsLength = arguments.length;
+    for (var i = 0, length = array.length; i < length; i++) {
+      var item = array[i];
+      if (_.contains(result, item)) continue;
+      for (var j = 1; j < argsLength; j++) {
+        if (!_.contains(arguments[j], item)) break;
+      }
+      if (j === argsLength) result.push(item);
+    }
+    return result;
   };
 
   // Take the difference between one array and a number of other arrays.
   // Only the elements present in just the first array will remain.
   _.difference = function(array) {
-    var rest = concat.apply(ArrayProto, slice.call(arguments, 1));
-    return _.filter(array, function(value){ return !_.contains(rest, value); });
+    var rest = flatten(slice.call(arguments, 1), true, true, []);
+    return _.filter(array, function(value){
+      return !_.contains(rest, value);
+    });
   };
 
   // Zip together multiple lists into a single array -- elements that share
   // an index go together.
-  _.zip = function() {
-    var length = _.max(_.pluck(arguments, 'length').concat(0));
-    var results = new Array(length);
+  _.zip = function(array) {
+    if (array == null) return [];
+    var length = _.max(arguments, 'length').length;
+    var results = Array(length);
     for (var i = 0; i < length; i++) {
-      results[i] = _.pluck(arguments, '' + i);
+      results[i] = _.pluck(arguments, i);
     }
     return results;
   };
@@ -14707,10 +14750,8 @@ return jQuery;
     return result;
   };
 
-  // If the browser doesn't supply us with indexOf (I'm looking at you, **MSIE**),
-  // we need this function. Return the position of the first occurrence of an
-  // item in an array, or -1 if the item is not included in the array.
-  // Delegates to **ECMAScript 5**'s native `indexOf` if available.
+  // Return the position of the first occurrence of an item in an array,
+  // or -1 if the item is not included in the array.
   // If the array is large and already in sort order, pass `true`
   // for **isSorted** to use binary search.
   _.indexOf = function(array, item, isSorted) {
@@ -14718,26 +14759,23 @@ return jQuery;
     var i = 0, length = array.length;
     if (isSorted) {
       if (typeof isSorted == 'number') {
-        i = (isSorted < 0 ? Math.max(0, length + isSorted) : isSorted);
+        i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
       } else {
         i = _.sortedIndex(array, item);
         return array[i] === item ? i : -1;
       }
     }
-    if (nativeIndexOf && array.indexOf === nativeIndexOf) return array.indexOf(item, isSorted);
     for (; i < length; i++) if (array[i] === item) return i;
     return -1;
   };
 
-  // Delegates to **ECMAScript 5**'s native `lastIndexOf` if available.
   _.lastIndexOf = function(array, item, from) {
     if (array == null) return -1;
-    var hasIndex = from != null;
-    if (nativeLastIndexOf && array.lastIndexOf === nativeLastIndexOf) {
-      return hasIndex ? array.lastIndexOf(item, from) : array.lastIndexOf(item);
+    var idx = array.length;
+    if (typeof from == 'number') {
+      idx = from < 0 ? idx + from + 1 : Math.min(idx, from + 1);
     }
-    var i = (hasIndex ? from : array.length);
-    while (i--) if (array[i] === item) return i;
+    while (--idx >= 0) if (array[idx] === item) return idx;
     return -1;
   };
 
@@ -14749,15 +14787,13 @@ return jQuery;
       stop = start || 0;
       start = 0;
     }
-    step = arguments[2] || 1;
+    step = step || 1;
 
     var length = Math.max(Math.ceil((stop - start) / step), 0);
-    var idx = 0;
-    var range = new Array(length);
+    var range = Array(length);
 
-    while(idx < length) {
-      range[idx++] = start;
-      start += step;
+    for (var idx = 0; idx < length; idx++, start += step) {
+      range[idx] = start;
     }
 
     return range;
@@ -14767,7 +14803,7 @@ return jQuery;
   // ------------------
 
   // Reusable constructor function for prototype setting.
-  var ctor = function(){};
+  var Ctor = function(){};
 
   // Create a function bound to a given object (assigning `this`, and arguments,
   // optionally). Delegates to **ECMAScript 5**'s native `Function.bind` if
@@ -14775,17 +14811,18 @@ return jQuery;
   _.bind = function(func, context) {
     var args, bound;
     if (nativeBind && func.bind === nativeBind) return nativeBind.apply(func, slice.call(arguments, 1));
-    if (!_.isFunction(func)) throw new TypeError;
+    if (!_.isFunction(func)) throw new TypeError('Bind must be called on a function');
     args = slice.call(arguments, 2);
-    return bound = function() {
+    bound = function() {
       if (!(this instanceof bound)) return func.apply(context, args.concat(slice.call(arguments)));
-      ctor.prototype = func.prototype;
-      var self = new ctor;
-      ctor.prototype = null;
+      Ctor.prototype = func.prototype;
+      var self = new Ctor;
+      Ctor.prototype = null;
       var result = func.apply(self, args.concat(slice.call(arguments)));
-      if (Object(result) === result) return result;
+      if (_.isObject(result)) return result;
       return self;
     };
+    return bound;
   };
 
   // Partially apply a function by creating a version that has had some of its
@@ -14808,27 +14845,34 @@ return jQuery;
   // are the method names to be bound. Useful for ensuring that all callbacks
   // defined on an object belong to it.
   _.bindAll = function(obj) {
-    var funcs = slice.call(arguments, 1);
-    if (funcs.length === 0) throw new Error('bindAll must be passed function names');
-    each(funcs, function(f) { obj[f] = _.bind(obj[f], obj); });
+    var i, length = arguments.length, key;
+    if (length <= 1) throw new Error('bindAll must be passed function names');
+    for (i = 1; i < length; i++) {
+      key = arguments[i];
+      obj[key] = _.bind(obj[key], obj);
+    }
     return obj;
   };
 
   // Memoize an expensive function by storing its results.
   _.memoize = function(func, hasher) {
-    var memo = {};
-    hasher || (hasher = _.identity);
-    return function() {
-      var key = hasher.apply(this, arguments);
-      return _.has(memo, key) ? memo[key] : (memo[key] = func.apply(this, arguments));
+    var memoize = function(key) {
+      var cache = memoize.cache;
+      var address = hasher ? hasher.apply(this, arguments) : key;
+      if (!_.has(cache, address)) cache[address] = func.apply(this, arguments);
+      return cache[address];
     };
+    memoize.cache = {};
+    return memoize;
   };
 
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
   _.delay = function(func, wait) {
     var args = slice.call(arguments, 2);
-    return setTimeout(function(){ return func.apply(null, args); }, wait);
+    return setTimeout(function(){
+      return func.apply(null, args);
+    }, wait);
   };
 
   // Defers a function, scheduling it to run after the current call stack has
@@ -14846,12 +14890,12 @@ return jQuery;
     var context, args, result;
     var timeout = null;
     var previous = 0;
-    options || (options = {});
+    if (!options) options = {};
     var later = function() {
       previous = options.leading === false ? 0 : _.now();
       timeout = null;
       result = func.apply(context, args);
-      context = args = null;
+      if (!timeout) context = args = null;
     };
     return function() {
       var now = _.now();
@@ -14859,12 +14903,12 @@ return jQuery;
       var remaining = wait - (now - previous);
       context = this;
       args = arguments;
-      if (remaining <= 0) {
+      if (remaining <= 0 || remaining > wait) {
         clearTimeout(timeout);
         timeout = null;
         previous = now;
         result = func.apply(context, args);
-        context = args = null;
+        if (!timeout) context = args = null;
       } else if (!timeout && options.trailing !== false) {
         timeout = setTimeout(later, remaining);
       }
@@ -14881,13 +14925,14 @@ return jQuery;
 
     var later = function() {
       var last = _.now() - timestamp;
-      if (last < wait) {
+
+      if (last < wait && last > 0) {
         timeout = setTimeout(later, wait - last);
       } else {
         timeout = null;
         if (!immediate) {
           result = func.apply(context, args);
-          context = args = null;
+          if (!timeout) context = args = null;
         }
       }
     };
@@ -14897,28 +14942,13 @@ return jQuery;
       args = arguments;
       timestamp = _.now();
       var callNow = immediate && !timeout;
-      if (!timeout) {
-        timeout = setTimeout(later, wait);
-      }
+      if (!timeout) timeout = setTimeout(later, wait);
       if (callNow) {
         result = func.apply(context, args);
         context = args = null;
       }
 
       return result;
-    };
-  };
-
-  // Returns a function that will be executed at most one time, no matter how
-  // often you call it. Useful for lazy initialization.
-  _.once = function(func) {
-    var ran = false, memo;
-    return function() {
-      if (ran) return memo;
-      ran = true;
-      memo = func.apply(this, arguments);
-      func = null;
-      return memo;
     };
   };
 
@@ -14929,16 +14959,23 @@ return jQuery;
     return _.partial(wrapper, func);
   };
 
+  // Returns a negated version of the passed-in predicate.
+  _.negate = function(predicate) {
+    return function() {
+      return !predicate.apply(this, arguments);
+    };
+  };
+
   // Returns a function that is the composition of a list of functions, each
   // consuming the return value of the function that follows.
   _.compose = function() {
-    var funcs = arguments;
+    var args = arguments;
+    var start = args.length - 1;
     return function() {
-      var args = arguments;
-      for (var i = funcs.length - 1; i >= 0; i--) {
-        args = [funcs[i].apply(this, args)];
-      }
-      return args[0];
+      var i = start;
+      var result = args[start].apply(this, arguments);
+      while (i--) result = args[i].call(this, result);
+      return result;
     };
   };
 
@@ -14950,6 +14987,23 @@ return jQuery;
       }
     };
   };
+
+  // Returns a function that will only be executed before being called N times.
+  _.before = function(times, func) {
+    var memo;
+    return function() {
+      if (--times > 0) {
+        memo = func.apply(this, arguments);
+      } else {
+        func = null;
+      }
+      return memo;
+    };
+  };
+
+  // Returns a function that will be executed at most one time, no matter how
+  // often you call it. Useful for lazy initialization.
+  _.once = _.partial(_.before, 2);
 
   // Object Functions
   // ----------------
@@ -14968,7 +15022,7 @@ return jQuery;
   _.values = function(obj) {
     var keys = _.keys(obj);
     var length = keys.length;
-    var values = new Array(length);
+    var values = Array(length);
     for (var i = 0; i < length; i++) {
       values[i] = obj[keys[i]];
     }
@@ -14979,7 +15033,7 @@ return jQuery;
   _.pairs = function(obj) {
     var keys = _.keys(obj);
     var length = keys.length;
-    var pairs = new Array(length);
+    var pairs = Array(length);
     for (var i = 0; i < length; i++) {
       pairs[i] = [keys[i], obj[keys[i]]];
     }
@@ -15008,45 +15062,62 @@ return jQuery;
 
   // Extend a given object with all the properties in passed-in object(s).
   _.extend = function(obj) {
-    each(slice.call(arguments, 1), function(source) {
-      if (source) {
-        for (var prop in source) {
-          obj[prop] = source[prop];
+    if (!_.isObject(obj)) return obj;
+    var source, prop;
+    for (var i = 1, length = arguments.length; i < length; i++) {
+      source = arguments[i];
+      for (prop in source) {
+        if (hasOwnProperty.call(source, prop)) {
+            obj[prop] = source[prop];
         }
       }
-    });
+    }
     return obj;
   };
 
   // Return a copy of the object only containing the whitelisted properties.
-  _.pick = function(obj) {
-    var copy = {};
-    var keys = concat.apply(ArrayProto, slice.call(arguments, 1));
-    each(keys, function(key) {
-      if (key in obj) copy[key] = obj[key];
-    });
-    return copy;
+  _.pick = function(obj, iteratee, context) {
+    var result = {}, key;
+    if (obj == null) return result;
+    if (_.isFunction(iteratee)) {
+      iteratee = createCallback(iteratee, context);
+      for (key in obj) {
+        var value = obj[key];
+        if (iteratee(value, key, obj)) result[key] = value;
+      }
+    } else {
+      var keys = concat.apply([], slice.call(arguments, 1));
+      obj = new Object(obj);
+      for (var i = 0, length = keys.length; i < length; i++) {
+        key = keys[i];
+        if (key in obj) result[key] = obj[key];
+      }
+    }
+    return result;
   };
 
    // Return a copy of the object without the blacklisted properties.
-  _.omit = function(obj) {
-    var copy = {};
-    var keys = concat.apply(ArrayProto, slice.call(arguments, 1));
-    for (var key in obj) {
-      if (!_.contains(keys, key)) copy[key] = obj[key];
+  _.omit = function(obj, iteratee, context) {
+    if (_.isFunction(iteratee)) {
+      iteratee = _.negate(iteratee);
+    } else {
+      var keys = _.map(concat.apply([], slice.call(arguments, 1)), String);
+      iteratee = function(value, key) {
+        return !_.contains(keys, key);
+      };
     }
-    return copy;
+    return _.pick(obj, iteratee, context);
   };
 
   // Fill in a given object with default properties.
   _.defaults = function(obj) {
-    each(slice.call(arguments, 1), function(source) {
-      if (source) {
-        for (var prop in source) {
-          if (obj[prop] === void 0) obj[prop] = source[prop];
-        }
+    if (!_.isObject(obj)) return obj;
+    for (var i = 1, length = arguments.length; i < length; i++) {
+      var source = arguments[i];
+      for (var prop in source) {
+        if (obj[prop] === void 0) obj[prop] = source[prop];
       }
-    });
+    }
     return obj;
   };
 
@@ -15068,7 +15139,7 @@ return jQuery;
   var eq = function(a, b, aStack, bStack) {
     // Identical objects are equal. `0 === -0`, but they aren't identical.
     // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
-    if (a === b) return a !== 0 || 1 / a == 1 / b;
+    if (a === b) return a !== 0 || 1 / a === 1 / b;
     // A strict comparison is necessary because `null == undefined`.
     if (a == null || b == null) return a === b;
     // Unwrap any wrapped objects.
@@ -15076,29 +15147,27 @@ return jQuery;
     if (b instanceof _) b = b._wrapped;
     // Compare `[[Class]]` names.
     var className = toString.call(a);
-    if (className != toString.call(b)) return false;
+    if (className !== toString.call(b)) return false;
     switch (className) {
-      // Strings, numbers, dates, and booleans are compared by value.
+      // Strings, numbers, regular expressions, dates, and booleans are compared by value.
+      case '[object RegExp]':
+      // RegExps are coerced to strings for comparison (Note: '' + /a/i === '/a/i')
       case '[object String]':
         // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
         // equivalent to `new String("5")`.
-        return a == String(b);
+        return '' + a === '' + b;
       case '[object Number]':
-        // `NaN`s are equivalent, but non-reflexive. An `egal` comparison is performed for
-        // other numeric values.
-        return a != +a ? b != +b : (a == 0 ? 1 / a == 1 / b : a == +b);
+        // `NaN`s are equivalent, but non-reflexive.
+        // Object(NaN) is equivalent to NaN
+        if (+a !== +a) return +b !== +b;
+        // An `egal` comparison is performed for other numeric values.
+        return +a === 0 ? 1 / +a === 1 / b : +a === +b;
       case '[object Date]':
       case '[object Boolean]':
         // Coerce dates and booleans to numeric primitive values. Dates are compared by their
         // millisecond representations. Note that invalid dates with millisecond representations
         // of `NaN` are not equivalent.
-        return +a == +b;
-      // RegExps are compared by their source patterns and flags.
-      case '[object RegExp]':
-        return a.source == b.source &&
-               a.global == b.global &&
-               a.multiline == b.multiline &&
-               a.ignoreCase == b.ignoreCase;
+        return +a === +b;
     }
     if (typeof a != 'object' || typeof b != 'object') return false;
     // Assume equality for cyclic structures. The algorithm for detecting cyclic
@@ -15107,25 +15176,29 @@ return jQuery;
     while (length--) {
       // Linear search. Performance is inversely proportional to the number of
       // unique nested structures.
-      if (aStack[length] == a) return bStack[length] == b;
+      if (aStack[length] === a) return bStack[length] === b;
     }
     // Objects with different constructors are not equivalent, but `Object`s
     // from different frames are.
     var aCtor = a.constructor, bCtor = b.constructor;
-    if (aCtor !== bCtor && !(_.isFunction(aCtor) && (aCtor instanceof aCtor) &&
-                             _.isFunction(bCtor) && (bCtor instanceof bCtor))
-                        && ('constructor' in a && 'constructor' in b)) {
+    if (
+      aCtor !== bCtor &&
+      // Handle Object.create(x) cases
+      'constructor' in a && 'constructor' in b &&
+      !(_.isFunction(aCtor) && aCtor instanceof aCtor &&
+        _.isFunction(bCtor) && bCtor instanceof bCtor)
+    ) {
       return false;
     }
     // Add the first object to the stack of traversed objects.
     aStack.push(a);
     bStack.push(b);
-    var size = 0, result = true;
+    var size, result;
     // Recursively compare objects and arrays.
-    if (className == '[object Array]') {
+    if (className === '[object Array]') {
       // Compare array lengths to determine if a deep comparison is necessary.
       size = a.length;
-      result = size == b.length;
+      result = size === b.length;
       if (result) {
         // Deep compare the contents, ignoring non-numeric properties.
         while (size--) {
@@ -15134,20 +15207,16 @@ return jQuery;
       }
     } else {
       // Deep compare objects.
-      for (var key in a) {
-        if (_.has(a, key)) {
-          // Count the expected number of properties.
-          size++;
-          // Deep compare each member.
+      var keys = _.keys(a), key;
+      size = keys.length;
+      // Ensure that both objects contain the same number of properties before comparing deep equality.
+      result = _.keys(b).length === size;
+      if (result) {
+        while (size--) {
+          // Deep compare each member
+          key = keys[size];
           if (!(result = _.has(b, key) && eq(a[key], b[key], aStack, bStack))) break;
         }
-      }
-      // Ensure that both objects contain the same number of properties.
-      if (result) {
-        for (key in b) {
-          if (_.has(b, key) && !(size--)) break;
-        }
-        result = !size;
       }
     }
     // Remove the first object from the stack of traversed objects.
@@ -15165,7 +15234,7 @@ return jQuery;
   // An "empty" object has no enumerable own-properties.
   _.isEmpty = function(obj) {
     if (obj == null) return true;
-    if (_.isArray(obj) || _.isString(obj)) return obj.length === 0;
+    if (_.isArray(obj) || _.isString(obj) || _.isArguments(obj)) return obj.length === 0;
     for (var key in obj) if (_.has(obj, key)) return false;
     return true;
   };
@@ -15178,18 +15247,19 @@ return jQuery;
   // Is a given value an array?
   // Delegates to ECMA5's native Array.isArray
   _.isArray = nativeIsArray || function(obj) {
-    return toString.call(obj) == '[object Array]';
+    return toString.call(obj) === '[object Array]';
   };
 
   // Is a given variable an object?
   _.isObject = function(obj) {
-    return obj === Object(obj);
+    var type = typeof obj;
+    return type === 'function' || type === 'object' && !!obj;
   };
 
   // Add some isType methods: isArguments, isFunction, isString, isNumber, isDate, isRegExp.
-  each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp'], function(name) {
+  _.each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp'], function(name) {
     _['is' + name] = function(obj) {
-      return toString.call(obj) == '[object ' + name + ']';
+      return toString.call(obj) === '[object ' + name + ']';
     };
   });
 
@@ -15197,14 +15267,14 @@ return jQuery;
   // there isn't any inspectable "Arguments" type.
   if (!_.isArguments(arguments)) {
     _.isArguments = function(obj) {
-      return !!(obj && _.has(obj, 'callee'));
+      return _.has(obj, 'callee');
     };
   }
 
-  // Optimize `isFunction` if appropriate.
-  if (typeof (/./) !== 'function') {
+  // Optimize `isFunction` if appropriate. Work around an IE 11 bug.
+  if (typeof /./ !== 'function') {
     _.isFunction = function(obj) {
-      return typeof obj === 'function';
+      return typeof obj == 'function' || false;
     };
   }
 
@@ -15215,12 +15285,12 @@ return jQuery;
 
   // Is the given value `NaN`? (NaN is the only number which does not equal itself).
   _.isNaN = function(obj) {
-    return _.isNumber(obj) && obj != +obj;
+    return _.isNumber(obj) && obj !== +obj;
   };
 
   // Is a given value a boolean?
   _.isBoolean = function(obj) {
-    return obj === true || obj === false || toString.call(obj) == '[object Boolean]';
+    return obj === true || obj === false || toString.call(obj) === '[object Boolean]';
   };
 
   // Is a given value equal to null?
@@ -15236,7 +15306,7 @@ return jQuery;
   // Shortcut function for checking if an object has a given property directly
   // on itself (in other words, not on a prototype).
   _.has = function(obj, key) {
-    return hasOwnProperty.call(obj, key);
+    return obj != null && hasOwnProperty.call(obj, key);
   };
 
   // Utility Functions
@@ -15249,16 +15319,18 @@ return jQuery;
     return this;
   };
 
-  // Keep the identity function around for default iterators.
+  // Keep the identity function around for default iteratees.
   _.identity = function(value) {
     return value;
   };
 
   _.constant = function(value) {
-    return function () {
+    return function() {
       return value;
     };
   };
+
+  _.noop = function(){};
 
   _.property = function(key) {
     return function(obj) {
@@ -15268,20 +15340,23 @@ return jQuery;
 
   // Returns a predicate for checking whether an object has a given set of `key:value` pairs.
   _.matches = function(attrs) {
+    var pairs = _.pairs(attrs), length = pairs.length;
     return function(obj) {
-      if (obj === attrs) return true; //avoid comparing an object to itself.
-      for (var key in attrs) {
-        if (attrs[key] !== obj[key])
-          return false;
+      if (obj == null) return !length;
+      obj = new Object(obj);
+      for (var i = 0; i < length; i++) {
+        var pair = pairs[i], key = pair[0];
+        if (pair[1] !== obj[key] || !(key in obj)) return false;
       }
       return true;
-    }
+    };
   };
 
   // Run a function **n** times.
-  _.times = function(n, iterator, context) {
+  _.times = function(n, iteratee, context) {
     var accum = Array(Math.max(0, n));
-    for (var i = 0; i < n; i++) accum[i] = iterator.call(context, i);
+    iteratee = createCallback(iteratee, context, 1);
+    for (var i = 0; i < n; i++) accum[i] = iteratee(i);
     return accum;
   };
 
@@ -15295,54 +15370,44 @@ return jQuery;
   };
 
   // A (possibly faster) way to get the current timestamp as an integer.
-  _.now = Date.now || function() { return new Date().getTime(); };
-
-  // List of HTML entities for escaping.
-  var entityMap = {
-    escape: {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#x27;'
-    }
+  _.now = Date.now || function() {
+    return new Date().getTime();
   };
-  entityMap.unescape = _.invert(entityMap.escape);
 
-  // Regexes containing the keys and values listed immediately above.
-  var entityRegexes = {
-    escape:   new RegExp('[' + _.keys(entityMap.escape).join('') + ']', 'g'),
-    unescape: new RegExp('(' + _.keys(entityMap.unescape).join('|') + ')', 'g')
+   // List of HTML entities for escaping.
+  var escapeMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#x27;',
+    '`': '&#x60;'
   };
+  var unescapeMap = _.invert(escapeMap);
 
   // Functions for escaping and unescaping strings to/from HTML interpolation.
-  _.each(['escape', 'unescape'], function(method) {
-    _[method] = function(string) {
-      if (string == null) return '';
-      return ('' + string).replace(entityRegexes[method], function(match) {
-        return entityMap[method][match];
-      });
+  var createEscaper = function(map) {
+    var escaper = function(match) {
+      return map[match];
     };
-  });
+    // Regexes for identifying a key that needs to be escaped
+    var source = '(?:' + _.keys(map).join('|') + ')';
+    var testRegexp = RegExp(source);
+    var replaceRegexp = RegExp(source, 'g');
+    return function(string) {
+      string = string == null ? '' : '' + string;
+      return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
+    };
+  };
+  _.escape = createEscaper(escapeMap);
+  _.unescape = createEscaper(unescapeMap);
 
   // If the value of the named `property` is a function then invoke it with the
   // `object` as context; otherwise, return it.
   _.result = function(object, property) {
     if (object == null) return void 0;
     var value = object[property];
-    return _.isFunction(value) ? value.call(object) : value;
-  };
-
-  // Add your own custom functions to the Underscore object.
-  _.mixin = function(obj) {
-    each(_.functions(obj), function(name) {
-      var func = _[name] = obj[name];
-      _.prototype[name] = function() {
-        var args = [this._wrapped];
-        push.apply(args, arguments);
-        return result.call(this, func.apply(_, args));
-      };
-    });
+    return _.isFunction(value) ? object[property]() : value;
   };
 
   // Generate a unique integer id (unique within the entire client session).
@@ -15373,22 +15438,26 @@ return jQuery;
     '\\':     '\\',
     '\r':     'r',
     '\n':     'n',
-    '\t':     't',
     '\u2028': 'u2028',
     '\u2029': 'u2029'
   };
 
-  var escaper = /\\|'|\r|\n|\t|\u2028|\u2029/g;
+  var escaper = /\\|'|\r|\n|\u2028|\u2029/g;
+
+  var escapeChar = function(match) {
+    return '\\' + escapes[match];
+  };
 
   // JavaScript micro-templating, similar to John Resig's implementation.
   // Underscore templating handles arbitrary delimiters, preserves whitespace,
   // and correctly escapes quotes within interpolated code.
-  _.template = function(text, data, settings) {
-    var render;
+  // NB: `oldSettings` only exists for backwards compatibility.
+  _.template = function(text, settings, oldSettings) {
+    if (!settings && oldSettings) settings = oldSettings;
     settings = _.defaults({}, settings, _.templateSettings);
 
     // Combine delimiters into one regular expression via alternation.
-    var matcher = new RegExp([
+    var matcher = RegExp([
       (settings.escape || noMatch).source,
       (settings.interpolate || noMatch).source,
       (settings.evaluate || noMatch).source
@@ -15398,19 +15467,18 @@ return jQuery;
     var index = 0;
     var source = "__p+='";
     text.replace(matcher, function(match, escape, interpolate, evaluate, offset) {
-      source += text.slice(index, offset)
-        .replace(escaper, function(match) { return '\\' + escapes[match]; });
+      source += text.slice(index, offset).replace(escaper, escapeChar);
+      index = offset + match.length;
 
       if (escape) {
         source += "'+\n((__t=(" + escape + "))==null?'':_.escape(__t))+\n'";
-      }
-      if (interpolate) {
+      } else if (interpolate) {
         source += "'+\n((__t=(" + interpolate + "))==null?'':__t)+\n'";
-      }
-      if (evaluate) {
+      } else if (evaluate) {
         source += "';\n" + evaluate + "\n__p+='";
       }
-      index = offset + match.length;
+
+      // Adobe VMs need the match returned to produce the correct offest.
       return match;
     });
     source += "';\n";
@@ -15420,29 +15488,31 @@ return jQuery;
 
     source = "var __t,__p='',__j=Array.prototype.join," +
       "print=function(){__p+=__j.call(arguments,'');};\n" +
-      source + "return __p;\n";
+      source + 'return __p;\n';
 
     try {
-      render = new Function(settings.variable || 'obj', '_', source);
+      var render = new Function(settings.variable || 'obj', '_', source);
     } catch (e) {
       e.source = source;
       throw e;
     }
 
-    if (data) return render(data, _);
     var template = function(data) {
       return render.call(this, data, _);
     };
 
-    // Provide the compiled function source as a convenience for precompilation.
-    template.source = 'function(' + (settings.variable || 'obj') + '){\n' + source + '}';
+    // Provide the compiled source as a convenience for precompilation.
+    var argument = settings.variable || 'obj';
+    template.source = 'function(' + argument + '){\n' + source + '}';
 
     return template;
   };
 
-  // Add a "chain" function, which will delegate to the wrapper.
+  // Add a "chain" function. Start chaining a wrapped Underscore object.
   _.chain = function(obj) {
-    return _(obj).chain();
+    var instance = _(obj);
+    instance._chain = true;
+    return instance;
   };
 
   // OOP
@@ -15456,42 +15526,44 @@ return jQuery;
     return this._chain ? _(obj).chain() : obj;
   };
 
+  // Add your own custom functions to the Underscore object.
+  _.mixin = function(obj) {
+    _.each(_.functions(obj), function(name) {
+      var func = _[name] = obj[name];
+      _.prototype[name] = function() {
+        var args = [this._wrapped];
+        push.apply(args, arguments);
+        return result.call(this, func.apply(_, args));
+      };
+    });
+  };
+
   // Add all of the Underscore functions to the wrapper object.
   _.mixin(_);
 
   // Add all mutator Array functions to the wrapper.
-  each(['pop', 'push', 'reverse', 'shift', 'sort', 'splice', 'unshift'], function(name) {
+  _.each(['pop', 'push', 'reverse', 'shift', 'sort', 'splice', 'unshift'], function(name) {
     var method = ArrayProto[name];
     _.prototype[name] = function() {
       var obj = this._wrapped;
       method.apply(obj, arguments);
-      if ((name == 'shift' || name == 'splice') && obj.length === 0) delete obj[0];
+      if ((name === 'shift' || name === 'splice') && obj.length === 0) delete obj[0];
       return result.call(this, obj);
     };
   });
 
   // Add all accessor Array functions to the wrapper.
-  each(['concat', 'join', 'slice'], function(name) {
+  _.each(['concat', 'join', 'slice'], function(name) {
     var method = ArrayProto[name];
     _.prototype[name] = function() {
       return result.call(this, method.apply(this._wrapped, arguments));
     };
   });
 
-  _.extend(_.prototype, {
-
-    // Start chaining a wrapped Underscore object.
-    chain: function() {
-      this._chain = true;
-      return this;
-    },
-
-    // Extracts the result from a wrapped and chained object.
-    value: function() {
-      return this._wrapped;
-    }
-
-  });
+  // Extracts the result from a wrapped and chained object.
+  _.prototype.value = function() {
+    return this._wrapped;
+  };
 
   // AMD registration happens at the end for compatibility with AMD loaders
   // that may not enforce next-turn semantics on modules. Even though general
@@ -15505,7 +15577,7 @@ return jQuery;
       return _;
     });
   }
-}).call(this);
+}.call(this));
 
 },{}],7:[function(require,module,exports){
 var EventEmitter = require('events').EventEmitter
@@ -15598,6 +15670,8 @@ if (typeof Object.create === 'function') {
   }
 }
 
+},{}],"base_object":[function(require,module,exports){
+module.exports=require('2HNVgz');
 },{}],"2HNVgz":[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
@@ -15608,18 +15682,13 @@ var BaseObject = function BaseObject(options) {
   this.uniqueId = _.uniqueId('o');
   options || (options = {});
   _.extend(this, _.pick(options, pluginOptions));
-  if (this.initialize) {
-    this.initialize.apply(this, arguments);
-  }
 };
 ($traceurRuntime.createClass)(BaseObject, {}, {}, Events);
 BaseObject.extend = extend;
 module.exports = BaseObject;
 
 
-},{"./events":11,"./utils":20,"underscore":6}],"base_object":[function(require,module,exports){
-module.exports=require('2HNVgz');
-},{}],11:[function(require,module,exports){
+},{"./events":11,"./utils":19,"underscore":6}],11:[function(require,module,exports){
 (function (global){
 "use strict";
 var _ = require('underscore');
@@ -15820,14 +15889,6 @@ module.exports = {
 
 },{"underscore":6}],13:[function(require,module,exports){
 "use strict";
-var PluginMixin = require('./plugin_mixin');
-var BaseObject = require('./base_object');
-var Plugin = BaseObject.extend(PluginMixin).extend({});
-module.exports = Plugin;
-
-
-},{"./base_object":"2HNVgz","./plugin_mixin":14}],14:[function(require,module,exports){
-"use strict";
 var PluginMixin = {
   initialize: function() {
     this.bindEvents();
@@ -15842,7 +15903,7 @@ var PluginMixin = {
 module.exports = PluginMixin;
 
 
-},{}],15:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var _ = require('underscore');
@@ -15862,9 +15923,9 @@ var extend = require('./utils').extend;
 var BaseObject = require('./base_object');
 var delegateEventSplitter = /^(\S+)\s*(.*)$/;
 var UIObject = function UIObject(options) {
+  $traceurRuntime.superCall(this, $UIObject.prototype, "constructor", [options]);
   this.cid = _.uniqueId('c');
   this._ensureElement();
-  $traceurRuntime.superCall(this, $UIObject.prototype, "constructor", [options]);
   this.delegateEvents();
 };
 var $UIObject = UIObject;
@@ -15875,7 +15936,6 @@ var $UIObject = UIObject;
   $: function(selector) {
     return this.$el.find(selector);
   },
-  initialize: function() {},
   render: function() {
     return this;
   },
@@ -15938,7 +15998,7 @@ UIObject.extend = extend;
 module.exports = UIObject;
 
 
-},{"./base_object":"2HNVgz","./utils":20,"jquery":4,"underscore":6}],"ui_object":[function(require,module,exports){
+},{"./base_object":"2HNVgz","./utils":19,"jquery":4,"underscore":6}],"ui_object":[function(require,module,exports){
 module.exports=require('8lqCAT');
 },{}],"Z7u8cr":[function(require,module,exports){
 "use strict";
@@ -15969,9 +16029,9 @@ UIPlugin.extend = extend;
 module.exports = UIPlugin;
 
 
-},{"./plugin_mixin":14,"./ui_object":"8lqCAT","./utils":20,"underscore":6}],"ui_plugin":[function(require,module,exports){
+},{"./plugin_mixin":13,"./ui_object":"8lqCAT","./utils":19,"underscore":6}],"ui_plugin":[function(require,module,exports){
 module.exports=require('Z7u8cr');
-},{}],20:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('jquery');
@@ -16146,13 +16206,19 @@ module.exports = Browser;
 
 },{}],"browser":[function(require,module,exports){
 module.exports=require('195Wj5');
-},{}],23:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 "use strict";
 var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
 var _ = require('underscore');
-var Container = function Container() {
-  $traceurRuntime.defaultSuperCall(this, $Container.prototype, arguments);
+var Container = function Container(options) {
+  $traceurRuntime.superCall(this, $Container.prototype, "constructor", [options]);
+  this.playback = options.playback;
+  this.settings = this.playback.settings;
+  this.isReady = false;
+  this.mediaControlDisabled = false;
+  this.plugins = [this.playback];
+  this.bindEvents();
 };
 var $Container = Container;
 ($traceurRuntime.createClass)(Container, {
@@ -16165,9 +16231,7 @@ var $Container = Container;
   get events() {
     return {'click': 'clicked'};
   },
-  initialize: function(options) {
-    this.playback = options.playback;
-    this.settings = this.playback.settings;
+  bindEvents: function() {
     this.listenTo(this.playback, 'playback:progress', this.progress);
     this.listenTo(this.playback, 'playback:timeupdate', this.timeUpdated);
     this.listenTo(this.playback, 'playback:ready', this.ready);
@@ -16180,9 +16244,6 @@ var $Container = Container;
     this.listenTo(this.playback, 'playback:mediacontrol:enable', this.enableMediaControl);
     this.listenTo(this.playback, 'playback:ended', this.ended);
     this.listenTo(this.playback, 'playback:play', this.playing);
-    this.isReady = false;
-    this.mediaControlDisabled = false;
-    this.plugins = [this.playback];
   },
   with: function(klass) {
     _.extend(this, klass);
@@ -16303,29 +16364,27 @@ var $Container = Container;
 module.exports = Container;
 
 
-},{"../../base/styler":15,"../../base/ui_object":"8lqCAT","underscore":6}],24:[function(require,module,exports){
+},{"../../base/styler":14,"../../base/ui_object":"8lqCAT","underscore":6}],23:[function(require,module,exports){
 "use strict";
 module.exports = require('./container');
 
 
-},{"./container":23}],25:[function(require,module,exports){
+},{"./container":22}],24:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var BaseObject = require('../../base/base_object');
 var Container = require('../container');
 var $ = require('jquery');
-var ContainerFactory = function ContainerFactory() {
-  $traceurRuntime.defaultSuperCall(this, $ContainerFactory.prototype, arguments);
+var ContainerFactory = function ContainerFactory(options, loader) {
+  $traceurRuntime.superCall(this, $ContainerFactory.prototype, "constructor", [options]);
+  this.options = options;
+  this.loader = loader;
 };
 var $ContainerFactory = ContainerFactory;
 ($traceurRuntime.createClass)(ContainerFactory, {
-  initialize: function(params, loader) {
-    this.params = params;
-    this.loader = loader;
-  },
   createContainers: function() {
     return $.Deferred(function(promise) {
-      promise.resolve(_.map(this.params.sources, function(source) {
+      promise.resolve(_.map(this.options.sources, function(source) {
         return this.createContainer(source);
       }, this));
     }.bind(this));
@@ -16337,11 +16396,11 @@ var $ContainerFactory = ContainerFactory;
   },
   createContainer: function(source) {
     var playbackPlugin = this.findPlaybackPlugin(source);
-    var params = _.extend({}, this.params, {
+    var options = _.extend({}, this.options, {
       src: source,
-      autoPlay: !!this.params.autoPlay
+      autoPlay: !!this.options.autoPlay
     });
-    var playback = new playbackPlugin(params);
+    var playback = new playbackPlugin(options);
     var container = new Container({playback: playback});
     var defer = $.Deferred();
     defer.promise(container);
@@ -16353,23 +16412,23 @@ var $ContainerFactory = ContainerFactory;
   },
   addContainerPlugins: function(container, source) {
     _.each(this.loader.containerPlugins, function(Plugin) {
-      var params = _.extend(this.params, {
+      var options = _.extend(this.options, {
         container: container,
         src: source
       });
-      container.addPlugin(new Plugin(params));
+      container.addPlugin(new Plugin(options));
     }, this);
   }
 }, {}, BaseObject);
 module.exports = ContainerFactory;
 
 
-},{"../../base/base_object":"2HNVgz","../container":24,"jquery":4,"underscore":6}],26:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../container":23,"jquery":4,"underscore":6}],25:[function(require,module,exports){
 "use strict";
 module.exports = require('./container_factory');
 
 
-},{"./container_factory":25}],27:[function(require,module,exports){
+},{"./container_factory":24}],26:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('jquery');
@@ -16378,8 +16437,30 @@ var ContainerFactory = require('../container_factory');
 var Fullscreen = require('../../base/utils').Fullscreen;
 var Styler = require('../../base/styler');
 var MediaControl = require('../media_control');
-var Core = function Core() {
-  $traceurRuntime.defaultSuperCall(this, $Core.prototype, arguments);
+var Core = function Core(options) {
+  var $__0 = this;
+  $traceurRuntime.superCall(this, $Core.prototype, "constructor", [options]);
+  this.defer = $.Deferred();
+  this.defer.promise(this);
+  this.plugins = [];
+  this.containers = [];
+  this.options = options;
+  this.options.displayType || (this.options.displayType = 'pip');
+  this.parentElement = options.parentElement;
+  this.loader = this.options.loader;
+  this.containerFactory = new ContainerFactory(options, this.loader);
+  this.containerFactory.createContainers().then((function(containers) {
+    return $__0.setupContainers(containers);
+  })).then((function(containers) {
+    return $__0.resolveOnContainersReady(containers);
+  }));
+  this.updateSize();
+  document.addEventListener('mozfullscreenchange', (function() {
+    return $__0.exit();
+  }));
+  $(window).resize((function() {
+    return $__0.updateSize();
+  }));
 };
 var $Core = Core;
 ($traceurRuntime.createClass)(Core, {
@@ -16393,30 +16474,6 @@ var $Core = Core;
   get attributes() {
     return {'data-player': ''};
   },
-  initialize: function(params) {
-    var $__0 = this;
-    this.defer = $.Deferred();
-    this.defer.promise(this);
-    this.plugins = [];
-    this.containers = [];
-    this.params = params;
-    this.params.displayType || (this.params.displayType = 'pip');
-    this.parentElement = params.parentElement;
-    this.loader = this.params.loader;
-    this.containerFactory = new ContainerFactory(params, this.loader);
-    this.containerFactory.createContainers().then((function(containers) {
-      return $__0.setupContainers(containers);
-    })).then((function(containers) {
-      return $__0.resolveOnContainersReady(containers);
-    }));
-    this.updateSize();
-    document.addEventListener('mozfullscreenchange', (function() {
-      return $__0.exit();
-    }));
-    $(window).resize((function() {
-      return $__0.updateSize();
-    }));
-  },
   updateSize: function() {
     if (Fullscreen.isFullscreen()) {
       this.$el.addClass('fullscreen');
@@ -16424,12 +16481,12 @@ var $Core = Core;
     } else {
       var width = 0;
       var height = 0;
-      if (this.params.stretchWidth && this.params.stretchHeight && this.params.stretchWidth <= window.innerWidth && this.params.stretchHeight <= (window.innerHeight * 0.73)) {
-        width = this.params.stretchWidth;
-        height = this.params.stretchHeight;
+      if (this.options.stretchWidth && this.options.stretchHeight && this.options.stretchWidth <= window.innerWidth && this.options.stretchHeight <= (window.innerHeight * 0.73)) {
+        width = this.options.stretchWidth;
+        height = this.options.stretchHeight;
       } else {
-        width = this.params.width || width;
-        height = this.params.height || height;
+        width = this.options.width || width;
+        height = this.options.height || height;
       }
       if (width > 0) {
         this.$el.css({width: width});
@@ -16463,7 +16520,7 @@ var $Core = Core;
     _(this.containers).each((function(container) {
       return container.destroy();
     }));
-    this.containerFactory.params = _(this.params).extend({sources: sources});
+    this.containerFactory.options = _(this.options).extend({sources: sources});
     this.containerFactory.createContainers().then((function(containers) {
       return $__0.setupContainers(containers);
     }));
@@ -16520,10 +16577,17 @@ var $Core = Core;
     if (this.mediaControl) {
       this.mediaControl.setContainer(container);
     } else {
-      this.mediaControl = new MediaControl(_.extend({container: container}, this.params));
+      this.mediaControl = this.createMediaControl(_.extend({container: container}, this.options));
       this.listenTo(this.mediaControl, 'mediacontrol:fullscreen', this.toggleFullscreen);
       this.listenTo(this.mediaControl, 'mediacontrol:show', this.onMediaControlShow.bind(this, true));
       this.listenTo(this.mediaControl, 'mediacontrol:hide', this.onMediaControlShow.bind(this, false));
+    }
+  },
+  createMediaControl: function(options) {
+    if (this.options.mediacontrol && this.options.mediacontrol.external) {
+      return new this.options.mediacontrol.external(options);
+    } else {
+      return new MediaControl(options);
     }
   },
   getCurrentContainer: function() {
@@ -16557,8 +16621,8 @@ var $Core = Core;
     this.$el.append(style);
     this.$el.append(this.mediaControl.render().el);
     this.$el.ready((function() {
-      $__0.params.width = $__0.params.width || $__0.$el.width();
-      $__0.params.height = $__0.params.height || $__0.$el.height();
+      $__0.options.width = $__0.options.width || $__0.$el.width();
+      $__0.options.height = $__0.options.height || $__0.$el.height();
       $__0.updateSize();
     }));
     return this;
@@ -16567,29 +16631,25 @@ var $Core = Core;
 module.exports = Core;
 
 
-},{"../../base/styler":15,"../../base/ui_object":"8lqCAT","../../base/utils":20,"../container_factory":26,"../media_control":33,"jquery":4,"underscore":6}],28:[function(require,module,exports){
+},{"../../base/styler":14,"../../base/ui_object":"8lqCAT","../../base/utils":19,"../container_factory":25,"../media_control":"A8Uh+k","jquery":4,"underscore":6}],27:[function(require,module,exports){
 "use strict";
 module.exports = require('./core');
 
 
-},{"./core":27}],29:[function(require,module,exports){
+},{"./core":26}],28:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var BaseObject = require('../../base/base_object');
 var Core = require('../core');
-var CoreFactory = function CoreFactory() {
-  $traceurRuntime.defaultSuperCall(this, $CoreFactory.prototype, arguments);
+var CoreFactory = function CoreFactory(player, loader) {
+  this.player = player;
+  this.options = player.options;
+  this.loader = loader;
+  this.options.loader = this.loader;
 };
-var $CoreFactory = CoreFactory;
 ($traceurRuntime.createClass)(CoreFactory, {
-  initialize: function(player, loader) {
-    this.player = player;
-    this.params = player.params;
-    this.loader = loader;
-    this.params.loader = this.loader;
-  },
   create: function() {
-    this.core = new Core(this.params);
+    this.core = new Core(this.options);
     this.core.then(this.addCorePlugins.bind(this));
     return this.core;
   },
@@ -16610,17 +16670,17 @@ var $CoreFactory = CoreFactory;
 module.exports = CoreFactory;
 
 
-},{"../../base/base_object":"2HNVgz","../core":28,"underscore":6}],30:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../core":27,"underscore":6}],29:[function(require,module,exports){
 "use strict";
 module.exports = require('./core_factory');
 
 
-},{"./core_factory":29}],31:[function(require,module,exports){
+},{"./core_factory":28}],30:[function(require,module,exports){
 "use strict";
 module.exports = require('./loader');
 
 
-},{"./loader":32}],32:[function(require,module,exports){
+},{"./loader":31}],31:[function(require,module,exports){
 "use strict";
 var BaseObject = require('../../base/base_object');
 var _ = require('underscore');
@@ -16632,23 +16692,21 @@ var SpinnerThreeBouncePlugin = require('../../plugins/spinner_three_bounce');
 var StatsPlugin = require('../../plugins/stats');
 var WaterMarkPlugin = require('../../plugins/watermark');
 var PosterPlugin = require('../../plugins/poster');
-var Loader = function Loader() {
-  $traceurRuntime.defaultSuperCall(this, $Loader.prototype, arguments);
+var Loader = function Loader(options) {
+  $traceurRuntime.superCall(this, $Loader.prototype, "constructor", [options]);
+  this.options = options;
+  this.playbackPlugins = [FlashVideoPlaybackPlugin, HTML5VideoPlaybackPlugin, HTML5AudioPlaybackPlugin, HLSVideoPlaybackPlugin];
+  this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin];
+  this.globalPlugins = [];
+  if (this.options.displayPlugins && this.displayPlugins[this.options.displayType]) {
+    this.globalPlugins.push(this.displayPlugins[this.options.displayType]);
+  }
+  this.addExternalPlugins(options.plugins || []);
 };
 var $Loader = Loader;
 ($traceurRuntime.createClass)(Loader, {
   get displayPlugins() {
     return {};
-  },
-  initialize: function(params) {
-    this.params = params;
-    this.playbackPlugins = [FlashVideoPlaybackPlugin, HTML5VideoPlaybackPlugin, HTML5AudioPlaybackPlugin, HLSVideoPlaybackPlugin];
-    this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin];
-    this.globalPlugins = [];
-    if (this.params.displayPlugins && this.displayPlugins[this.params.displayType]) {
-      this.globalPlugins.push(this.displayPlugins[this.params.displayType]);
-    }
-    this.addExternalPlugins(params.plugins || []);
   },
   addExternalPlugins: function(plugins) {
     if (plugins.playback) {
@@ -16671,12 +16729,14 @@ var $Loader = Loader;
 module.exports = Loader;
 
 
-},{"../../base/base_object":"2HNVgz","../../playbacks/flash_vod":38,"../../playbacks/hls":40,"../../playbacks/html5_audio":42,"../../playbacks/html5_video":44,"../../plugins/poster":47,"../../plugins/spinner_three_bounce":49,"../../plugins/stats":51,"../../plugins/watermark":53,"underscore":6}],33:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../../playbacks/flash_vod":38,"../../playbacks/hls":40,"../../playbacks/html5_audio":42,"../../playbacks/html5_video":44,"../../plugins/poster":47,"../../plugins/spinner_three_bounce":49,"../../plugins/stats":51,"../../plugins/watermark":53,"underscore":6}],"A8Uh+k":[function(require,module,exports){
 "use strict";
 module.exports = require('./media_control');
 
 
-},{"./media_control":34}],34:[function(require,module,exports){
+},{"./media_control":34}],"media_control":[function(require,module,exports){
+module.exports=require('A8Uh+k');
+},{}],34:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('jquery');
@@ -16684,8 +16744,29 @@ var JST = require('../../base/jst');
 var Styler = require('../../base/styler');
 var UIObject = require('../../base/ui_object');
 var Utils = require('../../base/utils');
-var MediaControl = function MediaControl() {
-  $traceurRuntime.defaultSuperCall(this, $MediaControl.prototype, arguments);
+var MediaControl = function MediaControl(options) {
+  var $__0 = this;
+  $traceurRuntime.superCall(this, $MediaControl.prototype, "constructor", [options]);
+  this.options = options;
+  this.container = options.container;
+  this.keepVisible = false;
+  this.addEventListeners();
+  this.defaultSettings = {
+    left: ['play', 'stop', 'pause'],
+    right: ['volume'],
+    default: ['position', 'seekbar', 'duration']
+  };
+  this.disabled = false;
+  if (this.container.mediaControlDisabled || this.options.chromeless) {
+    this.disable();
+  }
+  this.currentVolume = 100;
+  $(document).bind('mouseup', (function(event) {
+    return $__0.stopDrag(event);
+  }));
+  $(document).bind('mousemove', (function(event) {
+    return $__0.updateDrag(event);
+  }));
 };
 var $MediaControl = MediaControl;
 ($traceurRuntime.createClass)(MediaControl, {
@@ -16720,28 +16801,6 @@ var $MediaControl = MediaControl;
   get template() {
     return JST.media_control;
   },
-  initialize: function(params) {
-    var $__0 = this;
-    this.params = params;
-    this.container = params.container;
-    this.keepVisible = false;
-    this.addEventListeners();
-    this.defaultSettings = {
-      left: ['play', 'stop', 'pause'],
-      right: ['volume'],
-      default: ['position', 'seekbar', 'duration']
-    };
-    this.disabled = false;
-    if (this.container.mediaControlDisabled || this.params.chromeless)
-      this.disable();
-    this.currentVolume = 100;
-    $(document).bind('mouseup', (function(event) {
-      return $__0.stopDrag(event);
-    }));
-    $(document).bind('mousemove', (function(event) {
-      return $__0.updateDrag(event);
-    }));
-  },
   addEventListeners: function() {
     this.listenTo(this.container, 'container:play', this.changeTogglePlay);
     this.listenTo(this.container, 'container:playing', this.changeTogglePlay);
@@ -16759,12 +16818,13 @@ var $MediaControl = MediaControl;
     this.$el.hide();
   },
   enable: function() {
-    if (this.params.chromeless)
+    if (this.options.chromeless)
       return;
     this.disabled = false;
     this.show();
   },
   play: function() {
+    console.log('media control play');
     this.container.play();
   },
   pause: function() {
@@ -16787,6 +16847,7 @@ var $MediaControl = MediaControl;
       this.togglePlayPause();
   },
   togglePlayPause: function() {
+    console.log('toggle');
     if (this.container.isPlaying()) {
       this.container.pause();
     } else {
@@ -17023,7 +17084,7 @@ var $MediaControl = MediaControl;
     this.$playStopToggle.addClass('stopped');
     this.currentVolume = this.currentVolume || 100;
     this.$volumeBarContainer.hide();
-    if (this.params.autoPlay) {
+    if (this.options.autoPlay) {
       this.togglePlayPause();
       this.togglePlayStop();
     }
@@ -17033,6 +17094,9 @@ var $MediaControl = MediaControl;
     }), timeout);
     if (this.disabled) {
       this.hide();
+    }
+    if (this.options.mediacontrol && this.options.mediacontrol.style) {
+      this.$el.css(this.options.mediacontrol.style);
     }
     this.$el.ready((function() {
       $__0.setVolumeLevel($__0.currentVolume);
@@ -17046,7 +17110,7 @@ var $MediaControl = MediaControl;
 module.exports = MediaControl;
 
 
-},{"../../base/jst":12,"../../base/styler":15,"../../base/ui_object":"8lqCAT","../../base/utils":20,"jquery":4,"underscore":6}],35:[function(require,module,exports){
+},{"../../base/jst":12,"../../base/styler":14,"../../base/ui_object":"8lqCAT","../../base/utils":19,"jquery":4,"underscore":6}],35:[function(require,module,exports){
 "use strict";
 var Events = require('../base/events');
 var events = new Events();
@@ -17082,22 +17146,20 @@ var BaseObject = require('./base/base_object');
 var CoreFactory = require('./components/core_factory');
 var Loader = require('./components/loader');
 var Mediator = require('./components/mediator');
-var Player = function Player() {
-  $traceurRuntime.defaultSuperCall(this, $Player.prototype, arguments);
+var Player = function Player(options) {
+  $traceurRuntime.superCall(this, $Player.prototype, "constructor", [options]);
+  window.p = this;
+  options.displayType || (options.displayType = 'pip');
+  this.options = options;
+  this.loader = new Loader(this.options);
+  this.coreFactory = new CoreFactory(this, this.loader);
+  options.height || (options.height = 480);
+  options.width || (options.width = 720);
 };
 var $Player = Player;
 ($traceurRuntime.createClass)(Player, {
-  initialize: function(params) {
-    window.p = this;
-    params.displayType || (params.displayType = 'pip');
-    this.params = params;
-    this.loader = new Loader(this.params);
-    this.coreFactory = new CoreFactory(this, this.loader);
-    params.height || (params.height = 480);
-    params.width || (params.width = 720);
-  },
   attachTo: function(element) {
-    this.params.parentElement = element;
+    this.options.parentElement = element;
     this.core = this.coreFactory.create();
   },
   load: function(sources) {
@@ -17140,7 +17202,7 @@ module.exports = window.Clappr;
 
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./base/base_object":"2HNVgz","./components/core_factory":30,"./components/loader":31,"./components/mediator":35}],37:[function(require,module,exports){
+},{"./base/base_object":"2HNVgz","./components/core_factory":29,"./components/loader":30,"./components/mediator":35}],37:[function(require,module,exports){
 "use strict";
 var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
@@ -17150,8 +17212,18 @@ var _ = require('underscore');
 var $ = require('jquery');
 var Browser = require('../../components/browser');
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> </object>';
-var FlashVOD = function FlashVOD() {
-  $traceurRuntime.defaultSuperCall(this, $FlashVOD.prototype, arguments);
+var FlashVOD = function FlashVOD(options) {
+  $traceurRuntime.superCall(this, $FlashVOD.prototype, "constructor", [options]);
+  this.src = options.src;
+  this.swfPath = options.swfPath || "assets/Player.swf";
+  this.autoPlay = options.autoPlay;
+  this.settings = {
+    left: ["playpause", "position", "duration"],
+    default: ["seekbar"],
+    right: ["fullscreen", "volume"]
+  };
+  this.isReady = false;
+  this.addListeners();
 };
 var $FlashVOD = FlashVOD;
 ($traceurRuntime.createClass)(FlashVOD, {
@@ -17163,19 +17235,6 @@ var $FlashVOD = FlashVOD;
   },
   get template() {
     return JST.flash_vod;
-  },
-  initialize: function(options) {
-    $traceurRuntime.superCall(this, $FlashVOD.prototype, "initialize", [options]);
-    this.src = options.src;
-    this.swfPath = options.swfPath || "assets/Player.swf";
-    this.autoPlay = options.autoPlay;
-    this.settings = {
-      left: ["playpause", "position", "duration"],
-      default: ["seekbar"],
-      right: ["fullscreen", "volume"]
-    };
-    this.isReady = false;
-    this.addListeners();
   },
   safe: function(fn) {
     if (this.el.getState && this.el.getDuration && this.el.getPosition && this.el.getBytesLoaded && this.el.getBytesTotal) {
@@ -17351,7 +17410,7 @@ FlashVOD.canPlay = function(resource) {
 module.exports = FlashVOD;
 
 
-},{"../../base/jst":12,"../../base/styler":15,"../../base/ui_object":"8lqCAT","../../components/browser":"195Wj5","../../components/mediator":35,"jquery":4,"underscore":6}],38:[function(require,module,exports){
+},{"../../base/jst":12,"../../base/styler":14,"../../base/ui_object":"8lqCAT","../../components/browser":"195Wj5","../../components/mediator":35,"jquery":4,"underscore":6}],38:[function(require,module,exports){
 "use strict";
 module.exports = require('./flash_vod');
 
@@ -17366,8 +17425,20 @@ var Mediator = require('../../components/mediator');
 var Visibility = require('visibility');
 var Browser = require('../../components/browser');
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> </object>';
-var HLS = function HLS() {
-  $traceurRuntime.defaultSuperCall(this, $HLS.prototype, arguments);
+var HLS = function HLS(options) {
+  $traceurRuntime.superCall(this, $HLS.prototype, "constructor", [options]);
+  this.src = options.src;
+  this.swfPath = options.swfPath || "assets/HLSPlayer.swf";
+  this.setupVisibility();
+  this.highDefinition = false;
+  this.autoPlay = options.autoPlay;
+  this.defaultSettings = {
+    left: ["playstop", "volume"],
+    default: [],
+    right: ["fullscreen", "hd-indicator"]
+  };
+  this.settings = _.extend({}, this.defaultSettings);
+  this.addListeners();
 };
 var $HLS = HLS;
 ($traceurRuntime.createClass)(HLS, {
@@ -17385,21 +17456,6 @@ var $HLS = HLS;
       'data-hls': '',
       'type': 'application/x-shockwave-flash'
     };
-  },
-  initialize: function(options) {
-    $traceurRuntime.superCall(this, $HLS.prototype, "initialize", [options]);
-    this.src = options.src;
-    this.swfPath = options.swfPath || "assets/HLSPlayer.swf";
-    this.setupVisibility();
-    this.highDefinition = false;
-    this.autoPlay = options.autoPlay;
-    this.defaultSettings = {
-      left: ["playstop", "volume"],
-      default: [],
-      right: ["fullscreen", "hd-indicator"]
-    };
-    this.settings = _.extend({}, this.defaultSettings);
-    this.addListeners();
   },
   setupVisibility: function() {
     var $__0 = this;
@@ -17422,8 +17478,8 @@ var $HLS = HLS;
     Mediator.on(this.uniqueId + ':playbackstate', (function(state) {
       return $__0.setPlaybackState(state);
     }));
-    Mediator.on(this.uniqueId + ':highdefinition', (function(params) {
-      return $__0.updateHighDefinition(params);
+    Mediator.on(this.uniqueId + ':playbackerror', (function() {
+      return $__0.flashPlaybackError();
     }));
   },
   stopListening: function() {
@@ -17432,6 +17488,7 @@ var $HLS = HLS;
     Mediator.off(this.uniqueId + ':timeupdate');
     Mediator.off(this.uniqueId + ':playbackstate');
     Mediator.off(this.uniqueId + ':highdefinition');
+    Mediator.off(this.uniqueId + ':playbackerror');
   },
   safe: function(fn) {
     if (this.el.globoGetState && this.el.globoGetDuration && this.el.globoGetPosition && this.el.globoPlayerSmoothSetLevel && this.el.globoPlayerSetflushLiveURLCache) {
@@ -17610,6 +17667,9 @@ var $HLS = HLS;
       }
     }));
   },
+  flashPlaybackError: function() {
+    this.trigger('playback:stop');
+  },
   timeUpdate: function(time, duration) {
     this.trigger('playback:timeupdate', time, duration, this.name);
   },
@@ -17659,7 +17719,7 @@ HLS.canPlay = function(resource) {
 module.exports = HLS;
 
 
-},{"../../base/jst":12,"../../base/styler":15,"../../base/ui_plugin":"Z7u8cr","../../components/browser":"195Wj5","../../components/mediator":35,"underscore":6,"visibility":7}],40:[function(require,module,exports){
+},{"../../base/jst":12,"../../base/styler":14,"../../base/ui_plugin":"Z7u8cr","../../components/browser":"195Wj5","../../components/mediator":35,"underscore":6,"visibility":7}],40:[function(require,module,exports){
 "use strict";
 module.exports = require('./hls');
 
@@ -17667,8 +17727,10 @@ module.exports = require('./hls');
 },{"./hls":39}],41:[function(require,module,exports){
 "use strict";
 var UIPlugin = require('../../base/ui_plugin');
-var HTML5Audio = function HTML5Audio() {
-  $traceurRuntime.defaultSuperCall(this, $HTML5Audio.prototype, arguments);
+var HTML5Audio = function HTML5Audio(options) {
+  $traceurRuntime.superCall(this, $HTML5Audio.prototype, "constructor", [options]);
+  this.el.src = options.src;
+  this.render();
 };
 var $HTML5Audio = HTML5Audio;
 ($traceurRuntime.createClass)(HTML5Audio, {
@@ -17686,10 +17748,6 @@ var $HTML5Audio = HTML5Audio;
       'timeupdate': 'timeUpdated',
       'ended': 'ended'
     };
-  },
-  initialize: function(options) {
-    this.el.src = options.src;
-    this.render();
   },
   setContainer: function() {
     this.container.settings = {
@@ -17766,8 +17824,17 @@ module.exports = require('./html5_audio');
 var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
 var Browser = require('../../components/browser');
-var HTML5Video = function HTML5Video() {
-  $traceurRuntime.defaultSuperCall(this, $HTML5Video.prototype, arguments);
+var HTML5Video = function HTML5Video(options) {
+  $traceurRuntime.superCall(this, $HTML5Video.prototype, "constructor", [options]);
+  this.options = options;
+  this.src = options.src;
+  this.el.src = options.src;
+  this.el.loop = options.loop;
+  this.settings = {
+    left: ['playpause', 'volume'],
+    right: ['fullscreen'],
+    default: ['position', 'seekbar', 'duration']
+  };
 };
 var $HTML5Video = HTML5Video;
 ($traceurRuntime.createClass)(HTML5Video, {
@@ -17793,17 +17860,6 @@ var $HTML5Video = HTML5Video;
       'waiting': 'waiting',
       'canplaythrough': 'bufferFull',
       'loadedmetadata': 'loadedMetadata'
-    };
-  },
-  initialize: function(options) {
-    this.options = options;
-    this.src = options.src;
-    this.el.src = options.src;
-    this.el.loop = options.loop;
-    this.settings = {
-      left: ['playpause', 'volume'],
-      right: ['fullscreen'],
-      default: ['position', 'seekbar', 'duration']
     };
   },
   loadedMetadata: function(e) {
@@ -17888,9 +17944,6 @@ var $HTML5Video = HTML5Video;
     }
     this.trigger('playback:progress', this.el.buffered.start(bufferedPos), this.el.buffered.end(bufferedPos), this.el.duration, this.name);
   },
-  playing: function() {
-    this.trigger('playback:play', this.name);
-  },
   render: function() {
     var style = Styler.getStyleFor(this.name);
     this.$el.append(style);
@@ -17905,7 +17958,7 @@ HTML5Video.canPlay = function(resource) {
 module.exports = HTML5Video;
 
 
-},{"../../base/styler":15,"../../base/ui_plugin":"Z7u8cr","../../components/browser":"195Wj5"}],44:[function(require,module,exports){
+},{"../../base/styler":14,"../../base/ui_plugin":"Z7u8cr","../../components/browser":"195Wj5"}],44:[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_video');
 
@@ -17963,8 +18016,15 @@ var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var $ = require('jquery');
-var PosterPlugin = function PosterPlugin() {
-  $traceurRuntime.defaultSuperCall(this, $PosterPlugin.prototype, arguments);
+var PosterPlugin = function PosterPlugin(options) {
+  $traceurRuntime.superCall(this, $PosterPlugin.prototype, "constructor", [options]);
+  if (options.disableControlsOnPoster === undefined)
+    options.disableControlsOnPoster = true;
+  this.options = options;
+  if (this.options.disableControlsOnPoster)
+    this.container.disableMediaControl();
+  this.render();
+  this.bindEvents();
 };
 var $PosterPlugin = PosterPlugin;
 ($traceurRuntime.createClass)(PosterPlugin, {
@@ -17983,18 +18043,9 @@ var $PosterPlugin = PosterPlugin;
   get events() {
     return {'click': 'clicked'};
   },
-  initialize: function(options) {
-    $traceurRuntime.superCall(this, $PosterPlugin.prototype, "initialize", [options]);
-    if (options.disableControlsOnPoster === undefined)
-      options.disableControlsOnPoster = true;
-    this.options = options;
-    if (this.options.disableControlsOnPoster)
-      this.container.disableMediaControl();
-    this.render();
-  },
   bindEvents: function() {
     this.listenTo(this.container, 'container:state:buffering', this.onBuffering);
-    this.listenTo(this.container, 'container:play', this.onPlay);
+    this.listenTo(this.container.playback, 'playback:play', this.onPlay);
     this.listenTo(this.container, 'container:stop', this.onStop);
     this.listenTo(this.container, 'container:ended', this.onStop);
   },
@@ -18002,6 +18053,7 @@ var $PosterPlugin = PosterPlugin;
     this.hidePlayButton();
   },
   onPlay: function() {
+    console.log('poster on play');
     this.$el.hide();
     if (this.options.disableControlsOnPoster) {
       this.container.enableMediaControl();
@@ -18047,7 +18099,7 @@ var $PosterPlugin = PosterPlugin;
 module.exports = PosterPlugin;
 
 
-},{"../../base/jst":12,"../../base/styler":15,"../../base/ui_plugin":"Z7u8cr","jquery":4}],49:[function(require,module,exports){
+},{"../../base/jst":12,"../../base/styler":14,"../../base/ui_plugin":"Z7u8cr","jquery":4}],49:[function(require,module,exports){
 "use strict";
 module.exports = require('./spinner_three_bounce');
 
@@ -18057,8 +18109,13 @@ module.exports = require('./spinner_three_bounce');
 var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
-var SpinnerThreeBouncePlugin = function SpinnerThreeBouncePlugin() {
-  $traceurRuntime.defaultSuperCall(this, $SpinnerThreeBouncePlugin.prototype, arguments);
+var SpinnerThreeBouncePlugin = function SpinnerThreeBouncePlugin(options) {
+  $traceurRuntime.superCall(this, $SpinnerThreeBouncePlugin.prototype, "constructor", [options]);
+  this.template = JST[this.name];
+  this.listenTo(this.container, 'container:state:buffering', this.onBuffering);
+  this.listenTo(this.container, 'container:state:bufferfull', this.onBufferFull);
+  this.listenTo(this.container, 'container:stop', this.onStop);
+  this.render();
 };
 var $SpinnerThreeBouncePlugin = SpinnerThreeBouncePlugin;
 ($traceurRuntime.createClass)(SpinnerThreeBouncePlugin, {
@@ -18070,14 +18127,6 @@ var $SpinnerThreeBouncePlugin = SpinnerThreeBouncePlugin;
       'data-spinner': '',
       'class': 'spinner-three-bounce'
     };
-  },
-  initialize: function(options) {
-    $traceurRuntime.superCall(this, $SpinnerThreeBouncePlugin.prototype, "initialize", [options]);
-    this.template = JST[this.name];
-    this.listenTo(this.container, 'container:state:buffering', this.onBuffering);
-    this.listenTo(this.container, 'container:state:bufferfull', this.onBufferFull);
-    this.listenTo(this.container, 'container:stop', this.onStop);
-    this.render();
   },
   onBuffering: function() {
     this.$el.show();
@@ -18100,17 +18149,21 @@ var $SpinnerThreeBouncePlugin = SpinnerThreeBouncePlugin;
 module.exports = SpinnerThreeBouncePlugin;
 
 
-},{"../../base/jst":12,"../../base/styler":15,"../../base/ui_plugin":"Z7u8cr"}],51:[function(require,module,exports){
+},{"../../base/jst":12,"../../base/styler":14,"../../base/ui_plugin":"Z7u8cr"}],51:[function(require,module,exports){
 "use strict";
 module.exports = require('./stats');
 
 
 },{"./stats":52}],52:[function(require,module,exports){
 "use strict";
-var Plugin = require('../../base/plugin');
+var BaseObject = require('../../base/base_object');
 var $ = require("jquery");
-var StatsPlugin = function StatsPlugin() {
-  $traceurRuntime.defaultSuperCall(this, $StatsPlugin.prototype, arguments);
+var StatsPlugin = function StatsPlugin(options) {
+  $traceurRuntime.superCall(this, $StatsPlugin.prototype, "constructor", [options]);
+  this.setInitialAttrs();
+  this.reportInterval = options.reportInterval || 5000;
+  this.state = "IDLE";
+  this.bindEvents();
 };
 var $StatsPlugin = StatsPlugin;
 ($traceurRuntime.createClass)(StatsPlugin, {
@@ -18120,14 +18173,8 @@ var $StatsPlugin = StatsPlugin;
   get type() {
     return 'stats';
   },
-  initialize: function(options) {
-    $traceurRuntime.superCall(this, $StatsPlugin.prototype, "initialize", [options]);
-    this.setInitialAttrs();
-    this.reportInterval = options.reportInterval || 5000;
-    this.state = "IDLE";
-  },
   bindEvents: function() {
-    this.listenTo(this.container, 'container:play', this.onPlay);
+    this.listenTo(this.container.playback, 'playback:play', this.onPlay);
     this.listenTo(this.container, 'container:stop', this.onStop);
     this.listenTo(this.container, 'container:destroyed', this.onStop);
     this.listenTo(this.container, 'container:setreportinterval', this.setReportInterval);
@@ -18170,7 +18217,7 @@ var $StatsPlugin = StatsPlugin;
       this.firstPlay = false;
       this.startupTime = Date.now() - this.startupTimeInit;
       this.watchingTimeInit = Date.now();
-    } else {
+    } else if (!!this.rebufferingTimeInit) {
       this.rebufferingTime += this.getRebufferingTime();
     }
     this.rebufferingTimeInit = undefined;
@@ -18181,7 +18228,7 @@ var $StatsPlugin = StatsPlugin;
   },
   getWatchingTime: function() {
     var totalTime = (Date.now() - this.watchingTimeInit);
-    return totalTime - this.rebufferingTime - this.startupTime;
+    return totalTime - this.rebufferingTime;
   },
   isRebuffering: function() {
     return !!this.rebufferingTimeInit;
@@ -18200,13 +18247,14 @@ var $StatsPlugin = StatsPlugin;
     return metrics;
   },
   report: function() {
+    var stats = this.getStats();
     this.container.statsReport(this.getStats());
   }
-}, {}, Plugin);
+}, {}, BaseObject);
 module.exports = StatsPlugin;
 
 
-},{"../../base/plugin":13,"jquery":4}],53:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","jquery":4}],53:[function(require,module,exports){
 "use strict";
 module.exports = require('./watermark');
 
@@ -18216,8 +18264,16 @@ module.exports = require('./watermark');
 var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
-var WaterMarkPlugin = function WaterMarkPlugin() {
-  $traceurRuntime.defaultSuperCall(this, $WaterMarkPlugin.prototype, arguments);
+var WaterMarkPlugin = function WaterMarkPlugin(options) {
+  $traceurRuntime.superCall(this, $WaterMarkPlugin.prototype, "constructor", [options]);
+  this.template = JST[this.name];
+  this.position = options.position || "bottom-right";
+  if (options.watermark) {
+    this.imageUrl = options.watermark;
+    this.render();
+  } else {
+    this.$el.remove();
+  }
 };
 var $WaterMarkPlugin = WaterMarkPlugin;
 ($traceurRuntime.createClass)(WaterMarkPlugin, {
@@ -18226,17 +18282,6 @@ var $WaterMarkPlugin = WaterMarkPlugin;
   },
   get type() {
     return 'ui';
-  },
-  initialize: function(options) {
-    $traceurRuntime.superCall(this, $WaterMarkPlugin.prototype, "initialize", [options]);
-    this.template = JST[this.name];
-    this.position = options.position || "bottom-right";
-    if (options.watermark) {
-      this.imageUrl = options.watermark;
-      this.render();
-    } else {
-      this.$el.remove();
-    }
   },
   bindEvents: function() {
     this.listenTo(this.container, 'container:play', this.onPlay);
@@ -18265,4 +18310,4 @@ var $WaterMarkPlugin = WaterMarkPlugin;
 module.exports = WaterMarkPlugin;
 
 
-},{"../../base/jst":12,"../../base/styler":15,"../../base/ui_plugin":"Z7u8cr"}]},{},[3,36])
+},{"../../base/jst":12,"../../base/styler":14,"../../base/ui_plugin":"Z7u8cr"}]},{},[3,36])
