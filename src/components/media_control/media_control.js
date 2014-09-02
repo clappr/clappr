@@ -67,7 +67,6 @@ class MediaControl extends UIObject {
 
   addEventListeners() {
     this.listenTo(this.container, 'container:play', this.changeTogglePlay)
-    this.listenTo(this.container, 'container:playing', this.changeTogglePlay)
     this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar)
     this.listenTo(this.container, 'container:progress', this.updateProgressBar)
     this.listenTo(this.container, 'container:settingsupdate', this.settingsUpdate)
