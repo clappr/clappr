@@ -11,7 +11,6 @@
 
 .media-control[data-media-control] {
   position: absolute;
-  background-color: rgba(2, 2, 2, 0.5);
   border-radius: 0px;
   bottom: 0;
   left: 0;
@@ -22,6 +21,18 @@
   min-width: 60%;
   height: 40px;
   z-index: 9999;
+
+  .media-control-background[data-background] {
+    position: absolute;
+    height: 150px;
+    width: 100%;
+    bottom: 0;
+    background-image: -webkit-gradient(
+      linear, left top, left bottom, from(rgba(0,0,0,0.0)),
+      to(rgba(0,0,0,0.9))
+    );
+    @include transition(all, 0.6s, ease-out);
+  }
 
   .media-control-icon {
     font-family:"Player";
@@ -42,8 +53,11 @@
   @include transition(all, 0.4s, ease-out);
 
   &.media-control-hide {
-    bottom: -40px;
+    bottom: -50px;
 
+    .media-control-background[data-background] {
+      opacity: 0;
+    }
     .media-control-layer[data-controls] {
       .bar-container[data-seekbar]{
         .bar-scrubber[data-seekbar] {
@@ -169,13 +183,14 @@
       &[data-position], &[data-duration] {
         display: inline-block;
         font-size: 13px;
-        color: #fff;
+        color: white;
         cursor: default;
         line-height: 32px;
         position: relative;
       }
       &[data-duration] {
-        &:before { content: "/"; margin-right: 3px; }
+        &:before { content: "|"; margin-right: 3px; }
+        color: rgba(255, 255, 255, 0.3);
       }
     }
 
@@ -191,10 +206,10 @@
 
       .bar-background[data-seekbar] {
         width: 100%;
-        height: 8px;
+        height: 1px;
         position: relative;
         top: 12px;
-        background-color: #6f6f6f;
+        background-color: #666666;
         overflow: hidden;
 
         .bar-fill-1[data-seekbar] {
@@ -203,7 +218,7 @@
           left: 0;
           width: 0;
           height: 100%;
-          background-color: #bebebe;
+          background-color: #c2c2c2;
           @include transition(all, 0.1s, ease-out);
         }
 
@@ -213,7 +228,7 @@
           left: 0;
           width: 0;
           height: 100%;
-          background-color: white;
+          background-color: #005aff;
           @include transition(all, 0.1s, ease-out);
         }
       }
@@ -231,10 +246,10 @@
           position: absolute;
           left: 3px;
           top: 3px;
-          width: 14px;
-          height: 14px;
-          border-radius: 6px;
-          border: 1px solid #6f6f6f;
+          width: 8px;
+          height: 8px;
+          border-radius: 10px;
+          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);
           background-color: white;
         }
       }
