@@ -7,7 +7,6 @@ var Styler = require('../../base/styler')
 var JST = require('../../base/jst')
 var _ = require("underscore")
 var Mediator = require('../../components/mediator')
-var Visibility = require('visibility')
 var Browser = require('../../components/browser')
 
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> </object>'
@@ -27,7 +26,6 @@ class HLS extends UIPlugin {
     super(options)
     this.src = options.src
     this.swfPath = options.swfPath || "assets/HLSPlayer.swf"
-    this.setupVisibility()
     this.highDefinition = false
     this.autoPlay = options.autoPlay
     this.defaultSettings = {
@@ -37,12 +35,6 @@ class HLS extends UIPlugin {
     }
     this.settings = _.extend({}, this.defaultSettings)
     this.addListeners()
-  }
-
-  setupVisibility() {
-    this.visibility = new Visibility()
-    this.visibility.on('show', () => this.visibleCallback());
-    this.visibility.on('hide', () => this.hiddenCallback());
   }
 
   addListeners() {
@@ -66,23 +58,6 @@ class HLS extends UIPlugin {
        this.el.globoPlayerSmoothSetLevel && this.el.globoPlayerSetflushLiveURLCache) {
       return fn.apply(this)
     }
-  }
-
-  hiddenCallback() {
-    this.hiddenId = this.safe(() => {
-      return setTimeout(() => this.el.globoPlayerSmoothSetLevel(0), 10000)
-    })
-  }
-
-  visibleCallback() {
-    this.safe(() => {
-      if (this.hiddenId) {
-        clearTimeout(this.hiddenId)
-      }
-      if (!this.el.globoGetAutoLevel()) {
-        this.el.globoPlayerSmoothSetLevel(-1)
-      }
-    })
   }
 
   bootstrap() {
