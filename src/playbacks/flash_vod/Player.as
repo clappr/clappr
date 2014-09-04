@@ -32,8 +32,6 @@ package
       playbackId = LoaderInfo(this.root.loaderInfo).parameters.playbackId;
       playbackState = "IDLE";
       _video = new Video();
-      setupNetConnection();
-      setupStage();
       setupCallbacks();
       setTimeout(flashReady, 50);
     }
@@ -42,7 +40,6 @@ package
     }
     private function onConnectionStatus(e:NetStatusEvent):void {
         if (e.info.code == "NetConnection.Connect.Success"){
-            ExternalInterface.call('console.log', 'rolou');
             setupNetStream();
         }
     }
@@ -96,6 +93,7 @@ package
       return _ns.bytesLoaded;
     }
     private function netStatusHandler(event:NetStatusEvent):void {
+      ExternalInterface.call("console.log", event.info.code);
       if (event.info.code === "NetStream.Buffer.Full") {
         playbackState = "PLAYING";
       } else if (isBuffering(event.info.code)) {
@@ -121,6 +119,8 @@ package
       _triggerEvent('timeupdate');
     }
     private function playerPlay(url:String):void {
+      setupNetConnection();
+      setupStage();
       _ns.play(url);
       heartbeat.addEventListener( TimerEvent.TIMER, onHeartbeat );
       heartbeat.start();
