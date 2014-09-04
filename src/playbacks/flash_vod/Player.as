@@ -2,10 +2,7 @@ package
 {
   import flash.external.ExternalInterface;
   import flash.display.*;
-  import flash.events.Event;
-  import flash.events.NetStatusEvent;
-  import flash.events.StageVideoAvailabilityEvent;
-  import flash.events.TimerEvent;
+  import flash.events.*;
   import flash.geom.Rectangle;
   import flash.media.StageVideoAvailability;
   import flash.media.StageVideo;
@@ -34,29 +31,20 @@ package
       Security.allowInsecureDomain('*');
       playbackId = LoaderInfo(this.root.loaderInfo).parameters.playbackId;
       playbackState = "IDLE";
-      setupNetConnection();
-      setupNetStream();
-      setupStage();
       _video = new Video();
+      setupNetConnection();
+      setupStage();
       setupCallbacks();
       setTimeout(flashReady, 50);
     }
-
     private function flashReady(): void {
       _triggerEvent('flashready');
     }
-
-    private function setupStage():void {
-      stage.scaleMode = StageScaleMode.NO_SCALE;
-      stage.align = StageAlign.TOP_LEFT;
-      stage.fullScreenSourceRect = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
-      stage.displayState = StageDisplayState.NORMAL;
-      stage.addEventListener(StageVideoAvailabilityEvent.STAGE_VIDEO_AVAILABILITY, _onStageVideoAvailability);
-      stage.addEventListener(Event.RESIZE, _onResize);
-    }
-    private function setupNetConnection():void {
-      _nc = new NetConnection();
-      _nc.connect(null);
+    private function onConnectionStatus(e:NetStatusEvent):void {
+        if (e.info.code == "NetConnection.Connect.Success"){
+            ExternalInterface.call('console.log', 'rolou');
+            setupNetStream();
+        }
     }
     private function setupNetStream():void {
       videoVolumeTransform = new SoundTransform();
@@ -69,6 +57,23 @@ package
       _ns.inBufferSeek = true;
       _ns.maxPauseBufferTime = 3600;
       _ns.backBufferTime = 3600;
+    }
+    private function asyncErrorHandler(e:AsyncErrorEvent):void {
+    }
+    private function setupStage():void {
+      stage.scaleMode = StageScaleMode.NO_SCALE;
+      stage.align = StageAlign.TOP_LEFT;
+      stage.fullScreenSourceRect = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
+      stage.displayState = StageDisplayState.NORMAL;
+      stage.addEventListener(StageVideoAvailabilityEvent.STAGE_VIDEO_AVAILABILITY, _onStageVideoAvailability);
+      stage.addEventListener(Event.RESIZE, _onResize);
+    }
+    private function setupNetConnection(videoURL:String=null):void {
+      _nc = new NetConnection();
+      _nc.client = {onBWDone: function():void {}};
+      _nc.addEventListener(AsyncErrorEvent.ASYNC_ERROR, asyncErrorHandler);
+      _nc.addEventListener(NetStatusEvent.NET_STATUS, onConnectionStatus);
+      _nc.connect(null);
     }
     private function setupCallbacks():void {
       ExternalInterface.addCallback("setVideoSize", setVideoSize);
@@ -122,7 +127,9 @@ package
     }
     private function playerPause():void {
       _ns.pause();
-      if (_ns.bytesLoaded == _ns.bytesTotal) heartbeat.stop();
+      if (_ns.bytesLoaded == _ns.bytesTotal) {
+        heartbeat.stop();
+      }
       playbackState = "PAUSED";
     }
     private function playerStop():void {
