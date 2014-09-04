@@ -25,6 +25,10 @@ package
     private var videoVolumeTransform:SoundTransform;
     private var isOnStageVideo:Boolean = false;
     private var heartbeat:Timer = new Timer(500);
+    private var rtmpRegex:RegExp = /(rtmp:\/\/.*)\/(.*)$/i;
+    private var rtmpFullURL:Array;
+    private var isRTMP:Boolean = false;
+    private var source:String;
 
     public function Player() {
       Security.allowDomain('*');
@@ -50,12 +54,15 @@ package
       _ns.client = this;
       _ns.soundTransform = videoVolumeTransform;
       _ns.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler);
-      _ns.bufferTime = 10;
+      if (isRTMP) {
+        _ns.bufferTime = 3;
+      } else {
+        _ns.bufferTime = 10;
+      }
       _ns.inBufferSeek = true;
       _ns.maxPauseBufferTime = 3600;
       _ns.backBufferTime = 3600;
-    }
-    private function asyncErrorHandler(e:AsyncErrorEvent):void {
+      _ns.play(source);
     }
     private function setupStage():void {
       stage.scaleMode = StageScaleMode.NO_SCALE;
@@ -67,10 +74,10 @@ package
     }
     private function setupNetConnection(videoURL:String=null):void {
       _nc = new NetConnection();
-      _nc.client = {onBWDone: function():void {}};
+      _nc.client = this;
       _nc.addEventListener(AsyncErrorEvent.ASYNC_ERROR, asyncErrorHandler);
       _nc.addEventListener(NetStatusEvent.NET_STATUS, onConnectionStatus);
-      _nc.connect(null);
+      _nc.connect(videoURL);
     }
     private function setupCallbacks():void {
       ExternalInterface.addCallback("setVideoSize", setVideoSize);
@@ -119,9 +126,16 @@ package
       _triggerEvent('timeupdate');
     }
     private function playerPlay(url:String):void {
-      setupNetConnection();
       setupStage();
-      _ns.play(url);
+      if (url.indexOf("rtmp") > -1) {
+        isRTMP = true;
+        rtmpFullURL = url.match(rtmpRegex);
+        setupNetConnection(rtmpFullURL[1]);
+        source = rtmpFullURL[2];
+      } else {
+        source = url;
+        setupNetConnection();
+      }
       heartbeat.addEventListener( TimerEvent.TIMER, onHeartbeat );
       heartbeat.start();
     }
@@ -216,6 +230,30 @@ package
     public function onMetaData(info:Object):void {
       totalTime = info.duration;
       _triggerEvent('timeupdate');
+      receivedMeta(info);
+    }
+    public function receivedMeta(data:Object):void {
+        var _stageW:int = stage.stageWidth;
+        var _stageH:int = stage.stageHeight;
+        var _videoW:int;
+        var _videoH:int;
+        var _aspectH:int;
+        var Aspect_num:Number;
+        Aspect_num = data.width / data.height;
+        _videoW = _stageW;
+        _videoH = _videoW / Aspect_num;
+        _aspectH = (_stageH - _videoH) / 2;
+        setVideoSize(_videoW, _videoH);
+    }
+    public function onBWDone(...rest):void {
+    }
+    public function asyncErrorHandler(event:AsyncErrorEvent):void {
+    }
+    public function onFCSubscribe(info:Object):void {
+    }
+    public function cuePointHandler(infoObject:Object):void {
+    }
+    public function onFl(infoObject:Object):void {
     }
   }
 }
