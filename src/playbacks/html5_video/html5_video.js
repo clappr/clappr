@@ -37,7 +37,7 @@ class HTML5Video extends UIPlugin {
     this.el.src = options.src
     this.el.loop = options.loop
     this.settings = {
-      left: ['position', 'duration'],
+      left: ['playpause', 'position', 'duration'],
       right: ['fullscreen', 'volume'],
       default: ['seekbar']
     }
