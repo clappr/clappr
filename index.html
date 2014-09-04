@@ -3,8 +3,58 @@
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <link href='https://fonts.googleapis.com/css?family=Domine' rel='stylesheet' type='text/css'>
-    <script src="player.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+    <style type="text/css" media="screen">
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+}
+
+video {
+  height: 100%;
+  width: 100%;
+}
+
+.container img {
+  height: 100px;
+  width: 500px;
+  color: white;
+}
+
+.container p {
+  color: white;
+  position: relative;
+  font-size: 1.9em;
+  text-shadow: 1px 1px 2px rgba(2, 2, 2, 0.5);
+  -webkit-font-smoothing: antialiased;
+}
+
+.container iframe {
+  position: relative;
+  text-align: center;
+}
+
+.container {
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  margin: 0 auto;
+  top: 15%;
+}
+
+.issues {
+  position: relative;
+  font-size: 1.8em;
+  top: 80px;
+  line-height: 5px;
+  text-shadow: 1px 1px 2px rgba(2, 2, 2, 0.5);
+  -webkit-font-smoothing: antialiased;
+}
+    </style>
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -12,5 +62,17 @@
   </head>
 
   <body>
+      <div class="container">
+        <div class="content">
+          <img src="clappr.svg">
+          <p>An extensible media player for ther web</p>
+          <iframe src="http://ghbtns.com/github-btn.html?user=globocom&repo=clappr&type=watch&size=large&count=true"
+            allowtransparency="true" frameborder="0" scrolling="0" height="40" width="120"></iframe>
+        </div>
+
+      </div>
+    <video preload="preload" autoplay loop>
+      <source src="highline.mp4" type="video/mp4"/>
+    </video>
   </body>
 </html>
