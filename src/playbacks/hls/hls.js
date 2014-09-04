@@ -30,7 +30,7 @@ class HLS extends UIPlugin {
     this.autoPlay = options.autoPlay
     this.defaultSettings = {
       left: ["playstop", "volume"],
-      default: [],
+      default: ['seekbar'],
       right: ["fullscreen", "hd-indicator"]
     }
     this.settings = _.extend({}, this.defaultSettings)
