@@ -192,7 +192,9 @@ class FlashVOD extends UIObject {
 
 FlashVOD.canPlay = function(resource) {
   //http://help.adobe.com/en_US/flashmediaserver/techoverview/WS07865d390fac8e1f-4c43d6e71321ec235dd-7fff.html
-  if (Browser.isFirefox || Browser.isLegacyIE) {
+  if (resource.indexOf('rtmp') > -1) {
+    return true
+  } else if (Browser.isFirefox || Browser.isLegacyIE) {
     return _.isString(resource) && !!resource.match(/(.*).(mp4|mov|f4v|3gpp|3gp)/)
   } else {
     return _.isString(resource) && !!resource.match(/(.*).(mov|f4v|3gpp|3gp)/)
