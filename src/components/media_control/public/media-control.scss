@@ -48,6 +48,7 @@
     padding: 0 6px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    color: rgba(255, 255, 255, 0.3);
   }
 
   @include transition(all, 0.4s, ease-out);
