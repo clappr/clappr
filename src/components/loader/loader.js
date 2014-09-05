@@ -24,6 +24,7 @@ var PosterPlugin = require('../../plugins/poster');
 
 /* Core Plugins */
 var BackgroundButton = require('../../plugins/background_button');
+var SeekTime = require('../../plugins/seek_time');
 
 class Loader extends BaseObject {
   get displayPlugins() {
@@ -35,7 +36,7 @@ class Loader extends BaseObject {
     this.options = options
     this.playbackPlugins = [FlashVideoPlaybackPlugin, HTML5VideoPlaybackPlugin, HTML5AudioPlaybackPlugin, HLSVideoPlaybackPlugin]
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin]
-    this.globalPlugins = [BackgroundButton]
+    this.globalPlugins = [BackgroundButton, SeekTime]
     if (this.options.displayPlugins && this.displayPlugins[this.options.displayType]) {
       this.globalPlugins.push(this.displayPlugins[this.options.displayType])
     }
