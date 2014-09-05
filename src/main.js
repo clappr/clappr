@@ -6,6 +6,7 @@ var BaseObject = require('./base/base_object')
 var CoreFactory = require('./components/core_factory')
 var Loader = require('./components/loader')
 var Mediator = require('./components/mediator')
+var _ = require('underscore');
 
 
 class Player extends BaseObject {
@@ -14,6 +15,7 @@ class Player extends BaseObject {
     window.p = this
     options.displayType || (options.displayType = 'pip')
     this.options = options
+    this.options.sources = this.normalizeSources(options)
     this.loader = new Loader(this.options)
     this.coreFactory = new CoreFactory(this, this.loader)
     options.height || (options.height = 360);
@@ -23,6 +25,10 @@ class Player extends BaseObject {
   attachTo(element) {
     this.options.parentElement = element
     this.core = this.coreFactory.create()
+  }
+
+  normalizeSources(options) {
+    return _.compact(_.flatten([options.source, options.sources]))
   }
 
   load(sources) {
