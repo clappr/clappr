@@ -22,6 +22,9 @@ var StatsPlugin = require('../../plugins/stats');
 var WaterMarkPlugin = require('../../plugins/watermark');
 var PosterPlugin = require('../../plugins/poster');
 
+/* Core Plugins */
+var BackgroundButton = require('../../plugins/background_button');
+
 class Loader extends BaseObject {
   get displayPlugins() {
     return {};
@@ -32,7 +35,7 @@ class Loader extends BaseObject {
     this.options = options
     this.playbackPlugins = [FlashVideoPlaybackPlugin, HTML5VideoPlaybackPlugin, HTML5AudioPlaybackPlugin, HLSVideoPlaybackPlugin]
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin]
-    this.globalPlugins = []
+    this.globalPlugins = [BackgroundButton]
     if (this.options.displayPlugins && this.displayPlugins[this.options.displayType]) {
       this.globalPlugins.push(this.displayPlugins[this.options.displayType])
     }
