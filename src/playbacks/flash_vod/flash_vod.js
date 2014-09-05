@@ -20,11 +20,11 @@ class FlashVOD extends UIObject {
   constructor(options) {
     super(options)
     this.src = options.src
+    this.isRTMP = !!(this.src.indexOf("rtmp") > -1)
     this.swfPath = options.swfPath || "assets/Player.swf"
     this.autoPlay = options.autoPlay
-    this.settings = {}
-    this.settings.default = ["seekbar"]
-    if (this.src.indexOf("rtmp") > -1) {
+    this.settings = {default: ['seekbar']}
+    if (this.isRTMP) {
       this.settings.left = ["playstop", "volume"]
       this.settings.right = ["fullscreen"]
     } else {
