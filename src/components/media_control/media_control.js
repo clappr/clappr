@@ -38,6 +38,8 @@ class MediaControl extends UIObject {
       'mouseleave .drawer-container[data-volume]': 'hideVolumeBar',
       'mousedown .bar-scrubber[data-seekbar]': 'startSeekDrag',
       'mousedown .bar-scrubber[data-volume]': 'startVolumeDrag',
+      'mousemove .bar-container[data-seekbar]': 'mousemoveOnSeekBar',
+      'mouseleave .bar-container[data-seekbar]': 'mouseleaveOnSeekBar',
       'mouseenter .media-control-layer[data-controls]': 'setKeepVisible',
       'mouseleave .media-control-layer[data-controls]': 'resetKeepVisible'
     }
@@ -111,6 +113,14 @@ class MediaControl extends UIObject {
       this.$playStopToggle.removeClass('playing').addClass('stopped')
       this.trigger('mediacontrol:notplaying')
     }
+  }
+
+  mousemoveOnSeekBar(event) {
+    this.trigger('mediacontrol:mousemove:seekbar', event);
+  }
+
+  mouseleaveOnSeekBar(event) {
+    this.trigger('mediacontrol:mouseleave:seekbar', event);
   }
 
   onKeyDown(event) {
