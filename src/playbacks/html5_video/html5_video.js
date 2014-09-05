@@ -157,7 +157,7 @@ class HTML5Video extends UIPlugin {
 }
 
 HTML5Video.canPlay = function(resource) {
-    return (!!resource.match(/(.*).mp4/) || Browser.isSafari)
+    return (!!resource.match(/(.*).mp4/) || Browser.isSafari || Browser.isMobile)
 }
 
 module.exports = HTML5Video
