@@ -84,7 +84,7 @@
     .media-control-left-panel[data-media-control] {
       position: absolute;
       top: 0;
-      left: 5px;
+      left: 10px;
       height: 100%;
     }
 
@@ -190,7 +190,7 @@
     .media-control-indicator {
       &[data-position], &[data-duration] {
         display: inline-block;
-        font-size: 13px;
+        font-size: 10px;
         color: white;
         cursor: default;
         line-height: 32px;
