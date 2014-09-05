@@ -62,6 +62,7 @@ package
       _ns.inBufferSeek = true;
       _ns.maxPauseBufferTime = 3600;
       _ns.backBufferTime = 3600;
+      _stageVideo.attachNetStream(_ns);
       _ns.play(source);
     }
     private function setupStage():void {
@@ -211,7 +212,6 @@ package
       if (_video.parent) {
           removeChild(_video);
       }
-      _stageVideo.attachNetStream(_ns);
     }
     private function _disableStageVideo():void {
       _video.attachNetStream(_ns);
@@ -243,7 +243,7 @@ package
     }
     public function cuePointHandler(infoObject:Object):void {
     }
-    public function onFl(infoObject:Object):void {
+    public function onFI(infoObject:Object):void {
     }
   }
 }
