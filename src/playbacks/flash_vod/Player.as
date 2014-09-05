@@ -55,7 +55,7 @@ package
       _ns.soundTransform = videoVolumeTransform;
       _ns.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler);
       if (isRTMP) {
-        _ns.bufferTime = 3;
+        _ns.bufferTime = 0;
       } else {
         _ns.bufferTime = 10;
       }
@@ -100,7 +100,6 @@ package
       return _ns.bytesLoaded;
     }
     private function netStatusHandler(event:NetStatusEvent):void {
-      ExternalInterface.call("console.log", event.info.code);
       if (event.info.code === "NetStream.Buffer.Full") {
         playbackState = "PLAYING";
       } else if (isBuffering(event.info.code)) {
@@ -233,19 +232,10 @@ package
       receivedMeta(info);
     }
     public function receivedMeta(data:Object):void {
-        var _stageW:int = stage.stageWidth;
-        var _stageH:int = stage.stageHeight;
-        var _videoW:int;
-        var _videoH:int;
-        var _aspectH:int;
-        var Aspect_num:Number;
-        Aspect_num = data.width / data.height;
-        _videoW = _stageW;
-        _videoH = _videoW / Aspect_num;
-        _aspectH = (_stageH - _videoH) / 2;
-        setVideoSize(_videoW, _videoH);
+        setVideoSize(stage.stageWidth, stage.stageHeight);
     }
     public function onBWDone(...rest):void {
+        setVideoSize(stage.stageWidth, stage.stageHeight);
     }
     public function asyncErrorHandler(event:AsyncErrorEvent):void {
     }
