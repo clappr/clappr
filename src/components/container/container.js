@@ -81,6 +81,10 @@ class Container extends UIObject {
     return this.playback.isPlaying();
   }
 
+  getDuration() {
+    return this.playback.getDuration();
+  }
+
   error(errorObj) {
     this.trigger('container:error', errorObj, this.name);
   }
