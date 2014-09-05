@@ -36,10 +36,14 @@ class HTML5Video extends UIPlugin {
     this.src = options.src
     this.el.src = options.src
     this.el.loop = options.loop
-    this.settings = {
-      left: ['playpause', 'position', 'duration'],
-      right: ['fullscreen', 'volume'],
-      default: ['seekbar']
+    this.isHLS = !!(this.src.indexOf('m3u8') > -1)
+    this.settings = {default: ['seekbar']}
+    if (this.isHLS) {
+      this.settings.left = ["playstop", "volume"]
+      this.settings.right = ["fullscreen"]
+    } else {
+      this.settings.left = ["playpause", "position", "duration"]
+      this.settings.right = ["volume", "fullscreen"]
     }
   }
 
@@ -48,8 +52,7 @@ class HTML5Video extends UIPlugin {
   }
 
   getPlaybackType() {
-    var type = this.src.indexOf("m3u8") > -1?'live':'vod'
-    return type
+    return this.isHLS? 'live':'vod'
   }
 
   isHighDefinitionInUse() {
@@ -60,6 +63,9 @@ class HTML5Video extends UIPlugin {
     this.el.play()
     //FIXME: I don't think playback:{play,pause,etc} events are necessary.
     this.trigger('playback:play');
+    if (this.isHLS) {
+      this.trigger('playback:timeupdate', 1, 1, this.name)
+    }
   }
 
   pause() {
@@ -132,7 +138,9 @@ class HTML5Video extends UIPlugin {
   }
 
   timeUpdated() {
-    this.trigger('playback:timeupdate', this.el.currentTime, this.el.duration, this.name)
+    if (!this.isHLS) {
+      this.trigger('playback:timeupdate', this.el.currentTime, this.el.duration, this.name)
+    }
   }
 
   progress() {
