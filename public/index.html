@@ -9,8 +9,10 @@
   <script type="text/javascript" charset="utf-8">
 window.onload = function() {
     p = new Clappr.Player({
-      sources: ['http://bem.tv/superMisto.mp4'],
-//      sources: ['http://cdn.bem.tv/stream/soccer2sec/playlist.m3u8']
+      sources: ['https://github.com/globocom/clappr/raw/gh-pages/highline.mp4'],
+//      sources: ['http://cdn.bem.tv/stream/soccer2sec/playlist.m3u8'],
+      height: 360,
+      width: 640,
     });
 
     p.attachTo(document.getElementById('player-wrapper'));
