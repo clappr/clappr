@@ -22,11 +22,16 @@ class FlashVOD extends UIObject {
     this.src = options.src
     this.swfPath = options.swfPath || "assets/Player.swf"
     this.autoPlay = options.autoPlay
-    this.settings = {
-      left: ["playpause", "position", "duration"],
-      default: ["seekbar"],
-      right: ["fullscreen", "volume"]
+    this.settings = {}
+    this.settings.default = ["seekbar"]
+    if (this.src.indexOf("rtmp") > -1) {
+      this.settings.left = ["playstop", "volume"]
+      this.settings.right = ["fullscreen"]
+    } else {
+      this.settings.left = ["playpause", "position", "duration"]
+      this.settings.right = ["volume", "fullscreen"]
     }
+
     this.isReady = false
     this.addListeners()
   }
@@ -51,10 +56,6 @@ class FlashVOD extends UIObject {
     var $el = this.$('embed')
     $el.attr('data-flash-vod', '')
     this.setElement($el[0])
-  }
-
-  getPlaybackType() {
-    return "vod"
   }
 
   isHighDefinitionInUse() {

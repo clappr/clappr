@@ -62,7 +62,9 @@ package
       _ns.inBufferSeek = true;
       _ns.maxPauseBufferTime = 3600;
       _ns.backBufferTime = 3600;
-      _stageVideo.attachNetStream(_ns);
+      if (isRTMP) {
+        _stageVideo.attachNetStream(_ns);
+      }
       _ns.play(source);
     }
     private function setupStage():void {
@@ -170,9 +172,11 @@ package
       return playbackState;
     }
     private function getPosition():Number {
+      if (isRTMP) { return 1; }
       return _ns.time;
     }
     private function getDuration():Number {
+      if (isRTMP) { return 1; }
       return totalTime;
     }
     private function setVideoSize(width:Number, height:Number):void {
@@ -213,6 +217,9 @@ package
       }
       if (_video.parent) {
           removeChild(_video);
+      }
+      if (!isRTMP) {
+        _stageVideo.attachNetStream(_ns);
       }
     }
     private function _disableStageVideo():void {
