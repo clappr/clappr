@@ -51,11 +51,12 @@ class MediaControl extends UIObject {
     this.container = options.container
     this.keepVisible = false
     this.addEventListeners()
-    this.defaultSettings = {
+    this.settings = {
       left: ['play', 'stop', 'pause'],
       right: ['volume'],
       default: ['position', 'seekbar', 'duration']
     }
+    this.settings = _.isEmpty(this.container.settings) ? this.settings :this.container.settings
     this.disabled = false
     if (this.container.mediaControlDisabled || this.options.chromeless) {
       this.disable()
@@ -104,9 +105,11 @@ class MediaControl extends UIObject {
     if (this.container.isPlaying()) {
       this.$playPauseToggle.removeClass('paused').addClass('playing')
       this.$playStopToggle.removeClass('stopped').addClass('playing')
+      this.trigger('mediacontrol:playing');
     } else {
       this.$playPauseToggle.removeClass('playing').addClass('paused')
       this.$playStopToggle.removeClass('playing').addClass('stopped')
+      this.trigger('mediacontrol:notplaying')
     }
   }
 
@@ -354,8 +357,7 @@ class MediaControl extends UIObject {
   render() {
     var timeout = 1000
     var style = Styler.getStyleFor('media_control')
-    var settings = _.isEmpty(this.container.settings)? this.defaultSettings:this.container.settings
-    this.$el.html(this.template({ settings: settings }))
+    this.$el.html(this.template({ settings: this.settings }))
     this.$el.append(style)
     this.createCachedElements()
     this.$playPauseToggle.addClass('paused')
