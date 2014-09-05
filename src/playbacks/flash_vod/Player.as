@@ -254,5 +254,7 @@ package
     }
     public function onFI(infoObject:Object):void {
     }
+	public function onPlayStatus(infoObject:Object):void {
+	}
   }
 }
