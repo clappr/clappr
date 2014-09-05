@@ -2,11 +2,6 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-/**
- * Loader is responsible for parse embed parameters and decide which plugins should
- * be used in order to satisfy the playback.
- */
-
 var BaseObject = require('../../base/base_object');
 var _ = require('underscore');
 
