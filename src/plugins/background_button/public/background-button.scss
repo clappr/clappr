@@ -1,0 +1,53 @@
+@import '../../../base/scss/transition';
+
+.background-button[data-background-button] {
+  font-family: "Player";
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  @include transition(all, 0.4s, ease-out);
+
+  &.hide[data-background-button] {
+    opacity: 0;
+  }
+
+  .playpause-button-wrapper[data-background-button] {
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    height: 25%;
+    line-height: 100%;
+    font-size: 20%;
+    top: 45%;
+    margin-top: -5%;
+    text-align: center;
+
+    .playpause-icon[data-background-button] {
+      font-family:"Player";
+      font-weight: normal;
+      font-style: normal;
+      line-height: 1;
+      letter-spacing: 0;
+      speak: none;
+      font-size: 90px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      color: white;
+      opacity: 0.75;
+
+      &:hover {
+        text-shadow: rgba(255,255,255,0.5) 0 0 15px;
+      }
+
+      &.playing {
+        &:before { content:"\\e002"; }
+      }
+
+      &.paused {
+        &:before { content:"\\e001"; }
+      }
+    }
+  }
+}
+
