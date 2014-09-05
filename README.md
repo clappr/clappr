@@ -1,8 +1,9 @@
-## Clappr Player
+## Clappr
 
 [![Build Status](https://drone.io/github.com/globocom/clappr/status.png)](https://drone.io/github.com/globocom/clappr/latest)
 [![Dependency Status](https://gemnasium.com/globocom/clappr.svg)](https://gemnasium.com/globocom/clappr)
 
+<img src="https://i.cloudup.com/31N4YEbFO--1200x1200.png">
 
 ### Installing for development
 
