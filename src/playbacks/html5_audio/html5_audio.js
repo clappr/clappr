@@ -15,21 +15,18 @@ class HTML5Audio extends UIPlugin {
     }
   }
 
-  constructor(options) {
-    super(options);
-    this.el.src = options.src
+  constructor(params) {
+    super(params);
+    this.el.src = params.src
+    this.settings = {
+      left: ['playpause', 'position', 'duration'],
+      right: ['fullscreen', 'volume'],
+      default: ['seekbar']
+    }
     this.render() // it should render when the container trigger 'ready'
+    params.autoPlay && this.play()
   }
 
-  setContainer() {
-    this.container.settings = {
-      left: ['playpause'],
-      right: ['volume'],
-      default: ['position', 'seekbar', 'duration']
-    }
-    this.render()
-    this.params.autoPlay && this.play()
-  }
   bindEvents() {
     this.listenTo(this.container, 'container:play', this.play)
     this.listenTo(this.container, 'container:pause', this.pause)
@@ -40,6 +37,7 @@ class HTML5Audio extends UIPlugin {
 
   play() {
     this.el.play()
+    this.trigger('playback:play');
   }
 
   pause() {
@@ -84,12 +82,19 @@ class HTML5Audio extends UIPlugin {
     return this.el.duration
   }
 
+  isPlaying() {
+    return !this.el.paused && !this.el.ended
+  }
+
+  isHighDefinitionInUse() {
+    return false
+  }
+
   timeUpdated() {
-    this.container.timeUpdated(this.el.currentTime, this.el.duration)
+    this.trigger('playback:timeupdate', this.el.currentTime, this.el.duration, this.name)
   }
 
   render() {
-    this.container.$el.append(this.el)
     return this
   }
  }
