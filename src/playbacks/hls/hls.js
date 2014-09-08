@@ -76,19 +76,16 @@ class HLS extends UIPlugin {
 
   updateTime(params) {
     return this.safe(() => {
-      var previousDvrEnabled = this.dvrEnabled
-      this.dvrEnabled = (this.playbackType === 'live' && params.duration > 240)
       var duration = this.getDuration()
-      if (this.playbackType === 'live') {
-        var position = this.el.globoGetPosition()
-        if (position >= duration) {
-          position = duration
-        }
-        this.trigger('playback:timeupdate', position, duration, this.name)
-      } else {
-        this.trigger('playback:timeupdate', this.el.globoGetPosition(), duration, this.name)
+      var position = this.el.globoGetPosition()
+      if (this.playbackType === 'live' && position >= duration) {
+        position = duration
       }
-      if (this.dvrEnabled !== previousDvrEnabled) {
+      this.trigger('playback:timeupdate', position, duration, this.name)
+
+      var previousDVRStatus = this.dvrEnabled
+      this.dvrEnabled = (this.playbackType === 'live' && duration > 240)
+      if (previousDVRStatus && this.dvrEnabled !== previousDVRStatus) {
         this.updateSettings()
       }
     })
@@ -141,17 +138,19 @@ class HLS extends UIPlugin {
     var bufferLength = this.el.globoGetbufferLength()
     if (state === "PLAYING_BUFFERING" && bufferLength < 1)  {
       this.trigger('playback:buffering', this.name)
+      this.updatePlaybackType()
     } else if (state === "PLAYING") {
       if ((this.currentState === "PLAYING_BUFFERING" || this.currentState === "IDLE") && bufferLength !== this.lastBufferLength) {
         this.trigger('playback:bufferfull', this.name)
+        this.updatePlaybackType()
       }
     } else if (state === "IDLE") {
       this.trigger('playback:ended', this.name)
       this.trigger('playback:timeupdate', 0, this.el.globoGetDuration(), this.name)
+      this.updatePlaybackType()
     }
     this.lastBufferLength = bufferLength
     this.currentState = state;
-    this.updatePlaybackType()
   }
 
   updatePlaybackType() {
@@ -160,7 +159,6 @@ class HLS extends UIPlugin {
         this.playbackType = this.el.globoGetType()
         if (this.playbackType) {
           this.playbackType = this.playbackType.toLowerCase()
-          this.updateSettings()
         }
       }
     })
