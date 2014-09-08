@@ -15,6 +15,7 @@ var ContainerFactory = require('../container_factory')
 var Fullscreen = require('../../base/utils').Fullscreen
 var Styler = require('../../base/styler')
 var MediaControl = require('../media_control')
+var PlayerInfo = require('../player_info')
 
 class Core extends UIObject {
   get events() {
@@ -33,23 +34,26 @@ class Core extends UIObject {
 
   constructor(options) {
     super(options)
-    this.defer = $.Deferred()
-    this.defer.promise(this)
+    this.playerInfo = PlayerInfo.getInstance()
+    this.playerInfo.options = options
+    this.options = options
     this.plugins = []
     this.containers = []
-    this.options = options 
-    this.options.displayType || (this.options.displayType = 'pip')
-    this.parentElement = options.parentElement
-    this.loader = this.options.loader
-    this.containerFactory = new ContainerFactory(options, this.loader)
-    this.containerFactory
-      .createContainers()
-      .then((containers) => this.setupContainers(containers))
-      .then((containers) => this.resolveOnContainersReady(containers))
+    this.createContainers(options)
     this.updateSize()
     //FIXME fullscreen api sucks
     document.addEventListener('mozfullscreenchange', () => this.exit())
     $(window).resize(() => this.updateSize())
+  }
+
+  createContainers(options) {
+    this.defer = $.Deferred()
+    this.defer.promise(this)
+    this.containerFactory = new ContainerFactory(options, options.loader)
+    this.containerFactory
+      .createContainers()
+      .then((containers) => this.setupContainers(containers))
+      .then((containers) => this.resolveOnContainersReady(containers))
   }
 
   updateSize() {
@@ -57,21 +61,17 @@ class Core extends UIObject {
       this.$el.addClass('fullscreen')
       this.$el.removeAttr('style')
     } else {
-      var width = 0
-      var height = 0
-      if (this.options.stretchWidth && this.options.stretchHeight && this.options.stretchWidth <= window.innerWidth && this.options.stretchHeight <= (window.innerHeight * 0.73)) {
+      var needStretch = this.options.stretchWidth && this.options.stretchHeight
+      var width, height
+      if (needStretch && this.options.stretchWidth <= window.innerWidth && this.options.stretchHeight <= (window.innerHeight * 0.73)) {
         width = this.options.stretchWidth
         height = this.options.stretchHeight
       } else {
-        width = this.options.width || width
-        height = this.options.height || height
+        width = this.options.width
+        height = this.options.height
       }
-      if (width > 0) {
-        this.$el.css({ width: width })
-      }
-      if (height > 0) {
-        this.$el.css({ height: height })
-      }
+      this.$el.css({ width: width })
+      this.$el.css({ height: height })
       this.$el.removeClass('fullscreen')
     }
   }
@@ -145,7 +145,7 @@ class Core extends UIObject {
     _.map(containers, this.appendContainer, this)
     this.setupMediaControl(this.getCurrentContainer())
     this.render()
-    this.$el.appendTo(this.parentElement)
+    this.$el.appendTo(this.options.parentElement)
     return containers
   }
 
@@ -167,8 +167,8 @@ class Core extends UIObject {
   }
 
   createMediaControl(options) {
-    if(this.options.mediacontrol && this.options.mediacontrol.external) {
-      return new this.options.mediacontrol.external(options);
+    if(options.mediacontrol && options.mediacontrol.external) {
+      return new options.mediacontrol.external(options);
     } else {
       return new MediaControl(options);
     }
