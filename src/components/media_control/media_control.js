@@ -376,10 +376,6 @@ class MediaControl extends UIObject {
 
     this.$volumeBarContainer.hide()
 
-    if (this.options.autoPlay) {
-      this.togglePlayPause()
-      this.togglePlayStop()
-    }
     this.changeTogglePlay()
     this.hideId = setTimeout(() => this.hide(), timeout)
     if (this.disabled) {
