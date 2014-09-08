@@ -138,14 +138,18 @@ class HLS extends UIPlugin {
   }
 
   setPlaybackState(state) {
-    if (state === "PLAYING_BUFFERING" && this.el.globoGetbufferLength() < 1)  {
+    var bufferLength = this.el.globoGetbufferLength()
+    if (state === "PLAYING_BUFFERING" && bufferLength < 1)  {
       this.trigger('playback:buffering', this.name)
-    } else if (state === "PLAYING" && (this.currentState === "PLAYING_BUFFERING" || this.currentState === "IDLE")) {
-      this.trigger('playback:bufferfull', this.name)
+    } else if (state === "PLAYING") {
+      if ((this.currentState === "PLAYING_BUFFERING" || this.currentState === "IDLE") && bufferLength !== this.lastBufferLength) {
+        this.trigger('playback:bufferfull', this.name)
+      }
     } else if (state === "IDLE") {
       this.trigger('playback:ended', this.name)
       this.trigger('playback:timeupdate', 0, this.el.globoGetDuration(), this.name)
     }
+    this.lastBufferLength = bufferLength
     this.currentState = state;
     this.updatePlaybackType()
   }
