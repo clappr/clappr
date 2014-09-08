@@ -4,6 +4,7 @@
 
 var BaseObject = require('../../base/base_object');
 var _ = require('underscore');
+var PlayerInfo = require('../player_info')
 
 /* Playback Plugins */
 var HTML5VideoPlaybackPlugin = require('../../playbacks/html5_video');
@@ -22,14 +23,14 @@ var BackgroundButton = require('../../plugins/background_button');
 var SeekTime = require('../../plugins/seek_time');
 
 class Loader extends BaseObject {
-  constructor(options) {
-    super(options);
-    this.options = options
+  constructor(externalPlugins) {
+    super()
+    this.playerInfo = PlayerInfo.getInstance()
     this.playbackPlugins = [FlashVideoPlaybackPlugin, HTML5VideoPlaybackPlugin, HTML5AudioPlaybackPlugin, HLSVideoPlaybackPlugin]
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin]
     this.globalPlugins = [BackgroundButton, SeekTime]
-    if (options.plugins) {
-      this.addExternalPlugins(options.plugins)
+    if (externalPlugins) {
+      this.addExternalPlugins(externalPlugins)
     }
   }
 
@@ -43,6 +44,7 @@ class Loader extends BaseObject {
     if(plugins.core) {
       this.globalPlugins = plugins.core.concat(this.globalPlugins)
     }
+    this.playerInfo.playbackPlugins = this.playbackPlugins
   }
 
   getPlugin(name) {

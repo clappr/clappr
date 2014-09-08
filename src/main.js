@@ -13,10 +13,9 @@ class Player extends BaseObject {
   constructor(options) {
     super(options);
     window.p = this
-    options.displayType || (options.displayType = 'pip')
     this.options = options
     this.options.sources = this.normalizeSources(options)
-    this.loader = new Loader(this.options)
+    this.loader = new Loader(this.options.plugins || [])
     this.coreFactory = new CoreFactory(this, this.loader)
     options.height || (options.height = 360);
     options.width || (options.width = 640);
