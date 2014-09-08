@@ -19,6 +19,8 @@ class BackgroundButton extends UIObject {
     super(core);
     this.name = "background_button";
     this.core = core;
+    this.listenTo(this.core.mediaControl.container, 'container:state:buffering', this.hide);
+    this.listenTo(this.core.mediaControl.container, 'container:state:bufferfull', this.show);
     this.listenTo(this.core.mediaControl, 'mediacontrol:show', this.show);
     this.listenTo(this.core.mediaControl, 'mediacontrol:hide', this.hide);
     this.listenTo(this.core.mediaControl, 'mediacontrol:playing', this.playing);
