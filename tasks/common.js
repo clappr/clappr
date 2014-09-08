@@ -16,6 +16,7 @@ module.exports.browserify = function() {
     .require('./src/base/ui_object', { expose: 'ui_object' })
     .require('./src/components/browser', { expose: 'browser' })
     .require('./src/components/media_control', { expose: 'media_control' })
+    .require('./src/components/player_info', { expose: 'player_info' })
 };
 
 gulp.task('compile-js', function() {
