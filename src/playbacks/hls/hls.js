@@ -53,13 +53,6 @@ class HLS extends UIPlugin {
     Mediator.off(this.uniqueId + ':playbackerror')
   }
 
-  safe(fn) {
-    if(this.el.globoGetState && this.el.globoGetDuration && this.el.globoGetPosition &&
-       this.el.globoPlayerSmoothSetLevel && this.el.globoPlayerSetflushLiveURLCache) {
-      return fn.apply(this)
-    }
-  }
-
   bootstrap() {
     this.el.width = "100%"
     this.el.height = "100%"
@@ -75,31 +68,32 @@ class HLS extends UIPlugin {
   }
 
   updateTime(params) {
-    return this.safe(() => {
-      var duration = this.getDuration()
-      var position = this.el.globoGetPosition()
-      if (this.playbackType === 'live' && position >= duration) {
-        position = duration
-      }
-      this.trigger('playback:timeupdate', position, duration, this.name)
+    var duration = this.getDuration()
+    var position = this.el.globoGetPosition()
+    if (this.playbackType === 'live' && position >= duration) {
+      position = duration
+    }
+    this.trigger('playback:timeupdate', position, duration, this.name)
 
-      var previousDVRStatus = this.dvrEnabled
-      this.dvrEnabled = (this.playbackType === 'live' && duration > 240)
-      if (previousDVRStatus && this.dvrEnabled !== previousDVRStatus) {
-        this.updateSettings()
-      }
-    })
+    var previousDVRStatus = this.dvrEnabled
+    this.dvrEnabled = (this.playbackType === 'live' && duration > 240)
+    if (previousDVRStatus && this.dvrEnabled !== previousDVRStatus) {
+      this.updateSettings()
+    } else {
+      this.trigger('playback:timeupdate', this.el.globoGetPosition(), duration, this.name)
+    }
+    if (this.dvrEnabled !== previousDvrEnabled) {
+      this.updateSettings()
+    }
   }
 
   play() {
-    this.safe(() => {
-      if(this.el.currentState === 'PAUSED') {
-        this.el.globoPlayerResume()
-      } else {
-        this.firstPlay()
-      }
-      this.trigger('playback:play', this.name)
-    })
+    if(this.el.currentState === 'PAUSED') {
+      this.el.globoPlayerResume()
+    } else {
+      this.firstPlay()
+    }
+    this.trigger('playback:play', this.name)
   }
 
   getPlaybackType() {
@@ -109,10 +103,8 @@ class HLS extends UIPlugin {
   }
 
   getCurrentBitrate() {
-    return this.safe(function() {
-      var currentLevel = this.getLevels()[this.el.globoGetLevel()]
-      return currentLevel.bitrate
-    })
+    var currentLevel = this.getLevels()[this.el.globoGetLevel()]
+    return currentLevel.bitrate
   }
 
   getLastProgramDate() {
@@ -126,12 +118,10 @@ class HLS extends UIPlugin {
   }
 
   getLevels() {
-    return this.safe(() => {
-      if (!this.levels || this.levels.length === 0) {
-        this.levels = this.el.globoGetLevels()
-      }
-      return this.levels
-    })
+    if (!this.levels || this.levels.length === 0) {
+      this.levels = this.el.globoGetLevels()
+    }
+    return this.levels
   }
 
   setPlaybackState(state) {
@@ -154,75 +144,59 @@ class HLS extends UIPlugin {
   }
 
   updatePlaybackType() {
-    this.safe(() => {
-      if (!this.playbackType) {
-        this.playbackType = this.el.globoGetType()
-        if (this.playbackType) {
-          this.playbackType = this.playbackType.toLowerCase()
-        }
+    if (!this.playbackType) {
+      this.playbackType = this.el.globoGetType()
+      if (this.playbackType) {
+        this.playbackType = this.playbackType.toLowerCase()
       }
-    })
+    }
   }
 
   firstPlay() {
-    this.safe(() => {
-      this.el.globoPlayerLoad(this.src)
-      this.el.globoPlayerPlay()
-    })
+    this.el.globoPlayerLoad(this.src)
+    this.el.globoPlayerPlay()
   }
 
   volume(value) {
-    this.safe(() => {
-      this.el.globoPlayerVolume(value)
-    })
+    this.el.globoPlayerVolume(value)
   }
 
   pause() {
-    this.safe(() => {
-      this.el.globoPlayerPause()
-    })
+    this.el.globoPlayerPause()
   }
 
   stop() {
-    this.safe(() => {
-      this.el.globoPlayerStop()
-      this.trigger('playback:timeupdate', 0, this.name)
-    })
+    this.el.globoPlayerStop()
+    this.trigger('playback:timeupdate', 0, this.name)
   }
 
   isPlaying() {
-    return this.safe(() => {
-      if (this.currentState) {
-        return !!(this.currentState.match(/playing/i))
-      }
-      return false
-    })
+    if (this.currentState) {
+      return !!(this.currentState.match(/playing/i))
+    }
+    return false
   }
 
   getDuration() {
-    return this.safe(() => {
-      var duration = this.el.globoGetDuration()
-      if (this.playbackType === 'live') {
-        // estimate 10 seconds of buffer time for live streams for seek positions
-        duration = duration - 10
-      }
-      return duration
-    })
+    var duration = this.el.globoGetDuration()
+    if (this.playbackType === 'live') {
+      // estimate 10 seconds of buffer time for live streams for seek positions
+      duration = duration - 10
+    }
+    return duration
   }
 
   seek(time) {
-    this.safe(() => {
-      if (time < 0) {
-        this.el.globoPlayerSeek(time)
-      } else {
-        var duration = this.getDuration()
-        time = duration * time / 100
-        // seek operations to a time within 2 seconds from live stream will position playhead back to live
-        if (this.playbackType === 'live' && duration - time < 2)
-          time = -1
-        this.el.globoPlayerSeek(time)
-      }
-    })
+    if (time < 0) {
+      this.el.globoPlayerSeek(time)
+    } else {
+      var duration = this.getDuration()
+      time = duration * time / 100
+      // seek operations to a time within 2 seconds from live stream will position playhead back to live
+      if (this.playbackType === 'live' && duration - time < 2)
+        time = -1
+      this.el.globoPlayerSeek(time)
+    }
   }
 
   flashPlaybackError() {
