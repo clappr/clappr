@@ -36,11 +36,6 @@ class FlashVOD extends UIObject {
     this.addListeners()
   }
 
-  safe(fn) {
-    if(this.el.getState && this.el.getDuration && this.el.getPosition && this.el.getBytesLoaded && this.el.getBytesTotal) {
-      return fn.apply(this)
-    }
-  }
 
   bootstrap() {
     this.el.width = "100%"
@@ -63,9 +58,7 @@ class FlashVOD extends UIObject {
   }
 
   updateTime() {
-    this.safe(() => {
-      this.trigger('playback:timeupdate', this.el.getPosition(), this.el.getDuration(), this.name)
-    })
+    this.trigger('playback:timeupdate', this.el.getPosition(), this.el.getDuration(), this.name)
   }
 
   addListeners() {
@@ -83,68 +76,54 @@ class FlashVOD extends UIObject {
   }
 
   checkState() {
-    this.safe(() => {
-      if (this.currentState !== "PLAYING_BUFFERING" && this.el.getState() === "PLAYING_BUFFERING") {
-        this.trigger('playback:buffering', this.name)
-        this.currentState = "PLAYING_BUFFERING"
-      } else if (this.currentState === "PLAYING_BUFFERING" && this.el.getState() === "PLAYING") {
-        this.trigger('playback:bufferfull', this.name)
-        this.currentState = "PLAYING"
-      } else if (this.el.getState() === "IDLE") {
-        this.currentState = "IDLE"
-      } else if (this.el.getState() === "ENDED") {
-        this.trigger('playback:ended', this.name)
-        this.trigger('playback:timeupdate', 0, this.el.getDuration(), this.name)
-        this.currentState = "ENDED"
-      }
-    })
+    if (this.currentState !== "PLAYING_BUFFERING" && this.el.getState() === "PLAYING_BUFFERING") {
+      this.trigger('playback:buffering', this.name)
+      this.currentState = "PLAYING_BUFFERING"
+    } else if (this.currentState === "PLAYING_BUFFERING" && this.el.getState() === "PLAYING") {
+      this.trigger('playback:bufferfull', this.name)
+      this.currentState = "PLAYING"
+    } else if (this.el.getState() === "IDLE") {
+      this.currentState = "IDLE"
+    } else if (this.el.getState() === "ENDED") {
+      this.trigger('playback:ended', this.name)
+      this.trigger('playback:timeupdate', 0, this.el.getDuration(), this.name)
+      this.currentState = "ENDED"
+    }
   }
 
   progress() {
-    this.safe(() => {
-      if (this.currentState !== "IDLE" && this.currentState !== "ENDED") {
-        this.trigger('playback:progress', 0, this.el.getBytesLoaded(), this.el.getBytesTotal(), this.name)
-      }
-    })
+    if (this.currentState !== "IDLE" && this.currentState !== "ENDED") {
+      this.trigger('playback:progress', 0, this.el.getBytesLoaded(), this.el.getBytesTotal(), this.name)
+    }
   }
 
   firstPlay() {
-    this.safe(() => {
-      this.currentState = "PLAYING"
-      this.el.playerPlay(this.src)
-    })
+    this.currentState = "PLAYING"
+    this.el.playerPlay(this.src)
   }
 
   play() {
-    this.safe(() => {
-      if(this.el.getState() === 'PAUSED') {
-        this.currentState = "PLAYING"
-        this.el.playerResume()
-      } else if (this.el.getState() !== 'PLAYING') {
-        this.firstPlay()
-      }
-      this.trigger('playback:play', this.name)
-    })
+    if(this.el.getState() === 'PAUSED') {
+      this.currentState = "PLAYING"
+      this.el.playerResume()
+    } else if (this.el.getState() !== 'PLAYING') {
+      this.firstPlay()
+    }
+    this.trigger('playback:play', this.name)
   }
 
   volume(value) {
-    this.safe(() => {
-      this.el.playerVolume(value)
-    })
+    this.el.playerVolume(value)
   }
 
   pause() {
-    this.safe(() => {
-      this.currentState = "PAUSED"
-      this.el.playerPause()
-    })
+    this.currentState = "PAUSED"
+    this.el.playerPause()
   }
 
   stop() {
-    this.safe(() => {
-      this.el.playerStop()
-      this.trigger('playback:timeupdate', 0, this.name)
-    })
+    this.el.playerStop()
+    this.trigger('playback:timeupdate', 0, this.name)
   }
 
   isPlaying() {
@@ -152,20 +131,16 @@ class FlashVOD extends UIObject {
   }
 
   getDuration() {
-    return this.safe(() => {
-      return this.el.getDuration()
-    })
+    return this.el.getDuration()
   }
 
   seek(time) {
-    this.safe(() => {
-      var seekTo = this.el.getDuration() * (time / 100)
-      this.el.playerSeek(seekTo)
-      this.trigger('playback:timeupdate', seekTo, this.el.getDuration(), this.name)
-      if (this.currentState === "PAUSED") {
-        this.pause()
-      }
-    })
+    var seekTo = this.el.getDuration() * (time / 100)
+    this.el.playerSeek(seekTo)
+    this.trigger('playback:timeupdate', seekTo, this.el.getDuration(), this.name)
+    if (this.currentState === "PAUSED") {
+      this.pause()
+    }
   }
 
   destroy() {
