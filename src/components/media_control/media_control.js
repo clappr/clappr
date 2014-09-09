@@ -364,6 +364,24 @@ class MediaControl extends UIObject {
     }
   }
 
+  parseColors() {
+    var translate = {
+      query: {
+        'seekbar': '.bar-fill-2[data-seekbar]',
+        'buttons': '[data-media-control] > .media-control-icon, [data-volume]'
+      },
+      rule: {
+        'seekbar': 'background-color',
+        'buttons': 'color'
+      }
+    };
+    var customColors = _.pick(this.options.mediacontrol, 'seekbar', 'buttons');
+
+    _.each(customColors, (value, key) => {
+      this.$el.find(translate.query[key]).css(translate.rule[key], customColors[key]);
+    });
+  }
+
   render() {
     var timeout = 1000
     var style = Styler.getStyleFor('media_control')
@@ -382,16 +400,14 @@ class MediaControl extends UIObject {
       this.hide()
     }
 
-    if(this.options.mediacontrol && this.options.mediacontrol.style) {
-      this.$el.css(this.options.mediacontrol.style)
-    }
-
     this.$el.ready(() => {
       this.setVolumeLevel(this.currentVolume)
       this.setSeekPercentage(0)
       this.bindKeyEvents()
       this.highDefinitionUpdate()
     })
+
+    this.parseColors();
 
     return this
   }
