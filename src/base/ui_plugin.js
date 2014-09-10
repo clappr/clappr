@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 var PluginMixin = require('./plugin_mixin')
-var UIObject = require('ui_object')
+var UIObject = require('./ui_object')
 
 var extend = require('./utils').extend
 

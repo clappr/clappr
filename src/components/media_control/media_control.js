@@ -10,7 +10,7 @@ var _ = require('underscore')
 var $ = require('jquery')
 var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
-var UIObject = require('ui_object')
+var UIObject = require('../../base/ui_object')
 var Utils = require('../../base/utils')
 
 class MediaControl extends UIObject {
