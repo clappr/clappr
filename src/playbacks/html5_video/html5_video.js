@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var UIPlugin = require('ui_plugin')
-var Browser = require('browser')
+var UIPlugin = require('../../base/ui_plugin')
 var Styler = require('../../base/styler')
+var Browser = require('../../components/browser')
 
 class HTML5Video extends UIPlugin {
   get name() { return 'html5_video' }
