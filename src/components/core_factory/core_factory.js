@@ -7,7 +7,7 @@
  */
 
 var _ = require('underscore');
-var BaseObject = require('base_object');
+var BaseObject = require('../../base/base_object');
 var Core = require('../core');
 
 class CoreFactory extends BaseObject {
