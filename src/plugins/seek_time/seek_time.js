@@ -1,4 +1,4 @@
-var UIObject = require('../../base/ui_object');
+var UIObject = require('ui_object');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var formatTime = require('../../base/utils').formatTime;

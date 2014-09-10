@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var BaseObject = require('../../base/base_object');
+var BaseObject = require('base_object');
 var $ = require("jquery");
 
 class StatsPlugin extends BaseObject {
