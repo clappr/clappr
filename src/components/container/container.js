@@ -6,7 +6,7 @@
  * Container is responsible for the video rendering and state
  */
 
-var UIObject = require('../../base/ui_object');
+var UIObject = require('ui_object');
 var Styler = require('../../base/styler');
 var _ = require('underscore');
 
