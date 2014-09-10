@@ -2,7 +2,7 @@
   "name": "clappr",
   "version": "0.0.6",
   "description": "An extensible media player for the web",
-  "main": "dist/clappr.light.min.js",
+  "main": "dist/clappr.min.js",
   "scripts": {
     "test": "./node_modules/.bin/karma start --single-run --browsers Firefox"
   },
@@ -25,7 +25,7 @@
   "devDependencies": {
     "s3": "^4.1.1",
     "browserify": "^5.11.0",
-    "browserify-shim": "^3.6.0",
+    "browserify-shim": "^3.7.0",
     "chai": "latest",
     "dotenv": "^0.4.0",
     "es6ify": "~1.2.0",
