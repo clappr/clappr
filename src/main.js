@@ -55,15 +55,15 @@ class Player extends BaseObject {
   }
 
   setVolume(volume) {
-    this.core.mediaControl.container.volume(volume);
+    this.core.mediaControl.container.setVolume(volume);
   }
 
   mute() {
-    this.core.mediaControl.container.volume(0);
+    this.core.mediaControl.container.setVolume(0);
   }
 
   unmute() {
-    this.core.mediaControl.container.volume(100);
+    this.core.mediaControl.container.setVolume(100);
   }
 
   isPlaying() {
