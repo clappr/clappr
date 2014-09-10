@@ -1,71 +1,4 @@
-require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-(function (global){
-"use strict";
-var BaseObject = require('base_object');
-var CoreFactory = require('./components/core_factory');
-var Loader = require('./components/loader');
-var Mediator = require('./components/mediator');
-var _ = require('underscore');
-var Player = function Player(options) {
-  $traceurRuntime.superCall(this, $Player.prototype, "constructor", [options]);
-  window.p = this;
-  this.options = options;
-  this.options.sources = this.normalizeSources(options);
-  this.loader = new Loader(this.options.plugins || []);
-  this.coreFactory = new CoreFactory(this, this.loader);
-  options.height || (options.height = 360);
-  options.width || (options.width = 640);
-};
-var $Player = Player;
-($traceurRuntime.createClass)(Player, {
-  attachTo: function(element) {
-    this.options.parentElement = element;
-    this.core = this.coreFactory.create();
-  },
-  normalizeSources: function(options) {
-    return _.compact(_.flatten([options.source, options.sources]));
-  },
-  load: function(sources) {
-    this.core.load(sources);
-  },
-  destroy: function() {
-    this.core.destroy();
-  },
-  play: function() {
-    this.core.mediaControl.container.play();
-  },
-  pause: function() {
-    this.core.mediaControl.container.pause();
-  },
-  stop: function() {
-    this.core.mediaControl.container.stop();
-  },
-  seek: function(time) {
-    this.core.mediaControl.container.setCurrentTime(time);
-  },
-  setVolume: function(volume) {
-    this.core.mediaControl.container.volume(volume);
-  },
-  mute: function() {
-    this.core.mediaControl.container.volume(0);
-  },
-  unmute: function() {
-    this.core.mediaControl.container.volume(100);
-  },
-  isPlaying: function() {
-    return this.core.mediaControl.container.isPlaying();
-  }
-}, {}, BaseObject);
-global.DEBUG = false;
-window.Clappr = {
-  Player: Player,
-  Mediator: Mediator
-};
-module.exports = window.Clappr;
-
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./components/core_factory":19,"./components/loader":20,"./components/mediator":23,"base_object":undefined,"underscore":6}],2:[function(require,module,exports){
+require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -130,7 +63,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],3:[function(require,module,exports){
+},{}],2:[function(require,module,exports){
 (function (process,global){
 (function(global) {
   'use strict';
@@ -1919,8 +1852,8 @@ System.register("traceur-runtime@0.0.42/src/runtime/polyfill-import", [], functi
 });
 System.get("traceur-runtime@0.0.42/src/runtime/polyfill-import" + '');
 
-}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":2}],4:[function(require,module,exports){
+}).call(this,require("FWaASH"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"FWaASH":1}],3:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.1
  * http://jquery.com/
@@ -11112,10 +11045,10 @@ return jQuery;
 
 }));
 
-},{}],5:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 (function (global){
 //! moment.js
-//! version : 2.8.1
+//! version : 2.8.3
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
@@ -11126,11 +11059,12 @@ return jQuery;
     ************************************/
 
     var moment,
-        VERSION = '2.8.1',
+        VERSION = '2.8.3',
         // the global-scope this is NOT the global object in Node.js
         globalScope = typeof global !== 'undefined' ? global : this,
         oldGlobalMoment,
         round = Math.round,
+        hasOwnProperty = Object.prototype.hasOwnProperty,
         i,
 
         YEAR = 0,
@@ -11204,7 +11138,7 @@ return jQuery;
             ['HH', /(T| )\d\d/]
         ],
 
-        // timezone chunker "+10:00" > ["10", "00"] or "-1530" > ["-15", "30"]
+        // timezone chunker '+10:00' > ['10', '00'] or '-1530' > ['-15', '30']
         parseTimezoneChunker = /([\+\-]|\d\d)/gi,
 
         // getter and setter names
@@ -11409,6 +11343,10 @@ return jQuery;
         }
     }
 
+    function hasOwnProp(a, b) {
+        return hasOwnProperty.call(a, b);
+    }
+
     function defaultParsingFlags() {
         // We need to deep clone this object, and es5 standard is not very
         // helpful.
@@ -11429,7 +11367,7 @@ return jQuery;
     function printMsg(msg) {
         if (moment.suppressDeprecationWarnings === false &&
                 typeof console !== 'undefined' && console.warn) {
-            console.warn("Deprecation warning: " + msg);
+            console.warn('Deprecation warning: ' + msg);
         }
     }
 
@@ -11532,16 +11470,16 @@ return jQuery;
 
     function extend(a, b) {
         for (var i in b) {
-            if (b.hasOwnProperty(i)) {
+            if (hasOwnProp(b, i)) {
                 a[i] = b[i];
             }
         }
 
-        if (b.hasOwnProperty('toString')) {
+        if (hasOwnProp(b, 'toString')) {
             a.toString = b.toString;
         }
 
-        if (b.hasOwnProperty('valueOf')) {
+        if (hasOwnProp(b, 'valueOf')) {
             a.valueOf = b.valueOf;
         }
 
@@ -11649,7 +11587,7 @@ return jQuery;
             var dur, tmp;
             //invert the arguments, but complain about it
             if (period !== null && !isNaN(+period)) {
-                deprecateSimple(name, "moment()." + name  + "(period, number) is deprecated. Please use moment()." + name + "(number, period).");
+                deprecateSimple(name, 'moment().' + name  + '(period, number) is deprecated. Please use moment().' + name + '(number, period).');
                 tmp = val; val = period; period = tmp;
             }
 
@@ -11719,7 +11657,7 @@ return jQuery;
             prop;
 
         for (prop in inputObject) {
-            if (inputObject.hasOwnProperty(prop)) {
+            if (hasOwnProp(inputObject, prop)) {
                 normalizedProp = normalizeUnits(prop);
                 if (normalizedProp) {
                     normalizedInput[normalizedProp] = inputObject[prop];
@@ -12604,6 +12542,9 @@ return jQuery;
         for (i = 0; i < config._f.length; i++) {
             currentScore = 0;
             tempConfig = copyConfig({}, config);
+            if (config._useUTC != null) {
+                tempConfig._useUTC = config._useUTC;
+            }
             tempConfig._pf = defaultParsingFlags();
             tempConfig._f = config._f[i];
             makeDateFromStringAndFormat(tempConfig);
@@ -12639,7 +12580,7 @@ return jQuery;
             config._pf.iso = true;
             for (i = 0, l = isoDates.length; i < l; i++) {
                 if (isoDates[i][1].exec(string)) {
-                    // match[5] should be "T" or undefined
+                    // match[5] should be 'T' or undefined
                     config._f = isoDates[i][0] + (match[6] || ' ');
                     break;
                 }
@@ -12668,6 +12609,14 @@ return jQuery;
         }
     }
 
+    function map(arr, fn) {
+        var res = [], i;
+        for (i = 0; i < arr.length; ++i) {
+            res.push(fn(arr[i], i));
+        }
+        return res;
+    }
+
     function makeDateFromInput(config) {
         var input = config._i, matched;
         if (input === undefined) {
@@ -12679,7 +12628,9 @@ return jQuery;
         } else if (typeof input === 'string') {
             makeDateFromString(config);
         } else if (isArray(input)) {
-            config._a = input.slice(0);
+            config._a = map(input.slice(0), function (obj) {
+                return parseInt(obj, 10);
+            });
             dateFromConfig(config);
         } else if (typeof(input) === 'object') {
             dateFromObject(config);
@@ -12847,7 +12798,7 @@ return jQuery;
     moment = function (input, format, locale, strict) {
         var c;
 
-        if (typeof(locale) === "boolean") {
+        if (typeof(locale) === 'boolean') {
             strict = locale;
             locale = undefined;
         }
@@ -12915,7 +12866,7 @@ return jQuery;
     moment.utc = function (input, format, locale, strict) {
         var c;
 
-        if (typeof(locale) === "boolean") {
+        if (typeof(locale) === 'boolean') {
             strict = locale;
             locale = undefined;
         }
@@ -13002,7 +12953,7 @@ return jQuery;
 
         ret = new Duration(duration);
 
-        if (moment.isDuration(input) && input.hasOwnProperty('_locale')) {
+        if (moment.isDuration(input) && hasOwnProp(input, '_locale')) {
             ret._locale = input._locale;
         }
 
@@ -13039,7 +12990,7 @@ return jQuery;
     };
 
     moment.lang = deprecate(
-        "moment.lang is deprecated. Use moment.locale instead.",
+        'moment.lang is deprecated. Use moment.locale instead.',
         function (key, value) {
             return moment.locale(key, value);
         }
@@ -13051,7 +13002,7 @@ return jQuery;
     moment.locale = function (key, values) {
         var data;
         if (key) {
-            if (typeof(values) !== "undefined") {
+            if (typeof(values) !== 'undefined') {
                 data = moment.defineLocale(key, values);
             }
             else {
@@ -13086,7 +13037,7 @@ return jQuery;
     };
 
     moment.langData = deprecate(
-        "moment.langData is deprecated. Use moment.localeData instead.",
+        'moment.langData is deprecated. Use moment.localeData instead.',
         function (key) {
             return moment.localeData(key);
         }
@@ -13119,7 +13070,7 @@ return jQuery;
     // compare moment object
     moment.isMoment = function (obj) {
         return obj instanceof Moment ||
-            (obj != null &&  obj.hasOwnProperty('_isAMomentObject'));
+            (obj != null && hasOwnProp(obj, '_isAMomentObject'));
     };
 
     // for typechecking Duration objects
@@ -13175,7 +13126,7 @@ return jQuery;
         },
 
         toString : function () {
-            return this.clone().locale('en').format("ddd MMM DD YYYY HH:mm:ss [GMT]ZZ");
+            return this.clone().locale('en').format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ');
         },
 
         toDate : function () {
@@ -13234,7 +13185,7 @@ return jQuery;
                 this._isUTC = false;
 
                 if (keepLocalTime) {
-                    this.add(this._d.getTimezoneOffset(), 'm');
+                    this.add(this._dateTzOffset(), 'm');
                 }
             }
             return this;
@@ -13252,7 +13203,7 @@ return jQuery;
         diff : function (input, units, asFloat) {
             var that = makeAs(input, this),
                 zoneDiff = (this.zone() - that.zone()) * 6e4,
-                diff, output;
+                diff, output, daysAdjust;
 
             units = normalizeUnits(units);
 
@@ -13263,11 +13214,12 @@ return jQuery;
                 output = ((this.year() - that.year()) * 12) + (this.month() - that.month());
                 // adjust by taking difference in days, average number of days
                 // and dst in the given months.
-                output += ((this - moment(this).startOf('month')) -
-                        (that - moment(that).startOf('month'))) / diff;
+                daysAdjust = (this - moment(this).startOf('month')) -
+                    (that - moment(that).startOf('month'));
                 // same as above but with zones, to negate all dst
-                output -= ((this.zone() - moment(this).startOf('month').zone()) -
-                        (that.zone() - moment(that).startOf('month').zone())) * 6e4 / diff;
+                daysAdjust -= ((this.zone() - moment(this).startOf('month').zone()) -
+                        (that.zone() - moment(that).startOf('month').zone())) * 6e4;
+                output += daysAdjust / diff;
                 if (units === 'year') {
                     output = output / 12;
                 }
@@ -13376,18 +13328,33 @@ return jQuery;
         },
 
         isAfter: function (input, units) {
-            units = typeof units !== 'undefined' ? units : 'millisecond';
-            return +this.clone().startOf(units) > +moment(input).startOf(units);
+            units = normalizeUnits(typeof units !== 'undefined' ? units : 'millisecond');
+            if (units === 'millisecond') {
+                input = moment.isMoment(input) ? input : moment(input);
+                return +this > +input;
+            } else {
+                return +this.clone().startOf(units) > +moment(input).startOf(units);
+            }
         },
 
         isBefore: function (input, units) {
-            units = typeof units !== 'undefined' ? units : 'millisecond';
-            return +this.clone().startOf(units) < +moment(input).startOf(units);
+            units = normalizeUnits(typeof units !== 'undefined' ? units : 'millisecond');
+            if (units === 'millisecond') {
+                input = moment.isMoment(input) ? input : moment(input);
+                return +this < +input;
+            } else {
+                return +this.clone().startOf(units) < +moment(input).startOf(units);
+            }
         },
 
         isSame: function (input, units) {
-            units = units || 'ms';
-            return +this.clone().startOf(units) === +makeAs(input, this).startOf(units);
+            units = normalizeUnits(units || 'millisecond');
+            if (units === 'millisecond') {
+                input = moment.isMoment(input) ? input : moment(input);
+                return +this === +input;
+            } else {
+                return +this.clone().startOf(units) === +makeAs(input, this).startOf(units);
+            }
         },
 
         min: deprecate(
@@ -13427,7 +13394,7 @@ return jQuery;
                     input = input * 60;
                 }
                 if (!this._isUTC && keepLocalTime) {
-                    localAdjust = this._d.getTimezoneOffset();
+                    localAdjust = this._dateTzOffset();
                 }
                 this._offset = input;
                 this._isUTC = true;
@@ -13445,7 +13412,7 @@ return jQuery;
                     }
                 }
             } else {
-                return this._isUTC ? offset : this._d.getTimezoneOffset();
+                return this._isUTC ? offset : this._dateTzOffset();
             }
             return this;
         },
@@ -13549,28 +13516,38 @@ return jQuery;
         // instance.  Otherwise, it will return the locale configuration
         // variables for this instance.
         locale : function (key) {
+            var newLocaleData;
+
             if (key === undefined) {
                 return this._locale._abbr;
             } else {
-                this._locale = moment.localeData(key);
+                newLocaleData = moment.localeData(key);
+                if (newLocaleData != null) {
+                    this._locale = newLocaleData;
+                }
                 return this;
             }
         },
 
         lang : deprecate(
-            "moment().lang() is deprecated. Use moment().localeData() instead.",
+            'moment().lang() is deprecated. Use moment().localeData() instead.',
             function (key) {
                 if (key === undefined) {
                     return this.localeData();
                 } else {
-                    this._locale = moment.localeData(key);
-                    return this;
+                    return this.locale(key);
                 }
             }
         ),
 
         localeData : function () {
             return this._locale;
+        },
+
+        _dateTzOffset : function () {
+            // On Firefox.24 Date#getTimezoneOffset returns a floating point.
+            // https://github.com/moment/moment/pull/1871
+            return Math.round(this._d.getTimezoneOffset() / 15) * 15;
         }
     });
 
@@ -13768,19 +13745,21 @@ return jQuery;
             var days, months;
             units = normalizeUnits(units);
 
-            days = this._days + this._milliseconds / 864e5;
             if (units === 'month' || units === 'year') {
+                days = this._days + this._milliseconds / 864e5;
                 months = this._months + daysToYears(days) * 12;
                 return units === 'month' ? months : months / 12;
             } else {
-                days += yearsToDays(this._months / 12);
+                // handle milliseconds separately because of floating point math errors (issue #1867)
+                days = this._days + yearsToDays(this._months / 12);
                 switch (units) {
-                    case 'week': return days / 7;
-                    case 'day': return days;
-                    case 'hour': return days * 24;
-                    case 'minute': return days * 24 * 60;
-                    case 'second': return days * 24 * 60 * 60;
-                    case 'millisecond': return days * 24 * 60 * 60 * 1000;
+                    case 'week': return days / 7 + this._milliseconds / 6048e5;
+                    case 'day': return days + this._milliseconds / 864e5;
+                    case 'hour': return days * 24 + this._milliseconds / 36e5;
+                    case 'minute': return days * 24 * 60 + this._milliseconds / 6e4;
+                    case 'second': return days * 24 * 60 * 60 + this._milliseconds / 1000;
+                    // Math.floor prevents floating point math errors here
+                    case 'millisecond': return Math.floor(days * 24 * 60 * 60 * 1000) + this._milliseconds;
                     default: throw new Error('Unknown unit ' + units);
                 }
             }
@@ -13790,8 +13769,8 @@ return jQuery;
         locale : moment.fn.locale,
 
         toIsoString : deprecate(
-            "toIsoString() is deprecated. Please use toISOString() instead " +
-            "(notice the capitals)",
+            'toIsoString() is deprecated. Please use toISOString() instead ' +
+            '(notice the capitals)',
             function () {
                 return this.toISOString();
             }
@@ -13828,6 +13807,8 @@ return jQuery;
         }
     });
 
+    moment.duration.fn.toString = moment.duration.fn.toISOString;
+
     function makeDurationGetter(name) {
         moment.duration.fn[name] = function () {
             return this._data[name];
@@ -13835,7 +13816,7 @@ return jQuery;
     }
 
     for (i in unitMillisecondFactors) {
-        if (unitMillisecondFactors.hasOwnProperty(i)) {
+        if (hasOwnProp(unitMillisecondFactors, i)) {
             makeDurationGetter(i.toLowerCase());
         }
     }
@@ -13923,8 +13904,8 @@ return jQuery;
     }
 }).call(this);
 
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],6:[function(require,module,exports){
+}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],5:[function(require,module,exports){
 //     Underscore.js 1.7.0
 //     http://underscorejs.org
 //     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -15341,7 +15322,25 @@ return jQuery;
   }
 }.call(this));
 
-},{}],7:[function(require,module,exports){
+},{}],"base_object":[function(require,module,exports){
+module.exports=require('2HNVgz');
+},{}],"2HNVgz":[function(require,module,exports){
+"use strict";
+var _ = require('underscore');
+var extend = require('./utils').extend;
+var Events = require('./events');
+var pluginOptions = ['container'];
+var BaseObject = function BaseObject(options) {
+  this.uniqueId = _.uniqueId('o');
+  options || (options = {});
+  _.extend(this, _.pick(options, pluginOptions));
+};
+($traceurRuntime.createClass)(BaseObject, {}, {}, Events);
+BaseObject.extend = extend;
+module.exports = BaseObject;
+
+
+},{"./events":8,"./utils":16,"underscore":5}],8:[function(require,module,exports){
 (function (global){
 "use strict";
 var _ = require('underscore');
@@ -15512,8 +15511,8 @@ _.each(listenMethods, function(implementation, method) {
 module.exports = Events;
 
 
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../plugins/log":35,"underscore":6}],8:[function(require,module,exports){
+}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"../plugins/log":47,"underscore":5}],9:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 module.exports = {
@@ -15544,7 +15543,7 @@ module.exports = {
 };
 
 
-},{"underscore":6}],9:[function(require,module,exports){
+},{"underscore":5}],10:[function(require,module,exports){
 "use strict";
 var PluginMixin = {
   initialize: function() {
@@ -15560,7 +15559,7 @@ var PluginMixin = {
 module.exports = PluginMixin;
 
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var _ = require('underscore');
@@ -15572,7 +15571,123 @@ var Styler = {getStyleFor: function(name, options) {
 module.exports = Styler;
 
 
-},{"./jst":8,"jquery":4,"underscore":6}],11:[function(require,module,exports){
+},{"./jst":9,"jquery":3,"underscore":5}],"8lqCAT":[function(require,module,exports){
+"use strict";
+var $ = require('jquery');
+var _ = require('underscore');
+var extend = require('./utils').extend;
+var BaseObject = require('./base_object');
+var delegateEventSplitter = /^(\S+)\s*(.*)$/;
+var UIObject = function UIObject(options) {
+  $traceurRuntime.superCall(this, $UIObject.prototype, "constructor", [options]);
+  this.cid = _.uniqueId('c');
+  this._ensureElement();
+  this.delegateEvents();
+};
+var $UIObject = UIObject;
+($traceurRuntime.createClass)(UIObject, {
+  get tagName() {
+    return 'div';
+  },
+  $: function(selector) {
+    return this.$el.find(selector);
+  },
+  render: function() {
+    return this;
+  },
+  remove: function() {
+    this.$el.remove();
+    this.stopListening();
+    return this;
+  },
+  setElement: function(element, delegate) {
+    if (this.$el)
+      this.undelegateEvents();
+    this.$el = element instanceof $ ? element : $(element);
+    this.el = this.$el[0];
+    if (delegate !== false)
+      this.delegateEvents();
+    return this;
+  },
+  delegateEvents: function(events) {
+    if (!(events || (events = _.result(this, 'events'))))
+      return this;
+    this.undelegateEvents();
+    for (var key in events) {
+      var method = events[key];
+      if (!_.isFunction(method))
+        method = this[events[key]];
+      if (!method)
+        continue;
+      var match = key.match(delegateEventSplitter);
+      var eventName = match[1],
+          selector = match[2];
+      method = _.bind(method, this);
+      eventName += '.delegateEvents' + this.cid;
+      if (selector === '') {
+        this.$el.on(eventName, method);
+      } else {
+        this.$el.on(eventName, selector, method);
+      }
+    }
+    return this;
+  },
+  undelegateEvents: function() {
+    this.$el.off('.delegateEvents' + this.cid);
+    return this;
+  },
+  _ensureElement: function() {
+    if (!this.el) {
+      var attrs = _.extend({}, _.result(this, 'attributes'));
+      if (this.id)
+        attrs.id = _.result(this, 'id');
+      if (this.className)
+        attrs['class'] = _.result(this, 'className');
+      var $el = $('<' + _.result(this, 'tagName') + '>').attr(attrs);
+      this.setElement($el, false);
+    } else {
+      this.setElement(_.result(this, 'el'), false);
+    }
+  }
+}, {}, BaseObject);
+UIObject.extend = extend;
+module.exports = UIObject;
+
+
+},{"./base_object":"2HNVgz","./utils":16,"jquery":3,"underscore":5}],"ui_object":[function(require,module,exports){
+module.exports=require('8lqCAT');
+},{}],"Z7u8cr":[function(require,module,exports){
+"use strict";
+var PluginMixin = require('./plugin_mixin');
+var UIObject = require('./ui_object');
+var extend = require('./utils').extend;
+var _ = require('underscore');
+var UIPlugin = function UIPlugin() {
+  $traceurRuntime.defaultSuperCall(this, $UIPlugin.prototype, arguments);
+};
+var $UIPlugin = UIPlugin;
+($traceurRuntime.createClass)(UIPlugin, {
+  get type() {
+    return 'ui';
+  },
+  enable: function() {
+    $UIPlugin.super('enable').call(this);
+    this.$el.show();
+  },
+  disable: function() {
+    $UIPlugin.super('disable').call(this);
+    this.$el.hide();
+  },
+  bindEvents: function() {}
+}, {}, UIObject);
+_.extend(UIPlugin.prototype, PluginMixin);
+UIPlugin.extend = extend;
+module.exports = UIPlugin;
+
+
+},{"./plugin_mixin":10,"./ui_object":"8lqCAT","./utils":16,"underscore":5}],"ui_plugin":[function(require,module,exports){
+module.exports=require('Z7u8cr');
+},{}],16:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('jquery');
@@ -15734,9 +15849,23 @@ module.exports = {
 };
 
 
-},{"jquery":4,"moment":5,"underscore":6}],12:[function(require,module,exports){
+},{"jquery":3,"moment":4,"underscore":5}],"browser":[function(require,module,exports){
+module.exports=require('195Wj5');
+},{}],"195Wj5":[function(require,module,exports){
 "use strict";
-var UIObject = require('ui_object');
+var Browser = function Browser() {};
+($traceurRuntime.createClass)(Browser, {}, {});
+Browser.isSafari = (!!navigator.userAgent.match(/safari/i) && navigator.userAgent.indexOf('Chrome') === -1);
+Browser.isChrome = !!(navigator.userAgent.match(/chrome/i));
+Browser.isFirefox = !!(navigator.userAgent.match(/firefox/i));
+Browser.isLegacyIE = !!(window.ActiveXObject);
+Browser.isMobile = !!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+module.exports = Browser;
+
+
+},{}],19:[function(require,module,exports){
+"use strict";
+var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
 var _ = require('underscore');
 var Container = function Container(options) {
@@ -15895,15 +16024,15 @@ var $Container = Container;
 module.exports = Container;
 
 
-},{"../../base/styler":10,"ui_object":undefined,"underscore":6}],13:[function(require,module,exports){
+},{"../../base/styler":11,"../../base/ui_object":"8lqCAT","underscore":5}],20:[function(require,module,exports){
 "use strict";
 module.exports = require('./container');
 
 
-},{"./container":12}],14:[function(require,module,exports){
+},{"./container":19}],21:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
-var BaseObject = require('base_object');
+var BaseObject = require('../../base/base_object');
 var Container = require('../container');
 var $ = require('jquery');
 var ContainerFactory = function ContainerFactory(options, loader) {
@@ -15954,21 +16083,21 @@ var $ContainerFactory = ContainerFactory;
 module.exports = ContainerFactory;
 
 
-},{"../container":13,"base_object":undefined,"jquery":4,"underscore":6}],15:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../container":20,"jquery":3,"underscore":5}],22:[function(require,module,exports){
 "use strict";
 module.exports = require('./container_factory');
 
 
-},{"./container_factory":14}],16:[function(require,module,exports){
+},{"./container_factory":21}],23:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('jquery');
-var UIObject = require('ui_object');
+var UIObject = require('../../base/ui_object');
 var ContainerFactory = require('../container_factory');
 var Fullscreen = require('../../base/utils').Fullscreen;
 var Styler = require('../../base/styler');
-var MediaControl = require('media_control');
-var PlayerInfo = require('player_info');
+var MediaControl = require('../media_control');
+var PlayerInfo = require('../player_info');
 var Core = function Core(options) {
   var $__0 = this;
   $traceurRuntime.superCall(this, $Core.prototype, "constructor", [options]);
@@ -16163,15 +16292,15 @@ var $Core = Core;
 module.exports = Core;
 
 
-},{"../../base/styler":10,"../../base/utils":11,"../container_factory":15,"jquery":4,"media_control":undefined,"player_info":undefined,"ui_object":undefined,"underscore":6}],17:[function(require,module,exports){
+},{"../../base/styler":11,"../../base/ui_object":"8lqCAT","../../base/utils":16,"../container_factory":22,"../media_control":"A8Uh+k","../player_info":"Pce0iO","jquery":3,"underscore":5}],24:[function(require,module,exports){
 "use strict";
 module.exports = require('./core');
 
 
-},{"./core":16}],18:[function(require,module,exports){
+},{"./core":23}],25:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
-var BaseObject = require('base_object');
+var BaseObject = require('../../base/base_object');
 var Core = require('../core');
 var CoreFactory = function CoreFactory(player, loader) {
   this.player = player;
@@ -16202,21 +16331,21 @@ var CoreFactory = function CoreFactory(player, loader) {
 module.exports = CoreFactory;
 
 
-},{"../core":17,"base_object":undefined,"underscore":6}],19:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../core":24,"underscore":5}],26:[function(require,module,exports){
 "use strict";
 module.exports = require('./core_factory');
 
 
-},{"./core_factory":18}],20:[function(require,module,exports){
+},{"./core_factory":25}],27:[function(require,module,exports){
 "use strict";
 module.exports = require('./loader');
 
 
-},{"./loader":21}],21:[function(require,module,exports){
+},{"./loader":28}],28:[function(require,module,exports){
 "use strict";
-var BaseObject = require('base_object');
+var BaseObject = require('../../base/base_object');
 var _ = require('underscore');
-var PlayerInfo = require('player_info');
+var PlayerInfo = require('../player_info');
 var HTML5VideoPlaybackPlugin = require('../../playbacks/html5_video');
 var FlashVideoPlaybackPlugin = require('../../playbacks/flash_vod');
 var HTML5AudioPlaybackPlugin = require('../../playbacks/html5_audio');
@@ -16261,13 +16390,20 @@ var $Loader = Loader;
 module.exports = Loader;
 
 
-},{"../../playbacks/flash_vod":26,"../../playbacks/hls":28,"../../playbacks/html5_audio":30,"../../playbacks/html5_video":32,"../../plugins/background_button":34,"../../plugins/poster":37,"../../plugins/seek_time":39,"../../plugins/spinner_three_bounce":41,"../../plugins/stats":43,"../../plugins/watermark":45,"base_object":undefined,"player_info":undefined,"underscore":6}],22:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../../playbacks/flash_vod":38,"../../playbacks/hls":40,"../../playbacks/html5_audio":42,"../../playbacks/html5_video":44,"../../plugins/background_button":46,"../../plugins/poster":49,"../../plugins/seek_time":51,"../../plugins/spinner_three_bounce":53,"../../plugins/stats":55,"../../plugins/watermark":57,"../player_info":"Pce0iO","underscore":5}],"A8Uh+k":[function(require,module,exports){
+"use strict";
+module.exports = require('./media_control');
+
+
+},{"./media_control":31}],"media_control":[function(require,module,exports){
+module.exports=require('A8Uh+k');
+},{}],31:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('jquery');
 var JST = require('../../base/jst');
 var Styler = require('../../base/styler');
-var UIObject = require('ui_object');
+var UIObject = require('../../base/ui_object');
 var Utils = require('../../base/utils');
 var MediaControl = function MediaControl(options) {
   var $__0 = this;
@@ -16653,7 +16789,7 @@ var $MediaControl = MediaControl;
 module.exports = MediaControl;
 
 
-},{"../../base/jst":8,"../../base/styler":10,"../../base/utils":11,"jquery":4,"ui_object":undefined,"underscore":6}],23:[function(require,module,exports){
+},{"../../base/jst":9,"../../base/styler":11,"../../base/ui_object":"8lqCAT","../../base/utils":16,"jquery":3,"underscore":5}],32:[function(require,module,exports){
 "use strict";
 var Events = require('../base/events');
 var events = new Events();
@@ -16682,9 +16818,16 @@ Mediator.stopListening = function(obj, name, callback) {
 module.exports = Mediator;
 
 
-},{"../base/events":7}],24:[function(require,module,exports){
+},{"../base/events":8}],"Pce0iO":[function(require,module,exports){
 "use strict";
-var BaseObject = require('base_object');
+module.exports = require('./player_info');
+
+
+},{"./player_info":35}],"player_info":[function(require,module,exports){
+module.exports=require('Pce0iO');
+},{}],35:[function(require,module,exports){
+"use strict";
+var BaseObject = require('../../base/base_object');
 var PlayerInfo = function PlayerInfo() {
   this.options = {};
   this.playbackPlugins = [];
@@ -16699,15 +16842,82 @@ PlayerInfo.getInstance = function() {
 module.exports = PlayerInfo;
 
 
-},{"base_object":undefined}],25:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz"}],36:[function(require,module,exports){
+(function (global){
 "use strict";
-var UIObject = require('ui_object');
+var BaseObject = require('./base/base_object');
+var CoreFactory = require('./components/core_factory');
+var Loader = require('./components/loader');
+var Mediator = require('./components/mediator');
+var _ = require('underscore');
+var Player = function Player(options) {
+  $traceurRuntime.superCall(this, $Player.prototype, "constructor", [options]);
+  window.p = this;
+  this.options = options;
+  this.options.sources = this.normalizeSources(options);
+  this.loader = new Loader(this.options.plugins || []);
+  this.coreFactory = new CoreFactory(this, this.loader);
+  options.height || (options.height = 360);
+  options.width || (options.width = 640);
+};
+var $Player = Player;
+($traceurRuntime.createClass)(Player, {
+  attachTo: function(element) {
+    this.options.parentElement = element;
+    this.core = this.coreFactory.create();
+  },
+  normalizeSources: function(options) {
+    return _.compact(_.flatten([options.source, options.sources]));
+  },
+  load: function(sources) {
+    this.core.load(sources);
+  },
+  destroy: function() {
+    this.core.destroy();
+  },
+  play: function() {
+    this.core.mediaControl.container.play();
+  },
+  pause: function() {
+    this.core.mediaControl.container.pause();
+  },
+  stop: function() {
+    this.core.mediaControl.container.stop();
+  },
+  seek: function(time) {
+    this.core.mediaControl.container.setCurrentTime(time);
+  },
+  setVolume: function(volume) {
+    this.core.mediaControl.container.setVolume(volume);
+  },
+  mute: function() {
+    this.core.mediaControl.container.setVolume(0);
+  },
+  unmute: function() {
+    this.core.mediaControl.container.setVolume(100);
+  },
+  isPlaying: function() {
+    return this.core.mediaControl.container.isPlaying();
+  }
+}, {}, BaseObject);
+global.DEBUG = false;
+window.Clappr = {
+  Player: Player,
+  Mediator: Mediator
+};
+module.exports = window.Clappr;
+
+
+}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./base/base_object":"2HNVgz","./components/core_factory":26,"./components/loader":27,"./components/mediator":32,"underscore":5}],37:[function(require,module,exports){
+"use strict";
+var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var Mediator = require('../../components/mediator');
 var _ = require('underscore');
 var $ = require('jquery');
-var Browser = require('browser');
+var Browser = require('../../components/browser');
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> </object>';
 var FlashVOD = function FlashVOD(options) {
   $traceurRuntime.superCall(this, $FlashVOD.prototype, "constructor", [options]);
@@ -16875,19 +17085,19 @@ FlashVOD.canPlay = function(resource) {
 module.exports = FlashVOD;
 
 
-},{"../../base/jst":8,"../../base/styler":10,"../../components/mediator":23,"browser":undefined,"jquery":4,"ui_object":undefined,"underscore":6}],26:[function(require,module,exports){
+},{"../../base/jst":9,"../../base/styler":11,"../../base/ui_object":"8lqCAT","../../components/browser":"195Wj5","../../components/mediator":32,"jquery":3,"underscore":5}],38:[function(require,module,exports){
 "use strict";
 module.exports = require('./flash_vod');
 
 
-},{"./flash_vod":25}],27:[function(require,module,exports){
+},{"./flash_vod":37}],39:[function(require,module,exports){
 "use strict";
-var UIPlugin = require('ui_plugin');
+var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var _ = require("underscore");
 var Mediator = require('../../components/mediator');
-var Browser = require('browser');
+var Browser = require('../../components/browser');
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> </object>';
 var HLS = function HLS(options) {
   $traceurRuntime.superCall(this, $HLS.prototype, "constructor", [options]);
@@ -17119,14 +17329,14 @@ HLS.canPlay = function(resource) {
 module.exports = HLS;
 
 
-},{"../../base/jst":8,"../../base/styler":10,"../../components/mediator":23,"browser":undefined,"ui_plugin":undefined,"underscore":6}],28:[function(require,module,exports){
+},{"../../base/jst":9,"../../base/styler":11,"../../base/ui_plugin":"Z7u8cr","../../components/browser":"195Wj5","../../components/mediator":32,"underscore":5}],40:[function(require,module,exports){
 "use strict";
 module.exports = require('./hls');
 
 
-},{"./hls":27}],29:[function(require,module,exports){
+},{"./hls":39}],41:[function(require,module,exports){
 "use strict";
-var UIPlugin = require('ui_plugin');
+var UIPlugin = require('../../base/ui_plugin');
 var HTML5Audio = function HTML5Audio(params) {
   $traceurRuntime.superCall(this, $HTML5Audio.prototype, "constructor", [params]);
   this.el.src = params.src;
@@ -17217,16 +17427,16 @@ HTML5Audio.canPlay = function(resource) {
 module.exports = HTML5Audio;
 
 
-},{"ui_plugin":undefined}],30:[function(require,module,exports){
+},{"../../base/ui_plugin":"Z7u8cr"}],42:[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_audio');
 
 
-},{"./html5_audio":29}],31:[function(require,module,exports){
+},{"./html5_audio":41}],43:[function(require,module,exports){
 "use strict";
-var UIPlugin = require('ui_plugin');
-var Browser = require('browser');
+var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
+var Browser = require('../../components/browser');
 var HTML5Video = function HTML5Video(options) {
   $traceurRuntime.superCall(this, $HTML5Video.prototype, "constructor", [options]);
   this.options = options;
@@ -17370,14 +17580,14 @@ HTML5Video.canPlay = function(resource) {
 module.exports = HTML5Video;
 
 
-},{"../../base/styler":10,"browser":undefined,"ui_plugin":undefined}],32:[function(require,module,exports){
+},{"../../base/styler":11,"../../base/ui_plugin":"Z7u8cr","../../components/browser":"195Wj5"}],44:[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_video');
 
 
-},{"./html5_video":31}],33:[function(require,module,exports){
+},{"./html5_video":43}],45:[function(require,module,exports){
 "use strict";
-var UIObject = require('ui_object');
+var UIObject = require('../../base/ui_object');
 var JST = require('../../base/jst');
 var Styler = require('../../base/styler');
 var BackgroundButton = function BackgroundButton(core) {
@@ -17440,17 +17650,17 @@ var $BackgroundButton = BackgroundButton;
 module.exports = BackgroundButton;
 
 
-},{"../../base/jst":8,"../../base/styler":10,"ui_object":undefined}],34:[function(require,module,exports){
+},{"../../base/jst":9,"../../base/styler":11,"../../base/ui_object":"8lqCAT"}],46:[function(require,module,exports){
 "use strict";
 module.exports = require('./background_button');
 
 
-},{"./background_button":33}],35:[function(require,module,exports){
+},{"./background_button":45}],47:[function(require,module,exports){
 "use strict";
 module.exports = require('./log');
 
 
-},{"./log":36}],36:[function(require,module,exports){
+},{"./log":48}],48:[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var BOLD = 'font-weight: bold; font-size: 13px;';
@@ -17487,14 +17697,14 @@ Log.prototype = {
 module.exports = Log;
 
 
-},{"jquery":4}],37:[function(require,module,exports){
+},{"jquery":3}],49:[function(require,module,exports){
 "use strict";
 module.exports = require('./poster');
 
 
-},{"./poster":38}],38:[function(require,module,exports){
+},{"./poster":50}],50:[function(require,module,exports){
 "use strict";
-var UIPlugin = require('ui_plugin');
+var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var $ = require('jquery');
@@ -17581,14 +17791,14 @@ var $PosterPlugin = PosterPlugin;
 module.exports = PosterPlugin;
 
 
-},{"../../base/jst":8,"../../base/styler":10,"jquery":4,"ui_plugin":undefined,"underscore":6}],39:[function(require,module,exports){
+},{"../../base/jst":9,"../../base/styler":11,"../../base/ui_plugin":"Z7u8cr","jquery":3,"underscore":5}],51:[function(require,module,exports){
 "use strict";
 module.exports = require('./seek_time');
 
 
-},{"./seek_time":40}],40:[function(require,module,exports){
+},{"./seek_time":52}],52:[function(require,module,exports){
 "use strict";
-var UIObject = require('ui_object');
+var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var formatTime = require('../../base/utils').formatTime;
@@ -17640,14 +17850,14 @@ var $SeekTime = SeekTime;
 module.exports = SeekTime;
 
 
-},{"../../base/jst":8,"../../base/styler":10,"../../base/utils":11,"jquery":4,"ui_object":undefined}],41:[function(require,module,exports){
+},{"../../base/jst":9,"../../base/styler":11,"../../base/ui_object":"8lqCAT","../../base/utils":16,"jquery":3}],53:[function(require,module,exports){
 "use strict";
 module.exports = require('./spinner_three_bounce');
 
 
-},{"./spinner_three_bounce":42}],42:[function(require,module,exports){
+},{"./spinner_three_bounce":54}],54:[function(require,module,exports){
 "use strict";
-var UIPlugin = require('ui_plugin');
+var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var SpinnerThreeBouncePlugin = function SpinnerThreeBouncePlugin(options) {
@@ -17690,14 +17900,14 @@ var $SpinnerThreeBouncePlugin = SpinnerThreeBouncePlugin;
 module.exports = SpinnerThreeBouncePlugin;
 
 
-},{"../../base/jst":8,"../../base/styler":10,"ui_plugin":undefined}],43:[function(require,module,exports){
+},{"../../base/jst":9,"../../base/styler":11,"../../base/ui_plugin":"Z7u8cr"}],55:[function(require,module,exports){
 "use strict";
 module.exports = require('./stats');
 
 
-},{"./stats":44}],44:[function(require,module,exports){
+},{"./stats":56}],56:[function(require,module,exports){
 "use strict";
-var BaseObject = require('base_object');
+var BaseObject = require('../../base/base_object');
 var $ = require("jquery");
 var StatsPlugin = function StatsPlugin(options) {
   $traceurRuntime.superCall(this, $StatsPlugin.prototype, "constructor", [options]);
@@ -17795,14 +18005,14 @@ var $StatsPlugin = StatsPlugin;
 module.exports = StatsPlugin;
 
 
-},{"base_object":undefined,"jquery":4}],45:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","jquery":3}],57:[function(require,module,exports){
 "use strict";
 module.exports = require('./watermark');
 
 
-},{"./watermark":46}],46:[function(require,module,exports){
+},{"./watermark":58}],58:[function(require,module,exports){
 "use strict";
-var UIPlugin = require('ui_plugin');
+var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var WaterMarkPlugin = function WaterMarkPlugin(options) {
@@ -17851,154 +18061,4 @@ var $WaterMarkPlugin = WaterMarkPlugin;
 module.exports = WaterMarkPlugin;
 
 
-},{"../../base/jst":8,"../../base/styler":10,"ui_plugin":undefined}],"base_object":[function(require,module,exports){
-"use strict";
-var _ = require('underscore');
-var extend = require('./utils').extend;
-var Events = require('./events');
-var pluginOptions = ['container'];
-var BaseObject = function BaseObject(options) {
-  this.uniqueId = _.uniqueId('o');
-  options || (options = {});
-  _.extend(this, _.pick(options, pluginOptions));
-};
-($traceurRuntime.createClass)(BaseObject, {}, {}, Events);
-BaseObject.extend = extend;
-module.exports = BaseObject;
-
-
-},{"./events":7,"./utils":11,"underscore":6}],"browser":[function(require,module,exports){
-"use strict";
-var Browser = function Browser() {};
-($traceurRuntime.createClass)(Browser, {}, {});
-Browser.isSafari = (!!navigator.userAgent.match(/safari/i) && navigator.userAgent.indexOf('Chrome') === -1);
-Browser.isChrome = !!(navigator.userAgent.match(/chrome/i));
-Browser.isFirefox = !!(navigator.userAgent.match(/firefox/i));
-Browser.isLegacyIE = !!(window.ActiveXObject);
-Browser.isMobile = !!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-module.exports = Browser;
-
-
-},{}],"media_control":[function(require,module,exports){
-"use strict";
-module.exports = require('./media_control');
-
-
-},{"./media_control":22}],"player_info":[function(require,module,exports){
-"use strict";
-module.exports = require('./player_info');
-
-
-},{"./player_info":24}],"ui_object":[function(require,module,exports){
-"use strict";
-var $ = require('jquery');
-var _ = require('underscore');
-var extend = require('./utils').extend;
-var BaseObject = require('base_object');
-var delegateEventSplitter = /^(\S+)\s*(.*)$/;
-var UIObject = function UIObject(options) {
-  $traceurRuntime.superCall(this, $UIObject.prototype, "constructor", [options]);
-  this.cid = _.uniqueId('c');
-  this._ensureElement();
-  this.delegateEvents();
-};
-var $UIObject = UIObject;
-($traceurRuntime.createClass)(UIObject, {
-  get tagName() {
-    return 'div';
-  },
-  $: function(selector) {
-    return this.$el.find(selector);
-  },
-  render: function() {
-    return this;
-  },
-  remove: function() {
-    this.$el.remove();
-    this.stopListening();
-    return this;
-  },
-  setElement: function(element, delegate) {
-    if (this.$el)
-      this.undelegateEvents();
-    this.$el = element instanceof $ ? element : $(element);
-    this.el = this.$el[0];
-    if (delegate !== false)
-      this.delegateEvents();
-    return this;
-  },
-  delegateEvents: function(events) {
-    if (!(events || (events = _.result(this, 'events'))))
-      return this;
-    this.undelegateEvents();
-    for (var key in events) {
-      var method = events[key];
-      if (!_.isFunction(method))
-        method = this[events[key]];
-      if (!method)
-        continue;
-      var match = key.match(delegateEventSplitter);
-      var eventName = match[1],
-          selector = match[2];
-      method = _.bind(method, this);
-      eventName += '.delegateEvents' + this.cid;
-      if (selector === '') {
-        this.$el.on(eventName, method);
-      } else {
-        this.$el.on(eventName, selector, method);
-      }
-    }
-    return this;
-  },
-  undelegateEvents: function() {
-    this.$el.off('.delegateEvents' + this.cid);
-    return this;
-  },
-  _ensureElement: function() {
-    if (!this.el) {
-      var attrs = _.extend({}, _.result(this, 'attributes'));
-      if (this.id)
-        attrs.id = _.result(this, 'id');
-      if (this.className)
-        attrs['class'] = _.result(this, 'className');
-      var $el = $('<' + _.result(this, 'tagName') + '>').attr(attrs);
-      this.setElement($el, false);
-    } else {
-      this.setElement(_.result(this, 'el'), false);
-    }
-  }
-}, {}, BaseObject);
-UIObject.extend = extend;
-module.exports = UIObject;
-
-
-},{"./utils":11,"base_object":undefined,"jquery":4,"underscore":6}],"ui_plugin":[function(require,module,exports){
-"use strict";
-var PluginMixin = require('./plugin_mixin');
-var UIObject = require('ui_object');
-var extend = require('./utils').extend;
-var _ = require('underscore');
-var UIPlugin = function UIPlugin() {
-  $traceurRuntime.defaultSuperCall(this, $UIPlugin.prototype, arguments);
-};
-var $UIPlugin = UIPlugin;
-($traceurRuntime.createClass)(UIPlugin, {
-  get type() {
-    return 'ui';
-  },
-  enable: function() {
-    $UIPlugin.super('enable').call(this);
-    this.$el.show();
-  },
-  disable: function() {
-    $UIPlugin.super('disable').call(this);
-    this.$el.hide();
-  },
-  bindEvents: function() {}
-}, {}, UIObject);
-_.extend(UIPlugin.prototype, PluginMixin);
-UIPlugin.extend = extend;
-module.exports = UIPlugin;
-
-
-},{"./plugin_mixin":9,"./utils":11,"ui_object":undefined,"underscore":6}]},{},[3,1]);
+},{"../../base/jst":9,"../../base/styler":11,"../../base/ui_plugin":"Z7u8cr"}]},{},[2,36])
