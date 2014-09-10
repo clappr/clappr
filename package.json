@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/globocom/clappr",
   "devDependencies": {
+    "s3": "^4.1.1",
     "browserify": "^5.11.0",
     "browserify-shim": "^3.6.0",
     "chai": "latest",
