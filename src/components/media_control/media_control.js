@@ -404,7 +404,6 @@ class MediaControl extends UIObject {
       this.setVolumeLevel(this.currentVolume)
       this.setSeekPercentage(0)
       this.bindKeyEvents()
-      this.highDefinitionUpdate()
     })
 
     this.parseColors();
