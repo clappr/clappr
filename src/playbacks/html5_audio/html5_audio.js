@@ -6,7 +6,6 @@ var UIPlugin = require('../../base/ui_plugin')
 
 class HTML5Audio extends UIPlugin {
   get name() { return 'html5_audio' }
-  get type() { return 'playback' }
   get tagName() { return 'audio' }
   get events() {
     return {

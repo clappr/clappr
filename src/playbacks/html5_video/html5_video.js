@@ -8,7 +8,6 @@ var Browser = require('../../components/browser')
 
 class HTML5Video extends UIPlugin {
   get name() { return 'html5_video' }
-  get type() { return 'playback' }
   get tagName() { return 'video' }
 
   get attributes() {
