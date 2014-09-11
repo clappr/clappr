@@ -49,6 +49,9 @@ You can set the player size setting `width` and `height` parameters.
 ##### Auto Play
 Add `autoPlay: true` if you want the video to automatic play after page load.
 
+##### Auto Play when Visible
+If you want to play the video automatically when player truly appears on screen, add `autoPlayVisible: true`.
+
 ##### Control bar colors
 Customize control bar colors adding `mediacontrol` hash. Example:
 
