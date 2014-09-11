@@ -17,8 +17,8 @@ class Player extends BaseObject {
     this.options.sources = this.normalizeSources(options)
     this.loader = new Loader(this.options.plugins || [])
     this.coreFactory = new CoreFactory(this, this.loader)
-    options.height || (options.height = 360);
-    options.width || (options.width = 640);
+    options.height || (options.height = 360)
+    options.width || (options.width = 640)
   }
 
   attachTo(element) {
