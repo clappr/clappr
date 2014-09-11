@@ -12,6 +12,7 @@ var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
 var UIObject = require('../../base/ui_object')
 var Utils = require('../../base/utils')
+var Mousetrap = require('mousetrap');
 
 class MediaControl extends UIObject {
   get name() { return 'MediaControl' }
@@ -121,11 +122,6 @@ class MediaControl extends UIObject {
 
   mouseleaveOnSeekBar(event) {
     this.trigger('mediacontrol:mouseleave:seekbar', event);
-  }
-
-  onKeyDown(event) {
-    if (event.keyCode === 32) // space bar
-      this.togglePlayPause()
   }
 
   togglePlayPause() {
@@ -354,14 +350,7 @@ class MediaControl extends UIObject {
   }
 
   bindKeyEvents() {
-    if (this.keydownHandlerFn) {
-      $(document).unbind('keydown', this.keydownHandlerFn)
-    } else {
-      this.keydownHandlerFn = (event) => this.onKeyDown(event)
-    }
-    if (this.$playPauseToggle.length > 0) {
-      $(document).bind('keydown', this.keydownHandlerFn)
-    }
+    Mousetrap.bind(['space'], () => this.togglePlayPause())
   }
 
   parseColors() {
