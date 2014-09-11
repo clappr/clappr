@@ -43,6 +43,15 @@ RTMP | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_che
 
 ## Built-in Plugins & Embed Parameters
 
+All parameters listed below shall be added on `Clappr.Player` object instantiation. Example:
+```javascript
+var player = new Clappr.Player({
+  source: "http://your.video/here.mp4",
+  parameter1: "value1",
+  parameter2: "value2",
+});
+```
+
 ##### Player Size
 You can set the player size setting `width` and `height` parameters.
 
@@ -88,7 +97,6 @@ Clappr has a native statistics plugin that accounts QoE metrics such playing tim
 
 Clappr is under heavy development but production-ready. Feel free to open issues and send us pull requests.
 
-
 ### Installing for development
 
 Clone the project and install gulp:
@@ -105,3 +113,18 @@ Make your changes and build your own version:
 
 Check the result on `dist/` folder.
 
+
+### Contributors
+
+The culprits of this project are listed [here](https://github.com/globocom/clappr/graphs/contributors).
+
+### Contributing
+
+In general, we follow the fork-and-pull git workflow:
+
+1. Fork the repository on GitHub
+2. Commit changes to a branch in your fork
+3. Pull request "upstream" with your changes
+4. Merge changes in to "upstream" repoository
+
+:warning: Be sure to merge the latest from "upstream" before making a pull request.
