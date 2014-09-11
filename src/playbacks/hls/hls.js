@@ -25,7 +25,7 @@ class HLS extends UIPlugin {
   constructor(options) {
     super(options)
     this.src = options.src
-    this.swfPath = options.swfPath || "assets/HLSPlayer.swf"
+    this.swfPath = options.swfPath || "http://cdn.clappr.io/latest/assets/HLSPlayer.swf"
     this.highDefinition = false
     this.autoPlay = options.autoPlay
     this.defaultSettings = {

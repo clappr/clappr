@@ -22,7 +22,7 @@ class Flash extends UIObject {
     console.log("flash plugin")
     this.src = options.src
     this.isRTMP = !!(this.src.indexOf("rtmp") > -1)
-    this.swfPath = options.swfPath || "assets/Player.swf"
+    this.swfPath = options.swfPath || "http://cdn.clappr.io/latest/assets/Player.swf"
     this.autoPlay = options.autoPlay
     this.settings = {default: ['seekbar']}
     if (this.isRTMP) {
