@@ -13,6 +13,7 @@ var Styler = require('../../base/styler')
 var UIObject = require('../../base/ui_object')
 var Utils = require('../../base/utils')
 var Mousetrap = require('mousetrap');
+var ScrollMonitor = require('scrollmonitor');
 
 class MediaControl extends UIObject {
   get name() { return 'MediaControl' }
@@ -78,6 +79,10 @@ class MediaControl extends UIObject {
     this.listenTo(this.container, 'container:mediacontrol:disable', this.disable)
     this.listenTo(this.container, 'container:mediacontrol:enable', this.enable)
     this.listenTo(this.container, 'container:ended', this.ended)
+    if (this.options.autoPlayVisible) {
+      this.elementWatcher = ScrollMonitor.create(this.$el)
+      this.elementWatcher.enterViewport(() => this.enterViewport())
+    }
   }
 
   disable() {
@@ -90,6 +95,12 @@ class MediaControl extends UIObject {
     if (this.options.chromeless) return
     this.disabled = false
     this.show()
+  }
+
+  enterViewport() {
+    if (this.elementWatcher.top !== 0 && !this.container.isPlaying()) {
+      this.play()
+    }
   }
 
   play() {
