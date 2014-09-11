@@ -85,10 +85,6 @@ class HTML5Audio extends UIPlugin {
     return !this.el.paused && !this.el.ended
   }
 
-  isHighDefinitionInUse() {
-    return false
-  }
-
   timeUpdated() {
     this.trigger('playback:timeupdate', this.el.currentTime, this.el.duration, this.name)
   }
