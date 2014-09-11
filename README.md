@@ -44,10 +44,10 @@ RTMP | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_che
 ## Built-in Plugins & Embed Parameters
 
 ##### Player Size
-You can set the player size adding `width` and `height` embed parameters.
+You can set the player size setting `width` and `height` parameters.
 
 ##### Control bar colors
-Customize control bar colors adding `mediacontrol` hash on embed parameters. Example:
+Customize control bar colors adding `mediacontrol` hash. Example:
 
 ```javascript
   var player = new Clappr.Player({
@@ -62,7 +62,7 @@ Result:
 I'm sure you can do better than me.
 
 ##### Watermark
-Put `watermark: http://url/img.png` on your embed parameters to automatically add watermark on your video. Choose corner position by adding `position: [bottom-left|bottom-right|top-left|top-right]`. Example:
+Put `watermark: http://url/img.png` on your embed parameters to automatically add watermark on your video. Choose corner position by defining position parameter. Positions can be `bottom-left`, `bottom-right`, `top-left` and `top-right`. Example:
 
 ```javascript
   var player = new Clappr.Player({
@@ -72,7 +72,7 @@ Put `watermark: http://url/img.png` on your embed parameters to automatically ad
 ```
 
 ##### Poster
-Set poster adding `poster: http://url/img.png` on your embed parameters. It will appear after video embed, disappear on play and go back when user stops the video.
+Define a poster by adding `poster: http://url/img.png` on your embed parameters. It will appear after video embed, disappear on play and go back when user stops the video.
 
 ##### Stats
 Clappr has a native statistics plugin that accounts QoE metrics such playing time, rebuffering time, total rebuffers, etc. Metrics report happens periodically, learn how to access these numbers on [Create your own plugin]() session.
@@ -82,7 +82,6 @@ Clappr has a native statistics plugin that accounts QoE metrics such playing tim
 
 Clappr is under heavy development but production-ready. Feel free to open issues and send us pull requests.
 
-### 
 
 ### Installing for development
 
