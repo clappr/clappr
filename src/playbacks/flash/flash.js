@@ -12,10 +12,10 @@ var Browser = require('../../components/browser')
 
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> </object>'
 
-class FlashVOD extends UIObject {
-  get name() { return 'flash_vod' }
+class Flash extends UIObject {
+  get name() { return 'flash' }
   get tagName() { return 'object' }
-  get template() { return JST.flash_vod }
+  get template() { return JST.flash }
 
   constructor(options) {
     super(options)
@@ -49,7 +49,7 @@ class FlashVOD extends UIObject {
 
   setupFirefox() {
     var $el = this.$('embed')
-    $el.attr('data-flash-vod', '')
+    $el.attr('data-flash', '')
     this.setElement($el[0])
   }
 
@@ -166,7 +166,7 @@ class FlashVOD extends UIObject {
   }
 }
 
-FlashVOD.canPlay = function(resource) {
+Flash.canPlay = function(resource) {
   //http://help.adobe.com/en_US/flashmediaserver/techoverview/WS07865d390fac8e1f-4c43d6e71321ec235dd-7fff.html
   if (resource.indexOf('rtmp') > -1) {
     return true
@@ -177,4 +177,4 @@ FlashVOD.canPlay = function(resource) {
   }
 }
 
-module.exports = FlashVOD
+module.exports = Flash

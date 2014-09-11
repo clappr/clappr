@@ -7,3 +7,4 @@ src/base/jst.js
 *.cache
 dist/
 aws.json
+npm-debug.log
