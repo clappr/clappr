@@ -7,10 +7,10 @@ var _ = require('underscore');
 var PlayerInfo = require('../player_info')
 
 /* Playback Plugins */
-var HTML5VideoPlaybackPlugin = require('../../playbacks/html5_video');
-var FlashVideoPlaybackPlugin = require('../../playbacks/flash_vod');
-var HTML5AudioPlaybackPlugin = require('../../playbacks/html5_audio');
-var HLSVideoPlaybackPlugin = require('../../playbacks/hls');
+var HTML5VideoPlayback = require('../../playbacks/html5_video');
+var FlashVideoPlayback = require('../../playbacks/flash');
+var HTML5AudioPlayback = require('../../playbacks/html5_audio');
+var HLSVideoPlayback = require('../../playbacks/hls');
 
 /* Container Plugins */
 var SpinnerThreeBouncePlugin = require('../../plugins/spinner_three_bounce');
@@ -26,7 +26,7 @@ class Loader extends BaseObject {
   constructor(externalPlugins) {
     super()
     this.playerInfo = PlayerInfo.getInstance()
-    this.playbackPlugins = [FlashVideoPlaybackPlugin, HTML5VideoPlaybackPlugin, HTML5AudioPlaybackPlugin, HLSVideoPlaybackPlugin]
+    this.playbackPlugins = [FlashVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, HLSVideoPlayback]
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin]
     this.globalPlugins = [BackgroundButton, SeekTime]
     if (externalPlugins) {
@@ -35,15 +35,9 @@ class Loader extends BaseObject {
   }
 
   addExternalPlugins(plugins) {
-    if(plugins.playback) {
-      this.playbackPlugins = plugins.playback.concat(this.playbackPlugins)
-    }
-    if(plugins.container) {
-      this.containerPlugins = plugins.container.concat(this.containerPlugins)
-    }
-    if(plugins.core) {
-      this.globalPlugins = plugins.core.concat(this.globalPlugins)
-    }
+    if (plugins.playback) { this.playbackPlugins = plugins.playback.concat(this.playbackPlugins) }
+    if (plugins.container) { this.containerPlugins = plugins.container.concat(this.containerPlugins) }
+    if (plugins.core) { this.globalPlugins = plugins.core.concat(this.globalPlugins) }
     this.playerInfo.playbackPlugins = this.playbackPlugins
   }
 
