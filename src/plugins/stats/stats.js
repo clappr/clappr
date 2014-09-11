@@ -7,7 +7,6 @@ var $ = require("jquery");
 
 class StatsPlugin extends BaseObject {
   get name() { return 'stats' }
-  get type() { return 'stats' }
 
   constructor(options) {
     super(options)

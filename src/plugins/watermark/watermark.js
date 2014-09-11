@@ -8,7 +8,6 @@ var JST = require('../../base/jst')
 
 class WaterMarkPlugin extends UIPlugin {
   get name() { return 'watermark' }
-  get type() { return 'ui' }
 
   constructor(options) {
     super(options)
