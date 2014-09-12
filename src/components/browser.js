@@ -10,5 +10,7 @@ Browser.isChrome = !!(navigator.userAgent.match(/chrome/i))
 Browser.isFirefox = !!(navigator.userAgent.match(/firefox/i))
 Browser.isLegacyIE = !!(window.ActiveXObject)
 Browser.isMobile = !!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+Browser.isWin8App = !!(/MSAppHost/i.test(navigator.userAgent))
+
 
 module.exports = Browser
