@@ -105,6 +105,7 @@ package
     private function netStatusHandler(event:NetStatusEvent):void {
       if (event.info.code === "NetStream.Buffer.Full") {
         playbackState = "PLAYING";
+        _ns.bufferTime = 30;
       } else if (event.info.code === "NetStream.Play.Start") {
         playbackState = "PLAYING";
       } else if (isBuffering(event.info.code)) {
@@ -114,6 +115,8 @@ package
       } else if (event.info.code == "NetStream.Play.Stop") {
         playbackState = "ENDED";
         heartbeat.stop();
+      } else if (event.info.code == "NetStream.Buffer.Empty") {
+        _ns.bufferTime = 5;
       }
       _triggerEvent('statechanged');
     }
