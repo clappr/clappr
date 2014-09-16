@@ -34,6 +34,7 @@ class Container extends UIObject {
     this.listenTo(this.playback, 'playback:settingsupdate', this.settingsUpdate);
     this.listenTo(this.playback, 'playback:loadedmetadata', this.loadedMetadata);
     this.listenTo(this.playback, 'playback:highdefinitionupdate', this.highDefinitionUpdate);
+    this.listenTo(this.playback, 'playback:playbackstate', this.playbackStateChanged);
     this.listenTo(this.playback, 'playback:mediacontrol:disable', this.disableMediaControl);
     this.listenTo(this.playback, 'playback:mediacontrol:enable', this.enableMediaControl);
     this.listenTo(this.playback, 'playback:ended', this.ended);
@@ -43,6 +44,10 @@ class Container extends UIObject {
   with(klass) {
     _.extend(this, klass);
     return this;
+  }
+
+  playbackStateChanged() {
+    this.trigger('container:playbackstate');
   }
 
   statsAdd(metric) {
