@@ -149,6 +149,7 @@ class HLS extends UIPlugin {
       if (this.playbackType) {
         this.playbackType = this.playbackType.toLowerCase()
       }
+      this.trigger('playback:playbackstate');
     }
   }
 

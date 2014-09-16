@@ -78,6 +78,7 @@ class MediaControl extends UIObject {
     this.listenTo(this.container, 'container:highdefinitionupdate', this.highDefinitionUpdate)
     this.listenTo(this.container, 'container:mediacontrol:disable', this.disable)
     this.listenTo(this.container, 'container:mediacontrol:enable', this.enable)
+    this.listenTo(this.container, 'container:playbackstate', this.updatePlaybackType)
     this.listenTo(this.container, 'container:ended', this.ended)
     if (this.options.autoPlayVisible) {
       this.elementWatcher = ScrollMonitor.create(this.$el)
