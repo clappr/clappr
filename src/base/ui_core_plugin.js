@@ -10,9 +10,8 @@ class UICorePlugin extends UIObject {
   getExternalInterface() { return {} }
 
   render() {
-    var style = Styler.getStyleFor(this.name)
     this.$el.html(this.template())
-    this.$el.append(style)
+    this.$el.append(this.styler.getStyleFor(this.name))
     this.core.$el.append(this.el)
     return this
   }
