@@ -27,7 +27,7 @@ class ContainerFactory extends BaseObject {
   }
 
   findPlaybackPlugin(source) {
-    return _.find(this.loader.playbackPlugins, (p) => { return p.canPlay("" + source) }, this);
+    return _.find(this.loader.playbackPlugins, (p) => { return p.canPlay(source.toString()) }, this);
   }
 
   createContainer(source) {
