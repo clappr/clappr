@@ -13906,6 +13906,1159 @@ return jQuery;
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],5:[function(require,module,exports){
+/**
+ * Copyright 2012 Craig Campbell
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Mousetrap is a simple keyboard shortcut library for Javascript with
+ * no external dependencies
+ *
+ * @version 1.1.2
+ * @url craig.is/killing/mice
+ */
+
+  /**
+   * mapping of special keycodes to their corresponding keys
+   *
+   * everything in this dictionary cannot use keypress events
+   * so it has to be here to map to the correct keycodes for
+   * keyup/keydown events
+   *
+   * @type {Object}
+   */
+  var _MAP = {
+          8: 'backspace',
+          9: 'tab',
+          13: 'enter',
+          16: 'shift',
+          17: 'ctrl',
+          18: 'alt',
+          20: 'capslock',
+          27: 'esc',
+          32: 'space',
+          33: 'pageup',
+          34: 'pagedown',
+          35: 'end',
+          36: 'home',
+          37: 'left',
+          38: 'up',
+          39: 'right',
+          40: 'down',
+          45: 'ins',
+          46: 'del',
+          91: 'meta',
+          93: 'meta',
+          224: 'meta'
+      },
+
+      /**
+       * mapping for special characters so they can support
+       *
+       * this dictionary is only used incase you want to bind a
+       * keyup or keydown event to one of these keys
+       *
+       * @type {Object}
+       */
+      _KEYCODE_MAP = {
+          106: '*',
+          107: '+',
+          109: '-',
+          110: '.',
+          111 : '/',
+          186: ';',
+          187: '=',
+          188: ',',
+          189: '-',
+          190: '.',
+          191: '/',
+          192: '`',
+          219: '[',
+          220: '\\',
+          221: ']',
+          222: '\''
+      },
+
+      /**
+       * this is a mapping of keys that require shift on a US keypad
+       * back to the non shift equivelents
+       *
+       * this is so you can use keyup events with these keys
+       *
+       * note that this will only work reliably on US keyboards
+       *
+       * @type {Object}
+       */
+      _SHIFT_MAP = {
+          '~': '`',
+          '!': '1',
+          '@': '2',
+          '#': '3',
+          '$': '4',
+          '%': '5',
+          '^': '6',
+          '&': '7',
+          '*': '8',
+          '(': '9',
+          ')': '0',
+          '_': '-',
+          '+': '=',
+          ':': ';',
+          '\"': '\'',
+          '<': ',',
+          '>': '.',
+          '?': '/',
+          '|': '\\'
+      },
+
+      /**
+       * this is a list of special strings you can use to map
+       * to modifier keys when you specify your keyboard shortcuts
+       *
+       * @type {Object}
+       */
+      _SPECIAL_ALIASES = {
+          'option': 'alt',
+          'command': 'meta',
+          'return': 'enter',
+          'escape': 'esc'
+      },
+
+      /**
+       * variable to store the flipped version of _MAP from above
+       * needed to check if we should use keypress or not when no action
+       * is specified
+       *
+       * @type {Object|undefined}
+       */
+      _REVERSE_MAP,
+
+      /**
+       * a list of all the callbacks setup via Mousetrap.bind()
+       *
+       * @type {Object}
+       */
+      _callbacks = {},
+
+      /**
+       * direct map of string combinations to callbacks used for trigger()
+       *
+       * @type {Object}
+       */
+      _direct_map = {},
+
+      /**
+       * keeps track of what level each sequence is at since multiple
+       * sequences can start out with the same sequence
+       *
+       * @type {Object}
+       */
+      _sequence_levels = {},
+
+      /**
+       * variable to store the setTimeout call
+       *
+       * @type {null|number}
+       */
+      _reset_timer,
+
+      /**
+       * temporary state where we will ignore the next keyup
+       *
+       * @type {boolean|string}
+       */
+      _ignore_next_keyup = false,
+
+      /**
+       * are we currently inside of a sequence?
+       * type of action ("keyup" or "keydown" or "keypress") or false
+       *
+       * @type {boolean|string}
+       */
+      _inside_sequence = false;
+
+  /**
+   * loop through the f keys, f1 to f19 and add them to the map
+   * programatically
+   */
+  for (var i = 1; i < 20; ++i) {
+      _MAP[111 + i] = 'f' + i;
+  }
+
+  /**
+   * loop through to map numbers on the numeric keypad
+   */
+  for (i = 0; i <= 9; ++i) {
+      _MAP[i + 96] = i;
+  }
+
+  /**
+   * cross browser add event method
+   *
+   * @param {Element|HTMLDocument} object
+   * @param {string} type
+   * @param {Function} callback
+   * @returns void
+   */
+  function _addEvent(object, type, callback) {
+      if (object.addEventListener) {
+          return object.addEventListener(type, callback, false);
+      }
+
+      object.attachEvent('on' + type, callback);
+  }
+
+  /**
+   * takes the event and returns the key character
+   *
+   * @param {Event} e
+   * @return {string}
+   */
+  function _characterFromEvent(e) {
+
+      // for keypress events we should return the character as is
+      if (e.type == 'keypress') {
+          return String.fromCharCode(e.which);
+      }
+
+      // for non keypress events the special maps are needed
+      if (_MAP[e.which]) {
+          return _MAP[e.which];
+      }
+
+      if (_KEYCODE_MAP[e.which]) {
+          return _KEYCODE_MAP[e.which];
+      }
+
+      // if it is not in the special map
+      return String.fromCharCode(e.which).toLowerCase();
+  }
+
+  /**
+   * should we stop this event before firing off callbacks
+   *
+   * @param {Event} e
+   * @return {boolean}
+   */
+  function _stop(e) {
+      var element = e.target || e.srcElement,
+          tag_name = element.tagName;
+
+      // if the element has the class "mousetrap" then no need to stop
+      if ((' ' + element.className + ' ').indexOf(' mousetrap ') > -1) {
+          return false;
+      }
+
+      // stop for input, select, and textarea
+      return tag_name == 'INPUT' || tag_name == 'SELECT' || tag_name == 'TEXTAREA' || (element.contentEditable && element.contentEditable == 'true');
+  }
+
+  /**
+   * checks if two arrays are equal
+   *
+   * @param {Array} modifiers1
+   * @param {Array} modifiers2
+   * @returns {boolean}
+   */
+  function _modifiersMatch(modifiers1, modifiers2) {
+      return modifiers1.sort().join(',') === modifiers2.sort().join(',');
+  }
+
+  /**
+   * resets all sequence counters except for the ones passed in
+   *
+   * @param {Object} do_not_reset
+   * @returns void
+   */
+  function _resetSequences(do_not_reset) {
+      do_not_reset = do_not_reset || {};
+
+      var active_sequences = false,
+          key;
+
+      for (key in _sequence_levels) {
+          if (do_not_reset[key]) {
+              active_sequences = true;
+              continue;
+          }
+          _sequence_levels[key] = 0;
+      }
+
+      if (!active_sequences) {
+          _inside_sequence = false;
+      }
+  }
+
+  /**
+   * finds all callbacks that match based on the keycode, modifiers,
+   * and action
+   *
+   * @param {string} character
+   * @param {Array} modifiers
+   * @param {string} action
+   * @param {boolean=} remove - should we remove any matches
+   * @param {string=} combination
+   * @returns {Array}
+   */
+  function _getMatches(character, modifiers, action, remove, combination) {
+      var i,
+          callback,
+          matches = [];
+
+      // if there are no events related to this keycode
+      if (!_callbacks[character]) {
+          return [];
+      }
+
+      // if a modifier key is coming up on its own we should allow it
+      if (action == 'keyup' && _isModifier(character)) {
+          modifiers = [character];
+      }
+
+      // loop through all callbacks for the key that was pressed
+      // and see if any of them match
+      for (i = 0; i < _callbacks[character].length; ++i) {
+          callback = _callbacks[character][i];
+
+          // if this is a sequence but it is not at the right level
+          // then move onto the next match
+          if (callback.seq && _sequence_levels[callback.seq] != callback.level) {
+              continue;
+          }
+
+          // if the action we are looking for doesn't match the action we got
+          // then we should keep going
+          if (action != callback.action) {
+              continue;
+          }
+
+          // if this is a keypress event that means that we need to only
+          // look at the character, otherwise check the modifiers as
+          // well
+          if (action == 'keypress' || _modifiersMatch(modifiers, callback.modifiers)) {
+
+              // remove is used so if you change your mind and call bind a
+              // second time with a new function the first one is overwritten
+              if (remove && callback.combo == combination) {
+                  _callbacks[character].splice(i, 1);
+              }
+
+              matches.push(callback);
+          }
+      }
+
+      return matches;
+  }
+
+  /**
+   * takes a key event and figures out what the modifiers are
+   *
+   * @param {Event} e
+   * @returns {Array}
+   */
+  function _eventModifiers(e) {
+      var modifiers = [];
+
+      if (e.shiftKey) {
+          modifiers.push('shift');
+      }
+
+      if (e.altKey) {
+          modifiers.push('alt');
+      }
+
+      if (e.ctrlKey) {
+          modifiers.push('ctrl');
+      }
+
+      if (e.metaKey) {
+          modifiers.push('meta');
+      }
+
+      return modifiers;
+  }
+
+  /**
+   * actually calls the callback function
+   *
+   * if your callback function returns false this will use the jquery
+   * convention - prevent default and stop propogation on the event
+   *
+   * @param {Function} callback
+   * @param {Event} e
+   * @returns void
+   */
+  function _fireCallback(callback, e) {
+      if (callback(e) === false) {
+          if (e.preventDefault) {
+              e.preventDefault();
+          }
+
+          if (e.stopPropagation) {
+              e.stopPropagation();
+          }
+
+          e.returnValue = false;
+          e.cancelBubble = true;
+      }
+  }
+
+  /**
+   * handles a character key event
+   *
+   * @param {string} character
+   * @param {Event} e
+   * @returns void
+   */
+  function _handleCharacter(character, e) {
+
+      // if this event should not happen stop here
+      if (_stop(e)) {
+          return;
+      }
+
+      var callbacks = _getMatches(character, _eventModifiers(e), e.type),
+          i,
+          do_not_reset = {},
+          processed_sequence_callback = false;
+
+      // loop through matching callbacks for this key event
+      for (i = 0; i < callbacks.length; ++i) {
+
+          // fire for all sequence callbacks
+          // this is because if for example you have multiple sequences
+          // bound such as "g i" and "g t" they both need to fire the
+          // callback for matching g cause otherwise you can only ever
+          // match the first one
+          if (callbacks[i].seq) {
+              processed_sequence_callback = true;
+
+              // keep a list of which sequences were matches for later
+              do_not_reset[callbacks[i].seq] = 1;
+              _fireCallback(callbacks[i].callback, e);
+              continue;
+          }
+
+          // if there were no sequence matches but we are still here
+          // that means this is a regular match so we should fire that
+          if (!processed_sequence_callback && !_inside_sequence) {
+              _fireCallback(callbacks[i].callback, e);
+          }
+      }
+
+      // if you are inside of a sequence and the key you are pressing
+      // is not a modifier key then we should reset all sequences
+      // that were not matched by this key event
+      if (e.type == _inside_sequence && !_isModifier(character)) {
+          _resetSequences(do_not_reset);
+      }
+  }
+
+  /**
+   * handles a keydown event
+   *
+   * @param {Event} e
+   * @returns void
+   */
+  function _handleKey(e) {
+
+      // normalize e.which for key events
+      // @see http://stackoverflow.com/questions/4285627/javascript-keycode-vs-charcode-utter-confusion
+      e.which = typeof e.which == "number" ? e.which : e.keyCode;
+
+      var character = _characterFromEvent(e);
+
+      // no character found then stop
+      if (!character) {
+          return;
+      }
+
+      if (e.type == 'keyup' && _ignore_next_keyup == character) {
+          _ignore_next_keyup = false;
+          return;
+      }
+
+      _handleCharacter(character, e);
+  }
+
+  /**
+   * determines if the keycode specified is a modifier key or not
+   *
+   * @param {string} key
+   * @returns {boolean}
+   */
+  function _isModifier(key) {
+      return key == 'shift' || key == 'ctrl' || key == 'alt' || key == 'meta';
+  }
+
+  /**
+   * called to set a 1 second timeout on the specified sequence
+   *
+   * this is so after each key press in the sequence you have 1 second
+   * to press the next key before you have to start over
+   *
+   * @returns void
+   */
+  function _resetSequenceTimer() {
+      clearTimeout(_reset_timer);
+      _reset_timer = setTimeout(_resetSequences, 1000);
+  }
+
+  /**
+   * reverses the map lookup so that we can look for specific keys
+   * to see what can and can't use keypress
+   *
+   * @return {Object}
+   */
+  function _getReverseMap() {
+      if (!_REVERSE_MAP) {
+          _REVERSE_MAP = {};
+          for (var key in _MAP) {
+
+              // pull out the numeric keypad from here cause keypress should
+              // be able to detect the keys from the character
+              if (key > 95 && key < 112) {
+                  continue;
+              }
+
+              if (_MAP.hasOwnProperty(key)) {
+                  _REVERSE_MAP[_MAP[key]] = key;
+              }
+          }
+      }
+      return _REVERSE_MAP;
+  }
+
+  /**
+   * picks the best action based on the key combination
+   *
+   * @param {string} key - character for key
+   * @param {Array} modifiers
+   * @param {string=} action passed in
+   */
+  function _pickBestAction(key, modifiers, action) {
+
+      // if no action was picked in we should try to pick the one
+      // that we think would work best for this key
+      if (!action) {
+          action = _getReverseMap()[key] ? 'keydown' : 'keypress';
+      }
+
+      // modifier keys don't work as expected with keypress,
+      // switch to keydown
+      if (action == 'keypress' && modifiers.length) {
+          action = 'keydown';
+      }
+
+      return action;
+  }
+
+  /**
+   * binds a key sequence to an event
+   *
+   * @param {string} combo - combo specified in bind call
+   * @param {Array} keys
+   * @param {Function} callback
+   * @param {string=} action
+   * @returns void
+   */
+  function _bindSequence(combo, keys, callback, action) {
+
+      // start off by adding a sequence level record for this combination
+      // and setting the level to 0
+      _sequence_levels[combo] = 0;
+
+      // if there is no action pick the best one for the first key
+      // in the sequence
+      if (!action) {
+          action = _pickBestAction(keys[0], []);
+      }
+
+      /**
+       * callback to increase the sequence level for this sequence and reset
+       * all other sequences that were active
+       *
+       * @param {Event} e
+       * @returns void
+       */
+      var _increaseSequence = function(e) {
+              _inside_sequence = action;
+              ++_sequence_levels[combo];
+              _resetSequenceTimer();
+          },
+
+          /**
+           * wraps the specified callback inside of another function in order
+           * to reset all sequence counters as soon as this sequence is done
+           *
+           * @param {Event} e
+           * @returns void
+           */
+          _callbackAndReset = function(e) {
+              _fireCallback(callback, e);
+
+              // we should ignore the next key up if the action is key down
+              // or keypress.  this is so if you finish a sequence and
+              // release the key the final key will not trigger a keyup
+              if (action !== 'keyup') {
+                  _ignore_next_keyup = _characterFromEvent(e);
+              }
+
+              // weird race condition if a sequence ends with the key
+              // another sequence begins with
+              setTimeout(_resetSequences, 10);
+          },
+          i;
+
+      // loop through keys one at a time and bind the appropriate callback
+      // function.  for any key leading up to the final one it should
+      // increase the sequence. after the final, it should reset all sequences
+      for (i = 0; i < keys.length; ++i) {
+          _bindSingle(keys[i], i < keys.length - 1 ? _increaseSequence : _callbackAndReset, action, combo, i);
+      }
+  }
+
+  /**
+   * binds a single keyboard combination
+   *
+   * @param {string} combination
+   * @param {Function} callback
+   * @param {string=} action
+   * @param {string=} sequence_name - name of sequence if part of sequence
+   * @param {number=} level - what part of the sequence the command is
+   * @returns void
+   */
+  function _bindSingle(combination, callback, action, sequence_name, level) {
+
+      // make sure multiple spaces in a row become a single space
+      combination = combination.replace(/\s+/g, ' ');
+
+      var sequence = combination.split(' '),
+          i,
+          key,
+          keys,
+          modifiers = [];
+
+      // if this pattern is a sequence of keys then run through this method
+      // to reprocess each pattern one key at a time
+      if (sequence.length > 1) {
+          return _bindSequence(combination, sequence, callback, action);
+      }
+
+      // take the keys from this pattern and figure out what the actual
+      // pattern is all about
+      keys = combination === '+' ? ['+'] : combination.split('+');
+
+      for (i = 0; i < keys.length; ++i) {
+          key = keys[i];
+
+          // normalize key names
+          if (_SPECIAL_ALIASES[key]) {
+              key = _SPECIAL_ALIASES[key];
+          }
+
+          // if this is not a keypress event then we should
+          // be smart about using shift keys
+          // this will only work for US keyboards however
+          if (action && action != 'keypress' && _SHIFT_MAP[key]) {
+              key = _SHIFT_MAP[key];
+              modifiers.push('shift');
+          }
+
+          // if this key is a modifier then add it to the list of modifiers
+          if (_isModifier(key)) {
+              modifiers.push(key);
+          }
+      }
+
+      // depending on what the key combination is
+      // we will try to pick the best event for it
+      action = _pickBestAction(key, modifiers, action);
+
+      // make sure to initialize array if this is the first time
+      // a callback is added for this key
+      if (!_callbacks[key]) {
+          _callbacks[key] = [];
+      }
+
+      // remove an existing match if there is one
+      _getMatches(key, modifiers, action, !sequence_name, combination);
+
+      // add this call back to the array
+      // if it is a sequence put it at the beginning
+      // if not put it at the end
+      //
+      // this is important because the way these are processed expects
+      // the sequence ones to come first
+      _callbacks[key][sequence_name ? 'unshift' : 'push']({
+          callback: callback,
+          modifiers: modifiers,
+          action: action,
+          seq: sequence_name,
+          level: level,
+          combo: combination
+      });
+  }
+
+  /**
+   * binds multiple combinations to the same callback
+   *
+   * @param {Array} combinations
+   * @param {Function} callback
+   * @param {string|undefined} action
+   * @returns void
+   */
+  function _bindMultiple(combinations, callback, action) {
+      for (var i = 0; i < combinations.length; ++i) {
+          _bindSingle(combinations[i], callback, action);
+      }
+  }
+
+  // start!
+  _addEvent(document, 'keypress', _handleKey);
+  _addEvent(document, 'keydown', _handleKey);
+  _addEvent(document, 'keyup', _handleKey);
+
+  var mousetrap = {
+
+      /**
+       * binds an event to mousetrap
+       *
+       * can be a single key, a combination of keys separated with +,
+       * a comma separated list of keys, an array of keys, or
+       * a sequence of keys separated by spaces
+       *
+       * be sure to list the modifier keys first to make sure that the
+       * correct key ends up getting bound (the last key in the pattern)
+       *
+       * @param {string|Array} keys
+       * @param {Function} callback
+       * @param {string=} action - 'keypress', 'keydown', or 'keyup'
+       * @returns void
+       */
+      bind: function(keys, callback, action) {
+          _bindMultiple(keys instanceof Array ? keys : [keys], callback, action);
+          _direct_map[keys + ':' + action] = callback;
+          return this;
+      },
+
+      /**
+       * unbinds an event to mousetrap
+       *
+       * the unbinding sets the callback function of the specified key combo
+       * to an empty function and deletes the corresponding key in the
+       * _direct_map dict.
+       *
+       * the keycombo+action has to be exactly the same as
+       * it was defined in the bind method
+       *
+       * TODO: actually remove this from the _callbacks dictionary instead
+       * of binding an empty function
+       *
+       * @param {string|Array} keys
+       * @param {string} action
+       * @returns void
+       */
+      unbind: function(keys, action) {
+          if (_direct_map[keys + ':' + action]) {
+              delete _direct_map[keys + ':' + action];
+              this.bind(keys, function() {}, action);
+          }
+          return this;
+      },
+
+      /**
+       * triggers an event that has already been bound
+       *
+       * @param {string} keys
+       * @param {string=} action
+       * @returns void
+       */
+      trigger: function(keys, action) {
+          _direct_map[keys + ':' + action]();
+          return this;
+      },
+
+      /**
+       * resets the library back to its initial state.  this is useful
+       * if you want to clear out the current keyboard shortcuts and bind
+       * new ones - for example if you switch to another page
+       *
+       * @returns void
+       */
+      reset: function() {
+          _callbacks = {};
+          _direct_map = {};
+          return this;
+      }
+  };
+
+module.exports = mousetrap;
+
+
+},{}],6:[function(require,module,exports){
+(function( factory ) {
+	if (typeof define !== 'undefined' && define.amd) {
+		define(['jquery'], factory);
+	} else if (typeof module !== 'undefined' && module.exports) {
+		var $ = require('jquery');
+		module.exports = factory( $ );
+	} else {
+		window.scrollMonitor = factory( jQuery );
+	}
+})(function( $ ) {
+	
+	var exports = {};
+	
+	var $window = $(window);
+	var $document = $(document);
+
+	var watchers = [];
+
+	var VISIBILITYCHANGE = 'visibilityChange';
+	var ENTERVIEWPORT = 'enterViewport';
+	var FULLYENTERVIEWPORT = 'fullyEnterViewport';
+	var EXITVIEWPORT = 'exitViewport';
+	var PARTIALLYEXITVIEWPORT = 'partiallyExitViewport';
+	var LOCATIONCHANGE = 'locationChange';
+	var STATECHANGE = 'stateChange';
+
+	var eventTypes = [
+		VISIBILITYCHANGE,
+		ENTERVIEWPORT,
+		FULLYENTERVIEWPORT,
+		EXITVIEWPORT,
+		PARTIALLYEXITVIEWPORT,
+		LOCATIONCHANGE,
+		STATECHANGE
+	];
+
+	var defaultOffsets = {top: 0, bottom: 0};
+
+	exports.viewportTop;
+	exports.viewportBottom;
+	exports.documentHeight;
+	exports.viewportHeight = windowHeight();
+
+	var previousDocumentHeight;
+	var latestEvent;
+
+	function windowHeight() {
+		return window.innerHeight || document.documentElement.clientHeight;
+	}
+
+	var calculateViewportI;
+	function calculateViewport() {
+		exports.viewportTop = $window.scrollTop();
+		exports.viewportBottom = exports.viewportTop + exports.viewportHeight;
+		exports.documentHeight = $document.height();
+		if (exports.documentHeight !== previousDocumentHeight) {
+			calculateViewportI = watchers.length;
+			while( calculateViewportI-- ) {
+				watchers[calculateViewportI].recalculateLocation();
+			}
+			previousDocumentHeight = exports.documentHeight;
+		}
+	}
+
+	function recalculateWatchLocationsAndTrigger() {
+		exports.viewportHeight = windowHeight();
+		calculateViewport();
+		updateAndTriggerWatchers();
+	}
+
+	var recalculateAndTriggerTimer;
+	function debouncedRecalcuateAndTrigger() {
+		clearTimeout(recalculateAndTriggerTimer);
+		recalculateAndTriggerTimer = setTimeout( recalculateWatchLocationsAndTrigger, 100 );
+	}
+
+	var updateAndTriggerWatchersI;
+	function updateAndTriggerWatchers() {
+		// update all watchers then trigger the events so one can rely on another being up to date.
+		updateAndTriggerWatchersI = watchers.length;
+		while( updateAndTriggerWatchersI-- ) {
+			watchers[updateAndTriggerWatchersI].update();
+		}
+
+		updateAndTriggerWatchersI = watchers.length;
+		while( updateAndTriggerWatchersI-- ) {
+			watchers[updateAndTriggerWatchersI].triggerCallbacks();
+		}
+
+	}
+
+	function ElementWatcher( watchItem, offsets ) {
+		var self = this;
+
+		this.watchItem = watchItem;
+		
+		if (!offsets) {
+			this.offsets = defaultOffsets;
+		} else if (offsets === +offsets) {
+			this.offsets = {top: offsets, bottom: offsets};
+		} else {
+			this.offsets = $.extend({}, defaultOffsets, offsets);
+		}
+
+		this.callbacks = {}; // {callback: function, isOne: true }
+
+		for (var i = 0, j = eventTypes.length; i < j; i++) {
+			self.callbacks[eventTypes[i]] = [];
+		}
+
+		this.locked = false;
+
+		var wasInViewport;
+		var wasFullyInViewport;
+		var wasAboveViewport;
+		var wasBelowViewport;
+
+		var listenerToTriggerListI;
+		var listener;
+		function triggerCallbackArray( listeners ) {
+			if (listeners.length === 0) {
+				return;
+			}
+			listenerToTriggerListI = listeners.length;
+			while( listenerToTriggerListI-- ) {
+				listener = listeners[listenerToTriggerListI];
+				listener.callback.call( self, latestEvent );
+				if (listener.isOne) {
+					listeners.splice(listenerToTriggerListI, 1);
+				}
+			}
+		}
+		this.triggerCallbacks = function triggerCallbacks() {
+			
+			if (this.isInViewport && !wasInViewport) {
+				triggerCallbackArray( this.callbacks[ENTERVIEWPORT] );
+			}
+			if (this.isFullyInViewport && !wasFullyInViewport) {
+				triggerCallbackArray( this.callbacks[FULLYENTERVIEWPORT] );
+			}
+
+			
+			if (this.isAboveViewport !== wasAboveViewport && 
+				this.isBelowViewport !== wasBelowViewport) {
+
+				triggerCallbackArray( this.callbacks[VISIBILITYCHANGE] );
+				
+				// if you skip completely past this element
+				if (!wasFullyInViewport && !this.isFullyInViewport) {
+					triggerCallbackArray( this.callbacks[FULLYENTERVIEWPORT] );
+					triggerCallbackArray( this.callbacks[PARTIALLYEXITVIEWPORT] );
+				}
+				if (!wasInViewport && !this.isInViewport) {
+					triggerCallbackArray( this.callbacks[ENTERVIEWPORT] );
+					triggerCallbackArray( this.callbacks[EXITVIEWPORT] );
+				}
+			}
+
+			if (!this.isFullyInViewport && wasFullyInViewport) {
+				triggerCallbackArray( this.callbacks[PARTIALLYEXITVIEWPORT] );
+			}
+			if (!this.isInViewport && wasInViewport) {
+				triggerCallbackArray( this.callbacks[EXITVIEWPORT] );
+			}
+			if (this.isInViewport !== wasInViewport) {
+				triggerCallbackArray( this.callbacks[VISIBILITYCHANGE] );
+			}
+			switch( true ) {
+				case wasInViewport !== this.isInViewport:
+				case wasFullyInViewport !== this.isFullyInViewport:
+				case wasAboveViewport !== this.isAboveViewport:
+				case wasBelowViewport !== this.isBelowViewport:
+					triggerCallbackArray( this.callbacks[STATECHANGE] );
+			}
+
+			wasInViewport = this.isInViewport;
+			wasFullyInViewport = this.isFullyInViewport;
+			wasAboveViewport = this.isAboveViewport;
+			wasBelowViewport = this.isBelowViewport;
+
+		};
+
+		this.recalculateLocation = function() {
+			if (this.locked) {
+				return;
+			}
+			var previousTop = this.top;
+			var previousBottom = this.bottom;
+			if (this.watchItem.nodeName) { // a dom element
+				var cachedDisplay = this.watchItem.style.display;
+				if (cachedDisplay === 'none') {
+					this.watchItem.style.display = '';
+				}
+				
+				var elementLocation = $(this.watchItem).offset();
+				this.top = elementLocation.top;
+				this.bottom = elementLocation.top + this.watchItem.offsetHeight;
+
+				if (cachedDisplay === 'none') {
+					this.watchItem.style.display = cachedDisplay;
+				}
+
+			} else if (this.watchItem === +this.watchItem) { // number
+				if (this.watchItem > 0) {
+					this.top = this.bottom = this.watchItem;
+				} else {
+					this.top = this.bottom = exports.documentHeight - this.watchItem;
+				}
+
+			} else { // an object with a top and bottom property
+				this.top = this.watchItem.top;
+				this.bottom = this.watchItem.bottom;
+			}
+
+			this.top -= this.offsets.top;
+			this.bottom += this.offsets.bottom;
+			this.height = this.bottom - this.top;
+
+			if ( (previousTop !== undefined || previousBottom !== undefined) && (this.top !== previousTop || this.bottom !== previousBottom) ) {
+				triggerCallbackArray( this.callbacks[LOCATIONCHANGE] );
+			}
+		};
+
+		this.recalculateLocation();
+		this.update();
+
+		wasInViewport = this.isInViewport;
+		wasFullyInViewport = this.isFullyInViewport;
+		wasAboveViewport = this.isAboveViewport;
+		wasBelowViewport = this.isBelowViewport;
+	}
+
+	ElementWatcher.prototype = {
+		on: function( event, callback, isOne ) {
+
+			// trigger the event if it applies to the element right now.
+			switch( true ) {
+				case event === VISIBILITYCHANGE && !this.isInViewport && this.isAboveViewport:
+				case event === ENTERVIEWPORT && this.isInViewport:
+				case event === FULLYENTERVIEWPORT && this.isFullyInViewport:
+				case event === EXITVIEWPORT && this.isAboveViewport && !this.isInViewport:
+				case event === PARTIALLYEXITVIEWPORT && this.isAboveViewport:
+					callback();
+					if (isOne) {
+						return;
+					}
+			}
+
+			if (this.callbacks[event]) {
+				this.callbacks[event].push({callback: callback, isOne: isOne});
+			} else {
+				throw new Error('Tried to add a scroll monitor listener of type '+event+'. Your options are: '+eventTypes.join(', '));
+			}
+		},
+		off: function( event, callback ) {
+			if (this.callbacks[event]) {
+				for (var i = 0, item; item = this.callbacks[event][i]; i++) {
+					if (item.callback === callback) {
+						this.callbacks[event].splice(i, 1);
+						break;
+					}
+				}
+			} else {
+				throw new Error('Tried to remove a scroll monitor listener of type '+event+'. Your options are: '+eventTypes.join(', '));
+			}
+		},
+		one: function( event, callback ) {
+			this.on( event, callback, true);
+		},
+		recalculateSize: function() {
+			this.height = this.watchItem.offsetHeight + this.offsets.top + this.offsets.bottom;
+			this.bottom = this.top + this.height;
+		},
+		update: function() {
+			this.isAboveViewport = this.top < exports.viewportTop;
+			this.isBelowViewport = this.bottom > exports.viewportBottom;
+
+			this.isInViewport = (this.top <= exports.viewportBottom && this.bottom >= exports.viewportTop);
+			this.isFullyInViewport = (this.top >= exports.viewportTop && this.bottom <= exports.viewportBottom) ||
+								 (this.isAboveViewport && this.isBelowViewport);
+
+		},
+		destroy: function() {
+			var index = watchers.indexOf(this),
+				self  = this;
+			watchers.splice(index, 1);
+			for (var i = 0, j = eventTypes.length; i < j; i++) {
+				self.callbacks[eventTypes[i]].length = 0;
+			}
+		},
+		// prevent recalculating the element location
+		lock: function() {
+			this.locked = true;
+		},
+		unlock: function() {
+			this.locked = false;
+		}
+	};
+
+	var eventHandlerFactory = function (type) {
+		return function( callback, isOne ) {
+			this.on.call(this, type, callback, isOne);
+		};
+	};
+
+	for (var i = 0, j = eventTypes.length; i < j; i++) {
+		var type =  eventTypes[i];
+		ElementWatcher.prototype[type] = eventHandlerFactory(type);
+	}
+
+	try {
+		calculateViewport();
+	} catch (e) {
+		$(calculateViewport);
+	}
+
+	function scrollMonitorListener(event) {
+		latestEvent = event;
+		calculateViewport();
+		updateAndTriggerWatchers();
+	}
+
+	$window.on('scroll', scrollMonitorListener);
+	$window.on('resize', debouncedRecalcuateAndTrigger);
+
+	exports.beget = exports.create = function( element, offsets ) {
+		if (typeof element === 'string') {
+			element = $(element)[0];
+		}
+		if (element instanceof $) {
+			element = element[0];
+		}
+		var watcher = new ElementWatcher( element, offsets );
+		watchers.push(watcher);
+		watcher.update();
+		return watcher;
+	};
+
+	exports.update = function() {
+		latestEvent = null;
+		calculateViewport();
+		updateAndTriggerWatchers();
+	};
+	exports.recalculateLocations = function() {
+		exports.documentHeight = 0;
+		exports.update();
+	};
+	
+	return exports;
+});
+
+},{"jquery":3}],7:[function(require,module,exports){
 //     Underscore.js 1.7.0
 //     http://underscorejs.org
 //     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -15340,7 +16493,22 @@ BaseObject.extend = extend;
 module.exports = BaseObject;
 
 
-},{"./events":8,"./utils":16,"underscore":5}],8:[function(require,module,exports){
+},{"./events":12,"./utils":22,"underscore":7}],"it+usN":[function(require,module,exports){
+"use strict";
+var BaseObject = require('./base_object');
+var CorePlugin = function CorePlugin(core) {
+  $traceurRuntime.superCall(this, $CorePlugin.prototype, "constructor", [core]);
+  this.core = core;
+};
+var $CorePlugin = CorePlugin;
+($traceurRuntime.createClass)(CorePlugin, {getExternalInterface: function() {
+    return {};
+  }}, {}, BaseObject);
+
+
+},{"./base_object":"2HNVgz"}],"core_plugin":[function(require,module,exports){
+module.exports=require('it+usN');
+},{}],12:[function(require,module,exports){
 (function (global){
 "use strict";
 var _ = require('underscore');
@@ -15512,11 +16680,12 @@ module.exports = Events;
 
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../plugins/log":47,"underscore":5}],9:[function(require,module,exports){
+},{"../plugins/log":53,"underscore":7}],13:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 module.exports = {
   'media_control': _.template('<div class="media-control-background" data-background></div><div class="media-control-layer" data-controls>  <% var renderBar = function(name) { %>      <div class="bar-container" data-<%= name %>>        <div class="bar-background" data-<%= name %>>          <div class="bar-fill-1" data-<%= name %>></div>          <div class="bar-fill-2" data-<%= name %>></div>        </div>        <div class="bar-scrubber" data-<%= name %>>          <div class="bar-scrubber-icon" data-<%= name %>></div>        </div>      </div>  <% }; %>  <% var renderDrawer = function(name, renderContent) { %>      <div class="drawer-container" data-<%= name %>>        <div class="drawer-icon-container" data-<%= name %>>          <div class="drawer-icon media-control-icon" data-<%= name %>></div>          <span class="drawer-text" data-<%= name %>></span>        </div>        <% renderContent(name); %>      </div>  <% }; %>  <% var renderIndicator = function(name) { %>      <div class="media-control-indicator" data-<%= name %>></div>  <% }; %>  <% var renderButton = function(name) { %>      <button class="media-control-button media-control-icon" data-<%= name %>></button>  <% }; %>  <% var render = function(settings) {      _.each(settings, function(setting) {        if(setting === "seekbar") {          renderBar(setting);        } else if (setting === "volume") {          renderDrawer(setting, renderBar);        } else if (setting === "duration" || setting === "position") {          renderIndicator(setting);        } else {          renderButton(setting);        }      });    }; %>  <% if (settings.left && settings.left.length) { %>  <div class="media-control-left-panel" data-media-control>    <% render(settings.left); %>  </div>  <% } %>  <% if (settings.right && settings.right.length) { %>  <div class="media-control-right-panel" data-media-control>    <% render(settings.right); %>  </div>  <% } %>  <% if (settings.default && settings.default.length) { %>  <div class="media-control-center-panel" data-media-control>    <% render(settings.default); %>  </div>  <% } %></div>'),
+  'flash': _.template('  <param name="movie" value="<%= swfPath %>">  <param name="quality" value="autohigh">  <param name="swliveconnect" value="true">  <param name="allowScriptAccess" value="always">  <param name="bgcolor" value="#001122">  <param name="allowFullScreen" value="false">  <param name="wmode" value="gpu">  <param name="tabindex" value="1">  <param name=FlashVars value="playbackId=<%= playbackId %>" />  <embed    type="application/x-shockwave-flash"    disabled="disabled"    tabindex="-1"    enablecontextmenu="false"    allowScriptAccess="always"    quality="autohight"    pluginspage="http://www.macromedia.com/go/getflashplayer"    wmode="gpu"    swliveconnect="true"    type="application/x-shockwave-flash"    allowfullscreen="false"    bgcolor="#000000"    FlashVars="playbackId=<%= playbackId %>"    src="<%= swfPath %>">  </embed>'),
   'flash_vod': _.template('  <param name="movie" value="<%= swfPath %>">  <param name="quality" value="autohigh">  <param name="swliveconnect" value="true">  <param name="allowScriptAccess" value="always">  <param name="bgcolor" value="#001122">  <param name="allowFullScreen" value="false">  <param name="wmode" value="gpu">  <param name="tabindex" value="1">  <param name=FlashVars value="playbackId=<%= playbackId %>" />  <embed    type="application/x-shockwave-flash"    disabled="disabled"    tabindex="-1"    enablecontextmenu="false"    allowScriptAccess="always"    quality="autohight"    pluginspage="http://www.macromedia.com/go/getflashplayer"    wmode="gpu"    swliveconnect="true"    type="application/x-shockwave-flash"    allowfullscreen="false"    bgcolor="#000000"    FlashVars="playbackId=<%= playbackId %>"    src="<%= swfPath %>">  </embed>'),
   'hls': _.template('  <param name="movie" value="<%= swfPath %>?inline=1">  <param name="quality" value="autohigh">  <param name="swliveconnect" value="true">  <param name="allowScriptAccess" value="always">  <param name="bgcolor" value="#001122">  <param name="allowFullScreen" value="false">  <param name="wmode" value="transparent">  <param name="tabindex" value="1">  <param name=FlashVars value="playbackId=<%= playbackId %>" />  <embed    type="application/x-shockwave-flash"    tabindex="1"    enablecontextmenu="false"    allowScriptAccess="always"    quality="autohigh"    pluginspage="http://www.macromedia.com/go/getflashplayer"    wmode="transparent"    swliveconnect="true"    type="application/x-shockwave-flash"    allowfullscreen="false"    bgcolor="#000000"    FlashVars="playbackId=<%= playbackId %>"    src="<%= swfPath %>">  </embed>'),
   'background_button': _.template('<div class="playpause-button-wrapper" data-background-button>  <span class="playpause-icon" data-background-button></span></div>'),
@@ -15528,13 +16697,14 @@ module.exports = {
   CSS: {
     'container': '[data-container]{position:absolute;background-color:#000;height:100%;width:100%}',
     'core': '[data-player] *{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;-o-user-select:none;user-select:none;margin:0;padding:0;border:0;font-style:normal;font-weight:400;text-align:center;font-size:100%;color:#000;font-family:"lucida grande",tahoma,verdana,arial,sans-serif;text-shadow:0 0 0;box-sizing:border-box}[data-player] * a,[data-player] * abbr,[data-player] * acronym,[data-player] * address,[data-player] * applet,[data-player] * article,[data-player] * aside,[data-player] * audio,[data-player] * b,[data-player] * big,[data-player] * blockquote,[data-player] * canvas,[data-player] * caption,[data-player] * center,[data-player] * cite,[data-player] * code,[data-player] * dd,[data-player] * del,[data-player] * details,[data-player] * dfn,[data-player] * div,[data-player] * dl,[data-player] * dt,[data-player] * em,[data-player] * embed,[data-player] * fieldset,[data-player] * figcaption,[data-player] * figure,[data-player] * footer,[data-player] * form,[data-player] * h1,[data-player] * h2,[data-player] * h3,[data-player] * h4,[data-player] * h5,[data-player] * h6,[data-player] * header,[data-player] * hgroup,[data-player] * i,[data-player] * iframe,[data-player] * img,[data-player] * ins,[data-player] * kbd,[data-player] * label,[data-player] * legend,[data-player] * li,[data-player] * mark,[data-player] * menu,[data-player] * nav,[data-player] * object,[data-player] * ol,[data-player] * output,[data-player] * p,[data-player] * pre,[data-player] * q,[data-player] * ruby,[data-player] * s,[data-player] * samp,[data-player] * section,[data-player] * small,[data-player] * span,[data-player] * strike,[data-player] * strong,[data-player] * sub,[data-player] * summary,[data-player] * sup,[data-player] * table,[data-player] * tbody,[data-player] * td,[data-player] * tfoot,[data-player] * th,[data-player] * thead,[data-player] * time,[data-player] * tr,[data-player] * tt,[data-player] * u,[data-player] * ul,[data-player] * var,[data-player] * video{margin:0;padding:0;border:0;font:inherit;font-size:100%;vertical-align:baseline}[data-player] * table{border-collapse:collapse;border-spacing:0}[data-player] * caption,[data-player] * td,[data-player] * th{text-align:left;font-weight:400;vertical-align:middle}[data-player] * blockquote,[data-player] * q{quotes:none}[data-player] * blockquote:after,[data-player] * blockquote:before,[data-player] * q:after,[data-player] * q:before{content:"";content:none}[data-player] * a img{border:none}[data-player]{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-webkit-transform:translate3d(0,0,0);-moz-transform:translate3d(0,0,0);transform:translate3d(0,0,0);position:relative;margin:0;height:594px;width:1055px;text-align:center;overflow:hidden}[data-player].fullscreen{width:100%;height:100%}[data-player].nocursor{cursor:none}',
-    'media_control': '@font-face{font-family:Player;src:url(assets/Player-Regular.eot);src:url(assets/Player-Regular.eot?#iefix) format("embedded-opentype"),url(assets/Player-Regular.ttf) format("truetype"),url(assets/Player-Regular.svg#player) format("svg")}.media-control[data-media-control]{position:absolute;border-radius:0;bottom:0;left:0;right:0;margin-left:auto;margin-right:auto;max-width:100%;min-width:60%;height:40px;z-index:9999;-webkit-transition:all .4s ease-out;-moz-transition:all .4s ease-out;-ms-transition:all .4s ease-out;-o-transition:all .4s ease-out;transition:all .4s ease-out}.media-control[data-media-control] .media-control-background[data-background]{position:absolute;height:150px;width:100%;bottom:0;background-image:-webkit-gradient(linear,left top,left bottom,from(rgba(0,0,0,0)),to(rgba(0,0,0,.9)));-webkit-transition:all .6s ease-out;-moz-transition:all .6s ease-out;-ms-transition:all .6s ease-out;-o-transition:all .6s ease-out;transition:all .6s ease-out}.media-control[data-media-control] .media-control-icon{font-family:Player;font-weight:400;font-style:normal;font-size:26px;line-height:32px;letter-spacing:0;speak:none;color:#fff;vertical-align:middle;text-align:left;padding:0 6px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;color:rgba(255,255,255,.3)}.media-control[data-media-control] .media-control-icon:hover{color:#fff;opacity:.7;text-shadow:rgba(255,255,255,.5) 0 0 15px;-webkit-transition:all .1s ease-out;-moz-transition:all .1s ease-out;-ms-transition:all .1s ease-out;-o-transition:all .1s ease-out;transition:all .1s ease-out}.media-control[data-media-control].media-control-hide{bottom:-50px}.media-control[data-media-control].media-control-hide .media-control-background[data-background],.media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar]{opacity:0}.media-control[data-media-control] .media-control-layer[data-controls]{position:relative;top:10%;height:80%;vertical-align:middle}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control]{position:absolute;top:0;left:10px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control]{height:100%;text-align:center;line-height:32px}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control]{position:absolute;top:0;right:5px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button{background-color:transparent;border:0;margin:0 8px;cursor:pointer;display:inline-block}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus{outline:0}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]:before{content:"\\e002"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]:before{content:"\\e003"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]{float:right;background-color:transparent;border:0;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]:before{content:"\\e006"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]{cursor:default;float:right;background-color:transparent;border:0;width:32px;height:100%;opacity:0}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]:before{content:"\\e007"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled{opacity:1}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].playing:before{content:"\\e002"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].paused:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].playing:before{content:"\\e003"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].stopped:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration],.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position]{display:inline-block;font-size:10px;color:#fff;cursor:default;line-height:32px;position:relative}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]{color:rgba(255,255,255,.3)}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before{content:"|";margin-right:3px}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]{position:absolute;top:-20px;left:0;display:inline-block;vertical-align:middle;width:100%;height:25px;cursor:pointer}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar]{width:100%;height:1px;position:relative;top:12px;background-color:#666;overflow:hidden}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar]{position:absolute;top:0;left:0;width:0;height:100%;background-color:#c2c2c2;-webkit-transition:all .1s ease-out;-moz-transition:all .1s ease-out;-ms-transition:all .1s ease-out;-o-transition:all .1s ease-out;transition:all .1s ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar]{position:absolute;top:0;left:0;width:0;height:100%;background-color:#005aff;-webkit-transition:all .1s ease-out;-moz-transition:all .1s ease-out;-ms-transition:all .1s ease-out;-o-transition:all .1s ease-out;transition:all .1s ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar]{position:absolute;top:6px;left:0;width:20px;height:20px;opacity:1;-webkit-transition:all .1s ease-out;-moz-transition:all .1s ease-out;-ms-transition:all .1s ease-out;-o-transition:all .1s ease-out;transition:all .1s ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar]{position:absolute;left:3px;top:3px;width:8px;height:8px;border-radius:10px;box-shadow:0 0 0 6px rgba(255,255,255,.2);background-color:#fff}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume]{float:right;display:inline-block;width:32px;height:32px;cursor:pointer}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume]{position:absolute;bottom:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]{background-color:transparent;border:0;width:32px;height:32px}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:before{content:"\\e004"}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted:before{content:"\\e005"}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume]{width:32px;height:88px;position:absolute;bottom:40px;background:rgba(2,2,2,.5);border-radius:4px;-webkit-transition:all .2s ease-out;-moz-transition:all .2s ease-out;-ms-transition:all .2s ease-out;-o-transition:all .2s ease-out;transition:all .2s ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide{opacity:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume]{margin-left:12px;background:#6f6f6f;border-radius:4px;width:8px;height:72px;position:relative;top:8px;overflow:hidden}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume]{position:absolute;bottom:0;background:#fff;width:100%;height:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume]{position:absolute;bottom:40%;left:6px;width:20px;height:20px}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume]{position:absolute;left:4px;top:4px;width:12px;height:12px;border-radius:6px;border:1px solid #6f6f6f;background-color:#fff}',
+    'media_control': '@font-face{font-family:Player;src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot);src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot?#iefix) format("embedded-opentype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.ttf) format("truetype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.svg#player) format("svg")}.media-control[data-media-control]{position:absolute;border-radius:0;bottom:0;left:0;right:0;margin-left:auto;margin-right:auto;max-width:100%;min-width:60%;height:40px;z-index:9999;-webkit-transition:all .4s ease-out;-moz-transition:all .4s ease-out;-ms-transition:all .4s ease-out;-o-transition:all .4s ease-out;transition:all .4s ease-out}.media-control[data-media-control] .media-control-background[data-background]{position:absolute;height:150px;width:100%;bottom:0;background-image:-webkit-gradient(linear,left top,left bottom,from(rgba(0,0,0,0)),to(rgba(0,0,0,.9)));-webkit-transition:all .6s ease-out;-moz-transition:all .6s ease-out;-ms-transition:all .6s ease-out;-o-transition:all .6s ease-out;transition:all .6s ease-out}.media-control[data-media-control] .media-control-icon{font-family:Player;font-weight:400;font-style:normal;font-size:26px;line-height:32px;letter-spacing:0;speak:none;color:#fff;vertical-align:middle;text-align:left;padding:0 6px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;color:rgba(255,255,255,.3)}.media-control[data-media-control] .media-control-icon:hover{color:#fff;opacity:.7;text-shadow:rgba(255,255,255,.5) 0 0 15px;-webkit-transition:all .1s ease-out;-moz-transition:all .1s ease-out;-ms-transition:all .1s ease-out;-o-transition:all .1s ease-out;transition:all .1s ease-out}.media-control[data-media-control].media-control-hide{bottom:-50px}.media-control[data-media-control].media-control-hide .media-control-background[data-background],.media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar]{opacity:0}.media-control[data-media-control] .media-control-layer[data-controls]{position:relative;top:10%;height:80%;vertical-align:middle}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control]{position:absolute;top:0;left:10px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control]{height:100%;text-align:center;line-height:32px}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control]{position:absolute;top:0;right:5px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button{background-color:transparent;border:0;margin:0 8px;cursor:pointer;display:inline-block}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus{outline:0}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]:before{content:"\\e002"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]:before{content:"\\e003"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]{float:right;background-color:transparent;border:0;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]:before{content:"\\e006"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]{cursor:default;float:right;background-color:transparent;border:0;width:32px;height:100%;opacity:0}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]:before{content:"\\e007"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled{opacity:1}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].playing:before{content:"\\e002"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].paused:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].playing:before{content:"\\e003"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].stopped:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration],.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position]{display:inline-block;font-size:10px;color:#fff;cursor:default;line-height:32px;position:relative}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]{color:rgba(255,255,255,.3)}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before{content:"|";margin-right:3px}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]{position:absolute;top:-20px;left:0;display:inline-block;vertical-align:middle;width:100%;height:25px;cursor:pointer}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar]{width:100%;height:1px;position:relative;top:12px;background-color:#666;overflow:hidden}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar]{position:absolute;top:0;left:0;width:0;height:100%;background-color:#c2c2c2;-webkit-transition:all .1s ease-out;-moz-transition:all .1s ease-out;-ms-transition:all .1s ease-out;-o-transition:all .1s ease-out;transition:all .1s ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar]{position:absolute;top:0;left:0;width:0;height:100%;background-color:#005aff;-webkit-transition:all .1s ease-out;-moz-transition:all .1s ease-out;-ms-transition:all .1s ease-out;-o-transition:all .1s ease-out;transition:all .1s ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar]{position:absolute;top:6px;left:0;width:20px;height:20px;opacity:1;-webkit-transition:all .1s ease-out;-moz-transition:all .1s ease-out;-ms-transition:all .1s ease-out;-o-transition:all .1s ease-out;transition:all .1s ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar]{position:absolute;left:3px;top:3px;width:8px;height:8px;border-radius:10px;box-shadow:0 0 0 6px rgba(255,255,255,.2);background-color:#fff}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume]{float:right;display:inline-block;width:32px;height:32px;cursor:pointer}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume]{position:absolute;bottom:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]{background-color:transparent;border:0;width:32px;height:32px}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:before{content:"\\e004"}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted:before{content:"\\e005"}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume]{width:32px;height:88px;position:absolute;bottom:40px;background:rgba(2,2,2,.5);border-radius:4px;-webkit-transition:all .2s ease-out;-moz-transition:all .2s ease-out;-ms-transition:all .2s ease-out;-o-transition:all .2s ease-out;transition:all .2s ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide{opacity:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume]{margin-left:12px;background:#6f6f6f;border-radius:4px;width:8px;height:72px;position:relative;top:8px;overflow:hidden}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume]{position:absolute;bottom:0;background:#fff;width:100%;height:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume]{position:absolute;bottom:40%;left:6px;width:20px;height:20px}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume]{position:absolute;left:4px;top:4px;width:12px;height:12px;border-radius:6px;border:1px solid #6f6f6f;background-color:#fff}',
+    'flash': '[data-flash]{position:absolute;height:100%;width:100%;background-color:#000;display:block;pointer-events:none}',
     'flash_vod': '[data-flash-vod]{position:absolute;height:100%;width:100%;background-color:#000;display:block;pointer-events:none}',
     'hls': '[data-hls]{position:absolute;height:100%;width:100%;background-color:#000;display:block;pointer-events:none;top:0}',
     'html5_video': '[data-html5-video]{position:absolute;height:100%;width:100%;display:block}',
     'background_button': '.background-button[data-background-button]{font-family:Player;position:absolute;height:100%;width:100%;background-color:rgba(0,0,0,.2);-webkit-transition:all .4s ease-out;-moz-transition:all .4s ease-out;-ms-transition:all .4s ease-out;-o-transition:all .4s ease-out;transition:all .4s ease-out}.background-button[data-background-button].hide[data-background-button]{opacity:0}.background-button[data-background-button] .playpause-button-wrapper[data-background-button]{position:absolute;overflow:hidden;width:100%;height:25%;line-height:100%;font-size:20%;top:45%;margin-top:-5%;text-align:center}.background-button[data-background-button] .playpause-button-wrapper[data-background-button] .playpause-icon[data-background-button]{font-family:Player;cursor:pointer;font-weight:400;font-style:normal;line-height:1;letter-spacing:0;speak:none;font-size:90px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;color:#fff;opacity:.75}.background-button[data-background-button] .playpause-button-wrapper[data-background-button] .playpause-icon[data-background-button]:hover{text-shadow:rgba(255,255,255,.5) 0 0 15px}.background-button[data-background-button] .playpause-button-wrapper[data-background-button] .playpause-icon[data-background-button].playing:before{content:"\\e002"}.background-button[data-background-button] .playpause-button-wrapper[data-background-button] .playpause-icon[data-background-button].paused:before{content:"\\e001"}',
     'pip': '.pip-loading[data-pip]{left:25px;top:15px;position:relative;float:left;z-index:3001;color:#fff}.pip-transition[data-pip]{-webkit-transition:all .4s ease-out;-moz-transition:all .4s ease-out;-ms-transition:all .4s ease-out;-o-transition:all .4s ease-out;transition:all .4s ease-out}.master-container[data-pip]{cursor:default;width:100%;height:100%;font-size:100%;position:absolute;bottom:0;right:0;border:none}.pip-container[data-pip]{cursor:pointer;width:24%;height:24%;font-size:24%;z-index:2000;position:absolute;right:23px;bottom:23px;border-width:2px;border-radius:3px;border-style:solid;border-color:rgba(255,255,255,.25);background-clip:padding-box;-webkit-background-clip:padding-box}.pip-container[data-pip].over-media-control{bottom:63px}',
-    'poster': '@font-face{font-family:Player;src:url(assets/Player-Regular.eot);src:url(assets/Player-Regular.eot?#iefix) format("embedded-opentype"),url(assets/Player-Regular.ttf) format("truetype"),url(assets/Player-Regular.svg#player) format("svg")}.player-poster[data-poster]{cursor:pointer;position:absolute;height:100%;width:100%;z-index:998;top:0}.player-poster[data-poster] .poster-background[data-poster]{width:100%;height:100%}.player-poster[data-poster] .play-wrapper[data-poster]{position:absolute;overflow:hidden;width:100%;height:20%;line-height:100%;font-size:20%;top:50%;margin-top:-5%;text-align:center}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]{font-family:Player;font-weight:400;font-style:normal;line-height:1;letter-spacing:0;speak:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;color:#fff;opacity:.75}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster].play[data-poster]:before{content:"\\e001"}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]:hover{opacity:1}',
+    'poster': '@font-face{font-family:Player;src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot);src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot?#iefix) format("embedded-opentype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.ttf) format("truetype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.svg#player) format("svg")}.player-poster[data-poster]{cursor:pointer;position:absolute;height:100%;width:100%;z-index:998;top:0}.player-poster[data-poster] .poster-background[data-poster]{width:100%;height:100%}.player-poster[data-poster] .play-wrapper[data-poster]{position:absolute;overflow:hidden;width:100%;height:20%;line-height:100%;font-size:20%;top:50%;margin-top:-5%;text-align:center}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]{font-family:Player;font-weight:400;font-style:normal;line-height:1;letter-spacing:0;speak:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;color:#fff;opacity:.75}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster].play[data-poster]:before{content:"\\e001"}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]:hover{opacity:1}',
     'seek_time': '.seek-time[data-seek-time]{position:absolute;width:auto;height:20px;bottom:55px;background-color:rgba(2,2,2,.5);z-index:9999;-webkit-transition:all .2s ease-in;-moz-transition:all .2s ease-in;-ms-transition:all .2s ease-in;-o-transition:all .2s ease-in;transition:all .2s ease-in}.seek-time[data-seek-time].hidden[data-seek-time]{opacity:0}.seek-time[data-seek-time] span[data-seek-time]{position:relative;color:#fff;font-size:10px;padding-left:7px;padding-right:7px}',
     'spinner_loading': 'div[data-spinner]{width:50px;height:50px;position:relative;margin-left:auto;margin-right:auto;right:0;left:0;z-index:999;top:45%}.spin-container1>div,.spin-container2>div,.spin-container3>div{width:13px;height:13px;background-color:#fff;border-radius:100%;position:absolute;-webkit-animation:bouncedelay 1.2s infinite ease-in-out;animation:bouncedelay 1.2s infinite ease-in-out;-webkit-animation-fill-mode:both;animation-fill-mode:both}[data-spinner] [data-spinner-container]{position:absolute;width:100%;height:100%}.spin-container2{-webkit-transform:rotateZ(45deg);transform:rotateZ(45deg)}.spin-container3{-webkit-transform:rotateZ(90deg);transform:rotateZ(90deg)}[data-circle1]{top:0;left:0}[data-circle2]{top:0;right:0}[data-circle3]{right:0;bottom:0}[data-circle4]{left:0;bottom:0}.spin-container2 [data-circle1]{-webkit-animation-delay:-1.1s;animation-delay:-1.1s}.spin-container3 [data-circle1]{-webkit-animation-delay:-1s;animation-delay:-1s}.spin-container1 [data-circle2]{-webkit-animation-delay:-.9s;animation-delay:-.9s}.spin-container2 [data-circle2]{-webkit-animation-delay:-.8s;animation-delay:-.8s}.spin-container3 [data-circle2]{-webkit-animation-delay:-.7s;animation-delay:-.7s}.spin-container1 [data-circle3]{-webkit-animation-delay:-.6s;animation-delay:-.6s}.spin-container2 [data-circle3]{-webkit-animation-delay:-.5s;animation-delay:-.5s}.spin-container3 [data-circle3]{-webkit-animation-delay:-.4s;animation-delay:-.4s}.spin-container1 [data-circle4]{-webkit-animation-delay:-.3s;animation-delay:-.3s}.spin-container2 [data-circle4]{-webkit-animation-delay:-.2s;animation-delay:-.2s}.spin-container3 [data-circle4]{-webkit-animation-delay:-.1s;animation-delay:-.1s}@-webkit-keyframes bouncedelay{0%,100%,80%{-webkit-transform:scale(0)}40%{-webkit-transform:scale(1)}}@keyframes bouncedelay{0%,100%,80%{transform:scale(0);-webkit-transform:scale(0)}40%{transform:scale(1);-webkit-transform:scale(1)}}',
     'spinner_three_bounce': '.spinner-three-bounce[data-spinner]{position:absolute;margin:0 auto;width:70px;text-align:center;z-index:10;top:47%;left:0;right:0}.spinner-three-bounce[data-spinner]>div{width:18px;height:18px;background-color:#FFF;border-radius:100%;display:inline-block;-webkit-animation:bouncedelay 1.4s infinite ease-in-out;-moz-animation:bouncedelay 1.4s infinite ease-in-out;-o-animation:bouncedelay 1.4s infinite ease-in-out;animation:bouncedelay 1.4s infinite ease-in-out;-webkit-animation-fill-mode:both;-moz-animation-fill-mode:both;-o-animation-fill-mode:both;animation-fill-mode:both}.spinner-three-bounce[data-spinner] [data-bounce1]{-webkit-animation-delay:-.32s;animation-delay:-.32s}.spinner-three-bounce[data-spinner] [data-bounce2]{-webkit-animation-delay:-.16s;animation-delay:-.16s}@-webkit-keyframes bouncedelay{0%,100%,80%{-webkit-transform:scale(0);-moz-transform:scale(0);transform:scale(0)}40%{-webkit-transform:scale(1);-moz-transform:scale(1);transform:scale(1)}}@-moz-keyframes bouncedelay{0%,100%,80%{-webkit-transform:scale(0);-moz-transform:scale(0);transform:scale(0)}40%{-webkit-transform:scale(1);-moz-transform:scale(1);transform:scale(1)}}@-ms-keyframes bouncedelay{0%,100%,80%{-webkit-transform:scale(0);-moz-transform:scale(0);transform:scale(0)}40%{-webkit-transform:scale(1);-moz-transform:scale(1);transform:scale(1)}}@keyframes bouncedelay{0%,100%,80%{-webkit-transform:scale(0);-moz-transform:scale(0);transform:scale(0)}40%{-webkit-transform:scale(1);-moz-transform:scale(1);transform:scale(1)}}',
@@ -15543,7 +16713,7 @@ module.exports = {
 };
 
 
-},{"underscore":5}],10:[function(require,module,exports){
+},{"underscore":7}],14:[function(require,module,exports){
 "use strict";
 var PluginMixin = {
   initialize: function() {
@@ -15559,7 +16729,7 @@ var PluginMixin = {
 module.exports = PluginMixin;
 
 
-},{}],11:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var _ = require('underscore');
@@ -15571,7 +16741,33 @@ var Styler = {getStyleFor: function(name, options) {
 module.exports = Styler;
 
 
-},{"./jst":9,"jquery":3,"underscore":5}],"8lqCAT":[function(require,module,exports){
+},{"./jst":13,"jquery":3,"underscore":7}],"ui_core_plugin":[function(require,module,exports){
+module.exports=require('gNZMEo');
+},{}],"gNZMEo":[function(require,module,exports){
+"use strict";
+var UIObject = require('./ui_object');
+var UICorePlugin = function UICorePlugin(core) {
+  $traceurRuntime.superCall(this, $UICorePlugin.prototype, "constructor", [core]);
+  this.core = core;
+  this.render();
+};
+var $UICorePlugin = UICorePlugin;
+($traceurRuntime.createClass)(UICorePlugin, {
+  getExternalInterface: function() {
+    return {};
+  },
+  render: function() {
+    var style = Styler.getStyleFor(this.name);
+    this.$el.html(this.template());
+    this.$el.append(style);
+    this.core.$el.append(this.el);
+    return this;
+  }
+}, {}, UIObject);
+module.exports = UICorePlugin;
+
+
+},{"./ui_object":"8lqCAT"}],"8lqCAT":[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var _ = require('underscore');
@@ -15654,7 +16850,7 @@ UIObject.extend = extend;
 module.exports = UIObject;
 
 
-},{"./base_object":"2HNVgz","./utils":16,"jquery":3,"underscore":5}],"ui_object":[function(require,module,exports){
+},{"./base_object":"2HNVgz","./utils":22,"jquery":3,"underscore":7}],"ui_object":[function(require,module,exports){
 module.exports=require('8lqCAT');
 },{}],"Z7u8cr":[function(require,module,exports){
 "use strict";
@@ -15685,9 +16881,9 @@ UIPlugin.extend = extend;
 module.exports = UIPlugin;
 
 
-},{"./plugin_mixin":10,"./ui_object":"8lqCAT","./utils":16,"underscore":5}],"ui_plugin":[function(require,module,exports){
+},{"./plugin_mixin":14,"./ui_object":"8lqCAT","./utils":22,"underscore":7}],"ui_plugin":[function(require,module,exports){
 module.exports=require('Z7u8cr');
-},{}],16:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('jquery');
@@ -15849,7 +17045,7 @@ module.exports = {
 };
 
 
-},{"jquery":3,"moment":4,"underscore":5}],"browser":[function(require,module,exports){
+},{"jquery":3,"moment":4,"underscore":7}],"browser":[function(require,module,exports){
 module.exports=require('195Wj5');
 },{}],"195Wj5":[function(require,module,exports){
 "use strict";
@@ -15860,10 +17056,11 @@ Browser.isChrome = !!(navigator.userAgent.match(/chrome/i));
 Browser.isFirefox = !!(navigator.userAgent.match(/firefox/i));
 Browser.isLegacyIE = !!(window.ActiveXObject);
 Browser.isMobile = !!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+Browser.isWin8App = !!(/MSAppHost/i.test(navigator.userAgent));
 module.exports = Browser;
 
 
-},{}],19:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 "use strict";
 var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
@@ -15897,6 +17094,7 @@ var $Container = Container;
     this.listenTo(this.playback, 'playback:settingsupdate', this.settingsUpdate);
     this.listenTo(this.playback, 'playback:loadedmetadata', this.loadedMetadata);
     this.listenTo(this.playback, 'playback:highdefinitionupdate', this.highDefinitionUpdate);
+    this.listenTo(this.playback, 'playback:playbackstate', this.playbackStateChanged);
     this.listenTo(this.playback, 'playback:mediacontrol:disable', this.disableMediaControl);
     this.listenTo(this.playback, 'playback:mediacontrol:enable', this.enableMediaControl);
     this.listenTo(this.playback, 'playback:ended', this.ended);
@@ -15905,6 +17103,9 @@ var $Container = Container;
   with: function(klass) {
     _.extend(this, klass);
     return this;
+  },
+  playbackStateChanged: function() {
+    this.trigger('container:playbackstate');
   },
   statsAdd: function(metric) {
     this.trigger('container:stats:add', metric);
@@ -16024,12 +17225,12 @@ var $Container = Container;
 module.exports = Container;
 
 
-},{"../../base/styler":11,"../../base/ui_object":"8lqCAT","underscore":5}],20:[function(require,module,exports){
+},{"../../base/styler":15,"../../base/ui_object":"8lqCAT","underscore":7}],26:[function(require,module,exports){
 "use strict";
 module.exports = require('./container');
 
 
-},{"./container":19}],21:[function(require,module,exports){
+},{"./container":25}],27:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var BaseObject = require('../../base/base_object');
@@ -16083,12 +17284,12 @@ var $ContainerFactory = ContainerFactory;
 module.exports = ContainerFactory;
 
 
-},{"../../base/base_object":"2HNVgz","../container":20,"jquery":3,"underscore":5}],22:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../container":26,"jquery":3,"underscore":7}],28:[function(require,module,exports){
 "use strict";
 module.exports = require('./container_factory');
 
 
-},{"./container_factory":21}],23:[function(require,module,exports){
+},{"./container_factory":27}],29:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('jquery');
@@ -16292,12 +17493,12 @@ var $Core = Core;
 module.exports = Core;
 
 
-},{"../../base/styler":11,"../../base/ui_object":"8lqCAT","../../base/utils":16,"../container_factory":22,"../media_control":"A8Uh+k","../player_info":"Pce0iO","jquery":3,"underscore":5}],24:[function(require,module,exports){
+},{"../../base/styler":15,"../../base/ui_object":"8lqCAT","../../base/utils":22,"../container_factory":28,"../media_control":"A8Uh+k","../player_info":"Pce0iO","jquery":3,"underscore":7}],30:[function(require,module,exports){
 "use strict";
 module.exports = require('./core');
 
 
-},{"./core":23}],25:[function(require,module,exports){
+},{"./core":29}],31:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var BaseObject = require('../../base/base_object');
@@ -16331,25 +17532,25 @@ var CoreFactory = function CoreFactory(player, loader) {
 module.exports = CoreFactory;
 
 
-},{"../../base/base_object":"2HNVgz","../core":24,"underscore":5}],26:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../core":30,"underscore":7}],32:[function(require,module,exports){
 "use strict";
 module.exports = require('./core_factory');
 
 
-},{"./core_factory":25}],27:[function(require,module,exports){
+},{"./core_factory":31}],33:[function(require,module,exports){
 "use strict";
 module.exports = require('./loader');
 
 
-},{"./loader":28}],28:[function(require,module,exports){
+},{"./loader":34}],34:[function(require,module,exports){
 "use strict";
 var BaseObject = require('../../base/base_object');
 var _ = require('underscore');
 var PlayerInfo = require('../player_info');
-var HTML5VideoPlaybackPlugin = require('../../playbacks/html5_video');
-var FlashVideoPlaybackPlugin = require('../../playbacks/flash_vod');
-var HTML5AudioPlaybackPlugin = require('../../playbacks/html5_audio');
-var HLSVideoPlaybackPlugin = require('../../playbacks/hls');
+var HTML5VideoPlayback = require('../../playbacks/html5_video');
+var FlashVideoPlayback = require('../../playbacks/flash');
+var HTML5AudioPlayback = require('../../playbacks/html5_audio');
+var HLSVideoPlayback = require('../../playbacks/hls');
 var SpinnerThreeBouncePlugin = require('../../plugins/spinner_three_bounce');
 var StatsPlugin = require('../../plugins/stats');
 var WaterMarkPlugin = require('../../plugins/watermark');
@@ -16359,7 +17560,7 @@ var SeekTime = require('../../plugins/seek_time');
 var Loader = function Loader(externalPlugins) {
   $traceurRuntime.superCall(this, $Loader.prototype, "constructor", []);
   this.playerInfo = PlayerInfo.getInstance();
-  this.playbackPlugins = [FlashVideoPlaybackPlugin, HTML5VideoPlaybackPlugin, HTML5AudioPlaybackPlugin, HLSVideoPlaybackPlugin];
+  this.playbackPlugins = [FlashVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, HLSVideoPlayback];
   this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin];
   this.globalPlugins = [BackgroundButton, SeekTime];
   if (externalPlugins) {
@@ -16390,14 +17591,14 @@ var $Loader = Loader;
 module.exports = Loader;
 
 
-},{"../../base/base_object":"2HNVgz","../../playbacks/flash_vod":38,"../../playbacks/hls":40,"../../playbacks/html5_audio":42,"../../playbacks/html5_video":44,"../../plugins/background_button":46,"../../plugins/poster":49,"../../plugins/seek_time":51,"../../plugins/spinner_three_bounce":53,"../../plugins/stats":55,"../../plugins/watermark":57,"../player_info":"Pce0iO","underscore":5}],"A8Uh+k":[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../../playbacks/flash":44,"../../playbacks/hls":46,"../../playbacks/html5_audio":48,"../../playbacks/html5_video":50,"../../plugins/background_button":52,"../../plugins/poster":55,"../../plugins/seek_time":57,"../../plugins/spinner_three_bounce":59,"../../plugins/stats":61,"../../plugins/watermark":63,"../player_info":"Pce0iO","underscore":7}],"A8Uh+k":[function(require,module,exports){
 "use strict";
 module.exports = require('./media_control');
 
 
-},{"./media_control":31}],"media_control":[function(require,module,exports){
+},{"./media_control":37}],"media_control":[function(require,module,exports){
 module.exports=require('A8Uh+k');
-},{}],31:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('jquery');
@@ -16405,6 +17606,8 @@ var JST = require('../../base/jst');
 var Styler = require('../../base/styler');
 var UIObject = require('../../base/ui_object');
 var Utils = require('../../base/utils');
+var Mousetrap = require('mousetrap');
+var ScrollMonitor = require('scrollmonitor');
 var MediaControl = function MediaControl(options) {
   var $__0 = this;
   $traceurRuntime.superCall(this, $MediaControl.prototype, "constructor", [options]);
@@ -16466,6 +17669,7 @@ var $MediaControl = MediaControl;
     return JST.media_control;
   },
   addEventListeners: function() {
+    var $__0 = this;
     this.listenTo(this.container, 'container:play', this.changeTogglePlay);
     this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar);
     this.listenTo(this.container, 'container:progress', this.updateProgressBar);
@@ -16473,7 +17677,14 @@ var $MediaControl = MediaControl;
     this.listenTo(this.container, 'container:highdefinitionupdate', this.highDefinitionUpdate);
     this.listenTo(this.container, 'container:mediacontrol:disable', this.disable);
     this.listenTo(this.container, 'container:mediacontrol:enable', this.enable);
+    this.listenTo(this.container, 'container:playbackstate', this.updatePlaybackType);
     this.listenTo(this.container, 'container:ended', this.ended);
+    if (this.options.autoPlayVisible) {
+      this.elementWatcher = ScrollMonitor.create(this.$el);
+      this.elementWatcher.enterViewport((function() {
+        return $__0.enterViewport();
+      }));
+    }
   },
   disable: function() {
     this.disabled = true;
@@ -16485,6 +17696,11 @@ var $MediaControl = MediaControl;
       return;
     this.disabled = false;
     this.show();
+  },
+  enterViewport: function() {
+    if (this.elementWatcher.top !== 0 && !this.container.isPlaying()) {
+      this.play();
+    }
   },
   play: function() {
     this.container.play();
@@ -16511,10 +17727,6 @@ var $MediaControl = MediaControl;
   },
   mouseleaveOnSeekBar: function(event) {
     this.trigger('mediacontrol:mouseleave:seekbar', event);
-  },
-  onKeyDown: function(event) {
-    if (event.keyCode === 32)
-      this.togglePlayPause();
   },
   togglePlayPause: function() {
     if (this.container.isPlaying()) {
@@ -16724,22 +17936,17 @@ var $MediaControl = MediaControl;
     }
   },
   setSeekPercentage: function(value) {
+    if (value > 100)
+      return;
     var pos = this.$seekBarContainer.width() * value / 100.0 - this.$seekBarScrubber.width() / 2.0;
     this.$seekBarPosition.css({width: value + '%'});
     this.$seekBarScrubber.css({left: pos});
   },
   bindKeyEvents: function() {
     var $__0 = this;
-    if (this.keydownHandlerFn) {
-      $(document).unbind('keydown', this.keydownHandlerFn);
-    } else {
-      this.keydownHandlerFn = (function(event) {
-        return $__0.onKeyDown(event);
-      });
-    }
-    if (this.$playPauseToggle.length > 0) {
-      $(document).bind('keydown', this.keydownHandlerFn);
-    }
+    Mousetrap.bind(['space'], (function() {
+      return $__0.togglePlayPause();
+    }));
   },
   parseColors: function() {
     var $__0 = this;
@@ -16780,7 +17987,6 @@ var $MediaControl = MediaControl;
       $__0.setVolumeLevel($__0.currentVolume);
       $__0.setSeekPercentage(0);
       $__0.bindKeyEvents();
-      $__0.highDefinitionUpdate();
     }));
     this.parseColors();
     return this;
@@ -16789,7 +17995,7 @@ var $MediaControl = MediaControl;
 module.exports = MediaControl;
 
 
-},{"../../base/jst":9,"../../base/styler":11,"../../base/ui_object":"8lqCAT","../../base/utils":16,"jquery":3,"underscore":5}],32:[function(require,module,exports){
+},{"../../base/jst":13,"../../base/styler":15,"../../base/ui_object":"8lqCAT","../../base/utils":22,"jquery":3,"mousetrap":5,"scrollmonitor":6,"underscore":7}],38:[function(require,module,exports){
 "use strict";
 var Events = require('../base/events');
 var events = new Events();
@@ -16818,14 +18024,14 @@ Mediator.stopListening = function(obj, name, callback) {
 module.exports = Mediator;
 
 
-},{"../base/events":8}],"Pce0iO":[function(require,module,exports){
+},{"../base/events":12}],"Pce0iO":[function(require,module,exports){
 "use strict";
 module.exports = require('./player_info');
 
 
-},{"./player_info":35}],"player_info":[function(require,module,exports){
+},{"./player_info":41}],"player_info":[function(require,module,exports){
 module.exports=require('Pce0iO');
-},{}],35:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 "use strict";
 var BaseObject = require('../../base/base_object');
 var PlayerInfo = function PlayerInfo() {
@@ -16842,7 +18048,7 @@ PlayerInfo.getInstance = function() {
 module.exports = PlayerInfo;
 
 
-},{"../../base/base_object":"2HNVgz"}],36:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz"}],42:[function(require,module,exports){
 (function (global){
 "use strict";
 var BaseObject = require('./base/base_object');
@@ -16909,7 +18115,7 @@ module.exports = window.Clappr;
 
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./base/base_object":"2HNVgz","./components/core_factory":26,"./components/loader":27,"./components/mediator":32,"underscore":5}],37:[function(require,module,exports){
+},{"./base/base_object":"2HNVgz","./components/core_factory":32,"./components/loader":33,"./components/mediator":38,"underscore":7}],43:[function(require,module,exports){
 "use strict";
 var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
@@ -16919,11 +18125,12 @@ var _ = require('underscore');
 var $ = require('jquery');
 var Browser = require('../../components/browser');
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> </object>';
-var FlashVOD = function FlashVOD(options) {
-  $traceurRuntime.superCall(this, $FlashVOD.prototype, "constructor", [options]);
+var Flash = function Flash(options) {
+  $traceurRuntime.superCall(this, $Flash.prototype, "constructor", [options]);
+  console.log("flash plugin");
   this.src = options.src;
   this.isRTMP = !!(this.src.indexOf("rtmp") > -1);
-  this.swfPath = options.swfPath || "assets/Player.swf";
+  this.swfPath = options.swfPath || "http://cdn.clappr.io/latest/assets/Player.swf";
   this.autoPlay = options.autoPlay;
   this.settings = {default: ['seekbar']};
   if (this.isRTMP) {
@@ -16936,16 +18143,16 @@ var FlashVOD = function FlashVOD(options) {
   this.isReady = false;
   this.addListeners();
 };
-var $FlashVOD = FlashVOD;
-($traceurRuntime.createClass)(FlashVOD, {
+var $Flash = Flash;
+($traceurRuntime.createClass)(Flash, {
   get name() {
-    return 'flash_vod';
+    return 'flash';
   },
   get tagName() {
     return 'object';
   },
   get template() {
-    return JST.flash_vod;
+    return JST.flash;
   },
   bootstrap: function() {
     this.el.width = "100%";
@@ -16958,7 +18165,7 @@ var $FlashVOD = FlashVOD;
   },
   setupFirefox: function() {
     var $el = this.$('embed');
-    $el.attr('data-flash-vod', '');
+    $el.attr('data-flash', '');
     this.setElement($el[0]);
   },
   isHighDefinitionInUse: function() {
@@ -16983,7 +18190,7 @@ var $FlashVOD = FlashVOD;
     }));
   },
   stopListening: function() {
-    $traceurRuntime.superCall(this, $FlashVOD.prototype, "stopListening", []);
+    $traceurRuntime.superCall(this, $Flash.prototype, "stopListening", []);
     Mediator.off(this.uniqueId + ':progress');
     Mediator.off(this.uniqueId + ':timeupdate');
     Mediator.off(this.uniqueId + ':statechanged');
@@ -17073,7 +18280,7 @@ var $FlashVOD = FlashVOD;
     return this;
   }
 }, {}, UIObject);
-FlashVOD.canPlay = function(resource) {
+Flash.canPlay = function(resource) {
   if (resource.indexOf('rtmp') > -1) {
     return true;
   } else if (Browser.isFirefox || Browser.isLegacyIE) {
@@ -17082,15 +18289,15 @@ FlashVOD.canPlay = function(resource) {
     return _.isString(resource) && !!resource.match(/(.*).(mov|f4v|3gpp|3gp)/);
   }
 };
-module.exports = FlashVOD;
+module.exports = Flash;
 
 
-},{"../../base/jst":9,"../../base/styler":11,"../../base/ui_object":"8lqCAT","../../components/browser":"195Wj5","../../components/mediator":32,"jquery":3,"underscore":5}],38:[function(require,module,exports){
+},{"../../base/jst":13,"../../base/styler":15,"../../base/ui_object":"8lqCAT","../../components/browser":"195Wj5","../../components/mediator":38,"jquery":3,"underscore":7}],44:[function(require,module,exports){
 "use strict";
-module.exports = require('./flash_vod');
+module.exports = require('./flash');
 
 
-},{"./flash_vod":37}],39:[function(require,module,exports){
+},{"./flash":43}],45:[function(require,module,exports){
 "use strict";
 var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
@@ -17102,7 +18309,7 @@ var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" cla
 var HLS = function HLS(options) {
   $traceurRuntime.superCall(this, $HLS.prototype, "constructor", [options]);
   this.src = options.src;
-  this.swfPath = options.swfPath || "assets/HLSPlayer.swf";
+  this.swfPath = options.swfPath || "http://cdn.clappr.io/latest/assets/HLSPlayer.swf";
   this.highDefinition = false;
   this.autoPlay = options.autoPlay;
   this.defaultSettings = {
@@ -17237,6 +18444,7 @@ var $HLS = HLS;
       if (this.playbackType) {
         this.playbackType = this.playbackType.toLowerCase();
       }
+      this.trigger('playback:playbackstate');
     }
   },
   firstPlay: function() {
@@ -17329,12 +18537,12 @@ HLS.canPlay = function(resource) {
 module.exports = HLS;
 
 
-},{"../../base/jst":9,"../../base/styler":11,"../../base/ui_plugin":"Z7u8cr","../../components/browser":"195Wj5","../../components/mediator":32,"underscore":5}],40:[function(require,module,exports){
+},{"../../base/jst":13,"../../base/styler":15,"../../base/ui_plugin":"Z7u8cr","../../components/browser":"195Wj5","../../components/mediator":38,"underscore":7}],46:[function(require,module,exports){
 "use strict";
 module.exports = require('./hls');
 
 
-},{"./hls":39}],41:[function(require,module,exports){
+},{"./hls":45}],47:[function(require,module,exports){
 "use strict";
 var UIPlugin = require('../../base/ui_plugin');
 var HTML5Audio = function HTML5Audio(params) {
@@ -17352,9 +18560,6 @@ var $HTML5Audio = HTML5Audio;
 ($traceurRuntime.createClass)(HTML5Audio, {
   get name() {
     return 'html5_audio';
-  },
-  get type() {
-    return 'playback';
   },
   get tagName() {
     return 'audio';
@@ -17411,9 +18616,6 @@ var $HTML5Audio = HTML5Audio;
   isPlaying: function() {
     return !this.el.paused && !this.el.ended;
   },
-  isHighDefinitionInUse: function() {
-    return false;
-  },
   timeUpdated: function() {
     this.trigger('playback:timeupdate', this.el.currentTime, this.el.duration, this.name);
   },
@@ -17427,12 +18629,12 @@ HTML5Audio.canPlay = function(resource) {
 module.exports = HTML5Audio;
 
 
-},{"../../base/ui_plugin":"Z7u8cr"}],42:[function(require,module,exports){
+},{"../../base/ui_plugin":"Z7u8cr"}],48:[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_audio');
 
 
-},{"./html5_audio":41}],43:[function(require,module,exports){
+},{"./html5_audio":47}],49:[function(require,module,exports){
 "use strict";
 var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
@@ -17457,9 +18659,6 @@ var $HTML5Video = HTML5Video;
 ($traceurRuntime.createClass)(HTML5Video, {
   get name() {
     return 'html5_video';
-  },
-  get type() {
-    return 'playback';
   },
   get tagName() {
     return 'video';
@@ -17575,17 +18774,17 @@ var $HTML5Video = HTML5Video;
   }
 }, {}, UIPlugin);
 HTML5Video.canPlay = function(resource) {
-  return (!!resource.match(/(.*).mp4/) || Browser.isSafari || Browser.isMobile);
+  return (!!resource.match(/(.*).mp4/) || Browser.isSafari || Browser.isMobile || Browser.isWin8App);
 };
 module.exports = HTML5Video;
 
 
-},{"../../base/styler":11,"../../base/ui_plugin":"Z7u8cr","../../components/browser":"195Wj5"}],44:[function(require,module,exports){
+},{"../../base/styler":15,"../../base/ui_plugin":"Z7u8cr","../../components/browser":"195Wj5"}],50:[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_video');
 
 
-},{"./html5_video":43}],45:[function(require,module,exports){
+},{"./html5_video":49}],51:[function(require,module,exports){
 "use strict";
 var UIObject = require('../../base/ui_object');
 var JST = require('../../base/jst');
@@ -17650,17 +18849,17 @@ var $BackgroundButton = BackgroundButton;
 module.exports = BackgroundButton;
 
 
-},{"../../base/jst":9,"../../base/styler":11,"../../base/ui_object":"8lqCAT"}],46:[function(require,module,exports){
+},{"../../base/jst":13,"../../base/styler":15,"../../base/ui_object":"8lqCAT"}],52:[function(require,module,exports){
 "use strict";
 module.exports = require('./background_button');
 
 
-},{"./background_button":45}],47:[function(require,module,exports){
+},{"./background_button":51}],53:[function(require,module,exports){
 "use strict";
 module.exports = require('./log');
 
 
-},{"./log":48}],48:[function(require,module,exports){
+},{"./log":54}],54:[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var BOLD = 'font-weight: bold; font-size: 13px;';
@@ -17697,12 +18896,12 @@ Log.prototype = {
 module.exports = Log;
 
 
-},{"jquery":3}],49:[function(require,module,exports){
+},{"jquery":3}],55:[function(require,module,exports){
 "use strict";
 module.exports = require('./poster');
 
 
-},{"./poster":50}],50:[function(require,module,exports){
+},{"./poster":56}],56:[function(require,module,exports){
 "use strict";
 var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
@@ -17791,12 +18990,12 @@ var $PosterPlugin = PosterPlugin;
 module.exports = PosterPlugin;
 
 
-},{"../../base/jst":9,"../../base/styler":11,"../../base/ui_plugin":"Z7u8cr","jquery":3,"underscore":5}],51:[function(require,module,exports){
+},{"../../base/jst":13,"../../base/styler":15,"../../base/ui_plugin":"Z7u8cr","jquery":3,"underscore":7}],57:[function(require,module,exports){
 "use strict";
 module.exports = require('./seek_time');
 
 
-},{"./seek_time":52}],52:[function(require,module,exports){
+},{"./seek_time":58}],58:[function(require,module,exports){
 "use strict";
 var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
@@ -17850,12 +19049,12 @@ var $SeekTime = SeekTime;
 module.exports = SeekTime;
 
 
-},{"../../base/jst":9,"../../base/styler":11,"../../base/ui_object":"8lqCAT","../../base/utils":16,"jquery":3}],53:[function(require,module,exports){
+},{"../../base/jst":13,"../../base/styler":15,"../../base/ui_object":"8lqCAT","../../base/utils":22,"jquery":3}],59:[function(require,module,exports){
 "use strict";
 module.exports = require('./spinner_three_bounce');
 
 
-},{"./spinner_three_bounce":54}],54:[function(require,module,exports){
+},{"./spinner_three_bounce":60}],60:[function(require,module,exports){
 "use strict";
 var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
@@ -17900,12 +19099,12 @@ var $SpinnerThreeBouncePlugin = SpinnerThreeBouncePlugin;
 module.exports = SpinnerThreeBouncePlugin;
 
 
-},{"../../base/jst":9,"../../base/styler":11,"../../base/ui_plugin":"Z7u8cr"}],55:[function(require,module,exports){
+},{"../../base/jst":13,"../../base/styler":15,"../../base/ui_plugin":"Z7u8cr"}],61:[function(require,module,exports){
 "use strict";
 module.exports = require('./stats');
 
 
-},{"./stats":56}],56:[function(require,module,exports){
+},{"./stats":62}],62:[function(require,module,exports){
 "use strict";
 var BaseObject = require('../../base/base_object');
 var $ = require("jquery");
@@ -17919,9 +19118,6 @@ var StatsPlugin = function StatsPlugin(options) {
 var $StatsPlugin = StatsPlugin;
 ($traceurRuntime.createClass)(StatsPlugin, {
   get name() {
-    return 'stats';
-  },
-  get type() {
     return 'stats';
   },
   bindEvents: function() {
@@ -18005,12 +19201,12 @@ var $StatsPlugin = StatsPlugin;
 module.exports = StatsPlugin;
 
 
-},{"../../base/base_object":"2HNVgz","jquery":3}],57:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","jquery":3}],63:[function(require,module,exports){
 "use strict";
 module.exports = require('./watermark');
 
 
-},{"./watermark":58}],58:[function(require,module,exports){
+},{"./watermark":64}],64:[function(require,module,exports){
 "use strict";
 var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
@@ -18030,9 +19226,6 @@ var $WaterMarkPlugin = WaterMarkPlugin;
 ($traceurRuntime.createClass)(WaterMarkPlugin, {
   get name() {
     return 'watermark';
-  },
-  get type() {
-    return 'ui';
   },
   bindEvents: function() {
     this.listenTo(this.container, 'container:play', this.onPlay);
@@ -18061,4 +19254,4 @@ var $WaterMarkPlugin = WaterMarkPlugin;
 module.exports = WaterMarkPlugin;
 
 
-},{"../../base/jst":9,"../../base/styler":11,"../../base/ui_plugin":"Z7u8cr"}]},{},[2,36])
+},{"../../base/jst":13,"../../base/styler":15,"../../base/ui_plugin":"Z7u8cr"}]},{},[2,42])
