@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var UIPlugin = require('../../base/ui_plugin')
+var Playback = require('../../base/playback')
 var Styler = require('../../base/styler')
 var Browser = require('../../components/browser')
 
-class HTML5Video extends UIPlugin {
+class HTML5Video extends Playback {
   get name() { return 'html5_video' }
   get tagName() { return 'video' }
 
@@ -42,7 +42,7 @@ class HTML5Video extends UIPlugin {
       this.settings.right = ["fullscreen"]
     } else {
       this.settings.left = ["playpause", "position", "duration"]
-      this.settings.right = ["volume", "fullscreen"]
+      this.settings.right = ["fullscreen", "volume"]
     }
   }
 
