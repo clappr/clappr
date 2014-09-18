@@ -11,6 +11,7 @@ var HTML5VideoPlayback = require('../../playbacks/html5_video');
 var FlashVideoPlayback = require('../../playbacks/flash');
 var HTML5AudioPlayback = require('../../playbacks/html5_audio');
 var HLSVideoPlayback = require('../../playbacks/hls');
+var NoOp = require('../../playbacks/no_op');
 
 /* Container Plugins */
 var SpinnerThreeBouncePlugin = require('../../plugins/spinner_three_bounce');
@@ -26,7 +27,7 @@ class Loader extends BaseObject {
   constructor(externalPlugins) {
     super()
     this.playerInfo = PlayerInfo.getInstance()
-    this.playbackPlugins = [FlashVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, HLSVideoPlayback]
+    this.playbackPlugins = [FlashVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, HLSVideoPlayback, NoOp]
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin]
     this.globalPlugins = [BackgroundButton, SeekTime]
     if (externalPlugins) {
