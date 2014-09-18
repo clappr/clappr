@@ -8,3 +8,5 @@ class CorePlugin extends BaseObject {
 
   getExternalInterface() { return {} }
 }
+
+module.exports = CorePlugin
