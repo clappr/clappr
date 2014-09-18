@@ -15,6 +15,7 @@ module.exports.browserify = function() {
     .require('./src/base/base_object', { expose: 'base_object' })
     .require('./src/base/ui_object', { expose: 'ui_object' })
     .require('./src/base/core_plugin', { expose: 'core_plugin' })
+    .require('./src/base/playback', { expose: 'playback' })
     .require('./src/base/ui_core_plugin', { expose: 'ui_core_plugin' })
     .require('./src/components/browser', { expose: 'browser' })
     .require('./src/components/media_control', { expose: 'media_control' })
