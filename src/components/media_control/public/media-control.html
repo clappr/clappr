@@ -39,6 +39,11 @@
         }
       });
     }; %>
+  <% if (settings.default && settings.default.length) { %>
+  <div class="media-control-center-panel" data-media-control>
+    <% render(settings.default); %>
+  </div>
+  <% } %>
   <% if (settings.left && settings.left.length) { %>
   <div class="media-control-left-panel" data-media-control>
     <% render(settings.left); %>
@@ -47,11 +52,6 @@
   <% if (settings.right && settings.right.length) { %>
   <div class="media-control-right-panel" data-media-control>
     <% render(settings.right); %>
-  </div>
-  <% } %>
-  <% if (settings.default && settings.default.length) { %>
-  <div class="media-control-center-panel" data-media-control>
-    <% render(settings.default); %>
   </div>
   <% } %>
 </div>
