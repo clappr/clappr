@@ -10,7 +10,9 @@ var files = {
 
 gulp.task('sass', function () {
     return gulp.src(files.scss)
-        .pipe(sass())
+        .pipe(sass({
+          includePaths: ['node_modules/compass-mixins/lib', 'src/base/scss']
+        }))
         .pipe(minifyCSS())
         .pipe(gulp.dest("build"));
 });

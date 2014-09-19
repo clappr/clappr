@@ -1,5 +1,5 @@
-@import '../../../base/scss/animation';
-@import '../../../base/scss/transform';
+@import 'compass/css3/animation';
+@import 'compass/css3/transform';
 
 .spinner-three-bounce[data-spinner] {
   position: absolute;
@@ -25,13 +25,11 @@
   }
 
   [data-bounce1] {
-    -webkit-animation-delay: -0.32s;
-    animation-delay: -0.32s;
+    @include animation-delay(-0.32s);
   }
 
   [data-bounce2] {
-    -webkit-animation-delay: -0.16s;
-    animation-delay: -0.16s;
+    @include animation-delay(-0.32s);
   }
 }
 

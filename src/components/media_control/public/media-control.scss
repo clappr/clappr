@@ -1,4 +1,5 @@
-@import '../../../base/scss/transition';
+@import 'compass/css3';
+@import 'fontsmoothing';
 
 @font-face {
   font-family: "Player";
@@ -27,10 +28,7 @@
     height: 150px;
     width: 100%;
     bottom: 0;
-    background-image: -webkit-gradient(
-      linear, left top, left bottom, from(rgba(0,0,0,0.0)),
-      to(rgba(0,0,0,0.9))
-    );
+    @include background-image(linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.9)));
     @include transition(all, 0.6s, ease-out);
   }
 
@@ -46,9 +44,8 @@
     vertical-align: middle;
     text-align: left;
     padding: 0 6px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     color: rgba(255, 255, 255, 0.3);
+    @include font-smoothing(antialiased);
   }
 
   .media-control-icon:hover {

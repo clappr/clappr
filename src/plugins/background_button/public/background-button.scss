@@ -1,4 +1,5 @@
-@import '../../../base/scss/transition';
+@import 'compass/css3/transition';
+@import 'fontsmoothing';
 
 .background-button[data-background-button] {
   font-family: "Player";
@@ -32,10 +33,9 @@
       letter-spacing: 0;
       speak: none;
       font-size: 90px;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
       color: white;
       opacity: 0.75;
+      @include font-smoothing(antialiased);
 
       &:hover {
         text-shadow: rgba(255,255,255,0.5) 0 0 15px;
@@ -51,4 +51,3 @@
     }
   }
 }
-

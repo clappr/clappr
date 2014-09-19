@@ -1,7 +1,8 @@
-@import '../../../base/scss/reset';
-@import '../../../base/scss/noselect';
-@import '../../../base/scss/fontsmoothing';
-@import '../../../base/scss/transform';
+@import 'compass/reset';
+@import 'compass/css3/transform';
+@import 'noselect';
+@import 'fontsmoothing';
+
 
 [data-player] * {
   @include nested-reset;
