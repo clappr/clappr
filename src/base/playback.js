@@ -12,6 +12,8 @@ class Playback extends UIObject {
 
   stop() {}
 
+  seek(time) {}
+
   getDuration() { return 0 }
 
   isPlaying() {
