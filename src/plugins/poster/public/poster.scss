@@ -1,3 +1,5 @@
+@import 'fontsmoothing';
+
 @font-face {
   font-family: "Player";
   src: url("http://cdn.clappr.io/latest/assets/Player-Regular.eot");
@@ -36,10 +38,9 @@
       line-height: 1;
       letter-spacing: 0;
       speak: none;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
       color: white;
       opacity: 0.75;
+      @include font-smoothing(antialiased);
 
       &.play[data-poster]:before{
         content:"\\e001";
