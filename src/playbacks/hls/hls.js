@@ -40,7 +40,7 @@ class HLS extends UIPlugin {
 
   addListeners() {
     Mediator.on(this.uniqueId + ':flashready', () => this.bootstrap())
-    Mediator.on(this.uniqueId + ':timeupdate', (params) => this.updateTime(params))
+    Mediator.on(this.uniqueId + ':timeupdate', () => this.updateTime())
     Mediator.on(this.uniqueId + ':playbackstate', (state) => this.setPlaybackState(state))
     Mediator.on(this.uniqueId + ':playbackerror', () => this.flashPlaybackError())
   }
@@ -68,7 +68,7 @@ class HLS extends UIPlugin {
     this.trigger('playback:highdefinitionupdate')
   }
 
-  updateTime(params) {
+  updateTime() {
     var duration = this.getDuration()
     var position = this.el.globoGetPosition()
     if (this.playbackType === 'live' && position >= duration) {
