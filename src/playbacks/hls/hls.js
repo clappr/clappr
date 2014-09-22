@@ -31,7 +31,8 @@ class HLS extends UIPlugin {
     this.defaultSettings = {
       left: ["playstop", "volume"],
       default: ['seekbar'],
-      right: ["fullscreen", "hd-indicator"]
+      right: ["fullscreen", "hd-indicator"],
+      seekEnabled: true
     }
     this.settings = _.extend({}, this.defaultSettings)
     this.addListeners()
@@ -225,6 +226,8 @@ class HLS extends UIPlugin {
     if (this.playbackType === "vod" || this.dvrEnabled) {
       this.settings.left = ["playpause", "position", "duration"]
       this.settings.default = ["seekbar"]
+    } else {
+      this.settings.seekEnabled = false
     }
     this.trigger('playback:settingsupdate', this.name)
   }
