@@ -155,6 +155,7 @@ class MediaControl extends UIObject {
   }
 
   startSeekDrag(event) {
+    if (!this.container.settings.seekEnabled) return
     this.draggingSeekBar = true
     if (event) {
       event.preventDefault()
@@ -267,6 +268,7 @@ class MediaControl extends UIObject {
   }
 
   seek(event) {
+    if (!this.container.settings.seekEnabled) return
     var offsetX = event.pageX - this.$seekBarContainer.offset().left
     var pos = offsetX / this.$seekBarContainer.width() * 100
     pos = Math.min(100, Math.max(pos, 0))
