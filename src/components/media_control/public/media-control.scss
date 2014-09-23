@@ -9,6 +9,9 @@
        url("http://cdn.clappr.io/latest/assets/Player-Regular.svg#player") format("svg");
 }
 
+.media-control-notransition {
+  @include transition(none !important);
+}
 
 .media-control[data-media-control] {
   position: absolute;
