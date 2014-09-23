@@ -42,6 +42,7 @@ class HLS extends UIPlugin {
     Mediator.on(this.uniqueId + ':flashready', () => this.bootstrap())
     Mediator.on(this.uniqueId + ':timeupdate', () => this.updateTime())
     Mediator.on(this.uniqueId + ':playbackstate', (state) => this.setPlaybackState(state))
+    Mediator.on(this.uniqueId + ':highdefinition', (isHD) => this.updateHighDefinition(isHD))
     Mediator.on(this.uniqueId + ':playbackerror', () => this.flashPlaybackError())
   }
 
