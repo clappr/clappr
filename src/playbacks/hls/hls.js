@@ -81,8 +81,12 @@ class HLS extends UIPlugin {
     this.dvrEnabled = (this.playbackType === 'live' && duration > 240)
     if (this.dvrEnabled !== previousDVRStatus) {
       this.updateSettings()
-    } else {
-      this.trigger('playback:timeupdate', this.el.globoGetPosition(), duration, this.name)
+    }
+
+    var previousDvrInUse = !!this.dvrInUse
+    this.dvrInUse = this.dvrEnabled && (duration - position >= 2)
+    if (this.dvrInUse !== previousDvrInUse) {
+      this.trigger('playback:dvr', this.dvrInUse)
     }
   }
 
@@ -163,6 +167,9 @@ class HLS extends UIPlugin {
 
   pause() {
     this.el.globoPlayerPause()
+    if (this.playbackType === 'live' && this.dvrEnabled) {
+      this.trigger('playback:dvr', true);
+    }
   }
 
   stop() {
