@@ -87,7 +87,7 @@ class HLS extends UIPlugin {
   }
 
   play() {
-    if(this.el.currentState === 'PAUSED') {
+    if(this.currentState === 'PAUSED') {
       this.el.globoPlayerResume()
     } else {
       this.firstPlay()
