@@ -187,16 +187,15 @@ class HLS extends UIPlugin {
   }
 
   seek(time) {
-    if (time < 0) {
-      this.el.globoPlayerSeek(time)
-    } else {
-      var duration = this.getDuration()
+    var duration = this.getDuration()
+    if (time > 0) {
       time = duration * time / 100
-      // seek operations to a time within 2 seconds from live stream will position playhead back to live
-      if (this.playbackType === 'live' && duration - time < 2)
-        time = -1
-      this.el.globoPlayerSeek(time)
     }
+    // seek operations to a time within 2 seconds from live stream will position playhead back to live
+    if (this.playbackType === 'live' && duration - time < 2) {
+      time = -1
+    }
+    this.el.globoPlayerSeek(time)
   }
 
   flashPlaybackError() {
