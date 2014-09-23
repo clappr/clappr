@@ -35,6 +35,7 @@ class Container extends UIObject {
     this.listenTo(this.playback, 'playback:loadedmetadata', this.loadedMetadata);
     this.listenTo(this.playback, 'playback:highdefinitionupdate', this.highDefinitionUpdate);
     this.listenTo(this.playback, 'playback:playbackstate', this.playbackStateChanged);
+    this.listenTo(this.playback, 'playback:dvr', this.playbackDvrStateChanged);
     this.listenTo(this.playback, 'playback:mediacontrol:disable', this.disableMediaControl);
     this.listenTo(this.playback, 'playback:mediacontrol:enable', this.enableMediaControl);
     this.listenTo(this.playback, 'playback:ended', this.ended);
@@ -50,6 +51,10 @@ class Container extends UIObject {
     this.trigger('container:playbackstate');
   }
 
+  playbackDvrStateChanged(dvrInUse) {
+    this.trigger('container:dvr', dvrInUse);
+  }
+
   statsAdd(metric) {
     this.trigger('container:stats:add', metric)
   }
@@ -57,7 +62,6 @@ class Container extends UIObject {
   statsReport(metrics) {
     this.trigger('container:stats:report', metrics)
   }
-
 
   getPlaybackType() {
     return this.playback.getPlaybackType()
