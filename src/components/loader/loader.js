@@ -29,7 +29,7 @@ class Loader extends BaseObject {
     this.playerInfo = PlayerInfo.getInstance()
     this.playbackPlugins = [FlashVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, HLSVideoPlayback, NoOp]
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin]
-    this.globalPlugins = [BackgroundButton, SeekTime]
+    this.corePlugins = [BackgroundButton, SeekTime]
     if (externalPlugins) {
       this.addExternalPlugins(externalPlugins)
     }
@@ -38,12 +38,12 @@ class Loader extends BaseObject {
   addExternalPlugins(plugins) {
     if (plugins.playback) { this.playbackPlugins = plugins.playback.concat(this.playbackPlugins) }
     if (plugins.container) { this.containerPlugins = plugins.container.concat(this.containerPlugins) }
-    if (plugins.core) { this.globalPlugins = plugins.core.concat(this.globalPlugins) }
+    if (plugins.core) { this.corePlugins = plugins.core.concat(this.corePlugins) }
     this.playerInfo.playbackPlugins = this.playbackPlugins
   }
 
   getPlugin(name) {
-    var allPlugins = _.union(this.containerPlugins, this.playbackPlugins, this.globalPlugins)
+    var allPlugins = _.union(this.containerPlugins, this.playbackPlugins, this.corePlugins)
     return _.find(allPlugins, function(plugin) { return plugin.prototype.name === name })
   }
 }
