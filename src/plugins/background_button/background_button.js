@@ -4,6 +4,7 @@ var Styler = require('../../base/styler');
 
 class BackgroundButton extends UIObject {
   get template() { return JST.background_button; }
+  get name() { return 'background_button' }
   get events() {
     return {
       'click .playpause-icon': 'click'
@@ -17,7 +18,6 @@ class BackgroundButton extends UIObject {
   }
   constructor(core) {
     super(core);
-    this.name = "background_button";
     this.core = core;
     this.listenTo(this.core.mediaControl.container, 'container:state:buffering', this.hide);
     this.listenTo(this.core.mediaControl.container, 'container:state:bufferfull', this.show);

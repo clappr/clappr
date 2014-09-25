@@ -5,6 +5,7 @@ var formatTime = require('../../base/utils').formatTime;
 var $ = require('jquery');
 
 class SeekTime extends UIObject {
+  get name() { return 'seek_time' }
   get template() {
     return JST.seek_time;
   }
@@ -16,7 +17,6 @@ class SeekTime extends UIObject {
   }
   constructor(core) {
     super(core);
-    this.name = 'seek_time';
     this.core = core;
     this.mediaControl = this.core.mediaControl;
     var type = this.mediaControl.container.getPlaybackType();
