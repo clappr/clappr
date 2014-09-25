@@ -124,7 +124,6 @@ class Core extends UIObject {
   }
 
   removeContainer(container) {
-    console.log('container being removed')
     this.stopListening(container)
     this.containers = _.without(this.containers, container)
   }
