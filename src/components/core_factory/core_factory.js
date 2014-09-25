@@ -25,7 +25,7 @@ class CoreFactory extends BaseObject {
   }
 
   addCorePlugins() {
-    _.each(this.loader.globalPlugins, function(Plugin) {
+    _.each(this.loader.corePlugins, function(Plugin) {
       var plugin = new Plugin(this.core)
       this.core.addPlugin(plugin)
       this.setupExternalInterface(plugin)
