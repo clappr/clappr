@@ -1,34 +1,28 @@
-@import 'compass/reset';
+@import 'compass/reset/utilities';
 @import 'compass/css3/transform';
 @import 'noselect';
 @import 'fontsmoothing';
 
 
-[data-player] * {
+[data-player] {
   @include nested-reset;
   @include no-select;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-style: normal;
-  font-weight: normal;
-  text-align: center;
-  font-size: 100%;
-  color: #000;
-  font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
-  text-shadow: 0 0 0;
-  box-sizing: border-box;
-}
-
-[data-player] {
   @include font-smoothing;
   @include transform(translate3d(0,0,0));
   position: relative;
   margin: 0;
+  padding: 0;
+  border: 0;
   height: 594px;
   width: 1055px;
+  font-style: normal;
+  font-weight: normal;
   text-align: center;
-  overflow: hidden;
+  overflow: hidden;font-size: 100%;
+  color: #000;
+  font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+  text-shadow: 0 0 0;
+  box-sizing: border-box;
 
   &.fullscreen {
     width: 100%;
