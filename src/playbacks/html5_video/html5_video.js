@@ -3,12 +3,14 @@
 // license that can be found in the LICENSE file.
 
 var Playback = require('../../base/playback')
+var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
 var Browser = require('../../components/browser')
 
 class HTML5Video extends Playback {
   get name() { return 'html5_video' }
   get tagName() { return 'video' }
+  get template() { return JST.html5_video }
 
   get attributes() {
     return {
@@ -154,8 +156,13 @@ class HTML5Video extends Playback {
     this.trigger('playback:progress', this.el.buffered.start(bufferedPos), this.el.buffered.end(bufferedPos), this.el.duration, this.name)
   }
 
+  typeFor(src) {
+    return (src.indexOf('.m3u8') > 0) ? 'application/vnd.apple.mpegurl' : 'video/mp4'
+  }
+
   render() {
     var style = Styler.getStyleFor(this.name)
+    this.$el.html(this.template({ src: this.src, type: this.typeFor(this.src) }))
     this.$el.append(style)
     this.trigger('playback:ready', this.name)
     this.options.autoPlay && this.play()
