@@ -67,7 +67,7 @@ var formatTime = function(time, options) {
 
 var Fullscreen = {
   isFullscreen: function() {
-    return document.webkitIsFullScreen || document.mozFullScreen;
+    return document.webkitIsFullScreen || document.mozFullScreen || !!document.msFullscreenElement;
   },
   requestFullscreen: function(el) {
     if(el.requestFullscreen) {
