@@ -290,7 +290,7 @@ class MediaControl extends UIObject {
   }
 
   show(event) {
-    if (this.disabled) return
+    if (this.disabled || !this.$el.hasClass('media-control-hide')) return
     var timeout = 2000
     if (!event || (event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY) || navigator.userAgent.match(/firefox/i)) {
       if (this.hideId) {
@@ -312,6 +312,7 @@ class MediaControl extends UIObject {
     if (this.hideId) {
       clearTimeout(this.hideId)
     }
+    if (this.$el.hasClass('media-control-hide')) return
     if (this.keepVisible || this.draggingVolumeBar || this.draggingSeekBar) {
       this.hideId = setTimeout(() => this.hide(), timeout)
     } else {
