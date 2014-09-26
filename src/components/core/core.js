@@ -42,6 +42,8 @@ class Core extends UIObject {
     this.createContainers(options)
     this.updateSize()
     //FIXME fullscreen api sucks
+    document.addEventListener('fullscreenchange', () => this.exit())
+    document.addEventListener('MSFullscreenChange', () => this.exit())
     document.addEventListener('mozfullscreenchange', () => this.exit())
     $(window).resize(() => this.updateSize())
   }
