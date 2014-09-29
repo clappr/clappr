@@ -31,7 +31,6 @@ class Flash extends UIObject {
       this.settings.left = ["playpause", "position", "duration"]
       this.settings.right = ["volume", "fullscreen"]
     }
-
     this.isReady = false
     this.addListeners()
   }
@@ -45,6 +44,10 @@ class Flash extends UIObject {
     this.currentState = "IDLE"
     this.autoPlay && this.play()
     $('<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%" />').insertAfter(this.$el)
+  }
+
+  getPlaybackType() {
+    return this.isRTMP? 'live':'vod'
   }
 
   setupFirefox() {

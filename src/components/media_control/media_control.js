@@ -228,8 +228,10 @@ class MediaControl extends UIObject {
     this.addEventListeners()
     this.settingsUpdate()
     this.container.setVolume(this.currentVolume)
-    if (this.container.mediaControlDisabled)
+    if (this.container.mediaControlDisabled) {
       this.disable()
+    }
+    this.trigger("mediacontrol:containerchanged")
   }
 
   showVolumeBar() {

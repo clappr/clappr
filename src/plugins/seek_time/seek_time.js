@@ -16,14 +16,33 @@ class SeekTime extends UIObject {
     };
   }
   constructor(core) {
-    super(core);
-    this.core = core;
-    this.mediaControl = this.core.mediaControl;
-    var type = this.mediaControl.container.getPlaybackType();
-    if(type && type !== 'live') {
-      this.listenTo(this.mediaControl, 'mediacontrol:mousemove:seekbar', this.showTime);
-      this.listenTo(this.mediaControl, 'mediacontrol:mouseleave:seekbar', this.hideTime);
-      this.render();
+    super(core)
+    this.core = core
+    this.mediaControl = this.core.mediaControl
+    this.listenTo(this.mediaControl.container, 'container:playbackstate', this.setPlaybackType)
+    this.listenTo(this.mediaControl, 'mediacontrol:containerchanged', this.onContainerChanged)
+    this.setPlaybackType()
+    this.render()
+  }
+
+  onContainerChanged() {
+    this.listenTo(this.mediaControl.container, 'container:playbackstate', this.setPlaybackType)
+    this.setPlaybackType()
+  }
+
+  addEventListeners() {
+    this.listenTo(this.mediaControl, 'mediacontrol:mousemove:seekbar', this.showTime)
+    this.listenTo(this.mediaControl, 'mediacontrol:mouseleave:seekbar', this.hideTime)
+  }
+
+  setPlaybackType() {
+    var type = this.mediaControl.container.getPlaybackType()
+    if (type === 'vod') {
+      this.addEventListeners()
+    } else {
+      this.stopListening(this.mediaControl, 'mediacontrol:mousemove:seekbar')
+      this.stopListening(this.mediaControl, 'mediacontrol:mouseleave:seekbar')
+      this.hideTime()
     }
   }
 

@@ -151,13 +151,11 @@ class HLS extends UIPlugin {
   }
 
   updatePlaybackType() {
-    if (!this.playbackType) {
-      this.playbackType = this.el.globoGetType()
-      if (this.playbackType) {
-        this.playbackType = this.playbackType.toLowerCase()
-      }
-      this.trigger('playback:playbackstate');
+    this.playbackType = this.el.globoGetType()
+    if (this.playbackType) {
+      this.playbackType = this.playbackType.toLowerCase()
     }
+    this.trigger('playback:playbackstate');
   }
 
   firstPlay() {
