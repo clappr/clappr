@@ -43,11 +43,14 @@ class StatsPlugin extends BaseObject {
   onPlay() {
     this.state = "PLAYING"
     this.watchingTimeInit = Date.now()
-    this.intervalId = setInterval(this.report.bind(this), this.reportInterval)
+    if (!this.intervalId) {
+      this.intervalId = setInterval(this.report.bind(this), this.reportInterval)
+    }
   }
 
   onStop() {
     clearInterval(this.intervalId)
+    this.intervalId = undefined
     this.state = "STOPPED"
   }
 
