@@ -49,8 +49,8 @@ class SeekTime extends UIObject {
     var offsetX = event.pageX - $(event.target).offset().left
     var pos = offsetX / $(event.target).width() * 100
     pos = Math.min(100, Math.max(pos, 0))
-    var currentTime = pos * this.mediaControl.container.getDuration() / 100;
-    this.time = formatTime(currentTime);
+    this.currentTime = pos * this.mediaControl.container.getDuration() / 100;
+    this.time = formatTime(this.currentTime);
     this.$el.css('left', event.pageX - Math.floor((this.$el.width() / 2) + 6));
     this.$el.removeClass('hidden');
     this.render();
