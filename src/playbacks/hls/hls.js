@@ -72,13 +72,13 @@ class HLS extends UIPlugin {
   updateTime() {
     var duration = this.getDuration()
     var position = this.el.globoGetPosition()
-    if (this.playbackType === 'live' && position >= duration) {
+    var livePlayback = this.playbackType === 'live'
+    if (livePlayback && (position >= duration || position < 0)) {
       position = duration
     }
-    this.trigger('playback:timeupdate', position, duration, this.name)
 
     var previousDVRStatus = this.dvrEnabled
-    this.dvrEnabled = (this.playbackType === 'live' && duration > 240)
+    this.dvrEnabled = (livePlayback && duration > 240)
     if (this.dvrEnabled !== previousDVRStatus) {
       this.updateSettings()
     }
@@ -88,6 +88,12 @@ class HLS extends UIPlugin {
     if (this.dvrInUse !== previousDvrInUse) {
       this.trigger('playback:dvr', this.dvrInUse)
     }
+
+    if (livePlayback && (!this.dvrEnabled || !this.dvrInUse)) {
+      position = duration
+    }
+
+    this.trigger('playback:timeupdate', position, duration, this.name)
   }
 
   play() {
