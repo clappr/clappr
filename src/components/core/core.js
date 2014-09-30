@@ -16,6 +16,7 @@ var Fullscreen = require('../../base/utils').Fullscreen
 var Styler = require('../../base/styler')
 var MediaControl = require('../media_control')
 var PlayerInfo = require('../player_info')
+var Mediator = require('../mediator')
 
 class Core extends UIObject {
   get events() {
@@ -62,8 +63,9 @@ class Core extends UIObject {
    if (Fullscreen.isFullscreen()) {
       this.$el.addClass('fullscreen')
       this.$el.removeAttr('style')
+      this.playerInfo.currentSize = { width: window.innerWidth, height: window.innerHeight }
     } else {
-      var needStretch = this.options.stretchWidth && this.options.stretchHeight
+      var needStretch = !!this.options.stretchWidth && !!this.options.stretchHeight
       var width, height
       if (needStretch && this.options.stretchWidth <= window.innerWidth && this.options.stretchHeight <= (window.innerHeight * 0.73)) {
         width = this.options.stretchWidth
@@ -75,7 +77,9 @@ class Core extends UIObject {
       this.$el.css({ width: width })
       this.$el.css({ height: height })
       this.$el.removeClass('fullscreen')
+      this.playerInfo.currentSize = { width: width, height: height }
     }
+    Mediator.trigger('player:resize')
   }
 
   resolveOnContainersReady(containers) {
