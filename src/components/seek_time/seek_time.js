@@ -53,7 +53,7 @@ class SeekTime extends UIObject {
     this.time = formatTime(this.currentTime);
     this.$el.css('left', event.pageX - Math.floor((this.$el.width() / 2) + 6));
     this.$el.removeClass('hidden');
-    this.render();
+    this.render(event);
   }
 
   hideTime() {
@@ -62,7 +62,7 @@ class SeekTime extends UIObject {
 
   getExternalInterface() {}
 
-  render() {
+  render(event) {
     var style = Styler.getStyleFor(this.name);
     this.$el.html(this.template({time: this.time}));
     this.$el.append(style);
