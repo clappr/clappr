@@ -61,7 +61,7 @@ class HLS extends UIPlugin {
     this.trigger('playback:ready', this.name)
     this.currentState = "IDLE"
     this.el.globoPlayerSetflushLiveURLCache(true)
-    if (this._tmpVolume) {
+    if (this._tmpVolume !== undefined) {
       this.volume(this._tmpVolume)
       delete this._tmpVolume
     }
