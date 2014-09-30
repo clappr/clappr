@@ -218,7 +218,6 @@
         position: relative;
         top: 12px;
         background-color: #666666;
-        overflow: hidden;
 
         .bar-fill-1[data-seekbar] {
           position: absolute;
@@ -239,20 +238,22 @@
           background-color: #005aff;
           @include transition(all, 0.1s, ease-out);
         }
-      }
 
-      .bar-hover[data-seekbar] {
-        display: none;
-        position: absolute;
-        top: 9px;
-        width: 5px;
-        height: 7px;
-        background-color: rgba(255,255,255,0.5);
+        .bar-hover[data-seekbar] {
+          display: none;
+          position: absolute;
+          top: -3px;
+          width: 5px;
+          height: 7px;
+          background-color: rgba(255,255,255,0.5);
+        }
       }
 
       &:hover {
-        .bar-hover[data-seekbar] {
-          display: block;
+        .bar-background[data-seekbar] {
+          .bar-hover[data-seekbar] {
+            display: block;
+          }
         }
       }
 
