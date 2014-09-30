@@ -1855,7 +1855,7 @@ System.get("traceur-runtime@0.0.42/src/runtime/polyfill-import" + '');
 }).call(this,require("FWaASH"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"FWaASH":1}],3:[function(require,module,exports){
 /*!
- * jQuery JavaScript Library v2.1.0
+ * jQuery JavaScript Library v2.1.1
  * http://jquery.com/
  *
  * Includes Sizzle.js
@@ -1865,7 +1865,7 @@ System.get("traceur-runtime@0.0.42/src/runtime/polyfill-import" + '');
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2014-01-23T21:10Z
+ * Date: 2014-05-01T17:11Z
  */
 
 (function( global, factory ) {
@@ -1915,8 +1915,6 @@ var toString = class2type.toString;
 
 var hasOwn = class2type.hasOwnProperty;
 
-var trim = "".trim;
-
 var support = {};
 
 
@@ -1925,7 +1923,7 @@ var
 	// Use the correct document accordingly with window argument (sandbox)
 	document = window.document,
 
-	version = "2.1.0",
+	version = "2.1.1",
 
 	// Define a local copy of jQuery
 	jQuery = function( selector, context ) {
@@ -1933,6 +1931,10 @@ var
 		// Need init if jQuery is called (just allow error to be thrown if not included)
 		return new jQuery.fn.init( selector, context );
 	},
+
+	// Support: Android<4.1
+	// Make sure we trim BOM and NBSP
+	rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,
 
 	// Matches dashed string for camelizing
 	rmsPrefix = /^-ms-/,
@@ -1964,10 +1966,10 @@ jQuery.fn = jQuery.prototype = {
 	get: function( num ) {
 		return num != null ?
 
-			// Return a 'clean' array
+			// Return just the one element from the set
 			( num < 0 ? this[ num + this.length ] : this[ num ] ) :
 
-			// Return just the object
+			// Return all the elements in a clean array
 			slice.call( this );
 	},
 
@@ -2123,7 +2125,7 @@ jQuery.extend({
 		// parseFloat NaNs numeric-cast false positives (null|true|false|"")
 		// ...but misinterprets leading-number strings, particularly hex literals ("0x...")
 		// subtraction forces infinities to NaN
-		return obj - parseFloat( obj ) >= 0;
+		return !jQuery.isArray( obj ) && obj - parseFloat( obj ) >= 0;
 	},
 
 	isPlainObject: function( obj ) {
@@ -2135,16 +2137,8 @@ jQuery.extend({
 			return false;
 		}
 
-		// Support: Firefox <20
-		// The try/catch suppresses exceptions thrown when attempting to access
-		// the "constructor" property of certain host objects, ie. |window.location|
-		// https://bugzilla.mozilla.org/show_bug.cgi?id=814622
-		try {
-			if ( obj.constructor &&
-					!hasOwn.call( obj.constructor.prototype, "isPrototypeOf" ) ) {
-				return false;
-			}
-		} catch ( e ) {
+		if ( obj.constructor &&
+				!hasOwn.call( obj.constructor.prototype, "isPrototypeOf" ) ) {
 			return false;
 		}
 
@@ -2254,8 +2248,11 @@ jQuery.extend({
 		return obj;
 	},
 
+	// Support: Android<4.1
 	trim: function( text ) {
-		return text == null ? "" : trim.call( text );
+		return text == null ?
+			"" :
+			( text + "" ).replace( rtrim, "" );
 	},
 
 	// results is for internal usage only
@@ -2407,14 +2404,14 @@ function isArraylike( obj ) {
 }
 var Sizzle =
 /*!
- * Sizzle CSS Selector Engine v1.10.16
+ * Sizzle CSS Selector Engine v1.10.19
  * http://sizzlejs.com/
  *
  * Copyright 2013 jQuery Foundation, Inc. and other contributors
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2014-01-13
+ * Date: 2014-04-18
  */
 (function( window ) {
 
@@ -2423,7 +2420,9 @@ var i,
 	Expr,
 	getText,
 	isXML,
+	tokenize,
 	compile,
+	select,
 	outermostContext,
 	sortInput,
 	hasDuplicate,
@@ -2490,17 +2489,23 @@ var i,
 	// Proper syntax: http://www.w3.org/TR/CSS21/syndata.html#value-def-identifier
 	identifier = characterEncoding.replace( "w", "w#" ),
 
-	// Acceptable operators http://www.w3.org/TR/selectors/#attribute-selectors
-	attributes = "\\[" + whitespace + "*(" + characterEncoding + ")" + whitespace +
-		"*(?:([*^$|!~]?=)" + whitespace + "*(?:(['\"])((?:\\\\.|[^\\\\])*?)\\3|(" + identifier + ")|)|)" + whitespace + "*\\]",
+	// Attribute selectors: http://www.w3.org/TR/selectors/#attribute-selectors
+	attributes = "\\[" + whitespace + "*(" + characterEncoding + ")(?:" + whitespace +
+		// Operator (capture 2)
+		"*([*^$|!~]?=)" + whitespace +
+		// "Attribute values must be CSS identifiers [capture 5] or strings [capture 3 or capture 4]"
+		"*(?:'((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\"|(" + identifier + "))|)" + whitespace +
+		"*\\]",
 
-	// Prefer arguments quoted,
-	//   then not containing pseudos/brackets,
-	//   then attribute selectors/non-parenthetical expressions,
-	//   then anything else
-	// These preferences are here to reduce the number of selectors
-	//   needing tokenize in the PSEUDO preFilter
-	pseudos = ":(" + characterEncoding + ")(?:\\(((['\"])((?:\\\\.|[^\\\\])*?)\\3|((?:\\\\.|[^\\\\()[\\]]|" + attributes.replace( 3, 8 ) + ")*)|.*)\\)|)",
+	pseudos = ":(" + characterEncoding + ")(?:\\((" +
+		// To reduce the number of selectors needing tokenize in the preFilter, prefer arguments:
+		// 1. quoted (capture 3; capture 4 or capture 5)
+		"('((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\")|" +
+		// 2. simple (capture 6)
+		"((?:\\\\.|[^\\\\()[\\]]|" + attributes + ")*)|" +
+		// 3. anything else (capture 2)
+		".*" +
+		")\\)|)",
 
 	// Leading and non-escaped trailing whitespace, capturing some non-whitespace characters preceding the latter
 	rtrim = new RegExp( "^" + whitespace + "+|((?:^|[^\\\\])(?:\\\\.)*)" + whitespace + "+$", "g" ),
@@ -2545,7 +2550,7 @@ var i,
 	funescape = function( _, escaped, escapedWhitespace ) {
 		var high = "0x" + escaped - 0x10000;
 		// NaN means non-codepoint
-		// Support: Firefox
+		// Support: Firefox<24
 		// Workaround erroneous numeric interpretation of +"0x"
 		return high !== high || escapedWhitespace ?
 			escaped :
@@ -2941,7 +2946,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 				var m = context.getElementById( id );
 				// Check parentNode to catch when Blackberry 4.6 returns
 				// nodes that are no longer in the document #6963
-				return m && m.parentNode ? [m] : [];
+				return m && m.parentNode ? [ m ] : [];
 			}
 		};
 		Expr.filter["ID"] = function( id ) {
@@ -3021,11 +3026,13 @@ setDocument = Sizzle.setDocument = function( node ) {
 			// setting a boolean content attribute,
 			// since its presence should be enough
 			// http://bugs.jquery.com/ticket/12359
-			div.innerHTML = "<select t=''><option selected=''></option></select>";
+			div.innerHTML = "<select msallowclip=''><option selected=''></option></select>";
 
-			// Support: IE8, Opera 10-12
+			// Support: IE8, Opera 11-12.16
 			// Nothing should be selected when empty strings follow ^= or $= or *=
-			if ( div.querySelectorAll("[t^='']").length ) {
+			// The test attribute must be unknown in Opera but "safe" for WinRT
+			// http://msdn.microsoft.com/en-us/library/ie/hh465388.aspx#attribute_section
+			if ( div.querySelectorAll("[msallowclip^='']").length ) {
 				rbuggyQSA.push( "[*^$]=" + whitespace + "*(?:''|\"\")" );
 			}
 
@@ -3068,7 +3075,8 @@ setDocument = Sizzle.setDocument = function( node ) {
 		});
 	}
 
-	if ( (support.matchesSelector = rnative.test( (matches = docElem.webkitMatchesSelector ||
+	if ( (support.matchesSelector = rnative.test( (matches = docElem.matches ||
+		docElem.webkitMatchesSelector ||
 		docElem.mozMatchesSelector ||
 		docElem.oMatchesSelector ||
 		docElem.msMatchesSelector) )) ) {
@@ -3249,7 +3257,7 @@ Sizzle.matchesSelector = function( elem, expr ) {
 		} catch(e) {}
 	}
 
-	return Sizzle( expr, document, null, [elem] ).length > 0;
+	return Sizzle( expr, document, null, [ elem ] ).length > 0;
 };
 
 Sizzle.contains = function( context, elem ) {
@@ -3378,7 +3386,7 @@ Expr = Sizzle.selectors = {
 			match[1] = match[1].replace( runescape, funescape );
 
 			// Move the given value to match[3] whether quoted or unquoted
-			match[3] = ( match[4] || match[5] || "" ).replace( runescape, funescape );
+			match[3] = ( match[3] || match[4] || match[5] || "" ).replace( runescape, funescape );
 
 			if ( match[2] === "~=" ) {
 				match[3] = " " + match[3] + " ";
@@ -3421,15 +3429,15 @@ Expr = Sizzle.selectors = {
 
 		"PSEUDO": function( match ) {
 			var excess,
-				unquoted = !match[5] && match[2];
+				unquoted = !match[6] && match[2];
 
 			if ( matchExpr["CHILD"].test( match[0] ) ) {
 				return null;
 			}
 
 			// Accept quoted arguments as-is
-			if ( match[3] && match[4] !== undefined ) {
-				match[2] = match[4];
+			if ( match[3] ) {
+				match[2] = match[4] || match[5] || "";
 
 			// Strip excess characters from unquoted arguments
 			} else if ( unquoted && rpseudo.test( unquoted ) &&
@@ -3834,7 +3842,7 @@ function setFilters() {}
 setFilters.prototype = Expr.filters = Expr.pseudos;
 Expr.setFilters = new setFilters();
 
-function tokenize( selector, parseOnly ) {
+tokenize = Sizzle.tokenize = function( selector, parseOnly ) {
 	var matched, match, tokens, type,
 		soFar, groups, preFilters,
 		cached = tokenCache[ selector + " " ];
@@ -3899,7 +3907,7 @@ function tokenize( selector, parseOnly ) {
 			Sizzle.error( selector ) :
 			// Cache the tokens
 			tokenCache( selector, groups ).slice( 0 );
-}
+};
 
 function toSelector( tokens ) {
 	var i = 0,
@@ -3976,6 +3984,15 @@ function elementMatcher( matchers ) {
 			return true;
 		} :
 		matchers[0];
+}
+
+function multipleContexts( selector, contexts, results ) {
+	var i = 0,
+		len = contexts.length;
+	for ( ; i < len; i++ ) {
+		Sizzle( selector, contexts[i], results );
+	}
+	return results;
 }
 
 function condense( unmatched, map, filter, context, xml ) {
@@ -4246,7 +4263,7 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 		superMatcher;
 }
 
-compile = Sizzle.compile = function( selector, group /* Internal Use Only */ ) {
+compile = Sizzle.compile = function( selector, match /* Internal Use Only */ ) {
 	var i,
 		setMatchers = [],
 		elementMatchers = [],
@@ -4254,12 +4271,12 @@ compile = Sizzle.compile = function( selector, group /* Internal Use Only */ ) {
 
 	if ( !cached ) {
 		// Generate a function of recursive functions that can be used to check each element
-		if ( !group ) {
-			group = tokenize( selector );
+		if ( !match ) {
+			match = tokenize( selector );
 		}
-		i = group.length;
+		i = match.length;
 		while ( i-- ) {
-			cached = matcherFromTokens( group[i] );
+			cached = matcherFromTokens( match[i] );
 			if ( cached[ expando ] ) {
 				setMatchers.push( cached );
 			} else {
@@ -4269,74 +4286,83 @@ compile = Sizzle.compile = function( selector, group /* Internal Use Only */ ) {
 
 		// Cache the compiled function
 		cached = compilerCache( selector, matcherFromGroupMatchers( elementMatchers, setMatchers ) );
+
+		// Save selector and tokenization
+		cached.selector = selector;
 	}
 	return cached;
 };
 
-function multipleContexts( selector, contexts, results ) {
-	var i = 0,
-		len = contexts.length;
-	for ( ; i < len; i++ ) {
-		Sizzle( selector, contexts[i], results );
-	}
-	return results;
-}
-
-function select( selector, context, results, seed ) {
+/**
+ * A low-level selection function that works with Sizzle's compiled
+ *  selector functions
+ * @param {String|Function} selector A selector or a pre-compiled
+ *  selector function built with Sizzle.compile
+ * @param {Element} context
+ * @param {Array} [results]
+ * @param {Array} [seed] A set of elements to match against
+ */
+select = Sizzle.select = function( selector, context, results, seed ) {
 	var i, tokens, token, type, find,
-		match = tokenize( selector );
+		compiled = typeof selector === "function" && selector,
+		match = !seed && tokenize( (selector = compiled.selector || selector) );
 
-	if ( !seed ) {
-		// Try to minimize operations if there is only one group
-		if ( match.length === 1 ) {
+	results = results || [];
 
-			// Take a shortcut and set the context if the root selector is an ID
-			tokens = match[0] = match[0].slice( 0 );
-			if ( tokens.length > 2 && (token = tokens[0]).type === "ID" &&
-					support.getById && context.nodeType === 9 && documentIsHTML &&
-					Expr.relative[ tokens[1].type ] ) {
+	// Try to minimize operations if there is no seed and only one group
+	if ( match.length === 1 ) {
 
-				context = ( Expr.find["ID"]( token.matches[0].replace(runescape, funescape), context ) || [] )[0];
-				if ( !context ) {
-					return results;
-				}
-				selector = selector.slice( tokens.shift().value.length );
+		// Take a shortcut and set the context if the root selector is an ID
+		tokens = match[0] = match[0].slice( 0 );
+		if ( tokens.length > 2 && (token = tokens[0]).type === "ID" &&
+				support.getById && context.nodeType === 9 && documentIsHTML &&
+				Expr.relative[ tokens[1].type ] ) {
+
+			context = ( Expr.find["ID"]( token.matches[0].replace(runescape, funescape), context ) || [] )[0];
+			if ( !context ) {
+				return results;
+
+			// Precompiled matchers will still verify ancestry, so step up a level
+			} else if ( compiled ) {
+				context = context.parentNode;
 			}
 
-			// Fetch a seed set for right-to-left matching
-			i = matchExpr["needsContext"].test( selector ) ? 0 : tokens.length;
-			while ( i-- ) {
-				token = tokens[i];
+			selector = selector.slice( tokens.shift().value.length );
+		}
 
-				// Abort if we hit a combinator
-				if ( Expr.relative[ (type = token.type) ] ) {
-					break;
-				}
-				if ( (find = Expr.find[ type ]) ) {
-					// Search, expanding context for leading sibling combinators
-					if ( (seed = find(
-						token.matches[0].replace( runescape, funescape ),
-						rsibling.test( tokens[0].type ) && testContext( context.parentNode ) || context
-					)) ) {
+		// Fetch a seed set for right-to-left matching
+		i = matchExpr["needsContext"].test( selector ) ? 0 : tokens.length;
+		while ( i-- ) {
+			token = tokens[i];
 
-						// If seed is empty or no tokens remain, we can return early
-						tokens.splice( i, 1 );
-						selector = seed.length && toSelector( tokens );
-						if ( !selector ) {
-							push.apply( results, seed );
-							return results;
-						}
+			// Abort if we hit a combinator
+			if ( Expr.relative[ (type = token.type) ] ) {
+				break;
+			}
+			if ( (find = Expr.find[ type ]) ) {
+				// Search, expanding context for leading sibling combinators
+				if ( (seed = find(
+					token.matches[0].replace( runescape, funescape ),
+					rsibling.test( tokens[0].type ) && testContext( context.parentNode ) || context
+				)) ) {
 
-						break;
+					// If seed is empty or no tokens remain, we can return early
+					tokens.splice( i, 1 );
+					selector = seed.length && toSelector( tokens );
+					if ( !selector ) {
+						push.apply( results, seed );
+						return results;
 					}
+
+					break;
 				}
 			}
 		}
 	}
 
-	// Compile and execute a filtering function
+	// Compile and execute a filtering function if one is not provided
 	// Provide `match` to avoid retokenization if we modified the selector above
-	compile( selector, match )(
+	( compiled || compile( selector, match ) )(
 		seed,
 		context,
 		!documentIsHTML,
@@ -4344,7 +4370,7 @@ function select( selector, context, results, seed ) {
 		rsibling.test( selector ) && testContext( context.parentNode ) || context
 	);
 	return results;
-}
+};
 
 // One-time assignments
 
@@ -5221,8 +5247,9 @@ jQuery.extend({
 		readyList.resolveWith( document, [ jQuery ] );
 
 		// Trigger any bound ready events
-		if ( jQuery.fn.trigger ) {
-			jQuery( document ).trigger("ready").off("ready");
+		if ( jQuery.fn.triggerHandler ) {
+			jQuery( document ).triggerHandler( "ready" );
+			jQuery( document ).off( "ready" );
 		}
 	}
 });
@@ -5594,11 +5621,15 @@ jQuery.fn.extend({
 				if ( elem.nodeType === 1 && !data_priv.get( elem, "hasDataAttrs" ) ) {
 					i = attrs.length;
 					while ( i-- ) {
-						name = attrs[ i ].name;
 
-						if ( name.indexOf( "data-" ) === 0 ) {
-							name = jQuery.camelCase( name.slice(5) );
-							dataAttr( elem, name, data[ name ] );
+						// Support: IE11+
+						// The attrs elements can be null (#14894)
+						if ( attrs[ i ] ) {
+							name = attrs[ i ].name;
+							if ( name.indexOf( "data-" ) === 0 ) {
+								name = jQuery.camelCase( name.slice(5) );
+								dataAttr( elem, name, data[ name ] );
+							}
 						}
 					}
 					data_priv.set( elem, "hasDataAttrs", true );
@@ -5828,10 +5859,17 @@ var rcheckableType = (/^(?:checkbox|radio)$/i);
 
 (function() {
 	var fragment = document.createDocumentFragment(),
-		div = fragment.appendChild( document.createElement( "div" ) );
+		div = fragment.appendChild( document.createElement( "div" ) ),
+		input = document.createElement( "input" );
 
 	// #11217 - WebKit loses check when the name is after the checked attribute
-	div.innerHTML = "<input type='radio' checked='checked' name='t'/>";
+	// Support: Windows Web Apps (WWA)
+	// `name` and `type` need .setAttribute for WWA
+	input.setAttribute( "type", "radio" );
+	input.setAttribute( "checked", "checked" );
+	input.setAttribute( "name", "t" );
+
+	div.appendChild( input );
 
 	// Support: Safari 5.1, iOS 5.1, Android 4.x, Android 2.3
 	// old WebKit doesn't clone checked state correctly in fragments
@@ -5851,7 +5889,7 @@ support.focusinBubbles = "onfocusin" in window;
 
 var
 	rkeyEvent = /^key/,
-	rmouseEvent = /^(?:mouse|contextmenu)|click/,
+	rmouseEvent = /^(?:mouse|pointer|contextmenu)|click/,
 	rfocusMorph = /^(?:focusinfocus|focusoutblur)$/,
 	rtypenamespace = /^([^.]*)(?:\.(.+)|)$/;
 
@@ -6420,7 +6458,7 @@ jQuery.event = {
 
 				// Support: Firefox 20+
 				// Firefox doesn't alert if the returnValue field is not set.
-				if ( event.result !== undefined ) {
+				if ( event.result !== undefined && event.originalEvent ) {
 					event.originalEvent.returnValue = event.result;
 				}
 			}
@@ -6471,9 +6509,9 @@ jQuery.Event = function( src, props ) {
 		// Events bubbling up the document may have been marked as prevented
 		// by a handler lower down the tree; reflect the correct value.
 		this.isDefaultPrevented = src.defaultPrevented ||
-				// Support: Android < 4.0
 				src.defaultPrevented === undefined &&
-				src.getPreventDefault && src.getPreventDefault() ?
+				// Support: Android < 4.0
+				src.returnValue === false ?
 			returnTrue :
 			returnFalse;
 
@@ -6520,7 +6558,14 @@ jQuery.Event.prototype = {
 		}
 	},
 	stopImmediatePropagation: function() {
+		var e = this.originalEvent;
+
 		this.isImmediatePropagationStopped = returnTrue;
+
+		if ( e && e.stopImmediatePropagation ) {
+			e.stopImmediatePropagation();
+		}
+
 		this.stopPropagation();
 	}
 };
@@ -6529,7 +6574,9 @@ jQuery.Event.prototype = {
 // Support: Chrome 15+
 jQuery.each({
 	mouseenter: "mouseover",
-	mouseleave: "mouseout"
+	mouseleave: "mouseout",
+	pointerenter: "pointerover",
+	pointerleave: "pointerout"
 }, function( orig, fix ) {
 	jQuery.event.special[ orig ] = {
 		delegateType: fix,
@@ -6954,7 +7001,7 @@ jQuery.extend({
 	},
 
 	cleanData: function( elems ) {
-		var data, elem, events, type, key, j,
+		var data, elem, type, key,
 			special = jQuery.event.special,
 			i = 0;
 
@@ -6963,9 +7010,8 @@ jQuery.extend({
 				key = elem[ data_priv.expando ];
 
 				if ( key && (data = data_priv.cache[ key ]) ) {
-					events = Object.keys( data.events || {} );
-					if ( events.length ) {
-						for ( j = 0; (type = events[j]) !== undefined; j++ ) {
+					if ( data.events ) {
+						for ( type in data.events ) {
 							if ( special[ type ] ) {
 								jQuery.event.remove( elem, type );
 
@@ -7268,14 +7314,15 @@ var iframe,
  */
 // Called only from within defaultDisplay
 function actualDisplay( name, doc ) {
-	var elem = jQuery( doc.createElement( name ) ).appendTo( doc.body ),
+	var style,
+		elem = jQuery( doc.createElement( name ) ).appendTo( doc.body ),
 
 		// getDefaultComputedStyle might be reliably used only on attached element
-		display = window.getDefaultComputedStyle ?
+		display = window.getDefaultComputedStyle && ( style = window.getDefaultComputedStyle( elem[ 0 ] ) ) ?
 
 			// Use of this method is a temporary fix (more like optmization) until something better comes along,
 			// since it was removed from specification and supported only in FF
-			window.getDefaultComputedStyle( elem[ 0 ] ).display : jQuery.css( elem[ 0 ], "display" );
+			style.display : jQuery.css( elem[ 0 ], "display" );
 
 	// We don't have any data stored on the element,
 	// so use "detach" method as fast way to get rid of the element
@@ -7398,28 +7445,32 @@ function addGetHookIf( conditionFn, hookFn ) {
 
 (function() {
 	var pixelPositionVal, boxSizingReliableVal,
-		// Support: Firefox, Android 2.3 (Prefixed box-sizing versions).
-		divReset = "padding:0;margin:0;border:0;display:block;-webkit-box-sizing:content-box;" +
-			"-moz-box-sizing:content-box;box-sizing:content-box",
 		docElem = document.documentElement,
 		container = document.createElement( "div" ),
 		div = document.createElement( "div" );
+
+	if ( !div.style ) {
+		return;
+	}
 
 	div.style.backgroundClip = "content-box";
 	div.cloneNode( true ).style.backgroundClip = "";
 	support.clearCloneStyle = div.style.backgroundClip === "content-box";
 
-	container.style.cssText = "border:0;width:0;height:0;position:absolute;top:0;left:-9999px;" +
-		"margin-top:1px";
+	container.style.cssText = "border:0;width:0;height:0;top:0;left:-9999px;margin-top:1px;" +
+		"position:absolute";
 	container.appendChild( div );
 
 	// Executing both pixelPosition & boxSizingReliable tests require only one layout
 	// so they're executed at the same time to save the second computation.
 	function computePixelPositionAndBoxSizingReliable() {
-		// Support: Firefox, Android 2.3 (Prefixed box-sizing versions).
-		div.style.cssText = "-webkit-box-sizing:border-box;-moz-box-sizing:border-box;" +
-			"box-sizing:border-box;padding:1px;border:1px;display:block;width:4px;margin-top:1%;" +
-			"position:absolute;top:1%";
+		div.style.cssText =
+			// Support: Firefox<29, Android 2.3
+			// Vendor-prefix box-sizing
+			"-webkit-box-sizing:border-box;-moz-box-sizing:border-box;" +
+			"box-sizing:border-box;display:block;margin-top:1%;top:1%;" +
+			"border:1px;padding:1px;width:4px;position:absolute";
+		div.innerHTML = "";
 		docElem.appendChild( container );
 
 		var divStyle = window.getComputedStyle( div, null );
@@ -7429,9 +7480,10 @@ function addGetHookIf( conditionFn, hookFn ) {
 		docElem.removeChild( container );
 	}
 
-	// Use window.getComputedStyle because jsdom on node.js will break without it.
+	// Support: node.js jsdom
+	// Don't assume that getComputedStyle is a property of the global object
 	if ( window.getComputedStyle ) {
-		jQuery.extend(support, {
+		jQuery.extend( support, {
 			pixelPosition: function() {
 				// This test is executed only once but we still do memoizing
 				// since we can use the boxSizingReliable pre-computing.
@@ -7453,7 +7505,13 @@ function addGetHookIf( conditionFn, hookFn ) {
 				// This support function is only executed once so no memoizing is needed.
 				var ret,
 					marginDiv = div.appendChild( document.createElement( "div" ) );
-				marginDiv.style.cssText = div.style.cssText = divReset;
+
+				// Reset CSS: box-sizing; display; margin; border; padding
+				marginDiv.style.cssText = div.style.cssText =
+					// Support: Firefox<29, Android 2.3
+					// Vendor-prefix box-sizing
+					"-webkit-box-sizing:content-box;-moz-box-sizing:content-box;" +
+					"box-sizing:content-box;display:block;margin:0;border:0;padding:0";
 				marginDiv.style.marginRight = marginDiv.style.width = "0";
 				div.style.width = "1px";
 				docElem.appendChild( container );
@@ -7461,9 +7519,6 @@ function addGetHookIf( conditionFn, hookFn ) {
 				ret = !parseFloat( window.getComputedStyle( marginDiv, null ).marginRight );
 
 				docElem.removeChild( container );
-
-				// Clean up the div for other support tests.
-				div.innerHTML = "";
 
 				return ret;
 			}
@@ -7503,8 +7558,8 @@ var
 
 	cssShow = { position: "absolute", visibility: "hidden", display: "block" },
 	cssNormalTransform = {
-		letterSpacing: 0,
-		fontWeight: 400
+		letterSpacing: "0",
+		fontWeight: "400"
 	},
 
 	cssPrefixes = [ "Webkit", "O", "Moz", "ms" ];
@@ -7651,13 +7706,10 @@ function showHide( elements, show ) {
 				values[ index ] = data_priv.access( elem, "olddisplay", defaultDisplay(elem.nodeName) );
 			}
 		} else {
+			hidden = isHidden( elem );
 
-			if ( !values[ index ] ) {
-				hidden = isHidden( elem );
-
-				if ( display && display !== "none" || !hidden ) {
-					data_priv.set( elem, "olddisplay", hidden ? display : jQuery.css(elem, "display") );
-				}
+			if ( display !== "none" || !hidden ) {
+				data_priv.set( elem, "olddisplay", hidden ? display : jQuery.css( elem, "display" ) );
 			}
 		}
 	}
@@ -7696,6 +7748,8 @@ jQuery.extend({
 	cssNumber: {
 		"columnCount": true,
 		"fillOpacity": true,
+		"flexGrow": true,
+		"flexShrink": true,
 		"fontWeight": true,
 		"lineHeight": true,
 		"opacity": true,
@@ -7760,9 +7814,6 @@ jQuery.extend({
 
 			// If a hook was provided, use that value, otherwise just set the specified value
 			if ( !hooks || !("set" in hooks) || (value = hooks.set( elem, value, extra )) !== undefined ) {
-				// Support: Chrome, Safari
-				// Setting style to blank string required to delete "style: x !important;"
-				style[ name ] = "";
 				style[ name ] = value;
 			}
 
@@ -7818,7 +7869,7 @@ jQuery.each([ "height", "width" ], function( i, name ) {
 			if ( computed ) {
 				// certain elements can have dimension info if we invisibly show them
 				// however, it must have a current display style that would benefit from this
-				return elem.offsetWidth === 0 && rdisplayswap.test( jQuery.css( elem, "display" ) ) ?
+				return rdisplayswap.test( jQuery.css( elem, "display" ) ) && elem.offsetWidth === 0 ?
 					jQuery.swap( elem, cssShow, function() {
 						return getWidthOrHeight( elem, name, extra );
 					}) :
@@ -8139,7 +8190,7 @@ function createTween( value, prop, animation ) {
 
 function defaultPrefilter( elem, props, opts ) {
 	/* jshint validthis: true */
-	var prop, value, toggle, tween, hooks, oldfire, display,
+	var prop, value, toggle, tween, hooks, oldfire, display, checkDisplay,
 		anim = this,
 		orig = {},
 		style = elem.style,
@@ -8183,13 +8234,12 @@ function defaultPrefilter( elem, props, opts ) {
 		// Set display property to inline-block for height/width
 		// animations on inline elements that are having width/height animated
 		display = jQuery.css( elem, "display" );
-		// Get default display if display is currently "none"
-		if ( display === "none" ) {
-			display = defaultDisplay( elem.nodeName );
-		}
-		if ( display === "inline" &&
-				jQuery.css( elem, "float" ) === "none" ) {
 
+		// Test default display if display is currently "none"
+		checkDisplay = display === "none" ?
+			data_priv.get( elem, "olddisplay" ) || defaultDisplay( elem.nodeName ) : display;
+
+		if ( checkDisplay === "inline" && jQuery.css( elem, "float" ) === "none" ) {
 			style.display = "inline-block";
 		}
 	}
@@ -8219,6 +8269,10 @@ function defaultPrefilter( elem, props, opts ) {
 				}
 			}
 			orig[ prop ] = dataShow && dataShow[ prop ] || jQuery.style( elem, prop );
+
+		// Any non-fx value stops us from restoring the original display value
+		} else {
+			display = undefined;
 		}
 	}
 
@@ -8261,6 +8315,10 @@ function defaultPrefilter( elem, props, opts ) {
 				}
 			}
 		}
+
+	// If this is a noop like .hide().hide(), restore an overwritten display value
+	} else if ( (display === "none" ? defaultDisplay( elem.nodeName ) : display) === "inline" ) {
+		style.display = display;
 	}
 }
 
@@ -9153,6 +9211,16 @@ jQuery.fn.extend({
 
 jQuery.extend({
 	valHooks: {
+		option: {
+			get: function( elem ) {
+				var val = jQuery.find.attr( elem, "value" );
+				return val != null ?
+					val :
+					// Support: IE10-11+
+					// option.text throws exceptions (#14686, #14858)
+					jQuery.trim( jQuery.text( elem ) );
+			}
+		},
 		select: {
 			get: function( elem ) {
 				var value, option,
@@ -9199,7 +9267,7 @@ jQuery.extend({
 
 				while ( i-- ) {
 					option = options[ i ];
-					if ( (option.selected = jQuery.inArray( jQuery(option).val(), values ) >= 0) ) {
+					if ( (option.selected = jQuery.inArray( option.value, values ) >= 0) ) {
 						optionSet = true;
 					}
 				}
@@ -10406,10 +10474,15 @@ jQuery.ajaxTransport(function( options ) {
 				// Create the abort callback
 				callback = xhrCallbacks[ id ] = callback("abort");
 
-				// Do send the request
-				// This may raise an exception which is actually
-				// handled in jQuery.ajax (so no try/catch here)
-				xhr.send( options.hasContent && options.data || null );
+				try {
+					// Do send the request (this may raise an exception)
+					xhr.send( options.hasContent && options.data || null );
+				} catch ( e ) {
+					// #14683: Only rethrow if this hasn't been notified as an error yet
+					if ( callback ) {
+						throw e;
+					}
+				}
 			},
 
 			abort: function() {
@@ -10616,7 +10689,7 @@ jQuery.fn.load = function( url, params, callback ) {
 		off = url.indexOf(" ");
 
 	if ( off >= 0 ) {
-		selector = url.slice( off );
+		selector = jQuery.trim( url.slice( off ) );
 		url = url.slice( 0, off );
 	}
 
@@ -10924,6 +10997,12 @@ jQuery.fn.andSelf = jQuery.fn.addBack;
 // derived from file names, and jQuery is normally delivered in a lowercase
 // file name. Do this after creating the global so that if an AMD module wants
 // to call noConflict to hide this version of jQuery, it will work.
+
+// Note that for maximum portability, libraries that are not jQuery should
+// declare themselves as anonymous modules, and avoid setting a global if an
+// AMD loader is present. jQuery is a special case. For more information, see
+// https://github.com/jrburke/requirejs/wiki/Updating-existing-libraries#wiki-anon
+
 if ( typeof define === "function" && define.amd ) {
 	define( "jquery", [], function() {
 		return jQuery;
@@ -10969,7 +11048,7 @@ return jQuery;
 },{}],4:[function(require,module,exports){
 (function (global){
 //! moment.js
-//! version : 2.8.1
+//! version : 2.8.3
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
@@ -10980,11 +11059,12 @@ return jQuery;
     ************************************/
 
     var moment,
-        VERSION = '2.8.1',
+        VERSION = '2.8.3',
         // the global-scope this is NOT the global object in Node.js
         globalScope = typeof global !== 'undefined' ? global : this,
         oldGlobalMoment,
         round = Math.round,
+        hasOwnProperty = Object.prototype.hasOwnProperty,
         i,
 
         YEAR = 0,
@@ -11058,7 +11138,7 @@ return jQuery;
             ['HH', /(T| )\d\d/]
         ],
 
-        // timezone chunker "+10:00" > ["10", "00"] or "-1530" > ["-15", "30"]
+        // timezone chunker '+10:00' > ['10', '00'] or '-1530' > ['-15', '30']
         parseTimezoneChunker = /([\+\-]|\d\d)/gi,
 
         // getter and setter names
@@ -11263,6 +11343,10 @@ return jQuery;
         }
     }
 
+    function hasOwnProp(a, b) {
+        return hasOwnProperty.call(a, b);
+    }
+
     function defaultParsingFlags() {
         // We need to deep clone this object, and es5 standard is not very
         // helpful.
@@ -11283,7 +11367,7 @@ return jQuery;
     function printMsg(msg) {
         if (moment.suppressDeprecationWarnings === false &&
                 typeof console !== 'undefined' && console.warn) {
-            console.warn("Deprecation warning: " + msg);
+            console.warn('Deprecation warning: ' + msg);
         }
     }
 
@@ -11386,16 +11470,16 @@ return jQuery;
 
     function extend(a, b) {
         for (var i in b) {
-            if (b.hasOwnProperty(i)) {
+            if (hasOwnProp(b, i)) {
                 a[i] = b[i];
             }
         }
 
-        if (b.hasOwnProperty('toString')) {
+        if (hasOwnProp(b, 'toString')) {
             a.toString = b.toString;
         }
 
-        if (b.hasOwnProperty('valueOf')) {
+        if (hasOwnProp(b, 'valueOf')) {
             a.valueOf = b.valueOf;
         }
 
@@ -11503,7 +11587,7 @@ return jQuery;
             var dur, tmp;
             //invert the arguments, but complain about it
             if (period !== null && !isNaN(+period)) {
-                deprecateSimple(name, "moment()." + name  + "(period, number) is deprecated. Please use moment()." + name + "(number, period).");
+                deprecateSimple(name, 'moment().' + name  + '(period, number) is deprecated. Please use moment().' + name + '(number, period).');
                 tmp = val; val = period; period = tmp;
             }
 
@@ -11573,7 +11657,7 @@ return jQuery;
             prop;
 
         for (prop in inputObject) {
-            if (inputObject.hasOwnProperty(prop)) {
+            if (hasOwnProp(inputObject, prop)) {
                 normalizedProp = normalizeUnits(prop);
                 if (normalizedProp) {
                     normalizedInput[normalizedProp] = inputObject[prop];
@@ -12458,6 +12542,9 @@ return jQuery;
         for (i = 0; i < config._f.length; i++) {
             currentScore = 0;
             tempConfig = copyConfig({}, config);
+            if (config._useUTC != null) {
+                tempConfig._useUTC = config._useUTC;
+            }
             tempConfig._pf = defaultParsingFlags();
             tempConfig._f = config._f[i];
             makeDateFromStringAndFormat(tempConfig);
@@ -12493,7 +12580,7 @@ return jQuery;
             config._pf.iso = true;
             for (i = 0, l = isoDates.length; i < l; i++) {
                 if (isoDates[i][1].exec(string)) {
-                    // match[5] should be "T" or undefined
+                    // match[5] should be 'T' or undefined
                     config._f = isoDates[i][0] + (match[6] || ' ');
                     break;
                 }
@@ -12522,6 +12609,14 @@ return jQuery;
         }
     }
 
+    function map(arr, fn) {
+        var res = [], i;
+        for (i = 0; i < arr.length; ++i) {
+            res.push(fn(arr[i], i));
+        }
+        return res;
+    }
+
     function makeDateFromInput(config) {
         var input = config._i, matched;
         if (input === undefined) {
@@ -12533,7 +12628,9 @@ return jQuery;
         } else if (typeof input === 'string') {
             makeDateFromString(config);
         } else if (isArray(input)) {
-            config._a = input.slice(0);
+            config._a = map(input.slice(0), function (obj) {
+                return parseInt(obj, 10);
+            });
             dateFromConfig(config);
         } else if (typeof(input) === 'object') {
             dateFromObject(config);
@@ -12701,7 +12798,7 @@ return jQuery;
     moment = function (input, format, locale, strict) {
         var c;
 
-        if (typeof(locale) === "boolean") {
+        if (typeof(locale) === 'boolean') {
             strict = locale;
             locale = undefined;
         }
@@ -12769,7 +12866,7 @@ return jQuery;
     moment.utc = function (input, format, locale, strict) {
         var c;
 
-        if (typeof(locale) === "boolean") {
+        if (typeof(locale) === 'boolean') {
             strict = locale;
             locale = undefined;
         }
@@ -12856,7 +12953,7 @@ return jQuery;
 
         ret = new Duration(duration);
 
-        if (moment.isDuration(input) && input.hasOwnProperty('_locale')) {
+        if (moment.isDuration(input) && hasOwnProp(input, '_locale')) {
             ret._locale = input._locale;
         }
 
@@ -12893,7 +12990,7 @@ return jQuery;
     };
 
     moment.lang = deprecate(
-        "moment.lang is deprecated. Use moment.locale instead.",
+        'moment.lang is deprecated. Use moment.locale instead.',
         function (key, value) {
             return moment.locale(key, value);
         }
@@ -12905,7 +13002,7 @@ return jQuery;
     moment.locale = function (key, values) {
         var data;
         if (key) {
-            if (typeof(values) !== "undefined") {
+            if (typeof(values) !== 'undefined') {
                 data = moment.defineLocale(key, values);
             }
             else {
@@ -12940,7 +13037,7 @@ return jQuery;
     };
 
     moment.langData = deprecate(
-        "moment.langData is deprecated. Use moment.localeData instead.",
+        'moment.langData is deprecated. Use moment.localeData instead.',
         function (key) {
             return moment.localeData(key);
         }
@@ -12973,7 +13070,7 @@ return jQuery;
     // compare moment object
     moment.isMoment = function (obj) {
         return obj instanceof Moment ||
-            (obj != null &&  obj.hasOwnProperty('_isAMomentObject'));
+            (obj != null && hasOwnProp(obj, '_isAMomentObject'));
     };
 
     // for typechecking Duration objects
@@ -13029,7 +13126,7 @@ return jQuery;
         },
 
         toString : function () {
-            return this.clone().locale('en').format("ddd MMM DD YYYY HH:mm:ss [GMT]ZZ");
+            return this.clone().locale('en').format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ');
         },
 
         toDate : function () {
@@ -13088,7 +13185,7 @@ return jQuery;
                 this._isUTC = false;
 
                 if (keepLocalTime) {
-                    this.add(this._d.getTimezoneOffset(), 'm');
+                    this.add(this._dateTzOffset(), 'm');
                 }
             }
             return this;
@@ -13106,7 +13203,7 @@ return jQuery;
         diff : function (input, units, asFloat) {
             var that = makeAs(input, this),
                 zoneDiff = (this.zone() - that.zone()) * 6e4,
-                diff, output;
+                diff, output, daysAdjust;
 
             units = normalizeUnits(units);
 
@@ -13117,11 +13214,12 @@ return jQuery;
                 output = ((this.year() - that.year()) * 12) + (this.month() - that.month());
                 // adjust by taking difference in days, average number of days
                 // and dst in the given months.
-                output += ((this - moment(this).startOf('month')) -
-                        (that - moment(that).startOf('month'))) / diff;
+                daysAdjust = (this - moment(this).startOf('month')) -
+                    (that - moment(that).startOf('month'));
                 // same as above but with zones, to negate all dst
-                output -= ((this.zone() - moment(this).startOf('month').zone()) -
-                        (that.zone() - moment(that).startOf('month').zone())) * 6e4 / diff;
+                daysAdjust -= ((this.zone() - moment(this).startOf('month').zone()) -
+                        (that.zone() - moment(that).startOf('month').zone())) * 6e4;
+                output += daysAdjust / diff;
                 if (units === 'year') {
                     output = output / 12;
                 }
@@ -13230,18 +13328,33 @@ return jQuery;
         },
 
         isAfter: function (input, units) {
-            units = typeof units !== 'undefined' ? units : 'millisecond';
-            return +this.clone().startOf(units) > +moment(input).startOf(units);
+            units = normalizeUnits(typeof units !== 'undefined' ? units : 'millisecond');
+            if (units === 'millisecond') {
+                input = moment.isMoment(input) ? input : moment(input);
+                return +this > +input;
+            } else {
+                return +this.clone().startOf(units) > +moment(input).startOf(units);
+            }
         },
 
         isBefore: function (input, units) {
-            units = typeof units !== 'undefined' ? units : 'millisecond';
-            return +this.clone().startOf(units) < +moment(input).startOf(units);
+            units = normalizeUnits(typeof units !== 'undefined' ? units : 'millisecond');
+            if (units === 'millisecond') {
+                input = moment.isMoment(input) ? input : moment(input);
+                return +this < +input;
+            } else {
+                return +this.clone().startOf(units) < +moment(input).startOf(units);
+            }
         },
 
         isSame: function (input, units) {
-            units = units || 'ms';
-            return +this.clone().startOf(units) === +makeAs(input, this).startOf(units);
+            units = normalizeUnits(units || 'millisecond');
+            if (units === 'millisecond') {
+                input = moment.isMoment(input) ? input : moment(input);
+                return +this === +input;
+            } else {
+                return +this.clone().startOf(units) === +makeAs(input, this).startOf(units);
+            }
         },
 
         min: deprecate(
@@ -13281,7 +13394,7 @@ return jQuery;
                     input = input * 60;
                 }
                 if (!this._isUTC && keepLocalTime) {
-                    localAdjust = this._d.getTimezoneOffset();
+                    localAdjust = this._dateTzOffset();
                 }
                 this._offset = input;
                 this._isUTC = true;
@@ -13299,7 +13412,7 @@ return jQuery;
                     }
                 }
             } else {
-                return this._isUTC ? offset : this._d.getTimezoneOffset();
+                return this._isUTC ? offset : this._dateTzOffset();
             }
             return this;
         },
@@ -13403,28 +13516,38 @@ return jQuery;
         // instance.  Otherwise, it will return the locale configuration
         // variables for this instance.
         locale : function (key) {
+            var newLocaleData;
+
             if (key === undefined) {
                 return this._locale._abbr;
             } else {
-                this._locale = moment.localeData(key);
+                newLocaleData = moment.localeData(key);
+                if (newLocaleData != null) {
+                    this._locale = newLocaleData;
+                }
                 return this;
             }
         },
 
         lang : deprecate(
-            "moment().lang() is deprecated. Use moment().localeData() instead.",
+            'moment().lang() is deprecated. Use moment().localeData() instead.',
             function (key) {
                 if (key === undefined) {
                     return this.localeData();
                 } else {
-                    this._locale = moment.localeData(key);
-                    return this;
+                    return this.locale(key);
                 }
             }
         ),
 
         localeData : function () {
             return this._locale;
+        },
+
+        _dateTzOffset : function () {
+            // On Firefox.24 Date#getTimezoneOffset returns a floating point.
+            // https://github.com/moment/moment/pull/1871
+            return Math.round(this._d.getTimezoneOffset() / 15) * 15;
         }
     });
 
@@ -13622,19 +13745,21 @@ return jQuery;
             var days, months;
             units = normalizeUnits(units);
 
-            days = this._days + this._milliseconds / 864e5;
             if (units === 'month' || units === 'year') {
+                days = this._days + this._milliseconds / 864e5;
                 months = this._months + daysToYears(days) * 12;
                 return units === 'month' ? months : months / 12;
             } else {
-                days += yearsToDays(this._months / 12);
+                // handle milliseconds separately because of floating point math errors (issue #1867)
+                days = this._days + yearsToDays(this._months / 12);
                 switch (units) {
-                    case 'week': return days / 7;
-                    case 'day': return days;
-                    case 'hour': return days * 24;
-                    case 'minute': return days * 24 * 60;
-                    case 'second': return days * 24 * 60 * 60;
-                    case 'millisecond': return days * 24 * 60 * 60 * 1000;
+                    case 'week': return days / 7 + this._milliseconds / 6048e5;
+                    case 'day': return days + this._milliseconds / 864e5;
+                    case 'hour': return days * 24 + this._milliseconds / 36e5;
+                    case 'minute': return days * 24 * 60 + this._milliseconds / 6e4;
+                    case 'second': return days * 24 * 60 * 60 + this._milliseconds / 1000;
+                    // Math.floor prevents floating point math errors here
+                    case 'millisecond': return Math.floor(days * 24 * 60 * 60 * 1000) + this._milliseconds;
                     default: throw new Error('Unknown unit ' + units);
                 }
             }
@@ -13644,8 +13769,8 @@ return jQuery;
         locale : moment.fn.locale,
 
         toIsoString : deprecate(
-            "toIsoString() is deprecated. Please use toISOString() instead " +
-            "(notice the capitals)",
+            'toIsoString() is deprecated. Please use toISOString() instead ' +
+            '(notice the capitals)',
             function () {
                 return this.toISOString();
             }
@@ -13682,6 +13807,8 @@ return jQuery;
         }
     });
 
+    moment.duration.fn.toString = moment.duration.fn.toISOString;
+
     function makeDurationGetter(name) {
         moment.duration.fn[name] = function () {
             return this._data[name];
@@ -13689,7 +13816,7 @@ return jQuery;
     }
 
     for (i in unitMillisecondFactors) {
-        if (unitMillisecondFactors.hasOwnProperty(i)) {
+        if (hasOwnProp(unitMillisecondFactors, i)) {
             makeDurationGetter(i.toLowerCase());
         }
     }
@@ -16554,43 +16681,36 @@ module.exports = Events;
 
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../plugins/log":56,"underscore":7}],13:[function(require,module,exports){
+},{"../plugins/log":58,"underscore":7}],13:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 module.exports = {
   'media_control': _.template('<div class="media-control-background" data-background></div><div class="media-control-layer" data-controls>  <% var renderBar = function(name) { %>      <div class="bar-container" data-<%= name %>>        <div class="bar-background" data-<%= name %>>          <div class="bar-fill-1" data-<%= name %>></div>          <div class="bar-fill-2" data-<%= name %>></div>        </div>        <div class="bar-scrubber" data-<%= name %>>          <div class="bar-scrubber-icon" data-<%= name %>></div>        </div>      </div>  <% }; %>  <% var renderDrawer = function(name, renderContent) { %>      <div class="drawer-container" data-<%= name %>>        <div class="drawer-icon-container" data-<%= name %>>          <div class="drawer-icon media-control-icon" data-<%= name %>></div>          <span class="drawer-text" data-<%= name %>></span>        </div>        <% renderContent(name); %>      </div>  <% }; %>  <% var renderIndicator = function(name) { %>      <div class="media-control-indicator" data-<%= name %>></div>  <% }; %>  <% var renderButton = function(name) { %>      <button class="media-control-button media-control-icon" data-<%= name %>></button>  <% }; %>  <% var render = function(settings) {      _.each(settings, function(setting) {        if(setting === "seekbar") {          renderBar(setting);        } else if (setting === "volume") {          renderDrawer(setting, renderBar);        } else if (setting === "duration" || setting === "position") {          renderIndicator(setting);        } else {          renderButton(setting);        }      });    }; %>  <% if (settings.default && settings.default.length) { %>  <div class="media-control-center-panel" data-media-control>    <% render(settings.default); %>  </div>  <% } %>  <% if (settings.left && settings.left.length) { %>  <div class="media-control-left-panel" data-media-control>    <% render(settings.left); %>  </div>  <% } %>  <% if (settings.right && settings.right.length) { %>  <div class="media-control-right-panel" data-media-control>    <% render(settings.right); %>  </div>  <% } %></div>'),
+  'seek_time': _.template('<span data-seek-time><%= time %></span>'),
   'flash': _.template('  <param name="movie" value="<%= swfPath %>">  <param name="quality" value="autohigh">  <param name="swliveconnect" value="true">  <param name="allowScriptAccess" value="always">  <param name="bgcolor" value="#001122">  <param name="allowFullScreen" value="false">  <param name="wmode" value="gpu">  <param name="tabindex" value="1">  <param name=FlashVars value="playbackId=<%= playbackId %>" />  <embed    type="application/x-shockwave-flash"    disabled="disabled"    tabindex="-1"    enablecontextmenu="false"    allowScriptAccess="always"    quality="autohight"    pluginspage="http://www.macromedia.com/go/getflashplayer"    wmode="gpu"    swliveconnect="true"    type="application/x-shockwave-flash"    allowfullscreen="false"    bgcolor="#000000"    FlashVars="playbackId=<%= playbackId %>"    src="<%= swfPath %>">  </embed>'),
-  'flash_vod': _.template('  <param name="movie" value="<%= swfPath %>">  <param name="quality" value="autohigh">  <param name="swliveconnect" value="true">  <param name="allowScriptAccess" value="always">  <param name="bgcolor" value="#001122">  <param name="allowFullScreen" value="false">  <param name="wmode" value="gpu">  <param name="tabindex" value="1">  <param name=FlashVars value="playbackId=<%= playbackId %>" />  <embed    type="application/x-shockwave-flash"    disabled="disabled"    tabindex="-1"    enablecontextmenu="false"    allowScriptAccess="always"    quality="autohight"    pluginspage="http://www.macromedia.com/go/getflashplayer"    wmode="gpu"    swliveconnect="true"    type="application/x-shockwave-flash"    allowfullscreen="false"    bgcolor="#000000"    FlashVars="playbackId=<%= playbackId %>"    src="<%= swfPath %>">  </embed>'),
   'hls': _.template('  <param name="movie" value="<%= swfPath %>?inline=1">  <param name="quality" value="autohigh">  <param name="swliveconnect" value="true">  <param name="allowScriptAccess" value="always">  <param name="bgcolor" value="#001122">  <param name="allowFullScreen" value="false">  <param name="wmode" value="transparent">  <param name="tabindex" value="1">  <param name=FlashVars value="playbackId=<%= playbackId %>" />  <embed    type="application/x-shockwave-flash"    tabindex="1"    enablecontextmenu="false"    allowScriptAccess="always"    quality="autohigh"    pluginspage="http://www.macromedia.com/go/getflashplayer"    wmode="transparent"    swliveconnect="true"    type="application/x-shockwave-flash"    allowfullscreen="false"    bgcolor="#000000"    FlashVars="playbackId=<%= playbackId %>"    src="<%= swfPath %>">  </embed>'),
   'html5_video': _.template('<source src="<%=src%>" type="<%=type%>">'),
   'background_button': _.template('<div class="playpause-button-wrapper" data-background-button>  <span class="playpause-icon" data-background-button></span></div>'),
   'poster': _.template('<div class="play-wrapper" data-poster>  <span class="poster-icon play" data-poster /></div>'),
-  'seek_time': _.template('<span data-seek-time><%= time %></span>'),
-  'spinner_loading': _.template('<div data-spinner-container class="spin-container1">  <div data-circle1></div>  <div data-circle2></div>  <div data-circle3></div>  <div data-circle4></div></div><div data-spinner-container class="spin-container2">  <div data-circle1></div>  <div data-circle2></div>  <div data-circle3></div>  <div data-circle4></div></div><div data-spinner-container class="spin-container3">  <div data-circle1></div>  <div data-circle2></div>  <div data-circle3></div>  <div data-circle4></div></div>'),
   'spinner_three_bounce': _.template('<div data-bounce1></div><div data-bounce2></div><div data-bounce3></div>'),
   'watermark': _.template('<div data-watermark data-watermark-<%=position %>><img src="<%= imageUrl %>"></div>'),
   CSS: {
     'container': '[data-container]{position:absolute;background-color:#000;height:100%;width:100%}',
     'core': '[data-player]{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;-o-user-select:none;user-select:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-webkit-transform:translate3d(0,0,0);-moz-transform:translate3d(0,0,0);-ms-transform:translate3d(0,0,0);-o-transform:translate3d(0,0,0);transform:translate3d(0,0,0);position:relative;margin:0;padding:0;border:0;height:594px;width:1055px;font-style:normal;font-weight:400;text-align:center;overflow:hidden;font-size:100%;color:#000;font-family:"lucida grande",tahoma,verdana,arial,sans-serif;text-shadow:0 0 0;box-sizing:border-box}[data-player] a,[data-player] abbr,[data-player] acronym,[data-player] address,[data-player] applet,[data-player] article,[data-player] aside,[data-player] audio,[data-player] b,[data-player] big,[data-player] blockquote,[data-player] canvas,[data-player] caption,[data-player] center,[data-player] cite,[data-player] code,[data-player] dd,[data-player] del,[data-player] details,[data-player] dfn,[data-player] div,[data-player] dl,[data-player] dt,[data-player] em,[data-player] embed,[data-player] fieldset,[data-player] figcaption,[data-player] figure,[data-player] footer,[data-player] form,[data-player] h1,[data-player] h2,[data-player] h3,[data-player] h4,[data-player] h5,[data-player] h6,[data-player] header,[data-player] hgroup,[data-player] i,[data-player] iframe,[data-player] img,[data-player] ins,[data-player] kbd,[data-player] label,[data-player] legend,[data-player] li,[data-player] mark,[data-player] menu,[data-player] nav,[data-player] object,[data-player] ol,[data-player] output,[data-player] p,[data-player] pre,[data-player] q,[data-player] ruby,[data-player] s,[data-player] samp,[data-player] section,[data-player] small,[data-player] span,[data-player] strike,[data-player] strong,[data-player] sub,[data-player] summary,[data-player] sup,[data-player] table,[data-player] tbody,[data-player] td,[data-player] tfoot,[data-player] th,[data-player] thead,[data-player] time,[data-player] tr,[data-player] tt,[data-player] u,[data-player] ul,[data-player] var,[data-player] video{margin:0;padding:0;border:0;font:inherit;font-size:100%;vertical-align:baseline}[data-player] table{border-collapse:collapse;border-spacing:0}[data-player] caption,[data-player] td,[data-player] th{text-align:left;font-weight:400;vertical-align:middle}[data-player] blockquote,[data-player] q{quotes:none}[data-player] blockquote:after,[data-player] blockquote:before,[data-player] q:after,[data-player] q:before{content:"";content:none}[data-player] a img{border:none}[data-player].fullscreen{width:100%;height:100%}[data-player].nocursor{cursor:none}',
-    'media_control': '@font-face{font-family:Player;src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot);src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot?#iefix) format("embedded-opentype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.ttf) format("truetype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.svg#player) format("svg")}.media-control-notransition{-webkit-transition:none!important;-webkit-transition-delay:0s;-moz-transition:none!important;-o-transition:none!important;transition:none!important}.media-control[data-media-control]{position:absolute;border-radius:0;bottom:0;left:0;right:0;margin-left:auto;margin-right:auto;max-width:100%;min-width:60%;height:40px;z-index:9999;-webkit-transition:all,.4s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.4s,ease-out;-o-transition:all,.4s,ease-out;transition:all,.4s,ease-out}.media-control[data-media-control] .media-control-background[data-background]{position:absolute;height:150px;width:100%;bottom:0;background-image:-owg(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:-webkit(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:-moz(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:-o(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9));-webkit-transition:all,.6s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.6s,ease-out;-o-transition:all,.6s,ease-out;transition:all,.6s,ease-out}.media-control[data-media-control] .media-control-icon{font-family:Player;font-weight:400;font-style:normal;font-size:26px;line-height:32px;letter-spacing:0;speak:none;color:#fff;vertical-align:middle;text-align:left;padding:0 6px;color:rgba(255,255,255,.3);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.media-control[data-media-control] .media-control-icon:hover{color:#fff;opacity:.7;text-shadow:rgba(255,255,255,.5) 0 0 15px;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control].media-control-hide{bottom:-50px}.media-control[data-media-control].media-control-hide .media-control-background[data-background],.media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar]{opacity:0}.media-control[data-media-control] .media-control-layer[data-controls]{position:relative;top:10%;height:80%;vertical-align:middle}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control]{position:absolute;top:0;left:10px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control]{height:100%;text-align:center;line-height:32px}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control]{position:absolute;top:0;right:5px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button{background-color:transparent;border:0;margin:0 8px;cursor:pointer;display:inline-block}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus{outline:0}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]:before{content:"\\e002"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]:before{content:"\\e003"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]{float:right;background-color:transparent;border:0;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]:before{content:"\\e006"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]{cursor:default;float:right;background-color:transparent;border:0;width:32px;height:100%;opacity:0}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]:before{content:"\\e007"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled{opacity:1}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].playing:before{content:"\\e002"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].paused:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].playing:before{content:"\\e003"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].stopped:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration],.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position]{display:inline-block;font-size:10px;color:#fff;cursor:default;line-height:32px;position:relative}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]{color:rgba(255,255,255,.3)}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before{content:"|";margin-right:3px}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]{position:absolute;top:-20px;left:0;display:inline-block;vertical-align:middle;width:100%;height:25px;cursor:pointer}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar]{width:100%;height:1px;position:relative;top:12px;background-color:#666;overflow:hidden}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar]{position:absolute;top:0;left:0;width:0;height:100%;background-color:#c2c2c2;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar]{position:absolute;top:0;left:0;width:0;height:100%;background-color:#005aff;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar]{position:absolute;top:6px;left:0;width:20px;height:20px;opacity:1;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar]{position:absolute;left:3px;top:3px;width:8px;height:8px;border-radius:10px;box-shadow:0 0 0 6px rgba(255,255,255,.2);background-color:#fff}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume]{float:right;display:inline-block;width:32px;height:32px;cursor:pointer}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume]{position:absolute;bottom:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]{background-color:transparent;border:0;width:32px;height:32px}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:before{content:"\\e004"}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted:before{content:"\\e005"}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume]{width:32px;height:88px;position:absolute;bottom:40px;background:rgba(2,2,2,.5);border-radius:4px;-webkit-transition:all,.2s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.2s,ease-out;-o-transition:all,.2s,ease-out;transition:all,.2s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide{opacity:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume]{margin-left:12px;background:#6f6f6f;border-radius:4px;width:8px;height:72px;position:relative;top:8px;overflow:hidden}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume]{position:absolute;bottom:0;background:#fff;width:100%;height:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume]{position:absolute;bottom:40%;left:6px;width:20px;height:20px}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume]{position:absolute;left:4px;top:4px;width:12px;height:12px;border-radius:6px;border:1px solid #6f6f6f;background-color:#fff}',
+    'media_control': '@font-face{font-family:Player;src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot);src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot?#iefix) format("embedded-opentype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.ttf) format("truetype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.svg#player) format("svg")}.media-control-notransition{-webkit-transition:none!important;-webkit-transition-delay:0s;-moz-transition:none!important;-o-transition:none!important;transition:none!important}.media-control[data-media-control]{position:absolute;border-radius:0;bottom:0;left:0;right:0;margin-left:auto;margin-right:auto;max-width:100%;min-width:60%;height:40px;z-index:9999;-webkit-transition:all,.4s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.4s,ease-out;-o-transition:all,.4s,ease-out;transition:all,.4s,ease-out}.media-control[data-media-control] .media-control-background[data-background]{position:absolute;height:150px;width:100%;bottom:0;background-image:-owg(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:-webkit(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:-moz(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:-o(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9));-webkit-transition:all,.6s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.6s,ease-out;-o-transition:all,.6s,ease-out;transition:all,.6s,ease-out}.media-control[data-media-control] .media-control-icon{font-family:Player;font-weight:400;font-style:normal;font-size:26px;line-height:32px;letter-spacing:0;speak:none;color:#fff;vertical-align:middle;text-align:left;padding:0 6px;color:rgba(255,255,255,.3);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.media-control[data-media-control] .media-control-icon:hover{color:#fff;opacity:.7;text-shadow:rgba(255,255,255,.5) 0 0 15px;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control].media-control-hide{bottom:-50px}.media-control[data-media-control].media-control-hide .media-control-background[data-background],.media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar]{opacity:0}.media-control[data-media-control] .media-control-layer[data-controls]{position:relative;top:10%;height:80%;vertical-align:middle}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control]{position:absolute;top:0;left:10px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control]{height:100%;text-align:center;line-height:32px}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control]{position:absolute;top:0;right:5px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button{background-color:transparent;border:0;margin:0 8px;cursor:pointer;display:inline-block}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus{outline:0}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]:before{content:"\\e002"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]:before{content:"\\e003"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]{float:right;background-color:transparent;border:0;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]:before{content:"\\e006"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]{cursor:default;float:right;background-color:transparent;border:0;width:32px;height:100%;opacity:0}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]:before{content:"\\e007"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled{opacity:1}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].playing:before{content:"\\e002"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].paused:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].playing:before{content:"\\e003"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].stopped:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration],.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position]{display:inline-block;font-size:10px;color:#fff;cursor:default;line-height:32px;position:relative}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]{color:rgba(255,255,255,.3)}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before{content:"|";margin-right:3px}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]{position:absolute;top:-20px;left:0;display:inline-block;vertical-align:middle;width:100%;height:25px;cursor:pointer}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar]{width:100%;height:1px;position:relative;top:12px;background-color:#666;overflow:hidden}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar]{position:absolute;top:0;left:0;width:0;height:100%;background-color:#c2c2c2;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar]{position:absolute;top:0;left:0;width:0;height:100%;background-color:#005aff;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar]{position:absolute;top:2px;left:0;width:20px;height:20px;opacity:1;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar]{position:absolute;left:6px;top:6px;width:8px;height:8px;border-radius:10px;box-shadow:0 0 0 6px rgba(255,255,255,.2);background-color:#fff}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume]{float:right;display:inline-block;width:32px;height:32px;cursor:pointer}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume]{position:absolute;bottom:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]{background-color:transparent;border:0;width:32px;height:32px}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:before{content:"\\e004"}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted:before{content:"\\e005"}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume]{width:32px;height:88px;position:absolute;bottom:40px;background:rgba(2,2,2,.5);border-radius:4px;-webkit-transition:all,.2s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.2s,ease-out;-o-transition:all,.2s,ease-out;transition:all,.2s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide{opacity:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume]{margin-left:12px;background:#6f6f6f;border-radius:4px;width:8px;height:72px;position:relative;top:8px;overflow:hidden}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume]{position:absolute;bottom:0;background:#fff;width:100%;height:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume]{position:absolute;bottom:40%;left:6px;width:20px;height:20px}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume]{position:absolute;left:4px;top:4px;width:12px;height:12px;border-radius:6px;border:1px solid #6f6f6f;background-color:#fff}',
+    'seek_time': '.seek-time[data-seek-time]{position:absolute;width:auto;height:20px;bottom:55px;background-color:rgba(2,2,2,.5);z-index:9999;-webkit-transition:all,.2s,ease-in;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.2s,ease-in;-o-transition:all,.2s,ease-in;transition:all,.2s,ease-in}.seek-time[data-seek-time].hidden[data-seek-time]{opacity:0}.seek-time[data-seek-time] span[data-seek-time]{position:relative;color:#fff;font-size:10px;padding-left:7px;padding-right:7px}',
     'flash': '[data-flash]{position:absolute;height:100%;width:100%;background-color:#000;display:block;pointer-events:none}',
-    'flash_vod': '[data-flash-vod]{position:absolute;height:100%;width:100%;background-color:#000;display:block;pointer-events:none}',
     'hls': '[data-hls]{position:absolute;height:100%;width:100%;background-color:#000;display:block;pointer-events:none;top:0}',
     'html5_video': '[data-html5-video]{position:absolute;height:100%;width:100%;display:block}',
     'background_button': '.background-button[data-background-button]{font-family:Player;position:absolute;height:100%;width:100%;background-color:rgba(0,0,0,.2);-webkit-transition:all,.4s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.4s,ease-out;-o-transition:all,.4s,ease-out;transition:all,.4s,ease-out}.background-button[data-background-button].hide[data-background-button]{opacity:0}.background-button[data-background-button] .playpause-button-wrapper[data-background-button]{position:absolute;overflow:hidden;width:100%;height:25%;line-height:100%;font-size:20%;top:45%;margin-top:-5%;text-align:center}.background-button[data-background-button] .playpause-button-wrapper[data-background-button] .playpause-icon[data-background-button]{font-family:Player;cursor:pointer;font-weight:400;font-style:normal;line-height:1;letter-spacing:0;speak:none;font-size:90px;color:#fff;opacity:.75;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.background-button[data-background-button] .playpause-button-wrapper[data-background-button] .playpause-icon[data-background-button]:hover{text-shadow:rgba(255,255,255,.5) 0 0 15px}.background-button[data-background-button] .playpause-button-wrapper[data-background-button] .playpause-icon[data-background-button].playing:before{content:"\\e002"}.background-button[data-background-button] .playpause-button-wrapper[data-background-button] .playpause-icon[data-background-button].paused:before{content:"\\e001"}',
-    'pip': '.pip-loading[data-pip]{left:25px;top:15px;position:relative;float:left;z-index:3001;color:#fff}.pip-transition[data-pip]{-webkit-transition:all .4s ease-out;-moz-transition:all .4s ease-out;-ms-transition:all .4s ease-out;-o-transition:all .4s ease-out;transition:all .4s ease-out}.master-container[data-pip]{cursor:default;width:100%;height:100%;font-size:100%;position:absolute;bottom:0;right:0;border:none}.pip-container[data-pip]{cursor:pointer;width:24%;height:24%;font-size:24%;z-index:2000;position:absolute;right:23px;bottom:23px;border-width:2px;border-radius:3px;border-style:solid;border-color:rgba(255,255,255,.25);background-clip:padding-box;-webkit-background-clip:padding-box}.pip-container[data-pip].over-media-control{bottom:63px}',
     'poster': '@font-face{font-family:Player;src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot);src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot?#iefix) format("embedded-opentype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.ttf) format("truetype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.svg#player) format("svg")}.player-poster[data-poster]{cursor:pointer;position:absolute;height:100%;width:100%;z-index:998;top:0}.player-poster[data-poster] .poster-background[data-poster]{width:100%;height:100%}.player-poster[data-poster] .play-wrapper[data-poster]{position:absolute;overflow:hidden;width:100%;height:20%;line-height:100%;font-size:20%;top:50%;margin-top:-5%;text-align:center}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]{font-family:Player;font-weight:400;font-style:normal;line-height:1;letter-spacing:0;speak:none;color:#fff;opacity:.75;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster].play[data-poster]:before{content:"\\e001"}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]:hover{opacity:1}',
-    'seek_time': '.seek-time[data-seek-time]{position:absolute;width:auto;height:20px;bottom:55px;background-color:rgba(2,2,2,.5);z-index:9999;-webkit-transition:all,.2s,ease-in;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.2s,ease-in;-o-transition:all,.2s,ease-in;transition:all,.2s,ease-in}.seek-time[data-seek-time].hidden[data-seek-time]{opacity:0}.seek-time[data-seek-time] span[data-seek-time]{position:relative;color:#fff;font-size:10px;padding-left:7px;padding-right:7px}',
-    'spinner_loading': 'div[data-spinner]{width:50px;height:50px;position:relative;margin-left:auto;margin-right:auto;right:0;left:0;z-index:999;top:45%}.spin-container1>div,.spin-container2>div,.spin-container3>div{width:13px;height:13px;background-color:#fff;border-radius:100%;position:absolute;-webkit-animation:bouncedelay 1.2s infinite ease-in-out;animation:bouncedelay 1.2s infinite ease-in-out;-webkit-animation-fill-mode:both;animation-fill-mode:both}[data-spinner] [data-spinner-container]{position:absolute;width:100%;height:100%}.spin-container2{-webkit-transform:rotateZ(45deg);transform:rotateZ(45deg)}.spin-container3{-webkit-transform:rotateZ(90deg);transform:rotateZ(90deg)}[data-circle1]{top:0;left:0}[data-circle2]{top:0;right:0}[data-circle3]{right:0;bottom:0}[data-circle4]{left:0;bottom:0}.spin-container2 [data-circle1]{-webkit-animation-delay:-1.1s;animation-delay:-1.1s}.spin-container3 [data-circle1]{-webkit-animation-delay:-1s;animation-delay:-1s}.spin-container1 [data-circle2]{-webkit-animation-delay:-.9s;animation-delay:-.9s}.spin-container2 [data-circle2]{-webkit-animation-delay:-.8s;animation-delay:-.8s}.spin-container3 [data-circle2]{-webkit-animation-delay:-.7s;animation-delay:-.7s}.spin-container1 [data-circle3]{-webkit-animation-delay:-.6s;animation-delay:-.6s}.spin-container2 [data-circle3]{-webkit-animation-delay:-.5s;animation-delay:-.5s}.spin-container3 [data-circle3]{-webkit-animation-delay:-.4s;animation-delay:-.4s}.spin-container1 [data-circle4]{-webkit-animation-delay:-.3s;animation-delay:-.3s}.spin-container2 [data-circle4]{-webkit-animation-delay:-.2s;animation-delay:-.2s}.spin-container3 [data-circle4]{-webkit-animation-delay:-.1s;animation-delay:-.1s}@-webkit-keyframes bouncedelay{0%,100%,80%{-webkit-transform:scale(0)}40%{-webkit-transform:scale(1)}}@keyframes bouncedelay{0%,100%,80%{transform:scale(0);-webkit-transform:scale(0)}40%{transform:scale(1);-webkit-transform:scale(1)}}',
     'spinner_three_bounce': '.spinner-three-bounce[data-spinner]{position:absolute;margin:0 auto;width:70px;text-align:center;z-index:10;top:47%;left:0;right:0}.spinner-three-bounce[data-spinner]>div{width:18px;height:18px;background-color:#FFF;border-radius:100%;display:inline-block;-webkit-animation:bouncedelay 1.4s infinite ease-in-out;-moz-animation:bouncedelay 1.4s infinite ease-in-out;-ms-animation:bouncedelay 1.4s infinite ease-in-out;-o-animation:bouncedelay 1.4s infinite ease-in-out;animation:bouncedelay 1.4s infinite ease-in-out;-webkit-animation-fill-mode:both;-moz-animation-fill-mode:both;-ms-animation-fill-mode:both;-o-animation-fill-mode:both;animation-fill-mode:both}.spinner-three-bounce[data-spinner] [data-bounce1],.spinner-three-bounce[data-spinner] [data-bounce2]{-webkit-animation-delay:-.32s;-moz-animation-delay:-.32s;-ms-animation-delay:-.32s;-o-animation-delay:-.32s;animation-delay:-.32s}@-moz-keyframes bouncedelay{0%,100%,80%{-moz-transform:scale(0);transform:scale(0)}40%{-moz-transform:scale(1);transform:scale(1)}}@-webkit-keyframes bouncedelay{0%,100%,80%{-webkit-transform:scale(0);transform:scale(0)}40%{-webkit-transform:scale(1);transform:scale(1)}}@-o-keyframes bouncedelay{0%,100%,80%{-o-transform:scale(0);transform:scale(0)}40%{-o-transform:scale(1);transform:scale(1)}}@-ms-keyframes bouncedelay{0%,100%,80%{-ms-transform:scale(0);transform:scale(0)}40%{-ms-transform:scale(1);transform:scale(1)}}@keyframes bouncedelay{0%,100%,80%{transform:scale(0)}40%{transform:scale(1)}}',
     'watermark': '[data-watermark]{position:absolute;margin:100px auto 0;width:70px;text-align:center;z-index:10}[data-watermark-bottom-left]{bottom:10px;left:10px}[data-watermark-bottom-right]{bottom:10px;right:42px}[data-watermark-top-left]{top:-95px;left:10px}[data-watermark-top-right]{top:-95px;right:37px}'
   }
 };
 
 
-},{"underscore":7}],"playback":[function(require,module,exports){
-module.exports=require('VbgHr3');
-},{}],"VbgHr3":[function(require,module,exports){
+},{"underscore":7}],"VbgHr3":[function(require,module,exports){
 "use strict";
 var UIObject = require('../base/ui_object');
 var Playback = function Playback(options) {
@@ -16625,7 +16745,9 @@ Playback.canPlay = (function(source) {
 module.exports = Playback;
 
 
-},{"../base/ui_object":"8lqCAT"}],16:[function(require,module,exports){
+},{"../base/ui_object":"8lqCAT"}],"playback":[function(require,module,exports){
+module.exports=require('VbgHr3');
+},{}],16:[function(require,module,exports){
 "use strict";
 var PluginMixin = {
   initialize: function() {
@@ -16678,7 +16800,9 @@ var $UICorePlugin = UICorePlugin;
 module.exports = UICorePlugin;
 
 
-},{"./ui_object":"8lqCAT"}],"8lqCAT":[function(require,module,exports){
+},{"./ui_object":"8lqCAT"}],"ui_object":[function(require,module,exports){
+module.exports=require('8lqCAT');
+},{}],"8lqCAT":[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var _ = require('underscore');
@@ -16761,9 +16885,7 @@ UIObject.extend = extend;
 module.exports = UIObject;
 
 
-},{"./base_object":"2HNVgz","./utils":24,"jquery":3,"underscore":7}],"ui_object":[function(require,module,exports){
-module.exports=require('8lqCAT');
-},{}],"Z7u8cr":[function(require,module,exports){
+},{"./base_object":"2HNVgz","./utils":24,"jquery":3,"underscore":7}],"Z7u8cr":[function(require,module,exports){
 "use strict";
 var PluginMixin = require('./plugin_mixin');
 var UIObject = require('./ui_object');
@@ -16854,7 +16976,7 @@ var formatTime = function(time, options) {
 };
 var Fullscreen = {
   isFullscreen: function() {
-    return document.webkitIsFullScreen || document.mozFullScreen;
+    return document.webkitIsFullScreen || document.mozFullScreen || !!document.msFullscreenElement;
   },
   requestFullscreen: function(el) {
     if (el.requestFullscreen) {
@@ -16956,9 +17078,7 @@ module.exports = {
 };
 
 
-},{"jquery":3,"moment":4,"underscore":7}],"browser":[function(require,module,exports){
-module.exports=require('195Wj5');
-},{}],"195Wj5":[function(require,module,exports){
+},{"jquery":3,"moment":4,"underscore":7}],"195Wj5":[function(require,module,exports){
 "use strict";
 var Browser = function Browser() {};
 ($traceurRuntime.createClass)(Browser, {}, {});
@@ -16971,6 +17091,8 @@ Browser.isWin8App = !!(/MSAppHost/i.test(navigator.userAgent));
 module.exports = Browser;
 
 
+},{}],"browser":[function(require,module,exports){
+module.exports=require('195Wj5');
 },{}],27:[function(require,module,exports){
 "use strict";
 var UIObject = require('../../base/ui_object');
@@ -17214,6 +17336,7 @@ var Fullscreen = require('../../base/utils').Fullscreen;
 var Styler = require('../../base/styler');
 var MediaControl = require('../media_control');
 var PlayerInfo = require('../player_info');
+var Mediator = require('../mediator');
 var Core = function Core(options) {
   var $__0 = this;
   $traceurRuntime.superCall(this, $Core.prototype, "constructor", [options]);
@@ -17224,6 +17347,12 @@ var Core = function Core(options) {
   this.containers = [];
   this.createContainers(options);
   this.updateSize();
+  document.addEventListener('fullscreenchange', (function() {
+    return $__0.exit();
+  }));
+  document.addEventListener('MSFullscreenChange', (function() {
+    return $__0.exit();
+  }));
   document.addEventListener('mozfullscreenchange', (function() {
     return $__0.exit();
   }));
@@ -17258,8 +17387,12 @@ var $Core = Core;
     if (Fullscreen.isFullscreen()) {
       this.$el.addClass('fullscreen');
       this.$el.removeAttr('style');
+      this.playerInfo.currentSize = {
+        width: window.innerWidth,
+        height: window.innerHeight
+      };
     } else {
-      var needStretch = this.options.stretchWidth && this.options.stretchHeight;
+      var needStretch = !!this.options.stretchWidth && !!this.options.stretchHeight;
       var width,
           height;
       if (needStretch && this.options.stretchWidth <= window.innerWidth && this.options.stretchHeight <= (window.innerHeight * 0.73)) {
@@ -17272,7 +17405,12 @@ var $Core = Core;
       this.$el.css({width: width});
       this.$el.css({height: height});
       this.$el.removeClass('fullscreen');
+      this.playerInfo.currentSize = {
+        width: width,
+        height: height
+      };
     }
+    Mediator.trigger('player:resize');
   },
   resolveOnContainersReady: function(containers) {
     var $__0 = this;
@@ -17407,7 +17545,7 @@ var $Core = Core;
 module.exports = Core;
 
 
-},{"../../base/styler":17,"../../base/ui_object":"8lqCAT","../../base/utils":24,"../container_factory":30,"../media_control":"A8Uh+k","../player_info":"Pce0iO","jquery":3,"underscore":7}],32:[function(require,module,exports){
+},{"../../base/styler":17,"../../base/ui_object":"8lqCAT","../../base/utils":24,"../container_factory":30,"../media_control":"A8Uh+k","../mediator":40,"../player_info":"Pce0iO","jquery":3,"underscore":7}],32:[function(require,module,exports){
 "use strict";
 module.exports = require('./core');
 
@@ -17471,13 +17609,12 @@ var StatsPlugin = require('../../plugins/stats');
 var WaterMarkPlugin = require('../../plugins/watermark');
 var PosterPlugin = require('../../plugins/poster');
 var BackgroundButton = require('../../plugins/background_button');
-var SeekTime = require('../../plugins/seek_time');
 var Loader = function Loader(externalPlugins) {
   $traceurRuntime.superCall(this, $Loader.prototype, "constructor", []);
   this.playerInfo = PlayerInfo.getInstance();
   this.playbackPlugins = [FlashVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, HLSVideoPlayback, NoOp];
   this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin];
-  this.corePlugins = [BackgroundButton, SeekTime];
+  this.corePlugins = [BackgroundButton];
   if (externalPlugins) {
     this.addExternalPlugins(externalPlugins);
   }
@@ -17485,14 +17622,17 @@ var Loader = function Loader(externalPlugins) {
 var $Loader = Loader;
 ($traceurRuntime.createClass)(Loader, {
   addExternalPlugins: function(plugins) {
+    var pluginName = function(plugin) {
+      return plugin.prototype.name;
+    };
     if (plugins.playback) {
-      this.playbackPlugins = plugins.playback.concat(this.playbackPlugins);
+      this.playbackPlugins = _.uniq(plugins.playback.concat(this.playbackPlugins), pluginName);
     }
     if (plugins.container) {
-      this.containerPlugins = plugins.container.concat(this.containerPlugins);
+      this.containerPlugins = _.uniq(plugins.container.concat(this.containerPlugins), pluginName);
     }
     if (plugins.core) {
-      this.corePlugins = plugins.core.concat(this.corePlugins);
+      this.corePlugins = _.uniq(plugins.core.concat(this.corePlugins), pluginName);
     }
     this.playerInfo.playbackPlugins = this.playbackPlugins;
   },
@@ -17506,7 +17646,7 @@ var $Loader = Loader;
 module.exports = Loader;
 
 
-},{"../../base/base_object":"2HNVgz","../../playbacks/flash":46,"../../playbacks/hls":48,"../../playbacks/html5_audio":50,"../../playbacks/html5_video":52,"../../playbacks/no_op":53,"../../plugins/background_button":55,"../../plugins/poster":58,"../../plugins/seek_time":60,"../../plugins/spinner_three_bounce":62,"../../plugins/stats":64,"../../plugins/watermark":66,"../player_info":"Pce0iO","underscore":7}],"A8Uh+k":[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../../playbacks/flash":48,"../../playbacks/hls":50,"../../playbacks/html5_audio":52,"../../playbacks/html5_video":54,"../../playbacks/no_op":55,"../../plugins/background_button":57,"../../plugins/poster":60,"../../plugins/spinner_three_bounce":62,"../../plugins/stats":64,"../../plugins/watermark":66,"../player_info":"Pce0iO","underscore":7}],"A8Uh+k":[function(require,module,exports){
 "use strict";
 module.exports = require('./media_control');
 
@@ -17523,9 +17663,11 @@ var UIObject = require('../../base/ui_object');
 var Utils = require('../../base/utils');
 var Mousetrap = require('mousetrap');
 var ScrollMonitor = require('scrollmonitor');
+var SeekTime = require('../seek_time');
 var MediaControl = function MediaControl(options) {
   var $__0 = this;
   $traceurRuntime.superCall(this, $MediaControl.prototype, "constructor", [options]);
+  this.seekTime = new SeekTime(this);
   this.options = options;
   this.container = options.container;
   this.keepVisible = false;
@@ -17727,8 +17869,10 @@ var $MediaControl = MediaControl;
     this.addEventListeners();
     this.settingsUpdate();
     this.container.setVolume(this.currentVolume);
-    if (this.container.mediaControlDisabled)
+    if (this.container.mediaControlDisabled) {
       this.disable();
+    }
+    this.trigger("mediacontrol:containerchanged");
   },
   showVolumeBar: function() {
     if (this.hideVolumeId) {
@@ -17787,7 +17931,7 @@ var $MediaControl = MediaControl;
   },
   show: function(event) {
     var $__0 = this;
-    if (this.disabled)
+    if (this.disabled || !this.$el.hasClass('media-control-hide'))
       return;
     var timeout = 2000;
     if (!event || (event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY) || navigator.userAgent.match(/firefox/i)) {
@@ -17812,6 +17956,8 @@ var $MediaControl = MediaControl;
     if (this.hideId) {
       clearTimeout(this.hideId);
     }
+    if (this.$el.hasClass('media-control-hide'))
+      return;
     if (this.keepVisible || this.draggingVolumeBar || this.draggingSeekBar) {
       this.hideId = setTimeout((function() {
         return $__0.hide();
@@ -17863,7 +18009,7 @@ var $MediaControl = MediaControl;
   setSeekPercentage: function(value) {
     if (value > 100)
       return;
-    var pos = this.$seekBarContainer.width() * value / 100.0 - this.$seekBarScrubber.width() / 2.0;
+    var pos = this.$seekBarContainer.width() * value / 100.0 - (this.$seekBarScrubber.width() / 2.0);
     this.$seekBarPosition.css({width: value + '%'});
     this.$seekBarScrubber.css({left: pos});
   },
@@ -17920,7 +18066,7 @@ var $MediaControl = MediaControl;
 module.exports = MediaControl;
 
 
-},{"../../base/jst":13,"../../base/styler":17,"../../base/ui_object":"8lqCAT","../../base/utils":24,"jquery":3,"mousetrap":5,"scrollmonitor":6,"underscore":7}],40:[function(require,module,exports){
+},{"../../base/jst":13,"../../base/styler":17,"../../base/ui_object":"8lqCAT","../../base/utils":24,"../seek_time":44,"jquery":3,"mousetrap":5,"scrollmonitor":6,"underscore":7}],40:[function(require,module,exports){
 "use strict";
 var Events = require('../base/events');
 var events = new Events();
@@ -17974,6 +18120,83 @@ module.exports = PlayerInfo;
 
 
 },{"../../base/base_object":"2HNVgz"}],44:[function(require,module,exports){
+"use strict";
+module.exports = require('./seek_time');
+
+
+},{"./seek_time":45}],45:[function(require,module,exports){
+"use strict";
+var UIObject = require('../../base/ui_object');
+var Styler = require('../../base/styler');
+var JST = require('../../base/jst');
+var formatTime = require('../../base/utils').formatTime;
+var $ = require('jquery');
+var SeekTime = function SeekTime(mediaControl) {
+  $traceurRuntime.superCall(this, $SeekTime.prototype, "constructor", []);
+  this.mediaControl = mediaControl;
+  this.listenTo(this.mediaControl.container, 'container:playbackstate', this.setPlaybackType);
+  this.listenTo(this.mediaControl, 'mediacontrol:containerchanged', this.onContainerChanged);
+  this.setPlaybackType();
+  this.render();
+};
+var $SeekTime = SeekTime;
+($traceurRuntime.createClass)(SeekTime, {
+  get name() {
+    return 'seek_time';
+  },
+  get template() {
+    return JST.seek_time;
+  },
+  get attributes() {
+    return {
+      'class': 'seek-time hidden',
+      'data-seek-time': ''
+    };
+  },
+  onContainerChanged: function() {
+    this.listenTo(this.mediaControl.container, 'container:playbackstate', this.setPlaybackType);
+    this.setPlaybackType();
+  },
+  addEventListeners: function() {
+    this.listenTo(this.mediaControl, 'mediacontrol:mousemove:seekbar', this.showTime);
+    this.listenTo(this.mediaControl, 'mediacontrol:mouseleave:seekbar', this.hideTime);
+  },
+  setPlaybackType: function() {
+    var type = this.mediaControl.container.getPlaybackType();
+    if (type === 'vod') {
+      this.addEventListeners();
+    } else {
+      this.stopListening(this.mediaControl, 'mediacontrol:mousemove:seekbar');
+      this.stopListening(this.mediaControl, 'mediacontrol:mouseleave:seekbar');
+      this.hideTime();
+    }
+  },
+  showTime: function(event) {
+    var offsetX = event.pageX - $(event.target).offset().left;
+    var pos = offsetX / $(event.target).width() * 100;
+    pos = Math.min(100, Math.max(pos, 0));
+    var currentTime = pos * this.mediaControl.container.getDuration() / 100;
+    this.time = formatTime(currentTime);
+    this.$el.css('left', event.pageX - Math.floor((this.$el.width() / 2) + 6));
+    this.$el.removeClass('hidden');
+    this.render();
+  },
+  hideTime: function() {
+    this.$el.addClass('hidden');
+  },
+  getExternalInterface: function() {},
+  render: function() {
+    var style = Styler.getStyleFor(this.name);
+    this.$el.html(this.template({time: this.time}));
+    this.$el.append(style);
+    this.mediaControl.$el.append(this.el);
+    return this;
+  }
+}, {}, UIObject);
+module.exports = SeekTime;
+
+
+},{"../../base/jst":13,"../../base/styler":17,"../../base/ui_object":"8lqCAT","../../base/utils":24,"jquery":3}],46:[function(require,module,exports){
 (function (global){
 "use strict";
 var BaseObject = require('./base/base_object');
@@ -18040,7 +18263,7 @@ module.exports = window.Clappr;
 
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./base/base_object":"2HNVgz","./components/core_factory":34,"./components/loader":35,"./components/mediator":40,"underscore":7}],45:[function(require,module,exports){
+},{"./base/base_object":"2HNVgz","./components/core_factory":34,"./components/loader":35,"./components/mediator":40,"underscore":7}],47:[function(require,module,exports){
 "use strict";
 var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
@@ -18063,6 +18286,7 @@ var Flash = function Flash(options) {
   } else {
     this.settings.left = ["playpause", "position", "duration"];
     this.settings.right = ["volume", "fullscreen"];
+    this.settings.seekEnabled = true;
   }
   this.isReady = false;
   this.addListeners();
@@ -18086,6 +18310,9 @@ var $Flash = Flash;
     this.currentState = "IDLE";
     this.autoPlay && this.play();
     $('<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%" />').insertAfter(this.$el);
+  },
+  getPlaybackType: function() {
+    return this.isRTMP ? 'live' : 'vod';
   },
   setupFirefox: function() {
     var $el = this.$('embed');
@@ -18216,12 +18443,12 @@ Flash.canPlay = function(resource) {
 module.exports = Flash;
 
 
-},{"../../base/jst":13,"../../base/styler":17,"../../base/ui_object":"8lqCAT","../../components/browser":"195Wj5","../../components/mediator":40,"jquery":3,"underscore":7}],46:[function(require,module,exports){
+},{"../../base/jst":13,"../../base/styler":17,"../../base/ui_object":"8lqCAT","../../components/browser":"195Wj5","../../components/mediator":40,"jquery":3,"underscore":7}],48:[function(require,module,exports){
 "use strict";
 module.exports = require('./flash');
 
 
-},{"./flash":45}],47:[function(require,module,exports){
+},{"./flash":47}],49:[function(require,module,exports){
 "use strict";
 var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
@@ -18294,6 +18521,10 @@ var $HLS = HLS;
     this.trigger('playback:ready', this.name);
     this.currentState = "IDLE";
     this.el.globoPlayerSetflushLiveURLCache(true);
+    if (this._tmpVolume) {
+      this.volume(this._tmpVolume);
+      delete this._tmpVolume;
+    }
     this.autoPlay && this.play();
   },
   updateHighDefinition: function(isHD) {
@@ -18303,25 +18534,29 @@ var $HLS = HLS;
   updateTime: function() {
     var duration = this.getDuration();
     var position = this.el.globoGetPosition();
-    if (this.playbackType === 'live' && position >= duration) {
+    var livePlayback = this.playbackType === 'live';
+    if (livePlayback && (position >= duration || position < 0)) {
       position = duration;
     }
-    this.trigger('playback:timeupdate', position, duration, this.name);
     var previousDVRStatus = this.dvrEnabled;
-    this.dvrEnabled = (this.playbackType === 'live' && duration > 240);
+    this.dvrEnabled = (livePlayback && duration > 240);
     if (this.dvrEnabled !== previousDVRStatus) {
       this.updateSettings();
     }
     var previousDvrInUse = !!this.dvrInUse;
-    this.dvrInUse = this.dvrEnabled && (duration - position >= 2);
+    this.dvrInUse = this.dvrEnabled && (duration - position >= 5);
     if (this.dvrInUse !== previousDvrInUse) {
       this.trigger('playback:dvr', this.dvrInUse);
     }
+    if (livePlayback && (!this.dvrEnabled || !this.dvrInUse)) {
+      position = duration;
+    }
+    this.trigger('playback:timeupdate', position, duration, this.name);
   },
   play: function() {
     if (this.currentState === 'PAUSED') {
       this.el.globoPlayerResume();
-    } else {
+    } else if (this.currentState !== "PLAYING") {
       this.firstPlay();
     }
     this.trigger('playback:play', this.name);
@@ -18370,20 +18605,22 @@ var $HLS = HLS;
     this.updatePlaybackType();
   },
   updatePlaybackType: function() {
-    if (!this.playbackType) {
-      this.playbackType = this.el.globoGetType();
-      if (this.playbackType) {
-        this.playbackType = this.playbackType.toLowerCase();
-      }
-      this.trigger('playback:playbackstate');
+    this.playbackType = this.el.globoGetType();
+    if (this.playbackType) {
+      this.playbackType = this.playbackType.toLowerCase();
     }
+    this.trigger('playback:playbackstate');
   },
   firstPlay: function() {
     this.el.globoPlayerLoad(this.src);
     this.el.globoPlayerPlay();
   },
   volume: function(value) {
-    this.el.globoPlayerVolume(value);
+    if (this.el.globoPlayerVolume) {
+      this.el.globoPlayerVolume(value);
+    } else {
+      this._tmpVolume = value;
+    }
   },
   pause: function() {
     this.el.globoPlayerPause();
@@ -18413,7 +18650,7 @@ var $HLS = HLS;
     if (time > 0) {
       time = duration * time / 100;
     }
-    if (this.playbackType === 'live' && duration - time < 2) {
+    if (this.playbackType === 'live' && duration - time < 5) {
       time = -1;
     }
     this.el.globoPlayerSeek(time);
@@ -18472,12 +18709,12 @@ HLS.canPlay = function(resource) {
 module.exports = HLS;
 
 
-},{"../../base/jst":13,"../../base/styler":17,"../../base/ui_plugin":"Z7u8cr","../../components/browser":"195Wj5","../../components/mediator":40,"underscore":7}],48:[function(require,module,exports){
+},{"../../base/jst":13,"../../base/styler":17,"../../base/ui_plugin":"Z7u8cr","../../components/browser":"195Wj5","../../components/mediator":40,"underscore":7}],50:[function(require,module,exports){
 "use strict";
 module.exports = require('./hls');
 
 
-},{"./hls":47}],49:[function(require,module,exports){
+},{"./hls":49}],51:[function(require,module,exports){
 "use strict";
 var UIPlugin = require('../../base/ui_plugin');
 var HTML5Audio = function HTML5Audio(params) {
@@ -18564,12 +18801,12 @@ HTML5Audio.canPlay = function(resource) {
 module.exports = HTML5Audio;
 
 
-},{"../../base/ui_plugin":"Z7u8cr"}],50:[function(require,module,exports){
+},{"../../base/ui_plugin":"Z7u8cr"}],52:[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_audio');
 
 
-},{"./html5_audio":49}],51:[function(require,module,exports){
+},{"./html5_audio":51}],53:[function(require,module,exports){
 "use strict";
 var Playback = require('../../base/playback');
 var JST = require('../../base/jst');
@@ -18589,6 +18826,7 @@ var HTML5Video = function HTML5Video(options) {
   } else {
     this.settings.left = ["playpause", "position", "duration"];
     this.settings.right = ["fullscreen", "volume"];
+    this.settings.seekEnabled = true;
   }
 };
 var $HTML5Video = HTML5Video;
@@ -18725,12 +18963,12 @@ HTML5Video.canPlay = function(resource) {
 module.exports = HTML5Video;
 
 
-},{"../../base/jst":13,"../../base/playback":"VbgHr3","../../base/styler":17,"../../components/browser":"195Wj5"}],52:[function(require,module,exports){
+},{"../../base/jst":13,"../../base/playback":"VbgHr3","../../base/styler":17,"../../components/browser":"195Wj5"}],54:[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_video');
 
 
-},{"./html5_video":51}],53:[function(require,module,exports){
+},{"./html5_video":53}],55:[function(require,module,exports){
 "use strict";
 var Playback = require('../base/playback');
 var NoOp = function NoOp() {
@@ -18744,7 +18982,7 @@ NoOp.canPlay = (function(source) {
 module.exports = NoOp;
 
 
-},{"../base/playback":"VbgHr3"}],54:[function(require,module,exports){
+},{"../base/playback":"VbgHr3"}],56:[function(require,module,exports){
 "use strict";
 var UIObject = require('../../base/ui_object');
 var JST = require('../../base/jst');
@@ -18811,17 +19049,17 @@ var $BackgroundButton = BackgroundButton;
 module.exports = BackgroundButton;
 
 
-},{"../../base/jst":13,"../../base/styler":17,"../../base/ui_object":"8lqCAT"}],55:[function(require,module,exports){
+},{"../../base/jst":13,"../../base/styler":17,"../../base/ui_object":"8lqCAT"}],57:[function(require,module,exports){
 "use strict";
 module.exports = require('./background_button');
 
 
-},{"./background_button":54}],56:[function(require,module,exports){
+},{"./background_button":56}],58:[function(require,module,exports){
 "use strict";
 module.exports = require('./log');
 
 
-},{"./log":57}],57:[function(require,module,exports){
+},{"./log":59}],59:[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var BOLD = 'font-weight: bold; font-size: 13px;';
@@ -18843,7 +19081,7 @@ Log.info = function(klass, msg) {
 Log.error = function(klass, msg) {
   console.log('%s %cINFO%c [%s] %s', (new Date()).toLocaleTimeString(), INFO, DEFAULT, klass, msg);
 };
-Log.BLACKLIST = ['mediacontrol:show', 'mediacontrol:hide', 'playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress'];
+Log.BLACKLIST = ['playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress'];
 Log.prototype = {
   log: function(msg) {
     this.info(msg);
@@ -18858,16 +19096,18 @@ Log.prototype = {
 module.exports = Log;
 
 
-},{"jquery":3}],58:[function(require,module,exports){
+},{"jquery":3}],60:[function(require,module,exports){
 "use strict";
 module.exports = require('./poster');
 
 
-},{"./poster":59}],59:[function(require,module,exports){
+},{"./poster":61}],61:[function(require,module,exports){
 "use strict";
 var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
+var Mediator = require('../../components/mediator');
+var PlayerInfo = require('../../components/player_info');
 var $ = require('jquery');
 var _ = require('underscore');
 var PosterPlugin = function PosterPlugin(options) {
@@ -18898,10 +19138,14 @@ var $PosterPlugin = PosterPlugin;
     return {'click': 'clicked'};
   },
   bindEvents: function() {
+    var $__0 = this;
     this.listenTo(this.container, 'container:state:buffering', this.onBuffering);
     this.listenTo(this.container, 'container:play', this.onPlay);
     this.listenTo(this.container, 'container:stop', this.onStop);
     this.listenTo(this.container, 'container:ended', this.onStop);
+    Mediator.on('player:resize', (function() {
+      return $__0.updateSize();
+    }));
   },
   onBuffering: function() {
     this.hidePlayButton();
@@ -18925,11 +19169,18 @@ var $PosterPlugin = PosterPlugin;
     this.$playButton.hide();
   },
   showPlayButton: function() {
-    this.$el.css({fontSize: this.$el.height()});
+    this.updateSize();
     this.$playButton.show();
   },
   clicked: function() {
     this.container.play();
+  },
+  updateSize: function() {
+    if (!this.$el)
+      return;
+    var playerInfo = PlayerInfo.getInstance();
+    var height = playerInfo.currentSize ? playerInfo.currentSize.height : this.$el.height();
+    this.$el.css({fontSize: height});
   },
   render: function() {
     var $__0 = this;
@@ -18938,7 +19189,7 @@ var $PosterPlugin = PosterPlugin;
     this.$el.append(style);
     this.container.$el.append(this.el);
     this.$el.ready((function() {
-      $__0.$el.css({fontSize: $__0.options.height || $__0.$el.height()});
+      return $__0.updateSize();
     }));
     this.$playButton = $(this.$el.find('.play-wrapper'));
     if (this.options.poster !== undefined) {
@@ -18952,68 +19203,7 @@ var $PosterPlugin = PosterPlugin;
 module.exports = PosterPlugin;
 
 
-},{"../../base/jst":13,"../../base/styler":17,"../../base/ui_plugin":"Z7u8cr","jquery":3,"underscore":7}],60:[function(require,module,exports){
-"use strict";
-module.exports = require('./seek_time');
-
-
-},{"./seek_time":61}],61:[function(require,module,exports){
-"use strict";
-var UIObject = require('../../base/ui_object');
-var Styler = require('../../base/styler');
-var JST = require('../../base/jst');
-var formatTime = require('../../base/utils').formatTime;
-var $ = require('jquery');
-var SeekTime = function SeekTime(core) {
-  $traceurRuntime.superCall(this, $SeekTime.prototype, "constructor", [core]);
-  this.core = core;
-  this.mediaControl = this.core.mediaControl;
-  var type = this.mediaControl.container.getPlaybackType();
-  if (type && type !== 'live') {
-    this.listenTo(this.mediaControl, 'mediacontrol:mousemove:seekbar', this.showTime);
-    this.listenTo(this.mediaControl, 'mediacontrol:mouseleave:seekbar', this.hideTime);
-    this.render();
-  }
-};
-var $SeekTime = SeekTime;
-($traceurRuntime.createClass)(SeekTime, {
-  get name() {
-    return 'seek_time';
-  },
-  get template() {
-    return JST.seek_time;
-  },
-  get attributes() {
-    return {
-      'class': 'seek-time hidden',
-      'data-seek-time': ''
-    };
-  },
-  showTime: function(event) {
-    var offsetX = event.pageX - $(event.target).offset().left;
-    var pos = offsetX / $(event.target).width() * 100;
-    pos = Math.min(100, Math.max(pos, 0));
-    var currentTime = pos * this.mediaControl.container.getDuration() / 100;
-    this.time = formatTime(currentTime);
-    this.$el.css('left', event.pageX - Math.floor((this.$el.width() / 2) + 6));
-    this.$el.removeClass('hidden');
-    this.render();
-  },
-  hideTime: function(event) {
-    this.$el.addClass('hidden');
-  },
-  getExternalInterface: function() {},
-  render: function() {
-    var style = Styler.getStyleFor(this.name);
-    this.$el.html(this.template({time: this.time}));
-    this.$el.append(style);
-    this.core.$el.append(this.el);
-  }
-}, {}, UIObject);
-module.exports = SeekTime;
-
-
-},{"../../base/jst":13,"../../base/styler":17,"../../base/ui_object":"8lqCAT","../../base/utils":24,"jquery":3}],62:[function(require,module,exports){
+},{"../../base/jst":13,"../../base/styler":17,"../../base/ui_plugin":"Z7u8cr","../../components/mediator":40,"../../components/player_info":"Pce0iO","jquery":3,"underscore":7}],62:[function(require,module,exports){
 "use strict";
 module.exports = require('./spinner_three_bounce');
 
@@ -19108,10 +19298,13 @@ var $StatsPlugin = StatsPlugin;
   onPlay: function() {
     this.state = "PLAYING";
     this.watchingTimeInit = Date.now();
-    this.intervalId = setInterval(this.report.bind(this), this.reportInterval);
+    if (!this.intervalId) {
+      this.intervalId = setInterval(this.report.bind(this), this.reportInterval);
+    }
   },
   onStop: function() {
     clearInterval(this.intervalId);
+    this.intervalId = undefined;
     this.state = "STOPPED";
   },
   onBuffering: function() {
@@ -19218,4 +19411,4 @@ var $WaterMarkPlugin = WaterMarkPlugin;
 module.exports = WaterMarkPlugin;
 
 
-},{"../../base/jst":13,"../../base/styler":17,"../../base/ui_plugin":"Z7u8cr"}]},{},[2,44])
+},{"../../base/jst":13,"../../base/styler":17,"../../base/ui_plugin":"Z7u8cr"}]},{},[2,46])
