@@ -84,7 +84,7 @@ class HLS extends UIPlugin {
     }
 
     var previousDvrInUse = !!this.dvrInUse
-    this.dvrInUse = this.dvrEnabled && (duration - position >= 2)
+    this.dvrInUse = this.dvrEnabled && (duration - position >= 5)
     if (this.dvrInUse !== previousDvrInUse) {
       this.trigger('playback:dvr', this.dvrInUse)
     }
@@ -200,8 +200,8 @@ class HLS extends UIPlugin {
     if (time > 0) {
       time = duration * time / 100
     }
-    // seek operations to a time within 2 seconds from live stream will position playhead back to live
-    if (this.playbackType === 'live' && duration - time < 2) {
+    // seek operations to a time within 5 seconds from live stream will position playhead back to live
+    if (this.playbackType === 'live' && duration - time < 5) {
       time = -1
     }
     this.el.globoPlayerSeek(time)
