@@ -241,6 +241,30 @@
         }
       }
 
+      .bar-hover[data-seekbar] {
+        display: none;
+        position: absolute;
+        top: 9px;
+        width: 5px;
+        height: 7px;
+        background-color: rgba(255,255,255,0.5);
+      }
+
+      &:hover {
+        .bar-hover[data-seekbar] {
+          display: block;
+        }
+      }
+
+      &.seek-disabled {
+        cursor: default;
+        &:hover {
+          .bar-hover[data-seekbar] {
+            display: none;
+          }
+        }
+      }
+
       .bar-scrubber[data-seekbar] {
         position: absolute;
         top: 2px;

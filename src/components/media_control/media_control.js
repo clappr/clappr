@@ -41,6 +41,7 @@ class MediaControl extends UIObject {
       'mouseleave .drawer-container[data-volume]': 'hideVolumeBar',
       'mousedown .bar-scrubber[data-seekbar]': 'startSeekDrag',
       'mousedown .bar-scrubber[data-volume]': 'startVolumeDrag',
+      'mouseenter .bar-container[data-volume]': 'mousemoveOnSeekBar',
       'mousemove .bar-container[data-seekbar]': 'mousemoveOnSeekBar',
       'mouseleave .bar-container[data-seekbar]': 'mouseleaveOnSeekBar',
       'mouseenter .media-control-layer[data-controls]': 'setKeepVisible',
@@ -132,10 +133,14 @@ class MediaControl extends UIObject {
   }
 
   mousemoveOnSeekBar(event) {
+    var offsetX = event.pageX - this.$seekBarContainer.offset().left - (this.$seekBarHover.width() / 2)
+    this.$seekBarHover.css({left: offsetX})
+    this.$seekBarHover.show()
     this.trigger('mediacontrol:mousemove:seekbar', event);
   }
 
   mouseleaveOnSeekBar(event) {
+    this.$seekBarHover.hide()
     this.trigger('mediacontrol:mouseleave:seekbar', event);
   }
 
@@ -348,6 +353,7 @@ class MediaControl extends UIObject {
     this.$seekBarLoaded = this.$el.find('.bar-fill-1[data-seekbar]')
     this.$seekBarPosition = this.$el.find('.bar-fill-2[data-seekbar]')
     this.$seekBarScrubber = this.$el.find('.bar-scrubber[data-seekbar]')
+    this.$seekBarHover = this.$el.find('.bar-hover[data-seekbar]')
     this.$volumeBarContainer = this.$el.find('.bar-container[data-volume]')
     this.$volumeBarBackground = this.$el.find('.bar-background[data-volume]')
     this.$volumeBarFill = this.$el.find('.bar-fill-1[data-volume]')
