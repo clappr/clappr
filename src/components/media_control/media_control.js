@@ -54,7 +54,9 @@ class MediaControl extends UIObject {
     super(options);
     this.seekTime = new SeekTime(this)
     this.options = options
+    this.currentVolume = this.options.mute ? 0 : 100
     this.container = options.container
+    this.container.setVolume(this.currentVolume)
     this.keepVisible = false
     this.addEventListeners()
     this.settings = {
@@ -67,7 +69,6 @@ class MediaControl extends UIObject {
     if (this.container.mediaControlDisabled || this.options.chromeless) {
       this.disable()
     }
-    this.currentVolume = 100
     $(document).bind('mouseup', (event) => this.stopDrag(event))
     $(document).bind('mousemove', (event) => this.updateDrag(event))
   }
@@ -405,7 +406,6 @@ class MediaControl extends UIObject {
     this.createCachedElements()
     this.$playPauseToggle.addClass('paused')
     this.$playStopToggle.addClass('stopped')
-    this.currentVolume = this.currentVolume || 100
 
     this.$volumeBarContainer.hide()
 
