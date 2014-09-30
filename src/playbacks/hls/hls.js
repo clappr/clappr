@@ -61,6 +61,10 @@ class HLS extends UIPlugin {
     this.trigger('playback:ready', this.name)
     this.currentState = "IDLE"
     this.el.globoPlayerSetflushLiveURLCache(true)
+    if (this._tmpVolume) {
+      this.volume(this._tmpVolume)
+      delete this._tmpVolume
+    }
     this.autoPlay && this.play()
   }
 
@@ -170,7 +174,11 @@ class HLS extends UIPlugin {
   }
 
   volume(value) {
-    this.el.globoPlayerVolume(value)
+    if (this.el.globoPlayerVolume) {
+      this.el.globoPlayerVolume(value)
+    } else {
+      this._tmpVolume = value
+    }
   }
 
   pause() {
