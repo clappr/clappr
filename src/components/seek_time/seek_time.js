@@ -15,10 +15,9 @@ class SeekTime extends UIObject {
       'data-seek-time': ''
     };
   }
-  constructor(core) {
-    super(core)
-    this.core = core
-    this.mediaControl = this.core.mediaControl
+  constructor(mediaControl) {
+    super()
+    this.mediaControl = mediaControl
     this.listenTo(this.mediaControl.container, 'container:playbackstate', this.setPlaybackType)
     this.listenTo(this.mediaControl, 'mediacontrol:containerchanged', this.onContainerChanged)
     this.setPlaybackType()
@@ -57,7 +56,7 @@ class SeekTime extends UIObject {
     this.render();
   }
 
-  hideTime(event) {
+  hideTime() {
     this.$el.addClass('hidden');
   }
 
@@ -67,7 +66,8 @@ class SeekTime extends UIObject {
     var style = Styler.getStyleFor(this.name);
     this.$el.html(this.template({time: this.time}));
     this.$el.append(style);
-    this.core.$el.append(this.el);
+    this.mediaControl.$el.append(this.el);
+    return this
   }
 }
 

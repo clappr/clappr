@@ -14,6 +14,7 @@ var UIObject = require('../../base/ui_object')
 var Utils = require('../../base/utils')
 var Mousetrap = require('mousetrap');
 var ScrollMonitor = require('scrollmonitor');
+var SeekTime = require('../seek_time');
 
 class MediaControl extends UIObject {
   get name() { return 'MediaControl' }
@@ -51,6 +52,7 @@ class MediaControl extends UIObject {
 
   constructor(options) {
     super(options);
+    this.seekTime = new SeekTime(this)
     this.options = options
     this.container = options.container
     this.keepVisible = false
