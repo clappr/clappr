@@ -45,6 +45,7 @@ class HTML5Video extends Playback {
     } else {
       this.settings.left = ["playpause", "position", "duration"]
       this.settings.right = ["fullscreen", "volume"]
+      this.settings.seekEnabled = true
     }
   }
 
