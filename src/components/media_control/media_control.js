@@ -133,9 +133,11 @@ class MediaControl extends UIObject {
   }
 
   mousemoveOnSeekBar(event) {
-    var offsetX = event.pageX - this.$seekBarContainer.offset().left - (this.$seekBarHover.width() / 2)
-    this.$seekBarHover.css({left: offsetX})
-    this.$seekBarHover.show()
+    if (this.container.settings.seekEnabled) {
+      var offsetX = event.pageX - this.$seekBarContainer.offset().left - (this.$seekBarHover.width() / 2)
+      this.$seekBarHover.css({left: offsetX})
+      this.$seekBarHover.show()
+    }
     this.trigger('mediacontrol:mousemove:seekbar', event);
   }
 
@@ -422,6 +424,9 @@ class MediaControl extends UIObject {
     }
 
     this.$el.ready(() => {
+      if (!this.container.settings.seekEnabled) {
+        this.$seekBarContainer.addClass('seek-disabled')
+      }
       this.setVolumeLevel(this.currentVolume)
       this.setSeekPercentage(0)
       this.bindKeyEvents()
