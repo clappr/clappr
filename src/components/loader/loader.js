@@ -36,7 +36,7 @@ class Loader extends BaseObject {
   }
 
   addExternalPlugins(plugins) {
-    var pluginName = function(plugin) { return plugin.name }
+    var pluginName = function(plugin) { return plugin.prototype.name }
     if (plugins.playback) { this.playbackPlugins = _.uniq(plugins.playback.concat(this.playbackPlugins), pluginName) }
     if (plugins.container) { this.containerPlugins = _.uniq(plugins.container.concat(this.containerPlugins), pluginName) }
     if (plugins.core) { this.corePlugins = _.uniq(plugins.core.concat(this.corePlugins), pluginName) }
