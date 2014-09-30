@@ -30,6 +30,7 @@ class Flash extends UIObject {
     } else {
       this.settings.left = ["playpause", "position", "duration"]
       this.settings.right = ["volume", "fullscreen"]
+      this.settings.seekEnabled = true
     }
     this.isReady = false
     this.addListeners()
