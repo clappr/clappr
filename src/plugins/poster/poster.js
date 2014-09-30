@@ -5,6 +5,10 @@
 var UIPlugin = require('../../base/ui_plugin')
 var Styler = require('../../base/styler')
 var JST = require('../../base/jst')
+
+var Mediator = require('../../components/mediator')
+var PlayerInfo = require('../../components/player_info')
+
 var $ = require('jquery')
 var _ = require('underscore')
 
@@ -41,6 +45,7 @@ class PosterPlugin extends UIPlugin {
     this.listenTo(this.container, 'container:play', this.onPlay)
     this.listenTo(this.container, 'container:stop', this.onStop)
     this.listenTo(this.container, 'container:ended', this.onStop)
+    Mediator.on('player:resize', () => this.updateSize())
   }
 
   onBuffering() {
@@ -69,7 +74,7 @@ class PosterPlugin extends UIPlugin {
   }
 
   showPlayButton() {
-    this.$el.css({ fontSize: this.$el.height() })
+    this.updateSize()
     this.$playButton.show()
   }
 
@@ -77,14 +82,19 @@ class PosterPlugin extends UIPlugin {
     this.container.play()
   }
 
+  updateSize() {
+    if (!this.$el) return
+    var playerInfo = PlayerInfo.getInstance()
+    var height = playerInfo.currentSize ? playerInfo.currentSize.height : this.$el.height()
+    this.$el.css({ fontSize: height })
+  }
+
   render() {
     var style = Styler.getStyleFor(this.name)
     this.$el.html(this.template())
     this.$el.append(style)
     this.container.$el.append(this.el)
-    this.$el.ready(() => {
-      this.$el.css({ fontSize: this.options.height || this.$el.height() })
-    })
+    this.$el.ready(() => this.updateSize())
     this.$playButton = $(this.$el.find('.play-wrapper'))
     if(this.options.poster !== undefined) {
       var imgEl = $('<img data-poster class="poster-background"></img>');
