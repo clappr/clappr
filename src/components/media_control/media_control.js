@@ -370,7 +370,7 @@ class MediaControl extends UIObject {
 
   setSeekPercentage(value) {
     if(value > 100) return
-    var pos = this.$seekBarContainer.width() * value / 100.0 - this.$seekBarScrubber.width() / 2.0
+    var pos = this.$seekBarContainer.width() * value / 100.0 - (this.$seekBarScrubber.width() / 2.0)
     this.$seekBarPosition.css({ width: value + '%' })
     this.$seekBarScrubber.css({ left: pos })
   }
