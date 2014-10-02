@@ -106,8 +106,6 @@ package
       if (event.info.code === "NetStream.Buffer.Full") {
         playbackState = "PLAYING";
         _ns.bufferTime = 30;
-      } else if (event.info.code === "NetStream.Play.Start") {
-        playbackState = "PLAYING";
       } else if (isBuffering(event.info.code)) {
         playbackState = "PLAYING_BUFFERING";
       } else if (event.info.code == "NetStream.Video.DimensionChange") {
