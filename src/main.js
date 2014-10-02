@@ -7,6 +7,7 @@ var CoreFactory = require('./components/core_factory')
 var Loader = require('./components/loader')
 var Mediator = require('./components/mediator')
 var _ = require('underscore');
+var ScrollMonitor = require('scrollmonitor');
 
 
 class Player extends BaseObject {
@@ -24,6 +25,16 @@ class Player extends BaseObject {
   attachTo(element) {
     this.options.parentElement = element
     this.core = this.coreFactory.create()
+    if (this.options.autoPlayVisible) {
+      this.elementWatcher = ScrollMonitor.create(this.core.$el)
+      this.elementWatcher.enterViewport(() => this.enterViewport())
+    }
+  }
+
+  enterViewport() {
+    if (this.elementWatcher.top !== 0 && !this.isPlaying()) {
+      this.play()
+    }
   }
 
   normalizeSources(options) {
