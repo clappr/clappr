@@ -61,6 +61,9 @@ Add `autoPlay: true` if you want the video to automatic play after page load.
 ##### Auto Play when Visible
 If you want to play the video when it appears partially on screen, set `autoPlayVisible: 'partial'`. In case you want the player to play when it is full visible, `autoPlayVisible: 'full'`.
 
+##### Mute
+Add `mute: true` if you want to start the player muted.
+
 ##### Control bar colors
 Customize control bar colors adding `mediacontrol` hash. Example:
 
