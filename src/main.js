@@ -26,7 +26,15 @@ class Player extends BaseObject {
     this.options.parentElement = element
     this.core = this.coreFactory.create()
     if (this.options.autoPlayVisible) {
-      this.elementWatcher = ScrollMonitor.create(this.core.$el)
+      this.bindAutoPlayVisible(this.options.autoPlayVisible)
+    }
+  }
+
+  bindAutoPlayVisible(option) {
+    this.elementWatcher = ScrollMonitor.create(this.core.$el)
+    if (option === 'full') {
+      this.elementWatcher.fullyEnterViewport(() => this.enterViewport())
+    } else if (option === 'partial') {
       this.elementWatcher.enterViewport(() => this.enterViewport())
     }
   }
