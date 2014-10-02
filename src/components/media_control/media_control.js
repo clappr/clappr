@@ -353,16 +353,20 @@ class MediaControl extends UIObject {
   }
 
   setVolumeLevel(value) {
-    var containerHeight = this.$volumeBarContainer.height()
-    var barHeight = this.$volumeBarBackground.height()
-    var offset = (containerHeight - barHeight) / 2.0
-    var pos = barHeight * value / 100.0 - this.$volumeBarScrubber.height() / 2.0 + offset
-    this.$volumeBarFill.css({ height: value + '%' })
-    this.$volumeBarScrubber.css({ bottom: pos })
-    if (value > 0) {
-      this.$volumeIcon.removeClass('muted')
+    if (!this.container.isReady) {
+      this.listenToOnce(this.container, "container:ready", () => this.setVolumeLevel(value))
     } else {
-      this.$volumeIcon.addClass('muted')
+      var containerHeight = this.$volumeBarContainer.height()
+      var barHeight = this.$volumeBarBackground.height()
+      var offset = (containerHeight - barHeight) / 2.0
+      var pos = barHeight * value / 100.0 - this.$volumeBarScrubber.height() / 2.0 + offset
+      this.$volumeBarFill.css({ height: value + '%' })
+      this.$volumeBarScrubber.css({ bottom: pos })
+      if (value > 0) {
+        this.$volumeIcon.removeClass('muted')
+      } else {
+        this.$volumeIcon.addClass('muted')
+      }
     }
   }
 
