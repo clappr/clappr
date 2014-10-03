@@ -407,7 +407,6 @@ class MediaControl extends UIObject {
     this.createCachedElements()
     this.$playPauseToggle.addClass('paused')
     this.$playStopToggle.addClass('stopped')
-    this.currentVolume = this.currentVolume || 100
 
     this.$volumeBarContainer.hide()
 
