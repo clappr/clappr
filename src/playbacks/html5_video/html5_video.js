@@ -40,8 +40,8 @@ class HTML5Video extends Playback {
     this.isHLS = !!(this.src.indexOf('m3u8') > -1)
     this.settings = {default: ['seekbar']}
     if (this.isHLS) {
-      this.settings.left = ["playstop", "volume"]
-      this.settings.right = ["fullscreen"]
+      this.settings.left = ["playstop"]
+      this.settings.right = ["fullscreen", "volume"]
     } else {
       this.settings.left = ["playpause", "position", "duration"]
       this.settings.right = ["fullscreen", "volume"]
