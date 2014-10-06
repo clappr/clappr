@@ -52,6 +52,7 @@ class Container extends UIObject {
   }
 
   playbackDvrStateChanged(dvrInUse) {
+    this.settings = this.playback.settings
     this.trigger('container:dvr', dvrInUse);
   }
 
