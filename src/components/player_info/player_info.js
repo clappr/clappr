@@ -8,6 +8,7 @@ class PlayerInfo extends BaseObject {
   constructor() {
     this.options = {}
     this.playbackPlugins = []
+    this.currentSize = {width: 0, height: 0}
   }
 }
 
