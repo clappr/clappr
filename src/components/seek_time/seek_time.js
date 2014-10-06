@@ -48,7 +48,16 @@ class SeekTime extends UIObject {
   }
 
   showTime(event) {
-    var pos = event.pageX / this.playerInfo.currentSize.width * 100
+    var elementClass = $(event.target).attr('class')
+    var offset
+    if (elementClass === 'bar-container') {
+      offset = $(event.target).offset().left
+    } else if (elementClass === 'bar-hover'){
+      offset = $(event.target).parent().parent().offset().left
+    } else {
+      return
+    }
+    var pos = (event.pageX - offset) / this.playerInfo.currentSize.width * 100
     pos = Math.min(100, Math.max(pos, 0))
     this.currentTime = pos * this.mediaControl.container.getDuration() / 100;
     this.time = formatTime(this.currentTime);
