@@ -34,6 +34,10 @@ class HTML5Audio extends UIPlugin {
     this.listenTo(this.container, 'container:stop', this.stop)
   }
 
+  getPlaybackType() {
+    return "aod"
+  }
+
   play() {
     this.el.play()
     this.trigger('playback:play');
