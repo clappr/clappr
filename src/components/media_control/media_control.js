@@ -78,6 +78,7 @@ class MediaControl extends UIObject {
     this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar)
     this.listenTo(this.container, 'container:progress', this.updateProgressBar)
     this.listenTo(this.container, 'container:settingsupdate', this.settingsUpdate)
+    this.listenTo(this.container, 'container:dvr', this.settingsUpdate)
     this.listenTo(this.container, 'container:highdefinitionupdate', this.highDefinitionUpdate)
     this.listenTo(this.container, 'container:mediacontrol:disable', this.disable)
     this.listenTo(this.container, 'container:mediacontrol:enable', this.enable)
