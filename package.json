@@ -64,7 +64,6 @@
   "dependencies": {
     "underscore": "1.7.0",
     "jquery": "~2.1.0",
-    "moment": "^2.7.0",
     "mousetrap": "0.0.1",
     "scrollmonitor": "^1.0.8"
   }
