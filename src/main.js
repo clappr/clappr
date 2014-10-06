@@ -8,7 +8,7 @@ var Loader = require('./components/loader')
 var Mediator = require('./components/mediator')
 var _ = require('underscore');
 var ScrollMonitor = require('scrollmonitor');
-
+var PlayerInfo = require('./components/player_info')
 
 class Player extends BaseObject {
   constructor(options) {
@@ -18,8 +18,10 @@ class Player extends BaseObject {
     this.options.sources = this.normalizeSources(options)
     this.loader = new Loader(this.options.plugins || [])
     this.coreFactory = new CoreFactory(this, this.loader)
+    this.playerInfo = PlayerInfo.getInstance()
     options.height || (options.height = 360)
     options.width || (options.width = 640)
+    this.playerInfo.currentSize = {width: options.width, height: options.height}
   }
 
   attachTo(element) {
