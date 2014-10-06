@@ -30,9 +30,9 @@ class HLS extends UIPlugin {
     this.highDefinition = false
     this.autoPlay = options.autoPlay
     this.defaultSettings = {
-      left: ["playstop", "volume"],
+      left: ["playstop"],
       default: ['seekbar'],
-      right: ["fullscreen", "hd-indicator"],
+      right: ["fullscreen", "volume", "hd-indicator"],
       seekEnabled: true
     }
     this.settings = _.extend({}, this.defaultSettings)
@@ -221,6 +221,7 @@ class HLS extends UIPlugin {
       this.updateDvr(dvrInUse)
     }
     this.el.globoPlayerSeek(time)
+    this.trigger('playback:timeupdate', time, duration, this.name)
   }
 
   updateDvr(dvrInUse) {
@@ -257,9 +258,10 @@ class HLS extends UIPlugin {
 
   updateSettings() {
     this.settings = _.extend({}, this.defaultSettings)
-    if (this.playbackType === "vod" || this.dvrEnabled) {
+    if (this.playbackType === "vod" || this.dvrInUse) {
       this.settings.left = ["playpause", "position", "duration"]
-      this.settings.default = ["seekbar"]
+    } else if (this.dvrEnabled) {
+      this.settings.left = ["playpause"]
     } else {
       this.settings.seekEnabled = false
     }
