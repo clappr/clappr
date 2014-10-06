@@ -44,16 +44,16 @@
     letter-spacing: 0;
     speak: none;
     color: #fff;
+    opacity: 0.5;
     vertical-align: middle;
     text-align: left;
     padding: 0 6px;
-    color: rgba(255, 255, 255, 0.3);
     @include font-smoothing(antialiased);
   }
 
   .media-control-icon:hover {
     color: white;
-    opacity: 0.7;
+    opacity: 0.75;
     text-shadow: rgba(255,255,255,0.5) 0 0 15px;
     @include transition(all, 0.1s, ease-out);
   }
