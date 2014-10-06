@@ -83,12 +83,7 @@ class HLS extends UIPlugin {
     this.dvrEnabled = (livePlayback && duration > 240)
     if (this.dvrEnabled !== previousDVRStatus) {
       this.updateSettings()
-    }
-
-    var previousDvrInUse = !!this.dvrInUse
-    this.dvrInUse = this.dvrEnabled && (duration - position >= 5)
-    if (this.dvrInUse !== previousDvrInUse) {
-      this.trigger('playback:dvr', this.dvrInUse)
+      this.trigger('playback:settingsupdate', this.name)
     }
 
     if (livePlayback && (!this.dvrEnabled || !this.dvrInUse)) {
@@ -182,9 +177,11 @@ class HLS extends UIPlugin {
   }
 
   pause() {
-    this.el.globoPlayerPause()
-    if (this.playbackType === 'live' && this.dvrEnabled) {
-      this.trigger('playback:dvr', true);
+    if (this.playbackType !== 'live' || this.dvrEnabled) {
+      this.el.globoPlayerPause()
+      if (this.playbackType === 'live' && this.dvrEnabled) {
+        this.updateDvr(true)
+      }
     }
   }
 
@@ -214,11 +211,25 @@ class HLS extends UIPlugin {
     if (time > 0) {
       time = duration * time / 100
     }
-    // seek operations to a time within 5 seconds from live stream will position playhead back to live
-    if (this.playbackType === 'live' && duration - time < 5) {
-      time = -1
+
+    if (this.playbackType === 'live') {
+      // seek operations to a time within 5 seconds from live stream will position playhead back to live
+      var dvrInUse = (duration - time > 5)
+      if (!dvrInUse) {
+        time = -1
+      }
+      this.updateDvr(dvrInUse)
     }
     this.el.globoPlayerSeek(time)
+  }
+
+  updateDvr(dvrInUse) {
+    var previousDvrInUse = !!this.dvrInUse
+    this.dvrInUse = dvrInUse
+    if (this.dvrInUse !== previousDvrInUse) {
+      this.updateSettings()
+      this.trigger('playback:dvr', this.dvrInUse)
+    }
   }
 
   flashPlaybackError() {
@@ -252,7 +263,6 @@ class HLS extends UIPlugin {
     } else {
       this.settings.seekEnabled = false
     }
-    this.trigger('playback:settingsupdate', this.name)
   }
 
   setElement(element) {
