@@ -12,8 +12,10 @@ var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
 var UIObject = require('../../base/ui_object')
 var Utils = require('../../base/utils')
-var Mousetrap = require('mousetrap');
-var SeekTime = require('../seek_time');
+var Mousetrap = require('mousetrap')
+var SeekTime = require('../seek_time')
+
+var transitionEvents = 'webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend'
 
 class MediaControl extends UIObject {
   get name() { return 'MediaControl' }
@@ -249,8 +251,8 @@ class MediaControl extends UIObject {
     }
     this.hideVolumeId = setTimeout(
       () => {
-        this.$volumeBarContainer.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', () => {
-          this.$volumeBarContainer.off('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend')
+        this.$volumeBarContainer.one(transitionEvents, () => {
+          this.$volumeBarContainer.off(transitionEvents)
           this.$volumeBarContainer.hide()
         })
         this.$volumeBarContainer.addClass('volume-bar-hide')
@@ -269,6 +271,9 @@ class MediaControl extends UIObject {
 
   updateSeekBar(position, duration) {
     if (this.draggingSeekBar) return
+    if (position < 0) position = duration
+    this.$seekBarPosition.removeClass('media-control-notransition')
+    this.$seekBarScrubber.removeClass('media-control-notransition')
     var seekbarValue = (100 / duration) * position
     this.setSeekPercentage(seekbarValue)
     this.$('[data-position]').html(Utils.formatTime(position))
@@ -373,8 +378,9 @@ class MediaControl extends UIObject {
   }
 
   setSeekPercentage(value) {
-    if(value > 100) return
+    if (value > 100) return
     var pos = this.$seekBarContainer.width() * value / 100.0 - (this.$seekBarScrubber.width() / 2.0)
+    this.currentSeekPercentage = value;
     this.$seekBarPosition.css({ width: value + '%' })
     this.$seekBarScrubber.css({ left: pos })
   }
@@ -409,7 +415,6 @@ class MediaControl extends UIObject {
     this.createCachedElements()
     this.$playPauseToggle.addClass('paused')
     this.$playStopToggle.addClass('stopped')
-
     this.$volumeBarContainer.hide()
 
     this.changeTogglePlay()
@@ -418,12 +423,22 @@ class MediaControl extends UIObject {
       this.hide()
     }
 
+    this.$seekBarHover.hide()
+    this.$seekBarPosition.addClass('media-control-notransition')
+    this.$seekBarScrubber.addClass('media-control-notransition')
+
+    if (!this.currentSeekPercentage) {
+      this.currentSeekPercentage = 0
+    }
+    this.setSeekPercentage(this.currentSeekPercentage)
+
+
     this.$el.ready(() => {
       if (!this.container.settings.seekEnabled) {
         this.$seekBarContainer.addClass('seek-disabled')
       }
+
       this.setVolumeLevel(this.currentVolume)
-      this.setSeekPercentage(0)
       this.bindKeyEvents()
     })
 
