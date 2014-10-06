@@ -2,6 +2,7 @@ var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var formatTime = require('../../base/utils').formatTime;
+var PlayerInfo = require('../player_info')
 var $ = require('jquery');
 
 class SeekTime extends UIObject {
@@ -18,6 +19,7 @@ class SeekTime extends UIObject {
   constructor(mediaControl) {
     super()
     this.mediaControl = mediaControl
+    this.playerInfo = PlayerInfo.getInstance()
     this.listenTo(this.mediaControl.container, 'container:playbackstate', this.setPlaybackType)
     this.listenTo(this.mediaControl, 'mediacontrol:containerchanged', this.onContainerChanged)
     this.setPlaybackType()
@@ -46,8 +48,7 @@ class SeekTime extends UIObject {
   }
 
   showTime(event) {
-    var offsetX = event.pageX - $(event.target).offset().left
-    var pos = offsetX / $(event.target).width() * 100
+    var pos = event.pageX / this.playerInfo.currentSize.width * 100
     pos = Math.min(100, Math.max(pos, 0))
     this.currentTime = pos * this.mediaControl.container.getDuration() / 100;
     this.time = formatTime(this.currentTime);
