@@ -4,7 +4,6 @@
 
 var _ = require('underscore');
 var $ = require('jquery');
-var Moment = require('moment');
 
 var extend = function(protoProps, staticProps) {
   var parent = this;
@@ -41,29 +40,20 @@ var zeroPad = function(number, size) {
   return (new Array(size + 1 - number.toString().length)).join('0') + number;
 };
 
-var formatTime = function(time, options) {
-  options = options || {};
-  var separator = options.humanFriendly ? 'm' : ':';
-  var duration = Moment.duration(time * 1000);
-  var str = zeroPad(duration.seconds(), 2);
-  if (duration.hours()) {
-    str = zeroPad(duration.minutes(), 2) + separator + (options.humanFriendly ? '' : str);
-    if (options.humanFriendly) {
-      separator = 'h';
-    }
-    str = duration.hours() + separator + str;
-  } else {
-    var minutes = duration.minutes();
-    str = (!options.humanFriendly || minutes > 0 ? minutes + separator : '') + str;
-    if (options.humanFriendly) {
-      str += 's';
-    }
-  }
-  if (options.showMillis && !options.humanFriendly) {
-    str += separator + duration.milliseconds();
-  }
-  return str;
-};
+var formatTime = function(time) {
+    time = time * 1000
+    time = parseInt(time/1000)
+    var seconds = time % 60
+    time = parseInt(time/60)
+    var minutes = time % 60
+    time = parseInt(time/60)
+    var hours = time % 24
+    var out = ""
+    if (hours && hours > 0) out += ("0" + hours).slice(-2) + ":"
+    out += ("0" + minutes).slice(-2) + ":"
+    out += ("0" + seconds).slice(-2)
+    return out.trim()
+}
 
 var Fullscreen = {
   isFullscreen: function() {
