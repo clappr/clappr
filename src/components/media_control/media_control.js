@@ -327,6 +327,7 @@ class MediaControl extends UIObject {
   }
 
   settingsUpdate() {
+    this.settings = _.isEmpty(this.container.settings) ? this.settings :this.container.settings
     this.render()
   }
 
