@@ -15348,7 +15348,10 @@ var $SeekTime = SeekTime;
     this.time = formatTime(this.currentTime);
     this.$el.css('left', event.pageX - Math.floor((this.$el.width() / 2) + 6));
     this.$el.removeClass('hidden');
-    var options = _.extend({}, event, {timestamp: this.currentTime});
+    var options = _.extend({}, event, {
+      timestamp: this.currentTime,
+      formattedTime: this.time
+    });
     this.render(options);
   },
   hideTime: function() {
