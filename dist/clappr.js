@@ -15289,6 +15289,7 @@ var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var formatTime = require('../../base/utils').formatTime;
 var $ = require('jquery');
+var _ = require('underscore');
 var SeekTime = function SeekTime(mediaControl) {
   $traceurRuntime.superCall(this, $SeekTime.prototype, "constructor", []);
   this.mediaControl = mediaControl;
@@ -15331,24 +15332,24 @@ var $SeekTime = SeekTime;
   },
   showTime: function(event) {
     var elementClass = $(event.target).attr('class');
-    var offset,
-        width;
+    var element;
     if (elementClass === 'bar-container') {
-      offset = $(event.target).offset().left;
-      width = $(event.target).width();
+      element = $(event.target);
     } else if (elementClass === 'bar-hover') {
-      offset = $(event.target).parent().parent().offset().left;
-      width = $(event.target).parent().parent().width();
+      element = $(event.target).parent().parent();
     } else {
       return;
     }
+    var offset = element.offset().left;
+    var width = element.width();
     var pos = (event.pageX - offset) / width * 100;
     pos = Math.min(100, Math.max(pos, 0));
     this.currentTime = pos * this.mediaControl.container.getDuration() / 100;
     this.time = formatTime(this.currentTime);
     this.$el.css('left', event.pageX - Math.floor((this.$el.width() / 2) + 6));
     this.$el.removeClass('hidden');
-    this.render(event);
+    var options = _.extend({}, event, {timestamp: this.currentTime});
+    this.render(options);
   },
   hideTime: function() {
     this.$el.addClass('hidden');
@@ -15365,7 +15366,7 @@ var $SeekTime = SeekTime;
 module.exports = SeekTime;
 
 
-},{"../../base/jst":12,"../../base/styler":16,"../../base/ui_object":"8lqCAT","../../base/utils":23,"jquery":3}],46:[function(require,module,exports){
+},{"../../base/jst":12,"../../base/styler":16,"../../base/ui_object":"8lqCAT","../../base/utils":23,"jquery":3,"underscore":6}],46:[function(require,module,exports){
 (function (global){
 "use strict";
 var BaseObject = require('./base/base_object');
