@@ -47,29 +47,33 @@ class SeekTime extends UIObject {
   }
 
   showTime(event) {
-    var elementClass = $(event.target).attr('class')
-    var element
-    if (elementClass === 'bar-container') {
-      element = $(event.target)
-    } else if (elementClass === 'bar-hover'){
-      element = $(event.target).parent().parent()
-    } else {
-      return
+    var element = this.getHoverElement(event)
+    if (element) {
+      var offset = element.offset().left
+      var width = element.width()
+      var pos = (event.pageX - offset) / width * 100
+      pos = Math.min(100, Math.max(pos, 0))
+      this.currentTime = pos * this.mediaControl.container.getDuration() / 100
+      this.time = formatTime(this.currentTime)
+      this.$el.css('left', event.pageX - Math.floor((this.$el.width() / 2) + 6))
+      this.$el.removeClass('hidden')
+      var options = _.extend({}, event, {timestamp: this.currentTime, formattedTime: this.time})
+      this.render(options);
     }
-    var offset = element.offset().left
-    var width = element.width()
-    var pos = (event.pageX - offset) / width * 100
-    pos = Math.min(100, Math.max(pos, 0))
-    this.currentTime = pos * this.mediaControl.container.getDuration() / 100
-    this.time = formatTime(this.currentTime)
-    this.$el.css('left', event.pageX - Math.floor((this.$el.width() / 2) + 6))
-    this.$el.removeClass('hidden')
-    var options = _.extend({}, event, {timestamp: this.currentTime, formattedTime: this.time})
-    this.render(options);
   }
 
   hideTime() {
     this.$el.addClass('hidden');
+  }
+
+  getHoverElement(event) {
+    var elementClass = $(event.target).attr('class')
+    var element = undefined
+    if (elementClass === 'bar-container') {
+      return $(event.target)
+    } else if (elementClass === 'bar-hover'){
+      return $(event.target).parent().parent()
+    }
   }
 
   getExternalInterface() {}
