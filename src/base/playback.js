@@ -28,6 +28,8 @@ class Playback extends UIObject {
     return false
   }
 
+  volume(value) {}
+
   destroy() {
     this.$el.remove()
   }
