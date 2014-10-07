@@ -19,31 +19,13 @@ class SeekTime extends UIObject {
   constructor(mediaControl) {
     super()
     this.mediaControl = mediaControl
-    this.listenTo(this.mediaControl.container, 'container:playbackstate', this.setPlaybackType)
-    this.listenTo(this.mediaControl, 'mediacontrol:containerchanged', this.onContainerChanged)
-    this.setPlaybackType()
+    this.addEventListeners()
     this.render()
-  }
-
-  onContainerChanged() {
-    this.listenTo(this.mediaControl.container, 'container:playbackstate', this.setPlaybackType)
-    this.setPlaybackType()
   }
 
   addEventListeners() {
     this.listenTo(this.mediaControl, 'mediacontrol:mousemove:seekbar', this.showTime)
     this.listenTo(this.mediaControl, 'mediacontrol:mouseleave:seekbar', this.hideTime)
-  }
-
-  setPlaybackType() {
-    var type = this.mediaControl.container.getPlaybackType()
-    if (type === 'vod') {
-      this.addEventListeners()
-    } else {
-      this.stopListening(this.mediaControl, 'mediacontrol:mousemove:seekbar')
-      this.stopListening(this.mediaControl, 'mediacontrol:mouseleave:seekbar')
-      this.hideTime()
-    }
   }
 
   showTime(event) {
@@ -79,11 +61,12 @@ class SeekTime extends UIObject {
   getExternalInterface() {}
 
   render(event) {
-    var style = Styler.getStyleFor(this.name);
-    this.$el.html(this.template({time: this.time}));
-    this.$el.append(style);
-    this.mediaControl.$el.append(this.el);
-    return this
+    if (this.mediaControl.container.getPlaybackType() === 'vod') {
+      var style = Styler.getStyleFor(this.name);
+      this.$el.html(this.template({time: this.time}));
+      this.$el.append(style);
+      this.mediaControl.$el.append(this.el);
+    }
   }
 }
 
