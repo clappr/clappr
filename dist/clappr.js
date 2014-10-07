@@ -13821,7 +13821,7 @@ module.exports = Events;
 
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../plugins/log":58,"underscore":6}],12:[function(require,module,exports){
+},{"../plugins/log":59,"underscore":6}],12:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 module.exports = {
@@ -13830,6 +13830,7 @@ module.exports = {
   'flash': _.template('  <param name="movie" value="<%= swfPath %>">  <param name="quality" value="autohigh">  <param name="swliveconnect" value="true">  <param name="allowScriptAccess" value="always">  <param name="bgcolor" value="#001122">  <param name="allowFullScreen" value="false">  <param name="wmode" value="transparent">  <param name="tabindex" value="1">  <param name=FlashVars value="playbackId=<%= playbackId %>" />  <embed    type="application/x-shockwave-flash"    disabled="disabled"    tabindex="-1"    enablecontextmenu="false"    allowScriptAccess="always"    quality="autohight"    pluginspage="http://www.macromedia.com/go/getflashplayer"    wmode="transparent"    swliveconnect="true"    type="application/x-shockwave-flash"    allowfullscreen="false"    bgcolor="#000000"    FlashVars="playbackId=<%= playbackId %>"    src="<%= swfPath %>">  </embed>'),
   'hls': _.template('  <param name="movie" value="<%= swfPath %>?inline=1">  <param name="quality" value="autohigh">  <param name="swliveconnect" value="true">  <param name="allowScriptAccess" value="always">  <param name="bgcolor" value="#001122">  <param name="allowFullScreen" value="false">  <param name="wmode" value="transparent">  <param name="tabindex" value="1">  <param name=FlashVars value="playbackId=<%= playbackId %>" />  <embed    type="application/x-shockwave-flash"    tabindex="1"    enablecontextmenu="false"    allowScriptAccess="always"    quality="autohigh"    pluginspage="http://www.macromedia.com/go/getflashplayer"    wmode="transparent"    swliveconnect="true"    type="application/x-shockwave-flash"    allowfullscreen="false"    bgcolor="#000000"    FlashVars="playbackId=<%= playbackId %>"    src="<%= swfPath %>">  </embed>'),
   'html5_video': _.template('<source src="<%=src%>" type="<%=type%>">'),
+  'no_op': _.template('<p data-no-op-msg>Something went wrong :(</p>'),
   'background_button': _.template('<div class="playpause-button-wrapper" data-background-button>  <span class="playpause-icon" data-background-button></span></div>'),
   'poster': _.template('<div class="play-wrapper" data-poster>  <span class="poster-icon play" data-poster /></div>'),
   'spinner_three_bounce': _.template('<div data-bounce1></div><div data-bounce2></div><div data-bounce3></div>'),
@@ -13842,6 +13843,7 @@ module.exports = {
     'flash': '[data-flash]{position:absolute;height:100%;width:100%;background-color:#000;display:block;pointer-events:none}',
     'hls': '[data-hls]{position:absolute;height:100%;width:100%;background-color:#000;display:block;pointer-events:none;top:0}',
     'html5_video': '[data-html5-video]{position:absolute;height:100%;width:100%;display:block}',
+    'no_op': '[data-no-op]{z-index:1000;position:absolute;background-color:#222;height:100%;width:100%}[data-no-op] p[data-no-op-msg]{position:relative;font-size:25px;top:50%;color:#fff}',
     'background_button': '.background-button[data-background-button]{font-family:Player;position:absolute;height:100%;width:100%;background-color:rgba(0,0,0,.2);-webkit-transition:all,.4s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.4s,ease-out;-o-transition:all,.4s,ease-out;transition:all,.4s,ease-out}.background-button[data-background-button].hide[data-background-button]{opacity:0}.background-button[data-background-button] .playpause-button-wrapper[data-background-button]{position:absolute;overflow:hidden;width:100%;height:25%;line-height:100%;font-size:20%;top:45%;margin-top:-5%;text-align:center}.background-button[data-background-button] .playpause-button-wrapper[data-background-button] .playpause-icon[data-background-button]{font-family:Player;cursor:pointer;font-weight:400;font-style:normal;line-height:1;letter-spacing:0;speak:none;font-size:90px;color:#fff;opacity:.75;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.background-button[data-background-button] .playpause-button-wrapper[data-background-button] .playpause-icon[data-background-button]:hover{text-shadow:rgba(255,255,255,.5) 0 0 15px}.background-button[data-background-button] .playpause-button-wrapper[data-background-button] .playpause-icon[data-background-button].playing:before{content:"\\e002"}.background-button[data-background-button] .playpause-button-wrapper[data-background-button] .playpause-icon[data-background-button].paused:before{content:"\\e001"}',
     'poster': '@font-face{font-family:Player;src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot);src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot?#iefix) format("embedded-opentype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.ttf) format("truetype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.svg#player) format("svg")}.player-poster[data-poster]{cursor:pointer;position:absolute;height:100%;width:100%;z-index:998;top:0}.player-poster[data-poster] .poster-background[data-poster]{width:100%;height:100%}.player-poster[data-poster] .play-wrapper[data-poster]{position:absolute;overflow:hidden;width:100%;height:20%;line-height:100%;font-size:20%;top:50%;margin-top:-5%;text-align:center}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]{font-family:Player;font-weight:400;font-style:normal;line-height:1;letter-spacing:0;speak:none;color:#fff;opacity:.75;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster].play[data-poster]:before{content:"\\e001"}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]:hover{opacity:1}',
     'spinner_three_bounce': '.spinner-three-bounce[data-spinner]{position:absolute;margin:0 auto;width:70px;text-align:center;z-index:10;top:47%;left:0;right:0}.spinner-three-bounce[data-spinner]>div{width:18px;height:18px;background-color:#FFF;border-radius:100%;display:inline-block;-webkit-animation:bouncedelay 1.4s infinite ease-in-out;-moz-animation:bouncedelay 1.4s infinite ease-in-out;-ms-animation:bouncedelay 1.4s infinite ease-in-out;-o-animation:bouncedelay 1.4s infinite ease-in-out;animation:bouncedelay 1.4s infinite ease-in-out;-webkit-animation-fill-mode:both;-moz-animation-fill-mode:both;-ms-animation-fill-mode:both;-o-animation-fill-mode:both;animation-fill-mode:both}.spinner-three-bounce[data-spinner] [data-bounce1],.spinner-three-bounce[data-spinner] [data-bounce2]{-webkit-animation-delay:-.32s;-moz-animation-delay:-.32s;-ms-animation-delay:-.32s;-o-animation-delay:-.32s;animation-delay:-.32s}@-moz-keyframes bouncedelay{0%,100%,80%{-moz-transform:scale(0);transform:scale(0)}40%{-moz-transform:scale(1);transform:scale(1)}}@-webkit-keyframes bouncedelay{0%,100%,80%{-webkit-transform:scale(0);transform:scale(0)}40%{-webkit-transform:scale(1);transform:scale(1)}}@-o-keyframes bouncedelay{0%,100%,80%{-o-transform:scale(0);transform:scale(0)}40%{-o-transform:scale(1);transform:scale(1)}}@-ms-keyframes bouncedelay{0%,100%,80%{-ms-transform:scale(0);transform:scale(0)}40%{-ms-transform:scale(1);transform:scale(1)}}@keyframes bouncedelay{0%,100%,80%{transform:scale(0)}40%{transform:scale(1)}}',
@@ -13875,6 +13877,7 @@ var $Playback = Playback;
   isHighDefinitionInUse: function() {
     return false;
   },
+  volume: function(value) {},
   destroy: function() {
     this.$el.remove();
   }
@@ -14779,7 +14782,7 @@ var $Loader = Loader;
 module.exports = Loader;
 
 
-},{"../../base/base_object":"2HNVgz","../../playbacks/flash":48,"../../playbacks/hls":50,"../../playbacks/html5_audio":52,"../../playbacks/html5_video":54,"../../playbacks/no_op":55,"../../plugins/background_button":57,"../../plugins/poster":60,"../../plugins/spinner_three_bounce":62,"../../plugins/stats":64,"../../plugins/watermark":66,"../player_info":"Pce0iO","underscore":6}],"A8Uh+k":[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../../playbacks/flash":48,"../../playbacks/hls":50,"../../playbacks/html5_audio":52,"../../playbacks/html5_video":54,"../../playbacks/no_op":55,"../../plugins/background_button":58,"../../plugins/poster":61,"../../plugins/spinner_three_bounce":63,"../../plugins/stats":65,"../../plugins/watermark":67,"../player_info":"Pce0iO","underscore":6}],"A8Uh+k":[function(require,module,exports){
 "use strict";
 module.exports = require('./media_control');
 
@@ -15293,9 +15296,7 @@ var _ = require('underscore');
 var SeekTime = function SeekTime(mediaControl) {
   $traceurRuntime.superCall(this, $SeekTime.prototype, "constructor", []);
   this.mediaControl = mediaControl;
-  this.listenTo(this.mediaControl.container, 'container:playbackstate', this.setPlaybackType);
-  this.listenTo(this.mediaControl, 'mediacontrol:containerchanged', this.onContainerChanged);
-  this.setPlaybackType();
+  this.addEventListeners();
   this.render();
 };
 var $SeekTime = SeekTime;
@@ -15312,58 +15313,48 @@ var $SeekTime = SeekTime;
       'data-seek-time': ''
     };
   },
-  onContainerChanged: function() {
-    this.listenTo(this.mediaControl.container, 'container:playbackstate', this.setPlaybackType);
-    this.setPlaybackType();
-  },
   addEventListeners: function() {
     this.listenTo(this.mediaControl, 'mediacontrol:mousemove:seekbar', this.showTime);
     this.listenTo(this.mediaControl, 'mediacontrol:mouseleave:seekbar', this.hideTime);
   },
-  setPlaybackType: function() {
-    var type = this.mediaControl.container.getPlaybackType();
-    if (type === 'vod') {
-      this.addEventListeners();
-    } else {
-      this.stopListening(this.mediaControl, 'mediacontrol:mousemove:seekbar');
-      this.stopListening(this.mediaControl, 'mediacontrol:mouseleave:seekbar');
-      this.hideTime();
-    }
-  },
   showTime: function(event) {
-    var elementClass = $(event.target).attr('class');
-    var element;
-    if (elementClass === 'bar-container') {
-      element = $(event.target);
-    } else if (elementClass === 'bar-hover') {
-      element = $(event.target).parent().parent();
-    } else {
-      return;
+    var element = this.getHoverElement(event);
+    if (element) {
+      var offset = element.offset().left;
+      var width = element.width();
+      var pos = (event.pageX - offset) / width * 100;
+      pos = Math.min(100, Math.max(pos, 0));
+      this.currentTime = pos * this.mediaControl.container.getDuration() / 100;
+      this.time = formatTime(this.currentTime);
+      this.$el.css('left', event.pageX - Math.floor((this.$el.width() / 2) + 6));
+      this.$el.removeClass('hidden');
+      var options = _.extend({}, event, {
+        timestamp: this.currentTime,
+        formattedTime: this.time
+      });
+      this.render(options);
     }
-    var offset = element.offset().left;
-    var width = element.width();
-    var pos = (event.pageX - offset) / width * 100;
-    pos = Math.min(100, Math.max(pos, 0));
-    this.currentTime = pos * this.mediaControl.container.getDuration() / 100;
-    this.time = formatTime(this.currentTime);
-    this.$el.css('left', event.pageX - Math.floor((this.$el.width() / 2) + 6));
-    this.$el.removeClass('hidden');
-    var options = _.extend({}, event, {
-      timestamp: this.currentTime,
-      formattedTime: this.time
-    });
-    this.render(options);
   },
   hideTime: function() {
     this.$el.addClass('hidden');
   },
+  getHoverElement: function(event) {
+    var elementClass = $(event.target).attr('class');
+    var element = undefined;
+    if (elementClass === 'bar-container') {
+      return $(event.target);
+    } else if (elementClass === 'bar-hover') {
+      return $(event.target).parent().parent();
+    }
+  },
   getExternalInterface: function() {},
   render: function(event) {
-    var style = Styler.getStyleFor(this.name);
-    this.$el.html(this.template({time: this.time}));
-    this.$el.append(style);
-    this.mediaControl.$el.append(this.el);
-    return this;
+    if (this.mediaControl.container.getPlaybackType() === 'vod') {
+      var style = Styler.getStyleFor(this.name);
+      this.$el.html(this.template({time: this.time}));
+      this.$el.append(style);
+      this.mediaControl.$el.append(this.el);
+    }
   }
 }, {}, UIObject);
 module.exports = SeekTime;
@@ -16204,19 +16195,42 @@ module.exports = require('./html5_video');
 
 },{"./html5_video":53}],55:[function(require,module,exports){
 "use strict";
-var Playback = require('../base/playback');
-var NoOp = function NoOp() {
-  $traceurRuntime.defaultSuperCall(this, $NoOp.prototype, arguments);
+module.exports = require('./no_op');
+
+
+},{"./no_op":56}],56:[function(require,module,exports){
+"use strict";
+var Playback = require('../../base/playback');
+var JST = require('../../base/jst');
+var Styler = require('../../base/styler');
+var NoOp = function NoOp(options) {
+  $traceurRuntime.superCall(this, $NoOp.prototype, "constructor", [options]);
 };
 var $NoOp = NoOp;
-($traceurRuntime.createClass)(NoOp, {}, {}, Playback);
+($traceurRuntime.createClass)(NoOp, {
+  get name() {
+    return 'no_op';
+  },
+  get template() {
+    return JST.no_op;
+  },
+  get attributes() {
+    return {'data-no-op': ''};
+  },
+  render: function() {
+    var style = Styler.getStyleFor(this.name);
+    this.$el.html(this.template());
+    this.$el.append(style);
+    return this;
+  }
+}, {}, Playback);
 NoOp.canPlay = (function(source) {
   return true;
 });
 module.exports = NoOp;
 
 
-},{"../base/playback":"VbgHr3"}],56:[function(require,module,exports){
+},{"../../base/jst":12,"../../base/playback":"VbgHr3","../../base/styler":16}],57:[function(require,module,exports){
 "use strict";
 var UIObject = require('../../base/ui_object');
 var JST = require('../../base/jst');
@@ -16293,17 +16307,17 @@ var $BackgroundButton = BackgroundButton;
 module.exports = BackgroundButton;
 
 
-},{"../../base/jst":12,"../../base/styler":16,"../../base/ui_object":"8lqCAT"}],57:[function(require,module,exports){
+},{"../../base/jst":12,"../../base/styler":16,"../../base/ui_object":"8lqCAT"}],58:[function(require,module,exports){
 "use strict";
 module.exports = require('./background_button');
 
 
-},{"./background_button":56}],58:[function(require,module,exports){
+},{"./background_button":57}],59:[function(require,module,exports){
 "use strict";
 module.exports = require('./log');
 
 
-},{"./log":59}],59:[function(require,module,exports){
+},{"./log":60}],60:[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var BOLD = 'font-weight: bold; font-size: 13px;';
@@ -16340,12 +16354,12 @@ Log.prototype = {
 module.exports = Log;
 
 
-},{"jquery":3}],60:[function(require,module,exports){
+},{"jquery":3}],61:[function(require,module,exports){
 "use strict";
 module.exports = require('./poster');
 
 
-},{"./poster":61}],61:[function(require,module,exports){
+},{"./poster":62}],62:[function(require,module,exports){
 "use strict";
 var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
@@ -16447,12 +16461,12 @@ var $PosterPlugin = PosterPlugin;
 module.exports = PosterPlugin;
 
 
-},{"../../base/jst":12,"../../base/styler":16,"../../base/ui_plugin":"Z7u8cr","../../components/mediator":"veeMMc","../../components/player_info":"Pce0iO","jquery":3,"underscore":6}],62:[function(require,module,exports){
+},{"../../base/jst":12,"../../base/styler":16,"../../base/ui_plugin":"Z7u8cr","../../components/mediator":"veeMMc","../../components/player_info":"Pce0iO","jquery":3,"underscore":6}],63:[function(require,module,exports){
 "use strict";
 module.exports = require('./spinner_three_bounce');
 
 
-},{"./spinner_three_bounce":63}],63:[function(require,module,exports){
+},{"./spinner_three_bounce":64}],64:[function(require,module,exports){
 "use strict";
 var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
@@ -16497,12 +16511,12 @@ var $SpinnerThreeBouncePlugin = SpinnerThreeBouncePlugin;
 module.exports = SpinnerThreeBouncePlugin;
 
 
-},{"../../base/jst":12,"../../base/styler":16,"../../base/ui_plugin":"Z7u8cr"}],64:[function(require,module,exports){
+},{"../../base/jst":12,"../../base/styler":16,"../../base/ui_plugin":"Z7u8cr"}],65:[function(require,module,exports){
 "use strict";
 module.exports = require('./stats');
 
 
-},{"./stats":65}],65:[function(require,module,exports){
+},{"./stats":66}],66:[function(require,module,exports){
 "use strict";
 var BaseObject = require('../../base/base_object');
 var $ = require("jquery");
@@ -16602,12 +16616,12 @@ var $StatsPlugin = StatsPlugin;
 module.exports = StatsPlugin;
 
 
-},{"../../base/base_object":"2HNVgz","jquery":3}],66:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","jquery":3}],67:[function(require,module,exports){
 "use strict";
 module.exports = require('./watermark');
 
 
-},{"./watermark":67}],67:[function(require,module,exports){
+},{"./watermark":68}],68:[function(require,module,exports){
 "use strict";
 var UIPlugin = require('../../base/ui_plugin');
 var Styler = require('../../base/styler');
