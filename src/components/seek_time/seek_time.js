@@ -1,8 +1,9 @@
-var UIObject = require('../../base/ui_object');
-var Styler = require('../../base/styler');
-var JST = require('../../base/jst');
-var formatTime = require('../../base/utils').formatTime;
-var $ = require('jquery');
+var UIObject = require('../../base/ui_object')
+var Styler = require('../../base/styler')
+var JST = require('../../base/jst')
+var formatTime = require('../../base/utils').formatTime
+var $ = require('jquery')
+var _ = require('underscore')
 
 class SeekTime extends UIObject {
   get name() { return 'seek_time' }
@@ -47,23 +48,24 @@ class SeekTime extends UIObject {
 
   showTime(event) {
     var elementClass = $(event.target).attr('class')
-    var offset, width
+    var element
     if (elementClass === 'bar-container') {
-      offset = $(event.target).offset().left
-      width = $(event.target).width()
+      element = $(event.target)
     } else if (elementClass === 'bar-hover'){
-      offset = $(event.target).parent().parent().offset().left
-      width = $(event.target).parent().parent().width()
+      element = $(event.target).parent().parent()
     } else {
       return
     }
+    var offset = element.offset().left
+    var width = element.width()
     var pos = (event.pageX - offset) / width * 100
     pos = Math.min(100, Math.max(pos, 0))
-    this.currentTime = pos * this.mediaControl.container.getDuration() / 100;
-    this.time = formatTime(this.currentTime);
-    this.$el.css('left', event.pageX - Math.floor((this.$el.width() / 2) + 6));
-    this.$el.removeClass('hidden');
-    this.render(event);
+    this.currentTime = pos * this.mediaControl.container.getDuration() / 100
+    this.time = formatTime(this.currentTime)
+    this.$el.css('left', event.pageX - Math.floor((this.$el.width() / 2) + 6))
+    this.$el.removeClass('hidden')
+    var options = _.extend({}, event, {timestamp: this.currentTime})
+    this.render(options);
   }
 
   hideTime() {
