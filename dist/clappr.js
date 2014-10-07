@@ -15288,12 +15288,10 @@ var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var formatTime = require('../../base/utils').formatTime;
-var PlayerInfo = require('../player_info');
 var $ = require('jquery');
 var SeekTime = function SeekTime(mediaControl) {
   $traceurRuntime.superCall(this, $SeekTime.prototype, "constructor", []);
   this.mediaControl = mediaControl;
-  this.playerInfo = PlayerInfo.getInstance();
   this.listenTo(this.mediaControl.container, 'container:playbackstate', this.setPlaybackType);
   this.listenTo(this.mediaControl, 'mediacontrol:containerchanged', this.onContainerChanged);
   this.setPlaybackType();
@@ -15333,15 +15331,18 @@ var $SeekTime = SeekTime;
   },
   showTime: function(event) {
     var elementClass = $(event.target).attr('class');
-    var offset;
+    var offset,
+        width;
     if (elementClass === 'bar-container') {
       offset = $(event.target).offset().left;
+      width = $(event.target).width();
     } else if (elementClass === 'bar-hover') {
       offset = $(event.target).parent().parent().offset().left;
+      width = $(event.target).parent().parent().width();
     } else {
       return;
     }
-    var pos = (event.pageX - offset) / this.playerInfo.currentSize.width * 100;
+    var pos = (event.pageX - offset) / width * 100;
     pos = Math.min(100, Math.max(pos, 0));
     this.currentTime = pos * this.mediaControl.container.getDuration() / 100;
     this.time = formatTime(this.currentTime);
@@ -15364,7 +15365,7 @@ var $SeekTime = SeekTime;
 module.exports = SeekTime;
 
 
-},{"../../base/jst":12,"../../base/styler":16,"../../base/ui_object":"8lqCAT","../../base/utils":23,"../player_info":"Pce0iO","jquery":3}],46:[function(require,module,exports){
+},{"../../base/jst":12,"../../base/styler":16,"../../base/ui_object":"8lqCAT","../../base/utils":23,"jquery":3}],46:[function(require,module,exports){
 (function (global){
 "use strict";
 var BaseObject = require('./base/base_object');
