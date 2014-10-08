@@ -179,9 +179,9 @@ Flash.canPlay = function(resource) {
   if (resource.indexOf('rtmp') > -1) {
     return true
   } else if (Browser.isFirefox || Browser.isLegacyIE) {
-    return _.isString(resource) && !!resource.match(/(.*).(mp4|mov|f4v|3gpp|3gp)/)
+    return _.isString(resource) && !!resource.match(/(.*)\.(mp4|mov|f4v|3gpp|3gp)/)
   } else {
-    return _.isString(resource) && !!resource.match(/(.*).(mov|f4v|3gpp|3gp)/)
+    return _.isString(resource) && !!resource.match(/(.*)\.(mov|f4v|3gpp|3gp)/)
   }
 }
 
