@@ -37,7 +37,6 @@ class PosterPlugin extends UIContainerPlugin {
       this.container.disableMediaControl()
     }
     this.render()
-    this.bindEvents();
   }
 
   bindEvents() {

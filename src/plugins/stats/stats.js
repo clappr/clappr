@@ -13,7 +13,6 @@ class StatsPlugin extends ContainerPlugin {
     this.setInitialAttrs()
     this.reportInterval = options.reportInterval || 5000
     this.state = "IDLE"
-    this.bindEvents()
   }
 
   bindEvents() {
@@ -103,7 +102,7 @@ class StatsPlugin extends ContainerPlugin {
     $.extend(metrics, this.externalMetrics)
     return metrics
   }
-  
+
   report() {
     var stats = this.getStats()
     this.container.statsReport(this.getStats())
