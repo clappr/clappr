@@ -1,8 +1,8 @@
-var UIObject = require('../../base/ui_object');
+var UIContainerPlugin = require('../../base/ui_container_plugin');
 var JST = require('../../base/jst');
 var Styler = require('../../base/styler');
 
-class BackgroundButton extends UIObject {
+class BackgroundButton extends UIContainerPlugin {
   get template() { return JST.background_button; }
   get name() { return 'background_button' }
   get events() {
