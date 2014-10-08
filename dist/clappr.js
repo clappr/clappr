@@ -15569,9 +15569,9 @@ Flash.canPlay = function(resource) {
   if (resource.indexOf('rtmp') > -1) {
     return true;
   } else if (Browser.isFirefox || Browser.isLegacyIE) {
-    return _.isString(resource) && !!resource.match(/(.*).(mp4|mov|f4v|3gpp|3gp)/);
+    return _.isString(resource) && !!resource.match(/(.*)\.(mp4|mov|f4v|3gpp|3gp)/);
   } else {
-    return _.isString(resource) && !!resource.match(/(.*).(mov|f4v|3gpp|3gp)/);
+    return _.isString(resource) && !!resource.match(/(.*)\.(mov|f4v|3gpp|3gp)/);
   }
 };
 module.exports = Flash;
@@ -15972,6 +15972,7 @@ var Playback = require('../../base/playback');
 var JST = require('../../base/jst');
 var Styler = require('../../base/styler');
 var Browser = require('../../components/browser');
+var _ = require('underscore');
 var HTML5Video = function HTML5Video(options) {
   $traceurRuntime.superCall(this, $HTML5Video.prototype, "constructor", [options]);
   this.options = options;
@@ -16020,7 +16021,7 @@ var $HTML5Video = HTML5Video;
     this.trigger('playback:settingsupdate');
   },
   getPlaybackType: function() {
-    return this.isHLS && (this.el.duration === undefined || this.el.duration === Infinity) ? 'live' : 'vod';
+    return this.isHLS && _.contains([0, undefined, Infinity], this.el.duration) ? 'live' : 'vod';
   },
   isHighDefinitionInUse: function() {
     return false;
@@ -16087,7 +16088,7 @@ var $HTML5Video = HTML5Video;
     return this.el.duration;
   },
   timeUpdated: function() {
-    if (!this.isHLS) {
+    if (this.getPlaybackType() !== 'live') {
       this.trigger('playback:timeupdate', this.el.currentTime, this.el.duration, this.name);
     }
   },
@@ -16124,7 +16125,7 @@ HTML5Video.canPlay = function(resource) {
 module.exports = HTML5Video;
 
 
-},{"../../base/jst":13,"../../base/playback":"VbgHr3","../../base/styler":16,"../../components/browser":"195Wj5"}],53:[function(require,module,exports){
+},{"../../base/jst":13,"../../base/playback":"VbgHr3","../../base/styler":16,"../../components/browser":"195Wj5","underscore":6}],53:[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_video');
 
