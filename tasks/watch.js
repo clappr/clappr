@@ -2,7 +2,7 @@ var gulp = require('gulp');
 var util = require('gulp-util');
 var livereload = require('gulp-livereload');
 
-gulp.task('watch', function() {
+gulp.task('watch', ['build'], function() {
   livereload.listen();
 
   var js = gulp.watch('./src/**/*.js');
