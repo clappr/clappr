@@ -42,8 +42,7 @@ class BackgroundButton extends UIContainerPlugin {
   }
 
   shouldRender() {
-    //this plugin should render only if there is a playpause icon
-    //in media control
+    //this plugin should render only if there is a playpause icon in media control
     var settings = this.core.mediaControl.settings;
     return settings.default.indexOf('playpause') >= 0 ||
       settings.left.indexOf('playpause') >= 0 ||
@@ -61,6 +60,16 @@ class BackgroundButton extends UIContainerPlugin {
 
   hide() {
     this.$el.addClass('hide');
+  }
+
+  enable() {
+    super()
+    this.core.mediaControl.$el.find('[data-playpause]').hide();
+  }
+
+  disable() {
+    super()
+    this.core.mediaControl.$el.find('[data-playpause]').show();
   }
 
   playing() {
@@ -81,7 +90,9 @@ class BackgroundButton extends UIContainerPlugin {
     var style = Styler.getStyleFor(this.name);
     this.$el.html(this.template());
     this.$el.append(style);
-    this.core.mediaControl.$el.find('[data-playpause]').hide();
+    if (this.enabled) {
+      this.core.mediaControl.$el.find('[data-playpause]').hide();
+    }
     this.core.$el.append(this.$el);
     return this;
   }
