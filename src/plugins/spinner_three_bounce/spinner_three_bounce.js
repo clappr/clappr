@@ -7,7 +7,7 @@ var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 
 class SpinnerThreeBouncePlugin extends UIContainerPlugin {
-  get name() { return 'spinner_three_bounce' }
+  get name() { return 'spinner' }
   get attributes() {
     return {
       'data-spinner':'',
@@ -17,7 +17,7 @@ class SpinnerThreeBouncePlugin extends UIContainerPlugin {
 
   constructor(options) {
     super(options)
-    this.template = JST[this.name]
+    this.template = JST.spinner_three_bounce
     this.listenTo(this.container, 'container:state:buffering', this.onBuffering)
     this.listenTo(this.container, 'container:state:bufferfull', this.onBufferFull)
     this.listenTo(this.container, 'container:stop', this.onStop)
@@ -37,11 +37,11 @@ class SpinnerThreeBouncePlugin extends UIContainerPlugin {
   }
 
   render() {
-    this.$el.hide()
     this.$el.html(this.template())
-    var style = Styler.getStyleFor(this.name)
+    var style = Styler.getStyleFor('spinner_three_bounce')
     this.container.$el.append(style)
     this.container.$el.append(this.$el)
+    this.$el.hide()
     return this
   }
 }
