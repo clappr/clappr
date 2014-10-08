@@ -27,6 +27,7 @@ class BackgroundButton extends UICorePlugin {
     this.listenTo(this.core.mediaControl.container, 'container:state:bufferfull', this.show)
     this.listenTo(this.core.mediaControl.container, 'container:settingsupdate', this.settingsUpdate)
     this.listenTo(this.core.mediaControl.container, 'container:dvr', this.settingsUpdate)
+    this.listenTo(this.core.mediaControl, 'mediacontrol:containerchanged', this.settingsUpdate)
     this.listenTo(this.core.mediaControl, 'mediacontrol:show', this.show)
     this.listenTo(this.core.mediaControl, 'mediacontrol:hide', this.hide)
     this.listenTo(this.core.mediaControl, 'mediacontrol:playing', this.playing)
@@ -34,6 +35,7 @@ class BackgroundButton extends UICorePlugin {
   }
 
   settingsUpdate() {
+    this.stopListening()
     if(this.shouldRender()) {
       this.render()
       this.bindEvents()
@@ -44,7 +46,6 @@ class BackgroundButton extends UICorePlugin {
       }
     } else {
       this.hide()
-      this.stopListening()
       this.listenTo(this.core.mediaControl.container, 'container:settingsupdate', this.settingsUpdate)
     }
   }
