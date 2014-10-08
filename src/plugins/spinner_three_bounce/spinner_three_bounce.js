@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var UIPlugin = require('../../base/ui_plugin');
+var UIContainerPlugin = require('../../base/ui_container_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 
-class SpinnerThreeBouncePlugin extends UIPlugin {
+class SpinnerThreeBouncePlugin extends UIContainerPlugin {
   get name() { return 'spinner_three_bounce' }
   get attributes() {
     return {
