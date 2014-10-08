@@ -24,4 +24,4 @@ class UIContainerPlugin extends UIObject {
   bindEvents() {}
 }
 
-module.exports = UIPlugin
+module.exports = UIContainerPlugin

@@ -17,3 +17,4 @@ class ContainerPlugin extends BaseObject {
   bindEvents() {}
 }
 
+module.exports = ContainerPlugin
