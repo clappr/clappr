@@ -37,7 +37,7 @@ class HTML5Video extends Playback {
     this.src = options.src
     this.el.src = options.src
     this.el.loop = options.loop
-    this.isHLS = !!(this.src.indexOf('m3u8') > -1)
+    this.isHLS = (this.src.indexOf('m3u8') > -1)
     this.settings = {default: ['seekbar']}
     if (this.isHLS) {
       this.settings.left = ["playstop"]
@@ -51,6 +51,7 @@ class HTML5Video extends Playback {
 
   loadedMetadata(e) {
     this.trigger('playback:loadedmetadata', e.target.duration)
+    this.trigger('playback:settingsupdate')
   }
 
   getPlaybackType() {
