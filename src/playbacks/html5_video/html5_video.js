@@ -7,6 +7,8 @@ var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
 var Browser = require('../../components/browser')
 
+var _ = require('underscore')
+
 class HTML5Video extends Playback {
   get name() { return 'html5_video' }
   get tagName() { return 'video' }
@@ -55,7 +57,7 @@ class HTML5Video extends Playback {
   }
 
   getPlaybackType() {
-    return this.isHLS && (this.el.duration === undefined || this.el.duration === Infinity) ? 'live' : 'vod'
+    return this.isHLS && _.contains([0, undefined, Infinity], this.el.duration) ? 'live' : 'vod'
   }
 
   isHighDefinitionInUse() {
@@ -141,7 +143,7 @@ class HTML5Video extends Playback {
   }
 
   timeUpdated() {
-    if (!this.isHLS) {
+    if (this.getPlaybackType() !== 'live') {
       this.trigger('playback:timeupdate', this.el.currentTime, this.el.duration, this.name)
     }
   }
