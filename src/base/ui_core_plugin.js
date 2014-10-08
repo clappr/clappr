@@ -4,10 +4,26 @@ class UICorePlugin extends UIObject {
   constructor(core) {
     super(core)
     this.core = core
+    this.enabled = true
+    this.bindEvents()
     this.render()
   }
 
+  bindEvents() {}
+
   getExternalInterface() { return {} }
+
+  enable() {
+    this.bindEvents()
+    this.$el.show()
+    this.enabled = true
+  }
+
+  disable() {
+    this.stopListening()
+    this.$el.hide()
+    this.enabled = false
+  }
 
   render() {
     this.$el.html(this.template())
