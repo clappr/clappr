@@ -3,22 +3,24 @@
 // license that can be found in the LICENSE file.
 
 var UIObject = require('./ui_object')
-var _ = require('underscore')
 
 class UIContainerPlugin extends UIObject {
   constructor(options) {
     super(options)
+    this.enabled = true
     this.bindEvents()
   }
 
   enable() {
     this.bindEvents()
     this.$el.show()
+    this.enabled = true
   }
 
   disable() {
     this.stopListening()
     this.$el.hide()
+    this.enabled = false
   }
 
   bindEvents() {}
