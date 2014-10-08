@@ -26,7 +26,7 @@ class Loader extends BaseObject {
   constructor(externalPlugins) {
     super()
     this.playerInfo = PlayerInfo.getInstance()
-    this.playbackPlugins = [HLSVideoPlayback, FlashVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, NoOp]
+    this.playbackPlugins = [FlashVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, HLSVideoPlayback, NoOp]
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin]
     this.corePlugins = [BackgroundButton]
     if (externalPlugins) {
