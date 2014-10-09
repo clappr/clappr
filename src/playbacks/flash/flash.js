@@ -10,7 +10,7 @@ var _ = require('underscore')
 var $ = require('jquery')
 var Browser = require('../../components/browser')
 
-var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> </object>'
+var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>'
 
 class Flash extends UIObject {
   get name() { return 'flash' }
@@ -164,7 +164,7 @@ class Flash extends UIObject {
   }
 
   setupIE() {
-    this.setElement($(_.template(objectIE)({cid: this.cid, swfPath: this.swfPath})))
+    this.setElement($(_.template(objectIE)({ cid: this.cid, swfPath: this.swfPath, playbackId: this.uniqueId })))
   }
 
   render() {
