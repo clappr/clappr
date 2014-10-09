@@ -53,8 +53,10 @@ class SeekTime extends UIObject {
     var element = undefined
     if (elementClass === 'bar-container') {
       return $(event.target)
-    } else if (elementClass === 'bar-hover'){
+    } else if (elementClass === 'bar-hover' || elementClass === 'bar-scrubber-icon'){
       return $(event.target).parent().parent()
+    } else if (elementClass === 'bar-scrubber') {
+      return $(event.target).parent()
     }
   }
 
