@@ -6,8 +6,6 @@ var UIObject = require('../../base/ui_object')
 var Styler = require('../../base/styler')
 var JST = require('../../base/jst')
 var formatTime = require('../../base/utils').formatTime
-var $ = require('jquery')
-var _ = require('underscore')
 
 class SeekTime extends UIObject {
   get name() { return 'seek_time' }
@@ -32,17 +30,16 @@ class SeekTime extends UIObject {
   }
 
   showTime(event) {
-    var element = this.getHoverElement(event)
-    if (element) {
-      var offset = element.offset().left
-      var width = element.width()
-      var pos = (event.pageX - offset) / width * 100
-      pos = Math.min(100, Math.max(pos, 0))
-      var currentTime = pos * this.mediaControl.container.getDuration() / 100
-      var time = formatTime(currentTime)
-      var options = _.extend({}, event, {timestamp: currentTime, formattedTime: time})
-      this.update(options)
+    var offset = this.mediaControl.$seekBarContainer.offset().left
+    var width = this.mediaControl.$seekBarContainer.width()
+    var pos = Math.min(100, Math.max((event.pageX - offset) / width * 100, 0))
+    var currentTime = pos * this.mediaControl.container.getDuration() / 100
+    var options = {
+      timestamp: currentTime,
+      formattedTime: formatTime(currentTime),
+      pageX: event.pageX
     }
+    this.update(options)
   }
 
   hideTime() {
@@ -56,19 +53,6 @@ class SeekTime extends UIObject {
       this.$el.removeClass('hidden')
     }
   }
-
-  getHoverElement(event) {
-    var elClass = $(event.target).attr('class')
-    if (elClass === 'bar-container') {
-      return $(event.target)
-    } else if (_.contains(['bar-hover', 'bar-scrubber-icon', 'bar-fill-1', 'bar-fill-2'], elClass)) {
-      return $(event.target).parent().parent()
-    } else if (_.contains(['bar-scrubber', 'bar-background'], elClass)) {
-      return $(event.target).parent()
-    }
-  }
-
-  getExternalInterface() {}
 
   render() {
       var style = Styler.getStyleFor(this.name);
