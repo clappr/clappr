@@ -24,7 +24,6 @@ class SeekTime extends UIObject {
     super()
     this.mediaControl = mediaControl
     this.addEventListeners()
-    this.render()
   }
 
   addEventListeners() {
@@ -39,12 +38,10 @@ class SeekTime extends UIObject {
       var width = element.width()
       var pos = (event.pageX - offset) / width * 100
       pos = Math.min(100, Math.max(pos, 0))
-      this.currentTime = pos * this.mediaControl.container.getDuration() / 100
-      this.time = formatTime(this.currentTime)
-      this.$el.css('left', event.pageX - Math.floor((this.$el.width() / 2) + 6))
-      this.$el.removeClass('hidden')
-      var options = _.extend({}, event, {timestamp: this.currentTime, formattedTime: this.time})
-      this.render(options);
+      var currentTime = pos * this.mediaControl.container.getDuration() / 100
+      var time = formatTime(currentTime)
+      var options = _.extend({}, event, {timestamp: currentTime, formattedTime: time})
+      this.update(options)
     }
   }
 
@@ -52,9 +49,16 @@ class SeekTime extends UIObject {
     this.$el.addClass('hidden');
   }
 
+  update(options) {
+    if (this.mediaControl.container.getPlaybackType() === 'vod') {
+      this.$el.find('span').text(options.formattedTime)
+      this.$el.css('left', options.pageX - Math.floor((this.$el.width() / 2) + 6))
+      this.$el.removeClass('hidden')
+    }
+  }
+
   getHoverElement(event) {
     var elClass = $(event.target).attr('class')
-    var element = undefined
     if (elClass === 'bar-container') {
       return $(event.target)
     } else if (_.contains(['bar-hover', 'bar-scrubber-icon', 'bar-fill-1', 'bar-fill-2'], elClass)) {
@@ -66,13 +70,11 @@ class SeekTime extends UIObject {
 
   getExternalInterface() {}
 
-  render(event) {
-    if (this.mediaControl.container.getPlaybackType() === 'vod') {
+  render() {
       var style = Styler.getStyleFor(this.name);
-      this.$el.html(this.template({time: this.time}));
+      this.$el.html(this.template());
       this.$el.append(style);
       this.mediaControl.$el.append(this.el);
-    }
   }
 }
 

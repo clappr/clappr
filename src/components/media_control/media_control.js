@@ -446,7 +446,8 @@ class MediaControl extends UIObject {
       this.bindKeyEvents()
     })
 
-    this.parseColors();
+    this.parseColors()
+    this.seekTime.render()
 
     return this
   }
