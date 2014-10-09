@@ -20,7 +20,7 @@ class Flash extends UIObject {
   constructor(options) {
     super(options)
     this.src = options.src
-    this.isRTMP = !!(this.src.indexOf("rtmp") > -1)
+    this.isRTMP = (this.src.indexOf("rtmp") > -1)
     this.swfPath = options.swfPath || "http://cdn.clappr.io/latest/assets/Player.swf"
     this.autoPlay = options.autoPlay
     this.settings = {default: ['seekbar']}
@@ -41,10 +41,14 @@ class Flash extends UIObject {
     this.el.width = "100%"
     this.el.height = "100%"
     this.isReady = true
-    this.trigger('playback:ready', this.name)
-    this.currentState = "IDLE"
-    this.autoPlay && this.play()
+    if (this.currentState === 'PLAYING') {
+      this.firstPlay()
+    } else {
+      this.currentState = "IDLE"
+      this.autoPlay && this.play()
+    }
     $('<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%" />').insertAfter(this.$el)
+    this.trigger('playback:ready', this.name)
   }
 
   getPlaybackType() {
@@ -103,7 +107,9 @@ class Flash extends UIObject {
 
   firstPlay() {
     this.currentState = "PLAYING"
-    this.el.playerPlay(this.src)
+    if (_.isFunction(this.el.playerPlay)) {
+      this.el.playerPlay(this.src)
+    }
   }
 
   play() {
