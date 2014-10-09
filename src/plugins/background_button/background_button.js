@@ -47,6 +47,8 @@ class BackgroundButton extends UICorePlugin {
     } else {
       this.hide()
       this.listenTo(this.core.mediaControl.container, 'container:settingsupdate', this.settingsUpdate)
+      this.listenTo(this.core.mediaControl.container, 'container:dvr', this.settingsUpdate)
+      this.listenTo(this.core.mediaControl, 'mediacontrol:containerchanged', this.settingsUpdate)
     }
   }
 
@@ -81,7 +83,6 @@ class BackgroundButton extends UICorePlugin {
   disable() {
     super()
     this.core.mediaControl.$el.find('[data-playpause]').show()
-    this.listenTo(this.core.mediaControl.container, 'container:settingsupdate', this.settingsUpdate)
   }
 
   playing() {
