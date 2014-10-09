@@ -49,13 +49,13 @@ class SeekTime extends UIObject {
   }
 
   getHoverElement(event) {
-    var elementClass = $(event.target).attr('class')
+    var elClass = $(event.target).attr('class')
     var element = undefined
-    if (elementClass === 'bar-container') {
+    if (elClass === 'bar-container') {
       return $(event.target)
-    } else if (elementClass === 'bar-hover' || elementClass === 'bar-scrubber-icon'){
+    } else if (_.contains(['bar-hover', 'bar-scrubber-icon', 'bar-fill-1', 'bar-fill-2'], elClass)) {
       return $(event.target).parent().parent()
-    } else if (elementClass === 'bar-scrubber') {
+    } else if (_.contains(['bar-scrubber', 'bar-background'], elClass)) {
       return $(event.target).parent()
     }
   }
