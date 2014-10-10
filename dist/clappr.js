@@ -13615,7 +13615,9 @@ module.exports = mousetrap;
   }
 }.call(this));
 
-},{}],7:[function(require,module,exports){
+},{}],"base_object":[function(require,module,exports){
+module.exports=require('2HNVgz');
+},{}],"2HNVgz":[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var extend = require('./utils').extend;
@@ -13631,7 +13633,7 @@ BaseObject.extend = extend;
 module.exports = BaseObject;
 
 
-},{"./events":12,"./utils":22,"underscore":6}],"6xH8xW":[function(require,module,exports){
+},{"./events":13,"./utils":23,"underscore":6}],"6xH8xW":[function(require,module,exports){
 "use strict";
 var BaseObject = require('./base_object');
 var ContainerPlugin = function ContainerPlugin(options) {
@@ -13651,7 +13653,7 @@ var $ContainerPlugin = ContainerPlugin;
 module.exports = ContainerPlugin;
 
 
-},{"./base_object":7}],"container_plugin":[function(require,module,exports){
+},{"./base_object":"2HNVgz"}],"container_plugin":[function(require,module,exports){
 module.exports=require('6xH8xW');
 },{}],"core_plugin":[function(require,module,exports){
 module.exports=require('it+usN');
@@ -13669,7 +13671,7 @@ var $CorePlugin = CorePlugin;
 module.exports = CorePlugin;
 
 
-},{"./base_object":7}],12:[function(require,module,exports){
+},{"./base_object":"2HNVgz"}],13:[function(require,module,exports){
 (function (global){
 "use strict";
 var _ = require('underscore');
@@ -13841,7 +13843,7 @@ module.exports = Events;
 
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../plugins/log":58,"underscore":6}],13:[function(require,module,exports){
+},{"../plugins/log":59,"underscore":6}],14:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 module.exports = {
@@ -13908,9 +13910,9 @@ Playback.canPlay = (function(source) {
 module.exports = Playback;
 
 
-},{"../base/ui_object":21}],"playback":[function(require,module,exports){
+},{"../base/ui_object":22}],"playback":[function(require,module,exports){
 module.exports=require('VbgHr3');
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var _ = require('underscore');
@@ -13922,7 +13924,7 @@ var Styler = {getStyleFor: function(name, options) {
 module.exports = Styler;
 
 
-},{"./jst":13,"jquery":3,"underscore":6}],"ui_container_plugin":[function(require,module,exports){
+},{"./jst":14,"jquery":3,"underscore":6}],"ui_container_plugin":[function(require,module,exports){
 module.exports=require('XSLDWT');
 },{}],"XSLDWT":[function(require,module,exports){
 "use strict";
@@ -13949,7 +13951,7 @@ var $UIContainerPlugin = UIContainerPlugin;
 module.exports = UIContainerPlugin;
 
 
-},{"./ui_object":21}],"ui_core_plugin":[function(require,module,exports){
+},{"./ui_object":22}],"ui_core_plugin":[function(require,module,exports){
 module.exports=require('gNZMEo');
 },{}],"gNZMEo":[function(require,module,exports){
 "use strict";
@@ -13987,7 +13989,7 @@ var $UICorePlugin = UICorePlugin;
 module.exports = UICorePlugin;
 
 
-},{"./ui_object":21}],21:[function(require,module,exports){
+},{"./ui_object":22}],22:[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var _ = require('underscore');
@@ -14070,7 +14072,7 @@ UIObject.extend = extend;
 module.exports = UIObject;
 
 
-},{"./base_object":7,"./utils":22,"jquery":3,"underscore":6}],22:[function(require,module,exports){
+},{"./base_object":"2HNVgz","./utils":23,"jquery":3,"underscore":6}],23:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('jquery');
@@ -14239,7 +14241,7 @@ module.exports = Browser;
 
 },{}],"browser":[function(require,module,exports){
 module.exports=require('195Wj5');
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 "use strict";
 var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
@@ -14409,12 +14411,12 @@ var $Container = Container;
 module.exports = Container;
 
 
-},{"../../base/styler":16,"../../base/ui_object":21,"underscore":6}],26:[function(require,module,exports){
+},{"../../base/styler":17,"../../base/ui_object":22,"underscore":6}],27:[function(require,module,exports){
 "use strict";
 module.exports = require('./container');
 
 
-},{"./container":25}],27:[function(require,module,exports){
+},{"./container":26}],28:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var BaseObject = require('../../base/base_object');
@@ -14468,12 +14470,12 @@ var $ContainerFactory = ContainerFactory;
 module.exports = ContainerFactory;
 
 
-},{"../../base/base_object":7,"../container":26,"jquery":3,"underscore":6}],28:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../container":27,"jquery":3,"underscore":6}],29:[function(require,module,exports){
 "use strict";
 module.exports = require('./container_factory');
 
 
-},{"./container_factory":27}],29:[function(require,module,exports){
+},{"./container_factory":28}],30:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('jquery');
@@ -14692,12 +14694,12 @@ var $Core = Core;
 module.exports = Core;
 
 
-},{"../../base/styler":16,"../../base/ui_object":21,"../../base/utils":22,"../container_factory":28,"../media_control":"A8Uh+k","../mediator":"veeMMc","../player_info":"Pce0iO","jquery":3,"underscore":6}],30:[function(require,module,exports){
+},{"../../base/styler":17,"../../base/ui_object":22,"../../base/utils":23,"../container_factory":29,"../media_control":"A8Uh+k","../mediator":"veeMMc","../player_info":"Pce0iO","jquery":3,"underscore":6}],31:[function(require,module,exports){
 "use strict";
 module.exports = require('./core');
 
 
-},{"./core":29}],31:[function(require,module,exports){
+},{"./core":30}],32:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var BaseObject = require('../../base/base_object');
@@ -14731,17 +14733,17 @@ var CoreFactory = function CoreFactory(player, loader) {
 module.exports = CoreFactory;
 
 
-},{"../../base/base_object":7,"../core":30,"underscore":6}],32:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../core":31,"underscore":6}],33:[function(require,module,exports){
 "use strict";
 module.exports = require('./core_factory');
 
 
-},{"./core_factory":31}],33:[function(require,module,exports){
+},{"./core_factory":32}],34:[function(require,module,exports){
 "use strict";
 module.exports = require('./loader');
 
 
-},{"./loader":34}],34:[function(require,module,exports){
+},{"./loader":35}],35:[function(require,module,exports){
 "use strict";
 var BaseObject = require('../../base/base_object');
 var _ = require('underscore');
@@ -14793,14 +14795,14 @@ var $Loader = Loader;
 module.exports = Loader;
 
 
-},{"../../base/base_object":7,"../../playbacks/flash":47,"../../playbacks/hls":49,"../../playbacks/html5_audio":51,"../../playbacks/html5_video":53,"../../playbacks/no_op":54,"../../plugins/background_button":57,"../../plugins/poster":60,"../../plugins/spinner_three_bounce":62,"../../plugins/stats":64,"../../plugins/watermark":66,"../player_info":"Pce0iO","underscore":6}],"A8Uh+k":[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../../playbacks/flash":48,"../../playbacks/hls":50,"../../playbacks/html5_audio":52,"../../playbacks/html5_video":54,"../../playbacks/no_op":55,"../../plugins/background_button":58,"../../plugins/poster":61,"../../plugins/spinner_three_bounce":63,"../../plugins/stats":65,"../../plugins/watermark":67,"../player_info":"Pce0iO","underscore":6}],"A8Uh+k":[function(require,module,exports){
 "use strict";
 module.exports = require('./media_control');
 
 
-},{"./media_control":37}],"media_control":[function(require,module,exports){
+},{"./media_control":38}],"media_control":[function(require,module,exports){
 module.exports=require('A8Uh+k');
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('jquery');
@@ -14883,7 +14885,6 @@ var $MediaControl = MediaControl;
     this.listenTo(this.container, 'container:highdefinitionupdate', this.highDefinitionUpdate);
     this.listenTo(this.container, 'container:mediacontrol:disable', this.disable);
     this.listenTo(this.container, 'container:mediacontrol:enable', this.enable);
-    this.listenTo(this.container, 'container:playbackstate', this.updatePlaybackType);
     this.listenTo(this.container, 'container:ended', this.ended);
   },
   disable: function() {
@@ -15236,7 +15237,7 @@ var $MediaControl = MediaControl;
 module.exports = MediaControl;
 
 
-},{"../../base/jst":13,"../../base/styler":16,"../../base/ui_object":21,"../../base/utils":22,"../seek_time":43,"jquery":3,"mousetrap":4,"underscore":6}],"veeMMc":[function(require,module,exports){
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_object":22,"../../base/utils":23,"../seek_time":44,"jquery":3,"mousetrap":4,"underscore":6}],"veeMMc":[function(require,module,exports){
 "use strict";
 var Events = require('../base/events');
 var events = new Events();
@@ -15265,16 +15266,16 @@ Mediator.stopListening = function(obj, name, callback) {
 module.exports = Mediator;
 
 
-},{"../base/events":12}],"mediator":[function(require,module,exports){
+},{"../base/events":13}],"mediator":[function(require,module,exports){
 module.exports=require('veeMMc');
 },{}],"Pce0iO":[function(require,module,exports){
 "use strict";
 module.exports = require('./player_info');
 
 
-},{"./player_info":42}],"player_info":[function(require,module,exports){
+},{"./player_info":43}],"player_info":[function(require,module,exports){
 module.exports=require('Pce0iO');
-},{}],42:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 "use strict";
 var BaseObject = require('../../base/base_object');
 var PlayerInfo = function PlayerInfo() {
@@ -15295,12 +15296,12 @@ PlayerInfo.getInstance = function() {
 module.exports = PlayerInfo;
 
 
-},{"../../base/base_object":7}],43:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz"}],44:[function(require,module,exports){
 "use strict";
 module.exports = require('./seek_time');
 
 
-},{"./seek_time":44}],44:[function(require,module,exports){
+},{"./seek_time":45}],45:[function(require,module,exports){
 "use strict";
 var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
@@ -15361,7 +15362,7 @@ var $SeekTime = SeekTime;
 module.exports = SeekTime;
 
 
-},{"../../base/jst":13,"../../base/styler":16,"../../base/ui_object":21,"../../base/utils":22}],45:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_object":22,"../../base/utils":23}],46:[function(require,module,exports){
 (function (global){
 "use strict";
 var BaseObject = require('./base/base_object');
@@ -15456,7 +15457,7 @@ module.exports = window.Clappr;
 
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./base/base_object":7,"./components/core_factory":32,"./components/loader":33,"./components/mediator":"veeMMc","./components/player_info":"Pce0iO","scrollmonitor":5,"underscore":6}],46:[function(require,module,exports){
+},{"./base/base_object":"2HNVgz","./components/core_factory":33,"./components/loader":34,"./components/mediator":"veeMMc","./components/player_info":"Pce0iO","scrollmonitor":5,"underscore":6}],47:[function(require,module,exports){
 "use strict";
 var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
@@ -15650,12 +15651,12 @@ Flash.canPlay = function(resource) {
 module.exports = Flash;
 
 
-},{"../../base/jst":13,"../../base/styler":16,"../../base/ui_object":21,"../../components/browser":"195Wj5","../../components/mediator":"veeMMc","jquery":3,"underscore":6}],47:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_object":22,"../../components/browser":"195Wj5","../../components/mediator":"veeMMc","jquery":3,"underscore":6}],48:[function(require,module,exports){
 "use strict";
 module.exports = require('./flash');
 
 
-},{"./flash":46}],48:[function(require,module,exports){
+},{"./flash":47}],49:[function(require,module,exports){
 "use strict";
 var Playback = require('../../base/playback');
 var Styler = require('../../base/styler');
@@ -15939,12 +15940,12 @@ HLS.canPlay = function(resource) {
 module.exports = HLS;
 
 
-},{"../../base/jst":13,"../../base/playback":"VbgHr3","../../base/styler":16,"../../components/browser":"195Wj5","../../components/mediator":"veeMMc","underscore":6}],49:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/playback":"VbgHr3","../../base/styler":17,"../../components/browser":"195Wj5","../../components/mediator":"veeMMc","underscore":6}],50:[function(require,module,exports){
 "use strict";
 module.exports = require('./hls');
 
 
-},{"./hls":48}],50:[function(require,module,exports){
+},{"./hls":49}],51:[function(require,module,exports){
 "use strict";
 var Playback = require('../../base/playback');
 var HTML5Audio = function HTML5Audio(params) {
@@ -16034,12 +16035,12 @@ HTML5Audio.canPlay = function(resource) {
 module.exports = HTML5Audio;
 
 
-},{"../../base/playback":"VbgHr3"}],51:[function(require,module,exports){
+},{"../../base/playback":"VbgHr3"}],52:[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_audio');
 
 
-},{"./html5_audio":50}],52:[function(require,module,exports){
+},{"./html5_audio":51}],53:[function(require,module,exports){
 "use strict";
 var Playback = require('../../base/playback');
 var JST = require('../../base/jst');
@@ -16198,17 +16199,17 @@ HTML5Video.canPlay = function(resource) {
 module.exports = HTML5Video;
 
 
-},{"../../base/jst":13,"../../base/playback":"VbgHr3","../../base/styler":16,"../../components/browser":"195Wj5","underscore":6}],53:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/playback":"VbgHr3","../../base/styler":17,"../../components/browser":"195Wj5","underscore":6}],54:[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_video');
 
 
-},{"./html5_video":52}],54:[function(require,module,exports){
+},{"./html5_video":53}],55:[function(require,module,exports){
 "use strict";
 module.exports = require('./no_op');
 
 
-},{"./no_op":55}],55:[function(require,module,exports){
+},{"./no_op":56}],56:[function(require,module,exports){
 "use strict";
 var Playback = require('../../base/playback');
 var JST = require('../../base/jst');
@@ -16240,7 +16241,7 @@ NoOp.canPlay = (function(source) {
 module.exports = NoOp;
 
 
-},{"../../base/jst":13,"../../base/playback":"VbgHr3","../../base/styler":16}],56:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/playback":"VbgHr3","../../base/styler":17}],57:[function(require,module,exports){
 "use strict";
 var UICorePlugin = require('../../base/ui_core_plugin');
 var JST = require('../../base/jst');
@@ -16291,6 +16292,8 @@ var $BackgroundButton = BackgroundButton;
     } else {
       this.hide();
       this.listenTo(this.core.mediaControl.container, 'container:settingsupdate', this.settingsUpdate);
+      this.listenTo(this.core.mediaControl.container, 'container:dvr', this.settingsUpdate);
+      this.listenTo(this.core.mediaControl, 'mediacontrol:containerchanged', this.settingsUpdate);
     }
   },
   shouldRender: function() {
@@ -16315,7 +16318,6 @@ var $BackgroundButton = BackgroundButton;
   disable: function() {
     $traceurRuntime.superCall(this, $BackgroundButton.prototype, "disable", []);
     this.core.mediaControl.$el.find('[data-playpause]').show();
-    this.listenTo(this.core.mediaControl.container, 'container:settingsupdate', this.settingsUpdate);
   },
   playing: function() {
     this.$el.find('.playpause-icon[data-background-button]').removeClass('paused').addClass('playing');
@@ -16341,17 +16343,17 @@ var $BackgroundButton = BackgroundButton;
 module.exports = BackgroundButton;
 
 
-},{"../../base/jst":13,"../../base/styler":16,"../../base/ui_core_plugin":"gNZMEo"}],57:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_core_plugin":"gNZMEo"}],58:[function(require,module,exports){
 "use strict";
 module.exports = require('./background_button');
 
 
-},{"./background_button":56}],58:[function(require,module,exports){
+},{"./background_button":57}],59:[function(require,module,exports){
 "use strict";
 module.exports = require('./log');
 
 
-},{"./log":59}],59:[function(require,module,exports){
+},{"./log":60}],60:[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var BOLD = 'font-weight: bold; font-size: 13px;';
@@ -16388,12 +16390,12 @@ Log.prototype = {
 module.exports = Log;
 
 
-},{"jquery":3}],60:[function(require,module,exports){
+},{"jquery":3}],61:[function(require,module,exports){
 "use strict";
 module.exports = require('./poster');
 
 
-},{"./poster":61}],61:[function(require,module,exports){
+},{"./poster":62}],62:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('../../base/ui_container_plugin');
 var Styler = require('../../base/styler');
@@ -16494,12 +16496,12 @@ var $PosterPlugin = PosterPlugin;
 module.exports = PosterPlugin;
 
 
-},{"../../base/jst":13,"../../base/styler":16,"../../base/ui_container_plugin":"XSLDWT","../../components/mediator":"veeMMc","../../components/player_info":"Pce0iO","jquery":3,"underscore":6}],62:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_container_plugin":"XSLDWT","../../components/mediator":"veeMMc","../../components/player_info":"Pce0iO","jquery":3,"underscore":6}],63:[function(require,module,exports){
 "use strict";
 module.exports = require('./spinner_three_bounce');
 
 
-},{"./spinner_three_bounce":63}],63:[function(require,module,exports){
+},{"./spinner_three_bounce":64}],64:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('../../base/ui_container_plugin');
 var Styler = require('../../base/styler');
@@ -16544,12 +16546,12 @@ var $SpinnerThreeBouncePlugin = SpinnerThreeBouncePlugin;
 module.exports = SpinnerThreeBouncePlugin;
 
 
-},{"../../base/jst":13,"../../base/styler":16,"../../base/ui_container_plugin":"XSLDWT"}],64:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_container_plugin":"XSLDWT"}],65:[function(require,module,exports){
 "use strict";
 module.exports = require('./stats');
 
 
-},{"./stats":65}],65:[function(require,module,exports){
+},{"./stats":66}],66:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('../../base/container_plugin');
 var $ = require("jquery");
@@ -16648,12 +16650,12 @@ var $StatsPlugin = StatsPlugin;
 module.exports = StatsPlugin;
 
 
-},{"../../base/container_plugin":"6xH8xW","jquery":3}],66:[function(require,module,exports){
+},{"../../base/container_plugin":"6xH8xW","jquery":3}],67:[function(require,module,exports){
 "use strict";
 module.exports = require('./watermark');
 
 
-},{"./watermark":67}],67:[function(require,module,exports){
+},{"./watermark":68}],68:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('../../base/ui_container_plugin');
 var Styler = require('../../base/styler');
@@ -16701,4 +16703,4 @@ var $WaterMarkPlugin = WaterMarkPlugin;
 module.exports = WaterMarkPlugin;
 
 
-},{"../../base/jst":13,"../../base/styler":16,"../../base/ui_container_plugin":"XSLDWT"}]},{},[2,45])
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_container_plugin":"XSLDWT"}]},{},[2,46])
