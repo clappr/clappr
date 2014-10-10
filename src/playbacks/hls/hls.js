@@ -230,6 +230,7 @@ class HLS extends Playback {
     if (this.dvrInUse !== previousDvrInUse) {
       this.updateSettings()
       this.trigger('playback:dvr', this.dvrInUse)
+      this.trigger('playback:stats:add', {'dvr': this.dvrInUse})
     }
   }
 
