@@ -214,7 +214,7 @@ class HLS extends Playback {
 
     if (this.playbackType === 'live') {
       // seek operations to a time within 5 seconds from live stream will position playhead back to live
-      var dvrInUse = (duration - time > 5)
+      var dvrInUse = (time >= 0 && duration - time > 5)
       if (!dvrInUse) {
         time = -1
       }
