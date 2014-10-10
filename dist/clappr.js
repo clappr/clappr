@@ -15860,7 +15860,7 @@ var $HLS = HLS;
       time = duration * time / 100;
     }
     if (this.playbackType === 'live') {
-      var dvrInUse = (duration - time > 5);
+      var dvrInUse = (time >= 0 && duration - time > 5);
       if (!dvrInUse) {
         time = -1;
       }
