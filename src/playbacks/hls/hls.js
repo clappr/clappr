@@ -160,8 +160,29 @@ class HLS extends Playback {
     this.playbackType = this.el.globoGetType()
     if (this.playbackType) {
       this.playbackType = this.playbackType.toLowerCase()
+      if (this.playbackType === 'vod') {
+        this.startReportingProgress()
+      } else {
+        this.stopReportingProgress()
+      }
     }
     this.trigger('playback:playbackstate');
+  }
+
+  startReportingProgress() {
+    if (!this.reportingProgress) {
+      this.reportingProgress = true
+      Mediator.on(this.uniqueId + ':fragmentloaded', () => this.onFragmentLoaded())
+    }
+  }
+
+  stopReportingProgress() {
+    Mediator.off(this.uniqueId + ':fragmentloaded')
+  }
+
+  onFragmentLoaded() {
+    var buffered = this.el.globoGetPosition() + this.el.globoGetbufferLength()
+    this.trigger('playback:progress', this.el.globoGetPosition(), buffered, this.getDuration(), this.name)
   }
 
   firstPlay() {
