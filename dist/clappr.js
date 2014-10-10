@@ -15331,14 +15331,14 @@ var $SeekTime = SeekTime;
     this.listenTo(this.mediaControl, 'mediacontrol:mouseleave:seekbar', this.hideTime);
   },
   showTime: function(event) {
-    var offset = this.mediaControl.$seekBarContainer.offset().left;
-    var width = this.mediaControl.$seekBarContainer.width();
-    var pos = Math.min(100, Math.max((event.pageX - offset) / width * 100, 0));
-    var currentTime = pos * this.mediaControl.container.getDuration() / 100;
+    var offset = event.pageX - this.mediaControl.$seekBarContainer.offset().left;
+    var timePosition = Math.min(100, Math.max((offset) / this.mediaControl.$seekBarContainer.width() * 100, 0));
+    var pointerPosition = offset - (this.$el.width() / 2);
+    var currentTime = timePosition * this.mediaControl.container.getDuration() / 100;
     var options = {
       timestamp: currentTime,
       formattedTime: formatTime(currentTime),
-      pageX: event.pageX
+      pointerPosition: pointerPosition
     };
     this.update(options);
   },
@@ -15348,7 +15348,7 @@ var $SeekTime = SeekTime;
   update: function(options) {
     if (this.mediaControl.container.getPlaybackType() === 'vod') {
       this.$el.find('[data-seek-time]').text(options.formattedTime);
-      this.$el.css('left', options.pageX - Math.floor((this.$el.width() / 2) + 6));
+      this.$el.css('left', options.pointerPosition);
       this.$el.removeClass('hidden');
     }
   },
@@ -15875,6 +15875,7 @@ var $HLS = HLS;
     if (this.dvrInUse !== previousDvrInUse) {
       this.updateSettings();
       this.trigger('playback:dvr', this.dvrInUse);
+      this.trigger('playback:stats:add', {'dvr': this.dvrInUse});
     }
   },
   flashPlaybackError: function() {
