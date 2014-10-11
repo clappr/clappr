@@ -104,9 +104,7 @@ class HLS extends Playback {
   }
 
   getPlaybackType() {
-    if (this.playbackType)
-      return this.playbackType
-    return null
+    return this.playbackType? this.playbackType: null
   }
 
   getCurrentBitrate() {
