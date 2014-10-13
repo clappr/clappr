@@ -3,7 +3,6 @@
 // license that can be found in the LICENSE file.
 
 var _ = require('underscore');
-var $ = require('jquery');
 
 var extend = function(protoProps, staticProps) {
   var parent = this;
@@ -34,10 +33,6 @@ var extend = function(protoProps, staticProps) {
   }
 
   return child;
-};
-
-var zeroPad = function(number, size) {
-  return (new Array(size + 1 - number.toString().length)).join('0') + number;
 };
 
 var formatTime = function(time) {
@@ -83,93 +78,8 @@ var Fullscreen = {
   }
 };
 
-var HEX_TAB = "0123456789abcdef";
-var B64_TAB = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
-var b64pad = "";
-
-var rstr2b64 = function(input) {
-  var output = "";
-  var len = input.length;
-  for (var i = 0; i < len; i += 3) {
-    var triplet = (input.charCodeAt(i) << 16) | (i + 1 < len ? input.charCodeAt(i + 1) << 8: 0) | (i + 2 < len ? input.charCodeAt(i + 2) : 0);
-    for (var j = 0; j < 4; j++) {
-      if (i * 8 + j * 6 > input.length * 8) output += b64pad;
-      else output += B64_TAB.charAt((triplet >>> 6 * (3 - j)) & 0x3F);
-    }
-  }
-  return output;
-};
-
-var rstr2hex = function(input) {
-  var output = "";
-
-  for (var i = 0; i < input.length; i++) {
-    var x = input.charCodeAt(i);
-    output += HEX_TAB.charAt((x >>> 4) & 0x0F) +  HEX_TAB.charAt(x & 0x0F);
-  }
-
-  return output;
-};
-
-var getHostname = function() {
-  return location.hostname;
-};
-
-var Ajax = {
-  jsonp: function(settings) {
-    var defer = new $.Deferred();
-    settings.callbackName = settings.callbackName || "json_callback";
-    settings.timeout = settings.timeout || 15000;
-
-    window[settings.callbackName] = function (data) {
-      if (!Ajax.isErrorObject(data)) {
-        defer.resolve(data);
-      } else {
-        defer.reject(data);
-      }
-    };
-
-    var head = $("head")[0];
-    var script = document.createElement("script");
-    script.setAttribute("src", settings.url);
-    script.setAttribute("async", "async");
-
-    script.onload = script.onreadystatechange = function(eventLoad) {
-      if (!script.readyState || /loaded|complete/.test(script.readyState)) {
-
-        if (settings.timeoutId) {
-          window.clearTimeout(settings.timeoutId);
-        }
-
-        // Handling memory leak in IE, removing and dereference the script
-        script.onload = script.onreadystatechange = null;
-        if (head && script.parentNode) head.removeChild(script);
-        script = undefined;
-      }
-    };
-
-    // Use insertBefore instead of appendChild to circumvent an IE6 bug.
-    head.insertBefore(script, head.firstChild);
-
-    if (settings.error) {
-      settings.timeoutId = window.setTimeout(settings.error, settings.timeout);
-    }
-
-    return defer.promise();
-  },
-
-  isErrorObject: function (data) {
-    return data && data.http_status_code && data.http_status_code != 200;
-  }
-};
-
 module.exports = {
   extend: extend,
-  zeroPad: zeroPad,
   formatTime: formatTime,
   Fullscreen: Fullscreen,
-  Ajax: Ajax,
-  rstr2b64: rstr2b64,
-  rstr2hex: rstr2hex,
-  getHostname: getHostname
 };
