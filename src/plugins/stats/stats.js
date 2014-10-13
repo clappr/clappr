@@ -104,7 +104,6 @@ class StatsPlugin extends ContainerPlugin {
   }
 
   report() {
-    var stats = this.getStats()
     this.container.statsReport(this.getStats())
   }
 }
