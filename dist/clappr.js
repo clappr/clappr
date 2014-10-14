@@ -1855,7 +1855,7 @@ System.get("traceur-runtime@0.0.42/src/runtime/polyfill-import" + '');
 }).call(this,require("FWaASH"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"FWaASH":1}],3:[function(require,module,exports){
 /*!
- * jQuery JavaScript Library v2.1.1
+ * jQuery JavaScript Library v2.1.0
  * http://jquery.com/
  *
  * Includes Sizzle.js
@@ -1865,7 +1865,7 @@ System.get("traceur-runtime@0.0.42/src/runtime/polyfill-import" + '');
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2014-05-01T17:11Z
+ * Date: 2014-01-23T21:10Z
  */
 
 (function( global, factory ) {
@@ -1915,6 +1915,8 @@ var toString = class2type.toString;
 
 var hasOwn = class2type.hasOwnProperty;
 
+var trim = "".trim;
+
 var support = {};
 
 
@@ -1923,7 +1925,7 @@ var
 	// Use the correct document accordingly with window argument (sandbox)
 	document = window.document,
 
-	version = "2.1.1",
+	version = "2.1.0",
 
 	// Define a local copy of jQuery
 	jQuery = function( selector, context ) {
@@ -1931,10 +1933,6 @@ var
 		// Need init if jQuery is called (just allow error to be thrown if not included)
 		return new jQuery.fn.init( selector, context );
 	},
-
-	// Support: Android<4.1
-	// Make sure we trim BOM and NBSP
-	rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,
 
 	// Matches dashed string for camelizing
 	rmsPrefix = /^-ms-/,
@@ -1966,10 +1964,10 @@ jQuery.fn = jQuery.prototype = {
 	get: function( num ) {
 		return num != null ?
 
-			// Return just the one element from the set
+			// Return a 'clean' array
 			( num < 0 ? this[ num + this.length ] : this[ num ] ) :
 
-			// Return all the elements in a clean array
+			// Return just the object
 			slice.call( this );
 	},
 
@@ -2125,7 +2123,7 @@ jQuery.extend({
 		// parseFloat NaNs numeric-cast false positives (null|true|false|"")
 		// ...but misinterprets leading-number strings, particularly hex literals ("0x...")
 		// subtraction forces infinities to NaN
-		return !jQuery.isArray( obj ) && obj - parseFloat( obj ) >= 0;
+		return obj - parseFloat( obj ) >= 0;
 	},
 
 	isPlainObject: function( obj ) {
@@ -2137,8 +2135,16 @@ jQuery.extend({
 			return false;
 		}
 
-		if ( obj.constructor &&
-				!hasOwn.call( obj.constructor.prototype, "isPrototypeOf" ) ) {
+		// Support: Firefox <20
+		// The try/catch suppresses exceptions thrown when attempting to access
+		// the "constructor" property of certain host objects, ie. |window.location|
+		// https://bugzilla.mozilla.org/show_bug.cgi?id=814622
+		try {
+			if ( obj.constructor &&
+					!hasOwn.call( obj.constructor.prototype, "isPrototypeOf" ) ) {
+				return false;
+			}
+		} catch ( e ) {
 			return false;
 		}
 
@@ -2248,11 +2254,8 @@ jQuery.extend({
 		return obj;
 	},
 
-	// Support: Android<4.1
 	trim: function( text ) {
-		return text == null ?
-			"" :
-			( text + "" ).replace( rtrim, "" );
+		return text == null ? "" : trim.call( text );
 	},
 
 	// results is for internal usage only
@@ -2404,14 +2407,14 @@ function isArraylike( obj ) {
 }
 var Sizzle =
 /*!
- * Sizzle CSS Selector Engine v1.10.19
+ * Sizzle CSS Selector Engine v1.10.16
  * http://sizzlejs.com/
  *
  * Copyright 2013 jQuery Foundation, Inc. and other contributors
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2014-04-18
+ * Date: 2014-01-13
  */
 (function( window ) {
 
@@ -2420,9 +2423,7 @@ var i,
 	Expr,
 	getText,
 	isXML,
-	tokenize,
 	compile,
-	select,
 	outermostContext,
 	sortInput,
 	hasDuplicate,
@@ -2489,23 +2490,17 @@ var i,
 	// Proper syntax: http://www.w3.org/TR/CSS21/syndata.html#value-def-identifier
 	identifier = characterEncoding.replace( "w", "w#" ),
 
-	// Attribute selectors: http://www.w3.org/TR/selectors/#attribute-selectors
-	attributes = "\\[" + whitespace + "*(" + characterEncoding + ")(?:" + whitespace +
-		// Operator (capture 2)
-		"*([*^$|!~]?=)" + whitespace +
-		// "Attribute values must be CSS identifiers [capture 5] or strings [capture 3 or capture 4]"
-		"*(?:'((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\"|(" + identifier + "))|)" + whitespace +
-		"*\\]",
+	// Acceptable operators http://www.w3.org/TR/selectors/#attribute-selectors
+	attributes = "\\[" + whitespace + "*(" + characterEncoding + ")" + whitespace +
+		"*(?:([*^$|!~]?=)" + whitespace + "*(?:(['\"])((?:\\\\.|[^\\\\])*?)\\3|(" + identifier + ")|)|)" + whitespace + "*\\]",
 
-	pseudos = ":(" + characterEncoding + ")(?:\\((" +
-		// To reduce the number of selectors needing tokenize in the preFilter, prefer arguments:
-		// 1. quoted (capture 3; capture 4 or capture 5)
-		"('((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\")|" +
-		// 2. simple (capture 6)
-		"((?:\\\\.|[^\\\\()[\\]]|" + attributes + ")*)|" +
-		// 3. anything else (capture 2)
-		".*" +
-		")\\)|)",
+	// Prefer arguments quoted,
+	//   then not containing pseudos/brackets,
+	//   then attribute selectors/non-parenthetical expressions,
+	//   then anything else
+	// These preferences are here to reduce the number of selectors
+	//   needing tokenize in the PSEUDO preFilter
+	pseudos = ":(" + characterEncoding + ")(?:\\(((['\"])((?:\\\\.|[^\\\\])*?)\\3|((?:\\\\.|[^\\\\()[\\]]|" + attributes.replace( 3, 8 ) + ")*)|.*)\\)|)",
 
 	// Leading and non-escaped trailing whitespace, capturing some non-whitespace characters preceding the latter
 	rtrim = new RegExp( "^" + whitespace + "+|((?:^|[^\\\\])(?:\\\\.)*)" + whitespace + "+$", "g" ),
@@ -2550,7 +2545,7 @@ var i,
 	funescape = function( _, escaped, escapedWhitespace ) {
 		var high = "0x" + escaped - 0x10000;
 		// NaN means non-codepoint
-		// Support: Firefox<24
+		// Support: Firefox
 		// Workaround erroneous numeric interpretation of +"0x"
 		return high !== high || escapedWhitespace ?
 			escaped :
@@ -2946,7 +2941,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 				var m = context.getElementById( id );
 				// Check parentNode to catch when Blackberry 4.6 returns
 				// nodes that are no longer in the document #6963
-				return m && m.parentNode ? [ m ] : [];
+				return m && m.parentNode ? [m] : [];
 			}
 		};
 		Expr.filter["ID"] = function( id ) {
@@ -3026,13 +3021,11 @@ setDocument = Sizzle.setDocument = function( node ) {
 			// setting a boolean content attribute,
 			// since its presence should be enough
 			// http://bugs.jquery.com/ticket/12359
-			div.innerHTML = "<select msallowclip=''><option selected=''></option></select>";
+			div.innerHTML = "<select t=''><option selected=''></option></select>";
 
-			// Support: IE8, Opera 11-12.16
+			// Support: IE8, Opera 10-12
 			// Nothing should be selected when empty strings follow ^= or $= or *=
-			// The test attribute must be unknown in Opera but "safe" for WinRT
-			// http://msdn.microsoft.com/en-us/library/ie/hh465388.aspx#attribute_section
-			if ( div.querySelectorAll("[msallowclip^='']").length ) {
+			if ( div.querySelectorAll("[t^='']").length ) {
 				rbuggyQSA.push( "[*^$]=" + whitespace + "*(?:''|\"\")" );
 			}
 
@@ -3075,8 +3068,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 		});
 	}
 
-	if ( (support.matchesSelector = rnative.test( (matches = docElem.matches ||
-		docElem.webkitMatchesSelector ||
+	if ( (support.matchesSelector = rnative.test( (matches = docElem.webkitMatchesSelector ||
 		docElem.mozMatchesSelector ||
 		docElem.oMatchesSelector ||
 		docElem.msMatchesSelector) )) ) {
@@ -3257,7 +3249,7 @@ Sizzle.matchesSelector = function( elem, expr ) {
 		} catch(e) {}
 	}
 
-	return Sizzle( expr, document, null, [ elem ] ).length > 0;
+	return Sizzle( expr, document, null, [elem] ).length > 0;
 };
 
 Sizzle.contains = function( context, elem ) {
@@ -3386,7 +3378,7 @@ Expr = Sizzle.selectors = {
 			match[1] = match[1].replace( runescape, funescape );
 
 			// Move the given value to match[3] whether quoted or unquoted
-			match[3] = ( match[3] || match[4] || match[5] || "" ).replace( runescape, funescape );
+			match[3] = ( match[4] || match[5] || "" ).replace( runescape, funescape );
 
 			if ( match[2] === "~=" ) {
 				match[3] = " " + match[3] + " ";
@@ -3429,15 +3421,15 @@ Expr = Sizzle.selectors = {
 
 		"PSEUDO": function( match ) {
 			var excess,
-				unquoted = !match[6] && match[2];
+				unquoted = !match[5] && match[2];
 
 			if ( matchExpr["CHILD"].test( match[0] ) ) {
 				return null;
 			}
 
 			// Accept quoted arguments as-is
-			if ( match[3] ) {
-				match[2] = match[4] || match[5] || "";
+			if ( match[3] && match[4] !== undefined ) {
+				match[2] = match[4];
 
 			// Strip excess characters from unquoted arguments
 			} else if ( unquoted && rpseudo.test( unquoted ) &&
@@ -3842,7 +3834,7 @@ function setFilters() {}
 setFilters.prototype = Expr.filters = Expr.pseudos;
 Expr.setFilters = new setFilters();
 
-tokenize = Sizzle.tokenize = function( selector, parseOnly ) {
+function tokenize( selector, parseOnly ) {
 	var matched, match, tokens, type,
 		soFar, groups, preFilters,
 		cached = tokenCache[ selector + " " ];
@@ -3907,7 +3899,7 @@ tokenize = Sizzle.tokenize = function( selector, parseOnly ) {
 			Sizzle.error( selector ) :
 			// Cache the tokens
 			tokenCache( selector, groups ).slice( 0 );
-};
+}
 
 function toSelector( tokens ) {
 	var i = 0,
@@ -3984,15 +3976,6 @@ function elementMatcher( matchers ) {
 			return true;
 		} :
 		matchers[0];
-}
-
-function multipleContexts( selector, contexts, results ) {
-	var i = 0,
-		len = contexts.length;
-	for ( ; i < len; i++ ) {
-		Sizzle( selector, contexts[i], results );
-	}
-	return results;
 }
 
 function condense( unmatched, map, filter, context, xml ) {
@@ -4263,7 +4246,7 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 		superMatcher;
 }
 
-compile = Sizzle.compile = function( selector, match /* Internal Use Only */ ) {
+compile = Sizzle.compile = function( selector, group /* Internal Use Only */ ) {
 	var i,
 		setMatchers = [],
 		elementMatchers = [],
@@ -4271,12 +4254,12 @@ compile = Sizzle.compile = function( selector, match /* Internal Use Only */ ) {
 
 	if ( !cached ) {
 		// Generate a function of recursive functions that can be used to check each element
-		if ( !match ) {
-			match = tokenize( selector );
+		if ( !group ) {
+			group = tokenize( selector );
 		}
-		i = match.length;
+		i = group.length;
 		while ( i-- ) {
-			cached = matcherFromTokens( match[i] );
+			cached = matcherFromTokens( group[i] );
 			if ( cached[ expando ] ) {
 				setMatchers.push( cached );
 			} else {
@@ -4286,83 +4269,74 @@ compile = Sizzle.compile = function( selector, match /* Internal Use Only */ ) {
 
 		// Cache the compiled function
 		cached = compilerCache( selector, matcherFromGroupMatchers( elementMatchers, setMatchers ) );
-
-		// Save selector and tokenization
-		cached.selector = selector;
 	}
 	return cached;
 };
 
-/**
- * A low-level selection function that works with Sizzle's compiled
- *  selector functions
- * @param {String|Function} selector A selector or a pre-compiled
- *  selector function built with Sizzle.compile
- * @param {Element} context
- * @param {Array} [results]
- * @param {Array} [seed] A set of elements to match against
- */
-select = Sizzle.select = function( selector, context, results, seed ) {
+function multipleContexts( selector, contexts, results ) {
+	var i = 0,
+		len = contexts.length;
+	for ( ; i < len; i++ ) {
+		Sizzle( selector, contexts[i], results );
+	}
+	return results;
+}
+
+function select( selector, context, results, seed ) {
 	var i, tokens, token, type, find,
-		compiled = typeof selector === "function" && selector,
-		match = !seed && tokenize( (selector = compiled.selector || selector) );
+		match = tokenize( selector );
 
-	results = results || [];
+	if ( !seed ) {
+		// Try to minimize operations if there is only one group
+		if ( match.length === 1 ) {
 
-	// Try to minimize operations if there is no seed and only one group
-	if ( match.length === 1 ) {
+			// Take a shortcut and set the context if the root selector is an ID
+			tokens = match[0] = match[0].slice( 0 );
+			if ( tokens.length > 2 && (token = tokens[0]).type === "ID" &&
+					support.getById && context.nodeType === 9 && documentIsHTML &&
+					Expr.relative[ tokens[1].type ] ) {
 
-		// Take a shortcut and set the context if the root selector is an ID
-		tokens = match[0] = match[0].slice( 0 );
-		if ( tokens.length > 2 && (token = tokens[0]).type === "ID" &&
-				support.getById && context.nodeType === 9 && documentIsHTML &&
-				Expr.relative[ tokens[1].type ] ) {
-
-			context = ( Expr.find["ID"]( token.matches[0].replace(runescape, funescape), context ) || [] )[0];
-			if ( !context ) {
-				return results;
-
-			// Precompiled matchers will still verify ancestry, so step up a level
-			} else if ( compiled ) {
-				context = context.parentNode;
+				context = ( Expr.find["ID"]( token.matches[0].replace(runescape, funescape), context ) || [] )[0];
+				if ( !context ) {
+					return results;
+				}
+				selector = selector.slice( tokens.shift().value.length );
 			}
 
-			selector = selector.slice( tokens.shift().value.length );
-		}
+			// Fetch a seed set for right-to-left matching
+			i = matchExpr["needsContext"].test( selector ) ? 0 : tokens.length;
+			while ( i-- ) {
+				token = tokens[i];
 
-		// Fetch a seed set for right-to-left matching
-		i = matchExpr["needsContext"].test( selector ) ? 0 : tokens.length;
-		while ( i-- ) {
-			token = tokens[i];
-
-			// Abort if we hit a combinator
-			if ( Expr.relative[ (type = token.type) ] ) {
-				break;
-			}
-			if ( (find = Expr.find[ type ]) ) {
-				// Search, expanding context for leading sibling combinators
-				if ( (seed = find(
-					token.matches[0].replace( runescape, funescape ),
-					rsibling.test( tokens[0].type ) && testContext( context.parentNode ) || context
-				)) ) {
-
-					// If seed is empty or no tokens remain, we can return early
-					tokens.splice( i, 1 );
-					selector = seed.length && toSelector( tokens );
-					if ( !selector ) {
-						push.apply( results, seed );
-						return results;
-					}
-
+				// Abort if we hit a combinator
+				if ( Expr.relative[ (type = token.type) ] ) {
 					break;
+				}
+				if ( (find = Expr.find[ type ]) ) {
+					// Search, expanding context for leading sibling combinators
+					if ( (seed = find(
+						token.matches[0].replace( runescape, funescape ),
+						rsibling.test( tokens[0].type ) && testContext( context.parentNode ) || context
+					)) ) {
+
+						// If seed is empty or no tokens remain, we can return early
+						tokens.splice( i, 1 );
+						selector = seed.length && toSelector( tokens );
+						if ( !selector ) {
+							push.apply( results, seed );
+							return results;
+						}
+
+						break;
+					}
 				}
 			}
 		}
 	}
 
-	// Compile and execute a filtering function if one is not provided
+	// Compile and execute a filtering function
 	// Provide `match` to avoid retokenization if we modified the selector above
-	( compiled || compile( selector, match ) )(
+	compile( selector, match )(
 		seed,
 		context,
 		!documentIsHTML,
@@ -4370,7 +4344,7 @@ select = Sizzle.select = function( selector, context, results, seed ) {
 		rsibling.test( selector ) && testContext( context.parentNode ) || context
 	);
 	return results;
-};
+}
 
 // One-time assignments
 
@@ -5247,9 +5221,8 @@ jQuery.extend({
 		readyList.resolveWith( document, [ jQuery ] );
 
 		// Trigger any bound ready events
-		if ( jQuery.fn.triggerHandler ) {
-			jQuery( document ).triggerHandler( "ready" );
-			jQuery( document ).off( "ready" );
+		if ( jQuery.fn.trigger ) {
+			jQuery( document ).trigger("ready").off("ready");
 		}
 	}
 });
@@ -5621,15 +5594,11 @@ jQuery.fn.extend({
 				if ( elem.nodeType === 1 && !data_priv.get( elem, "hasDataAttrs" ) ) {
 					i = attrs.length;
 					while ( i-- ) {
+						name = attrs[ i ].name;
 
-						// Support: IE11+
-						// The attrs elements can be null (#14894)
-						if ( attrs[ i ] ) {
-							name = attrs[ i ].name;
-							if ( name.indexOf( "data-" ) === 0 ) {
-								name = jQuery.camelCase( name.slice(5) );
-								dataAttr( elem, name, data[ name ] );
-							}
+						if ( name.indexOf( "data-" ) === 0 ) {
+							name = jQuery.camelCase( name.slice(5) );
+							dataAttr( elem, name, data[ name ] );
 						}
 					}
 					data_priv.set( elem, "hasDataAttrs", true );
@@ -5859,17 +5828,10 @@ var rcheckableType = (/^(?:checkbox|radio)$/i);
 
 (function() {
 	var fragment = document.createDocumentFragment(),
-		div = fragment.appendChild( document.createElement( "div" ) ),
-		input = document.createElement( "input" );
+		div = fragment.appendChild( document.createElement( "div" ) );
 
 	// #11217 - WebKit loses check when the name is after the checked attribute
-	// Support: Windows Web Apps (WWA)
-	// `name` and `type` need .setAttribute for WWA
-	input.setAttribute( "type", "radio" );
-	input.setAttribute( "checked", "checked" );
-	input.setAttribute( "name", "t" );
-
-	div.appendChild( input );
+	div.innerHTML = "<input type='radio' checked='checked' name='t'/>";
 
 	// Support: Safari 5.1, iOS 5.1, Android 4.x, Android 2.3
 	// old WebKit doesn't clone checked state correctly in fragments
@@ -5889,7 +5851,7 @@ support.focusinBubbles = "onfocusin" in window;
 
 var
 	rkeyEvent = /^key/,
-	rmouseEvent = /^(?:mouse|pointer|contextmenu)|click/,
+	rmouseEvent = /^(?:mouse|contextmenu)|click/,
 	rfocusMorph = /^(?:focusinfocus|focusoutblur)$/,
 	rtypenamespace = /^([^.]*)(?:\.(.+)|)$/;
 
@@ -6458,7 +6420,7 @@ jQuery.event = {
 
 				// Support: Firefox 20+
 				// Firefox doesn't alert if the returnValue field is not set.
-				if ( event.result !== undefined && event.originalEvent ) {
+				if ( event.result !== undefined ) {
 					event.originalEvent.returnValue = event.result;
 				}
 			}
@@ -6509,9 +6471,9 @@ jQuery.Event = function( src, props ) {
 		// Events bubbling up the document may have been marked as prevented
 		// by a handler lower down the tree; reflect the correct value.
 		this.isDefaultPrevented = src.defaultPrevented ||
-				src.defaultPrevented === undefined &&
 				// Support: Android < 4.0
-				src.returnValue === false ?
+				src.defaultPrevented === undefined &&
+				src.getPreventDefault && src.getPreventDefault() ?
 			returnTrue :
 			returnFalse;
 
@@ -6558,14 +6520,7 @@ jQuery.Event.prototype = {
 		}
 	},
 	stopImmediatePropagation: function() {
-		var e = this.originalEvent;
-
 		this.isImmediatePropagationStopped = returnTrue;
-
-		if ( e && e.stopImmediatePropagation ) {
-			e.stopImmediatePropagation();
-		}
-
 		this.stopPropagation();
 	}
 };
@@ -6574,9 +6529,7 @@ jQuery.Event.prototype = {
 // Support: Chrome 15+
 jQuery.each({
 	mouseenter: "mouseover",
-	mouseleave: "mouseout",
-	pointerenter: "pointerover",
-	pointerleave: "pointerout"
+	mouseleave: "mouseout"
 }, function( orig, fix ) {
 	jQuery.event.special[ orig ] = {
 		delegateType: fix,
@@ -7001,7 +6954,7 @@ jQuery.extend({
 	},
 
 	cleanData: function( elems ) {
-		var data, elem, type, key,
+		var data, elem, events, type, key, j,
 			special = jQuery.event.special,
 			i = 0;
 
@@ -7010,8 +6963,9 @@ jQuery.extend({
 				key = elem[ data_priv.expando ];
 
 				if ( key && (data = data_priv.cache[ key ]) ) {
-					if ( data.events ) {
-						for ( type in data.events ) {
+					events = Object.keys( data.events || {} );
+					if ( events.length ) {
+						for ( j = 0; (type = events[j]) !== undefined; j++ ) {
 							if ( special[ type ] ) {
 								jQuery.event.remove( elem, type );
 
@@ -7314,15 +7268,14 @@ var iframe,
  */
 // Called only from within defaultDisplay
 function actualDisplay( name, doc ) {
-	var style,
-		elem = jQuery( doc.createElement( name ) ).appendTo( doc.body ),
+	var elem = jQuery( doc.createElement( name ) ).appendTo( doc.body ),
 
 		// getDefaultComputedStyle might be reliably used only on attached element
-		display = window.getDefaultComputedStyle && ( style = window.getDefaultComputedStyle( elem[ 0 ] ) ) ?
+		display = window.getDefaultComputedStyle ?
 
 			// Use of this method is a temporary fix (more like optmization) until something better comes along,
 			// since it was removed from specification and supported only in FF
-			style.display : jQuery.css( elem[ 0 ], "display" );
+			window.getDefaultComputedStyle( elem[ 0 ] ).display : jQuery.css( elem[ 0 ], "display" );
 
 	// We don't have any data stored on the element,
 	// so use "detach" method as fast way to get rid of the element
@@ -7445,32 +7398,28 @@ function addGetHookIf( conditionFn, hookFn ) {
 
 (function() {
 	var pixelPositionVal, boxSizingReliableVal,
+		// Support: Firefox, Android 2.3 (Prefixed box-sizing versions).
+		divReset = "padding:0;margin:0;border:0;display:block;-webkit-box-sizing:content-box;" +
+			"-moz-box-sizing:content-box;box-sizing:content-box",
 		docElem = document.documentElement,
 		container = document.createElement( "div" ),
 		div = document.createElement( "div" );
-
-	if ( !div.style ) {
-		return;
-	}
 
 	div.style.backgroundClip = "content-box";
 	div.cloneNode( true ).style.backgroundClip = "";
 	support.clearCloneStyle = div.style.backgroundClip === "content-box";
 
-	container.style.cssText = "border:0;width:0;height:0;top:0;left:-9999px;margin-top:1px;" +
-		"position:absolute";
+	container.style.cssText = "border:0;width:0;height:0;position:absolute;top:0;left:-9999px;" +
+		"margin-top:1px";
 	container.appendChild( div );
 
 	// Executing both pixelPosition & boxSizingReliable tests require only one layout
 	// so they're executed at the same time to save the second computation.
 	function computePixelPositionAndBoxSizingReliable() {
-		div.style.cssText =
-			// Support: Firefox<29, Android 2.3
-			// Vendor-prefix box-sizing
-			"-webkit-box-sizing:border-box;-moz-box-sizing:border-box;" +
-			"box-sizing:border-box;display:block;margin-top:1%;top:1%;" +
-			"border:1px;padding:1px;width:4px;position:absolute";
-		div.innerHTML = "";
+		// Support: Firefox, Android 2.3 (Prefixed box-sizing versions).
+		div.style.cssText = "-webkit-box-sizing:border-box;-moz-box-sizing:border-box;" +
+			"box-sizing:border-box;padding:1px;border:1px;display:block;width:4px;margin-top:1%;" +
+			"position:absolute;top:1%";
 		docElem.appendChild( container );
 
 		var divStyle = window.getComputedStyle( div, null );
@@ -7480,10 +7429,9 @@ function addGetHookIf( conditionFn, hookFn ) {
 		docElem.removeChild( container );
 	}
 
-	// Support: node.js jsdom
-	// Don't assume that getComputedStyle is a property of the global object
+	// Use window.getComputedStyle because jsdom on node.js will break without it.
 	if ( window.getComputedStyle ) {
-		jQuery.extend( support, {
+		jQuery.extend(support, {
 			pixelPosition: function() {
 				// This test is executed only once but we still do memoizing
 				// since we can use the boxSizingReliable pre-computing.
@@ -7505,13 +7453,7 @@ function addGetHookIf( conditionFn, hookFn ) {
 				// This support function is only executed once so no memoizing is needed.
 				var ret,
 					marginDiv = div.appendChild( document.createElement( "div" ) );
-
-				// Reset CSS: box-sizing; display; margin; border; padding
-				marginDiv.style.cssText = div.style.cssText =
-					// Support: Firefox<29, Android 2.3
-					// Vendor-prefix box-sizing
-					"-webkit-box-sizing:content-box;-moz-box-sizing:content-box;" +
-					"box-sizing:content-box;display:block;margin:0;border:0;padding:0";
+				marginDiv.style.cssText = div.style.cssText = divReset;
 				marginDiv.style.marginRight = marginDiv.style.width = "0";
 				div.style.width = "1px";
 				docElem.appendChild( container );
@@ -7519,6 +7461,9 @@ function addGetHookIf( conditionFn, hookFn ) {
 				ret = !parseFloat( window.getComputedStyle( marginDiv, null ).marginRight );
 
 				docElem.removeChild( container );
+
+				// Clean up the div for other support tests.
+				div.innerHTML = "";
 
 				return ret;
 			}
@@ -7558,8 +7503,8 @@ var
 
 	cssShow = { position: "absolute", visibility: "hidden", display: "block" },
 	cssNormalTransform = {
-		letterSpacing: "0",
-		fontWeight: "400"
+		letterSpacing: 0,
+		fontWeight: 400
 	},
 
 	cssPrefixes = [ "Webkit", "O", "Moz", "ms" ];
@@ -7706,10 +7651,13 @@ function showHide( elements, show ) {
 				values[ index ] = data_priv.access( elem, "olddisplay", defaultDisplay(elem.nodeName) );
 			}
 		} else {
-			hidden = isHidden( elem );
 
-			if ( display !== "none" || !hidden ) {
-				data_priv.set( elem, "olddisplay", hidden ? display : jQuery.css( elem, "display" ) );
+			if ( !values[ index ] ) {
+				hidden = isHidden( elem );
+
+				if ( display && display !== "none" || !hidden ) {
+					data_priv.set( elem, "olddisplay", hidden ? display : jQuery.css(elem, "display") );
+				}
 			}
 		}
 	}
@@ -7748,8 +7696,6 @@ jQuery.extend({
 	cssNumber: {
 		"columnCount": true,
 		"fillOpacity": true,
-		"flexGrow": true,
-		"flexShrink": true,
 		"fontWeight": true,
 		"lineHeight": true,
 		"opacity": true,
@@ -7814,6 +7760,9 @@ jQuery.extend({
 
 			// If a hook was provided, use that value, otherwise just set the specified value
 			if ( !hooks || !("set" in hooks) || (value = hooks.set( elem, value, extra )) !== undefined ) {
+				// Support: Chrome, Safari
+				// Setting style to blank string required to delete "style: x !important;"
+				style[ name ] = "";
 				style[ name ] = value;
 			}
 
@@ -7869,7 +7818,7 @@ jQuery.each([ "height", "width" ], function( i, name ) {
 			if ( computed ) {
 				// certain elements can have dimension info if we invisibly show them
 				// however, it must have a current display style that would benefit from this
-				return rdisplayswap.test( jQuery.css( elem, "display" ) ) && elem.offsetWidth === 0 ?
+				return elem.offsetWidth === 0 && rdisplayswap.test( jQuery.css( elem, "display" ) ) ?
 					jQuery.swap( elem, cssShow, function() {
 						return getWidthOrHeight( elem, name, extra );
 					}) :
@@ -8190,7 +8139,7 @@ function createTween( value, prop, animation ) {
 
 function defaultPrefilter( elem, props, opts ) {
 	/* jshint validthis: true */
-	var prop, value, toggle, tween, hooks, oldfire, display, checkDisplay,
+	var prop, value, toggle, tween, hooks, oldfire, display,
 		anim = this,
 		orig = {},
 		style = elem.style,
@@ -8234,12 +8183,13 @@ function defaultPrefilter( elem, props, opts ) {
 		// Set display property to inline-block for height/width
 		// animations on inline elements that are having width/height animated
 		display = jQuery.css( elem, "display" );
+		// Get default display if display is currently "none"
+		if ( display === "none" ) {
+			display = defaultDisplay( elem.nodeName );
+		}
+		if ( display === "inline" &&
+				jQuery.css( elem, "float" ) === "none" ) {
 
-		// Test default display if display is currently "none"
-		checkDisplay = display === "none" ?
-			data_priv.get( elem, "olddisplay" ) || defaultDisplay( elem.nodeName ) : display;
-
-		if ( checkDisplay === "inline" && jQuery.css( elem, "float" ) === "none" ) {
 			style.display = "inline-block";
 		}
 	}
@@ -8269,10 +8219,6 @@ function defaultPrefilter( elem, props, opts ) {
 				}
 			}
 			orig[ prop ] = dataShow && dataShow[ prop ] || jQuery.style( elem, prop );
-
-		// Any non-fx value stops us from restoring the original display value
-		} else {
-			display = undefined;
 		}
 	}
 
@@ -8315,10 +8261,6 @@ function defaultPrefilter( elem, props, opts ) {
 				}
 			}
 		}
-
-	// If this is a noop like .hide().hide(), restore an overwritten display value
-	} else if ( (display === "none" ? defaultDisplay( elem.nodeName ) : display) === "inline" ) {
-		style.display = display;
 	}
 }
 
@@ -9211,16 +9153,6 @@ jQuery.fn.extend({
 
 jQuery.extend({
 	valHooks: {
-		option: {
-			get: function( elem ) {
-				var val = jQuery.find.attr( elem, "value" );
-				return val != null ?
-					val :
-					// Support: IE10-11+
-					// option.text throws exceptions (#14686, #14858)
-					jQuery.trim( jQuery.text( elem ) );
-			}
-		},
 		select: {
 			get: function( elem ) {
 				var value, option,
@@ -9267,7 +9199,7 @@ jQuery.extend({
 
 				while ( i-- ) {
 					option = options[ i ];
-					if ( (option.selected = jQuery.inArray( option.value, values ) >= 0) ) {
+					if ( (option.selected = jQuery.inArray( jQuery(option).val(), values ) >= 0) ) {
 						optionSet = true;
 					}
 				}
@@ -10474,15 +10406,10 @@ jQuery.ajaxTransport(function( options ) {
 				// Create the abort callback
 				callback = xhrCallbacks[ id ] = callback("abort");
 
-				try {
-					// Do send the request (this may raise an exception)
-					xhr.send( options.hasContent && options.data || null );
-				} catch ( e ) {
-					// #14683: Only rethrow if this hasn't been notified as an error yet
-					if ( callback ) {
-						throw e;
-					}
-				}
+				// Do send the request
+				// This may raise an exception which is actually
+				// handled in jQuery.ajax (so no try/catch here)
+				xhr.send( options.hasContent && options.data || null );
 			},
 
 			abort: function() {
@@ -10689,7 +10616,7 @@ jQuery.fn.load = function( url, params, callback ) {
 		off = url.indexOf(" ");
 
 	if ( off >= 0 ) {
-		selector = jQuery.trim( url.slice( off ) );
+		selector = url.slice( off );
 		url = url.slice( 0, off );
 	}
 
@@ -10997,12 +10924,6 @@ jQuery.fn.andSelf = jQuery.fn.addBack;
 // derived from file names, and jQuery is normally delivered in a lowercase
 // file name. Do this after creating the global so that if an AMD module wants
 // to call noConflict to hide this version of jQuery, it will work.
-
-// Note that for maximum portability, libraries that are not jQuery should
-// declare themselves as anonymous modules, and avoid setting a global if an
-// AMD loader is present. jQuery is a special case. For more information, see
-// https://github.com/jrburke/requirejs/wiki/Updating-existing-libraries#wiki-anon
-
 if ( typeof define === "function" && define.amd ) {
 	define( "jquery", [], function() {
 		return jQuery;
@@ -13633,7 +13554,7 @@ BaseObject.extend = extend;
 module.exports = BaseObject;
 
 
-},{"./events":13,"./utils":23,"underscore":6}],"6xH8xW":[function(require,module,exports){
+},{"./events":13,"./utils":24,"underscore":6}],"6xH8xW":[function(require,module,exports){
 "use strict";
 var BaseObject = require('./base_object');
 var ContainerPlugin = function ContainerPlugin(options) {
@@ -13843,7 +13764,7 @@ module.exports = Events;
 
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../plugins/log":59,"underscore":6}],14:[function(require,module,exports){
+},{"../plugins/log":60,"underscore":6}],14:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 module.exports = {
@@ -13910,7 +13831,7 @@ Playback.canPlay = (function(source) {
 module.exports = Playback;
 
 
-},{"../base/ui_object":22}],"playback":[function(require,module,exports){
+},{"../base/ui_object":"8lqCAT"}],"playback":[function(require,module,exports){
 module.exports=require('VbgHr3');
 },{}],17:[function(require,module,exports){
 "use strict";
@@ -13951,7 +13872,7 @@ var $UIContainerPlugin = UIContainerPlugin;
 module.exports = UIContainerPlugin;
 
 
-},{"./ui_object":22}],"ui_core_plugin":[function(require,module,exports){
+},{"./ui_object":"8lqCAT"}],"ui_core_plugin":[function(require,module,exports){
 module.exports=require('gNZMEo');
 },{}],"gNZMEo":[function(require,module,exports){
 "use strict";
@@ -13989,7 +13910,7 @@ var $UICorePlugin = UICorePlugin;
 module.exports = UICorePlugin;
 
 
-},{"./ui_object":22}],22:[function(require,module,exports){
+},{"./ui_object":"8lqCAT"}],"8lqCAT":[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var _ = require('underscore');
@@ -14072,10 +13993,11 @@ UIObject.extend = extend;
 module.exports = UIObject;
 
 
-},{"./base_object":"2HNVgz","./utils":23,"jquery":3,"underscore":6}],23:[function(require,module,exports){
+},{"./base_object":"2HNVgz","./utils":24,"jquery":3,"underscore":6}],"ui_object":[function(require,module,exports){
+module.exports=require('8lqCAT');
+},{}],24:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
-var $ = require('jquery');
 var extend = function(protoProps, staticProps) {
   var parent = this;
   var child;
@@ -14102,9 +14024,6 @@ var extend = function(protoProps, staticProps) {
     return child;
   };
   return child;
-};
-var zeroPad = function(number, size) {
-  return (new Array(size + 1 - number.toString().length)).join('0') + number;
 };
 var formatTime = function(time) {
   time = time * 1000;
@@ -14148,84 +14067,14 @@ var Fullscreen = {
     }
   }
 };
-var HEX_TAB = "0123456789abcdef";
-var B64_TAB = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
-var b64pad = "";
-var rstr2b64 = function(input) {
-  var output = "";
-  var len = input.length;
-  for (var i = 0; i < len; i += 3) {
-    var triplet = (input.charCodeAt(i) << 16) | (i + 1 < len ? input.charCodeAt(i + 1) << 8 : 0) | (i + 2 < len ? input.charCodeAt(i + 2) : 0);
-    for (var j = 0; j < 4; j++) {
-      if (i * 8 + j * 6 > input.length * 8)
-        output += b64pad;
-      else
-        output += B64_TAB.charAt((triplet >>> 6 * (3 - j)) & 0x3F);
-    }
-  }
-  return output;
-};
-var rstr2hex = function(input) {
-  var output = "";
-  for (var i = 0; i < input.length; i++) {
-    var x = input.charCodeAt(i);
-    output += HEX_TAB.charAt((x >>> 4) & 0x0F) + HEX_TAB.charAt(x & 0x0F);
-  }
-  return output;
-};
-var getHostname = function() {
-  return location.hostname;
-};
-var Ajax = {
-  jsonp: function(settings) {
-    var defer = new $.Deferred();
-    settings.callbackName = settings.callbackName || "json_callback";
-    settings.timeout = settings.timeout || 15000;
-    window[settings.callbackName] = function(data) {
-      if (!Ajax.isErrorObject(data)) {
-        defer.resolve(data);
-      } else {
-        defer.reject(data);
-      }
-    };
-    var head = $("head")[0];
-    var script = document.createElement("script");
-    script.setAttribute("src", settings.url);
-    script.setAttribute("async", "async");
-    script.onload = script.onreadystatechange = function(eventLoad) {
-      if (!script.readyState || /loaded|complete/.test(script.readyState)) {
-        if (settings.timeoutId) {
-          window.clearTimeout(settings.timeoutId);
-        }
-        script.onload = script.onreadystatechange = null;
-        if (head && script.parentNode)
-          head.removeChild(script);
-        script = undefined;
-      }
-    };
-    head.insertBefore(script, head.firstChild);
-    if (settings.error) {
-      settings.timeoutId = window.setTimeout(settings.error, settings.timeout);
-    }
-    return defer.promise();
-  },
-  isErrorObject: function(data) {
-    return data && data.http_status_code && data.http_status_code != 200;
-  }
-};
 module.exports = {
   extend: extend,
-  zeroPad: zeroPad,
   formatTime: formatTime,
-  Fullscreen: Fullscreen,
-  Ajax: Ajax,
-  rstr2b64: rstr2b64,
-  rstr2hex: rstr2hex,
-  getHostname: getHostname
+  Fullscreen: Fullscreen
 };
 
 
-},{"jquery":3,"underscore":6}],"195Wj5":[function(require,module,exports){
+},{"underscore":6}],"195Wj5":[function(require,module,exports){
 "use strict";
 var Browser = function Browser() {};
 ($traceurRuntime.createClass)(Browser, {}, {});
@@ -14241,7 +14090,7 @@ module.exports = Browser;
 
 },{}],"browser":[function(require,module,exports){
 module.exports=require('195Wj5');
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 "use strict";
 var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
@@ -14281,6 +14130,7 @@ var $Container = Container;
     this.listenTo(this.playback, 'playback:mediacontrol:enable', this.enableMediaControl);
     this.listenTo(this.playback, 'playback:ended', this.ended);
     this.listenTo(this.playback, 'playback:play', this.playing);
+    this.listenTo(this.playback, 'playback:error', this.error);
   },
   with: function(klass) {
     _.extend(this, klass);
@@ -14411,12 +14261,12 @@ var $Container = Container;
 module.exports = Container;
 
 
-},{"../../base/styler":17,"../../base/ui_object":22,"underscore":6}],27:[function(require,module,exports){
+},{"../../base/styler":17,"../../base/ui_object":"8lqCAT","underscore":6}],28:[function(require,module,exports){
 "use strict";
 module.exports = require('./container');
 
 
-},{"./container":26}],28:[function(require,module,exports){
+},{"./container":27}],29:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var BaseObject = require('../../base/base_object');
@@ -14470,12 +14320,12 @@ var $ContainerFactory = ContainerFactory;
 module.exports = ContainerFactory;
 
 
-},{"../../base/base_object":"2HNVgz","../container":27,"jquery":3,"underscore":6}],29:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../container":28,"jquery":3,"underscore":6}],30:[function(require,module,exports){
 "use strict";
 module.exports = require('./container_factory');
 
 
-},{"./container_factory":28}],30:[function(require,module,exports){
+},{"./container_factory":29}],31:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('jquery');
@@ -14495,7 +14345,6 @@ var Core = function Core(options) {
   this.plugins = [];
   this.containers = [];
   this.createContainers(options);
-  this.updateSize();
   document.addEventListener('fullscreenchange', (function() {
     return $__0.exit();
   }));
@@ -14533,18 +14382,19 @@ var $Core = Core;
     }));
   },
   updateSize: function() {
+    var $window = $(window);
     if (Fullscreen.isFullscreen()) {
       this.$el.addClass('fullscreen');
       this.$el.removeAttr('style');
       this.playerInfo.currentSize = {
-        width: window.innerWidth,
-        height: window.innerHeight
+        width: $window.width(),
+        height: $window.height()
       };
     } else {
       var needStretch = !!this.options.stretchWidth && !!this.options.stretchHeight;
       var width,
           height;
-      if (needStretch && this.options.stretchWidth <= window.innerWidth && this.options.stretchHeight <= (window.innerHeight * 0.73)) {
+      if (needStretch && this.options.stretchWidth <= $window.width() && this.options.stretchHeight <= ($window.height() * 0.73)) {
         width = this.options.stretchWidth;
         height = this.options.stretchHeight;
       } else {
@@ -14694,12 +14544,12 @@ var $Core = Core;
 module.exports = Core;
 
 
-},{"../../base/styler":17,"../../base/ui_object":22,"../../base/utils":23,"../container_factory":29,"../media_control":"A8Uh+k","../mediator":"veeMMc","../player_info":"Pce0iO","jquery":3,"underscore":6}],31:[function(require,module,exports){
+},{"../../base/styler":17,"../../base/ui_object":"8lqCAT","../../base/utils":24,"../container_factory":30,"../media_control":"A8Uh+k","../mediator":"veeMMc","../player_info":"Pce0iO","jquery":3,"underscore":6}],32:[function(require,module,exports){
 "use strict";
 module.exports = require('./core');
 
 
-},{"./core":30}],32:[function(require,module,exports){
+},{"./core":31}],33:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var BaseObject = require('../../base/base_object');
@@ -14733,17 +14583,17 @@ var CoreFactory = function CoreFactory(player, loader) {
 module.exports = CoreFactory;
 
 
-},{"../../base/base_object":"2HNVgz","../core":31,"underscore":6}],33:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../core":32,"underscore":6}],34:[function(require,module,exports){
 "use strict";
 module.exports = require('./core_factory');
 
 
-},{"./core_factory":32}],34:[function(require,module,exports){
+},{"./core_factory":33}],35:[function(require,module,exports){
 "use strict";
 module.exports = require('./loader');
 
 
-},{"./loader":35}],35:[function(require,module,exports){
+},{"./loader":36}],36:[function(require,module,exports){
 "use strict";
 var BaseObject = require('../../base/base_object');
 var _ = require('underscore');
@@ -14795,14 +14645,14 @@ var $Loader = Loader;
 module.exports = Loader;
 
 
-},{"../../base/base_object":"2HNVgz","../../playbacks/flash":48,"../../playbacks/hls":50,"../../playbacks/html5_audio":52,"../../playbacks/html5_video":54,"../../playbacks/no_op":55,"../../plugins/background_button":58,"../../plugins/poster":61,"../../plugins/spinner_three_bounce":63,"../../plugins/stats":65,"../../plugins/watermark":67,"../player_info":"Pce0iO","underscore":6}],"A8Uh+k":[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../../playbacks/flash":49,"../../playbacks/hls":51,"../../playbacks/html5_audio":53,"../../playbacks/html5_video":55,"../../playbacks/no_op":56,"../../plugins/background_button":59,"../../plugins/poster":62,"../../plugins/spinner_three_bounce":64,"../../plugins/stats":66,"../../plugins/watermark":68,"../player_info":"Pce0iO","underscore":6}],"A8Uh+k":[function(require,module,exports){
 "use strict";
 module.exports = require('./media_control');
 
 
-},{"./media_control":38}],"media_control":[function(require,module,exports){
+},{"./media_control":39}],"media_control":[function(require,module,exports){
 module.exports=require('A8Uh+k');
-},{}],38:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('jquery');
@@ -15193,7 +15043,9 @@ var $MediaControl = MediaControl;
         'buttons': 'color'
       }
     };
-    var customColors = _.pick(this.options.mediacontrol, 'seekbar', 'buttons');
+    if (this.options.mediacontrol) {
+      var customColors = _.pick(this.options.mediacontrol, 'seekbar', 'buttons');
+    }
     _.each(customColors, (function(value, key) {
       $__0.$el.find(translate.query[key]).css(translate.rule[key], customColors[key]);
     }));
@@ -15237,7 +15089,9 @@ var $MediaControl = MediaControl;
 module.exports = MediaControl;
 
 
-},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_object":22,"../../base/utils":23,"../seek_time":44,"jquery":3,"mousetrap":4,"underscore":6}],"veeMMc":[function(require,module,exports){
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_object":"8lqCAT","../../base/utils":24,"../seek_time":45,"jquery":3,"mousetrap":4,"underscore":6}],"mediator":[function(require,module,exports){
+module.exports=require('veeMMc');
+},{}],"veeMMc":[function(require,module,exports){
 "use strict";
 var Events = require('../base/events');
 var events = new Events();
@@ -15266,16 +15120,14 @@ Mediator.stopListening = function(obj, name, callback) {
 module.exports = Mediator;
 
 
-},{"../base/events":13}],"mediator":[function(require,module,exports){
-module.exports=require('veeMMc');
-},{}],"Pce0iO":[function(require,module,exports){
+},{"../base/events":13}],"Pce0iO":[function(require,module,exports){
 "use strict";
 module.exports = require('./player_info');
 
 
-},{"./player_info":43}],"player_info":[function(require,module,exports){
+},{"./player_info":44}],"player_info":[function(require,module,exports){
 module.exports=require('Pce0iO');
-},{}],43:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 "use strict";
 var BaseObject = require('../../base/base_object');
 var PlayerInfo = function PlayerInfo() {
@@ -15296,12 +15148,12 @@ PlayerInfo.getInstance = function() {
 module.exports = PlayerInfo;
 
 
-},{"../../base/base_object":"2HNVgz"}],44:[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz"}],45:[function(require,module,exports){
 "use strict";
 module.exports = require('./seek_time');
 
 
-},{"./seek_time":45}],45:[function(require,module,exports){
+},{"./seek_time":46}],46:[function(require,module,exports){
 "use strict";
 var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
@@ -15362,7 +15214,7 @@ var $SeekTime = SeekTime;
 module.exports = SeekTime;
 
 
-},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_object":22,"../../base/utils":23}],46:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_object":"8lqCAT","../../base/utils":24}],47:[function(require,module,exports){
 (function (global){
 "use strict";
 var BaseObject = require('./base/base_object');
@@ -15457,7 +15309,7 @@ module.exports = window.Clappr;
 
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./base/base_object":"2HNVgz","./components/core_factory":33,"./components/loader":34,"./components/mediator":"veeMMc","./components/player_info":"Pce0iO","scrollmonitor":5,"underscore":6}],47:[function(require,module,exports){
+},{"./base/base_object":"2HNVgz","./components/core_factory":34,"./components/loader":35,"./components/mediator":"veeMMc","./components/player_info":"Pce0iO","scrollmonitor":5,"underscore":6}],48:[function(require,module,exports){
 "use strict";
 var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
@@ -15651,12 +15503,12 @@ Flash.canPlay = function(resource) {
 module.exports = Flash;
 
 
-},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_object":22,"../../components/browser":"195Wj5","../../components/mediator":"veeMMc","jquery":3,"underscore":6}],48:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_object":"8lqCAT","../../components/browser":"195Wj5","../../components/mediator":"veeMMc","jquery":3,"underscore":6}],49:[function(require,module,exports){
 "use strict";
 module.exports = require('./flash');
 
 
-},{"./flash":47}],49:[function(require,module,exports){
+},{"./flash":48}],50:[function(require,module,exports){
 "use strict";
 var Playback = require('../../base/playback');
 var Styler = require('../../base/styler');
@@ -15668,7 +15520,7 @@ var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" cla
 var HLS = function HLS(options) {
   $traceurRuntime.superCall(this, $HLS.prototype, "constructor", [options]);
   this.src = options.src;
-  this.swfPath = options.swfPath || "http://cdn.clappr.io/latest/assets/HLSPlayer.swf";
+  this.swfPath = options.swfPath || "assets/HLSPlayer.swf";
   this.highDefinition = false;
   this.autoPlay = options.autoPlay;
   this.defaultSettings = {
@@ -15731,6 +15583,7 @@ var $HLS = HLS;
     this.trigger('playback:ready', this.name);
     this.currentState = "IDLE";
     this.el.globoPlayerSetflushLiveURLCache(true);
+    this.el.globoPlayerSetmaxBufferLength(0);
     this.autoPlay && this.play();
   },
   updateHighDefinition: function(isHD) {
@@ -15764,9 +15617,7 @@ var $HLS = HLS;
     this.trigger('playback:play', this.name);
   },
   getPlaybackType: function() {
-    if (this.playbackType)
-      return this.playbackType;
-    return null;
+    return this.playbackType ? this.playbackType : null;
   },
   getCurrentBitrate: function() {
     var currentLevel = this.getLevels()[this.el.globoGetLevel()];
@@ -15812,8 +15663,29 @@ var $HLS = HLS;
     this.playbackType = this.el.globoGetType();
     if (this.playbackType) {
       this.playbackType = this.playbackType.toLowerCase();
+      if (this.playbackType === 'vod') {
+        this.startReportingProgress();
+      } else {
+        this.stopReportingProgress();
+      }
     }
     this.trigger('playback:playbackstate');
+  },
+  startReportingProgress: function() {
+    var $__0 = this;
+    if (!this.reportingProgress) {
+      this.reportingProgress = true;
+      Mediator.on(this.uniqueId + ':fragmentloaded', (function() {
+        return $__0.onFragmentLoaded();
+      }));
+    }
+  },
+  stopReportingProgress: function() {
+    Mediator.off(this.uniqueId + ':fragmentloaded');
+  },
+  onFragmentLoaded: function() {
+    var buffered = this.el.globoGetPosition() + this.el.globoGetbufferLength();
+    this.trigger('playback:progress', this.el.globoGetPosition(), buffered, this.getDuration(), this.name);
   },
   firstPlay: function() {
     this.el.globoPlayerLoad(this.src);
@@ -15941,12 +15813,12 @@ HLS.canPlay = function(resource) {
 module.exports = HLS;
 
 
-},{"../../base/jst":14,"../../base/playback":"VbgHr3","../../base/styler":17,"../../components/browser":"195Wj5","../../components/mediator":"veeMMc","underscore":6}],50:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/playback":"VbgHr3","../../base/styler":17,"../../components/browser":"195Wj5","../../components/mediator":"veeMMc","underscore":6}],51:[function(require,module,exports){
 "use strict";
 module.exports = require('./hls');
 
 
-},{"./hls":49}],51:[function(require,module,exports){
+},{"./hls":50}],52:[function(require,module,exports){
 "use strict";
 var Playback = require('../../base/playback');
 var HTML5Audio = function HTML5Audio(params) {
@@ -16036,12 +15908,12 @@ HTML5Audio.canPlay = function(resource) {
 module.exports = HTML5Audio;
 
 
-},{"../../base/playback":"VbgHr3"}],52:[function(require,module,exports){
+},{"../../base/playback":"VbgHr3"}],53:[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_audio');
 
 
-},{"./html5_audio":51}],53:[function(require,module,exports){
+},{"./html5_audio":52}],54:[function(require,module,exports){
 "use strict";
 var Playback = require('../../base/playback');
 var JST = require('../../base/jst');
@@ -16200,17 +16072,17 @@ HTML5Video.canPlay = function(resource) {
 module.exports = HTML5Video;
 
 
-},{"../../base/jst":14,"../../base/playback":"VbgHr3","../../base/styler":17,"../../components/browser":"195Wj5","underscore":6}],54:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/playback":"VbgHr3","../../base/styler":17,"../../components/browser":"195Wj5","underscore":6}],55:[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_video');
 
 
-},{"./html5_video":53}],55:[function(require,module,exports){
+},{"./html5_video":54}],56:[function(require,module,exports){
 "use strict";
 module.exports = require('./no_op');
 
 
-},{"./no_op":56}],56:[function(require,module,exports){
+},{"./no_op":57}],57:[function(require,module,exports){
 "use strict";
 var Playback = require('../../base/playback');
 var JST = require('../../base/jst');
@@ -16242,7 +16114,7 @@ NoOp.canPlay = (function(source) {
 module.exports = NoOp;
 
 
-},{"../../base/jst":14,"../../base/playback":"VbgHr3","../../base/styler":17}],57:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/playback":"VbgHr3","../../base/styler":17}],58:[function(require,module,exports){
 "use strict";
 var UICorePlugin = require('../../base/ui_core_plugin');
 var JST = require('../../base/jst');
@@ -16344,17 +16216,17 @@ var $BackgroundButton = BackgroundButton;
 module.exports = BackgroundButton;
 
 
-},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_core_plugin":"gNZMEo"}],58:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_core_plugin":"gNZMEo"}],59:[function(require,module,exports){
 "use strict";
 module.exports = require('./background_button');
 
 
-},{"./background_button":57}],59:[function(require,module,exports){
+},{"./background_button":58}],60:[function(require,module,exports){
 "use strict";
 module.exports = require('./log');
 
 
-},{"./log":60}],60:[function(require,module,exports){
+},{"./log":61}],61:[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var BOLD = 'font-weight: bold; font-size: 13px;';
@@ -16391,12 +16263,12 @@ Log.prototype = {
 module.exports = Log;
 
 
-},{"jquery":3}],61:[function(require,module,exports){
+},{"jquery":3}],62:[function(require,module,exports){
 "use strict";
 module.exports = require('./poster');
 
 
-},{"./poster":62}],62:[function(require,module,exports){
+},{"./poster":63}],63:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('../../base/ui_container_plugin');
 var Styler = require('../../base/styler');
@@ -16497,12 +16369,12 @@ var $PosterPlugin = PosterPlugin;
 module.exports = PosterPlugin;
 
 
-},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_container_plugin":"XSLDWT","../../components/mediator":"veeMMc","../../components/player_info":"Pce0iO","jquery":3,"underscore":6}],63:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_container_plugin":"XSLDWT","../../components/mediator":"veeMMc","../../components/player_info":"Pce0iO","jquery":3,"underscore":6}],64:[function(require,module,exports){
 "use strict";
 module.exports = require('./spinner_three_bounce');
 
 
-},{"./spinner_three_bounce":64}],64:[function(require,module,exports){
+},{"./spinner_three_bounce":65}],65:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('../../base/ui_container_plugin');
 var Styler = require('../../base/styler');
@@ -16547,12 +16419,12 @@ var $SpinnerThreeBouncePlugin = SpinnerThreeBouncePlugin;
 module.exports = SpinnerThreeBouncePlugin;
 
 
-},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_container_plugin":"XSLDWT"}],65:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_container_plugin":"XSLDWT"}],66:[function(require,module,exports){
 "use strict";
 module.exports = require('./stats');
 
 
-},{"./stats":66}],66:[function(require,module,exports){
+},{"./stats":67}],67:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('../../base/container_plugin');
 var $ = require("jquery");
@@ -16644,19 +16516,18 @@ var $StatsPlugin = StatsPlugin;
     return metrics;
   },
   report: function() {
-    var stats = this.getStats();
     this.container.statsReport(this.getStats());
   }
 }, {}, ContainerPlugin);
 module.exports = StatsPlugin;
 
 
-},{"../../base/container_plugin":"6xH8xW","jquery":3}],67:[function(require,module,exports){
+},{"../../base/container_plugin":"6xH8xW","jquery":3}],68:[function(require,module,exports){
 "use strict";
 module.exports = require('./watermark');
 
 
-},{"./watermark":68}],68:[function(require,module,exports){
+},{"./watermark":69}],69:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('../../base/ui_container_plugin');
 var Styler = require('../../base/styler');
@@ -16704,4 +16575,4 @@ var $WaterMarkPlugin = WaterMarkPlugin;
 module.exports = WaterMarkPlugin;
 
 
-},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_container_plugin":"XSLDWT"}]},{},[2,46])
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_container_plugin":"XSLDWT"}]},{},[2,47])
