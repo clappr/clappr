@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var sass = require('gulp-sass');
 var minifyCSS = require('gulp-minify-css');
+var compressor = require("gulp-compressor");
 
 var files = {
   css: 'src/**/*.css',
@@ -25,5 +26,9 @@ gulp.task("copy-css", function() {
 
 gulp.task("copy-html", function() {
   return gulp.src(files.html)
+    .pipe(compressor({
+      'remove-intertag-spaces': true,
+      'simple-bool-attr': true
+    }))
     .pipe(gulp.dest('build'));
 });
