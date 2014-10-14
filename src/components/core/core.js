@@ -41,7 +41,6 @@ class Core extends UIObject {
     this.plugins = []
     this.containers = []
     this.createContainers(options)
-    this.updateSize()
     //FIXME fullscreen api sucks
     document.addEventListener('fullscreenchange', () => this.exit())
     document.addEventListener('MSFullscreenChange', () => this.exit())
@@ -60,14 +59,15 @@ class Core extends UIObject {
   }
 
   updateSize() {
-   if (Fullscreen.isFullscreen()) {
+    var $window = $(window)
+    if (Fullscreen.isFullscreen()) {
       this.$el.addClass('fullscreen')
       this.$el.removeAttr('style')
-      this.playerInfo.currentSize = { width: window.innerWidth, height: window.innerHeight }
+      this.playerInfo.currentSize = { width: $window.width(), height: $window.height() }
     } else {
       var needStretch = !!this.options.stretchWidth && !!this.options.stretchHeight
       var width, height
-      if (needStretch && this.options.stretchWidth <= window.innerWidth && this.options.stretchHeight <= (window.innerHeight * 0.73)) {
+      if (needStretch && this.options.stretchWidth <= $window.width() && this.options.stretchHeight <= ($window.height() * 0.73)) {
         width = this.options.stretchWidth
         height = this.options.stretchHeight
       } else {
