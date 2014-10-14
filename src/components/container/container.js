@@ -40,6 +40,7 @@ class Container extends UIObject {
     this.listenTo(this.playback, 'playback:mediacontrol:enable', this.enableMediaControl);
     this.listenTo(this.playback, 'playback:ended', this.ended);
     this.listenTo(this.playback, 'playback:play', this.playing);
+    this.listenTo(this.playback, 'playback:error', this.error);
   }
 
   with(klass) {
