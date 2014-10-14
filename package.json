@@ -23,7 +23,6 @@
   },
   "homepage": "https://github.com/globocom/clappr",
   "devDependencies": {
-    "gulp-compressor": "0.1.0",
     "s3": "^4.1.1",
     "browserify": "^4.2.3",
     "browserify-shim": "^3.7.0",
