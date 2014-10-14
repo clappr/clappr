@@ -136,14 +136,22 @@ class Core extends UIObject {
 
   appendContainer(container) {
     this.listenTo(container, 'container:destroyed', this.removeContainer)
+    this.listenTo(container, 'container:error', this.renderError)
     this.el.appendChild(container.render().el)
     this.containers.push(container)
   }
 
   prependContainer(container) {
     this.listenTo(container, 'container:destroyed', this.removeContainer)
+    this.listenTo(container, 'container:error', this.renderError)
     this.$el.append(container.render().el)
     this.containers.unshift(container)
+  }
+
+  renderError(data) {
+    var error = data.error
+    var brokenContainer = data.container
+    brokenContainer.$el.prepend(error.render().el)
   }
 
   setupContainers(containers) {
