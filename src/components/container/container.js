@@ -97,6 +97,7 @@ class Container extends UIObject {
   }
 
   error(error) {
+    this.$el.prepend(error.render().el)
     this.trigger('container:error', {error: error, container: this}, this.name);
   }
 
