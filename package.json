@@ -39,6 +39,7 @@
     "gulp-sass": "~0.7.2",
     "gulp-streamify": "0.0.5",
     "gulp-uglify": "^0.3.0",
+    "gulp-compressor": "^0.1.0",
     "gulp-util": "latest",
     "karma": "^0.12.17",
     "karma-bro": "^0.6.0",
