@@ -9,3 +9,7 @@ env:
   - CHROME_BIN=/usr/bin/chromium-browser
 
 script: node_modules/.bin/gulp build && npm test
+
+notifications:
+  email:
+    - videos5@corp.globo.com
