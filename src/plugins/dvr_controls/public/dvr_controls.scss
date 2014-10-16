@@ -1,0 +1,68 @@
+$live-color: #ff0101;
+$dvr-color: #fff;
+
+$disabled-opacity: 0.3;
+
+$control-height: 32px;
+$circle-radius: 5px;
+
+.dvr-controls[data-dvr-controls] {
+  display: inline-block;
+  color: $dvr-color;
+  line-height: 32px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 5px;
+
+  .live-info {
+    cursor: default;
+    &:before {
+      content: "";
+      display: inline-block;
+      position: relative;
+      width: $circle-radius*2;
+      height: $circle-radius*2;
+      border-radius: $circle-radius;
+      margin-right: 3px;
+      background-color: $live-color;
+    }
+    &.disabled {
+      opacity: $disabled-opacity;
+      &:before {
+        background-color: $dvr-color;
+      }
+    }
+  }
+
+  .live-button {
+    cursor: pointer;
+    outline: none;
+    display: none;
+    border: 0;
+    color: $dvr-color;
+    background-color: transparent;
+    font-size: 12px;
+    height: 32px;
+    padding: 0;
+
+    &:before {
+      content: "";
+      display: inline-block;
+      position: relative;
+      width: $circle-radius*2;
+      height: $circle-radius*2;
+      border-radius: $circle-radius;
+      margin-right: 3px;
+      background-color: $dvr-color;
+    }
+  }
+
+  &.dvr {
+    .live-info {
+      display: none;
+    }
+    .live-button {
+      display: block;
+    }
+  }
+}
