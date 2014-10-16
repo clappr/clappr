@@ -7,7 +7,7 @@ class BackgroundButton extends UICorePlugin {
   get name() { return 'background_button' }
   get events() {
     return {
-      'click .playpause-icon': 'click'
+      'click .background-button-icon': 'click'
     }
   }
   get attributes() {
@@ -56,14 +56,15 @@ class BackgroundButton extends UICorePlugin {
     //this plugin should render only if there is a playpause icon in media control
     var settings = this.core.mediaControl.settings
     var useBackgroundButton = this.core.options.useBackgroundButton === undefined || !!this.core.options.useBackgroundButton
-    return useBackgroundButton && (settings.default.indexOf('playpause') >= 0 ||
-      settings.left.indexOf('playpause') >= 0 ||
-      settings.right.indexOf('playpause') >= 0)
-
+    return useBackgroundButton && (this.core.mediaControl.$el.find('[data-playstop]').length > 0 || this.core.mediaControl.$el.find('[data-playpause]').length > 0)
   }
 
   click() {
-    this.core.mediaControl.togglePlayPause()
+    if (this.shouldStop) {
+      this.core.mediaControl.togglePlayStop()
+    } else {
+      this.core.mediaControl.togglePlayPause()
+    }
   }
 
   show() {
@@ -77,24 +78,26 @@ class BackgroundButton extends UICorePlugin {
   enable() {
     this.stopListening()
     super()
-    this.core.mediaControl.$el.find('[data-playpause]').hide()
+    this.$playPauseButton.hide()
+    this.$playStopButton.hide()
   }
 
   disable() {
     super()
-    this.core.mediaControl.$el.find('[data-playpause]').show()
+    this.$playPauseButton.show()
+    this.$playStopButton.show()
   }
 
   playing() {
-    this.$el.find('.playpause-icon[data-background-button]')
-      .removeClass('paused')
+    this.$buttonIcon
+      .removeClass('notplaying')
       .addClass('playing')
   }
 
   notplaying() {
-    this.$el.find('.playpause-icon[data-background-button]')
+    this.$buttonIcon
       .removeClass('playing')
-      .addClass('paused')
+      .addClass('notplaying')
   }
 
   getExternalInterface() {}
@@ -103,10 +106,18 @@ class BackgroundButton extends UICorePlugin {
     var style = Styler.getStyleFor(this.name)
     this.$el.html(this.template())
     this.$el.append(style)
-    if (this.enabled) {
-      this.core.mediaControl.$el.find('[data-playpause]').hide()
-    }
+    this.$playPauseButton = this.core.mediaControl.$el.find('[data-playpause]')
+    this.$playStopButton = this.core.mediaControl.$el.find('[data-playstop]')
+    this.$buttonIcon = this.$el.find('.background-button-icon[data-background-button]')
+    this.shouldStop = this.$playStopButton.length > 0
     this.core.$el.append(this.$el)
+    if (this.enabled) {
+      this.$playPauseButton.hide()
+      this.$playStopButton.hide()
+    }
+    if (this.shouldStop) {
+      this.$buttonIcon.addClass('playstop')
+    }
     if (this.core.mediaControl.isVisible()) {
       this.show()
     }

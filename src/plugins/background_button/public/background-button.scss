@@ -13,7 +13,7 @@
     opacity: 0;
   }
 
-  .playpause-button-wrapper[data-background-button] {
+  .background-button-wrapper[data-background-button] {
     position: absolute;
     overflow: hidden;
     width: 100%;
@@ -24,7 +24,7 @@
     margin-top: -5%;
     text-align: center;
 
-    .playpause-icon[data-background-button] {
+    .background-button-icon[data-background-button] {
       font-family:"Player";
       cursor: pointer;
       font-weight: normal;
@@ -45,8 +45,18 @@
         &:before { content:"\\e002"; }
       }
 
-      &.paused {
+      &.notplaying {
         &:before { content:"\\e001"; }
+      }
+
+      &.playstop {
+        &.playing {
+          &:before { content:"\\e003"; }
+        }
+
+        &.notplaying {
+          &:before { content:"\\e001"; }
+        }
       }
     }
   }
