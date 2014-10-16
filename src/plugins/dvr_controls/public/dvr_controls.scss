@@ -45,6 +45,8 @@ $circle-radius: 5px;
     font-size: 12px;
     height: 32px;
     padding: 0;
+    opacity: 0.7;
+    text-shadow: rgba(255,255,255,.75) 0 0 5px;
 
     &:before {
       content: "";
@@ -55,6 +57,10 @@ $circle-radius: 5px;
       border-radius: $circle-radius;
       margin-right: 3px;
       background-color: $dvr-color;
+    }
+
+    &:hover {
+      opacity: 1;
     }
   }
 }
