@@ -1,5 +1,6 @@
 $live-color: #ff0101;
 $dvr-color: #fff;
+$vod-color: #005aff;
 
 $disabled-opacity: 0.3;
 
@@ -56,13 +57,27 @@ $circle-radius: 5px;
       background-color: $dvr-color;
     }
   }
+}
 
-  &.dvr {
+.dvr {
+  .dvr-controls[data-dvr-controls] {
     .live-info {
       display: none;
     }
     .live-button {
       display: block;
     }
+  }
+
+  &.media-control.live[data-media-control] {
+    .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {
+      background-color: $vod-color;
+    }
+  }
+}
+
+.media-control.live[data-media-control] {
+  .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {
+    background-color: $live-color;
   }
 }
