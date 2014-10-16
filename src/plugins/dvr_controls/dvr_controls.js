@@ -31,10 +31,11 @@ class DVRControls extends UICorePlugin {
 
   dvrChanged(dvrEnabled) {
     this.settingsUpdate()
+    this.core.mediaControl.$el.addClass('live')
     if (dvrEnabled) {
-      this.$el.addClass('dvr')
+      this.core.mediaControl.$el.addClass('dvr')
     } else {
-      this.$el.removeClass('dvr')
+      this.core.mediaControl.$el.removeClass('dvr')
     }
   }
 
@@ -61,7 +62,7 @@ class DVRControls extends UICorePlugin {
     var style = Styler.getStyleFor(this.name)
     this.$el.html(this.template())
     this.$el.append(style)
-
+    this.core.mediaControl.$el.addClass('live')
     this.core.mediaControl.$('.media-control-left-panel[data-media-control]').append(this.$el)
     return this
   }
