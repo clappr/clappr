@@ -29,7 +29,7 @@ class Flash extends UIObject {
       this.settings.right = ["fullscreen"]
     } else {
       this.settings.left = ["playpause", "position", "duration"]
-      this.settings.right = ["volume", "fullscreen"]
+      this.settings.right = ["fullscreen", "volume"]
       this.settings.seekEnabled = true
     }
     this.isReady = false
