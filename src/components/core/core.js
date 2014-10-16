@@ -59,27 +59,32 @@ class Core extends UIObject {
   }
 
   updateSize() {
-    var $window = $(window)
     if (Fullscreen.isFullscreen()) {
-      this.$el.addClass('fullscreen')
-      this.$el.removeAttr('style')
-      this.playerInfo.currentSize = { width: $window.width(), height: $window.height() }
+      this.setFullscreen()
     } else {
-      var needStretch = !!this.options.stretchWidth && !!this.options.stretchHeight
-      var width, height
-      if (needStretch && this.options.stretchWidth <= $window.width() && this.options.stretchHeight <= ($window.height() * 0.73)) {
-        width = this.options.stretchWidth
-        height = this.options.stretchHeight
-      } else {
-        width = this.options.width
-        height = this.options.height
-      }
-      this.$el.css({ width: width })
-      this.$el.css({ height: height })
-      this.$el.removeClass('fullscreen')
-      this.playerInfo.currentSize = { width: width, height: height }
+      this.setPlayerSize()
     }
     Mediator.trigger('player:resize')
+  }
+
+  setFullscreen() {
+    this.$el.addClass('fullscreen')
+    this.$el.removeAttr('style')
+    this.playerInfo.currentSize = { width: $(window).width(), height: $(window).height() }
+  }
+
+  setPlayerSize() {
+    var hasStretchParams = !!this.options.stretchWidth && !!this.options.stretchHeight
+    var canStretch = this.options.stretchWidth <= $(window).width() && this.options.stretchHeight <= ($(window).height() * 0.73)
+    var width, height
+    if (hasStretchParams && canStretch) {
+      [width, height] = [this.options.stretchWidth, this.options.stretchHeight]
+    } else {
+      [width, height] = [this.options.width, this.options.height]
+    }
+    this.$el.css({ width: width, height: height })
+    this.$el.removeClass('fullscreen')
+    this.playerInfo.currentSize = { width: width, height: height }
   }
 
   resolveOnContainersReady(containers) {
