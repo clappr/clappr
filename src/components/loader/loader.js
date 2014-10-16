@@ -21,6 +21,7 @@ var PosterPlugin = require('../../plugins/poster');
 
 /* Core Plugins */
 var BackgroundButton = require('../../plugins/background_button');
+var DVRControls = require('../../plugins/dvr_controls');
 
 class Loader extends BaseObject {
   constructor(externalPlugins) {
@@ -28,7 +29,7 @@ class Loader extends BaseObject {
     this.playerInfo = PlayerInfo.getInstance()
     this.playbackPlugins = [FlashVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, HLSVideoPlayback, NoOp]
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin]
-    this.corePlugins = [BackgroundButton]
+    this.corePlugins = [BackgroundButton, DVRControls]
     if (externalPlugins) {
       this.addExternalPlugins(externalPlugins)
     }
