@@ -13764,31 +13764,33 @@ module.exports = Events;
 
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../plugins/log":60,"underscore":6}],14:[function(require,module,exports){
+},{"../plugins/log":61,"underscore":6}],14:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 module.exports = {
-  'media_control': _.template('<div class="media-control-background" data-background></div><div class="media-control-layer" data-controls>  <% var renderBar = function(name) { %>      <div class="bar-container" data-<%= name %>>        <div class="bar-background" data-<%= name %>>          <div class="bar-fill-1" data-<%= name %>></div>          <div class="bar-fill-2" data-<%= name %>></div>          <div class="bar-hover" data-<%= name %>></div>        </div>        <div class="bar-scrubber" data-<%= name %>>          <div class="bar-scrubber-icon" data-<%= name %>></div>        </div>      </div>  <% }; %>  <% var renderDrawer = function(name, renderContent) { %>      <div class="drawer-container" data-<%= name %>>        <div class="drawer-icon-container" data-<%= name %>>          <div class="drawer-icon media-control-icon" data-<%= name %>></div>          <span class="drawer-text" data-<%= name %>></span>        </div>        <% renderContent(name); %>      </div>  <% }; %>  <% var renderIndicator = function(name) { %>      <div class="media-control-indicator" data-<%= name %>></div>  <% }; %>  <% var renderButton = function(name) { %>      <button class="media-control-button media-control-icon" data-<%= name %>></button>  <% }; %>  <% var render = function(settings) {      _.each(settings, function(setting) {        if(setting === "seekbar") {          renderBar(setting);        } else if (setting === "volume") {          renderDrawer(setting, renderBar);        } else if (setting === "duration" || setting === "position") {          renderIndicator(setting);        } else {          renderButton(setting);        }      });    }; %>  <% if (settings.default && settings.default.length) { %>  <div class="media-control-center-panel" data-media-control>    <% render(settings.default); %>  </div>  <% } %>  <% if (settings.left && settings.left.length) { %>  <div class="media-control-left-panel" data-media-control>    <% render(settings.left); %>  </div>  <% } %>  <% if (settings.right && settings.right.length) { %>  <div class="media-control-right-panel" data-media-control>    <% render(settings.right); %>  </div>  <% } %></div>'),
+  'media_control': _.template('<div class="media-control-background" data-background></div><div class="media-control-layer" data-controls><% var renderBar=function(name) { %><div class="bar-container" data-<%= name %>><div class="bar-background" data-<%= name %>><div class="bar-fill-1" data-<%= name %>></div><div class="bar-fill-2" data-<%= name %>></div><div class="bar-hover" data-<%= name %>></div></div><div class="bar-scrubber" data-<%= name %>><div class="bar-scrubber-icon" data-<%= name %>></div></div></div><% }; %><% var renderDrawer=function(name, renderContent) { %><div class="drawer-container" data-<%= name %>><div class="drawer-icon-container" data-<%= name %>><div class="drawer-icon media-control-icon" data-<%= name %>></div><span class="drawer-text" data-<%= name %>></span></div><% renderContent(name); %></div><% }; %><% var renderIndicator=function(name) { %><div class="media-control-indicator" data-<%= name %>></div><% }; %><% var renderButton=function(name) { %><button class="media-control-button media-control-icon" data-<%= name %>></button><% }; %><% var render=function(settings) { _.each(settings, function(setting) { if(setting === "seekbar") { renderBar(setting); } else if (setting === "volume") { renderDrawer(setting, renderBar); } else if (setting === "duration" || setting=== "position") { renderIndicator(setting); } else { renderButton(setting); } }); }; %><% if (settings.default && settings.default.length) { %><div class="media-control-center-panel" data-media-control><% render(settings.default); %></div><% } %><% if (settings.left && settings.left.length) { %><div class="media-control-left-panel" data-media-control><% render(settings.left); %></div><% } %><% if (settings.right && settings.right.length) { %><div class="media-control-right-panel" data-media-control><% render(settings.right); %></div><% } %></div>'),
   'seek_time': _.template('<span data-seek-time></span>'),
-  'flash': _.template('  <param name="movie" value="<%= swfPath %>">  <param name="quality" value="autohigh">  <param name="swliveconnect" value="true">  <param name="allowScriptAccess" value="always">  <param name="bgcolor" value="#001122">  <param name="allowFullScreen" value="false">  <param name="wmode" value="transparent">  <param name="tabindex" value="1">  <param name=FlashVars value="playbackId=<%= playbackId %>" />  <embed    type="application/x-shockwave-flash"    disabled="disabled"    tabindex="-1"    enablecontextmenu="false"    allowScriptAccess="always"    quality="autohight"    pluginspage="http://www.macromedia.com/go/getflashplayer"    wmode="transparent"    swliveconnect="true"    type="application/x-shockwave-flash"    allowfullscreen="false"    bgcolor="#000000"    FlashVars="playbackId=<%= playbackId %>"    src="<%= swfPath %>">  </embed>'),
-  'hls': _.template('  <param name="movie" value="<%= swfPath %>?inline=1">  <param name="quality" value="autohigh">  <param name="swliveconnect" value="true">  <param name="allowScriptAccess" value="always">  <param name="bgcolor" value="#001122">  <param name="allowFullScreen" value="false">  <param name="wmode" value="transparent">  <param name="tabindex" value="1">  <param name=FlashVars value="playbackId=<%= playbackId %>" />  <embed    type="application/x-shockwave-flash"    tabindex="1"    enablecontextmenu="false"    allowScriptAccess="always"    quality="autohigh"    pluginspage="http://www.macromedia.com/go/getflashplayer"    wmode="transparent"    swliveconnect="true"    type="application/x-shockwave-flash"    allowfullscreen="false"    bgcolor="#000000"    FlashVars="playbackId=<%= playbackId %>"    src="<%= swfPath %>">  </embed>'),
+  'flash': _.template('<param name="movie" value="<%= swfPath %>"><param name="quality" value="autohigh"><param name="swliveconnect" value="true"><param name="allowScriptAccess" value="always"><param name="bgcolor" value="#001122"><param name="allowFullScreen" value="false"><param name="wmode" value="transparent"><param name="tabindex" value="1"><param name=FlashVars value="playbackId=<%= playbackId %>" /><embed type="application/x-shockwave-flash" disabled tabindex="-1" enablecontextmenu="false" allowScriptAccess="always" quality="autohight" pluginspage="http://www.macromedia.com/go/getflashplayer" wmode="transparent" swliveconnect="true" type="application/x-shockwave-flash" allowfullscreen="false" bgcolor="#000000" FlashVars="playbackId=<%= playbackId %>" src="<%= swfPath %>"></embed>'),
+  'hls': _.template('<param name="movie" value="<%= swfPath %>?inline=1"><param name="quality" value="autohigh"><param name="swliveconnect" value="true"><param name="allowScriptAccess" value="always"><param name="bgcolor" value="#001122"><param name="allowFullScreen" value="false"><param name="wmode" value="transparent"><param name="tabindex" value="1"><param name=FlashVars value="playbackId=<%= playbackId %>" /><embed type="application/x-shockwave-flash" tabindex="1" enablecontextmenu="false" allowScriptAccess="always" quality="autohigh" pluginspage="http://www.macromedia.com/go/getflashplayer" wmode="transparent" swliveconnect="true" type="application/x-shockwave-flash" allowfullscreen="false" bgcolor="#000000" FlashVars="playbackId=<%= playbackId %>" src="<%= swfPath %>"></embed>'),
   'html5_video': _.template('<source src="<%=src%>" type="<%=type%>">'),
   'no_op': _.template('<p data-no-op-msg>Something went wrong :(</p>'),
-  'background_button': _.template('<div class="playpause-button-wrapper" data-background-button>  <span class="playpause-icon" data-background-button></span></div>'),
-  'poster': _.template('<div class="play-wrapper" data-poster>  <span class="poster-icon play" data-poster /></div>'),
+  'background_button': _.template('<div class="background-button-wrapper" data-background-button><span class="background-button-icon" data-background-button></span></div>'),
+  'dvr_controls': _.template('<div class="live-info">LIVE</div><button class="live-button">BACK TO LIVE</button>'),
+  'poster': _.template('<div class="play-wrapper" data-poster><span class="poster-icon play" data-poster/></div>'),
   'spinner_three_bounce': _.template('<div data-bounce1></div><div data-bounce2></div><div data-bounce3></div>'),
   'watermark': _.template('<div data-watermark data-watermark-<%=position %>><img src="<%= imageUrl %>"></div>'),
   CSS: {
     'container': '[data-container]{position:absolute;background-color:#000;height:100%;width:100%}',
-    'core': '[data-player]{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;-o-user-select:none;user-select:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-webkit-transform:translate3d(0,0,0);-moz-transform:translate3d(0,0,0);-ms-transform:translate3d(0,0,0);-o-transform:translate3d(0,0,0);transform:translate3d(0,0,0);position:relative;margin:0;padding:0;border:0;height:594px;width:1055px;font-style:normal;font-weight:400;text-align:center;overflow:hidden;font-size:100%;color:#000;font-family:"lucida grande",tahoma,verdana,arial,sans-serif;text-shadow:0 0 0;box-sizing:border-box}[data-player] a,[data-player] abbr,[data-player] acronym,[data-player] address,[data-player] applet,[data-player] article,[data-player] aside,[data-player] audio,[data-player] b,[data-player] big,[data-player] blockquote,[data-player] canvas,[data-player] caption,[data-player] center,[data-player] cite,[data-player] code,[data-player] dd,[data-player] del,[data-player] details,[data-player] dfn,[data-player] div,[data-player] dl,[data-player] dt,[data-player] em,[data-player] embed,[data-player] fieldset,[data-player] figcaption,[data-player] figure,[data-player] footer,[data-player] form,[data-player] h1,[data-player] h2,[data-player] h3,[data-player] h4,[data-player] h5,[data-player] h6,[data-player] header,[data-player] hgroup,[data-player] i,[data-player] iframe,[data-player] img,[data-player] ins,[data-player] kbd,[data-player] label,[data-player] legend,[data-player] li,[data-player] mark,[data-player] menu,[data-player] nav,[data-player] object,[data-player] ol,[data-player] output,[data-player] p,[data-player] pre,[data-player] q,[data-player] ruby,[data-player] s,[data-player] samp,[data-player] section,[data-player] small,[data-player] span,[data-player] strike,[data-player] strong,[data-player] sub,[data-player] summary,[data-player] sup,[data-player] table,[data-player] tbody,[data-player] td,[data-player] tfoot,[data-player] th,[data-player] thead,[data-player] time,[data-player] tr,[data-player] tt,[data-player] u,[data-player] ul,[data-player] var,[data-player] video{margin:0;padding:0;border:0;font:inherit;font-size:100%;vertical-align:baseline}[data-player] table{border-collapse:collapse;border-spacing:0}[data-player] caption,[data-player] td,[data-player] th{text-align:left;font-weight:400;vertical-align:middle}[data-player] blockquote,[data-player] q{quotes:none}[data-player] blockquote:after,[data-player] blockquote:before,[data-player] q:after,[data-player] q:before{content:"";content:none}[data-player] a img{border:none}[data-player].fullscreen{width:100%;height:100%}[data-player].nocursor{cursor:none}',
-    'media_control': '@font-face{font-family:Player;src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot);src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot?#iefix) format("embedded-opentype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.ttf) format("truetype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.svg#player) format("svg")}.media-control-notransition{-webkit-transition:none!important;-webkit-transition-delay:0s;-moz-transition:none!important;-o-transition:none!important;transition:none!important}.media-control[data-media-control]{position:absolute;border-radius:0;bottom:0;left:0;right:0;margin-left:auto;margin-right:auto;max-width:100%;min-width:60%;height:40px;z-index:9999;-webkit-transition:all,.4s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.4s,ease-out;-o-transition:all,.4s,ease-out;transition:all,.4s,ease-out}.media-control[data-media-control] .media-control-background[data-background]{position:absolute;height:150px;width:100%;bottom:0;background-image:-owg(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:-webkit(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:-moz(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:-o(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9));-webkit-transition:all,.6s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.6s,ease-out;-o-transition:all,.6s,ease-out;transition:all,.6s,ease-out}.media-control[data-media-control] .media-control-icon{font-family:Player;font-weight:400;font-style:normal;font-size:26px;line-height:32px;letter-spacing:0;speak:none;color:#fff;opacity:.5;vertical-align:middle;text-align:left;padding:0 6px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.media-control[data-media-control] .media-control-icon:hover{color:#fff;opacity:.75;text-shadow:rgba(255,255,255,.5) 0 0 15px;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control].media-control-hide{bottom:-50px}.media-control[data-media-control].media-control-hide .media-control-background[data-background],.media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar]{opacity:0}.media-control[data-media-control] .media-control-layer[data-controls]{position:relative;top:10%;height:80%;vertical-align:middle}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control]{position:absolute;top:0;left:10px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control]{height:100%;text-align:center;line-height:32px}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control]{position:absolute;top:0;right:5px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button{background-color:transparent;border:0;margin:0 8px;cursor:pointer;display:inline-block}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus{outline:0}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]:before{content:"\\e002"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]:before{content:"\\e003"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]{float:right;background-color:transparent;border:0;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]:before{content:"\\e006"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]{cursor:default;float:right;background-color:transparent;border:0;width:32px;height:100%;opacity:0}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]:before{content:"\\e007"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled{opacity:1}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].playing:before{content:"\\e002"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].paused:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].playing:before{content:"\\e003"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].stopped:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration],.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position]{display:inline-block;font-size:10px;color:#fff;cursor:default;line-height:32px;position:relative}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]{color:rgba(255,255,255,.3)}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before{content:"|";margin-right:3px}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]{position:absolute;top:-20px;left:0;display:inline-block;vertical-align:middle;width:100%;height:25px;cursor:pointer}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar]{width:100%;height:1px;position:relative;top:12px;background-color:#666}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar]{position:absolute;top:0;left:0;width:0;height:100%;background-color:#c2c2c2;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar]{position:absolute;top:0;left:0;width:0;height:100%;background-color:#005aff;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar]{display:none;position:absolute;top:-3px;width:5px;height:7px;background-color:rgba(255,255,255,.5)}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar]{display:block}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled{cursor:default}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar]{position:absolute;top:2px;left:0;width:20px;height:20px;opacity:1;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar]{position:absolute;left:6px;top:6px;width:8px;height:8px;border-radius:10px;box-shadow:0 0 0 6px rgba(255,255,255,.2);background-color:#fff}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume]{float:right;display:inline-block;width:32px;height:32px;cursor:pointer}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume]{position:absolute;bottom:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]{background-color:transparent;border:0;width:32px;height:32px}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:before{content:"\\e004"}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted:before{content:"\\e005"}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume]{width:32px;height:88px;position:absolute;bottom:40px;background:rgba(2,2,2,.5);border-radius:4px;-webkit-transition:all,.2s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.2s,ease-out;-o-transition:all,.2s,ease-out;transition:all,.2s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide{opacity:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume]{margin-left:12px;background:#6f6f6f;border-radius:4px;width:8px;height:72px;position:relative;top:8px;overflow:hidden}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume]{position:absolute;bottom:0;background:#fff;width:100%;height:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume]{position:absolute;bottom:40%;left:6px;width:20px;height:20px}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume]{position:absolute;left:4px;top:4px;width:12px;height:12px;border-radius:6px;border:1px solid #6f6f6f;background-color:#fff}',
+    'core': '[data-player]{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;-o-user-select:none;user-select:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-webkit-transform:translate3d(0,0,0);-moz-transform:translate3d(0,0,0);-ms-transform:translate3d(0,0,0);-o-transform:translate3d(0,0,0);transform:translate3d(0,0,0);position:relative;margin:0;padding:0;border:0;height:594px;width:1055px;font-style:normal;font-weight:400;text-align:center;overflow:hidden;font-size:100%;color:#000;background-color:#000;font-family:"lucida grande",tahoma,verdana,arial,sans-serif;text-shadow:0 0 0;box-sizing:border-box}[data-player] a,[data-player] abbr,[data-player] acronym,[data-player] address,[data-player] applet,[data-player] article,[data-player] aside,[data-player] audio,[data-player] b,[data-player] big,[data-player] blockquote,[data-player] canvas,[data-player] caption,[data-player] center,[data-player] cite,[data-player] code,[data-player] dd,[data-player] del,[data-player] details,[data-player] dfn,[data-player] div,[data-player] dl,[data-player] dt,[data-player] em,[data-player] embed,[data-player] fieldset,[data-player] figcaption,[data-player] figure,[data-player] footer,[data-player] form,[data-player] h1,[data-player] h2,[data-player] h3,[data-player] h4,[data-player] h5,[data-player] h6,[data-player] header,[data-player] hgroup,[data-player] i,[data-player] iframe,[data-player] img,[data-player] ins,[data-player] kbd,[data-player] label,[data-player] legend,[data-player] li,[data-player] mark,[data-player] menu,[data-player] nav,[data-player] object,[data-player] ol,[data-player] output,[data-player] p,[data-player] pre,[data-player] q,[data-player] ruby,[data-player] s,[data-player] samp,[data-player] section,[data-player] small,[data-player] span,[data-player] strike,[data-player] strong,[data-player] sub,[data-player] summary,[data-player] sup,[data-player] table,[data-player] tbody,[data-player] td,[data-player] tfoot,[data-player] th,[data-player] thead,[data-player] time,[data-player] tr,[data-player] tt,[data-player] u,[data-player] ul,[data-player] var,[data-player] video{margin:0;padding:0;border:0;font:inherit;font-size:100%;vertical-align:baseline}[data-player] table{border-collapse:collapse;border-spacing:0}[data-player] caption,[data-player] td,[data-player] th{text-align:left;font-weight:400;vertical-align:middle}[data-player] blockquote,[data-player] q{quotes:none}[data-player] blockquote:after,[data-player] blockquote:before,[data-player] q:after,[data-player] q:before{content:"";content:none}[data-player] a img{border:none}[data-player].fullscreen{width:100%;height:100%}[data-player].nocursor{cursor:none}',
+    'media_control': '@font-face{font-family:Player;src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot);src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot?#iefix) format("embedded-opentype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.ttf) format("truetype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.svg#player) format("svg")}.media-control-notransition{-webkit-transition:none!important;-webkit-transition-delay:0s;-moz-transition:none!important;-o-transition:none!important;transition:none!important}.media-control[data-media-control]{position:absolute;border-radius:0;bottom:0;left:0;right:0;margin-left:auto;margin-right:auto;max-width:100%;min-width:60%;height:40px;z-index:9999;-webkit-transition:all,.4s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.4s,ease-out;-o-transition:all,.4s,ease-out;transition:all,.4s,ease-out}.media-control[data-media-control] .media-control-background[data-background]{position:absolute;height:150px;width:100%;bottom:0;background-image:-owg(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:-webkit(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:-moz(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:-o(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9));-webkit-transition:all,.6s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.6s,ease-out;-o-transition:all,.6s,ease-out;transition:all,.6s,ease-out}.media-control[data-media-control] .media-control-icon{font-family:Player;font-weight:400;font-style:normal;font-size:26px;line-height:32px;letter-spacing:0;speak:none;color:#fff;opacity:.5;vertical-align:middle;text-align:left;padding:0 6px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.media-control[data-media-control] .media-control-icon:hover{color:#fff;opacity:.75;text-shadow:rgba(255,255,255,.8) 0 0 15px;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control].media-control-hide{bottom:-50px}.media-control[data-media-control].media-control-hide .media-control-background[data-background],.media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar]{opacity:0}.media-control[data-media-control] .media-control-layer[data-controls]{position:relative;top:10%;height:80%;vertical-align:middle}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control]{position:absolute;top:0;left:10px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control]{height:100%;text-align:center;line-height:32px}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control]{position:absolute;top:0;right:5px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button{background-color:transparent;border:0;margin:0 8px;cursor:pointer;display:inline-block}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus{outline:0}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]:before{content:"\\e002"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]:before{content:"\\e003"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]{float:right;background-color:transparent;border:0;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]:before{content:"\\e006"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen].shrink:before{content:"\\e007"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]{cursor:default;float:right;background-color:transparent;border:0;width:32px;height:100%;opacity:0}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]:before{content:"\\e008"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled{opacity:1}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].playing:before{content:"\\e002"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].paused:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].playing:before{content:"\\e003"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].stopped:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration],.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position]{display:inline-block;font-size:10px;color:#fff;cursor:default;line-height:32px;position:relative}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]{color:rgba(255,255,255,.3)}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before{content:"|";margin-right:3px}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]{position:absolute;top:-20px;left:0;display:inline-block;vertical-align:middle;width:100%;height:25px;cursor:pointer}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar]{width:100%;height:1px;position:relative;top:12px;background-color:#666}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar]{position:absolute;top:0;left:0;width:0;height:100%;background-color:#c2c2c2;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar]{position:absolute;top:0;left:0;width:0;height:100%;background-color:#005aff;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar]{display:none;position:absolute;top:-3px;width:5px;height:7px;background-color:rgba(255,255,255,.5)}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar]{display:block}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled{cursor:default}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar]{position:absolute;top:2px;left:0;width:20px;height:20px;opacity:1;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar]{position:absolute;left:6px;top:6px;width:8px;height:8px;border-radius:10px;box-shadow:0 0 0 6px rgba(255,255,255,.2);background-color:#fff}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume]{float:right;display:inline-block;width:32px;height:32px;cursor:pointer}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume]{position:absolute;bottom:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]{background-color:transparent;border:0;width:32px;height:32px}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:before{content:"\\e004"}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted:before{content:"\\e005"}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume]{width:32px;height:88px;position:absolute;bottom:40px;background:rgba(2,2,2,.5);border-radius:4px;-webkit-transition:all,.2s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.2s,ease-out;-o-transition:all,.2s,ease-out;transition:all,.2s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide{opacity:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume]{margin-left:12px;background:#6f6f6f;border-radius:4px;width:8px;height:72px;position:relative;top:8px;overflow:hidden}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume]{position:absolute;bottom:0;background:#fff;width:100%;height:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume]{position:absolute;bottom:40%;left:6px;width:20px;height:20px}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume]{position:absolute;left:4px;top:4px;width:12px;height:12px;border-radius:6px;border:1px solid #6f6f6f;background-color:#fff}',
     'seek_time': '.seek-time[data-seek-time]{position:absolute;width:auto;height:20px;bottom:55px;background-color:rgba(2,2,2,.5);z-index:9999}.seek-time[data-seek-time].hidden[data-seek-time]{opacity:0}.seek-time[data-seek-time] span[data-seek-time]{position:relative;color:#fff;font-size:10px;padding-left:7px;padding-right:7px}',
     'flash': '[data-flash]{position:absolute;height:100%;width:100%;background-color:#000;display:block;pointer-events:none}',
     'hls': '[data-hls]{position:absolute;height:100%;width:100%;background-color:#000;display:block;pointer-events:none;top:0}',
     'html5_video': '[data-html5-video]{position:absolute;height:100%;width:100%;display:block}',
     'no_op': '[data-no-op]{z-index:1000;position:absolute;background-color:#222;height:100%;width:100%}[data-no-op] p[data-no-op-msg]{position:relative;font-size:25px;top:50%;color:#fff}',
-    'background_button': '.background-button[data-background-button]{font-family:Player;position:absolute;height:100%;width:100%;background-color:rgba(0,0,0,.2);-webkit-transition:all,.4s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.4s,ease-out;-o-transition:all,.4s,ease-out;transition:all,.4s,ease-out}.background-button[data-background-button].hide[data-background-button]{opacity:0}.background-button[data-background-button] .playpause-button-wrapper[data-background-button]{position:absolute;overflow:hidden;width:100%;height:25%;line-height:100%;font-size:20%;top:45%;margin-top:-5%;text-align:center}.background-button[data-background-button] .playpause-button-wrapper[data-background-button] .playpause-icon[data-background-button]{font-family:Player;cursor:pointer;font-weight:400;font-style:normal;line-height:1;letter-spacing:0;speak:none;font-size:90px;color:#fff;opacity:.75;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.background-button[data-background-button] .playpause-button-wrapper[data-background-button] .playpause-icon[data-background-button]:hover{text-shadow:rgba(255,255,255,.5) 0 0 15px}.background-button[data-background-button] .playpause-button-wrapper[data-background-button] .playpause-icon[data-background-button].playing:before{content:"\\e002"}.background-button[data-background-button] .playpause-button-wrapper[data-background-button] .playpause-icon[data-background-button].paused:before{content:"\\e001"}',
-    'poster': '@font-face{font-family:Player;src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot);src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot?#iefix) format("embedded-opentype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.ttf) format("truetype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.svg#player) format("svg")}.player-poster[data-poster]{cursor:pointer;position:absolute;height:100%;width:100%;z-index:998;top:0}.player-poster[data-poster] .poster-background[data-poster]{width:100%;height:100%}.player-poster[data-poster] .play-wrapper[data-poster]{position:absolute;overflow:hidden;width:100%;height:20%;line-height:100%;font-size:20%;top:50%;margin-top:-5%;text-align:center}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]{font-family:Player;font-weight:400;font-style:normal;line-height:1;letter-spacing:0;speak:none;color:#fff;opacity:.75;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster].play[data-poster]:before{content:"\\e001"}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]:hover{opacity:1}',
+    'background_button': '.background-button[data-background-button]{font-family:Player;position:absolute;height:100%;width:100%;background-color:rgba(0,0,0,.2);-webkit-transition:all,.4s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.4s,ease-out;-o-transition:all,.4s,ease-out;transition:all,.4s,ease-out;cursor:pointer}.background-button[data-background-button].hide[data-background-button]{opacity:0}.background-button[data-background-button] .background-button-wrapper[data-background-button]{position:absolute;overflow:hidden;width:100%;height:25%;line-height:100%;font-size:20%;top:45%;margin-top:-5%;text-align:center}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button]{font-family:Player;cursor:pointer;font-weight:400;font-style:normal;line-height:1;letter-spacing:0;speak:none;font-size:90px;color:#fff;opacity:.75;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button]:hover{opacity:1;text-shadow:rgba(255,255,255,.8) 0 0 15px}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button].playing:before{content:"\\e002"}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button].notplaying:before{content:"\\e001"}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button].playstop.playing:before{content:"\\e003"}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button].playstop.notplaying:before{content:"\\e001"}',
+    'dvr_controls': '.dvr-controls[data-dvr-controls]{display:inline-block;color:#fff;line-height:32px;font-size:12px;font-weight:700;margin-left:5px}.dvr-controls[data-dvr-controls] .live-info{cursor:default}.dvr-controls[data-dvr-controls] .live-info:before{content:"";display:inline-block;position:relative;width:10px;height:10px;border-radius:5px;margin-right:3px;background-color:#ff0101}.dvr-controls[data-dvr-controls] .live-info.disabled{opacity:.3}.dvr-controls[data-dvr-controls] .live-info.disabled:before{background-color:#fff}.dvr-controls[data-dvr-controls] .live-button{cursor:pointer;outline:0;display:none;border:0;color:#fff;background-color:transparent;font-size:12px;height:32px;padding:0;opacity:.7}.dvr-controls[data-dvr-controls] .live-button:before{content:"";display:inline-block;position:relative;width:10px;height:10px;border-radius:5px;margin-right:3px;background-color:#fff}.dvr-controls[data-dvr-controls] .live-button:hover{opacity:1;text-shadow:rgba(255,255,255,.75) 0 0 5px}.dvr .dvr-controls[data-dvr-controls] .live-info{display:none}.dvr .dvr-controls[data-dvr-controls] .live-button{display:block}.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar]{background-color:#005aff}.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar]{background-color:#ff0101}',
+    'poster': '@font-face{font-family:Player;src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot);src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot?#iefix) format("embedded-opentype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.ttf) format("truetype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.svg#player) format("svg")}.player-poster[data-poster]{cursor:pointer;position:absolute;height:100%;width:100%;z-index:998;top:0}.player-poster[data-poster] .poster-background[data-poster]{width:100%;height:100%}.player-poster[data-poster] .play-wrapper[data-poster]{position:absolute;width:100%;height:20%;line-height:100%;font-size:20%;top:50%;margin-top:-5%;text-align:center}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]{font-family:Player;font-weight:400;font-style:normal;line-height:1;letter-spacing:0;speak:none;color:#fff;opacity:.75;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster].play[data-poster]:before{content:"\\e001"}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]:hover{opacity:1}',
     'spinner_three_bounce': '.spinner-three-bounce[data-spinner]{position:absolute;margin:0 auto;width:70px;text-align:center;z-index:10;top:47%;left:0;right:0}.spinner-three-bounce[data-spinner]>div{width:18px;height:18px;background-color:#FFF;border-radius:100%;display:inline-block;-webkit-animation:bouncedelay 1.4s infinite ease-in-out;-moz-animation:bouncedelay 1.4s infinite ease-in-out;-ms-animation:bouncedelay 1.4s infinite ease-in-out;-o-animation:bouncedelay 1.4s infinite ease-in-out;animation:bouncedelay 1.4s infinite ease-in-out;-webkit-animation-fill-mode:both;-moz-animation-fill-mode:both;-ms-animation-fill-mode:both;-o-animation-fill-mode:both;animation-fill-mode:both}.spinner-three-bounce[data-spinner] [data-bounce1],.spinner-three-bounce[data-spinner] [data-bounce2]{-webkit-animation-delay:-.32s;-moz-animation-delay:-.32s;-ms-animation-delay:-.32s;-o-animation-delay:-.32s;animation-delay:-.32s}@-moz-keyframes bouncedelay{0%,100%,80%{-moz-transform:scale(0);transform:scale(0)}40%{-moz-transform:scale(1);transform:scale(1)}}@-webkit-keyframes bouncedelay{0%,100%,80%{-webkit-transform:scale(0);transform:scale(0)}40%{-webkit-transform:scale(1);transform:scale(1)}}@-o-keyframes bouncedelay{0%,100%,80%{-o-transform:scale(0);transform:scale(0)}40%{-o-transform:scale(1);transform:scale(1)}}@-ms-keyframes bouncedelay{0%,100%,80%{-ms-transform:scale(0);transform:scale(0)}40%{-ms-transform:scale(1);transform:scale(1)}}@keyframes bouncedelay{0%,100%,80%{transform:scale(0)}40%{transform:scale(1)}}',
     'watermark': '[data-watermark]{position:absolute;margin:100px auto 0;width:70px;text-align:center;z-index:10}[data-watermark-bottom-left]{bottom:10px;left:10px}[data-watermark-bottom-right]{bottom:10px;right:42px}[data-watermark-top-left]{top:-95px;left:10px}[data-watermark-top-right]{top:-95px;right:37px}'
   }
@@ -14173,8 +14175,12 @@ var $Container = Container;
   getDuration: function() {
     return this.playback.getDuration();
   },
-  error: function(errorObj) {
-    this.trigger('container:error', errorObj, this.name);
+  error: function(error) {
+    this.$el.prepend(error.render().el);
+    this.trigger('container:error', {
+      error: error,
+      container: this
+    }, this.name);
   },
   loadedMetadata: function(duration) {
     this.trigger('container:loadedmetadata', duration);
@@ -14339,8 +14345,7 @@ var Mediator = require('../mediator');
 var Core = function Core(options) {
   var $__0 = this;
   $traceurRuntime.superCall(this, $Core.prototype, "constructor", [options]);
-  this.playerInfo = PlayerInfo.getInstance();
-  this.playerInfo.options = options;
+  PlayerInfo.options = options;
   this.options = options;
   this.plugins = [];
   this.containers = [];
@@ -14382,34 +14387,41 @@ var $Core = Core;
     }));
   },
   updateSize: function() {
-    var $window = $(window);
     if (Fullscreen.isFullscreen()) {
-      this.$el.addClass('fullscreen');
-      this.$el.removeAttr('style');
-      this.playerInfo.currentSize = {
-        width: $window.width(),
-        height: $window.height()
-      };
+      this.setFullscreen();
     } else {
-      var needStretch = !!this.options.stretchWidth && !!this.options.stretchHeight;
-      var width,
-          height;
-      if (needStretch && this.options.stretchWidth <= $window.width() && this.options.stretchHeight <= ($window.height() * 0.73)) {
-        width = this.options.stretchWidth;
-        height = this.options.stretchHeight;
-      } else {
-        width = this.options.width;
-        height = this.options.height;
-      }
-      this.$el.css({width: width});
-      this.$el.css({height: height});
-      this.$el.removeClass('fullscreen');
-      this.playerInfo.currentSize = {
-        width: width,
-        height: height
-      };
+      this.setPlayerSize();
     }
     Mediator.trigger('player:resize');
+  },
+  setFullscreen: function() {
+    this.$el.addClass('fullscreen');
+    this.$el.removeAttr('style');
+    PlayerInfo.currentSize = {
+      width: $(window).width(),
+      height: $(window).height()
+    };
+  },
+  setPlayerSize: function() {
+    var $__2;
+    var hasStretchParams = !!this.options.stretchWidth && !!this.options.stretchHeight;
+    var canStretch = this.options.stretchWidth <= $(window).width() && this.options.stretchHeight <= ($(window).height() * 0.73);
+    var width,
+        height;
+    if (hasStretchParams && canStretch) {
+      ($__2 = [this.options.stretchWidth, this.options.stretchHeight], width = $__2[0], height = $__2[1], $__2);
+    } else {
+      ($__2 = [this.options.width, this.options.height], width = $__2[0], height = $__2[1], $__2);
+    }
+    this.$el.css({
+      width: width,
+      height: height
+    });
+    this.$el.removeClass('fullscreen');
+    PlayerInfo.currentSize = {
+      width: width,
+      height: height
+    };
   },
   resolveOnContainersReady: function(containers) {
     var $__0 = this;
@@ -14544,7 +14556,7 @@ var $Core = Core;
 module.exports = Core;
 
 
-},{"../../base/styler":17,"../../base/ui_object":"8lqCAT","../../base/utils":24,"../container_factory":30,"../media_control":"A8Uh+k","../mediator":"veeMMc","../player_info":"Pce0iO","jquery":3,"underscore":6}],32:[function(require,module,exports){
+},{"../../base/styler":17,"../../base/ui_object":"8lqCAT","../../base/utils":24,"../container_factory":30,"../media_control":"A8Uh+k","../mediator":"veeMMc","../player_info":"Rmed05","jquery":3,"underscore":6}],32:[function(require,module,exports){
 "use strict";
 module.exports = require('./core');
 
@@ -14608,12 +14620,12 @@ var StatsPlugin = require('../../plugins/stats');
 var WaterMarkPlugin = require('../../plugins/watermark');
 var PosterPlugin = require('../../plugins/poster');
 var BackgroundButton = require('../../plugins/background_button');
+var DVRControls = require('../../plugins/dvr_controls');
 var Loader = function Loader(externalPlugins) {
   $traceurRuntime.superCall(this, $Loader.prototype, "constructor", []);
-  this.playerInfo = PlayerInfo.getInstance();
   this.playbackPlugins = [FlashVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, HLSVideoPlayback, NoOp];
   this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin];
-  this.corePlugins = [BackgroundButton];
+  this.corePlugins = [BackgroundButton, DVRControls];
   if (externalPlugins) {
     this.addExternalPlugins(externalPlugins);
   }
@@ -14633,7 +14645,7 @@ var $Loader = Loader;
     if (plugins.core) {
       this.corePlugins = _.uniq(plugins.core.concat(this.corePlugins), pluginName);
     }
-    this.playerInfo.playbackPlugins = this.playbackPlugins;
+    PlayerInfo.playbackPlugins = this.playbackPlugins;
   },
   getPlugin: function(name) {
     var allPlugins = _.union(this.containerPlugins, this.playbackPlugins, this.corePlugins);
@@ -14645,7 +14657,7 @@ var $Loader = Loader;
 module.exports = Loader;
 
 
-},{"../../base/base_object":"2HNVgz","../../playbacks/flash":49,"../../playbacks/hls":51,"../../playbacks/html5_audio":53,"../../playbacks/html5_video":55,"../../playbacks/no_op":56,"../../plugins/background_button":59,"../../plugins/poster":62,"../../plugins/spinner_three_bounce":64,"../../plugins/stats":66,"../../plugins/watermark":68,"../player_info":"Pce0iO","underscore":6}],"A8Uh+k":[function(require,module,exports){
+},{"../../base/base_object":"2HNVgz","../../playbacks/flash":48,"../../playbacks/hls":50,"../../playbacks/html5_audio":52,"../../playbacks/html5_video":54,"../../playbacks/no_op":55,"../../plugins/background_button":58,"../../plugins/dvr_controls":60,"../../plugins/poster":63,"../../plugins/spinner_three_bounce":65,"../../plugins/stats":67,"../../plugins/watermark":69,"../player_info":"Rmed05","underscore":6}],"A8Uh+k":[function(require,module,exports){
 "use strict";
 module.exports = require('./media_control');
 
@@ -14662,6 +14674,7 @@ var UIObject = require('../../base/ui_object');
 var Utils = require('../../base/utils');
 var Mousetrap = require('mousetrap');
 var SeekTime = require('../seek_time');
+var Mediator = require('../../components/mediator');
 var transitionEvents = 'webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend';
 var MediaControl = function MediaControl(options) {
   var $__0 = this;
@@ -14688,6 +14701,9 @@ var MediaControl = function MediaControl(options) {
   }));
   $(document).bind('mousemove', (function(event) {
     return $__0.updateDrag(event);
+  }));
+  Mediator.on('player:resize', (function() {
+    return $__0.playerResize();
   }));
 };
 var $MediaControl = MediaControl;
@@ -14779,6 +14795,13 @@ var $MediaControl = MediaControl;
   mouseleaveOnSeekBar: function(event) {
     this.$seekBarHover.hide();
     this.trigger('mediacontrol:mouseleave:seekbar', event);
+  },
+  playerResize: function() {
+    if (Utils.Fullscreen.isFullscreen()) {
+      this.$fullscreenToggle.addClass('shrink');
+    } else {
+      this.$fullscreenToggle.removeClass('shrink');
+    }
   },
   togglePlayPause: function() {
     if (this.container.isPlaying()) {
@@ -14986,6 +15009,7 @@ var $MediaControl = MediaControl;
   createCachedElements: function() {
     this.$playPauseToggle = this.$el.find('button.media-control-button[data-playpause]');
     this.$playStopToggle = this.$el.find('button.media-control-button[data-playstop]');
+    this.$fullscreenToggle = this.$el.find('button.media-control-button[data-fullscreen]');
     this.$seekBarContainer = this.$el.find('.bar-container[data-seekbar]');
     this.$seekBarLoaded = this.$el.find('.bar-fill-1[data-seekbar]');
     this.$seekBarPosition = this.$el.find('.bar-fill-2[data-seekbar]');
@@ -15089,7 +15113,7 @@ var $MediaControl = MediaControl;
 module.exports = MediaControl;
 
 
-},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_object":"8lqCAT","../../base/utils":24,"../seek_time":45,"jquery":3,"mousetrap":4,"underscore":6}],"mediator":[function(require,module,exports){
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_object":"8lqCAT","../../base/utils":24,"../../components/mediator":"veeMMc","../seek_time":44,"jquery":3,"mousetrap":4,"underscore":6}],"mediator":[function(require,module,exports){
 module.exports=require('veeMMc');
 },{}],"veeMMc":[function(require,module,exports){
 "use strict";
@@ -15120,40 +15144,27 @@ Mediator.stopListening = function(obj, name, callback) {
 module.exports = Mediator;
 
 
-},{"../base/events":13}],"Pce0iO":[function(require,module,exports){
+},{"../base/events":13}],"player_info":[function(require,module,exports){
+module.exports=require('Rmed05');
+},{}],"Rmed05":[function(require,module,exports){
 "use strict";
-module.exports = require('./player_info');
-
-
-},{"./player_info":44}],"player_info":[function(require,module,exports){
-module.exports=require('Pce0iO');
-},{}],44:[function(require,module,exports){
-"use strict";
-var BaseObject = require('../../base/base_object');
-var PlayerInfo = function PlayerInfo() {
-  this.options = {};
-  this.playbackPlugins = [];
-  this.currentSize = {
+var PlayerInfo = {
+  options: {},
+  playbackPlugins: [],
+  currentSize: {
     width: 0,
     height: 0
-  };
-};
-($traceurRuntime.createClass)(PlayerInfo, {}, {}, BaseObject);
-PlayerInfo.getInstance = function() {
-  if (this._instance === undefined) {
-    this._instance = new this();
   }
-  return this._instance;
 };
 module.exports = PlayerInfo;
 
 
-},{"../../base/base_object":"2HNVgz"}],45:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 "use strict";
 module.exports = require('./seek_time');
 
 
-},{"./seek_time":46}],46:[function(require,module,exports){
+},{"./seek_time":45}],45:[function(require,module,exports){
 "use strict";
 var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
@@ -15214,7 +15225,7 @@ var $SeekTime = SeekTime;
 module.exports = SeekTime;
 
 
-},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_object":"8lqCAT","../../base/utils":24}],47:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_object":"8lqCAT","../../base/utils":24}],46:[function(require,module,exports){
 (function (global){
 "use strict";
 var BaseObject = require('./base/base_object');
@@ -15231,10 +15242,9 @@ var Player = function Player(options) {
   this.options.sources = this.normalizeSources(options);
   this.loader = new Loader(this.options.plugins || []);
   this.coreFactory = new CoreFactory(this, this.loader);
-  this.playerInfo = PlayerInfo.getInstance();
   options.height || (options.height = 360);
   options.width || (options.width = 640);
-  this.playerInfo.currentSize = {
+  PlayerInfo.currentSize = {
     width: options.width,
     height: options.height
   };
@@ -15309,7 +15319,7 @@ module.exports = window.Clappr;
 
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./base/base_object":"2HNVgz","./components/core_factory":34,"./components/loader":35,"./components/mediator":"veeMMc","./components/player_info":"Pce0iO","scrollmonitor":5,"underscore":6}],48:[function(require,module,exports){
+},{"./base/base_object":"2HNVgz","./components/core_factory":34,"./components/loader":35,"./components/mediator":"veeMMc","./components/player_info":"Rmed05","scrollmonitor":5,"underscore":6}],47:[function(require,module,exports){
 "use strict";
 var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
@@ -15331,7 +15341,7 @@ var Flash = function Flash(options) {
     this.settings.right = ["fullscreen"];
   } else {
     this.settings.left = ["playpause", "position", "duration"];
-    this.settings.right = ["volume", "fullscreen"];
+    this.settings.right = ["fullscreen", "volume"];
     this.settings.seekEnabled = true;
   }
   this.isReady = false;
@@ -15503,12 +15513,12 @@ Flash.canPlay = function(resource) {
 module.exports = Flash;
 
 
-},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_object":"8lqCAT","../../components/browser":"195Wj5","../../components/mediator":"veeMMc","jquery":3,"underscore":6}],49:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_object":"8lqCAT","../../components/browser":"195Wj5","../../components/mediator":"veeMMc","jquery":3,"underscore":6}],48:[function(require,module,exports){
 "use strict";
 module.exports = require('./flash');
 
 
-},{"./flash":48}],50:[function(require,module,exports){
+},{"./flash":47}],49:[function(require,module,exports){
 "use strict";
 var Playback = require('../../base/playback');
 var Styler = require('../../base/styler');
@@ -15520,7 +15530,7 @@ var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" cla
 var HLS = function HLS(options) {
   $traceurRuntime.superCall(this, $HLS.prototype, "constructor", [options]);
   this.src = options.src;
-  this.swfPath = options.swfPath || "assets/HLSPlayer.swf";
+  this.swfPath = options.swfPath || "http://cdn.clappr.io/latest/assets/HLSPlayer.swf";
   this.highDefinition = false;
   this.autoPlay = options.autoPlay;
   this.defaultSettings = {
@@ -15813,12 +15823,12 @@ HLS.canPlay = function(resource) {
 module.exports = HLS;
 
 
-},{"../../base/jst":14,"../../base/playback":"VbgHr3","../../base/styler":17,"../../components/browser":"195Wj5","../../components/mediator":"veeMMc","underscore":6}],51:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/playback":"VbgHr3","../../base/styler":17,"../../components/browser":"195Wj5","../../components/mediator":"veeMMc","underscore":6}],50:[function(require,module,exports){
 "use strict";
 module.exports = require('./hls');
 
 
-},{"./hls":50}],52:[function(require,module,exports){
+},{"./hls":49}],51:[function(require,module,exports){
 "use strict";
 var Playback = require('../../base/playback');
 var HTML5Audio = function HTML5Audio(params) {
@@ -15908,12 +15918,12 @@ HTML5Audio.canPlay = function(resource) {
 module.exports = HTML5Audio;
 
 
-},{"../../base/playback":"VbgHr3"}],53:[function(require,module,exports){
+},{"../../base/playback":"VbgHr3"}],52:[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_audio');
 
 
-},{"./html5_audio":52}],54:[function(require,module,exports){
+},{"./html5_audio":51}],53:[function(require,module,exports){
 "use strict";
 var Playback = require('../../base/playback');
 var JST = require('../../base/jst');
@@ -16072,17 +16082,17 @@ HTML5Video.canPlay = function(resource) {
 module.exports = HTML5Video;
 
 
-},{"../../base/jst":14,"../../base/playback":"VbgHr3","../../base/styler":17,"../../components/browser":"195Wj5","underscore":6}],55:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/playback":"VbgHr3","../../base/styler":17,"../../components/browser":"195Wj5","underscore":6}],54:[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_video');
 
 
-},{"./html5_video":54}],56:[function(require,module,exports){
+},{"./html5_video":53}],55:[function(require,module,exports){
 "use strict";
 module.exports = require('./no_op');
 
 
-},{"./no_op":57}],57:[function(require,module,exports){
+},{"./no_op":56}],56:[function(require,module,exports){
 "use strict";
 var Playback = require('../../base/playback');
 var JST = require('../../base/jst');
@@ -16114,7 +16124,7 @@ NoOp.canPlay = (function(source) {
 module.exports = NoOp;
 
 
-},{"../../base/jst":14,"../../base/playback":"VbgHr3","../../base/styler":17}],58:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/playback":"VbgHr3","../../base/styler":17}],57:[function(require,module,exports){
 "use strict";
 var UICorePlugin = require('../../base/ui_core_plugin');
 var JST = require('../../base/jst');
@@ -16133,7 +16143,7 @@ var $BackgroundButton = BackgroundButton;
     return 'background_button';
   },
   get events() {
-    return {'click .playpause-icon': 'click'};
+    return {'click .background-button-icon': 'click'};
   },
   get attributes() {
     return {
@@ -16172,10 +16182,14 @@ var $BackgroundButton = BackgroundButton;
   shouldRender: function() {
     var settings = this.core.mediaControl.settings;
     var useBackgroundButton = this.core.options.useBackgroundButton === undefined || !!this.core.options.useBackgroundButton;
-    return useBackgroundButton && (settings.default.indexOf('playpause') >= 0 || settings.left.indexOf('playpause') >= 0 || settings.right.indexOf('playpause') >= 0);
+    return useBackgroundButton && (this.core.mediaControl.$el.find('[data-playstop]').length > 0 || this.core.mediaControl.$el.find('[data-playpause]').length > 0);
   },
   click: function() {
-    this.core.mediaControl.togglePlayPause();
+    if (this.shouldStop) {
+      this.core.mediaControl.togglePlayStop();
+    } else {
+      this.core.mediaControl.togglePlayPause();
+    }
   },
   show: function() {
     this.$el.removeClass('hide');
@@ -16186,27 +16200,37 @@ var $BackgroundButton = BackgroundButton;
   enable: function() {
     this.stopListening();
     $traceurRuntime.superCall(this, $BackgroundButton.prototype, "enable", []);
-    this.core.mediaControl.$el.find('[data-playpause]').hide();
+    this.$playPauseButton.hide();
+    this.$playStopButton.hide();
   },
   disable: function() {
     $traceurRuntime.superCall(this, $BackgroundButton.prototype, "disable", []);
-    this.core.mediaControl.$el.find('[data-playpause]').show();
+    this.$playPauseButton.show();
+    this.$playStopButton.show();
   },
   playing: function() {
-    this.$el.find('.playpause-icon[data-background-button]').removeClass('paused').addClass('playing');
+    this.$buttonIcon.removeClass('notplaying').addClass('playing');
   },
   notplaying: function() {
-    this.$el.find('.playpause-icon[data-background-button]').removeClass('playing').addClass('paused');
+    this.$buttonIcon.removeClass('playing').addClass('notplaying');
   },
   getExternalInterface: function() {},
   render: function() {
     var style = Styler.getStyleFor(this.name);
     this.$el.html(this.template());
     this.$el.append(style);
-    if (this.enabled) {
-      this.core.mediaControl.$el.find('[data-playpause]').hide();
-    }
+    this.$playPauseButton = this.core.mediaControl.$el.find('[data-playpause]');
+    this.$playStopButton = this.core.mediaControl.$el.find('[data-playstop]');
+    this.$buttonIcon = this.$el.find('.background-button-icon[data-background-button]');
+    this.shouldStop = this.$playStopButton.length > 0;
     this.core.$el.append(this.$el);
+    if (this.enabled) {
+      this.$playPauseButton.hide();
+      this.$playStopButton.hide();
+    }
+    if (this.shouldStop) {
+      this.$buttonIcon.addClass('playstop');
+    }
     if (this.core.mediaControl.isVisible()) {
       this.show();
     }
@@ -16216,17 +16240,99 @@ var $BackgroundButton = BackgroundButton;
 module.exports = BackgroundButton;
 
 
-},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_core_plugin":"gNZMEo"}],59:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_core_plugin":"gNZMEo"}],58:[function(require,module,exports){
 "use strict";
 module.exports = require('./background_button');
 
 
-},{"./background_button":58}],60:[function(require,module,exports){
+},{"./background_button":57}],59:[function(require,module,exports){
+"use strict";
+var UICorePlugin = require('../../base/ui_core_plugin');
+var JST = require('../../base/jst');
+var Styler = require('../../base/styler');
+var DVRControls = function DVRControls(core) {
+  $traceurRuntime.superCall(this, $DVRControls.prototype, "constructor", [core]);
+  this.core = core;
+  this.settingsUpdate();
+};
+var $DVRControls = DVRControls;
+($traceurRuntime.createClass)(DVRControls, {
+  get template() {
+    return JST.dvr_controls;
+  },
+  get name() {
+    return 'dvr_controls';
+  },
+  get events() {
+    return {'click .live-button': 'click'};
+  },
+  get attributes() {
+    return {
+      'class': 'dvr-controls',
+      'data-dvr-controls': ''
+    };
+  },
+  bindEvents: function() {
+    this.listenTo(this.core.mediaControl, 'mediacontrol:containerchanged', this.settingsUpdate);
+    this.listenTo(this.core.mediaControl.container, 'container:settingsupdate', this.settingsUpdate);
+    this.listenTo(this.core.mediaControl.container, 'container:dvr', this.dvrChanged);
+  },
+  dvrChanged: function(dvrEnabled) {
+    this.settingsUpdate();
+    this.core.mediaControl.$el.addClass('live');
+    if (dvrEnabled) {
+      this.core.mediaControl.$el.addClass('dvr');
+    } else {
+      this.core.mediaControl.$el.removeClass('dvr');
+    }
+  },
+  click: function() {
+    if (!this.core.mediaControl.container.isPlaying()) {
+      this.core.mediaControl.container.play();
+    }
+    this.core.mediaControl.container.setCurrentTime(-1);
+  },
+  settingsUpdate: function() {
+    var $__0 = this;
+    this.stopListening();
+    if (this.shouldRender()) {
+      this.render();
+      this.$el.click((function() {
+        return $__0.click();
+      }));
+    }
+    this.bindEvents();
+  },
+  shouldRender: function() {
+    var settings = this.core.mediaControl.settings;
+    var useDvrControls = this.core.options.useDvrControls === undefined || !!this.core.options.useDvrControls;
+    return useDvrControls && this.core.mediaControl.container.getPlaybackType() === 'live';
+  },
+  render: function() {
+    var style = Styler.getStyleFor(this.name);
+    this.$el.html(this.template());
+    this.$el.append(style);
+    if (this.shouldRender()) {
+      this.core.mediaControl.$el.addClass('live');
+      this.core.mediaControl.$('.media-control-left-panel[data-media-control]').append(this.$el);
+    }
+    return this;
+  }
+}, {}, UICorePlugin);
+module.exports = DVRControls;
+
+
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_core_plugin":"gNZMEo"}],60:[function(require,module,exports){
+"use strict";
+module.exports = require('./dvr_controls');
+
+
+},{"./dvr_controls":59}],61:[function(require,module,exports){
 "use strict";
 module.exports = require('./log');
 
 
-},{"./log":61}],61:[function(require,module,exports){
+},{"./log":62}],62:[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var BOLD = 'font-weight: bold; font-size: 13px;';
@@ -16263,12 +16369,12 @@ Log.prototype = {
 module.exports = Log;
 
 
-},{"jquery":3}],62:[function(require,module,exports){
+},{"jquery":3}],63:[function(require,module,exports){
 "use strict";
 module.exports = require('./poster');
 
 
-},{"./poster":63}],63:[function(require,module,exports){
+},{"./poster":64}],64:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('../../base/ui_container_plugin');
 var Styler = require('../../base/styler');
@@ -16344,8 +16450,7 @@ var $PosterPlugin = PosterPlugin;
   updateSize: function() {
     if (!this.$el)
       return;
-    var playerInfo = PlayerInfo.getInstance();
-    var height = playerInfo.currentSize ? playerInfo.currentSize.height : this.$el.height();
+    var height = PlayerInfo.currentSize ? PlayerInfo.currentSize.height : this.$el.height();
     this.$el.css({fontSize: height});
   },
   render: function() {
@@ -16369,12 +16474,12 @@ var $PosterPlugin = PosterPlugin;
 module.exports = PosterPlugin;
 
 
-},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_container_plugin":"XSLDWT","../../components/mediator":"veeMMc","../../components/player_info":"Pce0iO","jquery":3,"underscore":6}],64:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_container_plugin":"XSLDWT","../../components/mediator":"veeMMc","../../components/player_info":"Rmed05","jquery":3,"underscore":6}],65:[function(require,module,exports){
 "use strict";
 module.exports = require('./spinner_three_bounce');
 
 
-},{"./spinner_three_bounce":65}],65:[function(require,module,exports){
+},{"./spinner_three_bounce":66}],66:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('../../base/ui_container_plugin');
 var Styler = require('../../base/styler');
@@ -16419,12 +16524,12 @@ var $SpinnerThreeBouncePlugin = SpinnerThreeBouncePlugin;
 module.exports = SpinnerThreeBouncePlugin;
 
 
-},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_container_plugin":"XSLDWT"}],66:[function(require,module,exports){
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_container_plugin":"XSLDWT"}],67:[function(require,module,exports){
 "use strict";
 module.exports = require('./stats');
 
 
-},{"./stats":67}],67:[function(require,module,exports){
+},{"./stats":68}],68:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('../../base/container_plugin');
 var $ = require("jquery");
@@ -16522,12 +16627,12 @@ var $StatsPlugin = StatsPlugin;
 module.exports = StatsPlugin;
 
 
-},{"../../base/container_plugin":"6xH8xW","jquery":3}],68:[function(require,module,exports){
+},{"../../base/container_plugin":"6xH8xW","jquery":3}],69:[function(require,module,exports){
 "use strict";
 module.exports = require('./watermark');
 
 
-},{"./watermark":69}],69:[function(require,module,exports){
+},{"./watermark":70}],70:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('../../base/ui_container_plugin');
 var Styler = require('../../base/styler');
@@ -16575,4 +16680,4 @@ var $WaterMarkPlugin = WaterMarkPlugin;
 module.exports = WaterMarkPlugin;
 
 
-},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_container_plugin":"XSLDWT"}]},{},[2,47])
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_container_plugin":"XSLDWT"}]},{},[2,46])
