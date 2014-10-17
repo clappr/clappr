@@ -54,7 +54,7 @@
   .media-control-icon:hover {
     color: white;
     opacity: 0.75;
-    text-shadow: rgba(255,255,255,0.5) 0 0 15px;
+    text-shadow: rgba(255,255,255,0.8) 0 0 15px;
     @include transition(all, 0.1s, ease-out);
   }
 
@@ -62,7 +62,6 @@
 
   &.media-control-hide {
     bottom: -50px;
-
     .media-control-background[data-background] {
       opacity: 0;
     }
