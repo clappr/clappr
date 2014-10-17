@@ -1,5 +1,5 @@
 var Container = require('../src/components/container');
-var FakePlayback = require('./fakes/fake_playback');
+var FakePlayback = require('./fakes/playback');
 var Stats = require('../src/plugins/stats');
 
 describe('StatsPlugin', function() {

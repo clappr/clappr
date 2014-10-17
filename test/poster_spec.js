@@ -1,4 +1,4 @@
-var FakePlayback = require('./fakes/fake_playback');
+var FakePlayback = require('./fakes/playback');
 var Container = require('../src/components/container');
 var Poster = require('../src/plugins/poster');
 

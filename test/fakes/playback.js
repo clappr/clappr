@@ -1,6 +1,6 @@
-var Events = require('../../src/base/events');
+var Playback = require('../../src/base/playback');
 
-class FakePlayback extends Events {
+class FakePlayback extends Playback {
   constructor() {
     this.settings = {
       left: ['playpause', 'volume'],
