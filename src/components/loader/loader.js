@@ -26,7 +26,6 @@ var DVRControls = require('../../plugins/dvr_controls');
 class Loader extends BaseObject {
   constructor(externalPlugins) {
     super()
-    this.playerInfo = PlayerInfo.getInstance()
     this.playbackPlugins = [FlashVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, HLSVideoPlayback, NoOp]
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin]
     this.corePlugins = [BackgroundButton, DVRControls]
@@ -40,7 +39,7 @@ class Loader extends BaseObject {
     if (plugins.playback) { this.playbackPlugins = _.uniq(plugins.playback.concat(this.playbackPlugins), pluginName) }
     if (plugins.container) { this.containerPlugins = _.uniq(plugins.container.concat(this.containerPlugins), pluginName) }
     if (plugins.core) { this.corePlugins = _.uniq(plugins.core.concat(this.corePlugins), pluginName) }
-    this.playerInfo.playbackPlugins = this.playbackPlugins
+    PlayerInfo.playbackPlugins = this.playbackPlugins
   }
 
   getPlugin(name) {

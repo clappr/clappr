@@ -35,8 +35,7 @@ class Core extends UIObject {
 
   constructor(options) {
     super(options)
-    this.playerInfo = PlayerInfo.getInstance()
-    this.playerInfo.options = options
+    PlayerInfo.options = options
     this.options = options
     this.plugins = []
     this.containers = []
@@ -70,7 +69,7 @@ class Core extends UIObject {
   setFullscreen() {
     this.$el.addClass('fullscreen')
     this.$el.removeAttr('style')
-    this.playerInfo.currentSize = { width: $(window).width(), height: $(window).height() }
+    PlayerInfo.currentSize = { width: $(window).width(), height: $(window).height() }
   }
 
   setPlayerSize() {
@@ -84,7 +83,7 @@ class Core extends UIObject {
     }
     this.$el.css({ width: width, height: height })
     this.$el.removeClass('fullscreen')
-    this.playerInfo.currentSize = { width: width, height: height }
+    PlayerInfo.currentSize = { width: width, height: height }
   }
 
   resolveOnContainersReady(containers) {

@@ -83,8 +83,7 @@ class PosterPlugin extends UIContainerPlugin {
 
   updateSize() {
     if (!this.$el) return
-    var playerInfo = PlayerInfo.getInstance()
-    var height = playerInfo.currentSize ? playerInfo.currentSize.height : this.$el.height()
+    var height = PlayerInfo.currentSize ? PlayerInfo.currentSize.height : this.$el.height()
     this.$el.css({ fontSize: height })
   }
 
