@@ -56,7 +56,6 @@ class DVRControls extends UICorePlugin {
   }
 
   shouldRender() {
-    var settings = this.core.mediaControl.settings
     var useDvrControls = this.core.options.useDvrControls === undefined || !!this.core.options.useDvrControls
     return useDvrControls && this.core.mediaControl.container.getPlaybackType() === 'live'
   }
