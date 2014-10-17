@@ -54,7 +54,6 @@ class BackgroundButton extends UICorePlugin {
 
   shouldRender() {
     //this plugin should render only if there is a playpause icon in media control
-    var settings = this.core.mediaControl.settings
     var useBackgroundButton = this.core.options.useBackgroundButton === undefined || !!this.core.options.useBackgroundButton
     return useBackgroundButton && (this.core.mediaControl.$el.find('[data-playstop]').length > 0 || this.core.mediaControl.$el.find('[data-playpause]').length > 0)
   }
