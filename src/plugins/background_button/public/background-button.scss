@@ -8,6 +8,7 @@
   width: 100%;
   background-color: rgba(0, 0, 0, 0.2);
   @include transition(all, 0.4s, ease-out);
+  cursor: pointer;
 
   &.hide[data-background-button] {
     opacity: 0;
