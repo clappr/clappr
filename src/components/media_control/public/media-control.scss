@@ -140,6 +140,8 @@
         width: 32px;
         height: 100%;
         &:before { content:"\\e006"; }
+
+        &.shrink:before { content:"\\e007"; }
       }
 
       &[data-hd-indicator] {
@@ -150,7 +152,7 @@
         width: 32px;
         height: 100%;
         opacity: 0;
-        &:before { content:"\\e007"; }
+        &:before { content:"\\e008"; }
         &.enabled {
           opacity: 1.0;
         }
