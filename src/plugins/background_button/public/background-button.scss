@@ -38,7 +38,8 @@
       @include font-smoothing(antialiased);
 
       &:hover {
-        text-shadow: rgba(255,255,255,0.5) 0 0 15px;
+        opacity: 1;
+        text-shadow: rgba(255,255,255,0.8) 0 0 15px;
       }
 
       &.playing {
