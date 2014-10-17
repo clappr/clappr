@@ -30,9 +30,10 @@ function format(filePath) {
   return {name: name, content: content};
 }
 
-function copyAssets(asset) {
+function copyFiles(asset) {
+  var targetDir = path.extname(asset) === '.js' ? 'dist/' : 'dist/assets';
   fs.createReadStream(asset)
-    .pipe(fs.createWriteStream('dist/assets/' + path.basename(asset)));
+    .pipe(fs.createWriteStream(path.join(targetDir, path.basename(asset))));
 }
 
 var templates = glob('build/{plugins,playbacks,components}/**/*.html').map(format);
@@ -42,4 +43,6 @@ fs.writeFileSync(jstFile, codeTemplate({templates: templates, styles: styles}));
 
 mkdirp('dist/assets/');
 
-glob('src/{plugins,playbacks,components}/**/*.{png,jpeg,jpg,gif,swf,eot,ttf,svg}').map(copyAssets);
+glob('src/{plugins,playbacks,components}/**/*.{png,jpeg,jpg,gif,swf,eot,ttf,svg}').map(copyFiles);
+glob('./node_modules/jquery/dist/*.js').map(copyFiles);
+glob('./node_modules/underscore/*.js').map(copyFiles);
