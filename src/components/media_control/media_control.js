@@ -14,6 +14,7 @@ var UIObject = require('../../base/ui_object')
 var Utils = require('../../base/utils')
 var Mousetrap = require('mousetrap')
 var SeekTime = require('../seek_time')
+var Mediator = require('../../components/mediator')
 
 var transitionEvents = 'webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend'
 
@@ -73,6 +74,7 @@ class MediaControl extends UIObject {
     }
     $(document).bind('mouseup', (event) => this.stopDrag(event))
     $(document).bind('mousemove', (event) => this.updateDrag(event))
+    Mediator.on('player:resize', () => this.playerResize())
   }
 
   addEventListeners() {
@@ -135,6 +137,14 @@ class MediaControl extends UIObject {
   mouseleaveOnSeekBar(event) {
     this.$seekBarHover.hide()
     this.trigger('mediacontrol:mouseleave:seekbar', event);
+  }
+
+  playerResize() {
+    if (Utils.Fullscreen.isFullscreen()) {
+      this.$fullscreenToggle.addClass('shrink')
+    } else {
+      this.$fullscreenToggle.removeClass('shrink')
+    }
   }
 
   togglePlayPause() {
@@ -350,6 +360,7 @@ class MediaControl extends UIObject {
   createCachedElements() {
     this.$playPauseToggle = this.$el.find('button.media-control-button[data-playpause]')
     this.$playStopToggle = this.$el.find('button.media-control-button[data-playstop]')
+    this.$fullscreenToggle = this.$el.find('button.media-control-button[data-fullscreen]')
     this.$seekBarContainer = this.$el.find('.bar-container[data-seekbar]')
     this.$seekBarLoaded = this.$el.find('.bar-fill-1[data-seekbar]')
     this.$seekBarPosition = this.$el.find('.bar-fill-2[data-seekbar]')
@@ -436,7 +447,6 @@ class MediaControl extends UIObject {
       this.currentSeekPercentage = 0
     }
     this.setSeekPercentage(this.currentSeekPercentage)
-
 
     this.$el.ready(() => {
       if (!this.container.settings.seekEnabled) {
