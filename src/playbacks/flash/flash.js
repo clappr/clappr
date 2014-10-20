@@ -70,10 +70,10 @@ class Flash extends UIObject {
   }
 
   addListeners() {
-    Mediator.on(this.uniqueId + ':progress', () => this.progress())
-    Mediator.on(this.uniqueId + ':timeupdate', () => this.updateTime())
-    Mediator.on(this.uniqueId + ':statechanged', () => this.checkState())
-    Mediator.on(this.uniqueId + ':flashready', () => this.bootstrap())
+    Mediator.on(this.uniqueId + ':progress', this.progress, this)
+    Mediator.on(this.uniqueId + ':timeupdate', this.updateTime, this)
+    Mediator.on(this.uniqueId + ':statechanged', this.checkState, this)
+    Mediator.on(this.uniqueId + ':flashready', this.bootstrap, this)
   }
 
   stopListening() {
@@ -81,6 +81,7 @@ class Flash extends UIObject {
     Mediator.off(this.uniqueId + ':progress')
     Mediator.off(this.uniqueId + ':timeupdate')
     Mediator.off(this.uniqueId + ':statechanged')
+    Mediator.off(this.uniqueId + ':flashready')
   }
 
   checkState() {
