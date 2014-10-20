@@ -25,6 +25,10 @@ class UICorePlugin extends UIObject {
     this.enabled = false
   }
 
+  destroy() {
+    this.remove()
+  }
+
   render() {
     this.$el.html(this.template())
     this.$el.append(this.styler.getStyleFor(this.name))

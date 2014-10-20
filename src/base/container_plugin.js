@@ -15,6 +15,10 @@ class ContainerPlugin extends BaseObject {
   }
 
   bindEvents() {}
+
+  destroy() {
+    this.stopListening()
+  }
 }
 
 module.exports = ContainerPlugin

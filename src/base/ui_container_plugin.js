@@ -24,6 +24,10 @@ class UIContainerPlugin extends UIObject {
   }
 
   bindEvents() {}
+
+  destroy() {
+    this.remove()
+  }
 }
 
 module.exports = UIContainerPlugin

@@ -7,6 +7,8 @@ class CorePlugin extends BaseObject {
   }
 
   getExternalInterface() { return {} }
+
+  destroy() {}
 }
 
 module.exports = CorePlugin
