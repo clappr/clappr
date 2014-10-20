@@ -72,6 +72,7 @@ class Container extends UIObject {
   destroy() {
     this.trigger('container:destroyed', this, this.name);
     this.playback.destroy();
+    _(this.plugins).each((plugin) => plugin.destroy())
     this.$el.remove();
   }
 
