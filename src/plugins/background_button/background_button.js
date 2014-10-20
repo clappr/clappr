@@ -38,11 +38,6 @@ class BackgroundButton extends UICorePlugin {
     Mediator.on('player:resize', this.updateSize, this)
   }
 
-  destroy() {
-    super()
-    Mediator.off('player:resize', this.updateSize, this)
-  }
-
   stopListening() {
     super()
     Mediator.off('player:resize', this.updateSize, this)
@@ -117,7 +112,6 @@ class BackgroundButton extends UICorePlugin {
 
   updateSize() {
     if (!this.$el) return
-    console.log('background button: updateSize')
     var height = PlayerInfo.currentSize ? PlayerInfo.currentSize.height : this.$el.height()
     this.$el.css({ fontSize: height })
     this.$buttonWrapper.css({ marginTop: -(this.$buttonWrapper.height() / 2) })
