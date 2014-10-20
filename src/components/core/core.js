@@ -108,6 +108,7 @@ class Core extends UIObject {
 
   destroy() {
     _(this.containers).each((container) => container.destroy())
+    _(this.plugins).each((plugin) => plugin.destroy())
     this.$el.remove()
   }
 
