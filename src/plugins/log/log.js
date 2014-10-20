@@ -1,4 +1,5 @@
-var $ = require('jquery');
+var $ = require('jquery')
+var Mousetrap = require('mousetrap')
 
 var BOLD = 'font-weight: bold; font-size: 13px;';
 var INFO = 'color: green;' + BOLD;
@@ -6,11 +7,7 @@ var DEBUG = 'color: #222;' + BOLD;
 var ERROR = 'color: red;' + BOLD;
 var DEFAULT = '';
 
-$(document).keydown(function(e) {
-  if(e.ctrlKey && e.shiftKey && e.keyCode === 68) {
-    window.DEBUG = !window.DEBUG;
-  }
-});
+Mousetrap.bind(['ctrl+shift+d'], () => window.DEBUG = !window.DEBUG)
 
 var Log = function(klass) {
   this.klass = klass || 'Logger';
