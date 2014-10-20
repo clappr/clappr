@@ -85,6 +85,7 @@ class PosterPlugin extends UIContainerPlugin {
     if (!this.$el) return
     var height = PlayerInfo.currentSize ? PlayerInfo.currentSize.height : this.$el.height()
     this.$el.css({ fontSize: height })
+    this.$playButton.css({ marginTop: -(this.$playButton.height() / 2) })
   }
 
   render() {
