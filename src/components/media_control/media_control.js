@@ -230,6 +230,7 @@ class MediaControl extends UIObject {
 
   toggleFullscreen() {
     this.trigger('mediacontrol:fullscreen', this.name)
+    this.resetKeepVisible()
   }
 
   setContainer(container) {
