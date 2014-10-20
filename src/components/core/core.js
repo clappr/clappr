@@ -72,6 +72,13 @@ class Core extends UIObject {
     PlayerInfo.currentSize = { width: $(window).width(), height: $(window).height() }
   }
 
+  resize(height, width) {
+    var size = { width: width, height: height }
+    this.$el.css(size)
+    PlayerInfo.currentSize = size
+    Mediator.trigger('player:resize', size)
+  }
+
   setPlayerSize() {
     var hasStretchParams = !!this.options.stretchWidth && !!this.options.stretchHeight
     var canStretch = this.options.stretchWidth <= $(window).width() && this.options.stretchHeight <= ($(window).height() * 0.73)
