@@ -44,7 +44,12 @@ class PosterPlugin extends UIContainerPlugin {
     this.listenTo(this.container, 'container:play', this.onPlay)
     this.listenTo(this.container, 'container:stop', this.onStop)
     this.listenTo(this.container, 'container:ended', this.onStop)
-    Mediator.on('player:resize', () => this.updateSize())
+    Mediator.on('player:resize', this.updateSize, this)
+  }
+
+  destroy() {
+    super()
+    Mediator.off('player:resize', this.updateSize, this)
   }
 
   onBuffering() {
