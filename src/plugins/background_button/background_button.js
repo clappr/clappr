@@ -35,7 +35,17 @@ class BackgroundButton extends UICorePlugin {
     this.listenTo(this.core.mediaControl, 'mediacontrol:hide', this.hide)
     this.listenTo(this.core.mediaControl, 'mediacontrol:playing', this.playing)
     this.listenTo(this.core.mediaControl, 'mediacontrol:notplaying', this.notplaying)
-    Mediator.on('player:resize', () => this.updateSize())
+    Mediator.on('player:resize', this.updateSize, this)
+  }
+
+  destroy() {
+    super()
+    Mediator.off('player:resize', this.updateSize, this)
+  }
+
+  stopListening() {
+    super()
+    Mediator.off('player:resize', this.updateSize, this)
   }
 
   settingsUpdate() {
