@@ -218,11 +218,9 @@ class Core extends UIObject {
     this.$el.append(style)
     this.$el.append(this.mediaControl.render().el)
 
-    this.$el.ready(() => {
-      this.options.width = this.options.width || this.$el.width()
-      this.options.height = this.options.height || this.$el.height()
-      this.updateSize()
-    })
+    this.options.width = this.options.width || this.$el.width()
+    this.options.height = this.options.height || this.$el.height()
+    this.updateSize()
 
     return this
   }
