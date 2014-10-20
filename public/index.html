@@ -1,28 +1,86 @@
-<!DOCTYPE HTML>
 <html>
-<head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-  <script type="text/javascript" charset="utf-8" src="underscore.js"> </script>
-  <script type="text/javascript" charset="utf-8" src="jquery.js"> </script>
-  <script type="text/javascript" charset="utf-8" src="clappr.js"> </script>
-  <title>hls test</title>
-  <script type="text/javascript" charset="utf-8">
-window.onload = function() {
-    p = new Clappr.Player({
-      sources: ['http://clappr.io/highline.mp4'],
-//      sources: ['http://origin.live.hls.globoi.com/video/gnews/playlist.m3u8'],
-      poster: 'http://clappr.io/poster.png',
-      height: 360,
-      width: 640,
-    });
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="stylesheets/bootstrap.min.css" type="text/css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="stylesheets/bootstrap-theme.min.css" type="text/css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="stylesheets/style.css" type="text/css" media="screen" charset="utf-8">
+    <link rel="shortcut icon" type="image/png" href="i/favico.png">
+  </head>
+  <body>
+    <header class="header">
+      <span>Clappr</span>
+      <ul>
+        <li><a href="https://github.com/globocom/clappr/blob/master/README.md">docs</a></li>
+      </ul>
+    </header>
+    <section class="container">
+      <div class="main">
+        <div id="output">
+          <div id="player-wrapper" class="player"></div>
+        </div>
+      </div>
+      <div class="sidebar">
+        <div id="editor">var playerElement = document.getElementById("player-wrapper");
 
-    p.attachTo(document.getElementById('player-wrapper'));
-}
-  </script>
-</head>
-<body>
-  <center>
-    <div id="player-wrapper"></div>
-  </center>
-</body>
+var player = new Clappr.Player({
+  source: 'http://clappr.io/highline.mp4',
+  poster: 'http://clappr.io/poster.png',
+  mute: true,
+  height: 360,
+  width: 640
+});
+
+player.attachTo(playerElement);
+        </div>
+        <button class="run btn btn-primary">Run</button>
+        <div id="console"> </div>
+      </div>
+    </section>
+    <footer class="footer"></footer>
+    <script type="text/javascript" charset="utf-8" src="j/vendor/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="j/vendor/underscore-min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="j/main.js"></script>
+    <script type="text/javascript" charset="utf-8" src="j/editor/ace.js"></script>
+    <script type="text/javascript" charset="utf-8" src="clappr.min.js"></script>
+    <script>
+      var urlParams;
+      (function() {
+        window.onpopstate = function () {
+          var match,
+              pl     = /\+/g,  // Regex for replacing addition symbol with a space
+              search = /([^&=]+)=?([^&]*)/g,
+              decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+              query  = window.location.search.substring(1);
+
+          urlParams = {};
+          while (match = search.exec(query))
+            urlParams[decode(match[1])] = decode(match[2]);
+        }
+        window.onpopstate();
+      })();
+
+      var playerElement = document.getElementById("player-wrapper");
+
+      var player = new Clappr.Player({
+        source: 'http://clappr.io/highline.mp4',
+        poster: 'http://clappr.io/poster.png',
+        mute: true,
+        height: 360,
+        width: 640
+      });
+
+      player.attachTo(playerElement);
+
+      //editor
+      window.onload = function() {
+        var editor = ace.edit("editor");
+        var session = editor.getSession();
+
+        editor.setTheme("ace/theme/katzenmilch");
+        session.setMode("ace/mode/javascript");
+        session.setTabSize(2);
+        session.setUseSoftTabs(true);
+      }
+    </script>
+  </body>
 </html>
