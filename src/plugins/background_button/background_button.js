@@ -132,8 +132,8 @@ class BackgroundButton extends UICorePlugin {
     this.$buttonWrapper = this.$el.find('.background-button-wrapper[data-background-button]')
     this.$buttonIcon = this.$el.find('.background-button-icon[data-background-button]')
     this.shouldStop = this.$playStopButton.length > 0
-    this.$el.ready(() => this.updateSize())
     this.core.$el.append(this.$el)
+    process.nextTick(() => this.updateSize())
     if (this.enabled) {
       this.$playPauseButton.hide()
       this.$playStopButton.hide()
