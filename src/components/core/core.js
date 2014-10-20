@@ -44,7 +44,6 @@ class Core extends UIObject {
     document.addEventListener('fullscreenchange', () => this.exit())
     document.addEventListener('MSFullscreenChange', () => this.exit())
     document.addEventListener('mozfullscreenchange', () => this.exit())
-    $(window).resize(() => this.updateSize())
   }
 
   createContainers(options) {
@@ -73,24 +72,15 @@ class Core extends UIObject {
   }
 
   resize(height, width) {
-    var size = { width: width, height: height }
+    var size = { height: height, width: width }
     this.$el.css(size)
     PlayerInfo.currentSize = size
     Mediator.trigger('player:resize', size)
   }
 
   setPlayerSize() {
-    var hasStretchParams = !!this.options.stretchWidth && !!this.options.stretchHeight
-    var canStretch = this.options.stretchWidth <= $(window).width() && this.options.stretchHeight <= ($(window).height() * 0.73)
-    var width, height
-    if (hasStretchParams && canStretch) {
-      [width, height] = [this.options.stretchWidth, this.options.stretchHeight]
-    } else {
-      [width, height] = [this.options.width, this.options.height]
-    }
-    this.$el.css({ width: width, height: height })
+    this.resize(this.options.height, this.options.width)
     this.$el.removeClass('fullscreen')
-    PlayerInfo.currentSize = { width: width, height: height }
   }
 
   resolveOnContainersReady(containers) {
