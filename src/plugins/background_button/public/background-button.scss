@@ -18,11 +18,11 @@
     position: absolute;
     overflow: hidden;
     width: 100%;
-    height: 25%;
+    height: 20%;
     line-height: 100%;
     font-size: 20%;
-    top: 45%;
-    margin-top: -5%;
+    top: 50%;
+    // margin-top: -10%;
     text-align: center;
 
     .background-button-icon[data-background-button] {
@@ -33,7 +33,6 @@
       line-height: 1;
       letter-spacing: 0;
       speak: none;
-      font-size: 90px;
       color: white;
       opacity: 0.75;
       @include font-smoothing(antialiased);

@@ -2,6 +2,9 @@ var UICorePlugin = require('../../base/ui_core_plugin')
 var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
 
+var Mediator = require('../../components/mediator')
+var PlayerInfo = require('../../components/player_info')
+
 class BackgroundButton extends UICorePlugin {
   get template() { return JST.background_button }
   get name() { return 'background_button' }
@@ -32,6 +35,7 @@ class BackgroundButton extends UICorePlugin {
     this.listenTo(this.core.mediaControl, 'mediacontrol:hide', this.hide)
     this.listenTo(this.core.mediaControl, 'mediacontrol:playing', this.playing)
     this.listenTo(this.core.mediaControl, 'mediacontrol:notplaying', this.notplaying)
+    Mediator.on('player:resize', () => this.updateSize())
   }
 
   settingsUpdate() {
@@ -101,14 +105,24 @@ class BackgroundButton extends UICorePlugin {
 
   getExternalInterface() {}
 
+  updateSize() {
+    if (!this.$el) return
+    console.log('background button: updateSize')
+    var height = PlayerInfo.currentSize ? PlayerInfo.currentSize.height : this.$el.height()
+    this.$el.css({ fontSize: height })
+    this.$buttonWrapper.css({ marginTop: -(this.$buttonWrapper.height() / 2) })
+  }
+
   render() {
     var style = Styler.getStyleFor(this.name)
     this.$el.html(this.template())
     this.$el.append(style)
     this.$playPauseButton = this.core.mediaControl.$el.find('[data-playpause]')
     this.$playStopButton = this.core.mediaControl.$el.find('[data-playstop]')
+    this.$buttonWrapper = this.$el.find('.background-button-wrapper[data-background-button]')
     this.$buttonIcon = this.$el.find('.background-button-icon[data-background-button]')
     this.shouldStop = this.$playStopButton.length > 0
+    this.$el.ready(() => this.updateSize())
     this.core.$el.append(this.$el)
     if (this.enabled) {
       this.$playPauseButton.hide()
