@@ -73,8 +73,8 @@ class PosterPlugin extends UIContainerPlugin {
   }
 
   showPlayButton() {
-    this.updateSize()
     this.$playButton.show()
+    this.updateSize()
   }
 
   clicked() {
@@ -85,21 +85,33 @@ class PosterPlugin extends UIContainerPlugin {
     if (!this.$el) return
     var height = PlayerInfo.currentSize ? PlayerInfo.currentSize.height : this.$el.height()
     this.$el.css({ fontSize: height })
-    this.$playButton.css({ marginTop: -(this.$playButton.height() / 2) })
+    if (this.$playWrapper.is(':visible')) {
+      this.$playWrapper.css({ marginTop: -(this.$playWrapper.height() / 2) })
+      if (!this.options.hidePlayButton) {
+        this.$playButton.show()
+      }
+    } else {
+      this.$playButton.hide()
+    }
+
   }
 
   render() {
     var style = Styler.getStyleFor(this.name)
     this.$el.html(this.template())
     this.$el.append(style)
-    this.container.$el.append(this.el)
-    this.$el.ready(() => this.updateSize())
-    this.$playButton = $(this.$el.find('.play-wrapper'))
+    this.$playButton = this.$el.find('.poster-icon')
+    this.$playWrapper = this.$el.find('.play-wrapper')
     if(this.options.poster !== undefined) {
       var imgEl = $('<img data-poster class="poster-background"></img>');
       imgEl.attr('src', this.options.poster);
       this.$el.prepend(imgEl);
     }
+    this.container.$el.append(this.el)
+    if (!!this.options.hidePlayButton) {
+      this.hidePlayButton()
+    }
+    process.nextTick(() => this.updateSize())
     return this
   }
 }
