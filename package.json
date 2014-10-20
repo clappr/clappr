@@ -15,7 +15,7 @@
   "bugs": {
     "url": "https://github.com/globocom/clappr/issues"
   },
-  "browserify-shim": "./src/shim.js",
+  "browserify-shim": "./shim.js",
   "browserify": {
     "transform": [
       "browserify-shim"
