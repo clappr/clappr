@@ -65,11 +65,9 @@ class BackgroundButton extends UICorePlugin {
 
   click(element) {
     this.core.mediaControl.show()
-    if (element === this.$buttonIcon) {
-      if (this.shouldStop) {
-          this.core.mediaControl.togglePlayStop()
-      }
-    } else {
+    if (element === this.$buttonIcon && this.shouldStop) {
+      this.core.mediaControl.togglePlayStop()
+    } else if (element !== this.$buttonIcon && !this.shouldStop) {
       this.core.mediaControl.togglePlayPause()
     }
   }
@@ -135,6 +133,8 @@ class BackgroundButton extends UICorePlugin {
     }
     if (this.shouldStop) {
       this.$buttonIcon.addClass('playstop')
+    } else {
+      this.$el.addClass('pointer-enabled')
     }
     if (this.core.mediaControl.isVisible()) {
       this.show()
