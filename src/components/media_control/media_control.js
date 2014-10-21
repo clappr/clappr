@@ -296,6 +296,7 @@ class MediaControl extends UIObject {
     var pos = offsetX / this.$seekBarContainer.width() * 100
     pos = Math.min(100, Math.max(pos, 0))
     this.container.setCurrentTime(pos)
+    this.setSeekPercentage(pos)
   }
 
   setKeepVisible() {
