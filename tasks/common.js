@@ -31,4 +31,3 @@ gulp.task('compile-js', function() {
   .pipe(rename('clappr.js'))
   .pipe(gulp.dest('./dist'))
 });
-
