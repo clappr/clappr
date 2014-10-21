@@ -15,20 +15,13 @@
 
 .media-control[data-media-control] {
   position: absolute;
-  border-radius: 0px;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 100%;
-  min-width: 60%;
-  height: 40px;
+  width: 100%;
+  height: 100%;
   z-index: 9999;
 
   .media-control-background[data-background] {
     position: absolute;
-    height: 150px;
+    height: 40%;
     width: 100%;
     bottom: 0;
     @include background-image(linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.9)));
@@ -58,14 +51,12 @@
     @include transition(all, 0.1s, ease-out);
   }
 
-  @include transition(all, 0.4s, ease-out);
-
   &.media-control-hide {
-    bottom: -50px;
     .media-control-background[data-background] {
       opacity: 0;
     }
     .media-control-layer[data-controls] {
+      bottom: -50px;
       .bar-container[data-seekbar]{
         .bar-scrubber[data-seekbar] {
           opacity: 0;
@@ -75,10 +66,12 @@
   }
 
   .media-control-layer[data-controls] {
-    position: relative;
-    top: 10%;
-    height: 80%;
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
+    height: 32px;
     vertical-align: middle;
+    @include transition(all, 0.4s, ease-out);
 
     .media-control-left-panel[data-media-control] {
       position: absolute;
@@ -198,7 +191,7 @@
         position: relative;
       }
       &[data-duration] {
-        &:before { content: "|"; margin-right: 3px; }
+        &:before { content: "|"; margin: 0 3px; }
         color: rgba(255, 255, 255, 0.3);
       }
     }

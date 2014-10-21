@@ -19,6 +19,7 @@ class BackgroundButton extends UICorePlugin {
       'data-background-button': '',
     }
   }
+
   constructor(core) {
     super(core)
     this.core = core
@@ -31,8 +32,7 @@ class BackgroundButton extends UICorePlugin {
     this.listenTo(this.core.mediaControl.container, 'container:settingsupdate', this.settingsUpdate)
     this.listenTo(this.core.mediaControl.container, 'container:dvr', this.settingsUpdate)
     this.listenTo(this.core.mediaControl, 'mediacontrol:containerchanged', this.settingsUpdate)
-    this.listenTo(this.core.mediaControl, 'mediacontrol:show', this.show)
-    this.listenTo(this.core.mediaControl, 'mediacontrol:hide', this.hide)
+    this.listenTo(this.core.mediaControl, 'mediacontrol:show', this.updateSize)
     this.listenTo(this.core.mediaControl, 'mediacontrol:playing', this.playing)
     this.listenTo(this.core.mediaControl, 'mediacontrol:notplaying', this.notplaying)
     Mediator.on('player:resize', this.updateSize, this)
@@ -73,14 +73,6 @@ class BackgroundButton extends UICorePlugin {
     } else {
       this.core.mediaControl.togglePlayPause()
     }
-  }
-
-  show() {
-    this.$el.removeClass('hide')
-  }
-
-  hide() {
-    this.$el.addClass('hide')
   }
 
   enable() {
@@ -126,7 +118,8 @@ class BackgroundButton extends UICorePlugin {
     this.$buttonWrapper = this.$el.find('.background-button-wrapper[data-background-button]')
     this.$buttonIcon = this.$el.find('.background-button-icon[data-background-button]')
     this.shouldStop = this.$playStopButton.length > 0
-    this.core.$el.append(this.$el)
+    this.$el.insertBefore(this.core.mediaControl.$el.find('.media-control-layer[data-controls]'))
+    this.$buttonIcon.click(() => this.click(this.$buttonIcon))
     process.nextTick(() => this.updateSize())
     if (this.enabled) {
       this.$playPauseButton.hide()

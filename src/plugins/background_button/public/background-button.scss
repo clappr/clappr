@@ -10,10 +10,6 @@
   @include transition(all, 0.4s, ease-out);
   cursor: pointer;
 
-  &.hide[data-background-button] {
-    opacity: 0;
-  }
-
   .background-button-wrapper[data-background-button] {
     position: absolute;
     overflow: hidden;
@@ -60,5 +56,11 @@
         }
       }
     }
+  }
+}
+
+.media-control.media-control-hide[data-media-control] {
+  .background-button[data-background-button] {
+    opacity: 0;
   }
 }
