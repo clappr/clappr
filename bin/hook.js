@@ -44,5 +44,3 @@ fs.writeFileSync(jstFile, codeTemplate({templates: templates, styles: styles}));
 mkdirp('dist/assets/');
 
 glob('src/{plugins,playbacks,components}/**/*.{png,jpeg,jpg,gif,swf,eot,ttf,svg}').map(copyFiles);
-glob('./node_modules/jquery/dist/*.js').map(copyFiles);
-glob('./node_modules/underscore/*.js').map(copyFiles);
