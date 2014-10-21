@@ -8,11 +8,7 @@ var PlayerInfo = require('../../components/player_info')
 class BackgroundButton extends UICorePlugin {
   get template() { return JST.background_button }
   get name() { return 'background_button' }
-  get events() {
-    return {
-      'click .background-button-icon': 'click'
-    }
-  }
+
   get attributes() {
     return {
       'class': 'background-button',
@@ -67,9 +63,12 @@ class BackgroundButton extends UICorePlugin {
     return useBackgroundButton && (this.core.mediaControl.$el.find('[data-playstop]').length > 0 || this.core.mediaControl.$el.find('[data-playpause]').length > 0)
   }
 
-  click() {
-    if (this.shouldStop) {
-      this.core.mediaControl.togglePlayStop()
+  click(element) {
+    this.core.mediaControl.show()
+    if (element === this.$buttonIcon) {
+      if (this.shouldStop) {
+          this.core.mediaControl.togglePlayStop()
+      }
     } else {
       this.core.mediaControl.togglePlayPause()
     }
@@ -119,6 +118,7 @@ class BackgroundButton extends UICorePlugin {
     this.$buttonIcon = this.$el.find('.background-button-icon[data-background-button]')
     this.shouldStop = this.$playStopButton.length > 0
     this.$el.insertBefore(this.core.mediaControl.$el.find('.media-control-layer[data-controls]'))
+    this.$el.click(() => this.click(this.$el))
     this.$buttonIcon.click(() => this.click(this.$buttonIcon))
     process.nextTick(() => this.updateSize())
     if (this.enabled) {
