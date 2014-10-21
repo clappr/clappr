@@ -1855,7 +1855,7 @@ System.get("traceur-runtime@0.0.42/src/runtime/polyfill-import" + '');
 }).call(this,require("FWaASH"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"FWaASH":1}],3:[function(require,module,exports){
 /*!
- * jQuery JavaScript Library v2.1.1
+ * jQuery JavaScript Library v2.1.0
  * http://jquery.com/
  *
  * Includes Sizzle.js
@@ -1865,7 +1865,7 @@ System.get("traceur-runtime@0.0.42/src/runtime/polyfill-import" + '');
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2014-05-01T17:11Z
+ * Date: 2014-01-23T21:10Z
  */
 
 (function( global, factory ) {
@@ -1915,6 +1915,8 @@ var toString = class2type.toString;
 
 var hasOwn = class2type.hasOwnProperty;
 
+var trim = "".trim;
+
 var support = {};
 
 
@@ -1923,7 +1925,7 @@ var
 	// Use the correct document accordingly with window argument (sandbox)
 	document = window.document,
 
-	version = "2.1.1",
+	version = "2.1.0",
 
 	// Define a local copy of jQuery
 	jQuery = function( selector, context ) {
@@ -1931,10 +1933,6 @@ var
 		// Need init if jQuery is called (just allow error to be thrown if not included)
 		return new jQuery.fn.init( selector, context );
 	},
-
-	// Support: Android<4.1
-	// Make sure we trim BOM and NBSP
-	rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,
 
 	// Matches dashed string for camelizing
 	rmsPrefix = /^-ms-/,
@@ -1966,10 +1964,10 @@ jQuery.fn = jQuery.prototype = {
 	get: function( num ) {
 		return num != null ?
 
-			// Return just the one element from the set
+			// Return a 'clean' array
 			( num < 0 ? this[ num + this.length ] : this[ num ] ) :
 
-			// Return all the elements in a clean array
+			// Return just the object
 			slice.call( this );
 	},
 
@@ -2125,7 +2123,7 @@ jQuery.extend({
 		// parseFloat NaNs numeric-cast false positives (null|true|false|"")
 		// ...but misinterprets leading-number strings, particularly hex literals ("0x...")
 		// subtraction forces infinities to NaN
-		return !jQuery.isArray( obj ) && obj - parseFloat( obj ) >= 0;
+		return obj - parseFloat( obj ) >= 0;
 	},
 
 	isPlainObject: function( obj ) {
@@ -2137,8 +2135,16 @@ jQuery.extend({
 			return false;
 		}
 
-		if ( obj.constructor &&
-				!hasOwn.call( obj.constructor.prototype, "isPrototypeOf" ) ) {
+		// Support: Firefox <20
+		// The try/catch suppresses exceptions thrown when attempting to access
+		// the "constructor" property of certain host objects, ie. |window.location|
+		// https://bugzilla.mozilla.org/show_bug.cgi?id=814622
+		try {
+			if ( obj.constructor &&
+					!hasOwn.call( obj.constructor.prototype, "isPrototypeOf" ) ) {
+				return false;
+			}
+		} catch ( e ) {
 			return false;
 		}
 
@@ -2248,11 +2254,8 @@ jQuery.extend({
 		return obj;
 	},
 
-	// Support: Android<4.1
 	trim: function( text ) {
-		return text == null ?
-			"" :
-			( text + "" ).replace( rtrim, "" );
+		return text == null ? "" : trim.call( text );
 	},
 
 	// results is for internal usage only
@@ -2404,14 +2407,14 @@ function isArraylike( obj ) {
 }
 var Sizzle =
 /*!
- * Sizzle CSS Selector Engine v1.10.19
+ * Sizzle CSS Selector Engine v1.10.16
  * http://sizzlejs.com/
  *
  * Copyright 2013 jQuery Foundation, Inc. and other contributors
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2014-04-18
+ * Date: 2014-01-13
  */
 (function( window ) {
 
@@ -2420,9 +2423,7 @@ var i,
 	Expr,
 	getText,
 	isXML,
-	tokenize,
 	compile,
-	select,
 	outermostContext,
 	sortInput,
 	hasDuplicate,
@@ -2489,23 +2490,17 @@ var i,
 	// Proper syntax: http://www.w3.org/TR/CSS21/syndata.html#value-def-identifier
 	identifier = characterEncoding.replace( "w", "w#" ),
 
-	// Attribute selectors: http://www.w3.org/TR/selectors/#attribute-selectors
-	attributes = "\\[" + whitespace + "*(" + characterEncoding + ")(?:" + whitespace +
-		// Operator (capture 2)
-		"*([*^$|!~]?=)" + whitespace +
-		// "Attribute values must be CSS identifiers [capture 5] or strings [capture 3 or capture 4]"
-		"*(?:'((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\"|(" + identifier + "))|)" + whitespace +
-		"*\\]",
+	// Acceptable operators http://www.w3.org/TR/selectors/#attribute-selectors
+	attributes = "\\[" + whitespace + "*(" + characterEncoding + ")" + whitespace +
+		"*(?:([*^$|!~]?=)" + whitespace + "*(?:(['\"])((?:\\\\.|[^\\\\])*?)\\3|(" + identifier + ")|)|)" + whitespace + "*\\]",
 
-	pseudos = ":(" + characterEncoding + ")(?:\\((" +
-		// To reduce the number of selectors needing tokenize in the preFilter, prefer arguments:
-		// 1. quoted (capture 3; capture 4 or capture 5)
-		"('((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\")|" +
-		// 2. simple (capture 6)
-		"((?:\\\\.|[^\\\\()[\\]]|" + attributes + ")*)|" +
-		// 3. anything else (capture 2)
-		".*" +
-		")\\)|)",
+	// Prefer arguments quoted,
+	//   then not containing pseudos/brackets,
+	//   then attribute selectors/non-parenthetical expressions,
+	//   then anything else
+	// These preferences are here to reduce the number of selectors
+	//   needing tokenize in the PSEUDO preFilter
+	pseudos = ":(" + characterEncoding + ")(?:\\(((['\"])((?:\\\\.|[^\\\\])*?)\\3|((?:\\\\.|[^\\\\()[\\]]|" + attributes.replace( 3, 8 ) + ")*)|.*)\\)|)",
 
 	// Leading and non-escaped trailing whitespace, capturing some non-whitespace characters preceding the latter
 	rtrim = new RegExp( "^" + whitespace + "+|((?:^|[^\\\\])(?:\\\\.)*)" + whitespace + "+$", "g" ),
@@ -2550,7 +2545,7 @@ var i,
 	funescape = function( _, escaped, escapedWhitespace ) {
 		var high = "0x" + escaped - 0x10000;
 		// NaN means non-codepoint
-		// Support: Firefox<24
+		// Support: Firefox
 		// Workaround erroneous numeric interpretation of +"0x"
 		return high !== high || escapedWhitespace ?
 			escaped :
@@ -2946,7 +2941,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 				var m = context.getElementById( id );
 				// Check parentNode to catch when Blackberry 4.6 returns
 				// nodes that are no longer in the document #6963
-				return m && m.parentNode ? [ m ] : [];
+				return m && m.parentNode ? [m] : [];
 			}
 		};
 		Expr.filter["ID"] = function( id ) {
@@ -3026,13 +3021,11 @@ setDocument = Sizzle.setDocument = function( node ) {
 			// setting a boolean content attribute,
 			// since its presence should be enough
 			// http://bugs.jquery.com/ticket/12359
-			div.innerHTML = "<select msallowclip=''><option selected=''></option></select>";
+			div.innerHTML = "<select t=''><option selected=''></option></select>";
 
-			// Support: IE8, Opera 11-12.16
+			// Support: IE8, Opera 10-12
 			// Nothing should be selected when empty strings follow ^= or $= or *=
-			// The test attribute must be unknown in Opera but "safe" for WinRT
-			// http://msdn.microsoft.com/en-us/library/ie/hh465388.aspx#attribute_section
-			if ( div.querySelectorAll("[msallowclip^='']").length ) {
+			if ( div.querySelectorAll("[t^='']").length ) {
 				rbuggyQSA.push( "[*^$]=" + whitespace + "*(?:''|\"\")" );
 			}
 
@@ -3075,8 +3068,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 		});
 	}
 
-	if ( (support.matchesSelector = rnative.test( (matches = docElem.matches ||
-		docElem.webkitMatchesSelector ||
+	if ( (support.matchesSelector = rnative.test( (matches = docElem.webkitMatchesSelector ||
 		docElem.mozMatchesSelector ||
 		docElem.oMatchesSelector ||
 		docElem.msMatchesSelector) )) ) {
@@ -3257,7 +3249,7 @@ Sizzle.matchesSelector = function( elem, expr ) {
 		} catch(e) {}
 	}
 
-	return Sizzle( expr, document, null, [ elem ] ).length > 0;
+	return Sizzle( expr, document, null, [elem] ).length > 0;
 };
 
 Sizzle.contains = function( context, elem ) {
@@ -3386,7 +3378,7 @@ Expr = Sizzle.selectors = {
 			match[1] = match[1].replace( runescape, funescape );
 
 			// Move the given value to match[3] whether quoted or unquoted
-			match[3] = ( match[3] || match[4] || match[5] || "" ).replace( runescape, funescape );
+			match[3] = ( match[4] || match[5] || "" ).replace( runescape, funescape );
 
 			if ( match[2] === "~=" ) {
 				match[3] = " " + match[3] + " ";
@@ -3429,15 +3421,15 @@ Expr = Sizzle.selectors = {
 
 		"PSEUDO": function( match ) {
 			var excess,
-				unquoted = !match[6] && match[2];
+				unquoted = !match[5] && match[2];
 
 			if ( matchExpr["CHILD"].test( match[0] ) ) {
 				return null;
 			}
 
 			// Accept quoted arguments as-is
-			if ( match[3] ) {
-				match[2] = match[4] || match[5] || "";
+			if ( match[3] && match[4] !== undefined ) {
+				match[2] = match[4];
 
 			// Strip excess characters from unquoted arguments
 			} else if ( unquoted && rpseudo.test( unquoted ) &&
@@ -3842,7 +3834,7 @@ function setFilters() {}
 setFilters.prototype = Expr.filters = Expr.pseudos;
 Expr.setFilters = new setFilters();
 
-tokenize = Sizzle.tokenize = function( selector, parseOnly ) {
+function tokenize( selector, parseOnly ) {
 	var matched, match, tokens, type,
 		soFar, groups, preFilters,
 		cached = tokenCache[ selector + " " ];
@@ -3907,7 +3899,7 @@ tokenize = Sizzle.tokenize = function( selector, parseOnly ) {
 			Sizzle.error( selector ) :
 			// Cache the tokens
 			tokenCache( selector, groups ).slice( 0 );
-};
+}
 
 function toSelector( tokens ) {
 	var i = 0,
@@ -3984,15 +3976,6 @@ function elementMatcher( matchers ) {
 			return true;
 		} :
 		matchers[0];
-}
-
-function multipleContexts( selector, contexts, results ) {
-	var i = 0,
-		len = contexts.length;
-	for ( ; i < len; i++ ) {
-		Sizzle( selector, contexts[i], results );
-	}
-	return results;
 }
 
 function condense( unmatched, map, filter, context, xml ) {
@@ -4263,7 +4246,7 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 		superMatcher;
 }
 
-compile = Sizzle.compile = function( selector, match /* Internal Use Only */ ) {
+compile = Sizzle.compile = function( selector, group /* Internal Use Only */ ) {
 	var i,
 		setMatchers = [],
 		elementMatchers = [],
@@ -4271,12 +4254,12 @@ compile = Sizzle.compile = function( selector, match /* Internal Use Only */ ) {
 
 	if ( !cached ) {
 		// Generate a function of recursive functions that can be used to check each element
-		if ( !match ) {
-			match = tokenize( selector );
+		if ( !group ) {
+			group = tokenize( selector );
 		}
-		i = match.length;
+		i = group.length;
 		while ( i-- ) {
-			cached = matcherFromTokens( match[i] );
+			cached = matcherFromTokens( group[i] );
 			if ( cached[ expando ] ) {
 				setMatchers.push( cached );
 			} else {
@@ -4286,83 +4269,74 @@ compile = Sizzle.compile = function( selector, match /* Internal Use Only */ ) {
 
 		// Cache the compiled function
 		cached = compilerCache( selector, matcherFromGroupMatchers( elementMatchers, setMatchers ) );
-
-		// Save selector and tokenization
-		cached.selector = selector;
 	}
 	return cached;
 };
 
-/**
- * A low-level selection function that works with Sizzle's compiled
- *  selector functions
- * @param {String|Function} selector A selector or a pre-compiled
- *  selector function built with Sizzle.compile
- * @param {Element} context
- * @param {Array} [results]
- * @param {Array} [seed] A set of elements to match against
- */
-select = Sizzle.select = function( selector, context, results, seed ) {
+function multipleContexts( selector, contexts, results ) {
+	var i = 0,
+		len = contexts.length;
+	for ( ; i < len; i++ ) {
+		Sizzle( selector, contexts[i], results );
+	}
+	return results;
+}
+
+function select( selector, context, results, seed ) {
 	var i, tokens, token, type, find,
-		compiled = typeof selector === "function" && selector,
-		match = !seed && tokenize( (selector = compiled.selector || selector) );
+		match = tokenize( selector );
 
-	results = results || [];
+	if ( !seed ) {
+		// Try to minimize operations if there is only one group
+		if ( match.length === 1 ) {
 
-	// Try to minimize operations if there is no seed and only one group
-	if ( match.length === 1 ) {
+			// Take a shortcut and set the context if the root selector is an ID
+			tokens = match[0] = match[0].slice( 0 );
+			if ( tokens.length > 2 && (token = tokens[0]).type === "ID" &&
+					support.getById && context.nodeType === 9 && documentIsHTML &&
+					Expr.relative[ tokens[1].type ] ) {
 
-		// Take a shortcut and set the context if the root selector is an ID
-		tokens = match[0] = match[0].slice( 0 );
-		if ( tokens.length > 2 && (token = tokens[0]).type === "ID" &&
-				support.getById && context.nodeType === 9 && documentIsHTML &&
-				Expr.relative[ tokens[1].type ] ) {
-
-			context = ( Expr.find["ID"]( token.matches[0].replace(runescape, funescape), context ) || [] )[0];
-			if ( !context ) {
-				return results;
-
-			// Precompiled matchers will still verify ancestry, so step up a level
-			} else if ( compiled ) {
-				context = context.parentNode;
+				context = ( Expr.find["ID"]( token.matches[0].replace(runescape, funescape), context ) || [] )[0];
+				if ( !context ) {
+					return results;
+				}
+				selector = selector.slice( tokens.shift().value.length );
 			}
 
-			selector = selector.slice( tokens.shift().value.length );
-		}
+			// Fetch a seed set for right-to-left matching
+			i = matchExpr["needsContext"].test( selector ) ? 0 : tokens.length;
+			while ( i-- ) {
+				token = tokens[i];
 
-		// Fetch a seed set for right-to-left matching
-		i = matchExpr["needsContext"].test( selector ) ? 0 : tokens.length;
-		while ( i-- ) {
-			token = tokens[i];
-
-			// Abort if we hit a combinator
-			if ( Expr.relative[ (type = token.type) ] ) {
-				break;
-			}
-			if ( (find = Expr.find[ type ]) ) {
-				// Search, expanding context for leading sibling combinators
-				if ( (seed = find(
-					token.matches[0].replace( runescape, funescape ),
-					rsibling.test( tokens[0].type ) && testContext( context.parentNode ) || context
-				)) ) {
-
-					// If seed is empty or no tokens remain, we can return early
-					tokens.splice( i, 1 );
-					selector = seed.length && toSelector( tokens );
-					if ( !selector ) {
-						push.apply( results, seed );
-						return results;
-					}
-
+				// Abort if we hit a combinator
+				if ( Expr.relative[ (type = token.type) ] ) {
 					break;
+				}
+				if ( (find = Expr.find[ type ]) ) {
+					// Search, expanding context for leading sibling combinators
+					if ( (seed = find(
+						token.matches[0].replace( runescape, funescape ),
+						rsibling.test( tokens[0].type ) && testContext( context.parentNode ) || context
+					)) ) {
+
+						// If seed is empty or no tokens remain, we can return early
+						tokens.splice( i, 1 );
+						selector = seed.length && toSelector( tokens );
+						if ( !selector ) {
+							push.apply( results, seed );
+							return results;
+						}
+
+						break;
+					}
 				}
 			}
 		}
 	}
 
-	// Compile and execute a filtering function if one is not provided
+	// Compile and execute a filtering function
 	// Provide `match` to avoid retokenization if we modified the selector above
-	( compiled || compile( selector, match ) )(
+	compile( selector, match )(
 		seed,
 		context,
 		!documentIsHTML,
@@ -4370,7 +4344,7 @@ select = Sizzle.select = function( selector, context, results, seed ) {
 		rsibling.test( selector ) && testContext( context.parentNode ) || context
 	);
 	return results;
-};
+}
 
 // One-time assignments
 
@@ -5247,9 +5221,8 @@ jQuery.extend({
 		readyList.resolveWith( document, [ jQuery ] );
 
 		// Trigger any bound ready events
-		if ( jQuery.fn.triggerHandler ) {
-			jQuery( document ).triggerHandler( "ready" );
-			jQuery( document ).off( "ready" );
+		if ( jQuery.fn.trigger ) {
+			jQuery( document ).trigger("ready").off("ready");
 		}
 	}
 });
@@ -5621,15 +5594,11 @@ jQuery.fn.extend({
 				if ( elem.nodeType === 1 && !data_priv.get( elem, "hasDataAttrs" ) ) {
 					i = attrs.length;
 					while ( i-- ) {
+						name = attrs[ i ].name;
 
-						// Support: IE11+
-						// The attrs elements can be null (#14894)
-						if ( attrs[ i ] ) {
-							name = attrs[ i ].name;
-							if ( name.indexOf( "data-" ) === 0 ) {
-								name = jQuery.camelCase( name.slice(5) );
-								dataAttr( elem, name, data[ name ] );
-							}
+						if ( name.indexOf( "data-" ) === 0 ) {
+							name = jQuery.camelCase( name.slice(5) );
+							dataAttr( elem, name, data[ name ] );
 						}
 					}
 					data_priv.set( elem, "hasDataAttrs", true );
@@ -5859,17 +5828,10 @@ var rcheckableType = (/^(?:checkbox|radio)$/i);
 
 (function() {
 	var fragment = document.createDocumentFragment(),
-		div = fragment.appendChild( document.createElement( "div" ) ),
-		input = document.createElement( "input" );
+		div = fragment.appendChild( document.createElement( "div" ) );
 
 	// #11217 - WebKit loses check when the name is after the checked attribute
-	// Support: Windows Web Apps (WWA)
-	// `name` and `type` need .setAttribute for WWA
-	input.setAttribute( "type", "radio" );
-	input.setAttribute( "checked", "checked" );
-	input.setAttribute( "name", "t" );
-
-	div.appendChild( input );
+	div.innerHTML = "<input type='radio' checked='checked' name='t'/>";
 
 	// Support: Safari 5.1, iOS 5.1, Android 4.x, Android 2.3
 	// old WebKit doesn't clone checked state correctly in fragments
@@ -5889,7 +5851,7 @@ support.focusinBubbles = "onfocusin" in window;
 
 var
 	rkeyEvent = /^key/,
-	rmouseEvent = /^(?:mouse|pointer|contextmenu)|click/,
+	rmouseEvent = /^(?:mouse|contextmenu)|click/,
 	rfocusMorph = /^(?:focusinfocus|focusoutblur)$/,
 	rtypenamespace = /^([^.]*)(?:\.(.+)|)$/;
 
@@ -6458,7 +6420,7 @@ jQuery.event = {
 
 				// Support: Firefox 20+
 				// Firefox doesn't alert if the returnValue field is not set.
-				if ( event.result !== undefined && event.originalEvent ) {
+				if ( event.result !== undefined ) {
 					event.originalEvent.returnValue = event.result;
 				}
 			}
@@ -6509,9 +6471,9 @@ jQuery.Event = function( src, props ) {
 		// Events bubbling up the document may have been marked as prevented
 		// by a handler lower down the tree; reflect the correct value.
 		this.isDefaultPrevented = src.defaultPrevented ||
-				src.defaultPrevented === undefined &&
 				// Support: Android < 4.0
-				src.returnValue === false ?
+				src.defaultPrevented === undefined &&
+				src.getPreventDefault && src.getPreventDefault() ?
 			returnTrue :
 			returnFalse;
 
@@ -6558,14 +6520,7 @@ jQuery.Event.prototype = {
 		}
 	},
 	stopImmediatePropagation: function() {
-		var e = this.originalEvent;
-
 		this.isImmediatePropagationStopped = returnTrue;
-
-		if ( e && e.stopImmediatePropagation ) {
-			e.stopImmediatePropagation();
-		}
-
 		this.stopPropagation();
 	}
 };
@@ -6574,9 +6529,7 @@ jQuery.Event.prototype = {
 // Support: Chrome 15+
 jQuery.each({
 	mouseenter: "mouseover",
-	mouseleave: "mouseout",
-	pointerenter: "pointerover",
-	pointerleave: "pointerout"
+	mouseleave: "mouseout"
 }, function( orig, fix ) {
 	jQuery.event.special[ orig ] = {
 		delegateType: fix,
@@ -7001,7 +6954,7 @@ jQuery.extend({
 	},
 
 	cleanData: function( elems ) {
-		var data, elem, type, key,
+		var data, elem, events, type, key, j,
 			special = jQuery.event.special,
 			i = 0;
 
@@ -7010,8 +6963,9 @@ jQuery.extend({
 				key = elem[ data_priv.expando ];
 
 				if ( key && (data = data_priv.cache[ key ]) ) {
-					if ( data.events ) {
-						for ( type in data.events ) {
+					events = Object.keys( data.events || {} );
+					if ( events.length ) {
+						for ( j = 0; (type = events[j]) !== undefined; j++ ) {
 							if ( special[ type ] ) {
 								jQuery.event.remove( elem, type );
 
@@ -7314,15 +7268,14 @@ var iframe,
  */
 // Called only from within defaultDisplay
 function actualDisplay( name, doc ) {
-	var style,
-		elem = jQuery( doc.createElement( name ) ).appendTo( doc.body ),
+	var elem = jQuery( doc.createElement( name ) ).appendTo( doc.body ),
 
 		// getDefaultComputedStyle might be reliably used only on attached element
-		display = window.getDefaultComputedStyle && ( style = window.getDefaultComputedStyle( elem[ 0 ] ) ) ?
+		display = window.getDefaultComputedStyle ?
 
 			// Use of this method is a temporary fix (more like optmization) until something better comes along,
 			// since it was removed from specification and supported only in FF
-			style.display : jQuery.css( elem[ 0 ], "display" );
+			window.getDefaultComputedStyle( elem[ 0 ] ).display : jQuery.css( elem[ 0 ], "display" );
 
 	// We don't have any data stored on the element,
 	// so use "detach" method as fast way to get rid of the element
@@ -7445,32 +7398,28 @@ function addGetHookIf( conditionFn, hookFn ) {
 
 (function() {
 	var pixelPositionVal, boxSizingReliableVal,
+		// Support: Firefox, Android 2.3 (Prefixed box-sizing versions).
+		divReset = "padding:0;margin:0;border:0;display:block;-webkit-box-sizing:content-box;" +
+			"-moz-box-sizing:content-box;box-sizing:content-box",
 		docElem = document.documentElement,
 		container = document.createElement( "div" ),
 		div = document.createElement( "div" );
-
-	if ( !div.style ) {
-		return;
-	}
 
 	div.style.backgroundClip = "content-box";
 	div.cloneNode( true ).style.backgroundClip = "";
 	support.clearCloneStyle = div.style.backgroundClip === "content-box";
 
-	container.style.cssText = "border:0;width:0;height:0;top:0;left:-9999px;margin-top:1px;" +
-		"position:absolute";
+	container.style.cssText = "border:0;width:0;height:0;position:absolute;top:0;left:-9999px;" +
+		"margin-top:1px";
 	container.appendChild( div );
 
 	// Executing both pixelPosition & boxSizingReliable tests require only one layout
 	// so they're executed at the same time to save the second computation.
 	function computePixelPositionAndBoxSizingReliable() {
-		div.style.cssText =
-			// Support: Firefox<29, Android 2.3
-			// Vendor-prefix box-sizing
-			"-webkit-box-sizing:border-box;-moz-box-sizing:border-box;" +
-			"box-sizing:border-box;display:block;margin-top:1%;top:1%;" +
-			"border:1px;padding:1px;width:4px;position:absolute";
-		div.innerHTML = "";
+		// Support: Firefox, Android 2.3 (Prefixed box-sizing versions).
+		div.style.cssText = "-webkit-box-sizing:border-box;-moz-box-sizing:border-box;" +
+			"box-sizing:border-box;padding:1px;border:1px;display:block;width:4px;margin-top:1%;" +
+			"position:absolute;top:1%";
 		docElem.appendChild( container );
 
 		var divStyle = window.getComputedStyle( div, null );
@@ -7480,10 +7429,9 @@ function addGetHookIf( conditionFn, hookFn ) {
 		docElem.removeChild( container );
 	}
 
-	// Support: node.js jsdom
-	// Don't assume that getComputedStyle is a property of the global object
+	// Use window.getComputedStyle because jsdom on node.js will break without it.
 	if ( window.getComputedStyle ) {
-		jQuery.extend( support, {
+		jQuery.extend(support, {
 			pixelPosition: function() {
 				// This test is executed only once but we still do memoizing
 				// since we can use the boxSizingReliable pre-computing.
@@ -7505,13 +7453,7 @@ function addGetHookIf( conditionFn, hookFn ) {
 				// This support function is only executed once so no memoizing is needed.
 				var ret,
 					marginDiv = div.appendChild( document.createElement( "div" ) );
-
-				// Reset CSS: box-sizing; display; margin; border; padding
-				marginDiv.style.cssText = div.style.cssText =
-					// Support: Firefox<29, Android 2.3
-					// Vendor-prefix box-sizing
-					"-webkit-box-sizing:content-box;-moz-box-sizing:content-box;" +
-					"box-sizing:content-box;display:block;margin:0;border:0;padding:0";
+				marginDiv.style.cssText = div.style.cssText = divReset;
 				marginDiv.style.marginRight = marginDiv.style.width = "0";
 				div.style.width = "1px";
 				docElem.appendChild( container );
@@ -7519,6 +7461,9 @@ function addGetHookIf( conditionFn, hookFn ) {
 				ret = !parseFloat( window.getComputedStyle( marginDiv, null ).marginRight );
 
 				docElem.removeChild( container );
+
+				// Clean up the div for other support tests.
+				div.innerHTML = "";
 
 				return ret;
 			}
@@ -7558,8 +7503,8 @@ var
 
 	cssShow = { position: "absolute", visibility: "hidden", display: "block" },
 	cssNormalTransform = {
-		letterSpacing: "0",
-		fontWeight: "400"
+		letterSpacing: 0,
+		fontWeight: 400
 	},
 
 	cssPrefixes = [ "Webkit", "O", "Moz", "ms" ];
@@ -7706,10 +7651,13 @@ function showHide( elements, show ) {
 				values[ index ] = data_priv.access( elem, "olddisplay", defaultDisplay(elem.nodeName) );
 			}
 		} else {
-			hidden = isHidden( elem );
 
-			if ( display !== "none" || !hidden ) {
-				data_priv.set( elem, "olddisplay", hidden ? display : jQuery.css( elem, "display" ) );
+			if ( !values[ index ] ) {
+				hidden = isHidden( elem );
+
+				if ( display && display !== "none" || !hidden ) {
+					data_priv.set( elem, "olddisplay", hidden ? display : jQuery.css(elem, "display") );
+				}
 			}
 		}
 	}
@@ -7748,8 +7696,6 @@ jQuery.extend({
 	cssNumber: {
 		"columnCount": true,
 		"fillOpacity": true,
-		"flexGrow": true,
-		"flexShrink": true,
 		"fontWeight": true,
 		"lineHeight": true,
 		"opacity": true,
@@ -7814,6 +7760,9 @@ jQuery.extend({
 
 			// If a hook was provided, use that value, otherwise just set the specified value
 			if ( !hooks || !("set" in hooks) || (value = hooks.set( elem, value, extra )) !== undefined ) {
+				// Support: Chrome, Safari
+				// Setting style to blank string required to delete "style: x !important;"
+				style[ name ] = "";
 				style[ name ] = value;
 			}
 
@@ -7869,7 +7818,7 @@ jQuery.each([ "height", "width" ], function( i, name ) {
 			if ( computed ) {
 				// certain elements can have dimension info if we invisibly show them
 				// however, it must have a current display style that would benefit from this
-				return rdisplayswap.test( jQuery.css( elem, "display" ) ) && elem.offsetWidth === 0 ?
+				return elem.offsetWidth === 0 && rdisplayswap.test( jQuery.css( elem, "display" ) ) ?
 					jQuery.swap( elem, cssShow, function() {
 						return getWidthOrHeight( elem, name, extra );
 					}) :
@@ -8190,7 +8139,7 @@ function createTween( value, prop, animation ) {
 
 function defaultPrefilter( elem, props, opts ) {
 	/* jshint validthis: true */
-	var prop, value, toggle, tween, hooks, oldfire, display, checkDisplay,
+	var prop, value, toggle, tween, hooks, oldfire, display,
 		anim = this,
 		orig = {},
 		style = elem.style,
@@ -8234,12 +8183,13 @@ function defaultPrefilter( elem, props, opts ) {
 		// Set display property to inline-block for height/width
 		// animations on inline elements that are having width/height animated
 		display = jQuery.css( elem, "display" );
+		// Get default display if display is currently "none"
+		if ( display === "none" ) {
+			display = defaultDisplay( elem.nodeName );
+		}
+		if ( display === "inline" &&
+				jQuery.css( elem, "float" ) === "none" ) {
 
-		// Test default display if display is currently "none"
-		checkDisplay = display === "none" ?
-			data_priv.get( elem, "olddisplay" ) || defaultDisplay( elem.nodeName ) : display;
-
-		if ( checkDisplay === "inline" && jQuery.css( elem, "float" ) === "none" ) {
 			style.display = "inline-block";
 		}
 	}
@@ -8269,10 +8219,6 @@ function defaultPrefilter( elem, props, opts ) {
 				}
 			}
 			orig[ prop ] = dataShow && dataShow[ prop ] || jQuery.style( elem, prop );
-
-		// Any non-fx value stops us from restoring the original display value
-		} else {
-			display = undefined;
 		}
 	}
 
@@ -8315,10 +8261,6 @@ function defaultPrefilter( elem, props, opts ) {
 				}
 			}
 		}
-
-	// If this is a noop like .hide().hide(), restore an overwritten display value
-	} else if ( (display === "none" ? defaultDisplay( elem.nodeName ) : display) === "inline" ) {
-		style.display = display;
 	}
 }
 
@@ -9211,16 +9153,6 @@ jQuery.fn.extend({
 
 jQuery.extend({
 	valHooks: {
-		option: {
-			get: function( elem ) {
-				var val = jQuery.find.attr( elem, "value" );
-				return val != null ?
-					val :
-					// Support: IE10-11+
-					// option.text throws exceptions (#14686, #14858)
-					jQuery.trim( jQuery.text( elem ) );
-			}
-		},
 		select: {
 			get: function( elem ) {
 				var value, option,
@@ -9267,7 +9199,7 @@ jQuery.extend({
 
 				while ( i-- ) {
 					option = options[ i ];
-					if ( (option.selected = jQuery.inArray( option.value, values ) >= 0) ) {
+					if ( (option.selected = jQuery.inArray( jQuery(option).val(), values ) >= 0) ) {
 						optionSet = true;
 					}
 				}
@@ -10474,15 +10406,10 @@ jQuery.ajaxTransport(function( options ) {
 				// Create the abort callback
 				callback = xhrCallbacks[ id ] = callback("abort");
 
-				try {
-					// Do send the request (this may raise an exception)
-					xhr.send( options.hasContent && options.data || null );
-				} catch ( e ) {
-					// #14683: Only rethrow if this hasn't been notified as an error yet
-					if ( callback ) {
-						throw e;
-					}
-				}
+				// Do send the request
+				// This may raise an exception which is actually
+				// handled in jQuery.ajax (so no try/catch here)
+				xhr.send( options.hasContent && options.data || null );
 			},
 
 			abort: function() {
@@ -10689,7 +10616,7 @@ jQuery.fn.load = function( url, params, callback ) {
 		off = url.indexOf(" ");
 
 	if ( off >= 0 ) {
-		selector = jQuery.trim( url.slice( off ) );
+		selector = url.slice( off );
 		url = url.slice( 0, off );
 	}
 
@@ -10997,12 +10924,6 @@ jQuery.fn.andSelf = jQuery.fn.addBack;
 // derived from file names, and jQuery is normally delivered in a lowercase
 // file name. Do this after creating the global so that if an AMD module wants
 // to call noConflict to hide this version of jQuery, it will work.
-
-// Note that for maximum portability, libraries that are not jQuery should
-// declare themselves as anonymous modules, and avoid setting a global if an
-// AMD loader is present. jQuery is a special case. For more information, see
-// https://github.com/jrburke/requirejs/wiki/Updating-existing-libraries#wiki-anon
-
 if ( typeof define === "function" && define.amd ) {
 	define( "jquery", [], function() {
 		return jQuery;
@@ -13633,7 +13554,9 @@ BaseObject.extend = extend;
 module.exports = BaseObject;
 
 
-},{"./events":13,"./utils":24,"underscore":6}],"6xH8xW":[function(require,module,exports){
+},{"./events":13,"./utils":24,"underscore":6}],"container_plugin":[function(require,module,exports){
+module.exports=require('6xH8xW');
+},{}],"6xH8xW":[function(require,module,exports){
 "use strict";
 var BaseObject = require('./base_object');
 var ContainerPlugin = function ContainerPlugin(options) {
@@ -13648,14 +13571,15 @@ var $ContainerPlugin = ContainerPlugin;
   disable: function() {
     this.stopListening();
   },
-  bindEvents: function() {}
+  bindEvents: function() {},
+  destroy: function() {
+    this.stopListening();
+  }
 }, {}, BaseObject);
 module.exports = ContainerPlugin;
 
 
-},{"./base_object":"2HNVgz"}],"container_plugin":[function(require,module,exports){
-module.exports=require('6xH8xW');
-},{}],"core_plugin":[function(require,module,exports){
+},{"./base_object":"2HNVgz"}],"core_plugin":[function(require,module,exports){
 module.exports=require('it+usN');
 },{}],"it+usN":[function(require,module,exports){
 "use strict";
@@ -13665,9 +13589,12 @@ var CorePlugin = function CorePlugin(core) {
   this.core = core;
 };
 var $CorePlugin = CorePlugin;
-($traceurRuntime.createClass)(CorePlugin, {getExternalInterface: function() {
+($traceurRuntime.createClass)(CorePlugin, {
+  getExternalInterface: function() {
     return {};
-  }}, {}, BaseObject);
+  },
+  destroy: function() {}
+}, {}, BaseObject);
 module.exports = CorePlugin;
 
 
@@ -13861,15 +13788,15 @@ module.exports = {
   CSS: {
     'container': '[data-container]{position:absolute;background-color:#000;height:100%;width:100%}',
     'core': '[data-player]{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;-o-user-select:none;user-select:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-webkit-transform:translate3d(0,0,0);-moz-transform:translate3d(0,0,0);-ms-transform:translate3d(0,0,0);-o-transform:translate3d(0,0,0);transform:translate3d(0,0,0);position:relative;margin:0;padding:0;border:0;height:594px;width:1055px;font-style:normal;font-weight:400;text-align:center;overflow:hidden;font-size:100%;color:#000;background-color:#000;font-family:"lucida grande",tahoma,verdana,arial,sans-serif;text-shadow:0 0 0;box-sizing:border-box}[data-player] a,[data-player] abbr,[data-player] acronym,[data-player] address,[data-player] applet,[data-player] article,[data-player] aside,[data-player] audio,[data-player] b,[data-player] big,[data-player] blockquote,[data-player] canvas,[data-player] caption,[data-player] center,[data-player] cite,[data-player] code,[data-player] dd,[data-player] del,[data-player] details,[data-player] dfn,[data-player] div,[data-player] dl,[data-player] dt,[data-player] em,[data-player] embed,[data-player] fieldset,[data-player] figcaption,[data-player] figure,[data-player] footer,[data-player] form,[data-player] h1,[data-player] h2,[data-player] h3,[data-player] h4,[data-player] h5,[data-player] h6,[data-player] header,[data-player] hgroup,[data-player] i,[data-player] iframe,[data-player] img,[data-player] ins,[data-player] kbd,[data-player] label,[data-player] legend,[data-player] li,[data-player] mark,[data-player] menu,[data-player] nav,[data-player] object,[data-player] ol,[data-player] output,[data-player] p,[data-player] pre,[data-player] q,[data-player] ruby,[data-player] s,[data-player] samp,[data-player] section,[data-player] small,[data-player] span,[data-player] strike,[data-player] strong,[data-player] sub,[data-player] summary,[data-player] sup,[data-player] table,[data-player] tbody,[data-player] td,[data-player] tfoot,[data-player] th,[data-player] thead,[data-player] time,[data-player] tr,[data-player] tt,[data-player] u,[data-player] ul,[data-player] var,[data-player] video{margin:0;padding:0;border:0;font:inherit;font-size:100%;vertical-align:baseline}[data-player] table{border-collapse:collapse;border-spacing:0}[data-player] caption,[data-player] td,[data-player] th{text-align:left;font-weight:400;vertical-align:middle}[data-player] blockquote,[data-player] q{quotes:none}[data-player] blockquote:after,[data-player] blockquote:before,[data-player] q:after,[data-player] q:before{content:"";content:none}[data-player] a img{border:none}[data-player].fullscreen{width:100%;height:100%}[data-player].nocursor{cursor:none}',
-    'media_control': '@font-face{font-family:Player;src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot);src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot?#iefix) format("embedded-opentype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.ttf) format("truetype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.svg#player) format("svg")}.media-control-notransition{-webkit-transition:none!important;-webkit-transition-delay:0s;-moz-transition:none!important;-o-transition:none!important;transition:none!important}.media-control[data-media-control]{position:absolute;border-radius:0;bottom:0;left:0;right:0;margin-left:auto;margin-right:auto;max-width:100%;min-width:60%;height:40px;z-index:9999;-webkit-transition:all,.4s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.4s,ease-out;-o-transition:all,.4s,ease-out;transition:all,.4s,ease-out}.media-control[data-media-control] .media-control-background[data-background]{position:absolute;height:150px;width:100%;bottom:0;background-image:-owg(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:-webkit(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:-moz(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:-o(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9));-webkit-transition:all,.6s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.6s,ease-out;-o-transition:all,.6s,ease-out;transition:all,.6s,ease-out}.media-control[data-media-control] .media-control-icon{font-family:Player;font-weight:400;font-style:normal;font-size:26px;line-height:32px;letter-spacing:0;speak:none;color:#fff;opacity:.5;vertical-align:middle;text-align:left;padding:0 6px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.media-control[data-media-control] .media-control-icon:hover{color:#fff;opacity:.75;text-shadow:rgba(255,255,255,.8) 0 0 15px;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control].media-control-hide{bottom:-50px}.media-control[data-media-control].media-control-hide .media-control-background[data-background],.media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar]{opacity:0}.media-control[data-media-control] .media-control-layer[data-controls]{position:relative;top:10%;height:80%;vertical-align:middle}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control]{position:absolute;top:0;left:10px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control]{height:100%;text-align:center;line-height:32px}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control]{position:absolute;top:0;right:5px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button{background-color:transparent;border:0;margin:0 8px;cursor:pointer;display:inline-block}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus{outline:0}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]:before{content:"\\e002"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]:before{content:"\\e003"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]{float:right;background-color:transparent;border:0;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]:before{content:"\\e006"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen].shrink:before{content:"\\e007"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]{cursor:default;float:right;background-color:transparent;border:0;width:32px;height:100%;opacity:0}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]:before{content:"\\e008"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled{opacity:1}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].playing:before{content:"\\e002"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].paused:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].playing:before{content:"\\e003"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].stopped:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration],.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position]{display:inline-block;font-size:10px;color:#fff;cursor:default;line-height:32px;position:relative}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]{color:rgba(255,255,255,.3)}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before{content:"|";margin-right:3px}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]{position:absolute;top:-20px;left:0;display:inline-block;vertical-align:middle;width:100%;height:25px;cursor:pointer}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar]{width:100%;height:1px;position:relative;top:12px;background-color:#666}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar]{position:absolute;top:0;left:0;width:0;height:100%;background-color:#c2c2c2;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar]{position:absolute;top:0;left:0;width:0;height:100%;background-color:#005aff;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar]{display:none;position:absolute;top:-3px;width:5px;height:7px;background-color:rgba(255,255,255,.5)}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar]{display:block}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled{cursor:default}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar]{position:absolute;top:2px;left:0;width:20px;height:20px;opacity:1;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar]{position:absolute;left:6px;top:6px;width:8px;height:8px;border-radius:10px;box-shadow:0 0 0 6px rgba(255,255,255,.2);background-color:#fff}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume]{float:right;display:inline-block;width:32px;height:32px;cursor:pointer}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume]{position:absolute;bottom:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]{background-color:transparent;border:0;width:32px;height:32px}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:before{content:"\\e004"}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted:before{content:"\\e005"}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume]{width:32px;height:88px;position:absolute;bottom:40px;background:rgba(2,2,2,.5);border-radius:4px;-webkit-transition:all,.2s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.2s,ease-out;-o-transition:all,.2s,ease-out;transition:all,.2s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide{opacity:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume]{margin-left:12px;background:#6f6f6f;border-radius:4px;width:8px;height:72px;position:relative;top:8px;overflow:hidden}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume]{position:absolute;bottom:0;background:#fff;width:100%;height:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume]{position:absolute;bottom:40%;left:6px;width:20px;height:20px}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume]{position:absolute;left:4px;top:4px;width:12px;height:12px;border-radius:6px;border:1px solid #6f6f6f;background-color:#fff}',
+    'media_control': '@font-face{font-family:Player;src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot);src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot?#iefix) format("embedded-opentype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.ttf) format("truetype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.svg#player) format("svg")}.media-control-notransition{-webkit-transition:none!important;-webkit-transition-delay:0s;-moz-transition:none!important;-o-transition:none!important;transition:none!important}.media-control[data-media-control]{position:absolute;width:100%;height:100%;z-index:9999}.media-control[data-media-control] .media-control-background[data-background]{position:absolute;height:40%;width:100%;bottom:0;background-image:-owg(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:-webkit(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:-moz(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:-o(linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9)));background-image:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.9));-webkit-transition:all,.6s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.6s,ease-out;-o-transition:all,.6s,ease-out;transition:all,.6s,ease-out}.media-control[data-media-control] .media-control-icon{font-family:Player;font-weight:400;font-style:normal;font-size:26px;line-height:32px;letter-spacing:0;speak:none;color:#fff;opacity:.5;vertical-align:middle;text-align:left;padding:0 6px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.media-control[data-media-control] .media-control-icon:hover{color:#fff;opacity:.75;text-shadow:rgba(255,255,255,.8) 0 0 15px;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control].media-control-hide .media-control-background[data-background]{opacity:0}.media-control[data-media-control].media-control-hide .media-control-layer[data-controls]{bottom:-50px}.media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar]{opacity:0}.media-control[data-media-control] .media-control-layer[data-controls]{position:absolute;bottom:5px;width:100%;height:32px;vertical-align:middle;-webkit-transition:all,.4s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.4s,ease-out;-o-transition:all,.4s,ease-out;transition:all,.4s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control]{position:absolute;top:0;left:10px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control]{height:100%;text-align:center;line-height:32px}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control]{position:absolute;top:0;right:5px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button{background-color:transparent;border:0;margin:0 8px;cursor:pointer;display:inline-block}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus{outline:0}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]:before{content:"\\e002"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]:before{content:"\\e003"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]{float:right;background-color:transparent;border:0;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]:before{content:"\\e006"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen].shrink:before{content:"\\e007"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]{cursor:default;float:right;background-color:transparent;border:0;width:32px;height:100%;opacity:0}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]:before{content:"\\e008"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled{opacity:1}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].playing:before{content:"\\e002"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].paused:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]{float:left;width:32px;height:100%}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].playing:before{content:"\\e003"}.media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].stopped:before{content:"\\e001"}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration],.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position]{display:inline-block;font-size:10px;color:#fff;cursor:default;line-height:32px;position:relative}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]{color:rgba(255,255,255,.3)}.media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before{content:"|";margin:0 3px}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]{position:absolute;top:-20px;left:0;display:inline-block;vertical-align:middle;width:100%;height:25px;cursor:pointer}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar]{width:100%;height:1px;position:relative;top:12px;background-color:#666}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar]{position:absolute;top:0;left:0;width:0;height:100%;background-color:#c2c2c2;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar]{position:absolute;top:0;left:0;width:0;height:100%;background-color:#005aff;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar]{display:none;position:absolute;top:-3px;width:5px;height:7px;background-color:rgba(255,255,255,.5)}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar]{display:block}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled{cursor:default}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar]{position:absolute;top:2px;left:0;width:20px;height:20px;opacity:1;-webkit-transition:all,.1s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.1s,ease-out;-o-transition:all,.1s,ease-out;transition:all,.1s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar]{position:absolute;left:6px;top:6px;width:8px;height:8px;border-radius:10px;box-shadow:0 0 0 6px rgba(255,255,255,.2);background-color:#fff}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume]{float:right;display:inline-block;width:32px;height:32px;cursor:pointer}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume]{position:absolute;bottom:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]{background-color:transparent;border:0;width:32px;height:32px}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:before{content:"\\e004"}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted:before{content:"\\e005"}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume]{width:32px;height:88px;position:absolute;bottom:40px;background:rgba(2,2,2,.5);border-radius:4px;-webkit-transition:all,.2s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.2s,ease-out;-o-transition:all,.2s,ease-out;transition:all,.2s,ease-out}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide{opacity:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume]{margin-left:12px;background:#6f6f6f;border-radius:4px;width:8px;height:72px;position:relative;top:8px;overflow:hidden}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume]{position:absolute;bottom:0;background:#fff;width:100%;height:0}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume]{position:absolute;bottom:40%;left:6px;width:20px;height:20px}.media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume]{position:absolute;left:4px;top:4px;width:12px;height:12px;border-radius:6px;border:1px solid #6f6f6f;background-color:#fff}',
     'seek_time': '.seek-time[data-seek-time]{position:absolute;width:auto;height:20px;bottom:55px;background-color:rgba(2,2,2,.5);z-index:9999}.seek-time[data-seek-time].hidden[data-seek-time]{opacity:0}.seek-time[data-seek-time] span[data-seek-time]{position:relative;color:#fff;font-size:10px;padding-left:7px;padding-right:7px}',
     'flash': '[data-flash]{position:absolute;height:100%;width:100%;background-color:#000;display:block;pointer-events:none}',
     'hls': '[data-hls]{position:absolute;height:100%;width:100%;background-color:#000;display:block;pointer-events:none;top:0}',
     'html5_video': '[data-html5-video]{position:absolute;height:100%;width:100%;display:block}',
     'no_op': '[data-no-op]{z-index:1000;position:absolute;background-color:#222;height:100%;width:100%}[data-no-op] p[data-no-op-msg]{position:relative;font-size:25px;top:50%;color:#fff}',
-    'background_button': '.background-button[data-background-button]{font-family:Player;position:absolute;height:100%;width:100%;background-color:rgba(0,0,0,.2);-webkit-transition:all,.4s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.4s,ease-out;-o-transition:all,.4s,ease-out;transition:all,.4s,ease-out;cursor:pointer}.background-button[data-background-button].hide[data-background-button]{opacity:0}.background-button[data-background-button] .background-button-wrapper[data-background-button]{position:absolute;overflow:hidden;width:100%;height:25%;line-height:100%;font-size:20%;top:45%;margin-top:-5%;text-align:center}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button]{font-family:Player;cursor:pointer;font-weight:400;font-style:normal;line-height:1;letter-spacing:0;speak:none;font-size:90px;color:#fff;opacity:.75;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button]:hover{opacity:1;text-shadow:rgba(255,255,255,.8) 0 0 15px}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button].playing:before{content:"\\e002"}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button].notplaying:before{content:"\\e001"}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button].playstop.playing:before{content:"\\e003"}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button].playstop.notplaying:before{content:"\\e001"}',
+    'background_button': '.background-button[data-background-button]{font-family:Player;position:absolute;height:100%;width:100%;background-color:rgba(0,0,0,.2);-webkit-transition:all,.4s,ease-out;-webkit-transition-delay:0s,0s,0s;-moz-transition:all,.4s,ease-out;-o-transition:all,.4s,ease-out;transition:all,.4s,ease-out;cursor:pointer}.background-button[data-background-button].hide .background-button-wrapper[data-background-button]{opacity:0}.background-button[data-background-button] .background-button-wrapper[data-background-button]{position:absolute;overflow:hidden;width:100%;height:25%;line-height:100%;font-size:25%;top:50%;text-align:center}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button]{font-family:Player;cursor:pointer;font-weight:400;font-style:normal;line-height:1;letter-spacing:0;speak:none;color:#fff;opacity:.75;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button]:hover{opacity:1;text-shadow:rgba(255,255,255,.8) 0 0 15px}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button].playing:before{content:"\\e002"}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button].notplaying:before{content:"\\e001"}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button].playstop.playing:before{content:"\\e003"}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button].playstop.notplaying:before{content:"\\e001"}.media-control.media-control-hide[data-media-control] .background-button[data-background-button]{opacity:0}',
     'dvr_controls': '.dvr-controls[data-dvr-controls]{display:inline-block;color:#fff;line-height:32px;font-size:12px;font-weight:700;margin-left:5px}.dvr-controls[data-dvr-controls] .live-info{cursor:default}.dvr-controls[data-dvr-controls] .live-info:before{content:"";display:inline-block;position:relative;width:10px;height:10px;border-radius:5px;margin-right:3px;background-color:#ff0101}.dvr-controls[data-dvr-controls] .live-info.disabled{opacity:.3}.dvr-controls[data-dvr-controls] .live-info.disabled:before{background-color:#fff}.dvr-controls[data-dvr-controls] .live-button{cursor:pointer;outline:0;display:none;border:0;color:#fff;background-color:transparent;font-size:12px;height:32px;padding:0;opacity:.7}.dvr-controls[data-dvr-controls] .live-button:before{content:"";display:inline-block;position:relative;width:10px;height:10px;border-radius:5px;margin-right:3px;background-color:#fff}.dvr-controls[data-dvr-controls] .live-button:hover{opacity:1;text-shadow:rgba(255,255,255,.75) 0 0 5px}.dvr .dvr-controls[data-dvr-controls] .live-info{display:none}.dvr .dvr-controls[data-dvr-controls] .live-button{display:block}.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar]{background-color:#005aff}.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar]{background-color:#ff0101}',
-    'poster': '@font-face{font-family:Player;src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot);src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot?#iefix) format("embedded-opentype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.ttf) format("truetype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.svg#player) format("svg")}.player-poster[data-poster]{cursor:pointer;position:absolute;height:100%;width:100%;z-index:998;top:0}.player-poster[data-poster] .poster-background[data-poster]{width:100%;height:100%}.player-poster[data-poster] .play-wrapper[data-poster]{position:absolute;width:100%;height:20%;line-height:100%;font-size:20%;top:50%;margin-top:-5%;text-align:center}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]{font-family:Player;font-weight:400;font-style:normal;line-height:1;letter-spacing:0;speak:none;color:#fff;opacity:.75;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster].play[data-poster]:before{content:"\\e001"}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]:hover{opacity:1}',
+    'poster': '@font-face{font-family:Player;src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot);src:url(http://cdn.clappr.io/latest/assets/Player-Regular.eot?#iefix) format("embedded-opentype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.ttf) format("truetype"),url(http://cdn.clappr.io/latest/assets/Player-Regular.svg#player) format("svg")}.player-poster[data-poster]{cursor:pointer;position:absolute;height:100%;width:100%;z-index:998;top:0}.player-poster[data-poster] .poster-background[data-poster]{width:100%;height:100%}.player-poster[data-poster] .play-wrapper[data-poster]{position:absolute;width:100%;height:25%;line-height:100%;font-size:25%;top:50%;text-align:center}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]{font-family:Player;font-weight:400;font-style:normal;line-height:1;letter-spacing:0;speak:none;color:#fff;opacity:.75;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster].play[data-poster]:before{content:"\\e001"}.player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]:hover{opacity:1}',
     'spinner_three_bounce': '.spinner-three-bounce[data-spinner]{position:absolute;margin:0 auto;width:70px;text-align:center;z-index:10;top:47%;left:0;right:0}.spinner-three-bounce[data-spinner]>div{width:18px;height:18px;background-color:#FFF;border-radius:100%;display:inline-block;-webkit-animation:bouncedelay 1.4s infinite ease-in-out;-moz-animation:bouncedelay 1.4s infinite ease-in-out;-ms-animation:bouncedelay 1.4s infinite ease-in-out;-o-animation:bouncedelay 1.4s infinite ease-in-out;animation:bouncedelay 1.4s infinite ease-in-out;-webkit-animation-fill-mode:both;-moz-animation-fill-mode:both;-ms-animation-fill-mode:both;-o-animation-fill-mode:both;animation-fill-mode:both}.spinner-three-bounce[data-spinner] [data-bounce1],.spinner-three-bounce[data-spinner] [data-bounce2]{-webkit-animation-delay:-.32s;-moz-animation-delay:-.32s;-ms-animation-delay:-.32s;-o-animation-delay:-.32s;animation-delay:-.32s}@-moz-keyframes bouncedelay{0%,100%,80%{-moz-transform:scale(0);transform:scale(0)}40%{-moz-transform:scale(1);transform:scale(1)}}@-webkit-keyframes bouncedelay{0%,100%,80%{-webkit-transform:scale(0);transform:scale(0)}40%{-webkit-transform:scale(1);transform:scale(1)}}@-o-keyframes bouncedelay{0%,100%,80%{-o-transform:scale(0);transform:scale(0)}40%{-o-transform:scale(1);transform:scale(1)}}@-ms-keyframes bouncedelay{0%,100%,80%{-ms-transform:scale(0);transform:scale(0)}40%{-ms-transform:scale(1);transform:scale(1)}}@keyframes bouncedelay{0%,100%,80%{transform:scale(0)}40%{transform:scale(1)}}',
     'watermark': '[data-watermark]{position:absolute;margin:100px auto 0;width:70px;text-align:center;z-index:10}[data-watermark-bottom-left]{bottom:10px;left:10px}[data-watermark-bottom-right]{bottom:10px;right:42px}[data-watermark-top-left]{top:-95px;left:10px}[data-watermark-top-right]{top:-95px;right:37px}'
   }
@@ -13948,7 +13875,10 @@ var $UIContainerPlugin = UIContainerPlugin;
     this.$el.hide();
     this.enabled = false;
   },
-  bindEvents: function() {}
+  bindEvents: function() {},
+  destroy: function() {
+    this.remove();
+  }
 }, {}, UIObject);
 module.exports = UIContainerPlugin;
 
@@ -13981,6 +13911,9 @@ var $UICorePlugin = UICorePlugin;
     this.$el.hide();
     this.enabled = false;
   },
+  destroy: function() {
+    this.remove();
+  },
   render: function() {
     this.$el.html(this.template());
     this.$el.append(this.styler.getStyleFor(this.name));
@@ -13991,9 +13924,7 @@ var $UICorePlugin = UICorePlugin;
 module.exports = UICorePlugin;
 
 
-},{"./ui_object":"8lqCAT"}],"ui_object":[function(require,module,exports){
-module.exports=require('8lqCAT');
-},{}],"8lqCAT":[function(require,module,exports){
+},{"./ui_object":"8lqCAT"}],"8lqCAT":[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var _ = require('underscore');
@@ -14076,7 +14007,9 @@ UIObject.extend = extend;
 module.exports = UIObject;
 
 
-},{"./base_object":"2HNVgz","./utils":24,"jquery":3,"underscore":6}],24:[function(require,module,exports){
+},{"./base_object":"2HNVgz","./utils":24,"jquery":3,"underscore":6}],"ui_object":[function(require,module,exports){
+module.exports=require('8lqCAT');
+},{}],24:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var extend = function(protoProps, staticProps) {
@@ -14236,6 +14169,9 @@ var $Container = Container;
   destroy: function() {
     this.trigger('container:destroyed', this, this.name);
     this.playback.destroy();
+    _(this.plugins).each((function(plugin) {
+      return plugin.destroy();
+    }));
     this.$el.remove();
   },
   setStyle: function(style) {
@@ -14438,9 +14374,6 @@ var Core = function Core(options) {
   document.addEventListener('mozfullscreenchange', (function() {
     return $__0.exit();
   }));
-  $(window).resize((function() {
-    return $__0.updateSize();
-  }));
 };
 var $Core = Core;
 ($traceurRuntime.createClass)(Core, {
@@ -14481,26 +14414,18 @@ var $Core = Core;
       height: $(window).height()
     };
   },
-  setPlayerSize: function() {
-    var $__2;
-    var hasStretchParams = !!this.options.stretchWidth && !!this.options.stretchHeight;
-    var canStretch = this.options.stretchWidth <= $(window).width() && this.options.stretchHeight <= ($(window).height() * 0.73);
-    var width,
-        height;
-    if (hasStretchParams && canStretch) {
-      ($__2 = [this.options.stretchWidth, this.options.stretchHeight], width = $__2[0], height = $__2[1], $__2);
-    } else {
-      ($__2 = [this.options.width, this.options.height], width = $__2[0], height = $__2[1], $__2);
-    }
-    this.$el.css({
-      width: width,
-      height: height
-    });
-    this.$el.removeClass('fullscreen');
-    PlayerInfo.currentSize = {
-      width: width,
-      height: height
+  resize: function(height, width) {
+    var size = {
+      height: height,
+      width: width
     };
+    this.$el.css(size);
+    PlayerInfo.currentSize = size;
+    Mediator.trigger('player:resize', size);
+  },
+  setPlayerSize: function() {
+    this.resize(this.options.height, this.options.width);
+    this.$el.removeClass('fullscreen');
   },
   resolveOnContainersReady: function(containers) {
     var $__0 = this;
@@ -14533,6 +14458,9 @@ var $Core = Core;
   destroy: function() {
     _(this.containers).each((function(container) {
       return container.destroy();
+    }));
+    _(this.plugins).each((function(plugin) {
+      return plugin.destroy();
     }));
     this.$el.remove();
   },
@@ -14620,15 +14548,12 @@ var $Core = Core;
       this.$el.addClass('nocursor');
   },
   render: function() {
-    var $__0 = this;
     var style = Styler.getStyleFor('core');
     this.$el.append(style);
     this.$el.append(this.mediaControl.render().el);
-    this.$el.ready((function() {
-      $__0.options.width = $__0.options.width || $__0.$el.width();
-      $__0.options.height = $__0.options.height || $__0.$el.height();
-      $__0.updateSize();
-    }));
+    this.options.width = this.options.width || this.$el.width();
+    this.options.height = this.options.height || this.$el.height();
+    this.updateSize();
     return this;
   }
 }, {}, UIObject);
@@ -15024,6 +14949,7 @@ var $MediaControl = MediaControl;
     var pos = offsetX / this.$seekBarContainer.width() * 100;
     pos = Math.min(100, Math.max(pos, 0));
     this.container.setCurrentTime(pos);
+    this.setSeekPercentage(pos);
   },
   setKeepVisible: function() {
     this.keepVisible = true;
@@ -15193,7 +15119,9 @@ var $MediaControl = MediaControl;
 module.exports = MediaControl;
 
 
-},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_object":"8lqCAT","../../base/utils":24,"../../components/mediator":"veeMMc","../seek_time":44,"jquery":3,"mousetrap":4,"underscore":6}],"veeMMc":[function(require,module,exports){
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_object":"8lqCAT","../../base/utils":24,"../../components/mediator":"veeMMc","../seek_time":44,"jquery":3,"mousetrap":4,"underscore":6}],"mediator":[function(require,module,exports){
+module.exports=require('veeMMc');
+},{}],"veeMMc":[function(require,module,exports){
 "use strict";
 var Events = require('../base/events');
 var events = new Events();
@@ -15222,8 +15150,8 @@ Mediator.stopListening = function(obj, name, callback) {
 module.exports = Mediator;
 
 
-},{"../base/events":13}],"mediator":[function(require,module,exports){
-module.exports=require('veeMMc');
+},{"../base/events":13}],"player_info":[function(require,module,exports){
+module.exports=require('Rmed05');
 },{}],"Rmed05":[function(require,module,exports){
 "use strict";
 var PlayerInfo = {
@@ -15237,8 +15165,6 @@ var PlayerInfo = {
 module.exports = PlayerInfo;
 
 
-},{}],"player_info":[function(require,module,exports){
-module.exports=require('Rmed05');
 },{}],44:[function(require,module,exports){
 "use strict";
 module.exports = require('./seek_time');
@@ -15359,6 +15285,9 @@ var $Player = Player;
   normalizeSources: function(options) {
     return _.compact(_.flatten([options.source, options.sources]));
   },
+  resize: function(height, width) {
+    this.core.resize(height, width);
+  },
   load: function(sources) {
     this.core.load(sources);
   },
@@ -15466,25 +15395,17 @@ var $Flash = Flash;
     this.trigger('playback:timeupdate', this.el.getPosition(), this.el.getDuration(), this.name);
   },
   addListeners: function() {
-    var $__0 = this;
-    Mediator.on(this.uniqueId + ':progress', (function() {
-      return $__0.progress();
-    }));
-    Mediator.on(this.uniqueId + ':timeupdate', (function() {
-      return $__0.updateTime();
-    }));
-    Mediator.on(this.uniqueId + ':statechanged', (function() {
-      return $__0.checkState();
-    }));
-    Mediator.on(this.uniqueId + ':flashready', (function() {
-      return $__0.bootstrap();
-    }));
+    Mediator.on(this.uniqueId + ':progress', this.progress, this);
+    Mediator.on(this.uniqueId + ':timeupdate', this.updateTime, this);
+    Mediator.on(this.uniqueId + ':statechanged', this.checkState, this);
+    Mediator.on(this.uniqueId + ':flashready', this.bootstrap, this);
   },
   stopListening: function() {
     $traceurRuntime.superCall(this, $Flash.prototype, "stopListening", []);
     Mediator.off(this.uniqueId + ':progress');
     Mediator.off(this.uniqueId + ':timeupdate');
     Mediator.off(this.uniqueId + ':statechanged');
+    Mediator.off(this.uniqueId + ':flashready');
   },
   checkState: function() {
     if (this.currentState !== "PLAYING_BUFFERING" && this.el.getState() === "PLAYING_BUFFERING") {
@@ -16205,10 +16126,13 @@ module.exports = NoOp;
 
 
 },{"../../base/jst":14,"../../base/playback":"VbgHr3","../../base/styler":17}],57:[function(require,module,exports){
+(function (process){
 "use strict";
 var UICorePlugin = require('../../base/ui_core_plugin');
 var JST = require('../../base/jst');
 var Styler = require('../../base/styler');
+var Mediator = require('../../components/mediator');
+var PlayerInfo = require('../../components/player_info');
 var BackgroundButton = function BackgroundButton(core) {
   $traceurRuntime.superCall(this, $BackgroundButton.prototype, "constructor", [core]);
   this.core = core;
@@ -16222,9 +16146,6 @@ var $BackgroundButton = BackgroundButton;
   get name() {
     return 'background_button';
   },
-  get events() {
-    return {'click .background-button-icon': 'click'};
-  },
   get attributes() {
     return {
       'class': 'background-button',
@@ -16237,10 +16158,14 @@ var $BackgroundButton = BackgroundButton;
     this.listenTo(this.core.mediaControl.container, 'container:settingsupdate', this.settingsUpdate);
     this.listenTo(this.core.mediaControl.container, 'container:dvr', this.settingsUpdate);
     this.listenTo(this.core.mediaControl, 'mediacontrol:containerchanged', this.settingsUpdate);
-    this.listenTo(this.core.mediaControl, 'mediacontrol:show', this.show);
-    this.listenTo(this.core.mediaControl, 'mediacontrol:hide', this.hide);
+    this.listenTo(this.core.mediaControl, 'mediacontrol:show', this.updateSize);
     this.listenTo(this.core.mediaControl, 'mediacontrol:playing', this.playing);
     this.listenTo(this.core.mediaControl, 'mediacontrol:notplaying', this.notplaying);
+    Mediator.on('player:resize', this.updateSize, this);
+  },
+  stopListening: function() {
+    $traceurRuntime.superCall(this, $BackgroundButton.prototype, "stopListening", []);
+    Mediator.off('player:resize', this.updateSize, this);
   },
   settingsUpdate: function() {
     this.stopListening();
@@ -16263,9 +16188,12 @@ var $BackgroundButton = BackgroundButton;
     var useBackgroundButton = this.core.options.useBackgroundButton === undefined || !!this.core.options.useBackgroundButton;
     return useBackgroundButton && (this.core.mediaControl.$el.find('[data-playstop]').length > 0 || this.core.mediaControl.$el.find('[data-playpause]').length > 0);
   },
-  click: function() {
-    if (this.shouldStop) {
-      this.core.mediaControl.togglePlayStop();
+  click: function(element) {
+    this.core.mediaControl.show();
+    if (element === this.$buttonIcon) {
+      if (this.shouldStop) {
+        this.core.mediaControl.togglePlayStop();
+      }
     } else {
       this.core.mediaControl.togglePlayPause();
     }
@@ -16294,15 +16222,33 @@ var $BackgroundButton = BackgroundButton;
     this.$buttonIcon.removeClass('playing').addClass('notplaying');
   },
   getExternalInterface: function() {},
+  updateSize: function() {
+    if (!this.$el)
+      return;
+    var height = PlayerInfo.currentSize ? PlayerInfo.currentSize.height : this.$el.height();
+    this.$el.css({fontSize: height});
+    this.$buttonWrapper.css({marginTop: -(this.$buttonWrapper.height() / 2)});
+  },
   render: function() {
+    var $__0 = this;
     var style = Styler.getStyleFor(this.name);
     this.$el.html(this.template());
     this.$el.append(style);
     this.$playPauseButton = this.core.mediaControl.$el.find('[data-playpause]');
     this.$playStopButton = this.core.mediaControl.$el.find('[data-playstop]');
+    this.$buttonWrapper = this.$el.find('.background-button-wrapper[data-background-button]');
     this.$buttonIcon = this.$el.find('.background-button-icon[data-background-button]');
     this.shouldStop = this.$playStopButton.length > 0;
-    this.core.$el.append(this.$el);
+    this.$el.insertBefore(this.core.mediaControl.$el.find('.media-control-layer[data-controls]'));
+    this.$el.click((function() {
+      return $__0.click($__0.$el);
+    }));
+    this.$buttonIcon.click((function() {
+      return $__0.click($__0.$buttonIcon);
+    }));
+    process.nextTick((function() {
+      return $__0.updateSize();
+    }));
     if (this.enabled) {
       this.$playPauseButton.hide();
       this.$playStopButton.hide();
@@ -16319,7 +16265,8 @@ var $BackgroundButton = BackgroundButton;
 module.exports = BackgroundButton;
 
 
-},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_core_plugin":"gNZMEo"}],58:[function(require,module,exports){
+}).call(this,require("FWaASH"))
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_core_plugin":"gNZMEo","../../components/mediator":"veeMMc","../../components/player_info":"Rmed05","FWaASH":1}],58:[function(require,module,exports){
 "use strict";
 module.exports = require('./background_button');
 
@@ -16413,16 +16360,15 @@ module.exports = require('./log');
 },{"./log":62}],62:[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
+var Mousetrap = require('mousetrap');
 var BOLD = 'font-weight: bold; font-size: 13px;';
 var INFO = 'color: green;' + BOLD;
 var DEBUG = 'color: #222;' + BOLD;
 var ERROR = 'color: red;' + BOLD;
 var DEFAULT = '';
-$(document).keydown(function(e) {
-  if (e.ctrlKey && e.shiftKey && e.keyCode === 68) {
-    window.DEBUG = !window.DEBUG;
-  }
-});
+Mousetrap.bind(['ctrl+shift+d'], (function() {
+  return window.DEBUG = !window.DEBUG;
+}));
 var Log = function(klass) {
   this.klass = klass || 'Logger';
 };
@@ -16447,12 +16393,13 @@ Log.prototype = {
 module.exports = Log;
 
 
-},{"jquery":3}],63:[function(require,module,exports){
+},{"jquery":3,"mousetrap":4}],63:[function(require,module,exports){
 "use strict";
 module.exports = require('./poster');
 
 
 },{"./poster":64}],64:[function(require,module,exports){
+(function (process){
 "use strict";
 var UIContainerPlugin = require('../../base/ui_container_plugin');
 var Styler = require('../../base/styler');
@@ -16488,14 +16435,15 @@ var $PosterPlugin = PosterPlugin;
     return {'click': 'clicked'};
   },
   bindEvents: function() {
-    var $__0 = this;
     this.listenTo(this.container, 'container:state:buffering', this.onBuffering);
     this.listenTo(this.container, 'container:play', this.onPlay);
     this.listenTo(this.container, 'container:stop', this.onStop);
     this.listenTo(this.container, 'container:ended', this.onStop);
-    Mediator.on('player:resize', (function() {
-      return $__0.updateSize();
-    }));
+    Mediator.on('player:resize', this.updateSize, this);
+  },
+  stopListening: function() {
+    $traceurRuntime.superCall(this, $PosterPlugin.prototype, "stopListening", []);
+    Mediator.off('player:resize', this.updateSize, this);
   },
   onBuffering: function() {
     this.hidePlayButton();
@@ -16519,8 +16467,8 @@ var $PosterPlugin = PosterPlugin;
     this.$playButton.hide();
   },
   showPlayButton: function() {
-    this.updateSize();
     this.$playButton.show();
+    this.updateSize();
   },
   clicked: function() {
     this.container.play();
@@ -16530,29 +16478,42 @@ var $PosterPlugin = PosterPlugin;
       return;
     var height = PlayerInfo.currentSize ? PlayerInfo.currentSize.height : this.$el.height();
     this.$el.css({fontSize: height});
+    if (this.$playWrapper.is(':visible')) {
+      this.$playWrapper.css({marginTop: -(this.$playWrapper.height() / 2)});
+      if (!this.options.hidePlayButton) {
+        this.$playButton.show();
+      }
+    } else {
+      this.$playButton.hide();
+    }
   },
   render: function() {
     var $__0 = this;
     var style = Styler.getStyleFor(this.name);
     this.$el.html(this.template());
     this.$el.append(style);
-    this.container.$el.append(this.el);
-    this.$el.ready((function() {
-      return $__0.updateSize();
-    }));
-    this.$playButton = $(this.$el.find('.play-wrapper'));
+    this.$playButton = this.$el.find('.poster-icon');
+    this.$playWrapper = this.$el.find('.play-wrapper');
     if (this.options.poster !== undefined) {
       var imgEl = $('<img data-poster class="poster-background"></img>');
       imgEl.attr('src', this.options.poster);
       this.$el.prepend(imgEl);
     }
+    this.container.$el.append(this.el);
+    if (!!this.options.hidePlayButton) {
+      this.hidePlayButton();
+    }
+    process.nextTick((function() {
+      return $__0.updateSize();
+    }));
     return this;
   }
 }, {}, UIContainerPlugin);
 module.exports = PosterPlugin;
 
 
-},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_container_plugin":"XSLDWT","../../components/mediator":"veeMMc","../../components/player_info":"Rmed05","jquery":3,"underscore":6}],65:[function(require,module,exports){
+}).call(this,require("FWaASH"))
+},{"../../base/jst":14,"../../base/styler":17,"../../base/ui_container_plugin":"XSLDWT","../../components/mediator":"veeMMc","../../components/player_info":"Rmed05","FWaASH":1,"jquery":3,"underscore":6}],65:[function(require,module,exports){
 "use strict";
 module.exports = require('./spinner_three_bounce');
 
