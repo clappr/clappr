@@ -74,6 +74,14 @@ class BackgroundButton extends UICorePlugin {
     }
   }
 
+  show() {
+    this.$el.removeClass('hide')
+  }
+
+  hide() {
+    this.$el.addClass('hide')
+  }
+
   enable() {
     this.stopListening()
     super()

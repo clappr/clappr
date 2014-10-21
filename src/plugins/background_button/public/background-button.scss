@@ -10,6 +10,12 @@
   @include transition(all, 0.4s, ease-out);
   cursor: pointer;
 
+  &.hide {
+    .background-button-wrapper[data-background-button] {
+      opacity: 0;
+    }
+  }
+
   .background-button-wrapper[data-background-button] {
     position: absolute;
     overflow: hidden;
