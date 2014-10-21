@@ -1,1 +1,16 @@
-aws.json
+.gitignore
+.npmignore
+.env
+.jshintrc
+Gulpfile.js
+AUTHORS
+CONTRIBUTORS
+LICENSE
+node_modules/
+tasks/
+build/
+test/
+src/
+public/
+bin/hook.js
+karma.conf.js
