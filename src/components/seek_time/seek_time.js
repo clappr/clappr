@@ -48,7 +48,7 @@ class SeekTime extends UIObject {
   }
 
   update(options) {
-    if (this.mediaControl.container.getPlaybackType() === 'vod') {
+    if (this.mediaControl.container.getPlaybackType() === 'vod' || this.mediaControl.container.isDvrInUse()) {
       this.$el.find('[data-seek-time]').text(options.formattedTime)
       this.$el.css('left', options.pointerPosition)
       this.$el.removeClass('hidden')
