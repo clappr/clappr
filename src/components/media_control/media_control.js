@@ -239,6 +239,7 @@ class MediaControl extends UIObject {
     this.changeTogglePlay()
     this.addEventListeners()
     this.settingsUpdate()
+    this.container.trigger('container:dvr', this.container.isDvrInUse())
     this.container.setVolume(this.currentVolume)
     if (this.container.mediaControlDisabled) {
       this.disable()
