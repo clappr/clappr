@@ -277,21 +277,22 @@
       }
     }
 
-    .drawer-container[data-volume] {
+    .segmented-bar[data-volume] {
       float: right;
       display: inline-block;
-      width: 32px;
       height: 32px;
       cursor: pointer;
+      margin: 0 8px;
 
-      .drawer-icon-container[data-volume] {
-        position: absolute;
+      .segmented-bar-icon-container[data-volume] {
+        display: inline-block;
         bottom: 0;
 
-        .drawer-icon[data-volume] {
+        .segmented-bar-icon[data-volume] {
           background-color: transparent;
           border: 0;
-          width: 32px;
+          box-sizing: content-box;
+          width: 16px;
           height: 32px;
           &:before { content:"\\e004"; }
 
@@ -301,18 +302,30 @@
         }
       }
 
-      .bar-container[data-volume] {
-        width: 32px;
-        height: 88px;
-        position: absolute;
-        bottom: 40px;
-        background: rgba(2,2,2,.5);
-        border-radius: 4px;
-
+      .segmented-bar-container[data-volume] {
+        display: inline-block;
+        position: relative;
+        bottom: 2px;
         @include transition(all, 0.2s, ease-out);
 
-        &.volume-bar-hide {
-          opacity: 0;
+        .segmented-bar-element[data-volume] {
+          display: inline-block;
+          width: 4px;
+          padding-left: 2px;
+          height: 12px;
+          @include box-shadow(inset 2px 0 0 rgba(255,255,255,0.5));
+
+          &.fill {
+            @include box-shadow(inset 2px 0 0 #fff);
+          }
+
+          &:nth-of-type(1) {
+            padding-left: 0;
+          }
+
+          &:hover {
+            @include transform(scaleY(1.5));
+          }
         }
 
         .bar-background[data-volume] {

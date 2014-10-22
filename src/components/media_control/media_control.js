@@ -37,13 +37,9 @@ class MediaControl extends UIObject {
       'click [data-playstop]': 'togglePlayStop',
       'click [data-fullscreen]': 'toggleFullscreen',
       'click [data-seekbar]': 'seek',
-      'click .bar-background[data-volume]': 'volume',
-      'click .drawer-icon[data-volume]': 'toggleMute',
-      'mouseover .drawer-container[data-volume]': 'showVolumeBar',
-      'mouseleave .drawer-container[data-volume]': 'hideVolumeBar',
+      'click .segmented-bar-container[data-volume]': 'volume',
+      'click .segmented-bar-icon[data-volume]': 'toggleMute',
       'mousedown .bar-scrubber[data-seekbar]': 'startSeekDrag',
-      'mousedown .bar-scrubber[data-volume]': 'startVolumeDrag',
-      'mouseenter .bar-container[data-volume]': 'mousemoveOnSeekBar',
       'mousemove .bar-container[data-seekbar]': 'mousemoveOnSeekBar',
       'mouseleave .bar-container[data-seekbar]': 'mouseleaveOnSeekBar',
       'mouseenter .media-control-layer[data-controls]': 'setKeepVisible',
@@ -209,8 +205,8 @@ class MediaControl extends UIObject {
   }
 
   volume(event) {
-    var offsetY = event.pageY - this.$volumeBarContainer.offset().top
-    this.currentVolume = (1 - (offsetY / this.$volumeBarContainer.height())) * 100
+    var offsetY = event.pageX - this.$volumeBarContainer.offset().left
+    this.currentVolume = (offsetY / this.$volumeBarContainer.width()) * 100
     this.currentVolume = Math.min(100, Math.max(this.currentVolume, 0))
     this.container.setVolume(this.currentVolume)
     this.setVolumeLevel(this.currentVolume)
@@ -245,29 +241,6 @@ class MediaControl extends UIObject {
       this.disable()
     }
     this.trigger("mediacontrol:containerchanged")
-  }
-
-  showVolumeBar() {
-    if (this.hideVolumeId) {
-      clearTimeout(this.hideVolumeId)
-    }
-    this.$volumeBarContainer.show()
-    this.$volumeBarContainer.removeClass('volume-bar-hide')
-  }
-
-  hideVolumeBar() {
-    if (!this.$volumeBarContainer) return
-    if (this.hideVolumeId) {
-      clearTimeout(this.hideVolumeId)
-    }
-    this.hideVolumeId = setTimeout(
-      () => {
-        this.$volumeBarContainer.one(transitionEvents, () => {
-          this.$volumeBarContainer.off(transitionEvents)
-          this.$volumeBarContainer.hide()
-        })
-        this.$volumeBarContainer.addClass('volume-bar-hide')
-      }, 750)
   }
 
   ended() {
@@ -336,12 +309,9 @@ class MediaControl extends UIObject {
       clearTimeout(this.hideId)
     }
     if (!this.isVisible()) return
-    if (this.keepVisible || this.draggingVolumeBar || this.draggingSeekBar) {
+    if (this.keepVisible || this.draggingSeekBar) {
       this.hideId = setTimeout(() => this.hide(), timeout)
     } else {
-      if (this.$volumeBarContainer) {
-        this.$volumeBarContainer.hide()
-      }
       this.trigger('mediacontrol:hide', this.name)
       this.$el.addClass('media-control-hide')
     }
@@ -369,23 +339,18 @@ class MediaControl extends UIObject {
     this.$seekBarPosition = this.$el.find('.bar-fill-2[data-seekbar]')
     this.$seekBarScrubber = this.$el.find('.bar-scrubber[data-seekbar]')
     this.$seekBarHover = this.$el.find('.bar-hover[data-seekbar]')
-    this.$volumeBarContainer = this.$el.find('.bar-container[data-volume]')
-    this.$volumeBarBackground = this.$el.find('.bar-background[data-volume]')
-    this.$volumeBarFill = this.$el.find('.bar-fill-1[data-volume]')
-    this.$volumeBarScrubber = this.$el.find('.bar-scrubber[data-volume]')
-    this.$volumeIcon = this.$el.find('.drawer-icon[data-volume]')
+    this.$volumeBarContainer = this.$el.find('.segmented-bar-container[data-volume]')
+    this.$volumeIcon = this.$el.find('.segmented-bar-icon[data-volume]')
+    this.$volumeBarBackground = this.$el.find('.segmented-bar-background[data-volume]')
   }
 
   setVolumeLevel(value) {
     if (!this.container.isReady) {
       this.listenToOnce(this.container, "container:ready", () => this.setVolumeLevel(value))
     } else {
-      var containerHeight = this.$volumeBarContainer.height()
-      var barHeight = this.$volumeBarBackground.height()
-      var offset = (containerHeight - barHeight) / 2.0
-      var pos = barHeight * value / 100.0 - this.$volumeBarScrubber.height() / 2.0 + offset
-      this.$volumeBarFill.css({ height: value + '%' })
-      this.$volumeBarScrubber.css({ bottom: pos })
+      this.$volumeBarContainer.find('.segmented-bar-element').removeClass('fill')
+      var item  = Math.ceil(value / 10.0)
+      this.$volumeBarContainer.find('.segmented-bar-element').slice(0, item).addClass('fill')
       if (value > 0) {
         this.$volumeIcon.removeClass('muted')
       } else {
@@ -433,7 +398,6 @@ class MediaControl extends UIObject {
     this.createCachedElements()
     this.$playPauseToggle.addClass('paused')
     this.$playStopToggle.addClass('stopped')
-    this.$volumeBarContainer.hide()
 
     this.changeTogglePlay()
     this.hideId = setTimeout(() => this.hide(), timeout)
