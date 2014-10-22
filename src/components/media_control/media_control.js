@@ -462,6 +462,7 @@ class MediaControl extends UIObject {
     this.parseColors()
     this.seekTime.render()
 
+    this.trigger('mediacontrol:rendered')
     return this
   }
 }
