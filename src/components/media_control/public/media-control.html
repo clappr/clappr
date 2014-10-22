@@ -25,15 +25,6 @@
       </div>
     </div>
   <% }; %>
-  <% var renderDrawer = function(name, renderContent) { %>
-      <div class="drawer-container" data-<%= name %>>
-        <div class="drawer-icon-container" data-<%= name %>>
-          <div class="drawer-icon media-control-icon" data-<%= name %>></div>
-          <span class="drawer-text" data-<%= name %>></span>
-        </div>
-        <% renderContent(name); %>
-      </div>
-  <% }; %>
   <% var renderIndicator = function(name) { %>
       <div class="media-control-indicator" data-<%= name %>></div>
   <% }; %>
