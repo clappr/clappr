@@ -418,11 +418,10 @@ class MediaControl extends UIObject {
     }
     if (this.options.mediacontrol) {
       var customColors = _.pick(this.options.mediacontrol, 'seekbar', 'buttons')
+      _.each(customColors, (value, key) => {
+        this.$el.find(translate.query[key]).css(translate.rule[key], customColors[key]);
+      })
     }
-
-    _.each(customColors, (value, key) => {
-      this.$el.find(translate.query[key]).css(translate.rule[key], customColors[key]);
-    })
   }
 
   render() {
