@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto);
+
 $live-color: #ff0101;
 $dvr-color: #fff;
 $vod-color: #005aff;
@@ -5,18 +7,19 @@ $vod-color: #005aff;
 $disabled-opacity: 0.3;
 
 $control-height: 32px;
-$circle-radius: 5px;
+$circle-radius: 3.5px;
 
 .dvr-controls[data-dvr-controls] {
   display: inline-block;
   color: $dvr-color;
   line-height: 32px;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: bold;
   margin-left: 5px;
 
   .live-info {
     cursor: default;
+    font-family: "Roboto", "Open Sans", Arial, sans-serif;
     &:before {
       content: "";
       display: inline-block;
@@ -24,7 +27,7 @@ $circle-radius: 5px;
       width: $circle-radius*2;
       height: $circle-radius*2;
       border-radius: $circle-radius;
-      margin-right: 3px;
+      margin-right: $circle-radius*2;
       background-color: $live-color;
     }
     &.disabled {
@@ -42,10 +45,10 @@ $circle-radius: 5px;
     border: 0;
     color: $dvr-color;
     background-color: transparent;
-    font-size: 12px;
     height: 32px;
     padding: 0;
     opacity: 0.7;
+    font-family: "Roboto", "Open Sans", Arial, sans-serif;
 
     &:before {
       content: "";
@@ -54,7 +57,7 @@ $circle-radius: 5px;
       width: $circle-radius*2;
       height: $circle-radius*2;
       border-radius: $circle-radius;
-      margin-right: 3px;
+      margin-right: $circle-radius*2;
       background-color: $dvr-color;
     }
 
