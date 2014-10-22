@@ -54,7 +54,8 @@ class Container extends UIObject {
 
   playbackDvrStateChanged(dvrInUse) {
     this.settings = this.playback.settings
-    this.trigger('container:dvr', dvrInUse);
+    this.dvrInUse = dvrInUse
+    this.trigger('container:dvr', dvrInUse)
   }
 
   statsAdd(metric) {
@@ -67,6 +68,14 @@ class Container extends UIObject {
 
   getPlaybackType() {
     return this.playback.getPlaybackType()
+  }
+
+  isDvrEnabled() {
+    return !!this.playback.dvrEnabled
+  }
+
+  isDvrInUse() {
+    return !!this.dvrInUse
   }
 
   destroy() {
