@@ -1,9 +1,8 @@
-@import 'compass/css3/transition';
-
 .seek-time[data-seek-time] {
   position: absolute;
   width: auto;
   height: 20px;
+  line-height: 20px;
   bottom: 55px;
   background-color: rgba(2, 2, 2, 0.5);
   z-index: 9999;
@@ -11,7 +10,6 @@
   &.hidden[data-seek-time] {
     opacity: 0;
   }
-
 
   span[data-seek-time] {
     position: relative;
