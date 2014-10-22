@@ -327,44 +327,6 @@
             @include transform(scaleY(1.5));
           }
         }
-
-        .bar-background[data-volume] {
-          margin-left: 12px;
-          background: #6f6f6f;
-          border-radius: 4px;
-          width: 8px;
-          height: 72px;
-          position: relative;
-          top: 8px;
-          overflow: hidden;
-
-          .bar-fill-1[data-volume] {
-            position: absolute;
-            bottom: 0;
-            background: white;
-            width: 100%;
-            height: 0;
-          }
-        }
-
-        .bar-scrubber[data-volume] {
-          position: absolute;
-          bottom: 40%;
-          left: 6px;
-          width: 20px;
-          height: 20px;
-
-          .bar-scrubber-icon[data-volume] {
-            position: absolute;
-            left: 4px;
-            top: 4px;
-            width: 12px;
-            height: 12px;
-            border-radius: 6px;
-            border: 1px solid #6f6f6f;
-            background-color: white;
-          }
-        }
       }
     }
   }
