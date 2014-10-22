@@ -106,9 +106,9 @@ class Container extends UIObject {
     return this.playback.getDuration();
   }
 
-  error(error) {
-    this.$el.prepend(error.render().el)
-    this.trigger('container:error', {error: error, container: this}, this.name);
+  error(errorObj) {
+    this.$el.prepend(errorObj.render().el)
+    this.trigger('container:error', {error: errorObj, container: this}, this.name);
   }
 
   loadedMetadata(duration) {
