@@ -43,7 +43,8 @@ class SeekTime extends UIObject {
   }
 
   hideTime() {
-    this.$el.addClass('hidden');
+    this.$el.addClass('hidden')
+    this.$el.css('left', '-100%')
   }
 
   update(options) {
