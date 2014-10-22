@@ -34,6 +34,7 @@ class DVRControls extends UICorePlugin {
     this.core.mediaControl.$el.addClass('live')
     if (dvrEnabled) {
       this.core.mediaControl.$el.addClass('dvr')
+      this.core.mediaControl.$el.find('.media-control-indicator[data-position], .media-control-indicator[data-duration]').hide()
     } else {
       this.core.mediaControl.$el.removeClass('dvr')
     }
@@ -67,6 +68,7 @@ class DVRControls extends UICorePlugin {
     if (this.shouldRender()) {
       this.core.mediaControl.$el.addClass('live')
       this.core.mediaControl.$('.media-control-left-panel[data-media-control]').append(this.$el)
+      this.$duration = this.core.mediaControl.seekTime.$el.append('<span data-duration></span>')
     }
     return this
   }
