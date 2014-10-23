@@ -7,7 +7,7 @@
   height: 100%;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.2);
-  @include transition(all, 0.4s, ease-out);
+  @include transition(all 0.4s ease-out);
 
   &.pointer-enabled {
     cursor: pointer;
@@ -27,7 +27,6 @@
     line-height: 100%;
     font-size: 25%;
     top: 50%;
-    // margin-top: -10%;
     text-align: center;
 
     .background-button-icon[data-background-button] {
