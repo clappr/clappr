@@ -191,9 +191,13 @@
         line-height: 32px;
         position: relative;
       }
+      &[data-position] {
+        margin-left: 6px;
+      }
       &[data-duration] {
         &:before { content: "|"; margin: 0 3px; }
         color: rgba(255, 255, 255, 0.5);
+        margin-right: 6px;
       }
     }
 
