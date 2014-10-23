@@ -63,7 +63,7 @@ class MediaControl extends UIObject {
       right: ['volume'],
       default: ['position', 'seekbar', 'duration']
     }
-    this.settings = _.isEmpty(this.container.settings) ? this.settings :this.container.settings
+    this.settings = _.isEmpty(this.container.settings) ? this.settings : this.container.settings
     this.disabled = false
     if (this.container.mediaControlDisabled || this.options.chromeless) {
       this.disable()
@@ -125,13 +125,11 @@ class MediaControl extends UIObject {
     if (this.container.settings.seekEnabled) {
       var offsetX = event.pageX - this.$seekBarContainer.offset().left - (this.$seekBarHover.width() / 2)
       this.$seekBarHover.css({left: offsetX})
-      this.$seekBarHover.show()
     }
     this.trigger('mediacontrol:mousemove:seekbar', event);
   }
 
   mouseleaveOnSeekBar(event) {
-    this.$seekBarHover.hide()
     this.trigger('mediacontrol:mouseleave:seekbar', event);
   }
 
@@ -318,7 +316,7 @@ class MediaControl extends UIObject {
   }
 
   settingsUpdate() {
-    this.settings = _.isEmpty(this.container.settings) ? this.settings :this.container.settings
+    this.settings = _.isEmpty(this.container.settings) ? this.settings : this.container.settings
     this.render()
   }
 
@@ -349,7 +347,7 @@ class MediaControl extends UIObject {
       this.listenToOnce(this.container, "container:ready", () => this.setVolumeLevel(value))
     } else {
       this.$volumeBarContainer.find('.segmented-bar-element').removeClass('fill')
-      var item  = Math.ceil(value / 10.0)
+      var item = Math.ceil(value / 10.0)
       this.$volumeBarContainer.find('.segmented-bar-element').slice(0, item).addClass('fill')
       if (value > 0) {
         this.$volumeIcon.removeClass('muted')
@@ -405,7 +403,6 @@ class MediaControl extends UIObject {
       this.hide()
     }
 
-    this.$seekBarHover.hide()
     this.$seekBarPosition.addClass('media-control-notransition')
     this.$seekBarScrubber.addClass('media-control-notransition')
 

@@ -235,19 +235,20 @@
         }
 
         .bar-hover[data-seekbar] {
-          display: none;
+          opacity: 0;
           position: absolute;
           top: -3px;
           width: 5px;
           height: 7px;
           background-color: rgba(255,255,255,0.5);
+          @include transition(opacity 0.1s ease);
         }
       }
 
       &:hover {
         .bar-background[data-seekbar] {
           .bar-hover[data-seekbar] {
-            display: block;
+            opacity: 1;
           }
         }
       }
