@@ -1,3 +1,5 @@
+@import "compass/css3";
+
 @import url(http://fonts.googleapis.com/css?family=Roboto);
 
 $live-color: #ff0101;
@@ -49,6 +51,7 @@ $circle-radius: 3.5px;
     padding: 0;
     opacity: 0.7;
     font-family: "Roboto", "Open Sans", Arial, sans-serif;
+    @include transition(all 0.1s ease);
 
     &:before {
       content: "";
