@@ -60,7 +60,8 @@
     "traceur": "0.0.49",
     "vinyl-source-stream": "^0.1.1",
     "watchify": "^0.10.2",
-    "yargs": "latest"
+    "yargs": "latest",
+    "express-alias": "~0.3.0"
   },
   "dependencies": {
     "underscore": "1.7.0",
