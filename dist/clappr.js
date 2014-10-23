@@ -16134,9 +16134,7 @@ var $BackgroundButton = BackgroundButton;
   bindEvents: function() {
     this.listenTo(this.core.mediaControl.container, 'container:state:buffering', this.hide);
     this.listenTo(this.core.mediaControl.container, 'container:state:bufferfull', this.show);
-    this.listenTo(this.core.mediaControl.container, 'container:settingsupdate', this.settingsUpdate);
-    this.listenTo(this.core.mediaControl.container, 'container:dvr', this.settingsUpdate);
-    this.listenTo(this.core.mediaControl, 'mediacontrol:containerchanged', this.settingsUpdate);
+    this.listenTo(this.core.mediaControl, 'mediacontrol:rendered', this.settingsUpdate);
     this.listenTo(this.core.mediaControl, 'mediacontrol:show', this.updateSize);
     this.listenTo(this.core.mediaControl, 'mediacontrol:playing', this.playing);
     this.listenTo(this.core.mediaControl, 'mediacontrol:notplaying', this.notplaying);
@@ -16282,8 +16280,7 @@ var $DVRControls = DVRControls;
     };
   },
   bindEvents: function() {
-    this.listenTo(this.core.mediaControl, 'mediacontrol:containerchanged', this.settingsUpdate);
-    this.listenTo(this.core.mediaControl.container, 'container:settingsupdate', this.settingsUpdate);
+    this.listenTo(this.core.mediaControl, 'mediacontrol:rendered', this.settingsUpdate);
     this.listenTo(this.core.mediaControl.container, 'container:dvr', this.dvrChanged);
   },
   dvrChanged: function(dvrEnabled) {
@@ -16324,7 +16321,11 @@ var $DVRControls = DVRControls;
     if (this.shouldRender()) {
       this.core.mediaControl.$el.addClass('live');
       this.core.mediaControl.$('.media-control-left-panel[data-media-control]').append(this.$el);
-      this.$duration = this.core.mediaControl.seekTime.$el.append('<span data-duration></span>');
+      if (this.$duration) {
+        this.$duration.remove();
+      }
+      this.$duration = $('<span data-duration></span>');
+      this.core.mediaControl.seekTime.$el.append(this.$duration);
     }
     return this;
   }
