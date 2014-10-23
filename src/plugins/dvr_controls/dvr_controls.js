@@ -24,8 +24,7 @@ class DVRControls extends UICorePlugin {
   }
 
   bindEvents() {
-    this.listenTo(this.core.mediaControl, 'mediacontrol:containerchanged', this.settingsUpdate)
-    this.listenTo(this.core.mediaControl.container, 'container:settingsupdate', this.settingsUpdate)
+    this.listenTo(this.core.mediaControl, 'mediacontrol:rendered', this.settingsUpdate)
     this.listenTo(this.core.mediaControl.container, 'container:dvr', this.dvrChanged)
   }
 
@@ -68,7 +67,11 @@ class DVRControls extends UICorePlugin {
     if (this.shouldRender()) {
       this.core.mediaControl.$el.addClass('live')
       this.core.mediaControl.$('.media-control-left-panel[data-media-control]').append(this.$el)
-      this.$duration = this.core.mediaControl.seekTime.$el.append('<span data-duration></span>')
+      if (this.$duration) {
+        this.$duration.remove()
+      }
+      this.$duration = $('<span data-duration></span>')
+      this.core.mediaControl.seekTime.$el.append(this.$duration)
     }
     return this
   }
