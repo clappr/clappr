@@ -40,7 +40,6 @@
     opacity: 0.5;
     vertical-align: middle;
     text-align: left;
-    padding: 0 6px;
     @include font-smoothing(antialiased);
     @include transition(all 0.1s ease);
   }
@@ -76,7 +75,7 @@
     .media-control-left-panel[data-media-control] {
       position: absolute;
       top: 0;
-      left: 10px;
+      left: 4px;
       height: 100%;
     }
 
@@ -89,14 +88,15 @@
     .media-control-right-panel[data-media-control] {
       position: absolute;
       top: 0;
-      right: 5px;
+      right: 4px;
       height: 100%;
     }
 
     button.media-control-button {
       background-color: transparent;
       border: 0;
-      margin: 0 8px;
+      margin: 0 6px;
+      padding: 0;
       cursor: pointer;
       display: inline-block;
 
@@ -106,22 +106,22 @@
 
       &[data-play] {
         float: left;
-        width: 32px;
         height: 100%;
+        font-size: 20px;
         &:before { content:"\\e001"; }
       }
 
       &[data-pause] {
         float: left;
-        width: 32px;
         height: 100%;
+        font-size: 20px;
         &:before { content:"\\e002"; }
       }
 
       &[data-stop] {
         float: left;
-        width: 32px;
         height: 100%;
+        font-size: 20px;
         &:before { content:"\\e003"; }
       }
 
@@ -129,7 +129,6 @@
         float: right;
         background-color: transparent;
         border: 0;
-        width: 32px;
         height: 100%;
         &:before { content:"\\e006"; }
 
@@ -141,7 +140,6 @@
         float: right;
         background-color: transparent;
         border: 0;
-        width: 32px;
         height: 100%;
         opacity: 0;
         &:before { content:"\\e008"; }
@@ -153,8 +151,9 @@
 
       &[data-playpause] {
         float: left;
-        width: 32px;
         height: 100%;
+        font-size: 20px;
+
         &:before { content:"\\e001"; }
 
         &.playing {
@@ -168,8 +167,9 @@
 
       &[data-playstop] {
         float: left;
-        width: 32px;
         height: 100%;
+        font-size: 20px;
+
         &:before { content:"\\e001"; }
 
         &.playing {
@@ -284,7 +284,8 @@
       display: inline-block;
       height: 32px;
       cursor: pointer;
-      margin: 0 8px;
+      margin: 0 6px;
+      box-sizing: border-box;
 
       .segmented-bar-icon-container[data-volume] {
         display: inline-block;
@@ -296,6 +297,7 @@
           box-sizing: content-box;
           width: 16px;
           height: 32px;
+          margin-right: 6px;
           opacity: 1;
           &:hover { opacity: 1; }
           &:before { content:"\\e004"; }
