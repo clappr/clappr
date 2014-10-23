@@ -26,9 +26,7 @@ class BackgroundButton extends UICorePlugin {
   bindEvents() {
     this.listenTo(this.core.mediaControl.container, 'container:state:buffering', this.hide)
     this.listenTo(this.core.mediaControl.container, 'container:state:bufferfull', this.show)
-    this.listenTo(this.core.mediaControl.container, 'container:settingsupdate', this.settingsUpdate)
-    this.listenTo(this.core.mediaControl.container, 'container:dvr', this.settingsUpdate)
-    this.listenTo(this.core.mediaControl, 'mediacontrol:containerchanged', this.settingsUpdate)
+    this.listenTo(this.core.mediaControl, 'mediacontrol:rendered', this.settingsUpdate)
     this.listenTo(this.core.mediaControl, 'mediacontrol:show', this.updateSize)
     this.listenTo(this.core.mediaControl, 'mediacontrol:playing', this.playing)
     this.listenTo(this.core.mediaControl, 'mediacontrol:notplaying', this.notplaying)
