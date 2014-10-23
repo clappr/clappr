@@ -1,4 +1,5 @@
-@import 'fontsmoothing';
+@import "compass/css3";
+@import "fontsmoothing";
 
 @font-face {
   font-family: "Player";
@@ -39,6 +40,7 @@
       color: white;
       opacity: 0.75;
       @include font-smoothing(antialiased);
+      @include transition(opacity text-shadow 0.1s ease);
 
       &.play[data-poster]:before{
         content:"\\e001";
@@ -46,6 +48,7 @@
 
       &:hover {
         opacity: 1.0;
+        text-shadow: rgba(255,255,255,0.8) 0 0 15px;
       }
     }
   }
