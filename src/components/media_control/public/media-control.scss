@@ -25,7 +25,7 @@
     width: 100%;
     bottom: 0;
     @include background-image(linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.9)));
-    @include transition(all, 0.6s, ease-out);
+    @include transition(opacity 0.6s ease-out);
   }
 
   .media-control-icon {
@@ -42,13 +42,13 @@
     text-align: left;
     padding: 0 6px;
     @include font-smoothing(antialiased);
+    @include transition(all 0.1s ease);
   }
 
   .media-control-icon:hover {
     color: white;
     opacity: 0.75;
     text-shadow: rgba(255,255,255,0.8) 0 0 5px;
-    @include transition(all, 0.1s, ease-out);
   }
 
   &.media-control-hide {
@@ -71,7 +71,7 @@
     width: 100%;
     height: 32px;
     vertical-align: middle;
-    @include transition(all, 0.4s, ease-out);
+    @include transition(bottom 0.4s ease-out);
 
     .media-control-left-panel[data-media-control] {
       position: absolute;
@@ -146,6 +146,7 @@
         opacity: 0;
         &:before { content:"\\e008"; }
         &.enabled {
+          &:hover { opacity: 1.0; text-shadow: none;}
           opacity: 1.0;
         }
       }
@@ -220,7 +221,7 @@
           width: 0;
           height: 100%;
           background-color: #c2c2c2;
-          @include transition(all, 0.1s, ease-out);
+          @include transition(all 0.1s ease-out);
         }
 
         .bar-fill-2[data-seekbar] {
@@ -230,7 +231,7 @@
           width: 0;
           height: 100%;
           background-color: #005aff;
-          @include transition(all, 0.1s, ease-out);
+          @include transition(all 0.1s ease-out);
         }
 
         .bar-hover[data-seekbar] {
@@ -262,7 +263,7 @@
         width: 20px;
         height: 20px;
         opacity: 1;
-        @include transition(all, 0.1s, ease-out);
+        @include transition(all 0.1s ease-out);
 
         .bar-scrubber-icon[data-seekbar] {
           position: absolute;
@@ -318,7 +319,7 @@
           height: 12px;
           @include box-shadow(inset 2px 0 0 rgba(255,255,255,0.5));
 
-          @include transition(transform, 0.2s, ease-out);
+          @include transition(transform 0.2s ease-out);
 
           &.fill {
             @include box-shadow(inset 2px 0 0 #fff);
