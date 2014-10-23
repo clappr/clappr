@@ -2,6 +2,7 @@ var UICorePlugin = require('../../base/ui_core_plugin')
 var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
 
+var Browser = require('../../components/browser')
 var Mediator = require('../../components/mediator')
 var PlayerInfo = require('../../components/player_info')
 
@@ -59,8 +60,8 @@ class BackgroundButton extends UICorePlugin {
 
   shouldRender() {
     //this plugin should render only if there is a playpause icon in media control
-    var useBackgroundButton = this.core.options.useBackgroundButton === undefined || !!this.core.options.useBackgroundButton
-    return useBackgroundButton && (this.core.mediaControl.$el.find('[data-playstop]').length > 0 || this.core.mediaControl.$el.find('[data-playpause]').length > 0)
+    this.displayBackgroundButton = (this.core.options.displayBackgroundButton === undefined && Browser.isMobile) || !!this.core.options.displayBackgroundButton
+    return (this.displayBackgroundButton && this.core.mediaControl.$el.find('[data-playstop]').length > 0) || this.core.mediaControl.$el.find('[data-playpause]').length > 0
   }
 
   click(element) {
@@ -73,7 +74,9 @@ class BackgroundButton extends UICorePlugin {
   }
 
   show() {
-    this.$el.removeClass('hide')
+    if (!!this.displayBackgroundButton) {
+      this.$el.removeClass('hide')
+    }
   }
 
   hide() {
@@ -127,9 +130,11 @@ class BackgroundButton extends UICorePlugin {
     this.$el.click(() => this.click(this.$el))
     this.$buttonIcon.click(() => this.click(this.$buttonIcon))
     process.nextTick(() => this.updateSize())
-    if (this.enabled) {
+    if (this.displayBackgroundButton) {
       this.$playPauseButton.hide()
       this.$playStopButton.hide()
+    } else {
+      this.$el.addClass('hide')
     }
     if (this.shouldStop) {
       this.$buttonIcon.addClass('playstop')
