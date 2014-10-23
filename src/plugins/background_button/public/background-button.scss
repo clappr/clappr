@@ -40,6 +40,7 @@
       color: white;
       opacity: 0.75;
       @include font-smoothing(antialiased);
+      @include transition(all 0.1s ease);
 
       &:hover {
         opacity: 1;
