@@ -13,11 +13,12 @@ $circle-radius: 3.5px;
 
 .dvr-controls[data-dvr-controls] {
   display: inline-block;
+  float: left;
   color: $dvr-color;
   line-height: 32px;
   font-size: 10px;
   font-weight: bold;
-  margin-left: 5px;
+  margin-left: 6px;
 
   .live-info {
     cursor: default;
@@ -29,7 +30,7 @@ $circle-radius: 3.5px;
       width: $circle-radius*2;
       height: $circle-radius*2;
       border-radius: $circle-radius;
-      margin-right: $circle-radius*2;
+      margin-right: $circle-radius;
       background-color: $live-color;
     }
     &.disabled {
