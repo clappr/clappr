@@ -15,6 +15,7 @@ var Utils = require('../../base/utils')
 var Mousetrap = require('mousetrap')
 var SeekTime = require('../seek_time')
 var Mediator = require('../../components/mediator')
+var PlayerInfo = require('../../components/player_info')
 
 var transitionEvents = 'webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend'
 
@@ -140,6 +141,10 @@ class MediaControl extends UIObject {
       this.$fullscreenToggle.addClass('shrink')
     } else {
       this.$fullscreenToggle.removeClass('shrink')
+    }
+    this.$el.removeClass('w320')
+    if (PlayerInfo.currentSize.width <= 320) {
+      this.$el.addClass('w320')
     }
   }
 
