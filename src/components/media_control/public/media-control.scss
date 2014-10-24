@@ -327,6 +327,7 @@
         height: 18px;
         padding: 3px 0;
         overflow: hidden;
+        @include transition(width .2s ease-out);
 
         .segmented-bar-element[data-volume] {
           display: inline-block;
@@ -352,4 +353,20 @@
       }
     }
   }
+
+  &.w320 {
+    .media-control-layer[data-controls] {
+      .drawer-container[data-volume] {
+        .segmented-bar[data-volume] {
+          &.volume-bar-hide {
+            height: 12px;
+            top: 9px;
+            padding: 0;
+            width: 0;
+          }
+        }
+      }
+    }
+  }
+
 }
