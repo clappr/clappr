@@ -162,6 +162,7 @@ class MediaControl extends UIObject {
   startSeekDrag(event) {
     if (!this.container.settings.seekEnabled) return
     this.draggingSeekBar = true
+    this.$seekBarScrubber.addClass('dragging')
     this.$seekBarLoaded.addClass('media-control-notransition')
     this.$seekBarPosition.addClass('media-control-notransition')
     this.$seekBarScrubber.addClass('media-control-notransition')
@@ -183,7 +184,7 @@ class MediaControl extends UIObject {
     }
     this.$seekBarLoaded.removeClass('media-control-notransition')
     this.$seekBarPosition.removeClass('media-control-notransition')
-    this.$seekBarScrubber.removeClass('media-control-notransition')
+    this.$seekBarScrubber.removeClass('media-control-notransition dragging')
     this.draggingSeekBar = false
     this.draggingVolumeBar = false
   }

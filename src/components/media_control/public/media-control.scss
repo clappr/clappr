@@ -201,6 +201,11 @@
       }
     }
 
+    .bar-scrubber.dragging {
+      cursor: -webkit-grabbing;
+      cursor: grabbing;
+    }
+
     .bar-container[data-seekbar] {
       position: absolute;
       top: -20px;
