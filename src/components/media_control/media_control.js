@@ -39,6 +39,8 @@ class MediaControl extends UIObject {
       'click [data-seekbar]': 'seek',
       'click .segmented-bar[data-volume]': 'volume',
       'click .drawer-icon[data-volume]': 'toggleMute',
+      'mouseenter .drawer-container[data-volume]': 'showVolumeBar',
+      'mouseleave .drawer-container[data-volume]': 'hideVolumeBar',
       'mousedown .bar-scrubber[data-seekbar]': 'startSeekDrag',
       'mousemove .bar-container[data-seekbar]': 'mousemoveOnSeekBar',
       'mouseleave .bar-container[data-seekbar]': 'mouseleaveOnSeekBar',
@@ -242,6 +244,21 @@ class MediaControl extends UIObject {
     this.trigger("mediacontrol:containerchanged")
   }
 
+  showVolumeBar() {
+    if (this.hideVolumeId) {
+      clearTimeout(this.hideVolumeId)
+    }
+    this.$volumeBarContainer.removeClass('volume-bar-hide')
+  }
+
+  hideVolumeBar() {
+    if (!this.$volumeBarContainer) return
+    if (this.hideVolumeId) {
+      clearTimeout(this.hideVolumeId)
+    }
+    this.hideVolumeId = setTimeout(() => this.$volumeBarContainer.addClass('volume-bar-hide'), 750)
+  }
+
   ended() {
     this.changeTogglePlay()
   }
@@ -307,6 +324,7 @@ class MediaControl extends UIObject {
     if (this.hideId) {
       clearTimeout(this.hideId)
     }
+    this.hideVolumeBar()
     if (!this.isVisible()) return
     if (this.keepVisible || this.draggingSeekBar) {
       this.hideId = setTimeout(() => this.hide(), timeout)
@@ -418,6 +436,7 @@ class MediaControl extends UIObject {
 
       this.setVolumeLevel(this.currentVolume)
       this.bindKeyEvents()
+      this.hideVolumeBar()
     })
 
     this.parseColors()
