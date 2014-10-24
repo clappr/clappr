@@ -330,7 +330,7 @@
         @include transition(width .2s ease-out);
 
         .segmented-bar-element[data-volume] {
-          display: inline-block;
+          float: left;
           width: 4px;
           padding-left: 2px;
           height: 12px;
