@@ -14,15 +14,9 @@
   <% }; %>
   <% var renderSegmentedBar = function(name, segments) { %>
     <div class="segmented-bar" data-<%= name %>>
-      <div class="segmented-bar-icon-container" data-<%= name %>>
-        <div class="segmented-bar-icon media-control-icon" data-<%= name %>></div>
-        <span class="segmented-bar-text" data-<%= name %>></span>
-      </div>
-      <div class="segmented-bar-container" data-<%= name %>>
-      <% for (var i = 0; i < segments; i++) { %>
-        <div class="segmented-bar-element" data-<%= name %>></div>
-      <% } %>
-      </div>
+    <% for (var i = 0; i < segments; i++) { %>
+      <div class="segmented-bar-element" data-<%= name %>></div>
+    <% } %>
     </div>
   <% }; %>
   <% var renderDrawer = function(name, renderContent) { %>
@@ -45,7 +39,7 @@
         if(setting === "seekbar") {
           renderBar(setting);
         } else if (setting === "volume") {
-          renderSegmentedBar(setting, 10);
+          renderDrawer(setting, function(name) { return renderSegmentedBar(name, 10); });
         } else if (setting === "duration" || setting === "position") {
           renderIndicator(setting);
         } else {
