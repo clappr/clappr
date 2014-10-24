@@ -25,8 +25,8 @@ class Flash extends UIObject {
     this.autoPlay = options.autoPlay
     this.settings = {default: ['seekbar']}
     if (this.isRTMP) {
-      this.settings.left = ["playstop", "volume"]
-      this.settings.right = ["fullscreen"]
+      this.settings.left = ["playstop"]
+      this.settings.right = ["fullscreen", "volume"]
     } else {
       this.settings.left = ["playpause", "position", "duration"]
       this.settings.right = ["fullscreen", "volume"]
