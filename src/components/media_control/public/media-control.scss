@@ -288,7 +288,7 @@
       }
     }
 
-    .segmented-bar[data-volume] {
+    .drawer-container[data-volume] {
       float: right;
       display: inline-block;
       height: 32px;
@@ -296,11 +296,11 @@
       margin: 0 6px;
       box-sizing: border-box;
 
-      .segmented-bar-icon-container[data-volume] {
-        display: inline-block;
+      .drawer-icon-container[data-volume] {
+        float: left;
         bottom: 0;
 
-        .segmented-bar-icon[data-volume] {
+        .drawer-icon[data-volume] {
           background-color: transparent;
           border: 0;
           box-sizing: content-box;
@@ -319,10 +319,14 @@
         }
       }
 
-      .segmented-bar-container[data-volume] {
-        display: inline-block;
+      .segmented-bar[data-volume] {
+        float: left;
         position: relative;
-        bottom: 2px;
+        top: 6px;
+        width: 42px;
+        height: 18px;
+        padding: 3px 0;
+        overflow: hidden;
 
         .segmented-bar-element[data-volume] {
           display: inline-block;
@@ -331,7 +335,7 @@
           height: 12px;
           @include box-shadow(inset 2px 0 0 rgba(255,255,255,0.5));
 
-          @include transition(transform 0.2s ease-out);
+          @include transition(transform .2s ease-out);
 
           &.fill {
             @include box-shadow(inset 2px 0 0 #fff);
