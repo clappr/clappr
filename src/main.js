@@ -50,8 +50,8 @@ class Player extends BaseObject {
     return _.compact(_.flatten([options.source, options.sources]))
   }
 
-  resize(height, width) {
-    this.core.resize(height, width);
+  resize(size) {
+    this.core.resize(size);
   }
 
   load(sources) {
