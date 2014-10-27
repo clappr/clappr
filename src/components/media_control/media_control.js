@@ -221,11 +221,10 @@ class MediaControl extends UIObject {
 
   toggleMute() {
     if (this.mute) {
-      if (this.currentVolume > 0) {
-        this.setVolume(this.currentVolume)
-      } else {
-        this.setVolume(100)
+      if (this.currentVolume <= 0) {
+        this.currentVolume = 100
       }
+      this.setVolume(100)
     } else {
       this.setVolume(0)
     }
