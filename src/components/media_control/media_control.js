@@ -56,6 +56,7 @@ class MediaControl extends UIObject {
     super(options);
     this.seekTime = new SeekTime(this)
     this.options = options
+    this.mute = this.options.mute
     this.currentVolume = this.options.mute ? 0 : 100
     this.container = options.container
     this.container.setVolume(this.currentVolume)

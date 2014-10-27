@@ -39,8 +39,6 @@
         bar: renderBar,
         segmentedBar: renderSegmentedBar,
       };
-      console.log(settings);
-      console.log(templates[settings.volumeBarTemplate]);
       var render = function(settingsList) {
         _.each(settingsList, function(setting) {
           if(setting === "seekbar") {
