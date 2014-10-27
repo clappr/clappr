@@ -1,6 +1,6 @@
 <div class="media-control-background" data-background></div>
 <div class="media-control-layer" data-controls>
-  <% var renderBar = function(name) { %>
+  <%  var renderBar = function(name) { %>
       <div class="bar-container" data-<%= name %>>
         <div class="bar-background" data-<%= name %>>
           <div class="bar-fill-1" data-<%= name %>></div>
@@ -11,8 +11,9 @@
           <div class="bar-scrubber-icon" data-<%= name %>></div>
         </div>
       </div>
-  <% }; %>
-  <% var renderSegmentedBar = function(name, segments) { %>
+  <%  }; %>
+  <%  var renderSegmentedBar = function(name, segments) {
+      segments = segments || 10; %>
     <div class="bar-container" data-<%= name %>>
     <% for (var i = 0; i < segments; i++) { %>
       <div class="segmented-bar-element" data-<%= name %>></div>
@@ -34,19 +35,25 @@
   <% var renderButton = function(name) { %>
       <button class="media-control-button media-control-icon" data-<%= name %>></button>
   <% }; %>
-  <% var render = function(settings) {
-      _.each(settings, function(setting) {
-        if(setting === "seekbar") {
-          renderBar(setting);
-        } else if (setting === "volume") {
-          renderDrawer(setting, function(name) { return renderSegmentedBar(name, 10); });
-        } else if (setting === "duration" || setting === "position") {
-          renderIndicator(setting);
-        } else {
-          renderButton(setting);
-        }
-      });
-    }; %>
+  <%  var templates = {
+        bar: renderBar,
+        segmentedBar: renderSegmentedBar,
+      };
+      console.log(settings);
+      console.log(templates[settings.volumeBarTemplate]);
+      var render = function(settingsList) {
+        _.each(settingsList, function(setting) {
+          if(setting === "seekbar") {
+            renderBar(setting);
+          } else if (setting === "volume") {
+            renderDrawer(setting, settings.volumeBarTemplate ? templates[settings.volumeBarTemplate] : function(name) { return renderSegmentedBar(name); });
+          } else if (setting === "duration" || setting === "position") {
+            renderIndicator(setting);
+          } else {
+            renderButton(setting);
+          }
+        });
+      }; %>
   <% if (settings.default && settings.default.length) { %>
   <div class="media-control-center-panel" data-media-control>
     <% render(settings.default); %>
