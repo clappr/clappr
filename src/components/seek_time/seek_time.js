@@ -32,8 +32,8 @@ class SeekTime extends UIObject {
   showTime(event) {
     var offset = event.pageX - this.mediaControl.$seekBarContainer.offset().left
     var timePosition = Math.min(100, Math.max((offset) / this.mediaControl.$seekBarContainer.width() * 100, 0))
-    var pointerPosition = offset - (this.$el.width() / 2)
-    pointerPosition = Math.min(Math.max(0, pointerPosition), this.mediaControl.$seekBarContainer.width() - this.$el.width())
+    var pointerPosition = event.pageX - this.mediaControl.$el.offset().left - (this.$el.width() / 2)
+    pointerPosition = Math.min(Math.max(0, pointerPosition), this.mediaControl.$el.width() - this.$el.width())
     var currentTime = timePosition * this.mediaControl.container.getDuration() / 100
     var options = {
       timestamp: currentTime,
