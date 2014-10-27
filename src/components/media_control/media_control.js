@@ -38,7 +38,7 @@ class MediaControl extends UIObject {
       'click [data-playstop]': 'togglePlayStop',
       'click [data-fullscreen]': 'toggleFullscreen',
       'click [data-seekbar]': 'seek',
-      'click .segmented-bar[data-volume]': 'volume',
+      'click .bar-container[data-volume]': 'volume',
       'click .drawer-icon[data-volume]': 'toggleMute',
       'mouseenter .drawer-container[data-volume]': 'showVolumeBar',
       'mouseleave .drawer-container[data-volume]': 'hideVolumeBar',
@@ -361,7 +361,7 @@ class MediaControl extends UIObject {
     this.$seekBarPosition = this.$el.find('.bar-fill-2[data-seekbar]')
     this.$seekBarScrubber = this.$el.find('.bar-scrubber[data-seekbar]')
     this.$seekBarHover = this.$el.find('.bar-hover[data-seekbar]')
-    this.$volumeBarContainer = this.$el.find('.segmented-bar[data-volume]')
+    this.$volumeBarContainer = this.$el.find('.bar-container[data-volume]')
     this.$volumeIcon = this.$el.find('.drawer-icon[data-volume]')
   }
 

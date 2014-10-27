@@ -319,7 +319,7 @@
         }
       }
 
-      .segmented-bar[data-volume] {
+      .bar-container[data-volume] {
         float: left;
         position: relative;
         top: 6px;
@@ -357,7 +357,7 @@
   &.w320 {
     .media-control-layer[data-controls] {
       .drawer-container[data-volume] {
-        .segmented-bar[data-volume] {
+        .bar-container[data-volume] {
           &.volume-bar-hide {
             height: 12px;
             top: 9px;
