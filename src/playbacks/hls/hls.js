@@ -165,7 +165,7 @@ class HLS extends Playback {
         this.stopReportingProgress()
       }
     }
-    this.trigger('playback:playbackstate');
+    this.trigger('playback:playbackstate')
   }
 
   startReportingProgress() {
