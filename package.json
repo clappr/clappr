@@ -37,7 +37,7 @@
     "gulp-livereload": "^2.1.0",
     "gulp-minify-css": "~0.3.5",
     "gulp-rename": "^1.2.0",
-    "gulp-sass": "~0.7.2",
+    "gulp-sass": "~1.2.0",
     "gulp-streamify": "0.0.5",
     "gulp-uglify": "^0.3.0",
     "gulp-util": "latest",
