@@ -60,7 +60,7 @@
     "sinon": "^1.10.2",
     "traceur": "0.0.72",
     "vinyl-source-stream": "^1.0.0",
-    "watchify": "^0.10.2",
+    "watchify": "^2.0.0",
     "yargs": "latest"
   },
   "dependencies": {
