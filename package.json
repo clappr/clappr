@@ -59,7 +59,7 @@
     "scp": "latest",
     "sinon": "^1.10.2",
     "traceur": "0.0.72",
-    "vinyl-source-stream": "^0.1.1",
+    "vinyl-source-stream": "^1.0.0",
     "watchify": "^0.10.2",
     "yargs": "latest"
   },
