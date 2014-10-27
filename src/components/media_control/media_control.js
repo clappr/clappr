@@ -42,6 +42,7 @@ class MediaControl extends UIObject {
       'click .drawer-icon[data-volume]': 'toggleMute',
       'mouseenter .drawer-container[data-volume]': 'showVolumeBar',
       'mouseleave .drawer-container[data-volume]': 'hideVolumeBar',
+      'mousedown .bar-scrubber[data-volume]': 'startVolumeDrag',
       'mousedown .bar-scrubber[data-seekbar]': 'startSeekDrag',
       'mousemove .bar-container[data-seekbar]': 'mousemoveOnSeekBar',
       'mouseleave .bar-container[data-seekbar]': 'mouseleaveOnSeekBar',
@@ -267,11 +268,16 @@ class MediaControl extends UIObject {
   }
 
   hideVolumeBar() {
+    var timeout = 400
     if (!this.$volumeBarContainer) return
-    if (this.hideVolumeId) {
-      clearTimeout(this.hideVolumeId)
+    if (this.draggingVolumeBar) {
+      this.hideVolumeId = setTimeout(() => this.hideVolumeBar(), timeout)
+    } else {
+      if (this.hideVolumeId) {
+        clearTimeout(this.hideVolumeId)
+      }
+      this.hideVolumeId = setTimeout(() => this.$volumeBarContainer.addClass('volume-bar-hide'), timeout)
     }
-    this.hideVolumeId = setTimeout(() => this.$volumeBarContainer.addClass('volume-bar-hide'), 750)
   }
 
   ended() {
@@ -339,13 +345,13 @@ class MediaControl extends UIObject {
     if (this.hideId) {
       clearTimeout(this.hideId)
     }
-    this.hideVolumeBar()
     if (!this.isVisible()) return
-    if (this.keepVisible || this.draggingSeekBar) {
+    if (this.keepVisible || this.draggingSeekBar || this.draggingVolumeBar) {
       this.hideId = setTimeout(() => this.hide(), timeout)
     } else {
       this.trigger('mediacontrol:hide', this.name)
       this.$el.addClass('media-control-hide')
+      this.hideVolumeBar()
     }
   }
 
