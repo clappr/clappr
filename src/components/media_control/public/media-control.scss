@@ -338,12 +338,14 @@
           width: 4px;
           padding-left: 2px;
           height: 12px;
-          @include box-shadow(inset 2px 0 0 rgba(255,255,255,0.5));
+          opacity: 0.5;
+          @include box-shadow(inset 2px 0 0 white);
 
           @include transition(transform .2s ease-out);
 
           &.fill {
             @include box-shadow(inset 2px 0 0 #fff);
+            opacity: 1;
           }
 
           &:nth-of-type(1) {

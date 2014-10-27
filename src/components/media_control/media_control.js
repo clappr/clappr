@@ -411,21 +411,12 @@ class MediaControl extends UIObject {
   }
 
   parseColors() {
-    var translate = {
-      query: {
-        'seekbar': '.bar-fill-2[data-seekbar]',
-        'buttons': '[data-media-control] > .media-control-icon, [data-volume]'
-      },
-      rule: {
-        'seekbar': 'background-color',
-        'buttons': 'color'
-      }
-    }
     if (this.options.mediacontrol) {
-      var customColors = _.pick(this.options.mediacontrol, 'seekbar', 'buttons')
-      _.each(customColors, (value, key) => {
-        this.$el.find(translate.query[key]).css(translate.rule[key], customColors[key]);
-      })
+      var buttonsColor = this.options.mediacontrol.buttons;
+      var seekbarColor = this.options.mediacontrol.seekbar;
+      this.$el.find('.bar-fill-2[data-seekbar]').css('background-color', seekbarColor)
+      this.$el.find('[data-media-control] > .media-control-icon, .drawer-icon').css('color', buttonsColor)
+      this.$el.find('.segmented-bar-element[data-volume]').css('boxShadow', "inset 2px 0 0 " + buttonsColor)
     }
   }
 
