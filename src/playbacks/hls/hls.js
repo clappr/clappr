@@ -74,14 +74,15 @@ class HLS extends Playback {
 
   updateTime() {
     var duration = this.getDuration()
-    var position = this.el.globoGetPosition()
-    var livePlayback = this.playbackType === 'live'
-    if (livePlayback && (position >= duration || position < 0)) {
-      position = duration
+    var position = Math.min(Math.max(this.el.globoGetPosition(), 0), duration)
+    var previousDVRStatus = this.dvrEnabled
+    var livePlayback = (this.playbackType === 'live')
+    this.dvrEnabled = (livePlayback && duration > 240)
+
+    if (duration === 100 || livePlayback === undefined) {
+      return;
     }
 
-    var previousDVRStatus = this.dvrEnabled
-    this.dvrEnabled = (livePlayback && duration > 240)
     if (this.dvrEnabled !== previousDVRStatus) {
       this.updateSettings()
       this.trigger('playback:settingsupdate', this.name)
