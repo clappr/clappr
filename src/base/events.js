@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 var _ = require('underscore')
-var Log = require('../plugins/log')
+var Log = require('../plugins/log').getInstance()
 
 var slice = Array.prototype.slice
 
@@ -57,10 +57,7 @@ class Events {
 
   trigger(name) {
     var klass = arguments[arguments.length - 1]
-    if(global.DEBUG) {
-      if(Log.BLACKLIST.indexOf(name) < 0)
-        Log.info(klass, 'event ' + name + ' triggered')
-    }
+    Log.info(klass, name)
     if (!this._events) return this
     var args = slice.call(arguments, 1)
     if (!eventsApi(this, 'trigger', name, args)) return this

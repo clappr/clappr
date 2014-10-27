@@ -1,39 +1,42 @@
-var $ = require('jquery')
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
 var Mousetrap = require('mousetrap')
+var $ = require('jquery')
 
-var BOLD = 'font-weight: bold; font-size: 13px;';
-var INFO = 'color: green;' + BOLD;
-var DEBUG = 'color: #222;' + BOLD;
-var ERROR = 'color: red;' + BOLD;
-var DEFAULT = '';
+class Log {
+  constructor() {
+      Mousetrap.bind(['ctrl+shift+d'], () => this.onOff())
+      this.BLACKLIST = ['playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress'];
+    }
 
-Mousetrap.bind(['ctrl+shift+d'], () => window.DEBUG = !window.DEBUG)
+  info(klass, message) {this.log(klass, 'info', message)}
+  warn(klass, message) {this.log(klass, 'warn', message)}
+  debug(klass, message) {this.log(klass, 'debug', message)}
 
-var Log = function(klass) {
-  this.klass = klass || 'Logger';
+  onOff() {
+      window.DEBUG = !window.DEBUG
+      if (window.DEBUG) { console.log('log enabled');  }
+      else { console.log('log disabled'); }
+    }
+
+  log(klass, level, message) {
+      if (!window.DEBUG || $.inArray(message, this.BLACKLIST)) return
+      var color
+      if (level === 'warn') { color = '#FF8000' }
+      else if (level === 'info') { color = '#006600' }
+      else if (level === 'error') { color = '#FF0000'}
+      console.log("%c [" + klass + "] [" + level + "] " +  message, 'color: '+color);
+    }
+}
+
+Log.getInstance = function() {
+  if (this._instance === undefined) {
+      this._instance = new this()
+    }
+  return this._instance
 }
 
 
-Log.info = function(klass, msg) {
-    console.log('%s %cINFO%c [%s] %s', (new Date()).toLocaleTimeString(), INFO, DEFAULT, klass, msg);
-}
-
-Log.error = function(klass, msg) {
-    console.log('%s %cINFO%c [%s] %s', (new Date()).toLocaleTimeString(), INFO, DEFAULT, klass, msg);
-}
-
-Log.BLACKLIST = ['playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress'];
-
-Log.prototype = {
-  log: function(msg) {
-    this.info(msg);
-  },
-  info: function(msg) {
-    console.log('%s %cINFO%c [%s] %s', (new Date()).toLocaleTimeString(), INFO, DEFAULT, this.klass, msg);
-  },
-  error: function(msg) {
-    console.log('%s %cERROR%c [%s] %s', (new Date()).toLocaleTimeString(), ERROR, DEFAULT, this.klass, msg);
-  }
-};
-
-module.exports = Log;
+module.exports = Log
