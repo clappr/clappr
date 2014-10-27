@@ -13,6 +13,15 @@
   @include transition(none !important);
 }
 
+.dragging {
+  cursor: -webkit-grabbing !important;
+  cursor: grabbing !important;
+  * {
+    cursor: -webkit-grabbing !important;
+    cursor: grabbing !important;
+  }
+}
+
 .media-control[data-media-control] {
   position: absolute;
   width: 100%;
@@ -199,11 +208,6 @@
         color: rgba(255, 255, 255, 0.5);
         margin-right: 6px;
       }
-    }
-
-    .bar-scrubber.dragging {
-      cursor: -webkit-grabbing;
-      cursor: grabbing;
     }
 
     .bar-container[data-seekbar] {
