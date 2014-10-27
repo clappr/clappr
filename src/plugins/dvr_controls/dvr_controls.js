@@ -43,7 +43,9 @@ class DVRControls extends UICorePlugin {
     if (!this.core.mediaControl.container.isPlaying()) {
       this.core.mediaControl.container.play()
     }
-    this.core.mediaControl.container.setCurrentTime(-1)
+    if (this.core.mediaControl.$el.hasClass('dvr')) {
+      this.core.mediaControl.container.setCurrentTime(-1)
+    }
   }
 
   settingsUpdate() {
