@@ -159,7 +159,7 @@ class Container extends UIObject {
     this.playback.volume(value);
   }
 
-  requestFullscreen() {
+  fullscreen() {
     this.trigger('container:fullscreen', this.name);
   }
 
