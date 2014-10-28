@@ -68,18 +68,20 @@ class Core extends UIObject {
   setFullscreen() {
     this.$el.addClass('fullscreen')
     this.$el.removeAttr('style')
+    PlayerInfo.previousSize = PlayerInfo.currentSize
     PlayerInfo.currentSize = { width: $(window).width(), height: $(window).height() }
   }
 
   resize(size) {
     var size = _.pick(size, 'width', 'height')
     this.$el.css(size)
+    PlayerInfo.previousSize = PlayerInfo.currentSize
     PlayerInfo.currentSize = size
     Mediator.trigger('player:resize', size)
   }
 
   setPlayerSize() {
-    this.resize(this.options)
+    this.resize(PlayerInfo.previousSize)
     this.$el.removeClass('fullscreen')
   }
 
@@ -220,6 +222,7 @@ class Core extends UIObject {
 
     this.options.width = this.options.width || this.$el.width()
     this.options.height = this.options.height || this.$el.height()
+    PlayerInfo.previousSize = PlayerInfo.currentSize = _.pick(this.options, 'width', 'height')
     this.updateSize()
 
     return this
