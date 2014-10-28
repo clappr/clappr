@@ -62,7 +62,18 @@ Add `autoPlay: true` if you want the video to automatic play after page load.
 If you want to play the video when it appears partially on screen, set `autoPlayVisible: 'partial'`. In case you want the player to play when it is full visible, `autoPlayVisible: 'full'`.
 
 ##### Mute
-Add `mute: true` if you want to start the player muted.
+Add `mute: true` if you want to start player with no sound.
+
+##### Google Analytics Plugin
+Enable Google Analytics events dispatch (play/pause/stop/buffering/etc) adding your `gaAccount`. Optionally, pass your favorite trackerName as `gaTrackerName`. Example:
+
+```javascript
+  var player = new Clappr.Player({
+    source: "http://your.video/here.mp4",
+		gaAccount: 'UA-44332211-1',
+		gaTracker: 'MyPlayerInstance'
+  });
+```
 
 ##### Control bar colors
 Customize control bar colors adding `mediacontrol` hash. Example:
