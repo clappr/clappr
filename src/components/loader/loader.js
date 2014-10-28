@@ -18,6 +18,7 @@ var SpinnerThreeBouncePlugin = require('../../plugins/spinner_three_bounce');
 var StatsPlugin = require('../../plugins/stats');
 var WaterMarkPlugin = require('../../plugins/watermark');
 var PosterPlugin = require('../../plugins/poster');
+var GoogleAnalyticsPlugin = require('../../plugins/google_analytics');
 
 /* Core Plugins */
 var BackgroundButton = require('../../plugins/background_button');
@@ -27,7 +28,7 @@ class Loader extends BaseObject {
   constructor(externalPlugins) {
     super()
     this.playbackPlugins = [FlashVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, HLSVideoPlayback, NoOp]
-    this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin]
+    this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin]
     this.corePlugins = [BackgroundButton, DVRControls]
     if (externalPlugins) {
       this.addExternalPlugins(externalPlugins)
