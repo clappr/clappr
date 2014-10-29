@@ -6,8 +6,9 @@ var source = require('vinyl-source-stream');
 
 module.exports.js = 'src/**/*.js';
 
-module.exports.browserify = function() {
-  return browserify()
+module.exports.browserify = function(options) {
+  options || (options = {})
+  return browserify(options)
     .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
     .add(es6ify.runtime)
     .require('./src/main.js', { entry: true })
