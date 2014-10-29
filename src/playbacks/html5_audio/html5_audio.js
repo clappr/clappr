@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var Playback = require('../../base/playback')
+var Playback = require('playback')
 
 class HTML5Audio extends Playback {
   get name() { return 'html5_audio' }
