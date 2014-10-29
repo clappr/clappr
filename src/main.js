@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var BaseObject = require('./base/base_object')
+var BaseObject = require('base_object')
 var CoreFactory = require('./components/core_factory')
 var Loader = require('./components/loader')
-var Mediator = require('./components/mediator')
+var Mediator = require('mediator')
 var _ = require('underscore');
 var ScrollMonitor = require('scrollmonitor');
-var PlayerInfo = require('./components/player_info')
+var PlayerInfo = require('player_info')
 
 class Player extends BaseObject {
   constructor(options) {

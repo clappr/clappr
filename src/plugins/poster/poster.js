@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var UIContainerPlugin = require('../../base/ui_container_plugin')
+var UIContainerPlugin = require('ui_container_plugin')
 var Styler = require('../../base/styler')
 var JST = require('../../base/jst')
 
-var Mediator = require('../../components/mediator')
-var PlayerInfo = require('../../components/player_info')
+var Mediator = require('mediator')
+var PlayerInfo = require('player_info')
 
 var $ = require('jquery')
 var _ = require('underscore')
