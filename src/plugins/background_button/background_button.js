@@ -1,10 +1,10 @@
-var UICorePlugin = require('../../base/ui_core_plugin')
+var UICorePlugin = require('ui_core_plugin')
 var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
 
-var Browser = require('../../components/browser')
-var Mediator = require('../../components/mediator')
-var PlayerInfo = require('../../components/player_info')
+var Browser = require('browser')
+var Mediator = require('mediator')
+var PlayerInfo = require('player_info')
 
 class BackgroundButton extends UICorePlugin {
   get template() { return JST.background_button }

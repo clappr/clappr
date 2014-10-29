@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var Playback = require('../../base/playback')
+var Playback = require('playback')
 var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
-var Browser = require('../../components/browser')
+var Browser = require('browser')
 
 var _ = require('underscore')
 

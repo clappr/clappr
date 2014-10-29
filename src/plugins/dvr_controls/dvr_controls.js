@@ -1,4 +1,4 @@
-var UICorePlugin = require('../../base/ui_core_plugin')
+var UICorePlugin = require('ui_core_plugin')
 var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
 

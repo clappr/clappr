@@ -10,12 +10,12 @@ var _ = require('underscore')
 var $ = require('jquery')
 var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
-var UIObject = require('../../base/ui_object')
+var UIObject = require('ui_object')
 var Utils = require('../../base/utils')
 var Mousetrap = require('mousetrap')
 var SeekTime = require('../seek_time')
-var Mediator = require('../../components/mediator')
-var PlayerInfo = require('../../components/player_info')
+var Mediator = require('mediator')
+var PlayerInfo = require('player_info')
 
 var transitionEvents = 'webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend'
 

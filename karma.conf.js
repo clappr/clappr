@@ -21,7 +21,8 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'test/**/*spec.js'
+      'test/**/*spec.js',
+      'src/**/*.js'
     ],
 
 
@@ -33,7 +34,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'src/**/*.js': ['traceur'],
+      'src/**/*.js': ['traceur', 'browserify'],
       'test/**/*.js': ['traceur', 'browserify']
     },
 
@@ -47,6 +48,19 @@ module.exports = function(config) {
       watch: true,
       debug: true,
       transform: ['es6ify'],
+      prebundle: function(bundle) {
+        bundle.require('./src/base/ui_object', { expose: 'ui_object' })
+        bundle.require('./src/base/base_object', { expose: 'base_object' })
+        bundle.require('./src/base/ui_container_plugin', { expose: 'ui_container_plugin' })
+        bundle.require('./src/base/container_plugin', { expose: 'container_plugin' })
+        bundle.require('./src/base/core_plugin', { expose: 'core_plugin' })
+        bundle.require('./src/base/ui_core_plugin', { expose: 'ui_core_plugin' })
+        bundle.require('./src/base/playback', { expose: 'playback' })
+        bundle.require('./src/components/browser', { expose: 'browser' })
+        bundle.require('./src/components/media_control', { expose: 'media_control' })
+        bundle.require('./src/components/player_info', { expose: 'player_info' })
+        bundle.require('./src/components/mediator', { expose: 'mediator' })
+      }
     },
 
 

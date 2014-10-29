@@ -1,4 +1,4 @@
-var Playback = require('../../base/playback')
+var Playback = require('playback')
 var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
 
