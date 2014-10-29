@@ -5,7 +5,7 @@
 var $ = require('jquery')
 var _ = require('underscore')
 var extend = require('./utils').extend
-var BaseObject = require('./base_object')
+var BaseObject = require('base_object')
 
 var delegateEventSplitter = /^(\S+)\s*(.*)$/
 

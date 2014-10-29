@@ -1,4 +1,4 @@
-var BaseObject = require('./base_object')
+var BaseObject = require('base_object')
 
 class CorePlugin extends BaseObject {
   constructor(core) {

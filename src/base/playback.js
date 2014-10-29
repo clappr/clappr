@@ -1,4 +1,4 @@
-var UIObject = require('../base/ui_object')
+var UIObject = require('ui_object')
 
 class Playback extends UIObject {
   constructor(options) {
