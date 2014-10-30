@@ -326,7 +326,7 @@ class MediaControl extends UIObject {
   }
 
   show(event) {
-    if (this.disabled || this.isVisible()) return
+    if (this.disabled || this.isVisible() || this.container.getPlaybackType() === null) return
     var timeout = 2000
     if (!event || (event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY) || navigator.userAgent.match(/firefox/i)) {
       if (this.hideId) {
@@ -359,8 +359,13 @@ class MediaControl extends UIObject {
   }
 
   settingsUpdate() {
-    this.settings = _.isEmpty(this.container.settings) ? this.settings : this.container.settings
-    this.render()
+    if (this.container.getPlaybackType() !== null && !_.isEmpty(this.container.settings)) {
+      this.settings = this.container.settings
+      this.render()
+      this.enable()
+    } else {
+      this.disable()
+    }
   }
 
   highDefinitionUpdate() {
