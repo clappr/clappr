@@ -17,6 +17,12 @@ class BackgroundButton extends UICorePlugin {
     }
   }
 
+  get events() {
+    return {
+      'click .background-button-icon': 'click'
+    }
+  }
+
   constructor(core) {
     super(core)
     this.core = core
@@ -49,7 +55,9 @@ class BackgroundButton extends UICorePlugin {
         this.notplaying()
       }
     } else {
-      this.hide()
+      this.$el.remove()
+      this.$playPauseButton.show()
+      this.$playStopButton.show()
       this.listenTo(this.core.mediaControl.container, 'container:settingsupdate', this.settingsUpdate)
       this.listenTo(this.core.mediaControl.container, 'container:dvr', this.settingsUpdate)
       this.listenTo(this.core.mediaControl, 'mediacontrol:containerchanged', this.settingsUpdate)
@@ -57,24 +65,22 @@ class BackgroundButton extends UICorePlugin {
   }
 
   shouldRender() {
-    //this plugin should render only if there is a playpause icon in media control
-    this.displayBackgroundButton = (this.core.options.displayBackgroundButton === undefined && Browser.isMobile) || !!this.core.options.displayBackgroundButton
-    return (this.displayBackgroundButton && this.core.mediaControl.$el.find('[data-playstop]').length > 0) || this.core.mediaControl.$el.find('[data-playpause]').length > 0
+    //this plugin should render only if there is a playpause or playstop icon in media control
+    var useBackgroundButton = (this.core.options.useBackgroundButton === undefined && Browser.isMobile) || !!this.core.options.useBackgroundButton
+    return useBackgroundButton && (this.core.mediaControl.$el.find('[data-playstop]').length > 0 || this.core.mediaControl.$el.find('[data-playpause]').length > 0)
   }
 
-  click(element) {
+  click() {
     this.core.mediaControl.show()
-    if (element === this.$buttonIcon && this.shouldStop) {
+    if (this.shouldStop) {
       this.core.mediaControl.togglePlayStop()
-    } else if (element !== this.$buttonIcon && !this.shouldStop) {
+    } else {
       this.core.mediaControl.togglePlayPause()
     }
   }
 
   show() {
-    if (!!this.displayBackgroundButton) {
-      this.$el.removeClass('hide')
-    }
+    this.$el.removeClass('hide')
   }
 
   hide() {
@@ -84,8 +90,7 @@ class BackgroundButton extends UICorePlugin {
   enable() {
     this.stopListening()
     super()
-    this.$playPauseButton.hide()
-    this.$playStopButton.hide()
+    this.settingsUpdate()
   }
 
   disable() {
@@ -126,19 +131,17 @@ class BackgroundButton extends UICorePlugin {
     this.shouldStop = this.$playStopButton.length > 0
     this.$el.insertBefore(this.core.mediaControl.$el.find('.media-control-layer[data-controls]'))
     this.$el.click(() => this.click(this.$el))
-    this.$buttonIcon.click(() => this.click(this.$buttonIcon))
     process.nextTick(() => this.updateSize())
-    if (this.displayBackgroundButton) {
+
+    if (this.core.options.useBackgroundButton) {
       this.$playPauseButton.hide()
       this.$playStopButton.hide()
-    } else {
-      this.$el.addClass('hide')
     }
+
     if (this.shouldStop) {
       this.$buttonIcon.addClass('playstop')
-    } else {
-      this.$el.addClass('pointer-enabled')
     }
+
     if (this.core.mediaControl.isVisible()) {
       this.show()
     }
