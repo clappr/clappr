@@ -84,6 +84,7 @@ class PosterPlugin extends UIContainerPlugin {
 
   clicked() {
     this.container.play()
+    return false
   }
 
   updateSize() {
