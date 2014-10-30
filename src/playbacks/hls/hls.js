@@ -33,9 +33,10 @@ class HLS extends Playback {
       left: ["playstop"],
       default: ['seekbar'],
       right: ["fullscreen", "volume", "hd-indicator"],
-      seekEnabled: true
+      seekEnabled: false
     }
     this.settings = _.extend({}, this.defaultSettings)
+    this.playbackType = 'live'
     this.addListeners()
   }
 
@@ -282,8 +283,10 @@ class HLS extends Playback {
     this.settings = _.extend({}, this.defaultSettings)
     if (this.playbackType === "vod" || this.dvrInUse) {
       this.settings.left = ["playpause", "position", "duration"]
+      this.settings.seekEnabled = true
     } else if (this.dvrEnabled) {
       this.settings.left = ["playpause"]
+      this.settings.seekEnabled = true
     } else {
       this.settings.seekEnabled = false
     }
