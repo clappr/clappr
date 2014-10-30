@@ -7,6 +7,7 @@
   height: 100%;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.2);
+  pointer-events: none;
   @include transition(all 0.4s ease-out);
 
   &.hide {
@@ -27,8 +28,9 @@
     text-align: center;
 
     .background-button-icon[data-background-button] {
-      font-family:"Player";
       cursor: pointer;
+      pointer-events: auto;
+      font-family:"Player";
       font-weight: normal;
       font-style: normal;
       line-height: 1;
