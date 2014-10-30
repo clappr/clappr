@@ -9,6 +9,7 @@ class ClickToPausePlugin extends ContainerPlugin {
 
   bindEvents() {
     this.listenTo(this.container, 'container:click', this.click)
+    this.listenTo(this.container, 'container:settingsupdate', this.settingsUpdate)
   }
 
   click() {
@@ -18,6 +19,13 @@ class ClickToPausePlugin extends ContainerPlugin {
       } else {
         this.container.play()
       }
+    }
+  }
+
+  settingsUpdate() {
+    this.container.$el.removeClass('pointer-enabled')
+    if (this.container.getPlaybackType() !== 'live' || this.container.isDvrEnabled()) {
+      this.container.$el.addClass('pointer-enabled')
     }
   }
 }
