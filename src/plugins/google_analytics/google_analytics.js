@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var ContainerPlugin = require('../../base/container_plugin');
+var ContainerPlugin = require('container_plugin');
 
 class GoogleAnalytics extends ContainerPlugin {
   get name() { return 'google_analytics' }
@@ -116,4 +116,3 @@ class GoogleAnalytics extends ContainerPlugin {
 }
 
 module.exports = GoogleAnalytics;
-
