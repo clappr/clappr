@@ -30,7 +30,7 @@ body {
   right: 7%;
 }
 
-.header ul, li, a {
+.header ul, .header li, .header a {
   position: relative;
   display: inline;
   float: right;
