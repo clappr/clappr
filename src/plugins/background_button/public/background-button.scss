@@ -36,6 +36,9 @@
       speak: none;
       color: white;
       opacity: 0.75;
+      border: 0;
+      outline: none;
+      background-color: transparent;
       @include font-smoothing(antialiased);
       @include transition(all 0.1s ease);
 
