@@ -12,7 +12,7 @@ var _ = require('underscore');
 
 class Container extends UIObject {
   get name() { return 'Container' }
-  get attributes() { return { 'data-container': '' } }
+  get attributes() { return { class: 'container', 'data-container': '' } }
   get events() { return {'click': 'clicked'} }
 
   constructor(options) {

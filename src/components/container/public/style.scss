@@ -1,6 +1,9 @@
-[data-container] {
+.container[data-container] {
   position: absolute;
   background-color: black;
   height: 100%;
   width: 100%;
+  &.pointer-enabled {
+    cursor: pointer;
+  }
 }
