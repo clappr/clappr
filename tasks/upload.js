@@ -6,12 +6,9 @@ var exec = require('child_process').exec;
 
 gulp.task('upload', ['release'], function(b) {
   var tag = args.tag || undefined;
-  upload('./dist/', 'latest/', true);
-  upload('./public/', '', false);
+//  upload('./dist/', 'latest/', true);
   if (tag) {
-    exec('git tag ' + tag)
-    exec('git push origin master --tags')
-    upload(tag + '/');
+    upload('./dist/', tag + '/', true);
   }
   return;
 });
