@@ -27,7 +27,12 @@ class HLS extends Playback {
     super(options)
     this.src = options.src
     this.swfPath = options.swfPath || "http://cdn.clappr.io/latest/assets/HLSPlayer.swf"
-    this.flushLiveURLCache = options.flushLiveURLCache || true
+    if (options.flushLiveURLCache == undefined){
+      this.flushLiveURLCache = true
+    }
+    else{
+      this.flushLiveURLCache = options.flushLiveURLCache
+    }
     this.highDefinition = false
     this.autoPlay = options.autoPlay
     this.defaultSettings = {
