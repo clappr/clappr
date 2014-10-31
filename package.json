@@ -41,6 +41,7 @@
     "gulp-streamify": "0.0.5",
     "gulp-uglify": "^1.0.1",
     "gulp-util": "latest",
+    "gulp-jshint":  "latest",
     "karma": "^0.12.17",
     "karma-bro": "^0.7.0",
     "karma-chai": "^0.1.0",
