@@ -225,7 +225,7 @@ class MediaControl extends UIObject {
       if (this.currentVolume <= 0) {
         this.currentVolume = 100
       }
-      this.setVolume(100)
+      this.setVolume(this.currentVolume)
     } else {
       this.setVolume(0)
     }
