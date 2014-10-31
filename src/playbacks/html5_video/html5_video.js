@@ -6,6 +6,7 @@ var Playback = require('playback')
 var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
 var Browser = require('browser')
+var Mousetrap = require('mousetrap')
 
 var _ = require('underscore')
 
@@ -49,6 +50,11 @@ class HTML5Video extends Playback {
       this.settings.right = ["fullscreen", "volume"]
       this.settings.seekEnabled = true
     }
+    this.bindEvents()
+  }
+
+  bindEvents() {
+    _.each(_.range(1,10), function (i) { Mousetrap.bind([i.toString()], () => this.seek(i * 10)) }.bind(this))
   }
 
   loadedMetadata(e) {
