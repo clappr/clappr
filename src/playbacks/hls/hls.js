@@ -27,6 +27,7 @@ class HLS extends Playback {
     super(options)
     this.src = options.src
     this.swfPath = options.swfPath || "http://cdn.clappr.io/latest/assets/HLSPlayer.swf"
+    this.flushLiveURLCache = options.flushLiveURLCache || true
     this.highDefinition = false
     this.autoPlay = options.autoPlay
     this.defaultSettings = {
@@ -63,7 +64,7 @@ class HLS extends Playback {
     this.isReady = true
     this.trigger('playback:ready', this.name)
     this.currentState = "IDLE"
-    this.el.globoPlayerSetflushLiveURLCache(true)
+    this.el.globoPlayerSetflushLiveURLCache(this.flushLiveURLCache)
     this.el.globoPlayerSetmaxBufferLength(0)
     this.autoPlay && this.play()
   }
