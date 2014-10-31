@@ -72,8 +72,8 @@ class Core extends UIObject {
     PlayerInfo.currentSize = { width: $(window).width(), height: $(window).height() }
   }
 
-  resize(size) {
-    var size = _.pick(size, 'width', 'height')
+  resize(options) {
+    var size = _.pick(options, 'width', 'height')
     this.$el.css(size)
     PlayerInfo.previousSize = PlayerInfo.currentSize
     PlayerInfo.currentSize = size

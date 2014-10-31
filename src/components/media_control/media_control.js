@@ -17,8 +17,6 @@ var SeekTime = require('../seek_time')
 var Mediator = require('mediator')
 var PlayerInfo = require('player_info')
 
-var transitionEvents = 'webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend'
-
 class MediaControl extends UIObject {
   get name() { return 'MediaControl' }
 
