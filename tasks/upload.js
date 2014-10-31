@@ -6,7 +6,7 @@ var exec = require('child_process').exec;
 
 gulp.task('upload', ['release'], function(b) {
   var tag = args.tag || undefined;
-//  upload('./dist/', 'latest/', true);
+  upload('./dist/', 'latest/', true);
   if (tag) {
     upload('./dist/', tag + '/', true);
   }
