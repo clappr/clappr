@@ -27,6 +27,7 @@
   box-sizing: border-box;
 
   * {
+    max-width: initial;
     box-sizing: inherit;
     float: initial;
   }
