@@ -60,6 +60,7 @@ class HTML5Video extends Playback {
   loadedMetadata(e) {
     this.trigger('playback:loadedmetadata', e.target.duration)
     this.trigger('playback:settingsupdate')
+    this.checkInitialSeek()
   }
 
   getPlaybackType() {
@@ -72,7 +73,6 @@ class HTML5Video extends Playback {
 
   play() {
     this.el.play()
-    //FIXME: I don't think playback:{play,pause,etc} events are necessary.
     this.trigger('playback:play');
     if (this.isHLS) {
       this.trigger('playback:timeupdate', 1, 1, this.name)
@@ -137,7 +137,26 @@ class HTML5Video extends Playback {
 
   seek(seekBarValue) {
     var time = this.el.duration * (seekBarValue / 100)
+    this.seekSeconds(time)
+  }
+
+  seekSeconds(time) {
     this.el.currentTime = time
+  }
+
+  checkInitialSeek() {
+    var seekTime = this.getInitialSeek(window.location.href)
+    this.seekSeconds(seekTime)
+  }
+
+  getInitialSeek(url) {
+    var elements = _.rest(_.compact(url.match(/t=([0-9]*)h?([0-9]*)m?([0-9]*)s/))).reverse()
+    var [seconds, factor] = [0, 1]
+    _.each(elements, function (el) {
+      seconds += (parseInt(el) * factor)
+      factor = factor * 60
+    }, this)
+    return seconds
   }
 
   getCurrentTime() {
