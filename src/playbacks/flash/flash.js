@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var UIObject = require('ui_object')
+var Playback = require('playback')
 var Styler = require('../../base/styler')
 var JST = require('../../base/jst')
 var Mediator = require('mediator')
@@ -13,7 +13,7 @@ var Mousetrap = require('mousetrap')
 
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>'
 
-class Flash extends UIObject {
+class Flash extends Playback {
   get name() { return 'flash' }
   get tagName() { return 'object' }
   get template() { return JST.flash }
@@ -152,8 +152,8 @@ class Flash extends UIObject {
     return this.el.getDuration()
   }
 
-  seek(time) {
-    var seekTo = this.el.getDuration() * (time / 100)
+  seek(seekBarValue) {
+    var seekTo = this.el.getDuration() * (seekBarValue / 100)
     this.el.playerSeek(seekTo)
     this.trigger('playback:timeupdate', seekTo, this.el.getDuration(), this.name)
     if (this.currentState === "PAUSED") {
