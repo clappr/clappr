@@ -10,6 +10,7 @@ var _ = require('underscore')
 var $ = require('jquery')
 var Browser = require('browser')
 var Mousetrap = require('mousetrap')
+var seekStringToSeconds = require('../../base/utils').seekStringToSeconds
 
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>'
 
@@ -115,7 +116,13 @@ class Flash extends Playback {
     this.currentState = "PLAYING"
     if (_.isFunction(this.el.playerPlay)) {
       this.el.playerPlay(this.src)
+      this.listenToOnce(this, 'playback:bufferfull', () => this.checkInitialSeek())
     }
+  }
+
+  checkInitialSeek() {
+    var seekTime = seekStringToSeconds(window.location.href)
+    this.seekSeconds(seekTime)
   }
 
   play() {
@@ -156,6 +163,10 @@ class Flash extends Playback {
 
   seek(seekBarValue) {
     var seekTo = this.el.getDuration() * (seekBarValue / 100)
+    this.seekSeconds(seekTo)
+  }
+
+  seekSeconds(seekTo) {
     this.el.playerSeek(seekTo)
     this.trigger('playback:timeupdate', seekTo, this.el.getDuration(), this.name)
     if (this.currentState === "PAUSED") {
