@@ -30,7 +30,7 @@
     "dotenv": "^0.4.0",
     "es6ify": "~1.4.0",
     "express": "^4.6.1",
-    "express-alias": "~0.3.0",
+    "express-alias": "latest",
     "glob": "^4.0.2",
     "gulp": "^3.8.1",
     "gulp-compressor": "^0.1.0",
