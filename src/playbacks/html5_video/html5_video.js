@@ -7,6 +7,7 @@ var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
 var Browser = require('browser')
 var Mousetrap = require('mousetrap')
+var seekStringToSeconds = require('../../base/utils').seekStringToSeconds
 
 var _ = require('underscore')
 
@@ -145,18 +146,8 @@ class HTML5Video extends Playback {
   }
 
   checkInitialSeek() {
-    var seekTime = this.getInitialSeek(window.location.href)
+    var seekTime = seekStringToSeconds(window.location.href)
     this.seekSeconds(seekTime)
-  }
-
-  getInitialSeek(url) {
-    var elements = _.rest(_.compact(url.match(/t=([0-9]*)h?([0-9]*)m?([0-9]*)s/))).reverse()
-    var [seconds, factor] = [0, 1]
-    _.each(elements, function (el) {
-      seconds += (parseInt(el) * factor)
-      factor = factor * 60
-    }, this)
-    return seconds
   }
 
   getCurrentTime() {
