@@ -78,8 +78,20 @@ var Fullscreen = {
   }
 };
 
+var seekStringToSeconds = function(url) {
+  var elements = _.rest(_.compact(url.match(/t=([0-9]*)h?([0-9]*)m?([0-9]*)s/))).reverse();
+  var seconds = 0;
+  var factor = 1;
+  _.each(elements, function (el) {
+    seconds += (parseInt(el) * factor)
+    factor = factor * 60
+  }, this);
+  return seconds;
+};
+
 module.exports = {
   extend: extend,
   formatTime: formatTime,
   Fullscreen: Fullscreen,
+  seekStringToSeconds: seekStringToSeconds
 };
