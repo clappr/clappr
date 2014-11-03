@@ -88,7 +88,9 @@ class Flash extends Playback {
   }
 
   checkState() {
-    if (this.currentState !== "PLAYING_BUFFERING" && this.el.getState() === "PLAYING_BUFFERING") {
+    if (this.currentState === "PAUSED") {
+      return
+    } else if (this.currentState !== "PLAYING_BUFFERING" && this.el.getState() === "PLAYING_BUFFERING") {
       this.trigger('playback:buffering', this.name)
       this.currentState = "PLAYING_BUFFERING"
     } else if (this.currentState === "PLAYING_BUFFERING" && this.el.getState() === "PLAYING") {
@@ -117,7 +119,7 @@ class Flash extends Playback {
   }
 
   play() {
-    if(this.el.getState() === 'PAUSED') {
+    if (this.el.getState() === 'PAUSED' || this.el.getState() === 'PLAYING_BUFFERING') {
       this.currentState = "PLAYING"
       this.el.playerResume()
     } else if (this.el.getState() !== 'PLAYING') {
@@ -157,7 +159,7 @@ class Flash extends Playback {
     this.el.playerSeek(seekTo)
     this.trigger('playback:timeupdate', seekTo, this.el.getDuration(), this.name)
     if (this.currentState === "PAUSED") {
-      this.pause()
+      this.el.playerPause()
     }
   }
 
