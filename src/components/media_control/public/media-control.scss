@@ -271,6 +271,13 @@
 
       &.seek-disabled {
         cursor: default;
+        &:hover {
+          .bar-background[data-seekbar] {
+            .bar-hover[data-seekbar] {
+              opacity: 0;
+            }
+          }
+        }
       }
 
       .bar-scrubber[data-seekbar] {
