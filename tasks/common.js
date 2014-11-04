@@ -23,6 +23,7 @@ module.exports.browserify = function(options) {
     .require('./src/components/media_control', { expose: 'media_control' })
     .require('./src/components/player_info', { expose: 'player_info' })
     .require('./src/components/mediator', { expose: 'mediator' })
+    .require('jquery')
 };
 
 gulp.task('compile-js', function() {
