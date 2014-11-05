@@ -35,7 +35,7 @@ class MediaControl extends UIObject {
       'click [data-stop]': 'stop',
       'click [data-playstop]': 'togglePlayStop',
       'click [data-fullscreen]': 'toggleFullscreen',
-      'click [data-seekbar]': 'seek',
+      'click .bar-container[data-seekbar]': 'seek',
       'click .bar-container[data-volume]': 'volume',
       'click .drawer-icon[data-volume]': 'toggleMute',
       'mouseenter .drawer-container[data-volume]': 'showVolumeBar',
@@ -309,6 +309,7 @@ class MediaControl extends UIObject {
     pos = Math.min(100, Math.max(pos, 0))
     this.container.setCurrentTime(pos)
     this.setSeekPercentage(pos)
+    return false
   }
 
   setKeepVisible() {
