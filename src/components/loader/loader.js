@@ -7,10 +7,10 @@ var _ = require('underscore');
 var PlayerInfo = require('player_info')
 
 /* Playback Plugins */
-var HTML5VideoPlayback = require('../../playbacks/html5_video');
-var FlashVideoPlayback = require('../../playbacks/flash');
-var HTML5AudioPlayback = require('../../playbacks/html5_audio');
-var HLSVideoPlayback = require('../../playbacks/hls');
+var HTML5VideoPlayback = require('html5_video');
+var FlashVideoPlayback = require('flash');
+var HTML5AudioPlayback = require('html5_audio');
+var HLSVideoPlayback = require('hls');
 var NoOp = require('../../playbacks/no_op');
 
 /* Container Plugins */
