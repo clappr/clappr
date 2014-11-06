@@ -58,10 +58,6 @@ class Container extends UIObject {
     this.trigger('container:dvr', dvrInUse)
   }
 
-  statsAdd(metric) {
-    this.trigger('container:stats:add', metric)
-  }
-
   statsReport(metrics) {
     this.trigger('container:stats:report', metrics)
   }
