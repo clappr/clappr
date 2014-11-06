@@ -19,15 +19,10 @@ class StatsPlugin extends ContainerPlugin {
     this.listenTo(this.container.playback, 'playback:play', this.onPlay)
     this.listenTo(this.container, 'container:stop', this.onStop)
     this.listenTo(this.container, 'container:destroyed', this.onStop)
-    this.listenTo(this.container, 'container:setreportinterval', this.setReportInterval)
     this.listenTo(this.container, 'container:state:buffering', this.onBuffering)
     this.listenTo(this.container, 'container:state:bufferfull', this.onBufferFull)
     this.listenTo(this.container, 'container:stats:add', this.onStatsAdd)
     this.listenTo(this.container.playback, 'playback:stats:add', this.onStatsAdd)
-  }
-
-  setReportInterval(reportInterval) {
-    this.reportInterval = reportInterval
   }
 
   setInitialAttrs() {
