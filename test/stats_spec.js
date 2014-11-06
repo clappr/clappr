@@ -97,20 +97,6 @@ describe('StatsPlugin', function() {
     expect(this.stats.getStats().watchingTime).to.equal(10000);
   });
 
-  it('should be able to add custom metric', () => {
-    this.container.statsAdd({"skippedPreRoll": true});
-    expect(this.stats.getStats()).to.have.property('skippedPreRoll');
-    this.stats.getStats().skippedPreRoll.should.be.true;
-  });
-
-  it('should overwrite metric if added twice', () => {
-    this.container.statsAdd({"p2pChunks": 20});
-    expect(this.stats.getStats().p2pChunks).to.equal(20);
-
-    this.container.statsAdd({"p2pChunks": 30});
-    expect(this.stats.getStats().p2pChunks).to.equal(30);
-  });
-
   it('should announce statistics periodically', () => {
     var container = new Container({playback: this.playback});
     var spy = sinon.spy(container, 'statsReport');
