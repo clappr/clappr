@@ -23,6 +23,10 @@ module.exports.browserify = function(options) {
     .require('./src/components/media_control', { expose: 'media_control' })
     .require('./src/components/player_info', { expose: 'player_info' })
     .require('./src/components/mediator', { expose: 'mediator' })
+    .require('./src/playbacks/flash', { expose: 'flash' })
+    .require('./src/playbacks/hls', { expose: 'hls' })
+    .require('./src/playbacks/html5_audio', { expose: 'html5_audio' })
+    .require('./src/playbacks/html5_video', { expose: 'html5_video' })
     .require('jquery')
 };
 
