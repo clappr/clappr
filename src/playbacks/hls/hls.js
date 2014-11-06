@@ -78,6 +78,7 @@ class HLS extends Playback {
   updateHighDefinition(isHD) {
     this.highDefinition = (isHD === "true");
     this.trigger('playback:highdefinitionupdate')
+    this.trigger('playback:bitrate', {'bitrate': this.getCurrentBitrate()})
   }
 
   updateTime() {
