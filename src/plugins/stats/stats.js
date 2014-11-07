@@ -60,7 +60,7 @@ class StatsPlugin extends ContainerPlugin {
   }
 
   onBufferFull() {
-    if (this.firstPlay) {
+    if (this.firstPlay && !!this.startupTimeInit) {
       this.firstPlay = false
       this.startupTime = Date.now() - this.startupTimeInit
       this.watchingTimeInit = Date.now()
