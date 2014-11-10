@@ -19,11 +19,11 @@ class ContainerFactory extends BaseObject {
   }
 
   createContainers() {
-    return $.Deferred(function(promise) {
-      promise.resolve( _.map(this.options.sources, function(source) {
+    return $.Deferred((promise) => {
+      promise.resolve( _.map(this.options.sources, (source) => {
         return this.createContainer(source);
       }, this));
-    }.bind(this));
+    });
   }
 
   findPlaybackPlugin(source) {
