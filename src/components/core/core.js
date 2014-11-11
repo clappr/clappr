@@ -102,10 +102,12 @@ class Core extends UIObject {
   }
 
   load(sources) {
-    sources = _.isString(sources) ? [sources]: sources;
+    sources = _.isArray(sources) ? sources : [sources.toString()];
     _(this.containers).each((container) => container.destroy())
     this.containerFactory.options = _(this.options).extend({sources})
-    this.containerFactory.createContainers().then((containers) => this.setupContainers(containers))
+    this.containerFactory.createContainers().then((containers) => {
+      this.setupContainers(containers)
+    })
   }
 
   destroy() {
