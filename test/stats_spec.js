@@ -1,5 +1,5 @@
-var Container = require('../src/components/container');
-var FakePlayback = require('./fakes/playback');
+var Container = require('container');
+var FakePlayback = require('playback');
 var Stats = require('../src/plugins/stats');
 
 describe('StatsPlugin', function() {
@@ -8,14 +8,15 @@ describe('StatsPlugin', function() {
     this.container = new Container({playback: this.playback});
     this.stats = new Stats({container: this.container});
     this.container.addPlugin(this.stats);
-    this.clock = sinon.useFakeTimers();
+    this.clock = sinon.useFakeTimers(Date.now());
   });
+
+  afterEach(() => this.clock.restore());
 
   it('should calculate startup time', () => {
     this.container.buffering();
     this.clock.tick(1000);
     this.container.bufferfull();
-
     expect(this.stats.getStats().startupTime).to.equal(1000);
   });
 
@@ -98,13 +99,15 @@ describe('StatsPlugin', function() {
   });
 
   it('should announce statistics periodically', () => {
-    var container = new Container({playback: this.playback});
-    var spy = sinon.spy(container, 'statsReport');
+    sinon.spy(this.container, 'statsReport');
     var stats = new Stats({container: container, reportInterval: 10});
     container.addPlugin(stats);
-    container.play();
-    this.clock.tick(25);
-    spy.calledTwice.should.be.true;
+    this.playback.trigger('playback:play');
+    // clock.tick freezes when used with {set,clear}Interval and I don't know why
+    setTimeout(() => {
+      assert.ok(this.container.statsReport.calledTwice);
+      this.container.restore();
+    }, 20);
   });
 
 });
