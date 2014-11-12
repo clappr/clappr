@@ -56,6 +56,7 @@ module.exports = function(config) {
         bundle.require('./src/base/core_plugin', { expose: 'core_plugin' })
         bundle.require('./src/base/ui_core_plugin', { expose: 'ui_core_plugin' })
         bundle.require('./src/base/playback', { expose: 'playback' })
+        bundle.require('./src/components/container', { expose: 'container' })
         bundle.require('./src/components/browser', { expose: 'browser' })
         bundle.require('./src/components/media_control', { expose: 'media_control' })
         bundle.require('./src/components/player_info', { expose: 'player_info' })
