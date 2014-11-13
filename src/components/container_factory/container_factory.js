@@ -8,7 +8,7 @@
 
 var _ = require('underscore');
 var BaseObject = require('base_object');
-var Container = require('../container');
+var Container = require('container');
 var $ = require('jquery');
 
 class ContainerFactory extends BaseObject {
