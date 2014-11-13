@@ -61,6 +61,8 @@ module.exports = function(config) {
         bundle.require('./src/components/media_control', { expose: 'media_control' })
         bundle.require('./src/components/player_info', { expose: 'player_info' })
         bundle.require('./src/components/mediator', { expose: 'mediator' })
+        bundle.require('./src/components/container', { expose: 'container' })
+        bundle.require('./src/components/core', { expose: 'core' })
         bundle.require('./src/playbacks/hls', { expose: 'hls' })
         bundle.require('./src/playbacks/flash', { expose: 'flash' })
         bundle.require('./src/playbacks/html5_audio', { expose: 'html5_audio' })
