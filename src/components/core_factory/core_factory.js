@@ -8,7 +8,7 @@
 
 var _ = require('underscore');
 var BaseObject = require('base_object');
-var Core = require('../core');
+var Core = require('core');
 
 class CoreFactory extends BaseObject {
   constructor(player, loader) {
