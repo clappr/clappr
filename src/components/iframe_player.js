@@ -18,19 +18,24 @@ class IframePlayer extends BaseObject {
     this.iframe.setAttribute("id", this.uniqueId)
     this.iframe.setAttribute("allowfullscreen", true)
     this.iframe.setAttribute("scrolling", "no")
+    this.iframe.setAttribute("src", this.createBlob())
   }
 
   insertPlayer() {
-    $('#' + this.uniqueId).attr("src", this.createBlob())
     $('#' + this.uniqueId).css({width: this.options.width, height: this.options.height})
+    $('#' + this.uniqueId).ready(function () {
+      this.iframe.contentWindow.addEventListener("fullscreenchange", () => this.updateSize())
+      this.iframe.contentWindow.addEventListener("webkitfullscreenchange", () => this.updateSize())
+      this.iframe.contentWindow.addEventListener("mozfullscreenchange", () => this.updateSize())
+    }.bind(this))
   }
 
   getIframeContent() {
     return '<style>body { margin: 0 }</style>' +
-    '<div id="player-wrapper" style="border: 0px;border-radius: 0px;width: 100%;height: 100%" ></div>' +
+    '<div id="wrapper" style="border: 0px;border-radius: 0px;width: 100%;height: 100%"></div>' +
     '<scr' + 'ipt>' + 
-        'var player = new parent.Clappr.Player('+ JSON.stringify(this.options) + ');' +
-        'player.attachTo(document.getElementById("player-wrapper"));' +
+        'window.player = new parent.Clappr.Player('+ JSON.stringify(this.options) + ');' +
+        'window.player.attachTo(document.getElementById("wrapper"));' +
     '</scr' + 'ipt>'
   }
 
@@ -50,6 +55,12 @@ class IframePlayer extends BaseObject {
   attachTo(element) {
     element.appendChild(this.iframe)
     this.insertPlayer()
+  }
+
+  updateSize() {
+    var doc = this.iframe.contentDocument
+    window.iframeFullScreen = doc.webkitIsFullScreen || doc.mozFullScreen || !!doc.msFullscreenElement
+    this.iframe.contentWindow.player.core.updateSize()
   }
 }
 
