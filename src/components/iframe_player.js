@@ -19,22 +19,9 @@ class IframePlayer extends BaseObject {
     this.iframe.setAttribute("id", this.uniqueId)
     this.iframe.setAttribute("allowfullscreen", true)
     this.iframe.setAttribute("scrolling", "no")
-    this.iframe.setAttribute("src", this.createBlob())
+    this.iframe.setAttribute("src", "")
     this.iframe.setAttribute('width', this.options.width)
     this.iframe.setAttribute('height', this.options.height)
-  }
-
-  createBlob() {
-    var blob
-    try {
-      blob = new Blob([this.getIframeContent()], {type: 'text/html'})
-    } catch (e) {
-      window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder
-      blob = new BlobBuilder()
-      blob.append(this.getIframeContent())
-      blob = blob.getBlob()
-    }
-    return URL.createObjectURL(blob)
   }
 
   getIframeContent() {
@@ -44,7 +31,8 @@ class IframePlayer extends BaseObject {
 
   attachTo(element) {
     element.appendChild(this.iframe)
-    $('iframe#' + this.uniqueId).load(function () {
+    $('iframe#' + this.uniqueId).ready(function () {
+      this.iframe.contentDocument.body.innerHTML = this.getIframeContent()
       var wrapper = this.iframe.contentDocument.getElementById('wrapper')
       this.player = new Player(this.options)
       this.player.attachTo(wrapper)
