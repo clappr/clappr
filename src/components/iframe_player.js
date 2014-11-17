@@ -4,6 +4,7 @@
 
 var BaseObject = require('base_object')
 var $ = require('jquery')
+var Player = require('./player')
 
 class IframePlayer extends BaseObject {
   constructor(options) {
@@ -37,25 +38,24 @@ class IframePlayer extends BaseObject {
   }
 
   getIframeContent() {
-    return '<style>body { margin: 0 }</style>' +
-    '<div id="wrapper" style="border: 0px;border-radius: 0px;width: 100%;height: 100%"></div>' +
-    '<scr' + 'ipt>' +
-        'window.player = new parent.Clappr.Player('+ JSON.stringify(this.options) + ');' +
-        'window.player.attachTo(document.getElementById("wrapper"));' +
-    '</scr' + 'ipt>'
+    return '<style>body {margin:0}</style>' +
+      '<div id="wrapper" style="border: 0px;border-radius: 0px;width: 100%;height: 100%"></div>'
   }
 
   attachTo(element) {
     element.appendChild(this.iframe)
-    this.addEventListeners()
+    $('iframe#' + this.uniqueId).load(function () {
+      var wrapper = this.iframe.contentDocument.getElementById('wrapper')
+      this.player = new Player(this.options)
+      this.player.attachTo(wrapper)
+      this.addEventListeners()
+    }.bind(this))
   }
 
   addEventListeners() {
-    $('#' + this.uniqueId).ready(function () {
-      this.iframe.contentWindow.addEventListener("fullscreenchange", () => this.updateSize())
-      this.iframe.contentWindow.addEventListener("webkitfullscreenchange", () => this.updateSize())
-      this.iframe.contentWindow.addEventListener("mozfullscreenchange", () => this.updateSize())
-    }.bind(this))
+    this.iframe.contentWindow.addEventListener("fullscreenchange", () => this.updateSize())
+    this.iframe.contentWindow.addEventListener("webkitfullscreenchange", () => this.updateSize())
+    this.iframe.contentWindow.addEventListener("mozfullscreenchange", () => this.updateSize())
   }
 
   updateSize() {
