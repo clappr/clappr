@@ -19,7 +19,7 @@ class IframePlayer extends BaseObject {
     this.iframe.setAttribute("id", this.uniqueId)
     this.iframe.setAttribute("allowfullscreen", true)
     this.iframe.setAttribute("scrolling", "no")
-    this.iframe.setAttribute("src", "")
+    this.iframe.setAttribute("src", "about:blank")
     this.iframe.setAttribute('width', this.options.width)
     this.iframe.setAttribute('height', this.options.height)
   }
