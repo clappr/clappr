@@ -1,101 +1,20 @@
 require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 "use strict";
-var BaseObject = require('base_object');
-var CoreFactory = require('./components/core_factory');
-var Loader = require('./components/loader');
+var Player = require('./components/player');
+var IframePlayer = require('./components/iframe_player');
 var Mediator = require('mediator');
-var _ = require('underscore');
-var ScrollMonitor = require('scrollmonitor');
-var PlayerInfo = require('player_info');
-var Player = function Player(options) {
-  $traceurRuntime.superCall(this, $Player.prototype, "constructor", [options]);
-  window.p = this;
-  this.options = options;
-  this.options.sources = this.normalizeSources(options);
-  this.loader = new Loader(this.options.plugins || []);
-  this.coreFactory = new CoreFactory(this, this.loader);
-  options.height || (options.height = 360);
-  options.width || (options.width = 640);
-  PlayerInfo.currentSize = {
-    width: options.width,
-    height: options.height
-  };
-};
-var $Player = Player;
-($traceurRuntime.createClass)(Player, {
-  attachTo: function(element) {
-    this.options.parentElement = element;
-    this.core = this.coreFactory.create();
-    if (this.options.autoPlayVisible) {
-      this.bindAutoPlayVisible(this.options.autoPlayVisible);
-    }
-  },
-  bindAutoPlayVisible: function(option) {
-    var $__0 = this;
-    this.elementWatcher = ScrollMonitor.create(this.core.$el);
-    if (option === 'full') {
-      this.elementWatcher.fullyEnterViewport((function() {
-        return $__0.enterViewport();
-      }));
-    } else if (option === 'partial') {
-      this.elementWatcher.enterViewport((function() {
-        return $__0.enterViewport();
-      }));
-    }
-  },
-  enterViewport: function() {
-    if (this.elementWatcher.top !== 0 && !this.isPlaying()) {
-      this.play();
-    }
-  },
-  normalizeSources: function(options) {
-    return _.compact(_.flatten([options.source, options.sources]));
-  },
-  resize: function(size) {
-    this.core.resize(size);
-  },
-  load: function(sources) {
-    this.core.load(sources);
-  },
-  destroy: function() {
-    this.core.destroy();
-  },
-  play: function() {
-    this.core.mediaControl.container.play();
-  },
-  pause: function() {
-    this.core.mediaControl.container.pause();
-  },
-  stop: function() {
-    this.core.mediaControl.container.stop();
-  },
-  seek: function(time) {
-    this.core.mediaControl.container.setCurrentTime(time);
-  },
-  setVolume: function(volume) {
-    this.core.mediaControl.container.setVolume(volume);
-  },
-  mute: function() {
-    this.core.mediaControl.container.setVolume(0);
-  },
-  unmute: function() {
-    this.core.mediaControl.container.setVolume(100);
-  },
-  isPlaying: function() {
-    return this.core.mediaControl.container.isPlaying();
-  }
-}, {}, BaseObject);
 global.DEBUG = false;
 window.Clappr = {
   Player: Player,
-  Mediator: Mediator
+  Mediator: Mediator,
+  IframePlayer: IframePlayer
 };
 module.exports = window.Clappr;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./components/core_factory":18,"./components/loader":19,"base_object":undefined,"mediator":undefined,"player_info":undefined,"scrollmonitor":5,"underscore":6}],2:[function(require,module,exports){
+},{"./components/iframe_player":17,"./components/player":21,"mediator":undefined}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -5476,7 +5395,7 @@ var formatTime = function(time) {
 };
 var Fullscreen = {
   isFullscreen: function() {
-    return document.webkitIsFullScreen || document.mozFullScreen || !!document.msFullscreenElement;
+    return document.webkitIsFullScreen || document.mozFullScreen || !!document.msFullscreenElement || window.iframeFullScreen;
   },
   requestFullscreen: function(el) {
     if (el.requestFullscreen) {
@@ -5710,14 +5629,9 @@ module.exports = Container;
 
 },{"../../base/styler":9,"ui_object":undefined,"underscore":6}],12:[function(require,module,exports){
 "use strict";
-module.exports = require('./container');
-
-
-},{"./container":11}],13:[function(require,module,exports){
-"use strict";
 var _ = require('underscore');
 var BaseObject = require('base_object');
-var Container = require('../container');
+var Container = require('container');
 var $ = require('jquery');
 var ContainerFactory = function ContainerFactory(options, loader) {
   $traceurRuntime.superCall(this, $ContainerFactory.prototype, "constructor", [options]);
@@ -5727,11 +5641,12 @@ var ContainerFactory = function ContainerFactory(options, loader) {
 var $ContainerFactory = ContainerFactory;
 ($traceurRuntime.createClass)(ContainerFactory, {
   createContainers: function() {
-    return $.Deferred(function(promise) {
-      promise.resolve(_.map(this.options.sources, function(source) {
-        return this.createContainer(source);
-      }, this));
-    }.bind(this));
+    var $__0 = this;
+    return $.Deferred((function(promise) {
+      promise.resolve(_.map($__0.options.sources, (function(source) {
+        return $__0.createContainer(source);
+      }), $__0));
+    }));
   },
   findPlaybackPlugin: function(source) {
     return _.find(this.loader.playbackPlugins, (function(p) {
@@ -5767,12 +5682,12 @@ var $ContainerFactory = ContainerFactory;
 module.exports = ContainerFactory;
 
 
-},{"../container":12,"base_object":undefined,"jquery":undefined,"underscore":6}],14:[function(require,module,exports){
+},{"base_object":undefined,"container":undefined,"jquery":undefined,"underscore":6}],13:[function(require,module,exports){
 "use strict";
 module.exports = require('./container_factory');
 
 
-},{"./container_factory":13}],15:[function(require,module,exports){
+},{"./container_factory":12}],14:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('jquery');
@@ -5835,22 +5750,23 @@ var $Core = Core;
   setFullscreen: function() {
     this.$el.addClass('fullscreen');
     this.$el.removeAttr('style');
-    PlayerInfo.previousSize = PlayerInfo.currentSize;
+    if (!_.isEqual(PlayerInfo.currentSize, PlayerInfo.currentSize)) {
+      PlayerInfo.previousSize = PlayerInfo.currentSize;
+    }
     PlayerInfo.currentSize = {
       width: $(window).width(),
       height: $(window).height()
     };
+  },
+  setPlayerSize: function() {
+    this.resize(PlayerInfo.previousSize);
+    this.$el.removeClass('fullscreen');
   },
   resize: function(options) {
     var size = _.pick(options, 'width', 'height');
     this.$el.css(size);
     PlayerInfo.previousSize = PlayerInfo.currentSize;
     PlayerInfo.currentSize = size;
-    Mediator.trigger('player:resize', size);
-  },
-  setPlayerSize: function() {
-    this.resize(PlayerInfo.previousSize);
-    this.$el.removeClass('fullscreen');
   },
   resolveOnContainersReady: function(containers) {
     var $__0 = this;
@@ -5871,13 +5787,13 @@ var $Core = Core;
   },
   load: function(sources) {
     var $__0 = this;
-    sources = _.isString(sources) ? [sources] : sources;
+    sources = _.isArray(sources) ? sources : [sources.toString()];
     _(this.containers).each((function(container) {
       return container.destroy();
     }));
     this.containerFactory.options = _(this.options).extend({sources: sources});
     this.containerFactory.createContainers().then((function(containers) {
-      return $__0.setupContainers(containers);
+      $__0.setupContainers(containers);
     }));
   },
   destroy: function() {
@@ -5986,16 +5902,11 @@ var $Core = Core;
 module.exports = Core;
 
 
-},{"../../base/styler":9,"../../base/utils":10,"../container_factory":14,"jquery":undefined,"media_control":undefined,"mediator":undefined,"player_info":undefined,"ui_object":undefined,"underscore":6}],16:[function(require,module,exports){
-"use strict";
-module.exports = require('./core');
-
-
-},{"./core":15}],17:[function(require,module,exports){
+},{"../../base/styler":9,"../../base/utils":10,"../container_factory":13,"jquery":undefined,"media_control":undefined,"mediator":undefined,"player_info":undefined,"ui_object":undefined,"underscore":6}],15:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var BaseObject = require('base_object');
-var Core = require('../core');
+var Core = require('core');
 var CoreFactory = function CoreFactory(player, loader) {
   this.player = player;
   this.options = player.options;
@@ -6025,17 +5936,84 @@ var CoreFactory = function CoreFactory(player, loader) {
 module.exports = CoreFactory;
 
 
-},{"../core":16,"base_object":undefined,"underscore":6}],18:[function(require,module,exports){
+},{"base_object":undefined,"core":undefined,"underscore":6}],16:[function(require,module,exports){
 "use strict";
 module.exports = require('./core_factory');
 
 
-},{"./core_factory":17}],19:[function(require,module,exports){
+},{"./core_factory":15}],17:[function(require,module,exports){
+"use strict";
+var BaseObject = require('base_object');
+var $ = require('jquery');
+var Player = require('./player');
+var IframePlayer = function IframePlayer(options) {
+  $traceurRuntime.superCall(this, $IframePlayer.prototype, "constructor", [options]);
+  this.options = options;
+  this.createIframe();
+};
+var $IframePlayer = IframePlayer;
+($traceurRuntime.createClass)(IframePlayer, {
+  createIframe: function() {
+    this.iframe = document.createElement("iframe");
+    this.iframe.setAttribute("frameborder", 0);
+    this.iframe.setAttribute("id", this.uniqueId);
+    this.iframe.setAttribute("allowfullscreen", true);
+    this.iframe.setAttribute("scrolling", "no");
+    this.iframe.setAttribute("src", this.createBlob());
+    this.iframe.setAttribute('width', this.options.width);
+    this.iframe.setAttribute('height', this.options.height);
+  },
+  createBlob: function() {
+    var blob;
+    try {
+      blob = new Blob([this.getIframeContent()], {type: 'text/html'});
+    } catch (e) {
+      window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
+      blob = new BlobBuilder();
+      blob.append(this.getIframeContent());
+      blob = blob.getBlob();
+    }
+    return URL.createObjectURL(blob);
+  },
+  getIframeContent: function() {
+    return '<style>body {margin:0}</style>' + '<div id="wrapper" style="border: 0px;border-radius: 0px;width: 100%;height: 100%"></div>';
+  },
+  attachTo: function(element) {
+    element.appendChild(this.iframe);
+    $('iframe#' + this.uniqueId).load(function() {
+      var wrapper = this.iframe.contentDocument.getElementById('wrapper');
+      this.player = new Player(this.options);
+      this.player.attachTo(wrapper);
+      this.addEventListeners();
+    }.bind(this));
+  },
+  addEventListeners: function() {
+    var $__0 = this;
+    this.iframe.contentWindow.addEventListener("fullscreenchange", (function() {
+      return $__0.updateSize();
+    }));
+    this.iframe.contentWindow.addEventListener("webkitfullscreenchange", (function() {
+      return $__0.updateSize();
+    }));
+    this.iframe.contentWindow.addEventListener("mozfullscreenchange", (function() {
+      return $__0.updateSize();
+    }));
+  },
+  updateSize: function() {
+    var doc = this.iframe.contentDocument;
+    window.iframeFullScreen = doc.webkitIsFullScreen || doc.mozFullScreen || !!doc.msFullscreenElement;
+    this.iframe.contentWindow.player.core.updateSize();
+  }
+}, {}, BaseObject);
+module.exports = IframePlayer;
+
+
+},{"./player":21,"base_object":undefined,"jquery":undefined}],18:[function(require,module,exports){
 "use strict";
 module.exports = require('./loader');
 
 
-},{"./loader":20}],20:[function(require,module,exports){
+},{"./loader":19}],19:[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var _ = require('underscore');
@@ -6089,7 +6067,7 @@ var $Loader = Loader;
 module.exports = Loader;
 
 
-},{"../../playbacks/no_op":28,"../../plugins/background_button":31,"../../plugins/click_to_pause":33,"../../plugins/dvr_controls":35,"../../plugins/google_analytics":37,"../../plugins/poster":40,"../../plugins/spinner_three_bounce":42,"../../plugins/stats":44,"../../plugins/watermark":46,"base_object":undefined,"flash":undefined,"hls":undefined,"html5_audio":undefined,"html5_video":undefined,"player_info":undefined,"underscore":6}],21:[function(require,module,exports){
+},{"../../playbacks/no_op":28,"../../plugins/background_button":31,"../../plugins/click_to_pause":33,"../../plugins/dvr_controls":35,"../../plugins/google_analytics":37,"../../plugins/poster":40,"../../plugins/spinner_three_bounce":42,"../../plugins/stats":44,"../../plugins/watermark":46,"base_object":undefined,"flash":undefined,"hls":undefined,"html5_audio":undefined,"html5_video":undefined,"player_info":undefined,"underscore":6}],20:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('jquery');
@@ -6545,7 +6523,96 @@ var $MediaControl = MediaControl;
 module.exports = MediaControl;
 
 
-},{"../../base/jst":8,"../../base/styler":9,"../../base/utils":10,"../seek_time":22,"jquery":undefined,"mediator":undefined,"mousetrap":4,"player_info":undefined,"ui_object":undefined,"underscore":6}],22:[function(require,module,exports){
+},{"../../base/jst":8,"../../base/styler":9,"../../base/utils":10,"../seek_time":22,"jquery":undefined,"mediator":undefined,"mousetrap":4,"player_info":undefined,"ui_object":undefined,"underscore":6}],21:[function(require,module,exports){
+"use strict";
+var BaseObject = require('base_object');
+var CoreFactory = require('./core_factory');
+var Loader = require('./loader');
+var _ = require('underscore');
+var ScrollMonitor = require('scrollmonitor');
+var PlayerInfo = require('player_info');
+var Player = function Player(options) {
+  $traceurRuntime.superCall(this, $Player.prototype, "constructor", [options]);
+  window.p = this;
+  this.options = options;
+  this.options.sources = this.normalizeSources(options);
+  this.loader = new Loader(this.options.plugins || []);
+  this.coreFactory = new CoreFactory(this, this.loader);
+  options.height || (options.height = 360);
+  options.width || (options.width = 640);
+  PlayerInfo.currentSize = {
+    width: options.width,
+    height: options.height
+  };
+};
+var $Player = Player;
+($traceurRuntime.createClass)(Player, {
+  attachTo: function(element) {
+    this.options.parentElement = element;
+    this.core = this.coreFactory.create();
+    if (this.options.autoPlayVisible) {
+      this.bindAutoPlayVisible(this.options.autoPlayVisible);
+    }
+  },
+  bindAutoPlayVisible: function(option) {
+    var $__0 = this;
+    this.elementWatcher = ScrollMonitor.create(this.core.$el);
+    if (option === 'full') {
+      this.elementWatcher.fullyEnterViewport((function() {
+        return $__0.enterViewport();
+      }));
+    } else if (option === 'partial') {
+      this.elementWatcher.enterViewport((function() {
+        return $__0.enterViewport();
+      }));
+    }
+  },
+  enterViewport: function() {
+    if (this.elementWatcher.top !== 0 && !this.isPlaying()) {
+      this.play();
+    }
+  },
+  normalizeSources: function(options) {
+    return _.compact(_.flatten([options.source, options.sources]));
+  },
+  resize: function(size) {
+    this.core.resize(size);
+  },
+  load: function(sources) {
+    this.core.load(sources);
+  },
+  destroy: function() {
+    this.core.destroy();
+  },
+  play: function() {
+    this.core.mediaControl.container.play();
+  },
+  pause: function() {
+    this.core.mediaControl.container.pause();
+  },
+  stop: function() {
+    this.core.mediaControl.container.stop();
+  },
+  seek: function(time) {
+    this.core.mediaControl.container.setCurrentTime(time);
+  },
+  setVolume: function(volume) {
+    this.core.mediaControl.container.setVolume(volume);
+  },
+  mute: function() {
+    this.core.mediaControl.container.setVolume(0);
+  },
+  unmute: function() {
+    this.core.mediaControl.container.setVolume(100);
+  },
+  isPlaying: function() {
+    return this.core.mediaControl.container.isPlaying();
+  }
+}, {}, BaseObject);
+module.exports = Player;
+
+
+},{"./core_factory":16,"./loader":18,"base_object":undefined,"player_info":undefined,"scrollmonitor":5,"underscore":6}],22:[function(require,module,exports){
 "use strict";
 module.exports = require('./seek_time');
 
@@ -8123,7 +8190,7 @@ var $StatsPlugin = StatsPlugin;
     this.rebuffers++;
   },
   onBufferFull: function() {
-    if (this.firstPlay) {
+    if (this.firstPlay && !!this.startupTimeInit) {
       this.firstPlay = false;
       this.startupTime = Date.now() - this.startupTimeInit;
       this.watchingTimeInit = Date.now();
@@ -8269,7 +8336,12 @@ var $ContainerPlugin = ContainerPlugin;
 module.exports = ContainerPlugin;
 
 
-},{"base_object":undefined}],"core_plugin":[function(require,module,exports){
+},{"base_object":undefined}],"container":[function(require,module,exports){
+"use strict";
+module.exports = require('./container');
+
+
+},{"./container":11}],"core_plugin":[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var CorePlugin = function CorePlugin(core) {
@@ -8286,7 +8358,12 @@ var $CorePlugin = CorePlugin;
 module.exports = CorePlugin;
 
 
-},{"base_object":undefined}],"flash":[function(require,module,exports){
+},{"base_object":undefined}],"core":[function(require,module,exports){
+"use strict";
+module.exports = require('./core');
+
+
+},{"./core":14}],"flash":[function(require,module,exports){
 "use strict";
 module.exports = require('./flash');
 
@@ -17503,7 +17580,7 @@ return jQuery;
 module.exports = require('./media_control');
 
 
-},{"./media_control":21}],"mediator":[function(require,module,exports){
+},{"./media_control":20}],"mediator":[function(require,module,exports){
 "use strict";
 var Events = require('../base/events');
 var events = new Events();
