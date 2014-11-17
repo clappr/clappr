@@ -1,5 +1,5 @@
-var Container = require('../src/components/container');
-var FakePlayback = require('./fakes/playback');
+var Container = require('container');
+var FakePlayback = require('playback');
 
 describe('Container', () => {
   beforeEach(() => {
@@ -12,7 +12,7 @@ describe('Container', () => {
   });
 
   it('gets playback type', () => {
-    expect(this.container.getPlaybackType()).to.equal('fake');
+    expect(this.container.getPlaybackType()).to.equal('no_op');
   });
 
   it('listens to playback:progress event', () => {

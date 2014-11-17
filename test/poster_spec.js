@@ -1,5 +1,5 @@
-var FakePlayback = require('./fakes/playback');
-var Container = require('../src/components/container');
+var FakePlayback = require('playback');
+var Container = require('container');
 var Poster = require('../src/plugins/poster');
 
 describe('Poster', () => {
