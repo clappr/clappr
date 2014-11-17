@@ -14,9 +14,8 @@ install:
 
 env:
   - CHROME_BIN=/usr/bin/chromium-browser
-  - CI=false
 
-script: node_modules/.bin/gulp build && npm test
+script: npm test
 
 notifications:
   email:
