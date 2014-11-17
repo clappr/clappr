@@ -33,6 +33,7 @@ class IframePlayer extends BaseObject {
     element.appendChild(this.iframe)
     $('iframe#' + this.uniqueId).ready(function () {
       this.iframe.contentDocument.body.innerHTML = this.getIframeContent()
+      this.iframe.contentWindow.Clappr = window.Clappr
       var wrapper = this.iframe.contentDocument.getElementById('wrapper')
       this.player = new Player(this.options)
       this.player.attachTo(wrapper)
