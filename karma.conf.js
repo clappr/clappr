@@ -4,7 +4,6 @@
 
 var dotenv = require('dotenv');
 var exec = require('child_process').exec;
-exec('node bin/hook.js');
 dotenv.load();
 
 module.exports = function(config) {
@@ -13,35 +12,25 @@ module.exports = function(config) {
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
 
-
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['browserify', 'traceur', 'mocha', 'sinon-chai', 'jquery-2.1.0'],
-
+    frameworks: ['browserify', 'mocha', 'sinon-chai', 'jquery-2.1.0'],
 
     // list of files / patterns to load in the browser
     files: [
+      'dist/underscore-min.js',
+      'dist/clappr.min.js',
       'test/**/*spec.js',
-      'src/**/*.js'
     ],
-
 
     // list of files to exclude
     exclude: [
     ],
 
-
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'src/**/*.js': ['traceur', 'browserify'],
-      'test/**/*.js': ['traceur', 'browserify']
-    },
-
-    traceurPreprocessor: {
-      options: {
-        sourceMap: true
-      }
+      'test/**/*.js': ['browserify'],
     },
 
     browserify: {
@@ -49,27 +38,23 @@ module.exports = function(config) {
       debug: true,
       transform: ['es6ify'],
       prebundle: function(bundle) {
-        bundle.require('./src/base/ui_object', { expose: 'ui_object' })
-        bundle.require('./src/base/base_object', { expose: 'base_object' })
-        bundle.require('./src/base/ui_container_plugin', { expose: 'ui_container_plugin' })
-        bundle.require('./src/base/container_plugin', { expose: 'container_plugin' })
-        bundle.require('./src/base/core_plugin', { expose: 'core_plugin' })
-        bundle.require('./src/base/ui_core_plugin', { expose: 'ui_core_plugin' })
-        bundle.require('./src/base/playback', { expose: 'playback' })
-        bundle.require('./src/components/container', { expose: 'container' })
-        bundle.require('./src/components/browser', { expose: 'browser' })
-        bundle.require('./src/components/media_control', { expose: 'media_control' })
-        bundle.require('./src/components/player_info', { expose: 'player_info' })
-        bundle.require('./src/components/mediator', { expose: 'mediator' })
-        bundle.require('./src/components/container', { expose: 'container' })
-        bundle.require('./src/components/core', { expose: 'core' })
-        bundle.require('./src/playbacks/hls', { expose: 'hls' })
-        bundle.require('./src/playbacks/flash', { expose: 'flash' })
-        bundle.require('./src/playbacks/html5_audio', { expose: 'html5_audio' })
-        bundle.require('./src/playbacks/html5_video', { expose: 'html5_video' })
+        bundle.external('ui_object');
+        bundle.external('base_object');
+        bundle.external('ui_container_plugin');
+        bundle.external('container_plugin');
+        bundle.external('ui_core_plugin');
+        bundle.external('core_plugin');
+        bundle.external('media_control');
+        bundle.external('playback');
+        bundle.external('browser');
+        bundle.external('player_info');
+        bundle.external('underscore');
+        bundle.external('jquery');
+        bundle.external('mediator');
+        bundle.external('container');
+        bundle.external('underscore');
       }
     },
-
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
