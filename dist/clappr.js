@@ -5959,28 +5959,18 @@ var $IframePlayer = IframePlayer;
     this.iframe.setAttribute("id", this.uniqueId);
     this.iframe.setAttribute("allowfullscreen", true);
     this.iframe.setAttribute("scrolling", "no");
-    this.iframe.setAttribute("src", this.createBlob());
+    this.iframe.setAttribute("src", "about:blank");
     this.iframe.setAttribute('width', this.options.width);
     this.iframe.setAttribute('height', this.options.height);
-  },
-  createBlob: function() {
-    var blob;
-    try {
-      blob = new Blob([this.getIframeContent()], {type: 'text/html'});
-    } catch (e) {
-      window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
-      blob = new BlobBuilder();
-      blob.append(this.getIframeContent());
-      blob = blob.getBlob();
-    }
-    return URL.createObjectURL(blob);
   },
   getIframeContent: function() {
     return '<style>body {margin:0}</style>' + '<div id="wrapper" style="border: 0px;border-radius: 0px;width: 100%;height: 100%"></div>';
   },
   attachTo: function(element) {
     element.appendChild(this.iframe);
-    $('iframe#' + this.uniqueId).load(function() {
+    $('iframe#' + this.uniqueId).ready(function() {
+      this.iframe.contentDocument.body.innerHTML = this.getIframeContent();
+      this.iframe.contentWindow.Clappr = window.Clappr;
       var wrapper = this.iframe.contentDocument.getElementById('wrapper');
       this.player = new Player(this.options);
       this.player.attachTo(wrapper);
@@ -7345,7 +7335,6 @@ var $HTML5Video = HTML5Video;
       'timeupdate': 'timeUpdated',
       'progress': 'progress',
       'ended': 'ended',
-      'playing': 'playing',
       'stalled': 'stalled',
       'waiting': 'waiting',
       'canplaythrough': 'bufferFull',
@@ -7407,12 +7396,14 @@ var $HTML5Video = HTML5Video;
     this.trigger('playback:timeupdate', 0, this.el.duration, this.name);
   },
   stalled: function() {
-    if (this.getPlaybackType() === 'vod') {
+    if (this.getPlaybackType() === 'vod' && this.el.readyState < this.el.HAVE_FUTURE_DATA) {
       this.trigger('playback:buffering', this.name);
     }
   },
   waiting: function() {
-    this.trigger('playback:buffering', this.name);
+    if (this.el.readyState < this.el.HAVE_FUTURE_DATA) {
+      this.trigger('playback:buffering', this.name);
+    }
   },
   bufferFull: function() {
     this.trigger('playback:bufferfull', this.name);
