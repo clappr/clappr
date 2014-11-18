@@ -27,7 +27,6 @@ class HTML5Video extends Playback {
       'timeupdate': 'timeUpdated',
       'progress': 'progress',
       'ended': 'ended',
-      'playing': 'playing',
       'stalled': 'stalled',
       'waiting': 'waiting',
       'canplaythrough': 'bufferFull',
@@ -117,13 +116,15 @@ class HTML5Video extends Playback {
   }
 
   stalled() {
-    if (this.getPlaybackType() === 'vod') {
+    if (this.getPlaybackType() === 'vod' && this.el.readyState < this.el.HAVE_FUTURE_DATA) {
       this.trigger('playback:buffering', this.name)
     }
   }
 
   waiting() {
-    this.trigger('playback:buffering', this.name)
+    if(this.el.readyState < this.el.HAVE_FUTURE_DATA) {
+      this.trigger('playback:buffering', this.name)
+    }
   }
 
   bufferFull() {
