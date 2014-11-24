@@ -7055,16 +7055,13 @@ var $HLS = HLS;
     this.trigger('playback:playbackstate');
   },
   startReportingProgress: function() {
-    var $__0 = this;
     if (!this.reportingProgress) {
       this.reportingProgress = true;
-      Mediator.on(this.uniqueId + ':fragmentloaded', (function() {
-        return $__0.onFragmentLoaded();
-      }));
+      Mediator.on(this.uniqueId + ':fragmentloaded', this.onFragmentLoaded);
     }
   },
   stopReportingProgress: function() {
-    Mediator.off(this.uniqueId + ':fragmentloaded');
+    Mediator.off(this.uniqueId + ':fragmentloaded', this.onFragmentLoaded, this);
   },
   onFragmentLoaded: function() {
     var buffered = this.el.globoGetPosition() + this.el.globoGetbufferLength();
@@ -17799,7 +17796,4 @@ UIObject.extend = extend;
 module.exports = UIObject;
 
 
-},{"./utils":10,"base_object":undefined,"jquery":undefined,"underscore":6}]},{},[3,1])
-
-
-//# sourceMappingURL=clappr.map
+},{"./utils":10,"base_object":undefined,"jquery":undefined,"underscore":6}]},{},[3,1]);
