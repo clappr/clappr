@@ -35,7 +35,7 @@ class HTML5Video extends Playback {
   }
 
   constructor(options) {
-    super(options);
+    super(options)
     this.options = options
     this.src = options.src
     this.el.src = options.src
@@ -128,6 +128,7 @@ class HTML5Video extends Playback {
   }
 
   bufferFull() {
+    this.el.poster = this.options.poster
     this.trigger('playback:bufferfull', this.name)
   }
 
