@@ -57,10 +57,18 @@ class PosterPlugin extends UIContainerPlugin {
   }
 
   onPlay() {
-    this.$el.hide()
+    if (this.container.playback.name === 'hls' || this.container.playback.name === 'flash') {
+      this.listenToOnce(this.container, 'container:state:bufferfull', this.hide)
+    } else {
+      this.hide()
+    }
     if (this.options.disableControlsOnPoster) {
       this.container.enableMediaControl()
     }
+  }
+
+  hide() {
+    this.$el.hide()
   }
 
   onStop() {
