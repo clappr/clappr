@@ -41,7 +41,7 @@ class PosterPlugin extends UIContainerPlugin {
 
   bindEvents() {
     this.listenTo(this.container, 'container:state:buffering', this.onBuffering)
-    this.listenTo(this.container, 'container:play', this.onPlay)
+    this.listenTo(this.container, 'container:state:bufferfull', this.onBufferfull)
     this.listenTo(this.container, 'container:stop', this.onStop)
     this.listenTo(this.container, 'container:ended', this.onStop)
     Mediator.on('player:resize', this.updateSize, this)
@@ -56,19 +56,11 @@ class PosterPlugin extends UIContainerPlugin {
     this.hidePlayButton()
   }
 
-  onPlay() {
-    if (this.container.playback.name === 'hls' || this.container.playback.name === 'flash') {
-      this.listenToOnce(this.container, 'container:state:bufferfull', this.hide)
-    } else {
-      this.hide()
-    }
+  onBufferfull() {
+    this.$el.hide()
     if (this.options.disableControlsOnPoster) {
       this.container.enableMediaControl()
     }
-  }
-
-  hide() {
-    this.$el.hide()
   }
 
   onStop() {
