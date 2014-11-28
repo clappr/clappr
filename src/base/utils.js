@@ -52,7 +52,7 @@ var formatTime = function(time) {
 
 var Fullscreen = {
   isFullscreen: function() {
-    return document.webkitIsFullScreen || document.mozFullScreen || !!document.msFullscreenElement;
+    return document.webkitIsFullScreen || document.mozFullScreen || !!document.msFullscreenElement || window.iframeFullScreen;
   },
   requestFullscreen: function(el) {
     if(el.requestFullscreen) {
