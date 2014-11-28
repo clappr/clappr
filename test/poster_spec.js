@@ -25,15 +25,6 @@ describe('Poster', () => {
     expect(this.poster.$playButton.is(':visible')).to.be.false;
   });
 
-  it('listens to container:play event', () => {
-    sinon.spy(this.poster, 'onPlay');
-    this.poster.bindEvents();
-    this.container.trigger('container:play');
-
-    expect(this.poster.onPlay).called.once;
-    expect(this.poster.$el.is(':visible')).to.be.false;
-  });
-
   it('listens to container:stop event', () => {
     sinon.spy(this.container, 'disableMediaControl');
     sinon.spy(this.poster, 'showPlayButton');
