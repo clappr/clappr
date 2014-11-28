@@ -1,6 +1,6 @@
 # Clappr Player
 
-[![Build Status](https://drone.io/github.com/globocom/clappr/status.png)](https://drone.io/github.com/globocom/clappr/latest)
+[![Build Status](https://travis-ci.org/globocom/clappr.svg?branch=master)](https://travis-ci.org/globocom/clappr)
 [![Dependency Status](https://gemnasium.com/globocom/clappr.svg)](https://gemnasium.com/globocom/clappr)
 
 <img src="https://i.cloudup.com/GSbXxvCsBK.png">
