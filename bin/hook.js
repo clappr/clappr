@@ -43,4 +43,4 @@ fs.writeFileSync(jstFile, codeTemplate({templates: templates, styles: styles}));
 
 mkdirp('dist/assets/');
 
-glob('src/{plugins,playbacks,components}/**/*.{png,jpeg,jpg,gif,swf,eot,ttf,svg}').map(copyFiles);
+glob('src/{plugins,playbacks,components}/**/*.{png,jpeg,jpg,gif,swf,eot,ttf,svg,htm}').map(copyFiles);
