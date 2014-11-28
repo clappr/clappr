@@ -25,6 +25,15 @@ describe('Poster', () => {
     expect(this.poster.$playButton.is(':visible')).to.be.false;
   });
 
+  it('listens to container:bufferful event', () => {
+    sinon.spy(this.poster, 'onBufferfull');
+    this.poster.bindEvents();
+    this.container.trigger('container:state:bufferfull');
+
+    expect(this.poster.onBufferfull).called.once;
+//    expect(this.poster.$el.is(':visible')).to.be.false;
+  });
+
   it('listens to container:stop event', () => {
     sinon.spy(this.container, 'disableMediaControl');
     sinon.spy(this.poster, 'showPlayButton');
