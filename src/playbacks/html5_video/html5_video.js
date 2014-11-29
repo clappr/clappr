@@ -199,7 +199,11 @@ class HTML5Video extends Playback {
 }
 
 HTML5Video.canPlay = function(resource) {
-    return (!!resource.match(/(.*).mp4/) || Browser.isSafari || Browser.isMobile || Browser.isWin8App)
+  if (Browser.isChrome || Browser.isFirefox || Browser.isIE) {
+    return (!!resource.match(/(.*).(mp4|webm)/))
+  } else if (Browser.isSafari || Browser.isMobile || Browser.isWin8App || Browser.isLegacyIE) {
+    return (!!resource.match(/(.*).mp4/))
+  }
 }
 
 module.exports = HTML5Video
