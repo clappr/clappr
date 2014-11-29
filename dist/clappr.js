@@ -5141,7 +5141,7 @@ module.exports = mousetrap;
 },{}],7:[function(require,module,exports){
 module.exports={
   "name": "clappr",
-  "version": "0.0.62",
+  "version": "0.0.63",
   "description": "An extensible media player for the web",
   "main": "dist/clappr.min.js",
   "scripts": {
@@ -5829,23 +5829,27 @@ var $Core = Core;
   setFullscreen: function() {
     this.$el.addClass('fullscreen');
     this.$el.removeAttr('style');
-    if (!_.isEqual(PlayerInfo.currentSize, PlayerInfo.currentSize)) {
-      PlayerInfo.previousSize = PlayerInfo.currentSize;
-    }
+    PlayerInfo.previousSize = PlayerInfo.currentSize;
     PlayerInfo.currentSize = {
       width: $(window).width(),
       height: $(window).height()
     };
   },
   setPlayerSize: function() {
-    this.resize(PlayerInfo.previousSize);
     this.$el.removeClass('fullscreen');
+    PlayerInfo.currentSize = PlayerInfo.previousSize;
+    PlayerInfo.previousSize = {
+      width: $(window).width(),
+      height: $(window).height()
+    };
+    this.resize(PlayerInfo.currentSize);
   },
   resize: function(options) {
     var size = _.pick(options, 'width', 'height');
     this.$el.css(size);
     PlayerInfo.previousSize = PlayerInfo.currentSize;
     PlayerInfo.currentSize = size;
+    Mediator.trigger('player:resize');
   },
   resolveOnContainersReady: function(containers) {
     var $__0 = this;
