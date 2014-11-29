@@ -40,6 +40,7 @@ class HTML5Video extends Playback {
     this.src = options.src
     this.el.src = options.src
     this.el.loop = options.loop
+    this.firstBuffer = true
     this.isHLS = (this.src.indexOf('m3u8') > -1)
     this.settings = {default: ['seekbar']}
     if (this.isHLS) {
@@ -128,8 +129,11 @@ class HTML5Video extends Playback {
   }
 
   bufferFull() {
-    if (this.getPlaybackType() === 'vod' && this.options.poster) {
+    if (this.getPlaybackType() === 'vod' && this.options.poster && this.firstBuffer) {
+      this.firstBuffer = false
       this.el.poster = this.options.poster
+    } else {
+      this.el.poster = ''
     }
     this.trigger('playback:bufferfull', this.name)
   }
