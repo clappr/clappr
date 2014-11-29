@@ -128,7 +128,9 @@ class HTML5Video extends Playback {
   }
 
   bufferFull() {
-    this.el.poster = this.options.poster
+    if (this.getPlaybackType() === 'vod' && this.options.poster) {
+      this.el.poster = this.options.poster
+    }
     this.trigger('playback:bufferfull', this.name)
   }
 
