@@ -5141,7 +5141,7 @@ module.exports = mousetrap;
 },{}],7:[function(require,module,exports){
 module.exports={
   "name": "clappr",
-  "version": "0.0.63",
+  "version": "0.0.64",
   "description": "An extensible media player for the web",
   "main": "dist/clappr.min.js",
   "scripts": {
@@ -7552,8 +7552,8 @@ var $HTML5Video = HTML5Video;
 HTML5Video.canPlay = function(resource) {
   if (Browser.isChrome || Browser.isFirefox || Browser.isIE) {
     return (!!resource.match(/(.*).(mp4|webm)/));
-  } else if (Browser.isSafari || Browser.isMobile || Browser.isWin8App || Browser.isLegacyIE) {
-    return (!!resource.match(/(.*).mp4/));
+  } else {
+    return (Browser.isSafari || Browser.isMobile || Browser.isWin8App || Browser.isLegacyIE);
   }
 };
 module.exports = HTML5Video;
@@ -17887,4 +17887,7 @@ UIObject.extend = extend;
 module.exports = UIObject;
 
 
-},{"./utils":11,"base_object":"base_object","jquery":"jquery","underscore":6}]},{},[3,1]);
+},{"./utils":11,"base_object":"base_object","jquery":"jquery","underscore":6}]},{},[3,1])
+
+
+//# sourceMappingURL=clappr.map
