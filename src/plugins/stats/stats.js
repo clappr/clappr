@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 var ContainerPlugin = require('container_plugin');
-var $ = require("jquery");
+var $ = require("zepto");
 
 class StatsPlugin extends ContainerPlugin {
   get name() { return 'stats' }

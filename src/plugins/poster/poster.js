@@ -9,7 +9,7 @@ var JST = require('../../base/jst')
 var Mediator = require('mediator')
 var PlayerInfo = require('player_info')
 
-var $ = require('jquery')
+var $ = require('zepto')
 var _ = require('underscore')
 
 class PosterPlugin extends UIContainerPlugin {
