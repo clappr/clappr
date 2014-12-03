@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var $ = require('jquery')
+var $ = require('zepto')
 var _ = require('underscore')
 var extend = require('./utils').extend
 var BaseObject = require('base_object')

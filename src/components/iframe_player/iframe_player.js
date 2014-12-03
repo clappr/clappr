@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 var BaseObject = require('base_object')
-var $ = require('jquery')
+var $ = require('zepto')
 var Player = require('../player')
 
 class IframePlayer extends BaseObject {

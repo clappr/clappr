@@ -8,7 +8,7 @@
  */
 
 var _ = require('underscore')
-var $ = require('jquery')
+var $ = require('zepto')
 
 var UIObject = require('ui_object')
 var ContainerFactory = require('../container_factory')

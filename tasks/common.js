@@ -29,7 +29,7 @@ module.exports.browserify = function(options) {
     .require('./src/playbacks/hls', { expose: 'hls' })
     .require('./src/playbacks/html5_audio', { expose: 'html5_audio' })
     .require('./src/playbacks/html5_video', { expose: 'html5_video' })
-    .require('jquery')
+    .require('zepto')
 };
 
 gulp.task('compile-js', function() {

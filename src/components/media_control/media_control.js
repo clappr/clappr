@@ -7,7 +7,7 @@
  */
 
 var _ = require('underscore')
-var $ = require('jquery')
+var $ = require('zepto')
 var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
 var UIObject = require('ui_object')
