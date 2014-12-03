@@ -11,8 +11,6 @@
 Add the following scripts on your HTML:
 ```html
 <head>
-  <script type="text/javascript" charset="utf-8" src="http://cdn.clappr.io/j/vendor/jquery.min.js"></script>
-  <script type="text/javascript" charset="utf-8" src="http://cdn.clappr.io/j/vendor/underscore-min.js"></script>
   <script type="text/javascript" charset="utf-8" src="http://cdn.clappr.io/latest/clappr.min.js"> </script>
 </head>
 ```
@@ -27,8 +25,6 @@ Now, create the player:
   </script>
 </body>
 ```
-
-:warning: Note that is not necessary to add underscore or jquery scripts if your website already have it.
 
 ## Formats Supported
 
