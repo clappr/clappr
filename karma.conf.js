@@ -14,11 +14,10 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['browserify', 'mocha', 'sinon-chai', 'jquery-2.1.0'],
+    frameworks: ['browserify', 'mocha', 'sinon-chai'],
 
     // list of files / patterns to load in the browser
     files: [
-      'dist/underscore-min.js',
       'dist/clappr.min.js',
       'test/**/*spec.js',
     ],
@@ -49,10 +48,8 @@ module.exports = function(config) {
         bundle.external('browser');
         bundle.external('player_info');
         bundle.external('underscore');
-        bundle.external('jquery');
         bundle.external('mediator');
         bundle.external('container');
-        bundle.external('underscore');
       }
     },
 
