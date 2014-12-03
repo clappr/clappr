@@ -9,7 +9,7 @@
 var _ = require('underscore');
 var BaseObject = require('base_object');
 var Container = require('container');
-var $ = require('jquery');
+var $ = require('zepto');
 
 class ContainerFactory extends BaseObject {
   constructor(options, loader) {
