@@ -15,11 +15,14 @@
   "bugs": {
     "url": "https://github.com/globocom/clappr/issues"
   },
-  "browserify-shim": "./shim.js",
+  "browser": {
+    "zepto": "./dist/zepto.min.js"
+  },
+  "browserify-shim": {
+    "zepto": "Zepto"
+  },
   "browserify": {
-    "transform": [
-      "browserify-shim"
-    ]
+    "transform": [ "browserify-shim" ]
   },
   "homepage": "https://github.com/globocom/clappr",
   "devDependencies": {
@@ -67,7 +70,6 @@
   },
   "dependencies": {
     "underscore": "1.7.0",
-    "jquery": "~2.1.0",
     "mousetrap": "0.0.1",
     "scrollmonitor": "^1.0.8"
   }
