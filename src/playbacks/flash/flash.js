@@ -12,7 +12,7 @@ var Browser = require('browser')
 var Mousetrap = require('mousetrap')
 var seekStringToSeconds = require('../../base/utils').seekStringToSeconds
 
-var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>'
+var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfBasepath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>'
 
 class Flash extends Playback {
   get name() { return 'flash' }
@@ -23,7 +23,7 @@ class Flash extends Playback {
     super(options)
     this.src = options.src
     this.isRTMP = (this.src.indexOf("rtmp") > -1)
-    this.swfPath = options.swfPath || "http://cdn.clappr.io/latest/assets/Player.swf"
+    this.swfBasepath = options.swfBasepath || "http://cdn.clappr.io/latest/assets/Player.swf"
     this.autoPlay = options.autoPlay
     this.settings = {default: ['seekbar']}
     if (this.isRTMP) {
@@ -181,12 +181,12 @@ class Flash extends Playback {
   }
 
   setupIE() {
-    this.setElement($(_.template(objectIE)({ cid: this.cid, swfPath: this.swfPath, playbackId: this.uniqueId })))
+    this.setElement($(_.template(objectIE)({ cid: this.cid, swfBasepath: this.swfBasepath, playbackId: this.uniqueId })))
   }
 
   render() {
     var style = Styler.getStyleFor(this.name)
-    this.$el.html(this.template({ cid: this.cid, swfPath: this.swfPath, playbackId: this.uniqueId }))
+    this.$el.html(this.template({ cid: this.cid, swfBasepath: this.swfBasepath, playbackId: this.uniqueId }))
     if(Browser.isFirefox) {
       this.setupFirefox()
     } else if(Browser.isLegacyIE) {

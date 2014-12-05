@@ -9,7 +9,7 @@ var _ = require("underscore")
 var Mediator = require('mediator')
 var Browser = require('browser')
 
-var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" class="hls-playback" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls="" width="100%" height="100%"><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>'
+var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" class="hls-playback" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls="" width="100%" height="100%"><param name="movie" value="<%= swfBasepath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>'
 
 class HLS extends Playback {
   get name() { return 'hls' }
@@ -26,7 +26,7 @@ class HLS extends Playback {
   constructor(options) {
     super(options)
     this.src = options.src
-    this.swfPath = options.swfPath || "http://cdn.clappr.io/latest/assets/HLSPlayer.swf"
+    this.swfBasepath = options.swfBasepath || "http://cdn.clappr.io/latest/assets/HLSPlayer.swf"
     this.flushLiveURLCache = (options.flushLiveURLCache === undefined)? true: options.flushLiveURLCache
     this.capLevelToStage = (options.capLevelToStage === undefined)? false: options.capLevelToStage
     this.highDefinition = false
@@ -284,7 +284,7 @@ class HLS extends Playback {
   }
 
   setupIE() {
-    this.setElement($(_.template(objectIE)({cid: this.cid, swfPath: this.swfPath, playbackId: this.uniqueId})))
+    this.setElement($(_.template(objectIE)({cid: this.cid, swfBasepath: this.swfBasepath, playbackId: this.uniqueId})))
   }
 
   updateSettings() {
@@ -310,7 +310,7 @@ class HLS extends Playback {
     if(Browser.isLegacyIE) {
       this.setupIE()
     } else {
-      this.$el.html(this.template({cid: this.cid, swfPath: this.swfPath, playbackId: this.uniqueId}))
+      this.$el.html(this.template({cid: this.cid, swfBasepath: this.swfBasepath, playbackId: this.uniqueId}))
       if(Browser.isFirefox) {
         this.setupFirefox()
       } else if (Browser.isIE) {
