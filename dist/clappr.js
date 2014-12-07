@@ -16,88 +16,7 @@ module.exports = window.Clappr;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../package.json":6,"./components/iframe_player":18,"./components/player":22,"mediator":"mediator"}],"base_object":[function(require,module,exports){
-"use strict";
-var _ = require('underscore');
-var extend = require('./utils').extend;
-var Events = require('./events');
-var pluginOptions = ['container'];
-var BaseObject = function BaseObject(options) {
-  this.uniqueId = _.uniqueId('o');
-  options || (options = {});
-  _.extend(this, _.pick(options, pluginOptions));
-};
-($traceurRuntime.createClass)(BaseObject, {}, {}, Events);
-BaseObject.extend = extend;
-module.exports = BaseObject;
-
-
-},{"./events":7,"./utils":10,"underscore":"underscore"}],"browser":[function(require,module,exports){
-"use strict";
-var Browser = function Browser() {};
-($traceurRuntime.createClass)(Browser, {}, {});
-Browser.isSafari = (!!navigator.userAgent.match(/safari/i) && navigator.userAgent.indexOf('Chrome') === -1);
-Browser.isChrome = !!(navigator.userAgent.match(/chrome/i));
-Browser.isFirefox = !!(navigator.userAgent.match(/firefox/i));
-Browser.isLegacyIE = !!(window.ActiveXObject);
-Browser.isIE = Browser.isLegacyIE || !!(navigator.userAgent.match(/trident.*rv:1\d/i));
-Browser.isIE11 = !!(navigator.userAgent.match(/trident.*rv:11/i));
-Browser.isMobile = !!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|IEMobile|Opera Mini/i.test(navigator.userAgent));
-Browser.isWin8App = !!(/MSAppHost/i.test(navigator.userAgent));
-module.exports = Browser;
-
-
-},{}],"container_plugin":[function(require,module,exports){
-"use strict";
-var BaseObject = require('base_object');
-var ContainerPlugin = function ContainerPlugin(options) {
-  $traceurRuntime.superCall(this, $ContainerPlugin.prototype, "constructor", [options]);
-  this.bindEvents();
-};
-var $ContainerPlugin = ContainerPlugin;
-($traceurRuntime.createClass)(ContainerPlugin, {
-  enable: function() {
-    this.bindEvents();
-  },
-  disable: function() {
-    this.stopListening();
-  },
-  bindEvents: function() {},
-  destroy: function() {
-    this.stopListening();
-  }
-}, {}, BaseObject);
-module.exports = ContainerPlugin;
-
-
-},{"base_object":"base_object"}],"container":[function(require,module,exports){
-"use strict";
-module.exports = require('./container');
-
-
-},{"./container":11}],"core_plugin":[function(require,module,exports){
-"use strict";
-var BaseObject = require('base_object');
-var CorePlugin = function CorePlugin(core) {
-  $traceurRuntime.superCall(this, $CorePlugin.prototype, "constructor", [core]);
-  this.core = core;
-};
-var $CorePlugin = CorePlugin;
-($traceurRuntime.createClass)(CorePlugin, {
-  getExternalInterface: function() {
-    return {};
-  },
-  destroy: function() {}
-}, {}, BaseObject);
-module.exports = CorePlugin;
-
-
-},{"base_object":"base_object"}],"core":[function(require,module,exports){
-"use strict";
-module.exports = require('./core');
-
-
-},{"./core":14}],2:[function(require,module,exports){
+},{"../package.json":6,"./components/iframe_player":18,"./components/player":22,"mediator":"mediator"}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -4051,6 +3970,7 @@ module.exports = Events;
 "use strict";
 var _ = require('underscore');
 module.exports = {
+  'iframe_player': _.template('<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"/><script type="text/javascript" charset="utf-8" src="http://cdn.clappr.io/j/vendor/jquery.min.js"></script><script type="text/javascript" charset="utf-8" src="http://cdn.clappr.io/j/vendor/underscore-min.js"></script><script type="text/javascript" charset="utf-8" src="http://flavio.globoi.com/clappr.js"></script><script type="text/javascript" charset="utf-8"></script><style>body {margin:0}</style></head><body><div id="player-wrapper" style="border: 0px;border-radius: 0px;width: 100%;height: 100%"></div></body></html>'),
   'media_control': _.template('<div class="media-control-background" data-background></div><div class="media-control-layer" data-controls><% var renderBar=function(name) { %><div class="bar-container" data-<%= name %>><div class="bar-background" data-<%= name %>><div class="bar-fill-1" data-<%= name %>></div><div class="bar-fill-2" data-<%= name %>></div><div class="bar-hover" data-<%= name %>></div></div><div class="bar-scrubber" data-<%= name %>><div class="bar-scrubber-icon" data-<%= name %>></div></div></div><% }; %><% var renderSegmentedBar=function(name, segments) { segments=segments || 10; %><div class="bar-container" data-<%= name %>><% for (var i = 0; i < segments; i++) { %><div class="segmented-bar-element" data-<%= name %>></div><% } %></div><% }; %><% var renderDrawer=function(name, renderContent) { %><div class="drawer-container" data-<%= name %>><div class="drawer-icon-container" data-<%= name %>><div class="drawer-icon media-control-icon" data-<%= name %>></div><span class="drawer-text" data-<%= name %>></span></div><% renderContent(name); %></div><% }; %><% var renderIndicator=function(name) { %><div class="media-control-indicator" data-<%= name %>></div><% }; %><% var renderButton=function(name) { %><button class="media-control-button media-control-icon" data-<%= name %>></button><% }; %><% var templates={ bar: renderBar, segmentedBar: renderSegmentedBar, }; var render=function(settingsList) { _.each(settingsList, function(setting) { if(setting === "seekbar") { renderBar(setting); } else if (setting === "volume") { renderDrawer(setting, settings.volumeBarTemplate ? templates[settings.volumeBarTemplate] : function(name) { return renderSegmentedBar(name); }); } else if (setting === "duration" || setting=== "position") { renderIndicator(setting); } else { renderButton(setting); } }); }; %><% if (settings.default && settings.default.length) { %><div class="media-control-center-panel" data-media-control><% render(settings.default); %></div><% } %><% if (settings.left && settings.left.length) { %><div class="media-control-left-panel" data-media-control><% render(settings.left); %></div><% } %><% if (settings.right && settings.right.length) { %><div class="media-control-right-panel" data-media-control><% render(settings.right); %></div><% } %></div>'),
   'seek_time': _.template('<span data-seek-time></span>'),
   'flash': _.template('<param name="movie" value="<%= swfPath %>"><param name="quality" value="autohigh"><param name="swliveconnect" value="true"><param name="allowScriptAccess" value="always"><param name="bgcolor" value="#001122"><param name="allowFullScreen" value="false"><param name="wmode" value="transparent"><param name="tabindex" value="1"><param name=FlashVars value="playbackId=<%= playbackId %>" /><embed type="application/x-shockwave-flash" disabled tabindex="-1" enablecontextmenu="false" allowScriptAccess="always" quality="autohight" pluginspage="http://www.macromedia.com/go/getflashplayer" wmode="transparent" swliveconnect="true" type="application/x-shockwave-flash" allowfullscreen="false" bgcolor="#000000" FlashVars="playbackId=<%= playbackId %>" src="<%= swfPath %>"></embed>'),
@@ -5114,13 +5034,11 @@ var $MediaControl = MediaControl;
   },
   show: function(event) {
     var $__0 = this;
-    if (this.disabled || this.isVisible() || this.container.getPlaybackType() === null)
+    if (this.disabled || this.container.getPlaybackType() === null)
       return;
     var timeout = 2000;
     if (!event || (event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY) || navigator.userAgent.match(/firefox/i)) {
-      if (this.hideId) {
-        clearTimeout(this.hideId);
-      }
+      clearTimeout(this.hideId);
       this.$el.show();
       this.trigger('mediacontrol:show', this.name);
       this.$el.removeClass('media-control-hide');
@@ -5136,10 +5054,8 @@ var $MediaControl = MediaControl;
   hide: function() {
     var $__0 = this;
     var timeout = 2000;
-    if (this.hideId) {
-      clearTimeout(this.hideId);
-    }
-    if (!this.isVisible())
+    clearTimeout(this.hideId);
+    if (!this.isVisible() || this.options.hideMediaControl === false)
       return;
     if (this.keepVisible || this.draggingSeekBar || this.draggingVolumeBar) {
       this.hideId = setTimeout((function() {
@@ -7028,7 +6944,88 @@ var $WaterMarkPlugin = WaterMarkPlugin;
 module.exports = WaterMarkPlugin;
 
 
-},{"../../base/jst":8,"../../base/styler":9,"ui_container_plugin":"ui_container_plugin"}],"flash":[function(require,module,exports){
+},{"../../base/jst":8,"../../base/styler":9,"ui_container_plugin":"ui_container_plugin"}],"base_object":[function(require,module,exports){
+"use strict";
+var _ = require('underscore');
+var extend = require('./utils').extend;
+var Events = require('./events');
+var pluginOptions = ['container'];
+var BaseObject = function BaseObject(options) {
+  this.uniqueId = _.uniqueId('o');
+  options || (options = {});
+  _.extend(this, _.pick(options, pluginOptions));
+};
+($traceurRuntime.createClass)(BaseObject, {}, {}, Events);
+BaseObject.extend = extend;
+module.exports = BaseObject;
+
+
+},{"./events":7,"./utils":10,"underscore":"underscore"}],"browser":[function(require,module,exports){
+"use strict";
+var Browser = function Browser() {};
+($traceurRuntime.createClass)(Browser, {}, {});
+Browser.isSafari = (!!navigator.userAgent.match(/safari/i) && navigator.userAgent.indexOf('Chrome') === -1);
+Browser.isChrome = !!(navigator.userAgent.match(/chrome/i));
+Browser.isFirefox = !!(navigator.userAgent.match(/firefox/i));
+Browser.isLegacyIE = !!(window.ActiveXObject);
+Browser.isIE = Browser.isLegacyIE || !!(navigator.userAgent.match(/trident.*rv:1\d/i));
+Browser.isIE11 = !!(navigator.userAgent.match(/trident.*rv:11/i));
+Browser.isMobile = !!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|IEMobile|Opera Mini/i.test(navigator.userAgent));
+Browser.isWin8App = !!(/MSAppHost/i.test(navigator.userAgent));
+module.exports = Browser;
+
+
+},{}],"container_plugin":[function(require,module,exports){
+"use strict";
+var BaseObject = require('base_object');
+var ContainerPlugin = function ContainerPlugin(options) {
+  $traceurRuntime.superCall(this, $ContainerPlugin.prototype, "constructor", [options]);
+  this.bindEvents();
+};
+var $ContainerPlugin = ContainerPlugin;
+($traceurRuntime.createClass)(ContainerPlugin, {
+  enable: function() {
+    this.bindEvents();
+  },
+  disable: function() {
+    this.stopListening();
+  },
+  bindEvents: function() {},
+  destroy: function() {
+    this.stopListening();
+  }
+}, {}, BaseObject);
+module.exports = ContainerPlugin;
+
+
+},{"base_object":"base_object"}],"container":[function(require,module,exports){
+"use strict";
+module.exports = require('./container');
+
+
+},{"./container":11}],"core_plugin":[function(require,module,exports){
+"use strict";
+var BaseObject = require('base_object');
+var CorePlugin = function CorePlugin(core) {
+  $traceurRuntime.superCall(this, $CorePlugin.prototype, "constructor", [core]);
+  this.core = core;
+};
+var $CorePlugin = CorePlugin;
+($traceurRuntime.createClass)(CorePlugin, {
+  getExternalInterface: function() {
+    return {};
+  },
+  destroy: function() {}
+}, {}, BaseObject);
+module.exports = CorePlugin;
+
+
+},{"base_object":"base_object"}],"core":[function(require,module,exports){
+"use strict";
+module.exports = require('./core');
+
+
+},{"./core":14}],"flash":[function(require,module,exports){
 "use strict";
 module.exports = require('./flash');
 
@@ -10073,7 +10070,4 @@ window.Zepto = Zepto, void 0 === window.$ && (window.$ = Zepto), function(t) {
 }).call(global, undefined, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}]},{},[3,1])
-
-
-//# sourceMappingURL=clappr.map
+},{}]},{},[3,1]);
