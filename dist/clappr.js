@@ -16,7 +16,88 @@ module.exports = window.Clappr;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../package.json":6,"./components/iframe_player":18,"./components/player":22,"mediator":"mediator"}],2:[function(require,module,exports){
+},{"../package.json":6,"./components/iframe_player":18,"./components/player":22,"mediator":"mediator"}],"base_object":[function(require,module,exports){
+"use strict";
+var _ = require('underscore');
+var extend = require('./utils').extend;
+var Events = require('./events');
+var pluginOptions = ['container'];
+var BaseObject = function BaseObject(options) {
+  this.uniqueId = _.uniqueId('o');
+  options || (options = {});
+  _.extend(this, _.pick(options, pluginOptions));
+};
+($traceurRuntime.createClass)(BaseObject, {}, {}, Events);
+BaseObject.extend = extend;
+module.exports = BaseObject;
+
+
+},{"./events":7,"./utils":10,"underscore":"underscore"}],"browser":[function(require,module,exports){
+"use strict";
+var Browser = function Browser() {};
+($traceurRuntime.createClass)(Browser, {}, {});
+Browser.isSafari = (!!navigator.userAgent.match(/safari/i) && navigator.userAgent.indexOf('Chrome') === -1);
+Browser.isChrome = !!(navigator.userAgent.match(/chrome/i));
+Browser.isFirefox = !!(navigator.userAgent.match(/firefox/i));
+Browser.isLegacyIE = !!(window.ActiveXObject);
+Browser.isIE = Browser.isLegacyIE || !!(navigator.userAgent.match(/trident.*rv:1\d/i));
+Browser.isIE11 = !!(navigator.userAgent.match(/trident.*rv:11/i));
+Browser.isMobile = !!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|IEMobile|Opera Mini/i.test(navigator.userAgent));
+Browser.isWin8App = !!(/MSAppHost/i.test(navigator.userAgent));
+module.exports = Browser;
+
+
+},{}],"container_plugin":[function(require,module,exports){
+"use strict";
+var BaseObject = require('base_object');
+var ContainerPlugin = function ContainerPlugin(options) {
+  $traceurRuntime.superCall(this, $ContainerPlugin.prototype, "constructor", [options]);
+  this.bindEvents();
+};
+var $ContainerPlugin = ContainerPlugin;
+($traceurRuntime.createClass)(ContainerPlugin, {
+  enable: function() {
+    this.bindEvents();
+  },
+  disable: function() {
+    this.stopListening();
+  },
+  bindEvents: function() {},
+  destroy: function() {
+    this.stopListening();
+  }
+}, {}, BaseObject);
+module.exports = ContainerPlugin;
+
+
+},{"base_object":"base_object"}],"container":[function(require,module,exports){
+"use strict";
+module.exports = require('./container');
+
+
+},{"./container":11}],"core_plugin":[function(require,module,exports){
+"use strict";
+var BaseObject = require('base_object');
+var CorePlugin = function CorePlugin(core) {
+  $traceurRuntime.superCall(this, $CorePlugin.prototype, "constructor", [core]);
+  this.core = core;
+};
+var $CorePlugin = CorePlugin;
+($traceurRuntime.createClass)(CorePlugin, {
+  getExternalInterface: function() {
+    return {};
+  },
+  destroy: function() {}
+}, {}, BaseObject);
+module.exports = CorePlugin;
+
+
+},{"base_object":"base_object"}],"core":[function(require,module,exports){
+"use strict";
+module.exports = require('./core');
+
+
+},{"./core":14}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -5350,7 +5431,7 @@ var Flash = function Flash(options) {
   $traceurRuntime.superCall(this, $Flash.prototype, "constructor", [options]);
   this.src = options.src;
   this.isRTMP = (this.src.indexOf("rtmp") > -1);
-  this.swfPath = options.swfPath || "http://cdn.clappr.io/latest/assets/Player.swf";
+  this.swfPath = (options.swfBasepath || "http://cdn.clappr.io/latest/assets") + "/Player.swf";
   this.autoPlay = options.autoPlay;
   this.settings = {default: ['seekbar']};
   if (this.isRTMP) {
@@ -5559,7 +5640,7 @@ var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" cla
 var HLS = function HLS(options) {
   $traceurRuntime.superCall(this, $HLS.prototype, "constructor", [options]);
   this.src = options.src;
-  this.swfPath = options.swfPath || "http://cdn.clappr.io/latest/assets/HLSPlayer.swf";
+  this.swfPath = (options.swfBasepath || "http://cdn.clappr.io/latest/assets") + "/HLSPlayer.swf";
   this.flushLiveURLCache = (options.flushLiveURLCache === undefined) ? true : options.flushLiveURLCache;
   this.capLevelToStage = (options.capLevelToStage === undefined) ? false : options.capLevelToStage;
   this.highDefinition = false;
@@ -5964,6 +6045,7 @@ var HTML5Video = function HTML5Video(options) {
   this.options = options;
   this.src = options.src;
   this.el.src = options.src;
+  this.el.preload = options.preload ? options.preload : 'metadata';
   this.el.loop = options.loop;
   this.firstBuffer = true;
   this.isHLS = (this.src.indexOf('m3u8') > -1);
@@ -6946,88 +7028,7 @@ var $WaterMarkPlugin = WaterMarkPlugin;
 module.exports = WaterMarkPlugin;
 
 
-},{"../../base/jst":8,"../../base/styler":9,"ui_container_plugin":"ui_container_plugin"}],"base_object":[function(require,module,exports){
-"use strict";
-var _ = require('underscore');
-var extend = require('./utils').extend;
-var Events = require('./events');
-var pluginOptions = ['container'];
-var BaseObject = function BaseObject(options) {
-  this.uniqueId = _.uniqueId('o');
-  options || (options = {});
-  _.extend(this, _.pick(options, pluginOptions));
-};
-($traceurRuntime.createClass)(BaseObject, {}, {}, Events);
-BaseObject.extend = extend;
-module.exports = BaseObject;
-
-
-},{"./events":7,"./utils":10,"underscore":"underscore"}],"browser":[function(require,module,exports){
-"use strict";
-var Browser = function Browser() {};
-($traceurRuntime.createClass)(Browser, {}, {});
-Browser.isSafari = (!!navigator.userAgent.match(/safari/i) && navigator.userAgent.indexOf('Chrome') === -1);
-Browser.isChrome = !!(navigator.userAgent.match(/chrome/i));
-Browser.isFirefox = !!(navigator.userAgent.match(/firefox/i));
-Browser.isLegacyIE = !!(window.ActiveXObject);
-Browser.isIE = Browser.isLegacyIE || !!(navigator.userAgent.match(/trident.*rv:1\d/i));
-Browser.isIE11 = !!(navigator.userAgent.match(/trident.*rv:11/i));
-Browser.isMobile = !!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|IEMobile|Opera Mini/i.test(navigator.userAgent));
-Browser.isWin8App = !!(/MSAppHost/i.test(navigator.userAgent));
-module.exports = Browser;
-
-
-},{}],"container_plugin":[function(require,module,exports){
-"use strict";
-var BaseObject = require('base_object');
-var ContainerPlugin = function ContainerPlugin(options) {
-  $traceurRuntime.superCall(this, $ContainerPlugin.prototype, "constructor", [options]);
-  this.bindEvents();
-};
-var $ContainerPlugin = ContainerPlugin;
-($traceurRuntime.createClass)(ContainerPlugin, {
-  enable: function() {
-    this.bindEvents();
-  },
-  disable: function() {
-    this.stopListening();
-  },
-  bindEvents: function() {},
-  destroy: function() {
-    this.stopListening();
-  }
-}, {}, BaseObject);
-module.exports = ContainerPlugin;
-
-
-},{"base_object":"base_object"}],"container":[function(require,module,exports){
-"use strict";
-module.exports = require('./container');
-
-
-},{"./container":11}],"core_plugin":[function(require,module,exports){
-"use strict";
-var BaseObject = require('base_object');
-var CorePlugin = function CorePlugin(core) {
-  $traceurRuntime.superCall(this, $CorePlugin.prototype, "constructor", [core]);
-  this.core = core;
-};
-var $CorePlugin = CorePlugin;
-($traceurRuntime.createClass)(CorePlugin, {
-  getExternalInterface: function() {
-    return {};
-  },
-  destroy: function() {}
-}, {}, BaseObject);
-module.exports = CorePlugin;
-
-
-},{"base_object":"base_object"}],"core":[function(require,module,exports){
-"use strict";
-module.exports = require('./core');
-
-
-},{"./core":14}],"flash":[function(require,module,exports){
+},{"../../base/jst":8,"../../base/styler":9,"ui_container_plugin":"ui_container_plugin"}],"flash":[function(require,module,exports){
 "use strict";
 module.exports = require('./flash');
 
