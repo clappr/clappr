@@ -325,12 +325,10 @@ class MediaControl extends UIObject {
   }
 
   show(event) {
-    if (this.disabled || this.isVisible() || this.container.getPlaybackType() === null) return
+    if (this.disabled || this.container.getPlaybackType() === null) return
     var timeout = 2000
     if (!event || (event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY) || navigator.userAgent.match(/firefox/i)) {
-      if (this.hideId) {
-        clearTimeout(this.hideId)
-      }
+      clearTimeout(this.hideId)
       this.$el.show()
       this.trigger('mediacontrol:show', this.name)
       this.$el.removeClass('media-control-hide')
@@ -344,10 +342,8 @@ class MediaControl extends UIObject {
 
   hide() {
     var timeout = 2000
-    if (this.hideId) {
-      clearTimeout(this.hideId)
-    }
-    if (!this.isVisible()) return
+    clearTimeout(this.hideId)
+    if (!this.isVisible() || this.options.hideMediaControl === false) return
     if (this.keepVisible || this.draggingSeekBar || this.draggingVolumeBar) {
       this.hideId = setTimeout(() => this.hide(), timeout)
     } else {

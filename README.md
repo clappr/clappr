@@ -89,6 +89,10 @@ Result:
 
 I'm sure you can do better than me.
 
+##### Media Control Auto Hide
+
+If you want to disable media control auto hide, add `hideMediaControl: false` in your embed parameters.
+
 ##### Watermark
 Put `watermark: http://url/img.png` on your embed parameters to automatically add watermark on your video. Choose corner position by defining position parameter. Positions can be `bottom-left`, `bottom-right`, `top-left` and `top-right`. Example:
 
