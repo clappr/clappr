@@ -8,10 +8,10 @@
 
 ### Using the Player
 
-Add the following scripts on your HTML:
+Add the following script on your HTML:
 ```html
 <head>
-  <script type="text/javascript" charset="utf-8" src="http://cdn.clappr.io/latest/clappr.min.js"> </script>
+  <script type="text/javascript" charset="utf-8" src="http://cdn.clappr.io/latest/clappr.min.js"></script>
 </head>
 ```
 Now, create the player:
