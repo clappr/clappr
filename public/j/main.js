@@ -17,10 +17,10 @@ Parser.prototype = {
     }
   }
 };
-$(document).ready(function() {
+window.onload = function() {
   var parser = new Parser($('#output'));
   $('.run').click(function() {
     var code = ace.edit('editor').getSession().getValue();
     parser.parse(code);
   });
-})
+}
