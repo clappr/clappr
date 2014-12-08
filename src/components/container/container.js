@@ -26,22 +26,22 @@ class Container extends UIObject {
   }
 
   bindEvents() {
-    this.listenTo(this.playback, 'playback:progress', this.progress);
-    this.listenTo(this.playback, 'playback:timeupdate', this.timeUpdated);
-    this.listenTo(this.playback, 'playback:ready', this.ready);
-    this.listenTo(this.playback, 'playback:buffering', this.buffering);
-    this.listenTo(this.playback, 'playback:bufferfull', this.bufferfull);
-    this.listenTo(this.playback, 'playback:settingsupdate', this.settingsUpdate);
-    this.listenTo(this.playback, 'playback:loadedmetadata', this.loadedMetadata);
-    this.listenTo(this.playback, 'playback:highdefinitionupdate', this.highDefinitionUpdate);
-    this.listenTo(this.playback, 'playback:bitrate', this.updateBitrate);
-    this.listenTo(this.playback, 'playback:playbackstate', this.playbackStateChanged);
-    this.listenTo(this.playback, 'playback:dvr', this.playbackDvrStateChanged);
-    this.listenTo(this.playback, 'playback:mediacontrol:disable', this.disableMediaControl);
-    this.listenTo(this.playback, 'playback:mediacontrol:enable', this.enableMediaControl);
-    this.listenTo(this.playback, 'playback:ended', this.ended);
-    this.listenTo(this.playback, 'playback:play', this.playing);
-    this.listenTo(this.playback, 'playback:error', this.error);
+    this.listenTo(this.playback, Events.PLAYBACK_PROGRESS, this.progress);
+    this.listenTo(this.playback, Events.PLAYBACK_TIMEUPDATE, this.timeUpdated);
+    this.listenTo(this.playback, Events.PLAYBACK_READY, this.ready);
+    this.listenTo(this.playback, Events.PLAYBACK_BUFFERING, this.buffering);
+    this.listenTo(this.playback, Events.PLAYBACK_BUFFERFULL, this.bufferfull);
+    this.listenTo(this.playback, Events.PLAYBACK_SETTINGSUPDATE, this.settingsUpdate);
+    this.listenTo(this.playback, Events.PLAYBACK_LOADEDMETADATA, this.loadedMetadata);
+    this.listenTo(this.playback, Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinitionUpdate);
+    this.listenTo(this.playback, Events.PLAYBACK_BITRATE, this.updateBitrate);
+    this.listenTo(this.playback, Events.PLAYBACK_PLAYBACKSTATE, this.playbackStateChanged);
+    this.listenTo(this.playback, Events.PLAYBACK_DVR, this.playbackDvrStateChanged);
+    this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL:DISABLE, this.disableMediaControl);
+    this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL:ENABLE, this.enableMediaControl);
+    this.listenTo(this.playback, Events.PLAYBACK_ENDED, this.ended);
+    this.listenTo(this.playback, Events.PLAYBACK_PLAY, this.playing);
+    this.listenTo(this.playback, Events.PLAYBACK_ERROR, this.error);
   }
 
   with(klass) {
