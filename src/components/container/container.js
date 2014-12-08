@@ -37,8 +37,8 @@ class Container extends UIObject {
     this.listenTo(this.playback, Events.PLAYBACK_BITRATE, this.updateBitrate);
     this.listenTo(this.playback, Events.PLAYBACK_PLAYBACKSTATE, this.playbackStateChanged);
     this.listenTo(this.playback, Events.PLAYBACK_DVR, this.playbackDvrStateChanged);
-    this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL:DISABLE, this.disableMediaControl);
-    this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL:ENABLE, this.enableMediaControl);
+    this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL_DISABLE, this.disableMediaControl);
+    this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL_ENABLE, this.enableMediaControl);
     this.listenTo(this.playback, Events.PLAYBACK_ENDED, this.ended);
     this.listenTo(this.playback, Events.PLAYBACK_PLAY, this.playing);
     this.listenTo(this.playback, Events.PLAYBACK_ERROR, this.error);
@@ -199,12 +199,12 @@ class Container extends UIObject {
 
   disableMediaControl() {
     this.mediaControlDisabled = true;
-    this.trigger(Events.PLAYBACK_MEDIACONTROL:DISABLE);
+    this.trigger(Events.PLAYBACK_MEDIACONTROL_DISABLE);
   }
 
   enableMediaControl() {
     this.mediaControlDisabled = false;
-    this.trigger(Events.PLAYBACK_MEDIACONTROL:ENABLE);
+    this.trigger(Events.PLAYBACK_MEDIACONTROL_ENABLE);
   }
 
   render() {
