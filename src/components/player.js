@@ -20,6 +20,9 @@ class Player extends BaseObject {
     options.height || (options.height = 360)
     options.width || (options.width = 640)
     PlayerInfo.currentSize = {width: options.width, height: options.height}
+    if (this.options.parentElement) {
+      this.attachTo(this.options.parentElement)
+    }
   }
 
   attachTo(element) {
@@ -95,4 +98,3 @@ class Player extends BaseObject {
 }
 
 module.exports = Player
-
