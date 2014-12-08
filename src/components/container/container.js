@@ -109,7 +109,7 @@ class Container extends UIObject {
 
   error(errorObj) {
     this.$el.append(errorObj.render().el)
-    this.trigger(Events.PLAYBACK_ERROR,, {error: errorObj, container: this}, this.name);
+    this.trigger(Events.PLAYBACK_ERROR, {error: errorObj, container: this}, this.name);
   }
 
   loadedMetadata(duration) {
