@@ -17,7 +17,7 @@ var NoOp = require('../../playbacks/no_op');
 var SpinnerThreeBouncePlugin = require('../../plugins/spinner_three_bounce');
 var StatsPlugin = require('../../plugins/stats');
 var WaterMarkPlugin = require('../../plugins/watermark');
-var PosterPlugin = require('../../plugins/poster');
+var PosterPlugin = require('poster');
 var GoogleAnalyticsPlugin = require('../../plugins/google_analytics');
 var ClickToPausePlugin = require('../../plugins/click_to_pause');
 
