@@ -16,13 +16,7 @@
     "url": "https://github.com/globocom/clappr/issues"
   },
   "browser": {
-    "zepto": "./node_modules/clappr-zepto/zepto.min.js"
-  },
-  "browserify-shim": {
-    "zepto": "Zepto"
-  },
-  "browserify": {
-    "transform": [ "browserify-shim" ]
+    "zepto": "clappr-zepto"
   },
   "homepage": "https://github.com/globocom/clappr",
   "devDependencies": {
