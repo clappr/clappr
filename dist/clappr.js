@@ -3724,7 +3724,7 @@ module.exports = mousetrap;
 },{}],6:[function(require,module,exports){
 module.exports={
   "name": "clappr",
-  "version": "0.0.64",
+  "version": "0.0.65",
   "description": "An extensible media player for the web",
   "main": "dist/clappr.min.js",
   "scripts": {
@@ -3970,7 +3970,6 @@ module.exports = Events;
 "use strict";
 var _ = require('underscore');
 module.exports = {
-  'iframe_player': _.template('<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"/><script type="text/javascript" charset="utf-8" src="http://cdn.clappr.io/j/vendor/jquery.min.js"></script><script type="text/javascript" charset="utf-8" src="http://cdn.clappr.io/j/vendor/underscore-min.js"></script><script type="text/javascript" charset="utf-8" src="http://flavio.globoi.com/clappr.js"></script><script type="text/javascript" charset="utf-8"></script><style>body {margin:0}</style></head><body><div id="player-wrapper" style="border: 0px;border-radius: 0px;width: 100%;height: 100%"></div></body></html>'),
   'media_control': _.template('<div class="media-control-background" data-background></div><div class="media-control-layer" data-controls><% var renderBar=function(name) { %><div class="bar-container" data-<%= name %>><div class="bar-background" data-<%= name %>><div class="bar-fill-1" data-<%= name %>></div><div class="bar-fill-2" data-<%= name %>></div><div class="bar-hover" data-<%= name %>></div></div><div class="bar-scrubber" data-<%= name %>><div class="bar-scrubber-icon" data-<%= name %>></div></div></div><% }; %><% var renderSegmentedBar=function(name, segments) { segments=segments || 10; %><div class="bar-container" data-<%= name %>><% for (var i = 0; i < segments; i++) { %><div class="segmented-bar-element" data-<%= name %>></div><% } %></div><% }; %><% var renderDrawer=function(name, renderContent) { %><div class="drawer-container" data-<%= name %>><div class="drawer-icon-container" data-<%= name %>><div class="drawer-icon media-control-icon" data-<%= name %>></div><span class="drawer-text" data-<%= name %>></span></div><% renderContent(name); %></div><% }; %><% var renderIndicator=function(name) { %><div class="media-control-indicator" data-<%= name %>></div><% }; %><% var renderButton=function(name) { %><button class="media-control-button media-control-icon" data-<%= name %>></button><% }; %><% var templates={ bar: renderBar, segmentedBar: renderSegmentedBar, }; var render=function(settingsList) { _.each(settingsList, function(setting) { if(setting === "seekbar") { renderBar(setting); } else if (setting === "volume") { renderDrawer(setting, settings.volumeBarTemplate ? templates[settings.volumeBarTemplate] : function(name) { return renderSegmentedBar(name); }); } else if (setting === "duration" || setting=== "position") { renderIndicator(setting); } else { renderButton(setting); } }); }; %><% if (settings.default && settings.default.length) { %><div class="media-control-center-panel" data-media-control><% render(settings.default); %></div><% } %><% if (settings.left && settings.left.length) { %><div class="media-control-left-panel" data-media-control><% render(settings.left); %></div><% } %><% if (settings.right && settings.right.length) { %><div class="media-control-right-panel" data-media-control><% render(settings.right); %></div><% } %></div>'),
   'seek_time': _.template('<span data-seek-time></span>'),
   'flash': _.template('<param name="movie" value="<%= swfPath %>"><param name="quality" value="autohigh"><param name="swliveconnect" value="true"><param name="allowScriptAccess" value="always"><param name="bgcolor" value="#001122"><param name="allowFullScreen" value="false"><param name="wmode" value="transparent"><param name="tabindex" value="1"><param name=FlashVars value="playbackId=<%= playbackId %>" /><embed type="application/x-shockwave-flash" disabled tabindex="-1" enablecontextmenu="false" allowScriptAccess="always" quality="autohight" pluginspage="http://www.macromedia.com/go/getflashplayer" wmode="transparent" swliveconnect="true" type="application/x-shockwave-flash" allowfullscreen="false" bgcolor="#000000" FlashVars="playbackId=<%= playbackId %>" src="<%= swfPath %>"></embed>'),
@@ -4681,7 +4680,7 @@ var NoOp = require('../../playbacks/no_op');
 var SpinnerThreeBouncePlugin = require('../../plugins/spinner_three_bounce');
 var StatsPlugin = require('../../plugins/stats');
 var WaterMarkPlugin = require('../../plugins/watermark');
-var PosterPlugin = require('../../plugins/poster');
+var PosterPlugin = require('poster');
 var GoogleAnalyticsPlugin = require('../../plugins/google_analytics');
 var ClickToPausePlugin = require('../../plugins/click_to_pause');
 var BackgroundButton = require('../../plugins/background_button');
@@ -4722,7 +4721,7 @@ var $Loader = Loader;
 module.exports = Loader;
 
 
-},{"../../playbacks/no_op":29,"../../plugins/background_button":32,"../../plugins/click_to_pause":34,"../../plugins/dvr_controls":36,"../../plugins/google_analytics":38,"../../plugins/poster":41,"../../plugins/spinner_three_bounce":43,"../../plugins/stats":45,"../../plugins/watermark":47,"base_object":"base_object","flash":"flash","hls":"hls","html5_audio":"html5_audio","html5_video":"html5_video","player_info":"player_info","underscore":"underscore"}],21:[function(require,module,exports){
+},{"../../playbacks/no_op":29,"../../plugins/background_button":32,"../../plugins/click_to_pause":34,"../../plugins/dvr_controls":36,"../../plugins/google_analytics":38,"../../plugins/spinner_three_bounce":42,"../../plugins/stats":44,"../../plugins/watermark":46,"base_object":"base_object","flash":"flash","hls":"hls","html5_audio":"html5_audio","html5_video":"html5_video","player_info":"player_info","poster":"poster","underscore":"underscore"}],21:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('zepto');
@@ -6132,10 +6131,10 @@ var $HTML5Video = HTML5Video;
   }
 }, {}, Playback);
 HTML5Video.canPlay = function(resource) {
-  if (Browser.isChrome || Browser.isFirefox || Browser.isIE) {
+  if (Browser.isSafari || Browser.isMobile || Browser.isWin8App || Browser.isLegacyIE) {
+    return true;
+  } else if (Browser.isChrome || Browser.isFirefox || Browser.isIE) {
     return (!!resource.match(/(.*).(mp4|webm)/));
-  } else {
-    return (Browser.isSafari || Browser.isMobile || Browser.isWin8App || Browser.isLegacyIE);
   }
 };
 module.exports = HTML5Video;
@@ -6621,11 +6620,6 @@ module.exports = Log;
 
 
 },{"mousetrap":4,"underscore":"underscore"}],41:[function(require,module,exports){
-"use strict";
-module.exports = require('./poster');
-
-
-},{"./poster":42}],42:[function(require,module,exports){
 (function (process){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
@@ -6741,12 +6735,12 @@ module.exports = PosterPlugin;
 
 
 }).call(this,require('_process'))
-},{"../../base/jst":8,"../../base/styler":9,"_process":2,"mediator":"mediator","player_info":"player_info","ui_container_plugin":"ui_container_plugin","underscore":"underscore","zepto":"zepto"}],43:[function(require,module,exports){
+},{"../../base/jst":8,"../../base/styler":9,"_process":2,"mediator":"mediator","player_info":"player_info","ui_container_plugin":"ui_container_plugin","underscore":"underscore","zepto":"zepto"}],42:[function(require,module,exports){
 "use strict";
 module.exports = require('./spinner_three_bounce');
 
 
-},{"./spinner_three_bounce":44}],44:[function(require,module,exports){
+},{"./spinner_three_bounce":43}],43:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
 var Styler = require('../../base/styler');
@@ -6791,12 +6785,12 @@ var $SpinnerThreeBouncePlugin = SpinnerThreeBouncePlugin;
 module.exports = SpinnerThreeBouncePlugin;
 
 
-},{"../../base/jst":8,"../../base/styler":9,"ui_container_plugin":"ui_container_plugin"}],45:[function(require,module,exports){
+},{"../../base/jst":8,"../../base/styler":9,"ui_container_plugin":"ui_container_plugin"}],44:[function(require,module,exports){
 "use strict";
 module.exports = require('./stats');
 
 
-},{"./stats":46}],46:[function(require,module,exports){
+},{"./stats":45}],45:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('container_plugin');
 var $ = require("zepto");
@@ -6891,12 +6885,12 @@ var $StatsPlugin = StatsPlugin;
 module.exports = StatsPlugin;
 
 
-},{"container_plugin":"container_plugin","zepto":"zepto"}],47:[function(require,module,exports){
+},{"container_plugin":"container_plugin","zepto":"zepto"}],46:[function(require,module,exports){
 "use strict";
 module.exports = require('./watermark');
 
 
-},{"./watermark":48}],48:[function(require,module,exports){
+},{"./watermark":47}],47:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
 var Styler = require('../../base/styler');
@@ -7128,7 +7122,12 @@ var PlayerInfo = {
 module.exports = PlayerInfo;
 
 
-},{}],"ui_container_plugin":[function(require,module,exports){
+},{}],"poster":[function(require,module,exports){
+"use strict";
+module.exports = require('./poster');
+
+
+},{"./poster":41}],"ui_container_plugin":[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var UIContainerPlugin = function UIContainerPlugin(options) {
