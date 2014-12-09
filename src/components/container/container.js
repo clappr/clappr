@@ -26,22 +26,22 @@ class Container extends UIObject {
   }
 
   bindEvents() {
-    this.listenTo(this.playback, 'playback:progress', this.progress);
-    this.listenTo(this.playback, 'playback:timeupdate', this.timeUpdated);
-    this.listenTo(this.playback, 'playback:ready', this.ready);
-    this.listenTo(this.playback, 'playback:buffering', this.buffering);
-    this.listenTo(this.playback, 'playback:bufferfull', this.bufferfull);
-    this.listenTo(this.playback, 'playback:settingsupdate', this.settingsUpdate);
-    this.listenTo(this.playback, 'playback:loadedmetadata', this.loadedMetadata);
-    this.listenTo(this.playback, 'playback:highdefinitionupdate', this.highDefinitionUpdate);
-    this.listenTo(this.playback, 'playback:bitrate', this.updateBitrate);
-    this.listenTo(this.playback, 'playback:playbackstate', this.playbackStateChanged);
-    this.listenTo(this.playback, 'playback:dvr', this.playbackDvrStateChanged);
-    this.listenTo(this.playback, 'playback:mediacontrol:disable', this.disableMediaControl);
-    this.listenTo(this.playback, 'playback:mediacontrol:enable', this.enableMediaControl);
-    this.listenTo(this.playback, 'playback:ended', this.ended);
-    this.listenTo(this.playback, 'playback:play', this.playing);
-    this.listenTo(this.playback, 'playback:error', this.error);
+    this.listenTo(this.playback, Events.PLAYBACK_PROGRESS, this.progress);
+    this.listenTo(this.playback, Events.PLAYBACK_TIMEUPDATE, this.timeUpdated);
+    this.listenTo(this.playback, Events.PLAYBACK_READY, this.ready);
+    this.listenTo(this.playback, Events.PLAYBACK_BUFFERING, this.buffering);
+    this.listenTo(this.playback, Events.PLAYBACK_BUFFERFULL, this.bufferfull);
+    this.listenTo(this.playback, Events.PLAYBACK_SETTINGSUPDATE, this.settingsUpdate);
+    this.listenTo(this.playback, Events.PLAYBACK_LOADEDMETADATA, this.loadedMetadata);
+    this.listenTo(this.playback, Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinitionUpdate);
+    this.listenTo(this.playback, Events.PLAYBACK_BITRATE, this.updateBitrate);
+    this.listenTo(this.playback, Events.PLAYBACK_PLAYBACKSTATE, this.playbackStateChanged);
+    this.listenTo(this.playback, Events.PLAYBACK_DVR, this.playbackDvrStateChanged);
+    this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL_DISABLE, this.disableMediaControl);
+    this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL_ENABLE, this.enableMediaControl);
+    this.listenTo(this.playback, Events.PLAYBACK_ENDED, this.ended);
+    this.listenTo(this.playback, Events.PLAYBACK_PLAY, this.playing);
+    this.listenTo(this.playback, Events.PLAYBACK_ERROR, this.error);
   }
 
   with(klass) {
@@ -50,17 +50,17 @@ class Container extends UIObject {
   }
 
   playbackStateChanged() {
-    this.trigger('container:playbackstate');
+    this.trigger(Events.PLAYBACK_PLAYBACKSTATE);
   }
 
   playbackDvrStateChanged(dvrInUse) {
     this.settings = this.playback.settings
     this.dvrInUse = dvrInUse
-    this.trigger('container:dvr', dvrInUse)
+    this.trigger(Events.PLAYBACK_DVR, dvrInUse)
   }
 
   updateBitrate(newBitrate) {
-    this.trigger('container:bitrate', newBitrate)
+    this.trigger(Events.PLAYBACK_BITRATE, newBitrate)
   }
 
   statsReport(metrics) {
@@ -96,7 +96,7 @@ class Container extends UIObject {
 
   ready() {
     this.isReady = true;
-    this.trigger('container:ready', this.name);
+    this.trigger(Events.PLAYBACK_READY, this.name);
   }
 
   isPlaying() {
@@ -109,23 +109,23 @@ class Container extends UIObject {
 
   error(errorObj) {
     this.$el.append(errorObj.render().el)
-    this.trigger('container:error', {error: errorObj, container: this}, this.name);
+    this.trigger(Events.PLAYBACK_ERROR, {error: errorObj, container: this}, this.name);
   }
 
   loadedMetadata(duration) {
-    this.trigger('container:loadedmetadata', duration);
+    this.trigger(Events.PLAYBACK_LOADEDMETADATA, duration);
   }
 
   timeUpdated(position, duration) {
-    this.trigger('container:timeupdate', position, duration, this.name);
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, position, duration, this.name);
   }
 
   progress(startPosition, endPosition, duration) {
-    this.trigger('container:progress', startPosition, endPosition, duration, this.name);
+    this.trigger(Events.PLAYBACK_PROGRESS, startPosition, endPosition, duration, this.name);
   }
 
   playing() {
-    this.trigger('container:play', this.name);
+    this.trigger(Events.PLAYBACK_PLAY, this.name);
   }
 
   play() {
@@ -143,7 +143,7 @@ class Container extends UIObject {
   }
 
   ended() {
-    this.trigger('container:ended', this, this.name);
+    this.trigger(Events.PLAYBACK_ENDED, this, this.name);
   }
 
   clicked() {
@@ -165,11 +165,11 @@ class Container extends UIObject {
   }
 
   buffering() {
-    this.trigger('container:state:buffering', this.name);
+    this.trigger(Events.PLAYBACK_BUFFERING, this.name);
   }
 
   bufferfull() {
-    this.trigger('container:state:bufferfull', this.name);
+    this.trigger(Events.PLAYBACK_BUFFERFULL, this.name);
   }
 
   addPlugin(plugin) {
@@ -186,11 +186,11 @@ class Container extends UIObject {
 
   settingsUpdate() {
     this.settings = this.playback.settings;
-    this.trigger('container:settingsupdate');
+    this.trigger(Events.PLAYBACK_SETTINGSUPDATE);
   }
 
   highDefinitionUpdate() {
-    this.trigger('container:highdefinitionupdate');
+    this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE);
   }
 
   isHighDefinitionInUse() {
@@ -199,12 +199,12 @@ class Container extends UIObject {
 
   disableMediaControl() {
     this.mediaControlDisabled = true;
-    this.trigger('container:mediacontrol:disable');
+    this.trigger(Events.PLAYBACK_MEDIACONTROL_DISABLE);
   }
 
   enableMediaControl() {
     this.mediaControlDisabled = false;
-    this.trigger('container:mediacontrol:enable');
+    this.trigger(Events.PLAYBACK_MEDIACONTROL_ENABLE);
   }
 
   render() {
