@@ -20,12 +20,12 @@ class Player extends BaseObject {
     options.height || (options.height = 360)
     options.width || (options.width = 640)
     PlayerInfo.currentSize = {width: options.width, height: options.height}
-       if (this.options.parentId) {
-         var el = document.querySelector(this.options.parentId)
-         if (el) {
-           this.attachTo(el)
-         }
-       }
+    if (this.options.parentId) {
+      var el = document.querySelector(this.options.parentId)
+      if (el) {
+        this.attachTo(el)
+      }
+    }
   }
 
   attachTo(element) {
