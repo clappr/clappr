@@ -16,7 +16,7 @@
     "url": "https://github.com/globocom/clappr/issues"
   },
   "browser": {
-    "zepto": "./dist/zepto.min.js"
+    "zepto": "./node_modules/clappr-zepto/zepto.min.js"
   },
   "browserify-shim": {
     "zepto": "Zepto"
@@ -37,6 +37,7 @@
     "express-alias": "latest",
     "glob": "^4.0.2",
     "gulp": "^3.8.1",
+    "clappr-zepto": "latest",
     "gulp-compressor": "^0.1.0",
     "gulp-jshint": "latest",
     "gulp-livereload": "^2.1.0",
