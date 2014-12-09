@@ -39,15 +39,16 @@ class HTML5Video extends Playback {
     this.options = options
     this.src = options.src
     this.el.src = options.src
-    this.el.preload = options.preload ? options.preload: 'metadata'
     this.el.loop = options.loop
     this.firstBuffer = true
     this.isHLS = (this.src.indexOf('m3u8') > -1)
     this.settings = {default: ['seekbar']}
     if (this.isHLS) {
+      this.el.preload = options.preload ? options.preload: 'none'
       this.settings.left = ["playstop"]
       this.settings.right = ["fullscreen", "volume"]
     } else {
+      this.el.preload = options.preload ? options.preload: 'metadata'
       this.settings.left = ["playpause", "position", "duration"]
       this.settings.right = ["fullscreen", "volume"]
       this.settings.seekEnabled = true
@@ -130,7 +131,7 @@ class HTML5Video extends Playback {
   }
 
   bufferFull() {
-    if (this.getPlaybackType() === 'vod' && this.options.poster && this.firstBuffer) {
+    if (this.options.poster && this.firstBuffer) {
       this.firstBuffer = false
       this.el.poster = this.options.poster
     } else {
