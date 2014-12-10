@@ -14,5 +14,6 @@ Browser.isIE11 = !!(navigator.userAgent.match(/trident.*rv:11/i))
 Browser.isMobile = !!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|IEMobile|Opera Mini/i.test(navigator.userAgent))
 Browser.isWin8App = !!(/MSAppHost/i.test(navigator.userAgent))
 Browser.isWiiU = !!(/WiiU/i.test(navigator.userAgent))
+Browser.isPS4 = !!(/PlayStation 4/i.test(navigator.userAgent))
 
 module.exports = Browser
