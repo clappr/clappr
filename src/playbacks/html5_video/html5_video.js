@@ -201,7 +201,7 @@ class HTML5Video extends Playback {
 }
 
 HTML5Video.canPlay = function(resource) {
-  if (Browser.isSafari || Browser.isMobile || Browser.isWin8App || Browser.isLegacyIE) {
+  if (Browser.isSafari || Browser.isMobile || Browser.isWin8App || Browser.isLegacyIE || Browser.isWiiU) {
     return true
   } else if (Browser.isChrome || Browser.isFirefox || Browser.isIE) {
     return (!!resource.match(/(.*).(mp4|webm)/))
