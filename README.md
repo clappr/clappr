@@ -11,7 +11,7 @@
 Add the following script on your HTML:
 ```html
 <head>
-  <script type="text/javascript" charset="utf-8" src="http://cdn.clappr.io/latest/clappr.min.js"></script>
+  <script type="text/javascript" src="http://cdn.clappr.io/latest/clappr.min.js"></script>
 </head>
 ```
 Now, create the player:
@@ -19,9 +19,7 @@ Now, create the player:
 <body>
   <div id="player"></div>
   <script>
-    var playerEl = document.getElementById("player");
-    var player = new Clappr.Player({source: "http://your.video/here.mp4"});
-    player.attachTo(playerEl);
+    var player = new Clappr.Player({source: "http://your.video/here.mp4", parentId: "#player"});
   </script>
 </body>
 ```
