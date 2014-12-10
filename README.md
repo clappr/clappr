@@ -28,13 +28,13 @@ Now, create the player:
 
 ## Formats Supported
 
-Format | IE10 | IE11 | Firefox | Chrome | Safari | iPhone | iPad | Android | Wii U
--------|------|------|---------|--------|--------|--------|------|---------|-------
-HLS | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
-MP4 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
-MP3 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_multiplication_x:
-[DASH](https://github.com/globocom/clappr/issues/161) | :heavy_multiplication_x: | :heavy_multiplication_x: | :heavy_multiplication_x: |:heavy_multiplication_x: | :heavy_multiplication_x: | :heavy_multiplication_x: | :heavy_multiplication_x: | :heavy_multiplication_x: | :heavy_multiplication_x:
-RTMP | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_multiplication_x: | :heavy_multiplication_x: | :heavy_multiplication_x: | :heavy_multiplication_x:
+Format | IE10 | IE11 | Firefox | Chrome | Safari | iPhone | iPad | Android | Wii U | PS4 |
+-------|------|------|---------|--------|--------|--------|------|---------|-------|-----|
+HLS | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
+MP4 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:
+MP3 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_multiplication_x: | :heavy_multiplication_x:
+[DASH](https://github.com/globocom/clappr/issues/161) | :heavy_multiplication_x: | :heavy_multiplication_x: | :heavy_multiplication_x: |:heavy_multiplication_x: | :heavy_multiplication_x: | :heavy_multiplication_x: | :heavy_multiplication_x: | :heavy_multiplication_x: | :heavy_multiplication_x: | :heavy_multiplication_x:
+RTMP | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_multiplication_x: | :heavy_multiplication_x: | :heavy_multiplication_x: | :heavy_multiplication_x: | :heavy_multiplication_x:
 
 
 ## Built-in Plugins & Embed Parameters
@@ -79,7 +79,7 @@ Customize control bar colors adding `mediacontrol` hash. Example:
 
 ```javascript
   var player = new Clappr.Player({
-    source: "http://your.video/here.mp4", 
+    source: "http://your.video/here.mp4",
     mediacontrol: {seekbar: "#E113D3", buttons: "#66B2FF"}
   });
 ```
@@ -98,7 +98,7 @@ Put `watermark: http://url/img.png` on your embed parameters to automatically ad
 
 ```javascript
   var player = new Clappr.Player({
-    source: "http://your.video/here.mp4", 
+    source: "http://your.video/here.mp4",
     watermark: "http://url/img.png", position: 'top-right'
   });
 ```
