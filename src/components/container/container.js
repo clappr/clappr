@@ -118,7 +118,7 @@ class Container extends UIObject {
   }
 
   timeUpdated(position, duration) {
-    this.trigger(Events.CONTAINER_UPDATE, position, duration, this.name);
+    this.trigger(Events.CONTAINER_TIMEUPDATE, position, duration, this.name);
   }
 
   progress(startPosition, endPosition, duration) {
