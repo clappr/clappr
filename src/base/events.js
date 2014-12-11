@@ -81,7 +81,6 @@ class Events {
     }
     return this
   }
-
 }
 
 var eventSplitter = /\s+/
@@ -132,5 +131,50 @@ _.each(listenMethods, function(implementation, method) {
     return this
   }
 })
+
+// Playback Events
+Events.PLAYBACK_PROGRESS = 'playback:progress'
+Events.PLAYBACK_TIMEUPDATE = 'playback:timeupdate'
+Events.PLAYBACK_READY = 'playback:ready'
+Events.PLAYBACK_BUFFERING = 'playback:buffering'
+Events.PLAYBACK_BUFFERFULL = 'playback:bufferfull'
+Events.PLAYBACK_SETTINGSUPDATE = 'playback:settingsupdate'
+Events.PLAYBACK_LOADEDMETADATA = 'playback:loadedmetadata'
+Events.PLAYBACK_HIGHDEFINITIONUPDATE = 'playback:highdefinitionupdate'
+Events.PLAYBACK_BITRATE = 'playback:bitrate'
+Events.PLAYBACK_PLAYBACKSTATE = 'playback:playbackstate'
+Events.PLAYBACK_DVR = 'playback:dvr'
+Events.PLAYBACK_MEDIACONTROL_DISABLE = 'playback:mediacontrol:disable'
+Events.PLAYBACK_MEDIACONTROL_ENABLE = 'playback:mediacontrol:enable'
+Events.PLAYBACK_ENDED = 'playback:ended'
+Events.PLAYBACK_PLAY = 'playback:play'
+Events.PLAYBACK_ERROR = 'playback:error'
+
+// Container Events
+Events.CONTAINER_PLAYBACKSTATE = 'container:playbackstate'
+Events.CONTAINER_PLAYBACKDVRSTATECHANGED = 'container:dvr'
+Events.CONTAINER_BITRATE = 'container:bitrate'
+Events.CONTAINER_STATS_REPORT = 'container:stats:report'
+Events.CONTAINER_DESTROYED = 'container:destroyed'
+Events.CONTAINER_READY = 'container:ready'
+Events.CONTAINER_ERROR = 'container:error'
+Events.CONTAINER_LOADEDMETADATA = 'container:loadedmetadata'
+Events.CONTAINER_TIMEUPDATE = 'container:timeupdate'
+Events.CONTAINER_PROGRESS = 'container:progress'
+Events.CONTAINER_PLAY = 'container:play'
+Events.CONTAINER_STOP = 'container:stop'
+Events.CONTAINER_PAUSE = 'container:pause'
+Events.CONTAINER_ENDED = 'container:ended'
+Events.CONTAINER_CLICK = 'container:click'
+Events.CONTAINER_SEEK = 'container:seek'
+Events.CONTAINER_VOLUME = 'container:volume'
+Events.CONTAINER_FULLSCREEN = 'container:fullscreen'
+Events.CONTAINER_STATE_BUFFERING = 'container:state:buffering'
+Events.CONTAINER_STATE_BUFFERFULL = 'container:state:bufferfull'
+Events.CONTAINER_SETTINGSUPDATE = 'container:settingsupdate'
+Events.CONTAINER_HIGHDEFINITIONUPDATE = 'container:highdefinitionupdate'
+Events.CONTAINER_MEDIACONTROL_DISABLE = 'container:mediacontrol:disable'
+Events.CONTAINER_MEDIACONTROL_ENABLE = 'container:mediacontrol:enable'
+
 
 module.exports = Events
