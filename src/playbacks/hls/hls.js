@@ -26,8 +26,8 @@ class HLS extends Playback {
   constructor(options) {
     super(options)
     this.src = options.src
-    this.defaultSwfPath = "http://cdn.clappr.io/" + Clappr.version + "/assets"
-    this.swfPath = (options.swfBasepath || this.defaultSwfBasePath) + "/HLSPlayer.swf"
+    this.defaultBaseSwfPath = "http://cdn.clappr.io/" + Clappr.version + "/assets/"
+    this.swfPath = (options.swfBasePath || this.defaultBaseSwfPath) + "HLSPlayer.swf"
     this.flushLiveURLCache = (options.flushLiveURLCache === undefined)? true: options.flushLiveURLCache
     this.capLevelToStage = (options.capLevelToStage === undefined)? false: options.capLevelToStage
     this.highDefinition = false
