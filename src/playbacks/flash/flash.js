@@ -23,8 +23,8 @@ class Flash extends Playback {
     super(options)
     this.src = options.src
     this.isRTMP = (this.src.indexOf("rtmp") > -1)
-    this.defaultSwfPath = "http://cdn.clappr.io/" + Clappr.version + "/assets/"
-    this.swfPath = (options.swfBasepath || this.defaultBaseSwfPath) + "/Player.swf"
+    this.defaultBaseSwfPath = "http://cdn.clappr.io/" + Clappr.version + "/assets/"
+    this.swfPath = (options.swfBasePath || this.defaultBaseSwfPath) + "Player.swf"
     this.autoPlay = options.autoPlay
     this.settings = {default: ['seekbar']}
     if (this.isRTMP) {
