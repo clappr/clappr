@@ -41,9 +41,9 @@ class Core extends UIObject {
     this.containers = []
     this.createContainers(options)
     //FIXME fullscreen api sucks
-    document.addEventListener('fullscreenchange', () => this.exit())
-    document.addEventListener('MSFullscreenChange', () => this.exit())
-    document.addEventListener('mozfullscreenchange', () => this.exit())
+    $(document).bind('fullscreenchange', () => this.exit())
+    $(document).bind('MSFullscreenChange', () => this.exit())
+    $(document).bind('mozfullscreenchange', () => this.exit())
   }
 
   createContainers(options) {
@@ -116,7 +116,11 @@ class Core extends UIObject {
     _(this.containers).each((container) => container.destroy())
     _(this.plugins).each((plugin) => plugin.destroy())
     this.$el.remove()
-  }
+    this.mediaControl.destroy()
+    $(document).unbind('fullscreenchange')
+    $(document).unbind('MSFullscreenChange')
+    $(document).unbind('mozfullscreenchange')
+}
 
   exit() {
     this.updateSize()

@@ -411,6 +411,10 @@ class MediaControl extends UIObject {
     Mousetrap.bind(['space'], () => this.togglePlayPause())
   }
 
+  unbindKeyEvents() {
+    Mousetrap.unbind('space')
+  }
+
   parseColors() {
     if (this.options.mediacontrol) {
       var buttonsColor = this.options.mediacontrol.buttons;
@@ -459,6 +463,12 @@ class MediaControl extends UIObject {
 
     this.trigger('mediacontrol:rendered')
     return this
+  }
+
+  destroy() {
+    $(document).unbind('mouseup')
+    $(document).unbind('mousemove')
+    this.unbindKeyEvents()
   }
 }
 
