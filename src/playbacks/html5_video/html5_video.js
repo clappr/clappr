@@ -201,15 +201,24 @@ class HTML5Video extends Playback {
 }
 
 HTML5Video.canPlay = function(resource) {
-  if (isSupportedBrowser()) {
-    return true
-  } else if (Browser.isChrome || Browser.isFirefox || Browser.isIE) {
-    return (!!resource.match(/(.*).(mp4|webm)/))
+  var mimetypes = {
+    'mp4': _.map(["avc1.42E01E", "avc1.58A01E", "avc1.4D401E", "avc1.64001E", "mp4v.20.8", "mp4v.20.240"],
+      function (codec) { return 'video/mp4; codecs=' + codec + ', mp4a.40.2'}),
+    'ogg': ['video/ogg; codecs="theora, vorbis"', 'video/ogg; codecs="dirac"', 'video/ogg; codecs="theora, speex"'],
+    '3gpp': ['video/3gpp; codecs="mp4v.20.8, samr"'],
+    'webm': ['video/webm; codecs="vp8, vorbis"'],
+    'mkv': ['video/x-matroska; codecs="theora, vorbis"'],
+    'm3u8': ['application/x-mpegURL']
   }
-}
+  mimetypes['ogv'] = mimetypes['ogg']
+  mimetypes['3gp'] = mimetypes['3gpp']
+  var extension = resource.split('?')[0].match(/.*\.(.*)$/)[1]
 
-var isSupportedBrowser = () => {
-  return Browser.isSafari || Browser.isMobile || Browser.isWin8App || Browser.isLegacyIE || Browser.isWiiU || Browser.isPS4;
+  if (_.has(mimetypes, extension)) {
+    var v = document.createElement('video')
+    return !!_.find(mimetypes[extension], function (ext) { return !!v.canPlayType(ext).replace(/no/, '') })
+  }
+  return false
 }
 
 module.exports = HTML5Video
