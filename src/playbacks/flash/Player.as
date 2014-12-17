@@ -55,15 +55,13 @@ package
       _ns.soundTransform = videoVolumeTransform;
       _ns.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler);
       if (isRTMP) {
-        _ns.bufferTime = 0;
+        _ns.bufferTime = 0.5;
+        _stageVideo.attachNetStream(_ns);
       } else {
         _ns.bufferTime = 10;
-      }
-      _ns.inBufferSeek = true;
-      _ns.maxPauseBufferTime = 3600;
-      _ns.backBufferTime = 3600;
-      if (isRTMP) {
-        _stageVideo.attachNetStream(_ns);
+	_ns.inBufferSeek = true;
+	_ns.maxPauseBufferTime = 3600;
+	_ns.backBufferTime = 3600;
       }
       _ns.play(source);
     }
@@ -105,7 +103,6 @@ package
     private function netStatusHandler(event:NetStatusEvent):void {
       if (event.info.code === "NetStream.Buffer.Full") {
         playbackState = "PLAYING";
-        _ns.bufferTime = 30;
       } else if (isBuffering(event.info.code)) {
         playbackState = "PLAYING_BUFFERING";
       } else if (event.info.code == "NetStream.Video.DimensionChange") {
@@ -113,7 +110,7 @@ package
       } else if (event.info.code == "NetStream.Play.Stop") {
         playbackState = "ENDED";
         heartbeat.stop();
-      } else if (event.info.code == "NetStream.Buffer.Empty") {
+      } else if (event.info.code == "NetStream.Buffer.Empty" && !isRTMP) {
         _ns.bufferTime = 5;
       }
       _triggerEvent('statechanged');
