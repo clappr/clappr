@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 var Playback = require('playback')
+var Events = require('../../base/events')
 
 class HTML5Audio extends Playback {
   get name() { return 'html5_audio' }
@@ -27,11 +28,11 @@ class HTML5Audio extends Playback {
   }
 
   bindEvents() {
-    this.listenTo(this.container, 'container:play', this.play)
-    this.listenTo(this.container, 'container:pause', this.pause)
-    this.listenTo(this.container, 'container:seek', this.seek)
-    this.listenTo(this.container, 'container:volume', this.volume)
-    this.listenTo(this.container, 'container:stop', this.stop)
+    this.listenTo(this.container, Events.CONTAINER_PLAY, this.play)
+    this.listenTo(this.container, Events.CONTAINER_PAUSE, this.pause)
+    this.listenTo(this.container, Events.CONTAINER_SEEK, this.seek)
+    this.listenTo(this.container, Events.CONTAINER_VOLUME, this.volume)
+    this.listenTo(this.container, Events.CONTAINER_STOP, this.stop)
   }
 
   getPlaybackType() {
