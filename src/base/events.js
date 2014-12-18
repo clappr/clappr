@@ -176,5 +176,11 @@ Events.CONTAINER_HIGHDEFINITIONUPDATE = 'container:highdefinitionupdate'
 Events.CONTAINER_MEDIACONTROL_DISABLE = 'container:mediacontrol:disable'
 Events.CONTAINER_MEDIACONTROL_ENABLE = 'container:mediacontrol:enable'
 
+// MediaControl Events
+Events.MEDIACONTROL_FULLSCREEN = 'mediacontrol:fullscreen'
+Events.MEDIACONTROL_SHOW = 'mediacontrol:show'
+Events.MEDIACONTROL_HIDE = 'mediacontrol:hide'
+Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR = 'mediacontrol:mousemove:seekbar'
+Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR = 'mediacontrol:mouseleave:seekbar'
 
 module.exports = Events
