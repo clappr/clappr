@@ -10,6 +10,7 @@ var _ = require('underscore');
 var BaseObject = require('base_object');
 var Container = require('container');
 var $ = require('zepto');
+var Events = require('../../base/events');
 
 class ContainerFactory extends BaseObject {
   constructor(options, loader) {
@@ -38,7 +39,7 @@ class ContainerFactory extends BaseObject {
     var defer = $.Deferred();
     defer.promise(container);
     this.addContainerPlugins(container, source);
-    this.listenToOnce(container, 'container:ready', () => defer.resolve(container) );
+    this.listenToOnce(container, Events.CONTAINER_READY, () => defer.resolve(container) );
     return container;
   }
 

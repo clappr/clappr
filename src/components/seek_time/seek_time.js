@@ -6,6 +6,7 @@ var UIObject = require('ui_object')
 var Styler = require('../../base/styler')
 var JST = require('../../base/jst')
 var formatTime = require('../../base/utils').formatTime
+var Events = require('../../base/events')
 
 class SeekTime extends UIObject {
   get name() { return 'seek_time' }
@@ -25,8 +26,8 @@ class SeekTime extends UIObject {
   }
 
   addEventListeners() {
-    this.listenTo(this.mediaControl, 'mediacontrol:mousemove:seekbar', this.showTime)
-    this.listenTo(this.mediaControl, 'mediacontrol:mouseleave:seekbar', this.hideTime)
+    this.listenTo(this.mediaControl, Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR, this.showTime)
+    this.listenTo(this.mediaControl, Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR, this.hideTime)
   }
 
   showTime(event) {

@@ -17,6 +17,7 @@ var Styler = require('../../base/styler')
 var MediaControl = require('media_control')
 var PlayerInfo = require('player_info')
 var Mediator = require('mediator')
+var Events = require('../../base/events');
 
 class Core extends UIObject {
   get events() {
@@ -147,15 +148,9 @@ class Core extends UIObject {
   }
 
   appendContainer(container) {
-    this.listenTo(container, 'container:destroyed', this.removeContainer)
+    this.listenTo(container, Events.CONTAINER_DESTROYED, this.removeContainer)
     this.el.appendChild(container.render().el)
     this.containers.push(container)
-  }
-
-  prependContainer(container) {
-    this.listenTo(container, 'container:destroyed', this.removeContainer)
-    this.$el.append(container.render().el)
-    this.containers.unshift(container)
   }
 
   setupContainers(containers) {
@@ -177,9 +172,9 @@ class Core extends UIObject {
       this.mediaControl.setContainer(container)
     } else {
       this.mediaControl = this.createMediaControl(_.extend({container: container}, this.options))
-      this.listenTo(this.mediaControl, 'mediacontrol:fullscreen', this.toggleFullscreen)
-      this.listenTo(this.mediaControl, 'mediacontrol:show', this.onMediaControlShow.bind(this, true))
-      this.listenTo(this.mediaControl, 'mediacontrol:hide', this.onMediaControlShow.bind(this, false))
+      this.listenTo(this.mediaControl, Events.MEDIACONTROL_FULLSCREEN, this.toggleFullscreen)
+      this.listenTo(this.mediaControl, Events.MEDIACONTROL_SHOW, this.onMediaControlShow.bind(this, true))
+      this.listenTo(this.mediaControl, Events.MEDIACONTROL_HIDE, this.onMediaControlShow.bind(this, false))
     }
   }
 

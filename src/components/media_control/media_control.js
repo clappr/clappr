@@ -16,6 +16,7 @@ var Mousetrap = require('mousetrap')
 var SeekTime = require('../seek_time')
 var Mediator = require('mediator')
 var PlayerInfo = require('player_info')
+var Events = require('../../base/events')
 
 class MediaControl extends UIObject {
   get name() { return 'MediaControl' }
@@ -77,15 +78,15 @@ class MediaControl extends UIObject {
   }
 
   addEventListeners() {
-    this.listenTo(this.container, 'container:play', this.changeTogglePlay)
-    this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar)
-    this.listenTo(this.container, 'container:progress', this.updateProgressBar)
-    this.listenTo(this.container, 'container:settingsupdate', this.settingsUpdate)
-    this.listenTo(this.container, 'container:dvr', this.settingsUpdate)
-    this.listenTo(this.container, 'container:highdefinitionupdate', this.highDefinitionUpdate)
-    this.listenTo(this.container, 'container:mediacontrol:disable', this.disable)
-    this.listenTo(this.container, 'container:mediacontrol:enable', this.enable)
-    this.listenTo(this.container, 'container:ended', this.ended)
+    this.listenTo(this.container, Events.CONTAINER_PLAY, this.changeTogglePlay)
+    this.listenTo(this.container, Events.CONTAINER_TIMEUPDATE, this.updateSeekBar)
+    this.listenTo(this.container, Events.CONTAINER_PROGRESS, this.updateProgressBar)
+    this.listenTo(this.container, Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate)
+    this.listenTo(this.container, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.settingsUpdate)
+    this.listenTo(this.container, Events.CONTAINER_HIGHDEFINITIONUPDATE, this.highDefinitionUpdate)
+    this.listenTo(this.container, Events.CONTAINER_MEDIACONTROL_DISABLE, this.disable)
+    this.listenTo(this.container, Events.CONTAINER_MEDIACONTROL_ENABLE, this.enable)
+    this.listenTo(this.container, Events.CONTAINER_ENDED, this.ended)
   }
 
   disable() {
@@ -386,7 +387,7 @@ class MediaControl extends UIObject {
 
   setVolumeLevel(value) {
     if (!this.container.isReady) {
-      this.listenToOnce(this.container, "container:ready", () => this.setVolumeLevel(value))
+      this.listenToOnce(this.container, Events.CONTAINER_READY, () => this.setVolumeLevel(value))
     } else {
       this.$volumeBarContainer.find('.segmented-bar-element').removeClass('fill')
       var item = Math.ceil(value / 10.0)
