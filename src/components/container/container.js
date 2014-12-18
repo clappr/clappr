@@ -191,7 +191,7 @@ class Container extends UIObject {
   }
 
   highDefinitionUpdate() {
-    this.trigger(Events.CONTAINER_HIGHDEFINITIONUPDATES);
+    this.trigger(Events.CONTAINER_HIGHDEFINITIONUPDATE);
   }
 
   isHighDefinitionInUse() {
