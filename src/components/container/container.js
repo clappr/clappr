@@ -14,7 +14,6 @@ var Events = require('../../base/events')
 class Container extends UIObject {
   get name() { return 'Container' }
   get attributes() { return { class: 'container', 'data-container': '' } }
-  get events() { return {'click': 'clicked'} }
 
   constructor(options) {
     super(options);
@@ -145,10 +144,6 @@ class Container extends UIObject {
 
   ended() {
     this.trigger(Events.CONTAINER_ENDED, this, this.name);
-  }
-
-  clicked() {
-    this.trigger(Events.CONTAINER_CLICK, this, this.name);
   }
 
   setCurrentTime(time) {
