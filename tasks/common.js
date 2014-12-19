@@ -30,8 +30,8 @@ module.exports.browserify = function(options) {
     .require('./src/playbacks/html5_audio', { expose: 'html5_audio' })
     .require('./src/playbacks/html5_video', { expose: 'html5_video' })
     .require('./src/plugins/poster', { expose: 'poster' })
-    .require('zepto')
-    .require('underscore')
+    .require('zepto', { expose: 'zepto' })
+    .require('underscore', { expose: 'underscore' })
 };
 
 gulp.task('compile-js', function() {
