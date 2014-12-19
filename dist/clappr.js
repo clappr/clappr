@@ -16,7 +16,7 @@ module.exports = window.Clappr;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../package.json":6,"./components/iframe_player":19,"./components/player":23,"mediator":"mediator"}],2:[function(require,module,exports){
+},{"../package.json":6,"./components/iframe_player":18,"./components/player":22,"mediator":"mediator"}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -3724,7 +3724,7 @@ module.exports = mousetrap;
 },{}],6:[function(require,module,exports){
 module.exports={
   "name": "clappr",
-  "version": "0.0.68",
+  "version": "0.0.69",
   "description": "An extensible media player for the web",
   "main": "dist/clappr.min.js",
   "scripts": {
@@ -4012,226 +4012,7 @@ Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged';
 module.exports = Events;
 
 
-},{"../plugins/log":40,"underscore":"underscore"}],8:[function(require,module,exports){
-"use strict";
-var _ = require('underscore');
-var Log = require('../plugins/log').getInstance();
-var slice = Array.prototype.slice;
-var Events = function Events() {};
-($traceurRuntime.createClass)(Events, {
-  on: function(name, callback, context) {
-    if (!eventsApi(this, 'on', name, [callback, context]) || !callback)
-      return this;
-    this._events || (this._events = {});
-    var events = this._events[name] || (this._events[name] = []);
-    events.push({
-      callback: callback,
-      context: context,
-      ctx: context || this
-    });
-    return this;
-  },
-  once: function(name, callback, context) {
-    if (!eventsApi(this, 'once', name, [callback, context]) || !callback)
-      return this;
-    var self = this;
-    var once = _.once(function() {
-      self.off(name, once);
-      callback.apply(this, arguments);
-    });
-    once._callback = callback;
-    return this.on(name, once, context);
-  },
-  off: function(name, callback, context) {
-    var retain,
-        ev,
-        events,
-        names,
-        i,
-        l,
-        j,
-        k;
-    if (!this._events || !eventsApi(this, 'off', name, [callback, context]))
-      return this;
-    if (!name && !callback && !context) {
-      this._events = void 0;
-      return this;
-    }
-    names = name ? [name] : _.keys(this._events);
-    for (i = 0, l = names.length; i < l; i++) {
-      name = names[i];
-      events = this._events[name];
-      if (events) {
-        this._events[name] = retain = [];
-        if (callback || context) {
-          for (j = 0, k = events.length; j < k; j++) {
-            ev = events[j];
-            if ((callback && callback !== ev.callback && callback !== ev.callback._callback) || (context && context !== ev.context)) {
-              retain.push(ev);
-            }
-          }
-        }
-        if (!retain.length)
-          delete this._events[name];
-      }
-    }
-    return this;
-  },
-  trigger: function(name) {
-    var klass = arguments[arguments.length - 1];
-    Log.info(klass, name);
-    if (!this._events)
-      return this;
-    var args = slice.call(arguments, 1);
-    if (!eventsApi(this, 'trigger', name, args))
-      return this;
-    var events = this._events[name];
-    var allEvents = this._events.all;
-    if (events)
-      triggerEvents(events, args);
-    if (allEvents)
-      triggerEvents(allEvents, arguments);
-    return this;
-  },
-  stopListening: function(obj, name, callback) {
-    var listeningTo = this._listeningTo;
-    if (!listeningTo)
-      return this;
-    var remove = !name && !callback;
-    if (!callback && typeof name === 'object')
-      callback = this;
-    if (obj)
-      (listeningTo = {})[obj._listenId] = obj;
-    for (var id in listeningTo) {
-      obj = listeningTo[id];
-      obj.off(name, callback, this);
-      if (remove || _.isEmpty(obj._events))
-        delete this._listeningTo[id];
-    }
-    return this;
-  }
-}, {});
-var eventSplitter = /\s+/;
-var eventsApi = function(obj, action, name, rest) {
-  if (!name)
-    return true;
-  if (typeof name === 'object') {
-    for (var key in name) {
-      obj[action].apply(obj, [key, name[key]].concat(rest));
-    }
-    return false;
-  }
-  if (eventSplitter.test(name)) {
-    var names = name.split(eventSplitter);
-    for (var i = 0,
-        l = names.length; i < l; i++) {
-      obj[action].apply(obj, [names[i]].concat(rest));
-    }
-    return false;
-  }
-  return true;
-};
-var triggerEvents = function(events, args) {
-  var ev,
-      i = -1,
-      l = events.length,
-      a1 = args[0],
-      a2 = args[1],
-      a3 = args[2];
-  switch (args.length) {
-    case 0:
-      while (++i < l)
-        (ev = events[i]).callback.call(ev.ctx);
-      return;
-    case 1:
-      while (++i < l)
-        (ev = events[i]).callback.call(ev.ctx, a1);
-      return;
-    case 2:
-      while (++i < l)
-        (ev = events[i]).callback.call(ev.ctx, a1, a2);
-      return;
-    case 3:
-      while (++i < l)
-        (ev = events[i]).callback.call(ev.ctx, a1, a2, a3);
-      return;
-    default:
-      while (++i < l)
-        (ev = events[i]).callback.apply(ev.ctx, args);
-      return;
-  }
-};
-var listenMethods = {
-  listenTo: 'on',
-  listenToOnce: 'once'
-};
-_.each(listenMethods, function(implementation, method) {
-  Events.prototype[method] = function(obj, name, callback) {
-    var listeningTo = this._listeningTo || (this._listeningTo = {});
-    var id = obj._listenId || (obj._listenId = _.uniqueId('l'));
-    listeningTo[id] = obj;
-    if (!callback && typeof name === 'object')
-      callback = this;
-    obj[implementation](name, callback, this);
-    return this;
-  };
-});
-Events.PLAYER_RESIZE = 'player:resize';
-Events.PLAYBACK_PROGRESS = 'playback:progress';
-Events.PLAYBACK_TIMEUPDATE = 'playback:timeupdate';
-Events.PLAYBACK_READY = 'playback:ready';
-Events.PLAYBACK_BUFFERING = 'playback:buffering';
-Events.PLAYBACK_BUFFERFULL = 'playback:bufferfull';
-Events.PLAYBACK_SETTINGSUPDATE = 'playback:settingsupdate';
-Events.PLAYBACK_LOADEDMETADATA = 'playback:loadedmetadata';
-Events.PLAYBACK_HIGHDEFINITIONUPDATE = 'playback:highdefinitionupdate';
-Events.PLAYBACK_BITRATE = 'playback:bitrate';
-Events.PLAYBACK_PLAYBACKSTATE = 'playback:playbackstate';
-Events.PLAYBACK_DVR = 'playback:dvr';
-Events.PLAYBACK_MEDIACONTROL_DISABLE = 'playback:mediacontrol:disable';
-Events.PLAYBACK_MEDIACONTROL_ENABLE = 'playback:mediacontrol:enable';
-Events.PLAYBACK_ENDED = 'playback:ended';
-Events.PLAYBACK_PLAY = 'playback:play';
-Events.PLAYBACK_ERROR = 'playback:error';
-Events.PLAYBACK_STATS_ADD = 'playback:stats:add';
-Events.CONTAINER_PLAYBACKSTATE = 'container:playbackstate';
-Events.CONTAINER_PLAYBACKDVRSTATECHANGED = 'container:dvr';
-Events.CONTAINER_BITRATE = 'container:bitrate';
-Events.CONTAINER_STATS_REPORT = 'container:stats:report';
-Events.CONTAINER_DESTROYED = 'container:destroyed';
-Events.CONTAINER_READY = 'container:ready';
-Events.CONTAINER_ERROR = 'container:error';
-Events.CONTAINER_LOADEDMETADATA = 'container:loadedmetadata';
-Events.CONTAINER_TIMEUPDATE = 'container:timeupdate';
-Events.CONTAINER_PROGRESS = 'container:progress';
-Events.CONTAINER_PLAY = 'container:play';
-Events.CONTAINER_STOP = 'container:stop';
-Events.CONTAINER_PAUSE = 'container:pause';
-Events.CONTAINER_ENDED = 'container:ended';
-Events.CONTAINER_CLICK = 'container:click';
-Events.CONTAINER_SEEK = 'container:seek';
-Events.CONTAINER_VOLUME = 'container:volume';
-Events.CONTAINER_FULLSCREEN = 'container:fullscreen';
-Events.CONTAINER_STATE_BUFFERING = 'container:state:buffering';
-Events.CONTAINER_STATE_BUFFERFULL = 'container:state:bufferfull';
-Events.CONTAINER_SETTINGSUPDATE = 'container:settingsupdate';
-Events.CONTAINER_HIGHDEFINITIONUPDATE = 'container:highdefinitionupdate';
-Events.CONTAINER_MEDIACONTROL_DISABLE = 'container:mediacontrol:disable';
-Events.CONTAINER_MEDIACONTROL_ENABLE = 'container:mediacontrol:enable';
-Events.CONTAINER_STATS_ADD = 'container:stats:add';
-Events.MEDIACONTROL_RENDERED = 'mediacontrol:rendered';
-Events.MEDIACONTROL_FULLSCREEN = 'mediacontrol:fullscreen';
-Events.MEDIACONTROL_SHOW = 'mediacontrol:show';
-Events.MEDIACONTROL_HIDE = 'mediacontrol:hide';
-Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR = 'mediacontrol:mousemove:seekbar';
-Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR = 'mediacontrol:mouseleave:seekbar';
-Events.MEDIACONTROL_PLAYING = 'mediacontrol:playing';
-Events.MEDIACONTROL_NOTPLAYING = 'mediacontrol:notplaying';
-Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged';
-module.exports = Events;
-
-
-},{"../plugins/log":40,"underscore":"underscore"}],9:[function(require,module,exports){
+},{"../plugins/log":39,"underscore":"underscore"}],8:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 module.exports = {
@@ -4264,7 +4045,7 @@ module.exports = {
 };
 
 
-},{"underscore":"underscore"}],10:[function(require,module,exports){
+},{"underscore":"underscore"}],9:[function(require,module,exports){
 "use strict";
 var $ = require('zepto');
 var _ = require('underscore');
@@ -4276,7 +4057,7 @@ var Styler = {getStyleFor: function(name, options) {
 module.exports = Styler;
 
 
-},{"./jst":9,"underscore":"underscore","zepto":"zepto"}],11:[function(require,module,exports){
+},{"./jst":8,"underscore":"underscore","zepto":"zepto"}],10:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var extend = function(protoProps, staticProps) {
@@ -4366,7 +4147,7 @@ module.exports = {
 };
 
 
-},{"underscore":"underscore"}],12:[function(require,module,exports){
+},{"underscore":"underscore"}],11:[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var Styler = require('../../base/styler');
@@ -4556,7 +4337,7 @@ var $Container = Container;
 module.exports = Container;
 
 
-},{"../../base/events":8,"../../base/styler":10,"ui_object":"ui_object","underscore":"underscore"}],13:[function(require,module,exports){
+},{"../../base/events":7,"../../base/styler":9,"ui_object":"ui_object","underscore":"underscore"}],12:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var BaseObject = require('base_object');
@@ -4612,12 +4393,12 @@ var $ContainerFactory = ContainerFactory;
 module.exports = ContainerFactory;
 
 
-},{"../../base/events":8,"base_object":"base_object","container":"container","underscore":"underscore","zepto":"zepto"}],14:[function(require,module,exports){
+},{"../../base/events":7,"base_object":"base_object","container":"container","underscore":"underscore","zepto":"zepto"}],13:[function(require,module,exports){
 "use strict";
 module.exports = require('./container_factory');
 
 
-},{"./container_factory":13}],15:[function(require,module,exports){
+},{"./container_factory":12}],14:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('zepto');
@@ -4836,7 +4617,7 @@ var $Core = Core;
 module.exports = Core;
 
 
-},{"../../base/events":8,"../../base/styler":10,"../../base/utils":11,"../container_factory":14,"media_control":"media_control","mediator":"mediator","player_info":"player_info","ui_object":"ui_object","underscore":"underscore","zepto":"zepto"}],16:[function(require,module,exports){
+},{"../../base/events":7,"../../base/styler":9,"../../base/utils":10,"../container_factory":13,"media_control":"media_control","mediator":"mediator","player_info":"player_info","ui_object":"ui_object","underscore":"underscore","zepto":"zepto"}],15:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var BaseObject = require('base_object');
@@ -4870,12 +4651,12 @@ var CoreFactory = function CoreFactory(player, loader) {
 module.exports = CoreFactory;
 
 
-},{"base_object":"base_object","core":"core","underscore":"underscore"}],17:[function(require,module,exports){
+},{"base_object":"base_object","core":"core","underscore":"underscore"}],16:[function(require,module,exports){
 "use strict";
 module.exports = require('./core_factory');
 
 
-},{"./core_factory":16}],18:[function(require,module,exports){
+},{"./core_factory":15}],17:[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var $ = require('zepto');
@@ -4924,17 +4705,17 @@ var $IframePlayer = IframePlayer;
 module.exports = IframePlayer;
 
 
-},{"../player":23,"base_object":"base_object","zepto":"zepto"}],19:[function(require,module,exports){
+},{"../player":22,"base_object":"base_object","zepto":"zepto"}],18:[function(require,module,exports){
 "use strict";
 module.exports = require('./iframe_player');
 
 
-},{"./iframe_player":18}],20:[function(require,module,exports){
+},{"./iframe_player":17}],19:[function(require,module,exports){
 "use strict";
 module.exports = require('./loader');
 
 
-},{"./loader":21}],21:[function(require,module,exports){
+},{"./loader":20}],20:[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var _ = require('underscore');
@@ -4988,7 +4769,7 @@ var $Loader = Loader;
 module.exports = Loader;
 
 
-},{"../../playbacks/no_op":30,"../../plugins/background_button":33,"../../plugins/click_to_pause":35,"../../plugins/dvr_controls":37,"../../plugins/google_analytics":39,"../../plugins/spinner_three_bounce":43,"../../plugins/stats":45,"../../plugins/watermark":47,"base_object":"base_object","flash":"flash","hls":"hls","html5_audio":"html5_audio","html5_video":"html5_video","player_info":"player_info","poster":"poster","underscore":"underscore"}],22:[function(require,module,exports){
+},{"../../playbacks/no_op":29,"../../plugins/background_button":32,"../../plugins/click_to_pause":34,"../../plugins/dvr_controls":36,"../../plugins/google_analytics":38,"../../plugins/spinner_three_bounce":42,"../../plugins/stats":44,"../../plugins/watermark":46,"base_object":"base_object","flash":"flash","hls":"hls","html5_audio":"html5_audio","html5_video":"html5_video","player_info":"player_info","poster":"poster","underscore":"underscore"}],21:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('zepto');
@@ -5449,7 +5230,7 @@ var $MediaControl = MediaControl;
 module.exports = MediaControl;
 
 
-},{"../../base/events":8,"../../base/jst":9,"../../base/styler":10,"../../base/utils":11,"../seek_time":24,"mediator":"mediator","mousetrap":4,"player_info":"player_info","ui_object":"ui_object","underscore":"underscore","zepto":"zepto"}],23:[function(require,module,exports){
+},{"../../base/events":7,"../../base/jst":8,"../../base/styler":9,"../../base/utils":10,"../seek_time":23,"mediator":"mediator","mousetrap":4,"player_info":"player_info","ui_object":"ui_object","underscore":"underscore","zepto":"zepto"}],22:[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var CoreFactory = require('./core_factory');
@@ -5544,12 +5325,12 @@ var $Player = Player;
 module.exports = Player;
 
 
-},{"./core_factory":17,"./loader":20,"base_object":"base_object","player_info":"player_info","scrollmonitor":5,"underscore":"underscore"}],24:[function(require,module,exports){
+},{"./core_factory":16,"./loader":19,"base_object":"base_object","player_info":"player_info","scrollmonitor":5,"underscore":"underscore"}],23:[function(require,module,exports){
 "use strict";
 module.exports = require('./seek_time');
 
 
-},{"./seek_time":25}],25:[function(require,module,exports){
+},{"./seek_time":24}],24:[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var Styler = require('../../base/styler');
@@ -5613,7 +5394,7 @@ var $SeekTime = SeekTime;
 module.exports = SeekTime;
 
 
-},{"../../base/events":8,"../../base/jst":9,"../../base/styler":10,"../../base/utils":11,"ui_object":"ui_object"}],26:[function(require,module,exports){
+},{"../../base/events":7,"../../base/jst":8,"../../base/styler":9,"../../base/utils":10,"ui_object":"ui_object"}],25:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
 var Styler = require('../../base/styler');
@@ -5828,7 +5609,7 @@ Flash.canPlay = function(resource) {
 module.exports = Flash;
 
 
-},{"../../base/events":8,"../../base/jst":9,"../../base/styler":10,"../../base/utils":11,"browser":"browser","mediator":"mediator","mousetrap":4,"playback":"playback","underscore":"underscore","zepto":"zepto"}],27:[function(require,module,exports){
+},{"../../base/events":7,"../../base/jst":8,"../../base/styler":9,"../../base/utils":10,"browser":"browser","mediator":"mediator","mousetrap":4,"playback":"playback","underscore":"underscore","zepto":"zepto"}],26:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
 var Styler = require('../../base/styler');
@@ -6142,7 +5923,7 @@ HLS.canPlay = function(resource) {
 module.exports = HLS;
 
 
-},{"../../base/events":8,"../../base/jst":9,"../../base/styler":10,"browser":"browser","mediator":"mediator","playback":"playback","underscore":"underscore"}],28:[function(require,module,exports){
+},{"../../base/events":7,"../../base/jst":8,"../../base/styler":9,"browser":"browser","mediator":"mediator","playback":"playback","underscore":"underscore"}],27:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
 var Events = require('../../base/events');
@@ -6233,7 +6014,7 @@ HTML5Audio.canPlay = function(resource) {
 module.exports = HTML5Audio;
 
 
-},{"../../base/events":8,"playback":"playback"}],29:[function(require,module,exports){
+},{"../../base/events":7,"playback":"playback"}],28:[function(require,module,exports){
 (function (process){
 "use strict";
 var Playback = require('playback');
@@ -6446,12 +6227,12 @@ module.exports = HTML5Video;
 
 
 }).call(this,require('_process'))
-},{"../../base/events":8,"../../base/jst":9,"../../base/styler":10,"../../base/utils":11,"_process":2,"browser":"browser","mousetrap":4,"playback":"playback","underscore":"underscore"}],30:[function(require,module,exports){
+},{"../../base/events":7,"../../base/jst":8,"../../base/styler":9,"../../base/utils":10,"_process":2,"browser":"browser","mousetrap":4,"playback":"playback","underscore":"underscore"}],29:[function(require,module,exports){
 "use strict";
 module.exports = require('./no_op');
 
 
-},{"./no_op":31}],31:[function(require,module,exports){
+},{"./no_op":30}],30:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
 var JST = require('../../base/jst');
@@ -6483,7 +6264,7 @@ NoOp.canPlay = (function(source) {
 module.exports = NoOp;
 
 
-},{"../../base/jst":9,"../../base/styler":10,"playback":"playback"}],32:[function(require,module,exports){
+},{"../../base/jst":8,"../../base/styler":9,"playback":"playback"}],31:[function(require,module,exports){
 (function (process){
 "use strict";
 var UICorePlugin = require('ui_core_plugin');
@@ -6623,12 +6404,12 @@ module.exports = BackgroundButton;
 
 
 }).call(this,require('_process'))
-},{"../../base/events":8,"../../base/jst":9,"../../base/styler":10,"_process":2,"browser":"browser","mediator":"mediator","player_info":"player_info","ui_core_plugin":"ui_core_plugin"}],33:[function(require,module,exports){
+},{"../../base/events":7,"../../base/jst":8,"../../base/styler":9,"_process":2,"browser":"browser","mediator":"mediator","player_info":"player_info","ui_core_plugin":"ui_core_plugin"}],32:[function(require,module,exports){
 "use strict";
 module.exports = require('./background_button');
 
 
-},{"./background_button":32}],34:[function(require,module,exports){
+},{"./background_button":31}],33:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('container_plugin');
 var Events = require('../../base/events');
@@ -6663,12 +6444,12 @@ var $ClickToPausePlugin = ClickToPausePlugin;
 module.exports = ClickToPausePlugin;
 
 
-},{"../../base/events":8,"container_plugin":"container_plugin"}],35:[function(require,module,exports){
+},{"../../base/events":7,"container_plugin":"container_plugin"}],34:[function(require,module,exports){
 "use strict";
 module.exports = require('./click_to_pause');
 
 
-},{"./click_to_pause":34}],36:[function(require,module,exports){
+},{"./click_to_pause":33}],35:[function(require,module,exports){
 "use strict";
 var UICorePlugin = require('ui_core_plugin');
 var JST = require('../../base/jst');
@@ -6752,12 +6533,12 @@ var $DVRControls = DVRControls;
 module.exports = DVRControls;
 
 
-},{"../../base/events":8,"../../base/jst":9,"../../base/styler":10,"ui_core_plugin":"ui_core_plugin"}],37:[function(require,module,exports){
+},{"../../base/events":7,"../../base/jst":8,"../../base/styler":9,"ui_core_plugin":"ui_core_plugin"}],36:[function(require,module,exports){
 "use strict";
 module.exports = require('./dvr_controls');
 
 
-},{"./dvr_controls":36}],38:[function(require,module,exports){
+},{"./dvr_controls":35}],37:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('container_plugin');
 var Events = require('../../base/events');
@@ -6867,17 +6648,17 @@ var $GoogleAnalytics = GoogleAnalytics;
 module.exports = GoogleAnalytics;
 
 
-},{"../../base/events":8,"container_plugin":"container_plugin"}],39:[function(require,module,exports){
+},{"../../base/events":7,"container_plugin":"container_plugin"}],38:[function(require,module,exports){
 "use strict";
 module.exports = require('./google_analytics');
 
 
-},{"./google_analytics":38}],40:[function(require,module,exports){
+},{"./google_analytics":37}],39:[function(require,module,exports){
 "use strict";
 module.exports = require('./log');
 
 
-},{"./log":41}],41:[function(require,module,exports){
+},{"./log":40}],40:[function(require,module,exports){
 "use strict";
 var Mousetrap = require('mousetrap');
 var _ = require('underscore');
@@ -6929,7 +6710,7 @@ Log.getInstance = function() {
 module.exports = Log;
 
 
-},{"mousetrap":4,"underscore":"underscore"}],42:[function(require,module,exports){
+},{"mousetrap":4,"underscore":"underscore"}],41:[function(require,module,exports){
 (function (process){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
@@ -7046,17 +6827,17 @@ module.exports = PosterPlugin;
 
 
 }).call(this,require('_process'))
-},{"../../base/events":8,"../../base/jst":9,"../../base/styler":10,"_process":2,"mediator":"mediator","player_info":"player_info","ui_container_plugin":"ui_container_plugin","underscore":"underscore","zepto":"zepto"}],43:[function(require,module,exports){
+},{"../../base/events":7,"../../base/jst":8,"../../base/styler":9,"_process":2,"mediator":"mediator","player_info":"player_info","ui_container_plugin":"ui_container_plugin","underscore":"underscore","zepto":"zepto"}],42:[function(require,module,exports){
 "use strict";
 module.exports = require('./spinner_three_bounce');
 
 
-},{"./spinner_three_bounce":44}],44:[function(require,module,exports){
+},{"./spinner_three_bounce":43}],43:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
-var Events = require('../../base/Events');
+var Events = require('../../base/events');
 var SpinnerThreeBouncePlugin = function SpinnerThreeBouncePlugin(options) {
   $traceurRuntime.superCall(this, $SpinnerThreeBouncePlugin.prototype, "constructor", [options]);
   this.template = JST.spinner_three_bounce;
@@ -7097,12 +6878,12 @@ var $SpinnerThreeBouncePlugin = SpinnerThreeBouncePlugin;
 module.exports = SpinnerThreeBouncePlugin;
 
 
-},{"../../base/Events":7,"../../base/jst":9,"../../base/styler":10,"ui_container_plugin":"ui_container_plugin"}],45:[function(require,module,exports){
+},{"../../base/events":7,"../../base/jst":8,"../../base/styler":9,"ui_container_plugin":"ui_container_plugin"}],44:[function(require,module,exports){
 "use strict";
 module.exports = require('./stats');
 
 
-},{"./stats":46}],46:[function(require,module,exports){
+},{"./stats":45}],45:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('container_plugin');
 var $ = require("zepto");
@@ -7198,12 +6979,12 @@ var $StatsPlugin = StatsPlugin;
 module.exports = StatsPlugin;
 
 
-},{"../../base/events":8,"container_plugin":"container_plugin","zepto":"zepto"}],47:[function(require,module,exports){
+},{"../../base/events":7,"container_plugin":"container_plugin","zepto":"zepto"}],46:[function(require,module,exports){
 "use strict";
 module.exports = require('./watermark');
 
 
-},{"./watermark":48}],48:[function(require,module,exports){
+},{"./watermark":47}],47:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
 var Styler = require('../../base/styler');
@@ -7252,7 +7033,7 @@ var $WaterMarkPlugin = WaterMarkPlugin;
 module.exports = WaterMarkPlugin;
 
 
-},{"../../base/events":8,"../../base/jst":9,"../../base/styler":10,"ui_container_plugin":"ui_container_plugin"}],"base_object":[function(require,module,exports){
+},{"../../base/events":7,"../../base/jst":8,"../../base/styler":9,"ui_container_plugin":"ui_container_plugin"}],"base_object":[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var extend = require('./utils').extend;
@@ -7268,7 +7049,7 @@ BaseObject.extend = extend;
 module.exports = BaseObject;
 
 
-},{"./events":8,"./utils":11,"underscore":"underscore"}],"browser":[function(require,module,exports){
+},{"./events":7,"./utils":10,"underscore":"underscore"}],"browser":[function(require,module,exports){
 "use strict";
 var Browser = function Browser() {};
 ($traceurRuntime.createClass)(Browser, {}, {});
@@ -7313,7 +7094,7 @@ module.exports = ContainerPlugin;
 module.exports = require('./container');
 
 
-},{"./container":12}],"core_plugin":[function(require,module,exports){
+},{"./container":11}],"core_plugin":[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var CorePlugin = function CorePlugin(core) {
@@ -7335,32 +7116,32 @@ module.exports = CorePlugin;
 module.exports = require('./core');
 
 
-},{"./core":15}],"flash":[function(require,module,exports){
+},{"./core":14}],"flash":[function(require,module,exports){
 "use strict";
 module.exports = require('./flash');
 
 
-},{"./flash":26}],"hls":[function(require,module,exports){
+},{"./flash":25}],"hls":[function(require,module,exports){
 "use strict";
 module.exports = require('./hls');
 
 
-},{"./hls":27}],"html5_audio":[function(require,module,exports){
+},{"./hls":26}],"html5_audio":[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_audio');
 
 
-},{"./html5_audio":28}],"html5_video":[function(require,module,exports){
+},{"./html5_audio":27}],"html5_video":[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_video');
 
 
-},{"./html5_video":29}],"media_control":[function(require,module,exports){
+},{"./html5_video":28}],"media_control":[function(require,module,exports){
 "use strict";
 module.exports = require('./media_control');
 
 
-},{"./media_control":22}],"mediator":[function(require,module,exports){
+},{"./media_control":21}],"mediator":[function(require,module,exports){
 "use strict";
 var Events = require('../base/events');
 var events = new Events();
@@ -7389,7 +7170,7 @@ Mediator.stopListening = function(obj, name, callback) {
 module.exports = Mediator;
 
 
-},{"../base/events":8}],"playback":[function(require,module,exports){
+},{"../base/events":7}],"playback":[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var Playback = function Playback(options) {
@@ -7443,7 +7224,7 @@ module.exports = PlayerInfo;
 module.exports = require('./poster');
 
 
-},{"./poster":42}],"ui_container_plugin":[function(require,module,exports){
+},{"./poster":41}],"ui_container_plugin":[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var UIContainerPlugin = function UIContainerPlugin(options) {
@@ -7593,7 +7374,7 @@ UIObject.extend = extend;
 module.exports = UIObject;
 
 
-},{"./utils":11,"base_object":"base_object","underscore":"underscore","zepto":"zepto"}],"underscore":[function(require,module,exports){
+},{"./utils":10,"base_object":"base_object","underscore":"underscore","zepto":"zepto"}],"underscore":[function(require,module,exports){
 //     Underscore.js 1.7.0
 //     http://underscorejs.org
 //     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
