@@ -5,7 +5,7 @@
 var UIContainerPlugin = require('ui_container_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
-var Events = require('../../base/Events');
+var Events = require('../../base/events');
 
 class SpinnerThreeBouncePlugin extends UIContainerPlugin {
   get name() { return 'spinner' }
