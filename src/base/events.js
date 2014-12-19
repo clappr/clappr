@@ -132,6 +132,9 @@ _.each(listenMethods, function(implementation, method) {
   }
 })
 
+// PLAYER EVENTS
+Events.PLAYER_RESIZE = 'player:resize'
+
 // Playback Events
 Events.PLAYBACK_PROGRESS = 'playback:progress'
 Events.PLAYBACK_TIMEUPDATE = 'playback:timeupdate'
@@ -149,6 +152,7 @@ Events.PLAYBACK_MEDIACONTROL_ENABLE = 'playback:mediacontrol:enable'
 Events.PLAYBACK_ENDED = 'playback:ended'
 Events.PLAYBACK_PLAY = 'playback:play'
 Events.PLAYBACK_ERROR = 'playback:error'
+Events.PLAYBACK_STATS_ADD = 'playback:stats:add'
 
 // Container Events
 Events.CONTAINER_PLAYBACKSTATE = 'container:playbackstate'
@@ -175,12 +179,17 @@ Events.CONTAINER_SETTINGSUPDATE = 'container:settingsupdate'
 Events.CONTAINER_HIGHDEFINITIONUPDATE = 'container:highdefinitionupdate'
 Events.CONTAINER_MEDIACONTROL_DISABLE = 'container:mediacontrol:disable'
 Events.CONTAINER_MEDIACONTROL_ENABLE = 'container:mediacontrol:enable'
+Events.CONTAINER_STATS_ADD = 'container:stats:add'
 
 // MediaControl Events
+Events.MEDIACONTROL_RENDERED = 'mediacontrol:rendered'
 Events.MEDIACONTROL_FULLSCREEN = 'mediacontrol:fullscreen'
 Events.MEDIACONTROL_SHOW = 'mediacontrol:show'
 Events.MEDIACONTROL_HIDE = 'mediacontrol:hide'
 Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR = 'mediacontrol:mousemove:seekbar'
 Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR = 'mediacontrol:mouseleave:seekbar'
+Events.MEDIACONTROL_PLAYING = 'mediacontrol:playing'
+Events.MEDIACONTROL_NOTPLAYING = 'mediacontrol:notplaying'
+Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged'
 
 module.exports = Events
