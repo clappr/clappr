@@ -16,7 +16,7 @@ module.exports = window.Clappr;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../package.json":6,"./components/iframe_player":18,"./components/player":22,"mediator":"mediator"}],2:[function(require,module,exports){
+},{"../package.json":6,"./components/iframe_player":19,"./components/player":23,"mediator":"mediator"}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -3724,7 +3724,7 @@ module.exports = mousetrap;
 },{}],6:[function(require,module,exports){
 module.exports={
   "name": "clappr",
-  "version": "0.0.67",
+  "version": "0.0.68",
   "description": "An extensible media player for the web",
   "main": "dist/clappr.min.js",
   "scripts": {
@@ -3745,25 +3745,25 @@ module.exports={
   "homepage": "https://github.com/globocom/clappr",
   "devDependencies": {
     "browserify": "^7.0.1",
-    "chai": "latest",
-    "compass-mixins": "latest",
+    "chai": "1.10.0",
+    "compass-mixins": "0.12.3",
     "dotenv": "^0.4.0",
     "es6ify": "~1.4.0",
     "exorcist": "^0.1.6",
     "express": "^4.6.1",
-    "express-alias": "latest",
+    "express-alias": "0.4.0",
     "glob": "^4.0.2",
     "gulp": "^3.8.1",
-    "clappr-zepto": "latest",
+    "clappr-zepto": "0.0.2",
     "gulp-compressor": "^0.1.0",
-    "gulp-jshint": "latest",
+    "gulp-jshint": "1.9.0",
     "gulp-livereload": "^2.1.0",
     "gulp-minify-css": "~0.3.5",
     "gulp-rename": "^1.2.0",
     "gulp-sass": "1.0.0",
     "gulp-streamify": "0.0.5",
     "gulp-uglify": "^1.0.1",
-    "gulp-util": "latest",
+    "gulp-util": "3.0.1",
     "karma": "^0.12.17",
     "karma-browserify": "^1.0.0",
     "karma-chai": "^0.1.0",
@@ -3778,13 +3778,13 @@ module.exports={
     "karma-sinon-chai": "^0.2.0",
     "mkdirp": "^0.5.0",
     "s3": "^4.1.1",
-    "scp": "latest",
+    "scp": "0.0.3",
     "sinon": "^1.10.2",
     "traceur": "0.0.72",
     "vinyl-source-stream": "^1.0.0",
     "vinyl-transform": "0.0.1",
     "watchify": "^2.0.0",
-    "yargs": "latest"
+    "yargs": "1.3.3"
   },
   "dependencies": {
     "underscore": "1.7.0",
@@ -3957,6 +3957,7 @@ _.each(listenMethods, function(implementation, method) {
     return this;
   };
 });
+Events.PLAYER_RESIZE = 'player:resize';
 Events.PLAYBACK_PROGRESS = 'playback:progress';
 Events.PLAYBACK_TIMEUPDATE = 'playback:timeupdate';
 Events.PLAYBACK_READY = 'playback:ready';
@@ -3973,6 +3974,7 @@ Events.PLAYBACK_MEDIACONTROL_ENABLE = 'playback:mediacontrol:enable';
 Events.PLAYBACK_ENDED = 'playback:ended';
 Events.PLAYBACK_PLAY = 'playback:play';
 Events.PLAYBACK_ERROR = 'playback:error';
+Events.PLAYBACK_STATS_ADD = 'playback:stats:add';
 Events.CONTAINER_PLAYBACKSTATE = 'container:playbackstate';
 Events.CONTAINER_PLAYBACKDVRSTATECHANGED = 'container:dvr';
 Events.CONTAINER_BITRATE = 'container:bitrate';
@@ -3997,10 +3999,239 @@ Events.CONTAINER_SETTINGSUPDATE = 'container:settingsupdate';
 Events.CONTAINER_HIGHDEFINITIONUPDATE = 'container:highdefinitionupdate';
 Events.CONTAINER_MEDIACONTROL_DISABLE = 'container:mediacontrol:disable';
 Events.CONTAINER_MEDIACONTROL_ENABLE = 'container:mediacontrol:enable';
+Events.CONTAINER_STATS_ADD = 'container:stats:add';
+Events.MEDIACONTROL_RENDERED = 'mediacontrol:rendered';
+Events.MEDIACONTROL_FULLSCREEN = 'mediacontrol:fullscreen';
+Events.MEDIACONTROL_SHOW = 'mediacontrol:show';
+Events.MEDIACONTROL_HIDE = 'mediacontrol:hide';
+Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR = 'mediacontrol:mousemove:seekbar';
+Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR = 'mediacontrol:mouseleave:seekbar';
+Events.MEDIACONTROL_PLAYING = 'mediacontrol:playing';
+Events.MEDIACONTROL_NOTPLAYING = 'mediacontrol:notplaying';
+Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged';
 module.exports = Events;
 
 
-},{"../plugins/log":39,"underscore":"underscore"}],8:[function(require,module,exports){
+},{"../plugins/log":40,"underscore":"underscore"}],8:[function(require,module,exports){
+"use strict";
+var _ = require('underscore');
+var Log = require('../plugins/log').getInstance();
+var slice = Array.prototype.slice;
+var Events = function Events() {};
+($traceurRuntime.createClass)(Events, {
+  on: function(name, callback, context) {
+    if (!eventsApi(this, 'on', name, [callback, context]) || !callback)
+      return this;
+    this._events || (this._events = {});
+    var events = this._events[name] || (this._events[name] = []);
+    events.push({
+      callback: callback,
+      context: context,
+      ctx: context || this
+    });
+    return this;
+  },
+  once: function(name, callback, context) {
+    if (!eventsApi(this, 'once', name, [callback, context]) || !callback)
+      return this;
+    var self = this;
+    var once = _.once(function() {
+      self.off(name, once);
+      callback.apply(this, arguments);
+    });
+    once._callback = callback;
+    return this.on(name, once, context);
+  },
+  off: function(name, callback, context) {
+    var retain,
+        ev,
+        events,
+        names,
+        i,
+        l,
+        j,
+        k;
+    if (!this._events || !eventsApi(this, 'off', name, [callback, context]))
+      return this;
+    if (!name && !callback && !context) {
+      this._events = void 0;
+      return this;
+    }
+    names = name ? [name] : _.keys(this._events);
+    for (i = 0, l = names.length; i < l; i++) {
+      name = names[i];
+      events = this._events[name];
+      if (events) {
+        this._events[name] = retain = [];
+        if (callback || context) {
+          for (j = 0, k = events.length; j < k; j++) {
+            ev = events[j];
+            if ((callback && callback !== ev.callback && callback !== ev.callback._callback) || (context && context !== ev.context)) {
+              retain.push(ev);
+            }
+          }
+        }
+        if (!retain.length)
+          delete this._events[name];
+      }
+    }
+    return this;
+  },
+  trigger: function(name) {
+    var klass = arguments[arguments.length - 1];
+    Log.info(klass, name);
+    if (!this._events)
+      return this;
+    var args = slice.call(arguments, 1);
+    if (!eventsApi(this, 'trigger', name, args))
+      return this;
+    var events = this._events[name];
+    var allEvents = this._events.all;
+    if (events)
+      triggerEvents(events, args);
+    if (allEvents)
+      triggerEvents(allEvents, arguments);
+    return this;
+  },
+  stopListening: function(obj, name, callback) {
+    var listeningTo = this._listeningTo;
+    if (!listeningTo)
+      return this;
+    var remove = !name && !callback;
+    if (!callback && typeof name === 'object')
+      callback = this;
+    if (obj)
+      (listeningTo = {})[obj._listenId] = obj;
+    for (var id in listeningTo) {
+      obj = listeningTo[id];
+      obj.off(name, callback, this);
+      if (remove || _.isEmpty(obj._events))
+        delete this._listeningTo[id];
+    }
+    return this;
+  }
+}, {});
+var eventSplitter = /\s+/;
+var eventsApi = function(obj, action, name, rest) {
+  if (!name)
+    return true;
+  if (typeof name === 'object') {
+    for (var key in name) {
+      obj[action].apply(obj, [key, name[key]].concat(rest));
+    }
+    return false;
+  }
+  if (eventSplitter.test(name)) {
+    var names = name.split(eventSplitter);
+    for (var i = 0,
+        l = names.length; i < l; i++) {
+      obj[action].apply(obj, [names[i]].concat(rest));
+    }
+    return false;
+  }
+  return true;
+};
+var triggerEvents = function(events, args) {
+  var ev,
+      i = -1,
+      l = events.length,
+      a1 = args[0],
+      a2 = args[1],
+      a3 = args[2];
+  switch (args.length) {
+    case 0:
+      while (++i < l)
+        (ev = events[i]).callback.call(ev.ctx);
+      return;
+    case 1:
+      while (++i < l)
+        (ev = events[i]).callback.call(ev.ctx, a1);
+      return;
+    case 2:
+      while (++i < l)
+        (ev = events[i]).callback.call(ev.ctx, a1, a2);
+      return;
+    case 3:
+      while (++i < l)
+        (ev = events[i]).callback.call(ev.ctx, a1, a2, a3);
+      return;
+    default:
+      while (++i < l)
+        (ev = events[i]).callback.apply(ev.ctx, args);
+      return;
+  }
+};
+var listenMethods = {
+  listenTo: 'on',
+  listenToOnce: 'once'
+};
+_.each(listenMethods, function(implementation, method) {
+  Events.prototype[method] = function(obj, name, callback) {
+    var listeningTo = this._listeningTo || (this._listeningTo = {});
+    var id = obj._listenId || (obj._listenId = _.uniqueId('l'));
+    listeningTo[id] = obj;
+    if (!callback && typeof name === 'object')
+      callback = this;
+    obj[implementation](name, callback, this);
+    return this;
+  };
+});
+Events.PLAYER_RESIZE = 'player:resize';
+Events.PLAYBACK_PROGRESS = 'playback:progress';
+Events.PLAYBACK_TIMEUPDATE = 'playback:timeupdate';
+Events.PLAYBACK_READY = 'playback:ready';
+Events.PLAYBACK_BUFFERING = 'playback:buffering';
+Events.PLAYBACK_BUFFERFULL = 'playback:bufferfull';
+Events.PLAYBACK_SETTINGSUPDATE = 'playback:settingsupdate';
+Events.PLAYBACK_LOADEDMETADATA = 'playback:loadedmetadata';
+Events.PLAYBACK_HIGHDEFINITIONUPDATE = 'playback:highdefinitionupdate';
+Events.PLAYBACK_BITRATE = 'playback:bitrate';
+Events.PLAYBACK_PLAYBACKSTATE = 'playback:playbackstate';
+Events.PLAYBACK_DVR = 'playback:dvr';
+Events.PLAYBACK_MEDIACONTROL_DISABLE = 'playback:mediacontrol:disable';
+Events.PLAYBACK_MEDIACONTROL_ENABLE = 'playback:mediacontrol:enable';
+Events.PLAYBACK_ENDED = 'playback:ended';
+Events.PLAYBACK_PLAY = 'playback:play';
+Events.PLAYBACK_ERROR = 'playback:error';
+Events.PLAYBACK_STATS_ADD = 'playback:stats:add';
+Events.CONTAINER_PLAYBACKSTATE = 'container:playbackstate';
+Events.CONTAINER_PLAYBACKDVRSTATECHANGED = 'container:dvr';
+Events.CONTAINER_BITRATE = 'container:bitrate';
+Events.CONTAINER_STATS_REPORT = 'container:stats:report';
+Events.CONTAINER_DESTROYED = 'container:destroyed';
+Events.CONTAINER_READY = 'container:ready';
+Events.CONTAINER_ERROR = 'container:error';
+Events.CONTAINER_LOADEDMETADATA = 'container:loadedmetadata';
+Events.CONTAINER_TIMEUPDATE = 'container:timeupdate';
+Events.CONTAINER_PROGRESS = 'container:progress';
+Events.CONTAINER_PLAY = 'container:play';
+Events.CONTAINER_STOP = 'container:stop';
+Events.CONTAINER_PAUSE = 'container:pause';
+Events.CONTAINER_ENDED = 'container:ended';
+Events.CONTAINER_CLICK = 'container:click';
+Events.CONTAINER_SEEK = 'container:seek';
+Events.CONTAINER_VOLUME = 'container:volume';
+Events.CONTAINER_FULLSCREEN = 'container:fullscreen';
+Events.CONTAINER_STATE_BUFFERING = 'container:state:buffering';
+Events.CONTAINER_STATE_BUFFERFULL = 'container:state:bufferfull';
+Events.CONTAINER_SETTINGSUPDATE = 'container:settingsupdate';
+Events.CONTAINER_HIGHDEFINITIONUPDATE = 'container:highdefinitionupdate';
+Events.CONTAINER_MEDIACONTROL_DISABLE = 'container:mediacontrol:disable';
+Events.CONTAINER_MEDIACONTROL_ENABLE = 'container:mediacontrol:enable';
+Events.CONTAINER_STATS_ADD = 'container:stats:add';
+Events.MEDIACONTROL_RENDERED = 'mediacontrol:rendered';
+Events.MEDIACONTROL_FULLSCREEN = 'mediacontrol:fullscreen';
+Events.MEDIACONTROL_SHOW = 'mediacontrol:show';
+Events.MEDIACONTROL_HIDE = 'mediacontrol:hide';
+Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR = 'mediacontrol:mousemove:seekbar';
+Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR = 'mediacontrol:mouseleave:seekbar';
+Events.MEDIACONTROL_PLAYING = 'mediacontrol:playing';
+Events.MEDIACONTROL_NOTPLAYING = 'mediacontrol:notplaying';
+Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged';
+module.exports = Events;
+
+
+},{"../plugins/log":40,"underscore":"underscore"}],9:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 module.exports = {
@@ -4033,7 +4264,7 @@ module.exports = {
 };
 
 
-},{"underscore":"underscore"}],9:[function(require,module,exports){
+},{"underscore":"underscore"}],10:[function(require,module,exports){
 "use strict";
 var $ = require('zepto');
 var _ = require('underscore');
@@ -4045,7 +4276,7 @@ var Styler = {getStyleFor: function(name, options) {
 module.exports = Styler;
 
 
-},{"./jst":8,"underscore":"underscore","zepto":"zepto"}],10:[function(require,module,exports){
+},{"./jst":9,"underscore":"underscore","zepto":"zepto"}],11:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var extend = function(protoProps, staticProps) {
@@ -4135,7 +4366,7 @@ module.exports = {
 };
 
 
-},{"underscore":"underscore"}],11:[function(require,module,exports){
+},{"underscore":"underscore"}],12:[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var Styler = require('../../base/styler');
@@ -4302,7 +4533,7 @@ var $Container = Container;
     this.trigger(Events.CONTAINER_SETTINGSUPDATE);
   },
   highDefinitionUpdate: function() {
-    this.trigger(Events.CONTAINER_HIGHDEFINITIONUPDATES);
+    this.trigger(Events.CONTAINER_HIGHDEFINITIONUPDATE);
   },
   isHighDefinitionInUse: function() {
     return this.playback.isHighDefinitionInUse();
@@ -4325,12 +4556,13 @@ var $Container = Container;
 module.exports = Container;
 
 
-},{"../../base/events":7,"../../base/styler":9,"ui_object":"ui_object","underscore":"underscore"}],12:[function(require,module,exports){
+},{"../../base/events":8,"../../base/styler":10,"ui_object":"ui_object","underscore":"underscore"}],13:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var BaseObject = require('base_object');
 var Container = require('container');
 var $ = require('zepto');
+var Events = require('../../base/events');
 var ContainerFactory = function ContainerFactory(options, loader) {
   $traceurRuntime.superCall(this, $ContainerFactory.prototype, "constructor", [options]);
   this.options = options;
@@ -4362,7 +4594,7 @@ var $ContainerFactory = ContainerFactory;
     var defer = $.Deferred();
     defer.promise(container);
     this.addContainerPlugins(container, source);
-    this.listenToOnce(container, 'container:ready', (function() {
+    this.listenToOnce(container, Events.CONTAINER_READY, (function() {
       return defer.resolve(container);
     }));
     return container;
@@ -4380,12 +4612,12 @@ var $ContainerFactory = ContainerFactory;
 module.exports = ContainerFactory;
 
 
-},{"base_object":"base_object","container":"container","underscore":"underscore","zepto":"zepto"}],13:[function(require,module,exports){
+},{"../../base/events":8,"base_object":"base_object","container":"container","underscore":"underscore","zepto":"zepto"}],14:[function(require,module,exports){
 "use strict";
 module.exports = require('./container_factory');
 
 
-},{"./container_factory":12}],14:[function(require,module,exports){
+},{"./container_factory":13}],15:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('zepto');
@@ -4396,6 +4628,7 @@ var Styler = require('../../base/styler');
 var MediaControl = require('media_control');
 var PlayerInfo = require('player_info');
 var Mediator = require('mediator');
+var Events = require('../../base/events');
 var Core = function Core(options) {
   var $__0 = this;
   $traceurRuntime.superCall(this, $Core.prototype, "constructor", [options]);
@@ -4443,7 +4676,7 @@ var $Core = Core;
     } else {
       this.setPlayerSize();
     }
-    Mediator.trigger('player:resize');
+    Mediator.trigger(Events.PLAYER_RESIZE);
   },
   setFullscreen: function() {
     this.$el.addClass('fullscreen');
@@ -4468,7 +4701,7 @@ var $Core = Core;
     this.$el.css(size);
     PlayerInfo.previousSize = PlayerInfo.currentSize;
     PlayerInfo.currentSize = size;
-    Mediator.trigger('player:resize');
+    Mediator.trigger(Events.PLAYER_RESIZE);
   },
   resolveOnContainersReady: function(containers) {
     var $__0 = this;
@@ -4531,14 +4764,9 @@ var $Core = Core;
     this.containers = _.without(this.containers, container);
   },
   appendContainer: function(container) {
-    this.listenTo(container, 'container:destroyed', this.removeContainer);
+    this.listenTo(container, Events.CONTAINER_DESTROYED, this.removeContainer);
     this.el.appendChild(container.render().el);
     this.containers.push(container);
-  },
-  prependContainer: function(container) {
-    this.listenTo(container, 'container:destroyed', this.removeContainer);
-    this.$el.append(container.render().el);
-    this.containers.unshift(container);
   },
   setupContainers: function(containers) {
     _.map(containers, this.appendContainer, this);
@@ -4557,9 +4785,9 @@ var $Core = Core;
       this.mediaControl.setContainer(container);
     } else {
       this.mediaControl = this.createMediaControl(_.extend({container: container}, this.options));
-      this.listenTo(this.mediaControl, 'mediacontrol:fullscreen', this.toggleFullscreen);
-      this.listenTo(this.mediaControl, 'mediacontrol:show', this.onMediaControlShow.bind(this, true));
-      this.listenTo(this.mediaControl, 'mediacontrol:hide', this.onMediaControlShow.bind(this, false));
+      this.listenTo(this.mediaControl, Events.MEDIACONTROL_FULLSCREEN, this.toggleFullscreen);
+      this.listenTo(this.mediaControl, Events.MEDIACONTROL_SHOW, this.onMediaControlShow.bind(this, true));
+      this.listenTo(this.mediaControl, Events.MEDIACONTROL_HIDE, this.onMediaControlShow.bind(this, false));
     }
   },
   createMediaControl: function(options) {
@@ -4608,7 +4836,7 @@ var $Core = Core;
 module.exports = Core;
 
 
-},{"../../base/styler":9,"../../base/utils":10,"../container_factory":13,"media_control":"media_control","mediator":"mediator","player_info":"player_info","ui_object":"ui_object","underscore":"underscore","zepto":"zepto"}],15:[function(require,module,exports){
+},{"../../base/events":8,"../../base/styler":10,"../../base/utils":11,"../container_factory":14,"media_control":"media_control","mediator":"mediator","player_info":"player_info","ui_object":"ui_object","underscore":"underscore","zepto":"zepto"}],16:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var BaseObject = require('base_object');
@@ -4642,12 +4870,12 @@ var CoreFactory = function CoreFactory(player, loader) {
 module.exports = CoreFactory;
 
 
-},{"base_object":"base_object","core":"core","underscore":"underscore"}],16:[function(require,module,exports){
+},{"base_object":"base_object","core":"core","underscore":"underscore"}],17:[function(require,module,exports){
 "use strict";
 module.exports = require('./core_factory');
 
 
-},{"./core_factory":15}],17:[function(require,module,exports){
+},{"./core_factory":16}],18:[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var $ = require('zepto');
@@ -4696,17 +4924,17 @@ var $IframePlayer = IframePlayer;
 module.exports = IframePlayer;
 
 
-},{"../player":22,"base_object":"base_object","zepto":"zepto"}],18:[function(require,module,exports){
+},{"../player":23,"base_object":"base_object","zepto":"zepto"}],19:[function(require,module,exports){
 "use strict";
 module.exports = require('./iframe_player');
 
 
-},{"./iframe_player":17}],19:[function(require,module,exports){
+},{"./iframe_player":18}],20:[function(require,module,exports){
 "use strict";
 module.exports = require('./loader');
 
 
-},{"./loader":20}],20:[function(require,module,exports){
+},{"./loader":21}],21:[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var _ = require('underscore');
@@ -4760,7 +4988,7 @@ var $Loader = Loader;
 module.exports = Loader;
 
 
-},{"../../playbacks/no_op":29,"../../plugins/background_button":32,"../../plugins/click_to_pause":34,"../../plugins/dvr_controls":36,"../../plugins/google_analytics":38,"../../plugins/spinner_three_bounce":42,"../../plugins/stats":44,"../../plugins/watermark":46,"base_object":"base_object","flash":"flash","hls":"hls","html5_audio":"html5_audio","html5_video":"html5_video","player_info":"player_info","poster":"poster","underscore":"underscore"}],21:[function(require,module,exports){
+},{"../../playbacks/no_op":30,"../../plugins/background_button":33,"../../plugins/click_to_pause":35,"../../plugins/dvr_controls":37,"../../plugins/google_analytics":39,"../../plugins/spinner_three_bounce":43,"../../plugins/stats":45,"../../plugins/watermark":47,"base_object":"base_object","flash":"flash","hls":"hls","html5_audio":"html5_audio","html5_video":"html5_video","player_info":"player_info","poster":"poster","underscore":"underscore"}],22:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('zepto');
@@ -4772,6 +5000,7 @@ var Mousetrap = require('mousetrap');
 var SeekTime = require('../seek_time');
 var Mediator = require('mediator');
 var PlayerInfo = require('player_info');
+var Events = require('../../base/events');
 var MediaControl = function MediaControl(options) {
   var $__0 = this;
   $traceurRuntime.superCall(this, $MediaControl.prototype, "constructor", [options]);
@@ -4799,7 +5028,7 @@ var MediaControl = function MediaControl(options) {
   $(document).bind('mousemove', (function(event) {
     return $__0.updateDrag(event);
   }));
-  Mediator.on('player:resize', (function() {
+  Mediator.on(Events.PLAYER_RESIZE, (function() {
     return $__0.playerResize();
   }));
 };
@@ -4839,15 +5068,15 @@ var $MediaControl = MediaControl;
     return JST.media_control;
   },
   addEventListeners: function() {
-    this.listenTo(this.container, 'container:play', this.changeTogglePlay);
-    this.listenTo(this.container, 'container:timeupdate', this.updateSeekBar);
-    this.listenTo(this.container, 'container:progress', this.updateProgressBar);
-    this.listenTo(this.container, 'container:settingsupdate', this.settingsUpdate);
-    this.listenTo(this.container, 'container:dvr', this.settingsUpdate);
-    this.listenTo(this.container, 'container:highdefinitionupdate', this.highDefinitionUpdate);
-    this.listenTo(this.container, 'container:mediacontrol:disable', this.disable);
-    this.listenTo(this.container, 'container:mediacontrol:enable', this.enable);
-    this.listenTo(this.container, 'container:ended', this.ended);
+    this.listenTo(this.container, Events.CONTAINER_PLAY, this.changeTogglePlay);
+    this.listenTo(this.container, Events.CONTAINER_TIMEUPDATE, this.updateSeekBar);
+    this.listenTo(this.container, Events.CONTAINER_PROGRESS, this.updateProgressBar);
+    this.listenTo(this.container, Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate);
+    this.listenTo(this.container, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.settingsUpdate);
+    this.listenTo(this.container, Events.CONTAINER_HIGHDEFINITIONUPDATE, this.highDefinitionUpdate);
+    this.listenTo(this.container, Events.CONTAINER_MEDIACONTROL_DISABLE, this.disable);
+    this.listenTo(this.container, Events.CONTAINER_MEDIACONTROL_ENABLE, this.enable);
+    this.listenTo(this.container, Events.CONTAINER_ENDED, this.ended);
   },
   disable: function() {
     this.disabled = true;
@@ -4873,11 +5102,11 @@ var $MediaControl = MediaControl;
     if (this.container.isPlaying()) {
       this.$playPauseToggle.removeClass('paused').addClass('playing');
       this.$playStopToggle.removeClass('stopped').addClass('playing');
-      this.trigger('mediacontrol:playing');
+      this.trigger(Events.MEDIACONTROL_PLAYING);
     } else {
       this.$playPauseToggle.removeClass('playing').addClass('paused');
       this.$playStopToggle.removeClass('playing').addClass('stopped');
-      this.trigger('mediacontrol:notplaying');
+      this.trigger(Events.MEDIACONTROL_NOTPLAYING);
     }
   },
   mousemoveOnSeekBar: function(event) {
@@ -4885,10 +5114,10 @@ var $MediaControl = MediaControl;
       var offsetX = event.pageX - this.$seekBarContainer.offset().left - (this.$seekBarHover.width() / 2);
       this.$seekBarHover.css({left: offsetX});
     }
-    this.trigger('mediacontrol:mousemove:seekbar', event);
+    this.trigger(Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR, event);
   },
   mouseleaveOnSeekBar: function(event) {
-    this.trigger('mediacontrol:mouseleave:seekbar', event);
+    this.trigger(Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR, event);
   },
   playerResize: function() {
     if (Utils.Fullscreen.isFullscreen()) {
@@ -4987,7 +5216,7 @@ var $MediaControl = MediaControl;
     }
   },
   toggleFullscreen: function() {
-    this.trigger('mediacontrol:fullscreen', this.name);
+    this.trigger(Events.MEDIACONTROL_FULLSCREEN, this.name);
     this.container.fullscreen();
     this.resetKeepVisible();
   },
@@ -4997,12 +5226,12 @@ var $MediaControl = MediaControl;
     this.changeTogglePlay();
     this.addEventListeners();
     this.settingsUpdate();
-    this.container.trigger('container:dvr', this.container.isDvrInUse());
+    this.container.trigger(Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.container.isDvrInUse());
     this.container.setVolume(this.currentVolume);
     if (this.container.mediaControlDisabled) {
       this.disable();
     }
-    this.trigger("mediacontrol:containerchanged");
+    this.trigger(Events.MEDIACONTROL_CONTAINERCHANGED);
   },
   showVolumeBar: function() {
     if (this.hideVolumeId) {
@@ -5078,7 +5307,7 @@ var $MediaControl = MediaControl;
     if (!event || (event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY) || navigator.userAgent.match(/firefox/i)) {
       clearTimeout(this.hideId);
       this.$el.show();
-      this.trigger('mediacontrol:show', this.name);
+      this.trigger(Events.MEDIACONTROL_SHOW, this.name);
       this.$el.removeClass('media-control-hide');
       this.hideId = setTimeout((function() {
         return $__0.hide();
@@ -5100,7 +5329,7 @@ var $MediaControl = MediaControl;
         return $__0.hide();
       }), timeout);
     } else {
-      this.trigger('mediacontrol:hide', this.name);
+      this.trigger(Events.MEDIACONTROL_HIDE, this.name);
       this.$el.addClass('media-control-hide');
       this.hideVolumeBar();
     }
@@ -5136,7 +5365,7 @@ var $MediaControl = MediaControl;
   setVolumeLevel: function(value) {
     var $__0 = this;
     if (!this.container.isReady) {
-      this.listenToOnce(this.container, "container:ready", (function() {
+      this.listenToOnce(this.container, Events.CONTAINER_READY, (function() {
         return $__0.setVolumeLevel(value);
       }));
     } else {
@@ -5208,7 +5437,7 @@ var $MediaControl = MediaControl;
     }));
     this.parseColors();
     this.seekTime.render();
-    this.trigger('mediacontrol:rendered');
+    this.trigger(Events.MEDIACONTROL_RENDERED);
     return this;
   },
   destroy: function() {
@@ -5220,7 +5449,7 @@ var $MediaControl = MediaControl;
 module.exports = MediaControl;
 
 
-},{"../../base/jst":8,"../../base/styler":9,"../../base/utils":10,"../seek_time":23,"mediator":"mediator","mousetrap":4,"player_info":"player_info","ui_object":"ui_object","underscore":"underscore","zepto":"zepto"}],22:[function(require,module,exports){
+},{"../../base/events":8,"../../base/jst":9,"../../base/styler":10,"../../base/utils":11,"../seek_time":24,"mediator":"mediator","mousetrap":4,"player_info":"player_info","ui_object":"ui_object","underscore":"underscore","zepto":"zepto"}],23:[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var CoreFactory = require('./core_factory');
@@ -5315,17 +5544,18 @@ var $Player = Player;
 module.exports = Player;
 
 
-},{"./core_factory":16,"./loader":19,"base_object":"base_object","player_info":"player_info","scrollmonitor":5,"underscore":"underscore"}],23:[function(require,module,exports){
+},{"./core_factory":17,"./loader":20,"base_object":"base_object","player_info":"player_info","scrollmonitor":5,"underscore":"underscore"}],24:[function(require,module,exports){
 "use strict";
 module.exports = require('./seek_time');
 
 
-},{"./seek_time":24}],24:[function(require,module,exports){
+},{"./seek_time":25}],25:[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var formatTime = require('../../base/utils').formatTime;
+var Events = require('../../base/events');
 var SeekTime = function SeekTime(mediaControl) {
   $traceurRuntime.superCall(this, $SeekTime.prototype, "constructor", []);
   this.mediaControl = mediaControl;
@@ -5346,8 +5576,8 @@ var $SeekTime = SeekTime;
     };
   },
   addEventListeners: function() {
-    this.listenTo(this.mediaControl, 'mediacontrol:mousemove:seekbar', this.showTime);
-    this.listenTo(this.mediaControl, 'mediacontrol:mouseleave:seekbar', this.hideTime);
+    this.listenTo(this.mediaControl, Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR, this.showTime);
+    this.listenTo(this.mediaControl, Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR, this.hideTime);
   },
   showTime: function(event) {
     var offset = event.pageX - this.mediaControl.$seekBarContainer.offset().left;
@@ -5383,7 +5613,7 @@ var $SeekTime = SeekTime;
 module.exports = SeekTime;
 
 
-},{"../../base/jst":8,"../../base/styler":9,"../../base/utils":10,"ui_object":"ui_object"}],25:[function(require,module,exports){
+},{"../../base/events":8,"../../base/jst":9,"../../base/styler":10,"../../base/utils":11,"ui_object":"ui_object"}],26:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
 var Styler = require('../../base/styler');
@@ -5394,6 +5624,7 @@ var $ = require('zepto');
 var Browser = require('browser');
 var Mousetrap = require('mousetrap');
 var seekStringToSeconds = require('../../base/utils').seekStringToSeconds;
+var Events = require('../../base/events');
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>';
 var Flash = function Flash(options) {
   $traceurRuntime.superCall(this, $Flash.prototype, "constructor", [options]);
@@ -5436,7 +5667,7 @@ var $Flash = Flash;
       this.autoPlay && this.play();
     }
     $('<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%" />').insertAfter(this.$el);
-    this.trigger('playback:ready', this.name);
+    this.trigger(Events.PLAYBACK_READY, this.name);
   },
   getPlaybackType: function() {
     return this.isRTMP ? 'live' : 'vod';
@@ -5450,7 +5681,7 @@ var $Flash = Flash;
     return false;
   },
   updateTime: function() {
-    this.trigger('playback:timeupdate', this.el.getPosition(), this.el.getDuration(), this.name);
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, this.el.getPosition(), this.el.getDuration(), this.name);
   },
   addListeners: function() {
     Mediator.on(this.uniqueId + ':progress', this.progress, this);
@@ -5481,22 +5712,22 @@ var $Flash = Flash;
     if (this.currentState === "PAUSED") {
       return;
     } else if (this.currentState !== "PLAYING_BUFFERING" && this.el.getState() === "PLAYING_BUFFERING") {
-      this.trigger('playback:buffering', this.name);
+      this.trigger(Events.PLAYBACK_BUFFERING, this.name);
       this.currentState = "PLAYING_BUFFERING";
     } else if (this.currentState === "PLAYING_BUFFERING" && this.el.getState() === "PLAYING") {
-      this.trigger('playback:bufferfull', this.name);
+      this.trigger(Events.PLAYBACK_BUFFERFULL, this.name);
       this.currentState = "PLAYING";
     } else if (this.el.getState() === "IDLE") {
       this.currentState = "IDLE";
     } else if (this.el.getState() === "ENDED") {
-      this.trigger('playback:ended', this.name);
-      this.trigger('playback:timeupdate', 0, this.el.getDuration(), this.name);
+      this.trigger(Events.PLAYBACK_ENDED, this.name);
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.el.getDuration(), this.name);
       this.currentState = "ENDED";
     }
   },
   progress: function() {
     if (this.currentState !== "IDLE" && this.currentState !== "ENDED") {
-      this.trigger('playback:progress', 0, this.el.getBytesLoaded(), this.el.getBytesTotal(), this.name);
+      this.trigger(Events.PLAYBACK_PROGRESS, 0, this.el.getBytesLoaded(), this.el.getBytesTotal(), this.name);
     }
   },
   firstPlay: function() {
@@ -5504,7 +5735,7 @@ var $Flash = Flash;
     this.currentState = "PLAYING";
     if (_.isFunction(this.el.playerPlay)) {
       this.el.playerPlay(this.src);
-      this.listenToOnce(this, 'playback:bufferfull', (function() {
+      this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, (function() {
         return $__0.checkInitialSeek();
       }));
     }
@@ -5520,14 +5751,14 @@ var $Flash = Flash;
     } else if (this.el.getState() !== 'PLAYING') {
       this.firstPlay();
     }
-    this.trigger('playback:play', this.name);
+    this.trigger(Events.PLAYBACK_PLAY, this.name);
   },
   volume: function(value) {
     var $__0 = this;
     if (this.isReady) {
       this.el.playerVolume(value);
     } else {
-      this.listenToOnce(this, 'playback:bufferfull', (function() {
+      this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, (function() {
         return $__0.volume(value);
       }));
     }
@@ -5538,7 +5769,7 @@ var $Flash = Flash;
   },
   stop: function() {
     this.el.playerStop();
-    this.trigger('playback:timeupdate', 0, this.name);
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.name);
   },
   isPlaying: function() {
     return !!(this.isReady && this.currentState === "PLAYING");
@@ -5552,7 +5783,7 @@ var $Flash = Flash;
   },
   seekSeconds: function(seekTo) {
     this.el.playerSeek(seekTo);
-    this.trigger('playback:timeupdate', seekTo, this.el.getDuration(), this.name);
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, seekTo, this.el.getDuration(), this.name);
     if (this.currentState === "PAUSED") {
       this.el.playerPause();
     }
@@ -5597,7 +5828,7 @@ Flash.canPlay = function(resource) {
 module.exports = Flash;
 
 
-},{"../../base/jst":8,"../../base/styler":9,"../../base/utils":10,"browser":"browser","mediator":"mediator","mousetrap":4,"playback":"playback","underscore":"underscore","zepto":"zepto"}],26:[function(require,module,exports){
+},{"../../base/events":8,"../../base/jst":9,"../../base/styler":10,"../../base/utils":11,"browser":"browser","mediator":"mediator","mousetrap":4,"playback":"playback","underscore":"underscore","zepto":"zepto"}],27:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
 var Styler = require('../../base/styler');
@@ -5605,6 +5836,7 @@ var JST = require('../../base/jst');
 var _ = require("underscore");
 var Mediator = require('mediator');
 var Browser = require('browser');
+var Events = require('../../base/events');
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" class="hls-playback" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls="" width="100%" height="100%"><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>';
 var HLS = function HLS(options) {
   $traceurRuntime.superCall(this, $HLS.prototype, "constructor", [options]);
@@ -5673,7 +5905,7 @@ var $HLS = HLS;
     this.el.width = "100%";
     this.el.height = "100%";
     this.isReady = true;
-    this.trigger('playback:ready', this.name);
+    this.trigger(Events.PLAYBACK_READY, this.name);
     this.currentState = "IDLE";
     this.setFlashSettings();
     this.autoPlay && this.play();
@@ -5685,8 +5917,8 @@ var $HLS = HLS;
   },
   updateHighDefinition: function(isHD) {
     this.highDefinition = (isHD === "true");
-    this.trigger('playback:highdefinitionupdate');
-    this.trigger('playback:bitrate', {'bitrate': this.getCurrentBitrate()});
+    this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE);
+    this.trigger(Events.PLAYBACK_BITRATE, {'bitrate': this.getCurrentBitrate()});
   },
   updateTime: function() {
     var duration = this.getDuration();
@@ -5699,12 +5931,12 @@ var $HLS = HLS;
     }
     if (this.dvrEnabled !== previousDVRStatus) {
       this.updateSettings();
-      this.trigger('playback:settingsupdate', this.name);
+      this.trigger(Events.PLAYBACK_SETTINGSUPDATE, this.name);
     }
     if (livePlayback && (!this.dvrEnabled || !this.dvrInUse)) {
       position = duration;
     }
-    this.trigger('playback:timeupdate', position, duration, this.name);
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, position, duration, this.name);
   },
   play: function() {
     if (this.currentState === 'PAUSED') {
@@ -5712,7 +5944,7 @@ var $HLS = HLS;
     } else if (this.currentState !== "PLAYING") {
       this.firstPlay();
     }
-    this.trigger('playback:play', this.name);
+    this.trigger(Events.PLAYBACK_PLAY, this.name);
   },
   getPlaybackType: function() {
     return this.playbackType ? this.playbackType : null;
@@ -5737,18 +5969,18 @@ var $HLS = HLS;
   setPlaybackState: function(state) {
     var bufferLength = this.el.globoGetbufferLength();
     if (state === "PLAYING_BUFFERING" && bufferLength < 1) {
-      this.trigger('playback:buffering', this.name);
+      this.trigger(Events.PLAYBACK_BUFFERING, this.name);
       this.updateCurrentState(state);
     } else if (state === "PLAYING") {
       if (_.contains(["PLAYING_BUFFERING", "PAUSED", "IDLE"], this.currentState)) {
-        this.trigger('playback:bufferfull', this.name);
+        this.trigger(Events.PLAYBACK_BUFFERFULL, this.name);
         this.updateCurrentState(state);
       }
     } else if (state === "PAUSED") {
       this.updateCurrentState(state);
     } else if (state === "IDLE") {
-      this.trigger('playback:ended', this.name);
-      this.trigger('playback:timeupdate', 0, this.el.globoGetDuration(), this.name);
+      this.trigger(Events.PLAYBACK_ENDED, this.name);
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.el.globoGetDuration(), this.name);
       this.updateCurrentState(state);
     }
     this.lastBufferLength = bufferLength;
@@ -5767,7 +5999,7 @@ var $HLS = HLS;
         this.stopReportingProgress();
       }
     }
-    this.trigger('playback:playbackstate');
+    this.trigger(Events.PLAYBACK_PLAYBACKSTATE);
   },
   startReportingProgress: function() {
     if (!this.reportingProgress) {
@@ -5780,7 +6012,7 @@ var $HLS = HLS;
   },
   onFragmentLoaded: function() {
     var buffered = this.el.globoGetPosition() + this.el.globoGetbufferLength();
-    this.trigger('playback:progress', this.el.globoGetPosition(), buffered, this.getDuration(), this.name);
+    this.trigger(Events.PLAYBACK_PROGRESS, this.el.globoGetPosition(), buffered, this.getDuration(), this.name);
   },
   firstPlay: function() {
     this.el.globoPlayerLoad(this.src);
@@ -5791,7 +6023,7 @@ var $HLS = HLS;
     if (this.isReady) {
       this.el.globoPlayerVolume(value);
     } else {
-      this.listenToOnce(this, 'playback:bufferfull', (function() {
+      this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, (function() {
         return $__0.volume(value);
       }));
     }
@@ -5806,7 +6038,7 @@ var $HLS = HLS;
   },
   stop: function() {
     this.el.globoPlayerStop();
-    this.trigger('playback:timeupdate', 0, this.name);
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.name);
   },
   isPlaying: function() {
     if (this.currentState) {
@@ -5834,22 +6066,22 @@ var $HLS = HLS;
       this.updateDvr(dvrInUse);
     }
     this.el.globoPlayerSeek(time);
-    this.trigger('playback:timeupdate', time, duration, this.name);
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, time, duration, this.name);
   },
   updateDvr: function(dvrInUse) {
     var previousDvrInUse = !!this.dvrInUse;
     this.dvrInUse = dvrInUse;
     if (this.dvrInUse !== previousDvrInUse) {
       this.updateSettings();
-      this.trigger('playback:dvr', this.dvrInUse);
-      this.trigger('playback:stats:add', {'dvr': this.dvrInUse});
+      this.trigger(Events.PLAYBACK_DVR, this.dvrInUse);
+      this.trigger(Events.PLAYBACK_STATS_ADD, {'dvr': this.dvrInUse});
     }
   },
   flashPlaybackError: function() {
-    this.trigger('playback:stop');
+    this.trigger(Events.PLAYBACK_STOP);
   },
   timeUpdate: function(time, duration) {
-    this.trigger('playback:timeupdate', time, duration, this.name);
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, time, duration, this.name);
   },
   destroy: function() {
     this.stopListening();
@@ -5910,9 +6142,10 @@ HLS.canPlay = function(resource) {
 module.exports = HLS;
 
 
-},{"../../base/jst":8,"../../base/styler":9,"browser":"browser","mediator":"mediator","playback":"playback","underscore":"underscore"}],27:[function(require,module,exports){
+},{"../../base/events":8,"../../base/jst":9,"../../base/styler":10,"browser":"browser","mediator":"mediator","playback":"playback","underscore":"underscore"}],28:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
+var Events = require('../../base/events');
 var HTML5Audio = function HTML5Audio(params) {
   $traceurRuntime.superCall(this, $HTML5Audio.prototype, "constructor", [params]);
   this.el.src = params.src;
@@ -5939,18 +6172,18 @@ var $HTML5Audio = HTML5Audio;
     };
   },
   bindEvents: function() {
-    this.listenTo(this.container, 'container:play', this.play);
-    this.listenTo(this.container, 'container:pause', this.pause);
-    this.listenTo(this.container, 'container:seek', this.seek);
-    this.listenTo(this.container, 'container:volume', this.volume);
-    this.listenTo(this.container, 'container:stop', this.stop);
+    this.listenTo(this.container, Events.CONTAINER_PLAY, this.play);
+    this.listenTo(this.container, Events.CONTAINER_PAUSE, this.pause);
+    this.listenTo(this.container, Events.CONTAINER_SEEK, this.seek);
+    this.listenTo(this.container, Events.CONTAINER_VOLUME, this.volume);
+    this.listenTo(this.container, Events.CONTAINER_STOP, this.stop);
   },
   getPlaybackType: function() {
     return "aod";
   },
   play: function() {
     this.el.play();
-    this.trigger('playback:play');
+    this.trigger(Events.PLAYBACK_PLAY);
   },
   pause: function() {
     this.el.pause();
@@ -5972,7 +6205,7 @@ var $HTML5Audio = HTML5Audio;
     return !!this.el.volume;
   },
   ended: function() {
-    this.trigger('container:timeupdate', 0);
+    this.trigger(Events.CONTAINER_TIMEUPDATE, 0);
   },
   seek: function(seekBarValue) {
     var time = this.el.duration * (seekBarValue / 100);
@@ -5988,7 +6221,7 @@ var $HTML5Audio = HTML5Audio;
     return !this.el.paused && !this.el.ended;
   },
   timeUpdated: function() {
-    this.trigger('playback:timeupdate', this.el.currentTime, this.el.duration, this.name);
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, this.el.currentTime, this.el.duration, this.name);
   },
   render: function() {
     return this;
@@ -6000,7 +6233,7 @@ HTML5Audio.canPlay = function(resource) {
 module.exports = HTML5Audio;
 
 
-},{"playback":"playback"}],28:[function(require,module,exports){
+},{"../../base/events":8,"playback":"playback"}],29:[function(require,module,exports){
 (function (process){
 "use strict";
 var Playback = require('playback');
@@ -6009,6 +6242,7 @@ var Styler = require('../../base/styler');
 var Browser = require('browser');
 var Mousetrap = require('mousetrap');
 var seekStringToSeconds = require('../../base/utils').seekStringToSeconds;
+var Events = require('../../base/events');
 var _ = require('underscore');
 var HTML5Video = function HTML5Video(options) {
   $traceurRuntime.superCall(this, $HTML5Video.prototype, "constructor", [options]);
@@ -6065,8 +6299,8 @@ var $HTML5Video = HTML5Video;
     }.bind(this));
   },
   loadedMetadata: function(e) {
-    this.trigger('playback:loadedmetadata', e.target.duration);
-    this.trigger('playback:settingsupdate');
+    this.trigger(Events.PLAYBACK_LOADEDMETADATA, e.target.duration);
+    this.trigger(Events.PLAYBACK_SETTINGSUPDATE);
     this.checkInitialSeek();
   },
   getPlaybackType: function() {
@@ -6077,9 +6311,9 @@ var $HTML5Video = HTML5Video;
   },
   play: function() {
     this.el.play();
-    this.trigger('playback:play');
+    this.trigger(Events.PLAYBACK_PLAY);
     if (this.isHLS) {
-      this.trigger('playback:timeupdate', 1, 1, this.name);
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, 1, 1, this.name);
     }
   },
   pause: function() {
@@ -6107,17 +6341,17 @@ var $HTML5Video = HTML5Video;
     return !this.el.paused && !this.el.ended;
   },
   ended: function() {
-    this.trigger('playback:ended', this.name);
-    this.trigger('playback:timeupdate', 0, this.el.duration, this.name);
+    this.trigger(Events.PLAYBACK_ENDED, this.name);
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.el.duration, this.name);
   },
   stalled: function() {
     if (this.getPlaybackType() === 'vod' && this.el.readyState < this.el.HAVE_FUTURE_DATA) {
-      this.trigger('playback:buffering', this.name);
+      this.trigger(Events.PLAYBACK_BUFFERING, this.name);
     }
   },
   waiting: function() {
     if (this.el.readyState < this.el.HAVE_FUTURE_DATA) {
-      this.trigger('playback:buffering', this.name);
+      this.trigger(Events.PLAYBACK_BUFFERING, this.name);
     }
   },
   bufferFull: function() {
@@ -6127,7 +6361,7 @@ var $HTML5Video = HTML5Video;
     } else {
       this.el.poster = '';
     }
-    this.trigger('playback:bufferfull', this.name);
+    this.trigger(Events.PLAYBACK_BUFFERFULL, this.name);
   },
   destroy: function() {
     this.stop();
@@ -6153,7 +6387,7 @@ var $HTML5Video = HTML5Video;
   },
   timeUpdated: function() {
     if (this.getPlaybackType() !== 'live') {
-      this.trigger('playback:timeupdate', this.el.currentTime, this.el.duration, this.name);
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, this.el.currentTime, this.el.duration, this.name);
     }
   },
   progress: function() {
@@ -6166,7 +6400,7 @@ var $HTML5Video = HTML5Video;
         break;
       }
     }
-    this.trigger('playback:progress', this.el.buffered.start(bufferedPos), this.el.buffered.end(bufferedPos), this.el.duration, this.name);
+    this.trigger(Events.PLAYBACK_PROGRESS, this.el.buffered.start(bufferedPos), this.el.buffered.end(bufferedPos), this.el.duration, this.name);
   },
   typeFor: function(src) {
     return (src.indexOf('.m3u8') > 0) ? 'application/vnd.apple.mpegurl' : 'video/mp4';
@@ -6179,7 +6413,7 @@ var $HTML5Video = HTML5Video;
       type: this.typeFor(this.src)
     }));
     this.$el.append(style);
-    this.trigger('playback:ready', this.name);
+    this.trigger(Events.PLAYBACK_READY, this.name);
     process.nextTick((function() {
       return $__0.options.autoPlay && $__0.play();
     }));
@@ -6212,12 +6446,12 @@ module.exports = HTML5Video;
 
 
 }).call(this,require('_process'))
-},{"../../base/jst":8,"../../base/styler":9,"../../base/utils":10,"_process":2,"browser":"browser","mousetrap":4,"playback":"playback","underscore":"underscore"}],29:[function(require,module,exports){
+},{"../../base/events":8,"../../base/jst":9,"../../base/styler":10,"../../base/utils":11,"_process":2,"browser":"browser","mousetrap":4,"playback":"playback","underscore":"underscore"}],30:[function(require,module,exports){
 "use strict";
 module.exports = require('./no_op');
 
 
-},{"./no_op":30}],30:[function(require,module,exports){
+},{"./no_op":31}],31:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
 var JST = require('../../base/jst');
@@ -6249,12 +6483,13 @@ NoOp.canPlay = (function(source) {
 module.exports = NoOp;
 
 
-},{"../../base/jst":8,"../../base/styler":9,"playback":"playback"}],31:[function(require,module,exports){
+},{"../../base/jst":9,"../../base/styler":10,"playback":"playback"}],32:[function(require,module,exports){
 (function (process){
 "use strict";
 var UICorePlugin = require('ui_core_plugin');
 var JST = require('../../base/jst');
 var Styler = require('../../base/styler');
+var Events = require('../../base/events');
 var Browser = require('browser');
 var Mediator = require('mediator');
 var PlayerInfo = require('player_info');
@@ -6281,17 +6516,17 @@ var $BackgroundButton = BackgroundButton;
     return {'click .background-button-icon': 'click'};
   },
   bindEvents: function() {
-    this.listenTo(this.core.mediaControl.container, 'container:state:buffering', this.hide);
-    this.listenTo(this.core.mediaControl.container, 'container:state:bufferfull', this.show);
-    this.listenTo(this.core.mediaControl, 'mediacontrol:rendered', this.settingsUpdate);
-    this.listenTo(this.core.mediaControl, 'mediacontrol:show', this.updateSize);
-    this.listenTo(this.core.mediaControl, 'mediacontrol:playing', this.playing);
-    this.listenTo(this.core.mediaControl, 'mediacontrol:notplaying', this.notplaying);
-    Mediator.on('player:resize', this.updateSize, this);
+    this.listenTo(this.core.mediaControl.container, Events.CONTAINER_STATE_BUFFERING, this.hide);
+    this.listenTo(this.core.mediaControl.container, Events.CONTAINER_STATE_BUFFERFULL, this.show);
+    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_RENDERED, this.settingsUpdate);
+    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_SHOW, this.updateSize);
+    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_PLAYING, this.playing);
+    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_NOTPLAYING, this.notplaying);
+    Mediator.on(Events.PLAYER_RESIZE, this.updateSize, this);
   },
   stopListening: function() {
     $traceurRuntime.superCall(this, $BackgroundButton.prototype, "stopListening", []);
-    Mediator.off('player:resize', this.updateSize, this);
+    Mediator.off(Events.PLAYER_RESIZE, this.updateSize, this);
   },
   settingsUpdate: function() {
     this.stopListening();
@@ -6307,9 +6542,9 @@ var $BackgroundButton = BackgroundButton;
       this.$el.remove();
       this.$playPauseButton.show();
       this.$playStopButton.show();
-      this.listenTo(this.core.mediaControl.container, 'container:settingsupdate', this.settingsUpdate);
-      this.listenTo(this.core.mediaControl.container, 'container:dvr', this.settingsUpdate);
-      this.listenTo(this.core.mediaControl, 'mediacontrol:containerchanged', this.settingsUpdate);
+      this.listenTo(this.core.mediaControl.container, Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate);
+      this.listenTo(this.core.mediaControl.container, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.settingsUpdate);
+      this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.settingsUpdate);
     }
   },
   shouldRender: function() {
@@ -6388,14 +6623,15 @@ module.exports = BackgroundButton;
 
 
 }).call(this,require('_process'))
-},{"../../base/jst":8,"../../base/styler":9,"_process":2,"browser":"browser","mediator":"mediator","player_info":"player_info","ui_core_plugin":"ui_core_plugin"}],32:[function(require,module,exports){
+},{"../../base/events":8,"../../base/jst":9,"../../base/styler":10,"_process":2,"browser":"browser","mediator":"mediator","player_info":"player_info","ui_core_plugin":"ui_core_plugin"}],33:[function(require,module,exports){
 "use strict";
 module.exports = require('./background_button');
 
 
-},{"./background_button":31}],33:[function(require,module,exports){
+},{"./background_button":32}],34:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('container_plugin');
+var Events = require('../../base/events');
 var ClickToPausePlugin = function ClickToPausePlugin() {
   $traceurRuntime.defaultSuperCall(this, $ClickToPausePlugin.prototype, arguments);
 };
@@ -6405,8 +6641,8 @@ var $ClickToPausePlugin = ClickToPausePlugin;
     return 'click_to_pause';
   },
   bindEvents: function() {
-    this.listenTo(this.container, 'container:click', this.click);
-    this.listenTo(this.container, 'container:settingsupdate', this.settingsUpdate);
+    this.listenTo(this.container, Events.CONTAINER_CLICK, this.click);
+    this.listenTo(this.container, Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate);
   },
   click: function() {
     if (this.container.getPlaybackType() !== 'live' || this.container.isDvrEnabled()) {
@@ -6427,16 +6663,17 @@ var $ClickToPausePlugin = ClickToPausePlugin;
 module.exports = ClickToPausePlugin;
 
 
-},{"container_plugin":"container_plugin"}],34:[function(require,module,exports){
+},{"../../base/events":8,"container_plugin":"container_plugin"}],35:[function(require,module,exports){
 "use strict";
 module.exports = require('./click_to_pause');
 
 
-},{"./click_to_pause":33}],35:[function(require,module,exports){
+},{"./click_to_pause":34}],36:[function(require,module,exports){
 "use strict";
 var UICorePlugin = require('ui_core_plugin');
 var JST = require('../../base/jst');
 var Styler = require('../../base/styler');
+var Events = require('../../base/events');
 var DVRControls = function DVRControls(core) {
   $traceurRuntime.superCall(this, $DVRControls.prototype, "constructor", [core]);
   this.core = core;
@@ -6460,8 +6697,8 @@ var $DVRControls = DVRControls;
     };
   },
   bindEvents: function() {
-    this.listenTo(this.core.mediaControl, 'mediacontrol:rendered', this.settingsUpdate);
-    this.listenTo(this.core.mediaControl.container, 'container:dvr', this.dvrChanged);
+    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_RENDERED, this.settingsUpdate);
+    this.listenTo(this.core.mediaControl.container, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.dvrChanged);
   },
   dvrChanged: function(dvrEnabled) {
     this.settingsUpdate();
@@ -6515,14 +6752,15 @@ var $DVRControls = DVRControls;
 module.exports = DVRControls;
 
 
-},{"../../base/jst":8,"../../base/styler":9,"ui_core_plugin":"ui_core_plugin"}],36:[function(require,module,exports){
+},{"../../base/events":8,"../../base/jst":9,"../../base/styler":10,"ui_core_plugin":"ui_core_plugin"}],37:[function(require,module,exports){
 "use strict";
 module.exports = require('./dvr_controls');
 
 
-},{"./dvr_controls":35}],37:[function(require,module,exports){
+},{"./dvr_controls":36}],38:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('container_plugin');
+var Events = require('../../base/events');
 var GoogleAnalytics = function GoogleAnalytics(options) {
   $traceurRuntime.superCall(this, $GoogleAnalytics.prototype, "constructor", [options]);
   if (options.gaAccount) {
@@ -6554,23 +6792,24 @@ var $GoogleAnalytics = GoogleAnalytics;
   },
   addEventListeners: function() {
     var $__0 = this;
-    this.listenTo(this.container, 'container:play', this.onPlay);
-    this.listenTo(this.container, 'container:pause', this.onPause);
-    this.listenTo(this.container, 'container:stop', this.onStop);
-    this.listenTo(this.container, 'container:ended', this.onEnded);
-    this.listenTo(this.container, 'container:state:buffering', this.onBuffering);
-    this.listenTo(this.container, 'container:state:bufferfull', this.onBufferFull);
-    this.listenTo(this.container, 'container:error', this.onError);
-    this.listenTo(this.container, 'container:playbackstate', this.onPlaybackChanged);
-    this.listenTo(this.container, 'container:volume', (function(event) {
+    this.listenTo(this.container, Events.CONTAINER_PLAY, this.onPlay);
+    this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop);
+    this.listenTo(this.container, Events.CONTAINER_PAUSE, this.onPause);
+    this.listenTo(this.container, Events.CONTAINER_ENDED, this.onEnded);
+    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering);
+    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferFull);
+    this.listenTo(this.container, Events.CONTAINER_ENDED, this.onEnded);
+    this.listenTo(this.container, Events.CONTAINER_ERROR, this.onError);
+    this.listenTo(this.container, Events.CONTAINER_PLAYBACKSTATE, this.onPlaybackChanged);
+    this.listenTo(this.container, Events.CONTAINER_VOLUME, (function(event) {
       return $__0.onVolumeChanged(event);
     }));
-    this.listenTo(this.container, 'container:seek', (function(event) {
+    this.listenTo(this.container, Events.CONTAINER_SEEK, (function(event) {
       return $__0.onSeek(event);
     }));
-    this.listenTo(this.container, 'container:fullscreen', this.onFullscreen);
-    this.listenTo(this.container, 'container:highdefinitionupdate', this.onHD);
-    this.listenTo(this.container.playback, 'playback:dvr', this.onDVR);
+    this.listenTo(this.container, Events.CONTAINER_FULL_SCREEN, this.onFullscreen);
+    this.listenTo(this.container, Events.CONTAINER_HIGHDEFINITIONUPDATE, this.onHD);
+    this.listenTo(this.container.playback, Events.PLAYBACK_DVR, this.onDVR);
     _gaq.push([this.trackerName + '_setAccount', this.account]);
   },
   onPlay: function() {
@@ -6628,17 +6867,17 @@ var $GoogleAnalytics = GoogleAnalytics;
 module.exports = GoogleAnalytics;
 
 
-},{"container_plugin":"container_plugin"}],38:[function(require,module,exports){
+},{"../../base/events":8,"container_plugin":"container_plugin"}],39:[function(require,module,exports){
 "use strict";
 module.exports = require('./google_analytics');
 
 
-},{"./google_analytics":37}],39:[function(require,module,exports){
+},{"./google_analytics":38}],40:[function(require,module,exports){
 "use strict";
 module.exports = require('./log');
 
 
-},{"./log":40}],40:[function(require,module,exports){
+},{"./log":41}],41:[function(require,module,exports){
 "use strict";
 var Mousetrap = require('mousetrap');
 var _ = require('underscore');
@@ -6690,12 +6929,13 @@ Log.getInstance = function() {
 module.exports = Log;
 
 
-},{"mousetrap":4,"underscore":"underscore"}],41:[function(require,module,exports){
+},{"mousetrap":4,"underscore":"underscore"}],42:[function(require,module,exports){
 (function (process){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
+var Events = require('../../base/events');
 var Mediator = require('mediator');
 var PlayerInfo = require('player_info');
 var $ = require('zepto');
@@ -6727,15 +6967,15 @@ var $PosterPlugin = PosterPlugin;
     return {'click': 'clicked'};
   },
   bindEvents: function() {
-    this.listenTo(this.container, 'container:state:buffering', this.onBuffering);
-    this.listenTo(this.container, 'container:state:bufferfull', this.onBufferfull);
-    this.listenTo(this.container, 'container:stop', this.onStop);
-    this.listenTo(this.container, 'container:ended', this.onStop);
-    Mediator.on('player:resize', this.updateSize, this);
+    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering);
+    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferfull);
+    this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop);
+    this.listenTo(this.container, Events.CONTAINER_ENDED, this.onStop);
+    Mediator.on(Events.PLAYER_RESIZE, this.updateSize, this);
   },
   stopListening: function() {
     $traceurRuntime.superCall(this, $PosterPlugin.prototype, "stopListening", []);
-    Mediator.off('player:resize', this.updateSize, this);
+    Mediator.off(Events.PLAYER_RESIZE, this.updateSize, this);
   },
   onBuffering: function() {
     this.hidePlayButton();
@@ -6806,22 +7046,23 @@ module.exports = PosterPlugin;
 
 
 }).call(this,require('_process'))
-},{"../../base/jst":8,"../../base/styler":9,"_process":2,"mediator":"mediator","player_info":"player_info","ui_container_plugin":"ui_container_plugin","underscore":"underscore","zepto":"zepto"}],42:[function(require,module,exports){
+},{"../../base/events":8,"../../base/jst":9,"../../base/styler":10,"_process":2,"mediator":"mediator","player_info":"player_info","ui_container_plugin":"ui_container_plugin","underscore":"underscore","zepto":"zepto"}],43:[function(require,module,exports){
 "use strict";
 module.exports = require('./spinner_three_bounce');
 
 
-},{"./spinner_three_bounce":43}],43:[function(require,module,exports){
+},{"./spinner_three_bounce":44}],44:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
+var Events = require('../../base/Events');
 var SpinnerThreeBouncePlugin = function SpinnerThreeBouncePlugin(options) {
   $traceurRuntime.superCall(this, $SpinnerThreeBouncePlugin.prototype, "constructor", [options]);
   this.template = JST.spinner_three_bounce;
-  this.listenTo(this.container, 'container:state:buffering', this.onBuffering);
-  this.listenTo(this.container, 'container:state:bufferfull', this.onBufferFull);
-  this.listenTo(this.container, 'container:stop', this.onStop);
+  this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering);
+  this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferFull);
+  this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop);
   this.render();
 };
 var $SpinnerThreeBouncePlugin = SpinnerThreeBouncePlugin;
@@ -6856,15 +7097,16 @@ var $SpinnerThreeBouncePlugin = SpinnerThreeBouncePlugin;
 module.exports = SpinnerThreeBouncePlugin;
 
 
-},{"../../base/jst":8,"../../base/styler":9,"ui_container_plugin":"ui_container_plugin"}],44:[function(require,module,exports){
+},{"../../base/Events":7,"../../base/jst":9,"../../base/styler":10,"ui_container_plugin":"ui_container_plugin"}],45:[function(require,module,exports){
 "use strict";
 module.exports = require('./stats');
 
 
-},{"./stats":45}],45:[function(require,module,exports){
+},{"./stats":46}],46:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('container_plugin');
 var $ = require("zepto");
+var Events = require('../../base/events');
 var StatsPlugin = function StatsPlugin(options) {
   $traceurRuntime.superCall(this, $StatsPlugin.prototype, "constructor", [options]);
   this.setInitialAttrs();
@@ -6877,14 +7119,14 @@ var $StatsPlugin = StatsPlugin;
     return 'stats';
   },
   bindEvents: function() {
-    this.listenTo(this.container.playback, 'playback:play', this.onPlay);
-    this.listenTo(this.container, 'container:stop', this.onStop);
-    this.listenTo(this.container, 'container:destroyed', this.onStop);
-    this.listenTo(this.container, 'container:state:buffering', this.onBuffering);
-    this.listenTo(this.container, 'container:state:bufferfull', this.onBufferFull);
-    this.listenTo(this.container, 'container:stats:add', this.onStatsAdd);
-    this.listenTo(this.container, 'container:bitrate', this.onStatsAdd);
-    this.listenTo(this.container.playback, 'playback:stats:add', this.onStatsAdd);
+    this.listenTo(this.container.playback, Events.PLAYBACK_PLAY, this.onPlay);
+    this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop);
+    this.listenTo(this.container, Events.CONTAINER_DESTROYED, this.onStop);
+    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering);
+    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferFull);
+    this.listenTo(this.container, Events.CONTAINER_STATS_ADD, this.onStatsAdd);
+    this.listenTo(this.container, Events.CONTAINER_BITRATE, this.onStatsAdd);
+    this.listenTo(this.container.playback, Events.PLAYBACK_STATS_ADD, this.onStatsAdd);
   },
   setInitialAttrs: function() {
     this.firstPlay = true;
@@ -6956,16 +7198,17 @@ var $StatsPlugin = StatsPlugin;
 module.exports = StatsPlugin;
 
 
-},{"container_plugin":"container_plugin","zepto":"zepto"}],46:[function(require,module,exports){
+},{"../../base/events":8,"container_plugin":"container_plugin","zepto":"zepto"}],47:[function(require,module,exports){
 "use strict";
 module.exports = require('./watermark');
 
 
-},{"./watermark":47}],47:[function(require,module,exports){
+},{"./watermark":48}],48:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
+var Events = require('../../base/events');
 var WaterMarkPlugin = function WaterMarkPlugin(options) {
   $traceurRuntime.superCall(this, $WaterMarkPlugin.prototype, "constructor", [options]);
   this.template = JST[this.name];
@@ -6983,8 +7226,8 @@ var $WaterMarkPlugin = WaterMarkPlugin;
     return 'watermark';
   },
   bindEvents: function() {
-    this.listenTo(this.container, 'container:play', this.onPlay);
-    this.listenTo(this.container, 'container:stop', this.onStop);
+    this.listenTo(this.container, Events.CONTAINER_PLAY, this.onPlay);
+    this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop);
   },
   onPlay: function() {
     if (!this.hidden)
@@ -7009,7 +7252,7 @@ var $WaterMarkPlugin = WaterMarkPlugin;
 module.exports = WaterMarkPlugin;
 
 
-},{"../../base/jst":8,"../../base/styler":9,"ui_container_plugin":"ui_container_plugin"}],"base_object":[function(require,module,exports){
+},{"../../base/events":8,"../../base/jst":9,"../../base/styler":10,"ui_container_plugin":"ui_container_plugin"}],"base_object":[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var extend = require('./utils').extend;
@@ -7025,7 +7268,7 @@ BaseObject.extend = extend;
 module.exports = BaseObject;
 
 
-},{"./events":7,"./utils":10,"underscore":"underscore"}],"browser":[function(require,module,exports){
+},{"./events":8,"./utils":11,"underscore":"underscore"}],"browser":[function(require,module,exports){
 "use strict";
 var Browser = function Browser() {};
 ($traceurRuntime.createClass)(Browser, {}, {});
@@ -7070,7 +7313,7 @@ module.exports = ContainerPlugin;
 module.exports = require('./container');
 
 
-},{"./container":11}],"core_plugin":[function(require,module,exports){
+},{"./container":12}],"core_plugin":[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var CorePlugin = function CorePlugin(core) {
@@ -7092,32 +7335,32 @@ module.exports = CorePlugin;
 module.exports = require('./core');
 
 
-},{"./core":14}],"flash":[function(require,module,exports){
+},{"./core":15}],"flash":[function(require,module,exports){
 "use strict";
 module.exports = require('./flash');
 
 
-},{"./flash":25}],"hls":[function(require,module,exports){
+},{"./flash":26}],"hls":[function(require,module,exports){
 "use strict";
 module.exports = require('./hls');
 
 
-},{"./hls":26}],"html5_audio":[function(require,module,exports){
+},{"./hls":27}],"html5_audio":[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_audio');
 
 
-},{"./html5_audio":27}],"html5_video":[function(require,module,exports){
+},{"./html5_audio":28}],"html5_video":[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_video');
 
 
-},{"./html5_video":28}],"media_control":[function(require,module,exports){
+},{"./html5_video":29}],"media_control":[function(require,module,exports){
 "use strict";
 module.exports = require('./media_control');
 
 
-},{"./media_control":21}],"mediator":[function(require,module,exports){
+},{"./media_control":22}],"mediator":[function(require,module,exports){
 "use strict";
 var Events = require('../base/events');
 var events = new Events();
@@ -7146,7 +7389,7 @@ Mediator.stopListening = function(obj, name, callback) {
 module.exports = Mediator;
 
 
-},{"../base/events":7}],"playback":[function(require,module,exports){
+},{"../base/events":8}],"playback":[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var Playback = function Playback(options) {
@@ -7200,7 +7443,7 @@ module.exports = PlayerInfo;
 module.exports = require('./poster');
 
 
-},{"./poster":41}],"ui_container_plugin":[function(require,module,exports){
+},{"./poster":42}],"ui_container_plugin":[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var UIContainerPlugin = function UIContainerPlugin(options) {
@@ -7350,7 +7593,7 @@ UIObject.extend = extend;
 module.exports = UIObject;
 
 
-},{"./utils":10,"base_object":"base_object","underscore":"underscore","zepto":"zepto"}],"underscore":[function(require,module,exports){
+},{"./utils":11,"base_object":"base_object","underscore":"underscore","zepto":"zepto"}],"underscore":[function(require,module,exports){
 //     Underscore.js 1.7.0
 //     http://underscorejs.org
 //     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -8773,4 +9016,7 @@ var Zepto=function(){function k(t){return null==t?String(t):S[j.call(t)]||"objec
 },fire:function(){return l.fireWith(this,arguments)},fired:function(){return!!i}};return l}}(Zepto);
 module.exports = Zepto;
 
-},{}]},{},[3,1]);
+},{}]},{},[3,1])
+
+
+//# sourceMappingURL=clappr.map
