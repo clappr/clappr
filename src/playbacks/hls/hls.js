@@ -65,7 +65,7 @@ class HLS extends Playback {
     this.el.width = "100%"
     this.el.height = "100%"
     this.isReady = true
-    this.trigger('playback:ready', this.name)
+    this.trigger(Events.PLAYBACK_READY, this.name)
     this.currentState = "IDLE"
     this.setFlashSettings()
     this.autoPlay && this.play()
@@ -96,14 +96,14 @@ class HLS extends Playback {
 
     if (this.dvrEnabled !== previousDVRStatus) {
       this.updateSettings()
-      this.trigger('playback:settingsupdate', this.name)
+      this.trigger(Events.PLAYBACK_SETTINGSUPDATE, this.name)
     }
 
     if (livePlayback && (!this.dvrEnabled || !this.dvrInUse)) {
       position = duration
     }
 
-    this.trigger('playback:timeupdate', position, duration, this.name)
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, position, duration, this.name)
   }
 
   play() {
@@ -112,7 +112,7 @@ class HLS extends Playback {
     } else if (this.currentState !== "PLAYING") {
       this.firstPlay()
     }
-    this.trigger('playback:play', this.name)
+    this.trigger(Events.PLAYBACK_PLAY, this.name)
   }
 
   getPlaybackType() {
@@ -144,18 +144,18 @@ class HLS extends Playback {
   setPlaybackState(state) {
     var bufferLength = this.el.globoGetbufferLength()
     if (state === "PLAYING_BUFFERING" && bufferLength < 1)  {
-      this.trigger('playback:buffering', this.name)
+      this.trigger(Events.PLAYBACK_BUFFERING, this.name)
       this.updateCurrentState(state)
     } else if (state === "PLAYING") {
       if (_.contains(["PLAYING_BUFFERING", "PAUSED", "IDLE"], this.currentState)) {
-        this.trigger('playback:bufferfull', this.name)
+        this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
         this.updateCurrentState(state)
       }
     } else if (state === "PAUSED") {
       this.updateCurrentState(state)
     } else if (state === "IDLE") {
-      this.trigger('playback:ended', this.name)
-      this.trigger('playback:timeupdate', 0, this.el.globoGetDuration(), this.name)
+      this.trigger(Events.PLAYBACK_ENDED, this.name)
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.el.globoGetDuration(), this.name)
       this.updateCurrentState(state)
     }
     this.lastBufferLength = bufferLength
@@ -176,7 +176,7 @@ class HLS extends Playback {
         this.stopReportingProgress()
       }
     }
-    this.trigger('playback:playbackstate')
+    this.trigger(Events.PLAYBACK_PLAYBACKSTATE)
   }
 
   startReportingProgress() {
@@ -192,7 +192,7 @@ class HLS extends Playback {
 
   onFragmentLoaded() {
     var buffered = this.el.globoGetPosition() + this.el.globoGetbufferLength()
-    this.trigger('playback:progress', this.el.globoGetPosition(), buffered, this.getDuration(), this.name)
+    this.trigger(Events.PLAYBACK_PROGRESS, this.el.globoGetPosition(), buffered, this.getDuration(), this.name)
   }
 
   firstPlay() {
@@ -219,7 +219,7 @@ class HLS extends Playback {
 
   stop() {
     this.el.globoPlayerStop()
-    this.trigger('playback:timeupdate', 0, this.name)
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.name)
   }
 
   isPlaying() {
@@ -253,7 +253,7 @@ class HLS extends Playback {
       this.updateDvr(dvrInUse)
     }
     this.el.globoPlayerSeek(time)
-    this.trigger('playback:timeupdate', time, duration, this.name)
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, time, duration, this.name)
   }
 
   updateDvr(dvrInUse) {
@@ -261,17 +261,17 @@ class HLS extends Playback {
     this.dvrInUse = dvrInUse
     if (this.dvrInUse !== previousDvrInUse) {
       this.updateSettings()
-      this.trigger('playback:dvr', this.dvrInUse)
-      this.trigger('playback:stats:add', {'dvr': this.dvrInUse})
+      this.trigger(Events.PLAYBACK_DVR, this.dvrInUse)
+      this.trigger(Events.PLAYBACK_STATS_ADD, {'dvr': this.dvrInUse})
     }
   }
 
   flashPlaybackError() {
-    this.trigger('playback:stop')
+    this.trigger(Events.PLAYBACK_STOP)
   }
 
   timeUpdate(time, duration) {
-    this.trigger('playback:timeupdate', time, duration, this.name)
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, time, duration, this.name)
   }
 
   destroy() {

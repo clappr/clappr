@@ -41,7 +41,7 @@ class HTML5Audio extends Playback {
 
   play() {
     this.el.play()
-    this.trigger('playback:play');
+    this.trigger(Events.PLAYBACK_PLAY);
   }
 
   pause() {
@@ -70,7 +70,7 @@ class HTML5Audio extends Playback {
   }
 
   ended() {
-    this.trigger('container:timeupdate', 0)
+    this.trigger(Events.CONTAINER_TIMEUPDATE, 0)
   }
 
   seek(seekBarValue) {
@@ -91,7 +91,7 @@ class HTML5Audio extends Playback {
   }
 
   timeUpdated() {
-    this.trigger('playback:timeupdate', this.el.currentTime, this.el.duration, this.name)
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, this.el.currentTime, this.el.duration, this.name)
   }
 
   render() {
