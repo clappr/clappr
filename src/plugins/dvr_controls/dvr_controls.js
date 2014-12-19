@@ -1,6 +1,7 @@
 var UICorePlugin = require('ui_core_plugin')
 var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
+var Events = require('../../base/events')
 
 class DVRControls extends UICorePlugin {
   get template() { return JST.dvr_controls }
@@ -24,8 +25,8 @@ class DVRControls extends UICorePlugin {
   }
 
   bindEvents() {
-    this.listenTo(this.core.mediaControl, 'mediacontrol:rendered', this.settingsUpdate)
-    this.listenTo(this.core.mediaControl.container, 'container:dvr', this.dvrChanged)
+    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_RENDERED, this.settingsUpdate)
+    this.listenTo(this.core.mediaControl.container, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.dvrChanged)
   }
 
   dvrChanged(dvrEnabled) {

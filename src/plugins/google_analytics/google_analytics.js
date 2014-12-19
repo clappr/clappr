@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 var ContainerPlugin = require('container_plugin');
+var Events = require('../../base/events')
 
 class GoogleAnalytics extends ContainerPlugin {
   get name() { return 'google_analytics' }
@@ -30,19 +31,20 @@ class GoogleAnalytics extends ContainerPlugin {
   }
 
   addEventListeners() {
-    this.listenTo(this.container, 'container:play', this.onPlay)
-    this.listenTo(this.container, 'container:pause', this.onPause)
-    this.listenTo(this.container, 'container:stop', this.onStop)
-    this.listenTo(this.container, 'container:ended', this.onEnded)
-    this.listenTo(this.container, 'container:state:buffering', this.onBuffering)
-    this.listenTo(this.container, 'container:state:bufferfull', this.onBufferFull)
-    this.listenTo(this.container, 'container:error', this.onError)
-    this.listenTo(this.container, 'container:playbackstate', this.onPlaybackChanged)
-    this.listenTo(this.container, 'container:volume', (event) => this.onVolumeChanged(event))
-    this.listenTo(this.container, 'container:seek', (event) => this.onSeek(event))
-    this.listenTo(this.container, 'container:fullscreen', this.onFullscreen)
-    this.listenTo(this.container, 'container:highdefinitionupdate', this.onHD)
-    this.listenTo(this.container.playback, 'playback:dvr', this.onDVR)
+    this.listenTo(this.container, Events.CONTAINER_PLAY, this.onPlay)
+    this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
+    this.listenTo(this.container, Events.CONTAINER_PAUSE, this.onPause)
+    this.listenTo(this.container, Events.CONTAINER_ENDED, this.onEnded)
+    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering)
+    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferFull)
+    this.listenTo(this.container, Events.CONTAINER_ENDED, this.onEnded)
+    this.listenTo(this.container, Events.CONTAINER_ERROR, this.onError)
+    this.listenTo(this.container, Events.CONTAINER_PLAYBACKSTATE, this.onPlaybackChanged)
+    this.listenTo(this.container, Events.CONTAINER_VOLUME, (event) => this.onVolumeChanged(event))
+    this.listenTo(this.container, Events.CONTAINER_SEEK, (event) => this.onSeek(event))
+    this.listenTo(this.container, Events.CONTAINER_FULL_SCREEN, this.onFullscreen)
+    this.listenTo(this.container, Events.CONTAINER_HIGHDEFINITIONUPDATE, this.onHD)
+    this.listenTo(this.container.playback, Events.PLAYBACK_DVR, this.onDVR)
     _gaq.push([this.trackerName + '_setAccount', this.account]);
   }
 

@@ -5,6 +5,7 @@
 var UIContainerPlugin = require('ui_container_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
+var Events = require('../../base/Events');
 
 class SpinnerThreeBouncePlugin extends UIContainerPlugin {
   get name() { return 'spinner' }
@@ -18,9 +19,9 @@ class SpinnerThreeBouncePlugin extends UIContainerPlugin {
   constructor(options) {
     super(options)
     this.template = JST.spinner_three_bounce
-    this.listenTo(this.container, 'container:state:buffering', this.onBuffering)
-    this.listenTo(this.container, 'container:state:bufferfull', this.onBufferFull)
-    this.listenTo(this.container, 'container:stop', this.onStop)
+    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering)
+    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferFull)
+    this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
     this.render()
   }
 

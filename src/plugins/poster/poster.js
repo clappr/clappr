@@ -5,6 +5,7 @@
 var UIContainerPlugin = require('ui_container_plugin')
 var Styler = require('../../base/styler')
 var JST = require('../../base/jst')
+var Events = require('../../base/events')
 
 var Mediator = require('mediator')
 var PlayerInfo = require('player_info')
@@ -40,16 +41,16 @@ class PosterPlugin extends UIContainerPlugin {
   }
 
   bindEvents() {
-    this.listenTo(this.container, 'container:state:buffering', this.onBuffering)
-    this.listenTo(this.container, 'container:state:bufferfull', this.onBufferfull)
-    this.listenTo(this.container, 'container:stop', this.onStop)
-    this.listenTo(this.container, 'container:ended', this.onStop)
-    Mediator.on('player:resize', this.updateSize, this)
+    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering)
+    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferfull)
+    this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
+    this.listenTo(this.container, Events.CONTAINER_ENDED, this.onStop)
+    Mediator.on(Events.PLAYER_RESIZE, this.updateSize, this)
   }
 
   stopListening() {
     super()
-    Mediator.off('player:resize', this.updateSize, this)
+    Mediator.off(Events.PLAYER_RESIZE, this.updateSize, this)
   }
 
   onBuffering() {

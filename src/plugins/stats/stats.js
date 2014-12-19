@@ -4,6 +4,7 @@
 
 var ContainerPlugin = require('container_plugin');
 var $ = require("zepto");
+var Events = require('../../base/events');
 
 class StatsPlugin extends ContainerPlugin {
   get name() { return 'stats' }
@@ -16,14 +17,14 @@ class StatsPlugin extends ContainerPlugin {
   }
 
   bindEvents() {
-    this.listenTo(this.container.playback, 'playback:play', this.onPlay)
-    this.listenTo(this.container, 'container:stop', this.onStop)
-    this.listenTo(this.container, 'container:destroyed', this.onStop)
-    this.listenTo(this.container, 'container:state:buffering', this.onBuffering)
-    this.listenTo(this.container, 'container:state:bufferfull', this.onBufferFull)
-    this.listenTo(this.container, 'container:stats:add', this.onStatsAdd)
-    this.listenTo(this.container, 'container:bitrate', this.onStatsAdd)
-    this.listenTo(this.container.playback, 'playback:stats:add', this.onStatsAdd)
+    this.listenTo(this.container.playback, Events.PLAYBACK_PLAY, this.onPlay)
+    this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
+    this.listenTo(this.container, Events.CONTAINER_DESTROYED, this.onStop)
+    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering)
+    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferFull)
+    this.listenTo(this.container, Events.CONTAINER_STATS_ADD, this.onStatsAdd)
+    this.listenTo(this.container, Events.CONTAINER_BITRATE, this.onStatsAdd)
+    this.listenTo(this.container.playback, Events.PLAYBACK_STATS_ADD, this.onStatsAdd)
   }
 
   setInitialAttrs() {
