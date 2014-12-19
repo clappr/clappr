@@ -3,13 +3,14 @@
 // license that can be found in the LICENSE file.
 
 var ContainerPlugin = require('container_plugin')
+var Events = require('../../base/events')
 
 class ClickToPausePlugin extends ContainerPlugin {
   get name() { return 'click_to_pause' }
 
   bindEvents() {
-    this.listenTo(this.container, 'container:click', this.click)
-    this.listenTo(this.container, 'container:settingsupdate', this.settingsUpdate)
+    this.listenTo(this.container, Events.CONTAINER_CLICK, this.click)
+    this.listenTo(this.container, Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate)
   }
 
   click() {

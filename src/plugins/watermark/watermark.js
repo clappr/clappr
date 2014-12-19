@@ -5,6 +5,7 @@
 var UIContainerPlugin = require('ui_container_plugin')
 var Styler = require('../../base/styler')
 var JST = require('../../base/jst')
+var Events = require('../../base/events')
 
 class WaterMarkPlugin extends UIContainerPlugin {
   get name() { return 'watermark' }
@@ -22,8 +23,8 @@ class WaterMarkPlugin extends UIContainerPlugin {
   }
 
   bindEvents() {
-    this.listenTo(this.container, 'container:play', this.onPlay)
-    this.listenTo(this.container, 'container:stop', this.onStop)
+    this.listenTo(this.container, Events.CONTAINER_PLAY, this.onPlay)
+    this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
   }
 
   onPlay() {

@@ -52,7 +52,7 @@ class Flash extends Playback {
       this.autoPlay && this.play()
     }
     $('<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%" />').insertAfter(this.$el)
-    this.trigger('playback:ready', this.name)
+    this.trigger(Events.PLAYBACK_READY, this.name)
   }
 
   getPlaybackType() {
@@ -70,7 +70,7 @@ class Flash extends Playback {
   }
 
   updateTime() {
-    this.trigger('playback:timeupdate', this.el.getPosition(), this.el.getDuration(), this.name)
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, this.el.getPosition(), this.el.getDuration(), this.name)
   }
 
   addListeners() {
@@ -94,23 +94,23 @@ class Flash extends Playback {
     if (this.currentState === "PAUSED") {
       return
     } else if (this.currentState !== "PLAYING_BUFFERING" && this.el.getState() === "PLAYING_BUFFERING") {
-      this.trigger('playback:buffering', this.name)
+      this.trigger(Events.PLAYBACK_BUFFERING, this.name)
       this.currentState = "PLAYING_BUFFERING"
     } else if (this.currentState === "PLAYING_BUFFERING" && this.el.getState() === "PLAYING") {
-      this.trigger('playback:bufferfull', this.name)
+      this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
       this.currentState = "PLAYING"
     } else if (this.el.getState() === "IDLE") {
       this.currentState = "IDLE"
     } else if (this.el.getState() === "ENDED") {
-      this.trigger('playback:ended', this.name)
-      this.trigger('playback:timeupdate', 0, this.el.getDuration(), this.name)
+      this.trigger(Events.PLAYBACK_ENDED, this.name)
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.el.getDuration(), this.name)
       this.currentState = "ENDED"
     }
   }
 
   progress() {
     if (this.currentState !== "IDLE" && this.currentState !== "ENDED") {
-      this.trigger('playback:progress', 0, this.el.getBytesLoaded(), this.el.getBytesTotal(), this.name)
+      this.trigger(Events.PLAYBACK_PROGRESS, 0, this.el.getBytesLoaded(), this.el.getBytesTotal(), this.name)
     }
   }
 
@@ -134,7 +134,7 @@ class Flash extends Playback {
     } else if (this.el.getState() !== 'PLAYING') {
       this.firstPlay()
     }
-    this.trigger('playback:play', this.name)
+    this.trigger(Events.PLAYBACK_PLAY, this.name)
   }
 
   volume(value) {
@@ -152,7 +152,7 @@ class Flash extends Playback {
 
   stop() {
     this.el.playerStop()
-    this.trigger('playback:timeupdate', 0, this.name)
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.name)
   }
 
   isPlaying() {
@@ -170,7 +170,7 @@ class Flash extends Playback {
 
   seekSeconds(seekTo) {
     this.el.playerSeek(seekTo)
-    this.trigger('playback:timeupdate', seekTo, this.el.getDuration(), this.name)
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, seekTo, this.el.getDuration(), this.name)
     if (this.currentState === "PAUSED") {
       this.el.playerPause()
     }

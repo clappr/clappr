@@ -8,6 +8,7 @@ var Styler = require('../../base/styler')
 var Browser = require('browser')
 var Mousetrap = require('mousetrap')
 var seekStringToSeconds = require('../../base/utils').seekStringToSeconds
+var Events = require('../../base/events')
 
 var _ = require('underscore')
 
@@ -61,8 +62,8 @@ class HTML5Video extends Playback {
   }
 
   loadedMetadata(e) {
-    this.trigger('playback:loadedmetadata', e.target.duration)
-    this.trigger('playback:settingsupdate')
+    this.trigger(Events.PLAYBACK_LOADEDMETADATA, e.target.duration)
+    this.trigger(Events.PLAYBACK_SETTINGSUPDATE)
     this.checkInitialSeek()
   }
 
@@ -76,9 +77,9 @@ class HTML5Video extends Playback {
 
   play() {
     this.el.play()
-    this.trigger('playback:play');
+    this.trigger(Events.PLAYBACK_PLAY);
     if (this.isHLS) {
-      this.trigger('playback:timeupdate', 1, 1, this.name)
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, 1, 1, this.name)
     }
   }
 
@@ -114,19 +115,19 @@ class HTML5Video extends Playback {
   }
 
   ended() {
-    this.trigger('playback:ended', this.name)
-    this.trigger('playback:timeupdate', 0, this.el.duration, this.name)
+    this.trigger(Events.PLAYBACK_ENDED, this.name)
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.el.duration, this.name)
   }
 
   stalled() {
     if (this.getPlaybackType() === 'vod' && this.el.readyState < this.el.HAVE_FUTURE_DATA) {
-      this.trigger('playback:buffering', this.name)
+      this.trigger(Events.PLAYBACK_BUFFERING, this.name)
     }
   }
 
   waiting() {
     if(this.el.readyState < this.el.HAVE_FUTURE_DATA) {
-      this.trigger('playback:buffering', this.name)
+      this.trigger(Events.PLAYBACK_BUFFERING, this.name)
     }
   }
 
@@ -137,7 +138,7 @@ class HTML5Video extends Playback {
     } else {
       this.el.poster = ''
     }
-    this.trigger('playback:bufferfull', this.name)
+    this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
   }
 
   destroy() {
@@ -170,7 +171,7 @@ class HTML5Video extends Playback {
 
   timeUpdated() {
     if (this.getPlaybackType() !== 'live') {
-      this.trigger('playback:timeupdate', this.el.currentTime, this.el.duration, this.name)
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, this.el.currentTime, this.el.duration, this.name)
     }
   }
 
@@ -183,7 +184,7 @@ class HTML5Video extends Playback {
         break
       }
     }
-    this.trigger('playback:progress', this.el.buffered.start(bufferedPos), this.el.buffered.end(bufferedPos), this.el.duration, this.name)
+    this.trigger(Events.PLAYBACK_PROGRESS, this.el.buffered.start(bufferedPos), this.el.buffered.end(bufferedPos), this.el.duration, this.name)
   }
 
   typeFor(src) {
@@ -194,7 +195,7 @@ class HTML5Video extends Playback {
     var style = Styler.getStyleFor(this.name)
     this.$el.html(this.template({ src: this.src, type: this.typeFor(this.src) }))
     this.$el.append(style)
-    this.trigger('playback:ready', this.name)
+    this.trigger(Events.PLAYBACK_READY, this.name)
     process.nextTick(() => this.options.autoPlay && this.play())
     return this
   }

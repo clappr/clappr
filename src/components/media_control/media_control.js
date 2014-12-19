@@ -74,7 +74,7 @@ class MediaControl extends UIObject {
     }
     $(document).bind('mouseup', (event) => this.stopDrag(event))
     $(document).bind('mousemove', (event) => this.updateDrag(event))
-    Mediator.on('player:resize', () => this.playerResize())
+    Mediator.on(Events.PLAYER_RESIZE, () => this.playerResize())
   }
 
   addEventListeners() {
@@ -117,11 +117,11 @@ class MediaControl extends UIObject {
     if (this.container.isPlaying()) {
       this.$playPauseToggle.removeClass('paused').addClass('playing')
       this.$playStopToggle.removeClass('stopped').addClass('playing')
-      this.trigger('mediacontrol:playing');
+      this.trigger(Events.MEDIACONTROL_PLAYING);
     } else {
       this.$playPauseToggle.removeClass('playing').addClass('paused')
       this.$playStopToggle.removeClass('playing').addClass('stopped')
-      this.trigger('mediacontrol:notplaying')
+      this.trigger(Events.MEDIACONTROL_NOTPLAYING);
     }
   }
 
@@ -130,11 +130,11 @@ class MediaControl extends UIObject {
       var offsetX = event.pageX - this.$seekBarContainer.offset().left - (this.$seekBarHover.width() / 2)
       this.$seekBarHover.css({left: offsetX})
     }
-    this.trigger('mediacontrol:mousemove:seekbar', event);
+    this.trigger(Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR, event);
   }
 
   mouseleaveOnSeekBar(event) {
-    this.trigger('mediacontrol:mouseleave:seekbar', event);
+    this.trigger(Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR, event);
   }
 
   playerResize() {
@@ -243,7 +243,7 @@ class MediaControl extends UIObject {
   }
 
   toggleFullscreen() {
-    this.trigger('mediacontrol:fullscreen', this.name)
+    this.trigger(Events.MEDIACONTROL_FULLSCREEN, this.name)
     this.container.fullscreen()
     this.resetKeepVisible()
   }
@@ -254,12 +254,12 @@ class MediaControl extends UIObject {
     this.changeTogglePlay()
     this.addEventListeners()
     this.settingsUpdate()
-    this.container.trigger('container:dvr', this.container.isDvrInUse())
+    this.container.trigger(Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.container.isDvrInUse())
     this.container.setVolume(this.currentVolume)
     if (this.container.mediaControlDisabled) {
       this.disable()
     }
-    this.trigger("mediacontrol:containerchanged")
+    this.trigger(Events.MEDIACONTROL_CONTAINERCHANGED)
   }
 
   showVolumeBar() {
@@ -331,7 +331,7 @@ class MediaControl extends UIObject {
     if (!event || (event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY) || navigator.userAgent.match(/firefox/i)) {
       clearTimeout(this.hideId)
       this.$el.show()
-      this.trigger('mediacontrol:show', this.name)
+      this.trigger(Events.MEDIACONTROL_SHOW, this.name)
       this.$el.removeClass('media-control-hide')
       this.hideId = setTimeout(() => this.hide(), timeout)
       if (event) {
@@ -348,7 +348,7 @@ class MediaControl extends UIObject {
     if (this.keepVisible || this.draggingSeekBar || this.draggingVolumeBar) {
       this.hideId = setTimeout(() => this.hide(), timeout)
     } else {
-      this.trigger('mediacontrol:hide', this.name)
+      this.trigger(Events.MEDIACONTROL_HIDE, this.name)
       this.$el.addClass('media-control-hide')
       this.hideVolumeBar()
     }
@@ -462,7 +462,7 @@ class MediaControl extends UIObject {
     this.parseColors()
     this.seekTime.render()
 
-    this.trigger('mediacontrol:rendered')
+    this.trigger(Events.MEDIACONTROL_RENDERED)
     return this
   }
 

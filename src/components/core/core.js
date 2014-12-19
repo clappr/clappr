@@ -63,7 +63,7 @@ class Core extends UIObject {
     } else {
       this.setPlayerSize()
     }
-    Mediator.trigger('player:resize')
+    Mediator.trigger(Events.PLAYER_RESIZE)
   }
 
   setFullscreen() {
@@ -85,7 +85,7 @@ class Core extends UIObject {
     this.$el.css(size)
     PlayerInfo.previousSize = PlayerInfo.currentSize
     PlayerInfo.currentSize = size
-    Mediator.trigger('player:resize')
+    Mediator.trigger(Events.PLAYER_RESIZE)
   }
 
   resolveOnContainersReady(containers) {

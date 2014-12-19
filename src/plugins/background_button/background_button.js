@@ -1,6 +1,7 @@
 var UICorePlugin = require('ui_core_plugin')
 var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
+var Events = require('../../base/events')
 
 var Browser = require('browser')
 var Mediator = require('mediator')
@@ -30,18 +31,18 @@ class BackgroundButton extends UICorePlugin {
   }
 
   bindEvents() {
-    this.listenTo(this.core.mediaControl.container, 'container:state:buffering', this.hide)
-    this.listenTo(this.core.mediaControl.container, 'container:state:bufferfull', this.show)
-    this.listenTo(this.core.mediaControl, 'mediacontrol:rendered', this.settingsUpdate)
-    this.listenTo(this.core.mediaControl, 'mediacontrol:show', this.updateSize)
-    this.listenTo(this.core.mediaControl, 'mediacontrol:playing', this.playing)
-    this.listenTo(this.core.mediaControl, 'mediacontrol:notplaying', this.notplaying)
-    Mediator.on('player:resize', this.updateSize, this)
+    this.listenTo(this.core.mediaControl.container, Events.CONTAINER_STATE_BUFFERING, this.hide)
+    this.listenTo(this.core.mediaControl.container, Events.CONTAINER_STATE_BUFFERFULL, this.show)
+    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_RENDERED, this.settingsUpdate)
+    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_SHOW, this.updateSize)
+    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_PLAYING, this.playing)
+    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_NOTPLAYING, this.notplaying)
+    Mediator.on(Events.PLAYER_RESIZE, this.updateSize, this)
   }
 
   stopListening() {
     super()
-    Mediator.off('player:resize', this.updateSize, this)
+    Mediator.off(Events.PLAYER_RESIZE, this.updateSize, this)
   }
 
   settingsUpdate() {
@@ -58,9 +59,9 @@ class BackgroundButton extends UICorePlugin {
       this.$el.remove()
       this.$playPauseButton.show()
       this.$playStopButton.show()
-      this.listenTo(this.core.mediaControl.container, 'container:settingsupdate', this.settingsUpdate)
-      this.listenTo(this.core.mediaControl.container, 'container:dvr', this.settingsUpdate)
-      this.listenTo(this.core.mediaControl, 'mediacontrol:containerchanged', this.settingsUpdate)
+      this.listenTo(this.core.mediaControl.container, Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate)
+      this.listenTo(this.core.mediaControl.container, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.settingsUpdate)
+      this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.settingsUpdate)
     }
   }
 
