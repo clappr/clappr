@@ -6,10 +6,12 @@ var Player = require('./components/player')
 var IframePlayer = require('./components/iframe_player')
 var Mediator = require('mediator')
 var version = require('../package.json').version
+var events = require('./base/events')
 
 global.DEBUG = false
 
 window.Clappr = { Player: Player, Mediator: Mediator, IframePlayer: IframePlayer }
 window.Clappr.version = version
+window.Clappr.events = events
 
 module.exports = window.Clappr
