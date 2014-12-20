@@ -16,7 +16,7 @@ var Mousetrap = require('mousetrap')
 var SeekTime = require('../seek_time')
 var Mediator = require('mediator')
 var PlayerInfo = require('player_info')
-var Events = require('../../base/events')
+var Events = require('events')
 
 class MediaControl extends UIObject {
   get name() { return 'MediaControl' }

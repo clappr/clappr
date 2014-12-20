@@ -17,7 +17,7 @@ var Styler = require('../../base/styler')
 var MediaControl = require('media_control')
 var PlayerInfo = require('player_info')
 var Mediator = require('mediator')
-var Events = require('../../base/events');
+var Events = require('events');
 
 class Core extends UIObject {
   get events() {
