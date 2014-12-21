@@ -9,7 +9,7 @@
 var UIObject = require('ui_object');
 var Styler = require('../../base/styler');
 var _ = require('underscore');
-var Events = require('../../base/events')
+var Events = require('events')
 
 class Container extends UIObject {
   get name() { return 'Container' }
