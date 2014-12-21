@@ -1,7 +1,7 @@
 var UICorePlugin = require('ui_core_plugin')
 var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
-var Events = require('../../base/events')
+var Events = require('events')
 
 class DVRControls extends UICorePlugin {
   get template() { return JST.dvr_controls }

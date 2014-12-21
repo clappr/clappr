@@ -5,7 +5,7 @@
 var UIContainerPlugin = require('ui_container_plugin')
 var Styler = require('../../base/styler')
 var JST = require('../../base/jst')
-var Events = require('../../base/events')
+var Events = require('events')
 
 var Mediator = require('mediator')
 var PlayerInfo = require('player_info')
