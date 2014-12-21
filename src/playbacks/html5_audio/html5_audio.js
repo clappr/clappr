@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 var Playback = require('playback')
-var Events = require('../../base/events')
+var Events = require('events')
 
 class HTML5Audio extends Playback {
   get name() { return 'html5_audio' }

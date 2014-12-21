@@ -4,7 +4,7 @@
 
 var ContainerPlugin = require('container_plugin');
 var $ = require("zepto");
-var Events = require('../../base/events');
+var Events = require('events');
 
 class StatsPlugin extends ContainerPlugin {
   get name() { return 'stats' }

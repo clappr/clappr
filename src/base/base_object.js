@@ -4,7 +4,7 @@
 
 var _ = require('underscore')
 var extend = require('./utils').extend
-var Events = require('./events')
+var Events = require('events')
 
 var pluginOptions = ['container']
 
