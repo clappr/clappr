@@ -8,7 +8,7 @@ var Styler = require('../../base/styler')
 var Browser = require('browser')
 var Mousetrap = require('mousetrap')
 var seekStringToSeconds = require('../../base/utils').seekStringToSeconds
-var Events = require('../../base/events')
+var Events = require('events')
 
 var _ = require('underscore')
 
