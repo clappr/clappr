@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 var ContainerPlugin = require('container_plugin')
-var Events = require('../../base/events')
+var Events = require('events')
 
 class ClickToPausePlugin extends ContainerPlugin {
   get name() { return 'click_to_pause' }

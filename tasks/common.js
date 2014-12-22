@@ -12,6 +12,7 @@ module.exports.browserify = function(options) {
     .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
     .add(es6ify.runtime)
     .require('./src/main.js', { entry: true })
+    .require('./src/base/events', { expose: 'events' })
     .require('./src/base/ui_object', { expose: 'ui_object' })
     .require('./src/base/base_object', { expose: 'base_object' })
     .require('./src/base/ui_container_plugin', { expose: 'ui_container_plugin' })

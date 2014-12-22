@@ -6,7 +6,7 @@ var UIObject = require('ui_object')
 var Styler = require('../../base/styler')
 var JST = require('../../base/jst')
 var formatTime = require('../../base/utils').formatTime
-var Events = require('../../base/events')
+var Events = require('events')
 
 class SeekTime extends UIObject {
   get name() { return 'seek_time' }
