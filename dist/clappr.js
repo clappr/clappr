@@ -16,7 +16,7 @@ module.exports = window.Clappr;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../package.json":6,"./components/iframe_player":18,"./components/player":22,"mediator":"mediator"}],2:[function(require,module,exports){
+},{"../package.json":6,"./components/iframe_player":17,"./components/player":21,"mediator":"mediator"}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -3724,7 +3724,7 @@ module.exports = mousetrap;
 },{}],6:[function(require,module,exports){
 module.exports={
   "name": "clappr",
-  "version": "0.0.69",
+  "version": "0.0.70",
   "description": "An extensible media player for the web",
   "main": "dist/clappr.min.js",
   "scripts": {
@@ -3796,225 +3796,6 @@ module.exports={
 },{}],7:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
-var Log = require('../plugins/log').getInstance();
-var slice = Array.prototype.slice;
-var Events = function Events() {};
-($traceurRuntime.createClass)(Events, {
-  on: function(name, callback, context) {
-    if (!eventsApi(this, 'on', name, [callback, context]) || !callback)
-      return this;
-    this._events || (this._events = {});
-    var events = this._events[name] || (this._events[name] = []);
-    events.push({
-      callback: callback,
-      context: context,
-      ctx: context || this
-    });
-    return this;
-  },
-  once: function(name, callback, context) {
-    if (!eventsApi(this, 'once', name, [callback, context]) || !callback)
-      return this;
-    var self = this;
-    var once = _.once(function() {
-      self.off(name, once);
-      callback.apply(this, arguments);
-    });
-    once._callback = callback;
-    return this.on(name, once, context);
-  },
-  off: function(name, callback, context) {
-    var retain,
-        ev,
-        events,
-        names,
-        i,
-        l,
-        j,
-        k;
-    if (!this._events || !eventsApi(this, 'off', name, [callback, context]))
-      return this;
-    if (!name && !callback && !context) {
-      this._events = void 0;
-      return this;
-    }
-    names = name ? [name] : _.keys(this._events);
-    for (i = 0, l = names.length; i < l; i++) {
-      name = names[i];
-      events = this._events[name];
-      if (events) {
-        this._events[name] = retain = [];
-        if (callback || context) {
-          for (j = 0, k = events.length; j < k; j++) {
-            ev = events[j];
-            if ((callback && callback !== ev.callback && callback !== ev.callback._callback) || (context && context !== ev.context)) {
-              retain.push(ev);
-            }
-          }
-        }
-        if (!retain.length)
-          delete this._events[name];
-      }
-    }
-    return this;
-  },
-  trigger: function(name) {
-    var klass = arguments[arguments.length - 1];
-    Log.info(klass, name);
-    if (!this._events)
-      return this;
-    var args = slice.call(arguments, 1);
-    if (!eventsApi(this, 'trigger', name, args))
-      return this;
-    var events = this._events[name];
-    var allEvents = this._events.all;
-    if (events)
-      triggerEvents(events, args);
-    if (allEvents)
-      triggerEvents(allEvents, arguments);
-    return this;
-  },
-  stopListening: function(obj, name, callback) {
-    var listeningTo = this._listeningTo;
-    if (!listeningTo)
-      return this;
-    var remove = !name && !callback;
-    if (!callback && typeof name === 'object')
-      callback = this;
-    if (obj)
-      (listeningTo = {})[obj._listenId] = obj;
-    for (var id in listeningTo) {
-      obj = listeningTo[id];
-      obj.off(name, callback, this);
-      if (remove || _.isEmpty(obj._events))
-        delete this._listeningTo[id];
-    }
-    return this;
-  }
-}, {});
-var eventSplitter = /\s+/;
-var eventsApi = function(obj, action, name, rest) {
-  if (!name)
-    return true;
-  if (typeof name === 'object') {
-    for (var key in name) {
-      obj[action].apply(obj, [key, name[key]].concat(rest));
-    }
-    return false;
-  }
-  if (eventSplitter.test(name)) {
-    var names = name.split(eventSplitter);
-    for (var i = 0,
-        l = names.length; i < l; i++) {
-      obj[action].apply(obj, [names[i]].concat(rest));
-    }
-    return false;
-  }
-  return true;
-};
-var triggerEvents = function(events, args) {
-  var ev,
-      i = -1,
-      l = events.length,
-      a1 = args[0],
-      a2 = args[1],
-      a3 = args[2];
-  switch (args.length) {
-    case 0:
-      while (++i < l)
-        (ev = events[i]).callback.call(ev.ctx);
-      return;
-    case 1:
-      while (++i < l)
-        (ev = events[i]).callback.call(ev.ctx, a1);
-      return;
-    case 2:
-      while (++i < l)
-        (ev = events[i]).callback.call(ev.ctx, a1, a2);
-      return;
-    case 3:
-      while (++i < l)
-        (ev = events[i]).callback.call(ev.ctx, a1, a2, a3);
-      return;
-    default:
-      while (++i < l)
-        (ev = events[i]).callback.apply(ev.ctx, args);
-      return;
-  }
-};
-var listenMethods = {
-  listenTo: 'on',
-  listenToOnce: 'once'
-};
-_.each(listenMethods, function(implementation, method) {
-  Events.prototype[method] = function(obj, name, callback) {
-    var listeningTo = this._listeningTo || (this._listeningTo = {});
-    var id = obj._listenId || (obj._listenId = _.uniqueId('l'));
-    listeningTo[id] = obj;
-    if (!callback && typeof name === 'object')
-      callback = this;
-    obj[implementation](name, callback, this);
-    return this;
-  };
-});
-Events.PLAYER_RESIZE = 'player:resize';
-Events.PLAYBACK_PROGRESS = 'playback:progress';
-Events.PLAYBACK_TIMEUPDATE = 'playback:timeupdate';
-Events.PLAYBACK_READY = 'playback:ready';
-Events.PLAYBACK_BUFFERING = 'playback:buffering';
-Events.PLAYBACK_BUFFERFULL = 'playback:bufferfull';
-Events.PLAYBACK_SETTINGSUPDATE = 'playback:settingsupdate';
-Events.PLAYBACK_LOADEDMETADATA = 'playback:loadedmetadata';
-Events.PLAYBACK_HIGHDEFINITIONUPDATE = 'playback:highdefinitionupdate';
-Events.PLAYBACK_BITRATE = 'playback:bitrate';
-Events.PLAYBACK_PLAYBACKSTATE = 'playback:playbackstate';
-Events.PLAYBACK_DVR = 'playback:dvr';
-Events.PLAYBACK_MEDIACONTROL_DISABLE = 'playback:mediacontrol:disable';
-Events.PLAYBACK_MEDIACONTROL_ENABLE = 'playback:mediacontrol:enable';
-Events.PLAYBACK_ENDED = 'playback:ended';
-Events.PLAYBACK_PLAY = 'playback:play';
-Events.PLAYBACK_ERROR = 'playback:error';
-Events.PLAYBACK_STATS_ADD = 'playback:stats:add';
-Events.CONTAINER_PLAYBACKSTATE = 'container:playbackstate';
-Events.CONTAINER_PLAYBACKDVRSTATECHANGED = 'container:dvr';
-Events.CONTAINER_BITRATE = 'container:bitrate';
-Events.CONTAINER_STATS_REPORT = 'container:stats:report';
-Events.CONTAINER_DESTROYED = 'container:destroyed';
-Events.CONTAINER_READY = 'container:ready';
-Events.CONTAINER_ERROR = 'container:error';
-Events.CONTAINER_LOADEDMETADATA = 'container:loadedmetadata';
-Events.CONTAINER_TIMEUPDATE = 'container:timeupdate';
-Events.CONTAINER_PROGRESS = 'container:progress';
-Events.CONTAINER_PLAY = 'container:play';
-Events.CONTAINER_STOP = 'container:stop';
-Events.CONTAINER_PAUSE = 'container:pause';
-Events.CONTAINER_ENDED = 'container:ended';
-Events.CONTAINER_CLICK = 'container:click';
-Events.CONTAINER_SEEK = 'container:seek';
-Events.CONTAINER_VOLUME = 'container:volume';
-Events.CONTAINER_FULLSCREEN = 'container:fullscreen';
-Events.CONTAINER_STATE_BUFFERING = 'container:state:buffering';
-Events.CONTAINER_STATE_BUFFERFULL = 'container:state:bufferfull';
-Events.CONTAINER_SETTINGSUPDATE = 'container:settingsupdate';
-Events.CONTAINER_HIGHDEFINITIONUPDATE = 'container:highdefinitionupdate';
-Events.CONTAINER_MEDIACONTROL_DISABLE = 'container:mediacontrol:disable';
-Events.CONTAINER_MEDIACONTROL_ENABLE = 'container:mediacontrol:enable';
-Events.CONTAINER_STATS_ADD = 'container:stats:add';
-Events.MEDIACONTROL_RENDERED = 'mediacontrol:rendered';
-Events.MEDIACONTROL_FULLSCREEN = 'mediacontrol:fullscreen';
-Events.MEDIACONTROL_SHOW = 'mediacontrol:show';
-Events.MEDIACONTROL_HIDE = 'mediacontrol:hide';
-Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR = 'mediacontrol:mousemove:seekbar';
-Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR = 'mediacontrol:mouseleave:seekbar';
-Events.MEDIACONTROL_PLAYING = 'mediacontrol:playing';
-Events.MEDIACONTROL_NOTPLAYING = 'mediacontrol:notplaying';
-Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged';
-module.exports = Events;
-
-
-},{"../plugins/log":39,"underscore":"underscore"}],8:[function(require,module,exports){
-"use strict";
-var _ = require('underscore');
 module.exports = {
   'media_control': _.template('<div class="media-control-background" data-background></div><div class="media-control-layer" data-controls><% var renderBar=function(name) { %><div class="bar-container" data-<%= name %>><div class="bar-background" data-<%= name %>><div class="bar-fill-1" data-<%= name %>></div><div class="bar-fill-2" data-<%= name %>></div><div class="bar-hover" data-<%= name %>></div></div><div class="bar-scrubber" data-<%= name %>><div class="bar-scrubber-icon" data-<%= name %>></div></div></div><% }; %><% var renderSegmentedBar=function(name, segments) { segments=segments || 10; %><div class="bar-container" data-<%= name %>><% for (var i = 0; i < segments; i++) { %><div class="segmented-bar-element" data-<%= name %>></div><% } %></div><% }; %><% var renderDrawer=function(name, renderContent) { %><div class="drawer-container" data-<%= name %>><div class="drawer-icon-container" data-<%= name %>><div class="drawer-icon media-control-icon" data-<%= name %>></div><span class="drawer-text" data-<%= name %>></span></div><% renderContent(name); %></div><% }; %><% var renderIndicator=function(name) { %><div class="media-control-indicator" data-<%= name %>></div><% }; %><% var renderButton=function(name) { %><button class="media-control-button media-control-icon" data-<%= name %>></button><% }; %><% var templates={ bar: renderBar, segmentedBar: renderSegmentedBar, }; var render=function(settingsList) { _.each(settingsList, function(setting) { if(setting === "seekbar") { renderBar(setting); } else if (setting === "volume") { renderDrawer(setting, settings.volumeBarTemplate ? templates[settings.volumeBarTemplate] : function(name) { return renderSegmentedBar(name); }); } else if (setting === "duration" || setting=== "position") { renderIndicator(setting); } else { renderButton(setting); } }); }; %><% if (settings.default && settings.default.length) { %><div class="media-control-center-panel" data-media-control><% render(settings.default); %></div><% } %><% if (settings.left && settings.left.length) { %><div class="media-control-left-panel" data-media-control><% render(settings.left); %></div><% } %><% if (settings.right && settings.right.length) { %><div class="media-control-right-panel" data-media-control><% render(settings.right); %></div><% } %></div>'),
   'seek_time': _.template('<span data-seek-time></span>'),
@@ -4045,7 +3826,7 @@ module.exports = {
 };
 
 
-},{"underscore":"underscore"}],9:[function(require,module,exports){
+},{"underscore":"underscore"}],8:[function(require,module,exports){
 "use strict";
 var $ = require('zepto');
 var _ = require('underscore');
@@ -4057,7 +3838,7 @@ var Styler = {getStyleFor: function(name, options) {
 module.exports = Styler;
 
 
-},{"./jst":8,"underscore":"underscore","zepto":"zepto"}],10:[function(require,module,exports){
+},{"./jst":7,"underscore":"underscore","zepto":"zepto"}],9:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var extend = function(protoProps, staticProps) {
@@ -4147,12 +3928,12 @@ module.exports = {
 };
 
 
-},{"underscore":"underscore"}],11:[function(require,module,exports){
+},{"underscore":"underscore"}],10:[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var Styler = require('../../base/styler');
 var _ = require('underscore');
-var Events = require('../../base/events');
+var Events = require('events');
 var Container = function Container(options) {
   $traceurRuntime.superCall(this, $Container.prototype, "constructor", [options]);
   this.playback = options.playback;
@@ -4337,13 +4118,13 @@ var $Container = Container;
 module.exports = Container;
 
 
-},{"../../base/events":7,"../../base/styler":9,"ui_object":"ui_object","underscore":"underscore"}],12:[function(require,module,exports){
+},{"../../base/styler":8,"events":"events","ui_object":"ui_object","underscore":"underscore"}],11:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var BaseObject = require('base_object');
 var Container = require('container');
 var $ = require('zepto');
-var Events = require('../../base/events');
+var Events = require('events');
 var ContainerFactory = function ContainerFactory(options, loader) {
   $traceurRuntime.superCall(this, $ContainerFactory.prototype, "constructor", [options]);
   this.options = options;
@@ -4393,12 +4174,12 @@ var $ContainerFactory = ContainerFactory;
 module.exports = ContainerFactory;
 
 
-},{"../../base/events":7,"base_object":"base_object","container":"container","underscore":"underscore","zepto":"zepto"}],13:[function(require,module,exports){
+},{"base_object":"base_object","container":"container","events":"events","underscore":"underscore","zepto":"zepto"}],12:[function(require,module,exports){
 "use strict";
 module.exports = require('./container_factory');
 
 
-},{"./container_factory":12}],14:[function(require,module,exports){
+},{"./container_factory":11}],13:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('zepto');
@@ -4409,7 +4190,7 @@ var Styler = require('../../base/styler');
 var MediaControl = require('media_control');
 var PlayerInfo = require('player_info');
 var Mediator = require('mediator');
-var Events = require('../../base/events');
+var Events = require('events');
 var Core = function Core(options) {
   var $__0 = this;
   $traceurRuntime.superCall(this, $Core.prototype, "constructor", [options]);
@@ -4617,7 +4398,7 @@ var $Core = Core;
 module.exports = Core;
 
 
-},{"../../base/events":7,"../../base/styler":9,"../../base/utils":10,"../container_factory":13,"media_control":"media_control","mediator":"mediator","player_info":"player_info","ui_object":"ui_object","underscore":"underscore","zepto":"zepto"}],15:[function(require,module,exports){
+},{"../../base/styler":8,"../../base/utils":9,"../container_factory":12,"events":"events","media_control":"media_control","mediator":"mediator","player_info":"player_info","ui_object":"ui_object","underscore":"underscore","zepto":"zepto"}],14:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var BaseObject = require('base_object');
@@ -4651,12 +4432,12 @@ var CoreFactory = function CoreFactory(player, loader) {
 module.exports = CoreFactory;
 
 
-},{"base_object":"base_object","core":"core","underscore":"underscore"}],16:[function(require,module,exports){
+},{"base_object":"base_object","core":"core","underscore":"underscore"}],15:[function(require,module,exports){
 "use strict";
 module.exports = require('./core_factory');
 
 
-},{"./core_factory":15}],17:[function(require,module,exports){
+},{"./core_factory":14}],16:[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var $ = require('zepto');
@@ -4705,17 +4486,17 @@ var $IframePlayer = IframePlayer;
 module.exports = IframePlayer;
 
 
-},{"../player":22,"base_object":"base_object","zepto":"zepto"}],18:[function(require,module,exports){
+},{"../player":21,"base_object":"base_object","zepto":"zepto"}],17:[function(require,module,exports){
 "use strict";
 module.exports = require('./iframe_player');
 
 
-},{"./iframe_player":17}],19:[function(require,module,exports){
+},{"./iframe_player":16}],18:[function(require,module,exports){
 "use strict";
 module.exports = require('./loader');
 
 
-},{"./loader":20}],20:[function(require,module,exports){
+},{"./loader":19}],19:[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var _ = require('underscore');
@@ -4769,7 +4550,7 @@ var $Loader = Loader;
 module.exports = Loader;
 
 
-},{"../../playbacks/no_op":29,"../../plugins/background_button":32,"../../plugins/click_to_pause":34,"../../plugins/dvr_controls":36,"../../plugins/google_analytics":38,"../../plugins/spinner_three_bounce":42,"../../plugins/stats":44,"../../plugins/watermark":46,"base_object":"base_object","flash":"flash","hls":"hls","html5_audio":"html5_audio","html5_video":"html5_video","player_info":"player_info","poster":"poster","underscore":"underscore"}],21:[function(require,module,exports){
+},{"../../playbacks/no_op":28,"../../plugins/background_button":31,"../../plugins/click_to_pause":33,"../../plugins/dvr_controls":35,"../../plugins/google_analytics":37,"../../plugins/spinner_three_bounce":41,"../../plugins/stats":43,"../../plugins/watermark":45,"base_object":"base_object","flash":"flash","hls":"hls","html5_audio":"html5_audio","html5_video":"html5_video","player_info":"player_info","poster":"poster","underscore":"underscore"}],20:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('zepto');
@@ -4781,7 +4562,7 @@ var Mousetrap = require('mousetrap');
 var SeekTime = require('../seek_time');
 var Mediator = require('mediator');
 var PlayerInfo = require('player_info');
-var Events = require('../../base/events');
+var Events = require('events');
 var MediaControl = function MediaControl(options) {
   var $__0 = this;
   $traceurRuntime.superCall(this, $MediaControl.prototype, "constructor", [options]);
@@ -5230,7 +5011,7 @@ var $MediaControl = MediaControl;
 module.exports = MediaControl;
 
 
-},{"../../base/events":7,"../../base/jst":8,"../../base/styler":9,"../../base/utils":10,"../seek_time":23,"mediator":"mediator","mousetrap":4,"player_info":"player_info","ui_object":"ui_object","underscore":"underscore","zepto":"zepto"}],22:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"../../base/utils":9,"../seek_time":22,"events":"events","mediator":"mediator","mousetrap":4,"player_info":"player_info","ui_object":"ui_object","underscore":"underscore","zepto":"zepto"}],21:[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var CoreFactory = require('./core_factory');
@@ -5325,18 +5106,18 @@ var $Player = Player;
 module.exports = Player;
 
 
-},{"./core_factory":16,"./loader":19,"base_object":"base_object","player_info":"player_info","scrollmonitor":5,"underscore":"underscore"}],23:[function(require,module,exports){
+},{"./core_factory":15,"./loader":18,"base_object":"base_object","player_info":"player_info","scrollmonitor":5,"underscore":"underscore"}],22:[function(require,module,exports){
 "use strict";
 module.exports = require('./seek_time');
 
 
-},{"./seek_time":24}],24:[function(require,module,exports){
+},{"./seek_time":23}],23:[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var formatTime = require('../../base/utils').formatTime;
-var Events = require('../../base/events');
+var Events = require('events');
 var SeekTime = function SeekTime(mediaControl) {
   $traceurRuntime.superCall(this, $SeekTime.prototype, "constructor", []);
   this.mediaControl = mediaControl;
@@ -5394,7 +5175,7 @@ var $SeekTime = SeekTime;
 module.exports = SeekTime;
 
 
-},{"../../base/events":7,"../../base/jst":8,"../../base/styler":9,"../../base/utils":10,"ui_object":"ui_object"}],25:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"../../base/utils":9,"events":"events","ui_object":"ui_object"}],24:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
 var Styler = require('../../base/styler');
@@ -5405,7 +5186,7 @@ var $ = require('zepto');
 var Browser = require('browser');
 var Mousetrap = require('mousetrap');
 var seekStringToSeconds = require('../../base/utils').seekStringToSeconds;
-var Events = require('../../base/events');
+var Events = require('events');
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>';
 var Flash = function Flash(options) {
   $traceurRuntime.superCall(this, $Flash.prototype, "constructor", [options]);
@@ -5609,7 +5390,7 @@ Flash.canPlay = function(resource) {
 module.exports = Flash;
 
 
-},{"../../base/events":7,"../../base/jst":8,"../../base/styler":9,"../../base/utils":10,"browser":"browser","mediator":"mediator","mousetrap":4,"playback":"playback","underscore":"underscore","zepto":"zepto"}],26:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"../../base/utils":9,"browser":"browser","events":"events","mediator":"mediator","mousetrap":4,"playback":"playback","underscore":"underscore","zepto":"zepto"}],25:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
 var Styler = require('../../base/styler');
@@ -5617,7 +5398,7 @@ var JST = require('../../base/jst');
 var _ = require("underscore");
 var Mediator = require('mediator');
 var Browser = require('browser');
-var Events = require('../../base/events');
+var Events = require('events');
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" class="hls-playback" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls="" width="100%" height="100%"><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>';
 var HLS = function HLS(options) {
   $traceurRuntime.superCall(this, $HLS.prototype, "constructor", [options]);
@@ -5923,10 +5704,10 @@ HLS.canPlay = function(resource) {
 module.exports = HLS;
 
 
-},{"../../base/events":7,"../../base/jst":8,"../../base/styler":9,"browser":"browser","mediator":"mediator","playback":"playback","underscore":"underscore"}],27:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"browser":"browser","events":"events","mediator":"mediator","playback":"playback","underscore":"underscore"}],26:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
-var Events = require('../../base/events');
+var Events = require('events');
 var HTML5Audio = function HTML5Audio(params) {
   $traceurRuntime.superCall(this, $HTML5Audio.prototype, "constructor", [params]);
   this.el.src = params.src;
@@ -6014,7 +5795,7 @@ HTML5Audio.canPlay = function(resource) {
 module.exports = HTML5Audio;
 
 
-},{"../../base/events":7,"playback":"playback"}],28:[function(require,module,exports){
+},{"events":"events","playback":"playback"}],27:[function(require,module,exports){
 (function (process){
 "use strict";
 var Playback = require('playback');
@@ -6023,7 +5804,7 @@ var Styler = require('../../base/styler');
 var Browser = require('browser');
 var Mousetrap = require('mousetrap');
 var seekStringToSeconds = require('../../base/utils').seekStringToSeconds;
-var Events = require('../../base/events');
+var Events = require('events');
 var _ = require('underscore');
 var HTML5Video = function HTML5Video(options) {
   $traceurRuntime.superCall(this, $HTML5Video.prototype, "constructor", [options]);
@@ -6227,12 +6008,12 @@ module.exports = HTML5Video;
 
 
 }).call(this,require('_process'))
-},{"../../base/events":7,"../../base/jst":8,"../../base/styler":9,"../../base/utils":10,"_process":2,"browser":"browser","mousetrap":4,"playback":"playback","underscore":"underscore"}],29:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"../../base/utils":9,"_process":2,"browser":"browser","events":"events","mousetrap":4,"playback":"playback","underscore":"underscore"}],28:[function(require,module,exports){
 "use strict";
 module.exports = require('./no_op');
 
 
-},{"./no_op":30}],30:[function(require,module,exports){
+},{"./no_op":29}],29:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
 var JST = require('../../base/jst');
@@ -6264,13 +6045,13 @@ NoOp.canPlay = (function(source) {
 module.exports = NoOp;
 
 
-},{"../../base/jst":8,"../../base/styler":9,"playback":"playback"}],31:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"playback":"playback"}],30:[function(require,module,exports){
 (function (process){
 "use strict";
 var UICorePlugin = require('ui_core_plugin');
 var JST = require('../../base/jst');
 var Styler = require('../../base/styler');
-var Events = require('../../base/events');
+var Events = require('events');
 var Browser = require('browser');
 var Mediator = require('mediator');
 var PlayerInfo = require('player_info');
@@ -6404,15 +6185,15 @@ module.exports = BackgroundButton;
 
 
 }).call(this,require('_process'))
-},{"../../base/events":7,"../../base/jst":8,"../../base/styler":9,"_process":2,"browser":"browser","mediator":"mediator","player_info":"player_info","ui_core_plugin":"ui_core_plugin"}],32:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"_process":2,"browser":"browser","events":"events","mediator":"mediator","player_info":"player_info","ui_core_plugin":"ui_core_plugin"}],31:[function(require,module,exports){
 "use strict";
 module.exports = require('./background_button');
 
 
-},{"./background_button":31}],33:[function(require,module,exports){
+},{"./background_button":30}],32:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('container_plugin');
-var Events = require('../../base/events');
+var Events = require('events');
 var ClickToPausePlugin = function ClickToPausePlugin() {
   $traceurRuntime.defaultSuperCall(this, $ClickToPausePlugin.prototype, arguments);
 };
@@ -6444,17 +6225,17 @@ var $ClickToPausePlugin = ClickToPausePlugin;
 module.exports = ClickToPausePlugin;
 
 
-},{"../../base/events":7,"container_plugin":"container_plugin"}],34:[function(require,module,exports){
+},{"container_plugin":"container_plugin","events":"events"}],33:[function(require,module,exports){
 "use strict";
 module.exports = require('./click_to_pause');
 
 
-},{"./click_to_pause":33}],35:[function(require,module,exports){
+},{"./click_to_pause":32}],34:[function(require,module,exports){
 "use strict";
 var UICorePlugin = require('ui_core_plugin');
 var JST = require('../../base/jst');
 var Styler = require('../../base/styler');
-var Events = require('../../base/events');
+var Events = require('events');
 var DVRControls = function DVRControls(core) {
   $traceurRuntime.superCall(this, $DVRControls.prototype, "constructor", [core]);
   this.core = core;
@@ -6533,15 +6314,15 @@ var $DVRControls = DVRControls;
 module.exports = DVRControls;
 
 
-},{"../../base/events":7,"../../base/jst":8,"../../base/styler":9,"ui_core_plugin":"ui_core_plugin"}],36:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"events":"events","ui_core_plugin":"ui_core_plugin"}],35:[function(require,module,exports){
 "use strict";
 module.exports = require('./dvr_controls');
 
 
-},{"./dvr_controls":35}],37:[function(require,module,exports){
+},{"./dvr_controls":34}],36:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('container_plugin');
-var Events = require('../../base/events');
+var Events = require('events');
 var GoogleAnalytics = function GoogleAnalytics(options) {
   $traceurRuntime.superCall(this, $GoogleAnalytics.prototype, "constructor", [options]);
   if (options.gaAccount) {
@@ -6648,17 +6429,17 @@ var $GoogleAnalytics = GoogleAnalytics;
 module.exports = GoogleAnalytics;
 
 
-},{"../../base/events":7,"container_plugin":"container_plugin"}],38:[function(require,module,exports){
+},{"container_plugin":"container_plugin","events":"events"}],37:[function(require,module,exports){
 "use strict";
 module.exports = require('./google_analytics');
 
 
-},{"./google_analytics":37}],39:[function(require,module,exports){
+},{"./google_analytics":36}],38:[function(require,module,exports){
 "use strict";
 module.exports = require('./log');
 
 
-},{"./log":40}],40:[function(require,module,exports){
+},{"./log":39}],39:[function(require,module,exports){
 "use strict";
 var Mousetrap = require('mousetrap');
 var _ = require('underscore');
@@ -6710,13 +6491,13 @@ Log.getInstance = function() {
 module.exports = Log;
 
 
-},{"mousetrap":4,"underscore":"underscore"}],41:[function(require,module,exports){
+},{"mousetrap":4,"underscore":"underscore"}],40:[function(require,module,exports){
 (function (process){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
-var Events = require('../../base/events');
+var Events = require('events');
 var Mediator = require('mediator');
 var PlayerInfo = require('player_info');
 var $ = require('zepto');
@@ -6827,17 +6608,17 @@ module.exports = PosterPlugin;
 
 
 }).call(this,require('_process'))
-},{"../../base/events":7,"../../base/jst":8,"../../base/styler":9,"_process":2,"mediator":"mediator","player_info":"player_info","ui_container_plugin":"ui_container_plugin","underscore":"underscore","zepto":"zepto"}],42:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"_process":2,"events":"events","mediator":"mediator","player_info":"player_info","ui_container_plugin":"ui_container_plugin","underscore":"underscore","zepto":"zepto"}],41:[function(require,module,exports){
 "use strict";
 module.exports = require('./spinner_three_bounce');
 
 
-},{"./spinner_three_bounce":43}],43:[function(require,module,exports){
+},{"./spinner_three_bounce":42}],42:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
-var Events = require('../../base/events');
+var Events = require('events');
 var SpinnerThreeBouncePlugin = function SpinnerThreeBouncePlugin(options) {
   $traceurRuntime.superCall(this, $SpinnerThreeBouncePlugin.prototype, "constructor", [options]);
   this.template = JST.spinner_three_bounce;
@@ -6878,16 +6659,16 @@ var $SpinnerThreeBouncePlugin = SpinnerThreeBouncePlugin;
 module.exports = SpinnerThreeBouncePlugin;
 
 
-},{"../../base/events":7,"../../base/jst":8,"../../base/styler":9,"ui_container_plugin":"ui_container_plugin"}],44:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"events":"events","ui_container_plugin":"ui_container_plugin"}],43:[function(require,module,exports){
 "use strict";
 module.exports = require('./stats');
 
 
-},{"./stats":45}],45:[function(require,module,exports){
+},{"./stats":44}],44:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('container_plugin');
 var $ = require("zepto");
-var Events = require('../../base/events');
+var Events = require('events');
 var StatsPlugin = function StatsPlugin(options) {
   $traceurRuntime.superCall(this, $StatsPlugin.prototype, "constructor", [options]);
   this.setInitialAttrs();
@@ -6979,17 +6760,17 @@ var $StatsPlugin = StatsPlugin;
 module.exports = StatsPlugin;
 
 
-},{"../../base/events":7,"container_plugin":"container_plugin","zepto":"zepto"}],46:[function(require,module,exports){
+},{"container_plugin":"container_plugin","events":"events","zepto":"zepto"}],45:[function(require,module,exports){
 "use strict";
 module.exports = require('./watermark');
 
 
-},{"./watermark":47}],47:[function(require,module,exports){
+},{"./watermark":46}],46:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
-var Events = require('../../base/events');
+var Events = require('events');
 var WaterMarkPlugin = function WaterMarkPlugin(options) {
   $traceurRuntime.superCall(this, $WaterMarkPlugin.prototype, "constructor", [options]);
   this.template = JST[this.name];
@@ -7033,11 +6814,11 @@ var $WaterMarkPlugin = WaterMarkPlugin;
 module.exports = WaterMarkPlugin;
 
 
-},{"../../base/events":7,"../../base/jst":8,"../../base/styler":9,"ui_container_plugin":"ui_container_plugin"}],"base_object":[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"events":"events","ui_container_plugin":"ui_container_plugin"}],"base_object":[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var extend = require('./utils').extend;
-var Events = require('./events');
+var Events = require('events');
 var pluginOptions = ['container'];
 var BaseObject = function BaseObject(options) {
   this.uniqueId = _.uniqueId('o');
@@ -7049,7 +6830,7 @@ BaseObject.extend = extend;
 module.exports = BaseObject;
 
 
-},{"./events":7,"./utils":10,"underscore":"underscore"}],"browser":[function(require,module,exports){
+},{"./utils":9,"events":"events","underscore":"underscore"}],"browser":[function(require,module,exports){
 "use strict";
 var Browser = function Browser() {};
 ($traceurRuntime.createClass)(Browser, {}, {});
@@ -7094,7 +6875,7 @@ module.exports = ContainerPlugin;
 module.exports = require('./container');
 
 
-},{"./container":11}],"core_plugin":[function(require,module,exports){
+},{"./container":10}],"core_plugin":[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var CorePlugin = function CorePlugin(core) {
@@ -7116,34 +6897,253 @@ module.exports = CorePlugin;
 module.exports = require('./core');
 
 
-},{"./core":14}],"flash":[function(require,module,exports){
+},{"./core":13}],"events":[function(require,module,exports){
+"use strict";
+var _ = require('underscore');
+var Log = require('../plugins/log').getInstance();
+var slice = Array.prototype.slice;
+var Events = function Events() {};
+($traceurRuntime.createClass)(Events, {
+  on: function(name, callback, context) {
+    if (!eventsApi(this, 'on', name, [callback, context]) || !callback)
+      return this;
+    this._events || (this._events = {});
+    var events = this._events[name] || (this._events[name] = []);
+    events.push({
+      callback: callback,
+      context: context,
+      ctx: context || this
+    });
+    return this;
+  },
+  once: function(name, callback, context) {
+    if (!eventsApi(this, 'once', name, [callback, context]) || !callback)
+      return this;
+    var self = this;
+    var once = _.once(function() {
+      self.off(name, once);
+      callback.apply(this, arguments);
+    });
+    once._callback = callback;
+    return this.on(name, once, context);
+  },
+  off: function(name, callback, context) {
+    var retain,
+        ev,
+        events,
+        names,
+        i,
+        l,
+        j,
+        k;
+    if (!this._events || !eventsApi(this, 'off', name, [callback, context]))
+      return this;
+    if (!name && !callback && !context) {
+      this._events = void 0;
+      return this;
+    }
+    names = name ? [name] : _.keys(this._events);
+    for (i = 0, l = names.length; i < l; i++) {
+      name = names[i];
+      events = this._events[name];
+      if (events) {
+        this._events[name] = retain = [];
+        if (callback || context) {
+          for (j = 0, k = events.length; j < k; j++) {
+            ev = events[j];
+            if ((callback && callback !== ev.callback && callback !== ev.callback._callback) || (context && context !== ev.context)) {
+              retain.push(ev);
+            }
+          }
+        }
+        if (!retain.length)
+          delete this._events[name];
+      }
+    }
+    return this;
+  },
+  trigger: function(name) {
+    var klass = arguments[arguments.length - 1];
+    Log.info(klass, name);
+    if (!this._events)
+      return this;
+    var args = slice.call(arguments, 1);
+    if (!eventsApi(this, 'trigger', name, args))
+      return this;
+    var events = this._events[name];
+    var allEvents = this._events.all;
+    if (events)
+      triggerEvents(events, args);
+    if (allEvents)
+      triggerEvents(allEvents, arguments);
+    return this;
+  },
+  stopListening: function(obj, name, callback) {
+    var listeningTo = this._listeningTo;
+    if (!listeningTo)
+      return this;
+    var remove = !name && !callback;
+    if (!callback && typeof name === 'object')
+      callback = this;
+    if (obj)
+      (listeningTo = {})[obj._listenId] = obj;
+    for (var id in listeningTo) {
+      obj = listeningTo[id];
+      obj.off(name, callback, this);
+      if (remove || _.isEmpty(obj._events))
+        delete this._listeningTo[id];
+    }
+    return this;
+  }
+}, {});
+var eventSplitter = /\s+/;
+var eventsApi = function(obj, action, name, rest) {
+  if (!name)
+    return true;
+  if (typeof name === 'object') {
+    for (var key in name) {
+      obj[action].apply(obj, [key, name[key]].concat(rest));
+    }
+    return false;
+  }
+  if (eventSplitter.test(name)) {
+    var names = name.split(eventSplitter);
+    for (var i = 0,
+        l = names.length; i < l; i++) {
+      obj[action].apply(obj, [names[i]].concat(rest));
+    }
+    return false;
+  }
+  return true;
+};
+var triggerEvents = function(events, args) {
+  var ev,
+      i = -1,
+      l = events.length,
+      a1 = args[0],
+      a2 = args[1],
+      a3 = args[2];
+  switch (args.length) {
+    case 0:
+      while (++i < l)
+        (ev = events[i]).callback.call(ev.ctx);
+      return;
+    case 1:
+      while (++i < l)
+        (ev = events[i]).callback.call(ev.ctx, a1);
+      return;
+    case 2:
+      while (++i < l)
+        (ev = events[i]).callback.call(ev.ctx, a1, a2);
+      return;
+    case 3:
+      while (++i < l)
+        (ev = events[i]).callback.call(ev.ctx, a1, a2, a3);
+      return;
+    default:
+      while (++i < l)
+        (ev = events[i]).callback.apply(ev.ctx, args);
+      return;
+  }
+};
+var listenMethods = {
+  listenTo: 'on',
+  listenToOnce: 'once'
+};
+_.each(listenMethods, function(implementation, method) {
+  Events.prototype[method] = function(obj, name, callback) {
+    var listeningTo = this._listeningTo || (this._listeningTo = {});
+    var id = obj._listenId || (obj._listenId = _.uniqueId('l'));
+    listeningTo[id] = obj;
+    if (!callback && typeof name === 'object')
+      callback = this;
+    obj[implementation](name, callback, this);
+    return this;
+  };
+});
+Events.PLAYER_RESIZE = 'player:resize';
+Events.PLAYBACK_PROGRESS = 'playback:progress';
+Events.PLAYBACK_TIMEUPDATE = 'playback:timeupdate';
+Events.PLAYBACK_READY = 'playback:ready';
+Events.PLAYBACK_BUFFERING = 'playback:buffering';
+Events.PLAYBACK_BUFFERFULL = 'playback:bufferfull';
+Events.PLAYBACK_SETTINGSUPDATE = 'playback:settingsupdate';
+Events.PLAYBACK_LOADEDMETADATA = 'playback:loadedmetadata';
+Events.PLAYBACK_HIGHDEFINITIONUPDATE = 'playback:highdefinitionupdate';
+Events.PLAYBACK_BITRATE = 'playback:bitrate';
+Events.PLAYBACK_PLAYBACKSTATE = 'playback:playbackstate';
+Events.PLAYBACK_DVR = 'playback:dvr';
+Events.PLAYBACK_MEDIACONTROL_DISABLE = 'playback:mediacontrol:disable';
+Events.PLAYBACK_MEDIACONTROL_ENABLE = 'playback:mediacontrol:enable';
+Events.PLAYBACK_ENDED = 'playback:ended';
+Events.PLAYBACK_PLAY = 'playback:play';
+Events.PLAYBACK_ERROR = 'playback:error';
+Events.PLAYBACK_STATS_ADD = 'playback:stats:add';
+Events.CONTAINER_PLAYBACKSTATE = 'container:playbackstate';
+Events.CONTAINER_PLAYBACKDVRSTATECHANGED = 'container:dvr';
+Events.CONTAINER_BITRATE = 'container:bitrate';
+Events.CONTAINER_STATS_REPORT = 'container:stats:report';
+Events.CONTAINER_DESTROYED = 'container:destroyed';
+Events.CONTAINER_READY = 'container:ready';
+Events.CONTAINER_ERROR = 'container:error';
+Events.CONTAINER_LOADEDMETADATA = 'container:loadedmetadata';
+Events.CONTAINER_TIMEUPDATE = 'container:timeupdate';
+Events.CONTAINER_PROGRESS = 'container:progress';
+Events.CONTAINER_PLAY = 'container:play';
+Events.CONTAINER_STOP = 'container:stop';
+Events.CONTAINER_PAUSE = 'container:pause';
+Events.CONTAINER_ENDED = 'container:ended';
+Events.CONTAINER_CLICK = 'container:click';
+Events.CONTAINER_SEEK = 'container:seek';
+Events.CONTAINER_VOLUME = 'container:volume';
+Events.CONTAINER_FULLSCREEN = 'container:fullscreen';
+Events.CONTAINER_STATE_BUFFERING = 'container:state:buffering';
+Events.CONTAINER_STATE_BUFFERFULL = 'container:state:bufferfull';
+Events.CONTAINER_SETTINGSUPDATE = 'container:settingsupdate';
+Events.CONTAINER_HIGHDEFINITIONUPDATE = 'container:highdefinitionupdate';
+Events.CONTAINER_MEDIACONTROL_DISABLE = 'container:mediacontrol:disable';
+Events.CONTAINER_MEDIACONTROL_ENABLE = 'container:mediacontrol:enable';
+Events.CONTAINER_STATS_ADD = 'container:stats:add';
+Events.MEDIACONTROL_RENDERED = 'mediacontrol:rendered';
+Events.MEDIACONTROL_FULLSCREEN = 'mediacontrol:fullscreen';
+Events.MEDIACONTROL_SHOW = 'mediacontrol:show';
+Events.MEDIACONTROL_HIDE = 'mediacontrol:hide';
+Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR = 'mediacontrol:mousemove:seekbar';
+Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR = 'mediacontrol:mouseleave:seekbar';
+Events.MEDIACONTROL_PLAYING = 'mediacontrol:playing';
+Events.MEDIACONTROL_NOTPLAYING = 'mediacontrol:notplaying';
+Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged';
+module.exports = Events;
+
+
+},{"../plugins/log":38,"underscore":"underscore"}],"flash":[function(require,module,exports){
 "use strict";
 module.exports = require('./flash');
 
 
-},{"./flash":25}],"hls":[function(require,module,exports){
+},{"./flash":24}],"hls":[function(require,module,exports){
 "use strict";
 module.exports = require('./hls');
 
 
-},{"./hls":26}],"html5_audio":[function(require,module,exports){
+},{"./hls":25}],"html5_audio":[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_audio');
 
 
-},{"./html5_audio":27}],"html5_video":[function(require,module,exports){
+},{"./html5_audio":26}],"html5_video":[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_video');
 
 
-},{"./html5_video":28}],"media_control":[function(require,module,exports){
+},{"./html5_video":27}],"media_control":[function(require,module,exports){
 "use strict";
 module.exports = require('./media_control');
 
 
-},{"./media_control":21}],"mediator":[function(require,module,exports){
+},{"./media_control":20}],"mediator":[function(require,module,exports){
 "use strict";
-var Events = require('../base/events');
+var Events = require('events');
 var events = new Events();
 var Mediator = function Mediator() {};
 ($traceurRuntime.createClass)(Mediator, {}, {});
@@ -7170,7 +7170,7 @@ Mediator.stopListening = function(obj, name, callback) {
 module.exports = Mediator;
 
 
-},{"../base/events":7}],"playback":[function(require,module,exports){
+},{"events":"events"}],"playback":[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var Playback = function Playback(options) {
@@ -7224,7 +7224,7 @@ module.exports = PlayerInfo;
 module.exports = require('./poster');
 
 
-},{"./poster":41}],"ui_container_plugin":[function(require,module,exports){
+},{"./poster":40}],"ui_container_plugin":[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var UIContainerPlugin = function UIContainerPlugin(options) {
@@ -7374,7 +7374,7 @@ UIObject.extend = extend;
 module.exports = UIObject;
 
 
-},{"./utils":10,"base_object":"base_object","underscore":"underscore","zepto":"zepto"}],"underscore":[function(require,module,exports){
+},{"./utils":9,"base_object":"base_object","underscore":"underscore","zepto":"zepto"}],"underscore":[function(require,module,exports){
 //     Underscore.js 1.7.0
 //     http://underscorejs.org
 //     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
