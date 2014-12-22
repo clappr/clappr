@@ -50,6 +50,7 @@ module.exports = function(config) {
         bundle.external('underscore');
         bundle.external('mediator');
         bundle.external('container');
+        bundle.external('events');
       }
     },
 
