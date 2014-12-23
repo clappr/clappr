@@ -21,6 +21,25 @@ describe('Utils', () => {
     url = 'http://globo.com/rede-globo/globo-esporte/v/brasil-usa-col/3735973/'
     expect(utils.seekStringToSeconds(url)).to.equal(0);
   });
+
+  describe('Config', () => {
+    beforeEach(() => {
+      localStorage.removeItem("clappr.volume")
+    });
+
+    it('restores default volume', () => {
+      expect(utils.Config.restore('volume')).to.be.equal(100)
+    });
+
+    it('restores a persisted volume', () => {
+      utils.Config.persist('volume', 42)
+      expect(utils.Config.restore('volume')).to.be.equal(42)
+    });
+
+    it('returns undefined for unknown key', () => {
+      expect(utils.Config.restore('unknown.key.CAFE')).to.be.equal(undefined)
+    });
+  });
 })
 
 

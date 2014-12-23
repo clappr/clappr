@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 var _ = require('underscore');
+var Browser = require('browser');
 
 var extend = function(protoProps, staticProps) {
   var parent = this;
@@ -78,6 +79,50 @@ var Fullscreen = {
   }
 };
 
+class Config {}
+
+Config._defaultConfig = {
+  volume: {
+    value: 100,
+    parse: parseInt
+  }
+}
+
+Config._defaultValueFor = function(key) {
+  try {
+    return Config._defaultConfig[key]['parse'](Config._defaultConfig[key]['value']);
+  } catch(e) {
+    return undefined
+  }
+}
+
+Config._create_keyspace = function(key){
+  return 'clappr.' + key
+}
+
+Config.restore = function(key) {
+  if (Browser.hasLocalstorage) {
+    if (localStorage[Config._create_keyspace(key)]){
+      return Config._defaultConfig[key]['parse'](localStorage[Config._create_keyspace(key)])
+    }else{
+      return Config._defaultValueFor(key)
+    }
+  }else{
+    return Config._defaultValueFor(key)
+  }
+}
+
+Config.persist = function(key, value) {
+  if (Browser.hasLocalstorage) {
+    try {
+      localStorage[Config._create_keyspace(key)] = value
+      return true
+    } catch(e) {
+      return false
+    }
+  }
+}
+
 var seekStringToSeconds = function(url) {
   var elements = _.rest(_.compact(url.match(/t=([0-9]*)h?([0-9]*)m?([0-9]*)s/))).reverse();
   var seconds = 0;
@@ -93,5 +138,6 @@ module.exports = {
   extend: extend,
   formatTime: formatTime,
   Fullscreen: Fullscreen,
+  Config: Config,
   seekStringToSeconds: seekStringToSeconds
 };

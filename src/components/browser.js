@@ -5,6 +5,16 @@
 class Browser {
 }
 
+var hasLocalstorage = function(){
+  try {
+    localStorage.setItem('clappr', 'clappr')
+    localStorage.removeItem('clappr')
+    return true
+  } catch(e) {
+    return false
+  }
+}
+
 Browser.isSafari = (!!navigator.userAgent.match(/safari/i) && navigator.userAgent.indexOf('Chrome') === -1)
 Browser.isChrome = !!(navigator.userAgent.match(/chrome/i))
 Browser.isFirefox = !!(navigator.userAgent.match(/firefox/i))
@@ -15,5 +25,6 @@ Browser.isMobile = !!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|I
 Browser.isWin8App = !!(/MSAppHost/i.test(navigator.userAgent))
 Browser.isWiiU = !!(/WiiU/i.test(navigator.userAgent))
 Browser.isPS4 = !!(/PlayStation 4/i.test(navigator.userAgent))
+Browser.hasLocalstorage = hasLocalstorage()
 
 module.exports = Browser
