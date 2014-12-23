@@ -127,12 +127,15 @@ Then enter the project directory and install the dependencies:
 
 `npm install`
 
-Make your changes and build your own version:
+Make your changes and run the tests:
+
+`npm test`
+
+Build your own version:
 
 `gulp build`
 
 Check the result on `dist/` folder.
-
 
 ### Contributors
 
