@@ -3724,7 +3724,7 @@ module.exports = mousetrap;
 },{}],6:[function(require,module,exports){
 module.exports={
   "name": "clappr",
-  "version": "0.0.72",
+  "version": "0.0.73",
   "description": "An extensible media player for the web",
   "main": "dist/clappr.min.js",
   "scripts": {
@@ -3816,6 +3816,7 @@ module.exports = {
     'flash': '[data-flash]{position:absolute;height:100%;width:100%;background-color:#000;display:block;pointer-events:none}',
     'hls': '[data-hls]{position:absolute;height:100%;width:100%;background-color:#000;display:block;pointer-events:none;top:0}',
     'html5_video': '[data-html5-video]{position:absolute;height:100%;width:100%;display:block}',
+    'html_img': '[data-html-img]{max-width:100%;max-height:100%}',
     'no_op': '[data-no-op]{z-index:1000;position:absolute;background-color:#222;height:100%;width:100%}[data-no-op] p[data-no-op-msg]{position:relative;font-size:25px;top:50%;color:#fff}',
     'background_button': '.background-button[data-background-button]{font-family:Player;position:absolute;height:100%;width:100%;background-color:rgba(0,0,0,.2);pointer-events:none;-webkit-transition:all .4s;-webkit-transition-delay:ease-out;-moz-transition:all .4s ease-out;-o-transition:all .4s ease-out;transition:all .4s ease-out}.background-button[data-background-button].hide{background-color:transparent}.background-button[data-background-button].hide .background-button-wrapper[data-background-button]{opacity:0}.background-button[data-background-button] .background-button-wrapper[data-background-button]{position:absolute;overflow:hidden;width:100%;height:25%;line-height:100%;font-size:25%;top:50%;text-align:center}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button]{cursor:pointer;pointer-events:auto;font-family:Player;font-weight:400;font-style:normal;line-height:1;letter-spacing:0;speak:none;color:#fff;opacity:.75;border:0;outline:0;background-color:transparent;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-webkit-transition:all .1s;-webkit-transition-delay:ease;-moz-transition:all .1s ease;-o-transition:all .1s ease;transition:all .1s ease}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button]:hover{opacity:1;text-shadow:rgba(255,255,255,.8) 0 0 15px}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button].playing:before{content:"\\e002"}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button].notplaying:before{content:"\\e001"}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button].playstop.playing:before{content:"\\e003"}.background-button[data-background-button] .background-button-wrapper[data-background-button] .background-button-icon[data-background-button].playstop.notplaying:before{content:"\\e001"}.media-control.media-control-hide[data-media-control] .background-button[data-background-button]{opacity:0}',
     'dvr_controls': '@import url(http://fonts.googleapis.com/css?family=Roboto);.dvr-controls[data-dvr-controls]{display:inline-block;float:left;color:#fff;line-height:32px;font-size:10px;font-weight:700;margin-left:6px}.dvr-controls[data-dvr-controls] .live-info{cursor:default;font-family:Roboto,"Open Sans",Arial,sans-serif}.dvr-controls[data-dvr-controls] .live-info:before{content:"";display:inline-block;position:relative;width:7px;height:7px;border-radius:3.5px;margin-right:3.5px;background-color:#ff0101}.dvr-controls[data-dvr-controls] .live-info.disabled{opacity:.3}.dvr-controls[data-dvr-controls] .live-info.disabled:before{background-color:#fff}.dvr-controls[data-dvr-controls] .live-button{cursor:pointer;outline:0;display:none;border:0;color:#fff;background-color:transparent;height:32px;padding:0;opacity:.7;font-family:Roboto,"Open Sans",Arial,sans-serif;-webkit-transition:all .1s;-webkit-transition-delay:ease;-moz-transition:all .1s ease;-o-transition:all .1s ease;transition:all .1s ease}.dvr-controls[data-dvr-controls] .live-button:before{content:"";display:inline-block;position:relative;width:7px;height:7px;border-radius:3.5px;margin-right:3.5px;background-color:#fff}.dvr-controls[data-dvr-controls] .live-button:hover{opacity:1;text-shadow:rgba(255,255,255,.75) 0 0 5px}.dvr .dvr-controls[data-dvr-controls] .live-info{display:none}.dvr .dvr-controls[data-dvr-controls] .live-button{display:block}.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar]{background-color:#005aff}.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar]{background-color:#ff0101}.seek-time[data-seek-time] span[data-duration]{position:relative;color:rgba(255,255,255,.5);font-size:10px;padding-right:7px}.seek-time[data-seek-time] span[data-duration]:before{content:"|";margin-right:7px}',
@@ -4505,6 +4506,7 @@ var HTML5VideoPlayback = require('html5_video');
 var FlashVideoPlayback = require('flash');
 var HTML5AudioPlayback = require('html5_audio');
 var HLSVideoPlayback = require('hls');
+var HTMLImgPlayback = require('html_img');
 var NoOp = require('../../playbacks/no_op');
 var SpinnerThreeBouncePlugin = require('../../plugins/spinner_three_bounce');
 var StatsPlugin = require('../../plugins/stats');
@@ -4516,7 +4518,7 @@ var BackgroundButton = require('../../plugins/background_button');
 var DVRControls = require('../../plugins/dvr_controls');
 var Loader = function Loader(externalPlugins) {
   $traceurRuntime.superCall(this, $Loader.prototype, "constructor", []);
-  this.playbackPlugins = [FlashVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, HLSVideoPlayback, NoOp];
+  this.playbackPlugins = [FlashVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, HLSVideoPlayback, HTMLImgPlayback, NoOp];
   this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin];
   this.corePlugins = [BackgroundButton, DVRControls];
   if (externalPlugins) {
@@ -4550,7 +4552,7 @@ var $Loader = Loader;
 module.exports = Loader;
 
 
-},{"../../playbacks/no_op":28,"../../plugins/background_button":31,"../../plugins/click_to_pause":33,"../../plugins/dvr_controls":35,"../../plugins/google_analytics":37,"../../plugins/spinner_three_bounce":41,"../../plugins/stats":43,"../../plugins/watermark":45,"base_object":"base_object","flash":"flash","hls":"hls","html5_audio":"html5_audio","html5_video":"html5_video","player_info":"player_info","poster":"poster","underscore":"underscore"}],20:[function(require,module,exports){
+},{"../../playbacks/no_op":29,"../../plugins/background_button":32,"../../plugins/click_to_pause":34,"../../plugins/dvr_controls":36,"../../plugins/google_analytics":38,"../../plugins/spinner_three_bounce":42,"../../plugins/stats":44,"../../plugins/watermark":46,"base_object":"base_object","flash":"flash","hls":"hls","html5_audio":"html5_audio","html5_video":"html5_video","html_img":"html_img","player_info":"player_info","poster":"poster","underscore":"underscore"}],20:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('zepto');
@@ -6010,10 +6012,49 @@ module.exports = HTML5Video;
 }).call(this,require('_process'))
 },{"../../base/jst":7,"../../base/styler":8,"../../base/utils":9,"_process":2,"browser":"browser","events":"events","mousetrap":4,"playback":"playback","underscore":"underscore"}],28:[function(require,module,exports){
 "use strict";
+var Playback = require('playback');
+var Styler = require('../../base/styler');
+var JST = require('../../base/jst');
+var Events = require('events');
+var HTMLImg = function HTMLImg(params) {
+  $traceurRuntime.superCall(this, $HTMLImg.prototype, "constructor", [params]);
+  this.el.src = params.src;
+  setTimeout(function() {
+    this.trigger(Events.PLAYBACK_BUFFERFULL, this.name);
+  }.bind(this), 1);
+};
+var $HTMLImg = HTMLImg;
+($traceurRuntime.createClass)(HTMLImg, {
+  get name() {
+    return 'html_img';
+  },
+  get tagName() {
+    return 'img';
+  },
+  get attributes() {
+    return {'data-html-img': ''};
+  },
+  getPlaybackType: function() {
+    return null;
+  },
+  render: function() {
+    var style = Styler.getStyleFor(this.name);
+    this.$el.append(style);
+    return this;
+  }
+}, {}, Playback);
+HTMLImg.canPlay = function(resource) {
+  return !!resource.match(/(.*).(png|jpg|jpeg|gif|bmp)/);
+};
+module.exports = HTMLImg;
+
+
+},{"../../base/jst":7,"../../base/styler":8,"events":"events","playback":"playback"}],29:[function(require,module,exports){
+"use strict";
 module.exports = require('./no_op');
 
 
-},{"./no_op":29}],29:[function(require,module,exports){
+},{"./no_op":30}],30:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
 var JST = require('../../base/jst');
@@ -6045,7 +6086,7 @@ NoOp.canPlay = (function(source) {
 module.exports = NoOp;
 
 
-},{"../../base/jst":7,"../../base/styler":8,"playback":"playback"}],30:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"playback":"playback"}],31:[function(require,module,exports){
 (function (process){
 "use strict";
 var UICorePlugin = require('ui_core_plugin');
@@ -6185,12 +6226,12 @@ module.exports = BackgroundButton;
 
 
 }).call(this,require('_process'))
-},{"../../base/jst":7,"../../base/styler":8,"_process":2,"browser":"browser","events":"events","mediator":"mediator","player_info":"player_info","ui_core_plugin":"ui_core_plugin"}],31:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"_process":2,"browser":"browser","events":"events","mediator":"mediator","player_info":"player_info","ui_core_plugin":"ui_core_plugin"}],32:[function(require,module,exports){
 "use strict";
 module.exports = require('./background_button');
 
 
-},{"./background_button":30}],32:[function(require,module,exports){
+},{"./background_button":31}],33:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('container_plugin');
 var Events = require('events');
@@ -6225,12 +6266,12 @@ var $ClickToPausePlugin = ClickToPausePlugin;
 module.exports = ClickToPausePlugin;
 
 
-},{"container_plugin":"container_plugin","events":"events"}],33:[function(require,module,exports){
+},{"container_plugin":"container_plugin","events":"events"}],34:[function(require,module,exports){
 "use strict";
 module.exports = require('./click_to_pause');
 
 
-},{"./click_to_pause":32}],34:[function(require,module,exports){
+},{"./click_to_pause":33}],35:[function(require,module,exports){
 "use strict";
 var UICorePlugin = require('ui_core_plugin');
 var JST = require('../../base/jst');
@@ -6314,12 +6355,12 @@ var $DVRControls = DVRControls;
 module.exports = DVRControls;
 
 
-},{"../../base/jst":7,"../../base/styler":8,"events":"events","ui_core_plugin":"ui_core_plugin"}],35:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"events":"events","ui_core_plugin":"ui_core_plugin"}],36:[function(require,module,exports){
 "use strict";
 module.exports = require('./dvr_controls');
 
 
-},{"./dvr_controls":34}],36:[function(require,module,exports){
+},{"./dvr_controls":35}],37:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('container_plugin');
 var Events = require('events');
@@ -6429,17 +6470,17 @@ var $GoogleAnalytics = GoogleAnalytics;
 module.exports = GoogleAnalytics;
 
 
-},{"container_plugin":"container_plugin","events":"events"}],37:[function(require,module,exports){
+},{"container_plugin":"container_plugin","events":"events"}],38:[function(require,module,exports){
 "use strict";
 module.exports = require('./google_analytics');
 
 
-},{"./google_analytics":36}],38:[function(require,module,exports){
+},{"./google_analytics":37}],39:[function(require,module,exports){
 "use strict";
 module.exports = require('./log');
 
 
-},{"./log":39}],39:[function(require,module,exports){
+},{"./log":40}],40:[function(require,module,exports){
 "use strict";
 var Mousetrap = require('mousetrap');
 var _ = require('underscore');
@@ -6491,7 +6532,7 @@ Log.getInstance = function() {
 module.exports = Log;
 
 
-},{"mousetrap":4,"underscore":"underscore"}],40:[function(require,module,exports){
+},{"mousetrap":4,"underscore":"underscore"}],41:[function(require,module,exports){
 (function (process){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
@@ -6608,12 +6649,12 @@ module.exports = PosterPlugin;
 
 
 }).call(this,require('_process'))
-},{"../../base/jst":7,"../../base/styler":8,"_process":2,"events":"events","mediator":"mediator","player_info":"player_info","ui_container_plugin":"ui_container_plugin","underscore":"underscore","zepto":"zepto"}],41:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"_process":2,"events":"events","mediator":"mediator","player_info":"player_info","ui_container_plugin":"ui_container_plugin","underscore":"underscore","zepto":"zepto"}],42:[function(require,module,exports){
 "use strict";
 module.exports = require('./spinner_three_bounce');
 
 
-},{"./spinner_three_bounce":42}],42:[function(require,module,exports){
+},{"./spinner_three_bounce":43}],43:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
 var Styler = require('../../base/styler');
@@ -6659,12 +6700,12 @@ var $SpinnerThreeBouncePlugin = SpinnerThreeBouncePlugin;
 module.exports = SpinnerThreeBouncePlugin;
 
 
-},{"../../base/jst":7,"../../base/styler":8,"events":"events","ui_container_plugin":"ui_container_plugin"}],43:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"events":"events","ui_container_plugin":"ui_container_plugin"}],44:[function(require,module,exports){
 "use strict";
 module.exports = require('./stats');
 
 
-},{"./stats":44}],44:[function(require,module,exports){
+},{"./stats":45}],45:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('container_plugin');
 var $ = require("zepto");
@@ -6760,12 +6801,12 @@ var $StatsPlugin = StatsPlugin;
 module.exports = StatsPlugin;
 
 
-},{"container_plugin":"container_plugin","events":"events","zepto":"zepto"}],45:[function(require,module,exports){
+},{"container_plugin":"container_plugin","events":"events","zepto":"zepto"}],46:[function(require,module,exports){
 "use strict";
 module.exports = require('./watermark');
 
 
-},{"./watermark":46}],46:[function(require,module,exports){
+},{"./watermark":47}],47:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
 var Styler = require('../../base/styler');
@@ -7116,7 +7157,7 @@ Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged';
 module.exports = Events;
 
 
-},{"../plugins/log":38,"underscore":"underscore"}],"flash":[function(require,module,exports){
+},{"../plugins/log":39,"underscore":"underscore"}],"flash":[function(require,module,exports){
 "use strict";
 module.exports = require('./flash');
 
@@ -7136,7 +7177,12 @@ module.exports = require('./html5_audio');
 module.exports = require('./html5_video');
 
 
-},{"./html5_video":27}],"media_control":[function(require,module,exports){
+},{"./html5_video":27}],"html_img":[function(require,module,exports){
+"use strict";
+module.exports = require('./html_img');
+
+
+},{"./html_img":28}],"media_control":[function(require,module,exports){
 "use strict";
 module.exports = require('./media_control');
 
@@ -7224,7 +7270,7 @@ module.exports = PlayerInfo;
 module.exports = require('./poster');
 
 
-},{"./poster":40}],"ui_container_plugin":[function(require,module,exports){
+},{"./poster":41}],"ui_container_plugin":[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var UIContainerPlugin = function UIContainerPlugin(options) {
@@ -8797,4 +8843,7 @@ var Zepto=function(){function k(t){return null==t?String(t):S[j.call(t)]||"objec
 },has:function(e){return!(!u||!(e?t.inArray(e,u)>-1:u.length))},empty:function(){return s=u.length=0,this},disable:function(){return u=f=n=void 0,this},disabled:function(){return!u},lock:function(){return f=void 0,n||l.disable(),this},locked:function(){return!f},fireWith:function(t,e){return!u||i&&!f||(e=e||[],e=[t,e.slice?e.slice():e],r?f.push(e):c(e)),this},fire:function(){return l.fireWith(this,arguments)},fired:function(){return!!i}};return l}}(Zepto);
 module.exports = Zepto;
 
-},{}]},{},[3,1]);
+},{}]},{},[3,1])
+
+
+//# sourceMappingURL=clappr.map
