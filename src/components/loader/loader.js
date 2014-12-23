@@ -11,6 +11,7 @@ var HTML5VideoPlayback = require('html5_video');
 var FlashVideoPlayback = require('flash');
 var HTML5AudioPlayback = require('html5_audio');
 var HLSVideoPlayback = require('hls');
+var HTMLImgPlayback = require('html_img');
 var NoOp = require('../../playbacks/no_op');
 
 /* Container Plugins */
@@ -28,7 +29,7 @@ var DVRControls = require('../../plugins/dvr_controls');
 class Loader extends BaseObject {
   constructor(externalPlugins) {
     super()
-    this.playbackPlugins = [FlashVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, HLSVideoPlayback, NoOp]
+    this.playbackPlugins = [FlashVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, HLSVideoPlayback, HTMLImgPlayback, NoOp]
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
     this.corePlugins = [BackgroundButton, DVRControls]
     if (externalPlugins) {
