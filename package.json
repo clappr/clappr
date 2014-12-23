@@ -1,6 +1,6 @@
 {
   "name": "clappr",
-  "version": "0.0.70",
+  "version": "0.0.71",
   "description": "An extensible media player for the web",
   "main": "dist/clappr.min.js",
   "scripts": {
@@ -16,7 +16,7 @@
     "url": "https://github.com/globocom/clappr/issues"
   },
   "browser": {
-    "zepto": "clappr-zepto"
+    "zepto": "zepto-node"
   },
   "homepage": "https://github.com/globocom/clappr",
   "devDependencies": {
@@ -30,7 +30,7 @@
     "express-alias": "0.4.0",
     "glob": "^4.0.2",
     "gulp": "^3.8.1",
-    "clappr-zepto": "0.0.2",
+    "zepto-node": "latest",
     "gulp-compressor": "^0.1.0",
     "gulp-jshint": "1.9.0",
     "gulp-livereload": "^2.1.0",
