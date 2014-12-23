@@ -10,7 +10,6 @@ var Events = require('events')
 class HTMLImg extends Playback {
   get name() { return 'html_img' }
   get tagName() { return 'img' }
-  get template() { return JST.html_img }
   get attributes() {
     return {
       'data-html-img': ''
