@@ -3724,7 +3724,7 @@ module.exports = mousetrap;
 },{}],6:[function(require,module,exports){
 module.exports={
   "name": "clappr",
-  "version": "0.0.73",
+  "version": "0.0.74",
   "description": "An extensible media player for the web",
   "main": "dist/clappr.min.js",
   "scripts": {
@@ -5817,8 +5817,7 @@ var HTML5Video = function HTML5Video(options) {
   this.firstBuffer = true;
   this.isHLS = (this.src.indexOf('m3u8') > -1);
   this.settings = {default: ['seekbar']};
-  if (this.isHLS) {
-    this.el.preload = options.preload ? options.preload : 'none';
+  if (this.isHLS && Browser.isSafari) {
     this.settings.left = ["playstop"];
     this.settings.right = ["fullscreen", "volume"];
   } else {
@@ -5921,7 +5920,9 @@ var $HTML5Video = HTML5Video;
   bufferFull: function() {
     if (this.options.poster && this.firstBuffer) {
       this.firstBuffer = false;
-      this.el.poster = this.options.poster;
+      if (!this.isPlaying()) {
+        this.el.poster = this.options.poster;
+      }
     } else {
       this.el.poster = '';
     }
@@ -8843,7 +8844,4 @@ var Zepto=function(){function k(t){return null==t?String(t):S[j.call(t)]||"objec
 },has:function(e){return!(!u||!(e?t.inArray(e,u)>-1:u.length))},empty:function(){return s=u.length=0,this},disable:function(){return u=f=n=void 0,this},disabled:function(){return!u},lock:function(){return f=void 0,n||l.disable(),this},locked:function(){return!f},fireWith:function(t,e){return!u||i&&!f||(e=e||[],e=[t,e.slice?e.slice():e],r?f.push(e):c(e)),this},fire:function(){return l.fireWith(this,arguments)},fired:function(){return!!i}};return l}}(Zepto);
 module.exports = Zepto;
 
-},{}]},{},[3,1])
-
-
-//# sourceMappingURL=clappr.map
+},{}]},{},[3,1]);
