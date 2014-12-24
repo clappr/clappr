@@ -44,8 +44,7 @@ class HTML5Video extends Playback {
     this.firstBuffer = true
     this.isHLS = (this.src.indexOf('m3u8') > -1)
     this.settings = {default: ['seekbar']}
-    if (this.isHLS) {
-      this.el.preload = options.preload ? options.preload: 'none'
+    if (this.isHLS && Browser.isSafari) {
       this.settings.left = ["playstop"]
       this.settings.right = ["fullscreen", "volume"]
     } else {
@@ -134,7 +133,9 @@ class HTML5Video extends Playback {
   bufferFull() {
     if (this.options.poster && this.firstBuffer) {
       this.firstBuffer = false
-      this.el.poster = this.options.poster
+      if (!this.isPlaying()) {
+        this.el.poster = this.options.poster
+      }
     } else {
       this.el.poster = ''
     }
