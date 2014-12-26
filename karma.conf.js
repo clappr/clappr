@@ -37,20 +37,28 @@ module.exports = function(config) {
       debug: true,
       transform: ['es6ify'],
       prebundle: function(bundle) {
+        bundle.external('events');
         bundle.external('ui_object');
         bundle.external('base_object');
         bundle.external('ui_container_plugin');
         bundle.external('container_plugin');
-        bundle.external('ui_core_plugin');
         bundle.external('core_plugin');
-        bundle.external('media_control');
+        bundle.external('ui_core_plugin');
         bundle.external('playback');
         bundle.external('browser');
+        bundle.external('media_control');
         bundle.external('player_info');
-        bundle.external('underscore');
         bundle.external('mediator');
         bundle.external('container');
-        bundle.external('events');
+        bundle.external('core');
+        bundle.external('flash');
+        bundle.external('hls');
+        bundle.external('html5_audio');
+        bundle.external('html5_video');
+        bundle.external('html_img');
+        bundle.external('poster');
+        bundle.external('underscore');
+
       }
     },
 
