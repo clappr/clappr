@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/globocom/clappr.svg?branch=master)](https://travis-ci.org/globocom/clappr)
 [![Dependency Status](https://gemnasium.com/globocom/clappr.svg)](https://gemnasium.com/globocom/clappr)
+[![Pull Requests Stats](http://issuestats.com/github/globocom/clappr/badge/pr)](http://issuestats.com/github/globocom/clappr)
+[![Issues Stats](http://issuestats.com/github/globocom/clappr/badge/issue)](http://issuestats.com/github/globocom/clappr)
 
 <img src="https://i.cloudup.com/GSbXxvCsBK.png">
 
