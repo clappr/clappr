@@ -57,9 +57,10 @@ class MediaControl extends UIObject {
     this.seekTime = new SeekTime(this)
     this.options = options
     this.mute = this.options.mute
-    this.currentVolume = this.options.mute ? 0 : 100
+    this.persistConfig = this.options.persistConfig
     this.container = options.container
-    this.container.setVolume(this.currentVolume)
+    var initialVolume = (this.persistConfig) ? Utils.Config.restore("volume") : 100;
+    this.setVolume(this.mute ? 0 : initialVolume)
     this.keepVisible = false
     this.addEventListeners()
     this.settings = {
@@ -215,10 +216,8 @@ class MediaControl extends UIObject {
 
   volume(event) {
     var offsetY = event.pageX - this.$volumeBarContainer.offset().left
-    this.currentVolume = (offsetY / this.$volumeBarContainer.width()) * 100
-    this.currentVolume = Math.min(100, Math.max(this.currentVolume, 0))
-    this.container.setVolume(this.currentVolume)
-    this.setVolumeLevel(this.currentVolume)
+    var volumeFromUI = (offsetY / this.$volumeBarContainer.width()) * 100
+    this.setVolume(volumeFromUI)
   }
 
   toggleMute() {
@@ -233,13 +232,11 @@ class MediaControl extends UIObject {
   }
 
   setVolume(value) {
-    this.container.setVolume(value)
-    this.setVolumeLevel(value)
-    if (value === 0) {
-      this.mute = true
-    } else {
-      this.mute = false
-    }
+    this.currentVolume = Math.min(100, Math.max(value, 0))
+    this.container.setVolume(this.currentVolume)
+    this.setVolumeLevel(this.currentVolume)
+    this.mute = this.currentVolume === 0
+    this.persistConfig && Utils.Config.persist("volume", this.currentVolume)
   }
 
   toggleFullscreen() {
@@ -255,7 +252,7 @@ class MediaControl extends UIObject {
     this.addEventListeners()
     this.settingsUpdate()
     this.container.trigger(Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.container.isDvrInUse())
-    this.container.setVolume(this.currentVolume)
+    this.setVolume(this.currentVolume)
     if (this.container.mediaControlDisabled) {
       this.disable()
     }
@@ -454,7 +451,7 @@ class MediaControl extends UIObject {
         this.$seekBarContainer.addClass('seek-disabled')
       }
 
-      this.setVolumeLevel(this.currentVolume)
+      this.setVolume(this.currentVolume)
       this.bindKeyEvents()
       this.hideVolumeBar()
     })
