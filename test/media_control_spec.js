@@ -8,7 +8,7 @@ describe('MediaControl', () => {
     this.playback = new FakePlayback();
     this.container = new Container({playback: this.playback});
     this.mediaControl = new MediaControl({container: this.container});
-    localStorage.removeItem("clappr.volume")
+    localStorage.removeItem("clappr.localhost.volume")
   });
 
   describe('#constructor', () => {

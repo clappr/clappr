@@ -13,7 +13,8 @@ class Player extends BaseObject {
   constructor(options) {
     super(options)
     window.p = this
-    this.options = options
+    var DEFAULT_OPTIONS = {persistConfig: true}
+    this.options = _.extend(DEFAULT_OPTIONS, options)
     this.options.sources = this.normalizeSources(options)
     this.loader = new Loader(this.options.plugins || {})
     this.coreFactory = new CoreFactory(this, this.loader)

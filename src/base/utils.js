@@ -79,49 +79,48 @@ var Fullscreen = {
   }
 };
 
-class Config {}
+class Config {
 
-Config._defaultConfig = {
-  volume: {
-    value: 100,
-    parse: parseInt
-  }
-}
-
-Config._defaultValueFor = function(key) {
-  try {
-    return Config._defaultConfig[key]['parse'](Config._defaultConfig[key]['value']);
-  } catch(e) {
-    return undefined
-  }
-}
-
-Config._create_keyspace = function(key){
-  return 'clappr.' + key
-}
-
-Config.restore = function(key) {
-  if (Browser.hasLocalstorage) {
-    if (localStorage[Config._create_keyspace(key)]){
-      return Config._defaultConfig[key]['parse'](localStorage[Config._create_keyspace(key)])
-    }else{
-      return Config._defaultValueFor(key)
+  static _defaultConfig() {
+    return {
+      volume: {
+        value: 100,
+        parse: parseInt
+      }
     }
-  }else{
-    return Config._defaultValueFor(key)
   }
-}
 
-Config.persist = function(key, value) {
-  if (Browser.hasLocalstorage) {
+  static _defaultValueFor(key) {
     try {
-      localStorage[Config._create_keyspace(key)] = value
-      return true
+      return this._defaultConfig()[key]['parse'](this._defaultConfig()[key]['value']);
     } catch(e) {
-      return false
+      return undefined
+    }
+  }
+
+  static _create_keyspace(key){
+    return 'clappr.' + document.domain + '.' + key
+  }
+
+  static restore(key) {
+    if (Browser.hasLocalstorage && localStorage[this._create_keyspace(key)]){
+      return this._defaultConfig()[key]['parse'](localStorage[this._create_keyspace(key)])
+    }
+    return this._defaultValueFor(key)
+  }
+
+  static persist(key, value) {
+    if (Browser.hasLocalstorage) {
+      try {
+        localStorage[this._create_keyspace(key)] = value
+        return true
+      } catch(e) {
+        return false
+      }
     }
   }
 }
+
 
 var seekStringToSeconds = function(url) {
   var elements = _.rest(_.compact(url.match(/t=([0-9]*)h?([0-9]*)m?([0-9]*)s/))).reverse();

@@ -24,7 +24,7 @@ describe('Utils', () => {
 
   describe('Config', () => {
     beforeEach(() => {
-      localStorage.removeItem("clappr.volume")
+      localStorage.removeItem("clappr.localhost.volume")
     });
 
     it('restores default volume', () => {
