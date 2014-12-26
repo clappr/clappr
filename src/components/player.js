@@ -11,20 +11,26 @@ var PlayerInfo = require('player_info')
 
 class Player extends BaseObject {
   constructor(options) {
-    super(options);
+    super(options)
     window.p = this
     this.options = options
     this.options.sources = this.normalizeSources(options)
-    this.loader = new Loader(this.options.plugins || [])
+    this.loader = new Loader(this.options.plugins || {})
     this.coreFactory = new CoreFactory(this, this.loader)
-    options.height || (options.height = 360)
-    options.width || (options.width = 640)
-    PlayerInfo.currentSize = {width: options.width, height: options.height}
+    this.setCurrentSize(options.height, options.width)
     if (this.options.parentId) {
-      var el = document.querySelector(this.options.parentId)
-      if (el) {
-        this.attachTo(el)
-      }
+      this.setParentId(this.options.parentId)
+    }
+  }
+
+  setCurrentSize(height=360, width=640) {
+    PlayerInfo.currentSize = {width: width, height: height}
+  }
+
+  setParentId(parentId) {
+    var el = document.querySelector(parentId)
+    if (el) {
+      this.attachTo(el)
     }
   }
 
