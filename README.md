@@ -66,7 +66,7 @@ If you want to play the video when it appears partially on screen, set `autoPlay
 Add `mute: true` if you want to start player with no sound.
 
 ##### Configuration persistance
-Add `persistConfig: false` if you don't want to persist player's volume through your videos, by **default it saves**. These configuration is being saved at user's browser ([through localStorage](http://diveintohtml5.info/storage.html)).
+Add `persistConfig: false` if you don't want to persist player's volume through your videos, by **default it saves**. These configuration are being saved at user's browser ([through localStorage](http://diveintohtml5.info/storage.html)).
 
 ##### Preload
 In case you're loading a on demand video (mp4), it's possible to define the way the video will be preloaded according to [preload](http://www.stevesouders.com/blog/2013/04/12/html5-video-preload/) attribute options. Add `preload: <type>` on embed parameters. By default, Clappr will try to download only video metadata (`preload: 'metadata'`).
