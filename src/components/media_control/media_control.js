@@ -383,7 +383,7 @@ class MediaControl extends UIObject {
   }
 
   setVolumeLevel(value) {
-    if (!this.container.isReady) {
+    if (!this.container.isReady || !this.$volumeBarContainer) {
       this.listenToOnce(this.container, Events.CONTAINER_READY, () => this.setVolumeLevel(value))
     } else {
       this.$volumeBarContainer.find('.segmented-bar-element').removeClass('fill')
