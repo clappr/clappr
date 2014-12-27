@@ -11,19 +11,20 @@ class HTML5Audio extends Playback {
   get events() {
     return {
       'timeupdate': 'timeUpdated',
-      'ended': 'ended'
+      'ended': 'ended',
+      'canplaythrough': 'bufferFull'
     }
   }
 
   constructor(params) {
-    super(params);
+    super(params)
     this.el.src = params.src
     this.settings = {
       left: ['playpause', 'position', 'duration'],
       right: ['fullscreen', 'volume'],
       default: ['seekbar']
     }
-    this.render() // it should render when the container trigger 'ready'
+    this.render()
     params.autoPlay && this.play()
   }
 
@@ -92,6 +93,11 @@ class HTML5Audio extends Playback {
 
   timeUpdated() {
     this.trigger(Events.PLAYBACK_TIMEUPDATE, this.el.currentTime, this.el.duration, this.name)
+  }
+
+  bufferFull() {
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, this.el.currentTime, this.el.duration, this.name)
+    this.trigger(Events.PLAYBACK_BUFFERFULL)
   }
 
   render() {
