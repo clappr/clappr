@@ -3724,7 +3724,7 @@ module.exports = mousetrap;
 },{}],6:[function(require,module,exports){
 module.exports={
   "name": "clappr",
-  "version": "0.0.74",
+  "version": "0.0.75",
   "description": "An extensible media player for the web",
   "main": "dist/clappr.min.js",
   "scripts": {
@@ -3842,6 +3842,7 @@ module.exports = Styler;
 },{"./jst":7,"underscore":"underscore","zepto":"zepto"}],9:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
+var Browser = require('browser');
 var extend = function(protoProps, staticProps) {
   var parent = this;
   var child;
@@ -3911,6 +3912,41 @@ var Fullscreen = {
     }
   }
 };
+var Config = function Config() {};
+($traceurRuntime.createClass)(Config, {}, {
+  _defaultConfig: function() {
+    return {volume: {
+        value: 100,
+        parse: parseInt
+      }};
+  },
+  _defaultValueFor: function(key) {
+    try {
+      return this._defaultConfig()[key]['parse'](this._defaultConfig()[key]['value']);
+    } catch (e) {
+      return undefined;
+    }
+  },
+  _create_keyspace: function(key) {
+    return 'clappr.' + document.domain + '.' + key;
+  },
+  restore: function(key) {
+    if (Browser.hasLocalstorage && localStorage[this._create_keyspace(key)]) {
+      return this._defaultConfig()[key]['parse'](localStorage[this._create_keyspace(key)]);
+    }
+    return this._defaultValueFor(key);
+  },
+  persist: function(key, value) {
+    if (Browser.hasLocalstorage) {
+      try {
+        localStorage[this._create_keyspace(key)] = value;
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+  }
+});
 var seekStringToSeconds = function(url) {
   var elements = _.rest(_.compact(url.match(/t=([0-9]*)h?([0-9]*)m?([0-9]*)s/))).reverse();
   var seconds = 0;
@@ -3925,11 +3961,12 @@ module.exports = {
   extend: extend,
   formatTime: formatTime,
   Fullscreen: Fullscreen,
+  Config: Config,
   seekStringToSeconds: seekStringToSeconds
 };
 
 
-},{"underscore":"underscore"}],10:[function(require,module,exports){
+},{"browser":"browser","underscore":"underscore"}],10:[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var Styler = require('../../base/styler');
@@ -4571,9 +4608,10 @@ var MediaControl = function MediaControl(options) {
   this.seekTime = new SeekTime(this);
   this.options = options;
   this.mute = this.options.mute;
-  this.currentVolume = this.options.mute ? 0 : 100;
+  this.persistConfig = this.options.persistConfig;
   this.container = options.container;
-  this.container.setVolume(this.currentVolume);
+  var initialVolume = (this.persistConfig) ? Utils.Config.restore("volume") : 100;
+  this.setVolume(this.mute ? 0 : initialVolume);
   this.keepVisible = false;
   this.addEventListeners();
   this.settings = {
@@ -4755,10 +4793,8 @@ var $MediaControl = MediaControl;
   },
   volume: function(event) {
     var offsetY = event.pageX - this.$volumeBarContainer.offset().left;
-    this.currentVolume = (offsetY / this.$volumeBarContainer.width()) * 100;
-    this.currentVolume = Math.min(100, Math.max(this.currentVolume, 0));
-    this.container.setVolume(this.currentVolume);
-    this.setVolumeLevel(this.currentVolume);
+    var volumeFromUI = (offsetY / this.$volumeBarContainer.width()) * 100;
+    this.setVolume(volumeFromUI);
   },
   toggleMute: function() {
     if (this.mute) {
@@ -4771,13 +4807,11 @@ var $MediaControl = MediaControl;
     }
   },
   setVolume: function(value) {
-    this.container.setVolume(value);
-    this.setVolumeLevel(value);
-    if (value === 0) {
-      this.mute = true;
-    } else {
-      this.mute = false;
-    }
+    this.currentVolume = Math.min(100, Math.max(value, 0));
+    this.container.setVolume(this.currentVolume);
+    this.setVolumeLevel(this.currentVolume);
+    this.mute = this.currentVolume === 0;
+    this.persistConfig && Utils.Config.persist("volume", this.currentVolume);
   },
   toggleFullscreen: function() {
     this.trigger(Events.MEDIACONTROL_FULLSCREEN, this.name);
@@ -4791,7 +4825,7 @@ var $MediaControl = MediaControl;
     this.addEventListeners();
     this.settingsUpdate();
     this.container.trigger(Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.container.isDvrInUse());
-    this.container.setVolume(this.currentVolume);
+    this.setVolume(this.currentVolume);
     if (this.container.mediaControlDisabled) {
       this.disable();
     }
@@ -4928,7 +4962,7 @@ var $MediaControl = MediaControl;
   },
   setVolumeLevel: function(value) {
     var $__0 = this;
-    if (!this.container.isReady) {
+    if (!this.container.isReady || !this.$volumeBarContainer) {
       this.listenToOnce(this.container, Events.CONTAINER_READY, (function() {
         return $__0.setVolumeLevel(value);
       }));
@@ -4995,7 +5029,7 @@ var $MediaControl = MediaControl;
       if (!$__0.container.settings.seekEnabled) {
         $__0.$seekBarContainer.addClass('seek-disabled');
       }
-      $__0.setVolumeLevel($__0.currentVolume);
+      $__0.setVolume($__0.currentVolume);
       $__0.bindKeyEvents();
       $__0.hideVolumeBar();
     }));
@@ -5024,25 +5058,32 @@ var PlayerInfo = require('player_info');
 var Player = function Player(options) {
   $traceurRuntime.superCall(this, $Player.prototype, "constructor", [options]);
   window.p = this;
-  this.options = options;
+  var DEFAULT_OPTIONS = {persistConfig: true};
+  this.options = _.extend(DEFAULT_OPTIONS, options);
   this.options.sources = this.normalizeSources(options);
-  this.loader = new Loader(this.options.plugins || []);
+  this.loader = new Loader(this.options.plugins || {});
   this.coreFactory = new CoreFactory(this, this.loader);
-  options.height || (options.height = 360);
-  options.width || (options.width = 640);
-  PlayerInfo.currentSize = {
-    width: options.width,
-    height: options.height
-  };
+  this.setCurrentSize(options.height, options.width);
   if (this.options.parentId) {
-    var el = document.querySelector(this.options.parentId);
-    if (el) {
-      this.attachTo(el);
-    }
+    this.setParentId(this.options.parentId);
   }
 };
 var $Player = Player;
 ($traceurRuntime.createClass)(Player, {
+  setCurrentSize: function() {
+    var height = arguments[0] !== (void 0) ? arguments[0] : 360;
+    var width = arguments[1] !== (void 0) ? arguments[1] : 640;
+    PlayerInfo.currentSize = {
+      width: width,
+      height: height
+    };
+  },
+  setParentId: function(parentId) {
+    var el = document.querySelector(parentId);
+    if (el) {
+      this.attachTo(el);
+    }
+  },
   attachTo: function(element) {
     this.options.parentElement = element;
     this.core = this.coreFactory.create();
@@ -5732,7 +5773,8 @@ var $HTML5Audio = HTML5Audio;
   get events() {
     return {
       'timeupdate': 'timeUpdated',
-      'ended': 'ended'
+      'ended': 'ended',
+      'canplaythrough': 'bufferFull'
     };
   },
   bindEvents: function() {
@@ -5786,6 +5828,10 @@ var $HTML5Audio = HTML5Audio;
   },
   timeUpdated: function() {
     this.trigger(Events.PLAYBACK_TIMEUPDATE, this.el.currentTime, this.el.duration, this.name);
+  },
+  bufferFull: function() {
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, this.el.currentTime, this.el.duration, this.name);
+    this.trigger(Events.PLAYBACK_BUFFERFULL);
   },
   render: function() {
     return this;
@@ -6876,6 +6922,15 @@ module.exports = BaseObject;
 "use strict";
 var Browser = function Browser() {};
 ($traceurRuntime.createClass)(Browser, {}, {});
+var hasLocalstorage = function() {
+  try {
+    localStorage.setItem('clappr', 'clappr');
+    localStorage.removeItem('clappr');
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
 Browser.isSafari = (!!navigator.userAgent.match(/safari/i) && navigator.userAgent.indexOf('Chrome') === -1);
 Browser.isChrome = !!(navigator.userAgent.match(/chrome/i));
 Browser.isFirefox = !!(navigator.userAgent.match(/firefox/i));
@@ -6886,6 +6941,7 @@ Browser.isMobile = !!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|I
 Browser.isWin8App = !!(/MSAppHost/i.test(navigator.userAgent));
 Browser.isWiiU = !!(/WiiU/i.test(navigator.userAgent));
 Browser.isPS4 = !!(/PlayStation 4/i.test(navigator.userAgent));
+Browser.hasLocalstorage = hasLocalstorage();
 module.exports = Browser;
 
 
