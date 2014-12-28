@@ -56,13 +56,13 @@ package
       _ns.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler);
       if (isRTMP) {
         _ns.bufferTime = 0.5;
-        _stageVideo.attachNetStream(_ns);
       } else {
         _ns.bufferTime = 10;
 	_ns.inBufferSeek = true;
 	_ns.maxPauseBufferTime = 3600;
 	_ns.backBufferTime = 3600;
       }
+      _stageVideo.attachNetStream(_ns);
       _ns.play(source);
     }
     private function setupStage():void {
