@@ -3724,7 +3724,7 @@ module.exports = mousetrap;
 },{}],6:[function(require,module,exports){
 module.exports={
   "name": "clappr",
-  "version": "0.0.75",
+  "version": "0.0.76",
   "description": "An extensible media player for the web",
   "main": "dist/clappr.min.js",
   "scripts": {
