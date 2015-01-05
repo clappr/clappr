@@ -6,11 +6,12 @@ var Playback = require('playback')
 var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
 var Browser = require('browser')
-var Mousetrap = require('mousetrap')
 var seekStringToSeconds = require('../../base/utils').seekStringToSeconds
 var Events = require('events')
 
 var _ = require('underscore')
+
+require('mousetrap')
 
 class HTML5Video extends Playback {
   get name() { return 'html5_video' }
