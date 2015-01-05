@@ -64,7 +64,7 @@
   },
   "dependencies": {
     "underscore": "1.7.0",
-    "mousetrap": "0.0.1",
+    "mousetrap": "^1.4.6",
     "scrollmonitor": "^1.0.8"
   }
 }
