@@ -101,6 +101,7 @@ class HTML5Audio extends Playback {
   }
 
   render() {
+    this.trigger(Events.PLAYBACK_READY, this.name)
     return this
   }
  }
