@@ -15,8 +15,239 @@ window.Clappr.version = version;
 module.exports = window.Clappr;
 
 
+//# sourceURL=/Users/thiago/code/clappr-web/src/main.js
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../package.json":6,"./components/iframe_player":17,"./components/player":21,"mediator":"mediator"}],2:[function(require,module,exports){
+
+},{"../package.json":7,"./components/iframe_player":18,"./components/player":22,"mediator":"mediator"}],2:[function(require,module,exports){
+(function (process){
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+// resolves . and .. elements in a path array with directory names there
+// must be no slashes, empty elements, or device names (c:\) in the array
+// (so also no leading and trailing slashes - it does not distinguish
+// relative and absolute paths)
+function normalizeArray(parts, allowAboveRoot) {
+  // if the path tries to go above the root, `up` ends up > 0
+  var up = 0;
+  for (var i = parts.length - 1; i >= 0; i--) {
+    var last = parts[i];
+    if (last === '.') {
+      parts.splice(i, 1);
+    } else if (last === '..') {
+      parts.splice(i, 1);
+      up++;
+    } else if (up) {
+      parts.splice(i, 1);
+      up--;
+    }
+  }
+
+  // if the path is allowed to go above the root, restore leading ..s
+  if (allowAboveRoot) {
+    for (; up--; up) {
+      parts.unshift('..');
+    }
+  }
+
+  return parts;
+}
+
+// Split a filename into [root, dir, basename, ext], unix version
+// 'root' is just a slash, or nothing.
+var splitPathRe =
+    /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
+var splitPath = function(filename) {
+  return splitPathRe.exec(filename).slice(1);
+};
+
+// path.resolve([from ...], to)
+// posix version
+exports.resolve = function() {
+  var resolvedPath = '',
+      resolvedAbsolute = false;
+
+  for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
+    var path = (i >= 0) ? arguments[i] : process.cwd();
+
+    // Skip empty and invalid entries
+    if (typeof path !== 'string') {
+      throw new TypeError('Arguments to path.resolve must be strings');
+    } else if (!path) {
+      continue;
+    }
+
+    resolvedPath = path + '/' + resolvedPath;
+    resolvedAbsolute = path.charAt(0) === '/';
+  }
+
+  // At this point the path should be resolved to a full absolute path, but
+  // handle relative paths to be safe (might happen when process.cwd() fails)
+
+  // Normalize the path
+  resolvedPath = normalizeArray(filter(resolvedPath.split('/'), function(p) {
+    return !!p;
+  }), !resolvedAbsolute).join('/');
+
+  return ((resolvedAbsolute ? '/' : '') + resolvedPath) || '.';
+};
+
+// path.normalize(path)
+// posix version
+exports.normalize = function(path) {
+  var isAbsolute = exports.isAbsolute(path),
+      trailingSlash = substr(path, -1) === '/';
+
+  // Normalize the path
+  path = normalizeArray(filter(path.split('/'), function(p) {
+    return !!p;
+  }), !isAbsolute).join('/');
+
+  if (!path && !isAbsolute) {
+    path = '.';
+  }
+  if (path && trailingSlash) {
+    path += '/';
+  }
+
+  return (isAbsolute ? '/' : '') + path;
+};
+
+// posix version
+exports.isAbsolute = function(path) {
+  return path.charAt(0) === '/';
+};
+
+// posix version
+exports.join = function() {
+  var paths = Array.prototype.slice.call(arguments, 0);
+  return exports.normalize(filter(paths, function(p, index) {
+    if (typeof p !== 'string') {
+      throw new TypeError('Arguments to path.join must be strings');
+    }
+    return p;
+  }).join('/'));
+};
+
+
+// path.relative(from, to)
+// posix version
+exports.relative = function(from, to) {
+  from = exports.resolve(from).substr(1);
+  to = exports.resolve(to).substr(1);
+
+  function trim(arr) {
+    var start = 0;
+    for (; start < arr.length; start++) {
+      if (arr[start] !== '') break;
+    }
+
+    var end = arr.length - 1;
+    for (; end >= 0; end--) {
+      if (arr[end] !== '') break;
+    }
+
+    if (start > end) return [];
+    return arr.slice(start, end - start + 1);
+  }
+
+  var fromParts = trim(from.split('/'));
+  var toParts = trim(to.split('/'));
+
+  var length = Math.min(fromParts.length, toParts.length);
+  var samePartsLength = length;
+  for (var i = 0; i < length; i++) {
+    if (fromParts[i] !== toParts[i]) {
+      samePartsLength = i;
+      break;
+    }
+  }
+
+  var outputParts = [];
+  for (var i = samePartsLength; i < fromParts.length; i++) {
+    outputParts.push('..');
+  }
+
+  outputParts = outputParts.concat(toParts.slice(samePartsLength));
+
+  return outputParts.join('/');
+};
+
+exports.sep = '/';
+exports.delimiter = ':';
+
+exports.dirname = function(path) {
+  var result = splitPath(path),
+      root = result[0],
+      dir = result[1];
+
+  if (!root && !dir) {
+    // No dirname whatsoever
+    return '.';
+  }
+
+  if (dir) {
+    // It has a dirname, strip trailing slash
+    dir = dir.substr(0, dir.length - 1);
+  }
+
+  return root + dir;
+};
+
+
+exports.basename = function(path, ext) {
+  var f = splitPath(path)[2];
+  // TODO: make this comparison case-insensitive on windows?
+  if (ext && f.substr(-1 * ext.length) === ext) {
+    f = f.substr(0, f.length - ext.length);
+  }
+  return f;
+};
+
+
+exports.extname = function(path) {
+  return splitPath(path)[3];
+};
+
+function filter (xs, f) {
+    if (xs.filter) return xs.filter(f);
+    var res = [];
+    for (var i = 0; i < xs.length; i++) {
+        if (f(xs[i], i, xs)) res.push(xs[i]);
+    }
+    return res;
+}
+
+// String.prototype.substr - negative index don't work in IE8
+var substr = 'ab'.substr(-1) === 'b'
+    ? function (str, start, len) { return str.substr(start, len) }
+    : function (str, start, len) {
+        if (start < 0) start = str.length + start;
+        return str.substr(start, len);
+    }
+;
+
+}).call(this,require('_process'))
+
+},{"_process":3}],3:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -104,7 +335,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 (function (process,global){
 (function(global) {
   'use strict';
@@ -133,13 +364,6 @@ process.chdir = function (dir) {
       writable: true
     };
   }
-  var types = {
-    void: function voidType() {},
-    any: function any() {},
-    string: function string() {},
-    number: function number() {},
-    boolean: function boolean() {}
-  };
   var method = nonEnum;
   var counter = 0;
   function newUniqueString() {
@@ -150,16 +374,19 @@ process.chdir = function (dir) {
   var symbolDataProperty = newUniqueString();
   var symbolValues = $create(null);
   var privateNames = $create(null);
+  function isPrivateName(s) {
+    return privateNames[s];
+  }
   function createPrivateName() {
     var s = newUniqueString();
     privateNames[s] = true;
     return s;
   }
-  function isSymbol(symbol) {
+  function isShimSymbol(symbol) {
     return typeof symbol === 'object' && symbol instanceof SymbolValue;
   }
   function typeOf(v) {
-    if (isSymbol(v))
+    if (isShimSymbol(v))
       return 'symbol';
     return typeof v;
   }
@@ -238,35 +465,43 @@ process.chdir = function (dir) {
     getOwnHashObject(object);
     return $seal.apply(this, arguments);
   }
-  Symbol.iterator = Symbol();
   freeze(SymbolValue.prototype);
+  function isSymbolString(s) {
+    return symbolValues[s] || privateNames[s];
+  }
   function toProperty(name) {
-    if (isSymbol(name))
+    if (isShimSymbol(name))
       return name[symbolInternalProperty];
     return name;
   }
-  function getOwnPropertyNames(object) {
+  function removeSymbolKeys(array) {
     var rv = [];
-    var names = $getOwnPropertyNames(object);
-    for (var i = 0; i < names.length; i++) {
-      var name = names[i];
-      if (!symbolValues[name] && !privateNames[name])
-        rv.push(name);
+    for (var i = 0; i < array.length; i++) {
+      if (!isSymbolString(array[i])) {
+        rv.push(array[i]);
+      }
     }
     return rv;
   }
-  function getOwnPropertyDescriptor(object, name) {
-    return $getOwnPropertyDescriptor(object, toProperty(name));
+  function getOwnPropertyNames(object) {
+    return removeSymbolKeys($getOwnPropertyNames(object));
+  }
+  function keys(object) {
+    return removeSymbolKeys($keys(object));
   }
   function getOwnPropertySymbols(object) {
     var rv = [];
     var names = $getOwnPropertyNames(object);
     for (var i = 0; i < names.length; i++) {
       var symbol = symbolValues[names[i]];
-      if (symbol)
+      if (symbol) {
         rv.push(symbol);
+      }
     }
     return rv;
+  }
+  function getOwnPropertyDescriptor(object, name) {
+    return $getOwnPropertyDescriptor(object, toProperty(name));
   }
   function hasOwnProperty(name) {
     return $hasOwnProperty.call(this, toProperty(name));
@@ -274,23 +509,8 @@ process.chdir = function (dir) {
   function getOption(name) {
     return global.traceur && global.traceur.options[name];
   }
-  function setProperty(object, name, value) {
-    var sym,
-        desc;
-    if (isSymbol(name)) {
-      sym = name;
-      name = name[symbolInternalProperty];
-    }
-    object[name] = value;
-    if (sym && (desc = $getOwnPropertyDescriptor(object, name)))
-      $defineProperty(object, name, {enumerable: false});
-    return value;
-  }
   function defineProperty(object, name, descriptor) {
-    if (isSymbol(name)) {
-      if (descriptor.enumerable) {
-        descriptor = $create(descriptor, {enumerable: {value: false}});
-      }
+    if (isShimSymbol(name)) {
       name = name[symbolInternalProperty];
     }
     $defineProperty(object, name, descriptor);
@@ -304,14 +524,14 @@ process.chdir = function (dir) {
     $defineProperty(Object, 'freeze', {value: freeze});
     $defineProperty(Object, 'preventExtensions', {value: preventExtensions});
     $defineProperty(Object, 'seal', {value: seal});
-    Object.getOwnPropertySymbols = getOwnPropertySymbols;
+    $defineProperty(Object, 'keys', {value: keys});
   }
   function exportStar(object) {
     for (var i = 1; i < arguments.length; i++) {
       var names = $getOwnPropertyNames(arguments[i]);
       for (var j = 0; j < names.length; j++) {
         var name = names[j];
-        if (privateNames[name])
+        if (isSymbolString(name))
           continue;
         (function(mod, name) {
           $defineProperty(object, name, {
@@ -339,36 +559,61 @@ process.chdir = function (dir) {
     }
     return argument;
   }
+  function polyfillSymbol(global, Symbol) {
+    if (!global.Symbol) {
+      global.Symbol = Symbol;
+      Object.getOwnPropertySymbols = getOwnPropertySymbols;
+    }
+    if (!global.Symbol.iterator) {
+      global.Symbol.iterator = Symbol('Symbol.iterator');
+    }
+  }
   function setupGlobals(global) {
-    global.Symbol = Symbol;
+    polyfillSymbol(global, Symbol);
     global.Reflect = global.Reflect || {};
     global.Reflect.global = global.Reflect.global || global;
     polyfillObject(global.Object);
   }
   setupGlobals(global);
   global.$traceurRuntime = {
-    createPrivateName: createPrivateName,
-    exportStar: exportStar,
-    getOwnHashObject: getOwnHashObject,
-    privateNames: privateNames,
-    setProperty: setProperty,
-    setupGlobals: setupGlobals,
-    toObject: toObject,
-    isObject: isObject,
-    toProperty: toProperty,
-    type: types,
-    typeof: typeOf,
     checkObjectCoercible: checkObjectCoercible,
-    hasOwnProperty: function(o, p) {
-      return hasOwnProperty.call(o, p);
-    },
+    createPrivateName: createPrivateName,
     defineProperties: $defineProperties,
     defineProperty: $defineProperty,
+    exportStar: exportStar,
+    getOwnHashObject: getOwnHashObject,
     getOwnPropertyDescriptor: $getOwnPropertyDescriptor,
     getOwnPropertyNames: $getOwnPropertyNames,
-    keys: $keys
+    isObject: isObject,
+    isPrivateName: isPrivateName,
+    isSymbolString: isSymbolString,
+    keys: $keys,
+    setupGlobals: setupGlobals,
+    toObject: toObject,
+    toProperty: toProperty,
+    typeof: typeOf
   };
-})(typeof global !== 'undefined' ? global : this);
+})(typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : this);
+(function() {
+  'use strict';
+  var path;
+  function relativeRequire(callerPath, requiredPath) {
+    path = path || typeof require !== 'undefined' && require('path');
+    function isDirectory(path) {
+      return path.slice(-1) === '/';
+    }
+    function isAbsolute(path) {
+      return path[0] === '/';
+    }
+    function isRelative(path) {
+      return path[0] === '.';
+    }
+    if (isDirectory(requiredPath) || isAbsolute(requiredPath))
+      return;
+    return isRelative(requiredPath) ? require(path.resolve(path.dirname(callerPath), requiredPath)) : require(requiredPath);
+  }
+  $traceurRuntime.require = relativeRequire;
+})();
 (function() {
   'use strict';
   function spread() {
@@ -399,6 +644,9 @@ process.chdir = function (dir) {
   var $getOwnPropertyDescriptor = $traceurRuntime.getOwnPropertyDescriptor;
   var $getOwnPropertyNames = $traceurRuntime.getOwnPropertyNames;
   var $getPrototypeOf = Object.getPrototypeOf;
+  var $__0 = Object,
+      getOwnPropertyNames = $__0.getOwnPropertyNames,
+      getOwnPropertySymbols = $__0.getOwnPropertySymbols;
   function superDescriptor(homeObject, name) {
     var proto = $getPrototypeOf(homeObject);
     do {
@@ -408,6 +656,9 @@ process.chdir = function (dir) {
       proto = $getPrototypeOf(proto);
     } while (proto);
     return undefined;
+  }
+  function superConstructor(ctor) {
+    return ctor.__proto__;
   }
   function superCall(self, homeObject, name, args) {
     return superGet(self, homeObject, name).apply(self, args);
@@ -427,15 +678,19 @@ process.chdir = function (dir) {
       descriptor.set.call(self, value);
       return value;
     }
-    throw $TypeError("super has no setter '" + name + "'.");
+    throw $TypeError(("super has no setter '" + name + "'."));
   }
   function getDescriptors(object) {
-    var descriptors = {},
-        name,
-        names = $getOwnPropertyNames(object);
+    var descriptors = {};
+    var names = getOwnPropertyNames(object);
     for (var i = 0; i < names.length; i++) {
       var name = names[i];
       descriptors[name] = $getOwnPropertyDescriptor(object, name);
+    }
+    var symbols = getOwnPropertySymbols(object);
+    for (var i = 0; i < symbols.length; i++) {
+      var symbol = symbols[i];
+      descriptors[$traceurRuntime.toProperty(symbol)] = $getOwnPropertyDescriptor(object, $traceurRuntime.toProperty(symbol));
     }
     return descriptors;
   }
@@ -477,11 +732,15 @@ process.chdir = function (dir) {
   $traceurRuntime.createClass = createClass;
   $traceurRuntime.defaultSuperCall = defaultSuperCall;
   $traceurRuntime.superCall = superCall;
+  $traceurRuntime.superConstructor = superConstructor;
   $traceurRuntime.superGet = superGet;
   $traceurRuntime.superSet = superSet;
 })();
 (function() {
   'use strict';
+  if (typeof $traceurRuntime !== 'object') {
+    throw new Error('traceur runtime not found.');
+  }
   var createPrivateName = $traceurRuntime.createPrivateName;
   var $defineProperties = $traceurRuntime.defineProperties;
   var $defineProperty = $traceurRuntime.defineProperty;
@@ -828,6 +1087,50 @@ process.chdir = function (dir) {
   $traceurRuntime.removeDotSegments = removeDotSegments;
   $traceurRuntime.resolveUrl = resolveUrl;
 })();
+(function() {
+  'use strict';
+  var types = {
+    any: {name: 'any'},
+    boolean: {name: 'boolean'},
+    number: {name: 'number'},
+    string: {name: 'string'},
+    symbol: {name: 'symbol'},
+    void: {name: 'void'}
+  };
+  var GenericType = function GenericType(type, argumentTypes) {
+    this.type = type;
+    this.argumentTypes = argumentTypes;
+  };
+  ($traceurRuntime.createClass)(GenericType, {}, {});
+  var typeRegister = Object.create(null);
+  function genericType(type) {
+    for (var argumentTypes = [],
+        $__1 = 1; $__1 < arguments.length; $__1++)
+      argumentTypes[$__1 - 1] = arguments[$__1];
+    var typeMap = typeRegister;
+    var key = $traceurRuntime.getOwnHashObject(type).hash;
+    if (!typeMap[key]) {
+      typeMap[key] = Object.create(null);
+    }
+    typeMap = typeMap[key];
+    for (var i = 0; i < argumentTypes.length - 1; i++) {
+      key = $traceurRuntime.getOwnHashObject(argumentTypes[i]).hash;
+      if (!typeMap[key]) {
+        typeMap[key] = Object.create(null);
+      }
+      typeMap = typeMap[key];
+    }
+    var tail = argumentTypes[argumentTypes.length - 1];
+    key = $traceurRuntime.getOwnHashObject(tail).hash;
+    if (!typeMap[key]) {
+      typeMap[key] = new GenericType(type, argumentTypes);
+    }
+    return typeMap[key];
+  }
+  $traceurRuntime.GenericType = GenericType;
+  $traceurRuntime.genericType = genericType;
+  $traceurRuntime.type = types;
+})();
 (function(global) {
   'use strict';
   var $__2 = $traceurRuntime,
@@ -878,8 +1181,35 @@ process.chdir = function (dir) {
       return stack.join('\n');
     }
   }, {}, Error);
+  function beforeLines(lines, number) {
+    var result = [];
+    var first = number - 3;
+    if (first < 0)
+      first = 0;
+    for (var i = first; i < number; i++) {
+      result.push(lines[i]);
+    }
+    return result;
+  }
+  function afterLines(lines, number) {
+    var last = number + 1;
+    if (last > lines.length - 1)
+      last = lines.length - 1;
+    var result = [];
+    for (var i = number; i <= last; i++) {
+      result.push(lines[i]);
+    }
+    return result;
+  }
+  function columnSpacing(columns) {
+    var result = '';
+    for (var i = 0; i < columns - 1; i++) {
+      result += '-';
+    }
+    return result;
+  }
   var UncoatedModuleInstantiator = function UncoatedModuleInstantiator(url, func) {
-    $traceurRuntime.superCall(this, $UncoatedModuleInstantiator.prototype, "constructor", [url, null]);
+    $traceurRuntime.superConstructor($UncoatedModuleInstantiator).call(this, url, null);
     this.func = func;
   };
   var $UncoatedModuleInstantiator = UncoatedModuleInstantiator;
@@ -887,11 +1217,34 @@ process.chdir = function (dir) {
       if (this.value_)
         return this.value_;
       try {
-        return this.value_ = this.func.call(global);
+        var relativeRequire;
+        if (typeof $traceurRuntime !== undefined) {
+          relativeRequire = $traceurRuntime.require.bind(null, this.url);
+        }
+        return this.value_ = this.func.call(global, relativeRequire);
       } catch (ex) {
         if (ex instanceof ModuleEvaluationError) {
           ex.loadedBy(this.url);
           throw ex;
+        }
+        if (ex.stack) {
+          var lines = this.func.toString().split('\n');
+          var evaled = [];
+          ex.stack.split('\n').some(function(frame) {
+            if (frame.indexOf('UncoatedModuleInstantiator.getUncoatedModule') > 0)
+              return true;
+            var m = /(at\s[^\s]*\s).*>:(\d*):(\d*)\)/.exec(frame);
+            if (m) {
+              var line = parseInt(m[2], 10);
+              evaled = evaled.concat(beforeLines(lines, line));
+              evaled.push(columnSpacing(m[3]) + '^');
+              evaled = evaled.concat(afterLines(lines, line));
+              evaled.push('= = = = = = = = =');
+            } else {
+              evaled.push(frame);
+            }
+          });
+          ex.stack = evaled.join('\n');
         }
         throw new ModuleEvaluationError(this.url, ex);
       }
@@ -932,8 +1285,8 @@ process.chdir = function (dir) {
   }
   var ModuleStore = {
     normalize: function(name, refererName, refererAddress) {
-      if (typeof name !== "string")
-        throw new TypeError("module name must be a string, not " + typeof name);
+      if (typeof name !== 'string')
+        throw new TypeError('module name must be a string, not ' + typeof name);
       if (isAbsolute(name))
         return canonicalizeUrl(name);
       if (/[^\.]\/\.\.\//.test(name)) {
@@ -966,7 +1319,7 @@ process.chdir = function (dir) {
     set baseURL(v) {
       baseURL = String(v);
     },
-    registerModule: function(name, func) {
+    registerModule: function(name, deps, func) {
       var normalizedName = ModuleStore.normalize(name);
       if (moduleInstantiators[normalizedName])
         throw new Error('duplicate module named ' + normalizedName);
@@ -975,7 +1328,7 @@ process.chdir = function (dir) {
     bundleStore: Object.create(null),
     register: function(name, deps, func) {
       if (!deps || !deps.length && !func.length) {
-        this.registerModule(name, func);
+        this.registerModule(name, deps, func);
       } else {
         this.bundleStore[name] = {
           deps: deps,
@@ -1009,7 +1362,9 @@ process.chdir = function (dir) {
       return this.get(this.testingPrefix_ + name);
     }
   };
-  ModuleStore.set('@traceur/src/runtime/ModuleStore', new Module({ModuleStore: ModuleStore}));
+  var moduleStoreModule = new Module({ModuleStore: ModuleStore});
+  ModuleStore.set('@traceur/src/runtime/ModuleStore', moduleStoreModule);
+  ModuleStore.set('@traceur/src/runtime/ModuleStore.js', moduleStoreModule);
   var setupGlobals = $traceurRuntime.setupGlobals;
   $traceurRuntime.setupGlobals = function(global) {
     setupGlobals(global);
@@ -1017,6 +1372,7 @@ process.chdir = function (dir) {
   $traceurRuntime.ModuleStore = ModuleStore;
   global.System = {
     register: ModuleStore.register.bind(ModuleStore),
+    registerModule: ModuleStore.registerModule.bind(ModuleStore),
     get: ModuleStore.get,
     set: ModuleStore.set,
     normalize: ModuleStore.normalize
@@ -1025,10 +1381,10 @@ process.chdir = function (dir) {
     var instantiator = getUncoatedModuleInstantiator(name);
     return instantiator && instantiator.getUncoatedModule();
   };
-})(typeof global !== 'undefined' ? global : this);
-System.register("traceur-runtime@0.0.62/src/runtime/polyfills/utils", [], function() {
+})(typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : this);
+System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/utils.js", [], function() {
   "use strict";
-  var __moduleName = "traceur-runtime@0.0.62/src/runtime/polyfills/utils";
+  var __moduleName = "traceur-runtime@0.0.79/src/runtime/polyfills/utils.js";
   var $ceil = Math.ceil;
   var $floor = Math.floor;
   var $isFinite = isFinite;
@@ -1186,13 +1542,13 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/utils", [], functi
     }
   };
 });
-System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Map", [], function() {
+System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Map.js", [], function() {
   "use strict";
-  var __moduleName = "traceur-runtime@0.0.62/src/runtime/polyfills/Map";
-  var $__3 = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/utils"),
-      isObject = $__3.isObject,
-      maybeAddIterator = $__3.maybeAddIterator,
-      registerPolyfill = $__3.registerPolyfill;
+  var __moduleName = "traceur-runtime@0.0.79/src/runtime/polyfills/Map.js";
+  var $__0 = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/utils.js"),
+      isObject = $__0.isObject,
+      maybeAddIterator = $__0.maybeAddIterator,
+      registerPolyfill = $__0.registerPolyfill;
   var getOwnHashObject = $traceurRuntime.getOwnHashObject;
   var $hasOwnProperty = Object.prototype.hasOwnProperty;
   var deletedSentinel = {};
@@ -1221,11 +1577,11 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Map", [], function
     }
     initMap(this);
     if (iterable !== null && iterable !== undefined) {
-      for (var $__5 = iterable[Symbol.iterator](),
-          $__6; !($__6 = $__5.next()).done; ) {
-        var $__7 = $__6.value,
-            key = $__7[0],
-            value = $__7[1];
+      for (var $__2 = iterable[$traceurRuntime.toProperty(Symbol.iterator)](),
+          $__3; !($__3 = $__2.next()).done; ) {
+        var $__4 = $__3.value,
+            key = $__4[0],
+            value = $__4[1];
         {
           this.set(key, value);
         }
@@ -1305,7 +1661,7 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Map", [], function
         callbackFn.call(thisArg, value, key, this);
       }
     },
-    entries: $traceurRuntime.initGeneratorFunction(function $__8() {
+    entries: $traceurRuntime.initGeneratorFunction(function $__5() {
       var i,
           key,
           value;
@@ -1341,9 +1697,9 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Map", [], function
             default:
               return $ctx.end();
           }
-      }, $__8, this);
+      }, $__5, this);
     }),
-    keys: $traceurRuntime.initGeneratorFunction(function $__9() {
+    keys: $traceurRuntime.initGeneratorFunction(function $__6() {
       var i,
           key,
           value;
@@ -1379,9 +1735,9 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Map", [], function
             default:
               return $ctx.end();
           }
-      }, $__9, this);
+      }, $__6, this);
     }),
-    values: $traceurRuntime.initGeneratorFunction(function $__10() {
+    values: $traceurRuntime.initGeneratorFunction(function $__7() {
       var i,
           key,
           value;
@@ -1417,7 +1773,7 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Map", [], function
             default:
               return $ctx.end();
           }
-      }, $__10, this);
+      }, $__7, this);
     })
   }, {});
   Object.defineProperty(Map.prototype, Symbol.iterator, {
@@ -1426,12 +1782,14 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Map", [], function
     value: Map.prototype.entries
   });
   function polyfillMap(global) {
-    var $__7 = global,
-        Object = $__7.Object,
-        Symbol = $__7.Symbol;
+    var $__4 = global,
+        Object = $__4.Object,
+        Symbol = $__4.Symbol;
     if (!global.Map)
       global.Map = Map;
     var mapPrototype = global.Map.prototype;
+    if (mapPrototype.entries === undefined)
+      global.Map = Map;
     if (mapPrototype.entries) {
       maybeAddIterator(mapPrototype, mapPrototype.entries, Symbol);
       maybeAddIterator(Object.getPrototypeOf(new global.Map().entries()), function() {
@@ -1449,15 +1807,15 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Map", [], function
     }
   };
 });
-System.get("traceur-runtime@0.0.62/src/runtime/polyfills/Map" + '');
-System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Set", [], function() {
+System.get("traceur-runtime@0.0.79/src/runtime/polyfills/Map.js" + '');
+System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Set.js", [], function() {
   "use strict";
-  var __moduleName = "traceur-runtime@0.0.62/src/runtime/polyfills/Set";
-  var $__11 = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/utils"),
-      isObject = $__11.isObject,
-      maybeAddIterator = $__11.maybeAddIterator,
-      registerPolyfill = $__11.registerPolyfill;
-  var Map = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/Map").Map;
+  var __moduleName = "traceur-runtime@0.0.79/src/runtime/polyfills/Set.js";
+  var $__0 = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/utils.js"),
+      isObject = $__0.isObject,
+      maybeAddIterator = $__0.maybeAddIterator,
+      registerPolyfill = $__0.registerPolyfill;
+  var Map = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/Map.js").Map;
   var getOwnHashObject = $traceurRuntime.getOwnHashObject;
   var $hasOwnProperty = Object.prototype.hasOwnProperty;
   function initSet(set) {
@@ -1472,9 +1830,9 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Set", [], function
     }
     initSet(this);
     if (iterable !== null && iterable !== undefined) {
-      for (var $__15 = iterable[Symbol.iterator](),
-          $__16; !($__16 = $__15.next()).done; ) {
-        var item = $__16.value;
+      for (var $__4 = iterable[$traceurRuntime.toProperty(Symbol.iterator)](),
+          $__5; !($__5 = $__4.next()).done; ) {
+        var item = $__5.value;
         {
           this.add(item);
         }
@@ -1500,72 +1858,72 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Set", [], function
     },
     forEach: function(callbackFn) {
       var thisArg = arguments[1];
-      var $__13 = this;
+      var $__2 = this;
       return this.map_.forEach((function(value, key) {
-        callbackFn.call(thisArg, key, key, $__13);
+        callbackFn.call(thisArg, key, key, $__2);
       }));
     },
-    values: $traceurRuntime.initGeneratorFunction(function $__18() {
-      var $__19,
-          $__20;
+    values: $traceurRuntime.initGeneratorFunction(function $__7() {
+      var $__8,
+          $__9;
       return $traceurRuntime.createGeneratorInstance(function($ctx) {
         while (true)
           switch ($ctx.state) {
             case 0:
-              $__19 = this.map_.keys()[Symbol.iterator]();
+              $__8 = this.map_.keys()[Symbol.iterator]();
               $ctx.sent = void 0;
               $ctx.action = 'next';
               $ctx.state = 12;
               break;
             case 12:
-              $__20 = $__19[$ctx.action]($ctx.sentIgnoreThrow);
+              $__9 = $__8[$ctx.action]($ctx.sentIgnoreThrow);
               $ctx.state = 9;
               break;
             case 9:
-              $ctx.state = ($__20.done) ? 3 : 2;
+              $ctx.state = ($__9.done) ? 3 : 2;
               break;
             case 3:
-              $ctx.sent = $__20.value;
+              $ctx.sent = $__9.value;
               $ctx.state = -2;
               break;
             case 2:
               $ctx.state = 12;
-              return $__20.value;
+              return $__9.value;
             default:
               return $ctx.end();
           }
-      }, $__18, this);
+      }, $__7, this);
     }),
-    entries: $traceurRuntime.initGeneratorFunction(function $__21() {
-      var $__22,
-          $__23;
+    entries: $traceurRuntime.initGeneratorFunction(function $__10() {
+      var $__11,
+          $__12;
       return $traceurRuntime.createGeneratorInstance(function($ctx) {
         while (true)
           switch ($ctx.state) {
             case 0:
-              $__22 = this.map_.entries()[Symbol.iterator]();
+              $__11 = this.map_.entries()[Symbol.iterator]();
               $ctx.sent = void 0;
               $ctx.action = 'next';
               $ctx.state = 12;
               break;
             case 12:
-              $__23 = $__22[$ctx.action]($ctx.sentIgnoreThrow);
+              $__12 = $__11[$ctx.action]($ctx.sentIgnoreThrow);
               $ctx.state = 9;
               break;
             case 9:
-              $ctx.state = ($__23.done) ? 3 : 2;
+              $ctx.state = ($__12.done) ? 3 : 2;
               break;
             case 3:
-              $ctx.sent = $__23.value;
+              $ctx.sent = $__12.value;
               $ctx.state = -2;
               break;
             case 2:
               $ctx.state = 12;
-              return $__23.value;
+              return $__12.value;
             default:
               return $ctx.end();
           }
-      }, $__21, this);
+      }, $__10, this);
     })
   }, {});
   Object.defineProperty(Set.prototype, Symbol.iterator, {
@@ -1579,9 +1937,9 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Set", [], function
     value: Set.prototype.values
   });
   function polyfillSet(global) {
-    var $__17 = global,
-        Object = $__17.Object,
-        Symbol = $__17.Symbol;
+    var $__6 = global,
+        Object = $__6.Object,
+        Symbol = $__6.Symbol;
     if (!global.Set)
       global.Set = Set;
     var setPrototype = global.Set.prototype;
@@ -1602,10 +1960,10 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Set", [], function
     }
   };
 });
-System.get("traceur-runtime@0.0.62/src/runtime/polyfills/Set" + '');
-System.register("traceur-runtime@0.0.62/node_modules/rsvp/lib/rsvp/asap", [], function() {
+System.get("traceur-runtime@0.0.79/src/runtime/polyfills/Set.js" + '');
+System.registerModule("traceur-runtime@0.0.79/node_modules/rsvp/lib/rsvp/asap.js", [], function() {
   "use strict";
-  var __moduleName = "traceur-runtime@0.0.62/node_modules/rsvp/lib/rsvp/asap";
+  var __moduleName = "traceur-runtime@0.0.79/node_modules/rsvp/lib/rsvp/asap.js";
   var len = 0;
   function asap(callback, arg) {
     queue[len] = callback;
@@ -1670,11 +2028,11 @@ System.register("traceur-runtime@0.0.62/node_modules/rsvp/lib/rsvp/asap", [], fu
       return $__default;
     }};
 });
-System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Promise", [], function() {
+System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Promise.js", [], function() {
   "use strict";
-  var __moduleName = "traceur-runtime@0.0.62/src/runtime/polyfills/Promise";
-  var async = System.get("traceur-runtime@0.0.62/node_modules/rsvp/lib/rsvp/asap").default;
-  var registerPolyfill = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/utils").registerPolyfill;
+  var __moduleName = "traceur-runtime@0.0.79/src/runtime/polyfills/Promise.js";
+  var async = System.get("traceur-runtime@0.0.79/node_modules/rsvp/lib/rsvp/asap.js").default;
+  var registerPolyfill = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/utils.js").registerPolyfill;
   var promiseRaw = {};
   function isPromise(x) {
     return x && typeof x === 'object' && x.status_ !== undefined;
@@ -1911,24 +2269,23 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Promise", [], func
     }
   };
 });
-System.get("traceur-runtime@0.0.62/src/runtime/polyfills/Promise" + '');
-System.register("traceur-runtime@0.0.62/src/runtime/polyfills/StringIterator", [], function() {
+System.get("traceur-runtime@0.0.79/src/runtime/polyfills/Promise.js" + '');
+System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/StringIterator.js", [], function() {
   "use strict";
-  var $__29;
-  var __moduleName = "traceur-runtime@0.0.62/src/runtime/polyfills/StringIterator";
-  var $__27 = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/utils"),
-      createIteratorResultObject = $__27.createIteratorResultObject,
-      isObject = $__27.isObject;
-  var $__30 = $traceurRuntime,
-      hasOwnProperty = $__30.hasOwnProperty,
-      toProperty = $__30.toProperty;
+  var $__2;
+  var __moduleName = "traceur-runtime@0.0.79/src/runtime/polyfills/StringIterator.js";
+  var $__0 = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/utils.js"),
+      createIteratorResultObject = $__0.createIteratorResultObject,
+      isObject = $__0.isObject;
+  var toProperty = $traceurRuntime.toProperty;
+  var hasOwnProperty = Object.prototype.hasOwnProperty;
   var iteratedString = Symbol('iteratedString');
   var stringIteratorNextIndex = Symbol('stringIteratorNextIndex');
   var StringIterator = function StringIterator() {};
-  ($traceurRuntime.createClass)(StringIterator, ($__29 = {}, Object.defineProperty($__29, "next", {
+  ($traceurRuntime.createClass)(StringIterator, ($__2 = {}, Object.defineProperty($__2, "next", {
     value: function() {
       var o = this;
-      if (!isObject(o) || !hasOwnProperty(o, iteratedString)) {
+      if (!isObject(o) || !hasOwnProperty.call(o, iteratedString)) {
         throw new TypeError('this must be a StringIterator object');
       }
       var s = o[toProperty(iteratedString)];
@@ -1959,14 +2316,14 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/StringIterator", [
     configurable: true,
     enumerable: true,
     writable: true
-  }), Object.defineProperty($__29, Symbol.iterator, {
+  }), Object.defineProperty($__2, Symbol.iterator, {
     value: function() {
       return this;
     },
     configurable: true,
     enumerable: true,
     writable: true
-  }), $__29), {});
+  }), $__2), {});
   function createStringIterator(string) {
     var s = String(string);
     var iterator = Object.create(StringIterator.prototype);
@@ -1978,14 +2335,14 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/StringIterator", [
       return createStringIterator;
     }};
 });
-System.register("traceur-runtime@0.0.62/src/runtime/polyfills/String", [], function() {
+System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/String.js", [], function() {
   "use strict";
-  var __moduleName = "traceur-runtime@0.0.62/src/runtime/polyfills/String";
-  var createStringIterator = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/StringIterator").createStringIterator;
-  var $__32 = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/utils"),
-      maybeAddFunctions = $__32.maybeAddFunctions,
-      maybeAddIterator = $__32.maybeAddIterator,
-      registerPolyfill = $__32.registerPolyfill;
+  var __moduleName = "traceur-runtime@0.0.79/src/runtime/polyfills/String.js";
+  var createStringIterator = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/StringIterator.js").createStringIterator;
+  var $__1 = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/utils.js"),
+      maybeAddFunctions = $__1.maybeAddFunctions,
+      maybeAddIterator = $__1.maybeAddIterator,
+      registerPolyfill = $__1.registerPolyfill;
   var $toString = Object.prototype.toString;
   var $indexOf = String.prototype.indexOf;
   var $lastIndexOf = String.prototype.lastIndexOf;
@@ -2030,20 +2387,26 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/String", [], funct
     }
     return $lastIndexOf.call(string, searchString, start) == start;
   }
-  function contains(search) {
+  function includes(search) {
     if (this == null) {
       throw TypeError();
     }
     var string = String(this);
+    if (search && $toString.call(search) == '[object RegExp]') {
+      throw TypeError();
+    }
     var stringLength = string.length;
     var searchString = String(search);
     var searchLength = searchString.length;
     var position = arguments.length > 1 ? arguments[1] : undefined;
     var pos = position ? Number(position) : 0;
-    if (isNaN(pos)) {
+    if (pos != pos) {
       pos = 0;
     }
     var start = Math.min(Math.max(pos, 0), stringLength);
+    if (searchLength + start > stringLength) {
+      return false;
+    }
     return $indexOf.call(string, searchString, pos) != -1;
   }
   function repeat(count) {
@@ -2137,7 +2500,7 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/String", [], funct
   }
   function polyfillString(global) {
     var String = global.String;
-    maybeAddFunctions(String.prototype, ['codePointAt', codePointAt, 'contains', contains, 'endsWith', endsWith, 'startsWith', startsWith, 'repeat', repeat]);
+    maybeAddFunctions(String.prototype, ['codePointAt', codePointAt, 'endsWith', endsWith, 'includes', includes, 'repeat', repeat, 'startsWith', startsWith]);
     maybeAddFunctions(String, ['fromCodePoint', fromCodePoint, 'raw', raw]);
     maybeAddIterator(String.prototype, stringPrototypeIterator, Symbol);
   }
@@ -2149,8 +2512,8 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/String", [], funct
     get endsWith() {
       return endsWith;
     },
-    get contains() {
-      return contains;
+    get includes() {
+      return includes;
     },
     get repeat() {
       return repeat;
@@ -2172,20 +2535,20 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/String", [], funct
     }
   };
 });
-System.get("traceur-runtime@0.0.62/src/runtime/polyfills/String" + '');
-System.register("traceur-runtime@0.0.62/src/runtime/polyfills/ArrayIterator", [], function() {
+System.get("traceur-runtime@0.0.79/src/runtime/polyfills/String.js" + '');
+System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/ArrayIterator.js", [], function() {
   "use strict";
-  var $__36;
-  var __moduleName = "traceur-runtime@0.0.62/src/runtime/polyfills/ArrayIterator";
-  var $__34 = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/utils"),
-      toObject = $__34.toObject,
-      toUint32 = $__34.toUint32,
-      createIteratorResultObject = $__34.createIteratorResultObject;
+  var $__2;
+  var __moduleName = "traceur-runtime@0.0.79/src/runtime/polyfills/ArrayIterator.js";
+  var $__0 = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/utils.js"),
+      toObject = $__0.toObject,
+      toUint32 = $__0.toUint32,
+      createIteratorResultObject = $__0.createIteratorResultObject;
   var ARRAY_ITERATOR_KIND_KEYS = 1;
   var ARRAY_ITERATOR_KIND_VALUES = 2;
   var ARRAY_ITERATOR_KIND_ENTRIES = 3;
   var ArrayIterator = function ArrayIterator() {};
-  ($traceurRuntime.createClass)(ArrayIterator, ($__36 = {}, Object.defineProperty($__36, "next", {
+  ($traceurRuntime.createClass)(ArrayIterator, ($__2 = {}, Object.defineProperty($__2, "next", {
     value: function() {
       var iterator = toObject(this);
       var array = iterator.iteratorObject_;
@@ -2209,14 +2572,14 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/ArrayIterator", []
     configurable: true,
     enumerable: true,
     writable: true
-  }), Object.defineProperty($__36, Symbol.iterator, {
+  }), Object.defineProperty($__2, Symbol.iterator, {
     value: function() {
       return this;
     },
     configurable: true,
     enumerable: true,
     writable: true
-  }), $__36), {});
+  }), $__2), {});
   function createArrayIterator(array, kind) {
     var object = toObject(array);
     var iterator = new ArrayIterator;
@@ -2246,23 +2609,23 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/ArrayIterator", []
     }
   };
 });
-System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Array", [], function() {
+System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Array.js", [], function() {
   "use strict";
-  var __moduleName = "traceur-runtime@0.0.62/src/runtime/polyfills/Array";
-  var $__37 = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/ArrayIterator"),
-      entries = $__37.entries,
-      keys = $__37.keys,
-      values = $__37.values;
-  var $__38 = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/utils"),
-      checkIterable = $__38.checkIterable,
-      isCallable = $__38.isCallable,
-      isConstructor = $__38.isConstructor,
-      maybeAddFunctions = $__38.maybeAddFunctions,
-      maybeAddIterator = $__38.maybeAddIterator,
-      registerPolyfill = $__38.registerPolyfill,
-      toInteger = $__38.toInteger,
-      toLength = $__38.toLength,
-      toObject = $__38.toObject;
+  var __moduleName = "traceur-runtime@0.0.79/src/runtime/polyfills/Array.js";
+  var $__0 = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/ArrayIterator.js"),
+      entries = $__0.entries,
+      keys = $__0.keys,
+      values = $__0.values;
+  var $__1 = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/utils.js"),
+      checkIterable = $__1.checkIterable,
+      isCallable = $__1.isCallable,
+      isConstructor = $__1.isConstructor,
+      maybeAddFunctions = $__1.maybeAddFunctions,
+      maybeAddIterator = $__1.maybeAddIterator,
+      registerPolyfill = $__1.registerPolyfill,
+      toInteger = $__1.toInteger,
+      toLength = $__1.toLength,
+      toObject = $__1.toObject;
   function from(arrLike) {
     var mapFn = arguments[1];
     var thisArg = arguments[2];
@@ -2277,9 +2640,9 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Array", [], functi
     }
     if (checkIterable(items)) {
       arr = isConstructor(C) ? new C() : [];
-      for (var $__39 = items[Symbol.iterator](),
-          $__40; !($__40 = $__39.next()).done; ) {
-        var item = $__40.value;
+      for (var $__2 = items[$traceurRuntime.toProperty(Symbol.iterator)](),
+          $__3; !($__3 = $__2.next()).done; ) {
+        var item = $__3.value;
         {
           if (mapping) {
             arr[k] = mapFn.call(thisArg, item, k);
@@ -2306,8 +2669,8 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Array", [], functi
   }
   function of() {
     for (var items = [],
-        $__41 = 0; $__41 < arguments.length; $__41++)
-      items[$__41] = arguments[$__41];
+        $__4 = 0; $__4 < arguments.length; $__4++)
+      items[$__4] = arguments[$__4];
     var C = this;
     var len = items.length;
     var arr = isConstructor(C) ? new C(len) : new Array(len);
@@ -2349,20 +2712,18 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Array", [], functi
       throw TypeError();
     }
     for (var i = 0; i < len; i++) {
-      if (i in object) {
-        var value = object[i];
-        if (predicate.call(thisArg, value, i, object)) {
-          return returnIndex ? i : value;
-        }
+      var value = object[i];
+      if (predicate.call(thisArg, value, i, object)) {
+        return returnIndex ? i : value;
       }
     }
     return returnIndex ? -1 : undefined;
   }
   function polyfillArray(global) {
-    var $__42 = global,
-        Array = $__42.Array,
-        Object = $__42.Object,
-        Symbol = $__42.Symbol;
+    var $__5 = global,
+        Array = $__5.Array,
+        Object = $__5.Object,
+        Symbol = $__5.Symbol;
     maybeAddFunctions(Array.prototype, ['entries', entries, 'keys', keys, 'values', values, 'fill', fill, 'find', find, 'findIndex', findIndex]);
     maybeAddFunctions(Array, ['from', from, 'of', of]);
     maybeAddIterator(Array.prototype, values, Symbol);
@@ -2392,19 +2753,19 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Array", [], functi
     }
   };
 });
-System.get("traceur-runtime@0.0.62/src/runtime/polyfills/Array" + '');
-System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Object", [], function() {
+System.get("traceur-runtime@0.0.79/src/runtime/polyfills/Array.js" + '');
+System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Object.js", [], function() {
   "use strict";
-  var __moduleName = "traceur-runtime@0.0.62/src/runtime/polyfills/Object";
-  var $__43 = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/utils"),
-      maybeAddFunctions = $__43.maybeAddFunctions,
-      registerPolyfill = $__43.registerPolyfill;
-  var $__44 = $traceurRuntime,
-      defineProperty = $__44.defineProperty,
-      getOwnPropertyDescriptor = $__44.getOwnPropertyDescriptor,
-      getOwnPropertyNames = $__44.getOwnPropertyNames,
-      keys = $__44.keys,
-      privateNames = $__44.privateNames;
+  var __moduleName = "traceur-runtime@0.0.79/src/runtime/polyfills/Object.js";
+  var $__0 = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/utils.js"),
+      maybeAddFunctions = $__0.maybeAddFunctions,
+      registerPolyfill = $__0.registerPolyfill;
+  var $__1 = $traceurRuntime,
+      defineProperty = $__1.defineProperty,
+      getOwnPropertyDescriptor = $__1.getOwnPropertyDescriptor,
+      getOwnPropertyNames = $__1.getOwnPropertyNames,
+      isPrivateName = $__1.isPrivateName,
+      keys = $__1.keys;
   function is(left, right) {
     if (left === right)
       return left !== 0 || 1 / left === 1 / right;
@@ -2413,12 +2774,12 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Object", [], funct
   function assign(target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i];
-      var props = keys(source);
+      var props = source == null ? [] : keys(source);
       var p,
           length = props.length;
       for (p = 0; p < length; p++) {
         var name = props[p];
-        if (privateNames[name])
+        if (isPrivateName(name))
           continue;
         target[name] = source[name];
       }
@@ -2432,7 +2793,7 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Object", [], funct
         length = props.length;
     for (p = 0; p < length; p++) {
       var name = props[p];
-      if (privateNames[name])
+      if (isPrivateName(name))
         continue;
       descriptor = getOwnPropertyDescriptor(source, props[p]);
       defineProperty(target, props[p], descriptor);
@@ -2459,16 +2820,16 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Object", [], funct
     }
   };
 });
-System.get("traceur-runtime@0.0.62/src/runtime/polyfills/Object" + '');
-System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Number", [], function() {
+System.get("traceur-runtime@0.0.79/src/runtime/polyfills/Object.js" + '');
+System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Number.js", [], function() {
   "use strict";
-  var __moduleName = "traceur-runtime@0.0.62/src/runtime/polyfills/Number";
-  var $__46 = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/utils"),
-      isNumber = $__46.isNumber,
-      maybeAddConsts = $__46.maybeAddConsts,
-      maybeAddFunctions = $__46.maybeAddFunctions,
-      registerPolyfill = $__46.registerPolyfill,
-      toInteger = $__46.toInteger;
+  var __moduleName = "traceur-runtime@0.0.79/src/runtime/polyfills/Number.js";
+  var $__0 = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/utils.js"),
+      isNumber = $__0.isNumber,
+      maybeAddConsts = $__0.maybeAddConsts,
+      maybeAddFunctions = $__0.maybeAddFunctions,
+      registerPolyfill = $__0.registerPolyfill,
+      toInteger = $__0.toInteger;
   var $abs = Math.abs;
   var $isFinite = isFinite;
   var $isNaN = isNaN;
@@ -2527,12 +2888,12 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Number", [], funct
     }
   };
 });
-System.get("traceur-runtime@0.0.62/src/runtime/polyfills/Number" + '');
-System.register("traceur-runtime@0.0.62/src/runtime/polyfills/polyfills", [], function() {
+System.get("traceur-runtime@0.0.79/src/runtime/polyfills/Number.js" + '');
+System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/polyfills.js", [], function() {
   "use strict";
-  var __moduleName = "traceur-runtime@0.0.62/src/runtime/polyfills/polyfills";
-  var polyfillAll = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/utils").polyfillAll;
-  polyfillAll(this);
+  var __moduleName = "traceur-runtime@0.0.79/src/runtime/polyfills/polyfills.js";
+  var polyfillAll = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/utils.js").polyfillAll;
+  polyfillAll(Reflect.global);
   var setupGlobals = $traceurRuntime.setupGlobals;
   $traceurRuntime.setupGlobals = function(global) {
     setupGlobals(global);
@@ -2540,12 +2901,14 @@ System.register("traceur-runtime@0.0.62/src/runtime/polyfills/polyfills", [], fu
   };
   return {};
 });
-System.get("traceur-runtime@0.0.62/src/runtime/polyfills/polyfills" + '');
+System.get("traceur-runtime@0.0.79/src/runtime/polyfills/polyfills.js" + '');
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":2}],4:[function(require,module,exports){
+
+},{"_process":3,"path":2}],5:[function(require,module,exports){
+/*global define:false */
 /**
- * Copyright 2012 Craig Campbell
+ * Copyright 2013 Craig Campbell
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -2562,789 +2925,942 @@ System.get("traceur-runtime@0.0.62/src/runtime/polyfills/polyfills" + '');
  * Mousetrap is a simple keyboard shortcut library for Javascript with
  * no external dependencies
  *
- * @version 1.1.2
+ * @version 1.4.6
  * @url craig.is/killing/mice
  */
-
-  /**
-   * mapping of special keycodes to their corresponding keys
-   *
-   * everything in this dictionary cannot use keypress events
-   * so it has to be here to map to the correct keycodes for
-   * keyup/keydown events
-   *
-   * @type {Object}
-   */
-  var _MAP = {
-          8: 'backspace',
-          9: 'tab',
-          13: 'enter',
-          16: 'shift',
-          17: 'ctrl',
-          18: 'alt',
-          20: 'capslock',
-          27: 'esc',
-          32: 'space',
-          33: 'pageup',
-          34: 'pagedown',
-          35: 'end',
-          36: 'home',
-          37: 'left',
-          38: 'up',
-          39: 'right',
-          40: 'down',
-          45: 'ins',
-          46: 'del',
-          91: 'meta',
-          93: 'meta',
-          224: 'meta'
-      },
-
-      /**
-       * mapping for special characters so they can support
-       *
-       * this dictionary is only used incase you want to bind a
-       * keyup or keydown event to one of these keys
-       *
-       * @type {Object}
-       */
-      _KEYCODE_MAP = {
-          106: '*',
-          107: '+',
-          109: '-',
-          110: '.',
-          111 : '/',
-          186: ';',
-          187: '=',
-          188: ',',
-          189: '-',
-          190: '.',
-          191: '/',
-          192: '`',
-          219: '[',
-          220: '\\',
-          221: ']',
-          222: '\''
-      },
-
-      /**
-       * this is a mapping of keys that require shift on a US keypad
-       * back to the non shift equivelents
-       *
-       * this is so you can use keyup events with these keys
-       *
-       * note that this will only work reliably on US keyboards
-       *
-       * @type {Object}
-       */
-      _SHIFT_MAP = {
-          '~': '`',
-          '!': '1',
-          '@': '2',
-          '#': '3',
-          '$': '4',
-          '%': '5',
-          '^': '6',
-          '&': '7',
-          '*': '8',
-          '(': '9',
-          ')': '0',
-          '_': '-',
-          '+': '=',
-          ':': ';',
-          '\"': '\'',
-          '<': ',',
-          '>': '.',
-          '?': '/',
-          '|': '\\'
-      },
-
-      /**
-       * this is a list of special strings you can use to map
-       * to modifier keys when you specify your keyboard shortcuts
-       *
-       * @type {Object}
-       */
-      _SPECIAL_ALIASES = {
-          'option': 'alt',
-          'command': 'meta',
-          'return': 'enter',
-          'escape': 'esc'
-      },
-
-      /**
-       * variable to store the flipped version of _MAP from above
-       * needed to check if we should use keypress or not when no action
-       * is specified
-       *
-       * @type {Object|undefined}
-       */
-      _REVERSE_MAP,
-
-      /**
-       * a list of all the callbacks setup via Mousetrap.bind()
-       *
-       * @type {Object}
-       */
-      _callbacks = {},
-
-      /**
-       * direct map of string combinations to callbacks used for trigger()
-       *
-       * @type {Object}
-       */
-      _direct_map = {},
-
-      /**
-       * keeps track of what level each sequence is at since multiple
-       * sequences can start out with the same sequence
-       *
-       * @type {Object}
-       */
-      _sequence_levels = {},
-
-      /**
-       * variable to store the setTimeout call
-       *
-       * @type {null|number}
-       */
-      _reset_timer,
-
-      /**
-       * temporary state where we will ignore the next keyup
-       *
-       * @type {boolean|string}
-       */
-      _ignore_next_keyup = false,
-
-      /**
-       * are we currently inside of a sequence?
-       * type of action ("keyup" or "keydown" or "keypress") or false
-       *
-       * @type {boolean|string}
-       */
-      _inside_sequence = false;
-
-  /**
-   * loop through the f keys, f1 to f19 and add them to the map
-   * programatically
-   */
-  for (var i = 1; i < 20; ++i) {
-      _MAP[111 + i] = 'f' + i;
-  }
-
-  /**
-   * loop through to map numbers on the numeric keypad
-   */
-  for (i = 0; i <= 9; ++i) {
-      _MAP[i + 96] = i;
-  }
-
-  /**
-   * cross browser add event method
-   *
-   * @param {Element|HTMLDocument} object
-   * @param {string} type
-   * @param {Function} callback
-   * @returns void
-   */
-  function _addEvent(object, type, callback) {
-      if (object.addEventListener) {
-          return object.addEventListener(type, callback, false);
-      }
-
-      object.attachEvent('on' + type, callback);
-  }
-
-  /**
-   * takes the event and returns the key character
-   *
-   * @param {Event} e
-   * @return {string}
-   */
-  function _characterFromEvent(e) {
-
-      // for keypress events we should return the character as is
-      if (e.type == 'keypress') {
-          return String.fromCharCode(e.which);
-      }
-
-      // for non keypress events the special maps are needed
-      if (_MAP[e.which]) {
-          return _MAP[e.which];
-      }
-
-      if (_KEYCODE_MAP[e.which]) {
-          return _KEYCODE_MAP[e.which];
-      }
-
-      // if it is not in the special map
-      return String.fromCharCode(e.which).toLowerCase();
-  }
-
-  /**
-   * should we stop this event before firing off callbacks
-   *
-   * @param {Event} e
-   * @return {boolean}
-   */
-  function _stop(e) {
-      var element = e.target || e.srcElement,
-          tag_name = element.tagName;
-
-      // if the element has the class "mousetrap" then no need to stop
-      if ((' ' + element.className + ' ').indexOf(' mousetrap ') > -1) {
-          return false;
-      }
-
-      // stop for input, select, and textarea
-      return tag_name == 'INPUT' || tag_name == 'SELECT' || tag_name == 'TEXTAREA' || (element.contentEditable && element.contentEditable == 'true');
-  }
-
-  /**
-   * checks if two arrays are equal
-   *
-   * @param {Array} modifiers1
-   * @param {Array} modifiers2
-   * @returns {boolean}
-   */
-  function _modifiersMatch(modifiers1, modifiers2) {
-      return modifiers1.sort().join(',') === modifiers2.sort().join(',');
-  }
-
-  /**
-   * resets all sequence counters except for the ones passed in
-   *
-   * @param {Object} do_not_reset
-   * @returns void
-   */
-  function _resetSequences(do_not_reset) {
-      do_not_reset = do_not_reset || {};
-
-      var active_sequences = false,
-          key;
-
-      for (key in _sequence_levels) {
-          if (do_not_reset[key]) {
-              active_sequences = true;
-              continue;
-          }
-          _sequence_levels[key] = 0;
-      }
-
-      if (!active_sequences) {
-          _inside_sequence = false;
-      }
-  }
-
-  /**
-   * finds all callbacks that match based on the keycode, modifiers,
-   * and action
-   *
-   * @param {string} character
-   * @param {Array} modifiers
-   * @param {string} action
-   * @param {boolean=} remove - should we remove any matches
-   * @param {string=} combination
-   * @returns {Array}
-   */
-  function _getMatches(character, modifiers, action, remove, combination) {
-      var i,
-          callback,
-          matches = [];
-
-      // if there are no events related to this keycode
-      if (!_callbacks[character]) {
-          return [];
-      }
-
-      // if a modifier key is coming up on its own we should allow it
-      if (action == 'keyup' && _isModifier(character)) {
-          modifiers = [character];
-      }
-
-      // loop through all callbacks for the key that was pressed
-      // and see if any of them match
-      for (i = 0; i < _callbacks[character].length; ++i) {
-          callback = _callbacks[character][i];
-
-          // if this is a sequence but it is not at the right level
-          // then move onto the next match
-          if (callback.seq && _sequence_levels[callback.seq] != callback.level) {
-              continue;
-          }
-
-          // if the action we are looking for doesn't match the action we got
-          // then we should keep going
-          if (action != callback.action) {
-              continue;
-          }
-
-          // if this is a keypress event that means that we need to only
-          // look at the character, otherwise check the modifiers as
-          // well
-          if (action == 'keypress' || _modifiersMatch(modifiers, callback.modifiers)) {
-
-              // remove is used so if you change your mind and call bind a
-              // second time with a new function the first one is overwritten
-              if (remove && callback.combo == combination) {
-                  _callbacks[character].splice(i, 1);
-              }
-
-              matches.push(callback);
-          }
-      }
-
-      return matches;
-  }
-
-  /**
-   * takes a key event and figures out what the modifiers are
-   *
-   * @param {Event} e
-   * @returns {Array}
-   */
-  function _eventModifiers(e) {
-      var modifiers = [];
-
-      if (e.shiftKey) {
-          modifiers.push('shift');
-      }
-
-      if (e.altKey) {
-          modifiers.push('alt');
-      }
-
-      if (e.ctrlKey) {
-          modifiers.push('ctrl');
-      }
-
-      if (e.metaKey) {
-          modifiers.push('meta');
-      }
-
-      return modifiers;
-  }
-
-  /**
-   * actually calls the callback function
-   *
-   * if your callback function returns false this will use the jquery
-   * convention - prevent default and stop propogation on the event
-   *
-   * @param {Function} callback
-   * @param {Event} e
-   * @returns void
-   */
-  function _fireCallback(callback, e) {
-      if (callback(e) === false) {
-          if (e.preventDefault) {
-              e.preventDefault();
-          }
-
-          if (e.stopPropagation) {
-              e.stopPropagation();
-          }
-
-          e.returnValue = false;
-          e.cancelBubble = true;
-      }
-  }
-
-  /**
-   * handles a character key event
-   *
-   * @param {string} character
-   * @param {Event} e
-   * @returns void
-   */
-  function _handleCharacter(character, e) {
-
-      // if this event should not happen stop here
-      if (_stop(e)) {
-          return;
-      }
-
-      var callbacks = _getMatches(character, _eventModifiers(e), e.type),
-          i,
-          do_not_reset = {},
-          processed_sequence_callback = false;
-
-      // loop through matching callbacks for this key event
-      for (i = 0; i < callbacks.length; ++i) {
-
-          // fire for all sequence callbacks
-          // this is because if for example you have multiple sequences
-          // bound such as "g i" and "g t" they both need to fire the
-          // callback for matching g cause otherwise you can only ever
-          // match the first one
-          if (callbacks[i].seq) {
-              processed_sequence_callback = true;
-
-              // keep a list of which sequences were matches for later
-              do_not_reset[callbacks[i].seq] = 1;
-              _fireCallback(callbacks[i].callback, e);
-              continue;
-          }
-
-          // if there were no sequence matches but we are still here
-          // that means this is a regular match so we should fire that
-          if (!processed_sequence_callback && !_inside_sequence) {
-              _fireCallback(callbacks[i].callback, e);
-          }
-      }
-
-      // if you are inside of a sequence and the key you are pressing
-      // is not a modifier key then we should reset all sequences
-      // that were not matched by this key event
-      if (e.type == _inside_sequence && !_isModifier(character)) {
-          _resetSequences(do_not_reset);
-      }
-  }
-
-  /**
-   * handles a keydown event
-   *
-   * @param {Event} e
-   * @returns void
-   */
-  function _handleKey(e) {
-
-      // normalize e.which for key events
-      // @see http://stackoverflow.com/questions/4285627/javascript-keycode-vs-charcode-utter-confusion
-      e.which = typeof e.which == "number" ? e.which : e.keyCode;
-
-      var character = _characterFromEvent(e);
-
-      // no character found then stop
-      if (!character) {
-          return;
-      }
-
-      if (e.type == 'keyup' && _ignore_next_keyup == character) {
-          _ignore_next_keyup = false;
-          return;
-      }
-
-      _handleCharacter(character, e);
-  }
-
-  /**
-   * determines if the keycode specified is a modifier key or not
-   *
-   * @param {string} key
-   * @returns {boolean}
-   */
-  function _isModifier(key) {
-      return key == 'shift' || key == 'ctrl' || key == 'alt' || key == 'meta';
-  }
-
-  /**
-   * called to set a 1 second timeout on the specified sequence
-   *
-   * this is so after each key press in the sequence you have 1 second
-   * to press the next key before you have to start over
-   *
-   * @returns void
-   */
-  function _resetSequenceTimer() {
-      clearTimeout(_reset_timer);
-      _reset_timer = setTimeout(_resetSequences, 1000);
-  }
-
-  /**
-   * reverses the map lookup so that we can look for specific keys
-   * to see what can and can't use keypress
-   *
-   * @return {Object}
-   */
-  function _getReverseMap() {
-      if (!_REVERSE_MAP) {
-          _REVERSE_MAP = {};
-          for (var key in _MAP) {
-
-              // pull out the numeric keypad from here cause keypress should
-              // be able to detect the keys from the character
-              if (key > 95 && key < 112) {
-                  continue;
-              }
-
-              if (_MAP.hasOwnProperty(key)) {
-                  _REVERSE_MAP[_MAP[key]] = key;
-              }
-          }
-      }
-      return _REVERSE_MAP;
-  }
-
-  /**
-   * picks the best action based on the key combination
-   *
-   * @param {string} key - character for key
-   * @param {Array} modifiers
-   * @param {string=} action passed in
-   */
-  function _pickBestAction(key, modifiers, action) {
-
-      // if no action was picked in we should try to pick the one
-      // that we think would work best for this key
-      if (!action) {
-          action = _getReverseMap()[key] ? 'keydown' : 'keypress';
-      }
-
-      // modifier keys don't work as expected with keypress,
-      // switch to keydown
-      if (action == 'keypress' && modifiers.length) {
-          action = 'keydown';
-      }
-
-      return action;
-  }
-
-  /**
-   * binds a key sequence to an event
-   *
-   * @param {string} combo - combo specified in bind call
-   * @param {Array} keys
-   * @param {Function} callback
-   * @param {string=} action
-   * @returns void
-   */
-  function _bindSequence(combo, keys, callback, action) {
-
-      // start off by adding a sequence level record for this combination
-      // and setting the level to 0
-      _sequence_levels[combo] = 0;
-
-      // if there is no action pick the best one for the first key
-      // in the sequence
-      if (!action) {
-          action = _pickBestAction(keys[0], []);
-      }
-
-      /**
-       * callback to increase the sequence level for this sequence and reset
-       * all other sequences that were active
-       *
-       * @param {Event} e
-       * @returns void
-       */
-      var _increaseSequence = function(e) {
-              _inside_sequence = action;
-              ++_sequence_levels[combo];
-              _resetSequenceTimer();
-          },
-
-          /**
-           * wraps the specified callback inside of another function in order
-           * to reset all sequence counters as soon as this sequence is done
-           *
-           * @param {Event} e
-           * @returns void
-           */
-          _callbackAndReset = function(e) {
-              _fireCallback(callback, e);
-
-              // we should ignore the next key up if the action is key down
-              // or keypress.  this is so if you finish a sequence and
-              // release the key the final key will not trigger a keyup
-              if (action !== 'keyup') {
-                  _ignore_next_keyup = _characterFromEvent(e);
-              }
-
-              // weird race condition if a sequence ends with the key
-              // another sequence begins with
-              setTimeout(_resetSequences, 10);
-          },
-          i;
-
-      // loop through keys one at a time and bind the appropriate callback
-      // function.  for any key leading up to the final one it should
-      // increase the sequence. after the final, it should reset all sequences
-      for (i = 0; i < keys.length; ++i) {
-          _bindSingle(keys[i], i < keys.length - 1 ? _increaseSequence : _callbackAndReset, action, combo, i);
-      }
-  }
-
-  /**
-   * binds a single keyboard combination
-   *
-   * @param {string} combination
-   * @param {Function} callback
-   * @param {string=} action
-   * @param {string=} sequence_name - name of sequence if part of sequence
-   * @param {number=} level - what part of the sequence the command is
-   * @returns void
-   */
-  function _bindSingle(combination, callback, action, sequence_name, level) {
-
-      // make sure multiple spaces in a row become a single space
-      combination = combination.replace(/\s+/g, ' ');
-
-      var sequence = combination.split(' '),
-          i,
-          key,
-          keys,
-          modifiers = [];
-
-      // if this pattern is a sequence of keys then run through this method
-      // to reprocess each pattern one key at a time
-      if (sequence.length > 1) {
-          return _bindSequence(combination, sequence, callback, action);
-      }
-
-      // take the keys from this pattern and figure out what the actual
-      // pattern is all about
-      keys = combination === '+' ? ['+'] : combination.split('+');
-
-      for (i = 0; i < keys.length; ++i) {
-          key = keys[i];
-
-          // normalize key names
-          if (_SPECIAL_ALIASES[key]) {
-              key = _SPECIAL_ALIASES[key];
-          }
-
-          // if this is not a keypress event then we should
-          // be smart about using shift keys
-          // this will only work for US keyboards however
-          if (action && action != 'keypress' && _SHIFT_MAP[key]) {
-              key = _SHIFT_MAP[key];
-              modifiers.push('shift');
-          }
-
-          // if this key is a modifier then add it to the list of modifiers
-          if (_isModifier(key)) {
-              modifiers.push(key);
-          }
-      }
-
-      // depending on what the key combination is
-      // we will try to pick the best event for it
-      action = _pickBestAction(key, modifiers, action);
-
-      // make sure to initialize array if this is the first time
-      // a callback is added for this key
-      if (!_callbacks[key]) {
-          _callbacks[key] = [];
-      }
-
-      // remove an existing match if there is one
-      _getMatches(key, modifiers, action, !sequence_name, combination);
-
-      // add this call back to the array
-      // if it is a sequence put it at the beginning
-      // if not put it at the end
-      //
-      // this is important because the way these are processed expects
-      // the sequence ones to come first
-      _callbacks[key][sequence_name ? 'unshift' : 'push']({
-          callback: callback,
-          modifiers: modifiers,
-          action: action,
-          seq: sequence_name,
-          level: level,
-          combo: combination
-      });
-  }
-
-  /**
-   * binds multiple combinations to the same callback
-   *
-   * @param {Array} combinations
-   * @param {Function} callback
-   * @param {string|undefined} action
-   * @returns void
-   */
-  function _bindMultiple(combinations, callback, action) {
-      for (var i = 0; i < combinations.length; ++i) {
-          _bindSingle(combinations[i], callback, action);
-      }
-  }
-
-  // start!
-  _addEvent(document, 'keypress', _handleKey);
-  _addEvent(document, 'keydown', _handleKey);
-  _addEvent(document, 'keyup', _handleKey);
-
-  var mousetrap = {
-
-      /**
-       * binds an event to mousetrap
-       *
-       * can be a single key, a combination of keys separated with +,
-       * a comma separated list of keys, an array of keys, or
-       * a sequence of keys separated by spaces
-       *
-       * be sure to list the modifier keys first to make sure that the
-       * correct key ends up getting bound (the last key in the pattern)
-       *
-       * @param {string|Array} keys
-       * @param {Function} callback
-       * @param {string=} action - 'keypress', 'keydown', or 'keyup'
-       * @returns void
-       */
-      bind: function(keys, callback, action) {
-          _bindMultiple(keys instanceof Array ? keys : [keys], callback, action);
-          _direct_map[keys + ':' + action] = callback;
-          return this;
-      },
-
-      /**
-       * unbinds an event to mousetrap
-       *
-       * the unbinding sets the callback function of the specified key combo
-       * to an empty function and deletes the corresponding key in the
-       * _direct_map dict.
-       *
-       * the keycombo+action has to be exactly the same as
-       * it was defined in the bind method
-       *
-       * TODO: actually remove this from the _callbacks dictionary instead
-       * of binding an empty function
-       *
-       * @param {string|Array} keys
-       * @param {string} action
-       * @returns void
-       */
-      unbind: function(keys, action) {
-          if (_direct_map[keys + ':' + action]) {
-              delete _direct_map[keys + ':' + action];
-              this.bind(keys, function() {}, action);
-          }
-          return this;
-      },
-
-      /**
-       * triggers an event that has already been bound
-       *
-       * @param {string} keys
-       * @param {string=} action
-       * @returns void
-       */
-      trigger: function(keys, action) {
-          _direct_map[keys + ':' + action]();
-          return this;
-      },
-
-      /**
-       * resets the library back to its initial state.  this is useful
-       * if you want to clear out the current keyboard shortcuts and bind
-       * new ones - for example if you switch to another page
-       *
-       * @returns void
-       */
-      reset: function() {
-          _callbacks = {};
-          _direct_map = {};
-          return this;
-      }
-  };
-
-module.exports = mousetrap;
-
-
-},{}],5:[function(require,module,exports){
+(function(window, document, undefined) {
+
+    /**
+     * mapping of special keycodes to their corresponding keys
+     *
+     * everything in this dictionary cannot use keypress events
+     * so it has to be here to map to the correct keycodes for
+     * keyup/keydown events
+     *
+     * @type {Object}
+     */
+    var _MAP = {
+            8: 'backspace',
+            9: 'tab',
+            13: 'enter',
+            16: 'shift',
+            17: 'ctrl',
+            18: 'alt',
+            20: 'capslock',
+            27: 'esc',
+            32: 'space',
+            33: 'pageup',
+            34: 'pagedown',
+            35: 'end',
+            36: 'home',
+            37: 'left',
+            38: 'up',
+            39: 'right',
+            40: 'down',
+            45: 'ins',
+            46: 'del',
+            91: 'meta',
+            93: 'meta',
+            224: 'meta'
+        },
+
+        /**
+         * mapping for special characters so they can support
+         *
+         * this dictionary is only used incase you want to bind a
+         * keyup or keydown event to one of these keys
+         *
+         * @type {Object}
+         */
+        _KEYCODE_MAP = {
+            106: '*',
+            107: '+',
+            109: '-',
+            110: '.',
+            111 : '/',
+            186: ';',
+            187: '=',
+            188: ',',
+            189: '-',
+            190: '.',
+            191: '/',
+            192: '`',
+            219: '[',
+            220: '\\',
+            221: ']',
+            222: '\''
+        },
+
+        /**
+         * this is a mapping of keys that require shift on a US keypad
+         * back to the non shift equivelents
+         *
+         * this is so you can use keyup events with these keys
+         *
+         * note that this will only work reliably on US keyboards
+         *
+         * @type {Object}
+         */
+        _SHIFT_MAP = {
+            '~': '`',
+            '!': '1',
+            '@': '2',
+            '#': '3',
+            '$': '4',
+            '%': '5',
+            '^': '6',
+            '&': '7',
+            '*': '8',
+            '(': '9',
+            ')': '0',
+            '_': '-',
+            '+': '=',
+            ':': ';',
+            '\"': '\'',
+            '<': ',',
+            '>': '.',
+            '?': '/',
+            '|': '\\'
+        },
+
+        /**
+         * this is a list of special strings you can use to map
+         * to modifier keys when you specify your keyboard shortcuts
+         *
+         * @type {Object}
+         */
+        _SPECIAL_ALIASES = {
+            'option': 'alt',
+            'command': 'meta',
+            'return': 'enter',
+            'escape': 'esc',
+            'mod': /Mac|iPod|iPhone|iPad/.test(navigator.platform) ? 'meta' : 'ctrl'
+        },
+
+        /**
+         * variable to store the flipped version of _MAP from above
+         * needed to check if we should use keypress or not when no action
+         * is specified
+         *
+         * @type {Object|undefined}
+         */
+        _REVERSE_MAP,
+
+        /**
+         * a list of all the callbacks setup via Mousetrap.bind()
+         *
+         * @type {Object}
+         */
+        _callbacks = {},
+
+        /**
+         * direct map of string combinations to callbacks used for trigger()
+         *
+         * @type {Object}
+         */
+        _directMap = {},
+
+        /**
+         * keeps track of what level each sequence is at since multiple
+         * sequences can start out with the same sequence
+         *
+         * @type {Object}
+         */
+        _sequenceLevels = {},
+
+        /**
+         * variable to store the setTimeout call
+         *
+         * @type {null|number}
+         */
+        _resetTimer,
+
+        /**
+         * temporary state where we will ignore the next keyup
+         *
+         * @type {boolean|string}
+         */
+        _ignoreNextKeyup = false,
+
+        /**
+         * temporary state where we will ignore the next keypress
+         *
+         * @type {boolean}
+         */
+        _ignoreNextKeypress = false,
+
+        /**
+         * are we currently inside of a sequence?
+         * type of action ("keyup" or "keydown" or "keypress") or false
+         *
+         * @type {boolean|string}
+         */
+        _nextExpectedAction = false;
+
+    /**
+     * loop through the f keys, f1 to f19 and add them to the map
+     * programatically
+     */
+    for (var i = 1; i < 20; ++i) {
+        _MAP[111 + i] = 'f' + i;
+    }
+
+    /**
+     * loop through to map numbers on the numeric keypad
+     */
+    for (i = 0; i <= 9; ++i) {
+        _MAP[i + 96] = i;
+    }
+
+    /**
+     * cross browser add event method
+     *
+     * @param {Element|HTMLDocument} object
+     * @param {string} type
+     * @param {Function} callback
+     * @returns void
+     */
+    function _addEvent(object, type, callback) {
+        if (object.addEventListener) {
+            object.addEventListener(type, callback, false);
+            return;
+        }
+
+        object.attachEvent('on' + type, callback);
+    }
+
+    /**
+     * takes the event and returns the key character
+     *
+     * @param {Event} e
+     * @return {string}
+     */
+    function _characterFromEvent(e) {
+
+        // for keypress events we should return the character as is
+        if (e.type == 'keypress') {
+            var character = String.fromCharCode(e.which);
+
+            // if the shift key is not pressed then it is safe to assume
+            // that we want the character to be lowercase.  this means if
+            // you accidentally have caps lock on then your key bindings
+            // will continue to work
+            //
+            // the only side effect that might not be desired is if you
+            // bind something like 'A' cause you want to trigger an
+            // event when capital A is pressed caps lock will no longer
+            // trigger the event.  shift+a will though.
+            if (!e.shiftKey) {
+                character = character.toLowerCase();
+            }
+
+            return character;
+        }
+
+        // for non keypress events the special maps are needed
+        if (_MAP[e.which]) {
+            return _MAP[e.which];
+        }
+
+        if (_KEYCODE_MAP[e.which]) {
+            return _KEYCODE_MAP[e.which];
+        }
+
+        // if it is not in the special map
+
+        // with keydown and keyup events the character seems to always
+        // come in as an uppercase character whether you are pressing shift
+        // or not.  we should make sure it is always lowercase for comparisons
+        return String.fromCharCode(e.which).toLowerCase();
+    }
+
+    /**
+     * checks if two arrays are equal
+     *
+     * @param {Array} modifiers1
+     * @param {Array} modifiers2
+     * @returns {boolean}
+     */
+    function _modifiersMatch(modifiers1, modifiers2) {
+        return modifiers1.sort().join(',') === modifiers2.sort().join(',');
+    }
+
+    /**
+     * resets all sequence counters except for the ones passed in
+     *
+     * @param {Object} doNotReset
+     * @returns void
+     */
+    function _resetSequences(doNotReset) {
+        doNotReset = doNotReset || {};
+
+        var activeSequences = false,
+            key;
+
+        for (key in _sequenceLevels) {
+            if (doNotReset[key]) {
+                activeSequences = true;
+                continue;
+            }
+            _sequenceLevels[key] = 0;
+        }
+
+        if (!activeSequences) {
+            _nextExpectedAction = false;
+        }
+    }
+
+    /**
+     * finds all callbacks that match based on the keycode, modifiers,
+     * and action
+     *
+     * @param {string} character
+     * @param {Array} modifiers
+     * @param {Event|Object} e
+     * @param {string=} sequenceName - name of the sequence we are looking for
+     * @param {string=} combination
+     * @param {number=} level
+     * @returns {Array}
+     */
+    function _getMatches(character, modifiers, e, sequenceName, combination, level) {
+        var i,
+            callback,
+            matches = [],
+            action = e.type;
+
+        // if there are no events related to this keycode
+        if (!_callbacks[character]) {
+            return [];
+        }
+
+        // if a modifier key is coming up on its own we should allow it
+        if (action == 'keyup' && _isModifier(character)) {
+            modifiers = [character];
+        }
+
+        // loop through all callbacks for the key that was pressed
+        // and see if any of them match
+        for (i = 0; i < _callbacks[character].length; ++i) {
+            callback = _callbacks[character][i];
+
+            // if a sequence name is not specified, but this is a sequence at
+            // the wrong level then move onto the next match
+            if (!sequenceName && callback.seq && _sequenceLevels[callback.seq] != callback.level) {
+                continue;
+            }
+
+            // if the action we are looking for doesn't match the action we got
+            // then we should keep going
+            if (action != callback.action) {
+                continue;
+            }
+
+            // if this is a keypress event and the meta key and control key
+            // are not pressed that means that we need to only look at the
+            // character, otherwise check the modifiers as well
+            //
+            // chrome will not fire a keypress if meta or control is down
+            // safari will fire a keypress if meta or meta+shift is down
+            // firefox will fire a keypress if meta or control is down
+            if ((action == 'keypress' && !e.metaKey && !e.ctrlKey) || _modifiersMatch(modifiers, callback.modifiers)) {
+
+                // when you bind a combination or sequence a second time it
+                // should overwrite the first one.  if a sequenceName or
+                // combination is specified in this call it does just that
+                //
+                // @todo make deleting its own method?
+                var deleteCombo = !sequenceName && callback.combo == combination;
+                var deleteSequence = sequenceName && callback.seq == sequenceName && callback.level == level;
+                if (deleteCombo || deleteSequence) {
+                    _callbacks[character].splice(i, 1);
+                }
+
+                matches.push(callback);
+            }
+        }
+
+        return matches;
+    }
+
+    /**
+     * takes a key event and figures out what the modifiers are
+     *
+     * @param {Event} e
+     * @returns {Array}
+     */
+    function _eventModifiers(e) {
+        var modifiers = [];
+
+        if (e.shiftKey) {
+            modifiers.push('shift');
+        }
+
+        if (e.altKey) {
+            modifiers.push('alt');
+        }
+
+        if (e.ctrlKey) {
+            modifiers.push('ctrl');
+        }
+
+        if (e.metaKey) {
+            modifiers.push('meta');
+        }
+
+        return modifiers;
+    }
+
+    /**
+     * prevents default for this event
+     *
+     * @param {Event} e
+     * @returns void
+     */
+    function _preventDefault(e) {
+        if (e.preventDefault) {
+            e.preventDefault();
+            return;
+        }
+
+        e.returnValue = false;
+    }
+
+    /**
+     * stops propogation for this event
+     *
+     * @param {Event} e
+     * @returns void
+     */
+    function _stopPropagation(e) {
+        if (e.stopPropagation) {
+            e.stopPropagation();
+            return;
+        }
+
+        e.cancelBubble = true;
+    }
+
+    /**
+     * actually calls the callback function
+     *
+     * if your callback function returns false this will use the jquery
+     * convention - prevent default and stop propogation on the event
+     *
+     * @param {Function} callback
+     * @param {Event} e
+     * @returns void
+     */
+    function _fireCallback(callback, e, combo, sequence) {
+
+        // if this event should not happen stop here
+        if (Mousetrap.stopCallback(e, e.target || e.srcElement, combo, sequence)) {
+            return;
+        }
+
+        if (callback(e, combo) === false) {
+            _preventDefault(e);
+            _stopPropagation(e);
+        }
+    }
+
+    /**
+     * handles a character key event
+     *
+     * @param {string} character
+     * @param {Array} modifiers
+     * @param {Event} e
+     * @returns void
+     */
+    function _handleKey(character, modifiers, e) {
+        var callbacks = _getMatches(character, modifiers, e),
+            i,
+            doNotReset = {},
+            maxLevel = 0,
+            processedSequenceCallback = false;
+
+        // Calculate the maxLevel for sequences so we can only execute the longest callback sequence
+        for (i = 0; i < callbacks.length; ++i) {
+            if (callbacks[i].seq) {
+                maxLevel = Math.max(maxLevel, callbacks[i].level);
+            }
+        }
+
+        // loop through matching callbacks for this key event
+        for (i = 0; i < callbacks.length; ++i) {
+
+            // fire for all sequence callbacks
+            // this is because if for example you have multiple sequences
+            // bound such as "g i" and "g t" they both need to fire the
+            // callback for matching g cause otherwise you can only ever
+            // match the first one
+            if (callbacks[i].seq) {
+
+                // only fire callbacks for the maxLevel to prevent
+                // subsequences from also firing
+                //
+                // for example 'a option b' should not cause 'option b' to fire
+                // even though 'option b' is part of the other sequence
+                //
+                // any sequences that do not match here will be discarded
+                // below by the _resetSequences call
+                if (callbacks[i].level != maxLevel) {
+                    continue;
+                }
+
+                processedSequenceCallback = true;
+
+                // keep a list of which sequences were matches for later
+                doNotReset[callbacks[i].seq] = 1;
+                _fireCallback(callbacks[i].callback, e, callbacks[i].combo, callbacks[i].seq);
+                continue;
+            }
+
+            // if there were no sequence matches but we are still here
+            // that means this is a regular match so we should fire that
+            if (!processedSequenceCallback) {
+                _fireCallback(callbacks[i].callback, e, callbacks[i].combo);
+            }
+        }
+
+        // if the key you pressed matches the type of sequence without
+        // being a modifier (ie "keyup" or "keypress") then we should
+        // reset all sequences that were not matched by this event
+        //
+        // this is so, for example, if you have the sequence "h a t" and you
+        // type "h e a r t" it does not match.  in this case the "e" will
+        // cause the sequence to reset
+        //
+        // modifier keys are ignored because you can have a sequence
+        // that contains modifiers such as "enter ctrl+space" and in most
+        // cases the modifier key will be pressed before the next key
+        //
+        // also if you have a sequence such as "ctrl+b a" then pressing the
+        // "b" key will trigger a "keypress" and a "keydown"
+        //
+        // the "keydown" is expected when there is a modifier, but the
+        // "keypress" ends up matching the _nextExpectedAction since it occurs
+        // after and that causes the sequence to reset
+        //
+        // we ignore keypresses in a sequence that directly follow a keydown
+        // for the same character
+        var ignoreThisKeypress = e.type == 'keypress' && _ignoreNextKeypress;
+        if (e.type == _nextExpectedAction && !_isModifier(character) && !ignoreThisKeypress) {
+            _resetSequences(doNotReset);
+        }
+
+        _ignoreNextKeypress = processedSequenceCallback && e.type == 'keydown';
+    }
+
+    /**
+     * handles a keydown event
+     *
+     * @param {Event} e
+     * @returns void
+     */
+    function _handleKeyEvent(e) {
+
+        // normalize e.which for key events
+        // @see http://stackoverflow.com/questions/4285627/javascript-keycode-vs-charcode-utter-confusion
+        if (typeof e.which !== 'number') {
+            e.which = e.keyCode;
+        }
+
+        var character = _characterFromEvent(e);
+
+        // no character found then stop
+        if (!character) {
+            return;
+        }
+
+        // need to use === for the character check because the character can be 0
+        if (e.type == 'keyup' && _ignoreNextKeyup === character) {
+            _ignoreNextKeyup = false;
+            return;
+        }
+
+        Mousetrap.handleKey(character, _eventModifiers(e), e);
+    }
+
+    /**
+     * determines if the keycode specified is a modifier key or not
+     *
+     * @param {string} key
+     * @returns {boolean}
+     */
+    function _isModifier(key) {
+        return key == 'shift' || key == 'ctrl' || key == 'alt' || key == 'meta';
+    }
+
+    /**
+     * called to set a 1 second timeout on the specified sequence
+     *
+     * this is so after each key press in the sequence you have 1 second
+     * to press the next key before you have to start over
+     *
+     * @returns void
+     */
+    function _resetSequenceTimer() {
+        clearTimeout(_resetTimer);
+        _resetTimer = setTimeout(_resetSequences, 1000);
+    }
+
+    /**
+     * reverses the map lookup so that we can look for specific keys
+     * to see what can and can't use keypress
+     *
+     * @return {Object}
+     */
+    function _getReverseMap() {
+        if (!_REVERSE_MAP) {
+            _REVERSE_MAP = {};
+            for (var key in _MAP) {
+
+                // pull out the numeric keypad from here cause keypress should
+                // be able to detect the keys from the character
+                if (key > 95 && key < 112) {
+                    continue;
+                }
+
+                if (_MAP.hasOwnProperty(key)) {
+                    _REVERSE_MAP[_MAP[key]] = key;
+                }
+            }
+        }
+        return _REVERSE_MAP;
+    }
+
+    /**
+     * picks the best action based on the key combination
+     *
+     * @param {string} key - character for key
+     * @param {Array} modifiers
+     * @param {string=} action passed in
+     */
+    function _pickBestAction(key, modifiers, action) {
+
+        // if no action was picked in we should try to pick the one
+        // that we think would work best for this key
+        if (!action) {
+            action = _getReverseMap()[key] ? 'keydown' : 'keypress';
+        }
+
+        // modifier keys don't work as expected with keypress,
+        // switch to keydown
+        if (action == 'keypress' && modifiers.length) {
+            action = 'keydown';
+        }
+
+        return action;
+    }
+
+    /**
+     * binds a key sequence to an event
+     *
+     * @param {string} combo - combo specified in bind call
+     * @param {Array} keys
+     * @param {Function} callback
+     * @param {string=} action
+     * @returns void
+     */
+    function _bindSequence(combo, keys, callback, action) {
+
+        // start off by adding a sequence level record for this combination
+        // and setting the level to 0
+        _sequenceLevels[combo] = 0;
+
+        /**
+         * callback to increase the sequence level for this sequence and reset
+         * all other sequences that were active
+         *
+         * @param {string} nextAction
+         * @returns {Function}
+         */
+        function _increaseSequence(nextAction) {
+            return function() {
+                _nextExpectedAction = nextAction;
+                ++_sequenceLevels[combo];
+                _resetSequenceTimer();
+            };
+        }
+
+        /**
+         * wraps the specified callback inside of another function in order
+         * to reset all sequence counters as soon as this sequence is done
+         *
+         * @param {Event} e
+         * @returns void
+         */
+        function _callbackAndReset(e) {
+            _fireCallback(callback, e, combo);
+
+            // we should ignore the next key up if the action is key down
+            // or keypress.  this is so if you finish a sequence and
+            // release the key the final key will not trigger a keyup
+            if (action !== 'keyup') {
+                _ignoreNextKeyup = _characterFromEvent(e);
+            }
+
+            // weird race condition if a sequence ends with the key
+            // another sequence begins with
+            setTimeout(_resetSequences, 10);
+        }
+
+        // loop through keys one at a time and bind the appropriate callback
+        // function.  for any key leading up to the final one it should
+        // increase the sequence. after the final, it should reset all sequences
+        //
+        // if an action is specified in the original bind call then that will
+        // be used throughout.  otherwise we will pass the action that the
+        // next key in the sequence should match.  this allows a sequence
+        // to mix and match keypress and keydown events depending on which
+        // ones are better suited to the key provided
+        for (var i = 0; i < keys.length; ++i) {
+            var isFinal = i + 1 === keys.length;
+            var wrappedCallback = isFinal ? _callbackAndReset : _increaseSequence(action || _getKeyInfo(keys[i + 1]).action);
+            _bindSingle(keys[i], wrappedCallback, action, combo, i);
+        }
+    }
+
+    /**
+     * Converts from a string key combination to an array
+     *
+     * @param  {string} combination like "command+shift+l"
+     * @return {Array}
+     */
+    function _keysFromString(combination) {
+        if (combination === '+') {
+            return ['+'];
+        }
+
+        return combination.split('+');
+    }
+
+    /**
+     * Gets info for a specific key combination
+     *
+     * @param  {string} combination key combination ("command+s" or "a" or "*")
+     * @param  {string=} action
+     * @returns {Object}
+     */
+    function _getKeyInfo(combination, action) {
+        var keys,
+            key,
+            i,
+            modifiers = [];
+
+        // take the keys from this pattern and figure out what the actual
+        // pattern is all about
+        keys = _keysFromString(combination);
+
+        for (i = 0; i < keys.length; ++i) {
+            key = keys[i];
+
+            // normalize key names
+            if (_SPECIAL_ALIASES[key]) {
+                key = _SPECIAL_ALIASES[key];
+            }
+
+            // if this is not a keypress event then we should
+            // be smart about using shift keys
+            // this will only work for US keyboards however
+            if (action && action != 'keypress' && _SHIFT_MAP[key]) {
+                key = _SHIFT_MAP[key];
+                modifiers.push('shift');
+            }
+
+            // if this key is a modifier then add it to the list of modifiers
+            if (_isModifier(key)) {
+                modifiers.push(key);
+            }
+        }
+
+        // depending on what the key combination is
+        // we will try to pick the best event for it
+        action = _pickBestAction(key, modifiers, action);
+
+        return {
+            key: key,
+            modifiers: modifiers,
+            action: action
+        };
+    }
+
+    /**
+     * binds a single keyboard combination
+     *
+     * @param {string} combination
+     * @param {Function} callback
+     * @param {string=} action
+     * @param {string=} sequenceName - name of sequence if part of sequence
+     * @param {number=} level - what part of the sequence the command is
+     * @returns void
+     */
+    function _bindSingle(combination, callback, action, sequenceName, level) {
+
+        // store a direct mapped reference for use with Mousetrap.trigger
+        _directMap[combination + ':' + action] = callback;
+
+        // make sure multiple spaces in a row become a single space
+        combination = combination.replace(/\s+/g, ' ');
+
+        var sequence = combination.split(' '),
+            info;
+
+        // if this pattern is a sequence of keys then run through this method
+        // to reprocess each pattern one key at a time
+        if (sequence.length > 1) {
+            _bindSequence(combination, sequence, callback, action);
+            return;
+        }
+
+        info = _getKeyInfo(combination, action);
+
+        // make sure to initialize array if this is the first time
+        // a callback is added for this key
+        _callbacks[info.key] = _callbacks[info.key] || [];
+
+        // remove an existing match if there is one
+        _getMatches(info.key, info.modifiers, {type: info.action}, sequenceName, combination, level);
+
+        // add this call back to the array
+        // if it is a sequence put it at the beginning
+        // if not put it at the end
+        //
+        // this is important because the way these are processed expects
+        // the sequence ones to come first
+        _callbacks[info.key][sequenceName ? 'unshift' : 'push']({
+            callback: callback,
+            modifiers: info.modifiers,
+            action: info.action,
+            seq: sequenceName,
+            level: level,
+            combo: combination
+        });
+    }
+
+    /**
+     * binds multiple combinations to the same callback
+     *
+     * @param {Array} combinations
+     * @param {Function} callback
+     * @param {string|undefined} action
+     * @returns void
+     */
+    function _bindMultiple(combinations, callback, action) {
+        for (var i = 0; i < combinations.length; ++i) {
+            _bindSingle(combinations[i], callback, action);
+        }
+    }
+
+    // start!
+    _addEvent(document, 'keypress', _handleKeyEvent);
+    _addEvent(document, 'keydown', _handleKeyEvent);
+    _addEvent(document, 'keyup', _handleKeyEvent);
+
+    var Mousetrap = {
+
+        /**
+         * binds an event to mousetrap
+         *
+         * can be a single key, a combination of keys separated with +,
+         * an array of keys, or a sequence of keys separated by spaces
+         *
+         * be sure to list the modifier keys first to make sure that the
+         * correct key ends up getting bound (the last key in the pattern)
+         *
+         * @param {string|Array} keys
+         * @param {Function} callback
+         * @param {string=} action - 'keypress', 'keydown', or 'keyup'
+         * @returns void
+         */
+        bind: function(keys, callback, action) {
+            keys = keys instanceof Array ? keys : [keys];
+            _bindMultiple(keys, callback, action);
+            return this;
+        },
+
+        /**
+         * unbinds an event to mousetrap
+         *
+         * the unbinding sets the callback function of the specified key combo
+         * to an empty function and deletes the corresponding key in the
+         * _directMap dict.
+         *
+         * TODO: actually remove this from the _callbacks dictionary instead
+         * of binding an empty function
+         *
+         * the keycombo+action has to be exactly the same as
+         * it was defined in the bind method
+         *
+         * @param {string|Array} keys
+         * @param {string} action
+         * @returns void
+         */
+        unbind: function(keys, action) {
+            return Mousetrap.bind(keys, function() {}, action);
+        },
+
+        /**
+         * triggers an event that has already been bound
+         *
+         * @param {string} keys
+         * @param {string=} action
+         * @returns void
+         */
+        trigger: function(keys, action) {
+            if (_directMap[keys + ':' + action]) {
+                _directMap[keys + ':' + action]({}, keys);
+            }
+            return this;
+        },
+
+        /**
+         * resets the library back to its initial state.  this is useful
+         * if you want to clear out the current keyboard shortcuts and bind
+         * new ones - for example if you switch to another page
+         *
+         * @returns void
+         */
+        reset: function() {
+            _callbacks = {};
+            _directMap = {};
+            return this;
+        },
+
+       /**
+        * should we stop this event before firing off callbacks
+        *
+        * @param {Event} e
+        * @param {Element} element
+        * @return {boolean}
+        */
+        stopCallback: function(e, element) {
+
+            // if the element has the class "mousetrap" then no need to stop
+            if ((' ' + element.className + ' ').indexOf(' mousetrap ') > -1) {
+                return false;
+            }
+
+            // stop for input, select, and textarea
+            return element.tagName == 'INPUT' || element.tagName == 'SELECT' || element.tagName == 'TEXTAREA' || element.isContentEditable;
+        },
+
+        /**
+         * exposes _handleKey publicly so it can be overwritten by extensions
+         */
+        handleKey: _handleKey
+    };
+
+    // expose mousetrap to the global object
+    window.Mousetrap = Mousetrap;
+
+    // expose mousetrap as an AMD module
+    if (typeof define === 'function' && define.amd) {
+        define(Mousetrap);
+    }
+}) (window, document);
+
+},{}],6:[function(require,module,exports){
 (function( factory ) {
 	if (typeof define !== 'undefined' && define.amd) {
 		define([], factory);
@@ -3721,7 +4237,7 @@ module.exports = mousetrap;
 	return exports;
 });
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 module.exports={
   "name": "clappr",
   "version": "0.0.76",
@@ -3735,7 +4251,7 @@ module.exports={
     "url": "git@github.com:globocom/clappr.git"
   },
   "author": "Globo.com",
-  "license": "ISC",
+  "license": "BSD",
   "bugs": {
     "url": "https://github.com/globocom/clappr/issues"
   },
@@ -3744,11 +4260,11 @@ module.exports={
   },
   "homepage": "https://github.com/globocom/clappr",
   "devDependencies": {
-    "browserify": "^7.0.1",
+    "browserify": "^8.0.3",
     "chai": "1.10.0",
     "compass-mixins": "0.12.3",
     "dotenv": "^0.4.0",
-    "es6ify": "~1.4.0",
+    "es6ify": "~1.6.0",
     "exorcist": "^0.1.6",
     "express": "^4.6.1",
     "express-alias": "0.4.0",
@@ -3788,12 +4304,12 @@ module.exports={
   },
   "dependencies": {
     "underscore": "1.7.0",
-    "mousetrap": "0.0.1",
+    "mousetrap": "^1.4.6",
     "scrollmonitor": "^1.0.8"
   }
 }
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 module.exports = {
@@ -3827,7 +4343,8 @@ module.exports = {
 };
 
 
-},{"underscore":"underscore"}],8:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/base/jst.js
+},{"underscore":"underscore"}],9:[function(require,module,exports){
 "use strict";
 var $ = require('zepto');
 var _ = require('underscore');
@@ -3839,7 +4356,8 @@ var Styler = {getStyleFor: function(name, options) {
 module.exports = Styler;
 
 
-},{"./jst":7,"underscore":"underscore","zepto":"zepto"}],9:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/base/styler.js
+},{"./jst":8,"underscore":"underscore","zepto":"zepto"}],10:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var Browser = require('browser');
@@ -3966,14 +4484,15 @@ module.exports = {
 };
 
 
-},{"browser":"browser","underscore":"underscore"}],10:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/base/utils.js
+},{"browser":"browser","underscore":"underscore"}],11:[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var Styler = require('../../base/styler');
 var _ = require('underscore');
 var Events = require('events');
 var Container = function Container(options) {
-  $traceurRuntime.superCall(this, $Container.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($Container).call(this, options);
   this.playback = options.playback;
   this.settings = this.playback.settings;
   this.isReady = false;
@@ -4156,7 +4675,8 @@ var $Container = Container;
 module.exports = Container;
 
 
-},{"../../base/styler":8,"events":"events","ui_object":"ui_object","underscore":"underscore"}],11:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/components/container/container.js
+},{"../../base/styler":9,"events":"events","ui_object":"ui_object","underscore":"underscore"}],12:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var BaseObject = require('base_object');
@@ -4164,7 +4684,7 @@ var Container = require('container');
 var $ = require('zepto');
 var Events = require('events');
 var ContainerFactory = function ContainerFactory(options, loader) {
-  $traceurRuntime.superCall(this, $ContainerFactory.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($ContainerFactory).call(this, options);
   this.options = options;
   this.loader = loader;
 };
@@ -4212,12 +4732,14 @@ var $ContainerFactory = ContainerFactory;
 module.exports = ContainerFactory;
 
 
-},{"base_object":"base_object","container":"container","events":"events","underscore":"underscore","zepto":"zepto"}],12:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/components/container_factory/container_factory.js
+},{"base_object":"base_object","container":"container","events":"events","underscore":"underscore","zepto":"zepto"}],13:[function(require,module,exports){
 "use strict";
 module.exports = require('./container_factory');
 
 
-},{"./container_factory":11}],13:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/components/container_factory/index.js
+},{"./container_factory":12}],14:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('zepto');
@@ -4231,7 +4753,7 @@ var Mediator = require('mediator');
 var Events = require('events');
 var Core = function Core(options) {
   var $__0 = this;
-  $traceurRuntime.superCall(this, $Core.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($Core).call(this, options);
   PlayerInfo.options = options;
   this.options = options;
   this.plugins = [];
@@ -4436,7 +4958,8 @@ var $Core = Core;
 module.exports = Core;
 
 
-},{"../../base/styler":8,"../../base/utils":9,"../container_factory":12,"events":"events","media_control":"media_control","mediator":"mediator","player_info":"player_info","ui_object":"ui_object","underscore":"underscore","zepto":"zepto"}],14:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/components/core/core.js
+},{"../../base/styler":9,"../../base/utils":10,"../container_factory":13,"events":"events","media_control":"media_control","mediator":"mediator","player_info":"player_info","ui_object":"ui_object","underscore":"underscore","zepto":"zepto"}],15:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var BaseObject = require('base_object');
@@ -4470,18 +4993,20 @@ var CoreFactory = function CoreFactory(player, loader) {
 module.exports = CoreFactory;
 
 
-},{"base_object":"base_object","core":"core","underscore":"underscore"}],15:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/components/core_factory/core_factory.js
+},{"base_object":"base_object","core":"core","underscore":"underscore"}],16:[function(require,module,exports){
 "use strict";
 module.exports = require('./core_factory');
 
 
-},{"./core_factory":14}],16:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/components/core_factory/index.js
+},{"./core_factory":15}],17:[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var $ = require('zepto');
 var Player = require('../player');
 var IframePlayer = function IframePlayer(options) {
-  $traceurRuntime.superCall(this, $IframePlayer.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($IframePlayer).call(this, options);
   this.options = options;
   this.createIframe();
 };
@@ -4524,17 +5049,20 @@ var $IframePlayer = IframePlayer;
 module.exports = IframePlayer;
 
 
-},{"../player":21,"base_object":"base_object","zepto":"zepto"}],17:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/components/iframe_player/iframe_player.js
+},{"../player":22,"base_object":"base_object","zepto":"zepto"}],18:[function(require,module,exports){
 "use strict";
 module.exports = require('./iframe_player');
 
 
-},{"./iframe_player":16}],18:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/components/iframe_player/index.js
+},{"./iframe_player":17}],19:[function(require,module,exports){
 "use strict";
 module.exports = require('./loader');
 
 
-},{"./loader":19}],19:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/components/loader/index.js
+},{"./loader":20}],20:[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var _ = require('underscore');
@@ -4554,7 +5082,7 @@ var ClickToPausePlugin = require('../../plugins/click_to_pause');
 var BackgroundButton = require('../../plugins/background_button');
 var DVRControls = require('../../plugins/dvr_controls');
 var Loader = function Loader(externalPlugins) {
-  $traceurRuntime.superCall(this, $Loader.prototype, "constructor", []);
+  $traceurRuntime.superConstructor($Loader).call(this);
   this.playbackPlugins = [FlashVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, HLSVideoPlayback, HTMLImgPlayback, NoOp];
   this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin];
   this.corePlugins = [BackgroundButton, DVRControls];
@@ -4589,7 +5117,8 @@ var $Loader = Loader;
 module.exports = Loader;
 
 
-},{"../../playbacks/no_op":29,"../../plugins/background_button":32,"../../plugins/click_to_pause":34,"../../plugins/dvr_controls":36,"../../plugins/google_analytics":38,"../../plugins/spinner_three_bounce":42,"../../plugins/stats":44,"../../plugins/watermark":46,"base_object":"base_object","flash":"flash","hls":"hls","html5_audio":"html5_audio","html5_video":"html5_video","html_img":"html_img","player_info":"player_info","poster":"poster","underscore":"underscore"}],20:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/components/loader/loader.js
+},{"../../playbacks/no_op":30,"../../plugins/background_button":33,"../../plugins/click_to_pause":35,"../../plugins/dvr_controls":37,"../../plugins/google_analytics":39,"../../plugins/spinner_three_bounce":43,"../../plugins/stats":45,"../../plugins/watermark":47,"base_object":"base_object","flash":"flash","hls":"hls","html5_audio":"html5_audio","html5_video":"html5_video","html_img":"html_img","player_info":"player_info","poster":"poster","underscore":"underscore"}],21:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('zepto');
@@ -4597,14 +5126,14 @@ var JST = require('../../base/jst');
 var Styler = require('../../base/styler');
 var UIObject = require('ui_object');
 var Utils = require('../../base/utils');
-var Mousetrap = require('mousetrap');
 var SeekTime = require('../seek_time');
 var Mediator = require('mediator');
 var PlayerInfo = require('player_info');
 var Events = require('events');
+require('mousetrap');
 var MediaControl = function MediaControl(options) {
   var $__0 = this;
-  $traceurRuntime.superCall(this, $MediaControl.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($MediaControl).call(this, options);
   this.seekTime = new SeekTime(this);
   this.options = options;
   this.mute = this.options.mute;
@@ -5047,7 +5576,8 @@ var $MediaControl = MediaControl;
 module.exports = MediaControl;
 
 
-},{"../../base/jst":7,"../../base/styler":8,"../../base/utils":9,"../seek_time":22,"events":"events","mediator":"mediator","mousetrap":4,"player_info":"player_info","ui_object":"ui_object","underscore":"underscore","zepto":"zepto"}],21:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/components/media_control/media_control.js
+},{"../../base/jst":8,"../../base/styler":9,"../../base/utils":10,"../seek_time":23,"events":"events","mediator":"mediator","mousetrap":5,"player_info":"player_info","ui_object":"ui_object","underscore":"underscore","zepto":"zepto"}],22:[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var CoreFactory = require('./core_factory');
@@ -5056,7 +5586,7 @@ var _ = require('underscore');
 var ScrollMonitor = require('scrollmonitor');
 var PlayerInfo = require('player_info');
 var Player = function Player(options) {
-  $traceurRuntime.superCall(this, $Player.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($Player).call(this, options);
   window.p = this;
   var DEFAULT_OPTIONS = {persistConfig: true};
   this.options = _.extend(DEFAULT_OPTIONS, options);
@@ -5110,7 +5640,8 @@ var $Player = Player;
     }
   },
   normalizeSources: function(options) {
-    return _.compact(_.flatten([options.source, options.sources]));
+    var sources = _.compact(_.flatten([options.source, options.sources]));
+    return _.isEmpty(sources) ? ['no.op'] : sources;
   },
   resize: function(size) {
     this.core.resize(size);
@@ -5149,12 +5680,14 @@ var $Player = Player;
 module.exports = Player;
 
 
-},{"./core_factory":15,"./loader":18,"base_object":"base_object","player_info":"player_info","scrollmonitor":5,"underscore":"underscore"}],22:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/components/player.js
+},{"./core_factory":16,"./loader":19,"base_object":"base_object","player_info":"player_info","scrollmonitor":6,"underscore":"underscore"}],23:[function(require,module,exports){
 "use strict";
 module.exports = require('./seek_time');
 
 
-},{"./seek_time":23}],23:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/components/seek_time/index.js
+},{"./seek_time":24}],24:[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var Styler = require('../../base/styler');
@@ -5162,7 +5695,7 @@ var JST = require('../../base/jst');
 var formatTime = require('../../base/utils').formatTime;
 var Events = require('events');
 var SeekTime = function SeekTime(mediaControl) {
-  $traceurRuntime.superCall(this, $SeekTime.prototype, "constructor", []);
+  $traceurRuntime.superConstructor($SeekTime).call(this);
   this.mediaControl = mediaControl;
   this.addEventListeners();
 };
@@ -5218,7 +5751,8 @@ var $SeekTime = SeekTime;
 module.exports = SeekTime;
 
 
-},{"../../base/jst":7,"../../base/styler":8,"../../base/utils":9,"events":"events","ui_object":"ui_object"}],24:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/components/seek_time/seek_time.js
+},{"../../base/jst":8,"../../base/styler":9,"../../base/utils":10,"events":"events","ui_object":"ui_object"}],25:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
 var Styler = require('../../base/styler');
@@ -5227,12 +5761,12 @@ var Mediator = require('mediator');
 var _ = require('underscore');
 var $ = require('zepto');
 var Browser = require('browser');
-var Mousetrap = require('mousetrap');
 var seekStringToSeconds = require('../../base/utils').seekStringToSeconds;
 var Events = require('events');
+require('mousetrap');
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>';
 var Flash = function Flash(options) {
-  $traceurRuntime.superCall(this, $Flash.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($Flash).call(this, options);
   this.src = options.src;
   this.isRTMP = (this.src.indexOf("rtmp") > -1);
   this.defaultBaseSwfPath = "http://cdn.clappr.io/" + Clappr.version + "/assets/";
@@ -5301,7 +5835,7 @@ var $Flash = Flash;
     }.bind(this));
   },
   stopListening: function() {
-    $traceurRuntime.superCall(this, $Flash.prototype, "stopListening", []);
+    $traceurRuntime.superConstructor($Flash).call(this);
     Mediator.off(this.uniqueId + ':progress');
     Mediator.off(this.uniqueId + ':timeupdate');
     Mediator.off(this.uniqueId + ':statechanged');
@@ -5433,7 +5967,8 @@ Flash.canPlay = function(resource) {
 module.exports = Flash;
 
 
-},{"../../base/jst":7,"../../base/styler":8,"../../base/utils":9,"browser":"browser","events":"events","mediator":"mediator","mousetrap":4,"playback":"playback","underscore":"underscore","zepto":"zepto"}],25:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/flash/flash.js
+},{"../../base/jst":8,"../../base/styler":9,"../../base/utils":10,"browser":"browser","events":"events","mediator":"mediator","mousetrap":5,"playback":"playback","underscore":"underscore","zepto":"zepto"}],26:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
 var Styler = require('../../base/styler');
@@ -5444,7 +5979,7 @@ var Browser = require('browser');
 var Events = require('events');
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" class="hls-playback" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls="" width="100%" height="100%"><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>';
 var HLS = function HLS(options) {
-  $traceurRuntime.superCall(this, $HLS.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($HLS).call(this, options);
   this.src = options.src;
   this.defaultBaseSwfPath = "http://cdn.clappr.io/" + Clappr.version + "/assets/";
   this.swfPath = (options.swfBasePath || this.defaultBaseSwfPath) + "HLSPlayer.swf";
@@ -5499,7 +6034,7 @@ var $HLS = HLS;
     }));
   },
   stopListening: function() {
-    $traceurRuntime.superCall(this, $HLS.prototype, "stopListening", []);
+    $traceurRuntime.superConstructor($HLS).call(this);
     Mediator.off(this.uniqueId + ':flashready');
     Mediator.off(this.uniqueId + ':timeupdate');
     Mediator.off(this.uniqueId + ':playbackstate');
@@ -5747,12 +6282,13 @@ HLS.canPlay = function(resource) {
 module.exports = HLS;
 
 
-},{"../../base/jst":7,"../../base/styler":8,"browser":"browser","events":"events","mediator":"mediator","playback":"playback","underscore":"underscore"}],26:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/hls/hls.js
+},{"../../base/jst":8,"../../base/styler":9,"browser":"browser","events":"events","mediator":"mediator","playback":"playback","underscore":"underscore"}],27:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
 var Events = require('events');
 var HTML5Audio = function HTML5Audio(params) {
-  $traceurRuntime.superCall(this, $HTML5Audio.prototype, "constructor", [params]);
+  $traceurRuntime.superConstructor($HTML5Audio).call(this, params);
   this.el.src = params.src;
   this.settings = {
     left: ['playpause', 'position', 'duration'],
@@ -5834,6 +6370,7 @@ var $HTML5Audio = HTML5Audio;
     this.trigger(Events.PLAYBACK_BUFFERFULL);
   },
   render: function() {
+    this.trigger(Events.PLAYBACK_READY, this.name);
     return this;
   }
 }, {}, Playback);
@@ -5843,19 +6380,20 @@ HTML5Audio.canPlay = function(resource) {
 module.exports = HTML5Audio;
 
 
-},{"events":"events","playback":"playback"}],27:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/html5_audio/html5_audio.js
+},{"events":"events","playback":"playback"}],28:[function(require,module,exports){
 (function (process){
 "use strict";
 var Playback = require('playback');
 var JST = require('../../base/jst');
 var Styler = require('../../base/styler');
 var Browser = require('browser');
-var Mousetrap = require('mousetrap');
 var seekStringToSeconds = require('../../base/utils').seekStringToSeconds;
 var Events = require('events');
 var _ = require('underscore');
+require('mousetrap');
 var HTML5Video = function HTML5Video(options) {
-  $traceurRuntime.superCall(this, $HTML5Video.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($HTML5Video).call(this, options);
   this.options = options;
   this.src = options.src;
   this.el.src = options.src;
@@ -6056,15 +6594,17 @@ HTML5Video.canPlay = function(resource) {
 module.exports = HTML5Video;
 
 
+//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/html5_video/html5_video.js
 }).call(this,require('_process'))
-},{"../../base/jst":7,"../../base/styler":8,"../../base/utils":9,"_process":2,"browser":"browser","events":"events","mousetrap":4,"playback":"playback","underscore":"underscore"}],28:[function(require,module,exports){
+
+},{"../../base/jst":8,"../../base/styler":9,"../../base/utils":10,"_process":3,"browser":"browser","events":"events","mousetrap":5,"playback":"playback","underscore":"underscore"}],29:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var Events = require('events');
 var HTMLImg = function HTMLImg(params) {
-  $traceurRuntime.superCall(this, $HTMLImg.prototype, "constructor", [params]);
+  $traceurRuntime.superConstructor($HTMLImg).call(this, params);
   this.el.src = params.src;
   setTimeout(function() {
     this.trigger(Events.PLAYBACK_BUFFERFULL, this.name);
@@ -6096,18 +6636,20 @@ HTMLImg.canPlay = function(resource) {
 module.exports = HTMLImg;
 
 
-},{"../../base/jst":7,"../../base/styler":8,"events":"events","playback":"playback"}],29:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/html_img/html_img.js
+},{"../../base/jst":8,"../../base/styler":9,"events":"events","playback":"playback"}],30:[function(require,module,exports){
 "use strict";
 module.exports = require('./no_op');
 
 
-},{"./no_op":30}],30:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/no_op/index.js
+},{"./no_op":31}],31:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
 var JST = require('../../base/jst');
 var Styler = require('../../base/styler');
 var NoOp = function NoOp(options) {
-  $traceurRuntime.superCall(this, $NoOp.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($NoOp).call(this, options);
 };
 var $NoOp = NoOp;
 ($traceurRuntime.createClass)(NoOp, {
@@ -6133,7 +6675,8 @@ NoOp.canPlay = (function(source) {
 module.exports = NoOp;
 
 
-},{"../../base/jst":7,"../../base/styler":8,"playback":"playback"}],31:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/no_op/no_op.js
+},{"../../base/jst":8,"../../base/styler":9,"playback":"playback"}],32:[function(require,module,exports){
 (function (process){
 "use strict";
 var UICorePlugin = require('ui_core_plugin');
@@ -6144,7 +6687,7 @@ var Browser = require('browser');
 var Mediator = require('mediator');
 var PlayerInfo = require('player_info');
 var BackgroundButton = function BackgroundButton(core) {
-  $traceurRuntime.superCall(this, $BackgroundButton.prototype, "constructor", [core]);
+  $traceurRuntime.superConstructor($BackgroundButton).call(this, core);
   this.core = core;
   this.settingsUpdate();
 };
@@ -6175,7 +6718,7 @@ var $BackgroundButton = BackgroundButton;
     Mediator.on(Events.PLAYER_RESIZE, this.updateSize, this);
   },
   stopListening: function() {
-    $traceurRuntime.superCall(this, $BackgroundButton.prototype, "stopListening", []);
+    $traceurRuntime.superConstructor($BackgroundButton).call(this);
     Mediator.off(Events.PLAYER_RESIZE, this.updateSize, this);
   },
   settingsUpdate: function() {
@@ -6217,11 +6760,11 @@ var $BackgroundButton = BackgroundButton;
   },
   enable: function() {
     this.stopListening();
-    $traceurRuntime.superCall(this, $BackgroundButton.prototype, "enable", []);
+    $traceurRuntime.superConstructor($BackgroundButton).call(this);
     this.settingsUpdate();
   },
   disable: function() {
-    $traceurRuntime.superCall(this, $BackgroundButton.prototype, "disable", []);
+    $traceurRuntime.superConstructor($BackgroundButton).call(this);
     this.$playPauseButton.show();
     this.$playStopButton.show();
   },
@@ -6272,18 +6815,21 @@ var $BackgroundButton = BackgroundButton;
 module.exports = BackgroundButton;
 
 
+//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/background_button/background_button.js
 }).call(this,require('_process'))
-},{"../../base/jst":7,"../../base/styler":8,"_process":2,"browser":"browser","events":"events","mediator":"mediator","player_info":"player_info","ui_core_plugin":"ui_core_plugin"}],32:[function(require,module,exports){
+
+},{"../../base/jst":8,"../../base/styler":9,"_process":3,"browser":"browser","events":"events","mediator":"mediator","player_info":"player_info","ui_core_plugin":"ui_core_plugin"}],33:[function(require,module,exports){
 "use strict";
 module.exports = require('./background_button');
 
 
-},{"./background_button":31}],33:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/background_button/index.js
+},{"./background_button":32}],34:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('container_plugin');
 var Events = require('events');
 var ClickToPausePlugin = function ClickToPausePlugin() {
-  $traceurRuntime.defaultSuperCall(this, $ClickToPausePlugin.prototype, arguments);
+  $traceurRuntime.superConstructor($ClickToPausePlugin).apply(this, arguments);
 };
 var $ClickToPausePlugin = ClickToPausePlugin;
 ($traceurRuntime.createClass)(ClickToPausePlugin, {
@@ -6313,19 +6859,21 @@ var $ClickToPausePlugin = ClickToPausePlugin;
 module.exports = ClickToPausePlugin;
 
 
-},{"container_plugin":"container_plugin","events":"events"}],34:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/click_to_pause/click_to_pause.js
+},{"container_plugin":"container_plugin","events":"events"}],35:[function(require,module,exports){
 "use strict";
 module.exports = require('./click_to_pause');
 
 
-},{"./click_to_pause":33}],35:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/click_to_pause/index.js
+},{"./click_to_pause":34}],36:[function(require,module,exports){
 "use strict";
 var UICorePlugin = require('ui_core_plugin');
 var JST = require('../../base/jst');
 var Styler = require('../../base/styler');
 var Events = require('events');
 var DVRControls = function DVRControls(core) {
-  $traceurRuntime.superCall(this, $DVRControls.prototype, "constructor", [core]);
+  $traceurRuntime.superConstructor($DVRControls).call(this, core);
   this.core = core;
   this.settingsUpdate();
 };
@@ -6402,17 +6950,19 @@ var $DVRControls = DVRControls;
 module.exports = DVRControls;
 
 
-},{"../../base/jst":7,"../../base/styler":8,"events":"events","ui_core_plugin":"ui_core_plugin"}],36:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/dvr_controls/dvr_controls.js
+},{"../../base/jst":8,"../../base/styler":9,"events":"events","ui_core_plugin":"ui_core_plugin"}],37:[function(require,module,exports){
 "use strict";
 module.exports = require('./dvr_controls');
 
 
-},{"./dvr_controls":35}],37:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/dvr_controls/index.js
+},{"./dvr_controls":36}],38:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('container_plugin');
 var Events = require('events');
 var GoogleAnalytics = function GoogleAnalytics(options) {
-  $traceurRuntime.superCall(this, $GoogleAnalytics.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($GoogleAnalytics).call(this, options);
   if (options.gaAccount) {
     this.embedScript();
     this.account = options.gaAccount;
@@ -6517,20 +7067,23 @@ var $GoogleAnalytics = GoogleAnalytics;
 module.exports = GoogleAnalytics;
 
 
-},{"container_plugin":"container_plugin","events":"events"}],38:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/google_analytics/google_analytics.js
+},{"container_plugin":"container_plugin","events":"events"}],39:[function(require,module,exports){
 "use strict";
 module.exports = require('./google_analytics');
 
 
-},{"./google_analytics":37}],39:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/google_analytics/index.js
+},{"./google_analytics":38}],40:[function(require,module,exports){
 "use strict";
 module.exports = require('./log');
 
 
-},{"./log":40}],40:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/log/index.js
+},{"./log":41}],41:[function(require,module,exports){
 "use strict";
-var Mousetrap = require('mousetrap');
 var _ = require('underscore');
+require('mousetrap');
 var Log = function Log() {
   var $__0 = this;
   Mousetrap.bind(['ctrl+shift+d'], (function() {
@@ -6579,7 +7132,8 @@ Log.getInstance = function() {
 module.exports = Log;
 
 
-},{"mousetrap":4,"underscore":"underscore"}],41:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/log/log.js
+},{"mousetrap":5,"underscore":"underscore"}],42:[function(require,module,exports){
 (function (process){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
@@ -6591,7 +7145,7 @@ var PlayerInfo = require('player_info');
 var $ = require('zepto');
 var _ = require('underscore');
 var PosterPlugin = function PosterPlugin(options) {
-  $traceurRuntime.superCall(this, $PosterPlugin.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($PosterPlugin).call(this, options);
   this.options = options;
   _.defaults(this.options, {disableControlsOnPoster: true});
   if (this.options.disableControlsOnPoster) {
@@ -6624,7 +7178,7 @@ var $PosterPlugin = PosterPlugin;
     Mediator.on(Events.PLAYER_RESIZE, this.updateSize, this);
   },
   stopListening: function() {
-    $traceurRuntime.superCall(this, $PosterPlugin.prototype, "stopListening", []);
+    $traceurRuntime.superConstructor($PosterPlugin).call(this);
     Mediator.off(Events.PLAYER_RESIZE, this.updateSize, this);
   },
   onBuffering: function() {
@@ -6695,20 +7249,23 @@ var $PosterPlugin = PosterPlugin;
 module.exports = PosterPlugin;
 
 
+//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/poster/poster.js
 }).call(this,require('_process'))
-},{"../../base/jst":7,"../../base/styler":8,"_process":2,"events":"events","mediator":"mediator","player_info":"player_info","ui_container_plugin":"ui_container_plugin","underscore":"underscore","zepto":"zepto"}],42:[function(require,module,exports){
+
+},{"../../base/jst":8,"../../base/styler":9,"_process":3,"events":"events","mediator":"mediator","player_info":"player_info","ui_container_plugin":"ui_container_plugin","underscore":"underscore","zepto":"zepto"}],43:[function(require,module,exports){
 "use strict";
 module.exports = require('./spinner_three_bounce');
 
 
-},{"./spinner_three_bounce":43}],43:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/spinner_three_bounce/index.js
+},{"./spinner_three_bounce":44}],44:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var Events = require('events');
 var SpinnerThreeBouncePlugin = function SpinnerThreeBouncePlugin(options) {
-  $traceurRuntime.superCall(this, $SpinnerThreeBouncePlugin.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($SpinnerThreeBouncePlugin).call(this, options);
   this.template = JST.spinner_three_bounce;
   this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering);
   this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferFull);
@@ -6747,18 +7304,20 @@ var $SpinnerThreeBouncePlugin = SpinnerThreeBouncePlugin;
 module.exports = SpinnerThreeBouncePlugin;
 
 
-},{"../../base/jst":7,"../../base/styler":8,"events":"events","ui_container_plugin":"ui_container_plugin"}],44:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/spinner_three_bounce/spinner_three_bounce.js
+},{"../../base/jst":8,"../../base/styler":9,"events":"events","ui_container_plugin":"ui_container_plugin"}],45:[function(require,module,exports){
 "use strict";
 module.exports = require('./stats');
 
 
-},{"./stats":45}],45:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/stats/index.js
+},{"./stats":46}],46:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('container_plugin');
 var $ = require("zepto");
 var Events = require('events');
 var StatsPlugin = function StatsPlugin(options) {
-  $traceurRuntime.superCall(this, $StatsPlugin.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($StatsPlugin).call(this, options);
   this.setInitialAttrs();
   this.reportInterval = options.reportInterval || 5000;
   this.state = "IDLE";
@@ -6848,19 +7407,21 @@ var $StatsPlugin = StatsPlugin;
 module.exports = StatsPlugin;
 
 
-},{"container_plugin":"container_plugin","events":"events","zepto":"zepto"}],46:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/stats/stats.js
+},{"container_plugin":"container_plugin","events":"events","zepto":"zepto"}],47:[function(require,module,exports){
 "use strict";
 module.exports = require('./watermark');
 
 
-},{"./watermark":47}],47:[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/watermark/index.js
+},{"./watermark":48}],48:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var Events = require('events');
 var WaterMarkPlugin = function WaterMarkPlugin(options) {
-  $traceurRuntime.superCall(this, $WaterMarkPlugin.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($WaterMarkPlugin).call(this, options);
   this.template = JST[this.name];
   this.position = options.position || "bottom-right";
   if (options.watermark) {
@@ -6902,7 +7463,8 @@ var $WaterMarkPlugin = WaterMarkPlugin;
 module.exports = WaterMarkPlugin;
 
 
-},{"../../base/jst":7,"../../base/styler":8,"events":"events","ui_container_plugin":"ui_container_plugin"}],"base_object":[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/watermark/watermark.js
+},{"../../base/jst":8,"../../base/styler":9,"events":"events","ui_container_plugin":"ui_container_plugin"}],"base_object":[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var extend = require('./utils').extend;
@@ -6918,7 +7480,8 @@ BaseObject.extend = extend;
 module.exports = BaseObject;
 
 
-},{"./utils":9,"events":"events","underscore":"underscore"}],"browser":[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/base/base_object.js
+},{"./utils":10,"events":"events","underscore":"underscore"}],"browser":[function(require,module,exports){
 "use strict";
 var Browser = function Browser() {};
 ($traceurRuntime.createClass)(Browser, {}, {});
@@ -6945,11 +7508,12 @@ Browser.hasLocalstorage = hasLocalstorage();
 module.exports = Browser;
 
 
+//# sourceURL=/Users/thiago/code/clappr-web/src/components/browser.js
 },{}],"container_plugin":[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var ContainerPlugin = function ContainerPlugin(options) {
-  $traceurRuntime.superCall(this, $ContainerPlugin.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($ContainerPlugin).call(this, options);
   this.bindEvents();
 };
 var $ContainerPlugin = ContainerPlugin;
@@ -6968,16 +7532,18 @@ var $ContainerPlugin = ContainerPlugin;
 module.exports = ContainerPlugin;
 
 
+//# sourceURL=/Users/thiago/code/clappr-web/src/base/container_plugin.js
 },{"base_object":"base_object"}],"container":[function(require,module,exports){
 "use strict";
 module.exports = require('./container');
 
 
-},{"./container":10}],"core_plugin":[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/components/container/index.js
+},{"./container":11}],"core_plugin":[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var CorePlugin = function CorePlugin(core) {
-  $traceurRuntime.superCall(this, $CorePlugin.prototype, "constructor", [core]);
+  $traceurRuntime.superConstructor($CorePlugin).call(this, core);
   this.core = core;
 };
 var $CorePlugin = CorePlugin;
@@ -6990,12 +7556,14 @@ var $CorePlugin = CorePlugin;
 module.exports = CorePlugin;
 
 
+//# sourceURL=/Users/thiago/code/clappr-web/src/base/core_plugin.js
 },{"base_object":"base_object"}],"core":[function(require,module,exports){
 "use strict";
 module.exports = require('./core');
 
 
-},{"./core":13}],"events":[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/components/core/index.js
+},{"./core":14}],"events":[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var Log = require('../plugins/log').getInstance();
@@ -7214,37 +7782,44 @@ Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged';
 module.exports = Events;
 
 
-},{"../plugins/log":39,"underscore":"underscore"}],"flash":[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/base/events.js
+},{"../plugins/log":40,"underscore":"underscore"}],"flash":[function(require,module,exports){
 "use strict";
 module.exports = require('./flash');
 
 
-},{"./flash":24}],"hls":[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/flash/index.js
+},{"./flash":25}],"hls":[function(require,module,exports){
 "use strict";
 module.exports = require('./hls');
 
 
-},{"./hls":25}],"html5_audio":[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/hls/index.js
+},{"./hls":26}],"html5_audio":[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_audio');
 
 
-},{"./html5_audio":26}],"html5_video":[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/html5_audio/index.js
+},{"./html5_audio":27}],"html5_video":[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_video');
 
 
-},{"./html5_video":27}],"html_img":[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/html5_video/index.js
+},{"./html5_video":28}],"html_img":[function(require,module,exports){
 "use strict";
 module.exports = require('./html_img');
 
 
-},{"./html_img":28}],"media_control":[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/html_img/index.js
+},{"./html_img":29}],"media_control":[function(require,module,exports){
 "use strict";
 module.exports = require('./media_control');
 
 
-},{"./media_control":20}],"mediator":[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/components/media_control/index.js
+},{"./media_control":21}],"mediator":[function(require,module,exports){
 "use strict";
 var Events = require('events');
 var events = new Events();
@@ -7273,11 +7848,12 @@ Mediator.stopListening = function(obj, name, callback) {
 module.exports = Mediator;
 
 
+//# sourceURL=/Users/thiago/code/clappr-web/src/components/mediator.js
 },{"events":"events"}],"playback":[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var Playback = function Playback(options) {
-  $traceurRuntime.superCall(this, $Playback.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($Playback).call(this, options);
   this.settings = {};
 };
 var $Playback = Playback;
@@ -7309,6 +7885,7 @@ Playback.canPlay = (function(source) {
 module.exports = Playback;
 
 
+//# sourceURL=/Users/thiago/code/clappr-web/src/base/playback.js
 },{"ui_object":"ui_object"}],"player_info":[function(require,module,exports){
 "use strict";
 var PlayerInfo = {
@@ -7322,16 +7899,18 @@ var PlayerInfo = {
 module.exports = PlayerInfo;
 
 
+//# sourceURL=/Users/thiago/code/clappr-web/src/components/player_info.js
 },{}],"poster":[function(require,module,exports){
 "use strict";
 module.exports = require('./poster');
 
 
-},{"./poster":41}],"ui_container_plugin":[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/poster/index.js
+},{"./poster":42}],"ui_container_plugin":[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var UIContainerPlugin = function UIContainerPlugin(options) {
-  $traceurRuntime.superCall(this, $UIContainerPlugin.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($UIContainerPlugin).call(this, options);
   this.enabled = true;
   this.bindEvents();
 };
@@ -7355,11 +7934,12 @@ var $UIContainerPlugin = UIContainerPlugin;
 module.exports = UIContainerPlugin;
 
 
+//# sourceURL=/Users/thiago/code/clappr-web/src/base/ui_container_plugin.js
 },{"ui_object":"ui_object"}],"ui_core_plugin":[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var UICorePlugin = function UICorePlugin(core) {
-  $traceurRuntime.superCall(this, $UICorePlugin.prototype, "constructor", [core]);
+  $traceurRuntime.superConstructor($UICorePlugin).call(this, core);
   this.core = core;
   this.enabled = true;
   this.bindEvents();
@@ -7394,6 +7974,7 @@ var $UICorePlugin = UICorePlugin;
 module.exports = UICorePlugin;
 
 
+//# sourceURL=/Users/thiago/code/clappr-web/src/base/ui_core_plugin.js
 },{"ui_object":"ui_object"}],"ui_object":[function(require,module,exports){
 "use strict";
 var $ = require('zepto');
@@ -7402,7 +7983,7 @@ var extend = require('./utils').extend;
 var BaseObject = require('base_object');
 var delegateEventSplitter = /^(\S+)\s*(.*)$/;
 var UIObject = function UIObject(options) {
-  $traceurRuntime.superCall(this, $UIObject.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($UIObject).call(this, options);
   this.cid = _.uniqueId('c');
   this._ensureElement();
   this.delegateEvents();
@@ -7477,7 +8058,8 @@ UIObject.extend = extend;
 module.exports = UIObject;
 
 
-},{"./utils":9,"base_object":"base_object","underscore":"underscore","zepto":"zepto"}],"underscore":[function(require,module,exports){
+//# sourceURL=/Users/thiago/code/clappr-web/src/base/ui_object.js
+},{"./utils":10,"base_object":"base_object","underscore":"underscore","zepto":"zepto"}],"underscore":[function(require,module,exports){
 //     Underscore.js 1.7.0
 //     http://underscorejs.org
 //     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -8900,4 +9482,7 @@ var Zepto=function(){function k(t){return null==t?String(t):S[j.call(t)]||"objec
 },has:function(e){return!(!u||!(e?t.inArray(e,u)>-1:u.length))},empty:function(){return s=u.length=0,this},disable:function(){return u=f=n=void 0,this},disabled:function(){return!u},lock:function(){return f=void 0,n||l.disable(),this},locked:function(){return!f},fireWith:function(t,e){return!u||i&&!f||(e=e||[],e=[t,e.slice?e.slice():e],r?f.push(e):c(e)),this},fire:function(){return l.fireWith(this,arguments)},fired:function(){return!!i}};return l}}(Zepto);
 module.exports = Zepto;
 
-},{}]},{},[3,1]);
+},{}]},{},[4,1])
+
+
+//# sourceMappingURL=clappr.map
