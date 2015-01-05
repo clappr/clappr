@@ -28,18 +28,18 @@ Now, create the player:
 
 ## Formats Supported
 
-Format       |HLS|MP4|MP3| [DASH](https://github.com/globocom/clappr/issues/161) | RTMP |
--------------|---|---|---|-------------------------------------------------------|------|
-IE10         | ✔ | ✔ | ✔ | ✘ | ✔
-IE11         | ✔ | ✔ | ✔ | ✘ | ✔
-Firefox      | ✔ | ✔ | ✔ | ✘ | ✔
-Chrome       | ✔ | ✔ | ✔ | ✘ | ✔
-Safari       | ✔ | ✔ | ✔ | ✘ | ✔
-iPhone       | ✔ | ✔ | ✔ | ✘ | ✘
-iPad         | ✔ | ✔ | ✔ | ✘ | ✘
-Android      | ✔ | ✔ | ✔ | ✘ | ✘
-WiiU Browser | ✔ | ✔ | ✘ | ✘ | ✘
-PS4 Browser  | ✔ | ✔ | ✘ | ✘ | ✘
+Format       |HLS|MP4|MP3|WEBM| [DASH](https://github.com/globocom/clappr/issues/161) | RTMP |
+-------------|---|---|---|----|-------------------------------------------------------|------|
+IE10         | ✔ | ✔ | ✔ |  ✘ | ✘ | ✔
+IE11         | ✔ | ✔ | ✔ |  ✘ | ✘ | ✔
+Firefox      | ✔ | ✔ | ✔ |  ✔ | ✘ | ✔
+Chrome       | ✔ | ✔ | ✔ |  ✔ | ✘ | ✔
+Safari       | ✔ | ✔ | ✔ |  ✘ | ✘ | ✔
+iPhone       | ✔ | ✔ | ✔ |  ✘ | ✘ | ✘
+iPad         | ✔ | ✔ | ✔ |  ✘ | ✘ | ✘
+Android      | ✔ | ✔ | ✔ |  ✘ | ✘ | ✘
+WiiU Browser | ✔ | ✔ | ✘ |  ? | ✘ | ✘
+PS4 Browser  | ✔ | ✔ | ✘ |  ? | ✘ | ✘
 
 
 ## Built-in Plugins & Embed Parameters
