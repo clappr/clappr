@@ -59,7 +59,8 @@ class Player extends BaseObject {
   }
 
   normalizeSources(options) {
-    return _.compact(_.flatten([options.source, options.sources]))
+    var sources = _.compact(_.flatten([options.source, options.sources]))
+    return _.isEmpty(sources)? ['no.op'] : sources
   }
 
   resize(size) {

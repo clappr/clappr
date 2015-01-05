@@ -32,15 +32,15 @@ class ContainerFactory extends BaseObject {
   }
 
   createContainer(source) {
-    var playbackPlugin = this.findPlaybackPlugin(source);
-    var options = _.extend({}, this.options, {src: source, autoPlay: !!this.options.autoPlay});
-    var playback = new playbackPlugin(options);
-    var container = new Container({playback: playback});
-    var defer = $.Deferred();
-    defer.promise(container);
-    this.addContainerPlugins(container, source);
-    this.listenToOnce(container, Events.CONTAINER_READY, () => defer.resolve(container) );
-    return container;
+    var playbackPlugin = this.findPlaybackPlugin(source)
+    var options = _.extend({}, this.options, {src: source, autoPlay: !!this.options.autoPlay})
+    var playback = new playbackPlugin(options)
+    var container = new Container({playback: playback})
+    var defer = $.Deferred()
+    defer.promise(container)
+    this.addContainerPlugins(container, source)
+    this.listenToOnce(container, Events.CONTAINER_READY, () => defer.resolve(container))
+    return container
   }
 
   addContainerPlugins(container, source) {
