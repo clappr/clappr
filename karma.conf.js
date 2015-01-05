@@ -3,7 +3,7 @@
 
 
 var dotenv = require('dotenv');
-var exec = require('child_process').exec;
+
 dotenv.load();
 
 module.exports = function(config) {
