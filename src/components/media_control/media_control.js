@@ -12,11 +12,11 @@ var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
 var UIObject = require('ui_object')
 var Utils = require('../../base/utils')
-var Mousetrap = require('mousetrap')
 var SeekTime = require('../seek_time')
 var Mediator = require('mediator')
 var PlayerInfo = require('player_info')
 var Events = require('events')
+require('mousetrap')
 
 class MediaControl extends UIObject {
   get name() { return 'MediaControl' }
