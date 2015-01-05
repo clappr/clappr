@@ -25,9 +25,6 @@ package
     private var videoVolumeTransform:SoundTransform;
     private var isOnStageVideo:Boolean = false;
     private var heartbeat:Timer = new Timer(500);
-    private var rtmpRegex:RegExp = /(rtmp:\/\/.*)\/(.*)$/i;
-    private var rtmpFullURL:Array;
-    private var isRTMP:Boolean = false;
     private var source:String;
 
     public function Player() {
@@ -41,29 +38,29 @@ package
     }
     private function flashReady(): void {
       _triggerEvent('flashready');
+      setupStage();
     }
     private function onConnectionStatus(e:NetStatusEvent):void {
-        if (e.info.code == "NetConnection.Connect.Success"){
-            setupNetStream();
-        }
+      if (e.info.code == "NetConnection.Connect.Success"){
+        setupNetStream();
+      }
     }
     private function setupNetStream():void {
       videoVolumeTransform = new SoundTransform();
       videoVolumeTransform.volume = 1;
+      createNetStream();
+      _stageVideo.attachNetStream(_ns);
+      _ns.play(source);
+    }
+    private function createNetStream():void {
       _ns = new NetStream(_nc);
       _ns.client = this;
       _ns.soundTransform = videoVolumeTransform;
       _ns.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler);
-      if (isRTMP) {
-        _ns.bufferTime = 0.5;
-      } else {
-        _ns.bufferTime = 10;
-	_ns.inBufferSeek = true;
-	_ns.maxPauseBufferTime = 3600;
-	_ns.backBufferTime = 3600;
-      }
-      _stageVideo.attachNetStream(_ns);
-      _ns.play(source);
+      _ns.bufferTime = 10;
+      _ns.inBufferSeek = true;
+      _ns.maxPauseBufferTime = 3600;
+      _ns.backBufferTime = 3600;
     }
     private function setupStage():void {
       stage.scaleMode = StageScaleMode.NO_SCALE;
@@ -73,12 +70,12 @@ package
       stage.addEventListener(StageVideoAvailabilityEvent.STAGE_VIDEO_AVAILABILITY, _onStageVideoAvailability);
       stage.addEventListener(Event.RESIZE, _onResize);
     }
-    private function setupNetConnection(videoURL:String=null):void {
+    private function setupNetConnection():void {
       _nc = new NetConnection();
       _nc.client = this;
       _nc.addEventListener(AsyncErrorEvent.ASYNC_ERROR, asyncErrorHandler);
       _nc.addEventListener(NetStatusEvent.NET_STATUS, onConnectionStatus);
-      _nc.connect(videoURL);
+      _nc.connect(null);
     }
     private function setupCallbacks():void {
       ExternalInterface.addCallback("setVideoSize", setVideoSize);
@@ -103,6 +100,7 @@ package
     private function netStatusHandler(event:NetStatusEvent):void {
       if (event.info.code === "NetStream.Buffer.Full") {
         playbackState = "PLAYING";
+        _ns.bufferTime = 15;
       } else if (isBuffering(event.info.code)) {
         playbackState = "PLAYING_BUFFERING";
       } else if (event.info.code == "NetStream.Video.DimensionChange") {
@@ -110,7 +108,7 @@ package
       } else if (event.info.code == "NetStream.Play.Stop") {
         playbackState = "ENDED";
         heartbeat.stop();
-      } else if (event.info.code == "NetStream.Buffer.Empty" && !isRTMP) {
+      } else if (event.info.code == "NetStream.Buffer.Empty") {
         _ns.bufferTime = 5;
       }
       _triggerEvent('statechanged');
@@ -128,16 +126,8 @@ package
       _triggerEvent('timeupdate');
     }
     private function playerPlay(url:String):void {
-      setupStage();
-      if (url.indexOf("rtmp") > -1) {
-        isRTMP = true;
-        rtmpFullURL = url.match(rtmpRegex);
-        setupNetConnection(rtmpFullURL[1]);
-        source = rtmpFullURL[2];
-      } else {
-        source = url;
-        setupNetConnection();
-      }
+      source = url;
+      setupNetConnection();
       heartbeat.addEventListener( TimerEvent.TIMER, onHeartbeat );
       heartbeat.start();
     }
@@ -170,11 +160,9 @@ package
       return playbackState;
     }
     private function getPosition():Number {
-      if (isRTMP) { return 1; }
       return _ns.time;
     }
     private function getDuration():Number {
-      if (isRTMP) { return 1; }
       return totalTime;
     }
     private function setVideoSize(width:Number, height:Number):void {
@@ -216,9 +204,7 @@ package
       if (_video.parent) {
           removeChild(_video);
       }
-      if (!isRTMP) {
-        _stageVideo.attachNetStream(_ns);
-      }
+      _stageVideo.attachNetStream(_ns);
     }
     private function _disableStageVideo():void {
       _video.attachNetStream(_ns);

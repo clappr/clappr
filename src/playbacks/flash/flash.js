@@ -24,19 +24,13 @@ class Flash extends Playback {
   constructor(options) {
     super(options)
     this.src = options.src
-    this.isRTMP = (this.src.indexOf("rtmp") > -1)
     this.defaultBaseSwfPath = "http://cdn.clappr.io/" + Clappr.version + "/assets/"
     this.swfPath = (options.swfBasePath || this.defaultBaseSwfPath) + "Player.swf"
     this.autoPlay = options.autoPlay
     this.settings = {default: ['seekbar']}
-    if (this.isRTMP) {
-      this.settings.left = ["playstop"]
-      this.settings.right = ["fullscreen", "volume"]
-    } else {
-      this.settings.left = ["playpause", "position", "duration"]
-      this.settings.right = ["fullscreen", "volume"]
-      this.settings.seekEnabled = true
-    }
+    this.settings.left = ["playpause", "position", "duration"]
+    this.settings.right = ["fullscreen", "volume"]
+    this.settings.seekEnabled = true
     this.isReady = false
     this.addListeners()
   }
@@ -57,7 +51,7 @@ class Flash extends Playback {
   }
 
   getPlaybackType() {
-    return this.isRTMP? 'live':'vod'
+    return 'vod'
   }
 
   setupFirefox() {
@@ -117,9 +111,11 @@ class Flash extends Playback {
 
   firstPlay() {
     this.currentState = "PLAYING"
-    if (_.isFunction(this.el.playerPlay)) {
+    if (this.el.playerPlay) {
       this.el.playerPlay(this.src)
       this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this.checkInitialSeek())
+    } else {
+      this.listenToOnce(this, EVENTS.PLAYBACK_READY, this.firstPlay)
     }
   }
 
@@ -201,10 +197,7 @@ class Flash extends Playback {
 }
 
 Flash.canPlay = function(resource) {
-  //http://help.adobe.com/en_US/flashmediaserver/techoverview/WS07865d390fac8e1f-4c43d6e71321ec235dd-7fff.html
-  if (resource.indexOf('rtmp') > -1) {
-    return true
-  } else if ((!Browser.isMobile && Browser.isFirefox) || Browser.isLegacyIE) {
+  if ((!Browser.isMobile && Browser.isFirefox) || Browser.isLegacyIE) {
     return _.isString(resource) && !!resource.match(/(.*)\.(mp4|mov|f4v|3gpp|3gp)/)
   } else {
     return _.isString(resource) && !!resource.match(/(.*)\.(mov|f4v|3gpp|3gp)/)
