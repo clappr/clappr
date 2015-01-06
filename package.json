@@ -24,7 +24,7 @@
     "chai": "1.10.0",
     "compass-mixins": "0.12.3",
     "dotenv": "^0.4.0",
-    "es6ify": "~1.6.0",
+    "es6ify": "~1.4.0",
     "exorcist": "^0.1.6",
     "express": "^4.6.1",
     "express-alias": "0.4.0",
