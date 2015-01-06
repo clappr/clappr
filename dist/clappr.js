@@ -3880,7 +3880,7 @@ System.get("traceur-runtime@0.0.62/src/runtime/polyfills/polyfills" + '');
 },{}],6:[function(require,module,exports){
 module.exports={
   "name": "clappr",
-  "version": "0.0.77",
+  "version": "0.0.78",
   "description": "An extensible media player for the web",
   "main": "dist/clappr.min.js",
   "scripts": {
@@ -5214,26 +5214,25 @@ var PlayerInfo = require('player_info');
 var Player = function Player(options) {
   $traceurRuntime.superCall(this, $Player.prototype, "constructor", [options]);
   window.p = this;
-  var DEFAULT_OPTIONS = {persistConfig: true};
-  this.options = _.extend(DEFAULT_OPTIONS, options);
+  var defaultOptions = {
+    persistConfig: true,
+    width: 640,
+    height: 360
+  };
+  this.options = _.extend(defaultOptions, options);
   this.options.sources = this.normalizeSources(options);
   this.loader = new Loader(this.options.plugins || {});
   this.coreFactory = new CoreFactory(this, this.loader);
-  this.setCurrentSize(options.height, options.width);
+  PlayerInfo.currentSize = {
+    width: options.width,
+    height: options.height
+  };
   if (this.options.parentId) {
     this.setParentId(this.options.parentId);
   }
 };
 var $Player = Player;
 ($traceurRuntime.createClass)(Player, {
-  setCurrentSize: function() {
-    var height = arguments[0] !== (void 0) ? arguments[0] : 360;
-    var width = arguments[1] !== (void 0) ? arguments[1] : 640;
-    PlayerInfo.currentSize = {
-      width: width,
-      height: height
-    };
-  },
   setParentId: function(parentId) {
     var el = document.querySelector(parentId);
     if (el) {
