@@ -115,7 +115,7 @@ class Flash extends Playback {
       this.el.playerPlay(this.src)
       this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this.checkInitialSeek())
     } else {
-      this.listenToOnce(this, EVENTS.PLAYBACK_READY, this.firstPlay)
+      this.listenToOnce(this, Events.PLAYBACK_READY, this.firstPlay)
     }
   }
 
