@@ -13,19 +13,15 @@ class Player extends BaseObject {
   constructor(options) {
     super(options)
     window.p = this
-    var DEFAULT_OPTIONS = {persistConfig: true}
-    this.options = _.extend(DEFAULT_OPTIONS, options)
+    var defaultOptions = {persistConfig: true, width: 640, height: 360}
+    this.options = _.extend(defaultOptions, options)
     this.options.sources = this.normalizeSources(options)
     this.loader = new Loader(this.options.plugins || {})
     this.coreFactory = new CoreFactory(this, this.loader)
-    this.setCurrentSize(options.height, options.width)
+    PlayerInfo.currentSize = {width: options.width, height: options.height}
     if (this.options.parentId) {
       this.setParentId(this.options.parentId)
     }
-  }
-
-  setCurrentSize(height=360, width=640) {
-    PlayerInfo.currentSize = {width: width, height: height}
   }
 
   setParentId(parentId) {
