@@ -15,239 +15,9 @@ window.Clappr.version = version;
 module.exports = window.Clappr;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/main.js
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"../package.json":7,"./components/iframe_player":18,"./components/player":22,"mediator":"mediator"}],2:[function(require,module,exports){
-(function (process){
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-// resolves . and .. elements in a path array with directory names there
-// must be no slashes, empty elements, or device names (c:\) in the array
-// (so also no leading and trailing slashes - it does not distinguish
-// relative and absolute paths)
-function normalizeArray(parts, allowAboveRoot) {
-  // if the path tries to go above the root, `up` ends up > 0
-  var up = 0;
-  for (var i = parts.length - 1; i >= 0; i--) {
-    var last = parts[i];
-    if (last === '.') {
-      parts.splice(i, 1);
-    } else if (last === '..') {
-      parts.splice(i, 1);
-      up++;
-    } else if (up) {
-      parts.splice(i, 1);
-      up--;
-    }
-  }
-
-  // if the path is allowed to go above the root, restore leading ..s
-  if (allowAboveRoot) {
-    for (; up--; up) {
-      parts.unshift('..');
-    }
-  }
-
-  return parts;
-}
-
-// Split a filename into [root, dir, basename, ext], unix version
-// 'root' is just a slash, or nothing.
-var splitPathRe =
-    /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
-var splitPath = function(filename) {
-  return splitPathRe.exec(filename).slice(1);
-};
-
-// path.resolve([from ...], to)
-// posix version
-exports.resolve = function() {
-  var resolvedPath = '',
-      resolvedAbsolute = false;
-
-  for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
-    var path = (i >= 0) ? arguments[i] : process.cwd();
-
-    // Skip empty and invalid entries
-    if (typeof path !== 'string') {
-      throw new TypeError('Arguments to path.resolve must be strings');
-    } else if (!path) {
-      continue;
-    }
-
-    resolvedPath = path + '/' + resolvedPath;
-    resolvedAbsolute = path.charAt(0) === '/';
-  }
-
-  // At this point the path should be resolved to a full absolute path, but
-  // handle relative paths to be safe (might happen when process.cwd() fails)
-
-  // Normalize the path
-  resolvedPath = normalizeArray(filter(resolvedPath.split('/'), function(p) {
-    return !!p;
-  }), !resolvedAbsolute).join('/');
-
-  return ((resolvedAbsolute ? '/' : '') + resolvedPath) || '.';
-};
-
-// path.normalize(path)
-// posix version
-exports.normalize = function(path) {
-  var isAbsolute = exports.isAbsolute(path),
-      trailingSlash = substr(path, -1) === '/';
-
-  // Normalize the path
-  path = normalizeArray(filter(path.split('/'), function(p) {
-    return !!p;
-  }), !isAbsolute).join('/');
-
-  if (!path && !isAbsolute) {
-    path = '.';
-  }
-  if (path && trailingSlash) {
-    path += '/';
-  }
-
-  return (isAbsolute ? '/' : '') + path;
-};
-
-// posix version
-exports.isAbsolute = function(path) {
-  return path.charAt(0) === '/';
-};
-
-// posix version
-exports.join = function() {
-  var paths = Array.prototype.slice.call(arguments, 0);
-  return exports.normalize(filter(paths, function(p, index) {
-    if (typeof p !== 'string') {
-      throw new TypeError('Arguments to path.join must be strings');
-    }
-    return p;
-  }).join('/'));
-};
-
-
-// path.relative(from, to)
-// posix version
-exports.relative = function(from, to) {
-  from = exports.resolve(from).substr(1);
-  to = exports.resolve(to).substr(1);
-
-  function trim(arr) {
-    var start = 0;
-    for (; start < arr.length; start++) {
-      if (arr[start] !== '') break;
-    }
-
-    var end = arr.length - 1;
-    for (; end >= 0; end--) {
-      if (arr[end] !== '') break;
-    }
-
-    if (start > end) return [];
-    return arr.slice(start, end - start + 1);
-  }
-
-  var fromParts = trim(from.split('/'));
-  var toParts = trim(to.split('/'));
-
-  var length = Math.min(fromParts.length, toParts.length);
-  var samePartsLength = length;
-  for (var i = 0; i < length; i++) {
-    if (fromParts[i] !== toParts[i]) {
-      samePartsLength = i;
-      break;
-    }
-  }
-
-  var outputParts = [];
-  for (var i = samePartsLength; i < fromParts.length; i++) {
-    outputParts.push('..');
-  }
-
-  outputParts = outputParts.concat(toParts.slice(samePartsLength));
-
-  return outputParts.join('/');
-};
-
-exports.sep = '/';
-exports.delimiter = ':';
-
-exports.dirname = function(path) {
-  var result = splitPath(path),
-      root = result[0],
-      dir = result[1];
-
-  if (!root && !dir) {
-    // No dirname whatsoever
-    return '.';
-  }
-
-  if (dir) {
-    // It has a dirname, strip trailing slash
-    dir = dir.substr(0, dir.length - 1);
-  }
-
-  return root + dir;
-};
-
-
-exports.basename = function(path, ext) {
-  var f = splitPath(path)[2];
-  // TODO: make this comparison case-insensitive on windows?
-  if (ext && f.substr(-1 * ext.length) === ext) {
-    f = f.substr(0, f.length - ext.length);
-  }
-  return f;
-};
-
-
-exports.extname = function(path) {
-  return splitPath(path)[3];
-};
-
-function filter (xs, f) {
-    if (xs.filter) return xs.filter(f);
-    var res = [];
-    for (var i = 0; i < xs.length; i++) {
-        if (f(xs[i], i, xs)) res.push(xs[i]);
-    }
-    return res;
-}
-
-// String.prototype.substr - negative index don't work in IE8
-var substr = 'ab'.substr(-1) === 'b'
-    ? function (str, start, len) { return str.substr(start, len) }
-    : function (str, start, len) {
-        if (start < 0) start = str.length + start;
-        return str.substr(start, len);
-    }
-;
-
-}).call(this,require('_process'))
-
-},{"_process":3}],3:[function(require,module,exports){
+},{"../package.json":6,"./components/iframe_player":17,"./components/player":21,"mediator":"mediator"}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -335,7 +105,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 (function (process,global){
 (function(global) {
   'use strict';
@@ -364,6 +134,13 @@ process.chdir = function (dir) {
       writable: true
     };
   }
+  var types = {
+    void: function voidType() {},
+    any: function any() {},
+    string: function string() {},
+    number: function number() {},
+    boolean: function boolean() {}
+  };
   var method = nonEnum;
   var counter = 0;
   function newUniqueString() {
@@ -374,19 +151,16 @@ process.chdir = function (dir) {
   var symbolDataProperty = newUniqueString();
   var symbolValues = $create(null);
   var privateNames = $create(null);
-  function isPrivateName(s) {
-    return privateNames[s];
-  }
   function createPrivateName() {
     var s = newUniqueString();
     privateNames[s] = true;
     return s;
   }
-  function isShimSymbol(symbol) {
+  function isSymbol(symbol) {
     return typeof symbol === 'object' && symbol instanceof SymbolValue;
   }
   function typeOf(v) {
-    if (isShimSymbol(v))
+    if (isSymbol(v))
       return 'symbol';
     return typeof v;
   }
@@ -465,43 +239,35 @@ process.chdir = function (dir) {
     getOwnHashObject(object);
     return $seal.apply(this, arguments);
   }
+  Symbol.iterator = Symbol();
   freeze(SymbolValue.prototype);
-  function isSymbolString(s) {
-    return symbolValues[s] || privateNames[s];
-  }
   function toProperty(name) {
-    if (isShimSymbol(name))
+    if (isSymbol(name))
       return name[symbolInternalProperty];
     return name;
   }
-  function removeSymbolKeys(array) {
+  function getOwnPropertyNames(object) {
     var rv = [];
-    for (var i = 0; i < array.length; i++) {
-      if (!isSymbolString(array[i])) {
-        rv.push(array[i]);
-      }
+    var names = $getOwnPropertyNames(object);
+    for (var i = 0; i < names.length; i++) {
+      var name = names[i];
+      if (!symbolValues[name] && !privateNames[name])
+        rv.push(name);
     }
     return rv;
   }
-  function getOwnPropertyNames(object) {
-    return removeSymbolKeys($getOwnPropertyNames(object));
-  }
-  function keys(object) {
-    return removeSymbolKeys($keys(object));
+  function getOwnPropertyDescriptor(object, name) {
+    return $getOwnPropertyDescriptor(object, toProperty(name));
   }
   function getOwnPropertySymbols(object) {
     var rv = [];
     var names = $getOwnPropertyNames(object);
     for (var i = 0; i < names.length; i++) {
       var symbol = symbolValues[names[i]];
-      if (symbol) {
+      if (symbol)
         rv.push(symbol);
-      }
     }
     return rv;
-  }
-  function getOwnPropertyDescriptor(object, name) {
-    return $getOwnPropertyDescriptor(object, toProperty(name));
   }
   function hasOwnProperty(name) {
     return $hasOwnProperty.call(this, toProperty(name));
@@ -509,8 +275,23 @@ process.chdir = function (dir) {
   function getOption(name) {
     return global.traceur && global.traceur.options[name];
   }
+  function setProperty(object, name, value) {
+    var sym,
+        desc;
+    if (isSymbol(name)) {
+      sym = name;
+      name = name[symbolInternalProperty];
+    }
+    object[name] = value;
+    if (sym && (desc = $getOwnPropertyDescriptor(object, name)))
+      $defineProperty(object, name, {enumerable: false});
+    return value;
+  }
   function defineProperty(object, name, descriptor) {
-    if (isShimSymbol(name)) {
+    if (isSymbol(name)) {
+      if (descriptor.enumerable) {
+        descriptor = $create(descriptor, {enumerable: {value: false}});
+      }
       name = name[symbolInternalProperty];
     }
     $defineProperty(object, name, descriptor);
@@ -524,14 +305,14 @@ process.chdir = function (dir) {
     $defineProperty(Object, 'freeze', {value: freeze});
     $defineProperty(Object, 'preventExtensions', {value: preventExtensions});
     $defineProperty(Object, 'seal', {value: seal});
-    $defineProperty(Object, 'keys', {value: keys});
+    Object.getOwnPropertySymbols = getOwnPropertySymbols;
   }
   function exportStar(object) {
     for (var i = 1; i < arguments.length; i++) {
       var names = $getOwnPropertyNames(arguments[i]);
       for (var j = 0; j < names.length; j++) {
         var name = names[j];
-        if (isSymbolString(name))
+        if (privateNames[name])
           continue;
         (function(mod, name) {
           $defineProperty(object, name, {
@@ -559,61 +340,36 @@ process.chdir = function (dir) {
     }
     return argument;
   }
-  function polyfillSymbol(global, Symbol) {
-    if (!global.Symbol) {
-      global.Symbol = Symbol;
-      Object.getOwnPropertySymbols = getOwnPropertySymbols;
-    }
-    if (!global.Symbol.iterator) {
-      global.Symbol.iterator = Symbol('Symbol.iterator');
-    }
-  }
   function setupGlobals(global) {
-    polyfillSymbol(global, Symbol);
+    global.Symbol = Symbol;
     global.Reflect = global.Reflect || {};
     global.Reflect.global = global.Reflect.global || global;
     polyfillObject(global.Object);
   }
   setupGlobals(global);
   global.$traceurRuntime = {
-    checkObjectCoercible: checkObjectCoercible,
     createPrivateName: createPrivateName,
-    defineProperties: $defineProperties,
-    defineProperty: $defineProperty,
     exportStar: exportStar,
     getOwnHashObject: getOwnHashObject,
-    getOwnPropertyDescriptor: $getOwnPropertyDescriptor,
-    getOwnPropertyNames: $getOwnPropertyNames,
-    isObject: isObject,
-    isPrivateName: isPrivateName,
-    isSymbolString: isSymbolString,
-    keys: $keys,
+    privateNames: privateNames,
+    setProperty: setProperty,
     setupGlobals: setupGlobals,
     toObject: toObject,
+    isObject: isObject,
     toProperty: toProperty,
-    typeof: typeOf
+    type: types,
+    typeof: typeOf,
+    checkObjectCoercible: checkObjectCoercible,
+    hasOwnProperty: function(o, p) {
+      return hasOwnProperty.call(o, p);
+    },
+    defineProperties: $defineProperties,
+    defineProperty: $defineProperty,
+    getOwnPropertyDescriptor: $getOwnPropertyDescriptor,
+    getOwnPropertyNames: $getOwnPropertyNames,
+    keys: $keys
   };
-})(typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : this);
-(function() {
-  'use strict';
-  var path;
-  function relativeRequire(callerPath, requiredPath) {
-    path = path || typeof require !== 'undefined' && require('path');
-    function isDirectory(path) {
-      return path.slice(-1) === '/';
-    }
-    function isAbsolute(path) {
-      return path[0] === '/';
-    }
-    function isRelative(path) {
-      return path[0] === '.';
-    }
-    if (isDirectory(requiredPath) || isAbsolute(requiredPath))
-      return;
-    return isRelative(requiredPath) ? require(path.resolve(path.dirname(callerPath), requiredPath)) : require(requiredPath);
-  }
-  $traceurRuntime.require = relativeRequire;
-})();
+})(typeof global !== 'undefined' ? global : this);
 (function() {
   'use strict';
   function spread() {
@@ -644,9 +400,6 @@ process.chdir = function (dir) {
   var $getOwnPropertyDescriptor = $traceurRuntime.getOwnPropertyDescriptor;
   var $getOwnPropertyNames = $traceurRuntime.getOwnPropertyNames;
   var $getPrototypeOf = Object.getPrototypeOf;
-  var $__0 = Object,
-      getOwnPropertyNames = $__0.getOwnPropertyNames,
-      getOwnPropertySymbols = $__0.getOwnPropertySymbols;
   function superDescriptor(homeObject, name) {
     var proto = $getPrototypeOf(homeObject);
     do {
@@ -656,9 +409,6 @@ process.chdir = function (dir) {
       proto = $getPrototypeOf(proto);
     } while (proto);
     return undefined;
-  }
-  function superConstructor(ctor) {
-    return ctor.__proto__;
   }
   function superCall(self, homeObject, name, args) {
     return superGet(self, homeObject, name).apply(self, args);
@@ -678,19 +428,15 @@ process.chdir = function (dir) {
       descriptor.set.call(self, value);
       return value;
     }
-    throw $TypeError(("super has no setter '" + name + "'."));
+    throw $TypeError("super has no setter '" + name + "'.");
   }
   function getDescriptors(object) {
-    var descriptors = {};
-    var names = getOwnPropertyNames(object);
+    var descriptors = {},
+        name,
+        names = $getOwnPropertyNames(object);
     for (var i = 0; i < names.length; i++) {
       var name = names[i];
       descriptors[name] = $getOwnPropertyDescriptor(object, name);
-    }
-    var symbols = getOwnPropertySymbols(object);
-    for (var i = 0; i < symbols.length; i++) {
-      var symbol = symbols[i];
-      descriptors[$traceurRuntime.toProperty(symbol)] = $getOwnPropertyDescriptor(object, $traceurRuntime.toProperty(symbol));
     }
     return descriptors;
   }
@@ -732,15 +478,11 @@ process.chdir = function (dir) {
   $traceurRuntime.createClass = createClass;
   $traceurRuntime.defaultSuperCall = defaultSuperCall;
   $traceurRuntime.superCall = superCall;
-  $traceurRuntime.superConstructor = superConstructor;
   $traceurRuntime.superGet = superGet;
   $traceurRuntime.superSet = superSet;
 })();
 (function() {
   'use strict';
-  if (typeof $traceurRuntime !== 'object') {
-    throw new Error('traceur runtime not found.');
-  }
   var createPrivateName = $traceurRuntime.createPrivateName;
   var $defineProperties = $traceurRuntime.defineProperties;
   var $defineProperty = $traceurRuntime.defineProperty;
@@ -1087,50 +829,6 @@ process.chdir = function (dir) {
   $traceurRuntime.removeDotSegments = removeDotSegments;
   $traceurRuntime.resolveUrl = resolveUrl;
 })();
-(function() {
-  'use strict';
-  var types = {
-    any: {name: 'any'},
-    boolean: {name: 'boolean'},
-    number: {name: 'number'},
-    string: {name: 'string'},
-    symbol: {name: 'symbol'},
-    void: {name: 'void'}
-  };
-  var GenericType = function GenericType(type, argumentTypes) {
-    this.type = type;
-    this.argumentTypes = argumentTypes;
-  };
-  ($traceurRuntime.createClass)(GenericType, {}, {});
-  var typeRegister = Object.create(null);
-  function genericType(type) {
-    for (var argumentTypes = [],
-        $__1 = 1; $__1 < arguments.length; $__1++)
-      argumentTypes[$__1 - 1] = arguments[$__1];
-    var typeMap = typeRegister;
-    var key = $traceurRuntime.getOwnHashObject(type).hash;
-    if (!typeMap[key]) {
-      typeMap[key] = Object.create(null);
-    }
-    typeMap = typeMap[key];
-    for (var i = 0; i < argumentTypes.length - 1; i++) {
-      key = $traceurRuntime.getOwnHashObject(argumentTypes[i]).hash;
-      if (!typeMap[key]) {
-        typeMap[key] = Object.create(null);
-      }
-      typeMap = typeMap[key];
-    }
-    var tail = argumentTypes[argumentTypes.length - 1];
-    key = $traceurRuntime.getOwnHashObject(tail).hash;
-    if (!typeMap[key]) {
-      typeMap[key] = new GenericType(type, argumentTypes);
-    }
-    return typeMap[key];
-  }
-  $traceurRuntime.GenericType = GenericType;
-  $traceurRuntime.genericType = genericType;
-  $traceurRuntime.type = types;
-})();
 (function(global) {
   'use strict';
   var $__2 = $traceurRuntime,
@@ -1181,35 +879,8 @@ process.chdir = function (dir) {
       return stack.join('\n');
     }
   }, {}, Error);
-  function beforeLines(lines, number) {
-    var result = [];
-    var first = number - 3;
-    if (first < 0)
-      first = 0;
-    for (var i = first; i < number; i++) {
-      result.push(lines[i]);
-    }
-    return result;
-  }
-  function afterLines(lines, number) {
-    var last = number + 1;
-    if (last > lines.length - 1)
-      last = lines.length - 1;
-    var result = [];
-    for (var i = number; i <= last; i++) {
-      result.push(lines[i]);
-    }
-    return result;
-  }
-  function columnSpacing(columns) {
-    var result = '';
-    for (var i = 0; i < columns - 1; i++) {
-      result += '-';
-    }
-    return result;
-  }
   var UncoatedModuleInstantiator = function UncoatedModuleInstantiator(url, func) {
-    $traceurRuntime.superConstructor($UncoatedModuleInstantiator).call(this, url, null);
+    $traceurRuntime.superCall(this, $UncoatedModuleInstantiator.prototype, "constructor", [url, null]);
     this.func = func;
   };
   var $UncoatedModuleInstantiator = UncoatedModuleInstantiator;
@@ -1217,34 +888,11 @@ process.chdir = function (dir) {
       if (this.value_)
         return this.value_;
       try {
-        var relativeRequire;
-        if (typeof $traceurRuntime !== undefined) {
-          relativeRequire = $traceurRuntime.require.bind(null, this.url);
-        }
-        return this.value_ = this.func.call(global, relativeRequire);
+        return this.value_ = this.func.call(global);
       } catch (ex) {
         if (ex instanceof ModuleEvaluationError) {
           ex.loadedBy(this.url);
           throw ex;
-        }
-        if (ex.stack) {
-          var lines = this.func.toString().split('\n');
-          var evaled = [];
-          ex.stack.split('\n').some(function(frame) {
-            if (frame.indexOf('UncoatedModuleInstantiator.getUncoatedModule') > 0)
-              return true;
-            var m = /(at\s[^\s]*\s).*>:(\d*):(\d*)\)/.exec(frame);
-            if (m) {
-              var line = parseInt(m[2], 10);
-              evaled = evaled.concat(beforeLines(lines, line));
-              evaled.push(columnSpacing(m[3]) + '^');
-              evaled = evaled.concat(afterLines(lines, line));
-              evaled.push('= = = = = = = = =');
-            } else {
-              evaled.push(frame);
-            }
-          });
-          ex.stack = evaled.join('\n');
         }
         throw new ModuleEvaluationError(this.url, ex);
       }
@@ -1285,8 +933,8 @@ process.chdir = function (dir) {
   }
   var ModuleStore = {
     normalize: function(name, refererName, refererAddress) {
-      if (typeof name !== 'string')
-        throw new TypeError('module name must be a string, not ' + typeof name);
+      if (typeof name !== "string")
+        throw new TypeError("module name must be a string, not " + typeof name);
       if (isAbsolute(name))
         return canonicalizeUrl(name);
       if (/[^\.]\/\.\.\//.test(name)) {
@@ -1319,7 +967,7 @@ process.chdir = function (dir) {
     set baseURL(v) {
       baseURL = String(v);
     },
-    registerModule: function(name, deps, func) {
+    registerModule: function(name, func) {
       var normalizedName = ModuleStore.normalize(name);
       if (moduleInstantiators[normalizedName])
         throw new Error('duplicate module named ' + normalizedName);
@@ -1328,7 +976,7 @@ process.chdir = function (dir) {
     bundleStore: Object.create(null),
     register: function(name, deps, func) {
       if (!deps || !deps.length && !func.length) {
-        this.registerModule(name, deps, func);
+        this.registerModule(name, func);
       } else {
         this.bundleStore[name] = {
           deps: deps,
@@ -1362,9 +1010,7 @@ process.chdir = function (dir) {
       return this.get(this.testingPrefix_ + name);
     }
   };
-  var moduleStoreModule = new Module({ModuleStore: ModuleStore});
-  ModuleStore.set('@traceur/src/runtime/ModuleStore', moduleStoreModule);
-  ModuleStore.set('@traceur/src/runtime/ModuleStore.js', moduleStoreModule);
+  ModuleStore.set('@traceur/src/runtime/ModuleStore', new Module({ModuleStore: ModuleStore}));
   var setupGlobals = $traceurRuntime.setupGlobals;
   $traceurRuntime.setupGlobals = function(global) {
     setupGlobals(global);
@@ -1372,7 +1018,6 @@ process.chdir = function (dir) {
   $traceurRuntime.ModuleStore = ModuleStore;
   global.System = {
     register: ModuleStore.register.bind(ModuleStore),
-    registerModule: ModuleStore.registerModule.bind(ModuleStore),
     get: ModuleStore.get,
     set: ModuleStore.set,
     normalize: ModuleStore.normalize
@@ -1381,10 +1026,10 @@ process.chdir = function (dir) {
     var instantiator = getUncoatedModuleInstantiator(name);
     return instantiator && instantiator.getUncoatedModule();
   };
-})(typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : this);
-System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/utils.js", [], function() {
+})(typeof global !== 'undefined' ? global : this);
+System.register("traceur-runtime@0.0.62/src/runtime/polyfills/utils", [], function() {
   "use strict";
-  var __moduleName = "traceur-runtime@0.0.79/src/runtime/polyfills/utils.js";
+  var __moduleName = "traceur-runtime@0.0.62/src/runtime/polyfills/utils";
   var $ceil = Math.ceil;
   var $floor = Math.floor;
   var $isFinite = isFinite;
@@ -1542,13 +1187,13 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/utils.js", [
     }
   };
 });
-System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Map.js", [], function() {
+System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Map", [], function() {
   "use strict";
-  var __moduleName = "traceur-runtime@0.0.79/src/runtime/polyfills/Map.js";
-  var $__0 = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/utils.js"),
-      isObject = $__0.isObject,
-      maybeAddIterator = $__0.maybeAddIterator,
-      registerPolyfill = $__0.registerPolyfill;
+  var __moduleName = "traceur-runtime@0.0.62/src/runtime/polyfills/Map";
+  var $__3 = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/utils"),
+      isObject = $__3.isObject,
+      maybeAddIterator = $__3.maybeAddIterator,
+      registerPolyfill = $__3.registerPolyfill;
   var getOwnHashObject = $traceurRuntime.getOwnHashObject;
   var $hasOwnProperty = Object.prototype.hasOwnProperty;
   var deletedSentinel = {};
@@ -1577,11 +1222,11 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Map.js", [],
     }
     initMap(this);
     if (iterable !== null && iterable !== undefined) {
-      for (var $__2 = iterable[$traceurRuntime.toProperty(Symbol.iterator)](),
-          $__3; !($__3 = $__2.next()).done; ) {
-        var $__4 = $__3.value,
-            key = $__4[0],
-            value = $__4[1];
+      for (var $__5 = iterable[Symbol.iterator](),
+          $__6; !($__6 = $__5.next()).done; ) {
+        var $__7 = $__6.value,
+            key = $__7[0],
+            value = $__7[1];
         {
           this.set(key, value);
         }
@@ -1661,7 +1306,7 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Map.js", [],
         callbackFn.call(thisArg, value, key, this);
       }
     },
-    entries: $traceurRuntime.initGeneratorFunction(function $__5() {
+    entries: $traceurRuntime.initGeneratorFunction(function $__8() {
       var i,
           key,
           value;
@@ -1697,9 +1342,9 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Map.js", [],
             default:
               return $ctx.end();
           }
-      }, $__5, this);
+      }, $__8, this);
     }),
-    keys: $traceurRuntime.initGeneratorFunction(function $__6() {
+    keys: $traceurRuntime.initGeneratorFunction(function $__9() {
       var i,
           key,
           value;
@@ -1735,9 +1380,9 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Map.js", [],
             default:
               return $ctx.end();
           }
-      }, $__6, this);
+      }, $__9, this);
     }),
-    values: $traceurRuntime.initGeneratorFunction(function $__7() {
+    values: $traceurRuntime.initGeneratorFunction(function $__10() {
       var i,
           key,
           value;
@@ -1773,7 +1418,7 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Map.js", [],
             default:
               return $ctx.end();
           }
-      }, $__7, this);
+      }, $__10, this);
     })
   }, {});
   Object.defineProperty(Map.prototype, Symbol.iterator, {
@@ -1782,14 +1427,12 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Map.js", [],
     value: Map.prototype.entries
   });
   function polyfillMap(global) {
-    var $__4 = global,
-        Object = $__4.Object,
-        Symbol = $__4.Symbol;
+    var $__7 = global,
+        Object = $__7.Object,
+        Symbol = $__7.Symbol;
     if (!global.Map)
       global.Map = Map;
     var mapPrototype = global.Map.prototype;
-    if (mapPrototype.entries === undefined)
-      global.Map = Map;
     if (mapPrototype.entries) {
       maybeAddIterator(mapPrototype, mapPrototype.entries, Symbol);
       maybeAddIterator(Object.getPrototypeOf(new global.Map().entries()), function() {
@@ -1807,15 +1450,15 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Map.js", [],
     }
   };
 });
-System.get("traceur-runtime@0.0.79/src/runtime/polyfills/Map.js" + '');
-System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Set.js", [], function() {
+System.get("traceur-runtime@0.0.62/src/runtime/polyfills/Map" + '');
+System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Set", [], function() {
   "use strict";
-  var __moduleName = "traceur-runtime@0.0.79/src/runtime/polyfills/Set.js";
-  var $__0 = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/utils.js"),
-      isObject = $__0.isObject,
-      maybeAddIterator = $__0.maybeAddIterator,
-      registerPolyfill = $__0.registerPolyfill;
-  var Map = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/Map.js").Map;
+  var __moduleName = "traceur-runtime@0.0.62/src/runtime/polyfills/Set";
+  var $__11 = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/utils"),
+      isObject = $__11.isObject,
+      maybeAddIterator = $__11.maybeAddIterator,
+      registerPolyfill = $__11.registerPolyfill;
+  var Map = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/Map").Map;
   var getOwnHashObject = $traceurRuntime.getOwnHashObject;
   var $hasOwnProperty = Object.prototype.hasOwnProperty;
   function initSet(set) {
@@ -1830,9 +1473,9 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Set.js", [],
     }
     initSet(this);
     if (iterable !== null && iterable !== undefined) {
-      for (var $__4 = iterable[$traceurRuntime.toProperty(Symbol.iterator)](),
-          $__5; !($__5 = $__4.next()).done; ) {
-        var item = $__5.value;
+      for (var $__15 = iterable[Symbol.iterator](),
+          $__16; !($__16 = $__15.next()).done; ) {
+        var item = $__16.value;
         {
           this.add(item);
         }
@@ -1858,72 +1501,72 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Set.js", [],
     },
     forEach: function(callbackFn) {
       var thisArg = arguments[1];
-      var $__2 = this;
+      var $__13 = this;
       return this.map_.forEach((function(value, key) {
-        callbackFn.call(thisArg, key, key, $__2);
+        callbackFn.call(thisArg, key, key, $__13);
       }));
     },
-    values: $traceurRuntime.initGeneratorFunction(function $__7() {
-      var $__8,
-          $__9;
+    values: $traceurRuntime.initGeneratorFunction(function $__18() {
+      var $__19,
+          $__20;
       return $traceurRuntime.createGeneratorInstance(function($ctx) {
         while (true)
           switch ($ctx.state) {
             case 0:
-              $__8 = this.map_.keys()[Symbol.iterator]();
+              $__19 = this.map_.keys()[Symbol.iterator]();
               $ctx.sent = void 0;
               $ctx.action = 'next';
               $ctx.state = 12;
               break;
             case 12:
-              $__9 = $__8[$ctx.action]($ctx.sentIgnoreThrow);
+              $__20 = $__19[$ctx.action]($ctx.sentIgnoreThrow);
               $ctx.state = 9;
               break;
             case 9:
-              $ctx.state = ($__9.done) ? 3 : 2;
+              $ctx.state = ($__20.done) ? 3 : 2;
               break;
             case 3:
-              $ctx.sent = $__9.value;
+              $ctx.sent = $__20.value;
               $ctx.state = -2;
               break;
             case 2:
               $ctx.state = 12;
-              return $__9.value;
+              return $__20.value;
             default:
               return $ctx.end();
           }
-      }, $__7, this);
+      }, $__18, this);
     }),
-    entries: $traceurRuntime.initGeneratorFunction(function $__10() {
-      var $__11,
-          $__12;
+    entries: $traceurRuntime.initGeneratorFunction(function $__21() {
+      var $__22,
+          $__23;
       return $traceurRuntime.createGeneratorInstance(function($ctx) {
         while (true)
           switch ($ctx.state) {
             case 0:
-              $__11 = this.map_.entries()[Symbol.iterator]();
+              $__22 = this.map_.entries()[Symbol.iterator]();
               $ctx.sent = void 0;
               $ctx.action = 'next';
               $ctx.state = 12;
               break;
             case 12:
-              $__12 = $__11[$ctx.action]($ctx.sentIgnoreThrow);
+              $__23 = $__22[$ctx.action]($ctx.sentIgnoreThrow);
               $ctx.state = 9;
               break;
             case 9:
-              $ctx.state = ($__12.done) ? 3 : 2;
+              $ctx.state = ($__23.done) ? 3 : 2;
               break;
             case 3:
-              $ctx.sent = $__12.value;
+              $ctx.sent = $__23.value;
               $ctx.state = -2;
               break;
             case 2:
               $ctx.state = 12;
-              return $__12.value;
+              return $__23.value;
             default:
               return $ctx.end();
           }
-      }, $__10, this);
+      }, $__21, this);
     })
   }, {});
   Object.defineProperty(Set.prototype, Symbol.iterator, {
@@ -1937,9 +1580,9 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Set.js", [],
     value: Set.prototype.values
   });
   function polyfillSet(global) {
-    var $__6 = global,
-        Object = $__6.Object,
-        Symbol = $__6.Symbol;
+    var $__17 = global,
+        Object = $__17.Object,
+        Symbol = $__17.Symbol;
     if (!global.Set)
       global.Set = Set;
     var setPrototype = global.Set.prototype;
@@ -1960,10 +1603,10 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Set.js", [],
     }
   };
 });
-System.get("traceur-runtime@0.0.79/src/runtime/polyfills/Set.js" + '');
-System.registerModule("traceur-runtime@0.0.79/node_modules/rsvp/lib/rsvp/asap.js", [], function() {
+System.get("traceur-runtime@0.0.62/src/runtime/polyfills/Set" + '');
+System.register("traceur-runtime@0.0.62/node_modules/rsvp/lib/rsvp/asap", [], function() {
   "use strict";
-  var __moduleName = "traceur-runtime@0.0.79/node_modules/rsvp/lib/rsvp/asap.js";
+  var __moduleName = "traceur-runtime@0.0.62/node_modules/rsvp/lib/rsvp/asap";
   var len = 0;
   function asap(callback, arg) {
     queue[len] = callback;
@@ -2028,11 +1671,11 @@ System.registerModule("traceur-runtime@0.0.79/node_modules/rsvp/lib/rsvp/asap.js
       return $__default;
     }};
 });
-System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Promise.js", [], function() {
+System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Promise", [], function() {
   "use strict";
-  var __moduleName = "traceur-runtime@0.0.79/src/runtime/polyfills/Promise.js";
-  var async = System.get("traceur-runtime@0.0.79/node_modules/rsvp/lib/rsvp/asap.js").default;
-  var registerPolyfill = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/utils.js").registerPolyfill;
+  var __moduleName = "traceur-runtime@0.0.62/src/runtime/polyfills/Promise";
+  var async = System.get("traceur-runtime@0.0.62/node_modules/rsvp/lib/rsvp/asap").default;
+  var registerPolyfill = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/utils").registerPolyfill;
   var promiseRaw = {};
   function isPromise(x) {
     return x && typeof x === 'object' && x.status_ !== undefined;
@@ -2269,23 +1912,24 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Promise.js",
     }
   };
 });
-System.get("traceur-runtime@0.0.79/src/runtime/polyfills/Promise.js" + '');
-System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/StringIterator.js", [], function() {
+System.get("traceur-runtime@0.0.62/src/runtime/polyfills/Promise" + '');
+System.register("traceur-runtime@0.0.62/src/runtime/polyfills/StringIterator", [], function() {
   "use strict";
-  var $__2;
-  var __moduleName = "traceur-runtime@0.0.79/src/runtime/polyfills/StringIterator.js";
-  var $__0 = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/utils.js"),
-      createIteratorResultObject = $__0.createIteratorResultObject,
-      isObject = $__0.isObject;
-  var toProperty = $traceurRuntime.toProperty;
-  var hasOwnProperty = Object.prototype.hasOwnProperty;
+  var $__29;
+  var __moduleName = "traceur-runtime@0.0.62/src/runtime/polyfills/StringIterator";
+  var $__27 = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/utils"),
+      createIteratorResultObject = $__27.createIteratorResultObject,
+      isObject = $__27.isObject;
+  var $__30 = $traceurRuntime,
+      hasOwnProperty = $__30.hasOwnProperty,
+      toProperty = $__30.toProperty;
   var iteratedString = Symbol('iteratedString');
   var stringIteratorNextIndex = Symbol('stringIteratorNextIndex');
   var StringIterator = function StringIterator() {};
-  ($traceurRuntime.createClass)(StringIterator, ($__2 = {}, Object.defineProperty($__2, "next", {
+  ($traceurRuntime.createClass)(StringIterator, ($__29 = {}, Object.defineProperty($__29, "next", {
     value: function() {
       var o = this;
-      if (!isObject(o) || !hasOwnProperty.call(o, iteratedString)) {
+      if (!isObject(o) || !hasOwnProperty(o, iteratedString)) {
         throw new TypeError('this must be a StringIterator object');
       }
       var s = o[toProperty(iteratedString)];
@@ -2316,14 +1960,14 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/StringIterat
     configurable: true,
     enumerable: true,
     writable: true
-  }), Object.defineProperty($__2, Symbol.iterator, {
+  }), Object.defineProperty($__29, Symbol.iterator, {
     value: function() {
       return this;
     },
     configurable: true,
     enumerable: true,
     writable: true
-  }), $__2), {});
+  }), $__29), {});
   function createStringIterator(string) {
     var s = String(string);
     var iterator = Object.create(StringIterator.prototype);
@@ -2335,14 +1979,14 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/StringIterat
       return createStringIterator;
     }};
 });
-System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/String.js", [], function() {
+System.register("traceur-runtime@0.0.62/src/runtime/polyfills/String", [], function() {
   "use strict";
-  var __moduleName = "traceur-runtime@0.0.79/src/runtime/polyfills/String.js";
-  var createStringIterator = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/StringIterator.js").createStringIterator;
-  var $__1 = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/utils.js"),
-      maybeAddFunctions = $__1.maybeAddFunctions,
-      maybeAddIterator = $__1.maybeAddIterator,
-      registerPolyfill = $__1.registerPolyfill;
+  var __moduleName = "traceur-runtime@0.0.62/src/runtime/polyfills/String";
+  var createStringIterator = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/StringIterator").createStringIterator;
+  var $__32 = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/utils"),
+      maybeAddFunctions = $__32.maybeAddFunctions,
+      maybeAddIterator = $__32.maybeAddIterator,
+      registerPolyfill = $__32.registerPolyfill;
   var $toString = Object.prototype.toString;
   var $indexOf = String.prototype.indexOf;
   var $lastIndexOf = String.prototype.lastIndexOf;
@@ -2387,26 +2031,20 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/String.js", 
     }
     return $lastIndexOf.call(string, searchString, start) == start;
   }
-  function includes(search) {
+  function contains(search) {
     if (this == null) {
       throw TypeError();
     }
     var string = String(this);
-    if (search && $toString.call(search) == '[object RegExp]') {
-      throw TypeError();
-    }
     var stringLength = string.length;
     var searchString = String(search);
     var searchLength = searchString.length;
     var position = arguments.length > 1 ? arguments[1] : undefined;
     var pos = position ? Number(position) : 0;
-    if (pos != pos) {
+    if (isNaN(pos)) {
       pos = 0;
     }
     var start = Math.min(Math.max(pos, 0), stringLength);
-    if (searchLength + start > stringLength) {
-      return false;
-    }
     return $indexOf.call(string, searchString, pos) != -1;
   }
   function repeat(count) {
@@ -2500,7 +2138,7 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/String.js", 
   }
   function polyfillString(global) {
     var String = global.String;
-    maybeAddFunctions(String.prototype, ['codePointAt', codePointAt, 'endsWith', endsWith, 'includes', includes, 'repeat', repeat, 'startsWith', startsWith]);
+    maybeAddFunctions(String.prototype, ['codePointAt', codePointAt, 'contains', contains, 'endsWith', endsWith, 'startsWith', startsWith, 'repeat', repeat]);
     maybeAddFunctions(String, ['fromCodePoint', fromCodePoint, 'raw', raw]);
     maybeAddIterator(String.prototype, stringPrototypeIterator, Symbol);
   }
@@ -2512,8 +2150,8 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/String.js", 
     get endsWith() {
       return endsWith;
     },
-    get includes() {
-      return includes;
+    get contains() {
+      return contains;
     },
     get repeat() {
       return repeat;
@@ -2535,20 +2173,20 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/String.js", 
     }
   };
 });
-System.get("traceur-runtime@0.0.79/src/runtime/polyfills/String.js" + '');
-System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/ArrayIterator.js", [], function() {
+System.get("traceur-runtime@0.0.62/src/runtime/polyfills/String" + '');
+System.register("traceur-runtime@0.0.62/src/runtime/polyfills/ArrayIterator", [], function() {
   "use strict";
-  var $__2;
-  var __moduleName = "traceur-runtime@0.0.79/src/runtime/polyfills/ArrayIterator.js";
-  var $__0 = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/utils.js"),
-      toObject = $__0.toObject,
-      toUint32 = $__0.toUint32,
-      createIteratorResultObject = $__0.createIteratorResultObject;
+  var $__36;
+  var __moduleName = "traceur-runtime@0.0.62/src/runtime/polyfills/ArrayIterator";
+  var $__34 = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/utils"),
+      toObject = $__34.toObject,
+      toUint32 = $__34.toUint32,
+      createIteratorResultObject = $__34.createIteratorResultObject;
   var ARRAY_ITERATOR_KIND_KEYS = 1;
   var ARRAY_ITERATOR_KIND_VALUES = 2;
   var ARRAY_ITERATOR_KIND_ENTRIES = 3;
   var ArrayIterator = function ArrayIterator() {};
-  ($traceurRuntime.createClass)(ArrayIterator, ($__2 = {}, Object.defineProperty($__2, "next", {
+  ($traceurRuntime.createClass)(ArrayIterator, ($__36 = {}, Object.defineProperty($__36, "next", {
     value: function() {
       var iterator = toObject(this);
       var array = iterator.iteratorObject_;
@@ -2572,14 +2210,14 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/ArrayIterato
     configurable: true,
     enumerable: true,
     writable: true
-  }), Object.defineProperty($__2, Symbol.iterator, {
+  }), Object.defineProperty($__36, Symbol.iterator, {
     value: function() {
       return this;
     },
     configurable: true,
     enumerable: true,
     writable: true
-  }), $__2), {});
+  }), $__36), {});
   function createArrayIterator(array, kind) {
     var object = toObject(array);
     var iterator = new ArrayIterator;
@@ -2609,23 +2247,23 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/ArrayIterato
     }
   };
 });
-System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Array.js", [], function() {
+System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Array", [], function() {
   "use strict";
-  var __moduleName = "traceur-runtime@0.0.79/src/runtime/polyfills/Array.js";
-  var $__0 = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/ArrayIterator.js"),
-      entries = $__0.entries,
-      keys = $__0.keys,
-      values = $__0.values;
-  var $__1 = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/utils.js"),
-      checkIterable = $__1.checkIterable,
-      isCallable = $__1.isCallable,
-      isConstructor = $__1.isConstructor,
-      maybeAddFunctions = $__1.maybeAddFunctions,
-      maybeAddIterator = $__1.maybeAddIterator,
-      registerPolyfill = $__1.registerPolyfill,
-      toInteger = $__1.toInteger,
-      toLength = $__1.toLength,
-      toObject = $__1.toObject;
+  var __moduleName = "traceur-runtime@0.0.62/src/runtime/polyfills/Array";
+  var $__37 = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/ArrayIterator"),
+      entries = $__37.entries,
+      keys = $__37.keys,
+      values = $__37.values;
+  var $__38 = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/utils"),
+      checkIterable = $__38.checkIterable,
+      isCallable = $__38.isCallable,
+      isConstructor = $__38.isConstructor,
+      maybeAddFunctions = $__38.maybeAddFunctions,
+      maybeAddIterator = $__38.maybeAddIterator,
+      registerPolyfill = $__38.registerPolyfill,
+      toInteger = $__38.toInteger,
+      toLength = $__38.toLength,
+      toObject = $__38.toObject;
   function from(arrLike) {
     var mapFn = arguments[1];
     var thisArg = arguments[2];
@@ -2640,9 +2278,9 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Array.js", [
     }
     if (checkIterable(items)) {
       arr = isConstructor(C) ? new C() : [];
-      for (var $__2 = items[$traceurRuntime.toProperty(Symbol.iterator)](),
-          $__3; !($__3 = $__2.next()).done; ) {
-        var item = $__3.value;
+      for (var $__39 = items[Symbol.iterator](),
+          $__40; !($__40 = $__39.next()).done; ) {
+        var item = $__40.value;
         {
           if (mapping) {
             arr[k] = mapFn.call(thisArg, item, k);
@@ -2669,8 +2307,8 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Array.js", [
   }
   function of() {
     for (var items = [],
-        $__4 = 0; $__4 < arguments.length; $__4++)
-      items[$__4] = arguments[$__4];
+        $__41 = 0; $__41 < arguments.length; $__41++)
+      items[$__41] = arguments[$__41];
     var C = this;
     var len = items.length;
     var arr = isConstructor(C) ? new C(len) : new Array(len);
@@ -2712,18 +2350,20 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Array.js", [
       throw TypeError();
     }
     for (var i = 0; i < len; i++) {
-      var value = object[i];
-      if (predicate.call(thisArg, value, i, object)) {
-        return returnIndex ? i : value;
+      if (i in object) {
+        var value = object[i];
+        if (predicate.call(thisArg, value, i, object)) {
+          return returnIndex ? i : value;
+        }
       }
     }
     return returnIndex ? -1 : undefined;
   }
   function polyfillArray(global) {
-    var $__5 = global,
-        Array = $__5.Array,
-        Object = $__5.Object,
-        Symbol = $__5.Symbol;
+    var $__42 = global,
+        Array = $__42.Array,
+        Object = $__42.Object,
+        Symbol = $__42.Symbol;
     maybeAddFunctions(Array.prototype, ['entries', entries, 'keys', keys, 'values', values, 'fill', fill, 'find', find, 'findIndex', findIndex]);
     maybeAddFunctions(Array, ['from', from, 'of', of]);
     maybeAddIterator(Array.prototype, values, Symbol);
@@ -2753,19 +2393,19 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Array.js", [
     }
   };
 });
-System.get("traceur-runtime@0.0.79/src/runtime/polyfills/Array.js" + '');
-System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Object.js", [], function() {
+System.get("traceur-runtime@0.0.62/src/runtime/polyfills/Array" + '');
+System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Object", [], function() {
   "use strict";
-  var __moduleName = "traceur-runtime@0.0.79/src/runtime/polyfills/Object.js";
-  var $__0 = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/utils.js"),
-      maybeAddFunctions = $__0.maybeAddFunctions,
-      registerPolyfill = $__0.registerPolyfill;
-  var $__1 = $traceurRuntime,
-      defineProperty = $__1.defineProperty,
-      getOwnPropertyDescriptor = $__1.getOwnPropertyDescriptor,
-      getOwnPropertyNames = $__1.getOwnPropertyNames,
-      isPrivateName = $__1.isPrivateName,
-      keys = $__1.keys;
+  var __moduleName = "traceur-runtime@0.0.62/src/runtime/polyfills/Object";
+  var $__43 = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/utils"),
+      maybeAddFunctions = $__43.maybeAddFunctions,
+      registerPolyfill = $__43.registerPolyfill;
+  var $__44 = $traceurRuntime,
+      defineProperty = $__44.defineProperty,
+      getOwnPropertyDescriptor = $__44.getOwnPropertyDescriptor,
+      getOwnPropertyNames = $__44.getOwnPropertyNames,
+      keys = $__44.keys,
+      privateNames = $__44.privateNames;
   function is(left, right) {
     if (left === right)
       return left !== 0 || 1 / left === 1 / right;
@@ -2774,12 +2414,12 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Object.js", 
   function assign(target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i];
-      var props = source == null ? [] : keys(source);
+      var props = keys(source);
       var p,
           length = props.length;
       for (p = 0; p < length; p++) {
         var name = props[p];
-        if (isPrivateName(name))
+        if (privateNames[name])
           continue;
         target[name] = source[name];
       }
@@ -2793,7 +2433,7 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Object.js", 
         length = props.length;
     for (p = 0; p < length; p++) {
       var name = props[p];
-      if (isPrivateName(name))
+      if (privateNames[name])
         continue;
       descriptor = getOwnPropertyDescriptor(source, props[p]);
       defineProperty(target, props[p], descriptor);
@@ -2820,16 +2460,16 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Object.js", 
     }
   };
 });
-System.get("traceur-runtime@0.0.79/src/runtime/polyfills/Object.js" + '');
-System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Number.js", [], function() {
+System.get("traceur-runtime@0.0.62/src/runtime/polyfills/Object" + '');
+System.register("traceur-runtime@0.0.62/src/runtime/polyfills/Number", [], function() {
   "use strict";
-  var __moduleName = "traceur-runtime@0.0.79/src/runtime/polyfills/Number.js";
-  var $__0 = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/utils.js"),
-      isNumber = $__0.isNumber,
-      maybeAddConsts = $__0.maybeAddConsts,
-      maybeAddFunctions = $__0.maybeAddFunctions,
-      registerPolyfill = $__0.registerPolyfill,
-      toInteger = $__0.toInteger;
+  var __moduleName = "traceur-runtime@0.0.62/src/runtime/polyfills/Number";
+  var $__46 = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/utils"),
+      isNumber = $__46.isNumber,
+      maybeAddConsts = $__46.maybeAddConsts,
+      maybeAddFunctions = $__46.maybeAddFunctions,
+      registerPolyfill = $__46.registerPolyfill,
+      toInteger = $__46.toInteger;
   var $abs = Math.abs;
   var $isFinite = isFinite;
   var $isNaN = isNaN;
@@ -2888,12 +2528,12 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/Number.js", 
     }
   };
 });
-System.get("traceur-runtime@0.0.79/src/runtime/polyfills/Number.js" + '');
-System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/polyfills.js", [], function() {
+System.get("traceur-runtime@0.0.62/src/runtime/polyfills/Number" + '');
+System.register("traceur-runtime@0.0.62/src/runtime/polyfills/polyfills", [], function() {
   "use strict";
-  var __moduleName = "traceur-runtime@0.0.79/src/runtime/polyfills/polyfills.js";
-  var polyfillAll = System.get("traceur-runtime@0.0.79/src/runtime/polyfills/utils.js").polyfillAll;
-  polyfillAll(Reflect.global);
+  var __moduleName = "traceur-runtime@0.0.62/src/runtime/polyfills/polyfills";
+  var polyfillAll = System.get("traceur-runtime@0.0.62/src/runtime/polyfills/utils").polyfillAll;
+  polyfillAll(this);
   var setupGlobals = $traceurRuntime.setupGlobals;
   $traceurRuntime.setupGlobals = function(global) {
     setupGlobals(global);
@@ -2901,11 +2541,11 @@ System.registerModule("traceur-runtime@0.0.79/src/runtime/polyfills/polyfills.js
   };
   return {};
 });
-System.get("traceur-runtime@0.0.79/src/runtime/polyfills/polyfills.js" + '');
+System.get("traceur-runtime@0.0.62/src/runtime/polyfills/polyfills" + '');
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"_process":3,"path":2}],5:[function(require,module,exports){
+},{"_process":2}],4:[function(require,module,exports){
 /*global define:false */
 /**
  * Copyright 2013 Craig Campbell
@@ -3860,7 +3500,7 @@ System.get("traceur-runtime@0.0.79/src/runtime/polyfills/polyfills.js" + '');
     }
 }) (window, document);
 
-},{}],6:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 (function( factory ) {
 	if (typeof define !== 'undefined' && define.amd) {
 		define([], factory);
@@ -4237,10 +3877,10 @@ System.get("traceur-runtime@0.0.79/src/runtime/polyfills/polyfills.js" + '');
 	return exports;
 });
 
-},{}],7:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 module.exports={
   "name": "clappr",
-  "version": "0.0.76",
+  "version": "0.0.77",
   "description": "An extensible media player for the web",
   "main": "dist/clappr.min.js",
   "scripts": {
@@ -4264,13 +3904,13 @@ module.exports={
     "chai": "1.10.0",
     "compass-mixins": "0.12.3",
     "dotenv": "^0.4.0",
-    "es6ify": "~1.6.0",
+    "es6ify": "~1.4.0",
     "exorcist": "^0.1.6",
     "express": "^4.6.1",
     "express-alias": "0.4.0",
     "glob": "^4.0.2",
     "gulp": "^3.8.1",
-    "clappr-zepto": "latest",
+    "clappr-zepto": "0.0.3",
     "gulp-compressor": "^0.1.0",
     "gulp-jshint": "1.9.0",
     "gulp-livereload": "^2.1.0",
@@ -4309,7 +3949,7 @@ module.exports={
   }
 }
 
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 module.exports = {
@@ -4343,8 +3983,7 @@ module.exports = {
 };
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/base/jst.js
-},{"underscore":"underscore"}],9:[function(require,module,exports){
+},{"underscore":"underscore"}],8:[function(require,module,exports){
 "use strict";
 var $ = require('zepto');
 var _ = require('underscore');
@@ -4356,8 +3995,7 @@ var Styler = {getStyleFor: function(name, options) {
 module.exports = Styler;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/base/styler.js
-},{"./jst":8,"underscore":"underscore","zepto":"zepto"}],10:[function(require,module,exports){
+},{"./jst":7,"underscore":"underscore","zepto":"zepto"}],9:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var Browser = require('browser');
@@ -4484,15 +4122,14 @@ module.exports = {
 };
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/base/utils.js
-},{"browser":"browser","underscore":"underscore"}],11:[function(require,module,exports){
+},{"browser":"browser","underscore":"underscore"}],10:[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var Styler = require('../../base/styler');
 var _ = require('underscore');
 var Events = require('events');
 var Container = function Container(options) {
-  $traceurRuntime.superConstructor($Container).call(this, options);
+  $traceurRuntime.superCall(this, $Container.prototype, "constructor", [options]);
   this.playback = options.playback;
   this.settings = this.playback.settings;
   this.isReady = false;
@@ -4675,8 +4312,7 @@ var $Container = Container;
 module.exports = Container;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/components/container/container.js
-},{"../../base/styler":9,"events":"events","ui_object":"ui_object","underscore":"underscore"}],12:[function(require,module,exports){
+},{"../../base/styler":8,"events":"events","ui_object":"ui_object","underscore":"underscore"}],11:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var BaseObject = require('base_object');
@@ -4684,7 +4320,7 @@ var Container = require('container');
 var $ = require('zepto');
 var Events = require('events');
 var ContainerFactory = function ContainerFactory(options, loader) {
-  $traceurRuntime.superConstructor($ContainerFactory).call(this, options);
+  $traceurRuntime.superCall(this, $ContainerFactory.prototype, "constructor", [options]);
   this.options = options;
   this.loader = loader;
 };
@@ -4732,14 +4368,12 @@ var $ContainerFactory = ContainerFactory;
 module.exports = ContainerFactory;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/components/container_factory/container_factory.js
-},{"base_object":"base_object","container":"container","events":"events","underscore":"underscore","zepto":"zepto"}],13:[function(require,module,exports){
+},{"base_object":"base_object","container":"container","events":"events","underscore":"underscore","zepto":"zepto"}],12:[function(require,module,exports){
 "use strict";
 module.exports = require('./container_factory');
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/components/container_factory/index.js
-},{"./container_factory":12}],14:[function(require,module,exports){
+},{"./container_factory":11}],13:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('zepto');
@@ -4753,7 +4387,7 @@ var Mediator = require('mediator');
 var Events = require('events');
 var Core = function Core(options) {
   var $__0 = this;
-  $traceurRuntime.superConstructor($Core).call(this, options);
+  $traceurRuntime.superCall(this, $Core.prototype, "constructor", [options]);
   PlayerInfo.options = options;
   this.options = options;
   this.plugins = [];
@@ -4958,8 +4592,7 @@ var $Core = Core;
 module.exports = Core;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/components/core/core.js
-},{"../../base/styler":9,"../../base/utils":10,"../container_factory":13,"events":"events","media_control":"media_control","mediator":"mediator","player_info":"player_info","ui_object":"ui_object","underscore":"underscore","zepto":"zepto"}],15:[function(require,module,exports){
+},{"../../base/styler":8,"../../base/utils":9,"../container_factory":12,"events":"events","media_control":"media_control","mediator":"mediator","player_info":"player_info","ui_object":"ui_object","underscore":"underscore","zepto":"zepto"}],14:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var BaseObject = require('base_object');
@@ -4993,20 +4626,18 @@ var CoreFactory = function CoreFactory(player, loader) {
 module.exports = CoreFactory;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/components/core_factory/core_factory.js
-},{"base_object":"base_object","core":"core","underscore":"underscore"}],16:[function(require,module,exports){
+},{"base_object":"base_object","core":"core","underscore":"underscore"}],15:[function(require,module,exports){
 "use strict";
 module.exports = require('./core_factory');
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/components/core_factory/index.js
-},{"./core_factory":15}],17:[function(require,module,exports){
+},{"./core_factory":14}],16:[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var $ = require('zepto');
 var Player = require('../player');
 var IframePlayer = function IframePlayer(options) {
-  $traceurRuntime.superConstructor($IframePlayer).call(this, options);
+  $traceurRuntime.superCall(this, $IframePlayer.prototype, "constructor", [options]);
   this.options = options;
   this.createIframe();
 };
@@ -5049,20 +4680,17 @@ var $IframePlayer = IframePlayer;
 module.exports = IframePlayer;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/components/iframe_player/iframe_player.js
-},{"../player":22,"base_object":"base_object","zepto":"zepto"}],18:[function(require,module,exports){
+},{"../player":21,"base_object":"base_object","zepto":"zepto"}],17:[function(require,module,exports){
 "use strict";
 module.exports = require('./iframe_player');
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/components/iframe_player/index.js
-},{"./iframe_player":17}],19:[function(require,module,exports){
+},{"./iframe_player":16}],18:[function(require,module,exports){
 "use strict";
 module.exports = require('./loader');
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/components/loader/index.js
-},{"./loader":20}],20:[function(require,module,exports){
+},{"./loader":19}],19:[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var _ = require('underscore');
@@ -5082,7 +4710,7 @@ var ClickToPausePlugin = require('../../plugins/click_to_pause');
 var BackgroundButton = require('../../plugins/background_button');
 var DVRControls = require('../../plugins/dvr_controls');
 var Loader = function Loader(externalPlugins) {
-  $traceurRuntime.superConstructor($Loader).call(this);
+  $traceurRuntime.superCall(this, $Loader.prototype, "constructor", []);
   this.playbackPlugins = [FlashVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, HLSVideoPlayback, HTMLImgPlayback, NoOp];
   this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin];
   this.corePlugins = [BackgroundButton, DVRControls];
@@ -5117,8 +4745,7 @@ var $Loader = Loader;
 module.exports = Loader;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/components/loader/loader.js
-},{"../../playbacks/no_op":30,"../../plugins/background_button":33,"../../plugins/click_to_pause":35,"../../plugins/dvr_controls":37,"../../plugins/google_analytics":39,"../../plugins/spinner_three_bounce":43,"../../plugins/stats":45,"../../plugins/watermark":47,"base_object":"base_object","flash":"flash","hls":"hls","html5_audio":"html5_audio","html5_video":"html5_video","html_img":"html_img","player_info":"player_info","poster":"poster","underscore":"underscore"}],21:[function(require,module,exports){
+},{"../../playbacks/no_op":29,"../../plugins/background_button":32,"../../plugins/click_to_pause":34,"../../plugins/dvr_controls":36,"../../plugins/google_analytics":38,"../../plugins/spinner_three_bounce":42,"../../plugins/stats":44,"../../plugins/watermark":46,"base_object":"base_object","flash":"flash","hls":"hls","html5_audio":"html5_audio","html5_video":"html5_video","html_img":"html_img","player_info":"player_info","poster":"poster","underscore":"underscore"}],20:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('zepto');
@@ -5133,7 +4760,7 @@ var Events = require('events');
 require('mousetrap');
 var MediaControl = function MediaControl(options) {
   var $__0 = this;
-  $traceurRuntime.superConstructor($MediaControl).call(this, options);
+  $traceurRuntime.superCall(this, $MediaControl.prototype, "constructor", [options]);
   this.seekTime = new SeekTime(this);
   this.options = options;
   this.mute = this.options.mute;
@@ -5576,8 +5203,7 @@ var $MediaControl = MediaControl;
 module.exports = MediaControl;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/components/media_control/media_control.js
-},{"../../base/jst":8,"../../base/styler":9,"../../base/utils":10,"../seek_time":23,"events":"events","mediator":"mediator","mousetrap":5,"player_info":"player_info","ui_object":"ui_object","underscore":"underscore","zepto":"zepto"}],22:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"../../base/utils":9,"../seek_time":22,"events":"events","mediator":"mediator","mousetrap":4,"player_info":"player_info","ui_object":"ui_object","underscore":"underscore","zepto":"zepto"}],21:[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var CoreFactory = require('./core_factory');
@@ -5586,7 +5212,7 @@ var _ = require('underscore');
 var ScrollMonitor = require('scrollmonitor');
 var PlayerInfo = require('player_info');
 var Player = function Player(options) {
-  $traceurRuntime.superConstructor($Player).call(this, options);
+  $traceurRuntime.superCall(this, $Player.prototype, "constructor", [options]);
   window.p = this;
   var DEFAULT_OPTIONS = {persistConfig: true};
   this.options = _.extend(DEFAULT_OPTIONS, options);
@@ -5680,14 +5306,12 @@ var $Player = Player;
 module.exports = Player;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/components/player.js
-},{"./core_factory":16,"./loader":19,"base_object":"base_object","player_info":"player_info","scrollmonitor":6,"underscore":"underscore"}],23:[function(require,module,exports){
+},{"./core_factory":15,"./loader":18,"base_object":"base_object","player_info":"player_info","scrollmonitor":5,"underscore":"underscore"}],22:[function(require,module,exports){
 "use strict";
 module.exports = require('./seek_time');
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/components/seek_time/index.js
-},{"./seek_time":24}],24:[function(require,module,exports){
+},{"./seek_time":23}],23:[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var Styler = require('../../base/styler');
@@ -5695,7 +5319,7 @@ var JST = require('../../base/jst');
 var formatTime = require('../../base/utils').formatTime;
 var Events = require('events');
 var SeekTime = function SeekTime(mediaControl) {
-  $traceurRuntime.superConstructor($SeekTime).call(this);
+  $traceurRuntime.superCall(this, $SeekTime.prototype, "constructor", []);
   this.mediaControl = mediaControl;
   this.addEventListeners();
 };
@@ -5751,8 +5375,7 @@ var $SeekTime = SeekTime;
 module.exports = SeekTime;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/components/seek_time/seek_time.js
-},{"../../base/jst":8,"../../base/styler":9,"../../base/utils":10,"events":"events","ui_object":"ui_object"}],25:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"../../base/utils":9,"events":"events","ui_object":"ui_object"}],24:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
 var Styler = require('../../base/styler');
@@ -5766,21 +5389,15 @@ var Events = require('events');
 require('mousetrap');
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>';
 var Flash = function Flash(options) {
-  $traceurRuntime.superConstructor($Flash).call(this, options);
+  $traceurRuntime.superCall(this, $Flash.prototype, "constructor", [options]);
   this.src = options.src;
-  this.isRTMP = (this.src.indexOf("rtmp") > -1);
   this.defaultBaseSwfPath = "http://cdn.clappr.io/" + Clappr.version + "/assets/";
   this.swfPath = (options.swfBasePath || this.defaultBaseSwfPath) + "Player.swf";
   this.autoPlay = options.autoPlay;
   this.settings = {default: ['seekbar']};
-  if (this.isRTMP) {
-    this.settings.left = ["playstop"];
-    this.settings.right = ["fullscreen", "volume"];
-  } else {
-    this.settings.left = ["playpause", "position", "duration"];
-    this.settings.right = ["fullscreen", "volume"];
-    this.settings.seekEnabled = true;
-  }
+  this.settings.left = ["playpause", "position", "duration"];
+  this.settings.right = ["fullscreen", "volume"];
+  this.settings.seekEnabled = true;
   this.isReady = false;
   this.addListeners();
 };
@@ -5809,7 +5426,7 @@ var $Flash = Flash;
     this.trigger(Events.PLAYBACK_READY, this.name);
   },
   getPlaybackType: function() {
-    return this.isRTMP ? 'live' : 'vod';
+    return 'vod';
   },
   setupFirefox: function() {
     var $el = this.$('embed');
@@ -5835,7 +5452,7 @@ var $Flash = Flash;
     }.bind(this));
   },
   stopListening: function() {
-    $traceurRuntime.superConstructor($Flash).call(this);
+    $traceurRuntime.superCall(this, $Flash.prototype, "stopListening", []);
     Mediator.off(this.uniqueId + ':progress');
     Mediator.off(this.uniqueId + ':timeupdate');
     Mediator.off(this.uniqueId + ':statechanged');
@@ -5872,11 +5489,13 @@ var $Flash = Flash;
   firstPlay: function() {
     var $__0 = this;
     this.currentState = "PLAYING";
-    if (_.isFunction(this.el.playerPlay)) {
+    if (this.el.playerPlay) {
       this.el.playerPlay(this.src);
       this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, (function() {
         return $__0.checkInitialSeek();
       }));
+    } else {
+      this.listenToOnce(this, EVENTS.PLAYBACK_READY, this.firstPlay);
     }
   },
   checkInitialSeek: function() {
@@ -5956,9 +5575,7 @@ var $Flash = Flash;
   }
 }, {}, Playback);
 Flash.canPlay = function(resource) {
-  if (resource.indexOf('rtmp') > -1) {
-    return true;
-  } else if ((!Browser.isMobile && Browser.isFirefox) || Browser.isLegacyIE) {
+  if ((!Browser.isMobile && Browser.isFirefox) || Browser.isLegacyIE) {
     return _.isString(resource) && !!resource.match(/(.*)\.(mp4|mov|f4v|3gpp|3gp)/);
   } else {
     return _.isString(resource) && !!resource.match(/(.*)\.(mov|f4v|3gpp|3gp)/);
@@ -5967,8 +5584,7 @@ Flash.canPlay = function(resource) {
 module.exports = Flash;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/flash/flash.js
-},{"../../base/jst":8,"../../base/styler":9,"../../base/utils":10,"browser":"browser","events":"events","mediator":"mediator","mousetrap":5,"playback":"playback","underscore":"underscore","zepto":"zepto"}],26:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"../../base/utils":9,"browser":"browser","events":"events","mediator":"mediator","mousetrap":4,"playback":"playback","underscore":"underscore","zepto":"zepto"}],25:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
 var Styler = require('../../base/styler');
@@ -5979,7 +5595,7 @@ var Browser = require('browser');
 var Events = require('events');
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" class="hls-playback" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls="" width="100%" height="100%"><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>';
 var HLS = function HLS(options) {
-  $traceurRuntime.superConstructor($HLS).call(this, options);
+  $traceurRuntime.superCall(this, $HLS.prototype, "constructor", [options]);
   this.src = options.src;
   this.defaultBaseSwfPath = "http://cdn.clappr.io/" + Clappr.version + "/assets/";
   this.swfPath = (options.swfBasePath || this.defaultBaseSwfPath) + "HLSPlayer.swf";
@@ -6034,7 +5650,7 @@ var $HLS = HLS;
     }));
   },
   stopListening: function() {
-    $traceurRuntime.superConstructor($HLS).call(this);
+    $traceurRuntime.superCall(this, $HLS.prototype, "stopListening", []);
     Mediator.off(this.uniqueId + ':flashready');
     Mediator.off(this.uniqueId + ':timeupdate');
     Mediator.off(this.uniqueId + ':playbackstate');
@@ -6282,13 +5898,12 @@ HLS.canPlay = function(resource) {
 module.exports = HLS;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/hls/hls.js
-},{"../../base/jst":8,"../../base/styler":9,"browser":"browser","events":"events","mediator":"mediator","playback":"playback","underscore":"underscore"}],27:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"browser":"browser","events":"events","mediator":"mediator","playback":"playback","underscore":"underscore"}],26:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
 var Events = require('events');
 var HTML5Audio = function HTML5Audio(params) {
-  $traceurRuntime.superConstructor($HTML5Audio).call(this, params);
+  $traceurRuntime.superCall(this, $HTML5Audio.prototype, "constructor", [params]);
   this.el.src = params.src;
   this.settings = {
     left: ['playpause', 'position', 'duration'],
@@ -6380,8 +5995,7 @@ HTML5Audio.canPlay = function(resource) {
 module.exports = HTML5Audio;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/html5_audio/html5_audio.js
-},{"events":"events","playback":"playback"}],28:[function(require,module,exports){
+},{"events":"events","playback":"playback"}],27:[function(require,module,exports){
 (function (process){
 "use strict";
 var Playback = require('playback');
@@ -6393,7 +6007,7 @@ var Events = require('events');
 var _ = require('underscore');
 require('mousetrap');
 var HTML5Video = function HTML5Video(options) {
-  $traceurRuntime.superConstructor($HTML5Video).call(this, options);
+  $traceurRuntime.superCall(this, $HTML5Video.prototype, "constructor", [options]);
   this.options = options;
   this.src = options.src;
   this.el.src = options.src;
@@ -6594,17 +6208,16 @@ HTML5Video.canPlay = function(resource) {
 module.exports = HTML5Video;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/html5_video/html5_video.js
 }).call(this,require('_process'))
 
-},{"../../base/jst":8,"../../base/styler":9,"../../base/utils":10,"_process":3,"browser":"browser","events":"events","mousetrap":5,"playback":"playback","underscore":"underscore"}],29:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"../../base/utils":9,"_process":2,"browser":"browser","events":"events","mousetrap":4,"playback":"playback","underscore":"underscore"}],28:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var Events = require('events');
 var HTMLImg = function HTMLImg(params) {
-  $traceurRuntime.superConstructor($HTMLImg).call(this, params);
+  $traceurRuntime.superCall(this, $HTMLImg.prototype, "constructor", [params]);
   this.el.src = params.src;
   setTimeout(function() {
     this.trigger(Events.PLAYBACK_BUFFERFULL, this.name);
@@ -6636,20 +6249,18 @@ HTMLImg.canPlay = function(resource) {
 module.exports = HTMLImg;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/html_img/html_img.js
-},{"../../base/jst":8,"../../base/styler":9,"events":"events","playback":"playback"}],30:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"events":"events","playback":"playback"}],29:[function(require,module,exports){
 "use strict";
 module.exports = require('./no_op');
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/no_op/index.js
-},{"./no_op":31}],31:[function(require,module,exports){
+},{"./no_op":30}],30:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
 var JST = require('../../base/jst');
 var Styler = require('../../base/styler');
 var NoOp = function NoOp(options) {
-  $traceurRuntime.superConstructor($NoOp).call(this, options);
+  $traceurRuntime.superCall(this, $NoOp.prototype, "constructor", [options]);
 };
 var $NoOp = NoOp;
 ($traceurRuntime.createClass)(NoOp, {
@@ -6675,8 +6286,7 @@ NoOp.canPlay = (function(source) {
 module.exports = NoOp;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/no_op/no_op.js
-},{"../../base/jst":8,"../../base/styler":9,"playback":"playback"}],32:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"playback":"playback"}],31:[function(require,module,exports){
 (function (process){
 "use strict";
 var UICorePlugin = require('ui_core_plugin');
@@ -6687,7 +6297,7 @@ var Browser = require('browser');
 var Mediator = require('mediator');
 var PlayerInfo = require('player_info');
 var BackgroundButton = function BackgroundButton(core) {
-  $traceurRuntime.superConstructor($BackgroundButton).call(this, core);
+  $traceurRuntime.superCall(this, $BackgroundButton.prototype, "constructor", [core]);
   this.core = core;
   this.settingsUpdate();
 };
@@ -6718,7 +6328,7 @@ var $BackgroundButton = BackgroundButton;
     Mediator.on(Events.PLAYER_RESIZE, this.updateSize, this);
   },
   stopListening: function() {
-    $traceurRuntime.superConstructor($BackgroundButton).call(this);
+    $traceurRuntime.superCall(this, $BackgroundButton.prototype, "stopListening", []);
     Mediator.off(Events.PLAYER_RESIZE, this.updateSize, this);
   },
   settingsUpdate: function() {
@@ -6760,11 +6370,11 @@ var $BackgroundButton = BackgroundButton;
   },
   enable: function() {
     this.stopListening();
-    $traceurRuntime.superConstructor($BackgroundButton).call(this);
+    $traceurRuntime.superCall(this, $BackgroundButton.prototype, "enable", []);
     this.settingsUpdate();
   },
   disable: function() {
-    $traceurRuntime.superConstructor($BackgroundButton).call(this);
+    $traceurRuntime.superCall(this, $BackgroundButton.prototype, "disable", []);
     this.$playPauseButton.show();
     this.$playStopButton.show();
   },
@@ -6815,21 +6425,19 @@ var $BackgroundButton = BackgroundButton;
 module.exports = BackgroundButton;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/background_button/background_button.js
 }).call(this,require('_process'))
 
-},{"../../base/jst":8,"../../base/styler":9,"_process":3,"browser":"browser","events":"events","mediator":"mediator","player_info":"player_info","ui_core_plugin":"ui_core_plugin"}],33:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"_process":2,"browser":"browser","events":"events","mediator":"mediator","player_info":"player_info","ui_core_plugin":"ui_core_plugin"}],32:[function(require,module,exports){
 "use strict";
 module.exports = require('./background_button');
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/background_button/index.js
-},{"./background_button":32}],34:[function(require,module,exports){
+},{"./background_button":31}],33:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('container_plugin');
 var Events = require('events');
 var ClickToPausePlugin = function ClickToPausePlugin() {
-  $traceurRuntime.superConstructor($ClickToPausePlugin).apply(this, arguments);
+  $traceurRuntime.defaultSuperCall(this, $ClickToPausePlugin.prototype, arguments);
 };
 var $ClickToPausePlugin = ClickToPausePlugin;
 ($traceurRuntime.createClass)(ClickToPausePlugin, {
@@ -6859,21 +6467,19 @@ var $ClickToPausePlugin = ClickToPausePlugin;
 module.exports = ClickToPausePlugin;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/click_to_pause/click_to_pause.js
-},{"container_plugin":"container_plugin","events":"events"}],35:[function(require,module,exports){
+},{"container_plugin":"container_plugin","events":"events"}],34:[function(require,module,exports){
 "use strict";
 module.exports = require('./click_to_pause');
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/click_to_pause/index.js
-},{"./click_to_pause":34}],36:[function(require,module,exports){
+},{"./click_to_pause":33}],35:[function(require,module,exports){
 "use strict";
 var UICorePlugin = require('ui_core_plugin');
 var JST = require('../../base/jst');
 var Styler = require('../../base/styler');
 var Events = require('events');
 var DVRControls = function DVRControls(core) {
-  $traceurRuntime.superConstructor($DVRControls).call(this, core);
+  $traceurRuntime.superCall(this, $DVRControls.prototype, "constructor", [core]);
   this.core = core;
   this.settingsUpdate();
 };
@@ -6950,19 +6556,17 @@ var $DVRControls = DVRControls;
 module.exports = DVRControls;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/dvr_controls/dvr_controls.js
-},{"../../base/jst":8,"../../base/styler":9,"events":"events","ui_core_plugin":"ui_core_plugin"}],37:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"events":"events","ui_core_plugin":"ui_core_plugin"}],36:[function(require,module,exports){
 "use strict";
 module.exports = require('./dvr_controls');
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/dvr_controls/index.js
-},{"./dvr_controls":36}],38:[function(require,module,exports){
+},{"./dvr_controls":35}],37:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('container_plugin');
 var Events = require('events');
 var GoogleAnalytics = function GoogleAnalytics(options) {
-  $traceurRuntime.superConstructor($GoogleAnalytics).call(this, options);
+  $traceurRuntime.superCall(this, $GoogleAnalytics.prototype, "constructor", [options]);
   if (options.gaAccount) {
     this.embedScript();
     this.account = options.gaAccount;
@@ -7067,20 +6671,17 @@ var $GoogleAnalytics = GoogleAnalytics;
 module.exports = GoogleAnalytics;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/google_analytics/google_analytics.js
-},{"container_plugin":"container_plugin","events":"events"}],39:[function(require,module,exports){
+},{"container_plugin":"container_plugin","events":"events"}],38:[function(require,module,exports){
 "use strict";
 module.exports = require('./google_analytics');
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/google_analytics/index.js
-},{"./google_analytics":38}],40:[function(require,module,exports){
+},{"./google_analytics":37}],39:[function(require,module,exports){
 "use strict";
 module.exports = require('./log');
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/log/index.js
-},{"./log":41}],41:[function(require,module,exports){
+},{"./log":40}],40:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 require('mousetrap');
@@ -7132,8 +6733,7 @@ Log.getInstance = function() {
 module.exports = Log;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/log/log.js
-},{"mousetrap":5,"underscore":"underscore"}],42:[function(require,module,exports){
+},{"mousetrap":4,"underscore":"underscore"}],41:[function(require,module,exports){
 (function (process){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
@@ -7145,7 +6745,7 @@ var PlayerInfo = require('player_info');
 var $ = require('zepto');
 var _ = require('underscore');
 var PosterPlugin = function PosterPlugin(options) {
-  $traceurRuntime.superConstructor($PosterPlugin).call(this, options);
+  $traceurRuntime.superCall(this, $PosterPlugin.prototype, "constructor", [options]);
   this.options = options;
   _.defaults(this.options, {disableControlsOnPoster: true});
   if (this.options.disableControlsOnPoster) {
@@ -7178,7 +6778,7 @@ var $PosterPlugin = PosterPlugin;
     Mediator.on(Events.PLAYER_RESIZE, this.updateSize, this);
   },
   stopListening: function() {
-    $traceurRuntime.superConstructor($PosterPlugin).call(this);
+    $traceurRuntime.superCall(this, $PosterPlugin.prototype, "stopListening", []);
     Mediator.off(Events.PLAYER_RESIZE, this.updateSize, this);
   },
   onBuffering: function() {
@@ -7249,23 +6849,21 @@ var $PosterPlugin = PosterPlugin;
 module.exports = PosterPlugin;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/poster/poster.js
 }).call(this,require('_process'))
 
-},{"../../base/jst":8,"../../base/styler":9,"_process":3,"events":"events","mediator":"mediator","player_info":"player_info","ui_container_plugin":"ui_container_plugin","underscore":"underscore","zepto":"zepto"}],43:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"_process":2,"events":"events","mediator":"mediator","player_info":"player_info","ui_container_plugin":"ui_container_plugin","underscore":"underscore","zepto":"zepto"}],42:[function(require,module,exports){
 "use strict";
 module.exports = require('./spinner_three_bounce');
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/spinner_three_bounce/index.js
-},{"./spinner_three_bounce":44}],44:[function(require,module,exports){
+},{"./spinner_three_bounce":43}],43:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var Events = require('events');
 var SpinnerThreeBouncePlugin = function SpinnerThreeBouncePlugin(options) {
-  $traceurRuntime.superConstructor($SpinnerThreeBouncePlugin).call(this, options);
+  $traceurRuntime.superCall(this, $SpinnerThreeBouncePlugin.prototype, "constructor", [options]);
   this.template = JST.spinner_three_bounce;
   this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering);
   this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferFull);
@@ -7304,20 +6902,18 @@ var $SpinnerThreeBouncePlugin = SpinnerThreeBouncePlugin;
 module.exports = SpinnerThreeBouncePlugin;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/spinner_three_bounce/spinner_three_bounce.js
-},{"../../base/jst":8,"../../base/styler":9,"events":"events","ui_container_plugin":"ui_container_plugin"}],45:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"events":"events","ui_container_plugin":"ui_container_plugin"}],44:[function(require,module,exports){
 "use strict";
 module.exports = require('./stats');
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/stats/index.js
-},{"./stats":46}],46:[function(require,module,exports){
+},{"./stats":45}],45:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('container_plugin');
 var $ = require("zepto");
 var Events = require('events');
 var StatsPlugin = function StatsPlugin(options) {
-  $traceurRuntime.superConstructor($StatsPlugin).call(this, options);
+  $traceurRuntime.superCall(this, $StatsPlugin.prototype, "constructor", [options]);
   this.setInitialAttrs();
   this.reportInterval = options.reportInterval || 5000;
   this.state = "IDLE";
@@ -7407,21 +7003,19 @@ var $StatsPlugin = StatsPlugin;
 module.exports = StatsPlugin;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/stats/stats.js
-},{"container_plugin":"container_plugin","events":"events","zepto":"zepto"}],47:[function(require,module,exports){
+},{"container_plugin":"container_plugin","events":"events","zepto":"zepto"}],46:[function(require,module,exports){
 "use strict";
 module.exports = require('./watermark');
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/watermark/index.js
-},{"./watermark":48}],48:[function(require,module,exports){
+},{"./watermark":47}],47:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var Events = require('events');
 var WaterMarkPlugin = function WaterMarkPlugin(options) {
-  $traceurRuntime.superConstructor($WaterMarkPlugin).call(this, options);
+  $traceurRuntime.superCall(this, $WaterMarkPlugin.prototype, "constructor", [options]);
   this.template = JST[this.name];
   this.position = options.position || "bottom-right";
   if (options.watermark) {
@@ -7463,8 +7057,7 @@ var $WaterMarkPlugin = WaterMarkPlugin;
 module.exports = WaterMarkPlugin;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/watermark/watermark.js
-},{"../../base/jst":8,"../../base/styler":9,"events":"events","ui_container_plugin":"ui_container_plugin"}],"base_object":[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"events":"events","ui_container_plugin":"ui_container_plugin"}],"base_object":[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var extend = require('./utils').extend;
@@ -7480,8 +7073,7 @@ BaseObject.extend = extend;
 module.exports = BaseObject;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/base/base_object.js
-},{"./utils":10,"events":"events","underscore":"underscore"}],"browser":[function(require,module,exports){
+},{"./utils":9,"events":"events","underscore":"underscore"}],"browser":[function(require,module,exports){
 "use strict";
 var Browser = function Browser() {};
 ($traceurRuntime.createClass)(Browser, {}, {});
@@ -7508,12 +7100,11 @@ Browser.hasLocalstorage = hasLocalstorage();
 module.exports = Browser;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/components/browser.js
 },{}],"container_plugin":[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var ContainerPlugin = function ContainerPlugin(options) {
-  $traceurRuntime.superConstructor($ContainerPlugin).call(this, options);
+  $traceurRuntime.superCall(this, $ContainerPlugin.prototype, "constructor", [options]);
   this.bindEvents();
 };
 var $ContainerPlugin = ContainerPlugin;
@@ -7532,18 +7123,16 @@ var $ContainerPlugin = ContainerPlugin;
 module.exports = ContainerPlugin;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/base/container_plugin.js
 },{"base_object":"base_object"}],"container":[function(require,module,exports){
 "use strict";
 module.exports = require('./container');
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/components/container/index.js
-},{"./container":11}],"core_plugin":[function(require,module,exports){
+},{"./container":10}],"core_plugin":[function(require,module,exports){
 "use strict";
 var BaseObject = require('base_object');
 var CorePlugin = function CorePlugin(core) {
-  $traceurRuntime.superConstructor($CorePlugin).call(this, core);
+  $traceurRuntime.superCall(this, $CorePlugin.prototype, "constructor", [core]);
   this.core = core;
 };
 var $CorePlugin = CorePlugin;
@@ -7556,14 +7145,12 @@ var $CorePlugin = CorePlugin;
 module.exports = CorePlugin;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/base/core_plugin.js
 },{"base_object":"base_object"}],"core":[function(require,module,exports){
 "use strict";
 module.exports = require('./core');
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/components/core/index.js
-},{"./core":14}],"events":[function(require,module,exports){
+},{"./core":13}],"events":[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var Log = require('../plugins/log').getInstance();
@@ -7782,44 +7369,37 @@ Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged';
 module.exports = Events;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/base/events.js
-},{"../plugins/log":40,"underscore":"underscore"}],"flash":[function(require,module,exports){
+},{"../plugins/log":39,"underscore":"underscore"}],"flash":[function(require,module,exports){
 "use strict";
 module.exports = require('./flash');
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/flash/index.js
-},{"./flash":25}],"hls":[function(require,module,exports){
+},{"./flash":24}],"hls":[function(require,module,exports){
 "use strict";
 module.exports = require('./hls');
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/hls/index.js
-},{"./hls":26}],"html5_audio":[function(require,module,exports){
+},{"./hls":25}],"html5_audio":[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_audio');
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/html5_audio/index.js
-},{"./html5_audio":27}],"html5_video":[function(require,module,exports){
+},{"./html5_audio":26}],"html5_video":[function(require,module,exports){
 "use strict";
 module.exports = require('./html5_video');
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/html5_video/index.js
-},{"./html5_video":28}],"html_img":[function(require,module,exports){
+},{"./html5_video":27}],"html_img":[function(require,module,exports){
 "use strict";
 module.exports = require('./html_img');
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/playbacks/html_img/index.js
-},{"./html_img":29}],"media_control":[function(require,module,exports){
+},{"./html_img":28}],"media_control":[function(require,module,exports){
 "use strict";
 module.exports = require('./media_control');
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/components/media_control/index.js
-},{"./media_control":21}],"mediator":[function(require,module,exports){
+},{"./media_control":20}],"mediator":[function(require,module,exports){
 "use strict";
 var Events = require('events');
 var events = new Events();
@@ -7848,12 +7428,11 @@ Mediator.stopListening = function(obj, name, callback) {
 module.exports = Mediator;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/components/mediator.js
 },{"events":"events"}],"playback":[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var Playback = function Playback(options) {
-  $traceurRuntime.superConstructor($Playback).call(this, options);
+  $traceurRuntime.superCall(this, $Playback.prototype, "constructor", [options]);
   this.settings = {};
 };
 var $Playback = Playback;
@@ -7885,7 +7464,6 @@ Playback.canPlay = (function(source) {
 module.exports = Playback;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/base/playback.js
 },{"ui_object":"ui_object"}],"player_info":[function(require,module,exports){
 "use strict";
 var PlayerInfo = {
@@ -7899,18 +7477,16 @@ var PlayerInfo = {
 module.exports = PlayerInfo;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/components/player_info.js
 },{}],"poster":[function(require,module,exports){
 "use strict";
 module.exports = require('./poster');
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/plugins/poster/index.js
-},{"./poster":42}],"ui_container_plugin":[function(require,module,exports){
+},{"./poster":41}],"ui_container_plugin":[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var UIContainerPlugin = function UIContainerPlugin(options) {
-  $traceurRuntime.superConstructor($UIContainerPlugin).call(this, options);
+  $traceurRuntime.superCall(this, $UIContainerPlugin.prototype, "constructor", [options]);
   this.enabled = true;
   this.bindEvents();
 };
@@ -7934,12 +7510,11 @@ var $UIContainerPlugin = UIContainerPlugin;
 module.exports = UIContainerPlugin;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/base/ui_container_plugin.js
 },{"ui_object":"ui_object"}],"ui_core_plugin":[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var UICorePlugin = function UICorePlugin(core) {
-  $traceurRuntime.superConstructor($UICorePlugin).call(this, core);
+  $traceurRuntime.superCall(this, $UICorePlugin.prototype, "constructor", [core]);
   this.core = core;
   this.enabled = true;
   this.bindEvents();
@@ -7974,7 +7549,6 @@ var $UICorePlugin = UICorePlugin;
 module.exports = UICorePlugin;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/base/ui_core_plugin.js
 },{"ui_object":"ui_object"}],"ui_object":[function(require,module,exports){
 "use strict";
 var $ = require('zepto');
@@ -7983,7 +7557,7 @@ var extend = require('./utils').extend;
 var BaseObject = require('base_object');
 var delegateEventSplitter = /^(\S+)\s*(.*)$/;
 var UIObject = function UIObject(options) {
-  $traceurRuntime.superConstructor($UIObject).call(this, options);
+  $traceurRuntime.superCall(this, $UIObject.prototype, "constructor", [options]);
   this.cid = _.uniqueId('c');
   this._ensureElement();
   this.delegateEvents();
@@ -8058,8 +7632,7 @@ UIObject.extend = extend;
 module.exports = UIObject;
 
 
-//# sourceURL=/Users/thiago/code/clappr-web/src/base/ui_object.js
-},{"./utils":10,"base_object":"base_object","underscore":"underscore","zepto":"zepto"}],"underscore":[function(require,module,exports){
+},{"./utils":9,"base_object":"base_object","underscore":"underscore","zepto":"zepto"}],"underscore":[function(require,module,exports){
 //     Underscore.js 1.7.0
 //     http://underscorejs.org
 //     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -9477,12 +9050,11 @@ module.exports = UIObject;
 }.call(this));
 
 },{}],"zepto":[function(require,module,exports){
-/* Zepto v1.1.4-67-g76e4233 - zepto deferred detect ajax touch selector event callbacks - zeptojs.com/license */
-var Zepto=function(){function k(t){return null==t?String(t):S[j.call(t)]||"object"}function D(t){return"function"==k(t)}function L(t){return null!=t&&t==t.window}function Z(t){return null!=t&&t.nodeType==t.DOCUMENT_NODE}function F(t){return"object"==k(t)}function $(t){return F(t)&&!L(t)&&Object.getPrototypeOf(t)==Object.prototype}function R(t){return"number"==typeof t.length}function _(t){return s.call(t,function(t){return null!=t})}function q(t){return t.length>0?n.fn.concat.apply([],t):t}function W(t){return t.replace(/::/g,"/").replace(/([A-Z]+)([A-Z][a-z])/g,"$1_$2").replace(/([a-z\d])([A-Z])/g,"$1_$2").replace(/_/g,"-").toLowerCase()}function B(t){return t in c?c[t]:c[t]=new RegExp("(^|\\s)"+t+"(\\s|$)")}function I(t,e){return"number"!=typeof e||l[W(t)]?e:e+"px"}function z(t){var e,n;return f[t]||(e=u.createElement(t),u.body.appendChild(e),n=getComputedStyle(e,"").getPropertyValue("display"),e.parentNode.removeChild(e),"none"==n&&(n="block"),f[t]=n),f[t]}function H(t){return"children"in t?a.call(t.children):n.map(t.childNodes,function(t){return 1==t.nodeType?t:void 0})}function V(t,e){var n,i=t?t.length:0;for(n=0;i>n;n++)this[n]=t[n];this.length=i,this.selector=e||""}function U(n,i,r){for(e in i)r&&($(i[e])||A(i[e]))?($(i[e])&&!$(n[e])&&(n[e]={}),A(i[e])&&!A(n[e])&&(n[e]=[]),U(n[e],i[e],r)):i[e]!==t&&(n[e]=i[e])}function X(t,e){return null==e?n(t):n(t).filter(e)}function Y(t,e,n,i){return D(e)?e.call(t,n,i):e}function J(t,e,n){null==n?t.removeAttribute(e):t.setAttribute(e,n)}function G(e,n){var i=e.className||"",r=i&&i.baseVal!==t;return n===t?r?i.baseVal:i:void(r?i.baseVal=n:e.className=n)}function K(t){try{return t?"true"==t||("false"==t?!1:"null"==t?null:+t+""==t?+t:/^[\[\{]/.test(t)?n.parseJSON(t):t):t}catch(e){return t}}function Q(t,e){e(t);for(var n=0,i=t.childNodes.length;i>n;n++)Q(t.childNodes[n],e)}var t,e,n,i,P,N,r=[],o=r.concat,s=r.filter,a=r.slice,u=window.document,f={},c={},l={"column-count":1,columns:1,"font-weight":1,"line-height":1,opacity:1,"z-index":1,zoom:1},h=/^\s*<(\w+|!)[^>]*>/,p=/^<(\w+)\s*\/?>(?:<\/\1>|)$/,d=/<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/gi,m=/^(?:body|html)$/i,g=/([A-Z])/g,v=["val","css","html","text","data","width","height","offset"],y=["after","prepend","before","append"],w=u.createElement("table"),b=u.createElement("tr"),x={tr:u.createElement("tbody"),tbody:w,thead:w,tfoot:w,td:b,th:b,"*":u.createElement("div")},T=/complete|loaded|interactive/,E=/^[\w-]*$/,S={},j=S.toString,C={},O=u.createElement("div"),M={tabindex:"tabIndex",readonly:"readOnly","for":"htmlFor","class":"className",maxlength:"maxLength",cellspacing:"cellSpacing",cellpadding:"cellPadding",rowspan:"rowSpan",colspan:"colSpan",usemap:"useMap",frameborder:"frameBorder",contenteditable:"contentEditable"},A=Array.isArray||function(t){return t instanceof Array};return C.matches=function(t,e){if(!e||!t||1!==t.nodeType)return!1;var n=t.webkitMatchesSelector||t.mozMatchesSelector||t.oMatchesSelector||t.matchesSelector;if(n)return n.call(t,e);var i,r=t.parentNode,o=!r;return o&&(r=O).appendChild(t),i=~C.qsa(r,e).indexOf(t),o&&O.removeChild(t),i},P=function(t){return t.replace(/-+(.)?/g,function(t,e){return e?e.toUpperCase():""})},N=function(t){return s.call(t,function(e,n){return t.indexOf(e)==n})},C.fragment=function(e,i,r){var o,s,f;return p.test(e)&&(o=n(u.createElement(RegExp.$1))),o||(e.replace&&(e=e.replace(d,"<$1></$2>")),i===t&&(i=h.test(e)&&RegExp.$1),i in x||(i="*"),f=x[i],f.innerHTML=""+e,o=n.each(a.call(f.childNodes),function(){f.removeChild(this)})),$(r)&&(s=n(o),n.each(r,function(t,e){v.indexOf(t)>-1?s[t](e):s.attr(t,e)})),o},C.Z=function(t,e){return new V(t,e)},C.isZ=function(t){return t instanceof C.Z},C.init=function(e,i){var r;if(!e)return C.Z();if("string"==typeof e)if(e=e.trim(),"<"==e[0]&&h.test(e))r=C.fragment(e,RegExp.$1,i),e=null;else{if(i!==t)return n(i).find(e);r=C.qsa(u,e)}else{if(D(e))return n(u).ready(e);if(C.isZ(e))return e;if(A(e))r=_(e);else if(F(e))r=[e],e=null;else if(h.test(e))r=C.fragment(e.trim(),RegExp.$1,i),e=null;else{if(i!==t)return n(i).find(e);r=C.qsa(u,e)}}return C.Z(r,e)},n=function(t,e){return C.init(t,e)},n.extend=function(t){var e,n=a.call(arguments,1);return"boolean"==typeof t&&(e=t,t=n.shift()),n.forEach(function(n){U(t,n,e)}),t},C.qsa=function(t,e){var n,i="#"==e[0],r=!i&&"."==e[0],o=i||r?e.slice(1):e,s=E.test(o);return t.getElementById&&s&&i?(n=t.getElementById(o))?[n]:[]:1!==t.nodeType&&9!==t.nodeType&&11!==t.nodeType?[]:a.call(s&&!i&&t.getElementsByClassName?r?t.getElementsByClassName(o):t.getElementsByTagName(e):t.querySelectorAll(e))},n.contains=u.documentElement.contains?function(t,e){return t!==e&&t.contains(e)}:function(t,e){for(;e&&(e=e.parentNode);)if(e===t)return!0;return!1},n.type=k,n.isFunction=D,n.isWindow=L,n.isArray=A,n.isPlainObject=$,n.isEmptyObject=function(t){var e;for(e in t)return!1;return!0},n.inArray=function(t,e,n){return r.indexOf.call(e,t,n)},n.camelCase=P,n.trim=function(t){return null==t?"":String.prototype.trim.call(t)},n.uuid=0,n.support={},n.expr={},n.noop=function(){},n.map=function(t,e){var n,r,o,i=[];if(R(t))for(r=0;r<t.length;r++)n=e(t[r],r),null!=n&&i.push(n);else for(o in t)n=e(t[o],o),null!=n&&i.push(n);return q(i)},n.each=function(t,e){var n,i;if(R(t)){for(n=0;n<t.length;n++)if(e.call(t[n],n,t[n])===!1)return t}else for(i in t)if(e.call(t[i],i,t[i])===!1)return t;return t},n.grep=function(t,e){return s.call(t,e)},window.JSON&&(n.parseJSON=JSON.parse),n.each("Boolean Number String Function Array Date RegExp Object Error".split(" "),function(t,e){S["[object "+e+"]"]=e.toLowerCase()}),n.fn={constructor:C.Z,length:0,forEach:r.forEach,reduce:r.reduce,push:r.push,sort:r.sort,splice:r.splice,indexOf:r.indexOf,concat:function(){var t,e,n=[];for(t=0;t<arguments.length;t++)e=arguments[t],n[t]=C.isZ(e)?e.toArray():e;return o.apply(C.isZ(this)?this.toArray():this,n)},map:function(t){return n(n.map(this,function(e,n){return t.call(e,n,e)}))},slice:function(){return n(a.apply(this,arguments))},ready:function(t){return T.test(u.readyState)&&u.body?t(n):u.addEventListener("DOMContentLoaded",function(){t(n)},!1),this},get:function(e){return e===t?a.call(this):this[e>=0?e:e+this.length]},toArray:function(){return this.get()},size:function(){return this.length},remove:function(){return this.each(function(){null!=this.parentNode&&this.parentNode.removeChild(this)})},each:function(t){return r.every.call(this,function(e,n){return t.call(e,n,e)!==!1}),this},filter:function(t){return D(t)?this.not(this.not(t)):n(s.call(this,function(e){return C.matches(e,t)}))},add:function(t,e){return n(N(this.concat(n(t,e))))},is:function(t){return this.length>0&&C.matches(this[0],t)},not:function(e){var i=[];if(D(e)&&e.call!==t)this.each(function(t){e.call(this,t)||i.push(this)});else{var r="string"==typeof e?this.filter(e):R(e)&&D(e.item)?a.call(e):n(e);this.forEach(function(t){r.indexOf(t)<0&&i.push(t)})}return n(i)},has:function(t){return this.filter(function(){return F(t)?n.contains(this,t):n(this).find(t).size()})},eq:function(t){return-1===t?this.slice(t):this.slice(t,+t+1)},first:function(){var t=this[0];return t&&!F(t)?t:n(t)},last:function(){var t=this[this.length-1];return t&&!F(t)?t:n(t)},find:function(t){var e,i=this;return e=t?"object"==typeof t?n(t).filter(function(){var t=this;return r.some.call(i,function(e){return n.contains(e,t)})}):1==this.length?n(C.qsa(this[0],t)):this.map(function(){return C.qsa(this,t)}):n()},closest:function(t,e){var i=this[0],r=!1;for("object"==typeof t&&(r=n(t));i&&!(r?r.indexOf(i)>=0:C.matches(i,t));)i=i!==e&&!Z(i)&&i.parentNode;return n(i)},parents:function(t){for(var e=[],i=this;i.length>0;)i=n.map(i,function(t){return(t=t.parentNode)&&!Z(t)&&e.indexOf(t)<0?(e.push(t),t):void 0});return X(e,t)},parent:function(t){return X(N(this.pluck("parentNode")),t)},children:function(t){return X(this.map(function(){return H(this)}),t)},contents:function(){return this.map(function(){return a.call(this.childNodes)})},siblings:function(t){return X(this.map(function(t,e){return s.call(H(e.parentNode),function(t){return t!==e})}),t)},empty:function(){return this.each(function(){this.innerHTML=""})},pluck:function(t){return n.map(this,function(e){return e[t]})},show:function(){return this.each(function(){"none"==this.style.display&&(this.style.display=""),"none"==getComputedStyle(this,"").getPropertyValue("display")&&(this.style.display=z(this.nodeName))})},replaceWith:function(t){return this.before(t).remove()},wrap:function(t){var e=D(t);if(this[0]&&!e)var i=n(t).get(0),r=i.parentNode||this.length>1;return this.each(function(o){n(this).wrapAll(e?t.call(this,o):r?i.cloneNode(!0):i)})},wrapAll:function(t){if(this[0]){n(this[0]).before(t=n(t));for(var e;(e=t.children()).length;)t=e.first();n(t).append(this)}return this},wrapInner:function(t){var e=D(t);return this.each(function(i){var r=n(this),o=r.contents(),s=e?t.call(this,i):t;o.length?o.wrapAll(s):r.append(s)})},unwrap:function(){return this.parent().each(function(){n(this).replaceWith(n(this).children())}),this},clone:function(){return this.map(function(){return this.cloneNode(!0)})},hide:function(){return this.css("display","none")},toggle:function(e){return this.each(function(){var i=n(this);(e===t?"none"==i.css("display"):e)?i.show():i.hide()})},prev:function(t){return n(this.pluck("previousElementSibling")).filter(t||"*")},next:function(t){return n(this.pluck("nextElementSibling")).filter(t||"*")},html:function(t){return 0 in arguments?this.each(function(e){var i=this.innerHTML;n(this).empty().append(Y(this,t,e,i))}):0 in this?this[0].innerHTML:null},text:function(t){return 0 in arguments?this.each(function(e){var n=Y(this,t,e,this.textContent);this.textContent=null==n?"":""+n}):0 in this?this[0].textContent:null},attr:function(n,i){var r;return"string"!=typeof n||1 in arguments?this.each(function(t){if(1===this.nodeType)if(F(n))for(e in n)J(this,e,n[e]);else J(this,n,Y(this,i,t,this.getAttribute(n)))}):this.length&&1===this[0].nodeType?!(r=this[0].getAttribute(n))&&n in this[0]?this[0][n]:r:t},removeAttr:function(t){return this.each(function(){1===this.nodeType&&t.split(" ").forEach(function(t){J(this,t)},this)})},prop:function(t,e){return t=M[t]||t,1 in arguments?this.each(function(n){this[t]=Y(this,e,n,this[t])}):this[0]&&this[0][t]},data:function(e,n){var i="data-"+e.replace(g,"-$1").toLowerCase(),r=1 in arguments?this.attr(i,n):this.attr(i);return null!==r?K(r):t},val:function(t){return 0 in arguments?this.each(function(e){this.value=Y(this,t,e,this.value)}):this[0]&&(this[0].multiple?n(this[0]).find("option").filter(function(){return this.selected}).pluck("value"):this[0].value)},offset:function(t){if(t)return this.each(function(e){var i=n(this),r=Y(this,t,e,i.offset()),o=i.offsetParent().offset(),s={top:r.top-o.top,left:r.left-o.left};"static"==i.css("position")&&(s.position="relative"),i.css(s)});if(!this.length)return null;var e=this[0].getBoundingClientRect();return{left:e.left+window.pageXOffset,top:e.top+window.pageYOffset,width:Math.round(e.width),height:Math.round(e.height)}},css:function(t,i){if(arguments.length<2){var r,o=this[0];if(!o)return;if(r=getComputedStyle(o,""),"string"==typeof t)return o.style[P(t)]||r.getPropertyValue(t);if(A(t)){var s={};return n.each(t,function(t,e){s[e]=o.style[P(e)]||r.getPropertyValue(e)}),s}}var a="";if("string"==k(t))i||0===i?a=W(t)+":"+I(t,i):this.each(function(){this.style.removeProperty(W(t))});else for(e in t)t[e]||0===t[e]?a+=W(e)+":"+I(e,t[e])+";":this.each(function(){this.style.removeProperty(W(e))});return this.each(function(){this.style.cssText+=";"+a})},index:function(t){return t?this.indexOf(n(t)[0]):this.parent().children().indexOf(this[0])},hasClass:function(t){return t?r.some.call(this,function(t){return this.test(G(t))},B(t)):!1},addClass:function(t){return t?this.each(function(e){if("className"in this){i=[];var r=G(this),o=Y(this,t,e,r);o.split(/\s+/g).forEach(function(t){n(this).hasClass(t)||i.push(t)},this),i.length&&G(this,r+(r?" ":"")+i.join(" "))}}):this},removeClass:function(e){return this.each(function(n){if("className"in this){if(e===t)return G(this,"");i=G(this),Y(this,e,n,i).split(/\s+/g).forEach(function(t){i=i.replace(B(t)," ")}),G(this,i.trim())}})},toggleClass:function(e,i){return e?this.each(function(r){var o=n(this),s=Y(this,e,r,G(this));s.split(/\s+/g).forEach(function(e){(i===t?!o.hasClass(e):i)?o.addClass(e):o.removeClass(e)})}):this},scrollTop:function(e){if(this.length){var n="scrollTop"in this[0];return e===t?n?this[0].scrollTop:this[0].pageYOffset:this.each(n?function(){this.scrollTop=e}:function(){this.scrollTo(this.scrollX,e)})}},scrollLeft:function(e){if(this.length){var n="scrollLeft"in this[0];return e===t?n?this[0].scrollLeft:this[0].pageXOffset:this.each(n?function(){this.scrollLeft=e}:function(){this.scrollTo(e,this.scrollY)})}},position:function(){if(this.length){var t=this[0],e=this.offsetParent(),i=this.offset(),r=m.test(e[0].nodeName)?{top:0,left:0}:e.offset();return i.top-=parseFloat(n(t).css("margin-top"))||0,i.left-=parseFloat(n(t).css("margin-left"))||0,r.top+=parseFloat(n(e[0]).css("border-top-width"))||0,r.left+=parseFloat(n(e[0]).css("border-left-width"))||0,{top:i.top-r.top,left:i.left-r.left}}},offsetParent:function(){return this.map(function(){for(var t=this.offsetParent||u.body;t&&!m.test(t.nodeName)&&"static"==n(t).css("position");)t=t.offsetParent;return t})}},n.fn.detach=n.fn.remove,["width","height"].forEach(function(e){var i=e.replace(/./,function(t){return t[0].toUpperCase()});n.fn[e]=function(r){var o,s=this[0];return r===t?L(s)?s["inner"+i]:Z(s)?s.documentElement["scroll"+i]:(o=this.offset())&&o[e]:this.each(function(t){s=n(this),s.css(e,Y(this,r,t,s[e]()))})}}),y.forEach(function(t,e){var i=e%2;n.fn[t]=function(){var t,o,r=n.map(arguments,function(e){return t=k(e),"object"==t||"array"==t||null==e?e:C.fragment(e)}),s=this.length>1;return r.length<1?this:this.each(function(t,a){o=i?a:a.parentNode,a=0==e?a.nextSibling:1==e?a.firstChild:2==e?a:null;var f=n.contains(u.documentElement,o);r.forEach(function(t){if(s)t=t.cloneNode(!0);else if(!o)return n(t).remove();o.insertBefore(t,a),f&&Q(t,function(t){null==t.nodeName||"SCRIPT"!==t.nodeName.toUpperCase()||t.type&&"text/javascript"!==t.type||t.src||window.eval.call(window,t.innerHTML)})})})},n.fn[i?t+"To":"insert"+(e?"Before":"After")]=function(e){return n(e)[t](this),this}}),C.Z.prototype=V.prototype=n.fn,C.uniq=N,C.deserializeValue=K,n.zepto=C,n}();window.Zepto=Zepto,void 0===window.$&&(window.$=Zepto),function(t){function n(e){var i=[["resolve","done",t.Callbacks({once:1,memory:1}),"resolved"],["reject","fail",t.Callbacks({once:1,memory:1}),"rejected"],["notify","progress",t.Callbacks({memory:1})]],r="pending",o={state:function(){return r},always:function(){return s.done(arguments).fail(arguments),this},then:function(){var e=arguments;return n(function(n){t.each(i,function(i,r){var a=t.isFunction(e[i])&&e[i];s[r[1]](function(){var e=a&&a.apply(this,arguments);if(e&&t.isFunction(e.promise))e.promise().done(n.resolve).fail(n.reject).progress(n.notify);else{var i=this===o?n.promise():this,s=a?[e]:arguments;n[r[0]+"With"](i,s)}})}),e=null}).promise()},promise:function(e){return null!=e?t.extend(e,o):o}},s={};return t.each(i,function(t,e){var n=e[2],a=e[3];o[e[1]]=n.add,a&&n.add(function(){r=a},i[1^t][2].disable,i[2][2].lock),s[e[0]]=function(){return s[e[0]+"With"](this===s?o:this,arguments),this},s[e[0]+"With"]=n.fireWith}),o.promise(s),e&&e.call(s,s),s}var e=Array.prototype.slice;t.when=function(i){var f,c,l,r=e.call(arguments),o=r.length,s=0,a=1!==o||i&&t.isFunction(i.promise)?o:0,u=1===a?i:n(),h=function(t,n,i){return function(r){n[t]=this,i[t]=arguments.length>1?e.call(arguments):r,i===f?u.notifyWith(n,i):--a||u.resolveWith(n,i)}};if(o>1)for(f=new Array(o),c=new Array(o),l=new Array(o);o>s;++s)r[s]&&t.isFunction(r[s].promise)?r[s].promise().done(h(s,l,r)).fail(u.reject).progress(h(s,c,f)):--a;return a||u.resolveWith(l,r),u.promise()},t.Deferred=n}(Zepto),function(t){function e(t,e){var n=this.os={},i=this.browser={},r=t.match(/Web[kK]it[\/]{0,1}([\d.]+)/),o=t.match(/(Android);?[\s\/]+([\d.]+)?/),s=!!t.match(/\(Macintosh\; Intel /),a=t.match(/(iPad).*OS\s([\d_]+)/),u=t.match(/(iPod)(.*OS\s([\d_]+))?/),f=!a&&t.match(/(iPhone\sOS)\s([\d_]+)/),c=t.match(/(webOS|hpwOS)[\s\/]([\d.]+)/),l=/Win\d{2}|Windows/.test(e),h=t.match(/Windows Phone ([\d.]+)/),p=c&&t.match(/TouchPad/),d=t.match(/Kindle\/([\d.]+)/),m=t.match(/Silk\/([\d._]+)/),g=t.match(/(BlackBerry).*Version\/([\d.]+)/),v=t.match(/(BB10).*Version\/([\d.]+)/),y=t.match(/(RIM\sTablet\sOS)\s([\d.]+)/),w=t.match(/PlayBook/),b=t.match(/Chrome\/([\d.]+)/)||t.match(/CriOS\/([\d.]+)/),x=t.match(/Firefox\/([\d.]+)/),T=t.match(/\((?:Mobile|Tablet); rv:([\d.]+)\).*Firefox\/[\d.]+/),E=t.match(/MSIE\s([\d.]+)/)||t.match(/Trident\/[\d](?=[^\?]+).*rv:([0-9.].)/),S=!b&&t.match(/(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/),j=S||t.match(/Version\/([\d.]+)([^S](Safari)|[^M]*(Mobile)[^S]*(Safari))/);(i.webkit=!!r)&&(i.version=r[1]),o&&(n.android=!0,n.version=o[2]),f&&!u&&(n.ios=n.iphone=!0,n.version=f[2].replace(/_/g,".")),a&&(n.ios=n.ipad=!0,n.version=a[2].replace(/_/g,".")),u&&(n.ios=n.ipod=!0,n.version=u[3]?u[3].replace(/_/g,"."):null),h&&(n.wp=!0,n.version=h[1]),c&&(n.webos=!0,n.version=c[2]),p&&(n.touchpad=!0),g&&(n.blackberry=!0,n.version=g[2]),v&&(n.bb10=!0,n.version=v[2]),y&&(n.rimtabletos=!0,n.version=y[2]),w&&(i.playbook=!0),d&&(n.kindle=!0,n.version=d[1]),m&&(i.silk=!0,i.version=m[1]),!m&&n.android&&t.match(/Kindle Fire/)&&(i.silk=!0),b&&(i.chrome=!0,i.version=b[1]),x&&(i.firefox=!0,i.version=x[1]),T&&(n.firefoxos=!0,n.version=T[1]),E&&(i.ie=!0,i.version=E[1]),j&&(s||n.ios||l)&&(i.safari=!0,n.ios||(i.version=j[1])),S&&(i.webview=!0),n.tablet=!!(a||w||o&&!t.match(/Mobile/)||x&&t.match(/Tablet/)||E&&!t.match(/Phone/)&&t.match(/Touch/)),n.phone=!(n.tablet||n.ipod||!(o||f||c||g||v||b&&t.match(/Android/)||b&&t.match(/CriOS\/([\d.]+)/)||x&&t.match(/Mobile/)||E&&t.match(/Touch/)))}e.call(t,navigator.userAgent,navigator.platform),t.__detect=e}(Zepto),function(t){function h(e,n,i){var r=t.Event(n);return t(e).trigger(r,i),!r.isDefaultPrevented()}function p(t,e,i,r){return t.global?h(e||n,i,r):void 0}function d(e){e.global&&0===t.active++&&p(e,null,"ajaxStart")}function m(e){e.global&&!--t.active&&p(e,null,"ajaxStop")}function g(t,e){var n=e.context;return e.beforeSend.call(n,t,e)===!1||p(e,n,"ajaxBeforeSend",[t,e])===!1?!1:void p(e,n,"ajaxSend",[t,e])}function v(t,e,n,i){var r=n.context,o="success";n.success.call(r,t,o,e),i&&i.resolveWith(r,[t,o,e]),p(n,r,"ajaxSuccess",[e,n,t]),w(o,e,n)}function y(t,e,n,i,r){var o=i.context;i.error.call(o,n,e,t),r&&r.rejectWith(o,[n,e,t]),p(i,o,"ajaxError",[n,i,t||e]),w(e,n,i)}function w(t,e,n){var i=n.context;n.complete.call(i,e,t),p(n,i,"ajaxComplete",[e,n]),m(n)}function b(){}function x(t){return t&&(t=t.split(";",2)[0]),t&&(t==f?"html":t==u?"json":s.test(t)?"script":a.test(t)&&"xml")||"text"}function T(t,e){return""==e?t:(t+"&"+e).replace(/[&?]{1,2}/,"?")}function E(e){e.processData&&e.data&&"string"!=t.type(e.data)&&(e.data=t.param(e.data,e.traditional)),!e.data||e.type&&"GET"!=e.type.toUpperCase()||(e.url=T(e.url,e.data),e.data=void 0)}function S(e,n,i,r){return t.isFunction(n)&&(r=i,i=n,n=void 0),t.isFunction(i)||(r=i,i=void 0),{url:e,data:n,success:i,dataType:r}}function C(e,n,i,r){var o,s=t.isArray(n),a=t.isPlainObject(n);t.each(n,function(n,u){o=t.type(u),r&&(n=i?r:r+"["+(a||"object"==o||"array"==o?n:"")+"]"),!r&&s?e.add(u.name,u.value):"array"==o||!i&&"object"==o?C(e,u,i,n):e.add(n,u)})}var i,r,e=0,n=window.document,o=/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,s=/^(?:text|application)\/javascript/i,a=/^(?:text|application)\/xml/i,u="application/json",f="text/html",c=/^\s*$/,l=n.createElement("a");l.href=window.location.href,t.active=0,t.ajaxJSONP=function(i,r){if(!("type"in i))return t.ajax(i);var f,h,o=i.jsonpCallback,s=(t.isFunction(o)?o():o)||"jsonp"+ ++e,a=n.createElement("script"),u=window[s],c=function(e){t(a).triggerHandler("error",e||"abort")},l={abort:c};return r&&r.promise(l),t(a).on("load error",function(e,n){clearTimeout(h),t(a).off().remove(),"error"!=e.type&&f?v(f[0],l,i,r):y(null,n||"error",l,i,r),window[s]=u,f&&t.isFunction(u)&&u(f[0]),u=f=void 0}),g(l,i)===!1?(c("abort"),l):(window[s]=function(){f=arguments},a.src=i.url.replace(/\?(.+)=\?/,"?$1="+s),n.head.appendChild(a),i.timeout>0&&(h=setTimeout(function(){c("timeout")},i.timeout)),l)},t.ajaxSettings={type:"GET",beforeSend:b,success:b,error:b,complete:b,context:null,global:!0,xhr:function(){return new window.XMLHttpRequest},accepts:{script:"text/javascript, application/javascript, application/x-javascript",json:u,xml:"application/xml, text/xml",html:f,text:"text/plain"},crossDomain:!1,timeout:0,processData:!0,cache:!0},t.ajax=function(e){var a,o=t.extend({},e||{}),s=t.Deferred&&t.Deferred();for(i in t.ajaxSettings)void 0===o[i]&&(o[i]=t.ajaxSettings[i]);d(o),o.crossDomain||(a=n.createElement("a"),a.href=o.url,a.href=a.href,o.crossDomain=l.protocol+"//"+l.host!=a.protocol+"//"+a.host),o.url||(o.url=window.location.toString()),E(o);var u=o.dataType,f=/\?.+=\?/.test(o.url);if(f&&(u="jsonp"),o.cache!==!1&&(e&&e.cache===!0||"script"!=u&&"jsonp"!=u)||(o.url=T(o.url,"_="+Date.now())),"jsonp"==u)return f||(o.url=T(o.url,o.jsonp?o.jsonp+"=?":o.jsonp===!1?"":"callback=?")),t.ajaxJSONP(o,s);var C,h=o.accepts[u],p={},m=function(t,e){p[t.toLowerCase()]=[t,e]},w=/^([\w-]+:)\/\//.test(o.url)?RegExp.$1:window.location.protocol,S=o.xhr(),j=S.setRequestHeader;if(s&&s.promise(S),o.crossDomain||m("X-Requested-With","XMLHttpRequest"),m("Accept",h||"*/*"),(h=o.mimeType||h)&&(h.indexOf(",")>-1&&(h=h.split(",",2)[0]),S.overrideMimeType&&S.overrideMimeType(h)),(o.contentType||o.contentType!==!1&&o.data&&"GET"!=o.type.toUpperCase())&&m("Content-Type",o.contentType||"application/x-www-form-urlencoded"),o.headers)for(r in o.headers)m(r,o.headers[r]);if(S.setRequestHeader=m,S.onreadystatechange=function(){if(4==S.readyState){S.onreadystatechange=b,clearTimeout(C);var e,n=!1;if(S.status>=200&&S.status<300||304==S.status||0==S.status&&"file:"==w){u=u||x(o.mimeType||S.getResponseHeader("content-type")),e=S.responseText;try{"script"==u?(1,eval)(e):"xml"==u?e=S.responseXML:"json"==u&&(e=c.test(e)?null:t.parseJSON(e))}catch(i){n=i}n?y(n,"parsererror",S,o,s):v(e,S,o,s)}else y(S.statusText||null,S.status?"error":"abort",S,o,s)}},g(S,o)===!1)return S.abort(),y(null,"abort",S,o,s),S;if(o.xhrFields)for(r in o.xhrFields)S[r]=o.xhrFields[r];var P="async"in o?o.async:!0;S.open(o.type,o.url,P,o.username,o.password);for(r in p)j.apply(S,p[r]);return o.timeout>0&&(C=setTimeout(function(){S.onreadystatechange=b,S.abort(),y(null,"timeout",S,o,s)},o.timeout)),S.send(o.data?o.data:null),S},t.get=function(){return t.ajax(S.apply(null,arguments))},t.post=function(){var e=S.apply(null,arguments);return e.type="POST",t.ajax(e)},t.getJSON=function(){var e=S.apply(null,arguments);return e.dataType="json",t.ajax(e)},t.fn.load=function(e,n,i){if(!this.length)return this;var a,r=this,s=e.split(/\s/),u=S(e,n,i),f=u.success;return s.length>1&&(u.url=s[0],a=s[1]),u.success=function(e){r.html(a?t("<div>").html(e.replace(o,"")).find(a):e),f&&f.apply(r,arguments)},t.ajax(u),this};var j=encodeURIComponent;t.param=function(e,n){var i=[];return i.add=function(e,n){t.isFunction(n)&&(n=n()),null==n&&(n=""),this.push(j(e)+"="+j(n))},C(i,e,n),i.join("&").replace(/%20/g,"+")}}(Zepto),function(t){function u(t,e,n,i){return Math.abs(t-e)>=Math.abs(n-i)?t-e>0?"Left":"Right":n-i>0?"Up":"Down"}function f(){o=null,e.last&&(e.el.trigger("longTap"),e={})}function c(){o&&clearTimeout(o),o=null}function l(){n&&clearTimeout(n),i&&clearTimeout(i),r&&clearTimeout(r),o&&clearTimeout(o),n=i=r=o=null,e={}}function h(t){return("touch"==t.pointerType||t.pointerType==t.MSPOINTER_TYPE_TOUCH)&&t.isPrimary}function p(t,e){return t.type=="pointer"+e||t.type.toLowerCase()=="mspointer"+e}var n,i,r,o,a,e={},s=750;t(document).ready(function(){var d,m,y,w,g=0,v=0;"MSGesture"in window&&(a=new MSGesture,a.target=document.body),t(document).bind("MSGestureEnd",function(t){var n=t.velocityX>1?"Right":t.velocityX<-1?"Left":t.velocityY>1?"Down":t.velocityY<-1?"Up":null;n&&(e.el.trigger("swipe"),e.el.trigger("swipe"+n))}).on("touchstart MSPointerDown pointerdown",function(i){(!(w=p(i,"down"))||h(i))&&(y=w?i:i.touches[0],i.touches&&1===i.touches.length&&e.x2&&(e.x2=void 0,e.y2=void 0),d=Date.now(),m=d-(e.last||d),e.el=t("tagName"in y.target?y.target:y.target.parentNode),n&&clearTimeout(n),e.x1=y.pageX,e.y1=y.pageY,m>0&&250>=m&&(e.isDoubleTap=!0),e.last=d,o=setTimeout(f,s),a&&w&&a.addPointer(i.pointerId))}).on("touchmove MSPointerMove pointermove",function(t){(!(w=p(t,"move"))||h(t))&&(y=w?t:t.touches[0],c(),e.x2=y.pageX,e.y2=y.pageY,g+=Math.abs(e.x1-e.x2),v+=Math.abs(e.y1-e.y2))}).on("touchend MSPointerUp pointerup",function(o){(!(w=p(o,"up"))||h(o))&&(c(),e.x2&&Math.abs(e.x1-e.x2)>30||e.y2&&Math.abs(e.y1-e.y2)>30?r=setTimeout(function(){e.el.trigger("swipe"),e.el.trigger("swipe"+u(e.x1,e.x2,e.y1,e.y2)),e={}},0):"last"in e&&(30>g&&30>v?i=setTimeout(function(){var i=t.Event("tap");i.cancelTouch=l,e.el.trigger(i),e.isDoubleTap?(e.el&&e.el.trigger("doubleTap"),e={}):n=setTimeout(function(){n=null,e.el&&e.el.trigger("singleTap"),e={}},250)},0):e={}),g=v=0)}).on("touchcancel MSPointerCancel pointercancel",l),t(window).on("scroll",l)}),["swipe","swipeLeft","swipeRight","swipeUp","swipeDown","doubleTap","tap","singleTap","longTap"].forEach(function(e){t.fn[e]=function(t){return this.on(e,t)}})}(Zepto),function(t){function r(e){return e=t(e),!(!e.width()&&!e.height())&&"none"!==e.css("display")}function f(t,e){t=t.replace(/=#\]/g,'="#"]');var n,i,r=s.exec(t);if(r&&r[2]in o&&(n=o[r[2]],i=r[3],t=r[1],i)){var a=Number(i);i=isNaN(a)?i.replace(/^["']|["']$/g,""):a}return e(t,n,i)}var e=t.zepto,n=e.qsa,i=e.matches,o=t.expr[":"]={visible:function(){return r(this)?this:void 0},hidden:function(){return r(this)?void 0:this},selected:function(){return this.selected?this:void 0},checked:function(){return this.checked?this:void 0},parent:function(){return this.parentNode},first:function(t){return 0===t?this:void 0},last:function(t,e){return t===e.length-1?this:void 0},eq:function(t,e,n){return t===n?this:void 0},contains:function(e,n,i){return t(this).text().indexOf(i)>-1?this:void 0},has:function(t,n,i){return e.qsa(this,i).length?this:void 0}},s=new RegExp("(.*):(\\w+)(?:\\(([^)]+)\\))?$\\s*"),a=/^\s*>/,u="Zepto"+ +new Date;e.qsa=function(i,r){return f(r,function(o,s,f){try{var c;!o&&s?o="*":a.test(o)&&(c=t(i).addClass(u),o="."+u+" "+o);var l=n(i,o)}catch(h){throw console.error("error performing selector: %o",r),h}finally{c&&c.removeClass(u)}return s?e.uniq(t.map(l,function(t,e){return s.call(t,e,l,f)})):l})},e.matches=function(t,e){return f(e,function(e,n,r){return!(e&&!i(t,e)||n&&n.call(t,null,r)!==t)})}}(Zepto),function(t){function l(t){return t._zid||(t._zid=e++)}function h(t,e,n,i){if(e=p(e),e.ns)var r=d(e.ns);return(s[l(t)]||[]).filter(function(t){return!(!t||e.e&&t.e!=e.e||e.ns&&!r.test(t.ns)||n&&l(t.fn)!==l(n)||i&&t.sel!=i)})}function p(t){var e=(""+t).split(".");return{e:e[0],ns:e.slice(1).sort().join(" ")}}function d(t){return new RegExp("(?:^| )"+t.replace(" "," .* ?")+"(?: |$)")}function m(t,e){return t.del&&!u&&t.e in f||!!e}function g(t){return c[t]||u&&f[t]||t}function v(e,i,r,o,a,u,f){var h=l(e),d=s[h]||(s[h]=[]);i.split(/\s/).forEach(function(i){if("ready"==i)return t(document).ready(r);var s=p(i);s.fn=r,s.sel=a,s.e in c&&(r=function(e){var n=e.relatedTarget;return!n||n!==this&&!t.contains(this,n)?s.fn.apply(this,arguments):void 0}),s.del=u;var l=u||r;s.proxy=function(t){if(t=E(t),!t.isImmediatePropagationStopped()){t.data=o;var i=l.apply(e,t._args==n?[t]:[t].concat(t._args));return i===!1&&(t.preventDefault(),t.stopPropagation()),i}},s.i=d.length,d.push(s),"addEventListener"in e&&e.addEventListener(g(s.e),s.proxy,m(s,f))})}function y(t,e,n,i,r){var o=l(t);(e||"").split(/\s/).forEach(function(e){h(t,e,n,i).forEach(function(e){delete s[o][e.i],"removeEventListener"in t&&t.removeEventListener(g(e.e),e.proxy,m(e,r))})})}function E(e,i){return(i||!e.isDefaultPrevented)&&(i||(i=e),t.each(T,function(t,n){var r=i[t];e[t]=function(){return this[n]=w,r&&r.apply(i,arguments)},e[n]=b}),(i.defaultPrevented!==n?i.defaultPrevented:"returnValue"in i?i.returnValue===!1:i.getPreventDefault&&i.getPreventDefault())&&(e.isDefaultPrevented=w)),e}function S(t){var e,i={originalEvent:t};for(e in t)x.test(e)||t[e]===n||(i[e]=t[e]);return E(i,t)}var n,e=1,i=Array.prototype.slice,r=t.isFunction,o=function(t){return"string"==typeof t},s={},a={},u="onfocusin"in window,f={focus:"focusin",blur:"focusout"},c={mouseenter:"mouseover",mouseleave:"mouseout"};a.click=a.mousedown=a.mouseup=a.mousemove="MouseEvents",t.event={add:v,remove:y},t.proxy=function(e,n){var s=2 in arguments&&i.call(arguments,2);if(r(e)){var a=function(){return e.apply(n,s?s.concat(i.call(arguments)):arguments)};return a._zid=l(e),a}if(o(n))return s?(s.unshift(e[n],e),t.proxy.apply(null,s)):t.proxy(e[n],e);throw new TypeError("expected function")},t.fn.bind=function(t,e,n){return this.on(t,e,n)},t.fn.unbind=function(t,e){return this.off(t,e)},t.fn.one=function(t,e,n,i){return this.on(t,e,n,i,1)};var w=function(){return!0},b=function(){return!1},x=/^([A-Z]|returnValue$|layer[XY]$)/,T={preventDefault:"isDefaultPrevented",stopImmediatePropagation:"isImmediatePropagationStopped",stopPropagation:"isPropagationStopped"};t.fn.delegate=function(t,e,n){return this.on(e,t,n)},t.fn.undelegate=function(t,e,n){return this.off(e,t,n)},t.fn.live=function(e,n){return t(document.body).delegate(this.selector,e,n),this},t.fn.die=function(e,n){return t(document.body).undelegate(this.selector,e,n),this},t.fn.on=function(e,s,a,u,f){var c,l,h=this;return e&&!o(e)?(t.each(e,function(t,e){h.on(t,s,a,e,f)}),h):(o(s)||r(u)||u===!1||(u=a,a=s,s=n),(r(a)||a===!1)&&(u=a,a=n),u===!1&&(u=b),h.each(function(n,r){f&&(c=function(t){return y(r,t.type,u),u.apply(this,arguments)}),s&&(l=function(e){var n,o=t(e.target).closest(s,r).get(0);return o&&o!==r?(n=t.extend(S(e),{currentTarget:o,liveFired:r}),(c||u).apply(o,[n].concat(i.call(arguments,1)))):void 0}),v(r,e,u,a,s,l||c)}))},t.fn.off=function(e,i,s){var a=this;return e&&!o(e)?(t.each(e,function(t,e){a.off(t,i,e)}),a):(o(i)||r(s)||s===!1||(s=i,i=n),s===!1&&(s=b),a.each(function(){y(this,e,s,i)}))},t.fn.trigger=function(e,n){return e=o(e)||t.isPlainObject(e)?t.Event(e):E(e),e._args=n,this.each(function(){e.type in f&&"function"==typeof this[e.type]?this[e.type]():"dispatchEvent"in this?this.dispatchEvent(e):t(this).triggerHandler(e,n)})},t.fn.triggerHandler=function(e,n){var i,r;return this.each(function(s,a){i=S(o(e)?t.Event(e):e),i._args=n,i.target=a,t.each(h(a,e.type||e),function(t,e){return r=e.proxy(i),i.isImmediatePropagationStopped()?!1:void 0})}),r},"focusin focusout focus blur load resize scroll unload click dblclick mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave change select keydown keypress keyup error".split(" ").forEach(function(e){t.fn[e]=function(t){return 0 in arguments?this.bind(e,t):this.trigger(e)}}),t.Event=function(t,e){o(t)||(e=t,t=e.type);var n=document.createEvent(a[t]||"Events"),i=!0;if(e)for(var r in e)"bubbles"==r?i=!!e[r]:n[r]=e[r];return n.initEvent(t,i,!0),E(n)}}(Zepto),function(t){t.Callbacks=function(e){e=t.extend({},e);var n,i,r,o,s,a,u=[],f=!e.once&&[],c=function(t){for(n=e.memory&&t,i=!0,a=o||0,o=0,s=u.length,r=!0;u&&s>a;++a)if(u[a].apply(t[0],t[1])===!1&&e.stopOnFalse){n=!1;break}r=!1,u&&(f?f.length&&c(f.shift()):n?u.length=0:l.disable())},l={add:function(){if(u){var i=u.length,a=function(n){t.each(n,function(t,n){"function"==typeof n?e.unique&&l.has(n)||u.push(n):n&&n.length&&"string"!=typeof n&&a(n)})};a(arguments),r?s=u.length:n&&(o=i,c(n))}return this},remove:function(){return u&&t.each(arguments,function(e,n){for(var i;(i=t.inArray(n,u,i))>-1;)u.splice(i,1),r&&(s>=i&&--s,a>=i&&--a)}),this
-},has:function(e){return!(!u||!(e?t.inArray(e,u)>-1:u.length))},empty:function(){return s=u.length=0,this},disable:function(){return u=f=n=void 0,this},disabled:function(){return!u},lock:function(){return f=void 0,n||l.disable(),this},locked:function(){return!f},fireWith:function(t,e){return!u||i&&!f||(e=e||[],e=[t,e.slice?e.slice():e],r?f.push(e):c(e)),this},fire:function(){return l.fireWith(this,arguments)},fired:function(){return!!i}};return l}}(Zepto);
+/* Zepto v1.1.4-76-g2bd5d7a - zepto event ajax callbacks deferred touch selector - zeptojs.com/license */
+var Zepto=function(){function D(t){return null==t?String(t):j[S.call(t)]||"object"}function L(t){return"function"==D(t)}function k(t){return null!=t&&t==t.window}function Z(t){return null!=t&&t.nodeType==t.DOCUMENT_NODE}function $(t){return"object"==D(t)}function F(t){return $(t)&&!k(t)&&Object.getPrototypeOf(t)==Object.prototype}function R(t){return"number"==typeof t.length}function q(t){return s.call(t,function(t){return null!=t})}function W(t){return t.length>0?n.fn.concat.apply([],t):t}function z(t){return t.replace(/::/g,"/").replace(/([A-Z]+)([A-Z][a-z])/g,"$1_$2").replace(/([a-z\d])([A-Z])/g,"$1_$2").replace(/_/g,"-").toLowerCase()}function H(t){return t in c?c[t]:c[t]=new RegExp("(^|\\s)"+t+"(\\s|$)")}function _(t,e){return"number"!=typeof e||l[z(t)]?e:e+"px"}function I(t){var e,n;return f[t]||(e=u.createElement(t),u.body.appendChild(e),n=getComputedStyle(e,"").getPropertyValue("display"),e.parentNode.removeChild(e),"none"==n&&(n="block"),f[t]=n),f[t]}function U(t){return"children"in t?a.call(t.children):n.map(t.childNodes,function(t){return 1==t.nodeType?t:void 0})}function X(t,e){var n,i=t?t.length:0;for(n=0;i>n;n++)this[n]=t[n];this.length=i,this.selector=e||""}function B(n,i,r){for(e in i)r&&(F(i[e])||A(i[e]))?(F(i[e])&&!F(n[e])&&(n[e]={}),A(i[e])&&!A(n[e])&&(n[e]=[]),B(n[e],i[e],r)):i[e]!==t&&(n[e]=i[e])}function V(t,e){return null==e?n(t):n(t).filter(e)}function Y(t,e,n,i){return L(e)?e.call(t,n,i):e}function J(t,e,n){null==n?t.removeAttribute(e):t.setAttribute(e,n)}function G(e,n){var i=e.className||"",r=i&&i.baseVal!==t;return n===t?r?i.baseVal:i:void(r?i.baseVal=n:e.className=n)}function K(t){try{return t?"true"==t||("false"==t?!1:"null"==t?null:+t+""==t?+t:/^[\[\{]/.test(t)?n.parseJSON(t):t):t}catch(e){return t}}function Q(t,e){e(t);for(var n=0,i=t.childNodes.length;i>n;n++)Q(t.childNodes[n],e)}var t,e,n,i,N,P,r=[],o=r.concat,s=r.filter,a=r.slice,u=window.document,f={},c={},l={"column-count":1,columns:1,"font-weight":1,"line-height":1,opacity:1,"z-index":1,zoom:1},h=/^\s*<(\w+|!)[^>]*>/,p=/^<(\w+)\s*\/?>(?:<\/\1>|)$/,d=/<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/gi,m=/^(?:body|html)$/i,g=/([A-Z])/g,v=["val","css","html","text","data","width","height","offset"],y=["after","prepend","before","append"],w=u.createElement("table"),x=u.createElement("tr"),b={tr:u.createElement("tbody"),tbody:w,thead:w,tfoot:w,td:x,th:x,"*":u.createElement("div")},E=/complete|loaded|interactive/,T=/^[\w-]*$/,j={},S=j.toString,C={},O=u.createElement("div"),M={tabindex:"tabIndex",readonly:"readOnly","for":"htmlFor","class":"className",maxlength:"maxLength",cellspacing:"cellSpacing",cellpadding:"cellPadding",rowspan:"rowSpan",colspan:"colSpan",usemap:"useMap",frameborder:"frameBorder",contenteditable:"contentEditable"},A=Array.isArray||function(t){return t instanceof Array};return C.matches=function(t,e){if(!e||!t||1!==t.nodeType)return!1;var n=t.webkitMatchesSelector||t.mozMatchesSelector||t.oMatchesSelector||t.matchesSelector;if(n)return n.call(t,e);var i,r=t.parentNode,o=!r;return o&&(r=O).appendChild(t),i=~C.qsa(r,e).indexOf(t),o&&O.removeChild(t),i},N=function(t){return t.replace(/-+(.)?/g,function(t,e){return e?e.toUpperCase():""})},P=function(t){return s.call(t,function(e,n){return t.indexOf(e)==n})},C.fragment=function(e,i,r){var o,s,f;return p.test(e)&&(o=n(u.createElement(RegExp.$1))),o||(e.replace&&(e=e.replace(d,"<$1></$2>")),i===t&&(i=h.test(e)&&RegExp.$1),i in b||(i="*"),f=b[i],f.innerHTML=""+e,o=n.each(a.call(f.childNodes),function(){f.removeChild(this)})),F(r)&&(s=n(o),n.each(r,function(t,e){v.indexOf(t)>-1?s[t](e):s.attr(t,e)})),o},C.Z=function(t,e){return new X(t,e)},C.isZ=function(t){return t instanceof C.Z},C.init=function(e,i){var r;if(!e)return C.Z();if("string"==typeof e)if(e=e.trim(),"<"==e[0]&&h.test(e))r=C.fragment(e,RegExp.$1,i),e=null;else{if(i!==t)return n(i).find(e);r=C.qsa(u,e)}else{if(L(e))return n(u).ready(e);if(C.isZ(e))return e;if(A(e))r=q(e);else if($(e))r=[e],e=null;else if(h.test(e))r=C.fragment(e.trim(),RegExp.$1,i),e=null;else{if(i!==t)return n(i).find(e);r=C.qsa(u,e)}}return C.Z(r,e)},n=function(t,e){return C.init(t,e)},n.extend=function(t){var e,n=a.call(arguments,1);return"boolean"==typeof t&&(e=t,t=n.shift()),n.forEach(function(n){B(t,n,e)}),t},C.qsa=function(t,e){var n,i="#"==e[0],r=!i&&"."==e[0],o=i||r?e.slice(1):e,s=T.test(o);return t.getElementById&&s&&i?(n=t.getElementById(o))?[n]:[]:1!==t.nodeType&&9!==t.nodeType&&11!==t.nodeType?[]:a.call(s&&!i&&t.getElementsByClassName?r?t.getElementsByClassName(o):t.getElementsByTagName(e):t.querySelectorAll(e))},n.contains=u.documentElement.contains?function(t,e){return t!==e&&t.contains(e)}:function(t,e){for(;e&&(e=e.parentNode);)if(e===t)return!0;return!1},n.type=D,n.isFunction=L,n.isWindow=k,n.isArray=A,n.isPlainObject=F,n.isEmptyObject=function(t){var e;for(e in t)return!1;return!0},n.inArray=function(t,e,n){return r.indexOf.call(e,t,n)},n.camelCase=N,n.trim=function(t){return null==t?"":String.prototype.trim.call(t)},n.uuid=0,n.support={},n.expr={},n.noop=function(){},n.map=function(t,e){var n,r,o,i=[];if(R(t))for(r=0;r<t.length;r++)n=e(t[r],r),null!=n&&i.push(n);else for(o in t)n=e(t[o],o),null!=n&&i.push(n);return W(i)},n.each=function(t,e){var n,i;if(R(t)){for(n=0;n<t.length;n++)if(e.call(t[n],n,t[n])===!1)return t}else for(i in t)if(e.call(t[i],i,t[i])===!1)return t;return t},n.grep=function(t,e){return s.call(t,e)},window.JSON&&(n.parseJSON=JSON.parse),n.each("Boolean Number String Function Array Date RegExp Object Error".split(" "),function(t,e){j["[object "+e+"]"]=e.toLowerCase()}),n.fn={constructor:C.Z,length:0,forEach:r.forEach,reduce:r.reduce,push:r.push,sort:r.sort,splice:r.splice,indexOf:r.indexOf,concat:function(){var t,e,n=[];for(t=0;t<arguments.length;t++)e=arguments[t],n[t]=C.isZ(e)?e.toArray():e;return o.apply(C.isZ(this)?this.toArray():this,n)},map:function(t){return n(n.map(this,function(e,n){return t.call(e,n,e)}))},slice:function(){return n(a.apply(this,arguments))},ready:function(t){return E.test(u.readyState)&&u.body?t(n):u.addEventListener("DOMContentLoaded",function(){t(n)},!1),this},get:function(e){return e===t?a.call(this):this[e>=0?e:e+this.length]},toArray:function(){return this.get()},size:function(){return this.length},remove:function(){return this.each(function(){null!=this.parentNode&&this.parentNode.removeChild(this)})},each:function(t){return r.every.call(this,function(e,n){return t.call(e,n,e)!==!1}),this},filter:function(t){return L(t)?this.not(this.not(t)):n(s.call(this,function(e){return C.matches(e,t)}))},add:function(t,e){return n(P(this.concat(n(t,e))))},is:function(t){return this.length>0&&C.matches(this[0],t)},not:function(e){var i=[];if(L(e)&&e.call!==t)this.each(function(t){e.call(this,t)||i.push(this)});else{var r="string"==typeof e?this.filter(e):R(e)&&L(e.item)?a.call(e):n(e);this.forEach(function(t){r.indexOf(t)<0&&i.push(t)})}return n(i)},has:function(t){return this.filter(function(){return $(t)?n.contains(this,t):n(this).find(t).size()})},eq:function(t){return-1===t?this.slice(t):this.slice(t,+t+1)},first:function(){var t=this[0];return t&&!$(t)?t:n(t)},last:function(){var t=this[this.length-1];return t&&!$(t)?t:n(t)},find:function(t){var e,i=this;return e=t?"object"==typeof t?n(t).filter(function(){var t=this;return r.some.call(i,function(e){return n.contains(e,t)})}):1==this.length?n(C.qsa(this[0],t)):this.map(function(){return C.qsa(this,t)}):n()},closest:function(t,e){var i=this[0],r=!1;for("object"==typeof t&&(r=n(t));i&&!(r?r.indexOf(i)>=0:C.matches(i,t));)i=i!==e&&!Z(i)&&i.parentNode;return n(i)},parents:function(t){for(var e=[],i=this;i.length>0;)i=n.map(i,function(t){return(t=t.parentNode)&&!Z(t)&&e.indexOf(t)<0?(e.push(t),t):void 0});return V(e,t)},parent:function(t){return V(P(this.pluck("parentNode")),t)},children:function(t){return V(this.map(function(){return U(this)}),t)},contents:function(){return this.map(function(){return this.contentDocument||a.call(this.childNodes)})},siblings:function(t){return V(this.map(function(t,e){return s.call(U(e.parentNode),function(t){return t!==e})}),t)},empty:function(){return this.each(function(){this.innerHTML=""})},pluck:function(t){return n.map(this,function(e){return e[t]})},show:function(){return this.each(function(){"none"==this.style.display&&(this.style.display=""),"none"==getComputedStyle(this,"").getPropertyValue("display")&&(this.style.display=I(this.nodeName))})},replaceWith:function(t){return this.before(t).remove()},wrap:function(t){var e=L(t);if(this[0]&&!e)var i=n(t).get(0),r=i.parentNode||this.length>1;return this.each(function(o){n(this).wrapAll(e?t.call(this,o):r?i.cloneNode(!0):i)})},wrapAll:function(t){if(this[0]){n(this[0]).before(t=n(t));for(var e;(e=t.children()).length;)t=e.first();n(t).append(this)}return this},wrapInner:function(t){var e=L(t);return this.each(function(i){var r=n(this),o=r.contents(),s=e?t.call(this,i):t;o.length?o.wrapAll(s):r.append(s)})},unwrap:function(){return this.parent().each(function(){n(this).replaceWith(n(this).children())}),this},clone:function(){return this.map(function(){return this.cloneNode(!0)})},hide:function(){return this.css("display","none")},toggle:function(e){return this.each(function(){var i=n(this);(e===t?"none"==i.css("display"):e)?i.show():i.hide()})},prev:function(t){return n(this.pluck("previousElementSibling")).filter(t||"*")},next:function(t){return n(this.pluck("nextElementSibling")).filter(t||"*")},html:function(t){return 0 in arguments?this.each(function(e){var i=this.innerHTML;n(this).empty().append(Y(this,t,e,i))}):0 in this?this[0].innerHTML:null},text:function(t){return 0 in arguments?this.each(function(e){var n=Y(this,t,e,this.textContent);this.textContent=null==n?"":""+n}):0 in this?this[0].textContent:null},attr:function(n,i){var r;return"string"!=typeof n||1 in arguments?this.each(function(t){if(1===this.nodeType)if($(n))for(e in n)J(this,e,n[e]);else J(this,n,Y(this,i,t,this.getAttribute(n)))}):this.length&&1===this[0].nodeType?!(r=this[0].getAttribute(n))&&n in this[0]?this[0][n]:r:t},removeAttr:function(t){return this.each(function(){1===this.nodeType&&t.split(" ").forEach(function(t){J(this,t)},this)})},prop:function(t,e){return t=M[t]||t,1 in arguments?this.each(function(n){this[t]=Y(this,e,n,this[t])}):this[0]&&this[0][t]},data:function(e,n){var i="data-"+e.replace(g,"-$1").toLowerCase(),r=1 in arguments?this.attr(i,n):this.attr(i);return null!==r?K(r):t},val:function(t){return 0 in arguments?this.each(function(e){this.value=Y(this,t,e,this.value)}):this[0]&&(this[0].multiple?n(this[0]).find("option").filter(function(){return this.selected}).pluck("value"):this[0].value)},offset:function(t){if(t)return this.each(function(e){var i=n(this),r=Y(this,t,e,i.offset()),o=i.offsetParent().offset(),s={top:r.top-o.top,left:r.left-o.left};"static"==i.css("position")&&(s.position="relative"),i.css(s)});if(!this.length)return null;var e=this[0].getBoundingClientRect();return{left:e.left+window.pageXOffset,top:e.top+window.pageYOffset,width:Math.round(e.width),height:Math.round(e.height)}},css:function(t,i){if(arguments.length<2){var r,o=this[0];if(!o)return;if(r=getComputedStyle(o,""),"string"==typeof t)return o.style[N(t)]||r.getPropertyValue(t);if(A(t)){var s={};return n.each(t,function(t,e){s[e]=o.style[N(e)]||r.getPropertyValue(e)}),s}}var a="";if("string"==D(t))i||0===i?a=z(t)+":"+_(t,i):this.each(function(){this.style.removeProperty(z(t))});else for(e in t)t[e]||0===t[e]?a+=z(e)+":"+_(e,t[e])+";":this.each(function(){this.style.removeProperty(z(e))});return this.each(function(){this.style.cssText+=";"+a})},index:function(t){return t?this.indexOf(n(t)[0]):this.parent().children().indexOf(this[0])},hasClass:function(t){return t?r.some.call(this,function(t){return this.test(G(t))},H(t)):!1},addClass:function(t){return t?this.each(function(e){if("className"in this){i=[];var r=G(this),o=Y(this,t,e,r);o.split(/\s+/g).forEach(function(t){n(this).hasClass(t)||i.push(t)},this),i.length&&G(this,r+(r?" ":"")+i.join(" "))}}):this},removeClass:function(e){return this.each(function(n){if("className"in this){if(e===t)return G(this,"");i=G(this),Y(this,e,n,i).split(/\s+/g).forEach(function(t){i=i.replace(H(t)," ")}),G(this,i.trim())}})},toggleClass:function(e,i){return e?this.each(function(r){var o=n(this),s=Y(this,e,r,G(this));s.split(/\s+/g).forEach(function(e){(i===t?!o.hasClass(e):i)?o.addClass(e):o.removeClass(e)})}):this},scrollTop:function(e){if(this.length){var n="scrollTop"in this[0];return e===t?n?this[0].scrollTop:this[0].pageYOffset:this.each(n?function(){this.scrollTop=e}:function(){this.scrollTo(this.scrollX,e)})}},scrollLeft:function(e){if(this.length){var n="scrollLeft"in this[0];return e===t?n?this[0].scrollLeft:this[0].pageXOffset:this.each(n?function(){this.scrollLeft=e}:function(){this.scrollTo(e,this.scrollY)})}},position:function(){if(this.length){var t=this[0],e=this.offsetParent(),i=this.offset(),r=m.test(e[0].nodeName)?{top:0,left:0}:e.offset();return i.top-=parseFloat(n(t).css("margin-top"))||0,i.left-=parseFloat(n(t).css("margin-left"))||0,r.top+=parseFloat(n(e[0]).css("border-top-width"))||0,r.left+=parseFloat(n(e[0]).css("border-left-width"))||0,{top:i.top-r.top,left:i.left-r.left}}},offsetParent:function(){return this.map(function(){for(var t=this.offsetParent||u.body;t&&!m.test(t.nodeName)&&"static"==n(t).css("position");)t=t.offsetParent;return t})}},n.fn.detach=n.fn.remove,["width","height"].forEach(function(e){var i=e.replace(/./,function(t){return t[0].toUpperCase()});n.fn[e]=function(r){var o,s=this[0];return r===t?k(s)?s["inner"+i]:Z(s)?s.documentElement["scroll"+i]:(o=this.offset())&&o[e]:this.each(function(t){s=n(this),s.css(e,Y(this,r,t,s[e]()))})}}),y.forEach(function(t,e){var i=e%2;n.fn[t]=function(){var t,o,r=n.map(arguments,function(e){return t=D(e),"object"==t||"array"==t||null==e?e:C.fragment(e)}),s=this.length>1;return r.length<1?this:this.each(function(t,a){o=i?a:a.parentNode,a=0==e?a.nextSibling:1==e?a.firstChild:2==e?a:null;var f=n.contains(u.documentElement,o);r.forEach(function(t){if(s)t=t.cloneNode(!0);else if(!o)return n(t).remove();o.insertBefore(t,a),f&&Q(t,function(t){null==t.nodeName||"SCRIPT"!==t.nodeName.toUpperCase()||t.type&&"text/javascript"!==t.type||t.src||window.eval.call(window,t.innerHTML)})})})},n.fn[i?t+"To":"insert"+(e?"Before":"After")]=function(e){return n(e)[t](this),this}}),C.Z.prototype=X.prototype=n.fn,C.uniq=P,C.deserializeValue=K,n.zepto=C,n}();window.Zepto=Zepto,void 0===window.$&&(window.$=Zepto),function(t){function l(t){return t._zid||(t._zid=e++)}function h(t,e,n,i){if(e=p(e),e.ns)var r=d(e.ns);return(s[l(t)]||[]).filter(function(t){return!(!t||e.e&&t.e!=e.e||e.ns&&!r.test(t.ns)||n&&l(t.fn)!==l(n)||i&&t.sel!=i)})}function p(t){var e=(""+t).split(".");return{e:e[0],ns:e.slice(1).sort().join(" ")}}function d(t){return new RegExp("(?:^| )"+t.replace(" "," .* ?")+"(?: |$)")}function m(t,e){return t.del&&!u&&t.e in f||!!e}function g(t){return c[t]||u&&f[t]||t}function v(e,i,r,o,a,u,f){var h=l(e),d=s[h]||(s[h]=[]);i.split(/\s/).forEach(function(i){if("ready"==i)return t(document).ready(r);var s=p(i);s.fn=r,s.sel=a,s.e in c&&(r=function(e){var n=e.relatedTarget;return!n||n!==this&&!t.contains(this,n)?s.fn.apply(this,arguments):void 0}),s.del=u;var l=u||r;s.proxy=function(t){if(t=T(t),!t.isImmediatePropagationStopped()){t.data=o;var i=l.apply(e,t._args==n?[t]:[t].concat(t._args));return i===!1&&(t.preventDefault(),t.stopPropagation()),i}},s.i=d.length,d.push(s),"addEventListener"in e&&e.addEventListener(g(s.e),s.proxy,m(s,f))})}function y(t,e,n,i,r){var o=l(t);(e||"").split(/\s/).forEach(function(e){h(t,e,n,i).forEach(function(e){delete s[o][e.i],"removeEventListener"in t&&t.removeEventListener(g(e.e),e.proxy,m(e,r))})})}function T(e,i){return(i||!e.isDefaultPrevented)&&(i||(i=e),t.each(E,function(t,n){var r=i[t];e[t]=function(){return this[n]=w,r&&r.apply(i,arguments)},e[n]=x}),(i.defaultPrevented!==n?i.defaultPrevented:"returnValue"in i?i.returnValue===!1:i.getPreventDefault&&i.getPreventDefault())&&(e.isDefaultPrevented=w)),e}function j(t){var e,i={originalEvent:t};for(e in t)b.test(e)||t[e]===n||(i[e]=t[e]);return T(i,t)}var n,e=1,i=Array.prototype.slice,r=t.isFunction,o=function(t){return"string"==typeof t},s={},a={},u="onfocusin"in window,f={focus:"focusin",blur:"focusout"},c={mouseenter:"mouseover",mouseleave:"mouseout"};a.click=a.mousedown=a.mouseup=a.mousemove="MouseEvents",t.event={add:v,remove:y},t.proxy=function(e,n){var s=2 in arguments&&i.call(arguments,2);if(r(e)){var a=function(){return e.apply(n,s?s.concat(i.call(arguments)):arguments)};return a._zid=l(e),a}if(o(n))return s?(s.unshift(e[n],e),t.proxy.apply(null,s)):t.proxy(e[n],e);throw new TypeError("expected function")},t.fn.bind=function(t,e,n){return this.on(t,e,n)},t.fn.unbind=function(t,e){return this.off(t,e)},t.fn.one=function(t,e,n,i){return this.on(t,e,n,i,1)};var w=function(){return!0},x=function(){return!1},b=/^([A-Z]|returnValue$|layer[XY]$)/,E={preventDefault:"isDefaultPrevented",stopImmediatePropagation:"isImmediatePropagationStopped",stopPropagation:"isPropagationStopped"};t.fn.delegate=function(t,e,n){return this.on(e,t,n)},t.fn.undelegate=function(t,e,n){return this.off(e,t,n)},t.fn.live=function(e,n){return t(document.body).delegate(this.selector,e,n),this},t.fn.die=function(e,n){return t(document.body).undelegate(this.selector,e,n),this},t.fn.on=function(e,s,a,u,f){var c,l,h=this;return e&&!o(e)?(t.each(e,function(t,e){h.on(t,s,a,e,f)}),h):(o(s)||r(u)||u===!1||(u=a,a=s,s=n),(u===n||a===!1)&&(u=a,a=n),u===!1&&(u=x),h.each(function(n,r){f&&(c=function(t){return y(r,t.type,u),u.apply(this,arguments)}),s&&(l=function(e){var n,o=t(e.target).closest(s,r).get(0);return o&&o!==r?(n=t.extend(j(e),{currentTarget:o,liveFired:r}),(c||u).apply(o,[n].concat(i.call(arguments,1)))):void 0}),v(r,e,u,a,s,l||c)}))},t.fn.off=function(e,i,s){var a=this;return e&&!o(e)?(t.each(e,function(t,e){a.off(t,i,e)}),a):(o(i)||r(s)||s===!1||(s=i,i=n),s===!1&&(s=x),a.each(function(){y(this,e,s,i)}))},t.fn.trigger=function(e,n){return e=o(e)||t.isPlainObject(e)?t.Event(e):T(e),e._args=n,this.each(function(){e.type in f&&"function"==typeof this[e.type]?this[e.type]():"dispatchEvent"in this?this.dispatchEvent(e):t(this).triggerHandler(e,n)})},t.fn.triggerHandler=function(e,n){var i,r;return this.each(function(s,a){i=j(o(e)?t.Event(e):e),i._args=n,i.target=a,t.each(h(a,e.type||e),function(t,e){return r=e.proxy(i),i.isImmediatePropagationStopped()?!1:void 0})}),r},"focusin focusout focus blur load resize scroll unload click dblclick mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave change select keydown keypress keyup error".split(" ").forEach(function(e){t.fn[e]=function(t){return 0 in arguments?this.bind(e,t):this.trigger(e)}}),t.Event=function(t,e){o(t)||(e=t,t=e.type);var n=document.createEvent(a[t]||"Events"),i=!0;if(e)for(var r in e)"bubbles"==r?i=!!e[r]:n[r]=e[r];return n.initEvent(t,i,!0),T(n)}}(Zepto),function(t){function h(e,n,i){var r=t.Event(n);return t(e).trigger(r,i),!r.isDefaultPrevented()}function p(t,e,i,r){return t.global?h(e||n,i,r):void 0}function d(e){e.global&&0===t.active++&&p(e,null,"ajaxStart")}function m(e){e.global&&!--t.active&&p(e,null,"ajaxStop")}function g(t,e){var n=e.context;return e.beforeSend.call(n,t,e)===!1||p(e,n,"ajaxBeforeSend",[t,e])===!1?!1:void p(e,n,"ajaxSend",[t,e])}function v(t,e,n,i){var r=n.context,o="success";n.success.call(r,t,o,e),i&&i.resolveWith(r,[t,o,e]),p(n,r,"ajaxSuccess",[e,n,t]),w(o,e,n)}function y(t,e,n,i,r){var o=i.context;i.error.call(o,n,e,t),r&&r.rejectWith(o,[n,e,t]),p(i,o,"ajaxError",[n,i,t||e]),w(e,n,i)}function w(t,e,n){var i=n.context;n.complete.call(i,e,t),p(n,i,"ajaxComplete",[e,n]),m(n)}function x(){}function b(t){return t&&(t=t.split(";",2)[0]),t&&(t==f?"html":t==u?"json":s.test(t)?"script":a.test(t)&&"xml")||"text"}function E(t,e){return""==e?t:(t+"&"+e).replace(/[&?]{1,2}/,"?")}function T(e){e.processData&&e.data&&"string"!=t.type(e.data)&&(e.data=t.param(e.data,e.traditional)),!e.data||e.type&&"GET"!=e.type.toUpperCase()||(e.url=E(e.url,e.data),e.data=void 0)}function j(e,n,i,r){return t.isFunction(n)&&(r=i,i=n,n=void 0),t.isFunction(i)||(r=i,i=void 0),{url:e,data:n,success:i,dataType:r}}function C(e,n,i,r){var o,s=t.isArray(n),a=t.isPlainObject(n);t.each(n,function(n,u){o=t.type(u),r&&(n=i?r:r+"["+(a||"object"==o||"array"==o?n:"")+"]"),!r&&s?e.add(u.name,u.value):"array"==o||!i&&"object"==o?C(e,u,i,n):e.add(n,u)})}var i,r,e=0,n=window.document,o=/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,s=/^(?:text|application)\/javascript/i,a=/^(?:text|application)\/xml/i,u="application/json",f="text/html",c=/^\s*$/,l=n.createElement("a");l.href=window.location.href,t.active=0,t.ajaxJSONP=function(i,r){if(!("type"in i))return t.ajax(i);var f,h,o=i.jsonpCallback,s=(t.isFunction(o)?o():o)||"jsonp"+ ++e,a=n.createElement("script"),u=window[s],c=function(e){t(a).triggerHandler("error",e||"abort")},l={abort:c};return r&&r.promise(l),t(a).on("load error",function(e,n){clearTimeout(h),t(a).off().remove(),"error"!=e.type&&f?v(f[0],l,i,r):y(null,n||"error",l,i,r),window[s]=u,f&&t.isFunction(u)&&u(f[0]),u=f=void 0}),g(l,i)===!1?(c("abort"),l):(window[s]=function(){f=arguments},a.src=i.url.replace(/\?(.+)=\?/,"?$1="+s),n.head.appendChild(a),i.timeout>0&&(h=setTimeout(function(){c("timeout")},i.timeout)),l)},t.ajaxSettings={type:"GET",beforeSend:x,success:x,error:x,complete:x,context:null,global:!0,xhr:function(){return new window.XMLHttpRequest},accepts:{script:"text/javascript, application/javascript, application/x-javascript",json:u,xml:"application/xml, text/xml",html:f,text:"text/plain"},crossDomain:!1,timeout:0,processData:!0,cache:!0},t.ajax=function(e){var a,u,o=t.extend({},e||{}),s=t.Deferred&&t.Deferred();for(i in t.ajaxSettings)void 0===o[i]&&(o[i]=t.ajaxSettings[i]);d(o),o.crossDomain||(a=n.createElement("a"),a.href=o.url,a.href=a.href,o.crossDomain=l.protocol+"//"+l.host!=a.protocol+"//"+a.host),o.url||(o.url=window.location.toString()),(u=o.url.indexOf("#"))>-1&&(o.url=o.url.slice(0,u)),T(o);var f=o.dataType,h=/\?.+=\?/.test(o.url);if(h&&(f="jsonp"),o.cache!==!1&&(e&&e.cache===!0||"script"!=f&&"jsonp"!=f)||(o.url=E(o.url,"_="+Date.now())),"jsonp"==f)return h||(o.url=E(o.url,o.jsonp?o.jsonp+"=?":o.jsonp===!1?"":"callback=?")),t.ajaxJSONP(o,s);var N,p=o.accepts[f],m={},w=function(t,e){m[t.toLowerCase()]=[t,e]},j=/^([\w-]+:)\/\//.test(o.url)?RegExp.$1:window.location.protocol,S=o.xhr(),C=S.setRequestHeader;if(s&&s.promise(S),o.crossDomain||w("X-Requested-With","XMLHttpRequest"),w("Accept",p||"*/*"),(p=o.mimeType||p)&&(p.indexOf(",")>-1&&(p=p.split(",",2)[0]),S.overrideMimeType&&S.overrideMimeType(p)),(o.contentType||o.contentType!==!1&&o.data&&"GET"!=o.type.toUpperCase())&&w("Content-Type",o.contentType||"application/x-www-form-urlencoded"),o.headers)for(r in o.headers)w(r,o.headers[r]);if(S.setRequestHeader=w,S.onreadystatechange=function(){if(4==S.readyState){S.onreadystatechange=x,clearTimeout(N);var e,n=!1;if(S.status>=200&&S.status<300||304==S.status||0==S.status&&"file:"==j){f=f||b(o.mimeType||S.getResponseHeader("content-type")),e=S.responseText;try{"script"==f?(1,eval)(e):"xml"==f?e=S.responseXML:"json"==f&&(e=c.test(e)?null:t.parseJSON(e))}catch(i){n=i}n?y(n,"parsererror",S,o,s):v(e,S,o,s)}else y(S.statusText||null,S.status?"error":"abort",S,o,s)}},g(S,o)===!1)return S.abort(),y(null,"abort",S,o,s),S;if(o.xhrFields)for(r in o.xhrFields)S[r]=o.xhrFields[r];var P="async"in o?o.async:!0;S.open(o.type,o.url,P,o.username,o.password);for(r in m)C.apply(S,m[r]);return o.timeout>0&&(N=setTimeout(function(){S.onreadystatechange=x,S.abort(),y(null,"timeout",S,o,s)},o.timeout)),S.send(o.data?o.data:null),S},t.get=function(){return t.ajax(j.apply(null,arguments))},t.post=function(){var e=j.apply(null,arguments);return e.type="POST",t.ajax(e)},t.getJSON=function(){var e=j.apply(null,arguments);return e.dataType="json",t.ajax(e)},t.fn.load=function(e,n,i){if(!this.length)return this;var a,r=this,s=e.split(/\s/),u=j(e,n,i),f=u.success;return s.length>1&&(u.url=s[0],a=s[1]),u.success=function(e){r.html(a?t("<div>").html(e.replace(o,"")).find(a):e),f&&f.apply(r,arguments)},t.ajax(u),this};var S=encodeURIComponent;t.param=function(e,n){var i=[];return i.add=function(e,n){t.isFunction(n)&&(n=n()),null==n&&(n=""),this.push(S(e)+"="+S(n))},C(i,e,n),i.join("&").replace(/%20/g,"+")}}(Zepto),function(t){t.Callbacks=function(e){e=t.extend({},e);var n,i,r,o,s,a,u=[],f=!e.once&&[],c=function(t){for(n=e.memory&&t,i=!0,a=o||0,o=0,s=u.length,r=!0;u&&s>a;++a)if(u[a].apply(t[0],t[1])===!1&&e.stopOnFalse){n=!1;break}r=!1,u&&(f?f.length&&c(f.shift()):n?u.length=0:l.disable())},l={add:function(){if(u){var i=u.length,a=function(n){t.each(n,function(t,n){"function"==typeof n?e.unique&&l.has(n)||u.push(n):n&&n.length&&"string"!=typeof n&&a(n)})};a(arguments),r?s=u.length:n&&(o=i,c(n))}return this},remove:function(){return u&&t.each(arguments,function(e,n){for(var i;(i=t.inArray(n,u,i))>-1;)u.splice(i,1),r&&(s>=i&&--s,a>=i&&--a)}),this},has:function(e){return!(!u||!(e?t.inArray(e,u)>-1:u.length))},empty:function(){return s=u.length=0,this},disable:function(){return u=f=n=void 0,this},disabled:function(){return!u},lock:function(){return f=void 0,n||l.disable(),this},locked:function(){return!f},fireWith:function(t,e){return!u||i&&!f||(e=e||[],e=[t,e.slice?e.slice():e],r?f.push(e):c(e)),this},fire:function(){return l.fireWith(this,arguments)},fired:function(){return!!i}};return l}}(Zepto),function(t){function n(e){var i=[["resolve","done",t.Callbacks({once:1,memory:1}),"resolved"],["reject","fail",t.Callbacks({once:1,memory:1}),"rejected"],["notify","progress",t.Callbacks({memory:1})]],r="pending",o={state:function(){return r},always:function(){return s.done(arguments).fail(arguments),this},then:function(){var e=arguments;return n(function(n){t.each(i,function(i,r){var a=t.isFunction(e[i])&&e[i];s[r[1]](function(){var e=a&&a.apply(this,arguments);if(e&&t.isFunction(e.promise))e.promise().done(n.resolve).fail(n.reject).progress(n.notify);else{var i=this===o?n.promise():this,s=a?[e]:arguments;n[r[0]+"With"](i,s)}})}),e=null}).promise()},promise:function(e){return null!=e?t.extend(e,o):o}},s={};return t.each(i,function(t,e){var n=e[2],a=e[3];o[e[1]]=n.add,a&&n.add(function(){r=a},i[1^t][2].disable,i[2][2].lock),s[e[0]]=function(){return s[e[0]+"With"](this===s?o:this,arguments),this},s[e[0]+"With"]=n.fireWith}),o.promise(s),e&&e.call(s,s),s}var e=Array.prototype.slice;t.when=function(i){var f,c,l,r=e.call(arguments),o=r.length,s=0,a=1!==o||i&&t.isFunction(i.promise)?o:0,u=1===a?i:n(),h=function(t,n,i){return function(r){n[t]=this,i[t]=arguments.length>1?e.call(arguments):r,i===f?u.notifyWith(n,i):--a||u.resolveWith(n,i)}};if(o>1)for(f=new Array(o),c=new Array(o),l=new Array(o);o>s;++s)r[s]&&t.isFunction(r[s].promise)?r[s].promise().done(h(s,l,r)).fail(u.reject).progress(h(s,c,f)):--a;return a||u.resolveWith(l,r),u.promise()},t.Deferred=n}(Zepto),function(t){function u(t,e,n,i){return Math.abs(t-e)>=Math.abs(n-i)?t-e>0?"Left":"Right":n-i>0?"Up":"Down"}function f(){o=null,e.last&&(e.el.trigger("longTap"),e={})}function c(){o&&clearTimeout(o),o=null}function l(){n&&clearTimeout(n),i&&clearTimeout(i),r&&clearTimeout(r),o&&clearTimeout(o),n=i=r=o=null,e={}}function h(t){return("touch"==t.pointerType||t.pointerType==t.MSPOINTER_TYPE_TOUCH)&&t.isPrimary}function p(t,e){return t.type=="pointer"+e||t.type.toLowerCase()=="mspointer"+e}var n,i,r,o,a,e={},s=750;t(document).ready(function(){var d,m,y,w,g=0,v=0;"MSGesture"in window&&(a=new MSGesture,a.target=document.body),t(document).bind("MSGestureEnd",function(t){var n=t.velocityX>1?"Right":t.velocityX<-1?"Left":t.velocityY>1?"Down":t.velocityY<-1?"Up":null;n&&(e.el.trigger("swipe"),e.el.trigger("swipe"+n))}).on("touchstart MSPointerDown pointerdown",function(i){(!(w=p(i,"down"))||h(i))&&(y=w?i:i.touches[0],i.touches&&1===i.touches.length&&e.x2&&(e.x2=void 0,e.y2=void 0),d=Date.now(),m=d-(e.last||d),e.el=t("tagName"in y.target?y.target:y.target.parentNode),n&&clearTimeout(n),e.x1=y.pageX,e.y1=y.pageY,m>0&&250>=m&&(e.isDoubleTap=!0),e.last=d,o=setTimeout(f,s),a&&w&&a.addPointer(i.pointerId))}).on("touchmove MSPointerMove pointermove",function(t){(!(w=p(t,"move"))||h(t))&&(y=w?t:t.touches[0],c(),e.x2=y.pageX,e.y2=y.pageY,g+=Math.abs(e.x1-e.x2),v+=Math.abs(e.y1-e.y2))}).on("touchend MSPointerUp pointerup",function(o){(!(w=p(o,"up"))||h(o))&&(c(),e.x2&&Math.abs(e.x1-e.x2)>30||e.y2&&Math.abs(e.y1-e.y2)>30?r=setTimeout(function(){e.el.trigger("swipe"),e.el.trigger("swipe"+u(e.x1,e.x2,e.y1,e.y2)),e={}},0):"last"in e&&(30>g&&30>v?i=setTimeout(function(){var i=t.Event("tap");i.cancelTouch=l,e.el.trigger(i),e.isDoubleTap?(e.el&&e.el.trigger("doubleTap"),e={}):n=setTimeout(function(){n=null,e.el&&e.el.trigger("singleTap"),e={}},250)},0):e={}),g=v=0)}).on("touchcancel MSPointerCancel pointercancel",l),t(window).on("scroll",l)}),["swipe","swipeLeft","swipeRight","swipeUp","swipeDown","doubleTap","tap","singleTap","longTap"].forEach(function(e){t.fn[e]=function(t){return this.on(e,t)}})}(Zepto),function(t){function r(e){return e=t(e),!(!e.width()&&!e.height())&&"none"!==e.css("display")}function f(t,e){t=t.replace(/=#\]/g,'="#"]');var n,i,r=s.exec(t);if(r&&r[2]in o&&(n=o[r[2]],i=r[3],t=r[1],i)){var a=Number(i);i=isNaN(a)?i.replace(/^["']|["']$/g,""):a}return e(t,n,i)}var e=t.zepto,n=e.qsa,i=e.matches,o=t.expr[":"]={visible:function(){return r(this)?this:void 0},hidden:function(){return r(this)?void 0:this},selected:function(){return this.selected?this:void 0},checked:function(){return this.checked?this:void 0},parent:function(){return this.parentNode},first:function(t){return 0===t?this:void 0},last:function(t,e){return t===e.length-1?this:void 0},eq:function(t,e,n){return t===n?this:void 0},contains:function(e,n,i){return t(this).text().indexOf(i)>-1?this:void 0},has:function(t,n,i){return e.qsa(this,i).length?this:void 0}},s=new RegExp("(.*):(\\w+)(?:\\(([^)]+)\\))?$\\s*"),a=/^\s*>/,u="Zepto"+ +new Date;e.qsa=function(i,r){return f(r,function(o,s,f){try{var c;!o&&s?o="*":a.test(o)&&(c=t(i).addClass(u),o="."+u+" "+o);var l=n(i,o)}catch(h){throw console.error("error performing selector: %o",r),h}finally{c&&c.removeClass(u)}return s?e.uniq(t.map(l,function(t,e){return s.call(t,e,l,f)})):l})},e.matches=function(t,e){return f(e,function(e,n,r){return!(e&&!i(t,e)||n&&n.call(t,null,r)!==t)})}}(Zepto);
 module.exports = Zepto;
 
-},{}]},{},[4,1])
+},{}]},{},[3,1])
 
 
 //# sourceMappingURL=clappr.map
