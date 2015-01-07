@@ -121,7 +121,9 @@ class Flash extends Playback {
 
   checkInitialSeek() {
     var seekTime = seekStringToSeconds(window.location.href)
-    this.seekSeconds(seekTime)
+    if (seekTime !== 0) {
+      this.seekSeconds(seekTime)
+    }
   }
 
   play() {
