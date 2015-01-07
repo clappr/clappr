@@ -91,7 +91,7 @@ class Flash extends Playback {
     } else if (this.currentState !== "PLAYING_BUFFERING" && this.el.getState() === "PLAYING_BUFFERING") {
       this.trigger(Events.PLAYBACK_BUFFERING, this.name)
       this.currentState = "PLAYING_BUFFERING"
-    } else if (this.currentState === "PLAYING_BUFFERING" && this.el.getState() === "PLAYING") {
+    } else if (this.el.getState() === "PLAYING") {
       this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
       this.currentState = "PLAYING"
     } else if (this.el.getState() === "IDLE") {
@@ -110,10 +110,10 @@ class Flash extends Playback {
   }
 
   firstPlay() {
-    this.currentState = "PLAYING"
     if (this.el.playerPlay) {
       this.el.playerPlay(this.src)
       this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this.checkInitialSeek())
+      this.currentState = "PLAYING"
     } else {
       this.listenToOnce(this, Events.PLAYBACK_READY, this.firstPlay)
     }
@@ -153,7 +153,7 @@ class Flash extends Playback {
   }
 
   isPlaying() {
-    return !!(this.isReady && this.currentState === "PLAYING")
+    return !!(this.isReady && this.currentState.indexOf("PLAYING") > -1)
   }
 
   getDuration() {
