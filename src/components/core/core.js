@@ -82,7 +82,7 @@ class Core extends UIObject {
 
   resize(options) {
     var size = _.pick(options, 'width', 'height')
-    if (size.height.indexOf('%') > -1) {
+    if (!_.isNumber(size.height) && !_.isNumber(size.width)) {
       this.el.style.height = `${size.height}`;
       this.el.style.width = `${size.width}`;
     } else {
