@@ -30,17 +30,22 @@ Now, create the player:
 
 Format       |HLS|MP4|MP3|WEBM| [DASH](https://github.com/globocom/clappr/issues/161) | RTMP |
 -------------|---|---|---|----|-------------------------------------------------------|------|
-IE10         | ✔ | ✔ | ✔ |  ✘ | ✘ | ✔
-IE11         | ✔ | ✔ | ✔ |  ✘ | ✘ | ✔
-Firefox      | ✔ | ✔ | ✔ |  ✔ | ✘ | ✔
-Chrome       | ✔ | ✔ | ✔ |  ✔ | ✘ | ✔
-Safari       | ✔ | ✔ | ✔ |  ✘ | ✘ | ✔
+IE10         | ✔ | ✔ | ✔ |  ✘ | ✘ | ![rtmp](http://flv.io/external3.png)
+IE11         | ✔ | ✔ | ✔ |  ✘ | ✘ | ![rtmp](http://flv.io/external3.png)
+Firefox      | ✔ | ✔ | ✔ |  ✔ | ✘ | ![rtmp](http://flv.io/external3.png)
+Chrome       | ✔ | ✔ | ✔ |  ✔ | ✘ | ![rtmp](http://flv.io/external3.png)
+Safari       | ✔ | ✔ | ✔ |  ✘ | ✘ | ![rtmp](http://flv.io/external3.png)
 iPhone       | ✔ | ✔ | ✔ |  ✘ | ✘ | ✘
 iPad         | ✔ | ✔ | ✔ |  ✘ | ✘ | ✘
 Android      | ✔ | ✔ | ✔ |  ✘ | ✘ | ✘
 WiiU Browser | ✔ | ✔ | ✘ |  ? | ✘ | ✘
 PS4 Browser  | ✔ | ✔ | ✘ |  ? | ✘ | ✘
 
+![rtmp](http://flv.io/external3.png) means that the support is made by an external plugin.
+
+## External Plugins
+
+- RTMP: https://github.com/flavioribeiro/clappr-rtmp-plugin
 
 ## Built-in Plugins & Embed Parameters
 
