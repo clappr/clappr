@@ -3878,7 +3878,7 @@ System.get("traceur-runtime@0.0.62/src/runtime/polyfills/polyfills" + '');
 },{}],6:[function(require,module,exports){
 module.exports={
   "name": "clappr",
-  "version": "0.0.84",
+  "version": "0.0.85",
   "description": "An extensible media player for the web",
   "main": "dist/clappr.min.js",
   "scripts": {
@@ -5777,6 +5777,7 @@ var $HLS = HLS;
     this.trigger(Events.PLAYBACK_PROGRESS, this.el.globoGetPosition(), buffered, this.getDuration(), this.name);
   },
   firstPlay: function() {
+    this.setFlashSettings();
     this.el.globoPlayerLoad(this.src);
     this.el.globoPlayerPlay();
   },
