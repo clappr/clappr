@@ -82,8 +82,13 @@ class Core extends UIObject {
 
   resize(options) {
     var size = _.pick(options, 'width', 'height')
-    this.el.style.height = `${size.height}px`;
-    this.el.style.width = `${size.width}px`;
+    if (size.height.indexOf('%') > -1) {
+      this.el.style.height = `${size.height}`;
+      this.el.style.width = `${size.width}`;
+    } else {
+      this.el.style.height = `${size.height}px`;
+      this.el.style.width = `${size.width}px`;
+    }
     PlayerInfo.previousSize = PlayerInfo.currentSize
     PlayerInfo.currentSize = size
     Mediator.trigger(Events.PLAYER_RESIZE)
