@@ -3878,7 +3878,7 @@ System.get("traceur-runtime@0.0.62/src/runtime/polyfills/polyfills" + '');
 },{}],6:[function(require,module,exports){
 module.exports={
   "name": "clappr",
-  "version": "0.0.82",
+  "version": "0.0.83",
   "description": "An extensible media player for the web",
   "main": "dist/clappr.min.js",
   "scripts": {
@@ -3954,7 +3954,7 @@ module.exports = {
   'media_control': _.template('<div class="media-control-background" data-background></div><div class="media-control-layer" data-controls><% var renderBar=function(name) { %><div class="bar-container" data-<%= name %>><div class="bar-background" data-<%= name %>><div class="bar-fill-1" data-<%= name %>></div><div class="bar-fill-2" data-<%= name %>></div><div class="bar-hover" data-<%= name %>></div></div><div class="bar-scrubber" data-<%= name %>><div class="bar-scrubber-icon" data-<%= name %>></div></div></div><% }; %><% var renderSegmentedBar=function(name, segments) { segments=segments || 10; %><div class="bar-container" data-<%= name %>><% for (var i = 0; i < segments; i++) { %><div class="segmented-bar-element" data-<%= name %>></div><% } %></div><% }; %><% var renderDrawer=function(name, renderContent) { %><div class="drawer-container" data-<%= name %>><div class="drawer-icon-container" data-<%= name %>><div class="drawer-icon media-control-icon" data-<%= name %>></div><span class="drawer-text" data-<%= name %>></span></div><% renderContent(name); %></div><% }; %><% var renderIndicator=function(name) { %><div class="media-control-indicator" data-<%= name %>></div><% }; %><% var renderButton=function(name) { %><button class="media-control-button media-control-icon" data-<%= name %>></button><% }; %><% var templates={ bar: renderBar, segmentedBar: renderSegmentedBar, }; var render=function(settingsList) { _.each(settingsList, function(setting) { if(setting === "seekbar") { renderBar(setting); } else if (setting === "volume") { renderDrawer(setting, settings.volumeBarTemplate ? templates[settings.volumeBarTemplate] : function(name) { return renderSegmentedBar(name); }); } else if (setting === "duration" || setting=== "position") { renderIndicator(setting); } else { renderButton(setting); } }); }; %><% if (settings.default && settings.default.length) { %><div class="media-control-center-panel" data-media-control><% render(settings.default); %></div><% } %><% if (settings.left && settings.left.length) { %><div class="media-control-left-panel" data-media-control><% render(settings.left); %></div><% } %><% if (settings.right && settings.right.length) { %><div class="media-control-right-panel" data-media-control><% render(settings.right); %></div><% } %></div>'),
   'seek_time': _.template('<span data-seek-time></span>'),
   'flash': _.template('<param name="movie" value="<%= swfPath %>"><param name="quality" value="autohigh"><param name="swliveconnect" value="true"><param name="allowScriptAccess" value="always"><param name="bgcolor" value="#001122"><param name="allowFullScreen" value="false"><param name="wmode" value="transparent"><param name="tabindex" value="1"><param name=FlashVars value="playbackId=<%= playbackId %>" /><embed type="application/x-shockwave-flash" disabled tabindex="-1" enablecontextmenu="false" allowScriptAccess="always" quality="autohight" pluginspage="http://www.macromedia.com/go/getflashplayer" wmode="transparent" swliveconnect="true" type="application/x-shockwave-flash" allowfullscreen="false" bgcolor="#000000" FlashVars="playbackId=<%= playbackId %>" src="<%= swfPath %>"></embed>'),
-  'hls': _.template('<param name="movie" value="<%= swfPath %>?inline=1"><param name="quality" value="autohigh"><param name="swliveconnect" value="true"><param name="allowScriptAccess" value="always"><param name="bgcolor" value="#001122"><param name="allowFullScreen" value="false"><param name="wmode" value="transparent"><param name="tabindex" value="1"><param name=FlashVars value="playbackId=<%= playbackId %>" /><embed type="application/x-shockwave-flash" tabindex="1" enablecontextmenu="false" allowScriptAccess="always" quality="autohigh" pluginspage="http://www.macromedia.com/go/getflashplayer" wmode="transparent" swliveconnect="true" type="application/x-shockwave-flash" allowfullscreen="false" bgcolor="#000000" FlashVars="playbackId=<%= playbackId %>" src="<%= swfPath %>"></embed>'),
+  'hls': _.template('<param name="movie" value="<%= swfPath %>?inline=1"><param name="quality" value="autohigh"><param name="swliveconnect" value="true"><param name="allowScriptAccess" value="always"><param name="bgcolor" value="#001122"><param name="allowFullScreen" value="false"><param name="wmode" value="transparent"><param name="tabindex" value="1"><param name=FlashVars value="playbackId=<%= playbackId %>" /><embed type="application/x-shockwave-flash" tabindex="1" enablecontextmenu="false" allowScriptAccess="always" quality="autohigh" pluginspage="http://www.macromedia.com/go/getflashplayer" wmode="transparent" swliveconnect="true" type="application/x-shockwave-flash" allowfullscreen="false" bgcolor="#000000" FlashVars="playbackId=<%= playbackId %>" src="<%= swfPath %>" width="100%" height="100%"></embed>'),
   'html5_video': _.template('<source src="<%=src%>" type="<%=type%>">'),
   'no_op': _.template('<p data-no-op-msg>Something went wrong :(</p>'),
   'background_button': _.template('<div class="background-button-wrapper" data-background-button><button class="background-button-icon" data-background-button></button></div>'),
@@ -4452,8 +4452,13 @@ var $Core = Core;
   },
   resize: function(options) {
     var size = _.pick(options, 'width', 'height');
-    this.el.style.height = (size.height + "px");
-    this.el.style.width = (size.width + "px");
+    if (size.height.indexOf('%') > -1) {
+      this.el.style.height = ("" + size.height);
+      this.el.style.width = ("" + size.width);
+    } else {
+      this.el.style.height = (size.height + "px");
+      this.el.style.width = (size.width + "px");
+    }
     PlayerInfo.previousSize = PlayerInfo.currentSize;
     PlayerInfo.currentSize = size;
     Mediator.trigger(Events.PLAYER_RESIZE);
@@ -5587,7 +5592,6 @@ module.exports = Flash;
 },{"../../base/jst":7,"../../base/styler":8,"../../base/utils":9,"browser":"browser","events":"events","mediator":"mediator","mousetrap":4,"playback":"playback","underscore":"underscore","zepto":"zepto"}],25:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
-var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
 var _ = require("underscore");
 var Mediator = require('mediator');
@@ -5628,7 +5632,9 @@ var $HLS = HLS;
     return {
       'class': 'hls-playback',
       'data-hls': '',
-      'type': 'application/x-shockwave-flash'
+      'type': 'application/x-shockwave-flash',
+      'width': '100%',
+      'height': '100%'
     };
   },
   addListeners: function() {
@@ -5872,7 +5878,6 @@ var $HLS = HLS;
     this.el = element[0];
   },
   render: function() {
-    var style = Styler.getStyleFor(this.name);
     if (Browser.isLegacyIE) {
       this.setupIE();
     } else {
@@ -5888,7 +5893,6 @@ var $HLS = HLS;
       }
     }
     this.el.id = this.cid;
-    this.$el.append(style);
     return this;
   }
 }, {}, Playback);
@@ -5898,7 +5902,7 @@ HLS.canPlay = function(resource) {
 module.exports = HLS;
 
 
-},{"../../base/jst":7,"../../base/styler":8,"browser":"browser","events":"events","mediator":"mediator","playback":"playback","underscore":"underscore"}],26:[function(require,module,exports){
+},{"../../base/jst":7,"browser":"browser","events":"events","mediator":"mediator","playback":"playback","underscore":"underscore"}],26:[function(require,module,exports){
 "use strict";
 var Playback = require('playback');
 var Events = require('events');
