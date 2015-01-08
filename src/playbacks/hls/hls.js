@@ -3,7 +3,6 @@
 // license that can be found in the LICENSE file.
 
 var Playback = require('playback')
-var Styler = require('../../base/styler')
 var JST = require('../../base/jst')
 var _ = require("underscore")
 var Mediator = require('mediator')
@@ -20,7 +19,9 @@ class HLS extends Playback {
     return {
       'class': 'hls-playback',
       'data-hls': '',
-      'type': 'application/x-shockwave-flash'
+      'type': 'application/x-shockwave-flash',
+      'width': '100%',
+      'height': '100%'
     }
   }
 
@@ -308,7 +309,6 @@ class HLS extends Playback {
   }
 
   render() {
-    var style = Styler.getStyleFor(this.name)
     if(Browser.isLegacyIE) {
       this.setupIE()
     } else {
@@ -320,7 +320,6 @@ class HLS extends Playback {
       }
     }
     this.el.id = this.cid
-    this.$el.append(style)
     return this
   }
 }
