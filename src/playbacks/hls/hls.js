@@ -197,6 +197,7 @@ class HLS extends Playback {
   }
 
   firstPlay() {
+    this.setFlashSettings() //ensure flushLiveURLCache will work (#327)
     this.el.globoPlayerLoad(this.src)
     this.el.globoPlayerPlay()
   }
