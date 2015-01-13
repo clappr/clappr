@@ -47,13 +47,14 @@ class HTML5Video extends Playback {
     this.settings = {default: ['seekbar']}
     if (this.isHLS && Browser.isSafari) {
       this.settings.left = ["playstop"]
-      this.settings.right = ["fullscreen", "volume"]
+    } else if (Browser.isSafari) {
+      this.el.preload = 'auto'
     } else {
       this.el.preload = options.preload ? options.preload: 'metadata'
       this.settings.left = ["playpause", "position", "duration"]
-      this.settings.right = ["fullscreen", "volume"]
       this.settings.seekEnabled = true
     }
+    this.settings.right = ["fullscreen", "volume"]
     this.bindEvents()
   }
 
@@ -205,8 +206,8 @@ class HTML5Video extends Playback {
 
 HTML5Video.canPlay = function(resource) {
   var mimetypes = {
-    'mp4': _.map(["avc1.42E01E", "avc1.58A01E", "avc1.4D401E", "avc1.64001E", "mp4v.20.8", "mp4v.20.240"],
-      function (codec) { return 'video/mp4; codecs=' + codec + ', mp4a.40.2'}),
+    'mp4': _.map(["avc1.42E01E", "avc1.58A01E", "avc1.4D401E", "avc1.64001E", "mp4v.20.8", "mp4v.20.240", "mp4a.40.2"],
+      function (codec) { return 'video/mp4; codecs="' + codec + ', mp4a.40.2"'}),
     'ogg': ['video/ogg; codecs="theora, vorbis"', 'video/ogg; codecs="dirac"', 'video/ogg; codecs="theora, speex"'],
     '3gpp': ['video/3gpp; codecs="mp4v.20.8, samr"'],
     'webm': ['video/webm; codecs="vp8, vorbis"'],
