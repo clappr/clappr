@@ -125,6 +125,8 @@ Define a poster by adding `poster: http://url/img.png` on your embed parameters.
 ##### Stats
 Clappr has a native statistics plugin that accounts QoE metrics such playing time, rebuffering time, total rebuffers, etc. Metrics report happens periodically, learn how to access these numbers on [Create your own plugin](https://github.com/globocom/generator-clappr-plugin) session.
 
+##### Disable Toggle Play
+Disable toggle play key event with "disableTogglePlay: true" or leave out for default.
 
 ### Status
 

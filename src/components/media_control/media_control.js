@@ -151,6 +151,10 @@ class MediaControl extends UIObject {
   }
 
   togglePlayPause() {
+    if (typeof this.options.disableTogglePlay !== "undefined" && this.options.disableTogglePlay !== null) {
+      return;
+    }
+
     if (this.container.isPlaying()) {
       this.container.pause()
     } else {
