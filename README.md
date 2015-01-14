@@ -46,6 +46,8 @@ PS4 Browser  | ✔ | ✔ | ✘ |  ? | ✘ | ✘
 ## External Plugins
 
 - RTMP: https://github.com/flavioribeiro/clappr-rtmp-plugin
+- Comments on seekbar: http://labs.jordane.net/clappr-comment/
+- Level Selector: https://github.com/lucasmundim/clappr-level-selector-plugin
 
 ## Built-in Plugins & Embed Parameters
 
