@@ -8,3 +8,9 @@ src/base/jst.js
 dist/
 aws.json
 npm-debug.log
+
+# Vim
+*~
+*.swp
+*.swo
+
