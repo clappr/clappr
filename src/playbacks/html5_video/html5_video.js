@@ -45,15 +45,13 @@ class HTML5Video extends Playback {
     this.firstBuffer = true
     this.isHLS = (this.src.indexOf('m3u8') > -1)
     this.settings = {default: ['seekbar']}
-    if (this.isHLS && Browser.isSafari) {
-      this.settings.left = ["playstop"]
-    } else if (Browser.isSafari) {
+    if (Browser.isSafari) {
       this.el.preload = 'auto'
     } else {
       this.el.preload = options.preload ? options.preload: 'metadata'
-      this.settings.left = ["playpause", "position", "duration"]
       this.settings.seekEnabled = true
     }
+    this.settings.left = this.isHLS ? ["playstop"] : ["playpause", "position", "duration"]
     this.settings.right = ["fullscreen", "volume"]
     this.bindEvents()
   }
