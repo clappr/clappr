@@ -4,7 +4,6 @@
 
 var Playback = require('playback')
 var Styler = require('../../base/styler')
-var JST = require('../../base/jst')
 var Events = require('events')
 
 class HTMLImg extends Playback {
@@ -23,9 +22,6 @@ class HTMLImg extends Playback {
   constructor(params) {
     super(params)
     this.el.src = params.src
-    setTimeout(function() {
-      this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
-    }.bind(this), 1);
   }
 
   render() {
