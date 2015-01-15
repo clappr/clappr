@@ -37,6 +37,11 @@ class PosterPlugin extends UIContainerPlugin {
     this.bufferFull = false
   }
 
+  load(source) {
+    this.options.poster = source
+    this.render()
+  }
+
   bindEvents() {
     this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering)
     this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferfull)
@@ -90,7 +95,6 @@ class PosterPlugin extends UIContainerPlugin {
     this.hidePlayButton()
     return false
   }
-
 
   updateSize() {
     if (this.container.playback.name === 'html_img') return
