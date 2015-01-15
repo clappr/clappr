@@ -28,12 +28,12 @@ Now, create the player:
 
 ## Formats Supported
 
-Format       |HLS|MP4|MP3|WEBM| [DASH](https://github.com/globocom/clappr/issues/161) | RTMP |
+Format       |HLS|MP4|MP3|WEBM| DASH | RTMP |
 -------------|---|---|---|----|-------------------------------------------------------|------|
 IE10         | ✔ | ✔ | ✔ |  ✘ | ✘ | ![rtmp](http://flv.io/external3.png)
 IE11         | ✔ | ✔ | ✔ |  ✘ | ✘ | ![rtmp](http://flv.io/external3.png)
 Firefox      | ✔ | ✔ | ✔ |  ✔ | ✘ | ![rtmp](http://flv.io/external3.png)
-Chrome       | ✔ | ✔ | ✔ |  ✔ | ✘ | ![rtmp](http://flv.io/external3.png)
+Chrome       | ✔ | ✔ | ✔ |  ✔ | ![dash](http://flv.io/external3.png) | ![rtmp](http://flv.io/external3.png)
 Safari       | ✔ | ✔ | ✔ |  ✘ | ✘ | ![rtmp](http://flv.io/external3.png)
 iPhone       | ✔ | ✔ | ✔ |  ✘ | ✘ | ✘
 iPad         | ✔ | ✔ | ✔ |  ✘ | ✘ | ✘
@@ -46,6 +46,7 @@ PS4 Browser  | ✔ | ✔ | ✘ |  ? | ✘ | ✘
 ## External Plugins
 
 - RTMP: https://github.com/flavioribeiro/clappr-rtmp-plugin
+- DASH: https://github.com/shankardevy/clappr-dash-plugin
 - Comments on seekbar: http://labs.jordane.net/clappr-comment/
 - Level Selector: https://github.com/lucasmundim/clappr-level-selector-plugin
 
