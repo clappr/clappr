@@ -3878,7 +3878,7 @@ System.get("traceur-runtime@0.0.62/src/runtime/polyfills/polyfills" + '');
 },{}],6:[function(require,module,exports){
 module.exports={
   "name": "clappr",
-  "version": "0.0.88",
+  "version": "0.0.89",
   "description": "An extensible media player for the web",
   "main": "dist/clappr.min.js",
   "scripts": {
@@ -4706,13 +4706,12 @@ var WaterMarkPlugin = require('../../plugins/watermark');
 var PosterPlugin = require('poster');
 var GoogleAnalyticsPlugin = require('../../plugins/google_analytics');
 var ClickToPausePlugin = require('../../plugins/click_to_pause');
-var BackgroundButton = require('../../plugins/background_button');
 var DVRControls = require('../../plugins/dvr_controls');
 var Loader = function Loader(externalPlugins) {
   $traceurRuntime.superCall(this, $Loader.prototype, "constructor", []);
   this.playbackPlugins = [HTML5VideoPlayback, FlashVideoPlayback, HTML5AudioPlayback, HLSVideoPlayback, HTMLImgPlayback, NoOp];
   this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin];
-  this.corePlugins = [BackgroundButton, DVRControls];
+  this.corePlugins = [DVRControls];
   if (externalPlugins) {
     this.addExternalPlugins(externalPlugins);
   }
@@ -4744,7 +4743,7 @@ var $Loader = Loader;
 module.exports = Loader;
 
 
-},{"../../playbacks/no_op":29,"../../plugins/background_button":32,"../../plugins/click_to_pause":34,"../../plugins/dvr_controls":36,"../../plugins/google_analytics":38,"../../plugins/spinner_three_bounce":42,"../../plugins/stats":44,"../../plugins/watermark":46,"base_object":"base_object","flash":"flash","hls":"hls","html5_audio":"html5_audio","html5_video":"html5_video","html_img":"html_img","player_info":"player_info","poster":"poster","underscore":"underscore"}],20:[function(require,module,exports){
+},{"../../playbacks/no_op":29,"../../plugins/click_to_pause":32,"../../plugins/dvr_controls":34,"../../plugins/google_analytics":36,"../../plugins/spinner_three_bounce":40,"../../plugins/stats":42,"../../plugins/watermark":44,"base_object":"base_object","flash":"flash","hls":"hls","html5_audio":"html5_audio","html5_video":"html5_video","html_img":"html_img","player_info":"player_info","poster":"poster","underscore":"underscore"}],20:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 var $ = require('zepto');
@@ -5091,7 +5090,6 @@ var $MediaControl = MediaControl;
     if (this.container.getPlaybackType() !== null && !_.isEmpty(this.container.settings)) {
       this.settings = this.container.settings;
       this.render();
-      this.enable();
     } else {
       this.disable();
     }
@@ -5299,6 +5297,12 @@ var $Player = Player;
   },
   isPlaying: function() {
     return this.core.mediaControl.container.isPlaying();
+  },
+  getContainerPlugin: function(name) {
+    return this.core.mediaControl.container.getPlugin(name);
+  },
+  getCorePlugin: function(name) {
+    return this.core.getPlugin(name);
   }
 }, {}, BaseObject);
 module.exports = Player;
@@ -5575,7 +5579,9 @@ var $Flash = Flash;
   }
 }, {}, Playback);
 Flash.canPlay = function(resource) {
-  if ((!Browser.isMobile && Browser.isFirefox) || Browser.isLegacyIE) {
+  if (!Browser.hasFlash) {
+    return false;
+  } else if ((!Browser.isMobile && Browser.isFirefox) || Browser.isLegacyIE) {
     return _.isString(resource) && !!resource.match(/(.*)\.(mp4|mov|f4v|3gpp|3gp)/);
   } else {
     return _.isString(resource) && !!resource.match(/(.*)\.(mov|f4v|3gpp|3gp)/);
@@ -5644,7 +5650,7 @@ var $HLS = HLS;
     Mediator.on(this.uniqueId + ':playbackstate', (function(state) {
       return $__0.setPlaybackState(state);
     }));
-    Mediator.on(this.uniqueId + ':highdefinition', (function(isHD) {
+    Mediator.on(this.uniqueId + ':levelchanged', (function(isHD) {
       return $__0.updateHighDefinition(isHD);
     }));
     Mediator.on(this.uniqueId + ':playbackerror', (function() {
@@ -5656,7 +5662,7 @@ var $HLS = HLS;
     Mediator.off(this.uniqueId + ':flashready');
     Mediator.off(this.uniqueId + ':timeupdate');
     Mediator.off(this.uniqueId + ':playbackstate');
-    Mediator.off(this.uniqueId + ':highdefinition');
+    Mediator.off(this.uniqueId + ':levelchanged');
     Mediator.off(this.uniqueId + ':playbackerror');
   },
   bootstrap: function() {
@@ -5674,7 +5680,7 @@ var $HLS = HLS;
     this.el.globoPlayerSetmaxBufferLength(0);
   },
   updateHighDefinition: function(isHD) {
-    this.highDefinition = (isHD === "true");
+    this.highDefinition = (isHD === "hd");
     this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE);
     this.trigger(Events.PLAYBACK_BITRATE, {'bitrate': this.getCurrentBitrate()});
   },
@@ -5896,7 +5902,7 @@ var $HLS = HLS;
   }
 }, {}, Playback);
 HLS.canPlay = function(resource) {
-  return !!resource.match(/^http(.*).m3u8?/);
+  return !!(resource.match(/^http(.*).m3u8?/) && Browser.hasFlash);
 };
 module.exports = HLS;
 
@@ -6151,7 +6157,9 @@ var $HTML5Video = HTML5Video;
     return this.el.duration;
   },
   timeUpdated: function() {
-    if (this.getPlaybackType() !== 'live') {
+    if (this.getPlaybackType() === 'live') {
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, 1, 1, this.name);
+    } else {
       this.trigger(Events.PLAYBACK_TIMEUPDATE, this.el.currentTime, this.el.duration, this.name);
     }
   },
@@ -6215,14 +6223,10 @@ module.exports = HTML5Video;
 "use strict";
 var Playback = require('playback');
 var Styler = require('../../base/styler');
-var JST = require('../../base/jst');
 var Events = require('events');
 var HTMLImg = function HTMLImg(params) {
   $traceurRuntime.superCall(this, $HTMLImg.prototype, "constructor", [params]);
   this.el.src = params.src;
-  setTimeout(function() {
-    this.trigger(Events.PLAYBACK_BUFFERFULL, this.name);
-  }.bind(this), 1);
 };
 var $HTMLImg = HTMLImg;
 ($traceurRuntime.createClass)(HTMLImg, {
@@ -6250,7 +6254,7 @@ HTMLImg.canPlay = function(resource) {
 module.exports = HTMLImg;
 
 
-},{"../../base/jst":7,"../../base/styler":8,"events":"events","playback":"playback"}],29:[function(require,module,exports){
+},{"../../base/styler":8,"events":"events","playback":"playback"}],29:[function(require,module,exports){
 "use strict";
 module.exports = require('./no_op');
 
@@ -6288,151 +6292,6 @@ module.exports = NoOp;
 
 
 },{"../../base/jst":7,"../../base/styler":8,"playback":"playback"}],31:[function(require,module,exports){
-(function (process){
-"use strict";
-var UICorePlugin = require('ui_core_plugin');
-var JST = require('../../base/jst');
-var Styler = require('../../base/styler');
-var Events = require('events');
-var Browser = require('browser');
-var Mediator = require('mediator');
-var PlayerInfo = require('player_info');
-var BackgroundButton = function BackgroundButton(core) {
-  $traceurRuntime.superCall(this, $BackgroundButton.prototype, "constructor", [core]);
-  this.core = core;
-  this.settingsUpdate();
-};
-var $BackgroundButton = BackgroundButton;
-($traceurRuntime.createClass)(BackgroundButton, {
-  get template() {
-    return JST.background_button;
-  },
-  get name() {
-    return 'background_button';
-  },
-  get attributes() {
-    return {
-      'class': 'background-button',
-      'data-background-button': ''
-    };
-  },
-  get events() {
-    return {'click .background-button-icon': 'click'};
-  },
-  bindEvents: function() {
-    this.listenTo(this.core.mediaControl.container, Events.CONTAINER_STATE_BUFFERING, this.hide);
-    this.listenTo(this.core.mediaControl.container, Events.CONTAINER_STATE_BUFFERFULL, this.show);
-    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_RENDERED, this.settingsUpdate);
-    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_SHOW, this.updateSize);
-    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_PLAYING, this.playing);
-    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_NOTPLAYING, this.notplaying);
-    Mediator.on(Events.PLAYER_RESIZE, this.updateSize, this);
-  },
-  stopListening: function() {
-    $traceurRuntime.superCall(this, $BackgroundButton.prototype, "stopListening", []);
-    Mediator.off(Events.PLAYER_RESIZE, this.updateSize, this);
-  },
-  settingsUpdate: function() {
-    this.stopListening();
-    if (this.shouldRender()) {
-      this.render();
-      this.bindEvents();
-      if (this.core.mediaControl.container.isPlaying()) {
-        this.playing();
-      } else {
-        this.notplaying();
-      }
-    } else {
-      this.$el.remove();
-      this.$playPauseButton.show();
-      this.$playStopButton.show();
-      this.listenTo(this.core.mediaControl.container, Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate);
-      this.listenTo(this.core.mediaControl.container, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.settingsUpdate);
-      this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.settingsUpdate);
-    }
-  },
-  shouldRender: function() {
-    var useBackgroundButton = (this.core.options.useBackgroundButton === undefined && Browser.isMobile) || !!this.core.options.useBackgroundButton;
-    return useBackgroundButton && (this.core.mediaControl.$el.find('[data-playstop]').length > 0 || this.core.mediaControl.$el.find('[data-playpause]').length > 0);
-  },
-  click: function() {
-    this.core.mediaControl.show();
-    if (this.shouldStop) {
-      this.core.mediaControl.togglePlayStop();
-    } else {
-      this.core.mediaControl.togglePlayPause();
-    }
-  },
-  show: function() {
-    this.$el.removeClass('hide');
-  },
-  hide: function() {
-    this.$el.addClass('hide');
-  },
-  enable: function() {
-    this.stopListening();
-    $traceurRuntime.superCall(this, $BackgroundButton.prototype, "enable", []);
-    this.settingsUpdate();
-  },
-  disable: function() {
-    $traceurRuntime.superCall(this, $BackgroundButton.prototype, "disable", []);
-    this.$playPauseButton.show();
-    this.$playStopButton.show();
-  },
-  playing: function() {
-    this.$buttonIcon.removeClass('notplaying').addClass('playing');
-  },
-  notplaying: function() {
-    this.$buttonIcon.removeClass('playing').addClass('notplaying');
-  },
-  getExternalInterface: function() {},
-  updateSize: function() {
-    if (!this.$el)
-      return;
-    var height = PlayerInfo.currentSize ? PlayerInfo.currentSize.height : this.$el.height();
-    this.$el.css({fontSize: height});
-    this.$buttonWrapper.css({marginTop: -(this.$buttonWrapper.height() / 2)});
-  },
-  render: function() {
-    var $__0 = this;
-    var style = Styler.getStyleFor(this.name);
-    this.$el.html(this.template());
-    this.$el.append(style);
-    this.$playPauseButton = this.core.mediaControl.$el.find('[data-playpause]');
-    this.$playStopButton = this.core.mediaControl.$el.find('[data-playstop]');
-    this.$buttonWrapper = this.$el.find('.background-button-wrapper[data-background-button]');
-    this.$buttonIcon = this.$el.find('.background-button-icon[data-background-button]');
-    this.shouldStop = this.$playStopButton.length > 0;
-    this.$el.insertBefore(this.core.mediaControl.$el.find('.media-control-layer[data-controls]'));
-    this.$el.click((function() {
-      return $__0.click($__0.$el);
-    }));
-    process.nextTick((function() {
-      return $__0.updateSize();
-    }));
-    if (this.core.options.useBackgroundButton) {
-      this.$playPauseButton.hide();
-      this.$playStopButton.hide();
-    }
-    if (this.shouldStop) {
-      this.$buttonIcon.addClass('playstop');
-    }
-    if (this.core.mediaControl.isVisible()) {
-      this.show();
-    }
-    return this;
-  }
-}, {}, UICorePlugin);
-module.exports = BackgroundButton;
-
-
-}).call(this,require('_process'))
-},{"../../base/jst":7,"../../base/styler":8,"_process":2,"browser":"browser","events":"events","mediator":"mediator","player_info":"player_info","ui_core_plugin":"ui_core_plugin"}],32:[function(require,module,exports){
-"use strict";
-module.exports = require('./background_button');
-
-
-},{"./background_button":31}],33:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('container_plugin');
 var Events = require('events');
@@ -6467,12 +6326,12 @@ var $ClickToPausePlugin = ClickToPausePlugin;
 module.exports = ClickToPausePlugin;
 
 
-},{"container_plugin":"container_plugin","events":"events"}],34:[function(require,module,exports){
+},{"container_plugin":"container_plugin","events":"events"}],32:[function(require,module,exports){
 "use strict";
 module.exports = require('./click_to_pause');
 
 
-},{"./click_to_pause":33}],35:[function(require,module,exports){
+},{"./click_to_pause":31}],33:[function(require,module,exports){
 "use strict";
 var UICorePlugin = require('ui_core_plugin');
 var JST = require('../../base/jst');
@@ -6556,12 +6415,12 @@ var $DVRControls = DVRControls;
 module.exports = DVRControls;
 
 
-},{"../../base/jst":7,"../../base/styler":8,"events":"events","ui_core_plugin":"ui_core_plugin"}],36:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"events":"events","ui_core_plugin":"ui_core_plugin"}],34:[function(require,module,exports){
 "use strict";
 module.exports = require('./dvr_controls');
 
 
-},{"./dvr_controls":35}],37:[function(require,module,exports){
+},{"./dvr_controls":33}],35:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('container_plugin');
 var Events = require('events');
@@ -6671,17 +6530,17 @@ var $GoogleAnalytics = GoogleAnalytics;
 module.exports = GoogleAnalytics;
 
 
-},{"container_plugin":"container_plugin","events":"events"}],38:[function(require,module,exports){
+},{"container_plugin":"container_plugin","events":"events"}],36:[function(require,module,exports){
 "use strict";
 module.exports = require('./google_analytics');
 
 
-},{"./google_analytics":37}],39:[function(require,module,exports){
+},{"./google_analytics":35}],37:[function(require,module,exports){
 "use strict";
 module.exports = require('./log');
 
 
-},{"./log":40}],40:[function(require,module,exports){
+},{"./log":38}],38:[function(require,module,exports){
 "use strict";
 var _ = require('underscore');
 require('mousetrap');
@@ -6733,7 +6592,7 @@ Log.getInstance = function() {
 module.exports = Log;
 
 
-},{"mousetrap":4,"underscore":"underscore"}],41:[function(require,module,exports){
+},{"mousetrap":4,"underscore":"underscore"}],39:[function(require,module,exports){
 (function (process){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
@@ -6743,15 +6602,12 @@ var Events = require('events');
 var Mediator = require('mediator');
 var PlayerInfo = require('player_info');
 var $ = require('zepto');
-var _ = require('underscore');
 var PosterPlugin = function PosterPlugin(options) {
   $traceurRuntime.superCall(this, $PosterPlugin.prototype, "constructor", [options]);
   this.options = options;
-  _.defaults(this.options, {disableControlsOnPoster: true});
-  if (this.options.disableControlsOnPoster) {
-    this.container.disableMediaControl();
-  }
+  this.container.disableMediaControl();
   this.render();
+  this.bufferFull = false;
 };
 var $PosterPlugin = PosterPlugin;
 ($traceurRuntime.createClass)(PosterPlugin, {
@@ -6770,10 +6626,15 @@ var $PosterPlugin = PosterPlugin;
   get events() {
     return {'click': 'clicked'};
   },
+  load: function(source) {
+    this.options.poster = source;
+    this.render();
+  },
   bindEvents: function() {
     this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering);
     this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferfull);
     this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop);
+    this.listenTo(this.container, Events.CONTAINER_PLAY, this.onPlay);
     this.listenTo(this.container, Events.CONTAINER_ENDED, this.onStop);
     Mediator.on(Events.PLAYER_RESIZE, this.updateSize, this);
   },
@@ -6782,64 +6643,63 @@ var $PosterPlugin = PosterPlugin;
     Mediator.off(Events.PLAYER_RESIZE, this.updateSize, this);
   },
   onBuffering: function() {
+    this.bufferFull = false;
     this.hidePlayButton();
   },
-  onBufferfull: function() {
-    this.$el.hide();
-    if (this.options.disableControlsOnPoster) {
+  onPlay: function() {
+    if (this.bufferFull) {
+      this.$el.hide();
       this.container.enableMediaControl();
     }
   },
+  onBufferfull: function() {
+    this.bufferFull = true;
+    if (this.container.playback.name === 'html5_video' && !this.container.isPlaying())
+      return;
+    this.$el.hide();
+    this.container.enableMediaControl();
+  },
   onStop: function() {
     this.$el.show();
-    if (this.options.disableControlsOnPoster) {
-      this.container.disableMediaControl();
-    }
-    if (!this.options.hidePlayButton) {
-      this.showPlayButton();
-    }
-  },
-  hidePlayButton: function() {
-    this.$playButton.hide();
+    this.container.disableMediaControl();
+    this.showPlayButton();
   },
   showPlayButton: function() {
     this.$playButton.show();
     this.updateSize();
   },
+  hidePlayButton: function() {
+    this.$playButton.hide();
+  },
   clicked: function() {
     this.container.play();
+    this.hidePlayButton();
     return false;
   },
   updateSize: function() {
-    if (!this.$el)
+    if (this.container.playback.name === 'html_img')
       return;
     var height = PlayerInfo.currentSize ? PlayerInfo.currentSize.height : this.$el.height();
     this.$el.css({fontSize: height});
     if (this.$playWrapper.is(':visible')) {
       this.$playWrapper.css({marginTop: -(this.$playWrapper.height() / 2)});
-      if (!this.options.hidePlayButton) {
-        this.$playButton.show();
-      }
-    } else {
-      this.$playButton.hide();
     }
   },
   render: function() {
     var $__0 = this;
+    if (this.container.playback.name === 'html_img')
+      return;
     var style = Styler.getStyleFor(this.name);
     this.$el.html(this.template());
     this.$el.append(style);
-    this.$playButton = this.$el.find('.poster-icon');
-    this.$playWrapper = this.$el.find('.play-wrapper');
-    if (this.options.poster !== undefined) {
+    if (this.options.poster) {
       var imgEl = $('<img data-poster class="poster-background"></img>');
       imgEl.attr('src', this.options.poster);
       this.$el.prepend(imgEl);
     }
     this.container.$el.append(this.el);
-    if (!!this.options.hidePlayButton) {
-      this.hidePlayButton();
-    }
+    this.$playButton = this.$el.find('.poster-icon');
+    this.$playWrapper = this.$el.find('.play-wrapper');
     process.nextTick((function() {
       return $__0.updateSize();
     }));
@@ -6850,12 +6710,12 @@ module.exports = PosterPlugin;
 
 
 }).call(this,require('_process'))
-},{"../../base/jst":7,"../../base/styler":8,"_process":2,"events":"events","mediator":"mediator","player_info":"player_info","ui_container_plugin":"ui_container_plugin","underscore":"underscore","zepto":"zepto"}],42:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"_process":2,"events":"events","mediator":"mediator","player_info":"player_info","ui_container_plugin":"ui_container_plugin","zepto":"zepto"}],40:[function(require,module,exports){
 "use strict";
 module.exports = require('./spinner_three_bounce');
 
 
-},{"./spinner_three_bounce":43}],43:[function(require,module,exports){
+},{"./spinner_three_bounce":41}],41:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
 var Styler = require('../../base/styler');
@@ -6901,12 +6761,12 @@ var $SpinnerThreeBouncePlugin = SpinnerThreeBouncePlugin;
 module.exports = SpinnerThreeBouncePlugin;
 
 
-},{"../../base/jst":7,"../../base/styler":8,"events":"events","ui_container_plugin":"ui_container_plugin"}],44:[function(require,module,exports){
+},{"../../base/jst":7,"../../base/styler":8,"events":"events","ui_container_plugin":"ui_container_plugin"}],42:[function(require,module,exports){
 "use strict";
 module.exports = require('./stats');
 
 
-},{"./stats":45}],45:[function(require,module,exports){
+},{"./stats":43}],43:[function(require,module,exports){
 "use strict";
 var ContainerPlugin = require('container_plugin');
 var $ = require("zepto");
@@ -7002,12 +6862,12 @@ var $StatsPlugin = StatsPlugin;
 module.exports = StatsPlugin;
 
 
-},{"container_plugin":"container_plugin","events":"events","zepto":"zepto"}],46:[function(require,module,exports){
+},{"container_plugin":"container_plugin","events":"events","zepto":"zepto"}],44:[function(require,module,exports){
 "use strict";
 module.exports = require('./watermark');
 
 
-},{"./watermark":47}],47:[function(require,module,exports){
+},{"./watermark":45}],45:[function(require,module,exports){
 "use strict";
 var UIContainerPlugin = require('ui_container_plugin');
 var Styler = require('../../base/styler');
@@ -7085,6 +6945,14 @@ var hasLocalstorage = function() {
     return false;
   }
 };
+var hasFlash = function() {
+  try {
+    var fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
+    return !!fo;
+  } catch (e) {
+    return !!(navigator.mimeTypes && navigator.mimeTypes['application/x-shockwave-flash'] != undefined && navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin);
+  }
+};
 Browser.isSafari = (!!navigator.userAgent.match(/safari/i) && navigator.userAgent.indexOf('Chrome') === -1);
 Browser.isChrome = !!(navigator.userAgent.match(/chrome/i));
 Browser.isFirefox = !!(navigator.userAgent.match(/firefox/i));
@@ -7096,6 +6964,7 @@ Browser.isWin8App = !!(/MSAppHost/i.test(navigator.userAgent));
 Browser.isWiiU = !!(/WiiU/i.test(navigator.userAgent));
 Browser.isPS4 = !!(/PlayStation 4/i.test(navigator.userAgent));
 Browser.hasLocalstorage = hasLocalstorage();
+Browser.hasFlash = hasFlash();
 module.exports = Browser;
 
 
@@ -7368,7 +7237,7 @@ Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged';
 module.exports = Events;
 
 
-},{"../plugins/log":39,"underscore":"underscore"}],"flash":[function(require,module,exports){
+},{"../plugins/log":37,"underscore":"underscore"}],"flash":[function(require,module,exports){
 "use strict";
 module.exports = require('./flash');
 
@@ -7481,7 +7350,7 @@ module.exports = PlayerInfo;
 module.exports = require('./poster');
 
 
-},{"./poster":41}],"ui_container_plugin":[function(require,module,exports){
+},{"./poster":39}],"ui_container_plugin":[function(require,module,exports){
 "use strict";
 var UIObject = require('ui_object');
 var UIContainerPlugin = function UIContainerPlugin(options) {
