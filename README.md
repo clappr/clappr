@@ -26,7 +26,7 @@ Now, create the player:
 </body>
 ```
 
-## Formats Supported
+## Supported Formats
 
 Format       |HLS|MP4|MP3|WEBM| DASH | RTMP |
 -------------|---|---|---|----|-------------------------------------------------------|------|
@@ -47,6 +47,7 @@ PS4 Browser  | ✔ | ✔ | ✘ |  ? | ✘ | ✘
 
 - RTMP: https://github.com/flavioribeiro/clappr-rtmp-plugin
 - DASH: https://github.com/shankardevy/clappr-dash-plugin
+- HLS+P2P: http://bem.tv
 - Comments on seekbar: http://labs.jordane.net/clappr-comment/
 - Level Selector: https://github.com/lucasmundim/clappr-level-selector-plugin
 
