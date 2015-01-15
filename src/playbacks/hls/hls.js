@@ -257,6 +257,7 @@ class HLS extends Playback {
     }
     this.el.globoPlayerSeek(time)
     this.trigger(Events.PLAYBACK_TIMEUPDATE, time, duration, this.name)
+    this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE)
   }
 
   updateDvr(dvrInUse) {
