@@ -23,7 +23,6 @@ var GoogleAnalyticsPlugin = require('../../plugins/google_analytics');
 var ClickToPausePlugin = require('../../plugins/click_to_pause');
 
 /* Core Plugins */
-var BackgroundButton = require('../../plugins/background_button');
 var DVRControls = require('../../plugins/dvr_controls');
 
 class Loader extends BaseObject {
@@ -31,7 +30,7 @@ class Loader extends BaseObject {
     super()
     this.playbackPlugins = [HTML5VideoPlayback, FlashVideoPlayback, HTML5AudioPlayback, HLSVideoPlayback, HTMLImgPlayback, NoOp]
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
-    this.corePlugins = [BackgroundButton, DVRControls]
+    this.corePlugins = [DVRControls]
     if (externalPlugins) {
       this.addExternalPlugins(externalPlugins)
     }
