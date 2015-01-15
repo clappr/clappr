@@ -15,6 +15,16 @@ var hasLocalstorage = function(){
   }
 }
 
+var hasFlash = function() {
+  try {
+    var fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
+    return !!fo;
+  } catch (e) {
+    return !!(navigator.mimeTypes && navigator.mimeTypes['application/x-shockwave-flash'] != undefined &&
+        navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin);
+  }
+}
+
 Browser.isSafari = (!!navigator.userAgent.match(/safari/i) && navigator.userAgent.indexOf('Chrome') === -1)
 Browser.isChrome = !!(navigator.userAgent.match(/chrome/i))
 Browser.isFirefox = !!(navigator.userAgent.match(/firefox/i))
@@ -26,5 +36,6 @@ Browser.isWin8App = !!(/MSAppHost/i.test(navigator.userAgent))
 Browser.isWiiU = !!(/WiiU/i.test(navigator.userAgent))
 Browser.isPS4 = !!(/PlayStation 4/i.test(navigator.userAgent))
 Browser.hasLocalstorage = hasLocalstorage()
+Browser.hasFlash = hasFlash()
 
 module.exports = Browser

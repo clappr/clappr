@@ -329,7 +329,7 @@ class HLS extends Playback {
 }
 
 HLS.canPlay = function(resource) {
-  return !!resource.match(/^http(.*).m3u8?/)
+  return !!(resource.match(/^http(.*).m3u8?/) && Browser.hasFlash)
 }
 
 module.exports = HLS
