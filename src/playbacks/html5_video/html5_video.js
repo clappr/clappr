@@ -171,7 +171,9 @@ class HTML5Video extends Playback {
   }
 
   timeUpdated() {
-    if (this.getPlaybackType() !== 'live') {
+    if (this.getPlaybackType() === 'live') {
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, 1, 1, this.name)
+    } else {
       this.trigger(Events.PLAYBACK_TIMEUPDATE, this.el.currentTime, this.el.duration, this.name)
     }
   }
