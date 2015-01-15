@@ -102,6 +102,14 @@ class Player extends BaseObject {
   isPlaying() {
     return this.core.mediaControl.container.isPlaying();
   }
+
+  getContainerPlugin(name) {
+    return this.core.mediaControl.container.getPlugin(name)
+  }
+
+  getCorePlugin(name) {
+    return this.core.getPlugin(name)
+  }
 }
 
 module.exports = Player
