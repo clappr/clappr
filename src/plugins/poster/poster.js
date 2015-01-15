@@ -11,7 +11,6 @@ var Mediator = require('mediator')
 var PlayerInfo = require('player_info')
 
 var $ = require('zepto')
-var _ = require('underscore')
 
 class PosterPlugin extends UIContainerPlugin {
   get name() { return 'poster' }
@@ -32,18 +31,17 @@ class PosterPlugin extends UIContainerPlugin {
 
   constructor(options) {
     super(options)
-    this.options = options;
-    _.defaults(this.options, {disableControlsOnPoster: true});
-    if (this.options.disableControlsOnPoster) {
-      this.container.disableMediaControl()
-    }
+    this.options = options
+    this.container.disableMediaControl()
     this.render()
+    this.bufferFull = false
   }
 
   bindEvents() {
     this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering)
     this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferfull)
     this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
+    this.listenTo(this.container, Events.CONTAINER_PLAY, this.onPlay)
     this.listenTo(this.container, Events.CONTAINER_ENDED, this.onStop)
     Mediator.on(Events.PLAYER_RESIZE, this.updateSize, this)
   }
@@ -54,28 +52,28 @@ class PosterPlugin extends UIContainerPlugin {
   }
 
   onBuffering() {
+    this.bufferFull = false
     this.hidePlayButton()
   }
 
-  onBufferfull() {
-    this.$el.hide()
-    if (this.options.disableControlsOnPoster) {
+  onPlay() {
+    if (this.bufferFull) {
+      this.$el.hide()
       this.container.enableMediaControl()
     }
   }
 
-  onStop() {
-    this.$el.show()
-    if (this.options.disableControlsOnPoster) {
-      this.container.disableMediaControl()
-    }
-    if (!this.options.hidePlayButton) {
-      this.showPlayButton()
-    }
+  onBufferfull() {
+    this.bufferFull = true
+    if (this.container.playback.name === 'html5_video' && !this.container.isPlaying()) return
+    this.$el.hide()
+    this.container.enableMediaControl()
   }
 
-  hidePlayButton() {
-    this.$playButton.hide()
+  onStop() {
+    this.$el.show()
+    this.container.disableMediaControl()
+    this.showPlayButton()
   }
 
   showPlayButton() {
@@ -83,41 +81,37 @@ class PosterPlugin extends UIContainerPlugin {
     this.updateSize()
   }
 
+  hidePlayButton() {
+    this.$playButton.hide()
+  }
+
   clicked() {
     this.container.play()
+    this.hidePlayButton()
     return false
   }
 
+
   updateSize() {
-    if (!this.$el) return
     var height = PlayerInfo.currentSize ? PlayerInfo.currentSize.height : this.$el.height()
     this.$el.css({ fontSize: height })
     if (this.$playWrapper.is(':visible')) {
       this.$playWrapper.css({ marginTop: -(this.$playWrapper.height() / 2) })
-      if (!this.options.hidePlayButton) {
-        this.$playButton.show()
-      }
-    } else {
-      this.$playButton.hide()
     }
-
   }
 
   render() {
     var style = Styler.getStyleFor(this.name)
     this.$el.html(this.template())
     this.$el.append(style)
-    this.$playButton = this.$el.find('.poster-icon')
-    this.$playWrapper = this.$el.find('.play-wrapper')
-    if(this.options.poster !== undefined) {
-      var imgEl = $('<img data-poster class="poster-background"></img>');
-      imgEl.attr('src', this.options.poster);
-      this.$el.prepend(imgEl);
+    if (this.options.poster) {
+      var imgEl = $('<img data-poster class="poster-background"></img>')
+      imgEl.attr('src', this.options.poster)
+      this.$el.prepend(imgEl)
     }
     this.container.$el.append(this.el)
-    if (!!this.options.hidePlayButton) {
-      this.hidePlayButton()
-    }
+    this.$playButton = this.$el.find('.poster-icon')
+    this.$playWrapper = this.$el.find('.play-wrapper')
     process.nextTick(() => this.updateSize())
     return this
   }
