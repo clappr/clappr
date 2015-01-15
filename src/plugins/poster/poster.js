@@ -93,6 +93,7 @@ class PosterPlugin extends UIContainerPlugin {
 
 
   updateSize() {
+    if (this.container.playback.name === 'html_img') return
     var height = PlayerInfo.currentSize ? PlayerInfo.currentSize.height : this.$el.height()
     this.$el.css({ fontSize: height })
     if (this.$playWrapper.is(':visible')) {
@@ -101,6 +102,7 @@ class PosterPlugin extends UIContainerPlugin {
   }
 
   render() {
+    if (this.container.playback.name === 'html_img') return
     var style = Styler.getStyleFor(this.name)
     this.$el.html(this.template())
     this.$el.append(style)
