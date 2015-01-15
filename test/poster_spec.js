@@ -32,7 +32,7 @@ describe('Poster', () => {
     this.container.trigger(Events.CONTAINER_STATE_BUFFERFULL);
 
     expect(this.poster.onBufferfull).called.once;
-//    expect(this.poster.$el.is(':visible')).to.be.false;
+    expect(this.poster.$el.is(':visible')).to.be.false;
   });
 
   it('listens to container:stop event', () => {

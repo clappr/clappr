@@ -355,7 +355,6 @@ class MediaControl extends UIObject {
     if (this.container.getPlaybackType() !== null && !_.isEmpty(this.container.settings)) {
       this.settings = this.container.settings
       this.render()
-      this.enable()
     } else {
       this.disable()
     }
