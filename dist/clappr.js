@@ -3880,7 +3880,7 @@ System.get("traceur-runtime@0.0.62/src/runtime/polyfills/polyfills" + '');
 },{}],6:[function(require,module,exports){
 module.exports={
   "name": "clappr",
-  "version": "0.0.90",
+  "version": "0.0.91",
   "description": "An extensible media player for the web",
   "main": "dist/clappr.min.js",
   "scripts": {
@@ -3900,7 +3900,7 @@ module.exports={
   },
   "homepage": "https://github.com/globocom/clappr",
   "devDependencies": {
-    "browserify": "^8.0.3",
+    "browserify": "8.1.0",
     "chai": "1.10.0",
     "compass-mixins": "0.12.3",
     "dotenv": "^0.4.0",
