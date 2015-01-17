@@ -4,7 +4,6 @@
 
 var Playback = require('playback')
 var Styler = require('../../base/styler')
-var Events = require('events')
 
 class HTMLImg extends Playback {
   get name() { return 'html_img' }
