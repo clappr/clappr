@@ -60,6 +60,10 @@ class HTML5Video extends Playback {
     _.each(_.range(1,10), function (i) { Mousetrap.bind([i.toString()], () => this.seek(i * 10)) }.bind(this))
   }
 
+  stopListening() {
+    _.each(_.range(1,10), function (i) { Mousetrap.unbind([i.toString()], () => this.seek(i * 10)) }.bind(this))
+  }
+
   loadedMetadata(e) {
     this.trigger(Events.PLAYBACK_LOADEDMETADATA, e.target.duration)
     this.trigger(Events.PLAYBACK_SETTINGSUPDATE)
@@ -143,6 +147,7 @@ class HTML5Video extends Playback {
   }
 
   destroy() {
+    this.stopListening()
     this.stop()
     this.el.src = ''
     this.$el.remove()
