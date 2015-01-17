@@ -20,7 +20,7 @@ var hasFlash = function() {
     var fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
     return !!fo;
   } catch (e) {
-    return !!(navigator.mimeTypes && navigator.mimeTypes['application/x-shockwave-flash'] != undefined &&
+    return !!(navigator.mimeTypes && navigator.mimeTypes['application/x-shockwave-flash'] !== undefined &&
         navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin);
   }
 }
