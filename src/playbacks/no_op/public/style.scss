@@ -1,14 +1,20 @@
 [data-no-op] {
   z-index: 1000;
   position: absolute;
-  background-color: #222;
   height: 100%;
   width: 100%;
+  text-align: center;
 }
 
 [data-no-op] p[data-no-op-msg] {
-  position: relative;
+  position: absolute;
   font-size: 25px;
-  top: 50%;
+  top: 40%;
   color: white;
+}
+
+[data-no-op] canvas[data-no-op-canvas] {
+  background-color: #777;
+  height: 100%;
+  width: 100%;
 }
