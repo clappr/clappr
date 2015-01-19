@@ -44,7 +44,7 @@ class GoogleAnalytics extends ContainerPlugin {
     this.listenTo(this.container, Events.CONTAINER_SEEK, (event) => this.onSeek(event))
     this.listenTo(this.container, Events.CONTAINER_FULL_SCREEN, this.onFullscreen)
     this.listenTo(this.container, Events.CONTAINER_HIGHDEFINITIONUPDATE, this.onHD)
-    this.listenTo(this.container.playback, Events.PLAYBACK_DVR, this.onDVR)
+    this.listenTo(this.container, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.onDVR)
     _gaq.push([this.trackerName + '_setAccount', this.account]);
   }
 
@@ -88,8 +88,8 @@ class GoogleAnalytics extends ContainerPlugin {
     }
   }
 
-  onDVR() {
-    var status = this.container.isHighDefinitionInUse()
+  onDVR(dvrInUse) {
+    var status = dvrInUse? "ON": "OFF"
     this.push(["Interaction", "DVR - " + status, this.container.playback.src])
   }
 
