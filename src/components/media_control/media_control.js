@@ -457,6 +457,7 @@ class MediaControl extends UIObject {
 
     this.parseColors()
     this.seekTime.render()
+    this.highDefinitionUpdate()
 
     this.trigger(Events.MEDIACONTROL_RENDERED)
     return this
