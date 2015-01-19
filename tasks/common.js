@@ -3,6 +3,8 @@ var es6ify = require('es6ify');
 var rename = require('gulp-rename');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
+var versionify = require("browserify-versionify");
+var version = require('../package.json').version;
 
 module.exports.js = 'src/**/*.js';
 
@@ -10,6 +12,7 @@ module.exports.browserify = function(options) {
   options || (options = {})
   return browserify(options)
     .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
+    .transform(versionify)
     .add(es6ify.runtime)
     .require('./src/main.js', { entry: true })
     .require('./src/base/events', { expose: 'events' })
