@@ -113,6 +113,10 @@ I'm sure you can do better than me.
 
 If you want to disable media control auto hide, add `hideMediaControl: false` in your embed parameters.
 
+#### Hide Volume Hide
+
+When embedded with width less than 320, volume bars are hidden. You can force this behavior for all sizes by adding `hideVolumeBar: true`.
+
 ##### Watermark
 Put `watermark: http://url/img.png` on your embed parameters to automatically add watermark on your video. Choose corner position by defining position parameter. Positions can be `bottom-left`, `bottom-right`, `top-left` and `top-right`. Example:
 
