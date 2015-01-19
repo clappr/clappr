@@ -145,7 +145,7 @@ class MediaControl extends UIObject {
       this.$fullscreenToggle.removeClass('shrink')
     }
     this.$el.removeClass('w320')
-    if (PlayerInfo.currentSize.width <= 320) {
+    if (PlayerInfo.currentSize.width <= 320 || this.options.hideVolumeBar) {
       this.$el.addClass('w320')
     }
   }
