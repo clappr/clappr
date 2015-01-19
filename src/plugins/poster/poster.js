@@ -91,8 +91,10 @@ class PosterPlugin extends UIContainerPlugin {
   }
 
   clicked() {
-    this.container.play()
-    this.hidePlayButton()
+    if (!this.options.chromeless) {
+      this.container.play()
+      this.hidePlayButton()
+    }
     return false
   }
 
@@ -119,6 +121,10 @@ class PosterPlugin extends UIContainerPlugin {
     this.$playButton = this.$el.find('.poster-icon')
     this.$playWrapper = this.$el.find('.play-wrapper')
     process.nextTick(() => this.updateSize())
+    if (this.options.chromeless) {
+      this.hidePlayButton()
+      this.$el.css({'cursor': 'initial'})
+    }
     return this
   }
 }
