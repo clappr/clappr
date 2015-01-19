@@ -8,6 +8,12 @@ var Events = require('events')
 class ClickToPausePlugin extends ContainerPlugin {
   get name() { return 'click_to_pause' }
 
+  constructor(options) {
+    if (!options.chromeless) {
+      super(options)
+    }
+  }
+
   bindEvents() {
     this.listenTo(this.container, Events.CONTAINER_CLICK, this.click)
     this.listenTo(this.container, Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate)
