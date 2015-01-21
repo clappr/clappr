@@ -67,10 +67,10 @@ class HLS extends Playback {
     this.el.width = "100%"
     this.el.height = "100%"
     this.isReady = true
-    this.trigger(Events.PLAYBACK_READY, this.name)
     this.currentState = "IDLE"
     this.setFlashSettings()
     this.autoPlay && this.play()
+    this.trigger(Events.PLAYBACK_READY, this.name)
   }
 
   setFlashSettings() {
@@ -118,6 +118,9 @@ class HLS extends Playback {
   }
 
   getPlaybackType() {
+    if (this.playbackType === 'live') {
+      this.updateTime()
+    }
     return this.playbackType? this.playbackType: null
   }
 
