@@ -37,9 +37,9 @@ class ContainerFactory extends BaseObject {
     var playback = new playbackPlugin(options)
     var container = new Container({playback: playback})
     var defer = $.Deferred()
+    this.listenToOnce(container, Events.CONTAINER_READY, () => defer.resolve(container))
     defer.promise(container)
     this.addContainerPlugins(container, source)
-    this.listenToOnce(container, Events.CONTAINER_READY, () => defer.resolve(container))
     return container
   }
 
