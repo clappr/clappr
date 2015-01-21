@@ -323,7 +323,7 @@ class MediaControl extends UIObject {
   }
 
   show(event) {
-    if (this.disabled || this.container.getPlaybackType() === null) return
+    if (this.disabled) return
     var timeout = 2000
     if (!event || (event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY) || navigator.userAgent.match(/firefox/i)) {
       clearTimeout(this.hideId)
