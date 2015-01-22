@@ -120,7 +120,7 @@ class PosterPlugin extends UIContainerPlugin {
     this.container.$el.append(this.el)
     this.$playButton = this.$el.find('.poster-icon')
     this.$playWrapper = this.$el.find('.play-wrapper')
-    process.nextTick(() => this.updateSize())
+    setTimeout(() => this.updateSize(), 0)
     if (this.options.chromeless) {
       this.hidePlayButton()
       this.$el.css({'cursor': 'initial'})
