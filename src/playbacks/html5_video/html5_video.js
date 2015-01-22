@@ -204,7 +204,7 @@ class HTML5Video extends Playback {
     this.$el.html(this.template({ src: this.src, type: this.typeFor(this.src) }))
     this.$el.append(style)
     this.trigger(Events.PLAYBACK_READY, this.name)
-    process.nextTick(() => this.options.autoPlay && this.play())
+    setTimeout(() => this.options.autoPlay && this.play(), 0);
     return this
   }
 }
