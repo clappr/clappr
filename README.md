@@ -50,6 +50,7 @@ PS4 Browser  | ✔ | ✔ | ✘ |  ? | ✘ | ✘
 - HLS+P2P: http://bem.tv
 - Comments on seekbar: http://labs.jordane.net/clappr-comment/
 - Level Selector: https://github.com/lucasmundim/clappr-level-selector-plugin
+- Control the player with your voice: https://github.com/flavioribeiro/clappr-speech-control-plugin
 
 ## Built-in Plugins & Embed Parameters
 
