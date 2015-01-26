@@ -19,6 +19,11 @@ class ClickToPausePlugin extends ContainerPlugin {
     this.listenTo(this.container, Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate)
   }
 
+  stopListening() {
+    this.stopListening(this.container, Events.CONTAINER_CLICK)
+    this.stopListening(this.container, Events.CONTAINER_SETTINGSUPDATE)
+  }
+
   click() {
     if (this.container.getPlaybackType() !== 'live' || this.container.isDvrEnabled()) {
       if (this.container.isPlaying()) {
