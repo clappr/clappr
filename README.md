@@ -173,3 +173,8 @@ In general, we follow the fork-and-pull git workflow:
 4. Merge changes in to "upstream" repository
 
 :warning: Be sure to merge the latest from "upstream" before making a pull request.
+
+### Sponsor
+
+![image](https://cloud.githubusercontent.com/assets/244265/5900100/ef156258-a54b-11e4-9862-7e5851ed9b81.png)
+
