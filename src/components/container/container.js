@@ -14,7 +14,9 @@ var Events = require('events')
 class Container extends UIObject {
   get name() { return 'Container' }
   get attributes() { return { class: 'container', 'data-container': '' } }
-  get events() { return {'click': 'clicked'} }
+  get events() {
+    return {'click': 'clicked', 'mouseenter': 'mouseEnter', 'mouseleave': 'mouseLeave'}
+  }
 
   constructor(options) {
     super(options);
@@ -183,6 +185,14 @@ class Container extends UIObject {
 
   getPlugin(name) {
     return _(this.plugins).find(function(plugin) { return plugin.name === name });
+  }
+
+  mouseEnter() {
+    this.trigger(Events.CONTAINER_MOUSE_ENTER)
+  }
+
+  mouseLeave() {
+    this.trigger(Events.CONTAINER_MOUSE_LEAVE)
   }
 
   settingsUpdate() {
