@@ -15,8 +15,10 @@ class ContainerPlugin extends BaseObject {
   }
 
   disable() {
-    this.stopListening()
-    this.enabled = false
+    if (this.enabled) {
+      this.stopListening()
+      this.enabled = false
+    }
   }
 
   bindEvents() {}
