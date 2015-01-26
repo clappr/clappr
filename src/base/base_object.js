@@ -9,9 +9,8 @@ var Events = require('events')
 var pluginOptions = ['container']
 
 class BaseObject extends Events {
-  constructor(options) {
+  constructor(options={}) {
     this.uniqueId = _.uniqueId('o')
-    options || (options = {})
     _.extend(this, _.pick(options, pluginOptions))
   }
 }
