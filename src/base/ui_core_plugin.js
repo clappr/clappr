@@ -14,9 +14,11 @@ class UICorePlugin extends UIObject {
   getExternalInterface() { return {} }
 
   enable() {
-    this.bindEvents()
-    this.$el.show()
-    this.enabled = true
+    if (!this.enabled) {
+      this.bindEvents()
+      this.$el.show()
+      this.enabled = true
+    }
   }
 
   disable() {

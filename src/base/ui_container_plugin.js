@@ -12,9 +12,11 @@ class UIContainerPlugin extends UIObject {
   }
 
   enable() {
-    this.bindEvents()
-    this.$el.show()
-    this.enabled = true
+    if (!this.enabled) {
+      this.bindEvents()
+      this.$el.show()
+      this.enabled = true
+    }
   }
 
   disable() {
