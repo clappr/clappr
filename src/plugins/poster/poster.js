@@ -114,7 +114,7 @@ class PosterPlugin extends UIContainerPlugin {
     this.$el.append(style)
     if (this.options.poster) {
       var imgEl = $('<div data-poster class="poster-background"></div>')
-      imgEl.css({'background-image': 'url(' + this.posterImage + ')'})
+      imgEl.css({'background-image': 'url(' + this.options.poster + ')'})
       this.$el.prepend(imgEl)
     }
     this.container.$el.append(this.el)
