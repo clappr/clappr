@@ -20,3 +20,4 @@ script: npm test
 notifications:
   email:
     - videos5@corp.globo.com
+  slack: globo:F1iVlyrzR4iX8OS7h8fwMcqx
