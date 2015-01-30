@@ -6,7 +6,7 @@ var exorcist = require('exorcist');
 var browserify = require('./common').browserify;
 
 gulp.task('build', ['pre-build'], function(b) {
-  return browserify({debug: true})
+  return browserify({debug: true, insertGlobalVars: [], detectGlobals: false})
     .bundle()
     .pipe(source('main.js'))
     .pipe(rename('clappr.js'))
