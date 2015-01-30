@@ -6,7 +6,7 @@ var Player = require('./components/player')
 var IframePlayer = require('./components/iframe_player')
 var Mediator = require('mediator')
 
-global.DEBUG = false
+window.DEBUG = false
 
 window.Clappr = { Player: Player, Mediator: Mediator, IframePlayer: IframePlayer }
 window.Clappr.version = "__VERSION__"
