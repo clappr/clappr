@@ -3,12 +3,11 @@
 // license that can be found in the LICENSE file.
 
 var Player = require('./components/player')
-var IframePlayer = require('./components/iframe_player')
 var Mediator = require('mediator')
 
 window.DEBUG = false
 
-window.Clappr = { Player: Player, Mediator: Mediator, IframePlayer: IframePlayer }
+window.Clappr = { Player: Player, Mediator: Mediator }
 window.Clappr.version = "__VERSION__"
 
 module.exports = window.Clappr
