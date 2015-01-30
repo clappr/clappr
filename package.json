@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/globocom/clappr",
   "devDependencies": {
-    "browserify": "8.1.0",
+    "browserify": "8.1.1",
     "browserify-versionify": "1.0.3",
     "chai": "1.10.0",
     "compass-mixins": "0.12.3",

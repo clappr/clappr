@@ -35,7 +35,7 @@ module.exports.browserify = function(options) {
     .require('./src/playbacks/html5_video', { expose: 'html5_video' })
     .require('./src/playbacks/html_img', { expose: 'html_img' })
     .require('./src/plugins/poster', { expose: 'poster' })
-    .require('zepto', { expose: 'zepto' })
+    .require('clappr-zepto', { expose: 'zepto' })
     .require('underscore', { expose: 'underscore' })
 };
 
