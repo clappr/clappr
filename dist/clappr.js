@@ -7,7 +7,7 @@ window.Clappr = {
   Player: Player,
   Mediator: Mediator
 };
-window.Clappr.version = "0.0.97";
+window.Clappr.version = "0.0.95";
 module.exports = window.Clappr;
 
 
