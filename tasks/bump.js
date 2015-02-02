@@ -8,27 +8,28 @@ var runSequence = require('run-sequence').use(gulp);
 var version = require("../package.json").version;
 
 gulp.task('increase-version', function() {
-  return gulp.src('./package.json')
+  gulp.src('./package.json')
     .pipe(bump({version: args.tag}))
     .pipe(gulp.dest('./'))
 });
 
 gulp.task('git-commit', function() {
-  return gulp.src('.')
+  gulp.src('.')
     .pipe(git.add())
     .pipe(git.commit("bump to " + args.tag))
 });
 
-gulp.task('git-tag', function() {
-    git.tag(args.tag, "bump to " + args.tag, function(err) {
-      if (err) throw err;
-    })
+gulp.task('git-tag', ['git-commit'], function() {
+  git.tag(args.tag, "bump to " + args.tag, function(err) {
+    if (err) throw err;
+  })
 });
 
-gulp.task('git-push', function(){
+gulp.task('git-push', ['git-tag'], function(cb) {
   git.push('origin', 'master', {args: " --tags"}, function (err) {
-      if (err) throw err;
-    });
+    if (err) throw err;
+    cb();
+  });
 });
 
 gulp.task('npm-publish', function() {
@@ -51,5 +52,5 @@ gulp.task('sendmail', function() {
 })
 
 gulp.task('bump', function() {
-  runSequence('increase-version', 'build', 'release', 'git-commit', 'git-tag', 'git-push', 'npm-publish', 'upload', 'sendmail')
+  runSequence('increase-version', ['build', 'release'], 'git-push', 'npm-publish', 'upload', 'sendmail')
 });

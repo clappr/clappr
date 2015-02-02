@@ -46,7 +46,7 @@ class HTML5Video extends Playback {
     this.isHLS = (this.src.indexOf('m3u8') > -1)
     this.settings = {default: ['seekbar']}
     if (Browser.isSafari) {
-      this.el.preload = 'auto'
+      this.setupSafari()
     } else {
       this.el.preload = options.preload ? options.preload: 'metadata'
       this.settings.seekEnabled = true
@@ -54,6 +54,13 @@ class HTML5Video extends Playback {
     this.settings.left = this.isHLS ? ["playstop"] : ["playpause", "position", "duration"]
     this.settings.right = ["fullscreen", "volume"]
     this.bindEvents()
+  }
+
+  setupSafari() {
+    this.el.preload = 'auto'
+    if (!this.isHLS) {
+      this.settings.seekEnabled = true
+    }
   }
 
   bindEvents() {
