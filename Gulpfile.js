@@ -9,6 +9,7 @@ require('./tasks/watch');
 require('./tasks/serve');
 require('./tasks/upload');
 require('./tasks/lint');
+require('./tasks/bump');
 
 gulp.task('default', ['build', 'watch']);
 
