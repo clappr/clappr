@@ -7,7 +7,7 @@ window.Clappr = {
   Player: Player,
   Mediator: Mediator
 };
-window.Clappr.version = "0.0.94";
+window.Clappr.version = "0.0.97";
 module.exports = window.Clappr;
 
 
@@ -6206,7 +6206,7 @@ var HTML5Video = function HTML5Video(options) {
   this.isHLS = (this.src.indexOf('m3u8') > -1);
   this.settings = {default: ['seekbar']};
   if (Browser.isSafari) {
-    this.el.preload = 'auto';
+    this.setupSafari();
   } else {
     this.el.preload = options.preload ? options.preload : 'metadata';
     this.settings.seekEnabled = true;
@@ -6239,6 +6239,12 @@ var $HTML5Video = HTML5Video;
       'canplaythrough': 'bufferFull',
       'loadedmetadata': 'loadedMetadata'
     };
+  },
+  setupSafari: function() {
+    this.el.preload = 'auto';
+    if (!this.isHLS) {
+      this.settings.seekEnabled = true;
+    }
   },
   bindEvents: function() {
     _.each(_.range(1, 10), function(i) {
