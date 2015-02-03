@@ -30,7 +30,6 @@ gulp.task('git-tag', function(cb) {
 });
 
 gulp.task('git-push', function(cb) {
-  console.log("4");
   git.push('origin', 'master', {args: " --tags"}, function (err) {
     if (err) throw err;
     cb();
