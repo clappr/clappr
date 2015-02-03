@@ -1,0 +1,72 @@
+#!/bin/sh
+
+update_version() {
+  current_tag=$(git describe)
+  echo 'bump from '$current_tag' to '$1
+  sed -i '' s/$current_tag/$1/ package.json
+}
+
+build() {
+  echo 'building clappr.js'
+  gulp build > /dev/null
+  echo 'building clappr.min.js'
+  gulp release > /dev/null
+}
+
+run_tests() {
+  ./node_modules/.bin/karma start --single-run --browsers Firefox
+  return $?
+}
+
+git_push() {
+  echo 'pushing to github'
+  git add .
+  git commit -m 'bump to '$1
+  git tag $1
+  git push origin master --tags
+}
+
+upload() {
+  gulp upload --tag=$1
+}
+
+npm_publish() {
+  npm publish
+}
+
+send_mail() {
+  last_tag=$(git log --tags --no-walk --pretty="format:%d" | sed 2q | sed 's/[()]//g' | sed 's/ tag: //' | sed -n 2p)
+  changelog=$(git log --pretty='%h %s (%an)' $last_tag..master)
+  message="Clappr developers bumped a new version: $1\n\n
+Changelog:\n
+=========\n
+$changelog\n\n
+
+with love,\n
+Your happy butler.\n
+"
+  echo $message | mail -s "$(echo "[clappr] new version released: $1\nFrom: Clappr Butler <buttler@clappr.io>\n")" email@flavioribeiro.com
+}
+
+main() {
+  update_version $1
+  build
+  run_tests
+  if (("$?" == "0")); then
+    git_push $1
+    upload $1
+    npm_publish
+    send_mail $1
+    exit 0
+  else
+    echo "you broke the tests. fix it before bump another version."
+    exit 1
+  fi
+}
+
+if [ "$1" != "" ]; then
+  main $1
+else
+  echo "Usage: bump [new_version]"
+fi
+
