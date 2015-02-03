@@ -47,7 +47,7 @@ gulp.task('sendmail', function(cb) {
     var transporter = nodemailer.createTransport();
     transporter.sendMail({
       from: 'butler@clappr.io',
-      to: 'email@flavioribeiro.com',
+      to: 'videos5@corp.globo.com',
       subject: '[clappr] new version released: ' + args.tag,
       text: 'Clappr developers bumped a new version: ' + args.tag + '\n\nCHANGELOG:\n\n' + stdout +
             '\n\nwith love,' +
