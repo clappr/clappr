@@ -1,7 +1,7 @@
 #!/bin/sh
 
 update_version() {
-  current_tag=$(git describe)
+  current_tag=$(git describe --abbrev=0)
   echo 'bump from '$current_tag' to '$1
   sed -i '' s/$current_tag/$1/ package.json
 }
@@ -36,7 +36,7 @@ npm_publish() {
 
 send_mail() {
   last_tag=$(git log --tags --no-walk --pretty="format:%d" | sed 2q | sed 's/[()]//g' | sed 's/ tag: //' | sed -n 2p)
-  changelog=$(git log --pretty='%h %s (%an)' $last_tag..master)
+  changelog=$(git log --pretty='%h %s (%an)\n' $last_tag..master)
   message="Clappr developers bumped a new version: $1\n\n
 Changelog:\n
 =========\n
