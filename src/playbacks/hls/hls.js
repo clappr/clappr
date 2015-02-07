@@ -69,6 +69,7 @@ class HLS extends Playback {
     this.isReady = true
     this.currentState = "IDLE"
     this.setFlashSettings()
+    this.updatePlaybackType()
     this.autoPlay && this.play()
     this.trigger(Events.PLAYBACK_READY, this.name)
   }
