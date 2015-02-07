@@ -7,7 +7,7 @@ window.Clappr = {
   Player: Player,
   Mediator: Mediator
 };
-window.Clappr.version = "0.0.100";
+window.Clappr.version = "0.0.101";
 module.exports = window.Clappr;
 
 
@@ -5834,6 +5834,7 @@ var $HLS = HLS;
     this.isReady = true;
     this.currentState = "IDLE";
     this.setFlashSettings();
+    this.updatePlaybackType();
     this.autoPlay && this.play();
     this.trigger(Events.PLAYBACK_READY, this.name);
   },
