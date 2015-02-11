@@ -162,8 +162,8 @@ class Core extends UIObject {
     return containers
   }
 
-  createContainer(source) {
-    var container = this.containerFactory.createContainer(source)
+  createContainer(source, options) {
+    var container = this.containerFactory.createContainer(source, options)
     this.appendContainer(container)
     return container
   }
