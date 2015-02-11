@@ -177,7 +177,7 @@ class Flash extends Playback {
 
   destroy() {
     clearInterval(this.bootstrapId)
-    this.stopListening()
+    super.stopListening()
     this.$el.remove()
   }
 
