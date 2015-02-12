@@ -32,7 +32,8 @@ class HTML5Video extends Playback {
       'stalled': 'stalled',
       'waiting': 'waiting',
       'canplaythrough': 'bufferFull',
-      'loadedmetadata': 'loadedMetadata'
+      'loadedmetadata': 'loadedMetadata',
+      'canplay': 'ready'
     }
   }
 
@@ -206,11 +207,15 @@ class HTML5Video extends Playback {
     return (src.indexOf('.m3u8') > 0) ? 'application/vnd.apple.mpegurl' : 'video/mp4'
   }
 
+  ready() {
+    console.log('playback ready');
+    this.trigger(Events.PLAYBACK_READY, this.name)
+  }
+
   render() {
     var style = Styler.getStyleFor(this.name)
     this.$el.html(this.template({ src: this.src, type: this.typeFor(this.src) }))
     this.$el.append(style)
-    this.trigger(Events.PLAYBACK_READY, this.name)
     setTimeout(() => this.options.autoPlay && this.play(), 0);
     return this
   }
