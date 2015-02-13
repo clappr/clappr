@@ -208,7 +208,6 @@ class HTML5Video extends Playback {
   }
 
   ready() {
-    console.log('playback ready');
     this.trigger(Events.PLAYBACK_READY, this.name)
   }
 
