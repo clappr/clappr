@@ -12,7 +12,7 @@ class GoogleAnalytics extends ContainerPlugin {
     if (options.gaAccount) {
       this.embedScript()
       this.account = options.gaAccount
-      this.trackerName = options.gaTrackerName + "." || 'Clappr.'
+      this.trackerName = (options.gaTrackerName) ? options.gaTrackerName + "." : 'Clappr.'
       this.currentHDState = undefined
     }
   }
