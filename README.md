@@ -91,7 +91,7 @@ Enable Google Analytics events dispatch (play/pause/stop/buffering/etc) adding y
   var player = new Clappr.Player({
     source: "http://your.video/here.mp4",
 		gaAccount: 'UA-44332211-1',
-		gaTracker: 'MyPlayerInstance'
+		gaTrackerName: 'MyPlayerInstance'
   });
 ```
 
