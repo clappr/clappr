@@ -7,7 +7,7 @@
  * and the player state.
  */
 
-var _ = require('underscore')
+var assign = require('lodash.assign')
 var $ = require('zepto')
 
 var UIObject = require('ui_object')
@@ -81,11 +81,10 @@ class Core extends UIObject {
   }
 
   resize(options) {
-    var size = _.pick(options, 'width', 'height')
-    this.el.style.height = `${size.height}px`;
-    this.el.style.width = `${size.width}px`;
+    this.el.style.height = `${options.height}px`;
+    this.el.style.width = `${options.width}px`;
     PlayerInfo.previousSize = PlayerInfo.currentSize
-    PlayerInfo.currentSize = size
+    PlayerInfo.currentSize = options
     Mediator.trigger(Events.PLAYER_RESIZE)
   }
 
@@ -102,21 +101,21 @@ class Core extends UIObject {
   }
 
   getPlugin(name) {
-    return _(this.plugins).find((plugin) => plugin.name === name)
+    return this.plugins.find((plugin) => plugin.name === name)
   }
 
   load(sources) {
-    sources = _.isArray(sources) ? sources : [sources.toString()];
-    _(this.containers).each((container) => container.destroy())
-    this.containerFactory.options = _(this.options).extend({sources})
+    sources = sources && sources.constructor === Array ? sources : [sources.toString()];
+    this.containers.forEach((container) => container.destroy())
+    this.containerFactory.options = assign(this.options, {sources})
     this.containerFactory.createContainers().then((containers) => {
       this.setupContainers(containers)
     })
   }
 
   destroy() {
-    _(this.containers).each((container) => container.destroy())
-    _(this.plugins).each((plugin) => plugin.destroy())
+    this.containers.forEach((container) => container.destroy())
+    this.plugins.forEach((plugin) => plugin.destroy())
     this.$el.remove()
     this.mediaControl.destroy()
     $(document).unbind('fullscreenchange')
@@ -145,7 +144,7 @@ class Core extends UIObject {
 
   removeContainer(container) {
     this.stopListening(container)
-    this.containers = _.without(this.containers, container)
+    this.containers = this.containers.filter((c) => c !== container)
   }
 
   appendContainer(container) {
@@ -155,7 +154,7 @@ class Core extends UIObject {
   }
 
   setupContainers(containers) {
-    _.map(containers, this.appendContainer, this)
+    containers.map(this.appendContainer.bind(this))
     this.setupMediaControl(this.getCurrentContainer())
     this.render()
     this.$el.appendTo(this.options.parentElement)
@@ -172,7 +171,7 @@ class Core extends UIObject {
     if (this.mediaControl) {
       this.mediaControl.setContainer(container)
     } else {
-      this.mediaControl = this.createMediaControl(_.extend({container: container}, this.options))
+      this.mediaControl = this.createMediaControl(assign({container: container}, this.options))
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_FULLSCREEN, this.toggleFullscreen)
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_SHOW, this.onMediaControlShow.bind(this, true))
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_HIDE, this.onMediaControlShow.bind(this, false))
@@ -226,7 +225,8 @@ class Core extends UIObject {
 
     this.options.width = this.options.width || this.$el.width()
     this.options.height = this.options.height || this.$el.height()
-    PlayerInfo.previousSize = PlayerInfo.currentSize = _.pick(this.options, 'width', 'height')
+    var size = {width: this.options.width, height: this.options.height}
+    PlayerInfo.previousSize = PlayerInfo.currentSize = size
     this.updateSize()
 
     return this

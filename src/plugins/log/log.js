@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var _ = require('underscore')
-
 require('mousetrap')
 
 class Log {
@@ -23,7 +21,7 @@ class Log {
     }
 
   log(klass, level, message) {
-      if (!window.DEBUG || _.contains(this.BLACKLIST, message)) return
+      if (!window.DEBUG || this.BLACKLIST.indexOf(message) >= 0) return
       var color
       if (level === 'warn') { color = '#FF8000' }
       else if (level === 'info') { color = '#006600' }

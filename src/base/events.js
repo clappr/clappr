@@ -2,7 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var _ = require('underscore')
+var execOnce = require('lodash.once')
+var uniqueId = require('lodash.uniqueid')
 var Log = require('../plugins/log').getInstance()
 
 var slice = Array.prototype.slice
@@ -19,7 +20,7 @@ class Events {
   once(name, callback, context) {
     if (!eventsApi(this, 'once', name, [callback, context]) || !callback) return this
     var self = this
-    var once = _.once(function() {
+    var once = execOnce(function() {
       self.off(name, once)
       callback.apply(this, arguments)
     })
@@ -34,7 +35,7 @@ class Events {
       this._events = void 0
       return this
     }
-    names = name ? [name] : _.keys(this._events)
+    names = name ? [name] : Object.keys(this._events)
     for (i = 0, l = names.length; i < l; i++) {
       name = names[i]
       events = this._events[name]
@@ -77,7 +78,7 @@ class Events {
     for (var id in listeningTo) {
       obj = listeningTo[id]
       obj.off(name, callback, this)
-      if (remove || _.isEmpty(obj._events)) delete this._listeningTo[id]
+      if (remove || Object.keys(obj._events).length === 0) delete this._listeningTo[id]
     }
     return this
   }
@@ -121,16 +122,16 @@ var triggerEvents = function(events, args) {
 
 var listenMethods = {listenTo: 'on', listenToOnce: 'once'}
 
-_.each(listenMethods, function(implementation, method) {
+Object.keys(listenMethods).forEach(function(method) {
   Events.prototype[method] = function(obj, name, callback) {
     var listeningTo = this._listeningTo || (this._listeningTo = {})
-    var id = obj._listenId || (obj._listenId = _.uniqueId('l'))
+    var id = obj._listenId || (obj._listenId = uniqueId('l'))
     listeningTo[id] = obj
     if (!callback && typeof name === 'object') callback = this
-    obj[implementation](name, callback, this)
+    obj[listenMethods[method]](name, callback, this)
     return this
   }
-})
+});
 
 // PLAYER EVENTS
 Events.PLAYER_RESIZE = 'player:resize'

@@ -6,7 +6,6 @@
  * The Core Factory is responsible for instantiate the core and it's plugins.
  */
 
-var _ = require('underscore');
 var BaseObject = require('base_object');
 var Core = require('core');
 
@@ -25,18 +24,19 @@ class CoreFactory extends BaseObject {
   }
 
   addCorePlugins() {
-    _.each(this.loader.corePlugins, function(Plugin) {
+    this.loader.corePlugins.forEach((Plugin) => {
       var plugin = new Plugin(this.core)
       this.core.addPlugin(plugin)
       this.setupExternalInterface(plugin)
-    }, this)
+    })
     return this.core
   }
 
   setupExternalInterface(plugin) {
-    _.each(plugin.getExternalInterface(), function(value, key) {
-      this.player[key] = value.bind(plugin)
-    }, this)
+    var externalFunctions = plugin.getExternalInterface();
+    for (var key in externalFunctions) {
+      this.player[key] = externalFunctions[key].bind(plugin)
+    }
   }
 }
 

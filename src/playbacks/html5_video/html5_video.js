@@ -9,8 +9,6 @@ var Browser = require('browser')
 var seekStringToSeconds = require('../../base/utils').seekStringToSeconds
 var Events = require('events')
 
-var _ = require('underscore')
-
 require('mousetrap')
 
 class HTML5Video extends Playback {
@@ -63,11 +61,11 @@ class HTML5Video extends Playback {
   }
 
   bindEvents() {
-    _.each(_.range(1,10), function (i) { Mousetrap.bind([i.toString()], () => this.seek(i * 10)) }.bind(this))
+    [1,2,3,4,5,6,7,8,9].forEach((i) => { Mousetrap.bind([i.toString()], () => this.seek(i * 10)) })
   }
 
   stopListening() {
-    _.each(_.range(1,10), function (i) { Mousetrap.unbind([i.toString()], () => this.seek(i * 10)) }.bind(this))
+    [1,2,3,4,5,6,7,8,9].forEach((i) => { Mousetrap.unbind([i.toString()], () => this.seek(i * 10)) })
   }
 
   loadedMetadata(e) {
@@ -87,7 +85,7 @@ class HTML5Video extends Playback {
   }
 
   getPlaybackType() {
-    return this.isHLS && _.contains([0, undefined, Infinity], this.el.duration) ? 'live' : 'vod'
+    return this.isHLS && [0, undefined, Infinity].indexOf(this.el.duration) >= 0 ? 'live' : 'vod'
   }
 
   isHighDefinitionInUse() {
@@ -227,8 +225,8 @@ class HTML5Video extends Playback {
 
 HTML5Video.canPlay = function(resource) {
   var mimetypes = {
-    'mp4': _.map(["avc1.42E01E", "avc1.58A01E", "avc1.4D401E", "avc1.64001E", "mp4v.20.8", "mp4v.20.240", "mp4a.40.2"],
-      function (codec) { return 'video/mp4; codecs="' + codec + ', mp4a.40.2"'}),
+    'mp4': ["avc1.42E01E", "avc1.58A01E", "avc1.4D401E", "avc1.64001E", "mp4v.20.8", "mp4v.20.240", "mp4a.40.2"].map(
+      (codec) => { return 'video/mp4; codecs="' + codec + ', mp4a.40.2"'}),
     'ogg': ['video/ogg; codecs="theora, vorbis"', 'video/ogg; codecs="dirac"', 'video/ogg; codecs="theora, speex"'],
     '3gpp': ['video/3gpp; codecs="mp4v.20.8, samr"'],
     'webm': ['video/webm; codecs="vp8, vorbis"'],
@@ -239,9 +237,9 @@ HTML5Video.canPlay = function(resource) {
   mimetypes['3gp'] = mimetypes['3gpp']
   var extension = resource.split('?')[0].match(/.*\.(.*)$/)[1]
 
-  if (_.has(mimetypes, extension)) {
+  if (mimetypes[extension] !== undefined) {
     var v = document.createElement('video')
-    return !!_.find(mimetypes[extension], function (ext) { return !!v.canPlayType(ext).replace(/no/, '') })
+    return !!mimetypes[extension].find((ext) => { return !!v.canPlayType(ext).replace(/no/, '') })
   }
   return false
 }

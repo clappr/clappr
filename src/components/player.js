@@ -5,7 +5,7 @@
 var BaseObject = require('base_object')
 var CoreFactory = require('./core_factory')
 var Loader = require('./loader')
-var _ = require('underscore');
+var assign = require('lodash.assign')
 var ScrollMonitor = require('scrollmonitor');
 var PlayerInfo = require('player_info')
 
@@ -14,7 +14,7 @@ class Player extends BaseObject {
     super(options)
     window.p = this
     var defaultOptions = {persistConfig: true, width: 640, height: 360}
-    this.options = _.extend(defaultOptions, options)
+    this.options = assign(defaultOptions, options)
     this.options.sources = this.normalizeSources(options)
     this.loader = new Loader(this.options.plugins || {})
     this.coreFactory = new CoreFactory(this, this.loader)
@@ -55,8 +55,9 @@ class Player extends BaseObject {
   }
 
   normalizeSources(options) {
-    var sources = _.compact(_.flatten([options.source, options.sources]))
-    return _.isEmpty(sources)? ['no.op'] : sources
+    options.source = options.source && options.source.constructor === String ? [options.source] : options.source;
+    var sources = [options.source, options.sources].reduce((a, b) => a.concat(b)).filter((s) => s && s !== "")
+    return sources.length === 0 ? ['no.op'] : sources
   }
 
   resize(size) {

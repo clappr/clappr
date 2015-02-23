@@ -8,7 +8,6 @@
 
 var UIObject = require('ui_object');
 var Styler = require('../../base/styler');
-var _ = require('underscore');
 var Events = require('events')
 
 class Container extends UIObject {
@@ -47,11 +46,6 @@ class Container extends UIObject {
     this.listenTo(this.playback, Events.PLAYBACK_ERROR, this.error);
   }
 
-  with(klass) {
-    _.extend(this, klass);
-    return this;
-  }
-
   playbackStateChanged() {
     this.trigger(Events.CONTAINER_PLAYBACKSTATE);
   }
@@ -85,7 +79,7 @@ class Container extends UIObject {
   destroy() {
     this.trigger(Events.CONTAINER_DESTROYED, this, this.name);
     this.playback.destroy();
-    _(this.plugins).each((plugin) => plugin.destroy())
+    this.plugins.forEach((plugin) => plugin.destroy())
     this.$el.remove();
   }
 
@@ -184,7 +178,7 @@ class Container extends UIObject {
   }
 
   getPlugin(name) {
-    return _(this.plugins).find(function(plugin) { return plugin.name === name });
+    return this.plugins.find((plugin) => { return plugin.name === name });
   }
 
   mouseEnter() {
