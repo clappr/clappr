@@ -10,10 +10,10 @@ class GoogleAnalytics extends ContainerPlugin {
   constructor(options) {
     super(options)
     if (options.gaAccount) {
-      this.embedScript()
       this.account = options.gaAccount
       this.trackerName = (options.gaTrackerName) ? options.gaTrackerName + "." : 'Clappr.'
       this.currentHDState = undefined
+      this.embedScript()
     }
   }
 
