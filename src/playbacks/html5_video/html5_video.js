@@ -33,7 +33,8 @@ class HTML5Video extends Playback {
       'waiting': 'waiting',
       'canplaythrough': 'bufferFull',
       'loadedmetadata': 'loadedMetadata',
-      'canplay': 'ready'
+      'canplay': 'ready',
+      'durationchange': 'durationChange'
     }
   }
 
@@ -70,15 +71,19 @@ class HTML5Video extends Playback {
   }
 
   loadedMetadata(e) {
-    // we can't figure out if hls resource is VoD or not until it is being loaded.
+    this.durationChange()
+    this.trigger(Events.PLAYBACK_LOADEDMETADATA, e.target.duration)
+    this.checkInitialSeek()
+  }
+
+  durationChange() {
+    // we can't figure out if hls resource is VoD or not until it is being loaded or duration has changed.
     // that's why we check it again and update media control accordingly.
     if (this.getPlaybackType() === 'vod') {
       this.settings.left = ["playpause", "position", "duration"]
       this.settings.seekEnabled = true
     }
-    this.trigger(Events.PLAYBACK_LOADEDMETADATA, e.target.duration)
     this.trigger(Events.PLAYBACK_SETTINGSUPDATE)
-    this.checkInitialSeek()
   }
 
   getPlaybackType() {
@@ -92,9 +97,6 @@ class HTML5Video extends Playback {
   play() {
     this.el.play()
     this.trigger(Events.PLAYBACK_PLAY);
-    if (this.isHLS) {
-      this.trigger(Events.PLAYBACK_TIMEUPDATE, 1, 1, this.name)
-    }
   }
 
   pause() {
