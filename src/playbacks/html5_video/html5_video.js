@@ -59,9 +59,6 @@ class HTML5Video extends Playback {
 
   setupSafari() {
     this.el.preload = 'auto'
-    if (!this.isHLS) {
-      this.settings.seekEnabled = true
-    }
   }
 
   bindEvents() {
@@ -73,6 +70,12 @@ class HTML5Video extends Playback {
   }
 
   loadedMetadata(e) {
+    // we can't figure out if hls resource is VoD or not until it is being loaded.
+    // that's why we check it again and update media control accordingly.
+    if (this.getPlaybackType() === 'vod') {
+      this.settings.left = ["playpause", "position", "duration"]
+      this.settings.seekEnabled = true
+    }
     this.trigger(Events.PLAYBACK_LOADEDMETADATA, e.target.duration)
     this.trigger(Events.PLAYBACK_SETTINGSUPDATE)
     this.checkInitialSeek()
