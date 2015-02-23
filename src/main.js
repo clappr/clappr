@@ -4,10 +4,11 @@
 
 var Player = require('./components/player')
 var Mediator = require('mediator')
+var Events = require('events')
 
 window.DEBUG = false
 
-window.Clappr = { Player: Player, Mediator: Mediator }
+window.Clappr = { Player: Player, Mediator: Mediator, Events: Events }
 window.Clappr.version = "__VERSION__"
 
 module.exports = window.Clappr
