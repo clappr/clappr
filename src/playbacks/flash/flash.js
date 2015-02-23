@@ -6,7 +6,7 @@ var Playback = require('playback')
 var Styler = require('../../base/styler')
 var JST = require('../../base/jst')
 var Mediator = require('mediator')
-var _ = require('underscore')
+var template = require('lodash.template')
 var $ = require('zepto')
 var Browser = require('browser')
 var seekStringToSeconds = require('../../base/utils').seekStringToSeconds
@@ -73,7 +73,7 @@ class Flash extends Playback {
     Mediator.on(this.uniqueId + ':timeupdate', this.updateTime, this)
     Mediator.on(this.uniqueId + ':statechanged', this.checkState, this)
     Mediator.on(this.uniqueId + ':flashready', this.bootstrap, this)
-    _.each(_.range(1,10), function (i) { Mousetrap.bind([i.toString()], () => this.seek(i * 10)) }.bind(this))
+    [1,2,3,4,5,6,7,8,9].forEach((i) => { Mousetrap.bind([i.toString()], () => this.seek(i * 10)) })
   }
 
   stopListening() {
@@ -82,7 +82,7 @@ class Flash extends Playback {
     Mediator.off(this.uniqueId + ':timeupdate')
     Mediator.off(this.uniqueId + ':statechanged')
     Mediator.off(this.uniqueId + ':flashready')
-    _.each(_.range(1,10), function (i) { Mousetrap.unbind([i.toString()], () => this.seek(i * 10)) }.bind(this))
+    [1,2,3,4,5,6,7,8,9].forEach((i) => { Mousetrap.unbind([i.toString()], () => this.seek(i * 10)) })
   }
 
   checkState() {
@@ -182,7 +182,7 @@ class Flash extends Playback {
   }
 
   setupIE() {
-    this.setElement($(_.template(objectIE)({ cid: this.cid, swfPath: this.swfPath, playbackId: this.uniqueId })))
+    this.setElement($(template(objectIE)({ cid: this.cid, swfPath: this.swfPath, playbackId: this.uniqueId })))
   }
 
   render() {
@@ -202,9 +202,9 @@ Flash.canPlay = function(resource) {
   if (!Browser.hasFlash) {
     return false
   } else if ((!Browser.isMobile && Browser.isFirefox) || Browser.isLegacyIE) {
-    return _.isString(resource) && !!resource.match(/(.*)\.(mp4|mov|f4v|3gpp|3gp)/)
+    return (resource && resource.constructor === String) && !!resource.match(/(.*)\.(mp4|mov|f4v|3gpp|3gp)/)
   } else {
-    return _.isString(resource) && !!resource.match(/(.*)\.(mov|f4v|3gpp|3gp)/)
+    return (resource && resource.constructor === String) && !!resource.match(/(.*)\.(mov|f4v|3gpp|3gp)/)
   }
 }
 

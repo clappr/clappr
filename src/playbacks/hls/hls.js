@@ -4,7 +4,9 @@
 
 var Playback = require('playback')
 var JST = require('../../base/jst')
-var _ = require("underscore")
+var assign = require('lodash.assign')
+var template = require('lodash.template')
+
 var Mediator = require('mediator')
 var Browser = require('browser')
 var Events = require('events')
@@ -41,7 +43,7 @@ class HLS extends Playback {
       right: ["fullscreen", "volume", "hd-indicator"],
       seekEnabled: false
     }
-    this.settings = _.extend({}, this.defaultSettings)
+    this.settings = assign({}, this.defaultSettings)
     this.playbackType = 'live'
     this.addListeners()
   }
@@ -153,7 +155,7 @@ class HLS extends Playback {
       this.trigger(Events.PLAYBACK_BUFFERING, this.name)
       this.updateCurrentState(state)
     } else if (state === "PLAYING") {
-      if (_.contains(["PLAYING_BUFFERING", "PAUSED", "IDLE"], this.currentState)) {
+      if (["PLAYING_BUFFERING", "PAUSED", "IDLE"].indexOf(this.currentState) >= 0) {
         this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
         this.updateCurrentState(state)
       }
@@ -294,11 +296,11 @@ class HLS extends Playback {
   }
 
   setupIE() {
-    this.setElement($(_.template(objectIE)({cid: this.cid, swfPath: this.swfPath, playbackId: this.uniqueId})))
+    this.setElement($(template(objectIE)({cid: this.cid, swfPath: this.swfPath, playbackId: this.uniqueId})))
   }
 
   updateSettings() {
-    this.settings = _.extend({}, this.defaultSettings)
+    this.settings = assign({}, this.defaultSettings)
     if (this.playbackType === "vod" || this.dvrInUse) {
       this.settings.left = ["playpause", "position", "duration"]
       this.settings.seekEnabled = true
