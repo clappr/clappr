@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var BaseObject = require('base_object');
-var _ = require('underscore');
+var BaseObject = require('base_object')
 var PlayerInfo = require('player_info')
+var uniq = require('lodash.uniq')
 
 /* Playback Plugins */
 var HTML5VideoPlayback = require('html5_video');
@@ -38,15 +38,15 @@ class Loader extends BaseObject {
 
   addExternalPlugins(plugins) {
     var pluginName = function(plugin) { return plugin.prototype.name }
-    if (plugins.playback) { this.playbackPlugins = _.uniq(plugins.playback.concat(this.playbackPlugins), pluginName) }
-    if (plugins.container) { this.containerPlugins = _.uniq(plugins.container.concat(this.containerPlugins), pluginName) }
-    if (plugins.core) { this.corePlugins = _.uniq(plugins.core.concat(this.corePlugins), pluginName) }
+    if (plugins.playback) { this.playbackPlugins = uniq(plugins.playback.concat(this.playbackPlugins), pluginName) }
+    if (plugins.container) { this.containerPlugins = uniq(plugins.container.concat(this.containerPlugins), pluginName) }
+    if (plugins.core) { this.corePlugins = uniq(plugins.core.concat(this.corePlugins), pluginName) }
     PlayerInfo.playbackPlugins = this.playbackPlugins
   }
 
   getPlugin(name) {
-    var allPlugins = _.union(this.containerPlugins, this.playbackPlugins, this.corePlugins)
-    return _.find(allPlugins, function(plugin) { return plugin.prototype.name === name })
+    var allPlugins = this.containerPlugins.concat(this.playbackPlugins).concat(this.corePlugins)
+    return allPlugins.find((plugin) => { return plugin.prototype.name === name })
   }
 }
 

@@ -40,7 +40,7 @@
         segmentedBar: renderSegmentedBar,
       };
       var render = function(settingsList) {
-        _.each(settingsList, function(setting) {
+        settingsList.forEach(function(setting) {
           if(setting === "seekbar") {
             renderBar(setting);
           } else if (setting === "volume") {

@@ -6,10 +6,9 @@ var exorcist = require('exorcist');
 var browserify = require('./common').browserify;
 
 gulp.task('build', ['pre-build'], function() {
-  return browserify({debug: true, insertGlobalVars: [], detectGlobals: false})
+  return browserify({debug: true})//, insertGlobalVars: [], detectGlobals: false})
     .bundle()
     .pipe(source('main.js'))
     .pipe(rename('clappr.js'))
-    .pipe(transform(function() { return exorcist('./dist/clappr.map') }))
     .pipe(gulp.dest('./dist'));
 });

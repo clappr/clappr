@@ -4,7 +4,6 @@
 
 var Playback = require('playback')
 var Events = require('events')
-var _ = require('underscore')
 
 class HTML5Audio extends Playback {
   get name() { return 'html5_audio' }
@@ -115,9 +114,9 @@ HTML5Audio.canPlay = function(resource) {
   }
   var extension = resource.split('?')[0].match(/.*\.(.*)$/)[1]
 
-  if (_.has(mimetypes, extension)) {
+  if (mimetypes[extension] !== undefined) {
     var a = document.createElement('audio')
-    return !!_.find(mimetypes[extension], function (ext) { return !!a.canPlayType(ext).replace(/no/, '') })
+    return !!mimetypes[extension].find((ext) => { return !!a.canPlayType(ext).replace(/no/, '') })
   }
   return false
 }

@@ -3,7 +3,9 @@
 // license that can be found in the LICENSE file.
 
 var $ = require('zepto')
-var _ = require('underscore')
+var uniqueId = require('lodash.uniqueid')
+var result = require('lodash.result')
+var assign = require('lodash.assign')
 var extend = require('./utils').extend
 var BaseObject = require('base_object')
 
@@ -15,7 +17,7 @@ class UIObject extends BaseObject {
 
   constructor(options) {
     super(options)
-    this.cid = _.uniqueId('c');
+    this.cid = uniqueId('c');
     this._ensureElement();
     this.delegateEvents();
   }
@@ -43,21 +45,21 @@ class UIObject extends BaseObject {
   }
 
   delegateEvents(events) {
-    if (!(events || (events = _.result(this, 'events')))) return this
+    if (!(events || (events = result(this, 'events')))) return this
     this.undelegateEvents()
     for (var key in events) {
       var method = events[key]
-      if (!_.isFunction(method)) method = this[events[key]]
+      if ((method && method.constructor !== Function)) method = this[events[key]]
       if (!method) continue
 
       var match = key.match(delegateEventSplitter)
       var eventName = match[1], selector = match[2]
-      method = _.bind(method, this)
+      //method = _.bind(method, this)
       eventName += '.delegateEvents' + this.cid
       if (selector === '') {
-        this.$el.on(eventName, method)
+        this.$el.on(eventName, method.bind(this))
       } else {
-        this.$el.on(eventName, selector, method)
+        this.$el.on(eventName, selector, method.bind(this))
       }
     }
     return this
@@ -70,13 +72,13 @@ class UIObject extends BaseObject {
 
   _ensureElement() {
     if (!this.el) {
-      var attrs = _.extend({}, _.result(this, 'attributes'))
-      if (this.id) attrs.id = _.result(this, 'id')
-      if (this.className) attrs['class'] = _.result(this, 'className')
-      var $el = $('<' + _.result(this, 'tagName') + '>').attr(attrs)
+      var attrs = assign({}, result(this, 'attributes'))
+      if (this.id) attrs.id = result(this, 'id')
+      if (this.className) attrs['class'] = result(this, 'className')
+      var $el = $('<' + result(this, 'tagName') + '>').attr(attrs)
       this.setElement($el, false)
     } else {
-      this.setElement(_.result(this, 'el'), false)
+      this.setElement(result(this, 'el'), false)
     }
   }
 }

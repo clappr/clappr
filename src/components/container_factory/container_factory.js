@@ -6,7 +6,7 @@
  * The ContainerFactory is responsible for manage playback bootstrap and create containers.
  */
 
-var _ = require('underscore');
+var assign = require('lodash.assign');
 var BaseObject = require('base_object');
 var Container = require('container');
 var $ = require('zepto');
@@ -21,19 +21,19 @@ class ContainerFactory extends BaseObject {
 
   createContainers() {
     return $.Deferred((promise) => {
-      promise.resolve( _.map(this.options.sources, (source) => {
+      promise.resolve(this.options.sources.map((source) => {
         return this.createContainer(source);
-      }, this));
+      }));
     });
   }
 
   findPlaybackPlugin(source) {
-    return _.find(this.loader.playbackPlugins, (p) => { return p.canPlay(source.toString()) }, this);
+    return this.loader.playbackPlugins.find((p) => { return p.canPlay(source.toString()) });
   }
 
   createContainer(source, options) {
     var playbackPlugin = this.findPlaybackPlugin(source)
-    var options = _.extend({}, options, this.options, {src: source, autoPlay: !!this.options.autoPlay})
+    var options = assign({}, options, this.options, {src: source, autoPlay: !!this.options.autoPlay})
     var playback = new playbackPlugin(options)
     var container = new Container({playback: playback})
     var defer = $.Deferred()
@@ -44,10 +44,10 @@ class ContainerFactory extends BaseObject {
   }
 
   addContainerPlugins(container, source) {
-    _.each(this.loader.containerPlugins, function(Plugin) {
-      var options = _.extend(this.options, {container: container, src: source});
+    this.loader.containerPlugins.forEach((Plugin) => {
+      var options = assign(this.options, {container: container, src: source});
       container.addPlugin(new Plugin(options));
-    }, this);
+    });
   }
 }
 

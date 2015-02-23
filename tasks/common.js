@@ -36,7 +36,6 @@ module.exports.browserify = function(options) {
     .require('./src/playbacks/html_img', { expose: 'html_img' })
     .require('./src/plugins/poster', { expose: 'poster' })
     .require('clappr-zepto', { expose: 'zepto' })
-    .require('underscore', { expose: 'underscore' })
 };
 
 gulp.task('compile-js', function() {
