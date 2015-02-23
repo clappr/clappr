@@ -57,7 +57,7 @@ class HLS extends Playback {
   }
 
   stopListening() {
-    super()
+    super.stopListening()
     Mediator.off(this.uniqueId + ':flashready')
     Mediator.off(this.uniqueId + ':timeupdate')
     Mediator.off(this.uniqueId + ':playbackstate')

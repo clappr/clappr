@@ -77,7 +77,7 @@ class Flash extends Playback {
   }
 
   stopListening() {
-    super()
+    super.stopListening()
     Mediator.off(this.uniqueId + ':progress')
     Mediator.off(this.uniqueId + ':timeupdate')
     Mediator.off(this.uniqueId + ':statechanged')
