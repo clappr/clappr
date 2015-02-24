@@ -3,7 +3,7 @@ var FakePlayback = require('playback');
 var Container = require('container');
 var utils = require('../src/base/utils');
 
-describe('MediaControl', () => {
+describe('MediaControl', function() {
   beforeEach(() => {
     this.playback = new FakePlayback();
     this.container = new Container({playback: this.playback});
@@ -40,28 +40,28 @@ describe('MediaControl', () => {
     });
 
     it('limits volume to an integer between 0 and 100', () => {
-      mediaControl.setVolume(1000)
-      expect(mediaControl.currentVolume).to.be.equal(100)
+      this.mediaControl.setVolume(1000)
+      expect(this.mediaControl.currentVolume).to.be.equal(100)
 
-      mediaControl.setVolume(101)
-      expect(mediaControl.currentVolume).to.be.equal(100)
+      this.mediaControl.setVolume(101)
+      expect(this.mediaControl.currentVolume).to.be.equal(100)
 
-      mediaControl.setVolume(481)
-      expect(mediaControl.currentVolume).to.be.equal(100)
+      this.mediaControl.setVolume(481)
+      expect(this.mediaControl.currentVolume).to.be.equal(100)
 
-      mediaControl.setVolume(-1)
-      expect(mediaControl.currentVolume).to.be.equal(0)
+      this.mediaControl.setVolume(-1)
+      expect(this.mediaControl.currentVolume).to.be.equal(0)
 
-      mediaControl.setVolume(0)
-      expect(mediaControl.currentVolume).to.be.equal(0)
+      this.mediaControl.setVolume(0)
+      expect(this.mediaControl.currentVolume).to.be.equal(0)
     })
 
     it('mutes when volume is 0 or less than 0', () => {
       this.mediaControl.setVolume(10)
-      expect(mediaControl.mute).to.be.equal(false)
+      expect(this.mediaControl.mute).to.be.equal(false)
 
       this.mediaControl.setVolume(0)
-      expect(mediaControl.mute).to.be.equal(true)
+      expect(this.mediaControl.mute).to.be.equal(true)
     });
 
     it('persists volume when persistence is on', () => {

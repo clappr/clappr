@@ -101,8 +101,8 @@ describe('StatsPlugin', function() {
 
   it('should announce statistics periodically', () => {
     sinon.spy(this.container, 'statsReport');
-    var stats = new Stats({container: container, reportInterval: 10});
-    container.addPlugin(stats);
+    var stats = new Stats({container: this.container, reportInterval: 10});
+    this.container.addPlugin(stats);
     this.playback.trigger(Events.PLAYBACK_PLAY);
     // clock.tick freezes when used with {set,clear}Interval and I don't know why
     setTimeout(() => {

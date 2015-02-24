@@ -2,7 +2,7 @@ var Container = require('container');
 var FakePlayback = require('playback');
 var Events = require('events');
 
-describe('Container', () => {
+describe('Container', function() {
   beforeEach(() => {
     this.playback = new FakePlayback();
     this.container = new Container({playback: this.playback});

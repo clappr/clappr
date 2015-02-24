@@ -3,7 +3,7 @@ var Container = require('container');
 var Poster = require('../src/plugins/poster');
 var Events = require('events');
 
-describe('Poster', () => {
+describe('Poster', function() {
   beforeEach(() => {
     this.playback = new FakePlayback();
     this.container = new Container({playback: this.playback});

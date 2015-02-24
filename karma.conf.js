@@ -35,7 +35,7 @@ module.exports = function(config) {
     browserify: {
       watch: true,
       debug: true,
-      transform: ['es6ify'],
+      transform: ['babelify'],
       prebundle: function(bundle) {
         bundle.external('events');
         bundle.external('ui_object');
