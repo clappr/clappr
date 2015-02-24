@@ -1,5 +1,5 @@
 var gulp = require('gulp');
-var es6ify = require('es6ify');
+var babelify = require('babelify');
 var rename = require('gulp-rename');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
@@ -11,9 +11,8 @@ module.exports.js = 'src/**/*.js';
 module.exports.browserify = function(options) {
   options || (options = {})
   return browserify(options)
-    .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
+    .transform(babelify)
     .transform(versionify)
-    .add(es6ify.runtime)
     .require('./src/main.js', { entry: true })
     .require('./src/base/events', { expose: 'events' })
     .require('./src/base/ui_object', { expose: 'ui_object' })
