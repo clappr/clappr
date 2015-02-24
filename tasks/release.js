@@ -9,7 +9,7 @@ gulp.task('release', ['pre-build'], function() {
   return browserify()
     .bundle()
     .pipe(source('main.js'))
-    .pipe(streamify(uglify()))
+    .pipe(streamify(uglify({compress: {unsafe: true, hoist_vars: true}})))
     .pipe(rename('clappr.min.js'))
     .pipe(gulp.dest('./dist'));
 });
