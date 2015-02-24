@@ -11,6 +11,7 @@ var BaseObject = require('base_object');
 var Container = require('container');
 var $ = require('zepto');
 var Events = require('events');
+var find = require('lodash.find');
 
 class ContainerFactory extends BaseObject {
   constructor(options, loader) {
@@ -28,7 +29,7 @@ class ContainerFactory extends BaseObject {
   }
 
   findPlaybackPlugin(source) {
-    return this.loader.playbackPlugins.find((p) => { return p.canPlay(source.toString()) });
+    return find(this.loader.playbackPlugins, (p) => { return p.canPlay(source.toString()) })
   }
 
   createContainer(source, options) {

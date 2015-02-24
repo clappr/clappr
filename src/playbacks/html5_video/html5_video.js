@@ -8,6 +8,7 @@ var Styler = require('../../base/styler')
 var Browser = require('browser')
 var seekStringToSeconds = require('../../base/utils').seekStringToSeconds
 var Events = require('events')
+var find = require('lodash.find')
 
 require('mousetrap')
 
@@ -239,7 +240,7 @@ HTML5Video.canPlay = function(resource) {
 
   if (mimetypes[extension] !== undefined) {
     var v = document.createElement('video')
-    return !!mimetypes[extension].find((ext) => { return !!v.canPlayType(ext).replace(/no/, '') })
+    return !!find(mimetypes[extension], (ext) => { return !!v.canPlayType(ext).replace(/no/, '') })
   }
   return false
 }
