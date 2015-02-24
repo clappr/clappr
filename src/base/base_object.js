@@ -3,10 +3,7 @@
 // license that can be found in the LICENSE file.
 
 var uniqueId = require('lodash.uniqueid')
-var assign = require('lodash.assign');
 var Events = require('events')
-
-var pluginOptions = ['container']
 
 class BaseObject extends Events {
   constructor(options={}) {

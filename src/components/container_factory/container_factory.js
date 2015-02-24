@@ -33,8 +33,8 @@ class ContainerFactory extends BaseObject {
   }
 
   createContainer(source, options) {
+    options = assign({}, options, this.options, {src: source, autoPlay: !!this.options.autoPlay})
     var playbackPlugin = this.findPlaybackPlugin(source)
-    var options = assign({}, options, this.options, {src: source, autoPlay: !!this.options.autoPlay})
     var playback = new playbackPlugin(options)
     var container = new Container({playback: playback})
     var defer = $.Deferred()

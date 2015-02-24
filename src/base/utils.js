@@ -9,7 +9,7 @@ var extend = function(protoProps, staticProps) {
   var parent = this;
   var child;
 
-  if (protoProps && protoProps['constructor'] !== undefined) {
+  if (protoProps && protoProps.constructor !== undefined) {
     child = protoProps.constructor;
   } else {
     child = function(){ return parent.apply(this, arguments); };
