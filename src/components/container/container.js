@@ -9,6 +9,7 @@
 var UIObject = require('ui_object');
 var Styler = require('../../base/styler');
 var Events = require('events')
+var find = require('lodash.find')
 
 class Container extends UIObject {
   get name() { return 'Container' }
@@ -178,7 +179,7 @@ class Container extends UIObject {
   }
 
   getPlugin(name) {
-    return this.plugins.find((plugin) => { return plugin.name === name });
+    return find(this.plugins, (plugin) => { return plugin.name === name });
   }
 
   mouseEnter() {
