@@ -121,18 +121,20 @@ class Config {
   }
 }
 
-
 var seekStringToSeconds = function(url) {
-  var rest = (url.match(/t=([0-9]*)h?([0-9]*)m?([0-9]*)s/) || []).filter((s) => s && s !== '')
-  var elements = rest.splice(1, rest.length).reverse();
-  var seconds = 0;
-  var factor = 1;
-  elements.forEach((el) => {
-    seconds += (parseInt(el) * factor)
-    factor = factor * 60
-  });
-  return seconds;
-};
+  var elements = (url.match(/t=([0-9]*h)?([0-9]*m)?([0-9]*s)?/) || []).splice(1);
+  return (!!elements.length)? elements.map(function (el) {
+    if (el) {
+      var value = parseInt(el.slice(0,2)) || 0;
+      switch (el[el.length-1]) {
+        case 'h': value = value * 3600; break;
+        case 'm': value = value * 60; break;
+      };
+      return value;
+    }
+    return 0;
+  }).reduce(function (a,b) { return a+b; }): 0;
+}
 
 module.exports = {
   extend: extend,

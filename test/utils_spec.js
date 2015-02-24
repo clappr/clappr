@@ -15,6 +15,12 @@ describe('Utils', () => {
     url = 'http://globotv.globo.com/rede-globo/globo-esporte/v/brasil-usa-col/3735973/?t=30m5s'
     expect(utils.seekStringToSeconds(url)).to.equal(1805);
 
+    url = 'http://globotv.globo.com/rede-globo/globo-esporte/v/brasil-usa-col/3735973/?t=1m'
+    expect(utils.seekStringToSeconds(url)).to.equal(60);
+
+    url = 'http://globotv.globo.com/rede-globo/globo-esporte/v/brasil-usa-col/3735973/?t=1h10s'
+    expect(utils.seekStringToSeconds(url)).to.equal(3610);
+
     url = 'http://globo.com/rede-globo/globo-esporte/v/brasil-usa-col/3735973/?autoPlay=true&t=5m5s'
     expect(utils.seekStringToSeconds(url)).to.equal(305);
 
