@@ -111,7 +111,7 @@ I'm sure you can do better than me.
 
 If you want to disable media control auto hide, add `hideMediaControl: false` in your embed parameters.
 
-#### Hide Volume Hide
+##### Hide Volume Bar
 
 When embedded with width less than 320, volume bars are hidden. You can force this behavior for all sizes by adding `hideVolumeBar: true`.
 
