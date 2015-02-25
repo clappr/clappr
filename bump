@@ -6,6 +6,10 @@ update_version() {
   sed -i '' s/$current_tag/$1/ package.json
 }
 
+update_bower() {
+  ./node_modules/sync-pkg/cli.js package.json
+}
+
 build() {
   echo 'building clappr.js'
   gulp build > /dev/null
@@ -50,6 +54,7 @@ Your happy butler.\n
 
 main() {
   update_version $1
+  update_bower
   build
   run_tests
   if (("$?" == "0")); then
