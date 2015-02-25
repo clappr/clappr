@@ -1,12 +1,9 @@
 [![Build Status](https://travis-ci.org/clappr/clappr.svg?branch=master)](https://travis-ci.org/globocom/clappr)
 [![Dependency Status](https://gemnasium.com/globocom/clappr.svg)](https://gemnasium.com/globocom/clappr)
-
 <div align=center>
-<img src="https://cloud.githubusercontent.com/assets/244265/6373134/a845eb50-bce7-11e4-80f2-592ba29972ab.png"><br>
-</div>
-
+<img src="https://cloud.githubusercontent.com/assets/244265/6373134/a845eb50-bce7-11e4-80f2-592ba29972ab.png"><br><br>
 <img src="https://i.cloudup.com/GSbXxvCsBK.png">
-
+</div>
 
 ### Using the Player
 
