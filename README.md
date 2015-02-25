@@ -1,9 +1,9 @@
-# Clappr Player
-
 [![Build Status](https://travis-ci.org/clappr/clappr.svg?branch=master)](https://travis-ci.org/globocom/clappr)
 [![Dependency Status](https://gemnasium.com/globocom/clappr.svg)](https://gemnasium.com/globocom/clappr)
-[![Pull Requests Stats](http://issuestats.com/github/globocom/clappr/badge/pr)](http://issuestats.com/github/globocom/clappr)
-[![Issues Stats](http://issuestats.com/github/globocom/clappr/badge/issue)](http://issuestats.com/github/globocom/clappr)
+
+<div align=center>
+<img src="https://cloud.githubusercontent.com/assets/244265/6373134/a845eb50-bce7-11e4-80f2-592ba29972ab.png"><br>
+</div>
 
 <img src="https://i.cloudup.com/GSbXxvCsBK.png">
 
