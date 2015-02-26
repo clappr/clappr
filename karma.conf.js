@@ -57,8 +57,6 @@ module.exports = function(config) {
         bundle.external('html5_video');
         bundle.external('html_img');
         bundle.external('poster');
-        bundle.external('underscore');
-
       }
     },
 
