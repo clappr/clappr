@@ -59,8 +59,7 @@ class Player extends BaseObject {
   }
 
   normalizeSources(options) {
-    options.source = options.source && (this.is(options.source, String) || this.is(options.source, Number)) ? [options.source] : options.source;
-    var sources = [options.source, options.sources].reduce((a, b) => a.concat(b)).filter((s) => s && s !== "")
+    var sources = options.sources || (options.source !== undefined? [options.source.toString()] : [])
     return sources.length === 0 ? ['no.op'] : sources
   }
 
