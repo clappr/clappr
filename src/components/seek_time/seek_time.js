@@ -41,11 +41,6 @@ class SeekTime extends UIObject {
       formattedTime: formatTime(currentTime),
       pointerPosition: pointerPosition
     }
-    console.log('options', options)
-    console.log('pageX', event.pageX)
-    console.log('offset left', this.mediaControl.$el.offset().left)
-    console.log('mediaControl width', this.mediaControl.$el.width())
-    console.log('el width', this.$el.width())
 
     this.update(options)
   }
