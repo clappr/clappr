@@ -1,7 +1,7 @@
 #!/bin/sh
 
 update_version() {
-  current_tag=$(git log --tags --no-walk --pretty="format:%d" | sed 1q | sed 's/[()]//g' | sed s/,[^,]*$// | sed  's ......  ')
+  current_tag=$(git describe --abbrev=0 --tags)
   echo 'bump from '$current_tag' to '$1
   sed -i '' s/$current_tag/$1/ package.json
 }
