@@ -1,6 +1,6 @@
 {
   "name": "clappr",
-  "version": "0.0.101",
+  "version": "0.0.104",
   "dependencies": {
     "lodash.assign": {
       "version": "3.0.0",
@@ -492,7 +492,7 @@
                 },
                 "NodObjC": {
                   "version": "0.0.14",
-                  "from": "../../../../../var/folders/g9/mmczdkpd6xn246gvbmlhwc7c0000gn/T/npm-25944-6f221629/git-cache-8fd14decc2ec/7c751d91472c361eded0a6baa34b6528e66cf08c",
+                  "from": "../../../../../var/folders/g9/mmczdkpd6xn246gvbmlhwc7c0000gn/T/npm-47359-7df1eed9/git-cache-3069704882ae/7c751d91472c361eded0a6baa34b6528e66cf08c",
                   "resolved": "git+https://github.com/xdissent/NodObjC.git#7c751d91472c361eded0a6baa34b6528e66cf08c",
                   "dependencies": {
                     "ffi": {
