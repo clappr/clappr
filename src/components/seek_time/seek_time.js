@@ -33,7 +33,7 @@ class SeekTime extends UIObject {
   showTime(event) {
     var offset = event.pageX - this.mediaControl.$seekBarContainer.offset().left
     var timePosition = Math.min(100, Math.max((offset) / this.mediaControl.$seekBarContainer.width() * 100, 0))
-    var pointerPosition = event.pageX - this.mediaControl.$el.offset().left - (this.$el.width() / 2)
+    var pointerPosition = event.pageX - this.mediaControl.$el.offset().left
     pointerPosition = Math.min(Math.max(0, pointerPosition), this.mediaControl.$el.width() - this.$el.width())
     var currentTime = timePosition * this.mediaControl.container.getDuration() / 100
     var options = {
@@ -52,7 +52,7 @@ class SeekTime extends UIObject {
   update(options) {
     if (this.mediaControl.container.getPlaybackType() === 'vod' || this.mediaControl.container.isDvrInUse()) {
       this.$el.find('[data-seek-time]').text(options.formattedTime)
-      this.$el.css('left', options.pointerPosition)
+      this.$el.css('left', options.pointerPosition - (this.$el.width() / 2))
       this.$el.removeClass('hidden')
     }
   }
