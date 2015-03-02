@@ -97,6 +97,20 @@ class Chromecast extends UICorePlugin {
     this.session = session
     this.deviceState = DEVICE_STATE.ACTIVE
 
+    if (this.core.mediaControl.container.isPlaying()) {
+      this.loadMedia()
+    }
+  }
+
+  loadMedia() {
+    var src = this.core.mediaControl.container.playback.src
+    console.log("loading... " + src)
+    var mediaInfo = new chrome.cast.media.MediaInfo(src)
+    mediaInfo.contentType = 'video/mp4'
+    var request = new chrome.cast.media.LoadRequest(mediaInfo)
+    request.autoplay = true
+    request.currentTime = 0
+    this.session.loadMedia(request, (h, m) => this.loadMediaSuccess(h, m), (e) => this.loadMediaError(e))
   }
 
   show() {
