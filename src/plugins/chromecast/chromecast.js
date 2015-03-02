@@ -86,7 +86,7 @@ class Chromecast extends UICorePlugin {
   }
 
   loadMediaSuccess(how, mediaSession) {
-    console.log("new media session ID:" + mediaSession.mediaSessionId + ' (' + how + ')');
+    console.log('new media session', mediaSession, '(', how , ')');
   }
 
   loadMediaError(e) {
@@ -110,7 +110,7 @@ class Chromecast extends UICorePlugin {
     var request = new chrome.cast.media.LoadRequest(mediaInfo)
     request.autoplay = true
     request.currentTime = 0
-    this.session.loadMedia(request, (h, m) => this.loadMediaSuccess(h, m), (e) => this.loadMediaError(e))
+    this.session.loadMedia(request, (mediaSession) => this.loadMediaSuccess('loadMedia', mediaSession), (e) => this.loadMediaError(e))
   }
 
   show() {
