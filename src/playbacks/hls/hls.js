@@ -122,9 +122,6 @@ class HLS extends Playback {
   }
 
   getPlaybackType() {
-    if (this.playbackType === 'live') {
-      this.updateTime()
-    }
     return this.playbackType? this.playbackType: null
   }
 
