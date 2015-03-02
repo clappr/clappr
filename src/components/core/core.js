@@ -17,7 +17,9 @@ var Styler = require('../../base/styler')
 var MediaControl = require('media_control')
 var PlayerInfo = require('player_info')
 var Mediator = require('mediator')
-var Events = require('events');
+var Events = require('events')
+
+var find = require('lodash.find')
 
 class Core extends UIObject {
   get events() {
@@ -101,7 +103,7 @@ class Core extends UIObject {
   }
 
   getPlugin(name) {
-    return this.plugins.find((plugin) => plugin.name === name)
+    return find(this.plugins, (plugin) => plugin.name === name)
   }
 
   load(sources) {
