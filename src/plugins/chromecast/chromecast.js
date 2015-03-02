@@ -11,12 +11,15 @@ var DEVICE_STATE = {
   'ERROR' : 3,
 };
 
+var DEFAULT_CLAPPR_APP_ID = '6BF3C808'
+
 class Chromecast extends UICorePlugin {
   get name() { return 'chromecast' }
   constructor(core) {
     super(core)
     if (Browser.isChrome) {
       this.appId = core.options.chromecastAppId
+      this.deviceState = DEVICE_STATE.IDLE
       this.embedScript()
     } else {
       this.disable()
@@ -40,8 +43,7 @@ class Chromecast extends UICorePlugin {
     if (!window.chrome.cast.isAvailable) {
       window['__onGCastApiAvailable'] = (loaded, errorInfo) => {
         if (!!loaded) {
-          console.log(chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID)
-          this.appId = this.appId || chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID
+          this.appId = this.appId || DEFAULT_CLAPPR_APP_ID
           this.initializeCastApi()
         } else {
           console.error('GCastApi error', errorInfo)
@@ -52,14 +54,16 @@ class Chromecast extends UICorePlugin {
   }
 
   initializeCastApi() {
+    var autoJoinPolicy = chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
     var sessionRequest = new chrome.cast.SessionRequest(this.appId)
-    var apiConfig = new chrome.cast.ApiConfig(sessionRequest, (session) => this.sessionListener(session), (e) => this.receiverListener(e))
+    var apiConfig = new chrome.cast.ApiConfig(sessionRequest,
+      (session) => this.sessionListener(session), (e) => this.receiverListener(e), autoJoinPolicy)
     chrome.cast.initialize(apiConfig, () => console.log('init success'), () => console.log('init error'))
   }
 
   sessionListener(session) {
-    console.log('new session id:' + e.sessionId)
-    this.session = session
+    console.log('new session id:' + session.sessionId)
+    this.newSession(session)
   }
 
   receiverListener(e) {
@@ -72,6 +76,29 @@ class Chromecast extends UICorePlugin {
     }
   }
 
+  launchSuccess(session) {
+    console.log('launch success - session: ' + session.sessionId)
+    this.newSession(session)
+  }
+
+  launchError(e) {
+    console.log('error on launch', e)
+  }
+
+  loadMediaSuccess(how, mediaSession) {
+    console.log("new media session ID:" + mediaSession.mediaSessionId + ' (' + how + ')');
+  }
+
+  loadMediaError(e) {
+    console.log("media error", e);
+  }
+
+  newSession(session) {
+    this.session = session
+    this.deviceState = DEVICE_STATE.ACTIVE
+
+  }
+
   show() {
     this.$el.show()
   }
@@ -80,8 +107,13 @@ class Chromecast extends UICorePlugin {
     this.$el.hide()
   }
 
+  click() {
+    chrome.cast.requestSession((session) => this.launchSuccess(session), (e) => this.launchError(e))
+  }
+
   render() {
     this.$el.html('<button>Chromecast</button>')
+    this.$el.click(() => this.click())
     this.core.mediaControl.$el.find('.media-control-right-panel[data-media-control]').append(this.$el)
     this.hide()
     return this
