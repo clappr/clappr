@@ -21,6 +21,7 @@ var WaterMarkPlugin = require('../../plugins/watermark');
 var PosterPlugin = require('poster');
 var GoogleAnalyticsPlugin = require('../../plugins/google_analytics');
 var ClickToPausePlugin = require('../../plugins/click_to_pause');
+var Chromecast = require('../../plugins/chromecast')
 
 /* Core Plugins */
 var DVRControls = require('../../plugins/dvr_controls');
@@ -30,7 +31,7 @@ class Loader extends BaseObject {
     super()
     this.playbackPlugins = [HTML5VideoPlayback, FlashVideoPlayback, HTML5AudioPlayback, HLSVideoPlayback, HTMLImgPlayback, NoOp]
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
-    this.corePlugins = [DVRControls]
+    this.corePlugins = [DVRControls, Chromecast]
     if (externalPlugins) {
       this.addExternalPlugins(externalPlugins)
     }
