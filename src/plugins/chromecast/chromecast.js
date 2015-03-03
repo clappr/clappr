@@ -1,4 +1,7 @@
 var UICorePlugin = require('ui_core_plugin')
+var Container = require('container')
+var ChromecastPlayback = require('./chromecast_playback')
+var assign = require('lodash.assign')
 
 var Log = require('../log').getInstance()
 
@@ -87,6 +90,21 @@ class Chromecast extends UICorePlugin {
 
   loadMediaSuccess(how, mediaSession) {
     console.log('new media session', mediaSession, '(', how , ')');
+
+    this.originalPlayback = this.core.mediaControl.container.playback
+    var options = assign({'currentMedia': mediaSession}, this.originalPlayback.options)
+    this.playbackProxy = new ChromecastPlayback(options)
+    this.playbackProxy.settings = this.originalPlayback.settings
+    this.playbackProxy.render()
+
+    this.originalPlayback.$el.remove()
+    this.core.mediaControl.container.$el.append(this.playbackProxy.$el)
+
+    var container = this.core.mediaControl.container
+    container.stopListening()
+    container.playback = this.playbackProxy
+    container.bindEvents()
+    container.settingsUpdate()
   }
 
   loadMediaError(e) {
