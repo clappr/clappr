@@ -53,19 +53,24 @@ var formatTime = function(time) {
 
 var Fullscreen = {
   isFullscreen: function() {
-    return document.webkitFullscreenElement || document.webkitIsFullScreen || document.mozFullScreen || !!document.msFullscreenElement;
+    return (
+      document.webkitFullscreenElement || 
+      document.webkitIsFullScreen || 
+      document.mozFullScreen || 
+      !!document.msFullscreenElement
+    );
   },
   requestFullscreen: function(el) {
     if(el.requestFullscreen) {
       el.requestFullscreen();
     } else if(el.webkitRequestFullscreen) {
       el.webkitRequestFullscreen();
-    } else if (el.querySelector("video").webkitEnterFullScreen) {
-      el.querySelector("video").webkitEnterFullScreen();
     } else if(el.mozRequestFullScreen) {
       el.mozRequestFullScreen();
     } else if(el.msRequestFullscreen) {
       el.msRequestFullscreen();
+    } else if (el.querySelector && el.querySelector("video").webkitEnterFullScreen) {
+      el.querySelector("video").webkitEnterFullScreen();
     }
   },
   cancelFullscreen: function() {
