@@ -1,7 +1,6 @@
 var Playback = require('playback')
 var Events = require('events')
 var JST = require('../../base/jst')
-var Styler = require('../../base/styler')
 
 var TICK_INTERVAL = 100
 
@@ -15,15 +14,14 @@ class ChromecastPlayback extends Playback {
       this.options = options
       this.src = options.src
       this.currentMedia = options.currentMedia
+      this.mediaControl = options.mediaControl
       this.currentMedia.addUpdateListener(this.onMediaStatusUpdate.bind(this))
     }
 
     render() {
-      var style = Styler.getStyleFor('chromecast')
       var template = this.template()
       this.$el = $(template)
       this.$el.css({'background-image': 'url(' + this.options.poster + ')'})
-      this.$el.append(style)
     }
 
     play() {
@@ -45,7 +43,7 @@ class ChromecastPlayback extends Playback {
     }
 
     onMediaStatusUpdate() {
-      this.core.mediaControl.changeTogglePlay()
+      this.mediaControl.changeTogglePlay()
       if (this.isPlaying() && !this.timer) {
         this.timer = setInterval(() => this.updateMediaControl(), TICK_INTERVAL)
       }

@@ -1,6 +1,8 @@
 var UICorePlugin = require('ui_core_plugin')
+var Events = require('events')
 var Container = require('container')
 var ChromecastPlayback = require('./chromecast_playback')
+var Styler = require('../../base/styler')
 var assign = require('lodash.assign')
 
 var Log = require('../log').getInstance()
@@ -18,6 +20,12 @@ var DEFAULT_CLAPPR_APP_ID = '6BF3C808'
 
 class Chromecast extends UICorePlugin {
   get name() { return 'chromecast' }
+  get tagName() { return 'button' }
+  get attributes() {
+    return {
+      'class' : 'chromecast-button chromecast-icon icon-cast'
+    }
+  }
   constructor(core) {
     super(core)
     if (Browser.isChrome) {
@@ -27,6 +35,10 @@ class Chromecast extends UICorePlugin {
     } else {
       this.disable()
     }
+  }
+
+  bindEvents() {
+    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_RENDERED, () => this.settingsUpdate())
   }
 
   embedScript() {
@@ -92,7 +104,7 @@ class Chromecast extends UICorePlugin {
     console.log('new media session', mediaSession, '(', how , ')');
 
     this.originalPlayback = this.core.mediaControl.container.playback
-    var options = assign({'currentMedia': mediaSession}, this.originalPlayback.options)
+    var options = assign({currentMedia: mediaSession, mediaControl: this.core.mediaControl}, this.originalPlayback.options)
     this.playbackProxy = new ChromecastPlayback(options)
     this.playbackProxy.settings = this.originalPlayback.settings
     this.playbackProxy.render()
@@ -114,6 +126,8 @@ class Chromecast extends UICorePlugin {
   newSession(session) {
     this.session = session
     this.deviceState = DEVICE_STATE.ACTIVE
+    this.$el.removeClass('icon-cast')
+    this.$el.addClass('icon-cast-connected')
 
     if (this.core.mediaControl.container.isPlaying()) {
       this.loadMedia()
@@ -143,11 +157,16 @@ class Chromecast extends UICorePlugin {
     chrome.cast.requestSession((session) => this.launchSuccess(session), (e) => this.launchError(e))
   }
 
+  settingsUpdate() {
+    this.core.mediaControl.$el.find('.media-control-right-panel[data-media-control]').append(this.$el)
+  }
+
   render() {
-    this.$el.html('<button>Chromecast</button>')
     this.$el.click(() => this.click())
     this.core.mediaControl.$el.find('.media-control-right-panel[data-media-control]').append(this.$el)
     this.hide()
+    var style = Styler.getStyleFor('chromecast')
+    this.core.$el.append(style)
     return this
   }
 }
