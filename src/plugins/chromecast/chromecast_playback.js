@@ -56,7 +56,7 @@ class ChromecastPlayback extends Playback {
   }
 
   isPlaying() {
-    return this.currentMedia.playerState === 'PLAYING'
+    return this.currentMedia.playerState === 'PLAYING' || this.currentMedia.playerState === 'BUFFERING'
   }
 
   onMediaStatusUpdate() {
