@@ -64,6 +64,10 @@ class ChromecastPlayback extends Playback {
     if (this.isPlaying() && !this.timer) {
       this.startTimer()
     }
+
+    if (this.currentMedia.playerState === 'IDLE') {
+      this.trigger(Events.PLAYBACK_ENDED, this.name)
+    }
   }
 
   updateMediaControl() {
