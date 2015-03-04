@@ -11,6 +11,7 @@ var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
 var UIObject = require('ui_object')
 var Utils = require('../../base/utils')
+var Browser = require('browser')
 var SeekTime = require('../seek_time')
 var Mediator = require('mediator')
 var PlayerInfo = require('player_info')
@@ -376,6 +377,7 @@ class MediaControl extends UIObject {
     this.$seekBarPosition = this.$el.find('.bar-fill-2[data-seekbar]')
     this.$seekBarScrubber = this.$el.find('.bar-scrubber[data-seekbar]')
     this.$seekBarHover = this.$el.find('.bar-hover[data-seekbar]')
+    this.$volumeContainer = this.$el.find('.drawer-container[data-volume]')
     this.$volumeBarContainer = this.$el.find('.bar-container[data-volume]')
     this.$volumeIcon = this.$el.find('.drawer-icon[data-volume]')
   }
@@ -434,6 +436,10 @@ class MediaControl extends UIObject {
     this.hideId = setTimeout(() => this.hide(), timeout)
     if (this.disabled) {
       this.hide()
+    }
+
+    if(Browser.isSafari && Browser.isMobile) {
+      this.$volumeContainer.css('display','none')
     }
 
     this.$seekBarPosition.addClass('media-control-notransition')
