@@ -100,7 +100,7 @@ class PosterPlugin extends UIContainerPlugin {
 
   updateSize() {
     if (this.container.playback.name === 'html_img') return
-    var height = PlayerInfo.currentSize ? PlayerInfo.currentSize.height : this.$el.height()
+    var height = this.$el.height()
     this.$el.css({ fontSize: height })
     if (this.$playWrapper.is(':visible')) {
       this.$playWrapper.css({ marginTop: -(this.$playWrapper.height() / 2) })
