@@ -15,7 +15,7 @@ class ChromecastPlayback extends Playback {
     this.src = options.src
     this.currentMedia = options.currentMedia
     this.mediaControl = options.mediaControl
-    this.currentMedia.addUpdateListener(this.onMediaStatusUpdate.bind(this))
+    this.currentMedia.addUpdateListener(() => this.onMediaStatusUpdate())
   }
 
   render() {
