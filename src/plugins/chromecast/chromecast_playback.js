@@ -38,6 +38,14 @@ class ChromecastPlayback extends Playback {
     this.stopTimer()
   }
 
+  seek(time) {
+    this.stopTimer()
+    var request = new chrome.cast.media.SeekRequest()
+    request.currentTime = time * this.currentMedia.media.duration / 100
+    this.currentMedia.seek(request,
+      () => this.startTimer(), () => console.log('seek failed'))
+  }
+
   startTimer() {
     this.timer = setInterval(() => this.updateMediaControl(), TICK_INTERVAL)
   }
