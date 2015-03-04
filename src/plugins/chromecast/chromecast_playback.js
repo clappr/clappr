@@ -30,12 +30,21 @@ class ChromecastPlayback extends Playback {
 
   pause() {
     this.currentMedia.pause()
-    clearInterval(this.timer)
+    this.stopTimer()
   }
 
   stop() {
     this.currentMedia.stop()
+    this.stopTimer()
+  }
+
+  startTimer() {
+    this.timer = setInterval(() => this.updateMediaControl(), TICK_INTERVAL)
+  }
+
+  stopTimer() {
     clearInterval(this.timer)
+    this.timer = null
   }
 
   isPlaying() {
@@ -45,7 +54,7 @@ class ChromecastPlayback extends Playback {
   onMediaStatusUpdate() {
     this.mediaControl.changeTogglePlay()
     if (this.isPlaying() && !this.timer) {
-      this.timer = setInterval(() => this.updateMediaControl(), TICK_INTERVAL)
+      this.startTimer()
     }
   }
 
