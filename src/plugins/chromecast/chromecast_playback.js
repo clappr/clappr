@@ -26,6 +26,7 @@ class ChromecastPlayback extends Playback {
 
   play() {
     this.currentMedia.play()
+    this.trigger(Events.PLAYBACK_PLAY)
   }
 
   pause() {
