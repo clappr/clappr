@@ -7,8 +7,8 @@ var template = require('lodash.template');
 var JST = require('./jst');
 
 var Styler = {
-  getStyleFor: function(name, options={}) {
-    return $('<style class="clappr-style"></style>').html(template(JST.CSS[name])(options))[0];
+  getStyleFor: function(name, options={baseUrl: ''}) {
+    return $('<style class="clappr-style"></style>').html(template(JST.CSS[name])(options));
   }
 };
 
