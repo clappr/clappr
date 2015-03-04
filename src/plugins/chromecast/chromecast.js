@@ -38,7 +38,9 @@ class Chromecast extends UICorePlugin {
   }
 
   bindEvents() {
-    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_RENDERED, () => this.settingsUpdate())
+    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_RENDERED, this.settingsUpdate)
+    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
+    this.listenTo(this.core.mediaControl.container, Events.CONTAINER_TIMEUPDATE, this.containerTimeUpdate)
   }
 
   embedScript() {
@@ -104,6 +106,8 @@ class Chromecast extends UICorePlugin {
     console.log('new media session', mediaSession, '(', how , ')');
 
     this.originalPlayback = this.core.mediaControl.container.playback
+    this.originalPlayback.pause()
+
     var options = assign({currentMedia: mediaSession, mediaControl: this.core.mediaControl}, this.originalPlayback.options)
     this.playbackProxy = new ChromecastPlayback(options)
     this.playbackProxy.settings = this.originalPlayback.settings
@@ -141,7 +145,7 @@ class Chromecast extends UICorePlugin {
     mediaInfo.contentType = 'video/mp4'
     var request = new chrome.cast.media.LoadRequest(mediaInfo)
     request.autoplay = true
-    request.currentTime = 0
+    request.currentTime = this.currentTime
     this.session.loadMedia(request, (mediaSession) => this.loadMediaSuccess('loadMedia', mediaSession), (e) => this.loadMediaError(e))
   }
 
@@ -159,6 +163,16 @@ class Chromecast extends UICorePlugin {
 
   settingsUpdate() {
     this.core.mediaControl.$el.find('.media-control-right-panel[data-media-control]').append(this.$el)
+  }
+
+  containerChanged() {
+    this.stopListening()
+    this.bindEvents()
+    this.currentTime = 0
+  }
+
+  containerTimeUpdate(position, duration) {
+    this.currentTime = position
   }
 
   render() {
