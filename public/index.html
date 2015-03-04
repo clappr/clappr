@@ -24,6 +24,7 @@
 
 var player = new Clappr.Player({
   source: 'http://clappr.io/highline.mp4',
+  baseUrl: 'http://cdn.clappr.io/latest',
   poster: 'http://clappr.io/poster.png',
   mute: true,
   height: 360,
@@ -62,6 +63,7 @@ player.attachTo(playerElement);
       var player = new Clappr.Player({
         source: 'http://clappr.io/highline.mp4',
         poster: 'http://clappr.io/poster.png',
+        baseUrl: 'http://cdn.clappr.io/latest',
         mute: true,
         height: 360,
         width: 640
