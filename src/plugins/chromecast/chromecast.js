@@ -108,7 +108,7 @@ class Chromecast extends UICorePlugin {
 
     this.originalPlayback = this.core.mediaControl.container.playback
 
-    var options = assign({currentMedia: mediaSession, mediaControl: this.core.mediaControl}, this.originalPlayback.options)
+    var options = assign({}, this.originalPlayback.options, {currentMedia: mediaSession, mediaControl: this.core.mediaControl})
     this.playbackProxy = new ChromecastPlayback(options)
     this.playbackProxy.settings = this.originalPlayback.settings
     this.playbackProxy.render()
