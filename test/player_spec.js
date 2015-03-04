@@ -2,6 +2,16 @@ var Player = require('../src/components/player');
 
 describe('Player', () => {
   describe('constructor', () => {
+    it('uses an empty string as default baseUrl', () => {
+      var player = new Player({source: '/playlist.m3u8'})
+      expect(player.options.baseUrl).to.be.equal('');
+    })
+
+    it('uses the baseUrl passed from initialization', () => {
+      var player = new Player({source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest'})
+      expect(player.options.baseUrl).to.be.equal('http://cdn.clappr.io/latest');
+    })
+
     it('persists config by default', () => {
       var player = new Player({source: '/playlist.m3u8'})
       expect(player.options.persistConfig).to.be.equal(true);

@@ -52,7 +52,7 @@ class MediaControl extends UIObject {
   get template() { return JST.media_control }
 
   constructor(options) {
-    super(options);
+    super(options)
     this.seekTime = new SeekTime(this)
     this.options = options
     this.mute = this.options.mute
@@ -421,9 +421,15 @@ class MediaControl extends UIObject {
     }
   }
 
+  destroy() {
+    $(document).unbind('mouseup')
+    $(document).unbind('mousemove')
+    this.unbindKeyEvents()
+  }
+
   render() {
     var timeout = 1000
-    var style = Styler.getStyleFor('media_control')
+    var style = Styler.getStyleFor('media_control', {baseUrl: this.options.baseUrl});
     this.$el.html(this.template({ settings: this.settings }))
     this.$el.append(style)
     this.createCachedElements()
@@ -460,12 +466,6 @@ class MediaControl extends UIObject {
 
     this.trigger(Events.MEDIACONTROL_RENDERED)
     return this
-  }
-
-  destroy() {
-    $(document).unbind('mouseup')
-    $(document).unbind('mousemove')
-    this.unbindKeyEvents()
   }
 }
 
