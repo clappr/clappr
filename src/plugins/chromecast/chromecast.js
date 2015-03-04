@@ -84,6 +84,13 @@ class Chromecast extends UICorePlugin {
     this.newSession(session)
   }
 
+  sessionUpdateListener() {
+    console.log(this.session)
+    if (this.session.status === chrome.cast.SessionStatus.STOPPED) {
+      this.sessionStopped()
+    }
+  }
+
   receiverListener(e) {
     if ( e === chrome.cast.ReceiverAvailability.AVAILABLE ) {
       console.log("receiver found")
@@ -113,6 +120,9 @@ class Chromecast extends UICorePlugin {
     this.playbackProxy.settings = this.originalPlayback.settings
     this.playbackProxy.render()
 
+    this.mediaSession = mediaSession
+    this.listenTo(this.playbackProxy, Events.PLAYBACK_TIMEUPDATE, this.playbackTimeUpdate)
+
     this.originalPlayback.$el.remove()
     this.core.mediaControl.container.$el.append(this.playbackProxy.$el)
 
@@ -133,9 +143,29 @@ class Chromecast extends UICorePlugin {
     this.$el.removeClass('icon-cast')
     this.$el.addClass('icon-cast-connected')
 
+    session.addUpdateListener(() => this.sessionUpdateListener())
+
     if (this.core.mediaControl.container.isPlaying()) {
       this.loadMedia()
     }
+  }
+
+  sessionStopped() {
+    this.$el.addClass('icon-cast')
+    this.$el.removeClass('icon-cast-connected')
+
+    this.session = null
+
+    this.core.load(this.playbackProxy.src)
+    if (this.playbackProxy.isPlaying() || this.mediaSession.playerState === 'PAUSED') {
+      var time = this.currentTime
+      setTimeout(() => {
+        this.core.mediaControl.container.setCurrentTime(100.0 * time / this.mediaSession.media.duration)
+        this.core.mediaControl.container.play()
+      }, 100)
+    }
+
+    this.playbackProxy.stop()
   }
 
   loadMedia() {
@@ -173,6 +203,10 @@ class Chromecast extends UICorePlugin {
   }
 
   containerTimeUpdate(position, duration) {
+    this.currentTime = position
+  }
+
+  playbackTimeUpdate(position, duration) {
     this.currentTime = position
   }
 

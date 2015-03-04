@@ -30,13 +30,13 @@ class ChromecastPlayback extends Playback {
   }
 
   pause() {
-    this.currentMedia.pause()
     this.stopTimer()
+    this.currentMedia.pause()
   }
 
   stop() {
-    this.currentMedia.stop()
     this.stopTimer()
+    this.currentMedia.stop()
   }
 
   seek(time) {
