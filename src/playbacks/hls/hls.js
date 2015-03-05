@@ -13,7 +13,7 @@ var Events = require('events')
 var Styler = require('../../base/styler')
 var $ = require('zepto')
 
-var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" class="hls-playback" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls="" width="100%" height="100%"><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>'
+var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" class="hls-playback" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls="" width="100%" height="100%"><param name="movie" value="<%= baseUrl %>/assets/HLSPlayer.swf"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>'
 
 class HLS extends Playback {
   get name() { return 'hls' }
@@ -32,8 +32,7 @@ class HLS extends Playback {
   constructor(options) {
     super(options)
     this.src = options.src
-    this.defaultBaseSwfPath = "http://cdn.clappr.io/" + Clappr.version + "/assets/"
-    this.swfPath = (options.swfBasePath || this.defaultBaseSwfPath) + "HLSPlayer.swf"
+    this.baseUrl = options.baseUrl;
     this.flushLiveURLCache = (options.flushLiveURLCache === undefined)? true: options.flushLiveURLCache
     this.capLevelToStage = (options.capLevelToStage === undefined)? false: options.capLevelToStage
     this.highDefinition = false
@@ -294,7 +293,7 @@ class HLS extends Playback {
   }
 
   setupIE() {
-    this.setElement($(template(objectIE)({cid: this.cid, swfPath: this.swfPath, playbackId: this.uniqueId})))
+    this.setElement($(template(objectIE)({cid: this.cid, baseUrl: this.baseUrl, playbackId: this.uniqueId})))
   }
 
   updateSettings() {
@@ -320,7 +319,7 @@ class HLS extends Playback {
     if(Browser.isLegacyIE) {
       this.setupIE()
     } else {
-      this.$el.html(this.template({cid: this.cid, swfPath: this.swfPath, playbackId: this.uniqueId}))
+      this.$el.html(this.template({cid: this.cid, baseUrl: this.baseUrl, playbackId: this.uniqueId}))
       if(Browser.isFirefox) {
         this.setupFirefox()
       } else if (Browser.isIE) {
