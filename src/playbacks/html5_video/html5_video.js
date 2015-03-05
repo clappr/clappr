@@ -239,11 +239,11 @@ HTML5Video.canPlay = function(resource) {
   }
   mimetypes['ogv'] = mimetypes['ogg']
   mimetypes['3gp'] = mimetypes['3gpp']
-  var extension = resource.split('?')[0].match(/.*\.(.*)$/)[1]
 
-  if (mimetypes[extension] !== undefined) {
+  var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
+  if ((resourceParts.length > 1) && (mimetypes[resourceParts[1]] !== undefined)) {
     var v = document.createElement('video')
-    return !!find(mimetypes[extension], (ext) => { return !!v.canPlayType(ext).replace(/no/, '') })
+    return !!find(mimetypes[resourceParts[1]], (ext) => { return !!v.canPlayType(ext).replace(/no/, '') })
   }
   return false
 }
