@@ -4,6 +4,7 @@
 
 var Playback = require('playback')
 var Events = require('events')
+var find = require('lodash.find')
 
 class HTML5Audio extends Playback {
   get name() { return 'html5_audio' }
@@ -110,13 +111,13 @@ HTML5Audio.canPlay = function(resource) {
   var mimetypes = {
     'wav': ['audio/wav'],
     'mp3': ['audio/mp3', 'audio/mpeg;codecs="mp3"'],
-    'aac': ['audio/mp4;codecs="mp4a.40.5"']
+    'aac': ['audio/mp4;codecs="mp4a.40.5"'],
+    'oga': ['audio/ogg']
   }
-  var extension = resource.split('?')[0].match(/.*\.(.*)$/)[1]
-
-  if (mimetypes[extension] !== undefined) {
+  var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
+  if ((resourceParts.length > 1) && (mimetypes[resourceParts[1]] !== undefined)) {
     var a = document.createElement('audio')
-    return !!mimetypes[extension].find((ext) => { return !!a.canPlayType(ext).replace(/no/, '') })
+    return !!find(mimetypes[resourceParts[1]], (ext) => { return !!a.canPlayType(ext).replace(/no/, '') })
   }
   return false
 }
