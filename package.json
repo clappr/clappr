@@ -8,17 +8,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:globocom/clappr.git"
+    "url": "git@github.com:clappr/clappr.git"
   },
   "author": "Globo.com",
   "license": "BSD",
   "bugs": {
-    "url": "https://github.com/globocom/clappr/issues"
+    "url": "https://github.com/clappr/clappr/issues"
   },
   "browser": {
     "zepto": "clappr-zepto"
   },
-  "homepage": "https://github.com/globocom/clappr",
+  "homepage": "https://github.com/clappr/clappr",
   "devDependencies": {
     "browserify": "9.0.3",
     "browserify-versionify": "1.0.3",
