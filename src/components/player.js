@@ -6,7 +6,6 @@ var BaseObject = require('base_object')
 var CoreFactory = require('./core_factory')
 var Loader = require('./loader')
 var assign = require('lodash.assign')
-var ScrollMonitor = require('scrollmonitor');
 var PlayerInfo = require('player_info')
 
 class Player extends BaseObject {
@@ -34,24 +33,6 @@ class Player extends BaseObject {
   attachTo(element) {
     this.options.parentElement = element
     this.core = this.coreFactory.create()
-    if (this.options.autoPlayVisible) {
-      this.bindAutoPlayVisible(this.options.autoPlayVisible)
-    }
-  }
-
-  bindAutoPlayVisible(option) {
-    this.elementWatcher = ScrollMonitor.create(this.core.$el)
-    if (option === 'full') {
-      this.elementWatcher.fullyEnterViewport(() => this.enterViewport())
-    } else if (option === 'partial') {
-      this.elementWatcher.enterViewport(() => this.enterViewport())
-    }
-  }
-
-  enterViewport() {
-    if (this.elementWatcher.top !== 0 && !this.isPlaying()) {
-      this.play()
-    }
   }
 
   is(value, type) {
