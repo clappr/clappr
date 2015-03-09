@@ -1,6 +1,7 @@
 var Playback = require('playback')
 var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
+var Events = require('events')
 
 class NoOp extends Playback {
   get name() { return 'no_op' }
@@ -18,6 +19,7 @@ class NoOp extends Playback {
     this.$el.html(this.template())
     this.$el.append(style);
     this.animate()
+    this.trigger(Events.PLAYBACK_READY, this.name)
     return this
   }
 
