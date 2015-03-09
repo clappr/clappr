@@ -66,9 +66,6 @@ You can set the player size setting `width` and `height` parameters.
 ##### Auto Play
 Add `autoPlay: true` if you want the video to automatic play after page load.
 
-##### Auto Play when Visible
-If you want to play the video when it appears partially on screen, set `autoPlayVisible: 'partial'`. In case you want the player to play when it is full visible, `autoPlayVisible: 'full'`.
-
 ##### Chromeless
 Add `chromeless: 'true'` if you want the player to act in chromeless mode.
 
