@@ -3,10 +3,10 @@
   "description": "An extensible media player for the web",
   "repository": {
     "type": "git",
-    "url": "git@github.com:globocom/clappr.git"
+    "url": "git@github.com:clappr/clappr.git"
   },
   "license": "BSD",
-  "homepage": "https://github.com/globocom/clappr",
+  "homepage": "https://github.com/clappr/clappr",
   "authors": [
     "Globo.com"
   ],
