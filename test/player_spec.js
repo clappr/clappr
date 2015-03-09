@@ -2,9 +2,9 @@ var Player = require('../src/components/player');
 
 describe('Player', () => {
   describe('constructor', () => {
-    it('uses an empty string as default baseUrl', () => {
+    it('uses default assets url as default baseUrl', () => {
       var player = new Player({source: '/playlist.m3u8'})
-      expect(player.options.baseUrl).to.be.equal('');
+      expect(player.options.baseUrl).to.be.equal('http://cdn.clappr.io/latest');
     })
 
     it('uses the baseUrl passed from initialization', () => {
