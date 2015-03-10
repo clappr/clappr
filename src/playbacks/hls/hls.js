@@ -187,7 +187,7 @@ class HLS extends Playback {
   startReportingProgress() {
     if (!this.reportingProgress) {
       this.reportingProgress = true
-      Mediator.on(this.uniqueId + ':fragmentloaded', this.onFragmentLoaded)
+      Mediator.on(this.uniqueId + ':fragmentloaded',() => this.onFragmentLoaded())
     }
   }
 
