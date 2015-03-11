@@ -5,7 +5,7 @@
 var Playback = require('playback')
 var JST = require('../../base/jst')
 var assign = require('lodash.assign')
-var template = require('lodash.template')
+var template = require('template')
 
 var Mediator = require('mediator')
 var Browser = require('browser')
