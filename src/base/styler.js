@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 var $ = require('zepto');
-var template = require('lodash.template');
+var template = require('template');
 var JST = require('./jst');
 
 var Styler = {
