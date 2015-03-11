@@ -31,7 +31,6 @@
     "express-alias": "0.4.0",
     "glob": "^4.0.2",
     "gulp": "^3.8.1",
-    "clappr-zepto": "0.0.4",
     "gulp-compressor": "^0.1.0",
     "gulp-jshint": "1.9.0",
     "gulp-livereload": "^2.1.0",
@@ -65,6 +64,7 @@
     "sync-pkg": "0.3.0"
   },
   "dependencies": {
+    "clappr-zepto": "0.0.4",
     "lodash.assign": "3.0.0",
     "lodash.find": "3.0.0",
     "lodash.once": "3.0.0",
