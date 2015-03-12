@@ -145,10 +145,18 @@ var seekStringToSeconds = function(url) {
   }).reduce(function (a,b) { return a+b; }): 0;
 }
 
+var idCounter = 0;
+
+var uniqueId = function(prefix) {
+  var id = ++idCounter;
+  return prefix + id;
+}
+
 module.exports = {
   extend: extend,
   formatTime: formatTime,
   Fullscreen: Fullscreen,
   Config: Config,
-  seekStringToSeconds: seekStringToSeconds
+  seekStringToSeconds: seekStringToSeconds,
+  uniqueId: uniqueId
 };

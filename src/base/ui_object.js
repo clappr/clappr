@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 var $ = require('zepto')
-var uniqueId = require('lodash.uniqueid')
+var uniqueId = require('./utils').uniqueId
 var result = require('lodash.result')
 var assign = require('lodash.assign')
 var extend = require('./utils').extend
