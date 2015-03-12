@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 var execOnce = require('lodash.once')
-var uniqueId = require('lodash.uniqueid')
+var uniqueId = require('./utils').uniqueId
 var Log = require('../plugins/log').getInstance()
 
 var slice = Array.prototype.slice

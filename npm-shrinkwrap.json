@@ -268,18 +268,6 @@
         }
       }
     },
-    "lodash.uniqueid": {
-      "version": "3.0.0",
-      "from": "lodash.uniqueid@3.0.0",
-      "resolved": "https://registry.npmjs.org/lodash.uniqueid/-/lodash.uniqueid-3.0.0.tgz",
-      "dependencies": {
-        "lodash._basetostring": {
-          "version": "3.0.0",
-          "from": "lodash._basetostring@>=3.0.0 <4.0.0",
-          "resolved": "https://registry.npmjs.org/lodash._basetostring/-/lodash._basetostring-3.0.0.tgz"
-        }
-      }
-    },
     "mocha": {
       "version": "2.2.1",
       "from": "mocha@*",

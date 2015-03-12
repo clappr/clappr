@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var uniqueId = require('lodash.uniqueid')
+var uniqueId = require('./utils').uniqueId
 var Events = require('events')
 
 class BaseObject extends Events {
