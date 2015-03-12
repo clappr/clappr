@@ -4,7 +4,8 @@
   "description": "An extensible media player for the web",
   "main": "dist/clappr.min.js",
   "scripts": {
-    "test": "./node_modules/.bin/gulp release && ./node_modules/.bin/karma start --single-run --browsers Firefox"
+    "test": "./node_modules/.bin/gulp release && ./node_modules/.bin/karma start --single-run --browsers Firefox",
+    "lock": "rm -rf npm-shrinkwrap.json node_modules && npm install --silent && npm shrinkwrap"
   },
   "repository": {
     "type": "git",
