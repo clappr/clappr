@@ -49,7 +49,7 @@ $changelog\n\n
 with love,\n
 Your happy butler.\n
 "
-  echo $message | mail -s "$(echo "[clappr] new version released: $1\nFrom: Clappr Butler <buttler@clappr.io>\n")" videos5@corp.globo.com 
+  echo $message | mail -s "$(echo "[clappr] new version released: $1\nFrom: Clappr Butler <butler@clappr.io>\n")" videos5@corp.globo.com 
 }
 
 main() {
