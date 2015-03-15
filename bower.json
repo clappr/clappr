@@ -14,13 +14,12 @@
     "dist/clappr.min.js"
   ],
   "dependencies": {
-    "lodash.uniqueid": "3.0.0",
+    "clappr-zepto": "0.0.4",
     "lodash.assign": "3.0.0",
+    "lodash.find": "3.0.0",
     "lodash.once": "3.0.0",
     "lodash.result": "3.0.0",
     "lodash.uniq": "3.0.0",
-    "lodash.find": "3.0.0",
-    "clappr-zepto": "0.0.4",
     "mousetrap": "^1.4.6"
   },
   "devDependencies": {
