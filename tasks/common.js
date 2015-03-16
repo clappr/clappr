@@ -14,6 +14,7 @@ module.exports.browserify = function(options) {
     .transform(babelify)
     .transform(versionify)
     .require('./src/main.js', { entry: true })
+    .require('./src/base/kibo', { expose: 'kibo' })
     .require('./src/base/events', { expose: 'events' })
     .require('./src/base/ui_object', { expose: 'ui_object' })
     .require('./src/base/base_object', { expose: 'base_object' })
