@@ -70,7 +70,6 @@
     "lodash.find": "3.0.0",
     "lodash.once": "3.0.0",
     "lodash.result": "3.0.0",
-    "lodash.uniq": "3.0.0",
-    "mousetrap": "^1.4.6"
+    "lodash.uniq": "3.0.0"
   }
 }
