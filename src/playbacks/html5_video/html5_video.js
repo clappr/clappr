@@ -4,13 +4,12 @@
 
 var Playback = require('playback')
 var JST = require('../../base/jst')
+var Kibo = require('../../base/kibo')
 var Styler = require('../../base/styler')
 var Browser = require('browser')
 var seekStringToSeconds = require('../../base/utils').seekStringToSeconds
 var Events = require('events')
 var find = require('lodash.find')
-
-require('mousetrap')
 
 class HTML5Video extends Playback {
   get name() { return 'html5_video' }
@@ -39,6 +38,7 @@ class HTML5Video extends Playback {
 
   constructor(options) {
     super(options)
+    this.kibo = new Kibo()
     this.options = options
     this.src = options.src
     this.el.src = options.src
@@ -62,11 +62,11 @@ class HTML5Video extends Playback {
   }
 
   bindEvents() {
-    [1,2,3,4,5,6,7,8,9].forEach((i) => { Mousetrap.bind([i.toString()], () => this.seek(i * 10)) })
+    [1,2,3,4,5,6,7,8,9].forEach((i) => { this.kibo.down(i.toString(), () => this.seek(i * 10)) })
   }
 
   stopListening() {
-    [1,2,3,4,5,6,7,8,9].forEach((i) => { Mousetrap.unbind([i.toString()], () => this.seek(i * 10)) })
+    this.kibo.off([1,2,3,4,5,6,7,8,9])
   }
 
   loadedMetadata(e) {

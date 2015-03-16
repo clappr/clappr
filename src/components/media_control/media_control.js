@@ -16,7 +16,7 @@ var SeekTime = require('../seek_time')
 var Mediator = require('mediator')
 var PlayerInfo = require('player_info')
 var Events = require('events')
-require('mousetrap')
+var Kibo = require('../../base/kibo')
 
 class MediaControl extends UIObject {
   get name() { return 'MediaControl' }
@@ -54,6 +54,7 @@ class MediaControl extends UIObject {
 
   constructor(options) {
     super(options)
+    this.kibo = new Kibo()
     this.seekTime = new SeekTime(this)
     this.options = options
     this.mute = this.options.mute
@@ -157,6 +158,7 @@ class MediaControl extends UIObject {
       this.container.play()
     }
     this.changeTogglePlay()
+    return false
   }
 
   togglePlayStop() {
@@ -406,11 +408,11 @@ class MediaControl extends UIObject {
   }
 
   bindKeyEvents() {
-    Mousetrap.bind(['space'], () => this.togglePlayPause())
+    this.kibo.down(['space'], () => this.togglePlayPause())
   }
 
   unbindKeyEvents() {
-    Mousetrap.unbind('space')
+    this.kibo.off('space')
   }
 
   parseColors() {
