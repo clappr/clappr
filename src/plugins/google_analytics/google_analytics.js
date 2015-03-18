@@ -12,6 +12,7 @@ class GoogleAnalytics extends ContainerPlugin {
     if (options.gaAccount) {
       this.account = options.gaAccount
       this.trackerName = (options.gaTrackerName) ? options.gaTrackerName + "." : 'Clappr.'
+      this.domainName = options.gaDomainName
       this.currentHDState = undefined
       this.embedScript()
     }
@@ -46,6 +47,8 @@ class GoogleAnalytics extends ContainerPlugin {
     this.listenTo(this.container, Events.CONTAINER_HIGHDEFINITIONUPDATE, this.onHD)
     this.listenTo(this.container, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.onDVR)
     _gaq.push([this.trackerName + '_setAccount', this.account]);
+    if (!!this.domainName)
+      _gaq.push([this.trackerName + '_setDomainName', this.domainName]);
   }
 
   onPlay() {
