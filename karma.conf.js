@@ -3,6 +3,7 @@
 
 
 var dotenv = require('dotenv');
+var versionify = require("browserify-versionify");
 
 dotenv.load();
 
@@ -18,8 +19,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'dist/clappr.min.js',
-      'test/**/*spec.js',
+      'test/**/*.js',
     ],
 
     // list of files to exclude
@@ -36,29 +36,6 @@ module.exports = function(config) {
       watch: true,
       debug: true,
       transform: ['babelify'],
-      prebundle: function(bundle) {
-        bundle.external('events');
-        bundle.external('ui_object');
-        bundle.external('base_object');
-        bundle.external('ui_container_plugin');
-        bundle.external('container_plugin');
-        bundle.external('core_plugin');
-        bundle.external('ui_core_plugin');
-        bundle.external('playback');
-        bundle.external('browser');
-        bundle.external('media_control');
-        bundle.external('player_info');
-        bundle.external('mediator');
-        bundle.external('container');
-        bundle.external('core');
-        bundle.external('flash');
-        bundle.external('hls');
-        bundle.external('html5_audio');
-        bundle.external('html5_video');
-        bundle.external('html_img');
-        bundle.external('poster');
-        bundle.external('template');
-      }
     },
 
     // test results reporter to use

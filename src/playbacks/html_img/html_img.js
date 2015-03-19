@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var Playback = require('playback')
+var Playback = require('../../base/playback')
 var Styler = require('../../base/styler')
 
 class HTMLImg extends Playback {

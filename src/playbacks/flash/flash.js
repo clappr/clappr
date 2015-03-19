@@ -2,15 +2,15 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var Playback = require('playback')
+var Playback = require('../../base/playback')
 var Styler = require('../../base/styler')
 var JST = require('../../base/jst')
-var Mediator = require('mediator')
-var template = require('template')
-var $ = require('zepto')
-var Browser = require('browser')
+var Mediator = require('../../components/mediator')
+var template = require('../../base/template')
+var $ = require('clappr-zepto')
+var Browser = require('../../components/browser')
 var seekStringToSeconds = require('../../base/utils').seekStringToSeconds
-var Events = require('events')
+var Events = require('../../base/events')
 var Kibo = require('../../base/kibo')
 
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= baseUrl %>/assets/Player.swf"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>'
