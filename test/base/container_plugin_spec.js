@@ -1,38 +1,38 @@
-var ContainerPlugin = require('../../src/base/container_plugin');
+var ContainerPlugin = require('../../src/base/container_plugin')
 
-describe('Container Plugin', () => {
-  it('should be enabled when created', () => {
-    var plugin = new ContainerPlugin({});
-    expect(plugin.enabled).to.be.true;
-  });
+describe('Container Plugin', function() {
+  it('should be enabled when created', function() {
+    var plugin = new ContainerPlugin({})
+    expect(plugin.enabled).to.be.true
+  })
 
-  it('should be disable when call disable()', () => {
-    var plugin = new ContainerPlugin({});
-    plugin.disable();
-    expect(plugin.enabled).to.be.false;
-  });
+  it('should be disable when call disable()', function() {
+    var plugin = new ContainerPlugin({})
+    plugin.disable()
+    expect(plugin.enabled).to.be.false
+  })
 
-  it('should call stopListening() when disabled', () => {
-    var plugin = new ContainerPlugin({});
+  it('should call stopListening() when disabled', function() {
+    var plugin = new ContainerPlugin({})
     var spy = sinon.spy(plugin, 'stopListening')
-    plugin.disable();
-    expect(spy).called.once;
-  });
+    plugin.disable()
+    expect(spy).called.once
+  })
 
-  it('should call stopListening() when destroyed', () => {
-    var plugin = new ContainerPlugin({});
+  it('should call stopListening() when destroyed', function() {
+    var plugin = new ContainerPlugin({})
     var spy = sinon.spy(plugin, 'stopListening')
-    plugin.destroy();
-    expect(spy).called.once;
-  });
+    plugin.destroy()
+    expect(spy).called.once
+  })
 
-  it('should not call bindEvents() twice', () => {
-    var plugin = new ContainerPlugin({});
+  it('should not call bindEvents() twice', function() {
+    var plugin = new ContainerPlugin({})
     var spy = sinon.spy(plugin, 'bindEvents')
-    plugin.disable();
-    plugin.enable();
-    plugin.enable();
-    expect(spy).called.once;
-  });
+    plugin.disable()
+    plugin.enable()
+    plugin.enable()
+    expect(spy).called.once
+  })
 
 })

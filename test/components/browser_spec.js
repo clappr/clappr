@@ -1,7 +1,7 @@
-var Browser = require('../../src/components/browser');
+var Browser = require('../../src/components/browser')
 
-describe('Browser', () => {
-  it('checks localstorage support', () => {
-    expect(Browser.hasLocalstorage).to.be.equal(true);
-  });
-});
+describe('Browser', function() {
+  it('checks localstorage support', function() {
+    expect(Browser.hasLocalstorage).to.be.equal(true)
+  })
+})
