@@ -12,7 +12,7 @@ var Events = require("events");
 window.DEBUG = false;
 
 window.Clappr = { Player: Player, Mediator: Mediator, Events: Events };
-window.Clappr.version = "0.0.110";
+window.Clappr.version = "0.0.111";
 
 module.exports = window.Clappr;
 
