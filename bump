@@ -3,7 +3,7 @@
 update_version() {
   current_tag=$(git describe --abbrev=0 --tags)
   echo 'bump from '$current_tag' to '$1
-  sed -i '' s/$current_tag/$1/ package.json
+  sed -i "s/$current_tag/$1/" package.json
 }
 
 update_bower() {
