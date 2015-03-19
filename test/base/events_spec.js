@@ -5,33 +5,33 @@ describe('Events', function(){
     this.events = new Events()
   })
 
-  it('subs to a given event', function(){
+  it('subcribes to a given event', function(){
     var counter = 0
-    var sumCounter = function() {
+    var eventsCounter = function() {
       counter += 1
     }
 
-    this.events.on("clappr.any.event", sumCounter)
+    this.events.on("clappr.any.event", eventsCounter)
     expect(counter).to.be.equal(0)
 
     this.events.trigger("clappr.any.event")
     expect(counter).to.be.equal(1)
   })
 
-  it('subs to a list of events separated by spaces', function(){
+  it('subscribes to a list of events separated by spaces', function(){
     var counter = 0
-    var sumCounter = function() {
+    var eventsCounter = function() {
       counter += 1
     }
 
-    this.events.on("clappr.any.event clappr.my.event", sumCounter)
+    this.events.on("clappr.any.event clappr.my.event", eventsCounter)
     expect(counter).to.be.equal(0)
 
     this.events.trigger("clappr.my.event")
     expect(counter).to.be.equal(1)
   })
 
-  it('subs to a given event using an object', function(){
+  it('subscribes to a given event using an object', function(){
     var counter = 0
 
     this.events.on({"clappr.any.event": function(){ counter += 1  }})
@@ -41,26 +41,26 @@ describe('Events', function(){
     expect(counter).to.be.equal(1)
   })
 
-  it('subs to a given event with context', function(){
-    var ctx = { counter: 9 }
-    var sumCounter = function() {
+  it('subscribes to a given event with context', function(){
+    var context = { counter: 9 }
+    var eventsCounter = function() {
       this.counter += 1
     }
 
-    this.events.on("clappr.any.event", sumCounter, ctx)
-    expect(ctx.counter).to.be.equal(9)
+    this.events.on("clappr.any.event", eventsCounter, context)
+    expect(context.counter).to.be.equal(9)
 
     this.events.trigger("clappr.any.event")
-    expect(ctx.counter).to.be.equal(10)
+    expect(context.counter).to.be.equal(10)
   })
 
   it('can unsub an event', function(){
     var counter = 0
-    var sumCounter = function() {
+    var eventsCounter = function() {
       counter += 1
     }
 
-    this.events.on("clappr.any.event", sumCounter)
+    this.events.on("clappr.any.event", eventsCounter)
     expect(counter).to.be.equal(0)
     this.events.off("clappr.any.event")
 
@@ -70,11 +70,11 @@ describe('Events', function(){
 
   it('can trigger multiple times', function(){
     var counter = 1
-    var sumCounter = function() {
+    var eventsCounter = function() {
       counter += 1
     }
 
-    this.events.on("clappr.any.event", sumCounter)
+    this.events.on("clappr.any.event", eventsCounter)
     expect(counter).to.be.equal(1)
 
     this.events.trigger("clappr.any.event")
@@ -84,11 +84,11 @@ describe('Events', function(){
 
   it('restricts to trigger only once', function(){
     var counter = 1
-    var sumCounter = function() {
+    var eventsCounter = function() {
       counter += 1
     }
 
-    this.events.once("clappr.any.event", sumCounter)
+    this.events.once("clappr.any.event", eventsCounter)
     expect(counter).to.be.equal(1)
 
     this.events.trigger("clappr.any.event")
@@ -98,7 +98,7 @@ describe('Events', function(){
 
   it('permist to listen events in other objects', function(){
     var counter = 0
-    var sumCounter = function() {
+    var eventsCounter = function() {
       counter += 1
     }
     var myEvents = new Events()
@@ -106,7 +106,7 @@ describe('Events', function(){
       counter += 2
     }
 
-    this.events.on("clappr.any.event", sumCounter)
+    this.events.on("clappr.any.event", eventsCounter)
     myEvents.listenTo(this.events, "clappr.any.event", myCounter)
 
     expect(counter).to.be.equal(0)
@@ -117,7 +117,7 @@ describe('Events', function(){
 
   it('permist to listen once events in other objects', function(){
     var counter = 0
-    var sumCounter = function() {
+    var eventsCounter = function() {
       counter += 1
     }
     var myEvents = new Events()
@@ -125,7 +125,7 @@ describe('Events', function(){
       counter += 1
     }
 
-    this.events.on("clappr.any.event", sumCounter)
+    this.events.on("clappr.any.event", eventsCounter)
     myEvents.listenToOnce(this.events, "clappr.any.event", myCounter)
 
     expect(counter).to.be.equal(0)
@@ -137,7 +137,7 @@ describe('Events', function(){
 
   it('permist to stop listening events in other objects', function(){
     var counter = 0
-    var sumCounter = function() {
+    var eventsCounter = function() {
       counter += 1
     }
     var myEvents = new Events()
@@ -145,7 +145,7 @@ describe('Events', function(){
       counter += 2
     }
 
-    this.events.on("clappr.any.event", sumCounter)
+    this.events.on("clappr.any.event", eventsCounter)
     myEvents.listenTo(this.events, "clappr.any.event", myCounter)
 
     expect(counter).to.be.equal(0)
