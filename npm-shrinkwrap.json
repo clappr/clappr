@@ -1,6 +1,6 @@
 {
   "name": "clappr",
-  "version": "0.0.107",
+  "version": "0.0.110",
   "dependencies": {
     "clappr-zepto": {
       "version": "0.0.4",
@@ -329,7 +329,7 @@
             },
             "inherits": {
               "version": "2.0.1",
-              "from": "inherits@>=2.0.1 <2.1.0",
+              "from": "inherits@>=2.0.0 <3.0.0",
               "resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz"
             }
           }
@@ -362,11 +362,6 @@
           "resolved": "https://registry.npmjs.org/supports-color/-/supports-color-1.2.1.tgz"
         }
       }
-    },
-    "mousetrap": {
-      "version": "1.4.6",
-      "from": "mousetrap@>=1.4.6 <2.0.0",
-      "resolved": "https://registry.npmjs.org/mousetrap/-/mousetrap-1.4.6.tgz"
     }
   }
 }
