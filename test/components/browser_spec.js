@@ -1,4 +1,4 @@
-var Browser = require('browser');
+var Browser = require('../../src/components/browser');
 
 describe('Browser', () => {
   it('checks localstorage support', () => {

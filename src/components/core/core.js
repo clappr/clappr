@@ -8,16 +8,16 @@
  */
 
 var assign = require('lodash.assign')
-var $ = require('zepto')
+var $ = require('clappr-zepto')
 
-var UIObject = require('ui_object')
+var UIObject = require('../../base/ui_object')
 var ContainerFactory = require('../container_factory')
 var Fullscreen = require('../../base/utils').Fullscreen
 var Styler = require('../../base/styler')
-var MediaControl = require('media_control')
-var PlayerInfo = require('player_info')
-var Mediator = require('mediator')
-var Events = require('events')
+var MediaControl = require('../media_control')
+var PlayerInfo = require('../player_info')
+var Mediator = require('../mediator')
+var Events = require('../../base/events')
 
 var find = require('lodash.find')
 

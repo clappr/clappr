@@ -1,4 +1,4 @@
-var BaseObject = require('base_object');
+var BaseObject = require('../../src/base/base_object');
 
 describe('BaseObject', function() {
   beforeEach(function(){

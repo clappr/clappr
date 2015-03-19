@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 var uniqueId = require('./utils').uniqueId
-var Events = require('events')
+var Events = require('./events')
 
 class BaseObject extends Events {
   constructor(options={}) {

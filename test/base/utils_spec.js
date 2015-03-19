@@ -1,4 +1,4 @@
-var utils = require('../src/base/utils');
+var utils = require('../../src/base/utils');
 
 describe('Utils', () => {
   it('should convert querystring seek regex in seconds', () => {

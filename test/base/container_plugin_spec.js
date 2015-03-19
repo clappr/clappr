@@ -1,4 +1,4 @@
-var ContainerPlugin = require('../src/base/container_plugin');
+var ContainerPlugin = require('../../src/base/container_plugin');
 
 describe('Container Plugin', () => {
   it('should be enabled when created', () => {

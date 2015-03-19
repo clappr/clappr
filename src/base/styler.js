@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var $ = require('zepto');
-var template = require('template');
+var $ = require('clappr-zepto');
+var template = require('./template');
 var JST = require('./jst');
 
 var Styler = {

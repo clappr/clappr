@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 var assign = require('lodash.assign')
-var Browser = require('browser');
+var Browser = require('../components/browser');
 
 var extend = function(protoProps, staticProps) {
   var parent = this;
@@ -54,9 +54,9 @@ var formatTime = function(time) {
 var Fullscreen = {
   isFullscreen: function() {
     return (
-      document.webkitFullscreenElement || 
-      document.webkitIsFullScreen || 
-      document.mozFullScreen || 
+      document.webkitFullscreenElement ||
+      document.webkitIsFullScreen ||
+      document.mozFullScreen ||
       !!document.msFullscreenElement
     );
   },

@@ -1,7 +1,7 @@
-var FakePlayback = require('playback');
-var Container = require('container');
-var Poster = require('../src/plugins/poster');
-var Events = require('events');
+var FakePlayback = require('../../src/base/playback');
+var Container = require('../../src/components/container');
+var Poster = require('../../src/plugins/poster');
+var Events = require('../../src/base/events');
 
 describe('Poster', function() {
   beforeEach(() => {

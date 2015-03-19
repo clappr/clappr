@@ -1,6 +1,6 @@
-var Container = require('container');
-var FakePlayback = require('playback');
-var Events = require('events');
+var Container = require('../../src/components/container');
+var FakePlayback = require('../../src/base/playback');
+var Events = require('../../src/base/events');
 
 describe('Container', function() {
   beforeEach(() => {

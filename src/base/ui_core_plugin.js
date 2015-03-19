@@ -1,4 +1,4 @@
-var UIObject = require('ui_object')
+var UIObject = require('./ui_object')
 
 class UICorePlugin extends UIObject {
   constructor(core) {

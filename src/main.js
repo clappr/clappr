@@ -3,8 +3,8 @@
 // license that can be found in the LICENSE file.
 
 var Player = require('./components/player')
-var Mediator = require('mediator')
-var Events = require('events')
+var Mediator = require('./components/mediator')
+var Events = require('./base/events')
 
 window.DEBUG = false
 

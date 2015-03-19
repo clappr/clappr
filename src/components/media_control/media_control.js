@@ -6,16 +6,16 @@
  * The MediaControl is responsible for displaying the Player controls.
  */
 
-var $ = require('zepto')
+var $ = require('clappr-zepto')
 var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
-var UIObject = require('ui_object')
+var UIObject = require('../../base/ui_object')
 var Utils = require('../../base/utils')
-var Browser = require('browser')
+var Browser = require('../browser')
 var SeekTime = require('../seek_time')
-var Mediator = require('mediator')
-var PlayerInfo = require('player_info')
-var Events = require('events')
+var Mediator = require('../mediator')
+var PlayerInfo = require('../player_info')
+var Events = require('../../base/events')
 var Kibo = require('../../base/kibo')
 
 class MediaControl extends UIObject {

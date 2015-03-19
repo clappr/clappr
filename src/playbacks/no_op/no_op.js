@@ -1,7 +1,7 @@
-var Playback = require('playback')
+var Playback = require('../../base/playback')
 var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
-var Events = require('events')
+var Events = require('../../base/events')
 
 class NoOp extends Playback {
   get name() { return 'no_op' }

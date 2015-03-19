@@ -1,4 +1,4 @@
-var HTML5Audio = require('../src/playbacks/html5_audio');
+var HTML5Audio = require('../../src/playbacks/html5_audio');
 
 describe('HTML5Audio playback', () => {
   it('should check if canPlay resource', () => {
