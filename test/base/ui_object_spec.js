@@ -1,4 +1,4 @@
-var UIObject = require('ui_object');
+var UIObject = require('../../src/base/ui_object');
 
 describe('UIObject', function() {
   beforeEach(function(){

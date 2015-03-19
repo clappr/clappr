@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var Playback = require('playback')
+var Playback = require('../../base/playback')
 var JST = require('../../base/jst')
 var Kibo = require('../../base/kibo')
 var Styler = require('../../base/styler')
-var Browser = require('browser')
+var Browser = require('../../components/browser')
 var seekStringToSeconds = require('../../base/utils').seekStringToSeconds
-var Events = require('events')
+var Events = require('../../base/events')
 var find = require('lodash.find')
 
 class HTML5Video extends Playback {
