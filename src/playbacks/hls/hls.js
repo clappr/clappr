@@ -129,12 +129,6 @@ class HLS extends Playback {
     return currentLevel.bitrate
   }
 
-  getLastProgramDate() {
-    var programDate = this.el.globoGetLastProgramDate()
-    // normalizing for BRT
-    return programDate - 1.08e+7
-  }
-
   isHighDefinitionInUse() {
     return this.highDefinition
   }
