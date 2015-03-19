@@ -1,28 +1,28 @@
-var Player = require('../src/components/player');
+var Player = require('../src/components/player')
 
-describe('Player', () => {
-  describe('constructor', () => {
-    it('uses default assets url as default baseUrl', () => {
+describe('Player', function() {
+  describe('constructor', function() {
+    it('uses default assets url as default baseUrl', function() {
       var player = new Player({source: '/playlist.m3u8'})
-      expect(player.options.baseUrl).to.be.equal('http://cdn.clappr.io/latest');
+      expect(player.options.baseUrl).to.be.equal('http://cdn.clappr.io/latest')
     })
 
-    it('uses the baseUrl passed from initialization', () => {
+    it('uses the baseUrl passed from initialization', function() {
       var player = new Player({source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest'})
-      expect(player.options.baseUrl).to.be.equal('http://cdn.clappr.io/latest');
+      expect(player.options.baseUrl).to.be.equal('http://cdn.clappr.io/latest')
     })
 
-    it('persists config by default', () => {
+    it('persists config by default', function() {
       var player = new Player({source: '/playlist.m3u8'})
-      expect(player.options.persistConfig).to.be.equal(true);
-    });
+      expect(player.options.persistConfig).to.be.equal(true)
+    })
 
-    it('can set persists config', () => {
+    it('can set persists config', function() {
       var player = new Player({source: '/playlist.m3u8', persistConfig: false})
-      expect(player.options.persistConfig).to.be.equal(false);
-    });
+      expect(player.options.persistConfig).to.be.equal(false)
+    })
 
-    it('should normalize sources', () => {
+    it('should normalize sources', function() {
       var player = new Player({source: '/playlist.m3u8', persistConfig: false})
       var normalizedSources = player.normalizeSources({sources: ["http://test.mp4"]})
       expect(normalizedSources).to.have.length(1)
@@ -36,5 +36,5 @@ describe('Player', () => {
       expect(normalizedSources).to.have.length(1)
       expect(normalizedSources[0]).to.be.equal('no.op')
     })
-  });
-});
+  })
+})
