@@ -7,6 +7,7 @@ var versionify = require("browserify-versionify");
 
 dotenv.load();
 var exec = require('child_process').exec
+var istanbul = require('browserify-istanbul');
 exec('gulp pre-build')
 
 module.exports = function(config) {
@@ -37,13 +38,22 @@ module.exports = function(config) {
     browserify: {
       watch: true,
       debug: true,
-      transform: ['babelify'],
+      transform: ['babelify', istanbul({
+       ignore: ['**/node_modules/**', '**/test/**']
+      })],
+    },
+
+    coverageReporter: {
+      reporters: [
+        {type: 'cobertura'},
+        {type: 'text-summary'}
+      ]
     },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['progress', 'coverage'],
 
 
     // web server port
