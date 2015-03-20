@@ -7,7 +7,7 @@ var versionify = require("browserify-versionify");
 
 dotenv.load();
 var exec = require('child_process').exec
-exec('node bin/hook.js')
+exec('gulp pre-build')
 
 module.exports = function(config) {
   config.set({
