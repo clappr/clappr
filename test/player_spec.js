@@ -7,10 +7,17 @@ describe('Player', function() {
       expect(player.options.baseUrl).to.be.equal('http://cdn.clappr.io/latest')
     })
 
-    it('has playerId', function() {
-      var player = new Player({source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest'})
-      expect(player.options.playerId).to.be.a('string')
-      expect(player.options.playerId[0]).to.be.equal('o')
+    it('has unique sequential id', function() {
+      var player1 = new Player({source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest'})
+      var player2 = new Player({source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest'})
+      var player3 = new Player({source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest'})
+
+      var p1Id = player1.options.playerId
+      var p2Id = player2.options.playerId
+      var p3Id = player3.options.playerId
+
+      expect(p2Id).to.be.above(p1Id)
+      expect(p3Id).to.be.above(p2Id)
     })
 
     it('uses the baseUrl passed from initialization', function() {

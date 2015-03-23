@@ -145,11 +145,12 @@ var seekStringToSeconds = function(url) {
   }).reduce(function (a,b) { return a+b; }): 0
 }
 
-var idCounter = 0;
+var idsCounter = {}
 
 var uniqueId = function(prefix) {
-  var id = ++idCounter;
-  return prefix + id;
+  idsCounter[prefix] || (idsCounter[prefix] = 0)
+  var id = ++idsCounter[prefix]
+  return prefix + id
 }
 
 module.exports = {
