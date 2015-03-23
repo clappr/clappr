@@ -7,6 +7,12 @@ describe('Player', function() {
       expect(player.options.baseUrl).to.be.equal('http://cdn.clappr.io/latest')
     })
 
+    it('has playerId', function() {
+      var player = new Player({source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest'})
+      expect(player.options.playerId).to.be.a('string')
+      expect(player.options.playerId[0]).to.be.equal('o')
+    })
+
     it('uses the baseUrl passed from initialization', function() {
       var player = new Player({source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest'})
       expect(player.options.baseUrl).to.be.equal('http://cdn.clappr.io/latest')

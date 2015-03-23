@@ -12,7 +12,7 @@ class Player extends BaseObject {
   constructor(options) {
     super(options)
     window.p = this
-    var defaultOptions = {persistConfig: true, width: 640, height: 360, baseUrl: 'http://cdn.clappr.io/latest'}
+    var defaultOptions = {playerId: this.uniqueId, persistConfig: true, width: 640, height: 360, baseUrl: 'http://cdn.clappr.io/latest'}
     this.options = assign(defaultOptions, options)
     this.options.sources = this.normalizeSources(options)
     this.loader = new Loader(this.options.plugins || {})
