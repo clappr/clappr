@@ -16,7 +16,6 @@ env:
   - CHROME_BIN=/usr/bin/chromium-browser
   - COVERALLS_SERVICE_NAME=travis-ci
   - COVERALLS_REPO_TOKEN=sj8SOxUBGaVeFGSY9ryrC2eTFpVjCPHJl
-   cat coverage/Firefox\ 35.0.0\ \(Mac\ OS\ X\ 10.10\)/lcov.info  | ./node_modules/coveralls/bin/coveralls.js
 
 script: npm test && cat coverage/*/lcov.info  | ./node_modules/coveralls/bin/coveralls.js
 
