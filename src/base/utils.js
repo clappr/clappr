@@ -157,6 +157,16 @@ var isNumber = function(value) {
   return value - parseFloat(value) + 1 >= 0
 }
 
+var requestAnimationFrame = window.requestAnimationFrame ||
+                            window.mozRequestAnimationFrame ||
+                            window.webkitRequestAnimationFrame ||
+                            (fn) => window.setTimeout(fn, 1000/60)
+
+var cancelAnimationFrame = window.cancelAnimationFrame ||
+                           window.mozCancelAnimationFrame ||
+                           window.webkitCancelAnimationFrame ||
+                           window.clearTimeout
+
 module.exports = {
   extend: extend,
   formatTime: formatTime,
@@ -164,5 +174,7 @@ module.exports = {
   Config: Config,
   seekStringToSeconds: seekStringToSeconds,
   uniqueId: uniqueId,
-  isNumber: isNumber
+  isNumber: isNumber,
+  requestAnimationFrame: requestAnimationFrame,
+  cancelAnimationFrame: cancelAnimationFrame
 }
