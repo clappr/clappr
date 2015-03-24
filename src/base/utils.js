@@ -153,11 +153,16 @@ var uniqueId = function(prefix) {
   return prefix + id
 }
 
+var isNumber = function(value) {
+  return value - parseFloat(value) + 1 >= 0
+}
+
 module.exports = {
   extend: extend,
   formatTime: formatTime,
   Fullscreen: Fullscreen,
   Config: Config,
   seekStringToSeconds: seekStringToSeconds,
-  uniqueId: uniqueId
+  uniqueId: uniqueId,
+  isNumber: isNumber
 }
