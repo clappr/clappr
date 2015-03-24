@@ -20,6 +20,7 @@ var Mediator = require('../mediator')
 var Events = require('../../base/events')
 
 var find = require('lodash.find')
+var isNumber = require('../../base/utils').isNumber
 
 class Core extends UIObject {
   get events() {
@@ -83,8 +84,13 @@ class Core extends UIObject {
   }
 
   resize(options) {
-    this.el.style.height = `${options.height}px`;
-    this.el.style.width = `${options.width}px`;
+    if (!isNumber(options.height) && !isNumber(options.width))  {
+      this.el.style.height = `${options.height}`;
+      this.el.style.width = `${options.width}`;
+    } else {
+      this.el.style.height = `${options.height}px`;
+      this.el.style.width = `${options.width}px`;
+    }
     PlayerInfo.previousSize = PlayerInfo.currentSize
     PlayerInfo.currentSize = options
     Mediator.trigger(Events.PLAYER_RESIZE)
