@@ -28,6 +28,7 @@
     "browserify-versionify": "1.0.3",
     "chai": "1.10.0",
     "compass-mixins": "0.12.3",
+    "coveralls": "^2.11.2",
     "dotenv": "^0.4.0",
     "exorcist": "^0.1.6",
     "express": "^4.6.1",
