@@ -21,6 +21,8 @@ var Events = require('../../base/events')
 
 var find = require('lodash.find')
 var isNumber = require('../../base/utils').isNumber
+var requestAnimationFrame = require('../../base/utils').requestAnimationFrame
+var cancelAnimationFrame = require('../../base/utils').cancelAnimationFrame
 
 class Core extends UIObject {
   get events() {
@@ -96,6 +98,24 @@ class Core extends UIObject {
     Mediator.trigger(Events.PLAYER_RESIZE)
   }
 
+  enableResizeObserver() {
+    var checkSizeCallback = () => {
+      if (this.reqAnimFrame) cancelAnimationFrame(this.reqAnimFrame)
+      if (this.previousSize.width != this.$el.width() ||
+          this.previousSize.height != this.$el.height()) {
+        Mediator.trigger(Events.PLAYER_RESIZE)
+        this.previousSize = { width: this.$el.width(), height: this.$el.height() }
+      }
+      this.reqAnimFrame = requestAnimationFrame(checkSizeCallback)
+    }
+
+    this.reqAnimFrame = requestAnimationFrame(checkSizeCallback)
+  }
+
+  disableResizeObserver() {
+    if (this.reqAnimFrame) cancelAnimationFrame(this.reqAnimFrame)
+  }
+
   resolveOnContainersReady(containers) {
     $.when.apply($, containers).done(() =>this.defer.resolve(this))
   }
@@ -122,6 +142,7 @@ class Core extends UIObject {
   }
 
   destroy() {
+    disableResizeObserver()
     this.containers.forEach((container) => container.destroy())
     this.plugins.forEach((plugin) => plugin.destroy())
     this.$el.remove()
@@ -236,6 +257,10 @@ class Core extends UIObject {
     var size = {width: this.options.width, height: this.options.height}
     PlayerInfo.previousSize = PlayerInfo.currentSize = size
     this.updateSize()
+
+    this.previousSize = { width: this.$el.width(), height: this.$el.height() }
+
+    this.enableResizeObserver()
 
     return this
   }
