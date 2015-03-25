@@ -5,9 +5,11 @@ describe('Utils', function() {
     expect(utils.uniqueId("a")).to.not.be.equal(utils.uniqueId("a"))
   });
 
-  it('converts date to time string format', function() {
-    var d = new Date(2000, 1, 1, 17, 11, 48, 980);
-    expect(utils.formatTime(d)).to.be.equal("12:56:20")
+  it('converts seconds to time string format', function() {
+    expect(utils.formatTime(1)).to.be.equal("00:01")
+    expect(utils.formatTime(10)).to.be.equal("00:10")
+    expect(utils.formatTime(60 * 10 + 15)).to.be.equal("10:15")
+    expect(utils.formatTime(60 * 60 * 12)).to.be.equal("12:00:00")
   });
 
   it('should convert querystring seek regex in seconds', function() {
