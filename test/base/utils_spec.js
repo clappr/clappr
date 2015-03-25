@@ -1,6 +1,15 @@
 var utils = require('../../src/base/utils')
 
 describe('Utils', function() {
+  it('creates unique id for a given prefix', function() {
+    expect(utils.uniqueId("a")).to.not.be.equal(utils.uniqueId("a"))
+  });
+
+  it('converts date to time string format', function() {
+    var d = new Date(2000, 1, 1, 17, 11, 48, 980);
+    expect(utils.formatTime(d)).to.be.equal("12:56:20")
+  });
+
   it('should convert querystring seek regex in seconds', function() {
 
     var url = 'http://globotv.globo.com/rede-globo/globo-esporte/v/brasil-usa-col/3735973/?t=1h10m30s'
