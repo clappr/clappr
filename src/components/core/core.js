@@ -142,7 +142,7 @@ class Core extends UIObject {
   }
 
   destroy() {
-    disableResizeObserver()
+    this.disableResizeObserver()
     this.containers.forEach((container) => container.destroy())
     this.plugins.forEach((plugin) => plugin.destroy())
     this.$el.remove()
