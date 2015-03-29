@@ -135,6 +135,10 @@ Object.keys(listenMethods).forEach(function(method) {
 
 // PLAYER EVENTS
 Events.PLAYER_RESIZE = 'player:resize'
+Events.PLAYER_PLAY = 'player:play'
+Events.PLAYER_PAUSE = 'player:pause'
+Events.PLAYER_STOP = 'player:stop'
+Events.PLAYER_ENDED = 'player:ended'
 
 // Playback Events
 Events.PLAYBACK_PROGRESS = 'playback:progress'

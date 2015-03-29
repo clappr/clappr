@@ -6,6 +6,7 @@ var BaseObject = require('../base/base_object')
 var CoreFactory = require('./core_factory')
 var Loader = require('./loader')
 var assign = require('lodash.assign')
+var Events = require('events')
 var uniqueId = require('../base/utils').uniqueId
 var PlayerInfo = require('./player_info')
 
@@ -34,6 +35,23 @@ class Player extends BaseObject {
   attachTo(element) {
     this.options.parentElement = element
     this.core = this.coreFactory.create()
+    this.addEventListeners()
+  }
+
+  addEventListeners() {
+    this.listenTo(this.core.mediaControl,  Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
+    var container = this.core.mediaControl.container
+    if (!!container) {
+      this.listenTo(container, Events.CONTAINER_PLAY, () => this.trigger(Events.PLAYER_PLAY))
+      this.listenTo(container, Events.CONTAINER_PAUSE, () => this.trigger(Events.PLAYER_PAUSE))
+      this.listenTo(container, Events.CONTAINER_STOP, () => this.trigger(Events.PLAYER_STOP))
+      this.listenTo(container, Events.CONTAINER_ENDED, () => this.trigger(Events.PLAYER_ENDED))
+    }
+  }
+
+  containerChanged() {
+    this.stopListening()
+    this.addEventListeners()
   }
 
   is(value, type) {
@@ -99,4 +117,3 @@ class Player extends BaseObject {
 }
 
 module.exports = Player
-
