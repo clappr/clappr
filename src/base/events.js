@@ -139,6 +139,7 @@ Events.PLAYER_PLAY = 'player:play'
 Events.PLAYER_PAUSE = 'player:pause'
 Events.PLAYER_STOP = 'player:stop'
 Events.PLAYER_ENDED = 'player:ended'
+Events.PLAYER_TIMEUPDATE = 'player:timeupdate'
 
 // Playback Events
 Events.PLAYBACK_PROGRESS = 'playback:progress'

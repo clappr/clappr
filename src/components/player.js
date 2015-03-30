@@ -46,6 +46,7 @@ class Player extends BaseObject {
       this.listenTo(container, Events.CONTAINER_PAUSE, this.onPause)
       this.listenTo(container, Events.CONTAINER_STOP, this.onStop)
       this.listenTo(container, Events.CONTAINER_ENDED, this.onEnded)
+      this.listenTo(container, Events.CONTAINER_TIMEUPDATE, this.onTimeUpdate)
     }
   }
 
@@ -68,6 +69,10 @@ class Player extends BaseObject {
 
   onEnded() {
     this.trigger(Events.PLAYER_ENDED)
+  }
+
+  onTimeUpdate(position, duration) {
+    this.trigger(Events.PLAYER_TIMEUPDATE, position, duration)
   }
 
   is(value, type) {
