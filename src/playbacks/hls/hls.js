@@ -35,6 +35,7 @@ class HLS extends Playback {
     this.baseUrl = options.baseUrl;
     this.flushLiveURLCache = (options.flushLiveURLCache === undefined)? true: options.flushLiveURLCache
     this.capLevelToStage = (options.capLevelToStage === undefined)? false: options.capLevelToStage
+    this.maxBufferLength = options.maxBufferLength || 0
     this.highDefinition = false
     this.autoPlay = options.autoPlay
     this.defaultSettings = {
@@ -79,7 +80,7 @@ class HLS extends Playback {
   setFlashSettings() {
     this.el.globoPlayerSetflushLiveURLCache(this.flushLiveURLCache)
     this.el.globoPlayerCapLeveltoStage(this.capLevelToStage)
-    this.el.globoPlayerSetmaxBufferLength(0)
+    this.el.globoPlayerSetmaxBufferLength(this.maxBufferLength)
   }
 
   updateHighDefinition(isHD) {
