@@ -140,6 +140,14 @@ class Player extends BaseObject {
   getCorePlugin(name) {
     return this.core.getPlugin(name)
   }
+
+  getCurrentTime() {
+    return this.core.mediaControl.container.getCurrentTime()
+  }
+
+  getDuration() {
+    return this.core.mediaControl.container.getDuration()
+  }
 }
 
 module.exports = Player
