@@ -42,16 +42,32 @@ class Player extends BaseObject {
     this.listenTo(this.core.mediaControl,  Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
     var container = this.core.mediaControl.container
     if (!!container) {
-      this.listenTo(container, Events.CONTAINER_PLAY, () => this.trigger(Events.PLAYER_PLAY))
-      this.listenTo(container, Events.CONTAINER_PAUSE, () => this.trigger(Events.PLAYER_PAUSE))
-      this.listenTo(container, Events.CONTAINER_STOP, () => this.trigger(Events.PLAYER_STOP))
-      this.listenTo(container, Events.CONTAINER_ENDED, () => this.trigger(Events.PLAYER_ENDED))
+      this.listenTo(container, Events.CONTAINER_PLAY, this.onPlay)
+      this.listenTo(container, Events.CONTAINER_PAUSE, this.onPause)
+      this.listenTo(container, Events.CONTAINER_STOP, this.onStop)
+      this.listenTo(container, Events.CONTAINER_ENDED, this.onEnded)
     }
   }
 
   containerChanged() {
     this.stopListening()
     this.addEventListeners()
+  }
+
+  onPlay() {
+    this.trigger(Events.PLAYER_PLAY)
+  }
+
+  onPause() {
+    this.trigger(Events.PLAYER_PAUSE)
+  }
+
+  onStop() {
+    this.trigger(Events.PLAYER_STOP)
+  }
+
+  onEnded() {
+    this.trigger(Events.PLAYER_ENDED)
   }
 
   is(value, type) {
