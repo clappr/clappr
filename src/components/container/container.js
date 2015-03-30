@@ -20,6 +20,7 @@ class Container extends UIObject {
 
   constructor(options) {
     super(options);
+    this.currentTime = 0
     this.playback = options.playback;
     this.settings = this.playback.settings;
     this.isReady = false;
@@ -101,6 +102,10 @@ class Container extends UIObject {
     return this.playback.isPlaying();
   }
 
+  getCurrentTime() {
+    return this.currentTime
+  }
+
   getDuration() {
     return this.playback.getDuration();
   }
@@ -115,7 +120,8 @@ class Container extends UIObject {
   }
 
   timeUpdated(position, duration) {
-    this.trigger(Events.CONTAINER_TIMEUPDATE, position, duration, this.name);
+    this.currentTime = position
+    this.trigger(Events.CONTAINER_TIMEUPDATE, position, duration, this.name)
   }
 
   progress(startPosition, endPosition, duration) {
@@ -131,6 +137,7 @@ class Container extends UIObject {
   }
 
   stop() {
+    this.currentTime = 0
     this.trigger(Events.CONTAINER_STOP, this.name);
     this.playback.stop();
   }
@@ -141,6 +148,7 @@ class Container extends UIObject {
   }
 
   ended() {
+    this.currentTime = 0
     this.trigger(Events.CONTAINER_ENDED, this, this.name);
   }
 
