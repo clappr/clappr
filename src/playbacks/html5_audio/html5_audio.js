@@ -23,7 +23,8 @@ class HTML5Audio extends Playback {
     this.settings = {
       left: ['playpause', 'position', 'duration'],
       right: ['fullscreen', 'volume'],
-      default: ['seekbar']
+      default: ['seekbar'],
+      seekEnabled: true
     }
     this.render()
     params.autoPlay && this.play()
