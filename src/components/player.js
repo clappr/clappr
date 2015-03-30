@@ -65,7 +65,7 @@ class Player extends BaseObject {
   }
 
   onStop() {
-    this.trigger(Events.PLAYER_STOP)
+    this.trigger(Events.PLAYER_STOP, this.getCurrentTime())
   }
 
   onEnded() {
