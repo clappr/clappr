@@ -137,9 +137,9 @@ class Container extends UIObject {
   }
 
   stop() {
-    this.currentTime = 0
     this.trigger(Events.CONTAINER_STOP, this.name);
     this.playback.stop();
+    this.currentTime = 0
   }
 
   pause() {
@@ -148,8 +148,8 @@ class Container extends UIObject {
   }
 
   ended() {
-    this.currentTime = 0
     this.trigger(Events.CONTAINER_ENDED, this, this.name);
+    this.currentTime = 0
   }
 
   clicked() {
