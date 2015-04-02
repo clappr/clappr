@@ -13,7 +13,7 @@ module.exports.browserify = function(options) {
   return browserify(options)
     .transform(babelify)
     .transform(versionify)
-    .require('./src/main.js', { entry: true })
+    .require('./src/main.js', { expose: 'clappr', entry: true })
     .require('./src/base/kibo', { expose: 'kibo' })
     .require('./src/base/template', { expose: 'template' })
     .require('./src/base/events', { expose: 'events' })
