@@ -33,6 +33,7 @@ class ContainerFactory extends BaseObject {
   }
 
   createContainer(source, options) {
+    if (!!source.match(/^\/\//)) source = window.location.protocol + source
     options = assign({}, options, this.options, {src: source, autoPlay: !!this.options.autoPlay})
     var playbackPlugin = this.findPlaybackPlugin(source)
     var playback = new playbackPlugin(options)
