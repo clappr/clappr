@@ -72,7 +72,8 @@ class Flash extends Playback {
     Mediator.on(this.uniqueId + ':timeupdate', this.updateTime, this)
     Mediator.on(this.uniqueId + ':statechanged', this.checkState, this)
     Mediator.on(this.uniqueId + ':flashready', this.bootstrap, this)
-    [1,2,3,4,5,6,7,8,9].forEach((i) => { this.kibo.down(i.toString(), () => this.seek(i * 10)) })
+    var shortcuts = [1,2,3,4,5,6,7,8,9]
+    shortcuts.forEach((i) => { this.kibo.down(i.toString(), () => this.seek(i * 10)) }, this)
   }
 
   stopListening() {
