@@ -6,6 +6,7 @@ var BaseObject = require('../base/base_object')
 var CoreFactory = require('./core_factory')
 var Loader = require('./loader')
 var assign = require('lodash.assign')
+var find = require('lodash.find')
 var Events = require('events')
 var uniqueId = require('../base/utils').uniqueId
 var PlayerInfo = require('./player_info')
@@ -133,12 +134,11 @@ class Player extends BaseObject {
     return this.core.mediaControl.container.isPlaying();
   }
 
-  getContainerPlugin(name) {
-    return this.core.mediaControl.container.getPlugin(name)
-  }
-
-  getCorePlugin(name) {
-    return this.core.getPlugin(name)
+  getPlugin(name) {
+    var plugins = this.core.plugins.concat(this.core.mediaControl.container.plugins);
+    return find(plugins, function(plugin) {
+      return plugin.name === name;
+    });
   }
 
   getCurrentTime() {
