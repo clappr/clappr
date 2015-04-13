@@ -63,5 +63,5 @@ player.resize({height: 360, width: 640});
 ## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.destroy();
 Destroy the current player and removes it from the DOM.
 
-## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.load();
+## <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.load(source);
 Loads a new source.
