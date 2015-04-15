@@ -3828,6 +3828,7 @@ var MediaControl = (function (_UIObject) {
     var initialVolume = this.persistConfig ? Utils.Config.restore("volume") : 100;
     this.setVolume(this.mute ? 0 : initialVolume);
     this.keepVisible = false;
+    this.volumeBarClickDown = false;
     this.addEventListeners();
     this.settings = {
       left: ["play", "stop", "pause"],
@@ -3880,6 +3881,10 @@ var MediaControl = (function (_UIObject) {
           "click .drawer-icon[data-volume]": "toggleMute",
           "mouseenter .drawer-container[data-volume]": "showVolumeBar",
           "mouseleave .drawer-container[data-volume]": "hideVolumeBar",
+          "mousedown .segmented-bar-element[data-volume]": "mousedownOnVolumeBar",
+          "mouseleave .media-control-layer": "mouseleaveOnVolumeBar",
+          "mousemove .segmented-bar-element[data-volume]": "mousemoveOnVolumeBar",
+          "mouseup .segmented-bar-element[data-volume]": "mouseupOnVolumeBar",
           "mousedown .bar-scrubber[data-volume]": "startVolumeDrag",
           "mousedown .bar-scrubber[data-seekbar]": "startSeekDrag",
           "mousemove .bar-container[data-seekbar]": "mousemoveOnSeekBar",
@@ -3962,6 +3967,36 @@ var MediaControl = (function (_UIObject) {
     mouseleaveOnSeekBar: {
       value: function mouseleaveOnSeekBar(event) {
         this.trigger(Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR, event);
+      }
+    },
+    mousemoveOnVolumeBar: {
+      value: function mousemoveOnVolumeBar(event) {
+          if(this.volumeBarClickDown){
+              this.volume(event);
+          }
+      }
+    },
+    mousedownOnVolumeBar: {
+      value: function mousemoveOnVolumeBar(event) {
+          this.$volumeBarContainer.css( 'cursor', '-webkit-grabbing' );
+          this.$volumeBarContainer.css( 'cursor', '-moz-grabbing' );
+          this.volumeBarClickDown = true;
+      }
+    },
+    mouseupOnVolumeBar: {
+      value: function mouseupOnVolumeBar(event) {
+          this.$volumeBarContainer.css( 'cursor', 'pointer' );
+          this.volumeBarClickDown = false;
+      }
+    },
+    mouseleaveOnVolumeBar: {
+      value: function mousemoveOnVolumeBar(event) {
+          var outsideHorizontally = (event.pageX < this.$seekBarContainer.offset().left || event.pageX > (this.$volumeBarContainer.offset().left + this.$volumeBarContainer.offset().width));
+          var outsideVertically = (event.pageY < this.$volumeBarContainer.offset().top || event.pageY > (this.$volumeBarContainer.offset().top + this.$volumeBarContainer.offset().height));
+
+          if(outsideHorizontally || outsideVertically) {
+              this.mouseupOnVolumeBar(event);
+          }
       }
     },
     playerResize: {
