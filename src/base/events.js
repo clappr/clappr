@@ -134,13 +134,13 @@ Object.keys(listenMethods).forEach(function(method) {
 });
 
 // PLAYER EVENTS
-Events.PLAYER_RESIZE = 'player:resize'
-Events.PLAYER_PLAY = 'player:play'
-Events.PLAYER_PAUSE = 'player:pause'
-Events.PLAYER_STOP = 'player:stop'
-Events.PLAYER_ENDED = 'player:ended'
-Events.PLAYER_SEEK = 'player:seek'
-Events.PLAYER_TIMEUPDATE = 'player:timeupdate'
+Events.PLAYER_RESIZE = 'resize'
+Events.PLAYER_PLAY = 'play'
+Events.PLAYER_PAUSE = 'pause'
+Events.PLAYER_STOP = 'stop'
+Events.PLAYER_ENDED = 'ended'
+Events.PLAYER_SEEK = 'seek'
+Events.PLAYER_TIMEUPDATE = 'timeupdate'
 
 // Playback Events
 Events.PLAYBACK_PROGRESS = 'playback:progress'
