@@ -65,7 +65,10 @@ var player = new Clappr.Player({
 You can set the player size setting `width` and `height` parameters.
 
 ##### Auto Play
-Add `autoPlay: true` if you want the video to automatic play after page load.
+Add `autoPlay: true` if you want the video to automatically play after page load.
+
+##### Loop
+Add `loop: true` if you want the video to automatically replay after it ends.
 
 ##### Chromeless
 Add `chromeless: 'true'` if you want the player to act in chromeless mode.
