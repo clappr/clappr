@@ -3977,25 +3977,34 @@ var MediaControl = (function (_UIObject) {
       }
     },
     mousedownOnVolumeBar: {
-      value: function mousemoveOnVolumeBar(event) {
+      value: function mousedownOnVolumeBar(event) {
           this.$volumeBarContainer.css( 'cursor', '-webkit-grabbing' );
           this.$volumeBarContainer.css( 'cursor', '-moz-grabbing' );
           this.volumeBarClickDown = true;
       }
     },
     mouseupOnVolumeBar: {
-      value: function mouseupOnVolumeBar(event) {
+      value: function mouseupOnVolumeBar() {
           this.$volumeBarContainer.css( 'cursor', 'pointer' );
           this.volumeBarClickDown = false;
       }
     },
     mouseleaveOnVolumeBar: {
-      value: function mousemoveOnVolumeBar(event) {
-          var outsideHorizontally = (event.pageX < this.$seekBarContainer.offset().left || event.pageX > (this.$volumeBarContainer.offset().left + this.$volumeBarContainer.offset().width));
-          var outsideVertically = (event.pageY < this.$volumeBarContainer.offset().top || event.pageY > (this.$volumeBarContainer.offset().top + this.$volumeBarContainer.offset().height));
+      value: function mouseleaveOnVolumeBar(event) {
+          var seekOffset = this.$seekBarContainer.offset();
+          var volOffset = this.$volumeBarContainer.offset();
+
+          var outsideByLeft = event.pageX < seekOffset.left;
+          var outsideByRigh = event.pageX > (volOffset.left + volOffset.width);
+          var outsideHorizontally = (outsideByLeft || outsideByRigh);
+
+          var outsideByTop = event.pageY < volOffset.top;
+          var outsideByBottom = event.pageY > (volOffset.top + volOffset.height);
+
+          var outsideVertically = (outsideByTop || outsideByBottom);
 
           if(outsideHorizontally || outsideVertically) {
-              this.mouseupOnVolumeBar(event);
+              this.mouseupOnVolumeBar();
           }
       }
     },
