@@ -41,6 +41,10 @@ class MediaControl extends UIObject {
       'click .drawer-icon[data-volume]': 'toggleMute',
       'mouseenter .drawer-container[data-volume]': 'showVolumeBar',
       'mouseleave .drawer-container[data-volume]': 'hideVolumeBar',
+      'mousedown .segmented-bar-element[data-volume]': 'mousedownOnVolumeBar',
+      'mouseleave .media-control-layer': 'mouseleaveOnVolumeBar',
+      'mousemove .segmented-bar-element[data-volume]': 'mousemoveOnVolumeBar',
+      'mouseup .segmented-bar-element[data-volume]': 'mouseupOnVolumeBar',
       'mousedown .bar-scrubber[data-volume]': 'startVolumeDrag',
       'mousedown .bar-scrubber[data-seekbar]': 'startSeekDrag',
       'mousemove .bar-container[data-seekbar]': 'mousemoveOnSeekBar',
@@ -63,6 +67,7 @@ class MediaControl extends UIObject {
     var initialVolume = (this.persistConfig) ? Utils.Config.restore("volume") : 100;
     this.setVolume(this.mute ? 0 : initialVolume)
     this.keepVisible = false
+    this.volumeBarClickDown = false;
     this.addEventListeners()
     this.settings = {
       left: ['play', 'stop', 'pause'],
@@ -137,6 +142,40 @@ class MediaControl extends UIObject {
 
   mouseleaveOnSeekBar(event) {
     this.trigger(Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR, event);
+  }
+
+  mousemoveOnVolumeBar(event) {
+    if(this.volumeBarClickDown){
+      this.volume(event);
+    }
+  }
+
+  mousedownOnVolumeBar() {
+    this.$volumeBarContainer.css( 'cursor', '-webkit-grabbing' );
+    this.$volumeBarContainer.css( 'cursor', '-moz-grabbing' );
+    this.volumeBarClickDown = true;
+  }
+
+  mouseupOnVolumeBar() {
+    this.$volumeBarContainer.css( 'cursor', 'pointer' );
+    this.volumeBarClickDown = false;
+  }
+
+  mouseleaveOnVolumeBar(event) {
+    var volOffset = this.$volumeBarContainer.offset();
+
+    var outsideByLeft = event.pageX < this.$seekBarContainer.offset().left;
+    var outsideByRight = event.pageX > (volOffset.left + volOffset.width);
+    var outsideHorizontally = (outsideByLeft || outsideByRight);
+
+    var outsideByTop = event.pageY < volOffset.top;
+    var outsideByBottom = event.pageY > (volOffset.top + volOffset.height);
+
+    var outsideVertically = (outsideByTop || outsideByBottom);
+
+    if(outsideHorizontally || outsideVertically) {
+      this.mouseupOnVolumeBar();
+    }
   }
 
   playerResize() {
