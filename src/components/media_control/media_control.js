@@ -151,8 +151,10 @@ class MediaControl extends UIObject {
   }
 
   mousedownOnVolumeBar() {
-    this.$volumeBarContainer.css( 'cursor', '-webkit-grabbing' );
-    this.$volumeBarContainer.css( 'cursor', '-moz-grabbing' );
+    var cursorStyleProperty = 'url(http://www.google.com/intl/en_ALL/mapfiles/closedhand.cur), move';
+    this.$volumeBarContainer.css('cursor', cursorStyleProperty);
+    this.$volumeBarContainer.css('cursor', '-webkit-grabbing');
+    this.$volumeBarContainer.css('cursor', '-moz-grabbing');
     this.volumeBarClickDown = true;
   }
 
