@@ -73,7 +73,7 @@ class Core extends UIObject {
   }
 
   setFullscreen() {
-    if(!Browser.isSafari) {
+    if(!Browser.isiOs) {
       this.$el.addClass('fullscreen')
       this.$el.removeAttr('style')
       PlayerInfo.previousSize = PlayerInfo.currentSize
@@ -225,12 +225,12 @@ class Core extends UIObject {
   toggleFullscreen() {
     if (!Fullscreen.isFullscreen()) {
       Fullscreen.requestFullscreen(this.el)
-      if(!Browser.isSafari) {
+      if(!Browser.isiOs) {
         this.$el.addClass('fullscreen')
       }
     } else {
       Fullscreen.cancelFullscreen()
-      if(!Browser.isSafari) {
+      if(!Browser.isiOs) {
         this.$el.removeClass('fullscreen nocursor')
       }
     }
