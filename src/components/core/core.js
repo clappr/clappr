@@ -18,6 +18,7 @@ var MediaControl = require('../media_control')
 var PlayerInfo = require('../player_info')
 var Mediator = require('../mediator')
 var Events = require('../../base/events')
+var Browser = require('../browser')
 
 var find = require('lodash.find')
 var isNumber = require('../../base/utils').isNumber
@@ -72,10 +73,12 @@ class Core extends UIObject {
   }
 
   setFullscreen() {
-    this.$el.addClass('fullscreen')
-    this.$el.removeAttr('style')
-    PlayerInfo.previousSize = PlayerInfo.currentSize
-    PlayerInfo.currentSize = { width: $(window).width(), height: $(window).height() }
+    if(!Browser.isiOs) {
+      this.$el.addClass('fullscreen')
+      this.$el.removeAttr('style')
+      PlayerInfo.previousSize = PlayerInfo.currentSize
+      PlayerInfo.currentSize = { width: $(window).width(), height: $(window).height() }
+    }
   }
 
   setPlayerSize() {
@@ -222,10 +225,14 @@ class Core extends UIObject {
   toggleFullscreen() {
     if (!Fullscreen.isFullscreen()) {
       Fullscreen.requestFullscreen(this.el)
-      this.$el.addClass('fullscreen')
+      if(!Browser.isiOs) {
+        this.$el.addClass('fullscreen')
+      }
     } else {
       Fullscreen.cancelFullscreen()
-      this.$el.removeClass('fullscreen nocursor')
+      if(!Browser.isiOs) {
+        this.$el.removeClass('fullscreen nocursor')
+      }
     }
     this.mediaControl.show()
   }
