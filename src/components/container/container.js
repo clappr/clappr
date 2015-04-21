@@ -143,8 +143,8 @@ class Container extends UIObject {
   }
 
   pause() {
-    this.trigger(Events.CONTAINER_PAUSE, this.name);
     this.playback.pause();
+    this.trigger(Events.CONTAINER_PAUSE, this.name);
   }
 
   ended() {
