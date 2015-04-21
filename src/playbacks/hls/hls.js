@@ -143,15 +143,13 @@ class HLS extends Playback {
 
   setPlaybackState(state) {
     var bufferLength = this.el.globoGetbufferLength()
-    if (state === "PLAYING_BUFFERING" && bufferLength < 1)  {
+    if (["PLAYING_BUFFERING", "PAUSED_BUFFERING"].indexOf(state) >= 0)  {
       this.trigger(Events.PLAYBACK_BUFFERING, this.name)
       this.updateCurrentState(state)
-    } else if (state === "PLAYING") {
-      if (["PLAYING_BUFFERING", "PAUSED", "IDLE"].indexOf(this.currentState) >= 0) {
+    } else if (["PLAYING", "PAUSED"].indexOf(state) >= 0) {
+      if (["PLAYING_BUFFERING", "PAUSED_BUFFERING", "PAUSED", "IDLE"].indexOf(this.currentState) >= 0) {
         this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
-        this.updateCurrentState(state)
       }
-    } else if (state === "PAUSED") {
       this.updateCurrentState(state)
     } else if (state === "IDLE") {
       this.trigger(Events.PLAYBACK_ENDED, this.name)
