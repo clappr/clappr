@@ -70,6 +70,7 @@ class HLS extends Playback {
     this.el.width = "100%"
     this.el.height = "100%"
     this.isReady = true
+    this.srcLoaded = false
     this.currentState = "IDLE"
     this.setFlashSettings()
     this.updatePlaybackType()
@@ -115,8 +116,10 @@ class HLS extends Playback {
   play() {
     if(this.currentState === 'PAUSED') {
       this.el.globoPlayerResume()
-    } else if (this.currentState !== "PLAYING") {
+    } else if (!this.srcLoaded && this.currentState !== "PLAYING") {
       this.firstPlay()
+    } else {
+      this.el.globoPlayerPlay()
     }
     this.trigger(Events.PLAYBACK_PLAY, this.name)
   }
@@ -197,6 +200,7 @@ class HLS extends Playback {
     this.setFlashSettings() //ensure flushLiveURLCache will work (#327)
     this.el.globoPlayerLoad(this.src)
     this.el.globoPlayerPlay()
+    this.srcLoaded = true
   }
 
   volume(value) {
