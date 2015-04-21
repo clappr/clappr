@@ -86,6 +86,7 @@ class MediaControl extends UIObject {
 
   addEventListeners() {
     this.listenTo(this.container, Events.CONTAINER_PLAY, this.changeTogglePlay)
+    this.listenTo(this.container, Events.CONTAINER_PAUSE, this.changeTogglePlay)
     this.listenTo(this.container, Events.CONTAINER_TIMEUPDATE, this.updateSeekBar)
     this.listenTo(this.container, Events.CONTAINER_PROGRESS, this.updateProgressBar)
     this.listenTo(this.container, Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate)
@@ -198,7 +199,6 @@ class MediaControl extends UIObject {
     } else {
       this.container.play()
     }
-    this.changeTogglePlay()
     return false
   }
 
@@ -208,7 +208,6 @@ class MediaControl extends UIObject {
     } else {
       this.container.play()
     }
-    this.changeTogglePlay()
   }
 
   startSeekDrag(event) {
