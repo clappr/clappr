@@ -15,7 +15,13 @@ class Container extends UIObject {
   get name() { return 'Container' }
   get attributes() { return { class: 'container', 'data-container': '' } }
   get events() {
-    return {'click': 'clicked', 'mouseenter': 'mouseEnter', 'mouseleave': 'mouseLeave'}
+    return {
+      'click': 'clicked', 
+      'dblclick': 'dblClicked',
+      'doubleTap': 'dblClicked',
+      'mouseenter': 'mouseEnter', 
+      'mouseleave': 'mouseLeave'
+    }
   }
 
   constructor(options) {
@@ -154,6 +160,10 @@ class Container extends UIObject {
 
   clicked() {
     this.trigger(Events.CONTAINER_CLICK, this, this.name);
+  }
+
+  dblClicked() {
+    this.trigger(Events.CONTAINER_DBLCLICK, this, this.name);
   }
 
   setCurrentTime(time) {
