@@ -96,7 +96,7 @@ describe('Events', function(){
     expect(counter).to.be.equal(2)
   })
 
-  it('permist to listen events in other objects', function(){
+  it('permits to listen events in other objects', function(){
     var counter = 0
     var eventsCounter = function() {
       counter += 1
@@ -115,7 +115,7 @@ describe('Events', function(){
     expect(counter).to.be.equal(3)
   })
 
-  it('permist to listen once events in other objects', function(){
+  it('permits to listen once events in other objects', function(){
     var counter = 0
     var eventsCounter = function() {
       counter += 1
@@ -135,7 +135,7 @@ describe('Events', function(){
     expect(counter).to.be.equal(3)
   })
 
-  it('permist to stop listening events in other objects', function(){
+  it('permits to stop listening events in other objects', function(){
     var counter = 0
     var eventsCounter = function() {
       counter += 1
