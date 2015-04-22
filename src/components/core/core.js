@@ -36,7 +36,8 @@ class Core extends UIObject {
 
   get attributes() {
     return {
-      'data-player': ''
+      'data-player': '',
+      tabindex: 9999,
     }
   }
 
@@ -203,7 +204,7 @@ class Core extends UIObject {
     if (this.mediaControl) {
       this.mediaControl.setContainer(container)
     } else {
-      this.mediaControl = this.createMediaControl(assign({container: container}, this.options))
+      this.mediaControl = this.createMediaControl(assign({container: container, focusElement: this.el}, this.options))
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_FULLSCREEN, this.toggleFullscreen)
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_SHOW, this.onMediaControlShow.bind(this, true))
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_HIDE, this.onMediaControlShow.bind(this, false))
