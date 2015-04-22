@@ -22,6 +22,10 @@
   text-shadow: 0 0 0;
   box-sizing: border-box;
 
+  &:focus {
+    outline: 0;
+  }
+
   * {
     max-width: initial;
     box-sizing: inherit;
@@ -47,5 +51,3 @@
 	opacity: 0.99;
   }
 }
-
-
