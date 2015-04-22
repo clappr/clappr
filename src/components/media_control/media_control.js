@@ -58,7 +58,6 @@ class MediaControl extends UIObject {
 
   constructor(options) {
     super(options)
-    this.kibo = new Kibo()
     this.seekTime = new SeekTime(this)
     this.options = options
     this.mute = this.options.mute
@@ -480,6 +479,8 @@ class MediaControl extends UIObject {
     this.createCachedElements()
     this.$playPauseToggle.addClass('paused')
     this.$playStopToggle.addClass('stopped')
+
+    this.kibo = new Kibo(this.options.focusElement)
 
     this.changeTogglePlay()
     this.hideId = setTimeout(() => this.hide(), timeout)
