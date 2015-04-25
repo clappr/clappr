@@ -177,4 +177,4 @@ In general, we follow the fork-and-pull git workflow:
 
 ### Sponsor
 
-![image](https://cloud.githubusercontent.com/assets/244265/5900100/ef156258-a54b-11e4-9862-7e5851ed9b81.png)
+[![image](https://cloud.githubusercontent.com/assets/244265/5900100/ef156258-a54b-11e4-9862-7e5851ed9b81.png)](http://globo.com)
