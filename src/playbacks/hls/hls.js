@@ -203,7 +203,7 @@ class HLS extends Playback {
   firstPlay() {
     this.setFlashSettings() //ensure flushLiveURLCache will work (#327)
     this.el.playerLoad(this.src)
-    setTimeout(() => this.el.playerPlay(), 300)
+    Mediator.once(this.cid + ':manifestloaded',() => this.el.playerPlay())
     this.srcLoaded = true
   }
 
