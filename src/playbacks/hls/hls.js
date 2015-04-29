@@ -187,12 +187,12 @@ class HLS extends Playback {
   startReportingProgress() {
     if (!this.reportingProgress) {
       this.reportingProgress = true
-      Mediator.on(this.uniqueId + ':fragmentloaded',() => this.onFragmentLoaded())
+      Mediator.on(this.cid + ':fragmentloaded',() => this.onFragmentLoaded())
     }
   }
 
   stopReportingProgress() {
-    Mediator.off(this.uniqueId + ':fragmentloaded', this.onFragmentLoaded, this)
+    Mediator.off(this.cid + ':fragmentloaded', this.onFragmentLoaded, this)
   }
 
   onFragmentLoaded() {
