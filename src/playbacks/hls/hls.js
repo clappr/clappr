@@ -13,7 +13,9 @@ var Events = require('../../base/events')
 var Styler = require('../../base/styler')
 var $ = require('clappr-zepto')
 
-var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" class="hls-playback" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls="" width="100%" height="100%"><param name="movie" value="<%= baseUrl %>/assets/HLSPlayer.swf"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>'
+var HLSEvents = require('./flashls_events')
+
+var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" class="hls-playback" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls="" width="100%" height="100%"><param name="movie" value="<%= baseUrl %>/assets/flashlsChromeless.swf"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>'
 
 class HLS extends Playback {
   get name() { return 'hls' }
@@ -33,8 +35,9 @@ class HLS extends Playback {
     super(options)
     this.src = options.src
     this.baseUrl = options.baseUrl;
-    this.flushLiveURLCache = (options.flushLiveURLCache === undefined)? true: options.flushLiveURLCache
-    this.capLevelToStage = (options.capLevelToStage === undefined)? false: options.capLevelToStage
+    this.flushLiveURLCache = (options.flushLiveURLCache === undefined) ? false : options.flushLiveURLCache
+    this.capLevelToStage = (options.capLevelToStage === undefined) ? false : options.capLevelToStage
+    this.useHardwareVideoDecoder = (options.useHardwareVideoDecoder === undefined) ? true : options.useHardwareVideoDecoder
     this.maxBufferLength = options.maxBufferLength || 120
     this.highDefinition = false
     this.autoPlay = options.autoPlay
@@ -50,20 +53,20 @@ class HLS extends Playback {
   }
 
   addListeners() {
-    Mediator.on(this.uniqueId + ':flashready', () => this.bootstrap())
-    Mediator.on(this.uniqueId + ':timeupdate', () => this.updateTime())
-    Mediator.on(this.uniqueId + ':playbackstate', (state) => this.setPlaybackState(state))
-    Mediator.on(this.uniqueId + ':levelchanged', (isHD) => this.updateHighDefinition(isHD))
-    Mediator.on(this.uniqueId + ':playbackerror', () => this.flashPlaybackError())
+    Mediator.on(this.cid + ':flashready', () => this.bootstrap())
+    Mediator.on(this.cid + ':timeupdate', () => this.updateTime())
+    Mediator.on(this.cid + ':playbackstate', (state) => this.setPlaybackState(state))
+    Mediator.on(this.cid + ':levelchanged', (isHD) => this.updateHighDefinition(isHD))
+    Mediator.on(this.cid + ':playbackerror', () => this.flashPlaybackError())
   }
 
   stopListening() {
     super.stopListening()
-    Mediator.off(this.uniqueId + ':flashready')
-    Mediator.off(this.uniqueId + ':timeupdate')
-    Mediator.off(this.uniqueId + ':playbackstate')
-    Mediator.off(this.uniqueId + ':levelchanged')
-    Mediator.off(this.uniqueId + ':playbackerror')
+    Mediator.off(this.cid + ':flashready')
+    Mediator.off(this.cid + ':timeupdate')
+    Mediator.off(this.cid + ':playbackstate')
+    Mediator.off(this.cid + ':levelchanged')
+    Mediator.off(this.cid + ':playbackerror')
   }
 
   bootstrap() {
@@ -79,9 +82,10 @@ class HLS extends Playback {
   }
 
   setFlashSettings() {
-    this.el.globoPlayerSetflushLiveURLCache(this.flushLiveURLCache)
-    this.el.globoPlayerCapLeveltoStage(this.capLevelToStage)
-    this.el.globoPlayerSetmaxBufferLength(this.maxBufferLength)
+    this.el.playerSetflushLiveURLCache(this.flushLiveURLCache)
+    this.el.playerCapLeveltoStage(this.capLevelToStage)
+    this.el.playerSetmaxBufferLength(this.maxBufferLength)
+    this.el.playerSetUseHardwareVideoDecoder(this.useHardwareVideoDecoder)
   }
 
   updateHighDefinition(isHD) {
@@ -92,7 +96,7 @@ class HLS extends Playback {
 
   updateTime() {
     var duration = this.getDuration()
-    var position = Math.min(Math.max(this.el.globoGetPosition(), 0), duration)
+    var position = Math.min(Math.max(this.el.getPosition(), 0), duration)
     var previousDVRStatus = this.dvrEnabled
     var livePlayback = (this.playbackType === 'live')
     this.dvrEnabled = (livePlayback && duration > 240)
@@ -115,11 +119,11 @@ class HLS extends Playback {
 
   play() {
     if(this.currentState === 'PAUSED') {
-      this.el.globoPlayerResume()
+      this.el.playerResume()
     } else if (!this.srcLoaded && this.currentState !== "PLAYING") {
       this.firstPlay()
     } else {
-      this.el.globoPlayerPlay()
+      this.el.playerPlay()
     }
     this.trigger(Events.PLAYBACK_PLAY, this.name)
   }
@@ -129,7 +133,7 @@ class HLS extends Playback {
   }
 
   getCurrentBitrate() {
-    var currentLevel = this.getLevels()[this.el.globoGetLevel()]
+    var currentLevel = this.getLevels()[this.el.getLevel()]
     return currentLevel.bitrate
   }
 
@@ -139,13 +143,12 @@ class HLS extends Playback {
 
   getLevels() {
     if (!this.levels || this.levels.length === 0) {
-      this.levels = this.el.globoGetLevels()
+      this.levels = this.el.getLevels()
     }
     return this.levels
   }
 
   setPlaybackState(state) {
-    var bufferLength = this.el.globoGetbufferLength()
     if (["PLAYING_BUFFERING", "PAUSED_BUFFERING"].indexOf(state) >= 0)  {
       this.trigger(Events.PLAYBACK_BUFFERING, this.name)
       this.updateCurrentState(state)
@@ -156,10 +159,9 @@ class HLS extends Playback {
       this.updateCurrentState(state)
     } else if (state === "IDLE") {
       this.trigger(Events.PLAYBACK_ENDED, this.name)
-      this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.el.globoGetDuration(), this.name)
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.el.getDuration(), this.name)
       this.updateCurrentState(state)
     }
-    this.lastBufferLength = bufferLength
   }
 
   updateCurrentState(state) {
@@ -168,7 +170,7 @@ class HLS extends Playback {
   }
 
   updatePlaybackType() {
-    this.playbackType = this.el.globoGetType()
+    this.playbackType = this.el.getType()
     if (this.playbackType) {
       this.playbackType = this.playbackType.toLowerCase()
       if (this.playbackType === 'vod') {
@@ -192,20 +194,20 @@ class HLS extends Playback {
   }
 
   onFragmentLoaded() {
-    var buffered = this.el.globoGetPosition() + this.el.globoGetbufferLength()
-    this.trigger(Events.PLAYBACK_PROGRESS, this.el.globoGetPosition(), buffered, this.getDuration(), this.name)
+    var buffered = this.el.getPosition() + this.el.getbufferLength()
+    this.trigger(Events.PLAYBACK_PROGRESS, this.el.getPosition(), buffered, this.getDuration(), this.name)
   }
 
   firstPlay() {
     this.setFlashSettings() //ensure flushLiveURLCache will work (#327)
-    this.el.globoPlayerLoad(this.src)
-    this.el.globoPlayerPlay()
+    this.el.playerLoad(this.src)
+    setTimeout(() => this.el.playerPlay(), 300)
     this.srcLoaded = true
   }
 
   volume(value) {
     if (this.isReady) {
-      this.el.globoPlayerVolume(value)
+      this.el.playerVolume(value)
     } else {
       this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this.volume(value))
     }
@@ -213,7 +215,7 @@ class HLS extends Playback {
 
   pause() {
     if (this.playbackType !== 'live' || this.dvrEnabled) {
-      this.el.globoPlayerPause()
+      this.el.playerPause()
       if (this.playbackType === 'live' && this.dvrEnabled) {
         this.updateDvr(true)
       }
@@ -221,7 +223,7 @@ class HLS extends Playback {
   }
 
   stop() {
-    this.el.globoPlayerStop()
+    this.el.playerStop()
     this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.name)
   }
 
@@ -233,7 +235,7 @@ class HLS extends Playback {
   }
 
   getDuration() {
-    var duration = this.el.globoGetDuration()
+    var duration = this.el.getDuration()
     if (this.playbackType === 'live') {
       // estimate 10 seconds of buffer time for live streams for seek positions
       duration = duration - 10
@@ -255,7 +257,7 @@ class HLS extends Playback {
       }
       this.updateDvr(dvrInUse)
     }
-    this.el.globoPlayerSeek(time)
+    this.el.playerSeek(time)
     this.trigger(Events.PLAYBACK_TIMEUPDATE, time, duration, this.name)
     this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE)
   }
@@ -311,12 +313,23 @@ class HLS extends Playback {
     this.el = element[0]
   }
 
+  createCallbacks() {
+    if (!window.Clappr.flashlsCallbacks) {
+      window.Clappr.flashlsCallbacks = {}
+    }
+    this.flashlsEvents = new HLSEvents(this.cid)
+    window.Clappr.flashlsCallbacks[this.cid] = (eventName, args) => {
+      this.flashlsEvents[eventName].apply(this.flashlsEvents, args)
+    }
+  }
+
   render() {
     var style = Styler.getStyleFor(this.name)
     if(Browser.isLegacyIE) {
       this.setupIE()
     } else {
-      this.$el.html(this.template({cid: this.cid, baseUrl: this.baseUrl, playbackId: this.uniqueId}))
+      var callbackName = this.createCallbacks()
+      this.$el.html(this.template({cid: this.cid, baseUrl: this.baseUrl, playbackId: this.uniqueId, callbackName: `window.Clappr.flashlsCallbacks.${this.cid}`}))
       if(Browser.isFirefox) {
         this.setupFirefox()
       } else if (Browser.isIE) {
