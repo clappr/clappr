@@ -54,7 +54,7 @@ class HLS extends Playback {
 
   addListeners() {
     Mediator.on(this.cid + ':flashready', () => this.bootstrap())
-    Mediator.on(this.cid + ':timeupdate', () => this.updateTime())
+    Mediator.on(this.cid + ':timeupdate', (timeMetrics) => this.updateTime(timeMetrics))
     Mediator.on(this.cid + ':playbackstate', (state) => this.setPlaybackState(state))
     Mediator.on(this.cid + ':levelchanged', (isHD) => this.updateHighDefinition(isHD))
     Mediator.on(this.cid + ':playbackerror', () => this.flashPlaybackError())
@@ -94,9 +94,11 @@ class HLS extends Playback {
     this.trigger(Events.PLAYBACK_BITRATE, {'bitrate': this.getCurrentBitrate()})
   }
 
-  updateTime() {
-    var duration = this.getDuration()
-    var position = Math.min(Math.max(this.el.getPosition(), 0), duration)
+  updateTime(timeMetrics) {
+    if (this.currentState === 'IDLE') return
+
+    var duration = this.normalizeDuration(timeMetrics.duration)
+    var position = Math.min(Math.max(timeMetrics.position, 0), duration)
     var previousDVRStatus = this.dvrEnabled
     var livePlayback = (this.playbackType === 'live')
     this.dvrEnabled = (livePlayback && duration > 240)
@@ -195,7 +197,7 @@ class HLS extends Playback {
 
   onFragmentLoaded() {
     var buffered = this.el.getPosition() + this.el.getbufferLength()
-    this.trigger(Events.PLAYBACK_PROGRESS, this.el.getPosition(), buffered, this.getDuration(), this.name)
+    this.trigger(Events.PLAYBACK_PROGRESS, this.el.getPosition(), buffered, this.el.getDuration(), this.name)
   }
 
   firstPlay() {
@@ -234,8 +236,7 @@ class HLS extends Playback {
     return false
   }
 
-  getDuration() {
-    var duration = this.el.getDuration()
+  normalizeDuration(duration) {
     if (this.playbackType === 'live') {
       // estimate 10 seconds of buffer time for live streams for seek positions
       duration = duration - 10
@@ -244,7 +245,7 @@ class HLS extends Playback {
   }
 
   seek(time) {
-    var duration = this.getDuration()
+    var duration = this.el.getDuration()
     if (time > 0) {
       time = duration * time / 100
     }
