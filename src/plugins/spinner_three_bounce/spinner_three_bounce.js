@@ -26,10 +26,11 @@ class SpinnerThreeBouncePlugin extends UIContainerPlugin {
   }
 
   onBuffering() {
-    this.$el.show()
+    this.showTimeout = setTimeout(() => this.$el.show(), 300)
   }
 
   onBufferFull() {
+    clearTimeout(this.showTimeout)
     this.$el.hide()
   }
 
