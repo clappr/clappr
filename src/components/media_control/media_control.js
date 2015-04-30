@@ -460,13 +460,13 @@ class MediaControl extends UIObject {
     this.kibo.down(['space'], () => this.togglePlayPause())
     this.kibo.down(['left'], () => this.seekRelative(-15))
     this.kibo.down(['right'], () => this.seekRelative(15))
-    var keys = [1,2,3,4,5,6,7,8,9]
+    var keys = [1,2,3,4,5,6,7,8,9,0]
     keys.forEach((i) => { this.kibo.down(i.toString(), () => this.container.settings.seekEnabled && this.container.setCurrentTime(i * 10)) })
   }
 
   unbindKeyEvents() {
     this.kibo.off('space')
-    this.kibo.off([1,2,3,4,5,6,7,8,9])
+    this.kibo.off([1,2,3,4,5,6,7,8,9,0])
   }
 
   parseColors() {
