@@ -11,7 +11,6 @@ var $ = require('clappr-zepto')
 var Browser = require('../../components/browser')
 var seekStringToSeconds = require('../../base/utils').seekStringToSeconds
 var Events = require('../../base/events')
-var Kibo = require('../../base/kibo')
 
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= baseUrl %>/assets/Player.swf"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>'
 
@@ -30,7 +29,6 @@ class Flash extends Playback {
     this.settings.right = ["fullscreen", "volume"]
     this.settings.seekEnabled = true
     this.isReady = false
-    this.kibo = new Kibo()
     this.addListeners()
   }
 
@@ -72,8 +70,6 @@ class Flash extends Playback {
     Mediator.on(this.uniqueId + ':timeupdate', this.updateTime, this)
     Mediator.on(this.uniqueId + ':statechanged', this.checkState, this)
     Mediator.on(this.uniqueId + ':flashready', this.bootstrap, this)
-    var shortcuts = [1,2,3,4,5,6,7,8,9]
-    shortcuts.forEach((i) => { this.kibo.down(i.toString(), () => this.seek(i * 10)) }, this)
   }
 
   stopListening() {
@@ -82,7 +78,6 @@ class Flash extends Playback {
     Mediator.off(this.uniqueId + ':timeupdate')
     Mediator.off(this.uniqueId + ':statechanged')
     Mediator.off(this.uniqueId + ':flashready')
-    this.kibo.off([1,2,3,4,5,6,7,8,9])
   }
 
   checkState() {

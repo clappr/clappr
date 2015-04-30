@@ -4,7 +4,6 @@
 
 var Playback = require('../../base/playback')
 var JST = require('../../base/jst')
-var Kibo = require('../../base/kibo')
 var Styler = require('../../base/styler')
 var Browser = require('../../components/browser')
 var seekStringToSeconds = require('../../base/utils').seekStringToSeconds
@@ -38,7 +37,6 @@ class HTML5Video extends Playback {
 
   constructor(options) {
     super(options)
-    this.kibo = new Kibo()
     this.options = options
     this.src = options.src
     this.el.src = options.src
@@ -54,19 +52,10 @@ class HTML5Video extends Playback {
     }
     this.settings.left = this.isHLS ? ["playstop"] : ["playpause", "position", "duration"]
     this.settings.right = ["fullscreen", "volume"]
-    this.bindEvents()
   }
 
   setupSafari() {
     this.el.preload = 'auto'
-  }
-
-  bindEvents() {
-    [1,2,3,4,5,6,7,8,9].forEach((i) => { this.kibo.down(i.toString(), () => this.seek(i * 10)) })
-  }
-
-  stopListening() {
-    this.kibo.off([1,2,3,4,5,6,7,8,9])
   }
 
   loadedMetadata(e) {
@@ -159,7 +148,6 @@ class HTML5Video extends Playback {
   }
 
   destroy() {
-    this.stopListening()
     this.stop()
     this.el.src = ''
     this.$el.remove()

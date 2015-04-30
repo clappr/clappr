@@ -449,10 +449,13 @@ class MediaControl extends UIObject {
 
   bindKeyEvents() {
     this.kibo.down(['space'], () => this.togglePlayPause())
+    var keys = [1,2,3,4,5,6,7,8,9]
+    keys.forEach((i) => { this.kibo.down(i.toString(), () => this.container.setCurrentTime(i * 10)) })
   }
 
   unbindKeyEvents() {
     this.kibo.off('space')
+    this.kibo.off([1,2,3,4,5,6,7,8,9])
   }
 
   parseColors() {
@@ -480,6 +483,9 @@ class MediaControl extends UIObject {
     this.$playPauseToggle.addClass('paused')
     this.$playStopToggle.addClass('stopped')
 
+    if (this.kibo) {
+      this.unbindKeyEvents()
+    }
     this.kibo = new Kibo(this.options.focusElement)
 
     this.changeTogglePlay()
