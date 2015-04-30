@@ -450,7 +450,7 @@ class MediaControl extends UIObject {
   bindKeyEvents() {
     this.kibo.down(['space'], () => this.togglePlayPause())
     var keys = [1,2,3,4,5,6,7,8,9]
-    keys.forEach((i) => { this.kibo.down(i.toString(), () => this.container.setCurrentTime(i * 10)) })
+    keys.forEach((i) => { this.kibo.down(i.toString(), () => this.container.settings.seekEnabled && this.container.setCurrentTime(i * 10)) })
   }
 
   unbindKeyEvents() {
