@@ -447,8 +447,19 @@ class MediaControl extends UIObject {
     this.$seekBarScrubber.css({ left: pos })
   }
 
+  seekRelative(delta) {
+    if (!this.container.settings.seekEnabled) return
+    var currentTime = this.container.getCurrentTime()
+    var duration = this.container.getDuration()
+    var position = Math.min(Math.max(currentTime + delta, 0), duration)
+    position = Math.min(position * 100 / duration, 100)
+    this.container.setCurrentTime(position)
+  }
+
   bindKeyEvents() {
     this.kibo.down(['space'], () => this.togglePlayPause())
+    this.kibo.down(['left'], () => this.seekRelative(-15))
+    this.kibo.down(['right'], () => this.seekRelative(15))
     var keys = [1,2,3,4,5,6,7,8,9]
     keys.forEach((i) => { this.kibo.down(i.toString(), () => this.container.settings.seekEnabled && this.container.setCurrentTime(i * 10)) })
   }
