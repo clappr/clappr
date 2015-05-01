@@ -48,6 +48,7 @@ class Player extends BaseObject {
       this.listenTo(container, Events.CONTAINER_STOP, this.onStop)
       this.listenTo(container, Events.CONTAINER_ENDED, this.onEnded)
       this.listenTo(container, Events.CONTAINER_SEEK, this.onSeek)
+      this.listenTo(container, Events.CONTAINER_ERROR, this.onError)
       this.listenTo(container, Events.CONTAINER_TIMEUPDATE, this.onTimeUpdate)
     }
   }
@@ -79,6 +80,10 @@ class Player extends BaseObject {
 
   onTimeUpdate(position, duration) {
     this.trigger(Events.PLAYER_TIMEUPDATE, position, duration)
+  }
+
+  onError(error) {
+    this.trigger(Events.PLAYER_ERROR, error)
   }
 
   is(value, type) {
