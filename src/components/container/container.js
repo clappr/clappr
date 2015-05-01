@@ -16,10 +16,10 @@ class Container extends UIObject {
   get attributes() { return { class: 'container', 'data-container': '' } }
   get events() {
     return {
-      'click': 'clicked', 
+      'click': 'clicked',
       'dblclick': 'dblClicked',
       'doubleTap': 'dblClicked',
-      'mouseenter': 'mouseEnter', 
+      'mouseenter': 'mouseEnter',
       'mouseleave': 'mouseLeave'
     }
   }
@@ -117,7 +117,6 @@ class Container extends UIObject {
   }
 
   error(errorObj) {
-    this.$el.append(errorObj.render().el)
     this.trigger(Events.CONTAINER_ERROR, {error: errorObj, container: this}, this.name);
   }
 
