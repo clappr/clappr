@@ -31,7 +31,8 @@ class HTML5Video extends Playback {
       'canplaythrough': 'bufferFull',
       'loadedmetadata': 'loadedMetadata',
       'canplay': 'ready',
-      'durationchange': 'durationChange'
+      'durationchange': 'durationChange',
+      'error': 'error'
     }
   }
 
@@ -145,6 +146,10 @@ class HTML5Video extends Playback {
       this.el.poster = ''
     }
     this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
+  }
+
+  error(event) {
+    this.trigger(Events.PLAYBACK_ERROR, this.el.error, this.name)
   }
 
   destroy() {
