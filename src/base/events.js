@@ -140,6 +140,7 @@ Events.PLAYER_PAUSE = 'pause'
 Events.PLAYER_STOP = 'stop'
 Events.PLAYER_ENDED = 'ended'
 Events.PLAYER_SEEK = 'seek'
+Events.PLAYER_ERROR = 'error'
 Events.PLAYER_TIMEUPDATE = 'timeupdate'
 
 // Playback Events
