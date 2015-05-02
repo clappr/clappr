@@ -57,8 +57,11 @@ class Events {
   }
 
   trigger(name) {
-    var klass = arguments[arguments.length - 1]
-    Log.info(klass, name)
+    var klass = this.constructor.name
+    if (this.hasOwnProperty(name)) {
+      klass = this.name
+    }
+    Log.debug.apply(Log, [klass].concat(Array.prototype.slice.call(arguments)))
     if (!this._events) return this
     var args = slice.call(arguments, 1)
     if (!eventsApi(this, 'trigger', name, args)) return this
