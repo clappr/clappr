@@ -99,8 +99,8 @@ class Player extends BaseObject {
     this.core.resize(size);
   }
 
-  load(sources) {
-    this.core.load(sources)
+  load(sources, mimeType) {
+    this.core.load(sources, mimeType)
   }
 
   destroy() {
