@@ -11,6 +11,7 @@ class HTML5Audio extends Playback {
   get tagName() { return 'audio' }
   get events() {
     return {
+      'loadedmetadata': 'loadedMetadata',
       'timeupdate': 'timeUpdated',
       'ended': 'ended',
       'canplaythrough': 'bufferFull'
@@ -38,8 +39,25 @@ class HTML5Audio extends Playback {
     this.listenTo(this.container, Events.CONTAINER_STOP, this.stop)
   }
 
+  loadedMetadata(e) {
+    this.durationChange()
+    this.trigger(Events.PLAYBACK_LOADEDMETADATA, e.target.duration)
+  }
+
+  durationChange() {
+    // we can't figure out if hls resource is VoD or not until it is being loaded or duration has changed.
+    // that's why we check it again and update media control accordingly.
+    if (this.getPlaybackType() === 'aod') {
+      this.settings.left = ["playpause", "position", "duration"]
+    } else {
+      this.settings.left = ["playstop"]
+    }
+    this.settings.seekEnabled = isFinite(this.getDuration())
+    this.trigger(Events.PLAYBACK_SETTINGSUPDATE)
+  }
+
   getPlaybackType() {
-    return "aod"
+    return [0, undefined, Infinity].indexOf(this.el.duration) >= 0 ? 'live' : 'aod'
   }
 
   play() {
@@ -94,7 +112,11 @@ class HTML5Audio extends Playback {
   }
 
   timeUpdated() {
-    this.trigger(Events.PLAYBACK_TIMEUPDATE, this.el.currentTime, this.el.duration, this.name)
+    if (this.getPlaybackType() === 'live') {
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, 1, 1, this.name)
+    } else {
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, this.el.currentTime, this.el.duration, this.name)
+    }
   }
 
   bufferFull() {
