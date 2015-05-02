@@ -136,7 +136,8 @@ class Core extends UIObject {
     return find(this.plugins, (plugin) => plugin.name === name)
   }
 
-  load(sources) {
+  load(sources, mimeType) {
+    this.options.mimeType = mimeType
     sources = sources && sources.constructor === Array ? sources : [sources.toString()];
     this.containers.forEach((container) => container.destroy())
     this.containerFactory.options = assign(this.options, {sources})
