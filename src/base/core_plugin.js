@@ -1,4 +1,5 @@
 var BaseObject = require('./base_object')
+var extend = require('./utils').extend
 
 class CorePlugin extends BaseObject {
   constructor(core) {
@@ -9,6 +10,10 @@ class CorePlugin extends BaseObject {
   getExternalInterface() { return {} }
 
   destroy() {}
+}
+
+CorePlugin.extend = function(properties) {
+  return extend(CorePlugin, properties)
 }
 
 module.exports = CorePlugin
