@@ -28,7 +28,7 @@ var DVRControls = require('../../plugins/dvr_controls');
 class Loader extends BaseObject {
   constructor(externalPlugins) {
     super()
-    this.playbackPlugins = [HTML5VideoPlayback, FlashVideoPlayback, HTML5AudioPlayback, HLSVideoPlayback, HTMLImgPlayback, NoOp]
+    this.playbackPlugins = [HTML5AudioPlayback, HTML5VideoPlayback, FlashVideoPlayback, HLSVideoPlayback, HTMLImgPlayback, NoOp]
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
     this.corePlugins = [DVRControls]
     if (externalPlugins) {
