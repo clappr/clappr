@@ -220,7 +220,7 @@ class HTML5Video extends Playback {
   }
 }
 
-HTML5Video.canPlay = function(resource) {
+HTML5Video.canPlay = function(resource, mimeType) {
   var mimetypes = {
     'mp4': ["avc1.42E01E", "avc1.58A01E", "avc1.4D401E", "avc1.64001E", "mp4v.20.8", "mp4v.20.240", "mp4a.40.2"].map(
       (codec) => { return 'video/mp4; codecs="' + codec + ', mp4a.40.2"'}),
@@ -237,6 +237,9 @@ HTML5Video.canPlay = function(resource) {
   if ((resourceParts.length > 1) && (mimetypes[resourceParts[1]] !== undefined)) {
     var v = document.createElement('video')
     return !!find(mimetypes[resourceParts[1]], (ext) => { return !!v.canPlayType(ext).replace(/no/, '') })
+  } else if (mimeType) {
+    var v = document.createElement('video')
+    return !!v.canPlayType(mimeType).replace(/no/, '')
   }
   return false
 }
