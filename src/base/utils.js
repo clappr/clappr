@@ -37,6 +37,9 @@ var extend = function(protoProps, staticProps) {
 }
 
 var formatTime = function(time) {
+    if (!isFinite(time)) {
+      return "--:--"
+    }
     time = time * 1000
     time = parseInt(time/1000)
     var seconds = time % 60
