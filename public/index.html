@@ -80,6 +80,12 @@ player.attachTo(playerElement);
         session.setMode("ace/mode/javascript");
         session.setTabSize(2);
         session.setUseSoftTabs(true);
+
+        var parser = new Parser($('#output'));
+        $('.run').click(function() {
+          var code = ace.edit('editor').getSession().getValue();
+          parser.parse(code);
+        });
       }
     </script>
   </body>
