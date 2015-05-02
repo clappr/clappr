@@ -76,7 +76,7 @@ class HTML5Video extends Playback {
   }
 
   getPlaybackType() {
-    return this.isHLS && [0, undefined, Infinity].indexOf(this.el.duration) >= 0 ? 'live' : 'vod'
+    return [0, undefined, Infinity].indexOf(this.el.duration) >= 0 ? 'live' : 'vod'
   }
 
   isHighDefinitionInUse() {
