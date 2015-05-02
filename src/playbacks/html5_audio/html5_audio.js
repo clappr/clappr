@@ -22,7 +22,7 @@ class HTML5Audio extends Playback {
 
   constructor(params) {
     super(params)
-    this.el.src = params.src
+    this.options = params
     this.settings = {
       left: ['playpause', 'position', 'duration'],
       right: ['fullscreen', 'volume'],
@@ -75,6 +75,7 @@ class HTML5Audio extends Playback {
   }
 
   play() {
+    this.el.src = this.options.src
     this.el.play()
     this.trigger(Events.PLAYBACK_PLAY);
   }
@@ -86,6 +87,7 @@ class HTML5Audio extends Playback {
   stop() {
     this.pause()
     this.el.currentTime = 0
+    this.el.src = ''
   }
 
   volume(value) {
