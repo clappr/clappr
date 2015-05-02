@@ -66,7 +66,7 @@ class DVRControls extends UICorePlugin {
   }
 
   render() {
-    var style = Styler.getStyleFor(this.name)
+    var style = Styler.getStyleFor(this.name, { baseUrl: this.core.options.baseUrl })
     this.$el.html(this.template())
     this.$el.append(style)
     if (this.shouldRender()) {
