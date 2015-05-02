@@ -5,35 +5,16 @@
 var assign = require('lodash.assign')
 var Browser = require('../components/browser')
 
-var extend = function(protoProps, staticProps) {
-  var parent = this
-  var child
-
-  if (protoProps && protoProps.constructor !== undefined) {
-    child = protoProps.constructor
-  } else {
-    child = function(){ return parent.apply(this, arguments); }
+var extend = function(parent, properties) {
+  var constructor = function() {
+    parent.prototype.constructor.apply(this, arguments)
+    if (properties.constructor) {
+      properties.constructor.apply(this, arguments)
+    }
   }
-
-  assign(child, parent, staticProps)
-
-  var Surrogate = function(){ this.constructor = child; }
-  Surrogate.prototype = parent.prototype
-  child.prototype = new Surrogate()
-
-  if (protoProps) assign(child.prototype, protoProps)
-
-  child.__super__ = parent.prototype
-
-  child.super = function(name) {
-    return parent.prototype[name]
-  }
-
-  child.prototype.getClass = function() {
-    return child
-  }
-
-  return child
+  constructor.prototype = Object.create(parent.prototype)
+  assign(constructor.prototype, properties)
+  return constructor
 }
 
 var formatTime = function(time) {
