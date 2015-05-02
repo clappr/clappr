@@ -12,6 +12,8 @@ class HTML5Audio extends Playback {
   get events() {
     return {
       'loadedmetadata': 'loadedMetadata',
+      'stalled': 'stalled',
+      'waiting': 'waiting',
       'timeupdate': 'timeUpdated',
       'ended': 'ended',
       'canplaythrough': 'bufferFull'
@@ -58,6 +60,18 @@ class HTML5Audio extends Playback {
 
   getPlaybackType() {
     return [0, undefined, Infinity].indexOf(this.el.duration) >= 0 ? 'live' : 'aod'
+  }
+
+  stalled() {
+    if (this.getPlaybackType() === 'vod' && this.el.readyState < this.el.HAVE_FUTURE_DATA) {
+      this.trigger(Events.PLAYBACK_BUFFERING, this.name)
+    }
+  }
+
+  waiting() {
+    if(this.el.readyState < this.el.HAVE_FUTURE_DATA) {
+      this.trigger(Events.PLAYBACK_BUFFERING, this.name)
+    }
   }
 
   play() {
