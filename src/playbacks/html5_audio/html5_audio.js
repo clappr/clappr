@@ -108,7 +108,7 @@ class HTML5Audio extends Playback {
   }
  }
 
-HTML5Audio.canPlay = function(resource) {
+HTML5Audio.canPlay = function(resource, mimeType) {
   var mimetypes = {
     'wav': ['audio/wav'],
     'mp3': ['audio/mp3', 'audio/mpeg;codecs="mp3"'],
@@ -119,6 +119,9 @@ HTML5Audio.canPlay = function(resource) {
   if ((resourceParts.length > 1) && (mimetypes[resourceParts[1]] !== undefined)) {
     var a = document.createElement('audio')
     return !!find(mimetypes[resourceParts[1]], (ext) => { return !!a.canPlayType(ext).replace(/no/, '') })
+  } else if (mimeType) {
+    var a = document.createElement('audio')
+    return !!a.canPlayType(mimeType).replace(/no/, '')
   }
   return false
 }
