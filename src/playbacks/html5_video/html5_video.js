@@ -70,8 +70,8 @@ class HTML5Video extends Playback {
     // that's why we check it again and update media control accordingly.
     if (this.getPlaybackType() === 'vod') {
       this.settings.left = ["playpause", "position", "duration"]
-      this.settings.seekEnabled = true
     }
+    this.settings.seekEnabled = isFinite(this.getDuration())
     this.trigger(Events.PLAYBACK_SETTINGSUPDATE)
   }
 
