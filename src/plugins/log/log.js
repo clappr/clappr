@@ -4,6 +4,13 @@
 
 var Kibo = require('../../base/kibo')
 
+var BOLD = 'font-weight: bold; font-size: 13px;';
+var INFO = 'color: #006600;' + BOLD;
+var DEBUG = 'color: #0000ff;' + BOLD;
+var WARN = 'color: #ff8000;' + BOLD;
+var ERROR = 'color: #ff0000;' + BOLD;
+var DEFAULT = '';
+
 class Log {
   constructor() {
     this.kibo = new Kibo()
@@ -11,9 +18,9 @@ class Log {
     this.BLACKLIST = ['playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress'];
   }
 
-  info(klass, message) {this.log(klass, 'info', message)}
-  warn(klass, message) {this.log(klass, 'warn', message)}
-  debug(klass, message) {this.log(klass, 'debug', message)}
+  info(klass) {this.log(klass, 'info', Array.prototype.slice.call(arguments, 1))}
+  warn(klass) {this.log(klass, 'warn', Array.prototype.slice.call(arguments, 1))}
+  debug(klass) {this.log(klass, 'debug', Array.prototype.slice.call(arguments, 1))}
 
   onOff() {
     window.DEBUG = !window.DEBUG
@@ -22,12 +29,21 @@ class Log {
   }
 
   log(klass, level, message) {
-    if (!window.DEBUG || this.BLACKLIST.indexOf(message) >= 0) return
+    if (!window.DEBUG || this.BLACKLIST.indexOf(message[0]) >= 0) return
+    if (!message) {
+      message = klass
+      klass = null
+    }
     var color
-    if (level === 'warn') { color = '#FF8000' }
-    else if (level === 'info') { color = '#006600' }
-    else if (level === 'error') { color = '#FF0000'}
-    console.log("%c [" + klass + "] [" + level + "] " +  message, 'color: '+color);
+    if (level === 'warn') { color = WARN }
+    else if (level === 'info') { color = INFO }
+    else if (level === 'debug') { color = DEBUG }
+    else if (level === 'error') { color = ERROR }
+    var klassDescription = ""
+    if (klass) {
+      klassDescription = "[" + klass + "]"
+    }
+    console.log.apply(console, ["%c[" + level + "]" + klassDescription, color].concat(message));
   }
 }
 
@@ -37,6 +53,5 @@ Log.getInstance = function() {
   }
   return this._instance
 }
-
 
 module.exports = Log
