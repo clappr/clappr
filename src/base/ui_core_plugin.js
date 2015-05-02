@@ -1,4 +1,5 @@
 var UIObject = require('./ui_object')
+var extend = require('./utils').extend
 
 class UICorePlugin extends UIObject {
   constructor(core) {
@@ -37,6 +38,10 @@ class UICorePlugin extends UIObject {
     this.core.$el.append(this.el)
     return this
   }
+}
+
+UICorePlugin.extend = function(properties) {
+  return extend(UICorePlugin, properties)
 }
 
 module.exports = UICorePlugin
