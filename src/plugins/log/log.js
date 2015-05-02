@@ -15,7 +15,7 @@ class Log {
   constructor() {
     this.kibo = new Kibo()
     this.kibo.down(['ctrl shift d'], () => this.onOff())
-    this.BLACKLIST = ['playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress'];
+    this.BLACKLIST = ['timeupdate', 'playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress'];
   }
 
   info(klass) {this.log(klass, 'info', Array.prototype.slice.call(arguments, 1))}
