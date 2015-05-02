@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 var UIObject = require('./ui_object')
+var extend = require('./utils').extend
 
 class UIContainerPlugin extends UIObject {
   constructor(options) {
@@ -30,6 +31,10 @@ class UIContainerPlugin extends UIObject {
   destroy() {
     this.remove()
   }
+}
+
+UIContainerPlugin.extend = function(properties) {
+  return extend(UIContainerPlugin, properties)
 }
 
 module.exports = UIContainerPlugin
