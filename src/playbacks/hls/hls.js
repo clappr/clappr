@@ -33,9 +33,9 @@ class HLS extends Playback {
     super(options)
     this.src = options.src
     this.baseUrl = options.baseUrl;
-    this.flushLiveURLCache = (options.flushLiveURLCache === undefined)? true: options.flushLiveURLCache
-    this.capLevelToStage = (options.capLevelToStage === undefined)? false: options.capLevelToStage
-    this.maxBufferLength = options.maxBufferLength || 120
+    this.flushLiveURLCache = (options.flushLiveURLCache === undefined) ? true : options.flushLiveURLCache
+    this.capLevelToStage = (options.capLevelToStage === undefined) ? false : options.capLevelToStage
+    this.maxBufferLength = (options.maxBufferLength === undefined) ? 120 : options.maxBufferLength
     this.highDefinition = false
     this.autoPlay = options.autoPlay
     this.defaultSettings = {
