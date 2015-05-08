@@ -162,6 +162,7 @@ Events.PLAYBACK_MEDIACONTROL_DISABLE = 'playback:mediacontrol:disable'
 Events.PLAYBACK_MEDIACONTROL_ENABLE = 'playback:mediacontrol:enable'
 Events.PLAYBACK_ENDED = 'playback:ended'
 Events.PLAYBACK_PLAY = 'playback:play'
+Events.PLAYBACK_PAUSE = 'playback:pause'
 Events.PLAYBACK_ERROR = 'playback:error'
 Events.PLAYBACK_STATS_ADD = 'playback:stats:add'
 
