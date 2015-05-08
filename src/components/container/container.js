@@ -51,6 +51,7 @@ class Container extends UIObject {
     this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL_ENABLE, this.enableMediaControl);
     this.listenTo(this.playback, Events.PLAYBACK_ENDED, this.ended);
     this.listenTo(this.playback, Events.PLAYBACK_PLAY, this.playing);
+    this.listenTo(this.playback, Events.PLAYBACK_PAUSE, this.paused);
     this.listenTo(this.playback, Events.PLAYBACK_ERROR, this.error);
   }
 
@@ -137,6 +138,10 @@ class Container extends UIObject {
     this.trigger(Events.CONTAINER_PLAY, this.name);
   }
 
+  paused() {
+    this.trigger(Events.CONTAINER_PAUSE, this.name);
+  }
+
   play() {
     this.playback.play();
   }
@@ -149,7 +154,6 @@ class Container extends UIObject {
 
   pause() {
     this.playback.pause();
-    this.trigger(Events.CONTAINER_PAUSE, this.name);
   }
 
   ended() {
