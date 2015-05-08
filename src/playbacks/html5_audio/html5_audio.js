@@ -77,7 +77,9 @@ class HTML5Audio extends Playback {
   }
 
   play() {
-    this.el.src = this.options.src
+    if (this.el.src !== this.options.src) {
+      this.el.src = this.options.src
+    }
     this.el.play()
     this.trigger(Events.PLAYBACK_PLAY);
   }
