@@ -32,7 +32,9 @@ class HTML5Video extends Playback {
       'loadedmetadata': 'loadedMetadata',
       'canplay': 'ready',
       'durationchange': 'durationChange',
-      'error': 'error'
+      'error': 'error',
+      'playing': 'playing',
+      'pause': 'paused'
     }
   }
 
@@ -86,7 +88,6 @@ class HTML5Video extends Playback {
 
   play() {
     this.el.play()
-    this.trigger(Events.PLAYBACK_PLAY);
   }
 
   pause() {
@@ -118,6 +119,14 @@ class HTML5Video extends Playback {
 
   isPlaying() {
     return !this.el.paused && !this.el.ended
+  }
+
+  playing() {
+    this.trigger(Events.PLAYBACK_PLAY);
+  }
+
+  paused() {
+    this.trigger(Events.PLAYBACK_PAUSE);
   }
 
   ended() {
