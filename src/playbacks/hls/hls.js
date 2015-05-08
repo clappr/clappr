@@ -121,7 +121,6 @@ class HLS extends Playback {
     } else {
       this.el.globoPlayerPlay()
     }
-    this.trigger(Events.PLAYBACK_PLAY, this.name)
   }
 
   getPlaybackType() {
@@ -165,6 +164,11 @@ class HLS extends Playback {
   updateCurrentState(state) {
     this.currentState = state
     this.updatePlaybackType()
+    if (state === "PLAYING") {
+      this.trigger(Events.PLAYBACK_PLAY, this.name)
+    } else {
+      this.trigger(Events.PLAYBACK_PAUSE, this.name)
+    }
   }
 
   updatePlaybackType() {
