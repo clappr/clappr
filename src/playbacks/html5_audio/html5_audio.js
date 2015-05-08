@@ -16,7 +16,9 @@ class HTML5Audio extends Playback {
       'waiting': 'waiting',
       'timeupdate': 'timeUpdated',
       'ended': 'ended',
-      'canplaythrough': 'bufferFull'
+      'canplaythrough': 'bufferFull',
+      'playing': 'playing',
+      'pause': 'paused'
     }
   }
 
@@ -125,6 +127,14 @@ class HTML5Audio extends Playback {
 
   isPlaying() {
     return !this.el.paused && !this.el.ended
+  }
+
+  playing() {
+    this.trigger(Events.PLAYBACK_PLAY);
+  }
+
+  paused() {
+    this.trigger(Events.PLAYBACK_PAUSE);
   }
 
   timeUpdated() {
