@@ -142,6 +142,7 @@ class Flash extends Playback {
   pause() {
     this.currentState = "PAUSED"
     this.el.playerPause()
+    this.trigger(Events.PLAYBACK_PAUSE, this.name)
   }
 
   stop() {
