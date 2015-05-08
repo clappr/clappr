@@ -5,9 +5,9 @@ describe('HLS playback', function() {
   describe('#setPlaybackState', function() {
     beforeEach(function() {
       this.hls = new HLS({})
-      this.hls.el.globoGetbufferLength = function() { return 0 }
-      this.hls.el.globoGetDuration = function() { return 30 }
-      this.hls.el.globoGetType = function() { return 'live' }
+      this.hls.el.getbufferLength = function() { return 0 }
+      this.hls.el.getDuration = function() { return 30 }
+      this.hls.el.getType = function() { return 'live' }
     })
 
     it('should trigger a buffering event on buffering states', function() {
@@ -22,7 +22,7 @@ describe('HLS playback', function() {
 
     it('should trigger a buffering event regardless of buffer size', function() {
       var buffering = false
-      this.hls.el.globoGetbufferLength = function() { return 10 }
+      this.hls.el.getbufferLength = function() { return 10 }
       this.hls.on(Events.PLAYBACK_BUFFERING, function() { buffering = true })
       this.hls.setPlaybackState("PLAYING_BUFFERING")
       expect(buffering).to.be.true
@@ -50,7 +50,7 @@ describe('HLS playback', function() {
       this.hls.setPlaybackState("IDLE")
       expect(ended).to.be.true
     })
-    
+
     it('should set current time to 0 when changing to idle', function() {
       var current = -1
       this.hls.on(Events.PLAYBACK_TIMEUPDATE, function(position) { current = position })
