@@ -56,7 +56,7 @@ class HLS extends Playback {
     Mediator.on(this.cid + ':flashready', () => this.bootstrap())
     Mediator.on(this.cid + ':timeupdate', (timeMetrics) => this.updateTime(timeMetrics))
     Mediator.on(this.cid + ':playbackstate', (state) => this.setPlaybackState(state))
-    Mediator.on(this.cid + ':levelchanged', (isHD) => this.updateHighDefinition(isHD))
+    Mediator.on(this.cid + ':levelchanged', (level) => this.updateHighDefinition(level))
     Mediator.on(this.cid + ':playbackerror', () => this.flashPlaybackError())
   }
 
@@ -88,8 +88,9 @@ class HLS extends Playback {
     this.el.playerSetUseHardwareVideoDecoder(this.useHardwareVideoDecoder)
   }
 
-  updateHighDefinition(isHD) {
-    this.highDefinition = (isHD === "hd");
+  updateHighDefinition(level) {
+    var currentLevel = this.getLevels()[level]
+    this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000);
     this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE)
     this.trigger(Events.PLAYBACK_BITRATE, {'bitrate': this.getCurrentBitrate()})
   }
