@@ -1,4 +1,4 @@
-var Mediator = require('mediator')
+var Mediator = require('../../components/mediator')
 
 class HLSEvents {
   constructor(instanceId) {
