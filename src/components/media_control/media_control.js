@@ -457,6 +457,10 @@ class MediaControl extends UIObject {
   }
 
   bindKeyEvents() {
+    if (this.kibo) {
+      this.unbindKeyEvents()
+    }
+    this.kibo = new Kibo(this.options.focusElement)
     this.kibo.down(['space'], () => this.togglePlayPause())
     this.kibo.down(['left'], () => this.seekRelative(-15))
     this.kibo.down(['right'], () => this.seekRelative(15))
@@ -493,11 +497,6 @@ class MediaControl extends UIObject {
     this.createCachedElements()
     this.$playPauseToggle.addClass('paused')
     this.$playStopToggle.addClass('stopped')
-
-    if (this.kibo) {
-      this.unbindKeyEvents()
-    }
-    this.kibo = new Kibo(this.options.focusElement)
 
     this.changeTogglePlay()
     this.hideId = setTimeout(() => this.hide(), timeout)
