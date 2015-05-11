@@ -241,6 +241,10 @@ class HLS extends Playback {
     return false
   }
 
+  getDuration() {
+    return this.normalizeDuration(this.el.getDuration())
+  }
+
   normalizeDuration(duration) {
     if (this.playbackType === 'live') {
       // estimate 10 seconds of buffer time for live streams for seek positions
