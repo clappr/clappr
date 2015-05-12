@@ -8,6 +8,7 @@ var extend = require('./utils').extend
 class UIContainerPlugin extends UIObject {
   constructor(options) {
     super(options)
+    this.container = options.container
     this.enabled = true
     this.bindEvents()
   }

@@ -4,6 +4,7 @@ var extend = require('./utils').extend
 class ContainerPlugin extends BaseObject {
   constructor(options) {
     super(options)
+    this.container = options.container
     this.enabled = true
     this.bindEvents()
   }
