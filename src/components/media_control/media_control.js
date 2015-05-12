@@ -78,8 +78,10 @@ class MediaControl extends UIObject {
     if (this.container.mediaControlDisabled || this.options.chromeless) {
       this.disable()
     }
-    $(document).bind('mouseup', (event) => this.stopDrag(event))
-    $(document).bind('mousemove', (event) => this.updateDrag(event))
+    this.stopDragHandler = (event) => this.stopDrag(event)
+    this.updateDragHandler = (event) => this.updateDrag(event)
+    $(document).bind('mouseup', this.stopDragHandler)
+    $(document).bind('mousemove', this.updateDragHandler)
     Mediator.on(Events.PLAYER_RESIZE, () => this.playerResize())
   }
 
@@ -483,8 +485,8 @@ class MediaControl extends UIObject {
   }
 
   destroy() {
-    $(document).unbind('mouseup')
-    $(document).unbind('mousemove')
+    $(document).unbind('mouseup', this.stopDragHandler)
+    $(document).unbind('mousemove', this.updateDragHandler)
     this.unbindKeyEvents()
   }
 
