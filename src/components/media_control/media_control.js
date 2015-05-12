@@ -243,15 +243,14 @@ class MediaControl extends UIObject {
   }
 
   updateDrag(event) {
-    if (event) {
-      event.preventDefault()
-    }
     if (this.draggingSeekBar) {
+      event.preventDefault()
       var offsetX = event.pageX - this.$seekBarContainer.offset().left
       var pos = offsetX / this.$seekBarContainer.width() * 100
       pos = Math.min(100, Math.max(pos, 0))
       this.setSeekPercentage(pos)
     } else if (this.draggingVolumeBar) {
+      event.preventDefault()
       this.volume(event)
     }
   }
