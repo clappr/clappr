@@ -207,7 +207,19 @@ class HTML5Video extends Playback {
         break
       }
     }
+    this.checkBufferState(this.el.buffered.end(bufferedPos))
     this.trigger(Events.PLAYBACK_PROGRESS, this.el.buffered.start(bufferedPos), this.el.buffered.end(bufferedPos), this.el.duration, this.name)
+  }
+
+  checkBufferState(bufferedPos) {
+    var playbackPos = this.el.currentTime + 1; // 1 second of threshold
+    if (playbackPos >= bufferedPos) {
+      this.trigger(Events.PLAYBACK_BUFFERING, this.name)
+      this.buffering = true
+    } else if (this.buffering) {
+      this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
+      this.buffering = false
+    }
   }
 
   typeFor(src) {
