@@ -130,6 +130,7 @@ class HTML5Video extends Playback {
   }
 
   ended() {
+    this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
     this.trigger(Events.PLAYBACK_ENDED, this.name)
     this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.el.duration, this.name)
   }
@@ -213,7 +214,7 @@ class HTML5Video extends Playback {
 
   checkBufferState(bufferedPos) {
     var playbackPos = this.el.currentTime + 1; // 1 second of threshold
-    if (playbackPos >= bufferedPos) {
+    if (this.isPlaying() && playbackPos >= bufferedPos) {
       this.trigger(Events.PLAYBACK_BUFFERING, this.name)
       this.buffering = true
     } else if (this.buffering) {
