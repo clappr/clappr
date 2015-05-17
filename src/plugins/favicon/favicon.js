@@ -1,5 +1,5 @@
-var CorePlugin = require('core_plugin')
-var Events = require('events')
+var CorePlugin = require('../../base/core_plugin')
+var Events = require('../../base/events')
 
 class Favicon extends CorePlugin {
   get name() { return 'favicon' }
