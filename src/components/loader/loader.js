@@ -24,13 +24,14 @@ var ClickToPausePlugin = require('../../plugins/click_to_pause');
 
 /* Core Plugins */
 var DVRControls = require('../../plugins/dvr_controls');
+var Favicon = require('../../plugins/favicon');
 
 class Loader extends BaseObject {
   constructor(externalPlugins) {
     super()
     this.playbackPlugins = [HTML5AudioPlayback, HTML5VideoPlayback, FlashVideoPlayback, HLSVideoPlayback, HTMLImgPlayback, NoOp]
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
-    this.corePlugins = [DVRControls]
+    this.corePlugins = [DVRControls, Favicon]
     if (externalPlugins) {
       this.addExternalPlugins(externalPlugins)
     }
