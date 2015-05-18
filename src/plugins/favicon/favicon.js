@@ -35,7 +35,6 @@ class Favicon extends CorePlugin {
   }
 
   setPlayIcon() {
-    console.log('setPlayIcon')
     if (!this.playIcon) {
       this.playIcon = this.createIcon(0xe001)
     }
