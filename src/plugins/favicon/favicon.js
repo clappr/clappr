@@ -27,6 +27,11 @@ class Favicon extends CorePlugin {
     this.listenTo(this.core.mediaControl.container, Events.CONTAINER_ERROR, this.resetIcon)
   }
 
+  disable() {
+    super.disable()
+    this.resetIcon()
+  }
+
   createIcon(charCode) {
     var canvas = $('<canvas/>')
     canvas[0].width = 32
