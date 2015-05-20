@@ -7,6 +7,12 @@ class Favicon extends CorePlugin {
   constructor(core) {
     super(core)
     this.oldIcon = $('link[rel="shortcut icon"]')
+    if (!this.core.options.changeFavicon) {
+      this.disable()
+    }
+  }
+
+  bindEvents() {
     this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
     if (this.core.mediaControl.container) {
       this.containerChanged()
