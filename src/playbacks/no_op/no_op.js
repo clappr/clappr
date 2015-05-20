@@ -2,6 +2,8 @@ var Playback = require('../../base/playback')
 var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
 var Events = require('../../base/events')
+var requestAnimationFrame = require('../../base/utils').requestAnimationFrame
+var cancelAnimationFrame = require('../../base/utils').cancelAnimationFrame
 
 class NoOp extends Playback {
   get name() { return 'no_op' }
