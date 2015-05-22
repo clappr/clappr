@@ -53,7 +53,7 @@ var Fullscreen = {
       el.mozRequestFullScreen()
     } else if(el.msRequestFullscreen) {
       el.msRequestFullscreen()
-    } else if (el.querySelector && el.querySelector("video").webkitEnterFullScreen) {
+    } else if (el.querySelector && el.querySelector("video") && el.querySelector("video").webkitEnterFullScreen) {
       el.querySelector("video").webkitEnterFullScreen()
     }
   },

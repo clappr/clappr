@@ -7,6 +7,12 @@ class Favicon extends CorePlugin {
   constructor(core) {
     super(core)
     this.oldIcon = $('link[rel="shortcut icon"]')
+    if (!this.core.options.changeFavicon) {
+      this.disable()
+    }
+  }
+
+  bindEvents() {
     this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
     if (this.core.mediaControl.container) {
       this.containerChanged()
@@ -19,6 +25,11 @@ class Favicon extends CorePlugin {
     this.listenTo(this.core.mediaControl.container, Events.CONTAINER_STOP, this.resetIcon)
     this.listenTo(this.core.mediaControl.container, Events.CONTAINER_ENDED, this.resetIcon)
     this.listenTo(this.core.mediaControl.container, Events.CONTAINER_ERROR, this.resetIcon)
+  }
+
+  disable() {
+    super.disable()
+    this.resetIcon()
   }
 
   createIcon(charCode) {
@@ -35,7 +46,6 @@ class Favicon extends CorePlugin {
   }
 
   setPlayIcon() {
-    console.log('setPlayIcon')
     if (!this.playIcon) {
       this.playIcon = this.createIcon(0xe001)
     }

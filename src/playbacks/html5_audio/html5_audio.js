@@ -169,7 +169,7 @@ HTML5Audio.canPlay = function(resource, mimeType) {
   if ((resourceParts.length > 1) && (mimetypes[resourceParts[1]] !== undefined)) {
     var a = document.createElement('audio')
     return !!find(mimetypes[resourceParts[1]], (ext) => { return !!a.canPlayType(ext).replace(/no/, '') })
-  } else if (mimeType) {
+  } else if (mimeType && !/m3u8/.test(resourceParts[1])) {
     var a = document.createElement('audio')
     return !!a.canPlayType(mimeType).replace(/no/, '')
   }

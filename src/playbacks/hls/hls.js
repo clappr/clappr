@@ -156,14 +156,14 @@ class HLS extends Playback {
       this.trigger(Events.PLAYBACK_BUFFERING, this.name)
       this.updateCurrentState(state)
     } else if (["PLAYING", "PAUSED"].indexOf(state) >= 0) {
-      if (["PLAYING_BUFFERING", "PAUSED_BUFFERING", "PAUSED", "IDLE"].indexOf(this.currentState) >= 0) {
+      if (["PLAYING_BUFFERING", "PAUSED_BUFFERING", "IDLE"].indexOf(this.currentState) >= 0) {
         this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
       }
       this.updateCurrentState(state)
     } else if (state === "IDLE") {
-      this.trigger(Events.PLAYBACK_ENDED, this.name)
-      this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.el.getDuration(), this.name)
       this.updateCurrentState(state)
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.el.getDuration(), this.name)
+      this.trigger(Events.PLAYBACK_ENDED, this.name)
     }
   }
 
@@ -172,7 +172,7 @@ class HLS extends Playback {
     this.updatePlaybackType()
     if (state === "PLAYING") {
       this.trigger(Events.PLAYBACK_PLAY, this.name)
-    } else {
+    } else if (state === "PAUSED") {
       this.trigger(Events.PLAYBACK_PAUSE, this.name)
     }
   }

@@ -29,7 +29,7 @@ Mediator.off = function(name, callback, context) {
 }
 
 Mediator.trigger = function(name, opts) {
-  events.trigger(name, opts)
+  events.trigger.apply(events, Array.prototype.slice.call(arguments))
   return
 }
 
