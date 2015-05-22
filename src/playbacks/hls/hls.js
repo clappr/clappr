@@ -354,7 +354,7 @@ class HLS extends Playback {
 }
 
 HLS.canPlay = function(resource, mimeType) {
-  return Browser.hasFlash && (!!resource.match(/^http(.*).m3u8?$/) || mimeType === 'application/x-mpegURL' || mimeType === 'application/application/vnd.apple.mpegURL')
+  return Browser.hasFlash && (!!resource.match(/^http(.*).m3u8?$/) || mimeType === 'application/x-mpegURL' || mimeType === 'application/vnd.apple.mpegURL')
 }
 
 module.exports = HLS
