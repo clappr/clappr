@@ -198,9 +198,9 @@ Flash.canPlay = function(resource) {
   if (!Browser.hasFlash) {
     return false
   } else if ((!Browser.isMobile && Browser.isFirefox) || Browser.isLegacyIE) {
-    return (resource && resource.constructor === String) && !!resource.match(/(.*)\.(mp4|mov|f4v|3gpp|3gp)/)
+    return (resource && resource.constructor === String) && !!resource.match(/(.*)\.(mp4|mov|f4v|3gpp|3gp)$/)
   } else {
-    return (resource && resource.constructor === String) && !!resource.match(/(.*)\.(mov|f4v|3gpp|3gp)/)
+    return (resource && resource.constructor === String) && !!resource.match(/(.*)\.(mov|f4v|3gpp|3gp)$/)
   }
 }
 
