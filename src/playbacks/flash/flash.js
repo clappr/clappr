@@ -195,12 +195,15 @@ class Flash extends Playback {
 }
 
 Flash.canPlay = function(resource) {
-  if (!Browser.hasFlash) {
+  if (!Browser.hasFlash || !resource || resource.constructor !== String) {
     return false
-  } else if ((!Browser.isMobile && Browser.isFirefox) || Browser.isLegacyIE) {
-    return (resource && resource.constructor === String) && !!resource.match(/(.*)\.(mp4|mov|f4v|3gpp|3gp)/)
   } else {
-    return (resource && resource.constructor === String) && !!resource.match(/(.*)\.(mov|f4v|3gpp|3gp)/)
+    var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
+    if ((!Browser.isMobile && Browser.isFirefox) || Browser.isLegacyIE) {
+      return resourceParts.length > 1 && resourceParts[1].match(/^(mp4|mov|f4v|3gpp|3gp)$/)
+    } else {
+      return resourceParts.length > 1 && resourceParts[1].match(/^(mov|f4v|3gpp|3gp)$/)
+    }
   }
 }
 
