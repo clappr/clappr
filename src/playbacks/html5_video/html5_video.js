@@ -213,7 +213,7 @@ class HTML5Video extends Playback {
   }
 
   checkBufferState(bufferedPos) {
-    var playbackPos = this.el.currentTime + 1; // 1 second of threshold
+    var playbackPos = this.el.currentTime + 0.05; // 50 ms threshold
     if (this.isPlaying() && playbackPos >= bufferedPos) {
       this.trigger(Events.PLAYBACK_BUFFERING, this.name)
       this.buffering = true
