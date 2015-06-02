@@ -8,6 +8,8 @@
 
 ### Using the Player
 
+[![Join the chat at https://gitter.im/clappr/clappr](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/clappr/clappr?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Add the following script on your HTML:
 ```html
 <head>
