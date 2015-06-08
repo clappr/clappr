@@ -40,6 +40,7 @@ class HLS extends Playback {
     this.useHardwareVideoDecoder = (options.useHardwareVideoDecoder === undefined) ? !Browser.isChrome : options.useHardwareVideoDecoder
     this.maxBufferLength = (options.maxBufferLength === undefined) ? 120 : options.maxBufferLength
     this.hlsMinimumDvrSize = (options.hlsMinimumDvrSize == undefined) ? 60 : options.hlsMinimumDvrSize
+    this.hlsLogEnabled = (options.hlsLogEnabled == undefined) ? true : options.hlsLogEnabled
     this.highDefinition = false
     this.autoPlay = options.autoPlay
     this.defaultSettings = {
@@ -87,6 +88,7 @@ class HLS extends Playback {
     this.el.playerCapLeveltoStage(this.capLevelToStage)
     this.el.playerSetmaxBufferLength(this.maxBufferLength)
     this.el.playerSetUseHardwareVideoDecoder(this.useHardwareVideoDecoder)
+    this.el.playerSetLogInfo(this.hlsLogEnabled)
   }
 
   updateHighDefinition(level) {
