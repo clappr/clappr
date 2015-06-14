@@ -24,6 +24,7 @@ class Log {
     this.BLACKLIST = ['timeupdate', 'playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress'];
   }
 
+  error(klass) {this.log(klass, 'error', Array.prototype.slice.call(arguments, 1))}
   info(klass) {this.log(klass, 'info', Array.prototype.slice.call(arguments, 1))}
   warn(klass) {this.log(klass, 'warn', Array.prototype.slice.call(arguments, 1))}
   debug(klass) {this.log(klass, 'debug', Array.prototype.slice.call(arguments, 1))}
