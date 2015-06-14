@@ -9,6 +9,12 @@ var INFO = 'color: #006600;' + BOLD;
 var DEBUG = 'color: #0000ff;' + BOLD;
 var WARN = 'color: #ff8000;' + BOLD;
 var ERROR = 'color: #ff0000;' + BOLD;
+var COLORS = {
+  warn: WARN,
+  info: INFO,
+  debug: DEBUG,
+  error: ERROR
+}
 var DEFAULT = '';
 
 class Log {
@@ -34,12 +40,8 @@ class Log {
       message = klass
       klass = null
     }
-    var color
-    if (level === 'warn') { color = WARN }
-    else if (level === 'info') { color = INFO }
-    else if (level === 'debug') { color = DEBUG }
-    else if (level === 'error') { color = ERROR }
     var klassDescription = ""
+    var color = COLORS[level]
     if (klass) {
       klassDescription = "[" + klass + "]"
     }
