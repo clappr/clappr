@@ -1,8 +1,10 @@
-var BaseObject = require('base_object')
+var BaseObject = require('./base_object')
+var extend = require('./utils').extend
 
 class ContainerPlugin extends BaseObject {
   constructor(options) {
     super(options)
+    this.container = options.container
     this.enabled = true
     this.bindEvents()
   }
@@ -26,6 +28,10 @@ class ContainerPlugin extends BaseObject {
   destroy() {
     this.stopListening()
   }
+}
+
+ContainerPlugin.extend = function(properties) {
+  return extend(ContainerPlugin, properties)
 }
 
 module.exports = ContainerPlugin

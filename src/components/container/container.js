@@ -6,20 +6,27 @@
  * Container is responsible for the video rendering and state
  */
 
-var UIObject = require('ui_object');
+var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
-var Events = require('events')
+var Events = require('../../base/events')
 var find = require('lodash.find')
 
 class Container extends UIObject {
   get name() { return 'Container' }
   get attributes() { return { class: 'container', 'data-container': '' } }
   get events() {
-    return {'click': 'clicked', 'mouseenter': 'mouseEnter', 'mouseleave': 'mouseLeave'}
+    return {
+      'click': 'clicked',
+      'dblclick': 'dblClicked',
+      'doubleTap': 'dblClicked',
+      'mouseenter': 'mouseEnter',
+      'mouseleave': 'mouseLeave'
+    }
   }
 
   constructor(options) {
     super(options);
+    this.currentTime = 0
     this.playback = options.playback;
     this.settings = this.playback.settings;
     this.isReady = false;
@@ -44,6 +51,7 @@ class Container extends UIObject {
     this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL_ENABLE, this.enableMediaControl);
     this.listenTo(this.playback, Events.PLAYBACK_ENDED, this.ended);
     this.listenTo(this.playback, Events.PLAYBACK_PLAY, this.playing);
+    this.listenTo(this.playback, Events.PLAYBACK_PAUSE, this.paused);
     this.listenTo(this.playback, Events.PLAYBACK_ERROR, this.error);
   }
 
@@ -101,12 +109,15 @@ class Container extends UIObject {
     return this.playback.isPlaying();
   }
 
+  getCurrentTime() {
+    return this.currentTime
+  }
+
   getDuration() {
     return this.playback.getDuration();
   }
 
   error(errorObj) {
-    this.$el.append(errorObj.render().el)
     this.trigger(Events.CONTAINER_ERROR, {error: errorObj, container: this}, this.name);
   }
 
@@ -115,7 +126,8 @@ class Container extends UIObject {
   }
 
   timeUpdated(position, duration) {
-    this.trigger(Events.CONTAINER_TIMEUPDATE, position, duration, this.name);
+    this.currentTime = position
+    this.trigger(Events.CONTAINER_TIMEUPDATE, position, duration, this.name)
   }
 
   progress(startPosition, endPosition, duration) {
@@ -126,6 +138,10 @@ class Container extends UIObject {
     this.trigger(Events.CONTAINER_PLAY, this.name);
   }
 
+  paused() {
+    this.trigger(Events.CONTAINER_PAUSE, this.name);
+  }
+
   play() {
     this.playback.play();
   }
@@ -133,19 +149,24 @@ class Container extends UIObject {
   stop() {
     this.trigger(Events.CONTAINER_STOP, this.name);
     this.playback.stop();
+    this.currentTime = 0
   }
 
   pause() {
-    this.trigger(Events.CONTAINER_PAUSE, this.name);
     this.playback.pause();
   }
 
   ended() {
     this.trigger(Events.CONTAINER_ENDED, this, this.name);
+    this.currentTime = 0
   }
 
   clicked() {
     this.trigger(Events.CONTAINER_CLICK, this, this.name);
+  }
+
+  dblClicked() {
+    this.trigger(Events.CONTAINER_DBLCLICK, this, this.name);
   }
 
   setCurrentTime(time) {

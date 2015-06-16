@@ -2,11 +2,13 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var UIObject = require('ui_object')
+var UIObject = require('./ui_object')
+var extend = require('./utils').extend
 
 class UIContainerPlugin extends UIObject {
   constructor(options) {
     super(options)
+    this.container = options.container
     this.enabled = true
     this.bindEvents()
   }
@@ -30,6 +32,10 @@ class UIContainerPlugin extends UIObject {
   destroy() {
     this.remove()
   }
+}
+
+UIContainerPlugin.extend = function(properties) {
+  return extend(UIContainerPlugin, properties)
 }
 
 module.exports = UIContainerPlugin

@@ -6,7 +6,7 @@
  * The mediator is a singleton for handling global events.
  */
 
-var Events = require('events')
+var Events = require('../base/events')
 
 var events = new Events()
 
@@ -29,7 +29,7 @@ Mediator.off = function(name, callback, context) {
 }
 
 Mediator.trigger = function(name, opts) {
-  events.trigger(name, opts)
+  events.trigger.apply(events, Array.prototype.slice.call(arguments))
   return
 }
 

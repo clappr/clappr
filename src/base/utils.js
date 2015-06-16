@@ -3,40 +3,24 @@
 // license that can be found in the LICENSE file.
 
 var assign = require('lodash.assign')
-var Browser = require('browser');
+var Browser = require('../components/browser')
 
-var extend = function(protoProps, staticProps) {
-  var parent = this;
-  var child;
-
-  if (protoProps && protoProps.constructor !== undefined) {
-    child = protoProps.constructor;
-  } else {
-    child = function(){ return parent.apply(this, arguments); };
+var extend = function(parent, properties) {
+  var constructor = function() {
+    parent.prototype.constructor.apply(this, arguments)
+    if (properties.constructor) {
+      properties.constructor.apply(this, arguments)
+    }
   }
-
-  assign(child, parent, staticProps);
-
-  var Surrogate = function(){ this.constructor = child; };
-  Surrogate.prototype = parent.prototype;
-  child.prototype = new Surrogate();
-
-  if (protoProps) assign(child.prototype, protoProps);
-
-  child.__super__ = parent.prototype;
-
-  child.super = function(name) {
-    return parent.prototype[name];
-  };
-
-  child.prototype.getClass = function() {
-    return child;
-  }
-
-  return child;
-};
+  constructor.prototype = Object.create(parent.prototype)
+  assign(constructor.prototype, properties)
+  return constructor
+}
 
 var formatTime = function(time) {
+    if (!isFinite(time)) {
+      return "--:--"
+    }
     time = time * 1000
     time = parseInt(time/1000)
     var seconds = time % 60
@@ -53,31 +37,40 @@ var formatTime = function(time) {
 
 var Fullscreen = {
   isFullscreen: function() {
-    return document.webkitIsFullScreen || document.mozFullScreen || !!document.msFullscreenElement;
+    return (
+      document.webkitFullscreenElement ||
+      document.webkitIsFullScreen ||
+      document.mozFullScreen ||
+      !!document.msFullscreenElement
+    )
   },
   requestFullscreen: function(el) {
     if(el.requestFullscreen) {
-      el.requestFullscreen();
+      el.requestFullscreen()
     } else if(el.webkitRequestFullscreen) {
-      el.webkitRequestFullscreen();
+      el.webkitRequestFullscreen()
     } else if(el.mozRequestFullScreen) {
-      el.mozRequestFullScreen();
+      el.mozRequestFullScreen()
     } else if(el.msRequestFullscreen) {
-      el.msRequestFullscreen();
+      el.msRequestFullscreen()
+    } else if (el.querySelector && el.querySelector("video") && el.querySelector("video").webkitEnterFullScreen) {
+      el.querySelector("video").webkitEnterFullScreen()
     }
   },
   cancelFullscreen: function() {
     if(document.exitFullscreen) {
-      document.exitFullscreen();
+      document.exitFullscreen()
     } else if(document.webkitCancelFullScreen) {
-      document.webkitCancelFullScreen();
+      document.webkitCancelFullScreen()
+    } else if(document.webkitExitFullscreen) {
+      document.webkitExitFullscreen()
     } else if(document.mozCancelFullScreen) {
-      document.mozCancelFullScreen();
+      document.mozCancelFullScreen()
     } else if(document.msExitFullscreen) {
-      document.msExitFullscreen();
+      document.msExitFullscreen()
     }
   }
-};
+}
 
 class Config {
 
@@ -92,7 +85,7 @@ class Config {
 
   static _defaultValueFor(key) {
     try {
-      return this._defaultConfig()[key]['parse'](this._defaultConfig()[key]['value']);
+      return this._defaultConfig()[key]['parse'](this._defaultConfig()[key]['value'])
     } catch(e) {
       return undefined
     }
@@ -122,24 +115,50 @@ class Config {
 }
 
 var seekStringToSeconds = function(url) {
-  var elements = (url.match(/t=([0-9]*h)?([0-9]*m)?([0-9]*s)?/) || []).splice(1);
+  var elements = (url.match(/t=([0-9]*h)?([0-9]*m)?([0-9]*s)?/) || []).splice(1)
   return (!!elements.length)? elements.map(function (el) {
     if (el) {
-      var value = parseInt(el.slice(0,2)) || 0;
+      var value = parseInt(el.slice(0,2)) || 0
       switch (el[el.length-1]) {
-        case 'h': value = value * 3600; break;
-        case 'm': value = value * 60; break;
-      };
-      return value;
+        case 'h': value = value * 3600; break
+        case 'm': value = value * 60; break
+      }
+      return value
     }
-    return 0;
-  }).reduce(function (a,b) { return a+b; }): 0;
+    return 0
+  }).reduce(function (a,b) { return a+b; }): 0
 }
+
+var idsCounter = {}
+
+var uniqueId = function(prefix) {
+  idsCounter[prefix] || (idsCounter[prefix] = 0)
+  var id = ++idsCounter[prefix]
+  return prefix + id
+}
+
+var isNumber = function(value) {
+  return value - parseFloat(value) + 1 >= 0
+}
+
+var requestAnimationFrame = window.requestAnimationFrame ||
+                            window.mozRequestAnimationFrame ||
+                            window.webkitRequestAnimationFrame ||
+                            (fn) => window.setTimeout(fn, 1000/60)
+
+var cancelAnimationFrame = window.cancelAnimationFrame ||
+                           window.mozCancelAnimationFrame ||
+                           window.webkitCancelAnimationFrame ||
+                           window.clearTimeout
 
 module.exports = {
   extend: extend,
   formatTime: formatTime,
   Fullscreen: Fullscreen,
   Config: Config,
-  seekStringToSeconds: seekStringToSeconds
-};
+  seekStringToSeconds: seekStringToSeconds,
+  uniqueId: uniqueId,
+  isNumber: isNumber,
+  requestAnimationFrame: requestAnimationFrame,
+  cancelAnimationFrame: cancelAnimationFrame
+}

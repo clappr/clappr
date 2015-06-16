@@ -7,10 +7,10 @@
  */
 
 var assign = require('lodash.assign');
-var BaseObject = require('base_object');
-var Container = require('container');
-var $ = require('zepto');
-var Events = require('events');
+var BaseObject = require('../../base/base_object');
+var Container = require('../container');
+var $ = require('clappr-zepto');
+var Events = require('../../base/events');
 var find = require('lodash.find');
 
 class ContainerFactory extends BaseObject {
@@ -29,10 +29,11 @@ class ContainerFactory extends BaseObject {
   }
 
   findPlaybackPlugin(source) {
-    return find(this.loader.playbackPlugins, (p) => { return p.canPlay(source.toString()) })
+    return find(this.loader.playbackPlugins, (p) => { return p.canPlay(source.toString(), this.options.mimeType) })
   }
 
   createContainer(source, options) {
+    if (!!source.match(/^\/\//)) source = window.location.protocol + source
     options = assign({}, options, this.options, {src: source, autoPlay: !!this.options.autoPlay})
     var playbackPlugin = this.findPlaybackPlugin(source)
     var playback = new playbackPlugin(options)

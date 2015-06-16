@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 var execOnce = require('lodash.once')
-var uniqueId = require('lodash.uniqueid')
+var uniqueId = require('./utils').uniqueId
 var Log = require('../plugins/log').getInstance()
 
 var slice = Array.prototype.slice
@@ -57,8 +57,11 @@ class Events {
   }
 
   trigger(name) {
-    var klass = arguments[arguments.length - 1]
-    Log.info(klass, name)
+    var klass = this.constructor.name
+    if (this.hasOwnProperty(name)) {
+      klass = this.name
+    }
+    Log.debug.apply(Log, [klass].concat(Array.prototype.slice.call(arguments)))
     if (!this._events) return this
     var args = slice.call(arguments, 1)
     if (!eventsApi(this, 'trigger', name, args)) return this
@@ -134,7 +137,14 @@ Object.keys(listenMethods).forEach(function(method) {
 });
 
 // PLAYER EVENTS
-Events.PLAYER_RESIZE = 'player:resize'
+Events.PLAYER_RESIZE = 'resize'
+Events.PLAYER_PLAY = 'play'
+Events.PLAYER_PAUSE = 'pause'
+Events.PLAYER_STOP = 'stop'
+Events.PLAYER_ENDED = 'ended'
+Events.PLAYER_SEEK = 'seek'
+Events.PLAYER_ERROR = 'error'
+Events.PLAYER_TIMEUPDATE = 'timeupdate'
 
 // Playback Events
 Events.PLAYBACK_PROGRESS = 'playback:progress'
@@ -152,6 +162,7 @@ Events.PLAYBACK_MEDIACONTROL_DISABLE = 'playback:mediacontrol:disable'
 Events.PLAYBACK_MEDIACONTROL_ENABLE = 'playback:mediacontrol:enable'
 Events.PLAYBACK_ENDED = 'playback:ended'
 Events.PLAYBACK_PLAY = 'playback:play'
+Events.PLAYBACK_PAUSE = 'playback:pause'
 Events.PLAYBACK_ERROR = 'playback:error'
 Events.PLAYBACK_STATS_ADD = 'playback:stats:add'
 
@@ -171,6 +182,7 @@ Events.CONTAINER_STOP = 'container:stop'
 Events.CONTAINER_PAUSE = 'container:pause'
 Events.CONTAINER_ENDED = 'container:ended'
 Events.CONTAINER_CLICK = 'container:click'
+Events.CONTAINER_DBLCLICK = 'container:dblclick'
 Events.CONTAINER_MOUSE_ENTER = 'container:mouseenter'
 Events.CONTAINER_MOUSE_LEAVE = 'container:mouseleave'
 Events.CONTAINER_SEEK = 'container:seek'
