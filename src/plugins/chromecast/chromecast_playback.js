@@ -21,7 +21,7 @@ class ChromecastPlayback extends Playback {
   render() {
     var template = this.template()
     this.$el = $(template)
-    this.$el.css({'background-image': 'url(' + this.options.poster + ')'})
+    this.$el.find('.chromecast-playback-background').css('background-image', 'url(' + this.options.poster + ')')
   }
 
   play() {

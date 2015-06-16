@@ -4,13 +4,21 @@
 .chromecast-playback {
   height: 100%;
   width: 100%;
-}
 
-.chromecast-playback-overlay {
-  background-color: #000;
-  height: 100%;
-  opacity: 0.6;
-  width: 100%;
+  .chromecast-playback-background, .chromecast-playback-overlay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+  }
+
+  .chromecast-playback-background {
+    background-size: contain;
+  }
+
+  .chromecast-playback-overlay {
+    background-color: #000;
+    opacity: 0.4;
+  }
 }
 
 @font-face {
