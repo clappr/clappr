@@ -3,11 +3,15 @@
 update_version() {
   current_tag=$(git describe --abbrev=0 --tags)
   echo 'bump from '$current_tag' to '$1
-  sed -i '' s/$current_tag/$1/ package.json
+  sed -i ".bkp" "s/\(version\":[ ]*\"\)$current_tag/\1$1/" package.json
 }
 
 update_bower() {
   ./node_modules/sync-pkg/cli.js package.json
+}
+
+update_dependencies() {
+  npm run lock
 }
 
 build() {
@@ -49,12 +53,13 @@ $changelog\n\n
 with love,\n
 Your happy butler.\n
 "
-  echo $message | mail -s "$(echo "[clappr] new version released: $1\nFrom: Clappr Butler <buttler@clappr.io>\n")" videos5@corp.globo.com 
+  echo $message | mail -s "$(echo "[clappr] new version released: $1\nFrom: Clappr Butler <butler@clappr.io>\n")" videos5@corp.globo.com
 }
 
 main() {
   update_version $1
   update_bower
+  update_dependencies
   build
   run_tests
   if (("$?" == "0")); then
@@ -74,4 +79,3 @@ if [ "$1" != "" ]; then
 else
   echo "Usage: bump [new_version]"
 fi
-
