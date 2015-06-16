@@ -58,7 +58,7 @@ class Chromecast extends UICorePlugin {
   }
 
   bootstrapCastApi() {
-    if (!window.chrome.cast.isAvailable) {
+    if (!window.chrome.cast || !window.chrome.cast.isAvailable) {
       window['__onGCastApiAvailable'] = (loaded, errorInfo) => {
         if (!!loaded) {
           this.appId = this.appId || DEFAULT_CLAPPR_APP_ID
