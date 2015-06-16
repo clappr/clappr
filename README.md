@@ -1,11 +1,14 @@
-[![Build Status](https://travis-ci.org/clappr/clappr.svg?branch=master)](https://travis-ci.org/globocom/clappr)
-[![Dependency Status](https://gemnasium.com/globocom/clappr.svg)](https://gemnasium.com/globocom/clappr)
+[![Build Status](https://travis-ci.org/clappr/clappr.svg?branch=master)](https://travis-ci.org/clappr/clappr)
+[![Dependency Status](https://gemnasium.com/clappr/clappr.svg)](https://gemnasium.com/clappr/clappr)
+[![Coverage Status](https://coveralls.io/repos/clappr/clappr/badge.svg?branch=master)](https://coveralls.io/r/clappr/clappr?branch=master)
 <div align=center>
 <img src="https://cloud.githubusercontent.com/assets/244265/6373134/a845eb50-bce7-11e4-80f2-592ba29972ab.png"><br><br>
 <img src="https://i.cloudup.com/GSbXxvCsBK.png">
 </div>
 
 ### Using the Player
+
+[![Join the chat at https://gitter.im/clappr/clappr](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/clappr/clappr?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Add the following script on your HTML:
 ```html
@@ -64,10 +67,10 @@ var player = new Clappr.Player({
 You can set the player size setting `width` and `height` parameters.
 
 ##### Auto Play
-Add `autoPlay: true` if you want the video to automatic play after page load.
+Add `autoPlay: true` if you want the video to automatically play after page load.
 
-##### Auto Play when Visible
-If you want to play the video when it appears partially on screen, set `autoPlayVisible: 'partial'`. In case you want the player to play when it is full visible, `autoPlayVisible: 'full'`.
+##### Loop
+Add `loop: true` if you want the video to automatically replay after it ends.
 
 ##### Chromeless
 Add `chromeless: 'true'` if you want the player to act in chromeless mode.
@@ -80,6 +83,9 @@ Add `persistConfig: false` if you don't want to persist player's volume through 
 
 ##### Preload
 In case you're loading a on demand video (mp4), it's possible to define the way the video will be preloaded according to [preload](http://www.stevesouders.com/blog/2013/04/12/html5-video-preload/) attribute options. Add `preload: <type>` on embed parameters. By default, Clappr will try to download only video metadata (`preload: 'metadata'`).
+
+##### HLS Buffer Length
+The default behavior for the HLS playback is to keep buffering indefinitely, even on VoD. This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks. To change this behavior, add `maxBufferLength: <value>` to embed parameters, where `value` is in seconds.
 
 ##### Google Analytics Plugin
 Enable Google Analytics events dispatch (play/pause/stop/buffering/etc) adding your `gaAccount`. Optionally, pass your favorite trackerName as `gaTrackerName`. Example:
@@ -173,5 +179,4 @@ In general, we follow the fork-and-pull git workflow:
 
 ### Sponsor
 
-![image](https://cloud.githubusercontent.com/assets/244265/5900100/ef156258-a54b-11e4-9862-7e5851ed9b81.png)
-
+[![image](https://cloud.githubusercontent.com/assets/244265/5900100/ef156258-a54b-11e4-9862-7e5851ed9b81.png)](http://globo.com)

@@ -3,12 +3,24 @@
 // license that can be found in the LICENSE file.
 
 var Player = require('./components/player')
-var Mediator = require('mediator')
-var Events = require('events')
+var Mediator = require('./components/mediator')
+var Events = require('./base/events')
+var ContainerPlugin = require('./base/container_plugin')
+var UIContainerPlugin = require('./base/ui_container_plugin')
+var CorePlugin = require('./base/core_plugin')
+var UICorePlugin = require('./base/ui_core_plugin')
 
 window.DEBUG = false
 
-window.Clappr = { Player: Player, Mediator: Mediator, Events: Events }
+window.Clappr = {
+  Player: Player,
+  Mediator: Mediator,
+  Events: Events,
+  ContainerPlugin: ContainerPlugin,
+  UIContainerPlugin: UIContainerPlugin,
+  CorePlugin: CorePlugin,
+  UICorePlugin: UICorePlugin
+}
 window.Clappr.version = "__VERSION__"
 
 module.exports = window.Clappr

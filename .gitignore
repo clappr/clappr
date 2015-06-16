@@ -9,8 +9,13 @@ dist/
 aws.json
 npm-debug.log
 
+# bump
+*.bkp
+
 # Vim
 *~
 *.swp
 *.swo
 
+# PhpStorm
+.idea

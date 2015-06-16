@@ -2,15 +2,13 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var Playback = require('playback')
+var Playback = require('../../base/playback')
 var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
-var Browser = require('browser')
+var Browser = require('../../components/browser')
 var seekStringToSeconds = require('../../base/utils').seekStringToSeconds
-var Events = require('events')
+var Events = require('../../base/events')
 var find = require('lodash.find')
-
-require('mousetrap')
 
 class HTML5Video extends Playback {
   get name() { return 'html5_video' }
@@ -33,7 +31,10 @@ class HTML5Video extends Playback {
       'canplaythrough': 'bufferFull',
       'loadedmetadata': 'loadedMetadata',
       'canplay': 'ready',
-      'durationchange': 'durationChange'
+      'durationchange': 'durationChange',
+      'error': 'error',
+      'playing': 'playing',
+      'pause': 'paused'
     }
   }
 
@@ -44,7 +45,6 @@ class HTML5Video extends Playback {
     this.el.src = options.src
     this.el.loop = options.loop
     this.firstBuffer = true
-    this.isHLS = (this.src.indexOf('m3u8') > -1)
     this.settings = {default: ['seekbar']}
     if (Browser.isSafari) {
       this.setupSafari()
@@ -52,21 +52,12 @@ class HTML5Video extends Playback {
       this.el.preload = options.preload ? options.preload: 'metadata'
       this.settings.seekEnabled = true
     }
-    this.settings.left = this.isHLS ? ["playstop"] : ["playpause", "position", "duration"]
+    this.settings.left = ["playpause", "position", "duration"]
     this.settings.right = ["fullscreen", "volume"]
-    this.bindEvents()
   }
 
   setupSafari() {
     this.el.preload = 'auto'
-  }
-
-  bindEvents() {
-    [1,2,3,4,5,6,7,8,9].forEach((i) => { Mousetrap.bind([i.toString()], () => this.seek(i * 10)) })
-  }
-
-  stopListening() {
-    [1,2,3,4,5,6,7,8,9].forEach((i) => { Mousetrap.unbind([i.toString()], () => this.seek(i * 10)) })
   }
 
   loadedMetadata(e) {
@@ -80,13 +71,15 @@ class HTML5Video extends Playback {
     // that's why we check it again and update media control accordingly.
     if (this.getPlaybackType() === 'vod') {
       this.settings.left = ["playpause", "position", "duration"]
-      this.settings.seekEnabled = true
+    } else {
+      this.settings.left = ["playstop"]
     }
+    this.settings.seekEnabled = isFinite(this.getDuration())
     this.trigger(Events.PLAYBACK_SETTINGSUPDATE)
   }
 
   getPlaybackType() {
-    return this.isHLS && [0, undefined, Infinity].indexOf(this.el.duration) >= 0 ? 'live' : 'vod'
+    return [0, undefined, Infinity].indexOf(this.el.duration) >= 0 ? 'live' : 'vod'
   }
 
   isHighDefinitionInUse() {
@@ -95,7 +88,6 @@ class HTML5Video extends Playback {
 
   play() {
     this.el.play()
-    this.trigger(Events.PLAYBACK_PLAY);
   }
 
   pause() {
@@ -129,7 +121,16 @@ class HTML5Video extends Playback {
     return !this.el.paused && !this.el.ended
   }
 
+  playing() {
+    this.trigger(Events.PLAYBACK_PLAY);
+  }
+
+  paused() {
+    this.trigger(Events.PLAYBACK_PAUSE);
+  }
+
   ended() {
+    this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
     this.trigger(Events.PLAYBACK_ENDED, this.name)
     this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.el.duration, this.name)
   }
@@ -158,8 +159,11 @@ class HTML5Video extends Playback {
     this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
   }
 
+  error(event) {
+    this.trigger(Events.PLAYBACK_ERROR, this.el.error, this.name)
+  }
+
   destroy() {
-    this.stopListening()
     this.stop()
     this.el.src = ''
     this.$el.remove()
@@ -204,7 +208,19 @@ class HTML5Video extends Playback {
         break
       }
     }
+    this.checkBufferState(this.el.buffered.end(bufferedPos))
     this.trigger(Events.PLAYBACK_PROGRESS, this.el.buffered.start(bufferedPos), this.el.buffered.end(bufferedPos), this.el.duration, this.name)
+  }
+
+  checkBufferState(bufferedPos) {
+    var playbackPos = this.el.currentTime + 0.05; // 50 ms threshold
+    if (this.isPlaying() && playbackPos >= bufferedPos) {
+      this.trigger(Events.PLAYBACK_BUFFERING, this.name)
+      this.buffering = true
+    } else if (this.buffering) {
+      this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
+      this.buffering = false
+    }
   }
 
   typeFor(src) {
@@ -227,7 +243,7 @@ class HTML5Video extends Playback {
   }
 }
 
-HTML5Video.canPlay = function(resource) {
+HTML5Video.canPlay = function(resource, mimeType) {
   var mimetypes = {
     'mp4': ["avc1.42E01E", "avc1.58A01E", "avc1.4D401E", "avc1.64001E", "mp4v.20.8", "mp4v.20.240", "mp4a.40.2"].map(
       (codec) => { return 'video/mp4; codecs="' + codec + ', mp4a.40.2"'}),
@@ -239,11 +255,14 @@ HTML5Video.canPlay = function(resource) {
   }
   mimetypes['ogv'] = mimetypes['ogg']
   mimetypes['3gp'] = mimetypes['3gpp']
-  var extension = resource.split('?')[0].match(/.*\.(.*)$/)[1]
 
-  if (mimetypes[extension] !== undefined) {
+  var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
+  if ((resourceParts.length > 1) && (mimetypes[resourceParts[1]] !== undefined)) {
     var v = document.createElement('video')
-    return !!find(mimetypes[extension], (ext) => { return !!v.canPlayType(ext).replace(/no/, '') })
+    return !!find(mimetypes[resourceParts[1]], (ext) => { return !!v.canPlayType(ext).replace(/no/, '') })
+  } else if (mimeType) {
+    var v = document.createElement('video')
+    return !!v.canPlayType(mimeType).replace(/no/, '')
   }
   return false
 }
