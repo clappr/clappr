@@ -2,18 +2,20 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var BaseObject = require('base_object')
+var BaseObject = require('../base/base_object')
 var CoreFactory = require('./core_factory')
 var Loader = require('./loader')
 var assign = require('lodash.assign')
-var ScrollMonitor = require('scrollmonitor');
-var PlayerInfo = require('player_info')
+var find = require('lodash.find')
+var Events = require('events')
+var uniqueId = require('../base/utils').uniqueId
+var PlayerInfo = require('./player_info')
 
 class Player extends BaseObject {
   constructor(options) {
     super(options)
     window.p = this
-    var defaultOptions = {persistConfig: true, width: 640, height: 360}
+    var defaultOptions = {playerId: uniqueId(""), persistConfig: true, width: 640, height: 360, baseUrl: 'http://cdn.clappr.io/latest'}
     this.options = assign(defaultOptions, options)
     this.options.sources = this.normalizeSources(options)
     this.loader = new Loader(this.options.plugins || {})
@@ -34,24 +36,54 @@ class Player extends BaseObject {
   attachTo(element) {
     this.options.parentElement = element
     this.core = this.coreFactory.create()
-    if (this.options.autoPlayVisible) {
-      this.bindAutoPlayVisible(this.options.autoPlayVisible)
+    this.addEventListeners()
+  }
+
+  addEventListeners() {
+    this.listenTo(this.core.mediaControl,  Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
+    var container = this.core.mediaControl.container
+    if (!!container) {
+      this.listenTo(container, Events.CONTAINER_PLAY, this.onPlay)
+      this.listenTo(container, Events.CONTAINER_PAUSE, this.onPause)
+      this.listenTo(container, Events.CONTAINER_STOP, this.onStop)
+      this.listenTo(container, Events.CONTAINER_ENDED, this.onEnded)
+      this.listenTo(container, Events.CONTAINER_SEEK, this.onSeek)
+      this.listenTo(container, Events.CONTAINER_ERROR, this.onError)
+      this.listenTo(container, Events.CONTAINER_TIMEUPDATE, this.onTimeUpdate)
     }
   }
 
-  bindAutoPlayVisible(option) {
-    this.elementWatcher = ScrollMonitor.create(this.core.$el)
-    if (option === 'full') {
-      this.elementWatcher.fullyEnterViewport(() => this.enterViewport())
-    } else if (option === 'partial') {
-      this.elementWatcher.enterViewport(() => this.enterViewport())
-    }
+  containerChanged() {
+    this.stopListening()
+    this.addEventListeners()
   }
 
-  enterViewport() {
-    if (this.elementWatcher.top !== 0 && !this.isPlaying()) {
-      this.play()
-    }
+  onPlay() {
+    this.trigger(Events.PLAYER_PLAY)
+  }
+
+  onPause() {
+    this.trigger(Events.PLAYER_PAUSE)
+  }
+
+  onStop() {
+    this.trigger(Events.PLAYER_STOP, this.getCurrentTime())
+  }
+
+  onEnded() {
+    this.trigger(Events.PLAYER_ENDED)
+  }
+
+  onSeek(percent) {
+    this.trigger(Events.PLAYER_SEEK, percent)
+  }
+
+  onTimeUpdate(position, duration) {
+    this.trigger(Events.PLAYER_TIMEUPDATE, position, duration)
+  }
+
+  onError(error) {
+    this.trigger(Events.PLAYER_ERROR, error)
   }
 
   is(value, type) {
@@ -67,8 +99,8 @@ class Player extends BaseObject {
     this.core.resize(size);
   }
 
-  load(sources) {
-    this.core.load(sources)
+  load(sources, mimeType) {
+    this.core.load(sources, mimeType)
   }
 
   destroy() {
@@ -107,14 +139,20 @@ class Player extends BaseObject {
     return this.core.mediaControl.container.isPlaying();
   }
 
-  getContainerPlugin(name) {
-    return this.core.mediaControl.container.getPlugin(name)
+  getPlugin(name) {
+    var plugins = this.core.plugins.concat(this.core.mediaControl.container.plugins);
+    return find(plugins, function(plugin) {
+      return plugin.name === name;
+    });
   }
 
-  getCorePlugin(name) {
-    return this.core.getPlugin(name)
+  getCurrentTime() {
+    return this.core.mediaControl.container.getCurrentTime()
+  }
+
+  getDuration() {
+    return this.core.mediaControl.container.getDuration()
   }
 }
 
 module.exports = Player
-

@@ -13,7 +13,9 @@ module.exports.browserify = function(options) {
   return browserify(options)
     .transform(babelify)
     .transform(versionify)
-    .require('./src/main.js', { entry: true })
+    .require('./src/main.js', { expose: 'clappr', entry: true })
+    .require('./src/base/kibo', { expose: 'kibo' })
+    .require('./src/base/template', { expose: 'template' })
     .require('./src/base/events', { expose: 'events' })
     .require('./src/base/ui_object', { expose: 'ui_object' })
     .require('./src/base/base_object', { expose: 'base_object' })
@@ -34,6 +36,7 @@ module.exports.browserify = function(options) {
     .require('./src/playbacks/html5_video', { expose: 'html5_video' })
     .require('./src/playbacks/html_img', { expose: 'html_img' })
     .require('./src/plugins/poster', { expose: 'poster' })
+    .require('./src/base/template', { expose: 'template' })
     .require('clappr-zepto', { expose: 'zepto' })
 };
 

@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var UIContainerPlugin = require('ui_container_plugin');
+var UIContainerPlugin = require('../../base/ui_container_plugin');
 var Styler = require('../../base/styler');
 var JST = require('../../base/jst');
-var Events = require('events');
+var Events = require('../../base/events');
 
 class SpinnerThreeBouncePlugin extends UIContainerPlugin {
   get name() { return 'spinner' }
@@ -26,10 +26,11 @@ class SpinnerThreeBouncePlugin extends UIContainerPlugin {
   }
 
   onBuffering() {
-    this.$el.show()
+    this.showTimeout = setTimeout(() => this.$el.show(), 300)
   }
 
   onBufferFull() {
+    clearTimeout(this.showTimeout)
     this.$el.hide()
   }
 

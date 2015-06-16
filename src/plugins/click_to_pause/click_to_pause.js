@@ -2,14 +2,15 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var ContainerPlugin = require('container_plugin')
-var Events = require('events')
+var ContainerPlugin = require('../../base/container_plugin')
+var Events = require('../../base/events')
+var Browser = require('../../components/browser')
 
 class ClickToPausePlugin extends ContainerPlugin {
   get name() { return 'click_to_pause' }
 
   constructor(options) {
-    if (!options.chromeless) {
+    if (!options.chromeless && !Browser.isMobile) {
       super(options)
     }
   }

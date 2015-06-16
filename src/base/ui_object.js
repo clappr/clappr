@@ -2,12 +2,11 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var $ = require('zepto')
-var uniqueId = require('lodash.uniqueid')
+var $ = require('clappr-zepto')
+var uniqueId = require('./utils').uniqueId
 var result = require('lodash.result')
 var assign = require('lodash.assign')
-var extend = require('./utils').extend
-var BaseObject = require('base_object')
+var BaseObject = require('./base_object')
 
 var delegateEventSplitter = /^(\S+)\s*(.*)$/
 
@@ -82,7 +81,5 @@ class UIObject extends BaseObject {
     }
   }
 }
-
-UIObject.extend = extend
 
 module.exports = UIObject

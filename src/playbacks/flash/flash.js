@@ -2,18 +2,17 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var Playback = require('playback')
+var Playback = require('../../base/playback')
 var Styler = require('../../base/styler')
 var JST = require('../../base/jst')
-var Mediator = require('mediator')
-var template = require('lodash.template')
-var $ = require('zepto')
-var Browser = require('browser')
+var Mediator = require('../../components/mediator')
+var template = require('../../base/template')
+var $ = require('clappr-zepto')
+var Browser = require('../../components/browser')
 var seekStringToSeconds = require('../../base/utils').seekStringToSeconds
-var Events = require('events')
-var Mousetrap = require('mousetrap')
+var Events = require('../../base/events')
 
-var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>'
+var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= baseUrl %>/assets/Player.swf"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>'
 
 class Flash extends Playback {
   get name() { return 'flash' }
@@ -23,8 +22,7 @@ class Flash extends Playback {
   constructor(options) {
     super(options)
     this.src = options.src
-    this.defaultBaseSwfPath = "http://cdn.clappr.io/" + Clappr.version + "/assets/"
-    this.swfPath = (options.swfBasePath || this.defaultBaseSwfPath) + "Player.swf"
+    this.baseUrl = options.baseUrl
     this.autoPlay = options.autoPlay
     this.settings = {default: ['seekbar']}
     this.settings.left = ["playpause", "position", "duration"]
@@ -72,8 +70,6 @@ class Flash extends Playback {
     Mediator.on(this.uniqueId + ':timeupdate', this.updateTime, this)
     Mediator.on(this.uniqueId + ':statechanged', this.checkState, this)
     Mediator.on(this.uniqueId + ':flashready', this.bootstrap, this)
-    var shortcuts = [1,2,3,4,5,6,7,8,9]
-    shortcuts.forEach((i) => { Mousetrap.bind([i.toString()], () => this.seek(i * 10)) })
   }
 
   stopListening() {
@@ -82,8 +78,6 @@ class Flash extends Playback {
     Mediator.off(this.uniqueId + ':timeupdate')
     Mediator.off(this.uniqueId + ':statechanged')
     Mediator.off(this.uniqueId + ':flashready')
-    var shortcuts = [1,2,3,4,5,6,7,8,9]
-    shortcuts.forEach((i) => { Mousetrap.unbind([i.toString()], () => this.seek(i * 10)) })
   }
 
   checkState() {
@@ -148,6 +142,7 @@ class Flash extends Playback {
   pause() {
     this.currentState = "PAUSED"
     this.el.playerPause()
+    this.trigger(Events.PLAYBACK_PAUSE, this.name)
   }
 
   stop() {
@@ -183,12 +178,12 @@ class Flash extends Playback {
   }
 
   setupIE() {
-    this.setElement($(template(objectIE)({ cid: this.cid, swfPath: this.swfPath, playbackId: this.uniqueId })))
+    this.setElement($(template(objectIE)({ cid: this.cid, baseUrl: this.baseUrl, playbackId: this.uniqueId })))
   }
 
   render() {
     var style = Styler.getStyleFor(this.name)
-    this.$el.html(this.template({ cid: this.cid, swfPath: this.swfPath, playbackId: this.uniqueId }))
+    this.$el.html(this.template({ cid: this.cid, baseUrl: this.baseUrl, playbackId: this.uniqueId }))
     if(Browser.isFirefox) {
       this.setupFirefox()
     } else if(Browser.isLegacyIE) {
@@ -200,12 +195,15 @@ class Flash extends Playback {
 }
 
 Flash.canPlay = function(resource) {
-  if (!Browser.hasFlash) {
+  if (!Browser.hasFlash || !resource || resource.constructor !== String) {
     return false
-  } else if ((!Browser.isMobile && Browser.isFirefox) || Browser.isLegacyIE) {
-    return (resource && resource.constructor === String) && !!resource.match(/(.*)\.(mp4|mov|f4v|3gpp|3gp)/)
   } else {
-    return (resource && resource.constructor === String) && !!resource.match(/(.*)\.(mov|f4v|3gpp|3gp)/)
+    var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
+    if ((!Browser.isMobile && Browser.isFirefox) || Browser.isLegacyIE) {
+      return resourceParts.length > 1 && resourceParts[1].match(/^(mp4|mov|f4v|3gpp|3gp)$/)
+    } else {
+      return resourceParts.length > 1 && resourceParts[1].match(/^(mov|f4v|3gpp|3gp)$/)
+    }
   }
 }
 

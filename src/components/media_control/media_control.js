@@ -6,16 +6,17 @@
  * The MediaControl is responsible for displaying the Player controls.
  */
 
-var $ = require('zepto')
+var $ = require('clappr-zepto')
 var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
-var UIObject = require('ui_object')
+var UIObject = require('../../base/ui_object')
 var Utils = require('../../base/utils')
+var Browser = require('../browser')
 var SeekTime = require('../seek_time')
-var Mediator = require('mediator')
-var PlayerInfo = require('player_info')
-var Events = require('events')
-require('mousetrap')
+var Mediator = require('../mediator')
+var PlayerInfo = require('../player_info')
+var Events = require('../../base/events')
+var Kibo = require('../../base/kibo')
 
 class MediaControl extends UIObject {
   get name() { return 'MediaControl' }
@@ -40,6 +41,10 @@ class MediaControl extends UIObject {
       'click .drawer-icon[data-volume]': 'toggleMute',
       'mouseenter .drawer-container[data-volume]': 'showVolumeBar',
       'mouseleave .drawer-container[data-volume]': 'hideVolumeBar',
+      'mousedown .segmented-bar-element[data-volume]': 'mousedownOnVolumeBar',
+      'mouseleave .media-control-layer': 'mouseleaveOnVolumeBar',
+      'mousemove .segmented-bar-element[data-volume]': 'mousemoveOnVolumeBar',
+      'mouseup .segmented-bar-element[data-volume]': 'mouseupOnVolumeBar',
       'mousedown .bar-scrubber[data-volume]': 'startVolumeDrag',
       'mousedown .bar-scrubber[data-seekbar]': 'startSeekDrag',
       'mousemove .bar-container[data-seekbar]': 'mousemoveOnSeekBar',
@@ -52,7 +57,7 @@ class MediaControl extends UIObject {
   get template() { return JST.media_control }
 
   constructor(options) {
-    super(options);
+    super(options)
     this.seekTime = new SeekTime(this)
     this.options = options
     this.mute = this.options.mute
@@ -61,6 +66,7 @@ class MediaControl extends UIObject {
     var initialVolume = (this.persistConfig) ? Utils.Config.restore("volume") : 100;
     this.setVolume(this.mute ? 0 : initialVolume)
     this.keepVisible = false
+    this.volumeBarClickDown = false;
     this.addEventListeners()
     this.settings = {
       left: ['play', 'stop', 'pause'],
@@ -72,13 +78,17 @@ class MediaControl extends UIObject {
     if (this.container.mediaControlDisabled || this.options.chromeless) {
       this.disable()
     }
-    $(document).bind('mouseup', (event) => this.stopDrag(event))
-    $(document).bind('mousemove', (event) => this.updateDrag(event))
+    this.stopDragHandler = (event) => this.stopDrag(event)
+    this.updateDragHandler = (event) => this.updateDrag(event)
+    $(document).bind('mouseup', this.stopDragHandler)
+    $(document).bind('mousemove', this.updateDragHandler)
     Mediator.on(Events.PLAYER_RESIZE, () => this.playerResize())
   }
 
   addEventListeners() {
     this.listenTo(this.container, Events.CONTAINER_PLAY, this.changeTogglePlay)
+    this.listenTo(this.container, Events.CONTAINER_PAUSE, this.changeTogglePlay)
+    this.listenTo(this.container, Events.CONTAINER_DBLCLICK, this.toggleFullscreen)
     this.listenTo(this.container, Events.CONTAINER_TIMEUPDATE, this.updateSeekBar)
     this.listenTo(this.container, Events.CONTAINER_PROGRESS, this.updateProgressBar)
     this.listenTo(this.container, Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate)
@@ -137,6 +147,42 @@ class MediaControl extends UIObject {
     this.trigger(Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR, event);
   }
 
+  mousemoveOnVolumeBar(event) {
+    if(this.volumeBarClickDown){
+      this.volume(event);
+    }
+  }
+
+  mousedownOnVolumeBar() {
+    var cursorStyleProperty = 'url(http://www.google.com/intl/en_ALL/mapfiles/closedhand.cur), move';
+    this.$volumeBarContainer.css('cursor', cursorStyleProperty);
+    this.$volumeBarContainer.css('cursor', '-webkit-grabbing');
+    this.$volumeBarContainer.css('cursor', '-moz-grabbing');
+    this.volumeBarClickDown = true;
+  }
+
+  mouseupOnVolumeBar() {
+    this.$volumeBarContainer.css( 'cursor', 'pointer' );
+    this.volumeBarClickDown = false;
+  }
+
+  mouseleaveOnVolumeBar(event) {
+    var volOffset = this.$volumeBarContainer.offset();
+
+    var outsideByLeft = event.pageX < this.$seekBarContainer.offset().left;
+    var outsideByRight = event.pageX > (volOffset.left + volOffset.width);
+    var outsideHorizontally = (outsideByLeft || outsideByRight);
+
+    var outsideByTop = event.pageY < volOffset.top;
+    var outsideByBottom = event.pageY > (volOffset.top + volOffset.height);
+
+    var outsideVertically = (outsideByTop || outsideByBottom);
+
+    if(outsideHorizontally || outsideVertically) {
+      this.mouseupOnVolumeBar();
+    }
+  }
+
   playerResize() {
     if (Utils.Fullscreen.isFullscreen()) {
       this.$fullscreenToggle.addClass('shrink')
@@ -155,7 +201,7 @@ class MediaControl extends UIObject {
     } else {
       this.container.play()
     }
-    this.changeTogglePlay()
+    return false
   }
 
   togglePlayStop() {
@@ -164,7 +210,6 @@ class MediaControl extends UIObject {
     } else {
       this.container.play()
     }
-    this.changeTogglePlay()
   }
 
   startSeekDrag(event) {
@@ -200,15 +245,14 @@ class MediaControl extends UIObject {
   }
 
   updateDrag(event) {
-    if (event) {
-      event.preventDefault()
-    }
     if (this.draggingSeekBar) {
+      event.preventDefault()
       var offsetX = event.pageX - this.$seekBarContainer.offset().left
       var pos = offsetX / this.$seekBarContainer.width() * 100
       pos = Math.min(100, Math.max(pos, 0))
       this.setSeekPercentage(pos)
     } else if (this.draggingVolumeBar) {
+      event.preventDefault()
       this.volume(event)
     }
   }
@@ -376,6 +420,7 @@ class MediaControl extends UIObject {
     this.$seekBarPosition = this.$el.find('.bar-fill-2[data-seekbar]')
     this.$seekBarScrubber = this.$el.find('.bar-scrubber[data-seekbar]')
     this.$seekBarHover = this.$el.find('.bar-hover[data-seekbar]')
+    this.$volumeContainer = this.$el.find('.drawer-container[data-volume]')
     this.$volumeBarContainer = this.$el.find('.bar-container[data-volume]')
     this.$volumeIcon = this.$el.find('.drawer-icon[data-volume]')
   }
@@ -396,19 +441,37 @@ class MediaControl extends UIObject {
   }
 
   setSeekPercentage(value) {
-    if (value > 100) return
-    var pos = this.$seekBarContainer.width() * value / 100.0 - (this.$seekBarScrubber.width() / 2.0)
+    value = Math.min(value, 100.0)
+    var pos = (this.$seekBarContainer.width() * value / 100.0) - (this.$seekBarScrubber.width() / 2.0)
     this.currentSeekPercentage = value;
     this.$seekBarPosition.css({ width: value + '%' })
     this.$seekBarScrubber.css({ left: pos })
   }
 
+  seekRelative(delta) {
+    if (!this.container.settings.seekEnabled) return
+    var currentTime = this.container.getCurrentTime()
+    var duration = this.container.getDuration()
+    var position = Math.min(Math.max(currentTime + delta, 0), duration)
+    position = Math.min(position * 100 / duration, 100)
+    this.container.setCurrentTime(position)
+  }
+
   bindKeyEvents() {
-    Mousetrap.bind(['space'], () => this.togglePlayPause())
+    if (this.kibo) {
+      this.unbindKeyEvents()
+    }
+    this.kibo = new Kibo(this.options.focusElement)
+    this.kibo.down(['space'], () => this.togglePlayPause())
+    this.kibo.down(['left'], () => this.seekRelative(-15))
+    this.kibo.down(['right'], () => this.seekRelative(15))
+    var keys = [1,2,3,4,5,6,7,8,9,0]
+    keys.forEach((i) => { this.kibo.down(i.toString(), () => this.container.settings.seekEnabled && this.container.setCurrentTime(i * 10)) })
   }
 
   unbindKeyEvents() {
-    Mousetrap.unbind('space')
+    this.kibo.off('space')
+    this.kibo.off([1,2,3,4,5,6,7,8,9,0])
   }
 
   parseColors() {
@@ -421,9 +484,15 @@ class MediaControl extends UIObject {
     }
   }
 
+  destroy() {
+    $(document).unbind('mouseup', this.stopDragHandler)
+    $(document).unbind('mousemove', this.updateDragHandler)
+    this.unbindKeyEvents()
+  }
+
   render() {
     var timeout = 1000
-    var style = Styler.getStyleFor('media_control')
+    var style = Styler.getStyleFor('media_control', {baseUrl: this.options.baseUrl});
     this.$el.html(this.template({ settings: this.settings }))
     this.$el.append(style)
     this.createCachedElements()
@@ -434,6 +503,10 @@ class MediaControl extends UIObject {
     this.hideId = setTimeout(() => this.hide(), timeout)
     if (this.disabled) {
       this.hide()
+    }
+
+    if(Browser.isSafari && Browser.isMobile) {
+      this.$volumeContainer.css('display','none')
     }
 
     this.$seekBarPosition.addClass('media-control-notransition')
@@ -460,12 +533,6 @@ class MediaControl extends UIObject {
 
     this.trigger(Events.MEDIACONTROL_RENDERED)
     return this
-  }
-
-  destroy() {
-    $(document).unbind('mouseup')
-    $(document).unbind('mousemove')
-    this.unbindKeyEvents()
   }
 }
 

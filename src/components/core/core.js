@@ -8,18 +8,22 @@
  */
 
 var assign = require('lodash.assign')
-var $ = require('zepto')
+var $ = require('clappr-zepto')
 
-var UIObject = require('ui_object')
+var UIObject = require('../../base/ui_object')
 var ContainerFactory = require('../container_factory')
 var Fullscreen = require('../../base/utils').Fullscreen
 var Styler = require('../../base/styler')
-var MediaControl = require('media_control')
-var PlayerInfo = require('player_info')
-var Mediator = require('mediator')
-var Events = require('events')
+var MediaControl = require('../media_control')
+var PlayerInfo = require('../player_info')
+var Mediator = require('../mediator')
+var Events = require('../../base/events')
+var Browser = require('../browser')
 
 var find = require('lodash.find')
+var isNumber = require('../../base/utils').isNumber
+var requestAnimationFrame = require('../../base/utils').requestAnimationFrame
+var cancelAnimationFrame = require('../../base/utils').cancelAnimationFrame
 
 class Core extends UIObject {
   get events() {
@@ -32,7 +36,8 @@ class Core extends UIObject {
 
   get attributes() {
     return {
-      'data-player': ''
+      'data-player': '',
+      tabindex: 9999,
     }
   }
 
@@ -69,10 +74,12 @@ class Core extends UIObject {
   }
 
   setFullscreen() {
-    this.$el.addClass('fullscreen')
-    this.$el.removeAttr('style')
-    PlayerInfo.previousSize = PlayerInfo.currentSize
-    PlayerInfo.currentSize = { width: $(window).width(), height: $(window).height() }
+    if(!Browser.isiOs) {
+      this.$el.addClass('fullscreen')
+      this.$el.removeAttr('style')
+      PlayerInfo.previousSize = PlayerInfo.currentSize
+      PlayerInfo.currentSize = { width: $(window).width(), height: $(window).height() }
+    }
   }
 
   setPlayerSize() {
@@ -83,11 +90,34 @@ class Core extends UIObject {
   }
 
   resize(options) {
-    this.el.style.height = `${options.height}px`;
-    this.el.style.width = `${options.width}px`;
+    if (!isNumber(options.height) && !isNumber(options.width))  {
+      this.el.style.height = `${options.height}`;
+      this.el.style.width = `${options.width}`;
+    } else {
+      this.el.style.height = `${options.height}px`;
+      this.el.style.width = `${options.width}px`;
+    }
     PlayerInfo.previousSize = PlayerInfo.currentSize
     PlayerInfo.currentSize = options
     Mediator.trigger(Events.PLAYER_RESIZE)
+  }
+
+  enableResizeObserver() {
+    var checkSizeCallback = () => {
+      if (this.reqAnimFrame) cancelAnimationFrame(this.reqAnimFrame)
+      if (this.previousSize.width != this.$el.width() ||
+          this.previousSize.height != this.$el.height()) {
+        Mediator.trigger(Events.PLAYER_RESIZE)
+        this.previousSize = { width: this.$el.width(), height: this.$el.height() }
+      }
+      this.reqAnimFrame = requestAnimationFrame(checkSizeCallback)
+    }
+
+    this.reqAnimFrame = requestAnimationFrame(checkSizeCallback)
+  }
+
+  disableResizeObserver() {
+    if (this.reqAnimFrame) cancelAnimationFrame(this.reqAnimFrame)
   }
 
   resolveOnContainersReady(containers) {
@@ -106,7 +136,8 @@ class Core extends UIObject {
     return find(this.plugins, (plugin) => plugin.name === name)
   }
 
-  load(sources) {
+  load(sources, mimeType) {
+    this.options.mimeType = mimeType
     sources = sources && sources.constructor === Array ? sources : [sources.toString()];
     this.containers.forEach((container) => container.destroy())
     this.containerFactory.options = assign(this.options, {sources})
@@ -116,6 +147,7 @@ class Core extends UIObject {
   }
 
   destroy() {
+    this.disableResizeObserver()
     this.containers.forEach((container) => container.destroy())
     this.plugins.forEach((plugin) => plugin.destroy())
     this.$el.remove()
@@ -173,7 +205,7 @@ class Core extends UIObject {
     if (this.mediaControl) {
       this.mediaControl.setContainer(container)
     } else {
-      this.mediaControl = this.createMediaControl(assign({container: container}, this.options))
+      this.mediaControl = this.createMediaControl(assign({container: container, focusElement: this.el}, this.options))
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_FULLSCREEN, this.toggleFullscreen)
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_SHOW, this.onMediaControlShow.bind(this, true))
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_HIDE, this.onMediaControlShow.bind(this, false))
@@ -195,10 +227,14 @@ class Core extends UIObject {
   toggleFullscreen() {
     if (!Fullscreen.isFullscreen()) {
       Fullscreen.requestFullscreen(this.el)
-      this.$el.addClass('fullscreen')
+      if(!Browser.isiOs) {
+        this.$el.addClass('fullscreen')
+      }
     } else {
       Fullscreen.cancelFullscreen()
-      this.$el.removeClass('fullscreen nocursor')
+      if(!Browser.isiOs) {
+        this.$el.removeClass('fullscreen nocursor')
+      }
     }
     this.mediaControl.show()
   }
@@ -230,6 +266,10 @@ class Core extends UIObject {
     var size = {width: this.options.width, height: this.options.height}
     PlayerInfo.previousSize = PlayerInfo.currentSize = size
     this.updateSize()
+
+    this.previousSize = { width: this.$el.width(), height: this.$el.height() }
+
+    this.enableResizeObserver()
 
     return this
   }

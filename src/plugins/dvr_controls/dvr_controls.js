@@ -1,7 +1,8 @@
-var UICorePlugin = require('ui_core_plugin')
+var UICorePlugin = require('../../base/ui_core_plugin')
 var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
-var Events = require('events')
+var Events = require('../../base/events')
+var $ = require('clappr-zepto')
 
 class DVRControls extends UICorePlugin {
   get template() { return JST.dvr_controls }
@@ -25,6 +26,7 @@ class DVRControls extends UICorePlugin {
   }
 
   bindEvents() {
+    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.settingsUpdate)
     this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_RENDERED, this.settingsUpdate)
     this.listenTo(this.core.mediaControl.container, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.dvrChanged)
   }
@@ -64,7 +66,7 @@ class DVRControls extends UICorePlugin {
   }
 
   render() {
-    var style = Styler.getStyleFor(this.name)
+    var style = Styler.getStyleFor(this.name, { baseUrl: this.core.options.baseUrl })
     this.$el.html(this.template())
     this.$el.append(style)
     if (this.shouldRender()) {

@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var UIObject = require('ui_object')
+var UIObject = require('../../base/ui_object')
 var Styler = require('../../base/styler')
 var JST = require('../../base/jst')
 var formatTime = require('../../base/utils').formatTime
-var Events = require('events')
+var Events = require('../../base/events')
 
 class SeekTime extends UIObject {
   get name() { return 'seek_time' }
@@ -51,7 +51,7 @@ class SeekTime extends UIObject {
   }
 
   update(options) {
-    if (this.mediaControl.container.getPlaybackType() === 'vod' || this.mediaControl.container.isDvrInUse()) {
+    if (this.mediaControl.container.settings.seekEnabled) {
       this.$el.find('[data-seek-time]').text(options.formattedTime)
       this.$el.css('left', options.pointerPosition - (this.$el.width() / 2))
       this.$el.removeClass('hidden')

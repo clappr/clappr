@@ -1,24 +1,24 @@
-var MediaControl = require('../src/components/media_control');
-var FakePlayback = require('playback');
-var Container = require('container');
-var utils = require('../src/base/utils');
+var MediaControl = require('../../src/components/media_control');
+var FakePlayback = require('../../src/base/playback');
+var Container = require('../../src/components/container');
+var utils = require('../../src/base/utils');
 
 describe('MediaControl', function() {
-  beforeEach(() => {
+  beforeEach(function() {
     this.playback = new FakePlayback();
     this.container = new Container({playback: this.playback});
     this.mediaControl = new MediaControl({container: this.container});
     localStorage.removeItem("clappr.localhost.volume")
   });
 
-  describe('#constructor', () => {
-    it('can be built muted', () => {
+  describe('#constructor', function() {
+    it('can be built muted', function() {
       var mediaControl = new MediaControl({mute: true, container: this.container});
       expect(mediaControl.mute).to.be.equal(true);
       expect(mediaControl.currentVolume).to.be.equal(0);
     });
 
-    it('restores saved volume', () => {
+    it('restores saved volume', function() {
       utils.Config.persist('volume', 42)
       var mediaControl = new MediaControl({persistConfig: true, container: this.container});
 
@@ -26,8 +26,8 @@ describe('MediaControl', function() {
     });
   });
 
-  describe('#setVolume', () => {
-    it('sets the volume', () => {
+  describe('#setVolume', function() {
+    it('sets the volume', function() {
       sinon.spy(this.container, 'setVolume');
       sinon.spy(this.mediaControl, 'setVolumeLevel');
 
@@ -39,7 +39,7 @@ describe('MediaControl', function() {
       expect(this.mediaControl.setVolumeLevel).called.once;
     });
 
-    it('limits volume to an integer between 0 and 100', () => {
+    it('limits volume to an integer between 0 and 100', function() {
       this.mediaControl.setVolume(1000)
       expect(this.mediaControl.currentVolume).to.be.equal(100)
 
@@ -56,7 +56,7 @@ describe('MediaControl', function() {
       expect(this.mediaControl.currentVolume).to.be.equal(0)
     })
 
-    it('mutes when volume is 0 or less than 0', () => {
+    it('mutes when volume is 0 or less than 0', function() {
       this.mediaControl.setVolume(10)
       expect(this.mediaControl.mute).to.be.equal(false)
 
@@ -64,7 +64,7 @@ describe('MediaControl', function() {
       expect(this.mediaControl.mute).to.be.equal(true)
     });
 
-    it('persists volume when persistence is on', () => {
+    it('persists volume when persistence is on', function() {
       // expected to be default value (100)
       expect(utils.Config.restore("volume")).to.be.equal(100)
 
@@ -75,7 +75,7 @@ describe('MediaControl', function() {
     })
   });
 
-  it('persists volume when persistence is on', () => {
+  it('persists volume when persistence is on', function() {
     // expected to be default value (100)
     expect(utils.Config.restore("volume")).to.be.equal(100)
 
