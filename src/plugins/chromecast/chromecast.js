@@ -38,10 +38,12 @@ class Chromecast extends UICorePlugin {
   }
 
   bindEvents() {
+    this.container = this.container || this.core.mediaControl.container
     this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_RENDERED, this.settingsUpdate)
     this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
-    this.listenTo(this.core.mediaControl.container, Events.CONTAINER_TIMEUPDATE, this.containerTimeUpdate)
-    this.listenTo(this.core.mediaControl.container, Events.CONTAINER_PLAY, this.containerPlay)
+    this.listenTo(this.container, Events.CONTAINER_TIMEUPDATE, this.containerTimeUpdate)
+    this.listenTo(this.container, Events.CONTAINER_PLAY, this.containerPlay)
+    this.listenTo(this.container, Events.CONTAINER_ENDED, this.sessionStopped)
   }
 
   embedScript() {
@@ -68,6 +70,9 @@ class Chromecast extends UICorePlugin {
           this.disable()
         }
       }
+    } else {
+      this.appId = this.appId || DEFAULT_CLAPPR_APP_ID
+      this.initializeCastApi()
     }
   }
 
@@ -85,9 +90,9 @@ class Chromecast extends UICorePlugin {
   }
 
   sessionUpdateListener() {
-    console.log(this.session)
-    if (this.session.status === chrome.cast.SessionStatus.STOPPED) {
+    if (this.session && this.session.status === chrome.cast.SessionStatus.STOPPED) {
       this.sessionStopped()
+      this.session = null
     }
   }
 
@@ -121,7 +126,6 @@ class Chromecast extends UICorePlugin {
     this.playbackProxy.render()
 
     this.mediaSession = mediaSession
-    this.listenTo(this.playbackProxy, Events.PLAYBACK_TIMEUPDATE, this.playbackTimeUpdate)
 
     this.originalPlayback.$el.remove()
     this.core.mediaControl.container.$el.append(this.playbackProxy.$el)
@@ -131,6 +135,10 @@ class Chromecast extends UICorePlugin {
     container.playback = this.playbackProxy
     container.bindEvents()
     container.settingsUpdate()
+
+    if (!this.originalPlaybackPlaying) {
+      setTimeout(() => container.pause(), 100)
+    }
   }
 
   loadMediaError(e) {
@@ -145,38 +153,41 @@ class Chromecast extends UICorePlugin {
 
     session.addUpdateListener(() => this.sessionUpdateListener())
 
-    if (this.core.mediaControl.container.isPlaying()) {
-      this.loadMedia()
-    }
+    this.originalPlaybackPlaying = this.core.mediaControl.container.isPlaying()
   }
 
   sessionStopped() {
     this.$el.addClass('icon-cast')
     this.$el.removeClass('icon-cast-connected')
 
-    this.session = null
+    var time = this.currentTime
+
+    var playerState = this.mediaSession.playerState
+    this.mediaSession = null
 
     this.core.load(this.playbackProxy.src)
-    if (this.playbackProxy.isPlaying() || this.mediaSession.playerState === 'PAUSED') {
-      var time = this.currentTime
-      setTimeout(() => {
-        this.core.mediaControl.container.setCurrentTime(100.0 * time / this.mediaSession.media.duration)
-        this.core.mediaControl.container.play()
-      }, 100)
+
+    var container = this.core.mediaControl.container
+
+    if (this.playbackProxy.isPlaying() || playerState === 'PAUSED') {
+      container.once(Events.CONTAINER_READY, () => {
+        container.play()
+        container.playback.seek(100 * time / container.getDuration())
+      })
     }
 
     this.playbackProxy.stop()
   }
 
   loadMedia() {
-    this.core.mediaControl.container.playback.pause()
+    this.container.pause()
     var src = this.core.mediaControl.container.playback.src
     console.log("loading... " + src)
     var mediaInfo = new chrome.cast.media.MediaInfo(src)
     mediaInfo.contentType = 'video/mp4'
     var request = new chrome.cast.media.LoadRequest(mediaInfo)
     request.autoplay = true
-    request.currentTime = this.currentTime
+    request.currentTime = this.currentTime || 0
     this.session.loadMedia(request, (mediaSession) => this.loadMediaSuccess('loadMedia', mediaSession), (e) => this.loadMediaError(e))
   }
 
@@ -197,6 +208,7 @@ class Chromecast extends UICorePlugin {
   }
 
   containerChanged() {
+    this.container = this.core.mediaControl.container
     this.stopListening()
     this.bindEvents()
     this.currentTime = 0
@@ -211,7 +223,6 @@ class Chromecast extends UICorePlugin {
   }
 
   containerPlay() {
-    console.log(this.session, this.mediaSession)
     if (!!this.session && (!this.mediaSession || this.mediaSession.playerStatus === 'IDLE')) {
       console.log('load media')
       this.currentTime = 0

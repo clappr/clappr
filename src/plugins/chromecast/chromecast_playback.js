@@ -26,7 +26,6 @@ class ChromecastPlayback extends Playback {
 
   play() {
     this.currentMedia.play()
-    this.trigger(Events.PLAYBACK_PLAY)
   }
 
   pause() {
@@ -66,7 +65,20 @@ class ChromecastPlayback extends Playback {
       this.startTimer()
     }
 
-    if (this.currentMedia.playerState === 'IDLE') {
+    if (this.currentMedia.playerState === 'BUFFERING') {
+      this.isBuffering = true
+      this.trigger(Events.PLAYBACK_BUFFERING, this.name)
+    } else if (this.currentMedia.playerState === 'PLAYING') {
+      if (this.isBuffering) {
+        this.isBuffering = false
+        this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
+      }
+      this.trigger(Events.PLAYBACK_PLAY, this.name)
+    } else if (this.currentMedia.playerState === 'IDLE') {
+      if (this.isBuffering) {
+        this.isBuffering = false
+        this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
+      }
       this.trigger(Events.PLAYBACK_ENDED, this.name)
     }
   }
