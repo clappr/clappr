@@ -16,7 +16,7 @@ var DEVICE_STATE = {
   'ERROR' : 3,
 };
 
-var DEFAULT_CLAPPR_APP_ID = '6BF3C808'
+var DEFAULT_CLAPPR_APP_ID = '9DFB77C0'
 
 class Chromecast extends UICorePlugin {
   get name() { return 'chromecast' }
