@@ -1,5 +1,7 @@
 [data-watermark] {
   position: absolute;
+  min-width: 70px;
+  max-width: 200px;
   width: 12%;
   text-align: center;
   z-index: 10;
