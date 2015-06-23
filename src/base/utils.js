@@ -115,18 +115,22 @@ class Config {
 }
 
 var seekStringToSeconds = function(url) {
-  var elements = (url.match(/t=([0-9]*h)?([0-9]*m)?([0-9]*s)?/) || []).splice(1)
-  return (!!elements.length)? elements.map(function (el) {
-    if (el) {
-      var value = parseInt(el.slice(0,2)) || 0
-      switch (el[el.length-1]) {
-        case 'h': value = value * 3600; break
-        case 'm': value = value * 60; break
+  var parts = url.match(/t=([0-9]*)(&|\/|$)/);
+  if (parts && parts.length > 0) {
+    return parseInt(parts[1], 10);
+  } else {
+    var seconds = 0;
+    var factor = {'h': 3600, 'm': 60, 's': 1};
+    parts = url.match(/[0-9]+[hms]+/g) || [];
+    parts.forEach(function(el) {
+      if (el) {
+        var suffix = el[el.length - 1];
+        var time = parseInt(el.slice(0, el.length - 1), 10);
+        seconds += time * (factor[suffix]);
       }
-      return value
-    }
-    return 0
-  }).reduce(function (a,b) { return a+b; }): 0
+    });
+    return seconds;
+   }
 }
 
 var idsCounter = {}
