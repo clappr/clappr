@@ -26,7 +26,6 @@ class DVRControls extends UICorePlugin {
   }
 
   bindEvents() {
-    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.settingsUpdate)
     this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_RENDERED, this.settingsUpdate)
     this.listenTo(this.core.mediaControl.container, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.dvrChanged)
   }
@@ -66,16 +65,16 @@ class DVRControls extends UICorePlugin {
   }
 
   render() {
-    var style = Styler.getStyleFor(this.name, { baseUrl: this.core.options.baseUrl })
+    this.style = this.style || Styler.getStyleFor(this.name, { baseUrl: this.core.options.baseUrl })
     this.$el.html(this.template())
-    this.$el.append(style)
+    this.$el.append(this.style)
     if (this.shouldRender()) {
       this.core.mediaControl.$el.addClass('live')
       this.core.mediaControl.$('.media-control-left-panel[data-media-control]').append(this.$el)
-      if (this.$duration) {
-        this.$duration.remove()
+      if (!this.$duration) {
+        this.$duration = $('<span data-duration></span>')
       }
-      this.$duration = $('<span data-duration></span>')
+      this.$duration.html('')
       this.core.mediaControl.seekTime.$el.append(this.$duration)
     }
     return this
