@@ -37,7 +37,7 @@ class HLS extends Playback {
     this.baseUrl = options.baseUrl;
     this.flushLiveURLCache = (options.flushLiveURLCache === undefined) ? true : options.flushLiveURLCache
     this.capLevelToStage = (options.capLevelToStage === undefined) ? false : options.capLevelToStage
-    this.useHardwareVideoDecoder = (options.useHardwareVideoDecoder === undefined) ? !Browser.isChrome : options.useHardwareVideoDecoder
+    this.useHardwareVideoDecoder = (options.useHardwareVideoDecoder === undefined) ? false : options.useHardwareVideoDecoder
     this.maxBufferLength = (options.maxBufferLength === undefined) ? 120 : options.maxBufferLength
     this.hlsMinimumDvrSize = (options.hlsMinimumDvrSize == undefined) ? 60 : options.hlsMinimumDvrSize
     this.hlsLogEnabled = (options.hlsLogEnabled == undefined) ? true : options.hlsLogEnabled
