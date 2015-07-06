@@ -1,0 +1,26 @@
+{
+  "name": "chromecast",
+  "family": "chromecast",
+  "weight": "Regular",
+  "ascent": 800,
+  "descent": 200,
+  "version": "1.1",
+  "glyphs": [
+    {
+      "code": "0xe001",
+      "name": "01-Default"
+    },
+    {
+      "code": "0xe002",
+      "name": "02-Casting"
+    },
+    {
+      "code": "0xe003",
+      "name": "03-Loading-1"
+    },
+    {
+      "code": "0xe004",
+      "name": "04-Loading-2"
+    }
+  ]
+}

@@ -90,9 +90,12 @@ class Chromecast extends UICorePlugin {
   }
 
   sessionUpdateListener() {
-    if (this.session && this.session.status === chrome.cast.SessionStatus.STOPPED) {
-      this.sessionStopped()
-      this.session = null
+    if (this.session) {
+      console.log(this.session.status)
+      if (this.session.status === chrome.cast.SessionStatus.STOPPED) {
+        this.sessionStopped()
+        this.session = null
+      }
     }
   }
 
@@ -107,12 +110,22 @@ class Chromecast extends UICorePlugin {
   }
 
   launchSuccess(session) {
+    this.$el.removeClass('icon-cast-connecting')
+    clearInterval(this.connectAnimInterval)
+    this.connectAnimInterval = null
+    this.$el.removeClass('loading-1 loading-2 loading-3')
+    this.core.mediaControl.resetKeepVisible()
     console.log('launch success - session: ' + session.sessionId)
     this.newSession(session)
   }
 
   launchError(e) {
     console.log('error on launch', e)
+    this.$el.removeClass('icon-cast-connecting')
+    clearInterval(this.connectAnimInterval)
+    this.connectAnimInterval = null
+    this.$el.removeClass('loading-1 loading-2 loading-3')
+    this.core.mediaControl.resetKeepVisible()
   }
 
   loadMediaSuccess(how, mediaSession) {
@@ -121,6 +134,7 @@ class Chromecast extends UICorePlugin {
     this.originalPlayback = this.core.mediaControl.container.playback
 
     var options = assign({}, this.originalPlayback.options, {currentMedia: mediaSession, mediaControl: this.core.mediaControl})
+    this.src = this.originalPlayback.src
     this.playbackProxy = new ChromecastPlayback(options)
     this.playbackProxy.settings = this.originalPlayback.settings
     this.playbackProxy.render()
@@ -162,10 +176,13 @@ class Chromecast extends UICorePlugin {
 
     var time = this.currentTime
 
-    var playerState = this.mediaSession.playerState
-    this.mediaSession = null
+    var playerState = undefined
+    if (this.mediaSession) {
+      playerState = this.mediaSession.playerState
+      this.mediaSession = null
+    }
 
-    this.core.load(this.playbackProxy.src)
+    this.core.load(this.src)
 
     var container = this.core.mediaControl.container
 
@@ -201,6 +218,16 @@ class Chromecast extends UICorePlugin {
 
   click() {
     chrome.cast.requestSession((session) => this.launchSuccess(session), (e) => this.launchError(e))
+    if (!this.session) {
+      var position = 0
+      this.$el.addClass('icon-cast-connecting')
+      this.connectAnimInterval = setInterval(() => {
+        this.$el.removeClass('loading-1 loading-2 loading-3')
+        this.$el.addClass(`loading-${position+1}`)
+        position = (position + 1) % 3
+      }, 600)
+      this.core.mediaControl.setKeepVisible()
+    }
   }
 
   settingsUpdate() {

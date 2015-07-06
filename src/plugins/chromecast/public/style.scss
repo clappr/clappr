@@ -72,9 +72,24 @@
 }
 
 .icon-cast:before {
-  content: "\\e600";
+  content: "\\e001";
+}
+
+.icon-cast-connecting {
+
+  &.loading-1:before {
+    content: "\\e003";
+  }
+
+  &.loading-2:before {
+    content: "\\e004";
+  }
+
+  &.loading-3:before {
+    content: "\\e001";
+  }
 }
 
 .icon-cast-connected:before {
-  content: "\\e601";
+  content: "\\e002";
 }
