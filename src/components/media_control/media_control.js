@@ -49,8 +49,8 @@ class MediaControl extends UIObject {
       'mousedown .bar-scrubber[data-seekbar]': 'startSeekDrag',
       'mousemove .bar-container[data-seekbar]': 'mousemoveOnSeekBar',
       'mouseleave .bar-container[data-seekbar]': 'mouseleaveOnSeekBar',
-      'mouseenter .media-control-layer[data-controls]': 'setKeepVisible',
-      'mouseleave .media-control-layer[data-controls]': 'resetKeepVisible'
+      'mouseenter .media-control-layer[data-controls]': 'setUserKeepVisible',
+      'mouseleave .media-control-layer[data-controls]': 'resetUserKeepVisible'
     }
   }
 
@@ -285,7 +285,7 @@ class MediaControl extends UIObject {
   toggleFullscreen() {
     this.trigger(Events.MEDIACONTROL_FULLSCREEN, this.name)
     this.container.fullscreen()
-    this.resetKeepVisible()
+    this.resetUserKeepVisible()
   }
 
   setContainer(container) {
@@ -361,6 +361,14 @@ class MediaControl extends UIObject {
     this.keepVisible = false
   }
 
+  setUserKeepVisible() {
+    this.userKeepVisible = true
+  }
+
+  resetUserKeepVisible() {
+    this.userKeepVisible = false
+  }
+
   isVisible() {
     return !this.$el.hasClass('media-control-hide')
   }
@@ -385,7 +393,7 @@ class MediaControl extends UIObject {
     var timeout = 2000
     clearTimeout(this.hideId)
     if (!this.isVisible() || this.options.hideMediaControl === false) return
-    if (this.keepVisible || this.draggingSeekBar || this.draggingVolumeBar) {
+    if (this.userKeepVisible || this.keepVisible || this.draggingSeekBar || this.draggingVolumeBar) {
       this.hideId = setTimeout(() => this.hide(), timeout)
     } else {
       this.trigger(Events.MEDIACONTROL_HIDE, this.name)
