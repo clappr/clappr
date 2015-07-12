@@ -221,7 +221,14 @@ class Core extends UIObject {
   }
 
   getCurrentContainer() {
-    return this.containers[0]
+    if (!this.mediacontrol) {
+      return this.containers[0]
+    }
+    return this.mediaControl.container
+  }
+
+  getPlaybackType() {
+    return this.getCurrentContainer().getPlaybackType()
   }
 
   toggleFullscreen() {

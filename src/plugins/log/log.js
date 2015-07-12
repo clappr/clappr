@@ -9,6 +9,12 @@ var INFO = 'color: #006600;' + BOLD;
 var DEBUG = 'color: #0000ff;' + BOLD;
 var WARN = 'color: #ff8000;' + BOLD;
 var ERROR = 'color: #ff0000;' + BOLD;
+var COLORS = {
+  warn: WARN,
+  info: INFO,
+  debug: DEBUG,
+  error: ERROR
+}
 var DEFAULT = '';
 
 class Log {
@@ -18,6 +24,7 @@ class Log {
     this.BLACKLIST = ['timeupdate', 'playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress'];
   }
 
+  error(klass) {this.log(klass, 'error', Array.prototype.slice.call(arguments, 1))}
   info(klass) {this.log(klass, 'info', Array.prototype.slice.call(arguments, 1))}
   warn(klass) {this.log(klass, 'warn', Array.prototype.slice.call(arguments, 1))}
   debug(klass) {this.log(klass, 'debug', Array.prototype.slice.call(arguments, 1))}
@@ -34,12 +41,8 @@ class Log {
       message = klass
       klass = null
     }
-    var color
-    if (level === 'warn') { color = WARN }
-    else if (level === 'info') { color = INFO }
-    else if (level === 'debug') { color = DEBUG }
-    else if (level === 'error') { color = ERROR }
     var klassDescription = ""
+    var color = COLORS[level]
     if (klass) {
       klassDescription = "[" + klass + "]"
     }
