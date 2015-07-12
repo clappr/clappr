@@ -1,5 +1,5 @@
-var Playback = require('playback')
-var Events = require('events')
+var Events = require('../../base/events')
+var Playback = require('../../base/playback')
 var JST = require('../../base/jst')
 
 var TICK_INTERVAL = 100
