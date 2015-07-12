@@ -37,6 +37,7 @@ module.exports.browserify = function(options) {
     .require('./src/playbacks/html_img', { expose: 'html_img' })
     .require('./src/plugins/poster', { expose: 'poster' })
     .require('./src/base/template', { expose: 'template' })
+    .require('./src/base/utils', { expose: 'clappr_utils' })
     .require('clappr-zepto', { expose: 'zepto' })
 };
 

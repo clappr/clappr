@@ -1,4 +1,5 @@
 var UIObject = require('./ui_object')
+var extend = require('./utils').extend
 
 class Playback extends UIObject {
   constructor(options) {
@@ -33,6 +34,10 @@ class Playback extends UIObject {
   destroy() {
     this.$el.remove()
   }
+}
+
+Playback.extend = function(properties) {
+  return extend(Playback, properties)
 }
 
 Playback.canPlay = (source) => {
