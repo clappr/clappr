@@ -67,6 +67,11 @@ a:hover {
   border: 0;
 }
 
+#player-wrapper {
+  min-width: 320px;
+  min-height: 180px;
+}
+
 .sidebar {
   display: inline-block;
   text-align: left;
@@ -78,7 +83,7 @@ a:hover {
 
 #editor {
   border: 1px solid #c0c0EE;
-  height: 360px;
+  min-height: 360px;
 }
 
 #console {

@@ -27,7 +27,17 @@ class NoOp extends Playback {
 
   noise() {
     var idata = this.context.createImageData(this.context.canvas.width, this.context.canvas.height)
-    var buffer32 = new Uint32Array(idata.data.buffer)
+
+    try {
+      var buffer32 = new Uint32Array(idata.data.buffer)
+    } catch (err) {
+        var buffer32 = new Uint32Array(this.context.canvas.width * this.context.canvas.height * 4)
+        var data=idata.data
+        for(var i = 0; i < data.length; i++){
+            buffer32[i]=data[i]
+        }
+    }
+    
     var len = buffer32.length
     var run = 0
     var color = 0
