@@ -9,6 +9,8 @@ var ContainerPlugin = require('./base/container_plugin')
 var UIContainerPlugin = require('./base/ui_container_plugin')
 var CorePlugin = require('./base/core_plugin')
 var UICorePlugin = require('./base/ui_core_plugin')
+var Playback = require('./base/playback')
+var Utils = require('./base/utils')
 
 window.DEBUG = false
 
@@ -19,7 +21,9 @@ window.Clappr = {
   ContainerPlugin: ContainerPlugin,
   UIContainerPlugin: UIContainerPlugin,
   CorePlugin: CorePlugin,
-  UICorePlugin: UICorePlugin
+  UICorePlugin: UICorePlugin,
+  Playback: Playback,
+  Utils: Utils
 }
 window.Clappr.version = "__VERSION__"
 

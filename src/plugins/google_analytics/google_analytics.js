@@ -23,7 +23,7 @@ class GoogleAnalytics extends ContainerPlugin {
       var script = document.createElement('script')
       script.setAttribute("type", "text/javascript")
       script.setAttribute("async", "async")
-      script.setAttribute("src", "http://www.google-analytics.com/ga.js")
+      script.setAttribute("src", "//www.google-analytics.com/ga.js")
       script.onload = () => this.addEventListeners()
       document.body.appendChild(script)
     } else {
