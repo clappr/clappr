@@ -11,6 +11,7 @@ var Core = require('../core');
 
 class CoreFactory extends BaseObject {
   constructor(player, loader) {
+    super()
     this.player = player
     this.options = player.options
     this.loader = loader
