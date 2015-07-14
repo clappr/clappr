@@ -39,6 +39,7 @@ module.exports.browserify = function(options) {
     .require('./src/base/template', { expose: 'template' })
     .require('./src/base/utils', { expose: 'clappr_utils' })
     .require('clappr-zepto', { expose: 'zepto' })
+    .require('./src/plugins/log', { expose: 'log' })
 };
 
 gulp.task('compile-js', function() {
