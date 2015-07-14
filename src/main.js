@@ -11,6 +11,7 @@ var CorePlugin = require('./base/core_plugin')
 var UICorePlugin = require('./base/ui_core_plugin')
 var Playback = require('./base/playback')
 var Utils = require('./base/utils')
+var Log = require('./plugins/log')
 
 window.DEBUG = false
 
@@ -23,7 +24,8 @@ window.Clappr = {
   CorePlugin: CorePlugin,
   UICorePlugin: UICorePlugin,
   Playback: Playback,
-  Utils: Utils
+  Utils: Utils,
+  Log: Log
 }
 window.Clappr.version = "__VERSION__"
 
