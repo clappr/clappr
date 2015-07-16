@@ -1,6 +1,7 @@
 var Events = require('../../base/events')
 var Playback = require('../../base/playback')
 var JST = require('../../base/jst')
+var $ = require('zepto')
 
 var TICK_INTERVAL = 100
 

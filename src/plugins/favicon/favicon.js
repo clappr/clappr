@@ -1,5 +1,6 @@
 var CorePlugin = require('../../base/core_plugin')
 var Events = require('../../base/events')
+var $ = require('zepto')
 
 class Favicon extends CorePlugin {
   get name() { return 'favicon' }
