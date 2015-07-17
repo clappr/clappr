@@ -388,11 +388,11 @@ class MediaControl extends UIObject {
     }
   }
 
-  hide() {
-    var timeout = 2000
+  hide(delay = 0) {
+    var timeout = delay || 2000
     clearTimeout(this.hideId)
     if (!this.isVisible() || this.options.hideMediaControl === false) return
-    if (this.userKeepVisible || this.keepVisible || this.draggingSeekBar || this.draggingVolumeBar) {
+    if (delay || this.userKeepVisible || this.keepVisible || this.draggingSeekBar || this.draggingVolumeBar) {
       this.hideId = setTimeout(() => this.hide(), timeout)
     } else {
       this.trigger(Events.MEDIACONTROL_HIDE, this.name)
