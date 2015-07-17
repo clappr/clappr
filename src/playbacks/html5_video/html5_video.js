@@ -234,6 +234,9 @@ class HTML5Video extends Playback {
   render() {
     var style = Styler.getStyleFor(this.name)
     this.$el.html(this.template({ src: this.src, type: this.typeFor(this.src) }))
+    if (this.options.useVideoTagDefaultControls) {
+      this.$el.attr('controls', 'controls')
+    }
     this.$el.append(style)
     setTimeout(() => this.options.autoPlay && this.play(), 0);
     if (this.el.readyState === this.el.HAVE_ENOUGH_DATA) {
