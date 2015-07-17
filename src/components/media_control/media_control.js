@@ -309,8 +309,7 @@ class MediaControl extends UIObject {
     this.$volumeBarContainer.removeClass('volume-bar-hide')
   }
 
-  hideVolumeBar() {
-    var timeout = 400
+  hideVolumeBar(timeout = 400) {
     if (!this.$volumeBarContainer) return
     if (this.draggingVolumeBar) {
       this.hideVolumeId = setTimeout(() => this.hideVolumeBar(), timeout)
@@ -398,7 +397,7 @@ class MediaControl extends UIObject {
     } else {
       this.trigger(Events.MEDIACONTROL_HIDE, this.name)
       this.$el.addClass('media-control-hide')
-      this.hideVolumeBar()
+      this.hideVolumeBar(0)
     }
   }
 
@@ -532,7 +531,7 @@ class MediaControl extends UIObject {
 
       this.setVolume(this.currentVolume)
       this.bindKeyEvents()
-      this.hideVolumeBar()
+      this.hideVolumeBar(0)
     })
 
     this.parseColors()
