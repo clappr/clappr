@@ -251,7 +251,7 @@ class Core extends UIObject {
   }
 
   hideMediaControl(event) {
-    this.mediaControl.hide(event)
+    this.mediaControl.hide(this.options.hideMediaControlDelay)
   }
 
   onMediaControlShow(showing) {
