@@ -9,6 +9,7 @@ class UIContainerPlugin extends UIObject {
   constructor(options) {
     super(options)
     this.container = options.container
+    this.options = options
     this.enabled = true
     this.bindEvents()
   }
