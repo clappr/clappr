@@ -60,6 +60,7 @@ class HLS extends Playback {
     Mediator.on(this.cid + ':playbackstate', (state) => this.setPlaybackState(state))
     Mediator.on(this.cid + ':levelchanged', (level) => this.updateHighDefinition(level))
     Mediator.on(this.cid + ':playbackerror', () => this.flashPlaybackError())
+    Mediator.once(this.cid + ':manifestloaded',(duration, loadmetrics) => this.manifestLoaded(duration, loadmetrics))
   }
 
   stopListening() {
@@ -69,6 +70,7 @@ class HLS extends Playback {
     Mediator.off(this.cid + ':playbackstate')
     Mediator.off(this.cid + ':levelchanged')
     Mediator.off(this.cid + ':playbackerror')
+    Mediator.off(this.cid + ':manifestloaded')
   }
 
   bootstrap() {
@@ -287,6 +289,10 @@ class HLS extends Playback {
 
   flashPlaybackError() {
     this.trigger(Events.PLAYBACK_STOP)
+  }
+
+  manifestLoaded(duration, loadmetrics) {
+    this.trigger(Events.PLAYBACK_LOADEDMETADATA, duration, loadmetrics)
   }
 
   timeUpdate(time, duration) {
