@@ -14,18 +14,10 @@ var LEVEL_DEBUG = 0
 var LEVEL_INFO = 1
 var LEVEL_WARN = 2
 var LEVEL_ERROR = 3
-var COLORS = {
-  LEVEL_DEBUG: DEBUG,
-  LEVEL_INFO: INFO,
-  LEVEL_WARN: WARN,
-  LEVEL_ERROR: ERROR
-}
-var DESCRIPTIONS = {
-  LEVEL_DEBUG: 'debug',
-  LEVEL_INFO: 'info',
-  LEVEL_WARN: 'warn',
-  LEVEL_ERROR: 'error'
-}
+var LEVEL_DISABLED = 4
+
+var COLORS = [DEBUG, INFO, WARN, ERROR, ERROR]
+var DESCRIPTIONS = ['debug', 'info', 'warn', 'error', 'disabled']
 
 class Log {
   constructor(level = LEVEL_WARN) {
