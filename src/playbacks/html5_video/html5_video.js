@@ -238,7 +238,7 @@ class HTML5Video extends Playback {
       this.$el.attr('controls', 'controls')
     }
     this.$el.append(style)
-    setTimeout(() => this.options.autoPlay && this.play(), 0);
+    process.nextTick(() => this.options.autoPlay && this.play())
     if (this.el.readyState === this.el.HAVE_ENOUGH_DATA) {
       this.ready()
     }
