@@ -33,9 +33,13 @@ class Log {
   error(klass) {this.log(klass, LEVEL_ERROR, Array.prototype.slice.call(arguments, 1))}
 
   onOff() {
-    window.DEBUG = !window.DEBUG
-    if (window.DEBUG) { console.log('log enabled');  }
-    else { console.log('log disabled'); }
+    if (this.level === LEVEL_DISABLED) {
+      this.level = this.previousLevel
+    } else {
+      this.previousLevel = this.level
+      this.level = LEVEL_DISABLED
+    }
+    console.log.apply(console, ["%c[Clappr.Log] set log level to " + DESCRIPTIONS[this.level], ERROR]);
   }
 
   level(newLevel) {
@@ -43,7 +47,7 @@ class Log {
   }
 
   log(klass, level, message) {
-    if (!window.DEBUG || this.BLACKLIST.indexOf(message[0]) >= 0) return
+    if (this.BLACKLIST.indexOf(message[0]) >= 0) return
     if (level < this.level) return
 
     if (!message) {
