@@ -5,7 +5,8 @@
 var UIContainerPlugin = require('../../base/ui_container_plugin')
 var Styler = require('../../base/styler')
 var watermarkStyle = require('./public/watermark.scss')
-var JST = require('../../base/jst')
+var watermarkHTML = require('./public/watermark.html')
+var template = require('../../base/template')
 var Events = require('../../base/events')
 
 class WaterMarkPlugin extends UIContainerPlugin {
@@ -13,7 +14,7 @@ class WaterMarkPlugin extends UIContainerPlugin {
 
   constructor(options) {
     super(options)
-    this.template = JST[this.name]
+    this.template = template(watermarkHTML)
     this.position = options.position || "bottom-right"
     if (options.watermark) {
       this.imageUrl = options.watermark

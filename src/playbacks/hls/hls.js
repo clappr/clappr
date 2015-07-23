@@ -3,7 +3,6 @@
 // license that can be found in the LICENSE file.
 
 var Playback = require('../../base/playback')
-var JST = require('../../base/jst')
 var assign = require('lodash.assign')
 var template = require('../../base/template')
 
@@ -12,6 +11,7 @@ var Browser = require('../../components/browser')
 var Events = require('../../base/events')
 var Styler = require('../../base/styler')
 var hlsStyle = require('./public/style.scss')
+var hlsHTML = require('./public/hls_playback.html')
 var $ = require('clappr-zepto')
 
 var HLSEvents = require('./flashls_events')
@@ -21,7 +21,7 @@ var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" cla
 class HLS extends Playback {
   get name() { return 'hls' }
   get tagName() { return 'object' }
-  get template() { return JST.hls }
+  get template() { return template(hlsHTML) }
   get attributes() {
     return {
       'class': 'hls-playback',

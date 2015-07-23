@@ -1,14 +1,15 @@
 var Events = require('../../base/events')
 var Playback = require('../../base/playback')
-var JST = require('../../base/jst')
 var $ = require('zepto')
+var template = require('../../base/template')
+var chromecastHTML = require('./public/chromecast.html')
 
 var TICK_INTERVAL = 100
 
 class ChromecastPlayback extends Playback {
 
   get name() { return 'chromecast_playback' }
-  get template() { return JST.chromecast }
+  get template() { return template(chromecastHTML) }
 
   constructor(options) {
     super(options)
