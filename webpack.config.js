@@ -1,4 +1,5 @@
 var path = require('path');
+var webpack = require('webpack');
 
 module.exports = {
   entry: path.resolve(__dirname, 'src/main.js'),
@@ -18,7 +19,7 @@ module.exports = {
         include: path.resolve(__dirname, 'src'),
       },
        {
-           test: /\.(png|woff|eot|ttf)/, loader: 'url-loader?limit=100000'
+           test: /\.(png|woff|eot|ttf)/, loader: 'url-loader?limit=500'
        },
        {
            test: /\.svg/, loader: 'file-loader'
