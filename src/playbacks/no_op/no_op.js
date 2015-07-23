@@ -2,6 +2,7 @@ var Playback = require('../../base/playback')
 var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
 var Events = require('../../base/events')
+var noOpStyle = require('./public/style.scss')
 var requestAnimationFrame = require('../../base/utils').requestAnimationFrame
 var cancelAnimationFrame = require('../../base/utils').cancelAnimationFrame
 
@@ -17,7 +18,7 @@ class NoOp extends Playback {
   }
 
   render() {
-    var style = Styler.getStyleFor(this.name);
+    var style = Styler.getStyleFor2(noOpStyle);
     this.$el.html(this.template())
     this.$el.append(style);
     this.animate()
@@ -37,7 +38,7 @@ class NoOp extends Playback {
             buffer32[i]=data[i]
         }
     }
-    
+
     var len = buffer32.length
     var run = 0
     var color = 0

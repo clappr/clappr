@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 var Playback = require('../../base/playback')
+var imgStyle = require('./public/style.scss')
 var Styler = require('../../base/styler')
 
 class HTMLImg extends Playback {
@@ -24,7 +25,7 @@ class HTMLImg extends Playback {
   }
 
   render() {
-    var style = Styler.getStyleFor(this.name)
+    var style = Styler.getStyleFor2(imgStyle)
     this.$el.append(style)
     return this
   }

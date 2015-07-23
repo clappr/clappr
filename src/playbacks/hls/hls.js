@@ -11,6 +11,7 @@ var Mediator = require('../../components/mediator')
 var Browser = require('../../components/browser')
 var Events = require('../../base/events')
 var Styler = require('../../base/styler')
+var hlsStyle = require('./public/style.scss')
 var $ = require('clappr-zepto')
 
 var HLSEvents = require('./flashls_events')
@@ -343,7 +344,7 @@ class HLS extends Playback {
   }
 
   render() {
-    var style = Styler.getStyleFor(this.name)
+    var style = Styler.getStyleFor2(hlsStyle)
     if(Browser.isLegacyIE) {
       this.setupIE()
     } else {
