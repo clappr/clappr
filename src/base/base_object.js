@@ -7,7 +7,7 @@ var Events = require('./events')
 
 class BaseObject extends Events {
   constructor(options={}) {
-    super()
+    super(options)
     this.uniqueId = uniqueId('o')
   }
 }
