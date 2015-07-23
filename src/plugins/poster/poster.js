@@ -4,6 +4,7 @@
 
 var UIContainerPlugin = require('../../base/ui_container_plugin')
 var Styler = require('../../base/styler')
+var posterStyle = require('./public/poster.scss')
 var JST = require('../../base/jst')
 var Events = require('../../base/events')
 
@@ -109,7 +110,8 @@ class PosterPlugin extends UIContainerPlugin {
 
   render() {
     if (this.container.playback.name === 'html_img') return
-    var style = Styler.getStyleFor(this.name, {baseUrl: this.options.baseUrl})[0]
+    //var style = Styler.getStyleFor2(posterStyle, {baseUrl: this.options.baseUrl})[0]
+    var style = Styler.getStyleFor2(posterStyle, {baseUrl: this.options.baseUrl})
     this.$el.html(this.template())
     this.$el.append(style)
     if (this.options.poster) {

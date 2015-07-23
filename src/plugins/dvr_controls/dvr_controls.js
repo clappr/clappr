@@ -2,6 +2,7 @@ var UICorePlugin = require('../../base/ui_core_plugin')
 var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
 var Events = require('../../base/events')
+var dvrStyle = require('./public/dvr_controls.scss')
 var $ = require('clappr-zepto')
 
 class DVRControls extends UICorePlugin {
@@ -65,7 +66,8 @@ class DVRControls extends UICorePlugin {
   }
 
   render() {
-    this.style = this.style || Styler.getStyleFor(this.name, { baseUrl: this.core.options.baseUrl })
+    this.style = this.style || Styler.getStyleFor2(dvrStyle, { baseUrl: this.core.options.baseUrl })
+
     this.$el.html(this.template())
     this.$el.append(this.style)
     if (this.shouldRender()) {

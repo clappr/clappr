@@ -46,7 +46,7 @@
       @include transition(opacity text-shadow 0.1s ease);
 
       &.play[data-poster]:before{
-        content:"\\e001";
+        content:"\e001";
       }
 
       &:hover {

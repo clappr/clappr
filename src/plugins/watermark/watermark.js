@@ -4,6 +4,7 @@
 
 var UIContainerPlugin = require('../../base/ui_container_plugin')
 var Styler = require('../../base/styler')
+var watermarkStyle = require('./public/watermark.scss')
 var JST = require('../../base/jst')
 var Events = require('../../base/events')
 
@@ -40,7 +41,7 @@ class WaterMarkPlugin extends UIContainerPlugin {
     this.$el.hide()
     var templateOptions = {position: this.position, imageUrl: this.imageUrl}
     this.$el.html(this.template(templateOptions))
-    var style = Styler.getStyleFor(this.name)
+    var style = Styler.getStyleFor2(watermarkStyle)
     this.container.$el.append(style)
     this.container.$el.append(this.$el)
     return this
