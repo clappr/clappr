@@ -9,6 +9,9 @@ var JST = require('./jst');
 var Styler = {
   getStyleFor: function(name, options={baseUrl: ''}) {
     return $('<style class="clappr-style"></style>').html(template(JST.CSS[name])(options));
+  },
+  getStyleFor2: function(style, options={baseUrl: ''}) {
+    return $('<style class="clappr-style"></style>').html(template(style.toString())(options));
   }
 };
 

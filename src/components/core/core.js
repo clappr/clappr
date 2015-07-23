@@ -19,6 +19,7 @@ var PlayerInfo = require('../player_info')
 var Mediator = require('../mediator')
 var Events = require('../../base/events')
 var Browser = require('../browser')
+var coreStyle = require('./public/style.scss');
 
 var find = require('lodash.find')
 var isNumber = require('../../base/utils').isNumber
@@ -262,7 +263,7 @@ class Core extends UIObject {
   }
 
   render() {
-    var style = Styler.getStyleFor('core')
+    var style = Styler.getStyleFor2(coreStyle);
     //FIXME
     //this.$el.empty()
     this.$el.append(style)

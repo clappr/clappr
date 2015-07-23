@@ -8,6 +8,7 @@ var Styler = require('../../base/styler')
 var Browser = require('../../components/browser')
 var seekStringToSeconds = require('../../base/utils').seekStringToSeconds
 var Events = require('../../base/events')
+var videoStyle = require('./public/style.scss')
 var find = require('lodash.find')
 
 class HTML5Video extends Playback {
@@ -232,7 +233,7 @@ class HTML5Video extends Playback {
   }
 
   render() {
-    var style = Styler.getStyleFor(this.name)
+    var style = Styler.getStyleFor2(videoStyle)
     this.$el.html(this.template({ src: this.src, type: this.typeFor(this.src) }))
     if (this.options.useVideoTagDefaultControls) {
       this.$el.attr('controls', 'controls')
