@@ -348,7 +348,7 @@ class HLS extends Playback {
     if(Browser.isLegacyIE) {
       this.setupIE()
     } else {
-      var callbackName = this.createCallbacks()
+      this.createCallbacks()
       this.$el.html(this.template({cid: this.cid, baseUrl: this.baseUrl, playbackId: this.uniqueId, callbackName: `window.Clappr.flashlsCallbacks.${this.cid}`}))
       if(Browser.isFirefox) {
         this.setupFirefox()
