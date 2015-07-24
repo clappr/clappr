@@ -53,7 +53,7 @@
     "html-loader": "^0.3.0",
     "isparta": "git://github.com/douglasduteil/isparta",
     "istanbul": "^0.3.8",
-    "karma": "^0.12.36",
+    "karma": "^0.13.3",
     "karma-chai": "^0.1.0",
     "karma-chai-sinon": "^0.1.5",
     "karma-chrome-launcher": "^0.2.0",
