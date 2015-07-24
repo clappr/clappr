@@ -5,7 +5,6 @@ var Events = require('../../base/events')
 var noOpStyle = require('./public/style.scss')
 var noOpHTML = require('./public/error.html')
 var requestAnimationFrame = require('../../base/utils').requestAnimationFrame
-var cancelAnimationFrame = require('../../base/utils').cancelAnimationFrame
 
 class NoOp extends Playback {
   get name() { return 'no_op' }

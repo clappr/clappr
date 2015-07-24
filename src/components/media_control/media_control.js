@@ -25,7 +25,7 @@ class MediaControl extends UIObject {
 
   get attributes() {
     return {
-      class: 'media-control',
+      'class': 'media-control',
       'data-media-control': ''
     }
   }

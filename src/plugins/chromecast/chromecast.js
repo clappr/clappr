@@ -1,12 +1,9 @@
 var UICorePlugin = require('../../base/ui_core_plugin')
 var Events = require('../../base/events')
 var Styler = require('../../base/styler')
-var Container = require('../../components/container')
 var ChromecastPlayback = require('./chromecast_playback')
 var chromecastStyle = require('./public/style.scss')
 var assign = require('lodash.assign')
-
-var Log = require('../log').getInstance()
 
 var Browser = require('../../components/browser');
 
