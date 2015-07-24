@@ -49,12 +49,13 @@ module.exports = function(config) {
         'karma-chrome-launcher',
         'karma-chai-sinon',
         'karma-jquery',
+        'karma-coverage',
     ],
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['progress', 'coverage'],
 
     webpack: {
         module: {
@@ -82,6 +83,11 @@ module.exports = function(config) {
                 test: /\.html/, loader: 'html?minimize=false'
             }
             ],
+            postLoaders: [ { // << add subject as webpack's postloader
+                test: /\.js$/,
+                exclude: /(test|node_modules|bower_components)\//,
+                loader: 'istanbul-instrumenter'
+            } ]
         },
         resolve: {
             extensions: ['', '.js'],
