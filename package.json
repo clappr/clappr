@@ -56,7 +56,7 @@
     "karma": "^0.12.36",
     "karma-chai": "^0.1.0",
     "karma-chai-sinon": "^0.1.5",
-    "karma-chrome-launcher": "^0.2.6",
+    "karma-chrome-launcher": "^0.2.0",
     "karma-cli": "0.0.4",
     "karma-coverage": "git://github.com/douglasduteil/karma-coverage#next",
     "karma-firefox-launcher": "^0.1.3",
