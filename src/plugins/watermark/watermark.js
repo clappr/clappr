@@ -12,9 +12,10 @@ var Events = require('../../base/events')
 class WaterMarkPlugin extends UIContainerPlugin {
   get name() { return 'watermark' }
 
+  get template() { return template(watermarkHTML) }
+
   constructor(options) {
     super(options)
-    this.template = template(watermarkHTML)
     this.position = options.position || "bottom-right"
     if (options.watermark) {
       this.imageUrl = options.watermark

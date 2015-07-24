@@ -19,13 +19,13 @@ module.exports = {
         include: path.resolve(__dirname, 'src'),
       },
        {
-           test: /\.(png|woff|eot|ttf)/, loader: 'url-loader?limit=500'
+           test: /\.(png|woff|eot|ttf)/, loader: 'url-loader?limit=1'
        },
        {
            test: /\.svg/, loader: 'file-loader'
        },
        {
-           test: /\.html/, loader: 'html'
+           test: /\.html/, loader: 'html?minimize=false'
        }
     ],
   },

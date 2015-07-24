@@ -10,7 +10,6 @@ var template = require('../../base/template')
 var Events = require('../../base/events')
 
 var Mediator = require('../../components/mediator')
-var PlayerInfo = require('../../components/player_info')
 
 var $ = require('clappr-zepto')
 
