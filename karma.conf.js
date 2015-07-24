@@ -3,6 +3,7 @@
 
 
 var dotenv = require('dotenv');
+var path = require('path');
 var versionify = require("browserify-versionify");
 
 dotenv.load();
@@ -18,7 +19,7 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['browserify', 'mocha', 'sinon-chai'],
+    frameworks: ['mocha', 'chai-sinon', 'jquery-2.1.0'],
 
     // list of files / patterns to load in the browser
     files: [
@@ -32,16 +33,9 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'test/**/*.js': ['browserify'],
+      'test/**/*.js': ['webpack'],
     },
 
-    browserify: {
-      watch: true,
-      debug: true,
-      transform: ['babelify', istanbul({
-       ignore: ['**/node_modules/**', '**/test/**']
-      })],
-    },
 
     coverageReporter: {
       reporters: [
@@ -49,11 +43,51 @@ module.exports = function(config) {
         {type: 'text-summary'}
       ]
     },
+    plugins: [
+        require('karma-webpack'),
+        require('karma-mocha'),
+        'karma-chrome-launcher',
+        'karma-chai-sinon',
+        'karma-jquery',
+    ],
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress', 'coverage'],
+    reporters: ['progress'],
+
+    webpack: {
+        module: {
+            loaders: [
+            {
+                test: /\.js$/,
+                loader: 'babel',
+            },
+            {
+                test: /\.scss$/,
+                loaders: ['css', 'sass?includePaths[]='
+                    + path.resolve(__dirname, './node_modules/compass-mixins/lib')
+                    + '&includePaths[]='
+                    + path.resolve(__dirname, './src/base/scss')
+                ],
+                include: path.resolve(__dirname, 'src'),
+            },
+            {
+                test: /\.(png|woff|eot|ttf)/, loader: 'url-loader?limit=1'
+            },
+            {
+                test: /\.svg/, loader: 'file-loader'
+            },
+            {
+                test: /\.html/, loader: 'html?minimize=false'
+            }
+            ],
+        },
+        resolve: {
+            extensions: ['', '.js'],
+        },
+
+    },
 
 
     // web server port
