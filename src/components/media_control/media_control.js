@@ -7,7 +7,6 @@
  */
 
 var $ = require('clappr-zepto')
-var JST = require('../../base/jst')
 var Styler = require('../../base/styler')
 var UIObject = require('../../base/ui_object')
 var Utils = require('../../base/utils')
@@ -17,13 +16,16 @@ var Mediator = require('../mediator')
 var PlayerInfo = require('../player_info')
 var Events = require('../../base/events')
 var Kibo = require('../../base/kibo')
+var mediaControlStyle = require('./public/media-control.scss');
+var template = require('../../base/template');
+var mediaControlHTML = require('./public/media-control.html');
 
 class MediaControl extends UIObject {
   get name() { return 'MediaControl' }
 
   get attributes() {
     return {
-      class: 'media-control',
+      'class': 'media-control',
       'data-media-control': ''
     }
   }
@@ -54,7 +56,7 @@ class MediaControl extends UIObject {
     }
   }
 
-  get template() { return JST.media_control }
+  get template() { return template(mediaControlHTML) }
 
   constructor(options) {
     super(options)
@@ -499,7 +501,7 @@ class MediaControl extends UIObject {
 
   render() {
     var timeout = 1000
-    var style = Styler.getStyleFor('media_control', {baseUrl: this.options.baseUrl});
+    var style = Styler.getStyleFor(mediaControlStyle, {baseUrl: this.options.baseUrl});
     this.$el.html(this.template({ settings: this.settings }))
     this.$el.append(style)
     this.createCachedElements()

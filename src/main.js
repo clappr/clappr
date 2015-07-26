@@ -27,6 +27,7 @@ window.Clappr = {
   Utils: Utils,
   Log: Log
 }
+
 window.Clappr.version = "__VERSION__"
 
 module.exports = window.Clappr
