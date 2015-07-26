@@ -25,7 +25,7 @@ class HTMLImg extends Playback {
   }
 
   render() {
-    var style = Styler.getStyleFor2(imgStyle)
+    var style = Styler.getStyleFor(imgStyle)
     this.$el.append(style)
     return this
   }

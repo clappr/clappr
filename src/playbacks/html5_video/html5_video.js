@@ -234,7 +234,7 @@ class HTML5Video extends Playback {
   }
 
   render() {
-    var style = Styler.getStyleFor2(videoStyle)
+    var style = Styler.getStyleFor(videoStyle)
     this.$el.html(this.template({ src: this.src, type: this.typeFor(this.src) }))
     if (this.options.useVideoTagDefaultControls) {
       this.$el.attr('controls', 'controls')

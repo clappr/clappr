@@ -236,7 +236,7 @@ class Container extends UIObject {
   }
 
   render() {
-    var s = Styler.getStyleFor2(style);
+    var s = Styler.getStyleFor(style);
     this.$el.append(s);
     this.$el.append(this.playback.render().el);
     return this;
