@@ -110,8 +110,7 @@ class PosterPlugin extends UIContainerPlugin {
 
   render() {
     if (this.container.playback.name === 'html_img') return
-    //var style = Styler.getStyleFor2(posterStyle, {baseUrl: this.options.baseUrl})[0]
-    var style = Styler.getStyleFor2(posterStyle, {baseUrl: this.options.baseUrl})
+    var style = Styler.getStyleFor(posterStyle, {baseUrl: this.options.baseUrl})
     this.$el.html(this.template())
     this.$el.append(style)
     if (this.options.poster) {

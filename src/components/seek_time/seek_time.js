@@ -63,7 +63,7 @@ class SeekTime extends UIObject {
   }
 
   render() {
-      var style = Styler.getStyleFor2(seekTimeStyle);
+      var style = Styler.getStyleFor(seekTimeStyle);
       this.$el.html(this.template());
       this.$el.append(style);
       this.mediaControl.$el.append(this.el);

@@ -263,7 +263,7 @@ class Core extends UIObject {
   }
 
   render() {
-    var style = Styler.getStyleFor2(coreStyle);
+    var style = Styler.getStyleFor(coreStyle);
     //FIXME
     //this.$el.empty()
     this.$el.append(style)

@@ -43,7 +43,7 @@ class WaterMarkPlugin extends UIContainerPlugin {
     this.$el.hide()
     var templateOptions = {position: this.position, imageUrl: this.imageUrl}
     this.$el.html(this.template(templateOptions))
-    var style = Styler.getStyleFor2(watermarkStyle)
+    var style = Styler.getStyleFor(watermarkStyle)
     this.container.$el.append(style)
     this.container.$el.append(this.$el)
     return this

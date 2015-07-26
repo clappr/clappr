@@ -501,7 +501,7 @@ class MediaControl extends UIObject {
 
   render() {
     var timeout = 1000
-    var style = Styler.getStyleFor2(mediaControlStyle, {baseUrl: this.options.baseUrl});
+    var style = Styler.getStyleFor(mediaControlStyle, {baseUrl: this.options.baseUrl});
     this.$el.html(this.template({ settings: this.settings }))
     this.$el.append(style)
     this.createCachedElements()

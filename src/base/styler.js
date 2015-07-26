@@ -6,7 +6,7 @@ var $ = require('clappr-zepto');
 var template = require('./template');
 
 var Styler = {
-  getStyleFor2: function(style, options={baseUrl: ''}) {
+  getStyleFor: function(style, options={baseUrl: ''}) {
     return $('<style class="clappr-style"></style>').html(template(style.toString())(options));
   }
 };

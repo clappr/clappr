@@ -18,7 +18,7 @@ class NoOp extends Playback {
   }
 
   render() {
-    var style = Styler.getStyleFor2(noOpStyle);
+    var style = Styler.getStyleFor(noOpStyle);
     this.$el.html(this.template())
     this.$el.append(style);
     this.animate()

@@ -260,7 +260,7 @@ class Chromecast extends UICorePlugin {
     this.$el.click(() => this.click())
     this.core.mediaControl.$el.find('.media-control-right-panel[data-media-control]').append(this.$el)
     this.hide()
-    var style = Styler.getStyleFor2(chromecastStyle)
+    var style = Styler.getStyleFor(chromecastStyle)
     this.core.$el.append(style)
     return this
   }
