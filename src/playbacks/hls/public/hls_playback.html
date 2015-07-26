@@ -1,4 +1,4 @@
-  <param name="movie" value="<%= baseUrl %>/assets/HLSPlayer.swf?inline=1">
+  <param name="movie" value="<%= swfPath %>?inline=1">
   <param name="quality" value="autohigh">
   <param name="swliveconnect" value="true">
   <param name="allowScriptAccess" value="always">
@@ -21,7 +21,7 @@
     allowfullscreen="false"
     bgcolor="#000000"
     FlashVars="playbackId=<%= playbackId %>&callback=<%= callbackName %>"
-    src="<%= baseUrl %>/assets/HLSPlayer.swf"
+    src="<%= swfPath %>"
     width="100%"
     height="100%">
   </embed>

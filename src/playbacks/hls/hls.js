@@ -12,11 +12,12 @@ var Events = require('../../base/events')
 var Styler = require('../../base/styler')
 var hlsStyle = require('./public/style.scss')
 var hlsHTML = require('./public/hls_playback.html')
+var hlsSwf = require('./public/HLSPlayer.swf')
 var $ = require('clappr-zepto')
 
 var HLSEvents = require('./flashls_events')
 
-var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" class="hls-playback" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls="" width="100%" height="100%"><param name="movie" value="<%= baseUrl %>/assets/HLSPlayer.swf"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>'
+var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" class="hls-playback" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls="" width="100%" height="100%"><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>'
 
 class HLS extends Playback {
   get name() { return 'hls' }
@@ -311,8 +312,8 @@ class HLS extends Playback {
     this.setElement($el)
   }
 
-  setupIE() {
-    this.setElement($(template(objectIE)({cid: this.cid, baseUrl: this.baseUrl, playbackId: this.uniqueId})))
+  setupIE(swfPath) {
+    this.setElement($(template(objectIE)({cid: this.cid, swfPath: swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId})))
   }
 
   updateSettings() {
@@ -345,11 +346,15 @@ class HLS extends Playback {
 
   render() {
     var style = Styler.getStyleFor(hlsStyle)
+    var swfPath = hlsSwf
+    if (this.baseUrl) {
+      swfPath = `${this.baseUrl}/public/HLSPlayer.swf`
+    }
     if(Browser.isLegacyIE) {
-      this.setupIE()
+      this.setupIE(swfPath)
     } else {
       this.createCallbacks()
-      this.$el.html(this.template({cid: this.cid, baseUrl: this.baseUrl, playbackId: this.uniqueId, callbackName: `window.Clappr.flashlsCallbacks.${this.cid}`}))
+      this.$el.html(this.template({cid: this.cid, swfPath: swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId, callbackName: `window.Clappr.flashlsCallbacks.${this.cid}`}))
       if(Browser.isFirefox) {
         this.setupFirefox()
       } else if (Browser.isIE) {
