@@ -4,20 +4,22 @@
 
 var Playback = require('../../base/playback')
 var Styler = require('../../base/styler')
-var JST = require('../../base/jst')
+var template = require('../../base/template')
 var Mediator = require('../../components/mediator')
 var template = require('../../base/template')
 var $ = require('clappr-zepto')
 var Browser = require('../../components/browser')
 var seekStringToSeconds = require('../../base/utils').seekStringToSeconds
 var Events = require('../../base/events')
+var flashStyle = require('./public/style.scss');
+var flashHTML = require('./public/flash_playback.html');
 
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= baseUrl %>/assets/Player.swf"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>'
 
 class Flash extends Playback {
   get name() { return 'flash' }
   get tagName() { return 'object' }
-  get template() { return JST.flash }
+  get template() { return template(flashHTML) }
 
   constructor(options) {
     super(options)
@@ -182,7 +184,7 @@ class Flash extends Playback {
   }
 
   render() {
-    var style = Styler.getStyleFor(this.name)
+    var style = Styler.getStyleFor(flashStyle)
     this.$el.html(this.template({ cid: this.cid, baseUrl: this.baseUrl, playbackId: this.uniqueId }))
     if(Browser.isFirefox) {
       this.setupFirefox()
