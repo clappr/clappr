@@ -34,6 +34,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/latest/',
     filename: 'clappr.js'
   },
 };
