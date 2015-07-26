@@ -344,7 +344,7 @@ class HLS extends Playback {
   }
 
   render() {
-    var style = Styler.getStyleFor2(hlsStyle)
+    var style = Styler.getStyleFor(hlsStyle)
     if(Browser.isLegacyIE) {
       this.setupIE()
     } else {

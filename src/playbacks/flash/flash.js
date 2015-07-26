@@ -184,7 +184,7 @@ class Flash extends Playback {
   }
 
   render() {
-    var style = Styler.getStyleFor2(flashStyle)
+    var style = Styler.getStyleFor(flashStyle)
     this.$el.html(this.template({ cid: this.cid, baseUrl: this.baseUrl, playbackId: this.uniqueId }))
     if(Browser.isFirefox) {
       this.setupFirefox()
