@@ -42,7 +42,7 @@ class SpinnerThreeBouncePlugin extends UIContainerPlugin {
 
   render() {
     this.$el.html(this.template())
-    var style = Styler.getStyleFor2(spinnerStyle);
+    var style = Styler.getStyleFor(spinnerStyle);
     this.container.$el.append(style)
     this.container.$el.append(this.$el)
     this.$el.hide()
