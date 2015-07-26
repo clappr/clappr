@@ -3,10 +3,10 @@
 
 @font-face {
   font-family: "Player";
-  src: url("<%= baseUrl %>/assets/Player-Regular.eot");
-  src: url("<%= baseUrl %>/assets/Player-Regular.eot?#iefix") format("embedded-opentype"),
-       url("<%= baseUrl %>/assets/Player-Regular.ttf") format("truetype"),
-       url("<%= baseUrl %>/assets/Player-Regular.svg#player") format("svg");
+  src: url("./Player-Regular.eot");
+  src: url("./Player-Regular.eot?#iefix") format("embedded-opentype"),
+       url("./Player-Regular.ttf") format("truetype"),
+       url("./Player-Regular.svg#player") format("svg");
 }
 
 .media-control-notransition {
