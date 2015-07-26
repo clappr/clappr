@@ -3,17 +3,19 @@
 // license that can be found in the LICENSE file.
 
 var Playback = require('../../base/playback')
-var JST = require('../../base/jst')
+var template = require('../../base/template')
 var Styler = require('../../base/styler')
 var Browser = require('../../components/browser')
 var seekStringToSeconds = require('../../base/utils').seekStringToSeconds
 var Events = require('../../base/events')
+var videoStyle = require('./public/style.scss')
+var videoHTML = require('./public/index.html')
 var find = require('lodash.find')
 
 class HTML5Video extends Playback {
   get name() { return 'html5_video' }
   get tagName() { return 'video' }
-  get template() { return JST.html5_video }
+  get template() { return template(videoHTML) }
 
   get attributes() {
     return {
@@ -232,7 +234,7 @@ class HTML5Video extends Playback {
   }
 
   render() {
-    var style = Styler.getStyleFor(this.name)
+    var style = Styler.getStyleFor(videoStyle)
     this.$el.html(this.template({ src: this.src, type: this.typeFor(this.src) }))
     if (this.options.useVideoTagDefaultControls) {
       this.$el.attr('controls', 'controls')
