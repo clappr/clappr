@@ -4,17 +4,18 @@
 
 var UIContainerPlugin = require('../../base/ui_container_plugin')
 var Styler = require('../../base/styler')
-var JST = require('../../base/jst')
+var posterStyle = require('./public/poster.scss')
+var posterHTML = require('./public/poster.html')
+var template = require('../../base/template')
 var Events = require('../../base/events')
 
 var Mediator = require('../../components/mediator')
-var PlayerInfo = require('../../components/player_info')
 
 var $ = require('clappr-zepto')
 
 class PosterPlugin extends UIContainerPlugin {
   get name() { return 'poster' }
-  get template() { return JST.poster }
+  get template() { return template(posterHTML) }
 
   get attributes() {
     return {
@@ -109,7 +110,7 @@ class PosterPlugin extends UIContainerPlugin {
 
   render() {
     if (this.container.playback.name === 'html_img') return
-    var style = Styler.getStyleFor(this.name, {baseUrl: this.options.baseUrl})[0]
+    var style = Styler.getStyleFor(posterStyle, {baseUrl: this.options.baseUrl})
     this.$el.html(this.template())
     this.$el.append(style)
     if (this.options.poster) {
