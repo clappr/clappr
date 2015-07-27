@@ -8,7 +8,8 @@
 
 var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
-var Events = require('../../base/events')
+var style = require('./public/style.scss');
+var Events = require('../../base/events');
 var find = require('lodash.find')
 
 class Container extends UIObject {
@@ -235,8 +236,8 @@ class Container extends UIObject {
   }
 
   render() {
-    var style = Styler.getStyleFor('container');
-    this.$el.append(style);
+    var s = Styler.getStyleFor(style);
+    this.$el.append(s);
     this.$el.append(this.playback.render().el);
     return this;
   }

@@ -1,13 +1,14 @@
 var Playback = require('../../base/playback')
-var JST = require('../../base/jst')
+var template = require('../../base/template')
 var Styler = require('../../base/styler')
 var Events = require('../../base/events')
+var noOpStyle = require('./public/style.scss')
+var noOpHTML = require('./public/error.html')
 var requestAnimationFrame = require('../../base/utils').requestAnimationFrame
-var cancelAnimationFrame = require('../../base/utils').cancelAnimationFrame
 
 class NoOp extends Playback {
   get name() { return 'no_op' }
-  get template() { return JST.no_op }
+  get template() { return template(noOpHTML) }
   get attributes() {
     return {'data-no-op': ''}
   }
@@ -17,7 +18,7 @@ class NoOp extends Playback {
   }
 
   render() {
-    var style = Styler.getStyleFor(this.name);
+    var style = Styler.getStyleFor(noOpStyle);
     this.$el.html(this.template())
     this.$el.append(style);
     this.animate()
@@ -37,7 +38,7 @@ class NoOp extends Playback {
             buffer32[i]=data[i]
         }
     }
-    
+
     var len = buffer32.length
     var run = 0
     var color = 0

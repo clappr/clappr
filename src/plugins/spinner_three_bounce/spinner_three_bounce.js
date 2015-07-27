@@ -4,7 +4,9 @@
 
 var UIContainerPlugin = require('../../base/ui_container_plugin');
 var Styler = require('../../base/styler');
-var JST = require('../../base/jst');
+var template = require('../../base/template');
+var spinnerHTML = require('./public/spinner.html');
+var spinnerStyle = require('./public/spinner.scss');
 var Events = require('../../base/events');
 
 class SpinnerThreeBouncePlugin extends UIContainerPlugin {
@@ -18,7 +20,7 @@ class SpinnerThreeBouncePlugin extends UIContainerPlugin {
 
   constructor(options) {
     super(options)
-    this.template = JST.spinner_three_bounce
+    this.template = template(spinnerHTML);
     this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering)
     this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferFull)
     this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
@@ -40,7 +42,7 @@ class SpinnerThreeBouncePlugin extends UIContainerPlugin {
 
   render() {
     this.$el.html(this.template())
-    var style = Styler.getStyleFor('spinner_three_bounce')
+    var style = Styler.getStyleFor(spinnerStyle);
     this.container.$el.append(style)
     this.container.$el.append(this.$el)
     this.$el.hide()

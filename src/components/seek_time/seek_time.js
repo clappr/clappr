@@ -4,14 +4,16 @@
 
 var UIObject = require('../../base/ui_object')
 var Styler = require('../../base/styler')
-var JST = require('../../base/jst')
+var template = require('../../base/template')
 var formatTime = require('../../base/utils').formatTime
 var Events = require('../../base/events')
+var seekTimeStyle = require('./public/seek_time.scss')
+var seekTimeHTML = require('./public/seek_time.html')
 
 class SeekTime extends UIObject {
   get name() { return 'seek_time' }
   get template() {
-    return JST.seek_time;
+    return template(seekTimeHTML);
   }
   get attributes() {
     return {
@@ -61,7 +63,7 @@ class SeekTime extends UIObject {
   }
 
   render() {
-      var style = Styler.getStyleFor(this.name);
+      var style = Styler.getStyleFor(seekTimeStyle);
       this.$el.html(this.template());
       this.$el.append(style);
       this.mediaControl.$el.append(this.el);
