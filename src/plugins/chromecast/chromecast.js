@@ -1,11 +1,9 @@
 var UICorePlugin = require('../../base/ui_core_plugin')
 var Events = require('../../base/events')
 var Styler = require('../../base/styler')
-var Container = require('../../components/container')
 var ChromecastPlayback = require('./chromecast_playback')
+var chromecastStyle = require('./public/style.scss')
 var assign = require('lodash.assign')
-
-var Log = require('../log').getInstance()
 
 var Browser = require('../../components/browser');
 
@@ -262,7 +260,7 @@ class Chromecast extends UICorePlugin {
     this.$el.click(() => this.click())
     this.core.mediaControl.$el.find('.media-control-right-panel[data-media-control]').append(this.$el)
     this.hide()
-    var style = Styler.getStyleFor('chromecast')
+    var style = Styler.getStyleFor(chromecastStyle)
     this.core.$el.append(style)
     return this
   }

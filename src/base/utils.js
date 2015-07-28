@@ -153,7 +153,7 @@ var isNumber = function(value) {
 var requestAnimationFrame = window.requestAnimationFrame ||
                             window.mozRequestAnimationFrame ||
                             window.webkitRequestAnimationFrame ||
-                            (fn) => window.setTimeout(fn, 1000/60)
+                            function(fn) { window.setTimeout(fn, 1000/60) }
 
 var cancelAnimationFrame = window.cancelAnimationFrame ||
                            window.mozCancelAnimationFrame ||
