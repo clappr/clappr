@@ -32,7 +32,7 @@ var formatTime = function(time) {
     var out = ""
     if (days && days > 0) {
       out += days + ":"
-      if (hours && hours < 1) out += "00:"
+      if (hours < 1) out += "00:"
     }
     if (hours && hours > 0) out += ("0" + hours).slice(-2) + ":"
     out += ("0" + minutes).slice(-2) + ":"
@@ -153,7 +153,7 @@ var isNumber = function(value) {
 var requestAnimationFrame = window.requestAnimationFrame ||
                             window.mozRequestAnimationFrame ||
                             window.webkitRequestAnimationFrame ||
-                            function(fn) { window.setTimeout(fn, 1000/60) }
+                            (fn) => window.setTimeout(fn, 1000/60)
 
 var cancelAnimationFrame = window.cancelAnimationFrame ||
                            window.mozCancelAnimationFrame ||
