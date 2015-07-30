@@ -28,7 +28,16 @@ var formatTime = function(time) {
     var minutes = time % 60
     time = parseInt(time/60)
     var hours = time % 24
+    var days = parseInt(time/24)
     var out = ""
+<<<<<<< HEAD
+    if (days && days > 0) {
+      out += days + ":"
+      if (hours < 1) out += "00:"
+    }
+=======
+    if (days && days > 0) out += days + ":"
+>>>>>>> 18c9dca... utils: added days to formatTime function
     if (hours && hours > 0) out += ("0" + hours).slice(-2) + ":"
     out += ("0" + minutes).slice(-2) + ":"
     out += ("0" + seconds).slice(-2)
@@ -148,7 +157,7 @@ var isNumber = function(value) {
 var requestAnimationFrame = window.requestAnimationFrame ||
                             window.mozRequestAnimationFrame ||
                             window.webkitRequestAnimationFrame ||
-                            function(fn) { window.setTimeout(fn, 1000/60) }
+                            (fn) => window.setTimeout(fn, 1000/60)
 
 var cancelAnimationFrame = window.cancelAnimationFrame ||
                            window.mozCancelAnimationFrame ||
