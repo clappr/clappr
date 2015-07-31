@@ -2,10 +2,6 @@ var Player = require('../src/components/player')
 
 describe('Player', function() {
   describe('constructor', function() {
-    it('uses default assets url as default baseUrl', function() {
-      var player = new Player({source: '/playlist.m3u8'})
-      expect(player.options.baseUrl).to.be.equal('http://cdn.clappr.io/latest')
-    })
 
     it('has unique sequential id', function() {
       var player1 = new Player({source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest'})
