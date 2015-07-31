@@ -74,7 +74,7 @@ module.exports = function(config) {
                 include: path.resolve(__dirname, 'src'),
             },
             {
-                test: /\.(png|woff|eot|ttf)/, loader: 'url-loader?limit=1'
+                test: /\.(png|woff|eot|ttf|swf)/, loader: 'url-loader?limit=1'
             },
             {
                 test: /\.svg/, loader: 'file-loader'
