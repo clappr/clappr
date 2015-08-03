@@ -28,7 +28,12 @@ var formatTime = function(time) {
     var minutes = time % 60
     time = parseInt(time/60)
     var hours = time % 24
+    var days = parseInt(time/24)
     var out = ""
+    if (days && days > 0) {
+      out += days + ":"
+      if (hours < 1) out += "00:"
+    }
     if (hours && hours > 0) out += ("0" + hours).slice(-2) + ":"
     out += ("0" + minutes).slice(-2) + ":"
     out += ("0" + seconds).slice(-2)

@@ -10,6 +10,8 @@ describe('Utils', function() {
     expect(utils.formatTime(10)).to.be.equal("00:10")
     expect(utils.formatTime(60 * 10 + 15)).to.be.equal("10:15")
     expect(utils.formatTime(60 * 60 * 12)).to.be.equal("12:00:00")
+    expect(utils.formatTime(60 * 60 * 24)).to.be.equal("1:00:00:00")
+    expect(utils.formatTime(60 * 60 * 27)).to.be.equal("1:03:00:00")
   });
 
   it('should convert querystring seek regex in seconds', function() {
