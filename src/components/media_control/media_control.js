@@ -14,7 +14,6 @@ var Utils = require('../../base/utils')
 var Browser = require('../browser')
 var SeekTime = require('../seek_time')
 var Mediator = require('../mediator')
-var PlayerInfo = require('../player_info')
 var Events = require('../../base/events')
 var Kibo = require('../../base/kibo')
 
@@ -82,7 +81,7 @@ class MediaControl extends UIObject {
     this.updateDragHandler = (event) => this.updateDrag(event)
     $(document).bind('mouseup', this.stopDragHandler)
     $(document).bind('mousemove', this.updateDragHandler)
-    Mediator.on(Events.PLAYER_RESIZE, () => this.playerResize())
+    Mediator.on(Events.PLAYER_RESIZE, (size) => this.playerResize(size))
   }
 
   addEventListeners() {
@@ -183,14 +182,14 @@ class MediaControl extends UIObject {
     }
   }
 
-  playerResize() {
+  playerResize(size) {
     if (Utils.Fullscreen.isFullscreen()) {
       this.$fullscreenToggle.addClass('shrink')
     } else {
       this.$fullscreenToggle.removeClass('shrink')
     }
     this.$el.removeClass('w320')
-    if (PlayerInfo.currentSize.width <= 320 || this.options.hideVolumeBar) {
+    if (size.width <= 320 || this.options.hideVolumeBar) {
       this.$el.addClass('w320')
     }
   }

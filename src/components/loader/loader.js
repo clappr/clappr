@@ -28,8 +28,9 @@ var DVRControls = require('../../plugins/dvr_controls');
 var Favicon = require('../../plugins/favicon');
 
 class Loader extends BaseObject {
-  constructor(externalPlugins) {
+  constructor(externalPlugins, playerId) {
     super()
+    this.playerId = playerId
     this.playbackPlugins = [HTML5AudioPlayback, HTML5VideoPlayback, FlashVideoPlayback, HLSVideoPlayback, HTMLImgPlayback, NoOp]
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
     this.corePlugins = [DVRControls, Favicon, Chromecast]
@@ -43,7 +44,7 @@ class Loader extends BaseObject {
     if (plugins.playback) { this.playbackPlugins = uniq(plugins.playback.concat(this.playbackPlugins), pluginName) }
     if (plugins.container) { this.containerPlugins = uniq(plugins.container.concat(this.containerPlugins), pluginName) }
     if (plugins.core) { this.corePlugins = uniq(plugins.core.concat(this.corePlugins), pluginName) }
-    PlayerInfo.playbackPlugins = this.playbackPlugins
+    PlayerInfo.getInstance(this.playerId).playbackPlugins = this.playbackPlugins
   }
 
   getPlugin(name) {
