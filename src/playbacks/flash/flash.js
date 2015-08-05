@@ -122,13 +122,14 @@ class Flash extends Playback {
   }
 
   play() {
-    if (this.el.getState() === 'PAUSED' || this.el.getState() === 'PLAYING_BUFFERING') {
+    if (this.currentState === 'PAUSED' || this.currentState === 'PLAYING_BUFFERING') {
       this.currentState = "PLAYING"
       this.el.playerResume()
-    } else if (this.el.getState() !== 'PLAYING') {
+      this.trigger(Events.PLAYBACK_PLAY, this.name)
+    } else if (this.currentState !== 'PLAYING') {
       this.firstPlay()
+      this.trigger(Events.PLAYBACK_PLAY, this.name)
     }
-    this.trigger(Events.PLAYBACK_PLAY, this.name)
   }
 
   volume(value) {
