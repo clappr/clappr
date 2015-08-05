@@ -4,6 +4,7 @@
 
 var Player = require('./components/player')
 var Mediator = require('./components/mediator')
+var Browser = require('./components/browser')
 var Events = require('./base/events')
 var ContainerPlugin = require('./base/container_plugin')
 var UIContainerPlugin = require('./base/ui_container_plugin')
@@ -25,7 +26,8 @@ window.Clappr = {
   UICorePlugin: UICorePlugin,
   Playback: Playback,
   Utils: Utils,
-  Log: Log
+  Log: Log,
+  Browser: Browser
 }
 window.Clappr.version = "__VERSION__"
 
