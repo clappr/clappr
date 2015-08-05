@@ -27,7 +27,7 @@ var hasFlash = function() {
 
 var getBrowserInfo = function() {
   var ua = navigator.userAgent
-  var parts = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || []
+  var parts = ua.match(/\b(playstation 4|nx|opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || []
   var extra
   if (/trident/i.test(parts[1])) {
     extra = /\brv[ :]+(\d+)/g.exec(ua) || []
