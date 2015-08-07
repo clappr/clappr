@@ -36,7 +36,6 @@ class Flash extends Playback {
   bootstrap() {
     this.el.width = "100%"
     this.el.height = "100%"
-    this.isReady = true
     if (this.currentState === 'PLAYING') {
       this.firstPlay()
     } else {
@@ -44,7 +43,9 @@ class Flash extends Playback {
       this.autoPlay && this.play()
     }
     $('<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%" />').insertAfter(this.$el)
+    this.isReady = true
     this.trigger(Events.PLAYBACK_READY, this.name)
+    this.trigger(Events.PLAYBACK_SETTINGSUPDATE, this.name)
   }
 
   getPlaybackType() {
@@ -160,15 +161,23 @@ class Flash extends Playback {
   }
 
   seek(seekBarValue) {
-    var seekTo = this.el.getDuration() * (seekBarValue / 100)
-    this.seekSeconds(seekTo)
+    if (this.el.getDuration() > 0) {
+      var seekTo = this.el.getDuration() * (seekBarValue / 100)
+      this.seekSeconds(seekTo)
+    } else {
+      this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this.seek(seekBarValue))
+    }
   }
 
   seekSeconds(seekTo) {
-    this.el.playerSeek(seekTo)
-    this.trigger(Events.PLAYBACK_TIMEUPDATE, seekTo, this.el.getDuration(), this.name)
-    if (this.currentState === "PAUSED") {
-      this.el.playerPause()
+    if (this.isReady && this.el.playerSeek) {
+      this.el.playerSeek(seekTo)
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, seekTo, this.el.getDuration(), this.name)
+      if (this.currentState === "PAUSED") {
+        this.el.playerPause()
+      }
+    } else {
+      this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this.seekSeconds(seekTo))
     }
   }
 
