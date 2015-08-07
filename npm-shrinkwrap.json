@@ -1,6 +1,6 @@
 {
   "name": "clappr",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "dependencies": {
     "clappr-zepto": {
       "version": "0.0.4",
