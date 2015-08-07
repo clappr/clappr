@@ -289,6 +289,7 @@ class MediaControl extends UIObject {
 
   setContainer(container) {
     this.stopListening(this.container)
+    Mediator.off(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
     this.container = container
     this.changeTogglePlay()
     this.addEventListeners()
