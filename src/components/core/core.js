@@ -107,8 +107,6 @@ class Core extends UIObject {
       if (this.reqAnimFrame) cancelAnimationFrame(this.reqAnimFrame)
       if (this.playerInfo.previousSize.width != this.$el.width() ||
           this.playerInfo.previousSize.height != this.$el.height()) {
-        console.log('previousSize', this.previousSize.width, this.previousSize.height)
-        console.log('current', this.$el.width(), this.$el.height())
         this.playerInfo.computedSize = { width: this.$el.width(), height: this.$el.height() }
         Mediator.trigger(Events.PLAYER_RESIZE, this.playerInfo.computedSize)
       }
