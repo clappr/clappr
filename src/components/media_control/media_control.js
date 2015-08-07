@@ -183,14 +183,16 @@ class MediaControl extends UIObject {
   }
 
   playerResize(size) {
-    if (Utils.Fullscreen.isFullscreen()) {
-      this.$fullscreenToggle.addClass('shrink')
-    } else {
-      this.$fullscreenToggle.removeClass('shrink')
-    }
-    this.$el.removeClass('w320')
-    if (size.width <= 320 || this.options.hideVolumeBar) {
-      this.$el.addClass('w320')
+    if (!this.disabled) {
+      if (Utils.Fullscreen.isFullscreen()) {
+        this.$fullscreenToggle.addClass('shrink')
+      } else {
+        this.$fullscreenToggle.removeClass('shrink')
+      }
+      this.$el.removeClass('w320')
+      if (size.width <= 320 || this.options.hideVolumeBar) {
+        this.$el.addClass('w320')
+      }
     }
   }
 
