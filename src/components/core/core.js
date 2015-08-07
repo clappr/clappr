@@ -70,7 +70,7 @@ class Core extends UIObject {
     } else {
       this.setPlayerSize()
     }
-    Mediator.trigger(Events.PLAYER_RESIZE, this.playerInfo.currentSize)
+    Mediator.trigger(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerInfo.currentSize)
   }
 
   setFullscreen() {
@@ -99,7 +99,7 @@ class Core extends UIObject {
     }
     this.playerInfo.previousSize = this.playerInfo.currentSize
     this.playerInfo.currentSize = options
-    Mediator.trigger(Events.PLAYER_RESIZE, this.playerInfo.currentSize)
+    Mediator.trigger(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerInfo.currentSize)
   }
 
   enableResizeObserver() {
@@ -108,7 +108,7 @@ class Core extends UIObject {
       if (this.playerInfo.previousSize.width != this.$el.width() ||
           this.playerInfo.previousSize.height != this.$el.height()) {
         this.playerInfo.computedSize = { width: this.$el.width(), height: this.$el.height() }
-        Mediator.trigger(Events.PLAYER_RESIZE, this.playerInfo.computedSize)
+        Mediator.trigger(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerInfo.computedSize)
       }
       this.reqAnimFrame = requestAnimationFrame(checkSizeCallback)
     }
