@@ -81,10 +81,10 @@ class MediaControl extends UIObject {
     this.updateDragHandler = (event) => this.updateDrag(event)
     $(document).bind('mouseup', this.stopDragHandler)
     $(document).bind('mousemove', this.updateDragHandler)
-    Mediator.on(Events.PLAYER_RESIZE, (size) => this.playerResize(size))
   }
 
   addEventListeners() {
+    Mediator.on(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
     this.listenTo(this.container, Events.CONTAINER_PLAY, this.changeTogglePlay)
     this.listenTo(this.container, Events.CONTAINER_PAUSE, this.changeTogglePlay)
     this.listenTo(this.container, Events.CONTAINER_DBLCLICK, this.toggleFullscreen)
