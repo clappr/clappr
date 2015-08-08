@@ -97,7 +97,7 @@ class HLS extends Playback {
     var currentLevel = this.getLevels()[level]
     this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000);
     this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE)
-    this.trigger(Events.PLAYBACK_BITRATE, {'bitrate': this.getCurrentBitrate()})
+    this.trigger(Events.PLAYBACK_BITRATE, {bitrate: this.getCurrentBitrate(), level: level})
   }
 
   updateTime(timeMetrics) {
