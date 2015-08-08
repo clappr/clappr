@@ -15,7 +15,7 @@ var Log = require('./plugins/log')
 
 window.DEBUG = false
 
-window.Clappr = {
+var Clappr = {
   Player: Player,
   Mediator: Mediator,
   Events: Events,
@@ -25,9 +25,23 @@ window.Clappr = {
   UICorePlugin: UICorePlugin,
   Playback: Playback,
   Utils: Utils,
-  Log: Log
+  Log: Log,
+  version:  "__VERSION__"
 }
 
-window.Clappr.version = "__VERSION__"
+export {
+    Player,
+    Mediator,
+    Events,
+    MediaControl,
+    ContainerPlugin,
+    UIContainerPlugin,
+    CorePlugin,
+    UICorePlugin,
+    Playback,
+    Utils,
+    Log,
+}
 
-module.exports = window.Clappr
+export default Clappr
+
