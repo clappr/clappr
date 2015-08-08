@@ -59,7 +59,7 @@ class HLS extends Playback {
     Mediator.on(this.cid + ':timeupdate', (timeMetrics) => this.updateTime(timeMetrics))
     Mediator.on(this.cid + ':playbackstate', (state) => this.setPlaybackState(state))
     Mediator.on(this.cid + ':levelchanged', (level) => this.updateHighDefinition(level))
-    Mediator.on(this.cid + ':playbackerror', () => this.flashPlaybackError())
+    Mediator.on(this.cid + ':error', (code, url, message) => this.flashPlaybackError(code, url, message))
     Mediator.once(this.cid + ':manifestloaded',(duration, loadmetrics) => this.manifestLoaded(duration, loadmetrics))
   }
 
@@ -298,7 +298,8 @@ class HLS extends Playback {
     }
   }
 
-  flashPlaybackError() {
+  flashPlaybackError(code, url, message) {
+    this.trigger(Events.PLAYBACK_ERROR, {code: code, url: url, message: message})
     this.trigger(Events.PLAYBACK_STOP)
   }
 
