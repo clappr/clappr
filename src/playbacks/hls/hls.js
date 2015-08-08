@@ -139,9 +139,16 @@ class HLS extends Playback {
     return this.playbackType? this.playbackType: null
   }
 
+  getCurrentLevelIndex() {
+    return this.el.getCurrentLevel()
+  }
+
+  getCurrentLevel() {
+    return this.getLevels()[this.getCurrentLevelIndex()]
+  }
+
   getCurrentBitrate() {
-    var currentLevel = this.getLevels()[this.el.getLevel()]
-    return currentLevel.bitrate
+    return this.getCurrentLevel().bitrate
   }
 
   isHighDefinitionInUse() {
