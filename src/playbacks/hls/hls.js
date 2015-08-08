@@ -60,7 +60,8 @@ class HLS extends Playback {
     Mediator.on(this.cid + ':playbackstate', (state) => this.setPlaybackState(state))
     Mediator.on(this.cid + ':levelchanged', (level) => this.levelChanged(level))
     Mediator.on(this.cid + ':error', (code, url, message) => this.flashPlaybackError(code, url, message))
-    Mediator.once(this.cid + ':manifestloaded',(duration, loadmetrics) => this.manifestLoaded(duration, loadmetrics))
+    Mediator.on(this.cid + ':fragmentloaded',(loadmetrics) => this.onFragmentLoaded(loadmetrics))
+    Mediator.once(this.cid + ':manifestloaded', (duration, loadmetrics) => this.manifestLoaded(duration, loadmetrics))
   }
 
   stopListening() {
@@ -70,6 +71,7 @@ class HLS extends Playback {
     Mediator.off(this.cid + ':playbackstate')
     Mediator.off(this.cid + ':levelchanged')
     Mediator.off(this.cid + ':playbackerror')
+    Mediator.off(this.cid + ':fragmentloaded')
     Mediator.off(this.cid + ':manifestloaded')
   }
 
@@ -208,17 +210,19 @@ class HLS extends Playback {
   startReportingProgress() {
     if (!this.reportingProgress) {
       this.reportingProgress = true
-      Mediator.on(this.cid + ':fragmentloaded',() => this.onFragmentLoaded())
     }
   }
 
   stopReportingProgress() {
-    Mediator.off(this.cid + ':fragmentloaded', this.onFragmentLoaded, this)
+    this.reportingProgress = false
   }
 
-  onFragmentLoaded() {
-    var buffered = this.el.getPosition() + this.el.getbufferLength()
-    this.trigger(Events.PLAYBACK_PROGRESS, this.el.getPosition(), buffered, this.el.getDuration(), this.name)
+  onFragmentLoaded(loadmetrics) {
+    this.trigger(Events.PLAYBACK_FRAGMENT_LOADED, loadmetrics)
+    if (this.reportingProgress) {
+      var buffered = this.el.getPosition() + this.el.getbufferLength()
+      this.trigger(Events.PLAYBACK_PROGRESS, this.el.getPosition(), buffered, this.el.getDuration(), this.name)
+    }
   }
 
   firstPlay() {
