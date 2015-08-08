@@ -151,6 +151,10 @@ class HLS extends Playback {
     return this.getCurrentLevel().bitrate
   }
 
+  setCurrentLevel(level) {
+    this.el.playerSetCurrentLevel(level)
+  }
+
   isHighDefinitionInUse() {
     return this.highDefinition
   }
