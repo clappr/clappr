@@ -66,7 +66,7 @@
     "karma-safari-launcher": "^0.1.1",
     "karma-sinon": "^1.0.3",
     "karma-sinon-chai": "^0.2.0",
-    "karma-webpack": "git+https://github.com/Dignifiedquire/karma-webpack.git#29fb1d801158f29cb0eb784edff69356705a7b74",
+    "karma-webpack": "^1.7.0",
     "mkdirp": "^0.5.0",
     "node-libs-browser": "^0.5.2",
     "node-sass": "^3.2.0",
