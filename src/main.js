@@ -2,16 +2,17 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var Player = require('./components/player')
-var Mediator = require('./components/mediator')
-var Events = require('./base/events')
-var ContainerPlugin = require('./base/container_plugin')
-var UIContainerPlugin = require('./base/ui_container_plugin')
-var CorePlugin = require('./base/core_plugin')
-var UICorePlugin = require('./base/ui_core_plugin')
-var Playback = require('./base/playback')
-var Utils = require('./base/utils')
-var Log = require('./plugins/log')
+import Player from './components/player'
+import Utils from './base/utils'
+import Events from './base/events'
+import Playback from './base/playback'
+import Mediator from './components/mediator'
+import MediaControl from './components/media_control'
+import ContainerPlugin from './base/container_plugin'
+import CorePlugin from './base/core_plugin'
+import UICorePlugin from './base/ui_core_plugin'
+import UIContainerPlugin from './base/ui_container_plugin'
+import Log from './plugins/log'
 
 window.DEBUG = false
 
@@ -19,6 +20,7 @@ var Clappr = {
   Player: Player,
   Mediator: Mediator,
   Events: Events,
+  MediaControl: MediaControl,
   ContainerPlugin: ContainerPlugin,
   UIContainerPlugin: UIContainerPlugin,
   CorePlugin: CorePlugin,
