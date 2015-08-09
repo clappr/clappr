@@ -20,7 +20,7 @@ describe('MediaControl', function() {
     });
 
     it('restores saved volume', function() {
-      utils.Config.persist('volume', 42)
+      Config.persist('volume', 42)
       var mediaControl = new MediaControl({persistConfig: true, container: this.container});
 
       expect(mediaControl.currentVolume).to.be.equal(42)
@@ -67,22 +67,22 @@ describe('MediaControl', function() {
 
     it('persists volume when persistence is on', function() {
       // expected to be default value (100)
-      expect(utils.Config.restore("volume")).to.be.equal(100)
+      expect(Config.restore("volume")).to.be.equal(100)
 
       var mediacontrol = new MediaControl({persistConfig: true, container: this.container});
       mediacontrol.setVolume(78)
 
-      expect(utils.Config.restore("volume")).to.be.equal(78)
+      expect(Config.restore("volume")).to.be.equal(78)
     })
   });
 
   it('persists volume when persistence is on', function() {
     // expected to be default value (100)
-    expect(utils.Config.restore("volume")).to.be.equal(100)
+    expect(Config.restore("volume")).to.be.equal(100)
 
     var mediacontrol = new MediaControl({persistConfig: true, container: this.container});
     mediacontrol.setVolume(78)
 
-    expect(utils.Config.restore("volume")).to.be.equal(78)
+    expect(Config.restore("volume")).to.be.equal(78)
   })
 });
