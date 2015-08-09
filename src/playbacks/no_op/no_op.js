@@ -1,10 +1,11 @@
+import requestAnimationFrame from '../../base/utils'
+
 var Playback = require('../../base/playback')
 var template = require('../../base/template')
 var Styler = require('../../base/styler')
 var Events = require('../../base/events')
 var noOpStyle = require('./public/style.scss')
 var noOpHTML = require('./public/error.html')
-var requestAnimationFrame = require('../../base/utils').requestAnimationFrame
 
 class NoOp extends Playback {
   get name() { return 'no_op' }

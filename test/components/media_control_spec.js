@@ -1,7 +1,8 @@
+import Config from '../../src/base/utils'
+
 var MediaControl = require('../../src/components/media_control');
 var FakePlayback = require('../../src/base/playback');
 var Container = require('../../src/components/container');
-var utils = require('../../src/base/utils');
 
 describe('MediaControl', function() {
   beforeEach(function() {

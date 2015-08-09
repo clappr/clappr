@@ -6,10 +6,11 @@
  * The MediaControl is responsible for displaying the Player controls.
  */
 
+import {Config, Fullscreen, formatTime} from '../../base/utils'
+
 var $ = require('clappr-zepto')
 var Styler = require('../../base/styler')
 var UIObject = require('../../base/ui_object')
-var Utils = require('../../base/utils')
 var Browser = require('../browser')
 var SeekTime = require('../seek_time')
 var Mediator = require('../mediator')
@@ -65,7 +66,7 @@ class MediaControl extends UIObject {
     this.mute = this.options.mute
     this.persistConfig = this.options.persistConfig
     this.container = options.container
-    var initialVolume = (this.persistConfig) ? Utils.Config.restore("volume") : 100;
+    var initialVolume = (this.persistConfig) ? Config.restore("volume") : 100;
     this.setVolume(this.mute ? 0 : initialVolume)
     this.keepVisible = false
     this.volumeBarClickDown = false;
@@ -186,7 +187,7 @@ class MediaControl extends UIObject {
   }
 
   playerResize() {
-    if (Utils.Fullscreen.isFullscreen()) {
+    if (Fullscreen.isFullscreen()) {
       this.$fullscreenToggle.addClass('shrink')
     } else {
       this.$fullscreenToggle.removeClass('shrink')
@@ -281,7 +282,7 @@ class MediaControl extends UIObject {
     this.container.setVolume(this.currentVolume)
     this.setVolumeLevel(this.currentVolume)
     this.mute = this.currentVolume === 0
-    this.persistConfig && Utils.Config.persist("volume", this.currentVolume)
+    this.persistConfig && Config.persist("volume", this.currentVolume)
   }
 
   toggleFullscreen() {
@@ -340,8 +341,8 @@ class MediaControl extends UIObject {
     this.$seekBarScrubber.removeClass('media-control-notransition')
     var seekbarValue = (100 / duration) * position
     this.setSeekPercentage(seekbarValue)
-    this.$('[data-position]').html(Utils.formatTime(position))
-    this.$('[data-duration]').html(Utils.formatTime(duration))
+    this.$('[data-position]').html(formatTime(position))
+    this.$('[data-duration]').html(formatTime(duration))
   }
 
   seek(event) {

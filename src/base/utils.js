@@ -5,7 +5,7 @@
 var assign = require('lodash.assign')
 var Browser = require('../components/browser')
 
-var extend = function(parent, properties) {
+export function extend(parent, properties) {
   var constructor = function() {
     parent.prototype.constructor.apply(this, arguments)
     if (properties.constructor) {
@@ -17,7 +17,7 @@ var extend = function(parent, properties) {
   return constructor
 }
 
-var formatTime = function(time) {
+export function formatTime(time) {
     if (!isFinite(time)) {
       return "--:--"
     }
@@ -40,7 +40,7 @@ var formatTime = function(time) {
     return out.trim()
 }
 
-var Fullscreen = {
+export var Fullscreen = {
   isFullscreen: function() {
     return (
       document.webkitFullscreenElement ||
@@ -77,7 +77,7 @@ var Fullscreen = {
   }
 }
 
-class Config {
+export class Config {
 
   static _defaultConfig() {
     return {
@@ -119,7 +119,7 @@ class Config {
   }
 }
 
-var seekStringToSeconds = function(url) {
+export function seekStringToSeconds(url) {
   var parts = url.match(/t=([0-9]*)(&|\/|$)/);
   if (parts && parts.length > 0) {
     return parseInt(parts[1], 10);
@@ -140,34 +140,22 @@ var seekStringToSeconds = function(url) {
 
 var idsCounter = {}
 
-var uniqueId = function(prefix) {
+export function uniqueId(prefix) {
   idsCounter[prefix] || (idsCounter[prefix] = 0)
   var id = ++idsCounter[prefix]
   return prefix + id
 }
 
-var isNumber = function(value) {
+export function isNumber(value) {
   return value - parseFloat(value) + 1 >= 0
 }
 
-var requestAnimationFrame = window.requestAnimationFrame ||
+export var requestAnimationFrame = window.requestAnimationFrame ||
                             window.mozRequestAnimationFrame ||
                             window.webkitRequestAnimationFrame ||
                             function(fn) { window.setTimeout(fn, 1000/60) }
 
-var cancelAnimationFrame = window.cancelAnimationFrame ||
+export var cancelAnimationFrame = window.cancelAnimationFrame ||
                            window.mozCancelAnimationFrame ||
                            window.webkitCancelAnimationFrame ||
                            window.clearTimeout
-
-module.exports = {
-  extend: extend,
-  formatTime: formatTime,
-  Fullscreen: Fullscreen,
-  Config: Config,
-  seekStringToSeconds: seekStringToSeconds,
-  uniqueId: uniqueId,
-  isNumber: isNumber,
-  requestAnimationFrame: requestAnimationFrame,
-  cancelAnimationFrame: cancelAnimationFrame
-}

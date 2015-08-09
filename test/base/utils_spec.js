@@ -1,4 +1,4 @@
-var utils = require('../../src/base/utils')
+import * as utils from '../../src/base/utils'
 
 describe('Utils', function() {
   it('creates unique id for a given prefix', function() {

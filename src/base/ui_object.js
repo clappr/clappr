@@ -2,8 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+import uniqueId from './utils'
+
 var $ = require('clappr-zepto')
-var uniqueId = require('./utils').uniqueId
 var result = require('lodash.result')
 var assign = require('lodash.assign')
 var BaseObject = require('./base_object')

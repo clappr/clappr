@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+import seekStringToSeconds from '../../base/utils'
+
 var Playback = require('../../base/playback')
 var Styler = require('../../base/styler')
 var template = require('../../base/template')
@@ -9,7 +11,6 @@ var Mediator = require('../../components/mediator')
 var template = require('../../base/template')
 var $ = require('clappr-zepto')
 var Browser = require('../../components/browser')
-var seekStringToSeconds = require('../../base/utils').seekStringToSeconds
 var Events = require('../../base/events')
 var flashStyle = require('./public/style.scss')
 var flashHTML = require('./public/flash_playback.html')
