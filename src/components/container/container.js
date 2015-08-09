@@ -6,10 +6,11 @@
  * Container is responsible for the video rendering and state
  */
 
+import Events from '../../base/events'
+
 var UIObject = require('../../base/ui_object');
 var Styler = require('../../base/styler');
 var style = require('./public/style.scss');
-var Events = require('../../base/events');
 var find = require('lodash.find')
 
 class Container extends UIObject {
