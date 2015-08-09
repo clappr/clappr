@@ -7,11 +7,10 @@
  */
 
 import Events from '../../base/events'
-
-var UIObject = require('../../base/ui_object');
-var Styler = require('../../base/styler');
-var style = require('./public/style.scss');
-var find = require('lodash.find')
+import UIObject from '../../base/ui_object'
+import Styler from '../../base/styler'
+import style from './public/style.scss'
+import find from 'lodash.find'
 
 class Container extends UIObject {
   get name() { return 'Container' }

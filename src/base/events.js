@@ -3,9 +3,10 @@
 // license that can be found in the LICENSE file.
 
 import {uniqueId} from './utils'
+import execOnce from 'lodash.once'
+import Log from '../plugins/log'
 
-var execOnce = require('lodash.once')
-var Log = require('../plugins/log').getInstance()
+var logger = Log.getInstance()
 
 var slice = Array.prototype.slice
 
@@ -62,7 +63,7 @@ export default class Events {
     if (this.hasOwnProperty(name)) {
       klass = this.name
     }
-    Log.debug.apply(Log, [klass].concat(Array.prototype.slice.call(arguments)))
+    logger.debug.apply(logger, [klass].concat(Array.prototype.slice.call(arguments)))
     if (!this._events) return this
     var args = slice.call(arguments, 1)
     if (!eventsApi(this, 'trigger', name, args)) return this

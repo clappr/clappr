@@ -2,30 +2,30 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var BaseObject = require('../../base/base_object')
-var PlayerInfo = require('../player_info')
-var uniq = require('lodash.uniq')
+import BaseObject from '../../base/base_object'
+import PlayerInfo from '../player_info'
+import uniq from 'lodash.uniq'
 
 /* Playback Plugins */
-var HTML5VideoPlayback = require('../../playbacks/html5_video');
-var FlashVideoPlayback = require('../../playbacks/flash');
-var HTML5AudioPlayback = require('../../playbacks/html5_audio');
-var HLSVideoPlayback = require('../../playbacks/hls');
-var HTMLImgPlayback = require('../../playbacks/html_img');
-var NoOp = require('../../playbacks/no_op');
+import HTML5VideoPlayback from '../../playbacks/html5_video'
+import FlashVideoPlayback from '../../playbacks/flash'
+import HTML5AudioPlayback from '../../playbacks/html5_audio'
+import HLSVideoPlayback from '../../playbacks/hls'
+import HTMLImgPlayback from '../../playbacks/html_img'
+import NoOp from '../../playbacks/no_op'
 
 /* Container Plugins */
-var SpinnerThreeBouncePlugin = require('../../plugins/spinner_three_bounce');
-var StatsPlugin = require('../../plugins/stats');
-var WaterMarkPlugin = require('../../plugins/watermark');
-var PosterPlugin = require('../../plugins/poster');
-var GoogleAnalyticsPlugin = require('../../plugins/google_analytics');
-var ClickToPausePlugin = require('../../plugins/click_to_pause');
-var Chromecast = require('../../plugins/chromecast')
+import SpinnerThreeBouncePlugin from '../../plugins/spinner_three_bounce'
+import StatsPlugin from '../../plugins/stats'
+import WaterMarkPlugin from '../../plugins/watermark'
+import PosterPlugin from '../../plugins/poster'
+import GoogleAnalyticsPlugin from '../../plugins/google_analytics'
+import ClickToPausePlugin from '../../plugins/click_to_pause'
+import Chromecast from '../../plugins/chromecast'
 
 /* Core Plugins */
-var DVRControls = require('../../plugins/dvr_controls');
-var Favicon = require('../../plugins/favicon');
+import DVRControls from '../../plugins/dvr_controls'
+import Favicon from '../../plugins/favicon'
 
 class Loader extends BaseObject {
   constructor(externalPlugins) {

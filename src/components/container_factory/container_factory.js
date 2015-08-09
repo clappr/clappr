@@ -6,12 +6,12 @@
  * The ContainerFactory is responsible for manage playback bootstrap and create containers.
  */
 
-var assign = require('lodash.assign');
-var BaseObject = require('../../base/base_object');
-var Container = require('../container');
-var $ = require('clappr-zepto');
-var Events = require('../../base/events');
-var find = require('lodash.find');
+import assign from 'lodash.assign'
+import BaseObject from '../../base/base_object'
+import Container from '../container'
+import $ from 'clappr-zepto'
+import Events from '../../base/events'
+import find from 'lodash.find'
 
 class ContainerFactory extends BaseObject {
   constructor(options, loader) {

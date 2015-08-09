@@ -1,4 +1,4 @@
-var BaseObject = require('./base_object')
+import BaseObject from './base_object'
 import {extend} from './utils'
 
 class ContainerPlugin extends BaseObject {

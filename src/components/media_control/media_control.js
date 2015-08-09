@@ -8,18 +8,18 @@
 
 import {Config, Fullscreen, formatTime} from '../../base/utils'
 
-var $ = require('clappr-zepto')
-var Styler = require('../../base/styler')
-var UIObject = require('../../base/ui_object')
-var Browser = require('../browser')
-var SeekTime = require('../seek_time')
-var Mediator = require('../mediator')
-var PlayerInfo = require('../player_info')
-var Events = require('../../base/events')
-var Kibo = require('../../base/kibo')
-var mediaControlStyle = require('./public/media-control.scss');
-var template = require('../../base/template');
-var mediaControlHTML = require('./public/media-control.html');
+import  $ from 'clappr-zepto'
+import  Styler from '../../base/styler'
+import  UIObject from '../../base/ui_object'
+import  Browser from '../browser'
+import  SeekTime from '../seek_time'
+import  Mediator from '../mediator'
+import  PlayerInfo from '../player_info'
+import  Events from '../../base/events'
+import  Kibo from '../../base/kibo'
+import  mediaControlStyle from './public/media-control.scss'
+import  template from '../../base/template'
+import  mediaControlHTML from './public/media-control.html'
 
 class MediaControl extends UIObject {
   get name() { return 'MediaControl' }

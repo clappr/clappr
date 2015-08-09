@@ -4,12 +4,12 @@
 
 import {formatTime} from '../../base/utils'
 
-var UIObject = require('../../base/ui_object')
-var Styler = require('../../base/styler')
-var template = require('../../base/template')
-var Events = require('../../base/events')
-var seekTimeStyle = require('./public/seek_time.scss')
-var seekTimeHTML = require('./public/seek_time.html')
+import UIObject from '../../base/ui_object'
+import Styler from '../../base/styler'
+import template from '../../base/template'
+import Events from '../../base/events'
+import seekTimeStyle from './public/seek_time.scss'
+import seekTimeHTML from './public/seek_time.html'
 
 class SeekTime extends UIObject {
   get name() { return 'seek_time' }

@@ -4,17 +4,16 @@
 
 import {seekStringToSeconds} from '../../base/utils'
 
-var Playback = require('../../base/playback')
-var Styler = require('../../base/styler')
-var template = require('../../base/template')
-var Mediator = require('../../components/mediator')
-var template = require('../../base/template')
-var $ = require('clappr-zepto')
-var Browser = require('../../components/browser')
-var Events = require('../../base/events')
-var flashStyle = require('./public/style.scss')
-var flashHTML = require('./public/flash_playback.html')
-var flashSwf = require('./public/Player.swf')
+import Playback from '../../base/playback'
+import Styler from '../../base/styler'
+import Mediator from '../../components/mediator'
+import template from '../../base/template'
+import $ from 'clappr-zepto'
+import Browser from '../../components/browser'
+import Events from '../../base/events'
+import flashStyle from './public/style.scss'
+import flashHTML from './public/flash_playback.html'
+import flashSwf from './public/Player.swf'
 
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>'
 

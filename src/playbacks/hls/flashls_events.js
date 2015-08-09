@@ -1,4 +1,4 @@
-var Mediator = require('../../components/mediator')
+import Mediator from '../../components/mediator'
 
 class HLSEvents {
   constructor(instanceId) {

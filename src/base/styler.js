@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var $ = require('clappr-zepto');
-var template = require('./template');
+import $ from 'clappr-zepto'
+import template from './template'
 
 var Styler = {
   getStyleFor: function(style, options={baseUrl: ''}) {
