@@ -1,4 +1,4 @@
-import requestAnimationFrame from '../../base/utils'
+import {requestAnimationFrame} from '../../base/utils'
 
 var Playback = require('../../base/playback')
 var template = require('../../base/template')
