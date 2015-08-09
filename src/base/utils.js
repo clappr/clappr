@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var assign = require('lodash.assign')
-var Browser = require('../components/browser')
+import assign from 'lodash.assign'
+import Browser from '../components/browser'
 
 export function extend(parent, properties) {
   var constructor = function() {

@@ -6,8 +6,8 @@
  * The Core Factory is responsible for instantiate the core and it's plugins.
  */
 
-var BaseObject = require('../../base/base_object');
-var Core = require('../core');
+import BaseObject from '../../base/base_object'
+import Core from '../core'
 
 class CoreFactory extends BaseObject {
   constructor(player, loader) {

@@ -4,13 +4,13 @@
 
 import {uniqueId} from '../base/utils'
 
-var BaseObject = require('../base/base_object')
-var CoreFactory = require('./core_factory')
-var Loader = require('./loader')
-var assign = require('lodash.assign')
-var find = require('lodash.find')
-var Events = require('events')
-var PlayerInfo = require('./player_info')
+import BaseObject from '../base/base_object'
+import CoreFactory from './core_factory'
+import Loader from './loader'
+import assign from 'lodash.assign'
+import find from 'lodash.find'
+import Events from 'events'
+import PlayerInfo from './player_info'
 
 export default class Player extends BaseObject {
   constructor(options) {

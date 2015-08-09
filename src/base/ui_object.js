@@ -3,11 +3,10 @@
 // license that can be found in the LICENSE file.
 
 import {uniqueId} from './utils'
-
-var $ = require('clappr-zepto')
-var result = require('lodash.result')
-var assign = require('lodash.assign')
-var BaseObject = require('./base_object')
+import $ from 'clappr-zepto'
+import result from 'lodash.result'
+import assign from 'lodash.assign'
+import BaseObject from './base_object'
 
 var delegateEventSplitter = /^(\S+)\s*(.*)$/
 

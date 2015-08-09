@@ -14,20 +14,18 @@ import {
     cancelAnimationFrame
 } from '../../base/utils'
 
-var assign = require('lodash.assign')
-var $ = require('clappr-zepto')
-
-var UIObject = require('../../base/ui_object')
-var ContainerFactory = require('../container_factory')
-var Styler = require('../../base/styler')
-var MediaControl = require('../media_control')
-var PlayerInfo = require('../player_info')
-var Mediator = require('../mediator')
-var Events = require('../../base/events')
-var Browser = require('../browser')
-var coreStyle = require('./public/style.scss');
-
-var find = require('lodash.find')
+import assign from 'lodash.assign'
+import $ from 'clappr-zepto'
+import UIObject from '../../base/ui_object'
+import ContainerFactory from '../container_factory'
+import Styler from '../../base/styler'
+import MediaControl from '../media_control'
+import PlayerInfo from '../player_info'
+import Mediator from '../mediator'
+import Events from '../../base/events'
+import Browser from '../browser'
+import coreStyle from './public/style.scss'
+import find from 'lodash.find'
 
 class Core extends UIObject {
   get events() {

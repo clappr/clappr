@@ -6,7 +6,7 @@
  * The mediator is a singleton for handling global events.
  */
 
-var Events = require('../base/events')
+import Events from '../base/events'
 
 var events = new Events()
 
