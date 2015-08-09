@@ -1,4 +1,4 @@
-var Events = require('../../src/base/events')
+import Events from '../../src/base/events'
 
 describe('Events', function(){
   beforeEach(function(){

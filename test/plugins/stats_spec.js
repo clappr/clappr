@@ -1,7 +1,7 @@
 var Container = require('../../src/components/container')
 var FakePlayback = require('../../src/base/playback')
 var Stats = require('../../src/plugins/stats')
-var Events = require('../../src/base/events')
+import Events from '../../src/base/events'
 
 describe('StatsPlugin', function() {
   beforeEach(function() {

@@ -1,5 +1,6 @@
+import {extend} from './utils'
+
 var BaseObject = require('./base_object')
-import extend from './utils'
 
 class CorePlugin extends BaseObject {
   constructor(core) {

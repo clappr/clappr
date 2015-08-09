@@ -1,4 +1,4 @@
-import Config from '../../src/base/utils'
+import {Config} from '../../src/base/utils'
 
 var MediaControl = require('../../src/components/media_control');
 var FakePlayback = require('../../src/base/playback');
