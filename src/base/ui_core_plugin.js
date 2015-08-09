@@ -1,5 +1,6 @@
+import extend from './utils'
+
 var UIObject = require('./ui_object')
-var extend = require('./utils').extend
 
 class UICorePlugin extends UIObject {
   constructor(core) {

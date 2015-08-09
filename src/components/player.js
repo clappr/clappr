@@ -2,16 +2,17 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+import uniqueId from '../base/utils'
+
 var BaseObject = require('../base/base_object')
 var CoreFactory = require('./core_factory')
 var Loader = require('./loader')
 var assign = require('lodash.assign')
 var find = require('lodash.find')
 var Events = require('events')
-var uniqueId = require('../base/utils').uniqueId
 var PlayerInfo = require('./player_info')
 
-class Player extends BaseObject {
+export default class Player extends BaseObject {
   constructor(options) {
     super(options)
     window.p = this
@@ -155,4 +156,3 @@ class Player extends BaseObject {
   }
 }
 
-module.exports = Player

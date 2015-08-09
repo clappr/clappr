@@ -7,12 +7,18 @@
  * and the player state.
  */
 
+import {
+    isNumber,
+    Fullscreen,
+    requestAnimationFrame,
+    cancelAnimationFrame
+} from '../../base/utils'
+
 var assign = require('lodash.assign')
 var $ = require('clappr-zepto')
 
 var UIObject = require('../../base/ui_object')
 var ContainerFactory = require('../container_factory')
-var Fullscreen = require('../../base/utils').Fullscreen
 var Styler = require('../../base/styler')
 var MediaControl = require('../media_control')
 var PlayerInfo = require('../player_info')
@@ -22,9 +28,6 @@ var Browser = require('../browser')
 var coreStyle = require('./public/style.scss');
 
 var find = require('lodash.find')
-var isNumber = require('../../base/utils').isNumber
-var requestAnimationFrame = require('../../base/utils').requestAnimationFrame
-var cancelAnimationFrame = require('../../base/utils').cancelAnimationFrame
 
 class Core extends UIObject {
   get events() {

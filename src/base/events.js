@@ -2,13 +2,14 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+import uniqueId from './utils'
+
 var execOnce = require('lodash.once')
-var uniqueId = require('./utils').uniqueId
 var Log = require('../plugins/log').getInstance()
 
 var slice = Array.prototype.slice
 
-class Events {
+export default class Events {
   on(name, callback, context) {
     if (!eventsApi(this, 'on', name, [callback, context]) || !callback) return this
     this._events || (this._events = {})
@@ -207,4 +208,3 @@ Events.MEDIACONTROL_PLAYING = 'mediacontrol:playing'
 Events.MEDIACONTROL_NOTPLAYING = 'mediacontrol:notplaying'
 Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged'
 
-module.exports = Events

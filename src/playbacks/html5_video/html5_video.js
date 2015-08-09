@@ -2,11 +2,12 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+import seekStringToSeconds from '../../base/utils'
+
 var Playback = require('../../base/playback')
 var template = require('../../base/template')
 var Styler = require('../../base/styler')
 var Browser = require('../../components/browser')
-var seekStringToSeconds = require('../../base/utils').seekStringToSeconds
 var Events = require('../../base/events')
 var videoStyle = require('./public/style.scss')
 var videoHTML = require('./public/index.html')
