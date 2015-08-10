@@ -1,4 +1,4 @@
-var HTML5Video = require('../../src/playbacks/html5_video')
+import HTML5Video from '../../src/playbacks/html5_video'
 
 describe('HTML5Video playback', function() {
   it('should check if canPlay resource', function() {
