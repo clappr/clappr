@@ -2,16 +2,16 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var UIContainerPlugin = require('../../base/ui_container_plugin')
-var Styler = require('../../base/styler')
-var posterStyle = require('./public/poster.scss')
-var posterHTML = require('./public/poster.html')
-var template = require('../../base/template')
-var Events = require('../../base/events')
+import UIContainerPlugin from '../../base/ui_container_plugin'
+import Styler from '../../base/styler'
+import posterStyle from './public/poster.scss'
+import posterHTML from './public/poster.html'
+import template from '../../base/template'
+import Events from '../../base/events'
 
-var Mediator = require('../../components/mediator')
+import Mediator from '../../components/mediator'
 
-var $ = require('clappr-zepto')
+import $ from 'clappr-zepto'
 
 class PosterPlugin extends UIContainerPlugin {
   get name() { return 'poster' }

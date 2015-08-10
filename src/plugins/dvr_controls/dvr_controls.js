@@ -1,10 +1,10 @@
-var UICorePlugin = require('../../base/ui_core_plugin')
-var template = require('../../base/template')
-var Styler = require('../../base/styler')
-var Events = require('../../base/events')
-var dvrStyle = require('./public/dvr_controls.scss')
-var dvrHTML = require('./public/index.html')
-var $ = require('clappr-zepto')
+import UICorePlugin from '../../base/ui_core_plugin'
+import template from '../../base/template'
+import Styler from '../../base/styler'
+import Events from '../../base/events'
+import dvrStyle from './public/dvr_controls.scss'
+import dvrHTML from './public/index.html'
+import $ from 'clappr-zepto'
 
 class DVRControls extends UICorePlugin {
   get template() { return template(dvrHTML) }

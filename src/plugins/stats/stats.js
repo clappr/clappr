@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var ContainerPlugin = require('../../base/container_plugin');
-var $ = require("clappr-zepto");
-var Events = require('../../base/events');
+import ContainerPlugin from '../../base/container_plugin'
+import $ from "clappr-zepto"
+import Events from '../../base/events'
 
 class StatsPlugin extends ContainerPlugin {
   get name() { return 'stats' }

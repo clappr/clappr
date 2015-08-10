@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var UIContainerPlugin = require('../../base/ui_container_plugin');
-var Styler = require('../../base/styler');
-var template = require('../../base/template');
-var spinnerHTML = require('./public/spinner.html');
-var spinnerStyle = require('./public/spinner.scss');
-var Events = require('../../base/events');
+import UIContainerPlugin from '../../base/ui_container_plugin'
+import Styler from '../../base/styler'
+import template from '../../base/template'
+import spinnerHTML from './public/spinner.html'
+import spinnerStyle from './public/spinner.scss'
+import Events from '../../base/events'
 
 class SpinnerThreeBouncePlugin extends UIContainerPlugin {
   get name() { return 'spinner' }

@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var ContainerPlugin = require('../../base/container_plugin')
-var Events = require('../../base/events')
-var Browser = require('../../components/browser')
+import ContainerPlugin from '../../base/container_plugin'
+import Events from '../../base/events'
+import Browser from '../../components/browser'
 
 class ClickToPausePlugin extends ContainerPlugin {
   get name() { return 'click_to_pause' }
