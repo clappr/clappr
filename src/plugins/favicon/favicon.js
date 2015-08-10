@@ -1,6 +1,6 @@
-var CorePlugin = require('../../base/core_plugin')
-var Events = require('../../base/events')
-var $ = require('zepto')
+import CorePlugin from '../../base/core_plugin'
+import Events from '../../base/events'
+import $ from 'zepto'
 
 class Favicon extends CorePlugin {
   get name() { return 'favicon' }

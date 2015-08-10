@@ -1,8 +1,8 @@
-var Events = require('../../base/events')
-var Playback = require('../../base/playback')
-var $ = require('zepto')
-var template = require('../../base/template')
-var chromecastHTML = require('./public/chromecast.html')
+import Events from '../../base/events'
+import Playback from '../../base/playback'
+import $ from 'zepto'
+import template from '../../base/template'
+import chromecastHTML from './public/chromecast.html'
 
 var TICK_INTERVAL = 100
 

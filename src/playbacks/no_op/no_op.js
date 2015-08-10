@@ -1,11 +1,11 @@
 import {requestAnimationFrame} from '../../base/utils'
 
-var Playback = require('../../base/playback')
-var template = require('../../base/template')
-var Styler = require('../../base/styler')
-var Events = require('../../base/events')
-var noOpStyle = require('./public/style.scss')
-var noOpHTML = require('./public/error.html')
+import Playback from '../../base/playback'
+import template from '../../base/template'
+import Styler from '../../base/styler'
+import Events from '../../base/events'
+import noOpStyle from './public/style.scss'
+import noOpHTML from './public/error.html'
 
 class NoOp extends Playback {
   get name() { return 'no_op' }

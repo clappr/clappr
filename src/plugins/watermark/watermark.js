@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var UIContainerPlugin = require('../../base/ui_container_plugin')
-var Styler = require('../../base/styler')
-var watermarkStyle = require('./public/watermark.scss')
-var watermarkHTML = require('./public/watermark.html')
-var template = require('../../base/template')
-var Events = require('../../base/events')
+import UIContainerPlugin from '../../base/ui_container_plugin'
+import Styler from '../../base/styler'
+import watermarkStyle from './public/watermark.scss'
+import watermarkHTML from './public/watermark.html'
+import template from '../../base/template'
+import Events from '../../base/events'
 
 class WaterMarkPlugin extends UIContainerPlugin {
   get name() { return 'watermark' }

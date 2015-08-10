@@ -1,11 +1,11 @@
-var UICorePlugin = require('../../base/ui_core_plugin')
-var Events = require('../../base/events')
-var Styler = require('../../base/styler')
-var ChromecastPlayback = require('./chromecast_playback')
-var chromecastStyle = require('./public/style.scss')
-var assign = require('lodash.assign')
+import UICorePlugin from '../../base/ui_core_plugin'
+import Events from '../../base/events'
+import Styler from '../../base/styler'
+import ChromecastPlayback from './chromecast_playback'
+import chromecastStyle from './public/style.scss'
+import assign from 'lodash.assign'
 
-var Browser = require('../../components/browser');
+import Browser from '../../components/browser';
 
 var DEVICE_STATE = {
   'IDLE' : 0,

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var Kibo = require('../../base/kibo')
+import Kibo from '../../base/kibo'
 
 var BOLD = 'font-weight: bold; font-size: 13px;';
 var INFO = 'color: #006600;' + BOLD;
