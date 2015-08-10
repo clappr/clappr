@@ -1,4 +1,4 @@
-var GoogleAnalytics = require('../../src/plugins/google_analytics')
+import GoogleAnalytics from '../../src/plugins/google_analytics'
 var gaControl
 
 describe('GoogleAnalytics', function() {

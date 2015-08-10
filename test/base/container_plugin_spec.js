@@ -1,4 +1,4 @@
-var ContainerPlugin = require('../../src/base/container_plugin')
+import ContainerPlugin from '../../src/base/container_plugin'
 
 describe('Container Plugin', function() {
   it('should be enabled when created', function() {

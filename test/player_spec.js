@@ -1,4 +1,4 @@
-var Player = require('../src/components/player')
+import Player from '../src/components/player'
 
 describe('Player', function() {
   describe('constructor', function() {

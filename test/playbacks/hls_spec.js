@@ -1,5 +1,5 @@
-var HLS = require('../../src/playbacks/hls/hls.js')
-var Events = require('../../src/base/events.js')
+import HLS from '../../src/playbacks/hls/hls.js'
+import Events from '../../src/base/events.js'
 
 describe('HLS playback', function() {
   describe('#setPlaybackState', function() {

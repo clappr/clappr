@@ -1,4 +1,4 @@
-var BaseObject = require('../../src/base/base_object')
+import BaseObject from '../../src/base/base_object'
 
 describe('BaseObject', function() {
   beforeEach(function(){
