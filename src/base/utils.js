@@ -150,12 +150,12 @@ export function isNumber(value) {
   return value - parseFloat(value) + 1 >= 0
 }
 
-export var requestAnimationFrame = window.requestAnimationFrame ||
+export var requestAnimationFrame = (window.requestAnimationFrame ||
                             window.mozRequestAnimationFrame ||
                             window.webkitRequestAnimationFrame ||
-                            function(fn) { window.setTimeout(fn, 1000/60) }
+                            function(fn) { window.setTimeout(fn, 1000/60) }).bind(window)
 
-export var cancelAnimationFrame = window.cancelAnimationFrame ||
+export var cancelAnimationFrame = (window.cancelAnimationFrame ||
                            window.mozCancelAnimationFrame ||
                            window.webkitCancelAnimationFrame ||
-                           window.clearTimeout
+                           window.clearTimeout).bind(window)
