@@ -4,14 +4,14 @@
 
 import {seekStringToSeconds} from '../../base/utils'
 
-var Playback = require('../../base/playback')
-var template = require('../../base/template')
-var Styler = require('../../base/styler')
-var Browser = require('../../components/browser')
-var Events = require('../../base/events')
-var videoStyle = require('./public/style.scss')
-var videoHTML = require('./public/index.html')
-var find = require('lodash.find')
+import Playback from '../../base/playback'
+import template from '../../base/template'
+import Styler from '../../base/styler'
+import Browser from '../../components/browser'
+import Events from '../../base/events'
+import videoStyle from './public/style.scss'
+import videoHTML from './public/index.html'
+import find from 'lodash.find'
 
 class HTML5Video extends Playback {
   get name() { return 'html5_video' }

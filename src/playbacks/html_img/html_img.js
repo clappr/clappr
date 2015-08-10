@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var Playback = require('../../base/playback')
-var imgStyle = require('./public/style.scss')
-var Styler = require('../../base/styler')
+import Playback from '../../base/playback'
+import imgStyle from './public/style.scss'
+import Styler from '../../base/styler'
 
 class HTMLImg extends Playback {
   get name() { return 'html_img' }
