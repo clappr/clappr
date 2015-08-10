@@ -1,4 +1,4 @@
-var Browser = require('../../src/components/browser')
+import Browser from '../../src/components/browser'
 
 describe('Browser', function() {
   it('checks localstorage support', function() {

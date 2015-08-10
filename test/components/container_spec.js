@@ -1,6 +1,6 @@
-var Container = require('../../src/components/container')
-var FakePlayback = require('../../src/base/playback')
-var Events = require('../../src/base/events')
+import Container from '../../src/components/container'
+import FakePlayback from '../../src/base/playback'
+import Events from '../../src/base/events'
 
 describe('Container', function() {
   beforeEach(function() {
