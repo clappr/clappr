@@ -6,7 +6,7 @@ import Playback from '../../base/playback'
 import Events from '../../base/events'
 import find from 'lodash.find'
 
-class HTML5Audio extends Playback {
+export default class HTML5Audio extends Playback {
   get name() { return 'html5_audio' }
   get tagName() { return 'audio' }
   get events() {
@@ -176,5 +176,3 @@ HTML5Audio.canPlay = function(resource, mimeType) {
   return false
 }
 
-
-module.exports = HTML5Audio

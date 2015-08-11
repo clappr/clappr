@@ -13,7 +13,7 @@ import videoStyle from './public/style.scss'
 import videoHTML from './public/index.html'
 import find from 'lodash.find'
 
-class HTML5Video extends Playback {
+export default class HTML5Video extends Playback {
   get name() { return 'html5_video' }
   get tagName() { return 'video' }
   get template() { return template(videoHTML) }
