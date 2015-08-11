@@ -346,10 +346,7 @@ export default class HLS extends Playback {
 
   render() {
     var style = Styler.getStyleFor(hlsStyle)
-    var swfPath = hlsSwf
-    if (this.baseUrl) {
-      swfPath = `${this.baseUrl}/public/HLSPlayer.swf`
-    }
+    var swfPath = template(hlsSwf)({baseUrl: this.baseUrl})
     if(Browser.isLegacyIE) {
       this.setupIE(swfPath)
     } else {
