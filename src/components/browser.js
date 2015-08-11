@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-class Browser {
+export default class Browser {
 }
 
 var hasLocalstorage = function(){
@@ -39,4 +39,3 @@ Browser.isPS4 = !!(/PlayStation 4/i.test(navigator.userAgent))
 Browser.hasLocalstorage = hasLocalstorage()
 Browser.hasFlash = hasFlash()
 
-module.exports = Browser

@@ -27,7 +27,7 @@ import Browser from '../browser'
 import coreStyle from './public/style.scss'
 import find from 'lodash.find'
 
-class Core extends UIObject {
+export default class Core extends UIObject {
   get events() {
     return {
       'webkitfullscreenchange': 'exit',
@@ -283,5 +283,3 @@ class Core extends UIObject {
     return this
   }
 }
-
-module.exports = Core

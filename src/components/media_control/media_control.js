@@ -21,7 +21,7 @@ import  mediaControlStyle from './public/media-control.scss'
 import  template from '../../base/template'
 import  mediaControlHTML from './public/media-control.html'
 
-class MediaControl extends UIObject {
+export default class MediaControl extends UIObject {
   get name() { return 'MediaControl' }
 
   get attributes() {
@@ -546,4 +546,3 @@ class MediaControl extends UIObject {
   }
 }
 
-module.exports = MediaControl

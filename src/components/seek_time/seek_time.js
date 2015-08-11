@@ -11,7 +11,7 @@ import Events from '../../base/events'
 import seekTimeStyle from './public/seek_time.scss'
 import seekTimeHTML from './public/seek_time.html'
 
-class SeekTime extends UIObject {
+export default class SeekTime extends UIObject {
   get name() { return 'seek_time' }
   get template() {
     return template(seekTimeHTML);
@@ -71,4 +71,3 @@ class SeekTime extends UIObject {
   }
 }
 
-module.exports = SeekTime;
