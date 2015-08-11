@@ -6,7 +6,7 @@ import dvrStyle from './public/dvr_controls.scss'
 import dvrHTML from './public/index.html'
 import $ from 'clappr-zepto'
 
-class DVRControls extends UICorePlugin {
+export default class DVRControls extends UICorePlugin {
   get template() { return template(dvrHTML) }
   get name() { return 'dvr_controls' }
   get events() {
@@ -84,4 +84,3 @@ class DVRControls extends UICorePlugin {
   }
 }
 
-module.exports = DVRControls

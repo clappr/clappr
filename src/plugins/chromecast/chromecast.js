@@ -16,7 +16,7 @@ var DEVICE_STATE = {
 
 var DEFAULT_CLAPPR_APP_ID = '9DFB77C0'
 
-class Chromecast extends UICorePlugin {
+export default class Chromecast extends UICorePlugin {
   get name() { return 'chromecast' }
   get tagName() { return 'button' }
   get attributes() {
@@ -266,4 +266,3 @@ class Chromecast extends UICorePlugin {
   }
 }
 
-module.exports = Chromecast

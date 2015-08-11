@@ -6,7 +6,7 @@ import ContainerPlugin from '../../base/container_plugin'
 import Events from '../../base/events'
 import Browser from '../../components/browser'
 
-class ClickToPausePlugin extends ContainerPlugin {
+export default class ClickToPausePlugin extends ContainerPlugin {
   get name() { return 'click_to_pause' }
 
   constructor(options) {
@@ -38,4 +38,3 @@ class ClickToPausePlugin extends ContainerPlugin {
   }
 }
 
-module.exports = ClickToPausePlugin

@@ -6,7 +6,7 @@ import ContainerPlugin from '../../base/container_plugin'
 import $ from "clappr-zepto"
 import Events from '../../base/events'
 
-class StatsPlugin extends ContainerPlugin {
+export default class StatsPlugin extends ContainerPlugin {
   get name() { return 'stats' }
 
   constructor(options) {
@@ -105,4 +105,3 @@ class StatsPlugin extends ContainerPlugin {
   }
 }
 
-module.exports = StatsPlugin;

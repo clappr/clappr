@@ -374,4 +374,3 @@ HLS.canPlay = function(resource, mimeType) {
           mimeType === 'application/x-mpegURL' || mimeType === 'application/vnd.apple.mpegurl')
 }
 
-module.exports = HLS

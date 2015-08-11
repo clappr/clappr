@@ -19,7 +19,7 @@ var LEVEL_DISABLED = 4
 var COLORS = [DEBUG, INFO, WARN, ERROR, ERROR]
 var DESCRIPTIONS = ['debug', 'info', 'warn', 'error', 'disabled']
 
-class Log {
+export default class Log {
   constructor(level = LEVEL_WARN) {
     this.kibo = new Kibo()
     this.kibo.down(['ctrl shift d'], () => this.onOff())
@@ -75,4 +75,3 @@ Log.getInstance = function() {
   return this._instance
 }
 
-module.exports = Log

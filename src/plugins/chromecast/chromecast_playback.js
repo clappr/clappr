@@ -6,7 +6,7 @@ import chromecastHTML from './public/chromecast.html'
 
 var TICK_INTERVAL = 100
 
-class ChromecastPlayback extends Playback {
+export default class ChromecastPlayback extends Playback {
 
   get name() { return 'chromecast_playback' }
   get template() { return template(chromecastHTML) }
@@ -100,4 +100,3 @@ class ChromecastPlayback extends Playback {
   }
 }
 
-module.exports = ChromecastPlayback
