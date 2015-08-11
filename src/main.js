@@ -16,20 +16,7 @@ import Log from './plugins/log'
 
 window.DEBUG = false
 
-var Clappr = {
-  Player: Player,
-  Mediator: Mediator,
-  Events: Events,
-  MediaControl: MediaControl,
-  ContainerPlugin: ContainerPlugin,
-  UIContainerPlugin: UIContainerPlugin,
-  CorePlugin: CorePlugin,
-  UICorePlugin: UICorePlugin,
-  Playback: Playback,
-  Utils: Utils,
-  Log: Log,
-  version: VERSION
-}
+var version = VERSION
 
 export {
     Player,
@@ -43,8 +30,5 @@ export {
     Playback,
     Utils,
     Log,
+    version
 }
-
-export default Clappr
-
-window.Clappr = Clappr
