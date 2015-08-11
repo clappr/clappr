@@ -6,7 +6,7 @@ import Playback from '../../base/playback'
 import imgStyle from './public/style.scss'
 import Styler from '../../base/styler'
 
-class HTMLImg extends Playback {
+export default class HTMLImg extends Playback {
   get name() { return 'html_img' }
   get tagName() { return 'img' }
   get attributes() {
@@ -35,4 +35,3 @@ HTMLImg.canPlay = function(resource) {
   return !!resource.match(/(.*).(png|jpg|jpeg|gif|bmp)/)
 }
 
-module.exports = HTMLImg

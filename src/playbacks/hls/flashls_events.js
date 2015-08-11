@@ -1,6 +1,6 @@
 import Mediator from '../../components/mediator'
 
-class HLSEvents {
+export default class HLSEvents {
   constructor(instanceId) {
     this.instanceId = instanceId
   }
@@ -51,4 +51,3 @@ class HLSEvents {
   }
 }
 
-module.exports = HLSEvents
