@@ -10,7 +10,7 @@ import BaseObject from './base_object'
 
 var delegateEventSplitter = /^(\S+)\s*(.*)$/
 
-class UIObject extends BaseObject {
+export default class UIObject extends BaseObject {
 
   get tagName() { return 'div' }
 
@@ -82,4 +82,3 @@ class UIObject extends BaseObject {
   }
 }
 
-module.exports = UIObject

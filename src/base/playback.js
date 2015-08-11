@@ -1,7 +1,7 @@
 import {extend} from './utils'
 import UIObject from './ui_object'
 
-class Playback extends UIObject {
+export default class Playback extends UIObject {
   constructor(options) {
     super(options)
     this.settings = {}
@@ -43,5 +43,3 @@ Playback.extend = function(properties) {
 Playback.canPlay = (source) => {
   return false
 }
-
-module.exports = Playback

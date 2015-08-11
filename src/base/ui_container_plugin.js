@@ -6,7 +6,7 @@ import {extend} from './utils'
 
 import UIObject from './ui_object'
 
-class UIContainerPlugin extends UIObject {
+export default class UIContainerPlugin extends UIObject {
   constructor(options) {
     super(options)
     this.container = options.container
@@ -40,4 +40,3 @@ UIContainerPlugin.extend = function(properties) {
   return extend(UIContainerPlugin, properties)
 }
 
-module.exports = UIContainerPlugin

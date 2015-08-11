@@ -11,4 +11,4 @@ var Styler = {
   }
 };
 
-module.exports = Styler;
+export default Styler;

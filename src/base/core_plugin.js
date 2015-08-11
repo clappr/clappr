@@ -1,7 +1,7 @@
 import {extend} from './utils'
 import BaseObject from './base_object'
 
-class CorePlugin extends BaseObject {
+export default class CorePlugin extends BaseObject {
   constructor(core) {
     super(core)
     this.core = core
@@ -36,4 +36,3 @@ CorePlugin.extend = function(properties) {
   return extend(CorePlugin, properties)
 }
 
-module.exports = CorePlugin
