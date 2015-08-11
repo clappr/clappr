@@ -47,3 +47,4 @@ export {
 
 export default Clappr
 
+window.Clappr = Clappr
