@@ -1,7 +1,7 @@
 import {extend} from './utils'
 import UIObject from './ui_object'
 
-class UICorePlugin extends UIObject {
+export default class UICorePlugin extends UIObject {
   constructor(core) {
     super(core)
     this.core = core
@@ -44,4 +44,3 @@ UICorePlugin.extend = function(properties) {
   return extend(UICorePlugin, properties)
 }
 
-module.exports = UICorePlugin

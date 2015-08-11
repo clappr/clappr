@@ -255,4 +255,4 @@ Kibo.prototype.lastModifiersAndKey = function() {
   return result.join(' ');
 };
 
-module.exports = Kibo;
+export default Kibo

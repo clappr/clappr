@@ -1,7 +1,7 @@
 import BaseObject from './base_object'
 import {extend} from './utils'
 
-class ContainerPlugin extends BaseObject {
+export default class ContainerPlugin extends BaseObject {
   constructor(options) {
     super(options)
     this.container = options.container
@@ -35,4 +35,3 @@ ContainerPlugin.extend = function(properties) {
   return extend(ContainerPlugin, properties)
 }
 
-module.exports = ContainerPlugin

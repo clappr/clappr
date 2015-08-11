@@ -5,12 +5,10 @@
 import {uniqueId} from './utils'
 import Events from './events'
 
-class BaseObject extends Events {
+export default class BaseObject extends Events {
   constructor(options={}) {
     super(options)
     this.uniqueId = uniqueId('o')
   }
 }
-
-module.exports = BaseObject;
 
