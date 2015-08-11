@@ -28,7 +28,7 @@ var Clappr = {
   Playback: Playback,
   Utils: Utils,
   Log: Log,
-  version:  "__VERSION__"
+  version: VERSION
 }
 
 export {
