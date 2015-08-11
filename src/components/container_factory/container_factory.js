@@ -13,7 +13,7 @@ import $ from 'clappr-zepto'
 import Events from '../../base/events'
 import find from 'lodash.find'
 
-class ContainerFactory extends BaseObject {
+export default class ContainerFactory extends BaseObject {
   constructor(options, loader) {
     super(options);
     this.options = options;
@@ -53,4 +53,3 @@ class ContainerFactory extends BaseObject {
   }
 }
 
-module.exports = ContainerFactory;

@@ -12,7 +12,7 @@ import Styler from '../../base/styler'
 import style from './public/style.scss'
 import find from 'lodash.find'
 
-class Container extends UIObject {
+export default class Container extends UIObject {
   get name() { return 'Container' }
   get attributes() { return { class: 'container', 'data-container': '' } }
   get events() {
@@ -243,4 +243,3 @@ class Container extends UIObject {
   }
 }
 
-module.exports = Container;

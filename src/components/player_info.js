@@ -8,4 +8,4 @@ var PlayerInfo = {
   currentSize: { width: 0, height: 0 }
 }
 
-module.exports = PlayerInfo;
+export default PlayerInfo;

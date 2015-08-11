@@ -9,7 +9,7 @@
 import BaseObject from '../../base/base_object'
 import Core from '../core'
 
-class CoreFactory extends BaseObject {
+export default class CoreFactory extends BaseObject {
   constructor(player, loader) {
     super()
     this.player = player
@@ -41,4 +41,3 @@ class CoreFactory extends BaseObject {
   }
 }
 
-module.exports = CoreFactory;

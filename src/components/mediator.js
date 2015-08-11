@@ -10,7 +10,7 @@ import Events from '../base/events'
 
 var events = new Events()
 
-class Mediator {
+export default class Mediator {
 }
 
 Mediator.on = function(name, callback, context) {
@@ -38,4 +38,3 @@ Mediator.stopListening = function(obj, name, callback) {
   return
 }
 
-module.exports = Mediator

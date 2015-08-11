@@ -27,7 +27,7 @@ import Chromecast from '../../plugins/chromecast'
 import DVRControls from '../../plugins/dvr_controls'
 import Favicon from '../../plugins/favicon'
 
-class Loader extends BaseObject {
+export default class Loader extends BaseObject {
   constructor(externalPlugins) {
     super()
     this.playbackPlugins = [HTML5AudioPlayback, HTML5VideoPlayback, FlashVideoPlayback, HLSVideoPlayback, HTMLImgPlayback, NoOp]
@@ -52,4 +52,3 @@ class Loader extends BaseObject {
   }
 }
 
-module.exports = Loader;
