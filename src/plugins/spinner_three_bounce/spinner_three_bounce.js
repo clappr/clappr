@@ -9,7 +9,7 @@ import spinnerHTML from './public/spinner.html'
 import spinnerStyle from './public/spinner.scss'
 import Events from '../../base/events'
 
-class SpinnerThreeBouncePlugin extends UIContainerPlugin {
+export default class SpinnerThreeBouncePlugin extends UIContainerPlugin {
   get name() { return 'spinner' }
   get attributes() {
     return {
@@ -50,4 +50,3 @@ class SpinnerThreeBouncePlugin extends UIContainerPlugin {
   }
 }
 
-module.exports = SpinnerThreeBouncePlugin;

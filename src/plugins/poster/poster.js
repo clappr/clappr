@@ -13,7 +13,7 @@ import Mediator from '../../components/mediator'
 
 import $ from 'clappr-zepto'
 
-class PosterPlugin extends UIContainerPlugin {
+export default class PosterPlugin extends UIContainerPlugin {
   get name() { return 'poster' }
   get template() { return template(posterHTML) }
 
@@ -130,4 +130,3 @@ class PosterPlugin extends UIContainerPlugin {
   }
 }
 
-module.exports = PosterPlugin

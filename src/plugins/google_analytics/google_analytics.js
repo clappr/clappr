@@ -5,7 +5,7 @@
 import ContainerPlugin from '../../base/container_plugin';
 import Events from '../../base/events'
 
-class GoogleAnalytics extends ContainerPlugin {
+export default class GoogleAnalytics extends ContainerPlugin {
   get name() { return 'google_analytics' }
   constructor(options) {
     super(options)
@@ -122,4 +122,3 @@ class GoogleAnalytics extends ContainerPlugin {
 
 }
 
-module.exports = GoogleAnalytics;

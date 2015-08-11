@@ -9,7 +9,7 @@ import watermarkHTML from './public/watermark.html'
 import template from '../../base/template'
 import Events from '../../base/events'
 
-class WaterMarkPlugin extends UIContainerPlugin {
+export default class WaterMarkPlugin extends UIContainerPlugin {
   get name() { return 'watermark' }
 
   get template() { return template(watermarkHTML) }
@@ -50,4 +50,3 @@ class WaterMarkPlugin extends UIContainerPlugin {
   }
 }
 
-module.exports = WaterMarkPlugin

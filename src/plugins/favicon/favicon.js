@@ -2,7 +2,7 @@ import CorePlugin from '../../base/core_plugin'
 import Events from '../../base/events'
 import $ from 'zepto'
 
-class Favicon extends CorePlugin {
+export default class Favicon extends CorePlugin {
   get name() { return 'favicon' }
 
   constructor(core) {
@@ -79,4 +79,3 @@ class Favicon extends CorePlugin {
   }
 }
 
-module.exports = Favicon
