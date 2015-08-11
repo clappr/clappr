@@ -41,7 +41,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '<%=baseUrl%>/',
     filename: 'clappr.js',
-    library: 'clappr',
+    library: 'Clappr',
     libraryTarget: 'umd',
   },
 };
