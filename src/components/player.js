@@ -16,7 +16,7 @@ export default class Player extends BaseObject {
   constructor(options) {
     super(options)
     window.p = this
-    var defaultOptions = {playerId: uniqueId(""), persistConfig: true, width: 640, height: 360}
+    var defaultOptions = {playerId: uniqueId(""), persistConfig: true, width: 640, height: 360, baseUrl: `//cdn.clappr.io/${VERSION}`}
     this.options = assign(defaultOptions, options)
     this.options.sources = this.normalizeSources(options)
     this.loader = new Loader(this.options.plugins || {})
@@ -155,4 +155,3 @@ export default class Player extends BaseObject {
     return this.core.mediaControl.container.getDuration()
   }
 }
-
