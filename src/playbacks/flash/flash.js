@@ -186,10 +186,7 @@ export default class Flash extends Playback {
 
   render() {
     var style = Styler.getStyleFor(flashStyle)
-    var swfPath = flashSwf
-    if (this.baseUrl) {
-      swfPath = `${this.baseUrl}/assets/Player.swf`
-    }
+    var swfPath = template(flashSwf)({baseUrl: this.baseUrl})
     this.$el.html(this.template({ cid: this.cid, swfPath: swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId }))
     if(Browser.isFirefox) {
       this.setupFirefox()
