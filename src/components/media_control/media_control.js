@@ -188,7 +188,7 @@ export default class MediaControl extends UIObject {
 
   playerResize(size) {
     if (!this.disabled) {
-      if (Utils.Fullscreen.isFullscreen()) {
+      if (Fullscreen.isFullscreen()) {
         this.$fullscreenToggle.addClass('shrink')
       } else {
         this.$fullscreenToggle.removeClass('shrink')
