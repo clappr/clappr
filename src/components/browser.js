@@ -2,8 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-export default class Browser {
-}
+var Browser = {}
 
 var hasLocalstorage = function(){
   try {
@@ -25,6 +24,29 @@ var hasFlash = function() {
   }
 }
 
+var getBrowserInfo = function() {
+  var ua = navigator.userAgent
+  var parts = ua.match(/\b(playstation 4|nx|opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || []
+  var extra
+  if (/trident/i.test(parts[1])) {
+    extra = /\brv[ :]+(\d+)/g.exec(ua) || []
+    return { name: 'IE', version: parseInt(extra[1] || '') }
+  } else if (parts[1] === 'Chrome' ) {
+    extra = ua.match(/\bOPR\/(\d+)/)
+    if (extra != null) {
+      return { name:'Opera', version: parseInt(extra[1]) }
+    }
+  }
+  parts = parts[2] ? [parts[1], parts[2]] : [navigator.appName, navigator.appVersion, '-?']
+
+  if ((extra = ua.match(/version\/(\d+)/i))) {
+    parts.splice(1, 1, extra[1])
+  }
+  return { name: parts[0], version: parseInt(parts[1]) }
+}
+
+var browserInfo = getBrowserInfo()
+
 Browser.isSafari = (!!navigator.userAgent.match(/safari/i) && navigator.userAgent.indexOf('Chrome') === -1)
 Browser.isChrome = !!(navigator.userAgent.match(/chrome/i))
 Browser.isFirefox = !!(navigator.userAgent.match(/firefox/i))
@@ -39,3 +61,7 @@ Browser.isPS4 = !!(/PlayStation 4/i.test(navigator.userAgent))
 Browser.hasLocalstorage = hasLocalstorage()
 Browser.hasFlash = hasFlash()
 
+Browser.name = browserInfo.name
+Browser.version = browserInfo.version
+
+export default Browser

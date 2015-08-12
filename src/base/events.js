@@ -59,18 +59,22 @@ export default class Events {
   }
 
   trigger(name) {
-    var klass = this.constructor.name
-    if (this.hasOwnProperty(name)) {
-      klass = this.name
+    try {
+      var klass = this.constructor.name
+      if (this.hasOwnProperty(name)) {
+        klass = this.name
+      }
+      Log.debug.apply(Log, [klass].concat(Array.prototype.slice.call(arguments)))
+      if (!this._events) return this
+      var args = slice.call(arguments, 1)
+      if (!eventsApi(this, 'trigger', name, args)) return this
+      var events = this._events[name]
+      var allEvents = this._events.all
+      if (events) triggerEvents(events, args)
+      if (allEvents) triggerEvents(allEvents, arguments)
+    } catch (exception) {
+      Log.error.apply(Log, [klass, 'error on event', name, 'trigger','-', exception])
     }
-    logger.debug.apply(logger, [klass].concat(Array.prototype.slice.call(arguments)))
-    if (!this._events) return this
-    var args = slice.call(arguments, 1)
-    if (!eventsApi(this, 'trigger', name, args)) return this
-    var events = this._events[name]
-    var allEvents = this._events.all
-    if (events) triggerEvents(events, args)
-    if (allEvents) triggerEvents(allEvents, arguments)
     return this
   }
 
@@ -167,6 +171,7 @@ Events.PLAYBACK_PLAY = 'playback:play'
 Events.PLAYBACK_PAUSE = 'playback:pause'
 Events.PLAYBACK_ERROR = 'playback:error'
 Events.PLAYBACK_STATS_ADD = 'playback:stats:add'
+Events.PLAYBACK_FRAGMENT_LOADED = 'playback:fragment:loaded'
 
 // Container Events
 Events.CONTAINER_PLAYBACKSTATE = 'container:playbackstate'
@@ -208,4 +213,3 @@ Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR = 'mediacontrol:mouseleave:seekbar'
 Events.MEDIACONTROL_PLAYING = 'mediacontrol:playing'
 Events.MEDIACONTROL_NOTPLAYING = 'mediacontrol:notplaying'
 Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged'
-

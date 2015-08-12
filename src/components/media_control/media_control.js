@@ -85,10 +85,10 @@ export default class MediaControl extends UIObject {
     this.updateDragHandler = (event) => this.updateDrag(event)
     $(document).bind('mouseup', this.stopDragHandler)
     $(document).bind('mousemove', this.updateDragHandler)
-    Mediator.on(Events.PLAYER_RESIZE, () => this.playerResize())
   }
 
   addEventListeners() {
+    Mediator.on(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
     this.listenTo(this.container, Events.CONTAINER_PLAY, this.changeTogglePlay)
     this.listenTo(this.container, Events.CONTAINER_PAUSE, this.changeTogglePlay)
     this.listenTo(this.container, Events.CONTAINER_DBLCLICK, this.toggleFullscreen)
@@ -186,15 +186,17 @@ export default class MediaControl extends UIObject {
     }
   }
 
-  playerResize() {
-    if (Fullscreen.isFullscreen()) {
-      this.$fullscreenToggle.addClass('shrink')
-    } else {
-      this.$fullscreenToggle.removeClass('shrink')
-    }
-    this.$el.removeClass('w320')
-    if (PlayerInfo.currentSize.width <= 320 || this.options.hideVolumeBar) {
-      this.$el.addClass('w320')
+  playerResize(size) {
+    if (!this.disabled) {
+      if (Utils.Fullscreen.isFullscreen()) {
+        this.$fullscreenToggle.addClass('shrink')
+      } else {
+        this.$fullscreenToggle.removeClass('shrink')
+      }
+      this.$el.removeClass('w320')
+      if (size.width <= 320 || this.options.hideVolumeBar) {
+        this.$el.addClass('w320')
+      }
     }
   }
 
@@ -293,6 +295,7 @@ export default class MediaControl extends UIObject {
 
   setContainer(container) {
     this.stopListening(this.container)
+    Mediator.off(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
     this.container = container
     this.changeTogglePlay()
     this.addEventListeners()
@@ -545,4 +548,3 @@ export default class MediaControl extends UIObject {
     return this
   }
 }
-

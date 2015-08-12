@@ -19,9 +19,11 @@ export default class Player extends BaseObject {
     var defaultOptions = {playerId: uniqueId(""), persistConfig: true, width: 640, height: 360, baseUrl: `//cdn.clappr.io/${VERSION}`}
     this.options = assign(defaultOptions, options)
     this.options.sources = this.normalizeSources(options)
-    this.loader = new Loader(this.options.plugins || {})
+    this.loader = new Loader(this.options.plugins || {}, this.options.playerId)
     this.coreFactory = new CoreFactory(this, this.loader)
-    PlayerInfo.currentSize = {width: options.width, height: options.height}
+    this.playerInfo = PlayerInfo.getInstance(this.options.playerId)
+    this.playerInfo.currentSize = {width: options.width, height: options.height}
+    this.playerInfo.options = this.options
     if (this.options.parentId) {
       this.setParentId(this.options.parentId)
     }

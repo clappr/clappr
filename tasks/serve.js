@@ -6,8 +6,8 @@ require('express-alias');
 
 gulp.task('serve', ['watch'], function() {
   express()
+    .alias('/latest/clappr.min.js', '/clappr.js', 301)
     .use(express.static('./public'))
     .use(express.static('./dist'))
-    .alias('/latest/clappr.min.js', '/clappr.js', 301)
     .listen(3000);
 });

@@ -39,7 +39,6 @@ export default class Flash extends Playback {
   bootstrap() {
     this.el.width = "100%"
     this.el.height = "100%"
-    this.isReady = true
     if (this.currentState === 'PLAYING') {
       this.firstPlay()
     } else {
@@ -47,7 +46,9 @@ export default class Flash extends Playback {
       this.autoPlay && this.play()
     }
     $('<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%" />').insertAfter(this.$el)
+    this.isReady = true
     this.trigger(Events.PLAYBACK_READY, this.name)
+    this.trigger(Events.PLAYBACK_SETTINGSUPDATE, this.name)
   }
 
   getPlaybackType() {
@@ -125,13 +126,14 @@ export default class Flash extends Playback {
   }
 
   play() {
-    if (this.el.getState() === 'PAUSED' || this.el.getState() === 'PLAYING_BUFFERING') {
+    if (this.currentState === 'PAUSED' || this.currentState === 'PLAYING_BUFFERING') {
       this.currentState = "PLAYING"
       this.el.playerResume()
-    } else if (this.el.getState() !== 'PLAYING') {
+      this.trigger(Events.PLAYBACK_PLAY, this.name)
+    } else if (this.currentState !== 'PLAYING') {
       this.firstPlay()
+      this.trigger(Events.PLAYBACK_PLAY, this.name)
     }
-    this.trigger(Events.PLAYBACK_PLAY, this.name)
   }
 
   volume(value) {
@@ -162,15 +164,23 @@ export default class Flash extends Playback {
   }
 
   seek(seekBarValue) {
-    var seekTo = this.el.getDuration() * (seekBarValue / 100)
-    this.seekSeconds(seekTo)
+    if (this.el.getDuration() > 0) {
+      var seekTo = this.el.getDuration() * (seekBarValue / 100)
+      this.seekSeconds(seekTo)
+    } else {
+      this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this.seek(seekBarValue))
+    }
   }
 
   seekSeconds(seekTo) {
-    this.el.playerSeek(seekTo)
-    this.trigger(Events.PLAYBACK_TIMEUPDATE, seekTo, this.el.getDuration(), this.name)
-    if (this.currentState === "PAUSED") {
-      this.el.playerPause()
+    if (this.isReady && this.el.playerSeek) {
+      this.el.playerSeek(seekTo)
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, seekTo, this.el.getDuration(), this.name)
+      if (this.currentState === "PAUSED") {
+        this.el.playerPause()
+      }
+    } else {
+      this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this.seekSeconds(seekTo))
     }
   }
 
@@ -203,11 +213,7 @@ Flash.canPlay = function(resource) {
     return false
   } else {
     var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
-    if ((!Browser.isMobile && Browser.isFirefox) || Browser.isLegacyIE) {
-      return resourceParts.length > 1 && resourceParts[1].match(/^(mp4|mov|f4v|3gpp|3gp)$/)
-    } else {
-      return resourceParts.length > 1 && resourceParts[1].match(/^(mov|f4v|3gpp|3gp)$/)
-    }
+    return resourceParts.length > 1 && !Browser.isMobile && resourceParts[1].match(/^(mp4|mov|f4v|3gpp|3gp)$/)
   }
 }
 
