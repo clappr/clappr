@@ -5,6 +5,7 @@
 var dotenv = require('dotenv');
 var path = require('path');
 var versionify = require("browserify-versionify");
+var webpack = require('webpack');
 
 dotenv.load();
 var exec = require('child_process').exec
@@ -58,6 +59,11 @@ module.exports = function(config) {
     reporters: ['progress', 'coverage'],
 
     webpack: {
+        plugins: [
+          new webpack.DefinePlugin({
+            VERSION: JSON.stringify(require('./package.json').version)
+          })
+        ],
         module: {
             loaders: [
             {
