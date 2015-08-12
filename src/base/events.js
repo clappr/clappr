@@ -60,10 +60,7 @@ export default class Events {
 
   trigger(name) {
     try {
-      var klass = this.constructor.name
-      if (this.hasOwnProperty(name)) {
-        klass = this.name
-      }
+      var klass = this.name || this.constructor.name
       logger.debug.apply(logger, [klass].concat(Array.prototype.slice.call(arguments)))
       if (!this._events) return this
       var args = slice.call(arguments, 1)
