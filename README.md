@@ -144,10 +144,6 @@ Clappr is under heavy development but production-ready. Feel free to open issues
 
 ### Installing for development
 
-Clone the project and install gulp:
-
-`npm install -g gulp`
-
 Then enter the project directory and install the dependencies:
 
 `npm install`
@@ -158,7 +154,7 @@ Make your changes and run the tests:
 
 Build your own version:
 
-`gulp build`
+`npm run build`
 
 Check the result on `dist/` folder.
 
