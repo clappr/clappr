@@ -6,7 +6,8 @@
   "scripts": {
     "release": "node_modules/.bin/webpack --progress -d -p --optimize-minimize --optimize-dedupe --output-filename clappr.min.js",
     "build": "node_modules/.bin/webpack --progress",
-    "test": "./node_modules/.bin/karma start --single-run --browsers Chrome",
+    "test": "node_modules/.bin/karma start --single-run --browsers Chrome",
+    "serve": "node_modules/.bin/webpack-dev-server --content-base public/ --hot",
     "lock": "rm -rf npm-shrinkwrap.json node_modules && npm install --silent && npm shrinkwrap"
   },
   "repository": {
@@ -80,6 +81,7 @@
     "vinyl-transform": "0.0.1",
     "watchify": "^2.0.0",
     "webpack": "^1.10.1",
+    "webpack-dev-server": "^1.10.1",
     "yargs": "1.3.3"
   },
   "dependencies": {
