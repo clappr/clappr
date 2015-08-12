@@ -60,9 +60,10 @@ export default class HLS extends Playback {
     Mediator.on(this.cid + ':flashready', () => this.bootstrap())
     Mediator.on(this.cid + ':timeupdate', (timeMetrics) => this.updateTime(timeMetrics))
     Mediator.on(this.cid + ':playbackstate', (state) => this.setPlaybackState(state))
-    Mediator.on(this.cid + ':levelchanged', (level) => this.updateHighDefinition(level))
-    Mediator.on(this.cid + ':playbackerror', () => this.flashPlaybackError())
-    Mediator.once(this.cid + ':manifestloaded',(duration, loadmetrics) => this.manifestLoaded(duration, loadmetrics))
+    Mediator.on(this.cid + ':levelchanged', (level) => this.levelChanged(level))
+    Mediator.on(this.cid + ':error', (code, url, message) => this.flashPlaybackError(code, url, message))
+    Mediator.on(this.cid + ':fragmentloaded',(loadmetrics) => this.onFragmentLoaded(loadmetrics))
+    Mediator.once(this.cid + ':manifestloaded', (duration, loadmetrics) => this.manifestLoaded(duration, loadmetrics))
   }
 
   stopListening() {
@@ -72,6 +73,7 @@ export default class HLS extends Playback {
     Mediator.off(this.cid + ':playbackstate')
     Mediator.off(this.cid + ':levelchanged')
     Mediator.off(this.cid + ':playbackerror')
+    Mediator.off(this.cid + ':fragmentloaded')
     Mediator.off(this.cid + ':manifestloaded')
   }
 
@@ -95,11 +97,11 @@ export default class HLS extends Playback {
     this.el.playerSetLogInfo(this.hlsLogEnabled)
   }
 
-  updateHighDefinition(level) {
+  levelChanged(level) {
     var currentLevel = this.getLevels()[level]
     this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000);
     this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE)
-    this.trigger(Events.PLAYBACK_BITRATE, {'bitrate': this.getCurrentBitrate()})
+    this.trigger(Events.PLAYBACK_BITRATE, {bitrate: this.getCurrentBitrate(), level: level})
   }
 
   updateTime(timeMetrics) {
@@ -141,9 +143,20 @@ export default class HLS extends Playback {
     return this.playbackType? this.playbackType: null
   }
 
+  getCurrentLevelIndex() {
+    return this.el.getCurrentLevel()
+  }
+
+  getCurrentLevel() {
+    return this.getLevels()[this.getCurrentLevelIndex()]
+  }
+
   getCurrentBitrate() {
-    var currentLevel = this.getLevels()[this.el.getLevel()]
-    return currentLevel.bitrate
+    return this.getCurrentLevel().bitrate
+  }
+
+  setCurrentLevel(level) {
+    this.el.playerSetCurrentLevel(level)
   }
 
   isHighDefinitionInUse() {
@@ -199,17 +212,19 @@ export default class HLS extends Playback {
   startReportingProgress() {
     if (!this.reportingProgress) {
       this.reportingProgress = true
-      Mediator.on(this.cid + ':fragmentloaded',() => this.onFragmentLoaded())
     }
   }
 
   stopReportingProgress() {
-    Mediator.off(this.cid + ':fragmentloaded', this.onFragmentLoaded, this)
+    this.reportingProgress = false
   }
 
-  onFragmentLoaded() {
-    var buffered = this.el.getPosition() + this.el.getbufferLength()
-    this.trigger(Events.PLAYBACK_PROGRESS, this.el.getPosition(), buffered, this.el.getDuration(), this.name)
+  onFragmentLoaded(loadmetrics) {
+    this.trigger(Events.PLAYBACK_FRAGMENT_LOADED, loadmetrics)
+    if (this.reportingProgress) {
+      var buffered = this.el.getPosition() + this.el.getbufferLength()
+      this.trigger(Events.PLAYBACK_PROGRESS, this.el.getPosition(), buffered, this.el.getDuration(), this.name)
+    }
   }
 
   firstPlay() {
@@ -289,7 +304,8 @@ export default class HLS extends Playback {
     }
   }
 
-  flashPlaybackError() {
+  flashPlaybackError(code, url, message) {
+    this.trigger(Events.PLAYBACK_ERROR, {code: code, url: url, message: message})
     this.trigger(Events.PLAYBACK_STOP)
   }
 
