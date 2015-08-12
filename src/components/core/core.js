@@ -45,7 +45,7 @@ export default class Core extends UIObject {
 
   constructor(options) {
     super(options)
-    PlayerInfo.options = options
+    this.playerInfo = PlayerInfo.getInstance(options.playerId)
     this.options = options
     this.plugins = []
     this.containers = []
@@ -72,23 +72,23 @@ export default class Core extends UIObject {
     } else {
       this.setPlayerSize()
     }
-    Mediator.trigger(Events.PLAYER_RESIZE)
+    Mediator.trigger(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerInfo.currentSize)
   }
 
   setFullscreen() {
     if(!Browser.isiOs) {
       this.$el.addClass('fullscreen')
       this.$el.removeAttr('style')
-      PlayerInfo.previousSize = PlayerInfo.currentSize
-      PlayerInfo.currentSize = { width: $(window).width(), height: $(window).height() }
+      this.playerInfo.previousSize = this.playerInfo.currentSize
+      this.playerInfo.currentSize = { width: $(window).width(), height: $(window).height() }
     }
   }
 
   setPlayerSize() {
     this.$el.removeClass('fullscreen')
-    PlayerInfo.currentSize = PlayerInfo.previousSize
-    PlayerInfo.previousSize = { width: $(window).width(), height: $(window).height() }
-    this.resize(PlayerInfo.currentSize)
+    this.playerInfo.currentSize = this.playerInfo.previousSize
+    this.playerInfo.previousSize = { width: $(window).width(), height: $(window).height() }
+    this.resize(this.playerInfo.currentSize)
   }
 
   resize(options) {
@@ -99,23 +99,22 @@ export default class Core extends UIObject {
       this.el.style.height = `${options.height}px`;
       this.el.style.width = `${options.width}px`;
     }
-    PlayerInfo.previousSize = PlayerInfo.currentSize
-    PlayerInfo.currentSize = options
-    Mediator.trigger(Events.PLAYER_RESIZE)
+    this.playerInfo.previousSize = this.playerInfo.currentSize
+    this.playerInfo.currentSize = options
+    Mediator.trigger(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerInfo.currentSize)
   }
 
   enableResizeObserver() {
     var checkSizeCallback = () => {
-      if (this.reqAnimFrame) cancelAnimationFrame(this.reqAnimFrame)
-      if (this.previousSize.width != this.$el.width() ||
-          this.previousSize.height != this.$el.height()) {
-        Mediator.trigger(Events.PLAYER_RESIZE)
-        this.previousSize = { width: this.$el.width(), height: this.$el.height() }
+      if (this.reqAnimFrame) clearTimeout(this.reqAnimFrame)
+      if (this.playerInfo.currentSize.width != this.el.clientWidth ||
+          this.playerInfo.currentSize.height != this.el.clientHeight) {
+        this.playerInfo.computedSize = { width: this.el.clientWidth, height: this.el.clientHeight }
+        Mediator.trigger(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerInfo.computedSize)
       }
-      this.reqAnimFrame = requestAnimationFrame(checkSizeCallback)
+      this.reqAnimFrame = setTimeout(checkSizeCallback, 500)
     }
-
-    this.reqAnimFrame = requestAnimationFrame(checkSizeCallback)
+    this.reqAnimFrame = setTimeout(checkSizeCallback, 500)
   }
 
   disableResizeObserver() {
@@ -273,7 +272,7 @@ export default class Core extends UIObject {
     this.options.width = this.options.width || this.$el.width()
     this.options.height = this.options.height || this.$el.height()
     var size = {width: this.options.width, height: this.options.height}
-    PlayerInfo.previousSize = PlayerInfo.currentSize = size
+    this.playerInfo.previousSize = this.playerInfo.currentSize = this.playerInfo.computedSize = size
     this.updateSize()
 
     this.previousSize = { width: this.$el.width(), height: this.$el.height() }

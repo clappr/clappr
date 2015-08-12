@@ -87,10 +87,11 @@ export default class Container extends UIObject {
   }
 
   destroy() {
-    this.trigger(Events.CONTAINER_DESTROYED, this, this.name);
-    this.playback.destroy();
+    this.trigger(Events.CONTAINER_DESTROYED, this, this.name)
+    this.stopListening()
+    this.playback.destroy()
     this.plugins.forEach((plugin) => plugin.destroy())
-    this.$el.remove();
+    this.$el.remove()
   }
 
   setStyle(style) {
