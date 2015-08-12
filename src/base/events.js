@@ -64,7 +64,7 @@ export default class Events {
       if (this.hasOwnProperty(name)) {
         klass = this.name
       }
-      Log.debug.apply(Log, [klass].concat(Array.prototype.slice.call(arguments)))
+      logger.debug.apply(logger, [klass].concat(Array.prototype.slice.call(arguments)))
       if (!this._events) return this
       var args = slice.call(arguments, 1)
       if (!eventsApi(this, 'trigger', name, args)) return this
@@ -73,7 +73,7 @@ export default class Events {
       if (events) triggerEvents(events, args)
       if (allEvents) triggerEvents(allEvents, arguments)
     } catch (exception) {
-      Log.error.apply(Log, [klass, 'error on event', name, 'trigger','-', exception])
+      logger.error.apply(logger, [klass, 'error on event', name, 'trigger','-', exception])
     }
     return this
   }
