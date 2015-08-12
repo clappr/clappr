@@ -57,5 +57,11 @@ describe('HLS playback', function() {
       this.hls.setPlaybackState("IDLE")
       expect(current).to.be.equal(0)
     })
+
+    it('should create flashls callbacks', function() {
+      this.hls.createCallbacks()
+      expect(window.Clappr.flashlsCallbacks).to.be.a('object')
+      expect(window.Clappr.flashlsCallbacks[this.hls.cid]).to.be.a('function')
+    })
   })
 })
