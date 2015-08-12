@@ -351,6 +351,9 @@ export default class HLS extends Playback {
   }
 
   createCallbacks() {
+    if (!window.Clappr) {
+      window.Clappr = {}
+    }
     if (!window.Clappr.flashlsCallbacks) {
       window.Clappr.flashlsCallbacks = {}
     }
