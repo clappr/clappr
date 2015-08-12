@@ -16,9 +16,9 @@ update_dependencies() {
 
 build() {
   echo 'building clappr.js'
-  gulp build > /dev/null
+  npm run build > /dev/null
   echo 'building clappr.min.js'
-  gulp release > /dev/null
+  npm run release > /dev/null
 }
 
 run_tests() {
