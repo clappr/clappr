@@ -112,7 +112,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	window.DEBUG = false;
 
-	var version = ("0.2.0");
+	var version = ("0.2.1");
 
 	exports.Player = _componentsPlayer2['default'];
 	exports.Mediator = _componentsMediator2['default'];
@@ -189,7 +189,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _get(Object.getPrototypeOf(Player.prototype), 'constructor', this).call(this, options);
 	    window.p = this;
-	    var defaultOptions = { playerId: (0, _baseUtils.uniqueId)(""), persistConfig: true, width: 640, height: 360, baseUrl: '//cdn.clappr.io/' + ("0.2.0") };
+	    var defaultOptions = { playerId: (0, _baseUtils.uniqueId)(""), persistConfig: true, width: 640, height: 360, baseUrl: '//cdn.clappr.io/' + ("0.2.1") };
 	    this.options = (0, _lodashAssign2['default'])(defaultOptions, options);
 	    this.options.sources = this.normalizeSources(options);
 	    this.loader = new _loader2['default'](this.options.plugins || {}, this.options.playerId);
@@ -8326,7 +8326,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'playerResize',
 	    value: function playerResize(size) {
 	      if (!this.disabled) {
-	        if (Utils.Fullscreen.isFullscreen()) {
+	        if (_baseUtils.Fullscreen.isFullscreen()) {
 	          this.$fullscreenToggle.addClass('shrink');
 	        } else {
 	          this.$fullscreenToggle.removeClass('shrink');
