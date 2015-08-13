@@ -5,11 +5,11 @@
 import {uniqueId} from '../base/utils'
 
 import BaseObject from '../base/base_object'
+import Events from '../base/events'
 import CoreFactory from './core_factory'
 import Loader from './loader'
 import assign from 'lodash.assign'
 import find from 'lodash.find'
-import Events from 'events'
 import PlayerInfo from './player_info'
 
 export default class Player extends BaseObject {
