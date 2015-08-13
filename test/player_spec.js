@@ -1,4 +1,5 @@
 import Player from '../src/components/player'
+import Events from '../src/base/events'
 
 describe('Player', function() {
   describe('constructor', function() {
@@ -44,6 +45,16 @@ describe('Player', function() {
       normalizedSources = player.normalizeSources({sources: []})
       expect(normalizedSources).to.have.length(1)
       expect(normalizedSources[0]).to.be.equal('no.op')
+    })
+
+    it('should trigger error events', function() {
+      var player = new Player({source: '/video.mp4', persistConfig: false})
+      var element = document.createElement('div')
+      var onError = sinon.spy()
+      player.on(Events.PLAYER_ERROR, onError)
+      player.attachTo(element)
+      player.core.getCurrentContainer().playback.error()
+      expect(onError).called.once
     })
   })
 })
