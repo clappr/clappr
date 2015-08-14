@@ -1,6 +1,6 @@
 import Events from '../../base/events'
 import Playback from '../../base/playback'
-import $ from 'zepto'
+import $ from 'clappr-zepto'
 import template from '../../base/template'
 import chromecastHTML from './public/chromecast.html'
 
@@ -99,4 +99,3 @@ export default class ChromecastPlayback extends Playback {
     this.$el.hide()
   }
 }
-
