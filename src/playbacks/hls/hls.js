@@ -41,8 +41,11 @@ export default class HLS extends Playback {
     this.capLevelToStage = (options.capLevelToStage === undefined) ? false : options.capLevelToStage
     this.useHardwareVideoDecoder = (options.useHardwareVideoDecoder === undefined) ? false : options.useHardwareVideoDecoder
     this.maxBufferLength = (options.maxBufferLength === undefined) ? 120 : options.maxBufferLength
-    this.hlsMinimumDvrSize = (options.hlsMinimumDvrSize == undefined) ? 60 : options.hlsMinimumDvrSize
-    this.hlsLogEnabled = (options.hlsLogEnabled == undefined) ? true : options.hlsLogEnabled
+    this.seekMode = (options.seekMode === undefined) ? "ACCURATE" : options.seekMode
+    this.startFromLevel = (options.startFromLevel === undefined) ? -1 : options.startFromLevel
+    this.startFromBitrate = (options.startFromBitrate === undefined) ? -1 : options.startFromBitrate
+    this.hlsMinimumDvrSize = (options.hlsMinimumDvrSize === undefined) ? 60 : options.hlsMinimumDvrSize
+    this.hlsLogEnabled = (options.hlsLogEnabled === undefined) ? true : options.hlsLogEnabled
     this.highDefinition = false
     this.autoPlay = options.autoPlay
     this.defaultSettings = {
@@ -99,6 +102,9 @@ export default class HLS extends Playback {
     this.el.playerSetmaxBufferLength(this.maxBufferLength)
     this.el.playerSetUseHardwareVideoDecoder(this.useHardwareVideoDecoder)
     this.el.playerSetLogInfo(this.hlsLogEnabled)
+    this.el.playerSetSeekMode(this.seekMode)
+    this.el.playerSetStartFromBitrate(this.startFromBitrate)
+    this.el.playerSetstartFromLevel(this.startFromLevel)
   }
 
   levelChanged(level) {
@@ -393,4 +399,3 @@ HLS.canPlay = function(resource, mimeType) {
         ((resourceParts.length > 1 && resourceParts[1] == "m3u8") ||
           mimeType === 'application/x-mpegURL' || mimeType === 'application/vnd.apple.mpegurl')
 }
-
