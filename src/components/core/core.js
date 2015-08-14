@@ -107,8 +107,8 @@ export default class Core extends UIObject {
   enableResizeObserver() {
     var checkSizeCallback = () => {
       if (this.reqAnimFrame) clearTimeout(this.reqAnimFrame)
-      if (this.playerInfo.currentSize.width != this.el.clientWidth ||
-          this.playerInfo.currentSize.height != this.el.clientHeight) {
+      if (this.playerInfo.computedSize.width != this.el.clientWidth ||
+          this.playerInfo.computedSize.height != this.el.clientHeight) {
         this.playerInfo.computedSize = { width: this.el.clientWidth, height: this.el.clientHeight }
         Mediator.trigger(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerInfo.computedSize)
       }
