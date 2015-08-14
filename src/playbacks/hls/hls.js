@@ -78,15 +78,19 @@ export default class HLS extends Playback {
   }
 
   bootstrap() {
-    this.el.width = "100%"
-    this.el.height = "100%"
-    this.isReady = true
-    this.srcLoaded = false
-    this.currentState = "IDLE"
-    this.setFlashSettings()
-    this.updatePlaybackType()
-    this.autoPlay && this.play()
-    this.trigger(Events.PLAYBACK_READY, this.name)
+    if (this.el.playerLoad) {
+      this.el.width = "100%"
+      this.el.height = "100%"
+      this.isReady = true
+      this.srcLoaded = false
+      this.currentState = "IDLE"
+      this.setFlashSettings()
+      this.updatePlaybackType()
+      this.autoPlay && this.play()
+      this.trigger(Events.PLAYBACK_READY, this.name)
+    } else {
+      setTimeout(() => bootstrap(), 50)
+    }
   }
 
   setFlashSettings() {
