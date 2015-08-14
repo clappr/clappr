@@ -112,7 +112,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	window.DEBUG = false;
 
-	var version = ("0.2.1");
+	var version = ("0.2.2");
 
 	exports.Player = _componentsPlayer2['default'];
 	exports.Mediator = _componentsMediator2['default'];
@@ -157,6 +157,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseBase_object2 = _interopRequireDefault(_baseBase_object);
 
+	var _baseEvents = __webpack_require__(16);
+
+	var _baseEvents2 = _interopRequireDefault(_baseEvents);
+
 	var _core_factory = __webpack_require__(22);
 
 	var _core_factory2 = _interopRequireDefault(_core_factory);
@@ -173,10 +177,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lodashFind2 = _interopRequireDefault(_lodashFind);
 
-	var _events = __webpack_require__(158);
-
-	var _events2 = _interopRequireDefault(_events);
-
 	var _player_info = __webpack_require__(65);
 
 	var _player_info2 = _interopRequireDefault(_player_info);
@@ -189,7 +189,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _get(Object.getPrototypeOf(Player.prototype), 'constructor', this).call(this, options);
 	    window.p = this;
-	    var defaultOptions = { playerId: (0, _baseUtils.uniqueId)(""), persistConfig: true, width: 640, height: 360, baseUrl: '//cdn.clappr.io/' + ("0.2.1") };
+	    var defaultOptions = { playerId: (0, _baseUtils.uniqueId)(""), persistConfig: true, width: 640, height: 360, baseUrl: '//cdn.clappr.io/' + ("0.2.2") };
 	    this.options = (0, _lodashAssign2['default'])(defaultOptions, options);
 	    this.options.sources = this.normalizeSources(options);
 	    this.loader = new _loader2['default'](this.options.plugins || {}, this.options.playerId);
@@ -220,16 +220,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'addEventListeners',
 	    value: function addEventListeners() {
-	      this.listenTo(this.core.mediaControl, _events2['default'].MEDIACONTROL_CONTAINERCHANGED, this.containerChanged);
+	      this.listenTo(this.core.mediaControl, _baseEvents2['default'].MEDIACONTROL_CONTAINERCHANGED, this.containerChanged);
 	      var container = this.core.mediaControl.container;
 	      if (!!container) {
-	        this.listenTo(container, _events2['default'].CONTAINER_PLAY, this.onPlay);
-	        this.listenTo(container, _events2['default'].CONTAINER_PAUSE, this.onPause);
-	        this.listenTo(container, _events2['default'].CONTAINER_STOP, this.onStop);
-	        this.listenTo(container, _events2['default'].CONTAINER_ENDED, this.onEnded);
-	        this.listenTo(container, _events2['default'].CONTAINER_SEEK, this.onSeek);
-	        this.listenTo(container, _events2['default'].CONTAINER_ERROR, this.onError);
-	        this.listenTo(container, _events2['default'].CONTAINER_TIMEUPDATE, this.onTimeUpdate);
+	        this.listenTo(container, _baseEvents2['default'].CONTAINER_PLAY, this.onPlay);
+	        this.listenTo(container, _baseEvents2['default'].CONTAINER_PAUSE, this.onPause);
+	        this.listenTo(container, _baseEvents2['default'].CONTAINER_STOP, this.onStop);
+	        this.listenTo(container, _baseEvents2['default'].CONTAINER_ENDED, this.onEnded);
+	        this.listenTo(container, _baseEvents2['default'].CONTAINER_SEEK, this.onSeek);
+	        this.listenTo(container, _baseEvents2['default'].CONTAINER_ERROR, this.onError);
+	        this.listenTo(container, _baseEvents2['default'].CONTAINER_TIMEUPDATE, this.onTimeUpdate);
 	      }
 	    }
 	  }, {
@@ -241,37 +241,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onPlay',
 	    value: function onPlay() {
-	      this.trigger(_events2['default'].PLAYER_PLAY);
+	      this.trigger(_baseEvents2['default'].PLAYER_PLAY);
 	    }
 	  }, {
 	    key: 'onPause',
 	    value: function onPause() {
-	      this.trigger(_events2['default'].PLAYER_PAUSE);
+	      this.trigger(_baseEvents2['default'].PLAYER_PAUSE);
 	    }
 	  }, {
 	    key: 'onStop',
 	    value: function onStop() {
-	      this.trigger(_events2['default'].PLAYER_STOP, this.getCurrentTime());
+	      this.trigger(_baseEvents2['default'].PLAYER_STOP, this.getCurrentTime());
 	    }
 	  }, {
 	    key: 'onEnded',
 	    value: function onEnded() {
-	      this.trigger(_events2['default'].PLAYER_ENDED);
+	      this.trigger(_baseEvents2['default'].PLAYER_ENDED);
 	    }
 	  }, {
 	    key: 'onSeek',
 	    value: function onSeek(percent) {
-	      this.trigger(_events2['default'].PLAYER_SEEK, percent);
+	      this.trigger(_baseEvents2['default'].PLAYER_SEEK, percent);
 	    }
 	  }, {
 	    key: 'onTimeUpdate',
 	    value: function onTimeUpdate(position, duration) {
-	      this.trigger(_events2['default'].PLAYER_TIMEUPDATE, position, duration);
+	      this.trigger(_baseEvents2['default'].PLAYER_TIMEUPDATE, position, duration);
 	    }
 	  }, {
 	    key: 'onError',
 	    value: function onError(error) {
-	      this.trigger(_events2['default'].PLAYER_ERROR, error);
+	      this.trigger(_baseEvents2['default'].PLAYER_ERROR, error);
 	    }
 	  }, {
 	    key: 'is',
@@ -2859,7 +2859,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      var checkSizeCallback = function checkSizeCallback() {
 	        if (_this3.reqAnimFrame) clearTimeout(_this3.reqAnimFrame);
-	        if (_this3.playerInfo.currentSize.width != _this3.el.clientWidth || _this3.playerInfo.currentSize.height != _this3.el.clientHeight) {
+	        if (_this3.playerInfo.computedSize.width != _this3.el.clientWidth || _this3.playerInfo.computedSize.height != _this3.el.clientHeight) {
 	          _this3.playerInfo.computedSize = { width: _this3.el.clientWidth, height: _this3.el.clientHeight };
 	          _mediator2['default'].trigger(_this3.options.playerId + ':' + _baseEvents2['default'].PLAYER_RESIZE, _this3.playerInfo.computedSize);
 	        }
@@ -13473,8 +13473,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.capLevelToStage = options.capLevelToStage === undefined ? false : options.capLevelToStage;
 	    this.useHardwareVideoDecoder = options.useHardwareVideoDecoder === undefined ? false : options.useHardwareVideoDecoder;
 	    this.maxBufferLength = options.maxBufferLength === undefined ? 120 : options.maxBufferLength;
-	    this.hlsMinimumDvrSize = options.hlsMinimumDvrSize == undefined ? 60 : options.hlsMinimumDvrSize;
-	    this.hlsLogEnabled = options.hlsLogEnabled == undefined ? true : options.hlsLogEnabled;
+	    this.seekMode = options.seekMode === undefined ? "ACCURATE" : options.seekMode;
+	    this.startFromLevel = options.startFromLevel === undefined ? -1 : options.startFromLevel;
+	    this.startFromBitrate = options.startFromBitrate === undefined ? -1 : options.startFromBitrate;
+	    this.hlsMinimumDvrSize = options.hlsMinimumDvrSize === undefined ? 60 : options.hlsMinimumDvrSize;
+	    this.hlsLogEnabled = options.hlsLogEnabled === undefined ? true : options.hlsLogEnabled;
 	    this.highDefinition = false;
 	    this.autoPlay = options.autoPlay;
 	    this.defaultSettings = {
@@ -13529,17 +13532,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'bootstrap',
-	    value: function bootstrap() {
-	      this.el.width = "100%";
-	      this.el.height = "100%";
-	      this.isReady = true;
-	      this.srcLoaded = false;
-	      this.currentState = "IDLE";
-	      this.setFlashSettings();
-	      this.updatePlaybackType();
-	      this.autoPlay && this.play();
-	      this.trigger(_baseEvents2['default'].PLAYBACK_READY, this.name);
-	    }
+	    value: (function (_bootstrap) {
+	      function bootstrap() {
+	        return _bootstrap.apply(this, arguments);
+	      }
+
+	      bootstrap.toString = function () {
+	        return _bootstrap.toString();
+	      };
+
+	      return bootstrap;
+	    })(function () {
+	      if (this.el.playerLoad) {
+	        this.el.width = "100%";
+	        this.el.height = "100%";
+	        this.isReady = true;
+	        this.srcLoaded = false;
+	        this.currentState = "IDLE";
+	        this.setFlashSettings();
+	        this.updatePlaybackType();
+	        this.autoPlay && this.play();
+	        this.trigger(_baseEvents2['default'].PLAYBACK_READY, this.name);
+	      } else {
+	        setTimeout(function () {
+	          return bootstrap();
+	        }, 50);
+	      }
+	    })
 	  }, {
 	    key: 'setFlashSettings',
 	    value: function setFlashSettings() {
@@ -13548,6 +13567,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.el.playerSetmaxBufferLength(this.maxBufferLength);
 	      this.el.playerSetUseHardwareVideoDecoder(this.useHardwareVideoDecoder);
 	      this.el.playerSetLogInfo(this.hlsLogEnabled);
+	      this.el.playerSetSeekMode(this.seekMode);
+	      this.el.playerSetStartFromBitrate(this.startFromBitrate);
+	      this.el.playerSetstartFromLevel(this.startFromLevel);
 	    }
 	  }, {
 	    key: 'levelChanged',
@@ -13848,6 +13870,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function createCallbacks() {
 	      var _this4 = this;
 
+	      if (!window.Clappr) {
+	        window.Clappr = {};
+	      }
 	      if (!window.Clappr.flashlsCallbacks) {
 	        window.Clappr.flashlsCallbacks = {};
 	      }
@@ -13913,7 +13938,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "049cef2eda79c41be378a508cc134606.swf"
+	module.exports = __webpack_require__.p + "0e6761eae56183e6cab4d2dcf45f280a.swf"
 
 /***/ },
 /* 111 */
@@ -15957,9 +15982,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _basePlayback2 = _interopRequireDefault(_basePlayback);
 
-	var _zepto = __webpack_require__(26);
+	var _clapprZepto = __webpack_require__(26);
 
-	var _zepto2 = _interopRequireDefault(_zepto);
+	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 	var _baseTemplate = __webpack_require__(35);
 
@@ -16005,7 +16030,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'render',
 	    value: function render() {
 	      var template = this.template();
-	      this.$el = (0, _zepto2['default'])(template);
+	      this.$el = (0, _clapprZepto2['default'])(template);
 	      this.$el.find('.chromecast-playback-background').css('background-image', 'url(' + this.options.poster + ')');
 	    }
 	  }, {
@@ -16389,9 +16414,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
 
-	var _zepto = __webpack_require__(26);
+	var _clapprZepto = __webpack_require__(26);
 
-	var _zepto2 = _interopRequireDefault(_zepto);
+	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 	var Favicon = (function (_CorePlugin) {
 	  _inherits(Favicon, _CorePlugin);
@@ -16407,7 +16432,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _classCallCheck(this, Favicon);
 
 	    _get(Object.getPrototypeOf(Favicon.prototype), 'constructor', this).call(this, core);
-	    this.oldIcon = (0, _zepto2['default'])('link[rel="shortcut icon"]');
+	    this.oldIcon = (0, _clapprZepto2['default'])('link[rel="shortcut icon"]');
 	    if (!this.core.options.changeFavicon) {
 	      this.disable();
 	    }
@@ -16439,14 +16464,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'createIcon',
 	    value: function createIcon(charCode) {
-	      var canvas = (0, _zepto2['default'])('<canvas/>');
+	      var canvas = (0, _clapprZepto2['default'])('<canvas/>');
 	      canvas[0].width = 32;
 	      canvas[0].height = 32;
 	      var ctx = canvas[0].getContext('2d');
 	      ctx.fillStyle = '#000';
 	      ctx.font = '25px Player';
 	      ctx.fillText(String.fromCharCode(charCode), 5, 26);
-	      var icon = (0, _zepto2['default'])('<link rel="shortcut icon" type="image/png"/>');
+	      var icon = (0, _clapprZepto2['default'])('<link rel="shortcut icon" type="image/png"/>');
 	      icon.attr('href', canvas[0].toDataURL('image/png'));
 	      return icon;
 	    }
@@ -16472,7 +16497,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.currentIcon) {
 	        this.currentIcon.remove();
 	      }
-	      (0, _zepto2['default'])('head').append(this.oldIcon);
+	      (0, _clapprZepto2['default'])('head').append(this.oldIcon);
 	    }
 	  }, {
 	    key: 'changeIcon',
@@ -16483,7 +16508,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          this.currentIcon.remove();
 	        }
 	        this.currentIcon = icon;
-	        (0, _zepto2['default'])('head').append(icon);
+	        (0, _clapprZepto2['default'])('head').append(icon);
 	      }
 	    }
 	  }]);
@@ -16572,273 +16597,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return (0, _utils.extend)(CorePlugin, properties);
 	};
 	module.exports = exports['default'];
-
-/***/ },
-/* 158 */
-/***/ function(module, exports) {
-
-	// Copyright Joyent, Inc. and other Node contributors.
-	//
-	// Permission is hereby granted, free of charge, to any person obtaining a
-	// copy of this software and associated documentation files (the
-	// "Software"), to deal in the Software without restriction, including
-	// without limitation the rights to use, copy, modify, merge, publish,
-	// distribute, sublicense, and/or sell copies of the Software, and to permit
-	// persons to whom the Software is furnished to do so, subject to the
-	// following conditions:
-	//
-	// The above copyright notice and this permission notice shall be included
-	// in all copies or substantial portions of the Software.
-	//
-	// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-	// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-	// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-	// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-	// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-	// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-	'use strict';
-
-	function EventEmitter() {
-	  this._events = this._events || {};
-	  this._maxListeners = this._maxListeners || undefined;
-	}
-	module.exports = EventEmitter;
-
-	// Backwards-compat with node 0.10.x
-	EventEmitter.EventEmitter = EventEmitter;
-
-	EventEmitter.prototype._events = undefined;
-	EventEmitter.prototype._maxListeners = undefined;
-
-	// By default EventEmitters will print a warning if more than 10 listeners are
-	// added to it. This is a useful default which helps finding memory leaks.
-	EventEmitter.defaultMaxListeners = 10;
-
-	// Obviously not all Emitters should be limited to 10. This function allows
-	// that to be increased. Set to zero for unlimited.
-	EventEmitter.prototype.setMaxListeners = function (n) {
-	  if (!isNumber(n) || n < 0 || isNaN(n)) throw TypeError('n must be a positive number');
-	  this._maxListeners = n;
-	  return this;
-	};
-
-	EventEmitter.prototype.emit = function (type) {
-	  var er, handler, len, args, i, listeners;
-
-	  if (!this._events) this._events = {};
-
-	  // If there is no 'error' event listener then throw.
-	  if (type === 'error') {
-	    if (!this._events.error || isObject(this._events.error) && !this._events.error.length) {
-	      er = arguments[1];
-	      if (er instanceof Error) {
-	        throw er; // Unhandled 'error' event
-	      }
-	      throw TypeError('Uncaught, unspecified "error" event.');
-	    }
-	  }
-
-	  handler = this._events[type];
-
-	  if (isUndefined(handler)) return false;
-
-	  if (isFunction(handler)) {
-	    switch (arguments.length) {
-	      // fast cases
-	      case 1:
-	        handler.call(this);
-	        break;
-	      case 2:
-	        handler.call(this, arguments[1]);
-	        break;
-	      case 3:
-	        handler.call(this, arguments[1], arguments[2]);
-	        break;
-	      // slower
-	      default:
-	        len = arguments.length;
-	        args = new Array(len - 1);
-	        for (i = 1; i < len; i++) args[i - 1] = arguments[i];
-	        handler.apply(this, args);
-	    }
-	  } else if (isObject(handler)) {
-	    len = arguments.length;
-	    args = new Array(len - 1);
-	    for (i = 1; i < len; i++) args[i - 1] = arguments[i];
-
-	    listeners = handler.slice();
-	    len = listeners.length;
-	    for (i = 0; i < len; i++) listeners[i].apply(this, args);
-	  }
-
-	  return true;
-	};
-
-	EventEmitter.prototype.addListener = function (type, listener) {
-	  var m;
-
-	  if (!isFunction(listener)) throw TypeError('listener must be a function');
-
-	  if (!this._events) this._events = {};
-
-	  // To avoid recursion in the case that type === "newListener"! Before
-	  // adding it to the listeners, first emit "newListener".
-	  if (this._events.newListener) this.emit('newListener', type, isFunction(listener.listener) ? listener.listener : listener);
-
-	  if (!this._events[type])
-	    // Optimize the case of one listener. Don't need the extra array object.
-	    this._events[type] = listener;else if (isObject(this._events[type]))
-	    // If we've already got an array, just append.
-	    this._events[type].push(listener);else
-	    // Adding the second element, need to change to array.
-	    this._events[type] = [this._events[type], listener];
-
-	  // Check for listener leak
-	  if (isObject(this._events[type]) && !this._events[type].warned) {
-	    var m;
-	    if (!isUndefined(this._maxListeners)) {
-	      m = this._maxListeners;
-	    } else {
-	      m = EventEmitter.defaultMaxListeners;
-	    }
-
-	    if (m && m > 0 && this._events[type].length > m) {
-	      this._events[type].warned = true;
-	      console.error('(node) warning: possible EventEmitter memory ' + 'leak detected. %d listeners added. ' + 'Use emitter.setMaxListeners() to increase limit.', this._events[type].length);
-	      if (typeof console.trace === 'function') {
-	        // not supported in IE 10
-	        console.trace();
-	      }
-	    }
-	  }
-
-	  return this;
-	};
-
-	EventEmitter.prototype.on = EventEmitter.prototype.addListener;
-
-	EventEmitter.prototype.once = function (type, listener) {
-	  if (!isFunction(listener)) throw TypeError('listener must be a function');
-
-	  var fired = false;
-
-	  function g() {
-	    this.removeListener(type, g);
-
-	    if (!fired) {
-	      fired = true;
-	      listener.apply(this, arguments);
-	    }
-	  }
-
-	  g.listener = listener;
-	  this.on(type, g);
-
-	  return this;
-	};
-
-	// emits a 'removeListener' event iff the listener was removed
-	EventEmitter.prototype.removeListener = function (type, listener) {
-	  var list, position, length, i;
-
-	  if (!isFunction(listener)) throw TypeError('listener must be a function');
-
-	  if (!this._events || !this._events[type]) return this;
-
-	  list = this._events[type];
-	  length = list.length;
-	  position = -1;
-
-	  if (list === listener || isFunction(list.listener) && list.listener === listener) {
-	    delete this._events[type];
-	    if (this._events.removeListener) this.emit('removeListener', type, listener);
-	  } else if (isObject(list)) {
-	    for (i = length; i-- > 0;) {
-	      if (list[i] === listener || list[i].listener && list[i].listener === listener) {
-	        position = i;
-	        break;
-	      }
-	    }
-
-	    if (position < 0) return this;
-
-	    if (list.length === 1) {
-	      list.length = 0;
-	      delete this._events[type];
-	    } else {
-	      list.splice(position, 1);
-	    }
-
-	    if (this._events.removeListener) this.emit('removeListener', type, listener);
-	  }
-
-	  return this;
-	};
-
-	EventEmitter.prototype.removeAllListeners = function (type) {
-	  var key, listeners;
-
-	  if (!this._events) return this;
-
-	  // not listening for removeListener, no need to emit
-	  if (!this._events.removeListener) {
-	    if (arguments.length === 0) this._events = {};else if (this._events[type]) delete this._events[type];
-	    return this;
-	  }
-
-	  // emit removeListener for all listeners on all events
-	  if (arguments.length === 0) {
-	    for (key in this._events) {
-	      if (key === 'removeListener') continue;
-	      this.removeAllListeners(key);
-	    }
-	    this.removeAllListeners('removeListener');
-	    this._events = {};
-	    return this;
-	  }
-
-	  listeners = this._events[type];
-
-	  if (isFunction(listeners)) {
-	    this.removeListener(type, listeners);
-	  } else {
-	    // LIFO order
-	    while (listeners.length) this.removeListener(type, listeners[listeners.length - 1]);
-	  }
-	  delete this._events[type];
-
-	  return this;
-	};
-
-	EventEmitter.prototype.listeners = function (type) {
-	  var ret;
-	  if (!this._events || !this._events[type]) ret = [];else if (isFunction(this._events[type])) ret = [this._events[type]];else ret = this._events[type].slice();
-	  return ret;
-	};
-
-	EventEmitter.listenerCount = function (emitter, type) {
-	  var ret;
-	  if (!emitter._events || !emitter._events[type]) ret = 0;else if (isFunction(emitter._events[type])) ret = 1;else ret = emitter._events[type].length;
-	  return ret;
-	};
-
-	function isFunction(arg) {
-	  return typeof arg === 'function';
-	}
-
-	function isNumber(arg) {
-	  return typeof arg === 'number';
-	}
-
-	function isObject(arg) {
-	  return typeof arg === 'object' && arg !== null;
-	}
-
-	function isUndefined(arg) {
-	  return arg === void 0;
-	}
 
 /***/ }
 /******/ ])
