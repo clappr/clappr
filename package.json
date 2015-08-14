@@ -7,7 +7,7 @@
     "release": "node_modules/.bin/webpack --progress -d -p --optimize-minimize --optimize-dedupe --output-filename clappr.min.js",
     "build": "node_modules/.bin/webpack --progress",
     "test": "node_modules/.bin/karma start --single-run --browsers Chrome",
-    "serve": "node_modules/.bin/webpack-dev-server --content-base public/ --output-public-path latest/ --hot",
+    "server": "node_modules/.bin/webpack-dev-server --content-base public/ --output-public-path latest/ --hot",
     "lock": "rm -rf npm-shrinkwrap.json node_modules && npm install --silent && npm shrinkwrap"
   },
   "repository": {
