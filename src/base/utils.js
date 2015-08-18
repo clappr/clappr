@@ -159,3 +159,15 @@ export var cancelAnimationFrame = (window.cancelAnimationFrame ||
                            window.mozCancelAnimationFrame ||
                            window.webkitCancelAnimationFrame ||
                            window.clearTimeout).bind(window)
+
+export default {
+  Config,
+  Fullscreen,
+  extend,
+  formatTime,
+  seekStringToSeconds,
+  uniqueId,
+  isNumber,
+  requestAnimationFrame,
+  cancelAnimationFrame
+}
