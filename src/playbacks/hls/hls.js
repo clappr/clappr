@@ -17,6 +17,8 @@ import $ from 'clappr-zepto'
 
 import HLSEvents from './flashls_events'
 
+var MAX_ATTEMPTS = 60
+
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" class="hls-playback" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls="" width="100%" height="100%"><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>'
 
 export default class HLS extends Playback {
@@ -92,7 +94,12 @@ export default class HLS extends Playback {
       this.autoPlay && this.play()
       this.trigger(Events.PLAYBACK_READY, this.name)
     } else {
-      setTimeout(() => bootstrap(), 50)
+      this._bootstrapAttempts = this._bootstrapAttempts || 0
+      if (++this._bootstrapAttempts <= MAX_ATTEMPTS) {
+        setTimeout(() => bootstrap(), 50)
+      } else {
+        this.trigger(Events.PLAYBACK_ERROR, {message: "Max number of attempts reached"}, this.name)
+      }
     }
   }
 
