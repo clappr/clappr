@@ -82,14 +82,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _basePlayback2 = _interopRequireDefault(_basePlayback);
 
-	var _componentsMediator = __webpack_require__(64);
-
-	var _componentsMediator2 = _interopRequireDefault(_componentsMediator);
-
-	var _componentsMedia_control = __webpack_require__(58);
-
-	var _componentsMedia_control2 = _interopRequireDefault(_componentsMedia_control);
-
 	var _baseContainer_plugin = __webpack_require__(126);
 
 	var _baseContainer_plugin2 = _interopRequireDefault(_baseContainer_plugin);
@@ -106,26 +98,97 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseUi_container_plugin2 = _interopRequireDefault(_baseUi_container_plugin);
 
+	var _baseBase_object = __webpack_require__(15);
+
+	var _baseBase_object2 = _interopRequireDefault(_baseBase_object);
+
+	var _baseUi_object = __webpack_require__(27);
+
+	var _baseUi_object2 = _interopRequireDefault(_baseUi_object);
+
+	var _componentsBrowser = __webpack_require__(14);
+
+	var _componentsBrowser2 = _interopRequireDefault(_componentsBrowser);
+
+	var _componentsContainer = __webpack_require__(32);
+
+	var _componentsContainer2 = _interopRequireDefault(_componentsContainer);
+
+	var _componentsCore = __webpack_require__(24);
+
+	var _componentsCore2 = _interopRequireDefault(_componentsCore);
+
+	var _componentsMediator = __webpack_require__(64);
+
+	var _componentsMediator2 = _interopRequireDefault(_componentsMediator);
+
+	var _componentsMedia_control = __webpack_require__(58);
+
+	var _componentsMedia_control2 = _interopRequireDefault(_componentsMedia_control);
+
+	var _componentsPlayer_info = __webpack_require__(65);
+
+	var _componentsPlayer_info2 = _interopRequireDefault(_componentsPlayer_info);
+
+	var _playbacksFlash = __webpack_require__(99);
+
+	var _playbacksFlash2 = _interopRequireDefault(_playbacksFlash);
+
+	var _playbacksHls = __webpack_require__(106);
+
+	var _playbacksHls2 = _interopRequireDefault(_playbacksHls);
+
+	var _playbacksHtml5_audio = __webpack_require__(104);
+
+	var _playbacksHtml5_audio2 = _interopRequireDefault(_playbacksHtml5_audio);
+
+	var _playbacksHtml5_video = __webpack_require__(93);
+
+	var _playbacksHtml5_video2 = _interopRequireDefault(_playbacksHtml5_video);
+
+	var _playbacksHtml_img = __webpack_require__(112);
+
+	var _playbacksHtml_img2 = _interopRequireDefault(_playbacksHtml_img);
+
+	var _pluginsPoster = __webpack_require__(131);
+
+	var _pluginsPoster2 = _interopRequireDefault(_pluginsPoster);
+
 	var _pluginsLog = __webpack_require__(19);
 
 	var _pluginsLog2 = _interopRequireDefault(_pluginsLog);
 
 	window.DEBUG = false;
 
-	var version = ("0.2.2");
+	var version = ("0.2.3");
 
-	exports.Player = _componentsPlayer2['default'];
-	exports.Mediator = _componentsMediator2['default'];
-	exports.Events = _baseEvents2['default'];
-	exports.MediaControl = _componentsMedia_control2['default'];
-	exports.ContainerPlugin = _baseContainer_plugin2['default'];
-	exports.UIContainerPlugin = _baseUi_container_plugin2['default'];
-	exports.CorePlugin = _baseCore_plugin2['default'];
-	exports.UICorePlugin = _baseUi_core_plugin2['default'];
-	exports.Playback = _basePlayback2['default'];
-	exports.Utils = _baseUtils2['default'];
-	exports.Log = _pluginsLog2['default'];
-	exports.version = version;
+	exports['default'] = {
+	    Player: _componentsPlayer2['default'],
+	    Mediator: _componentsMediator2['default'],
+	    Events: _baseEvents2['default'],
+	    Browser: _componentsBrowser2['default'],
+	    PlayerInfo: _componentsPlayer_info2['default'],
+	    MediaControl: _componentsMedia_control2['default'],
+	    ContainerPlugin: _baseContainer_plugin2['default'],
+	    UIContainerPlugin: _baseUi_container_plugin2['default'],
+	    CorePlugin: _baseCore_plugin2['default'],
+	    UICorePlugin: _baseUi_core_plugin2['default'],
+	    Playback: _basePlayback2['default'],
+	    Container: _componentsContainer2['default'],
+	    Core: _componentsCore2['default'],
+	    BaseObject: _baseBase_object2['default'],
+	    UIObject: _baseUi_object2['default'],
+	    Utils: _baseUtils2['default'],
+	    Flash: _playbacksFlash2['default'],
+	    HLS: _playbacksHls2['default'],
+	    HTML5Audio: _playbacksHtml5_audio2['default'],
+	    HTML5Video: _playbacksHtml5_video2['default'],
+	    HTMLImg: _playbacksHtml_img2['default'],
+	    Poster: _pluginsPoster2['default'],
+	    Log: _pluginsLog2['default'],
+	    version: version
+	};
+	module.exports = exports['default'];
 
 /***/ },
 /* 1 */
@@ -189,7 +252,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _get(Object.getPrototypeOf(Player.prototype), 'constructor', this).call(this, options);
 	    window.p = this;
-	    var defaultOptions = { playerId: (0, _baseUtils.uniqueId)(""), persistConfig: true, width: 640, height: 360, baseUrl: '//cdn.clappr.io/' + ("0.2.2") };
+	    var defaultOptions = { playerId: (0, _baseUtils.uniqueId)(""), persistConfig: true, width: 640, height: 360, baseUrl: '//cdn.clappr.io/' + ("0.2.3") };
 	    this.options = (0, _lodashAssign2['default'])(defaultOptions, options);
 	    this.options.sources = this.normalizeSources(options);
 	    this.loader = new _loader2['default'](this.options.plugins || {}, this.options.playerId);
@@ -561,7 +624,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.requestAnimationFrame = requestAnimationFrame;
 	var cancelAnimationFrame = (window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame || window.clearTimeout).bind(window);
+
 	exports.cancelAnimationFrame = cancelAnimationFrame;
+	exports['default'] = {
+	  Config: Config,
+	  Fullscreen: Fullscreen,
+	  extend: extend,
+	  formatTime: formatTime,
+	  seekStringToSeconds: seekStringToSeconds,
+	  uniqueId: uniqueId,
+	  isNumber: isNumber,
+	  requestAnimationFrame: requestAnimationFrame,
+	  cancelAnimationFrame: cancelAnimationFrame
+	};
 
 /***/ },
 /* 3 */
@@ -12800,6 +12875,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _publicPlayerSwf2 = _interopRequireDefault(_publicPlayerSwf);
 
+	var MAX_ATTEMPTS = 60;
+
 	var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>';
 
 	var Flash = (function (_Playback) {
@@ -12840,15 +12917,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(Flash, [{
 	    key: 'bootstrap',
 	    value: function bootstrap() {
-	      this.el.width = "100%";
-	      this.el.height = "100%";
-	      if (this.currentState === 'PLAYING') {
-	        this.firstPlay();
+	      var _this = this;
+
+	      if (this.el.playerPlay) {
+	        this.el.width = "100%";
+	        this.el.height = "100%";
+	        if (this.currentState === 'PLAYING') {
+	          this.firstPlay();
+	        } else {
+	          this.currentState = "IDLE";
+	          this.autoPlay && this.play();
+	        }
+	        (0, _clapprZepto2['default'])('<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%" />').insertAfter(this.$el);
+	        if (this.getDuration() > 0) {
+	          this.metadataLoaded();
+	        } else {
+	          _componentsMediator2['default'].once(this.uniqueId + ':timeupdate', this.metadataLoaded, this);
+	        }
 	      } else {
-	        this.currentState = "IDLE";
-	        this.autoPlay && this.play();
+	        this._attempts = this._attempts || 0;
+	        if (++this._attempts <= MAX_ATTEMPTS) {
+	          setTimeout(function () {
+	            return _this.bootstrap();
+	          }, 50);
+	        } else {
+	          this.trigger(_baseEvents2['default'].PLAYBACK_ERROR, { message: "Max number of attempts reached" }, this.name);
+	        }
 	      }
-	      (0, _clapprZepto2['default'])('<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%" />').insertAfter(this.$el);
+	    }
+	  }, {
+	    key: 'metadataLoaded',
+	    value: function metadataLoaded() {
 	      this.isReady = true;
 	      this.trigger(_baseEvents2['default'].PLAYBACK_READY, this.name);
 	      this.trigger(_baseEvents2['default'].PLAYBACK_SETTINGSUPDATE, this.name);
@@ -12921,12 +13020,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'firstPlay',
 	    value: function firstPlay() {
-	      var _this = this;
+	      var _this2 = this;
 
 	      if (this.el.playerPlay) {
 	        this.el.playerPlay(this.src);
 	        this.listenToOnce(this, _baseEvents2['default'].PLAYBACK_BUFFERFULL, function () {
-	          return _this.checkInitialSeek();
+	          return _this2.checkInitialSeek();
 	        });
 	        this.currentState = "PLAYING";
 	      } else {
@@ -12956,13 +13055,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'volume',
 	    value: function volume(value) {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      if (this.isReady) {
 	        this.el.playerVolume(value);
 	      } else {
 	        this.listenToOnce(this, _baseEvents2['default'].PLAYBACK_BUFFERFULL, function () {
-	          return _this2.volume(value);
+	          return _this3.volume(value);
 	        });
 	      }
 	    }
@@ -12992,21 +13091,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'seek',
 	    value: function seek(seekBarValue) {
-	      var _this3 = this;
+	      var _this4 = this;
 
 	      if (this.el.getDuration() > 0) {
 	        var seekTo = this.el.getDuration() * (seekBarValue / 100);
 	        this.seekSeconds(seekTo);
 	      } else {
 	        this.listenToOnce(this, _baseEvents2['default'].PLAYBACK_BUFFERFULL, function () {
-	          return _this3.seek(seekBarValue);
+	          return _this4.seek(seekBarValue);
 	        });
 	      }
 	    }
 	  }, {
 	    key: 'seekSeconds',
 	    value: function seekSeconds(seekTo) {
-	      var _this4 = this;
+	      var _this5 = this;
 
 	      if (this.isReady && this.el.playerSeek) {
 	        this.el.playerSeek(seekTo);
@@ -13016,7 +13115,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      } else {
 	        this.listenToOnce(this, _baseEvents2['default'].PLAYBACK_BUFFERFULL, function () {
-	          return _this4.seekSeconds(seekTo);
+	          return _this5.seekSeconds(seekTo);
 	        });
 	      }
 	    }
@@ -13087,7 +13186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 103 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "25ef2ebe168c5a195eaee1b36260478f.swf"
+	module.exports = __webpack_require__.p + "4b76590b32dab62bc95c1b7951efae78.swf"
 
 /***/ },
 /* 104 */
@@ -13430,6 +13529,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _flashls_events2 = _interopRequireDefault(_flashls_events);
 
+	var MAX_ATTEMPTS = 60;
+
 	var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" class="hls-playback" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls="" width="100%" height="100%"><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>';
 
 	var HLS = (function (_Playback) {
@@ -13469,15 +13570,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _get(Object.getPrototypeOf(HLS.prototype), 'constructor', this).call(this, options);
 	    this.src = options.src;
 	    this.baseUrl = options.baseUrl;
-	    this.flushLiveURLCache = options.flushLiveURLCache === undefined ? true : options.flushLiveURLCache;
-	    this.capLevelToStage = options.capLevelToStage === undefined ? false : options.capLevelToStage;
-	    this.useHardwareVideoDecoder = options.useHardwareVideoDecoder === undefined ? false : options.useHardwareVideoDecoder;
-	    this.maxBufferLength = options.maxBufferLength === undefined ? 120 : options.maxBufferLength;
-	    this.seekMode = options.seekMode === undefined ? "ACCURATE" : options.seekMode;
-	    this.startFromLevel = options.startFromLevel === undefined ? -1 : options.startFromLevel;
-	    this.startFromBitrate = options.startFromBitrate === undefined ? -1 : options.startFromBitrate;
-	    this.hlsMinimumDvrSize = options.hlsMinimumDvrSize === undefined ? 60 : options.hlsMinimumDvrSize;
-	    this.hlsLogEnabled = options.hlsLogEnabled === undefined ? true : options.hlsLogEnabled;
+	    this.initHlsParameters(options);
 	    this.highDefinition = false;
 	    this.autoPlay = options.autoPlay;
 	    this.defaultSettings = {
@@ -13492,6 +13585,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  _createClass(HLS, [{
+	    key: 'initHlsParameters',
+	    value: function initHlsParameters(options) {
+	      this.flushLiveURLCache = options.flushLiveURLCache === undefined ? true : options.flushLiveURLCache;
+	      this.capLevelToStage = options.capLevelToStage === undefined ? false : options.capLevelToStage;
+	      this.useHardwareVideoDecoder = options.useHardwareVideoDecoder === undefined ? false : options.useHardwareVideoDecoder;
+	      this.maxBufferLength = options.maxBufferLength === undefined ? 120 : options.maxBufferLength;
+	      this.seekMode = options.seekMode === undefined ? "ACCURATE" : options.seekMode;
+	      this.startFromLevel = options.startFromLevel === undefined ? -1 : options.startFromLevel;
+	      this.startFromBitrate = options.startFromBitrate === undefined ? -1 : options.startFromBitrate;
+	      this.hlsMinimumDvrSize = options.hlsMinimumDvrSize === undefined ? 60 : options.hlsMinimumDvrSize;
+	      this.hlsLogEnabled = options.hlsLogEnabled === undefined ? true : options.hlsLogEnabled;
+	      this.keyLoadMaxRetry = options.keyLoadMaxRetry === undefined ? 3 : options.keyLoadMaxRetry;
+	      this.keyLoadMaxRetryTimeout = options.keyLoadMaxRetryTimeout === undefined ? 64000 : options.keyLoadMaxRetryTimeout;
+	      this.fragmentLoadMaxRetry = options.fragmentLoadMaxRetry === undefined ? 3 : options.fragmentLoadMaxRetry;
+	      this.fragmentLoadMaxRetryTimeout = options.fragmentLoadMaxRetryTimeout === undefined ? 4000 : options.fragmentLoadMaxRetryTimeout;
+	      this.fragmentLoadSkipAfterMaxRetry = options.fragmentLoadSkipAfterMaxRetry === undefined ? false : options.fragmentLoadSkipAfterMaxRetry;
+	    }
+	  }, {
 	    key: 'addListeners',
 	    value: function addListeners() {
 	      var _this = this;
@@ -13532,17 +13643,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'bootstrap',
-	    value: (function (_bootstrap) {
-	      function bootstrap() {
-	        return _bootstrap.apply(this, arguments);
-	      }
+	    value: function bootstrap() {
+	      var _this2 = this;
 
-	      bootstrap.toString = function () {
-	        return _bootstrap.toString();
-	      };
-
-	      return bootstrap;
-	    })(function () {
 	      if (this.el.playerLoad) {
 	        this.el.width = "100%";
 	        this.el.height = "100%";
@@ -13551,14 +13654,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.currentState = "IDLE";
 	        this.setFlashSettings();
 	        this.updatePlaybackType();
-	        this.autoPlay && this.play();
+	        if (this.autoPlay || this._shouldPlayOnBootstrap) this.play();
 	        this.trigger(_baseEvents2['default'].PLAYBACK_READY, this.name);
 	      } else {
-	        setTimeout(function () {
-	          return bootstrap();
-	        }, 50);
+	        this._bootstrapAttempts = this._bootstrapAttempts || 0;
+	        if (++this._bootstrapAttempts <= MAX_ATTEMPTS) {
+	          setTimeout(function () {
+	            return _this2.bootstrap();
+	          }, 50);
+	        } else {
+	          this.trigger(_baseEvents2['default'].PLAYBACK_ERROR, { message: "Max number of attempts reached" }, this.name);
+	        }
 	      }
-	    })
+	    }
 	  }, {
 	    key: 'setFlashSettings',
 	    value: function setFlashSettings() {
@@ -13570,6 +13678,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.el.playerSetSeekMode(this.seekMode);
 	      this.el.playerSetStartFromBitrate(this.startFromBitrate);
 	      this.el.playerSetstartFromLevel(this.startFromLevel);
+	      this.el.playerSetKeyLoadMaxRetry(this.keyLoadMaxRetry);
+	      this.el.playerSetKeyLoadMaxRetryTimeout(this.keyLoadMaxRetryTimeout);
+	      this.el.playerSetFragmentLoadMaxRetry(this.fragmentLoadMaxRetry);
+	      this.el.playerSetFragmentLoadMaxRetryTimeout(this.fragmentLoadMaxRetryTimeout);
+	      this.el.playerSetFragmentLoadSkipAfterMaxRetry(this.fragmentLoadSkipAfterMaxRetry);
 	    }
 	  }, {
 	    key: 'levelChanged',
@@ -13720,25 +13833,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'firstPlay',
 	    value: function firstPlay() {
-	      var _this2 = this;
+	      var _this3 = this;
 
-	      this.setFlashSettings(); //ensure flushLiveURLCache will work (#327)
-	      this.el.playerLoad(this.src);
-	      _componentsMediator2['default'].once(this.cid + ':manifestloaded', function () {
-	        return _this2.el.playerPlay();
-	      });
-	      this.srcLoaded = true;
+	      if (this.el.playerLoad) {
+	        this.setFlashSettings(); //ensure flushLiveURLCache will work (#327)
+	        this.el.playerLoad(this.src);
+	        _componentsMediator2['default'].once(this.cid + ':manifestloaded', function () {
+	          return _this3.el.playerPlay();
+	        });
+	        this.srcLoaded = true;
+	      } else {
+	        this._shouldPlayOnBootstrap = true;
+	      }
 	    }
 	  }, {
 	    key: 'volume',
 	    value: function volume(value) {
-	      var _this3 = this;
+	      var _this4 = this;
 
 	      if (this.isReady) {
 	        this.el.playerVolume(value);
 	      } else {
 	        this.listenToOnce(this, _baseEvents2['default'].PLAYBACK_BUFFERFULL, function () {
-	          return _this3.volume(value);
+	          return _this4.volume(value);
 	        });
 	      }
 	    }
@@ -13868,7 +13985,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'createCallbacks',
 	    value: function createCallbacks() {
-	      var _this4 = this;
+	      var _this5 = this;
 
 	      if (!window.Clappr) {
 	        window.Clappr = {};
@@ -13878,7 +13995,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      this.flashlsEvents = new _flashls_events2['default'](this.cid);
 	      window.Clappr.flashlsCallbacks[this.cid] = function (eventName, args) {
-	        _this4.flashlsEvents[eventName].apply(_this4.flashlsEvents, args);
+	        _this5.flashlsEvents[eventName].apply(_this5.flashlsEvents, args);
 	      };
 	    }
 	  }, {
@@ -13938,7 +14055,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "0e6761eae56183e6cab4d2dcf45f280a.swf"
+	module.exports = __webpack_require__.p + "c0ada09560611574b7f2857e8359f425.swf"
 
 /***/ },
 /* 111 */
@@ -14413,6 +14530,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.listenTo(this.container, _baseEvents2['default'].CONTAINER_STATE_BUFFERING, this.onBuffering);
 	    this.listenTo(this.container, _baseEvents2['default'].CONTAINER_STATE_BUFFERFULL, this.onBufferFull);
 	    this.listenTo(this.container, _baseEvents2['default'].CONTAINER_STOP, this.onStop);
+	    this.listenTo(this.container, _baseEvents2['default'].CONTAINER_ERROR, this.onStop);
 	    this.render();
 	  }
 
@@ -14548,7 +14666,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".spinner-three-bounce[data-spinner] {\n  position: absolute;\n  margin: 0 auto;\n  width: 70px;\n  text-align: center;\n  z-index: 999;\n  top: 47%;\n  left: 0;\n  right: 0;\n  margin-left: auto;\n  margin-right: auto; }\n  .spinner-three-bounce[data-spinner] > div {\n    width: 18px;\n    height: 18px;\n    background-color: #FFFFFF;\n    border-radius: 100%;\n    display: inline-block;\n    -webkit-animation: bouncedelay 1.4s infinite ease-in-out;\n    -moz-animation: bouncedelay 1.4s infinite ease-in-out;\n    -ms-animation: bouncedelay 1.4s infinite ease-in-out;\n    -o-animation: bouncedelay 1.4s infinite ease-in-out;\n    animation: bouncedelay 1.4s infinite ease-in-out;\n    /* Prevent first frame from flickering when animation starts */\n    -webkit-animation-fill-mode: both;\n    -moz-animation-fill-mode: both;\n    -ms-animation-fill-mode: both;\n    -o-animation-fill-mode: both;\n    animation-fill-mode: both; }\n  .spinner-three-bounce[data-spinner] [data-bounce1] {\n    -webkit-animation-delay: -0.32s;\n    -moz-animation-delay: -0.32s;\n    -ms-animation-delay: -0.32s;\n    -o-animation-delay: -0.32s;\n    animation-delay: -0.32s; }\n  .spinner-three-bounce[data-spinner] [data-bounce2] {\n    -webkit-animation-delay: -0.32s;\n    -moz-animation-delay: -0.32s;\n    -ms-animation-delay: -0.32s;\n    -o-animation-delay: -0.32s;\n    animation-delay: -0.32s; }\n\n@-moz-keyframes bouncedelay {\n  0%, 80%, 100% {\n    -moz-transform: scale(0);\n    transform: scale(0); }\n\n  40% {\n    -moz-transform: scale(1);\n    transform: scale(1); } }\n\n@-webkit-keyframes bouncedelay {\n  0%, 80%, 100% {\n    -webkit-transform: scale(0);\n    transform: scale(0); }\n\n  40% {\n    -webkit-transform: scale(1);\n    transform: scale(1); } }\n\n@-o-keyframes bouncedelay {\n  0%, 80%, 100% {\n    -o-transform: scale(0);\n    transform: scale(0); }\n\n  40% {\n    -o-transform: scale(1);\n    transform: scale(1); } }\n\n@-ms-keyframes bouncedelay {\n  0%, 80%, 100% {\n    -ms-transform: scale(0);\n    transform: scale(0); }\n\n  40% {\n    -ms-transform: scale(1);\n    transform: scale(1); } }\n\n@keyframes bouncedelay {\n  0%, 80%, 100% {\n    transform: scale(0); }\n\n  40% {\n    transform: scale(1); } }\n", ""]);
+	exports.push([module.id, ".spinner-three-bounce[data-spinner] {\n  position: absolute;\n  margin: 0 auto;\n  width: 70px;\n  text-align: center;\n  z-index: 999;\n  top: 47%;\n  left: 0;\n  right: 0;\n  margin-left: auto;\n  margin-right: auto; }\n  .spinner-three-bounce[data-spinner] > div {\n    width: 18px;\n    height: 18px;\n    background-color: #FFFFFF;\n    border-radius: 100%;\n    display: inline-block;\n    -webkit-animation: bouncedelay 1.4s infinite ease-in-out;\n    -moz-animation: bouncedelay 1.4s infinite ease-in-out;\n    -ms-animation: bouncedelay 1.4s infinite ease-in-out;\n    -o-animation: bouncedelay 1.4s infinite ease-in-out;\n    animation: bouncedelay 1.4s infinite ease-in-out;\n    /* Prevent first frame from flickering when animation starts */\n    -webkit-animation-fill-mode: both;\n    -moz-animation-fill-mode: both;\n    -ms-animation-fill-mode: both;\n    -o-animation-fill-mode: both;\n    animation-fill-mode: both; }\n  .spinner-three-bounce[data-spinner] [data-bounce1] {\n    -webkit-animation-delay: -0.32s;\n    -moz-animation-delay: -0.32s;\n    -ms-animation-delay: -0.32s;\n    -o-animation-delay: -0.32s;\n    animation-delay: -0.32s; }\n  .spinner-three-bounce[data-spinner] [data-bounce2] {\n    -webkit-animation-delay: -0.16s;\n    -moz-animation-delay: -0.16s;\n    -ms-animation-delay: -0.16s;\n    -o-animation-delay: -0.16s;\n    animation-delay: -0.16s; }\n\n@-moz-keyframes bouncedelay {\n  0%, 80%, 100% {\n    -moz-transform: scale(0);\n    transform: scale(0); }\n\n  40% {\n    -moz-transform: scale(1);\n    transform: scale(1); } }\n\n@-webkit-keyframes bouncedelay {\n  0%, 80%, 100% {\n    -webkit-transform: scale(0);\n    transform: scale(0); }\n\n  40% {\n    -webkit-transform: scale(1);\n    transform: scale(1); } }\n\n@-o-keyframes bouncedelay {\n  0%, 80%, 100% {\n    -o-transform: scale(0);\n    transform: scale(0); }\n\n  40% {\n    -o-transform: scale(1);\n    transform: scale(1); } }\n\n@-ms-keyframes bouncedelay {\n  0%, 80%, 100% {\n    -ms-transform: scale(0);\n    transform: scale(0); }\n\n  40% {\n    -ms-transform: scale(1);\n    transform: scale(1); } }\n\n@keyframes bouncedelay {\n  0%, 80%, 100% {\n    transform: scale(0); }\n\n  40% {\n    transform: scale(1); } }\n", ""]);
 
 	// exports
 
