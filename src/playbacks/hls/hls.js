@@ -100,7 +100,7 @@ export default class HLS extends Playback {
       this.currentState = "IDLE"
       this.setFlashSettings()
       this.updatePlaybackType()
-      this.autoPlay && this.play()
+      if (this.autoPlay || this._shouldPlayOnBootstrap) this.play()
       this.trigger(Events.PLAYBACK_READY, this.name)
     } else {
       this._bootstrapAttempts = this._bootstrapAttempts || 0
@@ -259,10 +259,14 @@ export default class HLS extends Playback {
   }
 
   firstPlay() {
-    this.setFlashSettings() //ensure flushLiveURLCache will work (#327)
-    this.el.playerLoad(this.src)
-    Mediator.once(this.cid + ':manifestloaded',() => this.el.playerPlay())
-    this.srcLoaded = true
+    if (this.el.playerLoad) {
+      this.setFlashSettings() //ensure flushLiveURLCache will work (#327)
+      this.el.playerLoad(this.src)
+      Mediator.once(this.cid + ':manifestloaded',() => this.el.playerPlay())
+      this.srcLoaded = true
+    } else {
+      this._shouldPlayOnBootstrap = true
+    }
   }
 
   volume(value) {
