@@ -38,7 +38,22 @@ export default class HLS extends Playback {
   constructor(options) {
     super(options)
     this.src = options.src
-    this.baseUrl = options.baseUrl;
+    this.baseUrl = options.baseUrl
+    this.initHlsParameters(options)
+    this.highDefinition = false
+    this.autoPlay = options.autoPlay
+    this.defaultSettings = {
+      left: ["playstop"],
+      default: ['seekbar'],
+      right: ["fullscreen", "volume", "hd-indicator"],
+      seekEnabled: false
+    }
+    this.settings = assign({}, this.defaultSettings)
+    this.playbackType = 'live'
+    this.addListeners()
+  }
+
+  initHlsParameters(options) {
     this.flushLiveURLCache = (options.flushLiveURLCache === undefined) ? true : options.flushLiveURLCache
     this.capLevelToStage = (options.capLevelToStage === undefined) ? false : options.capLevelToStage
     this.useHardwareVideoDecoder = (options.useHardwareVideoDecoder === undefined) ? false : options.useHardwareVideoDecoder
@@ -53,17 +68,6 @@ export default class HLS extends Playback {
     this.fragmentLoadMaxRetry = (options.fragmentLoadMaxRetry === undefined) ? 3 : options.fragmentLoadMaxRetry
     this.fragmentLoadMaxRetryTimeout = (options.fragmentLoadMaxRetryTimeout === undefined) ? 4000 : options.fragmentLoadMaxRetryTimeout
     this.fragmentLoadSkipAfterMaxRetry = (options.fragmentLoadSkipAfterMaxRetry === undefined) ? false : options.fragmentLoadSkipAfterMaxRetry
-    this.highDefinition = false
-    this.autoPlay = options.autoPlay
-    this.defaultSettings = {
-      left: ["playstop"],
-      default: ['seekbar'],
-      right: ["fullscreen", "volume", "hd-indicator"],
-      seekEnabled: false
-    }
-    this.settings = assign({}, this.defaultSettings)
-    this.playbackType = 'live'
-    this.addListeners()
   }
 
   addListeners() {
