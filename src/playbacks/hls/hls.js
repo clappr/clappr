@@ -48,6 +48,11 @@ export default class HLS extends Playback {
     this.startFromBitrate = (options.startFromBitrate === undefined) ? -1 : options.startFromBitrate
     this.hlsMinimumDvrSize = (options.hlsMinimumDvrSize === undefined) ? 60 : options.hlsMinimumDvrSize
     this.hlsLogEnabled = (options.hlsLogEnabled === undefined) ? true : options.hlsLogEnabled
+    this.keyLoadMaxRetry = (options.keyLoadMaxRetry === undefined) ? 3 : options.keyLoadMaxRetry
+    this.keyLoadMaxRetryTimeout = (options.keyLoadMaxRetryTimeout === undefined) ? 64000 : options.keyLoadMaxRetryTimeout
+    this.fragmentLoadMaxRetry = (options.fragmentLoadMaxRetry === undefined) ? 3 : options.fragmentLoadMaxRetry
+    this.fragmentLoadMaxRetryTimeout = (options.fragmentLoadMaxRetryTimeout === undefined) ? 4000 : options.fragmentLoadMaxRetryTimeout
+    this.fragmentLoadSkipAfterMaxRetry = (options.fragmentLoadSkipAfterMaxRetry === undefined) ? false : options.fragmentLoadSkipAfterMaxRetry
     this.highDefinition = false
     this.autoPlay = options.autoPlay
     this.defaultSettings = {
@@ -112,6 +117,11 @@ export default class HLS extends Playback {
     this.el.playerSetSeekMode(this.seekMode)
     this.el.playerSetStartFromBitrate(this.startFromBitrate)
     this.el.playerSetstartFromLevel(this.startFromLevel)
+    this.el.playerSetKeyLoadMaxRetry(this.keyLoadMaxRetry)
+    this.el.playerSetKeyLoadMaxRetryTimeout(this.keyLoadMaxRetryTimeout)
+    this.el.playerSetFragmentLoadMaxRetry(this.fragmentLoadMaxRetry)
+    this.el.playerSetFragmentLoadMaxRetryTimeout(this.fragmentLoadMaxRetryTimeout)
+    this.el.playerSetFragmentLoadSkipAfterMaxRetry(this.fragmentLoadSkipAfterMaxRetry)
   }
 
   levelChanged(level) {
