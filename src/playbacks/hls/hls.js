@@ -105,7 +105,7 @@ export default class HLS extends Playback {
     } else {
       this._bootstrapAttempts = this._bootstrapAttempts || 0
       if (++this._bootstrapAttempts <= MAX_ATTEMPTS) {
-        setTimeout(() => bootstrap(), 50)
+        setTimeout(() => this.bootstrap(), 50)
       } else {
         this.trigger(Events.PLAYBACK_ERROR, {message: "Max number of attempts reached"}, this.name)
       }
