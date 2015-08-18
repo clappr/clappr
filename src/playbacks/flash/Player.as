@@ -128,7 +128,6 @@ package
       source = url;
       setupNetConnection();
       heartbeat.addEventListener( TimerEvent.TIMER, onHeartbeat );
-      heartbeat.start();
     }
     private function playerPause():void {
       _ns.pause();
@@ -223,6 +222,7 @@ package
       totalTime = info.duration;
       _triggerEvent('timeupdate');
       receivedMeta(info);
+      heartbeat.start();
     }
     public function receivedMeta(data:Object):void {
         setVideoSize(stage.stageWidth, stage.stageHeight);
