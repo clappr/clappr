@@ -15,6 +15,8 @@ import flashStyle from './public/style.scss'
 import flashHTML from './public/flash_playback.html'
 import flashSwf from './public/Player.swf'
 
+var MAX_ATTEMPTS = 60
+
 var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>'
 
 export default class Flash extends Playback {
@@ -37,15 +39,32 @@ export default class Flash extends Playback {
 
 
   bootstrap() {
-    this.el.width = "100%"
-    this.el.height = "100%"
-    if (this.currentState === 'PLAYING') {
-      this.firstPlay()
+    if (this.el.playerPlay) {
+      this.el.width = "100%"
+      this.el.height = "100%"
+      if (this.currentState === 'PLAYING') {
+        this.firstPlay()
+      } else {
+        this.currentState = "IDLE"
+        this.autoPlay && this.play()
+      }
+      $('<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%" />').insertAfter(this.$el)
+      if (this.getDuration() > 0) {
+        this.metadataLoaded()
+      } else {
+        Mediator.once(this.uniqueId + ':timeupdate', this.metadataLoaded, this)
+      }
     } else {
-      this.currentState = "IDLE"
-      this.autoPlay && this.play()
+      this._attempts = this._attempts || 0
+      if (++this._attempts <= MAX_ATTEMPTS) {
+        setTimeout(() => this.bootstrap(), 50)
+      } else {
+        this.trigger(Events.PLAYBACK_ERROR, {message: "Max number of attempts reached"}, this.name)
+      }
     }
-    $('<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%" />').insertAfter(this.$el)
+  }
+
+  metadataLoaded() {
     this.isReady = true
     this.trigger(Events.PLAYBACK_READY, this.name)
     this.trigger(Events.PLAYBACK_SETTINGSUPDATE, this.name)
@@ -216,4 +235,3 @@ Flash.canPlay = function(resource) {
     return resourceParts.length > 1 && !Browser.isMobile && resourceParts[1].match(/^(mp4|mov|f4v|3gpp|3gp)$/)
   }
 }
-
