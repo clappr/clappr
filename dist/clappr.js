@@ -160,7 +160,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	window.DEBUG = false;
 
-	var version = ("0.2.3");
+	var version = ("0.2.4");
 
 	exports['default'] = {
 	    Player: _componentsPlayer2['default'],
@@ -244,6 +244,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _player_info2 = _interopRequireDefault(_player_info);
 
+	var baseUrl = (0, _baseUtils.currentScriptUrl)().replace(/\/[^\/]+$/, "");
+
 	var Player = (function (_BaseObject) {
 	  _inherits(Player, _BaseObject);
 
@@ -252,7 +254,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _get(Object.getPrototypeOf(Player.prototype), 'constructor', this).call(this, options);
 	    window.p = this;
-	    var defaultOptions = { playerId: (0, _baseUtils.uniqueId)(""), persistConfig: true, width: 640, height: 360, baseUrl: '//cdn.clappr.io/' + ("0.2.3") };
+	    var defaultOptions = { playerId: (0, _baseUtils.uniqueId)(""), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl };
 	    this.options = (0, _lodashAssign2['default'])(defaultOptions, options);
 	    this.options.sources = this.normalizeSources(options);
 	    this.loader = new _loader2['default'](this.options.plugins || {}, this.options.playerId);
@@ -449,6 +451,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.seekStringToSeconds = seekStringToSeconds;
 	exports.uniqueId = uniqueId;
 	exports.isNumber = isNumber;
+	exports.currentScriptUrl = currentScriptUrl;
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -618,6 +621,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return value - parseFloat(value) + 1 >= 0;
 	}
 
+	function currentScriptUrl() {
+	  var scripts = document.getElementsByTagName('script');
+	  return scripts[scripts.length - 1].src;
+	}
+
 	var requestAnimationFrame = (window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || function (fn) {
 	  window.setTimeout(fn, 1000 / 60);
 	}).bind(window);
@@ -633,6 +641,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  formatTime: formatTime,
 	  seekStringToSeconds: seekStringToSeconds,
 	  uniqueId: uniqueId,
+	  currentScriptUrl: currentScriptUrl,
 	  isNumber: isNumber,
 	  requestAnimationFrame: requestAnimationFrame,
 	  cancelAnimationFrame: cancelAnimationFrame
@@ -13688,9 +13697,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'levelChanged',
 	    value: function levelChanged(level) {
 	      var currentLevel = this.getLevels()[level];
-	      this.highDefinition = currentLevel.height >= 720 || currentLevel.bitrate / 1000 >= 2000;
-	      this.trigger(_baseEvents2['default'].PLAYBACK_HIGHDEFINITIONUPDATE);
-	      this.trigger(_baseEvents2['default'].PLAYBACK_BITRATE, { bitrate: this.getCurrentBitrate(), level: level });
+	      if (currentLevel) {
+	        this.highDefinition = currentLevel.height >= 720 || currentLevel.bitrate / 1000 >= 2000;
+	        this.trigger(_baseEvents2['default'].PLAYBACK_HIGHDEFINITIONUPDATE);
+	        this.trigger(_baseEvents2['default'].PLAYBACK_BITRATE, { bitrate: this.getCurrentBitrate(), level: level });
+	      }
 	    }
 	  }, {
 	    key: 'updateTime',
@@ -13762,9 +13773,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'getLevels',
 	    value: function getLevels() {
-	      if (!this.levels || this.levels.length === 0) {
-	        this.levels = this.el.getLevels();
-	      }
+	      this.levels = this.el.getLevels();
 	      return this.levels;
 	    }
 	  }, {
