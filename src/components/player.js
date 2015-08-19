@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {uniqueId} from '../base/utils'
+import {uniqueId, currentScriptUrl} from '../base/utils'
 
 import BaseObject from '../base/base_object'
 import Events from '../base/events'
@@ -12,11 +12,13 @@ import assign from 'lodash.assign'
 import find from 'lodash.find'
 import PlayerInfo from './player_info'
 
+var baseUrl = currentScriptUrl().replace(/\/[^\/]+$/, "")
+
 export default class Player extends BaseObject {
   constructor(options) {
     super(options)
     window.p = this
-    var defaultOptions = {playerId: uniqueId(""), persistConfig: true, width: 640, height: 360, baseUrl: `//cdn.clappr.io/${VERSION}`}
+    var defaultOptions = {playerId: uniqueId(""), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl}
     this.options = assign(defaultOptions, options)
     this.options.sources = this.normalizeSources(options)
     this.loader = new Loader(this.options.plugins || {}, this.options.playerId)
