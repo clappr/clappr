@@ -130,9 +130,11 @@ export default class HLS extends Playback {
 
   levelChanged(level) {
     var currentLevel = this.getLevels()[level]
-    this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000);
-    this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE)
-    this.trigger(Events.PLAYBACK_BITRATE, {bitrate: this.getCurrentBitrate(), level: level})
+    if (currentLevel) {
+      this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000);
+      this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE)
+      this.trigger(Events.PLAYBACK_BITRATE, {bitrate: this.getCurrentBitrate(), level: level})
+    }
   }
 
   updateTime(timeMetrics) {
@@ -195,9 +197,7 @@ export default class HLS extends Playback {
   }
 
   getLevels() {
-    if (!this.levels || this.levels.length === 0) {
-      this.levels = this.el.getLevels()
-    }
+    this.levels = this.el.getLevels()
     return this.levels
   }
 
