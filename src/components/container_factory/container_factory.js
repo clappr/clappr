@@ -34,7 +34,7 @@ export default class ContainerFactory extends BaseObject {
 
   createContainer(source, options) {
     if (!!source.match(/^\/\//)) source = window.location.protocol + source
-    options = assign({}, options, this.options, {src: source, autoPlay: !!this.options.autoPlay})
+    options = assign({}, this.options, {src: source, autoPlay: !!this.options.autoPlay}, options)
     var playbackPlugin = this.findPlaybackPlugin(source)
     var playback = new playbackPlugin(options)
     var container = new Container({playback: playback})
@@ -52,4 +52,3 @@ export default class ContainerFactory extends BaseObject {
     });
   }
 }
-
