@@ -150,6 +150,11 @@ export function isNumber(value) {
   return value - parseFloat(value) + 1 >= 0
 }
 
+export function currentScriptUrl() {
+  var scripts = document.getElementsByTagName('script')
+  return scripts[scripts.length - 1].src
+}
+
 export var requestAnimationFrame = (window.requestAnimationFrame ||
                             window.mozRequestAnimationFrame ||
                             window.webkitRequestAnimationFrame ||
@@ -167,6 +172,7 @@ export default {
   formatTime,
   seekStringToSeconds,
   uniqueId,
+  currentScriptUrl,
   isNumber,
   requestAnimationFrame,
   cancelAnimationFrame
