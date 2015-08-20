@@ -34,6 +34,12 @@ export default class SeekTime extends UIObject {
   }
 
   showTime(event) {
+    if (!this.mediaControl.container.settings.seekEnabled) {
+      return
+    }
+
+    // the element must be unhidden before its width is requested, otherwise it's width will be reported as 0
+    this.$el.removeClass('hidden')
     var offset = event.pageX - this.mediaControl.$seekBarContainer.offset().left
     if (offset >= 0 && offset <= this.mediaControl.$seekBarContainer.width()) {
       var timePosition = Math.min(100, Math.max((offset) / this.mediaControl.$seekBarContainer.width() * 100, 0))
@@ -56,11 +62,8 @@ export default class SeekTime extends UIObject {
   }
 
   update(options) {
-    if (this.mediaControl.container.settings.seekEnabled) {
-      this.$el.find('[data-seek-time]').text(options.formattedTime)
-      this.$el.css('left', Math.max(0, options.pointerPosition - (this.$el.width() / 2)))
-      this.$el.removeClass('hidden')
-    }
+    this.$el.find('[data-seek-time]').text(options.formattedTime)
+    this.$el.css('left', Math.max(0, options.pointerPosition - (this.$el.width() / 2)))
   }
 
   render() {
