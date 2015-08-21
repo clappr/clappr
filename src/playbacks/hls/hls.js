@@ -68,6 +68,10 @@ export default class HLS extends Playback {
     this.fragmentLoadMaxRetry = (options.fragmentLoadMaxRetry === undefined) ? 3 : options.fragmentLoadMaxRetry
     this.fragmentLoadMaxRetryTimeout = (options.fragmentLoadMaxRetryTimeout === undefined) ? 4000 : options.fragmentLoadMaxRetryTimeout
     this.fragmentLoadSkipAfterMaxRetry = (options.fragmentLoadSkipAfterMaxRetry === undefined) ? false : options.fragmentLoadSkipAfterMaxRetry
+    this.capLevelonFpsDrop = (options.capLevelonFpsDrop === undefined) ? false : options.capLevelonFpsDrop
+    this.smoothAutoSwitchonFpsDrop = (options.smoothAutoSwitchonFpsDrop === undefined) ? this.capLevelonFpsDrop : options.smoothAutoSwitchonFpsDrop
+    this.fpsDroppedMonitoringPeriod = (options.fpsDroppedMonitoringPeriod === undefined) ? 5000 : options.fpsDroppedMonitoringPeriod
+    this.fpsDroppedMonitoringThreshold = (options.fpsDroppedMonitoringThreshold === undefined) ? 0.2 : options.fpsDroppedMonitoringThreshold
   }
 
   addListeners() {
@@ -126,6 +130,10 @@ export default class HLS extends Playback {
     this.el.playerSetFragmentLoadMaxRetry(this.fragmentLoadMaxRetry)
     this.el.playerSetFragmentLoadMaxRetryTimeout(this.fragmentLoadMaxRetryTimeout)
     this.el.playerSetFragmentLoadSkipAfterMaxRetry(this.fragmentLoadSkipAfterMaxRetry)
+    this.el.playerSetCapLevelonFPSDrop(this.capLevelonFpsDrop)
+    this.el.playerSetSmoothAutoSwitchonFPSDrop(this.smoothAutoSwitchonFpsDrop)
+    this.el.playerSetFpsDroppedMonitoringPeriod(this.fpsDroppedMonitoringPeriod)
+    this.el.playerSetFpsDroppedMonitoringThreshold(this.fpsDroppedMonitoringThreshold)
   }
 
   levelChanged(level) {
