@@ -55,6 +55,7 @@ export default class SeekTime extends UIObject {
   update() {
     if (!this.shouldBeVisible()) {
       this.$el.addClass('hidden')
+      this.$el.css('left', "-100%")
     }
     else {
       var currentTime = this.hoverPosition * this.mediaControl.container.getDuration()
