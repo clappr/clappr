@@ -1,6 +1,6 @@
 {
   "name": "clappr",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "dependencies": {
     "clappr-zepto": {
       "version": "0.0.4",
@@ -362,7 +362,7 @@
           "dependencies": {
             "minimatch": {
               "version": "0.2.14",
-              "from": "minimatch@>=0.2.12 <0.3.0",
+              "from": "minimatch@>=0.2.11 <0.3.0",
               "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-0.2.14.tgz",
               "dependencies": {
                 "lru-cache": {
@@ -384,7 +384,7 @@
             },
             "inherits": {
               "version": "2.0.1",
-              "from": "inherits@>=2.0.0 <3.0.0",
+              "from": "inherits@>=2.0.1 <2.1.0",
               "resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz"
             }
           }

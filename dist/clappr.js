@@ -160,7 +160,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	window.DEBUG = false;
 
-	var version = ("0.2.4");
+	var version = ("0.2.5");
 
 	exports['default'] = {
 	    Player: _componentsPlayer2['default'],
@@ -4389,7 +4389,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'createContainer',
 	    value: function createContainer(source, options) {
 	      if (!!source.match(/^\/\//)) source = window.location.protocol + source;
-	      options = (0, _lodashAssign2['default'])({}, options, this.options, { src: source, autoPlay: !!this.options.autoPlay });
+	      options = (0, _lodashAssign2['default'])({}, this.options, { src: source, autoPlay: !!this.options.autoPlay }, options);
 	      var playbackPlugin = this.findPlaybackPlugin(source);
 	      var playback = new playbackPlugin(options);
 	      var container = new _container2['default']({ playback: playback });
@@ -8948,6 +8948,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'showTime',
 	    value: function showTime(event) {
+	      if (!this.mediaControl.container.settings.seekEnabled) {
+	        return;
+	      }
+
+	      // the element must be unhidden before its width is requested, otherwise it's width will be reported as 0
+	      this.$el.removeClass('hidden');
 	      var offset = event.pageX - this.mediaControl.$seekBarContainer.offset().left;
 	      if (offset >= 0 && offset <= this.mediaControl.$seekBarContainer.width()) {
 	        var timePosition = Math.min(100, Math.max(offset / this.mediaControl.$seekBarContainer.width() * 100, 0));
@@ -8972,11 +8978,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'update',
 	    value: function update(options) {
-	      if (this.mediaControl.container.settings.seekEnabled) {
-	        this.$el.find('[data-seek-time]').text(options.formattedTime);
-	        this.$el.css('left', Math.max(0, options.pointerPosition - this.$el.width() / 2));
-	        this.$el.removeClass('hidden');
-	      }
+	      this.$el.find('[data-seek-time]').text(options.formattedTime);
+	      this.$el.css('left', Math.max(0, options.pointerPosition - this.$el.width() / 2));
 	    }
 	  }, {
 	    key: 'render',
@@ -9003,7 +9006,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".seek-time[data-seek-time] {\n  position: absolute;\n  width: auto;\n  height: 20px;\n  line-height: 20px;\n  bottom: 55px;\n  background-color: rgba(2, 2, 2, 0.5);\n  z-index: 9999;\n  -webkit-transition: opacity 0.1s ease;\n  -moz-transition: opacity 0.1s ease;\n  -o-transition: opacity 0.1s ease;\n  transition: opacity 0.1s ease; }\n  .seek-time[data-seek-time].hidden[data-seek-time] {\n    opacity: 0; }\n  .seek-time[data-seek-time] span[data-seek-time] {\n    position: relative;\n    color: white;\n    font-size: 10px;\n    padding-left: 7px;\n    padding-right: 7px; }\n", ""]);
+	exports.push([module.id, ".seek-time[data-seek-time] {\n  position: absolute;\n  white-space: nowrap;\n  width: auto;\n  height: 20px;\n  line-height: 20px;\n  bottom: 55px;\n  background-color: rgba(2, 2, 2, 0.5);\n  z-index: 9999;\n  -webkit-transition: opacity 0.1s ease;\n  -moz-transition: opacity 0.1s ease;\n  -o-transition: opacity 0.1s ease;\n  transition: opacity 0.1s ease; }\n  .seek-time[data-seek-time].hidden[data-seek-time] {\n    opacity: 0; }\n  .seek-time[data-seek-time] span[data-seek-time] {\n    position: relative;\n    color: white;\n    font-size: 10px;\n    padding-left: 7px;\n    padding-right: 7px; }\n", ""]);
 
 	// exports
 
@@ -13610,6 +13613,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.fragmentLoadMaxRetry = options.fragmentLoadMaxRetry === undefined ? 3 : options.fragmentLoadMaxRetry;
 	      this.fragmentLoadMaxRetryTimeout = options.fragmentLoadMaxRetryTimeout === undefined ? 4000 : options.fragmentLoadMaxRetryTimeout;
 	      this.fragmentLoadSkipAfterMaxRetry = options.fragmentLoadSkipAfterMaxRetry === undefined ? false : options.fragmentLoadSkipAfterMaxRetry;
+	      this.capLevelonFpsDrop = options.capLevelonFpsDrop === undefined ? false : options.capLevelonFpsDrop;
+	      this.smoothAutoSwitchonFpsDrop = options.smoothAutoSwitchonFpsDrop === undefined ? this.capLevelonFpsDrop : options.smoothAutoSwitchonFpsDrop;
+	      this.fpsDroppedMonitoringPeriod = options.fpsDroppedMonitoringPeriod === undefined ? 5000 : options.fpsDroppedMonitoringPeriod;
+	      this.fpsDroppedMonitoringThreshold = options.fpsDroppedMonitoringThreshold === undefined ? 0.2 : options.fpsDroppedMonitoringThreshold;
 	    }
 	  }, {
 	    key: 'addListeners',
@@ -13692,6 +13699,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.el.playerSetFragmentLoadMaxRetry(this.fragmentLoadMaxRetry);
 	      this.el.playerSetFragmentLoadMaxRetryTimeout(this.fragmentLoadMaxRetryTimeout);
 	      this.el.playerSetFragmentLoadSkipAfterMaxRetry(this.fragmentLoadSkipAfterMaxRetry);
+	      this.el.playerSetCapLevelonFPSDrop(this.capLevelonFpsDrop);
+	      this.el.playerSetSmoothAutoSwitchonFPSDrop(this.smoothAutoSwitchonFpsDrop);
+	      this.el.playerSetFpsDroppedMonitoringPeriod(this.fpsDroppedMonitoringPeriod);
+	      this.el.playerSetFpsDroppedMonitoringThreshold(this.fpsDroppedMonitoringThreshold);
 	    }
 	  }, {
 	    key: 'levelChanged',
@@ -13834,7 +13845,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'onFragmentLoaded',
 	    value: function onFragmentLoaded(loadmetrics) {
 	      this.trigger(_baseEvents2['default'].PLAYBACK_FRAGMENT_LOADED, loadmetrics);
-	      if (this.reportingProgress) {
+	      if (this.reportingProgress && this.el.getPosition) {
 	        var buffered = this.el.getPosition() + this.el.getbufferLength();
 	        this.trigger(_baseEvents2['default'].PLAYBACK_PROGRESS, this.el.getPosition(), buffered, this.el.getDuration(), this.name);
 	      }
@@ -14064,7 +14075,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "c0ada09560611574b7f2857e8359f425.swf"
+	module.exports = __webpack_require__.p + "96f944f0104ee30b8fce6cffd89e13aa.swf"
 
 /***/ },
 /* 111 */
