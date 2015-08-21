@@ -25,52 +25,61 @@ export default class SeekTime extends UIObject {
   constructor(mediaControl) {
     super()
     this.mediaControl = mediaControl
+    this.hoveringOverSeekBar = false
+    this.hoverPosition = null
     this.addEventListeners()
   }
 
   addEventListeners() {
-    this.listenTo(this.mediaControl, Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR, this.showTime)
-    this.listenTo(this.mediaControl, Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR, this.hideTime)
+    var self = this;
+    this.listenTo(this.mediaControl, Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR, function(event) {
+      self.hoveringOverSeekBar = true
+      self.calculateHoverPosition(event)
+      self.update()
+    })
+    this.listenTo(this.mediaControl, Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR, function(event) {
+      self.hoveringOverSeekBar = false
+      self.update()
+    })
+
+    // Not sure how to get a reference to the container. does this need to be a UICorePlugin like dvr_controls?
+    // this.listenTo(this.mediaControl.container, Events.CONTAINER_SETTINGSUPDATE, this.update)
   }
 
-  showTime(event) {
-    if (!this.mediaControl.container.settings.seekEnabled) {
-      return
-    }
-
-    // the element must be unhidden before its width is requested, otherwise it's width will be reported as 0
-    this.$el.removeClass('hidden')
+  calculateHoverPosition(event) {
     var offset = event.pageX - this.mediaControl.$seekBarContainer.offset().left
-    if (offset >= 0 && offset <= this.mediaControl.$seekBarContainer.width()) {
-      var timePosition = Math.min(100, Math.max((offset) / this.mediaControl.$seekBarContainer.width() * 100, 0))
-      var pointerPosition = event.pageX - this.mediaControl.$el.offset().left
-      pointerPosition = Math.min(Math.max(0, pointerPosition), this.mediaControl.$el.width() - this.$el.width() / 2)
-      var currentTime = timePosition * this.mediaControl.container.getDuration() / 100
-      var options = {
-        timestamp: currentTime,
-        formattedTime: formatTime(currentTime),
-        pointerPosition: pointerPosition
-      }
+    // proportion into the seek bar that the mouse is hovered over 0-1
+    this.hoverPosition = Math.min(1, Math.max(offset/this.mediaControl.$seekBarContainer.width(), 0))
+  }
 
-      this.update(options)
+  update() {
+    if (!this.shouldBeVisible()) {
+      this.$el.addClass('hidden')
+    }
+    else {
+      var currentTime = this.hoverPosition * this.mediaControl.container.getDuration()
+      var formattedTime = formatTime(currentTime)
+      this.$textEl.text(formattedTime)
+      // the element must be unhidden before its width is requested, otherwise it's width will be reported as 0
+      this.$el.removeClass('hidden')
+      var containerWidth = this.mediaControl.$seekBarContainer.width()
+      var elWidth = this.$el.width()
+      var elLeftPos = this.hoverPosition * containerWidth
+      elLeftPos -= elWidth / 2;
+      elLeftPos = Math.max(0, Math.min(elLeftPos, containerWidth - elWidth))
+      this.$el.css('left', elLeftPos)
     }
   }
 
-  hideTime() {
-    this.$el.addClass('hidden')
-    this.$el.css('left', '-100%')
-  }
-
-  update(options) {
-    this.$el.find('[data-seek-time]').text(options.formattedTime)
-    this.$el.css('left', Math.max(0, options.pointerPosition - (this.$el.width() / 2)))
+  shouldBeVisible() {
+    return this.mediaControl.container.settings.seekEnabled && this.hoveringOverSeekBar
   }
 
   render() {
-      var style = Styler.getStyleFor(seekTimeStyle);
-      this.$el.html(this.template());
-      this.$el.append(style);
-      this.mediaControl.$el.append(this.el);
+      var style = Styler.getStyleFor(seekTimeStyle)
+      this.$el.html(this.template())
+      this.$el.append(style)
+      this.mediaControl.$el.append(this.el)
+      this.$textEl = this.$el.find('[data-seek-time]')
   }
 }
-
