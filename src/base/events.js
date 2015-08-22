@@ -171,6 +171,10 @@ var triggerEvents = function(events, args) {
  * @param {String} name
  * @param {Function} callback
  * @param {Object} context
+ * @example
+ * ```javascript
+ * this.listenTo(this.core.playback, Events.PLAYBACK_PAUSE, this.callback)
+ * ```
  */
 /**
  * listen to an event once for a given `obj`
@@ -179,6 +183,10 @@ var triggerEvents = function(events, args) {
  * @param {String} name
  * @param {Function} callback
  * @param {Object} context
+ * @example
+ * ```javascript
+ * this.listenToOnce(this.core.playback, Events.PLAYBACK_PAUSE, this.callback)
+ * ```
  */
 var listenMethods = {listenTo: 'on', listenToOnce: 'once'}
 
