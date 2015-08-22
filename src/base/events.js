@@ -18,7 +18,6 @@ var slice = Array.prototype.slice
 export default class Events {
   /**
    * listen to an event indefinitely, if you want to stop you need to call `off`
-   * *also known as `listenTo`*
    * @method on
    * @param {String} name
    * @param {Function} callback
@@ -34,7 +33,6 @@ export default class Events {
 
   /**
    * listen to an event only once
-   * *also known as `listenOnceTo`*
    * @method once
    * @param {String} name
    * @param {Function} callback
@@ -51,6 +49,13 @@ export default class Events {
     return this.on(name, once, context)
   }
 
+  /**
+   * stop listening to an event
+   * @method off
+   * @param {String} name
+   * @param {Function} callback
+   * @param {Object} context
+   */
   off(name, callback, context) {
     var retain, ev, events, names, i, l, j, k
     if (!this._events || !eventsApi(this, 'off', name, [callback, context])) return this
@@ -79,6 +84,11 @@ export default class Events {
     return this
   }
 
+  /**
+   * triggers an event given its `name`
+   * @method trigger
+   * @param {String} name
+   */
   trigger(name) {
     try {
       var klass = this.name || this.constructor.name
@@ -96,6 +106,13 @@ export default class Events {
     return this
   }
 
+  /**
+   * stop listening an event for a given object
+   * @method stopListening
+   * @param {Object} obj
+   * @param {String} name
+   * @param {Function} callback
+   */
   stopListening(obj, name, callback) {
     var listeningTo = this._listeningTo
     if (!listeningTo) return this
@@ -147,6 +164,22 @@ var triggerEvents = function(events, args) {
   }
 }
 
+/**
+ * listen to an event indefinitely for a given `obj`
+ * @method listenTo
+ * @param {Object} obj
+ * @param {String} name
+ * @param {Function} callback
+ * @param {Object} context
+ */
+/**
+ * listen to an event once for a given `obj`
+ * @method listenToOnce
+ * @param {Object} obj
+ * @param {String} name
+ * @param {Function} callback
+ * @param {Object} context
+ */
 var listenMethods = {listenTo: 'on', listenToOnce: 'once'}
 
 Object.keys(listenMethods).forEach(function(method) {
