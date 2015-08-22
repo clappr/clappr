@@ -160,7 +160,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	window.DEBUG = false;
 
-	var version = ("0.2.5");
+	var version = ("0.2.6");
 
 	exports['default'] = {
 	    Player: _componentsPlayer2['default'],
@@ -246,8 +246,79 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var baseUrl = (0, _baseUtils.currentScriptUrl)().replace(/\/[^\/]+$/, "");
 
+	/**
+	 * @class Player
+	 * @constructor
+	 * @extends BaseObject
+	 * @module components
+	 * @example
+	 * ### Using the Player
+	 *
+	 * Add the following script on your HTML:
+	 * ```html
+	 * <head>
+	 *   <script type="text/javascript" src="http://cdn.clappr.io/latest/clappr.min.js"></script>
+	 * </head>
+	 * ```
+	 * Now, create the player:
+	 * ```html
+	 * <body>
+	 *   <div id="player"></div>
+	 *   <script>
+	 *     var player = new Clappr.Player({source: "http://your.video/here.mp4", parentId: "#player"});
+	 *   </script>
+	 * </body>
+	 * ```
+	 */
+
 	var Player = (function (_BaseObject) {
 	  _inherits(Player, _BaseObject);
+
+	  /**
+	   * ## Player's constructor
+	   *
+	   * You might pass the options object to build the player.
+	   * ```javascript
+	   * var options = {source: "http://example.com/video.mp4", param1: "val1"};
+	   * var player = new Clappr.Player(options);
+	   * ```
+	   *
+	   * @method constructor
+	   * @param {Object} options Data
+	   * options to build a player instance
+	   * @param {Number} [options.width]
+	   * player's width **default**: `640`
+	   * @param {Number} [options.height]
+	   * player's height **default**: `360`
+	   * @param {Boolean} [options.autoPlay]
+	   * automatically play after page load **default**: `false`
+	   * @param {Boolean} [options.loop]
+	   * automatically replay after it ends **default**: `false`
+	   * @param {Boolean} [options.chromeless]
+	   * player acts in chromeless mode **default**: `false`
+	   * @param {Boolean} [options.muted]
+	   * start the video muted **default**: `false`
+	   * @param {Boolean} [options.persistConfig]
+	   * persist player's settings (volume) through the same domain **default**: `true`
+	   * @param {String} [options.preload]
+	   * video will be preloaded according to `preload` attribute options **default**: `'metadata'`
+	   * @param {Number} [options.maxBufferLength]
+	   * the default behavior for the **HLS playback** is to keep buffering indefinitely, even on VoD. This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks. To change this behavior use `maxBufferLength` where **value is in seconds**.
+	   * @param {String} [options.gaAccount]
+	   * enable Google Analytics events dispatch **(play/pause/stop/buffering/etc)** by adding your `gaAccount`
+	   * @param {String} [options.gaTrackerName]
+	   * besides `gaAccount` you can optionally, pass your favorite trackerName as `gaTrackerName`
+	   * @param {Object} [options.mediacontrol]
+	   * customize control bar colors, example: `mediacontrol: {seekbar: "#E113D3", buttons: "#66B2FF"}`
+	   * @param {Boolean} [options.hideMediaControl]
+	   * control media control auto hide **default**: `true`
+	   * @param {Boolean} [options.hideVolumeBar]
+	   * when embedded with width less than 320, volume bar will hide. You can force this behavior for all sizes by adding `true` **default**: `false`
+	   * @param {String} [options.watermark]
+	   * put `watermark: 'http://url/img.png'` on your embed parameters to automatically add watermark on your video. You can customize corner position by defining position parameter. Positions can be `bottom-left`, `bottom-right`, `top-left` and `top-right`.
+	   * @param {String} [options.poster]
+	   * define a poster by adding its address `poster: 'http://url/img.png'`. It will appear after video embed, disappear on play and go back when user stops the video.
+	   */
 
 	  function Player(options) {
 	    _classCallCheck(this, Player);
@@ -267,6 +338,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }
 
+	  /**
+	   * Specify a `parentId` to the player.
+	   * @method setParentId
+	   * @param {String} parentId the element parent id.
+	   */
+
 	  _createClass(Player, [{
 	    key: 'setParentId',
 	    value: function setParentId(parentId) {
@@ -275,6 +352,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.attachTo(el);
 	      }
 	    }
+
+	    /**
+	     * You can use this method to attach the player to a given element. You don't need to do this when you specify it during the player instantiation passing the `parentId` param.
+	     * @method attachTo
+	     * @param {Object} element a given element.
+	     */
 	  }, {
 	    key: 'attachTo',
 	    value: function attachTo(element) {
@@ -349,61 +432,139 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var sources = options.sources || (options.source !== undefined ? [options.source.toString()] : []);
 	      return sources.length === 0 ? ['no.op'] : sources;
 	    }
+
+	    /**
+	     * resizes the current player canvas.
+	     * @method resize
+	     * @param {Object} size should be a literal object with `height` and `width`.
+	     * @example
+	     * ```javascript
+	     * player.resize({height: 360, width: 640})
+	     * ```
+	     */
 	  }, {
 	    key: 'resize',
 	    value: function resize(size) {
 	      this.core.resize(size);
 	    }
+
+	    /**
+	     * loads a new source.
+	     * @method load
+	     * @param {Object} sources source or sources of video.
+	     * @param {Object} mimeType a mime type, example: `'application/vnd.apple.mpegurl'`
+	     *
+	     */
 	  }, {
 	    key: 'load',
 	    value: function load(sources, mimeType) {
 	      this.core.load(sources, mimeType);
 	    }
+
+	    /**
+	     * destroys the current player and removes it from the DOM.
+	     * @method destroy
+	     */
 	  }, {
 	    key: 'destroy',
 	    value: function destroy() {
 	      this.core.destroy();
 	    }
+
+	    /**
+	     * plays the current video (`source`).
+	     * @method play
+	     */
 	  }, {
 	    key: 'play',
 	    value: function play() {
 	      this.core.mediaControl.container.play();
 	    }
+
+	    /**
+	     * pauses the current video (`source`).
+	     * @method pause
+	     */
 	  }, {
 	    key: 'pause',
 	    value: function pause() {
 	      this.core.mediaControl.container.pause();
 	    }
+
+	    /**
+	     * stops the current video (`source`).
+	     * @method stop
+	     */
 	  }, {
 	    key: 'stop',
 	    value: function stop() {
 	      this.core.mediaControl.container.stop();
 	    }
+
+	    /**
+	     * seeks the current video (`source`). For example, `player.seek(50)` will seek to the middle of the current video.
+	     * @method seek
+	     * @param {Number} time should be a number between 0 and 100.
+	     */
 	  }, {
 	    key: 'seek',
 	    value: function seek(time) {
 	      this.core.mediaControl.container.setCurrentTime(time);
 	    }
+
+	    /**
+	     * Set the volume for the current video (`source`).
+	     * @method setVolume
+	     * @param {Number} time should be a number between 0 and 100, 0 being mute and 100 the max volume.
+	     */
 	  }, {
 	    key: 'setVolume',
 	    value: function setVolume(volume) {
 	      this.core.mediaControl.container.setVolume(volume);
 	    }
+
+	    /**
+	     * mutes the current video (`source`).
+	     * @method mute
+	     */
 	  }, {
 	    key: 'mute',
 	    value: function mute() {
 	      this.core.mediaControl.container.setVolume(0);
 	    }
+
+	    /**
+	     * unmutes the current video (`source`).
+	     * @method unmute
+	     */
 	  }, {
 	    key: 'unmute',
 	    value: function unmute() {
 	      this.core.mediaControl.container.setVolume(100);
 	    }
+
+	    /**
+	     * checks if the player is playing.
+	     * @method isPlaying
+	     * @return {Boolean} `true` if the current source is playing, otherwise `false`
+	     */
 	  }, {
 	    key: 'isPlaying',
 	    value: function isPlaying() {
 	      return this.core.mediaControl.container.isPlaying();
 	    }
+
+	    /**
+	     * get a plugin by its name.
+	     * @method getPlugin
+	     * @param {String} name of the plugin.
+	     * @return {Object} the plugin instance
+	     * @example
+	     * ```javascript
+	     * var poster = player.getPlugin('poster');
+	     * poster.hidePlayButton();
+	     * ```
+	     */
 	  }, {
 	    key: 'getPlugin',
 	    value: function getPlugin(name) {
@@ -412,11 +573,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return plugin.name === name;
 	      });
 	    }
+
+	    /**
+	     * the current time in seconds.
+	     * @method getCurrentTime
+	     * @return {Number} current time (in seconds) of the current source
+	     */
 	  }, {
 	    key: 'getCurrentTime',
 	    value: function getCurrentTime() {
 	      return this.core.mediaControl.container.getCurrentTime();
 	    }
+
+	    /**
+	     * the duration time in seconds.
+	     * @method getDuration
+	     * @return {Number} duration time (in seconds) of the current source
+	     */
 	  }, {
 	    key: 'getDuration',
 	    value: function getDuration() {
@@ -1898,8 +2071,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events2 = _interopRequireDefault(_events);
 
+	/**
+	 * @class BaseObject
+	 * @constructor
+	 * @extends Events
+	 * @module base
+	 */
+
 	var BaseObject = (function (_Events) {
 	  _inherits(BaseObject, _Events);
+
+	  /**
+	   * @method constructor
+	   * @param {Object} options
+	   */
 
 	  function BaseObject() {
 	    var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -1910,6 +2095,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.uniqueId = (0, _utils.uniqueId)('o');
 	  }
 
+	  /**
+	  * a unique id prefixed with `'o'`, `o1, o232`
+	  *
+	  * @property uniqueId
+	  * @type String
+	  */
 	  return BaseObject;
 	})(_events2['default']);
 
@@ -1950,6 +2141,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var slice = Array.prototype.slice;
 
+	/**
+	 * @class Events
+	 * @constructor
+	 * @module base
+	 */
+
 	var Events = (function () {
 	  function Events() {
 	    _classCallCheck(this, Events);
@@ -1957,6 +2154,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  _createClass(Events, [{
 	    key: 'on',
+
+	    /**
+	     * listen to an event indefinitely, if you want to stop you need to call `off`
+	     * @method on
+	     * @param {String} name
+	     * @param {Function} callback
+	     * @param {Object} context
+	     */
 	    value: function on(name, callback, context) {
 	      if (!eventsApi(this, 'on', name, [callback, context]) || !callback) return this;
 	      this._events || (this._events = {});
@@ -1964,6 +2169,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      events.push({ callback: callback, context: context, ctx: context || this });
 	      return this;
 	    }
+
+	    /**
+	     * listen to an event only once
+	     * @method once
+	     * @param {String} name
+	     * @param {Function} callback
+	     * @param {Object} context
+	     */
 	  }, {
 	    key: 'once',
 	    value: function once(name, callback, context) {
@@ -1976,6 +2189,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      once._callback = callback;
 	      return this.on(name, once, context);
 	    }
+
+	    /**
+	     * stop listening to an event
+	     * @method off
+	     * @param {String} name
+	     * @param {Function} callback
+	     * @param {Object} context
+	     */
 	  }, {
 	    key: 'off',
 	    value: function off(name, callback, context) {
@@ -2004,6 +2225,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      return this;
 	    }
+
+	    /**
+	     * triggers an event given its `name`
+	     * @method trigger
+	     * @param {String} name
+	     */
 	  }, {
 	    key: 'trigger',
 	    value: function trigger(name) {
@@ -2022,6 +2249,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      return this;
 	    }
+
+	    /**
+	     * stop listening an event for a given object
+	     * @method stopListening
+	     * @param {Object} obj
+	     * @param {String} name
+	     * @param {Function} callback
+	     */
 	  }, {
 	    key: 'stopListening',
 	    value: function stopListening(obj, name, callback) {
@@ -2090,6 +2325,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	};
 
+	/**
+	 * listen to an event indefinitely for a given `obj`
+	 * @method listenTo
+	 * @param {Object} obj
+	 * @param {String} name
+	 * @param {Function} callback
+	 * @param {Object} context
+	 * @example
+	 * ```javascript
+	 * this.listenTo(this.core.playback, Events.PLAYBACK_PAUSE, this.callback)
+	 * ```
+	 */
+	/**
+	 * listen to an event once for a given `obj`
+	 * @method listenToOnce
+	 * @param {Object} obj
+	 * @param {String} name
+	 * @param {Function} callback
+	 * @param {Object} context
+	 * @example
+	 * ```javascript
+	 * this.listenToOnce(this.core.playback, Events.PLAYBACK_PAUSE, this.callback)
+	 * ```
+	 */
 	var listenMethods = { listenTo: 'on', listenToOnce: 'once' };
 
 	Object.keys(listenMethods).forEach(function (method) {
@@ -2104,13 +2363,58 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 	// PLAYER EVENTS
+	/**
+	 * Fired when player risezes
+	 *
+	 * @event PLAYER_RESIZE
+	 * @param {Object} currentSize an object with the current size
+	 */
 	Events.PLAYER_RESIZE = 'resize';
+	/**
+	 * Fired when player starts to play
+	 *
+	 * @event PLAYER_PLAY
+	 */
 	Events.PLAYER_PLAY = 'play';
+	/**
+	 * Fired when player pauses
+	 *
+	 * @event PLAYER_PAUSE
+	 */
 	Events.PLAYER_PAUSE = 'pause';
+	/**
+	 * Fired when player stops
+	 *
+	 * @event PLAYER_STOP
+	 */
 	Events.PLAYER_STOP = 'stop';
+	/**
+	 * Fired when player ends the video
+	 *
+	 * @event PLAYER_ENDED
+	 */
 	Events.PLAYER_ENDED = 'ended';
+	/**
+	 * Fired when player ends the video
+	 *
+	 * @event PLAYER_SEEK
+	 * @param {Number} percent a percentagem of seek
+	 */
 	Events.PLAYER_SEEK = 'seek';
+	/**
+	 * Fired when player receives an error
+	 *
+	 * @event PLAYER_ERROR
+	 * @param {Object} error the error
+	 */
 	Events.PLAYER_ERROR = 'error';
+	/**
+	 * Fired when player updates its execution
+	 *
+	 * @event PLAYER_ERROR
+	 * @param {Number} postion the current position (in seconds)
+	 * @param {Number} duration the total duration (in seconds)
+	 */
 	Events.PLAYER_TIMEUPDATE = 'timeupdate';
 
 	// Playback Events
@@ -9157,7 +9461,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "[data-player] {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  -o-user-select: none;\n  user-select: none;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  -webkit-transform: translate3d(0, 0, 0);\n  -moz-transform: translate3d(0, 0, 0);\n  -ms-transform: translate3d(0, 0, 0);\n  -o-transform: translate3d(0, 0, 0);\n  transform: translate3d(0, 0, 0);\n  position: relative;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-style: normal;\n  font-weight: normal;\n  text-align: center;\n  overflow: hidden;\n  font-size: 100%;\n  font-family: \"lucida grande\", tahoma, verdana, arial, sans-serif;\n  text-shadow: 0 0 0;\n  box-sizing: border-box; }\n  [data-player] div, [data-player] span, [data-player] applet, [data-player] object, [data-player] iframe, [data-player] h1, [data-player] h2, [data-player] h3, [data-player] h4, [data-player] h5, [data-player] h6, [data-player] p, [data-player] blockquote, [data-player] pre, [data-player] a, [data-player] abbr, [data-player] acronym, [data-player] address, [data-player] big, [data-player] cite, [data-player] code, [data-player] del, [data-player] dfn, [data-player] em, [data-player] img, [data-player] ins, [data-player] kbd, [data-player] q, [data-player] s, [data-player] samp, [data-player] small, [data-player] strike, [data-player] strong, [data-player] sub, [data-player] sup, [data-player] tt, [data-player] var, [data-player] b, [data-player] u, [data-player] i, [data-player] center, [data-player] dl, [data-player] dt, [data-player] dd, [data-player] ol, [data-player] ul, [data-player] li, [data-player] fieldset, [data-player] form, [data-player] label, [data-player] legend, [data-player] table, [data-player] caption, [data-player] tbody, [data-player] tfoot, [data-player] thead, [data-player] tr, [data-player] th, [data-player] td, [data-player] article, [data-player] aside, [data-player] canvas, [data-player] details, [data-player] embed, [data-player] figure, [data-player] figcaption, [data-player] footer, [data-player] header, [data-player] hgroup, [data-player] menu, [data-player] nav, [data-player] output, [data-player] ruby, [data-player] section, [data-player] summary, [data-player] time, [data-player] mark, [data-player] audio, [data-player] video {\n    margin: 0;\n    padding: 0;\n    border: 0;\n    font: inherit;\n    font-size: 100%;\n    vertical-align: baseline; }\n  [data-player] table {\n    border-collapse: collapse;\n    border-spacing: 0; }\n  [data-player] caption, [data-player] th, [data-player] td {\n    text-align: left;\n    font-weight: normal;\n    vertical-align: middle; }\n  [data-player] q, [data-player] blockquote {\n    quotes: none; }\n    [data-player] q:before, [data-player] q:after, [data-player] blockquote:before, [data-player] blockquote:after {\n      content: \"\";\n      content: none; }\n  [data-player] a img {\n    border: none; }\n  [data-player]:focus {\n    outline: 0; }\n  [data-player] * {\n    max-width: initial;\n    box-sizing: inherit;\n    float: initial; }\n  [data-player].fullscreen {\n    width: 100% !important;\n    height: 100% !important; }\n  [data-player].nocursor {\n    cursor: none; }\n\n.clappr-style {\n  display: none !important; }\n\n@media screen {\n  [data-player] {\n    opacity: 0.99; } }\n", ""]);
+	exports.push([module.id, "[data-player] {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  -o-user-select: none;\n  user-select: none;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  -webkit-transform: translate3d(0, 0, 0);\n  -moz-transform: translate3d(0, 0, 0);\n  -ms-transform: translate3d(0, 0, 0);\n  -o-transform: translate3d(0, 0, 0);\n  transform: translate3d(0, 0, 0);\n  position: relative;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-style: normal;\n  font-weight: normal;\n  text-align: center;\n  overflow: hidden;\n  font-size: 100%;\n  font-family: \"lucida grande\", tahoma, verdana, arial, sans-serif;\n  text-shadow: 0 0 0;\n  box-sizing: border-box; }\n  [data-player] div, [data-player] span, [data-player] applet, [data-player] object, [data-player] iframe, [data-player] h1, [data-player] h2, [data-player] h3, [data-player] h4, [data-player] h5, [data-player] h6, [data-player] p, [data-player] blockquote, [data-player] pre, [data-player] a, [data-player] abbr, [data-player] acronym, [data-player] address, [data-player] big, [data-player] cite, [data-player] code, [data-player] del, [data-player] dfn, [data-player] em, [data-player] img, [data-player] ins, [data-player] kbd, [data-player] q, [data-player] s, [data-player] samp, [data-player] small, [data-player] strike, [data-player] strong, [data-player] sub, [data-player] sup, [data-player] tt, [data-player] var, [data-player] b, [data-player] u, [data-player] i, [data-player] center, [data-player] dl, [data-player] dt, [data-player] dd, [data-player] ol, [data-player] ul, [data-player] li, [data-player] fieldset, [data-player] form, [data-player] label, [data-player] legend, [data-player] table, [data-player] caption, [data-player] tbody, [data-player] tfoot, [data-player] thead, [data-player] tr, [data-player] th, [data-player] td, [data-player] article, [data-player] aside, [data-player] canvas, [data-player] details, [data-player] embed, [data-player] figure, [data-player] figcaption, [data-player] footer, [data-player] header, [data-player] hgroup, [data-player] menu, [data-player] nav, [data-player] output, [data-player] ruby, [data-player] section, [data-player] summary, [data-player] time, [data-player] mark, [data-player] audio, [data-player] video {\n    margin: 0;\n    padding: 0;\n    border: 0;\n    font: inherit;\n    font-size: 100%;\n    vertical-align: baseline; }\n  [data-player] table {\n    border-collapse: collapse;\n    border-spacing: 0; }\n  [data-player] caption, [data-player] th, [data-player] td {\n    text-align: left;\n    font-weight: normal;\n    vertical-align: middle; }\n  [data-player] q, [data-player] blockquote {\n    quotes: none; }\n    [data-player] q:before, [data-player] q:after, [data-player] blockquote:before, [data-player] blockquote:after {\n      content: \"\";\n      content: none; }\n  [data-player] a img {\n    border: none; }\n  [data-player]:focus {\n    outline: 0; }\n  [data-player] * {\n    max-width: initial;\n    box-sizing: inherit;\n    float: initial; }\n  [data-player].fullscreen {\n    width: 100% !important;\n    height: 100% !important; }\n  [data-player].nocursor {\n    cursor: none; }\n\n.clappr-style {\n  display: none !important; }\n", ""]);
 
 	// exports
 
@@ -12727,8 +13031,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _ui_object2 = _interopRequireDefault(_ui_object);
 
+	/**
+	 * An abstraction to represent a generic playback, it's like an interface to be implemented by subclasses.
+	 * @class Playback
+	 * @constructor
+	 * @extends UIObject
+	 * @module base
+	 */
+
 	var Playback = (function (_UIObject) {
 	  _inherits(Playback, _UIObject);
+
+	  /**
+	   * @method constructor
+	   * @param {Object} options the options object
+	   */
 
 	  function Playback(options) {
 	    _classCallCheck(this, Playback);
@@ -12737,41 +13054,102 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.settings = {};
 	  }
 
+	  /**
+	   * plays the playback.
+	   * @method play
+	   */
+
 	  _createClass(Playback, [{
 	    key: 'play',
 	    value: function play() {}
+
+	    /**
+	     * pauses the playback.
+	     * @method pause
+	     */
 	  }, {
 	    key: 'pause',
 	    value: function pause() {}
+
+	    /**
+	     * stops the playback.
+	     * @method stop
+	     */
 	  }, {
 	    key: 'stop',
 	    value: function stop() {}
+
+	    /**
+	     * seeks the playback to a given `time` in percentage
+	     * @method seek
+	     * @param {Number} time should be a number between 0 and 100
+	     */
 	  }, {
 	    key: 'seek',
 	    value: function seek(time) {}
+
+	    /**
+	     * gets the duration in seconds
+	     * @method getDuration
+	     * @return {Number} duration time (in seconds) of the current source
+	     */
 	  }, {
 	    key: 'getDuration',
 	    value: function getDuration() {
 	      return 0;
 	    }
+
+	    /**
+	     * checks if the playback is playing.
+	     * @method isPlaying
+	     * @return {Boolean} `true` if the current playback is playing, otherwise `false`
+	     */
 	  }, {
 	    key: 'isPlaying',
 	    value: function isPlaying() {
 	      return false;
 	    }
+
+	    /**
+	     * gets the playback type
+	     * @method getPlaybackType
+	     * @return {String} you should write the playback type otherwise it'll assume `'no_op'`
+	     * @example
+	     * ```javascript
+	     * html5VideoPlayback.getPlaybackType() //html5_video
+	     * flashHlsPlayback.getPlaybackType() //hls
+	     * ```
+	     */
 	  }, {
 	    key: 'getPlaybackType',
 	    value: function getPlaybackType() {
 	      return 'no_op';
 	    }
+
+	    /**
+	     * checks if the playback is in HD.
+	     * @method isHighDefinitionInUse
+	     * @return {Boolean} `true` if the playback is playing in HD, otherwise `false`
+	     */
 	  }, {
 	    key: 'isHighDefinitionInUse',
 	    value: function isHighDefinitionInUse() {
 	      return false;
 	    }
+
+	    /**
+	     * sets the volume for the playback
+	     * @method volume
+	     * @return {Number} a number between 0 (`muted`) to 100 (`max`)
+	     */
 	  }, {
 	    key: 'volume',
 	    value: function volume(value) {}
+
+	    /**
+	     * destroys the playback, removing it from DOM
+	     * @method destroy
+	     */
 	  }, {
 	    key: 'destroy',
 	    value: function destroy() {
