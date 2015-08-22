@@ -3,6 +3,7 @@ node_modules
 .env
 coverage
 build/
+docs/
 src/base/jst.js
 *.cache
 aws.json
