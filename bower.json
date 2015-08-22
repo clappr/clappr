@@ -11,7 +11,7 @@
     "Globo.com"
   ],
   "main": [
-    "dist/clappr.min.js"
+    "src/main.js"
   ],
   "dependencies": {
     "clappr-zepto": "0.0.4",
