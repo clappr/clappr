@@ -85,7 +85,7 @@ export default class Playback extends UIObject {
   /**
    * sets the volume for the playback
    * @method volume
-   * @return {Number} a number between 0 (`muted`) to 100 (`max`)
+   * @param {Number} value a number between 0 (`muted`) to 100 (`max`)
    */
   volume(value) {}
 
