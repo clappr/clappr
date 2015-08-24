@@ -10,8 +10,4 @@ describe('BaseObject', function() {
     expect(this.baseObject.uniqueId).to.be.equal('o1')
     expect(this.baseObject2.uniqueId).to.be.equal('o2')
   })
-
-  it('has a container', function(){
-    expect(this.baseObject.container).to.be.equal(undefined)
-  })
 })
