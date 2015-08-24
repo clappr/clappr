@@ -100,6 +100,7 @@ export default class UIObject extends BaseObject {
   remove() {
     this.$el.remove()
     this.stopListening()
+    this.undelegateEvents()
     return this
   }
 
