@@ -2,7 +2,7 @@
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
-		define(factory);
+		define([], factory);
 	else if(typeof exports === 'object')
 		exports["Clappr"] = factory();
 	else
@@ -160,7 +160,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	window.DEBUG = false;
 
-	var version = ("0.2.6");
+	var version = ("0.2.7");
 
 	exports['default'] = {
 	    Player: _componentsPlayer2['default'],
@@ -3214,7 +3214,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (!_browser2['default'].isiOs) {
 	        this.$el.addClass('fullscreen');
 	        this.$el.removeAttr('style');
-	        this.playerInfo.previousSize = this.playerInfo.currentSize;
+	        this.playerInfo.previousSize = { width: this.options.width, height: this.options.height };
 	        this.playerInfo.currentSize = { width: (0, _clapprZepto2['default'])(window).width(), height: (0, _clapprZepto2['default'])(window).height() };
 	      }
 	    }
@@ -3236,7 +3236,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.el.style.height = options.height + 'px';
 	        this.el.style.width = options.width + 'px';
 	      }
-	      this.playerInfo.previousSize = this.playerInfo.currentSize;
+	      this.playerInfo.previousSize = { width: this.options.width, height: this.options.height };
+	      this.options.width = options.width;
+	      this.options.height = options.height;
 	      this.playerInfo.currentSize = options;
 	      _mediator2['default'].trigger(this.options.playerId + ':' + _baseEvents2['default'].PLAYER_RESIZE, this.playerInfo.currentSize);
 	    }
@@ -4368,14 +4370,107 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var delegateEventSplitter = /^(\S+)\s*(.*)$/;
 
+	/**
+	 * A base class to create ui object.
+	 * @class UIObject
+	 * @constructor
+	 * @extends BaseObject
+	 * @module base
+	 * @since 1.0.0
+	 */
+
 	var UIObject = (function (_BaseObject) {
 	  _inherits(UIObject, _BaseObject);
 
 	  _createClass(UIObject, [{
 	    key: 'tagName',
+
+	    /**
+	     * a unique id prefixed with `'c'`, `c1, c232`
+	     *
+	     * @property cid
+	     * @type String
+	     */
+	    /**
+	     * the dom element itself
+	     *
+	     * @property el
+	     * @type HTMLElement
+	     */
+	    /**
+	     * the dom element wrapped by `$`
+	     *
+	     * @property $el
+	     * @type HTMLElement
+	     */
+
+	    /**
+	     * gets the tag name for the ui component
+	     * @method tagName
+	     * @default div
+	     * @return {String} tag's name
+	     */
 	    get: function get() {
 	      return 'div';
 	    }
+
+	    /**
+	     * a literal object mapping element's events to methods
+	     * @property events
+	     * @type Object
+	     * @example
+	     *
+	     *```javascript
+	     *
+	     * class MyButton extends UIObject {
+	     *   constructor(options) {
+	     *     super(options)
+	     *     this.myId = 0
+	     *   }
+	     *   get events() { return { 'click': 'myClick' } }
+	     *   myClick(){ this.myId = 42 }
+	     * }
+	     *
+	     * // when you click on MyButton the method `myClick` will be called
+	     *```
+	     */
+	  }, {
+	    key: 'events',
+	    get: function get() {
+	      return {};
+	    }
+
+	    /**
+	     * a literal object mapping attributes and values to the element
+	     * element's attribute name and the value the attribute value
+	     * @property attributes
+	     * @type Object
+	     * @example
+	     *
+	     *```javascript
+	     *
+	     * class MyButton extends UIObject {
+	     *    constructor(options) { super(options) }
+	     *    get attributes() { return { class: 'my-button'} }
+	     * }
+	     *
+	     * // MyButton.el.className will be 'my-button'
+	     * ```
+	     */
+	  }, {
+	    key: 'attributes',
+	    get: function get() {
+	      return {};
+	    }
+
+	    /**
+	     * it builds an ui component by:
+	     *  * creating an id for the component `cid`
+	     *  * making sure the element is created `$el`
+	     *  * delegating all `events` to the element
+	     * @method constructor
+	     * @param {Object} options the options object
+	     */
 	  }]);
 
 	  function UIObject(options) {
@@ -4387,23 +4482,55 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.delegateEvents();
 	  }
 
+	  /**
+	   * selects within the component.
+	   * @method $
+	   * @param {String} selector a selector to find within the component.
+	   * @return {HTMLElement} an element, if it exists.
+	   * @example
+	   * ```javascript
+	   * fullScreenBarUIComponent.$('.button-full') //will return only `.button-full` within the component
+	   * ```
+	   */
+
 	  _createClass(UIObject, [{
 	    key: '$',
 	    value: function $(selector) {
 	      return this.$el.find(selector);
 	    }
+
+	    /**
+	     * render the component, usually attach it to a real existent `element`
+	     * @method render
+	     * @return {UIObject} itself
+	     */
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return this;
 	    }
+
+	    /**
+	     * removes the ui component from DOM
+	     * @method remove
+	     * @return {UIObject} itself
+	     */
 	  }, {
 	    key: 'remove',
 	    value: function remove() {
 	      this.$el.remove();
 	      this.stopListening();
+	      this.undelegateEvents();
 	      return this;
 	    }
+
+	    /**
+	     * set element to `el` and `$el`
+	     * @method setElement
+	     * @param {HTMLElement} element
+	     * @param {Boolean} delegate whether is delegate or not
+	     * @return {UIObject} itself
+	     */
 	  }, {
 	    key: 'setElement',
 	    value: function setElement(element, delegate) {
@@ -4413,6 +4540,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (delegate !== false) this.delegateEvents();
 	      return this;
 	    }
+
+	    /**
+	     * delegates all the original `events` on `element` to its callbacks
+	     * @method delegateEvents
+	     * @param {Object} events
+	     * @return {UIObject} itself
+	     */
 	  }, {
 	    key: 'delegateEvents',
 	    value: function delegateEvents(events) {
@@ -4436,12 +4570,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      return this;
 	    }
+
+	    /**
+	     * undelegats all the `events`
+	     * @method undelegateEvents
+	     * @return {UIObject} itself
+	     */
 	  }, {
 	    key: 'undelegateEvents',
 	    value: function undelegateEvents() {
 	      this.$el.off('.delegateEvents' + this.cid);
 	      return this;
 	    }
+
+	    /**
+	     * ensures the creation of this ui component
+	     * @method _ensureElement
+	     * @private
+	     */
 	  }, {
 	    key: '_ensureElement',
 	    value: function _ensureElement() {
@@ -4693,7 +4839,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'createContainer',
 	    value: function createContainer(source, options) {
 	      if (!!source.match(/^\/\//)) source = window.location.protocol + source;
-	      options = (0, _lodashAssign2['default'])({}, this.options, { src: source, autoPlay: !!this.options.autoPlay }, options);
+	      options = (0, _lodashAssign2['default'])({}, this.options, { src: source }, options);
 	      var playbackPlugin = this.findPlaybackPlugin(source);
 	      var playback = new playbackPlugin(options);
 	      var container = new _container2['default']({ playback: playback });
@@ -13140,7 +13286,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * sets the volume for the playback
 	     * @method volume
-	     * @return {Number} a number between 0 (`muted`) to 100 (`max`)
+	     * @param {Number} value a number between 0 (`muted`) to 100 (`max`)
 	     */
 	  }, {
 	    key: 'volume',
