@@ -33,6 +33,7 @@
     "browserify-istanbul": "^0.2.1",
     "browserify-versionify": "1.0.3",
     "chai": "1.10.0",
+    "clean-webpack-plugin": "^0.1.3",
     "compass-mixins": "0.12.3",
     "coveralls": "^2.11.2",
     "css-loader": "^0.15.5",
