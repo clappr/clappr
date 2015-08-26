@@ -27,9 +27,13 @@
   }
 
   * {
-    max-width: initial;
+    max-width: none;
     box-sizing: inherit;
-    float: initial;
+    float: none;
+  }
+
+  div {
+    display: block;
   }
 
   &.fullscreen {
