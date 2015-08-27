@@ -142,6 +142,10 @@ Clappr has a native statistics plugin that accounts QoE metrics such playing tim
 
 Clappr is under heavy development but production-ready. Feel free to open issues and send us pull requests.
 
+### Documentation
+
+You can find it [here](http://clappr.github.io/).
+
 ### Installing for development
 
 Then enter the project directory and install the dependencies:
