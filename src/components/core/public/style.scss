@@ -27,9 +27,13 @@
   }
 
   * {
-    max-width: initial;
+    max-width: none;
     box-sizing: inherit;
-    float: initial;
+    float: none;
+  }
+
+  div {
+    display: block;
   }
 
   &.fullscreen {
@@ -44,10 +48,4 @@
 
 .clappr-style {
 	display: none !important;
-}
-
-@media screen  {
-  [data-player] {
-	opacity: 0.99;
-  }
 }
