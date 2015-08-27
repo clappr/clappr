@@ -1,6 +1,6 @@
 {
   "name": "clappr",
-  "version": "0.2.3",
+  "version": "0.2.8",
   "dependencies": {
     "clappr-zepto": {
       "version": "0.0.4",
@@ -384,7 +384,7 @@
             },
             "inherits": {
               "version": "2.0.1",
-              "from": "inherits@>=2.0.0 <3.0.0",
+              "from": "inherits@>=2.0.1 <2.1.0",
               "resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz"
             }
           }

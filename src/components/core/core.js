@@ -79,7 +79,7 @@ export default class Core extends UIObject {
     if(!Browser.isiOs) {
       this.$el.addClass('fullscreen')
       this.$el.removeAttr('style')
-      this.playerInfo.previousSize = this.playerInfo.currentSize
+      this.playerInfo.previousSize = { width: this.options.width, height: this.options.height }
       this.playerInfo.currentSize = { width: $(window).width(), height: $(window).height() }
     }
   }
@@ -99,7 +99,9 @@ export default class Core extends UIObject {
       this.el.style.height = `${options.height}px`;
       this.el.style.width = `${options.width}px`;
     }
-    this.playerInfo.previousSize = this.playerInfo.currentSize
+    this.playerInfo.previousSize = { width: this.options.width, height: this.options.height }
+    this.options.width = options.width
+    this.options.height = options.height
     this.playerInfo.currentSize = options
     Mediator.trigger(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerInfo.currentSize)
   }

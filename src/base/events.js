@@ -10,7 +10,19 @@ var logger = Log.getInstance()
 
 var slice = Array.prototype.slice
 
+/**
+ * @class Events
+ * @constructor
+ * @module base
+ */
 export default class Events {
+  /**
+   * listen to an event indefinitely, if you want to stop you need to call `off`
+   * @method on
+   * @param {String} name
+   * @param {Function} callback
+   * @param {Object} context
+   */
   on(name, callback, context) {
     if (!eventsApi(this, 'on', name, [callback, context]) || !callback) return this
     this._events || (this._events = {})
@@ -19,6 +31,13 @@ export default class Events {
     return this
   }
 
+  /**
+   * listen to an event only once
+   * @method once
+   * @param {String} name
+   * @param {Function} callback
+   * @param {Object} context
+   */
   once(name, callback, context) {
     if (!eventsApi(this, 'once', name, [callback, context]) || !callback) return this
     var self = this
@@ -30,6 +49,13 @@ export default class Events {
     return this.on(name, once, context)
   }
 
+  /**
+   * stop listening to an event
+   * @method off
+   * @param {String} name
+   * @param {Function} callback
+   * @param {Object} context
+   */
   off(name, callback, context) {
     var retain, ev, events, names, i, l, j, k
     if (!this._events || !eventsApi(this, 'off', name, [callback, context])) return this
@@ -58,6 +84,11 @@ export default class Events {
     return this
   }
 
+  /**
+   * triggers an event given its `name`
+   * @method trigger
+   * @param {String} name
+   */
   trigger(name) {
     try {
       var klass = this.name || this.constructor.name
@@ -75,6 +106,13 @@ export default class Events {
     return this
   }
 
+  /**
+   * stop listening an event for a given object
+   * @method stopListening
+   * @param {Object} obj
+   * @param {String} name
+   * @param {Function} callback
+   */
   stopListening(obj, name, callback) {
     var listeningTo = this._listeningTo
     if (!listeningTo) return this
@@ -126,6 +164,30 @@ var triggerEvents = function(events, args) {
   }
 }
 
+/**
+ * listen to an event indefinitely for a given `obj`
+ * @method listenTo
+ * @param {Object} obj
+ * @param {String} name
+ * @param {Function} callback
+ * @param {Object} context
+ * @example
+ * ```javascript
+ * this.listenTo(this.core.playback, Events.PLAYBACK_PAUSE, this.callback)
+ * ```
+ */
+/**
+ * listen to an event once for a given `obj`
+ * @method listenToOnce
+ * @param {Object} obj
+ * @param {String} name
+ * @param {Function} callback
+ * @param {Object} context
+ * @example
+ * ```javascript
+ * this.listenToOnce(this.core.playback, Events.PLAYBACK_PAUSE, this.callback)
+ * ```
+ */
 var listenMethods = {listenTo: 'on', listenToOnce: 'once'}
 
 Object.keys(listenMethods).forEach(function(method) {
@@ -140,13 +202,58 @@ Object.keys(listenMethods).forEach(function(method) {
 });
 
 // PLAYER EVENTS
+/**
+ * Fired when player risezes
+ *
+ * @event PLAYER_RESIZE
+ * @param {Object} currentSize an object with the current size
+ */
 Events.PLAYER_RESIZE = 'resize'
+/**
+ * Fired when player starts to play
+ *
+ * @event PLAYER_PLAY
+ */
 Events.PLAYER_PLAY = 'play'
+/**
+ * Fired when player pauses
+ *
+ * @event PLAYER_PAUSE
+ */
 Events.PLAYER_PAUSE = 'pause'
+/**
+ * Fired when player stops
+ *
+ * @event PLAYER_STOP
+ */
 Events.PLAYER_STOP = 'stop'
+/**
+ * Fired when player ends the video
+ *
+ * @event PLAYER_ENDED
+ */
 Events.PLAYER_ENDED = 'ended'
+/**
+ * Fired when player ends the video
+ *
+ * @event PLAYER_SEEK
+ * @param {Number} percent a percentagem of seek
+ */
 Events.PLAYER_SEEK = 'seek'
+/**
+ * Fired when player receives an error
+ *
+ * @event PLAYER_ERROR
+ * @param {Object} error the error
+ */
 Events.PLAYER_ERROR = 'error'
+/**
+ * Fired when player updates its execution
+ *
+ * @event PLAYER_ERROR
+ * @param {Number} postion the current position (in seconds)
+ * @param {Number} duration the total duration (in seconds)
+ */
 Events.PLAYER_TIMEUPDATE = 'timeupdate'
 
 // Playback Events

@@ -2,7 +2,7 @@
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
-		define(factory);
+		define([], factory);
 	else if(typeof exports === 'object')
 		exports["Clappr"] = factory();
 	else
@@ -160,7 +160,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	window.DEBUG = false;
 
-	var version = ("0.2.3");
+	var version = ("0.2.8");
 
 	exports['default'] = {
 	    Player: _componentsPlayer2['default'],
@@ -244,15 +244,88 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _player_info2 = _interopRequireDefault(_player_info);
 
+	var baseUrl = (0, _baseUtils.currentScriptUrl)().replace(/\/[^\/]+$/, "");
+
+	/**
+	 * @class Player
+	 * @constructor
+	 * @extends BaseObject
+	 * @module components
+	 * @example
+	 * ### Using the Player
+	 *
+	 * Add the following script on your HTML:
+	 * ```html
+	 * <head>
+	 *   <script type="text/javascript" src="http://cdn.clappr.io/latest/clappr.min.js"></script>
+	 * </head>
+	 * ```
+	 * Now, create the player:
+	 * ```html
+	 * <body>
+	 *   <div id="player"></div>
+	 *   <script>
+	 *     var player = new Clappr.Player({source: "http://your.video/here.mp4", parentId: "#player"});
+	 *   </script>
+	 * </body>
+	 * ```
+	 */
+
 	var Player = (function (_BaseObject) {
 	  _inherits(Player, _BaseObject);
+
+	  /**
+	   * ## Player's constructor
+	   *
+	   * You might pass the options object to build the player.
+	   * ```javascript
+	   * var options = {source: "http://example.com/video.mp4", param1: "val1"};
+	   * var player = new Clappr.Player(options);
+	   * ```
+	   *
+	   * @method constructor
+	   * @param {Object} options Data
+	   * options to build a player instance
+	   * @param {Number} [options.width]
+	   * player's width **default**: `640`
+	   * @param {Number} [options.height]
+	   * player's height **default**: `360`
+	   * @param {Boolean} [options.autoPlay]
+	   * automatically play after page load **default**: `false`
+	   * @param {Boolean} [options.loop]
+	   * automatically replay after it ends **default**: `false`
+	   * @param {Boolean} [options.chromeless]
+	   * player acts in chromeless mode **default**: `false`
+	   * @param {Boolean} [options.muted]
+	   * start the video muted **default**: `false`
+	   * @param {Boolean} [options.persistConfig]
+	   * persist player's settings (volume) through the same domain **default**: `true`
+	   * @param {String} [options.preload]
+	   * video will be preloaded according to `preload` attribute options **default**: `'metadata'`
+	   * @param {Number} [options.maxBufferLength]
+	   * the default behavior for the **HLS playback** is to keep buffering indefinitely, even on VoD. This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks. To change this behavior use `maxBufferLength` where **value is in seconds**.
+	   * @param {String} [options.gaAccount]
+	   * enable Google Analytics events dispatch **(play/pause/stop/buffering/etc)** by adding your `gaAccount`
+	   * @param {String} [options.gaTrackerName]
+	   * besides `gaAccount` you can optionally, pass your favorite trackerName as `gaTrackerName`
+	   * @param {Object} [options.mediacontrol]
+	   * customize control bar colors, example: `mediacontrol: {seekbar: "#E113D3", buttons: "#66B2FF"}`
+	   * @param {Boolean} [options.hideMediaControl]
+	   * control media control auto hide **default**: `true`
+	   * @param {Boolean} [options.hideVolumeBar]
+	   * when embedded with width less than 320, volume bar will hide. You can force this behavior for all sizes by adding `true` **default**: `false`
+	   * @param {String} [options.watermark]
+	   * put `watermark: 'http://url/img.png'` on your embed parameters to automatically add watermark on your video. You can customize corner position by defining position parameter. Positions can be `bottom-left`, `bottom-right`, `top-left` and `top-right`.
+	   * @param {String} [options.poster]
+	   * define a poster by adding its address `poster: 'http://url/img.png'`. It will appear after video embed, disappear on play and go back when user stops the video.
+	   */
 
 	  function Player(options) {
 	    _classCallCheck(this, Player);
 
 	    _get(Object.getPrototypeOf(Player.prototype), 'constructor', this).call(this, options);
 	    window.p = this;
-	    var defaultOptions = { playerId: (0, _baseUtils.uniqueId)(""), persistConfig: true, width: 640, height: 360, baseUrl: '//cdn.clappr.io/' + ("0.2.3") };
+	    var defaultOptions = { playerId: (0, _baseUtils.uniqueId)(""), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl };
 	    this.options = (0, _lodashAssign2['default'])(defaultOptions, options);
 	    this.options.sources = this.normalizeSources(options);
 	    this.loader = new _loader2['default'](this.options.plugins || {}, this.options.playerId);
@@ -265,6 +338,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }
 
+	  /**
+	   * Specify a `parentId` to the player.
+	   * @method setParentId
+	   * @param {String} parentId the element parent id.
+	   */
+
 	  _createClass(Player, [{
 	    key: 'setParentId',
 	    value: function setParentId(parentId) {
@@ -273,6 +352,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.attachTo(el);
 	      }
 	    }
+
+	    /**
+	     * You can use this method to attach the player to a given element. You don't need to do this when you specify it during the player instantiation passing the `parentId` param.
+	     * @method attachTo
+	     * @param {Object} element a given element.
+	     */
 	  }, {
 	    key: 'attachTo',
 	    value: function attachTo(element) {
@@ -347,61 +432,139 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var sources = options.sources || (options.source !== undefined ? [options.source.toString()] : []);
 	      return sources.length === 0 ? ['no.op'] : sources;
 	    }
+
+	    /**
+	     * resizes the current player canvas.
+	     * @method resize
+	     * @param {Object} size should be a literal object with `height` and `width`.
+	     * @example
+	     * ```javascript
+	     * player.resize({height: 360, width: 640})
+	     * ```
+	     */
 	  }, {
 	    key: 'resize',
 	    value: function resize(size) {
 	      this.core.resize(size);
 	    }
+
+	    /**
+	     * loads a new source.
+	     * @method load
+	     * @param {Object} sources source or sources of video.
+	     * @param {Object} mimeType a mime type, example: `'application/vnd.apple.mpegurl'`
+	     *
+	     */
 	  }, {
 	    key: 'load',
 	    value: function load(sources, mimeType) {
 	      this.core.load(sources, mimeType);
 	    }
+
+	    /**
+	     * destroys the current player and removes it from the DOM.
+	     * @method destroy
+	     */
 	  }, {
 	    key: 'destroy',
 	    value: function destroy() {
 	      this.core.destroy();
 	    }
+
+	    /**
+	     * plays the current video (`source`).
+	     * @method play
+	     */
 	  }, {
 	    key: 'play',
 	    value: function play() {
 	      this.core.mediaControl.container.play();
 	    }
+
+	    /**
+	     * pauses the current video (`source`).
+	     * @method pause
+	     */
 	  }, {
 	    key: 'pause',
 	    value: function pause() {
 	      this.core.mediaControl.container.pause();
 	    }
+
+	    /**
+	     * stops the current video (`source`).
+	     * @method stop
+	     */
 	  }, {
 	    key: 'stop',
 	    value: function stop() {
 	      this.core.mediaControl.container.stop();
 	    }
+
+	    /**
+	     * seeks the current video (`source`). For example, `player.seek(50)` will seek to the middle of the current video.
+	     * @method seek
+	     * @param {Number} time should be a number between 0 and 100.
+	     */
 	  }, {
 	    key: 'seek',
 	    value: function seek(time) {
 	      this.core.mediaControl.container.setCurrentTime(time);
 	    }
+
+	    /**
+	     * Set the volume for the current video (`source`).
+	     * @method setVolume
+	     * @param {Number} time should be a number between 0 and 100, 0 being mute and 100 the max volume.
+	     */
 	  }, {
 	    key: 'setVolume',
 	    value: function setVolume(volume) {
 	      this.core.mediaControl.container.setVolume(volume);
 	    }
+
+	    /**
+	     * mutes the current video (`source`).
+	     * @method mute
+	     */
 	  }, {
 	    key: 'mute',
 	    value: function mute() {
 	      this.core.mediaControl.container.setVolume(0);
 	    }
+
+	    /**
+	     * unmutes the current video (`source`).
+	     * @method unmute
+	     */
 	  }, {
 	    key: 'unmute',
 	    value: function unmute() {
 	      this.core.mediaControl.container.setVolume(100);
 	    }
+
+	    /**
+	     * checks if the player is playing.
+	     * @method isPlaying
+	     * @return {Boolean} `true` if the current source is playing, otherwise `false`
+	     */
 	  }, {
 	    key: 'isPlaying',
 	    value: function isPlaying() {
 	      return this.core.mediaControl.container.isPlaying();
 	    }
+
+	    /**
+	     * get a plugin by its name.
+	     * @method getPlugin
+	     * @param {String} name of the plugin.
+	     * @return {Object} the plugin instance
+	     * @example
+	     * ```javascript
+	     * var poster = player.getPlugin('poster');
+	     * poster.hidePlayButton();
+	     * ```
+	     */
 	  }, {
 	    key: 'getPlugin',
 	    value: function getPlugin(name) {
@@ -410,11 +573,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return plugin.name === name;
 	      });
 	    }
+
+	    /**
+	     * the current time in seconds.
+	     * @method getCurrentTime
+	     * @return {Number} current time (in seconds) of the current source
+	     */
 	  }, {
 	    key: 'getCurrentTime',
 	    value: function getCurrentTime() {
 	      return this.core.mediaControl.container.getCurrentTime();
 	    }
+
+	    /**
+	     * the duration time in seconds.
+	     * @method getDuration
+	     * @return {Number} duration time (in seconds) of the current source
+	     */
 	  }, {
 	    key: 'getDuration',
 	    value: function getDuration() {
@@ -449,6 +624,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.seekStringToSeconds = seekStringToSeconds;
 	exports.uniqueId = uniqueId;
 	exports.isNumber = isNumber;
+	exports.currentScriptUrl = currentScriptUrl;
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -618,6 +794,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return value - parseFloat(value) + 1 >= 0;
 	}
 
+	function currentScriptUrl() {
+	  var scripts = document.getElementsByTagName('script');
+	  return scripts[scripts.length - 1].src;
+	}
+
 	var requestAnimationFrame = (window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || function (fn) {
 	  window.setTimeout(fn, 1000 / 60);
 	}).bind(window);
@@ -633,6 +814,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  formatTime: formatTime,
 	  seekStringToSeconds: seekStringToSeconds,
 	  uniqueId: uniqueId,
+	  currentScriptUrl: currentScriptUrl,
 	  isNumber: isNumber,
 	  requestAnimationFrame: requestAnimationFrame,
 	  cancelAnimationFrame: cancelAnimationFrame
@@ -1889,8 +2071,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events2 = _interopRequireDefault(_events);
 
+	/**
+	 * @class BaseObject
+	 * @constructor
+	 * @extends Events
+	 * @module base
+	 */
+
 	var BaseObject = (function (_Events) {
 	  _inherits(BaseObject, _Events);
+
+	  /**
+	   * @method constructor
+	   * @param {Object} options
+	   */
 
 	  function BaseObject() {
 	    var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -1901,6 +2095,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.uniqueId = (0, _utils.uniqueId)('o');
 	  }
 
+	  /**
+	  * a unique id prefixed with `'o'`, `o1, o232`
+	  *
+	  * @property uniqueId
+	  * @type String
+	  */
 	  return BaseObject;
 	})(_events2['default']);
 
@@ -1941,6 +2141,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var slice = Array.prototype.slice;
 
+	/**
+	 * @class Events
+	 * @constructor
+	 * @module base
+	 */
+
 	var Events = (function () {
 	  function Events() {
 	    _classCallCheck(this, Events);
@@ -1948,6 +2154,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  _createClass(Events, [{
 	    key: 'on',
+
+	    /**
+	     * listen to an event indefinitely, if you want to stop you need to call `off`
+	     * @method on
+	     * @param {String} name
+	     * @param {Function} callback
+	     * @param {Object} context
+	     */
 	    value: function on(name, callback, context) {
 	      if (!eventsApi(this, 'on', name, [callback, context]) || !callback) return this;
 	      this._events || (this._events = {});
@@ -1955,6 +2169,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      events.push({ callback: callback, context: context, ctx: context || this });
 	      return this;
 	    }
+
+	    /**
+	     * listen to an event only once
+	     * @method once
+	     * @param {String} name
+	     * @param {Function} callback
+	     * @param {Object} context
+	     */
 	  }, {
 	    key: 'once',
 	    value: function once(name, callback, context) {
@@ -1967,6 +2189,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      once._callback = callback;
 	      return this.on(name, once, context);
 	    }
+
+	    /**
+	     * stop listening to an event
+	     * @method off
+	     * @param {String} name
+	     * @param {Function} callback
+	     * @param {Object} context
+	     */
 	  }, {
 	    key: 'off',
 	    value: function off(name, callback, context) {
@@ -1995,6 +2225,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      return this;
 	    }
+
+	    /**
+	     * triggers an event given its `name`
+	     * @method trigger
+	     * @param {String} name
+	     */
 	  }, {
 	    key: 'trigger',
 	    value: function trigger(name) {
@@ -2013,6 +2249,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      return this;
 	    }
+
+	    /**
+	     * stop listening an event for a given object
+	     * @method stopListening
+	     * @param {Object} obj
+	     * @param {String} name
+	     * @param {Function} callback
+	     */
 	  }, {
 	    key: 'stopListening',
 	    value: function stopListening(obj, name, callback) {
@@ -2081,6 +2325,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	};
 
+	/**
+	 * listen to an event indefinitely for a given `obj`
+	 * @method listenTo
+	 * @param {Object} obj
+	 * @param {String} name
+	 * @param {Function} callback
+	 * @param {Object} context
+	 * @example
+	 * ```javascript
+	 * this.listenTo(this.core.playback, Events.PLAYBACK_PAUSE, this.callback)
+	 * ```
+	 */
+	/**
+	 * listen to an event once for a given `obj`
+	 * @method listenToOnce
+	 * @param {Object} obj
+	 * @param {String} name
+	 * @param {Function} callback
+	 * @param {Object} context
+	 * @example
+	 * ```javascript
+	 * this.listenToOnce(this.core.playback, Events.PLAYBACK_PAUSE, this.callback)
+	 * ```
+	 */
 	var listenMethods = { listenTo: 'on', listenToOnce: 'once' };
 
 	Object.keys(listenMethods).forEach(function (method) {
@@ -2095,13 +2363,58 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 	// PLAYER EVENTS
+	/**
+	 * Fired when player risezes
+	 *
+	 * @event PLAYER_RESIZE
+	 * @param {Object} currentSize an object with the current size
+	 */
 	Events.PLAYER_RESIZE = 'resize';
+	/**
+	 * Fired when player starts to play
+	 *
+	 * @event PLAYER_PLAY
+	 */
 	Events.PLAYER_PLAY = 'play';
+	/**
+	 * Fired when player pauses
+	 *
+	 * @event PLAYER_PAUSE
+	 */
 	Events.PLAYER_PAUSE = 'pause';
+	/**
+	 * Fired when player stops
+	 *
+	 * @event PLAYER_STOP
+	 */
 	Events.PLAYER_STOP = 'stop';
+	/**
+	 * Fired when player ends the video
+	 *
+	 * @event PLAYER_ENDED
+	 */
 	Events.PLAYER_ENDED = 'ended';
+	/**
+	 * Fired when player ends the video
+	 *
+	 * @event PLAYER_SEEK
+	 * @param {Number} percent a percentagem of seek
+	 */
 	Events.PLAYER_SEEK = 'seek';
+	/**
+	 * Fired when player receives an error
+	 *
+	 * @event PLAYER_ERROR
+	 * @param {Object} error the error
+	 */
 	Events.PLAYER_ERROR = 'error';
+	/**
+	 * Fired when player updates its execution
+	 *
+	 * @event PLAYER_ERROR
+	 * @param {Number} postion the current position (in seconds)
+	 * @param {Number} duration the total duration (in seconds)
+	 */
 	Events.PLAYER_TIMEUPDATE = 'timeupdate';
 
 	// Playback Events
@@ -2901,7 +3214,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (!_browser2['default'].isiOs) {
 	        this.$el.addClass('fullscreen');
 	        this.$el.removeAttr('style');
-	        this.playerInfo.previousSize = this.playerInfo.currentSize;
+	        this.playerInfo.previousSize = { width: this.options.width, height: this.options.height };
 	        this.playerInfo.currentSize = { width: (0, _clapprZepto2['default'])(window).width(), height: (0, _clapprZepto2['default'])(window).height() };
 	      }
 	    }
@@ -2923,7 +3236,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.el.style.height = options.height + 'px';
 	        this.el.style.width = options.width + 'px';
 	      }
-	      this.playerInfo.previousSize = this.playerInfo.currentSize;
+	      this.playerInfo.previousSize = { width: this.options.width, height: this.options.height };
+	      this.options.width = options.width;
+	      this.options.height = options.height;
 	      this.playerInfo.currentSize = options;
 	      _mediator2['default'].trigger(this.options.playerId + ':' + _baseEvents2['default'].PLAYER_RESIZE, this.playerInfo.currentSize);
 	    }
@@ -4055,14 +4370,107 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var delegateEventSplitter = /^(\S+)\s*(.*)$/;
 
+	/**
+	 * A base class to create ui object.
+	 * @class UIObject
+	 * @constructor
+	 * @extends BaseObject
+	 * @module base
+	 * @since 1.0.0
+	 */
+
 	var UIObject = (function (_BaseObject) {
 	  _inherits(UIObject, _BaseObject);
 
 	  _createClass(UIObject, [{
 	    key: 'tagName',
+
+	    /**
+	     * a unique id prefixed with `'c'`, `c1, c232`
+	     *
+	     * @property cid
+	     * @type String
+	     */
+	    /**
+	     * the dom element itself
+	     *
+	     * @property el
+	     * @type HTMLElement
+	     */
+	    /**
+	     * the dom element wrapped by `$`
+	     *
+	     * @property $el
+	     * @type HTMLElement
+	     */
+
+	    /**
+	     * gets the tag name for the ui component
+	     * @method tagName
+	     * @default div
+	     * @return {String} tag's name
+	     */
 	    get: function get() {
 	      return 'div';
 	    }
+
+	    /**
+	     * a literal object mapping element's events to methods
+	     * @property events
+	     * @type Object
+	     * @example
+	     *
+	     *```javascript
+	     *
+	     * class MyButton extends UIObject {
+	     *   constructor(options) {
+	     *     super(options)
+	     *     this.myId = 0
+	     *   }
+	     *   get events() { return { 'click': 'myClick' } }
+	     *   myClick(){ this.myId = 42 }
+	     * }
+	     *
+	     * // when you click on MyButton the method `myClick` will be called
+	     *```
+	     */
+	  }, {
+	    key: 'events',
+	    get: function get() {
+	      return {};
+	    }
+
+	    /**
+	     * a literal object mapping attributes and values to the element
+	     * element's attribute name and the value the attribute value
+	     * @property attributes
+	     * @type Object
+	     * @example
+	     *
+	     *```javascript
+	     *
+	     * class MyButton extends UIObject {
+	     *    constructor(options) { super(options) }
+	     *    get attributes() { return { class: 'my-button'} }
+	     * }
+	     *
+	     * // MyButton.el.className will be 'my-button'
+	     * ```
+	     */
+	  }, {
+	    key: 'attributes',
+	    get: function get() {
+	      return {};
+	    }
+
+	    /**
+	     * it builds an ui component by:
+	     *  * creating an id for the component `cid`
+	     *  * making sure the element is created `$el`
+	     *  * delegating all `events` to the element
+	     * @method constructor
+	     * @param {Object} options the options object
+	     */
 	  }]);
 
 	  function UIObject(options) {
@@ -4074,23 +4482,55 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.delegateEvents();
 	  }
 
+	  /**
+	   * selects within the component.
+	   * @method $
+	   * @param {String} selector a selector to find within the component.
+	   * @return {HTMLElement} an element, if it exists.
+	   * @example
+	   * ```javascript
+	   * fullScreenBarUIComponent.$('.button-full') //will return only `.button-full` within the component
+	   * ```
+	   */
+
 	  _createClass(UIObject, [{
 	    key: '$',
 	    value: function $(selector) {
 	      return this.$el.find(selector);
 	    }
+
+	    /**
+	     * render the component, usually attach it to a real existent `element`
+	     * @method render
+	     * @return {UIObject} itself
+	     */
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return this;
 	    }
+
+	    /**
+	     * removes the ui component from DOM
+	     * @method remove
+	     * @return {UIObject} itself
+	     */
 	  }, {
 	    key: 'remove',
 	    value: function remove() {
 	      this.$el.remove();
 	      this.stopListening();
+	      this.undelegateEvents();
 	      return this;
 	    }
+
+	    /**
+	     * set element to `el` and `$el`
+	     * @method setElement
+	     * @param {HTMLElement} element
+	     * @param {Boolean} delegate whether is delegate or not
+	     * @return {UIObject} itself
+	     */
 	  }, {
 	    key: 'setElement',
 	    value: function setElement(element, delegate) {
@@ -4100,6 +4540,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (delegate !== false) this.delegateEvents();
 	      return this;
 	    }
+
+	    /**
+	     * delegates all the original `events` on `element` to its callbacks
+	     * @method delegateEvents
+	     * @param {Object} events
+	     * @return {UIObject} itself
+	     */
 	  }, {
 	    key: 'delegateEvents',
 	    value: function delegateEvents(events) {
@@ -4123,12 +4570,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      return this;
 	    }
+
+	    /**
+	     * undelegats all the `events`
+	     * @method undelegateEvents
+	     * @return {UIObject} itself
+	     */
 	  }, {
 	    key: 'undelegateEvents',
 	    value: function undelegateEvents() {
 	      this.$el.off('.delegateEvents' + this.cid);
 	      return this;
 	    }
+
+	    /**
+	     * ensures the creation of this ui component
+	     * @method _ensureElement
+	     * @private
+	     */
 	  }, {
 	    key: '_ensureElement',
 	    value: function _ensureElement() {
@@ -4380,7 +4839,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'createContainer',
 	    value: function createContainer(source, options) {
 	      if (!!source.match(/^\/\//)) source = window.location.protocol + source;
-	      options = (0, _lodashAssign2['default'])({}, options, this.options, { src: source, autoPlay: !!this.options.autoPlay });
+	      options = (0, _lodashAssign2['default'])({}, this.options, { src: source }, options);
 	      var playbackPlugin = this.findPlaybackPlugin(source);
 	      var playback = new playbackPlugin(options);
 	      var container = new _container2['default']({ playback: playback });
@@ -8939,6 +9398,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'showTime',
 	    value: function showTime(event) {
+	      if (!this.mediaControl.container.settings.seekEnabled) {
+	        return;
+	      }
+
+	      // the element must be unhidden before its width is requested, otherwise it's width will be reported as 0
+	      this.$el.removeClass('hidden');
 	      var offset = event.pageX - this.mediaControl.$seekBarContainer.offset().left;
 	      if (offset >= 0 && offset <= this.mediaControl.$seekBarContainer.width()) {
 	        var timePosition = Math.min(100, Math.max(offset / this.mediaControl.$seekBarContainer.width() * 100, 0));
@@ -8963,11 +9428,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'update',
 	    value: function update(options) {
-	      if (this.mediaControl.container.settings.seekEnabled) {
-	        this.$el.find('[data-seek-time]').text(options.formattedTime);
-	        this.$el.css('left', Math.max(0, options.pointerPosition - this.$el.width() / 2));
-	        this.$el.removeClass('hidden');
-	      }
+	      this.$el.find('[data-seek-time]').text(options.formattedTime);
+	      this.$el.css('left', Math.max(0, options.pointerPosition - this.$el.width() / 2));
 	    }
 	  }, {
 	    key: 'render',
@@ -8994,7 +9456,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".seek-time[data-seek-time] {\n  position: absolute;\n  width: auto;\n  height: 20px;\n  line-height: 20px;\n  bottom: 55px;\n  background-color: rgba(2, 2, 2, 0.5);\n  z-index: 9999;\n  -webkit-transition: opacity 0.1s ease;\n  -moz-transition: opacity 0.1s ease;\n  -o-transition: opacity 0.1s ease;\n  transition: opacity 0.1s ease; }\n  .seek-time[data-seek-time].hidden[data-seek-time] {\n    opacity: 0; }\n  .seek-time[data-seek-time] span[data-seek-time] {\n    position: relative;\n    color: white;\n    font-size: 10px;\n    padding-left: 7px;\n    padding-right: 7px; }\n", ""]);
+	exports.push([module.id, ".seek-time[data-seek-time] {\n  position: absolute;\n  white-space: nowrap;\n  width: auto;\n  height: 20px;\n  line-height: 20px;\n  bottom: 55px;\n  background-color: rgba(2, 2, 2, 0.5);\n  z-index: 9999;\n  -webkit-transition: opacity 0.1s ease;\n  -moz-transition: opacity 0.1s ease;\n  -o-transition: opacity 0.1s ease;\n  transition: opacity 0.1s ease; }\n  .seek-time[data-seek-time].hidden[data-seek-time] {\n    opacity: 0; }\n  .seek-time[data-seek-time] span[data-seek-time] {\n    position: relative;\n    color: white;\n    font-size: 10px;\n    padding-left: 7px;\n    padding-right: 7px; }\n", ""]);
 
 	// exports
 
@@ -9145,7 +9607,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "[data-player] {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  -o-user-select: none;\n  user-select: none;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  -webkit-transform: translate3d(0, 0, 0);\n  -moz-transform: translate3d(0, 0, 0);\n  -ms-transform: translate3d(0, 0, 0);\n  -o-transform: translate3d(0, 0, 0);\n  transform: translate3d(0, 0, 0);\n  position: relative;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-style: normal;\n  font-weight: normal;\n  text-align: center;\n  overflow: hidden;\n  font-size: 100%;\n  font-family: \"lucida grande\", tahoma, verdana, arial, sans-serif;\n  text-shadow: 0 0 0;\n  box-sizing: border-box; }\n  [data-player] div, [data-player] span, [data-player] applet, [data-player] object, [data-player] iframe, [data-player] h1, [data-player] h2, [data-player] h3, [data-player] h4, [data-player] h5, [data-player] h6, [data-player] p, [data-player] blockquote, [data-player] pre, [data-player] a, [data-player] abbr, [data-player] acronym, [data-player] address, [data-player] big, [data-player] cite, [data-player] code, [data-player] del, [data-player] dfn, [data-player] em, [data-player] img, [data-player] ins, [data-player] kbd, [data-player] q, [data-player] s, [data-player] samp, [data-player] small, [data-player] strike, [data-player] strong, [data-player] sub, [data-player] sup, [data-player] tt, [data-player] var, [data-player] b, [data-player] u, [data-player] i, [data-player] center, [data-player] dl, [data-player] dt, [data-player] dd, [data-player] ol, [data-player] ul, [data-player] li, [data-player] fieldset, [data-player] form, [data-player] label, [data-player] legend, [data-player] table, [data-player] caption, [data-player] tbody, [data-player] tfoot, [data-player] thead, [data-player] tr, [data-player] th, [data-player] td, [data-player] article, [data-player] aside, [data-player] canvas, [data-player] details, [data-player] embed, [data-player] figure, [data-player] figcaption, [data-player] footer, [data-player] header, [data-player] hgroup, [data-player] menu, [data-player] nav, [data-player] output, [data-player] ruby, [data-player] section, [data-player] summary, [data-player] time, [data-player] mark, [data-player] audio, [data-player] video {\n    margin: 0;\n    padding: 0;\n    border: 0;\n    font: inherit;\n    font-size: 100%;\n    vertical-align: baseline; }\n  [data-player] table {\n    border-collapse: collapse;\n    border-spacing: 0; }\n  [data-player] caption, [data-player] th, [data-player] td {\n    text-align: left;\n    font-weight: normal;\n    vertical-align: middle; }\n  [data-player] q, [data-player] blockquote {\n    quotes: none; }\n    [data-player] q:before, [data-player] q:after, [data-player] blockquote:before, [data-player] blockquote:after {\n      content: \"\";\n      content: none; }\n  [data-player] a img {\n    border: none; }\n  [data-player]:focus {\n    outline: 0; }\n  [data-player] * {\n    max-width: initial;\n    box-sizing: inherit;\n    float: initial; }\n  [data-player].fullscreen {\n    width: 100% !important;\n    height: 100% !important; }\n  [data-player].nocursor {\n    cursor: none; }\n\n.clappr-style {\n  display: none !important; }\n\n@media screen {\n  [data-player] {\n    opacity: 0.99; } }\n", ""]);
+	exports.push([module.id, "[data-player] {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  -o-user-select: none;\n  user-select: none;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  -webkit-transform: translate3d(0, 0, 0);\n  -moz-transform: translate3d(0, 0, 0);\n  -ms-transform: translate3d(0, 0, 0);\n  -o-transform: translate3d(0, 0, 0);\n  transform: translate3d(0, 0, 0);\n  position: relative;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-style: normal;\n  font-weight: normal;\n  text-align: center;\n  overflow: hidden;\n  font-size: 100%;\n  font-family: \"lucida grande\", tahoma, verdana, arial, sans-serif;\n  text-shadow: 0 0 0;\n  box-sizing: border-box; }\n  [data-player] div, [data-player] span, [data-player] applet, [data-player] object, [data-player] iframe, [data-player] h1, [data-player] h2, [data-player] h3, [data-player] h4, [data-player] h5, [data-player] h6, [data-player] p, [data-player] blockquote, [data-player] pre, [data-player] a, [data-player] abbr, [data-player] acronym, [data-player] address, [data-player] big, [data-player] cite, [data-player] code, [data-player] del, [data-player] dfn, [data-player] em, [data-player] img, [data-player] ins, [data-player] kbd, [data-player] q, [data-player] s, [data-player] samp, [data-player] small, [data-player] strike, [data-player] strong, [data-player] sub, [data-player] sup, [data-player] tt, [data-player] var, [data-player] b, [data-player] u, [data-player] i, [data-player] center, [data-player] dl, [data-player] dt, [data-player] dd, [data-player] ol, [data-player] ul, [data-player] li, [data-player] fieldset, [data-player] form, [data-player] label, [data-player] legend, [data-player] table, [data-player] caption, [data-player] tbody, [data-player] tfoot, [data-player] thead, [data-player] tr, [data-player] th, [data-player] td, [data-player] article, [data-player] aside, [data-player] canvas, [data-player] details, [data-player] embed, [data-player] figure, [data-player] figcaption, [data-player] footer, [data-player] header, [data-player] hgroup, [data-player] menu, [data-player] nav, [data-player] output, [data-player] ruby, [data-player] section, [data-player] summary, [data-player] time, [data-player] mark, [data-player] audio, [data-player] video {\n    margin: 0;\n    padding: 0;\n    border: 0;\n    font: inherit;\n    font-size: 100%;\n    vertical-align: baseline; }\n  [data-player] table {\n    border-collapse: collapse;\n    border-spacing: 0; }\n  [data-player] caption, [data-player] th, [data-player] td {\n    text-align: left;\n    font-weight: normal;\n    vertical-align: middle; }\n  [data-player] q, [data-player] blockquote {\n    quotes: none; }\n    [data-player] q:before, [data-player] q:after, [data-player] blockquote:before, [data-player] blockquote:after {\n      content: \"\";\n      content: none; }\n  [data-player] a img {\n    border: none; }\n  [data-player]:focus {\n    outline: 0; }\n  [data-player] * {\n    max-width: none;\n    box-sizing: inherit;\n    float: none; }\n  [data-player] div {\n    display: block; }\n  [data-player].fullscreen {\n    width: 100% !important;\n    height: 100% !important; }\n  [data-player].nocursor {\n    cursor: none; }\n\n.clappr-style {\n  display: none !important; }\n", ""]);
 
 	// exports
 
@@ -12715,8 +13177,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _ui_object2 = _interopRequireDefault(_ui_object);
 
+	/**
+	 * An abstraction to represent a generic playback, it's like an interface to be implemented by subclasses.
+	 * @class Playback
+	 * @constructor
+	 * @extends UIObject
+	 * @module base
+	 */
+
 	var Playback = (function (_UIObject) {
 	  _inherits(Playback, _UIObject);
+
+	  /**
+	   * @method constructor
+	   * @param {Object} options the options object
+	   */
 
 	  function Playback(options) {
 	    _classCallCheck(this, Playback);
@@ -12725,41 +13200,102 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.settings = {};
 	  }
 
+	  /**
+	   * plays the playback.
+	   * @method play
+	   */
+
 	  _createClass(Playback, [{
 	    key: 'play',
 	    value: function play() {}
+
+	    /**
+	     * pauses the playback.
+	     * @method pause
+	     */
 	  }, {
 	    key: 'pause',
 	    value: function pause() {}
+
+	    /**
+	     * stops the playback.
+	     * @method stop
+	     */
 	  }, {
 	    key: 'stop',
 	    value: function stop() {}
+
+	    /**
+	     * seeks the playback to a given `time` in percentage
+	     * @method seek
+	     * @param {Number} time should be a number between 0 and 100
+	     */
 	  }, {
 	    key: 'seek',
 	    value: function seek(time) {}
+
+	    /**
+	     * gets the duration in seconds
+	     * @method getDuration
+	     * @return {Number} duration time (in seconds) of the current source
+	     */
 	  }, {
 	    key: 'getDuration',
 	    value: function getDuration() {
 	      return 0;
 	    }
+
+	    /**
+	     * checks if the playback is playing.
+	     * @method isPlaying
+	     * @return {Boolean} `true` if the current playback is playing, otherwise `false`
+	     */
 	  }, {
 	    key: 'isPlaying',
 	    value: function isPlaying() {
 	      return false;
 	    }
+
+	    /**
+	     * gets the playback type
+	     * @method getPlaybackType
+	     * @return {String} you should write the playback type otherwise it'll assume `'no_op'`
+	     * @example
+	     * ```javascript
+	     * html5VideoPlayback.getPlaybackType() //html5_video
+	     * flashHlsPlayback.getPlaybackType() //hls
+	     * ```
+	     */
 	  }, {
 	    key: 'getPlaybackType',
 	    value: function getPlaybackType() {
 	      return 'no_op';
 	    }
+
+	    /**
+	     * checks if the playback is in HD.
+	     * @method isHighDefinitionInUse
+	     * @return {Boolean} `true` if the playback is playing in HD, otherwise `false`
+	     */
 	  }, {
 	    key: 'isHighDefinitionInUse',
 	    value: function isHighDefinitionInUse() {
 	      return false;
 	    }
+
+	    /**
+	     * sets the volume for the playback
+	     * @method volume
+	     * @param {Number} value a number between 0 (`muted`) to 100 (`max`)
+	     */
 	  }, {
 	    key: 'volume',
 	    value: function volume(value) {}
+
+	    /**
+	     * destroys the playback, removing it from DOM
+	     * @method destroy
+	     */
 	  }, {
 	    key: 'destroy',
 	    value: function destroy() {
@@ -13531,7 +14067,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var MAX_ATTEMPTS = 60;
 
-	var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" class="hls-playback" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls="" width="100%" height="100%"><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>';
+	var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" class="hls-playback" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls="" width="100%" height="100%"><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>&callback=<%= callbackName %>" /> </object>';
 
 	var HLS = (function (_Playback) {
 	  _inherits(HLS, _Playback);
@@ -13601,6 +14137,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.fragmentLoadMaxRetry = options.fragmentLoadMaxRetry === undefined ? 3 : options.fragmentLoadMaxRetry;
 	      this.fragmentLoadMaxRetryTimeout = options.fragmentLoadMaxRetryTimeout === undefined ? 4000 : options.fragmentLoadMaxRetryTimeout;
 	      this.fragmentLoadSkipAfterMaxRetry = options.fragmentLoadSkipAfterMaxRetry === undefined ? false : options.fragmentLoadSkipAfterMaxRetry;
+	      this.capLevelonFpsDrop = options.capLevelonFpsDrop === undefined ? false : options.capLevelonFpsDrop;
+	      this.smoothAutoSwitchonFpsDrop = options.smoothAutoSwitchonFpsDrop === undefined ? this.capLevelonFpsDrop : options.smoothAutoSwitchonFpsDrop;
+	      this.fpsDroppedMonitoringPeriod = options.fpsDroppedMonitoringPeriod === undefined ? 5000 : options.fpsDroppedMonitoringPeriod;
+	      this.fpsDroppedMonitoringThreshold = options.fpsDroppedMonitoringThreshold === undefined ? 0.2 : options.fpsDroppedMonitoringThreshold;
 	    }
 	  }, {
 	    key: 'addListeners',
@@ -13683,14 +14223,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.el.playerSetFragmentLoadMaxRetry(this.fragmentLoadMaxRetry);
 	      this.el.playerSetFragmentLoadMaxRetryTimeout(this.fragmentLoadMaxRetryTimeout);
 	      this.el.playerSetFragmentLoadSkipAfterMaxRetry(this.fragmentLoadSkipAfterMaxRetry);
+	      this.el.playerSetCapLevelonFPSDrop(this.capLevelonFpsDrop);
+	      this.el.playerSetSmoothAutoSwitchonFPSDrop(this.smoothAutoSwitchonFpsDrop);
+	      this.el.playerSetFpsDroppedMonitoringPeriod(this.fpsDroppedMonitoringPeriod);
+	      this.el.playerSetFpsDroppedMonitoringThreshold(this.fpsDroppedMonitoringThreshold);
 	    }
 	  }, {
 	    key: 'levelChanged',
 	    value: function levelChanged(level) {
 	      var currentLevel = this.getLevels()[level];
-	      this.highDefinition = currentLevel.height >= 720 || currentLevel.bitrate / 1000 >= 2000;
-	      this.trigger(_baseEvents2['default'].PLAYBACK_HIGHDEFINITIONUPDATE);
-	      this.trigger(_baseEvents2['default'].PLAYBACK_BITRATE, { bitrate: this.getCurrentBitrate(), level: level });
+	      if (currentLevel) {
+	        this.highDefinition = currentLevel.height >= 720 || currentLevel.bitrate / 1000 >= 2000;
+	        this.trigger(_baseEvents2['default'].PLAYBACK_HIGHDEFINITIONUPDATE);
+	        this.trigger(_baseEvents2['default'].PLAYBACK_BITRATE, { bitrate: this.getCurrentBitrate(), level: level });
+	      }
 	    }
 	  }, {
 	    key: 'updateTime',
@@ -13762,9 +14308,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'getLevels',
 	    value: function getLevels() {
-	      if (!this.levels || this.levels.length === 0) {
-	        this.levels = this.el.getLevels();
-	      }
+	      this.levels = this.el.getLevels();
 	      return this.levels;
 	    }
 	  }, {
@@ -13825,7 +14369,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'onFragmentLoaded',
 	    value: function onFragmentLoaded(loadmetrics) {
 	      this.trigger(_baseEvents2['default'].PLAYBACK_FRAGMENT_LOADED, loadmetrics);
-	      if (this.reportingProgress) {
+	      if (this.reportingProgress && this.el.getPosition) {
 	        var buffered = this.el.getPosition() + this.el.getbufferLength();
 	        this.trigger(_baseEvents2['default'].PLAYBACK_PROGRESS, this.el.getPosition(), buffered, this.el.getDuration(), this.name);
 	      }
@@ -13960,7 +14504,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'setupIE',
 	    value: function setupIE(swfPath) {
-	      this.setElement((0, _clapprZepto2['default'])((0, _baseTemplate2['default'])(objectIE)({ cid: this.cid, swfPath: swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId })));
+	      this.setElement((0, _clapprZepto2['default'])((0, _baseTemplate2['default'])(objectIE)({ cid: this.cid, swfPath: swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId, callbackName: 'window.Clappr.flashlsCallbacks.' + this.cid })));
 	    }
 	  }, {
 	    key: 'updateSettings',
@@ -14055,7 +14599,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "c0ada09560611574b7f2857e8359f425.swf"
+	module.exports = __webpack_require__.p + "96f944f0104ee30b8fce6cffd89e13aa.swf"
 
 /***/ },
 /* 111 */
@@ -15284,7 +15828,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "@font-face {\n  font-family: \"Player\";\n  src: url(" + __webpack_require__(67) + ");\n  src: url(" + __webpack_require__(67) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(68) + ") format(\"truetype\"), url(" + __webpack_require__(69) + "#player) format(\"svg\"); }\n\n.player-poster[data-poster] {\n  cursor: pointer;\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  z-index: 998;\n  top: 0; }\n  .player-poster[data-poster] .poster-background[data-poster] {\n    width: 100%;\n    height: 100%;\n    background-size: cover;\n    background-repeat: no-repeat;\n    background-position: 50% 50%; }\n  .player-poster[data-poster] .play-wrapper[data-poster] {\n    position: absolute;\n    width: 100%;\n    height: 25%;\n    line-height: 100%;\n    font-size: 25%;\n    top: 50%;\n    text-align: center; }\n    .player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster] {\n      font-family: \"Player\";\n      font-weight: normal;\n      font-style: normal;\n      line-height: 1;\n      letter-spacing: 0;\n      speak: none;\n      color: white;\n      opacity: 0.75;\n      -webkit-font-smoothing: antialiased;\n      -moz-osx-font-smoothing: grayscale;\n      -webkit-transition: opacity text-shadow 0.1s;\n      -webkit-transition-delay: ease;\n      -moz-transition: opacity text-shadow 0.1s ease;\n      -o-transition: opacity text-shadow 0.1s ease;\n      transition: opacity text-shadow 0.1s ease; }\n      .player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster].play[data-poster]:before {\n        content: \"\\E001\"; }\n      .player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]:hover {\n        opacity: 1.0;\n        text-shadow: rgba(255, 255, 255, 0.8) 0 0 15px; }\n", ""]);
+	exports.push([module.id, "@font-face {\n  font-family: \"Player\";\n  src: url(" + __webpack_require__(67) + ");\n  src: url(" + __webpack_require__(67) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(68) + ") format(\"truetype\"), url(" + __webpack_require__(69) + "#player) format(\"svg\"); }\n\n.player-poster[data-poster] {\n  cursor: pointer;\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  z-index: 998;\n  top: 0;\n  left: 0; }\n  .player-poster[data-poster] .poster-background[data-poster] {\n    width: 100%;\n    height: 100%;\n    background-size: cover;\n    background-repeat: no-repeat;\n    background-position: 50% 50%; }\n  .player-poster[data-poster] .play-wrapper[data-poster] {\n    position: absolute;\n    width: 100%;\n    height: 25%;\n    line-height: 100%;\n    font-size: 25%;\n    top: 50%;\n    text-align: center; }\n    .player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster] {\n      font-family: \"Player\";\n      font-weight: normal;\n      font-style: normal;\n      line-height: 1;\n      letter-spacing: 0;\n      speak: none;\n      color: white;\n      opacity: 0.75;\n      -webkit-font-smoothing: antialiased;\n      -moz-osx-font-smoothing: grayscale;\n      -webkit-transition: opacity text-shadow 0.1s;\n      -webkit-transition-delay: ease;\n      -moz-transition: opacity text-shadow 0.1s ease;\n      -o-transition: opacity text-shadow 0.1s ease;\n      transition: opacity text-shadow 0.1s ease; }\n      .player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster].play[data-poster]:before {\n        content: \"\\E001\"; }\n      .player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]:hover {\n        opacity: 1.0;\n        text-shadow: rgba(255, 255, 255, 0.8) 0 0 15px; }\n", ""]);
 
 	// exports
 
