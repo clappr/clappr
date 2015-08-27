@@ -32,7 +32,7 @@ export default class SeekTime extends UIObject {
   }
 
   addEventListeners() {
-    this.listenTo(this.mediaControl, Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR, (event)  =>  {
+    this.listenTo(this.mediaControl, Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR, (event) => {
       this.hoveringOverSeekBar = true
       this.calculateHoverPosition(event)
       this.update()

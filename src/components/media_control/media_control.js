@@ -363,7 +363,7 @@ export default class MediaControl extends UIObject {
   }
 
   remove() {
-    this.seekTime.remove();
+    this.seekTime.remove()
     super.remove()
   }
 
