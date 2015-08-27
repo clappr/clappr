@@ -362,6 +362,11 @@ export default class MediaControl extends UIObject {
     this.keepVisible = true
   }
 
+  remove() {
+    this.seekTime.remove();
+    super.remove()
+  }
+
   resetKeepVisible() {
     this.keepVisible = false
   }

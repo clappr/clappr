@@ -14,36 +14,33 @@ import seekTimeHTML from './public/seek_time.html'
 export default class SeekTime extends UIObject {
   get name() { return 'seek_time' }
   get template() {
-    return template(seekTimeHTML);
+    return template(seekTimeHTML)
   }
   get attributes() {
     return {
       'class': 'seek-time hidden',
       'data-seek-time': ''
-    };
+    }
   }
   constructor(mediaControl) {
     super()
     this.mediaControl = mediaControl
+    this.rendered = false
     this.hoveringOverSeekBar = false
     this.hoverPosition = null
     this.addEventListeners()
   }
 
   addEventListeners() {
-    var self = this;
-    this.listenTo(this.mediaControl, Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR, function(event) {
-      self.hoveringOverSeekBar = true
-      self.calculateHoverPosition(event)
-      self.update()
+    this.listenTo(this.mediaControl, Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR, (event)  =>  {
+      this.hoveringOverSeekBar = true
+      this.calculateHoverPosition(event)
+      this.update()
     })
-    this.listenTo(this.mediaControl, Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR, function(event) {
-      self.hoveringOverSeekBar = false
-      self.update()
+    this.listenTo(this.mediaControl, Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR, (event) => {
+      this.hoveringOverSeekBar = false
+      this.update()
     })
-
-    // Not sure how to get a reference to the container. does this need to be a UICorePlugin like dvr_controls?
-    // this.listenTo(this.mediaControl.container, Events.CONTAINER_SETTINGSUPDATE, this.update)
   }
 
   calculateHoverPosition(event) {
@@ -53,6 +50,10 @@ export default class SeekTime extends UIObject {
   }
 
   update() {
+    if (!this.rendered) {
+      // update() is always called after a render
+      return
+    }
     if (!this.shouldBeVisible()) {
       this.$el.addClass('hidden')
       this.$el.css('left', "-100%")
@@ -66,7 +67,7 @@ export default class SeekTime extends UIObject {
       var containerWidth = this.mediaControl.$seekBarContainer.width()
       var elWidth = this.$el.width()
       var elLeftPos = this.hoverPosition * containerWidth
-      elLeftPos -= elWidth / 2;
+      elLeftPos -= elWidth / 2
       elLeftPos = Math.max(0, Math.min(elLeftPos, containerWidth - elWidth))
       this.$el.css('left', elLeftPos)
     }
@@ -77,10 +78,12 @@ export default class SeekTime extends UIObject {
   }
 
   render() {
-      var style = Styler.getStyleFor(seekTimeStyle)
-      this.$el.html(this.template())
-      this.$el.append(style)
-      this.mediaControl.$el.append(this.el)
-      this.$textEl = this.$el.find('[data-seek-time]')
+    this.rendered = true
+    var style = Styler.getStyleFor(seekTimeStyle)
+    this.$el.html(this.template())
+    this.$el.append(style)
+    this.mediaControl.$el.append(this.el)
+    this.$textEl = this.$el.find('[data-seek-time]')
+    this.update()
   }
 }
