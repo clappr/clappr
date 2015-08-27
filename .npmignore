@@ -2,6 +2,8 @@
 .npmignore
 .env
 .jshintrc
+*.bkp
+bump
 Gulpfile.js
 AUTHORS
 CONTRIBUTORS
@@ -10,7 +12,6 @@ node_modules/
 tasks/
 build/
 test/
-src/
 public/
 bin/hook.js
 karma.conf.js

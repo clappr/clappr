@@ -3,9 +3,9 @@ node_modules
 .env
 coverage
 build/
+docs/
 src/base/jst.js
 *.cache
-dist/
 aws.json
 npm-debug.log
 

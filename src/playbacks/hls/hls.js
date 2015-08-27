@@ -19,7 +19,7 @@ import HLSEvents from './flashls_events'
 
 var MAX_ATTEMPTS = 60
 
-var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" class="hls-playback" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls="" width="100%" height="100%"><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>'
+var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" class="hls-playback" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls="" width="100%" height="100%"><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>&callback=<%= callbackName %>" /> </object>'
 
 export default class HLS extends Playback {
   get name() { return 'hls' }
@@ -68,6 +68,10 @@ export default class HLS extends Playback {
     this.fragmentLoadMaxRetry = (options.fragmentLoadMaxRetry === undefined) ? 3 : options.fragmentLoadMaxRetry
     this.fragmentLoadMaxRetryTimeout = (options.fragmentLoadMaxRetryTimeout === undefined) ? 4000 : options.fragmentLoadMaxRetryTimeout
     this.fragmentLoadSkipAfterMaxRetry = (options.fragmentLoadSkipAfterMaxRetry === undefined) ? false : options.fragmentLoadSkipAfterMaxRetry
+    this.capLevelonFpsDrop = (options.capLevelonFpsDrop === undefined) ? false : options.capLevelonFpsDrop
+    this.smoothAutoSwitchonFpsDrop = (options.smoothAutoSwitchonFpsDrop === undefined) ? this.capLevelonFpsDrop : options.smoothAutoSwitchonFpsDrop
+    this.fpsDroppedMonitoringPeriod = (options.fpsDroppedMonitoringPeriod === undefined) ? 5000 : options.fpsDroppedMonitoringPeriod
+    this.fpsDroppedMonitoringThreshold = (options.fpsDroppedMonitoringThreshold === undefined) ? 0.2 : options.fpsDroppedMonitoringThreshold
   }
 
   addListeners() {
@@ -126,13 +130,19 @@ export default class HLS extends Playback {
     this.el.playerSetFragmentLoadMaxRetry(this.fragmentLoadMaxRetry)
     this.el.playerSetFragmentLoadMaxRetryTimeout(this.fragmentLoadMaxRetryTimeout)
     this.el.playerSetFragmentLoadSkipAfterMaxRetry(this.fragmentLoadSkipAfterMaxRetry)
+    this.el.playerSetCapLevelonFPSDrop(this.capLevelonFpsDrop)
+    this.el.playerSetSmoothAutoSwitchonFPSDrop(this.smoothAutoSwitchonFpsDrop)
+    this.el.playerSetFpsDroppedMonitoringPeriod(this.fpsDroppedMonitoringPeriod)
+    this.el.playerSetFpsDroppedMonitoringThreshold(this.fpsDroppedMonitoringThreshold)
   }
 
   levelChanged(level) {
     var currentLevel = this.getLevels()[level]
-    this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000);
-    this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE)
-    this.trigger(Events.PLAYBACK_BITRATE, {bitrate: this.getCurrentBitrate(), level: level})
+    if (currentLevel) {
+      this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000);
+      this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE)
+      this.trigger(Events.PLAYBACK_BITRATE, {bitrate: this.getCurrentBitrate(), level: level})
+    }
   }
 
   updateTime(timeMetrics) {
@@ -195,9 +205,7 @@ export default class HLS extends Playback {
   }
 
   getLevels() {
-    if (!this.levels || this.levels.length === 0) {
-      this.levels = this.el.getLevels()
-    }
+    this.levels = this.el.getLevels()
     return this.levels
   }
 
@@ -252,7 +260,7 @@ export default class HLS extends Playback {
 
   onFragmentLoaded(loadmetrics) {
     this.trigger(Events.PLAYBACK_FRAGMENT_LOADED, loadmetrics)
-    if (this.reportingProgress) {
+    if (this.reportingProgress && this.el.getPosition) {
       var buffered = this.el.getPosition() + this.el.getbufferLength()
       this.trigger(Events.PLAYBACK_PROGRESS, this.el.getPosition(), buffered, this.el.getDuration(), this.name)
     }
@@ -364,7 +372,7 @@ export default class HLS extends Playback {
   }
 
   setupIE(swfPath) {
-    this.setElement($(template(objectIE)({cid: this.cid, swfPath: swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId})))
+    this.setElement($(template(objectIE)({cid: this.cid, swfPath: swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId, callbackName: `window.Clappr.flashlsCallbacks.${this.cid}`})))
   }
 
   updateSettings() {
