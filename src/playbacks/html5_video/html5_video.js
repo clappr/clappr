@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {seekStringToSeconds} from '../../base/utils'
+import {seekStringToSeconds} from 'base/utils'
 
-import Playback from '../../base/playback'
-import template from '../../base/template'
-import Styler from '../../base/styler'
-import Browser from '../../components/browser'
-import Events from '../../base/events'
+import Playback from 'base/playback'
+import template from 'base/template'
+import Styler from 'base/styler'
+import Browser from 'components/browser'
+import Events from 'base/events'
 import videoStyle from './public/style.scss'
 import videoHTML from './public/index.html'
 import find from 'lodash.find'
