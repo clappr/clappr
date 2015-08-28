@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+import Log from 'plugins/log'
 import {uniqueId} from './utils'
 import execOnce from 'lodash.once'
-import Log from '../plugins/log'
 
 var slice = Array.prototype.slice
 
