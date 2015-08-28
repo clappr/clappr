@@ -96,6 +96,7 @@ module.exports = function(config) {
             } ]
         },
         resolve: {
+            root: path.resolve(__dirname, 'src'),
             extensions: ['', '.js'],
         },
 
