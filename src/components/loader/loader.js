@@ -2,30 +2,30 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import BaseObject from '../../base/base_object'
-import PlayerInfo from '../player_info'
+import BaseObject from 'base/base_object'
+import PlayerInfo from 'components/player_info'
 import uniq from 'lodash.uniq'
 
 /* Playback Plugins */
-import HTML5VideoPlayback from '../../playbacks/html5_video'
-import FlashVideoPlayback from '../../playbacks/flash'
-import HTML5AudioPlayback from '../../playbacks/html5_audio'
-import HLSVideoPlayback from '../../playbacks/hls'
-import HTMLImgPlayback from '../../playbacks/html_img'
-import NoOp from '../../playbacks/no_op'
+import HTML5VideoPlayback from 'playbacks/html5_video'
+import FlashVideoPlayback from 'playbacks/flash'
+import HTML5AudioPlayback from 'playbacks/html5_audio'
+import HLSVideoPlayback from 'playbacks/hls'
+import HTMLImgPlayback from 'playbacks/html_img'
+import NoOp from 'playbacks/no_op'
 
 /* Container Plugins */
-import SpinnerThreeBouncePlugin from '../../plugins/spinner_three_bounce'
-import StatsPlugin from '../../plugins/stats'
-import WaterMarkPlugin from '../../plugins/watermark'
-import PosterPlugin from '../../plugins/poster'
-import GoogleAnalyticsPlugin from '../../plugins/google_analytics'
-import ClickToPausePlugin from '../../plugins/click_to_pause'
-import Chromecast from '../../plugins/chromecast'
+import SpinnerThreeBouncePlugin from 'plugins/spinner_three_bounce'
+import StatsPlugin from 'plugins/stats'
+import WaterMarkPlugin from 'plugins/watermark'
+import PosterPlugin from 'plugins/poster'
+import GoogleAnalyticsPlugin from 'plugins/google_analytics'
+import ClickToPausePlugin from 'plugins/click_to_pause'
+import Chromecast from 'plugins/chromecast'
 
 /* Core Plugins */
-import DVRControls from '../../plugins/dvr_controls'
-import Favicon from '../../plugins/favicon'
+import DVRControls from 'plugins/dvr_controls'
+import Favicon from 'plugins/favicon'
 
 export default class Loader extends BaseObject {
   constructor(externalPlugins, playerId) {

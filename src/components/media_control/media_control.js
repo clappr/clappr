@@ -6,19 +6,21 @@
  * The MediaControl is responsible for displaying the Player controls.
  */
 
-import {Config, Fullscreen, formatTime} from '../../base/utils'
+import {Config, Fullscreen, formatTime} from 'base/utils'
+
+import  Events from 'base/events'
+import  Kibo from 'base/kibo'
+import  Styler from 'base/styler'
+import  UIObject from 'base/ui_object'
+import  Browser from 'components/browser'
+import  SeekTime from 'components/seek_time'
+import  Mediator from 'components/mediator'
+import  PlayerInfo from 'components/player_info'
+import  template from 'base/template'
 
 import  $ from 'clappr-zepto'
-import  Styler from '../../base/styler'
-import  UIObject from '../../base/ui_object'
-import  Browser from '../browser'
-import  SeekTime from '../seek_time'
-import  Mediator from '../mediator'
-import  PlayerInfo from '../player_info'
-import  Events from '../../base/events'
-import  Kibo from '../../base/kibo'
+
 import  mediaControlStyle from './public/media-control.scss'
-import  template from '../../base/template'
 import  mediaControlHTML from './public/media-control.html'
 
 export default class MediaControl extends UIObject {

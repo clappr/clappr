@@ -7,25 +7,22 @@
  * and the player state.
  */
 
-import {
-    isNumber,
-    Fullscreen,
-    requestAnimationFrame,
-    cancelAnimationFrame
-} from '../../base/utils'
+import {isNumber,Fullscreen, requestAnimationFrame, cancelAnimationFrame} from 'base/utils'
+
+import Events from 'base/events'
+import Styler from 'base/styler'
+import UIObject from 'base/ui_object'
+import Browser from 'components/browser'
+import ContainerFactory from 'components/container_factory'
+import MediaControl from 'components/media_control'
+import Mediator from 'components/mediator'
+import PlayerInfo from 'components/player_info'
 
 import assign from 'lodash.assign'
-import $ from 'clappr-zepto'
-import UIObject from '../../base/ui_object'
-import ContainerFactory from '../container_factory'
-import Styler from '../../base/styler'
-import MediaControl from '../media_control'
-import PlayerInfo from '../player_info'
-import Mediator from '../mediator'
-import Events from '../../base/events'
-import Browser from '../browser'
-import coreStyle from './public/style.scss'
 import find from 'lodash.find'
+import $ from 'clappr-zepto'
+
+import coreStyle from './public/style.scss'
 
 export default class Core extends UIObject {
   get events() {

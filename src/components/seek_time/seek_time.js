@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {formatTime} from '../../base/utils'
+import {formatTime} from 'base/utils'
 
-import UIObject from '../../base/ui_object'
-import Styler from '../../base/styler'
-import template from '../../base/template'
-import Events from '../../base/events'
+import UIObject from 'base/ui_object'
+import Styler from 'base/styler'
+import template from 'base/template'
+import Events from 'base/events'
 import seekTimeStyle from './public/seek_time.scss'
 import seekTimeHTML from './public/seek_time.html'
 
@@ -73,4 +73,3 @@ export default class SeekTime extends UIObject {
       this.mediaControl.$el.append(this.el);
   }
 }
-
