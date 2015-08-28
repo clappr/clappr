@@ -1,9 +1,9 @@
-import {requestAnimationFrame} from '../../base/utils'
+import {requestAnimationFrame} from 'base/utils'
 
-import Playback from '../../base/playback'
-import template from '../../base/template'
-import Styler from '../../base/styler'
-import Events from '../../base/events'
+import Playback from 'base/playback'
+import template from 'base/template'
+import Styler from 'base/styler'
+import Events from 'base/events'
 import noOpStyle from './public/style.scss'
 import noOpHTML from './public/error.html'
 
@@ -72,4 +72,3 @@ export default class NoOp extends Playback {
 NoOp.canPlay = (source) => {
   return true
 }
-

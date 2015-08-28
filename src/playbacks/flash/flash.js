@@ -2,15 +2,15 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {seekStringToSeconds} from '../../base/utils'
+import {seekStringToSeconds} from 'base/utils'
 
-import Playback from '../../base/playback'
-import Styler from '../../base/styler'
-import Mediator from '../../components/mediator'
-import template from '../../base/template'
+import Playback from 'base/playback'
+import Styler from 'base/styler'
+import Browser from 'components/browser'
+import Mediator from 'components/mediator'
+import template from 'base/template'
 import $ from 'clappr-zepto'
-import Browser from '../../components/browser'
-import Events from '../../base/events'
+import Events from 'base/events'
 import flashStyle from './public/style.scss'
 import flashHTML from './public/flash_playback.html'
 import flashSwf from './public/Player.swf'
