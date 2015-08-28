@@ -1,5 +1,5 @@
-import CorePlugin from '../../base/core_plugin'
-import Events from '../../base/events'
+import CorePlugin from 'base/core_plugin'
+import Events from 'base/events'
 import $ from 'clappr-zepto'
 
 export default class Favicon extends CorePlugin {

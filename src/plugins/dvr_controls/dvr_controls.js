@@ -1,7 +1,7 @@
-import UICorePlugin from '../../base/ui_core_plugin'
-import template from '../../base/template'
-import Styler from '../../base/styler'
-import Events from '../../base/events'
+import UICorePlugin from 'base/ui_core_plugin'
+import template from 'base/template'
+import Styler from 'base/styler'
+import Events from 'base/events'
 import dvrStyle from './public/dvr_controls.scss'
 import dvrHTML from './public/index.html'
 import $ from 'clappr-zepto'
@@ -83,4 +83,3 @@ export default class DVRControls extends UICorePlugin {
     return this
   }
 }
-
