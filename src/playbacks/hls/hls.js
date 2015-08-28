@@ -2,20 +2,19 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import Playback from '../../base/playback'
-import assign from 'lodash.assign'
-import template from '../../base/template'
-
-import Mediator from '../../components/mediator'
-import Browser from '../../components/browser'
-import Events from '../../base/events'
-import Styler from '../../base/styler'
+import Playback from 'base/playback'
+import Events from 'base/events'
+import Styler from 'base/styler'
+import template from 'base/template'
+import Mediator from 'components/mediator'
+import Browser from 'components/browser'
+import HLSEvents from './flashls_events'
 import hlsStyle from './public/style.scss'
 import hlsHTML from './public/hls_playback.html'
 import hlsSwf from './public/HLSPlayer.swf'
-import $ from 'clappr-zepto'
 
-import HLSEvents from './flashls_events'
+import assign from 'lodash.assign'
+import $ from 'clappr-zepto'
 
 var MAX_ATTEMPTS = 60
 

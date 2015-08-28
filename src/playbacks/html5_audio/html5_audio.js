@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import Playback from '../../base/playback'
-import Events from '../../base/events'
+import Playback from 'base/playback'
+import Events from 'base/events'
 import find from 'lodash.find'
 
 export default class HTML5Audio extends Playback {
@@ -175,4 +175,3 @@ HTML5Audio.canPlay = function(resource, mimeType) {
   }
   return false
 }
-
