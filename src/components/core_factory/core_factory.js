@@ -6,8 +6,8 @@
  * The Core Factory is responsible for instantiate the core and it's plugins.
  */
 
-import BaseObject from '../../base/base_object'
-import Core from '../core'
+import BaseObject from 'base/base_object'
+import Core from 'components/core'
 
 export default class CoreFactory extends BaseObject {
   constructor(player, loader) {
@@ -40,4 +40,3 @@ export default class CoreFactory extends BaseObject {
     }
   }
 }
-

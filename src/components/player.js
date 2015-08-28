@@ -2,15 +2,15 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {uniqueId, currentScriptUrl} from '../base/utils'
+import {uniqueId, currentScriptUrl} from 'base/utils'
 
-import BaseObject from '../base/base_object'
-import Events from '../base/events'
-import CoreFactory from './core_factory'
-import Loader from './loader'
+import BaseObject from 'base/base_object'
+import Events from 'base/events'
+import CoreFactory from 'components/core_factory'
+import Loader from 'components/loader'
+import PlayerInfo from 'components/player_info'
 import assign from 'lodash.assign'
 import find from 'lodash.find'
-import PlayerInfo from './player_info'
 
 var baseUrl = currentScriptUrl().replace(/\/[^\/]+$/, "")
 

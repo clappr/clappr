@@ -6,7 +6,7 @@
  * The mediator is a singleton for handling global events.
  */
 
-import Events from '../base/events'
+import Events from 'base/events'
 
 var events = new Events()
 
@@ -37,4 +37,3 @@ Mediator.stopListening = function(obj, name, callback) {
   events.stopListening(obj, name, callback)
   return
 }
-
