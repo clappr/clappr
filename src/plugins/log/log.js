@@ -20,11 +20,12 @@ var COLORS = [DEBUG, INFO, WARN, ERROR, ERROR]
 var DESCRIPTIONS = ['debug', 'info', 'warn', 'error', 'disabled']
 
 export default class Log {
-  constructor(level = LEVEL_WARN) {
+  constructor(level = LEVEL_INFO, offLevel = LEVEL_DISABLED) {
     this.kibo = new Kibo()
     this.kibo.down(['ctrl shift d'], () => this.onOff())
     this.BLACKLIST = ['timeupdate', 'playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress'];
     this.level = level
+    this.offLevel = offLevel
   }
 
   debug(klass) {this.log(klass, LEVEL_DEBUG, Array.prototype.slice.call(arguments, 1))}
@@ -33,11 +34,11 @@ export default class Log {
   error(klass) {this.log(klass, LEVEL_ERROR, Array.prototype.slice.call(arguments, 1))}
 
   onOff() {
-    if (this.level === LEVEL_DISABLED) {
+    if (this.level === this.offLevel) {
       this.level = this.previousLevel
     } else {
       this.previousLevel = this.level
-      this.level = LEVEL_DISABLED
+      this.level = this.offLevel
     }
     console.log.apply(console, ["%c[Clappr.Log] set log level to " + DESCRIPTIONS[this.level], ERROR]);
   }
