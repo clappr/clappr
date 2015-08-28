@@ -6,8 +6,6 @@ import {uniqueId} from './utils'
 import execOnce from 'lodash.once'
 import Log from '../plugins/log'
 
-var logger = Log.getInstance()
-
 var slice = Array.prototype.slice
 
 /**
@@ -92,7 +90,7 @@ export default class Events {
   trigger(name) {
     try {
       var klass = this.name || this.constructor.name
-      logger.debug.apply(logger, [klass].concat(Array.prototype.slice.call(arguments)))
+      Log.debug.apply(Log, [klass].concat(Array.prototype.slice.call(arguments)))
       if (!this._events) return this
       var args = slice.call(arguments, 1)
       if (!eventsApi(this, 'trigger', name, args)) return this
@@ -101,7 +99,7 @@ export default class Events {
       if (events) triggerEvents(events, args)
       if (allEvents) triggerEvents(allEvents, arguments)
     } catch (exception) {
-      logger.error.apply(logger, [klass, 'error on event', name, 'trigger','-', exception])
+      Log.error.apply(Log, [klass, 'error on event', name, 'trigger','-', exception])
     }
     return this
   }
