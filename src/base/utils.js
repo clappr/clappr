@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import Browser from '../components/browser'
+import Browser from 'components/browser'
 
 var assign = function(obj, source) {
   if (source) {
