@@ -77,3 +77,9 @@ Log.getInstance = function() {
   return this._instance
 }
 
+Log.setLevel = function(level) { this.getInstance().level = level }
+
+Log.debug = function(klass) { this.getInstance().debug.apply(this.getInstance(), arguments) }
+Log.info = function(klass) { this.getInstance().info.apply(this.getInstance(), arguments) }
+Log.warn = function(klass) { this.getInstance().warn.apply(this.getInstance(), arguments) }
+Log.error = function(klass) { this.getInstance().error.apply(this.getInstance(), arguments) }
