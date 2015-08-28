@@ -2,8 +2,21 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import assign from 'lodash.assign'
 import Browser from '../components/browser'
+
+var assign = function(obj, source) {
+  if (source) {
+    for (var prop in source) {
+      var propDescriptor = Object.getOwnPropertyDescriptor(source, prop)
+      if (propDescriptor) {
+        Object.defineProperty(obj, prop, propDescriptor)
+      } else {
+        obj[prop] = source[prop]
+      }
+    }
+  }
+  return obj
+}
 
 export function extend(parent, properties) {
   var constructor = function() {
