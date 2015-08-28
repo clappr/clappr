@@ -2,14 +2,13 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import UIContainerPlugin from '../../base/ui_container_plugin'
-import Styler from '../../base/styler'
+import UIContainerPlugin from 'base/ui_container_plugin'
+import Events from 'base/events'
+import Styler from 'base/styler'
+import template from 'base/template'
+import Mediator from 'components/mediator'
 import posterStyle from './public/poster.scss'
 import posterHTML from './public/poster.html'
-import template from '../../base/template'
-import Events from '../../base/events'
-
-import Mediator from '../../components/mediator'
 
 import $ from 'clappr-zepto'
 
@@ -129,4 +128,3 @@ export default class PosterPlugin extends UIContainerPlugin {
     return this
   }
 }
-

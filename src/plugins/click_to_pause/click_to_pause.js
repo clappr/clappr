@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import ContainerPlugin from '../../base/container_plugin'
-import Events from '../../base/events'
-import Browser from '../../components/browser'
+import ContainerPlugin from 'base/container_plugin'
+import Events from 'base/events'
+import Browser from 'components/browser'
 
 export default class ClickToPausePlugin extends ContainerPlugin {
   get name() { return 'click_to_pause' }
@@ -37,4 +37,3 @@ export default class ClickToPausePlugin extends ContainerPlugin {
     }
   }
 }
-

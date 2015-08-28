@@ -1,11 +1,10 @@
-import UICorePlugin from '../../base/ui_core_plugin'
-import Events from '../../base/events'
-import Styler from '../../base/styler'
+import UICorePlugin from 'base/ui_core_plugin'
+import Events from 'base/events'
+import Styler from 'base/styler'
+import Browser from 'components/browser'
 import ChromecastPlayback from './chromecast_playback'
 import chromecastStyle from './public/style.scss'
 import assign from 'lodash.assign'
-
-import Browser from '../../components/browser';
 
 var DEVICE_STATE = {
   'IDLE' : 0,
