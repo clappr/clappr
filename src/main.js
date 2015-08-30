@@ -26,8 +26,6 @@ import HTMLImg from 'playbacks/html_img'
 import Poster from 'plugins/poster'
 import Log from 'plugins/log'
 
-window.DEBUG = false
-
 var version = VERSION
 
 export default {
