@@ -227,6 +227,10 @@ export default class Core extends UIObject {
     return this.mediaControl.container
   }
 
+  getCurrentPlayback() {
+    return this.getCurrentContainer().playback
+  }
+
   getPlaybackType() {
     return this.getCurrentContainer().getPlaybackType()
   }
