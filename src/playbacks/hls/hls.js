@@ -135,6 +135,91 @@ export default class HLS extends Playback {
     this.el.playerSetFpsDroppedMonitoringThreshold(this.fpsDroppedMonitoringThreshold)
   }
 
+  setFlushLiveUrlCache(flushLiveURLCache) {
+    this.flushLiveURLCache = flushLiveURLCache
+    this.el.playerSetflushLiveURLCache(this.flushLiveURLCache)
+  }
+
+  setCapLeveltoStage(capLevelToStage) {
+    this.capLevelToStage = capLevelToStage
+    this.el.playerCapLeveltoStage(this.capLevelToStage)
+  }
+
+  setMaxBufferLength(maxBufferLength) {
+    this.maxBufferLength = maxBufferLength
+    this.el.playerSetmaxBufferLength(this.maxBufferLength)
+  }
+
+  setUseHardwareVideoDecoder(useHardwareVideoDecoder) {
+    this.useHardwareVideoDecoder = useHardwareVideoDecoder
+    this.el.playerSetUseHardwareVideoDecoder(this.useHardwareVideoDecoder)
+  }
+
+  setHlsLogEnabled(hlsLogEnabled) {
+    this.hlsLogEnabled = hlsLogEnabled
+    this.el.playerSetLogInfo(this.hlsLogEnabled)
+  }
+
+  setSeekMode(seekMode) {
+    this.seekMode = seekMode
+    this.el.playerSetSeekMode(this.seekMode)
+  }
+
+  setStartFromBitrate(startFromBitrate) {
+    this.startFromBitrate = setStartFromBitrate
+    this.el.playerSetStartFromBitrate(this.startFromBitrate)
+  }
+
+  setStartFromLevel(startFromLevel) {
+    this.startFromLevel = startFromLevel
+    this.el.playerSetstartFromLevel(this.startFromLevel)
+  }
+
+  setKeyLoadMaxRetry(keyLoadMaxRetry) {
+    this.keyLoadMaxRetry = keyLoadMaxRetry
+    this.el.playerSetKeyLoadMaxRetry(this.keyLoadMaxRetry)
+  }
+
+  setKeyLoadMaxRetryTimeout(keyLoadMaxRetryTimeout) {
+    this.keyLoadMaxRetryTimeout = keyLoadMaxRetryTimeout
+    this.el.playerSetKeyLoadMaxRetryTimeout(this.keyLoadMaxRetryTimeout)
+  }
+
+  setFragmentLoadMaxRetry(fragmentLoadMaxRetry) {
+    this.fragmentLoadMaxRetry = fragmentLoadMaxRetry
+    this.el.playerSetFragmentLoadMaxRetry(this.fragmentLoadMaxRetry)
+  }
+
+  setFragmentLoadMaxRetryTimeout(fragmentLoadMaxRetryTimeout) {
+    this.fragmentLoadMaxRetryTimeout = fragmentLoadMaxRetryTimeout
+    this.el.playerSetFragmentLoadMaxRetryTimeout(this.fragmentLoadMaxRetryTimeout)
+  }
+
+  setFragmentLoadSkipAfterMaxRetry(fragmentLoadSkipAfterMaxRetry) {
+    this.fragmentLoadSkipAfterMaxRetry = fragmentLoadSkipAfterMaxRetry
+    this.el.playerSetFragmentLoadSkipAfterMaxRetry(this.fragmentLoadSkipAfterMaxRetry)
+  }
+
+  setCapLevelonFPSDrop(capLevelonFpsDrop) {
+    this.capLevelonFpsDrop = capLevelonFpsDrop
+    this.el.playerSetCapLevelonFPSDrop(this.capLevelonFpsDrop)
+  }
+
+  setSmoothAutoSwitchonFPSDrop(smoothAutoSwitchonFpsDrop) {
+    this.smoothAutoSwitchonFpsDrop = smoothAutoSwitchonFpsDrop
+    this.el.playerSetSmoothAutoSwitchonFPSDrop(this.smoothAutoSwitchonFpsDrop)
+  }
+
+  setFpsDroppedMonitoringPeriod(fpsDroppedMonitoringPeriod) {
+    this.fpsDroppedMonitoringPeriod = fpsDroppedMonitoringPeriod
+    this.el.playerSetFpsDroppedMonitoringPeriod(this.fpsDroppedMonitoringPeriod)
+  }
+
+  setFpsDroppedMonitoringThreshold(fpsDroppedMonitoringThreshold) {
+    this.fpsDroppedMonitoringThreshold = fpsDroppedMonitoringThreshold
+    this.el.playerSetFpsDroppedMonitoringThreshold(this.fpsDroppedMonitoringThreshold)
+  }
+
   levelChanged(level) {
     var currentLevel = this.getLevels()[level]
     if (currentLevel) {
