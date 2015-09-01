@@ -27,7 +27,20 @@ import Chromecast from 'plugins/chromecast'
 import DVRControls from 'plugins/dvr_controls'
 import Favicon from 'plugins/favicon'
 
+/**
+ * It keeps a list of the default plugins (playback, container, core) and it merges external plugins with its internals.
+ * @class BaseObject
+ * @constructor
+ * @extends Loader
+ * @module components
+ */
 export default class Loader extends BaseObject {
+  /**
+   * it builds the loader
+   * @method constructor
+   * @param {Object} externalPlugins the external plugins
+   * @param {Number} playerId you can embed multiple instances of clappr, therefore this is the unique id of each one.
+   */
   constructor(externalPlugins, playerId) {
     super()
     this.playerId = playerId
