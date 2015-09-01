@@ -1,6 +1,6 @@
 {
   "name": "clappr",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "dependencies": {
     "clappr-zepto": {
       "version": "0.0.4",
@@ -446,9 +446,9 @@
               "resolved": "https://registry.npmjs.org/constantinople/-/constantinople-3.0.2.tgz",
               "dependencies": {
                 "acorn": {
-                  "version": "2.3.0",
+                  "version": "2.4.0",
                   "from": "acorn@>=2.1.0 <3.0.0",
-                  "resolved": "https://registry.npmjs.org/acorn/-/acorn-2.3.0.tgz"
+                  "resolved": "https://registry.npmjs.org/acorn/-/acorn-2.4.0.tgz"
                 }
               }
             },
@@ -620,9 +620,9 @@
                   "resolved": "https://registry.npmjs.org/acorn-globals/-/acorn-globals-1.0.5.tgz",
                   "dependencies": {
                     "acorn": {
-                      "version": "2.3.0",
+                      "version": "2.4.0",
                       "from": "acorn@>=2.1.0 <3.0.0",
-                      "resolved": "https://registry.npmjs.org/acorn/-/acorn-2.3.0.tgz"
+                      "resolved": "https://registry.npmjs.org/acorn/-/acorn-2.4.0.tgz"
                     }
                   }
                 }
