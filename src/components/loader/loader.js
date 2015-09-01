@@ -29,9 +29,9 @@ import Favicon from 'plugins/favicon'
 
 /**
  * It keeps a list of the default plugins (playback, container, core) and it merges external plugins with its internals.
- * @class BaseObject
+ * @class Loader
  * @constructor
- * @extends Loader
+ * @extends BaseObject
  * @module components
  */
 export default class Loader extends BaseObject {
