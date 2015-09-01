@@ -12,7 +12,21 @@ import Styler from 'base/styler'
 import style from './public/style.scss'
 import find from 'lodash.find'
 
+/**
+ * An abstraction to represent a container for a given playback
+ * TODO: describe its responsabilities
+ * @class Container
+ * @constructor
+ * @extends UIObject
+ * @module base
+ */
 export default class Container extends UIObject {
+  /**
+   * container's name
+   * @method name
+   * @default Container
+   * @return {String} container's name
+   */
   get name() { return 'Container' }
   get attributes() { return { class: 'container', 'data-container': '' } }
   get events() {
@@ -25,6 +39,11 @@ export default class Container extends UIObject {
     }
   }
 
+  /**
+   * it builds a container
+   * @method constructor
+   * @param {Object} options the options object
+   */
   constructor(options) {
     super(options);
     this.currentTime = 0
@@ -36,6 +55,34 @@ export default class Container extends UIObject {
     this.bindEvents();
   }
 
+  /**
+   * binds playback events to the methods of the container.
+   * it listens to playback's events and triggers them as container events.
+   *
+   * | Playback |
+   * |----------|
+   * | progress |
+   * | timeupdate |
+   * | ready |
+   * | buffering |
+   * | bufferfull |
+   * | settingsupdate |
+   * | loadedmetadata |
+   * | highdefinitionupdate |
+   * | bitrate |
+   * | playbackstate |
+   * | dvr |
+   * | mediacontrol_disable |
+   * | mediacontrol_enable |
+   * | ended |
+   * | play |
+   * | pause |
+   * | error |
+   *
+   * ps: the events usually translate from PLABACK_x to CONTAINER_x, you can check all the events at `Event` class.
+   *
+   * @method bindEvents
+   */
   bindEvents() {
     this.listenTo(this.playback, Events.PLAYBACK_PROGRESS, this.progress);
     this.listenTo(this.playback, Events.PLAYBACK_TIMEUPDATE, this.timeUpdated);
@@ -78,14 +125,28 @@ export default class Container extends UIObject {
     return this.playback.getPlaybackType()
   }
 
+  /**
+   * returns `true` if DVR is enable otherwise `false`.
+   * @method isDvrEnabled
+   * @return {Boolean}
+   */
   isDvrEnabled() {
     return !!this.playback.dvrEnabled
   }
 
+  /**
+   * returns `true` if DVR is in use otherwise `false`.
+   * @method isDvrInUse
+   * @return {Boolean}
+   */
   isDvrInUse() {
     return !!this.dvrInUse
   }
 
+  /**
+   * destroys the container
+   * @method destroy
+   */
   destroy() {
     this.trigger(Events.CONTAINER_DESTROYED, this, this.name)
     this.stopListening()
@@ -144,16 +205,28 @@ export default class Container extends UIObject {
     this.trigger(Events.CONTAINER_PAUSE, this.name);
   }
 
+  /**
+   * plays the playback
+   * @method play
+   */
   play() {
     this.playback.play();
   }
 
+  /**
+   * stops the playback
+   * @method stop
+   */
   stop() {
     this.trigger(Events.CONTAINER_STOP, this.name);
     this.playback.stop();
     this.currentTime = 0
   }
 
+  /**
+   * pauses the playback
+   * @method pause
+   */
   pause() {
     this.playback.pause();
   }
@@ -193,14 +266,29 @@ export default class Container extends UIObject {
     this.trigger(Events.CONTAINER_STATE_BUFFERFULL, this.name);
   }
 
+  /**
+   * adds plugin to the container
+   * @method addPlugin
+   * @param {Object} plugin
+   */
   addPlugin(plugin) {
     this.plugins.push(plugin);
   }
 
+  /**
+   * checks if a plugin, given its name, exist
+   * @method addPlugin
+   * @param {String} name
+   */
   hasPlugin(name) {
     return !!this.getPlugin(name);
   }
 
+  /**
+   * get the plugin given its name
+   * @method getPlugin
+   * @param {String} name
+   */
   getPlugin(name) {
     return find(this.plugins, (plugin) => { return plugin.name === name });
   }
