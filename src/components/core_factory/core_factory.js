@@ -2,14 +2,23 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-/**
- * The Core Factory is responsible for instantiate the core and it's plugins.
- */
-
 import BaseObject from 'base/base_object'
 import Core from 'components/core'
 
+/**
+ * The Core Factory is responsible for instantiate the core and it's plugins.
+ * @class CoreFactory
+ * @constructor
+ * @extends BaseObject
+ * @module components
+ */
 export default class CoreFactory extends BaseObject {
+  /**
+   * it builds the core factory
+   * @method constructor
+   * @param {Player} player the player object
+   * @param {Loader} loader the loader object
+   */
   constructor(player, loader) {
     super()
     this.player = player
@@ -18,12 +27,22 @@ export default class CoreFactory extends BaseObject {
     this.options.loader = this.loader
   }
 
+  /**
+   * creates a core and its plugins
+   * @method create
+   * @return {Core} created core
+   */
   create() {
     this.core = new Core(this.options)
     this.core.then(this.addCorePlugins.bind(this))
     return this.core
   }
 
+  /**
+   * given the core plugins (`loader.corePlugins`) it builds each one
+   * @method addCorePlugins
+   * @return {Core} the core with all plugins
+   */
   addCorePlugins() {
     this.loader.corePlugins.forEach((Plugin) => {
       var plugin = new Plugin(this.core)
