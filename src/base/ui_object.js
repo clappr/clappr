@@ -16,7 +16,6 @@ var delegateEventSplitter = /^(\S+)\s*(.*)$/
  * @constructor
  * @extends BaseObject
  * @module base
- * @since 1.0.0
  */
 export default class UIObject extends BaseObject {
   /**
