@@ -77,7 +77,8 @@ Log.LEVEL_ERROR = LEVEL_ERROR
 Log.getInstance = function() {
   if (this._instance === undefined) {
     this._instance = new this()
-    this._instance.onOff()
+    this._instance.previousLevel = this._instance.level
+    this._instance.level = this._instance.offLevel
   }
   return this._instance
 }
