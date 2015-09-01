@@ -158,7 +158,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _pluginsLog2 = _interopRequireDefault(_pluginsLog);
 
-	var version = ("0.2.9");
+	var version = ("0.2.10");
 
 	exports['default'] = {
 	    Player: _componentsPlayer2['default'],
@@ -1434,7 +1434,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.previousLevel = this.level;
 	        this.level = this.offLevel;
 	      }
-	      console.log.apply(console, ["%c[Clappr.Log] set log level to " + DESCRIPTIONS[this.level], ERROR]);
+	      // handle instances where console.log is unavailable
+	      if (window.console && console.log) {
+	        console.log("%c[Clappr.Log] set log level to " + DESCRIPTIONS[this.level], WARN);
+	      }
 	    }
 	  }, {
 	    key: 'level',
@@ -1456,7 +1459,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (klass) {
 	        klassDescription = "[" + klass + "]";
 	      }
-	      console.log.apply(console, ["%c[" + DESCRIPTIONS[level] + "]" + klassDescription, color].concat(message));
+	      if (window.console && console.log) {
+	        console.log.apply(console, ["%c[" + DESCRIPTIONS[level] + "]" + klassDescription, color].concat(message));
+	      }
 	    }
 	  }]);
 
@@ -1473,7 +1478,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	Log.getInstance = function () {
 	  if (this._instance === undefined) {
 	    this._instance = new this();
-	    this._instance.onOff();
+	    this._instance.previousLevel = this._instance.level;
+	    this._instance.level = this._instance.offLevel;
 	  }
 	  return this._instance;
 	};
@@ -1856,10 +1862,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	// Use of this source code is governed by a BSD-style
 	// license that can be found in the LICENSE file.
 
-	/**
-	 * The Core Factory is responsible for instantiate the core and it's plugins.
-	 */
-
 	'use strict';
 
 	Object.defineProperty(exports, '__esModule', {
@@ -1884,8 +1886,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _componentsCore2 = _interopRequireDefault(_componentsCore);
 
+	/**
+	 * The Core Factory is responsible for instantiate the core and it's plugins.
+	 * @class CoreFactory
+	 * @constructor
+	 * @extends BaseObject
+	 * @module components
+	 */
+
 	var CoreFactory = (function (_BaseObject) {
 	  _inherits(CoreFactory, _BaseObject);
+
+	  /**
+	   * it builds the core factory
+	   * @method constructor
+	   * @param {Player} player the player object
+	   * @param {Loader} loader the loader object
+	   */
 
 	  function CoreFactory(player, loader) {
 	    _classCallCheck(this, CoreFactory);
@@ -1897,6 +1914,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.options.loader = this.loader;
 	  }
 
+	  /**
+	   * creates a core and its plugins
+	   * @method create
+	   * @return {Core} created core
+	   */
+
 	  _createClass(CoreFactory, [{
 	    key: 'create',
 	    value: function create() {
@@ -1904,6 +1927,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.core.then(this.addCorePlugins.bind(this));
 	      return this.core;
 	    }
+
+	    /**
+	     * given the core plugins (`loader.corePlugins`) it builds each one
+	     * @method addCorePlugins
+	     * @return {Core} the core with all plugins
+	     */
 	  }, {
 	    key: 'addCorePlugins',
 	    value: function addCorePlugins() {
@@ -1947,11 +1976,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
 	// Use of this source code is governed by a BSD-style
 	// license that can be found in the LICENSE file.
-
-	/**
-	 * The Core is responsible to manage Containers, the mediator, MediaControl
-	 * and the player state.
-	 */
 
 	'use strict';
 
@@ -2018,6 +2042,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _publicStyleScss = __webpack_require__(71);
 
 	var _publicStyleScss2 = _interopRequireDefault(_publicStyleScss);
+
+	/**
+	 * The Core is responsible to manage Containers, the mediator, MediaControl
+	 * and the player state.
+	 * @class Core
+	 * @constructor
+	 * @extends UIObject
+	 * @module components
+	 */
 
 	var Core = (function (_UIObject) {
 	  _inherits(Core, _UIObject);
@@ -3420,7 +3453,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @constructor
 	 * @extends BaseObject
 	 * @module base
-	 * @since 1.0.0
 	 */
 
 	var UIObject = (function (_BaseObject) {
@@ -5115,11 +5147,27 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lodashFind2 = _interopRequireDefault(_lodashFind);
 
+	/**
+	 * An abstraction to represent a container for a given playback
+	 * TODO: describe its responsabilities
+	 * @class Container
+	 * @constructor
+	 * @extends UIObject
+	 * @module base
+	 */
+
 	var Container = (function (_UIObject) {
 	  _inherits(Container, _UIObject);
 
 	  _createClass(Container, [{
 	    key: 'name',
+
+	    /**
+	     * container's name
+	     * @method name
+	     * @default Container
+	     * @return {String} container's name
+	     */
 	    get: function get() {
 	      return 'Container';
 	    }
@@ -5139,6 +5187,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        'mouseleave': 'mouseLeave'
 	      };
 	    }
+
+	    /**
+	     * it builds a container
+	     * @method constructor
+	     * @param {Object} options the options object
+	     */
 	  }]);
 
 	  function Container(options) {
@@ -5153,6 +5207,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.plugins = [this.playback];
 	    this.bindEvents();
 	  }
+
+	  /**
+	   * binds playback events to the methods of the container.
+	   * it listens to playback's events and triggers them as container events.
+	   *
+	   * | Playback |
+	   * |----------|
+	   * | progress |
+	   * | timeupdate |
+	   * | ready |
+	   * | buffering |
+	   * | bufferfull |
+	   * | settingsupdate |
+	   * | loadedmetadata |
+	   * | highdefinitionupdate |
+	   * | bitrate |
+	   * | playbackstate |
+	   * | dvr |
+	   * | mediacontrol_disable |
+	   * | mediacontrol_enable |
+	   * | ended |
+	   * | play |
+	   * | pause |
+	   * | error |
+	   *
+	   * ps: the events usually translate from PLABACK_x to CONTAINER_x, you can check all the events at `Event` class.
+	   *
+	   * @method bindEvents
+	   */
 
 	  _createClass(Container, [{
 	    key: 'bindEvents',
@@ -5202,16 +5285,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function getPlaybackType() {
 	      return this.playback.getPlaybackType();
 	    }
+
+	    /**
+	     * returns `true` if DVR is enable otherwise `false`.
+	     * @method isDvrEnabled
+	     * @return {Boolean}
+	     */
 	  }, {
 	    key: 'isDvrEnabled',
 	    value: function isDvrEnabled() {
 	      return !!this.playback.dvrEnabled;
 	    }
+
+	    /**
+	     * returns `true` if DVR is in use otherwise `false`.
+	     * @method isDvrInUse
+	     * @return {Boolean}
+	     */
 	  }, {
 	    key: 'isDvrInUse',
 	    value: function isDvrInUse() {
 	      return !!this.dvrInUse;
 	    }
+
+	    /**
+	     * destroys the container
+	     * @method destroy
+	     */
 	  }, {
 	    key: 'destroy',
 	    value: function destroy() {
@@ -5285,11 +5385,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function paused() {
 	      this.trigger(_baseEvents2['default'].CONTAINER_PAUSE, this.name);
 	    }
+
+	    /**
+	     * plays the playback
+	     * @method play
+	     */
 	  }, {
 	    key: 'play',
 	    value: function play() {
 	      this.playback.play();
 	    }
+
+	    /**
+	     * stops the playback
+	     * @method stop
+	     */
 	  }, {
 	    key: 'stop',
 	    value: function stop() {
@@ -5297,6 +5407,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.playback.stop();
 	      this.currentTime = 0;
 	    }
+
+	    /**
+	     * pauses the playback
+	     * @method pause
+	     */
 	  }, {
 	    key: 'pause',
 	    value: function pause() {
@@ -5345,16 +5460,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function bufferfull() {
 	      this.trigger(_baseEvents2['default'].CONTAINER_STATE_BUFFERFULL, this.name);
 	    }
+
+	    /**
+	     * adds plugin to the container
+	     * @method addPlugin
+	     * @param {Object} plugin
+	     */
 	  }, {
 	    key: 'addPlugin',
 	    value: function addPlugin(plugin) {
 	      this.plugins.push(plugin);
 	    }
+
+	    /**
+	     * checks if a plugin, given its name, exist
+	     * @method addPlugin
+	     * @param {String} name
+	     */
 	  }, {
 	    key: 'hasPlugin',
 	    value: function hasPlugin(name) {
 	      return !!this.getPlugin(name);
 	    }
+
+	    /**
+	     * get the plugin given its name
+	     * @method getPlugin
+	     * @param {String} name
+	     */
 	  }, {
 	    key: 'getPlugin',
 	    value: function getPlugin(name) {
@@ -9754,8 +9887,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _pluginsFavicon2 = _interopRequireDefault(_pluginsFavicon);
 
+	/**
+	 * It keeps a list of the default plugins (playback, container, core) and it merges external plugins with its internals.
+	 * @class Loader
+	 * @constructor
+	 * @extends BaseObject
+	 * @module components
+	 */
+
 	var Loader = (function (_BaseObject) {
 	  _inherits(Loader, _BaseObject);
+
+	  /**
+	   * it builds the loader
+	   * @method constructor
+	   * @param {Object} externalPlugins the external plugins
+	   * @param {Number} playerId you can embed multiple instances of clappr, therefore this is the unique id of each one.
+	   */
 
 	  function Loader(externalPlugins, playerId) {
 	    _classCallCheck(this, Loader);
@@ -14853,7 +15001,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "96f944f0104ee30b8fce6cffd89e13aa.swf"
+	module.exports = __webpack_require__.p + "26c91a360cb2551841d5eb2aff058449.swf"
 
 /***/ },
 /* 112 */
