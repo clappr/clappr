@@ -2,6 +2,7 @@ import UICorePlugin from 'base/ui_core_plugin'
 import Events from 'base/events'
 import Styler from 'base/styler'
 import Browser from 'components/browser'
+import Log from 'plugins/log'
 import ChromecastPlayback from './chromecast_playback'
 import chromecastStyle from './public/style.scss'
 import assign from 'lodash.assign'
@@ -64,7 +65,7 @@ export default class Chromecast extends UICorePlugin {
           this.appId = this.appId || DEFAULT_CLAPPR_APP_ID
           this.initializeCastApi()
         } else {
-          console.error('GCastApi error', errorInfo)
+          Log.warn('GCastApi error', errorInfo)
           this.disable()
         }
       }
@@ -79,17 +80,17 @@ export default class Chromecast extends UICorePlugin {
     var sessionRequest = new chrome.cast.SessionRequest(this.appId)
     var apiConfig = new chrome.cast.ApiConfig(sessionRequest,
       (session) => this.sessionListener(session), (e) => this.receiverListener(e), autoJoinPolicy)
-    chrome.cast.initialize(apiConfig, () => console.log('init success'), () => console.log('init error'))
+    chrome.cast.initialize(apiConfig, () => Log.debug(this.name, 'init success'), () => Log.warn(this.name, 'init error'))
   }
 
   sessionListener(session) {
-    console.log('new session id:' + session.sessionId)
+    Log.debug(this.name, 'new session id:' + session.sessionId)
     this.newSession(session)
   }
 
   sessionUpdateListener() {
     if (this.session) {
-      console.log(this.session.status)
+      Log.debug(this.name, this.session.status)
       if (this.session.status === chrome.cast.SessionStatus.STOPPED) {
         this.sessionStopped()
         this.session = null
@@ -99,10 +100,10 @@ export default class Chromecast extends UICorePlugin {
 
   receiverListener(e) {
     if ( e === chrome.cast.ReceiverAvailability.AVAILABLE ) {
-      console.log("receiver found")
+      Log.debug(this.name, "receiver found")
       this.show()
     } else {
-      console.log("receiver list empty");
+      Log.debug(this.name, "receiver list empty");
       this.hide()
     }
   }
@@ -113,12 +114,12 @@ export default class Chromecast extends UICorePlugin {
     this.connectAnimInterval = null
     this.$el.removeClass('loading-1 loading-2 loading-3')
     this.core.mediaControl.resetKeepVisible()
-    console.log('launch success - session: ' + session.sessionId)
+    Log.debug(this.name, 'launch success - session: ' + session.sessionId)
     this.newSession(session)
   }
 
   launchError(e) {
-    console.log('error on launch', e)
+    Log.debug(this.name, 'error on launch', e)
     this.$el.removeClass('icon-cast-connecting')
     clearInterval(this.connectAnimInterval)
     this.connectAnimInterval = null
@@ -127,7 +128,7 @@ export default class Chromecast extends UICorePlugin {
   }
 
   loadMediaSuccess(how, mediaSession) {
-    console.log('new media session', mediaSession, '(', how , ')');
+    Log.debug(this.name, 'new media session', mediaSession, '(', how , ')');
 
     this.originalPlayback = this.core.mediaControl.container.playback
 
@@ -154,7 +155,7 @@ export default class Chromecast extends UICorePlugin {
   }
 
   loadMediaError(e) {
-    console.log("media error", e);
+    Log.warn(this.name, "media error", e);
   }
 
   newSession(session) {
@@ -197,7 +198,7 @@ export default class Chromecast extends UICorePlugin {
   loadMedia() {
     this.container.pause()
     var src = this.core.mediaControl.container.playback.src
-    console.log("loading... " + src)
+    Log.debug(this.name, "loading... " + src)
     var mediaInfo = new chrome.cast.media.MediaInfo(src)
     mediaInfo.contentType = 'video/mp4'
     var request = new chrome.cast.media.LoadRequest(mediaInfo)
@@ -249,7 +250,7 @@ export default class Chromecast extends UICorePlugin {
 
   containerPlay() {
     if (!!this.session && (!this.mediaSession || this.mediaSession.playerStatus === 'IDLE')) {
-      console.log('load media')
+      Log.debug(this.name, 'load media')
       this.currentTime = 0
       this.loadMedia()
     }
