@@ -45,6 +45,12 @@ export default class Chromecast extends UICorePlugin {
     this.listenTo(this.container, Events.CONTAINER_ENDED, this.sessionStopped)
   }
 
+  enable() {
+    super.enable()
+    this.render()
+    this.embedScript()
+  }
+
   embedScript() {
     if (!window.chrome.cast || !window.chrome.cast.isAvailable) {
       var script = document.createElement('script')
