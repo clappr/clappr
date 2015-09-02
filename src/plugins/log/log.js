@@ -41,7 +41,7 @@ export default class Log {
       this.level = this.offLevel
     }
     // handle instances where console.log is unavailable
-    if (window.console && console.log) {
+    if (window.console && window.console.log) {
       console.log("%c[Clappr.Log] set log level to " + DESCRIPTIONS[this.level], WARN)
     }
   }
@@ -63,7 +63,7 @@ export default class Log {
     if (klass) {
       klassDescription = "[" + klass + "]"
     }
-    if (window.console && console.log) {
+    if (window.console && window.console.log) {
       console.log.apply(console, ["%c[" + DESCRIPTIONS[level] + "]" + klassDescription, color].concat(message))
     }
   }
