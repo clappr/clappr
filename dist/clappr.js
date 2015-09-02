@@ -86,7 +86,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseContainer_plugin2 = _interopRequireDefault(_baseContainer_plugin);
 
-	var _baseCore_plugin = __webpack_require__(157);
+	var _baseCore_plugin = __webpack_require__(156);
 
 	var _baseCore_plugin2 = _interopRequireDefault(_baseCore_plugin);
 
@@ -158,7 +158,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _pluginsLog2 = _interopRequireDefault(_pluginsLog);
 
-	var version = ("0.2.10");
+	var version = ("0.2.11");
 
 	exports['default'] = {
 	    Player: _componentsPlayer2['default'],
@@ -1435,7 +1435,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.level = this.offLevel;
 	      }
 	      // handle instances where console.log is unavailable
-	      if (window.console && console.log) {
+	      if (window.console && window.console.log) {
 	        console.log("%c[Clappr.Log] set log level to " + DESCRIPTIONS[this.level], WARN);
 	      }
 	    }
@@ -1459,7 +1459,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (klass) {
 	        klassDescription = "[" + klass + "]";
 	      }
-	      if (window.console && console.log) {
+	      if (window.console && window.console.log) {
 	        console.log.apply(console, ["%c[" + DESCRIPTIONS[level] + "]" + klassDescription, color].concat(message));
 	      }
 	    }
@@ -9879,11 +9879,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/* Core Plugins */
 
-	var _pluginsDvr_controls = __webpack_require__(150);
+	var _pluginsDvr_controls = __webpack_require__(149);
 
 	var _pluginsDvr_controls2 = _interopRequireDefault(_pluginsDvr_controls);
 
-	var _pluginsFavicon = __webpack_require__(155);
+	var _pluginsFavicon = __webpack_require__(154);
 
 	var _pluginsFavicon2 = _interopRequireDefault(_pluginsFavicon);
 
@@ -13492,7 +13492,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return (0, _utils.extend)(Playback, properties);
 	};
 
-	Playback.canPlay = function (source) {
+	/**
+	 * checks if the playback can play a given `source` and optionally a `mimeType`
+	 * @method canPlay
+	 * @static
+	 * @param {String} source the given source ex: `http://example.com/play.mp4`
+	 * @param {String} [mimeType] the given mime type, ex: `'application/vnd.apple.mpegurl'`
+	 * @return {Boolean} `true` if the playback is playable, otherwise `false`
+	 */
+	Playback.canPlay = function (source, mimeType) {
 	  return false;
 	};
 	module.exports = exports['default'];
@@ -16466,6 +16474,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _componentsBrowser2 = _interopRequireDefault(_componentsBrowser);
 
+	var _pluginsLog = __webpack_require__(6);
+
+	var _pluginsLog2 = _interopRequireDefault(_pluginsLog);
+
 	var _chromecast_playback = __webpack_require__(142);
 
 	var _chromecast_playback2 = _interopRequireDefault(_chromecast_playback);
@@ -16534,6 +16546,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.listenTo(this.container, _baseEvents2['default'].CONTAINER_ENDED, this.sessionStopped);
 	    }
 	  }, {
+	    key: 'enable',
+	    value: function enable() {
+	      _get(Object.getPrototypeOf(Chromecast.prototype), 'enable', this).call(this);
+	      this.render();
+	      this.embedScript();
+	    }
+	  }, {
 	    key: 'embedScript',
 	    value: function embedScript() {
 	      var _this = this;
@@ -16562,7 +16581,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _this2.appId = _this2.appId || DEFAULT_CLAPPR_APP_ID;
 	            _this2.initializeCastApi();
 	          } else {
-	            console.error('GCastApi error', errorInfo);
+	            _pluginsLog2['default'].warn('GCastApi error', errorInfo);
 	            _this2.disable();
 	          }
 	        };
@@ -16584,22 +16603,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return _this3.receiverListener(e);
 	      }, autoJoinPolicy);
 	      chrome.cast.initialize(apiConfig, function () {
-	        return console.log('init success');
+	        return _pluginsLog2['default'].debug(_this3.name, 'init success');
 	      }, function () {
-	        return console.log('init error');
+	        return _pluginsLog2['default'].warn(_this3.name, 'init error');
 	      });
 	    }
 	  }, {
 	    key: 'sessionListener',
 	    value: function sessionListener(session) {
-	      console.log('new session id:' + session.sessionId);
+	      _pluginsLog2['default'].debug(this.name, 'new session id:' + session.sessionId);
 	      this.newSession(session);
 	    }
 	  }, {
 	    key: 'sessionUpdateListener',
 	    value: function sessionUpdateListener() {
 	      if (this.session) {
-	        console.log(this.session.status);
+	        _pluginsLog2['default'].debug(this.name, this.session.status);
 	        if (this.session.status === chrome.cast.SessionStatus.STOPPED) {
 	          this.sessionStopped();
 	          this.session = null;
@@ -16610,10 +16629,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'receiverListener',
 	    value: function receiverListener(e) {
 	      if (e === chrome.cast.ReceiverAvailability.AVAILABLE) {
-	        console.log("receiver found");
+	        _pluginsLog2['default'].debug(this.name, "receiver found");
 	        this.show();
 	      } else {
-	        console.log("receiver list empty");
+	        _pluginsLog2['default'].debug(this.name, "receiver list empty");
 	        this.hide();
 	      }
 	    }
@@ -16625,13 +16644,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.connectAnimInterval = null;
 	      this.$el.removeClass('loading-1 loading-2 loading-3');
 	      this.core.mediaControl.resetKeepVisible();
-	      console.log('launch success - session: ' + session.sessionId);
+	      _pluginsLog2['default'].debug(this.name, 'launch success - session: ' + session.sessionId);
 	      this.newSession(session);
 	    }
 	  }, {
 	    key: 'launchError',
 	    value: function launchError(e) {
-	      console.log('error on launch', e);
+	      _pluginsLog2['default'].debug(this.name, 'error on launch', e);
 	      this.$el.removeClass('icon-cast-connecting');
 	      clearInterval(this.connectAnimInterval);
 	      this.connectAnimInterval = null;
@@ -16641,7 +16660,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'loadMediaSuccess',
 	    value: function loadMediaSuccess(how, mediaSession) {
-	      console.log('new media session', mediaSession, '(', how, ')');
+	      _pluginsLog2['default'].debug(this.name, 'new media session', mediaSession, '(', how, ')');
 
 	      this.originalPlayback = this.core.mediaControl.container.playback;
 
@@ -16671,7 +16690,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'loadMediaError',
 	    value: function loadMediaError(e) {
-	      console.log("media error", e);
+	      _pluginsLog2['default'].warn(this.name, "media error", e);
 	    }
 	  }, {
 	    key: 'newSession',
@@ -16723,7 +16742,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      this.container.pause();
 	      var src = this.core.mediaControl.container.playback.src;
-	      console.log("loading... " + src);
+	      _pluginsLog2['default'].debug(this.name, "loading... " + src);
 	      var mediaInfo = new chrome.cast.media.MediaInfo(src);
 	      mediaInfo.contentType = 'video/mp4';
 	      var request = new chrome.cast.media.LoadRequest(mediaInfo);
@@ -16793,7 +16812,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'containerPlay',
 	    value: function containerPlay() {
 	      if (!!this.session && (!this.mediaSession || this.mediaSession.playerStatus === 'IDLE')) {
-	        console.log('load media');
+	        _pluginsLog2['default'].debug(this.name, 'load media');
 	        this.currentTime = 0;
 	        this.loadMedia();
 	      }
@@ -17103,7 +17122,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".chromecast-playback {\n  height: 100%;\n  width: 100%; }\n  .chromecast-playback .chromecast-playback-background, .chromecast-playback .chromecast-playback-overlay {\n    position: absolute;\n    height: 100%;\n    width: 100%; }\n  .chromecast-playback .chromecast-playback-background {\n    background-size: contain; }\n  .chromecast-playback .chromecast-playback-overlay {\n    background-color: #000;\n    opacity: 0.4; }\n\n@font-face {\n  font-family: \"chromecast\";\n  src: url(" + __webpack_require__(145) + ");\n  src: url(" + __webpack_require__(146) + "?#iefix-2rwb6t) format(\"embedded-opentype\"), url(" + __webpack_require__(147) + ") format(\"woff\"), url(" + __webpack_require__(148) + ") format(\"truetype\"), url(" + __webpack_require__(149) + "#chromecast) format(\"svg\");\n  font-weight: normal;\n  font-style: normal; }\n\n.chromecast-button {\n  background: transparent;\n  border: 0;\n  width: 32px;\n  height: 26px;\n  font-size: 22px;\n  line-height: 26px;\n  letter-spacing: 0;\n  color: #fff;\n  opacity: 0.5;\n  vertical-align: middle;\n  text-align: left;\n  cursor: pointer;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  -webkit-transition: all 0.1s ease;\n  -moz-transition: all 0.1s ease;\n  -o-transition: all 0.1s ease;\n  transition: all 0.1s ease; }\n  .chromecast-button:hover {\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .chromecast-button:focus {\n    outline: none; }\n\n.chromecast-icon {\n  font-family: \"chromecast\";\n  speak: none;\n  font-style: normal;\n  font-weight: normal;\n  font-variant: normal;\n  text-transform: none;\n  /* Better Font Rendering =========== */\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale; }\n\n.icon-cast:before {\n  content: \"\\\\e001\"; }\n\n.icon-cast-connecting.loading-1:before {\n  content: \"\\\\e003\"; }\n.icon-cast-connecting.loading-2:before {\n  content: \"\\\\e004\"; }\n.icon-cast-connecting.loading-3:before {\n  content: \"\\\\e001\"; }\n\n.icon-cast-connected:before {\n  content: \"\\\\e002\"; }\n", ""]);
+	exports.push([module.id, ".chromecast-playback {\n  height: 100%;\n  width: 100%; }\n  .chromecast-playback .chromecast-playback-background, .chromecast-playback .chromecast-playback-overlay {\n    position: absolute;\n    height: 100%;\n    width: 100%; }\n  .chromecast-playback .chromecast-playback-background {\n    background-size: contain; }\n  .chromecast-playback .chromecast-playback-overlay {\n    background-color: #000;\n    opacity: 0.4; }\n\n@font-face {\n  font-family: \"chromecast\";\n  src: url(" + __webpack_require__(145) + ");\n  src: url(" + __webpack_require__(146) + "?#iefix-2rwb6t) format(\"embedded-opentype\"), url(" + __webpack_require__(147) + ") format(\"truetype\"), url(" + __webpack_require__(148) + "#chromecast) format(\"svg\");\n  font-weight: normal;\n  font-style: normal; }\n\n.chromecast-button {\n  background: transparent;\n  border: 0;\n  width: 32px;\n  height: 26px;\n  font-size: 22px;\n  line-height: 26px;\n  letter-spacing: 0;\n  color: #fff;\n  opacity: 0.5;\n  vertical-align: middle;\n  text-align: left;\n  cursor: pointer;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  -webkit-transition: all 0.1s ease;\n  -moz-transition: all 0.1s ease;\n  -o-transition: all 0.1s ease;\n  transition: all 0.1s ease; }\n  .chromecast-button:hover {\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .chromecast-button:focus {\n    outline: none; }\n\n.chromecast-icon {\n  font-family: \"chromecast\";\n  speak: none;\n  font-style: normal;\n  font-weight: normal;\n  font-variant: normal;\n  text-transform: none;\n  /* Better Font Rendering =========== */\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale; }\n\n.icon-cast:before {\n  content: \"\\\\e001\"; }\n\n.icon-cast-connecting.loading-1:before {\n  content: \"\\\\e003\"; }\n.icon-cast-connecting.loading-2:before {\n  content: \"\\\\e004\"; }\n.icon-cast-connecting.loading-3:before {\n  content: \"\\\\e001\"; }\n\n.icon-cast-connected:before {\n  content: \"\\\\e002\"; }\n", ""]);
 
 	// exports
 
@@ -17124,30 +17143,24 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 147 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "22c62aaa70cf273ced96cdd0ab9e4e72.woff"
+	module.exports = __webpack_require__.p + "6ac1074c3ad60163d6d52ecfd346e950.ttf"
 
 /***/ },
 /* 148 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "6ac1074c3ad60163d6d52ecfd346e950.ttf"
+	module.exports = __webpack_require__.p + "57e740a84980042b2b659da22fc9c4ab.svg"
 
 /***/ },
 /* 149 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "57e740a84980042b2b659da22fc9c4ab.svg"
+	'use strict';
+
+	module.exports = __webpack_require__(150);
 
 /***/ },
 /* 150 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	module.exports = __webpack_require__(151);
-
-/***/ },
-/* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17182,11 +17195,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
 
-	var _publicDvr_controlsScss = __webpack_require__(152);
+	var _publicDvr_controlsScss = __webpack_require__(151);
 
 	var _publicDvr_controlsScss2 = _interopRequireDefault(_publicDvr_controlsScss);
 
-	var _publicIndexHtml = __webpack_require__(154);
+	var _publicIndexHtml = __webpack_require__(153);
 
 	var _publicIndexHtml2 = _interopRequireDefault(_publicIndexHtml);
 
@@ -17307,7 +17320,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 152 */
+/* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(37)();
@@ -17315,33 +17328,33 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "@font-face {\n  font-family: \"Roboto\";\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Roboto\"), local(\"Roboto-Regular\"), url(" + __webpack_require__(153) + ") format(\"truetype\"); }\n\n.dvr-controls[data-dvr-controls] {\n  display: inline-block;\n  float: left;\n  color: #fff;\n  line-height: 32px;\n  font-size: 10px;\n  font-weight: bold;\n  margin-left: 6px; }\n  .dvr-controls[data-dvr-controls] .live-info {\n    cursor: default;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif; }\n    .dvr-controls[data-dvr-controls] .live-info:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #ff0101; }\n    .dvr-controls[data-dvr-controls] .live-info.disabled {\n      opacity: 0.3; }\n      .dvr-controls[data-dvr-controls] .live-info.disabled:before {\n        background-color: #fff; }\n  .dvr-controls[data-dvr-controls] .live-button {\n    cursor: pointer;\n    outline: none;\n    display: none;\n    border: 0;\n    color: #fff;\n    background-color: transparent;\n    height: 32px;\n    padding: 0;\n    opacity: 0.7;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease;\n    -o-transition: all 0.1s ease;\n    transition: all 0.1s ease; }\n    .dvr-controls[data-dvr-controls] .live-button:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #fff; }\n    .dvr-controls[data-dvr-controls] .live-button:hover {\n      opacity: 1;\n      text-shadow: rgba(255, 255, 255, 0.75) 0 0 5px; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-info {\n  display: none; }\n.dvr .dvr-controls[data-dvr-controls] .live-button {\n  display: block; }\n.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #005aff; }\n\n.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #ff0101; }\n\n.seek-time[data-seek-time] span[data-duration] {\n  position: relative;\n  color: rgba(255, 255, 255, 0.5);\n  font-size: 10px;\n  padding-right: 7px; }\n  .seek-time[data-seek-time] span[data-duration]:before {\n    content: \"|\";\n    margin-right: 7px; }\n", ""]);
+	exports.push([module.id, "@font-face {\n  font-family: \"Roboto\";\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Roboto\"), local(\"Roboto-Regular\"), url(" + __webpack_require__(152) + ") format(\"truetype\"); }\n\n.dvr-controls[data-dvr-controls] {\n  display: inline-block;\n  float: left;\n  color: #fff;\n  line-height: 32px;\n  font-size: 10px;\n  font-weight: bold;\n  margin-left: 6px; }\n  .dvr-controls[data-dvr-controls] .live-info {\n    cursor: default;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif; }\n    .dvr-controls[data-dvr-controls] .live-info:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #ff0101; }\n    .dvr-controls[data-dvr-controls] .live-info.disabled {\n      opacity: 0.3; }\n      .dvr-controls[data-dvr-controls] .live-info.disabled:before {\n        background-color: #fff; }\n  .dvr-controls[data-dvr-controls] .live-button {\n    cursor: pointer;\n    outline: none;\n    display: none;\n    border: 0;\n    color: #fff;\n    background-color: transparent;\n    height: 32px;\n    padding: 0;\n    opacity: 0.7;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease;\n    -o-transition: all 0.1s ease;\n    transition: all 0.1s ease; }\n    .dvr-controls[data-dvr-controls] .live-button:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #fff; }\n    .dvr-controls[data-dvr-controls] .live-button:hover {\n      opacity: 1;\n      text-shadow: rgba(255, 255, 255, 0.75) 0 0 5px; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-info {\n  display: none; }\n.dvr .dvr-controls[data-dvr-controls] .live-button {\n  display: block; }\n.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #005aff; }\n\n.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #ff0101; }\n\n.seek-time[data-seek-time] span[data-duration] {\n  position: relative;\n  color: rgba(255, 255, 255, 0.5);\n  font-size: 10px;\n  padding-right: 7px; }\n  .seek-time[data-seek-time] span[data-duration]:before {\n    content: \"|\";\n    margin-right: 7px; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 153 */
+/* 152 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "38861cba61c66739c1452c3a71e39852.ttf"
 
 /***/ },
-/* 154 */
+/* 153 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"live-info\">LIVE</div>\n<button class=\"live-button\">BACK TO LIVE</button>\n";
 
 /***/ },
-/* 155 */
+/* 154 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(156);
+	module.exports = __webpack_require__(155);
 
 /***/ },
-/* 156 */
+/* 155 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17360,7 +17373,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseCore_plugin = __webpack_require__(157);
+	var _baseCore_plugin = __webpack_require__(156);
 
 	var _baseCore_plugin2 = _interopRequireDefault(_baseCore_plugin);
 
@@ -17474,7 +17487,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 157 */
+/* 156 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
