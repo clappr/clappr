@@ -1,3 +1,4 @@
+[![npm version](https://badge.fury.io/js/clappr.svg)](http://badge.fury.io/js/clappr)
 [![Build Status](https://travis-ci.org/clappr/clappr.svg?branch=master)](https://travis-ci.org/clappr/clappr)
 [![Dependency Status](https://gemnasium.com/clappr/clappr.svg)](https://gemnasium.com/clappr/clappr)
 [![Coverage Status](https://coveralls.io/repos/clappr/clappr/badge.svg?branch=master)](https://coveralls.io/r/clappr/clappr?branch=master)
