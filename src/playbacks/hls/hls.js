@@ -41,6 +41,7 @@ export default class HLS extends Playback {
     this.initHlsParameters(options)
     this.highDefinition = false
     this.autoPlay = options.autoPlay
+    this.loop = options.loop
     this.defaultSettings = {
       left: ["playstop"],
       default: ['seekbar'],
@@ -303,9 +304,14 @@ export default class HLS extends Playback {
       }
       this.updateCurrentState(state)
     } else if (state === "IDLE") {
-      this.updateCurrentState(state)
-      this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.el.getDuration(), this.name)
-      this.trigger(Events.PLAYBACK_ENDED, this.name)
+      if (this.loop && ["PLAYING_BUFFERING", "PLAYING"].indexOf(this.currentState) >= 0) {
+        this.play()
+        this.seek(0)
+      } else {
+        this.updateCurrentState(state)
+        this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.el.getDuration(), this.name)
+        this.trigger(Events.PLAYBACK_ENDED, this.name)
+      }
     }
   }
 
