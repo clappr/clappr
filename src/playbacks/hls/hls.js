@@ -304,6 +304,7 @@ export default class HLS extends Playback {
       }
       this.updateCurrentState(state)
     } else if (state === "IDLE") {
+      this.srcLoaded = false
       if (this.loop && ["PLAYING_BUFFERING", "PLAYING"].indexOf(this.currentState) >= 0) {
         this.play()
         this.seek(0)
@@ -385,6 +386,7 @@ export default class HLS extends Playback {
   }
 
   stop() {
+    this.srcLoaded = false
     this.el.playerStop()
     this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.name)
   }
