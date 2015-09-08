@@ -55,7 +55,7 @@ export default class HLS extends Playback {
   initHlsParameters(options) {
     this.flushLiveURLCache = (options.flushLiveURLCache === undefined) ? true : options.flushLiveURLCache
     this.capLevelToStage = (options.capLevelToStage === undefined) ? false : options.capLevelToStage
-    this.useHardwareVideoDecoder = (options.useHardwareVideoDecoder === undefined) ? false : options.useHardwareVideoDecoder
+    this.useHardwareVideoDecoder = (options.useHardwareVideoDecoder === undefined) ? true : options.useHardwareVideoDecoder
     this.maxBufferLength = (options.maxBufferLength === undefined) ? 120 : options.maxBufferLength
     this.seekMode = (options.seekMode === undefined) ? "ACCURATE" : options.seekMode
     this.startFromLevel = (options.startFromLevel === undefined) ? -1 : options.startFromLevel
