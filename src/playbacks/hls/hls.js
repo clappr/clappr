@@ -18,6 +18,7 @@ var MAX_ATTEMPTS = 60
 
 export default class HLS extends BaseFlashPlayback {
   get name() { return 'hls' }
+  get swfPath() { return template(hlsSwf)({baseUrl: this.baseUrl}) }
   get attributes() {
     return {
       'class': 'hls-playback',
@@ -478,9 +479,8 @@ export default class HLS extends BaseFlashPlayback {
   }
 
   render() {
-    var swfPath = template(hlsSwf)({baseUrl: this.baseUrl})
+    super.render()
     var style = Styler.getStyleFor(hlsStyle)
-    this.renderFlashElement(swfPath)
     this.createCallbacks()
     this.$el.append(style)
     return this
