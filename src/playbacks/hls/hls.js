@@ -4,12 +4,10 @@
 
 import BaseFlashPlayback from 'playbacks/base_flash_playback'
 import Events from 'base/events'
-import Styler from 'base/styler'
 import template from 'base/template'
 import Mediator from 'components/mediator'
 import Browser from 'components/browser'
 import HLSEvents from './flashls_events'
-import hlsStyle from './public/style.scss'
 import hlsSwf from './public/HLSPlayer.swf'
 
 import assign from 'lodash.assign'
@@ -19,15 +17,6 @@ var MAX_ATTEMPTS = 60
 export default class HLS extends BaseFlashPlayback {
   get name() { return 'hls' }
   get swfPath() { return template(hlsSwf)({baseUrl: this.baseUrl}) }
-  get attributes() {
-    return {
-      'class': 'hls-playback',
-      'data-hls': '',
-      'type': 'application/x-shockwave-flash',
-      'width': '100%',
-      'height': '100%'
-    }
-  }
 
   constructor(options) {
     super(options)
@@ -480,9 +469,7 @@ export default class HLS extends BaseFlashPlayback {
 
   render() {
     super.render()
-    var style = Styler.getStyleFor(hlsStyle)
     this.createCallbacks()
-    this.$el.append(style)
     return this
   }
 }

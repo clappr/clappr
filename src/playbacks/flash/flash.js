@@ -5,13 +5,11 @@
 import {seekStringToSeconds} from 'base/utils'
 
 import BaseFlashPlayback from 'playbacks/base_flash_playback'
-import Styler from 'base/styler'
 import Browser from 'components/browser'
 import Mediator from 'components/mediator'
 import template from 'base/template'
 import $ from 'clappr-zepto'
 import Events from 'base/events'
-import flashStyle from './public/style.scss'
 import flashSwf from './public/Player.swf'
 
 var MAX_ATTEMPTS = 60
@@ -19,14 +17,6 @@ var MAX_ATTEMPTS = 60
 export default class Flash extends BaseFlashPlayback {
   get name() { return 'flash' }
   get swfPath() { return template(flashSwf)({baseUrl: this.baseUrl}) }
-  get attributes() {
-    return {
-      'data-flash': '',
-      'type': 'application/x-shockwave-flash',
-      'width': '100%',
-      'height': '100%'
-    }
-  }
 
   constructor(options) {
     super(options)
@@ -205,13 +195,6 @@ export default class Flash extends BaseFlashPlayback {
     clearInterval(this.bootstrapId)
     super.stopListening()
     this.$el.remove()
-  }
-
-  render() {
-    super.render()
-    var style = Styler.getStyleFor(flashStyle)
-    this.$el.append(style)
-    return this
   }
 }
 
