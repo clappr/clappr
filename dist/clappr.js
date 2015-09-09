@@ -130,15 +130,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _componentsPlayer_info2 = _interopRequireDefault(_componentsPlayer_info);
 
+	var _playbacksBase_flash_playback = __webpack_require__(101);
+
+	var _playbacksBase_flash_playback2 = _interopRequireDefault(_playbacksBase_flash_playback);
+
 	var _playbacksFlash = __webpack_require__(99);
 
 	var _playbacksFlash2 = _interopRequireDefault(_playbacksFlash);
 
-	var _playbacksHls = __webpack_require__(106);
+	var _playbacksHls = __webpack_require__(108);
 
 	var _playbacksHls2 = _interopRequireDefault(_playbacksHls);
 
-	var _playbacksHtml5_audio = __webpack_require__(104);
+	var _playbacksHtml5_audio = __webpack_require__(106);
 
 	var _playbacksHtml5_audio2 = _interopRequireDefault(_playbacksHtml5_audio);
 
@@ -158,7 +162,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _pluginsLog2 = _interopRequireDefault(_pluginsLog);
 
-	var version = ("0.2.11");
+	var version = ("0.2.12");
 
 	exports['default'] = {
 	    Player: _componentsPlayer2['default'],
@@ -177,6 +181,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    BaseObject: _baseBase_object2['default'],
 	    UIObject: _baseUi_object2['default'],
 	    Utils: _baseUtils2['default'],
+	    BaseFlashPlayback: _playbacksBase_flash_playback2['default'],
 	    Flash: _playbacksFlash2['default'],
 	    HLS: _playbacksHls2['default'],
 	    HTML5Audio: _playbacksHtml5_audio2['default'],
@@ -9224,6 +9229,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.keepVisible = true;
 	    }
 	  }, {
+	    key: 'remove',
+	    value: function remove() {
+	      this.seekTime.remove();
+	      _get(Object.getPrototypeOf(MediaControl.prototype), 'remove', this).call(this);
+	    }
+	  }, {
 	    key: 'resetKeepVisible',
 	    value: function resetKeepVisible() {
 	      this.keepVisible = false;
@@ -9551,6 +9562,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _get(Object.getPrototypeOf(SeekTime.prototype), 'constructor', this).call(this);
 	    this.mediaControl = mediaControl;
+	    this.rendered = false;
+	    this.hoveringOverSeekBar = false;
+	    this.hoverPosition = null;
 	    this.addEventListeners();
 	  }
 
@@ -9563,46 +9577,62 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'showTime',
 	    value: function showTime(event) {
-	      if (!this.mediaControl.container.settings.seekEnabled) {
-	        return;
-	      }
-
-	      // the element must be unhidden before its width is requested, otherwise it's width will be reported as 0
-	      this.$el.removeClass('hidden');
-	      var offset = event.pageX - this.mediaControl.$seekBarContainer.offset().left;
-	      if (offset >= 0 && offset <= this.mediaControl.$seekBarContainer.width()) {
-	        var timePosition = Math.min(100, Math.max(offset / this.mediaControl.$seekBarContainer.width() * 100, 0));
-	        var pointerPosition = event.pageX - this.mediaControl.$el.offset().left;
-	        pointerPosition = Math.min(Math.max(0, pointerPosition), this.mediaControl.$el.width() - this.$el.width() / 2);
-	        var currentTime = timePosition * this.mediaControl.container.getDuration() / 100;
-	        var options = {
-	          timestamp: currentTime,
-	          formattedTime: (0, _baseUtils.formatTime)(currentTime),
-	          pointerPosition: pointerPosition
-	        };
-
-	        this.update(options);
-	      }
+	      this.hoveringOverSeekBar = true;
+	      this.calculateHoverPosition(event);
+	      this.update();
 	    }
 	  }, {
 	    key: 'hideTime',
 	    value: function hideTime() {
-	      this.$el.addClass('hidden');
-	      this.$el.css('left', '-100%');
+	      this.hoveringOverSeekBar = false;
+	      this.update();
+	    }
+	  }, {
+	    key: 'calculateHoverPosition',
+	    value: function calculateHoverPosition(event) {
+	      var offset = event.pageX - this.mediaControl.$seekBarContainer.offset().left;
+	      // proportion into the seek bar that the mouse is hovered over 0-1
+	      this.hoverPosition = Math.min(1, Math.max(offset / this.mediaControl.$seekBarContainer.width(), 0));
 	    }
 	  }, {
 	    key: 'update',
-	    value: function update(options) {
-	      this.$el.find('[data-seek-time]').text(options.formattedTime);
-	      this.$el.css('left', Math.max(0, options.pointerPosition - this.$el.width() / 2));
+	    value: function update() {
+	      if (!this.rendered) {
+	        // update() is always called after a render
+	        return;
+	      }
+	      if (!this.shouldBeVisible()) {
+	        this.$el.addClass('hidden');
+	        this.$el.css('left', "-100%");
+	      } else {
+	        var currentTime = this.hoverPosition * this.mediaControl.container.getDuration();
+	        var formattedTime = (0, _baseUtils.formatTime)(currentTime);
+	        this.$textEl.text(formattedTime);
+	        // the element must be unhidden before its width is requested, otherwise it's width will be reported as 0
+	        this.$el.removeClass('hidden');
+	        var containerWidth = this.mediaControl.$seekBarContainer.width();
+	        var elWidth = this.$el.width();
+	        var elLeftPos = this.hoverPosition * containerWidth;
+	        elLeftPos -= elWidth / 2;
+	        elLeftPos = Math.max(0, Math.min(elLeftPos, containerWidth - elWidth));
+	        this.$el.css('left', elLeftPos);
+	      }
+	    }
+	  }, {
+	    key: 'shouldBeVisible',
+	    value: function shouldBeVisible() {
+	      return this.mediaControl.container.settings.seekEnabled && this.hoveringOverSeekBar;
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      this.rendered = true;
 	      var style = _baseStyler2['default'].getStyleFor(_publicSeek_timeScss2['default']);
 	      this.$el.html(this.template());
 	      this.$el.append(style);
 	      this.mediaControl.$el.append(this.el);
+	      this.$textEl = this.$el.find('[data-seek-time]');
+	      this.update();
 	    }
 	  }]);
 
@@ -9621,7 +9651,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".seek-time[data-seek-time] {\n  position: absolute;\n  white-space: nowrap;\n  width: auto;\n  height: 20px;\n  line-height: 20px;\n  bottom: 55px;\n  background-color: rgba(2, 2, 2, 0.5);\n  z-index: 9999;\n  -webkit-transition: opacity 0.1s ease;\n  -moz-transition: opacity 0.1s ease;\n  -o-transition: opacity 0.1s ease;\n  transition: opacity 0.1s ease; }\n  .seek-time[data-seek-time].hidden[data-seek-time] {\n    opacity: 0; }\n  .seek-time[data-seek-time] span[data-seek-time] {\n    position: relative;\n    color: white;\n    font-size: 10px;\n    padding-left: 7px;\n    padding-right: 7px; }\n", ""]);
+	exports.push([module.id, ".seek-time[data-seek-time] {\n  position: absolute;\n  white-space: nowrap;\n  width: auto;\n  height: 20px;\n  line-height: 20px;\n  left: -100%;\n  bottom: 55px;\n  background-color: rgba(2, 2, 2, 0.5);\n  z-index: 9999;\n  -webkit-transition: opacity 0.1s ease;\n  -moz-transition: opacity 0.1s ease;\n  -o-transition: opacity 0.1s ease;\n  transition: opacity 0.1s ease; }\n  .seek-time[data-seek-time].hidden[data-seek-time] {\n    opacity: 0; }\n  .seek-time[data-seek-time] span[data-seek-time] {\n    position: relative;\n    color: white;\n    font-size: 10px;\n    padding-left: 7px;\n    padding-right: 7px; }\n", ""]);
 
 	// exports
 
@@ -9831,11 +9861,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _playbacksFlash2 = _interopRequireDefault(_playbacksFlash);
 
-	var _playbacksHtml5_audio = __webpack_require__(104);
+	var _playbacksHtml5_audio = __webpack_require__(106);
 
 	var _playbacksHtml5_audio2 = _interopRequireDefault(_playbacksHtml5_audio);
 
-	var _playbacksHls = __webpack_require__(106);
+	var _playbacksHls = __webpack_require__(108);
 
 	var _playbacksHls2 = _interopRequireDefault(_playbacksHls);
 
@@ -13268,7 +13298,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        currentQueue = queue;
 	        queue = [];
 	        while (++queueIndex < len) {
-	            currentQueue[queueIndex].run();
+	            if (currentQueue) {
+	                currentQueue[queueIndex].run();
+	            }
 	        }
 	        queueIndex = -1;
 	        len = queue.length;
@@ -13320,7 +13352,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    throw new Error('process.binding is not supported');
 	};
 
-	// TODO(shtylman)
 	process.cwd = function () {
 	    return '/';
 	};
@@ -13559,13 +13590,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseUtils = __webpack_require__(2);
 
-	var _basePlayback = __webpack_require__(96);
+	var _playbacksBase_flash_playback = __webpack_require__(101);
 
-	var _basePlayback2 = _interopRequireDefault(_basePlayback);
-
-	var _baseStyler = __webpack_require__(15);
-
-	var _baseStyler2 = _interopRequireDefault(_baseStyler);
+	var _playbacksBase_flash_playback2 = _interopRequireDefault(_playbacksBase_flash_playback);
 
 	var _componentsBrowser = __webpack_require__(3);
 
@@ -13587,24 +13614,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
 
-	var _publicStyleScss = __webpack_require__(101);
-
-	var _publicStyleScss2 = _interopRequireDefault(_publicStyleScss);
-
-	var _publicFlash_playbackHtml = __webpack_require__(102);
-
-	var _publicFlash_playbackHtml2 = _interopRequireDefault(_publicFlash_playbackHtml);
-
-	var _publicPlayerSwf = __webpack_require__(103);
+	var _publicPlayerSwf = __webpack_require__(105);
 
 	var _publicPlayerSwf2 = _interopRequireDefault(_publicPlayerSwf);
 
 	var MAX_ATTEMPTS = 60;
 
-	var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-flash-vod=""><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="gpu"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>" /> </object>';
-
-	var Flash = (function (_Playback) {
-	  _inherits(Flash, _Playback);
+	var Flash = (function (_BaseFlashPlayback) {
+	  _inherits(Flash, _BaseFlashPlayback);
 
 	  _createClass(Flash, [{
 	    key: 'name',
@@ -13612,14 +13629,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return 'flash';
 	    }
 	  }, {
-	    key: 'tagName',
+	    key: 'swfPath',
 	    get: function get() {
-	      return 'object';
-	    }
-	  }, {
-	    key: 'template',
-	    get: function get() {
-	      return (0, _baseTemplate2['default'])(_publicFlash_playbackHtml2['default']);
+	      return (0, _baseTemplate2['default'])(_publicPlayerSwf2['default'])({ baseUrl: this.baseUrl });
 	    }
 	  }]);
 
@@ -13680,13 +13692,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'getPlaybackType',
 	    value: function getPlaybackType() {
 	      return 'vod';
-	    }
-	  }, {
-	    key: 'setupFirefox',
-	    value: function setupFirefox() {
-	      var $el = this.$('embed');
-	      $el.attr('data-flash', '');
-	      this.setElement($el[0]);
 	    }
 	  }, {
 	    key: 'isHighDefinitionInUse',
@@ -13850,29 +13855,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      _get(Object.getPrototypeOf(Flash.prototype), 'stopListening', this).call(this);
 	      this.$el.remove();
 	    }
-	  }, {
-	    key: 'setupIE',
-	    value: function setupIE(swfPath) {
-	      this.setElement((0, _clapprZepto2['default'])((0, _baseTemplate2['default'])(objectIE)({ cid: this.cid, swfPath: swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId })));
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var style = _baseStyler2['default'].getStyleFor(_publicStyleScss2['default']);
-	      var swfPath = (0, _baseTemplate2['default'])(_publicPlayerSwf2['default'])({ baseUrl: this.baseUrl });
-	      this.$el.html(this.template({ cid: this.cid, swfPath: swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId }));
-	      if (_componentsBrowser2['default'].isFirefox) {
-	        this.setupFirefox();
-	      } else if (_componentsBrowser2['default'].isLegacyIE) {
-	        this.setupIE(swfPath);
-	      }
-	      this.$el.append(style);
-	      return this;
-	    }
 	  }]);
 
 	  return Flash;
-	})(_basePlayback2['default']);
+	})(_playbacksBase_flash_playback2['default']);
 
 	exports['default'] = Flash;
 
@@ -13890,38 +13876,180 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(37)();
-	// imports
+	'use strict';
 
-
-	// module
-	exports.push([module.id, "[data-flash] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  background-color: black;\n  display: block;\n  pointer-events: none; }\n", ""]);
-
-	// exports
-
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports['default'] = __webpack_require__(102);
+	module.exports = exports['default'];
 
 /***/ },
 /* 102 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "  <param name=\"movie\" value=\"<%= swfPath %>\">\n  <param name=\"quality\" value=\"autohigh\">\n  <param name=\"swliveconnect\" value=\"true\">\n  <param name=\"allowScriptAccess\" value=\"always\">\n  <param name=\"bgcolor\" value=\"#001122\">\n  <param name=\"allowFullScreen\" value=\"false\">\n  <param name=\"wmode\" value=\"transparent\">\n  <param name=\"tabindex\" value=\"1\">\n  <param name=FlashVars value=\"playbackId=<%= playbackId %>\" />\n  <embed\n    type=\"application/x-shockwave-flash\"\n    disabled=\"disabled\"\n    tabindex=\"-1\"\n    enablecontextmenu=\"false\"\n    allowScriptAccess=\"always\"\n    quality=\"autohight\"\n    pluginspage=\"http://www.macromedia.com/go/getflashplayer\"\n    wmode=\"transparent\"\n    swliveconnect=\"true\"\n    type=\"application/x-shockwave-flash\"\n    allowfullscreen=\"false\"\n    bgcolor=\"#000000\"\n    FlashVars=\"playbackId=<%= playbackId %>\"\n    src=\"<%= swfPath %>\">\n  </embed>\n";
+	// Copyright 2015 Globo.com Player authors. All rights reserved.
+	// Use of this source code is governed by a BSD-style
+	// license that can be found in the LICENSE file.
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _basePlayback = __webpack_require__(96);
+
+	var _basePlayback2 = _interopRequireDefault(_basePlayback);
+
+	var _baseStyler = __webpack_require__(15);
+
+	var _baseStyler2 = _interopRequireDefault(_baseStyler);
+
+	var _baseTemplate = __webpack_require__(17);
+
+	var _baseTemplate2 = _interopRequireDefault(_baseTemplate);
+
+	var _componentsBrowser = __webpack_require__(3);
+
+	var _componentsBrowser2 = _interopRequireDefault(_componentsBrowser);
+
+	var _clapprZepto = __webpack_require__(16);
+
+	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
+
+	var _publicFlashHtml = __webpack_require__(103);
+
+	var _publicFlashHtml2 = _interopRequireDefault(_publicFlashHtml);
+
+	var _publicFlashScss = __webpack_require__(104);
+
+	var _publicFlashScss2 = _interopRequireDefault(_publicFlashScss);
+
+	var IE_CLASSID = "clsid:d27cdb6e-ae6d-11cf-96b8-444553540000";
+
+	var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls="" width="100%" height="100%"><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>&callback=<%= callbackName %>" /> </object>';
+
+	var BaseFlashPlayback = (function (_Playback) {
+	  _inherits(BaseFlashPlayback, _Playback);
+
+	  function BaseFlashPlayback() {
+	    _classCallCheck(this, BaseFlashPlayback);
+
+	    _get(Object.getPrototypeOf(BaseFlashPlayback.prototype), 'constructor', this).apply(this, arguments);
+	  }
+
+	  _createClass(BaseFlashPlayback, [{
+	    key: 'setElement',
+	    value: function setElement(element) {
+	      this.$el = element;
+	      this.el = element[0];
+	    }
+	  }, {
+	    key: 'setupFirefox',
+	    value: function setupFirefox() {
+	      var $el = this.$('embed');
+	      $el.attr('data-flash-playback', this.name);
+	      $el.addClass(this.attributes['class']);
+	      this.setElement($el);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      this.$el.html(this.template({ cid: this.cid, swfPath: this.swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId, callbackName: 'window.Clappr.flashlsCallbacks.' + this.cid }));
+	      if (_componentsBrowser2['default'].isIE) {
+	        this.$('embed').remove();
+	        if (_componentsBrowser2['default'].isLegacyIE) {
+	          this.$el.attr('classid', IE_CLASSID);
+	        }
+	      } else if (_componentsBrowser2['default'].isFirefox) {
+	        this.setupFirefox();
+	      }
+	      this.el.id = this.cid;
+	      var style = _baseStyler2['default'].getStyleFor(_publicFlashScss2['default']);
+	      this.$el.append(style);
+	      return this;
+	    }
+	  }, {
+	    key: 'tagName',
+	    get: function get() {
+	      return 'object';
+	    }
+	  }, {
+	    key: 'swfPath',
+	    get: function get() {
+	      return '';
+	    }
+	  }, {
+	    key: 'template',
+	    get: function get() {
+	      return (0, _baseTemplate2['default'])(_publicFlashHtml2['default']);
+	    }
+	  }, {
+	    key: 'attributes',
+	    get: function get() {
+	      return {
+	        'class': 'clappr-flash-playback',
+	        type: 'application/x-shockwave-flash',
+	        width: '100%',
+	        height: '100%',
+	        'data-flash-playback': this.name
+	      };
+	    }
+	  }]);
+
+	  return BaseFlashPlayback;
+	})(_basePlayback2['default']);
+
+	exports['default'] = BaseFlashPlayback;
+	module.exports = exports['default'];
 
 /***/ },
 /* 103 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	module.exports = __webpack_require__.p + "4b76590b32dab62bc95c1b7951efae78.swf"
+	module.exports = "<param name=\"movie\" value=\"<%= swfPath %>?inline=1\">\n<param name=\"quality\" value=\"autohigh\">\n<param name=\"swliveconnect\" value=\"true\">\n<param name=\"allowScriptAccess\" value=\"always\">\n<param name=\"bgcolor\" value=\"#000000\">\n<param name=\"allowFullScreen\" value=\"false\">\n<param name=\"wmode\" value=\"transparent\">\n<param name=\"tabindex\" value=\"1\">\n<param name=FlashVars value=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\" />\n<embed\n  name=\"<%= cid %>\"\n  type=\"application/x-shockwave-flash\"\n  disabled=\"disabled\"\n  tabindex=\"-1\"\n  enablecontextmenu=\"false\"\n  allowScriptAccess=\"always\"\n  quality=\"autohigh\"\n  pluginspage=\"http://www.macromedia.com/go/getflashplayer\"\n  wmode=\"transparent\"\n  swliveconnect=\"true\"\n  allowfullscreen=\"false\"\n  bgcolor=\"#000000\"\n  FlashVars=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\"\n  src=\"<%= swfPath %>\"\n  width=\"100%\"\n  height=\"100%\">\n</embed>\n";
 
 /***/ },
 /* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	exports = module.exports = __webpack_require__(37)();
+	// imports
 
-	module.exports = __webpack_require__(105);
+
+	// module
+	exports.push([module.id, ".clappr-flash-playback[data-flash-playback] {\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 100%;\n  width: 100%;\n  background-color: black;\n  pointer-events: none; }\n", ""]);
+
+	// exports
+
 
 /***/ },
 /* 105 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "4b76590b32dab62bc95c1b7951efae78.swf"
+
+/***/ },
+/* 106 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	module.exports = __webpack_require__(107);
+
+/***/ },
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -14174,15 +14302,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 106 */
+/* 108 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(107);
+	module.exports = __webpack_require__(109);
 
 /***/ },
-/* 107 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -14205,17 +14333,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _basePlayback = __webpack_require__(96);
+	var _playbacksBase_flash_playback = __webpack_require__(101);
 
-	var _basePlayback2 = _interopRequireDefault(_basePlayback);
+	var _playbacksBase_flash_playback2 = _interopRequireDefault(_playbacksBase_flash_playback);
 
 	var _baseEvents = __webpack_require__(5);
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
-
-	var _baseStyler = __webpack_require__(15);
-
-	var _baseStyler2 = _interopRequireDefault(_baseStyler);
 
 	var _baseTemplate = __webpack_require__(17);
 
@@ -14229,17 +14353,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _componentsBrowser2 = _interopRequireDefault(_componentsBrowser);
 
-	var _flashls_events = __webpack_require__(108);
+	var _flashls_events = __webpack_require__(110);
 
 	var _flashls_events2 = _interopRequireDefault(_flashls_events);
-
-	var _publicStyleScss = __webpack_require__(109);
-
-	var _publicStyleScss2 = _interopRequireDefault(_publicStyleScss);
-
-	var _publicHls_playbackHtml = __webpack_require__(110);
-
-	var _publicHls_playbackHtml2 = _interopRequireDefault(_publicHls_playbackHtml);
 
 	var _publicHLSPlayerSwf = __webpack_require__(111);
 
@@ -14249,16 +14365,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lodashAssign2 = _interopRequireDefault(_lodashAssign);
 
-	var _clapprZepto = __webpack_require__(16);
-
-	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
-
 	var MAX_ATTEMPTS = 60;
 
-	var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" class="hls-playback" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls="" width="100%" height="100%"><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>&callback=<%= callbackName %>" /> </object>';
-
-	var HLS = (function (_Playback) {
-	  _inherits(HLS, _Playback);
+	var HLS = (function (_BaseFlashPlayback) {
+	  _inherits(HLS, _BaseFlashPlayback);
 
 	  _createClass(HLS, [{
 	    key: 'name',
@@ -14266,25 +14376,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return 'hls';
 	    }
 	  }, {
-	    key: 'tagName',
+	    key: 'swfPath',
 	    get: function get() {
-	      return 'object';
-	    }
-	  }, {
-	    key: 'template',
-	    get: function get() {
-	      return (0, _baseTemplate2['default'])(_publicHls_playbackHtml2['default']);
-	    }
-	  }, {
-	    key: 'attributes',
-	    get: function get() {
-	      return {
-	        'class': 'hls-playback',
-	        'data-hls': '',
-	        'type': 'application/x-shockwave-flash',
-	        'width': '100%',
-	        'height': '100%'
-	      };
+	      return (0, _baseTemplate2['default'])(_publicHLSPlayerSwf2['default'])({ baseUrl: this.baseUrl });
 	    }
 	  }]);
 
@@ -14297,6 +14391,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.initHlsParameters(options);
 	    this.highDefinition = false;
 	    this.autoPlay = options.autoPlay;
+	    this.loop = options.loop;
 	    this.defaultSettings = {
 	      left: ["playstop"],
 	      'default': ['seekbar'],
@@ -14313,7 +14408,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function initHlsParameters(options) {
 	      this.flushLiveURLCache = options.flushLiveURLCache === undefined ? true : options.flushLiveURLCache;
 	      this.capLevelToStage = options.capLevelToStage === undefined ? false : options.capLevelToStage;
-	      this.useHardwareVideoDecoder = options.useHardwareVideoDecoder === undefined ? false : options.useHardwareVideoDecoder;
+	      this.useHardwareVideoDecoder = options.useHardwareVideoDecoder === undefined ? true : options.useHardwareVideoDecoder;
 	      this.maxBufferLength = options.maxBufferLength === undefined ? 120 : options.maxBufferLength;
 	      this.seekMode = options.seekMode === undefined ? "ACCURATE" : options.seekMode;
 	      this.startFromLevel = options.startFromLevel === undefined ? -1 : options.startFromLevel;
@@ -14623,9 +14718,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        this.updateCurrentState(state);
 	      } else if (state === "IDLE") {
-	        this.updateCurrentState(state);
-	        this.trigger(_baseEvents2['default'].PLAYBACK_TIMEUPDATE, 0, this.el.getDuration(), this.name);
-	        this.trigger(_baseEvents2['default'].PLAYBACK_ENDED, this.name);
+	        this.srcLoaded = false;
+	        if (this.loop && ["PLAYING_BUFFERING", "PLAYING"].indexOf(this.currentState) >= 0) {
+	          this.play();
+	          this.seek(0);
+	        } else {
+	          this.updateCurrentState(state);
+	          this.trigger(_baseEvents2['default'].PLAYBACK_TIMEUPDATE, 0, this.el.getDuration(), this.name);
+	          this.trigger(_baseEvents2['default'].PLAYBACK_ENDED, this.name);
+	        }
 	      }
 	    }
 	  }, {
@@ -14716,6 +14817,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'stop',
 	    value: function stop() {
+	      this.srcLoaded = false;
 	      this.el.playerStop();
 	      this.trigger(_baseEvents2['default'].PLAYBACK_TIMEUPDATE, 0, this.name);
 	    }
@@ -14795,18 +14897,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.$el.remove();
 	    }
 	  }, {
-	    key: 'setupFirefox',
-	    value: function setupFirefox() {
-	      var $el = this.$('embed');
-	      $el.attr('data-hls', '');
-	      this.setElement($el);
-	    }
-	  }, {
-	    key: 'setupIE',
-	    value: function setupIE(swfPath) {
-	      this.setElement((0, _clapprZepto2['default'])((0, _baseTemplate2['default'])(objectIE)({ cid: this.cid, swfPath: swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId, callbackName: 'window.Clappr.flashlsCallbacks.' + this.cid })));
-	    }
-	  }, {
 	    key: 'updateSettings',
 	    value: function updateSettings() {
 	      this.settings = (0, _lodashAssign2['default'])({}, this.defaultSettings);
@@ -14819,12 +14909,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      } else {
 	        this.settings.seekEnabled = false;
 	      }
-	    }
-	  }, {
-	    key: 'setElement',
-	    value: function setElement(element) {
-	      this.$el = element;
-	      this.el = element[0];
 	    }
 	  }, {
 	    key: 'createCallbacks',
@@ -14845,27 +14929,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var style = _baseStyler2['default'].getStyleFor(_publicStyleScss2['default']);
-	      var swfPath = (0, _baseTemplate2['default'])(_publicHLSPlayerSwf2['default'])({ baseUrl: this.baseUrl });
-	      if (_componentsBrowser2['default'].isLegacyIE) {
-	        this.setupIE(swfPath);
-	      } else {
-	        this.createCallbacks();
-	        this.$el.html(this.template({ cid: this.cid, swfPath: swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId, callbackName: 'window.Clappr.flashlsCallbacks.' + this.cid }));
-	        if (_componentsBrowser2['default'].isFirefox) {
-	          this.setupFirefox();
-	        } else if (_componentsBrowser2['default'].isIE) {
-	          this.$('embed').remove();
-	        }
-	      }
-	      this.el.id = this.cid;
-	      this.$el.append(style);
+	      _get(Object.getPrototypeOf(HLS.prototype), 'render', this).call(this);
+	      this.createCallbacks();
 	      return this;
 	    }
 	  }]);
 
 	  return HLS;
-	})(_basePlayback2['default']);
+	})(_playbacksBase_flash_playback2['default']);
 
 	exports['default'] = HLS;
 
@@ -14876,7 +14947,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 108 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14986,30 +15057,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 109 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(37)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "[data-hls] {\n  position: absolute;\n  display: block;\n  pointer-events: none;\n  top: 0; }\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 110 */
-/***/ function(module, exports) {
-
-	module.exports = "  <param name=\"movie\" value=\"<%= swfPath %>?inline=1\">\n  <param name=\"quality\" value=\"autohigh\">\n  <param name=\"swliveconnect\" value=\"true\">\n  <param name=\"allowScriptAccess\" value=\"always\">\n  <param name=\"bgcolor\" value=\"#001122\">\n  <param name=\"allowFullScreen\" value=\"false\">\n  <param name=\"wmode\" value=\"transparent\">\n  <param name=\"tabindex\" value=\"1\">\n  <param name=FlashVars value=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\" />\n  <embed\n    name=\"<%= cid %>\"\n    type=\"application/x-shockwave-flash\"\n    tabindex=\"1\"\n    enablecontextmenu=\"false\"\n    allowScriptAccess=\"always\"\n    quality=\"autohigh\"\n    pluginspage=\"http://www.macromedia.com/go/getflashplayer\"\n    wmode=\"transparent\"\n    swliveconnect=\"true\"\n    type=\"application/x-shockwave-flash\"\n    allowfullscreen=\"false\"\n    bgcolor=\"#000000\"\n    FlashVars=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\"\n    src=\"<%= swfPath %>\"\n    width=\"100%\"\n    height=\"100%\">\n  </embed>\n";
-
-/***/ },
 /* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "26c91a360cb2551841d5eb2aff058449.swf"
+	module.exports = __webpack_require__.p + "d878d8df1d462a3dc4c7b0ea7b4a8065.swf"
 
 /***/ },
 /* 112 */
@@ -15371,9 +15422,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _get(Object.getPrototypeOf(SpinnerThreeBouncePlugin.prototype), 'constructor', this).call(this, options);
 	    this.template = (0, _baseTemplate2['default'])(_publicSpinnerHtml2['default']);
+	    this.showTimeout = null;
 	    this.listenTo(this.container, _baseEvents2['default'].CONTAINER_STATE_BUFFERING, this.onBuffering);
 	    this.listenTo(this.container, _baseEvents2['default'].CONTAINER_STATE_BUFFERFULL, this.onBufferFull);
 	    this.listenTo(this.container, _baseEvents2['default'].CONTAINER_STOP, this.onStop);
+	    this.listenTo(this.container, _baseEvents2['default'].CONTAINER_ENDED, this.onStop);
 	    this.listenTo(this.container, _baseEvents2['default'].CONTAINER_ERROR, this.onStop);
 	    this.render();
 	  }
@@ -15381,21 +15434,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(SpinnerThreeBouncePlugin, [{
 	    key: 'onBuffering',
 	    value: function onBuffering() {
-	      var _this = this;
-
-	      this.showTimeout = setTimeout(function () {
-	        return _this.$el.show();
-	      }, 300);
+	      this.show();
 	    }
 	  }, {
 	    key: 'onBufferFull',
 	    value: function onBufferFull() {
-	      clearTimeout(this.showTimeout);
-	      this.$el.hide();
+	      this.hide();
 	    }
 	  }, {
 	    key: 'onStop',
 	    value: function onStop() {
+	      this.hide();
+	    }
+	  }, {
+	    key: 'show',
+	    value: function show() {
+	      var _this = this;
+
+	      if (this.showTimeout === null) {
+	        this.showTimeout = setTimeout(function () {
+	          return _this.$el.show();
+	        }, 300);
+	      }
+	    }
+	  }, {
+	    key: 'hide',
+	    value: function hide() {
+	      if (this.showTimeout !== null) {
+	        clearTimeout(this.showTimeout);
+	        this.showTimeout = null;
+	      }
 	      this.$el.hide();
 	    }
 	  }, {
