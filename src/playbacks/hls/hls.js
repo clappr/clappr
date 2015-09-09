@@ -10,7 +10,7 @@ import Mediator from 'components/mediator'
 import Browser from 'components/browser'
 import HLSEvents from './flashls_events'
 import hlsStyle from './public/style.scss'
-import hlsHTML from './public/hls_playback.html'
+import hlsHTML from 'playbacks/templates/flash.html'
 import hlsSwf from './public/HLSPlayer.swf'
 
 import assign from 'lodash.assign'
