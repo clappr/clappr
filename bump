@@ -35,7 +35,8 @@ git_push() {
 }
 
 upload() {
-  gulp upload --tag=$1
+  node upload.js --tag=$1
+  node upload.js --tag=latest
 }
 
 npm_publish() {
