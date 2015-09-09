@@ -8,7 +8,7 @@ import Browser from 'components/browser'
 
 import $ from 'clappr-zepto'
 
-import flashHTML from 'playbacks/templates/flash.html'
+import flashHTML from './public/flash.html'
 
 var IE_CLASSID = "clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
 
