@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import Playback from 'base/playback'
+import FlashBasedPlayback from 'playbacks/flash_based_playback'
 import Events from 'base/events'
 import Styler from 'base/styler'
 import template from 'base/template'
@@ -10,20 +10,15 @@ import Mediator from 'components/mediator'
 import Browser from 'components/browser'
 import HLSEvents from './flashls_events'
 import hlsStyle from './public/style.scss'
-import hlsHTML from 'playbacks/templates/flash.html'
 import hlsSwf from './public/HLSPlayer.swf'
 
 import assign from 'lodash.assign'
-import $ from 'clappr-zepto'
 
 var MAX_ATTEMPTS = 60
 
-var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" class="hls-playback" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls="" width="100%" height="100%"><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>&callback=<%= callbackName %>" /> </object>'
-
-export default class HLS extends Playback {
+export default class HLS extends FlashBasedPlayback {
   get name() { return 'hls' }
   get tagName() { return 'object' }
-  get template() { return template(hlsHTML) }
   get attributes() {
     return {
       'class': 'hls-playback',
@@ -457,16 +452,6 @@ export default class HLS extends Playback {
     this.$el.remove()
   }
 
-  setupFirefox() {
-    var $el = this.$('embed')
-    $el.attr('data-hls', '')
-    this.setElement($el)
-  }
-
-  setupIE(swfPath) {
-    this.setElement($(template(objectIE)({cid: this.cid, swfPath: swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId, callbackName: `window.Clappr.flashlsCallbacks.${this.cid}`})))
-  }
-
   updateSettings() {
     this.settings = assign({}, this.defaultSettings)
     if (this.playbackType === "vod" || this.dvrInUse) {
@@ -478,11 +463,6 @@ export default class HLS extends Playback {
     } else {
       this.settings.seekEnabled = false
     }
-  }
-
-  setElement(element) {
-    this.$el = element
-    this.el = element[0]
   }
 
   createCallbacks() {
@@ -499,20 +479,9 @@ export default class HLS extends Playback {
   }
 
   render() {
-    var style = Styler.getStyleFor(hlsStyle)
     var swfPath = template(hlsSwf)({baseUrl: this.baseUrl})
-    if(Browser.isLegacyIE) {
-      this.setupIE(swfPath)
-    } else {
-      this.createCallbacks()
-      this.$el.html(this.template({cid: this.cid, swfPath: swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId, callbackName: `window.Clappr.flashlsCallbacks.${this.cid}`}))
-      if(Browser.isFirefox) {
-        this.setupFirefox()
-      } else if (Browser.isIE) {
-        this.$('embed').remove()
-      }
-    }
-    this.el.id = this.cid
+    var style = Styler.getStyleFor(hlsStyle)
+    this.renderFlashElement(swfPath)
     this.$el.append(style)
     return this
   }
