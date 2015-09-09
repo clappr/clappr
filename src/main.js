@@ -18,6 +18,7 @@ import Core from 'components/core'
 import Mediator from 'components/mediator'
 import MediaControl from 'components/media_control'
 import PlayerInfo from 'components/player_info'
+import BaseFlashPlayback from 'playbacks/base_flash_playback'
 import Flash from 'playbacks/flash'
 import HLS from 'playbacks/hls'
 import HTML5Audio from 'playbacks/html5_audio'
@@ -45,6 +46,7 @@ export default {
     BaseObject,
     UIObject,
     Utils,
+    BaseFlashPlayback,
     Flash,
     HLS,
     HTML5Audio,
