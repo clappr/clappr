@@ -12,7 +12,6 @@ import template from 'base/template'
 import $ from 'clappr-zepto'
 import Events from 'base/events'
 import flashStyle from './public/style.scss'
-import flashHTML from 'playbacks/templates/flash.html'
 import flashSwf from './public/Player.swf'
 
 var MAX_ATTEMPTS = 60
