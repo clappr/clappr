@@ -3,12 +3,14 @@
 // license that can be found in the LICENSE file.
 
 import Playback from 'base/playback'
+import Styler from 'base/styler'
 import template from 'base/template'
 import Browser from 'components/browser'
 
 import $ from 'clappr-zepto'
 
 import flashHTML from './public/flash.html'
+import flashStyle from './public/flash.scss'
 
 var IE_CLASSID = "clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
 
@@ -20,9 +22,11 @@ export default class BaseFlashPlayback extends Playback {
   get template() { return template(flashHTML) }
   get attributes() {
     return {
-      'type': 'application/x-shockwave-flash',
-      'width': '100%',
-      'height': '100%'
+      class: 'clappr-flash-playback',
+      type: 'application/x-shockwave-flash',
+      width: '100%',
+      height: '100%',
+      'data-flash-playback': this.name
     }
   }
 
@@ -56,6 +60,8 @@ export default class BaseFlashPlayback extends Playback {
       }
     }
     this.el.id = this.cid
+    var style = Styler.getStyleFor(flashStyle)
+    this.$el.append(style)
     return this
   }
 }
