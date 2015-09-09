@@ -37,27 +37,20 @@ export default class BaseFlashPlayback extends Playback {
 
   setupFirefox() {
     var $el = this.$('embed')
-    $el.attr('data-hls', '')
+    $el.attr('data-flash-playback', this.name)
+    $el.addClass(this.attributes.class)
     this.setElement($el)
   }
 
-  setupIE(swfPath) {
-    this.setElement($(template(objectIE)({cid: this.cid, swfPath: swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId, callbackName: `window.Clappr.flashlsCallbacks.${this.cid}`})))
-    if (this.attributes.class) {
-      this.$el.addClass(this.attributes.class)
-    }
-  }
-
   render() {
-    if(Browser.isLegacyIE) {
-      this.setupIE(this.swfPath)
-    } else {
-      this.$el.html(this.template({cid: this.cid, swfPath: this.swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId, callbackName: `window.Clappr.flashlsCallbacks.${this.cid}`}))
-      if(Browser.isFirefox) {
-        this.setupFirefox()
-      } else if (Browser.isIE) {
-        this.$('embed').remove()
+    this.$el.html(this.template({cid: this.cid, swfPath: this.swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId, callbackName: `window.Clappr.flashlsCallbacks.${this.cid}`}))
+    if (Browser.isIE) {
+      this.$('embed').remove()
+      if(Browser.isLegacyIE) {
+        this.$el.attr('classid', IE_CLASSID)
       }
+    } else if (Browser.isFirefox) {
+      this.setupFirefox()
     }
     this.el.id = this.cid
     var style = Styler.getStyleFor(flashStyle)
