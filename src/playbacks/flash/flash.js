@@ -12,7 +12,7 @@ import template from 'base/template'
 import $ from 'clappr-zepto'
 import Events from 'base/events'
 import flashStyle from './public/style.scss'
-import flashHTML from './public/flash_playback.html'
+import flashHTML from 'playbacks/templates/flash.html'
 import flashSwf from './public/Player.swf'
 
 var MAX_ATTEMPTS = 60
@@ -216,7 +216,7 @@ export default class Flash extends Playback {
   render() {
     var style = Styler.getStyleFor(flashStyle)
     var swfPath = template(flashSwf)({baseUrl: this.baseUrl})
-    this.$el.html(this.template({ cid: this.cid, swfPath: swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId }))
+    this.$el.html(this.template({ cid: this.cid, swfPath: swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId, callbackName: '' }))
     if(Browser.isFirefox) {
       this.setupFirefox()
     } else if(Browser.isLegacyIE) {
