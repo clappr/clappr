@@ -4,7 +4,7 @@
 
 import {seekStringToSeconds} from 'base/utils'
 
-import FlashBasedPlayback from 'playbacks/flash_based_playback'
+import BaseFlashPlayback from 'playbacks/base_flash_playback'
 import Styler from 'base/styler'
 import Browser from 'components/browser'
 import Mediator from 'components/mediator'
@@ -17,7 +17,7 @@ import flashSwf from './public/Player.swf'
 
 var MAX_ATTEMPTS = 60
 
-export default class Flash extends FlashBasedPlayback {
+export default class Flash extends BaseFlashPlayback {
   get name() { return 'flash' }
   get attributes() {
     return {

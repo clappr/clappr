@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import FlashBasedPlayback from 'playbacks/flash_based_playback'
+import BaseFlashPlayback from 'playbacks/base_flash_playback'
 import Events from 'base/events'
 import Styler from 'base/styler'
 import template from 'base/template'
@@ -16,7 +16,7 @@ import assign from 'lodash.assign'
 
 var MAX_ATTEMPTS = 60
 
-export default class HLS extends FlashBasedPlayback {
+export default class HLS extends BaseFlashPlayback {
   get name() { return 'hls' }
   get attributes() {
     return {
