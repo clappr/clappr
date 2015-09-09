@@ -82,8 +82,10 @@ export default class PosterPlugin extends UIContainerPlugin {
   }
 
   showPlayButton() {
-    this.$playButton.show()
-    this.updateSize()
+    if (!this.options.chromeless) {
+      this.$playButton.show()
+      this.updateSize()
+    }
   }
 
   hidePlayButton() {
