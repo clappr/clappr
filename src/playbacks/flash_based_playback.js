@@ -47,7 +47,6 @@ export default class FlashBasedPlayback extends Playback {
     if(Browser.isLegacyIE) {
       this.setupIE(swfPath)
     } else {
-      this.createCallbacks()
       this.$el.html(this.template({cid: this.cid, swfPath: swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId, callbackName: `window.Clappr.flashlsCallbacks.${this.cid}`}))
       if(Browser.isFirefox) {
         this.setupFirefox()
