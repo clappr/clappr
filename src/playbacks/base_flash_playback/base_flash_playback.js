@@ -16,6 +16,7 @@ var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" cla
 
 export default class BaseFlashPlayback extends Playback {
   get tagName() { return 'object' }
+  get swfPath() { return '' }
   get template() { return template(flashHTML) }
   get attributes() {
     return {
@@ -43,11 +44,11 @@ export default class BaseFlashPlayback extends Playback {
     }
   }
 
-  renderFlashElement(swfPath) {
+  render() {
     if(Browser.isLegacyIE) {
-      this.setupIE(swfPath)
+      this.setupIE(this.swfPath)
     } else {
-      this.$el.html(this.template({cid: this.cid, swfPath: swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId, callbackName: `window.Clappr.flashlsCallbacks.${this.cid}`}))
+      this.$el.html(this.template({cid: this.cid, swfPath: this.swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId, callbackName: `window.Clappr.flashlsCallbacks.${this.cid}`}))
       if(Browser.isFirefox) {
         this.setupFirefox()
       } else if (Browser.isIE) {
@@ -55,5 +56,6 @@ export default class BaseFlashPlayback extends Playback {
       }
     }
     this.el.id = this.cid
+    return this
   }
 }

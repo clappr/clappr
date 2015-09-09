@@ -18,6 +18,7 @@ var MAX_ATTEMPTS = 60
 
 export default class Flash extends BaseFlashPlayback {
   get name() { return 'flash' }
+  get swfPath() { return template(flashSwf)({baseUrl: this.baseUrl}) }
   get attributes() {
     return {
       'data-flash': '',
@@ -207,9 +208,8 @@ export default class Flash extends BaseFlashPlayback {
   }
 
   render() {
+    super.render()
     var style = Styler.getStyleFor(flashStyle)
-    var swfPath = template(flashSwf)({baseUrl: this.baseUrl})
-    this.renderFlashElement(swfPath)
     this.$el.append(style)
     return this
   }
