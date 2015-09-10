@@ -92,7 +92,7 @@ export default class Flash extends BaseFlashPlayback {
   }
 
   checkState() {
-    if (this.currentState === "PAUSED") {
+    if (this.isIdle || this.currentState === "PAUSED") {
       return
     } else if (this.currentState !== "PLAYING_BUFFERING" && this.el.getState() === "PLAYING_BUFFERING") {
       this.trigger(Events.PLAYBACK_BUFFERING, this.name)
@@ -106,6 +106,7 @@ export default class Flash extends BaseFlashPlayback {
       this.trigger(Events.PLAYBACK_ENDED, this.name)
       this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.el.getDuration(), this.name)
       this.currentState = "ENDED"
+      this.isIdle = true
     }
   }
 
@@ -117,6 +118,7 @@ export default class Flash extends BaseFlashPlayback {
 
   firstPlay() {
     if (this.el.playerPlay) {
+      this.isIdle = false
       this.el.playerPlay(this.src)
       this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this.checkInitialSeek())
       this.currentState = "PLAYING"
