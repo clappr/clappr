@@ -78,23 +78,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
 
-	var _basePlayback = __webpack_require__(96);
+	var _basePlayback = __webpack_require__(93);
 
 	var _basePlayback2 = _interopRequireDefault(_basePlayback);
 
-	var _baseContainer_plugin = __webpack_require__(126);
+	var _baseContainer_plugin = __webpack_require__(123);
 
 	var _baseContainer_plugin2 = _interopRequireDefault(_baseContainer_plugin);
 
-	var _baseCore_plugin = __webpack_require__(156);
+	var _baseCore_plugin = __webpack_require__(153);
 
 	var _baseCore_plugin2 = _interopRequireDefault(_baseCore_plugin);
 
-	var _baseUi_core_plugin = __webpack_require__(141);
+	var _baseUi_core_plugin = __webpack_require__(138);
 
 	var _baseUi_core_plugin2 = _interopRequireDefault(_baseUi_core_plugin);
 
-	var _baseUi_container_plugin = __webpack_require__(121);
+	var _baseUi_container_plugin = __webpack_require__(118);
 
 	var _baseUi_container_plugin2 = _interopRequireDefault(_baseUi_container_plugin);
 
@@ -110,7 +110,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _componentsBrowser2 = _interopRequireDefault(_componentsBrowser);
 
-	var _componentsContainer = __webpack_require__(34);
+	var _componentsContainer = __webpack_require__(38);
 
 	var _componentsContainer2 = _interopRequireDefault(_componentsContainer);
 
@@ -118,43 +118,43 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _componentsCore2 = _interopRequireDefault(_componentsCore);
 
-	var _componentsMediator = __webpack_require__(64);
+	var _componentsMediator = __webpack_require__(61);
 
 	var _componentsMediator2 = _interopRequireDefault(_componentsMediator);
 
-	var _componentsMedia_control = __webpack_require__(58);
+	var _componentsMedia_control = __webpack_require__(55);
 
 	var _componentsMedia_control2 = _interopRequireDefault(_componentsMedia_control);
 
-	var _componentsPlayer_info = __webpack_require__(65);
+	var _componentsPlayer_info = __webpack_require__(62);
 
 	var _componentsPlayer_info2 = _interopRequireDefault(_componentsPlayer_info);
 
-	var _playbacksBase_flash_playback = __webpack_require__(101);
+	var _playbacksBase_flash_playback = __webpack_require__(98);
 
 	var _playbacksBase_flash_playback2 = _interopRequireDefault(_playbacksBase_flash_playback);
 
-	var _playbacksFlash = __webpack_require__(99);
+	var _playbacksFlash = __webpack_require__(96);
 
 	var _playbacksFlash2 = _interopRequireDefault(_playbacksFlash);
 
-	var _playbacksHls = __webpack_require__(108);
+	var _playbacksHls = __webpack_require__(105);
 
 	var _playbacksHls2 = _interopRequireDefault(_playbacksHls);
 
-	var _playbacksHtml5_audio = __webpack_require__(106);
+	var _playbacksHtml5_audio = __webpack_require__(103);
 
 	var _playbacksHtml5_audio2 = _interopRequireDefault(_playbacksHtml5_audio);
 
-	var _playbacksHtml5_video = __webpack_require__(93);
+	var _playbacksHtml5_video = __webpack_require__(90);
 
 	var _playbacksHtml5_video2 = _interopRequireDefault(_playbacksHtml5_video);
 
-	var _playbacksHtml_img = __webpack_require__(112);
+	var _playbacksHtml_img = __webpack_require__(109);
 
 	var _playbacksHtml_img2 = _interopRequireDefault(_playbacksHtml_img);
 
-	var _pluginsPoster = __webpack_require__(131);
+	var _pluginsPoster = __webpack_require__(128);
 
 	var _pluginsPoster2 = _interopRequireDefault(_pluginsPoster);
 
@@ -162,7 +162,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _pluginsLog2 = _interopRequireDefault(_pluginsLog);
 
-	var version = ("0.2.12");
+	var version = ("0.2.13");
 
 	exports['default'] = {
 	    Player: _componentsPlayer2['default'],
@@ -231,19 +231,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _componentsCore_factory2 = _interopRequireDefault(_componentsCore_factory);
 
-	var _componentsLoader = __webpack_require__(72);
+	var _componentsLoader = __webpack_require__(69);
 
 	var _componentsLoader2 = _interopRequireDefault(_componentsLoader);
 
-	var _componentsPlayer_info = __webpack_require__(65);
+	var _componentsPlayer_info = __webpack_require__(62);
 
 	var _componentsPlayer_info2 = _interopRequireDefault(_componentsPlayer_info);
 
-	var _lodashAssign = __webpack_require__(21);
+	var _lodashAssign = __webpack_require__(25);
 
 	var _lodashAssign2 = _interopRequireDefault(_lodashAssign);
 
-	var _lodashFind = __webpack_require__(38);
+	var _lodashFind = __webpack_require__(42);
 
 	var _lodashFind2 = _interopRequireDefault(_lodashFind);
 
@@ -1758,10 +1758,10 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * lodash 3.0.0 (Custom Build) <https://lodash.com/>
+	 * lodash 3.0.1 (Custom Build) <https://lodash.com/>
 	 * Build: `lodash modern modularize exports="npm" -o ./`
 	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
-	 * Based on Underscore.js 1.7.0 <http://underscorejs.org/LICENSE>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
@@ -1772,11 +1772,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Creates a function that is restricted to invoking `func` once. Repeat calls
 	 * to the function return the value of the first call. The `func` is invoked
-	 * with the `this` binding of the created function.
+	 * with the `this` binding and arguments of the created function.
 	 *
 	 * @static
 	 * @memberOf _
-	 * @type Function
 	 * @category Function
 	 * @param {Function} func The function to restrict.
 	 * @returns {Function} Returns the new restricted function.
@@ -1788,7 +1787,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * // `initialize` invokes `createApplication` once
 	 */
 	function once(func) {
-	  return before(func, 2);
+	  return before(2, func);
 	}
 
 	module.exports = once;
@@ -2016,27 +2015,27 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _componentsBrowser2 = _interopRequireDefault(_componentsBrowser);
 
-	var _componentsContainer_factory = __webpack_require__(32);
+	var _componentsContainer_factory = __webpack_require__(36);
 
 	var _componentsContainer_factory2 = _interopRequireDefault(_componentsContainer_factory);
 
-	var _componentsMedia_control = __webpack_require__(58);
+	var _componentsMedia_control = __webpack_require__(55);
 
 	var _componentsMedia_control2 = _interopRequireDefault(_componentsMedia_control);
 
-	var _componentsMediator = __webpack_require__(64);
+	var _componentsMediator = __webpack_require__(61);
 
 	var _componentsMediator2 = _interopRequireDefault(_componentsMediator);
 
-	var _componentsPlayer_info = __webpack_require__(65);
+	var _componentsPlayer_info = __webpack_require__(62);
 
 	var _componentsPlayer_info2 = _interopRequireDefault(_componentsPlayer_info);
 
-	var _lodashAssign = __webpack_require__(21);
+	var _lodashAssign = __webpack_require__(25);
 
 	var _lodashAssign2 = _interopRequireDefault(_lodashAssign);
 
-	var _lodashFind = __webpack_require__(38);
+	var _lodashFind = __webpack_require__(42);
 
 	var _lodashFind2 = _interopRequireDefault(_lodashFind);
 
@@ -2044,7 +2043,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var _publicStyleScss = __webpack_require__(71);
+	var _publicStyleScss = __webpack_require__(68);
 
 	var _publicStyleScss2 = _interopRequireDefault(_publicStyleScss);
 
@@ -3442,7 +3441,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lodashResult2 = _interopRequireDefault(_lodashResult);
 
-	var _lodashAssign = __webpack_require__(21);
+	var _lodashAssign = __webpack_require__(25);
 
 	var _lodashAssign2 = _interopRequireDefault(_lodashAssign);
 
@@ -3695,59 +3694,513 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * lodash 3.0.0 (Custom Build) <https://lodash.com/>
+	 * lodash 3.1.2 (Custom Build) <https://lodash.com/>
 	 * Build: `lodash modern modularize exports="npm" -o ./`
 	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
-	 * Based on Underscore.js 1.7.0 <http://underscorejs.org/LICENSE>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
 	'use strict';
 
-	var isFunction = __webpack_require__(20);
+	var baseGet = __webpack_require__(20),
+	    baseSlice = __webpack_require__(21),
+	    toPath = __webpack_require__(22),
+	    isArray = __webpack_require__(23),
+	    isFunction = __webpack_require__(24);
+
+	/** Used to match property names within property paths. */
+	var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\n\\]|\\.)*?\1)\]/,
+	    reIsPlainProp = /^\w*$/;
 
 	/**
-	 * Resolves the value of property `key` on `object`. If the value of `key` is
-	 * a function it is invoked with the `this` binding of `object` and its result
-	 * is returned, else the property value is returned. If the property value is
-	 * `undefined` the `defaultValue` is used in its place.
+	 * Checks if `value` is a property name and not a property path.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @param {Object} [object] The object to query keys on.
+	 * @returns {boolean} Returns `true` if `value` is a property name, else `false`.
+	 */
+	function isKey(value, object) {
+	  var type = typeof value;
+	  if (type == 'string' && reIsPlainProp.test(value) || type == 'number') {
+	    return true;
+	  }
+	  if (isArray(value)) {
+	    return false;
+	  }
+	  var result = !reIsDeepProp.test(value);
+	  return result || object != null && value in toObject(object);
+	}
+
+	/**
+	 * Converts `value` to an object if it's not one.
+	 *
+	 * @private
+	 * @param {*} value The value to process.
+	 * @returns {Object} Returns the object.
+	 */
+	function toObject(value) {
+	  return isObject(value) ? value : Object(value);
+	}
+
+	/**
+	 * Gets the last element of `array`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Array
+	 * @param {Array} array The array to query.
+	 * @returns {*} Returns the last element of `array`.
+	 * @example
+	 *
+	 * _.last([1, 2, 3]);
+	 * // => 3
+	 */
+	function last(array) {
+	  var length = array ? array.length : 0;
+	  return length ? array[length - 1] : undefined;
+	}
+
+	/**
+	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
+	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+	 * @example
+	 *
+	 * _.isObject({});
+	 * // => true
+	 *
+	 * _.isObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObject(1);
+	 * // => false
+	 */
+	function isObject(value) {
+	  // Avoid a V8 JIT bug in Chrome 19-20.
+	  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
+	  var type = typeof value;
+	  return !!value && (type == 'object' || type == 'function');
+	}
+
+	/**
+	 * This method is like `_.get` except that if the resolved value is a function
+	 * it is invoked with the `this` binding of its parent object and its result
+	 * is returned.
 	 *
 	 * @static
 	 * @memberOf _
 	 * @category Object
 	 * @param {Object} object The object to query.
-	 * @param {string} key The key of the property to resolve.
-	 * @param {*} [defaultValue] The value returned if the property value
-	 *  resolves to `undefined`.
+	 * @param {Array|string} path The path of the property to resolve.
+	 * @param {*} [defaultValue] The value returned if the resolved value is `undefined`.
 	 * @returns {*} Returns the resolved value.
 	 * @example
 	 *
-	 * var object = { 'user': 'fred', 'age': _.constant(40) };
+	 * var object = { 'a': [{ 'b': { 'c1': 3, 'c2': _.constant(4) } }] };
 	 *
-	 * _.result(object, 'user');
-	 * // => 'fred'
+	 * _.result(object, 'a[0].b.c1');
+	 * // => 3
 	 *
-	 * _.result(object, 'age');
-	 * // => 40
+	 * _.result(object, 'a[0].b.c2');
+	 * // => 4
 	 *
-	 * _.result(object, 'status', 'busy');
-	 * // => 'busy'
+	 * _.result(object, 'a.b.c', 'default');
+	 * // => 'default'
 	 *
-	 * _.result(object, 'status', _.constant('busy'));
-	 * // => 'busy'
+	 * _.result(object, 'a.b.c', _.constant('default'));
+	 * // => 'default'
 	 */
-	function result(object, key, defaultValue) {
-	  var value = object == null ? undefined : object[key];
-	  if (typeof value == 'undefined') {
-	    value = defaultValue;
+	function result(object, path, defaultValue) {
+	  var result = object == null ? undefined : object[path];
+	  if (result === undefined) {
+	    if (object != null && !isKey(path, object)) {
+	      path = toPath(path);
+	      object = path.length == 1 ? object : baseGet(object, baseSlice(path, 0, -1));
+	      result = object == null ? undefined : object[last(path)];
+	    }
+	    result = result === undefined ? defaultValue : result;
 	  }
-	  return isFunction(value) ? value.call(object) : value;
+	  return isFunction(result) ? result.call(object) : result;
 	}
 
 	module.exports = result;
 
 /***/ },
 /* 20 */
+/***/ function(module, exports) {
+
+	/**
+	 * lodash 3.7.2 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modern modularize exports="npm" -o ./`
+	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 * Available under MIT license <https://lodash.com/license>
+	 */
+
+	/**
+	 * The base implementation of `get` without support for string paths
+	 * and default values.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @param {Array} path The path of the property to get.
+	 * @param {string} [pathKey] The key representation of path.
+	 * @returns {*} Returns the resolved value.
+	 */
+	'use strict';
+
+	function baseGet(object, path, pathKey) {
+	  if (object == null) {
+	    return;
+	  }
+	  if (pathKey !== undefined && pathKey in toObject(object)) {
+	    path = [pathKey];
+	  }
+	  var index = 0,
+	      length = path.length;
+
+	  while (object != null && index < length) {
+	    object = object[path[index++]];
+	  }
+	  return index && index == length ? object : undefined;
+	}
+
+	/**
+	 * Converts `value` to an object if it's not one.
+	 *
+	 * @private
+	 * @param {*} value The value to process.
+	 * @returns {Object} Returns the object.
+	 */
+	function toObject(value) {
+	  return isObject(value) ? value : Object(value);
+	}
+
+	/**
+	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
+	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+	 * @example
+	 *
+	 * _.isObject({});
+	 * // => true
+	 *
+	 * _.isObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObject(1);
+	 * // => false
+	 */
+	function isObject(value) {
+	  // Avoid a V8 JIT bug in Chrome 19-20.
+	  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
+	  var type = typeof value;
+	  return !!value && (type == 'object' || type == 'function');
+	}
+
+	module.exports = baseGet;
+
+/***/ },
+/* 21 */
+/***/ function(module, exports) {
+
+	/**
+	 * lodash 3.0.3 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modern modularize exports="npm" -o ./`
+	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 * Available under MIT license <https://lodash.com/license>
+	 */
+
+	/**
+	 * The base implementation of `_.slice` without an iteratee call guard.
+	 *
+	 * @private
+	 * @param {Array} array The array to slice.
+	 * @param {number} [start=0] The start position.
+	 * @param {number} [end=array.length] The end position.
+	 * @returns {Array} Returns the slice of `array`.
+	 */
+	"use strict";
+
+	function baseSlice(array, start, end) {
+	  var index = -1,
+	      length = array.length;
+
+	  start = start == null ? 0 : +start || 0;
+	  if (start < 0) {
+	    start = -start > length ? 0 : length + start;
+	  }
+	  end = end === undefined || end > length ? length : +end || 0;
+	  if (end < 0) {
+	    end += length;
+	  }
+	  length = start > end ? 0 : end - start >>> 0;
+	  start >>>= 0;
+
+	  var result = Array(length);
+	  while (++index < length) {
+	    result[index] = array[index + start];
+	  }
+	  return result;
+	}
+
+	module.exports = baseSlice;
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * lodash 3.8.1 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modern modularize exports="npm" -o ./`
+	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 * Available under MIT license <https://lodash.com/license>
+	 */
+	'use strict';
+
+	var isArray = __webpack_require__(23);
+
+	/** Used to match property names within property paths. */
+	var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\n\\]|\\.)*?)\2)\]/g;
+
+	/** Used to match backslashes in property paths. */
+	var reEscapeChar = /\\(\\)?/g;
+
+	/**
+	 * Converts `value` to a string if it's not one. An empty string is returned
+	 * for `null` or `undefined` values.
+	 *
+	 * @private
+	 * @param {*} value The value to process.
+	 * @returns {string} Returns the string.
+	 */
+	function baseToString(value) {
+	  return value == null ? '' : value + '';
+	}
+
+	/**
+	 * Converts `value` to property path array if it's not one.
+	 *
+	 * @private
+	 * @param {*} value The value to process.
+	 * @returns {Array} Returns the property path array.
+	 */
+	function toPath(value) {
+	  if (isArray(value)) {
+	    return value;
+	  }
+	  var result = [];
+	  baseToString(value).replace(rePropName, function (match, number, quote, string) {
+	    result.push(quote ? string.replace(reEscapeChar, '$1') : number || match);
+	  });
+	  return result;
+	}
+
+	module.exports = toPath;
+
+/***/ },
+/* 23 */
+/***/ function(module, exports) {
+
+	/**
+	 * lodash 3.0.4 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modern modularize exports="npm" -o ./`
+	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 * Available under MIT license <https://lodash.com/license>
+	 */
+
+	/** `Object#toString` result references. */
+	'use strict';
+
+	var arrayTag = '[object Array]',
+	    funcTag = '[object Function]';
+
+	/** Used to detect host constructors (Safari > 5). */
+	var reIsHostCtor = /^\[object .+?Constructor\]$/;
+
+	/**
+	 * Checks if `value` is object-like.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+	 */
+	function isObjectLike(value) {
+	  return !!value && typeof value == 'object';
+	}
+
+	/** Used for native method references. */
+	var objectProto = Object.prototype;
+
+	/** Used to resolve the decompiled source of functions. */
+	var fnToString = Function.prototype.toString;
+
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+
+	/**
+	 * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var objToString = objectProto.toString;
+
+	/** Used to detect if a method is native. */
+	var reIsNative = RegExp('^' + fnToString.call(hasOwnProperty).replace(/[\\^$.*+?()[\]{}|]/g, '\\$&').replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$');
+
+	/* Native method references for those with the same name as other `lodash` methods. */
+	var nativeIsArray = getNative(Array, 'isArray');
+
+	/**
+	 * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
+	 * of an array-like value.
+	 */
+	var MAX_SAFE_INTEGER = 9007199254740991;
+
+	/**
+	 * Gets the native function at `key` of `object`.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @param {string} key The key of the method to get.
+	 * @returns {*} Returns the function if it's native, else `undefined`.
+	 */
+	function getNative(object, key) {
+	  var value = object == null ? undefined : object[key];
+	  return isNative(value) ? value : undefined;
+	}
+
+	/**
+	 * Checks if `value` is a valid array-like length.
+	 *
+	 * **Note:** This function is based on [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
+	 */
+	function isLength(value) {
+	  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+	}
+
+	/**
+	 * Checks if `value` is classified as an `Array` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+	 * @example
+	 *
+	 * _.isArray([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isArray(function() { return arguments; }());
+	 * // => false
+	 */
+	var isArray = nativeIsArray || function (value) {
+	  return isObjectLike(value) && isLength(value.length) && objToString.call(value) == arrayTag;
+	};
+
+	/**
+	 * Checks if `value` is classified as a `Function` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+	 * @example
+	 *
+	 * _.isFunction(_);
+	 * // => true
+	 *
+	 * _.isFunction(/abc/);
+	 * // => false
+	 */
+	function isFunction(value) {
+	  // The use of `Object#toString` avoids issues with the `typeof` operator
+	  // in older versions of Chrome and Safari which return 'function' for regexes
+	  // and Safari 8 equivalents which return 'object' for typed array constructors.
+	  return isObject(value) && objToString.call(value) == funcTag;
+	}
+
+	/**
+	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
+	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+	 * @example
+	 *
+	 * _.isObject({});
+	 * // => true
+	 *
+	 * _.isObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObject(1);
+	 * // => false
+	 */
+	function isObject(value) {
+	  // Avoid a V8 JIT bug in Chrome 19-20.
+	  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
+	  var type = typeof value;
+	  return !!value && (type == 'object' || type == 'function');
+	}
+
+	/**
+	 * Checks if `value` is a native function.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a native function, else `false`.
+	 * @example
+	 *
+	 * _.isNative(Array.prototype.push);
+	 * // => true
+	 *
+	 * _.isNative(_);
+	 * // => false
+	 */
+	function isNative(value) {
+	  if (value == null) {
+	    return false;
+	  }
+	  if (isFunction(value)) {
+	    return reIsNative.test(fnToString.call(value));
+	  }
+	  return isObjectLike(value) && reIsHostCtor.test(value);
+	}
+
+	module.exports = isArray;
+
+/***/ },
+/* 24 */
 /***/ function(module, exports) {
 
 	/**
@@ -3826,57 +4279,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isFunction;
 
 /***/ },
-/* 21 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * lodash 3.0.0 (Custom Build) <https://lodash.com/>
-	 * Build: `lodash modern modularize exports="npm" -o ./`
-	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
-	 * Based on Underscore.js 1.7.0 <http://underscorejs.org/LICENSE>
-	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-	 * Available under MIT license <https://lodash.com/license>
-	 */
-	'use strict';
-
-	var baseAssign = __webpack_require__(22),
-	    createAssigner = __webpack_require__(28);
-
-	/**
-	 * Assigns own enumerable properties of source object(s) to the destination
-	 * object. Subsequent sources overwrite property assignments of previous sources.
-	 * If `customizer` is provided it is invoked to produce the assigned values.
-	 * The `customizer` is bound to `thisArg` and invoked with five arguments;
-	 * (objectValue, sourceValue, key, object, source).
-	 *
-	 * @static
-	 * @memberOf _
-	 * @alias extend
-	 * @category Object
-	 * @param {Object} object The destination object.
-	 * @param {...Object} [sources] The source objects.
-	 * @param {Function} [customizer] The function to customize assigning values.
-	 * @param {*} [thisArg] The `this` binding of `customizer`.
-	 * @returns {Object} Returns `object`.
-	 * @example
-	 *
-	 * _.assign({ 'user': 'barney' }, { 'age': 40 }, { 'user': 'fred' });
-	 * // => { 'user': 'fred', 'age': 40 }
-	 *
-	 * // using a customizer callback
-	 * var defaults = _.partialRight(_.assign, function(value, other) {
-	 *   return typeof value == 'undefined' ? other : value;
-	 * });
-	 *
-	 * defaults({ 'user': 'barney' }, { 'age': 36 }, { 'user': 'fred' });
-	 * // => { 'user': 'barney', 'age': 36 }
-	 */
-	var assign = createAssigner(baseAssign);
-
-	module.exports = assign;
-
-/***/ },
-/* 22 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3889,8 +4292,92 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var baseCopy = __webpack_require__(23),
-	    keys = __webpack_require__(24);
+	var baseAssign = __webpack_require__(26),
+	    createAssigner = __webpack_require__(32),
+	    keys = __webpack_require__(28);
+
+	/**
+	 * A specialized version of `_.assign` for customizing assigned values without
+	 * support for argument juggling, multiple sources, and `this` binding `customizer`
+	 * functions.
+	 *
+	 * @private
+	 * @param {Object} object The destination object.
+	 * @param {Object} source The source object.
+	 * @param {Function} customizer The function to customize assigned values.
+	 * @returns {Object} Returns `object`.
+	 */
+	function assignWith(object, source, customizer) {
+	    var index = -1,
+	        props = keys(source),
+	        length = props.length;
+
+	    while (++index < length) {
+	        var key = props[index],
+	            value = object[key],
+	            result = customizer(value, source[key], key, object, source);
+
+	        if ((result === result ? result !== value : value === value) || value === undefined && !(key in object)) {
+	            object[key] = result;
+	        }
+	    }
+	    return object;
+	}
+
+	/**
+	 * Assigns own enumerable properties of source object(s) to the destination
+	 * object. Subsequent sources overwrite property assignments of previous sources.
+	 * If `customizer` is provided it is invoked to produce the assigned values.
+	 * The `customizer` is bound to `thisArg` and invoked with five arguments:
+	 * (objectValue, sourceValue, key, object, source).
+	 *
+	 * **Note:** This method mutates `object` and is based on
+	 * [`Object.assign`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-object.assign).
+	 *
+	 * @static
+	 * @memberOf _
+	 * @alias extend
+	 * @category Object
+	 * @param {Object} object The destination object.
+	 * @param {...Object} [sources] The source objects.
+	 * @param {Function} [customizer] The function to customize assigned values.
+	 * @param {*} [thisArg] The `this` binding of `customizer`.
+	 * @returns {Object} Returns `object`.
+	 * @example
+	 *
+	 * _.assign({ 'user': 'barney' }, { 'age': 40 }, { 'user': 'fred' });
+	 * // => { 'user': 'fred', 'age': 40 }
+	 *
+	 * // using a customizer callback
+	 * var defaults = _.partialRight(_.assign, function(value, other) {
+	 *   return _.isUndefined(value) ? other : value;
+	 * });
+	 *
+	 * defaults({ 'user': 'barney' }, { 'age': 36 }, { 'user': 'fred' });
+	 * // => { 'user': 'barney', 'age': 36 }
+	 */
+	var assign = createAssigner(function (object, source, customizer) {
+	    return customizer ? assignWith(object, source, customizer) : baseAssign(object, source);
+	});
+
+	module.exports = assign;
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * lodash 3.2.0 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modern modularize exports="npm" -o ./`
+	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 * Available under MIT license <https://lodash.com/license>
+	 */
+	'use strict';
+
+	var baseCopy = __webpack_require__(27),
+	    keys = __webpack_require__(28);
 
 	/**
 	 * The base implementation of `_.assign` without support for argument juggling,
@@ -3908,7 +4395,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseAssign;
 
 /***/ },
-/* 23 */
+/* 27 */
 /***/ function(module, exports) {
 
 	/**
@@ -3947,7 +4434,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseCopy;
 
 /***/ },
-/* 24 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3960,9 +4447,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var getNative = __webpack_require__(25),
-	    isArguments = __webpack_require__(26),
-	    isArray = __webpack_require__(27);
+	var getNative = __webpack_require__(29),
+	    isArguments = __webpack_require__(30),
+	    isArray = __webpack_require__(31);
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -4186,7 +4673,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = keys;
 
 /***/ },
-/* 25 */
+/* 29 */
 /***/ function(module, exports) {
 
 	/**
@@ -4327,7 +4814,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getNative;
 
 /***/ },
-/* 26 */
+/* 30 */
 /***/ function(module, exports) {
 
 	/**
@@ -4439,7 +4926,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isArguments;
 
 /***/ },
-/* 27 */
+/* 31 */
 /***/ function(module, exports) {
 
 	/**
@@ -4623,7 +5110,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isArray;
 
 /***/ },
-/* 28 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4636,9 +5123,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var bindCallback = __webpack_require__(29),
-	    isIterateeCall = __webpack_require__(30),
-	    restParam = __webpack_require__(31);
+	var bindCallback = __webpack_require__(33),
+	    isIterateeCall = __webpack_require__(34),
+	    restParam = __webpack_require__(35);
 
 	/**
 	 * Creates a function that assigns properties of source object(s) to a given
@@ -4682,7 +5169,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = createAssigner;
 
 /***/ },
-/* 29 */
+/* 33 */
 /***/ function(module, exports) {
 
 	/**
@@ -4758,7 +5245,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = bindCallback;
 
 /***/ },
-/* 30 */
+/* 34 */
 /***/ function(module, exports) {
 
 	/**
@@ -4895,7 +5382,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isIterateeCall;
 
 /***/ },
-/* 31 */
+/* 35 */
 /***/ function(module, exports) {
 
 	/**
@@ -4972,15 +5459,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = restParam;
 
 /***/ },
-/* 32 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(33);
+	module.exports = __webpack_require__(37);
 
 /***/ },
-/* 33 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -5015,7 +5502,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
 
-	var _componentsContainer = __webpack_require__(34);
+	var _componentsContainer = __webpack_require__(38);
 
 	var _componentsContainer2 = _interopRequireDefault(_componentsContainer);
 
@@ -5023,11 +5510,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var _lodashAssign = __webpack_require__(21);
+	var _lodashAssign = __webpack_require__(25);
 
 	var _lodashAssign2 = _interopRequireDefault(_lodashAssign);
 
-	var _lodashFind = __webpack_require__(38);
+	var _lodashFind = __webpack_require__(42);
 
 	var _lodashFind2 = _interopRequireDefault(_lodashFind);
 
@@ -5097,15 +5584,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 34 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(35);
+	module.exports = __webpack_require__(39);
 
 /***/ },
-/* 35 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -5144,11 +5631,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseStyler2 = _interopRequireDefault(_baseStyler);
 
-	var _publicStyleScss = __webpack_require__(36);
+	var _publicStyleScss = __webpack_require__(40);
 
 	var _publicStyleScss2 = _interopRequireDefault(_publicStyleScss);
 
-	var _lodashFind = __webpack_require__(38);
+	var _lodashFind = __webpack_require__(42);
 
 	var _lodashFind2 = _interopRequireDefault(_lodashFind);
 
@@ -5555,10 +6042,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 36 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(37)();
+	exports = module.exports = __webpack_require__(41)();
 	// imports
 
 
@@ -5569,7 +6056,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 37 */
+/* 41 */
 /***/ function(module, exports) {
 
 	/*
@@ -5624,34 +6111,57 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 38 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * lodash 3.0.0 (Custom Build) <https://lodash.com/>
+	 * lodash 3.2.1 (Custom Build) <https://lodash.com/>
 	 * Build: `lodash modern modularize exports="npm" -o ./`
 	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
-	 * Based on Underscore.js 1.7.0 <http://underscorejs.org/LICENSE>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
 	'use strict';
 
-	var baseCallback = __webpack_require__(39),
-	    baseEach = __webpack_require__(51),
-	    baseFind = __webpack_require__(55),
-	    findIndex = __webpack_require__(56),
-	    isArray = __webpack_require__(41);
+	var baseCallback = __webpack_require__(43),
+	    baseEach = __webpack_require__(52),
+	    baseFind = __webpack_require__(53),
+	    baseFindIndex = __webpack_require__(54),
+	    isArray = __webpack_require__(45);
+
+	/**
+	 * Creates a `_.find` or `_.findLast` function.
+	 *
+	 * @private
+	 * @param {Function} eachFunc The function to iterate over a collection.
+	 * @param {boolean} [fromRight] Specify iterating from right to left.
+	 * @returns {Function} Returns the new find function.
+	 */
+	function createFind(eachFunc, fromRight) {
+	  return function (collection, predicate, thisArg) {
+	    predicate = baseCallback(predicate, thisArg, 3);
+	    if (isArray(collection)) {
+	      var index = baseFindIndex(collection, predicate, fromRight);
+	      return index > -1 ? collection[index] : undefined;
+	    }
+	    return baseFind(collection, predicate, eachFunc);
+	  };
+	}
 
 	/**
 	 * Iterates over elements of `collection`, returning the first element
 	 * `predicate` returns truthy for. The predicate is bound to `thisArg` and
-	 * invoked with three arguments; (value, index|key, collection).
+	 * invoked with three arguments: (value, index|key, collection).
 	 *
-	 * If a property name is provided for `predicate` the created "_.property"
+	 * If a property name is provided for `predicate` the created `_.property`
 	 * style callback returns the property value of the given element.
 	 *
-	 * If an object is provided for `predicate` the created "_.matches" style
+	 * If a value is also provided for `thisArg` the created `_.matchesProperty`
+	 * style callback returns `true` for elements that have a matching property
+	 * value, else `false`.
+	 *
+	 * If an object is provided for `predicate` the created `_.matches` style
 	 * callback returns `true` for elements that have the properties of the given
 	 * object, else `false`.
 	 *
@@ -5661,42 +6171,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @category Collection
 	 * @param {Array|Object|string} collection The collection to search.
 	 * @param {Function|Object|string} [predicate=_.identity] The function invoked
-	 *  per iteration. If a property name or object is provided it is used to
-	 *  create a "_.property" or "_.matches" style callback respectively.
+	 *  per iteration.
 	 * @param {*} [thisArg] The `this` binding of `predicate`.
 	 * @returns {*} Returns the matched element, else `undefined`.
 	 * @example
 	 *
 	 * var users = [
-	 *   { 'user': 'barney',  'age': 36, 'active': false },
-	 *   { 'user': 'fred',    'age': 40, 'active': true },
-	 *   { 'user': 'pebbles', 'age': 1,  'active': false }
+	 *   { 'user': 'barney',  'age': 36, 'active': true },
+	 *   { 'user': 'fred',    'age': 40, 'active': false },
+	 *   { 'user': 'pebbles', 'age': 1,  'active': true }
 	 * ];
 	 *
-	 * _.result(_.find(users, function(chr) { return chr.age < 40; }), 'user');
+	 * _.result(_.find(users, function(chr) {
+	 *   return chr.age < 40;
+	 * }), 'user');
 	 * // => 'barney'
 	 *
-	 * // using the "_.matches" callback shorthand
-	 * _.result(_.find(users, { 'age': 1 }), 'user');
+	 * // using the `_.matches` callback shorthand
+	 * _.result(_.find(users, { 'age': 1, 'active': true }), 'user');
 	 * // => 'pebbles'
 	 *
-	 * // using the "_.property" callback shorthand
-	 * _.result(_.find(users, 'active'), 'user');
+	 * // using the `_.matchesProperty` callback shorthand
+	 * _.result(_.find(users, 'active', false), 'user');
 	 * // => 'fred'
+	 *
+	 * // using the `_.property` callback shorthand
+	 * _.result(_.find(users, 'active'), 'user');
+	 * // => 'barney'
 	 */
-	function find(collection, predicate, thisArg) {
-	  if (isArray(collection)) {
-	    var index = findIndex(collection, predicate, thisArg);
-	    return index > -1 ? collection[index] : undefined;
-	  }
-	  predicate = baseCallback(predicate, thisArg, 3);
-	  return baseFind(collection, predicate, baseEach);
-	}
+	var find = createFind(baseEach);
 
 	module.exports = find;
 
 /***/ },
-/* 39 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5709,10 +6217,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var baseIsEqual = __webpack_require__(40),
-	    bindCallback = __webpack_require__(46),
-	    isArray = __webpack_require__(41),
-	    pairs = __webpack_require__(47);
+	var baseIsEqual = __webpack_require__(44),
+	    bindCallback = __webpack_require__(50),
+	    isArray = __webpack_require__(45),
+	    pairs = __webpack_require__(51);
 
 	/** Used to match property names within property paths. */
 	var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\n\\]|\\.)*?\1)\]/,
@@ -6116,7 +6624,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseCallback;
 
 /***/ },
-/* 40 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6129,9 +6637,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var isArray = __webpack_require__(41),
-	    isTypedArray = __webpack_require__(42),
-	    keys = __webpack_require__(43);
+	var isArray = __webpack_require__(45),
+	    isTypedArray = __webpack_require__(46),
+	    keys = __webpack_require__(47);
 
 	/** `Object#toString` result references. */
 	var argsTag = '[object Arguments]',
@@ -6460,7 +6968,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseIsEqual;
 
 /***/ },
-/* 41 */
+/* 45 */
 /***/ function(module, exports) {
 
 	/**
@@ -6644,7 +7152,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isArray;
 
 /***/ },
-/* 42 */
+/* 46 */
 /***/ function(module, exports) {
 
 	/**
@@ -6751,7 +7259,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isTypedArray;
 
 /***/ },
-/* 43 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6764,9 +7272,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var getNative = __webpack_require__(44),
-	    isArguments = __webpack_require__(45),
-	    isArray = __webpack_require__(41);
+	var getNative = __webpack_require__(48),
+	    isArguments = __webpack_require__(49),
+	    isArray = __webpack_require__(45);
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -6990,7 +7498,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = keys;
 
 /***/ },
-/* 44 */
+/* 48 */
 /***/ function(module, exports) {
 
 	/**
@@ -7131,7 +7639,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getNative;
 
 /***/ },
-/* 45 */
+/* 49 */
 /***/ function(module, exports) {
 
 	/**
@@ -7243,7 +7751,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isArguments;
 
 /***/ },
-/* 46 */
+/* 50 */
 /***/ function(module, exports) {
 
 	/**
@@ -7319,7 +7827,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = bindCallback;
 
 /***/ },
-/* 47 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -7332,7 +7840,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var keys = __webpack_require__(48);
+	var keys = __webpack_require__(47);
 
 	/**
 	 * Converts `value` to an object if it's not one.
@@ -7404,499 +7912,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = pairs;
 
 /***/ },
-/* 48 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * lodash 3.1.2 (Custom Build) <https://lodash.com/>
-	 * Build: `lodash modern modularize exports="npm" -o ./`
-	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
-	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
-	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-	 * Available under MIT license <https://lodash.com/license>
-	 */
-	'use strict';
-
-	var getNative = __webpack_require__(49),
-	    isArguments = __webpack_require__(50),
-	    isArray = __webpack_require__(41);
-
-	/** Used to detect unsigned integer values. */
-	var reIsUint = /^\d+$/;
-
-	/** Used for native method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/* Native method references for those with the same name as other `lodash` methods. */
-	var nativeKeys = getNative(Object, 'keys');
-
-	/**
-	 * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
-	 * of an array-like value.
-	 */
-	var MAX_SAFE_INTEGER = 9007199254740991;
-
-	/**
-	 * The base implementation of `_.property` without support for deep paths.
-	 *
-	 * @private
-	 * @param {string} key The key of the property to get.
-	 * @returns {Function} Returns the new function.
-	 */
-	function baseProperty(key) {
-	  return function (object) {
-	    return object == null ? undefined : object[key];
-	  };
-	}
-
-	/**
-	 * Gets the "length" property value of `object`.
-	 *
-	 * **Note:** This function is used to avoid a [JIT bug](https://bugs.webkit.org/show_bug.cgi?id=142792)
-	 * that affects Safari on at least iOS 8.1-8.3 ARM64.
-	 *
-	 * @private
-	 * @param {Object} object The object to query.
-	 * @returns {*} Returns the "length" value.
-	 */
-	var getLength = baseProperty('length');
-
-	/**
-	 * Checks if `value` is array-like.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
-	 */
-	function isArrayLike(value) {
-	  return value != null && isLength(getLength(value));
-	}
-
-	/**
-	 * Checks if `value` is a valid array-like index.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
-	 * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
-	 */
-	function isIndex(value, length) {
-	  value = typeof value == 'number' || reIsUint.test(value) ? +value : -1;
-	  length = length == null ? MAX_SAFE_INTEGER : length;
-	  return value > -1 && value % 1 == 0 && value < length;
-	}
-
-	/**
-	 * Checks if `value` is a valid array-like length.
-	 *
-	 * **Note:** This function is based on [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
-	 */
-	function isLength(value) {
-	  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
-	}
-
-	/**
-	 * A fallback implementation of `Object.keys` which creates an array of the
-	 * own enumerable property names of `object`.
-	 *
-	 * @private
-	 * @param {Object} object The object to query.
-	 * @returns {Array} Returns the array of property names.
-	 */
-	function shimKeys(object) {
-	  var props = keysIn(object),
-	      propsLength = props.length,
-	      length = propsLength && object.length;
-
-	  var allowIndexes = !!length && isLength(length) && (isArray(object) || isArguments(object));
-
-	  var index = -1,
-	      result = [];
-
-	  while (++index < propsLength) {
-	    var key = props[index];
-	    if (allowIndexes && isIndex(key, length) || hasOwnProperty.call(object, key)) {
-	      result.push(key);
-	    }
-	  }
-	  return result;
-	}
-
-	/**
-	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
-	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
-	 * @example
-	 *
-	 * _.isObject({});
-	 * // => true
-	 *
-	 * _.isObject([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isObject(1);
-	 * // => false
-	 */
-	function isObject(value) {
-	  // Avoid a V8 JIT bug in Chrome 19-20.
-	  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
-	  var type = typeof value;
-	  return !!value && (type == 'object' || type == 'function');
-	}
-
-	/**
-	 * Creates an array of the own enumerable property names of `object`.
-	 *
-	 * **Note:** Non-object values are coerced to objects. See the
-	 * [ES spec](http://ecma-international.org/ecma-262/6.0/#sec-object.keys)
-	 * for more details.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Object
-	 * @param {Object} object The object to query.
-	 * @returns {Array} Returns the array of property names.
-	 * @example
-	 *
-	 * function Foo() {
-	 *   this.a = 1;
-	 *   this.b = 2;
-	 * }
-	 *
-	 * Foo.prototype.c = 3;
-	 *
-	 * _.keys(new Foo);
-	 * // => ['a', 'b'] (iteration order is not guaranteed)
-	 *
-	 * _.keys('hi');
-	 * // => ['0', '1']
-	 */
-	var keys = !nativeKeys ? shimKeys : function (object) {
-	  var Ctor = object == null ? undefined : object.constructor;
-	  if (typeof Ctor == 'function' && Ctor.prototype === object || typeof object != 'function' && isArrayLike(object)) {
-	    return shimKeys(object);
-	  }
-	  return isObject(object) ? nativeKeys(object) : [];
-	};
-
-	/**
-	 * Creates an array of the own and inherited enumerable property names of `object`.
-	 *
-	 * **Note:** Non-object values are coerced to objects.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Object
-	 * @param {Object} object The object to query.
-	 * @returns {Array} Returns the array of property names.
-	 * @example
-	 *
-	 * function Foo() {
-	 *   this.a = 1;
-	 *   this.b = 2;
-	 * }
-	 *
-	 * Foo.prototype.c = 3;
-	 *
-	 * _.keysIn(new Foo);
-	 * // => ['a', 'b', 'c'] (iteration order is not guaranteed)
-	 */
-	function keysIn(object) {
-	  if (object == null) {
-	    return [];
-	  }
-	  if (!isObject(object)) {
-	    object = Object(object);
-	  }
-	  var length = object.length;
-	  length = length && isLength(length) && (isArray(object) || isArguments(object)) && length || 0;
-
-	  var Ctor = object.constructor,
-	      index = -1,
-	      isProto = typeof Ctor == 'function' && Ctor.prototype === object,
-	      result = Array(length),
-	      skipIndexes = length > 0;
-
-	  while (++index < length) {
-	    result[index] = index + '';
-	  }
-	  for (var key in object) {
-	    if (!(skipIndexes && isIndex(key, length)) && !(key == 'constructor' && (isProto || !hasOwnProperty.call(object, key)))) {
-	      result.push(key);
-	    }
-	  }
-	  return result;
-	}
-
-	module.exports = keys;
-
-/***/ },
-/* 49 */
-/***/ function(module, exports) {
-
-	/**
-	 * lodash 3.9.1 (Custom Build) <https://lodash.com/>
-	 * Build: `lodash modern modularize exports="npm" -o ./`
-	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
-	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
-	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-	 * Available under MIT license <https://lodash.com/license>
-	 */
-
-	/** `Object#toString` result references. */
-	'use strict';
-
-	var funcTag = '[object Function]';
-
-	/** Used to detect host constructors (Safari > 5). */
-	var reIsHostCtor = /^\[object .+?Constructor\]$/;
-
-	/**
-	 * Checks if `value` is object-like.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
-	 */
-	function isObjectLike(value) {
-	  return !!value && typeof value == 'object';
-	}
-
-	/** Used for native method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to resolve the decompiled source of functions. */
-	var fnToString = Function.prototype.toString;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/**
-	 * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
-	 * of values.
-	 */
-	var objToString = objectProto.toString;
-
-	/** Used to detect if a method is native. */
-	var reIsNative = RegExp('^' + fnToString.call(hasOwnProperty).replace(/[\\^$.*+?()[\]{}|]/g, '\\$&').replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$');
-
-	/**
-	 * Gets the native function at `key` of `object`.
-	 *
-	 * @private
-	 * @param {Object} object The object to query.
-	 * @param {string} key The key of the method to get.
-	 * @returns {*} Returns the function if it's native, else `undefined`.
-	 */
-	function getNative(object, key) {
-	  var value = object == null ? undefined : object[key];
-	  return isNative(value) ? value : undefined;
-	}
-
-	/**
-	 * Checks if `value` is classified as a `Function` object.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
-	 * @example
-	 *
-	 * _.isFunction(_);
-	 * // => true
-	 *
-	 * _.isFunction(/abc/);
-	 * // => false
-	 */
-	function isFunction(value) {
-	  // The use of `Object#toString` avoids issues with the `typeof` operator
-	  // in older versions of Chrome and Safari which return 'function' for regexes
-	  // and Safari 8 equivalents which return 'object' for typed array constructors.
-	  return isObject(value) && objToString.call(value) == funcTag;
-	}
-
-	/**
-	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
-	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
-	 * @example
-	 *
-	 * _.isObject({});
-	 * // => true
-	 *
-	 * _.isObject([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isObject(1);
-	 * // => false
-	 */
-	function isObject(value) {
-	  // Avoid a V8 JIT bug in Chrome 19-20.
-	  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
-	  var type = typeof value;
-	  return !!value && (type == 'object' || type == 'function');
-	}
-
-	/**
-	 * Checks if `value` is a native function.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a native function, else `false`.
-	 * @example
-	 *
-	 * _.isNative(Array.prototype.push);
-	 * // => true
-	 *
-	 * _.isNative(_);
-	 * // => false
-	 */
-	function isNative(value) {
-	  if (value == null) {
-	    return false;
-	  }
-	  if (isFunction(value)) {
-	    return reIsNative.test(fnToString.call(value));
-	  }
-	  return isObjectLike(value) && reIsHostCtor.test(value);
-	}
-
-	module.exports = getNative;
-
-/***/ },
-/* 50 */
-/***/ function(module, exports) {
-
-	/**
-	 * lodash 3.0.4 (Custom Build) <https://lodash.com/>
-	 * Build: `lodash modern modularize exports="npm" -o ./`
-	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
-	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
-	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-	 * Available under MIT license <https://lodash.com/license>
-	 */
-
-	/**
-	 * Checks if `value` is object-like.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
-	 */
-	'use strict';
-
-	function isObjectLike(value) {
-	  return !!value && typeof value == 'object';
-	}
-
-	/** Used for native method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/** Native method references. */
-	var propertyIsEnumerable = objectProto.propertyIsEnumerable;
-
-	/**
-	 * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
-	 * of an array-like value.
-	 */
-	var MAX_SAFE_INTEGER = 9007199254740991;
-
-	/**
-	 * The base implementation of `_.property` without support for deep paths.
-	 *
-	 * @private
-	 * @param {string} key The key of the property to get.
-	 * @returns {Function} Returns the new function.
-	 */
-	function baseProperty(key) {
-	  return function (object) {
-	    return object == null ? undefined : object[key];
-	  };
-	}
-
-	/**
-	 * Gets the "length" property value of `object`.
-	 *
-	 * **Note:** This function is used to avoid a [JIT bug](https://bugs.webkit.org/show_bug.cgi?id=142792)
-	 * that affects Safari on at least iOS 8.1-8.3 ARM64.
-	 *
-	 * @private
-	 * @param {Object} object The object to query.
-	 * @returns {*} Returns the "length" value.
-	 */
-	var getLength = baseProperty('length');
-
-	/**
-	 * Checks if `value` is array-like.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
-	 */
-	function isArrayLike(value) {
-	  return value != null && isLength(getLength(value));
-	}
-
-	/**
-	 * Checks if `value` is a valid array-like length.
-	 *
-	 * **Note:** This function is based on [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
-	 */
-	function isLength(value) {
-	  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
-	}
-
-	/**
-	 * Checks if `value` is classified as an `arguments` object.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
-	 * @example
-	 *
-	 * _.isArguments(function() { return arguments; }());
-	 * // => true
-	 *
-	 * _.isArguments([1, 2, 3]);
-	 * // => false
-	 */
-	function isArguments(value) {
-	  return isObjectLike(value) && isArrayLike(value) && hasOwnProperty.call(value, 'callee') && !propertyIsEnumerable.call(value, 'callee');
-	}
-
-	module.exports = isArguments;
-
-/***/ },
-/* 51 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -7909,7 +7925,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var keys = __webpack_require__(52);
+	var keys = __webpack_require__(47);
 
 	/**
 	 * Used as the [maximum length](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-number.max_safe_integer)
@@ -8084,499 +8100,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseEach;
 
 /***/ },
-/* 52 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * lodash 3.1.2 (Custom Build) <https://lodash.com/>
-	 * Build: `lodash modern modularize exports="npm" -o ./`
-	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
-	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
-	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-	 * Available under MIT license <https://lodash.com/license>
-	 */
-	'use strict';
-
-	var getNative = __webpack_require__(53),
-	    isArguments = __webpack_require__(54),
-	    isArray = __webpack_require__(41);
-
-	/** Used to detect unsigned integer values. */
-	var reIsUint = /^\d+$/;
-
-	/** Used for native method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/* Native method references for those with the same name as other `lodash` methods. */
-	var nativeKeys = getNative(Object, 'keys');
-
-	/**
-	 * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
-	 * of an array-like value.
-	 */
-	var MAX_SAFE_INTEGER = 9007199254740991;
-
-	/**
-	 * The base implementation of `_.property` without support for deep paths.
-	 *
-	 * @private
-	 * @param {string} key The key of the property to get.
-	 * @returns {Function} Returns the new function.
-	 */
-	function baseProperty(key) {
-	  return function (object) {
-	    return object == null ? undefined : object[key];
-	  };
-	}
-
-	/**
-	 * Gets the "length" property value of `object`.
-	 *
-	 * **Note:** This function is used to avoid a [JIT bug](https://bugs.webkit.org/show_bug.cgi?id=142792)
-	 * that affects Safari on at least iOS 8.1-8.3 ARM64.
-	 *
-	 * @private
-	 * @param {Object} object The object to query.
-	 * @returns {*} Returns the "length" value.
-	 */
-	var getLength = baseProperty('length');
-
-	/**
-	 * Checks if `value` is array-like.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
-	 */
-	function isArrayLike(value) {
-	  return value != null && isLength(getLength(value));
-	}
-
-	/**
-	 * Checks if `value` is a valid array-like index.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
-	 * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
-	 */
-	function isIndex(value, length) {
-	  value = typeof value == 'number' || reIsUint.test(value) ? +value : -1;
-	  length = length == null ? MAX_SAFE_INTEGER : length;
-	  return value > -1 && value % 1 == 0 && value < length;
-	}
-
-	/**
-	 * Checks if `value` is a valid array-like length.
-	 *
-	 * **Note:** This function is based on [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
-	 */
-	function isLength(value) {
-	  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
-	}
-
-	/**
-	 * A fallback implementation of `Object.keys` which creates an array of the
-	 * own enumerable property names of `object`.
-	 *
-	 * @private
-	 * @param {Object} object The object to query.
-	 * @returns {Array} Returns the array of property names.
-	 */
-	function shimKeys(object) {
-	  var props = keysIn(object),
-	      propsLength = props.length,
-	      length = propsLength && object.length;
-
-	  var allowIndexes = !!length && isLength(length) && (isArray(object) || isArguments(object));
-
-	  var index = -1,
-	      result = [];
-
-	  while (++index < propsLength) {
-	    var key = props[index];
-	    if (allowIndexes && isIndex(key, length) || hasOwnProperty.call(object, key)) {
-	      result.push(key);
-	    }
-	  }
-	  return result;
-	}
-
-	/**
-	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
-	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
-	 * @example
-	 *
-	 * _.isObject({});
-	 * // => true
-	 *
-	 * _.isObject([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isObject(1);
-	 * // => false
-	 */
-	function isObject(value) {
-	  // Avoid a V8 JIT bug in Chrome 19-20.
-	  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
-	  var type = typeof value;
-	  return !!value && (type == 'object' || type == 'function');
-	}
-
-	/**
-	 * Creates an array of the own enumerable property names of `object`.
-	 *
-	 * **Note:** Non-object values are coerced to objects. See the
-	 * [ES spec](http://ecma-international.org/ecma-262/6.0/#sec-object.keys)
-	 * for more details.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Object
-	 * @param {Object} object The object to query.
-	 * @returns {Array} Returns the array of property names.
-	 * @example
-	 *
-	 * function Foo() {
-	 *   this.a = 1;
-	 *   this.b = 2;
-	 * }
-	 *
-	 * Foo.prototype.c = 3;
-	 *
-	 * _.keys(new Foo);
-	 * // => ['a', 'b'] (iteration order is not guaranteed)
-	 *
-	 * _.keys('hi');
-	 * // => ['0', '1']
-	 */
-	var keys = !nativeKeys ? shimKeys : function (object) {
-	  var Ctor = object == null ? undefined : object.constructor;
-	  if (typeof Ctor == 'function' && Ctor.prototype === object || typeof object != 'function' && isArrayLike(object)) {
-	    return shimKeys(object);
-	  }
-	  return isObject(object) ? nativeKeys(object) : [];
-	};
-
-	/**
-	 * Creates an array of the own and inherited enumerable property names of `object`.
-	 *
-	 * **Note:** Non-object values are coerced to objects.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Object
-	 * @param {Object} object The object to query.
-	 * @returns {Array} Returns the array of property names.
-	 * @example
-	 *
-	 * function Foo() {
-	 *   this.a = 1;
-	 *   this.b = 2;
-	 * }
-	 *
-	 * Foo.prototype.c = 3;
-	 *
-	 * _.keysIn(new Foo);
-	 * // => ['a', 'b', 'c'] (iteration order is not guaranteed)
-	 */
-	function keysIn(object) {
-	  if (object == null) {
-	    return [];
-	  }
-	  if (!isObject(object)) {
-	    object = Object(object);
-	  }
-	  var length = object.length;
-	  length = length && isLength(length) && (isArray(object) || isArguments(object)) && length || 0;
-
-	  var Ctor = object.constructor,
-	      index = -1,
-	      isProto = typeof Ctor == 'function' && Ctor.prototype === object,
-	      result = Array(length),
-	      skipIndexes = length > 0;
-
-	  while (++index < length) {
-	    result[index] = index + '';
-	  }
-	  for (var key in object) {
-	    if (!(skipIndexes && isIndex(key, length)) && !(key == 'constructor' && (isProto || !hasOwnProperty.call(object, key)))) {
-	      result.push(key);
-	    }
-	  }
-	  return result;
-	}
-
-	module.exports = keys;
-
-/***/ },
 /* 53 */
-/***/ function(module, exports) {
-
-	/**
-	 * lodash 3.9.1 (Custom Build) <https://lodash.com/>
-	 * Build: `lodash modern modularize exports="npm" -o ./`
-	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
-	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
-	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-	 * Available under MIT license <https://lodash.com/license>
-	 */
-
-	/** `Object#toString` result references. */
-	'use strict';
-
-	var funcTag = '[object Function]';
-
-	/** Used to detect host constructors (Safari > 5). */
-	var reIsHostCtor = /^\[object .+?Constructor\]$/;
-
-	/**
-	 * Checks if `value` is object-like.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
-	 */
-	function isObjectLike(value) {
-	  return !!value && typeof value == 'object';
-	}
-
-	/** Used for native method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to resolve the decompiled source of functions. */
-	var fnToString = Function.prototype.toString;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/**
-	 * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
-	 * of values.
-	 */
-	var objToString = objectProto.toString;
-
-	/** Used to detect if a method is native. */
-	var reIsNative = RegExp('^' + fnToString.call(hasOwnProperty).replace(/[\\^$.*+?()[\]{}|]/g, '\\$&').replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$');
-
-	/**
-	 * Gets the native function at `key` of `object`.
-	 *
-	 * @private
-	 * @param {Object} object The object to query.
-	 * @param {string} key The key of the method to get.
-	 * @returns {*} Returns the function if it's native, else `undefined`.
-	 */
-	function getNative(object, key) {
-	  var value = object == null ? undefined : object[key];
-	  return isNative(value) ? value : undefined;
-	}
-
-	/**
-	 * Checks if `value` is classified as a `Function` object.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
-	 * @example
-	 *
-	 * _.isFunction(_);
-	 * // => true
-	 *
-	 * _.isFunction(/abc/);
-	 * // => false
-	 */
-	function isFunction(value) {
-	  // The use of `Object#toString` avoids issues with the `typeof` operator
-	  // in older versions of Chrome and Safari which return 'function' for regexes
-	  // and Safari 8 equivalents which return 'object' for typed array constructors.
-	  return isObject(value) && objToString.call(value) == funcTag;
-	}
-
-	/**
-	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
-	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
-	 * @example
-	 *
-	 * _.isObject({});
-	 * // => true
-	 *
-	 * _.isObject([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isObject(1);
-	 * // => false
-	 */
-	function isObject(value) {
-	  // Avoid a V8 JIT bug in Chrome 19-20.
-	  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
-	  var type = typeof value;
-	  return !!value && (type == 'object' || type == 'function');
-	}
-
-	/**
-	 * Checks if `value` is a native function.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a native function, else `false`.
-	 * @example
-	 *
-	 * _.isNative(Array.prototype.push);
-	 * // => true
-	 *
-	 * _.isNative(_);
-	 * // => false
-	 */
-	function isNative(value) {
-	  if (value == null) {
-	    return false;
-	  }
-	  if (isFunction(value)) {
-	    return reIsNative.test(fnToString.call(value));
-	  }
-	  return isObjectLike(value) && reIsHostCtor.test(value);
-	}
-
-	module.exports = getNative;
-
-/***/ },
-/* 54 */
-/***/ function(module, exports) {
-
-	/**
-	 * lodash 3.0.4 (Custom Build) <https://lodash.com/>
-	 * Build: `lodash modern modularize exports="npm" -o ./`
-	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
-	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
-	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-	 * Available under MIT license <https://lodash.com/license>
-	 */
-
-	/**
-	 * Checks if `value` is object-like.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
-	 */
-	'use strict';
-
-	function isObjectLike(value) {
-	  return !!value && typeof value == 'object';
-	}
-
-	/** Used for native method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/** Native method references. */
-	var propertyIsEnumerable = objectProto.propertyIsEnumerable;
-
-	/**
-	 * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
-	 * of an array-like value.
-	 */
-	var MAX_SAFE_INTEGER = 9007199254740991;
-
-	/**
-	 * The base implementation of `_.property` without support for deep paths.
-	 *
-	 * @private
-	 * @param {string} key The key of the property to get.
-	 * @returns {Function} Returns the new function.
-	 */
-	function baseProperty(key) {
-	  return function (object) {
-	    return object == null ? undefined : object[key];
-	  };
-	}
-
-	/**
-	 * Gets the "length" property value of `object`.
-	 *
-	 * **Note:** This function is used to avoid a [JIT bug](https://bugs.webkit.org/show_bug.cgi?id=142792)
-	 * that affects Safari on at least iOS 8.1-8.3 ARM64.
-	 *
-	 * @private
-	 * @param {Object} object The object to query.
-	 * @returns {*} Returns the "length" value.
-	 */
-	var getLength = baseProperty('length');
-
-	/**
-	 * Checks if `value` is array-like.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
-	 */
-	function isArrayLike(value) {
-	  return value != null && isLength(getLength(value));
-	}
-
-	/**
-	 * Checks if `value` is a valid array-like length.
-	 *
-	 * **Note:** This function is based on [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
-	 */
-	function isLength(value) {
-	  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
-	}
-
-	/**
-	 * Checks if `value` is classified as an `arguments` object.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
-	 * @example
-	 *
-	 * _.isArguments(function() { return arguments; }());
-	 * // => true
-	 *
-	 * _.isArguments([1, 2, 3]);
-	 * // => false
-	 */
-	function isArguments(value) {
-	  return isObjectLike(value) && isArrayLike(value) && hasOwnProperty.call(value, 'callee') && !propertyIsEnumerable.call(value, 'callee');
-	}
-
-	module.exports = isArguments;
-
-/***/ },
-/* 55 */
 /***/ function(module, exports) {
 
 	/**
@@ -8617,93 +8141,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseFind;
 
 /***/ },
-/* 56 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * lodash 3.2.1 (Custom Build) <https://lodash.com/>
-	 * Build: `lodash modern modularize exports="npm" -o ./`
-	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
-	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
-	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-	 * Available under MIT license <https://lodash.com/license>
-	 */
-	'use strict';
-
-	var baseCallback = __webpack_require__(39),
-	    baseFindIndex = __webpack_require__(57);
-
-	/**
-	 * Creates a `_.findIndex` or `_.findLastIndex` function.
-	 *
-	 * @private
-	 * @param {boolean} [fromRight] Specify iterating from right to left.
-	 * @returns {Function} Returns the new find function.
-	 */
-	function createFindIndex(fromRight) {
-	  return function (array, predicate, thisArg) {
-	    if (!(array && array.length)) {
-	      return -1;
-	    }
-	    predicate = baseCallback(predicate, thisArg, 3);
-	    return baseFindIndex(array, predicate, fromRight);
-	  };
-	}
-
-	/**
-	 * This method is like `_.find` except that it returns the index of the first
-	 * element `predicate` returns truthy for instead of the element itself.
-	 *
-	 * If a property name is provided for `predicate` the created `_.property`
-	 * style callback returns the property value of the given element.
-	 *
-	 * If a value is also provided for `thisArg` the created `_.matchesProperty`
-	 * style callback returns `true` for elements that have a matching property
-	 * value, else `false`.
-	 *
-	 * If an object is provided for `predicate` the created `_.matches` style
-	 * callback returns `true` for elements that have the properties of the given
-	 * object, else `false`.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Array
-	 * @param {Array} array The array to search.
-	 * @param {Function|Object|string} [predicate=_.identity] The function invoked
-	 *  per iteration.
-	 * @param {*} [thisArg] The `this` binding of `predicate`.
-	 * @returns {number} Returns the index of the found element, else `-1`.
-	 * @example
-	 *
-	 * var users = [
-	 *   { 'user': 'barney',  'active': false },
-	 *   { 'user': 'fred',    'active': false },
-	 *   { 'user': 'pebbles', 'active': true }
-	 * ];
-	 *
-	 * _.findIndex(users, function(chr) {
-	 *   return chr.user == 'barney';
-	 * });
-	 * // => 0
-	 *
-	 * // using the `_.matches` callback shorthand
-	 * _.findIndex(users, { 'user': 'fred', 'active': false });
-	 * // => 1
-	 *
-	 * // using the `_.matchesProperty` callback shorthand
-	 * _.findIndex(users, 'active', false);
-	 * // => 0
-	 *
-	 * // using the `_.property` callback shorthand
-	 * _.findIndex(users, 'active');
-	 * // => 2
-	 */
-	var findIndex = createFindIndex();
-
-	module.exports = findIndex;
-
-/***/ },
-/* 57 */
+/* 54 */
 /***/ function(module, exports) {
 
 	/**
@@ -8742,15 +8180,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseFindIndex;
 
 /***/ },
-/* 58 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(59);
+	module.exports = __webpack_require__(56);
 
 /***/ },
-/* 59 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -8799,15 +8237,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _componentsBrowser2 = _interopRequireDefault(_componentsBrowser);
 
-	var _componentsSeek_time = __webpack_require__(60);
+	var _componentsSeek_time = __webpack_require__(57);
 
 	var _componentsSeek_time2 = _interopRequireDefault(_componentsSeek_time);
 
-	var _componentsMediator = __webpack_require__(64);
+	var _componentsMediator = __webpack_require__(61);
 
 	var _componentsMediator2 = _interopRequireDefault(_componentsMediator);
 
-	var _componentsPlayer_info = __webpack_require__(65);
+	var _componentsPlayer_info = __webpack_require__(62);
 
 	var _componentsPlayer_info2 = _interopRequireDefault(_componentsPlayer_info);
 
@@ -8819,11 +8257,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var _publicMediaControlScss = __webpack_require__(66);
+	var _publicMediaControlScss = __webpack_require__(63);
 
 	var _publicMediaControlScss2 = _interopRequireDefault(_publicMediaControlScss);
 
-	var _publicMediaControlHtml = __webpack_require__(70);
+	var _publicMediaControlHtml = __webpack_require__(67);
 
 	var _publicMediaControlHtml2 = _interopRequireDefault(_publicMediaControlHtml);
 
@@ -9477,15 +8915,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 60 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(61);
+	module.exports = __webpack_require__(58);
 
 /***/ },
-/* 61 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -9526,11 +8964,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
 
-	var _publicSeek_timeScss = __webpack_require__(62);
+	var _publicSeek_timeScss = __webpack_require__(59);
 
 	var _publicSeek_timeScss2 = _interopRequireDefault(_publicSeek_timeScss);
 
-	var _publicSeek_timeHtml = __webpack_require__(63);
+	var _publicSeek_timeHtml = __webpack_require__(60);
 
 	var _publicSeek_timeHtml2 = _interopRequireDefault(_publicSeek_timeHtml);
 
@@ -9643,27 +9081,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 62 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(37)();
+	exports = module.exports = __webpack_require__(41)();
 	// imports
 
 
 	// module
-	exports.push([module.id, ".seek-time[data-seek-time] {\n  position: absolute;\n  white-space: nowrap;\n  width: auto;\n  height: 20px;\n  line-height: 20px;\n  left: -100%;\n  bottom: 55px;\n  background-color: rgba(2, 2, 2, 0.5);\n  z-index: 9999;\n  -webkit-transition: opacity 0.1s ease;\n  -moz-transition: opacity 0.1s ease;\n  -o-transition: opacity 0.1s ease;\n  transition: opacity 0.1s ease; }\n  .seek-time[data-seek-time].hidden[data-seek-time] {\n    opacity: 0; }\n  .seek-time[data-seek-time] span[data-seek-time] {\n    position: relative;\n    color: white;\n    font-size: 10px;\n    padding-left: 7px;\n    padding-right: 7px; }\n", ""]);
+	exports.push([module.id, ".seek-time[data-seek-time] {\n  position: absolute;\n  white-space: nowrap;\n  width: auto;\n  height: 20px;\n  line-height: 20px;\n  left: -100%;\n  bottom: 55px;\n  background-color: rgba(2, 2, 2, 0.5);\n  z-index: 9999;\n  -webkit-transition: opacity 0.1s ease;\n  -moz-transition: opacity 0.1s ease false;\n  -o-transition: opacity 0.1s ease false;\n  transition: opacity 0.1s ease; }\n  .seek-time[data-seek-time].hidden[data-seek-time] {\n    opacity: 0; }\n  .seek-time[data-seek-time] span[data-seek-time] {\n    position: relative;\n    color: white;\n    font-size: 10px;\n    padding-left: 7px;\n    padding-right: 7px; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 63 */
+/* 60 */
 /***/ function(module, exports) {
 
 	module.exports = "<span data-seek-time></span>\n";
 
 /***/ },
-/* 64 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -9723,7 +9161,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 65 */
+/* 62 */
 /***/ function(module, exports) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -9756,67 +9194,67 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 66 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(37)();
+	exports = module.exports = __webpack_require__(41)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "@font-face {\n  font-family: \"Player\";\n  src: url(" + __webpack_require__(67) + ");\n  src: url(" + __webpack_require__(67) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(68) + ") format(\"truetype\"), url(" + __webpack_require__(69) + "#player) format(\"svg\"); }\n\n.media-control-notransition {\n  -webkit-transition: none !important;\n  -moz-transition: none !important;\n  -o-transition: none !important;\n  transition: none !important; }\n\n.media-control[data-media-control] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 9999;\n  pointer-events: none; }\n  .media-control[data-media-control].dragging {\n    pointer-events: auto;\n    cursor: -webkit-grabbing !important;\n    cursor: grabbing !important; }\n    .media-control[data-media-control].dragging * {\n      cursor: -webkit-grabbing !important;\n      cursor: grabbing !important; }\n  .media-control[data-media-control] .media-control-background[data-background] {\n    position: absolute;\n    height: 40%;\n    width: 100%;\n    bottom: 0;\n    background-image: -owg(linear-gradient(transparent, rgba(0, 0, 0, 0.9)));\n    background-image: -webkit(linear-gradient(transparent, rgba(0, 0, 0, 0.9)));\n    background-image: -moz(linear-gradient(transparent, rgba(0, 0, 0, 0.9)));\n    background-image: -o(linear-gradient(transparent, rgba(0, 0, 0, 0.9)));\n    background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    -webkit-transition: opacity 0.6s ease-out;\n    -moz-transition: opacity 0.6s ease-out;\n    -o-transition: opacity 0.6s ease-out;\n    transition: opacity 0.6s ease-out; }\n  .media-control[data-media-control] .media-control-icon {\n    font-family: \"Player\";\n    font-weight: normal;\n    font-style: normal;\n    font-size: 26px;\n    line-height: 32px;\n    letter-spacing: 0;\n    speak: none;\n    color: #fff;\n    opacity: 0.5;\n    vertical-align: middle;\n    text-align: left;\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease;\n    -o-transition: all 0.1s ease;\n    transition: all 0.1s ease; }\n  .media-control[data-media-control] .media-control-icon:hover {\n    color: white;\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .media-control[data-media-control].media-control-hide .media-control-background[data-background] {\n    opacity: 0; }\n  .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {\n    bottom: -50px; }\n    .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n      opacity: 0; }\n  .media-control[data-media-control] .media-control-layer[data-controls] {\n    position: absolute;\n    bottom: 7px;\n    width: 100%;\n    height: 32px;\n    vertical-align: middle;\n    pointer-events: auto;\n    -webkit-transition: bottom 0.4s ease-out;\n    -moz-transition: bottom 0.4s ease-out;\n    -o-transition: bottom 0.4s ease-out;\n    transition: bottom 0.4s ease-out; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      left: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {\n      height: 100%;\n      text-align: center;\n      line-height: 32px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {\n      background-color: transparent;\n      border: 0;\n      margin: 0 6px;\n      padding: 0;\n      cursor: pointer;\n      display: inline-block; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {\n        outline: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]:before {\n          content: \"\\E001\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]:before {\n          content: \"\\E002\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]:before {\n          content: \"\\E003\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]:before {\n          content: \"\\E006\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen].shrink:before {\n          content: \"\\E007\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {\n        cursor: default;\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%;\n        opacity: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]:before {\n          content: \"\\E008\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {\n          opacity: 1.0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {\n            opacity: 1.0;\n            text-shadow: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]:before {\n          content: \"\\E001\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].playing:before {\n          content: \"\\E002\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].paused:before {\n          content: \"\\E001\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]:before {\n          content: \"\\E001\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].playing:before {\n          content: \"\\E003\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].stopped:before {\n          content: \"\\E001\"; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position], .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      display: inline-block;\n      font-size: 10px;\n      color: white;\n      cursor: default;\n      line-height: 32px;\n      position: relative; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {\n      margin-left: 6px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      color: rgba(255, 255, 255, 0.5);\n      margin-right: 6px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {\n        content: \"|\";\n        margin: 0 3px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {\n      position: absolute;\n      top: -20px;\n      left: 0;\n      display: inline-block;\n      vertical-align: middle;\n      width: 100%;\n      height: 25px;\n      cursor: pointer; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {\n        width: 100%;\n        height: 1px;\n        position: relative;\n        top: 12px;\n        background-color: #666666; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #c2c2c2;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out;\n          -o-transition: all 0.1s ease-out;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #005aff;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out;\n          -o-transition: all 0.1s ease-out;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0;\n          position: absolute;\n          top: -3px;\n          width: 5px;\n          height: 7px;\n          background-color: rgba(255, 255, 255, 0.5);\n          -webkit-transition: opacity 0.1s ease;\n          -moz-transition: opacity 0.1s ease;\n          -o-transition: opacity 0.1s ease;\n          transition: opacity 0.1s ease; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n        opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {\n        cursor: default; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n        position: absolute;\n        top: 2px;\n        left: 0;\n        width: 20px;\n        height: 20px;\n        opacity: 1;\n        -webkit-transition: all 0.1s ease-out;\n        -moz-transition: all 0.1s ease-out;\n        -o-transition: all 0.1s ease-out;\n        transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {\n          position: absolute;\n          left: 6px;\n          top: 6px;\n          width: 8px;\n          height: 8px;\n          border-radius: 10px;\n          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n          background-color: white; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {\n      float: right;\n      display: inline-block;\n      height: 32px;\n      cursor: pointer;\n      margin: 0 6px;\n      box-sizing: border-box; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {\n        float: left;\n        bottom: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {\n          background-color: transparent;\n          border: 0;\n          box-sizing: content-box;\n          width: 16px;\n          height: 32px;\n          margin-right: 6px;\n          opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:before {\n            content: \"\\E004\"; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted {\n            opacity: 0.5; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted:hover {\n              opacity: 0.7; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted:before {\n              content: \"\\E005\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {\n        float: left;\n        position: relative;\n        top: 6px;\n        width: 42px;\n        height: 18px;\n        padding: 3px 0;\n        overflow: hidden;\n        -webkit-transition: width 0.2s ease-out;\n        -moz-transition: width 0.2s ease-out;\n        -o-transition: width 0.2s ease-out;\n        transition: width .2s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {\n          float: left;\n          width: 4px;\n          padding-left: 2px;\n          height: 12px;\n          opacity: 0.5;\n          -webkit-box-shadow: inset 2px 0 0 white;\n          -moz-box-shadow: inset 2px 0 0 white;\n          box-shadow: inset 2px 0 0 white;\n          -webkit-transition: -webkit-transform 0.2s ease-out;\n          -moz-transition: -moz-transform 0.2s ease-out;\n          -o-transition: -o-transform 0.2s ease-out;\n          transition: transform .2s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {\n            -webkit-box-shadow: inset 2px 0 0 #fff;\n            -moz-box-shadow: inset 2px 0 0 #fff;\n            box-shadow: inset 2px 0 0 #fff;\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:nth-of-type(1) {\n            padding-left: 0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {\n            -webkit-transform: scaleY(1.5);\n            -moz-transform: scaleY(1.5);\n            -ms-transform: scaleY(1.5);\n            -o-transform: scaleY(1.5);\n            transform: scaleY(1.5); }\n  .media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {\n    height: 12px;\n    top: 9px;\n    padding: 0;\n    width: 0; }\n", ""]);
+	exports.push([module.id, "@font-face {\n  font-family: \"Player\";\n  src: url(" + __webpack_require__(64) + ");\n  src: url(" + __webpack_require__(64) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(65) + ") format(\"truetype\"), url(" + __webpack_require__(66) + "#player) format(\"svg\"); }\n\n.media-control-notransition {\n  -webkit-transition: none !important false;\n  -moz-transition: none !important false false;\n  -o-transition: none !important false false;\n  transition: none !important; }\n\n.media-control[data-media-control] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 9999;\n  pointer-events: none; }\n  .media-control[data-media-control].dragging {\n    pointer-events: auto;\n    cursor: -webkit-grabbing !important;\n    cursor: grabbing !important; }\n    .media-control[data-media-control].dragging * {\n      cursor: -webkit-grabbing !important;\n      cursor: grabbing !important; }\n  .media-control[data-media-control] .media-control-background[data-background] {\n    position: absolute;\n    height: 40%;\n    width: 100%;\n    bottom: 0;\n    background-image: -owg-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background-image: -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background-image: -moz-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background-image: -o-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    -webkit-transition: opacity 0.6s ease-out;\n    -moz-transition: opacity 0.6s ease-out false;\n    -o-transition: opacity 0.6s ease-out false;\n    transition: opacity 0.6s ease-out; }\n  .media-control[data-media-control] .media-control-icon {\n    font-family: \"Player\";\n    font-weight: normal;\n    font-style: normal;\n    font-size: 26px;\n    line-height: 32px;\n    letter-spacing: 0;\n    speak: none;\n    color: #fff;\n    opacity: 0.5;\n    vertical-align: middle;\n    text-align: left;\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease false;\n    -o-transition: all 0.1s ease false;\n    transition: all 0.1s ease; }\n  .media-control[data-media-control] .media-control-icon:hover {\n    color: white;\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .media-control[data-media-control].media-control-hide .media-control-background[data-background] {\n    opacity: 0; }\n  .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {\n    bottom: -50px; }\n    .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n      opacity: 0; }\n  .media-control[data-media-control] .media-control-layer[data-controls] {\n    position: absolute;\n    bottom: 7px;\n    width: 100%;\n    height: 32px;\n    vertical-align: middle;\n    pointer-events: auto;\n    -webkit-transition: bottom 0.4s ease-out;\n    -moz-transition: bottom 0.4s ease-out false;\n    -o-transition: bottom 0.4s ease-out false;\n    transition: bottom 0.4s ease-out; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      left: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {\n      height: 100%;\n      text-align: center;\n      line-height: 32px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {\n      background-color: transparent;\n      border: 0;\n      margin: 0 6px;\n      padding: 0;\n      cursor: pointer;\n      display: inline-block; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {\n        outline: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]:before {\n          content: \"\\E001\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]:before {\n          content: \"\\E002\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]:before {\n          content: \"\\E003\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]:before {\n          content: \"\\E006\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen].shrink:before {\n          content: \"\\E007\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {\n        cursor: default;\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%;\n        opacity: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]:before {\n          content: \"\\E008\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {\n          opacity: 1.0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {\n            opacity: 1.0;\n            text-shadow: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]:before {\n          content: \"\\E001\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].playing:before {\n          content: \"\\E002\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].paused:before {\n          content: \"\\E001\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]:before {\n          content: \"\\E001\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].playing:before {\n          content: \"\\E003\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].stopped:before {\n          content: \"\\E001\"; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position], .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      display: inline-block;\n      font-size: 10px;\n      color: white;\n      cursor: default;\n      line-height: 32px;\n      position: relative; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {\n      margin-left: 6px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      color: rgba(255, 255, 255, 0.5);\n      margin-right: 6px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {\n        content: \"|\";\n        margin: 0 3px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {\n      position: absolute;\n      top: -20px;\n      left: 0;\n      display: inline-block;\n      vertical-align: middle;\n      width: 100%;\n      height: 25px;\n      cursor: pointer; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {\n        width: 100%;\n        height: 1px;\n        position: relative;\n        top: 12px;\n        background-color: #666666; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #c2c2c2;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out false;\n          -o-transition: all 0.1s ease-out false;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #005aff;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out false;\n          -o-transition: all 0.1s ease-out false;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0;\n          position: absolute;\n          top: -3px;\n          width: 5px;\n          height: 7px;\n          background-color: rgba(255, 255, 255, 0.5);\n          -webkit-transition: opacity 0.1s ease;\n          -moz-transition: opacity 0.1s ease false;\n          -o-transition: opacity 0.1s ease false;\n          transition: opacity 0.1s ease; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n        opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {\n        cursor: default; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n        position: absolute;\n        top: 2px;\n        left: 0;\n        width: 20px;\n        height: 20px;\n        opacity: 1;\n        -webkit-transition: all 0.1s ease-out;\n        -moz-transition: all 0.1s ease-out false;\n        -o-transition: all 0.1s ease-out false;\n        transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {\n          position: absolute;\n          left: 6px;\n          top: 6px;\n          width: 8px;\n          height: 8px;\n          border-radius: 10px;\n          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n          background-color: white; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {\n      float: right;\n      display: inline-block;\n      height: 32px;\n      cursor: pointer;\n      margin: 0 6px;\n      box-sizing: border-box; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {\n        float: left;\n        bottom: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {\n          background-color: transparent;\n          border: 0;\n          box-sizing: content-box;\n          width: 16px;\n          height: 32px;\n          margin-right: 6px;\n          opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:before {\n            content: \"\\E004\"; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted {\n            opacity: 0.5; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted:hover {\n              opacity: 0.7; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted:before {\n              content: \"\\E005\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {\n        float: left;\n        position: relative;\n        top: 6px;\n        width: 42px;\n        height: 18px;\n        padding: 3px 0;\n        overflow: hidden;\n        -webkit-transition: width 0.2s ease-out;\n        -moz-transition: width 0.2s ease-out false;\n        -o-transition: width 0.2s ease-out false;\n        transition: width 0.2s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {\n          float: left;\n          width: 4px;\n          padding-left: 2px;\n          height: 12px;\n          opacity: 0.5;\n          -webkit-box-shadow: inset 2px 0 0 white;\n          -moz-box-shadow: inset 2px 0 0 white;\n          box-shadow: inset 2px 0 0 white;\n          -webkit-transition: -webkit-transform 0.2s ease-out;\n          -moz-transition: -moz-transform 0.2s ease-out false;\n          -o-transition: -o-transform 0.2s ease-out false;\n          transition: transform 0.2s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {\n            -webkit-box-shadow: inset 2px 0 0 #fff;\n            -moz-box-shadow: inset 2px 0 0 #fff;\n            box-shadow: inset 2px 0 0 #fff;\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:nth-of-type(1) {\n            padding-left: 0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {\n            -webkit-transform: scaleY(1.5);\n            -moz-transform: scaleY(1.5);\n            -ms-transform: scaleY(1.5);\n            -o-transform: scaleY(1.5);\n            transform: scaleY(1.5); }\n  .media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {\n    height: 12px;\n    top: 9px;\n    padding: 0;\n    width: 0; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 67 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "ed8735c27adb521e625717506cfcfb04.eot"
 
 /***/ },
-/* 68 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "3e43a5d764f841e7e78896de82cd6c50.ttf"
 
 /***/ },
-/* 69 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "5d7ec830fd8d1c440f165111719aa4a0.svg"
 
 /***/ },
-/* 70 */
+/* 67 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"media-control-background\" data-background></div>\n<div class=\"media-control-layer\" data-controls>\n  <%  var renderBar = function(name) { %>\n      <div class=\"bar-container\" data-<%= name %>>\n        <div class=\"bar-background\" data-<%= name %>>\n          <div class=\"bar-fill-1\" data-<%= name %>></div>\n          <div class=\"bar-fill-2\" data-<%= name %>></div>\n          <div class=\"bar-hover\" data-<%= name %>></div>\n        </div>\n        <div class=\"bar-scrubber\" data-<%= name %>>\n          <div class=\"bar-scrubber-icon\" data-<%= name %>></div>\n        </div>\n      </div>\n  <%  }; %>\n  <%  var renderSegmentedBar = function(name, segments) {\n      segments = segments || 10; %>\n    <div class=\"bar-container\" data-<%= name %>>\n    <% for (var i = 0; i < segments; i++) { %>\n      <div class=\"segmented-bar-element\" data-<%= name %>></div>\n    <% } %>\n    </div>\n  <% }; %>\n  <% var renderDrawer = function(name, renderContent) { %>\n      <div class=\"drawer-container\" data-<%= name %>>\n        <div class=\"drawer-icon-container\" data-<%= name %>>\n          <div class=\"drawer-icon media-control-icon\" data-<%= name %>></div>\n          <span class=\"drawer-text\" data-<%= name %>></span>\n        </div>\n        <% renderContent(name); %>\n      </div>\n  <% }; %>\n  <% var renderIndicator = function(name) { %>\n      <div class=\"media-control-indicator\" data-<%= name %>></div>\n  <% }; %>\n  <% var renderButton = function(name) { %>\n      <button class=\"media-control-button media-control-icon\" data-<%= name %>></button>\n  <% }; %>\n  <%  var templates = {\n        bar: renderBar,\n        segmentedBar: renderSegmentedBar,\n      };\n      var render = function(settingsList) {\n        settingsList.forEach(function(setting) {\n          if(setting === \"seekbar\") {\n            renderBar(setting);\n          } else if (setting === \"volume\") {\n            renderDrawer(setting, settings.volumeBarTemplate ? templates[settings.volumeBarTemplate] : function(name) { return renderSegmentedBar(name); });\n          } else if (setting === \"duration\" || setting === \"position\") {\n            renderIndicator(setting);\n          } else {\n            renderButton(setting);\n          }\n        });\n      }; %>\n  <% if (settings.default && settings.default.length) { %>\n  <div class=\"media-control-center-panel\" data-media-control>\n    <% render(settings.default); %>\n  </div>\n  <% } %>\n  <% if (settings.left && settings.left.length) { %>\n  <div class=\"media-control-left-panel\" data-media-control>\n    <% render(settings.left); %>\n  </div>\n  <% } %>\n  <% if (settings.right && settings.right.length) { %>\n  <div class=\"media-control-right-panel\" data-media-control>\n    <% render(settings.right); %>\n  </div>\n  <% } %>\n</div>\n";
 
 /***/ },
-/* 71 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(37)();
+	exports = module.exports = __webpack_require__(41)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "[data-player] {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  -o-user-select: none;\n  user-select: none;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  -webkit-transform: translate3d(0, 0, 0);\n  -moz-transform: translate3d(0, 0, 0);\n  -ms-transform: translate3d(0, 0, 0);\n  -o-transform: translate3d(0, 0, 0);\n  transform: translate3d(0, 0, 0);\n  position: relative;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-style: normal;\n  font-weight: normal;\n  text-align: center;\n  overflow: hidden;\n  font-size: 100%;\n  font-family: \"lucida grande\", tahoma, verdana, arial, sans-serif;\n  text-shadow: 0 0 0;\n  box-sizing: border-box; }\n  [data-player] div, [data-player] span, [data-player] applet, [data-player] object, [data-player] iframe, [data-player] h1, [data-player] h2, [data-player] h3, [data-player] h4, [data-player] h5, [data-player] h6, [data-player] p, [data-player] blockquote, [data-player] pre, [data-player] a, [data-player] abbr, [data-player] acronym, [data-player] address, [data-player] big, [data-player] cite, [data-player] code, [data-player] del, [data-player] dfn, [data-player] em, [data-player] img, [data-player] ins, [data-player] kbd, [data-player] q, [data-player] s, [data-player] samp, [data-player] small, [data-player] strike, [data-player] strong, [data-player] sub, [data-player] sup, [data-player] tt, [data-player] var, [data-player] b, [data-player] u, [data-player] i, [data-player] center, [data-player] dl, [data-player] dt, [data-player] dd, [data-player] ol, [data-player] ul, [data-player] li, [data-player] fieldset, [data-player] form, [data-player] label, [data-player] legend, [data-player] table, [data-player] caption, [data-player] tbody, [data-player] tfoot, [data-player] thead, [data-player] tr, [data-player] th, [data-player] td, [data-player] article, [data-player] aside, [data-player] canvas, [data-player] details, [data-player] embed, [data-player] figure, [data-player] figcaption, [data-player] footer, [data-player] header, [data-player] hgroup, [data-player] menu, [data-player] nav, [data-player] output, [data-player] ruby, [data-player] section, [data-player] summary, [data-player] time, [data-player] mark, [data-player] audio, [data-player] video {\n    margin: 0;\n    padding: 0;\n    border: 0;\n    font: inherit;\n    font-size: 100%;\n    vertical-align: baseline; }\n  [data-player] table {\n    border-collapse: collapse;\n    border-spacing: 0; }\n  [data-player] caption, [data-player] th, [data-player] td {\n    text-align: left;\n    font-weight: normal;\n    vertical-align: middle; }\n  [data-player] q, [data-player] blockquote {\n    quotes: none; }\n    [data-player] q:before, [data-player] q:after, [data-player] blockquote:before, [data-player] blockquote:after {\n      content: \"\";\n      content: none; }\n  [data-player] a img {\n    border: none; }\n  [data-player]:focus {\n    outline: 0; }\n  [data-player] * {\n    max-width: none;\n    box-sizing: inherit;\n    float: none; }\n  [data-player] div {\n    display: block; }\n  [data-player].fullscreen {\n    width: 100% !important;\n    height: 100% !important; }\n  [data-player].nocursor {\n    cursor: none; }\n\n.clappr-style {\n  display: none !important; }\n", ""]);
+	exports.push([module.id, "[data-player] {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  -o-user-select: none;\n  user-select: none;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  -webkit-transform: translate3d(0, 0, 0);\n  -moz-transform: translate3d(0, 0, 0);\n  -ms-transform: translate3d(0, 0, 0);\n  -o-transform: translate3d(0, 0, 0);\n  transform: translate3d(0, 0, 0);\n  position: relative;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-style: normal;\n  font-weight: normal;\n  text-align: center;\n  overflow: hidden;\n  font-size: 100%;\n  font-family: \"lucida grande\", tahoma, verdana, arial, sans-serif;\n  text-shadow: 0 0 0;\n  box-sizing: border-box; }\n  [data-player] div, [data-player] span, [data-player] applet, [data-player] object, [data-player] iframe,\n  [data-player] h1, [data-player] h2, [data-player] h3, [data-player] h4, [data-player] h5, [data-player] h6, [data-player] p, [data-player] blockquote, [data-player] pre,\n  [data-player] a, [data-player] abbr, [data-player] acronym, [data-player] address, [data-player] big, [data-player] cite, [data-player] code,\n  [data-player] del, [data-player] dfn, [data-player] em, [data-player] img, [data-player] ins, [data-player] kbd, [data-player] q, [data-player] s, [data-player] samp,\n  [data-player] small, [data-player] strike, [data-player] strong, [data-player] sub, [data-player] sup, [data-player] tt, [data-player] var,\n  [data-player] b, [data-player] u, [data-player] i, [data-player] center,\n  [data-player] dl, [data-player] dt, [data-player] dd, [data-player] ol, [data-player] ul, [data-player] li,\n  [data-player] fieldset, [data-player] form, [data-player] label, [data-player] legend,\n  [data-player] table, [data-player] caption, [data-player] tbody, [data-player] tfoot, [data-player] thead, [data-player] tr, [data-player] th, [data-player] td,\n  [data-player] article, [data-player] aside, [data-player] canvas, [data-player] details, [data-player] embed,\n  [data-player] figure, [data-player] figcaption, [data-player] footer, [data-player] header, [data-player] hgroup,\n  [data-player] menu, [data-player] nav, [data-player] output, [data-player] ruby, [data-player] section, [data-player] summary,\n  [data-player] time, [data-player] mark, [data-player] audio, [data-player] video {\n    margin: 0;\n    padding: 0;\n    border: 0;\n    font: inherit;\n    font-size: 100%;\n    vertical-align: baseline; }\n  [data-player] table {\n    border-collapse: collapse;\n    border-spacing: 0; }\n  [data-player] caption, [data-player] th, [data-player] td {\n    text-align: left;\n    font-weight: normal;\n    vertical-align: middle; }\n  [data-player] q, [data-player] blockquote {\n    quotes: none; }\n    [data-player] q:before, [data-player] q:after, [data-player] blockquote:before, [data-player] blockquote:after {\n      content: \"\";\n      content: none; }\n  [data-player] a img {\n    border: none; }\n  [data-player]:focus {\n    outline: 0; }\n  [data-player] * {\n    max-width: none;\n    box-sizing: inherit;\n    float: none; }\n  [data-player] div {\n    display: block; }\n  [data-player].fullscreen {\n    width: 100% !important;\n    height: 100% !important; }\n  [data-player].nocursor {\n    cursor: none; }\n\n.clappr-style {\n  display: none !important; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 72 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(73);
+	module.exports = __webpack_require__(70);
 
 /***/ },
-/* 73 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -9843,77 +9281,77 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseBase_object2 = _interopRequireDefault(_baseBase_object);
 
-	var _componentsPlayer_info = __webpack_require__(65);
+	var _componentsPlayer_info = __webpack_require__(62);
 
 	var _componentsPlayer_info2 = _interopRequireDefault(_componentsPlayer_info);
 
-	var _lodashUniq = __webpack_require__(74);
+	var _lodashUniq = __webpack_require__(71);
 
 	var _lodashUniq2 = _interopRequireDefault(_lodashUniq);
 
 	/* Playback Plugins */
 
-	var _playbacksHtml5_video = __webpack_require__(93);
+	var _playbacksHtml5_video = __webpack_require__(90);
 
 	var _playbacksHtml5_video2 = _interopRequireDefault(_playbacksHtml5_video);
 
-	var _playbacksFlash = __webpack_require__(99);
+	var _playbacksFlash = __webpack_require__(96);
 
 	var _playbacksFlash2 = _interopRequireDefault(_playbacksFlash);
 
-	var _playbacksHtml5_audio = __webpack_require__(106);
+	var _playbacksHtml5_audio = __webpack_require__(103);
 
 	var _playbacksHtml5_audio2 = _interopRequireDefault(_playbacksHtml5_audio);
 
-	var _playbacksHls = __webpack_require__(108);
+	var _playbacksHls = __webpack_require__(105);
 
 	var _playbacksHls2 = _interopRequireDefault(_playbacksHls);
 
-	var _playbacksHtml_img = __webpack_require__(112);
+	var _playbacksHtml_img = __webpack_require__(109);
 
 	var _playbacksHtml_img2 = _interopRequireDefault(_playbacksHtml_img);
 
-	var _playbacksNo_op = __webpack_require__(115);
+	var _playbacksNo_op = __webpack_require__(112);
 
 	var _playbacksNo_op2 = _interopRequireDefault(_playbacksNo_op);
 
 	/* Container Plugins */
 
-	var _pluginsSpinner_three_bounce = __webpack_require__(119);
+	var _pluginsSpinner_three_bounce = __webpack_require__(116);
 
 	var _pluginsSpinner_three_bounce2 = _interopRequireDefault(_pluginsSpinner_three_bounce);
 
-	var _pluginsStats = __webpack_require__(124);
+	var _pluginsStats = __webpack_require__(121);
 
 	var _pluginsStats2 = _interopRequireDefault(_pluginsStats);
 
-	var _pluginsWatermark = __webpack_require__(127);
+	var _pluginsWatermark = __webpack_require__(124);
 
 	var _pluginsWatermark2 = _interopRequireDefault(_pluginsWatermark);
 
-	var _pluginsPoster = __webpack_require__(131);
+	var _pluginsPoster = __webpack_require__(128);
 
 	var _pluginsPoster2 = _interopRequireDefault(_pluginsPoster);
 
-	var _pluginsGoogle_analytics = __webpack_require__(135);
+	var _pluginsGoogle_analytics = __webpack_require__(132);
 
 	var _pluginsGoogle_analytics2 = _interopRequireDefault(_pluginsGoogle_analytics);
 
-	var _pluginsClick_to_pause = __webpack_require__(137);
+	var _pluginsClick_to_pause = __webpack_require__(134);
 
 	var _pluginsClick_to_pause2 = _interopRequireDefault(_pluginsClick_to_pause);
 
-	var _pluginsChromecast = __webpack_require__(139);
+	var _pluginsChromecast = __webpack_require__(136);
 
 	var _pluginsChromecast2 = _interopRequireDefault(_pluginsChromecast);
 
 	/* Core Plugins */
 
-	var _pluginsDvr_controls = __webpack_require__(149);
+	var _pluginsDvr_controls = __webpack_require__(146);
 
 	var _pluginsDvr_controls2 = _interopRequireDefault(_pluginsDvr_controls);
 
-	var _pluginsFavicon = __webpack_require__(154);
+	var _pluginsFavicon = __webpack_require__(151);
 
 	var _pluginsFavicon2 = _interopRequireDefault(_pluginsFavicon);
 
@@ -9982,7 +9420,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 74 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -9995,9 +9433,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var baseCallback = __webpack_require__(75),
-	    baseUniq = __webpack_require__(87),
-	    isIterateeCall = __webpack_require__(92);
+	var baseCallback = __webpack_require__(72),
+	    baseUniq = __webpack_require__(84),
+	    isIterateeCall = __webpack_require__(89);
 
 	/**
 	 * An implementation of `_.uniq` optimized for sorted arrays without support
@@ -10093,7 +9531,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = uniq;
 
 /***/ },
-/* 75 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -10106,10 +9544,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var baseIsEqual = __webpack_require__(76),
-	    bindCallback = __webpack_require__(82),
-	    isArray = __webpack_require__(77),
-	    pairs = __webpack_require__(83);
+	var baseIsEqual = __webpack_require__(73),
+	    bindCallback = __webpack_require__(79),
+	    isArray = __webpack_require__(74),
+	    pairs = __webpack_require__(80);
 
 	/** Used to match property names within property paths. */
 	var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\n\\]|\\.)*?\1)\]/,
@@ -10513,7 +9951,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseCallback;
 
 /***/ },
-/* 76 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -10526,9 +9964,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var isArray = __webpack_require__(77),
-	    isTypedArray = __webpack_require__(78),
-	    keys = __webpack_require__(79);
+	var isArray = __webpack_require__(74),
+	    isTypedArray = __webpack_require__(75),
+	    keys = __webpack_require__(76);
 
 	/** `Object#toString` result references. */
 	var argsTag = '[object Arguments]',
@@ -10857,7 +10295,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseIsEqual;
 
 /***/ },
-/* 77 */
+/* 74 */
 /***/ function(module, exports) {
 
 	/**
@@ -11041,7 +10479,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isArray;
 
 /***/ },
-/* 78 */
+/* 75 */
 /***/ function(module, exports) {
 
 	/**
@@ -11148,7 +10586,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isTypedArray;
 
 /***/ },
-/* 79 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -11161,9 +10599,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var getNative = __webpack_require__(80),
-	    isArguments = __webpack_require__(81),
-	    isArray = __webpack_require__(77);
+	var getNative = __webpack_require__(77),
+	    isArguments = __webpack_require__(78),
+	    isArray = __webpack_require__(74);
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -11387,7 +10825,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = keys;
 
 /***/ },
-/* 80 */
+/* 77 */
 /***/ function(module, exports) {
 
 	/**
@@ -11528,7 +10966,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getNative;
 
 /***/ },
-/* 81 */
+/* 78 */
 /***/ function(module, exports) {
 
 	/**
@@ -11640,7 +11078,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isArguments;
 
 /***/ },
-/* 82 */
+/* 79 */
 /***/ function(module, exports) {
 
 	/**
@@ -11716,7 +11154,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = bindCallback;
 
 /***/ },
-/* 83 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -11729,7 +11167,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var keys = __webpack_require__(84);
+	var keys = __webpack_require__(81);
 
 	/**
 	 * Converts `value` to an object if it's not one.
@@ -11801,7 +11239,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = pairs;
 
 /***/ },
-/* 84 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -11814,9 +11252,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var getNative = __webpack_require__(85),
-	    isArguments = __webpack_require__(86),
-	    isArray = __webpack_require__(77);
+	var getNative = __webpack_require__(82),
+	    isArguments = __webpack_require__(83),
+	    isArray = __webpack_require__(74);
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -12040,7 +11478,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = keys;
 
 /***/ },
-/* 85 */
+/* 82 */
 /***/ function(module, exports) {
 
 	/**
@@ -12181,7 +11619,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getNative;
 
 /***/ },
-/* 86 */
+/* 83 */
 /***/ function(module, exports) {
 
 	/**
@@ -12293,7 +11731,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isArguments;
 
 /***/ },
-/* 87 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -12306,9 +11744,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var baseIndexOf = __webpack_require__(88),
-	    cacheIndexOf = __webpack_require__(89),
-	    createCache = __webpack_require__(90);
+	var baseIndexOf = __webpack_require__(85),
+	    cacheIndexOf = __webpack_require__(86),
+	    createCache = __webpack_require__(87);
 
 	/** Used as the size to enable large array optimizations. */
 	var LARGE_ARRAY_SIZE = 200;
@@ -12366,7 +11804,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseUniq;
 
 /***/ },
-/* 88 */
+/* 85 */
 /***/ function(module, exports) {
 
 	/**
@@ -12430,7 +11868,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseIndexOf;
 
 /***/ },
-/* 89 */
+/* 86 */
 /***/ function(module, exports) {
 
 	/**
@@ -12490,7 +11928,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = cacheIndexOf;
 
 /***/ },
-/* 90 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -12503,7 +11941,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var getNative = __webpack_require__(91);
+	var getNative = __webpack_require__(88);
 
 	/** Native method references. */
 	var Set = getNative(global, 'Set');
@@ -12589,7 +12027,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 91 */
+/* 88 */
 /***/ function(module, exports) {
 
 	/**
@@ -12730,7 +12168,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getNative;
 
 /***/ },
-/* 92 */
+/* 89 */
 /***/ function(module, exports) {
 
 	/**
@@ -12867,15 +12305,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isIterateeCall;
 
 /***/ },
-/* 93 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(94);
+	module.exports = __webpack_require__(91);
 
 /***/ },
-/* 94 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -12900,7 +12338,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseUtils = __webpack_require__(2);
 
-	var _basePlayback = __webpack_require__(96);
+	var _basePlayback = __webpack_require__(93);
 
 	var _basePlayback2 = _interopRequireDefault(_basePlayback);
 
@@ -12920,15 +12358,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
 
-	var _publicStyleScss = __webpack_require__(97);
+	var _publicStyleScss = __webpack_require__(94);
 
 	var _publicStyleScss2 = _interopRequireDefault(_publicStyleScss);
 
-	var _publicIndexHtml = __webpack_require__(98);
+	var _publicIndexHtml = __webpack_require__(95);
 
 	var _publicIndexHtml2 = _interopRequireDefault(_publicIndexHtml);
 
-	var _lodashFind = __webpack_require__(38);
+	var _lodashFind = __webpack_require__(42);
 
 	var _lodashFind2 = _interopRequireDefault(_lodashFind);
 
@@ -13258,10 +12696,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	module.exports = HTML5Video;
 	module.exports = exports['default'];
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(95)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(92)))
 
 /***/ },
-/* 95 */
+/* 92 */
 /***/ function(module, exports) {
 
 	// shim for using process in browser
@@ -13363,7 +12801,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 96 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13537,10 +12975,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 97 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(37)();
+	exports = module.exports = __webpack_require__(41)();
 	// imports
 
 
@@ -13551,21 +12989,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 98 */
+/* 95 */
 /***/ function(module, exports) {
 
 	module.exports = "<source src=\"<%=src%>\" type=\"<%=type%>\">\n";
 
 /***/ },
-/* 99 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(100);
+	module.exports = __webpack_require__(97);
 
 /***/ },
-/* 100 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -13590,7 +13028,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseUtils = __webpack_require__(2);
 
-	var _playbacksBase_flash_playback = __webpack_require__(101);
+	var _playbacksBase_flash_playback = __webpack_require__(98);
 
 	var _playbacksBase_flash_playback2 = _interopRequireDefault(_playbacksBase_flash_playback);
 
@@ -13598,7 +13036,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _componentsBrowser2 = _interopRequireDefault(_componentsBrowser);
 
-	var _componentsMediator = __webpack_require__(64);
+	var _componentsMediator = __webpack_require__(61);
 
 	var _componentsMediator2 = _interopRequireDefault(_componentsMediator);
 
@@ -13614,7 +13052,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
 
-	var _publicPlayerSwf = __webpack_require__(105);
+	var _publicPlayerSwf = __webpack_require__(102);
 
 	var _publicPlayerSwf2 = _interopRequireDefault(_publicPlayerSwf);
 
@@ -13723,7 +13161,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'checkState',
 	    value: function checkState() {
-	      if (this.currentState === "PAUSED") {
+	      if (this.isIdle || this.currentState === "PAUSED") {
 	        return;
 	      } else if (this.currentState !== "PLAYING_BUFFERING" && this.el.getState() === "PLAYING_BUFFERING") {
 	        this.trigger(_baseEvents2['default'].PLAYBACK_BUFFERING, this.name);
@@ -13737,6 +13175,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.trigger(_baseEvents2['default'].PLAYBACK_ENDED, this.name);
 	        this.trigger(_baseEvents2['default'].PLAYBACK_TIMEUPDATE, 0, this.el.getDuration(), this.name);
 	        this.currentState = "ENDED";
+	        this.isIdle = true;
 	      }
 	    }
 	  }, {
@@ -13752,6 +13191,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _this2 = this;
 
 	      if (this.el.playerPlay) {
+	        this.isIdle = false;
 	        this.el.playerPlay(this.src);
 	        this.listenToOnce(this, _baseEvents2['default'].PLAYBACK_BUFFERFULL, function () {
 	          return _this2.checkInitialSeek();
@@ -13873,7 +13313,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 101 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13881,11 +13321,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
-	exports['default'] = __webpack_require__(102);
+	exports['default'] = __webpack_require__(99);
 	module.exports = exports['default'];
 
 /***/ },
-/* 102 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2015 Globo.com Player authors. All rights reserved.
@@ -13908,7 +13348,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _basePlayback = __webpack_require__(96);
+	var _basePlayback = __webpack_require__(93);
 
 	var _basePlayback2 = _interopRequireDefault(_basePlayback);
 
@@ -13928,11 +13368,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var _publicFlashHtml = __webpack_require__(103);
+	var _publicFlashHtml = __webpack_require__(100);
 
 	var _publicFlashHtml2 = _interopRequireDefault(_publicFlashHtml);
 
-	var _publicFlashScss = __webpack_require__(104);
+	var _publicFlashScss = __webpack_require__(101);
 
 	var _publicFlashScss2 = _interopRequireDefault(_publicFlashScss);
 
@@ -14015,41 +13455,41 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 103 */
+/* 100 */
 /***/ function(module, exports) {
 
 	module.exports = "<param name=\"movie\" value=\"<%= swfPath %>?inline=1\">\n<param name=\"quality\" value=\"autohigh\">\n<param name=\"swliveconnect\" value=\"true\">\n<param name=\"allowScriptAccess\" value=\"always\">\n<param name=\"bgcolor\" value=\"#000000\">\n<param name=\"allowFullScreen\" value=\"false\">\n<param name=\"wmode\" value=\"transparent\">\n<param name=\"tabindex\" value=\"1\">\n<param name=FlashVars value=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\" />\n<embed\n  name=\"<%= cid %>\"\n  type=\"application/x-shockwave-flash\"\n  disabled=\"disabled\"\n  tabindex=\"-1\"\n  enablecontextmenu=\"false\"\n  allowScriptAccess=\"always\"\n  quality=\"autohigh\"\n  pluginspage=\"http://www.macromedia.com/go/getflashplayer\"\n  wmode=\"transparent\"\n  swliveconnect=\"true\"\n  allowfullscreen=\"false\"\n  bgcolor=\"#000000\"\n  FlashVars=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\"\n  src=\"<%= swfPath %>\"\n  width=\"100%\"\n  height=\"100%\">\n</embed>\n";
 
 /***/ },
-/* 104 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(37)();
+	exports = module.exports = __webpack_require__(41)();
 	// imports
 
 
 	// module
-	exports.push([module.id, ".clappr-flash-playback[data-flash-playback] {\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 100%;\n  width: 100%;\n  background-color: black;\n  pointer-events: none; }\n", ""]);
+	exports.push([module.id, ".clappr-flash-playback[data-flash-playback] {\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 100%;\n  width: 100%;\n  pointer-events: none; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 105 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "4b76590b32dab62bc95c1b7951efae78.swf"
 
 /***/ },
-/* 106 */
+/* 103 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(107);
+	module.exports = __webpack_require__(104);
 
 /***/ },
-/* 107 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -14072,7 +13512,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _basePlayback = __webpack_require__(96);
+	var _basePlayback = __webpack_require__(93);
 
 	var _basePlayback2 = _interopRequireDefault(_basePlayback);
 
@@ -14080,7 +13520,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
 
-	var _lodashFind = __webpack_require__(38);
+	var _lodashFind = __webpack_require__(42);
 
 	var _lodashFind2 = _interopRequireDefault(_lodashFind);
 
@@ -14302,15 +13742,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 108 */
+/* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(109);
+	module.exports = __webpack_require__(106);
 
 /***/ },
-/* 109 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -14333,7 +13773,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _playbacksBase_flash_playback = __webpack_require__(101);
+	var _playbacksBase_flash_playback = __webpack_require__(98);
 
 	var _playbacksBase_flash_playback2 = _interopRequireDefault(_playbacksBase_flash_playback);
 
@@ -14345,7 +13785,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseTemplate2 = _interopRequireDefault(_baseTemplate);
 
-	var _componentsMediator = __webpack_require__(64);
+	var _componentsMediator = __webpack_require__(61);
 
 	var _componentsMediator2 = _interopRequireDefault(_componentsMediator);
 
@@ -14353,15 +13793,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _componentsBrowser2 = _interopRequireDefault(_componentsBrowser);
 
-	var _flashls_events = __webpack_require__(110);
+	var _flashls_events = __webpack_require__(107);
 
 	var _flashls_events2 = _interopRequireDefault(_flashls_events);
 
-	var _publicHLSPlayerSwf = __webpack_require__(111);
+	var _publicHLSPlayerSwf = __webpack_require__(108);
 
 	var _publicHLSPlayerSwf2 = _interopRequireDefault(_publicHLSPlayerSwf);
 
-	var _lodashAssign = __webpack_require__(21);
+	var _lodashAssign = __webpack_require__(25);
 
 	var _lodashAssign2 = _interopRequireDefault(_lodashAssign);
 
@@ -14947,7 +14387,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 110 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14962,7 +14402,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _componentsMediator = __webpack_require__(64);
+	var _componentsMediator = __webpack_require__(61);
 
 	var _componentsMediator2 = _interopRequireDefault(_componentsMediator);
 
@@ -15057,21 +14497,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 111 */
+/* 108 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "d878d8df1d462a3dc4c7b0ea7b4a8065.swf"
 
 /***/ },
-/* 112 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(113);
+	module.exports = __webpack_require__(110);
 
 /***/ },
-/* 113 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -15094,7 +14534,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _basePlayback = __webpack_require__(96);
+	var _basePlayback = __webpack_require__(93);
 
 	var _basePlayback2 = _interopRequireDefault(_basePlayback);
 
@@ -15102,7 +14542,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseStyler2 = _interopRequireDefault(_baseStyler);
 
-	var _publicStyleScss = __webpack_require__(114);
+	var _publicStyleScss = __webpack_require__(111);
 
 	var _publicStyleScss2 = _interopRequireDefault(_publicStyleScss);
 
@@ -15160,10 +14600,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 114 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(37)();
+	exports = module.exports = __webpack_require__(41)();
 	// imports
 
 
@@ -15174,15 +14614,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 115 */
+/* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(116);
+	module.exports = __webpack_require__(113);
 
 /***/ },
-/* 116 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15203,7 +14643,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseUtils = __webpack_require__(2);
 
-	var _basePlayback = __webpack_require__(96);
+	var _basePlayback = __webpack_require__(93);
 
 	var _basePlayback2 = _interopRequireDefault(_basePlayback);
 
@@ -15219,11 +14659,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
 
-	var _publicStyleScss = __webpack_require__(117);
+	var _publicStyleScss = __webpack_require__(114);
 
 	var _publicStyleScss2 = _interopRequireDefault(_publicStyleScss);
 
-	var _publicErrorHtml = __webpack_require__(118);
+	var _publicErrorHtml = __webpack_require__(115);
 
 	var _publicErrorHtml2 = _interopRequireDefault(_publicErrorHtml);
 
@@ -15324,10 +14764,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 117 */
+/* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(37)();
+	exports = module.exports = __webpack_require__(41)();
 	// imports
 
 
@@ -15338,21 +14778,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 118 */
+/* 115 */
 /***/ function(module, exports) {
 
 	module.exports = "<canvas data-no-op-canvas></canvas>\n<p data-no-op-msg>Your browser does not support the playback of this video. Try to use a different browser.<p>\n";
 
 /***/ },
-/* 119 */
+/* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(120);
+	module.exports = __webpack_require__(117);
 
 /***/ },
-/* 120 */
+/* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -15375,7 +14815,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseUi_container_plugin = __webpack_require__(121);
+	var _baseUi_container_plugin = __webpack_require__(118);
 
 	var _baseUi_container_plugin2 = _interopRequireDefault(_baseUi_container_plugin);
 
@@ -15391,11 +14831,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseTemplate2 = _interopRequireDefault(_baseTemplate);
 
-	var _publicSpinnerHtml = __webpack_require__(122);
+	var _publicSpinnerHtml = __webpack_require__(119);
 
 	var _publicSpinnerHtml2 = _interopRequireDefault(_publicSpinnerHtml);
 
-	var _publicSpinnerScss = __webpack_require__(123);
+	var _publicSpinnerScss = __webpack_require__(120);
 
 	var _publicSpinnerScss2 = _interopRequireDefault(_publicSpinnerScss);
 
@@ -15485,7 +14925,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 121 */
+/* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -15564,35 +15004,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 122 */
+/* 119 */
 /***/ function(module, exports) {
 
 	module.exports = "<div data-bounce1></div><div data-bounce2></div><div data-bounce3></div>\n";
 
 /***/ },
-/* 123 */
+/* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(37)();
+	exports = module.exports = __webpack_require__(41)();
 	// imports
 
 
 	// module
-	exports.push([module.id, ".spinner-three-bounce[data-spinner] {\n  position: absolute;\n  margin: 0 auto;\n  width: 70px;\n  text-align: center;\n  z-index: 999;\n  top: 47%;\n  left: 0;\n  right: 0;\n  margin-left: auto;\n  margin-right: auto; }\n  .spinner-three-bounce[data-spinner] > div {\n    width: 18px;\n    height: 18px;\n    background-color: #FFFFFF;\n    border-radius: 100%;\n    display: inline-block;\n    -webkit-animation: bouncedelay 1.4s infinite ease-in-out;\n    -moz-animation: bouncedelay 1.4s infinite ease-in-out;\n    -ms-animation: bouncedelay 1.4s infinite ease-in-out;\n    -o-animation: bouncedelay 1.4s infinite ease-in-out;\n    animation: bouncedelay 1.4s infinite ease-in-out;\n    /* Prevent first frame from flickering when animation starts */\n    -webkit-animation-fill-mode: both;\n    -moz-animation-fill-mode: both;\n    -ms-animation-fill-mode: both;\n    -o-animation-fill-mode: both;\n    animation-fill-mode: both; }\n  .spinner-three-bounce[data-spinner] [data-bounce1] {\n    -webkit-animation-delay: -0.32s;\n    -moz-animation-delay: -0.32s;\n    -ms-animation-delay: -0.32s;\n    -o-animation-delay: -0.32s;\n    animation-delay: -0.32s; }\n  .spinner-three-bounce[data-spinner] [data-bounce2] {\n    -webkit-animation-delay: -0.16s;\n    -moz-animation-delay: -0.16s;\n    -ms-animation-delay: -0.16s;\n    -o-animation-delay: -0.16s;\n    animation-delay: -0.16s; }\n\n@-moz-keyframes bouncedelay {\n  0%, 80%, 100% {\n    -moz-transform: scale(0);\n    transform: scale(0); }\n\n  40% {\n    -moz-transform: scale(1);\n    transform: scale(1); } }\n\n@-webkit-keyframes bouncedelay {\n  0%, 80%, 100% {\n    -webkit-transform: scale(0);\n    transform: scale(0); }\n\n  40% {\n    -webkit-transform: scale(1);\n    transform: scale(1); } }\n\n@-o-keyframes bouncedelay {\n  0%, 80%, 100% {\n    -o-transform: scale(0);\n    transform: scale(0); }\n\n  40% {\n    -o-transform: scale(1);\n    transform: scale(1); } }\n\n@-ms-keyframes bouncedelay {\n  0%, 80%, 100% {\n    -ms-transform: scale(0);\n    transform: scale(0); }\n\n  40% {\n    -ms-transform: scale(1);\n    transform: scale(1); } }\n\n@keyframes bouncedelay {\n  0%, 80%, 100% {\n    transform: scale(0); }\n\n  40% {\n    transform: scale(1); } }\n", ""]);
+	exports.push([module.id, ".spinner-three-bounce[data-spinner] {\n  position: absolute;\n  margin: 0 auto;\n  width: 70px;\n  text-align: center;\n  z-index: 999;\n  top: 47%;\n  left: 0;\n  right: 0;\n  margin-left: auto;\n  margin-right: auto; }\n  .spinner-three-bounce[data-spinner] > div {\n    width: 18px;\n    height: 18px;\n    background-color: #FFFFFF;\n    border-radius: 100%;\n    display: inline-block;\n    -webkit-animation: bouncedelay 1.4s infinite ease-in-out;\n    -moz-animation: bouncedelay 1.4s infinite ease-in-out;\n    -ms-animation: bouncedelay 1.4s infinite ease-in-out;\n    -o-animation: bouncedelay 1.4s infinite ease-in-out;\n    animation: bouncedelay 1.4s infinite ease-in-out;\n    /* Prevent first frame from flickering when animation starts */\n    -webkit-animation-fill-mode: both;\n    -moz-animation-fill-mode: both;\n    -ms-animation-fill-mode: both;\n    -o-animation-fill-mode: both;\n    animation-fill-mode: both; }\n  .spinner-three-bounce[data-spinner] [data-bounce1] {\n    -webkit-animation-delay: -0.32s;\n    -moz-animation-delay: -0.32s;\n    -ms-animation-delay: -0.32s;\n    -o-animation-delay: -0.32s;\n    animation-delay: -0.32s; }\n  .spinner-three-bounce[data-spinner] [data-bounce2] {\n    -webkit-animation-delay: -0.16s;\n    -moz-animation-delay: -0.16s;\n    -ms-animation-delay: -0.16s;\n    -o-animation-delay: -0.16s;\n    animation-delay: -0.16s; }\n\n@-moz-keyframes bouncedelay {\n  0%, 80%, 100% {\n    -webkit-transform: scale(0);\n    -moz-transform: scale(0);\n    -ms-transform: scale(0);\n    -o-transform: scale(0);\n    transform: scale(0); }\n  40% {\n    -webkit-transform: scale(1);\n    -moz-transform: scale(1);\n    -ms-transform: scale(1);\n    -o-transform: scale(1);\n    transform: scale(1); } }\n\n@-webkit-keyframes bouncedelay {\n  0%, 80%, 100% {\n    -webkit-transform: scale(0);\n    -moz-transform: scale(0);\n    -ms-transform: scale(0);\n    -o-transform: scale(0);\n    transform: scale(0); }\n  40% {\n    -webkit-transform: scale(1);\n    -moz-transform: scale(1);\n    -ms-transform: scale(1);\n    -o-transform: scale(1);\n    transform: scale(1); } }\n\n@-o-keyframes bouncedelay {\n  0%, 80%, 100% {\n    -webkit-transform: scale(0);\n    -moz-transform: scale(0);\n    -ms-transform: scale(0);\n    -o-transform: scale(0);\n    transform: scale(0); }\n  40% {\n    -webkit-transform: scale(1);\n    -moz-transform: scale(1);\n    -ms-transform: scale(1);\n    -o-transform: scale(1);\n    transform: scale(1); } }\n\n@-ms-keyframes bouncedelay {\n  0%, 80%, 100% {\n    -webkit-transform: scale(0);\n    -moz-transform: scale(0);\n    -ms-transform: scale(0);\n    -o-transform: scale(0);\n    transform: scale(0); }\n  40% {\n    -webkit-transform: scale(1);\n    -moz-transform: scale(1);\n    -ms-transform: scale(1);\n    -o-transform: scale(1);\n    transform: scale(1); } }\n\n@keyframes bouncedelay {\n  0%, 80%, 100% {\n    -webkit-transform: scale(0);\n    -moz-transform: scale(0);\n    -ms-transform: scale(0);\n    -o-transform: scale(0);\n    transform: scale(0); }\n  40% {\n    -webkit-transform: scale(1);\n    -moz-transform: scale(1);\n    -ms-transform: scale(1);\n    -o-transform: scale(1);\n    transform: scale(1); } }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 124 */
+/* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(125);
+	module.exports = __webpack_require__(122);
 
 /***/ },
-/* 125 */
+/* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -15615,7 +15055,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseContainer_plugin = __webpack_require__(126);
+	var _baseContainer_plugin = __webpack_require__(123);
 
 	var _baseContainer_plugin2 = _interopRequireDefault(_baseContainer_plugin);
 
@@ -15755,7 +15195,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 126 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15830,15 +15270,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 127 */
+/* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(128);
+	module.exports = __webpack_require__(125);
 
 /***/ },
-/* 128 */
+/* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -15861,7 +15301,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseUi_container_plugin = __webpack_require__(121);
+	var _baseUi_container_plugin = __webpack_require__(118);
 
 	var _baseUi_container_plugin2 = _interopRequireDefault(_baseUi_container_plugin);
 
@@ -15877,11 +15317,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseTemplate2 = _interopRequireDefault(_baseTemplate);
 
-	var _publicWatermarkScss = __webpack_require__(129);
+	var _publicWatermarkScss = __webpack_require__(126);
 
 	var _publicWatermarkScss2 = _interopRequireDefault(_publicWatermarkScss);
 
-	var _publicWatermarkHtml = __webpack_require__(130);
+	var _publicWatermarkHtml = __webpack_require__(127);
 
 	var _publicWatermarkHtml2 = _interopRequireDefault(_publicWatermarkHtml);
 
@@ -15949,10 +15389,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 129 */
+/* 126 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(37)();
+	exports = module.exports = __webpack_require__(41)();
 	// imports
 
 
@@ -15963,21 +15403,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 130 */
+/* 127 */
 /***/ function(module, exports) {
 
 	module.exports = "<div data-watermark data-watermark-<%=position %>><img src=\"<%= imageUrl %>\"></div>\n";
 
 /***/ },
-/* 131 */
+/* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(132);
+	module.exports = __webpack_require__(129);
 
 /***/ },
-/* 132 */
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -16000,7 +15440,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseUi_container_plugin = __webpack_require__(121);
+	var _baseUi_container_plugin = __webpack_require__(118);
 
 	var _baseUi_container_plugin2 = _interopRequireDefault(_baseUi_container_plugin);
 
@@ -16016,15 +15456,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseTemplate2 = _interopRequireDefault(_baseTemplate);
 
-	var _componentsMediator = __webpack_require__(64);
+	var _componentsMediator = __webpack_require__(61);
 
 	var _componentsMediator2 = _interopRequireDefault(_componentsMediator);
 
-	var _publicPosterScss = __webpack_require__(133);
+	var _publicPosterScss = __webpack_require__(130);
 
 	var _publicPosterScss2 = _interopRequireDefault(_publicPosterScss);
 
-	var _publicPosterHtml = __webpack_require__(134);
+	var _publicPosterHtml = __webpack_require__(131);
 
 	var _publicPosterHtml2 = _interopRequireDefault(_publicPosterHtml);
 
@@ -16126,8 +15566,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'showPlayButton',
 	    value: function showPlayButton() {
-	      this.$playButton.show();
-	      this.updateSize();
+	      if (!this.options.chromeless) {
+	        this.$playButton.show();
+	        this.updateSize();
+	      }
 	    }
 	  }, {
 	    key: 'hidePlayButton',
@@ -16188,35 +15630,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 133 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(37)();
+	exports = module.exports = __webpack_require__(41)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "@font-face {\n  font-family: \"Player\";\n  src: url(" + __webpack_require__(67) + ");\n  src: url(" + __webpack_require__(67) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(68) + ") format(\"truetype\"), url(" + __webpack_require__(69) + "#player) format(\"svg\"); }\n\n.player-poster[data-poster] {\n  cursor: pointer;\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  z-index: 998;\n  top: 0;\n  left: 0; }\n  .player-poster[data-poster] .poster-background[data-poster] {\n    width: 100%;\n    height: 100%;\n    background-size: cover;\n    background-repeat: no-repeat;\n    background-position: 50% 50%; }\n  .player-poster[data-poster] .play-wrapper[data-poster] {\n    position: absolute;\n    width: 100%;\n    height: 25%;\n    line-height: 100%;\n    font-size: 25%;\n    top: 50%;\n    text-align: center; }\n    .player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster] {\n      font-family: \"Player\";\n      font-weight: normal;\n      font-style: normal;\n      line-height: 1;\n      letter-spacing: 0;\n      speak: none;\n      color: white;\n      opacity: 0.75;\n      -webkit-font-smoothing: antialiased;\n      -moz-osx-font-smoothing: grayscale;\n      -webkit-transition: opacity text-shadow 0.1s;\n      -webkit-transition-delay: ease;\n      -moz-transition: opacity text-shadow 0.1s ease;\n      -o-transition: opacity text-shadow 0.1s ease;\n      transition: opacity text-shadow 0.1s ease; }\n      .player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster].play[data-poster]:before {\n        content: \"\\E001\"; }\n      .player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]:hover {\n        opacity: 1.0;\n        text-shadow: rgba(255, 255, 255, 0.8) 0 0 15px; }\n", ""]);
+	exports.push([module.id, "@font-face {\n  font-family: \"Player\";\n  src: url(" + __webpack_require__(64) + ");\n  src: url(" + __webpack_require__(64) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(65) + ") format(\"truetype\"), url(" + __webpack_require__(66) + "#player) format(\"svg\"); }\n\n.player-poster[data-poster] {\n  cursor: pointer;\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  z-index: 998;\n  top: 0;\n  left: 0; }\n  .player-poster[data-poster] .poster-background[data-poster] {\n    width: 100%;\n    height: 100%;\n    background-size: cover;\n    background-repeat: no-repeat;\n    background-position: 50% 50%; }\n  .player-poster[data-poster] .play-wrapper[data-poster] {\n    position: absolute;\n    width: 100%;\n    height: 25%;\n    line-height: 100%;\n    font-size: 25%;\n    top: 50%;\n    text-align: center; }\n    .player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster] {\n      font-family: \"Player\";\n      font-weight: normal;\n      font-style: normal;\n      line-height: 1;\n      letter-spacing: 0;\n      speak: none;\n      color: white;\n      opacity: 0.75;\n      -webkit-font-smoothing: antialiased;\n      -moz-osx-font-smoothing: grayscale;\n      -webkit-transition: opacity text-shadow 0.1s;\n      -webkit-transition-delay: ease;\n      -moz-transition: opacity text-shadow 0.1s ease;\n      -o-transition: opacity text-shadow 0.1s ease;\n      transition: opacity text-shadow 0.1s ease; }\n      .player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster].play[data-poster]:before {\n        content: \"\\E001\"; }\n      .player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]:hover {\n        opacity: 1.0;\n        text-shadow: rgba(255, 255, 255, 0.8) 0 0 15px; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 134 */
+/* 131 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"play-wrapper\" data-poster>\n  <span class=\"poster-icon play\" data-poster />\n</div>\n";
 
 /***/ },
-/* 135 */
+/* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(136);
+	module.exports = __webpack_require__(133);
 
 /***/ },
-/* 136 */
+/* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -16239,7 +15681,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseContainer_plugin = __webpack_require__(126);
+	var _baseContainer_plugin = __webpack_require__(123);
 
 	var _baseContainer_plugin2 = _interopRequireDefault(_baseContainer_plugin);
 
@@ -16404,15 +15846,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 137 */
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(138);
+	module.exports = __webpack_require__(135);
 
 /***/ },
-/* 138 */
+/* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -16435,7 +15877,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseContainer_plugin = __webpack_require__(126);
+	var _baseContainer_plugin = __webpack_require__(123);
 
 	var _baseContainer_plugin2 = _interopRequireDefault(_baseContainer_plugin);
 
@@ -16499,15 +15941,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 139 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(140);
+	module.exports = __webpack_require__(137);
 
 /***/ },
-/* 140 */
+/* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16526,7 +15968,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseUi_core_plugin = __webpack_require__(141);
+	var _baseUi_core_plugin = __webpack_require__(138);
 
 	var _baseUi_core_plugin2 = _interopRequireDefault(_baseUi_core_plugin);
 
@@ -16546,15 +15988,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _pluginsLog2 = _interopRequireDefault(_pluginsLog);
 
-	var _chromecast_playback = __webpack_require__(142);
+	var _chromecast_playback = __webpack_require__(139);
 
 	var _chromecast_playback2 = _interopRequireDefault(_chromecast_playback);
 
-	var _publicStyleScss = __webpack_require__(144);
+	var _publicStyleScss = __webpack_require__(141);
 
 	var _publicStyleScss2 = _interopRequireDefault(_publicStyleScss);
 
-	var _lodashAssign = __webpack_require__(21);
+	var _lodashAssign = __webpack_require__(25);
 
 	var _lodashAssign2 = _interopRequireDefault(_lodashAssign);
 
@@ -16908,7 +16350,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 141 */
+/* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16996,7 +16438,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 142 */
+/* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17019,7 +16461,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
 
-	var _basePlayback = __webpack_require__(96);
+	var _basePlayback = __webpack_require__(93);
 
 	var _basePlayback2 = _interopRequireDefault(_basePlayback);
 
@@ -17031,7 +16473,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseTemplate2 = _interopRequireDefault(_baseTemplate);
 
-	var _publicChromecastHtml = __webpack_require__(143);
+	var _publicChromecastHtml = __webpack_require__(140);
 
 	var _publicChromecastHtml2 = _interopRequireDefault(_publicChromecastHtml);
 
@@ -17176,59 +16618,59 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 143 */
+/* 140 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"chromecast-playback\">\n  <div class=\"chromecast-playback-background\"></div>\n  <div class=\"chromecast-playback-overlay\"></div>\n</div>\n";
 
 /***/ },
-/* 144 */
+/* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(37)();
+	exports = module.exports = __webpack_require__(41)();
 	// imports
 
 
 	// module
-	exports.push([module.id, ".chromecast-playback {\n  height: 100%;\n  width: 100%; }\n  .chromecast-playback .chromecast-playback-background, .chromecast-playback .chromecast-playback-overlay {\n    position: absolute;\n    height: 100%;\n    width: 100%; }\n  .chromecast-playback .chromecast-playback-background {\n    background-size: contain; }\n  .chromecast-playback .chromecast-playback-overlay {\n    background-color: #000;\n    opacity: 0.4; }\n\n@font-face {\n  font-family: \"chromecast\";\n  src: url(" + __webpack_require__(145) + ");\n  src: url(" + __webpack_require__(146) + "?#iefix-2rwb6t) format(\"embedded-opentype\"), url(" + __webpack_require__(147) + ") format(\"truetype\"), url(" + __webpack_require__(148) + "#chromecast) format(\"svg\");\n  font-weight: normal;\n  font-style: normal; }\n\n.chromecast-button {\n  background: transparent;\n  border: 0;\n  width: 32px;\n  height: 26px;\n  font-size: 22px;\n  line-height: 26px;\n  letter-spacing: 0;\n  color: #fff;\n  opacity: 0.5;\n  vertical-align: middle;\n  text-align: left;\n  cursor: pointer;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  -webkit-transition: all 0.1s ease;\n  -moz-transition: all 0.1s ease;\n  -o-transition: all 0.1s ease;\n  transition: all 0.1s ease; }\n  .chromecast-button:hover {\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .chromecast-button:focus {\n    outline: none; }\n\n.chromecast-icon {\n  font-family: \"chromecast\";\n  speak: none;\n  font-style: normal;\n  font-weight: normal;\n  font-variant: normal;\n  text-transform: none;\n  /* Better Font Rendering =========== */\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale; }\n\n.icon-cast:before {\n  content: \"\\\\e001\"; }\n\n.icon-cast-connecting.loading-1:before {\n  content: \"\\\\e003\"; }\n.icon-cast-connecting.loading-2:before {\n  content: \"\\\\e004\"; }\n.icon-cast-connecting.loading-3:before {\n  content: \"\\\\e001\"; }\n\n.icon-cast-connected:before {\n  content: \"\\\\e002\"; }\n", ""]);
+	exports.push([module.id, ".chromecast-playback {\n  height: 100%;\n  width: 100%; }\n  .chromecast-playback .chromecast-playback-background, .chromecast-playback .chromecast-playback-overlay {\n    position: absolute;\n    height: 100%;\n    width: 100%; }\n  .chromecast-playback .chromecast-playback-background {\n    background-size: contain; }\n  .chromecast-playback .chromecast-playback-overlay {\n    background-color: #000;\n    opacity: 0.4; }\n\n@font-face {\n  font-family: \"chromecast\";\n  src: url(" + __webpack_require__(142) + ");\n  src: url(" + __webpack_require__(143) + "?#iefix-2rwb6t) format(\"embedded-opentype\"), url(" + __webpack_require__(144) + ") format(\"truetype\"), url(" + __webpack_require__(145) + "#chromecast) format(\"svg\");\n  font-weight: normal;\n  font-style: normal; }\n\n.chromecast-button {\n  background: transparent;\n  border: 0;\n  width: 32px;\n  height: 26px;\n  font-size: 22px;\n  line-height: 26px;\n  letter-spacing: 0;\n  color: #fff;\n  opacity: 0.5;\n  vertical-align: middle;\n  text-align: left;\n  cursor: pointer;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  -webkit-transition: all 0.1s ease;\n  -moz-transition: all 0.1s ease false;\n  -o-transition: all 0.1s ease false;\n  transition: all 0.1s ease; }\n  .chromecast-button:hover {\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .chromecast-button:focus {\n    outline: none; }\n\n.chromecast-icon {\n  font-family: \"chromecast\";\n  speak: none;\n  font-style: normal;\n  font-weight: normal;\n  font-variant: normal;\n  text-transform: none;\n  /* Better Font Rendering =========== */\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale; }\n\n.icon-cast:before {\n  content: \"\\\\e001\"; }\n\n.icon-cast-connecting.loading-1:before {\n  content: \"\\\\e003\"; }\n\n.icon-cast-connecting.loading-2:before {\n  content: \"\\\\e004\"; }\n\n.icon-cast-connecting.loading-3:before {\n  content: \"\\\\e001\"; }\n\n.icon-cast-connected:before {\n  content: \"\\\\e002\"; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 145 */
+/* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "53cd406a16a857e2face1365a18cc729.eot"
 
 /***/ },
-/* 146 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "53cd406a16a857e2face1365a18cc729.eot"
 
 /***/ },
-/* 147 */
+/* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "6ac1074c3ad60163d6d52ecfd346e950.ttf"
 
 /***/ },
-/* 148 */
+/* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "57e740a84980042b2b659da22fc9c4ab.svg"
 
 /***/ },
-/* 149 */
+/* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(150);
+	module.exports = __webpack_require__(147);
 
 /***/ },
-/* 150 */
+/* 147 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17247,7 +16689,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseUi_core_plugin = __webpack_require__(141);
+	var _baseUi_core_plugin = __webpack_require__(138);
 
 	var _baseUi_core_plugin2 = _interopRequireDefault(_baseUi_core_plugin);
 
@@ -17263,11 +16705,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
 
-	var _publicDvr_controlsScss = __webpack_require__(151);
+	var _publicDvr_controlsScss = __webpack_require__(148);
 
 	var _publicDvr_controlsScss2 = _interopRequireDefault(_publicDvr_controlsScss);
 
-	var _publicIndexHtml = __webpack_require__(153);
+	var _publicIndexHtml = __webpack_require__(150);
 
 	var _publicIndexHtml2 = _interopRequireDefault(_publicIndexHtml);
 
@@ -17388,41 +16830,41 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 151 */
+/* 148 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(37)();
+	exports = module.exports = __webpack_require__(41)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "@font-face {\n  font-family: \"Roboto\";\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Roboto\"), local(\"Roboto-Regular\"), url(" + __webpack_require__(152) + ") format(\"truetype\"); }\n\n.dvr-controls[data-dvr-controls] {\n  display: inline-block;\n  float: left;\n  color: #fff;\n  line-height: 32px;\n  font-size: 10px;\n  font-weight: bold;\n  margin-left: 6px; }\n  .dvr-controls[data-dvr-controls] .live-info {\n    cursor: default;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif; }\n    .dvr-controls[data-dvr-controls] .live-info:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #ff0101; }\n    .dvr-controls[data-dvr-controls] .live-info.disabled {\n      opacity: 0.3; }\n      .dvr-controls[data-dvr-controls] .live-info.disabled:before {\n        background-color: #fff; }\n  .dvr-controls[data-dvr-controls] .live-button {\n    cursor: pointer;\n    outline: none;\n    display: none;\n    border: 0;\n    color: #fff;\n    background-color: transparent;\n    height: 32px;\n    padding: 0;\n    opacity: 0.7;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease;\n    -o-transition: all 0.1s ease;\n    transition: all 0.1s ease; }\n    .dvr-controls[data-dvr-controls] .live-button:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #fff; }\n    .dvr-controls[data-dvr-controls] .live-button:hover {\n      opacity: 1;\n      text-shadow: rgba(255, 255, 255, 0.75) 0 0 5px; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-info {\n  display: none; }\n.dvr .dvr-controls[data-dvr-controls] .live-button {\n  display: block; }\n.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #005aff; }\n\n.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #ff0101; }\n\n.seek-time[data-seek-time] span[data-duration] {\n  position: relative;\n  color: rgba(255, 255, 255, 0.5);\n  font-size: 10px;\n  padding-right: 7px; }\n  .seek-time[data-seek-time] span[data-duration]:before {\n    content: \"|\";\n    margin-right: 7px; }\n", ""]);
+	exports.push([module.id, "@font-face {\n  font-family: \"Roboto\";\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Roboto\"), local(\"Roboto-Regular\"), url(" + __webpack_require__(149) + ") format(\"truetype\"); }\n\n.dvr-controls[data-dvr-controls] {\n  display: inline-block;\n  float: left;\n  color: #fff;\n  line-height: 32px;\n  font-size: 10px;\n  font-weight: bold;\n  margin-left: 6px; }\n  .dvr-controls[data-dvr-controls] .live-info {\n    cursor: default;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif; }\n    .dvr-controls[data-dvr-controls] .live-info:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #ff0101; }\n    .dvr-controls[data-dvr-controls] .live-info.disabled {\n      opacity: 0.3; }\n      .dvr-controls[data-dvr-controls] .live-info.disabled:before {\n        background-color: #fff; }\n  .dvr-controls[data-dvr-controls] .live-button {\n    cursor: pointer;\n    outline: none;\n    display: none;\n    border: 0;\n    color: #fff;\n    background-color: transparent;\n    height: 32px;\n    padding: 0;\n    opacity: 0.7;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease false;\n    -o-transition: all 0.1s ease false;\n    transition: all 0.1s ease; }\n    .dvr-controls[data-dvr-controls] .live-button:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #fff; }\n    .dvr-controls[data-dvr-controls] .live-button:hover {\n      opacity: 1;\n      text-shadow: rgba(255, 255, 255, 0.75) 0 0 5px; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-info {\n  display: none; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-button {\n  display: block; }\n\n.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #005aff; }\n\n.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #ff0101; }\n\n.seek-time[data-seek-time] span[data-duration] {\n  position: relative;\n  color: rgba(255, 255, 255, 0.5);\n  font-size: 10px;\n  padding-right: 7px; }\n  .seek-time[data-seek-time] span[data-duration]:before {\n    content: \"|\";\n    margin-right: 7px; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 152 */
+/* 149 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "38861cba61c66739c1452c3a71e39852.ttf"
 
 /***/ },
-/* 153 */
+/* 150 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"live-info\">LIVE</div>\n<button class=\"live-button\">BACK TO LIVE</button>\n";
 
 /***/ },
-/* 154 */
+/* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(155);
+	module.exports = __webpack_require__(152);
 
 /***/ },
-/* 155 */
+/* 152 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17441,7 +16883,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseCore_plugin = __webpack_require__(156);
+	var _baseCore_plugin = __webpack_require__(153);
 
 	var _baseCore_plugin2 = _interopRequireDefault(_baseCore_plugin);
 
@@ -17555,7 +16997,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 156 */
+/* 153 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
