@@ -74,6 +74,6 @@
     "lodash.find": "^3.2.1",
     "lodash.once": "^3.0.1",
     "lodash.result": "^3.1.2",
-    "lodash.uniq": "3.0.0"
+    "lodash.uniq": "^3.2.2"
   }
 }
