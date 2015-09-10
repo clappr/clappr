@@ -4,13 +4,9 @@
 
 var dotenv = require('dotenv');
 var path = require('path');
-var versionify = require("browserify-versionify");
 var webpack = require('webpack');
 
 dotenv.load();
-var exec = require('child_process').exec
-var istanbul = require('browserify-istanbul');
-exec('gulp pre-build')
 
 module.exports = function(config) {
   config.set({
