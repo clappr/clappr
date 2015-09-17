@@ -189,16 +189,14 @@ export default class MediaControl extends UIObject {
   }
 
   playerResize(size) {
-    if (!this.disabled) {
-      if (Fullscreen.isFullscreen()) {
-        this.$fullscreenToggle.addClass('shrink')
-      } else {
-        this.$fullscreenToggle.removeClass('shrink')
-      }
-      this.$el.removeClass('w320')
-      if (size.width <= 320 || this.options.hideVolumeBar) {
-        this.$el.addClass('w320')
-      }
+    if (Fullscreen.isFullscreen()) {
+      this.$fullscreenToggle.addClass('shrink')
+    } else {
+      this.$fullscreenToggle.removeClass('shrink')
+    }
+    this.$el.removeClass('w320')
+    if (size.width <= 320 || this.options.hideVolumeBar) {
+      this.$el.addClass('w320')
     }
   }
 
@@ -538,13 +536,14 @@ export default class MediaControl extends UIObject {
     }
     this.setSeekPercentage(this.currentSeekPercentage)
 
-    this.$el.ready(() => {
+    process.nextTick(() => {
       if (!this.container.settings.seekEnabled) {
         this.$seekBarContainer.addClass('seek-disabled')
       }
 
       this.setVolume(this.currentVolume)
       this.bindKeyEvents()
+      this.playerResize({width: this.options.width, height: this.options.height})
       this.hideVolumeBar(0)
     })
 
