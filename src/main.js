@@ -26,6 +26,7 @@ import HTML5Video from 'playbacks/html5_video'
 import HTMLImg from 'playbacks/html_img'
 import Poster from 'plugins/poster'
 import Log from 'plugins/log'
+import template from 'base/template'
 
 var version = VERSION
 
@@ -54,5 +55,6 @@ export default {
     HTMLImg,
     Poster,
     Log,
-    version
+    version,
+    template,
 }
