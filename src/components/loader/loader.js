@@ -11,6 +11,7 @@ import HTML5VideoPlayback from 'playbacks/html5_video'
 import FlashVideoPlayback from 'playbacks/flash'
 import HTML5AudioPlayback from 'playbacks/html5_audio'
 import FlasHLSVideoPlayback from 'playbacks/flashls'
+import HLSVideoPlayback from 'playbacks/hls'
 import HTMLImgPlayback from 'playbacks/html_img'
 import NoOp from 'playbacks/no_op'
 
@@ -44,7 +45,7 @@ export default class Loader extends BaseObject {
   constructor(externalPlugins, playerId) {
     super()
     this.playerId = playerId
-    this.playbackPlugins = [HTML5AudioPlayback, HTML5VideoPlayback, FlashVideoPlayback, FlasHLSVideoPlayback, HTMLImgPlayback, NoOp]
+    this.playbackPlugins = [HTML5AudioPlayback, HTML5VideoPlayback, FlashVideoPlayback, HLSVideoPlayback, FlasHLSVideoPlayback, HTMLImgPlayback, NoOp]
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
     this.corePlugins = [DVRControls, Favicon, Chromecast]
     if (externalPlugins) {
