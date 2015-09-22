@@ -20,7 +20,7 @@ import MediaControl from 'components/media_control'
 import PlayerInfo from 'components/player_info'
 import BaseFlashPlayback from 'playbacks/base_flash_playback'
 import Flash from 'playbacks/flash'
-import HLS from 'playbacks/hls'
+import FlasHLS from 'playbacks/flashls'
 import HTML5Audio from 'playbacks/html5_audio'
 import HTML5Video from 'playbacks/html5_video'
 import HTMLImg from 'playbacks/html_img'
@@ -49,7 +49,7 @@ export default {
     Utils,
     BaseFlashPlayback,
     Flash,
-    HLS,
+    FlasHLS,
     HTML5Audio,
     HTML5Video,
     HTMLImg,
