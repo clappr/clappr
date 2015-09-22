@@ -70,6 +70,7 @@
   },
   "dependencies": {
     "clappr-zepto": "0.0.4",
+    "hls.js": "git+https://github.com/dailymotion/hls.js.git",
     "lodash.assign": "^3.2.0",
     "lodash.find": "^3.2.1",
     "lodash.once": "^3.0.1",
