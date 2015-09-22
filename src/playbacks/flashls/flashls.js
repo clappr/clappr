@@ -14,8 +14,8 @@ import assign from 'lodash.assign'
 
 var MAX_ATTEMPTS = 60
 
-export default class HLS extends BaseFlashPlayback {
-  get name() { return 'hls' }
+export default class FlasHLS extends BaseFlashPlayback {
+  get name() { return 'flashls' }
   get swfPath() { return template(hlsSwf)({baseUrl: this.baseUrl}) }
 
   constructor(options) {
@@ -474,7 +474,7 @@ export default class HLS extends BaseFlashPlayback {
   }
 }
 
-HLS.canPlay = function(resource, mimeType) {
+FlasHLS.canPlay = function(resource, mimeType) {
   var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
   return Browser.hasFlash &&
         ((resourceParts.length > 1 && resourceParts[1] == "m3u8") ||
