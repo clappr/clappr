@@ -1,10 +1,10 @@
-import HLS from '../../src/playbacks/hls/hls.js'
+import FlasHLS from '../../src/playbacks/flashls/flashls.js'
 import Events from '../../src/base/events.js'
 
 describe('HLS playback', function() {
   describe('#setPlaybackState', function() {
     beforeEach(function() {
-      this.hls = new HLS({})
+      this.hls = new FlasHLS({})
       this.hls.el.getbufferLength = function() { return 0 }
       this.hls.el.getDuration = function() { return 30 }
       this.hls.el.getType = function() { return 'live' }
