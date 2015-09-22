@@ -9,10 +9,6 @@ export default class HLS extends HTML5VideoPlayback {
 
   constructor(options) {
     super(options)
-    this.bootstrap()
-  }
-
-  bootstrap() {
     this.hls = new HLSJS()
     this.hls.on(HLSJS.Events.MSE_ATTACHED, () => this.hls.loadSource(this.options.source))
     this.hls.attachVideo(this.el)
@@ -24,4 +20,3 @@ HLS.canPlay = function(resource) {
   var isHls = !!(resourceParts.length > 1 && resourceParts[1] === 'm3u8')
   return !!(window.MediaSource && MediaSource.isTypeSupported('video/mp4; codecs="avc1.42E01E,mp4a.40.2"') && isHls)
 }
-
