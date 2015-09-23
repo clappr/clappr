@@ -77,8 +77,12 @@ export default class HTML5Video extends Playback {
     } else {
       this.settings.left = ["playstop"]
     }
-    this.settings.seekEnabled = isFinite(this.getDuration())
+    this.settings.seekEnabled = this.isSeekEnabled()
     this.trigger(Events.PLAYBACK_SETTINGSUPDATE)
+  }
+
+  isSeekEnabled() {
+    return isFinite(this.getDuration())
   }
 
   getPlaybackType() {
