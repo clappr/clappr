@@ -2,15 +2,18 @@ sudo: false
 language: node_js
 node_js:
   - "0.12"
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - gcc-4.8
+    - g++-4.8
 before_install:
-  - "sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test"
-  - "sudo apt-get update -qq"
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
 
 install:
-  - "sudo apt-get install -qq gcc-4.8 g++-4.8"
-  - "sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90"
   - "npm install"
 
 env:
