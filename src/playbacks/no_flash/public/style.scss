@@ -1,0 +1,25 @@
+[data-no-flash] {
+  z-index: 1000;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+}
+
+[data-no-flash] p[data-no-flash-msg] {
+  position: absolute;
+  font-size: 25px;
+  top: 40%;
+  color: white;
+}
+
+[data-no-flash] p[data-no-flash-msg] a {
+  color: white;
+}
+
+[data-no-flash] canvas[data-no-flash-canvas] {
+  background-color: #777;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+}
