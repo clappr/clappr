@@ -12,11 +12,25 @@ export default class HLS extends HTML5VideoPlayback {
 
   constructor(options) {
     super(options)
-    this.hls = new HLSJS()
+    var config = {}
+    if (options.xhrWithCredentials) {
+        config.xhrSetup = function(xhr) { xhr.withCredentials = true; }
+        config.debug = true
+    }
+    this.hls = new HLSJS(config)
     this.playbackType = 'vod'
+    this.addListeners()
+    this.hls.attachVideo(this.el)
+  }
+
+  addListeners() {
     this.hls.on(HLSJS.Events.MSE_ATTACHED, () => this.hls.loadSource(this.options.source))
     this.hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this.updatePlaybackType(evt, data))
-    this.hls.attachVideo(this.el)
+    this.hls.on(HLSJS.Events.ERROR, (evt, data) => this.handleError(evt, data))
+  }
+
+  handleError(evt, data) {
+      console.log("Error!", evt, data)
   }
 
   updatePlaybackType(evt, data) {
