@@ -414,8 +414,10 @@ export default class MediaControl extends UIObject {
 
   settingsUpdate() {
     if (this.container.getPlaybackType() !== null && Object.keys(this.container.settings).length !== 0) {
-      this.settings = this.container.settings
-      this.render()
+      if (JSON.stringify(this.container.settings) !== JSON.stringify(this.settings)) {
+        this.settings = this.container.settings
+        this.render()
+      }
     } else {
       this.disable()
     }
