@@ -12,6 +12,7 @@
   "trailing": true,
   "smarttabs": true,
   "white": true,
-  "indent": 2
+  "indent": 2,
+  "maxlen": 999
 }
 
