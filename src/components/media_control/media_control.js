@@ -8,20 +8,21 @@
 
 import {Config, Fullscreen, formatTime} from 'base/utils'
 
-import  Events from 'base/events'
-import  Kibo from 'base/kibo'
-import  Styler from 'base/styler'
-import  UIObject from 'base/ui_object'
-import  Browser from 'components/browser'
-import  SeekTime from 'components/seek_time'
-import  Mediator from 'components/mediator'
-import  PlayerInfo from 'components/player_info'
-import  template from 'base/template'
+import Events from 'base/events'
+import Kibo from 'base/kibo'
+import Styler from 'base/styler'
+import UIObject from 'base/ui_object'
+import Browser from 'components/browser'
+import SeekTime from 'components/seek_time'
+import Mediator from 'components/mediator'
+import PlayerInfo from 'components/player_info'
+import template from 'base/template'
+import extend from 'base/utils'
 
-import  $ from 'clappr-zepto'
+import $ from 'clappr-zepto'
 
-import  mediaControlStyle from './public/media-control.scss'
-import  mediaControlHTML from './public/media-control.html'
+import mediaControlStyle from './public/media-control.scss'
+import mediaControlHTML from './public/media-control.html'
 
 export default class MediaControl extends UIObject {
   get name() { return 'MediaControl' }
