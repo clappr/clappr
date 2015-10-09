@@ -11,6 +11,7 @@ import UIObject from 'base/ui_object'
 import Styler from 'base/styler'
 import style from './public/style.scss'
 import find from 'lodash.find'
+import $ from 'clappr-zepto'
 
 /**
  * An abstraction to represent a container for a given playback
@@ -45,14 +46,14 @@ export default class Container extends UIObject {
    * @param {Object} options the options object
    */
   constructor(options) {
-    super(options);
+    super(options)
     this.currentTime = 0
     this.playback = options.playback;
-    this.settings = this.playback.settings;
-    this.isReady = false;
-    this.mediaControlDisabled = false;
-    this.plugins = [this.playback];
-    this.bindEvents();
+    this.settings = $.extend({}, this.playback.settings)
+    this.isReady = false
+    this.mediaControlDisabled = false
+    this.plugins = [this.playback]
+    this.bindEvents()
   }
 
   /**
