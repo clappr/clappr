@@ -8,7 +8,7 @@ import Events from 'base/events'
 
 export default class HLS extends HTML5VideoPlayback {
   get name() { return 'hls' }
-  get attributes() { return {'width': '100%', 'height': '100%'} }
+  get attributes() { return {'width': '100%', 'height': '100%'} } // why we need this?
   render() { return this }
 
   constructor(options) {
@@ -18,8 +18,8 @@ export default class HLS extends HTML5VideoPlayback {
         config.xhrSetup = function(xhr) { xhr.withCredentials = true; }
         config.debug = true
     }
-    this.minDvrSize = options.hlsMinimumDvrSize ? options.hlsMinimumDvrSize : 60
     this.hls = new HLSJS(config)
+    this.minDvrSize = options.hlsMinimumDvrSize ? options.hlsMinimumDvrSize : 60
     this.playbackType = 'vod'
     this.addListeners()
     this.hls.attachVideo(this.el)
@@ -46,7 +46,7 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   get dvrEnabled() {
-      return (this.getDuration() >= this.minDvrSize)
+    return (this.getDuration() >= this.minDvrSize)
   }
 
   getPlaybackType() {

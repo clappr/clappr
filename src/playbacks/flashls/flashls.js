@@ -88,7 +88,9 @@ export default class FlasHLS extends BaseFlashPlayback {
       this.currentState = "IDLE"
       this.setFlashSettings()
       this.updatePlaybackType()
-      if (this.autoPlay || this._shouldPlayOnBootstrap) this.play()
+      if (this.autoPlay || this._shouldPlayOnBootstrap) {
+          this.play()
+      }
       this.trigger(Events.PLAYBACK_READY, this.name)
     } else {
       this._bootstrapAttempts = this._bootstrapAttempts || 0
@@ -215,7 +217,9 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   updateTime(timeMetrics) {
-    if (this.currentState === 'IDLE') return
+    if (this.currentState === 'IDLE') {
+        return
+    }
 
     var duration = this.normalizeDuration(timeMetrics.duration)
     var position = Math.min(Math.max(timeMetrics.position, 0), duration)
