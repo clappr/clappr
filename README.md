@@ -163,6 +163,15 @@ Build your own version:
 
 Check the result on `dist/` folder.
 
+Starting a local server:
+
+`npm run start`
+
+This command will start a HTTP Server on port 8080, you can check a sample page with Clappr on http://localhost:8080/webpack-dev-server/
+
+
+
+
 ### Contributors
 
 The culprits of this project are listed [here](https://github.com/globocom/clappr/graphs/contributors).
