@@ -4,6 +4,7 @@
 
 import HTML5VideoPlayback from 'playbacks/html5_video'
 import HLSJS from 'hls.js'
+import Events from 'base/events'
 
 export default class HLS extends HTML5VideoPlayback {
   get name() { return 'hls' }
@@ -17,6 +18,7 @@ export default class HLS extends HTML5VideoPlayback {
         config.xhrSetup = function(xhr) { xhr.withCredentials = true; }
         config.debug = true
     }
+    this.minDvrSize = options.hlsMinimumDvrSize ? options.hlsMinimumDvrSize : 60
     this.hls = new HLSJS(config)
     this.playbackType = 'vod'
     this.addListeners()
@@ -27,15 +29,24 @@ export default class HLS extends HTML5VideoPlayback {
     this.hls.on(HLSJS.Events.MSE_ATTACHED, () => this.hls.loadSource(this.options.source))
     this.hls.on(HLSJS.Events.MANIFEST_PARSED, () => { this.options.autoPlay && this.play() })
     this.hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this.updatePlaybackType(evt, data))
-    this.hls.on(HLSJS.Events.ERROR, (evt, data) => this.handleError(evt, data))
+    this.hls.on(HLSJS.Events.ERROR, (evt, data) => console.log('hls error!', evt, data))
   }
 
-  handleError(evt, data) {
-      console.log("Error!", evt, data)
+  timeUpdated() {
+    if (!this.dvrEnabled) {
+      super.timeUpdated()
+    } else {
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, 1, 1, this.name)
+      console.log("need to work here", this.el.currentTime, this.el.duration)
+    }
   }
 
   updatePlaybackType(evt, data) {
     this.playbackType = data.details.live ? 'live' : 'vod'
+  }
+
+  get dvrEnabled() {
+      return (this.getDuration() >= this.minDvrSize)
   }
 
   getPlaybackType() {
@@ -43,7 +54,7 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   isSeekEnabled() {
-    return (this.playbackType === 'vod')
+    return (this.playbackType === 'vod' || this.dvrEnabled)
   }
 }
 
