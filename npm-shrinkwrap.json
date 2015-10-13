@@ -244,6 +244,11 @@
         }
       }
     },
+    "hls.js": {
+      "version": "0.0.1",
+      "from": "dailymotion/hls.js",
+      "resolved": "git://github.com/dailymotion/hls.js.git#41d6feba6a8a47ce9be3eeb371abfb52d91a9184"
+    },
     "lodash.assign": {
       "version": "3.2.0",
       "from": "lodash.assign@>=3.2.0 <4.0.0",
