@@ -30,7 +30,9 @@ export default class HLS extends HTML5VideoPlayback {
   seek(seekBarValue) {
     var seekTo = (seekBarValue === -1 )? 0 : seekBarValue
     super.seek(seekTo)
-    this.updateDvr(!!seekTo)
+    if (this.dvrEnabled) {
+        this.updateDvr(!!seekTo)
+    }
   }
 
   updateDvr(status) {
