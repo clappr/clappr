@@ -61,6 +61,13 @@ export default class HLS extends HTML5VideoPlayback {
     }
   }
 
+  pause() {
+    super.pause()
+    if (this.dvrEnabled) {
+      this.updateDvr(true)
+    }
+  }
+
   updatePlaybackType(evt, data) {
     this.playbackType = data.details.live ? 'live' : 'vod'
   }
