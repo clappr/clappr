@@ -21,7 +21,6 @@ import WaterMarkPlugin from 'plugins/watermark'
 import PosterPlugin from 'plugins/poster'
 import GoogleAnalyticsPlugin from 'plugins/google_analytics'
 import ClickToPausePlugin from 'plugins/click_to_pause'
-import Chromecast from 'plugins/chromecast'
 
 /* Core Plugins */
 import DVRControls from 'plugins/dvr_controls'
@@ -46,7 +45,7 @@ export default class Loader extends BaseObject {
     this.playerId = playerId
     this.playbackPlugins = [HTML5AudioPlayback, HTML5VideoPlayback, FlashVideoPlayback, HLSVideoPlayback, HTMLImgPlayback, NoOp]
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
-    this.corePlugins = [DVRControls, Favicon, Chromecast]
+    this.corePlugins = [DVRControls, Favicon]
     if (externalPlugins) {
       this.addExternalPlugins(externalPlugins)
     }
