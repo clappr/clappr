@@ -8,18 +8,16 @@ import Events from 'base/events'
 
 export default class HLS extends HTML5VideoPlayback {
   get name() { return 'hls' }
-  get attributes() { return {'width': '100%', 'height': '100%'} } // why we need this?
-  render() { return this }
 
   constructor(options) {
     super(options)
-    this.setupHlsJs()
+    this.setupHls()
     this.minDvrSize = options.hlsMinimumDvrSize ? options.hlsMinimumDvrSize : 60
     this.playbackType = 'vod'
     this.dvrInUse = false
   }
 
-  setupHlsJs() {
+  setupHls() {
     this.hls = new HLSJS(this.options.hlsjsConfig || {})
     this.hls.on(HLSJS.Events.MSE_ATTACHED, () => this.hls.loadSource(this.options.source))
     this.hls.on(HLSJS.Events.MANIFEST_PARSED, () => { this.options.autoPlay && this.play() })
@@ -30,8 +28,10 @@ export default class HLS extends HTML5VideoPlayback {
   seek(seekBarValue) {
     var seekTo = (seekBarValue === -1 )? 0 : seekBarValue
     super.seek(seekTo)
-    if (this.dvrEnabled) {
-        this.updateDvr(!!seekTo)
+    if (this.dvrEnabled && seekTo > 0) {
+      this.updateDvr(true)
+    } else {
+      this.updateDvr(false)
     }
   }
 
