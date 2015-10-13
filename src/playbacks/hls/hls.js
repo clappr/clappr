@@ -48,8 +48,8 @@ export default class HLS extends HTML5VideoPlayback {
   updateDvr(status) {
     this.dvrInUse = status
     this.updateSettings()
-    this.trigger(Events.PLAYBACK_DVR, this.dvrEnabled)
-    this.trigger(Events.PLAYBACK_STATS_ADD, {'dvr': this.dvrEnabled})
+    this.trigger(Events.PLAYBACK_DVR, this.dvrInUse)
+    this.trigger(Events.PLAYBACK_STATS_ADD, {'dvr': this.dvrInUse})
   }
 
   updateSettings() {
