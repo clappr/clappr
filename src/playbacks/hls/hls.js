@@ -9,6 +9,7 @@ import Browser from 'components/browser'
 
 export default class HLS extends HTML5VideoPlayback {
   get name() { return 'hls' }
+  get sliding() { return (this.hls && this.hls.levels[this.hls.currentLevel] && this.hls.levels[this.hls.currentLevel].details.sliding) || 0 }
 
   constructor(options) {
     super(options)
@@ -25,8 +26,13 @@ export default class HLS extends HTML5VideoPlayback {
     this.hls.attachVideo(this.el)
   }
 
+  getDuration() {
+    return super.getDuration() - this.sliding
+  }
+
   seek(seekBarValue) {
-    var seekTo = (seekBarValue === -1 )? 0 : seekBarValue
+    seekBarValue > 0 && (seekBarValue = seekBarValue * this.getDuration() / super.getDuration())
+    var seekTo = (seekBarValue === -1 ) ? 0 : seekBarValue
     super.seek(seekTo)
     if (this.dvrEnabled && seekTo > 0) {
       this.updateDvr(true)
