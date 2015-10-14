@@ -63,7 +63,7 @@ export default class DVRControls extends UICorePlugin {
 
   shouldRender() {
     var useDvrControls = this.core.options.useDvrControls === undefined || !!this.core.options.useDvrControls
-    return useDvrControls && this.core.mediaControl.container.getPlaybackType() === 'live'
+    return useDvrControls && this.core.getPlaybackType() === 'live'
   }
 
   render() {
