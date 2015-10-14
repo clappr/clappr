@@ -12,7 +12,6 @@ export default class HLS extends HTML5VideoPlayback {
 
   constructor(options) {
     super(options)
-    this.setupHls()
     this.minDvrSize = options.hlsMinimumDvrSize ? options.hlsMinimumDvrSize : 60
     this.playbackType = 'vod'
     this.dvrInUse = false
@@ -60,6 +59,13 @@ export default class HLS extends HTML5VideoPlayback {
     } else {
       super.timeUpdated()
     }
+  }
+
+  play() {
+    if (!this.hls) {
+      this.setupHls()
+    }
+    super.play()
   }
 
   pause() {
