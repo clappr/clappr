@@ -27,7 +27,10 @@ import HTML5Video from 'playbacks/html5_video'
 import HTMLImg from 'playbacks/html_img'
 import Poster from 'plugins/poster'
 import Log from 'plugins/log'
+import Styler from 'base/styler'
 import template from 'base/template'
+
+import $ from 'clappr-zepto'
 
 var version = VERSION
 
@@ -57,6 +60,8 @@ export default {
     HTMLImg,
     Poster,
     Log,
+    Styler,
     version,
     template,
+    $
 }
