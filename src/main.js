@@ -28,6 +28,8 @@ import Poster from 'plugins/poster'
 import Log from 'plugins/log'
 import template from 'base/template'
 
+import $ from 'clappr-zepto'
+
 var version = VERSION
 
 export default {
@@ -57,4 +59,5 @@ export default {
     Log,
     version,
     template,
+    $
 }
