@@ -50,6 +50,7 @@ PS4 Browser  | ✔ | ✔ | ✘ |  ? | ✘ | ✘ | ✔
 - DASH: https://github.com/shankardevy/clappr-dash-plugin
 - HLS+P2P: http://bem.tv
 - Comments on seekbar: http://labs.jordane.net/clappr-comment/
+- Thumbnails on seekbar: https://github.com/tjenkinson/clappr-thumbnails-plugin
 - Level Selector: https://github.com/lucasmundim/clappr-level-selector-plugin
 - Control the player with your voice: https://github.com/flavioribeiro/clappr-speech-control-plugin
 
