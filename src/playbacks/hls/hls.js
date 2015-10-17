@@ -20,7 +20,7 @@ export default class HLS extends HTML5VideoPlayback {
 
   setupHls() {
     this.hls = new HLSJS(this.options.hlsjsConfig || {})
-    this.hls.on(HLSJS.Events.MSE_ATTACHED, () => this.hls.loadSource(this.options.source))
+    this.hls.on(HLSJS.Events.MSE_ATTACHED, () => this.hls.loadSource(this.options.src))
     this.hls.on(HLSJS.Events.MANIFEST_PARSED, () => { this.options.autoPlay && this.play() })
     this.hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this.updatePlaybackType(evt, data))
     this.hls.attachVideo(this.el)
