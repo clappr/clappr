@@ -81,6 +81,8 @@ export default class Player extends BaseObject {
    * when embedded with width less than 320, volume bar will hide. You can force this behavior for all sizes by adding `true` **default**: `false`
    * @param {String} [options.watermark]
    * put `watermark: 'http://url/img.png'` on your embed parameters to automatically add watermark on your video. You can customize corner position by defining position parameter. Positions can be `bottom-left`, `bottom-right`, `top-left` and `top-right`.
+   * @param {Boolean} [options.disableVideoTagContextMenu]
+   * disables the context menu (right click) on the video element if a HTML5Video playback is used.
    * @param {String} [options.poster]
    * define a poster by adding its address `poster: 'http://url/img.png'`. It will appear after video embed, disappear on play and go back when user stops the video.
    */
