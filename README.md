@@ -139,6 +139,8 @@ Define a poster by adding `poster: http://url/img.png` on your embed parameters.
 ##### Stats
 Clappr has a native statistics plugin that accounts QoE metrics such playing time, rebuffering time, total rebuffers, etc. Metrics report happens periodically, learn how to access these numbers on [Create your own plugin](https://github.com/globocom/generator-clappr-plugin) session.
 
+##### Disable HTML5 Video Context Menu
+Add `disableVideoTagContextMenu: true` to disable the context menu (right click) on the HTML5 video element (in the case where a HTML5 playback is used).
 
 ### Status
 
