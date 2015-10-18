@@ -244,6 +244,11 @@ export default class HTML5Video extends Playback {
     if (this.options.useVideoTagDefaultControls) {
       this.$el.attr('controls', 'controls')
     }
+    if (this.options.disableVideoTagContextMenu) {
+      this.$el.on("contextmenu", () => {
+        return false
+      })
+    }
     this.$el.append(style)
     process.nextTick(() => this.options.autoPlay && this.play())
     if (this.el.readyState === this.el.HAVE_ENOUGH_DATA) {
