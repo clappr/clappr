@@ -14446,6 +14446,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'destroy',
 	    value: function destroy() {
 	      _utilsLogger.logger.log('destroy');
+	      this.trigger(_events2['default'].DESTROYING);
 	      this.playlistLoader.destroy();
 	      this.fragmentLoader.destroy();
 	      this.levelController.destroy();
@@ -14483,7 +14484,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.statsHandler.detachVideo(video);
 	      var ms = this.mediaSource;
 	      if (ms) {
-	        if (ms.readyState !== 'ended') {
+	        if (ms.readyState === 'open') {
 	          ms.endOfStream();
 	        }
 	        ms.removeEventListener('sourceopen', this.onmso);
@@ -14686,7 +14687,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	exports['default'] = {
-	  // fired when MediaSource has been succesfully attached to video element - data: { mediaSource }
+	  // fired when MediaSource has been succesfully attached to video element - data: { video, mediaSource }
 	  MSE_ATTACHED: 'hlsMediaSourceAttached',
 	  // fired when MediaSource has been detached from video element - data: { }
 	  MSE_DETACHED: 'hlsMediaSourceDetached',
@@ -14725,7 +14726,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // Identifier for a FPS drop event - data: {curentDropped, currentDecoded, totalDroppedFrames}
 	  FPS_DROP: 'hlsFPSDrop',
 	  // Identifier for an error event - data: { type : error type, details : error details, fatal : if true, hls.js cannot/will not try to recover, if false, hls.js will try to recover,other error specific data}
-	  ERROR: 'hlsError'
+	  ERROR: 'hlsError',
+	  // fired when hls.js instance starts destroying. Different from MSE_DETACHED as one could want to detach and reattach a video to the instance of hls.js to handle mid-rolls for example
+	  DESTROYING: 'hlsDestroying'
 	};
 	module.exports = exports['default'];
 
@@ -15545,14 +15548,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function destroy() {
 	      this.stop();
 	      this.hls.off(_events2['default'].MANIFEST_PARSED, this.onmp);
-	      // remove video listener
-	      if (this.video) {
-	        this.video.removeEventListener('seeking', this.onvseeking);
-	        this.video.removeEventListener('seeked', this.onvseeked);
-	        this.video.removeEventListener('loadedmetadata', this.onvmetadata);
-	        this.video.removeEventListener('ended', this.onvended);
-	        this.onvseeking = this.onvseeked = this.onvmetadata = null;
-	      }
 	      this.state = this.IDLE;
 	    }
 	  }, {
@@ -16208,6 +16203,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onMSEDetached',
 	    value: function onMSEDetached() {
+	      // remove video listeners
+	      if (this.video) {
+	        this.video.removeEventListener('seeking', this.onvseeking);
+	        this.video.removeEventListener('seeked', this.onvseeked);
+	        this.video.removeEventListener('loadedmetadata', this.onvmetadata);
+	        this.video.removeEventListener('ended', this.onvended);
+	        this.onvseeking = this.onvseeked = this.onvmetadata = null;
+	      }
 	      this.video = null;
 	      this.loadedmetadata = false;
 	      this.stop();
