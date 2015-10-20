@@ -10,7 +10,7 @@
     "hls.js": {
       "version": "0.0.1",
       "from": "dailymotion/hls.js",
-      "resolved": "git://github.com/dailymotion/hls.js.git#6554d339cf8ab58495829d227c02c67b334571f1",
+      "resolved": "git://github.com/dailymotion/hls.js.git#f88be83442a08aca70d237fbd191f428538a24b3",
       "dependencies": {
         "babelify": {
           "version": "6.3.0",
