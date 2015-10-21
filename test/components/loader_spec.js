@@ -1,5 +1,12 @@
 import Loader from '../../src/components/loader'
 
+import PlaybackPlugin from 'base/playback'
+import CorePlugin from 'base/core_plugin'
+import ContainerPlugin from 'base/container_plugin'
+import UICorePlugin from 'base/ui_core_plugin'
+import UIContainerPlugin from 'base/ui_container_plugin'
+import Styler from 'base/styler'
+
 describe('Loader', function() {
   describe('getPlugin function', function() {
     it('should return plugin based on its name', function() {
@@ -51,6 +58,33 @@ describe('Loader', function() {
       loader.addExternalPlugins({playback: [playbackPlugin]})
 
       expect(loader.getPlugin('flash')).to.be.equal(playbackPlugin)
+    })
+  })
+
+  describe('checkExternalPluginsType function', function() {
+    it('should throw an exception if its not core plugin', function() {
+      var loader = new Loader()
+
+      var playbackPlugin = new PlaybackPlugin()
+      expect(function() { loader.checkExternalPluginsType({core: [playbackPlugin]}) }).to.throw('external plugin on wrong array')
+      expect(function() { loader.checkExternalPluginsType({container: [playbackPlugin]}) }).to.throw('external plugin on wrong array')
+
+      var containerPlugin = new ContainerPlugin({container: {}})
+      expect(function() { loader.checkExternalPluginsType({core: [containerPlugin]}) }).to.throw('external plugin on wrong array')
+      expect(function() { loader.checkExternalPluginsType({playback: [containerPlugin]}) }).to.throw('external plugin on wrong array')
+
+      var corePlugin = new CorePlugin()
+      expect(function() { loader.checkExternalPluginsType({container: [corePlugin]}) }).to.throw('external plugin on wrong array')
+      expect(function() { loader.checkExternalPluginsType({playback: [corePlugin]}) }).to.throw('external plugin on wrong array')
+
+      var uiContainerPlugin = new UIContainerPlugin({container: {}})
+      expect(function() { loader.checkExternalPluginsType({core: [uiContainerPlugin]}) }).to.throw('external plugin on wrong array')
+      expect(function() { loader.checkExternalPluginsType({playback: [uiContainerPlugin]}) }).to.throw('external plugin on wrong array')
+
+      UICorePlugin.prototype.render = function() {}
+      var uiCorePlugin = new UICorePlugin()
+      expect(function() { loader.checkExternalPluginsType({container: [uiCorePlugin]}) }).to.throw('external plugin on wrong array')
+      expect(function() { loader.checkExternalPluginsType({playback: [uiCorePlugin]}) }).to.throw('external plugin on wrong array')
     })
   })
 })

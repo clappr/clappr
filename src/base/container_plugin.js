@@ -10,6 +10,8 @@ export default class ContainerPlugin extends BaseObject {
     this.bindEvents()
   }
 
+  get type() { return 'container' }
+
   enable() {
     if (!this.enabled) {
       this.bindEvents()
