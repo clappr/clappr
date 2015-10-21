@@ -10,17 +10,17 @@
     "hls.js": {
       "version": "0.0.1",
       "from": "dailymotion/hls.js",
-      "resolved": "git://github.com/dailymotion/hls.js.git#f88be83442a08aca70d237fbd191f428538a24b3",
+      "resolved": "git://github.com/dailymotion/hls.js.git#c77153d5d6db48c36b5752c85a6ef36aa3585365",
       "dependencies": {
         "babelify": {
-          "version": "6.3.0",
+          "version": "6.4.0",
           "from": "babelify@>=6.1.2 <7.0.0",
-          "resolved": "https://registry.npmjs.org/babelify/-/babelify-6.3.0.tgz",
+          "resolved": "https://registry.npmjs.org/babelify/-/babelify-6.4.0.tgz",
           "dependencies": {
             "object-assign": {
-              "version": "3.0.0",
-              "from": "object-assign@>=3.0.0 <4.0.0",
-              "resolved": "https://registry.npmjs.org/object-assign/-/object-assign-3.0.0.tgz"
+              "version": "4.0.1",
+              "from": "object-assign@>=4.0.1 <5.0.0",
+              "resolved": "https://registry.npmjs.org/object-assign/-/object-assign-4.0.1.tgz"
             }
           }
         },
@@ -419,7 +419,7 @@
     },
     "sinon-chai": {
       "version": "2.8.0",
-      "from": "sinon-chai@*",
+      "from": "sinon-chai@>=2.8.0 <2.9.0",
       "resolved": "https://registry.npmjs.org/sinon-chai/-/sinon-chai-2.8.0.tgz"
     }
   }
