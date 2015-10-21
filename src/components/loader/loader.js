@@ -82,6 +82,7 @@ export default class Loader extends BaseObject {
     var plugintypes = ["playback", "container", "core"]
     plugintypes.forEach((type) => {
       (plugins[type] || []).forEach((el) => {
+        var errorMessage = "external " + el.type + " plugin on " + type + " array"
         if (el.type !== type) { throw new ReferenceError(errorMessage) }
       })
     })
