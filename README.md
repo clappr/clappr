@@ -157,6 +157,10 @@ Make your changes and run the tests:
 
 `npm test`
 
+Keep tests suite being executed when developing:
+
+`npm run watch_test`
+
 Build your own version:
 
 `npm run build`
