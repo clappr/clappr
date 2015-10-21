@@ -292,10 +292,7 @@ export default class Player extends BaseObject {
    * ```
    */
   getPlugin(name) {
-    var plugins = this.core.plugins.concat(this.core.mediaControl.container.plugins);
-    return find(plugins, function(plugin) {
-      return plugin.name === name;
-    });
+    return this.loader.getPlugin(name)
   }
 
   /**
