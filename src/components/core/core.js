@@ -13,7 +13,6 @@ import MediaControl from 'components/media_control'
 import Mediator from 'components/mediator'
 import PlayerInfo from 'components/player_info'
 
-import assign from 'lodash.assign'
 import find from 'lodash.find'
 import $ from 'clappr-zepto'
 
@@ -143,7 +142,7 @@ export default class Core extends UIObject {
     this.options.mimeType = mimeType
     sources = sources && sources.constructor === Array ? sources : [sources.toString()];
     this.containers.forEach((container) => container.destroy())
-    this.containerFactory.options = assign(this.options, {sources})
+    this.containerFactory.options = $.extend(this.options, {sources})
     this.containerFactory.createContainers().then((containers) => {
       this.setupContainers(containers)
     })
@@ -208,7 +207,7 @@ export default class Core extends UIObject {
     if (this.mediaControl) {
       this.mediaControl.setContainer(container)
     } else {
-      this.mediaControl = this.createMediaControl(assign({container: container, focusElement: this.el}, this.options))
+      this.mediaControl = this.createMediaControl($.extend({container: container, focusElement: this.el}, this.options))
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_FULLSCREEN, this.toggleFullscreen)
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_SHOW, this.onMediaControlShow.bind(this, true))
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_HIDE, this.onMediaControlShow.bind(this, false))
