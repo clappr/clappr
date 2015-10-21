@@ -9,7 +9,7 @@ import Events from 'base/events'
 import CoreFactory from 'components/core_factory'
 import Loader from 'components/loader'
 import PlayerInfo from 'components/player_info'
-import assign from 'lodash.assign'
+import $ from 'clappr-zepto'
 import find from 'lodash.find'
 
 var baseUrl = currentScriptUrl().replace(/\/[^\/]+$/, "")
@@ -90,7 +90,7 @@ export default class Player extends BaseObject {
     super(options)
     window.p = this
     var defaultOptions = {playerId: uniqueId(""), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl}
-    this.options = assign(defaultOptions, options)
+    this.options = $.extend(defaultOptions, options)
     this.options.sources = this.normalizeSources(options)
     this.loader = new Loader(this.options.plugins || {}, this.options.playerId)
     this.coreFactory = new CoreFactory(this, this.loader)

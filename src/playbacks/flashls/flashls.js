@@ -9,8 +9,8 @@ import Mediator from 'components/mediator'
 import Browser from 'components/browser'
 import HLSEvents from './flashls_events'
 import hlsSwf from './public/HLSPlayer.swf'
+import $ from 'clappr-zepto'
 
-import assign from 'lodash.assign'
 
 var MAX_ATTEMPTS = 60
 
@@ -32,7 +32,7 @@ export default class FlasHLS extends BaseFlashPlayback {
       right: ["fullscreen", "volume", "hd-indicator"],
       seekEnabled: false
     }
-    this.settings = assign({}, this.defaultSettings)
+    this.settings = $.extend({}, this.defaultSettings)
     this.playbackType = 'live'
     this.addListeners()
   }
@@ -446,7 +446,7 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   updateSettings() {
-    this.settings = assign({}, this.defaultSettings)
+    this.settings = $.extend({}, this.defaultSettings)
     if (this.playbackType === "vod" || this.dvrInUse) {
       this.settings.left = ["playpause", "position", "duration"]
       this.settings.seekEnabled = true
