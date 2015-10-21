@@ -9,9 +9,9 @@ describe('External Plugin', function() {
       return "test"
     }
 
-  	MyPluginClass = Clappr.CorePlugin.extend({testMethod: testMethod})
-  	myPluginInstance = new MyPluginClass()
-  	nativePluginInstance = new Clappr.CorePlugin()
+    MyPluginClass = Clappr.CorePlugin.extend({testMethod: testMethod})
+    myPluginInstance = new MyPluginClass()
+    nativePluginInstance = new Clappr.CorePlugin()
     expect(myPluginInstance.enable).to.be.equal(nativePluginInstance.enable)
     expect(myPluginInstance.disable).to.be.equal(nativePluginInstance.disable)
     expect(myPluginInstance.testMethod).to.be.equal(testMethod)
