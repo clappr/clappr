@@ -79,8 +79,11 @@ export default class Loader extends BaseObject {
 
   checkExternalPluginsType(plugins) {
     var errorMessage = 'external plugin on wrong array'
-    if (plugins.playback) { plugins.playback.forEach((el) => { if (el.type !== 'playback') { throw new ReferenceError(errorMessage) }}) }
-    if (plugins.container) { plugins.container.forEach((el) => { if (el.type !== 'container') { throw new ReferenceError(errorMessage) }}) }
-    if (plugins.core) { plugins.core.forEach((el) => { if (el.type !== 'core') { throw new ReferenceError(errorMessage) }}) }
+    var plugintypes = ["playback", "container", "core"]
+    plugintypes.forEach((type) => {
+      (plugins[type] || []).forEach((el) => {
+        if (el.type !== type) { throw new ReferenceError(errorMessage) }
+      })
+    })
   }
 }
