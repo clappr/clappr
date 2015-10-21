@@ -76,4 +76,11 @@ export default class Loader extends BaseObject {
     var allPlugins = this.containerPlugins.concat(this.playbackPlugins).concat(this.corePlugins)
     return allPlugins.find((plugin) => { return plugin.prototype.name === name })
   }
+
+  checkExternalPluginsType(plugins) {
+    var errorMessage = 'external plugin on wrong array'
+    if (plugins.playback) { plugins.playback.forEach((el) => { if (el.type !== 'playback') throw new ReferenceError(errorMessage) }) }
+    if (plugins.container) { plugins.container.forEach((el) => { if (el.type !== 'container') throw new ReferenceError(errorMessage) }) }
+    if (plugins.core) { plugins.core.forEach((el) => { if (el.type !== 'core') throw new ReferenceError(errorMessage) }) }
+  }
 }

@@ -9,6 +9,8 @@ export default class CorePlugin extends BaseObject {
     this.bindEvents()
   }
 
+  get type() { return 'core' }
+
   bindEvents() {}
 
   enable() {
