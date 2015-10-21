@@ -11,7 +11,6 @@ import Events from 'base/events'
 import Container from 'components/container'
 import $ from 'clappr-zepto'
 
-import assign from 'lodash.assign'
 import find from 'lodash.find'
 
 export default class ContainerFactory extends BaseObject {
@@ -35,7 +34,7 @@ export default class ContainerFactory extends BaseObject {
 
   createContainer(source, options) {
     if (!!source.match(/^\/\//)) source = window.location.protocol + source
-    options = assign({}, this.options, {src: source}, options)
+    options = $.extend({}, this.options, {src: source}, options)
     var playbackPlugin = this.findPlaybackPlugin(source)
     var playback = new playbackPlugin(options)
     var container = new Container({playback: playback})
@@ -48,7 +47,7 @@ export default class ContainerFactory extends BaseObject {
 
   addContainerPlugins(container, source) {
     this.loader.containerPlugins.forEach((Plugin) => {
-      var options = assign(this.options, {container: container, src: source});
+      var options = $.extend(this.options, {container: container, src: source});
       container.addPlugin(new Plugin(options));
     });
   }
