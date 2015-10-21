@@ -18,6 +18,8 @@ export default class Playback extends UIObject {
     this.settings = {}
   }
 
+  get type() { return 'playback' }
+
   /**
    * plays the playback.
    * @method play
