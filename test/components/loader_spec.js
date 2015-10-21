@@ -5,7 +5,6 @@ import CorePlugin from 'base/core_plugin'
 import ContainerPlugin from 'base/container_plugin'
 import UICorePlugin from 'base/ui_core_plugin'
 import UIContainerPlugin from 'base/ui_container_plugin'
-import Styler from 'base/styler'
 
 describe('Loader', function() {
   describe('getPlugin function', function() {
