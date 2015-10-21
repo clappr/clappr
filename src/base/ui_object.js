@@ -5,7 +5,6 @@
 import {uniqueId} from './utils'
 import $ from 'clappr-zepto'
 import result from 'lodash.result'
-import assign from 'lodash.assign'
 import BaseObject from './base_object'
 
 var delegateEventSplitter = /^(\S+)\s*(.*)$/
@@ -193,7 +192,7 @@ export default class UIObject extends BaseObject {
    */
   _ensureElement() {
     if (!this.el) {
-      var attrs = assign({}, result(this, 'attributes'))
+      var attrs = $.extend({}, result(this, 'attributes'))
       if (this.id) attrs.id = result(this, 'id')
       if (this.className) attrs['class'] = result(this, 'className')
       var $el = $('<' + result(this, 'tagName') + '>').attr(attrs)

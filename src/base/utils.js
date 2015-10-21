@@ -3,20 +3,7 @@
 // license that can be found in the LICENSE file.
 
 import Browser from 'components/browser'
-
-var assign = function(obj, source) {
-  if (source) {
-    for (var prop in source) {
-      var propDescriptor = Object.getOwnPropertyDescriptor(source, prop)
-      if (propDescriptor) {
-        Object.defineProperty(obj, prop, propDescriptor)
-      } else {
-        obj[prop] = source[prop]
-      }
-    }
-  }
-  return obj
-}
+import $ from 'clappr-zepto'
 
 export function extend(parent, properties) {
   var constructor = function() {
@@ -26,7 +13,7 @@ export function extend(parent, properties) {
     }
   }
   constructor.prototype = Object.create(parent.prototype)
-  assign(constructor.prototype, properties)
+  $.extend(constructor.prototype, properties)
   return constructor
 }
 
