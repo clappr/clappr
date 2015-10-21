@@ -55,6 +55,7 @@ export default class Loader extends BaseObject {
   /**
    * adds all the external plugins that were passe through `options.plugins`
    * @method addExternalPlugins
+   * @private
    * @param {Object} plugins the config object with all plugins
    */
   addExternalPlugins(plugins) {
