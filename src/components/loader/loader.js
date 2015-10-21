@@ -36,7 +36,7 @@ import Favicon from 'plugins/favicon'
  */
 export default class Loader extends BaseObject {
   /**
-   * it builds the loader
+   * builds the loader
    * @method constructor
    * @param {Object} externalPlugins the external plugins
    * @param {Number} playerId you can embed multiple instances of clappr, therefore this is the unique id of each one.
@@ -52,6 +52,11 @@ export default class Loader extends BaseObject {
     }
   }
 
+  /**
+   * adds all the external plugins that were passe through `options.plugins`
+   * @method addExternalPlugins
+   * @param {Object} plugins the config object with all plugins
+   */
   addExternalPlugins(plugins) {
     var pluginName = function(plugin) { return plugin.prototype.name }
     if (plugins.playback) { this.playbackPlugins = uniq(plugins.playback.concat(this.playbackPlugins), pluginName) }
@@ -60,6 +65,12 @@ export default class Loader extends BaseObject {
     PlayerInfo.getInstance(this.playerId).playbackPlugins = this.playbackPlugins
   }
 
+  /**
+   * gets a plugin (any kind: container, playback or core) by its name.
+   * @method getPlugin
+   * @param {String} name the plugin's name
+   * @return {Object} the plugin if it exists otherwise undefined
+   */
   getPlugin(name) {
     var allPlugins = this.containerPlugins.concat(this.playbackPlugins).concat(this.corePlugins)
     return allPlugins.find((plugin) => { return plugin.prototype.name === name })
