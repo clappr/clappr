@@ -16,7 +16,7 @@
     "url": "git@github.com:clappr/clappr.git"
   },
   "author": "Globo.com",
-  "license": "BSD",
+  "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/clappr/clappr/issues"
   },
