@@ -9,7 +9,13 @@ import Browser from 'components/browser'
 
 export default class HLS extends HTML5VideoPlayback {
   get name() { return 'hls' }
-  get sliding() { return (this.hls && this.hls.levels[this.hls.currentLevel] && this.hls.levels[this.hls.currentLevel].details.sliding) || 0 }
+  
+  getPlayableStartTime() {
+    if (this.hls && this.hls.levels[this.hls.currentLevel] && this.hls.levels[this.hls.currentLevel].details) {
+      return super.getDuration() - this.hls.levels[this.hls.currentLevel].details.totalduration
+    }
+    return 0
+  }
 
   constructor(options) {
     super(options)
@@ -26,15 +32,25 @@ export default class HLS extends HTML5VideoPlayback {
     this.hls.attachVideo(this.el)
   }
 
+  getCurrentTime() {
+    return this.el.currentTime - this.getPlayableStartTime()
+  }
+
   getDuration() {
-    return super.getDuration() - this.sliding
+    if (this.hls && this.hls.levels[this.hls.currentLevel] && this.hls.levels[this.hls.currentLevel].details) {
+      return this.hls.levels[this.hls.currentLevel].details.totalduration
+    }
+    return 0
   }
 
   seek(seekBarValue) {
-    seekBarValue > 0 && (seekBarValue = seekBarValue * this.getDuration() / super.getDuration())
-    var seekTo = (seekBarValue === -1 ) ? 0 : seekBarValue
-    super.seek(seekTo)
-    if (this.dvrEnabled && seekTo > 0) {
+    var seekTo = 0
+    if (seekBarValue > 0) {
+      seekTo = this.getDuration() * (seekBarValue / 100)
+    }
+    seekTo += this.getPlayableStartTime()
+    super.seekSeconds(seekTo)
+    if (this.dvrEnabled) {
       this.updateDvr(true)
     } else {
       this.updateDvr(false)
