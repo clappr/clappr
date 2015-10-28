@@ -61,7 +61,7 @@ player.attachTo(playerElement);
       var playerElement = document.getElementById("player-wrapper");
 
       var player = new Clappr.Player({
-        source: 'http://clappr.io/highline.mp4',
+        source: urlParams.src || 'http://clappr.io/highline.mp4',
         poster: 'http://clappr.io/poster.png',
         mute: true,
         height: 360,
