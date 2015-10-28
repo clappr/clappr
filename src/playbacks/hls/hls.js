@@ -9,7 +9,7 @@ import Browser from 'components/browser'
 
 export default class HLS extends HTML5VideoPlayback {
   get name() { return 'hls' }
-  
+
   getPlayableStartTime() {
     if (this.hls && this.hls.levels[this.hls.currentLevel] && this.hls.levels[this.hls.currentLevel].details) {
       return super.getDuration() - this.hls.levels[this.hls.currentLevel].details.totalduration
@@ -48,13 +48,10 @@ export default class HLS extends HTML5VideoPlayback {
     if (seekBarValue > 0) {
       seekTo = this.getDuration() * (seekBarValue / 100)
     }
+    var onDvr = this.dvrEnabled && seekBarValue > 0 && seekBarValue < 100
     seekTo += this.getPlayableStartTime()
     super.seekSeconds(seekTo)
-    if (this.dvrEnabled) {
-      this.updateDvr(true)
-    } else {
-      this.updateDvr(false)
-    }
+    this.updateDvr(onDvr)
   }
 
   updateDvr(status) {
