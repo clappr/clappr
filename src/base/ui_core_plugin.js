@@ -10,8 +10,6 @@ export default class UICorePlugin extends UIObject {
     this.render()
   }
 
-  get type() { return 'core' }
-
   bindEvents() {}
 
   getExternalInterface() { return {} }
@@ -46,3 +44,4 @@ UICorePlugin.extend = function(properties) {
   return extend(UICorePlugin, properties)
 }
 
+UICorePlugin.type = 'core'

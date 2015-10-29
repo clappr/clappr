@@ -18,8 +18,6 @@ export default class Playback extends UIObject {
     this.settings = {}
   }
 
-  get type() { return 'playback' }
-
   /**
    * plays the playback.
    * @method play
@@ -115,3 +113,5 @@ Playback.extend = function(properties) {
 Playback.canPlay = (source, mimeType) => {
   return false
 }
+
+Playback.type = 'playback'
