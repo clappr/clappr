@@ -40,3 +40,4 @@ UIContainerPlugin.extend = function(properties) {
   return extend(UIContainerPlugin, properties)
 }
 
+UIContainerPlugin.type = 'container'

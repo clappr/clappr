@@ -113,3 +113,5 @@ Playback.extend = function(properties) {
 Playback.canPlay = (source, mimeType) => {
   return false
 }
+
+Playback.type = 'playback'
