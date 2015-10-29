@@ -48,12 +48,13 @@ export default class Loader extends BaseObject {
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
     this.corePlugins = [DVRControls, Favicon]
     if (externalPlugins) {
+      this.validateExternalPluginsType(externalPlugins)
       this.addExternalPlugins(externalPlugins)
     }
   }
 
   /**
-   * adds all the external plugins that were passe through `options.plugins`
+   * adds all the external plugins that were passed through `options.plugins`
    * @method addExternalPlugins
    * @private
    * @param {Object} plugins the config object with all plugins
@@ -67,18 +68,12 @@ export default class Loader extends BaseObject {
   }
 
   /**
-   * gets a plugin (any kind: container, playback or core) by its name.
-   * @method getPlugin
-   * @param {String} name the plugin's name
-   * @return {Object} the plugin if it exists otherwise undefined
+   * validate if the external plugins that were passed through `options.plugins` are associated to the correct type
+   * @method validateExternalPluginsType
+   * @private
+   * @param {Object} plugins the config object with all plugins
    */
-  getPlugin(name) {
-    var allPlugins = this.containerPlugins.concat(this.playbackPlugins).concat(this.corePlugins)
-    return allPlugins.find((plugin) => { return plugin.prototype.name === name })
-  }
-
-  checkExternalPluginsType(plugins) {
-    var errorMessage = 'external plugin on wrong array'
+  validateExternalPluginsType(plugins) {
     var plugintypes = ["playback", "container", "core"]
     plugintypes.forEach((type) => {
       (plugins[type] || []).forEach((el) => {
