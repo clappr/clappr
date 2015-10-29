@@ -36,3 +36,4 @@ CorePlugin.extend = function(properties) {
   return extend(CorePlugin, properties)
 }
 
+CorePlugin.type = 'core'

@@ -6,15 +6,21 @@ import Browser from 'components/browser'
 import $ from 'clappr-zepto'
 
 export function extend(parent, properties) {
-  var constructor = function() {
-    parent.prototype.constructor.apply(this, arguments)
-    if (properties.constructor) {
-      properties.constructor.apply(this, arguments)
+  var pluginName = properties.name||""
+  class MergedPlugin extends parent {
+    constructor(args) {
+      super(args)
+      if (properties.initialize) {
+        properties.initialize.apply(this, [args])
+      }
+    }
+    get name(){
+      return pluginName
     }
   }
-  constructor.prototype = Object.create(parent.prototype)
-  $.extend(constructor.prototype, properties)
-  return constructor
+  delete properties.name
+  $.extend(MergedPlugin, properties)
+  return MergedPlugin
 }
 
 export function formatTime(time) {
