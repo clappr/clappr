@@ -7,33 +7,12 @@ import UICorePlugin from 'base/ui_core_plugin'
 import UIContainerPlugin from 'base/ui_container_plugin'
 
 describe('Loader', function() {
-  describe('getPlugin function', function() {
-    it('should return plugin based on its name', function() {
-      var fooPlugin = {prototype: {name: 'foo'}}
-      var barPlugin = {prototype: {name: 'bar'}}
-
-      var loader = new Loader({playback: [fooPlugin, barPlugin]})
-      expect(loader.getPlugin('foo')).to.be.equal(fooPlugin)
-    })
-
-    it('should search for any type of plugin', function() {
-      var playbackPlugin = {prototype: {name: 'playbackPlugin'}}
-      var containerPlugin = {prototype: {name: 'containerPlugin'}}
-      var corePlugin = {prototype: {name: 'corePlugin'}}
-
-      var loader = new Loader({playback: [playbackPlugin], container: [containerPlugin], core: [corePlugin]})
-
-      expect(loader.getPlugin('playbackPlugin')).to.be.equal(playbackPlugin)
-      expect(loader.getPlugin('containerPlugin')).to.be.equal(containerPlugin)
-      expect(loader.getPlugin('corePlugin')).to.be.equal(corePlugin)
-    })
-  })
 
   describe('addExternalPlugins function', function() {
     it("should extend the plugins array with the external ones", function() {
-      var playbackPlugin = {prototype: {name: 'playbackPlugin'}}
-      var containerPlugin = {prototype: {name: 'containerPlugin'}}
-      var corePlugin = {prototype: {name: 'corePlugin'}}
+      var playbackPlugin = PlaybackPlugin.extend({name: 'playbackPlugin'})
+      var containerPlugin = ContainerPlugin.extend({name: 'containerPlugin'})
+      var corePlugin = CorePlugin.extend({name: 'corePlugin'})
 
       var loader = new Loader()
 
@@ -52,38 +31,34 @@ describe('Loader', function() {
     })
 
     it("should prioritize external plugins if their names collide", function() {
-      var playbackPlugin = {prototype: {name: 'flash'}}
+      var spinnerPlugin = ContainerPlugin.extend({container: {},  name: 'spinner'})
       var loader = new Loader()
-      loader.addExternalPlugins({playback: [playbackPlugin]})
+      expect(loader.containerPlugins.filter((plugin) => {
+        return plugin.prototype.name === "spinner"
+      })[0]).to.not.be.equal(spinnerPlugin)
 
-      expect(loader.getPlugin('flash')).to.be.equal(playbackPlugin)
+      loader.addExternalPlugins({container: [spinnerPlugin]})
+      
+      expect(loader.containerPlugins.filter((plugin) => {
+        return plugin.prototype.name === "spinner"
+      })[0]).to.be.equal(spinnerPlugin)
     })
   })
 
-  describe('checkExternalPluginsType function', function() {
+  describe('validateExternalPluginsType function', function() {
     it('should throw an exception if its not core plugin', function() {
       var loader = new Loader()
+      expect(function() { loader.validateExternalPluginsType({core: [PlaybackPlugin]}) }).to.throw('external playback plugin on core array')
+      expect(function() { loader.validateExternalPluginsType({container: [PlaybackPlugin]}) }).to.throw('external playback plugin on container array')
 
-      var playbackPlugin = new PlaybackPlugin()
-      expect(function() { loader.checkExternalPluginsType({core: [playbackPlugin]}) }).to.throw('external playback plugin on core array')
-      expect(function() { loader.checkExternalPluginsType({container: [playbackPlugin]}) }).to.throw('external playback plugin on container array')
+      expect(function() { loader.validateExternalPluginsType({core: [ContainerPlugin]}) }).to.throw('external container plugin on core array')
+      expect(function() { loader.validateExternalPluginsType({playback: [ContainerPlugin]}) }).to.throw('external container plugin on playback array')
 
-      var containerPlugin = new ContainerPlugin({container: {}})
-      expect(function() { loader.checkExternalPluginsType({core: [containerPlugin]}) }).to.throw('external container plugin on core array')
-      expect(function() { loader.checkExternalPluginsType({playback: [containerPlugin]}) }).to.throw('external container plugin on playback array')
+      expect(function() { loader.validateExternalPluginsType({container: [CorePlugin]}) }).to.throw('external core plugin on container array')
+      expect(function() { loader.validateExternalPluginsType({playback: [CorePlugin]}) }).to.throw('external core plugin on playback array')
 
-      var corePlugin = new CorePlugin()
-      expect(function() { loader.checkExternalPluginsType({container: [corePlugin]}) }).to.throw('external core plugin on container array')
-      expect(function() { loader.checkExternalPluginsType({playback: [corePlugin]}) }).to.throw('external core plugin on playback array')
-
-      var uiContainerPlugin = new UIContainerPlugin({container: {}})
-      expect(function() { loader.checkExternalPluginsType({core: [uiContainerPlugin]}) }).to.throw('external container plugin on core array')
-      expect(function() { loader.checkExternalPluginsType({playback: [uiContainerPlugin]}) }).to.throw('external container plugin on playback array')
-
-      UICorePlugin.prototype.render = function() {}
-      var uiCorePlugin = new UICorePlugin()
-      expect(function() { loader.checkExternalPluginsType({container: [uiCorePlugin]}) }).to.throw('external core plugin on container array')
-      expect(function() { loader.checkExternalPluginsType({playback: [uiCorePlugin]}) }).to.throw('external core plugin on playback array')
+      expect(function() { loader.validateExternalPluginsType({core: [UIContainerPlugin]}) }).to.throw('external container plugin on core array')
+      expect(function() { loader.validateExternalPluginsType({playback: [UIContainerPlugin]}) }).to.throw('external container plugin on playback array')
     })
   })
 })
