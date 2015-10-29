@@ -44,3 +44,4 @@ UICorePlugin.extend = function(properties) {
   return extend(UICorePlugin, properties)
 }
 
+UICorePlugin.type = 'core'

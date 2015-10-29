@@ -35,3 +35,5 @@ ContainerPlugin.extend = function(properties) {
   return extend(ContainerPlugin, properties)
 }
 
+ContainerPlugin.type = 'container'
+
