@@ -53,6 +53,7 @@ PS4 Browser  | ✔ | ✔ | ✘ |  ? | ✘ | ✘ | ✔
 - Thumbnails on seekbar: https://github.com/tjenkinson/clappr-thumbnails-plugin
 - Level Selector: https://github.com/lucasmundim/clappr-level-selector-plugin
 - Control the player with your voice: https://github.com/flavioribeiro/clappr-speech-control-plugin
+- 360 videos: https://github.com/thiagopnts/video-360
 
 ## Built-in Plugins & Embed Parameters
 
