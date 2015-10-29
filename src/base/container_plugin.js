@@ -10,8 +10,6 @@ export default class ContainerPlugin extends BaseObject {
     this.bindEvents()
   }
 
-  get type() { return 'container' }
-
   enable() {
     if (!this.enabled) {
       this.bindEvents()
@@ -36,4 +34,6 @@ export default class ContainerPlugin extends BaseObject {
 ContainerPlugin.extend = function(properties) {
   return extend(ContainerPlugin, properties)
 }
+
+ContainerPlugin.type = 'container'
 

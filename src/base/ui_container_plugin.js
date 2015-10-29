@@ -15,8 +15,6 @@ export default class UIContainerPlugin extends UIObject {
     this.bindEvents()
   }
 
-  get type() { return 'container' }
-
   enable() {
     if (!this.enabled) {
       this.bindEvents()
@@ -42,3 +40,4 @@ UIContainerPlugin.extend = function(properties) {
   return extend(UIContainerPlugin, properties)
 }
 
+UIContainerPlugin.type = 'container'
