@@ -8,9 +8,9 @@
       "resolved": "https://registry.npmjs.org/clappr-zepto/-/clappr-zepto-0.0.4.tgz"
     },
     "hls.js": {
-      "version": "0.0.1",
-      "from": "dailymotion/hls.js",
-      "resolved": "git://github.com/dailymotion/hls.js.git#c77153d5d6db48c36b5752c85a6ef36aa3585365",
+      "version": "0.2.0",
+      "from": "dailymotion/hls.js#v0.2.0",
+      "resolved": "git://github.com/dailymotion/hls.js.git#cae5cb71085f0f9f2ae3fe627a3593d8c6c0ec8a",
       "dependencies": {
         "babelify": {
           "version": "6.4.0",
@@ -19,7 +19,7 @@
           "dependencies": {
             "object-assign": {
               "version": "4.0.1",
-              "from": "object-assign@>=4.0.1 <5.0.0",
+              "from": "object-assign@>=4.0.0 <5.0.0",
               "resolved": "https://registry.npmjs.org/object-assign/-/object-assign-4.0.1.tgz"
             }
           }
