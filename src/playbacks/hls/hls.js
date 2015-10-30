@@ -94,6 +94,13 @@ export default class HLS extends HTML5VideoPlayback {
     }
   }
 
+  stop() {
+    if (this.hls) {
+      this.hls.detachVideo()
+      delete this.hls
+    }
+  }
+
   updatePlaybackType(evt, data) {
     this.playbackType = data.details.live ? 'live' : 'vod'
   }
