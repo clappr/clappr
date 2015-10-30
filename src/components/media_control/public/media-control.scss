@@ -35,7 +35,7 @@
     height: 40%;
     width: 100%;
     bottom: 0;
-    @include background(linear-gradient(transparent, rgba(0, 0, 0, 0.9)))
+    @include background(linear-gradient(transparent, rgba(0, 0, 0, 0.9)));
     @include transition(opacity 0.6s ease-out);
   }
 
