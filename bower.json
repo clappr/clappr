@@ -5,7 +5,7 @@
     "type": "git",
     "url": "git@github.com:clappr/clappr.git"
   },
-  "license": "BSD",
+  "license": "BSD-3-Clause",
   "homepage": "https://github.com/clappr/clappr",
   "authors": [
     "Globo.com"
@@ -15,7 +15,7 @@
   ],
   "dependencies": {
     "clappr-zepto": "0.0.4",
-    "hls.js": "dailymotion/hls.js",
+    "hls.js": "dailymotion/hls.js#v0.2.0",
     "lodash.find": "^3.2.1",
     "lodash.once": "^3.0.1",
     "lodash.result": "^3.1.2",
