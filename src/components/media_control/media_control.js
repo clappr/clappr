@@ -63,11 +63,11 @@ export default class MediaControl extends UIObject {
 
   constructor(options) {
     super(options)
-    this.seekTime = new SeekTime(this)
     this.options = options
     this.mute = this.options.mute
     this.persistConfig = this.options.persistConfig
     this.container = options.container
+    this.seekTime = new SeekTime(this)
     var initialVolume = (this.persistConfig) ? Config.restore("volume") : 100
     this.setVolume(this.mute ? 0 : initialVolume)
     this.keepVisible = false
@@ -349,7 +349,6 @@ export default class MediaControl extends UIObject {
     var seekbarValue = (100 / duration) * position
     this.setSeekPercentage(seekbarValue)
     this.$('[data-position]').html(formatTime(position))
-    this.$('[data-duration]').html(formatTime(duration))
   }
 
   seek(event) {
