@@ -52,6 +52,7 @@ export default class DVRControls extends UICorePlugin {
     }
   }
 
+
   settingsUpdate() {
     this.stopListening()
     if(this.shouldRender()) {
@@ -74,11 +75,10 @@ export default class DVRControls extends UICorePlugin {
     if (this.shouldRender()) {
       this.core.mediaControl.$el.addClass('live')
       this.core.mediaControl.$('.media-control-left-panel[data-media-control]').append(this.$el)
-      if (!this.$duration) {
-        this.$duration = $('<span data-duration></span>')
-      }
-      this.$duration.html('')
-      this.core.mediaControl.seekTime.$el.append(this.$duration)
+      this.core.mediaControl.seekTime.showDuration()
+    }
+    else {
+      this.core.mediaControl.seekTime.hideDuration()
     }
     return this
   }
