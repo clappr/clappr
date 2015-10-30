@@ -177,7 +177,7 @@ export default class MediaControl extends UIObject {
   mouseleaveOnVolumeBar(event) {
     var volOffset = this.$volumeBarContainer.offset()
 
-    var outsideByLeft = event.pageX < this.$seekBarContainer.offset().left
+    var outsideByLeft = event.pageX < volOffset.left
     var outsideByRight = event.pageX > (volOffset.left + volOffset.width)
     var outsideHorizontally = (outsideByLeft || outsideByRight)
 
