@@ -25,15 +25,44 @@ export default class SeekTime extends UIObject {
   constructor(mediaControl) {
     super()
     this.mediaControl = mediaControl
+    this.mediaControlContainer = this.mediaControl.container
     this.rendered = false
     this.hoveringOverSeekBar = false
     this.hoverPosition = null
+    this.duration = null
+    this.durationShown = false
+    this.currentDurationTxt = ""
+    this.currentSeekTimeTxt = ""
     this.addEventListeners()
   }
 
   addEventListeners() {
     this.listenTo(this.mediaControl, Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR, this.showTime)
     this.listenTo(this.mediaControl, Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR, this.hideTime)
+    this.listenTo(this.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.onContainerChanged)
+    this.listenTo(this.mediaControlContainer, Events.CONTAINER_TIMEUPDATE, this.updateDuration)
+  }
+
+  onContainerChanged() {
+     this.stopListening(this.mediaControlContainer, Events.CONTAINER_TIMEUPDATE, this.updateDuration)
+     this.mediaControlContainer = this.mediaControl.container
+     this.listenTo(this.mediaControlContainer, Events.CONTAINER_TIMEUPDATE, this.updateDuration)
+  }
+
+  showDuration() {
+    this.$durationEl.removeClass("hidden")
+    this.durationShown = true
+    this.update()
+  }
+
+  hideDuration() {
+    this.$durationEl.addClass("hidden")
+    this.durationShown = false
+  }
+
+  updateDuration(position, duration) {
+    this.duration = duration
+    this.update()
   }
 
   showTime(event) {
@@ -63,9 +92,22 @@ export default class SeekTime extends UIObject {
       this.$el.css('left', "-100%")
     }
     else {
-      var currentTime = this.hoverPosition * this.mediaControl.container.getDuration()
-      var formattedTime = formatTime(currentTime)
-      this.$textEl.text(formattedTime)
+      var seekTime = this.hoverPosition * this.duration
+      var seekTimeTxt = formatTime(seekTime)
+      // only update dom if necessary, ie time actually changed
+      if (seekTimeTxt !== this.currentSeekTimeTxt) {
+        this.$seekTimeEl.text(seekTimeTxt)
+        this.currentSeekTimeTxt = seekTimeTxt
+      }
+
+      if (this.durationShown) {
+        var durationTxt = formatTime(this.duration)
+        if (durationTxt !== this.currentDurationTxt) {
+          this.$durationEl.text(durationTxt)
+          this.currentDurationTxt = durationTxt
+        }
+      }
+
       // the element must be unhidden before its width is requested, otherwise it's width will be reported as 0
       this.$el.removeClass('hidden')
       var containerWidth = this.mediaControl.$seekBarContainer.width()
@@ -78,7 +120,7 @@ export default class SeekTime extends UIObject {
   }
 
   shouldBeVisible() {
-    return this.mediaControl.container.settings.seekEnabled && this.hoveringOverSeekBar
+    return this.mediaControlContainer.settings.seekEnabled && this.hoveringOverSeekBar && this.hoverPosition !== null && this.duration !== null
   }
 
   render() {
@@ -87,7 +129,9 @@ export default class SeekTime extends UIObject {
     this.$el.html(this.template())
     this.$el.append(style)
     this.mediaControl.$el.append(this.el)
-    this.$textEl = this.$el.find('[data-seek-time]')
+    this.$seekTimeEl = this.$el.find('[data-seek-time]')
+    this.$durationEl = this.$el.find('[data-duration]')
+    this.$durationEl.addClass("hidden")
     this.update()
   }
 }
