@@ -15,7 +15,6 @@ import UIObject from 'base/ui_object'
 import Browser from 'components/browser'
 import SeekTime from 'components/seek_time'
 import Mediator from 'components/mediator'
-import PlayerInfo from 'components/player_info'
 import template from 'base/template'
 
 import $ from 'clappr-zepto'
