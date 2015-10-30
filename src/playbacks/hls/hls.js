@@ -74,7 +74,7 @@ export default class HLS extends HTML5VideoPlayback {
 
   timeUpdated() {
     if (this.dvrEnabled) {
-      this.trigger(Events.PLAYBACK_TIMEUPDATE, this.getCurrentTime(), this.getDuration(), this.name)
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, this.dvrInUse ? this.getCurrentTime() : this.getDuration(), this.getDuration(), this.name)
     } else {
       super.timeUpdated()
     }
