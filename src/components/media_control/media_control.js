@@ -348,6 +348,7 @@ export default class MediaControl extends UIObject {
     var seekbarValue = (100 / duration) * position
     this.setSeekPercentage(seekbarValue)
     this.$('[data-position]').html(formatTime(position))
+    this.$('[data-duration]').html(formatTime(duration))
   }
 
   seek(event) {
