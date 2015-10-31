@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>clappr dash shaka</title>
+  </head>
+  <body>
+    <div id="player"></div>
+    <script type="text/javascript" charset="utf-8">
+      window.onload = function() {
+        var player = new Clappr.Player({
+          parentId: '#player',
+          plugins: {
+            playback: [ClapprDashShaka]
+          },
+          source: 'http://live.unified-streaming.com/loop/loop.isml/loop.mpd?format=mp4&session_id=25020', //LIVE
+          //source: 'http://dash.edgesuite.net/dash264/TestCases/2c/qualcomm/2/MultiRes.mpd', //VOD multiple qualities
+          // for more examples go to: http://dashif.org/reference/players/javascript/v1.5.1/samples/dash-if-reference-player/index.html and https://shaka-player-demo.appspot.com/
+          height: 360,
+          width: 640
+        })
+      }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clappr/0.2.15/clappr.js"></script>
+    <script type="text/javascript" charset="utf-8" src="./clappr-dash-shaka.js"> </script>
+  </body>
+</html>
