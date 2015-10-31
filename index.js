@@ -46,7 +46,7 @@ export default class ClapprDashShaka extends HTML5Video {
 
     var shakaLoaded = this._player.load(new shaka.player.DashVideoSource(this.options.src))
 
-    shakaLoaded.then(this._loaded).catch(this._setupError)
+    shakaLoaded.then(this._loaded.bind(this)).catch(this._setupError.bind(this))
   }
 
   _loaded() {
