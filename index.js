@@ -12,7 +12,7 @@ export default class ClapprDashShaka extends HTML5Video {
   ready() {}
 
   // skipping buffering handling on video tag in favor of buffering on shaka
-  bufferFull() {}
+  //bufferFull() {}
 
   // skipping error handling on video tag in favor of error on shaka
   error(event) { Log.error('an error was raised by the video tag', event, this.el.error)}
@@ -39,8 +39,7 @@ export default class ClapprDashShaka extends HTML5Video {
     var frequencyToSendStats = 60 * 1000
 
     this._player = new shaka.player.Player(this.el)
-    this._player.addEventListener('bufferingStart', this._bufferingHandler)
-    this._player.addEventListener('bufferingEnd', this._bufferingFullHandler)
+    //this._player.addEventListener('buffering', this._bufferingHandler)
     this._player.addEventListener('error', this._error)
     this._player.addEventListener('adaptation', this._onAdaptation);
 
@@ -61,9 +60,7 @@ export default class ClapprDashShaka extends HTML5Video {
     this._error({detail: 'shaka could not be setup: ' + e})
   }
 
-  _bufferingHandler() { this.trigger(Events.PLAYBACK_BUFFERING, this.name) }
-
-  _bufferingFullHandler() { this.trigger(Events.PLAYBACK_BUFFERFULL, this.name) }
+  _bufferingHandler(event) { console.log(event); this.trigger(BUFFERING_EVENTS[event.type], this.name) }
 
   _error(error) {
     Log.error('an error was raised by shaka player', error.detail)
