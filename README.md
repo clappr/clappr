@@ -12,4 +12,4 @@ Build:
 
 Run:
 
-`twistd -no web --path=.`
+`npm start`
