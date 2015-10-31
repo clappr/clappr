@@ -5,10 +5,37 @@ export default class ClapprDashShaka extends HTML5Video {
 
   constructor(options) {
     super(options)
-    this.setup()
+    this._setup()
   }
 
-  setup() {
+  // skipping ready event on video tag in favor of ready on shaka
+  ready() {}
+
+  // skipping buffering handling on video tag in favor of buffering on shaka
+  bufferFull() {}
+
+  // skipping error handling on video tag in favor of error on shaka
+  error(event) { Log.error('an error was raised by the video tag', event, this.el.error)}
+
+  // shouldn't we be open to 4k 8k ... something like isDefinitionInUse("HD" || VideoDefinition.V4K)
+  isHighDefinitionInUse() { return !!this.highDefinition }
+
+  // I think we should enforce PlaybackType.LIVE and VOD (maybe) I documented it wront as it was for name
+  getPlaybackType() {
+    return this._player && (this._player.isLive() ? 'live' : 'vod')
+  }
+
+  destroy() {
+    // should I do that on stop too? I think so... it's not pause and resume
+    clearInterval(this.sendStats)
+    this._player.destroy().
+      then(this._destroy).
+      catch(() => Log.error('shaka could not be destroyed'))
+  }
+
+  version() {return shaka.player.Player.version}
+
+  _setup() {
     var frequencyToSendStats = 60 * 1000
 
     this._player = new shaka.player.Player(this.el)
@@ -34,15 +61,9 @@ export default class ClapprDashShaka extends HTML5Video {
     this._error({detail: 'shaka could not be setup: ' + e})
   }
 
-  // skipping buffering handling on video tag in favor of buffering on shaka
-  bufferFull() {}
-
   _bufferingHandler() { this.trigger(Events.PLAYBACK_BUFFERING, this.name) }
 
   _bufferingFullHandler() { this.trigger(Events.PLAYBACK_BUFFERFULL, this.name) }
-
-  // skipping error handling on video tag in favor of error on shaka
-  error(event) { Log.error('an error was raised by the video tag', event, this.el.error)}
 
   _error(error) {
     Log.error('an error was raised by shaka player', error.detail)
@@ -60,37 +81,12 @@ export default class ClapprDashShaka extends HTML5Video {
       this.trigger(Events.PLAYBACK_BITRATE, {bitrate: event.size.height})
   }
 
-  // shouldn't we be open to 4k 8k ... something like isDefinitionInUse("HD" || VideoDefinition.V4K)
-  isHighDefinitionInUse() {
-    return !!this.highDefinition
-  }
-
-  destroy() {
-    // should I do that on stop too? I think so... it's not pause and resume
-    clearInterval(this.sendStats)
-    this._player.destroy().
-      then(this._destroy).
-      catch(() => Log.error('shaka could not be destroyed'))
-  }
-
   _destroy() {
     super.destroy()
     Log.debug('shaka was destroyed')
   }
 
-  // I think we should enforce PlaybackType.LIVE and VOD (maybe) I documented it wront as it was for name
-  getPlaybackType() {
-    return this._player && (this._player.isLive() ? 'live' : 'vod')
-  }
-
-
-
-  // skipping ready event on video tag in favor of ready on shaka
-  ready() { }
-
   _ready() { super.ready() }
-
-  version() {return shaka.player.Player.version}
 }
 
 ClapprDashShaka.canPlay = function(resource, mimeType) {
