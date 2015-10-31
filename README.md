@@ -1,6 +1,6 @@
 # clappr-dash-shaka
 
-A clappr playback to play dash based on shaka-player.
+A [clappr](https://github.com/clappr/clappr) playback to play dash based on [shaka-player](https://github.com/google/shaka-player).
 
 Install dependencies:
 
