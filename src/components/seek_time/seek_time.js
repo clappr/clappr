@@ -101,11 +101,14 @@ export default class SeekTime extends UIObject {
       }
 
       if (this.durationShown) {
+        this.$durationEl.show()
         var durationTxt = formatTime(this.duration)
         if (durationTxt !== this.currentDurationTxt) {
           this.$durationEl.text(durationTxt)
           this.currentDurationTxt = durationTxt
         }
+      } else {
+        this.$durationEl.hide()
       }
 
       // the element must be unhidden before its width is requested, otherwise it's width will be reported as 0
