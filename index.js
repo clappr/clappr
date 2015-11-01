@@ -5,10 +5,31 @@ const SEND_STATS_AT = 10 * 1000
 
 export default class ClapprDashShaka extends HTML5Video {
 
+  //where is this enforced? maybe we should take it to base_object or each individual
+  name() {return 'clappr_dash_shaka'}
+
   constructor(options) {
     super(options)
+    this._readyToPlay = false
     this._setup()
+    //var checkIsReady = (fn) => { () => { this._readyToPlay && fn() } }
   }
+
+  enableTextTrack(enable=true){
+   this._readyToPlay && this._player.enableTextTrack(enable)
+  }
+
+  _audioTracks() {return this._readyToPlay && this._player.getAudioTracks()}
+
+  _selectAudioTrack(id) {this._readyToPlay && this._player.selectAudioTrack(id)}
+
+  _textTracks() {return this._readyToPlay && this._player.getTextTracks()}
+
+  _selectTextTrack(id) {this._readyToPlay && this._player.selectTextTrack(id)}
+
+  videoTracks() {return this._readyToPlay && this._player.getVideoTracks()}
+
+  selectVideoTrack(id) {this._readyToPlay && this._player.selectVideoTrack(id)}
 
   // skipping ready event on video tag in favor of ready on shaka
   ready() {}
@@ -87,10 +108,14 @@ export default class ClapprDashShaka extends HTML5Video {
 
   _destroy() {
     super.destroy()
+    this._readyToPlay = false
     Log.debug('shaka was destroyed')
   }
 
-  _ready() { super.ready() }
+  _ready() {
+    this._readyToPlay = true
+    super.ready()
+  }
 }
 
 ClapprDashShaka.canPlay = function(resource, mimeType) {
