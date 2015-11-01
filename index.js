@@ -19,13 +19,14 @@ export default class ClapprDashShaka extends HTML5Video {
    this._readyToPlay && this._player.enableTextTrack(enable)
   }
 
-  _audioTracks() {return this._readyToPlay && this._player.getAudioTracks()}
+  //maybe we should use this in Playback or AudioSubVideoPlayback ...
+  audioTracks() {return this._readyToPlay && this._player.getAudioTracks()}
 
-  _selectAudioTrack(id) {this._readyToPlay && this._player.selectAudioTrack(id)}
+  selectAudioTrack(id) {this._readyToPlay && this._player.selectAudioTrack(id)}
 
-  _textTracks() {return this._readyToPlay && this._player.getTextTracks()}
+  textTracks() {return this._readyToPlay && this._player.getTextTracks()}
 
-  _selectTextTrack(id) {this._readyToPlay && this._player.selectTextTrack(id)}
+  selectTextTrack(id) {this._readyToPlay && this._player.selectTextTrack(id)}
 
   videoTracks() {return this._readyToPlay && this._player.getVideoTracks()}
 
