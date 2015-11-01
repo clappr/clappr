@@ -162,15 +162,12 @@ export default class MediaControl extends UIObject {
   }
 
   mousedownOnVolumeBar() {
-    var cursorStyleProperty = 'url(http://www.google.com/intl/en_ALL/mapfiles/closedhand.cur), move'
-    this.$volumeBarContainer.css('cursor', cursorStyleProperty)
-    this.$volumeBarContainer.css('cursor', '-webkit-grabbing')
-    this.$volumeBarContainer.css('cursor', '-moz-grabbing')
+    this.$el.addClass('dragging')
     this.volumeBarClickDown = true
   }
 
   mouseupOnVolumeBar() {
-    this.$volumeBarContainer.css( 'cursor', 'pointer' )
+    this.$el.removeClass('dragging')
     this.volumeBarClickDown = false
   }
 
