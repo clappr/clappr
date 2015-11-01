@@ -1,6 +1,8 @@
 import {HTML5Video, Log, Events} from 'clappr'
 import shaka from 'shaka-player'
 
+const SEND_STATS_AT = 10 * 1000
+
 export default class ClapprDashShaka extends HTML5Video {
 
   constructor(options) {
@@ -12,7 +14,7 @@ export default class ClapprDashShaka extends HTML5Video {
   ready() {}
 
   // skipping buffering handling on video tag in favor of buffering on shaka
-  //bufferFull() {}
+  // bufferFull() {}
 
   // skipping error handling on video tag in favor of error on shaka
   error(event) { Log.error('an error was raised by the video tag', event, this.el.error)}
@@ -29,19 +31,19 @@ export default class ClapprDashShaka extends HTML5Video {
     // should I do that on stop too? I think so... it's not pause and resume
     clearInterval(this.sendStats)
     this._player.destroy().
-      then(this._destroy).
+      then(this._destroy.bind(this)).
       catch(() => Log.error('shaka could not be destroyed'))
   }
 
   version() {return shaka.player.Player.version}
 
   _setup() {
-    var frequencyToSendStats = 60 * 1000
 
     this._player = new shaka.player.Player(this.el)
-    //this._player.addEventListener('buffering', this._bufferingHandler)
-    this._player.addEventListener('error', this._error)
-    this._player.addEventListener('adaptation', this._onAdaptation);
+    this._player.addEventListener('bufferingStart', this._bufferingHandler.bind(this))
+    this._player.addEventListener('bufferingEnd', this._bufferingFullHandler.bind(this))
+    this._player.addEventListener('error', this._error.bind(this))
+    this._player.addEventListener('adaptation', this._onAdaptation.bind(this));
 
     var shakaLoaded = this._player.load(new shaka.player.DashVideoSource(this.options.src))
 
@@ -52,22 +54,27 @@ export default class ClapprDashShaka extends HTML5Video {
     this._ready()
 
     this.sendStats = setInterval(() => {
+      console.log(this._player.getStats())
       this.trigger(Events.PLAYBACK_STATS_ADD, this._player.getStats())
-    }, frequencyToSendStats)
+    }, SEND_STATS_AT)
   }
 
   _setupError(e) {
     this._error({detail: 'shaka could not be setup: ' + e})
   }
 
-  _bufferingHandler(event) { console.log(event); this.trigger(BUFFERING_EVENTS[event.type], this.name) }
+  _bufferingHandler() { console.log('buf'); this.trigger(Events.PLAYBACK_BUFFERING, this.name) }
+
+  _bufferingFullHandler() { console.log('buf full'); this.trigger(Events.PLAYBACK_BUFFERFULL, this.name) }
 
   _error(error) {
+    console.log('error')
     Log.error('an error was raised by shaka player', error.detail)
     this.trigger(Events.PLAYBACK_ERROR, error.detail, this.name)
   }
 
   _onAdaptation(event) {
+    console.log('adaptation', event)
     if (!!event.size) return
 
       Log.debug('an adaptation happened: ', event)
