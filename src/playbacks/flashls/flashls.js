@@ -5,6 +5,7 @@
 import BaseFlashPlayback from 'playbacks/base_flash_playback'
 import Events from 'base/events'
 import template from 'base/template'
+import Playback from 'base/playback'
 import Mediator from 'components/mediator'
 import Browser from 'components/browser'
 import HLSEvents from './flashls_events'
@@ -33,7 +34,7 @@ export default class FlasHLS extends BaseFlashPlayback {
       seekEnabled: false
     }
     this.settings = $.extend({}, this.defaultSettings)
-    this.playbackType = 'live'
+    this.playbackType = Playback.LIVE
     this.addListeners()
   }
 
@@ -224,7 +225,7 @@ export default class FlasHLS extends BaseFlashPlayback {
     var duration = this.normalizeDuration(timeMetrics.duration)
     var position = Math.min(Math.max(timeMetrics.position, 0), duration)
     var previousDVRStatus = this.dvrEnabled
-    var livePlayback = (this.playbackType === 'live')
+    var livePlayback = (this.playbackType === Playback.LIVE)
     this.dvrEnabled = (livePlayback && duration > this.hlsMinimumDvrSize)
 
     if (duration === 100 || livePlayback === undefined) {
@@ -318,7 +319,7 @@ export default class FlasHLS extends BaseFlashPlayback {
     this.playbackType = this.el.getType()
     if (this.playbackType) {
       this.playbackType = this.playbackType.toLowerCase()
-      if (this.playbackType === 'vod') {
+      if (this.playbackType === Playback.VOD) {
         this.startReportingProgress()
       } else {
         this.stopReportingProgress()
@@ -365,9 +366,9 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   pause() {
-    if (this.playbackType !== 'live' || this.dvrEnabled) {
+    if (this.playbackType !== Playback.LIVE || this.dvrEnabled) {
       this.el.playerPause()
-      if (this.playbackType === 'live' && this.dvrEnabled) {
+      if (this.playbackType === Playback.LIVE && this.dvrEnabled) {
         this.updateDvr(true)
       }
     }
@@ -391,7 +392,7 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   normalizeDuration(duration) {
-    if (this.playbackType === 'live') {
+    if (this.playbackType === Playback.LIVE) {
       // estimate 10 seconds of buffer time for live streams for seek positions
       duration = duration - 10
     }
@@ -404,7 +405,7 @@ export default class FlasHLS extends BaseFlashPlayback {
       time = duration * time / 100
     }
 
-    if (this.playbackType === 'live') {
+    if (this.playbackType === Playback.LIVE) {
       // seek operations to a time within 5 seconds from live stream will position playhead back to live
       var dvrInUse = (time >= 0 && duration - time > 5)
       if (!dvrInUse) {
@@ -447,7 +448,7 @@ export default class FlasHLS extends BaseFlashPlayback {
 
   updateSettings() {
     this.settings = $.extend({}, this.defaultSettings)
-    if (this.playbackType === "vod" || this.dvrInUse) {
+    if (this.playbackType === Playback.VOD || this.dvrInUse) {
       this.settings.left = ["playpause", "position", "duration"]
       this.settings.seekEnabled = true
     } else if (this.dvrEnabled) {
