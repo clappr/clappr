@@ -3,10 +3,17 @@
 
 
 var dotenv = require('dotenv');
-var path = require('path');
-var webpack = require('webpack');
 
 dotenv.load();
+
+var webpackConfig = require("./webpack-base-config");
+
+// add subject as webpack's postloader
+webpackConfig.module.postLoaders = [{
+    test: /\.js$/,
+    exclude: /(test|node_modules|bower_components)\//,
+    loader: 'istanbul-instrumenter'
+}];
 
 module.exports = function(config) {
   config.set({
@@ -54,50 +61,7 @@ module.exports = function(config) {
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: ['progress', 'coverage'],
 
-    webpack: {
-        plugins: [
-          new webpack.DefinePlugin({
-            VERSION: JSON.stringify(require('./package.json').version)
-          })
-        ],
-        module: {
-            loaders: [
-            {
-                test: /\.js$/,
-                loader: 'babel',
-            },
-            {
-                test: /\.scss$/,
-                loaders: ['css', 'sass?includePaths[]='
-                    + path.resolve(__dirname, './node_modules/compass-mixins/lib')
-                    + '&includePaths[]='
-                    + path.resolve(__dirname, './src/base/scss')
-                ],
-                include: path.resolve(__dirname, 'src'),
-            },
-            {
-                test: /\.(png|woff|eot|ttf|swf|cur)/, loader: 'url-loader?limit=1'
-            },
-            {
-                test: /\.svg/, loader: 'file-loader'
-            },
-            {
-                test: /\.html/, loader: 'html?minimize=false'
-            }
-            ],
-            postLoaders: [ { // << add subject as webpack's postloader
-                test: /\.js$/,
-                exclude: /(test|node_modules|bower_components)\//,
-                loader: 'istanbul-instrumenter'
-            } ]
-        },
-        resolve: {
-            root: path.resolve(__dirname, 'src'),
-            extensions: ['', '.js'],
-        },
-
-    },
-
+    webpack: webpackConfig,
 
     // web server port
     port: 9876,
