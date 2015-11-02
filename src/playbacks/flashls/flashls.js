@@ -212,7 +212,13 @@ export default class FlasHLS extends BaseFlashPlayback {
     if (currentLevel) {
       this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000);
       this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE)
-      this.trigger(Events.PLAYBACK_BITRATE, {bitrate: this.getCurrentBitrate(), level: level})
+      this.trigger(Events.PLAYBACK_BITRATE, {
+        height: currentLevel.height,
+        width: currentLevel.width,
+        bandwidth: currentLevel.bandwidth,
+        bitrate: this.getCurrentBitrate(),
+        level: level
+      })
     }
   }
 
