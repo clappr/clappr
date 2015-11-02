@@ -263,6 +263,21 @@ Events.PLAYBACK_BUFFERFULL = 'playback:bufferfull'
 Events.PLAYBACK_SETTINGSUPDATE = 'playback:settingsupdate'
 Events.PLAYBACK_LOADEDMETADATA = 'playback:loadedmetadata'
 Events.PLAYBACK_HIGHDEFINITIONUPDATE = 'playback:highdefinitionupdate'
+/**
+ * Fired when playback updates its bitrate
+ *
+ * @event PLAYBACK_BITRATE
+ * @param {Object} bitrate Data
+ * bitrate object
+ * @param {Number} [bitrate.bandwidth]
+ * bitrate bandwidth when it's available
+ * @param {Number} [bitrate.width]
+ * playback width (ex: 720, 640, 1080)
+ * @param {Number} [bitrate.height]
+ * playback height (ex: 240, 480, 720)
+ * @param {Number} [bitrate.level]
+ * playback level when it's available, it could be just a map for width (0 => 240, 1 => 480, 2 => 720)
+ */
 Events.PLAYBACK_BITRATE = 'playback:bitrate'
 Events.PLAYBACK_PLAYBACKSTATE = 'playback:playbackstate'
 Events.PLAYBACK_DVR = 'playback:dvr'
@@ -278,6 +293,21 @@ Events.PLAYBACK_FRAGMENT_LOADED = 'playback:fragment:loaded'
 // Container Events
 Events.CONTAINER_PLAYBACKSTATE = 'container:playbackstate'
 Events.CONTAINER_PLAYBACKDVRSTATECHANGED = 'container:dvr'
+/**
+ * Fired when the container updates its bitrate
+ *
+ * @event CONTAINER_BITRATE
+ * @param {Object} bitrate Data
+ * bitrate object
+ * @param {Number} [bitrate.bandwidth]
+ * bitrate bandwidth when it's available
+ * @param {Number} [bitrate.width]
+ * playback width (ex: 720, 640, 1080)
+ * @param {Number} [bitrate.height]
+ * playback height (ex: 240, 480, 720)
+ * @param {Number} [bitrate.level]
+ * playback level when it's available, it could be just a map for width (0 => 240, 1 => 480, 2 => 720)
+ */
 Events.CONTAINER_BITRATE = 'container:bitrate'
 Events.CONTAINER_STATS_REPORT = 'container:stats:report'
 Events.CONTAINER_DESTROYED = 'container:destroyed'
