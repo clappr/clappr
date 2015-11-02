@@ -77,8 +77,8 @@ export default class GoogleAnalytics extends ContainerPlugin {
     this.push(["Video", "Error", this.container.playback.src])
   }
 
-  onHD() {
-    var status = this.container.isHighDefinitionInUse()? "ON": "OFF"
+  onHD(state) {
+    var status = state? "ON": "OFF"
     if (status !== this.currentHDState) {
       this.currentHDState = status
       this.push(["Video", "HD - " + status, this.container.playback.src])
