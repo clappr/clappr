@@ -1,5 +1,6 @@
 import Container from '../../src/components/container'
 import FakePlayback from '../../src/base/playback'
+import Playback from '../../src/base/playback'
 import Events from '../../src/base/events'
 
 describe('Container', function() {
