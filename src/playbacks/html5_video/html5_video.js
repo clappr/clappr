@@ -72,7 +72,7 @@ export default class HTML5Video extends Playback {
   durationChange() {
     // we can't figure out if hls resource is VoD or not until it is being loaded or duration has changed.
     // that's why we check it again and update media control accordingly.
-    if (this.getPlaybackType() === 'vod') {
+    if (this.getPlaybackType() === Playback.VOD) {
       this.settings.left = ["playpause", "position", "duration"]
     } else {
       this.settings.left = ["playstop"]
@@ -86,7 +86,7 @@ export default class HTML5Video extends Playback {
   }
 
   getPlaybackType() {
-    return [0, undefined, Infinity].indexOf(this.el.duration) >= 0 ? 'live' : 'vod'
+    return [0, undefined, Infinity].indexOf(this.el.duration) >= 0 ? Playback.LIVE : Playback.VOD
   }
 
   isHighDefinitionInUse() {
@@ -143,7 +143,7 @@ export default class HTML5Video extends Playback {
   }
 
   stalled() {
-    if (this.getPlaybackType() === 'vod' && this.el.readyState < this.el.HAVE_FUTURE_DATA) {
+    if (this.getPlaybackType() === Playback.VOD && this.el.readyState < this.el.HAVE_FUTURE_DATA) {
       this.trigger(Events.PLAYBACK_BUFFERING, this.name)
     }
   }
@@ -199,7 +199,7 @@ export default class HTML5Video extends Playback {
   }
 
   timeUpdated() {
-    if (this.getPlaybackType() === 'live') {
+    if (this.getPlaybackType() === Playback.LIVE) {
       this.trigger(Events.PLAYBACK_TIMEUPDATE, 1, 1, this.name)
     } else {
       this.trigger(Events.PLAYBACK_TIMEUPDATE, this.el.currentTime, this.el.duration, this.name)
