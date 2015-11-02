@@ -262,6 +262,12 @@ Events.PLAYBACK_BUFFERING = 'playback:buffering'
 Events.PLAYBACK_BUFFERFULL = 'playback:bufferfull'
 Events.PLAYBACK_SETTINGSUPDATE = 'playback:settingsupdate'
 Events.PLAYBACK_LOADEDMETADATA = 'playback:loadedmetadata'
+/**
+ * Fired when playback updates its high definition
+ *
+ * @event PLAYBACK_HIGHDEFINITIONUPDATE
+ * @param {Boolean} state `true` when is updated to HD otherwise `false`
+ */
 Events.PLAYBACK_HIGHDEFINITIONUPDATE = 'playback:highdefinitionupdate'
 Events.PLAYBACK_BITRATE = 'playback:bitrate'
 Events.PLAYBACK_PLAYBACKSTATE = 'playback:playbackstate'
@@ -300,6 +306,12 @@ Events.CONTAINER_FULLSCREEN = 'container:fullscreen'
 Events.CONTAINER_STATE_BUFFERING = 'container:state:buffering'
 Events.CONTAINER_STATE_BUFFERFULL = 'container:state:bufferfull'
 Events.CONTAINER_SETTINGSUPDATE = 'container:settingsupdate'
+/**
+ * Fired when container updates its high definition
+ *
+ * @event CONTAINER_HIGHDEFINITIONUPDATE
+ * @param {Boolean} state `true` when is updated to HD otherwise `false`
+ */
 Events.CONTAINER_HIGHDEFINITIONUPDATE = 'container:highdefinitionupdate'
 Events.CONTAINER_MEDIACONTROL_DISABLE = 'container:mediacontrol:disable'
 Events.CONTAINER_MEDIACONTROL_ENABLE = 'container:mediacontrol:enable'
