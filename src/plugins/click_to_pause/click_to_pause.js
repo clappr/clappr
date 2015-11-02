@@ -4,6 +4,7 @@
 
 import ContainerPlugin from 'base/container_plugin'
 import Events from 'base/events'
+import Playback from 'base/playback'
 import Browser from 'components/browser'
 
 export default class ClickToPausePlugin extends ContainerPlugin {
@@ -21,7 +22,7 @@ export default class ClickToPausePlugin extends ContainerPlugin {
   }
 
   click() {
-    if (this.container.getPlaybackType() !== 'live' || this.container.isDvrEnabled()) {
+    if (this.container.getPlaybackType() !== Playback.LIVE || this.container.isDvrEnabled()) {
       if (this.container.isPlaying()) {
         this.container.pause()
       } else {
@@ -32,7 +33,7 @@ export default class ClickToPausePlugin extends ContainerPlugin {
 
   settingsUpdate() {
     this.container.$el.removeClass('pointer-enabled')
-    if (this.container.getPlaybackType() !== 'live' || this.container.isDvrEnabled()) {
+    if (this.container.getPlaybackType() !== Playback.LIVE || this.container.isDvrEnabled()) {
       this.container.$el.addClass('pointer-enabled')
     }
   }
