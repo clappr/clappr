@@ -174,8 +174,34 @@ Starting a local server:
 
 This command will start a HTTP Server on port 8080, you can check a sample page with Clappr on http://localhost:8080/webpack-dev-server/
 
+### Guideline to open an issue (bug)
 
+Please, try to follow this to open new bugs (questions, suggetions and others are welcome in freestyle)
 
+For the **issue title**: A **meaningful title** (like: HLS doesn't work at windows 10) at the same time try to **avoid helpless title** (like: it doesn't work, IE10, bug, problem) 
+
+**Be sure**: 
+
+* try to reproduce the bug at http://cdn.clappr.io/
+* there is no open bug like yours
+
+For the **issue body**:
+<hr>
+
+**Browser**: YOUR BROWSER (ex: Chrome Version 46.0.2490.80, Firefox, IE)
+
+**OS**: YOUR OS (ex: Mac OS 10.11.1, iOS9, android4.5)
+
+**ClapprVersion**: 0.2.25
+
+**Steps to reproduce**:
+
+* first step
+* then second step
+* I was exptecting X and but instead it show Y
+
+ps: you can attach images, logs or whatever you think might be helpful.
+<hr>
 
 ### Contributors
 
