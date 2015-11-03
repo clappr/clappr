@@ -5,6 +5,7 @@
 import HTML5VideoPlayback from 'playbacks/html5_video'
 import HLSJS from 'hls.js'
 import Events from 'base/events'
+import Playback from 'base/playback'
 import Browser from 'components/browser'
 
 export default class HLS extends HTML5VideoPlayback {
@@ -20,7 +21,7 @@ export default class HLS extends HTML5VideoPlayback {
   constructor(options) {
     super(options)
     this.minDvrSize = options.hlsMinimumDvrSize ? options.hlsMinimumDvrSize : 60
-    this.playbackType = 'vod'
+    this.playbackType = Playback.VOD
     this.dvrInUse = false
   }
 
@@ -61,7 +62,7 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   durationChange() {
-    if (this.playbackType === "vod") {
+    if (this.playbackType === Playback.VOD) {
       this.settings.left = ["playpause", "position", "duration"]
     } else if (this.dvrEnabled) {
       this.settings.left = ["playpause"]
@@ -102,11 +103,11 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   updatePlaybackType(evt, data) {
-    this.playbackType = data.details.live ? 'live' : 'vod'
+    this.playbackType = data.details.live ? Playback.LIVE : Playback.VOD
   }
 
   get dvrEnabled() {
-    return (this.getDuration() >= this.minDvrSize && this.getPlaybackType() === 'live')
+    return (this.getDuration() >= this.minDvrSize && this.getPlaybackType() === Playback.LIVE)
   }
 
   getPlaybackType() {
@@ -114,7 +115,7 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   isSeekEnabled() {
-    return (this.playbackType === 'vod' || this.dvrEnabled)
+    return (this.playbackType === Playback.VOD || this.dvrEnabled)
   }
 }
 

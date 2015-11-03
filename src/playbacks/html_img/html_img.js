@@ -16,7 +16,7 @@ export default class HTMLImg extends Playback {
   }
 
   getPlaybackType() {
-    return null
+    return Playback.NO_OP
   }
 
   constructor(params) {
