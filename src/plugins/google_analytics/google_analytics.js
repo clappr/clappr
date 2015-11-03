@@ -33,6 +33,7 @@ export default class GoogleAnalytics extends ContainerPlugin {
 
   addEventListeners() {
     if (this.container) {
+      this.listenTo(this.container, Events.CONTAINER_READY, this.onReady)
       this.listenTo(this.container, Events.CONTAINER_PLAY, this.onPlay)
       this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
       this.listenTo(this.container, Events.CONTAINER_PAUSE, this.onPause)
@@ -51,6 +52,10 @@ export default class GoogleAnalytics extends ContainerPlugin {
     _gaq.push([this.trackerName + '_setAccount', this.account]);
     if (!!this.domainName)
       _gaq.push([this.trackerName + '_setDomainName', this.domainName]);
+  }
+  
+  onReady(){
+    this.push(["Video", "Playback", this.container.playback.name])
   }
 
   onPlay() {
@@ -84,7 +89,6 @@ export default class GoogleAnalytics extends ContainerPlugin {
       this.push(["Video", "HD - " + status, this.container.playback.src])
     }
   }
-
 
   onPlaybackChanged() {
     var type = this.container.getPlaybackType()
