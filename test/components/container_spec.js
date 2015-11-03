@@ -1,5 +1,6 @@
 import Container from '../../src/components/container'
 import FakePlayback from '../../src/base/playback'
+import Playback from '../../src/base/playback'
 import Events from '../../src/base/events'
 
 describe('Container', function() {
@@ -13,7 +14,7 @@ describe('Container', function() {
   })
 
   it('gets playback type', function() {
-    expect(this.container.getPlaybackType()).to.equal('no_op')
+    expect(this.container.getPlaybackType()).to.equal(Playback.NO_OP)
   })
 
   it('listens to playback:progress event', function() {

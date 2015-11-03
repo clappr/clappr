@@ -1,5 +1,6 @@
 import UICorePlugin from 'base/ui_core_plugin'
 import template from 'base/template'
+import Playback from 'base/playback'
 import Styler from 'base/styler'
 import Events from 'base/events'
 import dvrStyle from './public/dvr_controls.scss'
@@ -64,7 +65,7 @@ export default class DVRControls extends UICorePlugin {
 
   shouldRender() {
     var useDvrControls = this.core.options.useDvrControls === undefined || !!this.core.options.useDvrControls
-    return useDvrControls && this.core.getPlaybackType() === 'live'
+    return useDvrControls && this.core.getPlaybackType() === Playback.LIVE
   }
 
   render() {
