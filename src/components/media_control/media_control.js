@@ -71,8 +71,6 @@ export default class MediaControl extends UIObject {
     this.setVolume(this.mute ? 0 : initialVolume)
     this.keepVisible = false
     this.volumeBarClickDown = false
-    this.currentDurationTxt = ""
-    this.currentPositionTxt = ""
     this.addEventListeners()
     this.settings = {
       left: ['play', 'stop', 'pause'],
@@ -342,19 +340,21 @@ export default class MediaControl extends UIObject {
   updateSeekBar(position, duration) {
     if (this.draggingSeekBar) return
     if (position < 0) position = duration
+
+    var seekbarValue = (100 / duration) * position
+    var currentPosition = formatTime(position)
+    var currentDuration = formatTime(duration)
+
     this.$seekBarPosition.removeClass('media-control-notransition')
     this.$seekBarScrubber.removeClass('media-control-notransition')
-    var seekbarValue = (100 / duration) * position
-    this.setSeekPercentage(seekbarValue)
-    var positionTxt = formatTime(position)
-    if (positionTxt !== this.currentPositionTxt) {
-      this.$position.html(positionTxt)
-      this.currentPositionTxt = positionTxt
+
+    if (currentPosition !== this.displayedPosition) {
+      this.$position.html(currentPosition)
+      this.displayedPosition = currentPosition
     }
-    var durationTxt = formatTime(duration)
-    if (durationTxt !== this.currentDurationTxt) {
-      this.$duration.html(durationTxt)
-      this.currentDurationTxt = durationTxt
+    if (currentDuration !== this.displayedDuration) {
+      this.$duration.html(currentDuration)
+      this.displayedDuration = currentDuration
     }
   }
 
@@ -441,17 +441,17 @@ export default class MediaControl extends UIObject {
   createCachedElements() {
     var $layer = this.$el.find('.media-control-layer')
     this.$duration = $layer.find('.media-control-indicator[data-duration]')
+    this.$fullscreenToggle = $layer.find('button.media-control-button[data-fullscreen]')
     this.$playPauseToggle = $layer.find('button.media-control-button[data-playpause]')
     this.$playStopToggle = $layer.find('button.media-control-button[data-playstop]')
     this.$position = $layer.find('.media-control-indicator[data-position]')
-    this.$fullscreenToggle = $layer.find('button.media-control-button[data-fullscreen]')
     this.$seekBarContainer = $layer.find('.bar-container[data-seekbar]')
+    this.$seekBarHover = $layer.find('.bar-hover[data-seekbar]')
     this.$seekBarLoaded = $layer.find('.bar-fill-1[data-seekbar]')
     this.$seekBarPosition = $layer.find('.bar-fill-2[data-seekbar]')
     this.$seekBarScrubber = $layer.find('.bar-scrubber[data-seekbar]')
-    this.$seekBarHover = $layer.find('.bar-hover[data-seekbar]')
-    this.$volumeContainer = $layer.find('.drawer-container[data-volume]')
     this.$volumeBarContainer = $layer.find('.bar-container[data-volume]')
+    this.$volumeContainer = $layer.find('.drawer-container[data-volume]')
     this.$volumeIcon = $layer.find('.drawer-icon[data-volume]')
   }
 
