@@ -24,9 +24,11 @@
     pointer-events: auto;
     cursor: -webkit-grabbing !important;
     cursor: grabbing !important;
+    cursor: url("./closed-hand.cur"), move;
     * {
       cursor: -webkit-grabbing !important;
       cursor: grabbing !important;
+      cursor: url("./closed-hand.cur"), move;
     }
   }
 
