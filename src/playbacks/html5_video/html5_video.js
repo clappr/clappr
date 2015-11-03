@@ -9,14 +9,14 @@ import template from 'base/template'
 import Styler from 'base/styler'
 import Browser from 'components/browser'
 import Events from 'base/events'
-import videoStyle from './public/style.scss'
-import videoHTML from './public/index.html'
+import tagStyle from './public/style.scss'
+import sourceHTML from './public/index.html'
 import find from 'lodash.find'
 
 export default class HTML5Video extends Playback {
   get name() { return 'html5_video' }
   get tagName() { return 'video' }
-  get template() { return template(videoHTML) }
+  get template() { return template(sourceHTML) }
 
   get attributes() {
     return {
@@ -239,7 +239,7 @@ export default class HTML5Video extends Playback {
   }
 
   render() {
-    var style = Styler.getStyleFor(videoStyle)
+    var style = Styler.getStyleFor(tagStyle)
     this.$el.html(this.template({ src: this.src, type: this.typeFor(this.src) }))
     if (this.options.useVideoTagDefaultControls) {
       this.$el.attr('controls', 'controls')
