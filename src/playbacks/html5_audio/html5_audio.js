@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import Playback from 'base/playback'
 import Events from 'base/events'
 import find from 'lodash.find'
 import HTML5Video from 'playbacks/html5_video'
