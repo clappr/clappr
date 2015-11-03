@@ -60,17 +60,19 @@ export default class Playback extends UIObject {
   }
 
   /**
-   * gets the playback type
+   * gets the playback type (`'vod', 'live', 'aod'`)
    * @method getPlaybackType
    * @return {String} you should write the playback type otherwise it'll assume `'no_op'`
    * @example
    * ```javascript
-   * html5VideoPlayback.getPlaybackType() //html5_video
-   * flashHlsPlayback.getPlaybackType() //hls
+   * html5VideoPlayback.getPlaybackType() //vod
+   * html5AudioPlayback.getPlaybackType() //aod
+   * html5VideoPlayback.getPlaybackType() //live
+   * flashHlsPlayback.getPlaybackType() //live
    * ```
    */
   getPlaybackType() {
-    return 'no_op'
+    return Playback.NO_OP
   }
 
   /**
@@ -102,16 +104,56 @@ Playback.extend = function(properties) {
   return extend(Playback, properties)
 }
 
-  /**
-   * checks if the playback can play a given `source` and optionally a `mimeType`
-   * @method canPlay
-   * @static
-   * @param {String} source the given source ex: `http://example.com/play.mp4`
-   * @param {String} [mimeType] the given mime type, ex: `'application/vnd.apple.mpegurl'`
-   * @return {Boolean} `true` if the playback is playable, otherwise `false`
-   */
+/**
+ * a playback type for video on demand
+ *
+ * @property VOD
+ * @static
+ * @type String
+ */
+Playback.VOD = 'vod'
+/**
+ * a playback type for audio on demand
+ *
+ * @property AOD
+ * @static
+ * @type String
+ */
+Playback.AOD = 'aod'
+/**
+ * a playback type for live video
+ *
+ * @property LIVE
+ * @static
+ * @type String
+ */
+Playback.LIVE = 'live'
+/**
+ * a default playback type
+ *
+ * @property NO_OP
+ * @static
+ * @type String
+ */
+Playback.NO_OP = 'no_op'
+
+/**
+ * checks if the playback can play a given `source` and optionally a `mimeType`
+ * @method canPlay
+ * @static
+ * @param {String} source the given source ex: `http://example.com/play.mp4`
+ * @param {String} [mimeType] the given mime type, ex: `'application/vnd.apple.mpegurl'`
+ * @return {Boolean} `true` if the playback is playable, otherwise `false`
+ */
 Playback.canPlay = (source, mimeType) => {
   return false
 }
 
+/**
+ * the plugin type
+ *
+ * @property type
+ * @static
+ * @type String
+ */
 Playback.type = 'playback'

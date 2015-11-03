@@ -15,7 +15,7 @@ export default class HTML5Audio extends HTML5Video {
     this.settings.seekEnabled = this.isSeekEnabled()
     this.trigger(Events.PLAYBACK_SETTINGSUPDATE)
   }
-  
+
   getPlaybackType() {
     return 'aod'
   }
