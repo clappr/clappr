@@ -3,8 +3,9 @@
 // license that can be found in the LICENSE file.
 
 import Events from 'base/events'
-import find from 'lodash.find'
+import Playback from 'base/playback'
 import HTML5Video from 'playbacks/html5_video'
+import find from 'lodash.find'
 
 export default class HTML5Audio extends HTML5Video {
   get name() { return 'html5_audio' }
@@ -17,7 +18,7 @@ export default class HTML5Audio extends HTML5Video {
   }
 
   getPlaybackType() {
-    return 'aod'
+    return Playback.AOD
   }
 
   stalled() {
