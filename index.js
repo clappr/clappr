@@ -40,9 +40,13 @@ export default class ClapprDashShaka extends HTML5Video {
 
   isHighDefinitionInUse() { return !!this.highDefinition }
 
+  stop() {
+    clearInterval(this.sendStatsId)
+    this._sendStats()
+    super.stop()
+  }
   destroy() {
-    // should I do that on stop and resume at resume/pause/play too? I think so... it's not pause and resume
-    clearInterval(this.sendStats)
+    clearInterval(this.sendStatsId)
     this._player.destroy().
       then(this._destroy.bind(this)).
       catch(() => Log.error('shaka could not be destroyed'))
@@ -73,10 +77,10 @@ export default class ClapprDashShaka extends HTML5Video {
   }
 
   _startToSendStats() {
-    this.sendStats = setInterval(() => {
-      this.trigger(Events.PLAYBACK_STATS_ADD, this._player.getStats())
-    }, SEND_STATS_AT)
+    this.sendStatsId = setInterval(this._sendStats, SEND_STATS_AT)
   }
+
+  _sendStats() {this.trigger(Events.PLAYBACK_STATS_ADD, this._player.getStats())
 
   _setupError(e) {
     this._error({detail: 'shaka could not be setup: ' + e})
