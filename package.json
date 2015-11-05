@@ -5,14 +5,14 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git@github.com:leandromoreira/clappr-dash-shaka.git"
+    "url": "git@github.com:clappr/dash-shaka-playback.git"
   },
   "scripts": {
     "build": "node_modules/.bin/webpack",
     "start": "node_modules/.bin/webpack-dev-server --host 0.0.0.0 --content-base public/ --hot",
     "release": "node_modules/.bin/webpack -p"
   },
-  "author": "Leandro Moreira <leandro.ribeiro.moreira@gmail.com>",
+  "author": "Clappr team",
   "license": "BSD-3-Clause",
   "dependencies": {
     "shaka-player": "^1.5.0"
