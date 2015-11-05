@@ -35,7 +35,7 @@ IE10           | ✔ | ✔ | ✔ |  ✘ | ✘ | ![rtmp](http://flv.io/external3.
 IE11           | ✔ | ✔ | ✔ |  ✘ | [✔](https://github.com/clappr/dash-shaka-playback) | ![rtmp](http://flv.io/external3.png) | ✔
 Microsoft Edge | ✔ | ✔ | ? |  ? | [?](https://github.com/clappr/dash-shaka-playback) | ![rtmp](http://flv.io/external3.png) | ? | ?
 Firefox        | ✔ | ✔ | ✔ |  ✔ | [?](https://github.com/clappr/dash-shaka-playback) | ![rtmp](http://flv.io/external3.png) | ![rtmp](http://flv.io/external3.png) | ✔
-Chrome         | ✔ | ✔ | ✔ |  ✔ | [?](https://github.com/clappr/dash-shaka-playback) | ![rtmp](http://flv.io/external3.png) ![rtmp](http://flv.io/external3.png) | ✔
+Chrome         | ✔ | ✔ | ✔ |  ✔ | [✔](https://github.com/clappr/dash-shaka-playback) | ![rtmp](http://flv.io/external3.png) ![rtmp](http://flv.io/external3.png) | ✔
 Safari         | ✔ | ✔ | ✔ |  ✘ | [✔](https://github.com/clappr/dash-shaka-playback) | ![rtmp](http://flv.io/external3.png) | ![rtmp](http://flv.io/external3.png) | ✔
 iPhone         | ✔ | ✔ | ✔ |  ✘ | ✘ | ✘ | ✔
 iPad           | ✔ | ✔ | ✔ |  ✘ | ✘ | ✘ | ✔
