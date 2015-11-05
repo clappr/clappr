@@ -59,8 +59,11 @@ export default class ClapprDashShaka extends HTML5Video {
   destroy() {
     clearInterval(this.sendStatsId)
     this._player.destroy().
-      then(this._destroy.bind(this)).
-      catch(() => Log.error('shaka could not be destroyed'))
+      then(() => this._destroy()).
+      catch(() => {
+        this._destroy()
+        Log.error('shaka could not be destroyed')
+      })
   }
 
   version() {return shaka.player.Player.version}
@@ -68,17 +71,17 @@ export default class ClapprDashShaka extends HTML5Video {
   _setup() {
     this._player = this._createPlayer()
 
-    // we still need to deal with autoload
     var playerLoaded = this._player.load(new shaka.player.DashVideoSource(this.options.src))
-    playerLoaded.then(this._loaded.bind(this)).catch(this._setupError.bind(this))
+    playerLoaded.then(() => this._loaded())
+      .catch((e) => this._setupError(e))
   }
 
   _createPlayer() {
     var player = new shaka.player.Player(this.el)
-    player.addEventListener('bufferingStart', this._bufferingHandler.bind(this))
-    player.addEventListener('bufferingEnd', this._bufferingFullHandler.bind(this))
-    player.addEventListener('error', this._error.bind(this))
-    player.addEventListener('adaptation', this._onAdaptation.bind(this));
+    player.addEventListener('bufferingStart', () => this._bufferingHandler())
+    player.addEventListener('bufferingEnd', () => this._bufferingFullHandler())
+    player.addEventListener('error', (e) => this._error(e))
+    player.addEventListener('adaptation', () => this._onAdaptation())
     return player
   }
 
@@ -88,14 +91,12 @@ export default class ClapprDashShaka extends HTML5Video {
   }
 
   _startToSendStats() {
-    this.sendStatsId = setInterval(this._sendStats, SEND_STATS_AT)
+    this.sendStatsId = setInterval(() => this._sendStats(), SEND_STATS_AT)
   }
 
-  _sendStats() {this.trigger(Events.PLAYBACK_STATS_ADD, this._player.getStats())
+  _sendStats() {this.trigger(Events.PLAYBACK_STATS_ADD, this._player.getStats())}
 
-  _setupError(e) {
-    this._error({detail: 'shaka could not be setup: ' + e})
-  }
+  _setupError(e) { this._error({detail: 'shaka could not be setup: ' + e}) }
 
   _bufferingHandler() { this.trigger(Events.PLAYBACK_BUFFERING, this.name) }
 
