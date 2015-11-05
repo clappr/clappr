@@ -4,8 +4,7 @@ var webpack = require('webpack');
 module.exports = {
   entry: path.resolve(__dirname, 'index.js'),
   externals: {
-    clappr: 'Clappr',
-    shaka: 'shaka'
+    clappr: 'Clappr'
   },
   module: {
     loaders: [
@@ -22,8 +21,8 @@ module.exports = {
     extensions: ['', '.js'],
   },
   output: {
-    filename: 'clappr-dash-shaka.js',
-    library: 'ClapprDashShaka',
+    filename: 'dash-shaka-playback.js',
+    library: 'DashShakaPlayback',
     libraryTarget: 'umd',
   },
 };

@@ -9,9 +9,9 @@
     <script type="text/javascript" charset="utf-8">
       window.onload = function() {
         var player = new Clappr.Player({
-          parentId: '#player',
+          parentId: '#player',autoPlay:true,
           plugins: {
-            playback: [ClapprDashShaka]
+            playback: [DashShakaPlayback]
           },
           //source: 'http://live.unified-streaming.com/loop/loop.isml/loop.mpd?format=mp4&session_id=25020', //LIVE
           source: 'https://shaka-player-demo.appspot.com/assets/angel_one.mpd?_=1446383792251', //multi audio, sub
@@ -26,7 +26,7 @@
         })
       }
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clappr/0.2.15/clappr.js"></script>
-    <script type="text/javascript" charset="utf-8" src="./clappr-dash-shaka.js"> </script>
+    <script src="https://cdn.jsdelivr.net/clappr/latest/clappr.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="./dash-shaka-playback.js"> </script>
   </body>
 </html>

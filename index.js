@@ -3,9 +3,10 @@ import shaka from 'shaka-player'
 
 const SEND_STATS_AT = 30 * 1000
 
-export default class ClapprDashShaka extends HTML5Video {
-  //where is this enforced???
-  name() {return 'clappr_dash_shaka'}
+export default class DashShakaPlayback extends HTML5Video {
+  get name() {return 'dash_shaka_playback'}
+
+  get shakaVersion() {return shaka.player.Player.version}
 
   constructor(options) {
     super(options)
@@ -66,7 +67,6 @@ export default class ClapprDashShaka extends HTML5Video {
       })
   }
 
-  version() {return shaka.player.Player.version}
 
   _setup() {
     this._player = this._createPlayer()
@@ -128,7 +128,7 @@ export default class ClapprDashShaka extends HTML5Video {
   }
 }
 
-ClapprDashShaka.canPlay = function(resource, mimeType) {
+DashShakaPlayback.canPlay = function(resource, mimeType) {
   shaka.polyfill.installAll()
 
   if (!shaka.player.Player.isBrowserSupported()) {
