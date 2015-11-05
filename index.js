@@ -29,13 +29,9 @@ export default class DashShakaPlayback extends HTML5Video {
     this.getPlaybackType = checkIfIsReady(() => (this._player.isLive()?'live':'vod'))
   }
 
-  render() {
-    super.render()
-    this._setup()
-    return this
-  }
-
   play() {
+    !this._player && this._setup()
+
     if (!this._readyToPlay) {
       this.once(Events.PLAYBACK_READY, this.play)
       return
@@ -53,8 +49,11 @@ export default class DashShakaPlayback extends HTML5Video {
 
   stop() {
     clearInterval(this.sendStatsId)
-    super.stop()
+    this.trigger(Events.CONTAINER_STOP, this.name)
     this._sendStats()
+    this._player.unload()
+    this._player = null
+    this._readyToPlay = false
   }
 
   destroy() {
