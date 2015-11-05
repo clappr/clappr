@@ -55,6 +55,7 @@ export default class ClapprDashShaka extends HTML5Video {
     super.stop()
     this._sendStats()
   }
+
   destroy() {
     clearInterval(this.sendStatsId)
     this._player.destroy().
