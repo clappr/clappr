@@ -45,9 +45,6 @@ export default class ClapprDashShaka extends HTML5Video {
   // skipping ready event on video tag in favor of ready on shaka
   ready() {}
 
-  // skipping buffering handling on video tag in favor of buffering on shaka
-  // bufferFull() {}
-
   // skipping error handling on video tag in favor of error on shaka
   error(event) { Log.error('an error was raised by the video tag', event, this.el.error)}
 
