@@ -10,7 +10,6 @@ export default class ClapprDashShaka extends HTML5Video {
   constructor(options) {
     super(options)
     this._readyToPlay = false
-    this._setup()
 
     var checkIfIsReady = (fn) => {
       return (arg) => {
