@@ -29,6 +29,20 @@ export default class ClapprDashShaka extends HTML5Video {
     this.getPlaybackType = checkIfIsReady(() => (this._player.isLive()?'live':'vod'))
   }
 
+  render() {
+    super.render()
+    this._setup()
+    return this
+  }
+
+  play() {
+    if (!this._readyToPlay) {
+      this.once(Events.PLAYBACK_READY, this.play)
+      return
+    }
+    super.play()
+  }
+
   // skipping ready event on video tag in favor of ready on shaka
   ready() {}
 
