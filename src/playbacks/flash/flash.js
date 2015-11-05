@@ -10,6 +10,7 @@ import Mediator from 'components/mediator'
 import template from 'base/template'
 import $ from 'clappr-zepto'
 import Events from 'base/events'
+import Playback from 'base/playback'
 import flashSwf from './public/Player.swf'
 
 var MAX_ATTEMPTS = 60
@@ -65,7 +66,7 @@ export default class Flash extends BaseFlashPlayback {
   }
 
   getPlaybackType() {
-    return 'vod'
+    return Playback.VOD
   }
 
   isHighDefinitionInUse() {
