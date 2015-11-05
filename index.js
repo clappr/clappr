@@ -1,7 +1,7 @@
 import {HTML5Video, Log, Events} from 'clappr'
 import shaka from 'shaka-player'
 
-const SEND_STATS_AT = 10 * 1000
+const SEND_STATS_AT = 30 * 1000
 
 export default class ClapprDashShaka extends HTML5Video {
   //where is this enforced???
