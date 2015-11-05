@@ -13,3 +13,8 @@ Build:
 Run:
 
 `npm start`
+
+# observations
+
+This playback supports the [browsers that shaka does](https://shaka-player-demo.appspot.com/docs/tutorial-porting.html) and it also has the same [content restrictions](https://shaka-player-demo.appspot.com/docs/tutorial-caveats.html).
+
