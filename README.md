@@ -32,16 +32,16 @@ Now, create the player:
 Format         |HLS|MP4|MP3|WEBM| DASH | RTMP | JPG/PNG/GIF |
 ---------------|---|---|---|----|------|------|-------------|
 IE10           | ✔ | ✔ | ✔ |  ✘ | ✘ | ![rtmp](http://flv.io/external3.png) | ✔
-IE11           | ✔ | ✔ | ✔ |  ✘ | ✘ | ![rtmp](http://flv.io/external3.png) | ✔
-Microsoft Edge | ✔ | ✔ | ? |  ? | ? | ? | ?
-Firefox        | ✔ | ✔ | ✔ |  ✔ | ✘ | ![rtmp](http://flv.io/external3.png) | ✔
-Chrome         | ✔ | ✔ | ✔ |  ✔ | ![dash](http://flv.io/external3.png) | ![rtmp](http://flv.io/external3.png) | ✔
-Safari         | ✔ | ✔ | ✔ |  ✘ | ✘ | ![rtmp](http://flv.io/external3.png) | ✔
+IE11           | ✔ | ✔ | ✔ |  ✘ | [✔](https://github.com/clappr/dash-shaka-playback) | ![rtmp](http://flv.io/external3.png) | ✔
+Microsoft Edge | ✔ | ✔ | ? |  ? | [?](https://github.com/clappr/dash-shaka-playback) | ![rtmp](http://flv.io/external3.png) | ? | ?
+Firefox        | ✔ | ✔ | ✔ |  ✔ | [?](https://github.com/clappr/dash-shaka-playback) | ![rtmp](http://flv.io/external3.png) | ![rtmp](http://flv.io/external3.png) | ✔
+Chrome         | ✔ | ✔ | ✔ |  ✔ | [?](https://github.com/clappr/dash-shaka-playback) | ![rtmp](http://flv.io/external3.png) ![rtmp](http://flv.io/external3.png) | ✔
+Safari         | ✔ | ✔ | ✔ |  ✘ | [✔](https://github.com/clappr/dash-shaka-playback) | ![rtmp](http://flv.io/external3.png) | ![rtmp](http://flv.io/external3.png) | ✔
 iPhone         | ✔ | ✔ | ✔ |  ✘ | ✘ | ✘ | ✔
 iPad           | ✔ | ✔ | ✔ |  ✘ | ✘ | ✘ | ✔
-Android        | ✔ | ✔ | ✔ |  ✘ | ✘ | ✘ | ✔
-WiiU Browser   | ✔ | ✔ | ✘ |  ? | ✘ | ✘ | ✔
-PS4 Browser    | ✔ | ✔ | ✘ |  ? | ✘ | ✘ | ✔
+Android        | ✔ | ✔ | ✔ |  ✘ | [✔](https://github.com/clappr/dash-shaka-playback) | ![rtmp](http://flv.io/external3.png) | ✘ | ✔
+WiiU Browser   | ✔ | ✔ | ✘ |  ? | [?](https://github.com/clappr/dash-shaka-playback) | ![rtmp](http://flv.io/external3.png) | ✘ | ✔
+PS4 Browser    | ✔ | ✔ | ✘ |  ? | [?](https://github.com/clappr/dash-shaka-playback) | ![rtmp](http://flv.io/external3.png) | ✘ | ✔
 
 ![rtmp](http://flv.io/external3.png) means that the support is made by an external plugin.
 
