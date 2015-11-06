@@ -50,13 +50,13 @@ export default class SeekTime extends UIObject {
   }
 
   showDuration() {
-    this.$durationEl.removeClass("hidden")
+    this.$durationEl.show()
     this.durationShown = true
     this.update()
   }
 
   hideDuration() {
-    this.$durationEl.addClass("hidden")
+    this.$durationEl.hide()
     this.durationShown = false
   }
 
@@ -101,14 +101,11 @@ export default class SeekTime extends UIObject {
       }
 
       if (this.durationShown) {
-        this.$durationEl.show()
         var durationTxt = formatTime(this.duration)
         if (durationTxt !== this.currentDurationTxt) {
           this.$durationEl.text(durationTxt)
           this.currentDurationTxt = durationTxt
         }
-      } else {
-        this.$durationEl.hide()
       }
 
       // the element must be unhidden before its width is requested, otherwise it's width will be reported as 0
@@ -134,7 +131,7 @@ export default class SeekTime extends UIObject {
     this.mediaControl.$el.append(this.el)
     this.$seekTimeEl = this.$el.find('[data-seek-time]')
     this.$durationEl = this.$el.find('[data-duration]')
-    this.$durationEl.addClass("hidden")
+    this.$durationEl.hide()
     this.update()
   }
 }
