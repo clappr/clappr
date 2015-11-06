@@ -14,6 +14,20 @@ Run:
 
 `npm start`
 
+# "extra" features
+
+This playback offers you an API for handling with: audio, video and text tracks.
+
+```javascript
+enableTextTrack(state)
+textTracks()
+selectTextTrack(id)
+audioTracks()
+selectAudioTrack(id)
+videoTracks()
+selectVideoTrack(id)
+```
+
 # observations
 
 This playback supports the [browsers that shaka does](https://shaka-player-demo.appspot.com/docs/tutorial-porting.html) and it also has the same [content restrictions](https://shaka-player-demo.appspot.com/docs/tutorial-caveats.html).
