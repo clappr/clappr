@@ -7,6 +7,34 @@ A [clappr](https://github.com/clappr/clappr) playback to play dash based on [sha
 > 
 > NPM: https://www.npmjs.com/package/dash-shaka-playback/
 
+# Usage
+
+```html
+<html>
+  <head>
+    <script type="https://cdn.jsdelivr.net/clappr/latest/clappr.min.js"></script>
+    <script type="https://cdn.jsdelivr.net/clappr/latest/dash-shaka-playback.js"></script>
+  </head>
+  
+  <body>
+    <div id="player"></div>
+    <script>
+      var player = new Clappr.Player(
+        {
+          source: 'https://shaka-player-demo.appspot.com/assets/angel_one.mpd?_=1446383792251', 
+          plugins: {
+            playback: [DashShakaPlayback]
+          },
+          parentId: '#player'
+        });
+    </script>
+  </body>
+</html>
+
+```
+
+# Development
+
 Install dependencies:
 
 `npm install`
