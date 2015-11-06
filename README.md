@@ -2,6 +2,10 @@
 
 A [clappr](https://github.com/clappr/clappr) playback to play dash based on [shaka-player](https://github.com/google/shaka-player).
 
+> CDN: https://cdn.jsdelivr.net/clappr.dash-shaka-playback/latest/dash-shaka-playback.js
+> 
+> NPM: https://www.npmjs.com/package/dash-shaka-playback/
+
 Install dependencies:
 
 `npm install`
