@@ -348,6 +348,8 @@ export default class MediaControl extends UIObject {
     this.$seekBarPosition.removeClass('media-control-notransition')
     this.$seekBarScrubber.removeClass('media-control-notransition')
 
+    this.setSeekPercentage(seekbarValue)
+
     if (currentPosition !== this.displayedPosition) {
       this.$position.html(currentPosition)
       this.displayedPosition = currentPosition
