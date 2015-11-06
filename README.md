@@ -7,6 +7,8 @@ A [clappr](https://github.com/clappr/clappr) playback to play dash based on [sha
 > 
 > NPM: https://www.npmjs.com/package/dash-shaka-playback/
 
+<img src="https://raw.githubusercontent.com/clappr/dash-shaka-playback/master/public/screen-shot-dash-clappr.png"/>
+
 # Usage
 
 ```html
