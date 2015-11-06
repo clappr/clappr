@@ -32,29 +32,32 @@ Now, create the player:
 Format         |HLS|MP4|MP3|WEBM| DASH | RTMP | JPG/PNG/GIF |
 ---------------|---|---|---|----|------|------|-------------|
 IE10           | ✔ | ✔ | ✔ |  ✘ | ✘ | ![rtmp](http://flv.io/external3.png) | ✔
-IE11           | ✔ | ✔ | ✔ |  ✘ | [✔](https://github.com/clappr/dash-shaka-playback) | ![rtmp](http://flv.io/external3.png) | ✔
-Microsoft Edge | ✔ | ✔ | ? |  ? | [?](https://github.com/clappr/dash-shaka-playback) | ![rtmp](http://flv.io/external3.png) | ? | ?
-Firefox        | ✔ | ✔ | ✔ |  ✔ | [?](https://github.com/clappr/dash-shaka-playback) | ![rtmp](http://flv.io/external3.png) | ![rtmp](http://flv.io/external3.png) | ✔
-Chrome         | ✔ | ✔ | ✔ |  ✔ | [✔](https://github.com/clappr/dash-shaka-playback) | ![rtmp](http://flv.io/external3.png) ![rtmp](http://flv.io/external3.png) | ✔
-Safari         | ✔ | ✔ | ✔ |  ✘ | [✔](https://github.com/clappr/dash-shaka-playback) | ![rtmp](http://flv.io/external3.png) | ![rtmp](http://flv.io/external3.png) | ✔
+IE11           | ✔ | ✔ | ✔ |  ✘ | ![rtmp](http://flv.io/external3.png) | ![rtmp](http://flv.io/external3.png) | ✔
+Microsoft Edge | ✔ | ✔ | ? |  ? | ![rtmp](http://flv.io/external3.png) | ![rtmp](http://flv.io/external3.png) | ? | ?
+Firefox        | ✔ | ✔ | ✔ |  ✔ | ![rtmp](http://flv.io/external3.png) | ![rtmp](http://flv.io/external3.png) | ![rtmp](http://flv.io/external3.png) | ✔
+Chrome         | ✔ | ✔ | ✔ |  ✔ | ![rtmp](http://flv.io/external3.png) | ![rtmp](http://flv.io/external3.png) | ✔
+Safari         | ✔ | ✔ | ✔ |  ✘ | ![rtmp](http://flv.io/external3.png) | ![rtmp](http://flv.io/external3.png) | ![rtmp](http://flv.io/external3.png) | ✔
 iPhone         | ✔ | ✔ | ✔ |  ✘ | ✘ | ✘ | ✔
 iPad           | ✔ | ✔ | ✔ |  ✘ | ✘ | ✘ | ✔
-Android        | ✔ | ✔ | ✔ |  ✘ | [✔](https://github.com/clappr/dash-shaka-playback) | ![rtmp](http://flv.io/external3.png) | ✘ | ✔
-WiiU Browser   | ✔ | ✔ | ✘ |  ? | [?](https://github.com/clappr/dash-shaka-playback) | ![rtmp](http://flv.io/external3.png) | ✘ | ✔
-PS4 Browser    | ✔ | ✔ | ✘ |  ? | [?](https://github.com/clappr/dash-shaka-playback) | ![rtmp](http://flv.io/external3.png) | ✘ | ✔
+Android        | ✔ | ✔ | ✔ |  ✘ | ![rtmp](http://flv.io/external3.png) | ![rtmp](http://flv.io/external3.png) | ✘ | ✔
+WiiU Browser   | ✔ | ✔ | ✘ |  ? | ![rtmp](http://flv.io/external3.png) | ![rtmp](http://flv.io/external3.png) | ✘ | ✔
+PS4 Browser    | ✔ | ✔ | ✘ |  ? | ![rtmp](http://flv.io/external3.png) | ![rtmp](http://flv.io/external3.png) | ✘ | ✔
 
 ![rtmp](http://flv.io/external3.png) means that the support is made by an external plugin.
 
 ## External Plugins
 
-- RTMP: https://github.com/flavioribeiro/clappr-rtmp-plugin
-- DASH: https://github.com/shankardevy/clappr-dash-plugin
-- HLS+P2P: http://bem.tv
-- Comments on seekbar: http://labs.jordane.net/clappr-comment/
-- Thumbnails on seekbar: https://github.com/tjenkinson/clappr-thumbnails-plugin
-- Level Selector: https://github.com/lucasmundim/clappr-level-selector-plugin
-- Control the player with your voice: https://github.com/flavioribeiro/clappr-speech-control-plugin
-- 360 videos: https://github.com/thiagopnts/video-360
+Plugin         |Status|Compatible with latest Clappr|URL|
+---------------|---|---|---|---|---
+RTMP           | Ready | ? | https://github.com/flavioribeiro/clappr-rtmp-plugin 
+Dash           | WIP | No | https://github.com/shankardevy/clappr-dash-plugin 
+HLS+P2P        | Ready | [WIP](https://github.com/bemtv/clappr-p2phls-plugin/issues/148) | http://bem.tv 
+Comments on seekbar| Ready | ? | http://labs.jordane.net/clappr-comment/ 
+Thumbnails on seekbar| Ready | Yes | https://github.com/tjenkinson/clappr-thumbnails-plugin 
+Level Selector| Ready | Yes | https://github.com/clappr/clappr-level-selector-plugin 
+Voice control| Ready | ? | https://github.com/flavioribeiro/clappr-speech-control-plugin 
+360 videos| Ready | Yes | https://github.com/thiagopnts/video-360 
+DASH with shaka| Ready | Yes | https://github.com/clappr/dash-shaka-playback 
 
 ## Built-in Plugins & Embed Parameters
 
