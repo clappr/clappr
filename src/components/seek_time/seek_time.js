@@ -31,8 +31,6 @@ export default class SeekTime extends UIObject {
     this.hoverPosition = null
     this.duration = null
     this.durationShown = false
-    this.currentDurationTxt = ""
-    this.currentSeekTimeTxt = ""
     this.addEventListeners()
   }
 
@@ -93,18 +91,18 @@ export default class SeekTime extends UIObject {
     }
     else {
       var seekTime = this.hoverPosition * this.duration
-      var seekTimeTxt = formatTime(seekTime)
+      var currentSeekTime = formatTime(seekTime)
       // only update dom if necessary, ie time actually changed
-      if (seekTimeTxt !== this.currentSeekTimeTxt) {
-        this.$seekTimeEl.text(seekTimeTxt)
-        this.currentSeekTimeTxt = seekTimeTxt
+      if (currentSeekTime !== this.displayedSeekTime) {
+        this.$seekTimeEl.html(currentSeekTime)
+        this.displayedSeekTime = currentSeekTime
       }
 
       if (this.durationShown) {
-        var durationTxt = formatTime(this.duration)
-        if (durationTxt !== this.currentDurationTxt) {
-          this.$durationEl.text(durationTxt)
-          this.currentDurationTxt = durationTxt
+        var currentDuration = formatTime(this.duration)
+        if (currentDuration !== this.displayedDuration) {
+          this.$durationEl.html(currentDuration)
+          this.displayedDuration = currentDuration
         }
       }
 
