@@ -14,16 +14,16 @@ A [clappr](https://github.com/clappr/clappr) playback to play dash based on [sha
 ```html
 <html>
   <head>
-    <script type="https://cdn.jsdelivr.net/clappr/latest/clappr.min.js"></script>
-    <script type="https://cdn.jsdelivr.net/clappr/latest/dash-shaka-playback.js"></script>
+    <script src="https://cdn.jsdelivr.net/clappr/latest/clappr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/clappr.dash-shaka-playback/latest/dash-shaka-playback.js"></script>
   </head>
-  
+
   <body>
     <div id="player"></div>
     <script>
       var player = new Clappr.Player(
         {
-          source: 'https://shaka-player-demo.appspot.com/assets/angel_one.mpd?_=1446383792251', 
+          source: 'https://shaka-player-demo.appspot.com/assets/angel_one.mpd?_=1446383792251',
           plugins: {
             playback: [DashShakaPlayback]
           },
@@ -32,7 +32,6 @@ A [clappr](https://github.com/clappr/clappr) playback to play dash based on [sha
     </script>
   </body>
 </html>
-
 ```
 
 # Development
