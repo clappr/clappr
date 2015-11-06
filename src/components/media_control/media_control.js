@@ -501,6 +501,8 @@ export default class MediaControl extends UIObject {
 
   unbindKeyEvents() {
     this.kibo.off('space')
+    this.kibo.off('left')
+    this.kibo.off('right')
     this.kibo.off([1,2,3,4,5,6,7,8,9,0])
   }
 
