@@ -1,5 +1,4 @@
-import {requestAnimationFrame} from 'base/utils'
-
+import {requestAnimationFrame, getBrowserLanguage} from 'base/utils'
 import Playback from 'base/playback'
 import template from 'base/template'
 import Styler from 'base/styler'
@@ -14,25 +13,20 @@ export default class NoOp extends Playback {
     return {'data-no-op': ''}
   }
 
-  installNavigator() {
-    if (!window.navigator) { window.navigator = {} }
-    if (!window.navigator.language) { window.navigator.language = 'en-US' }
-  }
-
   getNoOpMessage(){
-    var messages = {}
-    messages['en'] = "Your browser does not support the playback of this video. Try to use a different browser."
-    messages['es'] = "Su navegador no soporta la reproducción de un video. Trate de usar un navegador diferente."
-    messages['pt'] = "Seu navegador não supporta a reprodução deste video. Tente usar um outro navegador."
-    messages['en-US'] = messages['en']
+    var messages = {
+      'en': 'Your browser does not support the playback of this video. Please try using a different browser.',
+      'es': 'Su navegador no soporta la reproducción de un video. Por favor, trate de usar un navegador diferente.',
+      'pt': 'Seu navegador não supporta a reprodução deste video. Por favor, tente usar um navegador diferente.'
+    }
+    messages['en-us'] = messages['en']
     messages['es-419'] = messages['es']
-    messages['pt-BR'] = messages['pt']
-    return messages[window.navigator.language]
+    messages['pt-br'] = messages['pt']
+    return messages[getBrowserLanguage()]||messages['en']
   }
 
   constructor(options) {
     super(options)
-    this.installNavigator()
   }
 
   render() {
