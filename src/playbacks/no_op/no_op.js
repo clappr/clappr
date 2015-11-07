@@ -14,6 +14,11 @@ export default class NoOp extends Playback {
     return {'data-no-op': ''}
   }
 
+  installNavigator() {
+    if (!window.navigator) { window.navigator = {} }
+    if (!window.navigator.language) { window.navigator.language = 'en-US' }
+  }
+
   getNoOpMessage(){
     var messages = {}
     messages['en'] = "Your browser does not support the playback of this video. Try to use a different browser."
@@ -26,7 +31,8 @@ export default class NoOp extends Playback {
   }
 
   constructor(options) {
-    super(options);
+    super(options)
+    this.installNavigator()
   }
 
   render() {
