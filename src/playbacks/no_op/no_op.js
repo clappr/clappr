@@ -14,13 +14,30 @@ export default class NoOp extends Playback {
     return {'data-no-op': ''}
   }
 
+  installNavigator() {
+    if (!window.navigator) { window.navigator = {} }
+    if (!window.navigator.language) { window.navigator.language = 'en-US' }
+  }
+
+  getNoOpMessage(){
+    var messages = {}
+    messages['en'] = "Your browser does not support the playback of this video. Try to use a different browser."
+    messages['es'] = "Su navegador no soporta la reproducción de un video. Trate de usar un navegador diferente."
+    messages['pt'] = "Seu navegador não supporta a reprodução deste video. Tente usar um outro navegador."
+    messages['en-US'] = messages['en']
+    messages['es-419'] = messages['es']
+    messages['pt-BR'] = messages['pt']
+    return messages[window.navigator.language]
+  }
+
   constructor(options) {
-    super(options);
+    super(options)
+    this.installNavigator()
   }
 
   render() {
     var style = Styler.getStyleFor(noOpStyle);
-    this.$el.html(this.template())
+    this.$el.html(this.template({message:this.getNoOpMessage()}))
     this.$el.append(style);
     this.animate()
     this.trigger(Events.PLAYBACK_READY, this.name)
