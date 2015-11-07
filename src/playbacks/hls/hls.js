@@ -12,10 +12,7 @@ export default class HLS extends HTML5VideoPlayback {
   get name() { return 'hls' }
 
   getPlayableStartTime() {
-    if (this.hls && this.hls.levels[this.hls.currentLevel] && this.hls.levels[this.hls.currentLevel].details) {
-      return super.getDuration() - this.hls.levels[this.hls.currentLevel].details.totalduration
-    }
-    return 0
+    return super.getDuration() - this.playableRegionDuration
   }
 
   constructor(options) {
@@ -23,13 +20,18 @@ export default class HLS extends HTML5VideoPlayback {
     this.minDvrSize = options.hlsMinimumDvrSize ? options.hlsMinimumDvrSize : 60
     this.playbackType = Playback.VOD
     this.dvrInUse = false
+    this.playableRegionDuration = 0
   }
 
   setupHls() {
     this.hls = new HLSJS(this.options.hlsjsConfig || {})
     this.hls.on(HLSJS.Events.MSE_ATTACHED, () => this.hls.loadSource(this.options.src))
     this.hls.on(HLSJS.Events.MANIFEST_PARSED, () => { this.options.autoPlay && this.play() })
-    this.hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this.updatePlaybackType(evt, data))
+    this.hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => {
+      this.updateDuration(evt, data)
+      this.updatePlaybackType(evt, data)
+    })
+    this.hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this.updateDuration(evt, data))
     this.hls.attachVideo(this.el)
   }
 
@@ -37,17 +39,10 @@ export default class HLS extends HTML5VideoPlayback {
     return this.el.currentTime - this.getPlayableStartTime()
   }
 
-  getDuration() {
-    if (this.hls && this.hls.levels[this.hls.currentLevel] && this.hls.levels[this.hls.currentLevel].details) {
-      return this.hls.levels[this.hls.currentLevel].details.totalduration
-    }
-    return 0
-  }
-
   seek(seekBarValue) {
-    var seekTo = 0
+    var seekTo = this.playableRegionDuration
     if (seekBarValue > 0) {
-      seekTo = this.getDuration() * (seekBarValue / 100)
+      seekTo = this.playableRegionDuration * (seekBarValue / 100)
     }
     var onDvr = this.dvrEnabled && seekBarValue > 0 && seekBarValue < 100
     seekTo += this.getPlayableStartTime()
@@ -70,12 +65,13 @@ export default class HLS extends HTML5VideoPlayback {
       this.settings.left = ["playstop"]
     }
     this.settings.seekEnabled = this.isSeekEnabled()
+    this.timeUpdated()
     this.trigger(Events.PLAYBACK_SETTINGSUPDATE)
   }
 
   timeUpdated() {
     if (this.dvrEnabled) {
-      this.trigger(Events.PLAYBACK_TIMEUPDATE, this.dvrInUse ? this.getCurrentTime() : this.getDuration(), this.getDuration(), this.name)
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, this.dvrInUse ? this.getCurrentTime() : this.playableRegionDuration, this.playableRegionDuration, this.name)
     } else {
       super.timeUpdated()
     }
@@ -106,8 +102,13 @@ export default class HLS extends HTML5VideoPlayback {
     this.playbackType = data.details.live ? Playback.LIVE : Playback.VOD
   }
 
+  updateDuration(evt, data) {
+    this.playableRegionDuration = data.details.totalduration
+    this.durationChange()
+  }
+
   get dvrEnabled() {
-    return (this.getDuration() >= this.minDvrSize && this.getPlaybackType() === Playback.LIVE)
+    return (this.playableRegionDuration >= this.minDvrSize && this.getPlaybackType() === Playback.LIVE)
   }
 
   getPlaybackType() {
