@@ -171,6 +171,13 @@ export var cancelAnimationFrame = (window.cancelAnimationFrame ||
                            window.webkitCancelAnimationFrame ||
                            window.clearTimeout).bind(window)
 
+export function getBrowserLanguage() {
+  if (window.navigator && window.navigator.language) {
+    return window.navigator.language.toLowerCase()
+  }
+  return null
+}
+
 export default {
   Config,
   Fullscreen,
@@ -181,5 +188,6 @@ export default {
   currentScriptUrl,
   isNumber,
   requestAnimationFrame,
-  cancelAnimationFrame
+  cancelAnimationFrame,
+  getBrowserLanguage
 }
