@@ -11,6 +11,10 @@ import Browser from 'components/browser'
 export default class HLS extends HTML5VideoPlayback {
   get name() { return 'hls' }
 
+  get levels() { return (this.hls && this.hls.levels) || [] }
+  get currentLevel() { return (this.hls && this.hls.currentLevel) || -1 }
+  set currentLevel(level) { this.hls && (this.hls.currentLevel = level) }
+
   getPlayableStartTime() {
     if (this.hls && this.hls.levels[this.hls.currentLevel] && this.hls.levels[this.hls.currentLevel].details) {
       return super.getDuration() - this.hls.levels[this.hls.currentLevel].details.totalduration
