@@ -21,7 +21,6 @@ export default class FlasHLS extends BaseFlashPlayback {
 
   get levels() { return (this.el && this.el.getLevels()) || [] }
   get currentLevel() { return (this.el && this.el.getCurrentLevel()) || -1 }
-  get currentBitrate() { return this.levels[this.currentLevel].bitrate }
   set currentLevel(level) { this.el && this.el.playerSetCurrentLevel(level) }
 
   constructor(options) {
@@ -222,7 +221,7 @@ export default class FlasHLS extends BaseFlashPlayback {
         height: currentLevel.height,
         width: currentLevel.width,
         bandwidth: currentLevel.bandwidth,
-        bitrate: this.currentBitrate,
+        bitrate: currentLevel.bitrate,
         level: level
       })
     }
