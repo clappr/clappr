@@ -19,6 +19,10 @@ export default class FlasHLS extends BaseFlashPlayback {
   get name() { return 'flashls' }
   get swfPath() { return template(hlsSwf)({baseUrl: this.baseUrl}) }
 
+  get levels() { return (this.el && this.el.getLevels()) || [] }
+  get currentLevel() { return (this.el && this.el.getCurrentLevel()) || -1 }
+  set currentLevel(level) { this.el && this.el.playerSetCurrentLevel(level) }
+
   constructor(options) {
     super(options)
     this.src = options.src
@@ -209,7 +213,7 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   levelChanged(level) {
-    var currentLevel = this.getLevels()[level]
+    var currentLevel = this.levels[level]
     if (currentLevel) {
       this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000);
       this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE)
@@ -265,19 +269,19 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   getCurrentLevelIndex() {
-    return this.el.getCurrentLevel()
+    return this.currentLevel
   }
 
   getCurrentLevel() {
-    return this.getLevels()[this.getCurrentLevelIndex()]
+    return this.levels[this.currentLevel]
   }
 
   getCurrentBitrate() {
-    return this.getCurrentLevel().bitrate
+    return this.levels[this.currentLevel].bitrate
   }
 
   setCurrentLevel(level) {
-    this.el.playerSetCurrentLevel(level)
+    this.currentLevel = level
   }
 
   isHighDefinitionInUse() {
@@ -285,7 +289,6 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   getLevels() {
-    this.levels = this.el.getLevels()
     return this.levels
   }
 
