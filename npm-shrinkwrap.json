@@ -1,6 +1,6 @@
 {
   "name": "clappr",
-  "version": "0.2.15",
+  "version": "0.2.16",
   "dependencies": {
     "clappr-zepto": {
       "version": "0.0.4",
@@ -356,7 +356,7 @@
     },
     "sinon-chai": {
       "version": "2.8.0",
-      "from": "sinon-chai@*",
+      "from": "sinon-chai@>=2.8.0 <2.9.0",
       "resolved": "https://registry.npmjs.org/sinon-chai/-/sinon-chai-2.8.0.tgz"
     }
   }
