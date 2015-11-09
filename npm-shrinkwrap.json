@@ -8,9 +8,9 @@
       "resolved": "https://registry.npmjs.org/clappr-zepto/-/clappr-zepto-0.0.4.tgz"
     },
     "hls.js": {
-      "version": "0.2.0",
-      "from": "dailymotion/hls.js#v0.2.0",
-      "resolved": "git://github.com/dailymotion/hls.js.git#cae5cb71085f0f9f2ae3fe627a3593d8c6c0ec8a",
+      "version": "0.2.2",
+      "from": "dailymotion/hls.js#v0.2.2",
+      "resolved": "git://github.com/dailymotion/hls.js.git#6377fbb14f9b453fafbfde1c099e627fd86b29fb",
       "dependencies": {
         "babelify": {
           "version": "6.4.0",
