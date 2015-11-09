@@ -18,7 +18,7 @@ export default class SeekTime extends UIObject {
   }
   get attributes() {
     return {
-      'class': 'seek-time hidden',
+      'class': 'seek-time',
       'data-seek-time': ''
     }
   }
@@ -48,14 +48,13 @@ export default class SeekTime extends UIObject {
   }
 
   showDuration() {
-    this.$durationEl.show()
     this.durationShown = true
     this.update()
   }
 
   hideDuration() {
-    this.$durationEl.hide()
     this.durationShown = false
+    this.update()
   }
 
   updateDuration(position, duration) {
@@ -86,7 +85,7 @@ export default class SeekTime extends UIObject {
       return
     }
     if (!this.shouldBeVisible()) {
-      this.$el.addClass('hidden')
+      this.$el.hide()
       this.$el.css('left', "-100%")
     }
     else {
@@ -94,20 +93,24 @@ export default class SeekTime extends UIObject {
       var currentSeekTime = formatTime(seekTime)
       // only update dom if necessary, ie time actually changed
       if (currentSeekTime !== this.displayedSeekTime) {
-        this.$seekTimeEl.html(currentSeekTime)
+        this.$seekTimeEl.text(currentSeekTime)
         this.displayedSeekTime = currentSeekTime
       }
 
       if (this.durationShown) {
+        this.$durationEl.show()
         var currentDuration = formatTime(this.duration)
         if (currentDuration !== this.displayedDuration) {
-          this.$durationEl.html(currentDuration)
+          this.$durationEl.text(currentDuration)
           this.displayedDuration = currentDuration
         }
       }
+      else {
+        this.$durationEl.hide()
+      }
 
       // the element must be unhidden before its width is requested, otherwise it's width will be reported as 0
-      this.$el.removeClass('hidden')
+      this.$el.show()
       var containerWidth = this.mediaControl.$seekBarContainer.width()
       var elWidth = this.$el.width()
       var elLeftPos = this.hoverPosition * containerWidth
@@ -123,9 +126,12 @@ export default class SeekTime extends UIObject {
 
   render() {
     this.rendered = true
+    this.displayedDuration = null
+    this.displayedSeekTime = null
     var style = Styler.getStyleFor(seekTimeStyle)
     this.$el.html(this.template())
     this.$el.append(style)
+    this.$el.hide()
     this.mediaControl.$el.append(this.el)
     this.$seekTimeEl = this.$el.find('[data-seek-time]')
     this.$durationEl = this.$el.find('[data-duration]')

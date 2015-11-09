@@ -351,11 +351,11 @@ export default class MediaControl extends UIObject {
     this.setSeekPercentage(seekbarValue)
 
     if (currentPosition !== this.displayedPosition) {
-      this.$position.html(currentPosition)
+      this.$position.text(currentPosition)
       this.displayedPosition = currentPosition
     }
     if (currentDuration !== this.displayedDuration) {
-      this.$duration.html(currentDuration)
+      this.$duration.text(currentDuration)
       this.displayedDuration = currentDuration
     }
   }
@@ -527,6 +527,8 @@ export default class MediaControl extends UIObject {
 
   render() {
     var timeout = 1000
+    this.displayedPosition = null
+    this.displayedDuration = null
     var style = Styler.getStyleFor(mediaControlStyle, {baseUrl: this.options.baseUrl})
     this.$el.html(this.template({ settings: this.settings }))
     this.$el.append(style)
