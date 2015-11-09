@@ -78,23 +78,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
 
-	var _basePlayback = __webpack_require__(80);
+	var _basePlayback = __webpack_require__(81);
 
 	var _basePlayback2 = _interopRequireDefault(_basePlayback);
 
-	var _baseContainer_plugin = __webpack_require__(132);
+	var _baseContainer_plugin = __webpack_require__(133);
 
 	var _baseContainer_plugin2 = _interopRequireDefault(_baseContainer_plugin);
 
-	var _baseCore_plugin = __webpack_require__(153);
+	var _baseCore_plugin = __webpack_require__(154);
 
 	var _baseCore_plugin2 = _interopRequireDefault(_baseCore_plugin);
 
-	var _baseUi_core_plugin = __webpack_require__(147);
+	var _baseUi_core_plugin = __webpack_require__(148);
 
 	var _baseUi_core_plugin2 = _interopRequireDefault(_baseUi_core_plugin);
 
-	var _baseUi_container_plugin = __webpack_require__(127);
+	var _baseUi_container_plugin = __webpack_require__(128);
 
 	var _baseUi_container_plugin2 = _interopRequireDefault(_baseUi_container_plugin);
 
@@ -126,39 +126,39 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _componentsMedia_control2 = _interopRequireDefault(_componentsMedia_control);
 
-	var _componentsPlayer_info = __webpack_require__(52);
+	var _componentsPlayer_info = __webpack_require__(58);
 
 	var _componentsPlayer_info2 = _interopRequireDefault(_componentsPlayer_info);
 
-	var _playbacksBase_flash_playback = __webpack_require__(85);
+	var _playbacksBase_flash_playback = __webpack_require__(86);
 
 	var _playbacksBase_flash_playback2 = _interopRequireDefault(_playbacksBase_flash_playback);
 
-	var _playbacksFlash = __webpack_require__(83);
+	var _playbacksFlash = __webpack_require__(84);
 
 	var _playbacksFlash2 = _interopRequireDefault(_playbacksFlash);
 
-	var _playbacksFlashls = __webpack_require__(92);
+	var _playbacksFlashls = __webpack_require__(93);
 
 	var _playbacksFlashls2 = _interopRequireDefault(_playbacksFlashls);
 
-	var _playbacksHls = __webpack_require__(96);
+	var _playbacksHls = __webpack_require__(97);
 
 	var _playbacksHls2 = _interopRequireDefault(_playbacksHls);
 
-	var _playbacksHtml5_audio = __webpack_require__(90);
+	var _playbacksHtml5_audio = __webpack_require__(91);
 
 	var _playbacksHtml5_audio2 = _interopRequireDefault(_playbacksHtml5_audio);
 
-	var _playbacksHtml5_video = __webpack_require__(78);
+	var _playbacksHtml5_video = __webpack_require__(79);
 
 	var _playbacksHtml5_video2 = _interopRequireDefault(_playbacksHtml5_video);
 
-	var _playbacksHtml_img = __webpack_require__(118);
+	var _playbacksHtml_img = __webpack_require__(119);
 
 	var _playbacksHtml_img2 = _interopRequireDefault(_playbacksHtml_img);
 
-	var _pluginsPoster = __webpack_require__(137);
+	var _pluginsPoster = __webpack_require__(138);
 
 	var _pluginsPoster2 = _interopRequireDefault(_pluginsPoster);
 
@@ -178,7 +178,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var version = ("0.2.15");
+	var version = ("0.2.16");
 
 	exports['default'] = {
 	    Player: _componentsPlayer2['default'],
@@ -251,11 +251,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _componentsCore_factory2 = _interopRequireDefault(_componentsCore_factory);
 
-	var _componentsLoader = __webpack_require__(59);
+	var _componentsLoader = __webpack_require__(60);
 
 	var _componentsLoader2 = _interopRequireDefault(_componentsLoader);
 
-	var _componentsPlayer_info = __webpack_require__(52);
+	var _componentsPlayer_info = __webpack_require__(58);
 
 	var _componentsPlayer_info2 = _interopRequireDefault(_componentsPlayer_info);
 
@@ -652,6 +652,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.uniqueId = uniqueId;
 	exports.isNumber = isNumber;
 	exports.currentScriptUrl = currentScriptUrl;
+	exports.getBrowserLanguage = getBrowserLanguage;
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -854,6 +855,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	var cancelAnimationFrame = (window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame || window.clearTimeout).bind(window);
 
 	exports.cancelAnimationFrame = cancelAnimationFrame;
+
+	function getBrowserLanguage() {
+	  if (window.navigator && window.navigator.language) {
+	    return window.navigator.language.toLowerCase();
+	  }
+	  return null;
+	}
+
 	exports['default'] = {
 	  Config: Config,
 	  Fullscreen: Fullscreen,
@@ -864,7 +873,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  currentScriptUrl: currentScriptUrl,
 	  isNumber: isNumber,
 	  requestAnimationFrame: requestAnimationFrame,
-	  cancelAnimationFrame: cancelAnimationFrame
+	  cancelAnimationFrame: cancelAnimationFrame,
+	  getBrowserLanguage: getBrowserLanguage
 	};
 
 /***/ },
@@ -932,6 +942,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Browser.isIE11 = !!navigator.userAgent.match(/trident.*rv:11/i);
 	Browser.isMobile = !!/Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|IEMobile|Opera Mini/i.test(navigator.userAgent);
 	Browser.isiOs = !!/iPad|iPhone|iPod/i.test(navigator.userAgent);
+	Browser.isAndroid = !!/Android/i.test(navigator.userAgent);
 	Browser.isWin8App = !!/MSAppHost/i.test(navigator.userAgent);
 	Browser.isWiiU = !!/WiiU/i.test(navigator.userAgent);
 	Browser.isPS4 = !!/PlayStation 4/i.test(navigator.userAgent);
@@ -2184,6 +2195,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	Events.PLAYBACK_SETTINGSUPDATE = 'playback:settingsupdate';
 	Events.PLAYBACK_LOADEDMETADATA = 'playback:loadedmetadata';
 	Events.PLAYBACK_HIGHDEFINITIONUPDATE = 'playback:highdefinitionupdate';
+	/**
+	 * Fired when playback updates its bitrate
+	 *
+	 * @event PLAYBACK_BITRATE
+	 * @param {Object} bitrate Data
+	 * bitrate object
+	 * @param {Number} [bitrate.bandwidth]
+	 * bitrate bandwidth when it's available
+	 * @param {Number} [bitrate.width]
+	 * playback width (ex: 720, 640, 1080)
+	 * @param {Number} [bitrate.height]
+	 * playback height (ex: 240, 480, 720)
+	 * @param {Number} [bitrate.level]
+	 * playback level when it's available, it could be just a map for width (0 => 240, 1 => 480, 2 => 720)
+	 */
 	Events.PLAYBACK_BITRATE = 'playback:bitrate';
 	Events.PLAYBACK_PLAYBACKSTATE = 'playback:playbackstate';
 	Events.PLAYBACK_DVR = 'playback:dvr';
@@ -2199,6 +2225,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	// Container Events
 	Events.CONTAINER_PLAYBACKSTATE = 'container:playbackstate';
 	Events.CONTAINER_PLAYBACKDVRSTATECHANGED = 'container:dvr';
+	/**
+	 * Fired when the container updates its bitrate
+	 *
+	 * @event CONTAINER_BITRATE
+	 * @param {Object} bitrate Data
+	 * bitrate object
+	 * @param {Number} [bitrate.bandwidth]
+	 * bitrate bandwidth when it's available
+	 * @param {Number} [bitrate.width]
+	 * playback width (ex: 720, 640, 1080)
+	 * @param {Number} [bitrate.height]
+	 * playback height (ex: 240, 480, 720)
+	 * @param {Number} [bitrate.level]
+	 * playback level when it's available, it could be just a map for width (0 => 240, 1 => 480, 2 => 720)
+	 */
 	Events.CONTAINER_BITRATE = 'container:bitrate';
 	Events.CONTAINER_STATS_REPORT = 'container:stats:report';
 	Events.CONTAINER_DESTROYED = 'container:destroyed';
@@ -2920,7 +2961,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _componentsMediator2 = _interopRequireDefault(_componentsMediator);
 
-	var _componentsPlayer_info = __webpack_require__(52);
+	var _componentsPlayer_info = __webpack_require__(58);
 
 	var _componentsPlayer_info2 = _interopRequireDefault(_componentsPlayer_info);
 
@@ -2932,7 +2973,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var _publicStyleScss = __webpack_require__(58);
+	var _publicStyleScss = __webpack_require__(59);
 
 	var _publicStyleScss2 = _interopRequireDefault(_publicStyleScss);
 
@@ -7091,10 +7132,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _componentsMediator2 = _interopRequireDefault(_componentsMediator);
 
-	var _componentsPlayer_info = __webpack_require__(52);
-
-	var _componentsPlayer_info2 = _interopRequireDefault(_componentsPlayer_info);
-
 	var _baseTemplate = __webpack_require__(17);
 
 	var _baseTemplate2 = _interopRequireDefault(_baseTemplate);
@@ -7103,7 +7140,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var _publicMediaControlScss = __webpack_require__(53);
+	var _publicMediaControlScss = __webpack_require__(52);
 
 	var _publicMediaControlScss2 = _interopRequireDefault(_publicMediaControlScss);
 
@@ -7283,16 +7320,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'mousedownOnVolumeBar',
 	    value: function mousedownOnVolumeBar() {
-	      var cursorStyleProperty = 'url(http://www.google.com/intl/en_ALL/mapfiles/closedhand.cur), move';
-	      this.$volumeBarContainer.css('cursor', cursorStyleProperty);
-	      this.$volumeBarContainer.css('cursor', '-webkit-grabbing');
-	      this.$volumeBarContainer.css('cursor', '-moz-grabbing');
+	      this.$el.addClass('dragging');
 	      this.volumeBarClickDown = true;
 	    }
 	  }, {
 	    key: 'mouseupOnVolumeBar',
 	    value: function mouseupOnVolumeBar() {
-	      this.$volumeBarContainer.css('cursor', 'pointer');
+	      this.$el.removeClass('dragging');
 	      this.volumeBarClickDown = false;
 	    }
 	  }, {
@@ -7300,7 +7334,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function mouseleaveOnVolumeBar(event) {
 	      var volOffset = this.$volumeBarContainer.offset();
 
-	      var outsideByLeft = event.pageX < this.$seekBarContainer.offset().left;
+	      var outsideByLeft = event.pageX < volOffset.left;
 	      var outsideByRight = event.pageX > volOffset.left + volOffset.width;
 	      var outsideHorizontally = outsideByLeft || outsideByRight;
 
@@ -7491,11 +7525,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function updateSeekBar(position, duration) {
 	      if (this.draggingSeekBar) return;
 	      if (position < 0) position = duration;
+
+	      var seekbarValue = 100 / duration * position;
+	      var currentPosition = (0, _baseUtils.formatTime)(position);
+	      var currentDuration = (0, _baseUtils.formatTime)(duration);
+
 	      this.$seekBarPosition.removeClass('media-control-notransition');
 	      this.$seekBarScrubber.removeClass('media-control-notransition');
-	      var seekbarValue = 100 / duration * position;
+
 	      this.setSeekPercentage(seekbarValue);
-	      this.$('[data-position]').html((0, _baseUtils.formatTime)(position));
+
+	      if (currentPosition !== this.displayedPosition) {
+	        this.$position.text(currentPosition);
+	        this.displayedPosition = currentPosition;
+	      }
+	      if (currentDuration !== this.displayedDuration) {
+	        this.$duration.text(currentDuration);
+	        this.displayedDuration = currentDuration;
+	      }
 	    }
 	  }, {
 	    key: 'seek',
@@ -7601,17 +7648,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'createCachedElements',
 	    value: function createCachedElements() {
-	      this.$playPauseToggle = this.$el.find('button.media-control-button[data-playpause]');
-	      this.$playStopToggle = this.$el.find('button.media-control-button[data-playstop]');
-	      this.$fullscreenToggle = this.$el.find('button.media-control-button[data-fullscreen]');
-	      this.$seekBarContainer = this.$el.find('.bar-container[data-seekbar]');
-	      this.$seekBarLoaded = this.$el.find('.bar-fill-1[data-seekbar]');
-	      this.$seekBarPosition = this.$el.find('.bar-fill-2[data-seekbar]');
-	      this.$seekBarScrubber = this.$el.find('.bar-scrubber[data-seekbar]');
-	      this.$seekBarHover = this.$el.find('.bar-hover[data-seekbar]');
-	      this.$volumeContainer = this.$el.find('.drawer-container[data-volume]');
-	      this.$volumeBarContainer = this.$el.find('.bar-container[data-volume]');
-	      this.$volumeIcon = this.$el.find('.drawer-icon[data-volume]');
+	      var $layer = this.$el.find('.media-control-layer');
+	      this.$duration = $layer.find('.media-control-indicator[data-duration]');
+	      this.$fullscreenToggle = $layer.find('button.media-control-button[data-fullscreen]');
+	      this.$playPauseToggle = $layer.find('button.media-control-button[data-playpause]');
+	      this.$playStopToggle = $layer.find('button.media-control-button[data-playstop]');
+	      this.$position = $layer.find('.media-control-indicator[data-position]');
+	      this.$seekBarContainer = $layer.find('.bar-container[data-seekbar]');
+	      this.$seekBarHover = $layer.find('.bar-hover[data-seekbar]');
+	      this.$seekBarLoaded = $layer.find('.bar-fill-1[data-seekbar]');
+	      this.$seekBarPosition = $layer.find('.bar-fill-2[data-seekbar]');
+	      this.$seekBarScrubber = $layer.find('.bar-scrubber[data-seekbar]');
+	      this.$volumeBarContainer = $layer.find('.bar-container[data-volume]');
+	      this.$volumeContainer = $layer.find('.drawer-container[data-volume]');
+	      this.$volumeIcon = $layer.find('.drawer-icon[data-volume]');
 	    }
 	  }, {
 	    key: 'setVolumeLevel',
@@ -7681,6 +7731,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'unbindKeyEvents',
 	    value: function unbindKeyEvents() {
 	      this.kibo.off('space');
+	      this.kibo.off('left');
+	      this.kibo.off('right');
 	      this.kibo.off([1, 2, 3, 4, 5, 6, 7, 8, 9, 0]);
 	    }
 	  }, {
@@ -7708,6 +7760,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _this7 = this;
 
 	      var timeout = 1000;
+	      this.displayedPosition = null;
+	      this.displayedDuration = null;
 	      var style = _baseStyler2['default'].getStyleFor(_publicMediaControlScss2['default'], { baseUrl: this.options.baseUrl });
 	      this.$el.html(this.template({ settings: this.settings }));
 	      this.$el.append(style);
@@ -7939,7 +7993,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'attributes',
 	    get: function get() {
 	      return {
-	        'class': 'seek-time hidden',
+	        'class': 'seek-time',
 	        'data-seek-time': ''
 	      };
 	    }
@@ -7956,8 +8010,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.hoverPosition = null;
 	    this.duration = null;
 	    this.durationShown = false;
-	    this.currentDurationTxt = "";
-	    this.currentSeekTimeTxt = "";
 	    this.addEventListeners();
 	  }
 
@@ -7979,15 +8031,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'showDuration',
 	    value: function showDuration() {
-	      this.$durationEl.removeClass("hidden");
 	      this.durationShown = true;
 	      this.update();
 	    }
 	  }, {
 	    key: 'hideDuration',
 	    value: function hideDuration() {
-	      this.$durationEl.addClass("hidden");
 	      this.durationShown = false;
+	      this.update();
 	    }
 	  }, {
 	    key: 'updateDuration',
@@ -8023,27 +8074,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return;
 	      }
 	      if (!this.shouldBeVisible()) {
-	        this.$el.addClass('hidden');
+	        this.$el.hide();
 	        this.$el.css('left', "-100%");
 	      } else {
 	        var seekTime = this.hoverPosition * this.duration;
-	        var seekTimeTxt = (0, _baseUtils.formatTime)(seekTime);
+	        var currentSeekTime = (0, _baseUtils.formatTime)(seekTime);
 	        // only update dom if necessary, ie time actually changed
-	        if (seekTimeTxt !== this.currentSeekTimeTxt) {
-	          this.$seekTimeEl.text(seekTimeTxt);
-	          this.currentSeekTimeTxt = seekTimeTxt;
+	        if (currentSeekTime !== this.displayedSeekTime) {
+	          this.$seekTimeEl.text(currentSeekTime);
+	          this.displayedSeekTime = currentSeekTime;
 	        }
 
 	        if (this.durationShown) {
-	          var durationTxt = (0, _baseUtils.formatTime)(this.duration);
-	          if (durationTxt !== this.currentDurationTxt) {
-	            this.$durationEl.text(durationTxt);
-	            this.currentDurationTxt = durationTxt;
+	          this.$durationEl.show();
+	          var currentDuration = (0, _baseUtils.formatTime)(this.duration);
+	          if (currentDuration !== this.displayedDuration) {
+	            this.$durationEl.text(currentDuration);
+	            this.displayedDuration = currentDuration;
 	          }
+	        } else {
+	          this.$durationEl.hide();
 	        }
 
 	        // the element must be unhidden before its width is requested, otherwise it's width will be reported as 0
-	        this.$el.removeClass('hidden');
+	        this.$el.show();
 	        var containerWidth = this.mediaControl.$seekBarContainer.width();
 	        var elWidth = this.$el.width();
 	        var elLeftPos = this.hoverPosition * containerWidth;
@@ -8061,13 +8115,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'render',
 	    value: function render() {
 	      this.rendered = true;
+	      this.displayedDuration = null;
+	      this.displayedSeekTime = null;
 	      var style = _baseStyler2['default'].getStyleFor(_publicSeek_timeScss2['default']);
 	      this.$el.html(this.template());
 	      this.$el.append(style);
+	      this.$el.hide();
 	      this.mediaControl.$el.append(this.el);
 	      this.$seekTimeEl = this.$el.find('[data-seek-time]');
 	      this.$durationEl = this.$el.find('[data-duration]');
-	      this.$durationEl.addClass("hidden");
+	      this.$durationEl.hide();
 	      this.update();
 	    }
 	  }]);
@@ -8160,6 +8217,50 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 52 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(30)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "@font-face {\n  font-family: \"Player\";\n  src: url(" + __webpack_require__(53) + ");\n  src: url(" + __webpack_require__(53) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(54) + ") format(\"truetype\"), url(" + __webpack_require__(55) + "#player) format(\"svg\"); }\n\n.media-control-notransition {\n  -webkit-transition: none !important false;\n  -moz-transition: none !important false false;\n  -o-transition: none !important false false;\n  transition: none !important; }\n\n.media-control[data-media-control] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 9999;\n  pointer-events: none; }\n  .media-control[data-media-control].dragging {\n    pointer-events: auto;\n    cursor: -webkit-grabbing !important;\n    cursor: grabbing !important;\n    cursor: url(" + __webpack_require__(56) + "), move; }\n    .media-control[data-media-control].dragging * {\n      cursor: -webkit-grabbing !important;\n      cursor: grabbing !important;\n      cursor: url(" + __webpack_require__(56) + "), move; }\n  .media-control[data-media-control] .media-control-background[data-background] {\n    position: absolute;\n    height: 40%;\n    width: 100%;\n    bottom: 0;\n    background: -owg-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: -moz-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: -o-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    -pie-background: -pie-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    -webkit-transition: opacity 0.6s ease-out;\n    -moz-transition: opacity 0.6s ease-out false;\n    -o-transition: opacity 0.6s ease-out false;\n    transition: opacity 0.6s ease-out; }\n  .media-control[data-media-control] .media-control-icon {\n    font-family: \"Player\";\n    font-weight: normal;\n    font-style: normal;\n    font-size: 26px;\n    line-height: 32px;\n    letter-spacing: 0;\n    speak: none;\n    color: #fff;\n    opacity: 0.5;\n    vertical-align: middle;\n    text-align: left;\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease false;\n    -o-transition: all 0.1s ease false;\n    transition: all 0.1s ease; }\n  .media-control[data-media-control] .media-control-icon:hover {\n    color: white;\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .media-control[data-media-control].media-control-hide .media-control-background[data-background] {\n    opacity: 0; }\n  .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {\n    bottom: -50px; }\n    .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n      opacity: 0; }\n  .media-control[data-media-control] .media-control-layer[data-controls] {\n    position: absolute;\n    bottom: 7px;\n    width: 100%;\n    height: 32px;\n    vertical-align: middle;\n    pointer-events: auto;\n    -webkit-transition: bottom 0.4s ease-out;\n    -moz-transition: bottom 0.4s ease-out false;\n    -o-transition: bottom 0.4s ease-out false;\n    transition: bottom 0.4s ease-out; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      left: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {\n      height: 100%;\n      text-align: center;\n      line-height: 32px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {\n      background-color: transparent;\n      border: 0;\n      margin: 0 6px;\n      padding: 0;\n      cursor: pointer;\n      display: inline-block; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {\n        outline: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]:before {\n          content: \"\\E001\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]:before {\n          content: \"\\E002\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]:before {\n          content: \"\\E003\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]:before {\n          content: \"\\E006\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen].shrink:before {\n          content: \"\\E007\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {\n        cursor: default;\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%;\n        opacity: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]:before {\n          content: \"\\E008\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {\n          opacity: 1.0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {\n            opacity: 1.0;\n            text-shadow: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]:before {\n          content: \"\\E001\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].playing:before {\n          content: \"\\E002\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].paused:before {\n          content: \"\\E001\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]:before {\n          content: \"\\E001\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].playing:before {\n          content: \"\\E003\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].stopped:before {\n          content: \"\\E001\"; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position], .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      display: inline-block;\n      font-size: 10px;\n      color: white;\n      cursor: default;\n      line-height: 32px;\n      position: relative; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {\n      margin-left: 6px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      color: rgba(255, 255, 255, 0.5);\n      margin-right: 6px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {\n        content: \"|\";\n        margin: 0 3px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {\n      position: absolute;\n      top: -20px;\n      left: 0;\n      display: inline-block;\n      vertical-align: middle;\n      width: 100%;\n      height: 25px;\n      cursor: pointer; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {\n        width: 100%;\n        height: 1px;\n        position: relative;\n        top: 12px;\n        background-color: #666666; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #c2c2c2;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out false;\n          -o-transition: all 0.1s ease-out false;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #005aff;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out false;\n          -o-transition: all 0.1s ease-out false;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0;\n          position: absolute;\n          top: -3px;\n          width: 5px;\n          height: 7px;\n          background-color: rgba(255, 255, 255, 0.5);\n          -webkit-transition: opacity 0.1s ease;\n          -moz-transition: opacity 0.1s ease false;\n          -o-transition: opacity 0.1s ease false;\n          transition: opacity 0.1s ease; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n        opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {\n        cursor: default; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n        position: absolute;\n        top: 2px;\n        left: 0;\n        width: 20px;\n        height: 20px;\n        opacity: 1;\n        -webkit-transition: all 0.1s ease-out;\n        -moz-transition: all 0.1s ease-out false;\n        -o-transition: all 0.1s ease-out false;\n        transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {\n          position: absolute;\n          left: 6px;\n          top: 6px;\n          width: 8px;\n          height: 8px;\n          border-radius: 10px;\n          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n          background-color: white; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {\n      float: right;\n      display: inline-block;\n      height: 32px;\n      cursor: pointer;\n      margin: 0 6px;\n      box-sizing: border-box; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {\n        float: left;\n        bottom: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {\n          background-color: transparent;\n          border: 0;\n          box-sizing: content-box;\n          width: 16px;\n          height: 32px;\n          margin-right: 6px;\n          opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:before {\n            content: \"\\E004\"; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted {\n            opacity: 0.5; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted:hover {\n              opacity: 0.7; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted:before {\n              content: \"\\E005\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {\n        float: left;\n        position: relative;\n        top: 6px;\n        width: 42px;\n        height: 18px;\n        padding: 3px 0;\n        overflow: hidden;\n        -webkit-transition: width 0.2s ease-out;\n        -moz-transition: width 0.2s ease-out false;\n        -o-transition: width 0.2s ease-out false;\n        transition: width 0.2s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {\n          float: left;\n          width: 4px;\n          padding-left: 2px;\n          height: 12px;\n          opacity: 0.5;\n          -webkit-box-shadow: inset 2px 0 0 white;\n          -moz-box-shadow: inset 2px 0 0 white;\n          box-shadow: inset 2px 0 0 white;\n          -webkit-transition: -webkit-transform 0.2s ease-out;\n          -moz-transition: -moz-transform 0.2s ease-out false;\n          -o-transition: -o-transform 0.2s ease-out false;\n          transition: transform 0.2s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {\n            -webkit-box-shadow: inset 2px 0 0 #fff;\n            -moz-box-shadow: inset 2px 0 0 #fff;\n            box-shadow: inset 2px 0 0 #fff;\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:nth-of-type(1) {\n            padding-left: 0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {\n            -webkit-transform: scaleY(1.5);\n            -moz-transform: scaleY(1.5);\n            -ms-transform: scaleY(1.5);\n            -o-transform: scaleY(1.5);\n            transform: scaleY(1.5); }\n  .media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {\n    height: 12px;\n    top: 9px;\n    padding: 0;\n    width: 0; }\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 53 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "ed8735c27adb521e625717506cfcfb04.eot"
+
+/***/ },
+/* 54 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "3e43a5d764f841e7e78896de82cd6c50.ttf"
+
+/***/ },
+/* 55 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "5d7ec830fd8d1c440f165111719aa4a0.svg"
+
+/***/ },
+/* 56 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "a8c874b93b3d848f39a71260c57e3863.cur"
+
+/***/ },
+/* 57 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"media-control-background\" data-background></div>\n<div class=\"media-control-layer\" data-controls>\n  <%  var renderBar = function(name) { %>\n      <div class=\"bar-container\" data-<%= name %>>\n        <div class=\"bar-background\" data-<%= name %>>\n          <div class=\"bar-fill-1\" data-<%= name %>></div>\n          <div class=\"bar-fill-2\" data-<%= name %>></div>\n          <div class=\"bar-hover\" data-<%= name %>></div>\n        </div>\n        <div class=\"bar-scrubber\" data-<%= name %>>\n          <div class=\"bar-scrubber-icon\" data-<%= name %>></div>\n        </div>\n      </div>\n  <%  }; %>\n  <%  var renderSegmentedBar = function(name, segments) {\n      segments = segments || 10; %>\n    <div class=\"bar-container\" data-<%= name %>>\n    <% for (var i = 0; i < segments; i++) { %>\n      <div class=\"segmented-bar-element\" data-<%= name %>></div>\n    <% } %>\n    </div>\n  <% }; %>\n  <% var renderDrawer = function(name, renderContent) { %>\n      <div class=\"drawer-container\" data-<%= name %>>\n        <div class=\"drawer-icon-container\" data-<%= name %>>\n          <div class=\"drawer-icon media-control-icon\" data-<%= name %>></div>\n          <span class=\"drawer-text\" data-<%= name %>></span>\n        </div>\n        <% renderContent(name); %>\n      </div>\n  <% }; %>\n  <% var renderIndicator = function(name) { %>\n      <div class=\"media-control-indicator\" data-<%= name %>></div>\n  <% }; %>\n  <% var renderButton = function(name) { %>\n      <button class=\"media-control-button media-control-icon\" data-<%= name %>></button>\n  <% }; %>\n  <%  var templates = {\n        bar: renderBar,\n        segmentedBar: renderSegmentedBar,\n      };\n      var render = function(settingsList) {\n        settingsList.forEach(function(setting) {\n          if(setting === \"seekbar\") {\n            renderBar(setting);\n          } else if (setting === \"volume\") {\n            renderDrawer(setting, settings.volumeBarTemplate ? templates[settings.volumeBarTemplate] : function(name) { return renderSegmentedBar(name); });\n          } else if (setting === \"duration\" || setting === \"position\") {\n            renderIndicator(setting);\n          } else {\n            renderButton(setting);\n          }\n        });\n      }; %>\n  <% if (settings.default && settings.default.length) { %>\n  <div class=\"media-control-center-panel\" data-media-control>\n    <% render(settings.default); %>\n  </div>\n  <% } %>\n  <% if (settings.left && settings.left.length) { %>\n  <div class=\"media-control-left-panel\" data-media-control>\n    <% render(settings.left); %>\n  </div>\n  <% } %>\n  <% if (settings.right && settings.right.length) { %>\n  <div class=\"media-control-right-panel\" data-media-control>\n    <% render(settings.right); %>\n  </div>\n  <% } %>\n</div>\n";
+
+/***/ },
+/* 58 */
 /***/ function(module, exports) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -8192,45 +8293,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 53 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(30)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "@font-face {\n  font-family: \"Player\";\n  src: url(" + __webpack_require__(54) + ");\n  src: url(" + __webpack_require__(54) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(55) + ") format(\"truetype\"), url(" + __webpack_require__(56) + "#player) format(\"svg\"); }\n\n.media-control-notransition {\n  -webkit-transition: none !important false;\n  -moz-transition: none !important false false;\n  -o-transition: none !important false false;\n  transition: none !important; }\n\n.media-control[data-media-control] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 9999;\n  pointer-events: none; }\n  .media-control[data-media-control].dragging {\n    pointer-events: auto;\n    cursor: -webkit-grabbing !important;\n    cursor: grabbing !important; }\n    .media-control[data-media-control].dragging * {\n      cursor: -webkit-grabbing !important;\n      cursor: grabbing !important; }\n  .media-control[data-media-control] .media-control-background[data-background] {\n    position: absolute;\n    height: 40%;\n    width: 100%;\n    bottom: 0;\n    background: -owg-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: -moz-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: -o-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    -pie-background: -pie-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    -webkit-transition: opacity 0.6s ease-out;\n    -moz-transition: opacity 0.6s ease-out false;\n    -o-transition: opacity 0.6s ease-out false;\n    transition: opacity 0.6s ease-out; }\n  .media-control[data-media-control] .media-control-icon {\n    font-family: \"Player\";\n    font-weight: normal;\n    font-style: normal;\n    font-size: 26px;\n    line-height: 32px;\n    letter-spacing: 0;\n    speak: none;\n    color: #fff;\n    opacity: 0.5;\n    vertical-align: middle;\n    text-align: left;\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease false;\n    -o-transition: all 0.1s ease false;\n    transition: all 0.1s ease; }\n  .media-control[data-media-control] .media-control-icon:hover {\n    color: white;\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .media-control[data-media-control].media-control-hide .media-control-background[data-background] {\n    opacity: 0; }\n  .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {\n    bottom: -50px; }\n    .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n      opacity: 0; }\n  .media-control[data-media-control] .media-control-layer[data-controls] {\n    position: absolute;\n    bottom: 7px;\n    width: 100%;\n    height: 32px;\n    vertical-align: middle;\n    pointer-events: auto;\n    -webkit-transition: bottom 0.4s ease-out;\n    -moz-transition: bottom 0.4s ease-out false;\n    -o-transition: bottom 0.4s ease-out false;\n    transition: bottom 0.4s ease-out; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      left: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {\n      height: 100%;\n      text-align: center;\n      line-height: 32px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {\n      background-color: transparent;\n      border: 0;\n      margin: 0 6px;\n      padding: 0;\n      cursor: pointer;\n      display: inline-block; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {\n        outline: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]:before {\n          content: \"\\E001\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]:before {\n          content: \"\\E002\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]:before {\n          content: \"\\E003\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]:before {\n          content: \"\\E006\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen].shrink:before {\n          content: \"\\E007\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {\n        cursor: default;\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%;\n        opacity: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]:before {\n          content: \"\\E008\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {\n          opacity: 1.0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {\n            opacity: 1.0;\n            text-shadow: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]:before {\n          content: \"\\E001\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].playing:before {\n          content: \"\\E002\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].paused:before {\n          content: \"\\E001\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]:before {\n          content: \"\\E001\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].playing:before {\n          content: \"\\E003\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].stopped:before {\n          content: \"\\E001\"; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position], .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      display: inline-block;\n      font-size: 10px;\n      color: white;\n      cursor: default;\n      line-height: 32px;\n      position: relative; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {\n      margin-left: 6px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      color: rgba(255, 255, 255, 0.5);\n      margin-right: 6px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {\n        content: \"|\";\n        margin: 0 3px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {\n      position: absolute;\n      top: -20px;\n      left: 0;\n      display: inline-block;\n      vertical-align: middle;\n      width: 100%;\n      height: 25px;\n      cursor: pointer; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {\n        width: 100%;\n        height: 1px;\n        position: relative;\n        top: 12px;\n        background-color: #666666; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #c2c2c2;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out false;\n          -o-transition: all 0.1s ease-out false;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #005aff;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out false;\n          -o-transition: all 0.1s ease-out false;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0;\n          position: absolute;\n          top: -3px;\n          width: 5px;\n          height: 7px;\n          background-color: rgba(255, 255, 255, 0.5);\n          -webkit-transition: opacity 0.1s ease;\n          -moz-transition: opacity 0.1s ease false;\n          -o-transition: opacity 0.1s ease false;\n          transition: opacity 0.1s ease; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n        opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {\n        cursor: default; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n        position: absolute;\n        top: 2px;\n        left: 0;\n        width: 20px;\n        height: 20px;\n        opacity: 1;\n        -webkit-transition: all 0.1s ease-out;\n        -moz-transition: all 0.1s ease-out false;\n        -o-transition: all 0.1s ease-out false;\n        transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {\n          position: absolute;\n          left: 6px;\n          top: 6px;\n          width: 8px;\n          height: 8px;\n          border-radius: 10px;\n          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n          background-color: white; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {\n      float: right;\n      display: inline-block;\n      height: 32px;\n      cursor: pointer;\n      margin: 0 6px;\n      box-sizing: border-box; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {\n        float: left;\n        bottom: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {\n          background-color: transparent;\n          border: 0;\n          box-sizing: content-box;\n          width: 16px;\n          height: 32px;\n          margin-right: 6px;\n          opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:before {\n            content: \"\\E004\"; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted {\n            opacity: 0.5; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted:hover {\n              opacity: 0.7; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted:before {\n              content: \"\\E005\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {\n        float: left;\n        position: relative;\n        top: 6px;\n        width: 42px;\n        height: 18px;\n        padding: 3px 0;\n        overflow: hidden;\n        -webkit-transition: width 0.2s ease-out;\n        -moz-transition: width 0.2s ease-out false;\n        -o-transition: width 0.2s ease-out false;\n        transition: width 0.2s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {\n          float: left;\n          width: 4px;\n          padding-left: 2px;\n          height: 12px;\n          opacity: 0.5;\n          -webkit-box-shadow: inset 2px 0 0 white;\n          -moz-box-shadow: inset 2px 0 0 white;\n          box-shadow: inset 2px 0 0 white;\n          -webkit-transition: -webkit-transform 0.2s ease-out;\n          -moz-transition: -moz-transform 0.2s ease-out false;\n          -o-transition: -o-transform 0.2s ease-out false;\n          transition: transform 0.2s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {\n            -webkit-box-shadow: inset 2px 0 0 #fff;\n            -moz-box-shadow: inset 2px 0 0 #fff;\n            box-shadow: inset 2px 0 0 #fff;\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:nth-of-type(1) {\n            padding-left: 0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {\n            -webkit-transform: scaleY(1.5);\n            -moz-transform: scaleY(1.5);\n            -ms-transform: scaleY(1.5);\n            -o-transform: scaleY(1.5);\n            transform: scaleY(1.5); }\n  .media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {\n    height: 12px;\n    top: 9px;\n    padding: 0;\n    width: 0; }\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 54 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "ed8735c27adb521e625717506cfcfb04.eot"
-
-/***/ },
-/* 55 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "3e43a5d764f841e7e78896de82cd6c50.ttf"
-
-/***/ },
-/* 56 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "5d7ec830fd8d1c440f165111719aa4a0.svg"
-
-/***/ },
-/* 57 */
-/***/ function(module, exports) {
-
-	module.exports = "<div class=\"media-control-background\" data-background></div>\n<div class=\"media-control-layer\" data-controls>\n  <%  var renderBar = function(name) { %>\n      <div class=\"bar-container\" data-<%= name %>>\n        <div class=\"bar-background\" data-<%= name %>>\n          <div class=\"bar-fill-1\" data-<%= name %>></div>\n          <div class=\"bar-fill-2\" data-<%= name %>></div>\n          <div class=\"bar-hover\" data-<%= name %>></div>\n        </div>\n        <div class=\"bar-scrubber\" data-<%= name %>>\n          <div class=\"bar-scrubber-icon\" data-<%= name %>></div>\n        </div>\n      </div>\n  <%  }; %>\n  <%  var renderSegmentedBar = function(name, segments) {\n      segments = segments || 10; %>\n    <div class=\"bar-container\" data-<%= name %>>\n    <% for (var i = 0; i < segments; i++) { %>\n      <div class=\"segmented-bar-element\" data-<%= name %>></div>\n    <% } %>\n    </div>\n  <% }; %>\n  <% var renderDrawer = function(name, renderContent) { %>\n      <div class=\"drawer-container\" data-<%= name %>>\n        <div class=\"drawer-icon-container\" data-<%= name %>>\n          <div class=\"drawer-icon media-control-icon\" data-<%= name %>></div>\n          <span class=\"drawer-text\" data-<%= name %>></span>\n        </div>\n        <% renderContent(name); %>\n      </div>\n  <% }; %>\n  <% var renderIndicator = function(name) { %>\n      <div class=\"media-control-indicator\" data-<%= name %>></div>\n  <% }; %>\n  <% var renderButton = function(name) { %>\n      <button class=\"media-control-button media-control-icon\" data-<%= name %>></button>\n  <% }; %>\n  <%  var templates = {\n        bar: renderBar,\n        segmentedBar: renderSegmentedBar,\n      };\n      var render = function(settingsList) {\n        settingsList.forEach(function(setting) {\n          if(setting === \"seekbar\") {\n            renderBar(setting);\n          } else if (setting === \"volume\") {\n            renderDrawer(setting, settings.volumeBarTemplate ? templates[settings.volumeBarTemplate] : function(name) { return renderSegmentedBar(name); });\n          } else if (setting === \"duration\" || setting === \"position\") {\n            renderIndicator(setting);\n          } else {\n            renderButton(setting);\n          }\n        });\n      }; %>\n  <% if (settings.default && settings.default.length) { %>\n  <div class=\"media-control-center-panel\" data-media-control>\n    <% render(settings.default); %>\n  </div>\n  <% } %>\n  <% if (settings.left && settings.left.length) { %>\n  <div class=\"media-control-left-panel\" data-media-control>\n    <% render(settings.left); %>\n  </div>\n  <% } %>\n  <% if (settings.right && settings.right.length) { %>\n  <div class=\"media-control-right-panel\" data-media-control>\n    <% render(settings.right); %>\n  </div>\n  <% } %>\n</div>\n";
-
-/***/ },
-/* 58 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(30)();
@@ -8244,15 +8307,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 59 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(60);
+	module.exports = __webpack_require__(61);
 
 /***/ },
-/* 60 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -8279,77 +8342,77 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseBase_object2 = _interopRequireDefault(_baseBase_object);
 
-	var _componentsPlayer_info = __webpack_require__(52);
+	var _componentsPlayer_info = __webpack_require__(58);
 
 	var _componentsPlayer_info2 = _interopRequireDefault(_componentsPlayer_info);
 
-	var _lodashUniq = __webpack_require__(61);
+	var _lodashUniq = __webpack_require__(62);
 
 	var _lodashUniq2 = _interopRequireDefault(_lodashUniq);
 
 	/* Playback Plugins */
 
-	var _playbacksHtml5_video = __webpack_require__(78);
+	var _playbacksHtml5_video = __webpack_require__(79);
 
 	var _playbacksHtml5_video2 = _interopRequireDefault(_playbacksHtml5_video);
 
-	var _playbacksFlash = __webpack_require__(83);
+	var _playbacksFlash = __webpack_require__(84);
 
 	var _playbacksFlash2 = _interopRequireDefault(_playbacksFlash);
 
-	var _playbacksHtml5_audio = __webpack_require__(90);
+	var _playbacksHtml5_audio = __webpack_require__(91);
 
 	var _playbacksHtml5_audio2 = _interopRequireDefault(_playbacksHtml5_audio);
 
-	var _playbacksFlashls = __webpack_require__(92);
+	var _playbacksFlashls = __webpack_require__(93);
 
 	var _playbacksFlashls2 = _interopRequireDefault(_playbacksFlashls);
 
-	var _playbacksHls = __webpack_require__(96);
+	var _playbacksHls = __webpack_require__(97);
 
 	var _playbacksHls2 = _interopRequireDefault(_playbacksHls);
 
-	var _playbacksHtml_img = __webpack_require__(118);
+	var _playbacksHtml_img = __webpack_require__(119);
 
 	var _playbacksHtml_img2 = _interopRequireDefault(_playbacksHtml_img);
 
-	var _playbacksNo_op = __webpack_require__(121);
+	var _playbacksNo_op = __webpack_require__(122);
 
 	var _playbacksNo_op2 = _interopRequireDefault(_playbacksNo_op);
 
 	/* Container Plugins */
 
-	var _pluginsSpinner_three_bounce = __webpack_require__(125);
+	var _pluginsSpinner_three_bounce = __webpack_require__(126);
 
 	var _pluginsSpinner_three_bounce2 = _interopRequireDefault(_pluginsSpinner_three_bounce);
 
-	var _pluginsStats = __webpack_require__(130);
+	var _pluginsStats = __webpack_require__(131);
 
 	var _pluginsStats2 = _interopRequireDefault(_pluginsStats);
 
-	var _pluginsWatermark = __webpack_require__(133);
+	var _pluginsWatermark = __webpack_require__(134);
 
 	var _pluginsWatermark2 = _interopRequireDefault(_pluginsWatermark);
 
-	var _pluginsPoster = __webpack_require__(137);
+	var _pluginsPoster = __webpack_require__(138);
 
 	var _pluginsPoster2 = _interopRequireDefault(_pluginsPoster);
 
-	var _pluginsGoogle_analytics = __webpack_require__(141);
+	var _pluginsGoogle_analytics = __webpack_require__(142);
 
 	var _pluginsGoogle_analytics2 = _interopRequireDefault(_pluginsGoogle_analytics);
 
-	var _pluginsClick_to_pause = __webpack_require__(143);
+	var _pluginsClick_to_pause = __webpack_require__(144);
 
 	var _pluginsClick_to_pause2 = _interopRequireDefault(_pluginsClick_to_pause);
 
 	/* Core Plugins */
 
-	var _pluginsDvr_controls = __webpack_require__(145);
+	var _pluginsDvr_controls = __webpack_require__(146);
 
 	var _pluginsDvr_controls2 = _interopRequireDefault(_pluginsDvr_controls);
 
-	var _pluginsFavicon = __webpack_require__(151);
+	var _pluginsFavicon = __webpack_require__(152);
 
 	var _pluginsFavicon2 = _interopRequireDefault(_pluginsFavicon);
 
@@ -8438,7 +8501,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 61 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -8451,9 +8514,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var baseCallback = __webpack_require__(62),
-	    baseUniq = __webpack_require__(73),
-	    isIterateeCall = __webpack_require__(77);
+	var baseCallback = __webpack_require__(63),
+	    baseUniq = __webpack_require__(74),
+	    isIterateeCall = __webpack_require__(78);
 
 	/**
 	 * An implementation of `_.uniq` optimized for sorted arrays without support
@@ -8549,7 +8612,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = uniq;
 
 /***/ },
-/* 62 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -8562,10 +8625,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var baseIsEqual = __webpack_require__(63),
-	    bindCallback = __webpack_require__(69),
-	    isArray = __webpack_require__(64),
-	    pairs = __webpack_require__(70);
+	var baseIsEqual = __webpack_require__(64),
+	    bindCallback = __webpack_require__(70),
+	    isArray = __webpack_require__(65),
+	    pairs = __webpack_require__(71);
 
 	/** Used to match property names within property paths. */
 	var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\n\\]|\\.)*?\1)\]/,
@@ -8969,7 +9032,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseCallback;
 
 /***/ },
-/* 63 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -8982,9 +9045,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var isArray = __webpack_require__(64),
-	    isTypedArray = __webpack_require__(65),
-	    keys = __webpack_require__(66);
+	var isArray = __webpack_require__(65),
+	    isTypedArray = __webpack_require__(66),
+	    keys = __webpack_require__(67);
 
 	/** `Object#toString` result references. */
 	var argsTag = '[object Arguments]',
@@ -9313,7 +9376,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseIsEqual;
 
 /***/ },
-/* 64 */
+/* 65 */
 /***/ function(module, exports) {
 
 	/**
@@ -9497,7 +9560,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isArray;
 
 /***/ },
-/* 65 */
+/* 66 */
 /***/ function(module, exports) {
 
 	/**
@@ -9604,7 +9667,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isTypedArray;
 
 /***/ },
-/* 66 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -9617,9 +9680,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var getNative = __webpack_require__(67),
-	    isArguments = __webpack_require__(68),
-	    isArray = __webpack_require__(64);
+	var getNative = __webpack_require__(68),
+	    isArguments = __webpack_require__(69),
+	    isArray = __webpack_require__(65);
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -9843,7 +9906,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = keys;
 
 /***/ },
-/* 67 */
+/* 68 */
 /***/ function(module, exports) {
 
 	/**
@@ -9984,7 +10047,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getNative;
 
 /***/ },
-/* 68 */
+/* 69 */
 /***/ function(module, exports) {
 
 	/**
@@ -10096,7 +10159,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isArguments;
 
 /***/ },
-/* 69 */
+/* 70 */
 /***/ function(module, exports) {
 
 	/**
@@ -10172,7 +10235,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = bindCallback;
 
 /***/ },
-/* 70 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -10185,7 +10248,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var keys = __webpack_require__(71);
+	var keys = __webpack_require__(72);
 
 	/**
 	 * Converts `value` to an object if it's not one.
@@ -10257,7 +10320,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = pairs;
 
 /***/ },
-/* 71 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -10270,9 +10333,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var getNative = __webpack_require__(67),
-	    isArguments = __webpack_require__(72),
-	    isArray = __webpack_require__(64);
+	var getNative = __webpack_require__(68),
+	    isArguments = __webpack_require__(73),
+	    isArray = __webpack_require__(65);
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -10496,7 +10559,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = keys;
 
 /***/ },
-/* 72 */
+/* 73 */
 /***/ function(module, exports) {
 
 	/**
@@ -10608,7 +10671,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isArguments;
 
 /***/ },
-/* 73 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -10621,9 +10684,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var baseIndexOf = __webpack_require__(74),
-	    cacheIndexOf = __webpack_require__(75),
-	    createCache = __webpack_require__(76);
+	var baseIndexOf = __webpack_require__(75),
+	    cacheIndexOf = __webpack_require__(76),
+	    createCache = __webpack_require__(77);
 
 	/** Used as the size to enable large array optimizations. */
 	var LARGE_ARRAY_SIZE = 200;
@@ -10681,7 +10744,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseUniq;
 
 /***/ },
-/* 74 */
+/* 75 */
 /***/ function(module, exports) {
 
 	/**
@@ -10745,7 +10808,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseIndexOf;
 
 /***/ },
-/* 75 */
+/* 76 */
 /***/ function(module, exports) {
 
 	/**
@@ -10805,7 +10868,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = cacheIndexOf;
 
 /***/ },
-/* 76 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -10818,7 +10881,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
-	var getNative = __webpack_require__(67);
+	var getNative = __webpack_require__(68);
 
 	/** Native method references. */
 	var Set = getNative(global, 'Set');
@@ -10904,7 +10967,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 77 */
+/* 78 */
 /***/ function(module, exports) {
 
 	/**
@@ -11041,15 +11104,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = isIterateeCall;
 
 /***/ },
-/* 78 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(79);
+	module.exports = __webpack_require__(80);
 
 /***/ },
-/* 79 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -11074,7 +11137,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseUtils = __webpack_require__(2);
 
-	var _basePlayback = __webpack_require__(80);
+	var _basePlayback = __webpack_require__(81);
 
 	var _basePlayback2 = _interopRequireDefault(_basePlayback);
 
@@ -11094,11 +11157,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
 
-	var _publicStyleScss = __webpack_require__(81);
+	var _publicStyleScss = __webpack_require__(82);
 
 	var _publicStyleScss2 = _interopRequireDefault(_publicStyleScss);
 
-	var _publicIndexHtml = __webpack_require__(82);
+	var _publicIndexHtml = __webpack_require__(83);
 
 	var _publicIndexHtml2 = _interopRequireDefault(_publicIndexHtml);
 
@@ -11181,14 +11244,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function loadedMetadata(e) {
 	      this.durationChange();
 	      this.trigger(_baseEvents2['default'].PLAYBACK_LOADEDMETADATA, e.target.duration);
-	      this.checkInitialSeek();
+	      if (this.getPlaybackType() !== _basePlayback2['default'].LIVE) {
+	        this.checkInitialSeek();
+	      }
 	    }
 	  }, {
 	    key: 'durationChange',
 	    value: function durationChange() {
 	      // we can't figure out if hls resource is VoD or not until it is being loaded or duration has changed.
 	      // that's why we check it again and update media control accordingly.
-	      if (this.getPlaybackType() === 'vod') {
+	      if (this.getPlaybackType() === _basePlayback2['default'].VOD) {
 	        this.settings.left = ["playpause", "position", "duration"];
 	      } else {
 	        this.settings.left = ["playstop"];
@@ -11204,7 +11269,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'getPlaybackType',
 	    value: function getPlaybackType() {
-	      return [0, undefined, Infinity].indexOf(this.el.duration) >= 0 ? 'live' : 'vod';
+	      return [0, undefined, Infinity].indexOf(this.el.duration) >= 0 ? _basePlayback2['default'].LIVE : _basePlayback2['default'].VOD;
 	    }
 	  }, {
 	    key: 'isHighDefinitionInUse',
@@ -11274,7 +11339,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'stalled',
 	    value: function stalled() {
-	      if (this.getPlaybackType() === 'vod' && this.el.readyState < this.el.HAVE_FUTURE_DATA) {
+	      if (this.getPlaybackType() === _basePlayback2['default'].VOD && this.el.readyState < this.el.HAVE_FUTURE_DATA) {
 	        this.trigger(_baseEvents2['default'].PLAYBACK_BUFFERING, this.name);
 	      }
 	    }
@@ -11340,7 +11405,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'timeUpdated',
 	    value: function timeUpdated() {
-	      if (this.getPlaybackType() === 'live') {
+	      if (this.getPlaybackType() === _basePlayback2['default'].LIVE) {
 	        this.trigger(_baseEvents2['default'].PLAYBACK_TIMEUPDATE, 1, 1, this.name);
 	      } else {
 	        this.trigger(_baseEvents2['default'].PLAYBACK_TIMEUPDATE, this.el.currentTime, this.el.duration, this.name);
@@ -11445,7 +11510,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(46)))
 
 /***/ },
-/* 80 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11550,19 +11615,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    /**
-	     * gets the playback type
+	     * gets the playback type (`'vod', 'live', 'aod'`)
 	     * @method getPlaybackType
 	     * @return {String} you should write the playback type otherwise it'll assume `'no_op'`
 	     * @example
 	     * ```javascript
-	     * html5VideoPlayback.getPlaybackType() //html5_video
-	     * flashHlsPlayback.getPlaybackType() //hls
+	     * html5VideoPlayback.getPlaybackType() //vod
+	     * html5AudioPlayback.getPlaybackType() //aod
+	     * html5VideoPlayback.getPlaybackType() //live
+	     * flashHlsPlayback.getPlaybackType() //live
 	     * ```
 	     */
 	  }, {
 	    key: 'getPlaybackType',
 	    value: function getPlaybackType() {
-	      return 'no_op';
+	      return Playback.NO_OP;
 	    }
 
 	    /**
@@ -11606,6 +11673,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	/**
+	 * a playback type for video on demand
+	 *
+	 * @property VOD
+	 * @static
+	 * @type String
+	 */
+	Playback.VOD = 'vod';
+	/**
+	 * a playback type for audio on demand
+	 *
+	 * @property AOD
+	 * @static
+	 * @type String
+	 */
+	Playback.AOD = 'aod';
+	/**
+	 * a playback type for live video
+	 *
+	 * @property LIVE
+	 * @static
+	 * @type String
+	 */
+	Playback.LIVE = 'live';
+	/**
+	 * a default playback type
+	 *
+	 * @property NO_OP
+	 * @static
+	 * @type String
+	 */
+	Playback.NO_OP = 'no_op';
+
+	/**
 	 * checks if the playback can play a given `source` and optionally a `mimeType`
 	 * @method canPlay
 	 * @static
@@ -11617,11 +11717,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return false;
 	};
 
+	/**
+	 * the plugin type
+	 *
+	 * @property type
+	 * @static
+	 * @type String
+	 */
 	Playback.type = 'playback';
 	module.exports = exports['default'];
 
 /***/ },
-/* 81 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(30)();
@@ -11635,21 +11742,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 82 */
+/* 83 */
 /***/ function(module, exports) {
 
 	module.exports = "<source src=\"<%=src%>\" type=\"<%=type%>\">\n";
 
 /***/ },
-/* 83 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(84);
+	module.exports = __webpack_require__(85);
 
 /***/ },
-/* 84 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -11674,7 +11781,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseUtils = __webpack_require__(2);
 
-	var _playbacksBase_flash_playback = __webpack_require__(85);
+	var _playbacksBase_flash_playback = __webpack_require__(86);
 
 	var _playbacksBase_flash_playback2 = _interopRequireDefault(_playbacksBase_flash_playback);
 
@@ -11698,7 +11805,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
 
-	var _publicPlayerSwf = __webpack_require__(89);
+	var _basePlayback = __webpack_require__(81);
+
+	var _basePlayback2 = _interopRequireDefault(_basePlayback);
+
+	var _publicPlayerSwf = __webpack_require__(90);
 
 	var _publicPlayerSwf2 = _interopRequireDefault(_publicPlayerSwf);
 
@@ -11775,7 +11886,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'getPlaybackType',
 	    value: function getPlaybackType() {
-	      return 'vod';
+	      return _basePlayback2['default'].VOD;
 	    }
 	  }, {
 	    key: 'isHighDefinitionInUse',
@@ -11959,7 +12070,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 85 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11967,11 +12078,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
-	exports['default'] = __webpack_require__(86);
+	exports['default'] = __webpack_require__(87);
 	module.exports = exports['default'];
 
 /***/ },
-/* 86 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2015 Globo.com Player authors. All rights reserved.
@@ -11994,7 +12105,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _basePlayback = __webpack_require__(80);
+	var _basePlayback = __webpack_require__(81);
 
 	var _basePlayback2 = _interopRequireDefault(_basePlayback);
 
@@ -12014,11 +12125,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var _publicFlashHtml = __webpack_require__(87);
+	var _publicFlashHtml = __webpack_require__(88);
 
 	var _publicFlashHtml2 = _interopRequireDefault(_publicFlashHtml);
 
-	var _publicFlashScss = __webpack_require__(88);
+	var _publicFlashScss = __webpack_require__(89);
 
 	var _publicFlashScss2 = _interopRequireDefault(_publicFlashScss);
 
@@ -12101,13 +12212,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 87 */
+/* 88 */
 /***/ function(module, exports) {
 
 	module.exports = "<param name=\"movie\" value=\"<%= swfPath %>?inline=1\">\n<param name=\"quality\" value=\"autohigh\">\n<param name=\"swliveconnect\" value=\"true\">\n<param name=\"allowScriptAccess\" value=\"always\">\n<param name=\"bgcolor\" value=\"#000000\">\n<param name=\"allowFullScreen\" value=\"false\">\n<param name=\"wmode\" value=\"transparent\">\n<param name=\"tabindex\" value=\"1\">\n<param name=FlashVars value=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\" />\n<embed\n  name=\"<%= cid %>\"\n  type=\"application/x-shockwave-flash\"\n  disabled=\"disabled\"\n  tabindex=\"-1\"\n  enablecontextmenu=\"false\"\n  allowScriptAccess=\"always\"\n  quality=\"autohigh\"\n  pluginspage=\"http://www.macromedia.com/go/getflashplayer\"\n  wmode=\"transparent\"\n  swliveconnect=\"true\"\n  allowfullscreen=\"false\"\n  bgcolor=\"#000000\"\n  FlashVars=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\"\n  src=\"<%= swfPath %>\"\n  width=\"100%\"\n  height=\"100%\">\n</embed>\n";
 
 /***/ },
-/* 88 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(30)();
@@ -12121,21 +12232,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 89 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "4b76590b32dab62bc95c1b7951efae78.swf"
 
 /***/ },
-/* 90 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(91);
+	module.exports = __webpack_require__(92);
 
 /***/ },
-/* 91 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -12158,22 +12269,56 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _basePlayback = __webpack_require__(80);
-
-	var _basePlayback2 = _interopRequireDefault(_basePlayback);
-
 	var _baseEvents = __webpack_require__(6);
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
+
+	var _basePlayback = __webpack_require__(81);
+
+	var _basePlayback2 = _interopRequireDefault(_basePlayback);
+
+	var _playbacksHtml5_video = __webpack_require__(79);
+
+	var _playbacksHtml5_video2 = _interopRequireDefault(_playbacksHtml5_video);
 
 	var _lodashFind = __webpack_require__(31);
 
 	var _lodashFind2 = _interopRequireDefault(_lodashFind);
 
-	var HTML5Audio = (function (_Playback) {
-	  _inherits(HTML5Audio, _Playback);
+	var HTML5Audio = (function (_HTML5Video) {
+	  _inherits(HTML5Audio, _HTML5Video);
+
+	  function HTML5Audio() {
+	    _classCallCheck(this, HTML5Audio);
+
+	    _get(Object.getPrototypeOf(HTML5Audio.prototype), 'constructor', this).apply(this, arguments);
+	  }
 
 	  _createClass(HTML5Audio, [{
+	    key: 'durationChange',
+	    value: function durationChange() {
+	      this.settings.left = ["playpause", "position", "duration"];
+	      this.settings.seekEnabled = this.isSeekEnabled();
+	      this.trigger(_baseEvents2['default'].PLAYBACK_SETTINGSUPDATE);
+	    }
+	  }, {
+	    key: 'getPlaybackType',
+	    value: function getPlaybackType() {
+	      return _basePlayback2['default'].AOD;
+	    }
+	  }, {
+	    key: 'stalled',
+	    value: function stalled() {
+	      if (this.el.readyState < this.el.HAVE_FUTURE_DATA) {
+	        this.trigger(_baseEvents2['default'].PLAYBACK_BUFFERING, this.name);
+	      }
+	    }
+	  }, {
+	    key: 'timeUpdated',
+	    value: function timeUpdated() {
+	      this.trigger(_baseEvents2['default'].PLAYBACK_TIMEUPDATE, this.el.currentTime, this.el.duration, this.name);
+	    }
+	  }, {
 	    key: 'name',
 	    get: function get() {
 	      return 'html5_audio';
@@ -12183,186 +12328,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    get: function get() {
 	      return 'audio';
 	    }
-	  }, {
-	    key: 'events',
-	    get: function get() {
-	      return {
-	        'loadedmetadata': 'loadedMetadata',
-	        'stalled': 'stalled',
-	        'waiting': 'waiting',
-	        'timeupdate': 'timeUpdated',
-	        'ended': 'ended',
-	        'canplaythrough': 'bufferFull',
-	        'playing': 'playing',
-	        'pause': 'paused'
-	      };
-	    }
-	  }]);
-
-	  function HTML5Audio(params) {
-	    _classCallCheck(this, HTML5Audio);
-
-	    _get(Object.getPrototypeOf(HTML5Audio.prototype), 'constructor', this).call(this, params);
-	    this.options = params;
-	    this.settings = {
-	      left: ['playpause', 'position', 'duration'],
-	      right: ['fullscreen', 'volume'],
-	      'default': ['seekbar'],
-	      seekEnabled: true
-	    };
-	    this.render();
-	    params.autoPlay && this.play();
-	  }
-
-	  _createClass(HTML5Audio, [{
-	    key: 'bindEvents',
-	    value: function bindEvents() {
-	      this.listenTo(this.container, _baseEvents2['default'].CONTAINER_PLAY, this.play);
-	      this.listenTo(this.container, _baseEvents2['default'].CONTAINER_PAUSE, this.pause);
-	      this.listenTo(this.container, _baseEvents2['default'].CONTAINER_SEEK, this.seek);
-	      this.listenTo(this.container, _baseEvents2['default'].CONTAINER_VOLUME, this.volume);
-	      this.listenTo(this.container, _baseEvents2['default'].CONTAINER_STOP, this.stop);
-	    }
-	  }, {
-	    key: 'loadedMetadata',
-	    value: function loadedMetadata(e) {
-	      this.durationChange();
-	      this.trigger(_baseEvents2['default'].PLAYBACK_LOADEDMETADATA, e.target.duration);
-	    }
-	  }, {
-	    key: 'durationChange',
-	    value: function durationChange() {
-	      // we can't figure out if hls resource is VoD or not until it is being loaded or duration has changed.
-	      // that's why we check it again and update media control accordingly.
-	      if (this.getPlaybackType() === 'aod') {
-	        this.settings.left = ["playpause", "position", "duration"];
-	      } else {
-	        this.settings.left = ["playstop"];
-	      }
-	      this.settings.seekEnabled = isFinite(this.getDuration());
-	      this.trigger(_baseEvents2['default'].PLAYBACK_SETTINGSUPDATE);
-	    }
-	  }, {
-	    key: 'getPlaybackType',
-	    value: function getPlaybackType() {
-	      return [0, undefined, Infinity].indexOf(this.el.duration) >= 0 ? 'live' : 'aod';
-	    }
-	  }, {
-	    key: 'stalled',
-	    value: function stalled() {
-	      if (this.getPlaybackType() === 'vod' && this.el.readyState < this.el.HAVE_FUTURE_DATA) {
-	        this.trigger(_baseEvents2['default'].PLAYBACK_BUFFERING, this.name);
-	      }
-	    }
-	  }, {
-	    key: 'waiting',
-	    value: function waiting() {
-	      if (this.el.readyState < this.el.HAVE_FUTURE_DATA) {
-	        this.trigger(_baseEvents2['default'].PLAYBACK_BUFFERING, this.name);
-	      }
-	    }
-	  }, {
-	    key: 'play',
-	    value: function play() {
-	      if (this.el.src !== this.options.src) {
-	        this.el.src = this.options.src;
-	      }
-	      this.el.play();
-	      this.trigger(_baseEvents2['default'].PLAYBACK_PLAY);
-	    }
-	  }, {
-	    key: 'pause',
-	    value: function pause() {
-	      this.el.pause();
-	    }
-	  }, {
-	    key: 'stop',
-	    value: function stop() {
-	      this.pause();
-	      this.el.currentTime = 0;
-	      this.el.src = '';
-	    }
-	  }, {
-	    key: 'volume',
-	    value: function volume(value) {
-	      this.el.volume = value / 100;
-	    }
-	  }, {
-	    key: 'mute',
-	    value: function mute() {
-	      this.el.volume = 0;
-	    }
-	  }, {
-	    key: 'unmute',
-	    value: function unmute() {
-	      this.el.volume = 1;
-	    }
-	  }, {
-	    key: 'isMuted',
-	    value: function isMuted() {
-	      return !!this.el.volume;
-	    }
-	  }, {
-	    key: 'ended',
-	    value: function ended() {
-	      this.trigger(_baseEvents2['default'].CONTAINER_TIMEUPDATE, 0);
-	    }
-	  }, {
-	    key: 'seek',
-	    value: function seek(seekBarValue) {
-	      var time = this.el.duration * (seekBarValue / 100);
-	      this.el.currentTime = time;
-	    }
-	  }, {
-	    key: 'getCurrentTime',
-	    value: function getCurrentTime() {
-	      return this.el.currentTime;
-	    }
-	  }, {
-	    key: 'getDuration',
-	    value: function getDuration() {
-	      return this.el.duration;
-	    }
-	  }, {
-	    key: 'isPlaying',
-	    value: function isPlaying() {
-	      return !this.el.paused && !this.el.ended;
-	    }
-	  }, {
-	    key: 'playing',
-	    value: function playing() {
-	      this.trigger(_baseEvents2['default'].PLAYBACK_PLAY);
-	    }
-	  }, {
-	    key: 'paused',
-	    value: function paused() {
-	      this.trigger(_baseEvents2['default'].PLAYBACK_PAUSE);
-	    }
-	  }, {
-	    key: 'timeUpdated',
-	    value: function timeUpdated() {
-	      if (this.getPlaybackType() === 'live') {
-	        this.trigger(_baseEvents2['default'].PLAYBACK_TIMEUPDATE, 1, 1, this.name);
-	      } else {
-	        this.trigger(_baseEvents2['default'].PLAYBACK_TIMEUPDATE, this.el.currentTime, this.el.duration, this.name);
-	      }
-	    }
-	  }, {
-	    key: 'bufferFull',
-	    value: function bufferFull() {
-	      this.trigger(_baseEvents2['default'].PLAYBACK_TIMEUPDATE, this.el.currentTime, this.el.duration, this.name);
-	      this.trigger(_baseEvents2['default'].PLAYBACK_BUFFERFULL);
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      this.trigger(_baseEvents2['default'].PLAYBACK_READY, this.name);
-	      return this;
-	    }
 	  }]);
 
 	  return HTML5Audio;
-	})(_basePlayback2['default']);
+	})(_playbacksHtml5_video2['default']);
 
 	exports['default'] = HTML5Audio;
 
@@ -12388,15 +12357,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 92 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(93);
+	module.exports = __webpack_require__(94);
 
 /***/ },
-/* 93 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -12419,7 +12388,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _playbacksBase_flash_playback = __webpack_require__(85);
+	var _playbacksBase_flash_playback = __webpack_require__(86);
 
 	var _playbacksBase_flash_playback2 = _interopRequireDefault(_playbacksBase_flash_playback);
 
@@ -12431,6 +12400,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseTemplate2 = _interopRequireDefault(_baseTemplate);
 
+	var _basePlayback = __webpack_require__(81);
+
+	var _basePlayback2 = _interopRequireDefault(_basePlayback);
+
 	var _componentsMediator = __webpack_require__(51);
 
 	var _componentsMediator2 = _interopRequireDefault(_componentsMediator);
@@ -12439,11 +12412,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _componentsBrowser2 = _interopRequireDefault(_componentsBrowser);
 
-	var _flashls_events = __webpack_require__(94);
+	var _flashls_events = __webpack_require__(95);
 
 	var _flashls_events2 = _interopRequireDefault(_flashls_events);
 
-	var _publicHLSPlayerSwf = __webpack_require__(95);
+	var _publicHLSPlayerSwf = __webpack_require__(96);
 
 	var _publicHLSPlayerSwf2 = _interopRequireDefault(_publicHLSPlayerSwf);
 
@@ -12466,6 +12439,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    get: function get() {
 	      return (0, _baseTemplate2['default'])(_publicHLSPlayerSwf2['default'])({ baseUrl: this.baseUrl });
 	    }
+	  }, {
+	    key: 'levels',
+	    get: function get() {
+	      return this.el && this.el.getLevels() || [];
+	    }
+	  }, {
+	    key: 'currentLevel',
+	    get: function get() {
+	      return this.el && this.el.getCurrentLevel() || -1;
+	    },
+	    set: function set(level) {
+	      this.el && this.el.playerSetCurrentLevel(level);
+	    }
 	  }]);
 
 	  function FlasHLS(options) {
@@ -12485,7 +12471,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      seekEnabled: false
 	    };
 	    this.settings = _clapprZepto2['default'].extend({}, this.defaultSettings);
-	    this.playbackType = 'live';
+	    this.playbackType = _basePlayback2['default'].LIVE;
 	    this.addListeners();
 	  }
 
@@ -12704,11 +12690,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'levelChanged',
 	    value: function levelChanged(level) {
-	      var currentLevel = this.getLevels()[level];
+	      var currentLevel = this.levels[level];
 	      if (currentLevel) {
 	        this.highDefinition = currentLevel.height >= 720 || currentLevel.bitrate / 1000 >= 2000;
 	        this.trigger(_baseEvents2['default'].PLAYBACK_HIGHDEFINITIONUPDATE);
-	        this.trigger(_baseEvents2['default'].PLAYBACK_BITRATE, { bitrate: this.getCurrentBitrate(), level: level });
+	        this.trigger(_baseEvents2['default'].PLAYBACK_BITRATE, {
+	          height: currentLevel.height,
+	          width: currentLevel.width,
+	          bandwidth: currentLevel.bandwidth,
+	          bitrate: currentLevel.bitrate,
+	          level: level
+	        });
 	      }
 	    }
 	  }, {
@@ -12721,7 +12713,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var duration = this.normalizeDuration(timeMetrics.duration);
 	      var position = Math.min(Math.max(timeMetrics.position, 0), duration);
 	      var previousDVRStatus = this.dvrEnabled;
-	      var livePlayback = this.playbackType === 'live';
+	      var livePlayback = this.playbackType === _basePlayback2['default'].LIVE;
 	      this.dvrEnabled = livePlayback && duration > this.hlsMinimumDvrSize;
 
 	      if (duration === 100 || livePlayback === undefined) {
@@ -12758,22 +12750,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'getCurrentLevelIndex',
 	    value: function getCurrentLevelIndex() {
-	      return this.el.getCurrentLevel();
+	      return this.currentLevel;
 	    }
 	  }, {
 	    key: 'getCurrentLevel',
 	    value: function getCurrentLevel() {
-	      return this.getLevels()[this.getCurrentLevelIndex()];
+	      return this.levels[this.currentLevel];
 	    }
 	  }, {
 	    key: 'getCurrentBitrate',
 	    value: function getCurrentBitrate() {
-	      return this.getCurrentLevel().bitrate;
+	      return this.levels[this.currentLevel].bitrate;
 	    }
 	  }, {
 	    key: 'setCurrentLevel',
 	    value: function setCurrentLevel(level) {
-	      this.el.playerSetCurrentLevel(level);
+	      this.currentLevel = level;
 	    }
 	  }, {
 	    key: 'isHighDefinitionInUse',
@@ -12783,7 +12775,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'getLevels',
 	    value: function getLevels() {
-	      this.levels = this.el.getLevels();
 	      return this.levels;
 	    }
 	  }, {
@@ -12826,7 +12817,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.playbackType = this.el.getType();
 	      if (this.playbackType) {
 	        this.playbackType = this.playbackType.toLowerCase();
-	        if (this.playbackType === 'vod') {
+	        if (this.playbackType === _basePlayback2['default'].VOD) {
 	          this.startReportingProgress();
 	        } else {
 	          this.stopReportingProgress();
@@ -12887,9 +12878,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'pause',
 	    value: function pause() {
-	      if (this.playbackType !== 'live' || this.dvrEnabled) {
+	      if (this.playbackType !== _basePlayback2['default'].LIVE || this.dvrEnabled) {
 	        this.el.playerPause();
-	        if (this.playbackType === 'live' && this.dvrEnabled) {
+	        if (this.playbackType === _basePlayback2['default'].LIVE && this.dvrEnabled) {
 	          this.updateDvr(true);
 	        }
 	      }
@@ -12917,7 +12908,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'normalizeDuration',
 	    value: function normalizeDuration(duration) {
-	      if (this.playbackType === 'live') {
+	      if (this.playbackType === _basePlayback2['default'].LIVE) {
 	        // estimate 10 seconds of buffer time for live streams for seek positions
 	        duration = duration - 10;
 	      }
@@ -12931,7 +12922,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        time = duration * time / 100;
 	      }
 
-	      if (this.playbackType === 'live') {
+	      if (this.playbackType === _basePlayback2['default'].LIVE) {
 	        // seek operations to a time within 5 seconds from live stream will position playhead back to live
 	        var dvrInUse = time >= 0 && duration - time > 5;
 	        if (!dvrInUse) {
@@ -12980,7 +12971,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'updateSettings',
 	    value: function updateSettings() {
 	      this.settings = _clapprZepto2['default'].extend({}, this.defaultSettings);
-	      if (this.playbackType === "vod" || this.dvrInUse) {
+	      if (this.playbackType === _basePlayback2['default'].VOD || this.dvrInUse) {
 	        this.settings.left = ["playpause", "position", "duration"];
 	        this.settings.seekEnabled = true;
 	      } else if (this.dvrEnabled) {
@@ -13027,7 +13018,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 94 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13137,21 +13128,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 95 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "d878d8df1d462a3dc4c7b0ea7b4a8065.swf"
+	module.exports = __webpack_require__.p + "eea07e284091d08ca250c360e018fd85.swf"
 
 /***/ },
-/* 96 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(97);
+	module.exports = __webpack_require__(98);
 
 /***/ },
-/* 97 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -13174,17 +13165,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _playbacksHtml5_video = __webpack_require__(78);
+	var _playbacksHtml5_video = __webpack_require__(79);
 
 	var _playbacksHtml5_video2 = _interopRequireDefault(_playbacksHtml5_video);
 
-	var _hlsJs = __webpack_require__(98);
+	var _hlsJs = __webpack_require__(99);
 
 	var _hlsJs2 = _interopRequireDefault(_hlsJs);
 
 	var _baseEvents = __webpack_require__(6);
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
+
+	var _basePlayback = __webpack_require__(81);
+
+	var _basePlayback2 = _interopRequireDefault(_basePlayback);
 
 	var _componentsBrowser = __webpack_require__(3);
 
@@ -13196,15 +13191,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(HLS, [{
 	    key: 'getPlayableStartTime',
 	    value: function getPlayableStartTime() {
-	      if (this.hls && this.hls.levels[this.hls.currentLevel] && this.hls.levels[this.hls.currentLevel].details) {
-	        return _get(Object.getPrototypeOf(HLS.prototype), 'getDuration', this).call(this) - this.hls.levels[this.hls.currentLevel].details.totalduration;
-	      }
-	      return 0;
+	      return _get(Object.getPrototypeOf(HLS.prototype), 'getDuration', this).call(this) - this.playableRegionDuration;
 	    }
 	  }, {
 	    key: 'name',
 	    get: function get() {
 	      return 'hls';
+	    }
+	  }, {
+	    key: 'levels',
+	    get: function get() {
+	      return this.hls && this.hls.levels || [];
+	    }
+	  }, {
+	    key: 'currentLevel',
+	    get: function get() {
+	      return this.hls && this.hls.currentLevel || -1;
+	    },
+	    set: function set(level) {
+	      this.hls && (this.hls.currentLevel = level);
 	    }
 	  }]);
 
@@ -13213,8 +13218,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _get(Object.getPrototypeOf(HLS.prototype), 'constructor', this).call(this, options);
 	    this.minDvrSize = options.hlsMinimumDvrSize ? options.hlsMinimumDvrSize : 60;
-	    this.playbackType = 'vod';
+	    this.playbackType = _basePlayback2['default'].VOD;
 	    this.dvrInUse = false;
+	    this.playableRegionDuration = 0;
 	  }
 
 	  _createClass(HLS, [{
@@ -13230,7 +13236,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _this.options.autoPlay && _this.play();
 	      });
 	      this.hls.on(_hlsJs2['default'].Events.LEVEL_LOADED, function (evt, data) {
-	        return _this.updatePlaybackType(evt, data);
+	        _this.updateDuration(evt, data);
+	        _this.updatePlaybackType(evt, data);
+	      });
+	      this.hls.on(_hlsJs2['default'].Events.LEVEL_UPDATED, function (evt, data) {
+	        return _this.updateDuration(evt, data);
 	      });
 	      this.hls.attachVideo(this.el);
 	    }
@@ -13240,19 +13250,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return this.el.currentTime - this.getPlayableStartTime();
 	    }
 	  }, {
-	    key: 'getDuration',
-	    value: function getDuration() {
-	      if (this.hls && this.hls.levels[this.hls.currentLevel] && this.hls.levels[this.hls.currentLevel].details) {
-	        return this.hls.levels[this.hls.currentLevel].details.totalduration;
-	      }
-	      return 0;
-	    }
-	  }, {
 	    key: 'seek',
 	    value: function seek(seekBarValue) {
-	      var seekTo = 0;
+	      var seekTo = this.playableRegionDuration;
 	      if (seekBarValue > 0) {
-	        seekTo = this.getDuration() * (seekBarValue / 100);
+	        seekTo = this.playableRegionDuration * (seekBarValue / 100);
 	      }
 	      var onDvr = this.dvrEnabled && seekBarValue > 0 && seekBarValue < 100;
 	      seekTo += this.getPlayableStartTime();
@@ -13269,7 +13271,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'durationChange',
 	    value: function durationChange() {
-	      if (this.playbackType === "vod") {
+	      if (this.playbackType === _basePlayback2['default'].VOD) {
 	        this.settings.left = ["playpause", "position", "duration"];
 	      } else if (this.dvrEnabled) {
 	        this.settings.left = ["playpause"];
@@ -13277,13 +13279,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.settings.left = ["playstop"];
 	      }
 	      this.settings.seekEnabled = this.isSeekEnabled();
+	      this.timeUpdated();
 	      this.trigger(_baseEvents2['default'].PLAYBACK_SETTINGSUPDATE);
 	    }
 	  }, {
 	    key: 'timeUpdated',
 	    value: function timeUpdated() {
 	      if (this.dvrEnabled) {
-	        this.trigger(_baseEvents2['default'].PLAYBACK_TIMEUPDATE, this.dvrInUse ? this.getCurrentTime() : this.getDuration(), this.getDuration(), this.name);
+	        this.trigger(_baseEvents2['default'].PLAYBACK_TIMEUPDATE, this.dvrInUse ? this.getCurrentTime() : this.playableRegionDuration, this.playableRegionDuration, this.name);
 	      } else {
 	        _get(Object.getPrototypeOf(HLS.prototype), 'timeUpdated', this).call(this);
 	      }
@@ -13315,7 +13318,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'updatePlaybackType',
 	    value: function updatePlaybackType(evt, data) {
-	      this.playbackType = data.details.live ? 'live' : 'vod';
+	      this.playbackType = data.details.live ? _basePlayback2['default'].LIVE : _basePlayback2['default'].VOD;
+	    }
+	  }, {
+	    key: 'updateDuration',
+	    value: function updateDuration(evt, data) {
+	      this.playableRegionDuration = data.details.totalduration;
+	      this.durationChange();
 	    }
 	  }, {
 	    key: 'getPlaybackType',
@@ -13325,12 +13334,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'isSeekEnabled',
 	    value: function isSeekEnabled() {
-	      return this.playbackType === 'vod' || this.dvrEnabled;
+	      return this.playbackType === _basePlayback2['default'].VOD || this.dvrEnabled;
 	    }
 	  }, {
 	    key: 'dvrEnabled',
 	    get: function get() {
-	      return this.getDuration() >= this.minDvrSize && this.getPlaybackType() === 'live';
+	      return this.playableRegionDuration >= this.minDvrSize && this.getPlaybackType() === _basePlayback2['default'].LIVE;
 	    }
 	  }]);
 
@@ -13349,7 +13358,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 98 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -13367,15 +13376,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _events = __webpack_require__(99);
+	var _events = __webpack_require__(100);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _errors = __webpack_require__(100);
-
-	var _stats = __webpack_require__(101);
-
-	var _stats2 = _interopRequireDefault(_stats);
+	var _errors = __webpack_require__(101);
 
 	var _loaderPlaylistLoader = __webpack_require__(102);
 
@@ -13393,7 +13398,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _controllerBufferController2 = _interopRequireDefault(_controllerBufferController);
 
-	var _controllerLevelController = __webpack_require__(116);
+	var _controllerLevelController = __webpack_require__(117);
 
 	var _controllerLevelController2 = _interopRequireDefault(_controllerLevelController);
 
@@ -13401,11 +13406,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _utilsLogger = __webpack_require__(106);
 
-	var _utilsXhrLoader = __webpack_require__(117);
+	var _utilsXhrLoader = __webpack_require__(118);
 
 	var _utilsXhrLoader2 = _interopRequireDefault(_utilsXhrLoader);
 
-	var _events3 = __webpack_require__(111);
+	var _events3 = __webpack_require__(112);
 
 	var _events4 = _interopRequireDefault(_events3);
 
@@ -13498,7 +13503,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.abrController = new config.abrController(this);
 	    this.bufferController = new _controllerBufferController2['default'](this);
 	    //this.fpsController = new FPSController(this);
-	    this.statsHandler = new _stats2['default'](this);
 	  }
 
 	  _createClass(Hls, [{
@@ -13511,7 +13515,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.levelController.destroy();
 	      this.bufferController.destroy();
 	      //this.fpsController.destroy();
-	      this.statsHandler.destroy();
 	      this.url = null;
 	      this.detachVideo();
 	      this.observer.removeAllListeners();
@@ -13521,7 +13524,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function attachVideo(video) {
 	      _utilsLogger.logger.log('attachVideo');
 	      this.video = video;
-	      this.statsHandler.attachVideo(video);
 	      // setup the media source
 	      var ms = this.mediaSource = new MediaSource();
 	      //Media Source listeners
@@ -13540,7 +13542,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function detachVideo() {
 	      _utilsLogger.logger.log('detachVideo');
 	      var video = this.video;
-	      this.statsHandler.detachVideo(video);
+	      _utilsLogger.logger.log('trigger MSE_DETACHING');
+	      this.trigger(_events2['default'].MSE_DETACHING);
 	      var ms = this.mediaSource;
 	      if (ms) {
 	        if (ms.readyState === 'open') {
@@ -13721,13 +13724,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    get: function get() {
 	      return this.levelController.manualLevel;
 	    }
-
-	    /* return playback session stats */
-	  }, {
-	    key: 'stats',
-	    get: function get() {
-	      return this.statsHandler.stats;
-	    }
 	  }]);
 
 	  return Hls;
@@ -13737,7 +13733,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 99 */
+/* 100 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -13748,6 +13744,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = {
 	  // fired when MediaSource has been succesfully attached to video element - data: { video, mediaSource }
 	  MSE_ATTACHED: 'hlsMediaSourceAttached',
+	  // fired before detaching MediaSource from video element - data: { }
+	  MSE_DETACHING: 'hlsMediaSourceDetaching',
 	  // fired when MediaSource has been detached from video element - data: { }
 	  MSE_DETACHED: 'hlsMediaSourceDetached',
 	  // fired to signal that a manifest loading starts - data: { url : manifestURL}
@@ -13760,6 +13758,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  LEVEL_LOADING: 'hlsLevelLoading',
 	  // fired when a level playlist loading finishes - data: { details : levelDetails object, level : id of loaded level, stats : { trequest, tfirst, tload, mtime} }
 	  LEVEL_LOADED: 'hlsLevelLoaded',
+	  // fired when a level's details have been updated based on previous details, after it has been loaded. - data: { details : levelDetails object, level : id of updated level }
+	  LEVEL_UPDATED: 'hlsLevelUpdated',
+	  // fired when a level's PTS information has been updated after parsing a fragment - data: { details : levelDetails object, level : id of updated level, drift: PTS drift observed when parsing last fragment }
+	  LEVEL_PTS_UPDATED: 'hlsPTSUpdated',
 	  // fired when a level switch is requested - data: { level : id of new level }
 	  LEVEL_SWITCH: 'hlsLevelSwitch',
 	  // fired when a fragment loading starts - data: { frag : fragment object}
@@ -13792,7 +13794,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 100 */
+/* 101 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -13837,228 +13839,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.ErrorDetails = ErrorDetails;
 
 /***/ },
-/* 101 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Stats handler
-	*/
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	var _events = __webpack_require__(99);
-
-	var _events2 = _interopRequireDefault(_events);
-
-	var StatsHandler = (function () {
-	  function StatsHandler(hls) {
-	    _classCallCheck(this, StatsHandler);
-
-	    this.hls = hls;
-	    this.onmp = this.onManifestParsed.bind(this);
-	    this.onfc = this.onFragmentChanged.bind(this);
-	    this.onfb = this.onFragmentBuffered.bind(this);
-	    this.onflea = this.onFragmentLoadEmergencyAborted.bind(this);
-	    this.onerr = this.onError.bind(this);
-	    this.onfpsd = this.onFPSDrop.bind(this);
-	    hls.on(_events2['default'].MANIFEST_PARSED, this.onmp);
-	    hls.on(_events2['default'].FRAG_BUFFERED, this.onfb);
-	    hls.on(_events2['default'].FRAG_CHANGED, this.onfc);
-	    hls.on(_events2['default'].ERROR, this.onerr);
-	    hls.on(_events2['default'].FRAG_LOAD_EMERGENCY_ABORTED, this.onflea);
-	    hls.on(_events2['default'].FPS_DROP, this.onfpsd);
-	  }
-
-	  _createClass(StatsHandler, [{
-	    key: 'destroy',
-	    value: function destroy() {
-	      var hls = this.hls;
-	      hls.off(_events2['default'].MANIFEST_PARSED, this.onmp);
-	      hls.off(_events2['default'].FRAG_BUFFERED, this.onfb);
-	      hls.off(_events2['default'].FRAG_CHANGED, this.onfc);
-	      hls.off(_events2['default'].ERROR, this.onerr);
-	      hls.off(_events2['default'].FRAG_LOAD_EMERGENCY_ABORTED, this.onflea);
-	      hls.off(_events2['default'].FPS_DROP, this.onfpsd);
-	    }
-	  }, {
-	    key: 'attachVideo',
-	    value: function attachVideo(video) {
-	      this.video = video;
-	    }
-	  }, {
-	    key: 'detachVideo',
-	    value: function detachVideo() {
-	      this.video = null;
-	    }
-
-	    // reset stats on manifest parsed
-	  }, {
-	    key: 'onManifestParsed',
-	    value: function onManifestParsed(event, data) {
-	      this._stats = { tech: 'hls.js', levelNb: data.levels.length };
-	    }
-
-	    // on fragment changed is triggered whenever playback of a new fragment is starting ...
-	  }, {
-	    key: 'onFragmentChanged',
-	    value: function onFragmentChanged(event, data) {
-	      var stats = this._stats,
-	          level = data.frag.level,
-	          autoLevel = data.frag.autoLevel;
-	      if (stats) {
-	        if (stats.levelStart === undefined) {
-	          stats.levelStart = level;
-	        }
-	        if (autoLevel) {
-	          if (stats.fragChangedAuto) {
-	            stats.autoLevelMin = Math.min(stats.autoLevelMin, level);
-	            stats.autoLevelMax = Math.max(stats.autoLevelMax, level);
-	            stats.fragChangedAuto++;
-	            if (this.levelLastAuto && level !== stats.autoLevelLast) {
-	              stats.autoLevelSwitch++;
-	            }
-	          } else {
-	            stats.autoLevelMin = stats.autoLevelMax = level;
-	            stats.autoLevelSwitch = 0;
-	            stats.fragChangedAuto = 1;
-	            this.sumAutoLevel = 0;
-	          }
-	          this.sumAutoLevel += level;
-	          stats.autoLevelAvg = Math.round(1000 * this.sumAutoLevel / stats.fragChangedAuto) / 1000;
-	          stats.autoLevelLast = level;
-	        } else {
-	          if (stats.fragChangedManual) {
-	            stats.manualLevelMin = Math.min(stats.manualLevelMin, level);
-	            stats.manualLevelMax = Math.max(stats.manualLevelMax, level);
-	            stats.fragChangedManual++;
-	            if (!this.levelLastAuto && level !== stats.manualLevelLast) {
-	              stats.manualLevelSwitch++;
-	            }
-	          } else {
-	            stats.manualLevelMin = stats.manualLevelMax = level;
-	            stats.manualLevelSwitch = 0;
-	            stats.fragChangedManual = 1;
-	          }
-	          stats.manualLevelLast = level;
-	        }
-	        this.levelLastAuto = autoLevel;
-	      }
-	    }
-
-	    // triggered each time a new fragment is buffered
-	  }, {
-	    key: 'onFragmentBuffered',
-	    value: function onFragmentBuffered(event, data) {
-	      var stats = this._stats,
-	          latency = data.stats.tfirst - data.stats.trequest,
-	          process = data.stats.tbuffered - data.stats.trequest,
-	          bitrate = Math.round(8 * data.stats.length / (data.stats.tbuffered - data.stats.tfirst));
-	      if (stats.fragBuffered) {
-	        stats.fragMinLatency = Math.min(stats.fragMinLatency, latency);
-	        stats.fragMaxLatency = Math.max(stats.fragMaxLatency, latency);
-	        stats.fragMinProcess = Math.min(stats.fragMinProcess, process);
-	        stats.fragMaxProcess = Math.max(stats.fragMaxProcess, process);
-	        stats.fragMinKbps = Math.min(stats.fragMinKbps, bitrate);
-	        stats.fragMaxKbps = Math.max(stats.fragMaxKbps, bitrate);
-	        stats.autoLevelCappingMin = Math.min(stats.autoLevelCappingMin, this.hls.autoLevelCapping);
-	        stats.autoLevelCappingMax = Math.max(stats.autoLevelCappingMax, this.hls.autoLevelCapping);
-	        stats.fragBuffered++;
-	      } else {
-	        stats.fragMinLatency = stats.fragMaxLatency = latency;
-	        stats.fragMinProcess = stats.fragMaxProcess = process;
-	        stats.fragMinKbps = stats.fragMaxKbps = bitrate;
-	        stats.fragBuffered = 1;
-	        stats.fragBufferedBytes = 0;
-	        stats.autoLevelCappingMin = stats.autoLevelCappingMax = this.hls.autoLevelCapping;
-	        this.sumLatency = 0;
-	        this.sumKbps = 0;
-	        this.sumProcess = 0;
-	      }
-	      stats.fraglastLatency = latency;
-	      this.sumLatency += latency;
-	      stats.fragAvgLatency = Math.round(this.sumLatency / stats.fragBuffered);
-	      stats.fragLastProcess = process;
-	      this.sumProcess += process;
-	      stats.fragAvgProcess = Math.round(this.sumProcess / stats.fragBuffered);
-	      stats.fragLastKbps = bitrate;
-	      this.sumKbps += bitrate;
-	      stats.fragAvgKbps = Math.round(this.sumKbps / stats.fragBuffered);
-	      stats.fragBufferedBytes += data.stats.length;
-	      stats.autoLevelCappingLast = this.hls.autoLevelCapping;
-	    }
-	  }, {
-	    key: 'onFragmentLoadEmergencyAborted',
-	    value: function onFragmentLoadEmergencyAborted() {
-	      var stats = this._stats;
-	      if (stats) {
-	        if (stats.fragLoadEmergencyAborted === undefined) {
-	          stats.fragLoadEmergencyAborted = 1;
-	        } else {
-	          stats.fragLoadEmergencyAborted++;
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'onError',
-	    value: function onError(event, data) {
-	      var stats = this._stats;
-	      if (stats) {
-	        // track all errors independently
-	        if (stats[data.details] === undefined) {
-	          stats[data.details] = 1;
-	        } else {
-	          stats[data.details] += 1;
-	        }
-	        // track fatal error
-	        if (data.fatal) {
-	          if (stats.fatalError === undefined) {
-	            stats.fatalError = 1;
-	          } else {
-	            stats.fatalError += 1;
-	          }
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'onFPSDrop',
-	    value: function onFPSDrop(event, data) {
-	      var stats = this._stats;
-	      if (stats) {
-	        if (stats.fpsDropEvent === undefined) {
-	          stats.fpsDropEvent = 1;
-	        } else {
-	          stats.fpsDropEvent++;
-	        }
-	        stats.fpsTotalDroppedFrames = data.totalDroppedFrames;
-	      }
-	    }
-	  }, {
-	    key: 'stats',
-	    get: function get() {
-	      if (this.video) {
-	        this._stats.lastPos = this.video.currentTime.toFixed(3);
-	      }
-	      return this._stats;
-	    }
-	  }]);
-
-	  return StatsHandler;
-	})();
-
-	exports['default'] = StatsHandler;
-	module.exports = exports['default'];
-
-/***/ },
 /* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -14078,11 +13858,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _events = __webpack_require__(99);
+	var _events = __webpack_require__(100);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _errors = __webpack_require__(100);
+	var _errors = __webpack_require__(101);
 
 	//import {logger} from '../utils/logger';
 
@@ -14218,8 +13998,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	          level = { url: baseurl, fragments: [], live: true, startSN: 0 },
 	          result,
 	          regexp,
-	          cc = 0;
-	      regexp = /(?:#EXT-X-(MEDIA-SEQUENCE):(\d+))|(?:#EXT-X-(TARGETDURATION):(\d+))|(?:#EXT(INF):([\d\.]+)[^\r\n]*[\r\n]+([^\r\n]+)|(?:#EXT-X-(ENDLIST))|(?:#EXT-X-(DIS)CONTINUITY))/g;
+	          cc = 0,
+	          frag,
+	          byteRangeEndOffset,
+	          byteRangeStartOffset;
+	      regexp = /(?:#EXT-X-(MEDIA-SEQUENCE):(\d+))|(?:#EXT-X-(TARGETDURATION):(\d+))|(?:#EXT(INF):([\d\.]+)[^\r\n]*([\r\n]+[^#|\r\n]+)?)|(?:#EXT-X-(BYTERANGE):([\d]+[@[\d]*)]*[\r\n]+([^#|\r\n]+)?|(?:#EXT-X-(ENDLIST))|(?:#EXT-X-(DIS)CONTINUITY))/g;
 	      while ((result = regexp.exec(string)) !== null) {
 	        result.shift();
 	        result = result.filter(function (n) {
@@ -14238,11 +14021,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	          case 'DIS':
 	            cc++;
 	            break;
+	          case 'BYTERANGE':
+	            var params = result[1].split('@');
+	            if (params.length === 1) {
+	              byteRangeStartOffset = byteRangeEndOffset;
+	            } else {
+	              byteRangeStartOffset = parseInt(params[1]);
+	            }
+	            byteRangeEndOffset = parseInt(params[0]) + byteRangeStartOffset;
+	            frag = level.fragments.length ? level.fragments[level.fragments.length - 1] : null;
+	            if (frag && !frag.url) {
+	              frag.byteRangeStartOffset = byteRangeStartOffset;
+	              frag.byteRangeEndOffset = byteRangeEndOffset;
+	              frag.url = this.resolve(result[2], baseurl);
+	            }
+	            break;
 	          case 'INF':
 	            var duration = parseFloat(result[1]);
 	            if (!isNaN(duration)) {
-	              level.fragments.push({ url: this.resolve(result[2], baseurl), duration: duration, start: totalduration, sn: currentSN++, level: id, cc: cc });
+	              level.fragments.push({ url: result[2] ? this.resolve(result[2], baseurl) : null, duration: duration, start: totalduration, sn: currentSN++, level: id, cc: cc, byteRangeStartOffset: byteRangeStartOffset, byteRangeEndOffset: byteRangeEndOffset });
 	              totalduration += duration;
+	              byteRangeStartOffset = null;
 	            }
 	            break;
 	          default:
@@ -14349,11 +14148,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _events = __webpack_require__(99);
+	var _events = __webpack_require__(100);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _errors = __webpack_require__(100);
+	var _errors = __webpack_require__(101);
 
 	var FragmentLoader = (function () {
 	  function FragmentLoader(hls) {
@@ -14438,7 +14237,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _events = __webpack_require__(99);
+	var _events = __webpack_require__(100);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -14551,7 +14350,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _events = __webpack_require__(99);
+	var _events = __webpack_require__(100);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -14561,11 +14360,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _demuxDemuxer2 = _interopRequireDefault(_demuxDemuxer);
 
-	var _helperLevelHelper = __webpack_require__(115);
+	var _helperLevelHelper = __webpack_require__(116);
 
 	var _helperLevelHelper2 = _interopRequireDefault(_helperLevelHelper);
 
-	var _errors = __webpack_require__(100);
+	var _errors = __webpack_require__(101);
 
 	var BufferController = (function () {
 	  function BufferController(hls) {
@@ -14581,13 +14380,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.APPENDING = 5;
 	    this.BUFFER_FLUSHING = 6;
 	    this.config = hls.config;
-	    this.startPosition = 0;
 	    this.hls = hls;
 	    // Source Buffer listeners
 	    this.onsbue = this.onSBUpdateEnd.bind(this);
 	    this.onsbe = this.onSBUpdateError.bind(this);
 	    // internal listeners
 	    this.onmse = this.onMSEAttached.bind(this);
+	    this.onmsed0 = this.onMSEDetaching.bind(this);
 	    this.onmsed = this.onMSEDetached.bind(this);
 	    this.onmp = this.onManifestParsed.bind(this);
 	    this.onll = this.onLevelLoaded.bind(this);
@@ -14598,6 +14397,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.onerr = this.onError.bind(this);
 	    this.ontick = this.tick.bind(this);
 	    hls.on(_events2['default'].MSE_ATTACHED, this.onmse);
+	    hls.on(_events2['default'].MSE_DETACHING, this.onmsed0);
 	    hls.on(_events2['default'].MSE_DETACHED, this.onmsed);
 	    hls.on(_events2['default'].MANIFEST_PARSED, this.onmp);
 	  }
@@ -14606,7 +14406,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'destroy',
 	    value: function destroy() {
 	      this.stop();
-	      this.hls.off(_events2['default'].MANIFEST_PARSED, this.onmp);
+	      var hls = this.hls;
+	      hls.off(_events2['default'].MSE_ATTACHED, this.onmse);
+	      hls.off(_events2['default'].MSE_DETACHING, this.onmsed0);
+	      hls.off(_events2['default'].MSE_DETACHED, this.onmsed);
+	      hls.off(_events2['default'].MANIFEST_PARSED, this.onmp);
 	      this.state = this.IDLE;
 	    }
 	  }, {
@@ -14616,16 +14420,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.startInternal();
 	        if (this.lastCurrentTime) {
 	          _utilsLogger.logger.log('seeking @ ' + this.lastCurrentTime);
-	          this.nextLoadPosition = this.startPosition = this.lastCurrentTime;
 	          if (!this.lastPaused) {
 	            _utilsLogger.logger.log('resuming video');
 	            this.video.play();
 	          }
 	          this.state = this.IDLE;
 	        } else {
-	          this.nextLoadPosition = this.startPosition;
+	          this.lastCurrentTime = 0;
 	          this.state = this.STARTING;
 	        }
+	        this.nextLoadPosition = this.startPosition = this.lastCurrentTime;
 	        this.tick();
 	      } else {
 	        _utilsLogger.logger.warn('cannot start loading as either manifest not parsed or video not attached');
@@ -15048,9 +14852,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: '_checkFragmentChanged',
 	    value: function _checkFragmentChanged() {
-	      var rangeCurrent, currentTime;
-	      if (this.video && this.video.seeking === false) {
-	        this.lastCurrentTime = currentTime = this.video.currentTime;
+	      var rangeCurrent,
+	          currentTime,
+	          video = this.video;
+	      if (video && video.seeking === false) {
+	        currentTime = video.currentTime;
+	        /* if video element is in seeked state, currentTime can only increase.
+	          (assuming that playback rate is positive ...)
+	          As sometimes currentTime jumps back to zero after a
+	          media decode error, check this, to avoid seeking back to
+	          wrong position after a media decode error
+	        */
+	        if (currentTime > video.playbackRate * this.lastCurrentTime) {
+	          this.lastCurrentTime = currentTime;
+	        }
 	        if (this.isBuffered(currentTime)) {
 	          rangeCurrent = this.getBufferRange(currentTime);
 	        } else if (this.isBuffered(currentTime + 0.1)) {
@@ -15072,10 +14887,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	          if (levelDetails && !levelDetails.live) {
 	            // are we playing last fragment ?
 	            if (fragPlaying.sn === levelDetails.endSN) {
-	              if (this.mediaSource && this.mediaSource.readyState === 'open') {
+	              var mediaSource = this.mediaSource;
+	              if (mediaSource && mediaSource.readyState === 'open') {
 	                _utilsLogger.logger.log('all media data available, signal endOfStream() to MediaSource');
 	                //Notify the media element that it now has all of the media data
-	                this.mediaSource.endOfStream();
+	                mediaSource.endOfStream();
 	              }
 	            }
 	          }
@@ -15245,29 +15061,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onMSEAttached',
 	    value: function onMSEAttached(event, data) {
-	      this.video = data.video;
+	      var video = data.video;
+	      this.video = video;
 	      this.mediaSource = data.mediaSource;
 	      this.onvseeking = this.onVideoSeeking.bind(this);
 	      this.onvseeked = this.onVideoSeeked.bind(this);
 	      this.onvmetadata = this.onVideoMetadata.bind(this);
 	      this.onvended = this.onVideoEnded.bind(this);
-	      this.video.addEventListener('seeking', this.onvseeking);
-	      this.video.addEventListener('seeked', this.onvseeked);
-	      this.video.addEventListener('loadedmetadata', this.onvmetadata);
-	      this.video.addEventListener('ended', this.onvended);
+	      video.addEventListener('seeking', this.onvseeking);
+	      video.addEventListener('seeked', this.onvseeked);
+	      video.addEventListener('loadedmetadata', this.onvmetadata);
+	      video.addEventListener('ended', this.onvended);
 	      if (this.levels && this.config.autoStartLoad) {
 	        this.startLoad();
+	      }
+	    }
+	  }, {
+	    key: 'onMSEDetaching',
+	    value: function onMSEDetaching() {
+	      var video = this.video;
+	      if (video && video.ended) {
+	        _utilsLogger.logger.log('MSE detaching and video ended, reset startPosition');
+	        this.startPosition = this.lastCurrentTime = 0;
 	      }
 	    }
 	  }, {
 	    key: 'onMSEDetached',
 	    value: function onMSEDetached() {
 	      // remove video listeners
-	      if (this.video) {
-	        this.video.removeEventListener('seeking', this.onvseeking);
-	        this.video.removeEventListener('seeked', this.onvseeked);
-	        this.video.removeEventListener('loadedmetadata', this.onvmetadata);
-	        this.video.removeEventListener('ended', this.onvended);
+	      var video = this.video;
+	      if (video) {
+	        video.removeEventListener('seeking', this.onvseeking);
+	        video.removeEventListener('seeked', this.onvseeked);
+	        video.removeEventListener('loadedmetadata', this.onvmetadata);
+	        video.removeEventListener('ended', this.onvended);
 	        this.onvseeking = this.onvseeked = this.onvmetadata = null;
 	      }
 	      this.video = null;
@@ -15379,6 +15206,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      // override level info
 	      curLevel.details = newDetails;
+	      this.hls.trigger(_events2['default'].LEVEL_UPDATED, { details: newDetails, level: newLevelId });
 
 	      // compute start position
 	      if (this.startLevelLoaded === false) {
@@ -15476,7 +15304,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var level = this.levels[this.level],
 	            frag = this.fragCurrent;
 	        _utilsLogger.logger.log('parsed data, type/startPTS/endPTS/startDTS/endDTS/nb:' + data.type + '/' + data.startPTS.toFixed(3) + '/' + data.endPTS.toFixed(3) + '/' + data.startDTS.toFixed(3) + '/' + data.endDTS.toFixed(3) + '/' + data.nb);
-	        _helperLevelHelper2['default'].updateFragPTS(level.details, frag.sn, data.startPTS, data.endPTS);
+	        var drift = _helperLevelHelper2['default'].updateFragPTS(level.details, frag.sn, data.startPTS, data.endPTS);
+	        this.hls.trigger(_events2['default'].LEVEL_PTS_UPDATED, { details: level.details, level: this.level, drift: drift });
+
 	        this.mp4segments.push({ type: data.type, data: data.moof });
 	        this.mp4segments.push({ type: data.type, data: data.mdat });
 	        this.nextLoadPosition = data.endPTS;
@@ -15672,21 +15502,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _events = __webpack_require__(99);
+	var _events = __webpack_require__(100);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _tsdemuxer = __webpack_require__(108);
+	var _demuxDemuxerInline = __webpack_require__(108);
 
-	var _tsdemuxer2 = _interopRequireDefault(_tsdemuxer);
+	var _demuxDemuxerInline2 = _interopRequireDefault(_demuxDemuxerInline);
 
-	var _tsdemuxerworker = __webpack_require__(110);
+	var _demuxDemuxerWorker = __webpack_require__(111);
 
-	var _tsdemuxerworker2 = _interopRequireDefault(_tsdemuxerworker);
+	var _demuxDemuxerWorker2 = _interopRequireDefault(_demuxDemuxerWorker);
 
 	var _utilsLogger = __webpack_require__(106);
 
-	var _remuxMp4Remuxer = __webpack_require__(112);
+	var _remuxMp4Remuxer = __webpack_require__(113);
 
 	var _remuxMp4Remuxer2 = _interopRequireDefault(_remuxMp4Remuxer);
 
@@ -15696,19 +15526,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    this.hls = hls;
 	    if (hls.config.enableWorker && typeof Worker !== 'undefined') {
-	      _utilsLogger.logger.log('TS demuxing in webworker');
+	      _utilsLogger.logger.log('demuxing in webworker');
 	      try {
-	        var work = __webpack_require__(114);
-	        this.w = work(_tsdemuxerworker2['default']);
+	        var work = __webpack_require__(115);
+	        this.w = work(_demuxDemuxerWorker2['default']);
 	        this.onwmsg = this.onWorkerMessage.bind(this);
 	        this.w.addEventListener('message', this.onwmsg);
 	        this.w.postMessage({ cmd: 'init' });
 	      } catch (err) {
-	        _utilsLogger.logger.error('error while initializing TSDemuxerWorker, fallback on regular TSDemuxer');
-	        this.demuxer = new _tsdemuxer2['default'](hls, _remuxMp4Remuxer2['default']);
+	        _utilsLogger.logger.error('error while initializing DemuxerWorker, fallback on DemuxerInline');
+	        this.demuxer = new _demuxDemuxerInline2['default'](hls, _remuxMp4Remuxer2['default']);
 	      }
 	    } else {
-	      this.demuxer = new _tsdemuxer2['default'](hls, _remuxMp4Remuxer2['default']);
+	      this.demuxer = new _demuxDemuxerInline2['default'](hls, _remuxMp4Remuxer2['default']);
 	    }
 	    this.demuxInitialized = true;
 	  }
@@ -15789,10 +15619,92 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 108 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/*  inline demuxer.
+	 *   probe fragments and instantiate appropriate demuxer depending on content type (TSDemuxer, AACDemuxer, ...)
+	 */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	var _events = __webpack_require__(100);
+
+	var _events2 = _interopRequireDefault(_events);
+
+	var _errors = __webpack_require__(101);
+
+	var _demuxTsdemuxer = __webpack_require__(109);
+
+	var _demuxTsdemuxer2 = _interopRequireDefault(_demuxTsdemuxer);
+
+	var DemuxerInline = (function () {
+	  function DemuxerInline(hls, remuxer) {
+	    _classCallCheck(this, DemuxerInline);
+
+	    this.hls = hls;
+	    this.remuxer = remuxer;
+	  }
+
+	  _createClass(DemuxerInline, [{
+	    key: 'destroy',
+	    value: function destroy() {
+	      var demuxer = this.demuxer;
+	      if (demuxer) {
+	        demuxer.destroy();
+	      }
+	    }
+	  }, {
+	    key: 'push',
+	    value: function push(data, audioCodec, videoCodec, timeOffset, cc, level, duration) {
+	      var demuxer = this.demuxer;
+	      if (!demuxer) {
+	        // probe for content type
+	        if (_demuxTsdemuxer2['default'].probe(data)) {
+	          demuxer = this.demuxer = new _demuxTsdemuxer2['default'](this.hls, this.remuxer);
+	        } else {
+	          this.hls.trigger(_events2['default'].ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.FRAG_PARSING_ERROR, fatal: true, reason: 'no demux matching with content found' });
+	          return;
+	        }
+	      }
+	      demuxer.push(data, audioCodec, videoCodec, timeOffset, cc, level, duration);
+	    }
+	  }, {
+	    key: 'remux',
+	    value: function remux() {
+	      var demuxer = this.demuxer;
+	      if (demuxer) {
+	        demuxer.remux();
+	      }
+	    }
+	  }]);
+
+	  return DemuxerInline;
+	})();
+
+	exports['default'] = DemuxerInline;
+	module.exports = exports['default'];
+
+/***/ },
+/* 109 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/**
-	 * A stream-based mp2ts to mp4 converter. This utility is used to
-	 * deliver mp4s to a SourceBuffer on platforms that support native
-	 * Media Source Extensions.
+	 * highly optimized TS demuxer:
+	 * parse PAT, PMT
+	 * extract PES packet from audio and video PIDs
+	 * extract AVC/H264 NAL units and AAC/ADTS samples from PES packet
+	 * trigger the remuxer upon parsing completion
+	 * it also tries to workaround as best as it can audio codec switch (HE-AAC to AAC and vice versa), without having to restart the MediaSource.
+	 * it also controls the remuxing process :
+	 * upon discontinuity or level switch detection, it will also notifies the remuxer so that it can reset its state.
 	*/
 
 	'use strict';
@@ -15807,11 +15719,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _events = __webpack_require__(99);
+	var _events = __webpack_require__(100);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _expGolomb = __webpack_require__(109);
+	var _expGolomb = __webpack_require__(110);
 
 	var _expGolomb2 = _interopRequireDefault(_expGolomb);
 
@@ -15819,7 +15731,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _utilsLogger = __webpack_require__(106);
 
-	var _errors = __webpack_require__(100);
+	var _errors = __webpack_require__(101);
 
 	var TSDemuxer = (function () {
 	  function TSDemuxer(observer, remuxerClass) {
@@ -15829,7 +15741,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.remuxerClass = remuxerClass;
 	    this.lastCC = 0;
 	    this.PES_TIMESCALE = 90000;
-	    this.remuxer = new this.remuxerClass(this.observer);
+	    this.remuxer = new this.remuxerClass(observer);
 	  }
 
 	  _createClass(TSDemuxer, [{
@@ -16111,18 +16023,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      units.units.forEach(function (unit) {
 	        switch (unit.type) {
 	          //NDR
-	          case 1:
-	            //debugString += 'NDR ';
-	            // check if slice_type matches with a keyframe
-	            var sliceType = new _expGolomb2['default'](unit.data).readSliceType();
-	            if (sliceType === 2 || // I-slice
-	            sliceType === 4 || // SI-slice
-	            sliceType === 7 || // I-slice
-	            sliceType === 9) {
-	              // SI-slice
-	              key = true;
-	            }
-	            break;
+	          // case 1:
+	          //   debugString += 'NDR ';
+	          //   break;
 	          //IDR
 	          case 5:
 	            //debugString += 'IDR ';
@@ -16466,6 +16369,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function _parseID3PES(pes) {
 	      this._id3Track.samples.push(pes);
 	    }
+	  }], [{
+	    key: 'probe',
+	    value: function probe(data) {
+	      // a TS fragment should contain at least 3 TS packets, a PAT, a PMT, and one PID, each starting with 0x47
+	      if (data.length >= 3 * 188 && data[0] === 0x47 && data[188] === 0x47 && data[2 * 188] === 0x47) {
+	        return true;
+	      } else {
+	        return false;
+	      }
+	    }
 	  }]);
 
 	  return TSDemuxer;
@@ -16475,7 +16388,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 109 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -16770,8 +16683,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 110 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
+
+	/* demuxer web worker. 
+	 *  - listen to worker message, and trigger DemuxerInline upon reception of Fragments.
+	 *  - provides MP4 Boxes back to main thread using [transferable objects](https://developers.google.com/web/updates/2011/12/Transferable-Objects-Lightning-Fast) in order to minimize message passing overhead.
+	 */
 
 	'use strict';
 
@@ -16781,23 +16699,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _events = __webpack_require__(99);
+	var _demuxDemuxerInline = __webpack_require__(108);
+
+	var _demuxDemuxerInline2 = _interopRequireDefault(_demuxDemuxerInline);
+
+	var _events = __webpack_require__(100);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _events3 = __webpack_require__(111);
+	var _events3 = __webpack_require__(112);
 
 	var _events4 = _interopRequireDefault(_events3);
 
-	var _demuxTsdemuxer = __webpack_require__(108);
-
-	var _demuxTsdemuxer2 = _interopRequireDefault(_demuxTsdemuxer);
-
-	var _remuxMp4Remuxer = __webpack_require__(112);
+	var _remuxMp4Remuxer = __webpack_require__(113);
 
 	var _remuxMp4Remuxer2 = _interopRequireDefault(_remuxMp4Remuxer);
 
-	var TSDemuxerWorker = function TSDemuxerWorker(self) {
+	var DemuxerWorker = function DemuxerWorker(self) {
 	  // observer setup
 	  var observer = new _events4['default']();
 	  observer.trigger = function trigger(event) {
@@ -16819,7 +16737,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    //console.log('demuxer cmd:' + ev.data.cmd);
 	    switch (ev.data.cmd) {
 	      case 'init':
-	        self.demuxer = new _demuxTsdemuxer2['default'](observer, _remuxMp4Remuxer2['default']);
+	        self.demuxer = new _demuxDemuxerInline2['default'](observer, _remuxMp4Remuxer2['default']);
 	        break;
 	      case 'demux':
 	        self.demuxer.push(new Uint8Array(ev.data.data), ev.data.audioCodec, ev.data.videoCodec, ev.data.timeOffset, ev.data.cc, ev.data.level, ev.data.duration);
@@ -16871,11 +16789,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  });
 	};
 
-	exports['default'] = TSDemuxerWorker;
+	exports['default'] = DemuxerWorker;
 	module.exports = exports['default'];
 
 /***/ },
-/* 111 */
+/* 112 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -17143,7 +17061,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 112 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -17162,17 +17080,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _events = __webpack_require__(99);
+	var _events = __webpack_require__(100);
 
 	var _events2 = _interopRequireDefault(_events);
 
 	var _utilsLogger = __webpack_require__(106);
 
-	var _remuxMp4Generator = __webpack_require__(113);
+	var _remuxMp4Generator = __webpack_require__(114);
 
 	var _remuxMp4Generator2 = _interopRequireDefault(_remuxMp4Generator);
 
-	var _errors = __webpack_require__(100);
+	var _errors = __webpack_require__(101);
 
 	var MP4Remuxer = (function () {
 	  function MP4Remuxer(observer) {
@@ -17410,6 +17328,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.nextAvcDts = dtsnorm + mp4Sample.duration * pes2mp4ScaleFactor;
 	      track.len = 0;
 	      track.nbNalu = 0;
+	      if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
+	        // chrome workaround, mark first sample as being a Random Access Point to avoid sourcebuffer append issue
+	        // https://code.google.com/p/chromium/issues/detail?id=229412
+	        samples[0].flags.dependsOn = 2;
+	        samples[0].flags.isNonSync = 0;
+	      }
 	      track.samples = samples;
 	      moof = _remuxMp4Generator2['default'].moof(track.sequenceNumber++, firstDTS / pes2mp4ScaleFactor, track);
 	      track.samples = [];
@@ -17604,7 +17528,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 113 */
+/* 114 */
 /***/ function(module, exports) {
 
 	/**
@@ -18076,7 +18000,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 114 */
+/* 115 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -18124,7 +18048,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 115 */
+/* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -18205,7 +18129,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var fragIdx, fragments, frag, i;
 	      // exit if sn out of range
 	      if (sn < details.startSN || sn > details.endSN) {
-	        return;
+	        return 0;
 	      }
 	      fragIdx = sn - details.startSN;
 	      fragments = details.fragments;
@@ -18214,6 +18138,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        startPTS = Math.max(startPTS, frag.startPTS);
 	        endPTS = Math.min(endPTS, frag.endPTS);
 	      }
+
+	      var drift = startPTS - frag.start;
+
 	      frag.start = frag.startPTS = startPTS;
 	      frag.endPTS = endPTS;
 	      frag.duration = endPTS - startPTS;
@@ -18228,6 +18155,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      details.PTSKnown = true;
 	      //logger.log(`                                            frag start/end:${startPTS.toFixed(3)}/${endPTS.toFixed(3)}`);
+
+	      return drift;
 	    }
 	  }, {
 	    key: 'updatePTS',
@@ -18268,7 +18197,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 116 */
+/* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -18287,13 +18216,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _events = __webpack_require__(99);
+	var _events = __webpack_require__(100);
 
 	var _events2 = _interopRequireDefault(_events);
 
 	var _utilsLogger = __webpack_require__(106);
 
-	var _errors = __webpack_require__(100);
+	var _errors = __webpack_require__(101);
 
 	var LevelController = (function () {
 	  function LevelController(hls) {
@@ -18469,6 +18398,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // set reload period to playlist target duration
 	        this.timer = setInterval(this.ontick, 1000 * data.details.targetduration);
 	      }
+	      if (!data.details.live && this.timer) {
+	        // playlist is not live and timer is armed : stopping it
+	        clearInterval(this.timer);
+	        this.timer = null;
+	      }
 	    }
 	  }, {
 	    key: 'tick',
@@ -18544,7 +18478,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 117 */
+/* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -18593,8 +18527,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'load',
 	    value: function load(url, responseType, onSuccess, onError, onTimeout, timeout, maxRetry, retryDelay) {
 	      var onProgress = arguments.length <= 8 || arguments[8] === undefined ? null : arguments[8];
+	      var frag = arguments.length <= 9 || arguments[9] === undefined ? null : arguments[9];
 
 	      this.url = url;
+	      if (frag && !isNaN(frag.byteRangeStartOffset) && !isNaN(frag.byteRangeEndOffset)) {
+	        this.byteRange = frag.byteRangeStartOffset + '-' + frag.byteRangeEndOffset;
+	      }
 	      this.responseType = responseType;
 	      this.onSuccess = onSuccess;
 	      this.onProgress = onProgress;
@@ -18615,6 +18553,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      xhr.onerror = this.loaderror.bind(this);
 	      xhr.onprogress = this.loadprogress.bind(this);
 	      xhr.open('GET', this.url, true);
+	      if (this.byteRange) {
+	        xhr.setRequestHeader('Range', 'bytes=' + this.byteRange);
+	      }
 	      xhr.responseType = this.responseType;
 	      this.stats.tfirst = null;
 	      this.stats.loaded = 0;
@@ -18673,15 +18614,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 118 */
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(119);
+	module.exports = __webpack_require__(120);
 
 /***/ },
-/* 119 */
+/* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -18704,7 +18645,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _basePlayback = __webpack_require__(80);
+	var _basePlayback = __webpack_require__(81);
 
 	var _basePlayback2 = _interopRequireDefault(_basePlayback);
 
@@ -18712,7 +18653,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseStyler2 = _interopRequireDefault(_baseStyler);
 
-	var _publicStyleScss = __webpack_require__(120);
+	var _publicStyleScss = __webpack_require__(121);
 
 	var _publicStyleScss2 = _interopRequireDefault(_publicStyleScss);
 
@@ -18722,7 +18663,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(HTMLImg, [{
 	    key: 'getPlaybackType',
 	    value: function getPlaybackType() {
-	      return null;
+	      return _basePlayback2['default'].NO_OP;
 	    }
 	  }, {
 	    key: 'name',
@@ -18770,7 +18711,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 120 */
+/* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(30)();
@@ -18784,15 +18725,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 121 */
+/* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(122);
+	module.exports = __webpack_require__(123);
 
 /***/ },
-/* 122 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18813,7 +18754,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseUtils = __webpack_require__(2);
 
-	var _basePlayback = __webpack_require__(80);
+	var _basePlayback = __webpack_require__(81);
 
 	var _basePlayback2 = _interopRequireDefault(_basePlayback);
 
@@ -18829,11 +18770,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
 
-	var _publicStyleScss = __webpack_require__(123);
+	var _publicStyleScss = __webpack_require__(124);
 
 	var _publicStyleScss2 = _interopRequireDefault(_publicStyleScss);
 
-	var _publicErrorHtml = __webpack_require__(124);
+	var _publicErrorHtml = __webpack_require__(125);
 
 	var _publicErrorHtml2 = _interopRequireDefault(_publicErrorHtml);
 
@@ -18841,6 +18782,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _inherits(NoOp, _Playback);
 
 	  _createClass(NoOp, [{
+	    key: 'getNoOpMessage',
+	    value: function getNoOpMessage() {
+	      var messages = {
+	        'en': 'Your browser does not support the playback of this video. Please try using a different browser.',
+	        'es': 'Su navegador no soporta la reproducción de un video. Por favor, trate de usar un navegador diferente.',
+	        'pt': 'Seu navegador não supporta a reprodução deste video. Por favor, tente usar um navegador diferente.'
+	      };
+	      messages['en-us'] = messages['en'];
+	      messages['es-419'] = messages['es'];
+	      messages['pt-br'] = messages['pt'];
+	      return messages[(0, _baseUtils.getBrowserLanguage)()] || messages['en'];
+	    }
+	  }, {
 	    key: 'name',
 	    get: function get() {
 	      return 'no_op';
@@ -18867,7 +18821,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'render',
 	    value: function render() {
 	      var style = _baseStyler2['default'].getStyleFor(_publicStyleScss2['default']);
-	      this.$el.html(this.template());
+	      this.$el.html(this.template({ message: this.getNoOpMessage() }));
 	      this.$el.append(style);
 	      this.animate();
 	      this.trigger(_baseEvents2['default'].PLAYBACK_READY, this.name);
@@ -18934,7 +18888,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 123 */
+/* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(30)();
@@ -18948,21 +18902,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 124 */
+/* 125 */
 /***/ function(module, exports) {
 
-	module.exports = "<canvas data-no-op-canvas></canvas>\n<p data-no-op-msg>Your browser does not support the playback of this video. Try to use a different browser.<p>\n";
+	module.exports = "<canvas data-no-op-canvas></canvas>\n<p data-no-op-msg><%=message%><p>\n";
 
 /***/ },
-/* 125 */
+/* 126 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(126);
+	module.exports = __webpack_require__(127);
 
 /***/ },
-/* 126 */
+/* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -18985,7 +18939,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseUi_container_plugin = __webpack_require__(127);
+	var _baseUi_container_plugin = __webpack_require__(128);
 
 	var _baseUi_container_plugin2 = _interopRequireDefault(_baseUi_container_plugin);
 
@@ -19001,11 +18955,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseTemplate2 = _interopRequireDefault(_baseTemplate);
 
-	var _publicSpinnerHtml = __webpack_require__(128);
+	var _publicSpinnerHtml = __webpack_require__(129);
 
 	var _publicSpinnerHtml2 = _interopRequireDefault(_publicSpinnerHtml);
 
-	var _publicSpinnerScss = __webpack_require__(129);
+	var _publicSpinnerScss = __webpack_require__(130);
 
 	var _publicSpinnerScss2 = _interopRequireDefault(_publicSpinnerScss);
 
@@ -19095,7 +19049,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 127 */
+/* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -19176,13 +19130,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 128 */
+/* 129 */
 /***/ function(module, exports) {
 
 	module.exports = "<div data-bounce1></div><div data-bounce2></div><div data-bounce3></div>\n";
 
 /***/ },
-/* 129 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(30)();
@@ -19196,15 +19150,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 130 */
+/* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(131);
+	module.exports = __webpack_require__(132);
 
 /***/ },
-/* 131 */
+/* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -19227,7 +19181,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseContainer_plugin = __webpack_require__(132);
+	var _baseContainer_plugin = __webpack_require__(133);
 
 	var _baseContainer_plugin2 = _interopRequireDefault(_baseContainer_plugin);
 
@@ -19367,7 +19321,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 132 */
+/* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19444,15 +19398,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 133 */
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(134);
+	module.exports = __webpack_require__(135);
 
 /***/ },
-/* 134 */
+/* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -19475,7 +19429,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseUi_container_plugin = __webpack_require__(127);
+	var _baseUi_container_plugin = __webpack_require__(128);
 
 	var _baseUi_container_plugin2 = _interopRequireDefault(_baseUi_container_plugin);
 
@@ -19491,11 +19445,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseTemplate2 = _interopRequireDefault(_baseTemplate);
 
-	var _publicWatermarkScss = __webpack_require__(135);
+	var _publicWatermarkScss = __webpack_require__(136);
 
 	var _publicWatermarkScss2 = _interopRequireDefault(_publicWatermarkScss);
 
-	var _publicWatermarkHtml = __webpack_require__(136);
+	var _publicWatermarkHtml = __webpack_require__(137);
 
 	var _publicWatermarkHtml2 = _interopRequireDefault(_publicWatermarkHtml);
 
@@ -19563,7 +19517,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 135 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(30)();
@@ -19577,21 +19531,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 136 */
+/* 137 */
 /***/ function(module, exports) {
 
 	module.exports = "<div data-watermark data-watermark-<%=position %>><img src=\"<%= imageUrl %>\"></div>\n";
 
 /***/ },
-/* 137 */
+/* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(138);
+	module.exports = __webpack_require__(139);
 
 /***/ },
-/* 138 */
+/* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -19614,7 +19568,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseUi_container_plugin = __webpack_require__(127);
+	var _baseUi_container_plugin = __webpack_require__(128);
 
 	var _baseUi_container_plugin2 = _interopRequireDefault(_baseUi_container_plugin);
 
@@ -19634,11 +19588,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _componentsMediator2 = _interopRequireDefault(_componentsMediator);
 
-	var _publicPosterScss = __webpack_require__(139);
+	var _publicPosterScss = __webpack_require__(140);
 
 	var _publicPosterScss2 = _interopRequireDefault(_publicPosterScss);
 
-	var _publicPosterHtml = __webpack_require__(140);
+	var _publicPosterHtml = __webpack_require__(141);
 
 	var _publicPosterHtml2 = _interopRequireDefault(_publicPosterHtml);
 
@@ -19804,7 +19758,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 139 */
+/* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(30)();
@@ -19812,27 +19766,27 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "@font-face {\n  font-family: \"Player\";\n  src: url(" + __webpack_require__(54) + ");\n  src: url(" + __webpack_require__(54) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(55) + ") format(\"truetype\"), url(" + __webpack_require__(56) + "#player) format(\"svg\"); }\n\n.player-poster[data-poster] {\n  cursor: pointer;\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  z-index: 998;\n  top: 0;\n  left: 0; }\n  .player-poster[data-poster] .poster-background[data-poster] {\n    width: 100%;\n    height: 100%;\n    background-size: cover;\n    background-repeat: no-repeat;\n    background-position: 50% 50%; }\n  .player-poster[data-poster] .play-wrapper[data-poster] {\n    position: absolute;\n    width: 100%;\n    height: 25%;\n    line-height: 100%;\n    font-size: 25%;\n    top: 50%;\n    text-align: center; }\n    .player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster] {\n      font-family: \"Player\";\n      font-weight: normal;\n      font-style: normal;\n      line-height: 1;\n      letter-spacing: 0;\n      speak: none;\n      color: white;\n      opacity: 0.75;\n      -webkit-font-smoothing: antialiased;\n      -moz-osx-font-smoothing: grayscale;\n      -webkit-transition: opacity text-shadow 0.1s;\n      -webkit-transition-delay: ease;\n      -moz-transition: opacity text-shadow 0.1s ease;\n      -o-transition: opacity text-shadow 0.1s ease;\n      transition: opacity text-shadow 0.1s ease; }\n      .player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster].play[data-poster]:before {\n        content: \"\\E001\"; }\n      .player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]:hover {\n        opacity: 1.0;\n        text-shadow: rgba(255, 255, 255, 0.8) 0 0 15px; }\n", ""]);
+	exports.push([module.id, "@font-face {\n  font-family: \"Player\";\n  src: url(" + __webpack_require__(53) + ");\n  src: url(" + __webpack_require__(53) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(54) + ") format(\"truetype\"), url(" + __webpack_require__(55) + "#player) format(\"svg\"); }\n\n.player-poster[data-poster] {\n  cursor: pointer;\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  z-index: 998;\n  top: 0;\n  left: 0; }\n  .player-poster[data-poster] .poster-background[data-poster] {\n    width: 100%;\n    height: 100%;\n    background-size: cover;\n    background-repeat: no-repeat;\n    background-position: 50% 50%; }\n  .player-poster[data-poster] .play-wrapper[data-poster] {\n    position: absolute;\n    width: 100%;\n    height: 25%;\n    line-height: 100%;\n    font-size: 25%;\n    top: 50%;\n    text-align: center; }\n    .player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster] {\n      font-family: \"Player\";\n      font-weight: normal;\n      font-style: normal;\n      line-height: 1;\n      letter-spacing: 0;\n      speak: none;\n      color: white;\n      opacity: 0.75;\n      -webkit-font-smoothing: antialiased;\n      -moz-osx-font-smoothing: grayscale;\n      -webkit-transition: opacity text-shadow 0.1s;\n      -webkit-transition-delay: ease;\n      -moz-transition: opacity text-shadow 0.1s ease;\n      -o-transition: opacity text-shadow 0.1s ease;\n      transition: opacity text-shadow 0.1s ease; }\n      .player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster].play[data-poster]:before {\n        content: \"\\E001\"; }\n      .player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]:hover {\n        opacity: 1.0;\n        text-shadow: rgba(255, 255, 255, 0.8) 0 0 15px; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 140 */
+/* 141 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"play-wrapper\" data-poster>\n  <span class=\"poster-icon play\" data-poster />\n</div>\n";
 
 /***/ },
-/* 141 */
+/* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(142);
+	module.exports = __webpack_require__(143);
 
 /***/ },
-/* 142 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -19855,7 +19809,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseContainer_plugin = __webpack_require__(132);
+	var _baseContainer_plugin = __webpack_require__(133);
 
 	var _baseContainer_plugin2 = _interopRequireDefault(_baseContainer_plugin);
 
@@ -19910,6 +19864,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _this2 = this;
 
 	      if (this.container) {
+	        this.listenTo(this.container, _baseEvents2['default'].CONTAINER_READY, this.onReady);
 	        this.listenTo(this.container, _baseEvents2['default'].CONTAINER_PLAY, this.onPlay);
 	        this.listenTo(this.container, _baseEvents2['default'].CONTAINER_STOP, this.onStop);
 	        this.listenTo(this.container, _baseEvents2['default'].CONTAINER_PAUSE, this.onPause);
@@ -19931,6 +19886,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      _gaq.push([this.trackerName + '_setAccount', this.account]);
 	      if (!!this.domainName) _gaq.push([this.trackerName + '_setDomainName', this.domainName]);
+	    }
+	  }, {
+	    key: 'onReady',
+	    value: function onReady() {
+	      this.push(["Video", "Playback", this.container.playback.name]);
 	    }
 	  }, {
 	    key: 'onPlay',
@@ -20020,15 +19980,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 143 */
+/* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(144);
+	module.exports = __webpack_require__(145);
 
 /***/ },
-/* 144 */
+/* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -20051,13 +20011,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseContainer_plugin = __webpack_require__(132);
+	var _baseContainer_plugin = __webpack_require__(133);
 
 	var _baseContainer_plugin2 = _interopRequireDefault(_baseContainer_plugin);
 
 	var _baseEvents = __webpack_require__(6);
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
+
+	var _basePlayback = __webpack_require__(81);
+
+	var _basePlayback2 = _interopRequireDefault(_basePlayback);
 
 	var _componentsBrowser = __webpack_require__(3);
 
@@ -20090,7 +20054,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'click',
 	    value: function click() {
-	      if (this.container.getPlaybackType() !== 'live' || this.container.isDvrEnabled()) {
+	      if (this.container.getPlaybackType() !== _basePlayback2['default'].LIVE || this.container.isDvrEnabled()) {
 	        if (this.container.isPlaying()) {
 	          this.container.pause();
 	        } else {
@@ -20102,7 +20066,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'settingsUpdate',
 	    value: function settingsUpdate() {
 	      this.container.$el.removeClass('pointer-enabled');
-	      if (this.container.getPlaybackType() !== 'live' || this.container.isDvrEnabled()) {
+	      if (this.container.getPlaybackType() !== _basePlayback2['default'].LIVE || this.container.isDvrEnabled()) {
 	        this.container.$el.addClass('pointer-enabled');
 	      }
 	    }
@@ -20115,15 +20079,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 145 */
+/* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(146);
+	module.exports = __webpack_require__(147);
 
 /***/ },
-/* 146 */
+/* 147 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20142,13 +20106,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseUi_core_plugin = __webpack_require__(147);
+	var _baseUi_core_plugin = __webpack_require__(148);
 
 	var _baseUi_core_plugin2 = _interopRequireDefault(_baseUi_core_plugin);
 
 	var _baseTemplate = __webpack_require__(17);
 
 	var _baseTemplate2 = _interopRequireDefault(_baseTemplate);
+
+	var _basePlayback = __webpack_require__(81);
+
+	var _basePlayback2 = _interopRequireDefault(_basePlayback);
 
 	var _baseStyler = __webpack_require__(16);
 
@@ -20158,11 +20126,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
 
-	var _publicDvr_controlsScss = __webpack_require__(148);
+	var _publicDvr_controlsScss = __webpack_require__(149);
 
 	var _publicDvr_controlsScss2 = _interopRequireDefault(_publicDvr_controlsScss);
 
-	var _publicIndexHtml = __webpack_require__(150);
+	var _publicIndexHtml = __webpack_require__(151);
 
 	var _publicIndexHtml2 = _interopRequireDefault(_publicIndexHtml);
 
@@ -20211,6 +20179,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(DVRControls, [{
 	    key: 'bindEvents',
 	    value: function bindEvents() {
+	      this.listenToOnce(this.core.mediaControl.container, _baseEvents2['default'].CONTAINER_TIMEUPDATE, this.render);
 	      this.listenTo(this.core.mediaControl, _baseEvents2['default'].MEDIACONTROL_RENDERED, this.settingsUpdate);
 	      this.listenTo(this.core.mediaControl.container, _baseEvents2['default'].CONTAINER_PLAYBACKDVRSTATECHANGED, this.dvrChanged);
 	    }
@@ -20254,7 +20223,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'shouldRender',
 	    value: function shouldRender() {
 	      var useDvrControls = this.core.options.useDvrControls === undefined || !!this.core.options.useDvrControls;
-	      return useDvrControls && this.core.getPlaybackType() === 'live';
+	      return useDvrControls && this.core.getPlaybackType() === _basePlayback2['default'].LIVE;
 	    }
 	  }, {
 	    key: 'render',
@@ -20281,7 +20250,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 147 */
+/* 148 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20371,7 +20340,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 148 */
+/* 149 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(30)();
@@ -20379,33 +20348,33 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "@font-face {\n  font-family: \"Roboto\";\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Roboto\"), local(\"Roboto-Regular\"), url(" + __webpack_require__(149) + ") format(\"truetype\"); }\n\n.dvr-controls[data-dvr-controls] {\n  display: inline-block;\n  float: left;\n  color: #fff;\n  line-height: 32px;\n  font-size: 10px;\n  font-weight: bold;\n  margin-left: 6px; }\n  .dvr-controls[data-dvr-controls] .live-info {\n    cursor: default;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif; }\n    .dvr-controls[data-dvr-controls] .live-info:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #ff0101; }\n    .dvr-controls[data-dvr-controls] .live-info.disabled {\n      opacity: 0.3; }\n      .dvr-controls[data-dvr-controls] .live-info.disabled:before {\n        background-color: #fff; }\n  .dvr-controls[data-dvr-controls] .live-button {\n    cursor: pointer;\n    outline: none;\n    display: none;\n    border: 0;\n    color: #fff;\n    background-color: transparent;\n    height: 32px;\n    padding: 0;\n    opacity: 0.7;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease false;\n    -o-transition: all 0.1s ease false;\n    transition: all 0.1s ease; }\n    .dvr-controls[data-dvr-controls] .live-button:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #fff; }\n    .dvr-controls[data-dvr-controls] .live-button:hover {\n      opacity: 1;\n      text-shadow: rgba(255, 255, 255, 0.75) 0 0 5px; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-info {\n  display: none; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-button {\n  display: block; }\n\n.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #005aff; }\n\n.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #ff0101; }\n\n.seek-time[data-seek-time] span[data-duration] {\n  position: relative;\n  color: rgba(255, 255, 255, 0.5);\n  font-size: 10px;\n  padding-right: 7px; }\n  .seek-time[data-seek-time] span[data-duration]:before {\n    content: \"|\";\n    margin-right: 7px; }\n", ""]);
+	exports.push([module.id, "@font-face {\n  font-family: \"Roboto\";\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Roboto\"), local(\"Roboto-Regular\"), url(" + __webpack_require__(150) + ") format(\"truetype\"); }\n\n.dvr-controls[data-dvr-controls] {\n  display: inline-block;\n  float: left;\n  color: #fff;\n  line-height: 32px;\n  font-size: 10px;\n  font-weight: bold;\n  margin-left: 6px; }\n  .dvr-controls[data-dvr-controls] .live-info {\n    cursor: default;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif; }\n    .dvr-controls[data-dvr-controls] .live-info:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #ff0101; }\n    .dvr-controls[data-dvr-controls] .live-info.disabled {\n      opacity: 0.3; }\n      .dvr-controls[data-dvr-controls] .live-info.disabled:before {\n        background-color: #fff; }\n  .dvr-controls[data-dvr-controls] .live-button {\n    cursor: pointer;\n    outline: none;\n    display: none;\n    border: 0;\n    color: #fff;\n    background-color: transparent;\n    height: 32px;\n    padding: 0;\n    opacity: 0.7;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease false;\n    -o-transition: all 0.1s ease false;\n    transition: all 0.1s ease; }\n    .dvr-controls[data-dvr-controls] .live-button:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #fff; }\n    .dvr-controls[data-dvr-controls] .live-button:hover {\n      opacity: 1;\n      text-shadow: rgba(255, 255, 255, 0.75) 0 0 5px; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-info {\n  display: none; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-button {\n  display: block; }\n\n.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #005aff; }\n\n.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #ff0101; }\n\n.seek-time[data-seek-time] span[data-duration] {\n  position: relative;\n  color: rgba(255, 255, 255, 0.5);\n  font-size: 10px;\n  padding-right: 7px; }\n  .seek-time[data-seek-time] span[data-duration]:before {\n    content: \"|\";\n    margin-right: 7px; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 149 */
+/* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "38861cba61c66739c1452c3a71e39852.ttf"
 
 /***/ },
-/* 150 */
+/* 151 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"live-info\">LIVE</div>\n<button class=\"live-button\">BACK TO LIVE</button>\n";
 
 /***/ },
-/* 151 */
+/* 152 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(152);
+	module.exports = __webpack_require__(153);
 
 /***/ },
-/* 152 */
+/* 153 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20424,7 +20393,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseCore_plugin = __webpack_require__(153);
+	var _baseCore_plugin = __webpack_require__(154);
 
 	var _baseCore_plugin2 = _interopRequireDefault(_baseCore_plugin);
 
@@ -20538,7 +20507,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 153 */
+/* 154 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
