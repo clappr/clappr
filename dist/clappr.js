@@ -178,7 +178,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var version = ("0.2.16");
+	var version = ("0.2.17");
 
 	exports['default'] = {
 	    Player: _componentsPlayer2['default'],
@@ -13242,6 +13242,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.hls.on(_hlsJs2['default'].Events.LEVEL_UPDATED, function (evt, data) {
 	        return _this.updateDuration(evt, data);
 	      });
+	      this.hls.on(_hlsJs2['default'].Events.FRAG_LOADED, function (evt, data) {
+	        return _this.onFragmentLoaded(evt, data);
+	      });
+	      this.hls.on(_hlsJs2['default'].Events.LEVEL_SWITCH, function (evt, data) {
+	        return _this.onLevelSwitch(evt, data);
+	      });
 	      this.hls.attachVideo(this.el);
 	    }
 	  }, {
@@ -13325,6 +13331,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function updateDuration(evt, data) {
 	      this.playableRegionDuration = data.details.totalduration;
 	      this.durationChange();
+	    }
+	  }, {
+	    key: 'onFragmentLoaded',
+	    value: function onFragmentLoaded(evt, data) {
+	      this.trigger(_baseEvents2['default'].PLAYBACK_FRAGMENT_LOADED, data);
+	    }
+	  }, {
+	    key: 'onLevelSwitch',
+	    value: function onLevelSwitch(evt, data) {
+	      var currentLevel = this.levels[data.level];
+	      if (currentLevel) {
+	        this.highDefinition = currentLevel.height >= 720 || currentLevel.bitrate / 1000 >= 2000;
+	        this.trigger(_baseEvents2['default'].PLAYBACK_HIGHDEFINITIONUPDATE);
+	        this.trigger(_baseEvents2['default'].PLAYBACK_BITRATE, {
+	          height: currentLevel.height,
+	          width: currentLevel.width,
+	          bandwidth: currentLevel.bandwidth,
+	          bitrate: currentLevel.bitrate,
+	          level: data.level
+	        });
+	      }
 	    }
 	  }, {
 	    key: 'getPlaybackType',
