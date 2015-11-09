@@ -248,7 +248,7 @@ Events.PLAYER_ERROR = 'error'
 /**
  * Fired when player updates its execution
  *
- * @event PLAYER_ERROR
+ * @event PLAYER_TIMEUPDATE
  * @param {Number} postion the current position (in seconds)
  * @param {Number} duration the total duration (in seconds)
  */
