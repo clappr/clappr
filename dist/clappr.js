@@ -178,7 +178,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var version = ("0.2.17");
+	var version = ("0.2.18");
 
 	exports['default'] = {
 	    Player: _componentsPlayer2['default'],
@@ -2221,6 +2221,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Events.PLAYBACK_ERROR = 'playback:error';
 	Events.PLAYBACK_STATS_ADD = 'playback:stats:add';
 	Events.PLAYBACK_FRAGMENT_LOADED = 'playback:fragment:loaded';
+	Events.PLAYBACK_LEVEL_SWITCH = 'playback:level:switch';
 
 	// Container Events
 	Events.CONTAINER_PLAYBACKSTATE = 'container:playbackstate';
@@ -13242,11 +13243,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.hls.on(_hlsJs2['default'].Events.LEVEL_UPDATED, function (evt, data) {
 	        return _this.updateDuration(evt, data);
 	      });
-	      this.hls.on(_hlsJs2['default'].Events.FRAG_LOADED, function (evt, data) {
-	        return _this.onFragmentLoaded(evt, data);
-	      });
 	      this.hls.on(_hlsJs2['default'].Events.LEVEL_SWITCH, function (evt, data) {
 	        return _this.onLevelSwitch(evt, data);
+	      });
+	      this.hls.on(_hlsJs2['default'].Events.FRAG_LOADED, function (evt, data) {
+	        return _this.onFragmentLoaded(evt, data);
 	      });
 	      this.hls.attachVideo(this.el);
 	    }
@@ -13340,6 +13341,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onLevelSwitch',
 	    value: function onLevelSwitch(evt, data) {
+	      this.trigger(_baseEvents2['default'].PLAYBACK_LEVEL_SWITCH, data);
 	      var currentLevel = this.levels[data.level];
 	      if (currentLevel) {
 	        this.highDefinition = currentLevel.height >= 720 || currentLevel.bitrate / 1000 >= 2000;
@@ -15055,9 +15057,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (!this.video.paused) {
 	        // add a safety delay of 1s
 	        var nextLevelId = this.hls.nextLoadLevel,
-	            nextLevel = this.levels[nextLevelId];
-	        if (this.hls.stats.fragLastKbps && this.fragCurrent) {
-	          fetchdelay = this.fragCurrent.duration * nextLevel.bitrate / (1000 * this.hls.stats.fragLastKbps) + 1;
+	            nextLevel = this.levels[nextLevelId],
+	            fragLastKbps = this.fragLastKbps;
+	        if (fragLastKbps && this.fragCurrent) {
+	          fetchdelay = this.fragCurrent.duration * nextLevel.bitrate / (1000 * fragLastKbps) + 1;
 	        } else {
 	          fetchdelay = 0;
 	        }
@@ -15378,11 +15381,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function onSBUpdateEnd() {
 	      //trigger handler right now
 	      if (this.state === this.APPENDING && this.mp4segments.length === 0) {
-	        var frag = this.fragCurrent;
+	        var frag = this.fragCurrent,
+	            stats = this.stats;
 	        if (frag) {
 	          this.fragPrevious = frag;
-	          this.stats.tbuffered = new Date();
-	          this.hls.trigger(_events2['default'].FRAG_BUFFERED, { stats: this.stats, frag: frag });
+	          stats.tbuffered = new Date();
+	          this.fragLastKbps = Math.round(8 * stats.length / (stats.tbuffered - stats.tfirst));
+	          this.hls.trigger(_events2['default'].FRAG_BUFFERED, { stats: stats, frag: frag });
 	          _utilsLogger.logger.log('video buffered : ' + this.timeRangesToString(this.video.buffered));
 	          this.state = this.IDLE;
 	        }
