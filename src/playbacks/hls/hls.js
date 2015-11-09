@@ -36,9 +36,17 @@ export default class HLS extends HTML5VideoPlayback {
       this.updatePlaybackType(evt, data)
     })
     this.hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this.updateDuration(evt, data))
+    this.hls.on(HLSJS.Events.LEVEL_SWITCH, (evt,data) => this.onLevelSwitch(evt, data))
     this.hls.on(HLSJS.Events.FRAG_LOADED, (evt, data) => this.onFragmentLoaded(evt, data))
-    this.hls.on(HLSJS.Events.LEVEL_SWITCH, (evt, data) => this.onLevelSwitch(evt, data))
     this.hls.attachVideo(this.el)
+  }
+
+  onLevelSwitch(evt, data) {
+    this.trigger(Events.PLAYBACK_LEVEL_SWITCH, data)
+  }
+
+  onFragmentLoaded(evt, data) {
+    this.trigger(Events.PLAYBACK_FRAGMENT_LOADED, data)
   }
 
   getCurrentTime() {
