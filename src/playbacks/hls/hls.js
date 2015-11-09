@@ -41,14 +41,6 @@ export default class HLS extends HTML5VideoPlayback {
     this.hls.attachVideo(this.el)
   }
 
-  onLevelSwitch(evt, data) {
-    this.trigger(Events.PLAYBACK_LEVEL_SWITCH, data)
-  }
-
-  onFragmentLoaded(evt, data) {
-    this.trigger(Events.PLAYBACK_FRAGMENT_LOADED, data)
-  }
-
   getCurrentTime() {
     return this.el.currentTime - this.getPlayableStartTime()
   }
@@ -126,6 +118,7 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   onLevelSwitch(evt, data) {
+    this.trigger(Events.PLAYBACK_LEVEL_SWITCH, data)
     var currentLevel = this.levels[data.level]
     if (currentLevel) {
       this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000);
