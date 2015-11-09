@@ -289,6 +289,7 @@ Events.PLAYBACK_PAUSE = 'playback:pause'
 Events.PLAYBACK_ERROR = 'playback:error'
 Events.PLAYBACK_STATS_ADD = 'playback:stats:add'
 Events.PLAYBACK_FRAGMENT_LOADED = 'playback:fragment:loaded'
+Events.PLAYBACK_LEVEL_SWITCH = 'playback:level:switch'
 
 // Container Events
 Events.CONTAINER_PLAYBACKSTATE = 'container:playbackstate'
