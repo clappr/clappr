@@ -36,6 +36,8 @@ export default class HLS extends HTML5VideoPlayback {
       this.updatePlaybackType(evt, data)
     })
     this.hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this.updateDuration(evt, data))
+    this.hls.on(HLSJS.Events.FRAG_LOADED, (evt, data) => this.onFragmentLoaded(evt, data))
+    this.hls.on(HLSJS.Events.LEVEL_SWITCH, (evt, data) => this.onLevelSwitch(evt, data))
     this.hls.attachVideo(this.el)
   }
 
@@ -109,6 +111,25 @@ export default class HLS extends HTML5VideoPlayback {
   updateDuration(evt, data) {
     this.playableRegionDuration = data.details.totalduration
     this.durationChange()
+  }
+
+  onFragmentLoaded(evt, data) {
+    this.trigger(Events.PLAYBACK_FRAGMENT_LOADED, data)
+  }
+
+  onLevelSwitch(evt, data) {
+    var currentLevel = this.levels[data.level]
+    if (currentLevel) {
+      this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000);
+      this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE)
+      this.trigger(Events.PLAYBACK_BITRATE, {
+        height: currentLevel.height,
+        width: currentLevel.width,
+        bandwidth: currentLevel.bandwidth,
+        bitrate: currentLevel.bitrate,
+        level: data.level
+      })
+    }
   }
 
   get dvrEnabled() {
