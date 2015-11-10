@@ -35,6 +35,7 @@ export default class Container extends UIObject {
       'click': 'clicked',
       'dblclick': 'dblClicked',
       'doubleTap': 'dblClicked',
+      'contextmenu': 'onContextMenu',
       'mouseenter': 'mouseEnter',
       'mouseleave': 'mouseLeave'
     }
@@ -243,6 +244,10 @@ export default class Container extends UIObject {
 
   dblClicked() {
     this.trigger(Events.CONTAINER_DBLCLICK, this, this.name);
+  }
+
+  onContextMenu() {
+    this.trigger(Events.CONTAINER_CONTEXTMENU, this, this.name);
   }
 
   setCurrentTime(time) {
