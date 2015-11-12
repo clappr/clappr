@@ -133,7 +133,7 @@ export default class MediaControl extends UIObject {
   }
 
   onVolumeChanged(event) {
-    this.mute = this.currentVolume === 0
+    this.mute = (this.currentVolume === 0)
     this.setVolumeLevel(event)
   }
 
@@ -289,7 +289,7 @@ export default class MediaControl extends UIObject {
     this.currentVolume = Math.min(100, Math.max(value, 0))
     this.container.setVolume(this.currentVolume)
     this.setVolumeLevel(this.currentVolume)
-    this.mute = this.currentVolume === 0
+    this.mute = (this.currentVolume === 0)
     this.persistConfig && Config.persist("volume", this.currentVolume)
   }
 
