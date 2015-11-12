@@ -253,6 +253,13 @@ Events.PLAYER_ERROR = 'error'
  * @param {Number} duration the total duration (in seconds)
  */
 Events.PLAYER_TIMEUPDATE = 'timeupdate'
+/**
+ * Fired when player updates its volume
+ *
+ * @event PLAYER_VOLUMEUPDATE
+ * @param {Number} volume the current volume
+ */
+Events.PLAYER_VOLUMEUPDATE = 'volumeupdate'
 
 // Playback Events
 Events.PLAYBACK_PROGRESS = 'playback:progress'

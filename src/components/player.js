@@ -136,12 +136,17 @@ export default class Player extends BaseObject {
       this.listenTo(container, Events.CONTAINER_SEEK, this.onSeek)
       this.listenTo(container, Events.CONTAINER_ERROR, this.onError)
       this.listenTo(container, Events.CONTAINER_TIMEUPDATE, this.onTimeUpdate)
+      this.listenTo(container, Events.CONTAINER_VOLUME, this.onVolumeUpdate)
     }
   }
 
   containerChanged() {
     this.stopListening()
     this.addEventListeners()
+  }
+
+  onVolumeUpdate(volume) {
+    this.trigger(Events.PLAYER_VOLUMEUPDATE, volume)
   }
 
   onPlay() {
