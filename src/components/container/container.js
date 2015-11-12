@@ -49,7 +49,8 @@ export default class Container extends UIObject {
   constructor(options) {
     super(options)
     this.currentTime = 0
-    this.playback = options.playback;
+    this.volume = 100
+    this.playback = options.playback
     this.settings = $.extend({}, this.playback.settings)
     this.isReady = false
     this.mediaControlDisabled = false
@@ -86,27 +87,27 @@ export default class Container extends UIObject {
    * @method bindEvents
    */
   bindEvents() {
-    this.listenTo(this.playback, Events.PLAYBACK_PROGRESS, this.progress);
-    this.listenTo(this.playback, Events.PLAYBACK_TIMEUPDATE, this.timeUpdated);
-    this.listenTo(this.playback, Events.PLAYBACK_READY, this.ready);
-    this.listenTo(this.playback, Events.PLAYBACK_BUFFERING, this.buffering);
-    this.listenTo(this.playback, Events.PLAYBACK_BUFFERFULL, this.bufferfull);
-    this.listenTo(this.playback, Events.PLAYBACK_SETTINGSUPDATE, this.settingsUpdate);
-    this.listenTo(this.playback, Events.PLAYBACK_LOADEDMETADATA, this.loadedMetadata);
-    this.listenTo(this.playback, Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinitionUpdate);
-    this.listenTo(this.playback, Events.PLAYBACK_BITRATE, this.updateBitrate);
-    this.listenTo(this.playback, Events.PLAYBACK_PLAYBACKSTATE, this.playbackStateChanged);
-    this.listenTo(this.playback, Events.PLAYBACK_DVR, this.playbackDvrStateChanged);
-    this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL_DISABLE, this.disableMediaControl);
-    this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL_ENABLE, this.enableMediaControl);
-    this.listenTo(this.playback, Events.PLAYBACK_ENDED, this.ended);
-    this.listenTo(this.playback, Events.PLAYBACK_PLAY, this.playing);
-    this.listenTo(this.playback, Events.PLAYBACK_PAUSE, this.paused);
-    this.listenTo(this.playback, Events.PLAYBACK_ERROR, this.error);
+    this.listenTo(this.playback, Events.PLAYBACK_PROGRESS, this.progress)
+    this.listenTo(this.playback, Events.PLAYBACK_TIMEUPDATE, this.timeUpdated)
+    this.listenTo(this.playback, Events.PLAYBACK_READY, this.ready)
+    this.listenTo(this.playback, Events.PLAYBACK_BUFFERING, this.buffering)
+    this.listenTo(this.playback, Events.PLAYBACK_BUFFERFULL, this.bufferfull)
+    this.listenTo(this.playback, Events.PLAYBACK_SETTINGSUPDATE, this.settingsUpdate)
+    this.listenTo(this.playback, Events.PLAYBACK_LOADEDMETADATA, this.loadedMetadata)
+    this.listenTo(this.playback, Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinitionUpdate)
+    this.listenTo(this.playback, Events.PLAYBACK_BITRATE, this.updateBitrate)
+    this.listenTo(this.playback, Events.PLAYBACK_PLAYBACKSTATE, this.playbackStateChanged)
+    this.listenTo(this.playback, Events.PLAYBACK_DVR, this.playbackDvrStateChanged)
+    this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL_DISABLE, this.disableMediaControl)
+    this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL_ENABLE, this.enableMediaControl)
+    this.listenTo(this.playback, Events.PLAYBACK_ENDED, this.ended)
+    this.listenTo(this.playback, Events.PLAYBACK_PLAY, this.playing)
+    this.listenTo(this.playback, Events.PLAYBACK_PAUSE, this.paused)
+    this.listenTo(this.playback, Events.PLAYBACK_ERROR, this.error)
   }
 
   playbackStateChanged() {
-    this.trigger(Events.CONTAINER_PLAYBACKSTATE);
+    this.trigger(Events.CONTAINER_PLAYBACKSTATE)
   }
 
   playbackDvrStateChanged(dvrInUse) {
@@ -158,20 +159,20 @@ export default class Container extends UIObject {
   }
 
   setStyle(style) {
-    this.$el.css(style);
+    this.$el.css(style)
   }
 
   animate(style, duration) {
-    return this.$el.animate(style, duration).promise();
+    return this.$el.animate(style, duration).promise()
   }
 
   ready() {
-    this.isReady = true;
-    this.trigger(Events.CONTAINER_READY, this.name);
+    this.isReady = true
+    this.trigger(Events.CONTAINER_READY, this.name)
   }
 
   isPlaying() {
-    return this.playback.isPlaying();
+    return this.playback.isPlaying()
   }
 
   getCurrentTime() {
@@ -179,15 +180,15 @@ export default class Container extends UIObject {
   }
 
   getDuration() {
-    return this.playback.getDuration();
+    return this.playback.getDuration()
   }
 
   error(errorObj) {
-    this.trigger(Events.CONTAINER_ERROR, {error: errorObj, container: this}, this.name);
+    this.trigger(Events.CONTAINER_ERROR, {error: errorObj, container: this}, this.name)
   }
 
   loadedMetadata(duration) {
-    this.trigger(Events.CONTAINER_LOADEDMETADATA, duration);
+    this.trigger(Events.CONTAINER_LOADEDMETADATA, duration)
   }
 
   timeUpdated(position, duration) {
@@ -196,15 +197,15 @@ export default class Container extends UIObject {
   }
 
   progress(startPosition, endPosition, duration) {
-    this.trigger(Events.CONTAINER_PROGRESS, startPosition, endPosition, duration, this.name);
+    this.trigger(Events.CONTAINER_PROGRESS, startPosition, endPosition, duration, this.name)
   }
 
   playing() {
-    this.trigger(Events.CONTAINER_PLAY, this.name);
+    this.trigger(Events.CONTAINER_PLAY, this.name)
   }
 
   paused() {
-    this.trigger(Events.CONTAINER_PAUSE, this.name);
+    this.trigger(Events.CONTAINER_PAUSE, this.name)
   }
 
   /**
@@ -212,7 +213,7 @@ export default class Container extends UIObject {
    * @method play
    */
   play() {
-    this.playback.play();
+    this.playback.play()
   }
 
   /**
@@ -220,8 +221,8 @@ export default class Container extends UIObject {
    * @method stop
    */
   stop() {
-    this.trigger(Events.CONTAINER_STOP, this.name);
-    this.playback.stop();
+    this.trigger(Events.CONTAINER_STOP, this.name)
+    this.playback.stop()
     this.currentTime = 0
   }
 
@@ -230,46 +231,47 @@ export default class Container extends UIObject {
    * @method pause
    */
   pause() {
-    this.playback.pause();
+    this.playback.pause()
   }
 
   ended() {
-    this.trigger(Events.CONTAINER_ENDED, this, this.name);
+    this.trigger(Events.CONTAINER_ENDED, this, this.name)
     this.currentTime = 0
   }
 
   clicked() {
-    this.trigger(Events.CONTAINER_CLICK, this, this.name);
+    this.trigger(Events.CONTAINER_CLICK, this, this.name)
   }
 
   dblClicked() {
-    this.trigger(Events.CONTAINER_DBLCLICK, this, this.name);
+    this.trigger(Events.CONTAINER_DBLCLICK, this, this.name)
   }
 
   onContextMenu() {
-    this.trigger(Events.CONTAINER_CONTEXTMENU, this, this.name);
+    this.trigger(Events.CONTAINER_CONTEXTMENU, this, this.name)
   }
 
   setCurrentTime(time) {
-    this.trigger(Events.CONTAINER_SEEK, time, this.name);
-    this.playback.seek(time);
+    this.trigger(Events.CONTAINER_SEEK, time, this.name)
+    this.playback.seek(time)
   }
 
   setVolume(value) {
-    this.trigger(Events.CONTAINER_VOLUME, value, this.name);
-    this.playback.volume(value);
+    this.volume = parseInt(value, 10)
+    this.trigger(Events.CONTAINER_VOLUME, value, this.name)
+    this.playback.volume(value)
   }
 
   fullscreen() {
-    this.trigger(Events.CONTAINER_FULLSCREEN, this.name);
+    this.trigger(Events.CONTAINER_FULLSCREEN, this.name)
   }
 
   buffering() {
-    this.trigger(Events.CONTAINER_STATE_BUFFERING, this.name);
+    this.trigger(Events.CONTAINER_STATE_BUFFERING, this.name)
   }
 
   bufferfull() {
-    this.trigger(Events.CONTAINER_STATE_BUFFERFULL, this.name);
+    this.trigger(Events.CONTAINER_STATE_BUFFERFULL, this.name)
   }
 
   /**
@@ -278,7 +280,7 @@ export default class Container extends UIObject {
    * @param {Object} plugin
    */
   addPlugin(plugin) {
-    this.plugins.push(plugin);
+    this.plugins.push(plugin)
   }
 
   /**
@@ -287,7 +289,7 @@ export default class Container extends UIObject {
    * @param {String} name
    */
   hasPlugin(name) {
-    return !!this.getPlugin(name);
+    return !!this.getPlugin(name)
   }
 
   /**
@@ -296,7 +298,7 @@ export default class Container extends UIObject {
    * @param {String} name
    */
   getPlugin(name) {
-    return find(this.plugins, (plugin) => { return plugin.name === name });
+    return find(this.plugins, (plugin) => { return plugin.name === name })
   }
 
   mouseEnter() {
@@ -308,12 +310,12 @@ export default class Container extends UIObject {
   }
 
   settingsUpdate() {
-    this.settings = this.playback.settings;
-    this.trigger(Events.CONTAINER_SETTINGSUPDATE);
+    this.settings = this.playback.settings
+    this.trigger(Events.CONTAINER_SETTINGSUPDATE)
   }
 
   highDefinitionUpdate() {
-    this.trigger(Events.CONTAINER_HIGHDEFINITIONUPDATE);
+    this.trigger(Events.CONTAINER_HIGHDEFINITIONUPDATE)
   }
 
   isHighDefinitionInUse() {
@@ -321,19 +323,19 @@ export default class Container extends UIObject {
   }
 
   disableMediaControl() {
-    this.mediaControlDisabled = true;
-    this.trigger(Events.CONTAINER_MEDIACONTROL_DISABLE);
+    this.mediaControlDisabled = true
+    this.trigger(Events.CONTAINER_MEDIACONTROL_DISABLE)
   }
 
   enableMediaControl() {
-    this.mediaControlDisabled = false;
-    this.trigger(Events.CONTAINER_MEDIACONTROL_ENABLE);
+    this.mediaControlDisabled = false
+    this.trigger(Events.CONTAINER_MEDIACONTROL_ENABLE)
   }
 
   render() {
-    var s = Styler.getStyleFor(style);
-    this.$el.append(s);
-    this.$el.append(this.playback.render().el);
-    return this;
+    var s = Styler.getStyleFor(style)
+    this.$el.append(s)
+    this.$el.append(this.playback.render().el)
+    return this
   }
 }
