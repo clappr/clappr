@@ -136,12 +136,17 @@ export default class Player extends BaseObject {
       this.listenTo(container, Events.CONTAINER_SEEK, this.onSeek)
       this.listenTo(container, Events.CONTAINER_ERROR, this.onError)
       this.listenTo(container, Events.CONTAINER_TIMEUPDATE, this.onTimeUpdate)
+      this.listenTo(container, Events.CONTAINER_VOLUME, this.onVolumeUpdate)
     }
   }
 
   containerChanged() {
     this.stopListening()
     this.addEventListeners()
+  }
+
+  onVolumeUpdate(volume) {
+    this.trigger(Events.PLAYER_VOLUMEUPDATE, volume)
   }
 
   onPlay() {
@@ -249,10 +254,19 @@ export default class Player extends BaseObject {
   /**
    * Set the volume for the current video (`source`).
    * @method setVolume
-   * @param {Number} time should be a number between 0 and 100, 0 being mute and 100 the max volume.
+   * @param {Number} volume should be a number between 0 and 100, 0 being mute and 100 the max volume.
    */
   setVolume(volume) {
     this.core.mediaControl.container.setVolume(volume);
+  }
+
+  /**
+   * Get the volume for the current video
+   * @method getVolume
+   * @return {Number} volume should be a number between 0 and 100, 0 being mute and 100 the max volume.
+   */
+  getVolume() {
+    return this.core.mediaControl.container.volume;
   }
 
   /**
