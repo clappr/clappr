@@ -105,6 +105,7 @@ export default class MediaControl extends UIObject {
     this.listenTo(this.container, Events.CONTAINER_MEDIACONTROL_DISABLE, this.disable)
     this.listenTo(this.container, Events.CONTAINER_MEDIACONTROL_ENABLE, this.enable)
     this.listenTo(this.container, Events.CONTAINER_ENDED, this.ended)
+    this.listenTo(this.container, Events.CONTAINER_VOLUME, this.onVolumeChanged)
   }
 
   disable() {
@@ -129,6 +130,11 @@ export default class MediaControl extends UIObject {
 
   stop() {
     this.container.stop()
+  }
+
+  onVolumeChanged(event) {
+    this.mute = this.currentVolume === 0
+    this.setVolumeLevel(event)
   }
 
   changeTogglePlay() {
