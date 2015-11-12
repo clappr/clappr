@@ -255,6 +255,19 @@ Events.PLAYER_ERROR = 'error'
 Events.PLAYER_TIMEUPDATE = 'timeupdate'
 
 // Playback Events
+/**
+ * Fired when the browser loads more of the media file at playback level
+ *
+ * @event PLAYBACK_PROGRESS
+ * @param {Object} progress Data
+ * progress object
+ * @param {Number} [progress.start]
+ * start progress
+ * @param {Number} [progress.current]
+ * current progress
+ * @param {Number} [progress.total]
+ * total progress
+ */
 Events.PLAYBACK_PROGRESS = 'playback:progress'
 Events.PLAYBACK_TIMEUPDATE = 'playback:timeupdate'
 Events.PLAYBACK_READY = 'playback:ready'
@@ -316,6 +329,19 @@ Events.CONTAINER_READY = 'container:ready'
 Events.CONTAINER_ERROR = 'container:error'
 Events.CONTAINER_LOADEDMETADATA = 'container:loadedmetadata'
 Events.CONTAINER_TIMEUPDATE = 'container:timeupdate'
+/**
+ * Fired when the browser loads more of the media file at container level
+ *
+ * @event CONTAINER_PROGRESS
+ * @param {Object} progress Data
+ * progress object
+ * @param {Number} [progress.start]
+ * start progress
+ * @param {Number} [progress.current]
+ * current progress
+ * @param {Number} [progress.total]
+ * total progress
+ */
 Events.CONTAINER_PROGRESS = 'container:progress'
 Events.CONTAINER_PLAY = 'container:play'
 Events.CONTAINER_STOP = 'container:stop'

@@ -331,9 +331,9 @@ export default class MediaControl extends UIObject {
     this.changeTogglePlay()
   }
 
-  updateProgressBar(startPosition, endPosition, duration) {
-    var loadedStart = startPosition / duration * 100
-    var loadedEnd = endPosition / duration * 100
+  updateProgressBar(progress) {
+    var loadedStart = progess.start / progress.total * 100
+    var loadedEnd = progress.current / progress.total * 100
     this.$seekBarLoaded.css({ left: loadedStart + '%', width: (loadedEnd - loadedStart) + '%' })
   }
 
