@@ -99,7 +99,7 @@ export default class HLS extends HTML5VideoPlayback {
 
   stop() {
     if (this.hls) {
-      this.hls.detachVideo()
+      this.hls.destroy()
       delete this.hls
     }
   }
