@@ -68,9 +68,11 @@ describe('Container', function() {
   })
 
   it('listens to playback:highdefinitionupdate event', function() {
+    var isOnHD = true
+
     sinon.spy(this.container, 'highDefinitionUpdate')
     this.container.bindEvents()
-    this.playback.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE)
+    this.playback.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE, isOnHD)
     assert.ok(this.container.highDefinitionUpdate.calledOnce)
   })
 

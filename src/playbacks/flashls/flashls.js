@@ -216,7 +216,7 @@ export default class FlasHLS extends BaseFlashPlayback {
     var currentLevel = this.levels[level]
     if (currentLevel) {
       this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000);
-      this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE)
+      this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition)
       this.trigger(Events.PLAYBACK_BITRATE, {
         height: currentLevel.height,
         width: currentLevel.width,
@@ -424,7 +424,6 @@ export default class FlasHLS extends BaseFlashPlayback {
     }
     this.el.playerSeek(time)
     this.trigger(Events.PLAYBACK_TIMEUPDATE, time, duration, this.name)
-    this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE)
   }
 
   updateDvr(dvrInUse) {
