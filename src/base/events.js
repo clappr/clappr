@@ -201,7 +201,7 @@ Object.keys(listenMethods).forEach(function(method) {
 
 // PLAYER EVENTS
 /**
- * Fired when player risezes
+ * Fired when player resizes
  *
  * @event PLAYER_RESIZE
  * @param {Object} currentSize an object with the current size
@@ -232,7 +232,7 @@ Events.PLAYER_STOP = 'stop'
  */
 Events.PLAYER_ENDED = 'ended'
 /**
- * Fired when player ends the video
+ * Fired when player seeks the video
  *
  * @event PLAYER_SEEK
  * @param {Number} percent a percentagem of seek
