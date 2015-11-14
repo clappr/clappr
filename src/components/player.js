@@ -55,6 +55,10 @@ export default class Player extends BaseObject {
    * player's width **default**: `640`
    * @param {Number} [options.height]
    * player's height **default**: `360`
+   * @param {String} [options.parentId]
+   * the id of the element on the page that the player should be inserted into
+   * @param {Object} [options.parent]
+   * a reference to a dom element that the player should be inserted into
    * @param {Boolean} [options.autoPlay]
    * automatically play after page load **default**: `false`
    * @param {Boolean} [options.loop]
@@ -99,6 +103,9 @@ export default class Player extends BaseObject {
     this.playerInfo.options = this.options
     if (this.options.parentId) {
       this.setParentId(this.options.parentId)
+    }
+    else if (this.options.parent) {
+      this.attachTo(this.options.parent)
     }
   }
 
