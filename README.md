@@ -74,6 +74,9 @@ var player = new Clappr.Player({
 ##### Player Size
 You can set the player size setting `width` and `height` parameters.
 
+##### Player Location
+You can specify where the player should be attached to using either the `parentId`, or `parent` option. `parentId` should be the id of the element you would like the player to be inserted into, or `parent` should be set to a reference to a dom element.
+
 ##### Auto Play
 Add `autoPlay: true` if you want the video to automatically play after page load.
 
