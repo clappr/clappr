@@ -184,14 +184,14 @@ This command will start a HTTP Server on port 8080, you can check a sample page 
 
 ### Guideline to open an issue (bug)
 
-Please, try to follow this to open new bugs (questions, suggetions and others are welcome in freestyle)
+Please, try to follow this to open new bugs (questions, suggestions and others are welcome)
 
-For the **issue title**: A **meaningful title** (like: HLS doesn't work at windows 10) at the same time try to **avoid helpless title** (like: it doesn't work, IE10, bug, problem) 
+For the **issue title**: A **meaningful title** (like: HLS doesn't work at windows 10). Try to **avoid helpless title** (like: it doesn't work, IE10, bug, problem)
 
-**Be sure**: 
+**Be sure to**:
 
-* try to reproduce the bug at http://cdn.clappr.io/
-* there is no open bug like yours
+* Reproduce the bug at http://cdn.clappr.io/
+* Search for similar open/closed issues on this matter before open a new one.
 
 For the **issue body**:
 <hr>
@@ -200,13 +200,13 @@ For the **issue body**:
 
 **OS**: YOUR OS (ex: Mac OS 10.11.1, iOS9, android4.5)
 
-**ClapprVersion**: 0.2.25
+**Clappr Version**: 0.2.25
 
 **Steps to reproduce**:
 
 * first step
 * then second step
-* I was exptecting X and but instead it show Y
+* I was expecting X but instead it shows Y
 
 ps: you can attach images, logs or whatever you think might be helpful.
 <hr>
