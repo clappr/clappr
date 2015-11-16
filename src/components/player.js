@@ -92,7 +92,6 @@ export default class Player extends BaseObject {
    */
   constructor(options) {
     super(options)
-    window.p = this
     var defaultOptions = {playerId: uniqueId(""), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl}
     this.options = $.extend(defaultOptions, options)
     this.options.sources = this.normalizeSources(options)
