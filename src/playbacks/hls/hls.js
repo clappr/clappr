@@ -22,15 +22,17 @@ export default class HLS extends HTML5VideoPlayback {
   // start content is deleted
   // For streams with dvr where the entire recording is kept from the
   // beginning this should always return 0
+  // TODO this should also return a few seconds less than the duration
+  // reported from HLSJS (maybe configurable) so there's a bit of buffer time
+  // for new chunks to be appended to the end
   getPlayableStartTime() {
     // TODO this should probably just return video.seekable.start(0)
     // but looks like this might have a bug/not been implemented at the moment
     // https://github.com/dailymotion/hls.js/issues/65
 
-    // for now return this even though it's wrong as it works ok
-    // super.getDuration() should never be used for reasons
-    // described in https://github.com/clappr/clappr/issues/668#issuecomment-157036678
-    return super.getDuration() - this.playableRegionDuration
+    // for now return 0 which means it will work for any streams which have dvr
+    // back to the start of the stream
+    return 0
   }
 
   constructor(options) {
