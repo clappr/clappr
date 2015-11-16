@@ -342,7 +342,7 @@ export default class MediaControl extends UIObject {
   updateProgressBar(startPosition, endPosition, duration) {
     var loadedStart = startPosition / duration * 100
     var loadedEnd = endPosition / duration * 100
-    this.$seekBarLoaded.css({ left: loadedStart + '%', width: (loadedEnd - loadedStart) + '%' })
+    this.$seekBarLoaded.css({ left: `${loadedStart}%`, width: `${loadedEnd - loadedStart}%` })
   }
 
   onTimeUpdate(position, duration) {
@@ -505,8 +505,8 @@ export default class MediaControl extends UIObject {
 
     this.$seekBarPosition.removeClass('media-control-notransition')
     this.$seekBarScrubber.removeClass('media-control-notransition')
-    this.$seekBarPosition.css({ width: value + '%' })
-    this.$seekBarScrubber.css({ left: value + '%'})
+    this.$seekBarPosition.css({ width: `${value}%` })
+    this.$seekBarScrubber.css({ left: `${value}%` })
   }
 
   seekRelative(delta) {
