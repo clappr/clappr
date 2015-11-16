@@ -15,31 +15,20 @@ export default class HLS extends HTML5VideoPlayback {
   get currentLevel() { return (this.hls && this.hls.currentLevel) || -1 }
   set currentLevel(level) { this.hls && (this.hls.currentLevel = level) }
 
-  // for hls streams which have dvr with a sliding window,
-  // the content at the start of the playlist is removed as new
-  // content is appended at the end.
-  // this means the actual playable start time will increase as the
-  // start content is deleted
-  // For streams with dvr where the entire recording is kept from the
-  // beginning this should always return 0
-  // TODO this should also return a few seconds less than the duration
-  // reported from HLSJS (maybe configurable) so there's a bit of buffer time
-  // for new chunks to be appended to the end
-  getPlayableStartTime() {
-    // TODO this should probably just return video.seekable.start(0)
-    // but looks like this might have a bug/not been implemented at the moment
-    // https://github.com/dailymotion/hls.js/issues/65
-
-    // for now return 0 which means it will work for any streams which have dvr
-    // back to the start of the stream
-    return 0
-  }
-
   constructor(options) {
     super(options)
     this.minDvrSize = options.hlsMinimumDvrSize ? options.hlsMinimumDvrSize : 60
     this.playbackType = Playback.VOD
-    this.dvrInUse = false
+    // for hls streams which have dvr with a sliding window,
+    // the content at the start of the playlist is removed as new
+    // content is appended at the end.
+    // this means the actual playable start time will increase as the
+    // start content is deleted
+    // For streams with dvr where the entire recording is kept from the
+    // beginning this should stay as 0
+    this.playableRegionStartTime = 0
+    // if content is removed from the beginning then this empty area should
+    // be ignored. "playableRegionDuration" does not consider this
     this.playableRegionDuration = 0
   }
 
@@ -47,10 +36,7 @@ export default class HLS extends HTML5VideoPlayback {
     this.hls = new HLSJS(this.options.hlsjsConfig || {})
     this.hls.on(HLSJS.Events.MSE_ATTACHED, () => this.hls.loadSource(this.options.src))
     this.hls.on(HLSJS.Events.MANIFEST_PARSED, () => { this.options.autoPlay && this.play() })
-    this.hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => {
-      this.updateDuration(evt, data)
-      this.updatePlaybackType(evt, data)
-    })
+    this.hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this.updatePlaybackType(evt, data))
     this.hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this.updateDuration(evt, data))
     this.hls.on(HLSJS.Events.LEVEL_SWITCH, (evt,data) => this.onLevelSwitch(evt, data))
     this.hls.on(HLSJS.Events.FRAG_LOADED, (evt, data) => this.onFragmentLoaded(evt, data))
@@ -65,7 +51,7 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   getCurrentTime() {
-    return this.el.currentTime - this.getPlayableStartTime()
+    return this.el.currentTime - this.playableRegionStartTime
   }
 
   seek(seekBarValue) {
@@ -74,15 +60,14 @@ export default class HLS extends HTML5VideoPlayback {
       seekTo = this.playableRegionDuration * (seekBarValue / 100)
     }
     var onDvr = this.dvrEnabled && seekBarValue > 0 && seekBarValue < 100
-    seekTo += this.getPlayableStartTime()
+    seekTo += this.playableRegionStartTime
     super.seekSeconds(seekTo)
     this.updateDvr(onDvr)
   }
 
   updateDvr(status) {
-    this.dvrInUse = status
-    this.trigger(Events.PLAYBACK_DVR, this.dvrInUse)
-    this.trigger(Events.PLAYBACK_STATS_ADD, {'dvr': this.dvrInUse})
+    this.trigger(Events.PLAYBACK_DVR, status)
+    this.trigger(Events.PLAYBACK_STATS_ADD, {'dvr': status})
   }
 
   durationChange() {
@@ -128,6 +113,10 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   updateDuration(evt, data) {
+    var fragments = data.details.fragments
+    if (fragments.length > 0) {
+      this.playableRegionStartTime = fragments[0].start
+    }
     this.playableRegionDuration = data.details.totalduration
     this.durationChange()
   }
