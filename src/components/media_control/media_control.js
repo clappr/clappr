@@ -67,6 +67,8 @@ export default class MediaControl extends UIObject {
     this.persistConfig = this.options.persistConfig
     this.container = options.container
     this.seekTime = new SeekTime(this)
+    this.currentPositionValue = null
+    this.currentDurationValue = null
     var initialVolume = (this.persistConfig) ? Config.restore("volume") : 100
     this.setVolume(this.mute ? 0 : initialVolume)
     this.keepVisible = false
@@ -97,7 +99,7 @@ export default class MediaControl extends UIObject {
     this.listenTo(this.container, Events.CONTAINER_PLAY, this.changeTogglePlay)
     this.listenTo(this.container, Events.CONTAINER_PAUSE, this.changeTogglePlay)
     this.listenTo(this.container, Events.CONTAINER_DBLCLICK, this.toggleFullscreen)
-    this.listenTo(this.container, Events.CONTAINER_TIMEUPDATE, this.updateSeekBar)
+    this.listenTo(this.container, Events.CONTAINER_TIMEUPDATE, this.onTimeUpdate)
     this.listenTo(this.container, Events.CONTAINER_PROGRESS, this.updateProgressBar)
     this.listenTo(this.container, Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate)
     this.listenTo(this.container, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.settingsUpdate)
@@ -343,26 +345,39 @@ export default class MediaControl extends UIObject {
     this.$seekBarLoaded.css({ left: loadedStart + '%', width: (loadedEnd - loadedStart) + '%' })
   }
 
-  updateSeekBar(position, duration) {
+  onTimeUpdate(position, duration) {
     if (this.draggingSeekBar) return
+    // TODO why should position ever be negative?
     if (position < 0) position = duration
 
-    var seekbarValue = (100 / duration) * position
-    var currentPosition = formatTime(position)
-    var currentDuration = formatTime(duration)
+    this.currentPositionValue = position
+    this.currentDurationValue = duration
+    this.renderSeekBar()
+  }
 
-    this.$seekBarPosition.removeClass('media-control-notransition')
-    this.$seekBarScrubber.removeClass('media-control-notransition')
-
-    this.setSeekPercentage(seekbarValue)
-
-    if (currentPosition !== this.displayedPosition) {
-      this.$position.text(currentPosition)
-      this.displayedPosition = currentPosition
+  renderSeekBar() {
+    if (this.currentPositionValue === null || this.currentDurationValue === null) {
+      // this will be triggered as soon as these beocome available
+      return
     }
-    if (currentDuration !== this.displayedDuration) {
-      this.$duration.text(currentDuration)
-      this.displayedDuration = currentDuration
+
+    // default to 100%
+    this.currentSeekBarPercentage = 100
+    if (this.container.isDvrInUse()) {
+      // if dvr is enabled then set to the true percentage
+      this.currentSeekBarPercentage = (this.currentPositionValue / this.currentDurationValue) * 100
+    }
+    this.setSeekPercentage(this.currentSeekBarPercentage)
+
+    var newPosition = formatTime(this.currentPositionValue)
+    var newDuration = formatTime(this.currentDurationValue)
+    if (newPosition !== this.displayedPosition) {
+      this.$position.text(newPosition)
+      this.displayedPosition = newPosition
+    }
+    if (newDuration !== this.displayedDuration) {
+      this.$duration.text(newDuration)
+      this.displayedDuration = newDuration
     }
   }
 
@@ -479,11 +494,17 @@ export default class MediaControl extends UIObject {
   }
 
   setSeekPercentage(value) {
-    value = Math.min(value, 100.0)
-    var pos = (this.$seekBarContainer.width() * value / 100.0) - (this.$seekBarScrubber.width() / 2.0)
-    this.currentSeekPercentage = value
+    value = Math.max(Math.min(value, 100.0), 0)
+    if (this.displayedSeekBarPercentage === value) {
+      // not changed since last update
+      return
+    }
+    this.displayedSeekBarPercentage = value
+
+    this.$seekBarPosition.removeClass('media-control-notransition')
+    this.$seekBarScrubber.removeClass('media-control-notransition')
     this.$seekBarPosition.css({ width: value + '%' })
-    this.$seekBarScrubber.css({ left: pos })
+    this.$seekBarScrubber.css({ left: value + '%'})
   }
 
   seekRelative(delta) {
@@ -555,10 +576,12 @@ export default class MediaControl extends UIObject {
     this.$seekBarPosition.addClass('media-control-notransition')
     this.$seekBarScrubber.addClass('media-control-notransition')
 
-    if (!this.currentSeekPercentage) {
-      this.currentSeekPercentage = 0
+    var previousSeekPercentage = 0
+    if (this.displayedSeekBarPercentage) {
+      previousSeekPercentage = this.displayedSeekBarPercentage
     }
-    this.setSeekPercentage(this.currentSeekPercentage)
+    this.displayedSeekBarPercentage = null
+    this.setSeekPercentage(previousSeekPercentage)
 
     process.nextTick(() => {
       if (!this.container.settings.seekEnabled) {
