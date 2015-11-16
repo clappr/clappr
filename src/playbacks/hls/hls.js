@@ -15,7 +15,21 @@ export default class HLS extends HTML5VideoPlayback {
   get currentLevel() { return (this.hls && this.hls.currentLevel) || -1 }
   set currentLevel(level) { this.hls && (this.hls.currentLevel = level) }
 
+  // for hls streams which have dvr with a sliding window,
+  // the content at the start of the playlist is removed as new
+  // content is appended at the end.
+  // this means the actual playable start time will increase as the
+  // start content is deleted
+  // For streams with dvr where the entire recording is kept from the
+  // beginning this should always return 0
   getPlayableStartTime() {
+    // TODO this should probably just return video.seekable.start(0)
+    // but looks like this might have a bug/not been implemented at the moment
+    // https://github.com/dailymotion/hls.js/issues/65
+
+    // for now return this even though it's wrong as it works ok
+    // super.getDuration() should never be used for reasons
+    // described in https://github.com/clappr/clappr/issues/668#issuecomment-157036678
     return super.getDuration() - this.playableRegionDuration
   }
 
@@ -39,6 +53,13 @@ export default class HLS extends HTML5VideoPlayback {
     this.hls.on(HLSJS.Events.LEVEL_SWITCH, (evt,data) => this.onLevelSwitch(evt, data))
     this.hls.on(HLSJS.Events.FRAG_LOADED, (evt, data) => this.onFragmentLoaded(evt, data))
     this.hls.attachVideo(this.el)
+  }
+
+  // the duration on the video element itself should not be used
+  // as this does not necesarily represent the duration of the stream
+  // https://github.com/clappr/clappr/issues/668#issuecomment-157036678
+  getDuration() {
+    return this.playableRegionDuration
   }
 
   getCurrentTime() {
@@ -76,11 +97,7 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   timeUpdated() {
-    if (this.dvrEnabled) {
-      this.trigger(Events.PLAYBACK_TIMEUPDATE, this.dvrInUse ? this.getCurrentTime() : this.playableRegionDuration, this.playableRegionDuration, this.name)
-    } else {
-      super.timeUpdated()
-    }
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, this.getCurrentTime(), this.getDuration(), this.name)
   }
 
   play() {
