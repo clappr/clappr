@@ -15,15 +15,20 @@ export default class HLS extends HTML5VideoPlayback {
   get currentLevel() { return (this.hls && this.hls.currentLevel) || -1 }
   set currentLevel(level) { this.hls && (this.hls.currentLevel = level) }
 
-  getPlayableStartTime() {
-    return super.getDuration() - this.playableRegionDuration
-  }
-
   constructor(options) {
     super(options)
     this.minDvrSize = options.hlsMinimumDvrSize ? options.hlsMinimumDvrSize : 60
     this.playbackType = Playback.VOD
-    this.dvrInUse = false
+    // for hls streams which have dvr with a sliding window,
+    // the content at the start of the playlist is removed as new
+    // content is appended at the end.
+    // this means the actual playable start time will increase as the
+    // start content is deleted
+    // For streams with dvr where the entire recording is kept from the
+    // beginning this should stay as 0
+    this.playableRegionStartTime = 0
+    // if content is removed from the beginning then this empty area should
+    // be ignored. "playableRegionDuration" does not consider this
     this.playableRegionDuration = 0
   }
 
@@ -31,18 +36,22 @@ export default class HLS extends HTML5VideoPlayback {
     this.hls = new HLSJS(this.options.hlsjsConfig || {})
     this.hls.on(HLSJS.Events.MSE_ATTACHED, () => this.hls.loadSource(this.options.src))
     this.hls.on(HLSJS.Events.MANIFEST_PARSED, () => { this.options.autoPlay && this.play() })
-    this.hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => {
-      this.updateDuration(evt, data)
-      this.updatePlaybackType(evt, data)
-    })
+    this.hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this.updatePlaybackType(evt, data))
     this.hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this.updateDuration(evt, data))
     this.hls.on(HLSJS.Events.LEVEL_SWITCH, (evt,data) => this.onLevelSwitch(evt, data))
     this.hls.on(HLSJS.Events.FRAG_LOADED, (evt, data) => this.onFragmentLoaded(evt, data))
     this.hls.attachVideo(this.el)
   }
 
+  // the duration on the video element itself should not be used
+  // as this does not necesarily represent the duration of the stream
+  // https://github.com/clappr/clappr/issues/668#issuecomment-157036678
+  getDuration() {
+    return this.playableRegionDuration
+  }
+
   getCurrentTime() {
-    return this.el.currentTime - this.getPlayableStartTime()
+    return this.el.currentTime - this.playableRegionStartTime
   }
 
   seek(seekBarValue) {
@@ -50,16 +59,15 @@ export default class HLS extends HTML5VideoPlayback {
     if (seekBarValue > 0) {
       seekTo = this.playableRegionDuration * (seekBarValue / 100)
     }
-    var onDvr = this.dvrEnabled && seekBarValue > 0 && seekBarValue < 100
-    seekTo += this.getPlayableStartTime()
+    var onDvr = this.dvrEnabled && seekBarValue >= 0 && seekBarValue < 100
+    seekTo += this.playableRegionStartTime
     super.seekSeconds(seekTo)
     this.updateDvr(onDvr)
   }
 
   updateDvr(status) {
-    this.dvrInUse = status
-    this.trigger(Events.PLAYBACK_DVR, this.dvrInUse)
-    this.trigger(Events.PLAYBACK_STATS_ADD, {'dvr': this.dvrInUse})
+    this.trigger(Events.PLAYBACK_DVR, status)
+    this.trigger(Events.PLAYBACK_STATS_ADD, {'dvr': status})
   }
 
   durationChange() {
@@ -76,11 +84,7 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   timeUpdated() {
-    if (this.dvrEnabled) {
-      this.trigger(Events.PLAYBACK_TIMEUPDATE, this.dvrInUse ? this.getCurrentTime() : this.playableRegionDuration, this.playableRegionDuration, this.name)
-    } else {
-      super.timeUpdated()
-    }
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, this.getCurrentTime(), this.getDuration(), this.name)
   }
 
   play() {
@@ -109,6 +113,10 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   updateDuration(evt, data) {
+    var fragments = data.details.fragments
+    if (fragments.length > 0) {
+      this.playableRegionStartTime = fragments[0].start
+    }
     this.playableRegionDuration = data.details.totalduration
     this.durationChange()
   }

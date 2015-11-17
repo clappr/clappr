@@ -284,6 +284,7 @@
 
       .bar-scrubber[data-seekbar] {
         position: absolute;
+        @include translateX(-50%);
         top: 2px;
         left: 0;
         width: 20px;
