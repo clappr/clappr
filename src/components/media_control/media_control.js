@@ -478,6 +478,12 @@ export default class MediaControl extends UIObject {
     this.$volumeBarContainer = $layer.find('.bar-container[data-volume]')
     this.$volumeContainer = $layer.find('.drawer-container[data-volume]')
     this.$volumeIcon = $layer.find('.drawer-icon[data-volume]')
+    this.resetIndicators()
+  }
+
+  resetIndicators() {
+    this.displayedPosition = this.$position.text()
+    this.displayedDuration = this.$duration.text()
   }
 
   setVolumeLevel(value) {
@@ -556,8 +562,6 @@ export default class MediaControl extends UIObject {
 
   render() {
     var timeout = 1000
-    this.displayedPosition = null
-    this.displayedDuration = null
     var style = Styler.getStyleFor(mediaControlStyle, {baseUrl: this.options.baseUrl})
     this.$el.html(this.template({ settings: this.settings }))
     this.$el.append(style)
