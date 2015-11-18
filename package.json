@@ -53,6 +53,7 @@
     "karma-sinon": "^1.0.3",
     "karma-sinon-chai": "^1.0.0",
     "karma-webpack": "^1.7.0",
+    "sshpk": "^1.6.2",
     "mkdirp": "^0.5.1",
     "mocha": "^2.3.4",
     "node-libs-browser": "^0.5.2",
