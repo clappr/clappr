@@ -1,7 +1,7 @@
 language: node_js
 sudo: required
 node_js:
-  - "0.12"
+  - "4.1"
 before_install:
   - "sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test"
   - "sudo apt-get update -qq"
