@@ -91,7 +91,7 @@ Add `chromeless: 'true'` if you want the player to act in chromeless mode.
 Add `mute: true` if you want to start player with no sound.
 
 ##### Add mimeType for extension-less url
-Add `mimeType: "application/vnd.apple.mpegurl"` if you need to use a url withough extension.
+Add `mimeType: "application/vnd.apple.mpegurl"` if you need to use a url without extension.
 
 ##### Configuration persistance
 Add `persistConfig: false` if you don't want to persist player's volume through your videos, by **default it saves**. These configuration are being saved at user's browser ([through localStorage](http://diveintohtml5.info/storage.html)).
