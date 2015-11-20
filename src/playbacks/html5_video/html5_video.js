@@ -56,7 +56,7 @@ export default class HTML5Video extends Playback {
       this.settings.seekEnabled = true
     }
     this.settings.left = ["playpause", "position", "duration"]
-    this.settings.right = ["fullscreen", "volume"]
+    this.settings.right = ["fullscreen", "volume", "hd-indicator"]
   }
 
   setupSafari() {
