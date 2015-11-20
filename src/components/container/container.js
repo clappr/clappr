@@ -191,9 +191,9 @@ export default class Container extends UIObject {
     this.trigger(Events.CONTAINER_LOADEDMETADATA, duration)
   }
 
-  timeUpdated(position, duration) {
-    this.currentTime = position
-    this.trigger(Events.CONTAINER_TIMEUPDATE, position, duration, this.name)
+  timeUpdated(timeProgress) {
+    this.currentTime = timeProgress.current
+    this.trigger(Events.CONTAINER_TIMEUPDATE, timeProgress, this.name)
   }
 
   progress(progressObj) {

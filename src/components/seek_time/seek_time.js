@@ -57,8 +57,8 @@ export default class SeekTime extends UIObject {
     this.update()
   }
 
-  updateDuration(position, duration) {
-    this.duration = duration
+  updateDuration(timeProgress) {
+    this.duration = timeProgress.total
     this.update()
   }
 

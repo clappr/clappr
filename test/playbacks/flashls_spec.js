@@ -53,8 +53,9 @@ describe('HLS playback', function() {
 
     it('should set current time to 0 when changing to idle', function() {
       var current = -1
-      this.hls.on(Events.PLAYBACK_TIMEUPDATE, function(position) { current = position })
+      this.hls.on(Events.PLAYBACK_TIMEUPDATE, function(timeProgress) { current = timeProgress.current })
       this.hls.setPlaybackState("IDLE")
+
       expect(current).to.be.equal(0)
     })
 

@@ -345,13 +345,13 @@ export default class MediaControl extends UIObject {
     this.$seekBarLoaded.css({ left: `${loadedStart}%`, width: `${loadedEnd - loadedStart}%` })
   }
 
-  onTimeUpdate(position, duration) {
+  onTimeUpdate(timeProgress) {
     if (this.draggingSeekBar) return
-    // TODO why should position ever be negative?
-    if (position < 0) position = duration
+    // TODO why should current time ever be negative?
+    var position = (timeProgress.current < 0) ? timeProgress.total : timeProgress.current
 
     this.currentPositionValue = position
-    this.currentDurationValue = duration
+    this.currentDurationValue = timeProgress.total
     this.renderSeekBar()
   }
 

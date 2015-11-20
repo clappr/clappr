@@ -246,11 +246,15 @@ Events.PLAYER_SEEK = 'seek'
  */
 Events.PLAYER_ERROR = 'error'
 /**
- * Fired when player updates its execution
+ * Fired when the time is updated on player
  *
- * @event PLAYER_TIMEUPDATE
- * @param {Number} postion the current position (in seconds)
- * @param {Number} duration the total duration (in seconds)
+ * @event PLAYBACK_TIMEUPDATE
+ * @param {Object} progress Data
+ * progress object
+ * @param {Number} [progress.current]
+ * current time
+ * @param {Number} [progress.total]
+ * total time
  */
 Events.PLAYER_TIMEUPDATE = 'timeupdate'
 /**
@@ -276,6 +280,17 @@ Events.PLAYER_VOLUMEUPDATE = 'volumeupdate'
  * total content to be downloaded
  */
 Events.PLAYBACK_PROGRESS = 'playback:progress'
+/**
+ * Fired when the time is updated on playback
+ *
+ * @event PLAYBACK_TIMEUPDATE
+ * @param {Object} progress Data
+ * progress object
+ * @param {Number} [progress.current]
+ * current time
+ * @param {Number} [progress.total]
+ * total time
+ */
 Events.PLAYBACK_TIMEUPDATE = 'playback:timeupdate'
 Events.PLAYBACK_READY = 'playback:ready'
 Events.PLAYBACK_BUFFERING = 'playback:buffering'
@@ -342,6 +357,17 @@ Events.CONTAINER_DESTROYED = 'container:destroyed'
 Events.CONTAINER_READY = 'container:ready'
 Events.CONTAINER_ERROR = 'container:error'
 Events.CONTAINER_LOADEDMETADATA = 'container:loadedmetadata'
+/**
+ * Fired when the time is updated on container
+ *
+ * @event CONTAINER_TIMEUPDATE
+ * @param {Object} progress Data
+ * progress object
+ * @param {Number} [progress.current]
+ * current time
+ * @param {Number} [progress.total]
+ * total time
+ */
 Events.CONTAINER_TIMEUPDATE = 'container:timeupdate'
 /**
  * Fired when the container is downloading the media
