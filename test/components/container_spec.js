@@ -65,9 +65,11 @@ describe('Container', function() {
 
   it('listens to playback:loadedmetadata event', function() {
     sinon.spy(this.container, 'loadedMetadata')
+
     this.container.bindEvents()
-    this.playback.trigger(Events.PLAYBACK_LOADEDMETADATA)
-    assert.ok(this.container.loadedMetadata.calledOnce)
+    this.playback.trigger(Events.PLAYBACK_LOADEDMETADATA, {duration: 45, data: {hold: 'on'}})
+
+    assert.ok(this.container.loadedMetadata.calledWith({duration: 45, data: {hold: 'on'}}))
   })
 
   it('listens to playback:highdefinitionupdate event', function() {

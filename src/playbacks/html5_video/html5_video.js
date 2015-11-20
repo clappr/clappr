@@ -65,7 +65,7 @@ export default class HTML5Video extends Playback {
 
   loadedMetadata(e) {
     this.durationChange()
-    this.trigger(Events.PLAYBACK_LOADEDMETADATA, e.target.duration)
+    this.trigger(Events.PLAYBACK_LOADEDMETADATA, {duration: e.target.duration, data: e})
     if (this.getPlaybackType() !== Playback.LIVE) {
       this.checkInitialSeek()
     }
