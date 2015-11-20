@@ -334,7 +334,7 @@ export default class FlasHLS extends BaseFlashPlayback {
         this.stopReportingProgress()
       }
     }
-    this.trigger(Events.PLAYBACK_PLAYBACKSTATE)
+    this.trigger(Events.PLAYBACK_PLAYBACKSTATE, {type: this.playbackType})
   }
 
   startReportingProgress() {
