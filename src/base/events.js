@@ -292,9 +292,29 @@ Events.PLAYBACK_PROGRESS = 'playback:progress'
  * total time
  */
 Events.PLAYBACK_TIMEUPDATE = 'playback:timeupdate'
+/**
+ * Fired when playback is ready
+ *
+ * @event PLAYBACK_READY
+ */
 Events.PLAYBACK_READY = 'playback:ready'
+/**
+ * Fired when playback is buffering
+ *
+ * @event PLAYBACK_BUFFERING
+ */
 Events.PLAYBACK_BUFFERING = 'playback:buffering'
+/**
+ * Fired when playback filled the buffer
+ *
+ * @event PLAYBACK_BUFFERFULL
+ */
 Events.PLAYBACK_BUFFERFULL = 'playback:bufferfull'
+/**
+ * Fired when playback changes any settings (volume, seek and etc)
+ *
+ * @event PLAYBACK_SETTINGSUPDATE
+ */
 Events.PLAYBACK_SETTINGSUPDATE = 'playback:settingsupdate'
 Events.PLAYBACK_LOADEDMETADATA = 'playback:loadedmetadata'
 /**
@@ -354,6 +374,11 @@ Events.CONTAINER_PLAYBACKDVRSTATECHANGED = 'container:dvr'
 Events.CONTAINER_BITRATE = 'container:bitrate'
 Events.CONTAINER_STATS_REPORT = 'container:stats:report'
 Events.CONTAINER_DESTROYED = 'container:destroyed'
+/**
+ * Fired when the container is ready
+ *
+ * @event CONTAINER_READY
+ */
 Events.CONTAINER_READY = 'container:ready'
 Events.CONTAINER_ERROR = 'container:error'
 Events.CONTAINER_LOADEDMETADATA = 'container:loadedmetadata'
@@ -395,8 +420,23 @@ Events.CONTAINER_MOUSE_LEAVE = 'container:mouseleave'
 Events.CONTAINER_SEEK = 'container:seek'
 Events.CONTAINER_VOLUME = 'container:volume'
 Events.CONTAINER_FULLSCREEN = 'container:fullscreen'
+/**
+ * Fired when container is buffering
+ *
+ * @event CONTAINER_STATE_BUFFERING
+ */
 Events.CONTAINER_STATE_BUFFERING = 'container:state:buffering'
+/**
+ * Fired when the container filled the buffer
+ *
+ * @event CONTAINER_STATE_BUFFERFULL
+ */
 Events.CONTAINER_STATE_BUFFERFULL = 'container:state:bufferfull'
+/**
+ * Fired when the container changes any settings (volume, seek and etc)
+ *
+ * @event CONTAINER_SETTINGSUPDATE
+ */
 Events.CONTAINER_SETTINGSUPDATE = 'container:settingsupdate'
 /**
  * Fired when container updates its video quality
