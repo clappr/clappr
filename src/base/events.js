@@ -492,11 +492,55 @@ Events.CONTAINER_STATS_ADD = 'container:stats:add'
 
 // MediaControl Events
 Events.MEDIACONTROL_RENDERED = 'mediacontrol:rendered'
+/**
+ * Fired when the player enters/exit on fullscreen
+ *
+ * @event MEDIACONTROL_SHOW
+ */
 Events.MEDIACONTROL_FULLSCREEN = 'mediacontrol:fullscreen'
+/**
+ * Fired when the media control shows
+ *
+ * @event MEDIACONTROL_SHOW
+ */
 Events.MEDIACONTROL_SHOW = 'mediacontrol:show'
+/**
+ * Fired when the media control hides
+ *
+ * @event MEDIACONTROL_HIDE
+ */
 Events.MEDIACONTROL_HIDE = 'mediacontrol:hide'
+/**
+ * Fired when mouse enters on the seekbar
+ *
+ * @event MEDIACONTROL_MOUSEMOVE_SEEKBAR
+ * @param {Object} event
+ * the javascript event
+ */
 Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR = 'mediacontrol:mousemove:seekbar'
+/**
+ * Fired when mouse leaves the seekbar
+ *
+ * @event MEDIACONTROL_MOUSELEAVE_SEEKBAR
+ * @param {Object} event
+ * the javascript event
+ */
 Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR = 'mediacontrol:mouseleave:seekbar'
+/**
+ * Fired when the media is being played
+ *
+ * @event MEDIACONTROL_PLAYING
+ */
 Events.MEDIACONTROL_PLAYING = 'mediacontrol:playing'
+/**
+ * Fired when the media is not being played
+ *
+ * @event MEDIACONTROL_NOTPLAYING
+ */
 Events.MEDIACONTROL_NOTPLAYING = 'mediacontrol:notplaying'
+/**
+ * Fired when the container was changed
+ *
+ * @event MEDIACONTROL_CONTAINERCHANGED
+ */
 Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged'
