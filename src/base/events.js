@@ -262,6 +262,19 @@ Events.PLAYER_TIMEUPDATE = 'timeupdate'
 Events.PLAYER_VOLUMEUPDATE = 'volumeupdate'
 
 // Playback Events
+/**
+ * Fired when the playback is downloading the media
+ *
+ * @event PLAYBACK_PROGRESS
+ * @param {Object} progress Data
+ * progress object
+ * @param {Number} [progress.start]
+ * initial downloaded content
+ * @param {Number} [progress.current]
+ * current dowloaded content
+ * @param {Number} [progress.total]
+ * total content to be downloaded
+ */
 Events.PLAYBACK_PROGRESS = 'playback:progress'
 Events.PLAYBACK_TIMEUPDATE = 'playback:timeupdate'
 Events.PLAYBACK_READY = 'playback:ready'
@@ -330,6 +343,19 @@ Events.CONTAINER_READY = 'container:ready'
 Events.CONTAINER_ERROR = 'container:error'
 Events.CONTAINER_LOADEDMETADATA = 'container:loadedmetadata'
 Events.CONTAINER_TIMEUPDATE = 'container:timeupdate'
+/**
+ * Fired when the container is downloading the media
+ *
+ * @event CONTAINER_PROGRESS
+ * @param {Object} progress Data
+ * progress object
+ * @param {Number} [progress.start]
+ * initial downloaded content
+ * @param {Number} [progress.current]
+ * current dowloaded content
+ * @param {Number} [progress.total]
+ * total content to be downloaded
+ */
 Events.CONTAINER_PROGRESS = 'container:progress'
 Events.CONTAINER_PLAY = 'container:play'
 Events.CONTAINER_STOP = 'container:stop'
