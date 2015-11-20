@@ -141,7 +141,7 @@ export default class HTML5Video extends Playback {
   ended() {
     this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
     this.trigger(Events.PLAYBACK_ENDED, this.name)
-    this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.el.duration, this.name)
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, { current: 0, total: this.el.duration }, this.name)
   }
 
   stalled() {
@@ -202,9 +202,9 @@ export default class HTML5Video extends Playback {
 
   timeUpdated() {
     if (this.getPlaybackType() === Playback.LIVE) {
-      this.trigger(Events.PLAYBACK_TIMEUPDATE, 1, 1, this.name)
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: 1, total: 1}, this.name)
     } else {
-      this.trigger(Events.PLAYBACK_TIMEUPDATE, this.el.currentTime, this.el.duration, this.name)
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: this.el.currentTime, total: this.el.duration}, this.name)
     }
   }
 

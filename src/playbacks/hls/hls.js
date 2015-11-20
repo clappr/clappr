@@ -84,7 +84,7 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   timeUpdated() {
-    this.trigger(Events.PLAYBACK_TIMEUPDATE, this.getCurrentTime(), this.getDuration(), this.name)
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: this.getCurrentTime(), total: this.getDuration()}, this.name)
   }
 
   play() {

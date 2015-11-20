@@ -251,7 +251,7 @@ export default class FlasHLS extends BaseFlashPlayback {
       position = duration
     }
 
-    this.trigger(Events.PLAYBACK_TIMEUPDATE, position, duration, this.name)
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: position, total: duration}, this.name)
   }
 
   play() {
@@ -308,7 +308,7 @@ export default class FlasHLS extends BaseFlashPlayback {
         this.seek(0)
       } else {
         this.updateCurrentState(state)
-        this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.el.getDuration(), this.name)
+        this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: 0, total: this.el.getDuration()}, this.name)
         this.trigger(Events.PLAYBACK_ENDED, this.name)
       }
     }
@@ -390,7 +390,7 @@ export default class FlasHLS extends BaseFlashPlayback {
   stop() {
     this.srcLoaded = false
     this.el.playerStop()
-    this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.name)
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: 0, total: 0}, this.name)
   }
 
   isPlaying() {
@@ -427,7 +427,7 @@ export default class FlasHLS extends BaseFlashPlayback {
       this.updateDvr(dvrInUse)
     }
     this.el.playerSeek(time)
-    this.trigger(Events.PLAYBACK_TIMEUPDATE, time, duration, this.name)
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: time, total: duration}, this.name)
   }
 
   updateDvr(dvrInUse) {
@@ -450,7 +450,7 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   timeUpdate(time, duration) {
-    this.trigger(Events.PLAYBACK_TIMEUPDATE, time, duration, this.name)
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: time, total: duration}, this.name)
   }
 
   destroy() {

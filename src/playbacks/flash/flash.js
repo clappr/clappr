@@ -74,7 +74,7 @@ export default class Flash extends BaseFlashPlayback {
   }
 
   updateTime() {
-    this.trigger(Events.PLAYBACK_TIMEUPDATE, this.el.getPosition(), this.el.getDuration(), this.name)
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: this.el.getPosition(), total: this.el.getDuration()}, this.name)
   }
 
   addListeners() {
@@ -105,7 +105,7 @@ export default class Flash extends BaseFlashPlayback {
       this.currentState = "IDLE"
     } else if (this.el.getState() === "ENDED") {
       this.trigger(Events.PLAYBACK_ENDED, this.name)
-      this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.el.getDuration(), this.name)
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: 0, total: this.el.getDuration()}, this.name)
       this.currentState = "ENDED"
       this.isIdle = true
     }
@@ -166,7 +166,7 @@ export default class Flash extends BaseFlashPlayback {
 
   stop() {
     this.el.playerStop()
-    this.trigger(Events.PLAYBACK_TIMEUPDATE, 0, this.name)
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: 0, total: 0}, this.name)
   }
 
   isPlaying() {
@@ -189,7 +189,7 @@ export default class Flash extends BaseFlashPlayback {
   seekSeconds(seekTo) {
     if (this.isReady && this.el.playerSeek) {
       this.el.playerSeek(seekTo)
-      this.trigger(Events.PLAYBACK_TIMEUPDATE, seekTo, this.el.getDuration(), this.name)
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: seekTo, total: this.el.getDuration()}, this.name)
       if (this.currentState === "PAUSED") {
         this.el.playerPause()
       }
