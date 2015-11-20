@@ -106,8 +106,8 @@ export default class Container extends UIObject {
     this.listenTo(this.playback, Events.PLAYBACK_ERROR, this.error)
   }
 
-  playbackStateChanged() {
-    this.trigger(Events.CONTAINER_PLAYBACKSTATE)
+  playbackStateChanged(state) {
+    this.trigger(Events.CONTAINER_PLAYBACKSTATE, state)
   }
 
   playbackDvrStateChanged(dvrInUse) {
