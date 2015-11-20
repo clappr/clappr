@@ -314,8 +314,8 @@ export default class Container extends UIObject {
     this.trigger(Events.CONTAINER_SETTINGSUPDATE)
   }
 
-  highDefinitionUpdate() {
-    this.trigger(Events.CONTAINER_HIGHDEFINITIONUPDATE)
+  highDefinitionUpdate(isHD) {
+    this.trigger(Events.CONTAINER_HIGHDEFINITIONUPDATE, isHD)
   }
 
   isHighDefinitionInUse() {
