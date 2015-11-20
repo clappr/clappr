@@ -67,6 +67,8 @@ export default class Player extends BaseObject {
    * player acts in chromeless mode **default**: `false`
    * @param {Boolean} [options.muted]
    * start the video muted **default**: `false`
+   * @param {String} [options.mimeType]
+   * add `mimeType: "application/vnd.apple.mpegurl"` if you need to use a url without extension.
    * @param {Boolean} [options.persistConfig]
    * persist player's settings (volume) through the same domain **default**: `true`
    * @param {String} [options.preload]
