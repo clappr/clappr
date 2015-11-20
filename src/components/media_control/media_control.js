@@ -455,12 +455,9 @@ export default class MediaControl extends UIObject {
     }
   }
 
-  highDefinitionUpdate() {
-    if (this.container.isHighDefinitionInUse()) {
-      this.$el.find('button[data-hd-indicator]').addClass("enabled")
-    } else {
-      this.$el.find('button[data-hd-indicator]').removeClass("enabled")
-    }
+  highDefinitionUpdate(isHD) {
+    var method = isHD ? 'addClass' : 'removeClass'
+    this.$el.find('button[data-hd-indicator]')[method]('enabled')
   }
 
   createCachedElements() {
