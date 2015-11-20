@@ -456,7 +456,7 @@ export default class MediaControl extends UIObject {
   }
 
   highDefinitionUpdate(isHD) {
-    var method = isHD ? 'addClass' : 'removeClass'
+    var method = !!isHD ? 'addClass' : 'removeClass'
     this.$el.find('button[data-hd-indicator]')[method]('enabled')
   }
 
