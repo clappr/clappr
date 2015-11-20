@@ -90,10 +90,9 @@ export default class GoogleAnalytics extends ContainerPlugin {
     }
   }
 
-  onPlaybackChanged() {
-    var type = this.container.getPlaybackType()
-    if (type !== null) {
-      this.push(["Video", "Playback Type - " + type, this.container.playback.src])
+  onPlaybackChanged(playbackState) {
+    if (playbackState.type !== null) {
+      this.push(["Video", "Playback Type - " + playbackState.type, this.container.playback.src])
     }
   }
 

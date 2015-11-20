@@ -352,6 +352,15 @@ Events.PLAYBACK_HIGHDEFINITIONUPDATE = 'playback:highdefinitionupdate'
  * playback level when it's available, it could be just a map for width (0 => 240, 1 => 480, 2 => 720)
  */
 Events.PLAYBACK_BITRATE = 'playback:bitrate'
+/**
+ * Fired when playback internal state changes
+ *
+ * @event PLAYBACK_PLAYBACKSTATE
+ * @param {Object} state Data
+ * state object
+ * @param {String} [state.type]
+ * the playback type
+ */
 Events.PLAYBACK_PLAYBACKSTATE = 'playback:playbackstate'
 Events.PLAYBACK_DVR = 'playback:dvr'
 Events.PLAYBACK_MEDIACONTROL_DISABLE = 'playback:mediacontrol:disable'
@@ -365,6 +374,15 @@ Events.PLAYBACK_FRAGMENT_LOADED = 'playback:fragment:loaded'
 Events.PLAYBACK_LEVEL_SWITCH = 'playback:level:switch'
 
 // Container Events
+/**
+ * Fired when the container internal state changes
+ *
+ * @event CONTAINER_PLAYBACKSTATE
+ * @param {Object} state Data
+ * state object
+ * @param {String} [state.type]
+ * the playback type
+ */
 Events.CONTAINER_PLAYBACKSTATE = 'container:playbackstate'
 Events.CONTAINER_PLAYBACKDVRSTATECHANGED = 'container:dvr'
 /**
