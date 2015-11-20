@@ -446,7 +446,7 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   manifestLoaded(duration, loadmetrics) {
-    this.trigger(Events.PLAYBACK_LOADEDMETADATA, duration, loadmetrics)
+    this.trigger(Events.PLAYBACK_LOADEDMETADATA, {duration: duration, data: loadmetrics})
   }
 
   timeUpdate(time, duration) {
