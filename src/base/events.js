@@ -316,6 +316,17 @@ Events.PLAYBACK_BUFFERFULL = 'playback:bufferfull'
  * @event PLAYBACK_SETTINGSUPDATE
  */
 Events.PLAYBACK_SETTINGSUPDATE = 'playback:settingsupdate'
+/**
+ * Fired when playback loaded its metadata
+ *
+ * @event PLAYBACK_LOADEDMETADATA
+ * @param {Object} metadata Data
+ * settings object
+ * @param {Number} [metadata.duration]
+ * the playback duration
+ * @param {Object} [metadata.data]
+ * extra meta data
+ */
 Events.PLAYBACK_LOADEDMETADATA = 'playback:loadedmetadata'
 /**
  * Fired when playback updates its video quality
@@ -381,6 +392,17 @@ Events.CONTAINER_DESTROYED = 'container:destroyed'
  */
 Events.CONTAINER_READY = 'container:ready'
 Events.CONTAINER_ERROR = 'container:error'
+/**
+ * Fired when the container loaded its metadata
+ *
+ * @event CONTAINER_LOADEDMETADATA
+ * @param {Object} metadata Data
+ * settings object
+ * @param {Number} [metadata.duration]
+ * the playback duration
+ * @param {Object} [metadata.data]
+ * extra meta data
+ */
 Events.CONTAINER_LOADEDMETADATA = 'container:loadedmetadata'
 /**
  * Fired when the time is updated on container

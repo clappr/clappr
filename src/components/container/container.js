@@ -187,8 +187,8 @@ export default class Container extends UIObject {
     this.trigger(Events.CONTAINER_ERROR, {error: errorObj, container: this}, this.name)
   }
 
-  loadedMetadata(duration) {
-    this.trigger(Events.CONTAINER_LOADEDMETADATA, duration)
+  loadedMetadata(metadata) {
+    this.trigger(Events.CONTAINER_LOADEDMETADATA, metadata)
   }
 
   timeUpdated(timeProgress) {
