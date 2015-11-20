@@ -29,8 +29,9 @@ describe('Container', function() {
   it('listens to playback:timeupdate event', function() {
     sinon.spy(this.container, 'timeUpdated')
     this.container.bindEvents()
-    this.playback.trigger(Events.PLAYBACK_TIMEUPDATE)
-    assert.ok(this.container.timeUpdated.calledOnce)
+    this.playback.trigger(Events.PLAYBACK_TIMEUPDATE, {current: 2, total: 40})
+
+    assert.ok(this.container.timeUpdated.calledWith({current: 2, total: 40}))
   })
 
   it('listens to playback:ready event', function() {

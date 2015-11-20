@@ -28,7 +28,7 @@ export default class HTML5Audio extends HTML5Video {
   }
 
   timeUpdated() {
-    this.trigger(Events.PLAYBACK_TIMEUPDATE, this.el.currentTime, this.el.duration, this.name)
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: this.el.currentTime, total: this.el.duration}, this.name)
   }
 }
 

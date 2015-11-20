@@ -175,8 +175,8 @@ export default class Player extends BaseObject {
     this.trigger(Events.PLAYER_SEEK, percent)
   }
 
-  onTimeUpdate(position, duration) {
-    this.trigger(Events.PLAYER_TIMEUPDATE, position, duration)
+  onTimeUpdate(timeProgress) {
+    this.trigger(Events.PLAYER_TIMEUPDATE, timeProgress)
   }
 
   onError(error) {
