@@ -19,9 +19,11 @@ describe('Container', function() {
 
   it('listens to playback:progress event', function() {
     sinon.spy(this.container, 'progress')
+
     this.container.bindEvents()
-    this.playback.trigger(Events.PLAYBACK_PROGRESS)
-    assert.ok(this.container.progress.calledOnce)
+    this.playback.trigger(Events.PLAYBACK_PROGRESS, {start: 0, current: 3000, total: 6000})
+
+    assert.ok(this.container.progress.calledWith({start: 0, current: 3000, total: 6000}))
   })
 
   it('listens to playback:timeupdate event', function() {

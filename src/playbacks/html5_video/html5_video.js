@@ -218,7 +218,11 @@ export default class HTML5Video extends Playback {
       }
     }
     this.checkBufferState(this.el.buffered.end(bufferedPos))
-    this.trigger(Events.PLAYBACK_PROGRESS, this.el.buffered.start(bufferedPos), this.el.buffered.end(bufferedPos), this.el.duration, this.name)
+    this.trigger(Events.PLAYBACK_PROGRESS, {
+      start: this.el.buffered.start(bufferedPos),
+      current: this.el.buffered.end(bufferedPos),
+      total: this.el.duration
+    })
   }
 
   checkBufferState(bufferedPos) {

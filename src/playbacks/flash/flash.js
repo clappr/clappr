@@ -113,7 +113,11 @@ export default class Flash extends BaseFlashPlayback {
 
   progress() {
     if (this.currentState !== "IDLE" && this.currentState !== "ENDED") {
-      this.trigger(Events.PLAYBACK_PROGRESS, 0, this.el.getBytesLoaded(), this.el.getBytesTotal(), this.name)
+      this.trigger(Events.PLAYBACK_PROGRESS,{
+        start: 0,
+        current: this.el.getBytesLoaded(),
+        total: this.el.getBytesTotal()
+      })
     }
   }
 

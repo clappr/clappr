@@ -351,7 +351,11 @@ export default class FlasHLS extends BaseFlashPlayback {
     this.trigger(Events.PLAYBACK_FRAGMENT_LOADED, loadmetrics)
     if (this.reportingProgress && this.el.getPosition) {
       var buffered = this.el.getPosition() + this.el.getbufferLength()
-      this.trigger(Events.PLAYBACK_PROGRESS, this.el.getPosition(), buffered, this.el.getDuration(), this.name)
+      this.trigger(Events.PLAYBACK_PROGRESS, {
+        start: this.el.getPosition(),
+        current: buffered,
+        total: this.el.getDuration()
+      })
     }
   }
 
