@@ -127,7 +127,7 @@ export default class DashShakaPlayback extends HTML5Video {
   }
 }
 
-DashShakaPlayback.canPlay = function(resource, mimeType) {
+DashShakaPlayback.canPlay = (resource, mimeType = '') => {
   shaka.polyfill.installAll()
 
   if (!shaka.player.Player.isBrowserSupported()) {
@@ -136,6 +136,6 @@ DashShakaPlayback.canPlay = function(resource, mimeType) {
   }
 
   var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
-  return "mpd" === resourceParts[1]
+  return ("mpd" === resourceParts[1]) || mimeType.indexOf('application/dash+xml') > -1
 }
 
