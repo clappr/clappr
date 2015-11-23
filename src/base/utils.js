@@ -23,7 +23,7 @@ export function extend(parent, properties) {
   return MergedPlugin
 }
 
-export function formatTime(time) {
+export function formatTime(time, paddedHours) {
     if (!isFinite(time)) {
       return "--:--"
     }
@@ -40,29 +40,7 @@ export function formatTime(time) {
       out += days + ":"
       if (hours < 1) out += "00:"
     }
-    if (hours && hours > 0) out += ("0" + hours).slice(-2) + ":"
-    out += ("0" + minutes).slice(-2) + ":"
-    out += ("0" + seconds).slice(-2)
-    return out.trim()
-}
-export function formatActualTime(time) {
-    if (!isFinite(time)) {
-      return "--:--"
-    }
-    time = time * 1000
-    time = parseInt(time/1000)
-    var seconds = time % 60
-    time = parseInt(time/60)
-    var minutes = time % 60
-    time = parseInt(time/60)
-    var hours = time % 24
-    var days = parseInt(time/24)
-    var out = ""
-    if (days && days > 0) {
-      out += days + ":"
-      if (hours < 1) out += "00:"
-    }
-    out += ("0" + hours).slice(-2) + ":"
+    if (hours && hours > 0 || paddedHours !== undefined && paddedHours) out += ("0" + hours).slice(-2) + ":"
     out += ("0" + minutes).slice(-2) + ":"
     out += ("0" + seconds).slice(-2)
     return out.trim()

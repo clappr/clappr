@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {formatActualTime} from 'base/utils'
+import {formatTime} from 'base/utils'
 
 import UIObject from 'base/ui_object'
 import Styler from 'base/styler'
@@ -100,7 +100,7 @@ export default class SeekTime extends UIObject {
       } else {
         var seekTime = this.hoverPosition * this.duration
       }
-      var currentSeekTime = formatActualTime(seekTime)
+      var currentSeekTime = formatTime(seekTime)
       // only update dom if necessary, ie time actually changed
       if (currentSeekTime !== this.displayedSeekTime) {
         this.$seekTimeEl.text(currentSeekTime)
@@ -110,9 +110,9 @@ export default class SeekTime extends UIObject {
       if (this.durationShown) {
         this.$durationEl.show()
         if (this.actualLiveTime) {
-          var currentDuration = formatActualTime(secondsSinceMidnight)
+          var currentDuration = formatTime(secondsSinceMidnight)
         } else {
-          var currentDuration = formatActualTime(this.duration)
+          var currentDuration = formatTime(this.duration)
         }
 
         if (currentDuration !== this.displayedDuration) {
