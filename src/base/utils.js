@@ -40,7 +40,7 @@ export function formatTime(time, paddedHours) {
       out += days + ":"
       if (hours < 1) out += "00:"
     }
-    if (hours && hours > 0 || paddedHours !== undefined && paddedHours) out += ("0" + hours).slice(-2) + ":"
+    if (hours && hours > 0 || paddedHours) out += ("0" + hours).slice(-2) + ":"
     out += ("0" + minutes).slice(-2) + ":"
     out += ("0" + seconds).slice(-2)
     return out.trim()
