@@ -30,7 +30,7 @@ export default class SeekTime extends UIObject {
     this.hoveringOverSeekBar = false
     this.hoverPosition = null
     this.duration = null
-    this.actualLiveTime = this.mediaControl.options.actualLiveTime === true
+    this.actualLiveTime = !!this.mediaControl.options.actualLiveTime
     this.durationShown = false
     this.addEventListeners()
   }
