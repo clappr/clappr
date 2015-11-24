@@ -365,8 +365,7 @@ export default class MediaControl extends UIObject {
     this.currentSeekBarPercentage = 100
     // true if dvr is enabled but not in use. E.g. live stream with dvr but at live point
     var dvrEnabledButNotInUse = this.container.isDvrEnabled() && !this.container.isDvrInUse()
-    if (this.container.settings.seekEnabled && !dvrEnabledButNotInUse) {
-      // if seek enabled or dvr is enabled and being used then set to the true percentage
+    if (!dvrEnabledButNotInUse) {
       this.currentSeekBarPercentage = (this.currentPositionValue / this.currentDurationValue) * 100
     }
     this.setSeekPercentage(this.currentSeekBarPercentage)
