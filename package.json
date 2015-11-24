@@ -20,9 +20,6 @@
   "bugs": {
     "url": "https://github.com/clappr/clappr/issues"
   },
-  "browser": {
-    "zepto": "clappr-zepto"
-  },
   "homepage": "https://github.com/clappr/clappr",
   "devDependencies": {
     "babel-core": "^5.8.23",
