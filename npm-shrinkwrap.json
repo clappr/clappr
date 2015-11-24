@@ -1,0 +1,11 @@
+{
+  "name": "clappr",
+  "version": "0.2.19",
+  "dependencies": {
+    "sinon-chai": {
+      "version": "2.8.0",
+      "from": "sinon-chai@*",
+      "resolved": "https://registry.npmjs.org/sinon-chai/-/sinon-chai-2.8.0.tgz"
+    }
+  }
+}
