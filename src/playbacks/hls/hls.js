@@ -34,13 +34,13 @@ export default class HLS extends HTML5VideoPlayback {
 
   setupHls() {
     this.hls = new HLSJS(this.options.hlsjsConfig || {})
-    this.hls.on(HLSJS.Events.MSE_ATTACHED, () => this.hls.loadSource(this.options.src))
+    this.hls.on(HLSJS.Events.MEDIA_ATTACHED, () => this.hls.loadSource(this.options.src))
     this.hls.on(HLSJS.Events.MANIFEST_PARSED, () => { this.options.autoPlay && this.play() })
     this.hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this.updatePlaybackType(evt, data))
     this.hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this.updateDuration(evt, data))
     this.hls.on(HLSJS.Events.LEVEL_SWITCH, (evt,data) => this.onLevelSwitch(evt, data))
     this.hls.on(HLSJS.Events.FRAG_LOADED, (evt, data) => this.onFragmentLoaded(evt, data))
-    this.hls.attachVideo(this.el)
+    this.hls.attachMedia(this.el)
   }
 
   // the duration on the video element itself should not be used
