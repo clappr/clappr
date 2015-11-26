@@ -95,7 +95,7 @@ Add `mimeType: "mimetype-for-media"` if you need to use a media url without exte
 
 ##### Actual live time
 Add `actualLiveTime: true` if you want the time in the seek bar to be according to actual time.
-Add `serverTime: "2015/11/26 06:01:03"` if you want the time in the seek bar to match with a specified time.
+Add `actualLiveServerTime: "2015/11/26 06:01:03"` if you want the time in the seek bar to match with a specified time.
 
 ##### Configuration persistance
 Add `persistConfig: false` if you don't want to persist player's volume through your videos, by **default it saves**. These configuration are being saved at user's browser ([through localStorage](http://diveintohtml5.info/storage.html)).
