@@ -67,7 +67,7 @@
     "uglify-js": "^2.5.0",
     "url-loader": "^0.5.6",
     "webpack": "^1.12.1",
-    "webpack-dev-server": "^1.10.1",
+    "webpack-dev-server": "^1.14.0",
     "yargs": "^3.24.0"
   },
   "dependencies": {
