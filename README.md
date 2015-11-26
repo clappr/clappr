@@ -49,16 +49,16 @@ PS4 Browser    | ✔ | ✔ | ✘ |  ? | ![rtmp](http://flv.io/external3.png) | !
 
 Plugin         |Status|Compatible with latest Clappr|URL|
 ---------------|---|---|---|---|---
-Thumbnails on seekbar| Ready | Yes | https://github.com/tjenkinson/clappr-thumbnails-plugin 
-Level Selector| Ready | Yes | https://github.com/clappr/clappr-level-selector-plugin 
-360 videos| Ready | Yes | https://github.com/thiagopnts/video-360 
-Chromecast| Ready | Yes | https://github.com/clappr/clappr-chromecast-plugin 
-DASH with shaka| Ready | Yes | https://github.com/clappr/dash-shaka-playback 
-HLS+P2P        | Ready | [WIP](https://github.com/bemtv/clappr-p2phls-plugin/issues/148) | http://bem.tv 
-Comments on seekbar| Ready | ? | http://labs.jordane.net/clappr-comment/ 
-Voice control| Ready | ? | https://github.com/flavioribeiro/clappr-speech-control-plugin 
-RTMP           | Ready | ? | https://github.com/flavioribeiro/clappr-rtmp-plugin 
-Dash           | WIP | No | https://github.com/shankardevy/clappr-dash-plugin 
+Thumbnails on seekbar| Ready | Yes | https://github.com/tjenkinson/clappr-thumbnails-plugin
+Level Selector| Ready | Yes | https://github.com/clappr/clappr-level-selector-plugin
+360 videos| Ready | Yes | https://github.com/thiagopnts/video-360
+Chromecast| Ready | Yes | https://github.com/clappr/clappr-chromecast-plugin
+DASH with shaka| Ready | Yes | https://github.com/clappr/dash-shaka-playback
+HLS+P2P        | Ready | [WIP](https://github.com/bemtv/clappr-p2phls-plugin/issues/148) | http://bem.tv
+Comments on seekbar| Ready | ? | http://labs.jordane.net/clappr-comment/
+Voice control| Ready | ? | https://github.com/flavioribeiro/clappr-speech-control-plugin
+RTMP           | Ready | ? | https://github.com/flavioribeiro/clappr-rtmp-plugin
+Dash           | WIP | No | https://github.com/shankardevy/clappr-dash-plugin
 Youtube        | Ready | No | https://github.com/towerz/clappr-youtube-playback
 
 ## Built-in Plugins & Embed Parameters
@@ -92,6 +92,10 @@ Add `mute: true` if you want to start player with no sound.
 
 ##### Add mimeType for extension-less url
 Add `mimeType: "mimetype-for-media"` if you need to use a media url without extension.
+
+##### Actual live time
+Add `actualLiveTime: true` if you want the time in the seek bar to be according to actual time.
+Add `serverTime: "2015/11/26 06:01:03"` if you want the time in the seek bar to match with a specified time.
 
 ##### Configuration persistance
 Add `persistConfig: false` if you don't want to persist player's volume through your videos, by **default it saves**. These configuration are being saved at user's browser ([through localStorage](http://diveintohtml5.info/storage.html)).
