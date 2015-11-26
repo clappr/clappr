@@ -30,6 +30,7 @@ export default class SeekTime extends UIObject {
     this.hoveringOverSeekBar = false
     this.hoverPosition = null
     this.duration = null
+    this.actualLiveTime = !!this.mediaControl.options.actualLiveTime
     this.durationShown = false
     this.addEventListeners()
   }
@@ -89,7 +90,16 @@ export default class SeekTime extends UIObject {
       this.$el.css('left', "-100%")
     }
     else {
-      var seekTime = this.hoverPosition * this.duration
+      if (this.actualLiveTime) {
+        var d = new Date(), e = new Date(d);
+        var secondsSinceMidnight = (e - d.setHours(0,0,0,0)) / 1000;
+        var seekTime = (secondsSinceMidnight - this.duration) + (this.hoverPosition * this.duration)
+        if (seekTime < 0) {
+          seekTime = (3600 * 24) + seekTime
+        }
+      } else {
+        var seekTime = this.hoverPosition * this.duration
+      }
       var currentSeekTime = formatTime(seekTime)
       // only update dom if necessary, ie time actually changed
       if (currentSeekTime !== this.displayedSeekTime) {
@@ -99,7 +109,12 @@ export default class SeekTime extends UIObject {
 
       if (this.durationShown) {
         this.$durationEl.show()
-        var currentDuration = formatTime(this.duration)
+        if (this.actualLiveTime) {
+          var currentDuration = formatTime(secondsSinceMidnight)
+        } else {
+          var currentDuration = formatTime(this.duration)
+        }
+
         if (currentDuration !== this.displayedDuration) {
           this.$durationEl.text(currentDuration)
           this.displayedDuration = currentDuration
