@@ -32,13 +32,13 @@ export default class SeekTime extends UIObject {
     this.duration = null
     this.actualLiveTime = !!this.mediaControl.options.actualLiveTime
     if (this.actualLiveTime) {
-      if (!!this.mediaControl.options.serverTime) {
-        this.serverTimeDiff = new Date().getTime() - new Date(this.mediaControl.options.serverTime).getTime()
+      if (!!this.mediaControl.options.actualLiveServerTime) {
+        this.actualLiveServerTimeDiff = new Date().getTime() - new Date(this.mediaControl.options.actualLiveServerTime).getTime()
       } else {
-        this.serverTimeDiff = 0
+        this.actualLiveServerTimeDiff = 0
       }
     }
-    console.log("serverTimeDiff: " + formatTime(this.serverTimeDiff / 1000))
+    console.log("actualLiveServerTimeDiff: " + formatTime(this.actualLiveServerTimeDiff / 1000))
     this.durationShown = false
     this.addEventListeners()
   }
@@ -90,7 +90,7 @@ export default class SeekTime extends UIObject {
 
   getSeekTime() {
     if (this.actualLiveTime) {
-      var d = new Date(new Date().getTime() - this.serverTimeDiff), e = new Date(d);
+      var d = new Date(new Date().getTime() - this.actualLiveServerTimeDiff), e = new Date(d);
       var secondsSinceMidnight = (e - d.setHours(0,0,0,0)) / 1000;
       var seekTime = (secondsSinceMidnight - this.duration) + (this.hoverPosition * this.duration)
       if (seekTime < 0) {
