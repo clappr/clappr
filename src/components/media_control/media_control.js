@@ -16,6 +16,7 @@ import Browser from 'components/browser'
 import SeekTime from 'components/seek_time'
 import Mediator from 'components/mediator'
 import template from 'base/template'
+import Playback from 'base/playback'
 
 import $ from 'clappr-zepto'
 
@@ -363,10 +364,7 @@ export default class MediaControl extends UIObject {
 
     // default to 100%
     this.currentSeekBarPercentage = 100
-    // true if dvr is enabled but not in use. E.g. live stream with dvr but at live point
-    var dvrEnabledButNotInUse = this.container.isDvrEnabled() && !this.container.isDvrInUse()
-    if (this.container.settings.seekEnabled && !dvrEnabledButNotInUse) {
-      // if seek enabled or dvr is enabled and being used then set to the true percentage
+    if (this.container.getPlaybackType() !== Playback.LIVE || this.container.isDvrInUse()) {
       this.currentSeekBarPercentage = (this.currentPositionValue / this.currentDurationValue) * 100
     }
     this.setSeekPercentage(this.currentSeekBarPercentage)
