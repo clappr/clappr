@@ -1,38 +1,71 @@
-import ContainerPlugin from '../../src/base/container_plugin'
+import ContainerPlugin from 'base/container_plugin'
 
 describe('Container Plugin', function() {
-  it('should be enabled when created', function() {
-    var plugin = new ContainerPlugin({})
-    expect(plugin.enabled).to.be.true
+  describe('#constructor', () => {
+    it('enables', function() {
+      var plugin = new ContainerPlugin({})
+
+      expect(plugin.enabled).to.be.true
+    })
+
+    it('binds all events', () => {
+      var bind = false
+      var Plugin = class MyPlugin extends ContainerPlugin{
+        bindEvents() {
+          bind = true
+        }
+      }
+
+      new Plugin({})
+
+      expect(bind).to.be.true
+    })
   })
 
-  it('should be disable when call disable()', function() {
+  it('disables', () => {
     var plugin = new ContainerPlugin({})
+
     plugin.disable()
+
     expect(plugin.enabled).to.be.false
   })
 
-  it('should call stopListening() when disabled', function() {
+  it('stops listening when disable an enabled plugin', () => {
     var plugin = new ContainerPlugin({})
     var spy = sinon.spy(plugin, 'stopListening')
+
     plugin.disable()
+
     expect(spy).called.once
   })
 
-  it('should call stopListening() when destroyed', function() {
+  it('doesnt stops listening when disable a disabled plugin', () => {
     var plugin = new ContainerPlugin({})
     var spy = sinon.spy(plugin, 'stopListening')
+
+    plugin.enabled = false
+    plugin.disable()
+
+    expect(spy).not.called
+  })
+
+  it('stops listening when destroyed', () => {
+    var plugin = new ContainerPlugin({})
+    var spy = sinon.spy(plugin, 'stopListening')
+
     plugin.destroy()
+
     expect(spy).called.once
   })
 
-  it('should not call bindEvents() twice', function() {
+  it('binds events once', () => {
     var plugin = new ContainerPlugin({})
     var spy = sinon.spy(plugin, 'bindEvents')
-    plugin.disable()
-    plugin.enable()
-    plugin.enable()
-    expect(spy).called.once
-  })
 
+    plugin.enable()
+    plugin.enable()
+    plugin.enable()
+
+    expect(spy).not.called
+  })
 })
