@@ -23,7 +23,7 @@ export function extend(parent, properties) {
   return MergedPlugin
 }
 
-export function formatTime(time) {
+export function formatTime(time, paddedHours) {
     if (!isFinite(time)) {
       return "--:--"
     }
@@ -40,7 +40,7 @@ export function formatTime(time) {
       out += days + ":"
       if (hours < 1) out += "00:"
     }
-    if (hours && hours > 0) out += ("0" + hours).slice(-2) + ":"
+    if (hours && hours > 0 || paddedHours) out += ("0" + hours).slice(-2) + ":"
     out += ("0" + minutes).slice(-2) + ":"
     out += ("0" + seconds).slice(-2)
     return out.trim()

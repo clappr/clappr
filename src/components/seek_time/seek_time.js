@@ -30,6 +30,15 @@ export default class SeekTime extends UIObject {
     this.hoveringOverSeekBar = false
     this.hoverPosition = null
     this.duration = null
+    this.actualLiveTime = !!this.mediaControl.options.actualLiveTime
+    if (this.actualLiveTime) {
+      if (!!this.mediaControl.options.serverTime) {
+        this.serverTimeDiff = new Date().getTime() - new Date(this.mediaControl.options.serverTime).getTime()
+      } else {
+        this.serverTimeDiff = 0
+      }
+    }
+    console.log("serverTimeDiff: " + formatTime(this.serverTimeDiff / 1000))
     this.durationShown = false
     this.addEventListeners()
   }
@@ -79,7 +88,22 @@ export default class SeekTime extends UIObject {
     this.hoverPosition = Math.min(1, Math.max(offset/this.mediaControl.$seekBarContainer.width(), 0))
   }
 
+  getSeekTime() {
+    if (this.actualLiveTime) {
+      var d = new Date(new Date().getTime() - this.serverTimeDiff), e = new Date(d);
+      var secondsSinceMidnight = (e - d.setHours(0,0,0,0)) / 1000;
+      var seekTime = (secondsSinceMidnight - this.duration) + (this.hoverPosition * this.duration)
+      if (seekTime < 0) {
+        seekTime += 86400
+      }
+    } else {
+      var seekTime = this.hoverPosition * this.duration
+    }
+    return {seekTime: seekTime, secondsSinceMidnight: secondsSinceMidnight}
+  }
+
   update() {
+
     if (!this.rendered) {
       // update() is always called after a render
       return
@@ -89,8 +113,8 @@ export default class SeekTime extends UIObject {
       this.$el.css('left', "-100%")
     }
     else {
-      var seekTime = this.hoverPosition * this.duration
-      var currentSeekTime = formatTime(seekTime)
+      var seekTime = this.getSeekTime()
+      var currentSeekTime = formatTime(seekTime.seekTime, this.actualLiveTime)
       // only update dom if necessary, ie time actually changed
       if (currentSeekTime !== this.displayedSeekTime) {
         this.$seekTimeEl.text(currentSeekTime)
@@ -99,7 +123,7 @@ export default class SeekTime extends UIObject {
 
       if (this.durationShown) {
         this.$durationEl.show()
-        var currentDuration = formatTime(this.duration)
+        var currentDuration = formatTime(this.actualLiveTime ? seekTime.secondsSinceMidnight : this.duration, this.actualLiveTime)
         if (currentDuration !== this.displayedDuration) {
           this.$durationEl.text(currentDuration)
           this.displayedDuration = currentDuration
