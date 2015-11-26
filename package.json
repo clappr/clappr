@@ -36,7 +36,6 @@
     "dotenv": "^1.2.0",
     "file-loader": "^0.8.4",
     "gulp": "^3.8.1",
-    "hls.js": "github:dailymotion/hls.js#v0.3.0",
     "html-loader": "^0.3.0",
     "isparta": "^3.0.3",
     "istanbul": "^0.3.19",
@@ -72,7 +71,7 @@
   },
   "dependencies": {
     "clappr-zepto": "0.0.4",
-    "hls.js": "dailymotion/hls.js#v0.3.1",
+    "hls.js": "dailymotion/hls.js#v0.3.2",
     "lodash.find": "^3.2.1",
     "lodash.once": "^3.0.1",
     "lodash.result": "^3.1.2",
