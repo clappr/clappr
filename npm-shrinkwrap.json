@@ -486,9 +486,9 @@
       }
     },
     "caniuse-db": {
-      "version": "1.0.30000368",
+      "version": "1.0.30000369",
       "from": "caniuse-db@>=1.0.30000367 <2.0.0",
-      "resolved": "https://registry.npmjs.org/caniuse-db/-/caniuse-db-1.0.30000368.tgz"
+      "resolved": "https://registry.npmjs.org/caniuse-db/-/caniuse-db-1.0.30000369.tgz"
     },
     "caseless": {
       "version": "0.11.0",
@@ -2851,9 +2851,9 @@
       "resolved": "https://registry.npmjs.org/lower-case-first/-/lower-case-first-1.0.0.tgz"
     },
     "lru-cache": {
-      "version": "2.7.2",
+      "version": "2.7.3",
       "from": "lru-cache@>=2.0.0 <3.0.0",
-      "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-2.7.2.tgz"
+      "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-2.7.3.tgz"
     },
     "map-obj": {
       "version": "1.0.1",
@@ -2893,9 +2893,9 @@
       "resolved": "https://registry.npmjs.org/methods/-/methods-1.1.1.tgz"
     },
     "micromatch": {
-      "version": "2.3.2",
+      "version": "2.3.3",
       "from": "micromatch@>=2.1.5 <3.0.0",
-      "resolved": "https://registry.npmjs.org/micromatch/-/micromatch-2.3.2.tgz"
+      "resolved": "https://registry.npmjs.org/micromatch/-/micromatch-2.3.3.tgz"
     },
     "mime": {
       "version": "1.2.11",
@@ -3419,9 +3419,9 @@
       "resolved": "https://registry.npmjs.org/postcss-selector-parser/-/postcss-selector-parser-1.3.0.tgz"
     },
     "postcss-svgo": {
-      "version": "2.0.4",
+      "version": "2.1.0",
       "from": "postcss-svgo@>=2.0.4 <3.0.0",
-      "resolved": "https://registry.npmjs.org/postcss-svgo/-/postcss-svgo-2.0.4.tgz"
+      "resolved": "https://registry.npmjs.org/postcss-svgo/-/postcss-svgo-2.1.0.tgz"
     },
     "postcss-unique-selectors": {
       "version": "2.0.1",
