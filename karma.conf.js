@@ -45,7 +45,8 @@ module.exports = function(config) {
       reporters: [
         {type: 'lcovonly'},
         {type: 'text-summary'}
-      ]
+      ],
+      dir: 'coverage'
     },
     plugins: [
         require('karma-webpack'),
