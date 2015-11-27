@@ -178,18 +178,18 @@ export default class HTML5Video extends Playback {
     this.$el.remove()
   }
 
-  seek(seekBarValue) {
-    var time = this.el.duration * (seekBarValue / 100)
-    this.seekSeconds(time)
+  seek(time) {
+    this.el.currentTime = time
   }
 
-  seekSeconds(time) {
-    this.el.currentTime = time
+  seekPercentage(seekBarValue) {
+    var time = this.el.duration * (seekBarValue / 100)
+    this.seek(time)
   }
 
   checkInitialSeek() {
     var seekTime = seekStringToSeconds(window.location.href)
-    this.seekSeconds(seekTime)
+    this.seek(seekTime)
   }
 
   getCurrentTime() {

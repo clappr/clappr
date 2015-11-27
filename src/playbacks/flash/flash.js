@@ -177,24 +177,24 @@ export default class Flash extends BaseFlashPlayback {
     return this.el.getDuration()
   }
 
-  seek(seekBarValue) {
+  seekPercentage(seekBarValue) {
     if (this.el.getDuration() > 0) {
       var seekTo = this.el.getDuration() * (seekBarValue / 100)
-      this.seekSeconds(seekTo)
+      this.seek(seekTo)
     } else {
-      this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this.seek(seekBarValue))
+      this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this.seekPercentage(seekBarValue))
     }
   }
 
-  seekSeconds(seekTo) {
+  seek(time) {
     if (this.isReady && this.el.playerSeek) {
-      this.el.playerSeek(seekTo)
-      this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: seekTo, total: this.el.getDuration()}, this.name)
+      this.el.playerSeek(time)
+      this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: time, total: this.el.getDuration()}, this.name)
       if (this.currentState === "PAUSED") {
         this.el.playerPause()
       }
     } else {
-      this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this.seekSeconds(seekTo))
+      this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this.seek(time))
     }
   }
 

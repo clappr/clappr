@@ -54,15 +54,19 @@ export default class HLS extends HTML5VideoPlayback {
     return this.el.currentTime - this.playableRegionStartTime
   }
 
-  seek(seekBarValue) {
-    var seekTo = this.playableRegionDuration
-    if (seekBarValue > 0) {
-      seekTo = this.playableRegionDuration * (seekBarValue / 100)
-    }
-    var onDvr = this.dvrEnabled && seekBarValue >= 0 && seekBarValue < 100
-    seekTo += this.playableRegionStartTime
-    super.seekSeconds(seekTo)
+  seek(time) {
+    var onDvr = this.dvrEnabled && time > 0 && time <= this.playableRegionDuration
+    time += this.playableRegionStartTime
+    super.seek(time)
     this.updateDvr(onDvr)
+  }
+
+  seekPercentage(percentage) {
+    var seekTo = this.playableRegionDuration
+    if (percentage > 0) {
+      seekTo = this.playableRegionDuration * (percentage / 100)
+    }
+    this.seek(seekTo)
   }
 
   updateDvr(status) {
