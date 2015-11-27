@@ -32,6 +32,7 @@
     "dotenv": "^1.2.0",
     "file-loader": "^0.8.4",
     "gulp": "^3.8.1",
+    "hls.js": "github:dailymotion/hls.js#v0.3.3",
     "html-loader": "^0.3.0",
     "isparta": "^3.0.3",
     "istanbul": "^0.3.19",
