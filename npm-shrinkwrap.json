@@ -1,6 +1,6 @@
 {
   "name": "clappr",
-  "version": "0.2.20",
+  "version": "0.2.21",
   "dependencies": {
     "clappr-zepto": {
       "version": "0.0.4",
@@ -13,9 +13,9 @@
       "resolved": "https://registry.npmjs.org/compass-mixins/-/compass-mixins-0.12.7.tgz"
     },
     "hls.js": {
-      "version": "0.2.3",
-      "from": "dailymotion/hls.js#v0.2.3",
-      "resolved": "git://github.com/dailymotion/hls.js.git#eb8f4188d3704beb9b7cd615db2a5b49f9ace635",
+      "version": "0.3.2",
+      "from": "dailymotion/hls.js#v0.3.2",
+      "resolved": "git://github.com/dailymotion/hls.js.git#ff33d7d5e8672735dcb534baf5778e4dc64d8090",
       "dependencies": {
         "babelify": {
           "version": "6.4.0",
