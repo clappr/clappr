@@ -250,13 +250,23 @@ export default class Player extends BaseObject {
     this.core.mediaControl.container.stop();
   }
 
+  
   /**
-   * seeks the current video (`source`). For example, `player.seek(50)` will seek to the middle of the current video.
+   * seeks the current video (`source`). For example, `player.seek(120)` will seek to second 120 (2minutes) of the current video.
    * @method seek
-   * @param {Number} time should be a number between 0 and 100.
+   * @param {Number} time should be a number between 0 and the video duration.
    */
   seek(time) {
-    this.core.mediaControl.container.setCurrentTime(time);
+    this.core.mediaControl.container.seek(time);
+  }
+
+  /**
+   * seeks the current video (`source`). For example, `player.seek(50)` will seek to the middle of the current video.
+   * @method seekPercentage
+   * @param {Number} time should be a number between 0 and 100.
+   */
+  seekPercentage(percentage) {
+    this.core.mediaControl.container.seekPercentage(percentage);
   }
 
   /**
