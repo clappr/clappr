@@ -2,6 +2,7 @@ import FakePlayback from '../../src/base/playback'
 import Container from '../../src/components/container'
 import Poster from '../../src/plugins/poster'
 import Events from '../../src/base/events'
+import $ from 'clappr-zepto'
 
 describe('Poster', function() {
   beforeEach(function() {
