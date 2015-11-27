@@ -50,7 +50,7 @@ export default class DVRControls extends UICorePlugin {
       this.core.mediaControl.container.play()
     }
     if (this.core.mediaControl.$el.hasClass('dvr')) {
-      this.core.mediaControl.container.setCurrentTime(-1)
+      this.core.mediaControl.container.seek(-1)
     }
   }
 
