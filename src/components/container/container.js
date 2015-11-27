@@ -253,9 +253,9 @@ export default class Container extends UIObject {
 
   setCurrentTime(time, inseconds) {
     this.trigger(Events.CONTAINER_SEEK, time, this.name);
-    if(inseconds) {
+    if (inseconds) {
       this.playback.seek(time);
-    }else{
+    } else {
       this.playback.seekPercentage(time);
     }
   }
