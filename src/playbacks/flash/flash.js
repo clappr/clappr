@@ -177,12 +177,12 @@ export default class Flash extends BaseFlashPlayback {
     return this.el.getDuration()
   }
 
-  seekPercentage(seekBarValue) {
+  seekPercentage(percentage) {
     if (this.el.getDuration() > 0) {
-      var seekTo = this.el.getDuration() * (seekBarValue / 100)
-      this.seek(seekTo)
+      var seekSeconds = this.el.getDuration() * (percentage / 100)
+      this.seek(seekSeconds)
     } else {
-      this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this.seekPercentage(seekBarValue))
+      this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this.seekPercentage(percentage))
     }
   }
 
