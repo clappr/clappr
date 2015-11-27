@@ -235,7 +235,7 @@ Events.PLAYER_ENDED = 'ended'
  * Fired when player seeks the video
  *
  * @event PLAYER_SEEK
- * @param {Number} percent a percentagem of seek
+ * @param {Number} time the current time in seconds
  */
 Events.PLAYER_SEEK = 'seek'
 /**
@@ -457,6 +457,12 @@ Events.CONTAINER_DBLCLICK = 'container:dblclick'
 Events.CONTAINER_CONTEXTMENU = 'container:contextmenu'
 Events.CONTAINER_MOUSE_ENTER = 'container:mouseenter'
 Events.CONTAINER_MOUSE_LEAVE = 'container:mouseleave'
+/**
+ * Fired when the container seeks the video
+ *
+ * @event CONTAINER_SEEK
+ * @param {Number} time the current time in seconds
+ */
 Events.CONTAINER_SEEK = 'container:seek'
 Events.CONTAINER_VOLUME = 'container:volume'
 Events.CONTAINER_FULLSCREEN = 'container:fullscreen'

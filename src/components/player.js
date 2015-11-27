@@ -173,8 +173,8 @@ export default class Player extends BaseObject {
     this.trigger(Events.PLAYER_ENDED)
   }
 
-  onSeek(percent) {
-    this.trigger(Events.PLAYER_SEEK, percent)
+  onSeek(time) {
+    this.trigger(Events.PLAYER_SEEK, time)
   }
 
   onTimeUpdate(timeProgress) {
@@ -250,7 +250,7 @@ export default class Player extends BaseObject {
     this.core.mediaControl.container.stop();
   }
 
-  
+
   /**
    * seeks the current video (`source`). For example, `player.seek(120)` will seek to second 120 (2minutes) of the current video.
    * @method seek
