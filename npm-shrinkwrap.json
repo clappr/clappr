@@ -599,6 +599,11 @@
       "from": "commoner@>=0.10.3 <0.11.0",
       "resolved": "https://registry.npmjs.org/commoner/-/commoner-0.10.4.tgz"
     },
+    "compass-mixins": {
+      "version": "0.12.7",
+      "from": "compass-mixins@>=0.12.7 <0.13.0",
+      "resolved": "https://registry.npmjs.org/compass-mixins/-/compass-mixins-0.12.7.tgz"
+    },
     "component-bind": {
       "version": "1.0.0",
       "from": "component-bind@1.0.0",
@@ -2979,7 +2984,7 @@
     },
     "node-libs-browser": {
       "version": "0.5.3",
-      "from": "node-libs-browser@>=0.5.2 <0.6.0",
+      "from": "node-libs-browser@>=0.4.0 <=0.6.0",
       "resolved": "https://registry.npmjs.org/node-libs-browser/-/node-libs-browser-0.5.3.tgz"
     },
     "node-uuid": {
