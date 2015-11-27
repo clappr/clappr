@@ -16,4 +16,4 @@ notifications:
     - videos5@corp.globo.com
   slack: globo:F1iVlyrzR4iX8OS7h8fwMcqx
 
-after_script: "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+after_script: "cat coverage/C*/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
