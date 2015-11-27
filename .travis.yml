@@ -7,8 +7,6 @@ before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
 
-after_success:
-  - coveralls
 
 env:
   - COVERALLS_SERVICE_NAME="travis-ci" COVERALLS_REPO_TOKEN="sj8SOxUBGaVeFGSY9ryrC2eTFpVjCPHJl"
@@ -17,3 +15,5 @@ notifications:
   email:
     - videos5@corp.globo.com
   slack: globo:F1iVlyrzR4iX8OS7h8fwMcqx
+
+after_script: "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
