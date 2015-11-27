@@ -22,16 +22,17 @@ export default class NoOp extends Playback {
     messages['en-us'] = messages['en']
     messages['es-419'] = messages['es']
     messages['pt-br'] = messages['pt']
-    return messages[getBrowserLanguage()]||messages['en']
+    return messages[getBrowserLanguage()] || messages['en']
   }
 
   constructor(options) {
     super(options)
+    this.options = options
   }
 
   render() {
     var style = Styler.getStyleFor(noOpStyle);
-    this.$el.html(this.template({message:this.getNoOpMessage()}))
+    this.$el.html(this.template({message:this.options.playbackNotSupportedMessage || this.getNoOpMessage()}))
     this.$el.append(style);
     this.animate()
     this.trigger(Events.PLAYBACK_READY, this.name)
