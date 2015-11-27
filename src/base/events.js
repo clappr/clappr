@@ -248,7 +248,7 @@ Events.PLAYER_ERROR = 'error'
 /**
  * Fired when the time is updated on player
  *
- * @event PLAYBACK_TIMEUPDATE
+ * @event PLAYER_TIMEUPDATE
  * @param {Object} progress Data
  * progress object
  * @param {Number} [progress.current]
