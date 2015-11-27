@@ -1,7 +1,7 @@
 [![npm version](https://badge.fury.io/js/clappr.svg)](http://badge.fury.io/js/clappr)
 [![Build Status](https://travis-ci.org/clappr/clappr.svg?branch=master)](https://travis-ci.org/clappr/clappr)
 [![Dependency Status](https://gemnasium.com/clappr/clappr.svg)](https://gemnasium.com/clappr/clappr)
-[![Coverage Status](https://coveralls.io/repos/clappr/clappr/badge.svg?branch=master)](https://coveralls.io/r/clappr/clappr?branch=master)
+[![Coverage Status](https://coveralls.io/repos/clappr/clappr/badge.svg?branch=master&service=github)](https://coveralls.io/github/clappr/clappr?branch=master)
 <div align=center>
 <img src="https://cloud.githubusercontent.com/assets/244265/6373134/a845eb50-bce7-11e4-80f2-592ba29972ab.png"><br><br>
 <img src="https://i.cloudup.com/GSbXxvCsBK.png">
