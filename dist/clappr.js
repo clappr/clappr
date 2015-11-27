@@ -178,7 +178,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var version = ("0.2.21");
+	var version = ("0.2.22");
 
 	exports['default'] = {
 	    Player: _componentsPlayer2['default'],
@@ -2204,7 +2204,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Fired when the time is updated on player
 	 *
-	 * @event PLAYBACK_TIMEUPDATE
+	 * @event PLAYER_TIMEUPDATE
 	 * @param {Object} progress Data
 	 * progress object
 	 * @param {Number} [progress.current]
@@ -2442,6 +2442,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * true when is on HD, false otherwise
 	 */
 	Events.CONTAINER_HIGHDEFINITIONUPDATE = 'container:highdefinitionupdate';
+
+	/**
+	 * Fired when the media control shows
+	 *
+	 * @event CONTAINER_MEDIACONTROL_SHOW
+	 */
+	Events.CONTAINER_MEDIACONTROL_SHOW = 'container:mediacontrol:show';
+	/**
+	 * Fired when the media control hides
+	 *
+	 * @event CONTAINER_MEDIACONTROL_HIDE
+	 */
+	Events.CONTAINER_MEDIACONTROL_HIDE = 'container:mediacontrol:hide';
+
 	Events.CONTAINER_MEDIACONTROL_DISABLE = 'container:mediacontrol:disable';
 	Events.CONTAINER_MEDIACONTROL_ENABLE = 'container:mediacontrol:enable';
 	Events.CONTAINER_STATS_ADD = 'container:stats:add';
@@ -2451,7 +2465,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Fired when the player enters/exit on fullscreen
 	 *
-	 * @event MEDIACONTROL_SHOW
+	 * @event MEDIACONTROL_FULLSCREEN
 	 */
 	Events.MEDIACONTROL_FULLSCREEN = 'mediacontrol:fullscreen';
 	/**
@@ -3511,6 +3525,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onMediaControlShow',
 	    value: function onMediaControlShow(showing) {
+	      this.getCurrentContainer().trigger(showing ? _baseEvents2['default'].CONTAINER_MEDIACONTROL_SHOW : _baseEvents2['default'].CONTAINER_MEDIACONTROL_HIDE);
+
 	      if (showing) this.$el.removeClass('nocursor');else if (_baseUtils.Fullscreen.isFullscreen()) this.$el.addClass('nocursor');
 	    }
 	  }, {

@@ -261,6 +261,8 @@ export default class Core extends UIObject {
   }
 
   onMediaControlShow(showing) {
+    this.getCurrentContainer().trigger(showing?Events.CONTAINER_MEDIACONTROL_SHOW:Events.CONTAINER_MEDIACONTROL_HIDE)
+
     if (showing)
       this.$el.removeClass('nocursor')
     else if (Fullscreen.isFullscreen())
