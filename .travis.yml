@@ -7,6 +7,9 @@ before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
 
+after_success:
+  - coveralls
+
 env:
   - COVERALLS_SERVICE_NAME="travis-ci" COVERALLS_REPO_TOKEN="sj8SOxUBGaVeFGSY9ryrC2eTFpVjCPHJl"
 
