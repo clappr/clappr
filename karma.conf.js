@@ -23,7 +23,7 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'chai-sinon', 'jquery-2.1.0'],
+    frameworks: ['mocha', 'chai-sinon'],
 
     // list of files / patterns to load in the browser
     files: [
@@ -51,8 +51,8 @@ module.exports = function(config) {
         require('karma-webpack'),
         require('karma-mocha'),
         'karma-chrome-launcher',
+        'karma-firefox-launcher',
         'karma-chai-sinon',
-        'karma-jquery',
         'karma-coverage',
     ],
 
@@ -83,7 +83,15 @@ module.exports = function(config) {
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     //browsers: ['Chrome', 'Firefox', 'Safari'],
-    browsers: ['Chrome'],
+    browsers: [!process.env.TRAVIS ? 'Chrome' : 'Chrome_travis_ci', 'Firefox'],
+
+    customLaunchers: {
+      Chrome_travis_ci: {
+        base: 'Chrome',
+        flags: ['--no-sandbox']
+      }
+    },
+    
     // to avoid DISCONNECTED messages
     browserDisconnectTimeout : 10000, // default 2000
     browserDisconnectTolerance : 1, // default 0
