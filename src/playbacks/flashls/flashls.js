@@ -412,12 +412,16 @@ export default class FlasHLS extends BaseFlashPlayback {
     return duration
   }
 
+  seekPercentage(percentage) {
+    var duration = this.el.getDuration()
+    if (percentage > 0 ) {
+      var time = percentage * 60 / duration
+    }
+    this.seek(time)
+  }
+
   seek(time) {
     var duration = this.el.getDuration()
-    if (time > 0) {
-      time = duration * time / 100
-    }
-
     if (this.playbackType === Playback.LIVE) {
       // seek operations to a time within 5 seconds from live stream will position playhead back to live
       var dvrInUse = (time >= 0 && duration - time > 5)
