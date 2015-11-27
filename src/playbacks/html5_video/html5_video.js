@@ -182,8 +182,8 @@ export default class HTML5Video extends Playback {
     this.el.currentTime = time
   }
 
-  seekPercentage(seekBarValue) {
-    var time = this.el.duration * (seekBarValue / 100)
+  seekPercentage(percentage) {
+    var time = this.el.duration * (percentage / 100)
     this.seek(time)
   }
 
