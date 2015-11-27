@@ -54,10 +54,10 @@ Level Selector| Ready | Yes | https://github.com/clappr/clappr-level-selector-pl
 360 videos| Ready | Yes | https://github.com/thiagopnts/video-360
 Chromecast| Ready | Yes | https://github.com/clappr/clappr-chromecast-plugin
 DASH with shaka| Ready | Yes | https://github.com/clappr/dash-shaka-playback
+RTMP           | Ready | Yes | https://github.com/clappr/clappr-rtmp-plugin
 HLS+P2P        | Ready | [WIP](https://github.com/bemtv/clappr-p2phls-plugin/issues/148) | http://bem.tv
 Comments on seekbar| Ready | ? | http://labs.jordane.net/clappr-comment/
 Voice control| Ready | ? | https://github.com/flavioribeiro/clappr-speech-control-plugin
-RTMP           | Ready | ? | https://github.com/flavioribeiro/clappr-rtmp-plugin
 Dash           | WIP | No | https://github.com/shankardevy/clappr-dash-plugin
 Youtube        | Ready | No | https://github.com/towerz/clappr-youtube-playback
 
