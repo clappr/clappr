@@ -495,7 +495,7 @@ Events.MEDIACONTROL_RENDERED = 'mediacontrol:rendered'
 /**
  * Fired when the player enters/exit on fullscreen
  *
- * @event MEDIACONTROL_SHOW
+ * @event MEDIACONTROL_FULLSCREEN
  */
 Events.MEDIACONTROL_FULLSCREEN = 'mediacontrol:fullscreen'
 /**
