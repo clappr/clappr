@@ -91,6 +91,8 @@ export default class Player extends BaseObject {
    * disables the context menu (right click) on the video element if a HTML5Video playback is used.
    * @param {String} [options.poster]
    * define a poster by adding its address `poster: 'http://url/img.png'`. It will appear after video embed, disappear on play and go back when user stops the video.
+   * @param {String} [options.playbackNotSupportedMessage]
+   * define a custom message to be displayed when a playback is not supported.
    */
   constructor(options) {
     super(options)
