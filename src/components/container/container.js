@@ -251,9 +251,13 @@ export default class Container extends UIObject {
     this.trigger(Events.CONTAINER_CONTEXTMENU, this, this.name)
   }
 
-  setCurrentTime(time) {
-    this.trigger(Events.CONTAINER_SEEK, time, this.name)
-    this.playback.seek(time)
+  setCurrentTime(time, inseconds) {
+    this.trigger(Events.CONTAINER_SEEK, time, this.name);
+    if(inseconds) {
+      this.playback.seek(time);
+    }else{
+      this.playback.seekPercentage(time);
+    }
   }
 
   setVolume(value) {
