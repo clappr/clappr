@@ -37,11 +37,18 @@ export default class Playback extends UIObject {
   stop() {}
 
   /**
-   * seeks the playback to a given `time` in percentage
+   * seeks the playback to a given `time` in seconds
    * @method seek
-   * @param {Number} time should be a number between 0 and 100
+   * @param {Number} time should be a number between 0 and the video duration
    */
   seek(time) {}
+
+  /**
+   * seeks the playback to a given `percentage` in percentage
+   * @method seekPercentage
+   * @param {Number} time should be a number between 0 and 100
+   */
+  seekPercentage(percentage) {}
 
   /**
    * gets the duration in seconds
@@ -105,6 +112,18 @@ Playback.extend = function(properties) {
 }
 
 /**
+ * checks if the playback can play a given `source` and optionally a `mimeType`
+ * @method canPlay
+ * @static
+ * @param {String} source the given source ex: `http://example.com/play.mp4`
+ * @param {String} [mimeType] the given mime type, ex: `'application/vnd.apple.mpegurl'`
+ * @return {Boolean} `true` if the playback is playable, otherwise `false`
+ */
+Playback.canPlay = (source, mimeType) => {
+  return false
+}
+
+/**
  * a playback type for video on demand
  *
  * @property VOD
@@ -136,19 +155,6 @@ Playback.LIVE = 'live'
  * @type String
  */
 Playback.NO_OP = 'no_op'
-
-/**
- * checks if the playback can play a given `source` and optionally a `mimeType`
- * @method canPlay
- * @static
- * @param {String} source the given source ex: `http://example.com/play.mp4`
- * @param {String} [mimeType] the given mime type, ex: `'application/vnd.apple.mpegurl'`
- * @return {Boolean} `true` if the playback is playable, otherwise `false`
- */
-Playback.canPlay = (source, mimeType) => {
-  return false
-}
-
 /**
  * the plugin type
  *
