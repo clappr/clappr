@@ -8,8 +8,7 @@ before_install:
   - sh -e /etc/init.d/xvfb start
 
 env:
-  - COVERALLS_SERVICE_NAME="travis-ci"
-  - COVERALLS_REPO_TOKEN="sj8SOxUBGaVeFGSY9ryrC2eTFpVjCPHJl"
+  - COVERALLS_SERVICE_NAME="travis-ci" COVERALLS_REPO_TOKEN="sj8SOxUBGaVeFGSY9ryrC2eTFpVjCPHJl"
 
 notifications:
   email:
