@@ -414,8 +414,9 @@ export default class FlasHLS extends BaseFlashPlayback {
 
   seekPercentage(percentage) {
     var duration = this.el.getDuration()
+    var time = 0
     if (percentage > 0) {
-      var time = percentage * 60 / duration
+      time = duration * percentage / 100
     }
     this.seek(time)
   }
