@@ -486,6 +486,20 @@ Events.CONTAINER_SETTINGSUPDATE = 'container:settingsupdate'
  * true when is on HD, false otherwise
  */
 Events.CONTAINER_HIGHDEFINITIONUPDATE = 'container:highdefinitionupdate'
+
+/**
+ * Fired when the media control shows
+ *
+ * @event CONTAINER_MEDIACONTROL_SHOW
+ */
+Events.CONTAINER_MEDIACONTROL_SHOW = 'container:mediacontrol:show'
+/**
+ * Fired when the media control hides
+ *
+ * @event CONTAINER_MEDIACONTROL_HIDE
+ */
+Events.CONTAINER_MEDIACONTROL_HIDE = 'container:mediacontrol:hide'
+
 Events.CONTAINER_MEDIACONTROL_DISABLE = 'container:mediacontrol:disable'
 Events.CONTAINER_MEDIACONTROL_ENABLE = 'container:mediacontrol:enable'
 Events.CONTAINER_STATS_ADD = 'container:stats:add'
