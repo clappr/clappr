@@ -386,7 +386,7 @@ export default class MediaControl extends UIObject {
     var offsetX = event.pageX - this.$seekBarContainer.offset().left
     var pos = offsetX / this.$seekBarContainer.width() * 100
     pos = Math.min(100, Math.max(pos, 0))
-    this.container.setCurrentTime(pos)
+    this.container.seekPercentage(pos)
     this.setSeekPercentage(pos)
     return false
   }
@@ -516,7 +516,7 @@ export default class MediaControl extends UIObject {
     var duration = this.container.getDuration()
     var position = Math.min(Math.max(currentTime + delta, 0), duration)
     position = Math.min(position * 100 / duration, 100)
-    this.container.setCurrentTime(position)
+    this.container.seekPercentage(position)
   }
 
   bindKeyEvents() {
@@ -528,7 +528,7 @@ export default class MediaControl extends UIObject {
     this.kibo.down(['left'], () => this.seekRelative(-15))
     this.kibo.down(['right'], () => this.seekRelative(15))
     var keys = [1,2,3,4,5,6,7,8,9,0]
-    keys.forEach((i) => { this.kibo.down(i.toString(), () => this.container.settings.seekEnabled && this.container.setCurrentTime(i * 10)) })
+    keys.forEach((i) => { this.kibo.down(i.toString(), () => this.container.settings.seekEnabled && this.container.seekPercentage(i * 10)) })
   }
 
   unbindKeyEvents() {

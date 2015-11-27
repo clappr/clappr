@@ -45,7 +45,7 @@ export default class Playback extends UIObject {
 
   /**
    * seeks the playback to a given `percentage` in percentage
-   * @method seek
+   * @method seekPercentage
    * @param {Number} time should be a number between 0 and 100
    */
   seekPercentage(percentage) {}
