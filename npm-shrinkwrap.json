@@ -1,6 +1,6 @@
 {
   "name": "clappr",
-  "version": "0.2.21",
+  "version": "0.2.22",
   "dependencies": {
     "abbrev": {
       "version": "1.0.7",
@@ -2799,9 +2799,9 @@
       "resolved": "https://registry.npmjs.org/log-driver/-/log-driver-1.2.4.tgz"
     },
     "log4js": {
-      "version": "0.6.28",
+      "version": "0.6.29",
       "from": "log4js@>=0.6.25 <0.7.0",
-      "resolved": "https://registry.npmjs.org/log4js/-/log4js-0.6.28.tgz",
+      "resolved": "https://registry.npmjs.org/log4js/-/log4js-0.6.29.tgz",
       "dependencies": {
         "async": {
           "version": "0.2.10",
