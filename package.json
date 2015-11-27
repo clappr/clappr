@@ -1,6 +1,6 @@
 {
   "name": "clappr",
-  "version": "0.2.20",
+  "version": "0.2.22",
   "description": "An extensible media player for the web",
   "main": "dist/clappr.min.js",
   "scripts": {
@@ -36,7 +36,6 @@
     "dotenv": "^1.2.0",
     "file-loader": "^0.8.4",
     "gulp": "^3.8.1",
-    "hls.js": "github:dailymotion/hls.js#v0.3.0",
     "html-loader": "^0.3.0",
     "isparta": "^3.0.3",
     "istanbul": "^0.3.19",
@@ -67,12 +66,12 @@
     "uglify-js": "^2.5.0",
     "url-loader": "^0.5.6",
     "webpack": "^1.12.1",
-    "webpack-dev-server": "^1.10.1",
+    "webpack-dev-server": "^1.14.0",
     "yargs": "^3.24.0"
   },
   "dependencies": {
     "clappr-zepto": "0.0.4",
-    "hls.js": "dailymotion/hls.js#v0.3.0",
+    "hls.js": "dailymotion/hls.js#v0.3.2",
     "lodash.find": "^3.2.1",
     "lodash.once": "^3.0.1",
     "lodash.result": "^3.1.2",
