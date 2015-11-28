@@ -138,6 +138,7 @@ export default class MediaControl extends UIObject {
   onVolumeChanged(event) {
     this.mute = (this.currentVolume === 0)
     this.setVolumeLevel(event)
+    this.persistConfig && Config.persist("volume", event)
   }
 
   changeTogglePlay() {
@@ -291,9 +292,7 @@ export default class MediaControl extends UIObject {
   setVolume(value) {
     this.currentVolume = Math.min(100, Math.max(value, 0))
     this.container.setVolume(this.currentVolume)
-    this.setVolumeLevel(this.currentVolume)
-    this.mute = (this.currentVolume === 0)
-    this.persistConfig && Config.persist("volume", this.currentVolume)
+    this.onVolumeChanged(this.currentVolume)
   }
 
   toggleFullscreen() {
