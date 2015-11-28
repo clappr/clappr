@@ -96,6 +96,9 @@ Add `mimeType: "mimetype-for-media"` if you need to use a media url without exte
 ##### Configuration persistance
 Add `persistConfig: false` if you don't want to persist player's volume through your videos, by **default it saves**. These configuration are being saved at user's browser ([through localStorage](http://diveintohtml5.info/storage.html)).
 
+##### Playback not supported custom message
+Add `playbackNotSupportedMessage: 'Please try on a different browser'` to define a custom message to be displayed when a playback is not supported.
+
 ##### Preload
 In case you're loading a on demand video (mp4), it's possible to define the way the video will be preloaded according to [preload](http://www.stevesouders.com/blog/2013/04/12/html5-video-preload/) attribute options. Add `preload: <type>` on embed parameters. By default, Clappr will try to download only video metadata (`preload: 'metadata'`).
 
