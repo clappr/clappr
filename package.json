@@ -15,7 +15,7 @@
   "author": "Clappr team",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "shaka-player": "^1.5.0"
+    "shaka-player": "^1.6.0"
   },
   "devDependencies": {
     "webpack": "^1.12.1",
