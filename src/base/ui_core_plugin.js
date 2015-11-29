@@ -32,6 +32,7 @@ export default class UICorePlugin extends UIObject {
     this.remove()
   }
 
+  //TODO: this seems never be called and assume template and styler, remove it or add template and styler
   render() {
     this.$el.html(this.template())
     this.$el.append(this.styler.getStyleFor(this.name))
