@@ -50,6 +50,7 @@ PS4 Browser    | ✔ | ✔ | ✘ |  ? | ![rtmp](http://flv.io/external3.png) | !
 Plugin         |Status|Compatible with latest Clappr|URL|
 ---------------|---|---|---|---|---
 Thumbnails on seekbar| Ready | Yes | https://github.com/tjenkinson/clappr-thumbnails-plugin
+Markers       | Ready | Yes | https://github.com/tjenkinson/clappr-markers-plugin
 Level Selector| Ready | Yes | https://github.com/clappr/clappr-level-selector-plugin
 360 videos| Ready | Yes | https://github.com/thiagopnts/video-360
 Chromecast| Ready | Yes | https://github.com/clappr/clappr-chromecast-plugin
