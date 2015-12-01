@@ -390,6 +390,7 @@ export default class FlasHLS extends BaseFlashPlayback {
   stop() {
     this.srcLoaded = false
     this.el.playerStop()
+    this.trigger(Events.PLAYBACK_STOP)
     this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: 0, total: 0}, this.name)
   }
 

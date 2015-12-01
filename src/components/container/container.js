@@ -103,6 +103,7 @@ export default class Container extends UIObject {
     this.listenTo(this.playback, Events.PLAYBACK_ENDED, this.ended)
     this.listenTo(this.playback, Events.PLAYBACK_PLAY, this.playing)
     this.listenTo(this.playback, Events.PLAYBACK_PAUSE, this.paused)
+    this.listenTo(this.playback, Events.PLAYBACK_STOP, this.stopped)
     this.listenTo(this.playback, Events.PLAYBACK_ERROR, this.error)
   }
 
@@ -237,6 +238,10 @@ export default class Container extends UIObject {
   ended() {
     this.trigger(Events.CONTAINER_ENDED, this, this.name)
     this.currentTime = 0
+  }
+
+  stopped() {
+    this.trigger(Events.CONTAINER_STOP)
   }
 
   clicked() {
