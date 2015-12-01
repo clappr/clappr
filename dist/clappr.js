@@ -178,7 +178,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var version = ("0.2.22");
+	var version = ("0.2.23");
 
 	exports['default'] = {
 	    Player: _componentsPlayer2['default'],
@@ -349,6 +349,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * disables the context menu (right click) on the video element if a HTML5Video playback is used.
 	   * @param {String} [options.poster]
 	   * define a poster by adding its address `poster: 'http://url/img.png'`. It will appear after video embed, disappear on play and go back when user stops the video.
+	   * @param {String} [options.playbackNotSupportedMessage]
+	   * define a custom message to be displayed when a playback is not supported.
 	   */
 
 	  function Player(options) {
@@ -446,8 +448,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'onSeek',
-	    value: function onSeek(percent) {
-	      this.trigger(_baseEvents2['default'].PLAYER_SEEK, percent);
+	    value: function onSeek(time) {
+	      this.trigger(_baseEvents2['default'].PLAYER_SEEK, time);
 	    }
 	  }, {
 	    key: 'onTimeUpdate',
@@ -540,14 +542,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    /**
-	     * seeks the current video (`source`). For example, `player.seek(50)` will seek to the middle of the current video.
+	     * seeks the current video (`source`). For example, `player.seek(120)` will seek to second 120 (2minutes) of the current video.
 	     * @method seek
-	     * @param {Number} time should be a number between 0 and 100.
+	     * @param {Number} time should be a number between 0 and the video duration.
 	     */
 	  }, {
 	    key: 'seek',
 	    value: function seek(time) {
-	      this.core.mediaControl.container.setCurrentTime(time);
+	      this.core.mediaControl.container.seek(time);
+	    }
+
+	    /**
+	     * seeks the current video (`source`). For example, `player.seek(50)` will seek to the middle of the current video.
+	     * @method seekPercentage
+	     * @param {Number} time should be a number between 0 and 100.
+	     */
+	  }, {
+	    key: 'seekPercentage',
+	    value: function seekPercentage(percentage) {
+	      this.core.mediaControl.container.seekPercentage(percentage);
 	    }
 
 	    /**
@@ -2191,7 +2204,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Fired when player seeks the video
 	 *
 	 * @event PLAYER_SEEK
-	 * @param {Number} percent a percentagem of seek
+	 * @param {Number} time the current time in seconds
 	 */
 	Events.PLAYER_SEEK = 'seek';
 	/**
@@ -2413,6 +2426,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	Events.CONTAINER_CONTEXTMENU = 'container:contextmenu';
 	Events.CONTAINER_MOUSE_ENTER = 'container:mouseenter';
 	Events.CONTAINER_MOUSE_LEAVE = 'container:mouseleave';
+	/**
+	 * Fired when the container seeks the video
+	 *
+	 * @event CONTAINER_SEEK
+	 * @param {Number} time the current time in seconds
+	 */
 	Events.CONTAINER_SEEK = 'container:seek';
 	Events.CONTAINER_VOLUME = 'container:volume';
 	Events.CONTAINER_FULLSCREEN = 'container:fullscreen';
@@ -5059,10 +5078,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.trigger(_baseEvents2['default'].CONTAINER_CONTEXTMENU, this, this.name);
 	    }
 	  }, {
-	    key: 'setCurrentTime',
-	    value: function setCurrentTime(time) {
+	    key: 'seek',
+	    value: function seek(time) {
 	      this.trigger(_baseEvents2['default'].CONTAINER_SEEK, time, this.name);
 	      this.playback.seek(time);
+	    }
+	  }, {
+	    key: 'seekPercentage',
+	    value: function seekPercentage(percentage) {
+	      var duration = this.getDuration();
+	      if (percentage > 0 && percentage <= 100) {
+	        var time = duration * (percentage / 100);
+	        this.seek(time);
+	      }
 	    }
 	  }, {
 	    key: 'setVolume',
@@ -7358,6 +7386,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function onVolumeChanged(event) {
 	      this.mute = this.currentVolume === 0;
 	      this.setVolumeLevel(event);
+	      this.persistConfig && _baseUtils.Config.persist("volume", event);
 	    }
 	  }, {
 	    key: 'changeTogglePlay',
@@ -7528,9 +7557,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function setVolume(value) {
 	      this.currentVolume = Math.min(100, Math.max(value, 0));
 	      this.container.setVolume(this.currentVolume);
-	      this.setVolumeLevel(this.currentVolume);
-	      this.mute = this.currentVolume === 0;
-	      this.persistConfig && _baseUtils.Config.persist("volume", this.currentVolume);
+	      this.onVolumeChanged(this.currentVolume);
 	    }
 	  }, {
 	    key: 'toggleFullscreen',
@@ -7640,7 +7667,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var offsetX = event.pageX - this.$seekBarContainer.offset().left;
 	      var pos = offsetX / this.$seekBarContainer.width() * 100;
 	      pos = Math.min(100, Math.max(pos, 0));
-	      this.container.setCurrentTime(pos);
+	      this.container.seekPercentage(pos);
 	      this.setSeekPercentage(pos);
 	      return false;
 	    }
@@ -7799,7 +7826,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var duration = this.container.getDuration();
 	      var position = Math.min(Math.max(currentTime + delta, 0), duration);
 	      position = Math.min(position * 100 / duration, 100);
-	      this.container.setCurrentTime(position);
+	      this.container.seekPercentage(position);
 	    }
 	  }, {
 	    key: 'bindKeyEvents',
@@ -7822,7 +7849,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
 	      keys.forEach(function (i) {
 	        _this6.kibo.down(i.toString(), function () {
-	          return _this6.container.settings.seekEnabled && _this6.container.setCurrentTime(i * 10);
+	          return _this6.container.settings.seekEnabled && _this6.container.seekPercentage(i * 10);
 	        });
 	      });
 	    }
@@ -8389,13 +8416,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function stop() {}
 
 	    /**
-	     * seeks the playback to a given `time` in percentage
+	     * seeks the playback to a given `time` in seconds
 	     * @method seek
-	     * @param {Number} time should be a number between 0 and 100
+	     * @param {Number} time should be a number between 0 and the video duration
 	     */
 	  }, {
 	    key: 'seek',
 	    value: function seek(time) {}
+
+	    /**
+	     * seeks the playback to a given `percentage` in percentage
+	     * @method seekPercentage
+	     * @param {Number} time should be a number between 0 and 100
+	     */
+	  }, {
+	    key: 'seekPercentage',
+	    value: function seekPercentage(percentage) {}
 
 	    /**
 	     * gets the duration in seconds
@@ -8478,6 +8514,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	/**
+	 * checks if the playback can play a given `source` and optionally a `mimeType`
+	 * @method canPlay
+	 * @static
+	 * @param {String} source the given source ex: `http://example.com/play.mp4`
+	 * @param {String} [mimeType] the given mime type, ex: `'application/vnd.apple.mpegurl'`
+	 * @return {Boolean} `true` if the playback is playable, otherwise `false`
+	 */
+	Playback.canPlay = function (source, mimeType) {
+	  return false;
+	};
+
+	/**
 	 * a playback type for video on demand
 	 *
 	 * @property VOD
@@ -8509,19 +8557,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @type String
 	 */
 	Playback.NO_OP = 'no_op';
-
-	/**
-	 * checks if the playback can play a given `source` and optionally a `mimeType`
-	 * @method canPlay
-	 * @static
-	 * @param {String} source the given source ex: `http://example.com/play.mp4`
-	 * @param {String} [mimeType] the given mime type, ex: `'application/vnd.apple.mpegurl'`
-	 * @return {Boolean} `true` if the playback is playable, otherwise `false`
-	 */
-	Playback.canPlay = function (source, mimeType) {
-	  return false;
-	};
-
 	/**
 	 * the plugin type
 	 *
@@ -9635,20 +9670,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'seek',
-	    value: function seek(seekBarValue) {
-	      var time = this.el.duration * (seekBarValue / 100);
-	      this.seekSeconds(time);
+	    value: function seek(time) {
+	      this.el.currentTime = time;
 	    }
 	  }, {
-	    key: 'seekSeconds',
-	    value: function seekSeconds(time) {
-	      this.el.currentTime = time;
+	    key: 'seekPercentage',
+	    value: function seekPercentage(percentage) {
+	      var time = this.el.duration * (percentage / 100);
+	      this.seek(time);
 	    }
 	  }, {
 	    key: 'checkInitialSeek',
 	    value: function checkInitialSeek() {
 	      var seekTime = (0, _baseUtils.seekStringToSeconds)(window.location.href);
-	      this.seekSeconds(seekTime);
+	      this.seek(seekTime);
 	    }
 	  }, {
 	    key: 'getCurrentTime',
@@ -10063,33 +10098,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return this.el.getDuration();
 	    }
 	  }, {
-	    key: 'seek',
-	    value: function seek(seekBarValue) {
+	    key: 'seekPercentage',
+	    value: function seekPercentage(percentage) {
 	      var _this4 = this;
 
 	      if (this.el.getDuration() > 0) {
-	        var seekTo = this.el.getDuration() * (seekBarValue / 100);
-	        this.seekSeconds(seekTo);
+	        var seekSeconds = this.el.getDuration() * (percentage / 100);
+	        this.seek(seekSeconds);
 	      } else {
 	        this.listenToOnce(this, _baseEvents2['default'].PLAYBACK_BUFFERFULL, function () {
-	          return _this4.seek(seekBarValue);
+	          return _this4.seekPercentage(percentage);
 	        });
 	      }
 	    }
 	  }, {
-	    key: 'seekSeconds',
-	    value: function seekSeconds(seekTo) {
+	    key: 'seek',
+	    value: function seek(time) {
 	      var _this5 = this;
 
 	      if (this.isReady && this.el.playerSeek) {
-	        this.el.playerSeek(seekTo);
-	        this.trigger(_baseEvents2['default'].PLAYBACK_TIMEUPDATE, { current: seekTo, total: this.el.getDuration() }, this.name);
+	        this.el.playerSeek(time);
+	        this.trigger(_baseEvents2['default'].PLAYBACK_TIMEUPDATE, { current: time, total: this.el.getDuration() }, this.name);
 	        if (this.currentState === "PAUSED") {
 	          this.el.playerPause();
 	        }
 	      } else {
 	        this.listenToOnce(this, _baseEvents2['default'].PLAYBACK_BUFFERFULL, function () {
-	          return _this5.seekSeconds(seekTo);
+	          return _this5.seek(time);
 	        });
 	      }
 	    }
@@ -10967,13 +11002,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return duration;
 	    }
 	  }, {
+	    key: 'seekPercentage',
+	    value: function seekPercentage(percentage) {
+	      var duration = this.el.getDuration();
+	      var time = 0;
+	      if (percentage > 0) {
+	        time = duration * percentage / 100;
+	      }
+	      this.seek(time);
+	    }
+	  }, {
 	    key: 'seek',
 	    value: function seek(time) {
 	      var duration = this.el.getDuration();
-	      if (time > 0) {
-	        time = duration * time / 100;
-	      }
-
 	      if (this.playbackType === _basePlayback2['default'].LIVE) {
 	        // seek operations to a time within 5 seconds from live stream will position playhead back to live
 	        var dvrInUse = time >= 0 && duration - time > 5;
@@ -11320,15 +11361,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'seek',
-	    value: function seek(seekBarValue) {
-	      var seekTo = this.playableRegionDuration;
-	      if (seekBarValue > 0) {
-	        seekTo = this.playableRegionDuration * (seekBarValue / 100);
-	      }
-	      var onDvr = this.dvrEnabled && seekBarValue >= 0 && seekBarValue < 100;
-	      seekTo += this.playableRegionStartTime;
-	      _get(Object.getPrototypeOf(HLS.prototype), 'seekSeconds', this).call(this, seekTo);
+	    value: function seek(time) {
+	      var onDvr = this.dvrEnabled && time > 0 && time <= this.playableRegionDuration;
+	      time += this.playableRegionStartTime;
+	      _get(Object.getPrototypeOf(HLS.prototype), 'seek', this).call(this, time);
 	      this.updateDvr(onDvr);
+	    }
+	  }, {
+	    key: 'seekPercentage',
+	    value: function seekPercentage(percentage) {
+	      var seekTo = this.playableRegionDuration;
+	      if (percentage > 0) {
+	        seekTo = this.playableRegionDuration * (percentage / 100);
+	      }
+	      this.seek(seekTo);
 	    }
 	  }, {
 	    key: 'updateDvr',
@@ -13004,28 +13050,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      // check/update current fragment
 	      this._checkFragmentChanged();
+	      // check buffer
+	      this._checkBuffer();
 	    }
 	  }, {
 	    key: 'bufferInfo',
 	    value: function bufferInfo(pos, maxHoleDuration) {
-	      var sourceBuffer = this.sourceBuffer,
-	          data,
-	          bufferLen,
+	      var media = this.media,
+	          vbuffered = media.buffered,
+	          buffered = [],
+	          i;
+	      for (i = 0; i < vbuffered.length; i++) {
+	        buffered.push({ start: vbuffered.start(i), end: vbuffered.end(i) });
+	      }
+	      return this.bufferedInfo(buffered, pos, maxHoleDuration);
+	    }
+	  }, {
+	    key: 'bufferedInfo',
+	    value: function bufferedInfo(buffered, pos, maxHoleDuration) {
+	      var buffered2 = [],
 
 	      // bufferStart and bufferEnd are buffer boundaries around current video position
-	      bufferStart,
+	      bufferLen,
+	          bufferStart,
 	          bufferEnd,
 	          bufferStartNext,
-	          i,
-	          buffered = [],
-	          buffered2 = [];
-
-	      for (var type in sourceBuffer) {
-	        data = sourceBuffer[type].buffered;
-	        for (i = 0; i < data.length; i++) {
-	          buffered.push({ start: data.start(i), end: data.end(i) });
-	        }
-	      }
+	          i;
 	      // sort on buffer.start/smaller end (IE does not always return sorted buffered range)
 	      buffered.sort(function (a, b) {
 	        var diff = a.start - b.start;
@@ -13668,13 +13718,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 	          this.state = State.IDLE;
 	        }
-	        var video = this.media;
-	        if (video) {
-	          // seek back to a expected position after video buffered if needed
-	          if (this.seekAfterBuffered) {
-	            video.currentTime = this.seekAfterBuffered;
-	          } else {
-	            var currentTime = video.currentTime;
+	      }
+	      this.tick();
+	    }
+	  }, {
+	    key: '_checkBuffer',
+	    value: function _checkBuffer() {
+	      var media = this.media;
+	      if (media) {
+	        // compare readyState
+	        var readyState = media.readyState;
+	        //logger.log(`readyState:${readyState}`);
+	        // if ready state different from HAVE_NOTHING (numeric value 0), we are allowed to seek
+	        if (readyState) {
+	          // if seek after buffered defined, let's seek if within acceptable range
+	          var seekAfterBuffered = this.seekAfterBuffered;
+	          if (seekAfterBuffered) {
+	            if (media.duration >= seekAfterBuffered) {
+	              media.currentTime = seekAfterBuffered;
+	              this.seekAfterBuffered = undefined;
+	            }
+	          } else if (readyState < 3) {
+	            // readyState = 1 or 2
+	            //  HAVE_METADATA (numeric value 1)     Enough of the resource has been obtained that the duration of the resource is available.
+	            //                                       The API will no longer throw an exception when seeking.
+	            // HAVE_CURRENT_DATA (numeric value 2)  Data for the immediate current playback position is available,
+	            //                                      but either not enough data is available that the user agent could
+	            //                                      successfully advance the current playback position
+	            var currentTime = media.currentTime;
 	            var bufferInfo = this.bufferInfo(currentTime, 0);
 	            // check if current time is buffered or not
 	            if (bufferInfo.len === 0) {
@@ -13684,15 +13755,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                // next buffer is close ! adjust currentTime to nextBufferStart
 	                // this will ensure effective video decoding
 	                _utilsLogger.logger.log('adjust currentTime from ' + currentTime + ' to ' + nextBufferStart);
-	                video.currentTime = nextBufferStart;
+	                media.currentTime = nextBufferStart;
 	              }
 	            }
 	          }
 	        }
-	        // reset this variable, whether it was set or not
-	        this.seekAfterBuffered = undefined;
 	      }
-	      this.tick();
 	    }
 	  }, {
 	    key: 'onSBUpdateError',
@@ -17345,13 +17413,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _classCallCheck(this, NoOp);
 
 	    _get(Object.getPrototypeOf(NoOp.prototype), 'constructor', this).call(this, options);
+	    this.options = options;
 	  }
 
 	  _createClass(NoOp, [{
 	    key: 'render',
 	    value: function render() {
 	      var style = _baseStyler2['default'].getStyleFor(_publicStyleScss2['default']);
-	      this.$el.html(this.template({ message: this.getNoOpMessage() }));
+	      this.$el.html(this.template({ message: this.options.playbackNotSupportedMessage || this.getNoOpMessage() }));
 	      this.$el.append(style);
 	      this.animate();
 	      this.trigger(_baseEvents2['default'].PLAYBACK_READY, this.name);
@@ -18731,7 +18800,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.core.mediaControl.container.play();
 	      }
 	      if (this.core.mediaControl.$el.hasClass('dvr')) {
-	        this.core.mediaControl.container.setCurrentTime(-1);
+	        this.core.mediaControl.container.seek(-1);
 	      }
 	    }
 	  }, {
@@ -18846,6 +18915,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function destroy() {
 	      this.remove();
 	    }
+
+	    //TODO: this seems never be called and assume template and styler, remove it or add template and styler
 	  }, {
 	    key: 'render',
 	    value: function render() {
