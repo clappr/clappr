@@ -166,6 +166,7 @@ export default class Flash extends BaseFlashPlayback {
 
   stop() {
     this.el.playerStop()
+    this.trigger(Events.PLAYBACK_STOP)
     this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: 0, total: 0}, this.name)
   }
 

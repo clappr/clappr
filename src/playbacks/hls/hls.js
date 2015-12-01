@@ -109,6 +109,7 @@ export default class HLS extends HTML5VideoPlayback {
     if (this.hls) {
       this.hls.destroy()
       delete this.hls
+      this.trigger(Events.PLAYBACK_STOP)
     }
   }
 
