@@ -107,6 +107,7 @@ export default class HTML5Video extends Playback {
     this.pause()
     if (this.el.readyState !== 0) {
       this.el.currentTime = 0
+      this.trigger(Events.PLAYBACK_STOP)
     }
   }
 
