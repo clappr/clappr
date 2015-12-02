@@ -41,11 +41,11 @@ export default class HTML5Video extends Playback {
     }
   }
 
+
   constructor(options) {
     super(options)
     this.options = options
-    this.src = options.src
-    this.el.src = options.src
+    this.setupSrc(options.src)
     this.el.loop = options.loop
     this.firstBuffer = true
     this.settings = {default: ['seekbar']}
@@ -57,6 +57,14 @@ export default class HTML5Video extends Playback {
     }
     this.settings.left = ["playpause", "position", "duration"]
     this.settings.right = ["fullscreen", "volume", "hd-indicator"]
+  }
+
+  setupSrc(srcUrl) {
+    //avoid to set el.src of an "invalid" source since we're extending video tag with MSE
+    if (HTML5Video.canPlay(srcUrl)) {
+      this.src = srcUrl
+      this.el.src = srcUrl
+    }
   }
 
   setupSafari() {
@@ -247,16 +255,21 @@ export default class HTML5Video extends Playback {
 
   render() {
     var style = Styler.getStyleFor(tagStyle)
-    this.$el.html(this.template({ src: this.src, type: this.typeFor(this.src) }))
+
+    this.src && this.$el.html(this.template({ src: this.src, type: this.typeFor(this.src) }))
+
     if (this.options.useVideoTagDefaultControls) {
       this.$el.attr('controls', 'controls')
     }
+
     if (this.options.disableVideoTagContextMenu) {
       this.$el.on("contextmenu", () => {
         return false
       })
     }
+
     this.$el.append(style)
+
     process.nextTick(() => this.options.autoPlay && this.play())
     if (this.el.readyState === this.el.HAVE_ENOUGH_DATA) {
       this.ready()
