@@ -38,7 +38,6 @@ export default class SeekTime extends UIObject {
         this.actualLiveServerTimeDiff = 0
       }
     }
-    console.log("actualLiveServerTimeDiff: " + formatTime(this.actualLiveServerTimeDiff / 1000))
     this.durationShown = false
     this.addEventListeners()
   }
