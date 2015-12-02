@@ -13,6 +13,18 @@ import tagStyle from './public/style.scss'
 import sourceHTML from './public/index.html'
 import find from 'lodash.find'
 
+const MIMETYPES = {
+  'mp4': ["avc1.42E01E", "avc1.58A01E", "avc1.4D401E", "avc1.64001E", "mp4v.20.8", "mp4v.20.240", "mp4a.40.2"].map(
+    (codec) => { return 'video/mp4; codecs="' + codec + ', mp4a.40.2"'}),
+      'ogg': ['video/ogg; codecs="theora, vorbis"', 'video/ogg; codecs="dirac"', 'video/ogg; codecs="theora, speex"'],
+    '3gpp': ['video/3gpp; codecs="mp4v.20.8, samr"'],
+    'webm': ['video/webm; codecs="vp8, vorbis"'],
+    'mkv': ['video/x-matroska; codecs="theora, vorbis"'],
+    'm3u8': ['application/x-mpegurl']
+}
+MIMETYPES['ogv'] = MIMETYPES['ogg']
+MIMETYPES['3gp'] = MIMETYPES['3gpp']
+
 export default class HTML5Video extends Playback {
   get name() { return 'html5_video' }
   get tagName() { return 'video' }
@@ -278,28 +290,13 @@ export default class HTML5Video extends Playback {
   }
 }
 
-HTML5Video.canPlay = function(resource, mimeType) {
-  var mimetypes = {
-    'mp4': ["avc1.42E01E", "avc1.58A01E", "avc1.4D401E", "avc1.64001E", "mp4v.20.8", "mp4v.20.240", "mp4a.40.2"].map(
-      (codec) => { return 'video/mp4; codecs="' + codec + ', mp4a.40.2"'}),
-    'ogg': ['video/ogg; codecs="theora, vorbis"', 'video/ogg; codecs="dirac"', 'video/ogg; codecs="theora, speex"'],
-    '3gpp': ['video/3gpp; codecs="mp4v.20.8, samr"'],
-    'webm': ['video/webm; codecs="vp8, vorbis"'],
-    'mkv': ['video/x-matroska; codecs="theora, vorbis"'],
-    'm3u8': ['application/x-mpegURL']
-  }
-  mimetypes['ogv'] = mimetypes['ogg']
-  mimetypes['3gp'] = mimetypes['3gpp']
+HTML5Video.canPlay = function(srcUrl, mimeType = '') {
+  var extension = (srcUrl.split('?')[0].match(/.*\.(.*)$/) || [])[1]
+  var mimeTypes = MIMETYPES[extension] || mimeType
+  mimeTypes = (mimeTypes.constructor === Array) ? mimeTypes : [mimeTypes]
 
-  var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
-  if ((resourceParts.length > 1) && (mimetypes[resourceParts[1]] !== undefined)) {
-    var v = document.createElement('video')
-    return !!find(mimetypes[resourceParts[1]], (ext) => { return !!v.canPlayType(ext).replace(/no/, '') })
-  } else if (mimeType) {
-    var v = document.createElement('video')
-    return !!v.canPlayType(mimeType).replace(/no/, '')
-  }
-  return false
+  var video = document.createElement('video')
+  return !!find(mimeTypes, (mediaType) => !!video.canPlayType(mediaType).replace(/no/, ''))
 }
 
 module.exports = HTML5Video
