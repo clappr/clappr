@@ -15,13 +15,13 @@
   "author": "Clappr team",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "shaka-player": "^1.6.0"
+    "shaka-player": "^1.6.0",
+    "clappr": "latest"
   },
   "devDependencies": {
     "webpack": "^1.12.1",
     "webpack-dev-server": "^1.10.1",
     "babel-core": "^5.8.25",
-    "babel-loader": "^5.3.2",
-    "clappr": "^0.2.15"
+    "babel-loader": "^5.3.2"
   }
 }
