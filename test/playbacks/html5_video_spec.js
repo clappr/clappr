@@ -10,14 +10,14 @@ describe('HTML5Video playback', () => {
   })
 
   it('checks if it can play a resource with mime-type', () => {
-    expect(HTML5Video.canPlay("resource_without_dots", 'video/mp4;"codecs=mp4v.20.8,mp4a.40.2"')).to.be.true
+    expect(HTML5Video.canPlay("resource_without_dots", 'video/ogg; codecs="theora, vorbis"')).to.be.true
   })
 
   it('does set a valid src to video element', () => {
-    var options = {src: 'http://example.com/dash.mp4'}
+    var options = {src: 'http://example.com/dash.ogg'}
     var playback = new HTML5Video(options)
 
-    expect(playback.src).to.be.equals('http://example.com/dash.mp4')
+    expect(playback.src).to.be.equals('http://example.com/dash.ogg')
   })
 
   it('does not set an invalid src to video element', () => {
