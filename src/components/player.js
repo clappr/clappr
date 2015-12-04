@@ -69,6 +69,10 @@ export default class Player extends BaseObject {
    * start the video muted **default**: `false`
    * @param {String} [options.mimeType]
    * add `mimeType: "application/vnd.apple.mpegurl"` if you need to use a url without extension.
+   * @param {String} [options.actualLiveTime]
+   * show duration and seek time relative to actual time.
+   * @param {String} [options.actualLiveServerTime]
+   * specify server time as a string, format: "2015/11/26 06:01:03". This option is meant to be used with actualLiveTime.
    * @param {Boolean} [options.persistConfig]
    * persist player's settings (volume) through the same domain **default**: `true`
    * @param {String} [options.preload]
