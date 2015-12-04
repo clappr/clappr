@@ -110,7 +110,7 @@ export default class DashShakaPlayback extends HTML5Video {
 
   _sendStats() {this.trigger(Events.PLAYBACK_STATS_ADD, this._player.getStats())}
 
-  _setupError(e) { this._error({detail: `shaka could not be setup: ${e}`) }
+  _setupError(e) { this._error({detail: `shaka could not be setup: ${e}`}) }
 
   _bufferingHandler() { this.trigger(Events.PLAYBACK_BUFFERING, this.name) }
 
