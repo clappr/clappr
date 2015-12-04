@@ -361,6 +361,21 @@ Events.PLAYBACK_BITRATE = 'playback:bitrate'
  */
 Events.PLAYBACK_LEVELS_AVAILABLE = 'playback:levels:available'
 /**
+ * Fired when the playback starts to switch level
+ *
+ * @event PLAYBACK_LEVEL_SWITCH_START
+ *
+ */
+Events.PLAYBACK_LEVEL_SWITCH_START = 'playback:levels:switch:start'
+/**
+ * Fired when the playback ends the level switch
+ *
+ * @event PLAYBACK_LEVEL_SWITCH_END
+ *
+ */
+Events.PLAYBACK_LEVEL_SWITCH_END = 'playback:levels:switch:end'
+
+/**
  * Fired when playback internal state changes
  *
  * @event PLAYBACK_PLAYBACKSTATE

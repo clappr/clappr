@@ -5,16 +5,44 @@
     <link rel="stylesheet" href="stylesheets/bootstrap-theme.min.css" type="text/css" media="screen" charset="utf-8">
     <link rel="stylesheet" href="stylesheets/style.css" type="text/css" media="screen" charset="utf-8">
     <link rel="shortcut icon" type="image/png" href="i/favico.png">
+    <script>
+      window.clappr = window.clappr || {}
+      window.clappr.externals = []
+
+      function addExternal() {
+        var url = document.getElementById('js-link')
+        window.clappr.externals.push(url.value)
+        addTag(url.value)
+        url.value = ''
+      }
+
+      function addTag(url) {
+        var colors = ["aliceblue", "antiquewhite", "azure", "black", "blue", "brown", "yellow", "teal"]
+        var color = colors[Math.floor(Math.random() * colors.length)]
+        var span = document.createElement('span')
+
+        span.style.backgroundColor = color
+        span.className = "external-js"
+        span.innerText = url.split(/\//).pop().split(/\./)[0]
+
+        document.getElementById('external-js-panel').appendChild(span)
+      }
+    </script>
   </head>
   <body>
     <header class="header">
       <span>Clappr</span>
       <ul>
-        <li><a href="https://github.com/globocom/clappr/blob/master/README.md">docs</a></li>
+        <li><a href="http://clappr.github.io/">docs</a></li>
       </ul>
     </header>
     <section class="container">
       <div class="main">
+	<p id='external-js-panel'>
+	  Add external plugins: 
+          <input id="js-link" type="url" placeholder="http://clappr.io/ex-plugin.js" style="width: 200px;">
+	  <button id="btn-link" onclick="addExternal()">+</button>
+	</p>
         <div id="output">
           <div id="player-wrapper" class="player"></div>
         </div>
@@ -81,9 +109,29 @@ player.attachTo(playerElement);
         session.setUseSoftTabs(true);
 
         var parser = new Parser($('#output'));
+        var load = function(fn) {
+          if (window.clappr.externals.length > 0) {
+            var lastScript = window.clappr.externals.length
+            window.clappr.externals.forEach(function(url, index) {
+	      var script = document.createElement('script')
+
+	      script.setAttribute("type", "text/javascript")
+	      script.setAttribute("src", url)
+              if (index === (lastScript - 1)) {
+		script.onload = fn
+              }
+	      script.onerror = function(e){alert('we cant load ' + url + ': e' + e)}
+
+	      document.body.appendChild(script)
+            })
+	  } else {
+	    fn()
+          }
+        }
+
         $('.run').click(function() {
           var code = ace.edit('editor').getSession().getValue();
-          parser.parse(code);
+          load(function(){parser.parse(code)})
         });
       }
     </script>
