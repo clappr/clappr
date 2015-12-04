@@ -2,15 +2,28 @@ import {HTML5Video, Log, Events} from 'clappr'
 import shaka from 'shaka-player'
 
 const SEND_STATS_AT = 30 * 1000
+const AUTO = -1
 
 export default class DashShakaPlayback extends HTML5Video {
   get name() {return 'dash_shaka_playback'}
 
   get shakaVersion() {return shaka.player.Player.version}
 
+  get levels() { return this._levels }
+
+  set currentLevel(id) {
+    this._currentLevelId = id
+    var isAuto = this._currentLevelId === AUTO
+
+    this._player.configure({enableAdaptation: !isAuto})
+    !isAuto && this.selectVideoTrack(this._currentLevelId)
+  }
+  get currentLevel() { return this._currentLevelId || AUTO }
+
   constructor(options) {
     super(options)
     this._readyToPlay = false
+    this._levels = []
 
     var checkIfIsReady = (fn) => {
       return (arg) => {
@@ -87,6 +100,8 @@ export default class DashShakaPlayback extends HTML5Video {
   _loaded() {
     this._ready()
     this._startToSendStats()
+    this._levels = this.videoTracks().map((videoTrack) => {id: videoTrack.id, label: `${videoTrack.height}p`})
+    this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this.levels)
   }
 
   _startToSendStats() {
