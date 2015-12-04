@@ -353,6 +353,14 @@ Events.PLAYBACK_HIGHDEFINITIONUPDATE = 'playback:highdefinitionupdate'
  */
 Events.PLAYBACK_BITRATE = 'playback:bitrate'
 /**
+ * Fired when the playback has its levels
+ *
+ * @event PLAYBACK_LEVELS_AVAILABLE
+ * @param {Array} levels
+ * the ordered levels, each one with the following format `{id: 1, label: '500kbps'}` ps: id should be a number >= 0
+ */
+Events.PLAYBACK_LEVELS_AVAILABLE = 'playback:levels:available'
+/**
  * Fired when playback internal state changes
  *
  * @event PLAYBACK_PLAYBACKSTATE
