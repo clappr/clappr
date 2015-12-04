@@ -16,6 +16,7 @@ export default class DashShakaPlayback extends HTML5Video {
     var isAuto = this._currentLevelId === AUTO
 
     this._player.configure({enableAdaptation: !isAuto})
+    this.trigger(Events.PLAYBACK_LEVEL_SWITCH_START)
     !isAuto && this.selectVideoTrack(this._currentLevelId)
   }
   get currentLevel() { return this._currentLevelId || AUTO }
@@ -128,6 +129,7 @@ export default class DashShakaPlayback extends HTML5Video {
     this.highDefinition = (event.size.height >= 720)
     this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition)
     this.trigger(Events.PLAYBACK_BITRATE, {bitrate: event.size.height})
+    (this._levels.length > 0) && this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
   }
 
   _destroy() {
