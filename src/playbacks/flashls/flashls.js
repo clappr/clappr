@@ -43,24 +43,42 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   initHlsParameters(options) {
-    this.flushLiveURLCache = (options.flushLiveURLCache === undefined) ? true : options.flushLiveURLCache
+    this.autoStartLoad = (options.autoStartLoad === undefined) ? true : options.autoStartLoad
     this.capLevelToStage = (options.capLevelToStage === undefined) ? false : options.capLevelToStage
-    this.useHardwareVideoDecoder = (options.useHardwareVideoDecoder === undefined) ? true : options.useHardwareVideoDecoder
+    this.maxLevelCappingMode = (options.maxLevelCappingMode === undefined) ? "downscale" : options.maxLevelCappingMode
+    this.minBufferLength = (options.minBufferLength === undefined) ? -1 : options.minBufferLength
+    this.minBufferLengthCapping = (options.minBufferLengthCapping === undefined) ? -1 : options.minBufferLengthCapping
     this.maxBufferLength = (options.maxBufferLength === undefined) ? 120 : options.maxBufferLength
+    this.maxBackBufferLength = (options.maxBackBufferLength === undefined) ? 30 : options.maxBackBufferLength
+    this.lowBufferLength = (options.lowBufferLength === undefined) ? 3 : options.lowBufferLength
+    this.mediaTimePeriod = (options.mediaTimePeriod === undefined) ? 100 : options.mediaTimePeriod
+    this.fpsDroppedMonitoringPeriod = (options.fpsDroppedMonitoringPeriod === undefined) ? 5000 : options.fpsDroppedMonitoringPeriod
+    this.fpsDroppedMonitoringThreshold = (options.fpsDroppedMonitoringThreshold === undefined) ? 0.2 : options.fpsDroppedMonitoringThreshold
+    this.capLevelonFPSDrop = (options.capLevelonFPSDrop === undefined) ? false : options.capLevelonFPSDrop
+    this.smoothAutoSwitchonFPSDrop = (options.smoothAutoSwitchonFPSDrop === undefined) ? this.capLevelonFPSDrop : options.smoothAutoSwitchonFPSDrop
+    this.switchDownOnLevelError = (options.switchDownOnLevelError === undefined) ? true : options.switchDownOnLevelError
     this.seekMode = (options.seekMode === undefined) ? "ACCURATE" : options.seekMode
-    this.startFromLevel = (options.startFromLevel === undefined) ? -1 : options.startFromLevel
-    this.startFromBitrate = (options.startFromBitrate === undefined) ? -1 : options.startFromBitrate
-    this.hlsMinimumDvrSize = (options.hlsMinimumDvrSize === undefined) ? 60 : options.hlsMinimumDvrSize
-    this.hlsLogEnabled = (options.hlsLogEnabled === undefined) ? true : options.hlsLogEnabled
     this.keyLoadMaxRetry = (options.keyLoadMaxRetry === undefined) ? 3 : options.keyLoadMaxRetry
     this.keyLoadMaxRetryTimeout = (options.keyLoadMaxRetryTimeout === undefined) ? 64000 : options.keyLoadMaxRetryTimeout
     this.fragmentLoadMaxRetry = (options.fragmentLoadMaxRetry === undefined) ? 3 : options.fragmentLoadMaxRetry
     this.fragmentLoadMaxRetryTimeout = (options.fragmentLoadMaxRetryTimeout === undefined) ? 4000 : options.fragmentLoadMaxRetryTimeout
-    this.fragmentLoadSkipAfterMaxRetry = (options.fragmentLoadSkipAfterMaxRetry === undefined) ? false : options.fragmentLoadSkipAfterMaxRetry
-    this.capLevelonFpsDrop = (options.capLevelonFpsDrop === undefined) ? false : options.capLevelonFpsDrop
-    this.smoothAutoSwitchonFpsDrop = (options.smoothAutoSwitchonFpsDrop === undefined) ? this.capLevelonFpsDrop : options.smoothAutoSwitchonFpsDrop
-    this.fpsDroppedMonitoringPeriod = (options.fpsDroppedMonitoringPeriod === undefined) ? 5000 : options.fpsDroppedMonitoringPeriod
-    this.fpsDroppedMonitoringThreshold = (options.fpsDroppedMonitoringThreshold === undefined) ? 0.2 : options.fpsDroppedMonitoringThreshold
+    this.fragmentLoadSkipAfterMaxRetry = (options.fragmentLoadSkipAfterMaxRetry === undefined) ? true : options.fragmentLoadSkipAfterMaxRetry
+    this.flushLiveURLCache = (options.flushLiveURLCache === undefined) ? false : options.flushLiveURLCache
+    this.initialLiveManifestSize = (options.initialLiveManifestSize === undefined) ? 1 : options.initialLiveManifestSize
+    this.manifestLoadMaxRetry = (options.manifestLoadMaxRetry === undefined) ? 3 : options.manifestLoadMaxRetry
+    this.manifestLoadMaxRetryTimeout = (options.manifestLoadMaxRetryTimeout === undefined) ? 64000 : options.manifestLoadMaxRetryTimeout
+    this.manifestRedundantLoadmaxRetry = (options.manifestRedundantLoadmaxRetry === undefined) ? 3 : options.manifestRedundantLoadmaxRetry
+    this.startFromBitrate = (options.startFromBitrate === undefined) ? -1 : options.startFromBitrate
+    this.startFromLevel = (options.startFromLevel === undefined) ? -1 : options.startFromLevel
+    this.autoStartMaxDuration = (options.autoStartMaxDuration === undefined) ? -1 : options.autoStartMaxDuration
+    this.seekFromLevel = (options.seekFromLevel === undefined) ? -1 : options.seekFromLevel
+    this.useHardwareVideoDecoder = (options.useHardwareVideoDecoder === undefined) ? false : options.useHardwareVideoDecoder
+    this.hlsLogEnabled = (options.hlsLogEnabled === undefined) ? true : options.hlsLogEnabled
+    this.logDebug = (options.logDebug === undefined) ? false : options.logDebug
+    this.logDebug2 = (options.logDebug2 === undefined) ? false : options.logDebug2
+    this.logWarn = (options.logWarn === undefined) ? true : options.logWarn
+    this.logError = (options.logError === undefined) ? true : options.logError
+    this.hlsMinimumDvrSize = (options.hlsMinimumDvrSize === undefined) ? 60 : options.hlsMinimumDvrSize
   }
 
   addListeners() {
@@ -108,63 +126,116 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   setFlashSettings() {
-    this.el.playerSetflushLiveURLCache(this.flushLiveURLCache)
-    this.el.playerCapLeveltoStage(this.capLevelToStage)
-    this.el.playerSetmaxBufferLength(this.maxBufferLength)
-    this.el.playerSetUseHardwareVideoDecoder(this.useHardwareVideoDecoder)
-    this.el.playerSetLogInfo(this.hlsLogEnabled)
+    this.el.playerSetAutoStartLoad(this.autoStartLoad)
+    this.el.playerSetCapLevelToStage(this.capLevelToStage)
+    this.el.playerSetMaxLevelCappingMode(this.maxLevelCappingMode)
+    this.el.playerSetMinBufferLength(this.minBufferLength)
+    this.el.playerSetMinBufferLengthCapping(this.minBufferLengthCapping)
+    this.el.playerSetMaxBufferLength(this.maxBufferLength)
+    this.el.playerSetMaxBackBufferLength(this.maxBackBufferLength)
+    this.el.playerSetLowBufferLength(this.lowBufferLength)
+    this.el.playerSetMediaTimePeriod(this.mediaTimePeriod)
+    this.el.playerSetFpsDroppedMonitoringPeriod(this.fpsDroppedMonitoringPeriod)
+    this.el.playerSetFpsDroppedMonitoringThreshold(this.fpsDroppedMonitoringThreshold)
+    this.el.playerSetCapLevelonFPSDrop(this.capLevelonFPSDrop)
+    this.el.playerSetSmoothAutoSwitchonFPSDrop(this.smoothAutoSwitchonFPSDrop)
+    this.el.playerSetSwitchDownOnLevelError(this.switchDownOnLevelError)
     this.el.playerSetSeekMode(this.seekMode)
-    this.el.playerSetStartFromBitrate(this.startFromBitrate)
-    this.el.playerSetstartFromLevel(this.startFromLevel)
     this.el.playerSetKeyLoadMaxRetry(this.keyLoadMaxRetry)
     this.el.playerSetKeyLoadMaxRetryTimeout(this.keyLoadMaxRetryTimeout)
     this.el.playerSetFragmentLoadMaxRetry(this.fragmentLoadMaxRetry)
     this.el.playerSetFragmentLoadMaxRetryTimeout(this.fragmentLoadMaxRetryTimeout)
     this.el.playerSetFragmentLoadSkipAfterMaxRetry(this.fragmentLoadSkipAfterMaxRetry)
-    this.el.playerSetCapLevelonFPSDrop(this.capLevelonFpsDrop)
-    this.el.playerSetSmoothAutoSwitchonFPSDrop(this.smoothAutoSwitchonFpsDrop)
-    this.el.playerSetFpsDroppedMonitoringPeriod(this.fpsDroppedMonitoringPeriod)
-    this.el.playerSetFpsDroppedMonitoringThreshold(this.fpsDroppedMonitoringThreshold)
+    this.el.playerSetFlushLiveURLCache(this.flushLiveURLCache)
+    this.el.playerSetInitialLiveManifestSize(this.initialLiveManifestSize)
+    this.el.playerSetManifestLoadMaxRetry(this.manifestLoadMaxRetry)
+    this.el.playerSetManifestLoadMaxRetryTimeout(this.manifestLoadMaxRetryTimeout)
+    this.el.playerSetManifestRedundantLoadmaxRetry(this.manifestRedundantLoadmaxRetry)
+    this.el.playerSetStartFromBitrate(this.startFromBitrate)
+    this.el.playerSetStartFromLevel(this.startFromLevel)
+    this.el.playerSetAutoStartMaxDuration(this.autoStartMaxDuration)
+    this.el.playerSetSeekFromLevel(this.seekFromLevel)
+    this.el.playerSetUseHardwareVideoDecoder(this.useHardwareVideoDecoder)
+    this.el.playerSetLogInfo(this.hlsLogEnabled)
+    this.el.playerSetLogDebug(this.logDebug)
+    this.el.playerSetLogDebug2(this.logDebug2)
+    this.el.playerSetLogWarn(this.logWarn)
+    this.el.playerSetLogError(this.logError)
   }
 
-  setFlushLiveUrlCache(flushLiveURLCache) {
-    this.flushLiveURLCache = flushLiveURLCache
-    this.el.playerSetflushLiveURLCache(this.flushLiveURLCache)
+  setAutoStartLoad(autoStartLoad) {
+    this.autoStartLoad = autoStartLoad
+    this.el.playerSetAutoStartLoad(this.autoStartLoad)
   }
 
-  setCapLeveltoStage(capLevelToStage) {
+  setCapLevelToStage(capLevelToStage) {
     this.capLevelToStage = capLevelToStage
-    this.el.playerCapLeveltoStage(this.capLevelToStage)
+    this.el.playerSetCapLevelToStage(this.capLevelToStage)
+  }
+
+  setMaxLevelCappingMode(maxLevelCappingMode) {
+    this.maxLevelCappingMode = maxLevelCappingMode
+    this.el.playerSetMaxLevelCappingMode(this.maxLevelCappingMode)
+  }
+
+  setSetMinBufferLength(minBufferLength) {
+    this.minBufferLength = minBufferLength
+    this.el.playerSetMinBufferLength(this.minBufferLength)
+  }
+
+  setMinBufferLengthCapping(minBufferLengthCapping) {
+    this.minBufferLengthCapping = minBufferLengthCapping
+    this.el.playerSetMinBufferLengthCapping(this.minBufferLengthCapping)
   }
 
   setMaxBufferLength(maxBufferLength) {
     this.maxBufferLength = maxBufferLength
-    this.el.playerSetmaxBufferLength(this.maxBufferLength)
+    this.el.playerSetMaxBufferLength(this.maxBufferLength)
   }
 
-  setUseHardwareVideoDecoder(useHardwareVideoDecoder) {
-    this.useHardwareVideoDecoder = useHardwareVideoDecoder
-    this.el.playerSetUseHardwareVideoDecoder(this.useHardwareVideoDecoder)
+  setMaxBackBufferLength(maxBackBufferLength) {
+    this.maxBackBufferLength = maxBackBufferLength
+    this.el.playerSetMaxBackBufferLength(this.maxBackBufferLength)
   }
 
-  setHlsLogEnabled(hlsLogEnabled) {
-    this.hlsLogEnabled = hlsLogEnabled
-    this.el.playerSetLogInfo(this.hlsLogEnabled)
+  setLowBufferLength(lowBufferLength) {
+    this.lowBufferLength = lowBufferLength
+    this.el.playerSetLowBufferLength(this.lowBufferLength)
+  }
+
+  setMediaTimePeriod(mediaTimePeriod) {
+    this.mediaTimePeriod = mediaTimePeriod
+    this.el.playerSetMediaTimePeriod(this.mediaTimePeriod)
+  }
+
+  setFpsDroppedMonitoringPeriod(fpsDroppedMonitoringPeriod) {
+    this.fpsDroppedMonitoringPeriod = fpsDroppedMonitoringPeriod
+    this.el.playerSetFpsDroppedMonitoringPeriod(this.fpsDroppedMonitoringPeriod)
+  }
+
+  setFpsDroppedMonitoringThreshold(fpsDroppedMonitoringThreshold) {
+    this.fpsDroppedMonitoringThreshold = fpsDroppedMonitoringThreshold
+    this.el.playerSetFpsDroppedMonitoringThreshold(this.fpsDroppedMonitoringThreshold)
+  }
+
+  setCapLevelonFPSDrop(capLevelonFPSDrop) {
+    this.capLevelonFPSDrop = capLevelonFPSDrop
+    this.el.playerSetCapLevelonFPSDrop(this.capLevelonFPSDrop)
+  }
+
+  setSmoothAutoSwitchonFPSDrop(smoothAutoSwitchonFPSDrop) {
+    this.smoothAutoSwitchonFPSDrop = smoothAutoSwitchonFPSDrop
+    this.el.playerSetSmoothAutoSwitchonFPSDrop(this.smoothAutoSwitchonFPSDrop)
+  }
+
+  setSwitchDownOnLevelError(switchDownOnLevelError) {
+    this.switchDownOnLevelError = switchDownOnLevelError
+    this.el.playerSetSwitchDownOnLevelError(this.switchDownOnLevelError)
   }
 
   setSeekMode(seekMode) {
     this.seekMode = seekMode
     this.el.playerSetSeekMode(this.seekMode)
-  }
-
-  setStartFromBitrate(startFromBitrate) {
-    this.startFromBitrate = startFromBitrate
-    this.el.playerSetStartFromBitrate(this.startFromBitrate)
-  }
-
-  setStartFromLevel(startFromLevel) {
-    this.startFromLevel = startFromLevel
-    this.el.playerSetstartFromLevel(this.startFromLevel)
   }
 
   setKeyLoadMaxRetry(keyLoadMaxRetry) {
@@ -192,24 +263,79 @@ export default class FlasHLS extends BaseFlashPlayback {
     this.el.playerSetFragmentLoadSkipAfterMaxRetry(this.fragmentLoadSkipAfterMaxRetry)
   }
 
-  setCapLevelonFPSDrop(capLevelonFpsDrop) {
-    this.capLevelonFpsDrop = capLevelonFpsDrop
-    this.el.playerSetCapLevelonFPSDrop(this.capLevelonFpsDrop)
+  setFlushLiveURLCache(flushLiveURLCache) {
+    this.flushLiveURLCache = flushLiveURLCache
+    this.el.playerSetFlushLiveURLCache(this.flushLiveURLCache)
   }
 
-  setSmoothAutoSwitchonFPSDrop(smoothAutoSwitchonFpsDrop) {
-    this.smoothAutoSwitchonFpsDrop = smoothAutoSwitchonFpsDrop
-    this.el.playerSetSmoothAutoSwitchonFPSDrop(this.smoothAutoSwitchonFpsDrop)
+  setInitialLiveManifestSize(initialLiveManifestSize) {
+    this.initialLiveManifestSize = initialLiveManifestSize
+    this.el.playerSetInitialLiveManifestSize(this.initialLiveManifestSize)
   }
 
-  setFpsDroppedMonitoringPeriod(fpsDroppedMonitoringPeriod) {
-    this.fpsDroppedMonitoringPeriod = fpsDroppedMonitoringPeriod
-    this.el.playerSetFpsDroppedMonitoringPeriod(this.fpsDroppedMonitoringPeriod)
+  setManifestLoadMaxRetry(manifestLoadMaxRetry) {
+    this.manifestLoadMaxRetry = manifestLoadMaxRetry
+    this.el.playerSetManifestLoadMaxRetry(this.manifestLoadMaxRetry)
   }
 
-  setFpsDroppedMonitoringThreshold(fpsDroppedMonitoringThreshold) {
-    this.fpsDroppedMonitoringThreshold = fpsDroppedMonitoringThreshold
-    this.el.playerSetFpsDroppedMonitoringThreshold(this.fpsDroppedMonitoringThreshold)
+  setManifestLoadMaxRetryTimeout(manifestLoadMaxRetryTimeout) {
+    this.manifestLoadMaxRetryTimeout = manifestLoadMaxRetryTimeout
+    this.el.playerSetManifestLoadMaxRetryTimeout(this.manifestLoadMaxRetryTimeout)
+  }
+
+  setManifestRedundantLoadmaxRetry(manifestRedundantLoadmaxRetry) {
+    this.manifestRedundantLoadmaxRetry = manifestRedundantLoadmaxRetry
+    this.el.playerSetManifestRedundantLoadmaxRetry(this.manifestRedundantLoadmaxRetry)
+  }
+
+  setStartFromBitrate(startFromBitrate) {
+    this.startFromBitrate = startFromBitrate
+    this.el.playerSetStartFromBitrate(this.startFromBitrate)
+  }
+
+  setStartFromLevel(startFromLevel) {
+    this.startFromLevel = startFromLevel
+    this.el.playerSetStartFromLevel(this.startFromLevel)
+  }
+
+  setAutoStartMaxDuration(autoStartMaxDuration) {
+    this.autoStartMaxDuration = autoStartMaxDuration
+    this.el.playerSetAutoStartMaxDuration(this.autoStartMaxDuration)
+  }
+
+  setSeekFromLevel(seekFromLevel) {
+    this.seekFromLevel = seekFromLevel
+    this.el.playerSetSeekFromLevel(this.seekFromLevel)
+  }
+
+  setUseHardwareVideoDecoder(useHardwareVideoDecoder) {
+    this.useHardwareVideoDecoder = useHardwareVideoDecoder
+    this.el.playerSetUseHardwareVideoDecoder(this.useHardwareVideoDecoder)
+  }
+
+  setSetLogInfo(hlsLogEnabled) {
+    this.hlsLogEnabled = hlsLogEnabled
+    this.el.playerSetLogInfo(this.hlsLogEnabled)
+  }
+
+  setLogDebug(logDebug) {
+    this.logDebug = logDebug
+    this.el.playerSetLogDebug(this.logDebug)
+  }
+
+  setLogDebug2(logDebug2) {
+    this.logDebug2 = logDebug2
+    this.el.playerSetLogDebug2(this.logDebug2)
+  }
+
+  setLogWarn(logWarn) {
+    this.logWarn = logWarn
+    this.el.playerSetLogWarn(this.logWarn)
+  }
+
+  setLogError(logError) {
+    this.logError = logError
+    this.el.playerSetLogError(this.logError)
   }
 
   levelChanged(level) {
