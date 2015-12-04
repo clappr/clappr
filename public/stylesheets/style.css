@@ -63,8 +63,18 @@ a:hover {
 .main {
   display: inline-block;
   margin: 0;
-  padding: 40px 20px 0 20px;
+  padding: 0px 20px 0 20px;
   border: 0;
+}
+
+.external-js {
+  border-style: solid;
+  border-width: 1px;
+  color: #dcdcdc;
+  font-size: 10px;
+  padding: 2px;
+  margin-right: 2px;
+  font-family: monospace;
 }
 
 #player-wrapper {
