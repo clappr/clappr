@@ -222,7 +222,6 @@ export default class Container extends UIObject {
    * @method stop
    */
   stop() {
-    this.trigger(Events.CONTAINER_STOP, this.name)
     this.playback.stop()
     this.currentTime = 0
   }
