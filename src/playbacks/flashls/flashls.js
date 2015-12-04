@@ -13,15 +13,20 @@ import hlsSwf from './public/HLSPlayer.swf'
 import $ from 'clappr-zepto'
 
 
-var MAX_ATTEMPTS = 60
+const MAX_ATTEMPTS = 60
+const AUTO = -1
 
 export default class FlasHLS extends BaseFlashPlayback {
   get name() { return 'flashls' }
   get swfPath() { return template(hlsSwf)({baseUrl: this.baseUrl}) }
 
-  get levels() { return (this.el && this.el.getLevels()) || [] }
-  get currentLevel() { return (this.el && this.el.getCurrentLevel()) || -1 }
-  set currentLevel(level) { this.el && this.el.playerSetCurrentLevel(level) }
+  get levels() { return this._levels || [] }
+  get currentLevel() { return this._currentLevel || AUTO }
+  set currentLevel(id) {
+    this._currentLevel = id
+    this.trigger(Events.PLAYBACK_LEVEL_SWITCH_START)
+    this.el.playerSetCurrentLevel(id)
+  }
 
   constructor(options) {
     super(options)
@@ -350,6 +355,7 @@ export default class FlasHLS extends BaseFlashPlayback {
         bitrate: currentLevel.bitrate,
         level: level
       })
+      this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
     }
   }
 
@@ -578,6 +584,14 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   manifestLoaded(duration, loadmetrics) {
+    var levels = this.el.getLevels()
+    var levelsLength = levels.length
+    this._levels = []
+
+    for (var index = 0 ; index < levelsLength ; index++) {
+      this._levels.push({id: index, label: `${levels[index].height}p`})
+    }
+    this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this._levels)
     this.trigger(Events.PLAYBACK_LOADEDMETADATA, {duration: duration, data: loadmetrics})
   }
 
