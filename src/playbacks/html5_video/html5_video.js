@@ -71,12 +71,10 @@ export default class HTML5Video extends Playback {
     this.settings.right = ["fullscreen", "volume", "hd-indicator"]
   }
 
+  // this may be overridden in playbacks that extend this
   setupSrc(srcUrl) {
-    //avoid to set el.src of an "invalid" source since we're extending video tag with MSE
-    if (HTML5Video.canPlay(srcUrl)) {
-      this.src = srcUrl
-      this.el.src = srcUrl
-    }
+    this.src = srcUrl
+    this.el.src = srcUrl
   }
 
   setupSafari() {
