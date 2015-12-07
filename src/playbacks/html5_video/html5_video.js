@@ -71,12 +71,14 @@ export default class HTML5Video extends Playback {
     this.settings.right = ["fullscreen", "volume", "hd-indicator"]
   }
 
+  /**
+   * Sets the source url on the <video> element, and also the 'src' property.
+   * @method setupSrc
+   * @param {String} srcUrl The source URL.
+   */
   setupSrc(srcUrl) {
-    //avoid to set el.src of an "invalid" source since we're extending video tag with MSE
-    if (HTML5Video.canPlay(srcUrl)) {
-      this.src = srcUrl
-      this.el.src = srcUrl
-    }
+    this.src = srcUrl
+    this.el.src = srcUrl
   }
 
   setupSafari() {
