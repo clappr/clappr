@@ -20,11 +20,4 @@ describe('HTML5Video playback', () => {
     expect(playback.src).to.be.equals('http://example.com/dash.ogg')
   })
 
-  it('does not set an invalid src to video element', () => {
-    // although clappr can play dash.mpd it uses MSE, this is done to avoid to create source tag with invalid src
-    var options = {src: 'http://example.com/dash.mpd'}
-    var playback = new HTML5Video(options)
-
-    expect(playback.src).to.be.equals(undefined)
-  })
 })
