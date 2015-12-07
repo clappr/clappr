@@ -4,7 +4,7 @@
 <param name="allowScriptAccess" value="always">
 <param name="bgcolor" value="#000000">
 <param name="allowFullScreen" value="false">
-<param name="wmode" value="transparent">
+<param name="wmode" value="<%= wmode %>">
 <param name="tabindex" value="1">
 <param name=FlashVars value="playbackId=<%= playbackId %>&callback=<%= callbackName %>" />
 <embed
@@ -16,7 +16,7 @@
   allowScriptAccess="always"
   quality="autohigh"
   pluginspage="http://www.macromedia.com/go/getflashplayer"
-  wmode="transparent"
+  wmode="<%= wmode %>"
   swliveconnect="true"
   allowfullscreen="false"
   bgcolor="#000000"

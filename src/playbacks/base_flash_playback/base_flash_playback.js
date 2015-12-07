@@ -19,6 +19,7 @@ var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" cla
 export default class BaseFlashPlayback extends Playback {
   get tagName() { return 'object' }
   get swfPath() { return '' }
+  get wmode() { return 'transparent' }
   get template() { return template(flashHTML) }
   get attributes() {
     return {
@@ -43,7 +44,13 @@ export default class BaseFlashPlayback extends Playback {
   }
 
   render() {
-    this.$el.html(this.template({cid: this.cid, swfPath: this.swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId, callbackName: `window.Clappr.flashlsCallbacks.${this.cid}`}))
+    this.$el.html(this.template({
+      cid: this.cid,
+      swfPath: this.swfPath,
+      baseUrl: this.baseUrl,
+      playbackId: this.uniqueId,
+      wmode: this.wmode,
+      callbackName: `window.Clappr.flashlsCallbacks.${this.cid}`}))
     if (Browser.isIE) {
       this.$('embed').remove()
       if(Browser.isLegacyIE) {
