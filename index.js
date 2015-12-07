@@ -65,13 +65,18 @@ export default class DashShakaPlayback extends HTML5Video {
     clearInterval(this.sendStatsId)
     this.trigger(Events.PLAYBACK_STOP, this.name)
     this._sendStats()
-    this._player.unload()
-    this._player = null
-    this._readyToPlay = false
+
+    this._player.unload().
+      then(() => {
+        this._player = null
+        this._readyToPlay = false
+      }).
+      catch(() => { Log.error('shaka could not be unloaded') })
   }
 
   destroy() {
     clearInterval(this.sendStatsId)
+
     this._player.destroy().
       then(() => this._destroy()).
       catch(() => {
@@ -153,6 +158,6 @@ DashShakaPlayback.canPlay = (resource, mimeType = '') => {
   }
 
   var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
-  return ("mpd" === resourceParts[1]) || mimeType.indexOf('application/dash+xml') > -1
+  return ('mpd' === resourceParts[1]) || mimeType.indexOf('application/dash+xml') > -1
 }
 
