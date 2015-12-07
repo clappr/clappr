@@ -112,7 +112,9 @@ Playback.extend = function(properties) {
 }
 
 /**
- * checks if the playback can play a given `source` and optionally a `mimeType`
+ * checks if the playback can play a given `source`
+ * If a mimeType is provided then this will be used instead of inferring the mimetype
+ * from the source extension.
  * @method canPlay
  * @static
  * @param {String} source the given source ex: `http://example.com/play.mp4`
