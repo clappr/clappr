@@ -32,20 +32,12 @@ export default class HTML5Audio extends HTML5Video {
   }
 }
 
-HTML5Audio.canPlay = function(resource, mimeType) {
+HTML5Audio.canPlay = function(resourceUrl, mimeType) {
   var mimetypes = {
     'wav': ['audio/wav'],
     'mp3': ['audio/mp3', 'audio/mpeg;codecs="mp3"'],
     'aac': ['audio/mp4;codecs="mp4a.40.5"'],
     'oga': ['audio/ogg']
   }
-  var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
-  if ((resourceParts.length > 1) && (mimetypes[resourceParts[1]] !== undefined)) {
-    var a = document.createElement('audio')
-    return !!find(mimetypes[resourceParts[1]], (ext) => { return !!a.canPlayType(ext).replace(/no/, '') })
-  } else if (mimeType && !/m3u8/.test(resourceParts[1])) {
-    var a = document.createElement('audio')
-    return !!a.canPlayType(mimeType).replace(/no/, '')
-  }
-  return false
+  return HTML5Video._canPlay('audio', mimetypes, resourceUrl, mimeType)  
 }
