@@ -49,6 +49,11 @@ export default class HLS extends HTML5VideoPlayback {
     this.hls.attachMedia(this.el)
   }
 
+  // override
+  setupSrc(srcUrl) {
+    // this playback manages the src on the video element itself
+  }
+
   // the duration on the video element itself should not be used
   // as this does not necesarily represent the duration of the stream
   // https://github.com/clappr/clappr/issues/668#issuecomment-157036678
