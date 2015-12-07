@@ -71,7 +71,11 @@ export default class HTML5Video extends Playback {
     this.settings.right = ["fullscreen", "volume", "hd-indicator"]
   }
 
-  // this may be overridden in playbacks that extend this
+  /**
+   * Sets the source url on the <video> element, and also the 'src' property.
+   * @method setupSrc
+   * @param {String} srcUrl The source URL.
+   */
   setupSrc(srcUrl) {
     this.src = srcUrl
     this.el.src = srcUrl
