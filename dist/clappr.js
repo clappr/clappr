@@ -82,19 +82,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _basePlayback2 = _interopRequireDefault(_basePlayback);
 
-	var _baseContainer_plugin = __webpack_require__(124);
+	var _baseContainer_plugin = __webpack_require__(127);
 
 	var _baseContainer_plugin2 = _interopRequireDefault(_baseContainer_plugin);
 
-	var _baseCore_plugin = __webpack_require__(145);
+	var _baseCore_plugin = __webpack_require__(148);
 
 	var _baseCore_plugin2 = _interopRequireDefault(_baseCore_plugin);
 
-	var _baseUi_core_plugin = __webpack_require__(139);
+	var _baseUi_core_plugin = __webpack_require__(142);
 
 	var _baseUi_core_plugin2 = _interopRequireDefault(_baseUi_core_plugin);
 
-	var _baseUi_container_plugin = __webpack_require__(119);
+	var _baseUi_container_plugin = __webpack_require__(122);
 
 	var _baseUi_container_plugin2 = _interopRequireDefault(_baseUi_container_plugin);
 
@@ -154,11 +154,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _playbacksHtml5_video2 = _interopRequireDefault(_playbacksHtml5_video);
 
-	var _playbacksHtml_img = __webpack_require__(110);
+	var _playbacksHtml_img = __webpack_require__(113);
 
 	var _playbacksHtml_img2 = _interopRequireDefault(_playbacksHtml_img);
 
-	var _pluginsPoster = __webpack_require__(129);
+	var _pluginsPoster = __webpack_require__(132);
 
 	var _pluginsPoster2 = _interopRequireDefault(_pluginsPoster);
 
@@ -178,7 +178,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var version = ("0.2.23");
+	var version = ("0.2.24");
 
 	exports['default'] = {
 	    Player: _componentsPlayer2['default'],
@@ -327,6 +327,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * start the video muted **default**: `false`
 	   * @param {String} [options.mimeType]
 	   * add `mimeType: "application/vnd.apple.mpegurl"` if you need to use a url without extension.
+	   * @param {String} [options.actualLiveTime]
+	   * show duration and seek time relative to actual time.
+	   * @param {String} [options.actualLiveServerTime]
+	   * specify server time as a string, format: "2015/11/26 06:01:03". This option is meant to be used with actualLiveTime.
 	   * @param {Boolean} [options.persistConfig]
 	   * persist player's settings (volume) through the same domain **default**: `true`
 	   * @param {String} [options.preload]
@@ -347,6 +351,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * put `watermark: 'http://url/img.png'` on your embed parameters to automatically add watermark on your video. You can customize corner position by defining position parameter. Positions can be `bottom-left`, `bottom-right`, `top-left` and `top-right`.
 	   * @param {Boolean} [options.disableVideoTagContextMenu]
 	   * disables the context menu (right click) on the video element if a HTML5Video playback is used.
+	   * @param {Boolean} [options.autoSeekFromUrl]
+	   * Automatically seek to the seconds provided in the url (e.g example.com?t=100) **default**: `true`
 	   * @param {String} [options.poster]
 	   * define a poster by adding its address `poster: 'http://url/img.png'`. It will appear after video embed, disappear on play and go back when user stops the video.
 	   * @param {String} [options.playbackNotSupportedMessage]
@@ -617,6 +623,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    /**
+	     * enables to configure a player after its creation
+	     * @method configure
+	     * @param {Object} options all the options to change in form of a javascript object
+	     */
+	  }, {
+	    key: 'configure',
+	    value: function configure(options) {
+	      this.core.configure(options);
+	    }
+
+	    /**
 	     * get a plugin by its name.
 	     * @method getPlugin
 	     * @param {String} name of the plugin.
@@ -735,7 +752,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return MergedPlugin;
 	}
 
-	function formatTime(time) {
+	function formatTime(time, paddedHours) {
 	  if (!isFinite(time)) {
 	    return "--:--";
 	  }
@@ -752,7 +769,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    out += days + ":";
 	    if (hours < 1) out += "00:";
 	  }
-	  if (hours && hours > 0) out += ("0" + hours).slice(-2) + ":";
+	  if (hours && hours > 0 || paddedHours) out += ("0" + hours).slice(-2) + ":";
 	  out += ("0" + minutes).slice(-2) + ":";
 	  out += ("0" + seconds).slice(-2);
 	  return out.trim();
@@ -971,18 +988,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var browserInfo = getBrowserInfo();
 
-	Browser.isSafari = !!navigator.userAgent.match(/safari/i) && navigator.userAgent.indexOf('Chrome') === -1;
-	Browser.isChrome = !!navigator.userAgent.match(/chrome/i);
-	Browser.isFirefox = !!navigator.userAgent.match(/firefox/i);
+	Browser.isSafari = /safari/i.test(navigator.userAgent) && navigator.userAgent.indexOf('Chrome') === -1;
+	Browser.isChrome = /chrome/i.test(navigator.userAgent.match);
+	Browser.isFirefox = /firefox/i.test(navigator.userAgent);
 	Browser.isLegacyIE = !!window.ActiveXObject;
-	Browser.isIE = Browser.isLegacyIE || !!navigator.userAgent.match(/trident.*rv:1\d/i);
-	Browser.isIE11 = !!navigator.userAgent.match(/trident.*rv:11/i);
-	Browser.isMobile = !!/Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|IEMobile|Opera Mini/i.test(navigator.userAgent);
-	Browser.isiOs = !!/iPad|iPhone|iPod/i.test(navigator.userAgent);
-	Browser.isAndroid = !!/Android/i.test(navigator.userAgent);
-	Browser.isWin8App = !!/MSAppHost/i.test(navigator.userAgent);
-	Browser.isWiiU = !!/WiiU/i.test(navigator.userAgent);
-	Browser.isPS4 = !!/PlayStation 4/i.test(navigator.userAgent);
+	Browser.isIE = Browser.isLegacyIE || /trident.*rv:1\d/i.test(navigator.userAgent);
+	Browser.isIE11 = /trident.*rv:11/i.test(navigator.userAgent);
+	Browser.isChromecast = Browser.isChrome && /CrKey/i.test(navigator.userAgent);
+	Browser.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|IEMobile|Opera Mini/i.test(navigator.userAgent);
+	Browser.isiOS = /iPad|iPhone|iPod/i.test(navigator.userAgent);
+	Browser.isAndroid = /Android/i.test(navigator.userAgent);
+	Browser.isWindowsPhone = /Windows Phone/i.test(navigator.userAgent);
+	Browser.isWin8App = /MSAppHost/i.test(navigator.userAgent);
+	Browser.isWiiU = /WiiU/i.test(navigator.userAgent);
+	Browser.isPS4 = /PlayStation 4/i.test(navigator.userAgent);
 	Browser.hasLocalstorage = hasLocalstorage();
 	Browser.hasFlash = hasFlash();
 
@@ -2322,6 +2341,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	Events.PLAYBACK_BITRATE = 'playback:bitrate';
 	/**
+	 * Fired when the playback has its levels
+	 *
+	 * @event PLAYBACK_LEVELS_AVAILABLE
+	 * @param {Array} levels
+	 * the ordered levels, each one with the following format `{id: 1, label: '500kbps'}` ps: id should be a number >= 0
+	 */
+	Events.PLAYBACK_LEVELS_AVAILABLE = 'playback:levels:available';
+	/**
+	 * Fired when the playback starts to switch level
+	 *
+	 * @event PLAYBACK_LEVEL_SWITCH_START
+	 *
+	 */
+	Events.PLAYBACK_LEVEL_SWITCH_START = 'playback:levels:switch:start';
+	/**
+	 * Fired when the playback ends the level switch
+	 *
+	 * @event PLAYBACK_LEVEL_SWITCH_END
+	 *
+	 */
+	Events.PLAYBACK_LEVEL_SWITCH_END = 'playback:levels:switch:end';
+
+	/**
 	 * Fired when playback internal state changes
 	 *
 	 * @event PLAYBACK_PLAYBACKSTATE
@@ -2337,10 +2379,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	Events.PLAYBACK_ENDED = 'playback:ended';
 	Events.PLAYBACK_PLAY = 'playback:play';
 	Events.PLAYBACK_PAUSE = 'playback:pause';
+	Events.PLAYBACK_STOP = 'playback:stop';
 	Events.PLAYBACK_ERROR = 'playback:error';
 	Events.PLAYBACK_STATS_ADD = 'playback:stats:add';
 	Events.PLAYBACK_FRAGMENT_LOADED = 'playback:fragment:loaded';
 	Events.PLAYBACK_LEVEL_SWITCH = 'playback:level:switch';
+
+	/**
+	 * Fired when the options were changed for the core
+	 *
+	 * @event CORE_OPTIONS_CHANGE
+	 */
+	Events.CORE_OPTIONS_CHANGE = 'core:options:change';
 
 	// Container Events
 	/**
@@ -2478,6 +2528,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	Events.CONTAINER_MEDIACONTROL_DISABLE = 'container:mediacontrol:disable';
 	Events.CONTAINER_MEDIACONTROL_ENABLE = 'container:mediacontrol:enable';
 	Events.CONTAINER_STATS_ADD = 'container:stats:add';
+	/**
+	 * Fired when the options were changed for the container
+	 *
+	 * @event CONTAINER_OPTIONS_CHANGE
+	 */
+	Events.CONTAINER_OPTIONS_CHANGE = 'container:options:change';
 
 	// MediaControl Events
 	Events.MEDIACONTROL_RENDERED = 'mediacontrol:rendered';
@@ -3314,7 +3370,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'setFullscreen',
 	    value: function setFullscreen() {
-	      if (!_componentsBrowser2['default'].isiOs) {
+	      if (!_componentsBrowser2['default'].isiOS) {
 	        this.$el.addClass('fullscreen');
 	        this.$el.removeAttr('style');
 	        this.playerInfo.previousSize = { width: this.options.width, height: this.options.height };
@@ -3351,19 +3407,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _this3 = this;
 
 	      var checkSizeCallback = function checkSizeCallback() {
-	        if (_this3.reqAnimFrame) clearTimeout(_this3.reqAnimFrame);
+	        if (_this3.resizeObserverInterval) clearInterval(_this3.resizeObserverInterval);
 	        if (_this3.playerInfo.computedSize.width != _this3.el.clientWidth || _this3.playerInfo.computedSize.height != _this3.el.clientHeight) {
 	          _this3.playerInfo.computedSize = { width: _this3.el.clientWidth, height: _this3.el.clientHeight };
 	          _componentsMediator2['default'].trigger(_this3.options.playerId + ':' + _baseEvents2['default'].PLAYER_RESIZE, _this3.playerInfo.computedSize);
 	        }
-	        _this3.reqAnimFrame = setTimeout(checkSizeCallback, 500);
 	      };
-	      this.reqAnimFrame = setTimeout(checkSizeCallback, 500);
+	      this.resizeObserverInterval = setInterval(checkSizeCallback, 500);
 	    }
 	  }, {
 	    key: 'disableResizeObserver',
 	    value: function disableResizeObserver() {
-	      if (this.reqAnimFrame) (0, _baseUtils.cancelAnimationFrame)(this.reqAnimFrame);
+	      if (this.resizeObserverInterval) clearInterval(this.resizeObserverInterval);
 	    }
 	  }, {
 	    key: 'resolveOnContainersReady',
@@ -3520,12 +3575,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function toggleFullscreen() {
 	      if (!_baseUtils.Fullscreen.isFullscreen()) {
 	        _baseUtils.Fullscreen.requestFullscreen(this.el);
-	        if (!_componentsBrowser2['default'].isiOs) {
+	        if (!_componentsBrowser2['default'].isiOS) {
 	          this.$el.addClass('fullscreen');
 	        }
 	      } else {
 	        _baseUtils.Fullscreen.cancelFullscreen();
-	        if (!_componentsBrowser2['default'].isiOs) {
+	        if (!_componentsBrowser2['default'].isiOS) {
 	          this.$el.removeClass('fullscreen nocursor');
 	        }
 	      }
@@ -3547,6 +3602,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.getCurrentContainer().trigger(showing ? _baseEvents2['default'].CONTAINER_MEDIACONTROL_SHOW : _baseEvents2['default'].CONTAINER_MEDIACONTROL_HIDE);
 
 	      if (showing) this.$el.removeClass('nocursor');else if (_baseUtils.Fullscreen.isFullscreen()) this.$el.addClass('nocursor');
+	    }
+
+	    /**
+	     * enables to configure the container after its creation
+	     * @method configure
+	     * @param {Object} options all the options to change in form of a javascript object
+	     */
+	  }, {
+	    key: 'configure',
+	    value: function configure(options) {
+	      var _this6 = this;
+
+	      this.options = _clapprZepto2['default'].extend(this.options, options);
+	      var sources = this.options.source || this.options.sources;
+
+	      if (sources) {
+	        this.load(sources);
+	      } else {
+	        this.trigger(_baseEvents2['default'].CORE_OPTIONS_CHANGE);
+
+	        this.containers.forEach(function (container) {
+	          container.configure(_this6.options);
+	        });
+	      }
 	    }
 	  }, {
 	    key: 'render',
@@ -4692,12 +4771,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'createContainer',
-	    value: function createContainer(source, options) {
+	    value: function createContainer(source) {
 	      if (!!source.match(/^\/\//)) source = window.location.protocol + source;
-	      options = _clapprZepto2['default'].extend({}, this.options, { src: source }, options);
+	      var options = _clapprZepto2['default'].extend({}, this.options, { src: source });
 	      var playbackPlugin = this.findPlaybackPlugin(source);
 	      var playback = new playbackPlugin(options);
-	      var container = new _componentsContainer2['default']({ playback: playback });
+
+	      options = _clapprZepto2['default'].extend(options, { playback: playback });
+
+	      var container = new _componentsContainer2['default'](options);
 	      var defer = _clapprZepto2['default'].Deferred();
 	      defer.promise(container);
 	      this.addContainerPlugins(container, source);
@@ -4709,11 +4791,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'addContainerPlugins',
 	    value: function addContainerPlugins(container, source) {
-	      var _this3 = this;
-
 	      this.loader.containerPlugins.forEach(function (Plugin) {
-	        var options = _clapprZepto2['default'].extend(_this3.options, { container: container, src: source });
-	        container.addPlugin(new Plugin(options));
+	        container.addPlugin(new Plugin(container));
 	      });
 	    }
 	  }]);
@@ -4839,6 +4918,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _get(Object.getPrototypeOf(Container.prototype), 'constructor', this).call(this, options);
 	    this.currentTime = 0;
 	    this.volume = 100;
+	    this.options = options;
 	    this.playback = options.playback;
 	    this.settings = _clapprZepto2['default'].extend({}, this.playback.settings);
 	    this.isReady = false;
@@ -4895,6 +4975,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.listenTo(this.playback, _baseEvents2['default'].PLAYBACK_ENDED, this.ended);
 	      this.listenTo(this.playback, _baseEvents2['default'].PLAYBACK_PLAY, this.playing);
 	      this.listenTo(this.playback, _baseEvents2['default'].PLAYBACK_PAUSE, this.paused);
+	      this.listenTo(this.playback, _baseEvents2['default'].PLAYBACK_STOP, this.stopped);
 	      this.listenTo(this.playback, _baseEvents2['default'].PLAYBACK_ERROR, this.error);
 	    }
 	  }, {
@@ -5042,7 +5123,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'stop',
 	    value: function stop() {
-	      this.trigger(_baseEvents2['default'].CONTAINER_STOP, this.name);
 	      this.playback.stop();
 	      this.currentTime = 0;
 	    }
@@ -5061,6 +5141,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function ended() {
 	      this.trigger(_baseEvents2['default'].CONTAINER_ENDED, this, this.name);
 	      this.currentTime = 0;
+	    }
+	  }, {
+	    key: 'stopped',
+	    value: function stopped() {
+	      this.trigger(_baseEvents2['default'].CONTAINER_STOP);
 	    }
 	  }, {
 	    key: 'clicked',
@@ -5186,6 +5271,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function enableMediaControl() {
 	      this.mediaControlDisabled = false;
 	      this.trigger(_baseEvents2['default'].CONTAINER_MEDIACONTROL_ENABLE);
+	    }
+
+	    /**
+	     * enables to configure the container after its creation
+	     * @method configure
+	     * @param {Object} options all the options to change in form of a javascript object
+	     */
+	  }, {
+	    key: 'configure',
+	    value: function configure(options) {
+	      this.options = _clapprZepto2['default'].extend(this.options, options);
+	      this.trigger(_baseEvents2['default'].CONTAINER_OPTIONS_CHANGE);
 	    }
 	  }, {
 	    key: 'render',
@@ -8135,6 +8232,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.hoveringOverSeekBar = false;
 	    this.hoverPosition = null;
 	    this.duration = null;
+	    this.actualLiveTime = !!this.mediaControl.options.actualLiveTime;
+	    if (this.actualLiveTime) {
+	      if (!!this.mediaControl.options.actualLiveServerTime) {
+	        this.actualLiveServerTimeDiff = new Date().getTime() - new Date(this.mediaControl.options.actualLiveServerTime).getTime();
+	      } else {
+	        this.actualLiveServerTimeDiff = 0;
+	      }
+	    }
 	    this.durationShown = false;
 	    this.addEventListeners();
 	  }
@@ -8193,8 +8298,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.hoverPosition = Math.min(1, Math.max(offset / this.mediaControl.$seekBarContainer.width(), 0));
 	    }
 	  }, {
+	    key: 'getSeekTime',
+	    value: function getSeekTime() {
+	      if (this.actualLiveTime) {
+	        var d = new Date(new Date().getTime() - this.actualLiveServerTimeDiff),
+	            e = new Date(d);
+	        var secondsSinceMidnight = (e - d.setHours(0, 0, 0, 0)) / 1000;
+	        var seekTime = secondsSinceMidnight - this.duration + this.hoverPosition * this.duration;
+	        if (seekTime < 0) {
+	          seekTime += 86400;
+	        }
+	      } else {
+	        var seekTime = this.hoverPosition * this.duration;
+	      }
+	      return { seekTime: seekTime, secondsSinceMidnight: secondsSinceMidnight };
+	    }
+	  }, {
 	    key: 'update',
 	    value: function update() {
+
 	      if (!this.rendered) {
 	        // update() is always called after a render
 	        return;
@@ -8203,8 +8325,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.$el.hide();
 	        this.$el.css('left', "-100%");
 	      } else {
-	        var seekTime = this.hoverPosition * this.duration;
-	        var currentSeekTime = (0, _baseUtils.formatTime)(seekTime);
+	        var seekTime = this.getSeekTime();
+	        var currentSeekTime = (0, _baseUtils.formatTime)(seekTime.seekTime, this.actualLiveTime);
 	        // only update dom if necessary, ie time actually changed
 	        if (currentSeekTime !== this.displayedSeekTime) {
 	          this.$seekTimeEl.text(currentSeekTime);
@@ -8213,7 +8335,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        if (this.durationShown) {
 	          this.$durationEl.show();
-	          var currentDuration = (0, _baseUtils.formatTime)(this.duration);
+	          var currentDuration = (0, _baseUtils.formatTime)(this.actualLiveTime ? seekTime.secondsSinceMidnight : this.duration, this.actualLiveTime);
 	          if (currentDuration !== this.displayedDuration) {
 	            this.$durationEl.text(currentDuration);
 	            this.displayedDuration = currentDuration;
@@ -8514,7 +8636,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	/**
-	 * checks if the playback can play a given `source` and optionally a `mimeType`
+	 * checks if the playback can play a given `source`
+	 * If a mimeType is provided then this will be used instead of inferring the mimetype
+	 * from the source extension.
 	 * @method canPlay
 	 * @static
 	 * @param {String} source the given source ex: `http://example.com/play.mp4`
@@ -8724,47 +8848,47 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _playbacksHls2 = _interopRequireDefault(_playbacksHls);
 
-	var _playbacksHtml_img = __webpack_require__(110);
+	var _playbacksHtml_img = __webpack_require__(113);
 
 	var _playbacksHtml_img2 = _interopRequireDefault(_playbacksHtml_img);
 
-	var _playbacksNo_op = __webpack_require__(113);
+	var _playbacksNo_op = __webpack_require__(116);
 
 	var _playbacksNo_op2 = _interopRequireDefault(_playbacksNo_op);
 
 	/* Container Plugins */
 
-	var _pluginsSpinner_three_bounce = __webpack_require__(117);
+	var _pluginsSpinner_three_bounce = __webpack_require__(120);
 
 	var _pluginsSpinner_three_bounce2 = _interopRequireDefault(_pluginsSpinner_three_bounce);
 
-	var _pluginsStats = __webpack_require__(122);
+	var _pluginsStats = __webpack_require__(125);
 
 	var _pluginsStats2 = _interopRequireDefault(_pluginsStats);
 
-	var _pluginsWatermark = __webpack_require__(125);
+	var _pluginsWatermark = __webpack_require__(128);
 
 	var _pluginsWatermark2 = _interopRequireDefault(_pluginsWatermark);
 
-	var _pluginsPoster = __webpack_require__(129);
+	var _pluginsPoster = __webpack_require__(132);
 
 	var _pluginsPoster2 = _interopRequireDefault(_pluginsPoster);
 
-	var _pluginsGoogle_analytics = __webpack_require__(133);
+	var _pluginsGoogle_analytics = __webpack_require__(136);
 
 	var _pluginsGoogle_analytics2 = _interopRequireDefault(_pluginsGoogle_analytics);
 
-	var _pluginsClick_to_pause = __webpack_require__(135);
+	var _pluginsClick_to_pause = __webpack_require__(138);
 
 	var _pluginsClick_to_pause2 = _interopRequireDefault(_pluginsClick_to_pause);
 
 	/* Core Plugins */
 
-	var _pluginsDvr_controls = __webpack_require__(137);
+	var _pluginsDvr_controls = __webpack_require__(140);
 
 	var _pluginsDvr_controls2 = _interopRequireDefault(_pluginsDvr_controls);
 
-	var _pluginsFavicon = __webpack_require__(143);
+	var _pluginsFavicon = __webpack_require__(146);
 
 	var _pluginsFavicon2 = _interopRequireDefault(_pluginsFavicon);
 
@@ -8791,7 +8915,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _get(Object.getPrototypeOf(Loader.prototype), 'constructor', this).call(this);
 	    this.playerId = playerId;
-	    this.playbackPlugins = [_playbacksHtml5_audio2['default'], _playbacksHtml5_video2['default'], _playbacksFlash2['default'], _playbacksHls2['default'], _playbacksFlashls2['default'], _playbacksHtml_img2['default'], _playbacksNo_op2['default']];
+	    this.playbackPlugins = [_playbacksHtml5_video2['default'], _playbacksHtml5_audio2['default'], _playbacksFlash2['default'], _playbacksHls2['default'], _playbacksFlashls2['default'], _playbacksHtml_img2['default'], _playbacksNo_op2['default']];
 	    this.containerPlugins = [_pluginsSpinner_three_bounce2['default'], _pluginsWatermark2['default'], _pluginsPoster2['default'], _pluginsStats2['default'], _pluginsGoogle_analytics2['default'], _pluginsClick_to_pause2['default']];
 	    this.corePlugins = [_pluginsDvr_controls2['default'], _pluginsFavicon2['default']];
 	    if (externalPlugins) {
@@ -9462,6 +9586,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lodashFind2 = _interopRequireDefault(_lodashFind);
 
+	var MIMETYPES = {
+	  'mp4': ["avc1.42E01E", "avc1.58A01E", "avc1.4D401E", "avc1.64001E", "mp4v.20.8", "mp4v.20.240", "mp4a.40.2"].map(function (codec) {
+	    return 'video/mp4; codecs="' + codec + ', mp4a.40.2"';
+	  }),
+	  'ogg': ['video/ogg; codecs="theora, vorbis"', 'video/ogg; codecs="dirac"', 'video/ogg; codecs="theora, speex"'],
+	  '3gpp': ['video/3gpp; codecs="mp4v.20.8, samr"'],
+	  'webm': ['video/webm; codecs="vp8, vorbis"'],
+	  'mkv': ['video/x-matroska; codecs="theora, vorbis"'],
+	  'm3u8': ['application/x-mpegurl']
+	};
+	MIMETYPES['ogv'] = MIMETYPES['ogg'];
+	MIMETYPES['3gp'] = MIMETYPES['3gpp'];
+
 	var HTML5Video = (function (_Playback) {
 	  _inherits(HTML5Video, _Playback);
 
@@ -9512,8 +9649,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _get(Object.getPrototypeOf(HTML5Video.prototype), 'constructor', this).call(this, options);
 	    this.options = options;
-	    this.src = options.src;
-	    this.el.src = options.src;
+	    this.setupSrc(options.src);
 	    this.el.loop = options.loop;
 	    this.firstBuffer = true;
 	    this.settings = { 'default': ['seekbar'] };
@@ -9527,7 +9663,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.settings.right = ["fullscreen", "volume", "hd-indicator"];
 	  }
 
+	  /**
+	   * Sets the source url on the <video> element, and also the 'src' property.
+	   * @method setupSrc
+	   * @param {String} srcUrl The source URL.
+	   */
+
 	  _createClass(HTML5Video, [{
+	    key: 'setupSrc',
+	    value: function setupSrc(srcUrl) {
+	      this.src = srcUrl;
+	      this.el.src = srcUrl;
+	    }
+	  }, {
 	    key: 'setupSafari',
 	    value: function setupSafari() {
 	      this.el.preload = 'auto';
@@ -9536,10 +9684,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'loadedMetadata',
 	    value: function loadedMetadata(e) {
 	      this.durationChange();
-	      this.trigger(_baseEvents2['default'].PLAYBACK_LOADEDMETADATA, { duration: e.target.duration, data: e });
-	      if (this.getPlaybackType() !== _basePlayback2['default'].LIVE) {
+	      var autoSeekFromUrl = typeof this.options.autoSeekFromUrl === "undefined" || this.options.autoSeekFromUrl;
+	      if (this.getPlaybackType() !== _basePlayback2['default'].LIVE && autoSeekFromUrl) {
 	        this.checkInitialSeek();
 	      }
+	      this.trigger(_baseEvents2['default'].PLAYBACK_LOADEDMETADATA, { duration: e.target.duration, data: e });
 	    }
 	  }, {
 	    key: 'durationChange',
@@ -9585,6 +9734,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.pause();
 	      if (this.el.readyState !== 0) {
 	        this.el.currentTime = 0;
+	        this.trigger(_baseEvents2['default'].PLAYBACK_STOP);
 	      }
 	    }
 	  }, {
@@ -9750,16 +9900,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _this = this;
 
 	      var style = _baseStyler2['default'].getStyleFor(_publicStyleScss2['default']);
-	      this.$el.html(this.template({ src: this.src, type: this.typeFor(this.src) }));
+
+	      this.src && this.$el.html(this.template({ src: this.src, type: this.typeFor(this.src) }));
+
 	      if (this.options.useVideoTagDefaultControls) {
 	        this.$el.attr('controls', 'controls');
 	      }
+
 	      if (this.options.disableVideoTagContextMenu) {
 	        this.$el.on("contextmenu", function () {
 	          return false;
 	        });
 	      }
+
 	      this.$el.append(style);
+
 	      process.nextTick(function () {
 	        return _this.options.autoPlay && _this.play();
 	      });
@@ -9775,31 +9930,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports['default'] = HTML5Video;
 
-	HTML5Video.canPlay = function (resource, mimeType) {
-	  var mimetypes = {
-	    'mp4': ["avc1.42E01E", "avc1.58A01E", "avc1.4D401E", "avc1.64001E", "mp4v.20.8", "mp4v.20.240", "mp4a.40.2"].map(function (codec) {
-	      return 'video/mp4; codecs="' + codec + ', mp4a.40.2"';
-	    }),
-	    'ogg': ['video/ogg; codecs="theora, vorbis"', 'video/ogg; codecs="dirac"', 'video/ogg; codecs="theora, speex"'],
-	    '3gpp': ['video/3gpp; codecs="mp4v.20.8, samr"'],
-	    'webm': ['video/webm; codecs="vp8, vorbis"'],
-	    'mkv': ['video/x-matroska; codecs="theora, vorbis"'],
-	    'm3u8': ['application/x-mpegURL']
-	  };
-	  mimetypes['ogv'] = mimetypes['ogg'];
-	  mimetypes['3gp'] = mimetypes['3gpp'];
+	HTML5Video._canPlay = function (type, mimeTypesByExtension, resourceUrl, mimeType) {
+	  var extension = (resourceUrl.split('?')[0].match(/.*\.(.*)$/) || [])[1];
+	  var mimeTypes = mimeType || mimeTypesByExtension[extension] || [];
+	  mimeTypes = mimeTypes.constructor === Array ? mimeTypes : [mimeTypes];
 
-	  var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || [];
-	  if (resourceParts.length > 1 && mimetypes[resourceParts[1]] !== undefined) {
-	    var v = document.createElement('video');
-	    return !!(0, _lodashFind2['default'])(mimetypes[resourceParts[1]], function (ext) {
-	      return !!v.canPlayType(ext).replace(/no/, '');
-	    });
-	  } else if (mimeType) {
-	    var v = document.createElement('video');
-	    return !!v.canPlayType(mimeType).replace(/no/, '');
-	  }
-	  return false;
+	  var media = document.createElement(type);
+	  return !!(0, _lodashFind2['default'])(mimeTypes, function (mediaType) {
+	    return !!media.canPlayType(mediaType).replace(/no/, '');
+	  });
+	};
+
+	HTML5Video.canPlay = function (resourceUrl, mimeType) {
+	  return HTML5Video._canPlay('video', MIMETYPES, resourceUrl, mimeType);
 	};
 
 	module.exports = HTML5Video;
@@ -10085,6 +10228,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'stop',
 	    value: function stop() {
 	      this.el.playerStop();
+	      this.trigger(_baseEvents2['default'].PLAYBACK_STOP);
 	      this.trigger(_baseEvents2['default'].PLAYBACK_TIMEUPDATE, { current: 0, total: 0 }, this.name);
 	    }
 	  }, {
@@ -10246,7 +10390,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      this.$el.html(this.template({ cid: this.cid, swfPath: this.swfPath, baseUrl: this.baseUrl, playbackId: this.uniqueId, callbackName: 'window.Clappr.flashlsCallbacks.' + this.cid }));
+	      this.$el.html(this.template({
+	        cid: this.cid,
+	        swfPath: this.swfPath,
+	        baseUrl: this.baseUrl,
+	        playbackId: this.uniqueId,
+	        wmode: this.wmode,
+	        callbackName: 'window.Clappr.flashlsCallbacks.' + this.cid }));
 	      if (_componentsBrowser2['default'].isIE) {
 	        this.$('embed').remove();
 	        if (_componentsBrowser2['default'].isLegacyIE) {
@@ -10269,6 +10419,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'swfPath',
 	    get: function get() {
 	      return '';
+	    }
+	  }, {
+	    key: 'wmode',
+	    get: function get() {
+	      return 'transparent';
 	    }
 	  }, {
 	    key: 'template',
@@ -10298,7 +10453,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 76 */
 /***/ function(module, exports) {
 
-	module.exports = "<param name=\"movie\" value=\"<%= swfPath %>?inline=1\">\n<param name=\"quality\" value=\"autohigh\">\n<param name=\"swliveconnect\" value=\"true\">\n<param name=\"allowScriptAccess\" value=\"always\">\n<param name=\"bgcolor\" value=\"#000000\">\n<param name=\"allowFullScreen\" value=\"false\">\n<param name=\"wmode\" value=\"transparent\">\n<param name=\"tabindex\" value=\"1\">\n<param name=FlashVars value=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\" />\n<embed\n  name=\"<%= cid %>\"\n  type=\"application/x-shockwave-flash\"\n  disabled=\"disabled\"\n  tabindex=\"-1\"\n  enablecontextmenu=\"false\"\n  allowScriptAccess=\"always\"\n  quality=\"autohigh\"\n  pluginspage=\"http://www.macromedia.com/go/getflashplayer\"\n  wmode=\"transparent\"\n  swliveconnect=\"true\"\n  allowfullscreen=\"false\"\n  bgcolor=\"#000000\"\n  FlashVars=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\"\n  src=\"<%= swfPath %>\"\n  width=\"100%\"\n  height=\"100%\">\n</embed>\n";
+	module.exports = "<param name=\"movie\" value=\"<%= swfPath %>?inline=1\">\n<param name=\"quality\" value=\"autohigh\">\n<param name=\"swliveconnect\" value=\"true\">\n<param name=\"allowScriptAccess\" value=\"always\">\n<param name=\"bgcolor\" value=\"#000000\">\n<param name=\"allowFullScreen\" value=\"false\">\n<param name=\"wmode\" value=\"<%= wmode %>\">\n<param name=\"tabindex\" value=\"1\">\n<param name=FlashVars value=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\" />\n<embed\n  name=\"<%= cid %>\"\n  type=\"application/x-shockwave-flash\"\n  disabled=\"disabled\"\n  tabindex=\"-1\"\n  enablecontextmenu=\"false\"\n  allowScriptAccess=\"always\"\n  quality=\"autohigh\"\n  pluginspage=\"http://www.macromedia.com/go/getflashplayer\"\n  wmode=\"<%= wmode %>\"\n  swliveconnect=\"true\"\n  allowfullscreen=\"false\"\n  bgcolor=\"#000000\"\n  FlashVars=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\"\n  src=\"<%= swfPath %>\"\n  width=\"100%\"\n  height=\"100%\">\n</embed>\n";
 
 /***/ },
 /* 77 */
@@ -10418,24 +10573,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports['default'] = HTML5Audio;
 
-	HTML5Audio.canPlay = function (resource, mimeType) {
+	HTML5Audio.canPlay = function (resourceUrl, mimeType) {
 	  var mimetypes = {
 	    'wav': ['audio/wav'],
 	    'mp3': ['audio/mp3', 'audio/mpeg;codecs="mp3"'],
 	    'aac': ['audio/mp4;codecs="mp4a.40.5"'],
 	    'oga': ['audio/ogg']
 	  };
-	  var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || [];
-	  if (resourceParts.length > 1 && mimetypes[resourceParts[1]] !== undefined) {
-	    var a = document.createElement('audio');
-	    return !!(0, _lodashFind2['default'])(mimetypes[resourceParts[1]], function (ext) {
-	      return !!a.canPlayType(ext).replace(/no/, '');
-	    });
-	  } else if (mimeType && !/m3u8/.test(resourceParts[1])) {
-	    var a = document.createElement('audio');
-	    return !!a.canPlayType(mimeType).replace(/no/, '');
-	  }
-	  return false;
+	  return _playbacksHtml5_video2['default']._canPlay('audio', mimetypes, resourceUrl, mimeType);
 	};
 	module.exports = exports['default'];
 
@@ -10508,6 +10653,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 	var MAX_ATTEMPTS = 60;
+	var AUTO = -1;
 
 	var FlasHLS = (function (_BaseFlashPlayback) {
 	  _inherits(FlasHLS, _BaseFlashPlayback);
@@ -10525,15 +10671,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'levels',
 	    get: function get() {
-	      return this.el && this.el.getLevels() || [];
+	      return this._levels || [];
 	    }
 	  }, {
 	    key: 'currentLevel',
 	    get: function get() {
-	      return this.el && this.el.getCurrentLevel() || -1;
+	      return this._currentLevel || AUTO;
 	    },
-	    set: function set(level) {
-	      this.el && this.el.playerSetCurrentLevel(level);
+	    set: function set(id) {
+	      this._currentLevel = id;
+	      this.trigger(_baseEvents2['default'].PLAYBACK_LEVEL_SWITCH_START);
+	      this.el.playerSetCurrentLevel(id);
 	    }
 	  }]);
 
@@ -10561,24 +10709,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(FlasHLS, [{
 	    key: 'initHlsParameters',
 	    value: function initHlsParameters(options) {
-	      this.flushLiveURLCache = options.flushLiveURLCache === undefined ? true : options.flushLiveURLCache;
+	      this.autoStartLoad = options.autoStartLoad === undefined ? true : options.autoStartLoad;
 	      this.capLevelToStage = options.capLevelToStage === undefined ? false : options.capLevelToStage;
-	      this.useHardwareVideoDecoder = options.useHardwareVideoDecoder === undefined ? true : options.useHardwareVideoDecoder;
+	      this.maxLevelCappingMode = options.maxLevelCappingMode === undefined ? "downscale" : options.maxLevelCappingMode;
+	      this.minBufferLength = options.minBufferLength === undefined ? -1 : options.minBufferLength;
+	      this.minBufferLengthCapping = options.minBufferLengthCapping === undefined ? -1 : options.minBufferLengthCapping;
 	      this.maxBufferLength = options.maxBufferLength === undefined ? 120 : options.maxBufferLength;
+	      this.maxBackBufferLength = options.maxBackBufferLength === undefined ? 30 : options.maxBackBufferLength;
+	      this.lowBufferLength = options.lowBufferLength === undefined ? 3 : options.lowBufferLength;
+	      this.mediaTimePeriod = options.mediaTimePeriod === undefined ? 100 : options.mediaTimePeriod;
+	      this.fpsDroppedMonitoringPeriod = options.fpsDroppedMonitoringPeriod === undefined ? 5000 : options.fpsDroppedMonitoringPeriod;
+	      this.fpsDroppedMonitoringThreshold = options.fpsDroppedMonitoringThreshold === undefined ? 0.2 : options.fpsDroppedMonitoringThreshold;
+	      this.capLevelonFPSDrop = options.capLevelonFPSDrop === undefined ? false : options.capLevelonFPSDrop;
+	      this.smoothAutoSwitchonFPSDrop = options.smoothAutoSwitchonFPSDrop === undefined ? this.capLevelonFPSDrop : options.smoothAutoSwitchonFPSDrop;
+	      this.switchDownOnLevelError = options.switchDownOnLevelError === undefined ? true : options.switchDownOnLevelError;
 	      this.seekMode = options.seekMode === undefined ? "ACCURATE" : options.seekMode;
-	      this.startFromLevel = options.startFromLevel === undefined ? -1 : options.startFromLevel;
-	      this.startFromBitrate = options.startFromBitrate === undefined ? -1 : options.startFromBitrate;
-	      this.hlsMinimumDvrSize = options.hlsMinimumDvrSize === undefined ? 60 : options.hlsMinimumDvrSize;
-	      this.hlsLogEnabled = options.hlsLogEnabled === undefined ? true : options.hlsLogEnabled;
 	      this.keyLoadMaxRetry = options.keyLoadMaxRetry === undefined ? 3 : options.keyLoadMaxRetry;
 	      this.keyLoadMaxRetryTimeout = options.keyLoadMaxRetryTimeout === undefined ? 64000 : options.keyLoadMaxRetryTimeout;
 	      this.fragmentLoadMaxRetry = options.fragmentLoadMaxRetry === undefined ? 3 : options.fragmentLoadMaxRetry;
 	      this.fragmentLoadMaxRetryTimeout = options.fragmentLoadMaxRetryTimeout === undefined ? 4000 : options.fragmentLoadMaxRetryTimeout;
-	      this.fragmentLoadSkipAfterMaxRetry = options.fragmentLoadSkipAfterMaxRetry === undefined ? false : options.fragmentLoadSkipAfterMaxRetry;
-	      this.capLevelonFpsDrop = options.capLevelonFpsDrop === undefined ? false : options.capLevelonFpsDrop;
-	      this.smoothAutoSwitchonFpsDrop = options.smoothAutoSwitchonFpsDrop === undefined ? this.capLevelonFpsDrop : options.smoothAutoSwitchonFpsDrop;
-	      this.fpsDroppedMonitoringPeriod = options.fpsDroppedMonitoringPeriod === undefined ? 5000 : options.fpsDroppedMonitoringPeriod;
-	      this.fpsDroppedMonitoringThreshold = options.fpsDroppedMonitoringThreshold === undefined ? 0.2 : options.fpsDroppedMonitoringThreshold;
+	      this.fragmentLoadSkipAfterMaxRetry = options.fragmentLoadSkipAfterMaxRetry === undefined ? true : options.fragmentLoadSkipAfterMaxRetry;
+	      this.flushLiveURLCache = options.flushLiveURLCache === undefined ? false : options.flushLiveURLCache;
+	      this.initialLiveManifestSize = options.initialLiveManifestSize === undefined ? 1 : options.initialLiveManifestSize;
+	      this.manifestLoadMaxRetry = options.manifestLoadMaxRetry === undefined ? 3 : options.manifestLoadMaxRetry;
+	      this.manifestLoadMaxRetryTimeout = options.manifestLoadMaxRetryTimeout === undefined ? 64000 : options.manifestLoadMaxRetryTimeout;
+	      this.manifestRedundantLoadmaxRetry = options.manifestRedundantLoadmaxRetry === undefined ? 3 : options.manifestRedundantLoadmaxRetry;
+	      this.startFromBitrate = options.startFromBitrate === undefined ? -1 : options.startFromBitrate;
+	      this.startFromLevel = options.startFromLevel === undefined ? -1 : options.startFromLevel;
+	      this.autoStartMaxDuration = options.autoStartMaxDuration === undefined ? -1 : options.autoStartMaxDuration;
+	      this.seekFromLevel = options.seekFromLevel === undefined ? -1 : options.seekFromLevel;
+	      this.useHardwareVideoDecoder = options.useHardwareVideoDecoder === undefined ? false : options.useHardwareVideoDecoder;
+	      this.hlsLogEnabled = options.hlsLogEnabled === undefined ? true : options.hlsLogEnabled;
+	      this.logDebug = options.logDebug === undefined ? false : options.logDebug;
+	      this.logDebug2 = options.logDebug2 === undefined ? false : options.logDebug2;
+	      this.logWarn = options.logWarn === undefined ? true : options.logWarn;
+	      this.logError = options.logError === undefined ? true : options.logError;
+	      this.hlsMinimumDvrSize = options.hlsMinimumDvrSize === undefined ? 60 : options.hlsMinimumDvrSize;
 	    }
 	  }, {
 	    key: 'addListeners',
@@ -10650,71 +10816,131 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'setFlashSettings',
 	    value: function setFlashSettings() {
-	      this.el.playerSetflushLiveURLCache(this.flushLiveURLCache);
-	      this.el.playerCapLeveltoStage(this.capLevelToStage);
-	      this.el.playerSetmaxBufferLength(this.maxBufferLength);
-	      this.el.playerSetUseHardwareVideoDecoder(this.useHardwareVideoDecoder);
-	      this.el.playerSetLogInfo(this.hlsLogEnabled);
+	      this.el.playerSetAutoStartLoad(this.autoStartLoad);
+	      this.el.playerSetCapLevelToStage(this.capLevelToStage);
+	      this.el.playerSetMaxLevelCappingMode(this.maxLevelCappingMode);
+	      this.el.playerSetMinBufferLength(this.minBufferLength);
+	      this.el.playerSetMinBufferLengthCapping(this.minBufferLengthCapping);
+	      this.el.playerSetMaxBufferLength(this.maxBufferLength);
+	      this.el.playerSetMaxBackBufferLength(this.maxBackBufferLength);
+	      this.el.playerSetLowBufferLength(this.lowBufferLength);
+	      this.el.playerSetMediaTimePeriod(this.mediaTimePeriod);
+	      this.el.playerSetFpsDroppedMonitoringPeriod(this.fpsDroppedMonitoringPeriod);
+	      this.el.playerSetFpsDroppedMonitoringThreshold(this.fpsDroppedMonitoringThreshold);
+	      this.el.playerSetCapLevelonFPSDrop(this.capLevelonFPSDrop);
+	      this.el.playerSetSmoothAutoSwitchonFPSDrop(this.smoothAutoSwitchonFPSDrop);
+	      this.el.playerSetSwitchDownOnLevelError(this.switchDownOnLevelError);
 	      this.el.playerSetSeekMode(this.seekMode);
-	      this.el.playerSetStartFromBitrate(this.startFromBitrate);
-	      this.el.playerSetstartFromLevel(this.startFromLevel);
 	      this.el.playerSetKeyLoadMaxRetry(this.keyLoadMaxRetry);
 	      this.el.playerSetKeyLoadMaxRetryTimeout(this.keyLoadMaxRetryTimeout);
 	      this.el.playerSetFragmentLoadMaxRetry(this.fragmentLoadMaxRetry);
 	      this.el.playerSetFragmentLoadMaxRetryTimeout(this.fragmentLoadMaxRetryTimeout);
 	      this.el.playerSetFragmentLoadSkipAfterMaxRetry(this.fragmentLoadSkipAfterMaxRetry);
-	      this.el.playerSetCapLevelonFPSDrop(this.capLevelonFpsDrop);
-	      this.el.playerSetSmoothAutoSwitchonFPSDrop(this.smoothAutoSwitchonFpsDrop);
-	      this.el.playerSetFpsDroppedMonitoringPeriod(this.fpsDroppedMonitoringPeriod);
-	      this.el.playerSetFpsDroppedMonitoringThreshold(this.fpsDroppedMonitoringThreshold);
+	      this.el.playerSetFlushLiveURLCache(this.flushLiveURLCache);
+	      this.el.playerSetInitialLiveManifestSize(this.initialLiveManifestSize);
+	      this.el.playerSetManifestLoadMaxRetry(this.manifestLoadMaxRetry);
+	      this.el.playerSetManifestLoadMaxRetryTimeout(this.manifestLoadMaxRetryTimeout);
+	      this.el.playerSetManifestRedundantLoadmaxRetry(this.manifestRedundantLoadmaxRetry);
+	      this.el.playerSetStartFromBitrate(this.startFromBitrate);
+	      this.el.playerSetStartFromLevel(this.startFromLevel);
+	      this.el.playerSetAutoStartMaxDuration(this.autoStartMaxDuration);
+	      this.el.playerSetSeekFromLevel(this.seekFromLevel);
+	      this.el.playerSetUseHardwareVideoDecoder(this.useHardwareVideoDecoder);
+	      this.el.playerSetLogInfo(this.hlsLogEnabled);
+	      this.el.playerSetLogDebug(this.logDebug);
+	      this.el.playerSetLogDebug2(this.logDebug2);
+	      this.el.playerSetLogWarn(this.logWarn);
+	      this.el.playerSetLogError(this.logError);
 	    }
 	  }, {
-	    key: 'setFlushLiveUrlCache',
-	    value: function setFlushLiveUrlCache(flushLiveURLCache) {
-	      this.flushLiveURLCache = flushLiveURLCache;
-	      this.el.playerSetflushLiveURLCache(this.flushLiveURLCache);
+	    key: 'setAutoStartLoad',
+	    value: function setAutoStartLoad(autoStartLoad) {
+	      this.autoStartLoad = autoStartLoad;
+	      this.el.playerSetAutoStartLoad(this.autoStartLoad);
 	    }
 	  }, {
-	    key: 'setCapLeveltoStage',
-	    value: function setCapLeveltoStage(capLevelToStage) {
+	    key: 'setCapLevelToStage',
+	    value: function setCapLevelToStage(capLevelToStage) {
 	      this.capLevelToStage = capLevelToStage;
-	      this.el.playerCapLeveltoStage(this.capLevelToStage);
+	      this.el.playerSetCapLevelToStage(this.capLevelToStage);
+	    }
+	  }, {
+	    key: 'setMaxLevelCappingMode',
+	    value: function setMaxLevelCappingMode(maxLevelCappingMode) {
+	      this.maxLevelCappingMode = maxLevelCappingMode;
+	      this.el.playerSetMaxLevelCappingMode(this.maxLevelCappingMode);
+	    }
+	  }, {
+	    key: 'setSetMinBufferLength',
+	    value: function setSetMinBufferLength(minBufferLength) {
+	      this.minBufferLength = minBufferLength;
+	      this.el.playerSetMinBufferLength(this.minBufferLength);
+	    }
+	  }, {
+	    key: 'setMinBufferLengthCapping',
+	    value: function setMinBufferLengthCapping(minBufferLengthCapping) {
+	      this.minBufferLengthCapping = minBufferLengthCapping;
+	      this.el.playerSetMinBufferLengthCapping(this.minBufferLengthCapping);
 	    }
 	  }, {
 	    key: 'setMaxBufferLength',
 	    value: function setMaxBufferLength(maxBufferLength) {
 	      this.maxBufferLength = maxBufferLength;
-	      this.el.playerSetmaxBufferLength(this.maxBufferLength);
+	      this.el.playerSetMaxBufferLength(this.maxBufferLength);
 	    }
 	  }, {
-	    key: 'setUseHardwareVideoDecoder',
-	    value: function setUseHardwareVideoDecoder(useHardwareVideoDecoder) {
-	      this.useHardwareVideoDecoder = useHardwareVideoDecoder;
-	      this.el.playerSetUseHardwareVideoDecoder(this.useHardwareVideoDecoder);
+	    key: 'setMaxBackBufferLength',
+	    value: function setMaxBackBufferLength(maxBackBufferLength) {
+	      this.maxBackBufferLength = maxBackBufferLength;
+	      this.el.playerSetMaxBackBufferLength(this.maxBackBufferLength);
 	    }
 	  }, {
-	    key: 'setHlsLogEnabled',
-	    value: function setHlsLogEnabled(hlsLogEnabled) {
-	      this.hlsLogEnabled = hlsLogEnabled;
-	      this.el.playerSetLogInfo(this.hlsLogEnabled);
+	    key: 'setLowBufferLength',
+	    value: function setLowBufferLength(lowBufferLength) {
+	      this.lowBufferLength = lowBufferLength;
+	      this.el.playerSetLowBufferLength(this.lowBufferLength);
+	    }
+	  }, {
+	    key: 'setMediaTimePeriod',
+	    value: function setMediaTimePeriod(mediaTimePeriod) {
+	      this.mediaTimePeriod = mediaTimePeriod;
+	      this.el.playerSetMediaTimePeriod(this.mediaTimePeriod);
+	    }
+	  }, {
+	    key: 'setFpsDroppedMonitoringPeriod',
+	    value: function setFpsDroppedMonitoringPeriod(fpsDroppedMonitoringPeriod) {
+	      this.fpsDroppedMonitoringPeriod = fpsDroppedMonitoringPeriod;
+	      this.el.playerSetFpsDroppedMonitoringPeriod(this.fpsDroppedMonitoringPeriod);
+	    }
+	  }, {
+	    key: 'setFpsDroppedMonitoringThreshold',
+	    value: function setFpsDroppedMonitoringThreshold(fpsDroppedMonitoringThreshold) {
+	      this.fpsDroppedMonitoringThreshold = fpsDroppedMonitoringThreshold;
+	      this.el.playerSetFpsDroppedMonitoringThreshold(this.fpsDroppedMonitoringThreshold);
+	    }
+	  }, {
+	    key: 'setCapLevelonFPSDrop',
+	    value: function setCapLevelonFPSDrop(capLevelonFPSDrop) {
+	      this.capLevelonFPSDrop = capLevelonFPSDrop;
+	      this.el.playerSetCapLevelonFPSDrop(this.capLevelonFPSDrop);
+	    }
+	  }, {
+	    key: 'setSmoothAutoSwitchonFPSDrop',
+	    value: function setSmoothAutoSwitchonFPSDrop(smoothAutoSwitchonFPSDrop) {
+	      this.smoothAutoSwitchonFPSDrop = smoothAutoSwitchonFPSDrop;
+	      this.el.playerSetSmoothAutoSwitchonFPSDrop(this.smoothAutoSwitchonFPSDrop);
+	    }
+	  }, {
+	    key: 'setSwitchDownOnLevelError',
+	    value: function setSwitchDownOnLevelError(switchDownOnLevelError) {
+	      this.switchDownOnLevelError = switchDownOnLevelError;
+	      this.el.playerSetSwitchDownOnLevelError(this.switchDownOnLevelError);
 	    }
 	  }, {
 	    key: 'setSeekMode',
 	    value: function setSeekMode(seekMode) {
 	      this.seekMode = seekMode;
 	      this.el.playerSetSeekMode(this.seekMode);
-	    }
-	  }, {
-	    key: 'setStartFromBitrate',
-	    value: function setStartFromBitrate(startFromBitrate) {
-	      this.startFromBitrate = startFromBitrate;
-	      this.el.playerSetStartFromBitrate(this.startFromBitrate);
-	    }
-	  }, {
-	    key: 'setStartFromLevel',
-	    value: function setStartFromLevel(startFromLevel) {
-	      this.startFromLevel = startFromLevel;
-	      this.el.playerSetstartFromLevel(this.startFromLevel);
 	    }
 	  }, {
 	    key: 'setKeyLoadMaxRetry',
@@ -10747,28 +10973,94 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.el.playerSetFragmentLoadSkipAfterMaxRetry(this.fragmentLoadSkipAfterMaxRetry);
 	    }
 	  }, {
-	    key: 'setCapLevelonFPSDrop',
-	    value: function setCapLevelonFPSDrop(capLevelonFpsDrop) {
-	      this.capLevelonFpsDrop = capLevelonFpsDrop;
-	      this.el.playerSetCapLevelonFPSDrop(this.capLevelonFpsDrop);
+	    key: 'setFlushLiveURLCache',
+	    value: function setFlushLiveURLCache(flushLiveURLCache) {
+	      this.flushLiveURLCache = flushLiveURLCache;
+	      this.el.playerSetFlushLiveURLCache(this.flushLiveURLCache);
 	    }
 	  }, {
-	    key: 'setSmoothAutoSwitchonFPSDrop',
-	    value: function setSmoothAutoSwitchonFPSDrop(smoothAutoSwitchonFpsDrop) {
-	      this.smoothAutoSwitchonFpsDrop = smoothAutoSwitchonFpsDrop;
-	      this.el.playerSetSmoothAutoSwitchonFPSDrop(this.smoothAutoSwitchonFpsDrop);
+	    key: 'setInitialLiveManifestSize',
+	    value: function setInitialLiveManifestSize(initialLiveManifestSize) {
+	      this.initialLiveManifestSize = initialLiveManifestSize;
+	      this.el.playerSetInitialLiveManifestSize(this.initialLiveManifestSize);
 	    }
 	  }, {
-	    key: 'setFpsDroppedMonitoringPeriod',
-	    value: function setFpsDroppedMonitoringPeriod(fpsDroppedMonitoringPeriod) {
-	      this.fpsDroppedMonitoringPeriod = fpsDroppedMonitoringPeriod;
-	      this.el.playerSetFpsDroppedMonitoringPeriod(this.fpsDroppedMonitoringPeriod);
+	    key: 'setManifestLoadMaxRetry',
+	    value: function setManifestLoadMaxRetry(manifestLoadMaxRetry) {
+	      this.manifestLoadMaxRetry = manifestLoadMaxRetry;
+	      this.el.playerSetManifestLoadMaxRetry(this.manifestLoadMaxRetry);
 	    }
 	  }, {
-	    key: 'setFpsDroppedMonitoringThreshold',
-	    value: function setFpsDroppedMonitoringThreshold(fpsDroppedMonitoringThreshold) {
-	      this.fpsDroppedMonitoringThreshold = fpsDroppedMonitoringThreshold;
-	      this.el.playerSetFpsDroppedMonitoringThreshold(this.fpsDroppedMonitoringThreshold);
+	    key: 'setManifestLoadMaxRetryTimeout',
+	    value: function setManifestLoadMaxRetryTimeout(manifestLoadMaxRetryTimeout) {
+	      this.manifestLoadMaxRetryTimeout = manifestLoadMaxRetryTimeout;
+	      this.el.playerSetManifestLoadMaxRetryTimeout(this.manifestLoadMaxRetryTimeout);
+	    }
+	  }, {
+	    key: 'setManifestRedundantLoadmaxRetry',
+	    value: function setManifestRedundantLoadmaxRetry(manifestRedundantLoadmaxRetry) {
+	      this.manifestRedundantLoadmaxRetry = manifestRedundantLoadmaxRetry;
+	      this.el.playerSetManifestRedundantLoadmaxRetry(this.manifestRedundantLoadmaxRetry);
+	    }
+	  }, {
+	    key: 'setStartFromBitrate',
+	    value: function setStartFromBitrate(startFromBitrate) {
+	      this.startFromBitrate = startFromBitrate;
+	      this.el.playerSetStartFromBitrate(this.startFromBitrate);
+	    }
+	  }, {
+	    key: 'setStartFromLevel',
+	    value: function setStartFromLevel(startFromLevel) {
+	      this.startFromLevel = startFromLevel;
+	      this.el.playerSetStartFromLevel(this.startFromLevel);
+	    }
+	  }, {
+	    key: 'setAutoStartMaxDuration',
+	    value: function setAutoStartMaxDuration(autoStartMaxDuration) {
+	      this.autoStartMaxDuration = autoStartMaxDuration;
+	      this.el.playerSetAutoStartMaxDuration(this.autoStartMaxDuration);
+	    }
+	  }, {
+	    key: 'setSeekFromLevel',
+	    value: function setSeekFromLevel(seekFromLevel) {
+	      this.seekFromLevel = seekFromLevel;
+	      this.el.playerSetSeekFromLevel(this.seekFromLevel);
+	    }
+	  }, {
+	    key: 'setUseHardwareVideoDecoder',
+	    value: function setUseHardwareVideoDecoder(useHardwareVideoDecoder) {
+	      this.useHardwareVideoDecoder = useHardwareVideoDecoder;
+	      this.el.playerSetUseHardwareVideoDecoder(this.useHardwareVideoDecoder);
+	    }
+	  }, {
+	    key: 'setSetLogInfo',
+	    value: function setSetLogInfo(hlsLogEnabled) {
+	      this.hlsLogEnabled = hlsLogEnabled;
+	      this.el.playerSetLogInfo(this.hlsLogEnabled);
+	    }
+	  }, {
+	    key: 'setLogDebug',
+	    value: function setLogDebug(logDebug) {
+	      this.logDebug = logDebug;
+	      this.el.playerSetLogDebug(this.logDebug);
+	    }
+	  }, {
+	    key: 'setLogDebug2',
+	    value: function setLogDebug2(logDebug2) {
+	      this.logDebug2 = logDebug2;
+	      this.el.playerSetLogDebug2(this.logDebug2);
+	    }
+	  }, {
+	    key: 'setLogWarn',
+	    value: function setLogWarn(logWarn) {
+	      this.logWarn = logWarn;
+	      this.el.playerSetLogWarn(this.logWarn);
+	    }
+	  }, {
+	    key: 'setLogError',
+	    value: function setLogError(logError) {
+	      this.logError = logError;
+	      this.el.playerSetLogError(this.logError);
 	    }
 	  }, {
 	    key: 'levelChanged',
@@ -10784,6 +11076,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          bitrate: currentLevel.bitrate,
 	          level: level
 	        });
+	        this.trigger(_baseEvents2['default'].PLAYBACK_LEVEL_SWITCH_END);
 	      }
 	    }
 	  }, {
@@ -10977,6 +11270,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function stop() {
 	      this.srcLoaded = false;
 	      this.el.playerStop();
+	      this.trigger(_baseEvents2['default'].PLAYBACK_STOP);
 	      this.trigger(_baseEvents2['default'].PLAYBACK_TIMEUPDATE, { current: 0, total: 0 }, this.name);
 	    }
 	  }, {
@@ -11046,6 +11340,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'manifestLoaded',
 	    value: function manifestLoaded(duration, loadmetrics) {
+	      var levels = this.el.getLevels();
+	      var levelsLength = levels.length;
+	      this._levels = [];
+
+	      for (var index = 0; index < levelsLength; index++) {
+	        this._levels.push({ id: index, label: levels[index].height + 'p' });
+	      }
+	      this.trigger(_baseEvents2['default'].PLAYBACK_LEVELS_AVAILABLE, this._levels);
 	      this.trigger(_baseEvents2['default'].PLAYBACK_LOADEDMETADATA, { duration: duration, data: loadmetrics });
 	    }
 	  }, {
@@ -11223,7 +11525,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "217627a572d4f59b87b633aafd9a276c.swf";
+	module.exports = __webpack_require__.p + "8a0e4b17a5e97cfc84752044c2e0cfe9.swf";
 
 /***/ },
 /* 85 */
@@ -11277,6 +11579,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _componentsBrowser2 = _interopRequireDefault(_componentsBrowser);
 
+	var AUTO = -1;
+
 	var HLS = (function (_HTML5VideoPlayback) {
 	  _inherits(HLS, _HTML5VideoPlayback);
 
@@ -11288,15 +11592,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'levels',
 	    get: function get() {
-	      return this.hls && this.hls.levels || [];
+	      return this._levels || [];
 	    }
 	  }, {
 	    key: 'currentLevel',
 	    get: function get() {
-	      return this.hls && this.hls.currentLevel || -1;
+	      return this._currentLevel || AUTO;
 	    },
-	    set: function set(level) {
-	      this.hls && (this.hls.currentLevel = level);
+	    set: function set(id) {
+	      this._currentLevel = id;
+	      this.trigger(_baseEvents2['default'].PLAYBACK_LEVEL_SWITCH_START);
+	      this.hls.currentLevel = this._currentLevel;
 	    }
 	  }]);
 
@@ -11346,9 +11652,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.hls.attachMedia(this.el);
 	    }
 
+	    // override
+	  }, {
+	    key: 'setupSrc',
+	    value: function setupSrc(srcUrl) {}
+	    // this playback manages the src on the video element itself
+
 	    // the duration on the video element itself should not be used
 	    // as this does not necesarily represent the duration of the stream
 	    // https://github.com/clappr/clappr/issues/668#issuecomment-157036678
+
 	  }, {
 	    key: 'getDuration',
 	    value: function getDuration() {
@@ -11423,12 +11736,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.hls) {
 	        this.hls.destroy();
 	        delete this.hls;
+	        this.trigger(_baseEvents2['default'].PLAYBACK_STOP);
 	      }
 	    }
 	  }, {
 	    key: 'updatePlaybackType',
 	    value: function updatePlaybackType(evt, data) {
 	      this.playbackType = data.details.live ? _basePlayback2['default'].LIVE : _basePlayback2['default'].VOD;
+	      this.fillLevels();
+	    }
+	  }, {
+	    key: 'fillLevels',
+	    value: function fillLevels() {
+	      this._levels = this.hls.levels.map(function (level, index) {
+	        return { id: index, label: level.height + 'p' };
+	      });
+	      this.trigger(_baseEvents2['default'].PLAYBACK_LEVELS_AVAILABLE, this._levels);
 	    }
 	  }, {
 	    key: 'updateDuration',
@@ -11448,6 +11771,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onLevelSwitch',
 	    value: function onLevelSwitch(evt, data) {
+	      this.trigger(_baseEvents2['default'].PLAYBACK_LEVEL_SWITCH_END);
 	      this.trigger(_baseEvents2['default'].PLAYBACK_LEVEL_SWITCH, data);
 	      var currentLevel = this.levels[data.level];
 	      if (currentLevel) {
@@ -11533,7 +11857,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _controllerMseMediaController2 = _interopRequireDefault(_controllerMseMediaController);
 
-	var _controllerLevelController = __webpack_require__(107);
+	var _controllerLevelController = __webpack_require__(110);
 
 	var _controllerLevelController2 = _interopRequireDefault(_controllerLevelController);
 
@@ -11541,7 +11865,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _utilsLogger = __webpack_require__(99);
 
-	var _utilsXhrLoader = __webpack_require__(108);
+	var _utilsXhrLoader = __webpack_require__(111);
 
 	var _utilsXhrLoader2 = _interopRequireDefault(_utilsXhrLoader);
 
@@ -11549,7 +11873,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events4 = _interopRequireDefault(_events3);
 
-	var _loaderKeyLoader = __webpack_require__(109);
+	var _loaderKeyLoader = __webpack_require__(112);
 
 	var _loaderKeyLoader2 = _interopRequireDefault(_loaderKeyLoader);
 
@@ -11590,6 +11914,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      liveMaxLatencyDurationCount: Infinity,
 	      maxMaxBufferLength: 600,
 	      enableWorker: true,
+	      enableSoftwareAES: true,
 	      fragLoadingTimeOut: 20000,
 	      fragLoadingMaxRetry: 1,
 	      fragLoadingRetryDelay: 1000,
@@ -11597,8 +11922,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      manifestLoadingTimeOut: 10000,
 	      manifestLoadingMaxRetry: 1,
 	      manifestLoadingRetryDelay: 1000,
-	      fpsDroppedMonitoringPeriod: 5000,
-	      fpsDroppedMonitoringThreshold: 0.2,
+	      // fpsDroppedMonitoringPeriod: 5000,
+	      // fpsDroppedMonitoringThreshold: 0.2,
 	      appendErrorMaxRetry: 200,
 	      loader: _utilsXhrLoader2['default'],
 	      fLoader: undefined,
@@ -11614,7 +11939,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    if (config.liveMaxLatencyDurationCount !== undefined && config.liveMaxLatencyDurationCount <= config.liveSyncDurationCount) {
-	      throw new Error('Illegal hls.js configuration: "liveMaxLatencyDurationCount" must be strictly superior to "liveSyncDurationCount" in player configuration');
+	      throw new Error('Illegal hls.js config: "liveMaxLatencyDurationCount" must be gt "liveSyncDurationCount"');
 	    }
 
 	    (0, _utilsLogger.enableLogs)(config.debug);
@@ -11652,8 +11977,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'destroy',
 	    value: function destroy() {
 	      _utilsLogger.logger.log('destroy');
-	      this.detachMedia();
 	      this.trigger(_events2['default'].DESTROYING);
+	      this.detachMedia();
 	      this.playlistLoader.destroy();
 	      this.fragmentLoader.destroy();
 	      this.levelController.destroy();
@@ -11698,6 +12023,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var media = this.media;
 	      this.detachMedia();
 	      this.attachMedia(media);
+	      this.mediaController.recoverMediaError();
 	    }
 
 	    /** Return all quality levels **/
@@ -11937,12 +12263,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  FRAG_DECRYPT_ERROR: 'fragDecryptError',
 	  // Identifier for a fragment parsing error event - data: parsing error description
 	  FRAG_PARSING_ERROR: 'fragParsingError',
-	  // Identifier for a fragment appending error event - data: appending error description
-	  FRAG_APPENDING_ERROR: 'fragAppendingError',
 	  // Identifier for decrypt key load error - data: { frag : fragment object, response : XHR response}
 	  KEY_LOAD_ERROR: 'keyLoadError',
 	  // Identifier for decrypt key load timeout error - data: { frag : fragment object}
-	  KEY_LOAD_TIMEOUT: 'keyLoadTimeOut'
+	  KEY_LOAD_TIMEOUT: 'keyLoadTimeOut',
+	  // Identifier for a buffer append error - data: append error description
+	  BUFFER_APPEND_ERROR: 'bufferAppendError',
+	  // Identifier for a buffer appending error event - data: appending error description
+	  BUFFER_APPENDING_ERROR: 'bufferAppendingError'
 	};
 	exports.ErrorDetails = ErrorDetails;
 
@@ -12541,7 +12869,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 
 	      if (this._nextAutoLevel !== -1) {
-	        return Math.min(this._nextAutoLevel, maxAutoLevel);
+	        var nextLevel = Math.min(this._nextAutoLevel, maxAutoLevel);
+	        if (nextLevel === this.lastfetchlevel) {
+	          this._nextAutoLevel = -1;
+	        } else {
+	          return nextLevel;
+	        }
 	      }
 
 	      // follow algorithm captured from stagefright :
@@ -12603,11 +12936,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _utilsLogger = __webpack_require__(99);
 
-	var _utilsBinarySearch = __webpack_require__(105);
+	var _utilsBinarySearch = __webpack_require__(108);
 
 	var _utilsBinarySearch2 = _interopRequireDefault(_utilsBinarySearch);
 
-	var _helperLevelHelper = __webpack_require__(106);
+	var _helperLevelHelper = __webpack_require__(109);
 
 	var _helperLevelHelper2 = _interopRequireDefault(_helperLevelHelper);
 
@@ -12631,6 +12964,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _classCallCheck(this, MSEMediaController);
 
 	    this.config = hls.config;
+	    this.audioCodecSwap = false;
 	    this.hls = hls;
 	    // Source Buffer listeners
 	    this.onsbue = this.onSBUpdateEnd.bind(this);
@@ -12842,7 +13176,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                  /* we have no idea about which fragment should be loaded.
 	                     so let's load mid fragment. it will help computing playlist sliding and find the right one
 	                  */
-	                  _frag = fragments[Math.round(fragLen / 2)];
+	                  _frag = fragments[Math.min(fragLen - 1, Math.round(fragLen / 2))];
 	                  _utilsLogger.logger.log('live playlist, switching playlist, unknown, load middle frag : ' + _frag.sn);
 	                }
 	              }
@@ -12853,21 +13187,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	              }
 	            }
 	            if (!_frag) {
-	              if (bufferEnd > end) {
+	              var foundFrag;
+	              if (bufferEnd < end) {
+	                foundFrag = _utilsBinarySearch2['default'].search(fragments, function (candidate) {
+	                  //logger.log(`level/sn/start/end/bufEnd:${level}/${candidate.sn}/${candidate.start}/${(candidate.start+candidate.duration)}/${bufferEnd}`);
+	                  // offset should be within fragment boundary
+	                  if (candidate.start + candidate.duration <= bufferEnd) {
+	                    return 1;
+	                  } else if (candidate.start > bufferEnd) {
+	                    return -1;
+	                  }
+	                  return 0;
+	                });
+	              } else {
 	                // reach end of playlist
-	                break;
+	                foundFrag = fragments[fragLen - 1];
 	              }
-	              var foundFrag = _utilsBinarySearch2['default'].search(fragments, function (candidate) {
-	                //logger.log('level/sn/sliding/start/end/bufEnd:${level}/${candidate.sn}/${sliding.toFixed(3)}/${candidate.start.toFixed(3)}/${(candidate.start+candidate.duration).toFixed(3)}/${bufferEnd.toFixed(3)}');
-	                // offset should be within fragment boundary
-	                if (candidate.start + candidate.duration <= bufferEnd) {
-	                  return 1;
-	                } else if (candidate.start > bufferEnd) {
-	                  return -1;
-	                }
-	                return 0;
-	              });
-
 	              if (foundFrag) {
 	                _frag = foundFrag;
 	                start = foundFrag.start;
@@ -12877,7 +13212,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    _frag = fragments[_frag.sn + 1 - levelDetails.startSN];
 	                    _utilsLogger.logger.log('SN just loaded, load next one: ' + _frag.sn);
 	                  } else {
-	                    // end of VOD playlist reached
+	                    // have we reached end of VOD playlist ?
+	                    if (!levelDetails.live) {
+	                      var mediaSource = this.mediaSource;
+	                      if (mediaSource && mediaSource.readyState === 'open') {
+	                        // ensure sourceBuffer are not in updating stateyes
+	                        var sb = this.sourceBuffer;
+	                        if (!(sb.audio && sb.audio.updating || sb.video && sb.video.updating)) {
+	                          _utilsLogger.logger.log('all media data available, signal endOfStream() to MediaSource');
+	                          //Notify the media element that it now has all of the media data
+	                          mediaSource.endOfStream();
+	                        }
+	                      }
+	                    }
 	                    _frag = null;
 	                  }
 	                }
@@ -12996,7 +13343,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    } else {
 	                      this.appendError = 1;
 	                    }
-	                    var event = { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.FRAG_APPENDING_ERROR, frag: this.fragCurrent };
+	                    var event = { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.BUFFER_APPEND_ERROR, frag: this.fragCurrent };
 	                    /* with UHD content, we could get loop of quota exceeded error until
 	                      browser is able to evict some data from sourcebuffer. retrying help recovering this
 	                    */
@@ -13117,7 +13464,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (pos + maxHoleDuration >= start && pos < end) {
 	          // play position is inside this buffer TimeRange, retrieve end of buffer position and buffer length
 	          bufferStart = start;
-	          bufferEnd = end;
+	          bufferEnd = end + maxHoleDuration;
 	          bufferLen = bufferEnd - pos;
 	        } else if (pos + maxHoleDuration < start) {
 	          bufferStartNext = start;
@@ -13376,8 +13723,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      ms.addEventListener('sourceclose', this.onmsc);
 	      // link video and media Source
 	      media.src = URL.createObjectURL(ms);
-	      // FIXME: this was in code before but onverror was never set! can be removed or fixed?
-	      //media.addEventListener('error', this.onverror);
+	      this.lastReadyState = 0;
 	    }
 	  }, {
 	    key: 'onMediaDetaching',
@@ -13613,6 +13959,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	          audioCodec = 'mp4a.40.5';
 	        }
 	        if (!this.sourceBuffer) {
+	          if (audioCodec && this.audioCodecSwap) {
+	            _utilsLogger.logger.log('swapping audio codec');
+	            if (audioCodec.indexOf('mp4a.40.5') !== -1) {
+	              audioCodec = 'mp4a.40.2';
+	            } else {
+	              audioCodec = 'mp4a.40.5';
+	            }
+	          }
 	          this.sourceBuffer = {};
 	          _utilsLogger.logger.log('selected A/V codecs for sourceBuffers:' + audioCodec + ',' + videoCodec);
 	          // create source Buffer and link them to MediaSource
@@ -13682,7 +14036,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        case _errors.ErrorDetails.KEY_LOAD_ERROR:
 	        case _errors.ErrorDetails.KEY_LOAD_TIMEOUT:
 	          // if fatal error, stop processing, otherwise move to IDLE to retry loading
-	          _utilsLogger.logger.warn('buffer controller: ' + data.details + ' while loading frag,switch to ' + (data.fatal ? 'ERROR' : 'IDLE') + ' state ...');
+	          _utilsLogger.logger.warn('mediaController: ' + data.details + ' while loading frag,switch to ' + (data.fatal ? 'ERROR' : 'IDLE') + ' state ...');
 	          this.state = data.fatal ? State.ERROR : State.IDLE;
 	          break;
 	        default:
@@ -13702,20 +14056,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	          this.fragLastKbps = Math.round(8 * stats.length / (stats.tbuffered - stats.tfirst));
 	          this.hls.trigger(_events2['default'].FRAG_BUFFERED, { stats: stats, frag: frag });
 	          _utilsLogger.logger.log('media buffered : ' + this.timeRangesToString(this.media.buffered));
-
-	          // if stream is VOD (not live) and we reach End of Stream
-	          var levelDetails = this.levels[this.level].details;
-	          if (levelDetails && !levelDetails.live) {
-	            // have we buffered last fragment ?
-	            if (frag.sn === levelDetails.endSN) {
-	              var mediaSource = this.mediaSource;
-	              if (mediaSource && mediaSource.readyState === 'open') {
-	                _utilsLogger.logger.log('all media data available, signal endOfStream() to MediaSource');
-	                //Notify the media element that it now has all of the media data
-	                mediaSource.endOfStream();
-	              }
-	            }
-	          }
 	          this.state = State.IDLE;
 	        }
 	      }
@@ -13728,6 +14068,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (media) {
 	        // compare readyState
 	        var readyState = media.readyState;
+	        this.lastReadyState = readyState;
 	        //logger.log(`readyState:${readyState}`);
 	        // if ready state different from HAVE_NOTHING (numeric value 0), we are allowed to seek
 	        if (readyState) {
@@ -13763,11 +14104,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	  }, {
+	    key: 'recoverMediaError',
+	    value: function recoverMediaError() {
+	      // if player tries to recover a MediaError with last MediaElement.readyState being HAVE_NOTHING(0) or HAVE_METADATA(1)
+	      // it means that we try to recover a media error, although no media has ever been played
+	      // this usually happens when there is a mismatch between Init Segment and appended buffers
+	      // this is the case when there is an audio codec mismatch
+	      // try to swap audio codec, this could help recovering the playback in that specific case
+	      if (this.lastReadyState < 2) {
+	        this.audioCodecSwap = !this.audioCodecSwap;
+	      }
+	    }
+	  }, {
 	    key: 'onSBUpdateError',
 	    value: function onSBUpdateError(event) {
 	      _utilsLogger.logger.error('sourceBuffer error:' + event);
 	      this.state = State.ERROR;
-	      this.hls.trigger(_events2['default'].ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.FRAG_APPENDING_ERROR, fatal: true, frag: this.fragCurrent });
+	      this.hls.trigger(_events2['default'].ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.BUFFER_APPENDING_ERROR, fatal: true, frag: this.fragCurrent });
 	    }
 	  }, {
 	    key: 'timeRangesToString',
@@ -13868,8 +14221,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _errors = __webpack_require__(89);
-
 	var _demuxDemuxerInline = __webpack_require__(96);
 
 	var _demuxDemuxerInline2 = _interopRequireDefault(_demuxDemuxerInline);
@@ -13884,6 +14235,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _remuxMp4Remuxer2 = _interopRequireDefault(_remuxMp4Remuxer);
 
+	var _cryptDecrypter = __webpack_require__(104);
+
+	var _cryptDecrypter2 = _interopRequireDefault(_cryptDecrypter);
+
 	var Demuxer = (function () {
 	  function Demuxer(hls) {
 	    _classCallCheck(this, Demuxer);
@@ -13892,7 +14247,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (hls.config.enableWorker && typeof Worker !== 'undefined') {
 	      _utilsLogger.logger.log('demuxing in webworker');
 	      try {
-	        var work = __webpack_require__(104);
+	        var work = __webpack_require__(107);
 	        this.w = work(_demuxDemuxerWorker2['default']);
 	        this.onwmsg = this.onWorkerMessage.bind(this);
 	        this.w.addEventListener('message', this.onwmsg);
@@ -13916,6 +14271,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.w = null;
 	      } else {
 	        this.demuxer.destroy();
+	        this.demuxer = null;
+	      }
+	      if (this.decrypter) {
+	        this.decrypter.destroy();
+	        this.decrypter = null;
 	      }
 	    }
 	  }, {
@@ -13932,19 +14292,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'push',
 	    value: function push(data, audioCodec, videoCodec, timeOffset, cc, level, sn, duration, decryptdata) {
 	      if (data.byteLength > 0 && decryptdata != null && decryptdata.key != null && decryptdata.method === 'AES-128') {
+	        if (this.decrypter == null) {
+	          this.decrypter = new _cryptDecrypter2['default'](this.hls);
+	        }
+
 	        var localthis = this;
-	        window.crypto.subtle.importKey('raw', decryptdata.key, { name: 'AES-CBC', length: 128 }, false, ['decrypt']).then(function (importedKey) {
-	          window.crypto.subtle.decrypt({ name: 'AES-CBC', iv: decryptdata.iv.buffer }, importedKey, data).then(function (result) {
-	            localthis.pushDecrypted(result, audioCodec, videoCodec, timeOffset, cc, level, sn, duration);
-	          })['catch'](function (err) {
-	            _utilsLogger.logger.error('decrypting error : ' + err.message);
-	            localthis.hls.trigger(_events2['default'].ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.FRAG_DECRYPT_ERROR, fatal: true, reason: err.message });
-	            return;
-	          });
-	        })['catch'](function (err) {
-	          _utilsLogger.logger.error('decrypting error : ' + err.message);
-	          localthis.hls.trigger(_events2['default'].ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.FRAG_DECRYPT_ERROR, fatal: true, reason: err.message });
-	          return;
+	        this.decrypter.decrypt(data, decryptdata.key, decryptdata.iv, function (decryptedData) {
+	          localthis.pushDecrypted(decryptedData, audioCodec, videoCodec, timeOffset, cc, level, sn, duration);
 	        });
 	      } else {
 	        this.pushDecrypted(data, audioCodec, videoCodec, timeOffset, cc, level, sn, duration);
@@ -14725,8 +15079,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          */
 	          adtsObjectType = 5;
 	          config = new Array(4);
-	          // if (manifest codec is HE-AAC) OR (manifest codec not specified AND frequency less than 24kHz)
-	          if (audioCodec && audioCodec.indexOf('mp4a.40.5') !== -1 || !audioCodec && adtsSampleingIndex >= 6) {
+	          // if (manifest codec is HE-AAC or HE-AACv2) OR (manifest codec not specified AND frequency less than 24kHz)
+	          if (audioCodec && (audioCodec.indexOf('mp4a.40.29') !== -1 || audioCodec.indexOf('mp4a.40.5') !== -1) || !audioCodec && adtsSampleingIndex >= 6) {
 	            // HE-AAC uses SBR (Spectral Band Replication) , high frequencies are constructed from low frequencies
 	            // there is a factor 2 between frame sample rate and output sample rate
 	            // multiply frequency by 2 (see table below, equivalent to substract 3)
@@ -15015,6 +15369,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          frameCropRightOffset = 0,
 	          frameCropTopOffset = 0,
 	          frameCropBottomOffset = 0,
+	          sarScale = 1,
 	          profileIdc,
 	          profileCompat,
 	          levelIdc,
@@ -15083,9 +15438,58 @@ return /******/ (function(modules) { // webpackBootstrap
 	        frameCropTopOffset = this.readUEG();
 	        frameCropBottomOffset = this.readUEG();
 	      }
+	      if (this.readBoolean()) {
+	        // vui_parameters_present_flag
+	        if (this.readBoolean()) {
+	          // aspect_ratio_info_present_flag
+	          var sarRatio = undefined;
+	          var aspectRatioIdc = this.readUByte();
+	          switch (aspectRatioIdc) {
+	            //case 1: sarRatio = [1,1]; break;
+	            case 2:
+	              sarRatio = [12, 11];break;
+	            case 3:
+	              sarRatio = [10, 11];break;
+	            case 4:
+	              sarRatio = [16, 11];break;
+	            case 5:
+	              sarRatio = [40, 33];break;
+	            case 6:
+	              sarRatio = [24, 11];break;
+	            case 7:
+	              sarRatio = [20, 11];break;
+	            case 8:
+	              sarRatio = [32, 11];break;
+	            case 9:
+	              sarRatio = [80, 33];break;
+	            case 10:
+	              sarRatio = [18, 11];break;
+	            case 11:
+	              sarRatio = [15, 11];break;
+	            case 12:
+	              sarRatio = [64, 33];break;
+	            case 13:
+	              sarRatio = [160, 99];break;
+	            case 14:
+	              sarRatio = [4, 3];break;
+	            case 15:
+	              sarRatio = [3, 2];break;
+	            case 16:
+	              sarRatio = [2, 1];break;
+	            case 255:
+	              {
+	                sarRatio = [this.readUByte() << 8 | this.readUByte(), this.readUByte() << 8 | this.readUByte()];
+	                break;
+	              }
+	          }
+	          if (sarRatio) {
+	            sarScale = sarRatio[0] / sarRatio[1];
+	          }
+	        }
+	      }
 	      return {
-	        width: (picWidthInMbsMinus1 + 1) * 16 - frameCropLeftOffset * 2 - frameCropRightOffset * 2,
-	        height: (2 - frameMbsOnlyFlag) * (picHeightInMapUnitsMinus1 + 1) * 16 - frameCropTopOffset * 2 - frameCropBottomOffset * 2
+	        width: ((picWidthInMbsMinus1 + 1) * 16 - frameCropLeftOffset * 2 - frameCropRightOffset * 2) * sarScale,
+	        height: (2 - frameMbsOnlyFlag) * (picHeightInMapUnitsMinus1 + 1) * 16 - (frameMbsOnlyFlag ? 2 : 4) * (frameCropTopOffset + frameCropBottomOffset)
 	      };
 	    }
 	  }, {
@@ -15118,6 +15522,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	function noop() {}
 
 	var fakeLogger = {
+	  trace: noop,
+	  debug: noop,
 	  log: noop,
 	  warn: noop,
 	  info: noop,
@@ -15126,21 +15532,59 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var exportedLogger = fakeLogger;
 
-	var enableLogs = function enableLogs(debug) {
-	  if (debug === true || typeof debug === 'object') {
-	    exportedLogger.log = debug.log ? debug.log.bind(debug) : console.log.bind(console);
-	    exportedLogger.info = debug.info ? debug.info.bind(debug) : console.info.bind(console);
-	    exportedLogger.error = debug.error ? debug.error.bind(debug) : console.error.bind(console);
-	    exportedLogger.warn = debug.warn ? debug.warn.bind(debug) : console.warn.bind(console);
+	//let lastCallTime;
+	// function formatMsgWithTimeInfo(type, msg) {
+	//   const now = Date.now();
+	//   const diff = lastCallTime ? '+' + (now - lastCallTime) : '0';
+	//   lastCallTime = now;
+	//   msg = (new Date(now)).toISOString() + ' | [' +  type + '] > ' + msg + ' ( ' + diff + ' ms )';
+	//   return msg;
+	// }
+
+	function formatMsg(type, msg) {
+	  msg = '[' + type + '] > ' + msg;
+	  return msg;
+	}
+
+	function consolePrintFn(type) {
+	  var func = window.console[type];
+	  if (func) {
+	    return function () {
+	      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	        args[_key] = arguments[_key];
+	      }
+
+	      if (args[0]) {
+	        args[0] = formatMsg(type, args[0]);
+	      }
+	      func.apply(window.console, args);
+	    };
+	  }
+	  return noop;
+	}
+
+	function exportLoggerFunctions(debugConfig) {
+	  for (var _len2 = arguments.length, functions = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+	    functions[_key2 - 1] = arguments[_key2];
+	  }
+
+	  functions.forEach(function (type) {
+	    exportedLogger[type] = debugConfig[type] ? debugConfig[type].bind(debugConfig) : consolePrintFn(type);
+	  });
+	}
+
+	var enableLogs = function enableLogs(debugConfig) {
+	  if (debugConfig === true || typeof debugConfig === 'object') {
+	    exportLoggerFunctions(debugConfig,
+	    // Remove out from list here to hard-disable a log-level
+	    //'trace',
+	    'debug', 'log', 'info', 'warn', 'error');
 	    // Some browsers don't allow to use bind on console object anyway
 	    // fallback to default if needed
 	    try {
 	      exportedLogger.log();
 	    } catch (e) {
-	      exportedLogger.log = noop;
-	      exportedLogger.info = noop;
-	      exportedLogger.error = noop;
-	      exportedLogger.warn = noop;
+	      exportedLogger = fakeLogger;
 	    }
 	  } else {
 	    exportedLogger = fakeLogger;
@@ -15856,8 +16300,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                _utilsLogger.logger.log(delta + ' ms hole between AAC samples detected,filling it');
 	                // set PTS to next PTS, and ensure PTS is greater or equal than last DTS
 	              } else if (delta < -1) {
-	                  _utilsLogger.logger.log(-delta + ' ms overlapping between AAC samples detected, dropping it');
-	                  continue;
+	                  _utilsLogger.logger.log(-delta + ' ms overlapping between AAC samples detected');
 	                }
 	              // set DTS to next DTS
 	              ptsnorm = dtsnorm = nextAacPts;
@@ -16447,6 +16890,540 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 104 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * AES128 decryption.
+	 */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	var _aes128Decrypter = __webpack_require__(105);
+
+	var _aes128Decrypter2 = _interopRequireDefault(_aes128Decrypter);
+
+	var _errors = __webpack_require__(89);
+
+	var _utilsLogger = __webpack_require__(99);
+
+	var Decrypter = (function () {
+	  function Decrypter(hls) {
+	    _classCallCheck(this, Decrypter);
+
+	    this.hls = hls;
+	    try {
+	      var browserCrypto = window ? window.crypto : crypto;
+	      this.subtle = browserCrypto.subtle || browserCrypto.webkitSubtle;
+	      this.disableWebCrypto = !this.subtle;
+	    } catch (e) {
+	      this.disableWebCrypto = true;
+	    }
+	  }
+
+	  _createClass(Decrypter, [{
+	    key: 'destroy',
+	    value: function destroy() {}
+	  }, {
+	    key: 'decrypt',
+	    value: function decrypt(data, key, iv, callback) {
+	      if (this.disableWebCrypto && this.hls.config.enableSoftwareAES) {
+	        this.decryptBySoftware(data, key, iv, callback);
+	      } else {
+	        this.decryptByWebCrypto(data, key, iv, callback);
+	      }
+	    }
+	  }, {
+	    key: 'decryptByWebCrypto',
+	    value: function decryptByWebCrypto(data, key, iv, callback) {
+	      var _this = this;
+
+	      _utilsLogger.logger.log('decrypting by WebCrypto API');
+
+	      this.subtle.importKey('raw', key, { name: 'AES-CBC', length: 128 }, false, ['decrypt']).then(function (importedKey) {
+	        _this.subtle.decrypt({ name: 'AES-CBC', iv: iv.buffer }, importedKey, data).then(callback)['catch'](function (err) {
+	          _this.onWebCryptoError(err, data, key, iv, callback);
+	        });
+	      })['catch'](function (err) {
+	        _this.onWebCryptoError(err, data, key, iv, callback);
+	      });
+	    }
+	  }, {
+	    key: 'decryptBySoftware',
+	    value: function decryptBySoftware(data, key8, iv8, callback) {
+	      _utilsLogger.logger.log('decrypting by JavaScript Implementation');
+
+	      var view = new DataView(key8.buffer);
+	      var key = new Uint32Array([view.getUint32(0), view.getUint32(4), view.getUint32(8), view.getUint32(12)]);
+
+	      view = new DataView(iv8.buffer);
+	      var iv = new Uint32Array([view.getUint32(0), view.getUint32(4), view.getUint32(8), view.getUint32(12)]);
+
+	      var decrypter = new _aes128Decrypter2['default'](key, iv);
+	      callback(decrypter.decrypt(data).buffer);
+	    }
+	  }, {
+	    key: 'onWebCryptoError',
+	    value: function onWebCryptoError(err, data, key, iv, callback) {
+	      if (this.hls.config.enableSoftwareAES) {
+	        _utilsLogger.logger.log('disabling to use WebCrypto API');
+	        this.disableWebCrypto = true;
+	        this.decryptBySoftware(data, key, iv, callback);
+	      } else {
+	        _utilsLogger.logger.error('decrypting error : ' + err.message);
+	        this.hls.trigger(Event.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.FRAG_DECRYPT_ERROR, fatal: true, reason: err.message });
+	      }
+	    }
+	  }]);
+
+	  return Decrypter;
+	})();
+
+	exports['default'] = Decrypter;
+	module.exports = exports['default'];
+
+/***/ },
+/* 105 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 *
+	 * This file contains an adaptation of the AES decryption algorithm
+	 * from the Standford Javascript Cryptography Library. That work is
+	 * covered by the following copyright and permissions notice:
+	 *
+	 * Copyright 2009-2010 Emily Stark, Mike Hamburg, Dan Boneh.
+	 * All rights reserved.
+	 *
+	 * Redistribution and use in source and binary forms, with or without
+	 * modification, are permitted provided that the following conditions are
+	 * met:
+	 *
+	 * 1. Redistributions of source code must retain the above copyright
+	 *    notice, this list of conditions and the following disclaimer.
+	 *
+	 * 2. Redistributions in binary form must reproduce the above
+	 *    copyright notice, this list of conditions and the following
+	 *    disclaimer in the documentation and/or other materials provided
+	 *    with the distribution.
+	 *
+	 * THIS SOFTWARE IS PROVIDED BY THE AUTHORS ``AS IS'' AND ANY EXPRESS OR
+	 * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+	 * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> OR CONTRIBUTORS BE
+	 * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+	 * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+	 * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+	 * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+	 * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+	 * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+	 * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+	 *
+	 * The views and conclusions contained in the software and documentation
+	 * are those of the authors and should not be interpreted as representing
+	 * official policies, either expressed or implied, of the authors.
+	 */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	var _aes = __webpack_require__(106);
+
+	var _aes2 = _interopRequireDefault(_aes);
+
+	var AES128Decrypter = (function () {
+	  function AES128Decrypter(key, initVector) {
+	    _classCallCheck(this, AES128Decrypter);
+
+	    this.key = key;
+	    this.iv = initVector;
+	  }
+
+	  /**
+	   * Convert network-order (big-endian) bytes into their little-endian
+	   * representation.
+	   */
+
+	  _createClass(AES128Decrypter, [{
+	    key: 'ntoh',
+	    value: function ntoh(word) {
+	      return word << 24 | (word & 0xff00) << 8 | (word & 0xff0000) >> 8 | word >>> 24;
+	    }
+
+	    /**
+	     * Decrypt bytes using AES-128 with CBC and PKCS#7 padding.
+	     * @param encrypted {Uint8Array} the encrypted bytes
+	     * @param key {Uint32Array} the bytes of the decryption key
+	     * @param initVector {Uint32Array} the initialization vector (IV) to
+	     * use for the first round of CBC.
+	     * @return {Uint8Array} the decrypted bytes
+	     *
+	     * @see http://en.wikipedia.org/wiki/Advanced_Encryption_Standard
+	     * @see http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher_Block_Chaining_.28CBC.29
+	     * @see https://tools.ietf.org/html/rfc2315
+	     */
+	  }, {
+	    key: 'doDecrypt',
+	    value: function doDecrypt(encrypted, key, initVector) {
+	      var
+	      // word-level access to the encrypted bytes
+	      encrypted32 = new Int32Array(encrypted.buffer, encrypted.byteOffset, encrypted.byteLength >> 2),
+	          decipher = new _aes2['default'](Array.prototype.slice.call(key)),
+
+	      // byte and word-level access for the decrypted output
+	      decrypted = new Uint8Array(encrypted.byteLength),
+	          decrypted32 = new Int32Array(decrypted.buffer),
+
+	      // temporary variables for working with the IV, encrypted, and
+	      // decrypted data
+	      init0,
+	          init1,
+	          init2,
+	          init3,
+	          encrypted0,
+	          encrypted1,
+	          encrypted2,
+	          encrypted3,
+
+	      // iteration variable
+	      wordIx;
+
+	      // pull out the words of the IV to ensure we don't modify the
+	      // passed-in reference and easier access
+	      init0 = ~ ~initVector[0];
+	      init1 = ~ ~initVector[1];
+	      init2 = ~ ~initVector[2];
+	      init3 = ~ ~initVector[3];
+
+	      // decrypt four word sequences, applying cipher-block chaining (CBC)
+	      // to each decrypted block
+	      for (wordIx = 0; wordIx < encrypted32.length; wordIx += 4) {
+	        // convert big-endian (network order) words into little-endian
+	        // (javascript order)
+	        encrypted0 = ~ ~this.ntoh(encrypted32[wordIx]);
+	        encrypted1 = ~ ~this.ntoh(encrypted32[wordIx + 1]);
+	        encrypted2 = ~ ~this.ntoh(encrypted32[wordIx + 2]);
+	        encrypted3 = ~ ~this.ntoh(encrypted32[wordIx + 3]);
+
+	        // decrypt the block
+	        decipher.decrypt(encrypted0, encrypted1, encrypted2, encrypted3, decrypted32, wordIx);
+
+	        // XOR with the IV, and restore network byte-order to obtain the
+	        // plaintext
+	        decrypted32[wordIx] = this.ntoh(decrypted32[wordIx] ^ init0);
+	        decrypted32[wordIx + 1] = this.ntoh(decrypted32[wordIx + 1] ^ init1);
+	        decrypted32[wordIx + 2] = this.ntoh(decrypted32[wordIx + 2] ^ init2);
+	        decrypted32[wordIx + 3] = this.ntoh(decrypted32[wordIx + 3] ^ init3);
+
+	        // setup the IV for the next round
+	        init0 = encrypted0;
+	        init1 = encrypted1;
+	        init2 = encrypted2;
+	        init3 = encrypted3;
+	      }
+
+	      return decrypted;
+	    }
+	  }, {
+	    key: 'localDecript',
+	    value: function localDecript(encrypted, key, initVector, decrypted) {
+	      var bytes = this.doDecrypt(encrypted, key, initVector);
+	      decrypted.set(bytes, encrypted.byteOffset);
+	    }
+	  }, {
+	    key: 'decrypt',
+	    value: function decrypt(encrypted) {
+	      var step = 4 * 8000,
+
+	      //encrypted32 = new Int32Array(encrypted.buffer),
+	      encrypted32 = new Int32Array(encrypted),
+	          decrypted = new Uint8Array(encrypted.byteLength),
+	          i = 0;
+
+	      // split up the encryption job and do the individual chunks asynchronously
+	      var key = this.key;
+	      var initVector = this.iv;
+	      this.localDecript(encrypted32.subarray(i, i + step), key, initVector, decrypted);
+
+	      for (i = step; i < encrypted32.length; i += step) {
+	        initVector = new Uint32Array([this.ntoh(encrypted32[i - 4]), this.ntoh(encrypted32[i - 3]), this.ntoh(encrypted32[i - 2]), this.ntoh(encrypted32[i - 1])]);
+	        this.localDecript(encrypted32.subarray(i, i + step), key, initVector, decrypted);
+	      }
+
+	      return decrypted;
+	    }
+	  }]);
+
+	  return AES128Decrypter;
+	})();
+
+	exports['default'] = AES128Decrypter;
+	module.exports = exports['default'];
+
+/***/ },
+/* 106 */
+/***/ function(module, exports) {
+
+	/*
+	 *
+	 * This file contains an adaptation of the AES decryption algorithm
+	 * from the Standford Javascript Cryptography Library. That work is
+	 * covered by the following copyright and permissions notice:
+	 *
+	 * Copyright 2009-2010 Emily Stark, Mike Hamburg, Dan Boneh.
+	 * All rights reserved.
+	 *
+	 * Redistribution and use in source and binary forms, with or without
+	 * modification, are permitted provided that the following conditions are
+	 * met:
+	 *
+	 * 1. Redistributions of source code must retain the above copyright
+	 *    notice, this list of conditions and the following disclaimer.
+	 *
+	 * 2. Redistributions in binary form must reproduce the above
+	 *    copyright notice, this list of conditions and the following
+	 *    disclaimer in the documentation and/or other materials provided
+	 *    with the distribution.
+	 *
+	 * THIS SOFTWARE IS PROVIDED BY THE AUTHORS ``AS IS'' AND ANY EXPRESS OR
+	 * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+	 * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> OR CONTRIBUTORS BE
+	 * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+	 * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+	 * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+	 * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+	 * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+	 * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+	 * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+	 *
+	 * The views and conclusions contained in the software and documentation
+	 * are those of the authors and should not be interpreted as representing
+	 * official policies, either expressed or implied, of the authors.
+	 */
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	var AES = (function () {
+
+	  /**
+	   * Schedule out an AES key for both encryption and decryption. This
+	   * is a low-level class. Use a cipher mode to do bulk encryption.
+	   *
+	   * @constructor
+	   * @param key {Array} The key as an array of 4, 6 or 8 words.
+	   */
+
+	  function AES(key) {
+	    _classCallCheck(this, AES);
+
+	    /**
+	     * The expanded S-box and inverse S-box tables. These will be computed
+	     * on the client so that we don't have to send them down the wire.
+	     *
+	     * There are two tables, _tables[0] is for encryption and
+	     * _tables[1] is for decryption.
+	     *
+	     * The first 4 sub-tables are the expanded S-box with MixColumns. The
+	     * last (_tables[01][4]) is the S-box itself.
+	     *
+	     * @private
+	     */
+	    this._tables = [[[], [], [], [], []], [[], [], [], [], []]];
+
+	    this._precompute();
+
+	    var i,
+	        j,
+	        tmp,
+	        encKey,
+	        decKey,
+	        sbox = this._tables[0][4],
+	        decTable = this._tables[1],
+	        keyLen = key.length,
+	        rcon = 1;
+
+	    if (keyLen !== 4 && keyLen !== 6 && keyLen !== 8) {
+	      throw new Error('Invalid aes key size=' + keyLen);
+	    }
+
+	    encKey = key.slice(0);
+	    decKey = [];
+	    this._key = [encKey, decKey];
+
+	    // schedule encryption keys
+	    for (i = keyLen; i < 4 * keyLen + 28; i++) {
+	      tmp = encKey[i - 1];
+
+	      // apply sbox
+	      if (i % keyLen === 0 || keyLen === 8 && i % keyLen === 4) {
+	        tmp = sbox[tmp >>> 24] << 24 ^ sbox[tmp >> 16 & 255] << 16 ^ sbox[tmp >> 8 & 255] << 8 ^ sbox[tmp & 255];
+
+	        // shift rows and add rcon
+	        if (i % keyLen === 0) {
+	          tmp = tmp << 8 ^ tmp >>> 24 ^ rcon << 24;
+	          rcon = rcon << 1 ^ (rcon >> 7) * 283;
+	        }
+	      }
+
+	      encKey[i] = encKey[i - keyLen] ^ tmp;
+	    }
+
+	    // schedule decryption keys
+	    for (j = 0; i; j++, i--) {
+	      tmp = encKey[j & 3 ? i : i - 4];
+	      if (i <= 4 || j < 4) {
+	        decKey[j] = tmp;
+	      } else {
+	        decKey[j] = decTable[0][sbox[tmp >>> 24]] ^ decTable[1][sbox[tmp >> 16 & 255]] ^ decTable[2][sbox[tmp >> 8 & 255]] ^ decTable[3][sbox[tmp & 255]];
+	      }
+	    }
+	  }
+
+	  /**
+	   * Expand the S-box tables.
+	   *
+	   * @private
+	   */
+
+	  _createClass(AES, [{
+	    key: '_precompute',
+	    value: function _precompute() {
+	      var encTable = this._tables[0],
+	          decTable = this._tables[1],
+	          sbox = encTable[4],
+	          sboxInv = decTable[4],
+	          i,
+	          x,
+	          xInv,
+	          d = [],
+	          th = [],
+	          x2,
+	          x4,
+	          x8,
+	          s,
+	          tEnc,
+	          tDec;
+
+	      // Compute double and third tables
+	      for (i = 0; i < 256; i++) {
+	        th[(d[i] = i << 1 ^ (i >> 7) * 283) ^ i] = i;
+	      }
+
+	      for (x = xInv = 0; !sbox[x]; x ^= x2 || 1, xInv = th[xInv] || 1) {
+	        // Compute sbox
+	        s = xInv ^ xInv << 1 ^ xInv << 2 ^ xInv << 3 ^ xInv << 4;
+	        s = s >> 8 ^ s & 255 ^ 99;
+	        sbox[x] = s;
+	        sboxInv[s] = x;
+
+	        // Compute MixColumns
+	        x8 = d[x4 = d[x2 = d[x]]];
+	        tDec = x8 * 0x1010101 ^ x4 * 0x10001 ^ x2 * 0x101 ^ x * 0x1010100;
+	        tEnc = d[s] * 0x101 ^ s * 0x1010100;
+
+	        for (i = 0; i < 4; i++) {
+	          encTable[i][x] = tEnc = tEnc << 24 ^ tEnc >>> 8;
+	          decTable[i][s] = tDec = tDec << 24 ^ tDec >>> 8;
+	        }
+	      }
+
+	      // Compactify. Considerable speedup on Firefox.
+	      for (i = 0; i < 5; i++) {
+	        encTable[i] = encTable[i].slice(0);
+	        decTable[i] = decTable[i].slice(0);
+	      }
+	    }
+
+	    /**
+	     * Decrypt 16 bytes, specified as four 32-bit words.
+	     * @param encrypted0 {number} the first word to decrypt
+	     * @param encrypted1 {number} the second word to decrypt
+	     * @param encrypted2 {number} the third word to decrypt
+	     * @param encrypted3 {number} the fourth word to decrypt
+	     * @param out {Int32Array} the array to write the decrypted words
+	     * into
+	     * @param offset {number} the offset into the output array to start
+	     * writing results
+	     * @return {Array} The plaintext.
+	     */
+	  }, {
+	    key: 'decrypt',
+	    value: function decrypt(encrypted0, encrypted1, encrypted2, encrypted3, out, offset) {
+	      var key = this._key[1],
+
+	      // state variables a,b,c,d are loaded with pre-whitened data
+	      a = encrypted0 ^ key[0],
+	          b = encrypted3 ^ key[1],
+	          c = encrypted2 ^ key[2],
+	          d = encrypted1 ^ key[3],
+	          a2,
+	          b2,
+	          c2,
+	          nInnerRounds = key.length / 4 - 2,
+	          // key.length === 2 ?
+	      i,
+	          kIndex = 4,
+	          table = this._tables[1],
+
+	      // load up the tables
+	      table0 = table[0],
+	          table1 = table[1],
+	          table2 = table[2],
+	          table3 = table[3],
+	          sbox = table[4];
+
+	      // Inner rounds. Cribbed from OpenSSL.
+	      for (i = 0; i < nInnerRounds; i++) {
+	        a2 = table0[a >>> 24] ^ table1[b >> 16 & 255] ^ table2[c >> 8 & 255] ^ table3[d & 255] ^ key[kIndex];
+	        b2 = table0[b >>> 24] ^ table1[c >> 16 & 255] ^ table2[d >> 8 & 255] ^ table3[a & 255] ^ key[kIndex + 1];
+	        c2 = table0[c >>> 24] ^ table1[d >> 16 & 255] ^ table2[a >> 8 & 255] ^ table3[b & 255] ^ key[kIndex + 2];
+	        d = table0[d >>> 24] ^ table1[a >> 16 & 255] ^ table2[b >> 8 & 255] ^ table3[c & 255] ^ key[kIndex + 3];
+	        kIndex += 4;
+	        a = a2;b = b2;c = c2;
+	      }
+
+	      // Last round.
+	      for (i = 0; i < 4; i++) {
+	        out[(3 & -i) + offset] = sbox[a >>> 24] << 24 ^ sbox[b >> 16 & 255] << 16 ^ sbox[c >> 8 & 255] << 8 ^ sbox[d & 255] ^ key[kIndex++];
+	        a2 = a;a = b;b = c;c = d;d = a2;
+	      }
+	    }
+	  }]);
+
+	  return AES;
+	})();
+
+	exports['default'] = AES;
+	module.exports = exports['default'];
+
+/***/ },
+/* 107 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -16494,7 +17471,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 105 */
+/* 108 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -16542,7 +17519,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = BinarySearch;
 
 /***/ },
-/* 106 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -16691,7 +17668,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 107 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -16766,7 +17743,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        var redundantLevelId = bitrateSet[level.bitrate];
 	        if (redundantLevelId === undefined) {
-	          bitrateSet[level.bitrate] = levels.length;
+	          bitrateSet[level.bitrate] = levels0.length;
 	          level.url = [level.url];
 	          level.urlId = 0;
 	          levels0.push(level);
@@ -16979,7 +17956,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 108 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -17061,7 +18038,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.stats.tfirst = null;
 	      this.stats.loaded = 0;
 	      if (this.xhrSetup) {
-	        this.xhrSetup(xhr);
+	        this.xhrSetup(xhr, this.url);
 	      }
 	      xhr.send();
 	    }
@@ -17115,7 +18092,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 109 */
+/* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -17212,15 +18189,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 110 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(111);
+	module.exports = __webpack_require__(114);
 
 /***/ },
-/* 111 */
+/* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -17251,7 +18228,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseStyler2 = _interopRequireDefault(_baseStyler);
 
-	var _publicStyleScss = __webpack_require__(112);
+	var _publicStyleScss = __webpack_require__(115);
 
 	var _publicStyleScss2 = _interopRequireDefault(_publicStyleScss);
 
@@ -17309,7 +18286,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 112 */
+/* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(30)();
@@ -17323,15 +18300,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 113 */
+/* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(114);
+	module.exports = __webpack_require__(117);
 
 /***/ },
-/* 114 */
+/* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17368,11 +18345,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
 
-	var _publicStyleScss = __webpack_require__(115);
+	var _publicStyleScss = __webpack_require__(118);
 
 	var _publicStyleScss2 = _interopRequireDefault(_publicStyleScss);
 
-	var _publicErrorHtml = __webpack_require__(116);
+	var _publicErrorHtml = __webpack_require__(119);
 
 	var _publicErrorHtml2 = _interopRequireDefault(_publicErrorHtml);
 
@@ -17487,7 +18464,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 115 */
+/* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(30)();
@@ -17501,21 +18478,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 116 */
+/* 119 */
 /***/ function(module, exports) {
 
 	module.exports = "<canvas data-no-op-canvas></canvas>\n<p data-no-op-msg><%=message%><p>\n";
 
 /***/ },
-/* 117 */
+/* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(118);
+	module.exports = __webpack_require__(121);
 
 /***/ },
-/* 118 */
+/* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -17538,7 +18515,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseUi_container_plugin = __webpack_require__(119);
+	var _baseUi_container_plugin = __webpack_require__(122);
 
 	var _baseUi_container_plugin2 = _interopRequireDefault(_baseUi_container_plugin);
 
@@ -17554,11 +18531,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseTemplate2 = _interopRequireDefault(_baseTemplate);
 
-	var _publicSpinnerHtml = __webpack_require__(120);
+	var _publicSpinnerHtml = __webpack_require__(123);
 
 	var _publicSpinnerHtml2 = _interopRequireDefault(_publicSpinnerHtml);
 
-	var _publicSpinnerScss = __webpack_require__(121);
+	var _publicSpinnerScss = __webpack_require__(124);
 
 	var _publicSpinnerScss2 = _interopRequireDefault(_publicSpinnerScss);
 
@@ -17580,10 +18557,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }]);
 
-	  function SpinnerThreeBouncePlugin(options) {
+	  function SpinnerThreeBouncePlugin(container) {
 	    _classCallCheck(this, SpinnerThreeBouncePlugin);
 
-	    _get(Object.getPrototypeOf(SpinnerThreeBouncePlugin.prototype), 'constructor', this).call(this, options);
+	    _get(Object.getPrototypeOf(SpinnerThreeBouncePlugin.prototype), 'constructor', this).call(this, container);
 	    this.template = (0, _baseTemplate2['default'])(_publicSpinnerHtml2['default']);
 	    this.showTimeout = null;
 	    this.listenTo(this.container, _baseEvents2['default'].CONTAINER_STATE_BUFFERING, this.onBuffering);
@@ -17648,7 +18625,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 119 */
+/* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -17677,18 +18654,32 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _ui_object2 = _interopRequireDefault(_ui_object);
 
+	/**
+	 * The base class for an ui container plugin
+	 * @class UIContainerPlugin
+	 * @constructor
+	 * @extends UIObject
+	 * @module base
+	 */
+
 	var UIContainerPlugin = (function (_UIObject) {
 	  _inherits(UIContainerPlugin, _UIObject);
 
-	  function UIContainerPlugin(options) {
+	  function UIContainerPlugin(container) {
 	    _classCallCheck(this, UIContainerPlugin);
 
-	    _get(Object.getPrototypeOf(UIContainerPlugin.prototype), 'constructor', this).call(this, options);
-	    this.container = options.container;
-	    this.options = options;
+	    _get(Object.getPrototypeOf(UIContainerPlugin.prototype), 'constructor', this).call(this, container.options);
+	    this.container = container;
 	    this.enabled = true;
 	    this.bindEvents();
 	  }
+
+	  /**
+	   * provides the read-only options to the ui container plugin
+	   * @property options
+	   * @type Object
+	   * @default "`{}`"
+	   */
 
 	  _createClass(UIContainerPlugin, [{
 	    key: 'enable',
@@ -17714,6 +18705,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function destroy() {
 	      this.remove();
 	    }
+	  }, {
+	    key: 'options',
+	    get: function get() {
+	      return this.container && this.container.options || {};
+	    }
 	  }]);
 
 	  return UIContainerPlugin;
@@ -17729,13 +18725,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 120 */
+/* 123 */
 /***/ function(module, exports) {
 
 	module.exports = "<div data-bounce1></div><div data-bounce2></div><div data-bounce3></div>\n";
 
 /***/ },
-/* 121 */
+/* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(30)();
@@ -17749,15 +18745,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 122 */
+/* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(123);
+	module.exports = __webpack_require__(126);
 
 /***/ },
-/* 123 */
+/* 126 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -17780,7 +18776,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseContainer_plugin = __webpack_require__(124);
+	var _baseContainer_plugin = __webpack_require__(127);
 
 	var _baseContainer_plugin2 = _interopRequireDefault(_baseContainer_plugin);
 
@@ -17802,12 +18798,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }]);
 
-	  function StatsPlugin(options) {
+	  function StatsPlugin(container) {
 	    _classCallCheck(this, StatsPlugin);
 
-	    _get(Object.getPrototypeOf(StatsPlugin.prototype), 'constructor', this).call(this, options);
+	    _get(Object.getPrototypeOf(StatsPlugin.prototype), 'constructor', this).call(this, container);
 	    this.setInitialAttrs();
-	    this.reportInterval = options.reportInterval || 5000;
+	    this.reportInterval = this.options.reportInterval || 5000;
 	    this.state = "IDLE";
 	  }
 
@@ -17920,7 +18916,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 124 */
+/* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17945,18 +18941,32 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _utils = __webpack_require__(2);
 
+	/**
+	 * The base class for a container plugin
+	 * @class ContainerPlugin
+	 * @constructor
+	 * @extends UIObject
+	 * @module base
+	 */
+
 	var ContainerPlugin = (function (_BaseObject) {
 	  _inherits(ContainerPlugin, _BaseObject);
 
-	  function ContainerPlugin(options) {
+	  function ContainerPlugin(container) {
 	    _classCallCheck(this, ContainerPlugin);
 
-	    _get(Object.getPrototypeOf(ContainerPlugin.prototype), 'constructor', this).call(this, options);
-	    this.container = options.container;
-	    this.options = options;
+	    _get(Object.getPrototypeOf(ContainerPlugin.prototype), 'constructor', this).call(this, container.options);
+	    this.container = container;
 	    this.enabled = true;
 	    this.bindEvents();
 	  }
+
+	  /**
+	   * provides the read-only options to the container plugin
+	   * @property options
+	   * @type Object
+	   * @default "`{}`"
+	   */
 
 	  _createClass(ContainerPlugin, [{
 	    key: 'enable',
@@ -17982,6 +18992,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function destroy() {
 	      this.stopListening();
 	    }
+	  }, {
+	    key: 'options',
+	    get: function get() {
+	      return this.container && this.container.options || {};
+	    }
 	  }]);
 
 	  return ContainerPlugin;
@@ -17997,15 +19012,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 125 */
+/* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(126);
+	module.exports = __webpack_require__(129);
 
 /***/ },
-/* 126 */
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -18028,7 +19043,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseUi_container_plugin = __webpack_require__(119);
+	var _baseUi_container_plugin = __webpack_require__(122);
 
 	var _baseUi_container_plugin2 = _interopRequireDefault(_baseUi_container_plugin);
 
@@ -18044,11 +19059,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseTemplate2 = _interopRequireDefault(_baseTemplate);
 
-	var _publicWatermarkScss = __webpack_require__(127);
+	var _publicWatermarkScss = __webpack_require__(130);
 
 	var _publicWatermarkScss2 = _interopRequireDefault(_publicWatermarkScss);
 
-	var _publicWatermarkHtml = __webpack_require__(128);
+	var _publicWatermarkHtml = __webpack_require__(131);
 
 	var _publicWatermarkHtml2 = _interopRequireDefault(_publicWatermarkHtml);
 
@@ -18067,17 +19082,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }]);
 
-	  function WaterMarkPlugin(options) {
+	  function WaterMarkPlugin(container) {
 	    _classCallCheck(this, WaterMarkPlugin);
 
-	    _get(Object.getPrototypeOf(WaterMarkPlugin.prototype), 'constructor', this).call(this, options);
-	    this.position = options.position || "bottom-right";
-	    if (options.watermark) {
-	      this.imageUrl = options.watermark;
-	      this.render();
-	    } else {
-	      this.$el.remove();
-	    }
+	    _get(Object.getPrototypeOf(WaterMarkPlugin.prototype), 'constructor', this).call(this, container);
+	    this.configure();
 	  }
 
 	  _createClass(WaterMarkPlugin, [{
@@ -18085,6 +19094,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function bindEvents() {
 	      this.listenTo(this.container, _baseEvents2['default'].CONTAINER_PLAY, this.onPlay);
 	      this.listenTo(this.container, _baseEvents2['default'].CONTAINER_STOP, this.onStop);
+	      this.listenTo(this.container, _baseEvents2['default'].CONTAINER_OPTIONS_CHANGE, this.configure);
+	    }
+	  }, {
+	    key: 'configure',
+	    value: function configure() {
+	      this.position = this.options.position || "bottom-right";
+	      if (this.options.watermark) {
+	        this.imageUrl = this.options.watermark;
+	        this.render();
+	      } else {
+	        this.$el.remove();
+	      }
 	    }
 	  }, {
 	    key: 'onPlay',
@@ -18116,7 +19137,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 127 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(30)();
@@ -18130,21 +19151,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 128 */
+/* 131 */
 /***/ function(module, exports) {
 
 	module.exports = "<div data-watermark data-watermark-<%=position %>><img src=\"<%= imageUrl %>\"></div>\n";
 
 /***/ },
-/* 129 */
+/* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(130);
+	module.exports = __webpack_require__(133);
 
 /***/ },
-/* 130 */
+/* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -18167,7 +19188,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseUi_container_plugin = __webpack_require__(119);
+	var _baseUi_container_plugin = __webpack_require__(122);
 
 	var _baseUi_container_plugin2 = _interopRequireDefault(_baseUi_container_plugin);
 
@@ -18187,11 +19208,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _componentsMediator2 = _interopRequireDefault(_componentsMediator);
 
-	var _publicPosterScss = __webpack_require__(131);
+	var _publicPosterScss = __webpack_require__(134);
 
 	var _publicPosterScss2 = _interopRequireDefault(_publicPosterScss);
 
-	var _publicPosterHtml = __webpack_require__(132);
+	var _publicPosterHtml = __webpack_require__(135);
 
 	var _publicPosterHtml2 = _interopRequireDefault(_publicPosterHtml);
 
@@ -18229,23 +19250,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }]);
 
-	  function PosterPlugin(options) {
+	  function PosterPlugin(container) {
 	    _classCallCheck(this, PosterPlugin);
 
-	    _get(Object.getPrototypeOf(PosterPlugin.prototype), 'constructor', this).call(this, options);
-	    this.options = options;
+	    _get(Object.getPrototypeOf(PosterPlugin.prototype), 'constructor', this).call(this, container);
 	    this.container.disableMediaControl();
 	    this.render();
 	    this.bufferFull = false;
 	  }
 
 	  _createClass(PosterPlugin, [{
-	    key: 'load',
-	    value: function load(source) {
-	      this.options.poster = source;
-	      this.render();
-	    }
-	  }, {
 	    key: 'bindEvents',
 	    value: function bindEvents() {
 	      this.listenTo(this.container, _baseEvents2['default'].CONTAINER_STATE_BUFFERING, this.onBuffering);
@@ -18253,6 +19267,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.listenTo(this.container, _baseEvents2['default'].CONTAINER_STOP, this.onStop);
 	      this.listenTo(this.container, _baseEvents2['default'].CONTAINER_PLAY, this.onPlay);
 	      this.listenTo(this.container, _baseEvents2['default'].CONTAINER_ENDED, this.onStop);
+	      this.listenTo(this.container, _baseEvents2['default'].CONTAINER_OPTIONS_CHANGE, this.render);
 	      _componentsMediator2['default'].on(this.options.playerId + ':' + _baseEvents2['default'].PLAYER_RESIZE, this.updateSize, this);
 	    }
 	  }, {
@@ -18357,7 +19372,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 131 */
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(30)();
@@ -18371,21 +19386,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 132 */
+/* 135 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"play-wrapper\" data-poster>\n  <span class=\"poster-icon play\" data-poster />\n</div>\n";
 
 /***/ },
-/* 133 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(134);
+	module.exports = __webpack_require__(137);
 
 /***/ },
-/* 134 */
+/* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -18408,7 +19423,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseContainer_plugin = __webpack_require__(124);
+	var _baseContainer_plugin = __webpack_require__(127);
 
 	var _baseContainer_plugin2 = _interopRequireDefault(_baseContainer_plugin);
 
@@ -18426,14 +19441,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }]);
 
-	  function GoogleAnalytics(options) {
+	  function GoogleAnalytics(container) {
 	    _classCallCheck(this, GoogleAnalytics);
 
-	    _get(Object.getPrototypeOf(GoogleAnalytics.prototype), 'constructor', this).call(this, options);
-	    if (options.gaAccount) {
-	      this.account = options.gaAccount;
-	      this.trackerName = options.gaTrackerName ? options.gaTrackerName + "." : 'Clappr.';
-	      this.domainName = options.gaDomainName;
+	    _get(Object.getPrototypeOf(GoogleAnalytics.prototype), 'constructor', this).call(this, container);
+	    if (this.container.options.gaAccount) {
+	      this.account = this.container.options.gaAccount;
+	      this.trackerName = this.container.options.gaTrackerName ? this.container.options.gaTrackerName + "." : 'Clappr.';
+	      this.domainName = this.container.options.gaDomainName;
 	      this.currentHDState = undefined;
 	      this.embedScript();
 	    }
@@ -18578,15 +19593,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 135 */
+/* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(136);
+	module.exports = __webpack_require__(139);
 
 /***/ },
-/* 136 */
+/* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -18609,7 +19624,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseContainer_plugin = __webpack_require__(124);
+	var _baseContainer_plugin = __webpack_require__(127);
 
 	var _baseContainer_plugin2 = _interopRequireDefault(_baseContainer_plugin);
 
@@ -18635,10 +19650,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }]);
 
-	  function ClickToPausePlugin(options) {
+	  function ClickToPausePlugin(container) {
 	    _classCallCheck(this, ClickToPausePlugin);
 
-	    _get(Object.getPrototypeOf(ClickToPausePlugin.prototype), 'constructor', this).call(this, options);
+	    _get(Object.getPrototypeOf(ClickToPausePlugin.prototype), 'constructor', this).call(this, container);
 	  }
 
 	  _createClass(ClickToPausePlugin, [{
@@ -18677,15 +19692,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 137 */
+/* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(138);
+	module.exports = __webpack_require__(141);
 
 /***/ },
-/* 138 */
+/* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18704,7 +19719,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseUi_core_plugin = __webpack_require__(139);
+	var _baseUi_core_plugin = __webpack_require__(142);
 
 	var _baseUi_core_plugin2 = _interopRequireDefault(_baseUi_core_plugin);
 
@@ -18724,11 +19739,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
 
-	var _publicDvr_controlsScss = __webpack_require__(140);
+	var _publicDvr_controlsScss = __webpack_require__(143);
 
 	var _publicDvr_controlsScss2 = _interopRequireDefault(_publicDvr_controlsScss);
 
-	var _publicIndexHtml = __webpack_require__(142);
+	var _publicIndexHtml = __webpack_require__(145);
 
 	var _publicIndexHtml2 = _interopRequireDefault(_publicIndexHtml);
 
@@ -18780,6 +19795,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.listenToOnce(this.core.mediaControl.container, _baseEvents2['default'].CONTAINER_TIMEUPDATE, this.render);
 	      this.listenTo(this.core.mediaControl, _baseEvents2['default'].MEDIACONTROL_RENDERED, this.settingsUpdate);
 	      this.listenTo(this.core.mediaControl.container, _baseEvents2['default'].CONTAINER_PLAYBACKDVRSTATECHANGED, this.dvrChanged);
+	      this.listenTo(this.core, _baseEvents2['default'].CORE_OPTIONS_CHANGE, this.render);
 	    }
 	  }, {
 	    key: 'dvrChanged',
@@ -18848,7 +19864,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 139 */
+/* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18940,7 +19956,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 140 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(30)();
@@ -18948,33 +19964,33 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "@font-face {\n  font-family: \"Roboto\";\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Roboto\"), local(\"Roboto-Regular\"), url(" + __webpack_require__(141) + ") format(\"truetype\"); }\n\n.dvr-controls[data-dvr-controls] {\n  display: inline-block;\n  float: left;\n  color: #fff;\n  line-height: 32px;\n  font-size: 10px;\n  font-weight: bold;\n  margin-left: 6px; }\n  .dvr-controls[data-dvr-controls] .live-info {\n    cursor: default;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif; }\n    .dvr-controls[data-dvr-controls] .live-info:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #ff0101; }\n    .dvr-controls[data-dvr-controls] .live-info.disabled {\n      opacity: 0.3; }\n      .dvr-controls[data-dvr-controls] .live-info.disabled:before {\n        background-color: #fff; }\n  .dvr-controls[data-dvr-controls] .live-button {\n    cursor: pointer;\n    outline: none;\n    display: none;\n    border: 0;\n    color: #fff;\n    background-color: transparent;\n    height: 32px;\n    padding: 0;\n    opacity: 0.7;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease false;\n    -o-transition: all 0.1s ease false;\n    transition: all 0.1s ease; }\n    .dvr-controls[data-dvr-controls] .live-button:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #fff; }\n    .dvr-controls[data-dvr-controls] .live-button:hover {\n      opacity: 1;\n      text-shadow: rgba(255, 255, 255, 0.75) 0 0 5px; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-info {\n  display: none; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-button {\n  display: block; }\n\n.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #005aff; }\n\n.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #ff0101; }\n\n.seek-time[data-seek-time] span[data-duration] {\n  position: relative;\n  color: rgba(255, 255, 255, 0.5);\n  font-size: 10px;\n  padding-right: 7px; }\n  .seek-time[data-seek-time] span[data-duration]:before {\n    content: \"|\";\n    margin-right: 7px; }\n", ""]);
+	exports.push([module.id, "@font-face {\n  font-family: \"Roboto\";\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Roboto\"), local(\"Roboto-Regular\"), url(" + __webpack_require__(144) + ") format(\"truetype\"); }\n\n.dvr-controls[data-dvr-controls] {\n  display: inline-block;\n  float: left;\n  color: #fff;\n  line-height: 32px;\n  font-size: 10px;\n  font-weight: bold;\n  margin-left: 6px; }\n  .dvr-controls[data-dvr-controls] .live-info {\n    cursor: default;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif; }\n    .dvr-controls[data-dvr-controls] .live-info:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #ff0101; }\n    .dvr-controls[data-dvr-controls] .live-info.disabled {\n      opacity: 0.3; }\n      .dvr-controls[data-dvr-controls] .live-info.disabled:before {\n        background-color: #fff; }\n  .dvr-controls[data-dvr-controls] .live-button {\n    cursor: pointer;\n    outline: none;\n    display: none;\n    border: 0;\n    color: #fff;\n    background-color: transparent;\n    height: 32px;\n    padding: 0;\n    opacity: 0.7;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease false;\n    -o-transition: all 0.1s ease false;\n    transition: all 0.1s ease; }\n    .dvr-controls[data-dvr-controls] .live-button:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #fff; }\n    .dvr-controls[data-dvr-controls] .live-button:hover {\n      opacity: 1;\n      text-shadow: rgba(255, 255, 255, 0.75) 0 0 5px; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-info {\n  display: none; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-button {\n  display: block; }\n\n.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #005aff; }\n\n.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #ff0101; }\n\n.seek-time[data-seek-time] span[data-duration] {\n  position: relative;\n  color: rgba(255, 255, 255, 0.5);\n  font-size: 10px;\n  padding-right: 7px; }\n  .seek-time[data-seek-time] span[data-duration]:before {\n    content: \"|\";\n    margin-right: 7px; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 141 */
+/* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "38861cba61c66739c1452c3a71e39852.ttf";
 
 /***/ },
-/* 142 */
+/* 145 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"live-info\">LIVE</div>\n<button class=\"live-button\">BACK TO LIVE</button>\n";
 
 /***/ },
-/* 143 */
+/* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(144);
+	module.exports = __webpack_require__(147);
 
 /***/ },
-/* 144 */
+/* 147 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18993,7 +20009,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseCore_plugin = __webpack_require__(145);
+	var _baseCore_plugin = __webpack_require__(148);
 
 	var _baseCore_plugin2 = _interopRequireDefault(_baseCore_plugin);
 
@@ -19020,14 +20036,24 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _get(Object.getPrototypeOf(Favicon.prototype), 'constructor', this).call(this, core);
 	    this.oldIcon = (0, _clapprZepto2['default'])('link[rel="shortcut icon"]');
-	    if (!this.core.options.changeFavicon) {
-	      this.disable();
-	    }
+	    this.configure();
 	  }
 
 	  _createClass(Favicon, [{
+	    key: 'configure',
+	    value: function configure() {
+	      if (!this.core.options.changeFavicon) {
+	        this.disable();
+	        this.listenTo(this.core, _baseEvents2['default'].CORE_OPTIONS_CHANGE, this.configure);
+	      } else {
+	        this.stopListening(this.core, _baseEvents2['default'].CORE_OPTIONS_CHANGE);
+	        this.enable();
+	      }
+	    }
+	  }, {
 	    key: 'bindEvents',
 	    value: function bindEvents() {
+	      this.listenTo(this.core, _baseEvents2['default'].CORE_OPTIONS_CHANGE, this.configure);
 	      this.listenTo(this.core.mediaControl, _baseEvents2['default'].MEDIACONTROL_CONTAINERCHANGED, this.containerChanged);
 	      if (this.core.mediaControl.container) {
 	        this.containerChanged();
@@ -19107,7 +20133,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 145 */
+/* 148 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
