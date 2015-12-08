@@ -29,9 +29,8 @@ export default class PosterPlugin extends UIContainerPlugin {
     }
   }
 
-  constructor(options) {
-    super(options)
-    this.options = options
+  constructor(container) {
+    super(container)
     this.container.disableMediaControl()
     this.render()
     this.bufferFull = false

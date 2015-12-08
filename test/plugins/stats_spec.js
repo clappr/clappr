@@ -7,7 +7,7 @@ describe('StatsPlugin', function() {
   beforeEach(function() {
     this.playback = new FakePlayback()
     this.container = new Container({playback: this.playback})
-    this.stats = new Stats({container: this.container})
+    this.stats = new Stats(this.container)
     this.container.addPlugin(this.stats)
     this.clock = sinon.useFakeTimers(Date.now())
   })
@@ -101,7 +101,9 @@ describe('StatsPlugin', function() {
 
   it('should announce statistics periodically', function() {
     sinon.spy(this.container, 'statsReport')
-    var stats = new Stats({container: this.container, reportInterval: 10})
+    this.container.reportInterval = 10
+
+    var stats = new Stats(this.container)
     this.container.addPlugin(stats)
     this.playback.trigger(Events.PLAYBACK_PLAY)
     // clock.tick freezes when used with {set,clear}Interval and I don't know why
