@@ -16,6 +16,16 @@ export default class WaterMarkPlugin extends UIContainerPlugin {
 
   constructor(container) {
     super(container)
+    this.configure()
+  }
+
+  bindEvents() {
+    this.listenTo(this.container, Events.CONTAINER_PLAY, this.onPlay)
+    this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
+    this.listenTo(this.container, Events.CONTAINER_OPTIONS_CHANGE, this.configure)
+  }
+
+  configure() {
     this.position = this.options.position || "bottom-right"
     if (this.options.watermark) {
       this.imageUrl = this.options.watermark
@@ -23,11 +33,6 @@ export default class WaterMarkPlugin extends UIContainerPlugin {
     } else {
       this.$el.remove()
     }
-  }
-
-  bindEvents() {
-    this.listenTo(this.container, Events.CONTAINER_PLAY, this.onPlay)
-    this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
   }
 
   onPlay() {
