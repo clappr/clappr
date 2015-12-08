@@ -50,6 +50,7 @@ export default class Container extends UIObject {
     super(options)
     this.currentTime = 0
     this.volume = 100
+    this.options = options
     this.playback = options.playback
     this.settings = $.extend({}, this.playback.settings)
     this.isReady = false
@@ -342,6 +343,16 @@ export default class Container extends UIObject {
   enableMediaControl() {
     this.mediaControlDisabled = false
     this.trigger(Events.CONTAINER_MEDIACONTROL_ENABLE)
+  }
+
+  /**
+   * enables to configure the container after its creation
+   * @method configure
+   * @param {Object} options all the options to change in form of a javascript object
+   */
+  configure(options) {
+    this.options = $.extend(this.options, options)
+    this.trigger(Events.CONTAINER_OPTIONS_CHANGE)
   }
 
   render() {
