@@ -352,6 +352,7 @@ export default class Container extends UIObject {
    */
   configure(options) {
     this.options = $.extend(this.options, options)
+    this.trigger(Events.CONTAINER_OPTIONS_CHANGE)
   }
 
   render() {
