@@ -75,7 +75,7 @@ export default class Core extends UIObject {
   }
 
   setFullscreen() {
-    if(!Browser.isiOs) {
+    if(!Browser.isiOS) {
       this.$el.addClass('fullscreen')
       this.$el.removeAttr('style')
       this.playerInfo.previousSize = { width: this.options.width, height: this.options.height }
@@ -239,12 +239,12 @@ export default class Core extends UIObject {
   toggleFullscreen() {
     if (!Fullscreen.isFullscreen()) {
       Fullscreen.requestFullscreen(this.el)
-      if(!Browser.isiOs) {
+      if(!Browser.isiOS) {
         this.$el.addClass('fullscreen')
       }
     } else {
       Fullscreen.cancelFullscreen()
-      if(!Browser.isiOs) {
+      if(!Browser.isiOS) {
         this.$el.removeClass('fullscreen nocursor')
       }
     }
