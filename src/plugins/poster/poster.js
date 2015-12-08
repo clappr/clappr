@@ -29,17 +29,11 @@ export default class PosterPlugin extends UIContainerPlugin {
     }
   }
 
-  constructor(options) {
-    super(options)
-    this.options = options
+  constructor(container) {
+    super(container)
     this.container.disableMediaControl()
     this.render()
     this.bufferFull = false
-  }
-
-  load(source) {
-    this.options.poster = source
-    this.render()
   }
 
   bindEvents() {
@@ -48,6 +42,7 @@ export default class PosterPlugin extends UIContainerPlugin {
     this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
     this.listenTo(this.container, Events.CONTAINER_PLAY, this.onPlay)
     this.listenTo(this.container, Events.CONTAINER_ENDED, this.onStop)
+    this.listenTo(this.container, Events.CONTAINER_OPTIONS_CHANGE, this.render)
     Mediator.on(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.updateSize, this)
   }
 

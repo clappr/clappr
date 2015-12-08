@@ -9,10 +9,10 @@ import $ from "clappr-zepto"
 export default class StatsPlugin extends ContainerPlugin {
   get name() { return 'stats' }
 
-  constructor(options) {
-    super(options)
+  constructor(container) {
+    super(container)
     this.setInitialAttrs()
-    this.reportInterval = options.reportInterval || 5000
+    this.reportInterval = this.options.reportInterval || 5000
     this.state = "IDLE"
   }
 

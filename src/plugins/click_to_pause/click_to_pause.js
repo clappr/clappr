@@ -10,8 +10,8 @@ import Browser from 'components/browser'
 export default class ClickToPausePlugin extends ContainerPlugin {
   get name() { return 'click_to_pause' }
 
-  constructor(options) {
-    super(options)
+  constructor(container) {
+    super(container)
   }
 
   bindEvents() {

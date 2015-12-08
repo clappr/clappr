@@ -8,7 +8,7 @@ describe('Poster', function() {
   beforeEach(function() {
     this.playback = new FakePlayback()
     this.container = new Container({playback: this.playback})
-    this.poster = new Poster({container: this.container})
+    this.poster = new Poster(this.container)
     this.container.addPlugin(this.poster)
   })
 

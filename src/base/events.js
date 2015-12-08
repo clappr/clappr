@@ -397,6 +397,14 @@ Events.PLAYBACK_STATS_ADD = 'playback:stats:add'
 Events.PLAYBACK_FRAGMENT_LOADED = 'playback:fragment:loaded'
 Events.PLAYBACK_LEVEL_SWITCH = 'playback:level:switch'
 
+/**
+ * Fired when the options were changed for the core
+ *
+ * @event CORE_OPTIONS_CHANGE
+ */
+Events.CORE_OPTIONS_CHANGE = 'core:options:change'
+
+
 // Container Events
 /**
  * Fired when the container internal state changes
@@ -533,6 +541,12 @@ Events.CONTAINER_MEDIACONTROL_HIDE = 'container:mediacontrol:hide'
 Events.CONTAINER_MEDIACONTROL_DISABLE = 'container:mediacontrol:disable'
 Events.CONTAINER_MEDIACONTROL_ENABLE = 'container:mediacontrol:enable'
 Events.CONTAINER_STATS_ADD = 'container:stats:add'
+/**
+ * Fired when the options were changed for the container
+ *
+ * @event CONTAINER_OPTIONS_CHANGE
+ */
+Events.CONTAINER_OPTIONS_CHANGE = 'container:options:change'
 
 // MediaControl Events
 Events.MEDIACONTROL_RENDERED = 'mediacontrol:rendered'
