@@ -14,20 +14,25 @@ export default class WaterMarkPlugin extends UIContainerPlugin {
 
   get template() { return template(watermarkHTML) }
 
-  constructor(options) {
-    super(options)
-    this.position = options.position || "bottom-right"
-    if (options.watermark) {
-      this.imageUrl = options.watermark
-      this.render()
-    } else {
-      this.$el.remove()
-    }
+  constructor(container) {
+    super(container)
+    this.configure()
   }
 
   bindEvents() {
     this.listenTo(this.container, Events.CONTAINER_PLAY, this.onPlay)
     this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
+    this.listenTo(this.container, Events.CONTAINER_OPTIONS_CHANGE, this.configure)
+  }
+
+  configure() {
+    this.position = this.options.position || "bottom-right"
+    if (this.options.watermark) {
+      this.imageUrl = this.options.watermark
+      this.render()
+    } else {
+      this.$el.remove()
+    }
   }
 
   onPlay() {
