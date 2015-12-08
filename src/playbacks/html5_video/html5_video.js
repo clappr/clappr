@@ -87,7 +87,8 @@ export default class HTML5Video extends Playback {
 
   loadedMetadata(e) {
     this.durationChange()
-    if (this.getPlaybackType() !== Playback.LIVE) {
+    var autoSeekFromUrl = typeof(this.options.autoSeekFromUrl) === "undefined" || this.options.autoSeekFromUrl
+    if (this.getPlaybackType() !== Playback.LIVE && autoSeekFromUrl) {
       this.checkInitialSeek()
     }
     this.trigger(Events.PLAYBACK_LOADEDMETADATA, {duration: e.target.duration, data: e})
