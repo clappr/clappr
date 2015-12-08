@@ -8,12 +8,21 @@ export default class Favicon extends CorePlugin {
   constructor(core) {
     super(core)
     this.oldIcon = $('link[rel="shortcut icon"]')
+    this.configure()
+  }
+
+  configure() {
     if (!this.core.options.changeFavicon) {
       this.disable()
+      this.listenTo(this.core, Events.CORE_OPTIONS_CHANGE, this.configure)
+    } else {
+      this.stopListening(this.core, Events.CORE_OPTIONS_CHANGE)
+      this.enable()
     }
   }
 
   bindEvents() {
+    this.listenTo(this.core, Events.CORE_OPTIONS_CHANGE, this.configure)
     this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
     if (this.core.mediaControl.container) {
       this.containerChanged()

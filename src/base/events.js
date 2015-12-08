@@ -397,6 +397,14 @@ Events.PLAYBACK_STATS_ADD = 'playback:stats:add'
 Events.PLAYBACK_FRAGMENT_LOADED = 'playback:fragment:loaded'
 Events.PLAYBACK_LEVEL_SWITCH = 'playback:level:switch'
 
+/**
+ * Fired when the options were changed for the core
+ *
+ * @event CORE_OPTIONS_CHANGE
+ */
+Events.CORE_OPTIONS_CHANGE = 'core:options:change'
+
+
 // Container Events
 /**
  * Fired when the container internal state changes

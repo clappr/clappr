@@ -276,6 +276,9 @@ export default class Core extends UIObject {
    */
   configure(options) {
     this.options = $.extend(this.options, options)
+
+    this.trigger(Events.CORE_OPTIONS_CHANGE)
+
     this.containers.forEach((container) => {
      container.configure(this.options)
     })
