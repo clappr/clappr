@@ -533,6 +533,12 @@ Events.CONTAINER_MEDIACONTROL_HIDE = 'container:mediacontrol:hide'
 Events.CONTAINER_MEDIACONTROL_DISABLE = 'container:mediacontrol:disable'
 Events.CONTAINER_MEDIACONTROL_ENABLE = 'container:mediacontrol:enable'
 Events.CONTAINER_STATS_ADD = 'container:stats:add'
+/**
+ * Fired when the options were changed for the container
+ *
+ * @event CONTAINER_OPTIONS_CHANGE
+ */
+Events.CONTAINER_OPTIONS_CHANGE = 'container:options:change'
 
 // MediaControl Events
 Events.MEDIACONTROL_RENDERED = 'mediacontrol:rendered'

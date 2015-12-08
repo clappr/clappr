@@ -275,10 +275,9 @@ export default class Core extends UIObject {
    * @param {Object} options all the options to change in form of a javascript object
    */
   configure(options) {
-    var newOptions = $.extend(this.options, options)
+    this.options = $.extend(this.options, options)
     this.containers.forEach((container) => {
-      console.log(container, newOptions)
-     container.configure(newOptions)
+     container.configure(this.options)
     })
   }
 
