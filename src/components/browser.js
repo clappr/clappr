@@ -59,6 +59,7 @@ Browser.isAndroid = !!(/Android/i.test(navigator.userAgent))
 Browser.isWin8App = !!(/MSAppHost/i.test(navigator.userAgent))
 Browser.isWiiU = !!(/WiiU/i.test(navigator.userAgent))
 Browser.isPS4 = !!(/PlayStation 4/i.test(navigator.userAgent))
+Browser.isWindowsPhone = /Windows Phone/i.test(navigator.userAgent))
 Browser.hasLocalstorage = hasLocalstorage()
 Browser.hasFlash = hasFlash()
 
