@@ -269,6 +269,19 @@ export default class Core extends UIObject {
       this.$el.addClass('nocursor')
   }
 
+  /**
+   * enables to configure the container after its creation
+   * @method configure
+   * @param {Object} options all the options to change in form of a javascript object
+   */
+  configure(options) {
+    var newOptions = $.extend(this.options, options)
+    this.containers.forEach((container) => {
+      console.log(container, newOptions)
+     container.configure(newOptions)
+    })
+  }
+
   render() {
     var style = Styler.getStyleFor(coreStyle);
     //FIXME

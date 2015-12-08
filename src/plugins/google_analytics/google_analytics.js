@@ -7,12 +7,12 @@ import Events from 'base/events'
 
 export default class GoogleAnalytics extends ContainerPlugin {
   get name() { return 'google_analytics' }
-  constructor(options) {
-    super(options)
-    if (options.gaAccount) {
-      this.account = options.gaAccount
-      this.trackerName = (options.gaTrackerName) ? options.gaTrackerName + "." : 'Clappr.'
-      this.domainName = options.gaDomainName
+  constructor(container) {
+    super(container)
+    if (this.container.options.gaAccount) {
+      this.account = this.container.options.gaAccount
+      this.trackerName = (this.container.options.gaTrackerName) ? this.container.options.gaTrackerName + "." : 'Clappr.'
+      this.domainName = this.container.options.gaDomainName
       this.currentHDState = undefined
       this.embedScript()
     }

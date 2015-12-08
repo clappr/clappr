@@ -319,6 +319,15 @@ export default class Player extends BaseObject {
   }
 
   /**
+   * enables to configure a player after its creation
+   * @method configure
+   * @param {Object} options all the options to change in form of a javascript object
+   */
+  configure(options) {
+    this.core.configure(options)
+  }
+
+  /**
    * get a plugin by its name.
    * @method getPlugin
    * @param {String} name of the plugin.

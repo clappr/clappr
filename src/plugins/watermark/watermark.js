@@ -14,11 +14,11 @@ export default class WaterMarkPlugin extends UIContainerPlugin {
 
   get template() { return template(watermarkHTML) }
 
-  constructor(options) {
-    super(options)
-    this.position = options.position || "bottom-right"
-    if (options.watermark) {
-      this.imageUrl = options.watermark
+  constructor(container) {
+    super(container)
+    this.position = this.options.position || "bottom-right"
+    if (this.options.watermark) {
+      this.imageUrl = this.options.watermark
       this.render()
     } else {
       this.$el.remove()
