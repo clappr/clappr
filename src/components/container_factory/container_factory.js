@@ -32,12 +32,15 @@ export default class ContainerFactory extends BaseObject {
     return find(this.loader.playbackPlugins, (p) => { return p.canPlay(source.toString(), this.options.mimeType) })
   }
 
-  createContainer(source, options) {
+  createContainer(source) {
     if (!!source.match(/^\/\//)) source = window.location.protocol + source
-    options = $.extend({}, this.options, {src: source}, options)
+    var options = $.extend({}, this.options, {src: source})
     var playbackPlugin = this.findPlaybackPlugin(source)
     var playback = new playbackPlugin(options)
-    var container = new Container({playback: playback})
+
+    options = $.extend(options, {playback: playback})
+
+    var container = new Container(options)
     var defer = $.Deferred()
     defer.promise(container)
     this.addContainerPlugins(container, source)
@@ -47,8 +50,7 @@ export default class ContainerFactory extends BaseObject {
 
   addContainerPlugins(container, source) {
     this.loader.containerPlugins.forEach((Plugin) => {
-      var options = $.extend(this.options, {container: container, src: source});
-      container.addPlugin(new Plugin(options));
+      container.addPlugin(new Plugin(container))
     });
   }
 }
