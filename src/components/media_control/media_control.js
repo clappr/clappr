@@ -135,10 +135,10 @@ export default class MediaControl extends UIObject {
     this.container.stop()
   }
 
-  onVolumeChanged(event) {
+  onVolumeChanged(level) {
     this.mute = (this.currentVolume === 0)
-    this.setVolumeLevel(event)
-    this.persistConfig && Config.persist("volume", event)
+    this.setVolumeLevel(level)
+    this.persistConfig && Config.persist("volume", level)
   }
 
   changeTogglePlay() {
@@ -588,7 +588,7 @@ export default class MediaControl extends UIObject {
         this.$seekBarContainer.addClass('seek-disabled')
       }
 
-      this.setVolume(this.currentVolume)
+      this.onVolumeChanged(this.container.volume)
       this.bindKeyEvents()
       this.playerResize({width: this.options.width, height: this.options.height})
       this.hideVolumeBar(0)
