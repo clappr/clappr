@@ -2111,9 +2111,9 @@
       "resolved": "https://registry.npmjs.org/hawk/-/hawk-1.1.1.tgz"
     },
     "hls.js": {
-      "version": "0.3.5",
-      "from": "dailymotion/hls.js#v0.3.5",
-      "resolved": "git://github.com/dailymotion/hls.js.git#ca828c318779fcc8cd0336e33fbac30e857fd269"
+      "version": "0.3.9",
+      "from": "dailymotion/hls.js#v0.3.9",
+      "resolved": "git://github.com/dailymotion/hls.js.git#395c905b7e231bde220631fdc6432fcc383cfb2c"
     },
     "hoek": {
       "version": "0.9.1",
