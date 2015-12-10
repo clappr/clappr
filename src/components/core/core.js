@@ -122,7 +122,10 @@ export default class Core extends UIObject {
   }
 
   resolveOnContainersReady(containers) {
-    $.when.apply($, containers).done(() =>this.defer.resolve(this))
+    $.when.apply($, containers).done(() => {
+      this.defer.resolve(this)
+      this.trigger(Events.CORE_READY)
+    })
   }
 
   addPlugin(plugin) {
