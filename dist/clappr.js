@@ -82,19 +82,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _basePlayback2 = _interopRequireDefault(_basePlayback);
 
-	var _baseContainer_plugin = __webpack_require__(127);
+	var _baseContainer_plugin = __webpack_require__(129);
 
 	var _baseContainer_plugin2 = _interopRequireDefault(_baseContainer_plugin);
 
-	var _baseCore_plugin = __webpack_require__(148);
+	var _baseCore_plugin = __webpack_require__(150);
 
 	var _baseCore_plugin2 = _interopRequireDefault(_baseCore_plugin);
 
-	var _baseUi_core_plugin = __webpack_require__(142);
+	var _baseUi_core_plugin = __webpack_require__(144);
 
 	var _baseUi_core_plugin2 = _interopRequireDefault(_baseUi_core_plugin);
 
-	var _baseUi_container_plugin = __webpack_require__(122);
+	var _baseUi_container_plugin = __webpack_require__(124);
 
 	var _baseUi_container_plugin2 = _interopRequireDefault(_baseUi_container_plugin);
 
@@ -154,11 +154,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _playbacksHtml5_video2 = _interopRequireDefault(_playbacksHtml5_video);
 
-	var _playbacksHtml_img = __webpack_require__(113);
+	var _playbacksHtml_img = __webpack_require__(115);
 
 	var _playbacksHtml_img2 = _interopRequireDefault(_playbacksHtml_img);
 
-	var _pluginsPoster = __webpack_require__(132);
+	var _pluginsPoster = __webpack_require__(134);
 
 	var _pluginsPoster2 = _interopRequireDefault(_pluginsPoster);
 
@@ -178,7 +178,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var version = ("0.2.24");
+	var version = ("0.2.25");
 
 	exports['default'] = {
 	    Player: _componentsPlayer2['default'],
@@ -408,6 +408,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'addEventListeners',
 	    value: function addEventListeners() {
+	      this.listenTo(this.core, _baseEvents2['default'].CORE_READY, this.onReady);
 	      this.listenTo(this.core.mediaControl, _baseEvents2['default'].MEDIACONTROL_CONTAINERCHANGED, this.containerChanged);
 	      var container = this.core.mediaControl.container;
 	      if (!!container) {
@@ -426,6 +427,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function containerChanged() {
 	      this.stopListening();
 	      this.addEventListeners();
+	    }
+	  }, {
+	    key: 'onReady',
+	    value: function onReady() {
+	      this.trigger(_baseEvents2['default'].PLAYER_READY);
 	    }
 	  }, {
 	    key: 'onVolumeUpdate',
@@ -2189,6 +2195,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	// PLAYER EVENTS
 	/**
+	 * Fired when the player is ready on startup
+	 *
+	 * @event PLAYER_READY
+	 */
+	Events.PLAYER_READY = 'ready';
+	/**
 	 * Fired when player resizes
 	 *
 	 * @event PLAYER_RESIZE
@@ -2391,6 +2403,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @event CORE_OPTIONS_CHANGE
 	 */
 	Events.CORE_OPTIONS_CHANGE = 'core:options:change';
+	/**
+	 * Fired after creating containers, when the core is ready
+	 *
+	 * @event CORE_READY
+	 */
+	Events.CORE_READY = 'core:ready';
 
 	// Container Events
 	/**
@@ -3426,7 +3444,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _this4 = this;
 
 	      _clapprZepto2['default'].when.apply(_clapprZepto2['default'], containers).done(function () {
-	        return _this4.defer.resolve(_this4);
+	        _this4.defer.resolve(_this4);
+	        _this4.trigger(_baseEvents2['default'].CORE_READY);
 	      });
 	    }
 	  }, {
@@ -3615,7 +3634,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _this6 = this;
 
 	      this.options = _clapprZepto2['default'].extend(this.options, options);
-	      var sources = this.options.source || this.options.sources;
+	      var sources = options.source || options.sources;
 
 	      if (sources) {
 	        this.load(sources);
@@ -7480,10 +7499,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'onVolumeChanged',
-	    value: function onVolumeChanged(event) {
+	    value: function onVolumeChanged(level) {
 	      this.mute = this.currentVolume === 0;
-	      this.setVolumeLevel(event);
-	      this.persistConfig && _baseUtils.Config.persist("volume", event);
+	      this.setVolumeLevel(level);
+	      this.persistConfig && _baseUtils.Config.persist("volume", level);
 	    }
 	  }, {
 	    key: 'changeTogglePlay',
@@ -8017,7 +8036,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          _this7.$seekBarContainer.addClass('seek-disabled');
 	        }
 
-	        _this7.setVolume(_this7.currentVolume);
+	        _this7.onVolumeChanged(_this7.container.volume);
 	        _this7.bindKeyEvents();
 	        _this7.playerResize({ width: _this7.options.width, height: _this7.options.height });
 	        _this7.hideVolumeBar(0);
@@ -8848,47 +8867,47 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _playbacksHls2 = _interopRequireDefault(_playbacksHls);
 
-	var _playbacksHtml_img = __webpack_require__(113);
+	var _playbacksHtml_img = __webpack_require__(115);
 
 	var _playbacksHtml_img2 = _interopRequireDefault(_playbacksHtml_img);
 
-	var _playbacksNo_op = __webpack_require__(116);
+	var _playbacksNo_op = __webpack_require__(118);
 
 	var _playbacksNo_op2 = _interopRequireDefault(_playbacksNo_op);
 
 	/* Container Plugins */
 
-	var _pluginsSpinner_three_bounce = __webpack_require__(120);
+	var _pluginsSpinner_three_bounce = __webpack_require__(122);
 
 	var _pluginsSpinner_three_bounce2 = _interopRequireDefault(_pluginsSpinner_three_bounce);
 
-	var _pluginsStats = __webpack_require__(125);
+	var _pluginsStats = __webpack_require__(127);
 
 	var _pluginsStats2 = _interopRequireDefault(_pluginsStats);
 
-	var _pluginsWatermark = __webpack_require__(128);
+	var _pluginsWatermark = __webpack_require__(130);
 
 	var _pluginsWatermark2 = _interopRequireDefault(_pluginsWatermark);
 
-	var _pluginsPoster = __webpack_require__(132);
+	var _pluginsPoster = __webpack_require__(134);
 
 	var _pluginsPoster2 = _interopRequireDefault(_pluginsPoster);
 
-	var _pluginsGoogle_analytics = __webpack_require__(136);
+	var _pluginsGoogle_analytics = __webpack_require__(138);
 
 	var _pluginsGoogle_analytics2 = _interopRequireDefault(_pluginsGoogle_analytics);
 
-	var _pluginsClick_to_pause = __webpack_require__(138);
+	var _pluginsClick_to_pause = __webpack_require__(140);
 
 	var _pluginsClick_to_pause2 = _interopRequireDefault(_pluginsClick_to_pause);
 
 	/* Core Plugins */
 
-	var _pluginsDvr_controls = __webpack_require__(140);
+	var _pluginsDvr_controls = __webpack_require__(142);
 
 	var _pluginsDvr_controls2 = _interopRequireDefault(_pluginsDvr_controls);
 
-	var _pluginsFavicon = __webpack_require__(146);
+	var _pluginsFavicon = __webpack_require__(148);
 
 	var _pluginsFavicon2 = _interopRequireDefault(_pluginsFavicon);
 
@@ -11525,7 +11544,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "8a0e4b17a5e97cfc84752044c2e0cfe9.swf";
+	module.exports = __webpack_require__.p + "ce11521a0b89a2674007ac434b3b92c8.swf";
 
 /***/ },
 /* 85 */
@@ -11857,23 +11876,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _controllerMseMediaController2 = _interopRequireDefault(_controllerMseMediaController);
 
-	var _controllerLevelController = __webpack_require__(110);
+	var _controllerLevelController = __webpack_require__(112);
 
 	var _controllerLevelController2 = _interopRequireDefault(_controllerLevelController);
 
 	//import FPSController from './controller/fps-controller';
 
-	var _utilsLogger = __webpack_require__(99);
+	var _utilsLogger = __webpack_require__(98);
 
-	var _utilsXhrLoader = __webpack_require__(111);
+	var _utilsXhrLoader = __webpack_require__(113);
 
 	var _utilsXhrLoader2 = _interopRequireDefault(_utilsXhrLoader);
 
-	var _events3 = __webpack_require__(101);
+	var _events3 = __webpack_require__(103);
 
 	var _events4 = _interopRequireDefault(_events3);
 
-	var _loaderKeyLoader = __webpack_require__(112);
+	var _loaderKeyLoader = __webpack_require__(114);
 
 	var _loaderKeyLoader2 = _interopRequireDefault(_loaderKeyLoader);
 
@@ -12017,13 +12036,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.mediaController.startLoad();
 	    }
 	  }, {
+	    key: 'swapAudioCodec',
+	    value: function swapAudioCodec() {
+	      _utilsLogger.logger.log('swapAudioCodec');
+	      this.mediaController.swapAudioCodec();
+	    }
+	  }, {
 	    key: 'recoverMediaError',
 	    value: function recoverMediaError() {
 	      _utilsLogger.logger.log('recoverMediaError');
 	      var media = this.media;
 	      this.detachMedia();
 	      this.attachMedia(media);
-	      this.mediaController.recoverMediaError();
 	    }
 
 	    /** Return all quality levels **/
@@ -12212,7 +12236,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  FPS_DROP: 'hlsFPSDrop',
 	  // Identifier for an error event - data: { type : error type, details : error details, fatal : if true, hls.js cannot/will not try to recover, if false, hls.js will try to recover,other error specific data}
 	  ERROR: 'hlsError',
-	  // fired when hls.js instance starts destroying. Different from MSE_DETACHED as one could want to detach and reattach a media to the instance of hls.js to handle mid-rolls for example
+	  // fired when hls.js instance starts destroying. Different from MEDIA_DETACHED as one could want to detach and reattach a media to the instance of hls.js to handle mid-rolls for example
 	  DESTROYING: 'hlsDestroying',
 	  // fired when a decrypt key loading starts - data: { frag : fragment object}
 	  KEY_LOADING: 'hlsKeyLoading',
@@ -12934,13 +12958,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _utilsLogger = __webpack_require__(99);
+	var _utilsLogger = __webpack_require__(98);
 
-	var _utilsBinarySearch = __webpack_require__(108);
+	var _utilsBinarySearch = __webpack_require__(110);
 
 	var _utilsBinarySearch2 = _interopRequireDefault(_utilsBinarySearch);
 
-	var _helperLevelHelper = __webpack_require__(109);
+	var _helperLevelHelper = __webpack_require__(111);
 
 	var _helperLevelHelper2 = _interopRequireDefault(_helperLevelHelper);
 
@@ -13216,7 +13240,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    if (!levelDetails.live) {
 	                      var mediaSource = this.mediaSource;
 	                      if (mediaSource && mediaSource.readyState === 'open') {
-	                        // ensure sourceBuffer are not in updating stateyes
+	                        // ensure sourceBuffer are not in updating states
 	                        var sb = this.sourceBuffer;
 	                        if (!(sb.audio && sb.audio.updating || sb.video && sb.video.updating)) {
 	                          _utilsLogger.logger.log('all media data available, signal endOfStream() to MediaSource');
@@ -13723,7 +13747,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      ms.addEventListener('sourceclose', this.onmsc);
 	      // link video and media Source
 	      media.src = URL.createObjectURL(ms);
-	      this.lastReadyState = 0;
 	    }
 	  }, {
 	    key: 'onMediaDetaching',
@@ -13749,7 +13772,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var ms = this.mediaSource;
 	      if (ms) {
 	        if (ms.readyState === 'open') {
-	          ms.endOfStream();
+	          try {
+	            // endOfStream could trigger exception if any sourcebuffer is in updating state
+	            // we don't really care about checking sourcebuffer state here,
+	            // as we are anyway detaching the MediaSource
+	            // let's just avoid this exception to propagate
+	            ms.endOfStream();
+	          } catch (err) {
+	            _utilsLogger.logger.warn('onMediaDetaching:' + err.message + ' while calling endOfStream');
+	          }
 	        }
 	        ms.removeEventListener('sourceopen', this.onmso);
 	        ms.removeEventListener('sourceended', this.onmse);
@@ -13928,9 +13959,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	              duration = details.totalduration,
 	              start = fragCurrent.start,
 	              level = fragCurrent.level,
-	              sn = fragCurrent.sn;
+	              sn = fragCurrent.sn,
+	              audioCodec = currentLevel.audioCodec;
+	          if (audioCodec && this.audioCodecSwap) {
+	            _utilsLogger.logger.log('swapping playlist audio codec');
+	            if (audioCodec.indexOf('mp4a.40.5') !== -1) {
+	              audioCodec = 'mp4a.40.2';
+	            } else {
+	              audioCodec = 'mp4a.40.5';
+	            }
+	          }
 	          _utilsLogger.logger.log('Demuxing ' + sn + ' of [' + details.startSN + ' ,' + details.endSN + '],level ' + level);
-	          this.demuxer.push(data.payload, currentLevel.audioCodec, currentLevel.videoCodec, start, fragCurrent.cc, level, sn, duration, fragCurrent.decryptdata);
+	          this.demuxer.push(data.payload, audioCodec, currentLevel.videoCodec, start, fragCurrent.cc, level, sn, duration, fragCurrent.decryptdata);
 	        }
 	      }
 	    }
@@ -13943,13 +13983,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var audioCodec = this.levels[this.level].audioCodec,
 	            videoCodec = this.levels[this.level].videoCodec,
 	            sb;
-	        //logger.log('playlist level A/V codecs:' + audioCodec + ',' + videoCodec);
-	        //logger.log('playlist codecs:' + codec);
+	        if (audioCodec && this.audioCodecSwap) {
+	          _utilsLogger.logger.log('swapping playlist audio codec');
+	          if (audioCodec.indexOf('mp4a.40.5') !== -1) {
+	            audioCodec = 'mp4a.40.2';
+	          } else {
+	            audioCodec = 'mp4a.40.5';
+	          }
+	        }
+	        _utilsLogger.logger.log('playlist_level/init_segment codecs: video => ' + videoCodec + '/' + data.videoCodec + '; audio => ' + audioCodec + '/' + data.audioCodec);
 	        // if playlist does not specify codecs, use codecs found while parsing fragment
-	        if (audioCodec === undefined || data.audiocodec === undefined) {
+	        // if no codec found while parsing fragment, also set codec to undefined to avoid creating sourceBuffer
+	        if (audioCodec === undefined || data.audioCodec === undefined) {
 	          audioCodec = data.audioCodec;
 	        }
-	        if (videoCodec === undefined || data.videocodec === undefined) {
+
+	        if (videoCodec === undefined || data.videoCodec === undefined) {
 	          videoCodec = data.videoCodec;
 	        }
 	        // in case several audio codecs might be used, force HE-AAC for audio (some browsers don't support audio codec switch)
@@ -13959,14 +14008,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	          audioCodec = 'mp4a.40.5';
 	        }
 	        if (!this.sourceBuffer) {
-	          if (audioCodec && this.audioCodecSwap) {
-	            _utilsLogger.logger.log('swapping audio codec');
-	            if (audioCodec.indexOf('mp4a.40.5') !== -1) {
-	              audioCodec = 'mp4a.40.2';
-	            } else {
-	              audioCodec = 'mp4a.40.5';
-	            }
-	          }
 	          this.sourceBuffer = {};
 	          _utilsLogger.logger.log('selected A/V codecs for sourceBuffers:' + audioCodec + ',' + videoCodec);
 	          // create source Buffer and link them to MediaSource
@@ -14068,8 +14109,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (media) {
 	        // compare readyState
 	        var readyState = media.readyState;
-	        this.lastReadyState = readyState;
-	        //logger.log(`readyState:${readyState}`);
 	        // if ready state different from HAVE_NOTHING (numeric value 0), we are allowed to seek
 	        if (readyState) {
 	          // if seek after buffered defined, let's seek if within acceptable range
@@ -14104,16 +14143,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	  }, {
-	    key: 'recoverMediaError',
-	    value: function recoverMediaError() {
-	      // if player tries to recover a MediaError with last MediaElement.readyState being HAVE_NOTHING(0) or HAVE_METADATA(1)
-	      // it means that we try to recover a media error, although no media has ever been played
-	      // this usually happens when there is a mismatch between Init Segment and appended buffers
-	      // this is the case when there is an audio codec mismatch
-	      // try to swap audio codec, this could help recovering the playback in that specific case
-	      if (this.lastReadyState < 2) {
-	        this.audioCodecSwap = !this.audioCodecSwap;
-	      }
+	    key: 'swapAudioCodec',
+	    value: function swapAudioCodec() {
+	      this.audioCodecSwap = !this.audioCodecSwap;
 	    }
 	  }, {
 	    key: 'onSBUpdateError',
@@ -14225,17 +14257,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _demuxDemuxerInline2 = _interopRequireDefault(_demuxDemuxerInline);
 
-	var _demuxDemuxerWorker = __webpack_require__(100);
+	var _demuxDemuxerWorker = __webpack_require__(102);
 
 	var _demuxDemuxerWorker2 = _interopRequireDefault(_demuxDemuxerWorker);
 
-	var _utilsLogger = __webpack_require__(99);
+	var _utilsLogger = __webpack_require__(98);
 
-	var _remuxMp4Remuxer = __webpack_require__(102);
+	var _remuxMp4Remuxer = __webpack_require__(104);
 
 	var _remuxMp4Remuxer2 = _interopRequireDefault(_remuxMp4Remuxer);
 
-	var _cryptDecrypter = __webpack_require__(104);
+	var _cryptDecrypter = __webpack_require__(106);
 
 	var _cryptDecrypter2 = _interopRequireDefault(_cryptDecrypter);
 
@@ -14247,7 +14279,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (hls.config.enableWorker && typeof Worker !== 'undefined') {
 	      _utilsLogger.logger.log('demuxing in webworker');
 	      try {
-	        var work = __webpack_require__(107);
+	        var work = __webpack_require__(109);
 	        this.w = work(_demuxDemuxerWorker2['default']);
 	        this.onwmsg = this.onWorkerMessage.bind(this);
 	        this.w.addEventListener('message', this.onwmsg);
@@ -14380,7 +14412,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _errors = __webpack_require__(89);
 
-	var _demuxTsdemuxer = __webpack_require__(97);
+	var _demuxAacdemuxer = __webpack_require__(97);
+
+	var _demuxAacdemuxer2 = _interopRequireDefault(_demuxAacdemuxer);
+
+	var _demuxTsdemuxer = __webpack_require__(100);
 
 	var _demuxTsdemuxer2 = _interopRequireDefault(_demuxTsdemuxer);
 
@@ -14408,20 +14444,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // probe for content type
 	        if (_demuxTsdemuxer2['default'].probe(data)) {
 	          demuxer = this.demuxer = new _demuxTsdemuxer2['default'](this.hls, this.remuxer);
+	        } else if (_demuxAacdemuxer2['default'].probe(data)) {
+	          demuxer = this.demuxer = new _demuxAacdemuxer2['default'](this.hls, this.remuxer);
 	        } else {
 	          this.hls.trigger(_events2['default'].ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.FRAG_PARSING_ERROR, fatal: true, reason: 'no demux matching with content found' });
 	          return;
 	        }
 	      }
 	      demuxer.push(data, audioCodec, videoCodec, timeOffset, cc, level, sn, duration);
-	    }
-	  }, {
-	    key: 'remux',
-	    value: function remux() {
-	      var demuxer = this.demuxer;
-	      if (demuxer) {
-	        demuxer.remux();
-	      }
 	    }
 	  }]);
 
@@ -14433,6 +14463,488 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 97 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * AAC demuxer
+	 */
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	var _utilsLogger = __webpack_require__(98);
+
+	var _demuxId3 = __webpack_require__(99);
+
+	var _demuxId32 = _interopRequireDefault(_demuxId3);
+
+	var _errors = __webpack_require__(89);
+
+	var AACDemuxer = (function () {
+	  function AACDemuxer(observer, remuxerClass) {
+	    _classCallCheck(this, AACDemuxer);
+
+	    this.observer = observer;
+	    this.remuxerClass = remuxerClass;
+	    this.remuxer = new this.remuxerClass(observer);
+	    this._aacTrack = { type: 'audio', id: -1, sequenceNumber: 0, samples: [], len: 0 };
+	  }
+
+	  _createClass(AACDemuxer, [{
+	    key: 'push',
+
+	    // feed incoming data to the front of the parsing pipeline
+	    value: function push(data, audioCodec, videoCodec, timeOffset, cc, level, sn, duration) {
+	      var id3 = new _demuxId32['default'](data),
+	          adtsStartOffset,
+	          len,
+	          track = this._aacTrack,
+	          pts = id3.timeStamp,
+	          config,
+	          nbSamples,
+	          adtsFrameSize,
+	          adtsHeaderLen,
+	          stamp,
+	          aacSample;
+	      // look for ADTS header (0xFFFx)
+	      for (adtsStartOffset = id3.length, len = data.length; adtsStartOffset < len - 1; adtsStartOffset++) {
+	        if (data[adtsStartOffset] === 0xff && (data[adtsStartOffset + 1] & 0xf0) === 0xf0) {
+	          break;
+	        }
+	      }
+
+	      if (!track.audiosamplerate) {
+	        config = this._ADTStoAudioConfig(data, adtsStartOffset, audioCodec);
+	        track.config = config.config;
+	        track.audiosamplerate = config.samplerate;
+	        track.channelCount = config.channelCount;
+	        track.codec = config.codec;
+	        track.timescale = this.remuxer.timescale;
+	        track.duration = this.remuxer.timescale * duration;
+	        _utilsLogger.logger.log('parsed codec:' + track.codec + ',rate:' + config.samplerate + ',nb channel:' + config.channelCount);
+	      }
+	      nbSamples = 0;
+	      while (adtsStartOffset + 5 < len) {
+	        // retrieve frame size
+	        adtsFrameSize = (data[adtsStartOffset + 3] & 0x03) << 11;
+	        // byte 4
+	        adtsFrameSize |= data[adtsStartOffset + 4] << 3;
+	        // byte 5
+	        adtsFrameSize |= (data[adtsStartOffset + 5] & 0xE0) >>> 5;
+	        adtsHeaderLen = !!(data[adtsStartOffset + 1] & 0x01) ? 7 : 9;
+	        adtsFrameSize -= adtsHeaderLen;
+	        stamp = Math.round(90 * pts + nbSamples * 1024 * 90000 / track.audiosamplerate);
+	        //stamp = pes.pts;
+	        //console.log('AAC frame, offset/length/pts:' + (adtsStartOffset+7) + '/' + adtsFrameSize + '/' + stamp.toFixed(0));
+	        if (adtsFrameSize > 0 && adtsStartOffset + adtsHeaderLen + adtsFrameSize <= len) {
+	          aacSample = { unit: data.subarray(adtsStartOffset + adtsHeaderLen, adtsStartOffset + adtsHeaderLen + adtsFrameSize), pts: stamp, dts: stamp };
+	          track.samples.push(aacSample);
+	          track.len += adtsFrameSize;
+	          adtsStartOffset += adtsFrameSize + adtsHeaderLen;
+	          nbSamples++;
+	          // look for ADTS header (0xFFFx)
+	          for (; adtsStartOffset < len - 1; adtsStartOffset++) {
+	            if (data[adtsStartOffset] === 0xff && (data[adtsStartOffset + 1] & 0xf0) === 0xf0) {
+	              break;
+	            }
+	          }
+	        } else {
+	          break;
+	        }
+	      }
+	      this.remuxer.remux(this._aacTrack, { samples: [] }, { samples: [] }, timeOffset);
+	    }
+	  }, {
+	    key: '_ADTStoAudioConfig',
+	    value: function _ADTStoAudioConfig(data, offset, audioCodec) {
+	      var adtsObjectType,
+	          // :int
+	      adtsSampleingIndex,
+	          // :int
+	      adtsExtensionSampleingIndex,
+	          // :int
+	      adtsChanelConfig,
+	          // :int
+	      config,
+	          userAgent = navigator.userAgent.toLowerCase(),
+	          adtsSampleingRates = [96000, 88200, 64000, 48000, 44100, 32000, 24000, 22050, 16000, 12000, 11025, 8000, 7350];
+	      // byte 2
+	      adtsObjectType = ((data[offset + 2] & 0xC0) >>> 6) + 1;
+	      adtsSampleingIndex = (data[offset + 2] & 0x3C) >>> 2;
+	      if (adtsSampleingIndex > adtsSampleingRates.length - 1) {
+	        this.observer.trigger(Event.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.FRAG_PARSING_ERROR, fatal: true, reason: 'invalid ADTS sampling index:' + adtsSampleingIndex });
+	        return;
+	      }
+	      adtsChanelConfig = (data[offset + 2] & 0x01) << 2;
+	      // byte 3
+	      adtsChanelConfig |= (data[offset + 3] & 0xC0) >>> 6;
+	      _utilsLogger.logger.log('manifest codec:' + audioCodec + ',ADTS data:type:' + adtsObjectType + ',sampleingIndex:' + adtsSampleingIndex + '[' + adtsSampleingRates[adtsSampleingIndex] + 'Hz],channelConfig:' + adtsChanelConfig);
+	      // firefox: freq less than 24kHz = AAC SBR (HE-AAC)
+	      if (userAgent.indexOf('firefox') !== -1) {
+	        if (adtsSampleingIndex >= 6) {
+	          adtsObjectType = 5;
+	          config = new Array(4);
+	          // HE-AAC uses SBR (Spectral Band Replication) , high frequencies are constructed from low frequencies
+	          // there is a factor 2 between frame sample rate and output sample rate
+	          // multiply frequency by 2 (see table below, equivalent to substract 3)
+	          adtsExtensionSampleingIndex = adtsSampleingIndex - 3;
+	        } else {
+	          adtsObjectType = 2;
+	          config = new Array(2);
+	          adtsExtensionSampleingIndex = adtsSampleingIndex;
+	        }
+	        // Android : always use AAC
+	      } else if (userAgent.indexOf('android') !== -1) {
+	          adtsObjectType = 2;
+	          config = new Array(2);
+	          adtsExtensionSampleingIndex = adtsSampleingIndex;
+	        } else {
+	          /*  for other browsers (chrome ...)
+	              always force audio type to be HE-AAC SBR, as some browsers do not support audio codec switch properly (like Chrome ...)
+	          */
+	          adtsObjectType = 5;
+	          config = new Array(4);
+	          // if (manifest codec is HE-AAC) OR (manifest codec not specified AND frequency less than 24kHz)
+	          if (audioCodec && audioCodec.indexOf('mp4a.40.5') !== -1 || !audioCodec && adtsSampleingIndex >= 6) {
+	            // HE-AAC uses SBR (Spectral Band Replication) , high frequencies are constructed from low frequencies
+	            // there is a factor 2 between frame sample rate and output sample rate
+	            // multiply frequency by 2 (see table below, equivalent to substract 3)
+	            adtsExtensionSampleingIndex = adtsSampleingIndex - 3;
+	          } else {
+	            // if (manifest codec is AAC) AND (frequency less than 24kHz OR nb channel is 1)
+	            if (audioCodec && audioCodec.indexOf('mp4a.40.2') !== -1 && (adtsSampleingIndex >= 6 || adtsChanelConfig === 1)) {
+	              adtsObjectType = 2;
+	              config = new Array(2);
+	            }
+	            adtsExtensionSampleingIndex = adtsSampleingIndex;
+	          }
+	        }
+	      /* refer to http://wiki.multimedia.cx/index.php?title=MPEG-4_Audio#Audio_Specific_Config
+	          ISO 14496-3 (AAC).pdf - Table 1.13 — Syntax of AudioSpecificConfig()
+	        Audio Profile / Audio Object Type
+	        0: Null
+	        1: AAC Main
+	        2: AAC LC (Low Complexity)
+	        3: AAC SSR (Scalable Sample Rate)
+	        4: AAC LTP (Long Term Prediction)
+	        5: SBR (Spectral Band Replication)
+	        6: AAC Scalable
+	       sampling freq
+	        0: 96000 Hz
+	        1: 88200 Hz
+	        2: 64000 Hz
+	        3: 48000 Hz
+	        4: 44100 Hz
+	        5: 32000 Hz
+	        6: 24000 Hz
+	        7: 22050 Hz
+	        8: 16000 Hz
+	        9: 12000 Hz
+	        10: 11025 Hz
+	        11: 8000 Hz
+	        12: 7350 Hz
+	        13: Reserved
+	        14: Reserved
+	        15: frequency is written explictly
+	        Channel Configurations
+	        These are the channel configurations:
+	        0: Defined in AOT Specifc Config
+	        1: 1 channel: front-center
+	        2: 2 channels: front-left, front-right
+	      */
+	      // audioObjectType = profile => profile, the MPEG-4 Audio Object Type minus 1
+	      config[0] = adtsObjectType << 3;
+	      // samplingFrequencyIndex
+	      config[0] |= (adtsSampleingIndex & 0x0E) >> 1;
+	      config[1] |= (adtsSampleingIndex & 0x01) << 7;
+	      // channelConfiguration
+	      config[1] |= adtsChanelConfig << 3;
+	      if (adtsObjectType === 5) {
+	        // adtsExtensionSampleingIndex
+	        config[1] |= (adtsExtensionSampleingIndex & 0x0E) >> 1;
+	        config[2] = (adtsExtensionSampleingIndex & 0x01) << 7;
+	        // adtsObjectType (force to 2, chrome is checking that object type is less than 5 ???
+	        //    https://chromium.googlesource.com/chromium/src.git/+/master/media/formats/mp4/aac.cc
+	        config[2] |= 2 << 2;
+	        config[3] = 0;
+	      }
+	      return { config: config, samplerate: adtsSampleingRates[adtsSampleingIndex], channelCount: adtsChanelConfig, codec: 'mp4a.40.' + adtsObjectType };
+	    }
+	  }, {
+	    key: 'destroy',
+	    value: function destroy() {}
+	  }], [{
+	    key: 'probe',
+	    value: function probe(data) {
+	      // check if data contains ID3 timestamp and ADTS sync worc
+	      var id3 = new _demuxId32['default'](data),
+	          adtsStartOffset,
+	          len;
+	      if (id3.hasTimeStamp) {
+	        // look for ADTS header (0xFFFx)
+	        for (adtsStartOffset = id3.length, len = data.length; adtsStartOffset < len - 1; adtsStartOffset++) {
+	          if (data[adtsStartOffset] === 0xff && (data[adtsStartOffset + 1] & 0xf0) === 0xf0) {
+	            //logger.log('ADTS sync word found !');
+	            return true;
+	          }
+	        }
+	      }
+	      return false;
+	    }
+	  }]);
+
+	  return AACDemuxer;
+	})();
+
+	exports['default'] = AACDemuxer;
+	module.exports = exports['default'];
+
+/***/ },
+/* 98 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	function noop() {}
+
+	var fakeLogger = {
+	  trace: noop,
+	  debug: noop,
+	  log: noop,
+	  warn: noop,
+	  info: noop,
+	  error: noop
+	};
+
+	var exportedLogger = fakeLogger;
+
+	//let lastCallTime;
+	// function formatMsgWithTimeInfo(type, msg) {
+	//   const now = Date.now();
+	//   const diff = lastCallTime ? '+' + (now - lastCallTime) : '0';
+	//   lastCallTime = now;
+	//   msg = (new Date(now)).toISOString() + ' | [' +  type + '] > ' + msg + ' ( ' + diff + ' ms )';
+	//   return msg;
+	// }
+
+	function formatMsg(type, msg) {
+	  msg = '[' + type + '] > ' + msg;
+	  return msg;
+	}
+
+	function consolePrintFn(type) {
+	  var func = window.console[type];
+	  if (func) {
+	    return function () {
+	      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	        args[_key] = arguments[_key];
+	      }
+
+	      if (args[0]) {
+	        args[0] = formatMsg(type, args[0]);
+	      }
+	      func.apply(window.console, args);
+	    };
+	  }
+	  return noop;
+	}
+
+	function exportLoggerFunctions(debugConfig) {
+	  for (var _len2 = arguments.length, functions = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+	    functions[_key2 - 1] = arguments[_key2];
+	  }
+
+	  functions.forEach(function (type) {
+	    exportedLogger[type] = debugConfig[type] ? debugConfig[type].bind(debugConfig) : consolePrintFn(type);
+	  });
+	}
+
+	var enableLogs = function enableLogs(debugConfig) {
+	  if (debugConfig === true || typeof debugConfig === 'object') {
+	    exportLoggerFunctions(debugConfig,
+	    // Remove out from list here to hard-disable a log-level
+	    //'trace',
+	    'debug', 'log', 'info', 'warn', 'error');
+	    // Some browsers don't allow to use bind on console object anyway
+	    // fallback to default if needed
+	    try {
+	      exportedLogger.log();
+	    } catch (e) {
+	      exportedLogger = fakeLogger;
+	    }
+	  } else {
+	    exportedLogger = fakeLogger;
+	  }
+	};
+
+	exports.enableLogs = enableLogs;
+	var logger = exportedLogger;
+	exports.logger = logger;
+
+/***/ },
+/* 99 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * ID3 parser
+	 */
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	var _utilsLogger = __webpack_require__(98);
+
+	//import Hex from '../utils/hex';
+
+	var ID3 = (function () {
+	    function ID3(data) {
+	        _classCallCheck(this, ID3);
+
+	        this._hasTimeStamp = false;
+	        var offset = 0,
+	            byte1,
+	            byte2,
+	            byte3,
+	            byte4,
+	            tagSize,
+	            endPos,
+	            header,
+	            len;
+	        do {
+	            header = this.readUTF(data, offset, 3);
+	            offset += 3;
+	            // first check for ID3 header
+	            if (header === 'ID3') {
+	                // skip 24 bits
+	                offset += 3;
+	                // retrieve tag(s) length
+	                byte1 = data[offset++] & 0x7f;
+	                byte2 = data[offset++] & 0x7f;
+	                byte3 = data[offset++] & 0x7f;
+	                byte4 = data[offset++] & 0x7f;
+	                tagSize = (byte1 << 21) + (byte2 << 14) + (byte3 << 7) + byte4;
+	                endPos = offset + tagSize;
+	                //logger.log(`ID3 tag found, size/end: ${tagSize}/${endPos}`);
+
+	                // read ID3 tags
+	                this._parseID3Frames(data, offset, endPos);
+	                offset = endPos;
+	            } else if (header === '3DI') {
+	                // http://id3.org/id3v2.4.0-structure chapter 3.4.   ID3v2 footer
+	                offset += 7;
+	                _utilsLogger.logger.log('3DI footer found, end: ' + offset);
+	            } else {
+	                offset -= 3;
+	                len = offset;
+	                if (len) {
+	                    //logger.log(`ID3 len: ${len}`);
+	                    if (!this.hasTimeStamp) {
+	                        _utilsLogger.logger.warn('ID3 tag found, but no timestamp');
+	                    }
+	                    this._length = len;
+	                }
+	                return;
+	            }
+	        } while (true);
+	    }
+
+	    _createClass(ID3, [{
+	        key: 'readUTF',
+	        value: function readUTF(data, start, len) {
+
+	            var result = '',
+	                offset = start,
+	                end = start + len;
+	            do {
+	                result += String.fromCharCode(data[offset++]);
+	            } while (offset < end);
+	            return result;
+	        }
+	    }, {
+	        key: '_parseID3Frames',
+	        value: function _parseID3Frames(data, offset, endPos) {
+	            var tagId, tagLen, tagStart, tagFlags, timestamp;
+	            while (offset + 8 <= endPos) {
+	                tagId = this.readUTF(data, offset, 4);
+	                offset += 4;
+
+	                tagLen = data[offset++] << 24 + data[offset++] << 16 + data[offset++] << 8 + data[offset++];
+
+	                tagFlags = data[offset++] << 8 + data[offset++];
+
+	                tagStart = offset;
+	                //logger.log("ID3 tag id:" + tagId);
+	                switch (tagId) {
+	                    case 'PRIV':
+	                        //logger.log('parse frame:' + Hex.hexDump(data.subarray(offset,endPos)));
+	                        // owner should be "com.apple.streaming.transportStreamTimestamp"
+	                        if (this.readUTF(data, offset, 44) === 'com.apple.streaming.transportStreamTimestamp') {
+	                            offset += 44;
+	                            // smelling even better ! we found the right descriptor
+	                            // skip null character (string end) + 3 first bytes
+	                            offset += 4;
+
+	                            // timestamp is 33 bit expressed as a big-endian eight-octet number, with the upper 31 bits set to zero.
+	                            var pts33Bit = data[offset++] & 0x1;
+	                            this._hasTimeStamp = true;
+
+	                            timestamp = ((data[offset++] << 23) + (data[offset++] << 15) + (data[offset++] << 7) + data[offset++]) / 45;
+
+	                            if (pts33Bit) {
+	                                timestamp += 47721858.84; // 2^32 / 90
+	                            }
+	                            timestamp = Math.round(timestamp);
+	                            _utilsLogger.logger.trace('ID3 timestamp found: ' + timestamp);
+	                            this._timeStamp = timestamp;
+	                        }
+	                        break;
+	                    default:
+	                        break;
+	                }
+	            }
+	        }
+	    }, {
+	        key: 'hasTimeStamp',
+	        get: function get() {
+	            return this._hasTimeStamp;
+	        }
+	    }, {
+	        key: 'timeStamp',
+	        get: function get() {
+	            return this._timeStamp;
+	        }
+	    }, {
+	        key: 'length',
+	        get: function get() {
+	            return this._length;
+	        }
+	    }]);
+
+	    return ID3;
+	})();
+
+	exports['default'] = ID3;
+	module.exports = exports['default'];
+
+/***/ },
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -14462,13 +14974,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _expGolomb = __webpack_require__(98);
+	var _expGolomb = __webpack_require__(101);
 
 	var _expGolomb2 = _interopRequireDefault(_expGolomb);
 
 	// import Hex from '../utils/hex';
 
-	var _utilsLogger = __webpack_require__(99);
+	var _utilsLogger = __webpack_require__(98);
 
 	var _errors = __webpack_require__(89);
 
@@ -15053,7 +15565,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      adtsChanelConfig = (data[offset + 2] & 0x01) << 2;
 	      // byte 3
 	      adtsChanelConfig |= (data[offset + 3] & 0xC0) >>> 6;
-	      _utilsLogger.logger.log('manifest codec:' + audioCodec + ',ADTS data:type:' + adtsObjectType + ',sampleingIndex:' + adtsSampleingIndex + '[' + adtsSampleingRates[adtsSampleingIndex] + 'kHz],channelConfig:' + adtsChanelConfig);
+	      _utilsLogger.logger.log('manifest codec:' + audioCodec + ',ADTS data:type:' + adtsObjectType + ',sampleingIndex:' + adtsSampleingIndex + '[' + adtsSampleingRates[adtsSampleingIndex] + 'Hz],channelConfig:' + adtsChanelConfig);
 	      // firefox: freq less than 24kHz = AAC SBR (HE-AAC)
 	      if (userAgent.indexOf('firefox') !== -1) {
 	        if (adtsSampleingIndex >= 6) {
@@ -15086,8 +15598,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // multiply frequency by 2 (see table below, equivalent to substract 3)
 	            adtsExtensionSampleingIndex = adtsSampleingIndex - 3;
 	          } else {
-	            // if (manifest codec is AAC) AND (frequency less than 24kHz OR nb channel is 1)
-	            if (audioCodec && audioCodec.indexOf('mp4a.40.2') !== -1 && (adtsSampleingIndex >= 6 || adtsChanelConfig === 1)) {
+	            // if (manifest codec is AAC) AND (frequency less than 24kHz OR nb channel is 1) OR (manifest codec not specified and mono audio)
+	            // Chrome fails to play back with AAC LC mono when initialized with HE-AAC.  This is not a problem with stereo.
+	            if (audioCodec && audioCodec.indexOf('mp4a.40.2') !== -1 && (adtsSampleingIndex >= 6 || adtsChanelConfig === 1) || !audioCodec && adtsChanelConfig === 1) {
 	              adtsObjectType = 2;
 	              config = new Array(2);
 	            }
@@ -15169,7 +15682,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 98 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -15186,7 +15699,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _utilsLogger = __webpack_require__(99);
+	var _utilsLogger = __webpack_require__(98);
 
 	var ExpGolomb = (function () {
 	  function ExpGolomb(data) {
@@ -15511,92 +16024,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 99 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	function noop() {}
-
-	var fakeLogger = {
-	  trace: noop,
-	  debug: noop,
-	  log: noop,
-	  warn: noop,
-	  info: noop,
-	  error: noop
-	};
-
-	var exportedLogger = fakeLogger;
-
-	//let lastCallTime;
-	// function formatMsgWithTimeInfo(type, msg) {
-	//   const now = Date.now();
-	//   const diff = lastCallTime ? '+' + (now - lastCallTime) : '0';
-	//   lastCallTime = now;
-	//   msg = (new Date(now)).toISOString() + ' | [' +  type + '] > ' + msg + ' ( ' + diff + ' ms )';
-	//   return msg;
-	// }
-
-	function formatMsg(type, msg) {
-	  msg = '[' + type + '] > ' + msg;
-	  return msg;
-	}
-
-	function consolePrintFn(type) {
-	  var func = window.console[type];
-	  if (func) {
-	    return function () {
-	      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	        args[_key] = arguments[_key];
-	      }
-
-	      if (args[0]) {
-	        args[0] = formatMsg(type, args[0]);
-	      }
-	      func.apply(window.console, args);
-	    };
-	  }
-	  return noop;
-	}
-
-	function exportLoggerFunctions(debugConfig) {
-	  for (var _len2 = arguments.length, functions = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-	    functions[_key2 - 1] = arguments[_key2];
-	  }
-
-	  functions.forEach(function (type) {
-	    exportedLogger[type] = debugConfig[type] ? debugConfig[type].bind(debugConfig) : consolePrintFn(type);
-	  });
-	}
-
-	var enableLogs = function enableLogs(debugConfig) {
-	  if (debugConfig === true || typeof debugConfig === 'object') {
-	    exportLoggerFunctions(debugConfig,
-	    // Remove out from list here to hard-disable a log-level
-	    //'trace',
-	    'debug', 'log', 'info', 'warn', 'error');
-	    // Some browsers don't allow to use bind on console object anyway
-	    // fallback to default if needed
-	    try {
-	      exportedLogger.log();
-	    } catch (e) {
-	      exportedLogger = fakeLogger;
-	    }
-	  } else {
-	    exportedLogger = fakeLogger;
-	  }
-	};
-
-	exports.enableLogs = enableLogs;
-	var logger = exportedLogger;
-	exports.logger = logger;
-
-/***/ },
-/* 100 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* demuxer web worker.
@@ -15620,11 +16048,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _events3 = __webpack_require__(101);
+	var _events3 = __webpack_require__(103);
 
 	var _events4 = _interopRequireDefault(_events3);
 
-	var _remuxMp4Remuxer = __webpack_require__(102);
+	var _remuxMp4Remuxer = __webpack_require__(104);
 
 	var _remuxMp4Remuxer2 = _interopRequireDefault(_remuxMp4Remuxer);
 
@@ -15706,7 +16134,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 101 */
+/* 103 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -15974,7 +16402,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 102 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -15997,9 +16425,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _utilsLogger = __webpack_require__(99);
+	var _utilsLogger = __webpack_require__(98);
 
-	var _remuxMp4Generator = __webpack_require__(103);
+	var _remuxMp4Generator = __webpack_require__(105);
 
 	var _remuxMp4Generator2 = _interopRequireDefault(_remuxMp4Generator);
 
@@ -16406,7 +16834,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 103 */
+/* 105 */
 /***/ function(module, exports) {
 
 	/**
@@ -16889,7 +17317,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 104 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -16908,13 +17336,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _aes128Decrypter = __webpack_require__(105);
+	var _aes128Decrypter = __webpack_require__(107);
 
 	var _aes128Decrypter2 = _interopRequireDefault(_aes128Decrypter);
 
 	var _errors = __webpack_require__(89);
 
-	var _utilsLogger = __webpack_require__(99);
+	var _utilsLogger = __webpack_require__(98);
 
 	var Decrypter = (function () {
 	  function Decrypter(hls) {
@@ -16992,7 +17420,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 105 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -17045,7 +17473,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _aes = __webpack_require__(106);
+	var _aes = __webpack_require__(108);
 
 	var _aes2 = _interopRequireDefault(_aes);
 
@@ -17179,7 +17607,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 106 */
+/* 108 */
 /***/ function(module, exports) {
 
 	/*
@@ -17423,7 +17851,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 107 */
+/* 109 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -17471,7 +17899,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 108 */
+/* 110 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -17519,7 +17947,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = BinarySearch;
 
 /***/ },
-/* 109 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -17536,7 +17964,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _utilsLogger = __webpack_require__(99);
+	var _utilsLogger = __webpack_require__(98);
 
 	var LevelHelper = (function () {
 	  function LevelHelper() {
@@ -17668,7 +18096,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 110 */
+/* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -17691,7 +18119,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _utilsLogger = __webpack_require__(99);
+	var _utilsLogger = __webpack_require__(98);
 
 	var _errors = __webpack_require__(89);
 
@@ -17956,7 +18384,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 111 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -17973,7 +18401,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _utilsLogger = __webpack_require__(99);
+	var _utilsLogger = __webpack_require__(98);
 
 	var XhrLoader = (function () {
 	  function XhrLoader(config) {
@@ -18092,7 +18520,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 112 */
+/* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -18189,15 +18617,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 113 */
+/* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(114);
+	module.exports = __webpack_require__(116);
 
 /***/ },
-/* 114 */
+/* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -18228,7 +18656,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseStyler2 = _interopRequireDefault(_baseStyler);
 
-	var _publicStyleScss = __webpack_require__(115);
+	var _publicStyleScss = __webpack_require__(117);
 
 	var _publicStyleScss2 = _interopRequireDefault(_publicStyleScss);
 
@@ -18286,7 +18714,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 115 */
+/* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(30)();
@@ -18300,15 +18728,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 116 */
+/* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(117);
+	module.exports = __webpack_require__(119);
 
 /***/ },
-/* 117 */
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18345,11 +18773,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
 
-	var _publicStyleScss = __webpack_require__(118);
+	var _publicStyleScss = __webpack_require__(120);
 
 	var _publicStyleScss2 = _interopRequireDefault(_publicStyleScss);
 
-	var _publicErrorHtml = __webpack_require__(119);
+	var _publicErrorHtml = __webpack_require__(121);
 
 	var _publicErrorHtml2 = _interopRequireDefault(_publicErrorHtml);
 
@@ -18464,7 +18892,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 118 */
+/* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(30)();
@@ -18478,21 +18906,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 119 */
+/* 121 */
 /***/ function(module, exports) {
 
 	module.exports = "<canvas data-no-op-canvas></canvas>\n<p data-no-op-msg><%=message%><p>\n";
 
 /***/ },
-/* 120 */
+/* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(121);
+	module.exports = __webpack_require__(123);
 
 /***/ },
-/* 121 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -18515,7 +18943,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseUi_container_plugin = __webpack_require__(122);
+	var _baseUi_container_plugin = __webpack_require__(124);
 
 	var _baseUi_container_plugin2 = _interopRequireDefault(_baseUi_container_plugin);
 
@@ -18531,11 +18959,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseTemplate2 = _interopRequireDefault(_baseTemplate);
 
-	var _publicSpinnerHtml = __webpack_require__(123);
+	var _publicSpinnerHtml = __webpack_require__(125);
 
 	var _publicSpinnerHtml2 = _interopRequireDefault(_publicSpinnerHtml);
 
-	var _publicSpinnerScss = __webpack_require__(124);
+	var _publicSpinnerScss = __webpack_require__(126);
 
 	var _publicSpinnerScss2 = _interopRequireDefault(_publicSpinnerScss);
 
@@ -18625,7 +19053,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 122 */
+/* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -18725,13 +19153,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 123 */
+/* 125 */
 /***/ function(module, exports) {
 
 	module.exports = "<div data-bounce1></div><div data-bounce2></div><div data-bounce3></div>\n";
 
 /***/ },
-/* 124 */
+/* 126 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(30)();
@@ -18745,15 +19173,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 125 */
+/* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(126);
+	module.exports = __webpack_require__(128);
 
 /***/ },
-/* 126 */
+/* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -18776,7 +19204,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseContainer_plugin = __webpack_require__(127);
+	var _baseContainer_plugin = __webpack_require__(129);
 
 	var _baseContainer_plugin2 = _interopRequireDefault(_baseContainer_plugin);
 
@@ -18916,7 +19344,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 127 */
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19012,15 +19440,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 128 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(129);
+	module.exports = __webpack_require__(131);
 
 /***/ },
-/* 129 */
+/* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -19043,7 +19471,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseUi_container_plugin = __webpack_require__(122);
+	var _baseUi_container_plugin = __webpack_require__(124);
 
 	var _baseUi_container_plugin2 = _interopRequireDefault(_baseUi_container_plugin);
 
@@ -19059,11 +19487,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseTemplate2 = _interopRequireDefault(_baseTemplate);
 
-	var _publicWatermarkScss = __webpack_require__(130);
+	var _publicWatermarkScss = __webpack_require__(132);
 
 	var _publicWatermarkScss2 = _interopRequireDefault(_publicWatermarkScss);
 
-	var _publicWatermarkHtml = __webpack_require__(131);
+	var _publicWatermarkHtml = __webpack_require__(133);
 
 	var _publicWatermarkHtml2 = _interopRequireDefault(_publicWatermarkHtml);
 
@@ -19137,7 +19565,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 130 */
+/* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(30)();
@@ -19151,21 +19579,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 131 */
+/* 133 */
 /***/ function(module, exports) {
 
 	module.exports = "<div data-watermark data-watermark-<%=position %>><img src=\"<%= imageUrl %>\"></div>\n";
 
 /***/ },
-/* 132 */
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(133);
+	module.exports = __webpack_require__(135);
 
 /***/ },
-/* 133 */
+/* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -19188,7 +19616,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseUi_container_plugin = __webpack_require__(122);
+	var _baseUi_container_plugin = __webpack_require__(124);
 
 	var _baseUi_container_plugin2 = _interopRequireDefault(_baseUi_container_plugin);
 
@@ -19208,11 +19636,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _componentsMediator2 = _interopRequireDefault(_componentsMediator);
 
-	var _publicPosterScss = __webpack_require__(134);
+	var _publicPosterScss = __webpack_require__(136);
 
 	var _publicPosterScss2 = _interopRequireDefault(_publicPosterScss);
 
-	var _publicPosterHtml = __webpack_require__(135);
+	var _publicPosterHtml = __webpack_require__(137);
 
 	var _publicPosterHtml2 = _interopRequireDefault(_publicPosterHtml);
 
@@ -19372,7 +19800,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 134 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(30)();
@@ -19386,21 +19814,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 135 */
+/* 137 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"play-wrapper\" data-poster>\n  <span class=\"poster-icon play\" data-poster />\n</div>\n";
 
 /***/ },
-/* 136 */
+/* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(137);
+	module.exports = __webpack_require__(139);
 
 /***/ },
-/* 137 */
+/* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -19423,7 +19851,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseContainer_plugin = __webpack_require__(127);
+	var _baseContainer_plugin = __webpack_require__(129);
 
 	var _baseContainer_plugin2 = _interopRequireDefault(_baseContainer_plugin);
 
@@ -19593,15 +20021,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 138 */
+/* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(139);
+	module.exports = __webpack_require__(141);
 
 /***/ },
-/* 139 */
+/* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -19624,7 +20052,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseContainer_plugin = __webpack_require__(127);
+	var _baseContainer_plugin = __webpack_require__(129);
 
 	var _baseContainer_plugin2 = _interopRequireDefault(_baseContainer_plugin);
 
@@ -19692,15 +20120,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 140 */
+/* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(141);
+	module.exports = __webpack_require__(143);
 
 /***/ },
-/* 141 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19719,7 +20147,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseUi_core_plugin = __webpack_require__(142);
+	var _baseUi_core_plugin = __webpack_require__(144);
 
 	var _baseUi_core_plugin2 = _interopRequireDefault(_baseUi_core_plugin);
 
@@ -19739,11 +20167,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _baseEvents2 = _interopRequireDefault(_baseEvents);
 
-	var _publicDvr_controlsScss = __webpack_require__(143);
+	var _publicDvr_controlsScss = __webpack_require__(145);
 
 	var _publicDvr_controlsScss2 = _interopRequireDefault(_publicDvr_controlsScss);
 
-	var _publicIndexHtml = __webpack_require__(145);
+	var _publicIndexHtml = __webpack_require__(147);
 
 	var _publicIndexHtml2 = _interopRequireDefault(_publicIndexHtml);
 
@@ -19864,7 +20292,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 142 */
+/* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19956,7 +20384,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 143 */
+/* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(30)();
@@ -19964,33 +20392,33 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "@font-face {\n  font-family: \"Roboto\";\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Roboto\"), local(\"Roboto-Regular\"), url(" + __webpack_require__(144) + ") format(\"truetype\"); }\n\n.dvr-controls[data-dvr-controls] {\n  display: inline-block;\n  float: left;\n  color: #fff;\n  line-height: 32px;\n  font-size: 10px;\n  font-weight: bold;\n  margin-left: 6px; }\n  .dvr-controls[data-dvr-controls] .live-info {\n    cursor: default;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif; }\n    .dvr-controls[data-dvr-controls] .live-info:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #ff0101; }\n    .dvr-controls[data-dvr-controls] .live-info.disabled {\n      opacity: 0.3; }\n      .dvr-controls[data-dvr-controls] .live-info.disabled:before {\n        background-color: #fff; }\n  .dvr-controls[data-dvr-controls] .live-button {\n    cursor: pointer;\n    outline: none;\n    display: none;\n    border: 0;\n    color: #fff;\n    background-color: transparent;\n    height: 32px;\n    padding: 0;\n    opacity: 0.7;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease false;\n    -o-transition: all 0.1s ease false;\n    transition: all 0.1s ease; }\n    .dvr-controls[data-dvr-controls] .live-button:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #fff; }\n    .dvr-controls[data-dvr-controls] .live-button:hover {\n      opacity: 1;\n      text-shadow: rgba(255, 255, 255, 0.75) 0 0 5px; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-info {\n  display: none; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-button {\n  display: block; }\n\n.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #005aff; }\n\n.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #ff0101; }\n\n.seek-time[data-seek-time] span[data-duration] {\n  position: relative;\n  color: rgba(255, 255, 255, 0.5);\n  font-size: 10px;\n  padding-right: 7px; }\n  .seek-time[data-seek-time] span[data-duration]:before {\n    content: \"|\";\n    margin-right: 7px; }\n", ""]);
+	exports.push([module.id, "@font-face {\n  font-family: \"Roboto\";\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Roboto\"), local(\"Roboto-Regular\"), url(" + __webpack_require__(146) + ") format(\"truetype\"); }\n\n.dvr-controls[data-dvr-controls] {\n  display: inline-block;\n  float: left;\n  color: #fff;\n  line-height: 32px;\n  font-size: 10px;\n  font-weight: bold;\n  margin-left: 6px; }\n  .dvr-controls[data-dvr-controls] .live-info {\n    cursor: default;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif; }\n    .dvr-controls[data-dvr-controls] .live-info:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #ff0101; }\n    .dvr-controls[data-dvr-controls] .live-info.disabled {\n      opacity: 0.3; }\n      .dvr-controls[data-dvr-controls] .live-info.disabled:before {\n        background-color: #fff; }\n  .dvr-controls[data-dvr-controls] .live-button {\n    cursor: pointer;\n    outline: none;\n    display: none;\n    border: 0;\n    color: #fff;\n    background-color: transparent;\n    height: 32px;\n    padding: 0;\n    opacity: 0.7;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease false;\n    -o-transition: all 0.1s ease false;\n    transition: all 0.1s ease; }\n    .dvr-controls[data-dvr-controls] .live-button:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #fff; }\n    .dvr-controls[data-dvr-controls] .live-button:hover {\n      opacity: 1;\n      text-shadow: rgba(255, 255, 255, 0.75) 0 0 5px; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-info {\n  display: none; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-button {\n  display: block; }\n\n.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #005aff; }\n\n.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #ff0101; }\n\n.seek-time[data-seek-time] span[data-duration] {\n  position: relative;\n  color: rgba(255, 255, 255, 0.5);\n  font-size: 10px;\n  padding-right: 7px; }\n  .seek-time[data-seek-time] span[data-duration]:before {\n    content: \"|\";\n    margin-right: 7px; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 144 */
+/* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "38861cba61c66739c1452c3a71e39852.ttf";
 
 /***/ },
-/* 145 */
+/* 147 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"live-info\">LIVE</div>\n<button class=\"live-button\">BACK TO LIVE</button>\n";
 
 /***/ },
-/* 146 */
+/* 148 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(147);
+	module.exports = __webpack_require__(149);
 
 /***/ },
-/* 147 */
+/* 149 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20009,7 +20437,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _baseCore_plugin = __webpack_require__(148);
+	var _baseCore_plugin = __webpack_require__(150);
 
 	var _baseCore_plugin2 = _interopRequireDefault(_baseCore_plugin);
 
@@ -20133,7 +20561,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 148 */
+/* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
