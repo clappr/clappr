@@ -403,7 +403,12 @@ Events.PLAYBACK_LEVEL_SWITCH = 'playback:level:switch'
  * @event CORE_OPTIONS_CHANGE
  */
 Events.CORE_OPTIONS_CHANGE = 'core:options:change'
-
+/**
+ * Fired after creating containers, when the core is ready
+ *
+ * @event CORE_READY
+ */
+Events.CORE_READY = 'core:ready'
 
 // Container Events
 /**
