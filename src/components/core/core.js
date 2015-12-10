@@ -275,7 +275,7 @@ export default class Core extends UIObject {
    */
   configure(options) {
     this.options = $.extend(this.options, options)
-    var sources = this.options.source || this.options.sources
+    var sources = options.source || options.sources
 
     if (sources) {
       this.load(sources)
