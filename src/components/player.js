@@ -142,6 +142,7 @@ export default class Player extends BaseObject {
   }
 
   addEventListeners() {
+    this.listenTo(this.core, Events.CORE_READY, this.onReady)
     this.listenTo(this.core.mediaControl,  Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
     var container = this.core.mediaControl.container
     if (!!container) {
@@ -159,6 +160,10 @@ export default class Player extends BaseObject {
   containerChanged() {
     this.stopListening()
     this.addEventListeners()
+  }
+
+  onReady() {
+    this.trigger(Events.PLAYER_READY)
   }
 
   onVolumeUpdate(volume) {

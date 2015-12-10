@@ -201,6 +201,12 @@ Object.keys(listenMethods).forEach(function(method) {
 
 // PLAYER EVENTS
 /**
+ * Fired when the player is ready on startup
+ *
+ * @event PLAYER_READY
+ */
+Events.PLAYER_READY = 'ready'
+/**
  * Fired when player resizes
  *
  * @event PLAYER_RESIZE
