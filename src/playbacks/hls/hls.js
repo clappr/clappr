@@ -11,7 +11,7 @@ import Browser from 'components/browser'
 const AUTO = -1
 
 export default class HLS extends HTML5VideoPlayback {
-  get name() { return 'hls' }
+  static get pluginName() { return 'hls' }
 
   get levels() { return this._levels || [] }
   get currentLevel() { return this._currentLevel || AUTO }

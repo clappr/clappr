@@ -26,7 +26,7 @@ MIMETYPES['ogv'] = MIMETYPES['ogg']
 MIMETYPES['3gp'] = MIMETYPES['3gpp']
 
 export default class HTML5Video extends Playback {
-  get name() { return 'html5_video' }
+  static get pluginName() { return 'html5_video' }
   get tagName() { return 'video' }
   get template() { return template(sourceHTML) }
 

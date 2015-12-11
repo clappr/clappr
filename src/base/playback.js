@@ -9,6 +9,8 @@ import UIObject from './ui_object'
  * @module base
  */
 export default class Playback extends UIObject {
+  static get pluginName() { return this.prototype.pluginName }
+
   /**
    * @method constructor
    * @param {Object} options the options object

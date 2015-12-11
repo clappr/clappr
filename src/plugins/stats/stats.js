@@ -7,7 +7,7 @@ import Events from 'base/events'
 import $ from "clappr-zepto"
 
 export default class StatsPlugin extends ContainerPlugin {
-  get name() { return 'stats' }
+  static get pluginName() { return 'stats' }
 
   constructor(container) {
     super(container)

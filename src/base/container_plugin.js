@@ -9,6 +9,8 @@ import {extend} from './utils'
  * @module base
  */
 export default class ContainerPlugin extends BaseObject {
+  static get pluginName() { return this.prototype.pluginName }
+
   constructor(container) {
     super(container.options)
     this.container = container

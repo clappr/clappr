@@ -17,7 +17,7 @@ const MAX_ATTEMPTS = 60
 const AUTO = -1
 
 export default class FlasHLS extends BaseFlashPlayback {
-  get name() { return 'flashls' }
+  static get pluginName() { return 'flashls' }
   get swfPath() { return template(hlsSwf)({baseUrl: this.baseUrl}) }
 
   get levels() { return this._levels || [] }

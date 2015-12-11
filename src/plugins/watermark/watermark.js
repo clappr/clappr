@@ -10,7 +10,7 @@ import watermarkStyle from './public/watermark.scss'
 import watermarkHTML from './public/watermark.html'
 
 export default class WaterMarkPlugin extends UIContainerPlugin {
-  get name() { return 'watermark' }
+  static get pluginName() { return 'watermark' }
 
   get template() { return template(watermarkHTML) }
 
