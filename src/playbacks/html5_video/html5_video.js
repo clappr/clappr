@@ -266,6 +266,10 @@ export default class HTML5Video extends Playback {
 
   ready() {
     this.trigger(Events.PLAYBACK_READY, this.name)
+    if (this.firstBuffer) {
+      this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
+      this.firstBuffer = this.buffering = false
+    }
   }
 
   render() {
