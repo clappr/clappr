@@ -6,7 +6,7 @@ import ContainerPlugin from 'base/container_plugin';
 import Events from 'base/events'
 
 export default class GoogleAnalytics extends ContainerPlugin {
-  get name() { return 'google_analytics' }
+  static get pluginName() { return 'google_analytics' }
   constructor(container) {
     super(container)
     if (this.container.options.gaAccount) {

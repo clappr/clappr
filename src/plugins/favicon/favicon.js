@@ -3,7 +3,7 @@ import Events from 'base/events'
 import $ from 'clappr-zepto'
 
 export default class Favicon extends CorePlugin {
-  get name() { return 'favicon' }
+  static get pluginName() { return 'favicon' }
 
   constructor(core) {
     super(core)

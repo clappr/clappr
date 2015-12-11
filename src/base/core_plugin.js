@@ -2,6 +2,8 @@ import {extend} from './utils'
 import BaseObject from './base_object'
 
 export default class CorePlugin extends BaseObject {
+  static get pluginName() { return this.prototype.pluginName }
+
   constructor(core) {
     super(core)
     this.core = core

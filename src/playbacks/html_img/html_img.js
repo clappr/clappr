@@ -7,7 +7,7 @@ import Styler from 'base/styler'
 import imgStyle from './public/style.scss'
 
 export default class HTMLImg extends Playback {
-  get name() { return 'html_img' }
+  static get pluginName() { return 'html_img' }
   get tagName() { return 'img' }
   get attributes() {
     return {

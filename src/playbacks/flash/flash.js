@@ -16,7 +16,7 @@ import flashSwf from './public/Player.swf'
 var MAX_ATTEMPTS = 60
 
 export default class Flash extends BaseFlashPlayback {
-  get name() { return 'flash' }
+  static get pluginName() { return 'flash' }
   get swfPath() { return template(flashSwf)({baseUrl: this.baseUrl}) }
 
   constructor(options) {

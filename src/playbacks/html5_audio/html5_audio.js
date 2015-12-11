@@ -8,7 +8,7 @@ import HTML5Video from 'playbacks/html5_video'
 import find from 'lodash.find'
 
 export default class HTML5Audio extends HTML5Video {
-  get name() { return 'html5_audio' }
+   static get pluginName() { return 'html5_audio' }
   get tagName() { return 'audio' }
 
   durationChange() {
@@ -39,5 +39,5 @@ HTML5Audio.canPlay = function(resourceUrl, mimeType) {
     'aac': ['audio/mp4;codecs="mp4a.40.5"'],
     'oga': ['audio/ogg']
   }
-  return HTML5Video._canPlay('audio', mimetypes, resourceUrl, mimeType)  
+  return HTML5Video._canPlay('audio', mimetypes, resourceUrl, mimeType)
 }

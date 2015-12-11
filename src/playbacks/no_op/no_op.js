@@ -7,7 +7,7 @@ import noOpStyle from './public/style.scss'
 import noOpHTML from './public/error.html'
 
 export default class NoOp extends Playback {
-  get name() { return 'no_op' }
+  static get pluginName() { return 'no_op' }
   get template() { return template(noOpHTML) }
   get attributes() {
     return {'data-no-op': ''}

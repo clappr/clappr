@@ -8,7 +8,7 @@ import Playback from 'base/playback'
 import Browser from 'components/browser'
 
 export default class ClickToPausePlugin extends ContainerPlugin {
-  get name() { return 'click_to_pause' }
+  static get pluginName() { return 'click_to_pause' }
 
   constructor(container) {
     super(container)

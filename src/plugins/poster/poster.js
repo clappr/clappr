@@ -13,7 +13,7 @@ import posterHTML from './public/poster.html'
 import $ from 'clappr-zepto'
 
 export default class PosterPlugin extends UIContainerPlugin {
-  get name() { return 'poster' }
+  static get pluginName() { return 'poster' }
   get template() { return template(posterHTML) }
 
   get attributes() {

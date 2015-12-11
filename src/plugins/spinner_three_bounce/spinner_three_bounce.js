@@ -10,7 +10,7 @@ import spinnerHTML from './public/spinner.html'
 import spinnerStyle from './public/spinner.scss'
 
 export default class SpinnerThreeBouncePlugin extends UIContainerPlugin {
-  get name() { return 'spinner' }
+  static get pluginName() { return 'spinner' }
   get attributes() {
     return {
       'data-spinner':'',

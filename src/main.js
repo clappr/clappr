@@ -34,6 +34,12 @@ import $ from 'clappr-zepto'
 
 var version = VERSION
 
+var internalPlugins = {
+  playback: ['html5_video', 'html5_audio', 'flash', 'hls', 'flashls', 'html_img', 'no_op'],
+  container: ['spinner', 'watermark', 'poster', 'stats', 'google_analytics', 'click_to_pause'],
+  core: ['dvr_controls', 'favicon']
+}
+
 export default {
     Player,
     Mediator,
@@ -62,6 +68,7 @@ export default {
     Log,
     Styler,
     version,
+    internalPlugins,
     template,
     $
 }

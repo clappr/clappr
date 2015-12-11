@@ -9,7 +9,7 @@ import $ from 'clappr-zepto'
 
 export default class DVRControls extends UICorePlugin {
   get template() { return template(dvrHTML) }
-  get name() { return 'dvr_controls' }
+  static get pluginName() { return 'dvr_controls' }
   get events() {
     return {
       'click .live-button': 'click'
