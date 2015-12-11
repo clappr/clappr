@@ -99,8 +99,11 @@ export default class Player extends BaseObject {
    * define a poster by adding its address `poster: 'http://url/img.png'`. It will appear after video embed, disappear on play and go back when user stops the video.
    * @param {String} [options.playbackNotSupportedMessage]
    * define a custom message to be displayed when a playback is not supported.
+   * @param {Object} readyCallback (optional)
+   * If provided this will be called when the player has finished loading (just before the READY event is fired).
+   * It will be provided the player instance as the first argument.
    */
-  constructor(options) {
+  constructor(options, readyCallback) {
     super(options)
     var defaultOptions = {playerId: uniqueId(""), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl}
     this.options = $.extend(defaultOptions, options)
@@ -110,6 +113,7 @@ export default class Player extends BaseObject {
     this.playerInfo = PlayerInfo.getInstance(this.options.playerId)
     this.playerInfo.currentSize = {width: options.width, height: options.height}
     this.playerInfo.options = this.options
+    this.readyCallback = readyCallback
     if (this.options.parentId) {
       this.setParentId(this.options.parentId)
     }
@@ -163,6 +167,9 @@ export default class Player extends BaseObject {
   }
 
   onReady() {
+    if (this.readyCallback) {
+      this.readyCallback(this)
+    }
     this.trigger(Events.PLAYER_READY)
   }
 
