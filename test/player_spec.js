@@ -44,7 +44,7 @@ describe('Player', function() {
 
       normalizedSources = player.normalizeSources({sources: []})
       expect(normalizedSources).to.have.length(1)
-      expect(normalizedSources[0]).to.be.equal('no.op')
+      expect(JSON.stringify(normalizedSources[0])).to.be.equal(JSON.stringify({source: "", mimeType: ""}))
     })
 
     it('should trigger error events', function() {
