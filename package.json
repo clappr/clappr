@@ -9,7 +9,7 @@
     "build": "node_modules/.bin/webpack --progress",
     "watch": "node_modules/.bin/webpack --progress --watch",
     "test": "node_modules/.bin/karma start --single-run",
-    "start": "node_modules/.bin/webpack-dev-server --content-base public/ --output-public-path latest/ --hot",
+    "start": "node_modules/.bin/webpack-dev-server --host 0.0.0.0 --content-base public/ --output-public-path latest/ --hot",
     "lock": "rm -rf npm-shrinkwrap.json node_modules && npm install --silent && npm shrinkwrap"
   },
   "repository": {
