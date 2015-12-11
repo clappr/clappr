@@ -144,6 +144,14 @@ export default class Player extends BaseObject {
     }
   }
 
+  /**
+   * Determine if the player is ready.
+   * @return {boolean} true if the player is ready. ie PLAYER_READY event has fired
+   */
+  isReady() {
+    return !!this.ready
+  }
+
   addEventListeners() {
     if (!this.core.isReady()) {
       this.listenToOnce(this.core, Events.CORE_READY, this.onReady)
@@ -168,6 +176,7 @@ export default class Player extends BaseObject {
   }
 
   onReady() {
+    this.ready = true
     this.trigger(Events.PLAYER_READY)
   }
 
