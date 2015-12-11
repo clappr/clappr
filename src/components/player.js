@@ -139,10 +139,15 @@ export default class Player extends BaseObject {
     this.options.parentElement = element
     this.core = this.coreFactory.create()
     this.addEventListeners()
+    if (this.core.isReady()) {
+      this.onReady()
+    }
   }
 
   addEventListeners() {
-    this.listenTo(this.core, Events.CORE_READY, this.onReady)
+    if (!this.core.isReady()) {
+      this.listenToOnce(this.core, Events.CORE_READY, this.onReady)
+    }
     this.listenTo(this.core.mediaControl,  Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
     var container = this.core.mediaControl.container
     if (!!container) {
