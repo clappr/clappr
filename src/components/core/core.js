@@ -48,7 +48,7 @@ export default class Core extends UIObject {
     this.options = options
     this.plugins = []
     this.containers = []
-    this.createContainers(options)
+    this.setupMediaControl(this.getCurrentContainer())
     //FIXME fullscreen api sucks
     $(document).bind('fullscreenchange', () => this.exit())
     $(document).bind('MSFullscreenChange', () => this.exit())
@@ -145,6 +145,7 @@ export default class Core extends UIObject {
     this.options.mimeType = mimeType
     sources = sources && sources.constructor === Array ? sources : [sources.toString()];
     this.containers.forEach((container) => container.destroy())
+    this.mediaControl.container = null
     this.containerFactory.options = $.extend(this.options, {sources})
     this.containerFactory.createContainers().then((containers) => {
       this.setupContainers(containers)
@@ -188,22 +189,25 @@ export default class Core extends UIObject {
 
   appendContainer(container) {
     this.listenTo(container, Events.CONTAINER_DESTROYED, this.removeContainer)
-    this.el.appendChild(container.render().el)
     this.containers.push(container)
   }
 
   setupContainers(containers) {
     containers.map(this.appendContainer.bind(this))
+    this.trigger(Events.CORE_CONTAINERS_CREATED)
+    this.renderContainers()
     this.setupMediaControl(this.getCurrentContainer())
     this.render()
     this.$el.appendTo(this.options.parentElement)
-    this.trigger(Events.CORE_CONTAINERS_CREATED)
     return containers
+  }
+
+  renderContainers() {
+    this.containers.map((container) => this.el.appendChild(container.render().el))
   }
 
   createContainer(source, options) {
     var container = this.containerFactory.createContainer(source, options)
-    this.appendContainer(container)
     return container
   }
 
@@ -222,12 +226,12 @@ export default class Core extends UIObject {
     if(options.mediacontrol && options.mediacontrol.external) {
       return new options.mediacontrol.external(options);
     } else {
-      return new MediaControl(options);
+      return new MediaControl(options).render();
     }
   }
 
   getCurrentContainer() {
-    if (!this.mediacontrol) {
+    if (!this.mediaControl || !this.mediaControl.container) {
       return this.containers[0]
     }
     return this.mediaControl.container
@@ -238,7 +242,8 @@ export default class Core extends UIObject {
   }
 
   getPlaybackType() {
-    return this.getCurrentContainer().getPlaybackType()
+    var container = this.getCurrentContainer()
+    return container && container.getPlaybackType()
   }
 
   toggleFullscreen() {
@@ -303,8 +308,6 @@ export default class Core extends UIObject {
 
   render() {
     var style = Styler.getStyleFor(coreStyle);
-    //FIXME
-    //this.$el.empty()
     this.$el.append(style)
     this.$el.append(this.mediaControl.render().el)
 
