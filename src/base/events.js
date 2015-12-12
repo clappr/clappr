@@ -364,6 +364,8 @@ Events.PLAYBACK_BITRATE = 'playback:bitrate'
  * @event PLAYBACK_LEVELS_AVAILABLE
  * @param {Array} levels
  * the ordered levels, each one with the following format `{id: 1, label: '500kbps'}` ps: id should be a number >= 0
+ * @param {Number} initial
+ * the initial level otherwise -1 (AUTO)
  */
 Events.PLAYBACK_LEVELS_AVAILABLE = 'playback:levels:available'
 /**
