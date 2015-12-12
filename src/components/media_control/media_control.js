@@ -294,7 +294,7 @@ export default class MediaControl extends UIObject {
   }
 
   setVolume(value) {
-    if (value && this.container) {
+    if (value !== undefined && this.container) {
       this.currentVolume = Math.min(100, Math.max(value, 0))
       this.container.setVolume(this.currentVolume)
       this.onVolumeChanged(this.currentVolume)
