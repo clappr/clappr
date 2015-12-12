@@ -5,9 +5,8 @@ import Events from 'base/events'
 export default class FallbackMultiSource extends CorePlugin {
   get name() { return 'multi_source' }
 
-  constructor(core) {
-    super(core)
-    this.onContainersCreated()
+  bindEvents() {
+    this.listenToOnce(this.core, Events.CORE_CONTAINERS_CREATED, this.onContainersCreated)
   }
 
   onContainersCreated() {
