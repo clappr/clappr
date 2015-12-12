@@ -77,9 +77,11 @@ export default class DVRControls extends UICorePlugin {
     if (this.shouldRender()) {
       this.core.mediaControl.$el.addClass('live')
       this.core.mediaControl.$('.media-control-left-panel[data-media-control]').append(this.$el)
-      this.core.mediaControl.seekTime.showDuration()
+      if (this.core.mediaControl.seekTime) {
+        this.core.mediaControl.seekTime.showDuration()
+      }
     }
-    else {
+    else if (this.core.mediaControl.seekTime) {
       this.core.mediaControl.seekTime.hideDuration()
     }
     return this
