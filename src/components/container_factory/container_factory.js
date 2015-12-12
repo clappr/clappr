@@ -28,14 +28,30 @@ export default class ContainerFactory extends BaseObject {
     });
   }
 
-  findPlaybackPlugin(source) {
-    return find(this.loader.playbackPlugins, (p) => { return p.canPlay(source.toString(), this.options.mimeType) })
+  findPlaybackPlugin(source, mimeType) {
+    return find(this.loader.playbackPlugins, (p) => { return p.canPlay(source, mimeType) })
   }
 
   createContainer(source) {
-    if (!!source.match(/^\/\//)) source = window.location.protocol + source
-    var options = $.extend({}, this.options, {src: source})
-    var playbackPlugin = this.findPlaybackPlugin(source)
+    var resolvedSource = null
+    var mimeType = this.options.mimeType
+    if (typeof source === "string" || source instanceof String) {
+      resolvedSource = source.toString()
+    }
+    else {
+      resolvedSource = source.source.toString()
+      if (source.mimeType) {
+        mimeType = source.mimeType
+      }
+    }
+    
+    if (!!resolvedSource.match(/^\/\//)) resolvedSource = window.location.protocol + resolvedSource
+
+    var options = $.extend({}, this.options, {
+      src: resolvedSource,
+      mimeType: mimeType
+    })
+    var playbackPlugin = this.findPlaybackPlugin(resolvedSource, mimeType)
     var playback = new playbackPlugin(options)
 
     options = $.extend(options, {playback: playback})
@@ -43,7 +59,7 @@ export default class ContainerFactory extends BaseObject {
     var container = new Container(options)
     var defer = $.Deferred()
     defer.promise(container)
-    this.addContainerPlugins(container, source)
+    this.addContainerPlugins(container, resolvedSource)
     this.listenToOnce(container, Events.CONTAINER_READY, () => defer.resolve(container))
     return container
   }

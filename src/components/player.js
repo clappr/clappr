@@ -59,6 +59,10 @@ export default class Player extends BaseObject {
    * the id of the element on the page that the player should be inserted into
    * @param {Object} [options.parent]
    * a reference to a dom element that the player should be inserted into
+   * @param {String} [options.source]
+   * The media source URL, or {source: <<source URL>>, mimeType: <<source mime type>>}
+   * @param {Object} [options.sources]
+   * An array of media source URL's, or an array of {source: <<source URL>>, mimeType: <<source mime type>>}
    * @param {Boolean} [options.autoPlay]
    * automatically play after page load **default**: `false`
    * @param {Boolean} [options.loop]
@@ -217,8 +221,8 @@ export default class Player extends BaseObject {
   }
 
   normalizeSources(options) {
-    var sources = options.sources || (options.source !== undefined? [options.source.toString()] : [])
-    return sources.length === 0 ? ['no.op'] : sources
+    var sources = options.sources || (options.source !== undefined? [options.source] : [])
+    return sources.length === 0 ? [{source:"", mimeType:""}] : sources
   }
 
   /**
@@ -238,6 +242,7 @@ export default class Player extends BaseObject {
    * loads a new source.
    * @method load
    * @param {Object} sources source or sources of video.
+   * sources can be a string or {source: <<source URL>>, mimeType: <<source mime type>>}
    * @param {Object} mimeType a mime type, example: `'application/vnd.apple.mpegurl'`
    *
    */
