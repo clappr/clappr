@@ -13,7 +13,6 @@ import Kibo from 'base/kibo'
 import Styler from 'base/styler'
 import UIObject from 'base/ui_object'
 import Browser from 'components/browser'
-import SeekTime from 'components/seek_time'
 import Mediator from 'components/mediator'
 import template from 'base/template'
 import Playback from 'base/playback'
@@ -67,7 +66,6 @@ export default class MediaControl extends UIObject {
     this.mute = this.options.mute
     this.persistConfig = this.options.persistConfig
     this.container = options.container
-    this.seekTime = new SeekTime(this)
     this.currentPositionValue = null
     this.currentDurationValue = null
     var initialVolume = (this.persistConfig) ? Config.restore("volume") : 100
@@ -394,11 +392,6 @@ export default class MediaControl extends UIObject {
     this.keepVisible = true
   }
 
-  remove() {
-    this.seekTime.remove()
-    super.remove()
-  }
-
   resetKeepVisible() {
     this.keepVisible = false
   }
@@ -595,7 +588,6 @@ export default class MediaControl extends UIObject {
     })
 
     this.parseColors()
-    this.seekTime.render()
     this.highDefinitionUpdate()
 
     this.trigger(Events.MEDIACONTROL_RENDERED)

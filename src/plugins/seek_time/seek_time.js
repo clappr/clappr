@@ -4,14 +4,15 @@
 
 import {formatTime} from 'base/utils'
 
-import UIObject from 'base/ui_object'
+import UICorePlugin from 'base/ui_core_plugin'
 import Styler from 'base/styler'
 import template from 'base/template'
 import Events from 'base/events'
+import Playback from 'base/playback'
 import seekTimeStyle from './public/seek_time.scss'
 import seekTimeHTML from './public/seek_time.html'
 
-export default class SeekTime extends UIObject {
+export default class SeekTime extends UICorePlugin {
   get name() { return 'seek_time' }
   get template() {
     return template(seekTimeHTML)
@@ -22,11 +23,11 @@ export default class SeekTime extends UIObject {
       'data-seek-time': ''
     }
   }
-  constructor(mediaControl) {
-    super()
-    this.mediaControl = mediaControl
-    this.mediaControlContainer = this.mediaControl.container
-    this.rendered = false
+  get mediaControl() { return this.core.mediaControl }
+  get mediaControlContainer() { return this.mediaControl.container }
+  get durationShown() { return this.mediaControlContainer.getPlaybackType() !== Playback.LIVE || this.mediaControlContainer.isDvrInUse() }
+  constructor(core) {
+    super(core)
     this.hoveringOverSeekBar = false
     this.hoverPosition = null
     this.duration = null
@@ -38,31 +39,22 @@ export default class SeekTime extends UIObject {
         this.actualLiveServerTimeDiff = 0
       }
     }
-    this.durationShown = false
-    this.addEventListeners()
   }
 
-  addEventListeners() {
+  bindEvents() {
+    this.listenTo(this.mediaControl, Events.MEDIACONTROL_RENDERED, this.render)
     this.listenTo(this.mediaControl, Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR, this.showTime)
     this.listenTo(this.mediaControl, Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR, this.hideTime)
     this.listenTo(this.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.onContainerChanged)
+    this.listenTo(this.mediaControlContainer, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.update)
     this.listenTo(this.mediaControlContainer, Events.CONTAINER_TIMEUPDATE, this.updateDuration)
   }
 
   onContainerChanged() {
-     this.stopListening(this.mediaControlContainer, Events.CONTAINER_TIMEUPDATE, this.updateDuration)
+     this.stopListening(this.mediaControlContainer)
      this.mediaControlContainer = this.mediaControl.container
      this.listenTo(this.mediaControlContainer, Events.CONTAINER_TIMEUPDATE, this.updateDuration)
-  }
-
-  showDuration() {
-    this.durationShown = true
-    this.update()
-  }
-
-  hideDuration() {
-    this.durationShown = false
-    this.update()
+     this.listenTo(this.mediaControlContainer, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.update)
   }
 
   updateDuration(timeProgress) {
@@ -102,7 +94,6 @@ export default class SeekTime extends UIObject {
   }
 
   update() {
-
     if (!this.rendered) {
       // update() is always called after a render
       return
