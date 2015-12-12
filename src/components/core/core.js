@@ -124,6 +124,7 @@ export default class Core extends UIObject {
   resolveOnContainersReady(containers) {
     $.when.apply($, containers).done(() => {
       this.defer.resolve(this)
+      this.ready = true
       this.trigger(Events.CORE_READY)
     })
   }
@@ -159,7 +160,7 @@ export default class Core extends UIObject {
     $(document).unbind('fullscreenchange')
     $(document).unbind('MSFullscreenChange')
     $(document).unbind('mozfullscreenchange')
-}
+  }
 
   exit() {
     this.updateSize()
@@ -269,6 +270,14 @@ export default class Core extends UIObject {
       this.$el.removeClass('nocursor')
     else if (Fullscreen.isFullscreen())
       this.$el.addClass('nocursor')
+  }
+
+  /**
+   * Determine if the core is ready.
+   * @return {boolean} true if the core is ready. ie CORE_READY event fired
+   */
+  isReady() {
+    return !!this.ready
   }
 
   /**
