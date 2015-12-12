@@ -2,8 +2,8 @@ import CorePlugin from 'base/core_plugin'
 
 import Events from 'base/events'
 
-export default class FallbackMultiSource extends CorePlugin {
-  get name() { return 'multi_source' }
+export default class SourcesPlugin extends CorePlugin {
+  get name() { return 'sources' }
 
   bindEvents() {
     this.listenToOnce(this.core, Events.CORE_CONTAINERS_CREATED, this.onContainersCreated)
