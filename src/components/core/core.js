@@ -48,7 +48,7 @@ export default class Core extends UIObject {
     this.options = options
     this.plugins = []
     this.containers = []
-    this.setupMediaControl(this.getCurrentContainer())
+    this.setupMediaControl(null)
     //FIXME fullscreen api sucks
     $(document).bind('fullscreenchange', () => this.exit())
     $(document).bind('MSFullscreenChange', () => this.exit())
