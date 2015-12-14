@@ -53,10 +53,8 @@ export default class SeekTime extends UICorePlugin {
   }
 
   onContainerChanged() {
-     this.stopListening(this.mediaControlContainer)
-     this.mediaControlContainer = this.mediaControl.container
-     this.listenTo(this.mediaControlContainer, Events.CONTAINER_TIMEUPDATE, this.updateDuration)
-     this.listenTo(this.mediaControlContainer, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.update)
+    this.stopListening()
+    this.bindEvents()
   }
 
   updateDuration(timeProgress) {
