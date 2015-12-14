@@ -147,9 +147,6 @@ export default class Player extends BaseObject {
     this.options.parentElement = element
     this.core = this.coreFactory.create()
     this.addEventListeners()
-    if (this.core.isReady()) {
-      this.onReady()
-    }
   }
 
   /**
@@ -163,8 +160,13 @@ export default class Player extends BaseObject {
   addEventListeners() {
     if (!this.core.isReady()) {
       this.listenToOnce(this.core, Events.CORE_READY, this.onReady)
+    } else {
+      this.onReady()
     }
     this.listenTo(this.core.mediaControl,  Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
+  }
+
+  addContainerEventListeners() {
     var container = this.core.mediaControl.container
     if (!!container) {
       this.listenTo(container, Events.CONTAINER_PLAY, this.onPlay)
@@ -210,6 +212,7 @@ export default class Player extends BaseObject {
 
   onReady() {
     this.ready = true
+    this.addContainerEventListeners()
     this.trigger(Events.PLAYER_READY)
   }
 
