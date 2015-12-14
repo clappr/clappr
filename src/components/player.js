@@ -103,12 +103,16 @@ export default class Player extends BaseObject {
    * define a poster by adding its address `poster: 'http://url/img.png'`. It will appear after video embed, disappear on play and go back when user stops the video.
    * @param {String} [options.playbackNotSupportedMessage]
    * define a custom message to be displayed when a playback is not supported.
+   * @param {Object} [options.events]
+   * Specify listeners which will be registered with their corresponding player events.
+   * E.g. onReady -> "PLAYER_READY", onTimeUpdate -> "PLAYER_TIMEUPDATE"
    */
   constructor(options) {
     super(options)
     var defaultOptions = {playerId: uniqueId(""), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl}
     this.options = $.extend(defaultOptions, options)
     this.options.sources = this.normalizeSources(options)
+    this.registerOptionEventListeners()
     this.loader = new Loader(this.options.plugins || {}, this.options.playerId)
     this.coreFactory = new CoreFactory(this, this.loader)
     this.playerInfo = PlayerInfo.getInstance(this.options.playerId)
@@ -172,6 +176,31 @@ export default class Player extends BaseObject {
       this.listenTo(container, Events.CONTAINER_TIMEUPDATE, this.onTimeUpdate)
       this.listenTo(container, Events.CONTAINER_VOLUME, this.onVolumeUpdate)
     }
+  }
+
+  registerOptionEventListeners() {
+    var eventsMapping = {
+      "onReady": Events.PLAYER_READY,
+      "onResize": Events.PLAYER_RESIZE,
+      "onPlay": Events.PLAYER_PLAY,
+      "onPause": Events.PLAYER_PAUSE,
+      "onStop": Events.PLAYER_STOP,
+      "onEnded": Events.PLAYER_ENDED,
+      "onSeek": Events.PLAYER_SEEK,
+      "onError": Events.PLAYER_ERROR,
+      "onTimeUpdate": Events.PLAYER_TIMEUPDATE,
+      "onVolumeUpdate": Events.PLAYER_VOLUMEUPDATE
+    }
+    var userEvents = this.options.events || {}
+
+    Object.keys(userEvents).forEach((userEvent) => {
+      var eventType = eventsMapping[userEvent]
+      if (eventType) {
+        var eventFunction = userEvents[userEvent]
+        eventFunction = typeof eventFunction === "function" && eventFunction
+        eventFunction && this.listenTo(this, eventType, eventFunction)
+      }
+    })
   }
 
   containerChanged() {
