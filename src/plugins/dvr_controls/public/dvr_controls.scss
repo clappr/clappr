@@ -99,14 +99,3 @@ $circle-radius: 3.5px;
     background-color: $live-color;
   }
 }
-
-.seek-time[data-seek-time] {
-  span[data-duration] {
-    position: relative;
-    color: rgba(255,255,255,.5);
-    font-size: 10px;
-    padding-right: 7px;
-
-    &:before { content: "|"; margin-right: 7px; }
-  }
-}
