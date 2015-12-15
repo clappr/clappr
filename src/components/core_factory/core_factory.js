@@ -13,6 +13,9 @@ import Core from 'components/core'
  * @module components
  */
 export default class CoreFactory extends BaseObject {
+
+  get loader() { return this.player.loader }
+
   /**
    * it builds the core factory
    * @method constructor
@@ -23,8 +26,6 @@ export default class CoreFactory extends BaseObject {
     super()
     this.player = player
     this.options = player.options
-    this.loader = loader
-    this.options.loader = this.loader
   }
 
   /**
@@ -33,6 +34,7 @@ export default class CoreFactory extends BaseObject {
    * @return {Core} created core
    */
   create() {
+    this.options.loader = this.loader
     this.core = new Core(this.options)
     this.addCorePlugins()
     this.core.createContainers(this.options)
