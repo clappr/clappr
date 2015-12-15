@@ -186,6 +186,9 @@ export default class Container extends UIObject {
   }
 
   error(errorObj) {
+    if (!this.isReady) {
+      this.ready()
+    }
     this.trigger(Events.CONTAINER_ERROR, {error: errorObj, container: this}, this.name)
   }
 
