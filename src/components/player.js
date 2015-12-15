@@ -103,8 +103,13 @@ export default class Player extends BaseObject {
    * define a poster by adding its address `poster: 'http://url/img.png'`. It will appear after video embed, disappear on play and go back when user stops the video.
    * @param {String} [options.playbackNotSupportedMessage]
    * define a custom message to be displayed when a playback is not supported.
+   * @param {Object} [options.events]
+   * Specify listeners which will be registered with their corresponding player events.
+   * E.g. onReady -> "PLAYER_READY", onTimeUpdate -> "PLAYER_TIMEUPDATE"
    * @param {Object} [options.internalPlugins]
-   * define a custom internal plugins **names** set {playback: ['plugin_name1', ...], container: ['plugin_name1', ...], core: ['plugin_name1', ...]}. Override global Clappr.defaultPlugins default set (see main.js, defaults/plugins.js). If a particular type of plugins do not need to override, then it should not be a property of options.internalPlugins.
+   * define a custom internal plugins **names** set {playback: ['plugin_name1', ...], container: ['plugin_name1', ...], core: ['plugin_name1', ...]}.
+   * Override the global Clappr.defaultPlugins default set (see main.js, defaults/plugins.js).
+   * If a particular type of plugins do not need to override, then it should not be a property of options.internalPlugins.
    * @param {Object} [options.plugins]
    * define a custom external plugins **classes** set {playback: [pluginClass1, ...], container: [pluginClass1, ...], core: [pluginClass1, ...]}.
    */
@@ -113,6 +118,7 @@ export default class Player extends BaseObject {
     var defaultOptions = {playerId: uniqueId(""), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl}
     this.options = $.extend(defaultOptions, options)
     this.options.sources = this.normalizeSources(options)
+    this.registerOptionEventListeners()
     this.loader = new Loader(this.options.internalPlugins || {}, this.options.plugins || {}, this.options.playerId)
     this.coreFactory = new CoreFactory(this, this.loader)
     this.playerInfo = PlayerInfo.getInstance(this.options.playerId)
@@ -147,9 +153,6 @@ export default class Player extends BaseObject {
     this.options.parentElement = element
     this.core = this.coreFactory.create()
     this.addEventListeners()
-    if (this.core.isReady()) {
-      this.onReady()
-    }
   }
 
   /**
@@ -163,8 +166,13 @@ export default class Player extends BaseObject {
   addEventListeners() {
     if (!this.core.isReady()) {
       this.listenToOnce(this.core, Events.CORE_READY, this.onReady)
+    } else {
+      this.onReady()
     }
     this.listenTo(this.core.mediaControl,  Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
+  }
+
+  addContainerEventListeners() {
     var container = this.core.mediaControl.container
     if (!!container) {
       this.listenTo(container, Events.CONTAINER_PLAY, this.onPlay)
@@ -178,6 +186,31 @@ export default class Player extends BaseObject {
     }
   }
 
+  registerOptionEventListeners() {
+    var eventsMapping = {
+      "onReady": Events.PLAYER_READY,
+      "onResize": Events.PLAYER_RESIZE,
+      "onPlay": Events.PLAYER_PLAY,
+      "onPause": Events.PLAYER_PAUSE,
+      "onStop": Events.PLAYER_STOP,
+      "onEnded": Events.PLAYER_ENDED,
+      "onSeek": Events.PLAYER_SEEK,
+      "onError": Events.PLAYER_ERROR,
+      "onTimeUpdate": Events.PLAYER_TIMEUPDATE,
+      "onVolumeUpdate": Events.PLAYER_VOLUMEUPDATE
+    }
+    var userEvents = this.options.events || {}
+
+    Object.keys(userEvents).forEach((userEvent) => {
+      var eventType = eventsMapping[userEvent]
+      if (eventType) {
+        var eventFunction = userEvents[userEvent]
+        eventFunction = typeof eventFunction === "function" && eventFunction
+        eventFunction && this.listenTo(this, eventType, eventFunction)
+      }
+    })
+  }
+
   containerChanged() {
     this.stopListening()
     this.addEventListeners()
@@ -185,6 +218,7 @@ export default class Player extends BaseObject {
 
   onReady() {
     this.ready = true
+    this.addContainerEventListeners()
     this.trigger(Events.PLAYER_READY)
   }
 

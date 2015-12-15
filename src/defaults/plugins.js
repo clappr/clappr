@@ -23,6 +23,7 @@ import ClickToPausePlugin from 'plugins/click_to_pause'
 import DVRControls from 'plugins/dvr_controls'
 import Favicon from 'plugins/favicon'
 import SeekTime from 'plugins/seek_time'
+import SourcesPlugin from 'plugins/sources'
 
 const PLUGIN_TYPES = ['playback', 'container', 'core']
 
@@ -47,7 +48,8 @@ const PLUGIN_CLASSES_ORDERED = {
    core: [
       DVRControls,
       Favicon,
-      SeekTime
+      SeekTime,
+      SourcesPlugin
    ]
 }
 

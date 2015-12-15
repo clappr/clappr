@@ -615,3 +615,6 @@ Events.MEDIACONTROL_NOTPLAYING = 'mediacontrol:notplaying'
  * @event MEDIACONTROL_CONTAINERCHANGED
  */
 Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged'
+
+// Core Events
+Events.CORE_CONTAINERS_CREATED = 'core:containers:created'

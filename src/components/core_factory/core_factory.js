@@ -34,7 +34,8 @@ export default class CoreFactory extends BaseObject {
    */
   create() {
     this.core = new Core(this.options)
-    this.core.then(this.addCorePlugins.bind(this))
+    this.addCorePlugins()
+    this.core.createContainers(this.options)
     return this.core
   }
 

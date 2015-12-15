@@ -28,9 +28,11 @@ export default class Loader extends BaseObject {
     super()
 
     this.playerId = playerId
+
     this.playbackPlugins = this.getInternalPlugins('playback', customInternalPlugins || {})
     this.containerPlugins = this.getInternalPlugins('container', customInternalPlugins || {})
     this.corePlugins = this.getInternalPlugins('core', customInternalPlugins || {})
+
     if (externalPlugins) {
       this.validateExternalPluginsType(externalPlugins)
       this.addExternalPlugins(externalPlugins)

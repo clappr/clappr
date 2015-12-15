@@ -46,15 +46,15 @@ export default class SeekTime extends UICorePlugin {
     this.listenTo(this.mediaControl, Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR, this.showTime)
     this.listenTo(this.mediaControl, Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR, this.hideTime)
     this.listenTo(this.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.onContainerChanged)
-    this.listenTo(this.mediaControlContainer, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.update)
-    this.listenTo(this.mediaControlContainer, Events.CONTAINER_TIMEUPDATE, this.updateDuration)
+    if (this.mediaControlContainer) {
+      this.listenTo(this.mediaControlContainer, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.update)
+      this.listenTo(this.mediaControlContainer, Events.CONTAINER_TIMEUPDATE, this.updateDuration)
+    }
   }
 
   onContainerChanged() {
-     this.stopListening(this.mediaControlContainer)
-     this.mediaControlContainer = this.mediaControl.container
-     this.listenTo(this.mediaControlContainer, Events.CONTAINER_TIMEUPDATE, this.updateDuration)
-     this.listenTo(this.mediaControlContainer, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.update)
+    this.stopListening()
+    this.bindEvents()
   }
 
   updateDuration(timeProgress) {
@@ -135,7 +135,7 @@ export default class SeekTime extends UICorePlugin {
   }
 
   shouldBeVisible() {
-    return this.mediaControlContainer.settings.seekEnabled && this.hoveringOverSeekBar && this.hoverPosition !== null && this.duration !== null
+    return this.mediaControlContainer && this.mediaControlContainer.settings.seekEnabled && this.hoveringOverSeekBar && this.hoverPosition !== null && this.duration !== null
   }
 
   render() {
