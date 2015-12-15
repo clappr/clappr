@@ -25,7 +25,9 @@ export default class SeekTime extends UICorePlugin {
   }
   get mediaControl() { return this.core.mediaControl }
   get mediaControlContainer() { return this.mediaControl.container }
-  get durationShown() { return this.mediaControlContainer.getPlaybackType() === Playback.LIVE && this.mediaControlContainer.isDvrEnabled() }
+  get isLiveStreamWithDvr() { return this.mediaControlContainer && this.mediaControlContainer.getPlaybackType() === Playback.LIVE && this.mediaControlContainer.isDvrEnabled() }
+  get durationShown() { return this.isLiveStreamWithDvr }
+  get useActualLiveTime() { return this.actualLiveTime && this.isLiveStreamWithDvr }
   constructor(core) {
     super(core)
     this.hoveringOverSeekBar = false
@@ -80,15 +82,16 @@ export default class SeekTime extends UICorePlugin {
   }
 
   getSeekTime() {
-    if (this.actualLiveTime) {
-      var d = new Date(new Date().getTime() - this.actualLiveServerTimeDiff), e = new Date(d);
-      var secondsSinceMidnight = (e - d.setHours(0,0,0,0)) / 1000;
-      var seekTime = (secondsSinceMidnight - this.duration) + (this.hoverPosition * this.duration)
+    var seekTime = null
+    if (this.useActualLiveTime) {
+      var d = new Date(new Date().getTime() - this.actualLiveServerTimeDiff), e = new Date(d)
+      var secondsSinceMidnight = (e - d.setHours(0,0,0,0)) / 1000
+      seekTime = (secondsSinceMidnight - this.duration) + (this.hoverPosition * this.duration)
       if (seekTime < 0) {
         seekTime += 86400
       }
     } else {
-      var seekTime = this.hoverPosition * this.duration
+      seekTime = this.hoverPosition * this.duration
     }
     return {seekTime: seekTime, secondsSinceMidnight: secondsSinceMidnight}
   }
@@ -104,7 +107,7 @@ export default class SeekTime extends UICorePlugin {
     }
     else {
       var seekTime = this.getSeekTime()
-      var currentSeekTime = formatTime(seekTime.seekTime, this.actualLiveTime)
+      var currentSeekTime = formatTime(seekTime.seekTime, this.useActualLiveTime)
       // only update dom if necessary, ie time actually changed
       if (currentSeekTime !== this.displayedSeekTime) {
         this.$seekTimeEl.text(currentSeekTime)
