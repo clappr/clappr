@@ -25,7 +25,7 @@ export default class SeekTime extends UICorePlugin {
   }
   get mediaControl() { return this.core.mediaControl }
   get mediaControlContainer() { return this.mediaControl.container }
-  get durationShown() { return this.mediaControlContainer.getPlaybackType() !== Playback.LIVE || this.mediaControlContainer.isDvrInUse() }
+  get durationShown() { return this.mediaControlContainer.getPlaybackType() === Playback.LIVE && this.mediaControlContainer.isDvrEnabled() }
   constructor(core) {
     super(core)
     this.hoveringOverSeekBar = false
