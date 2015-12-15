@@ -15,6 +15,7 @@ import UIObject from 'base/ui_object'
 import Browser from 'components/browser'
 import Container from 'components/container'
 import Core from 'components/core'
+import Loader from 'components/loader'
 import Mediator from 'components/mediator'
 import MediaControl from 'components/media_control'
 import PlayerInfo from 'components/player_info'
@@ -25,6 +26,7 @@ import HLS from 'playbacks/hls'
 import HTML5Audio from 'playbacks/html5_audio'
 import HTML5Video from 'playbacks/html5_video'
 import HTMLImg from 'playbacks/html_img'
+import NoOp from 'playbacks/no_op'
 import Poster from 'plugins/poster'
 import Log from 'plugins/log'
 import Styler from 'base/styler'
@@ -48,6 +50,7 @@ export default {
     Playback,
     Container,
     Core,
+    Loader,
     BaseObject,
     UIObject,
     Utils,
@@ -58,6 +61,7 @@ export default {
     HTML5Audio,
     HTML5Video,
     HTMLImg,
+    NoOp,
     Poster,
     Log,
     Styler,
