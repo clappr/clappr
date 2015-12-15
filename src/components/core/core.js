@@ -199,7 +199,7 @@ export default class Core extends UIObject {
     this.setupMediaControl(this.getCurrentContainer())
     this.render()
     this.$el.appendTo(this.options.parentElement)
-    return containers
+    return this.containers
   }
 
   renderContainers() {
