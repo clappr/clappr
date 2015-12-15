@@ -169,7 +169,7 @@ export default class Player extends BaseObject {
     } else {
       this.onReady()
     }
-    this.listenTo(this.core.mediaControl,  Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
+    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
   }
 
   addContainerEventListeners() {
