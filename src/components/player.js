@@ -106,6 +106,12 @@ export default class Player extends BaseObject {
    * @param {Object} [options.events]
    * Specify listeners which will be registered with their corresponding player events.
    * E.g. onReady -> "PLAYER_READY", onTimeUpdate -> "PLAYER_TIMEUPDATE"
+   * @param {Object} [options.internalPlugins]
+   * define a custom internal plugins **names** set {playback: ['plugin_name1', ...], container: ['plugin_name1', ...], core: ['plugin_name1', ...]}.
+   * Override the global Clappr.defaultPlugins default set (see main.js, default/plugins.js).
+   * If a particular type of plugins do not need to override, then it should not be a property of options.internalPlugins.
+   * @param {Object} [options.plugins]
+   * define a custom external plugins **classes** set {playback: [pluginClass1, ...], container: [pluginClass1, ...], core: [pluginClass1, ...]}.
    */
   constructor(options) {
     super(options)
@@ -113,7 +119,7 @@ export default class Player extends BaseObject {
     this.options = $.extend(defaultOptions, options)
     this.options.sources = this.normalizeSources(options)
     this.registerOptionEventListeners()
-    this.loader = new Loader(this.options.plugins || {}, this.options.playerId)
+    this.loader = new Loader(this.options.internalPlugins || {}, this.options.plugins || {}, this.options.playerId)
     this.coreFactory = new CoreFactory(this, this.loader)
     this.playerInfo = PlayerInfo.getInstance(this.options.playerId)
     this.playerInfo.currentSize = {width: options.width, height: options.height}

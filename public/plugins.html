@@ -1,0 +1,47 @@
+<head>
+  <script type="text/javascript" charset="utf-8" src="latest/clappr.js"></script>
+  <script type="text/javascript" src="http://cdn.jsdelivr.net/clappr.rtmp/latest/rtmp.min.js">
+  </script>
+</head>
+<body>
+  <div id="wrapper"></div>
+  <script>
+
+    // override or/and reorder internal plugins set for all players
+    Clappr.defaultPlugins.playback = ['flash', 'html5_video', 'html5_audio', 'hls', 'flashls', 'html_img' /*, 'no_op' */];
+    Clappr.defaultPlugins.container = ['spinner', 'watermark', 'poster', /* 'stats', 'google_analytics', */ 'click_to_pause'];
+    Clappr.defaultPlugins.core = ['dvr_controls', 'favicon', 'seek_time'];
+
+    console.log('Clappr.defaultPlugins = ', Clappr.defaultPlugins);
+
+    // override or/and reorder internal plugins set for a current player
+    var player = new Clappr.Player({
+        source: 'http://clappr.io/highline.mp4',
+        poster: 'http://clappr.io/poster.png',
+        mute: true,
+        height: 240,
+        width: 320,
+        internalPlugins: {
+          playback: ['html5_video', 'html5_audio', 'flash', 'flashls', 'hls', 'html_img' /*, 'no_op' */],
+          container: ['spinner']
+        },
+        plugins: {'playback': [RTMP]},
+        rtmpConfig: {
+          swfPath: 'dist/assets/RTMP.swf',
+          scaling:'stretch',
+          playbackType: 'live',
+          bufferTime: 1,
+          startLevel: 0,
+          autoSwitch: true,
+        }
+      });
+
+      player.attachTo($('#wrapper'));
+
+      var container = player.core.getCurrentContainer();
+
+      container.on(Clappr.Events.CONTAINER_READY, function(c) {
+         console.log('Use playback: ' + this.playback.name);
+      });
+  </script>
+</body>

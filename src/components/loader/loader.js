@@ -5,29 +5,9 @@
 import BaseObject from 'base/base_object'
 import PlayerInfo from 'components/player_info'
 import uniq from 'lodash.uniq'
+import find from 'lodash.find'
 
-/* Playback Plugins */
-import HTML5VideoPlayback from 'playbacks/html5_video'
-import FlashVideoPlayback from 'playbacks/flash'
-import HTML5AudioPlayback from 'playbacks/html5_audio'
-import FlasHLSVideoPlayback from 'playbacks/flashls'
-import HLSVideoPlayback from 'playbacks/hls'
-import HTMLImgPlayback from 'playbacks/html_img'
-import NoOp from 'playbacks/no_op'
-
-/* Container Plugins */
-import SpinnerThreeBouncePlugin from 'plugins/spinner_three_bounce'
-import StatsPlugin from 'plugins/stats'
-import WaterMarkPlugin from 'plugins/watermark'
-import PosterPlugin from 'plugins/poster'
-import GoogleAnalyticsPlugin from 'plugins/google_analytics'
-import ClickToPausePlugin from 'plugins/click_to_pause'
-
-/* Core Plugins */
-import DVRControls from 'plugins/dvr_controls'
-import Favicon from 'plugins/favicon'
-import SeekTime from 'plugins/seek_time'
-import SourcesPlugin from 'plugins/sources'
+import {PLUGIN_TYPES, PLUGIN_CLASSES_ORDERED, defaultPlugins, getPluginName} from 'default/plugins'
 
 /**
  * It keeps a list of the default plugins (playback, container, core) and it merges external plugins with its internals.
@@ -40,19 +20,52 @@ export default class Loader extends BaseObject {
   /**
    * builds the loader
    * @method constructor
+   * @param {Object} customInternalPlugins override the global internal plugins set (Clappr.defaultPlugins)
    * @param {Object} externalPlugins the external plugins
    * @param {Number} playerId you can embed multiple instances of clappr, therefore this is the unique id of each one.
    */
-  constructor(externalPlugins, playerId) {
+  constructor(customInternalPlugins, externalPlugins, playerId) {
     super()
+
     this.playerId = playerId
-    this.playbackPlugins = [HTML5VideoPlayback, HTML5AudioPlayback, FlashVideoPlayback, HLSVideoPlayback, FlasHLSVideoPlayback, HTMLImgPlayback, NoOp]
-    this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
-    this.corePlugins = [DVRControls, Favicon, SeekTime, SourcesPlugin]
+
+    this.playbackPlugins = this.getInternalPlugins('playback', customInternalPlugins || {})
+    this.containerPlugins = this.getInternalPlugins('container', customInternalPlugins || {})
+    this.corePlugins = this.getInternalPlugins('core', customInternalPlugins || {})
+
     if (externalPlugins) {
       this.validateExternalPluginsType(externalPlugins)
       this.addExternalPlugins(externalPlugins)
     }
+  }
+
+  /**
+   * get all the internal plugins that were passed through `options.internalPlugins` or Clappr.defaultPlugins
+   * @method getInternalPlugins
+   * @private
+   * @param {String} pluginType the type of plugin: "playback", "contrainer" or "core"
+   * @param {Object} customInternalPlugins a set of plugin names, which override global Clappr.defaultPlugins
+   */
+  getInternalPlugins(pluginType, customInternalPlugins) {
+    var
+      intPluginNames = customInternalPlugins[pluginType] || defaultPlugins[pluginType] || [],
+      plugin,
+      ret = [];
+
+    if (pluginType === 'playback' && !find(intPluginNames, (n) => { return n === 'no_op' })) {
+      intPluginNames.push('no_op');
+    }
+
+    intPluginNames.forEach((pluginName) => {
+      plugin = find(PLUGIN_CLASSES_ORDERED[pluginType], (p) => { return p.prototype.name === pluginName })
+      if (plugin) {
+        ret.push(plugin)
+      } else {
+        throw new ReferenceError(`could not find an internal "${pluginType}" plugin with "${pluginName}" name`)
+      }
+    })
+
+    return ret;
   }
 
   /**
@@ -62,10 +75,9 @@ export default class Loader extends BaseObject {
    * @param {Object} plugins the config object with all plugins
    */
   addExternalPlugins(plugins) {
-    var pluginName = function(plugin) { return plugin.prototype.name }
-    if (plugins.playback) { this.playbackPlugins = uniq(plugins.playback.concat(this.playbackPlugins), pluginName) }
-    if (plugins.container) { this.containerPlugins = uniq(plugins.container.concat(this.containerPlugins), pluginName) }
-    if (plugins.core) { this.corePlugins = uniq(plugins.core.concat(this.corePlugins), pluginName) }
+    if (plugins.playback) { this.playbackPlugins = uniq(plugins.playback.concat(this.playbackPlugins), getPluginName) }
+    if (plugins.container) { this.containerPlugins = uniq(plugins.container.concat(this.containerPlugins), getPluginName) }
+    if (plugins.core) { this.corePlugins = uniq(plugins.core.concat(this.corePlugins), getPluginName) }
     PlayerInfo.getInstance(this.playerId).playbackPlugins = this.playbackPlugins
   }
 
@@ -76,8 +88,7 @@ export default class Loader extends BaseObject {
    * @param {Object} plugins the config object with all plugins
    */
   validateExternalPluginsType(plugins) {
-    var plugintypes = ["playback", "container", "core"]
-    plugintypes.forEach((type) => {
+    PLUGIN_TYPES.forEach((type) => {
       (plugins[type] || []).forEach((el) => {
         var errorMessage = "external " + el.type + " plugin on " + type + " array"
         if (el.type !== type) { throw new ReferenceError(errorMessage) }
