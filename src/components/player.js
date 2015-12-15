@@ -39,6 +39,10 @@ var baseUrl = currentScriptUrl().replace(/\/[^\/]+$/, "")
  * ```
  */
 export default class Player extends BaseObject {
+
+  set loader(loader) { this._loader = loader }
+  get loader() { return this._loader = this._loader || new Loader(this.options.plugins || {}, this.options.playerId) }
+
   /**
    * ## Player's constructor
    *
@@ -113,8 +117,7 @@ export default class Player extends BaseObject {
     this.options = $.extend(defaultOptions, options)
     this.options.sources = this.normalizeSources(options)
     this.registerOptionEventListeners()
-    this.loader = new Loader(this.options.plugins || {}, this.options.playerId)
-    this.coreFactory = new CoreFactory(this, this.loader)
+    this.coreFactory = new CoreFactory(this)
     this.playerInfo = PlayerInfo.getInstance(this.options.playerId)
     this.playerInfo.currentSize = {width: options.width, height: options.height}
     this.playerInfo.options = this.options
