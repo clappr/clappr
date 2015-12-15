@@ -103,13 +103,17 @@ export default class Player extends BaseObject {
    * define a poster by adding its address `poster: 'http://url/img.png'`. It will appear after video embed, disappear on play and go back when user stops the video.
    * @param {String} [options.playbackNotSupportedMessage]
    * define a custom message to be displayed when a playback is not supported.
+   * @param {Object} [options.internalPlugins]
+   * define a custom internal plugins **names** set {playback: ['plugin_name1', ...], container: ['plugin_name1', ...], core: ['plugin_name1', ...]}. Override global Clappr.defaultPlugins default set (see main.js, defaults/plugins.js). If a particular type of plugins do not need to override, then it should not be a property of options.internalPlugins.
+   * @param {Object} [options.plugins]
+   * define a custom external plugins **classes** set {playback: [pluginClass1, ...], container: [pluginClass1, ...], core: [pluginClass1, ...]}.
    */
   constructor(options) {
     super(options)
     var defaultOptions = {playerId: uniqueId(""), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl}
     this.options = $.extend(defaultOptions, options)
     this.options.sources = this.normalizeSources(options)
-    this.loader = new Loader(this.options.plugins || {}, this.options.playerId)
+    this.loader = new Loader(this.options.internalPlugins || {}, this.options.plugins || {}, this.options.playerId)
     this.coreFactory = new CoreFactory(this, this.loader)
     this.playerInfo = PlayerInfo.getInstance(this.options.playerId)
     this.playerInfo.currentSize = {width: options.width, height: options.height}
