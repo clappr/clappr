@@ -108,7 +108,7 @@ export default class Player extends BaseObject {
    * E.g. onReady -> "PLAYER_READY", onTimeUpdate -> "PLAYER_TIMEUPDATE"
    * @param {Object} [options.internalPlugins]
    * define a custom internal plugins **names** set {playback: ['plugin_name1', ...], container: ['plugin_name1', ...], core: ['plugin_name1', ...]}.
-   * Override the global Clappr.defaultPlugins default set (see main.js, defaults/plugins.js).
+   * Override the global Clappr.defaultPlugins default set (see main.js, default/plugins.js).
    * If a particular type of plugins do not need to override, then it should not be a property of options.internalPlugins.
    * @param {Object} [options.plugins]
    * define a custom external plugins **classes** set {playback: [pluginClass1, ...], container: [pluginClass1, ...], core: [pluginClass1, ...]}.

@@ -7,7 +7,7 @@ import PlayerInfo from 'components/player_info'
 import uniq from 'lodash.uniq'
 import find from 'lodash.find'
 
-import {PLUGIN_TYPES, PLUGIN_CLASSES_ORDERED, defaultPlugins, getPluginName} from 'defaults/plugins'
+import {PLUGIN_TYPES, PLUGIN_CLASSES_ORDERED, defaultPlugins, getPluginName} from 'default/plugins'
 
 /**
  * It keeps a list of the default plugins (playback, container, core) and it merges external plugins with its internals.
@@ -40,11 +40,11 @@ export default class Loader extends BaseObject {
   }
 
   /**
-   * adds all the external plugins that were passed through `options.plugins`
+   * get all the internal plugins that were passed through `options.internalPlugins` or Clappr.defaultPlugins
    * @method getInternalPlugins
    * @private
    * @param {String} pluginType the type of plugin: "playback", "contrainer" or "core"
-   * @param {Object} customInternalPlugins a set of plugin names, which override global Clappr.internalPlugins
+   * @param {Object} customInternalPlugins a set of plugin names, which override global Clappr.defaultPlugins
    */
   getInternalPlugins(pluginType, customInternalPlugins) {
     var

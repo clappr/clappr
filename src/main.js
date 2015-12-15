@@ -29,7 +29,7 @@ import Poster from 'plugins/poster'
 import Log from 'plugins/log'
 import Styler from 'base/styler'
 import template from 'base/template'
-import {defaultPlugins} from 'defaults/plugins'
+import {defaultPlugins} from 'default/plugins'
 
 import $ from 'clappr-zepto'
 
