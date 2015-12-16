@@ -48,7 +48,7 @@ var getBrowserInfo = function() {
 var browserInfo = getBrowserInfo()
 
 Browser.isSafari = /safari/i.test(navigator.userAgent) && navigator.userAgent.indexOf('Chrome') === -1
-Browser.isChrome = /chrome/i.test(navigator.userAgent.match)
+Browser.isChrome = /chrome/i.test(navigator.userAgent)
 Browser.isFirefox = /firefox/i.test(navigator.userAgent)
 Browser.isLegacyIE = !!(window.ActiveXObject)
 Browser.isIE = Browser.isLegacyIE || /trident.*rv:1\d/i.test(navigator.userAgent)
