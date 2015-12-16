@@ -1071,7 +1071,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var browserInfo = getBrowserInfo();
 
 	Browser.isSafari = /safari/i.test(navigator.userAgent) && navigator.userAgent.indexOf('Chrome') === -1;
-	Browser.isChrome = /chrome/i.test(navigator.userAgent.match);
+	Browser.isChrome = /chrome/i.test(navigator.userAgent);
 	Browser.isFirefox = /firefox/i.test(navigator.userAgent);
 	Browser.isLegacyIE = !!window.ActiveXObject;
 	Browser.isIE = Browser.isLegacyIE || /trident.*rv:1\d/i.test(navigator.userAgent);
@@ -20610,9 +20610,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return this.mediaControl.container;
 	    }
 	  }, {
+	    key: 'isLiveStreamWithDvr',
+	    get: function get() {
+	      return this.mediaControlContainer && this.mediaControlContainer.getPlaybackType() === _basePlayback2['default'].LIVE && this.mediaControlContainer.isDvrEnabled();
+	    }
+	  }, {
 	    key: 'durationShown',
 	    get: function get() {
-	      return this.mediaControlContainer.getPlaybackType() === _basePlayback2['default'].LIVE && this.mediaControlContainer.isDvrEnabled();
+	      return this.isLiveStreamWithDvr;
+	    }
+	  }, {
+	    key: 'useActualLiveTime',
+	    get: function get() {
+	      return this.actualLiveTime && this.isLiveStreamWithDvr;
 	    }
 	  }]);
 
@@ -20680,16 +20690,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'getSeekTime',
 	    value: function getSeekTime() {
-	      if (this.actualLiveTime) {
+	      var seekTime = null;
+	      if (this.useActualLiveTime) {
 	        var d = new Date(new Date().getTime() - this.actualLiveServerTimeDiff),
 	            e = new Date(d);
 	        var secondsSinceMidnight = (e - d.setHours(0, 0, 0, 0)) / 1000;
-	        var seekTime = secondsSinceMidnight - this.duration + this.hoverPosition * this.duration;
+	        seekTime = secondsSinceMidnight - this.duration + this.hoverPosition * this.duration;
 	        if (seekTime < 0) {
 	          seekTime += 86400;
 	        }
 	      } else {
-	        var seekTime = this.hoverPosition * this.duration;
+	        seekTime = this.hoverPosition * this.duration;
 	      }
 	      return { seekTime: seekTime, secondsSinceMidnight: secondsSinceMidnight };
 	    }
@@ -20705,7 +20716,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.$el.css('left', "-100%");
 	      } else {
 	        var seekTime = this.getSeekTime();
-	        var currentSeekTime = (0, _baseUtils.formatTime)(seekTime.seekTime, this.actualLiveTime);
+	        var currentSeekTime = (0, _baseUtils.formatTime)(seekTime.seekTime, this.useActualLiveTime);
 	        // only update dom if necessary, ie time actually changed
 	        if (currentSeekTime !== this.displayedSeekTime) {
 	          this.$seekTimeEl.text(currentSeekTime);
