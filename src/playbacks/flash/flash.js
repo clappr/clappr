@@ -28,7 +28,7 @@ export default class Flash extends BaseFlashPlayback {
     this.settings.left = ["playpause", "position", "duration"]
     this.settings.right = ["fullscreen", "volume"]
     this.settings.seekEnabled = true
-    this.isReady = false
+    this.isReadyState = false
     this.addListeners()
   }
 
@@ -60,7 +60,7 @@ export default class Flash extends BaseFlashPlayback {
   }
 
   metadataLoaded() {
-    this.isReady = true
+    this.isReadyState = true
     this.trigger(Events.PLAYBACK_READY, this.name)
     this.trigger(Events.PLAYBACK_SETTINGSUPDATE, this.name)
   }
@@ -172,6 +172,10 @@ export default class Flash extends BaseFlashPlayback {
 
   isPlaying() {
     return !!(this.isReady && this.currentState.indexOf("PLAYING") > -1)
+  }
+
+  get isReady(){
+    return this.isReadyState
   }
 
   getDuration() {

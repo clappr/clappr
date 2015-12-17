@@ -67,6 +67,15 @@ export default class Playback extends UIObject {
   }
 
   /**
+   * checks if the playback is ready.
+   * @property isReady
+   * @type {Boolean} `true` if the current playback is ready, otherwise `false`
+   */
+  get isReady() {
+    return false
+  }
+
+  /**
    * gets the playback type (`'vod', 'live', 'aod'`)
    * @method getPlaybackType
    * @return {String} you should write the playback type otherwise it'll assume `'no_op'`
