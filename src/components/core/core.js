@@ -238,7 +238,8 @@ export default class Core extends UIObject {
   }
 
   getCurrentPlayback() {
-    return this.getCurrentContainer().playback
+    var container = this.getCurrentContainer()
+    return container && container.playback
   }
 
   getPlaybackType() {
