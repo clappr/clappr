@@ -186,7 +186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var version = ("0.2.27");
+	var version = ("0.2.28");
 
 	exports['default'] = {
 	    Player: _componentsPlayer2['default'],
@@ -3647,6 +3647,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'createContainer',
 	    value: function createContainer(source, options) {
 	      var container = this.containerFactory.createContainer(source, options);
+	      this.appendContainer(container);
+	      this.el.appendChild(container.render().el);
 	      return container;
 	    }
 	  }, {
@@ -3681,7 +3683,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'getCurrentPlayback',
 	    value: function getCurrentPlayback() {
-	      return this.getCurrentContainer().playback;
+	      var container = this.getCurrentContainer();
+	      return container && container.playback;
 	    }
 	  }, {
 	    key: 'getPlaybackType',
@@ -8455,6 +8458,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    /**
+	     * checks if the playback is ready.
+	     * @property isReady
+	     * @type {Boolean} `true` if the current playback is ready, otherwise `false`
+	     */
+	  }, {
+	    key: 'getPlaybackType',
+
+	    /**
 	     * gets the playback type (`'vod', 'live', 'aod'`)
 	     * @method getPlaybackType
 	     * @return {String} you should write the playback type otherwise it'll assume `'no_op'`
@@ -8466,8 +8477,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * flashHlsPlayback.getPlaybackType() //live
 	     * ```
 	     */
-	  }, {
-	    key: 'getPlaybackType',
 	    value: function getPlaybackType() {
 	      return Playback.NO_OP;
 	    }
@@ -8500,6 +8509,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'destroy',
 	    value: function destroy() {
 	      this.$el.remove();
+	    }
+	  }, {
+	    key: 'isReady',
+	    get: function get() {
+	      return false;
 	    }
 	  }]);
 
@@ -8777,6 +8791,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _pluginsSources2 = _interopRequireDefault(_pluginsSources);
 
+	var _pluginsEnd_video = __webpack_require__(152);
+
+	var _pluginsEnd_video2 = _interopRequireDefault(_pluginsEnd_video);
+
 	/**
 	 * It keeps a list of the default plugins (playback, container, core) and it merges external plugins with its internals.
 	 * @class Loader
@@ -8802,7 +8820,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.playerId = playerId;
 	    this.playbackPlugins = [_playbacksHtml5_video2['default'], _playbacksHtml5_audio2['default'], _playbacksFlash2['default'], _playbacksHls2['default'], _playbacksFlashls2['default'], _playbacksHtml_img2['default'], _playbacksNo_op2['default']];
 	    this.containerPlugins = [_pluginsSpinner_three_bounce2['default'], _pluginsWatermark2['default'], _pluginsPoster2['default'], _pluginsStats2['default'], _pluginsGoogle_analytics2['default'], _pluginsClick_to_pause2['default']];
-	    this.corePlugins = [_pluginsDvr_controls2['default'], _pluginsFavicon2['default'], _pluginsSeek_time2['default'], _pluginsSources2['default']];
+	    this.corePlugins = [_pluginsDvr_controls2['default'], _pluginsFavicon2['default'], _pluginsSeek_time2['default'], _pluginsSources2['default'], _pluginsEnd_video2['default']];
 	    if (externalPlugins) {
 	      this.validateExternalPluginsType(externalPlugins);
 	      this.addExternalPlugins(externalPlugins);
@@ -9778,6 +9796,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'ready',
 	    value: function ready() {
 	      this.trigger(_baseEvents2['default'].PLAYBACK_READY, this.name);
+	      this.isReadyState = true;
 	      if (this.firstBuffer) {
 	        this.trigger(_baseEvents2['default'].PLAYBACK_BUFFERFULL, this.name);
 	        this.firstBuffer = this.buffering = false;
@@ -9811,6 +9830,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.ready();
 	      }
 	      return this;
+	    }
+	  }, {
+	    key: 'isReady',
+	    get: function get() {
+	      return this.isReadyState;
 	    }
 	  }]);
 
@@ -9952,7 +9976,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.settings.left = ["playpause", "position", "duration"];
 	    this.settings.right = ["fullscreen", "volume"];
 	    this.settings.seekEnabled = true;
-	    this.isReady = false;
+	    this.isReadyState = false;
 	    this.addListeners();
 	  }
 
@@ -9990,7 +10014,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'metadataLoaded',
 	    value: function metadataLoaded() {
-	      this.isReady = true;
+	      this.isReadyState = true;
 	      this.trigger(_baseEvents2['default'].PLAYBACK_READY, this.name);
 	      this.trigger(_baseEvents2['default'].PLAYBACK_SETTINGSUPDATE, this.name);
 	    }
@@ -10167,6 +10191,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      clearInterval(this.bootstrapId);
 	      _get(Object.getPrototypeOf(Flash.prototype), 'stopListening', this).call(this);
 	      this.$el.remove();
+	    }
+	  }, {
+	    key: 'isReady',
+	    get: function get() {
+	      return this.isReadyState;
 	    }
 	  }]);
 
@@ -10682,7 +10711,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.el.playerLoad) {
 	        this.el.width = "100%";
 	        this.el.height = "100%";
-	        this.isReady = true;
+	        this.isReadyState = true;
 	        this.srcLoaded = false;
 	        this.currentState = "IDLE";
 	        this.setFlashSettings();
@@ -11286,6 +11315,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      _get(Object.getPrototypeOf(FlasHLS.prototype), 'render', this).call(this);
 	      this.createCallbacks();
 	      return this;
+	    }
+	  }, {
+	    key: 'isReady',
+	    get: function get() {
+	      return this.isReadyState;
 	    }
 	  }]);
 
@@ -20860,6 +20894,81 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(_baseCore_plugin2['default']);
 
 	exports['default'] = SourcesPlugin;
+	module.exports = exports['default'];
+
+/***/ },
+/* 152 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _baseEvents = __webpack_require__(6);
+
+	var _baseEvents2 = _interopRequireDefault(_baseEvents);
+
+	var _baseCore_plugin = __webpack_require__(146);
+
+	var _baseCore_plugin2 = _interopRequireDefault(_baseCore_plugin);
+
+	var _baseUtils = __webpack_require__(2);
+
+	var EndVideo = (function (_CorePlugin) {
+	  _inherits(EndVideo, _CorePlugin);
+
+	  function EndVideo() {
+	    _classCallCheck(this, EndVideo);
+
+	    _get(Object.getPrototypeOf(EndVideo.prototype), 'constructor', this).apply(this, arguments);
+	  }
+
+	  _createClass(EndVideo, [{
+	    key: 'bindEvents',
+	    value: function bindEvents() {
+	      this.listenTo(this.core.mediaControl, _baseEvents2['default'].MEDIACONTROL_CONTAINERCHANGED, this.containerChanged);
+	      var container = this.core.getCurrentContainer();
+	      if (container) {
+	        this.listenTo(container, _baseEvents2['default'].CONTAINER_ENDED, this.ended);
+	        this.listenTo(container, _baseEvents2['default'].CONTAINER_STOP, this.ended);
+	      }
+	    }
+	  }, {
+	    key: 'containerChanged',
+	    value: function containerChanged() {
+	      this.stopListening();
+	      this.bindEvents();
+	    }
+	  }, {
+	    key: 'ended',
+	    value: function ended() {
+	      if (_baseUtils.Fullscreen.isFullscreen()) {
+	        this.core.toggleFullscreen();
+	      }
+	    }
+	  }, {
+	    key: 'name',
+	    get: function get() {
+	      return 'end_video';
+	    }
+	  }]);
+
+	  return EndVideo;
+	})(_baseCore_plugin2['default']);
+
+	exports['default'] = EndVideo;
 	module.exports = exports['default'];
 
 /***/ }
