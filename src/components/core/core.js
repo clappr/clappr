@@ -208,6 +208,8 @@ export default class Core extends UIObject {
 
   createContainer(source, options) {
     var container = this.containerFactory.createContainer(source, options)
+    this.appendContainer(container)
+    this.el.appendChild(container.render().el)
     return container
   }
 
