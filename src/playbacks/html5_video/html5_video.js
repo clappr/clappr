@@ -154,6 +154,10 @@ export default class HTML5Video extends Playback {
     return !this.el.paused && !this.el.ended
   }
 
+  get isReady() {
+    return this.isReadyState
+  }
+
   playing() {
     this.trigger(Events.PLAYBACK_PLAY);
   }
@@ -266,6 +270,7 @@ export default class HTML5Video extends Playback {
 
   ready() {
     this.trigger(Events.PLAYBACK_READY, this.name)
+    this.isReadyState = true
     if (this.firstBuffer) {
       this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
       this.firstBuffer = this.buffering = false

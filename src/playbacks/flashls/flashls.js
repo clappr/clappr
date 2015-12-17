@@ -111,7 +111,7 @@ export default class FlasHLS extends BaseFlashPlayback {
     if (this.el.playerLoad) {
       this.el.width = "100%"
       this.el.height = "100%"
-      this.isReady = true
+      this.isReadyState = true
       this.srcLoaded = false
       this.currentState = "IDLE"
       this.setFlashSettings()
@@ -531,6 +531,10 @@ export default class FlasHLS extends BaseFlashPlayback {
       return !!(this.currentState.match(/playing/i))
     }
     return false
+  }
+
+  get isReady() {
+    return this.isReadyState
   }
 
   getDuration() {
