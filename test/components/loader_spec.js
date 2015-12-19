@@ -30,6 +30,23 @@ describe('Loader', function() {
       expect(loader.corePlugins.length).to.be.equal(nativeCorePluginsCount + 1)
     })
 
+    it("should support an array of plugins and group them by type", function() {
+      var playbackPlugin = PlaybackPlugin.extend({name: 'playbackPlugin'})
+      var containerPlugin = ContainerPlugin.extend({name: 'containerPlugin'})
+      var corePlugin = CorePlugin.extend({name: 'corePlugin'})
+
+      var loader = new Loader()
+
+      var nativePlaybackPluginsCount = loader.playbackPlugins.length
+      var nativeContainerPluginsCount = loader.containerPlugins.length
+      var nativeCorePluginsCount = loader.corePlugins.length
+
+      loader.addExternalPlugins([playbackPlugin, containerPlugin, corePlugin])
+      expect(loader.playbackPlugins.length).to.be.equal(nativePlaybackPluginsCount + 1)
+      expect(loader.containerPlugins.length).to.be.equal(nativeContainerPluginsCount + 1)
+      expect(loader.corePlugins.length).to.be.equal(nativeCorePluginsCount + 1)
+    })
+
     it("should prioritize external plugins if their names collide", function() {
       var spinnerPlugin = ContainerPlugin.extend({container: {},  name: 'spinner'})
       var loader = new Loader()
@@ -38,7 +55,7 @@ describe('Loader', function() {
       })[0]).to.not.be.equal(spinnerPlugin)
 
       loader.addExternalPlugins({container: [spinnerPlugin]})
-      
+
       expect(loader.containerPlugins.filter((plugin) => {
         return plugin.prototype.name === "spinner"
       })[0]).to.be.equal(spinnerPlugin)
