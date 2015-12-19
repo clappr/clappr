@@ -51,9 +51,29 @@ export default class Loader extends BaseObject {
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
     this.corePlugins = [DVRControls, Favicon, SeekTime, SourcesPlugin, EndVideo]
     if (externalPlugins) {
-      this.validateExternalPluginsType(externalPlugins)
+      if (!Array.isArray(externalPlugins)) {
+        this.validateExternalPluginsType(externalPlugins)
+      }
       this.addExternalPlugins(externalPlugins)
     }
+  }
+
+  /**
+   * groups by type the external plugins that were passed through `options.plugins` it they're on a flat array
+   * @method addExternalPlugins
+   * @private
+   * @param {Object} an config object or an array of plugins
+   * @return {Object} plugins the config object with the plugins separated by type
+   */
+  groupPluginsByType(plugins) {
+    if (Array.isArray(plugins)) {
+      plugins = plugins.reduce(function(memo, plugin) {
+        memo[plugin.type] || (memo[plugin.type] = [])
+        memo[plugin.type].push(plugin)
+        return memo
+      }, {})
+    }
+    return plugins
   }
 
   /**
@@ -63,6 +83,7 @@ export default class Loader extends BaseObject {
    * @param {Object} plugins the config object with all plugins
    */
   addExternalPlugins(plugins) {
+    plugins = this.groupPluginsByType(plugins)
     var pluginName = function(plugin) { return plugin.prototype.name }
     if (plugins.playback) { this.playbackPlugins = uniq(plugins.playback.concat(this.playbackPlugins), pluginName) }
     if (plugins.container) { this.containerPlugins = uniq(plugins.container.concat(this.containerPlugins), pluginName) }
