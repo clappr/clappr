@@ -1,6 +1,6 @@
 {
   "name": "clappr",
-  "version": "0.2.28",
+  "version": "0.2.29",
   "dependencies": {
     "abbrev": {
       "version": "1.0.7",
@@ -188,9 +188,9 @@
       "resolved": "https://registry.npmjs.org/async-foreach/-/async-foreach-0.1.3.tgz"
     },
     "autoprefixer": {
-      "version": "6.1.2",
+      "version": "6.2.1",
       "from": "autoprefixer@>=6.0.3 <7.0.0",
-      "resolved": "https://registry.npmjs.org/autoprefixer/-/autoprefixer-6.1.2.tgz"
+      "resolved": "https://registry.npmjs.org/autoprefixer/-/autoprefixer-6.2.1.tgz"
     },
     "aws-sdk": {
       "version": "2.0.31",
@@ -393,9 +393,9 @@
       "resolved": "https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.2.tgz"
     },
     "braces": {
-      "version": "1.8.2",
-      "from": "braces@>=1.8.1 <2.0.0",
-      "resolved": "https://registry.npmjs.org/braces/-/braces-1.8.2.tgz"
+      "version": "1.8.3",
+      "from": "braces@>=1.8.2 <2.0.0",
+      "resolved": "https://registry.npmjs.org/braces/-/braces-1.8.3.tgz"
     },
     "breakable": {
       "version": "1.0.0",
@@ -467,9 +467,9 @@
       }
     },
     "caniuse-db": {
-      "version": "1.0.30000377",
-      "from": "caniuse-db@>=1.0.30000372 <2.0.0",
-      "resolved": "https://registry.npmjs.org/caniuse-db/-/caniuse-db-1.0.30000377.tgz"
+      "version": "1.0.30000379",
+      "from": "caniuse-db@>=1.0.30000379 <2.0.0",
+      "resolved": "https://registry.npmjs.org/caniuse-db/-/caniuse-db-1.0.30000379.tgz"
     },
     "caseless": {
       "version": "0.11.0",
@@ -992,9 +992,9 @@
       "resolved": "https://registry.npmjs.org/escape-html/-/escape-html-1.0.2.tgz"
     },
     "escape-string-regexp": {
-      "version": "1.0.3",
+      "version": "1.0.4",
       "from": "escape-string-regexp@>=1.0.2 <2.0.0",
-      "resolved": "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-1.0.3.tgz"
+      "resolved": "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-1.0.4.tgz"
     },
     "escodegen": {
       "version": "1.7.1",
@@ -2465,14 +2465,14 @@
       "resolved": "https://registry.npmjs.org/is-upper-case/-/is-upper-case-1.1.2.tgz"
     },
     "is-utf8": {
-      "version": "0.2.0",
+      "version": "0.2.1",
       "from": "is-utf8@>=0.2.0 <0.3.0",
-      "resolved": "https://registry.npmjs.org/is-utf8/-/is-utf8-0.2.0.tgz"
+      "resolved": "https://registry.npmjs.org/is-utf8/-/is-utf8-0.2.1.tgz"
     },
     "is-windows": {
-      "version": "0.1.0",
+      "version": "0.1.1",
       "from": "is-windows@>=0.1.0 <0.2.0",
-      "resolved": "https://registry.npmjs.org/is-windows/-/is-windows-0.1.0.tgz"
+      "resolved": "https://registry.npmjs.org/is-windows/-/is-windows-0.1.1.tgz"
     },
     "isarray": {
       "version": "0.0.1",
@@ -2990,9 +2990,9 @@
       "resolved": "https://registry.npmjs.org/methods/-/methods-1.1.1.tgz"
     },
     "micromatch": {
-      "version": "2.3.5",
+      "version": "2.3.7",
       "from": "micromatch@>=2.1.5 <3.0.0",
-      "resolved": "https://registry.npmjs.org/micromatch/-/micromatch-2.3.5.tgz",
+      "resolved": "https://registry.npmjs.org/micromatch/-/micromatch-2.3.7.tgz",
       "dependencies": {
         "kind-of": {
           "version": "3.0.2",
@@ -3137,8 +3137,13 @@
     },
     "normalize-path": {
       "version": "2.0.1",
-      "from": "normalize-path@>=2.0.0 <3.0.0",
+      "from": "normalize-path@>=2.0.1 <3.0.0",
       "resolved": "https://registry.npmjs.org/normalize-path/-/normalize-path-2.0.1.tgz"
+    },
+    "normalize-range": {
+      "version": "0.1.2",
+      "from": "normalize-range@>=0.1.2 <0.2.0",
+      "resolved": "https://registry.npmjs.org/normalize-range/-/normalize-range-0.1.2.tgz"
     },
     "normalize-url": {
       "version": "1.4.0",

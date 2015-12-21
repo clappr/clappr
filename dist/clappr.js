@@ -186,7 +186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var version = ("0.2.28");
+	var version = ("0.2.29");
 
 	exports['default'] = {
 	    Player: _componentsPlayer2['default'],
@@ -815,7 +815,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      _get(Object.getPrototypeOf(MergedPlugin.prototype), 'constructor', this).call(this, args);
 	      if (properties.initialize) {
-	        properties.initialize.apply(this, [args]);
+	        properties.initialize.apply(this, Array.prototype.slice.apply(arguments));
 	      }
 	    }
 
@@ -830,7 +830,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  })(parent);
 
 	  delete properties.name;
-	  _clapprZepto2['default'].extend(MergedPlugin, properties);
+	  _clapprZepto2['default'].extend(MergedPlugin.prototype, properties);
 	  return MergedPlugin;
 	}
 
@@ -8822,21 +8822,44 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.containerPlugins = [_pluginsSpinner_three_bounce2['default'], _pluginsWatermark2['default'], _pluginsPoster2['default'], _pluginsStats2['default'], _pluginsGoogle_analytics2['default'], _pluginsClick_to_pause2['default']];
 	    this.corePlugins = [_pluginsDvr_controls2['default'], _pluginsFavicon2['default'], _pluginsSeek_time2['default'], _pluginsSources2['default'], _pluginsEnd_video2['default']];
 	    if (externalPlugins) {
-	      this.validateExternalPluginsType(externalPlugins);
+	      if (!Array.isArray(externalPlugins)) {
+	        this.validateExternalPluginsType(externalPlugins);
+	      }
 	      this.addExternalPlugins(externalPlugins);
 	    }
 	  }
 
 	  /**
-	   * adds all the external plugins that were passed through `options.plugins`
+	   * groups by type the external plugins that were passed through `options.plugins` it they're on a flat array
 	   * @method addExternalPlugins
 	   * @private
-	   * @param {Object} plugins the config object with all plugins
+	   * @param {Object} an config object or an array of plugins
+	   * @return {Object} plugins the config object with the plugins separated by type
 	   */
 
 	  _createClass(Loader, [{
+	    key: 'groupPluginsByType',
+	    value: function groupPluginsByType(plugins) {
+	      if (Array.isArray(plugins)) {
+	        plugins = plugins.reduce(function (memo, plugin) {
+	          memo[plugin.type] || (memo[plugin.type] = []);
+	          memo[plugin.type].push(plugin);
+	          return memo;
+	        }, {});
+	      }
+	      return plugins;
+	    }
+
+	    /**
+	     * adds all the external plugins that were passed through `options.plugins`
+	     * @method addExternalPlugins
+	     * @private
+	     * @param {Object} plugins the config object with all plugins
+	     */
+	  }, {
 	    key: 'addExternalPlugins',
 	    value: function addExternalPlugins(plugins) {
+	      plugins = this.groupPluginsByType(plugins);
 	      var pluginName = function pluginName(plugin) {
 	        return plugin.prototype.name;
 	      };
@@ -20268,14 +20291,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function destroy() {
 	      this.remove();
 	    }
-
-	    //TODO: this seems never be called and assume template and styler, remove it or add template and styler
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      this.$el.html(this.template());
-	      this.$el.append(this.styler.getStyleFor(this.name));
-	      this.core.$el.append(this.el);
 	      return this;
 	    }
 	  }]);
