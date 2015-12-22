@@ -35,9 +35,7 @@ export default class PosterPlugin extends UIContainerPlugin {
     this.hasStartedPlaying = false
     this.playRequested = !!this.options.autoPlay
     this.render()
-    setTimeout(() => {
-      this.update()
-    }, 0)
+    process.nextTick(() => this.update())
   }
 
   bindEvents() {
@@ -68,12 +66,12 @@ export default class PosterPlugin extends UIContainerPlugin {
     if (!this.options.chromeless) {
       if (show) {
         this.$playButton.show()
-        this.$el.attr("data-clickable", "1")
+        this.$el.addClass("clickable")
         this.updateSize()
       }
       else {
         this.$playButton.hide()
-        this.$el.attr("data-clickable", "0")
+        this.$el.removeClass("clickable")
       }
     }
   }
