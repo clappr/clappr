@@ -393,16 +393,59 @@ Events.PLAYBACK_LEVEL_SWITCH_END = 'playback:levels:switch:end'
  * the playback type
  */
 Events.PLAYBACK_PLAYBACKSTATE = 'playback:playbackstate'
+/**
+ * Fired when DVR becomes enabled/disabled.
+ *
+ * @event PLAYBACK_DVR
+ * @param {boolean} state true if dvr enabled 
+ */
 Events.PLAYBACK_DVR = 'playback:dvr'
+// TODO doc
 Events.PLAYBACK_MEDIACONTROL_DISABLE = 'playback:mediacontrol:disable'
+// TODO doc
 Events.PLAYBACK_MEDIACONTROL_ENABLE = 'playback:mediacontrol:enable'
+/**
+ * Fired when the media for a playback ends.
+ *
+ * @event PLAYBACK_ENDED
+ * @param {String} name the name of the playback
+ */
 Events.PLAYBACK_ENDED = 'playback:ended'
+/**
+ * Fired when the media for a playback starts playing.
+ * This is not necessarily when the user requests `play()`
+ * The media may have to buffer first.
+ * I.e. `isPlaying()` might return `true` before this event is fired,
+ * because `isPlaying()` represents the intended state.
+ *
+ * @event PLAYBACK_PLAY
+ */
 Events.PLAYBACK_PLAY = 'playback:play'
+/**
+ * Fired when the media for a playback pauses.
+ *
+ * @event PLAYBACK_PAUSE
+ */
 Events.PLAYBACK_PAUSE = 'playback:pause'
+/**
+ * Fired when the media for a playback is stopped.
+ *
+ * @event PLAYBACK_STOP
+ */
 Events.PLAYBACK_STOP = 'playback:stop'
+/**
+ * Fired if an error occurs in the playback.
+ *
+ * @event PLAYBACK_ERROR
+ * @param {Object} error An object containing the error details
+ * @param {String} name Playback name
+ */
 Events.PLAYBACK_ERROR = 'playback:error'
+// TODO doc
 Events.PLAYBACK_STATS_ADD = 'playback:stats:add'
+// TODO doc
 Events.PLAYBACK_FRAGMENT_LOADED = 'playback:fragment:loaded'
+// TODO doc
 Events.PLAYBACK_LEVEL_SWITCH = 'playback:level:switch'
 
 /**
