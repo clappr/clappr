@@ -124,9 +124,9 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   render() {
-    var a = super.render()
+    super.render()
     this.ready()
-    return a
+    return this
   }
 
   updatePlaybackType(evt, data) {
