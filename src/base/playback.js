@@ -67,6 +67,15 @@ export default class Playback extends UIObject {
   }
 
   /**
+   * checks if the playback has ended.
+   * @method hasEnded
+   * @return {Boolean} `true` if the current playback has ended, otherwise `false`
+   */
+  hasEnded() {
+    return false
+  }
+
+  /**
    * checks if the playback is ready.
    * @property isReady
    * @type {Boolean} `true` if the current playback is ready, otherwise `false`

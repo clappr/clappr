@@ -177,6 +177,10 @@ export default class Container extends UIObject {
     return this.playback.isPlaying()
   }
 
+  hasEnded() {
+    return this.playback.hasEnded()
+  }
+
   getCurrentTime() {
     return this.currentTime
   }
