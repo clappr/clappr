@@ -68,6 +68,7 @@ export default class FlasHLS extends BaseFlashPlayback {
     this.fragmentLoadMaxRetry = (options.fragmentLoadMaxRetry === undefined) ? 3 : options.fragmentLoadMaxRetry
     this.fragmentLoadMaxRetryTimeout = (options.fragmentLoadMaxRetryTimeout === undefined) ? 4000 : options.fragmentLoadMaxRetryTimeout
     this.fragmentLoadSkipAfterMaxRetry = (options.fragmentLoadSkipAfterMaxRetry === undefined) ? true : options.fragmentLoadSkipAfterMaxRetry
+    this.maxSkippedFragments = (options.maxSkippedFragments === undefined) ? 5 : options.maxSkippedFragments
     this.flushLiveURLCache = (options.flushLiveURLCache === undefined) ? false : options.flushLiveURLCache
     this.initialLiveManifestSize = (options.initialLiveManifestSize === undefined) ? 1 : options.initialLiveManifestSize
     this.manifestLoadMaxRetry = (options.manifestLoadMaxRetry === undefined) ? 3 : options.manifestLoadMaxRetry
@@ -151,6 +152,7 @@ export default class FlasHLS extends BaseFlashPlayback {
     this.el.playerSetFragmentLoadMaxRetry(this.fragmentLoadMaxRetry)
     this.el.playerSetFragmentLoadMaxRetryTimeout(this.fragmentLoadMaxRetryTimeout)
     this.el.playerSetFragmentLoadSkipAfterMaxRetry(this.fragmentLoadSkipAfterMaxRetry)
+    this.el.playerSetMaxSkippedFragments(this.maxSkippedFragments)
     this.el.playerSetFlushLiveURLCache(this.flushLiveURLCache)
     this.el.playerSetInitialLiveManifestSize(this.initialLiveManifestSize)
     this.el.playerSetManifestLoadMaxRetry(this.manifestLoadMaxRetry)
@@ -266,6 +268,11 @@ export default class FlasHLS extends BaseFlashPlayback {
   setFragmentLoadSkipAfterMaxRetry(fragmentLoadSkipAfterMaxRetry) {
     this.fragmentLoadSkipAfterMaxRetry = fragmentLoadSkipAfterMaxRetry
     this.el.playerSetFragmentLoadSkipAfterMaxRetry(this.fragmentLoadSkipAfterMaxRetry)
+  }
+
+  setMaxSkippedFragments(maxSkippedFragments) {
+    this.maxSkippedFragments = maxSkippedFragments
+    this.el.playerSetMaxSkippedFragments(this.maxSkippedFragments)
   }
 
   setFlushLiveURLCache(flushLiveURLCache) {
