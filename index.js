@@ -53,6 +53,9 @@ export default class DashShakaPlayback extends HTML5Video {
     super.play()
   }
 
+  // skipping setup `setupSrc` on tag video
+  setupSrc() {}
+
   // skipping ready event on video tag in favor of ready on shaka
   ready() {}
 
