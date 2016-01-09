@@ -166,6 +166,10 @@ export default class HTML5Video extends Playback {
     this.trigger(Events.PLAYBACK_PAUSE);
   }
 
+  hasEnded() {
+    return this.el.ended
+  }
+
   ended() {
     this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
     this.trigger(Events.PLAYBACK_ENDED, this.name)

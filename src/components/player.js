@@ -380,6 +380,15 @@ export default class Player extends BaseObject {
   }
 
   /**
+   * checks if the media the player is playing has ended.
+   * @method hasEnded
+   * @return {Boolean} `true` if the media has ended, otherwise `false`
+   */
+  hasEnded() {
+    return this.core.mediaControl.container.hasEnded();
+  }
+
+  /**
    * enables to configure a player after its creation
    * @method configure
    * @param {Object} options all the options to change in form of a javascript object

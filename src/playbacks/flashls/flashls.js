@@ -44,6 +44,7 @@ export default class FlasHLS extends BaseFlashPlayback {
     }
     this.settings = $.extend({}, this.defaultSettings)
     this.playbackType = Playback.LIVE
+    this.ended = false
     this.addListeners()
   }
 
@@ -431,6 +432,10 @@ export default class FlasHLS extends BaseFlashPlayback {
     return this.levels
   }
 
+  hasEnded() {
+    return this.ended
+  }
+
   setPlaybackState(state) {
     if (["PLAYING_BUFFERING", "PAUSED_BUFFERING"].indexOf(state) >= 0)  {
       this.trigger(Events.PLAYBACK_BUFFERING, this.name)
@@ -447,6 +452,7 @@ export default class FlasHLS extends BaseFlashPlayback {
         this.seek(0)
       } else {
         this.updateCurrentState(state)
+        this.ended = true
         this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: 0, total: this.el.getDuration()}, this.name)
         this.trigger(Events.PLAYBACK_ENDED, this.name)
       }
@@ -455,6 +461,9 @@ export default class FlasHLS extends BaseFlashPlayback {
 
   updateCurrentState(state) {
     this.currentState = state
+    if (state !== "IDLE") {
+      this.ended = false
+    }
     this.updatePlaybackType()
     if (state === "PLAYING") {
       this.trigger(Events.PLAYBACK_PLAY, this.name)
