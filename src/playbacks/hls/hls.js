@@ -41,7 +41,6 @@ export default class HLS extends HTML5VideoPlayback {
   setupHls() {
     this.hls = new HLSJS(this.options.hlsjsConfig || {})
     this.hls.on(HLSJS.Events.MEDIA_ATTACHED, () => this.hls.loadSource(this.options.src))
-    this.hls.on(HLSJS.Events.MANIFEST_PARSED, () => { this.options.autoPlay && this.play() })
     this.hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this.updatePlaybackType(evt, data))
     this.hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this.updateDuration(evt, data))
     this.hls.on(HLSJS.Events.LEVEL_SWITCH, (evt,data) => this.onLevelSwitch(evt, data))
@@ -122,6 +121,12 @@ export default class HLS extends HTML5VideoPlayback {
       delete this.hls
       this.trigger(Events.PLAYBACK_STOP)
     }
+  }
+
+  render() {
+    super.render()
+    this.ready()
+    return this
   }
 
   updatePlaybackType(evt, data) {
