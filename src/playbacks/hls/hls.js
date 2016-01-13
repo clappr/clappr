@@ -155,7 +155,7 @@ export default class HLS extends HTML5VideoPlayback {
   onLevelSwitch(evt, data) {
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH, data)
-    var currentLevel = this.levels[data.level]
+    var currentLevel = this.hls.levels[data.level]
     if (currentLevel) {
       this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000);
       this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition)
