@@ -217,7 +217,7 @@ export default class HTML5Video extends Playback {
 
   checkInitialSeek() {
     var seekTime = seekStringToSeconds(window.location.href)
-    (seekTime !== 0) && this.seek(seekTime)
+    if (seekTime !== 0) this.seek(seekTime)
   }
 
   getCurrentTime() {
