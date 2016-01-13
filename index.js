@@ -138,7 +138,12 @@ export default class DashShakaPlayback extends HTML5Video {
     Log.debug('an adaptation has happened:', event)
     this.highDefinition = (event.size.height >= 720)
     this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition)
-    this.trigger(Events.PLAYBACK_BITRATE, {bitrate: event.size.height})
+    this.trigger(Events.PLAYBACK_BITRATE, {
+      bandwidth: event.bandwidth,
+      width: event.size.width,
+      height: event.size.height,
+      level: event.size.number
+    })
     (this._levels.length > 0) && this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
   }
 
