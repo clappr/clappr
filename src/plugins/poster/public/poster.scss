@@ -9,13 +9,16 @@
        url("../../../components/media_control/public/Player-Regular.svg#player") format("svg");
 }
 .player-poster[data-poster] {
-  cursor: pointer;
   position: absolute;
   height: 100%;
   width: 100%;
   z-index: 998;
   top: 0;
   left: 0;
+
+  &.clickable {
+    cursor: pointer;
+  }
 
   .poster-background[data-poster] {
     width: 100%;
