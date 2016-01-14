@@ -45,7 +45,7 @@ export default class Player extends BaseObject {
 
   /**
    * Determine if the playback has ended.
-   * @name ended
+   * @property ended
    * @type Boolean
    */
   get ended() {
