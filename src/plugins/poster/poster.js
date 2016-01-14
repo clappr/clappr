@@ -126,6 +126,10 @@ export default class PosterPlugin extends UIContainerPlugin {
     this.container.$el.append(this.el)
     this.$playButton = this.$el.find('.poster-icon')
     this.$playWrapper = this.$el.find('.play-wrapper')
+    if (this.options.mediacontrol && this.options.mediacontrol.buttons) {
+      var buttonsColor = this.options.mediacontrol.buttons;
+      this.$playButton.css('color', buttonsColor);
+    }
     this.update()
     return this
   }
