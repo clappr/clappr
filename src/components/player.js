@@ -44,6 +44,24 @@ export default class Player extends BaseObject {
   get loader() { return this._loader = this._loader || new Loader(this.options.plugins || {}, this.options.playerId) }
 
   /**
+   * Determine if the playback has ended.
+   * @property ended
+   * @type Boolean
+   */
+  get ended() {
+    return this.core.mediaControl.container.ended
+  }
+
+  /*
+   * determine if the player is ready.
+   * @property isReady
+   * @type {Boolean} `true` if the player is ready. ie PLAYER_READY event has fired
+   */
+  get isReady() {
+    return !!this.ready
+  }
+
+  /**
    * ## Player's constructor
    *
    * You might pass the options object to build the player.
@@ -152,16 +170,8 @@ export default class Player extends BaseObject {
     this.addEventListeners()
   }
 
-  /**
-   * Determine if the player is ready.
-   * @return {boolean} true if the player is ready. ie PLAYER_READY event has fired
-   */
-  isReady() {
-    return !!this.ready
-  }
-
   addEventListeners() {
-    if (!this.core.isReady()) {
+    if (!this.core.isReady) {
       this.listenToOnce(this.core, Events.CORE_READY, this.onReady)
     } else {
       this.onReady()

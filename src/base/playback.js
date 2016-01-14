@@ -10,6 +10,15 @@ import UIObject from './ui_object'
  */
 export default class Playback extends UIObject {
   /**
+   * Determine if the playback has ended.
+   * @property ended
+   * @type Boolean
+   */
+  get ended() {
+    return false
+  }
+
+  /**
    * @method constructor
    * @param {Object} options the options object
    */
@@ -63,6 +72,15 @@ export default class Playback extends UIObject {
    * @return {Boolean} `true` if the current playback is playing, otherwise `false`
    */
   isPlaying() {
+    return false
+  }
+
+  /**
+   * checks if the playback is ready.
+   * @property isReady
+   * @type {Boolean} `true` if the current playback is ready, otherwise `false`
+   */
+  get isReady() {
     return false
   }
 
