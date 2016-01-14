@@ -41,7 +41,6 @@ export default class HLS extends HTML5VideoPlayback {
   setupHls() {
     this.hls = new HLSJS(this.options.hlsjsConfig || {})
     this.hls.on(HLSJS.Events.MEDIA_ATTACHED, () => this.hls.loadSource(this.options.src))
-    this.hls.on(HLSJS.Events.MANIFEST_PARSED, () => { this.options.autoPlay && this.play() })
     this.hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this.updatePlaybackType(evt, data))
     this.hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this.updateDuration(evt, data))
     this.hls.on(HLSJS.Events.LEVEL_SWITCH, (evt,data) => this.onLevelSwitch(evt, data))
@@ -124,6 +123,12 @@ export default class HLS extends HTML5VideoPlayback {
     }
   }
 
+  render() {
+    super.render()
+    this.ready()
+    return this
+  }
+
   updatePlaybackType(evt, data) {
     this.playbackType = data.details.live ? Playback.LIVE : Playback.VOD
     this.fillLevels()
@@ -150,7 +155,7 @@ export default class HLS extends HTML5VideoPlayback {
   onLevelSwitch(evt, data) {
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH, data)
-    var currentLevel = this.levels[data.level]
+    var currentLevel = this.hls.levels[data.level]
     if (currentLevel) {
       this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000);
       this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition)

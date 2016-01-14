@@ -20,4 +20,18 @@ describe('HTML5Video playback', () => {
     expect(playback.src).to.be.equals('http://example.com/dash.ogg')
   })
 
+  it('starts not ready', () => {
+    var options = {src: 'http://example.com/dash.ogg'}
+    var playback = new HTML5Video(options)
+
+    expect(playback.isReady).to.be.undefined
+  })
+
+  it('can be ready', () => {
+    var options = {src: 'http://example.com/dash.ogg'}
+    var playback = new HTML5Video(options)
+    playback.ready()
+
+    expect(playback.isReady).to.be.true
+  })
 })

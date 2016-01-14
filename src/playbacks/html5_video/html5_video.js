@@ -40,7 +40,7 @@ export default class HTML5Video extends Playback {
     return {
       'timeupdate': 'timeUpdated',
       'progress': 'progress',
-      'ended': 'ended',
+      'ended': 'onEnded',
       'stalled': 'stalled',
       'waiting': 'waiting',
       'canplaythrough': 'bufferFull',
@@ -53,6 +53,14 @@ export default class HTML5Video extends Playback {
     }
   }
 
+  /**
+   * Determine if the playback has ended.
+   * @property ended
+   * @type Boolean
+   */
+  get ended() {
+    return this.el.ended
+  }
 
   constructor(options) {
     super(options)
@@ -154,6 +162,10 @@ export default class HTML5Video extends Playback {
     return !this.el.paused && !this.el.ended
   }
 
+  get isReady() {
+    return this.isReadyState
+  }
+
   playing() {
     this.trigger(Events.PLAYBACK_PLAY);
   }
@@ -162,7 +174,7 @@ export default class HTML5Video extends Playback {
     this.trigger(Events.PLAYBACK_PAUSE);
   }
 
-  ended() {
+  onEnded() {
     this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
     this.trigger(Events.PLAYBACK_ENDED, this.name)
     this.trigger(Events.PLAYBACK_TIMEUPDATE, { current: 0, total: this.el.duration }, this.name)
@@ -213,7 +225,7 @@ export default class HTML5Video extends Playback {
 
   checkInitialSeek() {
     var seekTime = seekStringToSeconds(window.location.href)
-    this.seek(seekTime)
+    if (seekTime !== 0) this.seek(seekTime)
   }
 
   getCurrentTime() {
@@ -265,6 +277,10 @@ export default class HTML5Video extends Playback {
   }
 
   ready() {
+    if (this.isReadyState) {
+      return
+    }
+    this.isReadyState = true
     this.trigger(Events.PLAYBACK_READY, this.name)
     if (this.firstBuffer) {
       this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
