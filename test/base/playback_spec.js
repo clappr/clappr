@@ -13,6 +13,10 @@ describe('Playback', function() {
     expect(this.basePlayback.isPlaying()).to.be.equal(false)
   })
 
+  it('is not ready', () => {
+    expect(this.basePlayback.isReady).to.be.equal(false)
+  })
+
   it('has NO_OP as playback type', () => {
     expect(this.basePlayback.getPlaybackType()).to.be.equal(Playback.NO_OP)
   })

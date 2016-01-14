@@ -11,7 +11,7 @@ export function extend(parent, properties) {
     constructor(args) {
       super(args)
       if (properties.initialize) {
-        properties.initialize.apply(this, [args])
+        properties.initialize.apply(this, Array.prototype.slice.apply(arguments))
       }
     }
     get name(){
@@ -19,7 +19,7 @@ export function extend(parent, properties) {
     }
   }
   delete properties.name
-  $.extend(MergedPlugin, properties)
+  $.extend(MergedPlugin.prototype, properties)
   return MergedPlugin
 }
 

@@ -42,6 +42,15 @@ export default class Container extends UIObject {
   }
 
   /**
+   * Determine if the playback has ended.
+   * @property ended
+   * @type Boolean
+   */
+  get ended() {
+    return this.playback.ended
+  }
+
+  /**
    * it builds a container
    * @method constructor
    * @param {Object} options the options object
