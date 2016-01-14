@@ -545,6 +545,8 @@ export default class MediaControl extends UIObject {
       this.$el.find('.bar-fill-2[data-seekbar]').css('background-color', seekbarColor)
       this.$el.find('[data-media-control] > .media-control-icon, .drawer-icon').css('color', buttonsColor)
       this.$el.find('.segmented-bar-element[data-volume]').css('boxShadow', "inset 2px 0 0 " + buttonsColor)
+      this.$el.find('.poster-icon[data-poster]').css('color', buttonsColor)
+      this.$el.find('.poster-icon[data-poster]:hover').css('text-shadow', "0 0 15px " + buttonsColor)
     }
   }
 
