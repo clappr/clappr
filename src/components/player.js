@@ -44,6 +44,15 @@ export default class Player extends BaseObject {
   get loader() { return this._loader = this._loader || new Loader(this.options.plugins || {}, this.options.playerId) }
 
   /**
+   * Determine if the playback has ended.
+   * @property ended
+   * @type Boolean
+   */
+  get ended() {
+    return this.core.mediaControl.container.ended
+  }
+
+  /*
    * determine if the player is ready.
    * @property isReady
    * @type {Boolean} `true` if the player is ready. ie PLAYER_READY event has fired
