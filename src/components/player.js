@@ -49,7 +49,16 @@ export default class Player extends BaseObject {
    * @type Boolean
    */
   get ended() {
-    return this.core.mediaControl.container.ended;
+    return this.core.mediaControl.container.ended
+  }
+
+  /*
+   * determine if the player is ready.
+   * @property isReady
+   * @type {Boolean} `true` if the player is ready. ie PLAYER_READY event has fired
+   */
+  get isReady() {
+    return !!this.ready
   }
 
   /**
@@ -161,16 +170,8 @@ export default class Player extends BaseObject {
     this.addEventListeners()
   }
 
-  /**
-   * Determine if the player is ready.
-   * @return {boolean} true if the player is ready. ie PLAYER_READY event has fired
-   */
-  isReady() {
-    return !!this.ready
-  }
-
   addEventListeners() {
-    if (!this.core.isReady()) {
+    if (!this.core.isReady) {
       this.listenToOnce(this.core, Events.CORE_READY, this.onReady)
     } else {
       this.onReady()

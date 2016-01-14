@@ -42,6 +42,15 @@ export default class Core extends UIObject {
     }
   }
 
+  /**
+   * checks if the core is ready.
+   * @property isReady
+   * @type {Boolean} `true` if the core is ready, otherwise `false`
+   */
+  get isReady() {
+    return !!this.ready
+  }
+
   constructor(options) {
     super(options)
     this.playerInfo = PlayerInfo.getInstance(options.playerId)
@@ -279,14 +288,6 @@ export default class Core extends UIObject {
       this.$el.removeClass('nocursor')
     else if (Fullscreen.isFullscreen())
       this.$el.addClass('nocursor')
-  }
-
-  /**
-   * Determine if the core is ready.
-   * @return {boolean} true if the core is ready. ie CORE_READY event fired
-   */
-  isReady() {
-    return !!this.ready
   }
 
   /**
