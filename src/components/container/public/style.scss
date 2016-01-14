@@ -3,7 +3,8 @@
   background-color: black;
   height: 100%;
   width: 100%;
-  &.pointer-enabled {
-    cursor: pointer;
-  }
+}
+
+[data-player]:not(.nocursor) .container[data-container].pointer-enabled {
+	cursor: pointer;
 }
