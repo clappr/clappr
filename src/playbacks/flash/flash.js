@@ -21,7 +21,7 @@ export default class Flash extends BaseFlashPlayback {
 
   /**
    * Determine if the playback has ended.
-   * @name ended
+   * @property ended
    * @type Boolean
    */
   get ended() {
