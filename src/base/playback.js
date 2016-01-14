@@ -11,7 +11,7 @@ import UIObject from './ui_object'
 export default class Playback extends UIObject {
   /**
    * Determine if the playback has ended.
-   * @name ended
+   * @property ended
    * @type Boolean
    */
   get ended() {

@@ -55,7 +55,7 @@ export default class HTML5Video extends Playback {
 
   /**
    * Determine if the playback has ended.
-   * @name ended
+   * @property ended
    * @type Boolean
    */
   get ended() {
