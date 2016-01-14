@@ -28,6 +28,15 @@ export default class FlasHLS extends BaseFlashPlayback {
     this.el.playerSetCurrentLevel(id)
   }
 
+  /**
+   * Determine if the playback has ended.
+   * @property ended
+   * @type Boolean
+   */
+  get ended() {
+    return this.hasEnded
+  }
+
   constructor(options) {
     super(options)
     this.src = options.src
@@ -44,6 +53,7 @@ export default class FlasHLS extends BaseFlashPlayback {
     }
     this.settings = $.extend({}, this.defaultSettings)
     this.playbackType = Playback.LIVE
+    this.hasEnded = false
     this.addListeners()
   }
 
@@ -447,6 +457,7 @@ export default class FlasHLS extends BaseFlashPlayback {
         this.seek(0)
       } else {
         this.updateCurrentState(state)
+        this.hasEnded = true
         this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: 0, total: this.el.getDuration()}, this.name)
         this.trigger(Events.PLAYBACK_ENDED, this.name)
       }
@@ -455,6 +466,9 @@ export default class FlasHLS extends BaseFlashPlayback {
 
   updateCurrentState(state) {
     this.currentState = state
+    if (state !== "IDLE") {
+      this.hasEnded = false
+    }
     this.updatePlaybackType()
     if (state === "PLAYING") {
       this.trigger(Events.PLAYBACK_PLAY, this.name)
