@@ -33,7 +33,7 @@ export default class PosterPlugin extends UIContainerPlugin {
   constructor(container) {
     super(container)
     this.hasStartedPlaying = false
-    this.playRequested = !!this.options.autoPlay
+    this.playRequested = false
     this.render()
     process.nextTick(() => this.update())
   }
@@ -42,6 +42,7 @@ export default class PosterPlugin extends UIContainerPlugin {
     this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
     this.listenTo(this.container, Events.CONTAINER_PLAY, this.onPlay)
     this.listenTo(this.container, Events.CONTAINER_ENDED, this.onStop)
+    this.listenToOnce(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering)
     this.listenTo(this.container, Events.CONTAINER_OPTIONS_CHANGE, this.render)
     Mediator.on(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.updateSize, this)
   }
@@ -60,6 +61,16 @@ export default class PosterPlugin extends UIContainerPlugin {
     this.hasStartedPlaying = false
     this.playRequested = false
     this.update()
+  }
+
+  onBuffering() {
+    // on some mobile devices (e.g. iOS), autoplay doesn't work
+    // this makes sure the play button only disappears when autoplay
+    // is enabled if autoplay is actually working
+    if (this.options.autoPlay) {
+      this.playRequested = true
+      this.update()
+    }
   }
 
   showPlayButton(show) {
