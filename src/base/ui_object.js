@@ -141,10 +141,10 @@ export default class UIObject extends BaseObject {
    * @return {UIObject} itself
    */
   setElement(element, delegate) {
-    if (this.$el) this.undelegateEvents()
+    if (this.$el) {this.undelegateEvents()}
     this.$el = element instanceof $ ? element : $(element)
     this.el = this.$el[0]
-    if (delegate !== false) this.delegateEvents()
+    if (delegate !== false) {this.delegateEvents()}
     return this
   }
 
@@ -155,12 +155,12 @@ export default class UIObject extends BaseObject {
    * @return {UIObject} itself
    */
   delegateEvents(events) {
-    if (!(events || (events = result(this, 'events')))) return this
+    if (!(events || (events = result(this, 'events')))) {return this}
     this.undelegateEvents()
     for (var key in events) {
       var method = events[key]
-      if ((method && method.constructor !== Function)) method = this[events[key]]
-      if (!method) continue
+      if ((method && method.constructor !== Function)) {method = this[events[key]]}
+      if (!method) {continue}
 
       var match = key.match(delegateEventSplitter)
       var eventName = match[1], selector = match[2]
@@ -193,8 +193,8 @@ export default class UIObject extends BaseObject {
   _ensureElement() {
     if (!this.el) {
       var attrs = $.extend({}, result(this, 'attributes'))
-      if (this.id) attrs.id = result(this, 'id')
-      if (this.className) attrs['class'] = result(this, 'className')
+      if (this.id) {attrs.id = result(this, 'id')}
+      if (this.className) {attrs['class'] = result(this, 'className')}
       var $el = $('<' + result(this, 'tagName') + '>').attr(attrs)
       this.setElement($el, false)
     } else {
