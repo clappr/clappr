@@ -1,6 +1,7 @@
 // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
+/*jshint -W079 */
 
 import Browser from 'components/browser'
 import $ from 'clappr-zepto'
@@ -38,9 +39,9 @@ export function formatTime(time, paddedHours) {
     var out = ""
     if (days && days > 0) {
       out += days + ":"
-      if (hours < 1) out += "00:"
+      if (hours < 1) {out += "00:"}
     }
-    if (hours && hours > 0 || paddedHours) out += ("0" + hours).slice(-2) + ":"
+    if (hours && hours > 0 || paddedHours) {out += ("0" + hours).slice(-2) + ":"}
     out += ("0" + minutes).slice(-2) + ":"
     out += ("0" + seconds).slice(-2)
     return out.trim()
@@ -96,19 +97,19 @@ export class Config {
 
   static _defaultValueFor(key) {
     try {
-      return this._defaultConfig()[key]['parse'](this._defaultConfig()[key]['value'])
+      return this._defaultConfig()[key].parse(this._defaultConfig()[key].value)
     } catch(e) {
       return undefined
     }
   }
 
-  static _create_keyspace(key){
-    return 'clappr.' + document.domain + '.' + key
+  static _createKeyspace(key){
+    return `clappr.${document.domain}.${key}`
   }
 
   static restore(key) {
-    if (Browser.hasLocalstorage && localStorage[this._create_keyspace(key)]){
-      return this._defaultConfig()[key]['parse'](localStorage[this._create_keyspace(key)])
+    if (Browser.hasLocalstorage && localStorage[this._createKeyspace(key)]){
+      return this._defaultConfig()[key].parse(localStorage[this._createKeyspace(key)])
     }
     return this._defaultValueFor(key)
   }
@@ -116,7 +117,7 @@ export class Config {
   static persist(key, value) {
     if (Browser.hasLocalstorage) {
       try {
-        localStorage[this._create_keyspace(key)] = value
+        localStorage[this._createKeyspace(key)] = value
         return true
       } catch(e) {
         return false
