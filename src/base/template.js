@@ -42,7 +42,7 @@
   var entityRe = new RegExp('[&<>"\']', 'g');
 
   var escapeExpr = function(string) {
-    if (string == null) return '';
+    if (string === null) {return ''}
     return ('' + string).replace(entityRe, function(match) {
       return htmlEntities[match];
     });
@@ -85,20 +85,22 @@
     source += "';\n";
 
     // If a variable is not specified, place data values in local scope.
-    if (!settings.variable) source = 'with(obj||{}){\n' + source + '}\n';
+    if (!settings.variable) {source = 'with(obj||{}){\n' + source + '}\n'}
 
     source = "var __t,__p='',__j=Array.prototype.join," +
       "print=function(){__p+=__j.call(arguments,'');};\n" +
       source + "return __p;\n//# sourceURL=/microtemplates/source[" + counter++ + "]";
 
     try {
+      /*jshint -W054 */
+      // TODO: find a way to avoid eval
       render = new Function(settings.variable || 'obj', 'escapeExpr', source);
     } catch (e) {
       e.source = source;
       throw e;
     }
 
-    if (data) return render(data, escapeExpr);
+    if (data) {return render(data, escapeExpr)}
     var template = function(data) {
       return render.call(this, data, escapeExpr);
     };
@@ -110,6 +112,7 @@
   };
   tmpl.settings = settings;
 
+  /*global define */ // define is for RequireJS
   if (typeof define !== 'undefined' && define.amd) {
     define([], function () {
       return tmpl;
