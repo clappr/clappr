@@ -9,6 +9,7 @@
     "build": "node_modules/.bin/webpack --progress",
     "watch": "node_modules/.bin/webpack --progress --watch",
     "test": "node_modules/.bin/karma start --single-run",
+    "lint": "jshint src/",
     "start": "node_modules/.bin/webpack-dev-server --host 0.0.0.0 --content-base public/ --output-public-path latest/ --hot",
     "lock": "rm -rf npm-shrinkwrap.json node_modules && npm install --silent && npm shrinkwrap"
   },
@@ -33,6 +34,7 @@
     "file-loader": "^0.8.4",
     "gulp": "^3.8.1",
     "html-loader": "^0.3.0",
+    "jshint": "^2.9.1",
     "isparta": "^3.0.3",
     "istanbul": "^0.3.19",
     "istanbul-instrumenter-loader": "^0.1.3",
