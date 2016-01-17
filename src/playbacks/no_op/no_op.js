@@ -1,4 +1,4 @@
-import {requestAnimationFrame, getBrowserLanguage} from 'base/utils'
+import {requestAnimationFrame, cancelAnimationFrame, getBrowserLanguage} from 'base/utils'
 import Playback from 'base/playback'
 import template from 'base/template'
 import Styler from 'base/styler'
@@ -70,8 +70,18 @@ export default class NoOp extends Playback {
   }
 
   loop() {
+    if (this.stop === true) {
+      return;
+    }
     this.noise()
-    requestAnimationFrame(() => this.loop())
+    this.animationHandle = requestAnimationFrame(() => this.loop())
+  }
+
+  destroy() {
+    if (this.animationHandle) {
+      cancelAnimationFrame(this.animationHandle);
+      this.stop = true;
+    }
   }
 
   animate() {
