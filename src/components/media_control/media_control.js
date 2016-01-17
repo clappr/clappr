@@ -520,9 +520,7 @@ export default class MediaControl extends UIObject {
   }
 
   bindKeyEvents() {
-    if (this.kibo) {
-      this.unbindKeyEvents()
-    }
+    this.unbindKeyEvents()
     this.kibo = new Kibo(this.options.focusElement)
     this.kibo.down(['space'], () => this.togglePlayPause())
     this.kibo.down(['left'], () => this.seekRelative(-15))
@@ -532,10 +530,12 @@ export default class MediaControl extends UIObject {
   }
 
   unbindKeyEvents() {
-    this.kibo.off('space')
-    this.kibo.off('left')
-    this.kibo.off('right')
-    this.kibo.off([1,2,3,4,5,6,7,8,9,0])
+    if (this.kibo) {
+      this.kibo.off('space')
+      this.kibo.off('left')
+      this.kibo.off('right')
+      this.kibo.off([1,2,3,4,5,6,7,8,9,0])
+    }
   }
 
   parseColors() {
