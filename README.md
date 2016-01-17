@@ -15,7 +15,7 @@
 Add the following script on your HTML:
 ```html
 <head>
-  <script type="text/javascript" src="http://cdn.clappr.io/latest/clappr.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/clappr/latest/clappr.min.js"></script>
 </head>
 ```
 Now, create the player:
@@ -45,6 +45,10 @@ WiiU Browser   | ✔ | ✔ | ✘ |  ? | ![rtmp](http://flv.io/external3.png) | !
 PS4 Browser    | ✔ | ✔ | ✘ |  ? | ![rtmp](http://flv.io/external3.png) | ![rtmp](http://flv.io/external3.png) | ✘ | ✔
 
 ![rtmp](http://flv.io/external3.png) means that the support is made by an external plugin.
+
+## CDN
+
+You can use the latest published version at `https://cdn.jsdelivr.net/clappr/latest/clappr.min.js`
 
 ## External Plugins
 
