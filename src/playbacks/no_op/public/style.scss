@@ -8,8 +8,11 @@
 
 [data-no-op] p[data-no-op-msg] {
   position: absolute;
+  text-align: center;
   font-size: 25px;
   top: 40%;
+  left: 0;
+  right: 0;
   color: white;
 }
 
