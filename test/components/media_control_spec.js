@@ -1,4 +1,6 @@
 import {Config} from '../../src/base/utils'
+import Styler from '../../src/base/styler';
+import template from '../../src/base/template';
 import MediaControl from '../../src/components/media_control'
 import FakePlayback from '../../src/base/playback'
 import Container from '../../src/components/container'
@@ -83,5 +85,23 @@ describe('MediaControl', function() {
     mediacontrol.setVolume(78)
 
     expect(Config.restore("volume")).to.be.equal(78)
-  })
+  });
+
+  describe('custom media control', function() {
+    it('can be extend the base mediacontrol with a custom template and stylesheet', function() {
+      class MyMediaControl extends MediaControl {
+        get template() { return template(`<div>My HTML here</div>`) }
+        get stylesheet () { return Styler.getStyleFor(`.my-css-class {}`) }
+        constructor(options) { super(options) }
+      }
+
+      var mediaControl = new MyMediaControl({mute: true, container: this.container});
+      mediaControl.render();
+      expect(mediaControl.mute).to.be.equal(true);
+      expect(mediaControl.currentVolume).to.be.equal(0);
+      expect(mediaControl.$el.html()).to.be.equal(
+        '<div>My HTML here</div><style class="clappr-style">.my-css-class {}</style>'
+      );
+    });
+  });
 });
