@@ -141,6 +141,32 @@ Result:
 
 I'm sure you can do better than me.
 
+For advanced configuration, you can create an entire `MediaControl` object. At its most basic,
+you might consider subclassing the base `MediaControl` and using your own custom HTML and CSS.
+
+```javascript
+  // ES6-style code shown
+  class MyMediaControl extends Clappr.MediaControl {
+    get template() {
+      return Clappr.template(
+        `<div>My HTML here based on clappr/src/components/media_control/public/media-control.html</div>`
+      )
+    }
+    get stylesheet () {
+      return Clappr.Styler.getStyleFor(
+        `.my-css-class { /* based on clappr/src/components/media_control/public/media-control.scss */ }`
+      )
+    }
+    constructor(options) {
+        super(options);
+    }
+  }
+  let player = new Clappr.Player({
+    source: "http://your.video/here.mp4",
+    mediacontrol: MyMediaControl
+  });
+```
+
 ##### Media Control Auto Hide
 
 If you want to disable media control auto hide, add `hideMediaControl: false` in your embed parameters.

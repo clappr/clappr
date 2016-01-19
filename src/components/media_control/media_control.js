@@ -60,6 +60,8 @@ export default class MediaControl extends UIObject {
 
   get template() { return template(mediaControlHTML) }
 
+  get stylesheet() { return Styler.getStyleFor(mediaControlStyle, {baseUrl: this.options.baseUrl}) }
+
   constructor(options) {
     super(options)
     this.options = options
@@ -557,9 +559,8 @@ export default class MediaControl extends UIObject {
 
   render() {
     var timeout = 1000
-    var style = Styler.getStyleFor(mediaControlStyle, {baseUrl: this.options.baseUrl})
     this.$el.html(this.template({ settings: this.settings }))
-    this.$el.append(style)
+    this.$el.append(this.stylesheet)
     this.createCachedElements()
     this.$playPauseToggle.addClass('paused')
     this.$playStopToggle.addClass('stopped')
