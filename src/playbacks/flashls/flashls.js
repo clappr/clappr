@@ -361,7 +361,7 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   levelChanged(level) {
-    var currentLevel = this.levels[level]
+    var currentLevel = this.el.getLevels()[level]
     if (currentLevel) {
       this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000);
       this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition)
