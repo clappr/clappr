@@ -107,6 +107,11 @@ export default class PosterPlugin extends UIContainerPlugin {
     }
   }
 
+  shouldHideOnPlay() {
+    // Audio broadcasts should keep the poster up; video should hide poster while playing.
+    return !((this.container.playback.name == 'html5_audio') || this.options.audioOnly);
+  }
+
   update() {
     if (!this.shouldRender) {
       return
@@ -118,7 +123,9 @@ export default class PosterPlugin extends UIContainerPlugin {
     }
     else {
       this.container.enableMediaControl()
-      this.$el.hide()
+      if (this.shouldHideOnPlay()) {
+        this.$el.hide()
+      }
     }
   }
 

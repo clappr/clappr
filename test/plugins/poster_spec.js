@@ -57,4 +57,18 @@ describe('Poster', function() {
     $(this.poster.$el).click()
     expect(this.container.play).called.once
   })
+
+  it('keeps the poster up for audio sources', function() {
+    this.playback.name = 'html5_video';
+    expect(this.poster.shouldHideOnPlay()).to.equal(true);
+
+    this.playback.name = 'html5_audio';
+    expect(this.poster.shouldHideOnPlay()).to.equal(false);
+
+    // HLS audio-only needs overridden manually via config
+    this.playback.name = 'html5_video';
+    this.poster.options.audioOnly = true;
+    expect(this.poster.shouldHideOnPlay()).to.equal(false);
+  });
+
 })
