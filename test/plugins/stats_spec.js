@@ -15,7 +15,7 @@ describe('StatsPlugin', function() {
   afterEach(function() { this.clock.restore() })
 
   it('should calculate startup time', function() {
-    this.container.buffering()
+    this.container.onBuffering()
     this.clock.tick(1000)
     this.container.bufferfull()
     expect(this.stats.getStats().startupTime).to.equal(1000)
@@ -24,10 +24,10 @@ describe('StatsPlugin', function() {
   it('should calculate rebuffer events', function() {
     // to maintain compatibility with the first ping version
     // we'll increment rebuffers even on the startup rebuffer event
-    this.container.buffering()
+    this.container.onBuffering()
     this.container.bufferfull()
 
-    this.container.buffering()
+    this.container.onBuffering()
     this.container.bufferfull()
 
     expect(this.stats.getStats().rebuffers).to.equal(2)
@@ -35,15 +35,15 @@ describe('StatsPlugin', function() {
 
   it('should calculate total rebuffer time', function() {
     this.container.play()
-    this.container.buffering() // startup time
+    this.container.onBuffering() // startup time
     this.clock.tick(1000)
     this.container.bufferfull()
 
-    this.container.buffering()
+    this.container.onBuffering()
     this.clock.tick(1000)
     this.container.bufferfull()
 
-    this.container.buffering()
+    this.container.onBuffering()
     this.clock.tick(500)
     this.container.bufferfull()
 
@@ -52,7 +52,7 @@ describe('StatsPlugin', function() {
 
   it('should avoid NaN on watching time and rebuffering time when more than one bufferfull is dispatched', function() {
     this.container.play()
-    this.container.buffering() // startup time
+    this.container.onBuffering() // startup time
     this.clock.tick(1000)
     this.container.bufferfull()
     this.container.bufferfull()
@@ -65,14 +65,14 @@ describe('StatsPlugin', function() {
 
   it('should calculate total watching time', function() {
     this.container.play()
-    this.container.buffering() // startup time
+    this.container.onBuffering() // startup time
     this.clock.tick(1000)
     this.container.bufferfull()
 
     this.clock.tick(2000) // watching for 2 secs
     expect(this.stats.getStats().watchingTime).to.equal(2000)
 
-    this.container.buffering()
+    this.container.onBuffering()
     this.clock.tick(500)
     this.container.bufferfull()
 
@@ -82,16 +82,16 @@ describe('StatsPlugin', function() {
 
   it('should consider current rebuffering state', function() {
     this.container.play()
-    this.container.buffering() // startup time
+    this.container.onBuffering() // startup time
     this.clock.tick(1000)
     this.container.bufferfull()
 
-    this.container.buffering()
+    this.container.onBuffering()
     this.clock.tick(1000)
     this.container.bufferfull()
     this.clock.tick(10000)
 
-    this.container.buffering()
+    this.container.onBuffering()
     this.clock.tick(500)
     // still rebuffering
 
