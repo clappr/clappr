@@ -37,6 +37,16 @@ export default class FlasHLS extends BaseFlashPlayback {
     return this.hasEnded
   }
 
+  /**
+   * Determine if the playback is buffering.
+   * This is related to the PLAYBACK_BUFFERING and PLAYBACK_BUFFERFULL events
+   * @property buffering
+   * @type Boolean
+   */
+  get buffering() {
+    return !!this.bufferingState && !this.hasEnded
+  }
+
   constructor(options) {
     super(options)
     this.src = options.src
@@ -443,10 +453,12 @@ export default class FlasHLS extends BaseFlashPlayback {
 
   setPlaybackState(state) {
     if (["PLAYING_BUFFERING", "PAUSED_BUFFERING"].indexOf(state) >= 0)  {
+      this.bufferingState = true
       this.trigger(Events.PLAYBACK_BUFFERING, this.name)
       this.updateCurrentState(state)
     } else if (["PLAYING", "PAUSED"].indexOf(state) >= 0) {
       if (["PLAYING_BUFFERING", "PAUSED_BUFFERING", "IDLE"].indexOf(this.currentState) >= 0) {
+        this.bufferingState = false
         this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
       }
       this.updateCurrentState(state)
