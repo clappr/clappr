@@ -253,7 +253,7 @@ export default class HTML5Video extends Playback {
   destroy() {
     this.stop()
     this.el.src = ''
-    this.src = ''
+    this.src = null
     clearInterval(this.playheadMovingTimer)
     this.$el.remove()
   }
