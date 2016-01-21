@@ -45,6 +45,7 @@ export default class HLS extends HTML5VideoPlayback {
     this.hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this.updateDuration(evt, data))
     this.hls.on(HLSJS.Events.LEVEL_SWITCH, (evt,data) => this.onLevelSwitch(evt, data))
     this.hls.on(HLSJS.Events.FRAG_LOADED, (evt, data) => this.onFragmentLoaded(evt, data))
+    this.hls.on(HLSJS.Events.ERROR, (evt, data) => this.onHlsJSError(evt, data))
     this.hls.attachMedia(this.el)
   }
 
@@ -80,6 +81,10 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   updateDvr(status) {
+    if (!!this.dvrStatus === status) {
+      return
+    }
+    this.dvrStatus = status
     this.trigger(Events.PLAYBACK_DVR, status)
     this.trigger(Events.PLAYBACK_STATS_ADD, {'dvr': status})
   }
@@ -166,6 +171,14 @@ export default class HLS extends HTML5VideoPlayback {
         bitrate: currentLevel.bitrate,
         level: data.level
       })
+    }
+  }
+
+  onHlsJSError(evt, data) {
+    if (data.details === HLSJS.ErrorDetails.BUFFER_STALLED_ERROR) {
+      if (this.dvrEnabled) {
+        this.updateDvr(true)
+      }
     }
   }
 
