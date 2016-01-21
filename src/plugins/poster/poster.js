@@ -42,7 +42,12 @@ export default class PosterPlugin extends UIContainerPlugin {
     this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
     this.listenTo(this.container, Events.CONTAINER_PLAY, this.onPlay)
     this.listenTo(this.container, Events.CONTAINER_ENDED, this.onStop)
-    this.listenToOnce(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering)
+    if (this.container.buffering) {
+      process.nextTick(() => this.onBuffering())
+    }
+    else {
+      this.listenToOnce(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering)
+    }
     this.listenTo(this.container, Events.CONTAINER_OPTIONS_CHANGE, this.render)
     Mediator.on(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.updateSize, this)
   }
