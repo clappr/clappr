@@ -43,10 +43,10 @@ describe('Container', function() {
   })
 
   it('listens to playback:buffering event', function() {
-    sinon.spy(this.container, 'buffering')
+    sinon.spy(this.container, 'onBuffering')
     this.container.bindEvents()
     this.playback.trigger(Events.PLAYBACK_BUFFERING)
-    assert.ok(this.container.buffering.calledOnce)
+    assert.ok(this.container.onBuffering.calledOnce)
   })
 
   it('listens to playback:bufferfull event', function() {
@@ -97,10 +97,10 @@ describe('Container', function() {
   })
 
   it('listens to playback:ended event', function() {
-    sinon.spy(this.container, 'ended')
+    sinon.spy(this.container, 'onEnded')
     this.container.bindEvents()
     this.playback.trigger(Events.PLAYBACK_ENDED)
-    assert.ok(this.container.ended.calledOnce)
+    assert.ok(this.container.onEnded.calledOnce)
   })
 
   it('listens to playback:play event', function() {
