@@ -16,54 +16,56 @@ describe('MediaControl', function() {
   describe('#constructor', function() {
     it('can be built muted', function() {
       var mediaControl = new MediaControl({mute: true, container: this.container});
-      expect(mediaControl.mute).to.be.equal(true);
-      expect(mediaControl.currentVolume).to.be.equal(0);
+      expect(mediaControl.muted).to.be.equal(true);
+      expect(mediaControl.volume).to.be.equal(0);
     });
 
     it('restores saved volume', function() {
       Config.persist('volume', 42)
       var mediaControl = new MediaControl({persistConfig: true, container: this.container});
 
-      expect(mediaControl.currentVolume).to.be.equal(42)
+      expect(mediaControl.volume).to.be.equal(42)
     });
   });
 
   describe('#setVolume', function() {
+    // TODO fix. needs to wait for container to be ready because
+    // setVolume only called at this point
     it('sets the volume', function() {
       sinon.spy(this.container, 'setVolume');
-      sinon.spy(this.mediaControl, 'setVolumeLevel');
+      sinon.spy(this.mediaControl, 'updateVolumeUI');
 
       this.mediaControl.setVolume(42)
 
-      expect(this.mediaControl.currentVolume).to.be.equal(42)
-      expect(this.mediaControl.mute).to.be.equal(false)
+      expect(this.mediaControl.volume).to.be.equal(42)
+      expect(this.mediaControl.muted).to.be.equal(false)
       expect(this.container.setVolume).called.once;
-      expect(this.mediaControl.setVolumeLevel).called.once;
+      expect(this.mediaControl.updateVolumeUI).called.once;
     });
 
     it('limits volume to an integer between 0 and 100', function() {
       this.mediaControl.setVolume(1000)
-      expect(this.mediaControl.currentVolume).to.be.equal(100)
+      expect(this.mediaControl.volume).to.be.equal(100)
 
       this.mediaControl.setVolume(101)
-      expect(this.mediaControl.currentVolume).to.be.equal(100)
+      expect(this.mediaControl.volume).to.be.equal(100)
 
       this.mediaControl.setVolume(481)
-      expect(this.mediaControl.currentVolume).to.be.equal(100)
+      expect(this.mediaControl.volume).to.be.equal(100)
 
       this.mediaControl.setVolume(-1)
-      expect(this.mediaControl.currentVolume).to.be.equal(0)
+      expect(this.mediaControl.volume).to.be.equal(0)
 
       this.mediaControl.setVolume(0)
-      expect(this.mediaControl.currentVolume).to.be.equal(0)
+      expect(this.mediaControl.volume).to.be.equal(0)
     })
 
     it('mutes when volume is 0 or less than 0', function() {
       this.mediaControl.setVolume(10)
-      expect(this.mediaControl.mute).to.be.equal(false)
+      expect(this.mediaControl.muted).to.be.equal(false)
 
       this.mediaControl.setVolume(0)
-      expect(this.mediaControl.mute).to.be.equal(true)
+      expect(this.mediaControl.muted).to.be.equal(true)
     });
 
     it('persists volume when persistence is on', function() {
@@ -97,8 +99,8 @@ describe('MediaControl', function() {
 
       var mediaControl = new MyMediaControl({mute: true, container: this.container});
       mediaControl.render();
-      expect(mediaControl.mute).to.be.equal(true);
-      expect(mediaControl.currentVolume).to.be.equal(0);
+      expect(mediaControl.muted).to.be.equal(true);
+      expect(mediaControl.volume).to.be.equal(0);
       expect(mediaControl.$el.html()).to.be.equal(
         '<div>My HTML here</div><style class="clappr-style">.my-css-class {}</style>'
       );

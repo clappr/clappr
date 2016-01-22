@@ -62,7 +62,7 @@ export default class MediaControl extends UIObject {
 
   get stylesheet() { return Styler.getStyleFor(mediaControlStyle, {baseUrl: this.options.baseUrl}) }
 
-  get volume() { return this.container ? this.container.volume : 100 }
+  get volume() { return this.intendedVolume }
   get muted() { return this.volume === 0 }
 
   constructor(options) {
@@ -309,6 +309,10 @@ export default class MediaControl extends UIObject {
 
   setVolume(value) {
     value = Math.min(100, Math.max(value, 0))
+    // this will hold the intended volume
+    // it may not actually get set to this straight away
+    // if the container is not ready etc
+    this.intendedVolume = value
     this.persistConfig && Config.persist("volume", value)
     var setWhenContainerReady = () => {
       if (this.container.isReady) {
@@ -343,6 +347,8 @@ export default class MediaControl extends UIObject {
     }
     Mediator.off(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
     this.container = container
+    // set the new container to match the volume of the last one
+    this.setVolume(this.intendedVolume)
     this.changeTogglePlay()
     this.addEventListeners()
     this.settingsUpdate()
