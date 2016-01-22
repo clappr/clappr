@@ -307,13 +307,22 @@ Events.PLAYBACK_TIMEUPDATE = 'playback:timeupdate'
  */
 Events.PLAYBACK_READY = 'playback:ready'
 /**
- * Fired when playback is buffering
+ * Fired when the playback starts having to buffer because
+ * playback can currently not be smooth.
+ *
+ * This corresponds to the playback `buffering` property being
+ * `true`.
  *
  * @event PLAYBACK_BUFFERING
  */
 Events.PLAYBACK_BUFFERING = 'playback:buffering'
 /**
- * Fired when playback filled the buffer
+ * Fired when the playback has enough in the buffer to be
+ * able to play smoothly, after previously being unable to
+ * do this.
+ *
+ * This corresponds to the playback `buffering` property being
+ * `false`.
  *
  * @event PLAYBACK_BUFFERFULL
  */
