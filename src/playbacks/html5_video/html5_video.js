@@ -80,8 +80,7 @@ export default class HTML5Video extends Playback {
     super(options)
     this.loadStarted = false
     this.playheadMoving = false
-    this.playheadMovingTimeOnCheck = null
-    this.playheadMovingTimer = setInterval(this.determineIfPlayheadMoving.bind(this), 500)
+    this.playheadMovingTimer = null
     this.options = options
     this.setupSrc(options.src)
     this.el.loop = options.loop
@@ -154,6 +153,7 @@ export default class HTML5Video extends Playback {
   }
 
   play() {
+    this.startPlayheadMovingChecks()
     if (!this.loadStarted && this.el.preload === 'none') {
       this.loadStarted = true
       this.handleBufferingEvents()
@@ -168,6 +168,7 @@ export default class HTML5Video extends Playback {
   stop() {
     this.pause()
     this.el.currentTime = 0
+    this.stopPlayheadMovingChecks()
     this.handleBufferingEvents()
     this.trigger(Events.PLAYBACK_STOP)
   }
@@ -194,6 +195,24 @@ export default class HTML5Video extends Playback {
 
   get isReady() {
     return this.isReadyState
+  }
+
+  startPlayheadMovingChecks() {
+    if (this.playheadMovingTimer !== null) {
+      return
+    }
+    this.playheadMovingTimeOnCheck = null
+    this.determineIfPlayheadMoving()
+    this.playheadMovingTimer = setInterval(this.determineIfPlayheadMoving.bind(this), 500)
+  }
+
+  stopPlayheadMovingChecks() {
+    if (this.playheadMovingTimer === null) {
+      return
+    }
+    clearInterval(this.playheadMovingTimer)
+    this.playheadMovingTimer = null
+    this.playheadMoving = false
   }
 
   determineIfPlayheadMoving() {
@@ -254,7 +273,6 @@ export default class HTML5Video extends Playback {
     this.stop()
     this.el.src = ''
     this.src = null
-    clearInterval(this.playheadMovingTimer)
     this.$el.remove()
   }
 
@@ -310,7 +328,9 @@ export default class HTML5Video extends Playback {
   }
 
   typeFor(src) {
-    return 'video/mp4'
+    var resourceParts = src.split('?')[0].match(/.*\.(.*)$/) || []
+    var isHls = resourceParts.length > 1 && resourceParts[1] === "m3u8"
+    return isHls ? 'application/vnd.apple.mpegurl' : 'video/mp4'
   }
 
   ready() {
