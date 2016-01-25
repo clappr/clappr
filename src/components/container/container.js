@@ -51,6 +51,17 @@ export default class Container extends UIObject {
   }
 
   /**
+   * Determine if the playback is having to buffer in order for
+   * playback to be smooth.
+   * (i.e if a live stream is playing smoothly, this will be false)
+   * @property buffering
+   * @type Boolean
+   */
+  get buffering() {
+    return this.playback.buffering
+  }
+
+  /**
    * it builds a container
    * @method constructor
    * @param {Object} options the options object
@@ -100,7 +111,7 @@ export default class Container extends UIObject {
     this.listenTo(this.playback, Events.PLAYBACK_PROGRESS, this.progress)
     this.listenTo(this.playback, Events.PLAYBACK_TIMEUPDATE, this.timeUpdated)
     this.listenTo(this.playback, Events.PLAYBACK_READY, this.ready)
-    this.listenTo(this.playback, Events.PLAYBACK_BUFFERING, this.buffering)
+    this.listenTo(this.playback, Events.PLAYBACK_BUFFERING, this.onBuffering)
     this.listenTo(this.playback, Events.PLAYBACK_BUFFERFULL, this.bufferfull)
     this.listenTo(this.playback, Events.PLAYBACK_SETTINGSUPDATE, this.settingsUpdate)
     this.listenTo(this.playback, Events.PLAYBACK_LOADEDMETADATA, this.loadedMetadata)
@@ -110,7 +121,7 @@ export default class Container extends UIObject {
     this.listenTo(this.playback, Events.PLAYBACK_DVR, this.playbackDvrStateChanged)
     this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL_DISABLE, this.disableMediaControl)
     this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL_ENABLE, this.enableMediaControl)
-    this.listenTo(this.playback, Events.PLAYBACK_ENDED, this.ended)
+    this.listenTo(this.playback, Events.PLAYBACK_ENDED, this.onEnded)
     this.listenTo(this.playback, Events.PLAYBACK_PLAY, this.playing)
     this.listenTo(this.playback, Events.PLAYBACK_PAUSE, this.paused)
     this.listenTo(this.playback, Events.PLAYBACK_STOP, this.stopped)
@@ -247,7 +258,7 @@ export default class Container extends UIObject {
     this.playback.pause()
   }
 
-  ended() {
+  onEnded() {
     this.trigger(Events.CONTAINER_ENDED, this, this.name)
     this.currentTime = 0
   }
@@ -291,7 +302,7 @@ export default class Container extends UIObject {
     this.trigger(Events.CONTAINER_FULLSCREEN, this.name)
   }
 
-  buffering() {
+  onBuffering() {
     this.trigger(Events.CONTAINER_STATE_BUFFERING, this.name)
   }
 

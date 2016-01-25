@@ -11,7 +11,7 @@ export default class HTML5Audio extends HTML5Video {
   get name() { return 'html5_audio' }
   get tagName() { return 'audio' }
 
-  durationChange() {
+  updateSettings() {
     this.settings.left = ["playpause", "position", "duration"]
     this.settings.seekEnabled = this.isSeekEnabled()
     this.trigger(Events.PLAYBACK_SETTINGSUPDATE)
@@ -19,16 +19,6 @@ export default class HTML5Audio extends HTML5Video {
 
   getPlaybackType() {
     return Playback.AOD
-  }
-
-  stalled() {
-    if (this.el.readyState < this.el.HAVE_FUTURE_DATA) {
-      this.trigger(Events.PLAYBACK_BUFFERING, this.name)
-    }
-  }
-
-  timeUpdated() {
-    this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: this.el.currentTime, total: this.el.duration}, this.name)
   }
 }
 

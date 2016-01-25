@@ -84,7 +84,7 @@ export default class HLS extends HTML5VideoPlayback {
     this.trigger(Events.PLAYBACK_STATS_ADD, {'dvr': status})
   }
 
-  durationChange() {
+  updateSettings() {
     if (this.playbackType === Playback.VOD) {
       this.settings.left = ["playpause", "position", "duration"]
     } else if (this.dvrEnabled) {
@@ -93,11 +93,10 @@ export default class HLS extends HTML5VideoPlayback {
       this.settings.left = ["playstop"]
     }
     this.settings.seekEnabled = this.isSeekEnabled()
-    this.timeUpdated()
     this.trigger(Events.PLAYBACK_SETTINGSUPDATE)
   }
 
-  timeUpdated() {
+  onTimeUpdate() {
     this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: this.getCurrentTime(), total: this.getDuration()}, this.name)
   }
 
@@ -116,17 +115,11 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   stop() {
+    super.stop()
     if (this.hls) {
       this.hls.destroy()
       delete this.hls
-      this.trigger(Events.PLAYBACK_STOP)
     }
-  }
-
-  render() {
-    super.render()
-    this.ready()
-    return this
   }
 
   updatePlaybackType(evt, data) {
@@ -145,7 +138,7 @@ export default class HLS extends HTML5VideoPlayback {
       this.playableRegionStartTime = fragments[0].start
     }
     this.playableRegionDuration = data.details.totalduration
-    this.durationChange()
+    this.onDurationChange()
   }
 
   onFragmentLoaded(evt, data) {

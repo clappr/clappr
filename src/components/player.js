@@ -52,6 +52,17 @@ export default class Player extends BaseObject {
     return this.core.mediaControl.container.ended
   }
 
+  /**
+   * Determine if the playback is having to buffer in order for
+   * playback to be smooth.
+   * (i.e if a live stream is playing smoothly, this will be false)
+   * @property buffering
+   * @type Boolean
+   */
+  get buffering() {
+    return this.core.mediaControl.container.buffering
+  }
+
   /*
    * determine if the player is ready.
    * @property isReady
