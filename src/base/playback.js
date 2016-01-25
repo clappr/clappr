@@ -19,6 +19,17 @@ export default class Playback extends UIObject {
   }
 
   /**
+   * Determine if the playback is having to buffer in order for
+   * playback to be smooth.
+   * (i.e if a live stream is playing smoothly, this will be false)
+   * @property buffering
+   * @type Boolean
+   */
+  get buffering() {
+    return false
+  }
+
+  /**
    * @method constructor
    * @param {Object} options the options object
    */
