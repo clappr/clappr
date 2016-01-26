@@ -41,6 +41,8 @@ export default class DashShakaPlayback extends HTML5Video {
     this.selectVideoTrack = checkIfIsReady((id) => this._player.selectVideoTrack(id))
 
     this.getPlaybackType = checkIfIsReady(() => (this._player.isLive()?'live':'vod'))
+
+    options.autoPlay && this.play()
   }
 
   play() {
