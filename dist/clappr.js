@@ -186,7 +186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var version = ("0.2.32");
+	var version = ("0.2.33");
 
 	exports['default'] = {
 	    Player: _componentsPlayer2['default'],
