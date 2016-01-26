@@ -176,12 +176,13 @@ If you want to disable media control auto hide, add `hideMediaControl: false` in
 When embedded with width less than 320, volume bars are hidden. You can force this behavior for all sizes by adding `hideVolumeBar: true`.
 
 ##### Watermark
-Put `watermark: http://url/img.png` on your embed parameters to automatically add watermark on your video. Choose corner position by defining position parameter. Positions can be `bottom-left`, `bottom-right`, `top-left` and `top-right`. Example:
+Put `watermark: http://url/img.png` on your embed parameters to automatically add watermark on your video. Choose corner position by defining position parameter. Positions can be `bottom-left`, `bottom-right`, `top-left` and `top-right`. To define an URL to open when the watermark is clicked, use watermarkLink parameter. If the watermarkLink parameter not defined, the watermark will not be clickable. Example:
 
 ```javascript
   var player = new Clappr.Player({
     source: "http://your.video/here.mp4",
-    watermark: "http://url/img.png", position: 'top-right'
+    watermark: "http://url/img.png", position: 'top-right',
+    watermarkLink: "http://example.net/"
   });
 ```
 
