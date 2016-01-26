@@ -153,7 +153,6 @@ export default class HTML5Video extends Playback {
   }
 
   play() {
-    this.startPlayheadMovingChecks()
     if (!this.loadStarted && this.el.preload === 'none') {
       this.loadStarted = true
       this.handleBufferingEvents()
@@ -233,11 +232,13 @@ export default class HTML5Video extends Playback {
   }
 
   onPlaying() {
+    this.startPlayheadMovingChecks()
     this.handleBufferingEvents()
     this.trigger(Events.PLAYBACK_PLAY)
   }
 
   onPause() {
+    this.stopPlayheadMovingChecks()
     this.handleBufferingEvents()
     this.trigger(Events.PLAYBACK_PAUSE)
   }
