@@ -36,6 +36,7 @@ export default class HLS extends HTML5VideoPlayback {
     // if content is removed from the beginning then this empty area should
     // be ignored. "playableRegionDuration" does not consider this
     this.playableRegionDuration = 0
+    options.autoPlay && this.setupHls()
   }
 
   setupHls() {
