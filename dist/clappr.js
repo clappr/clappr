@@ -186,7 +186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var version = ("0.2.31");
+	var version = ("0.2.32");
 
 	exports['default'] = {
 	    Player: _componentsPlayer2['default'],
@@ -10148,7 +10148,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'play',
 	    value: function play() {
-	      this.startPlayheadMovingChecks();
 	      if (!this.loadStarted && this.el.preload === 'none') {
 	        this.loadStarted = true;
 	        this.handleBufferingEvents();
@@ -10236,12 +10235,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onPlaying',
 	    value: function onPlaying() {
+	      this.startPlayheadMovingChecks();
 	      this.handleBufferingEvents();
 	      this.trigger(_baseEvents2['default'].PLAYBACK_PLAY);
 	    }
 	  }, {
 	    key: 'onPause',
 	    value: function onPause() {
+	      this.stopPlayheadMovingChecks();
 	      this.handleBufferingEvents();
 	      this.trigger(_baseEvents2['default'].PLAYBACK_PAUSE);
 	    }
@@ -12143,6 +12144,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // if content is removed from the beginning then this empty area should
 	    // be ignored. "playableRegionDuration" does not consider this
 	    this.playableRegionDuration = 0;
+	    options.autoPlay && this.setupHls();
 	  }
 
 	  _createClass(HLS, [{
