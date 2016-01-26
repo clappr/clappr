@@ -29,6 +29,7 @@ export default class WaterMarkPlugin extends UIContainerPlugin {
     this.position = this.options.position || "bottom-right"
     if (this.options.watermark) {
       this.imageUrl = this.options.watermark
+      this.imageLink = this.options.watermarkLink
       this.render()
     } else {
       this.$el.remove()
@@ -46,7 +47,7 @@ export default class WaterMarkPlugin extends UIContainerPlugin {
 
   render() {
     this.$el.hide()
-    var templateOptions = {position: this.position, imageUrl: this.imageUrl}
+    var templateOptions = {position: this.position, imageUrl: this.imageUrl, imageLink: this.imageLink}
     this.$el.html(this.template(templateOptions))
     var style = Styler.getStyleFor(watermarkStyle)
     this.container.$el.append(style)
