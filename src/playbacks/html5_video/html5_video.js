@@ -73,7 +73,7 @@ export default class HTML5Video extends Playback {
    * @type Boolean
    */
   get buffering() {
-    return this.bufferingState
+    return !!this.bufferingState
   }
 
   constructor(options) {
