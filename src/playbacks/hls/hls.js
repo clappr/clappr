@@ -7,6 +7,7 @@ import HLSJS from 'hls.js'
 import Events from 'base/events'
 import Playback from 'base/playback'
 import Browser from 'components/browser'
+import Log from 'plugins/log'
 
 const AUTO = -1
 
@@ -65,19 +66,27 @@ export default class HLS extends HTML5VideoPlayback {
     return this.el.currentTime - this.playableRegionStartTime
   }
 
-  seek(time) {
-    var onDvr = this.dvrEnabled && time > 0 && time <= this.playableRegionDuration
-    time += this.playableRegionStartTime
-    super.seek(time)
-    this.updateDvr(onDvr)
-  }
-
   seekPercentage(percentage) {
     var seekTo = this.playableRegionDuration
     if (percentage > 0) {
       seekTo = this.playableRegionDuration * (percentage / 100)
     }
     this.seek(seekTo)
+  }
+
+  seek(time) {
+    if (time < 0) {
+      Log.warn("Attempt to seek to a negative time. Resetting to live point. Use seekToLivePoint() to seek to the live point.")
+      time = this.getDuration()
+    }
+    // assume live if time within 3 seconds of end of stream
+    this.dvrEnabled && this.updateDvr(time < this.getDuration()-3)
+    time += this.playableRegionStartTime
+    super.seek(time)
+  }
+
+  seekToLivePoint() {
+    this.seek(this.getDuration())
   }
 
   updateDvr(status) {
