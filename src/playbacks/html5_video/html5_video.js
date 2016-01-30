@@ -38,13 +38,13 @@ export default class HTML5Video extends Playback {
 
   get events() {
     return {
-      'canplay': 'handleBufferingEvents',
+      'canplay': 'onCanPlay',
       'canplaythrough': 'handleBufferingEvents',
       'durationchange': 'onDurationChange',
       'ended': 'onEnded',
       'error': 'onError',
+      'loadeddata': 'onLoadedData',
       'loadedmetadata': 'onLoadedMetadata',
-      'loadstart': 'onLoadStart',
       'pause': 'onPause',
       'playing': 'onPlaying',
       'progress': 'onProgress',
@@ -52,7 +52,7 @@ export default class HTML5Video extends Playback {
       'seeking': 'handleBufferingEvents',
       'stalled': 'handleBufferingEvents',
       'timeupdate': 'onTimeUpdate',
-      'waiting': 'handleBufferingEvents'
+      'waiting': 'onWaiting'
     }
   }
 
@@ -153,10 +153,6 @@ export default class HTML5Video extends Playback {
   }
 
   play() {
-    if (!this.loadStarted && this.el.preload === 'none') {
-      this.loadStarted = true
-      this.handleBufferingEvents()
-    }
     this.el.play()
   }
 
@@ -222,13 +218,34 @@ export default class HTML5Video extends Playback {
     this.handleBufferingEvents()
   }
 
-  onLoadStart() {
-    if (this.el.preload !== 'none') {
-      // when preload is none the onLoadStart event is still fired
-      // immediately. Pretend that load starts in play()
-      this.loadStarted = true
-      this.handleBufferingEvents()
-    }
+  // this seems to happen when the user is having to wait
+  // for something to happen AFTER A USER INTERACTION
+  // e.g the player might be buffering, but when `play()` is called
+  // only at this point will this be called.
+  // Or the user may seek somewhere but the new area requires buffering,
+  // so it will fire then as well.
+  // On devices where playing is blocked until requested with a user action,
+  // buffering may start, but never finish until the user initiates a play,
+  // but this only happens when play is actually requested
+  onWaiting() {
+    this.loadStarted = true
+    this.handleBufferingEvents()
+  }
+  
+  // called after the first frame has loaded
+  // note this doesn't fire on ios before the user has requested play
+  // ideally the "loadstart" event would be used instead, but this fires
+  // before a user has requested play on iOS, and also this is always fired
+  // even if the preload setting is "none". In both these cases this causes
+  // infinite buffering until the user does something which isn't great.
+  onLoadedData() {
+    this.loadStarted = true
+    this.handleBufferingEvents()
+  }
+
+  // note this doesn't fire on ios before user has requested play
+  onCanPlay() {
+    this.handleBufferingEvents()
   }
 
   onPlaying() {
