@@ -81,6 +81,7 @@ export default class HTML5Video extends Playback {
     this.loadStarted = false
     this.playheadMoving = false
     this.playheadMovingTimer = null
+    this.stopped = false
     this.options = options
     this.setupSrc(options.src)
     this.el.loop = options.loop
@@ -153,6 +154,8 @@ export default class HTML5Video extends Playback {
   }
 
   play() {
+    this.stopped = false
+    this.handleBufferingEvents()
     this.el.play()
   }
 
@@ -162,6 +165,7 @@ export default class HTML5Video extends Playback {
 
   stop() {
     this.pause()
+    this.stopped = true
     this.el.currentTime = 0
     this.stopPlayheadMovingChecks()
     this.handleBufferingEvents()
@@ -267,11 +271,12 @@ export default class HTML5Video extends Playback {
 
   // The playback should be classed as buffering if the following are true:
   // - the ready state is less then HAVE_FUTURE_DATA or the playhead isn't moving and it should be
-  // - the media hasn't "ended"
+  // - the media hasn't "ended",
+  // - the media hasn't been stopped
   // - loading has started
   handleBufferingEvents() {
     var playheadShouldBeMoving = !this.el.ended && !this.el.paused
-    var buffering = this.loadStarted && !this.el.ended && ((playheadShouldBeMoving && !this.playheadMoving) || this.el.readyState < this.el.HAVE_FUTURE_DATA)
+    var buffering = this.loadStarted && !this.el.ended && !this.stopped && ((playheadShouldBeMoving && !this.playheadMoving) || this.el.readyState < this.el.HAVE_FUTURE_DATA)
     if (this.bufferingState !== buffering) {
       this.bufferingState = buffering
       if (buffering) {
