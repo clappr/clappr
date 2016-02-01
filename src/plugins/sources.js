@@ -1,6 +1,7 @@
 import CorePlugin from 'base/core_plugin'
 
 import Events from 'base/events'
+import find from 'lodash.find'
 
 export default class SourcesPlugin extends CorePlugin {
   get name() { return 'sources' }
@@ -10,7 +11,7 @@ export default class SourcesPlugin extends CorePlugin {
   }
 
   onContainersCreated() {
-    var firstValidSource = this.core.containers.find((container) => container.playback.name !== 'no_op') || this.core.containers[0]
+    var firstValidSource = find(this.core.containers, (container) => container.playback.name !== 'no_op' || this.core.containers[0])
     if (firstValidSource) {
       this.core.containers.forEach((container) => {
         if (container !== firstValidSource) {
