@@ -12,9 +12,7 @@ import $ from 'clappr-zepto'
 import flashHTML from './public/flash.html'
 import flashStyle from './public/flash.scss'
 
-var IE_CLASSID = "clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
-
-var objectIE = '<object type="application/x-shockwave-flash" id="<%= cid %>" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" data-hls="" width="100%" height="100%"><param name="movie" value="<%= swfPath %>"> <param name="quality" value="autohigh"> <param name="swliveconnect" value="true"> <param name="allowScriptAccess" value="always"> <param name="bgcolor" value="#001122"> <param name="allowFullScreen" value="false"> <param name="wmode" value="transparent"> <param name="tabindex" value="1"> <param name=FlashVars value="playbackId=<%= playbackId %>&callback=<%= callbackName %>" /> </object>'
+var IE_CLASSID = 'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000'
 
 export default class BaseFlashPlayback extends Playback {
   get tagName() { return 'object' }
@@ -22,9 +20,15 @@ export default class BaseFlashPlayback extends Playback {
   get wmode() { return 'transparent' }
   get template() { return template(flashHTML) }
   get attributes() {
+    var type = 'application/x-shockwave-flash';
+
+    if (Browser.isLegacyIE) {
+      type = '';
+    }
+
     return {
       class: 'clappr-flash-playback',
-      type: 'application/x-shockwave-flash',
+      type: type,
       width: '100%',
       height: '100%',
       'data-flash-playback': this.name
@@ -50,18 +54,24 @@ export default class BaseFlashPlayback extends Playback {
       baseUrl: this.baseUrl,
       playbackId: this.uniqueId,
       wmode: this.wmode,
-      callbackName: `window.Clappr.flashlsCallbacks.${this.cid}`}))
+      callbackName: `window.Clappr.flashlsCallbacks.${this.cid}`})
+    )
+
     if (Browser.isIE) {
       this.$('embed').remove()
-      if(Browser.isLegacyIE) {
+
+      if (Browser.isLegacyIE) {
         this.$el.attr('classid', IE_CLASSID)
       }
-    } else if (Browser.isFirefox) {
+    }
+
+    if (Browser.isFirefox) {
       this.setupFirefox()
     }
+
     this.el.id = this.cid
-    var style = Styler.getStyleFor(flashStyle)
-    this.$el.append(style)
+    this.$el.append(Styler.getStyleFor(flashStyle))
+
     return this
   }
 }
