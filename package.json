@@ -67,6 +67,7 @@
     "yargs": "^3.24.0"
   },
   "dependencies": {
+    "babel-polyfill": "6.3.14",
     "clappr-zepto": "0.0.4",
     "compass-mixins": "^0.12.7",
     "hls.js": "github:dailymotion/hls.js#v0.4.7",

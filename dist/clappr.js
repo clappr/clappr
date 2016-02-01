@@ -10054,7 +10054,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'buffering',
 	    get: function get() {
-	      return this.bufferingState;
+	      return !!this.bufferingState;
 	    }
 	  }]);
 
@@ -19816,7 +19816,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {// Copyright 2014 Globo.com Player authors. All rights reserved.
+	// Copyright 2014 Globo.com Player authors. All rights reserved.
 	// Use of this source code is governed by a BSD-style
 	// license that can be found in the LICENSE file.
 
@@ -19879,19 +19879,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }]);
 
 	  function SpinnerThreeBouncePlugin(container) {
-	    var _this = this;
-
 	    _classCallCheck(this, SpinnerThreeBouncePlugin);
 
 	    _get(Object.getPrototypeOf(SpinnerThreeBouncePlugin.prototype), 'constructor', this).call(this, container);
 	    this.template = (0, _baseTemplate2['default'])(_publicSpinnerHtml2['default']);
 	    this.showTimeout = null;
 	    this.listenTo(this.container, _baseEvents2['default'].CONTAINER_STATE_BUFFERING, this.onBuffering);
-	    if (this.container.buffering) {
-	      process.nextTick(function () {
-	        return _this.onBuffering();
-	      });
-	    }
 	    this.listenTo(this.container, _baseEvents2['default'].CONTAINER_STATE_BUFFERFULL, this.onBufferFull);
 	    this.listenTo(this.container, _baseEvents2['default'].CONTAINER_STOP, this.onStop);
 	    this.listenTo(this.container, _baseEvents2['default'].CONTAINER_ENDED, this.onStop);
@@ -19917,11 +19910,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'show',
 	    value: function show() {
-	      var _this2 = this;
+	      var _this = this;
 
 	      if (this.showTimeout === null) {
 	        this.showTimeout = setTimeout(function () {
-	          return _this2.$el.show();
+	          return _this.$el.show();
 	        }, 300);
 	      }
 	    }
@@ -19942,6 +19935,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.container.$el.append(style);
 	      this.container.$el.append(this.$el);
 	      this.$el.hide();
+	      if (this.container.buffering) {
+	        this.onBuffering();
+	      }
 	      return this;
 	    }
 	  }]);
@@ -19951,7 +19947,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports['default'] = SpinnerThreeBouncePlugin;
 	module.exports = exports['default'];
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(45)))
 
 /***/ },
 /* 123 */
