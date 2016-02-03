@@ -11,7 +11,15 @@ if (process.env.npm_lifecycle_event === 'release') {
     output: {comments: false}
   }));
 } else {
-  webpackConfig.plugins.push(new Clean(['dist']));
+  webpackConfig.plugins.push(new Clean([
+    'dist/*.cur',
+    'dist/*.eot',
+    'dist/*.js',
+    'dist/*.js.map',
+    'dist/*.svg',
+    'dist/*.swf',
+    'dist/*.ttf'
+  ]));
 }
 
 webpackConfig.output = {

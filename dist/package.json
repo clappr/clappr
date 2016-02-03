@@ -1,0 +1,17 @@
+{
+  "name": "clappr",
+  "version": "0.2.34",
+  "description": "An extensible media player for the web",
+  "main": "./clappr.js",
+  "browser": "./clappr.min.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:clappr/clappr.git"
+  },
+  "author": "Globo.com",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/clappr/clappr/issues"
+  },
+  "homepage": "https://github.com/clappr/clappr"
+}
