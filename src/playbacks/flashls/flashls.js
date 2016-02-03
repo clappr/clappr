@@ -21,7 +21,13 @@ export default class FlasHLS extends BaseFlashPlayback {
   get swfPath() { return template(hlsSwf)({baseUrl: this.baseUrl}) }
 
   get levels() { return this._levels || [] }
-  get currentLevel() { return this._currentLevel || AUTO }
+  get currentLevel() {
+    if (this._currentLevel === null || this._currentLevel === undefined) {
+      return AUTO;
+    } else {
+      return this._currentLevel; //0 is a valid level ID
+    }
+  }
   set currentLevel(id) {
     this._currentLevel = id
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_START)
