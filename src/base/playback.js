@@ -70,10 +70,20 @@ export default class Playback extends UIObject {
    */
   seekPercentage(percentage) {/*jshint unused:false*/}
 
+
+  /**
+   * The time that "0" now represents relative to when playback started.
+   * For a stream with a sliding window this will increase as content is
+   * removed from the beginning.
+   * @method getStartTimeOffset
+   * @return {Number} time (in seconds) that time "0" represents.
+   */
+  getStartTimeOffset() { return 0 }
+
   /**
    * gets the duration in seconds
    * @method getDuration
-   * @return {Number} duration time (in seconds) of the current source
+   * @return {Number} duration (in seconds) of the current source
    */
   getDuration() { return 0 }
 
