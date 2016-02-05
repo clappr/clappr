@@ -439,6 +439,17 @@ export default class Player extends BaseObject {
   }
 
   /**
+   * The time that "0" now represents relative to when playback started.
+   * For a stream with a sliding window this will increase as content is
+   * removed from the beginning.
+   * @method getStartTimeOffset
+   * @return {Number} time (in seconds) that time "0" represents.
+   */
+  getStartTimeOffset() {
+   return this.core.mediaControl.container.getStartTimeOffset()
+  }
+
+  /**
    * the duration time in seconds.
    * @method getDuration
    * @return {Number} duration time (in seconds) of the current source

@@ -72,6 +72,13 @@ export default class HLS extends HTML5VideoPlayback {
     return this.el.currentTime - this.playableRegionStartTime
   }
 
+  // the time that "0" now represents relative to when playback started
+  // for a stream with a sliding window this will increase as content is
+  // removed from the beginning
+  getStartTimeOffset() {
+    return this.playableRegionStartTime
+  }
+
   seekPercentage(percentage) {
     var seekTo = this.playableRegionDuration
     if (percentage > 0) {
