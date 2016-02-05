@@ -197,6 +197,10 @@ export default class Container extends UIObject {
     return this.playback.isPlaying()
   }
 
+  getStartTimeOffset() {
+    return this.playback.getStartTimeOffset()
+  }
+
   getCurrentTime() {
     return this.currentTime
   }
