@@ -50,7 +50,7 @@ export default class HLS extends HTML5VideoPlayback {
     this.hls = new HLSJS(this.options.hlsjsConfig || {})
     this.hls.on(HLSJS.Events.MEDIA_ATTACHED, () => this.hls.loadSource(this.options.src))
     this.hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this.updatePlaybackType(evt, data))
-    this.hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this.updateDuration(evt, data))
+    this.hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this.onLevelUpdated(evt, data))
     this.hls.on(HLSJS.Events.LEVEL_SWITCH, (evt,data) => this.onLevelSwitch(evt, data))
     this.hls.on(HLSJS.Events.FRAG_LOADED, (evt, data) => this.onFragmentLoaded(evt, data))
     this.hls.attachMedia(this.el)
@@ -155,13 +155,30 @@ export default class HLS extends HTML5VideoPlayback {
     this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this._levels)
   }
 
-  updateDuration(evt, data) {
+  onLevelUpdated(evt, data) {
     var fragments = data.details.fragments
     if (fragments.length > 0) {
       this.playableRegionStartTime = fragments[0].start
     }
-    this.playableRegionDuration = data.details.totalduration
-    this.onDurationChange()
+    var newDuration = data.details.totalduration
+
+    // if it's a live stream then shorten the duration to remove access
+    // to the area after hlsjs's live sync point
+    // seeks to areas after this point sometimes have issues
+    if (this.playbackType === Playback.LIVE) {
+      let currentLevel = this.hls.levels[data.level]
+      let fragmentTargetDuration = currentLevel.details.targetduration
+      let hlsjsConfig = this.options.hlsjsConfig || {}
+      let liveSyncDurationCount = hlsjsConfig.liveSyncDurationCount || HLSJS.DefaultConfig.liveSyncDurationCount
+      let hiddenAreaDuration = fragmentTargetDuration * liveSyncDurationCount
+      if (hiddenAreaDuration <= newDuration) {
+        newDuration -= hiddenAreaDuration
+      }
+    }
+    if (newDuration !== this.playableRegionDuration) {
+      this.playableRegionDuration = newDuration
+      this.onDurationChange()
+    }
   }
 
   onFragmentLoaded(evt, data) {
