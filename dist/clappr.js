@@ -186,7 +186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// Use of this source code is governed by a BSD-style
 	// license that can be found in the LICENSE file.
 
-	var version = ("0.2.34");
+	var version = ("0.2.35");
 
 	exports.default = {
 	    Player: _player2.default,
@@ -22849,7 +22849,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'durationShown',
 	    get: function get() {
-	      return this.isLiveStreamWithDvr;
+	      return this.isLiveStreamWithDvr && !this.useActualLiveTime;
 	    }
 	  }, {
 	    key: 'useActualLiveTime',
