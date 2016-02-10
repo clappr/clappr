@@ -26,7 +26,7 @@ export default class SeekTime extends UICorePlugin {
   get mediaControl() { return this.core.mediaControl }
   get mediaControlContainer() { return this.mediaControl.container }
   get isLiveStreamWithDvr() { return this.mediaControlContainer && this.mediaControlContainer.getPlaybackType() === Playback.LIVE && this.mediaControlContainer.isDvrEnabled() }
-  get durationShown() { return this.isLiveStreamWithDvr }
+  get durationShown() { return this.isLiveStreamWithDvr && !this.useActualLiveTime }
   get useActualLiveTime() { return this.actualLiveTime && this.isLiveStreamWithDvr }
   constructor(core) {
     super(core)
