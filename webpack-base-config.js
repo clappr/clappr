@@ -12,7 +12,10 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-	query: { presets: ['es2015'] }
+        query: {
+          presets: ['es2015'],
+          plugins: ['add-module-exports']
+        }
       },
       {
         test: /\.scss$/,
