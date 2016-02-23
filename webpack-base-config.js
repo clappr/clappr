@@ -11,11 +11,8 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['es2015'],
-          plugins: ['add-module-exports']
-        }
+        loader: 'babel-loader'
+        // config in .babelrc
       },
       {
         test: /\.scss$/,
