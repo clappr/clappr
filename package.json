@@ -71,7 +71,7 @@
   "dependencies": {
     "clappr-zepto": "0.0.4",
     "compass-mixins": "^0.12.7",
-    "hls.js": "^0.5.0",
+    "hls.js": "^0.5.7",
     "lodash.find": "^4.2.0",
     "lodash.once": "^4.0.0",
     "lodash.result": "^4.2.0",
