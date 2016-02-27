@@ -205,6 +205,9 @@ To disable this add `autoSeekFromUrl: false`.
 ##### Disable HTML5 Video Context Menu
 Add `disableVideoTagContextMenu: true` to disable the context menu (right click) on the HTML5 video element (in the case where a HTML5 playback is used).
 
+##### Disable Exiting Full Screen When Media Ends
+By default the player will automatically exit full screen when the media ends. To disable this add `exitFullscreenOnEnd: false` on your player options.
+
 ### Status
 
 Clappr is under heavy development but production-ready. Feel free to open issues and send us pull requests.
