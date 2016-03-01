@@ -51,5 +51,5 @@ export default class HTMLImg extends Playback {
 }
 
 HTMLImg.canPlay = function(resource) {
-  return !!resource.match(/(.*)\.(png|jpg|jpeg|gif|bmp)\?{0,1}/)
+  return /\.(png|jpg|jpeg|gif|bmp|tiff|pgm|pnm)(|\?.*)$/i.test(resource)
 }
