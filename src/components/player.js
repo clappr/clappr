@@ -134,6 +134,8 @@ export default class Player extends BaseObject {
    * disables the context menu (right click) on the video element if a HTML5Video playback is used.
    * @param {Boolean} [options.autoSeekFromUrl]
    * Automatically seek to the seconds provided in the url (e.g example.com?t=100) **default**: `true`
+   * @param {Boolean} [options.exitFullscreenOnEnd]
+   * Automatically exit full screen when the media finishes. **default**: `true`
    * @param {String} [options.poster]
    * define a poster by adding its address `poster: 'http://url/img.png'`. It will appear after video embed, disappear on play and go back when user stops the video.
    * @param {String} [options.playbackNotSupportedMessage]
