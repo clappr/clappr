@@ -92,7 +92,7 @@ module.exports = function(config) {
         flags: ['--no-sandbox']
       }
     },
-    
+
     // to avoid DISCONNECTED messages
     browserDisconnectTimeout : 10000, // default 2000
     browserDisconnectTolerance : 1, // default 0
