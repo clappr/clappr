@@ -1,7 +1,7 @@
 {
   "name": "Clappr",
   "description": "An extensible media player for the web",
-  "version": "0.2.36",
+  "version": "0.2.37",
   "url": "https://github.com/clappr/clappr",
   "logo": "https://cloud.githubusercontent.com/assets/244265/6373134/a845eb50-bce7-11e4-80f2-592ba29972ab.png",
   "options": {
