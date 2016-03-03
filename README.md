@@ -35,6 +35,38 @@ A [clappr](https://github.com/clappr/clappr) playback to play dash based on [sha
 </html>
 ```
 
+# DRM
+
+If need to protect your content (DRM) you need to provide a callback for it.
+
+```javascript
+var player = new Clappr.Player(
+  {
+    source: 'https://shaka-player-demo.appspot.com/assets/angel_one.mpd?_=1446383792251',
+    plugins: {
+      playback: [DashShakaPlayback]
+    },
+    shaka: {
+      interpretContentProtection: myInterpretCallback
+    }
+    parentId: '#player'
+  });
+```
+
+The `interpretContentProtection` [callback](http://shaka-player-demo.appspot.com/docs/shaka.player.DashVideoSource.html#ContentProtectionCallback) spec:
+
+```javascript
+/**
+* @param {string} schemeIdUri The ContentProtection's scheme ID URI.
+* @param {!Element} contentProtection The ContentProtection element.
+* @return {!Array.<shaka.player.DrmInfo.Config>} An array of Config
+*     objects or null if the element is not understood by this application.
+*     http://shaka-player-demo.appspot.com/docs/shaka.player.DrmInfo.html#Config
+*/
+function interpretContentProtection (schemeIdUri, contentProtection) {
+}
+```
+
 # Development
 
 Install dependencies:

@@ -25,6 +25,7 @@ export default class DashShakaPlayback extends HTML5Video {
     super(options)
     this.isReadyState = false
     this._levels = []
+    this.options.shaka = options.shaka || {}
 
     var checkIfIsReady = (fn) => {
       return (arg) => {
@@ -96,7 +97,7 @@ export default class DashShakaPlayback extends HTML5Video {
   _setup() {
     this._player = this._createPlayer()
 
-    var playerLoaded = this._player.load(new shaka.player.DashVideoSource(this.options.src))
+    var playerLoaded = this._player.load(new shaka.player.DashVideoSource(this.options.src, this.options.shaka.interpretContentProtection))
     playerLoaded.then(() => this._loaded())
       .catch((e) => this._setupError(e))
   }
