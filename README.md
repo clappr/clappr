@@ -67,7 +67,7 @@ function interpretContentProtection (schemeIdUri, contentProtection) {
 }
 ```
 
-You need to provide a function which receives: the content protection scheme id `schemeIdUri` and the content protection element `contentProtection` and it must return an array of [DRMInfo Config](http://shaka-player-demo.appspot.com/docs/shaka.player.DrmInfo.html#Config)
+You need to provide a function which receives: the content protection scheme id `schemeIdUri` and the content protection element `contentProtection` and it must return an array of [DRMInfo Config.](http://shaka-player-demo.appspot.com/docs/shaka.player.DrmInfo.html#Config) You can see an example at [shaka tutorial for License Request Pre-processing and License Response Post-processing.](https://shaka-player-demo.appspot.com/docs/tutorial-network.html)
 
 # Development
 
