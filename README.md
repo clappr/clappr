@@ -61,11 +61,13 @@ The `interpretContentProtection` [callback](http://shaka-player-demo.appspot.com
 * @param {!Element} contentProtection The ContentProtection element.
 * @return {!Array.<shaka.player.DrmInfo.Config>} An array of Config
 *     objects or null if the element is not understood by this application.
-*     http://shaka-player-demo.appspot.com/docs/shaka.player.DrmInfo.html#Config
+*     
 */
 function interpretContentProtection (schemeIdUri, contentProtection) {
 }
 ```
+
+You need to provide a function which receives: the content protection scheme id `schemeIdUri` and the content protection element `contentProtection` and it must return an array of [DRMInfo Config](http://shaka-player-demo.appspot.com/docs/shaka.player.DrmInfo.html#Config)
 
 # Development
 
