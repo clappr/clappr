@@ -11,10 +11,6 @@ update_bower() {
   ./node_modules/sync-pkg/cli.js package.json
 }
 
-update_dependencies() {
-  npm run lock
-}
-
 build() {
   echo 'building clappr.js'
   npm run build > /dev/null
@@ -61,7 +57,6 @@ Your happy butler.\n
 main() {
   update_version $1
   update_bower
-  update_dependencies
   build
   run_tests
   if (("$?" == "0")); then
