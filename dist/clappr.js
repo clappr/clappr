@@ -186,7 +186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// Use of this source code is governed by a BSD-style
 	// license that can be found in the LICENSE file.
 
-	var version = ("0.2.37");
+	var version = ("0.2.38");
 
 	exports.default = {
 	    Player: _player2.default,
@@ -430,7 +430,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function Player(options) {
 	    _classCallCheck(this, Player);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Player).call(this, options));
+	    var _this = _possibleConstructorReturn(this, _BaseObject.call(this, options));
 
 	    var defaultOptions = { playerId: (0, _utils.uniqueId)(""), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl };
 	    _this.options = _clapprZepto2.default.extend(defaultOptions, options);
@@ -455,374 +455,337 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 
 
-	  _createClass(Player, [{
-	    key: 'setParentId',
-	    value: function setParentId(parentId) {
-	      var el = document.querySelector(parentId);
-	      if (el) {
-	        this.attachTo(el);
+	  Player.prototype.setParentId = function setParentId(parentId) {
+	    var el = document.querySelector(parentId);
+	    if (el) {
+	      this.attachTo(el);
+	    }
+	  };
+
+	  /**
+	   * You can use this method to attach the player to a given element. You don't need to do this when you specify it during the player instantiation passing the `parentId` param.
+	   * @method attachTo
+	   * @param {Object} element a given element.
+	   */
+
+
+	  Player.prototype.attachTo = function attachTo(element) {
+	    this.options.parentElement = element;
+	    this.core = this.coreFactory.create();
+	    this.addEventListeners();
+	  };
+
+	  Player.prototype.addEventListeners = function addEventListeners() {
+	    if (!this.core.isReady) {
+	      this.listenToOnce(this.core, _events2.default.CORE_READY, this.onReady);
+	    } else {
+	      this.onReady();
+	    }
+	    this.listenTo(this.core.mediaControl, _events2.default.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged);
+	  };
+
+	  Player.prototype.addContainerEventListeners = function addContainerEventListeners() {
+	    var container = this.core.mediaControl.container;
+	    if (!!container) {
+	      this.listenTo(container, _events2.default.CONTAINER_PLAY, this.onPlay);
+	      this.listenTo(container, _events2.default.CONTAINER_PAUSE, this.onPause);
+	      this.listenTo(container, _events2.default.CONTAINER_STOP, this.onStop);
+	      this.listenTo(container, _events2.default.CONTAINER_ENDED, this.onEnded);
+	      this.listenTo(container, _events2.default.CONTAINER_SEEK, this.onSeek);
+	      this.listenTo(container, _events2.default.CONTAINER_ERROR, this.onError);
+	      this.listenTo(container, _events2.default.CONTAINER_TIMEUPDATE, this.onTimeUpdate);
+	      this.listenTo(container, _events2.default.CONTAINER_VOLUME, this.onVolumeUpdate);
+	    }
+	  };
+
+	  Player.prototype.registerOptionEventListeners = function registerOptionEventListeners() {
+	    var _this2 = this;
+
+	    var eventsMapping = {
+	      "onReady": _events2.default.PLAYER_READY,
+	      "onResize": _events2.default.PLAYER_RESIZE,
+	      "onPlay": _events2.default.PLAYER_PLAY,
+	      "onPause": _events2.default.PLAYER_PAUSE,
+	      "onStop": _events2.default.PLAYER_STOP,
+	      "onEnded": _events2.default.PLAYER_ENDED,
+	      "onSeek": _events2.default.PLAYER_SEEK,
+	      "onError": _events2.default.PLAYER_ERROR,
+	      "onTimeUpdate": _events2.default.PLAYER_TIMEUPDATE,
+	      "onVolumeUpdate": _events2.default.PLAYER_VOLUMEUPDATE
+	    };
+	    var userEvents = this.options.events || {};
+
+	    Object.keys(userEvents).forEach(function (userEvent) {
+	      var eventType = eventsMapping[userEvent];
+	      if (eventType) {
+	        var eventFunction = userEvents[userEvent];
+	        eventFunction = typeof eventFunction === "function" && eventFunction;
+	        eventFunction && _this2.listenTo(_this2, eventType, eventFunction);
 	      }
-	    }
+	    });
+	  };
 
-	    /**
-	     * You can use this method to attach the player to a given element. You don't need to do this when you specify it during the player instantiation passing the `parentId` param.
-	     * @method attachTo
-	     * @param {Object} element a given element.
-	     */
+	  Player.prototype.containerChanged = function containerChanged() {
+	    this.stopListening();
+	    this.addEventListeners();
+	  };
 
-	  }, {
-	    key: 'attachTo',
-	    value: function attachTo(element) {
-	      this.options.parentElement = element;
-	      this.core = this.coreFactory.create();
-	      this.addEventListeners();
-	    }
-	  }, {
-	    key: 'addEventListeners',
-	    value: function addEventListeners() {
-	      if (!this.core.isReady) {
-	        this.listenToOnce(this.core, _events2.default.CORE_READY, this.onReady);
-	      } else {
-	        this.onReady();
-	      }
-	      this.listenTo(this.core.mediaControl, _events2.default.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged);
-	    }
-	  }, {
-	    key: 'addContainerEventListeners',
-	    value: function addContainerEventListeners() {
-	      var container = this.core.mediaControl.container;
-	      if (!!container) {
-	        this.listenTo(container, _events2.default.CONTAINER_PLAY, this.onPlay);
-	        this.listenTo(container, _events2.default.CONTAINER_PAUSE, this.onPause);
-	        this.listenTo(container, _events2.default.CONTAINER_STOP, this.onStop);
-	        this.listenTo(container, _events2.default.CONTAINER_ENDED, this.onEnded);
-	        this.listenTo(container, _events2.default.CONTAINER_SEEK, this.onSeek);
-	        this.listenTo(container, _events2.default.CONTAINER_ERROR, this.onError);
-	        this.listenTo(container, _events2.default.CONTAINER_TIMEUPDATE, this.onTimeUpdate);
-	        this.listenTo(container, _events2.default.CONTAINER_VOLUME, this.onVolumeUpdate);
-	      }
-	    }
-	  }, {
-	    key: 'registerOptionEventListeners',
-	    value: function registerOptionEventListeners() {
-	      var _this2 = this;
+	  Player.prototype.onReady = function onReady() {
+	    this.ready = true;
+	    this.addContainerEventListeners();
+	    this.trigger(_events2.default.PLAYER_READY);
+	  };
 
-	      var eventsMapping = {
-	        "onReady": _events2.default.PLAYER_READY,
-	        "onResize": _events2.default.PLAYER_RESIZE,
-	        "onPlay": _events2.default.PLAYER_PLAY,
-	        "onPause": _events2.default.PLAYER_PAUSE,
-	        "onStop": _events2.default.PLAYER_STOP,
-	        "onEnded": _events2.default.PLAYER_ENDED,
-	        "onSeek": _events2.default.PLAYER_SEEK,
-	        "onError": _events2.default.PLAYER_ERROR,
-	        "onTimeUpdate": _events2.default.PLAYER_TIMEUPDATE,
-	        "onVolumeUpdate": _events2.default.PLAYER_VOLUMEUPDATE
-	      };
-	      var userEvents = this.options.events || {};
+	  Player.prototype.onVolumeUpdate = function onVolumeUpdate(volume) {
+	    this.trigger(_events2.default.PLAYER_VOLUMEUPDATE, volume);
+	  };
 
-	      Object.keys(userEvents).forEach(function (userEvent) {
-	        var eventType = eventsMapping[userEvent];
-	        if (eventType) {
-	          var eventFunction = userEvents[userEvent];
-	          eventFunction = typeof eventFunction === "function" && eventFunction;
-	          eventFunction && _this2.listenTo(_this2, eventType, eventFunction);
-	        }
-	      });
-	    }
-	  }, {
-	    key: 'containerChanged',
-	    value: function containerChanged() {
-	      this.stopListening();
-	      this.addEventListeners();
-	    }
-	  }, {
-	    key: 'onReady',
-	    value: function onReady() {
-	      this.ready = true;
-	      this.addContainerEventListeners();
-	      this.trigger(_events2.default.PLAYER_READY);
-	    }
-	  }, {
-	    key: 'onVolumeUpdate',
-	    value: function onVolumeUpdate(volume) {
-	      this.trigger(_events2.default.PLAYER_VOLUMEUPDATE, volume);
-	    }
-	  }, {
-	    key: 'onPlay',
-	    value: function onPlay() {
-	      this.trigger(_events2.default.PLAYER_PLAY);
-	    }
-	  }, {
-	    key: 'onPause',
-	    value: function onPause() {
-	      this.trigger(_events2.default.PLAYER_PAUSE);
-	    }
-	  }, {
-	    key: 'onStop',
-	    value: function onStop() {
-	      this.trigger(_events2.default.PLAYER_STOP, this.getCurrentTime());
-	    }
-	  }, {
-	    key: 'onEnded',
-	    value: function onEnded() {
-	      this.trigger(_events2.default.PLAYER_ENDED);
-	    }
-	  }, {
-	    key: 'onSeek',
-	    value: function onSeek(time) {
-	      this.trigger(_events2.default.PLAYER_SEEK, time);
-	    }
-	  }, {
-	    key: 'onTimeUpdate',
-	    value: function onTimeUpdate(timeProgress) {
-	      this.trigger(_events2.default.PLAYER_TIMEUPDATE, timeProgress);
-	    }
-	  }, {
-	    key: 'onError',
-	    value: function onError(error) {
-	      this.trigger(_events2.default.PLAYER_ERROR, error);
-	    }
-	  }, {
-	    key: 'is',
-	    value: function is(value, type) {
-	      return value.constructor === type;
-	    }
-	  }, {
-	    key: 'normalizeSources',
-	    value: function normalizeSources(options) {
-	      var sources = options.sources || (options.source !== undefined ? [options.source] : []);
-	      return sources.length === 0 ? [{ source: "", mimeType: "" }] : sources;
-	    }
+	  Player.prototype.onPlay = function onPlay() {
+	    this.trigger(_events2.default.PLAYER_PLAY);
+	  };
 
-	    /**
-	     * resizes the current player canvas.
-	     * @method resize
-	     * @param {Object} size should be a literal object with `height` and `width`.
-	     * @example
-	     * ```javascript
-	     * player.resize({height: 360, width: 640})
-	     * ```
-	     */
+	  Player.prototype.onPause = function onPause() {
+	    this.trigger(_events2.default.PLAYER_PAUSE);
+	  };
 
-	  }, {
-	    key: 'resize',
-	    value: function resize(size) {
-	      this.core.resize(size);
-	    }
+	  Player.prototype.onStop = function onStop() {
+	    this.trigger(_events2.default.PLAYER_STOP, this.getCurrentTime());
+	  };
 
-	    /**
-	     * loads a new source.
-	     * @method load
-	     * @param {Object} sources source or sources of video.
-	     * sources can be a string or {source: <<source URL>>, mimeType: <<source mime type>>}
-	     * @param {Object} mimeType a mime type, example: `'application/vnd.apple.mpegurl'`
-	     *
-	     */
+	  Player.prototype.onEnded = function onEnded() {
+	    this.trigger(_events2.default.PLAYER_ENDED);
+	  };
 
-	  }, {
-	    key: 'load',
-	    value: function load(sources, mimeType) {
-	      this.core.load(sources, mimeType);
-	    }
+	  Player.prototype.onSeek = function onSeek(time) {
+	    this.trigger(_events2.default.PLAYER_SEEK, time);
+	  };
 
-	    /**
-	     * destroys the current player and removes it from the DOM.
-	     * @method destroy
-	     */
+	  Player.prototype.onTimeUpdate = function onTimeUpdate(timeProgress) {
+	    this.trigger(_events2.default.PLAYER_TIMEUPDATE, timeProgress);
+	  };
 
-	  }, {
-	    key: 'destroy',
-	    value: function destroy() {
-	      this.core.destroy();
-	    }
+	  Player.prototype.onError = function onError(error) {
+	    this.trigger(_events2.default.PLAYER_ERROR, error);
+	  };
 
-	    /**
-	     * plays the current video (`source`).
-	     * @method play
-	     */
+	  Player.prototype.is = function is(value, type) {
+	    return value.constructor === type;
+	  };
 
-	  }, {
-	    key: 'play',
-	    value: function play() {
-	      this.core.mediaControl.container.play();
-	    }
+	  Player.prototype.normalizeSources = function normalizeSources(options) {
+	    var sources = options.sources || (options.source !== undefined ? [options.source] : []);
+	    return sources.length === 0 ? [{ source: "", mimeType: "" }] : sources;
+	  };
 
-	    /**
-	     * pauses the current video (`source`).
-	     * @method pause
-	     */
+	  /**
+	   * resizes the current player canvas.
+	   * @method resize
+	   * @param {Object} size should be a literal object with `height` and `width`.
+	   * @example
+	   * ```javascript
+	   * player.resize({height: 360, width: 640})
+	   * ```
+	   */
 
-	  }, {
-	    key: 'pause',
-	    value: function pause() {
-	      this.core.mediaControl.container.pause();
-	    }
 
-	    /**
-	     * stops the current video (`source`).
-	     * @method stop
-	     */
+	  Player.prototype.resize = function resize(size) {
+	    this.core.resize(size);
+	  };
 
-	  }, {
-	    key: 'stop',
-	    value: function stop() {
-	      this.core.mediaControl.container.stop();
-	    }
+	  /**
+	   * loads a new source.
+	   * @method load
+	   * @param {Object} sources source or sources of video.
+	   * sources can be a string or {source: <<source URL>>, mimeType: <<source mime type>>}
+	   * @param {Object} mimeType a mime type, example: `'application/vnd.apple.mpegurl'`
+	   *
+	   */
 
-	    /**
-	     * seeks the current video (`source`). For example, `player.seek(120)` will seek to second 120 (2minutes) of the current video.
-	     * @method seek
-	     * @param {Number} time should be a number between 0 and the video duration.
-	     */
 
-	  }, {
-	    key: 'seek',
-	    value: function seek(time) {
-	      this.core.mediaControl.container.seek(time);
-	    }
+	  Player.prototype.load = function load(sources, mimeType) {
+	    this.core.load(sources, mimeType);
+	  };
 
-	    /**
-	     * seeks the current video (`source`). For example, `player.seek(50)` will seek to the middle of the current video.
-	     * @method seekPercentage
-	     * @param {Number} time should be a number between 0 and 100.
-	     */
+	  /**
+	   * destroys the current player and removes it from the DOM.
+	   * @method destroy
+	   */
 
-	  }, {
-	    key: 'seekPercentage',
-	    value: function seekPercentage(percentage) {
-	      this.core.mediaControl.container.seekPercentage(percentage);
-	    }
 
-	    /**
-	     * Set the volume for the current video (`source`).
-	     * @method setVolume
-	     * @param {Number} volume should be a number between 0 and 100, 0 being mute and 100 the max volume.
-	     */
+	  Player.prototype.destroy = function destroy() {
+	    this.core.destroy();
+	  };
 
-	  }, {
-	    key: 'setVolume',
-	    value: function setVolume(volume) {
-	      this.core.mediaControl.container.setVolume(volume);
-	    }
+	  /**
+	   * plays the current video (`source`).
+	   * @method play
+	   */
 
-	    /**
-	     * Get the volume for the current video
-	     * @method getVolume
-	     * @return {Number} volume should be a number between 0 and 100, 0 being mute and 100 the max volume.
-	     */
 
-	  }, {
-	    key: 'getVolume',
-	    value: function getVolume() {
-	      return this.core.mediaControl.container.volume;
-	    }
+	  Player.prototype.play = function play() {
+	    this.core.mediaControl.container.play();
+	  };
 
-	    /**
-	     * mutes the current video (`source`).
-	     * @method mute
-	     */
+	  /**
+	   * pauses the current video (`source`).
+	   * @method pause
+	   */
 
-	  }, {
-	    key: 'mute',
-	    value: function mute() {
-	      this.core.mediaControl.container.setVolume(0);
-	    }
 
-	    /**
-	     * unmutes the current video (`source`).
-	     * @method unmute
-	     */
+	  Player.prototype.pause = function pause() {
+	    this.core.mediaControl.container.pause();
+	  };
 
-	  }, {
-	    key: 'unmute',
-	    value: function unmute() {
-	      this.core.mediaControl.container.setVolume(100);
-	    }
+	  /**
+	   * stops the current video (`source`).
+	   * @method stop
+	   */
 
-	    /**
-	     * checks if the player is playing.
-	     * @method isPlaying
-	     * @return {Boolean} `true` if the current source is playing, otherwise `false`
-	     */
 
-	  }, {
-	    key: 'isPlaying',
-	    value: function isPlaying() {
-	      return this.core.mediaControl.container.isPlaying();
-	    }
+	  Player.prototype.stop = function stop() {
+	    this.core.mediaControl.container.stop();
+	  };
 
-	    /**
-	     * enables to configure a player after its creation
-	     * @method configure
-	     * @param {Object} options all the options to change in form of a javascript object
-	     */
+	  /**
+	   * seeks the current video (`source`). For example, `player.seek(120)` will seek to second 120 (2minutes) of the current video.
+	   * @method seek
+	   * @param {Number} time should be a number between 0 and the video duration.
+	   */
 
-	  }, {
-	    key: 'configure',
-	    value: function configure(options) {
-	      this.core.configure(options);
-	    }
 
-	    /**
-	     * get a plugin by its name.
-	     * @method getPlugin
-	     * @param {String} name of the plugin.
-	     * @return {Object} the plugin instance
-	     * @example
-	     * ```javascript
-	     * var poster = player.getPlugin('poster');
-	     * poster.hidePlayButton();
-	     * ```
-	     */
+	  Player.prototype.seek = function seek(time) {
+	    this.core.mediaControl.container.seek(time);
+	  };
 
-	  }, {
-	    key: 'getPlugin',
-	    value: function getPlugin(name) {
-	      var plugins = this.core.plugins.concat(this.core.mediaControl.container.plugins);
-	      return (0, _lodash2.default)(plugins, function (plugin) {
-	        return plugin.name === name;
-	      });
-	    }
+	  /**
+	   * seeks the current video (`source`). For example, `player.seek(50)` will seek to the middle of the current video.
+	   * @method seekPercentage
+	   * @param {Number} time should be a number between 0 and 100.
+	   */
 
-	    /**
-	     * the current time in seconds.
-	     * @method getCurrentTime
-	     * @return {Number} current time (in seconds) of the current source
-	     */
 
-	  }, {
-	    key: 'getCurrentTime',
-	    value: function getCurrentTime() {
-	      return this.core.mediaControl.container.getCurrentTime();
-	    }
+	  Player.prototype.seekPercentage = function seekPercentage(percentage) {
+	    this.core.mediaControl.container.seekPercentage(percentage);
+	  };
 
-	    /**
-	     * The time that "0" now represents relative to when playback started.
-	     * For a stream with a sliding window this will increase as content is
-	     * removed from the beginning.
-	     * @method getStartTimeOffset
-	     * @return {Number} time (in seconds) that time "0" represents.
-	     */
+	  /**
+	   * Set the volume for the current video (`source`).
+	   * @method setVolume
+	   * @param {Number} volume should be a number between 0 and 100, 0 being mute and 100 the max volume.
+	   */
 
-	  }, {
-	    key: 'getStartTimeOffset',
-	    value: function getStartTimeOffset() {
-	      return this.core.mediaControl.container.getStartTimeOffset();
-	    }
 
-	    /**
-	     * the duration time in seconds.
-	     * @method getDuration
-	     * @return {Number} duration time (in seconds) of the current source
-	     */
+	  Player.prototype.setVolume = function setVolume(volume) {
+	    this.core.mediaControl.container.setVolume(volume);
+	  };
 
-	  }, {
-	    key: 'getDuration',
-	    value: function getDuration() {
-	      return this.core.mediaControl.container.getDuration();
-	    }
-	  }]);
+	  /**
+	   * Get the volume for the current video
+	   * @method getVolume
+	   * @return {Number} volume should be a number between 0 and 100, 0 being mute and 100 the max volume.
+	   */
+
+
+	  Player.prototype.getVolume = function getVolume() {
+	    return this.core.mediaControl.container.volume;
+	  };
+
+	  /**
+	   * mutes the current video (`source`).
+	   * @method mute
+	   */
+
+
+	  Player.prototype.mute = function mute() {
+	    this.core.mediaControl.container.setVolume(0);
+	  };
+
+	  /**
+	   * unmutes the current video (`source`).
+	   * @method unmute
+	   */
+
+
+	  Player.prototype.unmute = function unmute() {
+	    this.core.mediaControl.container.setVolume(100);
+	  };
+
+	  /**
+	   * checks if the player is playing.
+	   * @method isPlaying
+	   * @return {Boolean} `true` if the current source is playing, otherwise `false`
+	   */
+
+
+	  Player.prototype.isPlaying = function isPlaying() {
+	    return this.core.mediaControl.container.isPlaying();
+	  };
+
+	  /**
+	   * enables to configure a player after its creation
+	   * @method configure
+	   * @param {Object} options all the options to change in form of a javascript object
+	   */
+
+
+	  Player.prototype.configure = function configure(options) {
+	    this.core.configure(options);
+	  };
+
+	  /**
+	   * get a plugin by its name.
+	   * @method getPlugin
+	   * @param {String} name of the plugin.
+	   * @return {Object} the plugin instance
+	   * @example
+	   * ```javascript
+	   * var poster = player.getPlugin('poster');
+	   * poster.hidePlayButton();
+	   * ```
+	   */
+
+
+	  Player.prototype.getPlugin = function getPlugin(name) {
+	    var plugins = this.core.plugins.concat(this.core.mediaControl.container.plugins);
+	    return (0, _lodash2.default)(plugins, function (plugin) {
+	      return plugin.name === name;
+	    });
+	  };
+
+	  /**
+	   * the current time in seconds.
+	   * @method getCurrentTime
+	   * @return {Number} current time (in seconds) of the current source
+	   */
+
+
+	  Player.prototype.getCurrentTime = function getCurrentTime() {
+	    return this.core.mediaControl.container.getCurrentTime();
+	  };
+
+	  /**
+	   * The time that "0" now represents relative to when playback started.
+	   * For a stream with a sliding window this will increase as content is
+	   * removed from the beginning.
+	   * @method getStartTimeOffset
+	   * @return {Number} time (in seconds) that time "0" represents.
+	   */
+
+
+	  Player.prototype.getStartTimeOffset = function getStartTimeOffset() {
+	    return this.core.mediaControl.container.getStartTimeOffset();
+	  };
+
+	  /**
+	   * the duration time in seconds.
+	   * @method getDuration
+	   * @return {Number} duration time (in seconds) of the current source
+	   */
+
+
+	  Player.prototype.getDuration = function getDuration() {
+	    return this.core.mediaControl.container.getDuration();
+	  };
 
 	  return Player;
 	}(_base_object2.default);
@@ -879,7 +842,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function MergedPlugin(args) {
 	      _classCallCheck(this, MergedPlugin);
 
-	      var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(MergedPlugin).call(this, args));
+	      var _this = _possibleConstructorReturn(this, _parent.call(this, args));
 
 	      if (properties.initialize) {
 	        properties.initialize.apply(_this, Array.prototype.slice.apply(arguments));
@@ -966,51 +929,44 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _classCallCheck(this, Config);
 	  }
 
-	  _createClass(Config, null, [{
-	    key: '_defaultConfig',
-	    value: function _defaultConfig() {
-	      return {
-	        volume: {
-	          value: 100,
-	          parse: parseInt
-	        }
-	      };
+	  Config._defaultConfig = function _defaultConfig() {
+	    return {
+	      volume: {
+	        value: 100,
+	        parse: parseInt
+	      }
+	    };
+	  };
+
+	  Config._defaultValueFor = function _defaultValueFor(key) {
+	    try {
+	      return this._defaultConfig()[key].parse(this._defaultConfig()[key].value);
+	    } catch (e) {
+	      return undefined;
 	    }
-	  }, {
-	    key: '_defaultValueFor',
-	    value: function _defaultValueFor(key) {
+	  };
+
+	  Config._createKeyspace = function _createKeyspace(key) {
+	    return 'clappr.' + document.domain + '.' + key;
+	  };
+
+	  Config.restore = function restore(key) {
+	    if (_browser2.default.hasLocalstorage && localStorage[this._createKeyspace(key)]) {
+	      return this._defaultConfig()[key].parse(localStorage[this._createKeyspace(key)]);
+	    }
+	    return this._defaultValueFor(key);
+	  };
+
+	  Config.persist = function persist(key, value) {
+	    if (_browser2.default.hasLocalstorage) {
 	      try {
-	        return this._defaultConfig()[key].parse(this._defaultConfig()[key].value);
+	        localStorage[this._createKeyspace(key)] = value;
+	        return true;
 	      } catch (e) {
-	        return undefined;
+	        return false;
 	      }
 	    }
-	  }, {
-	    key: '_createKeyspace',
-	    value: function _createKeyspace(key) {
-	      return 'clappr.' + document.domain + '.' + key;
-	    }
-	  }, {
-	    key: 'restore',
-	    value: function restore(key) {
-	      if (_browser2.default.hasLocalstorage && localStorage[this._createKeyspace(key)]) {
-	        return this._defaultConfig()[key].parse(localStorage[this._createKeyspace(key)]);
-	      }
-	      return this._defaultValueFor(key);
-	    }
-	  }, {
-	    key: 'persist',
-	    value: function persist(key, value) {
-	      if (_browser2.default.hasLocalstorage) {
-	        try {
-	          localStorage[this._createKeyspace(key)] = value;
-	          return true;
-	        } catch (e) {
-	          return false;
-	        }
-	      }
-	    }
-	  }]);
+	  };
 
 	  return Config;
 	}();
@@ -2117,7 +2073,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _classCallCheck(this, BaseObject);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(BaseObject).call(this, options));
+	    var _this = _possibleConstructorReturn(this, _Events.call(this, options));
 
 	    _this.uniqueId = (0, _utils.uniqueId)('o');
 	    return _this;
@@ -2145,8 +2101,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; }; // Copyright 2014 Globo.com Player authors. All rights reserved.
 	// Use of this source code is governed by a BSD-style
@@ -2237,156 +2191,149 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _classCallCheck(this, Events);
 	  }
 
-	  _createClass(Events, [{
-	    key: 'on',
+	  /**
+	   * listen to an event indefinitely, if you want to stop you need to call `off`
+	   * @method on
+	   * @param {String} name
+	   * @param {Function} callback
+	   * @param {Object} context
+	   */
 
-	    /**
-	     * listen to an event indefinitely, if you want to stop you need to call `off`
-	     * @method on
-	     * @param {String} name
-	     * @param {Function} callback
-	     * @param {Object} context
-	     */
-	    value: function on(name, callback, context) {
-	      if (!eventsApi(this, 'on', name, [callback, context]) || !callback) {
-	        return this;
-	      }
-	      this._events || (this._events = {});
-	      var events = this._events[name] || (this._events[name] = []);
-	      events.push({ callback: callback, context: context, ctx: context || this });
+	  Events.prototype.on = function on(name, callback, context) {
+	    if (!eventsApi(this, 'on', name, [callback, context]) || !callback) {
 	      return this;
 	    }
+	    this._events || (this._events = {});
+	    var events = this._events[name] || (this._events[name] = []);
+	    events.push({ callback: callback, context: context, ctx: context || this });
+	    return this;
+	  };
 
-	    /**
-	     * listen to an event only once
-	     * @method once
-	     * @param {String} name
-	     * @param {Function} callback
-	     * @param {Object} context
-	     */
+	  /**
+	   * listen to an event only once
+	   * @method once
+	   * @param {String} name
+	   * @param {Function} callback
+	   * @param {Object} context
+	   */
 
-	  }, {
-	    key: 'once',
-	    value: function once(name, callback, context) {
-	      if (!eventsApi(this, 'once', name, [callback, context]) || !callback) {
-	        return this;
-	      }
-	      var self = this;
-	      var once = (0, _lodash2.default)(function () {
-	        self.off(name, once);
-	        callback.apply(this, arguments);
-	      });
-	      once._callback = callback;
-	      return this.on(name, once, context);
+
+	  Events.prototype.once = function once(name, callback, context) {
+	    if (!eventsApi(this, 'once', name, [callback, context]) || !callback) {
+	      return this;
 	    }
+	    var self = this;
+	    var once = (0, _lodash2.default)(function () {
+	      self.off(name, once);
+	      callback.apply(this, arguments);
+	    });
+	    once._callback = callback;
+	    return this.on(name, once, context);
+	  };
 
-	    /**
-	     * stop listening to an event
-	     * @method off
-	     * @param {String} name
-	     * @param {Function} callback
-	     * @param {Object} context
-	     */
+	  /**
+	   * stop listening to an event
+	   * @method off
+	   * @param {String} name
+	   * @param {Function} callback
+	   * @param {Object} context
+	   */
 
-	  }, {
-	    key: 'off',
-	    value: function off(name, callback, context) {
-	      var retain, ev, events, names, i, l, j, k;
-	      if (!this._events || !eventsApi(this, 'off', name, [callback, context])) {
-	        return this;
-	      }
-	      if (!name && !callback && !context) {
-	        this._events = void 0;
-	        return this;
-	      }
-	      names = name ? [name] : Object.keys(this._events);
-	      // jshint maxdepth:5
-	      for (i = 0, l = names.length; i < l; i++) {
-	        name = names[i];
-	        events = this._events[name];
-	        if (events) {
-	          this._events[name] = retain = [];
-	          if (callback || context) {
-	            for (j = 0, k = events.length; j < k; j++) {
-	              ev = events[j];
-	              if (callback && callback !== ev.callback && callback !== ev.callback._callback || context && context !== ev.context) {
-	                retain.push(ev);
-	              }
+
+	  Events.prototype.off = function off(name, callback, context) {
+	    var retain, ev, events, names, i, l, j, k;
+	    if (!this._events || !eventsApi(this, 'off', name, [callback, context])) {
+	      return this;
+	    }
+	    if (!name && !callback && !context) {
+	      this._events = void 0;
+	      return this;
+	    }
+	    names = name ? [name] : Object.keys(this._events);
+	    // jshint maxdepth:5
+	    for (i = 0, l = names.length; i < l; i++) {
+	      name = names[i];
+	      events = this._events[name];
+	      if (events) {
+	        this._events[name] = retain = [];
+	        if (callback || context) {
+	          for (j = 0, k = events.length; j < k; j++) {
+	            ev = events[j];
+	            if (callback && callback !== ev.callback && callback !== ev.callback._callback || context && context !== ev.context) {
+	              retain.push(ev);
 	            }
 	          }
-	          if (!retain.length) {
-	            delete this._events[name];
-	          }
+	        }
+	        if (!retain.length) {
+	          delete this._events[name];
 	        }
 	      }
-	      return this;
 	    }
+	    return this;
+	  };
 
-	    /**
-	     * triggers an event given its `name`
-	     * @method trigger
-	     * @param {String} name
-	     */
+	  /**
+	   * triggers an event given its `name`
+	   * @method trigger
+	   * @param {String} name
+	   */
 
-	  }, {
-	    key: 'trigger',
-	    value: function trigger(name) {
-	      var klass = this.name || this.constructor.name;
-	      try {
-	        _log2.default.debug.apply(_log2.default, [klass].concat(Array.prototype.slice.call(arguments)));
-	        if (!this._events) {
-	          return this;
-	        }
-	        var args = slice.call(arguments, 1);
-	        if (!eventsApi(this, 'trigger', name, args)) {
-	          return this;
-	        }
-	        var events = this._events[name];
-	        var allEvents = this._events.all;
-	        if (events) {
-	          triggerEvents(events, args);
-	        }
-	        if (allEvents) {
-	          triggerEvents(allEvents, arguments);
-	        }
-	      } catch (exception) {
-	        _log2.default.error.apply(_log2.default, [klass, 'error on event', name, 'trigger', '-', exception]);
-	      }
-	      return this;
-	    }
 
-	    /**
-	     * stop listening an event for a given object
-	     * @method stopListening
-	     * @param {Object} obj
-	     * @param {String} name
-	     * @param {Function} callback
-	     */
-
-	  }, {
-	    key: 'stopListening',
-	    value: function stopListening(obj, name, callback) {
-	      var listeningTo = this._listeningTo;
-	      if (!listeningTo) {
+	  Events.prototype.trigger = function trigger(name) {
+	    var klass = this.name || this.constructor.name;
+	    try {
+	      _log2.default.debug.apply(_log2.default, [klass].concat(Array.prototype.slice.call(arguments)));
+	      if (!this._events) {
 	        return this;
 	      }
-	      var remove = !name && !callback;
-	      if (!callback && (typeof name === 'undefined' ? 'undefined' : _typeof(name)) === 'object') {
-	        callback = this;
+	      var args = slice.call(arguments, 1);
+	      if (!eventsApi(this, 'trigger', name, args)) {
+	        return this;
 	      }
-	      if (obj) {
-	        (listeningTo = {})[obj._listenId] = obj;
+	      var events = this._events[name];
+	      var allEvents = this._events.all;
+	      if (events) {
+	        triggerEvents(events, args);
 	      }
-	      for (var id in listeningTo) {
-	        obj = listeningTo[id];
-	        obj.off(name, callback, this);
-	        if (remove || Object.keys(obj._events).length === 0) {
-	          delete this._listeningTo[id];
-	        }
+	      if (allEvents) {
+	        triggerEvents(allEvents, arguments);
 	      }
+	    } catch (exception) {
+	      _log2.default.error.apply(_log2.default, [klass, 'error on event', name, 'trigger', '-', exception]);
+	    }
+	    return this;
+	  };
+
+	  /**
+	   * stop listening an event for a given object
+	   * @method stopListening
+	   * @param {Object} obj
+	   * @param {String} name
+	   * @param {Function} callback
+	   */
+
+
+	  Events.prototype.stopListening = function stopListening(obj, name, callback) {
+	    var listeningTo = this._listeningTo;
+	    if (!listeningTo) {
 	      return this;
 	    }
-	  }]);
+	    var remove = !name && !callback;
+	    if (!callback && (typeof name === 'undefined' ? 'undefined' : _typeof(name)) === 'object') {
+	      callback = this;
+	    }
+	    if (obj) {
+	      (listeningTo = {})[obj._listenId] = obj;
+	    }
+	    for (var id in listeningTo) {
+	      obj = listeningTo[id];
+	      obj.off(name, callback, this);
+	      if (remove || Object.keys(obj._events).length === 0) {
+	        delete this._listeningTo[id];
+	      }
+	    }
+	    return this;
+	  };
 
 	  return Events;
 	}();
@@ -2924,10 +2871,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	// Use of this source code is governed by a BSD-style
-	// license that can be found in the LICENSE file.
-
 	var _kibo = __webpack_require__(9);
 
 	var _kibo2 = _interopRequireDefault(_kibo);
@@ -2935,6 +2878,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	// Use of this source code is governed by a BSD-style
+	// license that can be found in the LICENSE file.
 
 	var BOLD = 'font-weight: bold; font-size: 13px;';
 	var INFO = 'color: #006600;' + BOLD;
@@ -2969,65 +2914,56 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.offLevel = offLevel;
 	  }
 
-	  _createClass(Log, [{
-	    key: 'debug',
-	    value: function debug(klass) {
-	      this.log(klass, LEVEL_DEBUG, Array.prototype.slice.call(arguments, 1));
-	    }
-	  }, {
-	    key: 'info',
-	    value: function info(klass) {
-	      this.log(klass, LEVEL_INFO, Array.prototype.slice.call(arguments, 1));
-	    }
-	  }, {
-	    key: 'warn',
-	    value: function warn(klass) {
-	      this.log(klass, LEVEL_WARN, Array.prototype.slice.call(arguments, 1));
-	    }
-	  }, {
-	    key: 'error',
-	    value: function error(klass) {
-	      this.log(klass, LEVEL_ERROR, Array.prototype.slice.call(arguments, 1));
-	    }
-	  }, {
-	    key: 'onOff',
-	    value: function onOff() {
-	      if (this.level === this.offLevel) {
-	        this.level = this.previousLevel;
-	      } else {
-	        this.previousLevel = this.level;
-	        this.level = this.offLevel;
-	      }
-	      // handle instances where console.log is unavailable
-	      if (window.console && window.console.log) {
-	        console.log("%c[Clappr.Log] set log level to " + DESCRIPTIONS[this.level], WARN);
-	      }
-	    }
-	  }, {
-	    key: 'level',
-	    value: function level(newLevel) {
-	      this.level = newLevel;
-	    }
-	  }, {
-	    key: 'log',
-	    value: function log(klass, level, message) {
-	      if (this.BLACKLIST.indexOf(message[0]) >= 0) return;
-	      if (level < this.level) return;
+	  Log.prototype.debug = function debug(klass) {
+	    this.log(klass, LEVEL_DEBUG, Array.prototype.slice.call(arguments, 1));
+	  };
 
-	      if (!message) {
-	        message = klass;
-	        klass = null;
-	      }
-	      var klassDescription = "";
-	      var color = COLORS[level];
-	      if (klass) {
-	        klassDescription = "[" + klass + "]";
-	      }
-	      if (window.console && window.console.log) {
-	        console.log.apply(console, ["%c[" + DESCRIPTIONS[level] + "]" + klassDescription, color].concat(message));
-	      }
+	  Log.prototype.info = function info(klass) {
+	    this.log(klass, LEVEL_INFO, Array.prototype.slice.call(arguments, 1));
+	  };
+
+	  Log.prototype.warn = function warn(klass) {
+	    this.log(klass, LEVEL_WARN, Array.prototype.slice.call(arguments, 1));
+	  };
+
+	  Log.prototype.error = function error(klass) {
+	    this.log(klass, LEVEL_ERROR, Array.prototype.slice.call(arguments, 1));
+	  };
+
+	  Log.prototype.onOff = function onOff() {
+	    if (this.level === this.offLevel) {
+	      this.level = this.previousLevel;
+	    } else {
+	      this.previousLevel = this.level;
+	      this.level = this.offLevel;
 	    }
-	  }]);
+	    // handle instances where console.log is unavailable
+	    if (window.console && window.console.log) {
+	      console.log("%c[Clappr.Log] set log level to " + DESCRIPTIONS[this.level], WARN);
+	    }
+	  };
+
+	  Log.prototype.level = function level(newLevel) {
+	    this.level = newLevel;
+	  };
+
+	  Log.prototype.log = function log(klass, level, message) {
+	    if (this.BLACKLIST.indexOf(message[0]) >= 0) return;
+	    if (level < this.level) return;
+
+	    if (!message) {
+	      message = klass;
+	      klass = null;
+	    }
+	    var klassDescription = "";
+	    var color = COLORS[level];
+	    if (klass) {
+	      klassDescription = "[" + klass + "]";
+	    }
+	    if (window.console && window.console.log) {
+	      console.log.apply(console, ["%c[" + DESCRIPTIONS[level] + "]" + klassDescription, color].concat(message));
+	    }
+	  };
 
 	  return Log;
 	}();
@@ -3686,7 +3622,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function CoreFactory(player, loader) {
 	    _classCallCheck(this, CoreFactory);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(CoreFactory).call(this));
+	    var _this = _possibleConstructorReturn(this, _BaseObject.call(this));
 
 	    _this.player = player;
 	    _this.options = player.options;
@@ -3700,43 +3636,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 
 
-	  _createClass(CoreFactory, [{
-	    key: 'create',
-	    value: function create() {
-	      this.options.loader = this.loader;
-	      this.core = new _core2.default(this.options);
-	      this.addCorePlugins();
-	      this.core.createContainers(this.options);
-	      return this.core;
-	    }
+	  CoreFactory.prototype.create = function create() {
+	    this.options.loader = this.loader;
+	    this.core = new _core2.default(this.options);
+	    this.addCorePlugins();
+	    this.core.createContainers(this.options);
+	    return this.core;
+	  };
 
-	    /**
-	     * given the core plugins (`loader.corePlugins`) it builds each one
-	     * @method addCorePlugins
-	     * @return {Core} the core with all plugins
-	     */
+	  /**
+	   * given the core plugins (`loader.corePlugins`) it builds each one
+	   * @method addCorePlugins
+	   * @return {Core} the core with all plugins
+	   */
 
-	  }, {
-	    key: 'addCorePlugins',
-	    value: function addCorePlugins() {
-	      var _this2 = this;
 
-	      this.loader.corePlugins.forEach(function (Plugin) {
-	        var plugin = new Plugin(_this2.core);
-	        _this2.core.addPlugin(plugin);
-	        _this2.setupExternalInterface(plugin);
-	      });
-	      return this.core;
+	  CoreFactory.prototype.addCorePlugins = function addCorePlugins() {
+	    var _this2 = this;
+
+	    this.loader.corePlugins.forEach(function (Plugin) {
+	      var plugin = new Plugin(_this2.core);
+	      _this2.core.addPlugin(plugin);
+	      _this2.setupExternalInterface(plugin);
+	    });
+	    return this.core;
+	  };
+
+	  CoreFactory.prototype.setupExternalInterface = function setupExternalInterface(plugin) {
+	    var externalFunctions = plugin.getExternalInterface();
+	    for (var key in externalFunctions) {
+	      this.player[key] = externalFunctions[key].bind(plugin);
 	    }
-	  }, {
-	    key: 'setupExternalInterface',
-	    value: function setupExternalInterface(plugin) {
-	      var externalFunctions = plugin.getExternalInterface();
-	      for (var key in externalFunctions) {
-	        this.player[key] = externalFunctions[key].bind(plugin);
-	      }
-	    }
-	  }]);
+	  };
 
 	  return CoreFactory;
 	}(_base_object2.default);
@@ -3866,7 +3797,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function Core(options) {
 	    _classCallCheck(this, Core);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Core).call(this, options));
+	    var _this = _possibleConstructorReturn(this, _UIObject.call(this, options));
 
 	    _this.playerInfo = _player_info2.default.getInstance(options.playerId);
 	    _this.options = options;
@@ -3886,327 +3817,292 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return _this;
 	  }
 
-	  _createClass(Core, [{
-	    key: 'createContainers',
-	    value: function createContainers(options) {
-	      var _this2 = this;
+	  Core.prototype.createContainers = function createContainers(options) {
+	    var _this2 = this;
 
-	      this.defer = _clapprZepto2.default.Deferred();
-	      this.defer.promise(this);
-	      this.containerFactory = new _container_factory2.default(options, options.loader);
-	      this.containerFactory.createContainers().then(function (containers) {
-	        return _this2.setupContainers(containers);
-	      }).then(function (containers) {
-	        return _this2.resolveOnContainersReady(containers);
-	      });
+	    this.defer = _clapprZepto2.default.Deferred();
+	    this.defer.promise(this);
+	    this.containerFactory = new _container_factory2.default(options, options.loader);
+	    this.containerFactory.createContainers().then(function (containers) {
+	      return _this2.setupContainers(containers);
+	    }).then(function (containers) {
+	      return _this2.resolveOnContainersReady(containers);
+	    });
+	  };
+
+	  Core.prototype.updateSize = function updateSize() {
+	    if (_utils.Fullscreen.isFullscreen()) {
+	      this.setFullscreen();
+	    } else {
+	      this.setPlayerSize();
 	    }
-	  }, {
-	    key: 'updateSize',
-	    value: function updateSize() {
-	      if (_utils.Fullscreen.isFullscreen()) {
-	        this.setFullscreen();
-	      } else {
-	        this.setPlayerSize();
+	    _mediator2.default.trigger(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.playerInfo.currentSize);
+	  };
+
+	  Core.prototype.setFullscreen = function setFullscreen() {
+	    if (!_browser2.default.isiOS) {
+	      this.$el.addClass('fullscreen');
+	      this.$el.removeAttr('style');
+	      this.playerInfo.previousSize = { width: this.options.width, height: this.options.height };
+	      this.playerInfo.currentSize = { width: (0, _clapprZepto2.default)(window).width(), height: (0, _clapprZepto2.default)(window).height() };
+	    }
+	  };
+
+	  Core.prototype.setPlayerSize = function setPlayerSize() {
+	    this.$el.removeClass('fullscreen');
+	    this.playerInfo.currentSize = this.playerInfo.previousSize;
+	    this.playerInfo.previousSize = { width: (0, _clapprZepto2.default)(window).width(), height: (0, _clapprZepto2.default)(window).height() };
+	    this.resize(this.playerInfo.currentSize);
+	  };
+
+	  Core.prototype.resize = function resize(options) {
+	    if (!(0, _utils.isNumber)(options.height) && !(0, _utils.isNumber)(options.width)) {
+	      this.el.style.height = '' + options.height;
+	      this.el.style.width = '' + options.width;
+	    } else {
+	      this.el.style.height = options.height + 'px';
+	      this.el.style.width = options.width + 'px';
+	    }
+	    this.playerInfo.previousSize = { width: this.options.width, height: this.options.height };
+	    this.options.width = options.width;
+	    this.options.height = options.height;
+	    this.playerInfo.currentSize = options;
+	    _mediator2.default.trigger(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.playerInfo.currentSize);
+	  };
+
+	  Core.prototype.enableResizeObserver = function enableResizeObserver() {
+	    var _this3 = this;
+
+	    var checkSizeCallback = function checkSizeCallback() {
+	      if (_this3.resizeObserverInterval) clearInterval(_this3.resizeObserverInterval);
+	      if (_this3.playerInfo.computedSize.width != _this3.el.clientWidth || _this3.playerInfo.computedSize.height != _this3.el.clientHeight) {
+	        _this3.playerInfo.computedSize = { width: _this3.el.clientWidth, height: _this3.el.clientHeight };
+	        _mediator2.default.trigger(_this3.options.playerId + ':' + _events2.default.PLAYER_RESIZE, _this3.playerInfo.computedSize);
 	      }
-	      _mediator2.default.trigger(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.playerInfo.currentSize);
+	    };
+	    this.resizeObserverInterval = setInterval(checkSizeCallback, 500);
+	  };
+
+	  Core.prototype.disableResizeObserver = function disableResizeObserver() {
+	    if (this.resizeObserverInterval) clearInterval(this.resizeObserverInterval);
+	  };
+
+	  Core.prototype.resolveOnContainersReady = function resolveOnContainersReady(containers) {
+	    var _this4 = this;
+
+	    _clapprZepto2.default.when.apply(_clapprZepto2.default, containers).done(function () {
+	      _this4.defer.resolve(_this4);
+	      _this4.ready = true;
+	      _this4.trigger(_events2.default.CORE_READY);
+	    });
+	  };
+
+	  Core.prototype.addPlugin = function addPlugin(plugin) {
+	    this.plugins.push(plugin);
+	  };
+
+	  Core.prototype.hasPlugin = function hasPlugin(name) {
+	    return !!this.getPlugin(name);
+	  };
+
+	  Core.prototype.getPlugin = function getPlugin(name) {
+	    return (0, _lodash2.default)(this.plugins, function (plugin) {
+	      return plugin.name === name;
+	    });
+	  };
+
+	  Core.prototype.load = function load(sources, mimeType) {
+	    var _this5 = this;
+
+	    this.options.mimeType = mimeType;
+	    sources = sources && sources.constructor === Array ? sources : [sources.toString()];
+	    this.containers.forEach(function (container) {
+	      return container.destroy();
+	    });
+	    this.mediaControl.container = null;
+	    this.containerFactory.options = _clapprZepto2.default.extend(this.options, { sources: sources });
+	    this.containerFactory.createContainers().then(function (containers) {
+	      _this5.setupContainers(containers);
+	    });
+	  };
+
+	  Core.prototype.destroy = function destroy() {
+	    this.disableResizeObserver();
+	    this.containers.forEach(function (container) {
+	      return container.destroy();
+	    });
+	    this.plugins.forEach(function (plugin) {
+	      return plugin.destroy();
+	    });
+	    this.$el.remove();
+	    this.mediaControl.destroy();
+	    (0, _clapprZepto2.default)(document).unbind('fullscreenchange');
+	    (0, _clapprZepto2.default)(document).unbind('MSFullscreenChange');
+	    (0, _clapprZepto2.default)(document).unbind('mozfullscreenchange');
+	  };
+
+	  Core.prototype.exit = function exit() {
+	    this.updateSize();
+	    this.mediaControl.show();
+	  };
+
+	  Core.prototype.setMediaControlContainer = function setMediaControlContainer(container) {
+	    this.mediaControl.setContainer(container);
+	    this.mediaControl.render();
+	  };
+
+	  Core.prototype.disableMediaControl = function disableMediaControl() {
+	    this.mediaControl.disable();
+	    this.$el.removeClass('nocursor');
+	  };
+
+	  Core.prototype.enableMediaControl = function enableMediaControl() {
+	    this.mediaControl.enable();
+	  };
+
+	  Core.prototype.removeContainer = function removeContainer(container) {
+	    this.stopListening(container);
+	    this.containers = this.containers.filter(function (c) {
+	      return c !== container;
+	    });
+	  };
+
+	  Core.prototype.appendContainer = function appendContainer(container) {
+	    this.listenTo(container, _events2.default.CONTAINER_DESTROYED, this.removeContainer);
+	    this.containers.push(container);
+	  };
+
+	  Core.prototype.setupContainers = function setupContainers(containers) {
+	    containers.map(this.appendContainer.bind(this));
+	    this.trigger(_events2.default.CORE_CONTAINERS_CREATED);
+	    this.renderContainers();
+	    this.setupMediaControl(this.getCurrentContainer());
+	    this.render();
+	    this.$el.appendTo(this.options.parentElement);
+	    return this.containers;
+	  };
+
+	  Core.prototype.renderContainers = function renderContainers() {
+	    var _this6 = this;
+
+	    this.containers.map(function (container) {
+	      return _this6.el.appendChild(container.render().el);
+	    });
+	  };
+
+	  Core.prototype.createContainer = function createContainer(source, options) {
+	    var container = this.containerFactory.createContainer(source, options);
+	    this.appendContainer(container);
+	    this.el.appendChild(container.render().el);
+	    return container;
+	  };
+
+	  Core.prototype.setupMediaControl = function setupMediaControl(container) {
+	    if (this.mediaControl) {
+	      this.mediaControl.setContainer(container);
+	    } else {
+	      this.mediaControl = this.createMediaControl(_clapprZepto2.default.extend({ container: container, focusElement: this.el }, this.options));
+	      this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_FULLSCREEN, this.toggleFullscreen);
+	      this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_SHOW, this.onMediaControlShow.bind(this, true));
+	      this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_HIDE, this.onMediaControlShow.bind(this, false));
 	    }
-	  }, {
-	    key: 'setFullscreen',
-	    value: function setFullscreen() {
+	  };
+
+	  Core.prototype.createMediaControl = function createMediaControl(options) {
+	    if (options.mediacontrol && options.mediacontrol.external) {
+	      return new options.mediacontrol.external(options);
+	    } else {
+	      return new _media_control2.default(options).render();
+	    }
+	  };
+
+	  Core.prototype.getCurrentContainer = function getCurrentContainer() {
+	    if (!this.mediaControl || !this.mediaControl.container) {
+	      return this.containers[0];
+	    }
+	    return this.mediaControl.container;
+	  };
+
+	  Core.prototype.getCurrentPlayback = function getCurrentPlayback() {
+	    var container = this.getCurrentContainer();
+	    return container && container.playback;
+	  };
+
+	  Core.prototype.getPlaybackType = function getPlaybackType() {
+	    var container = this.getCurrentContainer();
+	    return container && container.getPlaybackType();
+	  };
+
+	  Core.prototype.toggleFullscreen = function toggleFullscreen() {
+	    if (!_utils.Fullscreen.isFullscreen()) {
+	      _utils.Fullscreen.requestFullscreen(this.el);
 	      if (!_browser2.default.isiOS) {
 	        this.$el.addClass('fullscreen');
-	        this.$el.removeAttr('style');
-	        this.playerInfo.previousSize = { width: this.options.width, height: this.options.height };
-	        this.playerInfo.currentSize = { width: (0, _clapprZepto2.default)(window).width(), height: (0, _clapprZepto2.default)(window).height() };
+	      }
+	    } else {
+	      _utils.Fullscreen.cancelFullscreen();
+	      if (!_browser2.default.isiOS) {
+	        this.$el.removeClass('fullscreen nocursor');
 	      }
 	    }
-	  }, {
-	    key: 'setPlayerSize',
-	    value: function setPlayerSize() {
-	      this.$el.removeClass('fullscreen');
-	      this.playerInfo.currentSize = this.playerInfo.previousSize;
-	      this.playerInfo.previousSize = { width: (0, _clapprZepto2.default)(window).width(), height: (0, _clapprZepto2.default)(window).height() };
-	      this.resize(this.playerInfo.currentSize);
-	    }
-	  }, {
-	    key: 'resize',
-	    value: function resize(options) {
-	      if (!(0, _utils.isNumber)(options.height) && !(0, _utils.isNumber)(options.width)) {
-	        this.el.style.height = '' + options.height;
-	        this.el.style.width = '' + options.width;
-	      } else {
-	        this.el.style.height = options.height + 'px';
-	        this.el.style.width = options.width + 'px';
-	      }
-	      this.playerInfo.previousSize = { width: this.options.width, height: this.options.height };
-	      this.options.width = options.width;
-	      this.options.height = options.height;
-	      this.playerInfo.currentSize = options;
-	      _mediator2.default.trigger(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.playerInfo.currentSize);
-	    }
-	  }, {
-	    key: 'enableResizeObserver',
-	    value: function enableResizeObserver() {
-	      var _this3 = this;
+	    this.mediaControl.show();
+	  };
 
-	      var checkSizeCallback = function checkSizeCallback() {
-	        if (_this3.resizeObserverInterval) clearInterval(_this3.resizeObserverInterval);
-	        if (_this3.playerInfo.computedSize.width != _this3.el.clientWidth || _this3.playerInfo.computedSize.height != _this3.el.clientHeight) {
-	          _this3.playerInfo.computedSize = { width: _this3.el.clientWidth, height: _this3.el.clientHeight };
-	          _mediator2.default.trigger(_this3.options.playerId + ':' + _events2.default.PLAYER_RESIZE, _this3.playerInfo.computedSize);
-	        }
-	      };
-	      this.resizeObserverInterval = setInterval(checkSizeCallback, 500);
-	    }
-	  }, {
-	    key: 'disableResizeObserver',
-	    value: function disableResizeObserver() {
-	      if (this.resizeObserverInterval) clearInterval(this.resizeObserverInterval);
-	    }
-	  }, {
-	    key: 'resolveOnContainersReady',
-	    value: function resolveOnContainersReady(containers) {
-	      var _this4 = this;
+	  Core.prototype.showMediaControl = function showMediaControl(event) {
+	    this.mediaControl.show(event);
+	  };
 
-	      _clapprZepto2.default.when.apply(_clapprZepto2.default, containers).done(function () {
-	        _this4.defer.resolve(_this4);
-	        _this4.ready = true;
-	        _this4.trigger(_events2.default.CORE_READY);
-	      });
-	    }
-	  }, {
-	    key: 'addPlugin',
-	    value: function addPlugin(plugin) {
-	      this.plugins.push(plugin);
-	    }
-	  }, {
-	    key: 'hasPlugin',
-	    value: function hasPlugin(name) {
-	      return !!this.getPlugin(name);
-	    }
-	  }, {
-	    key: 'getPlugin',
-	    value: function getPlugin(name) {
-	      return (0, _lodash2.default)(this.plugins, function (plugin) {
-	        return plugin.name === name;
-	      });
-	    }
-	  }, {
-	    key: 'load',
-	    value: function load(sources, mimeType) {
-	      var _this5 = this;
+	  Core.prototype.hideMediaControl = function hideMediaControl(event) {
+	    this.mediaControl.hide(this.options.hideMediaControlDelay);
+	  };
 
-	      this.options.mimeType = mimeType;
-	      sources = sources && sources.constructor === Array ? sources : [sources.toString()];
+	  Core.prototype.onMediaControlShow = function onMediaControlShow(showing) {
+	    this.getCurrentContainer().trigger(showing ? _events2.default.CONTAINER_MEDIACONTROL_SHOW : _events2.default.CONTAINER_MEDIACONTROL_HIDE);
+
+	    if (showing) this.$el.removeClass('nocursor');else if (_utils.Fullscreen.isFullscreen()) this.$el.addClass('nocursor');
+	  };
+
+	  /**
+	   * enables to configure the container after its creation
+	   * @method configure
+	   * @param {Object} options all the options to change in form of a javascript object
+	   */
+
+
+	  Core.prototype.configure = function configure(options) {
+	    var _this7 = this;
+
+	    this.options = _clapprZepto2.default.extend(this.options, options);
+	    var sources = options.source || options.sources;
+
+	    if (sources) {
+	      this.load(sources);
+	    } else {
+	      this.trigger(_events2.default.CORE_OPTIONS_CHANGE);
+
 	      this.containers.forEach(function (container) {
-	        return container.destroy();
-	      });
-	      this.mediaControl.container = null;
-	      this.containerFactory.options = _clapprZepto2.default.extend(this.options, { sources: sources });
-	      this.containerFactory.createContainers().then(function (containers) {
-	        _this5.setupContainers(containers);
+	        container.configure(_this7.options);
 	      });
 	    }
-	  }, {
-	    key: 'destroy',
-	    value: function destroy() {
-	      this.disableResizeObserver();
-	      this.containers.forEach(function (container) {
-	        return container.destroy();
-	      });
-	      this.plugins.forEach(function (plugin) {
-	        return plugin.destroy();
-	      });
-	      this.$el.remove();
-	      this.mediaControl.destroy();
-	      (0, _clapprZepto2.default)(document).unbind('fullscreenchange');
-	      (0, _clapprZepto2.default)(document).unbind('MSFullscreenChange');
-	      (0, _clapprZepto2.default)(document).unbind('mozfullscreenchange');
-	    }
-	  }, {
-	    key: 'exit',
-	    value: function exit() {
-	      this.updateSize();
-	      this.mediaControl.show();
-	    }
-	  }, {
-	    key: 'setMediaControlContainer',
-	    value: function setMediaControlContainer(container) {
-	      this.mediaControl.setContainer(container);
-	      this.mediaControl.render();
-	    }
-	  }, {
-	    key: 'disableMediaControl',
-	    value: function disableMediaControl() {
-	      this.mediaControl.disable();
-	      this.$el.removeClass('nocursor');
-	    }
-	  }, {
-	    key: 'enableMediaControl',
-	    value: function enableMediaControl() {
-	      this.mediaControl.enable();
-	    }
-	  }, {
-	    key: 'removeContainer',
-	    value: function removeContainer(container) {
-	      this.stopListening(container);
-	      this.containers = this.containers.filter(function (c) {
-	        return c !== container;
-	      });
-	    }
-	  }, {
-	    key: 'appendContainer',
-	    value: function appendContainer(container) {
-	      this.listenTo(container, _events2.default.CONTAINER_DESTROYED, this.removeContainer);
-	      this.containers.push(container);
-	    }
-	  }, {
-	    key: 'setupContainers',
-	    value: function setupContainers(containers) {
-	      containers.map(this.appendContainer.bind(this));
-	      this.trigger(_events2.default.CORE_CONTAINERS_CREATED);
-	      this.renderContainers();
-	      this.setupMediaControl(this.getCurrentContainer());
-	      this.render();
-	      this.$el.appendTo(this.options.parentElement);
-	      return this.containers;
-	    }
-	  }, {
-	    key: 'renderContainers',
-	    value: function renderContainers() {
-	      var _this6 = this;
+	  };
 
-	      this.containers.map(function (container) {
-	        return _this6.el.appendChild(container.render().el);
-	      });
-	    }
-	  }, {
-	    key: 'createContainer',
-	    value: function createContainer(source, options) {
-	      var container = this.containerFactory.createContainer(source, options);
-	      this.appendContainer(container);
-	      this.el.appendChild(container.render().el);
-	      return container;
-	    }
-	  }, {
-	    key: 'setupMediaControl',
-	    value: function setupMediaControl(container) {
-	      if (this.mediaControl) {
-	        this.mediaControl.setContainer(container);
-	      } else {
-	        this.mediaControl = this.createMediaControl(_clapprZepto2.default.extend({ container: container, focusElement: this.el }, this.options));
-	        this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_FULLSCREEN, this.toggleFullscreen);
-	        this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_SHOW, this.onMediaControlShow.bind(this, true));
-	        this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_HIDE, this.onMediaControlShow.bind(this, false));
-	      }
-	    }
-	  }, {
-	    key: 'createMediaControl',
-	    value: function createMediaControl(options) {
-	      if (options.mediacontrol && options.mediacontrol.external) {
-	        return new options.mediacontrol.external(options);
-	      } else {
-	        return new _media_control2.default(options).render();
-	      }
-	    }
-	  }, {
-	    key: 'getCurrentContainer',
-	    value: function getCurrentContainer() {
-	      if (!this.mediaControl || !this.mediaControl.container) {
-	        return this.containers[0];
-	      }
-	      return this.mediaControl.container;
-	    }
-	  }, {
-	    key: 'getCurrentPlayback',
-	    value: function getCurrentPlayback() {
-	      var container = this.getCurrentContainer();
-	      return container && container.playback;
-	    }
-	  }, {
-	    key: 'getPlaybackType',
-	    value: function getPlaybackType() {
-	      var container = this.getCurrentContainer();
-	      return container && container.getPlaybackType();
-	    }
-	  }, {
-	    key: 'toggleFullscreen',
-	    value: function toggleFullscreen() {
-	      if (!_utils.Fullscreen.isFullscreen()) {
-	        _utils.Fullscreen.requestFullscreen(this.el);
-	        if (!_browser2.default.isiOS) {
-	          this.$el.addClass('fullscreen');
-	        }
-	      } else {
-	        _utils.Fullscreen.cancelFullscreen();
-	        if (!_browser2.default.isiOS) {
-	          this.$el.removeClass('fullscreen nocursor');
-	        }
-	      }
-	      this.mediaControl.show();
-	    }
-	  }, {
-	    key: 'showMediaControl',
-	    value: function showMediaControl(event) {
-	      this.mediaControl.show(event);
-	    }
-	  }, {
-	    key: 'hideMediaControl',
-	    value: function hideMediaControl(event) {
-	      this.mediaControl.hide(this.options.hideMediaControlDelay);
-	    }
-	  }, {
-	    key: 'onMediaControlShow',
-	    value: function onMediaControlShow(showing) {
-	      this.getCurrentContainer().trigger(showing ? _events2.default.CONTAINER_MEDIACONTROL_SHOW : _events2.default.CONTAINER_MEDIACONTROL_HIDE);
+	  Core.prototype.render = function render() {
+	    var style = _styler2.default.getStyleFor(_style2.default);
+	    this.$el.append(style);
+	    this.$el.append(this.mediaControl.render().el);
 
-	      if (showing) this.$el.removeClass('nocursor');else if (_utils.Fullscreen.isFullscreen()) this.$el.addClass('nocursor');
-	    }
+	    this.options.width = this.options.width || this.$el.width();
+	    this.options.height = this.options.height || this.$el.height();
+	    var size = { width: this.options.width, height: this.options.height };
+	    this.playerInfo.previousSize = this.playerInfo.currentSize = this.playerInfo.computedSize = size;
+	    this.updateSize();
 
-	    /**
-	     * enables to configure the container after its creation
-	     * @method configure
-	     * @param {Object} options all the options to change in form of a javascript object
-	     */
+	    this.previousSize = { width: this.$el.width(), height: this.$el.height() };
 
-	  }, {
-	    key: 'configure',
-	    value: function configure(options) {
-	      var _this7 = this;
+	    this.enableResizeObserver();
 
-	      this.options = _clapprZepto2.default.extend(this.options, options);
-	      var sources = options.source || options.sources;
-
-	      if (sources) {
-	        this.load(sources);
-	      } else {
-	        this.trigger(_events2.default.CORE_OPTIONS_CHANGE);
-
-	        this.containers.forEach(function (container) {
-	          container.configure(_this7.options);
-	        });
-	      }
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var style = _styler2.default.getStyleFor(_style2.default);
-	      this.$el.append(style);
-	      this.$el.append(this.mediaControl.render().el);
-
-	      this.options.width = this.options.width || this.$el.width();
-	      this.options.height = this.options.height || this.$el.height();
-	      var size = { width: this.options.width, height: this.options.height };
-	      this.playerInfo.previousSize = this.playerInfo.currentSize = this.playerInfo.computedSize = size;
-	      this.updateSize();
-
-	      this.previousSize = { width: this.$el.width(), height: this.$el.height() };
-
-	      this.enableResizeObserver();
-
-	      return this;
-	    }
-	  }]);
+	    return this;
+	  };
 
 	  return Core;
 	}(_ui_object2.default);
@@ -4516,7 +4412,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function UIObject(options) {
 	    _classCallCheck(this, UIObject);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(UIObject).call(this, options));
+	    var _this = _possibleConstructorReturn(this, _BaseObject.call(this, options));
 
 	    _this.cid = (0, _utils.uniqueId)('c');
 	    _this._ensureElement();
@@ -4536,135 +4432,126 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 
 
-	  _createClass(UIObject, [{
-	    key: '$',
-	    value: function $(selector) {
-	      return this.$el.find(selector);
-	    }
+	  UIObject.prototype.$ = function $(selector) {
+	    return this.$el.find(selector);
+	  };
 
-	    /**
-	     * render the component, usually attach it to a real existent `element`
-	     * @method render
-	     * @return {UIObject} itself
-	     */
+	  /**
+	   * render the component, usually attach it to a real existent `element`
+	   * @method render
+	   * @return {UIObject} itself
+	   */
 
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return this;
-	    }
 
-	    /**
-	     * removes the ui component from DOM
-	     * @method remove
-	     * @return {UIObject} itself
-	     */
+	  UIObject.prototype.render = function render() {
+	    return this;
+	  };
 
-	  }, {
-	    key: 'remove',
-	    value: function remove() {
-	      this.$el.remove();
-	      this.stopListening();
+	  /**
+	   * removes the ui component from DOM
+	   * @method remove
+	   * @return {UIObject} itself
+	   */
+
+
+	  UIObject.prototype.remove = function remove() {
+	    this.$el.remove();
+	    this.stopListening();
+	    this.undelegateEvents();
+	    return this;
+	  };
+
+	  /**
+	   * set element to `el` and `$el`
+	   * @method setElement
+	   * @param {HTMLElement} element
+	   * @param {Boolean} delegate whether is delegate or not
+	   * @return {UIObject} itself
+	   */
+
+
+	  UIObject.prototype.setElement = function setElement(element, delegate) {
+	    if (this.$el) {
 	      this.undelegateEvents();
+	    }
+	    this.$el = element instanceof _clapprZepto2.default ? element : (0, _clapprZepto2.default)(element);
+	    this.el = this.$el[0];
+	    if (delegate !== false) {
+	      this.delegateEvents();
+	    }
+	    return this;
+	  };
+
+	  /**
+	   * delegates all the original `events` on `element` to its callbacks
+	   * @method delegateEvents
+	   * @param {Object} events
+	   * @return {UIObject} itself
+	   */
+
+
+	  UIObject.prototype.delegateEvents = function delegateEvents(events) {
+	    if (!(events || (events = (0, _lodash2.default)(this, 'events')))) {
 	      return this;
 	    }
-
-	    /**
-	     * set element to `el` and `$el`
-	     * @method setElement
-	     * @param {HTMLElement} element
-	     * @param {Boolean} delegate whether is delegate or not
-	     * @return {UIObject} itself
-	     */
-
-	  }, {
-	    key: 'setElement',
-	    value: function setElement(element, delegate) {
-	      if (this.$el) {
-	        this.undelegateEvents();
+	    this.undelegateEvents();
+	    for (var key in events) {
+	      var method = events[key];
+	      if (method && method.constructor !== Function) {
+	        method = this[events[key]];
 	      }
-	      this.$el = element instanceof _clapprZepto2.default ? element : (0, _clapprZepto2.default)(element);
-	      this.el = this.$el[0];
-	      if (delegate !== false) {
-	        this.delegateEvents();
+	      if (!method) {
+	        continue;
 	      }
-	      return this;
-	    }
 
-	    /**
-	     * delegates all the original `events` on `element` to its callbacks
-	     * @method delegateEvents
-	     * @param {Object} events
-	     * @return {UIObject} itself
-	     */
-
-	  }, {
-	    key: 'delegateEvents',
-	    value: function delegateEvents(events) {
-	      if (!(events || (events = (0, _lodash2.default)(this, 'events')))) {
-	        return this;
-	      }
-	      this.undelegateEvents();
-	      for (var key in events) {
-	        var method = events[key];
-	        if (method && method.constructor !== Function) {
-	          method = this[events[key]];
-	        }
-	        if (!method) {
-	          continue;
-	        }
-
-	        var match = key.match(delegateEventSplitter);
-	        var eventName = match[1],
-	            selector = match[2];
-	        //method = _.bind(method, this)
-	        eventName += '.delegateEvents' + this.cid;
-	        if (selector === '') {
-	          this.$el.on(eventName, method.bind(this));
-	        } else {
-	          this.$el.on(eventName, selector, method.bind(this));
-	        }
-	      }
-	      return this;
-	    }
-
-	    /**
-	     * undelegats all the `events`
-	     * @method undelegateEvents
-	     * @return {UIObject} itself
-	     */
-
-	  }, {
-	    key: 'undelegateEvents',
-	    value: function undelegateEvents() {
-	      this.$el.off('.delegateEvents' + this.cid);
-	      return this;
-	    }
-
-	    /**
-	     * ensures the creation of this ui component
-	     * @method _ensureElement
-	     * @private
-	     */
-
-	  }, {
-	    key: '_ensureElement',
-	    value: function _ensureElement() {
-	      if (!this.el) {
-	        var attrs = _clapprZepto2.default.extend({}, (0, _lodash2.default)(this, 'attributes'));
-	        if (this.id) {
-	          attrs.id = (0, _lodash2.default)(this, 'id');
-	        }
-	        if (this.className) {
-	          attrs['class'] = (0, _lodash2.default)(this, 'className');
-	        }
-	        var $el = (0, _clapprZepto2.default)('<' + (0, _lodash2.default)(this, 'tagName') + '>').attr(attrs);
-	        this.setElement($el, false);
+	      var match = key.match(delegateEventSplitter);
+	      var eventName = match[1],
+	          selector = match[2];
+	      //method = _.bind(method, this)
+	      eventName += '.delegateEvents' + this.cid;
+	      if (selector === '') {
+	        this.$el.on(eventName, method.bind(this));
 	      } else {
-	        this.setElement((0, _lodash2.default)(this, 'el'), false);
+	        this.$el.on(eventName, selector, method.bind(this));
 	      }
 	    }
-	  }]);
+	    return this;
+	  };
+
+	  /**
+	   * undelegats all the `events`
+	   * @method undelegateEvents
+	   * @return {UIObject} itself
+	   */
+
+
+	  UIObject.prototype.undelegateEvents = function undelegateEvents() {
+	    this.$el.off('.delegateEvents' + this.cid);
+	    return this;
+	  };
+
+	  /**
+	   * ensures the creation of this ui component
+	   * @method _ensureElement
+	   * @private
+	   */
+
+
+	  UIObject.prototype._ensureElement = function _ensureElement() {
+	    if (!this.el) {
+	      var attrs = _clapprZepto2.default.extend({}, (0, _lodash2.default)(this, 'attributes'));
+	      if (this.id) {
+	        attrs.id = (0, _lodash2.default)(this, 'id');
+	      }
+	      if (this.className) {
+	        attrs['class'] = (0, _lodash2.default)(this, 'className');
+	      }
+	      var $el = (0, _clapprZepto2.default)('<' + (0, _lodash2.default)(this, 'tagName') + '>').attr(attrs);
+	      this.setElement($el, false);
+	    } else {
+	      this.setElement((0, _lodash2.default)(this, 'el'), false);
+	    }
+	  };
 
 	  return UIObject;
 	}(_base_object2.default);
@@ -5184,8 +5071,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 	var _base_object = __webpack_require__(5);
 
 	var _base_object2 = _interopRequireDefault(_base_object);
@@ -5226,73 +5111,67 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function ContainerFactory(options, loader) {
 	    _classCallCheck(this, ContainerFactory);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ContainerFactory).call(this, options));
+	    var _this = _possibleConstructorReturn(this, _BaseObject.call(this, options));
 
 	    _this.options = options;
 	    _this.loader = loader;
 	    return _this;
 	  }
 
-	  _createClass(ContainerFactory, [{
-	    key: 'createContainers',
-	    value: function createContainers() {
-	      var _this2 = this;
+	  ContainerFactory.prototype.createContainers = function createContainers() {
+	    var _this2 = this;
 
-	      return _clapprZepto2.default.Deferred(function (promise) {
-	        promise.resolve(_this2.options.sources.map(function (source) {
-	          return _this2.createContainer(source);
-	        }));
-	      });
-	    }
-	  }, {
-	    key: 'findPlaybackPlugin',
-	    value: function findPlaybackPlugin(source, mimeType) {
-	      return (0, _lodash2.default)(this.loader.playbackPlugins, function (p) {
-	        return p.canPlay(source, mimeType);
-	      });
-	    }
-	  }, {
-	    key: 'createContainer',
-	    value: function createContainer(source) {
-	      var resolvedSource = null;
-	      var mimeType = this.options.mimeType;
-	      if (typeof source === "string" || source instanceof String) {
-	        resolvedSource = source.toString();
-	      } else {
-	        resolvedSource = source.source.toString();
-	        if (source.mimeType) {
-	          mimeType = source.mimeType;
-	        }
+	    return _clapprZepto2.default.Deferred(function (promise) {
+	      promise.resolve(_this2.options.sources.map(function (source) {
+	        return _this2.createContainer(source);
+	      }));
+	    });
+	  };
+
+	  ContainerFactory.prototype.findPlaybackPlugin = function findPlaybackPlugin(source, mimeType) {
+	    return (0, _lodash2.default)(this.loader.playbackPlugins, function (p) {
+	      return p.canPlay(source, mimeType);
+	    });
+	  };
+
+	  ContainerFactory.prototype.createContainer = function createContainer(source) {
+	    var resolvedSource = null;
+	    var mimeType = this.options.mimeType;
+	    if (typeof source === "string" || source instanceof String) {
+	      resolvedSource = source.toString();
+	    } else {
+	      resolvedSource = source.source.toString();
+	      if (source.mimeType) {
+	        mimeType = source.mimeType;
 	      }
-
-	      if (!!resolvedSource.match(/^\/\//)) resolvedSource = window.location.protocol + resolvedSource;
-
-	      var options = _clapprZepto2.default.extend({}, this.options, {
-	        src: resolvedSource,
-	        mimeType: mimeType
-	      });
-	      var playbackPlugin = this.findPlaybackPlugin(resolvedSource, mimeType);
-	      var playback = new playbackPlugin(options);
-
-	      options = _clapprZepto2.default.extend(options, { playback: playback });
-
-	      var container = new _container2.default(options);
-	      var defer = _clapprZepto2.default.Deferred();
-	      defer.promise(container);
-	      this.addContainerPlugins(container, resolvedSource);
-	      this.listenToOnce(container, _events2.default.CONTAINER_READY, function () {
-	        return defer.resolve(container);
-	      });
-	      return container;
 	    }
-	  }, {
-	    key: 'addContainerPlugins',
-	    value: function addContainerPlugins(container, source) {
-	      this.loader.containerPlugins.forEach(function (Plugin) {
-	        container.addPlugin(new Plugin(container));
-	      });
-	    }
-	  }]);
+
+	    if (!!resolvedSource.match(/^\/\//)) resolvedSource = window.location.protocol + resolvedSource;
+
+	    var options = _clapprZepto2.default.extend({}, this.options, {
+	      src: resolvedSource,
+	      mimeType: mimeType
+	    });
+	    var playbackPlugin = this.findPlaybackPlugin(resolvedSource, mimeType);
+	    var playback = new playbackPlugin(options);
+
+	    options = _clapprZepto2.default.extend(options, { playback: playback });
+
+	    var container = new _container2.default(options);
+	    var defer = _clapprZepto2.default.Deferred();
+	    defer.promise(container);
+	    this.addContainerPlugins(container, resolvedSource);
+	    this.listenToOnce(container, _events2.default.CONTAINER_READY, function () {
+	      return defer.resolve(container);
+	    });
+	    return container;
+	  };
+
+	  ContainerFactory.prototype.addContainerPlugins = function addContainerPlugins(container, source) {
+	    this.loader.containerPlugins.forEach(function (Plugin) {
+	      container.addPlugin(new Plugin(container));
+	    });
+	  };
 
 	  return ContainerFactory;
 	}(_base_object2.default);
@@ -5437,7 +5316,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function Container(options) {
 	    _classCallCheck(this, Container);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Container).call(this, options));
+	    var _this = _possibleConstructorReturn(this, _UIObject.call(this, options));
 
 	    _this.currentTime = 0;
 	    _this.volume = 100;
@@ -5481,361 +5360,311 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 
 
-	  _createClass(Container, [{
-	    key: 'bindEvents',
-	    value: function bindEvents() {
-	      this.listenTo(this.playback, _events2.default.PLAYBACK_PROGRESS, this.progress);
-	      this.listenTo(this.playback, _events2.default.PLAYBACK_TIMEUPDATE, this.timeUpdated);
-	      this.listenTo(this.playback, _events2.default.PLAYBACK_READY, this.ready);
-	      this.listenTo(this.playback, _events2.default.PLAYBACK_BUFFERING, this.onBuffering);
-	      this.listenTo(this.playback, _events2.default.PLAYBACK_BUFFERFULL, this.bufferfull);
-	      this.listenTo(this.playback, _events2.default.PLAYBACK_SETTINGSUPDATE, this.settingsUpdate);
-	      this.listenTo(this.playback, _events2.default.PLAYBACK_LOADEDMETADATA, this.loadedMetadata);
-	      this.listenTo(this.playback, _events2.default.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinitionUpdate);
-	      this.listenTo(this.playback, _events2.default.PLAYBACK_BITRATE, this.updateBitrate);
-	      this.listenTo(this.playback, _events2.default.PLAYBACK_PLAYBACKSTATE, this.playbackStateChanged);
-	      this.listenTo(this.playback, _events2.default.PLAYBACK_DVR, this.playbackDvrStateChanged);
-	      this.listenTo(this.playback, _events2.default.PLAYBACK_MEDIACONTROL_DISABLE, this.disableMediaControl);
-	      this.listenTo(this.playback, _events2.default.PLAYBACK_MEDIACONTROL_ENABLE, this.enableMediaControl);
-	      this.listenTo(this.playback, _events2.default.PLAYBACK_ENDED, this.onEnded);
-	      this.listenTo(this.playback, _events2.default.PLAYBACK_PLAY, this.playing);
-	      this.listenTo(this.playback, _events2.default.PLAYBACK_PAUSE, this.paused);
-	      this.listenTo(this.playback, _events2.default.PLAYBACK_STOP, this.stopped);
-	      this.listenTo(this.playback, _events2.default.PLAYBACK_ERROR, this.error);
-	    }
-	  }, {
-	    key: 'playbackStateChanged',
-	    value: function playbackStateChanged(state) {
-	      this.trigger(_events2.default.CONTAINER_PLAYBACKSTATE, state);
-	    }
-	  }, {
-	    key: 'playbackDvrStateChanged',
-	    value: function playbackDvrStateChanged(dvrInUse) {
-	      this.settings = this.playback.settings;
-	      this.dvrInUse = dvrInUse;
-	      this.trigger(_events2.default.CONTAINER_PLAYBACKDVRSTATECHANGED, dvrInUse);
-	    }
-	  }, {
-	    key: 'updateBitrate',
-	    value: function updateBitrate(newBitrate) {
-	      this.trigger(_events2.default.CONTAINER_BITRATE, newBitrate);
-	    }
-	  }, {
-	    key: 'statsReport',
-	    value: function statsReport(metrics) {
-	      this.trigger(_events2.default.CONTAINER_STATS_REPORT, metrics);
-	    }
-	  }, {
-	    key: 'getPlaybackType',
-	    value: function getPlaybackType() {
-	      return this.playback.getPlaybackType();
-	    }
+	  Container.prototype.bindEvents = function bindEvents() {
+	    this.listenTo(this.playback, _events2.default.PLAYBACK_PROGRESS, this.progress);
+	    this.listenTo(this.playback, _events2.default.PLAYBACK_TIMEUPDATE, this.timeUpdated);
+	    this.listenTo(this.playback, _events2.default.PLAYBACK_READY, this.ready);
+	    this.listenTo(this.playback, _events2.default.PLAYBACK_BUFFERING, this.onBuffering);
+	    this.listenTo(this.playback, _events2.default.PLAYBACK_BUFFERFULL, this.bufferfull);
+	    this.listenTo(this.playback, _events2.default.PLAYBACK_SETTINGSUPDATE, this.settingsUpdate);
+	    this.listenTo(this.playback, _events2.default.PLAYBACK_LOADEDMETADATA, this.loadedMetadata);
+	    this.listenTo(this.playback, _events2.default.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinitionUpdate);
+	    this.listenTo(this.playback, _events2.default.PLAYBACK_BITRATE, this.updateBitrate);
+	    this.listenTo(this.playback, _events2.default.PLAYBACK_PLAYBACKSTATE, this.playbackStateChanged);
+	    this.listenTo(this.playback, _events2.default.PLAYBACK_DVR, this.playbackDvrStateChanged);
+	    this.listenTo(this.playback, _events2.default.PLAYBACK_MEDIACONTROL_DISABLE, this.disableMediaControl);
+	    this.listenTo(this.playback, _events2.default.PLAYBACK_MEDIACONTROL_ENABLE, this.enableMediaControl);
+	    this.listenTo(this.playback, _events2.default.PLAYBACK_ENDED, this.onEnded);
+	    this.listenTo(this.playback, _events2.default.PLAYBACK_PLAY, this.playing);
+	    this.listenTo(this.playback, _events2.default.PLAYBACK_PAUSE, this.paused);
+	    this.listenTo(this.playback, _events2.default.PLAYBACK_STOP, this.stopped);
+	    this.listenTo(this.playback, _events2.default.PLAYBACK_ERROR, this.error);
+	  };
 
-	    /**
-	     * returns `true` if DVR is enable otherwise `false`.
-	     * @method isDvrEnabled
-	     * @return {Boolean}
-	     */
+	  Container.prototype.playbackStateChanged = function playbackStateChanged(state) {
+	    this.trigger(_events2.default.CONTAINER_PLAYBACKSTATE, state);
+	  };
 
-	  }, {
-	    key: 'isDvrEnabled',
-	    value: function isDvrEnabled() {
-	      return !!this.playback.dvrEnabled;
-	    }
+	  Container.prototype.playbackDvrStateChanged = function playbackDvrStateChanged(dvrInUse) {
+	    this.settings = this.playback.settings;
+	    this.dvrInUse = dvrInUse;
+	    this.trigger(_events2.default.CONTAINER_PLAYBACKDVRSTATECHANGED, dvrInUse);
+	  };
 
-	    /**
-	     * returns `true` if DVR is in use otherwise `false`.
-	     * @method isDvrInUse
-	     * @return {Boolean}
-	     */
+	  Container.prototype.updateBitrate = function updateBitrate(newBitrate) {
+	    this.trigger(_events2.default.CONTAINER_BITRATE, newBitrate);
+	  };
 
-	  }, {
-	    key: 'isDvrInUse',
-	    value: function isDvrInUse() {
-	      return !!this.dvrInUse;
-	    }
+	  Container.prototype.statsReport = function statsReport(metrics) {
+	    this.trigger(_events2.default.CONTAINER_STATS_REPORT, metrics);
+	  };
 
-	    /**
-	     * destroys the container
-	     * @method destroy
-	     */
+	  Container.prototype.getPlaybackType = function getPlaybackType() {
+	    return this.playback.getPlaybackType();
+	  };
 
-	  }, {
-	    key: 'destroy',
-	    value: function destroy() {
-	      this.trigger(_events2.default.CONTAINER_DESTROYED, this, this.name);
-	      this.stopListening();
-	      this.playback.destroy();
-	      this.plugins.forEach(function (plugin) {
-	        return plugin.destroy();
-	      });
-	      this.$el.remove();
-	    }
-	  }, {
-	    key: 'setStyle',
-	    value: function setStyle(style) {
-	      this.$el.css(style);
-	    }
-	  }, {
-	    key: 'animate',
-	    value: function animate(style, duration) {
-	      return this.$el.animate(style, duration).promise();
-	    }
-	  }, {
-	    key: 'ready',
-	    value: function ready() {
-	      this.isReady = true;
-	      this.trigger(_events2.default.CONTAINER_READY, this.name);
-	    }
-	  }, {
-	    key: 'isPlaying',
-	    value: function isPlaying() {
-	      return this.playback.isPlaying();
-	    }
-	  }, {
-	    key: 'getStartTimeOffset',
-	    value: function getStartTimeOffset() {
-	      return this.playback.getStartTimeOffset();
-	    }
-	  }, {
-	    key: 'getCurrentTime',
-	    value: function getCurrentTime() {
-	      return this.currentTime;
-	    }
-	  }, {
-	    key: 'getDuration',
-	    value: function getDuration() {
-	      return this.playback.getDuration();
-	    }
-	  }, {
-	    key: 'error',
-	    value: function error(errorObj) {
-	      if (!this.isReady) {
-	        this.ready();
-	      }
-	      this.trigger(_events2.default.CONTAINER_ERROR, { error: errorObj, container: this }, this.name);
-	    }
-	  }, {
-	    key: 'loadedMetadata',
-	    value: function loadedMetadata(metadata) {
-	      this.trigger(_events2.default.CONTAINER_LOADEDMETADATA, metadata);
-	    }
-	  }, {
-	    key: 'timeUpdated',
-	    value: function timeUpdated(timeProgress) {
-	      this.currentTime = timeProgress.current;
-	      this.trigger(_events2.default.CONTAINER_TIMEUPDATE, timeProgress, this.name);
-	    }
-	  }, {
-	    key: 'progress',
-	    value: function progress(progressObj) {
-	      this.trigger(_events2.default.CONTAINER_PROGRESS, progressObj, this.name);
-	    }
-	  }, {
-	    key: 'playing',
-	    value: function playing() {
-	      this.trigger(_events2.default.CONTAINER_PLAY, this.name);
-	    }
-	  }, {
-	    key: 'paused',
-	    value: function paused() {
-	      this.trigger(_events2.default.CONTAINER_PAUSE, this.name);
-	    }
+	  /**
+	   * returns `true` if DVR is enable otherwise `false`.
+	   * @method isDvrEnabled
+	   * @return {Boolean}
+	   */
 
-	    /**
-	     * plays the playback
-	     * @method play
-	     */
 
-	  }, {
-	    key: 'play',
-	    value: function play() {
-	      this.playback.play();
-	    }
+	  Container.prototype.isDvrEnabled = function isDvrEnabled() {
+	    return !!this.playback.dvrEnabled;
+	  };
 
-	    /**
-	     * stops the playback
-	     * @method stop
-	     */
+	  /**
+	   * returns `true` if DVR is in use otherwise `false`.
+	   * @method isDvrInUse
+	   * @return {Boolean}
+	   */
 
-	  }, {
-	    key: 'stop',
-	    value: function stop() {
-	      this.playback.stop();
-	      this.currentTime = 0;
-	    }
 
-	    /**
-	     * pauses the playback
-	     * @method pause
-	     */
+	  Container.prototype.isDvrInUse = function isDvrInUse() {
+	    return !!this.dvrInUse;
+	  };
 
-	  }, {
-	    key: 'pause',
-	    value: function pause() {
-	      this.playback.pause();
-	    }
-	  }, {
-	    key: 'onEnded',
-	    value: function onEnded() {
-	      this.trigger(_events2.default.CONTAINER_ENDED, this, this.name);
-	      this.currentTime = 0;
-	    }
-	  }, {
-	    key: 'stopped',
-	    value: function stopped() {
-	      this.trigger(_events2.default.CONTAINER_STOP);
-	    }
-	  }, {
-	    key: 'clicked',
-	    value: function clicked() {
-	      this.trigger(_events2.default.CONTAINER_CLICK, this, this.name);
-	    }
-	  }, {
-	    key: 'dblClicked',
-	    value: function dblClicked() {
-	      this.trigger(_events2.default.CONTAINER_DBLCLICK, this, this.name);
-	    }
-	  }, {
-	    key: 'onContextMenu',
-	    value: function onContextMenu() {
-	      this.trigger(_events2.default.CONTAINER_CONTEXTMENU, this, this.name);
-	    }
-	  }, {
-	    key: 'seek',
-	    value: function seek(time) {
-	      this.trigger(_events2.default.CONTAINER_SEEK, time, this.name);
-	      this.playback.seek(time);
-	    }
-	  }, {
-	    key: 'seekPercentage',
-	    value: function seekPercentage(percentage) {
-	      var duration = this.getDuration();
-	      if (percentage > 0 && percentage <= 100) {
-	        var time = duration * (percentage / 100);
-	        this.seek(time);
-	      }
-	    }
-	  }, {
-	    key: 'setVolume',
-	    value: function setVolume(value) {
-	      this.volume = parseInt(value, 10);
-	      this.trigger(_events2.default.CONTAINER_VOLUME, value, this.name);
-	      this.playback.volume(value);
-	    }
-	  }, {
-	    key: 'fullscreen',
-	    value: function fullscreen() {
-	      this.trigger(_events2.default.CONTAINER_FULLSCREEN, this.name);
-	    }
-	  }, {
-	    key: 'onBuffering',
-	    value: function onBuffering() {
-	      this.trigger(_events2.default.CONTAINER_STATE_BUFFERING, this.name);
-	    }
-	  }, {
-	    key: 'bufferfull',
-	    value: function bufferfull() {
-	      this.trigger(_events2.default.CONTAINER_STATE_BUFFERFULL, this.name);
-	    }
+	  /**
+	   * destroys the container
+	   * @method destroy
+	   */
 
-	    /**
-	     * adds plugin to the container
-	     * @method addPlugin
-	     * @param {Object} plugin
-	     */
 
-	  }, {
-	    key: 'addPlugin',
-	    value: function addPlugin(plugin) {
-	      this.plugins.push(plugin);
-	    }
+	  Container.prototype.destroy = function destroy() {
+	    this.trigger(_events2.default.CONTAINER_DESTROYED, this, this.name);
+	    this.stopListening();
+	    this.playback.destroy();
+	    this.plugins.forEach(function (plugin) {
+	      return plugin.destroy();
+	    });
+	    this.$el.remove();
+	  };
 
-	    /**
-	     * checks if a plugin, given its name, exist
-	     * @method addPlugin
-	     * @param {String} name
-	     */
+	  Container.prototype.setStyle = function setStyle(style) {
+	    this.$el.css(style);
+	  };
 
-	  }, {
-	    key: 'hasPlugin',
-	    value: function hasPlugin(name) {
-	      return !!this.getPlugin(name);
-	    }
+	  Container.prototype.animate = function animate(style, duration) {
+	    return this.$el.animate(style, duration).promise();
+	  };
 
-	    /**
-	     * get the plugin given its name
-	     * @method getPlugin
-	     * @param {String} name
-	     */
+	  Container.prototype.ready = function ready() {
+	    this.isReady = true;
+	    this.trigger(_events2.default.CONTAINER_READY, this.name);
+	  };
 
-	  }, {
-	    key: 'getPlugin',
-	    value: function getPlugin(name) {
-	      return (0, _lodash2.default)(this.plugins, function (plugin) {
-	        return plugin.name === name;
-	      });
-	    }
-	  }, {
-	    key: 'mouseEnter',
-	    value: function mouseEnter() {
-	      this.trigger(_events2.default.CONTAINER_MOUSE_ENTER);
-	    }
-	  }, {
-	    key: 'mouseLeave',
-	    value: function mouseLeave() {
-	      this.trigger(_events2.default.CONTAINER_MOUSE_LEAVE);
-	    }
-	  }, {
-	    key: 'settingsUpdate',
-	    value: function settingsUpdate() {
-	      this.settings = this.playback.settings;
-	      this.trigger(_events2.default.CONTAINER_SETTINGSUPDATE);
-	    }
-	  }, {
-	    key: 'highDefinitionUpdate',
-	    value: function highDefinitionUpdate(isHD) {
-	      this.trigger(_events2.default.CONTAINER_HIGHDEFINITIONUPDATE, isHD);
-	    }
-	  }, {
-	    key: 'isHighDefinitionInUse',
-	    value: function isHighDefinitionInUse() {
-	      return this.playback.isHighDefinitionInUse();
-	    }
-	  }, {
-	    key: 'disableMediaControl',
-	    value: function disableMediaControl() {
-	      this.mediaControlDisabled = true;
-	      this.trigger(_events2.default.CONTAINER_MEDIACONTROL_DISABLE);
-	    }
-	  }, {
-	    key: 'enableMediaControl',
-	    value: function enableMediaControl() {
-	      this.mediaControlDisabled = false;
-	      this.trigger(_events2.default.CONTAINER_MEDIACONTROL_ENABLE);
-	    }
+	  Container.prototype.isPlaying = function isPlaying() {
+	    return this.playback.isPlaying();
+	  };
 
-	    /**
-	     * enables to configure the container after its creation
-	     * @method configure
-	     * @param {Object} options all the options to change in form of a javascript object
-	     */
+	  Container.prototype.getStartTimeOffset = function getStartTimeOffset() {
+	    return this.playback.getStartTimeOffset();
+	  };
 
-	  }, {
-	    key: 'configure',
-	    value: function configure(options) {
-	      this.options = _clapprZepto2.default.extend(this.options, options);
-	      this.trigger(_events2.default.CONTAINER_OPTIONS_CHANGE);
+	  Container.prototype.getCurrentTime = function getCurrentTime() {
+	    return this.currentTime;
+	  };
+
+	  Container.prototype.getDuration = function getDuration() {
+	    return this.playback.getDuration();
+	  };
+
+	  Container.prototype.error = function error(errorObj) {
+	    if (!this.isReady) {
+	      this.ready();
 	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var s = _styler2.default.getStyleFor(_style2.default);
-	      this.$el.append(s);
-	      this.$el.append(this.playback.render().el);
-	      return this;
+	    this.trigger(_events2.default.CONTAINER_ERROR, { error: errorObj, container: this }, this.name);
+	  };
+
+	  Container.prototype.loadedMetadata = function loadedMetadata(metadata) {
+	    this.trigger(_events2.default.CONTAINER_LOADEDMETADATA, metadata);
+	  };
+
+	  Container.prototype.timeUpdated = function timeUpdated(timeProgress) {
+	    this.currentTime = timeProgress.current;
+	    this.trigger(_events2.default.CONTAINER_TIMEUPDATE, timeProgress, this.name);
+	  };
+
+	  Container.prototype.progress = function progress(progressObj) {
+	    this.trigger(_events2.default.CONTAINER_PROGRESS, progressObj, this.name);
+	  };
+
+	  Container.prototype.playing = function playing() {
+	    this.trigger(_events2.default.CONTAINER_PLAY, this.name);
+	  };
+
+	  Container.prototype.paused = function paused() {
+	    this.trigger(_events2.default.CONTAINER_PAUSE, this.name);
+	  };
+
+	  /**
+	   * plays the playback
+	   * @method play
+	   */
+
+
+	  Container.prototype.play = function play() {
+	    this.playback.play();
+	  };
+
+	  /**
+	   * stops the playback
+	   * @method stop
+	   */
+
+
+	  Container.prototype.stop = function stop() {
+	    this.playback.stop();
+	    this.currentTime = 0;
+	  };
+
+	  /**
+	   * pauses the playback
+	   * @method pause
+	   */
+
+
+	  Container.prototype.pause = function pause() {
+	    this.playback.pause();
+	  };
+
+	  Container.prototype.onEnded = function onEnded() {
+	    this.trigger(_events2.default.CONTAINER_ENDED, this, this.name);
+	    this.currentTime = 0;
+	  };
+
+	  Container.prototype.stopped = function stopped() {
+	    this.trigger(_events2.default.CONTAINER_STOP);
+	  };
+
+	  Container.prototype.clicked = function clicked() {
+	    this.trigger(_events2.default.CONTAINER_CLICK, this, this.name);
+	  };
+
+	  Container.prototype.dblClicked = function dblClicked() {
+	    this.trigger(_events2.default.CONTAINER_DBLCLICK, this, this.name);
+	  };
+
+	  Container.prototype.onContextMenu = function onContextMenu() {
+	    this.trigger(_events2.default.CONTAINER_CONTEXTMENU, this, this.name);
+	  };
+
+	  Container.prototype.seek = function seek(time) {
+	    this.trigger(_events2.default.CONTAINER_SEEK, time, this.name);
+	    this.playback.seek(time);
+	  };
+
+	  Container.prototype.seekPercentage = function seekPercentage(percentage) {
+	    var duration = this.getDuration();
+	    if (percentage > 0 && percentage <= 100) {
+	      var time = duration * (percentage / 100);
+	      this.seek(time);
 	    }
-	  }]);
+	  };
+
+	  Container.prototype.setVolume = function setVolume(value) {
+	    this.volume = parseInt(value, 10);
+	    this.trigger(_events2.default.CONTAINER_VOLUME, value, this.name);
+	    this.playback.volume(value);
+	  };
+
+	  Container.prototype.fullscreen = function fullscreen() {
+	    this.trigger(_events2.default.CONTAINER_FULLSCREEN, this.name);
+	  };
+
+	  Container.prototype.onBuffering = function onBuffering() {
+	    this.trigger(_events2.default.CONTAINER_STATE_BUFFERING, this.name);
+	  };
+
+	  Container.prototype.bufferfull = function bufferfull() {
+	    this.trigger(_events2.default.CONTAINER_STATE_BUFFERFULL, this.name);
+	  };
+
+	  /**
+	   * adds plugin to the container
+	   * @method addPlugin
+	   * @param {Object} plugin
+	   */
+
+
+	  Container.prototype.addPlugin = function addPlugin(plugin) {
+	    this.plugins.push(plugin);
+	  };
+
+	  /**
+	   * checks if a plugin, given its name, exist
+	   * @method addPlugin
+	   * @param {String} name
+	   */
+
+
+	  Container.prototype.hasPlugin = function hasPlugin(name) {
+	    return !!this.getPlugin(name);
+	  };
+
+	  /**
+	   * get the plugin given its name
+	   * @method getPlugin
+	   * @param {String} name
+	   */
+
+
+	  Container.prototype.getPlugin = function getPlugin(name) {
+	    return (0, _lodash2.default)(this.plugins, function (plugin) {
+	      return plugin.name === name;
+	    });
+	  };
+
+	  Container.prototype.mouseEnter = function mouseEnter() {
+	    this.trigger(_events2.default.CONTAINER_MOUSE_ENTER);
+	  };
+
+	  Container.prototype.mouseLeave = function mouseLeave() {
+	    this.trigger(_events2.default.CONTAINER_MOUSE_LEAVE);
+	  };
+
+	  Container.prototype.settingsUpdate = function settingsUpdate() {
+	    this.settings = this.playback.settings;
+	    this.trigger(_events2.default.CONTAINER_SETTINGSUPDATE);
+	  };
+
+	  Container.prototype.highDefinitionUpdate = function highDefinitionUpdate(isHD) {
+	    this.trigger(_events2.default.CONTAINER_HIGHDEFINITIONUPDATE, isHD);
+	  };
+
+	  Container.prototype.isHighDefinitionInUse = function isHighDefinitionInUse() {
+	    return this.playback.isHighDefinitionInUse();
+	  };
+
+	  Container.prototype.disableMediaControl = function disableMediaControl() {
+	    this.mediaControlDisabled = true;
+	    this.trigger(_events2.default.CONTAINER_MEDIACONTROL_DISABLE);
+	  };
+
+	  Container.prototype.enableMediaControl = function enableMediaControl() {
+	    this.mediaControlDisabled = false;
+	    this.trigger(_events2.default.CONTAINER_MEDIACONTROL_ENABLE);
+	  };
+
+	  /**
+	   * enables to configure the container after its creation
+	   * @method configure
+	   * @param {Object} options all the options to change in form of a javascript object
+	   */
+
+
+	  Container.prototype.configure = function configure(options) {
+	    this.options = _clapprZepto2.default.extend(this.options, options);
+	    this.trigger(_events2.default.CONTAINER_OPTIONS_CHANGE);
+	  };
+
+	  Container.prototype.render = function render() {
+	    var s = _styler2.default.getStyleFor(_style2.default);
+	    this.$el.append(s);
+	    this.$el.append(this.playback.render().el);
+	    return this;
+	  };
 
 	  return Container;
 	}(_ui_object2.default);
@@ -8703,7 +8532,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function MediaControl(options) {
 	    _classCallCheck(this, MediaControl);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(MediaControl).call(this, options));
+	    var _this = _possibleConstructorReturn(this, _UIObject.call(this, options));
 
 	    _this.options = options;
 	    _this.persistConfig = _this.options.persistConfig;
@@ -8744,617 +8573,562 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return _this;
 	  }
 
-	  _createClass(MediaControl, [{
-	    key: 'addEventListeners',
-	    value: function addEventListeners() {
-	      if (this.container) {
-	        _mediator2.default.on(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.playerResize, this);
-	        this.listenTo(this.container, _events2.default.CONTAINER_PLAY, this.changeTogglePlay);
-	        this.listenTo(this.container, _events2.default.CONTAINER_PAUSE, this.changeTogglePlay);
-	        this.listenTo(this.container, _events2.default.CONTAINER_DBLCLICK, this.toggleFullscreen);
-	        this.listenTo(this.container, _events2.default.CONTAINER_TIMEUPDATE, this.onTimeUpdate);
-	        this.listenTo(this.container, _events2.default.CONTAINER_PROGRESS, this.updateProgressBar);
-	        this.listenTo(this.container, _events2.default.CONTAINER_SETTINGSUPDATE, this.settingsUpdate);
-	        this.listenTo(this.container, _events2.default.CONTAINER_PLAYBACKDVRSTATECHANGED, this.settingsUpdate);
-	        this.listenTo(this.container, _events2.default.CONTAINER_HIGHDEFINITIONUPDATE, this.highDefinitionUpdate);
-	        this.listenTo(this.container, _events2.default.CONTAINER_MEDIACONTROL_DISABLE, this.disable);
-	        this.listenTo(this.container, _events2.default.CONTAINER_MEDIACONTROL_ENABLE, this.enable);
-	        this.listenTo(this.container, _events2.default.CONTAINER_ENDED, this.ended);
-	        this.listenTo(this.container, _events2.default.CONTAINER_VOLUME, this.onVolumeChanged);
-	      }
+	  MediaControl.prototype.addEventListeners = function addEventListeners() {
+	    if (this.container) {
+	      _mediator2.default.on(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.playerResize, this);
+	      this.listenTo(this.container, _events2.default.CONTAINER_PLAY, this.changeTogglePlay);
+	      this.listenTo(this.container, _events2.default.CONTAINER_PAUSE, this.changeTogglePlay);
+	      this.listenTo(this.container, _events2.default.CONTAINER_DBLCLICK, this.toggleFullscreen);
+	      this.listenTo(this.container, _events2.default.CONTAINER_TIMEUPDATE, this.onTimeUpdate);
+	      this.listenTo(this.container, _events2.default.CONTAINER_PROGRESS, this.updateProgressBar);
+	      this.listenTo(this.container, _events2.default.CONTAINER_SETTINGSUPDATE, this.settingsUpdate);
+	      this.listenTo(this.container, _events2.default.CONTAINER_PLAYBACKDVRSTATECHANGED, this.settingsUpdate);
+	      this.listenTo(this.container, _events2.default.CONTAINER_HIGHDEFINITIONUPDATE, this.highDefinitionUpdate);
+	      this.listenTo(this.container, _events2.default.CONTAINER_MEDIACONTROL_DISABLE, this.disable);
+	      this.listenTo(this.container, _events2.default.CONTAINER_MEDIACONTROL_ENABLE, this.enable);
+	      this.listenTo(this.container, _events2.default.CONTAINER_ENDED, this.ended);
+	      this.listenTo(this.container, _events2.default.CONTAINER_VOLUME, this.onVolumeChanged);
 	    }
-	  }, {
-	    key: 'disable',
-	    value: function disable() {
-	      this.disabled = true;
-	      this.hide();
-	      this.$el.hide();
+	  };
+
+	  MediaControl.prototype.disable = function disable() {
+	    this.disabled = true;
+	    this.hide();
+	    this.$el.hide();
+	  };
+
+	  MediaControl.prototype.enable = function enable() {
+	    if (this.options.chromeless) return;
+	    this.disabled = false;
+	    this.show();
+	  };
+
+	  MediaControl.prototype.play = function play() {
+	    this.container.play();
+	  };
+
+	  MediaControl.prototype.pause = function pause() {
+	    this.container.pause();
+	  };
+
+	  MediaControl.prototype.stop = function stop() {
+	    this.container.stop();
+	  };
+
+	  MediaControl.prototype.onVolumeChanged = function onVolumeChanged() {
+	    this.updateVolumeUI();
+	  };
+
+	  MediaControl.prototype.updateVolumeUI = function updateVolumeUI() {
+	    if (!this.rendered) {
+	      // this will be called after a render
+	      return;
 	    }
-	  }, {
-	    key: 'enable',
-	    value: function enable() {
-	      if (this.options.chromeless) return;
-	      this.disabled = false;
-	      this.show();
+	    this.$volumeBarContainer.find('.segmented-bar-element').removeClass('fill');
+	    var item = Math.ceil(this.volume / 10.0);
+	    this.$volumeBarContainer.find('.segmented-bar-element').slice(0, item).addClass('fill');
+	    if (!this.muted) {
+	      this.$volumeIcon.removeClass('muted');
+	    } else {
+	      this.$volumeIcon.addClass('muted');
 	    }
-	  }, {
-	    key: 'play',
-	    value: function play() {
-	      this.container.play();
+	  };
+
+	  MediaControl.prototype.changeTogglePlay = function changeTogglePlay() {
+	    if (this.container && this.container.isPlaying()) {
+	      this.$playPauseToggle.removeClass('paused').addClass('playing');
+	      this.$playStopToggle.removeClass('stopped').addClass('playing');
+	      this.trigger(_events2.default.MEDIACONTROL_PLAYING);
+	    } else {
+	      this.$playPauseToggle.removeClass('playing').addClass('paused');
+	      this.$playStopToggle.removeClass('playing').addClass('stopped');
+	      this.trigger(_events2.default.MEDIACONTROL_NOTPLAYING);
 	    }
-	  }, {
-	    key: 'pause',
-	    value: function pause() {
-	      this.container.pause();
+	  };
+
+	  MediaControl.prototype.mousemoveOnSeekBar = function mousemoveOnSeekBar(event) {
+	    if (this.container.settings.seekEnabled) {
+	      var offsetX = event.pageX - this.$seekBarContainer.offset().left - this.$seekBarHover.width() / 2;
+	      this.$seekBarHover.css({ left: offsetX });
 	    }
-	  }, {
-	    key: 'stop',
-	    value: function stop() {
-	      this.container.stop();
-	    }
-	  }, {
-	    key: 'onVolumeChanged',
-	    value: function onVolumeChanged() {
-	      this.updateVolumeUI();
-	    }
-	  }, {
-	    key: 'updateVolumeUI',
-	    value: function updateVolumeUI() {
-	      if (!this.rendered) {
-	        // this will be called after a render
-	        return;
-	      }
-	      this.$volumeBarContainer.find('.segmented-bar-element').removeClass('fill');
-	      var item = Math.ceil(this.volume / 10.0);
-	      this.$volumeBarContainer.find('.segmented-bar-element').slice(0, item).addClass('fill');
-	      if (!this.muted) {
-	        this.$volumeIcon.removeClass('muted');
-	      } else {
-	        this.$volumeIcon.addClass('muted');
-	      }
-	    }
-	  }, {
-	    key: 'changeTogglePlay',
-	    value: function changeTogglePlay() {
-	      if (this.container && this.container.isPlaying()) {
-	        this.$playPauseToggle.removeClass('paused').addClass('playing');
-	        this.$playStopToggle.removeClass('stopped').addClass('playing');
-	        this.trigger(_events2.default.MEDIACONTROL_PLAYING);
-	      } else {
-	        this.$playPauseToggle.removeClass('playing').addClass('paused');
-	        this.$playStopToggle.removeClass('playing').addClass('stopped');
-	        this.trigger(_events2.default.MEDIACONTROL_NOTPLAYING);
-	      }
-	    }
-	  }, {
-	    key: 'mousemoveOnSeekBar',
-	    value: function mousemoveOnSeekBar(event) {
-	      if (this.container.settings.seekEnabled) {
-	        var offsetX = event.pageX - this.$seekBarContainer.offset().left - this.$seekBarHover.width() / 2;
-	        this.$seekBarHover.css({ left: offsetX });
-	      }
-	      this.trigger(_events2.default.MEDIACONTROL_MOUSEMOVE_SEEKBAR, event);
-	    }
-	  }, {
-	    key: 'mouseleaveOnSeekBar',
-	    value: function mouseleaveOnSeekBar(event) {
-	      this.trigger(_events2.default.MEDIACONTROL_MOUSELEAVE_SEEKBAR, event);
-	    }
-	  }, {
-	    key: 'onVolumeClick',
-	    value: function onVolumeClick(event) {
+	    this.trigger(_events2.default.MEDIACONTROL_MOUSEMOVE_SEEKBAR, event);
+	  };
+
+	  MediaControl.prototype.mouseleaveOnSeekBar = function mouseleaveOnSeekBar(event) {
+	    this.trigger(_events2.default.MEDIACONTROL_MOUSELEAVE_SEEKBAR, event);
+	  };
+
+	  MediaControl.prototype.onVolumeClick = function onVolumeClick(event) {
+	    this.setVolume(this.getVolumeFromUIEvent(event));
+	  };
+
+	  MediaControl.prototype.mousemoveOnVolumeBar = function mousemoveOnVolumeBar(event) {
+	    if (this.volumeBarClickDown) {
 	      this.setVolume(this.getVolumeFromUIEvent(event));
 	    }
-	  }, {
-	    key: 'mousemoveOnVolumeBar',
-	    value: function mousemoveOnVolumeBar(event) {
-	      if (this.volumeBarClickDown) {
-	        this.setVolume(this.getVolumeFromUIEvent(event));
-	      }
-	    }
-	  }, {
-	    key: 'mousedownOnVolumeBar',
-	    value: function mousedownOnVolumeBar() {
-	      this.$el.addClass('dragging');
-	      this.volumeBarClickDown = true;
-	    }
-	  }, {
-	    key: 'mouseupOnVolumeBar',
-	    value: function mouseupOnVolumeBar() {
-	      this.$el.removeClass('dragging');
-	      this.volumeBarClickDown = false;
-	    }
-	  }, {
-	    key: 'mouseleaveOnVolumeBar',
-	    value: function mouseleaveOnVolumeBar(event) {
-	      var volOffset = this.$volumeBarContainer.offset();
+	  };
 
-	      var outsideByLeft = event.pageX < volOffset.left;
-	      var outsideByRight = event.pageX > volOffset.left + volOffset.width;
-	      var outsideHorizontally = outsideByLeft || outsideByRight;
+	  MediaControl.prototype.mousedownOnVolumeBar = function mousedownOnVolumeBar() {
+	    this.$el.addClass('dragging');
+	    this.volumeBarClickDown = true;
+	  };
 
-	      var outsideByTop = event.pageY < volOffset.top;
-	      var outsideByBottom = event.pageY > volOffset.top + volOffset.height;
+	  MediaControl.prototype.mouseupOnVolumeBar = function mouseupOnVolumeBar() {
+	    this.$el.removeClass('dragging');
+	    this.volumeBarClickDown = false;
+	  };
 
-	      var outsideVertically = outsideByTop || outsideByBottom;
+	  MediaControl.prototype.mouseleaveOnVolumeBar = function mouseleaveOnVolumeBar(event) {
+	    var volOffset = this.$volumeBarContainer.offset();
 
-	      if (outsideHorizontally || outsideVertically) {
-	        this.mouseupOnVolumeBar();
-	      }
-	    }
-	  }, {
-	    key: 'playerResize',
-	    value: function playerResize(size) {
-	      if (_utils.Fullscreen.isFullscreen()) {
-	        this.$fullscreenToggle.addClass('shrink');
-	      } else {
-	        this.$fullscreenToggle.removeClass('shrink');
-	      }
-	      this.$el.removeClass('w320');
-	      if (size.width <= 320 || this.options.hideVolumeBar) {
-	        this.$el.addClass('w320');
-	      }
-	    }
-	  }, {
-	    key: 'togglePlayPause',
-	    value: function togglePlayPause() {
-	      if (this.container.isPlaying()) {
-	        this.container.pause();
-	      } else {
-	        this.container.play();
-	      }
-	      return false;
-	    }
-	  }, {
-	    key: 'togglePlayStop',
-	    value: function togglePlayStop() {
-	      if (this.container.isPlaying()) {
-	        this.container.stop();
-	      } else {
-	        this.container.play();
-	      }
-	    }
-	  }, {
-	    key: 'startSeekDrag',
-	    value: function startSeekDrag(event) {
-	      if (!this.container.settings.seekEnabled) return;
-	      this.draggingSeekBar = true;
-	      this.$el.addClass('dragging');
-	      this.$seekBarLoaded.addClass('media-control-notransition');
-	      this.$seekBarPosition.addClass('media-control-notransition');
-	      this.$seekBarScrubber.addClass('media-control-notransition');
-	      if (event) {
-	        event.preventDefault();
-	      }
-	    }
-	  }, {
-	    key: 'startVolumeDrag',
-	    value: function startVolumeDrag(event) {
-	      this.draggingVolumeBar = true;
-	      this.$el.addClass('dragging');
-	      if (event) {
-	        event.preventDefault();
-	      }
-	    }
-	  }, {
-	    key: 'stopDrag',
-	    value: function stopDrag(event) {
-	      if (this.draggingSeekBar) {
-	        this.seek(event);
-	      }
-	      this.$el.removeClass('dragging');
-	      this.$seekBarLoaded.removeClass('media-control-notransition');
-	      this.$seekBarPosition.removeClass('media-control-notransition');
-	      this.$seekBarScrubber.removeClass('media-control-notransition dragging');
-	      this.draggingSeekBar = false;
-	      this.draggingVolumeBar = false;
-	    }
-	  }, {
-	    key: 'updateDrag',
-	    value: function updateDrag(event) {
-	      if (this.draggingSeekBar) {
-	        event.preventDefault();
-	        var offsetX = event.pageX - this.$seekBarContainer.offset().left;
-	        var pos = offsetX / this.$seekBarContainer.width() * 100;
-	        pos = Math.min(100, Math.max(pos, 0));
-	        this.setSeekPercentage(pos);
-	      } else if (this.draggingVolumeBar) {
-	        event.preventDefault();
-	        this.setVolume(this.getVolumeFromUIEvent(event));
-	      }
-	    }
-	  }, {
-	    key: 'getVolumeFromUIEvent',
-	    value: function getVolumeFromUIEvent(event) {
-	      var offsetY = event.pageX - this.$volumeBarContainer.offset().left;
-	      var volumeFromUI = offsetY / this.$volumeBarContainer.width() * 100;
-	      return volumeFromUI;
-	    }
-	  }, {
-	    key: 'toggleMute',
-	    value: function toggleMute() {
-	      this.setVolume(this.muted ? 100 : 0);
-	    }
-	  }, {
-	    key: 'setVolume',
-	    value: function setVolume(value) {
-	      var _this2 = this;
+	    var outsideByLeft = event.pageX < volOffset.left;
+	    var outsideByRight = event.pageX > volOffset.left + volOffset.width;
+	    var outsideHorizontally = outsideByLeft || outsideByRight;
 
-	      value = Math.min(100, Math.max(value, 0));
-	      // this will hold the intended volume
-	      // it may not actually get set to this straight away
-	      // if the container is not ready etc
-	      this.intendedVolume = value;
-	      this.persistConfig && _utils.Config.persist("volume", value);
-	      var setWhenContainerReady = function setWhenContainerReady() {
-	        if (_this2.container.isReady) {
-	          _this2.container.setVolume(value);
-	        } else {
-	          _this2.listenToOnce(_this2.container, _events2.default.CONTAINER_READY, function () {
-	            _this2.container.setVolume(value);
-	          });
-	        }
-	      };
+	    var outsideByTop = event.pageY < volOffset.top;
+	    var outsideByBottom = event.pageY > volOffset.top + volOffset.height;
 
-	      if (!this.container) {
-	        this.listenToOnce(this, _events2.default.MEDIACONTROL_CONTAINERCHANGED, function () {
-	          setWhenContainerReady();
-	        });
-	      } else {
-	        setWhenContainerReady();
-	      }
-	    }
-	  }, {
-	    key: 'toggleFullscreen',
-	    value: function toggleFullscreen() {
-	      this.trigger(_events2.default.MEDIACONTROL_FULLSCREEN, this.name);
-	      this.container.fullscreen();
-	      this.resetUserKeepVisible();
-	    }
-	  }, {
-	    key: 'setContainer',
-	    value: function setContainer(container) {
-	      if (this.container) {
-	        this.stopListening(this.container);
-	      }
-	      _mediator2.default.off(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.playerResize, this);
-	      this.container = container;
-	      // set the new container to match the volume of the last one
-	      this.setVolume(this.intendedVolume);
-	      this.changeTogglePlay();
-	      this.addEventListeners();
-	      this.settingsUpdate();
-	      this.container.trigger(_events2.default.CONTAINER_PLAYBACKDVRSTATECHANGED, this.container.isDvrInUse());
-	      if (this.container.mediaControlDisabled) {
-	        this.disable();
-	      }
-	      this.trigger(_events2.default.MEDIACONTROL_CONTAINERCHANGED);
-	    }
-	  }, {
-	    key: 'showVolumeBar',
-	    value: function showVolumeBar() {
-	      if (this.hideVolumeId) {
-	        clearTimeout(this.hideVolumeId);
-	      }
-	      this.$volumeBarContainer.removeClass('volume-bar-hide');
-	    }
-	  }, {
-	    key: 'hideVolumeBar',
-	    value: function hideVolumeBar() {
-	      var _this3 = this;
+	    var outsideVertically = outsideByTop || outsideByBottom;
 
-	      var timeout = arguments.length <= 0 || arguments[0] === undefined ? 400 : arguments[0];
+	    if (outsideHorizontally || outsideVertically) {
+	      this.mouseupOnVolumeBar();
+	    }
+	  };
 
-	      if (!this.$volumeBarContainer) return;
-	      if (this.draggingVolumeBar) {
-	        this.hideVolumeId = setTimeout(function () {
-	          return _this3.hideVolumeBar();
-	        }, timeout);
-	      } else {
-	        if (this.hideVolumeId) {
-	          clearTimeout(this.hideVolumeId);
-	        }
-	        this.hideVolumeId = setTimeout(function () {
-	          return _this3.$volumeBarContainer.addClass('volume-bar-hide');
-	        }, timeout);
-	      }
+	  MediaControl.prototype.playerResize = function playerResize(size) {
+	    if (_utils.Fullscreen.isFullscreen()) {
+	      this.$fullscreenToggle.addClass('shrink');
+	    } else {
+	      this.$fullscreenToggle.removeClass('shrink');
 	    }
-	  }, {
-	    key: 'ended',
-	    value: function ended() {
-	      this.changeTogglePlay();
+	    this.$el.removeClass('w320');
+	    if (size.width <= 320 || this.options.hideVolumeBar) {
+	      this.$el.addClass('w320');
 	    }
-	  }, {
-	    key: 'updateProgressBar',
-	    value: function updateProgressBar(progress) {
-	      var loadedStart = progress.start / progress.total * 100;
-	      var loadedEnd = progress.current / progress.total * 100;
-	      this.$seekBarLoaded.css({ left: loadedStart + '%', width: loadedEnd - loadedStart + '%' });
-	    }
-	  }, {
-	    key: 'onTimeUpdate',
-	    value: function onTimeUpdate(timeProgress) {
-	      if (this.draggingSeekBar) return;
-	      // TODO why should current time ever be negative?
-	      var position = timeProgress.current < 0 ? timeProgress.total : timeProgress.current;
+	  };
 
-	      this.currentPositionValue = position;
-	      this.currentDurationValue = timeProgress.total;
-	      this.renderSeekBar();
+	  MediaControl.prototype.togglePlayPause = function togglePlayPause() {
+	    if (this.container.isPlaying()) {
+	      this.container.pause();
+	    } else {
+	      this.container.play();
 	    }
-	  }, {
-	    key: 'renderSeekBar',
-	    value: function renderSeekBar() {
-	      if (this.currentPositionValue === null || this.currentDurationValue === null) {
-	        // this will be triggered as soon as these beocome available
-	        return;
-	      }
+	    return false;
+	  };
 
-	      // default to 100%
-	      this.currentSeekBarPercentage = 100;
-	      if (this.container.getPlaybackType() !== _playback2.default.LIVE || this.container.isDvrInUse()) {
-	        this.currentSeekBarPercentage = this.currentPositionValue / this.currentDurationValue * 100;
-	      }
-	      this.setSeekPercentage(this.currentSeekBarPercentage);
-
-	      var newPosition = (0, _utils.formatTime)(this.currentPositionValue);
-	      var newDuration = (0, _utils.formatTime)(this.currentDurationValue);
-	      if (newPosition !== this.displayedPosition) {
-	        this.$position.text(newPosition);
-	        this.displayedPosition = newPosition;
-	      }
-	      if (newDuration !== this.displayedDuration) {
-	        this.$duration.text(newDuration);
-	        this.displayedDuration = newDuration;
-	      }
+	  MediaControl.prototype.togglePlayStop = function togglePlayStop() {
+	    if (this.container.isPlaying()) {
+	      this.container.stop();
+	    } else {
+	      this.container.play();
 	    }
-	  }, {
-	    key: 'seek',
-	    value: function seek(event) {
-	      if (!this.container.settings.seekEnabled) return;
+	  };
+
+	  MediaControl.prototype.startSeekDrag = function startSeekDrag(event) {
+	    if (!this.container.settings.seekEnabled) return;
+	    this.draggingSeekBar = true;
+	    this.$el.addClass('dragging');
+	    this.$seekBarLoaded.addClass('media-control-notransition');
+	    this.$seekBarPosition.addClass('media-control-notransition');
+	    this.$seekBarScrubber.addClass('media-control-notransition');
+	    if (event) {
+	      event.preventDefault();
+	    }
+	  };
+
+	  MediaControl.prototype.startVolumeDrag = function startVolumeDrag(event) {
+	    this.draggingVolumeBar = true;
+	    this.$el.addClass('dragging');
+	    if (event) {
+	      event.preventDefault();
+	    }
+	  };
+
+	  MediaControl.prototype.stopDrag = function stopDrag(event) {
+	    if (this.draggingSeekBar) {
+	      this.seek(event);
+	    }
+	    this.$el.removeClass('dragging');
+	    this.$seekBarLoaded.removeClass('media-control-notransition');
+	    this.$seekBarPosition.removeClass('media-control-notransition');
+	    this.$seekBarScrubber.removeClass('media-control-notransition dragging');
+	    this.draggingSeekBar = false;
+	    this.draggingVolumeBar = false;
+	  };
+
+	  MediaControl.prototype.updateDrag = function updateDrag(event) {
+	    if (this.draggingSeekBar) {
+	      event.preventDefault();
 	      var offsetX = event.pageX - this.$seekBarContainer.offset().left;
 	      var pos = offsetX / this.$seekBarContainer.width() * 100;
 	      pos = Math.min(100, Math.max(pos, 0));
-	      this.container.seekPercentage(pos);
 	      this.setSeekPercentage(pos);
-	      return false;
+	    } else if (this.draggingVolumeBar) {
+	      event.preventDefault();
+	      this.setVolume(this.getVolumeFromUIEvent(event));
 	    }
-	  }, {
-	    key: 'setKeepVisible',
-	    value: function setKeepVisible() {
-	      this.keepVisible = true;
-	    }
-	  }, {
-	    key: 'resetKeepVisible',
-	    value: function resetKeepVisible() {
-	      this.keepVisible = false;
-	    }
-	  }, {
-	    key: 'setUserKeepVisible',
-	    value: function setUserKeepVisible() {
-	      this.userKeepVisible = true;
-	    }
-	  }, {
-	    key: 'resetUserKeepVisible',
-	    value: function resetUserKeepVisible() {
-	      this.userKeepVisible = false;
-	    }
-	  }, {
-	    key: 'isVisible',
-	    value: function isVisible() {
-	      return !this.$el.hasClass('media-control-hide');
-	    }
-	  }, {
-	    key: 'show',
-	    value: function show(event) {
-	      var _this4 = this;
+	  };
 
-	      if (this.disabled) return;
-	      var timeout = 2000;
-	      if (!event || event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY || navigator.userAgent.match(/firefox/i)) {
-	        clearTimeout(this.hideId);
-	        this.$el.show();
-	        this.trigger(_events2.default.MEDIACONTROL_SHOW, this.name);
-	        this.$el.removeClass('media-control-hide');
-	        this.hideId = setTimeout(function () {
-	          return _this4.hide();
-	        }, timeout);
-	        if (event) {
-	          this.lastMouseX = event.clientX;
-	          this.lastMouseY = event.clientY;
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'hide',
-	    value: function hide() {
-	      var _this5 = this;
+	  MediaControl.prototype.getVolumeFromUIEvent = function getVolumeFromUIEvent(event) {
+	    var offsetY = event.pageX - this.$volumeBarContainer.offset().left;
+	    var volumeFromUI = offsetY / this.$volumeBarContainer.width() * 100;
+	    return volumeFromUI;
+	  };
 
-	      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	  MediaControl.prototype.toggleMute = function toggleMute() {
+	    this.setVolume(this.muted ? 100 : 0);
+	  };
 
-	      var timeout = delay || 2000;
-	      clearTimeout(this.hideId);
-	      if (!this.isVisible() || this.options.hideMediaControl === false) return;
-	      if (delay || this.userKeepVisible || this.keepVisible || this.draggingSeekBar || this.draggingVolumeBar) {
-	        this.hideId = setTimeout(function () {
-	          return _this5.hide();
-	        }, timeout);
+	  MediaControl.prototype.setVolume = function setVolume(value) {
+	    var _this2 = this;
+
+	    value = Math.min(100, Math.max(value, 0));
+	    // this will hold the intended volume
+	    // it may not actually get set to this straight away
+	    // if the container is not ready etc
+	    this.intendedVolume = value;
+	    this.persistConfig && _utils.Config.persist("volume", value);
+	    var setWhenContainerReady = function setWhenContainerReady() {
+	      if (_this2.container.isReady) {
+	        _this2.container.setVolume(value);
 	      } else {
-	        this.trigger(_events2.default.MEDIACONTROL_HIDE, this.name);
-	        this.$el.addClass('media-control-hide');
-	        this.hideVolumeBar(0);
-	      }
-	    }
-	  }, {
-	    key: 'settingsUpdate',
-	    value: function settingsUpdate() {
-	      var settingsChanged = JSON.stringify(this.settings) !== JSON.stringify(this.container.settings);
-	      if (this.container.getPlaybackType() && settingsChanged) {
-	        this.settings = _clapprZepto2.default.extend({}, this.container.settings);
-	        this.render();
-	      }
-	    }
-	  }, {
-	    key: 'highDefinitionUpdate',
-	    value: function highDefinitionUpdate(isHD) {
-	      var method = !!isHD ? 'addClass' : 'removeClass';
-	      this.$el.find('button[data-hd-indicator]')[method]('enabled');
-	    }
-	  }, {
-	    key: 'createCachedElements',
-	    value: function createCachedElements() {
-	      var $layer = this.$el.find('.media-control-layer');
-	      this.$duration = $layer.find('.media-control-indicator[data-duration]');
-	      this.$fullscreenToggle = $layer.find('button.media-control-button[data-fullscreen]');
-	      this.$playPauseToggle = $layer.find('button.media-control-button[data-playpause]');
-	      this.$playStopToggle = $layer.find('button.media-control-button[data-playstop]');
-	      this.$position = $layer.find('.media-control-indicator[data-position]');
-	      this.$seekBarContainer = $layer.find('.bar-container[data-seekbar]');
-	      this.$seekBarHover = $layer.find('.bar-hover[data-seekbar]');
-	      this.$seekBarLoaded = $layer.find('.bar-fill-1[data-seekbar]');
-	      this.$seekBarPosition = $layer.find('.bar-fill-2[data-seekbar]');
-	      this.$seekBarScrubber = $layer.find('.bar-scrubber[data-seekbar]');
-	      this.$volumeBarContainer = $layer.find('.bar-container[data-volume]');
-	      this.$volumeContainer = $layer.find('.drawer-container[data-volume]');
-	      this.$volumeIcon = $layer.find('.drawer-icon[data-volume]');
-	      this.resetIndicators();
-	    }
-	  }, {
-	    key: 'resetIndicators',
-	    value: function resetIndicators() {
-	      this.displayedPosition = this.$position.text();
-	      this.displayedDuration = this.$duration.text();
-	    }
-	  }, {
-	    key: 'setSeekPercentage',
-	    value: function setSeekPercentage(value) {
-	      value = Math.max(Math.min(value, 100.0), 0);
-	      if (this.displayedSeekBarPercentage === value) {
-	        // not changed since last update
-	        return;
-	      }
-	      this.displayedSeekBarPercentage = value;
-
-	      this.$seekBarPosition.removeClass('media-control-notransition');
-	      this.$seekBarScrubber.removeClass('media-control-notransition');
-	      this.$seekBarPosition.css({ width: value + '%' });
-	      this.$seekBarScrubber.css({ left: value + '%' });
-	    }
-	  }, {
-	    key: 'seekRelative',
-	    value: function seekRelative(delta) {
-	      if (!this.container.settings.seekEnabled) return;
-	      var currentTime = this.container.getCurrentTime();
-	      var duration = this.container.getDuration();
-	      var position = Math.min(Math.max(currentTime + delta, 0), duration);
-	      position = Math.min(position * 100 / duration, 100);
-	      this.container.seekPercentage(position);
-	    }
-	  }, {
-	    key: 'bindKeyEvents',
-	    value: function bindKeyEvents() {
-	      var _this6 = this;
-
-	      this.unbindKeyEvents();
-	      this.kibo = new _kibo2.default(this.options.focusElement);
-	      this.kibo.down(['space'], function () {
-	        return _this6.togglePlayPause();
-	      });
-	      this.kibo.down(['left'], function () {
-	        return _this6.seekRelative(-15);
-	      });
-	      this.kibo.down(['right'], function () {
-	        return _this6.seekRelative(15);
-	      });
-	      var keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-	      keys.forEach(function (i) {
-	        _this6.kibo.down(i.toString(), function () {
-	          return _this6.container.settings.seekEnabled && _this6.container.seekPercentage(i * 10);
+	        _this2.listenToOnce(_this2.container, _events2.default.CONTAINER_READY, function () {
+	          _this2.container.setVolume(value);
 	        });
+	      }
+	    };
+
+	    if (!this.container) {
+	      this.listenToOnce(this, _events2.default.MEDIACONTROL_CONTAINERCHANGED, function () {
+	        setWhenContainerReady();
 	      });
+	    } else {
+	      setWhenContainerReady();
 	    }
-	  }, {
-	    key: 'unbindKeyEvents',
-	    value: function unbindKeyEvents() {
-	      if (this.kibo) {
-	        this.kibo.off('space');
-	        this.kibo.off('left');
-	        this.kibo.off('right');
-	        this.kibo.off([1, 2, 3, 4, 5, 6, 7, 8, 9, 0]);
-	      }
-	    }
-	  }, {
-	    key: 'parseColors',
-	    value: function parseColors() {
-	      if (this.options.mediacontrol) {
-	        var buttonsColor = this.options.mediacontrol.buttons;
-	        var seekbarColor = this.options.mediacontrol.seekbar;
-	        this.$el.find('.bar-fill-2[data-seekbar]').css('background-color', seekbarColor);
-	        this.$el.find('[data-media-control] > .media-control-icon, .drawer-icon').css('color', buttonsColor);
-	        this.$el.find('.segmented-bar-element[data-volume]').css('boxShadow', "inset 2px 0 0 " + buttonsColor);
-	      }
-	    }
-	  }, {
-	    key: 'destroy',
-	    value: function destroy() {
-	      this.remove();
-	      (0, _clapprZepto2.default)(document).unbind('mouseup', this.stopDragHandler);
-	      (0, _clapprZepto2.default)(document).unbind('mousemove', this.updateDragHandler);
-	      this.unbindKeyEvents();
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this7 = this;
+	  };
 
-	      var timeout = 1000;
-	      this.$el.html(this.template({ settings: this.settings }));
-	      this.$el.append(this.stylesheet);
-	      this.createCachedElements();
-	      this.$playPauseToggle.addClass('paused');
-	      this.$playStopToggle.addClass('stopped');
+	  MediaControl.prototype.toggleFullscreen = function toggleFullscreen() {
+	    this.trigger(_events2.default.MEDIACONTROL_FULLSCREEN, this.name);
+	    this.container.fullscreen();
+	    this.resetUserKeepVisible();
+	  };
 
-	      this.changeTogglePlay();
-	      this.hideId = setTimeout(function () {
-	        return _this7.hide();
+	  MediaControl.prototype.setContainer = function setContainer(container) {
+	    if (this.container) {
+	      this.stopListening(this.container);
+	    }
+	    _mediator2.default.off(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.playerResize, this);
+	    this.container = container;
+	    // set the new container to match the volume of the last one
+	    this.setVolume(this.intendedVolume);
+	    this.changeTogglePlay();
+	    this.addEventListeners();
+	    this.settingsUpdate();
+	    this.container.trigger(_events2.default.CONTAINER_PLAYBACKDVRSTATECHANGED, this.container.isDvrInUse());
+	    if (this.container.mediaControlDisabled) {
+	      this.disable();
+	    }
+	    this.trigger(_events2.default.MEDIACONTROL_CONTAINERCHANGED);
+	  };
+
+	  MediaControl.prototype.showVolumeBar = function showVolumeBar() {
+	    if (this.hideVolumeId) {
+	      clearTimeout(this.hideVolumeId);
+	    }
+	    this.$volumeBarContainer.removeClass('volume-bar-hide');
+	  };
+
+	  MediaControl.prototype.hideVolumeBar = function hideVolumeBar() {
+	    var _this3 = this;
+
+	    var timeout = arguments.length <= 0 || arguments[0] === undefined ? 400 : arguments[0];
+
+	    if (!this.$volumeBarContainer) return;
+	    if (this.draggingVolumeBar) {
+	      this.hideVolumeId = setTimeout(function () {
+	        return _this3.hideVolumeBar();
 	      }, timeout);
-	      if (this.disabled) {
-	        this.hide();
+	    } else {
+	      if (this.hideVolumeId) {
+	        clearTimeout(this.hideVolumeId);
 	      }
-
-	      if (_browser2.default.isSafari && _browser2.default.isMobile) {
-	        this.$volumeContainer.css('display', 'none');
-	      }
-
-	      this.$seekBarPosition.addClass('media-control-notransition');
-	      this.$seekBarScrubber.addClass('media-control-notransition');
-
-	      var previousSeekPercentage = 0;
-	      if (this.displayedSeekBarPercentage) {
-	        previousSeekPercentage = this.displayedSeekBarPercentage;
-	      }
-	      this.displayedSeekBarPercentage = null;
-	      this.setSeekPercentage(previousSeekPercentage);
-
-	      process.nextTick(function () {
-	        if (!_this7.container.settings.seekEnabled) {
-	          _this7.$seekBarContainer.addClass('seek-disabled');
-	        }
-
-	        _this7.bindKeyEvents();
-	        _this7.playerResize({ width: _this7.options.width, height: _this7.options.height });
-	        _this7.hideVolumeBar(0);
-	      });
-
-	      this.parseColors();
-	      this.highDefinitionUpdate();
-
-	      this.rendered = true;
-	      this.updateVolumeUI();
-	      this.trigger(_events2.default.MEDIACONTROL_RENDERED);
-	      return this;
+	      this.hideVolumeId = setTimeout(function () {
+	        return _this3.$volumeBarContainer.addClass('volume-bar-hide');
+	      }, timeout);
 	    }
-	  }]);
+	  };
+
+	  MediaControl.prototype.ended = function ended() {
+	    this.changeTogglePlay();
+	  };
+
+	  MediaControl.prototype.updateProgressBar = function updateProgressBar(progress) {
+	    var loadedStart = progress.start / progress.total * 100;
+	    var loadedEnd = progress.current / progress.total * 100;
+	    this.$seekBarLoaded.css({ left: loadedStart + '%', width: loadedEnd - loadedStart + '%' });
+	  };
+
+	  MediaControl.prototype.onTimeUpdate = function onTimeUpdate(timeProgress) {
+	    if (this.draggingSeekBar) return;
+	    // TODO why should current time ever be negative?
+	    var position = timeProgress.current < 0 ? timeProgress.total : timeProgress.current;
+
+	    this.currentPositionValue = position;
+	    this.currentDurationValue = timeProgress.total;
+	    this.renderSeekBar();
+	  };
+
+	  MediaControl.prototype.renderSeekBar = function renderSeekBar() {
+	    if (this.currentPositionValue === null || this.currentDurationValue === null) {
+	      // this will be triggered as soon as these beocome available
+	      return;
+	    }
+
+	    // default to 100%
+	    this.currentSeekBarPercentage = 100;
+	    if (this.container.getPlaybackType() !== _playback2.default.LIVE || this.container.isDvrInUse()) {
+	      this.currentSeekBarPercentage = this.currentPositionValue / this.currentDurationValue * 100;
+	    }
+	    this.setSeekPercentage(this.currentSeekBarPercentage);
+
+	    var newPosition = (0, _utils.formatTime)(this.currentPositionValue);
+	    var newDuration = (0, _utils.formatTime)(this.currentDurationValue);
+	    if (newPosition !== this.displayedPosition) {
+	      this.$position.text(newPosition);
+	      this.displayedPosition = newPosition;
+	    }
+	    if (newDuration !== this.displayedDuration) {
+	      this.$duration.text(newDuration);
+	      this.displayedDuration = newDuration;
+	    }
+	  };
+
+	  MediaControl.prototype.seek = function seek(event) {
+	    if (!this.container.settings.seekEnabled) return;
+	    var offsetX = event.pageX - this.$seekBarContainer.offset().left;
+	    var pos = offsetX / this.$seekBarContainer.width() * 100;
+	    pos = Math.min(100, Math.max(pos, 0));
+	    this.container.seekPercentage(pos);
+	    this.setSeekPercentage(pos);
+	    return false;
+	  };
+
+	  MediaControl.prototype.setKeepVisible = function setKeepVisible() {
+	    this.keepVisible = true;
+	  };
+
+	  MediaControl.prototype.resetKeepVisible = function resetKeepVisible() {
+	    this.keepVisible = false;
+	  };
+
+	  MediaControl.prototype.setUserKeepVisible = function setUserKeepVisible() {
+	    this.userKeepVisible = true;
+	  };
+
+	  MediaControl.prototype.resetUserKeepVisible = function resetUserKeepVisible() {
+	    this.userKeepVisible = false;
+	  };
+
+	  MediaControl.prototype.isVisible = function isVisible() {
+	    return !this.$el.hasClass('media-control-hide');
+	  };
+
+	  MediaControl.prototype.show = function show(event) {
+	    var _this4 = this;
+
+	    if (this.disabled) return;
+	    var timeout = 2000;
+	    if (!event || event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY || navigator.userAgent.match(/firefox/i)) {
+	      clearTimeout(this.hideId);
+	      this.$el.show();
+	      this.trigger(_events2.default.MEDIACONTROL_SHOW, this.name);
+	      this.$el.removeClass('media-control-hide');
+	      this.hideId = setTimeout(function () {
+	        return _this4.hide();
+	      }, timeout);
+	      if (event) {
+	        this.lastMouseX = event.clientX;
+	        this.lastMouseY = event.clientY;
+	      }
+	    }
+	  };
+
+	  MediaControl.prototype.hide = function hide() {
+	    var _this5 = this;
+
+	    var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+	    var timeout = delay || 2000;
+	    clearTimeout(this.hideId);
+	    if (!this.isVisible() || this.options.hideMediaControl === false) return;
+	    if (delay || this.userKeepVisible || this.keepVisible || this.draggingSeekBar || this.draggingVolumeBar) {
+	      this.hideId = setTimeout(function () {
+	        return _this5.hide();
+	      }, timeout);
+	    } else {
+	      this.trigger(_events2.default.MEDIACONTROL_HIDE, this.name);
+	      this.$el.addClass('media-control-hide');
+	      this.hideVolumeBar(0);
+	    }
+	  };
+
+	  MediaControl.prototype.settingsUpdate = function settingsUpdate() {
+	    var settingsChanged = JSON.stringify(this.settings) !== JSON.stringify(this.container.settings);
+	    if (this.container.getPlaybackType() && settingsChanged) {
+	      this.settings = _clapprZepto2.default.extend({}, this.container.settings);
+	      this.render();
+	    }
+	  };
+
+	  MediaControl.prototype.highDefinitionUpdate = function highDefinitionUpdate(isHD) {
+	    var method = !!isHD ? 'addClass' : 'removeClass';
+	    this.$el.find('button[data-hd-indicator]')[method]('enabled');
+	  };
+
+	  MediaControl.prototype.createCachedElements = function createCachedElements() {
+	    var $layer = this.$el.find('.media-control-layer');
+	    this.$duration = $layer.find('.media-control-indicator[data-duration]');
+	    this.$fullscreenToggle = $layer.find('button.media-control-button[data-fullscreen]');
+	    this.$playPauseToggle = $layer.find('button.media-control-button[data-playpause]');
+	    this.$playStopToggle = $layer.find('button.media-control-button[data-playstop]');
+	    this.$position = $layer.find('.media-control-indicator[data-position]');
+	    this.$seekBarContainer = $layer.find('.bar-container[data-seekbar]');
+	    this.$seekBarHover = $layer.find('.bar-hover[data-seekbar]');
+	    this.$seekBarLoaded = $layer.find('.bar-fill-1[data-seekbar]');
+	    this.$seekBarPosition = $layer.find('.bar-fill-2[data-seekbar]');
+	    this.$seekBarScrubber = $layer.find('.bar-scrubber[data-seekbar]');
+	    this.$volumeBarContainer = $layer.find('.bar-container[data-volume]');
+	    this.$volumeContainer = $layer.find('.drawer-container[data-volume]');
+	    this.$volumeIcon = $layer.find('.drawer-icon[data-volume]');
+	    this.resetIndicators();
+	  };
+
+	  MediaControl.prototype.resetIndicators = function resetIndicators() {
+	    this.displayedPosition = this.$position.text();
+	    this.displayedDuration = this.$duration.text();
+	  };
+
+	  MediaControl.prototype.setSeekPercentage = function setSeekPercentage(value) {
+	    value = Math.max(Math.min(value, 100.0), 0);
+	    if (this.displayedSeekBarPercentage === value) {
+	      // not changed since last update
+	      return;
+	    }
+	    this.displayedSeekBarPercentage = value;
+
+	    this.$seekBarPosition.removeClass('media-control-notransition');
+	    this.$seekBarScrubber.removeClass('media-control-notransition');
+	    this.$seekBarPosition.css({ width: value + '%' });
+	    this.$seekBarScrubber.css({ left: value + '%' });
+	  };
+
+	  MediaControl.prototype.seekRelative = function seekRelative(delta) {
+	    if (!this.container.settings.seekEnabled) return;
+	    var currentTime = this.container.getCurrentTime();
+	    var duration = this.container.getDuration();
+	    var position = Math.min(Math.max(currentTime + delta, 0), duration);
+	    position = Math.min(position * 100 / duration, 100);
+	    this.container.seekPercentage(position);
+	  };
+
+	  MediaControl.prototype.bindKeyEvents = function bindKeyEvents() {
+	    var _this6 = this;
+
+	    this.unbindKeyEvents();
+	    this.kibo = new _kibo2.default(this.options.focusElement);
+	    this.kibo.down(['space'], function () {
+	      return _this6.togglePlayPause();
+	    });
+	    this.kibo.down(['left'], function () {
+	      return _this6.seekRelative(-15);
+	    });
+	    this.kibo.down(['right'], function () {
+	      return _this6.seekRelative(15);
+	    });
+	    var keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+	    keys.forEach(function (i) {
+	      _this6.kibo.down(i.toString(), function () {
+	        return _this6.container.settings.seekEnabled && _this6.container.seekPercentage(i * 10);
+	      });
+	    });
+	  };
+
+	  MediaControl.prototype.unbindKeyEvents = function unbindKeyEvents() {
+	    if (this.kibo) {
+	      this.kibo.off('space');
+	      this.kibo.off('left');
+	      this.kibo.off('right');
+	      this.kibo.off([1, 2, 3, 4, 5, 6, 7, 8, 9, 0]);
+	    }
+	  };
+
+	  MediaControl.prototype.parseColors = function parseColors() {
+	    if (this.options.mediacontrol) {
+	      var buttonsColor = this.options.mediacontrol.buttons;
+	      var seekbarColor = this.options.mediacontrol.seekbar;
+	      this.$el.find('.bar-fill-2[data-seekbar]').css('background-color', seekbarColor);
+	      this.$el.find('[data-media-control] > .media-control-icon, .drawer-icon').css('color', buttonsColor);
+	      this.$el.find('.segmented-bar-element[data-volume]').css('boxShadow', "inset 2px 0 0 " + buttonsColor);
+	    }
+	  };
+
+	  MediaControl.prototype.destroy = function destroy() {
+	    this.remove();
+	    (0, _clapprZepto2.default)(document).unbind('mouseup', this.stopDragHandler);
+	    (0, _clapprZepto2.default)(document).unbind('mousemove', this.updateDragHandler);
+	    this.unbindKeyEvents();
+	  };
+
+	  MediaControl.prototype.render = function render() {
+	    var _this7 = this;
+
+	    var timeout = 1000;
+	    this.$el.html(this.template({ settings: this.settings }));
+	    this.$el.append(this.stylesheet);
+	    this.createCachedElements();
+	    this.$playPauseToggle.addClass('paused');
+	    this.$playStopToggle.addClass('stopped');
+
+	    this.changeTogglePlay();
+	    this.hideId = setTimeout(function () {
+	      return _this7.hide();
+	    }, timeout);
+	    if (this.disabled) {
+	      this.hide();
+	    }
+
+	    if (_browser2.default.isSafari && _browser2.default.isMobile) {
+	      this.$volumeContainer.css('display', 'none');
+	    }
+
+	    this.$seekBarPosition.addClass('media-control-notransition');
+	    this.$seekBarScrubber.addClass('media-control-notransition');
+
+	    var previousSeekPercentage = 0;
+	    if (this.displayedSeekBarPercentage) {
+	      previousSeekPercentage = this.displayedSeekBarPercentage;
+	    }
+	    this.displayedSeekBarPercentage = null;
+	    this.setSeekPercentage(previousSeekPercentage);
+
+	    process.nextTick(function () {
+	      if (!_this7.container.settings.seekEnabled) {
+	        _this7.$seekBarContainer.addClass('seek-disabled');
+	      }
+
+	      _this7.bindKeyEvents();
+	      _this7.playerResize({ width: _this7.options.width, height: _this7.options.height });
+	      _this7.hideVolumeBar(0);
+	    });
+
+	    this.parseColors();
+	    this.highDefinitionUpdate();
+
+	    this.rendered = true;
+	    this.updateVolumeUI();
+	    this.trigger(_events2.default.MEDIACONTROL_RENDERED);
+	    return this;
+	  };
 
 	  return MediaControl;
 	}(_ui_object2.default);
@@ -9597,7 +9371,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function Playback(options) {
 	    _classCallCheck(this, Playback);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Playback).call(this, options));
+	    var _this = _possibleConstructorReturn(this, _UIObject.call(this, options));
 
 	    _this.settings = {};
 	    return _this;
@@ -9609,145 +9383,132 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 
 
+	  Playback.prototype.play = function play() {};
+
+	  /**
+	   * pauses the playback.
+	   * @method pause
+	   */
+
+
+	  Playback.prototype.pause = function pause() {};
+
+	  /**
+	   * stops the playback.
+	   * @method stop
+	   */
+
+
+	  Playback.prototype.stop = function stop() {};
+
+	  /**
+	   * seeks the playback to a given `time` in seconds
+	   * @method seek
+	   * @param {Number} time should be a number between 0 and the video duration
+	   */
+
+
+	  Playback.prototype.seek = function seek(time) {} /*jshint unused:false*/
+
+	  /**
+	   * seeks the playback to a given `percentage` in percentage
+	   * @method seekPercentage
+	   * @param {Number} time should be a number between 0 and 100
+	   */
+	  ;
+
+	  Playback.prototype.seekPercentage = function seekPercentage(percentage) {} /*jshint unused:false*/
+
+	  /**
+	   * The time that "0" now represents relative to when playback started.
+	   * For a stream with a sliding window this will increase as content is
+	   * removed from the beginning.
+	   * @method getStartTimeOffset
+	   * @return {Number} time (in seconds) that time "0" represents.
+	   */
+	  ;
+
+	  Playback.prototype.getStartTimeOffset = function getStartTimeOffset() {
+	    return 0;
+	  };
+
+	  /**
+	   * gets the duration in seconds
+	   * @method getDuration
+	   * @return {Number} duration (in seconds) of the current source
+	   */
+
+
+	  Playback.prototype.getDuration = function getDuration() {
+	    return 0;
+	  };
+
+	  /**
+	   * checks if the playback is playing.
+	   * @method isPlaying
+	   * @return {Boolean} `true` if the current playback is playing, otherwise `false`
+	   */
+
+
+	  Playback.prototype.isPlaying = function isPlaying() {
+	    return false;
+	  };
+
+	  /**
+	   * checks if the playback is ready.
+	   * @property isReady
+	   * @type {Boolean} `true` if the current playback is ready, otherwise `false`
+	   */
+
+
+	  /**
+	   * gets the playback type (`'vod', 'live', 'aod'`)
+	   * @method getPlaybackType
+	   * @return {String} you should write the playback type otherwise it'll assume `'no_op'`
+	   * @example
+	   * ```javascript
+	   * html5VideoPlayback.getPlaybackType() //vod
+	   * html5AudioPlayback.getPlaybackType() //aod
+	   * html5VideoPlayback.getPlaybackType() //live
+	   * flashHlsPlayback.getPlaybackType() //live
+	   * ```
+	   */
+
+	  Playback.prototype.getPlaybackType = function getPlaybackType() {
+	    return Playback.NO_OP;
+	  };
+
+	  /**
+	   * checks if the playback is in HD.
+	   * @method isHighDefinitionInUse
+	   * @return {Boolean} `true` if the playback is playing in HD, otherwise `false`
+	   */
+
+
+	  Playback.prototype.isHighDefinitionInUse = function isHighDefinitionInUse() {
+	    return false;
+	  };
+
+	  /**
+	   * sets the volume for the playback
+	   * @method volume
+	   * @param {Number} value a number between 0 (`muted`) to 100 (`max`)
+	   */
+
+
+	  Playback.prototype.volume = function volume(value) {} /*jshint unused:false*/
+
+	  /**
+	   * destroys the playback, removing it from DOM
+	   * @method destroy
+	   */
+	  ;
+
+	  Playback.prototype.destroy = function destroy() {
+	    this.$el.remove();
+	  };
+
 	  _createClass(Playback, [{
-	    key: 'play',
-	    value: function play() {}
-
-	    /**
-	     * pauses the playback.
-	     * @method pause
-	     */
-
-	  }, {
-	    key: 'pause',
-	    value: function pause() {}
-
-	    /**
-	     * stops the playback.
-	     * @method stop
-	     */
-
-	  }, {
-	    key: 'stop',
-	    value: function stop() {}
-
-	    /**
-	     * seeks the playback to a given `time` in seconds
-	     * @method seek
-	     * @param {Number} time should be a number between 0 and the video duration
-	     */
-
-	  }, {
-	    key: 'seek',
-	    value: function seek(time) {} /*jshint unused:false*/
-
-	    /**
-	     * seeks the playback to a given `percentage` in percentage
-	     * @method seekPercentage
-	     * @param {Number} time should be a number between 0 and 100
-	     */
-
-	  }, {
-	    key: 'seekPercentage',
-	    value: function seekPercentage(percentage) {} /*jshint unused:false*/
-
-	    /**
-	     * The time that "0" now represents relative to when playback started.
-	     * For a stream with a sliding window this will increase as content is
-	     * removed from the beginning.
-	     * @method getStartTimeOffset
-	     * @return {Number} time (in seconds) that time "0" represents.
-	     */
-
-	  }, {
-	    key: 'getStartTimeOffset',
-	    value: function getStartTimeOffset() {
-	      return 0;
-	    }
-
-	    /**
-	     * gets the duration in seconds
-	     * @method getDuration
-	     * @return {Number} duration (in seconds) of the current source
-	     */
-
-	  }, {
-	    key: 'getDuration',
-	    value: function getDuration() {
-	      return 0;
-	    }
-
-	    /**
-	     * checks if the playback is playing.
-	     * @method isPlaying
-	     * @return {Boolean} `true` if the current playback is playing, otherwise `false`
-	     */
-
-	  }, {
-	    key: 'isPlaying',
-	    value: function isPlaying() {
-	      return false;
-	    }
-
-	    /**
-	     * checks if the playback is ready.
-	     * @property isReady
-	     * @type {Boolean} `true` if the current playback is ready, otherwise `false`
-	     */
-
-	  }, {
-	    key: 'getPlaybackType',
-
-
-	    /**
-	     * gets the playback type (`'vod', 'live', 'aod'`)
-	     * @method getPlaybackType
-	     * @return {String} you should write the playback type otherwise it'll assume `'no_op'`
-	     * @example
-	     * ```javascript
-	     * html5VideoPlayback.getPlaybackType() //vod
-	     * html5AudioPlayback.getPlaybackType() //aod
-	     * html5VideoPlayback.getPlaybackType() //live
-	     * flashHlsPlayback.getPlaybackType() //live
-	     * ```
-	     */
-	    value: function getPlaybackType() {
-	      return Playback.NO_OP;
-	    }
-
-	    /**
-	     * checks if the playback is in HD.
-	     * @method isHighDefinitionInUse
-	     * @return {Boolean} `true` if the playback is playing in HD, otherwise `false`
-	     */
-
-	  }, {
-	    key: 'isHighDefinitionInUse',
-	    value: function isHighDefinitionInUse() {
-	      return false;
-	    }
-
-	    /**
-	     * sets the volume for the playback
-	     * @method volume
-	     * @param {Number} value a number between 0 (`muted`) to 100 (`max`)
-	     */
-
-	  }, {
-	    key: 'volume',
-	    value: function volume(value) {} /*jshint unused:false*/
-
-	    /**
-	     * destroys the playback, removing it from DOM
-	     * @method destroy
-	     */
-
-	  }, {
-	    key: 'destroy',
-	    value: function destroy() {
-	      this.$el.remove();
-	    }
-	  }, {
 	    key: 'isReady',
 	    get: function get() {
 	      return false;
@@ -9930,8 +9691,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 	var _base_object = __webpack_require__(5);
 
 	var _base_object2 = _interopRequireDefault(_base_object);
@@ -10056,7 +9815,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function Loader(externalPlugins, playerId) {
 	    _classCallCheck(this, Loader);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Loader).call(this));
+	    var _this = _possibleConstructorReturn(this, _BaseObject.call(this));
 
 	    _this.playerId = playerId;
 	    _this.playbackPlugins = [_html5_video2.default, _html5_audio2.default, _flash2.default, _hls2.default, _flashls2.default, _html_img2.default, _no_op2.default];
@@ -10080,66 +9839,61 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 
 
-	  _createClass(Loader, [{
-	    key: 'groupPluginsByType',
-	    value: function groupPluginsByType(plugins) {
-	      if (Array.isArray(plugins)) {
-	        plugins = plugins.reduce(function (memo, plugin) {
-	          memo[plugin.type] || (memo[plugin.type] = []);
-	          memo[plugin.type].push(plugin);
-	          return memo;
-	        }, {});
-	      }
-	      return plugins;
+	  Loader.prototype.groupPluginsByType = function groupPluginsByType(plugins) {
+	    if (Array.isArray(plugins)) {
+	      plugins = plugins.reduce(function (memo, plugin) {
+	        memo[plugin.type] || (memo[plugin.type] = []);
+	        memo[plugin.type].push(plugin);
+	        return memo;
+	      }, {});
 	    }
+	    return plugins;
+	  };
 
-	    /**
-	     * adds all the external plugins that were passed through `options.plugins`
-	     * @method addExternalPlugins
-	     * @private
-	     * @param {Object} plugins the config object with all plugins
-	     */
+	  /**
+	   * adds all the external plugins that were passed through `options.plugins`
+	   * @method addExternalPlugins
+	   * @private
+	   * @param {Object} plugins the config object with all plugins
+	   */
 
-	  }, {
-	    key: 'addExternalPlugins',
-	    value: function addExternalPlugins(plugins) {
-	      plugins = this.groupPluginsByType(plugins);
-	      var pluginName = function pluginName(plugin) {
-	        return plugin.prototype.name;
-	      };
-	      if (plugins.playback) {
-	        this.playbackPlugins = (0, _lodash2.default)(plugins.playback.concat(this.playbackPlugins), pluginName);
-	      }
-	      if (plugins.container) {
-	        this.containerPlugins = (0, _lodash2.default)(plugins.container.concat(this.containerPlugins), pluginName);
-	      }
-	      if (plugins.core) {
-	        this.corePlugins = (0, _lodash2.default)(plugins.core.concat(this.corePlugins), pluginName);
-	      }
-	      _player_info2.default.getInstance(this.playerId).playbackPlugins = this.playbackPlugins;
+
+	  Loader.prototype.addExternalPlugins = function addExternalPlugins(plugins) {
+	    plugins = this.groupPluginsByType(plugins);
+	    var pluginName = function pluginName(plugin) {
+	      return plugin.prototype.name;
+	    };
+	    if (plugins.playback) {
+	      this.playbackPlugins = (0, _lodash2.default)(plugins.playback.concat(this.playbackPlugins), pluginName);
 	    }
+	    if (plugins.container) {
+	      this.containerPlugins = (0, _lodash2.default)(plugins.container.concat(this.containerPlugins), pluginName);
+	    }
+	    if (plugins.core) {
+	      this.corePlugins = (0, _lodash2.default)(plugins.core.concat(this.corePlugins), pluginName);
+	    }
+	    _player_info2.default.getInstance(this.playerId).playbackPlugins = this.playbackPlugins;
+	  };
 
-	    /**
-	     * validate if the external plugins that were passed through `options.plugins` are associated to the correct type
-	     * @method validateExternalPluginsType
-	     * @private
-	     * @param {Object} plugins the config object with all plugins
-	     */
+	  /**
+	   * validate if the external plugins that were passed through `options.plugins` are associated to the correct type
+	   * @method validateExternalPluginsType
+	   * @private
+	   * @param {Object} plugins the config object with all plugins
+	   */
 
-	  }, {
-	    key: 'validateExternalPluginsType',
-	    value: function validateExternalPluginsType(plugins) {
-	      var plugintypes = ["playback", "container", "core"];
-	      plugintypes.forEach(function (type) {
-	        (plugins[type] || []).forEach(function (el) {
-	          var errorMessage = "external " + el.type + " plugin on " + type + " array";
-	          if (el.type !== type) {
-	            throw new ReferenceError(errorMessage);
-	          }
-	        });
+
+	  Loader.prototype.validateExternalPluginsType = function validateExternalPluginsType(plugins) {
+	    var plugintypes = ["playback", "container", "core"];
+	    plugintypes.forEach(function (type) {
+	      (plugins[type] || []).forEach(function (el) {
+	        var errorMessage = "external " + el.type + " plugin on " + type + " array";
+	        if (el.type !== type) {
+	          throw new ReferenceError(errorMessage);
+	        }
 	      });
-	    }
-	  }]);
+	    });
+	  };
 
 	  return Loader;
 	}(_base_object2.default);
@@ -11397,7 +11151,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function HTML5Video(options) {
 	    _classCallCheck(this, HTML5Video);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HTML5Video).call(this, options));
+	    var _this = _possibleConstructorReturn(this, _Playback.call(this, options));
 
 	    _this.loadStarted = false;
 	    _this.playheadMoving = false;
@@ -11429,327 +11183,289 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 
 
-	  _createClass(HTML5Video, [{
-	    key: 'setupSrc',
-	    value: function setupSrc(srcUrl) {
-	      this.src = srcUrl;
-	      this.el.src = srcUrl;
+	  HTML5Video.prototype.setupSrc = function setupSrc(srcUrl) {
+	    this.src = srcUrl;
+	    this.el.src = srcUrl;
+	  };
+
+	  HTML5Video.prototype.setupSafari = function setupSafari() {
+	    this.el.preload = 'auto';
+	  };
+
+	  HTML5Video.prototype.onLoadedMetadata = function onLoadedMetadata(e) {
+	    this.handleBufferingEvents();
+	    this.trigger(_events2.default.PLAYBACK_LOADEDMETADATA, { duration: e.target.duration, data: e });
+	    this.updateSettings();
+	    var autoSeekFromUrl = typeof this.options.autoSeekFromUrl === "undefined" || this.options.autoSeekFromUrl;
+	    if (this.getPlaybackType() !== _playback2.default.LIVE && autoSeekFromUrl) {
+	      this.checkInitialSeek();
 	    }
-	  }, {
-	    key: 'setupSafari',
-	    value: function setupSafari() {
-	      this.el.preload = 'auto';
+	  };
+
+	  HTML5Video.prototype.onDurationChange = function onDurationChange() {
+	    this.updateSettings();
+	    this.onTimeUpdate();
+	  };
+
+	  HTML5Video.prototype.updateSettings = function updateSettings() {
+	    // we can't figure out if hls resource is VoD or not until it is being loaded or duration has changed.
+	    // that's why we check it again and update media control accordingly.
+	    if (this.getPlaybackType() === _playback2.default.VOD) {
+	      this.settings.left = ["playpause", "position", "duration"];
+	    } else {
+	      this.settings.left = ["playstop"];
 	    }
-	  }, {
-	    key: 'onLoadedMetadata',
-	    value: function onLoadedMetadata(e) {
-	      this.handleBufferingEvents();
-	      this.trigger(_events2.default.PLAYBACK_LOADEDMETADATA, { duration: e.target.duration, data: e });
-	      this.updateSettings();
-	      var autoSeekFromUrl = typeof this.options.autoSeekFromUrl === "undefined" || this.options.autoSeekFromUrl;
-	      if (this.getPlaybackType() !== _playback2.default.LIVE && autoSeekFromUrl) {
-	        this.checkInitialSeek();
-	      }
+	    this.settings.seekEnabled = this.isSeekEnabled();
+	    this.trigger(_events2.default.PLAYBACK_SETTINGSUPDATE);
+	  };
+
+	  HTML5Video.prototype.isSeekEnabled = function isSeekEnabled() {
+	    return isFinite(this.getDuration());
+	  };
+
+	  HTML5Video.prototype.getPlaybackType = function getPlaybackType() {
+	    return [0, undefined, Infinity].indexOf(this.el.duration) >= 0 ? _playback2.default.LIVE : _playback2.default.VOD;
+	  };
+
+	  HTML5Video.prototype.isHighDefinitionInUse = function isHighDefinitionInUse() {
+	    return false;
+	  };
+
+	  HTML5Video.prototype.play = function play() {
+	    this.stopped = false;
+	    this.handleBufferingEvents();
+	    this.el.play();
+	  };
+
+	  HTML5Video.prototype.pause = function pause() {
+	    this.el.pause();
+	  };
+
+	  HTML5Video.prototype.stop = function stop() {
+	    this.pause();
+	    this.stopped = true;
+	    this.el.currentTime = 0;
+	    this.stopPlayheadMovingChecks();
+	    this.handleBufferingEvents();
+	    this.trigger(_events2.default.PLAYBACK_STOP);
+	  };
+
+	  HTML5Video.prototype.volume = function volume(value) {
+	    this.el.volume = value / 100;
+	  };
+
+	  HTML5Video.prototype.mute = function mute() {
+	    this.el.volume = 0;
+	  };
+
+	  HTML5Video.prototype.unmute = function unmute() {
+	    this.el.volume = 1;
+	  };
+
+	  HTML5Video.prototype.isMuted = function isMuted() {
+	    return !!this.el.volume;
+	  };
+
+	  HTML5Video.prototype.isPlaying = function isPlaying() {
+	    return !this.el.paused && !this.el.ended;
+	  };
+
+	  HTML5Video.prototype.startPlayheadMovingChecks = function startPlayheadMovingChecks() {
+	    if (this.playheadMovingTimer !== null) {
+	      return;
 	    }
-	  }, {
-	    key: 'onDurationChange',
-	    value: function onDurationChange() {
-	      this.updateSettings();
-	      this.onTimeUpdate();
+	    this.playheadMovingTimeOnCheck = null;
+	    this.determineIfPlayheadMoving();
+	    this.playheadMovingTimer = setInterval(this.determineIfPlayheadMoving.bind(this), 500);
+	  };
+
+	  HTML5Video.prototype.stopPlayheadMovingChecks = function stopPlayheadMovingChecks() {
+	    if (this.playheadMovingTimer === null) {
+	      return;
 	    }
-	  }, {
-	    key: 'updateSettings',
-	    value: function updateSettings() {
-	      // we can't figure out if hls resource is VoD or not until it is being loaded or duration has changed.
-	      // that's why we check it again and update media control accordingly.
-	      if (this.getPlaybackType() === _playback2.default.VOD) {
-	        this.settings.left = ["playpause", "position", "duration"];
+	    clearInterval(this.playheadMovingTimer);
+	    this.playheadMovingTimer = null;
+	    this.playheadMoving = false;
+	  };
+
+	  HTML5Video.prototype.determineIfPlayheadMoving = function determineIfPlayheadMoving() {
+	    var before = this.playheadMovingTimeOnCheck;
+	    var now = this.el.currentTime;
+	    this.playheadMoving = before !== now;
+	    this.playheadMovingTimeOnCheck = now;
+	    this.handleBufferingEvents();
+	  };
+
+	  // this seems to happen when the user is having to wait
+	  // for something to happen AFTER A USER INTERACTION
+	  // e.g the player might be buffering, but when `play()` is called
+	  // only at this point will this be called.
+	  // Or the user may seek somewhere but the new area requires buffering,
+	  // so it will fire then as well.
+	  // On devices where playing is blocked until requested with a user action,
+	  // buffering may start, but never finish until the user initiates a play,
+	  // but this only happens when play is actually requested
+
+
+	  HTML5Video.prototype.onWaiting = function onWaiting() {
+	    this.loadStarted = true;
+	    this.handleBufferingEvents();
+	  };
+
+	  // called after the first frame has loaded
+	  // note this doesn't fire on ios before the user has requested play
+	  // ideally the "loadstart" event would be used instead, but this fires
+	  // before a user has requested play on iOS, and also this is always fired
+	  // even if the preload setting is "none". In both these cases this causes
+	  // infinite buffering until the user does something which isn't great.
+
+
+	  HTML5Video.prototype.onLoadedData = function onLoadedData() {
+	    this.loadStarted = true;
+	    this.handleBufferingEvents();
+	  };
+
+	  // note this doesn't fire on ios before user has requested play
+
+
+	  HTML5Video.prototype.onCanPlay = function onCanPlay() {
+	    this.handleBufferingEvents();
+	  };
+
+	  HTML5Video.prototype.onPlaying = function onPlaying() {
+	    this.startPlayheadMovingChecks();
+	    this.handleBufferingEvents();
+	    this.trigger(_events2.default.PLAYBACK_PLAY);
+	  };
+
+	  HTML5Video.prototype.onPause = function onPause() {
+	    this.stopPlayheadMovingChecks();
+	    this.handleBufferingEvents();
+	    this.trigger(_events2.default.PLAYBACK_PAUSE);
+	  };
+
+	  HTML5Video.prototype.onEnded = function onEnded() {
+	    this.handleBufferingEvents();
+	    this.trigger(_events2.default.PLAYBACK_ENDED, this.name);
+	  };
+
+	  // The playback should be classed as buffering if the following are true:
+	  // - the ready state is less then HAVE_FUTURE_DATA or the playhead isn't moving and it should be
+	  // - the media hasn't "ended",
+	  // - the media hasn't been stopped
+	  // - loading has started
+
+
+	  HTML5Video.prototype.handleBufferingEvents = function handleBufferingEvents() {
+	    var playheadShouldBeMoving = !this.el.ended && !this.el.paused;
+	    var buffering = this.loadStarted && !this.el.ended && !this.stopped && (playheadShouldBeMoving && !this.playheadMoving || this.el.readyState < this.el.HAVE_FUTURE_DATA);
+	    if (this.bufferingState !== buffering) {
+	      this.bufferingState = buffering;
+	      if (buffering) {
+	        this.trigger(_events2.default.PLAYBACK_BUFFERING, this.name);
 	      } else {
-	        this.settings.left = ["playstop"];
-	      }
-	      this.settings.seekEnabled = this.isSeekEnabled();
-	      this.trigger(_events2.default.PLAYBACK_SETTINGSUPDATE);
-	    }
-	  }, {
-	    key: 'isSeekEnabled',
-	    value: function isSeekEnabled() {
-	      return isFinite(this.getDuration());
-	    }
-	  }, {
-	    key: 'getPlaybackType',
-	    value: function getPlaybackType() {
-	      return [0, undefined, Infinity].indexOf(this.el.duration) >= 0 ? _playback2.default.LIVE : _playback2.default.VOD;
-	    }
-	  }, {
-	    key: 'isHighDefinitionInUse',
-	    value: function isHighDefinitionInUse() {
-	      return false;
-	    }
-	  }, {
-	    key: 'play',
-	    value: function play() {
-	      this.stopped = false;
-	      this.handleBufferingEvents();
-	      this.el.play();
-	    }
-	  }, {
-	    key: 'pause',
-	    value: function pause() {
-	      this.el.pause();
-	    }
-	  }, {
-	    key: 'stop',
-	    value: function stop() {
-	      this.pause();
-	      this.stopped = true;
-	      this.el.currentTime = 0;
-	      this.stopPlayheadMovingChecks();
-	      this.handleBufferingEvents();
-	      this.trigger(_events2.default.PLAYBACK_STOP);
-	    }
-	  }, {
-	    key: 'volume',
-	    value: function volume(value) {
-	      this.el.volume = value / 100;
-	    }
-	  }, {
-	    key: 'mute',
-	    value: function mute() {
-	      this.el.volume = 0;
-	    }
-	  }, {
-	    key: 'unmute',
-	    value: function unmute() {
-	      this.el.volume = 1;
-	    }
-	  }, {
-	    key: 'isMuted',
-	    value: function isMuted() {
-	      return !!this.el.volume;
-	    }
-	  }, {
-	    key: 'isPlaying',
-	    value: function isPlaying() {
-	      return !this.el.paused && !this.el.ended;
-	    }
-	  }, {
-	    key: 'startPlayheadMovingChecks',
-	    value: function startPlayheadMovingChecks() {
-	      if (this.playheadMovingTimer !== null) {
-	        return;
-	      }
-	      this.playheadMovingTimeOnCheck = null;
-	      this.determineIfPlayheadMoving();
-	      this.playheadMovingTimer = setInterval(this.determineIfPlayheadMoving.bind(this), 500);
-	    }
-	  }, {
-	    key: 'stopPlayheadMovingChecks',
-	    value: function stopPlayheadMovingChecks() {
-	      if (this.playheadMovingTimer === null) {
-	        return;
-	      }
-	      clearInterval(this.playheadMovingTimer);
-	      this.playheadMovingTimer = null;
-	      this.playheadMoving = false;
-	    }
-	  }, {
-	    key: 'determineIfPlayheadMoving',
-	    value: function determineIfPlayheadMoving() {
-	      var before = this.playheadMovingTimeOnCheck;
-	      var now = this.el.currentTime;
-	      this.playheadMoving = before !== now;
-	      this.playheadMovingTimeOnCheck = now;
-	      this.handleBufferingEvents();
-	    }
-
-	    // this seems to happen when the user is having to wait
-	    // for something to happen AFTER A USER INTERACTION
-	    // e.g the player might be buffering, but when `play()` is called
-	    // only at this point will this be called.
-	    // Or the user may seek somewhere but the new area requires buffering,
-	    // so it will fire then as well.
-	    // On devices where playing is blocked until requested with a user action,
-	    // buffering may start, but never finish until the user initiates a play,
-	    // but this only happens when play is actually requested
-
-	  }, {
-	    key: 'onWaiting',
-	    value: function onWaiting() {
-	      this.loadStarted = true;
-	      this.handleBufferingEvents();
-	    }
-
-	    // called after the first frame has loaded
-	    // note this doesn't fire on ios before the user has requested play
-	    // ideally the "loadstart" event would be used instead, but this fires
-	    // before a user has requested play on iOS, and also this is always fired
-	    // even if the preload setting is "none". In both these cases this causes
-	    // infinite buffering until the user does something which isn't great.
-
-	  }, {
-	    key: 'onLoadedData',
-	    value: function onLoadedData() {
-	      this.loadStarted = true;
-	      this.handleBufferingEvents();
-	    }
-
-	    // note this doesn't fire on ios before user has requested play
-
-	  }, {
-	    key: 'onCanPlay',
-	    value: function onCanPlay() {
-	      this.handleBufferingEvents();
-	    }
-	  }, {
-	    key: 'onPlaying',
-	    value: function onPlaying() {
-	      this.startPlayheadMovingChecks();
-	      this.handleBufferingEvents();
-	      this.trigger(_events2.default.PLAYBACK_PLAY);
-	    }
-	  }, {
-	    key: 'onPause',
-	    value: function onPause() {
-	      this.stopPlayheadMovingChecks();
-	      this.handleBufferingEvents();
-	      this.trigger(_events2.default.PLAYBACK_PAUSE);
-	    }
-	  }, {
-	    key: 'onEnded',
-	    value: function onEnded() {
-	      this.handleBufferingEvents();
-	      this.trigger(_events2.default.PLAYBACK_ENDED, this.name);
-	    }
-
-	    // The playback should be classed as buffering if the following are true:
-	    // - the ready state is less then HAVE_FUTURE_DATA or the playhead isn't moving and it should be
-	    // - the media hasn't "ended",
-	    // - the media hasn't been stopped
-	    // - loading has started
-
-	  }, {
-	    key: 'handleBufferingEvents',
-	    value: function handleBufferingEvents() {
-	      var playheadShouldBeMoving = !this.el.ended && !this.el.paused;
-	      var buffering = this.loadStarted && !this.el.ended && !this.stopped && (playheadShouldBeMoving && !this.playheadMoving || this.el.readyState < this.el.HAVE_FUTURE_DATA);
-	      if (this.bufferingState !== buffering) {
-	        this.bufferingState = buffering;
-	        if (buffering) {
-	          this.trigger(_events2.default.PLAYBACK_BUFFERING, this.name);
-	        } else {
-	          this.trigger(_events2.default.PLAYBACK_BUFFERFULL, this.name);
-	        }
+	        this.trigger(_events2.default.PLAYBACK_BUFFERFULL, this.name);
 	      }
 	    }
-	  }, {
-	    key: 'onError',
-	    value: function onError(event) {
-	      this.trigger(_events2.default.PLAYBACK_ERROR, this.el.error, this.name);
+	  };
+
+	  HTML5Video.prototype.onError = function onError(event) {
+	    this.trigger(_events2.default.PLAYBACK_ERROR, this.el.error, this.name);
+	  };
+
+	  HTML5Video.prototype.destroy = function destroy() {
+	    this.stop();
+	    this.el.src = '';
+	    this.src = null;
+	    this.$el.remove();
+	  };
+
+	  HTML5Video.prototype.seek = function seek(time) {
+	    this.el.currentTime = time;
+	  };
+
+	  HTML5Video.prototype.seekPercentage = function seekPercentage(percentage) {
+	    var time = this.el.duration * (percentage / 100);
+	    this.seek(time);
+	  };
+
+	  HTML5Video.prototype.checkInitialSeek = function checkInitialSeek() {
+	    var seekTime = (0, _utils.seekStringToSeconds)(window.location.href);
+	    if (seekTime !== 0) {
+	      this.seek(seekTime);
 	    }
-	  }, {
-	    key: 'destroy',
-	    value: function destroy() {
-	      this.stop();
-	      this.el.src = '';
-	      this.src = null;
-	      this.$el.remove();
+	  };
+
+	  HTML5Video.prototype.getCurrentTime = function getCurrentTime() {
+	    return this.el.currentTime;
+	  };
+
+	  HTML5Video.prototype.getDuration = function getDuration() {
+	    return this.el.duration;
+	  };
+
+	  HTML5Video.prototype.onTimeUpdate = function onTimeUpdate() {
+	    this.handleBufferingEvents();
+	    if (this.getPlaybackType() === _playback2.default.LIVE) {
+	      this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: 1, total: 1 }, this.name);
+	    } else {
+	      this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: this.el.currentTime, total: this.el.duration }, this.name);
 	    }
-	  }, {
-	    key: 'seek',
-	    value: function seek(time) {
-	      this.el.currentTime = time;
+	  };
+
+	  HTML5Video.prototype.onProgress = function onProgress() {
+	    if (!this.el.buffered.length) {
+	      return;
 	    }
-	  }, {
-	    key: 'seekPercentage',
-	    value: function seekPercentage(percentage) {
-	      var time = this.el.duration * (percentage / 100);
-	      this.seek(time);
-	    }
-	  }, {
-	    key: 'checkInitialSeek',
-	    value: function checkInitialSeek() {
-	      var seekTime = (0, _utils.seekStringToSeconds)(window.location.href);
-	      if (seekTime !== 0) {
-	        this.seek(seekTime);
+	    var bufferedPos = 0;
+	    for (var i = 0; i < this.el.buffered.length; i++) {
+	      if (this.el.currentTime >= this.el.buffered.start(i) && this.el.currentTime <= this.el.buffered.end(i)) {
+	        bufferedPos = i;
+	        break;
 	      }
 	    }
-	  }, {
-	    key: 'getCurrentTime',
-	    value: function getCurrentTime() {
-	      return this.el.currentTime;
+	    this.trigger(_events2.default.PLAYBACK_PROGRESS, {
+	      start: this.el.buffered.start(bufferedPos),
+	      current: this.el.buffered.end(bufferedPos),
+	      total: this.el.duration
+	    });
+	  };
+
+	  HTML5Video.prototype.typeFor = function typeFor(src) {
+	    var resourceParts = src.split('?')[0].match(/.*\.(.*)$/) || [];
+	    var isHls = resourceParts.length > 1 && resourceParts[1] === "m3u8";
+	    return isHls ? 'application/vnd.apple.mpegurl' : 'video/mp4';
+	  };
+
+	  HTML5Video.prototype.ready = function ready() {
+	    if (this.isReadyState) {
+	      return;
 	    }
-	  }, {
-	    key: 'getDuration',
-	    value: function getDuration() {
-	      return this.el.duration;
+	    this.isReadyState = true;
+	    this.trigger(_events2.default.PLAYBACK_READY, this.name);
+	  };
+
+	  HTML5Video.prototype.render = function render() {
+	    var style = _styler2.default.getStyleFor(_style2.default);
+
+	    this.src && this.$el.html(this.template({ src: this.src, type: this.typeFor(this.src) }));
+
+	    if (this.options.useVideoTagDefaultControls) {
+	      this.$el.attr('controls', 'controls');
 	    }
-	  }, {
-	    key: 'onTimeUpdate',
-	    value: function onTimeUpdate() {
-	      this.handleBufferingEvents();
-	      if (this.getPlaybackType() === _playback2.default.LIVE) {
-	        this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: 1, total: 1 }, this.name);
-	      } else {
-	        this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: this.el.currentTime, total: this.el.duration }, this.name);
-	      }
-	    }
-	  }, {
-	    key: 'onProgress',
-	    value: function onProgress() {
-	      if (!this.el.buffered.length) {
-	        return;
-	      }
-	      var bufferedPos = 0;
-	      for (var i = 0; i < this.el.buffered.length; i++) {
-	        if (this.el.currentTime >= this.el.buffered.start(i) && this.el.currentTime <= this.el.buffered.end(i)) {
-	          bufferedPos = i;
-	          break;
-	        }
-	      }
-	      this.trigger(_events2.default.PLAYBACK_PROGRESS, {
-	        start: this.el.buffered.start(bufferedPos),
-	        current: this.el.buffered.end(bufferedPos),
-	        total: this.el.duration
+
+	    if (this.options.disableVideoTagContextMenu) {
+	      this.$el.on("contextmenu", function () {
+	        return false;
 	      });
 	    }
-	  }, {
-	    key: 'typeFor',
-	    value: function typeFor(src) {
-	      var resourceParts = src.split('?')[0].match(/.*\.(.*)$/) || [];
-	      var isHls = resourceParts.length > 1 && resourceParts[1] === "m3u8";
-	      return isHls ? 'application/vnd.apple.mpegurl' : 'video/mp4';
-	    }
-	  }, {
-	    key: 'ready',
-	    value: function ready() {
-	      if (this.isReadyState) {
-	        return;
-	      }
-	      this.isReadyState = true;
-	      this.trigger(_events2.default.PLAYBACK_READY, this.name);
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var style = _styler2.default.getStyleFor(_style2.default);
 
-	      this.src && this.$el.html(this.template({ src: this.src, type: this.typeFor(this.src) }));
+	    this.$el.append(style);
+	    this.ready();
+	    return this;
+	  };
 
-	      if (this.options.useVideoTagDefaultControls) {
-	        this.$el.attr('controls', 'controls');
-	      }
-
-	      if (this.options.disableVideoTagContextMenu) {
-	        this.$el.on("contextmenu", function () {
-	          return false;
-	        });
-	      }
-
-	      this.$el.append(style);
-	      this.ready();
-	      return this;
-	    }
-	  }, {
+	  _createClass(HTML5Video, [{
 	    key: 'isReady',
 	    get: function get() {
 	      return this.isReadyState;
@@ -11817,8 +11533,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-
-	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -11911,7 +11625,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function Flash(options) {
 	    _classCallCheck(this, Flash);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Flash).call(this, options));
+	    var _this = _possibleConstructorReturn(this, _BaseFlashPlayback.call(this, options));
 
 	    _this.src = options.src;
 	    _this.baseUrl = options.baseUrl;
@@ -11925,221 +11639,201 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return _this;
 	  }
 
-	  _createClass(Flash, [{
-	    key: 'bootstrap',
-	    value: function bootstrap() {
-	      var _this2 = this;
+	  Flash.prototype.bootstrap = function bootstrap() {
+	    var _this2 = this;
 
-	      if (this.el.playerPlay) {
-	        this.el.width = "100%";
-	        this.el.height = "100%";
-	        if (this.currentState === 'PLAYING') {
-	          this.firstPlay();
-	        } else {
-	          this.currentState = "IDLE";
-	          this.autoPlay && this.play();
-	        }
-	        (0, _clapprZepto2.default)('<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%" />').insertAfter(this.$el);
-	        if (this.getDuration() > 0) {
-	          this.metadataLoaded();
-	        } else {
-	          _mediator2.default.once(this.uniqueId + ':timeupdate', this.metadataLoaded, this);
-	        }
-	      } else {
-	        this._attempts = this._attempts || 0;
-	        if (++this._attempts <= MAX_ATTEMPTS) {
-	          setTimeout(function () {
-	            return _this2.bootstrap();
-	          }, 50);
-	        } else {
-	          this.trigger(_events2.default.PLAYBACK_ERROR, { message: "Max number of attempts reached" }, this.name);
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'metadataLoaded',
-	    value: function metadataLoaded() {
-	      this.isReadyState = true;
-	      this.trigger(_events2.default.PLAYBACK_READY, this.name);
-	      this.trigger(_events2.default.PLAYBACK_SETTINGSUPDATE, this.name);
-	    }
-	  }, {
-	    key: 'getPlaybackType',
-	    value: function getPlaybackType() {
-	      return _playback2.default.VOD;
-	    }
-	  }, {
-	    key: 'isHighDefinitionInUse',
-	    value: function isHighDefinitionInUse() {
-	      return false;
-	    }
-	  }, {
-	    key: 'updateTime',
-	    value: function updateTime() {
-	      this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: this.el.getPosition(), total: this.el.getDuration() }, this.name);
-	    }
-	  }, {
-	    key: 'addListeners',
-	    value: function addListeners() {
-	      _mediator2.default.on(this.uniqueId + ':progress', this.progress, this);
-	      _mediator2.default.on(this.uniqueId + ':timeupdate', this.updateTime, this);
-	      _mediator2.default.on(this.uniqueId + ':statechanged', this.checkState, this);
-	      _mediator2.default.on(this.uniqueId + ':flashready', this.bootstrap, this);
-	    }
-	  }, {
-	    key: 'stopListening',
-	    value: function stopListening() {
-	      _get(Object.getPrototypeOf(Flash.prototype), 'stopListening', this).call(this);
-	      _mediator2.default.off(this.uniqueId + ':progress');
-	      _mediator2.default.off(this.uniqueId + ':timeupdate');
-	      _mediator2.default.off(this.uniqueId + ':statechanged');
-	      _mediator2.default.off(this.uniqueId + ':flashready');
-	    }
-	  }, {
-	    key: 'checkState',
-	    value: function checkState() {
-	      if (this.isIdle || this.currentState === "PAUSED") {
-	        return;
-	      } else if (this.currentState !== "PLAYING_BUFFERING" && this.el.getState() === "PLAYING_BUFFERING") {
-	        this.bufferingState = true;
-	        this.trigger(_events2.default.PLAYBACK_BUFFERING, this.name);
-	        this.currentState = "PLAYING_BUFFERING";
-	      } else if (this.el.getState() === "PLAYING") {
-	        this.bufferingState = false;
-	        this.trigger(_events2.default.PLAYBACK_BUFFERFULL, this.name);
-	        this.currentState = "PLAYING";
-	      } else if (this.el.getState() === "IDLE") {
-	        this.currentState = "IDLE";
-	      } else if (this.el.getState() === "ENDED") {
-	        this.trigger(_events2.default.PLAYBACK_ENDED, this.name);
-	        this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: 0, total: this.el.getDuration() }, this.name);
-	        this.currentState = "ENDED";
-	        this.isIdle = true;
-	      }
-	    }
-	  }, {
-	    key: 'progress',
-	    value: function progress() {
-	      if (this.currentState !== "IDLE" && this.currentState !== "ENDED") {
-	        this.trigger(_events2.default.PLAYBACK_PROGRESS, {
-	          start: 0,
-	          current: this.el.getBytesLoaded(),
-	          total: this.el.getBytesTotal()
-	        });
-	      }
-	    }
-	  }, {
-	    key: 'firstPlay',
-	    value: function firstPlay() {
-	      var _this3 = this;
-
-	      if (this.el.playerPlay) {
-	        this.isIdle = false;
-	        this.el.playerPlay(this.src);
-	        this.listenToOnce(this, _events2.default.PLAYBACK_BUFFERFULL, function () {
-	          return _this3.checkInitialSeek();
-	        });
-	        this.currentState = "PLAYING";
-	      } else {
-	        this.listenToOnce(this, _events2.default.PLAYBACK_READY, this.firstPlay);
-	      }
-	    }
-	  }, {
-	    key: 'checkInitialSeek',
-	    value: function checkInitialSeek() {
-	      var seekTime = (0, _utils.seekStringToSeconds)(window.location.href);
-	      if (seekTime !== 0) {
-	        this.seekSeconds(seekTime);
-	      }
-	    }
-	  }, {
-	    key: 'play',
-	    value: function play() {
-	      if (this.currentState === 'PAUSED' || this.currentState === 'PLAYING_BUFFERING') {
-	        this.currentState = "PLAYING";
-	        this.el.playerResume();
-	        this.trigger(_events2.default.PLAYBACK_PLAY, this.name);
-	      } else if (this.currentState !== 'PLAYING') {
+	    if (this.el.playerPlay) {
+	      this.el.width = "100%";
+	      this.el.height = "100%";
+	      if (this.currentState === 'PLAYING') {
 	        this.firstPlay();
-	        this.trigger(_events2.default.PLAYBACK_PLAY, this.name);
-	      }
-	    }
-	  }, {
-	    key: 'volume',
-	    value: function volume(value) {
-	      var _this4 = this;
-
-	      if (this.isReady) {
-	        this.el.playerVolume(value);
 	      } else {
-	        this.listenToOnce(this, _events2.default.PLAYBACK_BUFFERFULL, function () {
-	          return _this4.volume(value);
-	        });
+	        this.currentState = "IDLE";
+	        this.autoPlay && this.play();
 	      }
-	    }
-	  }, {
-	    key: 'pause',
-	    value: function pause() {
-	      this.currentState = "PAUSED";
-	      this.el.playerPause();
-	      this.trigger(_events2.default.PLAYBACK_PAUSE, this.name);
-	    }
-	  }, {
-	    key: 'stop',
-	    value: function stop() {
-	      this.el.playerStop();
-	      this.trigger(_events2.default.PLAYBACK_STOP);
-	      this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: 0, total: 0 }, this.name);
-	    }
-	  }, {
-	    key: 'isPlaying',
-	    value: function isPlaying() {
-	      return !!(this.isReady && this.currentState.indexOf("PLAYING") > -1);
-	    }
-	  }, {
-	    key: 'getDuration',
-	    value: function getDuration() {
-	      return this.el.getDuration();
-	    }
-	  }, {
-	    key: 'seekPercentage',
-	    value: function seekPercentage(percentage) {
-	      var _this5 = this;
-
-	      if (this.el.getDuration() > 0) {
-	        var seekSeconds = this.el.getDuration() * (percentage / 100);
-	        this.seek(seekSeconds);
+	      (0, _clapprZepto2.default)('<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%" />').insertAfter(this.$el);
+	      if (this.getDuration() > 0) {
+	        this.metadataLoaded();
 	      } else {
-	        this.listenToOnce(this, _events2.default.PLAYBACK_BUFFERFULL, function () {
-	          return _this5.seekPercentage(percentage);
-	        });
+	        _mediator2.default.once(this.uniqueId + ':timeupdate', this.metadataLoaded, this);
 	      }
-	    }
-	  }, {
-	    key: 'seek',
-	    value: function seek(time) {
-	      var _this6 = this;
-
-	      if (this.isReady && this.el.playerSeek) {
-	        this.el.playerSeek(time);
-	        this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: time, total: this.el.getDuration() }, this.name);
-	        if (this.currentState === "PAUSED") {
-	          this.el.playerPause();
-	        }
+	    } else {
+	      this._attempts = this._attempts || 0;
+	      if (++this._attempts <= MAX_ATTEMPTS) {
+	        setTimeout(function () {
+	          return _this2.bootstrap();
+	        }, 50);
 	      } else {
-	        this.listenToOnce(this, _events2.default.PLAYBACK_BUFFERFULL, function () {
-	          return _this6.seek(time);
-	        });
+	        this.trigger(_events2.default.PLAYBACK_ERROR, { message: "Max number of attempts reached" }, this.name);
 	      }
 	    }
-	  }, {
-	    key: 'destroy',
-	    value: function destroy() {
-	      clearInterval(this.bootstrapId);
-	      _get(Object.getPrototypeOf(Flash.prototype), 'stopListening', this).call(this);
-	      this.$el.remove();
+	  };
+
+	  Flash.prototype.metadataLoaded = function metadataLoaded() {
+	    this.isReadyState = true;
+	    this.trigger(_events2.default.PLAYBACK_READY, this.name);
+	    this.trigger(_events2.default.PLAYBACK_SETTINGSUPDATE, this.name);
+	  };
+
+	  Flash.prototype.getPlaybackType = function getPlaybackType() {
+	    return _playback2.default.VOD;
+	  };
+
+	  Flash.prototype.isHighDefinitionInUse = function isHighDefinitionInUse() {
+	    return false;
+	  };
+
+	  Flash.prototype.updateTime = function updateTime() {
+	    this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: this.el.getPosition(), total: this.el.getDuration() }, this.name);
+	  };
+
+	  Flash.prototype.addListeners = function addListeners() {
+	    _mediator2.default.on(this.uniqueId + ':progress', this.progress, this);
+	    _mediator2.default.on(this.uniqueId + ':timeupdate', this.updateTime, this);
+	    _mediator2.default.on(this.uniqueId + ':statechanged', this.checkState, this);
+	    _mediator2.default.on(this.uniqueId + ':flashready', this.bootstrap, this);
+	  };
+
+	  Flash.prototype.stopListening = function stopListening() {
+	    _BaseFlashPlayback.prototype.stopListening.call(this);
+	    _mediator2.default.off(this.uniqueId + ':progress');
+	    _mediator2.default.off(this.uniqueId + ':timeupdate');
+	    _mediator2.default.off(this.uniqueId + ':statechanged');
+	    _mediator2.default.off(this.uniqueId + ':flashready');
+	  };
+
+	  Flash.prototype.checkState = function checkState() {
+	    if (this.isIdle || this.currentState === "PAUSED") {
+	      return;
+	    } else if (this.currentState !== "PLAYING_BUFFERING" && this.el.getState() === "PLAYING_BUFFERING") {
+	      this.bufferingState = true;
+	      this.trigger(_events2.default.PLAYBACK_BUFFERING, this.name);
+	      this.currentState = "PLAYING_BUFFERING";
+	    } else if (this.el.getState() === "PLAYING") {
+	      this.bufferingState = false;
+	      this.trigger(_events2.default.PLAYBACK_BUFFERFULL, this.name);
+	      this.currentState = "PLAYING";
+	    } else if (this.el.getState() === "IDLE") {
+	      this.currentState = "IDLE";
+	    } else if (this.el.getState() === "ENDED") {
+	      this.trigger(_events2.default.PLAYBACK_ENDED, this.name);
+	      this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: 0, total: this.el.getDuration() }, this.name);
+	      this.currentState = "ENDED";
+	      this.isIdle = true;
 	    }
-	  }, {
+	  };
+
+	  Flash.prototype.progress = function progress() {
+	    if (this.currentState !== "IDLE" && this.currentState !== "ENDED") {
+	      this.trigger(_events2.default.PLAYBACK_PROGRESS, {
+	        start: 0,
+	        current: this.el.getBytesLoaded(),
+	        total: this.el.getBytesTotal()
+	      });
+	    }
+	  };
+
+	  Flash.prototype.firstPlay = function firstPlay() {
+	    var _this3 = this;
+
+	    if (this.el.playerPlay) {
+	      this.isIdle = false;
+	      this.el.playerPlay(this.src);
+	      this.listenToOnce(this, _events2.default.PLAYBACK_BUFFERFULL, function () {
+	        return _this3.checkInitialSeek();
+	      });
+	      this.currentState = "PLAYING";
+	    } else {
+	      this.listenToOnce(this, _events2.default.PLAYBACK_READY, this.firstPlay);
+	    }
+	  };
+
+	  Flash.prototype.checkInitialSeek = function checkInitialSeek() {
+	    var seekTime = (0, _utils.seekStringToSeconds)(window.location.href);
+	    if (seekTime !== 0) {
+	      this.seekSeconds(seekTime);
+	    }
+	  };
+
+	  Flash.prototype.play = function play() {
+	    if (this.currentState === 'PAUSED' || this.currentState === 'PLAYING_BUFFERING') {
+	      this.currentState = "PLAYING";
+	      this.el.playerResume();
+	      this.trigger(_events2.default.PLAYBACK_PLAY, this.name);
+	    } else if (this.currentState !== 'PLAYING') {
+	      this.firstPlay();
+	      this.trigger(_events2.default.PLAYBACK_PLAY, this.name);
+	    }
+	  };
+
+	  Flash.prototype.volume = function volume(value) {
+	    var _this4 = this;
+
+	    if (this.isReady) {
+	      this.el.playerVolume(value);
+	    } else {
+	      this.listenToOnce(this, _events2.default.PLAYBACK_BUFFERFULL, function () {
+	        return _this4.volume(value);
+	      });
+	    }
+	  };
+
+	  Flash.prototype.pause = function pause() {
+	    this.currentState = "PAUSED";
+	    this.el.playerPause();
+	    this.trigger(_events2.default.PLAYBACK_PAUSE, this.name);
+	  };
+
+	  Flash.prototype.stop = function stop() {
+	    this.el.playerStop();
+	    this.trigger(_events2.default.PLAYBACK_STOP);
+	    this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: 0, total: 0 }, this.name);
+	  };
+
+	  Flash.prototype.isPlaying = function isPlaying() {
+	    return !!(this.isReady && this.currentState.indexOf("PLAYING") > -1);
+	  };
+
+	  Flash.prototype.getDuration = function getDuration() {
+	    return this.el.getDuration();
+	  };
+
+	  Flash.prototype.seekPercentage = function seekPercentage(percentage) {
+	    var _this5 = this;
+
+	    if (this.el.getDuration() > 0) {
+	      var seekSeconds = this.el.getDuration() * (percentage / 100);
+	      this.seek(seekSeconds);
+	    } else {
+	      this.listenToOnce(this, _events2.default.PLAYBACK_BUFFERFULL, function () {
+	        return _this5.seekPercentage(percentage);
+	      });
+	    }
+	  };
+
+	  Flash.prototype.seek = function seek(time) {
+	    var _this6 = this;
+
+	    if (this.isReady && this.el.playerSeek) {
+	      this.el.playerSeek(time);
+	      this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: time, total: this.el.getDuration() }, this.name);
+	      if (this.currentState === "PAUSED") {
+	        this.el.playerPause();
+	      }
+	    } else {
+	      this.listenToOnce(this, _events2.default.PLAYBACK_BUFFERFULL, function () {
+	        return _this6.seek(time);
+	      });
+	    }
+	  };
+
+	  Flash.prototype.destroy = function destroy() {
+	    clearInterval(this.bootstrapId);
+	    _BaseFlashPlayback.prototype.stopListening.call(this);
+	    this.$el.remove();
+	  };
+
+	  _createClass(Flash, [{
 	    key: 'isReady',
 	    get: function get() {
 	      return this.isReadyState;
@@ -12232,52 +11926,49 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function BaseFlashPlayback() {
 	    _classCallCheck(this, BaseFlashPlayback);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(BaseFlashPlayback).apply(this, arguments));
+	    return _possibleConstructorReturn(this, _Playback.apply(this, arguments));
 	  }
 
+	  BaseFlashPlayback.prototype.setElement = function setElement(element) {
+	    this.$el = element;
+	    this.el = element[0];
+	  };
+
+	  BaseFlashPlayback.prototype.setupFirefox = function setupFirefox() {
+	    var $el = this.$('embed');
+	    $el.attr('data-flash-playback', this.name);
+	    $el.addClass(this.attributes.class);
+	    this.setElement($el);
+	  };
+
+	  BaseFlashPlayback.prototype.render = function render() {
+	    this.$el.html(this.template({
+	      cid: this.cid,
+	      swfPath: this.swfPath,
+	      baseUrl: this.baseUrl,
+	      playbackId: this.uniqueId,
+	      wmode: this.wmode,
+	      callbackName: 'window.Clappr.flashlsCallbacks.' + this.cid }));
+
+	    if (_browser2.default.isIE) {
+	      this.$('embed').remove();
+
+	      if (_browser2.default.isLegacyIE) {
+	        this.$el.attr('classid', IE_CLASSID);
+	      }
+	    }
+
+	    if (_browser2.default.isFirefox) {
+	      this.setupFirefox();
+	    }
+
+	    this.el.id = this.cid;
+	    this.$el.append(_styler2.default.getStyleFor(_flash4.default));
+
+	    return this;
+	  };
+
 	  _createClass(BaseFlashPlayback, [{
-	    key: 'setElement',
-	    value: function setElement(element) {
-	      this.$el = element;
-	      this.el = element[0];
-	    }
-	  }, {
-	    key: 'setupFirefox',
-	    value: function setupFirefox() {
-	      var $el = this.$('embed');
-	      $el.attr('data-flash-playback', this.name);
-	      $el.addClass(this.attributes.class);
-	      this.setElement($el);
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      this.$el.html(this.template({
-	        cid: this.cid,
-	        swfPath: this.swfPath,
-	        baseUrl: this.baseUrl,
-	        playbackId: this.uniqueId,
-	        wmode: this.wmode,
-	        callbackName: 'window.Clappr.flashlsCallbacks.' + this.cid }));
-
-	      if (_browser2.default.isIE) {
-	        this.$('embed').remove();
-
-	        if (_browser2.default.isLegacyIE) {
-	          this.$el.attr('classid', IE_CLASSID);
-	        }
-	      }
-
-	      if (_browser2.default.isFirefox) {
-	        this.setupFirefox();
-	      }
-
-	      this.el.id = this.cid;
-	      this.$el.append(_styler2.default.getStyleFor(_flash4.default));
-
-	      return this;
-	    }
-	  }, {
 	    key: 'tagName',
 	    get: function get() {
 	      return 'object';
@@ -12400,22 +12091,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function HTML5Audio() {
 	    _classCallCheck(this, HTML5Audio);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(HTML5Audio).apply(this, arguments));
+	    return _possibleConstructorReturn(this, _HTML5Video.apply(this, arguments));
 	  }
 
+	  HTML5Audio.prototype.updateSettings = function updateSettings() {
+	    this.settings.left = ["playpause", "position", "duration"];
+	    this.settings.seekEnabled = this.isSeekEnabled();
+	    this.trigger(_events2.default.PLAYBACK_SETTINGSUPDATE);
+	  };
+
+	  HTML5Audio.prototype.getPlaybackType = function getPlaybackType() {
+	    return _playback2.default.AOD;
+	  };
+
 	  _createClass(HTML5Audio, [{
-	    key: 'updateSettings',
-	    value: function updateSettings() {
-	      this.settings.left = ["playpause", "position", "duration"];
-	      this.settings.seekEnabled = this.isSeekEnabled();
-	      this.trigger(_events2.default.PLAYBACK_SETTINGSUPDATE);
-	    }
-	  }, {
-	    key: 'getPlaybackType',
-	    value: function getPlaybackType() {
-	      return _playback2.default.AOD;
-	    }
-	  }, {
 	    key: 'name',
 	    get: function get() {
 	      return 'html5_audio';
@@ -12461,8 +12150,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-
-	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -12577,7 +12264,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function FlasHLS(options) {
 	    _classCallCheck(this, FlasHLS);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(FlasHLS).call(this, options));
+	    var _this = _possibleConstructorReturn(this, _BaseFlashPlayback.call(this, options));
 
 	    _this.src = options.src;
 	    _this.baseUrl = options.baseUrl;
@@ -12598,713 +12285,639 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return _this;
 	  }
 
-	  _createClass(FlasHLS, [{
-	    key: 'initHlsParameters',
-	    value: function initHlsParameters(options) {
-	      this.autoStartLoad = options.autoStartLoad === undefined ? true : options.autoStartLoad;
-	      this.capLevelToStage = options.capLevelToStage === undefined ? false : options.capLevelToStage;
-	      this.maxLevelCappingMode = options.maxLevelCappingMode === undefined ? "downscale" : options.maxLevelCappingMode;
-	      this.minBufferLength = options.minBufferLength === undefined ? -1 : options.minBufferLength;
-	      this.minBufferLengthCapping = options.minBufferLengthCapping === undefined ? -1 : options.minBufferLengthCapping;
-	      this.maxBufferLength = options.maxBufferLength === undefined ? 120 : options.maxBufferLength;
-	      this.maxBackBufferLength = options.maxBackBufferLength === undefined ? 30 : options.maxBackBufferLength;
-	      this.lowBufferLength = options.lowBufferLength === undefined ? 3 : options.lowBufferLength;
-	      this.mediaTimePeriod = options.mediaTimePeriod === undefined ? 100 : options.mediaTimePeriod;
-	      this.fpsDroppedMonitoringPeriod = options.fpsDroppedMonitoringPeriod === undefined ? 5000 : options.fpsDroppedMonitoringPeriod;
-	      this.fpsDroppedMonitoringThreshold = options.fpsDroppedMonitoringThreshold === undefined ? 0.2 : options.fpsDroppedMonitoringThreshold;
-	      this.capLevelonFPSDrop = options.capLevelonFPSDrop === undefined ? false : options.capLevelonFPSDrop;
-	      this.smoothAutoSwitchonFPSDrop = options.smoothAutoSwitchonFPSDrop === undefined ? this.capLevelonFPSDrop : options.smoothAutoSwitchonFPSDrop;
-	      this.switchDownOnLevelError = options.switchDownOnLevelError === undefined ? true : options.switchDownOnLevelError;
-	      this.seekMode = options.seekMode === undefined ? "ACCURATE" : options.seekMode;
-	      this.keyLoadMaxRetry = options.keyLoadMaxRetry === undefined ? 3 : options.keyLoadMaxRetry;
-	      this.keyLoadMaxRetryTimeout = options.keyLoadMaxRetryTimeout === undefined ? 64000 : options.keyLoadMaxRetryTimeout;
-	      this.fragmentLoadMaxRetry = options.fragmentLoadMaxRetry === undefined ? 3 : options.fragmentLoadMaxRetry;
-	      this.fragmentLoadMaxRetryTimeout = options.fragmentLoadMaxRetryTimeout === undefined ? 4000 : options.fragmentLoadMaxRetryTimeout;
-	      this.fragmentLoadSkipAfterMaxRetry = options.fragmentLoadSkipAfterMaxRetry === undefined ? true : options.fragmentLoadSkipAfterMaxRetry;
-	      this.maxSkippedFragments = options.maxSkippedFragments === undefined ? 5 : options.maxSkippedFragments;
-	      this.flushLiveURLCache = options.flushLiveURLCache === undefined ? false : options.flushLiveURLCache;
-	      this.initialLiveManifestSize = options.initialLiveManifestSize === undefined ? 1 : options.initialLiveManifestSize;
-	      this.manifestLoadMaxRetry = options.manifestLoadMaxRetry === undefined ? 3 : options.manifestLoadMaxRetry;
-	      this.manifestLoadMaxRetryTimeout = options.manifestLoadMaxRetryTimeout === undefined ? 64000 : options.manifestLoadMaxRetryTimeout;
-	      this.manifestRedundantLoadmaxRetry = options.manifestRedundantLoadmaxRetry === undefined ? 3 : options.manifestRedundantLoadmaxRetry;
-	      this.startFromBitrate = options.startFromBitrate === undefined ? -1 : options.startFromBitrate;
-	      this.startFromLevel = options.startFromLevel === undefined ? -1 : options.startFromLevel;
-	      this.autoStartMaxDuration = options.autoStartMaxDuration === undefined ? -1 : options.autoStartMaxDuration;
-	      this.seekFromLevel = options.seekFromLevel === undefined ? -1 : options.seekFromLevel;
-	      this.useHardwareVideoDecoder = options.useHardwareVideoDecoder === undefined ? false : options.useHardwareVideoDecoder;
-	      this.hlsLogEnabled = options.hlsLogEnabled === undefined ? true : options.hlsLogEnabled;
-	      this.logDebug = options.logDebug === undefined ? false : options.logDebug;
-	      this.logDebug2 = options.logDebug2 === undefined ? false : options.logDebug2;
-	      this.logWarn = options.logWarn === undefined ? true : options.logWarn;
-	      this.logError = options.logError === undefined ? true : options.logError;
-	      this.hlsMinimumDvrSize = options.hlsMinimumDvrSize === undefined ? 60 : options.hlsMinimumDvrSize;
-	    }
-	  }, {
-	    key: 'addListeners',
-	    value: function addListeners() {
-	      var _this2 = this;
+	  FlasHLS.prototype.initHlsParameters = function initHlsParameters(options) {
+	    this.autoStartLoad = options.autoStartLoad === undefined ? true : options.autoStartLoad;
+	    this.capLevelToStage = options.capLevelToStage === undefined ? false : options.capLevelToStage;
+	    this.maxLevelCappingMode = options.maxLevelCappingMode === undefined ? "downscale" : options.maxLevelCappingMode;
+	    this.minBufferLength = options.minBufferLength === undefined ? -1 : options.minBufferLength;
+	    this.minBufferLengthCapping = options.minBufferLengthCapping === undefined ? -1 : options.minBufferLengthCapping;
+	    this.maxBufferLength = options.maxBufferLength === undefined ? 120 : options.maxBufferLength;
+	    this.maxBackBufferLength = options.maxBackBufferLength === undefined ? 30 : options.maxBackBufferLength;
+	    this.lowBufferLength = options.lowBufferLength === undefined ? 3 : options.lowBufferLength;
+	    this.mediaTimePeriod = options.mediaTimePeriod === undefined ? 100 : options.mediaTimePeriod;
+	    this.fpsDroppedMonitoringPeriod = options.fpsDroppedMonitoringPeriod === undefined ? 5000 : options.fpsDroppedMonitoringPeriod;
+	    this.fpsDroppedMonitoringThreshold = options.fpsDroppedMonitoringThreshold === undefined ? 0.2 : options.fpsDroppedMonitoringThreshold;
+	    this.capLevelonFPSDrop = options.capLevelonFPSDrop === undefined ? false : options.capLevelonFPSDrop;
+	    this.smoothAutoSwitchonFPSDrop = options.smoothAutoSwitchonFPSDrop === undefined ? this.capLevelonFPSDrop : options.smoothAutoSwitchonFPSDrop;
+	    this.switchDownOnLevelError = options.switchDownOnLevelError === undefined ? true : options.switchDownOnLevelError;
+	    this.seekMode = options.seekMode === undefined ? "ACCURATE" : options.seekMode;
+	    this.keyLoadMaxRetry = options.keyLoadMaxRetry === undefined ? 3 : options.keyLoadMaxRetry;
+	    this.keyLoadMaxRetryTimeout = options.keyLoadMaxRetryTimeout === undefined ? 64000 : options.keyLoadMaxRetryTimeout;
+	    this.fragmentLoadMaxRetry = options.fragmentLoadMaxRetry === undefined ? 3 : options.fragmentLoadMaxRetry;
+	    this.fragmentLoadMaxRetryTimeout = options.fragmentLoadMaxRetryTimeout === undefined ? 4000 : options.fragmentLoadMaxRetryTimeout;
+	    this.fragmentLoadSkipAfterMaxRetry = options.fragmentLoadSkipAfterMaxRetry === undefined ? true : options.fragmentLoadSkipAfterMaxRetry;
+	    this.maxSkippedFragments = options.maxSkippedFragments === undefined ? 5 : options.maxSkippedFragments;
+	    this.flushLiveURLCache = options.flushLiveURLCache === undefined ? false : options.flushLiveURLCache;
+	    this.initialLiveManifestSize = options.initialLiveManifestSize === undefined ? 1 : options.initialLiveManifestSize;
+	    this.manifestLoadMaxRetry = options.manifestLoadMaxRetry === undefined ? 3 : options.manifestLoadMaxRetry;
+	    this.manifestLoadMaxRetryTimeout = options.manifestLoadMaxRetryTimeout === undefined ? 64000 : options.manifestLoadMaxRetryTimeout;
+	    this.manifestRedundantLoadmaxRetry = options.manifestRedundantLoadmaxRetry === undefined ? 3 : options.manifestRedundantLoadmaxRetry;
+	    this.startFromBitrate = options.startFromBitrate === undefined ? -1 : options.startFromBitrate;
+	    this.startFromLevel = options.startFromLevel === undefined ? -1 : options.startFromLevel;
+	    this.autoStartMaxDuration = options.autoStartMaxDuration === undefined ? -1 : options.autoStartMaxDuration;
+	    this.seekFromLevel = options.seekFromLevel === undefined ? -1 : options.seekFromLevel;
+	    this.useHardwareVideoDecoder = options.useHardwareVideoDecoder === undefined ? false : options.useHardwareVideoDecoder;
+	    this.hlsLogEnabled = options.hlsLogEnabled === undefined ? true : options.hlsLogEnabled;
+	    this.logDebug = options.logDebug === undefined ? false : options.logDebug;
+	    this.logDebug2 = options.logDebug2 === undefined ? false : options.logDebug2;
+	    this.logWarn = options.logWarn === undefined ? true : options.logWarn;
+	    this.logError = options.logError === undefined ? true : options.logError;
+	    this.hlsMinimumDvrSize = options.hlsMinimumDvrSize === undefined ? 60 : options.hlsMinimumDvrSize;
+	  };
 
-	      _mediator2.default.on(this.cid + ':flashready', function () {
-	        return _this2.bootstrap();
-	      });
-	      _mediator2.default.on(this.cid + ':timeupdate', function (timeMetrics) {
-	        return _this2.updateTime(timeMetrics);
-	      });
-	      _mediator2.default.on(this.cid + ':playbackstate', function (state) {
-	        return _this2.setPlaybackState(state);
-	      });
-	      _mediator2.default.on(this.cid + ':levelchanged', function (level) {
-	        return _this2.levelChanged(level);
-	      });
-	      _mediator2.default.on(this.cid + ':error', function (code, url, message) {
-	        return _this2.flashPlaybackError(code, url, message);
-	      });
-	      _mediator2.default.on(this.cid + ':fragmentloaded', function (loadmetrics) {
-	        return _this2.onFragmentLoaded(loadmetrics);
-	      });
-	      _mediator2.default.once(this.cid + ':manifestloaded', function (duration, loadmetrics) {
-	        return _this2.manifestLoaded(duration, loadmetrics);
-	      });
-	    }
-	  }, {
-	    key: 'stopListening',
-	    value: function stopListening() {
-	      _get(Object.getPrototypeOf(FlasHLS.prototype), 'stopListening', this).call(this);
-	      _mediator2.default.off(this.cid + ':flashready');
-	      _mediator2.default.off(this.cid + ':timeupdate');
-	      _mediator2.default.off(this.cid + ':playbackstate');
-	      _mediator2.default.off(this.cid + ':levelchanged');
-	      _mediator2.default.off(this.cid + ':playbackerror');
-	      _mediator2.default.off(this.cid + ':fragmentloaded');
-	      _mediator2.default.off(this.cid + ':manifestloaded');
-	    }
-	  }, {
-	    key: 'bootstrap',
-	    value: function bootstrap() {
-	      var _this3 = this;
+	  FlasHLS.prototype.addListeners = function addListeners() {
+	    var _this2 = this;
 
-	      if (this.el.playerLoad) {
-	        this.el.width = "100%";
-	        this.el.height = "100%";
-	        this.isReadyState = true;
-	        this.srcLoaded = false;
-	        this.currentState = "IDLE";
-	        this.setFlashSettings();
-	        this.updatePlaybackType();
-	        if (this.autoPlay || this._shouldPlayOnBootstrap) {
-	          this.play();
-	        }
-	        this.trigger(_events2.default.PLAYBACK_READY, this.name);
-	      } else {
-	        this._bootstrapAttempts = this._bootstrapAttempts || 0;
-	        if (++this._bootstrapAttempts <= MAX_ATTEMPTS) {
-	          setTimeout(function () {
-	            return _this3.bootstrap();
-	          }, 50);
-	        } else {
-	          this.trigger(_events2.default.PLAYBACK_ERROR, { message: "Max number of attempts reached" }, this.name);
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'setFlashSettings',
-	    value: function setFlashSettings() {
-	      this.el.playerSetAutoStartLoad(this.autoStartLoad);
-	      this.el.playerSetCapLevelToStage(this.capLevelToStage);
-	      this.el.playerSetMaxLevelCappingMode(this.maxLevelCappingMode);
-	      this.el.playerSetMinBufferLength(this.minBufferLength);
-	      this.el.playerSetMinBufferLengthCapping(this.minBufferLengthCapping);
-	      this.el.playerSetMaxBufferLength(this.maxBufferLength);
-	      this.el.playerSetMaxBackBufferLength(this.maxBackBufferLength);
-	      this.el.playerSetLowBufferLength(this.lowBufferLength);
-	      this.el.playerSetMediaTimePeriod(this.mediaTimePeriod);
-	      this.el.playerSetFpsDroppedMonitoringPeriod(this.fpsDroppedMonitoringPeriod);
-	      this.el.playerSetFpsDroppedMonitoringThreshold(this.fpsDroppedMonitoringThreshold);
-	      this.el.playerSetCapLevelonFPSDrop(this.capLevelonFPSDrop);
-	      this.el.playerSetSmoothAutoSwitchonFPSDrop(this.smoothAutoSwitchonFPSDrop);
-	      this.el.playerSetSwitchDownOnLevelError(this.switchDownOnLevelError);
-	      this.el.playerSetSeekMode(this.seekMode);
-	      this.el.playerSetKeyLoadMaxRetry(this.keyLoadMaxRetry);
-	      this.el.playerSetKeyLoadMaxRetryTimeout(this.keyLoadMaxRetryTimeout);
-	      this.el.playerSetFragmentLoadMaxRetry(this.fragmentLoadMaxRetry);
-	      this.el.playerSetFragmentLoadMaxRetryTimeout(this.fragmentLoadMaxRetryTimeout);
-	      this.el.playerSetFragmentLoadSkipAfterMaxRetry(this.fragmentLoadSkipAfterMaxRetry);
-	      this.el.playerSetMaxSkippedFragments(this.maxSkippedFragments);
-	      this.el.playerSetFlushLiveURLCache(this.flushLiveURLCache);
-	      this.el.playerSetInitialLiveManifestSize(this.initialLiveManifestSize);
-	      this.el.playerSetManifestLoadMaxRetry(this.manifestLoadMaxRetry);
-	      this.el.playerSetManifestLoadMaxRetryTimeout(this.manifestLoadMaxRetryTimeout);
-	      this.el.playerSetManifestRedundantLoadmaxRetry(this.manifestRedundantLoadmaxRetry);
-	      this.el.playerSetStartFromBitrate(this.startFromBitrate);
-	      this.el.playerSetStartFromLevel(this.startFromLevel);
-	      this.el.playerSetAutoStartMaxDuration(this.autoStartMaxDuration);
-	      this.el.playerSetSeekFromLevel(this.seekFromLevel);
-	      this.el.playerSetUseHardwareVideoDecoder(this.useHardwareVideoDecoder);
-	      this.el.playerSetLogInfo(this.hlsLogEnabled);
-	      this.el.playerSetLogDebug(this.logDebug);
-	      this.el.playerSetLogDebug2(this.logDebug2);
-	      this.el.playerSetLogWarn(this.logWarn);
-	      this.el.playerSetLogError(this.logError);
-	    }
-	  }, {
-	    key: 'setAutoStartLoad',
-	    value: function setAutoStartLoad(autoStartLoad) {
-	      this.autoStartLoad = autoStartLoad;
-	      this.el.playerSetAutoStartLoad(this.autoStartLoad);
-	    }
-	  }, {
-	    key: 'setCapLevelToStage',
-	    value: function setCapLevelToStage(capLevelToStage) {
-	      this.capLevelToStage = capLevelToStage;
-	      this.el.playerSetCapLevelToStage(this.capLevelToStage);
-	    }
-	  }, {
-	    key: 'setMaxLevelCappingMode',
-	    value: function setMaxLevelCappingMode(maxLevelCappingMode) {
-	      this.maxLevelCappingMode = maxLevelCappingMode;
-	      this.el.playerSetMaxLevelCappingMode(this.maxLevelCappingMode);
-	    }
-	  }, {
-	    key: 'setSetMinBufferLength',
-	    value: function setSetMinBufferLength(minBufferLength) {
-	      this.minBufferLength = minBufferLength;
-	      this.el.playerSetMinBufferLength(this.minBufferLength);
-	    }
-	  }, {
-	    key: 'setMinBufferLengthCapping',
-	    value: function setMinBufferLengthCapping(minBufferLengthCapping) {
-	      this.minBufferLengthCapping = minBufferLengthCapping;
-	      this.el.playerSetMinBufferLengthCapping(this.minBufferLengthCapping);
-	    }
-	  }, {
-	    key: 'setMaxBufferLength',
-	    value: function setMaxBufferLength(maxBufferLength) {
-	      this.maxBufferLength = maxBufferLength;
-	      this.el.playerSetMaxBufferLength(this.maxBufferLength);
-	    }
-	  }, {
-	    key: 'setMaxBackBufferLength',
-	    value: function setMaxBackBufferLength(maxBackBufferLength) {
-	      this.maxBackBufferLength = maxBackBufferLength;
-	      this.el.playerSetMaxBackBufferLength(this.maxBackBufferLength);
-	    }
-	  }, {
-	    key: 'setLowBufferLength',
-	    value: function setLowBufferLength(lowBufferLength) {
-	      this.lowBufferLength = lowBufferLength;
-	      this.el.playerSetLowBufferLength(this.lowBufferLength);
-	    }
-	  }, {
-	    key: 'setMediaTimePeriod',
-	    value: function setMediaTimePeriod(mediaTimePeriod) {
-	      this.mediaTimePeriod = mediaTimePeriod;
-	      this.el.playerSetMediaTimePeriod(this.mediaTimePeriod);
-	    }
-	  }, {
-	    key: 'setFpsDroppedMonitoringPeriod',
-	    value: function setFpsDroppedMonitoringPeriod(fpsDroppedMonitoringPeriod) {
-	      this.fpsDroppedMonitoringPeriod = fpsDroppedMonitoringPeriod;
-	      this.el.playerSetFpsDroppedMonitoringPeriod(this.fpsDroppedMonitoringPeriod);
-	    }
-	  }, {
-	    key: 'setFpsDroppedMonitoringThreshold',
-	    value: function setFpsDroppedMonitoringThreshold(fpsDroppedMonitoringThreshold) {
-	      this.fpsDroppedMonitoringThreshold = fpsDroppedMonitoringThreshold;
-	      this.el.playerSetFpsDroppedMonitoringThreshold(this.fpsDroppedMonitoringThreshold);
-	    }
-	  }, {
-	    key: 'setCapLevelonFPSDrop',
-	    value: function setCapLevelonFPSDrop(capLevelonFPSDrop) {
-	      this.capLevelonFPSDrop = capLevelonFPSDrop;
-	      this.el.playerSetCapLevelonFPSDrop(this.capLevelonFPSDrop);
-	    }
-	  }, {
-	    key: 'setSmoothAutoSwitchonFPSDrop',
-	    value: function setSmoothAutoSwitchonFPSDrop(smoothAutoSwitchonFPSDrop) {
-	      this.smoothAutoSwitchonFPSDrop = smoothAutoSwitchonFPSDrop;
-	      this.el.playerSetSmoothAutoSwitchonFPSDrop(this.smoothAutoSwitchonFPSDrop);
-	    }
-	  }, {
-	    key: 'setSwitchDownOnLevelError',
-	    value: function setSwitchDownOnLevelError(switchDownOnLevelError) {
-	      this.switchDownOnLevelError = switchDownOnLevelError;
-	      this.el.playerSetSwitchDownOnLevelError(this.switchDownOnLevelError);
-	    }
-	  }, {
-	    key: 'setSeekMode',
-	    value: function setSeekMode(seekMode) {
-	      this.seekMode = seekMode;
-	      this.el.playerSetSeekMode(this.seekMode);
-	    }
-	  }, {
-	    key: 'setKeyLoadMaxRetry',
-	    value: function setKeyLoadMaxRetry(keyLoadMaxRetry) {
-	      this.keyLoadMaxRetry = keyLoadMaxRetry;
-	      this.el.playerSetKeyLoadMaxRetry(this.keyLoadMaxRetry);
-	    }
-	  }, {
-	    key: 'setKeyLoadMaxRetryTimeout',
-	    value: function setKeyLoadMaxRetryTimeout(keyLoadMaxRetryTimeout) {
-	      this.keyLoadMaxRetryTimeout = keyLoadMaxRetryTimeout;
-	      this.el.playerSetKeyLoadMaxRetryTimeout(this.keyLoadMaxRetryTimeout);
-	    }
-	  }, {
-	    key: 'setFragmentLoadMaxRetry',
-	    value: function setFragmentLoadMaxRetry(fragmentLoadMaxRetry) {
-	      this.fragmentLoadMaxRetry = fragmentLoadMaxRetry;
-	      this.el.playerSetFragmentLoadMaxRetry(this.fragmentLoadMaxRetry);
-	    }
-	  }, {
-	    key: 'setFragmentLoadMaxRetryTimeout',
-	    value: function setFragmentLoadMaxRetryTimeout(fragmentLoadMaxRetryTimeout) {
-	      this.fragmentLoadMaxRetryTimeout = fragmentLoadMaxRetryTimeout;
-	      this.el.playerSetFragmentLoadMaxRetryTimeout(this.fragmentLoadMaxRetryTimeout);
-	    }
-	  }, {
-	    key: 'setFragmentLoadSkipAfterMaxRetry',
-	    value: function setFragmentLoadSkipAfterMaxRetry(fragmentLoadSkipAfterMaxRetry) {
-	      this.fragmentLoadSkipAfterMaxRetry = fragmentLoadSkipAfterMaxRetry;
-	      this.el.playerSetFragmentLoadSkipAfterMaxRetry(this.fragmentLoadSkipAfterMaxRetry);
-	    }
-	  }, {
-	    key: 'setMaxSkippedFragments',
-	    value: function setMaxSkippedFragments(maxSkippedFragments) {
-	      this.maxSkippedFragments = maxSkippedFragments;
-	      this.el.playerSetMaxSkippedFragments(this.maxSkippedFragments);
-	    }
-	  }, {
-	    key: 'setFlushLiveURLCache',
-	    value: function setFlushLiveURLCache(flushLiveURLCache) {
-	      this.flushLiveURLCache = flushLiveURLCache;
-	      this.el.playerSetFlushLiveURLCache(this.flushLiveURLCache);
-	    }
-	  }, {
-	    key: 'setInitialLiveManifestSize',
-	    value: function setInitialLiveManifestSize(initialLiveManifestSize) {
-	      this.initialLiveManifestSize = initialLiveManifestSize;
-	      this.el.playerSetInitialLiveManifestSize(this.initialLiveManifestSize);
-	    }
-	  }, {
-	    key: 'setManifestLoadMaxRetry',
-	    value: function setManifestLoadMaxRetry(manifestLoadMaxRetry) {
-	      this.manifestLoadMaxRetry = manifestLoadMaxRetry;
-	      this.el.playerSetManifestLoadMaxRetry(this.manifestLoadMaxRetry);
-	    }
-	  }, {
-	    key: 'setManifestLoadMaxRetryTimeout',
-	    value: function setManifestLoadMaxRetryTimeout(manifestLoadMaxRetryTimeout) {
-	      this.manifestLoadMaxRetryTimeout = manifestLoadMaxRetryTimeout;
-	      this.el.playerSetManifestLoadMaxRetryTimeout(this.manifestLoadMaxRetryTimeout);
-	    }
-	  }, {
-	    key: 'setManifestRedundantLoadmaxRetry',
-	    value: function setManifestRedundantLoadmaxRetry(manifestRedundantLoadmaxRetry) {
-	      this.manifestRedundantLoadmaxRetry = manifestRedundantLoadmaxRetry;
-	      this.el.playerSetManifestRedundantLoadmaxRetry(this.manifestRedundantLoadmaxRetry);
-	    }
-	  }, {
-	    key: 'setStartFromBitrate',
-	    value: function setStartFromBitrate(startFromBitrate) {
-	      this.startFromBitrate = startFromBitrate;
-	      this.el.playerSetStartFromBitrate(this.startFromBitrate);
-	    }
-	  }, {
-	    key: 'setStartFromLevel',
-	    value: function setStartFromLevel(startFromLevel) {
-	      this.startFromLevel = startFromLevel;
-	      this.el.playerSetStartFromLevel(this.startFromLevel);
-	    }
-	  }, {
-	    key: 'setAutoStartMaxDuration',
-	    value: function setAutoStartMaxDuration(autoStartMaxDuration) {
-	      this.autoStartMaxDuration = autoStartMaxDuration;
-	      this.el.playerSetAutoStartMaxDuration(this.autoStartMaxDuration);
-	    }
-	  }, {
-	    key: 'setSeekFromLevel',
-	    value: function setSeekFromLevel(seekFromLevel) {
-	      this.seekFromLevel = seekFromLevel;
-	      this.el.playerSetSeekFromLevel(this.seekFromLevel);
-	    }
-	  }, {
-	    key: 'setUseHardwareVideoDecoder',
-	    value: function setUseHardwareVideoDecoder(useHardwareVideoDecoder) {
-	      this.useHardwareVideoDecoder = useHardwareVideoDecoder;
-	      this.el.playerSetUseHardwareVideoDecoder(this.useHardwareVideoDecoder);
-	    }
-	  }, {
-	    key: 'setSetLogInfo',
-	    value: function setSetLogInfo(hlsLogEnabled) {
-	      this.hlsLogEnabled = hlsLogEnabled;
-	      this.el.playerSetLogInfo(this.hlsLogEnabled);
-	    }
-	  }, {
-	    key: 'setLogDebug',
-	    value: function setLogDebug(logDebug) {
-	      this.logDebug = logDebug;
-	      this.el.playerSetLogDebug(this.logDebug);
-	    }
-	  }, {
-	    key: 'setLogDebug2',
-	    value: function setLogDebug2(logDebug2) {
-	      this.logDebug2 = logDebug2;
-	      this.el.playerSetLogDebug2(this.logDebug2);
-	    }
-	  }, {
-	    key: 'setLogWarn',
-	    value: function setLogWarn(logWarn) {
-	      this.logWarn = logWarn;
-	      this.el.playerSetLogWarn(this.logWarn);
-	    }
-	  }, {
-	    key: 'setLogError',
-	    value: function setLogError(logError) {
-	      this.logError = logError;
-	      this.el.playerSetLogError(this.logError);
-	    }
-	  }, {
-	    key: 'levelChanged',
-	    value: function levelChanged(level) {
-	      var currentLevel = this.el.getLevels()[level];
-	      if (currentLevel) {
-	        this.highDefinition = currentLevel.height >= 720 || currentLevel.bitrate / 1000 >= 2000;
-	        this.trigger(_events2.default.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition);
-	        this.trigger(_events2.default.PLAYBACK_BITRATE, {
-	          height: currentLevel.height,
-	          width: currentLevel.width,
-	          bandwidth: currentLevel.bandwidth,
-	          bitrate: currentLevel.bitrate,
-	          level: level
-	        });
-	        this.trigger(_events2.default.PLAYBACK_LEVEL_SWITCH_END);
-	      }
-	    }
-	  }, {
-	    key: 'updateTime',
-	    value: function updateTime(timeMetrics) {
-	      if (this.currentState === 'IDLE') {
-	        return;
-	      }
+	    _mediator2.default.on(this.cid + ':flashready', function () {
+	      return _this2.bootstrap();
+	    });
+	    _mediator2.default.on(this.cid + ':timeupdate', function (timeMetrics) {
+	      return _this2.updateTime(timeMetrics);
+	    });
+	    _mediator2.default.on(this.cid + ':playbackstate', function (state) {
+	      return _this2.setPlaybackState(state);
+	    });
+	    _mediator2.default.on(this.cid + ':levelchanged', function (level) {
+	      return _this2.levelChanged(level);
+	    });
+	    _mediator2.default.on(this.cid + ':error', function (code, url, message) {
+	      return _this2.flashPlaybackError(code, url, message);
+	    });
+	    _mediator2.default.on(this.cid + ':fragmentloaded', function (loadmetrics) {
+	      return _this2.onFragmentLoaded(loadmetrics);
+	    });
+	    _mediator2.default.once(this.cid + ':manifestloaded', function (duration, loadmetrics) {
+	      return _this2.manifestLoaded(duration, loadmetrics);
+	    });
+	  };
 
-	      var duration = this.normalizeDuration(timeMetrics.duration);
-	      var position = Math.min(Math.max(timeMetrics.position, 0), duration);
-	      var previousDVRStatus = this.dvrEnabled;
-	      var livePlayback = this.playbackType === _playback2.default.LIVE;
-	      this.dvrEnabled = livePlayback && duration > this.hlsMinimumDvrSize;
+	  FlasHLS.prototype.stopListening = function stopListening() {
+	    _BaseFlashPlayback.prototype.stopListening.call(this);
+	    _mediator2.default.off(this.cid + ':flashready');
+	    _mediator2.default.off(this.cid + ':timeupdate');
+	    _mediator2.default.off(this.cid + ':playbackstate');
+	    _mediator2.default.off(this.cid + ':levelchanged');
+	    _mediator2.default.off(this.cid + ':playbackerror');
+	    _mediator2.default.off(this.cid + ':fragmentloaded');
+	    _mediator2.default.off(this.cid + ':manifestloaded');
+	  };
 
-	      if (duration === 100 || livePlayback === undefined) {
-	        return;
-	      }
+	  FlasHLS.prototype.bootstrap = function bootstrap() {
+	    var _this3 = this;
 
-	      if (this.dvrEnabled !== previousDVRStatus) {
-	        this.updateSettings();
-	        this.trigger(_events2.default.PLAYBACK_SETTINGSUPDATE, this.name);
-	      }
-
-	      if (livePlayback && (!this.dvrEnabled || !this.dvrInUse)) {
-	        position = duration;
-	      }
-
-	      this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: position, total: duration }, this.name);
-	    }
-	  }, {
-	    key: 'play',
-	    value: function play() {
-	      if (this.currentState === 'PAUSED') {
-	        this.el.playerResume();
-	      } else if (!this.srcLoaded && this.currentState !== "PLAYING") {
-	        this.firstPlay();
-	      } else {
-	        this.el.playerPlay();
-	      }
-	    }
-	  }, {
-	    key: 'getPlaybackType',
-	    value: function getPlaybackType() {
-	      return this.playbackType ? this.playbackType : null;
-	    }
-	  }, {
-	    key: 'getCurrentLevelIndex',
-	    value: function getCurrentLevelIndex() {
-	      return this.currentLevel;
-	    }
-	  }, {
-	    key: 'getCurrentLevel',
-	    value: function getCurrentLevel() {
-	      return this.levels[this.currentLevel];
-	    }
-	  }, {
-	    key: 'getCurrentBitrate',
-	    value: function getCurrentBitrate() {
-	      return this.levels[this.currentLevel].bitrate;
-	    }
-	  }, {
-	    key: 'setCurrentLevel',
-	    value: function setCurrentLevel(level) {
-	      this.currentLevel = level;
-	    }
-	  }, {
-	    key: 'isHighDefinitionInUse',
-	    value: function isHighDefinitionInUse() {
-	      return this.highDefinition;
-	    }
-	  }, {
-	    key: 'getLevels',
-	    value: function getLevels() {
-	      return this.levels;
-	    }
-	  }, {
-	    key: 'setPlaybackState',
-	    value: function setPlaybackState(state) {
-	      if (["PLAYING_BUFFERING", "PAUSED_BUFFERING"].indexOf(state) >= 0) {
-	        this.bufferingState = true;
-	        this.trigger(_events2.default.PLAYBACK_BUFFERING, this.name);
-	        this.updateCurrentState(state);
-	      } else if (["PLAYING", "PAUSED"].indexOf(state) >= 0) {
-	        if (["PLAYING_BUFFERING", "PAUSED_BUFFERING", "IDLE"].indexOf(this.currentState) >= 0) {
-	          this.bufferingState = false;
-	          this.trigger(_events2.default.PLAYBACK_BUFFERFULL, this.name);
-	        }
-	        this.updateCurrentState(state);
-	      } else if (state === "IDLE") {
-	        this.srcLoaded = false;
-	        if (this.loop && ["PLAYING_BUFFERING", "PLAYING"].indexOf(this.currentState) >= 0) {
-	          this.play();
-	          this.seek(0);
-	        } else {
-	          this.updateCurrentState(state);
-	          this.hasEnded = true;
-	          this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: 0, total: this.el.getDuration() }, this.name);
-	          this.trigger(_events2.default.PLAYBACK_ENDED, this.name);
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'updateCurrentState',
-	    value: function updateCurrentState(state) {
-	      this.currentState = state;
-	      if (state !== "IDLE") {
-	        this.hasEnded = false;
-	      }
-	      this.updatePlaybackType();
-	      if (state === "PLAYING") {
-	        this.trigger(_events2.default.PLAYBACK_PLAY, this.name);
-	      } else if (state === "PAUSED") {
-	        this.trigger(_events2.default.PLAYBACK_PAUSE, this.name);
-	      }
-	    }
-	  }, {
-	    key: 'updatePlaybackType',
-	    value: function updatePlaybackType() {
-	      this.playbackType = this.el.getType();
-	      if (this.playbackType) {
-	        this.playbackType = this.playbackType.toLowerCase();
-	        if (this.playbackType === _playback2.default.VOD) {
-	          this.startReportingProgress();
-	        } else {
-	          this.stopReportingProgress();
-	        }
-	      }
-	      this.trigger(_events2.default.PLAYBACK_PLAYBACKSTATE, { type: this.playbackType });
-	    }
-	  }, {
-	    key: 'startReportingProgress',
-	    value: function startReportingProgress() {
-	      if (!this.reportingProgress) {
-	        this.reportingProgress = true;
-	      }
-	    }
-	  }, {
-	    key: 'stopReportingProgress',
-	    value: function stopReportingProgress() {
-	      this.reportingProgress = false;
-	    }
-	  }, {
-	    key: 'onFragmentLoaded',
-	    value: function onFragmentLoaded(loadmetrics) {
-	      this.trigger(_events2.default.PLAYBACK_FRAGMENT_LOADED, loadmetrics);
-	      if (this.reportingProgress && this.el.getPosition) {
-	        var buffered = this.el.getPosition() + this.el.getbufferLength();
-	        this.trigger(_events2.default.PLAYBACK_PROGRESS, {
-	          start: this.el.getPosition(),
-	          current: buffered,
-	          total: this.el.getDuration()
-	        });
-	      }
-	    }
-	  }, {
-	    key: 'firstPlay',
-	    value: function firstPlay() {
-	      var _this4 = this;
-
-	      if (this.el.playerLoad) {
-	        this.setFlashSettings(); //ensure flushLiveURLCache will work (#327)
-	        this.el.playerLoad(this.src);
-	        _mediator2.default.once(this.cid + ':manifestloaded', function () {
-	          return _this4.el.playerPlay();
-	        });
-	        this.srcLoaded = true;
-	      } else {
-	        this._shouldPlayOnBootstrap = true;
-	      }
-	    }
-	  }, {
-	    key: 'volume',
-	    value: function volume(value) {
-	      var _this5 = this;
-
-	      if (this.isReady) {
-	        this.el.playerVolume(value);
-	      } else {
-	        this.listenToOnce(this, _events2.default.PLAYBACK_BUFFERFULL, function () {
-	          return _this5.volume(value);
-	        });
-	      }
-	    }
-	  }, {
-	    key: 'pause',
-	    value: function pause() {
-	      if (this.playbackType !== _playback2.default.LIVE || this.dvrEnabled) {
-	        this.el.playerPause();
-	        if (this.playbackType === _playback2.default.LIVE && this.dvrEnabled) {
-	          this.updateDvr(true);
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'stop',
-	    value: function stop() {
+	    if (this.el.playerLoad) {
+	      this.el.width = "100%";
+	      this.el.height = "100%";
+	      this.isReadyState = true;
 	      this.srcLoaded = false;
-	      this.el.playerStop();
-	      this.trigger(_events2.default.PLAYBACK_STOP);
-	      this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: 0, total: 0 }, this.name);
-	    }
-	  }, {
-	    key: 'isPlaying',
-	    value: function isPlaying() {
-	      if (this.currentState) {
-	        return !!this.currentState.match(/playing/i);
+	      this.currentState = "IDLE";
+	      this.setFlashSettings();
+	      this.updatePlaybackType();
+	      if (this.autoPlay || this._shouldPlayOnBootstrap) {
+	        this.play();
 	      }
-	      return false;
-	    }
-	  }, {
-	    key: 'getDuration',
-	    value: function getDuration() {
-	      return this.normalizeDuration(this.el.getDuration());
-	    }
-	  }, {
-	    key: 'normalizeDuration',
-	    value: function normalizeDuration(duration) {
-	      if (this.playbackType === _playback2.default.LIVE) {
-	        // estimate 10 seconds of buffer time for live streams for seek positions
-	        duration = duration - 10;
-	      }
-	      return duration;
-	    }
-	  }, {
-	    key: 'seekPercentage',
-	    value: function seekPercentage(percentage) {
-	      var duration = this.el.getDuration();
-	      var time = 0;
-	      if (percentage > 0) {
-	        time = duration * percentage / 100;
-	      }
-	      this.seek(time);
-	    }
-	  }, {
-	    key: 'seek',
-	    value: function seek(time) {
-	      var duration = this.el.getDuration();
-	      if (this.playbackType === _playback2.default.LIVE) {
-	        // seek operations to a time within 5 seconds from live stream will position playhead back to live
-	        var dvrInUse = time >= 0 && duration - time > 5;
-	        if (!dvrInUse) {
-	          time = -1;
-	        }
-	        this.updateDvr(dvrInUse);
-	      }
-	      this.el.playerSeek(time);
-	      this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: time, total: duration }, this.name);
-	    }
-	  }, {
-	    key: 'updateDvr',
-	    value: function updateDvr(dvrInUse) {
-	      var previousDvrInUse = !!this.dvrInUse;
-	      this.dvrInUse = dvrInUse;
-	      if (this.dvrInUse !== previousDvrInUse) {
-	        this.updateSettings();
-	        this.trigger(_events2.default.PLAYBACK_DVR, this.dvrInUse);
-	        this.trigger(_events2.default.PLAYBACK_STATS_ADD, { 'dvr': this.dvrInUse });
-	      }
-	    }
-	  }, {
-	    key: 'flashPlaybackError',
-	    value: function flashPlaybackError(code, url, message) {
-	      this.trigger(_events2.default.PLAYBACK_ERROR, { code: code, url: url, message: message });
-	      this.trigger(_events2.default.PLAYBACK_STOP);
-	    }
-	  }, {
-	    key: 'manifestLoaded',
-	    value: function manifestLoaded(duration, loadmetrics) {
-	      var levels = this.el.getLevels();
-	      var levelsLength = levels.length;
-	      this._levels = [];
-
-	      for (var index = 0; index < levelsLength; index++) {
-	        this._levels.push({ id: index, label: levels[index].height + 'p' });
-	      }
-	      this.trigger(_events2.default.PLAYBACK_LEVELS_AVAILABLE, this._levels);
-	      this.trigger(_events2.default.PLAYBACK_LOADEDMETADATA, { duration: duration, data: loadmetrics });
-	    }
-	  }, {
-	    key: 'timeUpdate',
-	    value: function timeUpdate(time, duration) {
-	      this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: time, total: duration }, this.name);
-	    }
-	  }, {
-	    key: 'destroy',
-	    value: function destroy() {
-	      this.stopListening();
-	      this.$el.remove();
-	    }
-	  }, {
-	    key: 'updateSettings',
-	    value: function updateSettings() {
-	      this.settings = _clapprZepto2.default.extend({}, this.defaultSettings);
-	      if (this.playbackType === _playback2.default.VOD || this.dvrInUse) {
-	        this.settings.left = ["playpause", "position", "duration"];
-	        this.settings.seekEnabled = true;
-	      } else if (this.dvrEnabled) {
-	        this.settings.left = ["playpause"];
-	        this.settings.seekEnabled = true;
+	      this.trigger(_events2.default.PLAYBACK_READY, this.name);
+	    } else {
+	      this._bootstrapAttempts = this._bootstrapAttempts || 0;
+	      if (++this._bootstrapAttempts <= MAX_ATTEMPTS) {
+	        setTimeout(function () {
+	          return _this3.bootstrap();
+	        }, 50);
 	      } else {
-	        this.settings.seekEnabled = false;
+	        this.trigger(_events2.default.PLAYBACK_ERROR, { message: "Max number of attempts reached" }, this.name);
 	      }
 	    }
-	  }, {
-	    key: 'createCallbacks',
-	    value: function createCallbacks() {
-	      var _this6 = this;
+	  };
 
-	      if (!window.Clappr) {
-	        window.Clappr = {};
-	      }
-	      if (!window.Clappr.flashlsCallbacks) {
-	        window.Clappr.flashlsCallbacks = {};
-	      }
-	      this.flashlsEvents = new _flashls_events2.default(this.cid);
-	      window.Clappr.flashlsCallbacks[this.cid] = function (eventName, args) {
-	        _this6.flashlsEvents[eventName].apply(_this6.flashlsEvents, args);
-	      };
+	  FlasHLS.prototype.setFlashSettings = function setFlashSettings() {
+	    this.el.playerSetAutoStartLoad(this.autoStartLoad);
+	    this.el.playerSetCapLevelToStage(this.capLevelToStage);
+	    this.el.playerSetMaxLevelCappingMode(this.maxLevelCappingMode);
+	    this.el.playerSetMinBufferLength(this.minBufferLength);
+	    this.el.playerSetMinBufferLengthCapping(this.minBufferLengthCapping);
+	    this.el.playerSetMaxBufferLength(this.maxBufferLength);
+	    this.el.playerSetMaxBackBufferLength(this.maxBackBufferLength);
+	    this.el.playerSetLowBufferLength(this.lowBufferLength);
+	    this.el.playerSetMediaTimePeriod(this.mediaTimePeriod);
+	    this.el.playerSetFpsDroppedMonitoringPeriod(this.fpsDroppedMonitoringPeriod);
+	    this.el.playerSetFpsDroppedMonitoringThreshold(this.fpsDroppedMonitoringThreshold);
+	    this.el.playerSetCapLevelonFPSDrop(this.capLevelonFPSDrop);
+	    this.el.playerSetSmoothAutoSwitchonFPSDrop(this.smoothAutoSwitchonFPSDrop);
+	    this.el.playerSetSwitchDownOnLevelError(this.switchDownOnLevelError);
+	    this.el.playerSetSeekMode(this.seekMode);
+	    this.el.playerSetKeyLoadMaxRetry(this.keyLoadMaxRetry);
+	    this.el.playerSetKeyLoadMaxRetryTimeout(this.keyLoadMaxRetryTimeout);
+	    this.el.playerSetFragmentLoadMaxRetry(this.fragmentLoadMaxRetry);
+	    this.el.playerSetFragmentLoadMaxRetryTimeout(this.fragmentLoadMaxRetryTimeout);
+	    this.el.playerSetFragmentLoadSkipAfterMaxRetry(this.fragmentLoadSkipAfterMaxRetry);
+	    this.el.playerSetMaxSkippedFragments(this.maxSkippedFragments);
+	    this.el.playerSetFlushLiveURLCache(this.flushLiveURLCache);
+	    this.el.playerSetInitialLiveManifestSize(this.initialLiveManifestSize);
+	    this.el.playerSetManifestLoadMaxRetry(this.manifestLoadMaxRetry);
+	    this.el.playerSetManifestLoadMaxRetryTimeout(this.manifestLoadMaxRetryTimeout);
+	    this.el.playerSetManifestRedundantLoadmaxRetry(this.manifestRedundantLoadmaxRetry);
+	    this.el.playerSetStartFromBitrate(this.startFromBitrate);
+	    this.el.playerSetStartFromLevel(this.startFromLevel);
+	    this.el.playerSetAutoStartMaxDuration(this.autoStartMaxDuration);
+	    this.el.playerSetSeekFromLevel(this.seekFromLevel);
+	    this.el.playerSetUseHardwareVideoDecoder(this.useHardwareVideoDecoder);
+	    this.el.playerSetLogInfo(this.hlsLogEnabled);
+	    this.el.playerSetLogDebug(this.logDebug);
+	    this.el.playerSetLogDebug2(this.logDebug2);
+	    this.el.playerSetLogWarn(this.logWarn);
+	    this.el.playerSetLogError(this.logError);
+	  };
+
+	  FlasHLS.prototype.setAutoStartLoad = function setAutoStartLoad(autoStartLoad) {
+	    this.autoStartLoad = autoStartLoad;
+	    this.el.playerSetAutoStartLoad(this.autoStartLoad);
+	  };
+
+	  FlasHLS.prototype.setCapLevelToStage = function setCapLevelToStage(capLevelToStage) {
+	    this.capLevelToStage = capLevelToStage;
+	    this.el.playerSetCapLevelToStage(this.capLevelToStage);
+	  };
+
+	  FlasHLS.prototype.setMaxLevelCappingMode = function setMaxLevelCappingMode(maxLevelCappingMode) {
+	    this.maxLevelCappingMode = maxLevelCappingMode;
+	    this.el.playerSetMaxLevelCappingMode(this.maxLevelCappingMode);
+	  };
+
+	  FlasHLS.prototype.setSetMinBufferLength = function setSetMinBufferLength(minBufferLength) {
+	    this.minBufferLength = minBufferLength;
+	    this.el.playerSetMinBufferLength(this.minBufferLength);
+	  };
+
+	  FlasHLS.prototype.setMinBufferLengthCapping = function setMinBufferLengthCapping(minBufferLengthCapping) {
+	    this.minBufferLengthCapping = minBufferLengthCapping;
+	    this.el.playerSetMinBufferLengthCapping(this.minBufferLengthCapping);
+	  };
+
+	  FlasHLS.prototype.setMaxBufferLength = function setMaxBufferLength(maxBufferLength) {
+	    this.maxBufferLength = maxBufferLength;
+	    this.el.playerSetMaxBufferLength(this.maxBufferLength);
+	  };
+
+	  FlasHLS.prototype.setMaxBackBufferLength = function setMaxBackBufferLength(maxBackBufferLength) {
+	    this.maxBackBufferLength = maxBackBufferLength;
+	    this.el.playerSetMaxBackBufferLength(this.maxBackBufferLength);
+	  };
+
+	  FlasHLS.prototype.setLowBufferLength = function setLowBufferLength(lowBufferLength) {
+	    this.lowBufferLength = lowBufferLength;
+	    this.el.playerSetLowBufferLength(this.lowBufferLength);
+	  };
+
+	  FlasHLS.prototype.setMediaTimePeriod = function setMediaTimePeriod(mediaTimePeriod) {
+	    this.mediaTimePeriod = mediaTimePeriod;
+	    this.el.playerSetMediaTimePeriod(this.mediaTimePeriod);
+	  };
+
+	  FlasHLS.prototype.setFpsDroppedMonitoringPeriod = function setFpsDroppedMonitoringPeriod(fpsDroppedMonitoringPeriod) {
+	    this.fpsDroppedMonitoringPeriod = fpsDroppedMonitoringPeriod;
+	    this.el.playerSetFpsDroppedMonitoringPeriod(this.fpsDroppedMonitoringPeriod);
+	  };
+
+	  FlasHLS.prototype.setFpsDroppedMonitoringThreshold = function setFpsDroppedMonitoringThreshold(fpsDroppedMonitoringThreshold) {
+	    this.fpsDroppedMonitoringThreshold = fpsDroppedMonitoringThreshold;
+	    this.el.playerSetFpsDroppedMonitoringThreshold(this.fpsDroppedMonitoringThreshold);
+	  };
+
+	  FlasHLS.prototype.setCapLevelonFPSDrop = function setCapLevelonFPSDrop(capLevelonFPSDrop) {
+	    this.capLevelonFPSDrop = capLevelonFPSDrop;
+	    this.el.playerSetCapLevelonFPSDrop(this.capLevelonFPSDrop);
+	  };
+
+	  FlasHLS.prototype.setSmoothAutoSwitchonFPSDrop = function setSmoothAutoSwitchonFPSDrop(smoothAutoSwitchonFPSDrop) {
+	    this.smoothAutoSwitchonFPSDrop = smoothAutoSwitchonFPSDrop;
+	    this.el.playerSetSmoothAutoSwitchonFPSDrop(this.smoothAutoSwitchonFPSDrop);
+	  };
+
+	  FlasHLS.prototype.setSwitchDownOnLevelError = function setSwitchDownOnLevelError(switchDownOnLevelError) {
+	    this.switchDownOnLevelError = switchDownOnLevelError;
+	    this.el.playerSetSwitchDownOnLevelError(this.switchDownOnLevelError);
+	  };
+
+	  FlasHLS.prototype.setSeekMode = function setSeekMode(seekMode) {
+	    this.seekMode = seekMode;
+	    this.el.playerSetSeekMode(this.seekMode);
+	  };
+
+	  FlasHLS.prototype.setKeyLoadMaxRetry = function setKeyLoadMaxRetry(keyLoadMaxRetry) {
+	    this.keyLoadMaxRetry = keyLoadMaxRetry;
+	    this.el.playerSetKeyLoadMaxRetry(this.keyLoadMaxRetry);
+	  };
+
+	  FlasHLS.prototype.setKeyLoadMaxRetryTimeout = function setKeyLoadMaxRetryTimeout(keyLoadMaxRetryTimeout) {
+	    this.keyLoadMaxRetryTimeout = keyLoadMaxRetryTimeout;
+	    this.el.playerSetKeyLoadMaxRetryTimeout(this.keyLoadMaxRetryTimeout);
+	  };
+
+	  FlasHLS.prototype.setFragmentLoadMaxRetry = function setFragmentLoadMaxRetry(fragmentLoadMaxRetry) {
+	    this.fragmentLoadMaxRetry = fragmentLoadMaxRetry;
+	    this.el.playerSetFragmentLoadMaxRetry(this.fragmentLoadMaxRetry);
+	  };
+
+	  FlasHLS.prototype.setFragmentLoadMaxRetryTimeout = function setFragmentLoadMaxRetryTimeout(fragmentLoadMaxRetryTimeout) {
+	    this.fragmentLoadMaxRetryTimeout = fragmentLoadMaxRetryTimeout;
+	    this.el.playerSetFragmentLoadMaxRetryTimeout(this.fragmentLoadMaxRetryTimeout);
+	  };
+
+	  FlasHLS.prototype.setFragmentLoadSkipAfterMaxRetry = function setFragmentLoadSkipAfterMaxRetry(fragmentLoadSkipAfterMaxRetry) {
+	    this.fragmentLoadSkipAfterMaxRetry = fragmentLoadSkipAfterMaxRetry;
+	    this.el.playerSetFragmentLoadSkipAfterMaxRetry(this.fragmentLoadSkipAfterMaxRetry);
+	  };
+
+	  FlasHLS.prototype.setMaxSkippedFragments = function setMaxSkippedFragments(maxSkippedFragments) {
+	    this.maxSkippedFragments = maxSkippedFragments;
+	    this.el.playerSetMaxSkippedFragments(this.maxSkippedFragments);
+	  };
+
+	  FlasHLS.prototype.setFlushLiveURLCache = function setFlushLiveURLCache(flushLiveURLCache) {
+	    this.flushLiveURLCache = flushLiveURLCache;
+	    this.el.playerSetFlushLiveURLCache(this.flushLiveURLCache);
+	  };
+
+	  FlasHLS.prototype.setInitialLiveManifestSize = function setInitialLiveManifestSize(initialLiveManifestSize) {
+	    this.initialLiveManifestSize = initialLiveManifestSize;
+	    this.el.playerSetInitialLiveManifestSize(this.initialLiveManifestSize);
+	  };
+
+	  FlasHLS.prototype.setManifestLoadMaxRetry = function setManifestLoadMaxRetry(manifestLoadMaxRetry) {
+	    this.manifestLoadMaxRetry = manifestLoadMaxRetry;
+	    this.el.playerSetManifestLoadMaxRetry(this.manifestLoadMaxRetry);
+	  };
+
+	  FlasHLS.prototype.setManifestLoadMaxRetryTimeout = function setManifestLoadMaxRetryTimeout(manifestLoadMaxRetryTimeout) {
+	    this.manifestLoadMaxRetryTimeout = manifestLoadMaxRetryTimeout;
+	    this.el.playerSetManifestLoadMaxRetryTimeout(this.manifestLoadMaxRetryTimeout);
+	  };
+
+	  FlasHLS.prototype.setManifestRedundantLoadmaxRetry = function setManifestRedundantLoadmaxRetry(manifestRedundantLoadmaxRetry) {
+	    this.manifestRedundantLoadmaxRetry = manifestRedundantLoadmaxRetry;
+	    this.el.playerSetManifestRedundantLoadmaxRetry(this.manifestRedundantLoadmaxRetry);
+	  };
+
+	  FlasHLS.prototype.setStartFromBitrate = function setStartFromBitrate(startFromBitrate) {
+	    this.startFromBitrate = startFromBitrate;
+	    this.el.playerSetStartFromBitrate(this.startFromBitrate);
+	  };
+
+	  FlasHLS.prototype.setStartFromLevel = function setStartFromLevel(startFromLevel) {
+	    this.startFromLevel = startFromLevel;
+	    this.el.playerSetStartFromLevel(this.startFromLevel);
+	  };
+
+	  FlasHLS.prototype.setAutoStartMaxDuration = function setAutoStartMaxDuration(autoStartMaxDuration) {
+	    this.autoStartMaxDuration = autoStartMaxDuration;
+	    this.el.playerSetAutoStartMaxDuration(this.autoStartMaxDuration);
+	  };
+
+	  FlasHLS.prototype.setSeekFromLevel = function setSeekFromLevel(seekFromLevel) {
+	    this.seekFromLevel = seekFromLevel;
+	    this.el.playerSetSeekFromLevel(this.seekFromLevel);
+	  };
+
+	  FlasHLS.prototype.setUseHardwareVideoDecoder = function setUseHardwareVideoDecoder(useHardwareVideoDecoder) {
+	    this.useHardwareVideoDecoder = useHardwareVideoDecoder;
+	    this.el.playerSetUseHardwareVideoDecoder(this.useHardwareVideoDecoder);
+	  };
+
+	  FlasHLS.prototype.setSetLogInfo = function setSetLogInfo(hlsLogEnabled) {
+	    this.hlsLogEnabled = hlsLogEnabled;
+	    this.el.playerSetLogInfo(this.hlsLogEnabled);
+	  };
+
+	  FlasHLS.prototype.setLogDebug = function setLogDebug(logDebug) {
+	    this.logDebug = logDebug;
+	    this.el.playerSetLogDebug(this.logDebug);
+	  };
+
+	  FlasHLS.prototype.setLogDebug2 = function setLogDebug2(logDebug2) {
+	    this.logDebug2 = logDebug2;
+	    this.el.playerSetLogDebug2(this.logDebug2);
+	  };
+
+	  FlasHLS.prototype.setLogWarn = function setLogWarn(logWarn) {
+	    this.logWarn = logWarn;
+	    this.el.playerSetLogWarn(this.logWarn);
+	  };
+
+	  FlasHLS.prototype.setLogError = function setLogError(logError) {
+	    this.logError = logError;
+	    this.el.playerSetLogError(this.logError);
+	  };
+
+	  FlasHLS.prototype.levelChanged = function levelChanged(level) {
+	    var currentLevel = this.el.getLevels()[level];
+	    if (currentLevel) {
+	      this.highDefinition = currentLevel.height >= 720 || currentLevel.bitrate / 1000 >= 2000;
+	      this.trigger(_events2.default.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition);
+	      this.trigger(_events2.default.PLAYBACK_BITRATE, {
+	        height: currentLevel.height,
+	        width: currentLevel.width,
+	        bandwidth: currentLevel.bandwidth,
+	        bitrate: currentLevel.bitrate,
+	        level: level
+	      });
+	      this.trigger(_events2.default.PLAYBACK_LEVEL_SWITCH_END);
 	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      _get(Object.getPrototypeOf(FlasHLS.prototype), 'render', this).call(this);
-	      this.createCallbacks();
-	      return this;
+	  };
+
+	  FlasHLS.prototype.updateTime = function updateTime(timeMetrics) {
+	    if (this.currentState === 'IDLE') {
+	      return;
 	    }
-	  }, {
+
+	    var duration = this.normalizeDuration(timeMetrics.duration);
+	    var position = Math.min(Math.max(timeMetrics.position, 0), duration);
+	    var previousDVRStatus = this.dvrEnabled;
+	    var livePlayback = this.playbackType === _playback2.default.LIVE;
+	    this.dvrEnabled = livePlayback && duration > this.hlsMinimumDvrSize;
+
+	    if (duration === 100 || livePlayback === undefined) {
+	      return;
+	    }
+
+	    if (this.dvrEnabled !== previousDVRStatus) {
+	      this.updateSettings();
+	      this.trigger(_events2.default.PLAYBACK_SETTINGSUPDATE, this.name);
+	    }
+
+	    if (livePlayback && (!this.dvrEnabled || !this.dvrInUse)) {
+	      position = duration;
+	    }
+
+	    this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: position, total: duration }, this.name);
+	  };
+
+	  FlasHLS.prototype.play = function play() {
+	    if (this.currentState === 'PAUSED') {
+	      this.el.playerResume();
+	    } else if (!this.srcLoaded && this.currentState !== "PLAYING") {
+	      this.firstPlay();
+	    } else {
+	      this.el.playerPlay();
+	    }
+	  };
+
+	  FlasHLS.prototype.getPlaybackType = function getPlaybackType() {
+	    return this.playbackType ? this.playbackType : null;
+	  };
+
+	  FlasHLS.prototype.getCurrentLevelIndex = function getCurrentLevelIndex() {
+	    return this.currentLevel;
+	  };
+
+	  FlasHLS.prototype.getCurrentLevel = function getCurrentLevel() {
+	    return this.levels[this.currentLevel];
+	  };
+
+	  FlasHLS.prototype.getCurrentBitrate = function getCurrentBitrate() {
+	    return this.levels[this.currentLevel].bitrate;
+	  };
+
+	  FlasHLS.prototype.setCurrentLevel = function setCurrentLevel(level) {
+	    this.currentLevel = level;
+	  };
+
+	  FlasHLS.prototype.isHighDefinitionInUse = function isHighDefinitionInUse() {
+	    return this.highDefinition;
+	  };
+
+	  FlasHLS.prototype.getLevels = function getLevels() {
+	    return this.levels;
+	  };
+
+	  FlasHLS.prototype.setPlaybackState = function setPlaybackState(state) {
+	    if (["PLAYING_BUFFERING", "PAUSED_BUFFERING"].indexOf(state) >= 0) {
+	      this.bufferingState = true;
+	      this.trigger(_events2.default.PLAYBACK_BUFFERING, this.name);
+	      this.updateCurrentState(state);
+	    } else if (["PLAYING", "PAUSED"].indexOf(state) >= 0) {
+	      if (["PLAYING_BUFFERING", "PAUSED_BUFFERING", "IDLE"].indexOf(this.currentState) >= 0) {
+	        this.bufferingState = false;
+	        this.trigger(_events2.default.PLAYBACK_BUFFERFULL, this.name);
+	      }
+	      this.updateCurrentState(state);
+	    } else if (state === "IDLE") {
+	      this.srcLoaded = false;
+	      if (this.loop && ["PLAYING_BUFFERING", "PLAYING"].indexOf(this.currentState) >= 0) {
+	        this.play();
+	        this.seek(0);
+	      } else {
+	        this.updateCurrentState(state);
+	        this.hasEnded = true;
+	        this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: 0, total: this.el.getDuration() }, this.name);
+	        this.trigger(_events2.default.PLAYBACK_ENDED, this.name);
+	      }
+	    }
+	  };
+
+	  FlasHLS.prototype.updateCurrentState = function updateCurrentState(state) {
+	    this.currentState = state;
+	    if (state !== "IDLE") {
+	      this.hasEnded = false;
+	    }
+	    this.updatePlaybackType();
+	    if (state === "PLAYING") {
+	      this.trigger(_events2.default.PLAYBACK_PLAY, this.name);
+	    } else if (state === "PAUSED") {
+	      this.trigger(_events2.default.PLAYBACK_PAUSE, this.name);
+	    }
+	  };
+
+	  FlasHLS.prototype.updatePlaybackType = function updatePlaybackType() {
+	    this.playbackType = this.el.getType();
+	    if (this.playbackType) {
+	      this.playbackType = this.playbackType.toLowerCase();
+	      if (this.playbackType === _playback2.default.VOD) {
+	        this.startReportingProgress();
+	      } else {
+	        this.stopReportingProgress();
+	      }
+	    }
+	    this.trigger(_events2.default.PLAYBACK_PLAYBACKSTATE, { type: this.playbackType });
+	  };
+
+	  FlasHLS.prototype.startReportingProgress = function startReportingProgress() {
+	    if (!this.reportingProgress) {
+	      this.reportingProgress = true;
+	    }
+	  };
+
+	  FlasHLS.prototype.stopReportingProgress = function stopReportingProgress() {
+	    this.reportingProgress = false;
+	  };
+
+	  FlasHLS.prototype.onFragmentLoaded = function onFragmentLoaded(loadmetrics) {
+	    this.trigger(_events2.default.PLAYBACK_FRAGMENT_LOADED, loadmetrics);
+	    if (this.reportingProgress && this.el.getPosition) {
+	      var buffered = this.el.getPosition() + this.el.getbufferLength();
+	      this.trigger(_events2.default.PLAYBACK_PROGRESS, {
+	        start: this.el.getPosition(),
+	        current: buffered,
+	        total: this.el.getDuration()
+	      });
+	    }
+	  };
+
+	  FlasHLS.prototype.firstPlay = function firstPlay() {
+	    var _this4 = this;
+
+	    if (this.el.playerLoad) {
+	      this.setFlashSettings(); //ensure flushLiveURLCache will work (#327)
+	      this.el.playerLoad(this.src);
+	      _mediator2.default.once(this.cid + ':manifestloaded', function () {
+	        return _this4.el.playerPlay();
+	      });
+	      this.srcLoaded = true;
+	    } else {
+	      this._shouldPlayOnBootstrap = true;
+	    }
+	  };
+
+	  FlasHLS.prototype.volume = function volume(value) {
+	    var _this5 = this;
+
+	    if (this.isReady) {
+	      this.el.playerVolume(value);
+	    } else {
+	      this.listenToOnce(this, _events2.default.PLAYBACK_BUFFERFULL, function () {
+	        return _this5.volume(value);
+	      });
+	    }
+	  };
+
+	  FlasHLS.prototype.pause = function pause() {
+	    if (this.playbackType !== _playback2.default.LIVE || this.dvrEnabled) {
+	      this.el.playerPause();
+	      if (this.playbackType === _playback2.default.LIVE && this.dvrEnabled) {
+	        this.updateDvr(true);
+	      }
+	    }
+	  };
+
+	  FlasHLS.prototype.stop = function stop() {
+	    this.srcLoaded = false;
+	    this.el.playerStop();
+	    this.trigger(_events2.default.PLAYBACK_STOP);
+	    this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: 0, total: 0 }, this.name);
+	  };
+
+	  FlasHLS.prototype.isPlaying = function isPlaying() {
+	    if (this.currentState) {
+	      return !!this.currentState.match(/playing/i);
+	    }
+	    return false;
+	  };
+
+	  FlasHLS.prototype.getDuration = function getDuration() {
+	    return this.normalizeDuration(this.el.getDuration());
+	  };
+
+	  FlasHLS.prototype.normalizeDuration = function normalizeDuration(duration) {
+	    if (this.playbackType === _playback2.default.LIVE) {
+	      // estimate 10 seconds of buffer time for live streams for seek positions
+	      duration = duration - 10;
+	    }
+	    return duration;
+	  };
+
+	  FlasHLS.prototype.seekPercentage = function seekPercentage(percentage) {
+	    var duration = this.el.getDuration();
+	    var time = 0;
+	    if (percentage > 0) {
+	      time = duration * percentage / 100;
+	    }
+	    this.seek(time);
+	  };
+
+	  FlasHLS.prototype.seek = function seek(time) {
+	    var duration = this.el.getDuration();
+	    if (this.playbackType === _playback2.default.LIVE) {
+	      // seek operations to a time within 5 seconds from live stream will position playhead back to live
+	      var dvrInUse = time >= 0 && duration - time > 5;
+	      if (!dvrInUse) {
+	        time = -1;
+	      }
+	      this.updateDvr(dvrInUse);
+	    }
+	    this.el.playerSeek(time);
+	    this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: time, total: duration }, this.name);
+	  };
+
+	  FlasHLS.prototype.updateDvr = function updateDvr(dvrInUse) {
+	    var previousDvrInUse = !!this.dvrInUse;
+	    this.dvrInUse = dvrInUse;
+	    if (this.dvrInUse !== previousDvrInUse) {
+	      this.updateSettings();
+	      this.trigger(_events2.default.PLAYBACK_DVR, this.dvrInUse);
+	      this.trigger(_events2.default.PLAYBACK_STATS_ADD, { 'dvr': this.dvrInUse });
+	    }
+	  };
+
+	  FlasHLS.prototype.flashPlaybackError = function flashPlaybackError(code, url, message) {
+	    this.trigger(_events2.default.PLAYBACK_ERROR, { code: code, url: url, message: message });
+	    this.trigger(_events2.default.PLAYBACK_STOP);
+	  };
+
+	  FlasHLS.prototype.manifestLoaded = function manifestLoaded(duration, loadmetrics) {
+	    var levels = this.el.getLevels();
+	    var levelsLength = levels.length;
+	    this._levels = [];
+
+	    for (var index = 0; index < levelsLength; index++) {
+	      this._levels.push({ id: index, label: levels[index].height + 'p' });
+	    }
+	    this.trigger(_events2.default.PLAYBACK_LEVELS_AVAILABLE, this._levels);
+	    this.trigger(_events2.default.PLAYBACK_LOADEDMETADATA, { duration: duration, data: loadmetrics });
+	  };
+
+	  FlasHLS.prototype.timeUpdate = function timeUpdate(time, duration) {
+	    this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: time, total: duration }, this.name);
+	  };
+
+	  FlasHLS.prototype.destroy = function destroy() {
+	    this.stopListening();
+	    this.$el.remove();
+	  };
+
+	  FlasHLS.prototype.updateSettings = function updateSettings() {
+	    this.settings = _clapprZepto2.default.extend({}, this.defaultSettings);
+	    if (this.playbackType === _playback2.default.VOD || this.dvrInUse) {
+	      this.settings.left = ["playpause", "position", "duration"];
+	      this.settings.seekEnabled = true;
+	    } else if (this.dvrEnabled) {
+	      this.settings.left = ["playpause"];
+	      this.settings.seekEnabled = true;
+	    } else {
+	      this.settings.seekEnabled = false;
+	    }
+	  };
+
+	  FlasHLS.prototype.createCallbacks = function createCallbacks() {
+	    var _this6 = this;
+
+	    if (!window.Clappr) {
+	      window.Clappr = {};
+	    }
+	    if (!window.Clappr.flashlsCallbacks) {
+	      window.Clappr.flashlsCallbacks = {};
+	    }
+	    this.flashlsEvents = new _flashls_events2.default(this.cid);
+	    window.Clappr.flashlsCallbacks[this.cid] = function (eventName, args) {
+	      _this6.flashlsEvents[eventName].apply(_this6.flashlsEvents, args);
+	    };
+	  };
+
+	  FlasHLS.prototype.render = function render() {
+	    _BaseFlashPlayback.prototype.render.call(this);
+	    this.createCallbacks();
+	    return this;
+	  };
+
+	  _createClass(FlasHLS, [{
 	    key: 'isReady',
 	    get: function get() {
 	      return this.isReadyState;
@@ -13333,8 +12946,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 	var _mediator = __webpack_require__(37);
 
 	var _mediator2 = _interopRequireDefault(_mediator);
@@ -13350,82 +12961,65 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.instanceId = instanceId;
 	  }
 
-	  _createClass(HLSEvents, [{
-	    key: 'ready',
-	    value: function ready() {
-	      _mediator2.default.trigger(this.instanceId + ':flashready');
-	    }
-	  }, {
-	    key: 'videoSize',
-	    value: function videoSize(width, height) {
-	      _mediator2.default.trigger(this.instanceId + ':videosizechanged', width, height);
-	    }
-	  }, {
-	    key: 'complete',
-	    value: function complete() {
-	      _mediator2.default.trigger(this.instanceId + ':complete');
-	    }
-	  }, {
-	    key: 'error',
-	    value: function error(code, url, message) {
-	      _mediator2.default.trigger(this.instanceId + ':error', code, url, message);
-	    }
-	  }, {
-	    key: 'manifest',
-	    value: function manifest(duration, loadmetrics) {
-	      _mediator2.default.trigger(this.instanceId + ':manifestloaded', duration, loadmetrics);
-	    }
-	  }, {
-	    key: 'audioLevelLoaded',
-	    value: function audioLevelLoaded(loadmetrics) {
-	      _mediator2.default.trigger(this.instanceId + ':audiolevelloaded', loadmetrics);
-	    }
-	  }, {
-	    key: 'levelLoaded',
-	    value: function levelLoaded(loadmetrics) {
-	      _mediator2.default.trigger(this.instanceId + ':levelloaded', loadmetrics);
-	    }
-	  }, {
-	    key: 'fragmentLoaded',
-	    value: function fragmentLoaded(loadmetrics) {
-	      _mediator2.default.trigger(this.instanceId + ':fragmentloaded', loadmetrics);
-	    }
-	  }, {
-	    key: 'fragmentPlaying',
-	    value: function fragmentPlaying(playmetrics) {
-	      _mediator2.default.trigger(this.instanceId + ':fragmentplaying', playmetrics);
-	    }
-	  }, {
-	    key: 'position',
-	    value: function position(timemetrics) {
-	      _mediator2.default.trigger(this.instanceId + ':timeupdate', timemetrics);
-	    }
-	  }, {
-	    key: 'state',
-	    value: function state(newState) {
-	      _mediator2.default.trigger(this.instanceId + ':playbackstate', newState);
-	    }
-	  }, {
-	    key: 'seekState',
-	    value: function seekState(newState) {
-	      _mediator2.default.trigger(this.instanceId + ':seekstate', newState);
-	    }
-	  }, {
-	    key: 'switch',
-	    value: function _switch(newLevel) {
-	      _mediator2.default.trigger(this.instanceId + ':levelchanged', newLevel);
-	    }
-	  }, {
-	    key: 'audioTracksListChange',
-	    value: function audioTracksListChange(trackList) {
-	      _mediator2.default.trigger(this.instanceId + ':audiotracklistchanged', trackList);
-	    }
-	  }, {
-	    key: 'audioTrackChange',
-	    value: function audioTrackChange(trackId) {
-	      _mediator2.default.trigger(this.instanceId + ':audiotrackchanged', trackId);
-	    }
-	  }]);
+	  HLSEvents.prototype.ready = function ready() {
+	    _mediator2.default.trigger(this.instanceId + ':flashready');
+	  };
+
+	  HLSEvents.prototype.videoSize = function videoSize(width, height) {
+	    _mediator2.default.trigger(this.instanceId + ':videosizechanged', width, height);
+	  };
+
+	  HLSEvents.prototype.complete = function complete() {
+	    _mediator2.default.trigger(this.instanceId + ':complete');
+	  };
+
+	  HLSEvents.prototype.error = function error(code, url, message) {
+	    _mediator2.default.trigger(this.instanceId + ':error', code, url, message);
+	  };
+
+	  HLSEvents.prototype.manifest = function manifest(duration, loadmetrics) {
+	    _mediator2.default.trigger(this.instanceId + ':manifestloaded', duration, loadmetrics);
+	  };
+
+	  HLSEvents.prototype.audioLevelLoaded = function audioLevelLoaded(loadmetrics) {
+	    _mediator2.default.trigger(this.instanceId + ':audiolevelloaded', loadmetrics);
+	  };
+
+	  HLSEvents.prototype.levelLoaded = function levelLoaded(loadmetrics) {
+	    _mediator2.default.trigger(this.instanceId + ':levelloaded', loadmetrics);
+	  };
+
+	  HLSEvents.prototype.fragmentLoaded = function fragmentLoaded(loadmetrics) {
+	    _mediator2.default.trigger(this.instanceId + ':fragmentloaded', loadmetrics);
+	  };
+
+	  HLSEvents.prototype.fragmentPlaying = function fragmentPlaying(playmetrics) {
+	    _mediator2.default.trigger(this.instanceId + ':fragmentplaying', playmetrics);
+	  };
+
+	  HLSEvents.prototype.position = function position(timemetrics) {
+	    _mediator2.default.trigger(this.instanceId + ':timeupdate', timemetrics);
+	  };
+
+	  HLSEvents.prototype.state = function state(newState) {
+	    _mediator2.default.trigger(this.instanceId + ':playbackstate', newState);
+	  };
+
+	  HLSEvents.prototype.seekState = function seekState(newState) {
+	    _mediator2.default.trigger(this.instanceId + ':seekstate', newState);
+	  };
+
+	  HLSEvents.prototype.switch = function _switch(newLevel) {
+	    _mediator2.default.trigger(this.instanceId + ':levelchanged', newLevel);
+	  };
+
+	  HLSEvents.prototype.audioTracksListChange = function audioTracksListChange(trackList) {
+	    _mediator2.default.trigger(this.instanceId + ':audiotracklistchanged', trackList);
+	  };
+
+	  HLSEvents.prototype.audioTrackChange = function audioTrackChange(trackId) {
+	    _mediator2.default.trigger(this.instanceId + ':audiotrackchanged', trackId);
+	  };
 
 	  return HLSEvents;
 	}();
@@ -13456,8 +13050,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-
-	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -13529,7 +13121,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function HLS(options) {
 	    _classCallCheck(this, HLS);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HLS).call(this, options));
+	    var _this = _possibleConstructorReturn(this, _HTML5VideoPlayback.call(this, options));
 
 	    _this.minDvrSize = options.hlsMinimumDvrSize ? options.hlsMinimumDvrSize : 60;
 	    _this.playbackType = _playback2.default.VOD;
@@ -13548,212 +13140,191 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return _this;
 	  }
 
-	  _createClass(HLS, [{
-	    key: 'setupHls',
-	    value: function setupHls() {
-	      var _this2 = this;
+	  HLS.prototype.setupHls = function setupHls() {
+	    var _this2 = this;
 
-	      this.hls = new _hls2.default(this.options.hlsjsConfig || {});
-	      this.hls.on(_hls2.default.Events.MEDIA_ATTACHED, function () {
-	        return _this2.hls.loadSource(_this2.options.src);
-	      });
-	      this.hls.on(_hls2.default.Events.LEVEL_LOADED, function (evt, data) {
-	        return _this2.updatePlaybackType(evt, data);
-	      });
-	      this.hls.on(_hls2.default.Events.LEVEL_UPDATED, function (evt, data) {
-	        return _this2.onLevelUpdated(evt, data);
-	      });
-	      this.hls.on(_hls2.default.Events.LEVEL_SWITCH, function (evt, data) {
-	        return _this2.onLevelSwitch(evt, data);
-	      });
-	      this.hls.on(_hls2.default.Events.FRAG_LOADED, function (evt, data) {
-	        return _this2.onFragmentLoaded(evt, data);
-	      });
-	      this.hls.attachMedia(this.el);
-	    }
+	    this.hls = new _hls2.default(this.options.hlsjsConfig || {});
+	    this.hls.on(_hls2.default.Events.MEDIA_ATTACHED, function () {
+	      return _this2.hls.loadSource(_this2.options.src);
+	    });
+	    this.hls.on(_hls2.default.Events.LEVEL_LOADED, function (evt, data) {
+	      return _this2.updatePlaybackType(evt, data);
+	    });
+	    this.hls.on(_hls2.default.Events.LEVEL_UPDATED, function (evt, data) {
+	      return _this2.onLevelUpdated(evt, data);
+	    });
+	    this.hls.on(_hls2.default.Events.LEVEL_SWITCH, function (evt, data) {
+	      return _this2.onLevelSwitch(evt, data);
+	    });
+	    this.hls.on(_hls2.default.Events.FRAG_LOADED, function (evt, data) {
+	      return _this2.onFragmentLoaded(evt, data);
+	    });
+	    this.hls.attachMedia(this.el);
+	  };
 
-	    // override
-
-	  }, {
-	    key: 'setupSrc',
-	    value: function setupSrc(srcUrl) {}
-	    // this playback manages the src on the video element itself
+	  // override
 
 
-	    // the duration on the video element itself should not be used
-	    // as this does not necesarily represent the duration of the stream
-	    // https://github.com/clappr/clappr/issues/668#issuecomment-157036678
+	  HLS.prototype.setupSrc = function setupSrc(srcUrl) {}
+	  // this playback manages the src on the video element itself
 
-	  }, {
-	    key: 'getDuration',
-	    value: function getDuration() {
-	      return this.playableRegionDuration;
-	    }
-	  }, {
-	    key: 'getCurrentTime',
-	    value: function getCurrentTime() {
-	      return this.el.currentTime - this.playableRegionStartTime;
-	    }
 
-	    // the time that "0" now represents relative to when playback started
-	    // for a stream with a sliding window this will increase as content is
-	    // removed from the beginning
+	  // the duration on the video element itself should not be used
+	  // as this does not necesarily represent the duration of the stream
+	  // https://github.com/clappr/clappr/issues/668#issuecomment-157036678
+	  ;
 
-	  }, {
-	    key: 'getStartTimeOffset',
-	    value: function getStartTimeOffset() {
-	      return this.playableRegionStartTime;
-	    }
-	  }, {
-	    key: 'seekPercentage',
-	    value: function seekPercentage(percentage) {
-	      var seekTo = this.playableRegionDuration;
-	      if (percentage > 0) {
-	        seekTo = this.playableRegionDuration * (percentage / 100);
-	      }
-	      this.seek(seekTo);
-	    }
-	  }, {
-	    key: 'seek',
-	    value: function seek(time) {
-	      if (time < 0) {
-	        _log2.default.warn("Attempt to seek to a negative time. Resetting to live point. Use seekToLivePoint() to seek to the live point.");
-	        time = this.getDuration();
-	      }
-	      // assume live if time within 3 seconds of end of stream
-	      this.dvrEnabled && this.updateDvr(time < this.getDuration() - 3);
-	      time += this.playableRegionStartTime;
-	      _get(Object.getPrototypeOf(HLS.prototype), 'seek', this).call(this, time);
-	    }
-	  }, {
-	    key: 'seekToLivePoint',
-	    value: function seekToLivePoint() {
-	      this.seek(this.getDuration());
-	    }
-	  }, {
-	    key: 'updateDvr',
-	    value: function updateDvr(status) {
-	      this.trigger(_events2.default.PLAYBACK_DVR, status);
-	      this.trigger(_events2.default.PLAYBACK_STATS_ADD, { 'dvr': status });
-	    }
-	  }, {
-	    key: 'updateSettings',
-	    value: function updateSettings() {
-	      if (this.playbackType === _playback2.default.VOD) {
-	        this.settings.left = ["playpause", "position", "duration"];
-	      } else if (this.dvrEnabled) {
-	        this.settings.left = ["playpause"];
-	      } else {
-	        this.settings.left = ["playstop"];
-	      }
-	      this.settings.seekEnabled = this.isSeekEnabled();
-	      this.trigger(_events2.default.PLAYBACK_SETTINGSUPDATE);
-	    }
-	  }, {
-	    key: 'onTimeUpdate',
-	    value: function onTimeUpdate() {
-	      this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: this.getCurrentTime(), total: this.getDuration() }, this.name);
-	    }
-	  }, {
-	    key: 'play',
-	    value: function play() {
-	      if (!this.hls) {
-	        this.setupHls();
-	      }
-	      _get(Object.getPrototypeOf(HLS.prototype), 'play', this).call(this);
-	    }
-	  }, {
-	    key: 'pause',
-	    value: function pause() {
-	      _get(Object.getPrototypeOf(HLS.prototype), 'pause', this).call(this);
-	      if (this.dvrEnabled) {
-	        this.updateDvr(true);
-	      }
-	    }
-	  }, {
-	    key: 'stop',
-	    value: function stop() {
-	      _get(Object.getPrototypeOf(HLS.prototype), 'stop', this).call(this);
-	      if (this.hls) {
-	        this.hls.destroy();
-	        delete this.hls;
-	      }
-	    }
-	  }, {
-	    key: 'updatePlaybackType',
-	    value: function updatePlaybackType(evt, data) {
-	      this.playbackType = data.details.live ? _playback2.default.LIVE : _playback2.default.VOD;
-	      this.fillLevels();
-	    }
-	  }, {
-	    key: 'fillLevels',
-	    value: function fillLevels() {
-	      this._levels = this.hls.levels.map(function (level, index) {
-	        return { id: index, label: level.height + 'p' };
-	      });
-	      this.trigger(_events2.default.PLAYBACK_LEVELS_AVAILABLE, this._levels);
-	    }
-	  }, {
-	    key: 'onLevelUpdated',
-	    value: function onLevelUpdated(evt, data) {
-	      var fragments = data.details.fragments;
-	      if (fragments.length > 0) {
-	        this.playableRegionStartTime = fragments[0].start;
-	      }
-	      var newDuration = data.details.totalduration;
+	  HLS.prototype.getDuration = function getDuration() {
+	    return this.playableRegionDuration;
+	  };
 
-	      // if it's a live stream then shorten the duration to remove access
-	      // to the area after hlsjs's live sync point
-	      // seeks to areas after this point sometimes have issues
-	      if (this.playbackType === _playback2.default.LIVE) {
-	        var currentLevel = this.hls.levels[data.level];
-	        var fragmentTargetDuration = currentLevel.details.targetduration;
-	        var hlsjsConfig = this.options.hlsjsConfig || {};
-	        var liveSyncDurationCount = hlsjsConfig.liveSyncDurationCount || _hls2.default.DefaultConfig.liveSyncDurationCount;
-	        var hiddenAreaDuration = fragmentTargetDuration * liveSyncDurationCount;
-	        if (hiddenAreaDuration <= newDuration) {
-	          newDuration -= hiddenAreaDuration;
-	        }
-	      }
-	      if (newDuration !== this.playableRegionDuration) {
-	        this.playableRegionDuration = newDuration;
-	        this.onDurationChange();
-	      }
+	  HLS.prototype.getCurrentTime = function getCurrentTime() {
+	    return this.el.currentTime - this.playableRegionStartTime;
+	  };
+
+	  // the time that "0" now represents relative to when playback started
+	  // for a stream with a sliding window this will increase as content is
+	  // removed from the beginning
+
+
+	  HLS.prototype.getStartTimeOffset = function getStartTimeOffset() {
+	    return this.playableRegionStartTime;
+	  };
+
+	  HLS.prototype.seekPercentage = function seekPercentage(percentage) {
+	    var seekTo = this.playableRegionDuration;
+	    if (percentage > 0) {
+	      seekTo = this.playableRegionDuration * (percentage / 100);
 	    }
-	  }, {
-	    key: 'onFragmentLoaded',
-	    value: function onFragmentLoaded(evt, data) {
-	      this.trigger(_events2.default.PLAYBACK_FRAGMENT_LOADED, data);
+	    this.seek(seekTo);
+	  };
+
+	  HLS.prototype.seek = function seek(time) {
+	    if (time < 0) {
+	      _log2.default.warn("Attempt to seek to a negative time. Resetting to live point. Use seekToLivePoint() to seek to the live point.");
+	      time = this.getDuration();
 	    }
-	  }, {
-	    key: 'onLevelSwitch',
-	    value: function onLevelSwitch(evt, data) {
-	      this.trigger(_events2.default.PLAYBACK_LEVEL_SWITCH_END);
-	      this.trigger(_events2.default.PLAYBACK_LEVEL_SWITCH, data);
+	    // assume live if time within 3 seconds of end of stream
+	    this.dvrEnabled && this.updateDvr(time < this.getDuration() - 3);
+	    time += this.playableRegionStartTime;
+	    _HTML5VideoPlayback.prototype.seek.call(this, time);
+	  };
+
+	  HLS.prototype.seekToLivePoint = function seekToLivePoint() {
+	    this.seek(this.getDuration());
+	  };
+
+	  HLS.prototype.updateDvr = function updateDvr(status) {
+	    this.trigger(_events2.default.PLAYBACK_DVR, status);
+	    this.trigger(_events2.default.PLAYBACK_STATS_ADD, { 'dvr': status });
+	  };
+
+	  HLS.prototype.updateSettings = function updateSettings() {
+	    if (this.playbackType === _playback2.default.VOD) {
+	      this.settings.left = ["playpause", "position", "duration"];
+	    } else if (this.dvrEnabled) {
+	      this.settings.left = ["playpause"];
+	    } else {
+	      this.settings.left = ["playstop"];
+	    }
+	    this.settings.seekEnabled = this.isSeekEnabled();
+	    this.trigger(_events2.default.PLAYBACK_SETTINGSUPDATE);
+	  };
+
+	  HLS.prototype.onTimeUpdate = function onTimeUpdate() {
+	    this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: this.getCurrentTime(), total: this.getDuration() }, this.name);
+	  };
+
+	  HLS.prototype.play = function play() {
+	    if (!this.hls) {
+	      this.setupHls();
+	    }
+	    _HTML5VideoPlayback.prototype.play.call(this);
+	  };
+
+	  HLS.prototype.pause = function pause() {
+	    _HTML5VideoPlayback.prototype.pause.call(this);
+	    if (this.dvrEnabled) {
+	      this.updateDvr(true);
+	    }
+	  };
+
+	  HLS.prototype.stop = function stop() {
+	    _HTML5VideoPlayback.prototype.stop.call(this);
+	    if (this.hls) {
+	      this.hls.destroy();
+	      delete this.hls;
+	    }
+	  };
+
+	  HLS.prototype.updatePlaybackType = function updatePlaybackType(evt, data) {
+	    this.playbackType = data.details.live ? _playback2.default.LIVE : _playback2.default.VOD;
+	    this.fillLevels();
+	  };
+
+	  HLS.prototype.fillLevels = function fillLevels() {
+	    this._levels = this.hls.levels.map(function (level, index) {
+	      return { id: index, label: level.height + 'p' };
+	    });
+	    this.trigger(_events2.default.PLAYBACK_LEVELS_AVAILABLE, this._levels);
+	  };
+
+	  HLS.prototype.onLevelUpdated = function onLevelUpdated(evt, data) {
+	    var fragments = data.details.fragments;
+	    if (fragments.length > 0) {
+	      this.playableRegionStartTime = fragments[0].start;
+	    }
+	    var newDuration = data.details.totalduration;
+
+	    // if it's a live stream then shorten the duration to remove access
+	    // to the area after hlsjs's live sync point
+	    // seeks to areas after this point sometimes have issues
+	    if (this.playbackType === _playback2.default.LIVE) {
 	      var currentLevel = this.hls.levels[data.level];
-	      if (currentLevel) {
-	        this.highDefinition = currentLevel.height >= 720 || currentLevel.bitrate / 1000 >= 2000;
-	        this.trigger(_events2.default.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition);
-	        this.trigger(_events2.default.PLAYBACK_BITRATE, {
-	          height: currentLevel.height,
-	          width: currentLevel.width,
-	          bandwidth: currentLevel.bandwidth,
-	          bitrate: currentLevel.bitrate,
-	          level: data.level
-	        });
+	      var fragmentTargetDuration = currentLevel.details.targetduration;
+	      var hlsjsConfig = this.options.hlsjsConfig || {};
+	      var liveSyncDurationCount = hlsjsConfig.liveSyncDurationCount || _hls2.default.DefaultConfig.liveSyncDurationCount;
+	      var hiddenAreaDuration = fragmentTargetDuration * liveSyncDurationCount;
+	      if (hiddenAreaDuration <= newDuration) {
+	        newDuration -= hiddenAreaDuration;
 	      }
 	    }
-	  }, {
-	    key: 'getPlaybackType',
-	    value: function getPlaybackType() {
-	      return this.playbackType;
+	    if (newDuration !== this.playableRegionDuration) {
+	      this.playableRegionDuration = newDuration;
+	      this.onDurationChange();
 	    }
-	  }, {
-	    key: 'isSeekEnabled',
-	    value: function isSeekEnabled() {
-	      return this.playbackType === _playback2.default.VOD || this.dvrEnabled;
+	  };
+
+	  HLS.prototype.onFragmentLoaded = function onFragmentLoaded(evt, data) {
+	    this.trigger(_events2.default.PLAYBACK_FRAGMENT_LOADED, data);
+	  };
+
+	  HLS.prototype.onLevelSwitch = function onLevelSwitch(evt, data) {
+	    this.trigger(_events2.default.PLAYBACK_LEVEL_SWITCH_END);
+	    this.trigger(_events2.default.PLAYBACK_LEVEL_SWITCH, data);
+	    var currentLevel = this.hls.levels[data.level];
+	    if (currentLevel) {
+	      this.highDefinition = currentLevel.height >= 720 || currentLevel.bitrate / 1000 >= 2000;
+	      this.trigger(_events2.default.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition);
+	      this.trigger(_events2.default.PLAYBACK_BITRATE, {
+	        height: currentLevel.height,
+	        width: currentLevel.width,
+	        bandwidth: currentLevel.bandwidth,
+	        bitrate: currentLevel.bitrate,
+	        level: data.level
+	      });
 	    }
-	  }, {
+	  };
+
+	  HLS.prototype.getPlaybackType = function getPlaybackType() {
+	    return this.playbackType;
+	  };
+
+	  HLS.prototype.isSeekEnabled = function isSeekEnabled() {
+	    return this.playbackType === _playback2.default.VOD || this.dvrEnabled;
+	  };
+
+	  _createClass(HLS, [{
 	    key: 'dvrEnabled',
 	    get: function get() {
 	      return this.playableRegionDuration >= this.minDvrSize && this.getPlaybackType() === _playback2.default.LIVE;
@@ -22505,12 +22076,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	var HTMLImg = function (_Playback) {
 	  _inherits(HTMLImg, _Playback);
 
+	  HTMLImg.prototype.getPlaybackType = function getPlaybackType() {
+	    return _playback2.default.NO_OP;
+	  };
+
 	  _createClass(HTMLImg, [{
-	    key: 'getPlaybackType',
-	    value: function getPlaybackType() {
-	      return _playback2.default.NO_OP;
-	    }
-	  }, {
 	    key: 'name',
 	    get: function get() {
 	      return 'html_img';
@@ -22541,32 +22111,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function HTMLImg(params) {
 	    _classCallCheck(this, HTMLImg);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HTMLImg).call(this, params));
+	    var _this = _possibleConstructorReturn(this, _Playback.call(this, params));
 
 	    _this.el.src = params.src;
 	    return _this;
 	  }
 
-	  _createClass(HTMLImg, [{
-	    key: 'render',
-	    value: function render() {
-	      var style = _styler2.default.getStyleFor(_style2.default);
-	      this.$el.append(style);
-	      this.trigger(_events2.default.PLAYBACK_READY, this.name);
-	      return this;
-	    }
-	  }, {
-	    key: 'onLoad',
-	    value: function onLoad(evt) {
-	      this.trigger(_events2.default.PLAYBACK_ENDED, this.name);
-	    }
-	  }, {
-	    key: 'onError',
-	    value: function onError(evt) {
-	      var m = evt.type === 'error' ? 'load error' : 'loading aborted';
-	      this.trigger(_events2.default.PLAYBACK_ERROR, { message: m }, this.name);
-	    }
-	  }]);
+	  HTMLImg.prototype.render = function render() {
+	    var style = _styler2.default.getStyleFor(_style2.default);
+	    this.$el.append(style);
+	    this.trigger(_events2.default.PLAYBACK_READY, this.name);
+	    return this;
+	  };
+
+	  HTMLImg.prototype.onLoad = function onLoad(evt) {
+	    this.trigger(_events2.default.PLAYBACK_ENDED, this.name);
+	  };
+
+	  HTMLImg.prototype.onError = function onError(evt) {
+	    var m = evt.type === 'error' ? 'load error' : 'loading aborted';
+	    this.trigger(_events2.default.PLAYBACK_ERROR, { message: m }, this.name);
+	  };
 
 	  return HTMLImg;
 	}(_playback2.default);
@@ -22651,20 +22216,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	var NoOp = function (_Playback) {
 	  _inherits(NoOp, _Playback);
 
+	  NoOp.prototype.getNoOpMessage = function getNoOpMessage() {
+	    var messages = {
+	      'en': 'Your browser does not support the playback of this video. Please try using a different browser.',
+	      'es': 'Su navegador no soporta la reproducción de un video. Por favor, trate de usar un navegador diferente.',
+	      'pt': 'Seu navegador não supporta a reprodução deste video. Por favor, tente usar um navegador diferente.'
+	    };
+	    messages['en-us'] = messages['en'];
+	    messages['es-419'] = messages['es'];
+	    messages['pt-br'] = messages['pt'];
+	    return messages[(0, _utils.getBrowserLanguage)()] || messages['en'];
+	  };
+
 	  _createClass(NoOp, [{
-	    key: 'getNoOpMessage',
-	    value: function getNoOpMessage() {
-	      var messages = {
-	        'en': 'Your browser does not support the playback of this video. Please try using a different browser.',
-	        'es': 'Su navegador no soporta la reproducción de un video. Por favor, trate de usar un navegador diferente.',
-	        'pt': 'Seu navegador não supporta a reprodução deste video. Por favor, tente usar um navegador diferente.'
-	      };
-	      messages['en-us'] = messages['en'];
-	      messages['es-419'] = messages['es'];
-	      messages['pt-br'] = messages['pt'];
-	      return messages[(0, _utils.getBrowserLanguage)()] || messages['en'];
-	    }
-	  }, {
 	    key: 'name',
 	    get: function get() {
 	      return 'no_op';
@@ -22684,82 +22248,75 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function NoOp(options) {
 	    _classCallCheck(this, NoOp);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(NoOp).call(this, options));
+	    var _this = _possibleConstructorReturn(this, _Playback.call(this, options));
 
 	    _this.options = options;
 	    return _this;
 	  }
 
-	  _createClass(NoOp, [{
-	    key: 'render',
-	    value: function render() {
-	      var style = _styler2.default.getStyleFor(_style2.default);
-	      this.$el.html(this.template({ message: this.options.playbackNotSupportedMessage || this.getNoOpMessage() }));
-	      this.$el.append(style);
-	      this.animate();
-	      this.trigger(_events2.default.PLAYBACK_READY, this.name);
-	      return this;
-	    }
-	  }, {
-	    key: 'noise',
-	    value: function noise() {
-	      var idata = this.context.createImageData(this.context.canvas.width, this.context.canvas.height);
+	  NoOp.prototype.render = function render() {
+	    var style = _styler2.default.getStyleFor(_style2.default);
+	    this.$el.html(this.template({ message: this.options.playbackNotSupportedMessage || this.getNoOpMessage() }));
+	    this.$el.append(style);
+	    this.animate();
+	    this.trigger(_events2.default.PLAYBACK_READY, this.name);
+	    return this;
+	  };
 
-	      try {
-	        var buffer32 = new Uint32Array(idata.data.buffer);
-	      } catch (err) {
-	        var buffer32 = new Uint32Array(this.context.canvas.width * this.context.canvas.height * 4);
-	        var data = idata.data;
-	        for (var i = 0; i < data.length; i++) {
-	          buffer32[i] = data[i];
-	        }
-	      }
+	  NoOp.prototype.noise = function noise() {
+	    var idata = this.context.createImageData(this.context.canvas.width, this.context.canvas.height);
 
-	      var len = buffer32.length;
-	      var run = 0;
-	      var color = 0;
-	      var m = Math.random() * 6 + 4;
-
-	      for (var i = 0; i < len;) {
-	        if (run < 0) {
-	          run = m * Math.random();
-	          var p = Math.pow(Math.random(), 0.4);
-	          color = 255 * p << 24;
-	        }
-	        run -= 1;
-	        buffer32[i++] = color;
-	      }
-	      this.context.putImageData(idata, 0, 0);
-	    }
-	  }, {
-	    key: 'loop',
-	    value: function loop() {
-	      var _this2 = this;
-
-	      if (this.stop === true) {
-	        return;
-	      }
-	      this.noise();
-	      this.animationHandle = (0, _utils.requestAnimationFrame)(function () {
-	        return _this2.loop();
-	      });
-	    }
-	  }, {
-	    key: 'destroy',
-	    value: function destroy() {
-	      if (this.animationHandle) {
-	        (0, _utils.cancelAnimationFrame)(this.animationHandle);
-	        this.stop = true;
+	    try {
+	      var buffer32 = new Uint32Array(idata.data.buffer);
+	    } catch (err) {
+	      var buffer32 = new Uint32Array(this.context.canvas.width * this.context.canvas.height * 4);
+	      var data = idata.data;
+	      for (var i = 0; i < data.length; i++) {
+	        buffer32[i] = data[i];
 	      }
 	    }
-	  }, {
-	    key: 'animate',
-	    value: function animate() {
-	      this.canvas = this.$el.find('canvas[data-no-op-canvas]')[0];
-	      this.context = this.canvas.getContext('2d');
-	      this.loop();
+
+	    var len = buffer32.length;
+	    var run = 0;
+	    var color = 0;
+	    var m = Math.random() * 6 + 4;
+
+	    for (var i = 0; i < len;) {
+	      if (run < 0) {
+	        run = m * Math.random();
+	        var p = Math.pow(Math.random(), 0.4);
+	        color = 255 * p << 24;
+	      }
+	      run -= 1;
+	      buffer32[i++] = color;
 	    }
-	  }]);
+	    this.context.putImageData(idata, 0, 0);
+	  };
+
+	  NoOp.prototype.loop = function loop() {
+	    var _this2 = this;
+
+	    if (this.stop === true) {
+	      return;
+	    }
+	    this.noise();
+	    this.animationHandle = (0, _utils.requestAnimationFrame)(function () {
+	      return _this2.loop();
+	    });
+	  };
+
+	  NoOp.prototype.destroy = function destroy() {
+	    if (this.animationHandle) {
+	      (0, _utils.cancelAnimationFrame)(this.animationHandle);
+	      this.stop = true;
+	    }
+	  };
+
+	  NoOp.prototype.animate = function animate() {
+	    this.canvas = this.$el.find('canvas[data-no-op-canvas]')[0];
+	    this.context = this.canvas.getContext('2d');
+	    this.loop();
+	  };
 
 	  return NoOp;
 	}(_playback2.default);
@@ -22867,7 +22424,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function SpinnerThreeBouncePlugin(container) {
 	    _classCallCheck(this, SpinnerThreeBouncePlugin);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SpinnerThreeBouncePlugin).call(this, container));
+	    var _this = _possibleConstructorReturn(this, _UIContainerPlugin.call(this, container));
 
 	    _this.template = (0, _template2.default)(_spinner2.default);
 	    _this.showTimeout = null;
@@ -22880,55 +22437,47 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return _this;
 	  }
 
-	  _createClass(SpinnerThreeBouncePlugin, [{
-	    key: 'onBuffering',
-	    value: function onBuffering() {
-	      this.show();
-	    }
-	  }, {
-	    key: 'onBufferFull',
-	    value: function onBufferFull() {
-	      this.hide();
-	    }
-	  }, {
-	    key: 'onStop',
-	    value: function onStop() {
-	      this.hide();
-	    }
-	  }, {
-	    key: 'show',
-	    value: function show() {
-	      var _this2 = this;
+	  SpinnerThreeBouncePlugin.prototype.onBuffering = function onBuffering() {
+	    this.show();
+	  };
 
-	      if (this.showTimeout === null) {
-	        this.showTimeout = setTimeout(function () {
-	          return _this2.$el.show();
-	        }, 300);
-	      }
+	  SpinnerThreeBouncePlugin.prototype.onBufferFull = function onBufferFull() {
+	    this.hide();
+	  };
+
+	  SpinnerThreeBouncePlugin.prototype.onStop = function onStop() {
+	    this.hide();
+	  };
+
+	  SpinnerThreeBouncePlugin.prototype.show = function show() {
+	    var _this2 = this;
+
+	    if (this.showTimeout === null) {
+	      this.showTimeout = setTimeout(function () {
+	        return _this2.$el.show();
+	      }, 300);
 	    }
-	  }, {
-	    key: 'hide',
-	    value: function hide() {
-	      if (this.showTimeout !== null) {
-	        clearTimeout(this.showTimeout);
-	        this.showTimeout = null;
-	      }
-	      this.$el.hide();
+	  };
+
+	  SpinnerThreeBouncePlugin.prototype.hide = function hide() {
+	    if (this.showTimeout !== null) {
+	      clearTimeout(this.showTimeout);
+	      this.showTimeout = null;
 	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      this.$el.html(this.template());
-	      var style = _styler2.default.getStyleFor(_spinner4.default);
-	      this.container.$el.append(style);
-	      this.container.$el.append(this.$el);
-	      this.$el.hide();
-	      if (this.container.buffering) {
-	        this.onBuffering();
-	      }
-	      return this;
+	    this.$el.hide();
+	  };
+
+	  SpinnerThreeBouncePlugin.prototype.render = function render() {
+	    this.$el.html(this.template());
+	    var style = _styler2.default.getStyleFor(_spinner4.default);
+	    this.container.$el.append(style);
+	    this.container.$el.append(this.$el);
+	    this.$el.hide();
+	    if (this.container.buffering) {
+	      this.onBuffering();
 	    }
-	  }]);
+	    return this;
+	  };
 
 	  return SpinnerThreeBouncePlugin;
 	}(_ui_container_plugin2.default);
@@ -22978,7 +22527,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function UIContainerPlugin(container) {
 	    _classCallCheck(this, UIContainerPlugin);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(UIContainerPlugin).call(this, container.options));
+	    var _this = _possibleConstructorReturn(this, _UIObject.call(this, container.options));
 
 	    _this.container = container;
 	    _this.enabled = true;
@@ -22994,31 +22543,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 
 
+	  UIContainerPlugin.prototype.enable = function enable() {
+	    if (!this.enabled) {
+	      this.bindEvents();
+	      this.$el.show();
+	      this.enabled = true;
+	    }
+	  };
+
+	  UIContainerPlugin.prototype.disable = function disable() {
+	    this.stopListening();
+	    this.$el.hide();
+	    this.enabled = false;
+	  };
+
+	  UIContainerPlugin.prototype.bindEvents = function bindEvents() {};
+
+	  UIContainerPlugin.prototype.destroy = function destroy() {
+	    this.remove();
+	  };
+
 	  _createClass(UIContainerPlugin, [{
-	    key: 'enable',
-	    value: function enable() {
-	      if (!this.enabled) {
-	        this.bindEvents();
-	        this.$el.show();
-	        this.enabled = true;
-	      }
-	    }
-	  }, {
-	    key: 'disable',
-	    value: function disable() {
-	      this.stopListening();
-	      this.$el.hide();
-	      this.enabled = false;
-	    }
-	  }, {
-	    key: 'bindEvents',
-	    value: function bindEvents() {}
-	  }, {
-	    key: 'destroy',
-	    value: function destroy() {
-	      this.remove();
-	    }
-	  }, {
 	    key: 'options',
 	    get: function get() {
 	      return this.container && this.container.options || {};
@@ -23113,7 +22658,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function StatsPlugin(container) {
 	    _classCallCheck(this, StatsPlugin);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(StatsPlugin).call(this, container));
+	    var _this = _possibleConstructorReturn(this, _ContainerPlugin.call(this, container));
 
 	    _this.setInitialAttrs();
 	    _this.reportInterval = _this.options.reportInterval || 5000;
@@ -23121,107 +22666,93 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return _this;
 	  }
 
-	  _createClass(StatsPlugin, [{
-	    key: 'bindEvents',
-	    value: function bindEvents() {
-	      this.listenTo(this.container.playback, _events2.default.PLAYBACK_PLAY, this.onPlay);
-	      this.listenTo(this.container, _events2.default.CONTAINER_STOP, this.onStop);
-	      this.listenTo(this.container, _events2.default.CONTAINER_DESTROYED, this.onStop);
-	      this.listenTo(this.container, _events2.default.CONTAINER_STATE_BUFFERING, this.onBuffering);
-	      this.listenTo(this.container, _events2.default.CONTAINER_STATE_BUFFERFULL, this.onBufferFull);
-	      this.listenTo(this.container, _events2.default.CONTAINER_STATS_ADD, this.onStatsAdd);
-	      this.listenTo(this.container, _events2.default.CONTAINER_BITRATE, this.onStatsAdd);
-	      this.listenTo(this.container.playback, _events2.default.PLAYBACK_STATS_ADD, this.onStatsAdd);
+	  StatsPlugin.prototype.bindEvents = function bindEvents() {
+	    this.listenTo(this.container.playback, _events2.default.PLAYBACK_PLAY, this.onPlay);
+	    this.listenTo(this.container, _events2.default.CONTAINER_STOP, this.onStop);
+	    this.listenTo(this.container, _events2.default.CONTAINER_DESTROYED, this.onStop);
+	    this.listenTo(this.container, _events2.default.CONTAINER_STATE_BUFFERING, this.onBuffering);
+	    this.listenTo(this.container, _events2.default.CONTAINER_STATE_BUFFERFULL, this.onBufferFull);
+	    this.listenTo(this.container, _events2.default.CONTAINER_STATS_ADD, this.onStatsAdd);
+	    this.listenTo(this.container, _events2.default.CONTAINER_BITRATE, this.onStatsAdd);
+	    this.listenTo(this.container.playback, _events2.default.PLAYBACK_STATS_ADD, this.onStatsAdd);
+	  };
+
+	  StatsPlugin.prototype.setInitialAttrs = function setInitialAttrs() {
+	    this.firstPlay = true;
+	    this.startupTime = 0;
+	    this.rebufferingTime = 0;
+	    this.watchingTime = 0;
+	    this.rebuffers = 0;
+	    this.externalMetrics = {};
+	  };
+
+	  StatsPlugin.prototype.onPlay = function onPlay() {
+	    this.state = "PLAYING";
+	    this.watchingTimeInit = Date.now();
+	    if (!this.intervalId) {
+	      this.intervalId = setInterval(this.report.bind(this), this.reportInterval);
 	    }
-	  }, {
-	    key: 'setInitialAttrs',
-	    value: function setInitialAttrs() {
-	      this.firstPlay = true;
-	      this.startupTime = 0;
-	      this.rebufferingTime = 0;
-	      this.watchingTime = 0;
-	      this.rebuffers = 0;
-	      this.externalMetrics = {};
+	  };
+
+	  StatsPlugin.prototype.onStop = function onStop() {
+	    clearInterval(this.intervalId);
+	    this.intervalId = undefined;
+	    this.state = "STOPPED";
+	  };
+
+	  StatsPlugin.prototype.onBuffering = function onBuffering() {
+	    if (this.firstPlay) {
+	      this.startupTimeInit = Date.now();
+	    } else {
+	      this.rebufferingTimeInit = Date.now();
 	    }
-	  }, {
-	    key: 'onPlay',
-	    value: function onPlay() {
-	      this.state = "PLAYING";
+	    this.state = "BUFFERING";
+	    this.rebuffers++;
+	  };
+
+	  StatsPlugin.prototype.onBufferFull = function onBufferFull() {
+	    if (this.firstPlay && !!this.startupTimeInit) {
+	      this.firstPlay = false;
+	      this.startupTime = Date.now() - this.startupTimeInit;
 	      this.watchingTimeInit = Date.now();
-	      if (!this.intervalId) {
-	        this.intervalId = setInterval(this.report.bind(this), this.reportInterval);
-	      }
+	    } else if (!!this.rebufferingTimeInit) {
+	      this.rebufferingTime += this.getRebufferingTime();
 	    }
-	  }, {
-	    key: 'onStop',
-	    value: function onStop() {
-	      clearInterval(this.intervalId);
-	      this.intervalId = undefined;
-	      this.state = "STOPPED";
-	    }
-	  }, {
-	    key: 'onBuffering',
-	    value: function onBuffering() {
-	      if (this.firstPlay) {
-	        this.startupTimeInit = Date.now();
-	      } else {
-	        this.rebufferingTimeInit = Date.now();
-	      }
-	      this.state = "BUFFERING";
-	      this.rebuffers++;
-	    }
-	  }, {
-	    key: 'onBufferFull',
-	    value: function onBufferFull() {
-	      if (this.firstPlay && !!this.startupTimeInit) {
-	        this.firstPlay = false;
-	        this.startupTime = Date.now() - this.startupTimeInit;
-	        this.watchingTimeInit = Date.now();
-	      } else if (!!this.rebufferingTimeInit) {
-	        this.rebufferingTime += this.getRebufferingTime();
-	      }
-	      this.rebufferingTimeInit = undefined;
-	      this.state = "PLAYING";
-	    }
-	  }, {
-	    key: 'getRebufferingTime',
-	    value: function getRebufferingTime() {
-	      return Date.now() - this.rebufferingTimeInit;
-	    }
-	  }, {
-	    key: 'getWatchingTime',
-	    value: function getWatchingTime() {
-	      var totalTime = Date.now() - this.watchingTimeInit;
-	      return totalTime - this.rebufferingTime;
-	    }
-	  }, {
-	    key: 'isRebuffering',
-	    value: function isRebuffering() {
-	      return !!this.rebufferingTimeInit;
-	    }
-	  }, {
-	    key: 'onStatsAdd',
-	    value: function onStatsAdd(metric) {
-	      _clapprZepto2.default.extend(this.externalMetrics, metric);
-	    }
-	  }, {
-	    key: 'getStats',
-	    value: function getStats() {
-	      var metrics = {
-	        startupTime: this.startupTime,
-	        rebuffers: this.rebuffers,
-	        rebufferingTime: this.isRebuffering() ? this.rebufferingTime + this.getRebufferingTime() : this.rebufferingTime,
-	        watchingTime: this.isRebuffering() ? this.getWatchingTime() - this.getRebufferingTime() : this.getWatchingTime()
-	      };
-	      _clapprZepto2.default.extend(metrics, this.externalMetrics);
-	      return metrics;
-	    }
-	  }, {
-	    key: 'report',
-	    value: function report() {
-	      this.container.statsReport(this.getStats());
-	    }
-	  }]);
+	    this.rebufferingTimeInit = undefined;
+	    this.state = "PLAYING";
+	  };
+
+	  StatsPlugin.prototype.getRebufferingTime = function getRebufferingTime() {
+	    return Date.now() - this.rebufferingTimeInit;
+	  };
+
+	  StatsPlugin.prototype.getWatchingTime = function getWatchingTime() {
+	    var totalTime = Date.now() - this.watchingTimeInit;
+	    return totalTime - this.rebufferingTime;
+	  };
+
+	  StatsPlugin.prototype.isRebuffering = function isRebuffering() {
+	    return !!this.rebufferingTimeInit;
+	  };
+
+	  StatsPlugin.prototype.onStatsAdd = function onStatsAdd(metric) {
+	    _clapprZepto2.default.extend(this.externalMetrics, metric);
+	  };
+
+	  StatsPlugin.prototype.getStats = function getStats() {
+	    var metrics = {
+	      startupTime: this.startupTime,
+	      rebuffers: this.rebuffers,
+	      rebufferingTime: this.isRebuffering() ? this.rebufferingTime + this.getRebufferingTime() : this.rebufferingTime,
+	      watchingTime: this.isRebuffering() ? this.getWatchingTime() - this.getRebufferingTime() : this.getWatchingTime()
+	    };
+	    _clapprZepto2.default.extend(metrics, this.externalMetrics);
+	    return metrics;
+	  };
+
+	  StatsPlugin.prototype.report = function report() {
+	    this.container.statsReport(this.getStats());
+	  };
 
 	  return StatsPlugin;
 	}(_container_plugin2.default);
@@ -23269,7 +22800,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function ContainerPlugin(container) {
 	    _classCallCheck(this, ContainerPlugin);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ContainerPlugin).call(this, container.options));
+	    var _this = _possibleConstructorReturn(this, _BaseObject.call(this, container.options));
 
 	    _this.container = container;
 	    _this.enabled = true;
@@ -23285,31 +22816,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 
 
-	  _createClass(ContainerPlugin, [{
-	    key: 'enable',
-	    value: function enable() {
-	      if (!this.enabled) {
-	        this.bindEvents();
-	        this.enabled = true;
-	      }
+	  ContainerPlugin.prototype.enable = function enable() {
+	    if (!this.enabled) {
+	      this.bindEvents();
+	      this.enabled = true;
 	    }
-	  }, {
-	    key: 'disable',
-	    value: function disable() {
-	      if (this.enabled) {
-	        this.stopListening();
-	        this.enabled = false;
-	      }
-	    }
-	  }, {
-	    key: 'bindEvents',
-	    value: function bindEvents() {}
-	  }, {
-	    key: 'destroy',
-	    value: function destroy() {
+	  };
+
+	  ContainerPlugin.prototype.disable = function disable() {
+	    if (this.enabled) {
 	      this.stopListening();
+	      this.enabled = false;
 	    }
-	  }, {
+	  };
+
+	  ContainerPlugin.prototype.bindEvents = function bindEvents() {};
+
+	  ContainerPlugin.prototype.destroy = function destroy() {
+	    this.stopListening();
+	  };
+
+	  _createClass(ContainerPlugin, [{
 	    key: 'options',
 	    get: function get() {
 	      return this.container && this.container.options || {};
@@ -23401,53 +22928,46 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function WaterMarkPlugin(container) {
 	    _classCallCheck(this, WaterMarkPlugin);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(WaterMarkPlugin).call(this, container));
+	    var _this = _possibleConstructorReturn(this, _UIContainerPlugin.call(this, container));
 
 	    _this.configure();
 	    return _this;
 	  }
 
-	  _createClass(WaterMarkPlugin, [{
-	    key: 'bindEvents',
-	    value: function bindEvents() {
-	      this.listenTo(this.container, _events2.default.CONTAINER_PLAY, this.onPlay);
-	      this.listenTo(this.container, _events2.default.CONTAINER_STOP, this.onStop);
-	      this.listenTo(this.container, _events2.default.CONTAINER_OPTIONS_CHANGE, this.configure);
+	  WaterMarkPlugin.prototype.bindEvents = function bindEvents() {
+	    this.listenTo(this.container, _events2.default.CONTAINER_PLAY, this.onPlay);
+	    this.listenTo(this.container, _events2.default.CONTAINER_STOP, this.onStop);
+	    this.listenTo(this.container, _events2.default.CONTAINER_OPTIONS_CHANGE, this.configure);
+	  };
+
+	  WaterMarkPlugin.prototype.configure = function configure() {
+	    this.position = this.options.position || "bottom-right";
+	    if (this.options.watermark) {
+	      this.imageUrl = this.options.watermark;
+	      this.imageLink = this.options.watermarkLink;
+	      this.render();
+	    } else {
+	      this.$el.remove();
 	    }
-	  }, {
-	    key: 'configure',
-	    value: function configure() {
-	      this.position = this.options.position || "bottom-right";
-	      if (this.options.watermark) {
-	        this.imageUrl = this.options.watermark;
-	        this.imageLink = this.options.watermarkLink;
-	        this.render();
-	      } else {
-	        this.$el.remove();
-	      }
-	    }
-	  }, {
-	    key: 'onPlay',
-	    value: function onPlay() {
-	      if (!this.hidden) this.$el.show();
-	    }
-	  }, {
-	    key: 'onStop',
-	    value: function onStop() {
-	      this.$el.hide();
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      this.$el.hide();
-	      var templateOptions = { position: this.position, imageUrl: this.imageUrl, imageLink: this.imageLink };
-	      this.$el.html(this.template(templateOptions));
-	      var style = _styler2.default.getStyleFor(_watermark2.default);
-	      this.container.$el.append(style);
-	      this.container.$el.append(this.$el);
-	      return this;
-	    }
-	  }]);
+	  };
+
+	  WaterMarkPlugin.prototype.onPlay = function onPlay() {
+	    if (!this.hidden) this.$el.show();
+	  };
+
+	  WaterMarkPlugin.prototype.onStop = function onStop() {
+	    this.$el.hide();
+	  };
+
+	  WaterMarkPlugin.prototype.render = function render() {
+	    this.$el.hide();
+	    var templateOptions = { position: this.position, imageUrl: this.imageUrl, imageLink: this.imageLink };
+	    this.$el.html(this.template(templateOptions));
+	    var style = _styler2.default.getStyleFor(_watermark2.default);
+	    this.container.$el.append(style);
+	    this.container.$el.append(this.$el);
+	    return this;
+	  };
 
 	  return WaterMarkPlugin;
 	}(_ui_container_plugin2.default);
@@ -23492,8 +23012,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-
-	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -23577,7 +23095,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function PosterPlugin(container) {
 	    _classCallCheck(this, PosterPlugin);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PosterPlugin).call(this, container));
+	    var _this = _possibleConstructorReturn(this, _UIContainerPlugin.call(this, container));
 
 	    _this.hasStartedPlaying = false;
 	    _this.playRequested = false;
@@ -23588,121 +23106,109 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return _this;
 	  }
 
-	  _createClass(PosterPlugin, [{
-	    key: 'bindEvents',
-	    value: function bindEvents() {
-	      this.listenTo(this.container, _events2.default.CONTAINER_STOP, this.onStop);
-	      this.listenTo(this.container, _events2.default.CONTAINER_PLAY, this.onPlay);
-	      this.listenTo(this.container, _events2.default.CONTAINER_ENDED, this.onStop);
-	      this.listenTo(this.container, _events2.default.CONTAINER_STATE_BUFFERING, this.update);
-	      this.listenTo(this.container, _events2.default.CONTAINER_STATE_BUFFERFULL, this.update);
-	      this.listenTo(this.container, _events2.default.CONTAINER_OPTIONS_CHANGE, this.render);
-	      _mediator2.default.on(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.updateSize, this);
-	    }
-	  }, {
-	    key: 'stopListening',
-	    value: function stopListening() {
-	      _get(Object.getPrototypeOf(PosterPlugin.prototype), 'stopListening', this).call(this);
-	      _mediator2.default.off(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.updateSize, this);
-	    }
-	  }, {
-	    key: 'onPlay',
-	    value: function onPlay() {
-	      this.hasStartedPlaying = true;
-	      this.update();
-	    }
-	  }, {
-	    key: 'onStop',
-	    value: function onStop() {
-	      this.hasStartedPlaying = false;
-	      this.playRequested = false;
-	      this.update();
-	    }
-	  }, {
-	    key: 'showPlayButton',
-	    value: function showPlayButton(show) {
-	      if (!this.options.chromeless) {
-	        if (show) {
-	          this.$playButton.show();
-	          this.$el.addClass("clickable");
-	          this.updateSize();
-	        } else {
-	          this.$playButton.hide();
-	          this.$el.removeClass("clickable");
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'clicked',
-	    value: function clicked() {
-	      if (!this.options.chromeless) {
-	        this.playRequested = true;
-	        this.update();
-	        this.container.play();
-	      }
-	      return false;
-	    }
-	  }, {
-	    key: 'updateSize',
-	    value: function updateSize() {
-	      if (!this.shouldRender) {
-	        return;
-	      }
-	      var height = this.$el.height();
-	      this.$el.css({ fontSize: height });
-	      if (!this.playRequested && !this.hasStartedPlaying) {
-	        this.$playWrapper.css({ marginTop: -(this.$playWrapper.height() / 2) });
-	      }
-	    }
-	  }, {
-	    key: 'shouldHideOnPlay',
-	    value: function shouldHideOnPlay() {
-	      // Audio broadcasts should keep the poster up; video should hide poster while playing.
-	      return !(this.container.playback.name == 'html5_audio' || this.options.audioOnly);
-	    }
-	  }, {
-	    key: 'update',
-	    value: function update() {
-	      if (!this.shouldRender) {
-	        return;
-	      }
-	      if (!this.hasStartedPlaying) {
-	        this.container.disableMediaControl();
-	        this.$el.show();
-	        var showPlayButton = !this.playRequested && !this.container.buffering;
-	        this.showPlayButton(showPlayButton);
+	  PosterPlugin.prototype.bindEvents = function bindEvents() {
+	    this.listenTo(this.container, _events2.default.CONTAINER_STOP, this.onStop);
+	    this.listenTo(this.container, _events2.default.CONTAINER_PLAY, this.onPlay);
+	    this.listenTo(this.container, _events2.default.CONTAINER_ENDED, this.onStop);
+	    this.listenTo(this.container, _events2.default.CONTAINER_STATE_BUFFERING, this.update);
+	    this.listenTo(this.container, _events2.default.CONTAINER_STATE_BUFFERFULL, this.update);
+	    this.listenTo(this.container, _events2.default.CONTAINER_OPTIONS_CHANGE, this.render);
+	    _mediator2.default.on(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.updateSize, this);
+	  };
+
+	  PosterPlugin.prototype.stopListening = function stopListening() {
+	    _UIContainerPlugin.prototype.stopListening.call(this);
+	    _mediator2.default.off(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.updateSize, this);
+	  };
+
+	  PosterPlugin.prototype.onPlay = function onPlay() {
+	    this.hasStartedPlaying = true;
+	    this.update();
+	  };
+
+	  PosterPlugin.prototype.onStop = function onStop() {
+	    this.hasStartedPlaying = false;
+	    this.playRequested = false;
+	    this.update();
+	  };
+
+	  PosterPlugin.prototype.showPlayButton = function showPlayButton(show) {
+	    if (!this.options.chromeless) {
+	      if (show) {
+	        this.$playButton.show();
+	        this.$el.addClass("clickable");
+	        this.updateSize();
 	      } else {
-	        this.container.enableMediaControl();
-	        if (this.shouldHideOnPlay()) {
-	          this.$el.hide();
-	        }
+	        this.$playButton.hide();
+	        this.$el.removeClass("clickable");
 	      }
 	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      if (!this.shouldRender) {
-	        return;
-	      }
-	      var style = _styler2.default.getStyleFor(_poster2.default, { baseUrl: this.options.baseUrl });
-	      this.$el.html(this.template());
-	      this.$el.append(style);
-	      if (this.options.poster) {
-	        var imgEl = (0, _clapprZepto2.default)('<div data-poster class="poster-background"></div>');
-	        imgEl.css({ 'background-image': 'url(' + this.options.poster + ')' });
-	        this.$el.prepend(imgEl);
-	      }
-	      this.container.$el.append(this.el);
-	      this.$playButton = this.$el.find('.poster-icon');
-	      this.$playWrapper = this.$el.find('.play-wrapper');
-	      if (this.options.mediacontrol && this.options.mediacontrol.buttons) {
-	        var buttonsColor = this.options.mediacontrol.buttons;
-	        this.$playButton.css('color', buttonsColor);
-	      }
+	  };
+
+	  PosterPlugin.prototype.clicked = function clicked() {
+	    if (!this.options.chromeless) {
+	      this.playRequested = true;
 	      this.update();
-	      return this;
+	      this.container.play();
 	    }
-	  }]);
+	    return false;
+	  };
+
+	  PosterPlugin.prototype.updateSize = function updateSize() {
+	    if (!this.shouldRender) {
+	      return;
+	    }
+	    var height = this.$el.height();
+	    this.$el.css({ fontSize: height });
+	    if (!this.playRequested && !this.hasStartedPlaying) {
+	      this.$playWrapper.css({ marginTop: -(this.$playWrapper.height() / 2) });
+	    }
+	  };
+
+	  PosterPlugin.prototype.shouldHideOnPlay = function shouldHideOnPlay() {
+	    // Audio broadcasts should keep the poster up; video should hide poster while playing.
+	    return !(this.container.playback.name == 'html5_audio' || this.options.audioOnly);
+	  };
+
+	  PosterPlugin.prototype.update = function update() {
+	    if (!this.shouldRender) {
+	      return;
+	    }
+	    if (!this.hasStartedPlaying) {
+	      this.container.disableMediaControl();
+	      this.$el.show();
+	      var showPlayButton = !this.playRequested && !this.container.buffering;
+	      this.showPlayButton(showPlayButton);
+	    } else {
+	      this.container.enableMediaControl();
+	      if (this.shouldHideOnPlay()) {
+	        this.$el.hide();
+	      }
+	    }
+	  };
+
+	  PosterPlugin.prototype.render = function render() {
+	    if (!this.shouldRender) {
+	      return;
+	    }
+	    var style = _styler2.default.getStyleFor(_poster2.default, { baseUrl: this.options.baseUrl });
+	    this.$el.html(this.template());
+	    this.$el.append(style);
+	    if (this.options.poster) {
+	      var imgEl = (0, _clapprZepto2.default)('<div data-poster class="poster-background"></div>');
+	      imgEl.css({ 'background-image': 'url(' + this.options.poster + ')' });
+	      this.$el.prepend(imgEl);
+	    }
+	    this.container.$el.append(this.el);
+	    this.$playButton = this.$el.find('.poster-icon');
+	    this.$playWrapper = this.$el.find('.play-wrapper');
+	    if (this.options.mediacontrol && this.options.mediacontrol.buttons) {
+	      var buttonsColor = this.options.mediacontrol.buttons;
+	      this.$playButton.css('color', buttonsColor);
+	    }
+	    this.update();
+	    return this;
+	  };
 
 	  return PosterPlugin;
 	}(_ui_container_plugin2.default);
@@ -23782,7 +23288,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function GoogleAnalytics(container) {
 	    _classCallCheck(this, GoogleAnalytics);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(GoogleAnalytics).call(this, container));
+	    var _this = _possibleConstructorReturn(this, _ContainerPlugin.call(this, container));
 
 	    if (_this.container.options.gaAccount) {
 	      _this.account = _this.container.options.gaAccount;
@@ -23794,137 +23300,118 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return _this;
 	  }
 
-	  _createClass(GoogleAnalytics, [{
-	    key: 'embedScript',
-	    value: function embedScript() {
-	      var _this2 = this;
+	  GoogleAnalytics.prototype.embedScript = function embedScript() {
+	    var _this2 = this;
 
-	      if (!window._gat) {
-	        var script = document.createElement('script');
-	        script.setAttribute("type", "text/javascript");
-	        script.setAttribute("async", "async");
-	        script.setAttribute("src", "//www.google-analytics.com/ga.js");
-	        script.onload = function () {
-	          return _this2.addEventListeners();
-	        };
-	        document.body.appendChild(script);
-	      } else {
-	        this.addEventListeners();
-	      }
+	    if (!window._gat) {
+	      var script = document.createElement('script');
+	      script.setAttribute("type", "text/javascript");
+	      script.setAttribute("async", "async");
+	      script.setAttribute("src", "//www.google-analytics.com/ga.js");
+	      script.onload = function () {
+	        return _this2.addEventListeners();
+	      };
+	      document.body.appendChild(script);
+	    } else {
+	      this.addEventListeners();
 	    }
-	  }, {
-	    key: 'addEventListeners',
-	    value: function addEventListeners() {
-	      var _this3 = this;
+	  };
 
-	      if (this.container) {
-	        this.listenTo(this.container, _events2.default.CONTAINER_READY, this.onReady);
-	        this.listenTo(this.container, _events2.default.CONTAINER_PLAY, this.onPlay);
-	        this.listenTo(this.container, _events2.default.CONTAINER_STOP, this.onStop);
-	        this.listenTo(this.container, _events2.default.CONTAINER_PAUSE, this.onPause);
-	        this.listenTo(this.container, _events2.default.CONTAINER_ENDED, this.onEnded);
-	        this.listenTo(this.container, _events2.default.CONTAINER_STATE_BUFFERING, this.onBuffering);
-	        this.listenTo(this.container, _events2.default.CONTAINER_STATE_BUFFERFULL, this.onBufferFull);
-	        this.listenTo(this.container, _events2.default.CONTAINER_ENDED, this.onEnded);
-	        this.listenTo(this.container, _events2.default.CONTAINER_ERROR, this.onError);
-	        this.listenTo(this.container, _events2.default.CONTAINER_PLAYBACKSTATE, this.onPlaybackChanged);
-	        this.listenTo(this.container, _events2.default.CONTAINER_VOLUME, function (event) {
-	          return _this3.onVolumeChanged(event);
-	        });
-	        this.listenTo(this.container, _events2.default.CONTAINER_SEEK, function (event) {
-	          return _this3.onSeek(event);
-	        });
-	        this.listenTo(this.container, _events2.default.CONTAINER_FULL_SCREEN, this.onFullscreen);
-	        this.listenTo(this.container, _events2.default.CONTAINER_HIGHDEFINITIONUPDATE, this.onHD);
-	        this.listenTo(this.container, _events2.default.CONTAINER_PLAYBACKDVRSTATECHANGED, this.onDVR);
-	      }
-	      _gaq.push([this.trackerName + '_setAccount', this.account]);
-	      if (!!this.domainName) _gaq.push([this.trackerName + '_setDomainName', this.domainName]);
+	  GoogleAnalytics.prototype.addEventListeners = function addEventListeners() {
+	    var _this3 = this;
+
+	    if (this.container) {
+	      this.listenTo(this.container, _events2.default.CONTAINER_READY, this.onReady);
+	      this.listenTo(this.container, _events2.default.CONTAINER_PLAY, this.onPlay);
+	      this.listenTo(this.container, _events2.default.CONTAINER_STOP, this.onStop);
+	      this.listenTo(this.container, _events2.default.CONTAINER_PAUSE, this.onPause);
+	      this.listenTo(this.container, _events2.default.CONTAINER_ENDED, this.onEnded);
+	      this.listenTo(this.container, _events2.default.CONTAINER_STATE_BUFFERING, this.onBuffering);
+	      this.listenTo(this.container, _events2.default.CONTAINER_STATE_BUFFERFULL, this.onBufferFull);
+	      this.listenTo(this.container, _events2.default.CONTAINER_ENDED, this.onEnded);
+	      this.listenTo(this.container, _events2.default.CONTAINER_ERROR, this.onError);
+	      this.listenTo(this.container, _events2.default.CONTAINER_PLAYBACKSTATE, this.onPlaybackChanged);
+	      this.listenTo(this.container, _events2.default.CONTAINER_VOLUME, function (event) {
+	        return _this3.onVolumeChanged(event);
+	      });
+	      this.listenTo(this.container, _events2.default.CONTAINER_SEEK, function (event) {
+	        return _this3.onSeek(event);
+	      });
+	      this.listenTo(this.container, _events2.default.CONTAINER_FULL_SCREEN, this.onFullscreen);
+	      this.listenTo(this.container, _events2.default.CONTAINER_HIGHDEFINITIONUPDATE, this.onHD);
+	      this.listenTo(this.container, _events2.default.CONTAINER_PLAYBACKDVRSTATECHANGED, this.onDVR);
 	    }
-	  }, {
-	    key: 'onReady',
-	    value: function onReady() {
-	      this.push(["Video", "Playback", this.container.playback.name]);
+	    _gaq.push([this.trackerName + '_setAccount', this.account]);
+	    if (!!this.domainName) _gaq.push([this.trackerName + '_setDomainName', this.domainName]);
+	  };
+
+	  GoogleAnalytics.prototype.onReady = function onReady() {
+	    this.push(["Video", "Playback", this.container.playback.name]);
+	  };
+
+	  GoogleAnalytics.prototype.onPlay = function onPlay() {
+	    this.push(["Video", "Play", this.container.playback.src]);
+	  };
+
+	  GoogleAnalytics.prototype.onStop = function onStop() {
+	    this.push(["Video", "Stop", this.container.playback.src]);
+	  };
+
+	  GoogleAnalytics.prototype.onEnded = function onEnded() {
+	    this.push(["Video", "Ended", this.container.playback.src]);
+	  };
+
+	  GoogleAnalytics.prototype.onBuffering = function onBuffering() {
+	    this.push(["Video", "Buffering", this.container.playback.src]);
+	  };
+
+	  GoogleAnalytics.prototype.onBufferFull = function onBufferFull() {
+	    this.push(["Video", "Bufferfull", this.container.playback.src]);
+	  };
+
+	  GoogleAnalytics.prototype.onError = function onError() {
+	    this.push(["Video", "Error", this.container.playback.src]);
+	  };
+
+	  GoogleAnalytics.prototype.onHD = function onHD(isHD) {
+	    var status = isHD ? "ON" : "OFF";
+	    if (status !== this.currentHDState) {
+	      this.currentHDState = status;
+	      this.push(["Video", "HD - " + status, this.container.playback.src]);
 	    }
-	  }, {
-	    key: 'onPlay',
-	    value: function onPlay() {
-	      this.push(["Video", "Play", this.container.playback.src]);
+	  };
+
+	  GoogleAnalytics.prototype.onPlaybackChanged = function onPlaybackChanged(playbackState) {
+	    if (playbackState.type !== null) {
+	      this.push(["Video", "Playback Type - " + playbackState.type, this.container.playback.src]);
 	    }
-	  }, {
-	    key: 'onStop',
-	    value: function onStop() {
-	      this.push(["Video", "Stop", this.container.playback.src]);
-	    }
-	  }, {
-	    key: 'onEnded',
-	    value: function onEnded() {
-	      this.push(["Video", "Ended", this.container.playback.src]);
-	    }
-	  }, {
-	    key: 'onBuffering',
-	    value: function onBuffering() {
-	      this.push(["Video", "Buffering", this.container.playback.src]);
-	    }
-	  }, {
-	    key: 'onBufferFull',
-	    value: function onBufferFull() {
-	      this.push(["Video", "Bufferfull", this.container.playback.src]);
-	    }
-	  }, {
-	    key: 'onError',
-	    value: function onError() {
-	      this.push(["Video", "Error", this.container.playback.src]);
-	    }
-	  }, {
-	    key: 'onHD',
-	    value: function onHD(isHD) {
-	      var status = isHD ? "ON" : "OFF";
-	      if (status !== this.currentHDState) {
-	        this.currentHDState = status;
-	        this.push(["Video", "HD - " + status, this.container.playback.src]);
-	      }
-	    }
-	  }, {
-	    key: 'onPlaybackChanged',
-	    value: function onPlaybackChanged(playbackState) {
-	      if (playbackState.type !== null) {
-	        this.push(["Video", "Playback Type - " + playbackState.type, this.container.playback.src]);
-	      }
-	    }
-	  }, {
-	    key: 'onDVR',
-	    value: function onDVR(dvrInUse) {
-	      var status = dvrInUse ? "ON" : "OFF";
-	      this.push(["Interaction", "DVR - " + status, this.container.playback.src]);
-	    }
-	  }, {
-	    key: 'onPause',
-	    value: function onPause() {
-	      this.push(["Video", "Pause", this.container.playback.src]);
-	    }
-	  }, {
-	    key: 'onSeek',
-	    value: function onSeek() {
-	      this.push(["Video", "Seek", this.container.playback.src]);
-	    }
-	  }, {
-	    key: 'onVolumeChanged',
-	    value: function onVolumeChanged() {
-	      this.push(["Interaction", "Volume", this.container.playback.src]);
-	    }
-	  }, {
-	    key: 'onFullscreen',
-	    value: function onFullscreen() {
-	      this.push(["Interaction", "Fullscreen", this.container.playback.src]);
-	    }
-	  }, {
-	    key: 'push',
-	    value: function push(array) {
-	      var res = [this.trackerName + "_trackEvent"].concat(array);
-	      _gaq.push(res);
-	    }
-	  }]);
+	  };
+
+	  GoogleAnalytics.prototype.onDVR = function onDVR(dvrInUse) {
+	    var status = dvrInUse ? "ON" : "OFF";
+	    this.push(["Interaction", "DVR - " + status, this.container.playback.src]);
+	  };
+
+	  GoogleAnalytics.prototype.onPause = function onPause() {
+	    this.push(["Video", "Pause", this.container.playback.src]);
+	  };
+
+	  GoogleAnalytics.prototype.onSeek = function onSeek() {
+	    this.push(["Video", "Seek", this.container.playback.src]);
+	  };
+
+	  GoogleAnalytics.prototype.onVolumeChanged = function onVolumeChanged() {
+	    this.push(["Interaction", "Volume", this.container.playback.src]);
+	  };
+
+	  GoogleAnalytics.prototype.onFullscreen = function onFullscreen() {
+	    this.push(["Interaction", "Fullscreen", this.container.playback.src]);
+	  };
+
+	  GoogleAnalytics.prototype.push = function push(array) {
+	    var res = [this.trackerName + "_trackEvent"].concat(array);
+	    _gaq.push(res);
+	  };
 
 	  return GoogleAnalytics;
 	}(_container_plugin2.default);
@@ -23991,37 +23478,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function ClickToPausePlugin(container) {
 	    _classCallCheck(this, ClickToPausePlugin);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(ClickToPausePlugin).call(this, container));
+	    return _possibleConstructorReturn(this, _ContainerPlugin.call(this, container));
 	  }
 
-	  _createClass(ClickToPausePlugin, [{
-	    key: 'bindEvents',
-	    value: function bindEvents() {
-	      if (!this.options.chromeless && !_browser2.default.isMobile) {
-	        this.listenTo(this.container, _events2.default.CONTAINER_CLICK, this.click);
-	        this.listenTo(this.container, _events2.default.CONTAINER_SETTINGSUPDATE, this.settingsUpdate);
+	  ClickToPausePlugin.prototype.bindEvents = function bindEvents() {
+	    if (!this.options.chromeless && !_browser2.default.isMobile) {
+	      this.listenTo(this.container, _events2.default.CONTAINER_CLICK, this.click);
+	      this.listenTo(this.container, _events2.default.CONTAINER_SETTINGSUPDATE, this.settingsUpdate);
+	    }
+	  };
+
+	  ClickToPausePlugin.prototype.click = function click() {
+	    if (this.container.getPlaybackType() !== _playback2.default.LIVE || this.container.isDvrEnabled()) {
+	      if (this.container.isPlaying()) {
+	        this.container.pause();
+	      } else {
+	        this.container.play();
 	      }
 	    }
-	  }, {
-	    key: 'click',
-	    value: function click() {
-	      if (this.container.getPlaybackType() !== _playback2.default.LIVE || this.container.isDvrEnabled()) {
-	        if (this.container.isPlaying()) {
-	          this.container.pause();
-	        } else {
-	          this.container.play();
-	        }
-	      }
+	  };
+
+	  ClickToPausePlugin.prototype.settingsUpdate = function settingsUpdate() {
+	    this.container.$el.removeClass('pointer-enabled');
+	    if (this.container.getPlaybackType() !== _playback2.default.LIVE || this.container.isDvrEnabled()) {
+	      this.container.$el.addClass('pointer-enabled');
 	    }
-	  }, {
-	    key: 'settingsUpdate',
-	    value: function settingsUpdate() {
-	      this.container.$el.removeClass('pointer-enabled');
-	      if (this.container.getPlaybackType() !== _playback2.default.LIVE || this.container.isDvrEnabled()) {
-	        this.container.$el.addClass('pointer-enabled');
-	      }
-	    }
-	  }]);
+	  };
 
 	  return ClickToPausePlugin;
 	}(_container_plugin2.default);
@@ -24122,87 +23604,78 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function DVRControls(core) {
 	    _classCallCheck(this, DVRControls);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DVRControls).call(this, core));
+	    var _this = _possibleConstructorReturn(this, _UICorePlugin.call(this, core));
 
 	    _this.core = core;
 	    _this.settingsUpdate();
 	    return _this;
 	  }
 
-	  _createClass(DVRControls, [{
-	    key: 'bindEvents',
-	    value: function bindEvents() {
-	      this.listenTo(this.core.mediaControl, _events2.default.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged);
-	      this.listenTo(this.core.mediaControl, _events2.default.MEDIACONTROL_RENDERED, this.settingsUpdate);
-	      this.listenTo(this.core, _events2.default.CORE_OPTIONS_CHANGE, this.render);
-	      if (this.core.getCurrentContainer()) {
-	        this.listenToOnce(this.core.getCurrentContainer(), _events2.default.CONTAINER_TIMEUPDATE, this.render);
-	        this.listenTo(this.core.getCurrentContainer(), _events2.default.CONTAINER_PLAYBACKDVRSTATECHANGED, this.dvrChanged);
-	      }
+	  DVRControls.prototype.bindEvents = function bindEvents() {
+	    this.listenTo(this.core.mediaControl, _events2.default.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged);
+	    this.listenTo(this.core.mediaControl, _events2.default.MEDIACONTROL_RENDERED, this.settingsUpdate);
+	    this.listenTo(this.core, _events2.default.CORE_OPTIONS_CHANGE, this.render);
+	    if (this.core.getCurrentContainer()) {
+	      this.listenToOnce(this.core.getCurrentContainer(), _events2.default.CONTAINER_TIMEUPDATE, this.render);
+	      this.listenTo(this.core.getCurrentContainer(), _events2.default.CONTAINER_PLAYBACKDVRSTATECHANGED, this.dvrChanged);
 	    }
-	  }, {
-	    key: 'containerChanged',
-	    value: function containerChanged() {
-	      this.stopListening();
-	      this.bindEvents();
-	    }
-	  }, {
-	    key: 'dvrChanged',
-	    value: function dvrChanged(dvrEnabled) {
-	      this.settingsUpdate();
-	      this.core.mediaControl.$el.addClass('live');
-	      if (dvrEnabled) {
-	        this.core.mediaControl.$el.addClass('dvr');
-	        this.core.mediaControl.$el.find('.media-control-indicator[data-position], .media-control-indicator[data-duration]').hide();
-	      } else {
-	        this.core.mediaControl.$el.removeClass('dvr');
-	      }
-	    }
-	  }, {
-	    key: 'click',
-	    value: function click() {
-	      var mediaControl = this.core.mediaControl;
-	      var container = mediaControl.container;
-	      if (!container.isPlaying()) {
-	        container.play();
-	      }
-	      if (mediaControl.$el.hasClass('dvr')) {
-	        container.seek(container.getDuration());
-	      }
-	    }
-	  }, {
-	    key: 'settingsUpdate',
-	    value: function settingsUpdate() {
-	      var _this2 = this;
+	  };
 
-	      this.stopListening();
-	      if (this.shouldRender()) {
-	        this.render();
-	        this.$el.click(function () {
-	          return _this2.click();
-	        });
-	      }
-	      this.bindEvents();
+	  DVRControls.prototype.containerChanged = function containerChanged() {
+	    this.stopListening();
+	    this.bindEvents();
+	  };
+
+	  DVRControls.prototype.dvrChanged = function dvrChanged(dvrEnabled) {
+	    this.settingsUpdate();
+	    this.core.mediaControl.$el.addClass('live');
+	    if (dvrEnabled) {
+	      this.core.mediaControl.$el.addClass('dvr');
+	      this.core.mediaControl.$el.find('.media-control-indicator[data-position], .media-control-indicator[data-duration]').hide();
+	    } else {
+	      this.core.mediaControl.$el.removeClass('dvr');
 	    }
-	  }, {
-	    key: 'shouldRender',
-	    value: function shouldRender() {
-	      var useDvrControls = this.core.options.useDvrControls === undefined || !!this.core.options.useDvrControls;
-	      return useDvrControls && this.core.getPlaybackType() === _playback2.default.LIVE;
+	  };
+
+	  DVRControls.prototype.click = function click() {
+	    var mediaControl = this.core.mediaControl;
+	    var container = mediaControl.container;
+	    if (!container.isPlaying()) {
+	      container.play();
 	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      this.style = this.style || _styler2.default.getStyleFor(_dvr_controls2.default, { baseUrl: this.core.options.baseUrl });
-	      this.$el.html(this.template());
-	      this.$el.append(this.style);
-	      if (this.shouldRender()) {
-	        this.core.mediaControl.$el.addClass('live');
-	        this.core.mediaControl.$('.media-control-left-panel[data-media-control]').append(this.$el);
-	      }
-	      return this;
+	    if (mediaControl.$el.hasClass('dvr')) {
+	      container.seek(container.getDuration());
 	    }
-	  }]);
+	  };
+
+	  DVRControls.prototype.settingsUpdate = function settingsUpdate() {
+	    var _this2 = this;
+
+	    this.stopListening();
+	    if (this.shouldRender()) {
+	      this.render();
+	      this.$el.click(function () {
+	        return _this2.click();
+	      });
+	    }
+	    this.bindEvents();
+	  };
+
+	  DVRControls.prototype.shouldRender = function shouldRender() {
+	    var useDvrControls = this.core.options.useDvrControls === undefined || !!this.core.options.useDvrControls;
+	    return useDvrControls && this.core.getPlaybackType() === _playback2.default.LIVE;
+	  };
+
+	  DVRControls.prototype.render = function render() {
+	    this.style = this.style || _styler2.default.getStyleFor(_dvr_controls2.default, { baseUrl: this.core.options.baseUrl });
+	    this.$el.html(this.template());
+	    this.$el.append(this.style);
+	    if (this.shouldRender()) {
+	      this.core.mediaControl.$el.addClass('live');
+	      this.core.mediaControl.$('.media-control-left-panel[data-media-control]').append(this.$el);
+	    }
+	    return this;
+	  };
 
 	  return DVRControls;
 	}(_ui_core_plugin2.default);
@@ -24219,8 +23692,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _utils = __webpack_require__(2);
 
@@ -24242,7 +23713,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function UICorePlugin(core) {
 	    _classCallCheck(this, UICorePlugin);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(UICorePlugin).call(this, core));
+	    var _this = _possibleConstructorReturn(this, _UIObject.call(this, core));
 
 	    _this.core = core;
 	    _this.enabled = true;
@@ -24251,41 +23722,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return _this;
 	  }
 
-	  _createClass(UICorePlugin, [{
-	    key: 'bindEvents',
-	    value: function bindEvents() {}
-	  }, {
-	    key: 'getExternalInterface',
-	    value: function getExternalInterface() {
-	      return {};
+	  UICorePlugin.prototype.bindEvents = function bindEvents() {};
+
+	  UICorePlugin.prototype.getExternalInterface = function getExternalInterface() {
+	    return {};
+	  };
+
+	  UICorePlugin.prototype.enable = function enable() {
+	    if (!this.enabled) {
+	      this.bindEvents();
+	      this.$el.show();
+	      this.enabled = true;
 	    }
-	  }, {
-	    key: 'enable',
-	    value: function enable() {
-	      if (!this.enabled) {
-	        this.bindEvents();
-	        this.$el.show();
-	        this.enabled = true;
-	      }
-	    }
-	  }, {
-	    key: 'disable',
-	    value: function disable() {
-	      this.stopListening();
-	      this.$el.hide();
-	      this.enabled = false;
-	    }
-	  }, {
-	    key: 'destroy',
-	    value: function destroy() {
-	      this.remove();
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return this;
-	    }
-	  }]);
+	  };
+
+	  UICorePlugin.prototype.disable = function disable() {
+	    this.stopListening();
+	    this.$el.hide();
+	    this.enabled = false;
+	  };
+
+	  UICorePlugin.prototype.destroy = function destroy() {
+	    this.remove();
+	  };
+
+	  UICorePlugin.prototype.render = function render() {
+	    return this;
+	  };
 
 	  return UICorePlugin;
 	}(_ui_object2.default);
@@ -24344,8 +23807,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _core_plugin = __webpack_require__(143);
@@ -24381,99 +23842,88 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function Favicon(core) {
 	    _classCallCheck(this, Favicon);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Favicon).call(this, core));
+	    var _this = _possibleConstructorReturn(this, _CorePlugin.call(this, core));
 
 	    _this.oldIcon = (0, _clapprZepto2.default)('link[rel="shortcut icon"]');
 	    _this.configure();
 	    return _this;
 	  }
 
-	  _createClass(Favicon, [{
-	    key: 'configure',
-	    value: function configure() {
-	      if (!this.core.options.changeFavicon) {
-	        this.disable();
-	        this.listenTo(this.core, _events2.default.CORE_OPTIONS_CHANGE, this.configure);
-	      } else {
-	        this.stopListening(this.core, _events2.default.CORE_OPTIONS_CHANGE);
-	        this.enable();
-	      }
-	    }
-	  }, {
-	    key: 'bindEvents',
-	    value: function bindEvents() {
+	  Favicon.prototype.configure = function configure() {
+	    if (!this.core.options.changeFavicon) {
+	      this.disable();
 	      this.listenTo(this.core, _events2.default.CORE_OPTIONS_CHANGE, this.configure);
-	      this.listenTo(this.core.mediaControl, _events2.default.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged);
-	      if (this.core.mediaControl.container) {
-	        this.containerChanged();
-	      }
+	    } else {
+	      this.stopListening(this.core, _events2.default.CORE_OPTIONS_CHANGE);
+	      this.enable();
 	    }
-	  }, {
-	    key: 'containerChanged',
-	    value: function containerChanged() {
-	      this.listenTo(this.core.mediaControl.container, _events2.default.CONTAINER_PLAY, this.setPlayIcon);
-	      this.listenTo(this.core.mediaControl.container, _events2.default.CONTAINER_PAUSE, this.setPauseIcon);
-	      this.listenTo(this.core.mediaControl.container, _events2.default.CONTAINER_STOP, this.resetIcon);
-	      this.listenTo(this.core.mediaControl.container, _events2.default.CONTAINER_ENDED, this.resetIcon);
-	      this.listenTo(this.core.mediaControl.container, _events2.default.CONTAINER_ERROR, this.resetIcon);
+	  };
+
+	  Favicon.prototype.bindEvents = function bindEvents() {
+	    this.listenTo(this.core, _events2.default.CORE_OPTIONS_CHANGE, this.configure);
+	    this.listenTo(this.core.mediaControl, _events2.default.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged);
+	    if (this.core.mediaControl.container) {
+	      this.containerChanged();
 	    }
-	  }, {
-	    key: 'disable',
-	    value: function disable() {
-	      _get(Object.getPrototypeOf(Favicon.prototype), 'disable', this).call(this);
-	      this.resetIcon();
+	  };
+
+	  Favicon.prototype.containerChanged = function containerChanged() {
+	    this.listenTo(this.core.mediaControl.container, _events2.default.CONTAINER_PLAY, this.setPlayIcon);
+	    this.listenTo(this.core.mediaControl.container, _events2.default.CONTAINER_PAUSE, this.setPauseIcon);
+	    this.listenTo(this.core.mediaControl.container, _events2.default.CONTAINER_STOP, this.resetIcon);
+	    this.listenTo(this.core.mediaControl.container, _events2.default.CONTAINER_ENDED, this.resetIcon);
+	    this.listenTo(this.core.mediaControl.container, _events2.default.CONTAINER_ERROR, this.resetIcon);
+	  };
+
+	  Favicon.prototype.disable = function disable() {
+	    _CorePlugin.prototype.disable.call(this);
+	    this.resetIcon();
+	  };
+
+	  Favicon.prototype.createIcon = function createIcon(charCode) {
+	    var canvas = (0, _clapprZepto2.default)('<canvas/>');
+	    canvas[0].width = 32;
+	    canvas[0].height = 32;
+	    var ctx = canvas[0].getContext('2d');
+	    ctx.fillStyle = '#000';
+	    ctx.font = '25px Player';
+	    ctx.fillText(String.fromCharCode(charCode), 5, 26);
+	    var icon = (0, _clapprZepto2.default)('<link rel="shortcut icon" type="image/png"/>');
+	    icon.attr('href', canvas[0].toDataURL('image/png'));
+	    return icon;
+	  };
+
+	  Favicon.prototype.setPlayIcon = function setPlayIcon() {
+	    if (!this.playIcon) {
+	      this.playIcon = this.createIcon(0xe001);
 	    }
-	  }, {
-	    key: 'createIcon',
-	    value: function createIcon(charCode) {
-	      var canvas = (0, _clapprZepto2.default)('<canvas/>');
-	      canvas[0].width = 32;
-	      canvas[0].height = 32;
-	      var ctx = canvas[0].getContext('2d');
-	      ctx.fillStyle = '#000';
-	      ctx.font = '25px Player';
-	      ctx.fillText(String.fromCharCode(charCode), 5, 26);
-	      var icon = (0, _clapprZepto2.default)('<link rel="shortcut icon" type="image/png"/>');
-	      icon.attr('href', canvas[0].toDataURL('image/png'));
-	      return icon;
+	    this.changeIcon(this.playIcon);
+	  };
+
+	  Favicon.prototype.setPauseIcon = function setPauseIcon() {
+	    if (!this.pauseIcon) {
+	      this.pauseIcon = this.createIcon(0xe002);
 	    }
-	  }, {
-	    key: 'setPlayIcon',
-	    value: function setPlayIcon() {
-	      if (!this.playIcon) {
-	        this.playIcon = this.createIcon(0xe001);
-	      }
-	      this.changeIcon(this.playIcon);
+	    this.changeIcon(this.pauseIcon);
+	  };
+
+	  Favicon.prototype.resetIcon = function resetIcon() {
+	    if (this.currentIcon) {
+	      this.currentIcon.remove();
 	    }
-	  }, {
-	    key: 'setPauseIcon',
-	    value: function setPauseIcon() {
-	      if (!this.pauseIcon) {
-	        this.pauseIcon = this.createIcon(0xe002);
-	      }
-	      this.changeIcon(this.pauseIcon);
-	    }
-	  }, {
-	    key: 'resetIcon',
-	    value: function resetIcon() {
+	    (0, _clapprZepto2.default)('head').append(this.oldIcon);
+	  };
+
+	  Favicon.prototype.changeIcon = function changeIcon(icon) {
+	    if (icon) {
+	      this.oldIcon.remove();
 	      if (this.currentIcon) {
 	        this.currentIcon.remove();
 	      }
-	      (0, _clapprZepto2.default)('head').append(this.oldIcon);
+	      this.currentIcon = icon;
+	      (0, _clapprZepto2.default)('head').append(icon);
 	    }
-	  }, {
-	    key: 'changeIcon',
-	    value: function changeIcon(icon) {
-	      if (icon) {
-	        this.oldIcon.remove();
-	        if (this.currentIcon) {
-	          this.currentIcon.remove();
-	        }
-	        this.currentIcon = icon;
-	        (0, _clapprZepto2.default)('head').append(icon);
-	      }
-	    }
-	  }]);
+	  };
 
 	  return Favicon;
 	}(_core_plugin2.default);
@@ -24490,8 +23940,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _utils = __webpack_require__(2);
 
@@ -24513,7 +23961,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function CorePlugin(core) {
 	    _classCallCheck(this, CorePlugin);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(CorePlugin).call(this, core));
+	    var _this = _possibleConstructorReturn(this, _BaseObject.call(this, core));
 
 	    _this.core = core;
 	    _this.enabled = true;
@@ -24521,36 +23969,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return _this;
 	  }
 
-	  _createClass(CorePlugin, [{
-	    key: 'bindEvents',
-	    value: function bindEvents() {}
-	  }, {
-	    key: 'enable',
-	    value: function enable() {
-	      if (!this.enabled) {
-	        this.bindEvents();
-	        this.enabled = true;
-	      }
+	  CorePlugin.prototype.bindEvents = function bindEvents() {};
+
+	  CorePlugin.prototype.enable = function enable() {
+	    if (!this.enabled) {
+	      this.bindEvents();
+	      this.enabled = true;
 	    }
-	  }, {
-	    key: 'disable',
-	    value: function disable() {
-	      if (this.enabled) {
-	        this.stopListening();
-	        this.enabled = false;
-	      }
-	    }
-	  }, {
-	    key: 'getExternalInterface',
-	    value: function getExternalInterface() {
-	      return {};
-	    }
-	  }, {
-	    key: 'destroy',
-	    value: function destroy() {
+	  };
+
+	  CorePlugin.prototype.disable = function disable() {
+	    if (this.enabled) {
 	      this.stopListening();
+	      this.enabled = false;
 	    }
-	  }]);
+	  };
+
+	  CorePlugin.prototype.getExternalInterface = function getExternalInterface() {
+	    return {};
+	  };
+
+	  CorePlugin.prototype.destroy = function destroy() {
+	    this.stopListening();
+	  };
 
 	  return CorePlugin;
 	}(_base_object2.default);
@@ -24676,7 +24117,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function SeekTime(core) {
 	    _classCallCheck(this, SeekTime);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SeekTime).call(this, core));
+	    var _this = _possibleConstructorReturn(this, _UICorePlugin.call(this, core));
 
 	    _this.hoveringOverSeekBar = false;
 	    _this.hoverPosition = null;
@@ -24692,129 +24133,117 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return _this;
 	  }
 
-	  _createClass(SeekTime, [{
-	    key: 'bindEvents',
-	    value: function bindEvents() {
-	      this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_RENDERED, this.render);
-	      this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_MOUSEMOVE_SEEKBAR, this.showTime);
-	      this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_MOUSELEAVE_SEEKBAR, this.hideTime);
-	      this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_CONTAINERCHANGED, this.onContainerChanged);
-	      if (this.mediaControlContainer) {
-	        this.listenTo(this.mediaControlContainer, _events2.default.CONTAINER_PLAYBACKDVRSTATECHANGED, this.update);
-	        this.listenTo(this.mediaControlContainer, _events2.default.CONTAINER_TIMEUPDATE, this.updateDuration);
-	      }
+	  SeekTime.prototype.bindEvents = function bindEvents() {
+	    this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_RENDERED, this.render);
+	    this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_MOUSEMOVE_SEEKBAR, this.showTime);
+	    this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_MOUSELEAVE_SEEKBAR, this.hideTime);
+	    this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_CONTAINERCHANGED, this.onContainerChanged);
+	    if (this.mediaControlContainer) {
+	      this.listenTo(this.mediaControlContainer, _events2.default.CONTAINER_PLAYBACKDVRSTATECHANGED, this.update);
+	      this.listenTo(this.mediaControlContainer, _events2.default.CONTAINER_TIMEUPDATE, this.updateDuration);
 	    }
-	  }, {
-	    key: 'onContainerChanged',
-	    value: function onContainerChanged() {
-	      this.stopListening();
-	      this.bindEvents();
-	    }
-	  }, {
-	    key: 'updateDuration',
-	    value: function updateDuration(timeProgress) {
-	      this.duration = timeProgress.total;
-	      this.update();
-	    }
-	  }, {
-	    key: 'showTime',
-	    value: function showTime(event) {
-	      this.hoveringOverSeekBar = true;
-	      this.calculateHoverPosition(event);
-	      this.update();
-	    }
-	  }, {
-	    key: 'hideTime',
-	    value: function hideTime() {
-	      this.hoveringOverSeekBar = false;
-	      this.update();
-	    }
-	  }, {
-	    key: 'calculateHoverPosition',
-	    value: function calculateHoverPosition(event) {
-	      var offset = event.pageX - this.mediaControl.$seekBarContainer.offset().left;
-	      // proportion into the seek bar that the mouse is hovered over 0-1
-	      this.hoverPosition = Math.min(1, Math.max(offset / this.mediaControl.$seekBarContainer.width(), 0));
-	    }
-	  }, {
-	    key: 'getSeekTime',
-	    value: function getSeekTime() {
-	      var seekTime = null;
-	      if (this.useActualLiveTime) {
-	        var d = new Date(new Date().getTime() - this.actualLiveServerTimeDiff),
-	            e = new Date(d);
-	        var secondsSinceMidnight = (e - d.setHours(0, 0, 0, 0)) / 1000;
-	        seekTime = secondsSinceMidnight - this.duration + this.hoverPosition * this.duration;
-	        if (seekTime < 0) {
-	          seekTime += 86400;
-	        }
-	      } else {
-	        seekTime = this.hoverPosition * this.duration;
-	      }
-	      return { seekTime: seekTime, secondsSinceMidnight: secondsSinceMidnight };
-	    }
-	  }, {
-	    key: 'update',
-	    value: function update() {
-	      if (!this.rendered) {
-	        // update() is always called after a render
-	        return;
-	      }
-	      if (!this.shouldBeVisible()) {
-	        this.$el.hide();
-	        this.$el.css('left', "-100%");
-	      } else {
-	        var seekTime = this.getSeekTime();
-	        var currentSeekTime = (0, _utils.formatTime)(seekTime.seekTime, this.useActualLiveTime);
-	        // only update dom if necessary, ie time actually changed
-	        if (currentSeekTime !== this.displayedSeekTime) {
-	          this.$seekTimeEl.text(currentSeekTime);
-	          this.displayedSeekTime = currentSeekTime;
-	        }
+	  };
 
-	        if (this.durationShown) {
-	          this.$durationEl.show();
-	          var currentDuration = (0, _utils.formatTime)(this.actualLiveTime ? seekTime.secondsSinceMidnight : this.duration, this.actualLiveTime);
-	          if (currentDuration !== this.displayedDuration) {
-	            this.$durationEl.text(currentDuration);
-	            this.displayedDuration = currentDuration;
-	          }
-	        } else {
-	          this.$durationEl.hide();
-	        }
+	  SeekTime.prototype.onContainerChanged = function onContainerChanged() {
+	    this.stopListening();
+	    this.bindEvents();
+	  };
 
-	        // the element must be unhidden before its width is requested, otherwise it's width will be reported as 0
-	        this.$el.show();
-	        var containerWidth = this.mediaControl.$seekBarContainer.width();
-	        var elWidth = this.$el.width();
-	        var elLeftPos = this.hoverPosition * containerWidth;
-	        elLeftPos -= elWidth / 2;
-	        elLeftPos = Math.max(0, Math.min(elLeftPos, containerWidth - elWidth));
-	        this.$el.css('left', elLeftPos);
+	  SeekTime.prototype.updateDuration = function updateDuration(timeProgress) {
+	    this.duration = timeProgress.total;
+	    this.update();
+	  };
+
+	  SeekTime.prototype.showTime = function showTime(event) {
+	    this.hoveringOverSeekBar = true;
+	    this.calculateHoverPosition(event);
+	    this.update();
+	  };
+
+	  SeekTime.prototype.hideTime = function hideTime() {
+	    this.hoveringOverSeekBar = false;
+	    this.update();
+	  };
+
+	  SeekTime.prototype.calculateHoverPosition = function calculateHoverPosition(event) {
+	    var offset = event.pageX - this.mediaControl.$seekBarContainer.offset().left;
+	    // proportion into the seek bar that the mouse is hovered over 0-1
+	    this.hoverPosition = Math.min(1, Math.max(offset / this.mediaControl.$seekBarContainer.width(), 0));
+	  };
+
+	  SeekTime.prototype.getSeekTime = function getSeekTime() {
+	    var seekTime = null;
+	    if (this.useActualLiveTime) {
+	      var d = new Date(new Date().getTime() - this.actualLiveServerTimeDiff),
+	          e = new Date(d);
+	      var secondsSinceMidnight = (e - d.setHours(0, 0, 0, 0)) / 1000;
+	      seekTime = secondsSinceMidnight - this.duration + this.hoverPosition * this.duration;
+	      if (seekTime < 0) {
+	        seekTime += 86400;
 	      }
+	    } else {
+	      seekTime = this.hoverPosition * this.duration;
 	    }
-	  }, {
-	    key: 'shouldBeVisible',
-	    value: function shouldBeVisible() {
-	      return this.mediaControlContainer && this.mediaControlContainer.settings.seekEnabled && this.hoveringOverSeekBar && this.hoverPosition !== null && this.duration !== null;
+	    return { seekTime: seekTime, secondsSinceMidnight: secondsSinceMidnight };
+	  };
+
+	  SeekTime.prototype.update = function update() {
+	    if (!this.rendered) {
+	      // update() is always called after a render
+	      return;
 	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      this.rendered = true;
-	      this.displayedDuration = null;
-	      this.displayedSeekTime = null;
-	      var style = _styler2.default.getStyleFor(_seek_time2.default);
-	      this.$el.html(this.template());
-	      this.$el.append(style);
+	    if (!this.shouldBeVisible()) {
 	      this.$el.hide();
-	      this.mediaControl.$el.append(this.el);
-	      this.$seekTimeEl = this.$el.find('[data-seek-time]');
-	      this.$durationEl = this.$el.find('[data-duration]');
-	      this.$durationEl.hide();
-	      this.update();
+	      this.$el.css('left', "-100%");
+	    } else {
+	      var seekTime = this.getSeekTime();
+	      var currentSeekTime = (0, _utils.formatTime)(seekTime.seekTime, this.useActualLiveTime);
+	      // only update dom if necessary, ie time actually changed
+	      if (currentSeekTime !== this.displayedSeekTime) {
+	        this.$seekTimeEl.text(currentSeekTime);
+	        this.displayedSeekTime = currentSeekTime;
+	      }
+
+	      if (this.durationShown) {
+	        this.$durationEl.show();
+	        var currentDuration = (0, _utils.formatTime)(this.actualLiveTime ? seekTime.secondsSinceMidnight : this.duration, this.actualLiveTime);
+	        if (currentDuration !== this.displayedDuration) {
+	          this.$durationEl.text(currentDuration);
+	          this.displayedDuration = currentDuration;
+	        }
+	      } else {
+	        this.$durationEl.hide();
+	      }
+
+	      // the element must be unhidden before its width is requested, otherwise it's width will be reported as 0
+	      this.$el.show();
+	      var containerWidth = this.mediaControl.$seekBarContainer.width();
+	      var elWidth = this.$el.width();
+	      var elLeftPos = this.hoverPosition * containerWidth;
+	      elLeftPos -= elWidth / 2;
+	      elLeftPos = Math.max(0, Math.min(elLeftPos, containerWidth - elWidth));
+	      this.$el.css('left', elLeftPos);
 	    }
-	  }]);
+	  };
+
+	  SeekTime.prototype.shouldBeVisible = function shouldBeVisible() {
+	    return this.mediaControlContainer && this.mediaControlContainer.settings.seekEnabled && this.hoveringOverSeekBar && this.hoverPosition !== null && this.duration !== null;
+	  };
+
+	  SeekTime.prototype.render = function render() {
+	    this.rendered = true;
+	    this.displayedDuration = null;
+	    this.displayedSeekTime = null;
+	    var style = _styler2.default.getStyleFor(_seek_time2.default);
+	    this.$el.html(this.template());
+	    this.$el.append(style);
+	    this.$el.hide();
+	    this.mediaControl.$el.append(this.el);
+	    this.$seekTimeEl = this.$el.find('[data-seek-time]');
+	    this.$durationEl = this.$el.find('[data-duration]');
+	    this.$durationEl.hide();
+	    this.update();
+	  };
 
 	  return SeekTime;
 	}(_ui_core_plugin2.default);
@@ -24880,31 +24309,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function SourcesPlugin() {
 	    _classCallCheck(this, SourcesPlugin);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(SourcesPlugin).apply(this, arguments));
+	    return _possibleConstructorReturn(this, _CorePlugin.apply(this, arguments));
 	  }
 
-	  _createClass(SourcesPlugin, [{
-	    key: 'bindEvents',
-	    value: function bindEvents() {
-	      this.listenToOnce(this.core, _events2.default.CORE_CONTAINERS_CREATED, this.onContainersCreated);
-	    }
-	  }, {
-	    key: 'onContainersCreated',
-	    value: function onContainersCreated() {
-	      var _this2 = this;
+	  SourcesPlugin.prototype.bindEvents = function bindEvents() {
+	    this.listenToOnce(this.core, _events2.default.CORE_CONTAINERS_CREATED, this.onContainersCreated);
+	  };
 
-	      var firstValidSource = (0, _lodash2.default)(this.core.containers, function (container) {
-	        return container.playback.name !== 'no_op' || _this2.core.containers[0];
+	  SourcesPlugin.prototype.onContainersCreated = function onContainersCreated() {
+	    var _this2 = this;
+
+	    var firstValidSource = (0, _lodash2.default)(this.core.containers, function (container) {
+	      return container.playback.name !== 'no_op' || _this2.core.containers[0];
+	    });
+	    if (firstValidSource) {
+	      this.core.containers.forEach(function (container) {
+	        if (container !== firstValidSource) {
+	          container.destroy();
+	        }
 	      });
-	      if (firstValidSource) {
-	        this.core.containers.forEach(function (container) {
-	          if (container !== firstValidSource) {
-	            container.destroy();
-	          }
-	        });
-	      }
 	    }
-	  }, {
+	  };
+
+	  _createClass(SourcesPlugin, [{
 	    key: 'name',
 	    get: function get() {
 	      return 'sources';
@@ -24953,34 +24380,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function EndVideo() {
 	    _classCallCheck(this, EndVideo);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(EndVideo).apply(this, arguments));
+	    return _possibleConstructorReturn(this, _CorePlugin.apply(this, arguments));
 	  }
 
+	  EndVideo.prototype.bindEvents = function bindEvents() {
+	    this.listenTo(this.core.mediaControl, _events2.default.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged);
+	    var container = this.core.getCurrentContainer();
+	    if (container) {
+	      this.listenTo(container, _events2.default.CONTAINER_ENDED, this.ended);
+	      this.listenTo(container, _events2.default.CONTAINER_STOP, this.ended);
+	    }
+	  };
+
+	  EndVideo.prototype.containerChanged = function containerChanged() {
+	    this.stopListening();
+	    this.bindEvents();
+	  };
+
+	  EndVideo.prototype.ended = function ended() {
+	    var exitOnEnd = typeof this.core.options.exitFullscreenOnEnd === "undefined" || this.core.options.exitFullscreenOnEnd;
+	    if (exitOnEnd && _utils.Fullscreen.isFullscreen()) {
+	      this.core.toggleFullscreen();
+	    }
+	  };
+
 	  _createClass(EndVideo, [{
-	    key: 'bindEvents',
-	    value: function bindEvents() {
-	      this.listenTo(this.core.mediaControl, _events2.default.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged);
-	      var container = this.core.getCurrentContainer();
-	      if (container) {
-	        this.listenTo(container, _events2.default.CONTAINER_ENDED, this.ended);
-	        this.listenTo(container, _events2.default.CONTAINER_STOP, this.ended);
-	      }
-	    }
-	  }, {
-	    key: 'containerChanged',
-	    value: function containerChanged() {
-	      this.stopListening();
-	      this.bindEvents();
-	    }
-	  }, {
-	    key: 'ended',
-	    value: function ended() {
-	      var exitOnEnd = typeof this.core.options.exitFullscreenOnEnd === "undefined" || this.core.options.exitFullscreenOnEnd;
-	      if (exitOnEnd && _utils.Fullscreen.isFullscreen()) {
-	        this.core.toggleFullscreen();
-	      }
-	    }
-	  }, {
 	    key: 'name',
 	    get: function get() {
 	      return 'end_video';
