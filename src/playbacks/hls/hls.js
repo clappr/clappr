@@ -30,7 +30,7 @@ export default class HLS extends HTML5VideoPlayback {
 
   constructor(options) {
     super(options)
-    this.minDvrSize = options.hlsMinimumDvrSize ? options.hlsMinimumDvrSize : 60
+    this.minDvrSize = (options.hlsMinimumDvrSize === undefined) ? 60 : options.hlsMinimumDvrSize
     this.playbackType = Playback.VOD
     // for hls streams which have dvr with a sliding window,
     // the content at the start of the playlist is removed as new
