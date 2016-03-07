@@ -60,6 +60,20 @@ describe('Loader', function() {
         return plugin.prototype.name === "spinner"
       })[0]).to.be.equal(spinnerPlugin)
     })
+
+    it("should allow only a plugin with a given name", function() {
+      var spinnerPlugin = ContainerPlugin.extend({container: {},  name: 'spinner'})
+      var loader = new Loader()
+      expect(loader.containerPlugins.filter((plugin) => {
+        return plugin.prototype.name === "spinner"
+      }).length).to.be.equal(1)
+
+      loader.addExternalPlugins({container: [spinnerPlugin]})
+
+      expect(loader.containerPlugins.filter((plugin) => {
+        return plugin.prototype.name === "spinner"
+      }).length).to.be.equal(1)
+    })
   })
 
   describe('validateExternalPluginsType function', function() {

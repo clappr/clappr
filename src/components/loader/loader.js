@@ -4,7 +4,7 @@
 
 import BaseObject from 'base/base_object'
 import PlayerInfo from 'components/player_info'
-import uniq from 'lodash.uniq'
+import uniqBy from 'lodash.uniqby'
 
 /* Playback Plugins */
 import HTML5VideoPlayback from 'playbacks/html5_video'
@@ -85,9 +85,9 @@ export default class Loader extends BaseObject {
   addExternalPlugins(plugins) {
     plugins = this.groupPluginsByType(plugins)
     var pluginName = function(plugin) { return plugin.prototype.name }
-    if (plugins.playback) { this.playbackPlugins = uniq(plugins.playback.concat(this.playbackPlugins), pluginName) }
-    if (plugins.container) { this.containerPlugins = uniq(plugins.container.concat(this.containerPlugins), pluginName) }
-    if (plugins.core) { this.corePlugins = uniq(plugins.core.concat(this.corePlugins), pluginName) }
+    if (plugins.playback) { this.playbackPlugins = uniqBy(plugins.playback.concat(this.playbackPlugins), pluginName) }
+    if (plugins.container) { this.containerPlugins = uniqBy(plugins.container.concat(this.containerPlugins), pluginName) }
+    if (plugins.core) { this.corePlugins = uniqBy(plugins.core.concat(this.corePlugins), pluginName) }
     PlayerInfo.getInstance(this.playerId).playbackPlugins = this.playbackPlugins
   }
 
