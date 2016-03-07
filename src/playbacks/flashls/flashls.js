@@ -476,7 +476,7 @@ export default class FlasHLS extends BaseFlashPlayback {
       } else {
         this.updateCurrentState(state)
         this.hasEnded = true
-        this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: 0, total: this.el.getDuration()}, this.name)
+        this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: 0, total: this.getDuration()}, this.name)
         this.trigger(Events.PLAYBACK_ENDED, this.name)
       }
     }
@@ -583,7 +583,7 @@ export default class FlasHLS extends BaseFlashPlayback {
   normalizeDuration(duration) {
     if (this.playbackType === Playback.LIVE) {
       // estimate 10 seconds of buffer time for live streams for seek positions
-      duration = duration - 10
+      duration = Math.max(0, duration - 10)
     }
     return duration
   }
@@ -598,13 +598,10 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   seek(time) {
-    var duration = this.el.getDuration()
+    var duration = this.getDuration()
     if (this.playbackType === Playback.LIVE) {
-      // seek operations to a time within 5 seconds from live stream will position playhead back to live
-      var dvrInUse = (time >= 0 && duration - time > 5)
-      if (!dvrInUse) {
-        time = -1
-      }
+      // seek operations to a time within 3 seconds from live stream will position playhead back to live
+      var dvrInUse = duration - time > 3
       this.updateDvr(dvrInUse)
     }
     this.el.playerSeek(time)
@@ -636,10 +633,6 @@ export default class FlasHLS extends BaseFlashPlayback {
     }
     this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this._levels)
     this.trigger(Events.PLAYBACK_LOADEDMETADATA, {duration: duration, data: loadmetrics})
-  }
-
-  timeUpdate(time, duration) {
-    this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: time, total: duration}, this.name)
   }
 
   destroy() {
