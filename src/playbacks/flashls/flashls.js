@@ -143,8 +143,8 @@ export default class FlasHLS extends BaseFlashPlayback {
       this.currentState = "IDLE"
       this.setFlashSettings()
       this.updatePlaybackType()
-      if (this.autoPlay || this._shouldPlayOnBootstrap) {
-          this.play()
+      if (this.autoPlay || this._shouldPlayOnManifestLoaded) {
+        this.play()
       }
       this.trigger(Events.PLAYBACK_READY, this.name)
     } else {
@@ -531,13 +531,11 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   firstPlay() {
+    this._shouldPlayOnManifestLoaded = true
     if (this.el.playerLoad) {
       this.setFlashSettings() //ensure flushLiveURLCache will work (#327)
       this.el.playerLoad(this.src)
-      Mediator.once(this.cid + ':manifestloaded',() => this.el.playerPlay())
       this.srcLoaded = true
-    } else {
-      this._shouldPlayOnBootstrap = true
     }
   }
 
@@ -624,6 +622,15 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   manifestLoaded(duration, loadmetrics) {
+    if (this._shouldPlayOnManifestLoaded) {
+      this._shouldPlayOnManifestLoaded = false
+      // this method initialises the player (and starts playback)
+      // this needs to happen before PLAYBACK_LOADEDMETADATA is fired
+      // as the user may call seek() in a LOADEDMETADATA listener.
+      /// when playerPlay() is called the player seeks to 0
+      this.el.playerPlay()
+    }
+
     var levels = this.el.getLevels()
     var levelsLength = levels.length
     this._levels = []
