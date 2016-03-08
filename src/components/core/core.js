@@ -116,7 +116,6 @@ export default class Core extends UIObject {
 
   enableResizeObserver() {
     var checkSizeCallback = () => {
-      if (this.resizeObserverInterval) clearInterval(this.resizeObserverInterval)
       if (this.playerInfo.computedSize.width != this.el.clientWidth ||
           this.playerInfo.computedSize.height != this.el.clientHeight) {
         this.playerInfo.computedSize = { width: this.el.clientWidth, height: this.el.clientHeight }
