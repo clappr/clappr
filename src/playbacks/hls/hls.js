@@ -148,6 +148,7 @@ export default class HLS extends HTML5VideoPlayback {
   updatePlaybackType(evt, data) {
     this.playbackType = data.details.live ? Playback.LIVE : Playback.VOD
     this.fillLevels()
+    this.onLevelUpdated(evt, data)
   }
 
   fillLevels() {
