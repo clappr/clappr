@@ -343,8 +343,67 @@
         width: 42px;
         height: 18px;
         padding: 3px 0;
-        overflow: hidden;
         @include transition(width .2s ease-out);
+
+        .bar-background[data-volume] {
+          height: 1px;
+          position: relative;
+          top: 7px;
+          margin: 0 3px;
+          background-color: #666666;
+
+          .bar-fill-1[data-volume] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background-color: #c2c2c2;
+            @include transition(all 0.1s ease-out);
+          }
+
+          .bar-fill-2[data-volume] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background-color: #005aff;
+            @include transition(all 0.1s ease-out);
+          }
+
+          .bar-hover[data-volume] {
+            opacity: 0;
+            position: absolute;
+            top: -3px;
+            width: 5px;
+            height: 7px;
+            background-color: rgba(255,255,255,0.5);
+            @include transition(opacity 0.1s ease);
+          }
+        }
+
+        .bar-scrubber[data-volume] {
+          position: absolute;
+          @include translateX(-50%);
+          top: 0px;
+          left: 0;
+          width: 20px;
+          height: 20px;
+          opacity: 1;
+          @include transition(all 0.1s ease-out);
+
+          .bar-scrubber-icon[data-volume] {
+            position: absolute;
+            left: 6px;
+            top: 6px;
+            width: 8px;
+            height: 8px;
+            border-radius: 10px;
+            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);
+            background-color: white;
+          }
+        }
 
         .segmented-bar-element[data-volume] {
           float: left;
