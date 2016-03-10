@@ -59,7 +59,7 @@ export default class MediaControl extends UIObject {
 
   get stylesheet() { return Styler.getStyleFor(mediaControlStyle, {baseUrl: this.options.baseUrl}) }
 
-  get volume() { return this.container ? this.container.volume : this.intendedVolume }
+  get volume() { return (this.container && this.container.isReady) ? this.container.volume : this.intendedVolume }
   get muted() { return this.volume === 0 }
 
   constructor(options) {
