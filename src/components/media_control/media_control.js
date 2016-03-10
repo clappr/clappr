@@ -45,11 +45,8 @@ export default class MediaControl extends UIObject {
       'click .drawer-icon[data-volume]': 'toggleMute',
       'mouseenter .drawer-container[data-volume]': 'showVolumeBar',
       'mouseleave .drawer-container[data-volume]': 'hideVolumeBar',
-      'mousedown .segmented-bar-element[data-volume]': 'mousedownOnVolumeBar',
-      'mouseleave .media-control-layer': 'mouseleaveOnVolumeBar',
-      'mousemove .segmented-bar-element[data-volume]': 'mousemoveOnVolumeBar',
-      'mouseup .segmented-bar-element[data-volume]': 'mouseupOnVolumeBar',
-      'mousedown .bar-scrubber[data-volume]': 'startVolumeDrag',
+      'mousedown .bar-container[data-volume]': 'startVolumeDrag',
+      'mousemove .bar-container[data-volume]': 'mousemoveOnVolumeBar',
       'mousedown .bar-scrubber[data-seekbar]': 'startSeekDrag',
       'mousemove .bar-container[data-seekbar]': 'mousemoveOnSeekBar',
       'mouseleave .bar-container[data-seekbar]': 'mouseleaveOnSeekBar',
@@ -62,7 +59,7 @@ export default class MediaControl extends UIObject {
 
   get stylesheet() { return Styler.getStyleFor(mediaControlStyle, {baseUrl: this.options.baseUrl}) }
 
-  get volume() { return this.intendedVolume }
+  get volume() { return this.container ? this.container.volume : this.intendedVolume }
   get muted() { return this.volume === 0 }
 
   constructor(options) {
@@ -75,7 +72,6 @@ export default class MediaControl extends UIObject {
     var initialVolume = (this.persistConfig) ? Config.restore("volume") : 100
     this.setVolume(this.options.mute ? 0 : initialVolume)
     this.keepVisible = false
-    this.volumeBarClickDown = false
     this.addEventListeners()
     this.settings = {
       left: ['play', 'stop', 'pause'],
@@ -152,6 +148,16 @@ export default class MediaControl extends UIObject {
       // this will be called after a render
       return
     }
+    // update volume bar scrubber/fill on bar mode
+    this.$volumeBarContainer.find('.bar-fill-2').css({})
+    var containerWidth = this.$volumeBarContainer.width()
+    var barWidth = this.$volumeBarBackground.width()
+    var offset = (containerWidth - barWidth) / 2.0
+    var pos = barWidth * this.volume / 100.0 + offset
+    this.$volumeBarFill.css({ width: `${this.volume}%` })
+    this.$volumeBarScrubber.css({ left: pos })
+
+    // update volume bar segments on segmented bar mode
     this.$volumeBarContainer.find('.segmented-bar-element').removeClass('fill')
     var item = Math.ceil(this.volume / 10.0)
     this.$volumeBarContainer.find('.segmented-bar-element').slice(0, item).addClass('fill')
@@ -191,35 +197,8 @@ export default class MediaControl extends UIObject {
   }
 
   mousemoveOnVolumeBar(event) {
-    if(this.volumeBarClickDown) {
+    if(this.draggingVolumeBar) {
       this.setVolume(this.getVolumeFromUIEvent(event))
-    }
-  }
-
-  mousedownOnVolumeBar() {
-    this.$el.addClass('dragging')
-    this.volumeBarClickDown = true
-  }
-
-  mouseupOnVolumeBar() {
-    this.$el.removeClass('dragging')
-    this.volumeBarClickDown = false
-  }
-
-  mouseleaveOnVolumeBar(event) {
-    var volOffset = this.$volumeBarContainer.offset()
-
-    var outsideByLeft = event.pageX < volOffset.left
-    var outsideByRight = event.pageX > (volOffset.left + volOffset.width)
-    var outsideHorizontally = (outsideByLeft || outsideByRight)
-
-    var outsideByTop = event.pageY < volOffset.top
-    var outsideByBottom = event.pageY > (volOffset.top + volOffset.height)
-
-    var outsideVertically = (outsideByTop || outsideByBottom)
-
-    if(outsideHorizontally || outsideVertically) {
-      this.mouseupOnVolumeBar()
     }
   }
 
@@ -317,8 +296,7 @@ export default class MediaControl extends UIObject {
     var setWhenContainerReady = () => {
       if (this.container.isReady) {
         this.container.setVolume(value)
-      }
-      else {
+      } else {
         this.listenToOnce(this.container, Events.CONTAINER_READY, () => {
           this.container.setVolume(value)
         })
@@ -329,8 +307,7 @@ export default class MediaControl extends UIObject {
       this.listenToOnce(this, Events.MEDIACONTROL_CONTAINERCHANGED, () => {
         setWhenContainerReady()
       })
-    }
-    else {
+    } else {
       setWhenContainerReady()
     }
   }
@@ -510,6 +487,9 @@ export default class MediaControl extends UIObject {
     this.$volumeBarContainer = $layer.find('.bar-container[data-volume]')
     this.$volumeContainer = $layer.find('.drawer-container[data-volume]')
     this.$volumeIcon = $layer.find('.drawer-icon[data-volume]')
+    this.$volumeBarBackground = this.$el.find('.bar-background[data-volume]')
+    this.$volumeBarFill = this.$el.find('.bar-fill-1[data-volume]')
+    this.$volumeBarScrubber = this.$el.find('.bar-scrubber[data-volume]')
     this.resetIndicators()
   }
 
