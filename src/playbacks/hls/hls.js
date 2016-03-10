@@ -153,7 +153,7 @@ export default class HLS extends HTML5VideoPlayback {
 
   fillLevels() {
     this._levels = this.hls.levels.map((level, index) => {
-      return {id: index , label: `${level.bitrate/}Kbps`
+      return {id: index , label: `${level.bitrate/1000}Kbps`
     }})
     this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this._levels)
   }
