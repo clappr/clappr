@@ -15,14 +15,8 @@ import $ from 'clappr-zepto'
 export default class PosterPlugin extends UIContainerPlugin {
   get name() { return 'poster' }
   get template() { return template(posterHTML) }
-  get shouldRender() { return this.container.playback.name !== 'html_img'}
-  get showOnBuffer() {
-    if (!this.options.mediacontrol || typeof(this.options.mediacontrol.showOnBuffer) == 'undefined') {
-      return true;
-    } else {
-      return this.options.mediacontrol.showOnBuffer;
-    }
-  }
+  get shouldRender() { return this.container.playback.name !== 'html_img' }
+  get shouldUpdateMediaControl() { return this.options.posterMediaControl === undefined || this.options.posterMediaControl }
 
   get attributes() {
     return {
@@ -72,15 +66,11 @@ export default class PosterPlugin extends UIContainerPlugin {
   }
 
   onBuffering() {
-    if (this.showOnBuffer) {
-      this.update()
-    }
+    this.update()
   }
 
   onBufferfull() {
-    if (this.showOnBuffer) {
-      this.update()
-    }
+    this.update()
   }
 
   showPlayButton(show) {
@@ -127,13 +117,13 @@ export default class PosterPlugin extends UIContainerPlugin {
       return
     }
     if (!this.hasStartedPlaying) {
-      this.container.disableMediaControl()
+      this.shouldUpdateMediaControl && this.container.disableMediaControl()
       this.$el.show()
       let showPlayButton = !this.playRequested && !this.container.buffering
       this.showPlayButton(showPlayButton)
     }
     else {
-      this.container.enableMediaControl()
+      this.shouldUpdateMediaControl && this.container.enableMediaControl()
       if (this.shouldHideOnPlay()) {
         this.$el.hide()
       }
