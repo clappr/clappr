@@ -174,6 +174,8 @@ you might consider subclassing the base `MediaControl` and using your own custom
 
 If you want to disable media control auto hide, add `hideMediaControl: false` in your embed parameters.
 
+You can also avoid having the media control show up when buffering starts by setting `{mediacontrol: showOnBuffer: false}`. The default behavior is for the controls to open when buffering begins.
+
 ##### Hide Volume Bar
 
 When embedded with width less than 320, volume bars are hidden. You can force this behavior for all sizes by adding `hideVolumeBar: true`.

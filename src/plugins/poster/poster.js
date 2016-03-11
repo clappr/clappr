@@ -16,6 +16,13 @@ export default class PosterPlugin extends UIContainerPlugin {
   get name() { return 'poster' }
   get template() { return template(posterHTML) }
   get shouldRender() { return this.container.playback.name !== 'html_img'}
+  get showOnBuffer() {
+    if (!this.options.mediacontrol || typeof(this.options.mediacontrol.showOnBuffer) == 'undefined') {
+      return true;
+    } else {
+      return this.options.mediacontrol.showOnBuffer;
+    }
+  }
 
   get attributes() {
     return {
@@ -42,8 +49,8 @@ export default class PosterPlugin extends UIContainerPlugin {
     this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
     this.listenTo(this.container, Events.CONTAINER_PLAY, this.onPlay)
     this.listenTo(this.container, Events.CONTAINER_ENDED, this.onStop)
-    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.update)
-    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.update)
+    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering)
+    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferfull)
     this.listenTo(this.container, Events.CONTAINER_OPTIONS_CHANGE, this.render)
     Mediator.on(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.updateSize, this)
   }
@@ -62,6 +69,18 @@ export default class PosterPlugin extends UIContainerPlugin {
     this.hasStartedPlaying = false
     this.playRequested = false
     this.update()
+  }
+
+  onBuffering() {
+    if (this.showOnBuffer) {
+      this.update()
+    }
+  }
+
+  onBufferfull() {
+    if (this.showOnBuffer) {
+      this.update()
+    }
   }
 
   showPlayButton(show) {
