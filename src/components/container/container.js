@@ -363,17 +363,13 @@ export default class Container extends UIObject {
   }
 
   disableMediaControl() {
-    if (this.mediaControlDisabled !== true) {
-      this.mediaControlDisabled = true
-      this.trigger(Events.CONTAINER_MEDIACONTROL_DISABLE)
-    }
+    this.mediaControlDisabled = true
+    this.trigger(Events.CONTAINER_MEDIACONTROL_DISABLE)
   }
 
   enableMediaControl() {
-    if (this.mediaControlDisabled !== false) {
-      this.mediaControlDisabled = false
-      this.trigger(Events.CONTAINER_MEDIACONTROL_ENABLE)
-    }
+    this.mediaControlDisabled = false
+    this.trigger(Events.CONTAINER_MEDIACONTROL_ENABLE)
   }
 
   /**

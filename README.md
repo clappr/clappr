@@ -192,10 +192,6 @@ Put `watermark: http://url/img.png` on your embed parameters to automatically ad
 ##### Poster
 Define a poster image by adding `poster: 'http://url/img.png'` on your player options. It will appear after video embed, disappear on play and go back when user stops the video. For audio broadcasts, the poster stays up while playing.
 
-This Poster plugin also affects when to show and hide the Media Control bar. It can cause some
-unintented side-effects such as opening the seek bar when buffering. You can suggest
-that it leave the media control alone by setting `{posterMediaControl: false}`
-
 ##### Audio Only Hint
 Some audio-only sources (e.g. HLS) cannot be easily detected as such; for that you can add `audioOnly: true` to the options so clappr knows to treat the source as such.
 
