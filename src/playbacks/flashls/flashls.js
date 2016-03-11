@@ -636,7 +636,7 @@ export default class FlasHLS extends BaseFlashPlayback {
     this._levels = []
 
     for (var index = 0 ; index < levelsLength ; index++) {
-      this._levels.push({id: index, label: `${levels[index].height}p`})
+      this._levels.push({id: index, label: `${levels[index].height}p`, level: levels[index]})
     }
     this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this._levels)
     this.trigger(Events.PLAYBACK_LOADEDMETADATA, {duration: duration, data: loadmetrics})
