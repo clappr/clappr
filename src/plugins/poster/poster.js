@@ -16,7 +16,6 @@ export default class PosterPlugin extends UIContainerPlugin {
   get name() { return 'poster' }
   get template() { return template(posterHTML) }
   get shouldRender() { return this.container.playback.name !== 'html_img' }
-  get shouldUpdateMediaControl() { return this.options.posterMediaControl === undefined || this.options.posterMediaControl }
 
   get attributes() {
     return {
@@ -117,13 +116,13 @@ export default class PosterPlugin extends UIContainerPlugin {
       return
     }
     if (!this.hasStartedPlaying) {
-      this.shouldUpdateMediaControl && this.container.disableMediaControl()
+      this.container.disableMediaControl()
       this.$el.show()
       let showPlayButton = !this.playRequested && !this.container.buffering
       this.showPlayButton(showPlayButton)
     }
     else {
-      this.shouldUpdateMediaControl && this.container.enableMediaControl()
+      this.container.enableMediaControl()
       if (this.shouldHideOnPlay()) {
         this.$el.hide()
       }
@@ -150,9 +149,6 @@ export default class PosterPlugin extends UIContainerPlugin {
       this.$playButton.css('color', buttonsColor);
     }
     this.update()
-    if (!this.hasStartedPlaying) {
-      this.container.disableMediaControl()
-    }
     return this
   }
 }
