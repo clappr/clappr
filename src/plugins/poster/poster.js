@@ -150,6 +150,9 @@ export default class PosterPlugin extends UIContainerPlugin {
       this.$playButton.css('color', buttonsColor);
     }
     this.update()
+    if (!this.hasStartedPlaying) {
+      this.container.disableMediaControl()
+    }
     return this
   }
 }
