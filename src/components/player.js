@@ -6,6 +6,7 @@ import {uniqueId, currentScriptUrl} from 'base/utils'
 
 import BaseObject from 'base/base_object'
 import Events from 'base/events'
+import Browser from 'components/browser'
 import CoreFactory from 'components/core_factory'
 import Loader from 'components/loader'
 import PlayerInfo from 'components/player_info'
@@ -102,6 +103,8 @@ export default class Player extends BaseObject {
    * automatically replay after it ends **default**: `false`
    * @param {Boolean} [options.chromeless]
    * player acts in chromeless mode **default**: `false`
+   * @param {Boolean} [options.allowUserInteraction]
+   * whether or not the player should handle click events when in chromeless mode **default**: `false` on desktops browsers, `true` on mobile.
    * @param {Boolean} [options.muted]
    * start the video muted **default**: `false`
    * @param {String} [options.mimeType]
@@ -129,7 +132,7 @@ export default class Player extends BaseObject {
    * @param {String} [options.watermark]
    * put `watermark: 'http://url/img.png'` on your embed parameters to automatically add watermark on your video. You can customize corner position by defining position parameter. Positions can be `bottom-left`, `bottom-right`, `top-left` and `top-right`.
    * @param {String} [options.watermarkLink]
-   * `watermarkLink: 'http://example.net/'` - define URL to open when the watermark is clicked. If not provided watermark will not be clickable. 
+   * `watermarkLink: 'http://example.net/'` - define URL to open when the watermark is clicked. If not provided watermark will not be clickable.
    * @param {Boolean} [options.disableVideoTagContextMenu]
    * disables the context menu (right click) on the video element if a HTML5Video playback is used.
    * @param {Boolean} [options.autoSeekFromUrl]
@@ -146,7 +149,7 @@ export default class Player extends BaseObject {
    */
   constructor(options) {
     super(options)
-    var defaultOptions = {playerId: uniqueId(""), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl}
+    var defaultOptions = {playerId: uniqueId(""), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl, allowUserInteraction: Browser.isMobile}
     this.options = $.extend(defaultOptions, options)
     this.options.sources = this.normalizeSources(options)
     this.registerOptionEventListeners()
