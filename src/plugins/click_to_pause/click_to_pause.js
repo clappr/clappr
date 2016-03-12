@@ -5,7 +5,6 @@
 import ContainerPlugin from 'base/container_plugin'
 import Events from 'base/events'
 import Playback from 'base/playback'
-import Browser from 'components/browser'
 
 export default class ClickToPausePlugin extends ContainerPlugin {
   get name() { return 'click_to_pause' }
@@ -15,10 +14,8 @@ export default class ClickToPausePlugin extends ContainerPlugin {
   }
 
   bindEvents() {
-    if (!this.options.chromeless || this.options.allowUserInteraction) {
-      this.listenTo(this.container, Events.CONTAINER_CLICK, this.click)
-      this.listenTo(this.container, Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate)
-    }
+    this.listenTo(this.container, Events.CONTAINER_CLICK, this.click)
+    this.listenTo(this.container, Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate)
   }
 
   click() {
