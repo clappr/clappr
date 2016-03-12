@@ -272,15 +272,21 @@ export default class Container extends UIObject {
   }
 
   clicked() {
-    this.trigger(Events.CONTAINER_CLICK, this, this.name)
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
+      this.trigger(Events.CONTAINER_CLICK, this, this.name)
+    }
   }
 
   dblClicked() {
-    this.trigger(Events.CONTAINER_DBLCLICK, this, this.name)
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
+      this.trigger(Events.CONTAINER_DBLCLICK, this, this.name)
+    }
   }
 
   onContextMenu() {
-    this.trigger(Events.CONTAINER_CONTEXTMENU, this, this.name)
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
+      this.trigger(Events.CONTAINER_CONTEXTMENU, this, this.name)
+    }
   }
 
   seek(time) {
@@ -342,11 +348,15 @@ export default class Container extends UIObject {
   }
 
   mouseEnter() {
-    this.trigger(Events.CONTAINER_MOUSE_ENTER)
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
+      this.trigger(Events.CONTAINER_MOUSE_ENTER)
+    }
   }
 
   mouseLeave() {
-    this.trigger(Events.CONTAINER_MOUSE_LEAVE)
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
+      this.trigger(Events.CONTAINER_MOUSE_LEAVE)
+    }
   }
 
   settingsUpdate() {
