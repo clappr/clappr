@@ -65,21 +65,18 @@ export default class PosterPlugin extends UIContainerPlugin {
   }
 
   showPlayButton(show) {
-    if (!this.options.chromeless) {
-      if (show) {
-        this.$playButton.show()
-        this.$el.addClass("clickable")
-        this.updateSize()
-      }
-      else {
-        this.$playButton.hide()
-        this.$el.removeClass("clickable")
-      }
+    if (show && (!this.options.chromeless || this.options.allowUserInteraction)) {
+      this.$playButton.show()
+      this.$el.addClass("clickable")
+      this.updateSize()
+    } else {
+      this.$playButton.hide()
+      this.$el.removeClass("clickable")
     }
   }
 
   clicked() {
-    if (!this.options.chromeless) {
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
       this.playRequested = true
       this.update()
       this.container.play()
@@ -112,8 +109,7 @@ export default class PosterPlugin extends UIContainerPlugin {
       this.$el.show()
       let showPlayButton = !this.playRequested && !this.container.buffering
       this.showPlayButton(showPlayButton)
-    }
-    else {
+    } else {
       this.container.enableMediaControl()
       if (this.shouldHideOnPlay()) {
         this.$el.hide()
