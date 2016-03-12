@@ -15,7 +15,7 @@ export default class ClickToPausePlugin extends ContainerPlugin {
   }
 
   bindEvents() {
-    if (!this.options.chromeless && !Browser.isMobile) {
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
       this.listenTo(this.container, Events.CONTAINER_CLICK, this.click)
       this.listenTo(this.container, Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate)
     }
