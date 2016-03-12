@@ -382,6 +382,14 @@ export default class Container extends UIObject {
     this.trigger(Events.CONTAINER_MEDIACONTROL_ENABLE)
   }
 
+  updateStyle() {
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
+      this.$el.removeClass('chromeless')
+    } else {
+      this.$el.addClass('chromeless')
+    }
+  }
+
   /**
    * enables to configure the container after its creation
    * @method configure
@@ -389,6 +397,7 @@ export default class Container extends UIObject {
    */
   configure(options) {
     this.options = $.extend(this.options, options)
+    this.updateStyle()
     this.trigger(Events.CONTAINER_OPTIONS_CHANGE)
   }
 
@@ -396,6 +405,7 @@ export default class Container extends UIObject {
     var s = Styler.getStyleFor(style)
     this.$el.append(s)
     this.$el.append(this.playback.render().el)
+    this.updateStyle()
     return this
   }
 }
