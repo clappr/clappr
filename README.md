@@ -94,7 +94,10 @@ Add `autoPlay: true` if you want the video to automatically play after page load
 Add `loop: true` if you want the video to automatically replay after it ends.
 
 ##### Chromeless
-Add `chromeless: 'true'` if you want the player to act in chromeless mode.
+Add `chromeless: true` if you want the player to act in chromeless mode.
+
+##### Allow user interaction (in chromeless mode)
+Add `allowUserInteraction: true` if you want the player to handle clicks/taps when in chromeless mode. By default it's set to `false` on desktop browsers, and `true` on mobile browsers (due to playback start only being allowed when started through user interaction).
 
 ##### Mute
 Add `mute: true` if you want to start player with no sound.
