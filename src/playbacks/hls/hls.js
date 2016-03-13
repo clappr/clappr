@@ -53,7 +53,21 @@ export default class HLS extends HTML5VideoPlayback {
     this.hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this.onLevelUpdated(evt, data))
     this.hls.on(HLSJS.Events.LEVEL_SWITCH, (evt,data) => this.onLevelSwitch(evt, data))
     this.hls.on(HLSJS.Events.FRAG_LOADED, (evt, data) => this.onFragmentLoaded(evt, data))
+    this.hls.on(HLSJS.Events.ERROR, (evt, data) => this.onError(evt, data))
     this.hls.attachMedia(this.el)
+  }
+
+  recover() {
+    if (!_recoveredDecodingError) {
+      _recoveredDecodingError = true
+      hls.recoverMediaError()
+    } else if (!_recoveredAudioCodecError) {
+      _recoveredAudioCodecError = true
+      hls.swapAudioCodec()
+      hls.recoverMediaError()
+    } else {
+        // failed recovery
+    }
   }
 
   // override
@@ -117,6 +131,22 @@ export default class HLS extends HTML5VideoPlayback {
     }
     this.settings.seekEnabled = this.isSeekEnabled()
     this.trigger(Events.PLAYBACK_SETTINGSUPDATE)
+  }
+
+  onError(evt, data) {
+    if (data.fatal) {
+      switch (data.type) {
+        case Hls.ErrorTypes.NETWORK_ERROR:
+          hls.startLoad()
+          break
+        case Hls.ErrorTypes.MEDIA_ERROR:
+          recover()
+          break
+        default:
+          // cannot recover
+          break
+      }
+    }
   }
 
   onTimeUpdate() {
