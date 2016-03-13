@@ -134,7 +134,7 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   onError(evt, data) {
-    if (data.fatal) {
+    if (data && data.fatal) {
       switch (data.type) {
         case Hls.ErrorTypes.NETWORK_ERROR:
           hls.startLoad()
