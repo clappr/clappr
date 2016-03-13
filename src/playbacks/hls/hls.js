@@ -58,11 +58,11 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   recover() {
-    if (!_recoveredDecodingError) {
-      _recoveredDecodingError = true
+    if (!this._recoveredDecodingError) {
+      this._recoveredDecodingError = true
       hls.recoverMediaError()
-    } else if (!_recoveredAudioCodecError) {
-      _recoveredAudioCodecError = true
+    } else if (!this._recoveredAudioCodecError) {
+      this._recoveredAudioCodecError = true
       hls.swapAudioCodec()
       hls.recoverMediaError()
     } else {
