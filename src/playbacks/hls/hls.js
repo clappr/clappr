@@ -44,6 +44,7 @@ export default class HLS extends HTML5VideoPlayback {
     // be ignored. "playableRegionDuration" does not consider this
     this.playableRegionDuration = 0
     options.autoPlay && this.setupHls()
+    this.recoverAttemptsRemaining = options.hlsRecoverAttempts || 16
   }
 
   setupHls() {
@@ -134,7 +135,8 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   onError(evt, data) {
-    if (data && data.fatal) {
+    if (data && data.fatal && this.recoverAttemptsRemaining > 0) {
+      this.recoverAttemptsRemaining -= 1
       switch (data.type) {
         case Hls.ErrorTypes.NETWORK_ERROR:
           hls.startLoad()
