@@ -61,11 +61,11 @@ export default class HLS extends HTML5VideoPlayback {
   recover() {
     if (!this._recoveredDecodingError) {
       this._recoveredDecodingError = true
-      hls.recoverMediaError()
+      this.hls.recoverMediaError()
     } else if (!this._recoveredAudioCodecError) {
       this._recoveredAudioCodecError = true
-      hls.swapAudioCodec()
-      hls.recoverMediaError()
+      this.hls.swapAudioCodec()
+      this.hls.recoverMediaError()
     } else {
         // failed recovery
     }
@@ -140,11 +140,11 @@ export default class HLS extends HTML5VideoPlayback {
       switch (data.type) {
         case Hls.ErrorTypes.NETWORK_ERROR:
           Log.warning(`hlsjs: trying to recover from network error, evt ${evt}, data ${data} `)
-          hls.startLoad()
+          this.hls.startLoad()
           break
         case Hls.ErrorTypes.MEDIA_ERROR:
           Log.warning(`hlsjs: trying to recover from media error, evt ${evt}, data ${data} `)
-          recover()
+          this.recover()
           break
         default:
           Log.error(`hlsjs: could not recover from error, evt ${evt}, data ${data} `)
