@@ -189,6 +189,9 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   onLevelSwitch(evt, data) {
+    if (!this.levels.length) {
+      this.fillLevels()
+    }
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH, data)
     var currentLevel = this.hls.levels[data.level]
