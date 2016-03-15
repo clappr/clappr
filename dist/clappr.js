@@ -186,7 +186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// Use of this source code is governed by a BSD-style
 	// license that can be found in the LICENSE file.
 
-	var version = ("0.2.39");
+	var version = ("0.2.40");
 
 	exports.default = {
 	    Player: _player2.default,
@@ -244,6 +244,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _events = __webpack_require__(6);
 
 	var _events2 = _interopRequireDefault(_events);
+
+	var _browser = __webpack_require__(3);
+
+	var _browser2 = _interopRequireDefault(_browser);
 
 	var _core_factory = __webpack_require__(12);
 
@@ -382,6 +386,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * automatically replay after it ends **default**: `false`
 	     * @param {Boolean} [options.chromeless]
 	     * player acts in chromeless mode **default**: `false`
+	     * @param {Boolean} [options.allowUserInteraction]
+	     * whether or not the player should handle click events when in chromeless mode **default**: `false` on desktops browsers, `true` on mobile.
 	     * @param {Boolean} [options.muted]
 	     * start the video muted **default**: `false`
 	     * @param {String} [options.mimeType]
@@ -409,7 +415,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {String} [options.watermark]
 	     * put `watermark: 'http://url/img.png'` on your embed parameters to automatically add watermark on your video. You can customize corner position by defining position parameter. Positions can be `bottom-left`, `bottom-right`, `top-left` and `top-right`.
 	     * @param {String} [options.watermarkLink]
-	     * `watermarkLink: 'http://example.net/'` - define URL to open when the watermark is clicked. If not provided watermark will not be clickable. 
+	     * `watermarkLink: 'http://example.net/'` - define URL to open when the watermark is clicked. If not provided watermark will not be clickable.
 	     * @param {Boolean} [options.disableVideoTagContextMenu]
 	     * disables the context menu (right click) on the video element if a HTML5Video playback is used.
 	     * @param {Boolean} [options.autoSeekFromUrl]
@@ -432,7 +438,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var _this = _possibleConstructorReturn(this, _BaseObject.call(this, options));
 
-	    var defaultOptions = { playerId: (0, _utils.uniqueId)(""), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl };
+	    var defaultOptions = { playerId: (0, _utils.uniqueId)(""), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl, allowUserInteraction: _browser2.default.isMobile };
 	    _this.options = _clapprZepto2.default.extend(defaultOptions, options);
 	    _this.options.sources = _this.normalizeSources(options);
 	    _this.registerOptionEventListeners();
@@ -5538,15 +5544,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  Container.prototype.clicked = function clicked() {
-	    this.trigger(_events2.default.CONTAINER_CLICK, this, this.name);
+	    if (!this.options.chromeless || this.options.allowUserInteraction) {
+	      this.trigger(_events2.default.CONTAINER_CLICK, this, this.name);
+	    }
 	  };
 
 	  Container.prototype.dblClicked = function dblClicked() {
-	    this.trigger(_events2.default.CONTAINER_DBLCLICK, this, this.name);
+	    if (!this.options.chromeless || this.options.allowUserInteraction) {
+	      this.trigger(_events2.default.CONTAINER_DBLCLICK, this, this.name);
+	    }
 	  };
 
 	  Container.prototype.onContextMenu = function onContextMenu() {
-	    this.trigger(_events2.default.CONTAINER_CONTEXTMENU, this, this.name);
+	    if (!this.options.chromeless || this.options.allowUserInteraction) {
+	      this.trigger(_events2.default.CONTAINER_CONTEXTMENU, this, this.name);
+	    }
 	  };
 
 	  Container.prototype.seek = function seek(time) {
@@ -5616,11 +5628,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  Container.prototype.mouseEnter = function mouseEnter() {
-	    this.trigger(_events2.default.CONTAINER_MOUSE_ENTER);
+	    if (!this.options.chromeless || this.options.allowUserInteraction) {
+	      this.trigger(_events2.default.CONTAINER_MOUSE_ENTER);
+	    }
 	  };
 
 	  Container.prototype.mouseLeave = function mouseLeave() {
-	    this.trigger(_events2.default.CONTAINER_MOUSE_LEAVE);
+	    if (!this.options.chromeless || this.options.allowUserInteraction) {
+	      this.trigger(_events2.default.CONTAINER_MOUSE_LEAVE);
+	    }
 	  };
 
 	  Container.prototype.settingsUpdate = function settingsUpdate() {
@@ -5646,6 +5662,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.trigger(_events2.default.CONTAINER_MEDIACONTROL_ENABLE);
 	  };
 
+	  Container.prototype.updateStyle = function updateStyle() {
+	    if (!this.options.chromeless || this.options.allowUserInteraction) {
+	      this.$el.removeClass('chromeless');
+	    } else {
+	      this.$el.addClass('chromeless');
+	    }
+	  };
+
 	  /**
 	   * enables to configure the container after its creation
 	   * @method configure
@@ -5655,6 +5679,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  Container.prototype.configure = function configure(options) {
 	    this.options = _clapprZepto2.default.extend(this.options, options);
+	    this.updateStyle();
 	    this.trigger(_events2.default.CONTAINER_OPTIONS_CHANGE);
 	  };
 
@@ -5662,6 +5687,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var s = _styler2.default.getStyleFor(_style2.default);
 	    this.$el.append(s);
 	    this.$el.append(this.playback.render().el);
+	    this.updateStyle();
 	    return this;
 	  };
 
@@ -5680,7 +5706,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".container[data-container] {\n  position: absolute;\n  background-color: black;\n  height: 100%;\n  width: 100%; }\n\n[data-player]:not(.nocursor) .container[data-container].pointer-enabled {\n  cursor: pointer; }\n", ""]);
+	exports.push([module.id, ".container[data-container] {\n  position: absolute;\n  background-color: black;\n  height: 100%;\n  width: 100%; }\n  .container[data-container] .chromeless {\n    cursor: default; }\n\n[data-player]:not(.nocursor) .container[data-container]:not(.chromeless).pointer-enabled {\n  cursor: pointer; }\n", ""]);
 
 	// exports
 
@@ -12854,7 +12880,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._levels = [];
 
 	    for (var index = 0; index < levelsLength; index++) {
-	      this._levels.push({ id: index, label: levels[index].height + 'p' });
+	      this._levels.push({ id: index, label: levels[index].height + 'p', level: levels[index] });
 	    }
 	    this.trigger(_events2.default.PLAYBACK_LEVELS_AVAILABLE, this._levels);
 	    this.trigger(_events2.default.PLAYBACK_LOADEDMETADATA, { duration: duration, data: loadmetrics });
@@ -13247,7 +13273,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  HLS.prototype.fillLevels = function fillLevels() {
 	    this._levels = this.hls.levels.map(function (level, index) {
-	      return { id: index, label: level.bitrate / 1000 + 'Kbps'
+	      return { id: index, level: level, label: level.bitrate / 1000 + 'Kbps'
 	      };
 	    });
 	    this.trigger(_events2.default.PLAYBACK_LEVELS_AVAILABLE, this._levels);
@@ -13284,6 +13310,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  HLS.prototype.onLevelSwitch = function onLevelSwitch(evt, data) {
+	    if (!this.levels.length) {
+	      this.fillLevels();
+	    }
 	    this.trigger(_events2.default.PLAYBACK_LEVEL_SWITCH_END);
 	    this.trigger(_events2.default.PLAYBACK_LEVEL_SWITCH, data);
 	    var currentLevel = this.hls.levels[data.level];
@@ -13847,11 +13876,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	var ErrorTypes = exports.ErrorTypes = {
 	  // Identifier for a network error (loading error / timeout ...)
-	  NETWORK_ERROR: 'hlsNetworkError',
+	  NETWORK_ERROR: 'networkError',
 	  // Identifier for a media Error (video/parsing/mediasource error)
-	  MEDIA_ERROR: 'hlsMediaError',
+	  MEDIA_ERROR: 'mediaError',
 	  // Identifier for all other errors
-	  OTHER_ERROR: 'hlsOtherError'
+	  OTHER_ERROR: 'otherError'
 	};
 
 	var ErrorDetails = exports.ErrorDetails = {
@@ -13861,6 +13890,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  MANIFEST_LOAD_TIMEOUT: 'manifestLoadTimeOut',
 	  // Identifier for a manifest parsing error - data: { url : faulty URL, reason : error reason}
 	  MANIFEST_PARSING_ERROR: 'manifestParsingError',
+	  // Identifier for a manifest with only incompatible codecs error - data: { url : faulty URL, reason : error reason}
+	  MANIFEST_INCOMPATIBLE_CODECS_ERROR: 'manifestIncompatibleCodecsError',
 	  // Identifier for playlist load error - data: { url : faulty URL, response : XHR response}
 	  LEVEL_LOAD_ERROR: 'levelLoadError',
 	  // Identifier for playlist load timeout - data: { url : faulty URL, response : XHR response}
@@ -20640,7 +20671,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // be an object with the default export as a property of it. To ensure
 	        // the existing api and babel esmodule exports are both supported we
 	        // check for both
-	        if (exp === fn || exp.default === fn) {
+	        if (exp && (exp === fn || exp.default === fn)) {
 	            key = i;
 	            break;
 	        } else if (wrapperFuncString.indexOf(fnString) > -1) {
@@ -21019,7 +21050,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        hls.trigger(_events2.default.MANIFEST_PARSED, { levels: this._levels, firstLevel: this._firstLevel, stats: data.stats });
 	      } else {
-	        hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.NETWORK_ERROR, details: _errors.ErrorDetails.MANIFEST_PARSING_ERROR, fatal: true, url: hls.url, reason: 'no compatible level found in manifest' });
+	        hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.MANIFEST_INCOMPATIBLE_CODECS_ERROR, fatal: true, url: hls.url, reason: 'no level with compatible codecs found in manifest' });
 	      }
 	      return;
 	    }
@@ -23157,20 +23188,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  PosterPlugin.prototype.showPlayButton = function showPlayButton(show) {
-	    if (!this.options.chromeless) {
-	      if (show) {
-	        this.$playButton.show();
-	        this.$el.addClass("clickable");
-	        this.updateSize();
-	      } else {
-	        this.$playButton.hide();
-	        this.$el.removeClass("clickable");
-	      }
+	    if (show && (!this.options.chromeless || this.options.allowUserInteraction)) {
+	      this.$playButton.show();
+	      this.$el.addClass("clickable");
+	      this.updateSize();
+	    } else {
+	      this.$playButton.hide();
+	      this.$el.removeClass("clickable");
 	    }
 	  };
 
 	  PosterPlugin.prototype.clicked = function clicked() {
-	    if (!this.options.chromeless) {
+	    if (!this.options.chromeless || this.options.allowUserInteraction) {
 	      this.playRequested = true;
 	      this.update();
 	      this.container.play();
@@ -23475,10 +23504,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _playback2 = _interopRequireDefault(_playback);
 
-	var _browser = __webpack_require__(3);
-
-	var _browser2 = _interopRequireDefault(_browser);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23506,10 +23531,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  ClickToPausePlugin.prototype.bindEvents = function bindEvents() {
-	    if (!this.options.chromeless && !_browser2.default.isMobile) {
-	      this.listenTo(this.container, _events2.default.CONTAINER_CLICK, this.click);
-	      this.listenTo(this.container, _events2.default.CONTAINER_SETTINGSUPDATE, this.settingsUpdate);
-	    }
+	    this.listenTo(this.container, _events2.default.CONTAINER_CLICK, this.click);
+	    this.listenTo(this.container, _events2.default.CONTAINER_SETTINGSUPDATE, this.settingsUpdate);
 	  };
 
 	  ClickToPausePlugin.prototype.click = function click() {
