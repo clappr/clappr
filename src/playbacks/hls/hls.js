@@ -147,8 +147,7 @@ export default class HLS extends HTML5VideoPlayback {
           this.recover()
           break
         default:
-          Log.error(`hlsjs: could not recover from error, evt ${evt}, data ${data} `)
-          this.trigger(Events.PLAYBACK_ERROR, "error description", this.name)
+          this.trigger(Events.PLAYBACK_ERROR, `hlsjs: could not recover from error, evt ${evt}, data ${data} `, this.name)
           break
       }
     }
