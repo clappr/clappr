@@ -67,7 +67,8 @@ export default class HLS extends HTML5VideoPlayback {
       this.hls.swapAudioCodec()
       this.hls.recoverMediaError()
     } else {
-        // failed recovery
+      Log.error("hlsjs: failed to recover")
+      this.trigger(Events.PLAYBACK_ERROR, `hlsjs: could not recover from error, evt ${evt}, data ${data} `, this.name)
     }
   }
 
@@ -147,6 +148,7 @@ export default class HLS extends HTML5VideoPlayback {
           this.recover()
           break
         default:
+          Log.error(`hlsjs: trying to recover from media error, evt ${evt}, data ${data} `)
           this.trigger(Events.PLAYBACK_ERROR, `hlsjs: could not recover from error, evt ${evt}, data ${data} `, this.name)
           break
       }
