@@ -29,7 +29,7 @@ import coreStyle from './public/style.scss'
 export default class Core extends UIObject {
   get events() {
     return {
-      'webkitfullscreenchange': 'exit',
+      'webkitfullscreenchange': 'handleFullscreenChange',
       'mousemove': 'showMediaControl',
       'mouseleave': 'hideMediaControl'
     }
@@ -59,9 +59,10 @@ export default class Core extends UIObject {
     this.containers = []
     this.setupMediaControl(null)
     //FIXME fullscreen api sucks
-    $(document).bind('fullscreenchange', () => this.exit())
-    $(document).bind('MSFullscreenChange', () => this.exit())
-    $(document).bind('mozfullscreenchange', () => this.exit())
+    this._boundFullscreenHandler = () => this.handleFullscreenChange()
+    $(document).bind('fullscreenchange', this._boundFullscreenHandler)
+    $(document).bind('MSFullscreenChange', this._boundFullscreenHandler)
+    $(document).bind('mozfullscreenchange', this._boundFullscreenHandler)
   }
 
   createContainers(options) {
@@ -166,12 +167,12 @@ export default class Core extends UIObject {
     this.plugins.forEach((plugin) => plugin.destroy())
     this.$el.remove()
     this.mediaControl.destroy()
-    $(document).unbind('fullscreenchange')
-    $(document).unbind('MSFullscreenChange')
-    $(document).unbind('mozfullscreenchange')
+    $(document).unbind('fullscreenchange', this._boundFullscreenHandler)
+    $(document).unbind('MSFullscreenChange', this._boundFullscreenHandler)
+    $(document).unbind('mozfullscreenchange', this._boundFullscreenHandler)
   }
 
-  exit() {
+  handleFullscreenChange() {
     this.updateSize()
     this.mediaControl.show()
   }
