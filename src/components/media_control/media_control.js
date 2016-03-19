@@ -22,6 +22,15 @@ import $ from 'clappr-zepto'
 import mediaControlStyle from './public/media-control.scss'
 import mediaControlHTML from './public/media-control.html'
 
+import playIcon from 'icons/01-play.svg'
+import pauseIcon from 'icons/02-pause.svg'
+import stopIcon from 'icons/03-stop.svg'
+import volumeIcon from 'icons/04-volume.svg'
+import volumeMuteIcon from 'icons/05-mute.svg'
+import fullscreenIcon from 'icons/06-expand.svg'
+import exitFullscreenIcon from 'icons/07-shrink.svg'
+import hdIcon from 'icons/08-hd.svg'
+
 export default class MediaControl extends UIObject {
   get name() { return 'MediaControl' }
 
@@ -161,21 +170,25 @@ export default class MediaControl extends UIObject {
     this.$volumeBarContainer.find('.segmented-bar-element').removeClass('fill')
     var item = Math.ceil(this.volume / 10.0)
     this.$volumeBarContainer.find('.segmented-bar-element').slice(0, item).addClass('fill')
+    this.$volumeIcon.html('')
+    this.$volumeIcon.removeClass('muted')
     if (!this.muted) {
-      this.$volumeIcon.removeClass('muted')
+      this.$volumeIcon.append(volumeIcon)
     } else {
+      this.$volumeIcon.append(volumeMuteIcon)
       this.$volumeIcon.addClass('muted')
     }
   }
 
   changeTogglePlay() {
+    this.$playPauseToggle.html('')
     if (this.container && this.container.isPlaying()) {
-      this.$playPauseToggle.removeClass('paused').addClass('playing')
-      this.$playStopToggle.removeClass('stopped').addClass('playing')
+      this.$playPauseToggle.append(pauseIcon)
+      this.$playStopToggle.append(stopIcon)
       this.trigger(Events.MEDIACONTROL_PLAYING)
     } else {
-      this.$playPauseToggle.removeClass('playing').addClass('paused')
-      this.$playStopToggle.removeClass('playing').addClass('stopped')
+      this.$playPauseToggle.append(playIcon)
+      this.$playStopToggle.append(pauseIcon)
       this.trigger(Events.MEDIACONTROL_NOTPLAYING)
     }
   }
@@ -203,10 +216,11 @@ export default class MediaControl extends UIObject {
   }
 
   playerResize(size) {
+    this.$fullscreenToggle.html('')
     if (Fullscreen.isFullscreen()) {
-      this.$fullscreenToggle.addClass('shrink')
+      this.$fullscreenToggle.append(exitFullscreenIcon)
     } else {
-      this.$fullscreenToggle.removeClass('shrink')
+      this.$fullscreenToggle.append(fullscreenIcon)
     }
     this.$el.removeClass('w320')
     if (size.width <= 320 || this.options.hideVolumeBar) {
@@ -469,7 +483,7 @@ export default class MediaControl extends UIObject {
 
   highDefinitionUpdate(isHD) {
     var method = !!isHD ? 'addClass' : 'removeClass'
-    this.$el.find('button[data-hd-indicator]')[method]('enabled')
+    this.$hdIndicator[method]('enabled')
   }
 
   createCachedElements() {
@@ -490,12 +504,26 @@ export default class MediaControl extends UIObject {
     this.$volumeBarBackground = this.$el.find('.bar-background[data-volume]')
     this.$volumeBarFill = this.$el.find('.bar-fill-1[data-volume]')
     this.$volumeBarScrubber = this.$el.find('.bar-scrubber[data-volume]')
+    this.$hdIndicator = this.$el.find('button.media-control-button[data-hd-indicator]')
     this.resetIndicators()
+    this.initializeIcons()
   }
 
   resetIndicators() {
     this.displayedPosition = this.$position.text()
     this.displayedDuration = this.$duration.text()
+  }
+
+  initializeIcons() {
+    var $layer = this.$el.find('.media-control-layer')
+    $layer.find('button.media-control-button[data-play]').append(playIcon)
+    $layer.find('button.media-control-button[data-pause]').append(pauseIcon)
+    $layer.find('button.media-control-button[data-stop]').append(stopIcon)
+    this.$playPauseToggle.append(playIcon)
+    this.$playStopToggle.append(playIcon)
+    this.$volumeIcon.append(volumeIcon)
+    this.$fullscreenToggle.append(fullscreenIcon)
+    this.$hdIndicator.append(hdIcon)
   }
 
   setSeekPercentage(value) {

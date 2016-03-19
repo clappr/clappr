@@ -1,14 +1,6 @@
 @import 'compass/css3';
 @import 'fontsmoothing';
 
-@font-face {
-  font-family: "Player";
-  src: url("./Player-Regular.eot");
-  src: url("./Player-Regular.eot?#iefix") format("embedded-opentype"),
-       url("./Player-Regular.ttf") format("truetype"),
-       url("./Player-Regular.svg#player") format("svg");
-}
-
 .media-control-notransition {
   @include transition(none !important);
 }
@@ -113,6 +105,14 @@
       padding: 0;
       cursor: pointer;
       display: inline-block;
+      width: 32px;
+      height: 100%;
+
+      svg {
+        width: 100%;
+        height: 22px;
+        path { fill: white; }
+      }
 
       &:focus {
         outline: none;
@@ -121,22 +121,16 @@
       &[data-play] {
         float: left;
         height: 100%;
-        font-size: 20px;
-        &:before { content:"\e001"; }
       }
 
       &[data-pause] {
         float: left;
         height: 100%;
-        font-size: 20px;
-        &:before { content:"\e002"; }
       }
 
       &[data-stop] {
         float: left;
         height: 100%;
-        font-size: 20px;
-        &:before { content:"\e003"; }
       }
 
       &[data-fullscreen] {
@@ -144,9 +138,6 @@
         background-color: transparent;
         border: 0;
         height: 100%;
-        &:before { content:"\e006"; }
-
-        &.shrink:before { content:"\e007"; }
       }
 
       &[data-hd-indicator] {
@@ -155,44 +146,20 @@
         background-color: transparent;
         border: 0;
         height: 100%;
-        opacity: 0;
-        &:before { content:"\e008"; }
+        display: none;
         &.enabled {
           &:hover { opacity: 1.0; text-shadow: none;}
           opacity: 1.0;
+          display: block;
         }
       }
 
       &[data-playpause] {
         float: left;
-        height: 100%;
-        font-size: 20px;
-
-        &:before { content:"\e001"; }
-
-        &.playing {
-          &:before { content:"\e002"; }
-        }
-
-        &.paused {
-          &:before { content:"\e001"; }
-        }
       }
 
       &[data-playstop] {
         float: left;
-        height: 100%;
-        font-size: 20px;
-
-        &:before { content:"\e001"; }
-
-        &.playing {
-          &:before { content:"\e003"; }
-        }
-
-        &.stopped {
-          &:before { content:"\e001"; }
-        }
       }
     }
 
@@ -321,18 +288,19 @@
           background-color: transparent;
           border: 0;
           box-sizing: content-box;
-          width: 16px;
+          width: 32px;
           height: 32px;
-          margin-right: 6px;
-          opacity: 1;
-          &:hover { opacity: 1; }
-          &:before { content:"\e004"; }
+          opacity: 0.5;
+          &:hover { opacity: 0.75; }
 
-          &.muted {
-            opacity: 0.5;
-            &:hover { opacity: 0.7; }
-            &:before { content:"\e005"; }
+          svg {
+            height: 24px;
+            position: relative;
+            top: 3px;
+            path { fill: white; }
           }
+
+          &.muted svg { margin-left: 2px; }
         }
       }
 
