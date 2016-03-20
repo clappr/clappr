@@ -120,7 +120,6 @@ export default class FlasHLS extends BaseFlashPlayback {
     Mediator.on(this.cid + ':levelchanged', (level) => this.levelChanged(level))
     Mediator.on(this.cid + ':error', (code, url, message) => this.flashPlaybackError(code, url, message))
     Mediator.on(this.cid + ':fragmentloaded',(loadmetrics) => this.onFragmentLoaded(loadmetrics))
-    Mediator.once(this.cid + ':manifestloaded', (duration, loadmetrics) => this.manifestLoaded(duration, loadmetrics))
   }
 
   stopListening() {
@@ -533,6 +532,7 @@ export default class FlasHLS extends BaseFlashPlayback {
   firstPlay() {
     this._shouldPlayOnManifestLoaded = true
     if (this.el.playerLoad) {
+      Mediator.once(this.cid + ':manifestloaded', (duration, loadmetrics) => this.manifestLoaded(duration, loadmetrics))
       this.setFlashSettings() //ensure flushLiveURLCache will work (#327)
       this.el.playerLoad(this.src)
       this.srcLoaded = true
