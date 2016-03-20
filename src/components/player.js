@@ -195,6 +195,7 @@ export default class Player extends BaseObject {
       this.onReady()
     }
     this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
+    this.listenTo(this.core, Events.CORE_FULLSCREEN, this.onFullscreenChange)
   }
 
   addContainerEventListeners() {
@@ -245,6 +246,10 @@ export default class Player extends BaseObject {
     this.ready = true
     this.addContainerEventListeners()
     this.trigger(Events.PLAYER_READY)
+  }
+
+  onFullscreenChange(fullscreen) {
+    this.trigger(Events.PLAYER_FULLSCREEN, fullscreen)
   }
 
   onVolumeUpdate(volume) {

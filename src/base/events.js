@@ -216,6 +216,13 @@ Events.PLAYER_READY = 'ready'
  */
 Events.PLAYER_RESIZE = 'resize'
 /**
+ * Fired when player changes its fullscreen state
+ *
+ * @event PLAYER_FULLSCREEN
+ * @param {Boolean} whether or not the player is on fullscreen mode
+ */
+Events.PLAYER_FULLSCREEN = 'fullscreen'
+/**
  * Fired when player starts to play
  *
  * @event PLAYER_PLAY
@@ -408,7 +415,7 @@ Events.PLAYBACK_PLAYBACKSTATE = 'playback:playbackstate'
  * Fired when DVR becomes enabled/disabled.
  *
  * @event PLAYBACK_DVR
- * @param {boolean} state true if dvr enabled 
+ * @param {boolean} state true if dvr enabled
  */
 Events.PLAYBACK_DVR = 'playback:dvr'
 // TODO doc
