@@ -182,6 +182,7 @@ export default class MediaControl extends UIObject {
 
   changeTogglePlay() {
     this.$playPauseToggle.html('')
+    this.$playStopToggle.html('')
     if (this.container && this.container.isPlaying()) {
       this.$playPauseToggle.append(pauseIcon)
       this.$playStopToggle.append(stopIcon)
