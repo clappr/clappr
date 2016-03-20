@@ -173,6 +173,7 @@ export default class Core extends UIObject {
   }
 
   handleFullscreenChange() {
+    this.trigger(Events.CORE_FULLSCREEN, Fullscreen.isFullscreen())
     this.updateSize()
     this.mediaControl.show()
   }

@@ -471,6 +471,12 @@ Events.CORE_OPTIONS_CHANGE = 'core:options:change'
  * @event CORE_READY
  */
 Events.CORE_READY = 'core:ready'
+/**
+ * Fired when the fullscreen state change
+ *
+ * @event CORE_READY
+ */
+Events.CORE_FULLSCREEN = 'core:fullscreen'
 
 // Container Events
 /**
