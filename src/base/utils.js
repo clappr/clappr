@@ -49,11 +49,11 @@ export function formatTime(time, paddedHours) {
 
 export var Fullscreen = {
   isFullscreen: function() {
-    return (
+    return !!(
       document.webkitFullscreenElement ||
       document.webkitIsFullScreen ||
       document.mozFullScreen ||
-      !!document.msFullscreenElement
+      document.msFullscreenElement
     )
   },
   requestFullscreen: function(el) {
