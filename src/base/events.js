@@ -481,6 +481,7 @@ Events.CORE_READY = 'core:ready'
 /**
  * Fired when the fullscreen state change
  *
+ * @param {Boolean} whether or not the player is on fullscreen mode
  * @event CORE_READY
  */
 Events.CORE_FULLSCREEN = 'core:fullscreen'
