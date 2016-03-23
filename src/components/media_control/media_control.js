@@ -178,6 +178,7 @@ export default class MediaControl extends UIObject {
       this.$volumeIcon.append(volumeMuteIcon)
       this.$volumeIcon.addClass('muted')
     }
+    this.applyButtonStyle(this.$volumeIcon)
   }
 
   changeTogglePlay() {
@@ -192,6 +193,7 @@ export default class MediaControl extends UIObject {
       this.$playStopToggle.append(pauseIcon)
       this.trigger(Events.MEDIACONTROL_NOTPLAYING)
     }
+    this.applyButtonStyle($(this.$playPauseToggle, this.$playStopToggle))
   }
 
   mousemoveOnSeekBar(event) {
@@ -571,11 +573,17 @@ export default class MediaControl extends UIObject {
 
   parseColors() {
     if (this.options.mediacontrol) {
-      var buttonsColor = this.options.mediacontrol.buttons
+      this.buttonsColor = this.options.mediacontrol.buttons
       var seekbarColor = this.options.mediacontrol.seekbar
       this.$el.find('.bar-fill-2[data-seekbar]').css('background-color', seekbarColor)
-      this.$el.find('[data-media-control] > .media-control-icon, .drawer-icon').css('color', buttonsColor)
-      this.$el.find('.segmented-bar-element[data-volume]').css('boxShadow', "inset 2px 0 0 " + buttonsColor)
+      this.$el.find('.media-control-icon svg path').css('fill', this.buttonsColor)
+      this.$el.find('.segmented-bar-element[data-volume]').css('boxShadow', "inset 2px 0 0 " + this.buttonsColor)
+    }
+  }
+
+  applyButtonStyle(element) {
+    if (this.buttonsColor && element) {
+      $(element).find('svg path').css('fill', this.buttonsColor)
     }
   }
 
