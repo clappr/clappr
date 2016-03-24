@@ -225,6 +225,7 @@ export default class MediaControl extends UIObject {
     } else {
       this.$fullscreenToggle.append(fullscreenIcon)
     }
+    this.applyButtonStyle(this.$fullscreenToggle)
     this.$el.removeClass('w320')
     if (size.width <= 320 || this.options.hideVolumeBar) {
       this.$el.addClass('w320')
