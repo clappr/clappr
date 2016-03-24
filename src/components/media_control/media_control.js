@@ -193,7 +193,8 @@ export default class MediaControl extends UIObject {
       this.$playStopToggle.append(pauseIcon)
       this.trigger(Events.MEDIACONTROL_NOTPLAYING)
     }
-    this.applyButtonStyle($(this.$playPauseToggle, this.$playStopToggle))
+    this.applyButtonStyle(this.$playPauseToggle)
+    this.applyButtonStyle(this.$playStopToggle)
   }
 
   mousemoveOnSeekBar(event) {
