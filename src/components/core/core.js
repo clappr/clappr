@@ -301,7 +301,7 @@ export default class Core extends UIObject {
     var sources = options.source || options.sources
 
     if (sources) {
-      this.load(sources)
+      this.load(sources, options.mimeType || this.options.mimeType)
     } else {
       this.trigger(Events.CORE_OPTIONS_CHANGE)
 
