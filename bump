@@ -1,5 +1,10 @@
 #!/bin/sh
 
+update_dependencies() {
+  echo 'updating dependencies'
+  npm update > /dev/null
+}
+
 update_version() {
   current_tag=$(git describe --abbrev=0 --tags)
   echo 'bump from '$current_tag' to '$1
@@ -55,6 +60,7 @@ Your happy butler.\n
 }
 
 main() {
+  update_dependencies
   update_version $1
   update_bower
   build
