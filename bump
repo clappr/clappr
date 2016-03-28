@@ -18,9 +18,9 @@ update_bower() {
 
 build() {
   echo 'building clappr.js'
-  npm run build > /dev/null
+  npm run build --silent
   echo 'building clappr.min.js'
-  npm run release > /dev/null
+  npm run release --silent
 }
 
 run_tests() {
