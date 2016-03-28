@@ -2,7 +2,7 @@
 
 update_dependencies() {
   echo 'updating dependencies'
-  npm update > /dev/null
+  npm update --silent
 }
 
 update_version() {
