@@ -105,6 +105,8 @@ export default class Player extends BaseObject {
    * player acts in chromeless mode **default**: `false`
    * @param {Boolean} [options.allowUserInteraction]
    * whether or not the player should handle click events when in chromeless mode **default**: `false` on desktops browsers, `true` on mobile.
+   * @param {Boolean} [options.disableKeyboardShortcuts]
+   * disable keyboard shortcuts. **default**: `false`. `true` if `allowUserInteraction` is `false`.
    * @param {Boolean} [options.muted]
    * start the video muted **default**: `false`
    * @param {String} [options.mimeType]
@@ -152,6 +154,14 @@ export default class Player extends BaseObject {
     var defaultOptions = {playerId: uniqueId(""), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl, allowUserInteraction: Browser.isMobile}
     this.options = $.extend(defaultOptions, options)
     this.options.sources = this.normalizeSources(options)
+    if (!this.options.chromeless) {
+      // "allowUserInteraction" cannot be false if not in chromeless mode.
+      this.options.allowUserInteraction = true
+    }
+    if (!this.options.allowUserInteraction) {
+      // if user iteraction is not allowed ensure keyboard shortcuts are disabled
+      this.options.disableKeyboardShortcuts = true
+    }
     this.registerOptionEventListeners()
     this.coreFactory = new CoreFactory(this)
     this.playerInfo = PlayerInfo.getInstance(this.options.playerId)
