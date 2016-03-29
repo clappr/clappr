@@ -628,8 +628,9 @@ export default class MediaControl extends UIObject {
       if (!this.container.settings.seekEnabled) {
         this.$seekBarContainer.addClass('seek-disabled')
       }
-
-      this.bindKeyEvents()
+      if (!this.options.disableKeyboardShortcuts) {
+        this.bindKeyEvents()
+      }
       this.playerResize({width: this.options.width, height: this.options.height})
       this.hideVolumeBar(0)
     })
