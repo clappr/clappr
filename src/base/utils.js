@@ -126,6 +126,24 @@ export class Config {
   }
 }
 
+export class QueryString {
+  static get params() {
+    var query = window.location.search.substring(1)
+    if (query !== this.query) {
+      var match,
+          pl     = /\+/g,  // Regex for replacing addition symbol with a space
+          search = /([^&=]+)=?([^&]*)/g,
+          decode = (s) => decodeURIComponent(s.replace(pl, " "))
+      this._urlParams = {}
+      this.query = query
+      while (match = search.exec(query)) {
+        this._urlParams[decode(match[1]).toLowerCase()] = decode(match[2])
+      }
+    }
+    return this._urlParams
+  }
+}
+
 export function seekStringToSeconds(url) {
   var parts = url.match(/t=([0-9]*)(&|\/|$)/);
   if (parts && parts.length > 0) {
@@ -182,6 +200,7 @@ export function getBrowserLanguage() {
 export default {
   Config,
   Fullscreen,
+  QueryString,
   extend,
   formatTime,
   seekStringToSeconds,
