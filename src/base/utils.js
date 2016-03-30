@@ -144,23 +144,23 @@ export class QueryString {
   }
 }
 
-export function seekStringToSeconds(url) {
-  var parts = url.match(/t=([0-9]*)(&|\/|$)/);
-  if (parts && parts.length > 0) {
-    return parseInt(parts[1], 10);
-  } else {
-    var seconds = 0;
-    var factor = {'h': 3600, 'm': 60, 's': 1};
-    parts = url.match(/[0-9]+[hms]+/g) || [];
+export function seekStringToSeconds() {
+  var seconds = 0
+  var seekString = QueryString.params['t'] || ''
+  var parts = seekString.match(/[0-9]+[hms]+/g) || []
+  if (parts.length > 0) {
+    var factor = {'h': 3600, 'm': 60, 's': 1}
     parts.forEach(function(el) {
       if (el) {
-        var suffix = el[el.length - 1];
-        var time = parseInt(el.slice(0, el.length - 1), 10);
-        seconds += time * (factor[suffix]);
+        var suffix = el[el.length - 1]
+        var time = parseInt(el.slice(0, el.length - 1), 10)
+        seconds += time * (factor[suffix])
       }
-    });
-    return seconds;
+    })
+  } else if (seekString) {
+    seconds = parseInt(seekString, 10)
    }
+   return seconds
 }
 
 var idsCounter = {}
