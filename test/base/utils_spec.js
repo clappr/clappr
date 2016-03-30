@@ -1,7 +1,7 @@
 import * as utils from '../../src/base/utils'
 
 var pushUrl = function(path) {
-  window.history.pushState({"html":document.body.html,"pageTitle":document.head.title},"", path)
+  window.history.pushState({},"", path)
 }
 
 describe('Utils', function() {
