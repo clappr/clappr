@@ -1,14 +1,14 @@
-#!/bin/sh
+#!/bin/bash
 
 update_dependencies() {
-  echo 'updating dependencies'
+  echo 'updating dependencies' &&
   npm update --silent
 }
 
 update_version() {
-  current_tag=$(git describe --abbrev=0 --tags)
-  echo 'bump from '$current_tag' to '$1
-  sed -i ".bkp" "s/\(version\":[ ]*\"\)$current_tag/\1$1/" package.json
+  current_tag=$(git describe --abbrev=0 --tags) &&
+  echo 'bump from '$current_tag' to '$1 &&
+  sed -i ".bkp" "s/\(version\":[ ]*\"\)$current_tag/\1$1/" package.json &&
   sed -i ".bkp" "s/\(version\":[ ]*\"\)$current_tag/\1$1/" yuidoc.json
 }
 
@@ -17,27 +17,27 @@ update_bower() {
 }
 
 build() {
-  echo 'building clappr.js'
-  npm run build --silent
-  echo 'building clappr.min.js'
+  echo 'building clappr.js' &&
+  npm run build --silent &&
+  echo 'building clappr.min.js' &&
   npm run release --silent
 }
 
 run_tests() {
   npm test
-  return $?
 }
 
 git_push() {
-  echo 'pushing to github'
-  git add .
-  git commit -m 'bump to '$1
-  git tag $1
+  echo 'pushing to github' && 
+  git add "package.json" &&
+  git add "bower.json" &&
+  git commit -m 'bump to '$1 &&
+  git tag $1 &&
   git push origin master --tags
 }
 
 upload() {
-  node upload.js --tag=$1
+  node upload.js --tag=$1 &&
   node upload.js --tag=latest
 }
 
@@ -57,20 +57,28 @@ with love,\n
 Your happy butler.\n
 "
   echo $message | mail -s "$(echo "[clappr] new version released: $1\nFrom: Clappr Butler <butler@clappr.io>\n")" videos5@corp.globo.com
+  return 0
 }
 
 main() {
-  update_dependencies
-  update_version $1
-  update_bower
+  update_dependencies &&
+  update_version $1 &&
+  update_bower &&
   build
+  if (("$?" != "0")); then
+    echo "something failed during dependency update, version update, or build"
+    exit 1
+  fi
   run_tests
   if (("$?" == "0")); then
-    git_push $1
-    upload $1
-    npm_publish
-    send_mail $1
+    git_push $1 &&
+    upload $1 &&
+    npm_publish &&
+    send_mail $1 &&
     exit 0
+
+    echo "something failed"
+    exit 1
   else
     echo "you broke the tests. fix it before bump another version."
     exit 1
