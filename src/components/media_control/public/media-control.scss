@@ -1,5 +1,4 @@
 @import 'compass/css3';
-@import 'fontsmoothing';
 
 .media-control-notransition {
   @include transition(none !important);
@@ -34,18 +33,13 @@
   }
 
   .media-control-icon {
-    font-family:"Player";
-    font-weight: normal;
-    font-style: normal;
-    font-size: 26px;
-    line-height: 32px;
+    line-height: 0;
     letter-spacing: 0;
     speak: none;
     color: #fff;
     opacity: 0.5;
     vertical-align: middle;
     text-align: left;
-    @include font-smoothing(antialiased);
     @include transition(all 0.1s ease);
   }
 
