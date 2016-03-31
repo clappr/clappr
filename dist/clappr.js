@@ -76,19 +76,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _playback2 = _interopRequireDefault(_playback);
 
-	var _container_plugin = __webpack_require__(122);
+	var _container_plugin = __webpack_require__(130);
 
 	var _container_plugin2 = _interopRequireDefault(_container_plugin);
 
-	var _core_plugin = __webpack_require__(143);
+	var _core_plugin = __webpack_require__(151);
 
 	var _core_plugin2 = _interopRequireDefault(_core_plugin);
 
-	var _ui_core_plugin = __webpack_require__(137);
+	var _ui_core_plugin = __webpack_require__(145);
 
 	var _ui_core_plugin2 = _interopRequireDefault(_ui_core_plugin);
 
-	var _ui_container_plugin = __webpack_require__(117);
+	var _ui_container_plugin = __webpack_require__(125);
 
 	var _ui_container_plugin2 = _interopRequireDefault(_ui_container_plugin);
 
@@ -112,7 +112,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _core2 = _interopRequireDefault(_core);
 
-	var _loader = __webpack_require__(47);
+	var _loader = __webpack_require__(52);
 
 	var _loader2 = _interopRequireDefault(_loader);
 
@@ -124,43 +124,43 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _media_control2 = _interopRequireDefault(_media_control);
 
-	var _player_info = __webpack_require__(45);
+	var _player_info = __webpack_require__(50);
 
 	var _player_info2 = _interopRequireDefault(_player_info);
 
-	var _base_flash_playback = __webpack_require__(59);
+	var _base_flash_playback = __webpack_require__(65);
 
 	var _base_flash_playback2 = _interopRequireDefault(_base_flash_playback);
 
-	var _flash = __webpack_require__(57);
+	var _flash = __webpack_require__(63);
 
 	var _flash2 = _interopRequireDefault(_flash);
 
-	var _flashls = __webpack_require__(66);
+	var _flashls = __webpack_require__(72);
 
 	var _flashls2 = _interopRequireDefault(_flashls);
 
-	var _hls = __webpack_require__(70);
+	var _hls = __webpack_require__(76);
 
 	var _hls2 = _interopRequireDefault(_hls);
 
-	var _html5_audio = __webpack_require__(64);
+	var _html5_audio = __webpack_require__(70);
 
 	var _html5_audio2 = _interopRequireDefault(_html5_audio);
 
-	var _html5_video = __webpack_require__(53);
+	var _html5_video = __webpack_require__(59);
 
 	var _html5_video2 = _interopRequireDefault(_html5_video);
 
-	var _html_img = __webpack_require__(108);
+	var _html_img = __webpack_require__(116);
 
 	var _html_img2 = _interopRequireDefault(_html_img);
 
-	var _no_op = __webpack_require__(111);
+	var _no_op = __webpack_require__(119);
 
 	var _no_op2 = _interopRequireDefault(_no_op);
 
-	var _poster = __webpack_require__(127);
+	var _poster = __webpack_require__(135);
 
 	var _poster2 = _interopRequireDefault(_poster);
 
@@ -186,7 +186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// Use of this source code is governed by a BSD-style
 	// license that can be found in the LICENSE file.
 
-	var version = ("0.2.40");
+	var version = ("0.2.41");
 
 	exports.default = {
 	    Player: _player2.default,
@@ -253,11 +253,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _core_factory2 = _interopRequireDefault(_core_factory);
 
-	var _loader = __webpack_require__(47);
+	var _loader = __webpack_require__(52);
 
 	var _loader2 = _interopRequireDefault(_loader);
 
-	var _player_info = __webpack_require__(45);
+	var _player_info = __webpack_require__(50);
 
 	var _player_info2 = _interopRequireDefault(_player_info);
 
@@ -388,6 +388,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * player acts in chromeless mode **default**: `false`
 	     * @param {Boolean} [options.allowUserInteraction]
 	     * whether or not the player should handle click events when in chromeless mode **default**: `false` on desktops browsers, `true` on mobile.
+	     * @param {Boolean} [options.disableKeyboardShortcuts]
+	     * disable keyboard shortcuts. **default**: `false`. `true` if `allowUserInteraction` is `false`.
 	     * @param {Boolean} [options.muted]
 	     * start the video muted **default**: `false`
 	     * @param {String} [options.mimeType]
@@ -441,6 +443,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var defaultOptions = { playerId: (0, _utils.uniqueId)(""), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl, allowUserInteraction: _browser2.default.isMobile };
 	    _this.options = _clapprZepto2.default.extend(defaultOptions, options);
 	    _this.options.sources = _this.normalizeSources(options);
+	    if (!_this.options.chromeless) {
+	      // "allowUserInteraction" cannot be false if not in chromeless mode.
+	      _this.options.allowUserInteraction = true;
+	    }
+	    if (!_this.options.allowUserInteraction) {
+	      // if user iteraction is not allowed ensure keyboard shortcuts are disabled
+	      _this.options.disableKeyboardShortcuts = true;
+	    }
 	    _this.registerOptionEventListeners();
 	    _this.coreFactory = new _core_factory2.default(_this);
 	    _this.playerInfo = _player_info2.default.getInstance(_this.options.playerId);
@@ -488,6 +498,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.onReady();
 	    }
 	    this.listenTo(this.core.mediaControl, _events2.default.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged);
+	    this.listenTo(this.core, _events2.default.CORE_FULLSCREEN, this.onFullscreenChange);
 	  };
 
 	  Player.prototype.addContainerEventListeners = function addContainerEventListeners() {
@@ -540,6 +551,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.ready = true;
 	    this.addContainerEventListeners();
 	    this.trigger(_events2.default.PLAYER_READY);
+	  };
+
+	  Player.prototype.onFullscreenChange = function onFullscreenChange(fullscreen) {
+	    this.trigger(_events2.default.PLAYER_FULLSCREEN, fullscreen);
 	  };
 
 	  Player.prototype.onVolumeUpdate = function onVolumeUpdate(volume) {
@@ -808,7 +823,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.cancelAnimationFrame = exports.requestAnimationFrame = exports.Config = exports.Fullscreen = undefined;
+	exports.cancelAnimationFrame = exports.requestAnimationFrame = exports.QueryString = exports.Config = exports.Fullscreen = undefined;
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -900,7 +915,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var Fullscreen = exports.Fullscreen = {
 	  isFullscreen: function isFullscreen() {
-	    return document.webkitFullscreenElement || document.webkitIsFullScreen || document.mozFullScreen || !!document.msFullscreenElement;
+	    return !!(document.webkitFullscreenElement || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement);
 	  },
 	  requestFullscreen: function requestFullscreen(el) {
 	    if (el.requestFullscreen) {
@@ -977,14 +992,59 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return Config;
 	}();
 
-	function seekStringToSeconds(url) {
-	  var parts = url.match(/t=([0-9]*)(&|\/|$)/);
-	  if (parts && parts.length > 0) {
-	    return parseInt(parts[1], 10);
-	  } else {
-	    var seconds = 0;
+	var QueryString = exports.QueryString = function () {
+	  function QueryString() {
+	    _classCallCheck(this, QueryString);
+	  }
+
+	  QueryString.parse = function parse(paramsString) {
+	    var match,
+	        pl = /\+/g,
+	        // Regex for replacing addition symbol with a space
+	    search = /([^&=]+)=?([^&]*)/g,
+	        decode = function decode(s) {
+	      return decodeURIComponent(s.replace(pl, " "));
+	    };
+	    var params = {};
+	    while (match = search.exec(paramsString)) {
+	      params[decode(match[1]).toLowerCase()] = decode(match[2]);
+	    }
+	    return params;
+	  };
+
+	  _createClass(QueryString, null, [{
+	    key: 'params',
+	    get: function get() {
+	      var query = window.location.search.substring(1);
+	      if (query !== this.query) {
+	        this._urlParams = this.parse(query);
+	        this.query = query;
+	      }
+	      return this._urlParams;
+	    }
+	  }, {
+	    key: 'hashParams',
+	    get: function get() {
+	      var hash = window.location.hash.substring(1);
+	      if (hash !== this.hash) {
+	        this._hashParams = this.parse(hash);
+	        this.hash = hash;
+	      }
+	      return this._hashParams;
+	    }
+	  }]);
+
+	  return QueryString;
+	}();
+
+	function seekStringToSeconds() {
+	  var paramName = arguments.length <= 0 || arguments[0] === undefined ? 't' : arguments[0];
+
+	  var seconds = 0;
+	  var seekString = QueryString.params[paramName] || QueryString.hashParams[paramName] || '';
+	  var parts = seekString.match(/[0-9]+[hms]+/g) || [];
+	  if (parts.length > 0) {
 	    var factor = { 'h': 3600, 'm': 60, 's': 1 };
-	    parts = url.match(/[0-9]+[hms]+/g) || [];
 	    parts.forEach(function (el) {
 	      if (el) {
 	        var suffix = el[el.length - 1];
@@ -992,8 +1052,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        seconds += time * factor[suffix];
 	      }
 	    });
-	    return seconds;
+	  } else if (seekString) {
+	    seconds = parseInt(seekString, 10);
 	  }
+	  return seconds;
 	}
 
 	var idsCounter = {};
@@ -1029,6 +1091,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = {
 	  Config: Config,
 	  Fullscreen: Fullscreen,
+	  QueryString: QueryString,
 	  extend: extend,
 	  formatTime: formatTime,
 	  seekStringToSeconds: seekStringToSeconds,
@@ -2401,6 +2464,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	Events.PLAYER_RESIZE = 'resize';
 	/**
+	 * Fired when player changes its fullscreen state
+	 *
+	 * @event PLAYER_FULLSCREEN
+	 * @param {Boolean} whether or not the player is on fullscreen mode
+	 */
+	Events.PLAYER_FULLSCREEN = 'fullscreen';
+	/**
 	 * Fired when player starts to play
 	 *
 	 * @event PLAYER_PLAY
@@ -2593,7 +2663,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Fired when DVR becomes enabled/disabled.
 	 *
 	 * @event PLAYBACK_DVR
-	 * @param {boolean} state true if dvr enabled 
+	 * @param {boolean} state true if dvr enabled
 	 */
 	Events.PLAYBACK_DVR = 'playback:dvr';
 	// TODO doc
@@ -2656,6 +2726,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @event CORE_READY
 	 */
 	Events.CORE_READY = 'core:ready';
+	/**
+	 * Fired when the fullscreen state change
+	 *
+	 * @param {Boolean} whether or not the player is on fullscreen mode
+	 * @event CORE_READY
+	 */
+	Events.CORE_FULLSCREEN = 'core:fullscreen';
 
 	// Container Events
 	/**
@@ -3731,7 +3808,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _mediator2 = _interopRequireDefault(_mediator);
 
-	var _player_info = __webpack_require__(45);
+	var _player_info = __webpack_require__(50);
 
 	var _player_info2 = _interopRequireDefault(_player_info);
 
@@ -3743,7 +3820,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var _style = __webpack_require__(46);
+	var _style = __webpack_require__(51);
 
 	var _style2 = _interopRequireDefault(_style);
 
@@ -3773,7 +3850,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'events',
 	    get: function get() {
 	      return {
-	        'webkitfullscreenchange': 'exit',
+	        'webkitfullscreenchange': 'handleFullscreenChange',
 	        'mousemove': 'showMediaControl',
 	        'mouseleave': 'hideMediaControl'
 	      };
@@ -3811,15 +3888,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _this.containers = [];
 	    _this.setupMediaControl(null);
 	    //FIXME fullscreen api sucks
-	    (0, _clapprZepto2.default)(document).bind('fullscreenchange', function () {
-	      return _this.exit();
-	    });
-	    (0, _clapprZepto2.default)(document).bind('MSFullscreenChange', function () {
-	      return _this.exit();
-	    });
-	    (0, _clapprZepto2.default)(document).bind('mozfullscreenchange', function () {
-	      return _this.exit();
-	    });
+	    _this._boundFullscreenHandler = function () {
+	      return _this.handleFullscreenChange();
+	    };
+	    (0, _clapprZepto2.default)(document).bind('fullscreenchange', _this._boundFullscreenHandler);
+	    (0, _clapprZepto2.default)(document).bind('MSFullscreenChange', _this._boundFullscreenHandler);
+	    (0, _clapprZepto2.default)(document).bind('mozfullscreenchange', _this._boundFullscreenHandler);
 	    return _this;
 	  }
 
@@ -3941,12 +4015,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	    this.$el.remove();
 	    this.mediaControl.destroy();
-	    (0, _clapprZepto2.default)(document).unbind('fullscreenchange');
-	    (0, _clapprZepto2.default)(document).unbind('MSFullscreenChange');
-	    (0, _clapprZepto2.default)(document).unbind('mozfullscreenchange');
+	    (0, _clapprZepto2.default)(document).unbind('fullscreenchange', this._boundFullscreenHandler);
+	    (0, _clapprZepto2.default)(document).unbind('MSFullscreenChange', this._boundFullscreenHandler);
+	    (0, _clapprZepto2.default)(document).unbind('mozfullscreenchange', this._boundFullscreenHandler);
 	  };
 
-	  Core.prototype.exit = function exit() {
+	  Core.prototype.handleFullscreenChange = function handleFullscreenChange() {
+	    this.trigger(_events2.default.CORE_FULLSCREEN, _utils.Fullscreen.isFullscreen());
 	    this.updateSize();
 	    this.mediaControl.show();
 	  };
@@ -4081,7 +4156,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var sources = options.source || options.sources;
 
 	    if (sources) {
-	      this.load(sources);
+	      this.load(sources, options.mimeType || this.options.mimeType);
 	    } else {
 	      this.trigger(_events2.default.CORE_OPTIONS_CHANGE);
 
@@ -4573,7 +4648,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 	/**
-	 * lodash 4.2.0 (Custom Build) <https://lodash.com/>
+	 * lodash 4.2.1 (Custom Build) <https://lodash.com/>
 	 * Build: `lodash modularize exports="npm" -o ./`
 	 * Copyright 2012-2016 The Dojo Foundation <http://dojofoundation.org/>
 	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -4720,8 +4795,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function isFunction(value) {
 	  // The use of `Object#toString` avoids issues with the `typeof` operator
-	  // in Safari 8 which returns 'object' for typed array constructors, and
-	  // PhantomJS 1.9 which returns 'function' for `NodeList` instances.
+	  // in Safari 8 which returns 'object' for typed array and weak map constructors,
+	  // and PhantomJS 1.9 which returns 'function' for `NodeList` instances.
 	  var tag = isObject(value) ? objectToString.call(value) : '';
 	  return tag == funcTag || tag == genTag;
 	}
@@ -5653,13 +5728,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  Container.prototype.disableMediaControl = function disableMediaControl() {
-	    this.mediaControlDisabled = true;
-	    this.trigger(_events2.default.CONTAINER_MEDIACONTROL_DISABLE);
+	    if (!this.mediaControlDisabled) {
+	      this.mediaControlDisabled = true;
+	      this.trigger(_events2.default.CONTAINER_MEDIACONTROL_DISABLE);
+	    }
 	  };
 
 	  Container.prototype.enableMediaControl = function enableMediaControl() {
-	    this.mediaControlDisabled = false;
-	    this.trigger(_events2.default.CONTAINER_MEDIACONTROL_ENABLE);
+	    if (this.mediaControlDisabled) {
+	      this.mediaControlDisabled = false;
+	      this.trigger(_events2.default.CONTAINER_MEDIACONTROL_ENABLE);
+	    }
 	  };
 
 	  Container.prototype.updateStyle = function updateStyle() {
@@ -5773,7 +5852,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	/**
-	 * lodash 4.2.0 (Custom Build) <https://lodash.com/>
+	 * lodash 4.2.1 (Custom Build) <https://lodash.com/>
 	 * Build: `lodash modularize exports="npm" -o ./`
 	 * Copyright 2012-2016 The Dojo Foundation <http://dojofoundation.org/>
 	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -8471,9 +8550,41 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _mediaControl2 = _interopRequireDefault(_mediaControl);
 
-	var _mediaControl3 = __webpack_require__(44);
+	var _mediaControl3 = __webpack_require__(41);
 
 	var _mediaControl4 = _interopRequireDefault(_mediaControl3);
+
+	var _play = __webpack_require__(42);
+
+	var _play2 = _interopRequireDefault(_play);
+
+	var _pause = __webpack_require__(43);
+
+	var _pause2 = _interopRequireDefault(_pause);
+
+	var _stop = __webpack_require__(44);
+
+	var _stop2 = _interopRequireDefault(_stop);
+
+	var _volume = __webpack_require__(45);
+
+	var _volume2 = _interopRequireDefault(_volume);
+
+	var _mute = __webpack_require__(46);
+
+	var _mute2 = _interopRequireDefault(_mute);
+
+	var _expand = __webpack_require__(47);
+
+	var _expand2 = _interopRequireDefault(_expand);
+
+	var _shrink = __webpack_require__(48);
+
+	var _shrink2 = _interopRequireDefault(_shrink);
+
+	var _hd = __webpack_require__(49);
+
+	var _hd2 = _interopRequireDefault(_hd);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -8658,23 +8769,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.$volumeBarContainer.find('.segmented-bar-element').removeClass('fill');
 	    var item = Math.ceil(this.volume / 10.0);
 	    this.$volumeBarContainer.find('.segmented-bar-element').slice(0, item).addClass('fill');
+	    this.$volumeIcon.html('');
+	    this.$volumeIcon.removeClass('muted');
 	    if (!this.muted) {
-	      this.$volumeIcon.removeClass('muted');
+	      this.$volumeIcon.append(_volume2.default);
 	    } else {
+	      this.$volumeIcon.append(_mute2.default);
 	      this.$volumeIcon.addClass('muted');
 	    }
+	    this.applyButtonStyle(this.$volumeIcon);
 	  };
 
 	  MediaControl.prototype.changeTogglePlay = function changeTogglePlay() {
+	    this.$playPauseToggle.html('');
+	    this.$playStopToggle.html('');
 	    if (this.container && this.container.isPlaying()) {
-	      this.$playPauseToggle.removeClass('paused').addClass('playing');
-	      this.$playStopToggle.removeClass('stopped').addClass('playing');
+	      this.$playPauseToggle.append(_pause2.default);
+	      this.$playStopToggle.append(_stop2.default);
 	      this.trigger(_events2.default.MEDIACONTROL_PLAYING);
 	    } else {
-	      this.$playPauseToggle.removeClass('playing').addClass('paused');
-	      this.$playStopToggle.removeClass('playing').addClass('stopped');
+	      this.$playPauseToggle.append(_play2.default);
+	      this.$playStopToggle.append(_pause2.default);
 	      this.trigger(_events2.default.MEDIACONTROL_NOTPLAYING);
 	    }
+	    this.applyButtonStyle(this.$playPauseToggle);
+	    this.applyButtonStyle(this.$playStopToggle);
 	  };
 
 	  MediaControl.prototype.mousemoveOnSeekBar = function mousemoveOnSeekBar(event) {
@@ -8700,11 +8819,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  MediaControl.prototype.playerResize = function playerResize(size) {
+	    this.$fullscreenToggle.html('');
 	    if (_utils.Fullscreen.isFullscreen()) {
-	      this.$fullscreenToggle.addClass('shrink');
+	      this.$fullscreenToggle.append(_shrink2.default);
 	    } else {
-	      this.$fullscreenToggle.removeClass('shrink');
+	      this.$fullscreenToggle.append(_expand2.default);
 	    }
+	    this.applyButtonStyle(this.$fullscreenToggle);
 	    this.$el.removeClass('w320');
 	    if (size.width <= 320 || this.options.hideVolumeBar) {
 	      this.$el.addClass('w320');
@@ -8986,7 +9107,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  MediaControl.prototype.highDefinitionUpdate = function highDefinitionUpdate(isHD) {
 	    var method = !!isHD ? 'addClass' : 'removeClass';
-	    this.$el.find('button[data-hd-indicator]')[method]('enabled');
+	    this.$hdIndicator[method]('enabled');
 	  };
 
 	  MediaControl.prototype.createCachedElements = function createCachedElements() {
@@ -9007,12 +9128,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.$volumeBarBackground = this.$el.find('.bar-background[data-volume]');
 	    this.$volumeBarFill = this.$el.find('.bar-fill-1[data-volume]');
 	    this.$volumeBarScrubber = this.$el.find('.bar-scrubber[data-volume]');
+	    this.$hdIndicator = this.$el.find('button.media-control-button[data-hd-indicator]');
 	    this.resetIndicators();
+	    this.initializeIcons();
 	  };
 
 	  MediaControl.prototype.resetIndicators = function resetIndicators() {
 	    this.displayedPosition = this.$position.text();
 	    this.displayedDuration = this.$duration.text();
+	  };
+
+	  MediaControl.prototype.initializeIcons = function initializeIcons() {
+	    var $layer = this.$el.find('.media-control-layer');
+	    $layer.find('button.media-control-button[data-play]').append(_play2.default);
+	    $layer.find('button.media-control-button[data-pause]').append(_pause2.default);
+	    $layer.find('button.media-control-button[data-stop]').append(_stop2.default);
+	    this.$playPauseToggle.append(_play2.default);
+	    this.$playStopToggle.append(_play2.default);
+	    this.$volumeIcon.append(_volume2.default);
+	    this.$fullscreenToggle.append(_expand2.default);
+	    this.$hdIndicator.append(_hd2.default);
 	  };
 
 	  MediaControl.prototype.setSeekPercentage = function setSeekPercentage(value) {
@@ -9071,11 +9206,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  MediaControl.prototype.parseColors = function parseColors() {
 	    if (this.options.mediacontrol) {
-	      var buttonsColor = this.options.mediacontrol.buttons;
+	      this.buttonsColor = this.options.mediacontrol.buttons;
 	      var seekbarColor = this.options.mediacontrol.seekbar;
 	      this.$el.find('.bar-fill-2[data-seekbar]').css('background-color', seekbarColor);
-	      this.$el.find('[data-media-control] > .media-control-icon, .drawer-icon').css('color', buttonsColor);
-	      this.$el.find('.segmented-bar-element[data-volume]').css('boxShadow', "inset 2px 0 0 " + buttonsColor);
+	      this.$el.find('.media-control-icon svg path').css('fill', this.buttonsColor);
+	      this.$el.find('.segmented-bar-element[data-volume]').css('boxShadow', "inset 2px 0 0 " + this.buttonsColor);
+	    }
+	  };
+
+	  MediaControl.prototype.applyButtonStyle = function applyButtonStyle(element) {
+	    if (this.buttonsColor && element) {
+	      (0, _clapprZepto2.default)(element).find('svg path').css('fill', this.buttonsColor);
 	    }
 	  };
 
@@ -9122,8 +9263,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (!_this7.container.settings.seekEnabled) {
 	        _this7.$seekBarContainer.addClass('seek-disabled');
 	      }
-
-	      _this7.bindKeyEvents();
+	      if (!_this7.options.disableKeyboardShortcuts) {
+	        _this7.bindKeyEvents();
+	      }
 	      _this7.playerResize({ width: _this7.options.width, height: _this7.options.height });
 	      _this7.hideVolumeBar(0);
 	    });
@@ -9598,7 +9740,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "@font-face {\n  font-family: \"Player\";\n  src: url(" + __webpack_require__(40) + ");\n  src: url(" + __webpack_require__(40) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(41) + ") format(\"truetype\"), url(" + __webpack_require__(42) + "#player) format(\"svg\"); }\n\n.media-control-notransition {\n  -webkit-transition: none !important false;\n  -moz-transition: none !important false false;\n  -o-transition: none !important false false;\n  transition: none !important; }\n\n.media-control[data-media-control] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 9999;\n  pointer-events: none; }\n  .media-control[data-media-control].dragging {\n    pointer-events: auto;\n    cursor: -webkit-grabbing !important;\n    cursor: grabbing !important;\n    cursor: url(" + __webpack_require__(43) + "), move; }\n    .media-control[data-media-control].dragging * {\n      cursor: -webkit-grabbing !important;\n      cursor: grabbing !important;\n      cursor: url(" + __webpack_require__(43) + "), move; }\n  .media-control[data-media-control] .media-control-background[data-background] {\n    position: absolute;\n    height: 40%;\n    width: 100%;\n    bottom: 0;\n    background: -owg-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: -moz-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: -o-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    -pie-background: -pie-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    -webkit-transition: opacity 0.6s ease-out;\n    -moz-transition: opacity 0.6s ease-out false;\n    -o-transition: opacity 0.6s ease-out false;\n    transition: opacity 0.6s ease-out; }\n  .media-control[data-media-control] .media-control-icon {\n    font-family: \"Player\";\n    font-weight: normal;\n    font-style: normal;\n    font-size: 26px;\n    line-height: 32px;\n    letter-spacing: 0;\n    speak: none;\n    color: #fff;\n    opacity: 0.5;\n    vertical-align: middle;\n    text-align: left;\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease false;\n    -o-transition: all 0.1s ease false;\n    transition: all 0.1s ease; }\n  .media-control[data-media-control] .media-control-icon:hover {\n    color: white;\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .media-control[data-media-control].media-control-hide .media-control-background[data-background] {\n    opacity: 0; }\n  .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {\n    bottom: -50px; }\n    .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n      opacity: 0; }\n  .media-control[data-media-control] .media-control-layer[data-controls] {\n    position: absolute;\n    bottom: 7px;\n    width: 100%;\n    height: 32px;\n    vertical-align: middle;\n    pointer-events: auto;\n    -webkit-transition: bottom 0.4s ease-out;\n    -moz-transition: bottom 0.4s ease-out false;\n    -o-transition: bottom 0.4s ease-out false;\n    transition: bottom 0.4s ease-out; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      left: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {\n      height: 100%;\n      text-align: center;\n      line-height: 32px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {\n      background-color: transparent;\n      border: 0;\n      margin: 0 6px;\n      padding: 0;\n      cursor: pointer;\n      display: inline-block; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {\n        outline: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play]:before {\n          content: \"\\E001\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause]:before {\n          content: \"\\E002\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop]:before {\n          content: \"\\E003\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen]:before {\n          content: \"\\E006\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen].shrink:before {\n          content: \"\\E007\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {\n        cursor: default;\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%;\n        opacity: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator]:before {\n          content: \"\\E008\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {\n          opacity: 1.0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {\n            opacity: 1.0;\n            text-shadow: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause]:before {\n          content: \"\\E001\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].playing:before {\n          content: \"\\E002\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause].paused:before {\n          content: \"\\E001\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {\n        float: left;\n        height: 100%;\n        font-size: 20px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop]:before {\n          content: \"\\E001\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].playing:before {\n          content: \"\\E003\"; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop].stopped:before {\n          content: \"\\E001\"; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position], .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      display: inline-block;\n      font-size: 10px;\n      color: white;\n      cursor: default;\n      line-height: 32px;\n      position: relative; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {\n      margin-left: 6px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      color: rgba(255, 255, 255, 0.5);\n      margin-right: 6px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {\n        content: \"|\";\n        margin: 0 3px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {\n      position: absolute;\n      top: -20px;\n      left: 0;\n      display: inline-block;\n      vertical-align: middle;\n      width: 100%;\n      height: 25px;\n      cursor: pointer; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {\n        width: 100%;\n        height: 1px;\n        position: relative;\n        top: 12px;\n        background-color: #666666; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #c2c2c2;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out false;\n          -o-transition: all 0.1s ease-out false;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #005aff;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out false;\n          -o-transition: all 0.1s ease-out false;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0;\n          position: absolute;\n          top: -3px;\n          width: 5px;\n          height: 7px;\n          background-color: rgba(255, 255, 255, 0.5);\n          -webkit-transition: opacity 0.1s ease;\n          -moz-transition: opacity 0.1s ease false;\n          -o-transition: opacity 0.1s ease false;\n          transition: opacity 0.1s ease; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n        opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {\n        cursor: default; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n        position: absolute;\n        -webkit-transform: translateX(-50%);\n        -moz-transform: translateX(-50%);\n        -ms-transform: translateX(-50%);\n        -o-transform: translateX(-50%);\n        transform: translateX(-50%);\n        top: 2px;\n        left: 0;\n        width: 20px;\n        height: 20px;\n        opacity: 1;\n        -webkit-transition: all 0.1s ease-out;\n        -moz-transition: all 0.1s ease-out false;\n        -o-transition: all 0.1s ease-out false;\n        transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {\n          position: absolute;\n          left: 6px;\n          top: 6px;\n          width: 8px;\n          height: 8px;\n          border-radius: 10px;\n          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n          background-color: white; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {\n      float: right;\n      display: inline-block;\n      height: 32px;\n      cursor: pointer;\n      margin: 0 6px;\n      box-sizing: border-box; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {\n        float: left;\n        bottom: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {\n          background-color: transparent;\n          border: 0;\n          box-sizing: content-box;\n          width: 16px;\n          height: 32px;\n          margin-right: 6px;\n          opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:before {\n            content: \"\\E004\"; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted {\n            opacity: 0.5; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted:hover {\n              opacity: 0.7; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted:before {\n              content: \"\\E005\"; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {\n        float: left;\n        position: relative;\n        top: 6px;\n        width: 42px;\n        height: 18px;\n        padding: 3px 0;\n        -webkit-transition: width 0.2s ease-out;\n        -moz-transition: width 0.2s ease-out false;\n        -o-transition: width 0.2s ease-out false;\n        transition: width 0.2s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] {\n          height: 1px;\n          position: relative;\n          top: 7px;\n          margin: 0 3px;\n          background-color: #666666; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #c2c2c2;\n            -webkit-transition: all 0.1s ease-out;\n            -moz-transition: all 0.1s ease-out false;\n            -o-transition: all 0.1s ease-out false;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-2[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #005aff;\n            -webkit-transition: all 0.1s ease-out;\n            -moz-transition: all 0.1s ease-out false;\n            -o-transition: all 0.1s ease-out false;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-hover[data-volume] {\n            opacity: 0;\n            position: absolute;\n            top: -3px;\n            width: 5px;\n            height: 7px;\n            background-color: rgba(255, 255, 255, 0.5);\n            -webkit-transition: opacity 0.1s ease;\n            -moz-transition: opacity 0.1s ease false;\n            -o-transition: opacity 0.1s ease false;\n            transition: opacity 0.1s ease; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] {\n          position: absolute;\n          -webkit-transform: translateX(-50%);\n          -moz-transform: translateX(-50%);\n          -ms-transform: translateX(-50%);\n          -o-transform: translateX(-50%);\n          transform: translateX(-50%);\n          top: 0px;\n          left: 0;\n          width: 20px;\n          height: 20px;\n          opacity: 1;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out false;\n          -o-transition: all 0.1s ease-out false;\n          transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume] {\n            position: absolute;\n            left: 6px;\n            top: 6px;\n            width: 8px;\n            height: 8px;\n            border-radius: 10px;\n            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n            background-color: white; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {\n          float: left;\n          width: 4px;\n          padding-left: 2px;\n          height: 12px;\n          opacity: 0.5;\n          -webkit-box-shadow: inset 2px 0 0 white;\n          -moz-box-shadow: inset 2px 0 0 white;\n          box-shadow: inset 2px 0 0 white;\n          -webkit-transition: -webkit-transform 0.2s ease-out;\n          -moz-transition: -moz-transform 0.2s ease-out false;\n          -o-transition: -o-transform 0.2s ease-out false;\n          transition: transform 0.2s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {\n            -webkit-box-shadow: inset 2px 0 0 #fff;\n            -moz-box-shadow: inset 2px 0 0 #fff;\n            box-shadow: inset 2px 0 0 #fff;\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:nth-of-type(1) {\n            padding-left: 0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {\n            -webkit-transform: scaleY(1.5);\n            -moz-transform: scaleY(1.5);\n            -ms-transform: scaleY(1.5);\n            -o-transform: scaleY(1.5);\n            transform: scaleY(1.5); }\n  .media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {\n    height: 12px;\n    top: 9px;\n    padding: 0;\n    width: 0; }\n", ""]);
+	exports.push([module.id, ".media-control-notransition {\n  -webkit-transition: none !important false;\n  -moz-transition: none !important false false;\n  -o-transition: none !important false false;\n  transition: none !important; }\n\n.media-control[data-media-control] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 9999;\n  pointer-events: none; }\n  .media-control[data-media-control].dragging {\n    pointer-events: auto;\n    cursor: -webkit-grabbing !important;\n    cursor: grabbing !important;\n    cursor: url(" + __webpack_require__(40) + "), move; }\n    .media-control[data-media-control].dragging * {\n      cursor: -webkit-grabbing !important;\n      cursor: grabbing !important;\n      cursor: url(" + __webpack_require__(40) + "), move; }\n  .media-control[data-media-control] .media-control-background[data-background] {\n    position: absolute;\n    height: 40%;\n    width: 100%;\n    bottom: 0;\n    background: -owg-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: -moz-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: -o-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    -pie-background: -pie-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    -webkit-transition: opacity 0.6s ease-out;\n    -moz-transition: opacity 0.6s ease-out false;\n    -o-transition: opacity 0.6s ease-out false;\n    transition: opacity 0.6s ease-out; }\n  .media-control[data-media-control] .media-control-icon {\n    font-family: \"Player\";\n    font-weight: normal;\n    font-style: normal;\n    font-size: 26px;\n    line-height: 32px;\n    letter-spacing: 0;\n    speak: none;\n    color: #fff;\n    opacity: 0.5;\n    vertical-align: middle;\n    text-align: left;\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease false;\n    -o-transition: all 0.1s ease false;\n    transition: all 0.1s ease; }\n  .media-control[data-media-control] .media-control-icon:hover {\n    color: white;\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .media-control[data-media-control].media-control-hide .media-control-background[data-background] {\n    opacity: 0; }\n  .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {\n    bottom: -50px; }\n    .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n      opacity: 0; }\n  .media-control[data-media-control] .media-control-layer[data-controls] {\n    position: absolute;\n    bottom: 7px;\n    width: 100%;\n    height: 32px;\n    vertical-align: middle;\n    pointer-events: auto;\n    -webkit-transition: bottom 0.4s ease-out;\n    -moz-transition: bottom 0.4s ease-out false;\n    -o-transition: bottom 0.4s ease-out false;\n    transition: bottom 0.4s ease-out; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      left: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {\n      height: 100%;\n      text-align: center;\n      line-height: 32px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {\n      background-color: transparent;\n      border: 0;\n      margin: 0 6px;\n      padding: 0;\n      cursor: pointer;\n      display: inline-block;\n      width: 32px;\n      height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg {\n        width: 100%;\n        height: 22px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg path {\n          fill: white; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {\n        outline: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {\n        cursor: default;\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%;\n        display: none; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {\n          opacity: 1.0;\n          display: block; }\n          .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {\n            opacity: 1.0;\n            text-shadow: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause] {\n        float: left; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {\n        float: left; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position], .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      display: inline-block;\n      font-size: 10px;\n      color: white;\n      cursor: default;\n      line-height: 32px;\n      position: relative; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {\n      margin-left: 6px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      color: rgba(255, 255, 255, 0.5);\n      margin-right: 6px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {\n        content: \"|\";\n        margin: 0 3px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {\n      position: absolute;\n      top: -20px;\n      left: 0;\n      display: inline-block;\n      vertical-align: middle;\n      width: 100%;\n      height: 25px;\n      cursor: pointer; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {\n        width: 100%;\n        height: 1px;\n        position: relative;\n        top: 12px;\n        background-color: #666666; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #c2c2c2;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out false;\n          -o-transition: all 0.1s ease-out false;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #005aff;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out false;\n          -o-transition: all 0.1s ease-out false;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0;\n          position: absolute;\n          top: -3px;\n          width: 5px;\n          height: 7px;\n          background-color: rgba(255, 255, 255, 0.5);\n          -webkit-transition: opacity 0.1s ease;\n          -moz-transition: opacity 0.1s ease false;\n          -o-transition: opacity 0.1s ease false;\n          transition: opacity 0.1s ease; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n        opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {\n        cursor: default; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n        position: absolute;\n        -webkit-transform: translateX(-50%);\n        -moz-transform: translateX(-50%);\n        -ms-transform: translateX(-50%);\n        -o-transform: translateX(-50%);\n        transform: translateX(-50%);\n        top: 2px;\n        left: 0;\n        width: 20px;\n        height: 20px;\n        opacity: 1;\n        -webkit-transition: all 0.1s ease-out;\n        -moz-transition: all 0.1s ease-out false;\n        -o-transition: all 0.1s ease-out false;\n        transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {\n          position: absolute;\n          left: 6px;\n          top: 6px;\n          width: 8px;\n          height: 8px;\n          border-radius: 10px;\n          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n          background-color: white; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {\n      float: right;\n      display: inline-block;\n      height: 32px;\n      cursor: pointer;\n      margin: 0 6px;\n      box-sizing: border-box; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {\n        float: left;\n        bottom: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {\n          background-color: transparent;\n          border: 0;\n          box-sizing: content-box;\n          width: 32px;\n          height: 32px;\n          opacity: 0.5; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {\n            opacity: 0.75; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg {\n            height: 24px;\n            position: relative;\n            top: 3px; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg path {\n              fill: white; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted svg {\n            margin-left: 2px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {\n        float: left;\n        position: relative;\n        top: 6px;\n        width: 42px;\n        height: 18px;\n        padding: 3px 0;\n        -webkit-transition: width 0.2s ease-out;\n        -moz-transition: width 0.2s ease-out false;\n        -o-transition: width 0.2s ease-out false;\n        transition: width 0.2s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] {\n          height: 1px;\n          position: relative;\n          top: 7px;\n          margin: 0 3px;\n          background-color: #666666; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #c2c2c2;\n            -webkit-transition: all 0.1s ease-out;\n            -moz-transition: all 0.1s ease-out false;\n            -o-transition: all 0.1s ease-out false;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-2[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #005aff;\n            -webkit-transition: all 0.1s ease-out;\n            -moz-transition: all 0.1s ease-out false;\n            -o-transition: all 0.1s ease-out false;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-hover[data-volume] {\n            opacity: 0;\n            position: absolute;\n            top: -3px;\n            width: 5px;\n            height: 7px;\n            background-color: rgba(255, 255, 255, 0.5);\n            -webkit-transition: opacity 0.1s ease;\n            -moz-transition: opacity 0.1s ease false;\n            -o-transition: opacity 0.1s ease false;\n            transition: opacity 0.1s ease; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] {\n          position: absolute;\n          -webkit-transform: translateX(-50%);\n          -moz-transform: translateX(-50%);\n          -ms-transform: translateX(-50%);\n          -o-transform: translateX(-50%);\n          transform: translateX(-50%);\n          top: 0px;\n          left: 0;\n          width: 20px;\n          height: 20px;\n          opacity: 1;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out false;\n          -o-transition: all 0.1s ease-out false;\n          transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume] {\n            position: absolute;\n            left: 6px;\n            top: 6px;\n            width: 8px;\n            height: 8px;\n            border-radius: 10px;\n            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n            background-color: white; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {\n          float: left;\n          width: 4px;\n          padding-left: 2px;\n          height: 12px;\n          opacity: 0.5;\n          -webkit-box-shadow: inset 2px 0 0 white;\n          -moz-box-shadow: inset 2px 0 0 white;\n          box-shadow: inset 2px 0 0 white;\n          -webkit-transition: -webkit-transform 0.2s ease-out;\n          -moz-transition: -moz-transform 0.2s ease-out false;\n          -o-transition: -o-transform 0.2s ease-out false;\n          transition: transform 0.2s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {\n            -webkit-box-shadow: inset 2px 0 0 #fff;\n            -moz-box-shadow: inset 2px 0 0 #fff;\n            box-shadow: inset 2px 0 0 #fff;\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:nth-of-type(1) {\n            padding-left: 0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {\n            -webkit-transform: scaleY(1.5);\n            -moz-transform: scaleY(1.5);\n            -ms-transform: scaleY(1.5);\n            -o-transform: scaleY(1.5);\n            transform: scaleY(1.5); }\n  .media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {\n    height: 12px;\n    top: 9px;\n    padding: 0;\n    width: 0; }\n", ""]);
 
 	// exports
 
@@ -9607,34 +9749,64 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "ed8735c27adb521e625717506cfcfb04.eot";
-
-/***/ },
-/* 41 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "3e43a5d764f841e7e78896de82cd6c50.ttf";
-
-/***/ },
-/* 42 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "5d7ec830fd8d1c440f165111719aa4a0.svg";
-
-/***/ },
-/* 43 */
-/***/ function(module, exports, __webpack_require__) {
-
 	module.exports = __webpack_require__.p + "a8c874b93b3d848f39a71260c57e3863.cur";
 
 /***/ },
-/* 44 */
+/* 41 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"media-control-background\" data-background></div>\n<div class=\"media-control-layer\" data-controls>\n  <%  var renderBar = function(name) { %>\n      <div class=\"bar-container\" data-<%= name %>>\n        <div class=\"bar-background\" data-<%= name %>>\n          <div class=\"bar-fill-1\" data-<%= name %>></div>\n          <div class=\"bar-fill-2\" data-<%= name %>></div>\n          <div class=\"bar-hover\" data-<%= name %>></div>\n        </div>\n        <div class=\"bar-scrubber\" data-<%= name %>>\n          <div class=\"bar-scrubber-icon\" data-<%= name %>></div>\n        </div>\n      </div>\n  <%  }; %>\n  <%  var renderSegmentedBar = function(name, segments) {\n      segments = segments || 10; %>\n    <div class=\"bar-container\" data-<%= name %>>\n    <% for (var i = 0; i < segments; i++) { %>\n      <div class=\"segmented-bar-element\" data-<%= name %>></div>\n    <% } %>\n    </div>\n  <% }; %>\n  <% var renderDrawer = function(name, renderContent) { %>\n      <div class=\"drawer-container\" data-<%= name %>>\n        <div class=\"drawer-icon-container\" data-<%= name %>>\n          <div class=\"drawer-icon media-control-icon\" data-<%= name %>></div>\n          <span class=\"drawer-text\" data-<%= name %>></span>\n        </div>\n        <% renderContent(name); %>\n      </div>\n  <% }; %>\n  <% var renderIndicator = function(name) { %>\n      <div class=\"media-control-indicator\" data-<%= name %>></div>\n  <% }; %>\n  <% var renderButton = function(name) { %>\n      <button class=\"media-control-button media-control-icon\" data-<%= name %>></button>\n  <% }; %>\n  <%  var templates = {\n        bar: renderBar,\n        segmentedBar: renderSegmentedBar,\n      };\n      var render = function(settingsList) {\n        settingsList.forEach(function(setting) {\n          if(setting === \"seekbar\") {\n            renderBar(setting);\n          } else if (setting === \"volume\") {\n            renderDrawer(setting, settings.volumeBarTemplate ? templates[settings.volumeBarTemplate] : function(name) { return renderSegmentedBar(name); });\n          } else if (setting === \"duration\" || setting === \"position\") {\n            renderIndicator(setting);\n          } else {\n            renderButton(setting);\n          }\n        });\n      }; %>\n  <% if (settings.default && settings.default.length) { %>\n  <div class=\"media-control-center-panel\" data-media-control>\n    <% render(settings.default); %>\n  </div>\n  <% } %>\n  <% if (settings.left && settings.left.length) { %>\n  <div class=\"media-control-left-panel\" data-media-control>\n    <% render(settings.left); %>\n  </div>\n  <% } %>\n  <% if (settings.right && settings.right.length) { %>\n  <div class=\"media-control-right-panel\" data-media-control>\n    <% render(settings.right); %>\n  </div>\n  <% } %>\n</div>\n";
 
 /***/ },
+/* 42 */
+/***/ function(module, exports) {
+
+	module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M1.425.35L14.575 8l-13.15 7.65V.35z\"></path></svg>"
+
+/***/ },
+/* 43 */
+/***/ function(module, exports) {
+
+	module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M1.712 14.76H6.43V1.24H1.71v13.52zm7.86-13.52v13.52h4.716V1.24H9.573z\"></path></svg>"
+
+/***/ },
+/* 44 */
+/***/ function(module, exports) {
+
+	module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M1.712 1.24h12.6v13.52h-12.6z\"></path></svg>"
+
+/***/ },
 /* 45 */
+/***/ function(module, exports) {
+
+	module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M11.5 11h-.002v1.502L7.798 10H4.5V6h3.297l3.7-2.502V4.5h.003V11zM11 4.49L7.953 6.5H5v3h2.953L11 11.51V4.49z\"></path></svg>"
+
+/***/ },
+/* 46 */
+/***/ function(module, exports) {
+
+	module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M9.75 11.51L6.7 9.5H3.75v-3H6.7L9.75 4.49v.664l.497.498V3.498L6.547 6H3.248v4h3.296l3.7 2.502v-2.154l-.497.5v.662zm3-5.165L12.404 6l-1.655 1.653L9.093 6l-.346.345L10.402 8 8.747 9.654l.346.347 1.655-1.653L12.403 10l.348-.346L11.097 8l1.655-1.655z\"></path></svg>"
+
+/***/ },
+/* 47 */
+/***/ function(module, exports) {
+
+	module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M7.156 8L4 11.156V8.5H3V13h4.5v-1H4.844L8 8.844 7.156 8zM8.5 3v1h2.657L8 7.157 8.846 8 12 4.844V7.5h1V3H8.5z\"></path></svg>"
+
+/***/ },
+/* 48 */
+/***/ function(module, exports) {
+
+	module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M13.5 3.344l-.844-.844L9.5 5.656V3h-1v4.5H13v-1h-2.656L13.5 3.344zM3 9.5h2.656L2.5 12.656l.844.844L6.5 10.344V13h1V8.5H3v1z\"></path></svg>"
+
+/***/ },
+/* 49 */
+/***/ function(module, exports) {
+
+	module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M5.375 7.062H2.637V4.26H.502v7.488h2.135V8.9h2.738v2.848h2.133V4.26H5.375v2.802zm5.97-2.81h-2.84v7.496h2.798c2.65 0 4.195-1.607 4.195-3.77v-.022c0-2.162-1.523-3.704-4.154-3.704zm2.06 3.758c0 1.21-.81 1.896-2.03 1.896h-.83V6.093h.83c1.22 0 2.03.696 2.03 1.896v.02z\"></path></svg>"
+
+/***/ },
+/* 50 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9667,7 +9839,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 46 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(28)();
@@ -9681,15 +9853,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 47 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(48);
+	module.exports = __webpack_require__(53);
 
 /***/ },
-/* 48 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9702,83 +9874,83 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _base_object2 = _interopRequireDefault(_base_object);
 
-	var _player_info = __webpack_require__(45);
+	var _player_info = __webpack_require__(50);
 
 	var _player_info2 = _interopRequireDefault(_player_info);
 
-	var _lodash = __webpack_require__(49);
+	var _lodash = __webpack_require__(54);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _html5_video = __webpack_require__(53);
+	var _html5_video = __webpack_require__(59);
 
 	var _html5_video2 = _interopRequireDefault(_html5_video);
 
-	var _flash = __webpack_require__(57);
+	var _flash = __webpack_require__(63);
 
 	var _flash2 = _interopRequireDefault(_flash);
 
-	var _html5_audio = __webpack_require__(64);
+	var _html5_audio = __webpack_require__(70);
 
 	var _html5_audio2 = _interopRequireDefault(_html5_audio);
 
-	var _flashls = __webpack_require__(66);
+	var _flashls = __webpack_require__(72);
 
 	var _flashls2 = _interopRequireDefault(_flashls);
 
-	var _hls = __webpack_require__(70);
+	var _hls = __webpack_require__(76);
 
 	var _hls2 = _interopRequireDefault(_hls);
 
-	var _html_img = __webpack_require__(108);
+	var _html_img = __webpack_require__(116);
 
 	var _html_img2 = _interopRequireDefault(_html_img);
 
-	var _no_op = __webpack_require__(111);
+	var _no_op = __webpack_require__(119);
 
 	var _no_op2 = _interopRequireDefault(_no_op);
 
-	var _spinner_three_bounce = __webpack_require__(115);
+	var _spinner_three_bounce = __webpack_require__(123);
 
 	var _spinner_three_bounce2 = _interopRequireDefault(_spinner_three_bounce);
 
-	var _stats = __webpack_require__(120);
+	var _stats = __webpack_require__(128);
 
 	var _stats2 = _interopRequireDefault(_stats);
 
-	var _watermark = __webpack_require__(123);
+	var _watermark = __webpack_require__(131);
 
 	var _watermark2 = _interopRequireDefault(_watermark);
 
-	var _poster = __webpack_require__(127);
+	var _poster = __webpack_require__(135);
 
 	var _poster2 = _interopRequireDefault(_poster);
 
-	var _google_analytics = __webpack_require__(131);
+	var _google_analytics = __webpack_require__(139);
 
 	var _google_analytics2 = _interopRequireDefault(_google_analytics);
 
-	var _click_to_pause = __webpack_require__(133);
+	var _click_to_pause = __webpack_require__(141);
 
 	var _click_to_pause2 = _interopRequireDefault(_click_to_pause);
 
-	var _dvr_controls = __webpack_require__(135);
+	var _dvr_controls = __webpack_require__(143);
 
 	var _dvr_controls2 = _interopRequireDefault(_dvr_controls);
 
-	var _favicon = __webpack_require__(141);
+	var _favicon = __webpack_require__(149);
 
 	var _favicon2 = _interopRequireDefault(_favicon);
 
-	var _seek_time = __webpack_require__(144);
+	var _seek_time = __webpack_require__(152);
 
 	var _seek_time2 = _interopRequireDefault(_seek_time);
 
-	var _sources = __webpack_require__(148);
+	var _sources = __webpack_require__(156);
 
 	var _sources2 = _interopRequireDefault(_sources);
 
-	var _end_video = __webpack_require__(149);
+	var _end_video = __webpack_require__(157);
 
 	var _end_video2 = _interopRequireDefault(_end_video);
 
@@ -9909,21 +10081,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 49 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	/**
-	 * lodash 4.2.0 (Custom Build) <https://lodash.com/>
+	 * lodash 4.2.1 (Custom Build) <https://lodash.com/>
 	 * Build: `lodash modularize exports="npm" -o ./`
 	 * Copyright 2012-2016 The Dojo Foundation <http://dojofoundation.org/>
 	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
 	 * Copyright 2009-2016 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseIteratee = __webpack_require__(33),
-	    baseUniq = __webpack_require__(50);
+	var baseIteratee = __webpack_require__(55),
+	    baseUniq = __webpack_require__(56);
 
 	/**
 	 * This method is like `_.uniq` except that it accepts `iteratee` which is
@@ -9952,7 +10124,1954 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = uniqBy;
 
 /***/ },
-/* 50 */
+/* 55 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module, global) {'use strict';
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	/**
+	 * lodash 4.5.2 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modularize exports="npm" -o ./`
+	 * Copyright 2012-2016 The Dojo Foundation <http://dojofoundation.org/>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright 2009-2016 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 * Available under MIT license <https://lodash.com/license>
+	 */
+
+	/** Used as the size to enable large array optimizations. */
+	var LARGE_ARRAY_SIZE = 200;
+
+	/** Used to stand-in for `undefined` hash values. */
+	var HASH_UNDEFINED = '__lodash_hash_undefined__';
+
+	/** Used to compose bitmasks for comparison styles. */
+	var UNORDERED_COMPARE_FLAG = 1,
+	    PARTIAL_COMPARE_FLAG = 2;
+
+	/** Used as references for various `Number` constants. */
+	var INFINITY = 1 / 0,
+	    MAX_SAFE_INTEGER = 9007199254740991;
+
+	/** `Object#toString` result references. */
+	var argsTag = '[object Arguments]',
+	    arrayTag = '[object Array]',
+	    boolTag = '[object Boolean]',
+	    dateTag = '[object Date]',
+	    errorTag = '[object Error]',
+	    funcTag = '[object Function]',
+	    genTag = '[object GeneratorFunction]',
+	    mapTag = '[object Map]',
+	    numberTag = '[object Number]',
+	    objectTag = '[object Object]',
+	    regexpTag = '[object RegExp]',
+	    setTag = '[object Set]',
+	    stringTag = '[object String]',
+	    symbolTag = '[object Symbol]',
+	    weakMapTag = '[object WeakMap]';
+
+	var arrayBufferTag = '[object ArrayBuffer]',
+	    float32Tag = '[object Float32Array]',
+	    float64Tag = '[object Float64Array]',
+	    int8Tag = '[object Int8Array]',
+	    int16Tag = '[object Int16Array]',
+	    int32Tag = '[object Int32Array]',
+	    uint8Tag = '[object Uint8Array]',
+	    uint8ClampedTag = '[object Uint8ClampedArray]',
+	    uint16Tag = '[object Uint16Array]',
+	    uint32Tag = '[object Uint32Array]';
+
+	/** Used to match property names within property paths. */
+	var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/,
+	    reIsPlainProp = /^\w*$/,
+	    rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]/g;
+
+	/** Used to match `RegExp` [syntax characters](http://ecma-international.org/ecma-262/6.0/#sec-patterns). */
+	var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
+
+	/** Used to match backslashes in property paths. */
+	var reEscapeChar = /\\(\\)?/g;
+
+	/** Used to detect host constructors (Safari > 5). */
+	var reIsHostCtor = /^\[object .+?Constructor\]$/;
+
+	/** Used to detect unsigned integer values. */
+	var reIsUint = /^(?:0|[1-9]\d*)$/;
+
+	/** Used to identify `toStringTag` values of typed arrays. */
+	var typedArrayTags = {};
+	typedArrayTags[float32Tag] = typedArrayTags[float64Tag] = typedArrayTags[int8Tag] = typedArrayTags[int16Tag] = typedArrayTags[int32Tag] = typedArrayTags[uint8Tag] = typedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] = typedArrayTags[uint32Tag] = true;
+	typedArrayTags[argsTag] = typedArrayTags[arrayTag] = typedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] = typedArrayTags[dateTag] = typedArrayTags[errorTag] = typedArrayTags[funcTag] = typedArrayTags[mapTag] = typedArrayTags[numberTag] = typedArrayTags[objectTag] = typedArrayTags[regexpTag] = typedArrayTags[setTag] = typedArrayTags[stringTag] = typedArrayTags[weakMapTag] = false;
+
+	/** Used to determine if values are of the language type `Object`. */
+	var objectTypes = {
+	  'function': true,
+	  'object': true
+	};
+
+	/** Detect free variable `exports`. */
+	var freeExports = objectTypes[ false ? 'undefined' : _typeof(exports)] && exports && !exports.nodeType ? exports : undefined;
+
+	/** Detect free variable `module`. */
+	var freeModule = objectTypes[ false ? 'undefined' : _typeof(module)] && module && !module.nodeType ? module : undefined;
+
+	/** Detect free variable `global` from Node.js. */
+	var freeGlobal = checkGlobal(freeExports && freeModule && (typeof global === 'undefined' ? 'undefined' : _typeof(global)) == 'object' && global);
+
+	/** Detect free variable `self`. */
+	var freeSelf = checkGlobal(objectTypes[typeof self === 'undefined' ? 'undefined' : _typeof(self)] && self);
+
+	/** Detect free variable `window`. */
+	var freeWindow = checkGlobal(objectTypes[typeof window === 'undefined' ? 'undefined' : _typeof(window)] && window);
+
+	/** Detect `this` as the global object. */
+	var thisGlobal = checkGlobal(objectTypes[_typeof(undefined)] && undefined);
+
+	/**
+	 * Used as a reference to the global object.
+	 *
+	 * The `this` value is used if it's the global object to avoid Greasemonkey's
+	 * restricted `window` object, otherwise the `window` object is used.
+	 */
+	var root = freeGlobal || freeWindow !== (thisGlobal && thisGlobal.window) && freeWindow || freeSelf || thisGlobal || Function('return this')();
+
+	/**
+	 * A specialized version of `_.map` for arrays without support for iteratee
+	 * shorthands.
+	 *
+	 * @private
+	 * @param {Array} array The array to iterate over.
+	 * @param {Function} iteratee The function invoked per iteration.
+	 * @returns {Array} Returns the new mapped array.
+	 */
+	function arrayMap(array, iteratee) {
+	  var index = -1,
+	      length = array.length,
+	      result = Array(length);
+
+	  while (++index < length) {
+	    result[index] = iteratee(array[index], index, array);
+	  }
+	  return result;
+	}
+
+	/**
+	 * A specialized version of `_.some` for arrays without support for iteratee
+	 * shorthands.
+	 *
+	 * @private
+	 * @param {Array} array The array to iterate over.
+	 * @param {Function} predicate The function invoked per iteration.
+	 * @returns {boolean} Returns `true` if any element passes the predicate check, else `false`.
+	 */
+	function arraySome(array, predicate) {
+	  var index = -1,
+	      length = array.length;
+
+	  while (++index < length) {
+	    if (predicate(array[index], index, array)) {
+	      return true;
+	    }
+	  }
+	  return false;
+	}
+
+	/**
+	 * The base implementation of `_.times` without support for iteratee shorthands
+	 * or max array length checks.
+	 *
+	 * @private
+	 * @param {number} n The number of times to invoke `iteratee`.
+	 * @param {Function} iteratee The function invoked per iteration.
+	 * @returns {Array} Returns the array of results.
+	 */
+	function baseTimes(n, iteratee) {
+	  var index = -1,
+	      result = Array(n);
+
+	  while (++index < n) {
+	    result[index] = iteratee(index);
+	  }
+	  return result;
+	}
+
+	/**
+	 * The base implementation of `_.toPairs` and `_.toPairsIn` which creates an array
+	 * of key-value pairs for `object` corresponding to the property names of `props`.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @param {Array} props The property names to get values for.
+	 * @returns {Object} Returns the new array of key-value pairs.
+	 */
+	function baseToPairs(object, props) {
+	  return arrayMap(props, function (key) {
+	    return [key, object[key]];
+	  });
+	}
+
+	/**
+	 * Checks if `value` is a global object.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {null|Object} Returns `value` if it's a global object, else `null`.
+	 */
+	function checkGlobal(value) {
+	  return value && value.Object === Object ? value : null;
+	}
+
+	/**
+	 * Checks if `value` is a host object in IE < 9.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a host object, else `false`.
+	 */
+	function isHostObject(value) {
+	  // Many host objects are `Object` objects that can coerce to strings
+	  // despite having improperly defined `toString` methods.
+	  var result = false;
+	  if (value != null && typeof value.toString != 'function') {
+	    try {
+	      result = !!(value + '');
+	    } catch (e) {}
+	  }
+	  return result;
+	}
+
+	/**
+	 * Checks if `value` is a valid array-like index.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
+	 * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
+	 */
+	function isIndex(value, length) {
+	  value = typeof value == 'number' || reIsUint.test(value) ? +value : -1;
+	  length = length == null ? MAX_SAFE_INTEGER : length;
+	  return value > -1 && value % 1 == 0 && value < length;
+	}
+
+	/**
+	 * Converts `map` to an array.
+	 *
+	 * @private
+	 * @param {Object} map The map to convert.
+	 * @returns {Array} Returns the converted array.
+	 */
+	function mapToArray(map) {
+	  var index = -1,
+	      result = Array(map.size);
+
+	  map.forEach(function (value, key) {
+	    result[++index] = [key, value];
+	  });
+	  return result;
+	}
+
+	/**
+	 * Converts `set` to an array.
+	 *
+	 * @private
+	 * @param {Object} set The set to convert.
+	 * @returns {Array} Returns the converted array.
+	 */
+	function setToArray(set) {
+	  var index = -1,
+	      result = Array(set.size);
+
+	  set.forEach(function (value) {
+	    result[++index] = value;
+	  });
+	  return result;
+	}
+
+	/** Used for built-in method references. */
+	var arrayProto = Array.prototype,
+	    objectProto = Object.prototype;
+
+	/** Used to resolve the decompiled source of functions. */
+	var funcToString = Function.prototype.toString;
+
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+
+	/**
+	 * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var objectToString = objectProto.toString;
+
+	/** Used to detect if a method is native. */
+	var reIsNative = RegExp('^' + funcToString.call(hasOwnProperty).replace(reRegExpChar, '\\$&').replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$');
+
+	/** Built-in value references. */
+	var _Symbol = root.Symbol,
+	    Uint8Array = root.Uint8Array,
+	    getPrototypeOf = Object.getPrototypeOf,
+	    propertyIsEnumerable = objectProto.propertyIsEnumerable,
+	    splice = arrayProto.splice;
+
+	/* Built-in method references for those with the same name as other `lodash` methods. */
+	var nativeKeys = Object.keys;
+
+	/* Built-in method references that are verified to be native. */
+	var Map = getNative(root, 'Map'),
+	    Set = getNative(root, 'Set'),
+	    WeakMap = getNative(root, 'WeakMap'),
+	    nativeCreate = getNative(Object, 'create');
+
+	/** Used to detect maps, sets, and weakmaps. */
+	var mapCtorString = Map ? funcToString.call(Map) : '',
+	    setCtorString = Set ? funcToString.call(Set) : '',
+	    weakMapCtorString = WeakMap ? funcToString.call(WeakMap) : '';
+
+	/** Used to convert symbols to primitives and strings. */
+	var symbolProto = _Symbol ? _Symbol.prototype : undefined,
+	    symbolValueOf = symbolProto ? symbolProto.valueOf : undefined,
+	    symbolToString = symbolProto ? symbolProto.toString : undefined;
+
+	/**
+	 * Creates an hash object.
+	 *
+	 * @private
+	 * @constructor
+	 * @returns {Object} Returns the new hash object.
+	 */
+	function Hash() {}
+
+	/**
+	 * Removes `key` and its value from the hash.
+	 *
+	 * @private
+	 * @param {Object} hash The hash to modify.
+	 * @param {string} key The key of the value to remove.
+	 * @returns {boolean} Returns `true` if the entry was removed, else `false`.
+	 */
+	function hashDelete(hash, key) {
+	  return hashHas(hash, key) && delete hash[key];
+	}
+
+	/**
+	 * Gets the hash value for `key`.
+	 *
+	 * @private
+	 * @param {Object} hash The hash to query.
+	 * @param {string} key The key of the value to get.
+	 * @returns {*} Returns the entry value.
+	 */
+	function hashGet(hash, key) {
+	  if (nativeCreate) {
+	    var result = hash[key];
+	    return result === HASH_UNDEFINED ? undefined : result;
+	  }
+	  return hasOwnProperty.call(hash, key) ? hash[key] : undefined;
+	}
+
+	/**
+	 * Checks if a hash value for `key` exists.
+	 *
+	 * @private
+	 * @param {Object} hash The hash to query.
+	 * @param {string} key The key of the entry to check.
+	 * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
+	 */
+	function hashHas(hash, key) {
+	  return nativeCreate ? hash[key] !== undefined : hasOwnProperty.call(hash, key);
+	}
+
+	/**
+	 * Sets the hash `key` to `value`.
+	 *
+	 * @private
+	 * @param {Object} hash The hash to modify.
+	 * @param {string} key The key of the value to set.
+	 * @param {*} value The value to set.
+	 */
+	function hashSet(hash, key, value) {
+	  hash[key] = nativeCreate && value === undefined ? HASH_UNDEFINED : value;
+	}
+
+	/**
+	 * Creates a map cache object to store key-value pairs.
+	 *
+	 * @private
+	 * @constructor
+	 * @param {Array} [values] The values to cache.
+	 */
+	function MapCache(values) {
+	  var index = -1,
+	      length = values ? values.length : 0;
+
+	  this.clear();
+	  while (++index < length) {
+	    var entry = values[index];
+	    this.set(entry[0], entry[1]);
+	  }
+	}
+
+	/**
+	 * Removes all key-value entries from the map.
+	 *
+	 * @private
+	 * @name clear
+	 * @memberOf MapCache
+	 */
+	function mapClear() {
+	  this.__data__ = {
+	    'hash': new Hash(),
+	    'map': Map ? new Map() : [],
+	    'string': new Hash()
+	  };
+	}
+
+	/**
+	 * Removes `key` and its value from the map.
+	 *
+	 * @private
+	 * @name delete
+	 * @memberOf MapCache
+	 * @param {string} key The key of the value to remove.
+	 * @returns {boolean} Returns `true` if the entry was removed, else `false`.
+	 */
+	function mapDelete(key) {
+	  var data = this.__data__;
+	  if (isKeyable(key)) {
+	    return hashDelete(typeof key == 'string' ? data.string : data.hash, key);
+	  }
+	  return Map ? data.map['delete'](key) : assocDelete(data.map, key);
+	}
+
+	/**
+	 * Gets the map value for `key`.
+	 *
+	 * @private
+	 * @name get
+	 * @memberOf MapCache
+	 * @param {string} key The key of the value to get.
+	 * @returns {*} Returns the entry value.
+	 */
+	function mapGet(key) {
+	  var data = this.__data__;
+	  if (isKeyable(key)) {
+	    return hashGet(typeof key == 'string' ? data.string : data.hash, key);
+	  }
+	  return Map ? data.map.get(key) : assocGet(data.map, key);
+	}
+
+	/**
+	 * Checks if a map value for `key` exists.
+	 *
+	 * @private
+	 * @name has
+	 * @memberOf MapCache
+	 * @param {string} key The key of the entry to check.
+	 * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
+	 */
+	function mapHas(key) {
+	  var data = this.__data__;
+	  if (isKeyable(key)) {
+	    return hashHas(typeof key == 'string' ? data.string : data.hash, key);
+	  }
+	  return Map ? data.map.has(key) : assocHas(data.map, key);
+	}
+
+	/**
+	 * Sets the map `key` to `value`.
+	 *
+	 * @private
+	 * @name set
+	 * @memberOf MapCache
+	 * @param {string} key The key of the value to set.
+	 * @param {*} value The value to set.
+	 * @returns {Object} Returns the map cache object.
+	 */
+	function mapSet(key, value) {
+	  var data = this.__data__;
+	  if (isKeyable(key)) {
+	    hashSet(typeof key == 'string' ? data.string : data.hash, key, value);
+	  } else if (Map) {
+	    data.map.set(key, value);
+	  } else {
+	    assocSet(data.map, key, value);
+	  }
+	  return this;
+	}
+
+	/**
+	 * Creates a stack cache object to store key-value pairs.
+	 *
+	 * @private
+	 * @constructor
+	 * @param {Array} [values] The values to cache.
+	 */
+	function Stack(values) {
+	  var index = -1,
+	      length = values ? values.length : 0;
+
+	  this.clear();
+	  while (++index < length) {
+	    var entry = values[index];
+	    this.set(entry[0], entry[1]);
+	  }
+	}
+
+	/**
+	 * Removes all key-value entries from the stack.
+	 *
+	 * @private
+	 * @name clear
+	 * @memberOf Stack
+	 */
+	function stackClear() {
+	  this.__data__ = { 'array': [], 'map': null };
+	}
+
+	/**
+	 * Removes `key` and its value from the stack.
+	 *
+	 * @private
+	 * @name delete
+	 * @memberOf Stack
+	 * @param {string} key The key of the value to remove.
+	 * @returns {boolean} Returns `true` if the entry was removed, else `false`.
+	 */
+	function stackDelete(key) {
+	  var data = this.__data__,
+	      array = data.array;
+
+	  return array ? assocDelete(array, key) : data.map['delete'](key);
+	}
+
+	/**
+	 * Gets the stack value for `key`.
+	 *
+	 * @private
+	 * @name get
+	 * @memberOf Stack
+	 * @param {string} key The key of the value to get.
+	 * @returns {*} Returns the entry value.
+	 */
+	function stackGet(key) {
+	  var data = this.__data__,
+	      array = data.array;
+
+	  return array ? assocGet(array, key) : data.map.get(key);
+	}
+
+	/**
+	 * Checks if a stack value for `key` exists.
+	 *
+	 * @private
+	 * @name has
+	 * @memberOf Stack
+	 * @param {string} key The key of the entry to check.
+	 * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
+	 */
+	function stackHas(key) {
+	  var data = this.__data__,
+	      array = data.array;
+
+	  return array ? assocHas(array, key) : data.map.has(key);
+	}
+
+	/**
+	 * Sets the stack `key` to `value`.
+	 *
+	 * @private
+	 * @name set
+	 * @memberOf Stack
+	 * @param {string} key The key of the value to set.
+	 * @param {*} value The value to set.
+	 * @returns {Object} Returns the stack cache object.
+	 */
+	function stackSet(key, value) {
+	  var data = this.__data__,
+	      array = data.array;
+
+	  if (array) {
+	    if (array.length < LARGE_ARRAY_SIZE - 1) {
+	      assocSet(array, key, value);
+	    } else {
+	      data.array = null;
+	      data.map = new MapCache(array);
+	    }
+	  }
+	  var map = data.map;
+	  if (map) {
+	    map.set(key, value);
+	  }
+	  return this;
+	}
+
+	/**
+	 * Removes `key` and its value from the associative array.
+	 *
+	 * @private
+	 * @param {Array} array The array to query.
+	 * @param {string} key The key of the value to remove.
+	 * @returns {boolean} Returns `true` if the entry was removed, else `false`.
+	 */
+	function assocDelete(array, key) {
+	  var index = assocIndexOf(array, key);
+	  if (index < 0) {
+	    return false;
+	  }
+	  var lastIndex = array.length - 1;
+	  if (index == lastIndex) {
+	    array.pop();
+	  } else {
+	    splice.call(array, index, 1);
+	  }
+	  return true;
+	}
+
+	/**
+	 * Gets the associative array value for `key`.
+	 *
+	 * @private
+	 * @param {Array} array The array to query.
+	 * @param {string} key The key of the value to get.
+	 * @returns {*} Returns the entry value.
+	 */
+	function assocGet(array, key) {
+	  var index = assocIndexOf(array, key);
+	  return index < 0 ? undefined : array[index][1];
+	}
+
+	/**
+	 * Checks if an associative array value for `key` exists.
+	 *
+	 * @private
+	 * @param {Array} array The array to query.
+	 * @param {string} key The key of the entry to check.
+	 * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
+	 */
+	function assocHas(array, key) {
+	  return assocIndexOf(array, key) > -1;
+	}
+
+	/**
+	 * Gets the index at which the first occurrence of `key` is found in `array`
+	 * of key-value pairs.
+	 *
+	 * @private
+	 * @param {Array} array The array to search.
+	 * @param {*} key The key to search for.
+	 * @returns {number} Returns the index of the matched value, else `-1`.
+	 */
+	function assocIndexOf(array, key) {
+	  var length = array.length;
+	  while (length--) {
+	    if (eq(array[length][0], key)) {
+	      return length;
+	    }
+	  }
+	  return -1;
+	}
+
+	/**
+	 * Sets the associative array `key` to `value`.
+	 *
+	 * @private
+	 * @param {Array} array The array to modify.
+	 * @param {string} key The key of the value to set.
+	 * @param {*} value The value to set.
+	 */
+	function assocSet(array, key, value) {
+	  var index = assocIndexOf(array, key);
+	  if (index < 0) {
+	    array.push([key, value]);
+	  } else {
+	    array[index][1] = value;
+	  }
+	}
+
+	/**
+	 * Casts `value` to a path array if it's not one.
+	 *
+	 * @private
+	 * @param {*} value The value to inspect.
+	 * @returns {Array} Returns the cast property path array.
+	 */
+	function baseCastPath(value) {
+	  return isArray(value) ? value : stringToPath(value);
+	}
+
+	/**
+	 * The base implementation of `_.get` without support for default values.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @param {Array|string} path The path of the property to get.
+	 * @returns {*} Returns the resolved value.
+	 */
+	function baseGet(object, path) {
+	  path = isKey(path, object) ? [path + ''] : baseCastPath(path);
+
+	  var index = 0,
+	      length = path.length;
+
+	  while (object != null && index < length) {
+	    object = object[path[index++]];
+	  }
+	  return index && index == length ? object : undefined;
+	}
+
+	/**
+	 * The base implementation of `_.has` without support for deep paths.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @param {Array|string} key The key to check.
+	 * @returns {boolean} Returns `true` if `key` exists, else `false`.
+	 */
+	function baseHas(object, key) {
+	  // Avoid a bug in IE 10-11 where objects with a [[Prototype]] of `null`,
+	  // that are composed entirely of index properties, return `false` for
+	  // `hasOwnProperty` checks of them.
+	  return hasOwnProperty.call(object, key) || (typeof object === 'undefined' ? 'undefined' : _typeof(object)) == 'object' && key in object && getPrototypeOf(object) === null;
+	}
+
+	/**
+	 * The base implementation of `_.hasIn` without support for deep paths.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @param {Array|string} key The key to check.
+	 * @returns {boolean} Returns `true` if `key` exists, else `false`.
+	 */
+	function baseHasIn(object, key) {
+	  return key in Object(object);
+	}
+
+	/**
+	 * The base implementation of `_.isEqual` which supports partial comparisons
+	 * and tracks traversed objects.
+	 *
+	 * @private
+	 * @param {*} value The value to compare.
+	 * @param {*} other The other value to compare.
+	 * @param {Function} [customizer] The function to customize comparisons.
+	 * @param {boolean} [bitmask] The bitmask of comparison flags.
+	 *  The bitmask may be composed of the following flags:
+	 *     1 - Unordered comparison
+	 *     2 - Partial comparison
+	 * @param {Object} [stack] Tracks traversed `value` and `other` objects.
+	 * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
+	 */
+	function baseIsEqual(value, other, customizer, bitmask, stack) {
+	  if (value === other) {
+	    return true;
+	  }
+	  if (value == null || other == null || !isObject(value) && !isObjectLike(other)) {
+	    return value !== value && other !== other;
+	  }
+	  return baseIsEqualDeep(value, other, baseIsEqual, customizer, bitmask, stack);
+	}
+
+	/**
+	 * A specialized version of `baseIsEqual` for arrays and objects which performs
+	 * deep comparisons and tracks traversed objects enabling objects with circular
+	 * references to be compared.
+	 *
+	 * @private
+	 * @param {Object} object The object to compare.
+	 * @param {Object} other The other object to compare.
+	 * @param {Function} equalFunc The function to determine equivalents of values.
+	 * @param {Function} [customizer] The function to customize comparisons.
+	 * @param {number} [bitmask] The bitmask of comparison flags. See `baseIsEqual` for more details.
+	 * @param {Object} [stack] Tracks traversed `object` and `other` objects.
+	 * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
+	 */
+	function baseIsEqualDeep(object, other, equalFunc, customizer, bitmask, stack) {
+	  var objIsArr = isArray(object),
+	      othIsArr = isArray(other),
+	      objTag = arrayTag,
+	      othTag = arrayTag;
+
+	  if (!objIsArr) {
+	    objTag = getTag(object);
+	    objTag = objTag == argsTag ? objectTag : objTag;
+	  }
+	  if (!othIsArr) {
+	    othTag = getTag(other);
+	    othTag = othTag == argsTag ? objectTag : othTag;
+	  }
+	  var objIsObj = objTag == objectTag && !isHostObject(object),
+	      othIsObj = othTag == objectTag && !isHostObject(other),
+	      isSameTag = objTag == othTag;
+
+	  if (isSameTag && !objIsObj) {
+	    stack || (stack = new Stack());
+	    return objIsArr || isTypedArray(object) ? equalArrays(object, other, equalFunc, customizer, bitmask, stack) : equalByTag(object, other, objTag, equalFunc, customizer, bitmask, stack);
+	  }
+	  if (!(bitmask & PARTIAL_COMPARE_FLAG)) {
+	    var objIsWrapped = objIsObj && hasOwnProperty.call(object, '__wrapped__'),
+	        othIsWrapped = othIsObj && hasOwnProperty.call(other, '__wrapped__');
+
+	    if (objIsWrapped || othIsWrapped) {
+	      stack || (stack = new Stack());
+	      return equalFunc(objIsWrapped ? object.value() : object, othIsWrapped ? other.value() : other, customizer, bitmask, stack);
+	    }
+	  }
+	  if (!isSameTag) {
+	    return false;
+	  }
+	  stack || (stack = new Stack());
+	  return equalObjects(object, other, equalFunc, customizer, bitmask, stack);
+	}
+
+	/**
+	 * The base implementation of `_.isMatch` without support for iteratee shorthands.
+	 *
+	 * @private
+	 * @param {Object} object The object to inspect.
+	 * @param {Object} source The object of property values to match.
+	 * @param {Array} matchData The property names, values, and compare flags to match.
+	 * @param {Function} [customizer] The function to customize comparisons.
+	 * @returns {boolean} Returns `true` if `object` is a match, else `false`.
+	 */
+	function baseIsMatch(object, source, matchData, customizer) {
+	  var index = matchData.length,
+	      length = index,
+	      noCustomizer = !customizer;
+
+	  if (object == null) {
+	    return !length;
+	  }
+	  object = Object(object);
+	  while (index--) {
+	    var data = matchData[index];
+	    if (noCustomizer && data[2] ? data[1] !== object[data[0]] : !(data[0] in object)) {
+	      return false;
+	    }
+	  }
+	  while (++index < length) {
+	    data = matchData[index];
+	    var key = data[0],
+	        objValue = object[key],
+	        srcValue = data[1];
+
+	    if (noCustomizer && data[2]) {
+	      if (objValue === undefined && !(key in object)) {
+	        return false;
+	      }
+	    } else {
+	      var stack = new Stack(),
+	          result = customizer ? customizer(objValue, srcValue, key, object, source, stack) : undefined;
+
+	      if (!(result === undefined ? baseIsEqual(srcValue, objValue, customizer, UNORDERED_COMPARE_FLAG | PARTIAL_COMPARE_FLAG, stack) : result)) {
+	        return false;
+	      }
+	    }
+	  }
+	  return true;
+	}
+
+	/**
+	 * The base implementation of `_.iteratee`.
+	 *
+	 * @private
+	 * @param {*} [value=_.identity] The value to convert to an iteratee.
+	 * @returns {Function} Returns the iteratee.
+	 */
+	function baseIteratee(value) {
+	  var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
+	  if (type == 'function') {
+	    return value;
+	  }
+	  if (value == null) {
+	    return identity;
+	  }
+	  if (type == 'object') {
+	    return isArray(value) ? baseMatchesProperty(value[0], value[1]) : baseMatches(value);
+	  }
+	  return property(value);
+	}
+
+	/**
+	 * The base implementation of `_.keys` which doesn't skip the constructor
+	 * property of prototypes or treat sparse arrays as dense.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @returns {Array} Returns the array of property names.
+	 */
+	function baseKeys(object) {
+	  return nativeKeys(Object(object));
+	}
+
+	/**
+	 * The base implementation of `_.matches` which doesn't clone `source`.
+	 *
+	 * @private
+	 * @param {Object} source The object of property values to match.
+	 * @returns {Function} Returns the new function.
+	 */
+	function baseMatches(source) {
+	  var matchData = getMatchData(source);
+	  if (matchData.length == 1 && matchData[0][2]) {
+	    var key = matchData[0][0],
+	        value = matchData[0][1];
+
+	    return function (object) {
+	      if (object == null) {
+	        return false;
+	      }
+	      return object[key] === value && (value !== undefined || key in Object(object));
+	    };
+	  }
+	  return function (object) {
+	    return object === source || baseIsMatch(object, source, matchData);
+	  };
+	}
+
+	/**
+	 * The base implementation of `_.matchesProperty` which doesn't clone `srcValue`.
+	 *
+	 * @private
+	 * @param {string} path The path of the property to get.
+	 * @param {*} srcValue The value to match.
+	 * @returns {Function} Returns the new function.
+	 */
+	function baseMatchesProperty(path, srcValue) {
+	  return function (object) {
+	    var objValue = get(object, path);
+	    return objValue === undefined && objValue === srcValue ? hasIn(object, path) : baseIsEqual(srcValue, objValue, undefined, UNORDERED_COMPARE_FLAG | PARTIAL_COMPARE_FLAG);
+	  };
+	}
+
+	/**
+	 * The base implementation of `_.property` without support for deep paths.
+	 *
+	 * @private
+	 * @param {string} key The key of the property to get.
+	 * @returns {Function} Returns the new function.
+	 */
+	function baseProperty(key) {
+	  return function (object) {
+	    return object == null ? undefined : object[key];
+	  };
+	}
+
+	/**
+	 * A specialized version of `baseProperty` which supports deep paths.
+	 *
+	 * @private
+	 * @param {Array|string} path The path of the property to get.
+	 * @returns {Function} Returns the new function.
+	 */
+	function basePropertyDeep(path) {
+	  return function (object) {
+	    return baseGet(object, path);
+	  };
+	}
+
+	/**
+	 * The base implementation of `_.slice` without an iteratee call guard.
+	 *
+	 * @private
+	 * @param {Array} array The array to slice.
+	 * @param {number} [start=0] The start position.
+	 * @param {number} [end=array.length] The end position.
+	 * @returns {Array} Returns the slice of `array`.
+	 */
+	function baseSlice(array, start, end) {
+	  var index = -1,
+	      length = array.length;
+
+	  if (start < 0) {
+	    start = -start > length ? 0 : length + start;
+	  }
+	  end = end > length ? length : end;
+	  if (end < 0) {
+	    end += length;
+	  }
+	  length = start > end ? 0 : end - start >>> 0;
+	  start >>>= 0;
+
+	  var result = Array(length);
+	  while (++index < length) {
+	    result[index] = array[index + start];
+	  }
+	  return result;
+	}
+
+	/**
+	 * A specialized version of `baseIsEqualDeep` for arrays with support for
+	 * partial deep comparisons.
+	 *
+	 * @private
+	 * @param {Array} array The array to compare.
+	 * @param {Array} other The other array to compare.
+	 * @param {Function} equalFunc The function to determine equivalents of values.
+	 * @param {Function} customizer The function to customize comparisons.
+	 * @param {number} bitmask The bitmask of comparison flags. See `baseIsEqual` for more details.
+	 * @param {Object} stack Tracks traversed `array` and `other` objects.
+	 * @returns {boolean} Returns `true` if the arrays are equivalent, else `false`.
+	 */
+	function equalArrays(array, other, equalFunc, customizer, bitmask, stack) {
+	  var index = -1,
+	      isPartial = bitmask & PARTIAL_COMPARE_FLAG,
+	      isUnordered = bitmask & UNORDERED_COMPARE_FLAG,
+	      arrLength = array.length,
+	      othLength = other.length;
+
+	  if (arrLength != othLength && !(isPartial && othLength > arrLength)) {
+	    return false;
+	  }
+	  // Assume cyclic values are equal.
+	  var stacked = stack.get(array);
+	  if (stacked) {
+	    return stacked == other;
+	  }
+	  var result = true;
+	  stack.set(array, other);
+
+	  // Ignore non-index properties.
+	  while (++index < arrLength) {
+	    var arrValue = array[index],
+	        othValue = other[index];
+
+	    if (customizer) {
+	      var compared = isPartial ? customizer(othValue, arrValue, index, other, array, stack) : customizer(arrValue, othValue, index, array, other, stack);
+	    }
+	    if (compared !== undefined) {
+	      if (compared) {
+	        continue;
+	      }
+	      result = false;
+	      break;
+	    }
+	    // Recursively compare arrays (susceptible to call stack limits).
+	    if (isUnordered) {
+	      if (!arraySome(other, function (othValue) {
+	        return arrValue === othValue || equalFunc(arrValue, othValue, customizer, bitmask, stack);
+	      })) {
+	        result = false;
+	        break;
+	      }
+	    } else if (!(arrValue === othValue || equalFunc(arrValue, othValue, customizer, bitmask, stack))) {
+	      result = false;
+	      break;
+	    }
+	  }
+	  stack['delete'](array);
+	  return result;
+	}
+
+	/**
+	 * A specialized version of `baseIsEqualDeep` for comparing objects of
+	 * the same `toStringTag`.
+	 *
+	 * **Note:** This function only supports comparing values with tags of
+	 * `Boolean`, `Date`, `Error`, `Number`, `RegExp`, or `String`.
+	 *
+	 * @private
+	 * @param {Object} object The object to compare.
+	 * @param {Object} other The other object to compare.
+	 * @param {string} tag The `toStringTag` of the objects to compare.
+	 * @param {Function} equalFunc The function to determine equivalents of values.
+	 * @param {Function} customizer The function to customize comparisons.
+	 * @param {number} bitmask The bitmask of comparison flags. See `baseIsEqual` for more details.
+	 * @param {Object} stack Tracks traversed `object` and `other` objects.
+	 * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
+	 */
+	function equalByTag(object, other, tag, equalFunc, customizer, bitmask, stack) {
+	  switch (tag) {
+	    case arrayBufferTag:
+	      if (object.byteLength != other.byteLength || !equalFunc(new Uint8Array(object), new Uint8Array(other))) {
+	        return false;
+	      }
+	      return true;
+
+	    case boolTag:
+	    case dateTag:
+	      // Coerce dates and booleans to numbers, dates to milliseconds and booleans
+	      // to `1` or `0` treating invalid dates coerced to `NaN` as not equal.
+	      return +object == +other;
+
+	    case errorTag:
+	      return object.name == other.name && object.message == other.message;
+
+	    case numberTag:
+	      // Treat `NaN` vs. `NaN` as equal.
+	      return object != +object ? other != +other : object == +other;
+
+	    case regexpTag:
+	    case stringTag:
+	      // Coerce regexes to strings and treat strings primitives and string
+	      // objects as equal. See https://es5.github.io/#x15.10.6.4 for more details.
+	      return object == other + '';
+
+	    case mapTag:
+	      var convert = mapToArray;
+
+	    case setTag:
+	      var isPartial = bitmask & PARTIAL_COMPARE_FLAG;
+	      convert || (convert = setToArray);
+
+	      if (object.size != other.size && !isPartial) {
+	        return false;
+	      }
+	      // Assume cyclic values are equal.
+	      var stacked = stack.get(object);
+	      if (stacked) {
+	        return stacked == other;
+	      }
+	      // Recursively compare objects (susceptible to call stack limits).
+	      return equalArrays(convert(object), convert(other), equalFunc, customizer, bitmask | UNORDERED_COMPARE_FLAG, stack.set(object, other));
+
+	    case symbolTag:
+	      if (symbolValueOf) {
+	        return symbolValueOf.call(object) == symbolValueOf.call(other);
+	      }
+	  }
+	  return false;
+	}
+
+	/**
+	 * A specialized version of `baseIsEqualDeep` for objects with support for
+	 * partial deep comparisons.
+	 *
+	 * @private
+	 * @param {Object} object The object to compare.
+	 * @param {Object} other The other object to compare.
+	 * @param {Function} equalFunc The function to determine equivalents of values.
+	 * @param {Function} customizer The function to customize comparisons.
+	 * @param {number} bitmask The bitmask of comparison flags. See `baseIsEqual` for more details.
+	 * @param {Object} stack Tracks traversed `object` and `other` objects.
+	 * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
+	 */
+	function equalObjects(object, other, equalFunc, customizer, bitmask, stack) {
+	  var isPartial = bitmask & PARTIAL_COMPARE_FLAG,
+	      objProps = keys(object),
+	      objLength = objProps.length,
+	      othProps = keys(other),
+	      othLength = othProps.length;
+
+	  if (objLength != othLength && !isPartial) {
+	    return false;
+	  }
+	  var index = objLength;
+	  while (index--) {
+	    var key = objProps[index];
+	    if (!(isPartial ? key in other : baseHas(other, key))) {
+	      return false;
+	    }
+	  }
+	  // Assume cyclic values are equal.
+	  var stacked = stack.get(object);
+	  if (stacked) {
+	    return stacked == other;
+	  }
+	  var result = true;
+	  stack.set(object, other);
+
+	  var skipCtor = isPartial;
+	  while (++index < objLength) {
+	    key = objProps[index];
+	    var objValue = object[key],
+	        othValue = other[key];
+
+	    if (customizer) {
+	      var compared = isPartial ? customizer(othValue, objValue, key, other, object, stack) : customizer(objValue, othValue, key, object, other, stack);
+	    }
+	    // Recursively compare objects (susceptible to call stack limits).
+	    if (!(compared === undefined ? objValue === othValue || equalFunc(objValue, othValue, customizer, bitmask, stack) : compared)) {
+	      result = false;
+	      break;
+	    }
+	    skipCtor || (skipCtor = key == 'constructor');
+	  }
+	  if (result && !skipCtor) {
+	    var objCtor = object.constructor,
+	        othCtor = other.constructor;
+
+	    // Non `Object` object instances with different constructors are not equal.
+	    if (objCtor != othCtor && 'constructor' in object && 'constructor' in other && !(typeof objCtor == 'function' && objCtor instanceof objCtor && typeof othCtor == 'function' && othCtor instanceof othCtor)) {
+	      result = false;
+	    }
+	  }
+	  stack['delete'](object);
+	  return result;
+	}
+
+	/**
+	 * Gets the "length" property value of `object`.
+	 *
+	 * **Note:** This function is used to avoid a [JIT bug](https://bugs.webkit.org/show_bug.cgi?id=142792)
+	 * that affects Safari on at least iOS 8.1-8.3 ARM64.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @returns {*} Returns the "length" value.
+	 */
+	var getLength = baseProperty('length');
+
+	/**
+	 * Gets the property names, values, and compare flags of `object`.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @returns {Array} Returns the match data of `object`.
+	 */
+	function getMatchData(object) {
+	  var result = toPairs(object),
+	      length = result.length;
+
+	  while (length--) {
+	    result[length][2] = isStrictComparable(result[length][1]);
+	  }
+	  return result;
+	}
+
+	/**
+	 * Gets the native function at `key` of `object`.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @param {string} key The key of the method to get.
+	 * @returns {*} Returns the function if it's native, else `undefined`.
+	 */
+	function getNative(object, key) {
+	  var value = object[key];
+	  return isNative(value) ? value : undefined;
+	}
+
+	/**
+	 * Gets the `toStringTag` of `value`.
+	 *
+	 * @private
+	 * @param {*} value The value to query.
+	 * @returns {string} Returns the `toStringTag`.
+	 */
+	function getTag(value) {
+	  return objectToString.call(value);
+	}
+
+	// Fallback for IE 11 providing `toStringTag` values for maps, sets, and weakmaps.
+	if (Map && getTag(new Map()) != mapTag || Set && getTag(new Set()) != setTag || WeakMap && getTag(new WeakMap()) != weakMapTag) {
+	  getTag = function getTag(value) {
+	    var result = objectToString.call(value),
+	        Ctor = result == objectTag ? value.constructor : null,
+	        ctorString = typeof Ctor == 'function' ? funcToString.call(Ctor) : '';
+
+	    if (ctorString) {
+	      switch (ctorString) {
+	        case mapCtorString:
+	          return mapTag;
+	        case setCtorString:
+	          return setTag;
+	        case weakMapCtorString:
+	          return weakMapTag;
+	      }
+	    }
+	    return result;
+	  };
+	}
+
+	/**
+	 * Checks if `path` exists on `object`.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @param {Array|string} path The path to check.
+	 * @param {Function} hasFunc The function to check properties.
+	 * @returns {boolean} Returns `true` if `path` exists, else `false`.
+	 */
+	function hasPath(object, path, hasFunc) {
+	  if (object == null) {
+	    return false;
+	  }
+	  var result = hasFunc(object, path);
+	  if (!result && !isKey(path)) {
+	    path = baseCastPath(path);
+	    object = parent(object, path);
+	    if (object != null) {
+	      path = last(path);
+	      result = hasFunc(object, path);
+	    }
+	  }
+	  var length = object ? object.length : undefined;
+	  return result || !!length && isLength(length) && isIndex(path, length) && (isArray(object) || isString(object) || isArguments(object));
+	}
+
+	/**
+	 * Creates an array of index keys for `object` values of arrays,
+	 * `arguments` objects, and strings, otherwise `null` is returned.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @returns {Array|null} Returns index keys, else `null`.
+	 */
+	function indexKeys(object) {
+	  var length = object ? object.length : undefined;
+	  if (isLength(length) && (isArray(object) || isString(object) || isArguments(object))) {
+	    return baseTimes(length, String);
+	  }
+	  return null;
+	}
+
+	/**
+	 * Checks if `value` is a property name and not a property path.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @param {Object} [object] The object to query keys on.
+	 * @returns {boolean} Returns `true` if `value` is a property name, else `false`.
+	 */
+	function isKey(value, object) {
+	  if (typeof value == 'number') {
+	    return true;
+	  }
+	  return !isArray(value) && (reIsPlainProp.test(value) || !reIsDeepProp.test(value) || object != null && value in Object(object));
+	}
+
+	/**
+	 * Checks if `value` is suitable for use as unique object key.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is suitable, else `false`.
+	 */
+	function isKeyable(value) {
+	  var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
+	  return type == 'number' || type == 'boolean' || type == 'string' && value != '__proto__' || value == null;
+	}
+
+	/**
+	 * Checks if `value` is likely a prototype object.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a prototype, else `false`.
+	 */
+	function isPrototype(value) {
+	  var Ctor = value && value.constructor,
+	      proto = typeof Ctor == 'function' && Ctor.prototype || objectProto;
+
+	  return value === proto;
+	}
+
+	/**
+	 * Checks if `value` is suitable for strict equality comparisons, i.e. `===`.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` if suitable for strict
+	 *  equality comparisons, else `false`.
+	 */
+	function isStrictComparable(value) {
+	  return value === value && !isObject(value);
+	}
+
+	/**
+	 * Gets the parent value at `path` of `object`.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @param {Array} path The path to get the parent value of.
+	 * @returns {*} Returns the parent value.
+	 */
+	function parent(object, path) {
+	  return path.length == 1 ? object : get(object, baseSlice(path, 0, -1));
+	}
+
+	/**
+	 * Converts `string` to a property path array.
+	 *
+	 * @private
+	 * @param {string} string The string to convert.
+	 * @returns {Array} Returns the property path array.
+	 */
+	function stringToPath(string) {
+	  var result = [];
+	  toString(string).replace(rePropName, function (match, number, quote, string) {
+	    result.push(quote ? string.replace(reEscapeChar, '$1') : number || match);
+	  });
+	  return result;
+	}
+
+	/**
+	 * Gets the last element of `array`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Array
+	 * @param {Array} array The array to query.
+	 * @returns {*} Returns the last element of `array`.
+	 * @example
+	 *
+	 * _.last([1, 2, 3]);
+	 * // => 3
+	 */
+	function last(array) {
+	  var length = array ? array.length : 0;
+	  return length ? array[length - 1] : undefined;
+	}
+
+	/**
+	 * Performs a [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)
+	 * comparison between two values to determine if they are equivalent.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to compare.
+	 * @param {*} other The other value to compare.
+	 * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
+	 * @example
+	 *
+	 * var object = { 'user': 'fred' };
+	 * var other = { 'user': 'fred' };
+	 *
+	 * _.eq(object, object);
+	 * // => true
+	 *
+	 * _.eq(object, other);
+	 * // => false
+	 *
+	 * _.eq('a', 'a');
+	 * // => true
+	 *
+	 * _.eq('a', Object('a'));
+	 * // => false
+	 *
+	 * _.eq(NaN, NaN);
+	 * // => true
+	 */
+	function eq(value, other) {
+	  return value === other || value !== value && other !== other;
+	}
+
+	/**
+	 * Checks if `value` is likely an `arguments` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+	 * @example
+	 *
+	 * _.isArguments(function() { return arguments; }());
+	 * // => true
+	 *
+	 * _.isArguments([1, 2, 3]);
+	 * // => false
+	 */
+	function isArguments(value) {
+	  // Safari 8.1 incorrectly makes `arguments.callee` enumerable in strict mode.
+	  return isArrayLikeObject(value) && hasOwnProperty.call(value, 'callee') && (!propertyIsEnumerable.call(value, 'callee') || objectToString.call(value) == argsTag);
+	}
+
+	/**
+	 * Checks if `value` is classified as an `Array` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @type {Function}
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+	 * @example
+	 *
+	 * _.isArray([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isArray(document.body.children);
+	 * // => false
+	 *
+	 * _.isArray('abc');
+	 * // => false
+	 *
+	 * _.isArray(_.noop);
+	 * // => false
+	 */
+	var isArray = Array.isArray;
+
+	/**
+	 * Checks if `value` is array-like. A value is considered array-like if it's
+	 * not a function and has a `value.length` that's an integer greater than or
+	 * equal to `0` and less than or equal to `Number.MAX_SAFE_INTEGER`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
+	 * @example
+	 *
+	 * _.isArrayLike([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isArrayLike(document.body.children);
+	 * // => true
+	 *
+	 * _.isArrayLike('abc');
+	 * // => true
+	 *
+	 * _.isArrayLike(_.noop);
+	 * // => false
+	 */
+	function isArrayLike(value) {
+	  return value != null && isLength(getLength(value)) && !isFunction(value);
+	}
+
+	/**
+	 * This method is like `_.isArrayLike` except that it also checks if `value`
+	 * is an object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an array-like object, else `false`.
+	 * @example
+	 *
+	 * _.isArrayLikeObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isArrayLikeObject(document.body.children);
+	 * // => true
+	 *
+	 * _.isArrayLikeObject('abc');
+	 * // => false
+	 *
+	 * _.isArrayLikeObject(_.noop);
+	 * // => false
+	 */
+	function isArrayLikeObject(value) {
+	  return isObjectLike(value) && isArrayLike(value);
+	}
+
+	/**
+	 * Checks if `value` is classified as a `Function` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+	 * @example
+	 *
+	 * _.isFunction(_);
+	 * // => true
+	 *
+	 * _.isFunction(/abc/);
+	 * // => false
+	 */
+	function isFunction(value) {
+	  // The use of `Object#toString` avoids issues with the `typeof` operator
+	  // in Safari 8 which returns 'object' for typed array and weak map constructors,
+	  // and PhantomJS 1.9 which returns 'function' for `NodeList` instances.
+	  var tag = isObject(value) ? objectToString.call(value) : '';
+	  return tag == funcTag || tag == genTag;
+	}
+
+	/**
+	 * Checks if `value` is a valid array-like length.
+	 *
+	 * **Note:** This function is loosely based on [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
+	 * @example
+	 *
+	 * _.isLength(3);
+	 * // => true
+	 *
+	 * _.isLength(Number.MIN_VALUE);
+	 * // => false
+	 *
+	 * _.isLength(Infinity);
+	 * // => false
+	 *
+	 * _.isLength('3');
+	 * // => false
+	 */
+	function isLength(value) {
+	  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+	}
+
+	/**
+	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
+	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+	 * @example
+	 *
+	 * _.isObject({});
+	 * // => true
+	 *
+	 * _.isObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObject(_.noop);
+	 * // => true
+	 *
+	 * _.isObject(null);
+	 * // => false
+	 */
+	function isObject(value) {
+	  var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
+	  return !!value && (type == 'object' || type == 'function');
+	}
+
+	/**
+	 * Checks if `value` is object-like. A value is object-like if it's not `null`
+	 * and has a `typeof` result of "object".
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+	 * @example
+	 *
+	 * _.isObjectLike({});
+	 * // => true
+	 *
+	 * _.isObjectLike([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObjectLike(_.noop);
+	 * // => false
+	 *
+	 * _.isObjectLike(null);
+	 * // => false
+	 */
+	function isObjectLike(value) {
+	  return !!value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) == 'object';
+	}
+
+	/**
+	 * Checks if `value` is a native function.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a native function, else `false`.
+	 * @example
+	 *
+	 * _.isNative(Array.prototype.push);
+	 * // => true
+	 *
+	 * _.isNative(_);
+	 * // => false
+	 */
+	function isNative(value) {
+	  if (value == null) {
+	    return false;
+	  }
+	  if (isFunction(value)) {
+	    return reIsNative.test(funcToString.call(value));
+	  }
+	  return isObjectLike(value) && (isHostObject(value) ? reIsNative : reIsHostCtor).test(value);
+	}
+
+	/**
+	 * Checks if `value` is classified as a `String` primitive or object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+	 * @example
+	 *
+	 * _.isString('abc');
+	 * // => true
+	 *
+	 * _.isString(1);
+	 * // => false
+	 */
+	function isString(value) {
+	  return typeof value == 'string' || !isArray(value) && isObjectLike(value) && objectToString.call(value) == stringTag;
+	}
+
+	/**
+	 * Checks if `value` is classified as a `Symbol` primitive or object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+	 * @example
+	 *
+	 * _.isSymbol(Symbol.iterator);
+	 * // => true
+	 *
+	 * _.isSymbol('abc');
+	 * // => false
+	 */
+	function isSymbol(value) {
+	  return (typeof value === 'undefined' ? 'undefined' : _typeof(value)) == 'symbol' || isObjectLike(value) && objectToString.call(value) == symbolTag;
+	}
+
+	/**
+	 * Checks if `value` is classified as a typed array.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+	 * @example
+	 *
+	 * _.isTypedArray(new Uint8Array);
+	 * // => true
+	 *
+	 * _.isTypedArray([]);
+	 * // => false
+	 */
+	function isTypedArray(value) {
+	  return isObjectLike(value) && isLength(value.length) && !!typedArrayTags[objectToString.call(value)];
+	}
+
+	/**
+	 * Converts `value` to a string if it's not one. An empty string is returned
+	 * for `null` and `undefined` values. The sign of `-0` is preserved.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to process.
+	 * @returns {string} Returns the string.
+	 * @example
+	 *
+	 * _.toString(null);
+	 * // => ''
+	 *
+	 * _.toString(-0);
+	 * // => '-0'
+	 *
+	 * _.toString([1, 2, 3]);
+	 * // => '1,2,3'
+	 */
+	function toString(value) {
+	  // Exit early for strings to avoid a performance hit in some environments.
+	  if (typeof value == 'string') {
+	    return value;
+	  }
+	  if (value == null) {
+	    return '';
+	  }
+	  if (isSymbol(value)) {
+	    return symbolToString ? symbolToString.call(value) : '';
+	  }
+	  var result = value + '';
+	  return result == '0' && 1 / value == -INFINITY ? '-0' : result;
+	}
+
+	/**
+	 * Gets the value at `path` of `object`. If the resolved value is
+	 * `undefined` the `defaultValue` is used in its place.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Object
+	 * @param {Object} object The object to query.
+	 * @param {Array|string} path The path of the property to get.
+	 * @param {*} [defaultValue] The value returned if the resolved value is `undefined`.
+	 * @returns {*} Returns the resolved value.
+	 * @example
+	 *
+	 * var object = { 'a': [{ 'b': { 'c': 3 } }] };
+	 *
+	 * _.get(object, 'a[0].b.c');
+	 * // => 3
+	 *
+	 * _.get(object, ['a', '0', 'b', 'c']);
+	 * // => 3
+	 *
+	 * _.get(object, 'a.b.c', 'default');
+	 * // => 'default'
+	 */
+	function get(object, path, defaultValue) {
+	  var result = object == null ? undefined : baseGet(object, path);
+	  return result === undefined ? defaultValue : result;
+	}
+
+	/**
+	 * Checks if `path` is a direct or inherited property of `object`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Object
+	 * @param {Object} object The object to query.
+	 * @param {Array|string} path The path to check.
+	 * @returns {boolean} Returns `true` if `path` exists, else `false`.
+	 * @example
+	 *
+	 * var object = _.create({ 'a': _.create({ 'b': _.create({ 'c': 3 }) }) });
+	 *
+	 * _.hasIn(object, 'a');
+	 * // => true
+	 *
+	 * _.hasIn(object, 'a.b.c');
+	 * // => true
+	 *
+	 * _.hasIn(object, ['a', 'b', 'c']);
+	 * // => true
+	 *
+	 * _.hasIn(object, 'b');
+	 * // => false
+	 */
+	function hasIn(object, path) {
+	  return hasPath(object, path, baseHasIn);
+	}
+
+	/**
+	 * Creates an array of the own enumerable property names of `object`.
+	 *
+	 * **Note:** Non-object values are coerced to objects. See the
+	 * [ES spec](http://ecma-international.org/ecma-262/6.0/#sec-object.keys)
+	 * for more details.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Object
+	 * @param {Object} object The object to query.
+	 * @returns {Array} Returns the array of property names.
+	 * @example
+	 *
+	 * function Foo() {
+	 *   this.a = 1;
+	 *   this.b = 2;
+	 * }
+	 *
+	 * Foo.prototype.c = 3;
+	 *
+	 * _.keys(new Foo);
+	 * // => ['a', 'b'] (iteration order is not guaranteed)
+	 *
+	 * _.keys('hi');
+	 * // => ['0', '1']
+	 */
+	function keys(object) {
+	  var isProto = isPrototype(object);
+	  if (!(isProto || isArrayLike(object))) {
+	    return baseKeys(object);
+	  }
+	  var indexes = indexKeys(object),
+	      skipIndexes = !!indexes,
+	      result = indexes || [],
+	      length = result.length;
+
+	  for (var key in object) {
+	    if (baseHas(object, key) && !(skipIndexes && (key == 'length' || isIndex(key, length))) && !(isProto && key == 'constructor')) {
+	      result.push(key);
+	    }
+	  }
+	  return result;
+	}
+
+	/**
+	 * Creates an array of own enumerable key-value pairs for `object` which
+	 * can be consumed by `_.fromPairs`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Object
+	 * @param {Object} object The object to query.
+	 * @returns {Array} Returns the new array of key-value pairs.
+	 * @example
+	 *
+	 * function Foo() {
+	 *   this.a = 1;
+	 *   this.b = 2;
+	 * }
+	 *
+	 * Foo.prototype.c = 3;
+	 *
+	 * _.toPairs(new Foo);
+	 * // => [['a', 1], ['b', 2]] (iteration order is not guaranteed)
+	 */
+	function toPairs(object) {
+	  return baseToPairs(object, keys(object));
+	}
+
+	/**
+	 * This method returns the first argument given to it.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Util
+	 * @param {*} value Any value.
+	 * @returns {*} Returns `value`.
+	 * @example
+	 *
+	 * var object = { 'user': 'fred' };
+	 *
+	 * _.identity(object) === object;
+	 * // => true
+	 */
+	function identity(value) {
+	  return value;
+	}
+
+	/**
+	 * Creates a function that returns the value at `path` of a given object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Util
+	 * @param {Array|string} path The path of the property to get.
+	 * @returns {Function} Returns the new function.
+	 * @example
+	 *
+	 * var objects = [
+	 *   { 'a': { 'b': { 'c': 2 } } },
+	 *   { 'a': { 'b': { 'c': 1 } } }
+	 * ];
+	 *
+	 * _.map(objects, _.property('a.b.c'));
+	 * // => [2, 1]
+	 *
+	 * _.map(_.sortBy(objects, _.property(['a', 'b', 'c'])), 'a.b.c');
+	 * // => [1, 2]
+	 */
+	function property(path) {
+	  return isKey(path) ? baseProperty(path) : basePropertyDeep(path);
+	}
+
+	// Avoid inheriting from `Object.prototype` when possible.
+	Hash.prototype = nativeCreate ? nativeCreate(null) : objectProto;
+
+	// Add functions to the `MapCache`.
+	MapCache.prototype.clear = mapClear;
+	MapCache.prototype['delete'] = mapDelete;
+	MapCache.prototype.get = mapGet;
+	MapCache.prototype.has = mapHas;
+	MapCache.prototype.set = mapSet;
+
+	// Add functions to the `Stack` cache.
+	Stack.prototype.clear = stackClear;
+	Stack.prototype['delete'] = stackDelete;
+	Stack.prototype.get = stackGet;
+	Stack.prototype.has = stackHas;
+	Stack.prototype.set = stackSet;
+
+	module.exports = baseIteratee;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)(module), (function() { return this; }())))
+
+/***/ },
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9960,15 +12079,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 	/**
-	 * lodash 4.5.0 (Custom Build) <https://lodash.com/>
+	 * lodash 4.5.1 (Custom Build) <https://lodash.com/>
 	 * Build: `lodash modularize exports="npm" -o ./`
 	 * Copyright 2012-2016 The Dojo Foundation <http://dojofoundation.org/>
 	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
 	 * Copyright 2009-2016 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var SetCache = __webpack_require__(51),
-	    createSet = __webpack_require__(52);
+	var SetCache = __webpack_require__(57),
+	    createSet = __webpack_require__(58);
 
 	/** Used as the size to enable large array optimizations. */
 	var LARGE_ARRAY_SIZE = 200;
@@ -9990,8 +12109,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
-	 * A specialized version of `_.includesWith` for arrays without support for
-	 * specifying an index to search from.
+	 * This function is like `arrayIncludes` except that it accepts a comparator.
 	 *
 	 * @private
 	 * @param {Array} array The array to search.
@@ -10164,7 +12282,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseUniq;
 
 /***/ },
-/* 51 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module, global) {'use strict';
@@ -10750,7 +12868,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)(module), (function() { return this; }())))
 
 /***/ },
-/* 52 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module, global) {'use strict';
@@ -11010,15 +13128,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)(module), (function() { return this; }())))
 
 /***/ },
-/* 53 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(54);
+	module.exports = __webpack_require__(60);
 
 /***/ },
-/* 54 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11051,11 +13169,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _style = __webpack_require__(55);
+	var _style = __webpack_require__(61);
 
 	var _style2 = _interopRequireDefault(_style);
 
-	var _index = __webpack_require__(56);
+	var _index = __webpack_require__(62);
 
 	var _index2 = _interopRequireDefault(_index);
 
@@ -11509,7 +13627,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 55 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(28)();
@@ -11523,21 +13641,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 56 */
+/* 62 */
 /***/ function(module, exports) {
 
 	module.exports = "<source src=\"<%=src%>\" type=\"<%=type%>\">\n";
 
 /***/ },
-/* 57 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(58);
+	module.exports = __webpack_require__(64);
 
 /***/ },
-/* 58 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11550,7 +13668,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _utils = __webpack_require__(2);
 
-	var _base_flash_playback = __webpack_require__(59);
+	var _base_flash_playback = __webpack_require__(65);
 
 	var _base_flash_playback2 = _interopRequireDefault(_base_flash_playback);
 
@@ -11578,7 +13696,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _playback2 = _interopRequireDefault(_playback);
 
-	var _Player = __webpack_require__(63);
+	var _Player = __webpack_require__(69);
 
 	var _Player2 = _interopRequireDefault(_Player);
 
@@ -11869,7 +13987,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 59 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11877,11 +13995,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = __webpack_require__(60);
+	exports.default = __webpack_require__(66);
 	module.exports = exports['default'];
 
 /***/ },
-/* 60 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11912,11 +14030,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var _flash = __webpack_require__(61);
+	var _flash = __webpack_require__(67);
 
 	var _flash2 = _interopRequireDefault(_flash);
 
-	var _flash3 = __webpack_require__(62);
+	var _flash3 = __webpack_require__(68);
 
 	var _flash4 = _interopRequireDefault(_flash3);
 
@@ -12026,13 +14144,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 61 */
+/* 67 */
 /***/ function(module, exports) {
 
-	module.exports = "<param name=\"movie\" value=\"<%= swfPath %>?inline=1\">\n<param name=\"quality\" value=\"autohigh\">\n<param name=\"swliveconnect\" value=\"true\">\n<param name=\"allowScriptAccess\" value=\"always\">\n<param name=\"bgcolor\" value=\"#000000\">\n<param name=\"allowFullScreen\" value=\"false\">\n<param name=\"wmode\" value=\"<%= wmode %>\">\n<param name=\"tabindex\" value=\"1\">\n<param name=\"FlashVars\" value=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\">\n<embed\n  name=\"<%= cid %>\"\n  type=\"application/x-shockwave-flash\"\n  disabled=\"disabled\"\n  tabindex=\"-1\"\n  enablecontextmenu=\"false\"\n  allowScriptAccess=\"always\"\n  quality=\"autohigh\"\n  pluginspage=\"http://www.macromedia.com/go/getflashplayer\"\n  wmode=\"<%= wmode %>\"\n  swliveconnect=\"true\"\n  allowfullscreen=\"false\"\n  bgcolor=\"#000000\"\n  FlashVars=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\"\n  src=\"<%= swfPath %>\"\n  width=\"100%\"\n  height=\"100%\">\n</embed>\n";
+	module.exports = "<param name=\"movie\" value=\"<%= swfPath %>?inline=1\">\r\n<param name=\"quality\" value=\"autohigh\">\r\n<param name=\"swliveconnect\" value=\"true\">\r\n<param name=\"allowScriptAccess\" value=\"always\">\r\n<param name=\"bgcolor\" value=\"#000000\">\r\n<param name=\"allowFullScreen\" value=\"false\">\r\n<param name=\"wmode\" value=\"<%= wmode %>\">\r\n<param name=\"tabindex\" value=\"1\">\r\n<param name=\"FlashVars\" value=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\">\r\n<embed\r\n  name=\"<%= cid %>\"\r\n  type=\"application/x-shockwave-flash\"\r\n  disabled=\"disabled\"\r\n  tabindex=\"-1\"\r\n  enablecontextmenu=\"false\"\r\n  allowScriptAccess=\"always\"\r\n  quality=\"autohigh\"\r\n  pluginspage=\"http://www.macromedia.com/go/getflashplayer\"\r\n  wmode=\"<%= wmode %>\"\r\n  swliveconnect=\"true\"\r\n  allowfullscreen=\"false\"\r\n  bgcolor=\"#000000\"\r\n  FlashVars=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\"\r\n  src=\"<%= swfPath %>\"\r\n  width=\"100%\"\r\n  height=\"100%\">\r\n</embed>\r\n";
 
 /***/ },
-/* 62 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(28)();
@@ -12046,21 +14164,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 63 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "4b76590b32dab62bc95c1b7951efae78.swf";
 
 /***/ },
-/* 64 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(65);
+	module.exports = __webpack_require__(71);
 
 /***/ },
-/* 65 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12079,7 +14197,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _playback2 = _interopRequireDefault(_playback);
 
-	var _html5_video = __webpack_require__(53);
+	var _html5_video = __webpack_require__(59);
 
 	var _html5_video2 = _interopRequireDefault(_html5_video);
 
@@ -12146,15 +14264,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 66 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(67);
+	module.exports = __webpack_require__(73);
 
 /***/ },
-/* 67 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12165,7 +14283,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _base_flash_playback = __webpack_require__(59);
+	var _base_flash_playback = __webpack_require__(65);
 
 	var _base_flash_playback2 = _interopRequireDefault(_base_flash_playback);
 
@@ -12189,11 +14307,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _browser2 = _interopRequireDefault(_browser);
 
-	var _flashls_events = __webpack_require__(68);
+	var _flashls_events = __webpack_require__(74);
 
 	var _flashls_events2 = _interopRequireDefault(_flashls_events);
 
-	var _HLSPlayer = __webpack_require__(69);
+	var _HLSPlayer = __webpack_require__(75);
 
 	var _HLSPlayer2 = _interopRequireDefault(_HLSPlayer);
 
@@ -12357,9 +14475,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	    _mediator2.default.on(this.cid + ':fragmentloaded', function (loadmetrics) {
 	      return _this2.onFragmentLoaded(loadmetrics);
-	    });
-	    _mediator2.default.once(this.cid + ':manifestloaded', function (duration, loadmetrics) {
-	      return _this2.manifestLoaded(duration, loadmetrics);
 	    });
 	  };
 
@@ -12775,8 +14890,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  FlasHLS.prototype.firstPlay = function firstPlay() {
+	    var _this4 = this;
+
 	    this._shouldPlayOnManifestLoaded = true;
 	    if (this.el.playerLoad) {
+	      _mediator2.default.once(this.cid + ':manifestloaded', function (duration, loadmetrics) {
+	        return _this4.manifestLoaded(duration, loadmetrics);
+	      });
 	      this.setFlashSettings(); //ensure flushLiveURLCache will work (#327)
 	      this.el.playerLoad(this.src);
 	      this.srcLoaded = true;
@@ -12784,13 +14904,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  FlasHLS.prototype.volume = function volume(value) {
-	    var _this4 = this;
+	    var _this5 = this;
 
 	    if (this.isReady) {
 	      this.el.playerVolume(value);
 	    } else {
 	      this.listenToOnce(this, _events2.default.PLAYBACK_BUFFERFULL, function () {
-	        return _this4.volume(value);
+	        return _this5.volume(value);
 	      });
 	    }
 	  };
@@ -12905,7 +15025,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  FlasHLS.prototype.createCallbacks = function createCallbacks() {
-	    var _this5 = this;
+	    var _this6 = this;
 
 	    if (!window.Clappr) {
 	      window.Clappr = {};
@@ -12915,7 +15035,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    this.flashlsEvents = new _flashls_events2.default(this.cid);
 	    window.Clappr.flashlsCallbacks[this.cid] = function (eventName, args) {
-	      _this5.flashlsEvents[eventName].apply(_this5.flashlsEvents, args);
+	      _this6.flashlsEvents[eventName].apply(_this6.flashlsEvents, args);
 	    };
 	  };
 
@@ -12945,7 +15065,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 68 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13036,21 +15156,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 69 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "d218edf766218c19b416107bfb05ef0f.swf";
 
 /***/ },
-/* 70 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(71);
+	module.exports = __webpack_require__(77);
 
 /***/ },
-/* 71 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13061,11 +15181,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _html5_video = __webpack_require__(53);
+	var _html5_video = __webpack_require__(59);
 
 	var _html5_video2 = _interopRequireDefault(_html5_video);
 
-	var _hls = __webpack_require__(72);
+	var _hls = __webpack_require__(78);
 
 	var _hls2 = _interopRequireDefault(_hls);
 
@@ -13145,6 +15265,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // be ignored. "playableRegionDuration" does not consider this
 	    _this.playableRegionDuration = 0;
 	    options.autoPlay && _this.setupHls();
+	    _this.recoverAttemptsRemaining = options.hlsRecoverAttempts || 16;
 	    return _this;
 	  }
 
@@ -13167,7 +15288,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.hls.on(_hls2.default.Events.FRAG_LOADED, function (evt, data) {
 	      return _this2.onFragmentLoaded(evt, data);
 	    });
+	    this.hls.on(_hls2.default.Events.ERROR, function (evt, data) {
+	      return _this2.onError(evt, data);
+	    });
 	    this.hls.attachMedia(this.el);
+	  };
+
+	  HLS.prototype.recover = function recover() {
+	    if (!this._recoveredDecodingError) {
+	      this._recoveredDecodingError = true;
+	      this.hls.recoverMediaError();
+	    } else if (!this._recoveredAudioCodecError) {
+	      this._recoveredAudioCodecError = true;
+	      this.hls.swapAudioCodec();
+	      this.hls.recoverMediaError();
+	    } else {
+	      _log2.default.error("hlsjs: failed to recover");
+	      this.trigger(_events2.default.PLAYBACK_ERROR, 'hlsjs: could not recover from error, evt ' + evt + ', data ' + data + ' ', this.name);
+	    }
 	  };
 
 	  // override
@@ -13237,6 +15375,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    this.settings.seekEnabled = this.isSeekEnabled();
 	    this.trigger(_events2.default.PLAYBACK_SETTINGSUPDATE);
+	  };
+
+	  HLS.prototype.onError = function onError(evt, data) {
+	    if (data && data.fatal && this.recoverAttemptsRemaining > 0) {
+	      this.recoverAttemptsRemaining -= 1;
+	      switch (data.type) {
+	        case _hls2.default.ErrorTypes.NETWORK_ERROR:
+	          _log2.default.warn('hlsjs: trying to recover from network error, evt ' + evt + ', data ' + data + ' ');
+	          this.hls.startLoad();
+	          break;
+	        case _hls2.default.ErrorTypes.MEDIA_ERROR:
+	          _log2.default.warn('hlsjs: trying to recover from media error, evt ' + evt + ', data ' + data + ' ');
+	          this.recover();
+	          break;
+	        default:
+	          _log2.default.error('hlsjs: trying to recover from media error, evt ' + evt + ', data ' + data + ' ');
+	          this.trigger(_events2.default.PLAYBACK_ERROR, 'hlsjs: could not recover from error, evt ' + evt + ', data ' + data + ' ', this.name);
+	          break;
+	      }
+	    }
 	  };
 
 	  HLS.prototype.onTimeUpdate = function onTimeUpdate() {
@@ -13359,7 +15517,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 72 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13368,10 +15526,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	// syntax with the babel compiler, it looks like it doesnt support
 	// function exports like we are used to in node/commonjs
 
-	module.exports = __webpack_require__(73).default;
+	module.exports = __webpack_require__(79).default;
 
 /***/ },
-/* 73 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -13394,51 +15552,55 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _events = __webpack_require__(74);
+	var _events = __webpack_require__(80);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _errors = __webpack_require__(75);
+	var _errors = __webpack_require__(81);
 
-	var _playlistLoader = __webpack_require__(76);
+	var _playlistLoader = __webpack_require__(82);
 
 	var _playlistLoader2 = _interopRequireDefault(_playlistLoader);
 
-	var _fragmentLoader = __webpack_require__(80);
+	var _fragmentLoader = __webpack_require__(86);
 
 	var _fragmentLoader2 = _interopRequireDefault(_fragmentLoader);
 
-	var _abrController = __webpack_require__(81);
+	var _abrController = __webpack_require__(87);
 
 	var _abrController2 = _interopRequireDefault(_abrController);
 
-	var _bufferController = __webpack_require__(82);
+	var _bufferController = __webpack_require__(90);
 
 	var _bufferController2 = _interopRequireDefault(_bufferController);
 
-	var _streamController = __webpack_require__(84);
+	var _capLevelController = __webpack_require__(91);
+
+	var _capLevelController2 = _interopRequireDefault(_capLevelController);
+
+	var _streamController = __webpack_require__(92);
 
 	var _streamController2 = _interopRequireDefault(_streamController);
 
-	var _levelController = __webpack_require__(103);
+	var _levelController = __webpack_require__(111);
 
 	var _levelController2 = _interopRequireDefault(_levelController);
 
-	var _timelineController = __webpack_require__(104);
+	var _timelineController = __webpack_require__(112);
 
 	var _timelineController2 = _interopRequireDefault(_timelineController);
 
-	var _logger = __webpack_require__(83);
+	var _logger = __webpack_require__(89);
 
-	var _xhrLoader = __webpack_require__(106);
+	var _xhrLoader = __webpack_require__(114);
 
 	var _xhrLoader2 = _interopRequireDefault(_xhrLoader);
 
-	var _events3 = __webpack_require__(96);
+	var _events3 = __webpack_require__(104);
 
 	var _events4 = _interopRequireDefault(_events3);
 
-	var _keyLoader = __webpack_require__(107);
+	var _keyLoader = __webpack_require__(115);
 
 	var _keyLoader2 = _interopRequireDefault(_keyLoader);
 
@@ -13480,10 +15642,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        Hls.defaultConfig = {
 	          autoStartLoad: true,
 	          debug: false,
+	          capLevelToPlayerSize: false,
 	          maxBufferLength: 30,
 	          maxBufferSize: 60 * 1000 * 1000,
 	          maxBufferHole: 0.5,
 	          maxSeekHole: 2,
+	          seekHoleNudgeDuration: 0.01,
+	          maxFragLookUpTolerance: 0.2,
 	          liveSyncDurationCount: 3,
 	          liveMaxLatencyDurationCount: Infinity,
 	          liveSyncDuration: undefined,
@@ -13510,6 +15675,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          pLoader: undefined,
 	          abrController: _abrController2.default,
 	          bufferController: _bufferController2.default,
+	          capLevelController: _capLevelController2.default,
 	          streamController: _streamController2.default,
 	          timelineController: _timelineController2.default,
 	          enableCEA708Captions: true,
@@ -13576,6 +15742,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.levelController = new _levelController2.default(this);
 	    this.abrController = new config.abrController(this);
 	    this.bufferController = new config.bufferController(this);
+	    this.capLevelController = new config.capLevelController(this);
 	    this.streamController = new config.streamController(this);
 	    this.timelineController = new config.timelineController(this);
 	    this.keyLoader = new _keyLoader2.default(this);
@@ -13592,6 +15759,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.fragmentLoader.destroy();
 	      this.levelController.destroy();
 	      this.bufferController.destroy();
+	      this.capLevelController.destroy();
 	      this.streamController.destroy();
 	      this.timelineController.destroy();
 	      this.keyLoader.destroy();
@@ -13624,8 +15792,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'startLoad',
 	    value: function startLoad() {
+	      var startPosition = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
 	      _logger.logger.log('startLoad');
-	      this.streamController.startLoad();
+	      this.levelController.startLoad();
+	      this.streamController.startLoad(startPosition);
+	    }
+	  }, {
+	    key: 'stopLoad',
+	    value: function stopLoad() {
+	      _logger.logger.log('stopLoad');
+	      this.levelController.stopLoad();
+	      this.streamController.stopLoad();
 	    }
 	  }, {
 	    key: 'swapAudioCodec',
@@ -13702,13 +15880,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'nextLoadLevel',
 	    get: function get() {
-	      return this.levelController.nextLoadLevel();
+	      return this.levelController.nextLoadLevel;
 	    }
 
 	    /** set quality level of next loaded fragment **/
 
 	    , set: function set(level) {
-	      this.levelController.level = level;
+	      this.levelController.nextLoadLevel = level;
 	    }
 
 	    /** Return first level (index of first level referenced in manifest)
@@ -13787,7 +15965,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Hls;
 
 /***/ },
-/* 74 */
+/* 80 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -13866,7 +16044,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 75 */
+/* 81 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -13925,7 +16103,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 76 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13946,21 +16124,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _events = __webpack_require__(74);
+	var _events = __webpack_require__(80);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = __webpack_require__(77);
+	var _eventHandler = __webpack_require__(83);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _errors = __webpack_require__(75);
+	var _errors = __webpack_require__(81);
 
-	var _url = __webpack_require__(78);
+	var _url = __webpack_require__(84);
 
 	var _url2 = _interopRequireDefault(_url);
 
-	var _attrList = __webpack_require__(79);
+	var _attrList = __webpack_require__(85);
 
 	var _attrList2 = _interopRequireDefault(_attrList);
 
@@ -14292,7 +16470,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = PlaylistLoader;
 
 /***/ },
-/* 77 */
+/* 83 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -14411,7 +16589,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = EventHandler;
 
 /***/ },
-/* 78 */
+/* 84 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -14494,7 +16672,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = URLHelper;
 
 /***/ },
-/* 79 */
+/* 85 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -14616,7 +16794,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = AttrList;
 
 /***/ },
-/* 80 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14637,15 +16815,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _events = __webpack_require__(74);
+	var _events = __webpack_require__(80);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = __webpack_require__(77);
+	var _eventHandler = __webpack_require__(83);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _errors = __webpack_require__(75);
+	var _errors = __webpack_require__(81);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -14738,7 +16916,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = FragmentLoader;
 
 /***/ },
-/* 81 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14759,13 +16937,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _events = __webpack_require__(74);
+	var _events = __webpack_require__(80);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = __webpack_require__(77);
+	var _eventHandler = __webpack_require__(83);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
+
+	var _bufferHelper = __webpack_require__(88);
+
+	var _bufferHelper2 = _interopRequireDefault(_bufferHelper);
+
+	var _errors = __webpack_require__(81);
+
+	var _logger = __webpack_require__(89);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -14789,7 +16975,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 	} /*
 	   * simple ABR Controller
-	  */
+	   *  - compute next level based on last fragment bw heuristics
+	   *  - implement an abandon rules triggered if we have less than 2 frag buffered and if computed bw shows that we risk buffer stalling
+	   */
 
 	var AbrController = function (_EventHandler) {
 	  _inherits(AbrController, _EventHandler);
@@ -14797,18 +16985,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function AbrController(hls) {
 	    _classCallCheck(this, AbrController);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AbrController).call(this, hls, _events2.default.FRAG_LOAD_PROGRESS));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AbrController).call(this, hls, _events2.default.FRAG_LOADING, _events2.default.FRAG_LOAD_PROGRESS, _events2.default.FRAG_LOADED, _events2.default.ERROR));
 
-	    _this.lastfetchlevel = 0;
+	    _this.lastLoadedFragLevel = 0;
 	    _this._autoLevelCapping = -1;
 	    _this._nextAutoLevel = -1;
+	    _this.hls = hls;
+	    _this.onCheck = _this.abandonRulesCheck.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(AbrController, [{
 	    key: 'destroy',
 	    value: function destroy() {
+	      this.clearTimer();
 	      _eventHandler2.default.prototype.destroy.call(this);
+	    }
+	  }, {
+	    key: 'onFragLoading',
+	    value: function onFragLoading(data) {
+	      this.timer = setInterval(this.onCheck, 100);
+	      this.fragCurrent = data.frag;
 	    }
 	  }, {
 	    key: 'onFragLoadProgress',
@@ -14819,9 +17016,100 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // and leading to wrong bw estimation
 	      if (stats.aborted === undefined && data.frag.loadCounter === 1) {
 	        this.lastfetchduration = (performance.now() - stats.trequest) / 1000;
-	        this.lastfetchlevel = data.frag.level;
 	        this.lastbw = stats.loaded * 8 / this.lastfetchduration;
 	        //console.log(`fetchDuration:${this.lastfetchduration},bw:${(this.lastbw/1000).toFixed(0)}/${stats.aborted}`);
+	      }
+	    }
+	  }, {
+	    key: 'abandonRulesCheck',
+	    value: function abandonRulesCheck() {
+	      /*
+	        monitor fragment retrieval time...
+	        we compute expected time of arrival of the complete fragment.
+	        we compare it to expected time of buffer starvation
+	      */
+	      var hls = this.hls,
+	          v = hls.media,
+	          frag = this.fragCurrent;
+	      /* only monitor frag retrieval time if
+	      (video not paused OR first fragment being loaded(ready state === HAVE_NOTHING = 0)) AND autoswitching enabled AND not lowest level (=> means that we have several levels) */
+	      if (v && (!v.paused || !v.readyState) && frag.autoLevel && frag.level) {
+	        var requestDelay = performance.now() - frag.trequest;
+	        // monitor fragment load progress after half of expected fragment duration,to stabilize bitrate
+	        if (requestDelay > 500 * frag.duration) {
+	          var loadRate = Math.max(1, frag.loaded * 1000 / requestDelay); // byte/s; at least 1 byte/s to avoid division by zero
+	          if (frag.expectedLen < frag.loaded) {
+	            frag.expectedLen = frag.loaded;
+	          }
+	          var pos = v.currentTime;
+	          var fragLoadedDelay = (frag.expectedLen - frag.loaded) / loadRate;
+	          var bufferStarvationDelay = _bufferHelper2.default.bufferInfo(v, pos, hls.config.maxBufferHole).end - pos;
+	          // consider emergency switch down only if we have less than 2 frag buffered AND
+	          // time to finish loading current fragment is bigger than buffer starvation delay
+	          // ie if we risk buffer starvation if bw does not increase quickly
+	          if (bufferStarvationDelay < 2 * frag.duration && fragLoadedDelay > bufferStarvationDelay) {
+	            var fragLevelNextLoadedDelay = undefined,
+	                nextLoadLevel = undefined;
+	            // lets iterate through lower level and try to find the biggest one that could avoid rebuffering
+	            // we start from current level - 1 and we step down , until we find a matching level
+	            for (nextLoadLevel = frag.level - 1; nextLoadLevel >= 0; nextLoadLevel--) {
+	              // compute time to load next fragment at lower level
+	              // 0.8 : consider only 80% of current bw to be conservative
+	              // 8 = bits per byte (bps/Bps)
+	              fragLevelNextLoadedDelay = frag.duration * hls.levels[nextLoadLevel].bitrate / (8 * 0.8 * loadRate);
+	              _logger.logger.log('fragLoadedDelay/bufferStarvationDelay/fragLevelNextLoadedDelay[' + nextLoadLevel + '] :' + fragLoadedDelay.toFixed(1) + '/' + bufferStarvationDelay.toFixed(1) + '/' + fragLevelNextLoadedDelay.toFixed(1));
+	              if (fragLevelNextLoadedDelay < bufferStarvationDelay) {
+	                // we found a lower level that be rebuffering free with current estimated bw !
+	                break;
+	              }
+	            }
+	            // only emergency switch down if it takes less time to load new fragment at lowest level instead
+	            // of finishing loading current one ...
+	            if (fragLevelNextLoadedDelay < fragLoadedDelay) {
+	              // ensure nextLoadLevel is not negative
+	              nextLoadLevel = Math.max(0, nextLoadLevel);
+	              // force next load level in auto mode
+	              hls.nextLoadLevel = nextLoadLevel;
+	              // abort fragment loading ...
+	              _logger.logger.warn('loading too slow, abort fragment loading and switch to level ' + nextLoadLevel);
+	              //abort fragment loading
+	              frag.loader.abort();
+	              this.clearTimer();
+	              hls.trigger(_events2.default.FRAG_LOAD_EMERGENCY_ABORTED, { frag: frag });
+	            }
+	          }
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'onFragLoaded',
+	    value: function onFragLoaded(data) {
+	      // stop monitoring bw once frag loaded
+	      this.clearTimer();
+	      // store level id after successful fragment load
+	      this.lastLoadedFragLevel = data.frag.level;
+	      // reset forced auto level value so that next level will be selected
+	      this._nextAutoLevel = -1;
+	    }
+	  }, {
+	    key: 'onError',
+	    value: function onError(data) {
+	      // stop timer in case of frag loading error
+	      switch (data.details) {
+	        case _errors.ErrorDetails.FRAG_LOAD_ERROR:
+	        case _errors.ErrorDetails.FRAG_LOAD_TIMEOUT:
+	          this.clearTimer();
+	          break;
+	        default:
+	          break;
+	      }
+	    }
+	  }, {
+	    key: 'clearTimer',
+	    value: function clearTimer() {
+	      if (this.timer) {
+	        clearInterval(this.timer);
+	        this.timer = null;
 	      }
 	    }
 
@@ -14852,13 +17140,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        maxAutoLevel = this._autoLevelCapping;
 	      }
 
+	      // in case next auto level has been forced, return it straight-away (but capped)
 	      if (this._nextAutoLevel !== -1) {
-	        var nextLevel = Math.min(this._nextAutoLevel, maxAutoLevel);
-	        if (nextLevel === this.lastfetchlevel) {
-	          this._nextAutoLevel = -1;
-	        } else {
-	          return nextLevel;
-	        }
+	        return Math.min(this._nextAutoLevel, maxAutoLevel);
 	      }
 
 	      // follow algorithm captured from stagefright :
@@ -14868,7 +17152,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // consider only 80% of the available bandwidth, but if we are switching up,
 	        // be even more conservative (70%) to avoid overestimating and immediately
 	        // switching back.
-	        if (i <= this.lastfetchlevel) {
+	        if (i <= this.lastLoadedFragLevel) {
 	          adjustedbw = 0.8 * lastbw;
 	        } else {
 	          adjustedbw = 0.7 * lastbw;
@@ -14890,7 +17174,217 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = AbrController;
 
 /***/ },
-/* 82 */
+/* 88 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	var _createClass = function () {
+	  function defineProperties(target, props) {
+	    for (var i = 0; i < props.length; i++) {
+	      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+	    }
+	  }return function (Constructor, protoProps, staticProps) {
+	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+	  };
+	}();
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	function _classCallCheck(instance, Constructor) {
+	  if (!(instance instanceof Constructor)) {
+	    throw new TypeError("Cannot call a class as a function");
+	  }
+	}
+
+	/**
+	 * Buffer Helper class, providing methods dealing buffer length retrieval
+	*/
+
+	var BufferHelper = function () {
+	  function BufferHelper() {
+	    _classCallCheck(this, BufferHelper);
+	  }
+
+	  _createClass(BufferHelper, null, [{
+	    key: "bufferInfo",
+	    value: function bufferInfo(media, pos, maxHoleDuration) {
+	      if (media) {
+	        var vbuffered = media.buffered,
+	            buffered = [],
+	            i;
+	        for (i = 0; i < vbuffered.length; i++) {
+	          buffered.push({ start: vbuffered.start(i), end: vbuffered.end(i) });
+	        }
+	        return this.bufferedInfo(buffered, pos, maxHoleDuration);
+	      } else {
+	        return { len: 0, start: 0, end: 0, nextStart: undefined };
+	      }
+	    }
+	  }, {
+	    key: "bufferedInfo",
+	    value: function bufferedInfo(buffered, pos, maxHoleDuration) {
+	      var buffered2 = [],
+
+
+	      // bufferStart and bufferEnd are buffer boundaries around current video position
+	      bufferLen,
+	          bufferStart,
+	          bufferEnd,
+	          bufferStartNext,
+	          i;
+	      // sort on buffer.start/smaller end (IE does not always return sorted buffered range)
+	      buffered.sort(function (a, b) {
+	        var diff = a.start - b.start;
+	        if (diff) {
+	          return diff;
+	        } else {
+	          return b.end - a.end;
+	        }
+	      });
+	      // there might be some small holes between buffer time range
+	      // consider that holes smaller than maxHoleDuration are irrelevant and build another
+	      // buffer time range representations that discards those holes
+	      for (i = 0; i < buffered.length; i++) {
+	        var buf2len = buffered2.length;
+	        if (buf2len) {
+	          var buf2end = buffered2[buf2len - 1].end;
+	          // if small hole (value between 0 or maxHoleDuration ) or overlapping (negative)
+	          if (buffered[i].start - buf2end < maxHoleDuration) {
+	            // merge overlapping time ranges
+	            // update lastRange.end only if smaller than item.end
+	            // e.g.  [ 1, 15] with  [ 2,8] => [ 1,15] (no need to modify lastRange.end)
+	            // whereas [ 1, 8] with  [ 2,15] => [ 1,15] ( lastRange should switch from [1,8] to [1,15])
+	            if (buffered[i].end > buf2end) {
+	              buffered2[buf2len - 1].end = buffered[i].end;
+	            }
+	          } else {
+	            // big hole
+	            buffered2.push(buffered[i]);
+	          }
+	        } else {
+	          // first value
+	          buffered2.push(buffered[i]);
+	        }
+	      }
+	      for (i = 0, bufferLen = 0, bufferStart = bufferEnd = pos; i < buffered2.length; i++) {
+	        var start = buffered2[i].start,
+	            end = buffered2[i].end;
+	        //logger.log('buf start/end:' + buffered.start(i) + '/' + buffered.end(i));
+	        if (pos + maxHoleDuration >= start && pos < end) {
+	          // play position is inside this buffer TimeRange, retrieve end of buffer position and buffer length
+	          bufferStart = start;
+	          bufferEnd = end;
+	          bufferLen = bufferEnd - pos;
+	        } else if (pos + maxHoleDuration < start) {
+	          bufferStartNext = start;
+	          break;
+	        }
+	      }
+	      return { len: bufferLen, start: bufferStart, end: bufferEnd, nextStart: bufferStartNext };
+	    }
+	  }]);
+
+	  return BufferHelper;
+	}();
+
+	exports.default = BufferHelper;
+
+/***/ },
+/* 89 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+	  return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	} : function (obj) {
+	  return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	};
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	function noop() {}
+
+	var fakeLogger = {
+	  trace: noop,
+	  debug: noop,
+	  log: noop,
+	  warn: noop,
+	  info: noop,
+	  error: noop
+	};
+
+	var exportedLogger = fakeLogger;
+
+	//let lastCallTime;
+	// function formatMsgWithTimeInfo(type, msg) {
+	//   const now = Date.now();
+	//   const diff = lastCallTime ? '+' + (now - lastCallTime) : '0';
+	//   lastCallTime = now;
+	//   msg = (new Date(now)).toISOString() + ' | [' +  type + '] > ' + msg + ' ( ' + diff + ' ms )';
+	//   return msg;
+	// }
+
+	function formatMsg(type, msg) {
+	  msg = '[' + type + '] > ' + msg;
+	  return msg;
+	}
+
+	function consolePrintFn(type) {
+	  var func = window.console[type];
+	  if (func) {
+	    return function () {
+	      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	        args[_key] = arguments[_key];
+	      }
+
+	      if (args[0]) {
+	        args[0] = formatMsg(type, args[0]);
+	      }
+	      func.apply(window.console, args);
+	    };
+	  }
+	  return noop;
+	}
+
+	function exportLoggerFunctions(debugConfig) {
+	  for (var _len2 = arguments.length, functions = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+	    functions[_key2 - 1] = arguments[_key2];
+	  }
+
+	  functions.forEach(function (type) {
+	    exportedLogger[type] = debugConfig[type] ? debugConfig[type].bind(debugConfig) : consolePrintFn(type);
+	  });
+	}
+
+	var enableLogs = exports.enableLogs = function enableLogs(debugConfig) {
+	  if (debugConfig === true || (typeof debugConfig === 'undefined' ? 'undefined' : _typeof(debugConfig)) === 'object') {
+	    exportLoggerFunctions(debugConfig,
+	    // Remove out from list here to hard-disable a log-level
+	    //'trace',
+	    'debug', 'log', 'info', 'warn', 'error');
+	    // Some browsers don't allow to use bind on console object anyway
+	    // fallback to default if needed
+	    try {
+	      exportedLogger.log();
+	    } catch (e) {
+	      exportedLogger = fakeLogger;
+	    }
+	  } else {
+	    exportedLogger = fakeLogger;
+	  }
+	};
+
+	var logger = exports.logger = exportedLogger;
+
+/***/ },
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14911,17 +17405,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _events = __webpack_require__(74);
+	var _events = __webpack_require__(80);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = __webpack_require__(77);
+	var _eventHandler = __webpack_require__(83);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _logger = __webpack_require__(83);
+	var _logger = __webpack_require__(89);
 
-	var _errors = __webpack_require__(75);
+	var _errors = __webpack_require__(81);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -15008,6 +17502,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.mediaSource = null;
 	        this.media = null;
 	        this.pendingTracks = null;
+	        this.sourceBuffer = null;
 	      }
 	      this.onmso = this.onmse = this.onmsc = null;
 	      this.hls.trigger(_events2.default.MEDIA_DETACHED);
@@ -15309,98 +17804,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = BufferController;
 
 /***/ },
-/* 83 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
-	  return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
-	} : function (obj) {
-	  return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
-	};
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	function noop() {}
-
-	var fakeLogger = {
-	  trace: noop,
-	  debug: noop,
-	  log: noop,
-	  warn: noop,
-	  info: noop,
-	  error: noop
-	};
-
-	var exportedLogger = fakeLogger;
-
-	//let lastCallTime;
-	// function formatMsgWithTimeInfo(type, msg) {
-	//   const now = Date.now();
-	//   const diff = lastCallTime ? '+' + (now - lastCallTime) : '0';
-	//   lastCallTime = now;
-	//   msg = (new Date(now)).toISOString() + ' | [' +  type + '] > ' + msg + ' ( ' + diff + ' ms )';
-	//   return msg;
-	// }
-
-	function formatMsg(type, msg) {
-	  msg = '[' + type + '] > ' + msg;
-	  return msg;
-	}
-
-	function consolePrintFn(type) {
-	  var func = window.console[type];
-	  if (func) {
-	    return function () {
-	      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	        args[_key] = arguments[_key];
-	      }
-
-	      if (args[0]) {
-	        args[0] = formatMsg(type, args[0]);
-	      }
-	      func.apply(window.console, args);
-	    };
-	  }
-	  return noop;
-	}
-
-	function exportLoggerFunctions(debugConfig) {
-	  for (var _len2 = arguments.length, functions = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-	    functions[_key2 - 1] = arguments[_key2];
-	  }
-
-	  functions.forEach(function (type) {
-	    exportedLogger[type] = debugConfig[type] ? debugConfig[type].bind(debugConfig) : consolePrintFn(type);
-	  });
-	}
-
-	var enableLogs = exports.enableLogs = function enableLogs(debugConfig) {
-	  if (debugConfig === true || (typeof debugConfig === 'undefined' ? 'undefined' : _typeof(debugConfig)) === 'object') {
-	    exportLoggerFunctions(debugConfig,
-	    // Remove out from list here to hard-disable a log-level
-	    //'trace',
-	    'debug', 'log', 'info', 'warn', 'error');
-	    // Some browsers don't allow to use bind on console object anyway
-	    // fallback to default if needed
-	    try {
-	      exportedLogger.log();
-	    } catch (e) {
-	      exportedLogger = fakeLogger;
-	    }
-	  } else {
-	    exportedLogger = fakeLogger;
-	  }
-	};
-
-	var logger = exports.logger = exportedLogger;
-
-/***/ },
-/* 84 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15421,29 +17825,203 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _demuxer = __webpack_require__(85);
-
-	var _demuxer2 = _interopRequireDefault(_demuxer);
-
-	var _events = __webpack_require__(74);
+	var _events = __webpack_require__(80);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = __webpack_require__(77);
+	var _eventHandler = __webpack_require__(83);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _logger = __webpack_require__(83);
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { default: obj };
+	}
 
-	var _binarySearch = __webpack_require__(101);
+	function _classCallCheck(instance, Constructor) {
+	  if (!(instance instanceof Constructor)) {
+	    throw new TypeError("Cannot call a class as a function");
+	  }
+	}
+
+	function _possibleConstructorReturn(self, call) {
+	  if (!self) {
+	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+	  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+	}
+
+	function _inherits(subClass, superClass) {
+	  if (typeof superClass !== "function" && superClass !== null) {
+	    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+	} /*
+	   * cap stream level to media size dimension controller
+	  */
+
+	var CapLevelController = function (_EventHandler) {
+	  _inherits(CapLevelController, _EventHandler);
+
+	  function CapLevelController(hls) {
+	    _classCallCheck(this, CapLevelController);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(CapLevelController).call(this, hls, _events2.default.MEDIA_ATTACHING, _events2.default.MANIFEST_PARSED));
+	  }
+
+	  _createClass(CapLevelController, [{
+	    key: 'destroy',
+	    value: function destroy() {
+	      if (this.hls.config.capLevelToPlayerSize) {
+	        this.media = null;
+	        this.autoLevelCapping = Number.POSITIVE_INFINITY;
+	        if (this.timer) {
+	          this.timer = clearInterval(this.timer);
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'onMediaAttaching',
+	    value: function onMediaAttaching(data) {
+	      this.media = data.media instanceof HTMLVideoElement ? data.media : null;
+	    }
+	  }, {
+	    key: 'onManifestParsed',
+	    value: function onManifestParsed(data) {
+	      if (this.hls.config.capLevelToPlayerSize) {
+	        this.autoLevelCapping = Number.POSITIVE_INFINITY;
+	        this.levels = data.levels;
+	        this.hls.firstLevel = this.getMaxLevel(data.firstLevel);
+	        clearInterval(this.timer);
+	        this.timer = setInterval(this.detectPlayerSize.bind(this), 1000);
+	        this.detectPlayerSize();
+	      }
+	    }
+	  }, {
+	    key: 'detectPlayerSize',
+	    value: function detectPlayerSize() {
+	      if (this.media) {
+	        var levelsLength = this.levels ? this.levels.length : 0;
+	        if (levelsLength) {
+	          this.hls.autoLevelCapping = this.getMaxLevel(levelsLength - 1);
+	          if (this.hls.autoLevelCapping > this.autoLevelCapping) {
+	            // if auto level capping has a higher value for the previous one, flush the buffer using nextLevelSwitch
+	            // usually happen when the user go to the fullscreen mode.
+	            this.hls.streamController.nextLevelSwitch();
+	          }
+	          this.autoLevelCapping = this.hls.autoLevelCapping;
+	        }
+	      }
+	    }
+
+	    /*
+	    * returns level should be the one with the dimensions equal or greater than the media (player) dimensions (so the video will be downscaled)
+	    */
+
+	  }, {
+	    key: 'getMaxLevel',
+	    value: function getMaxLevel(capLevelIndex) {
+	      var result = undefined,
+	          i = undefined,
+	          level = undefined,
+	          mWidth = this.mediaWidth,
+	          mHeight = this.mediaHeight,
+	          lWidth = 0,
+	          lHeight = 0;
+
+	      for (i = 0; i <= capLevelIndex; i++) {
+	        level = this.levels[i];
+	        result = i;
+	        lWidth = level.width;
+	        lHeight = level.height;
+	        if (mWidth <= lWidth || mHeight <= lHeight) {
+	          break;
+	        }
+	      }
+	      return result;
+	    }
+	  }, {
+	    key: 'contentScaleFactor',
+	    get: function get() {
+	      var pixelRatio = 1;
+	      try {
+	        pixelRatio = window.devicePixelRatio;
+	      } catch (e) {}
+	      return pixelRatio;
+	    }
+	  }, {
+	    key: 'mediaWidth',
+	    get: function get() {
+	      var width = undefined;
+	      if (this.media) {
+	        width = this.media.width || this.media.clientWidth || this.media.offsetWidth;
+	        width *= this.contentScaleFactor;
+	      }
+	      return width;
+	    }
+	  }, {
+	    key: 'mediaHeight',
+	    get: function get() {
+	      var height = undefined;
+	      if (this.media) {
+	        height = this.media.height || this.media.clientHeight || this.media.offsetHeight;
+	        height *= this.contentScaleFactor;
+	      }
+	      return height;
+	    }
+	  }]);
+
+	  return CapLevelController;
+	}(_eventHandler2.default);
+
+	exports.default = CapLevelController;
+
+/***/ },
+/* 92 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	var _createClass = function () {
+	  function defineProperties(target, props) {
+	    for (var i = 0; i < props.length; i++) {
+	      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+	    }
+	  }return function (Constructor, protoProps, staticProps) {
+	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+	  };
+	}();
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _demuxer = __webpack_require__(93);
+
+	var _demuxer2 = _interopRequireDefault(_demuxer);
+
+	var _events = __webpack_require__(80);
+
+	var _events2 = _interopRequireDefault(_events);
+
+	var _eventHandler = __webpack_require__(83);
+
+	var _eventHandler2 = _interopRequireDefault(_eventHandler);
+
+	var _logger = __webpack_require__(89);
+
+	var _binarySearch = __webpack_require__(109);
 
 	var _binarySearch2 = _interopRequireDefault(_binarySearch);
 
-	var _levelHelper = __webpack_require__(102);
+	var _bufferHelper = __webpack_require__(88);
+
+	var _bufferHelper2 = _interopRequireDefault(_bufferHelper);
+
+	var _levelHelper = __webpack_require__(110);
 
 	var _levelHelper2 = _interopRequireDefault(_levelHelper);
 
-	var _errors = __webpack_require__(75);
+	var _errors = __webpack_require__(81);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -15470,7 +18048,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  */
 
 	var State = {
-	  ERROR: 'ERROR',
+	  STOPPED: 'STOPPED',
 	  STARTING: 'STARTING',
 	  IDLE: 'IDLE',
 	  PAUSED: 'PAUSED',
@@ -15480,7 +18058,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  WAITING_LEVEL: 'WAITING_LEVEL',
 	  PARSING: 'PARSING',
 	  PARSED: 'PARSED',
-	  ENDED: 'ENDED'
+	  ENDED: 'ENDED',
+	  ERROR: 'ERROR'
 	};
 
 	var StreamController = function (_EventHandler) {
@@ -15489,7 +18068,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function StreamController(hls) {
 	    _classCallCheck(this, StreamController);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(StreamController).call(this, hls, _events2.default.MEDIA_ATTACHED, _events2.default.MEDIA_DETACHING, _events2.default.MANIFEST_PARSED, _events2.default.LEVEL_LOADED, _events2.default.KEY_LOADED, _events2.default.FRAG_LOADED, _events2.default.FRAG_PARSING_INIT_SEGMENT, _events2.default.FRAG_PARSING_DATA, _events2.default.FRAG_PARSED, _events2.default.ERROR, _events2.default.BUFFER_APPENDED, _events2.default.BUFFER_FLUSHED));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(StreamController).call(this, hls, _events2.default.MEDIA_ATTACHED, _events2.default.MEDIA_DETACHING, _events2.default.MANIFEST_LOADING, _events2.default.MANIFEST_PARSED, _events2.default.LEVEL_LOADED, _events2.default.KEY_LOADED, _events2.default.FRAG_LOADED, _events2.default.FRAG_LOAD_EMERGENCY_ABORTED, _events2.default.FRAG_PARSING_INIT_SEGMENT, _events2.default.FRAG_PARSING_DATA, _events2.default.FRAG_PARSED, _events2.default.ERROR, _events2.default.BUFFER_APPENDED, _events2.default.BUFFER_FLUSHED));
 
 	    _this.config = hls.config;
 	    _this.audioCodecSwap = false;
@@ -15501,19 +18080,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(StreamController, [{
 	    key: 'destroy',
 	    value: function destroy() {
-	      this.stop();
+	      this.stopLoad();
+	      if (this.timer) {
+	        clearInterval(this.timer);
+	        this.timer = null;
+	      }
 	      _eventHandler2.default.prototype.destroy.call(this);
-	      this.state = State.IDLE;
+	      this.state = State.STOPPED;
 	    }
 	  }, {
 	    key: 'startLoad',
 	    value: function startLoad() {
+	      var startPosition = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
 	      if (this.levels) {
 	        var media = this.media,
 	            lastCurrentTime = this.lastCurrentTime;
-	        this.stop();
+	        this.stopLoad();
 	        this.demuxer = new _demuxer2.default(this.hls);
-	        this.timer = setInterval(this.ontick, 100);
+	        if (!this.timer) {
+	          this.timer = setInterval(this.ontick, 100);
+	        }
 	        this.level = -1;
 	        this.fragLoadError = 0;
 	        if (media && lastCurrentTime) {
@@ -15524,20 +18111,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 	          this.state = State.IDLE;
 	        } else {
-	          this.lastCurrentTime = this.startPosition ? this.startPosition : 0;
+	          this.lastCurrentTime = this.startPosition ? this.startPosition : startPosition;
 	          this.state = State.STARTING;
 	        }
 	        this.nextLoadPosition = this.startPosition = this.lastCurrentTime;
 	        this.tick();
 	      } else {
 	        _logger.logger.warn('cannot start loading as manifest not parsed yet');
+	        this.state = State.STOPPED;
 	      }
 	    }
 	  }, {
-	    key: 'stop',
-	    value: function stop() {
-	      this.bufferRange = [];
-	      this.stalled = false;
+	    key: 'stopLoad',
+	    value: function stopLoad() {
 	      var frag = this.fragCurrent;
 	      if (frag) {
 	        if (frag.loader) {
@@ -15546,16 +18132,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.fragCurrent = null;
 	      }
 	      this.fragPrevious = null;
-	      _logger.logger.log('trigger BUFFER_RESET');
-	      this.hls.trigger(_events2.default.BUFFER_RESET);
-	      if (this.timer) {
-	        clearInterval(this.timer);
-	        this.timer = null;
-	      }
 	      if (this.demuxer) {
 	        this.demuxer.destroy();
 	        this.demuxer = null;
 	      }
+	      this.state = State.STOPPED;
 	    }
 	  }, {
 	    key: 'tick',
@@ -15572,6 +18153,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'doTick',
 	    value: function doTick() {
+	      var _this2 = this;
+
 	      var pos,
 	          level,
 	          levelDetails,
@@ -15621,7 +18204,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // we are not at playback start, get next load level from level Controller
 	            level = hls.nextLoadLevel;
 	          }
-	          var bufferInfo = this.bufferInfo(pos, config.maxBufferHole),
+	          var bufferInfo = _bufferHelper2.default.bufferInfo(this.media, pos, config.maxBufferHole),
 	              bufferLen = bufferInfo.len,
 	              bufferEnd = bufferInfo.end,
 	              fragPrevious = this.fragPrevious,
@@ -15651,7 +18234,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                fragLen = fragments.length,
 	                start = fragments[0].start,
 	                end = fragments[fragLen - 1].start + fragments[fragLen - 1].duration,
-	                _frag = undefined;
+	                frag = undefined;
 
 	            // in case of live playlist we need to ensure that requested position is not located before playlist start
 	            if (levelDetails.live) {
@@ -15673,72 +18256,89 @@ return /******/ (function(modules) { // webpackBootstrap
 	                if (fragPrevious) {
 	                  var targetSN = fragPrevious.sn + 1;
 	                  if (targetSN >= levelDetails.startSN && targetSN <= levelDetails.endSN) {
-	                    _frag = fragments[targetSN - levelDetails.startSN];
-	                    _logger.logger.log('live playlist, switching playlist, load frag with next SN: ' + _frag.sn);
+	                    frag = fragments[targetSN - levelDetails.startSN];
+	                    _logger.logger.log('live playlist, switching playlist, load frag with next SN: ' + frag.sn);
 	                  }
 	                }
-	                if (!_frag) {
+	                if (!frag) {
 	                  /* we have no idea about which fragment should be loaded.
 	                     so let's load mid fragment. it will help computing playlist sliding and find the right one
 	                  */
-	                  _frag = fragments[Math.min(fragLen - 1, Math.round(fragLen / 2))];
-	                  _logger.logger.log('live playlist, switching playlist, unknown, load middle frag : ' + _frag.sn);
+	                  frag = fragments[Math.min(fragLen - 1, Math.round(fragLen / 2))];
+	                  _logger.logger.log('live playlist, switching playlist, unknown, load middle frag : ' + frag.sn);
 	                }
 	              }
 	            } else {
 	              // VoD playlist: if bufferEnd before start of playlist, load first fragment
 	              if (bufferEnd < start) {
-	                _frag = fragments[0];
+	                frag = fragments[0];
 	              }
 	            }
-	            if (!_frag) {
-	              var foundFrag;
-	              if (bufferEnd < end) {
-	                foundFrag = _binarySearch2.default.search(fragments, function (candidate) {
-	                  //logger.log(`level/sn/start/end/bufEnd:${level}/${candidate.sn}/${candidate.start}/${(candidate.start+candidate.duration)}/${bufferEnd}`);
-	                  // offset should be within fragment boundary
-	                  if (candidate.start + candidate.duration <= bufferEnd) {
-	                    return 1;
-	                  } else if (candidate.start > bufferEnd) {
-	                    return -1;
+	            if (!frag) {
+	              (function () {
+	                var foundFrag = undefined;
+	                var maxFragLookUpTolerance = config.maxFragLookUpTolerance;
+	                if (bufferEnd < end) {
+	                  if (bufferEnd > end - maxFragLookUpTolerance) {
+	                    maxFragLookUpTolerance = 0;
 	                  }
-	                  return 0;
-	                });
-	              } else {
-	                // reach end of playlist
-	                foundFrag = fragments[fragLen - 1];
-	              }
-	              if (foundFrag) {
-	                _frag = foundFrag;
-	                start = foundFrag.start;
-	                //logger.log('find SN matching with pos:' +  bufferEnd + ':' + frag.sn);
-	                if (fragPrevious && _frag.level === fragPrevious.level && _frag.sn === fragPrevious.sn) {
-	                  if (_frag.sn < levelDetails.endSN) {
-	                    _frag = fragments[_frag.sn + 1 - levelDetails.startSN];
-	                    _logger.logger.log('SN just loaded, load next one: ' + _frag.sn);
-	                  } else {
-	                    // have we reached end of VOD playlist ?
-	                    if (!levelDetails.live) {
-	                      this.hls.trigger(_events2.default.BUFFER_EOS);
-	                      this.state = State.ENDED;
+	                  foundFrag = _binarySearch2.default.search(fragments, function (candidate) {
+	                    // offset should be within fragment boundary - config.maxFragLookUpTolerance
+	                    // this is to cope with situations like
+	                    // bufferEnd = 9.991
+	                    // frag[Ø] : [0,10]
+	                    // frag[1] : [10,20]
+	                    // bufferEnd is within frag[0] range ... although what we are expecting is to return frag[1] here
+	                    //              frag start               frag start+duration
+	                    //                  |-----------------------------|
+	                    //              <--->                         <--->
+	                    //  ...--------><-----------------------------><---------....
+	                    // previous frag         matching fragment         next frag
+	                    //  return -1             return 0                 return 1
+	                    //logger.log(`level/sn/start/end/bufEnd:${level}/${candidate.sn}/${candidate.start}/${(candidate.start+candidate.duration)}/${bufferEnd}`);
+	                    if (candidate.start + candidate.duration - maxFragLookUpTolerance <= bufferEnd) {
+	                      return 1;
+	                    } else if (candidate.start - maxFragLookUpTolerance > bufferEnd) {
+	                      return -1;
 	                    }
-	                    _frag = null;
+	                    return 0;
+	                  });
+	                } else {
+	                  // reach end of playlist
+	                  foundFrag = fragments[fragLen - 1];
+	                }
+	                if (foundFrag) {
+	                  frag = foundFrag;
+	                  start = foundFrag.start;
+	                  //logger.log('find SN matching with pos:' +  bufferEnd + ':' + frag.sn);
+	                  if (fragPrevious && frag.level === fragPrevious.level && frag.sn === fragPrevious.sn) {
+	                    if (frag.sn < levelDetails.endSN) {
+	                      frag = fragments[frag.sn + 1 - levelDetails.startSN];
+	                      _logger.logger.log('SN just loaded, load next one: ' + frag.sn);
+	                    } else {
+	                      // have we reached end of VOD playlist ?
+	                      if (!levelDetails.live) {
+	                        _this2.hls.trigger(_events2.default.BUFFER_EOS);
+	                        _this2.state = State.ENDED;
+	                      }
+	                      frag = null;
+	                    }
 	                  }
 	                }
-	              }
+	              })();
 	            }
-	            if (_frag) {
+	            if (frag) {
 	              //logger.log('      loading frag ' + i +',pos/bufEnd:' + pos.toFixed(3) + '/' + bufferEnd.toFixed(3));
-	              if (_frag.decryptdata.uri != null && _frag.decryptdata.key == null) {
-	                _logger.logger.log('Loading key for ' + _frag.sn + ' of [' + levelDetails.startSN + ' ,' + levelDetails.endSN + '],level ' + level);
+	              if (frag.decryptdata.uri != null && frag.decryptdata.key == null) {
+	                _logger.logger.log('Loading key for ' + frag.sn + ' of [' + levelDetails.startSN + ' ,' + levelDetails.endSN + '],level ' + level);
 	                this.state = State.KEY_LOADING;
-	                hls.trigger(_events2.default.KEY_LOADING, { frag: _frag });
+	                hls.trigger(_events2.default.KEY_LOADING, { frag: frag });
 	              } else {
-	                _logger.logger.log('Loading ' + _frag.sn + ' of [' + levelDetails.startSN + ' ,' + levelDetails.endSN + '],level ' + level + ', currentTime:' + pos + ',bufferEnd:' + bufferEnd.toFixed(3));
-	                _frag.autoLevel = hls.autoLevelEnabled;
+	                _logger.logger.log('Loading ' + frag.sn + ' of [' + levelDetails.startSN + ' ,' + levelDetails.endSN + '],level ' + level + ', currentTime:' + pos + ',bufferEnd:' + bufferEnd.toFixed(3));
+	                frag.autoLevel = hls.autoLevelEnabled;
 	                if (this.levels.length > 1) {
-	                  _frag.expectedLen = Math.round(_frag.duration * this.levels[level].bitrate / 8);
-	                  _frag.trequest = performance.now();
+	                  frag.expectedLen = Math.round(frag.duration * this.levels[level].bitrate / 8);
+	                  frag.trequest = performance.now();
 	                }
 	                // ensure that we are not reloading the same fragments in loop ...
 	                if (this.fragLoadIdx !== undefined) {
@@ -15746,21 +18346,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	                } else {
 	                  this.fragLoadIdx = 0;
 	                }
-	                if (_frag.loadCounter) {
-	                  _frag.loadCounter++;
+	                if (frag.loadCounter) {
+	                  frag.loadCounter++;
 	                  var maxThreshold = config.fragLoadingLoopThreshold;
 	                  // if this frag has already been loaded 3 times, and if it has been reloaded recently
-	                  if (_frag.loadCounter > maxThreshold && Math.abs(this.fragLoadIdx - _frag.loadIdx) < maxThreshold) {
-	                    hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.FRAG_LOOP_LOADING_ERROR, fatal: false, frag: _frag });
+	                  if (frag.loadCounter > maxThreshold && Math.abs(this.fragLoadIdx - frag.loadIdx) < maxThreshold) {
+	                    hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.FRAG_LOOP_LOADING_ERROR, fatal: false, frag: frag });
 	                    return;
 	                  }
 	                } else {
-	                  _frag.loadCounter = 1;
+	                  frag.loadCounter = 1;
 	                }
-	                _frag.loadIdx = this.fragLoadIdx;
-	                this.fragCurrent = _frag;
+	                frag.loadIdx = this.fragLoadIdx;
+	                this.fragCurrent = frag;
 	                this.startFragRequested = true;
-	                hls.trigger(_events2.default.FRAG_LOADING, { frag: _frag });
+	                hls.trigger(_events2.default.FRAG_LOADING, { frag: frag });
 	                this.state = State.FRAG_LOADING;
 	              }
 	            }
@@ -15771,43 +18371,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	          // check if playlist is already loaded
 	          if (level && level.details) {
 	            this.state = State.IDLE;
-	          }
-	          break;
-	        case State.FRAG_LOADING:
-	          /*
-	            monitor fragment retrieval time...
-	            we compute expected time of arrival of the complete fragment.
-	            we compare it to expected time of buffer starvation
-	          */
-	          var v = this.media,
-	              frag = this.fragCurrent;
-	          /* only monitor frag retrieval time if
-	          (video not paused OR first fragment being loaded) AND autoswitching enabled AND not lowest level AND multiple levels */
-	          if (v && (!v.paused || this.loadedmetadata === false) && frag.autoLevel && this.level && this.levels.length > 1) {
-	            var requestDelay = performance.now() - frag.trequest;
-	            // monitor fragment load progress after half of expected fragment duration,to stabilize bitrate
-	            if (requestDelay > 500 * frag.duration) {
-	              var loadRate = frag.loaded * 1000 / requestDelay; // byte/s
-	              if (frag.expectedLen < frag.loaded) {
-	                frag.expectedLen = frag.loaded;
-	              }
-	              pos = v.currentTime;
-	              var fragLoadedDelay = (frag.expectedLen - frag.loaded) / loadRate;
-	              var bufferStarvationDelay = this.bufferInfo(pos, config.maxBufferHole).end - pos;
-	              var fragLevelNextLoadedDelay = frag.duration * this.levels[hls.nextLoadLevel].bitrate / (8 * loadRate); //bps/Bps
-	              /* if we have less than 2 frag duration in buffer and if frag loaded delay is greater than buffer starvation delay
-	                ... and also bigger than duration needed to load fragment at next level ...*/
-	              if (bufferStarvationDelay < 2 * frag.duration && fragLoadedDelay > bufferStarvationDelay && fragLoadedDelay > fragLevelNextLoadedDelay) {
-	                // abort fragment loading ...
-	                _logger.logger.warn('loading too slow, abort fragment loading');
-	                _logger.logger.log('fragLoadedDelay/bufferStarvationDelay/fragLevelNextLoadedDelay :' + fragLoadedDelay.toFixed(1) + '/' + bufferStarvationDelay.toFixed(1) + '/' + fragLevelNextLoadedDelay.toFixed(1));
-	                //abort fragment loading
-	                frag.loader.abort();
-	                hls.trigger(_events2.default.FRAG_LOAD_EMERGENCY_ABORTED, { frag: frag });
-	                // switch back to IDLE state to request new fragment at lowest level
-	                this.state = State.IDLE;
-	              }
-	            }
 	          }
 	          break;
 	        case State.FRAG_LOADING_WAITING_RETRY:
@@ -15821,12 +18384,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.state = State.IDLE;
 	          }
 	          break;
+	        case State.STOPPED:
+	        case State.FRAG_LOADING:
 	        case State.PARSING:
-	          // nothing to do, wait for fragment being parsed
-	          break;
 	        case State.PARSED:
-	          // nothing to do, wait for all buffers to be appended
-	          break;
 	        case State.ENDED:
 	          break;
 	        default:
@@ -15836,84 +18397,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this._checkBuffer();
 	      // check/update current fragment
 	      this._checkFragmentChanged();
-	    }
-	  }, {
-	    key: 'bufferInfo',
-	    value: function bufferInfo(pos, maxHoleDuration) {
-	      var media = this.media;
-	      if (media) {
-	        var vbuffered = media.buffered,
-	            buffered = [],
-	            i;
-	        for (i = 0; i < vbuffered.length; i++) {
-	          buffered.push({ start: vbuffered.start(i), end: vbuffered.end(i) });
-	        }
-	        return this.bufferedInfo(buffered, pos, maxHoleDuration);
-	      } else {
-	        return { len: 0, start: 0, end: 0, nextStart: undefined };
-	      }
-	    }
-	  }, {
-	    key: 'bufferedInfo',
-	    value: function bufferedInfo(buffered, pos, maxHoleDuration) {
-	      var buffered2 = [],
-
-
-	      // bufferStart and bufferEnd are buffer boundaries around current video position
-	      bufferLen,
-	          bufferStart,
-	          bufferEnd,
-	          bufferStartNext,
-	          i;
-	      // sort on buffer.start/smaller end (IE does not always return sorted buffered range)
-	      buffered.sort(function (a, b) {
-	        var diff = a.start - b.start;
-	        if (diff) {
-	          return diff;
-	        } else {
-	          return b.end - a.end;
-	        }
-	      });
-	      // there might be some small holes between buffer time range
-	      // consider that holes smaller than maxHoleDuration are irrelevant and build another
-	      // buffer time range representations that discards those holes
-	      for (i = 0; i < buffered.length; i++) {
-	        var buf2len = buffered2.length;
-	        if (buf2len) {
-	          var buf2end = buffered2[buf2len - 1].end;
-	          // if small hole (value between 0 or maxHoleDuration ) or overlapping (negative)
-	          if (buffered[i].start - buf2end < maxHoleDuration) {
-	            // merge overlapping time ranges
-	            // update lastRange.end only if smaller than item.end
-	            // e.g.  [ 1, 15] with  [ 2,8] => [ 1,15] (no need to modify lastRange.end)
-	            // whereas [ 1, 8] with  [ 2,15] => [ 1,15] ( lastRange should switch from [1,8] to [1,15])
-	            if (buffered[i].end > buf2end) {
-	              buffered2[buf2len - 1].end = buffered[i].end;
-	            }
-	          } else {
-	            // big hole
-	            buffered2.push(buffered[i]);
-	          }
-	        } else {
-	          // first value
-	          buffered2.push(buffered[i]);
-	        }
-	      }
-	      for (i = 0, bufferLen = 0, bufferStart = bufferEnd = pos; i < buffered2.length; i++) {
-	        var start = buffered2[i].start,
-	            end = buffered2[i].end;
-	        //logger.log('buf start/end:' + buffered.start(i) + '/' + buffered.end(i));
-	        if (pos + maxHoleDuration >= start && pos < end) {
-	          // play position is inside this buffer TimeRange, retrieve end of buffer position and buffer length
-	          bufferStart = start;
-	          bufferEnd = end;
-	          bufferLen = bufferEnd - pos;
-	        } else if (pos + maxHoleDuration < start) {
-	          bufferStartNext = start;
-	          break;
-	        }
-	      }
-	      return { len: bufferLen, start: bufferStart, end: bufferEnd, nextStart: bufferStartNext };
 	    }
 	  }, {
 	    key: 'getBufferRange',
@@ -16095,7 +18578,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      media.addEventListener('seeked', this.onvseeked);
 	      media.addEventListener('ended', this.onvended);
 	      if (this.levels && this.config.autoStartLoad) {
-	        this.startLoad();
+	        this.hls.startLoad();
 	      }
 	    }
 	  }, {
@@ -16128,7 +18611,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      this.media = null;
 	      this.loadedmetadata = false;
-	      this.stop();
+	      this.stopLoad();
 	    }
 	  }, {
 	    key: 'onMediaSeeking',
@@ -16136,7 +18619,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.state === State.FRAG_LOADING) {
 	        // check if currently loaded fragment is inside buffer.
 	        //if outside, cancel fragment loading, otherwise do nothing
-	        if (this.bufferInfo(this.media.currentTime, this.config.maxBufferHole).len === 0) {
+	        if (_bufferHelper2.default.bufferInfo(this.media, this.media.currentTime, this.config.maxBufferHole).len === 0) {
 	          _logger.logger.log('seeking outside of buffer while fragment load in progress, cancel fragment load');
 	          var fragCurrent = this.fragCurrent;
 	          if (fragCurrent) {
@@ -16177,6 +18660,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.startPosition = this.lastCurrentTime = 0;
 	    }
 	  }, {
+	    key: 'onManifestLoading',
+	    value: function onManifestLoading() {
+	      // reset buffer on manifest loading
+	      _logger.logger.log('trigger BUFFER_RESET');
+	      this.hls.trigger(_events2.default.BUFFER_RESET);
+	      this.bufferRange = [];
+	      this.stalled = false;
+	    }
+	  }, {
 	    key: 'onManifestParsed',
 	    value: function onManifestParsed(data) {
 	      var aac = false,
@@ -16202,7 +18694,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.startLevelLoaded = false;
 	      this.startFragRequested = false;
 	      if (this.config.autoStartLoad) {
-	        this.startLoad();
+	        this.hls.startLoad();
 	      }
 	    }
 	  }, {
@@ -16391,7 +18883,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onFragParsingData',
 	    value: function onFragParsingData(data) {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      if (this.state === State.PARSING) {
 	        this.tparse2 = Date.now();
@@ -16406,7 +18898,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        [data.data1, data.data2].forEach(function (buffer) {
 	          if (buffer) {
-	            _this2.pendingAppending++;
+	            _this3.pendingAppending++;
 	            hls.trigger(_events2.default.BUFFER_APPENDING, { type: data.type, data: buffer });
 	          }
 	        });
@@ -16546,7 +19038,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            currentTime = targetSeekPosition;
 	            _logger.logger.log('target seek position:' + targetSeekPosition);
 	          }
-	          var bufferInfo = this.bufferInfo(currentTime, 0),
+	          var bufferInfo = _bufferHelper2.default.bufferInfo(media, currentTime, 0),
 	              expectedPlaying = !(media.paused || media.ended || media.seeking || readyState < 2),
 	              jumpThreshold = 0.4,
 
@@ -16555,6 +19047,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	          if (this.stalled && playheadMoving) {
 	            this.stalled = false;
+	            _logger.logger.log('playback not stuck anymore @' + currentTime);
 	          }
 	          // check buffer upfront
 	          // if less than 200ms is buffered, and media is expected to play but playhead is not moving,
@@ -16563,12 +19056,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (playheadMoving || !expectedPlaying) {
 	              // playhead moving or media not playing
 	              jumpThreshold = 0;
+	              this.seekHoleNudgeDuration = 0;
 	            } else {
 	              // playhead not moving AND media expected to play
-	              _logger.logger.log('playback seems stuck @' + currentTime);
 	              if (!this.stalled) {
+	                this.seekHoleNudgeDuration = 0;
+	                _logger.logger.log('playback seems stuck @' + currentTime);
 	                this.hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.BUFFER_STALLED_ERROR, fatal: false });
 	                this.stalled = true;
+	              } else {
+	                this.seekHoleNudgeDuration += this.config.seekHoleNudgeDuration;
 	              }
 	            }
 	            // if we are below threshold, try to jump if next buffer range is close
@@ -16579,8 +19076,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	              if (nextBufferStart && delta < this.config.maxSeekHole && delta > 0 && !media.seeking) {
 	                // next buffer is close ! adjust currentTime to nextBufferStart
 	                // this will ensure effective video decoding
-	                _logger.logger.log('adjust currentTime from ' + media.currentTime + ' to next buffered @ ' + nextBufferStart);
-	                media.currentTime = nextBufferStart;
+	                _logger.logger.log('adjust currentTime from ' + media.currentTime + ' to next buffered @ ' + nextBufferStart + ' + nudge ' + this.seekHoleNudgeDuration);
+	                media.currentTime = nextBufferStart + this.seekHoleNudgeDuration;
 	                this.hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.BUFFER_SEEK_OVER_HOLE, fatal: false });
 	              }
 	            }
@@ -16592,6 +19089,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 	        }
 	      }
+	    }
+	  }, {
+	    key: 'onFragLoadEmergencyAborted',
+	    value: function onFragLoadEmergencyAborted() {
+	      this.state = State.IDLE;
+	      this.tick();
 	    }
 	  }, {
 	    key: 'onBufferFlushed',
@@ -16674,7 +19177,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = StreamController;
 
 /***/ },
-/* 85 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16693,21 +19196,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _events = __webpack_require__(74);
+	var _events = __webpack_require__(80);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _demuxerInline = __webpack_require__(86);
+	var _demuxerInline = __webpack_require__(94);
 
 	var _demuxerInline2 = _interopRequireDefault(_demuxerInline);
 
-	var _demuxerWorker = __webpack_require__(95);
+	var _demuxerWorker = __webpack_require__(103);
 
 	var _demuxerWorker2 = _interopRequireDefault(_demuxerWorker);
 
-	var _logger = __webpack_require__(83);
+	var _logger = __webpack_require__(89);
 
-	var _decrypter = __webpack_require__(97);
+	var _decrypter = __webpack_require__(105);
 
 	var _decrypter2 = _interopRequireDefault(_decrypter);
 
@@ -16733,7 +19236,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (hls.config.enableWorker && typeof Worker !== 'undefined') {
 	      _logger.logger.log('demuxing in webworker');
 	      try {
-	        var work = __webpack_require__(100);
+	        var work = __webpack_require__(108);
 	        this.w = work(_demuxerWorker2.default);
 	        this.onwmsg = this.onWorkerMessage.bind(this);
 	        this.w.addEventListener('message', this.onwmsg);
@@ -16837,7 +19340,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Demuxer;
 
 /***/ },
-/* 86 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16858,25 +19361,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _events = __webpack_require__(74);
+	var _events = __webpack_require__(80);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _errors = __webpack_require__(75);
+	var _errors = __webpack_require__(81);
 
-	var _aacdemuxer = __webpack_require__(87);
+	var _aacdemuxer = __webpack_require__(95);
 
 	var _aacdemuxer2 = _interopRequireDefault(_aacdemuxer);
 
-	var _tsdemuxer = __webpack_require__(90);
+	var _tsdemuxer = __webpack_require__(98);
 
 	var _tsdemuxer2 = _interopRequireDefault(_tsdemuxer);
 
-	var _mp4Remuxer = __webpack_require__(92);
+	var _mp4Remuxer = __webpack_require__(100);
 
 	var _mp4Remuxer2 = _interopRequireDefault(_mp4Remuxer);
 
-	var _passthroughRemuxer = __webpack_require__(94);
+	var _passthroughRemuxer = __webpack_require__(102);
 
 	var _passthroughRemuxer2 = _interopRequireDefault(_passthroughRemuxer);
 
@@ -16937,7 +19440,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = DemuxerInline;
 
 /***/ },
-/* 87 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16958,13 +19461,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _adts = __webpack_require__(88);
+	var _adts = __webpack_require__(96);
 
 	var _adts2 = _interopRequireDefault(_adts);
 
-	var _logger = __webpack_require__(83);
+	var _logger = __webpack_require__(89);
 
-	var _id = __webpack_require__(89);
+	var _id = __webpack_require__(97);
 
 	var _id2 = _interopRequireDefault(_id);
 
@@ -17018,8 +19521,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        track.audiosamplerate = config.samplerate;
 	        track.channelCount = config.channelCount;
 	        track.codec = config.codec;
-	        track.timescale = config.samplerate;
-	        track.duration = config.samplerate * duration;
+	        track.duration = duration;
 	        _logger.logger.log('parsed codec:' + track.codec + ',rate:' + config.samplerate + ',nb channel:' + config.channelCount);
 	      }
 	      frameIndex = 0;
@@ -17081,7 +19583,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = AACDemuxer;
 
 /***/ },
-/* 88 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17102,9 +19604,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _logger = __webpack_require__(83);
+	var _logger = __webpack_require__(89);
 
-	var _errors = __webpack_require__(75);
+	var _errors = __webpack_require__(81);
 
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
@@ -17178,9 +19680,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // multiply frequency by 2 (see table below, equivalent to substract 3)
 	            adtsExtensionSampleingIndex = adtsSampleingIndex - 3;
 	          } else {
-	            // if (manifest codec is AAC) AND (frequency less than 24kHz OR nb channel is 1) OR (manifest codec not specified and mono audio)
-	            // Chrome fails to play back with AAC LC mono when initialized with HE-AAC.  This is not a problem with stereo.
-	            if (audioCodec && audioCodec.indexOf('mp4a.40.2') !== -1 && (adtsSampleingIndex >= 6 || adtsChanelConfig === 1) || !audioCodec && adtsChanelConfig === 1) {
+	            // if (manifest codec is AAC) AND (frequency less than 24kHz AND nb channel is 1) OR (manifest codec not specified and mono audio)
+	            // Chrome fails to play back with low frequency AAC LC mono when initialized with HE-AAC.  This is not a problem with stereo.
+	            if (audioCodec && audioCodec.indexOf('mp4a.40.2') !== -1 && adtsSampleingIndex >= 6 && adtsChanelConfig === 1 || !audioCodec && adtsChanelConfig === 1) {
 	              adtsObjectType = 2;
 	              config = new Array(2);
 	            }
@@ -17246,7 +19748,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = ADTS;
 
 /***/ },
-/* 89 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17267,7 +19769,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _logger = __webpack_require__(83);
+	var _logger = __webpack_require__(89);
 
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
@@ -17413,7 +19915,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = ID3;
 
 /***/ },
-/* 90 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17443,21 +19945,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _adts = __webpack_require__(88);
+	var _adts = __webpack_require__(96);
 
 	var _adts2 = _interopRequireDefault(_adts);
 
-	var _events = __webpack_require__(74);
+	var _events = __webpack_require__(80);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _expGolomb = __webpack_require__(91);
+	var _expGolomb = __webpack_require__(99);
 
 	var _expGolomb2 = _interopRequireDefault(_expGolomb);
 
-	var _logger = __webpack_require__(83);
+	var _logger = __webpack_require__(89);
 
-	var _errors = __webpack_require__(75);
+	var _errors = __webpack_require__(81);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -17896,8 +20398,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	              track.width = config.width;
 	              track.height = config.height;
 	              track.sps = [unit.data];
-	              track.timescale = _this.remuxer.timescale;
-	              track.duration = _this.remuxer.timescale * _this._duration;
+	              track.duration = _this._duration;
 	              var codecarray = unit.data.subarray(1, 4);
 	              var codecstring = 'avc1.';
 	              for (i = 0; i < 3; i++) {
@@ -18084,8 +20585,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        track.audiosamplerate = config.samplerate;
 	        track.channelCount = config.channelCount;
 	        track.codec = config.codec;
-	        track.timescale = config.samplerate;
-	        track.duration = config.samplerate * duration;
+	        track.duration = duration;
 	        _logger.logger.log('parsed codec:' + track.codec + ',rate:' + config.samplerate + ',nb channel:' + config.channelCount);
 	      }
 	      frameIndex = 0;
@@ -18159,7 +20659,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = TSDemuxer;
 
 /***/ },
-/* 91 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18180,7 +20680,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _logger = __webpack_require__(83);
+	var _logger = __webpack_require__(89);
 
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
@@ -18538,7 +21038,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = ExpGolomb;
 
 /***/ },
-/* 92 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18559,17 +21059,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _events = __webpack_require__(74);
+	var _events = __webpack_require__(80);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _logger = __webpack_require__(83);
+	var _logger = __webpack_require__(89);
 
-	var _mp4Generator = __webpack_require__(93);
+	var _mp4Generator = __webpack_require__(101);
 
 	var _mp4Generator2 = _interopRequireDefault(_mp4Generator);
 
-	var _errors = __webpack_require__(75);
+	var _errors = __webpack_require__(81);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -18612,13 +21112,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (!this.ISGenerated) {
 	        this.generateIS(audioTrack, videoTrack, timeOffset);
 	      }
-	      //logger.log('nb AVC samples:' + videoTrack.samples.length);
-	      if (videoTrack.samples.length) {
-	        this.remuxVideo(videoTrack, timeOffset, contiguous);
-	      }
-	      //logger.log('nb AAC samples:' + audioTrack.samples.length);
-	      if (audioTrack.samples.length) {
-	        this.remuxAudio(audioTrack, timeOffset, contiguous);
+	      if (this.ISGenerated) {
+	        //logger.log('nb AVC samples:' + videoTrack.samples.length);
+	        if (videoTrack.samples.length) {
+	          this.remuxVideo(videoTrack, timeOffset, contiguous);
+	        }
+	        //logger.log('nb AAC samples:' + audioTrack.samples.length);
+	        if (audioTrack.samples.length) {
+	          this.remuxAudio(audioTrack, timeOffset, contiguous);
+	        }
 	      }
 	      //logger.log('nb ID3 samples:' + audioTrack.samples.length);
 	      if (id3Track.samples.length) {
@@ -18647,8 +21149,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (computePTSDTS) {
 	        initPTS = initDTS = Infinity;
 	      }
-
 	      if (audioTrack.config && audioSamples.length) {
+	        audioTrack.timescale = audioTrack.audiosamplerate;
+	        // MP4 duration (track duration in seconds multiplied by timescale) is coded on 32 bits
+	        // we know that each AAC sample contains 1024 frames....
+	        // in order to avoid overflowing the 32 bit counter for large duration, we use smaller timescale (timescale/gcd)
+	        // we just need to ensure that AAC sample duration will still be an integer (will be 1024/gcd)
+	        if (audioTrack.timescale * audioTrack.duration > Math.pow(2, 32)) {
+	          (function () {
+	            var greatestCommonDivisor = function greatestCommonDivisor(a, b) {
+	              if (!b) {
+	                return a;
+	              }
+	              return greatestCommonDivisor(b, a % b);
+	            };
+	            audioTrack.timescale = audioTrack.audiosamplerate / greatestCommonDivisor(audioTrack.audiosamplerate, 1024);
+	          })();
+	        }
+	        _logger.logger.log('audio mp4 timescale :' + audioTrack.timescale);
 	        tracks.audio = {
 	          container: 'audio/mp4',
 	          codec: audioTrack.codec,
@@ -18664,6 +21182,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 
 	      if (videoTrack.sps && videoTrack.pps && videoSamples.length) {
+	        videoTrack.timescale = this.MP4_TIMESCALE;
 	        tracks.video = {
 	          container: 'video/mp4',
 	          codec: videoTrack.codec,
@@ -18679,15 +21198,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      }
 
-	      if (!Object.keys(tracks)) {
-	        observer.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.FRAG_PARSING_ERROR, fatal: false, reason: 'no audio/video samples found' });
-	      } else {
+	      if (Object.keys(tracks).length) {
 	        observer.trigger(_events2.default.FRAG_PARSING_INIT_SEGMENT, data);
 	        this.ISGenerated = true;
 	        if (computePTSDTS) {
 	          this._initPTS = initPTS;
 	          this._initDTS = initDTS;
 	        }
+	      } else {
+	        observer.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.FRAG_PARSING_ERROR, fatal: false, reason: 'no audio/video samples found' });
 	      }
 	    }
 	  }, {
@@ -18747,8 +21266,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 	          mp4Sample.duration = sampleDuration;
 	        } else {
-	          var nextAvcDts = this.nextAvcDts,
-	              delta;
+	          var nextAvcDts = undefined,
+	              delta = undefined;
+	          if (contiguous) {
+	            nextAvcDts = this.nextAvcDts;
+	          } else {
+	            nextAvcDts = timeOffset * pesTimeScale;
+	          }
 	          // first AVC sample of video track, normalize PTS/DTS
 	          ptsnorm = this._PTSNormalize(pts, nextAvcDts);
 	          dtsnorm = this._PTSNormalize(dts, nextAvcDts);
@@ -18834,6 +21358,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          pesTimeScale = this.PES_TIMESCALE,
 	          mp4timeScale = track.timescale,
 	          pes2mp4ScaleFactor = pesTimeScale / mp4timeScale,
+	          expectedSampleDuration = track.timescale * 1024 / track.audiosamplerate,
 	          aacSample,
 	          mp4Sample,
 	          unit,
@@ -18865,17 +21390,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	          ptsnorm = this._PTSNormalize(pts, lastDTS);
 	          dtsnorm = this._PTSNormalize(dts, lastDTS);
 	          // let's compute sample duration.
-	          // there should be 1024 audio samples in one AAC frame
+	          // sample Duration should be close to expectedSampleDuration
 	          mp4Sample.duration = (dtsnorm - lastDTS) / pes2mp4ScaleFactor;
-	          if (Math.abs(mp4Sample.duration - 1024) > 10) {
-	            // not expected to happen ...
-	            _logger.logger.log('invalid AAC sample duration at PTS ' + Math.round(pts / 90) + ',should be 1024,found :' + Math.round(mp4Sample.duration));
+	          if (Math.abs(mp4Sample.duration - expectedSampleDuration) > expectedSampleDuration / 10) {
+	            // more than 10% diff between sample duration and expectedSampleDuration .... lets log that
+	            _logger.logger.log('invalid AAC sample duration at PTS ' + Math.round(pts / 90) + ',should be 1024,found :' + Math.round(mp4Sample.duration * track.audiosamplerate / track.timescale));
 	          }
-	          mp4Sample.duration = 1024;
-	          dtsnorm = 1024 * pes2mp4ScaleFactor + lastDTS;
+	          // always adjust sample duration to avoid av sync issue
+	          mp4Sample.duration = expectedSampleDuration;
+	          dtsnorm = expectedSampleDuration * pes2mp4ScaleFactor + lastDTS;
 	        } else {
-	          var nextAacPts = this.nextAacPts,
-	              delta;
+	          var nextAacPts = undefined,
+	              delta = undefined;
+	          if (contiguous) {
+	            nextAacPts = this.nextAacPts;
+	          } else {
+	            nextAacPts = timeOffset * pesTimeScale;
+	          }
 	          ptsnorm = this._PTSNormalize(pts, nextAacPts);
 	          dtsnorm = this._PTSNormalize(dts, nextAacPts);
 	          delta = Math.round(1000 * (ptsnorm - nextAacPts) / pesTimeScale);
@@ -19030,11 +21561,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    get: function get() {
 	      return false;
 	    }
-	  }, {
-	    key: 'timescale',
-	    get: function get() {
-	      return this.MP4_TIMESCALE;
-	    }
 	  }]);
 
 	  return MP4Remuxer;
@@ -19043,7 +21569,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = MP4Remuxer;
 
 /***/ },
-/* 93 */
+/* 101 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -19233,6 +21759,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'mdhd',
 	    value: function mdhd(timescale, duration) {
+	      duration *= timescale;
 	      return MP4.box(MP4.types.mdhd, new Uint8Array([0x00, // version 0
 	      0x00, 0x00, 0x00, // flags
 	      0x00, 0x00, 0x00, 0x02, // creation_time
@@ -19298,6 +21825,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'mvhd',
 	    value: function mvhd(timescale, duration) {
+	      duration *= timescale;
 	      var bytes = new Uint8Array([0x00, // version 0
 	      0x00, 0x00, 0x00, // flags
 	      0x00, 0x00, 0x00, 0x01, // creation_time
@@ -19447,7 +21975,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'tkhd',
 	    value: function tkhd(track) {
 	      var id = track.id,
-	          duration = track.duration,
+	          duration = track.duration * track.timescale,
 	          width = track.width,
 	          height = track.height;
 	      return MP4.box(MP4.types.tkhd, new Uint8Array([0x00, // version 0
@@ -19566,7 +22094,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = MP4;
 
 /***/ },
-/* 94 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19587,7 +22115,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _events = __webpack_require__(74);
+	var _events = __webpack_require__(80);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -19669,11 +22197,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    get: function get() {
 	      return true;
 	    }
-	  }, {
-	    key: 'timescale',
-	    get: function get() {
-	      return 0;
-	    }
 	  }]);
 
 	  return PassThroughRemuxer;
@@ -19682,7 +22205,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = PassThroughRemuxer;
 
 /***/ },
-/* 95 */
+/* 103 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19691,15 +22214,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _demuxerInline = __webpack_require__(86);
+	var _demuxerInline = __webpack_require__(94);
 
 	var _demuxerInline2 = _interopRequireDefault(_demuxerInline);
 
-	var _events = __webpack_require__(74);
+	var _events = __webpack_require__(80);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _events3 = __webpack_require__(96);
+	var _events3 = __webpack_require__(104);
 
 	var _events4 = _interopRequireDefault(_events3);
 
@@ -19776,7 +22299,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = DemuxerWorker;
 
 /***/ },
-/* 96 */
+/* 104 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -20050,7 +22573,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 97 */
+/* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20071,13 +22594,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _aes128Decrypter = __webpack_require__(98);
+	var _aes128Decrypter = __webpack_require__(106);
 
 	var _aes128Decrypter2 = _interopRequireDefault(_aes128Decrypter);
 
-	var _errors = __webpack_require__(75);
+	var _errors = __webpack_require__(81);
 
-	var _logger = __webpack_require__(83);
+	var _logger = __webpack_require__(89);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -20164,7 +22687,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Decrypter;
 
 /***/ },
-/* 98 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20219,7 +22742,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _aes = __webpack_require__(99);
+	var _aes = __webpack_require__(107);
 
 	var _aes2 = _interopRequireDefault(_aes);
 
@@ -20367,7 +22890,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = AES128Decrypter;
 
 /***/ },
-/* 99 */
+/* 107 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -20627,7 +23150,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = AES;
 
 /***/ },
-/* 100 */
+/* 108 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -20692,7 +23215,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 101 */
+/* 109 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -20740,7 +23263,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = BinarySearch;
 
 /***/ },
-/* 102 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20761,7 +23284,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _logger = __webpack_require__(83);
+	var _logger = __webpack_require__(89);
 
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
@@ -20898,7 +23421,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = LevelHelper;
 
 /***/ },
-/* 103 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20919,17 +23442,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _events = __webpack_require__(74);
+	var _events = __webpack_require__(80);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = __webpack_require__(77);
+	var _eventHandler = __webpack_require__(83);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _logger = __webpack_require__(83);
+	var _logger = __webpack_require__(89);
 
-	var _errors = __webpack_require__(75);
+	var _errors = __webpack_require__(81);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -20975,6 +23498,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        clearInterval(this.timer);
 	      }
 	      this._manualLevel = -1;
+	    }
+	  }, {
+	    key: 'startLoad',
+	    value: function startLoad() {
+	      this.canload = true;
+	      // speed up live playlist refresh if timer exists
+	      if (this.timer) {
+	        this.tick();
+	      }
+	    }
+	  }, {
+	    key: 'stopLoad',
+	    value: function stopLoad() {
+	      this.canload = false;
 	    }
 	  }, {
 	    key: 'onManifestLoaded',
@@ -21161,19 +23698,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'tick',
 	    value: function tick() {
 	      var levelId = this._level;
-	      if (levelId !== undefined) {
+	      if (levelId !== undefined && this.canload) {
 	        var level = this._levels[levelId],
 	            urlId = level.urlId;
 	        this.hls.trigger(_events2.default.LEVEL_LOADING, { url: level.url[urlId], level: levelId, id: urlId });
-	      }
-	    }
-	  }, {
-	    key: 'nextLoadLevel',
-	    value: function nextLoadLevel() {
-	      if (this._manualLevel !== -1) {
-	        return this._manualLevel;
-	      } else {
-	        return this.hls.abrController.nextAutoLevel;
 	      }
 	    }
 	  }, {
@@ -21222,6 +23750,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    set: function set(newLevel) {
 	      this._startLevel = newLevel;
 	    }
+	  }, {
+	    key: 'nextLoadLevel',
+	    get: function get() {
+	      if (this._manualLevel !== -1) {
+	        return this._manualLevel;
+	      } else {
+	        return this.hls.abrController.nextAutoLevel;
+	      }
+	    },
+	    set: function set(nextLevel) {
+	      this.level = nextLevel;
+	      if (this._manualLevel === -1) {
+	        this.hls.abrController.nextAutoLevel = nextLevel;
+	      }
+	    }
 	  }]);
 
 	  return LevelController;
@@ -21230,7 +23773,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = LevelController;
 
 /***/ },
-/* 104 */
+/* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21251,15 +23794,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _events = __webpack_require__(74);
+	var _events = __webpack_require__(80);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = __webpack_require__(77);
+	var _eventHandler = __webpack_require__(83);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _cea708Interpreter = __webpack_require__(105);
+	var _cea708Interpreter = __webpack_require__(113);
 
 	var _cea708Interpreter2 = _interopRequireDefault(_cea708Interpreter);
 
@@ -21355,7 +23898,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = TimelineController;
 
 /***/ },
-/* 105 */
+/* 113 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -21790,7 +24333,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = CEA708Interpreter;
 
 /***/ },
-/* 106 */
+/* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21811,7 +24354,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _logger = __webpack_require__(83);
+	var _logger = __webpack_require__(89);
 
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
@@ -21951,7 +24494,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = XhrLoader;
 
 /***/ },
-/* 107 */
+/* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21972,15 +24515,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _events = __webpack_require__(74);
+	var _events = __webpack_require__(80);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = __webpack_require__(77);
+	var _eventHandler = __webpack_require__(83);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _errors = __webpack_require__(75);
+	var _errors = __webpack_require__(81);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -22083,15 +24626,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = KeyLoader;
 
 /***/ },
-/* 108 */
+/* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(109);
+	module.exports = __webpack_require__(117);
 
 /***/ },
-/* 109 */
+/* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22110,7 +24653,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _styler2 = _interopRequireDefault(_styler);
 
-	var _style = __webpack_require__(110);
+	var _style = __webpack_require__(118);
 
 	var _style2 = _interopRequireDefault(_style);
 
@@ -22195,13 +24738,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	HTMLImg.canPlay = function (resource) {
-	  return (/\.(png|jpg|jpeg|gif|bmp|tiff|pgm|pnm)(|\?.*)$/i.test(resource)
+	  return (/\.(png|jpg|jpeg|gif|bmp|tiff|pgm|pnm|webp)(|\?.*)$/i.test(resource)
 	  );
 	};
 	module.exports = exports['default'];
 
 /***/ },
-/* 110 */
+/* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(28)();
@@ -22215,15 +24758,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 111 */
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(112);
+	module.exports = __webpack_require__(120);
 
 /***/ },
-/* 112 */
+/* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22252,11 +24795,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _style = __webpack_require__(113);
+	var _style = __webpack_require__(121);
 
 	var _style2 = _interopRequireDefault(_style);
 
-	var _error = __webpack_require__(114);
+	var _error = __webpack_require__(122);
 
 	var _error2 = _interopRequireDefault(_error);
 
@@ -22385,7 +24928,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 113 */
+/* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(28)();
@@ -22399,21 +24942,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 114 */
+/* 122 */
 /***/ function(module, exports) {
 
 	module.exports = "<canvas data-no-op-canvas></canvas>\n<p data-no-op-msg><%=message%><p>\n";
 
 /***/ },
-/* 115 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(116);
+	module.exports = __webpack_require__(124);
 
 /***/ },
-/* 116 */
+/* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22424,7 +24967,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _ui_container_plugin = __webpack_require__(117);
+	var _ui_container_plugin = __webpack_require__(125);
 
 	var _ui_container_plugin2 = _interopRequireDefault(_ui_container_plugin);
 
@@ -22440,11 +24983,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _template2 = _interopRequireDefault(_template);
 
-	var _spinner = __webpack_require__(118);
+	var _spinner = __webpack_require__(126);
 
 	var _spinner2 = _interopRequireDefault(_spinner);
 
-	var _spinner3 = __webpack_require__(119);
+	var _spinner3 = __webpack_require__(127);
 
 	var _spinner4 = _interopRequireDefault(_spinner3);
 
@@ -22541,7 +25084,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 117 */
+/* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22639,13 +25182,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 118 */
+/* 126 */
 /***/ function(module, exports) {
 
 	module.exports = "<div data-bounce1></div><div data-bounce2></div><div data-bounce3></div>\n";
 
 /***/ },
-/* 119 */
+/* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(28)();
@@ -22659,15 +25202,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 120 */
+/* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(121);
+	module.exports = __webpack_require__(129);
 
 /***/ },
-/* 121 */
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22678,7 +25221,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _container_plugin = __webpack_require__(122);
+	var _container_plugin = __webpack_require__(130);
 
 	var _container_plugin2 = _interopRequireDefault(_container_plugin);
 
@@ -22816,7 +25359,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 122 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22912,15 +25455,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 123 */
+/* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(124);
+	module.exports = __webpack_require__(132);
 
 /***/ },
-/* 124 */
+/* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22931,7 +25474,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _ui_container_plugin = __webpack_require__(117);
+	var _ui_container_plugin = __webpack_require__(125);
 
 	var _ui_container_plugin2 = _interopRequireDefault(_ui_container_plugin);
 
@@ -22947,11 +25490,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _template2 = _interopRequireDefault(_template);
 
-	var _watermark = __webpack_require__(125);
+	var _watermark = __webpack_require__(133);
 
 	var _watermark2 = _interopRequireDefault(_watermark);
 
-	var _watermark3 = __webpack_require__(126);
+	var _watermark3 = __webpack_require__(134);
 
 	var _watermark4 = _interopRequireDefault(_watermark3);
 
@@ -23031,7 +25574,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 125 */
+/* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(28)();
@@ -23045,21 +25588,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 126 */
+/* 134 */
 /***/ function(module, exports) {
 
-	module.exports = "<div data-watermark data-watermark-<%=position %>>\n<% if(typeof imageLink !== 'undefined') { %>\n<a target=_blank href=\"<%= imageLink %>\">\n<% } %>\n<img src=\"<%= imageUrl %>\">\n<% if(typeof imageLink !== 'undefined') { %>\n</a>\n<% } %>\n</div>\n";
+	module.exports = "<div data-watermark data-watermark-<%=position %>>\r\n<% if(typeof imageLink !== 'undefined') { %>\r\n<a target=_blank href=\"<%= imageLink %>\">\r\n<% } %>\r\n<img src=\"<%= imageUrl %>\">\r\n<% if(typeof imageLink !== 'undefined') { %>\r\n</a>\r\n<% } %>\r\n</div>\r\n";
 
 /***/ },
-/* 127 */
+/* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(128);
+	module.exports = __webpack_require__(136);
 
 /***/ },
-/* 128 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -23070,7 +25613,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _ui_container_plugin = __webpack_require__(117);
+	var _ui_container_plugin = __webpack_require__(125);
 
 	var _ui_container_plugin2 = _interopRequireDefault(_ui_container_plugin);
 
@@ -23090,13 +25633,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _mediator2 = _interopRequireDefault(_mediator);
 
-	var _poster = __webpack_require__(129);
+	var _poster = __webpack_require__(137);
 
 	var _poster2 = _interopRequireDefault(_poster);
 
-	var _poster3 = __webpack_require__(130);
+	var _poster3 = __webpack_require__(138);
 
 	var _poster4 = _interopRequireDefault(_poster3);
+
+	var _play = __webpack_require__(42);
+
+	var _play2 = _interopRequireDefault(_play);
 
 	var _clapprZepto = __webpack_require__(4);
 
@@ -23168,12 +25715,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.listenTo(this.container, _events2.default.CONTAINER_STATE_BUFFERING, this.update);
 	    this.listenTo(this.container, _events2.default.CONTAINER_STATE_BUFFERFULL, this.update);
 	    this.listenTo(this.container, _events2.default.CONTAINER_OPTIONS_CHANGE, this.render);
-	    _mediator2.default.on(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.updateSize, this);
 	  };
 
 	  PosterPlugin.prototype.stopListening = function stopListening() {
 	    _UIContainerPlugin.prototype.stopListening.call(this);
-	    _mediator2.default.off(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.updateSize, this);
 	  };
 
 	  PosterPlugin.prototype.onPlay = function onPlay() {
@@ -23191,7 +25736,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (show && (!this.options.chromeless || this.options.allowUserInteraction)) {
 	      this.$playButton.show();
 	      this.$el.addClass("clickable");
-	      this.updateSize();
 	    } else {
 	      this.$playButton.hide();
 	      this.$el.removeClass("clickable");
@@ -23205,17 +25749,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.container.play();
 	    }
 	    return false;
-	  };
-
-	  PosterPlugin.prototype.updateSize = function updateSize() {
-	    if (!this.shouldRender) {
-	      return;
-	    }
-	    var height = this.$el.height();
-	    this.$el.css({ fontSize: height });
-	    if (!this.playRequested && !this.hasStartedPlaying) {
-	      this.$playWrapper.css({ marginTop: -(this.$playWrapper.height() / 2) });
-	    }
 	  };
 
 	  PosterPlugin.prototype.shouldHideOnPlay = function shouldHideOnPlay() {
@@ -23248,13 +25781,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.$el.html(this.template());
 	    this.$el.append(style);
 	    if (this.options.poster) {
-	      var imgEl = (0, _clapprZepto2.default)('<div data-poster class="poster-background"></div>');
-	      imgEl.css({ 'background-image': 'url(' + this.options.poster + ')' });
-	      this.$el.prepend(imgEl);
+	      this.$el.css({ 'background-image': 'url(' + this.options.poster + ')' });
 	    }
 	    this.container.$el.append(this.el);
-	    this.$playButton = this.$el.find('.poster-icon');
 	    this.$playWrapper = this.$el.find('.play-wrapper');
+	    this.$playWrapper.append(_play2.default);
+	    this.$playButton = this.$playWrapper.find('svg');
+	    this.$playButton.addClass('poster-icon');
+	    this.$playButton.attr('data-poster', '');
+
+	    var buttonsColor = this.options.mediacontrol && this.options.mediacontrol.buttons;
+	    if (buttonsColor) {
+	      this.$el.find('svg path').css('fill', buttonsColor);
+	    }
+
 	    if (this.options.mediacontrol && this.options.mediacontrol.buttons) {
 	      var buttonsColor = this.options.mediacontrol.buttons;
 	      this.$playButton.css('color', buttonsColor);
@@ -23271,7 +25811,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(36)))
 
 /***/ },
-/* 129 */
+/* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(28)();
@@ -23279,27 +25819,27 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "@font-face {\n  font-family: \"Player\";\n  src: url(" + __webpack_require__(40) + ");\n  src: url(" + __webpack_require__(40) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(41) + ") format(\"truetype\"), url(" + __webpack_require__(42) + "#player) format(\"svg\"); }\n\n.player-poster[data-poster] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  z-index: 998;\n  top: 0;\n  left: 0; }\n  .player-poster[data-poster].clickable {\n    cursor: pointer; }\n  .player-poster[data-poster] .poster-background[data-poster] {\n    width: 100%;\n    height: 100%;\n    background-color: #000;\n    background-size: cover;\n    background-repeat: no-repeat;\n    background-position: 50% 50%; }\n  .player-poster[data-poster] .play-wrapper[data-poster] {\n    position: absolute;\n    width: 100%;\n    height: 25%;\n    line-height: 100%;\n    font-size: 25%;\n    top: 50%;\n    text-align: center; }\n    .player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster] {\n      font-family: \"Player\";\n      font-weight: normal;\n      font-style: normal;\n      line-height: 1;\n      letter-spacing: 0;\n      speak: none;\n      color: white;\n      opacity: 0.75;\n      -webkit-font-smoothing: antialiased;\n      -moz-osx-font-smoothing: grayscale;\n      -webkit-transition: opacity text-shadow 0.1s;\n      -webkit-transition-delay: ease;\n      -moz-transition: opacity text-shadow 0.1s ease;\n      -o-transition: opacity text-shadow 0.1s ease;\n      transition: opacity text-shadow 0.1s ease; }\n      .player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster].play[data-poster]:before {\n        content: \"\\E001\"; }\n      .player-poster[data-poster] .play-wrapper[data-poster] .poster-icon[data-poster]:hover {\n        opacity: 1.0;\n        text-shadow: rgba(255, 255, 255, 0.8) 0 0 15px; }\n", ""]);
+	exports.push([module.id, ".player-poster[data-poster] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  z-index: 998;\n  top: 0;\n  left: 0;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  background-color: #000;\n  background-size: cover;\n  background-repeat: no-repeat;\n  background-position: 50% 50%; }\n  .player-poster[data-poster].clickable {\n    cursor: pointer; }\n  .player-poster[data-poster]:hover .play-wrapper[data-poster] {\n    opacity: 1; }\n  .player-poster[data-poster] .play-wrapper[data-poster] {\n    width: 100%;\n    height: 25%;\n    margin: 0 auto;\n    opacity: 0.75;\n    -webkit-transition: opacity 0.1s ease;\n    -moz-transition: opacity 0.1s ease false;\n    -o-transition: opacity 0.1s ease false;\n    transition: opacity 0.1s ease; }\n    .player-poster[data-poster] .play-wrapper[data-poster] svg {\n      height: 100%; }\n      .player-poster[data-poster] .play-wrapper[data-poster] svg path {\n        fill: #fff; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 130 */
+/* 138 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"play-wrapper\" data-poster>\n  <span class=\"poster-icon play\" data-poster />\n</div>\n";
+	module.exports = "<div class=\"play-wrapper\" data-poster></div>\r\n";
 
 /***/ },
-/* 131 */
+/* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(132);
+	module.exports = __webpack_require__(140);
 
 /***/ },
-/* 132 */
+/* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23310,7 +25850,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _container_plugin = __webpack_require__(122);
+	var _container_plugin = __webpack_require__(130);
 
 	var _container_plugin2 = _interopRequireDefault(_container_plugin);
 
@@ -23473,15 +26013,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 133 */
+/* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(134);
+	module.exports = __webpack_require__(142);
 
 /***/ },
-/* 134 */
+/* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23492,7 +26032,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _container_plugin = __webpack_require__(122);
+	var _container_plugin = __webpack_require__(130);
 
 	var _container_plugin2 = _interopRequireDefault(_container_plugin);
 
@@ -23559,15 +26099,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 135 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(136);
+	module.exports = __webpack_require__(144);
 
 /***/ },
-/* 136 */
+/* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23578,7 +26118,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _ui_core_plugin = __webpack_require__(137);
+	var _ui_core_plugin = __webpack_require__(145);
 
 	var _ui_core_plugin2 = _interopRequireDefault(_ui_core_plugin);
 
@@ -23598,11 +26138,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _dvr_controls = __webpack_require__(138);
+	var _dvr_controls = __webpack_require__(146);
 
 	var _dvr_controls2 = _interopRequireDefault(_dvr_controls);
 
-	var _index = __webpack_require__(140);
+	var _index = __webpack_require__(148);
 
 	var _index2 = _interopRequireDefault(_index);
 
@@ -23731,7 +26271,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 137 */
+/* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23811,7 +26351,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 138 */
+/* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(28)();
@@ -23819,33 +26359,33 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "@font-face {\n  font-family: \"Roboto\";\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Roboto\"), local(\"Roboto-Regular\"), url(" + __webpack_require__(139) + ") format(\"truetype\"); }\n\n.dvr-controls[data-dvr-controls] {\n  display: inline-block;\n  float: left;\n  color: #fff;\n  line-height: 32px;\n  font-size: 10px;\n  font-weight: bold;\n  margin-left: 6px; }\n  .dvr-controls[data-dvr-controls] .live-info {\n    cursor: default;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif; }\n    .dvr-controls[data-dvr-controls] .live-info:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #ff0101; }\n    .dvr-controls[data-dvr-controls] .live-info.disabled {\n      opacity: 0.3; }\n      .dvr-controls[data-dvr-controls] .live-info.disabled:before {\n        background-color: #fff; }\n  .dvr-controls[data-dvr-controls] .live-button {\n    cursor: pointer;\n    outline: none;\n    display: none;\n    border: 0;\n    color: #fff;\n    background-color: transparent;\n    height: 32px;\n    padding: 0;\n    opacity: 0.7;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease false;\n    -o-transition: all 0.1s ease false;\n    transition: all 0.1s ease; }\n    .dvr-controls[data-dvr-controls] .live-button:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #fff; }\n    .dvr-controls[data-dvr-controls] .live-button:hover {\n      opacity: 1;\n      text-shadow: rgba(255, 255, 255, 0.75) 0 0 5px; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-info {\n  display: none; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-button {\n  display: block; }\n\n.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #005aff; }\n\n.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #ff0101; }\n", ""]);
+	exports.push([module.id, "@font-face {\n  font-family: \"Roboto\";\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Roboto\"), local(\"Roboto-Regular\"), url(" + __webpack_require__(147) + ") format(\"truetype\"); }\n\n.dvr-controls[data-dvr-controls] {\n  display: inline-block;\n  float: left;\n  color: #fff;\n  line-height: 32px;\n  font-size: 10px;\n  font-weight: bold;\n  margin-left: 6px; }\n  .dvr-controls[data-dvr-controls] .live-info {\n    cursor: default;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif; }\n    .dvr-controls[data-dvr-controls] .live-info:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #ff0101; }\n    .dvr-controls[data-dvr-controls] .live-info.disabled {\n      opacity: 0.3; }\n      .dvr-controls[data-dvr-controls] .live-info.disabled:before {\n        background-color: #fff; }\n  .dvr-controls[data-dvr-controls] .live-button {\n    cursor: pointer;\n    outline: none;\n    display: none;\n    border: 0;\n    color: #fff;\n    background-color: transparent;\n    height: 32px;\n    padding: 0;\n    opacity: 0.7;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease false;\n    -o-transition: all 0.1s ease false;\n    transition: all 0.1s ease; }\n    .dvr-controls[data-dvr-controls] .live-button:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #fff; }\n    .dvr-controls[data-dvr-controls] .live-button:hover {\n      opacity: 1;\n      text-shadow: rgba(255, 255, 255, 0.75) 0 0 5px; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-info {\n  display: none; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-button {\n  display: block; }\n\n.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #005aff; }\n\n.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #ff0101; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 139 */
+/* 147 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "38861cba61c66739c1452c3a71e39852.ttf";
 
 /***/ },
-/* 140 */
+/* 148 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"live-info\">LIVE</div>\n<button class=\"live-button\">BACK TO LIVE</button>\n";
 
 /***/ },
-/* 141 */
+/* 149 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(142);
+	module.exports = __webpack_require__(150);
 
 /***/ },
-/* 142 */
+/* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23856,7 +26396,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _core_plugin = __webpack_require__(143);
+	var _core_plugin = __webpack_require__(151);
 
 	var _core_plugin2 = _interopRequireDefault(_core_plugin);
 
@@ -23979,7 +26519,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 143 */
+/* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24054,15 +26594,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 144 */
+/* 152 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(145);
+	module.exports = __webpack_require__(153);
 
 /***/ },
-/* 145 */
+/* 153 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24075,7 +26615,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _utils = __webpack_require__(2);
 
-	var _ui_core_plugin = __webpack_require__(137);
+	var _ui_core_plugin = __webpack_require__(145);
 
 	var _ui_core_plugin2 = _interopRequireDefault(_ui_core_plugin);
 
@@ -24095,11 +26635,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _playback2 = _interopRequireDefault(_playback);
 
-	var _seek_time = __webpack_require__(146);
+	var _seek_time = __webpack_require__(154);
 
 	var _seek_time2 = _interopRequireDefault(_seek_time);
 
-	var _seek_time3 = __webpack_require__(147);
+	var _seek_time3 = __webpack_require__(155);
 
 	var _seek_time4 = _interopRequireDefault(_seek_time3);
 
@@ -24299,7 +26839,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 146 */
+/* 154 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(28)();
@@ -24313,13 +26853,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 147 */
+/* 155 */
 /***/ function(module, exports) {
 
 	module.exports = "<span data-seek-time></span>\n<span data-duration></span>\n";
 
 /***/ },
-/* 148 */
+/* 156 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24330,7 +26870,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _core_plugin = __webpack_require__(143);
+	var _core_plugin = __webpack_require__(151);
 
 	var _core_plugin2 = _interopRequireDefault(_core_plugin);
 
@@ -24392,7 +26932,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 149 */
+/* 157 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24407,7 +26947,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _core_plugin = __webpack_require__(143);
+	var _core_plugin = __webpack_require__(151);
 
 	var _core_plugin2 = _interopRequireDefault(_core_plugin);
 
