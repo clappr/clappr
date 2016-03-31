@@ -31,6 +31,7 @@ git_push() {
   echo 'pushing to github' && 
   git add "package.json" &&
   git add "bower.json" &&
+  git add "dist" &&
   git commit -m 'bump to '$1 &&
   git tag $1 &&
   git push origin master --tags
