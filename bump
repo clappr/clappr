@@ -47,15 +47,8 @@ npm_publish() {
 send_mail() {
   last_tag=$(git log --tags --no-walk --pretty="format:%d" | sed 2q | sed 's/[()]//g' | sed 's/ tag: //' | sed -n 2p)
   changelog=$(git log --pretty='%h %s (%an)\n' $last_tag..master)
-  message="Clappr developers bumped a new version: $1\n\n
-Changelog:\n
-=========\n
-$changelog\n\n
-
-with love,\n
-Your happy butler.\n
-"
-  echo $message | mail -s "$(echo "[clappr] new version released: $1\nFrom: Clappr Butler <butler@clappr.io>\n")" videos5@corp.globo.com
+  message="Clappr developers bumped a new version: $1\n\nChangelog:\n=========\n$changelog\n\nwith love,\nYour happy butler.\n"
+  echo -e $message | mail -s "$(echo "[clappr] new version released: $1\nFrom: Clappr Butler <butler@clappr.io>\n")" videos5@corp.globo.com
   return 0
 }
 
