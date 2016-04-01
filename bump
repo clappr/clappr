@@ -29,7 +29,7 @@ run_tests() {
 
 git_push() {
   echo 'pushing to github' &&
-  git add "package.json bower.json yuidoc.json dist" &&
+  git add package.json bower.json yuidoc.json dist &&
   git commit -m 'bump to '$1 &&
   git tag $1 &&
   git push origin master --tags
