@@ -3,6 +3,12 @@
 @import 'noselect';
 @import 'fontsmoothing';
 
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Roboto"), local("Roboto-Regular"), url("./Roboto.ttf") format("truetype");
+}
 
 [data-player] {
   @include nested-reset;
@@ -18,7 +24,7 @@
   text-align: center;
   overflow: hidden;
   font-size: 100%;
-  font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+  font-family: "Roboto", "Open Sans", Arial, sans-serif;
   text-shadow: 0 0 0;
   box-sizing: border-box;
 
