@@ -3,9 +3,9 @@
 .seek-time[data-seek-time] {
   position: absolute;
   white-space: nowrap;
-  width: auto;
   height: 20px;
   line-height: 20px;
+  font-size: 0;
   left: -100%;
   bottom: 55px;
   background-color: rgba(2, 2, 2, 0.5);
@@ -16,19 +16,21 @@
     opacity: 0;
   }
 
-  span[data-seek-time] {
-    position: relative;
+  [data-seek-time] {
+    display: inline-block;
     color: white;
     font-size: 10px;
     padding-left: 7px;
     padding-right: 7px;
+    vertical-align: top;
   }
 
-  span[data-duration] {
-    position: relative;
+  [data-duration] {
+    display: inline-block;
     color: rgba(255,255,255,.5);
     font-size: 10px;
     padding-right: 7px;
+    vertical-align: top;
     &:before { content: "|"; margin-right: 7px; }
   }
 }
