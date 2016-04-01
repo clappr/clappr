@@ -47,7 +47,7 @@ export default class Loader extends BaseObject {
   constructor(externalPlugins, playerId) {
     super()
     this.playerId = playerId
-    this.playbackPlugins = [HTML5VideoPlayback, HTML5AudioPlayback, FlashVideoPlayback, HLSVideoPlayback, FlasHLSVideoPlayback, HTMLImgPlayback, NoOp]
+    this.playbackPlugins = [HLSVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, FlashVideoPlayback, FlasHLSVideoPlayback, HTMLImgPlayback, NoOp]
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
     this.corePlugins = [DVRControls, Favicon, SeekTime, SourcesPlugin, EndVideo]
     if (externalPlugins) {
