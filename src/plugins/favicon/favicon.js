@@ -17,12 +17,14 @@ export default class Favicon extends CorePlugin {
   }
 
   configure() {
-    if (!this.core.options.changeFavicon && this.enabled) {
+    if (this.core.options.changeFavicon) {
+      if (!this.enabled) {
+        this.stopListening(this.core, Events.CORE_OPTIONS_CHANGE)
+        this.enable()
+      }  
+    } else if (this.enabled) {
       this.disable()
       this.listenTo(this.core, Events.CORE_OPTIONS_CHANGE, this.configure)
-    } else if (!this.enabled) {
-      this.stopListening(this.core, Events.CORE_OPTIONS_CHANGE)
-      this.enable()
     }
   }
 
