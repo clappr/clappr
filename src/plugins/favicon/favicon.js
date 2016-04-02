@@ -2,6 +2,9 @@ import CorePlugin from 'base/core_plugin'
 import Events from 'base/events'
 import $ from 'clappr-zepto'
 
+import playIcon from 'icons/01-play.svg'
+import pauseIcon from 'icons/02-pause.svg'
+
 export default class Favicon extends CorePlugin {
   get name() { return 'favicon' }
 
@@ -42,14 +45,15 @@ export default class Favicon extends CorePlugin {
     this.resetIcon()
   }
 
-  createIcon(charCode) {
+  createIcon(svg) {
     var canvas = $('<canvas/>')
-    canvas[0].width = 32
-    canvas[0].height = 32
+    canvas[0].width = 16
+    canvas[0].height = 16
     var ctx = canvas[0].getContext('2d')
     ctx.fillStyle = '#000'
-    ctx.font = '25px Player'
-    ctx.fillText(String.fromCharCode(charCode), 5, 26)
+    var d = $(svg).find('path').attr('d')
+    var path = new Path2D(d)
+    ctx.fill(path)
     var icon = $('<link rel="shortcut icon" type="image/png"/>')
     icon.attr('href', canvas[0].toDataURL('image/png'))
     return icon
@@ -57,14 +61,14 @@ export default class Favicon extends CorePlugin {
 
   setPlayIcon() {
     if (!this.playIcon) {
-      this.playIcon = this.createIcon(0xe001)
+      this.playIcon = this.createIcon(playIcon)
     }
     this.changeIcon(this.playIcon)
   }
 
   setPauseIcon() {
     if (!this.pauseIcon) {
-      this.pauseIcon = this.createIcon(0xe002)
+      this.pauseIcon = this.createIcon(pauseIcon)
     }
     this.changeIcon(this.pauseIcon)
   }
