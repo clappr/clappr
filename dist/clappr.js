@@ -186,7 +186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// Use of this source code is governed by a BSD-style
 	// license that can be found in the LICENSE file.
 
-	var version = ("0.2.43");
+	var version = ("0.2.44");
 
 	exports.default = {
 	    Player: _player2.default,
@@ -24461,6 +24461,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
+	var _play = __webpack_require__(42);
+
+	var _play2 = _interopRequireDefault(_play);
+
+	var _pause = __webpack_require__(43);
+
+	var _pause2 = _interopRequireDefault(_pause);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -24468,6 +24476,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var oldIcon = (0, _clapprZepto2.default)('link[rel="shortcut icon"]');
 
 	var Favicon = function (_CorePlugin) {
 	  _inherits(Favicon, _CorePlugin);
@@ -24477,6 +24487,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    get: function get() {
 	      return 'favicon';
 	    }
+	  }, {
+	    key: 'oldIcon',
+	    get: function get() {
+	      return oldIcon;
+	    }
 	  }]);
 
 	  function Favicon(core) {
@@ -24484,16 +24499,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var _this = _possibleConstructorReturn(this, _CorePlugin.call(this, core));
 
-	    _this.oldIcon = (0, _clapprZepto2.default)('link[rel="shortcut icon"]');
 	    _this.configure();
 	    return _this;
 	  }
 
 	  Favicon.prototype.configure = function configure() {
-	    if (!this.core.options.changeFavicon) {
+	    if (!this.core.options.changeFavicon && this.enabled) {
 	      this.disable();
 	      this.listenTo(this.core, _events2.default.CORE_OPTIONS_CHANGE, this.configure);
-	    } else {
+	    } else if (!this.enabled) {
 	      this.stopListening(this.core, _events2.default.CORE_OPTIONS_CHANGE);
 	      this.enable();
 	    }
@@ -24508,11 +24522,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  Favicon.prototype.containerChanged = function containerChanged() {
+	    this.stopListening(this.core.mediaControl.container);
 	    this.listenTo(this.core.mediaControl.container, _events2.default.CONTAINER_PLAY, this.setPlayIcon);
 	    this.listenTo(this.core.mediaControl.container, _events2.default.CONTAINER_PAUSE, this.setPauseIcon);
 	    this.listenTo(this.core.mediaControl.container, _events2.default.CONTAINER_STOP, this.resetIcon);
 	    this.listenTo(this.core.mediaControl.container, _events2.default.CONTAINER_ENDED, this.resetIcon);
 	    this.listenTo(this.core.mediaControl.container, _events2.default.CONTAINER_ERROR, this.resetIcon);
+	    this.resetIcon();
 	  };
 
 	  Favicon.prototype.disable = function disable() {
@@ -24520,14 +24536,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.resetIcon();
 	  };
 
-	  Favicon.prototype.createIcon = function createIcon(charCode) {
+	  Favicon.prototype.destroy = function destroy() {
+	    _CorePlugin.prototype.destroy.call(this);
+	    this.resetIcon();
+	  };
+
+	  Favicon.prototype.createIcon = function createIcon(svg) {
 	    var canvas = (0, _clapprZepto2.default)('<canvas/>');
-	    canvas[0].width = 32;
-	    canvas[0].height = 32;
+	    canvas[0].width = 16;
+	    canvas[0].height = 16;
 	    var ctx = canvas[0].getContext('2d');
 	    ctx.fillStyle = '#000';
-	    ctx.font = '25px Player';
-	    ctx.fillText(String.fromCharCode(charCode), 5, 26);
+	    var d = (0, _clapprZepto2.default)(svg).find('path').attr('d');
+	    var path = new Path2D(d);
+	    ctx.fill(path);
 	    var icon = (0, _clapprZepto2.default)('<link rel="shortcut icon" type="image/png"/>');
 	    icon.attr('href', canvas[0].toDataURL('image/png'));
 	    return icon;
@@ -24535,32 +24557,26 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  Favicon.prototype.setPlayIcon = function setPlayIcon() {
 	    if (!this.playIcon) {
-	      this.playIcon = this.createIcon(0xe001);
+	      this.playIcon = this.createIcon(_play2.default);
 	    }
 	    this.changeIcon(this.playIcon);
 	  };
 
 	  Favicon.prototype.setPauseIcon = function setPauseIcon() {
 	    if (!this.pauseIcon) {
-	      this.pauseIcon = this.createIcon(0xe002);
+	      this.pauseIcon = this.createIcon(_pause2.default);
 	    }
 	    this.changeIcon(this.pauseIcon);
 	  };
 
 	  Favicon.prototype.resetIcon = function resetIcon() {
-	    if (this.currentIcon) {
-	      this.currentIcon.remove();
-	    }
+	    (0, _clapprZepto2.default)('link[rel="shortcut icon"]').remove();
 	    (0, _clapprZepto2.default)('head').append(this.oldIcon);
 	  };
 
 	  Favicon.prototype.changeIcon = function changeIcon(icon) {
 	    if (icon) {
-	      this.oldIcon.remove();
-	      if (this.currentIcon) {
-	        this.currentIcon.remove();
-	      }
-	      this.currentIcon = icon;
+	      (0, _clapprZepto2.default)('link[rel="shortcut icon"]').remove();
 	      (0, _clapprZepto2.default)('head').append(icon);
 	    }
 	  };
