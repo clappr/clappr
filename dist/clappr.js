@@ -186,7 +186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// Use of this source code is governed by a BSD-style
 	// license that can be found in the LICENSE file.
 
-	var version = ("0.2.45");
+	var version = ("0.2.46");
 
 	exports.default = {
 	    Player: _player2.default,
@@ -24504,12 +24504,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  Favicon.prototype.configure = function configure() {
-	    if (!this.core.options.changeFavicon && this.enabled) {
+	    if (this.core.options.changeFavicon) {
+	      if (!this.enabled) {
+	        this.stopListening(this.core, _events2.default.CORE_OPTIONS_CHANGE);
+	        this.enable();
+	      }
+	    } else if (this.enabled) {
 	      this.disable();
 	      this.listenTo(this.core, _events2.default.CORE_OPTIONS_CHANGE, this.configure);
-	    } else if (!this.enabled) {
-	      this.stopListening(this.core, _events2.default.CORE_OPTIONS_CHANGE);
-	      this.enable();
 	    }
 	  };
 
