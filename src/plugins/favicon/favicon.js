@@ -12,10 +12,10 @@ export default class Favicon extends CorePlugin {
   }
 
   configure() {
-    if (!this.core.options.changeFavicon) {
+    if (!this.core.options.changeFavicon && this.enabled) {
       this.disable()
       this.listenTo(this.core, Events.CORE_OPTIONS_CHANGE, this.configure)
-    } else {
+    } else if (!this.enabled) {
       this.stopListening(this.core, Events.CORE_OPTIONS_CHANGE)
       this.enable()
     }
