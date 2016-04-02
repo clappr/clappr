@@ -186,7 +186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// Use of this source code is governed by a BSD-style
 	// license that can be found in the LICENSE file.
 
-	var version = ("0.2.44");
+	var version = ("0.2.45");
 
 	exports.default = {
 	    Player: _player2.default,
@@ -4167,7 +4167,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  Core.prototype.render = function render() {
-	    var style = _styler2.default.getStyleFor(_style2.default);
+	    var style = _styler2.default.getStyleFor(_style2.default, { baseUrl: this.options.baseUrl });
 	    this.$el.append(style);
 	    this.$el.append(this.mediaControl.render().el);
 
