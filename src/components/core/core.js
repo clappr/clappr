@@ -312,7 +312,7 @@ export default class Core extends UIObject {
   }
 
   render() {
-    var style = Styler.getStyleFor(coreStyle);
+    var style = Styler.getStyleFor(coreStyle, {baseUrl: this.options.baseUrl});
     this.$el.append(style)
     this.$el.append(this.mediaControl.render().el)
 
