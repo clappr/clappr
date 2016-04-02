@@ -5,12 +5,14 @@ import $ from 'clappr-zepto'
 import playIcon from 'icons/01-play.svg'
 import pauseIcon from 'icons/02-pause.svg'
 
+const oldIcon = $('link[rel="shortcut icon"]')
+
 export default class Favicon extends CorePlugin {
   get name() { return 'favicon' }
+  get oldIcon() { return oldIcon }
 
   constructor(core) {
     super(core)
-    this.oldIcon = $('link[rel="shortcut icon"]')
     this.configure()
   }
 
@@ -33,15 +35,22 @@ export default class Favicon extends CorePlugin {
   }
 
   containerChanged() {
+    this.stopListening(this.core.mediaControl.container)
     this.listenTo(this.core.mediaControl.container, Events.CONTAINER_PLAY, this.setPlayIcon)
     this.listenTo(this.core.mediaControl.container, Events.CONTAINER_PAUSE, this.setPauseIcon)
     this.listenTo(this.core.mediaControl.container, Events.CONTAINER_STOP, this.resetIcon)
     this.listenTo(this.core.mediaControl.container, Events.CONTAINER_ENDED, this.resetIcon)
     this.listenTo(this.core.mediaControl.container, Events.CONTAINER_ERROR, this.resetIcon)
+    this.resetIcon()
   }
 
   disable() {
     super.disable()
+    this.resetIcon()
+  }
+
+  destroy() {
+    super.destroy()
     this.resetIcon()
   }
 
@@ -74,19 +83,13 @@ export default class Favicon extends CorePlugin {
   }
 
   resetIcon() {
-    if (this.currentIcon) {
-      this.currentIcon.remove()
-    }
+    $('link[rel="shortcut icon"]').remove()
     $('head').append(this.oldIcon)
   }
 
   changeIcon(icon) {
     if (icon) {
-      this.oldIcon.remove()
-      if (this.currentIcon) {
-        this.currentIcon.remove()
-      }
-      this.currentIcon = icon
+      $('link[rel="shortcut icon"]').remove()
       $('head').append(icon)
     }
   }
