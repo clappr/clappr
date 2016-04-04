@@ -136,7 +136,7 @@ export default class DashShakaPlayback extends HTML5Video {
   }
 
   _onAdaptation(event) {
-    if (!!event.size) return
+    if (!event.size) return
 
     Log.debug('an adaptation has happened:', event)
     this.highDefinition = (event.size.height >= 720)
@@ -147,7 +147,10 @@ export default class DashShakaPlayback extends HTML5Video {
       height: event.size.height,
       level: event.size.number
     })
-    (this._levels.length > 0) && this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
+
+    if (this._levels.length > 0) {
+      this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
+    }
   }
 
   _destroy() {
