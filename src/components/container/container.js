@@ -290,13 +290,13 @@ export default class Container extends UIObject {
   }
 
   seek(time) {
-    this.trigger(Events.CONTAINER_SEEK, time, this.name);
-    this.playback.seek(time);
+    this.trigger(Events.CONTAINER_SEEK, time, this.name)
+    this.playback.seek(time)
   }
 
   seekPercentage(percentage) {
     var duration = this.getDuration()
-    if (percentage > 0 && percentage <= 100) {
+    if (percentage >= 0 && percentage <= 100) {
       var time = duration * (percentage / 100)
       this.seek(time)
     }
