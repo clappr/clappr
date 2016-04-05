@@ -242,7 +242,7 @@ export default class Player extends BaseObject {
       if (eventType) {
         var eventFunction = userEvents[userEvent]
         eventFunction = typeof eventFunction === "function" && eventFunction
-        eventFunction && this.listenTo(this, eventType, eventFunction)
+        eventFunction && this.on(eventType, eventFunction)
       }
     })
   }
