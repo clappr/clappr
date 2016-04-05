@@ -74,6 +74,26 @@ export default class Player extends BaseObject {
   }
 
   /**
+   * An events map that allows the user to add custom callbacks in player's options.
+   * @property eventsMapping
+   * @type {Object}
+   */
+  get eventsMapping() {
+    return {
+      "onReady": Events.PLAYER_READY,
+      "onResize": Events.PLAYER_RESIZE,
+      "onPlay": Events.PLAYER_PLAY,
+      "onPause": Events.PLAYER_PAUSE,
+      "onStop": Events.PLAYER_STOP,
+      "onEnded": Events.PLAYER_ENDED,
+      "onSeek": Events.PLAYER_SEEK,
+      "onError": Events.PLAYER_ERROR,
+      "onTimeUpdate": Events.PLAYER_TIMEUPDATE,
+      "onVolumeUpdate": Events.PLAYER_VOLUMEUPDATE
+    }
+  }
+
+  /**
    * ## Player's constructor
    *
    * You might pass the options object to build the player.
@@ -223,26 +243,13 @@ export default class Player extends BaseObject {
   }
 
   registerOptionEventListeners() {
-    var eventsMapping = {
-      "onReady": Events.PLAYER_READY,
-      "onResize": Events.PLAYER_RESIZE,
-      "onPlay": Events.PLAYER_PLAY,
-      "onPause": Events.PLAYER_PAUSE,
-      "onStop": Events.PLAYER_STOP,
-      "onEnded": Events.PLAYER_ENDED,
-      "onSeek": Events.PLAYER_SEEK,
-      "onError": Events.PLAYER_ERROR,
-      "onTimeUpdate": Events.PLAYER_TIMEUPDATE,
-      "onVolumeUpdate": Events.PLAYER_VOLUMEUPDATE
-    }
     var userEvents = this.options.events || {}
-
     Object.keys(userEvents).forEach((userEvent) => {
-      var eventType = eventsMapping[userEvent]
+      var eventType = this.eventsMapping[userEvent]
       if (eventType) {
         var eventFunction = userEvents[userEvent]
         eventFunction = typeof eventFunction === "function" && eventFunction
-        eventFunction && this.listenTo(this, eventType, eventFunction)
+        eventFunction && this.on(eventType, eventFunction)
       }
     })
   }
