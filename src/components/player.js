@@ -73,6 +73,11 @@ export default class Player extends BaseObject {
     return !!this.ready
   }
 
+  /**
+   * An events map that allows the user to add custom callbacks in player's options.
+   * @property eventsMapping
+   * @type {Object}
+   */
   get eventsMapping() {
     return {
       "onReady": Events.PLAYER_READY,
