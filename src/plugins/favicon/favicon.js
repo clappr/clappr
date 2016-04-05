@@ -21,7 +21,7 @@ export default class Favicon extends CorePlugin {
       if (!this.enabled) {
         this.stopListening(this.core, Events.CORE_OPTIONS_CHANGE)
         this.enable()
-      }  
+      }
     } else if (this.enabled) {
       this.disable()
       this.listenTo(this.core, Events.CORE_OPTIONS_CHANGE, this.configure)

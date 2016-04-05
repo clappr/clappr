@@ -235,7 +235,7 @@ export default class HTML5Video extends Playback {
     this.loadStarted = true
     this.handleBufferingEvents()
   }
-  
+
   // called after the first frame has loaded
   // note this doesn't fire on ios before the user has requested play
   // ideally the "loadstart" event would be used instead, but this fires
