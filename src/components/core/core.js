@@ -236,7 +236,7 @@ export default class Core extends UIObject {
 
   createMediaControl(options) {
     if(options.mediacontrol && options.mediacontrol.external) {
-      return new options.mediacontrol.external(options);
+      return new options.mediacontrol.external(options).render();
     } else {
       return new MediaControl(options).render();
     }
