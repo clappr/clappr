@@ -14,7 +14,7 @@ var LEVEL_DEBUG = 0
 var LEVEL_INFO = 1
 var LEVEL_WARN = 2
 var LEVEL_ERROR = 3
-var LEVEL_DISABLED = 4
+var LEVEL_DISABLED = LEVEL_ERROR
 
 var COLORS = [DEBUG, INFO, WARN, ERROR, ERROR]
 var DESCRIPTIONS = ['debug', 'info', 'warn', 'error', 'disabled']
