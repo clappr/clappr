@@ -190,7 +190,7 @@ export default class MediaControl extends UIObject {
       this.trigger(Events.MEDIACONTROL_PLAYING)
     } else {
       this.$playPauseToggle.append(playIcon)
-      this.$playStopToggle.append(pauseIcon)
+      this.$playStopToggle.append(playIcon)
       this.trigger(Events.MEDIACONTROL_NOTPLAYING)
     }
     this.applyButtonStyle(this.$playPauseToggle)
