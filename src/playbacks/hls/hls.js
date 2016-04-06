@@ -215,7 +215,7 @@ export default class HLS extends HTML5VideoPlayback {
       }
     }
     if (newDuration !== this.playableRegionDuration) {
-      this.playableRegionDuration = newDuration
+      this.hls.bufferController.mediaSource.duration = this.playableRegionDuration = newDuration
       this.onDurationChange()
     }
   }
