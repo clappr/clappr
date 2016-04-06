@@ -5,6 +5,57 @@ var pushUrl = function(path) {
 }
 
 describe('Utils', function() {
+  describe('extend', function() {
+    class Base {
+      get name() { return 'base' }
+      constructor(p1, p2) {
+        this.prop1 = p1
+        this.prop2 = p2
+      }
+      test() {}
+    }
+
+    it('should create a new class that extends parent', function() {
+      var Derived = utils.extend(Base, {})
+      var d = new Derived(1, 'some-value')
+      expect(d.name).to.be.equal('base')
+      expect(d.test()).to.be.undefined
+    });
+
+    it('should pass constructor parameters to super constructor', function() {
+      var Derived = utils.extend(Base, {})
+      var d = new Derived(1, 'some-value')
+      expect(d.prop1).to.be.equal(1)
+      expect(d.prop2).to.be.equal('some-value')
+    })
+
+    it('should pass constructor parameters to initialize method', function() {
+      var Derived = utils.extend(Base, {
+        initialize(p1, p2, p3) {
+          this.prop3 = p3
+        }
+      })
+      var d = new Derived(1, 'some-value', 42)
+      expect(d.prop3).to.be.equal(42)
+    })
+
+    it ('should support overriding methods', function() {
+      var Derived = utils.extend(Base, {
+        test() { return true }
+      })
+      var d = new Derived()
+      expect(d.test()).to.be.true
+    });
+
+    it ('should support overriding read-only properties', function() {
+      var Derived = utils.extend(Base, {
+        get name() { return 'derived' }
+      })
+      var d = new Derived()
+      expect(d.name).to.be.equal('derived')
+    });
+  });
+
   it('creates unique id for a given prefix', function() {
     expect(utils.uniqueId("a")).to.not.be.equal(utils.uniqueId("a"))
   });
