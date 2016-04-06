@@ -80,16 +80,16 @@ export default class Player extends BaseObject {
    */
   get eventsMapping() {
     return {
-      "onReady": Events.PLAYER_READY,
-      "onResize": Events.PLAYER_RESIZE,
-      "onPlay": Events.PLAYER_PLAY,
-      "onPause": Events.PLAYER_PAUSE,
-      "onStop": Events.PLAYER_STOP,
-      "onEnded": Events.PLAYER_ENDED,
-      "onSeek": Events.PLAYER_SEEK,
-      "onError": Events.PLAYER_ERROR,
-      "onTimeUpdate": Events.PLAYER_TIMEUPDATE,
-      "onVolumeUpdate": Events.PLAYER_VOLUMEUPDATE
+      onReady: Events.PLAYER_READY,
+      onResize: Events.PLAYER_RESIZE,
+      onPlay: Events.PLAYER_PLAY,
+      onPause: Events.PLAYER_PAUSE,
+      onStop: Events.PLAYER_STOP,
+      onEnded: Events.PLAYER_ENDED,
+      onSeek: Events.PLAYER_SEEK,
+      onError: Events.PLAYER_ERROR,
+      onTimeUpdate: Events.PLAYER_TIMEUPDATE,
+      onVolumeUpdate: Events.PLAYER_VOLUMEUPDATE
     }
   }
 
