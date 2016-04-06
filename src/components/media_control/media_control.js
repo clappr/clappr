@@ -6,7 +6,7 @@
  * The MediaControl is responsible for displaying the Player controls.
  */
 
-import {Config, Fullscreen, formatTime} from 'base/utils'
+import {Config, Fullscreen, formatTime, extend} from 'base/utils'
 
 import Events from 'base/events'
 import Kibo from 'base/kibo'
@@ -643,4 +643,8 @@ export default class MediaControl extends UIObject {
     this.trigger(Events.MEDIACONTROL_RENDERED)
     return this
   }
+}
+
+MediaControl.extend = function(properties) {
+  return extend(MediaControl, properties)
 }
