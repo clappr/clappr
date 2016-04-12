@@ -11,7 +11,7 @@ export default class SourcesPlugin extends CorePlugin {
   }
 
   onContainersCreated() {
-    var firstValidSource = find(this.core.containers, (container) => container.playback.name !== 'no_op' || this.core.containers[0])
+    var firstValidSource = find(this.core.containers, (container) => container.playback.name !== 'no_op')  || this.core.containers[0]
     if (firstValidSource) {
       this.core.containers.forEach((container) => {
         if (container !== firstValidSource) {
