@@ -159,6 +159,25 @@ export default class HLS extends HTML5VideoPlayback {
     this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: this.getCurrentTime(), total: this.getDuration()}, this.name)
   }
 
+  onProgress() {
+    if (!this.el.buffered.length) {
+      return
+    }
+    var bufferedPos = 0
+    for (var i = 0; i < this.el.buffered.length; i++) {
+      if (this.el.currentTime >= this.el.buffered.start(i) && this.el.currentTime <= this.el.buffered.end(i)) {
+        bufferedPos = i
+        break
+      }
+    }
+    this.trigger(Events.PLAYBACK_PROGRESS, {
+      // for a stream with sliding window dvr something that is buffered my slide off the start of the timeline
+      start: Math.max(0, this.el.buffered.start(bufferedPos) - this.playableRegionStartTime),
+      current: Math.max(0, this.el.buffered.end(bufferedPos) - this.playableRegionStartTime),
+      total: this.getDuration()
+    })
+  }
+
   play() {
     if (!this.hls) {
       this.setupHls()
@@ -195,12 +214,14 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   onLevelUpdated(evt, data) {
+    var startTimeChanged = false
+    var durationChanged = false
     var fragments = data.details.fragments
-    if (fragments.length > 0) {
+    if (fragments.length > 0 && this.playableRegionStartTime !== fragments[0].start) {
+      startTimeChanged = true
       this.playableRegionStartTime = fragments[0].start
     }
     var newDuration = data.details.totalduration
-
     // if it's a live stream then shorten the duration to remove access
     // to the area after hlsjs's live sync point
     // seeks to areas after this point sometimes have issues
@@ -214,10 +235,16 @@ export default class HLS extends HTML5VideoPlayback {
         newDuration -= hiddenAreaDuration
       }
     }
+
     if (newDuration !== this.playableRegionDuration) {
+      durationChanged = true
       this.playableRegionDuration = newDuration
-      this.onDurationChange()
     }
+
+    // now that the values have been updated call any methods that use on them so they get the updated values
+    // immediately
+    durationChanged && this.onDurationChange()
+    startTimeChanged && this.onProgress()
   }
 
   onFragmentLoaded(evt, data) {
