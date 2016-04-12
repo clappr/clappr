@@ -25,6 +25,9 @@ export default class HLSEvents {
   levelLoaded(loadmetrics) {
     Mediator.trigger(`${this.instanceId}:levelloaded`, loadmetrics)
   }
+  levelEndlist(level) {
+    Mediator.trigger(`${this.instanceId}:levelendlist`, level)
+  }
   fragmentLoaded(loadmetrics) {
     Mediator.trigger(`${this.instanceId}:fragmentloaded`, loadmetrics)
   }

@@ -120,6 +120,7 @@ export default class FlasHLS extends BaseFlashPlayback {
     Mediator.on(this.cid + ':levelchanged', (level) => this.levelChanged(level))
     Mediator.on(this.cid + ':error', (code, url, message) => this.flashPlaybackError(code, url, message))
     Mediator.on(this.cid + ':fragmentloaded',(loadmetrics) => this.onFragmentLoaded(loadmetrics))
+    Mediator.on(this.cid + ':levelendlist', (level) => this.onLevelEndlist(level))
   }
 
   stopListening() {
@@ -131,6 +132,7 @@ export default class FlasHLS extends BaseFlashPlayback {
     Mediator.off(this.cid + ':playbackerror')
     Mediator.off(this.cid + ':fragmentloaded')
     Mediator.off(this.cid + ':manifestloaded')
+    Mediator.off(this.cid + ':levelendlist')
   }
 
   bootstrap() {
@@ -527,6 +529,10 @@ export default class FlasHLS extends BaseFlashPlayback {
         total: this.el.getDuration()
       })
     }
+  }
+
+  onLevelEndlist(level) {
+    this.updatePlaybackType()
   }
 
   firstPlay() {
