@@ -43,6 +43,10 @@ export default class HLS extends HTML5VideoPlayback {
     // if content is removed from the beginning then this empty area should
     // be ignored. "playableRegionDuration" does not consider this
     this.playableRegionDuration = 0
+    // true when the actual duration is longer than hlsjs's live sync point
+    // when this is false playableRegionDuration will be the actual duration
+    // when this is true playableRegionDuration will exclude the time after the sync point
+    this.durationExcludesAfterLiveSyncPoint = false
     options.autoPlay && this.setupHls()
     this.recoverAttemptsRemaining = options.hlsRecoverAttempts || 16
   }
@@ -233,6 +237,10 @@ export default class HLS extends HTML5VideoPlayback {
       let hiddenAreaDuration = fragmentTargetDuration * liveSyncDurationCount
       if (hiddenAreaDuration <= newDuration) {
         newDuration -= hiddenAreaDuration
+        this.durationExcludesAfterLiveSyncPoint = true
+      }
+      else {
+        this.durationExcludesAfterLiveSyncPoint = false
       }
     }
 
@@ -272,7 +280,11 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   get dvrEnabled() {
-    return (this.playableRegionDuration >= this.minDvrSize && this.getPlaybackType() === Playback.LIVE)
+    // enabled when:
+    // - the duration does not include content after hlsjs's live sync point
+    // - the playable region duration is longer than the configured duration to enable dvr after
+    // - the playback type is LIVE.
+    return (this.durationExcludesAfterLiveSyncPoint && this.playableRegionDuration >= this.minDvrSize && this.getPlaybackType() === Playback.LIVE)
   }
 
   getPlaybackType() {
