@@ -127,6 +127,8 @@ export default class HTML5Video extends Playback {
   onDurationChange() {
     this.updateSettings()
     this.onTimeUpdate()
+    // onProgress uses the duration
+    this.onProgress()
   }
 
   updateSettings() {
