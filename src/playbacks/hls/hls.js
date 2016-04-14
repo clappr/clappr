@@ -58,7 +58,7 @@ export default class HLS extends HTML5VideoPlayback {
     this.hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this.onLevelUpdated(evt, data))
     this.hls.on(HLSJS.Events.LEVEL_SWITCH, (evt,data) => this.onLevelSwitch(evt, data))
     this.hls.on(HLSJS.Events.FRAG_LOADED, (evt, data) => this.onFragmentLoaded(evt, data))
-    this.hls.on(HLSJS.Events.ERROR, (evt, data) => this.onError(evt, data))
+    this.hls.on(HLSJS.Events.ERROR, (evt, data) => this.onHLSJSError(evt, data))
     this.hls.attachMedia(this.el)
   }
 
@@ -139,26 +139,33 @@ export default class HLS extends HTML5VideoPlayback {
     this.trigger(Events.PLAYBACK_SETTINGSUPDATE)
   }
 
-  onError(evt, data) {
-    if (data && data.fatal && this.recoverAttemptsRemaining > 0) {
-      this.recoverAttemptsRemaining -= 1
-      switch (data.type) {
-        case HLSJS.ErrorTypes.NETWORK_ERROR:
-          Log.warn(`hlsjs: trying to recover from network error, evt ${evt}, data ${data} `)
-          this.hls.startLoad()
-          break
-        case HLSJS.ErrorTypes.MEDIA_ERROR:
-          Log.warn(`hlsjs: trying to recover from media error, evt ${evt}, data ${data} `)
-          this.recover()
-          break
-        default:
-          Log.error(`hlsjs: trying to recover from media error, evt ${evt}, data ${data} `)
-          this.trigger(Events.PLAYBACK_ERROR, `hlsjs: could not recover from error, evt ${evt}, data ${data} `, this.name)
-          break
+  onHLSJSError(evt, data) {
+    // only report/handle errors if they are fatal
+    // hlsjs should automatically handle non fatal errors
+    if (data.fatal) {
+      if (this.recoverAttemptsRemaining > 0) {
+        this.recoverAttemptsRemaining -= 1
+        switch (data.type) {
+          case HLSJS.ErrorTypes.NETWORK_ERROR:
+            Log.warn(`hlsjs: trying to recover from network error, evt ${evt}, data ${data} `)
+            this.hls.startLoad()
+            break
+          case HLSJS.ErrorTypes.MEDIA_ERROR:
+            Log.warn(`hlsjs: trying to recover from media error, evt ${evt}, data ${data} `)
+            this.recover()
+            break
+          default:
+            Log.error(`hlsjs: trying to recover from error, evt ${evt}, data ${data} `)
+            this.trigger(Events.PLAYBACK_ERROR, `hlsjs: could not recover from error, evt ${evt}, data ${data} `, this.name)
+            break
+        }
+      } else {
+        Log.error(`hlsjs: could not recover from error after maximum number of attempts, evt ${evt}, data ${data} `)
+        this.trigger(Events.PLAYBACK_ERROR, {evt, data}, this.name)
       }
-    } else {
-      Log.error(`hlsjs: could not recover from error after maximum number of attempts, evt ${evt}, data ${data} `)
-      this.trigger(Events.PLAYBACK_ERROR, {evt, data}, this.name)
+    }
+    else {
+      Log.warn(`hlsjs: non-fatal error occurred, evt ${evt}, data ${data} `)
     }
   }
 
