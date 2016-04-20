@@ -186,7 +186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// Use of this source code is governed by a BSD-style
 	// license that can be found in the LICENSE file.
 
-	var version = ("0.2.47");
+	var version = ("0.2.48");
 
 	exports.default = {
 	    Player: _player2.default,
@@ -366,16 +366,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'eventsMapping',
 	    get: function get() {
 	      return {
-	        "onReady": _events2.default.PLAYER_READY,
-	        "onResize": _events2.default.PLAYER_RESIZE,
-	        "onPlay": _events2.default.PLAYER_PLAY,
-	        "onPause": _events2.default.PLAYER_PAUSE,
-	        "onStop": _events2.default.PLAYER_STOP,
-	        "onEnded": _events2.default.PLAYER_ENDED,
-	        "onSeek": _events2.default.PLAYER_SEEK,
-	        "onError": _events2.default.PLAYER_ERROR,
-	        "onTimeUpdate": _events2.default.PLAYER_TIMEUPDATE,
-	        "onVolumeUpdate": _events2.default.PLAYER_VOLUMEUPDATE
+	        onReady: _events2.default.PLAYER_READY,
+	        onResize: _events2.default.PLAYER_RESIZE,
+	        onPlay: _events2.default.PLAYER_PLAY,
+	        onPause: _events2.default.PLAYER_PAUSE,
+	        onStop: _events2.default.PLAYER_STOP,
+	        onEnded: _events2.default.PLAYER_ENDED,
+	        onSeek: _events2.default.PLAYER_SEEK,
+	        onError: _events2.default.PLAYER_ERROR,
+	        onTimeUpdate: _events2.default.PLAYER_TIMEUPDATE,
+	        onVolumeUpdate: _events2.default.PLAYER_VOLUMEUPDATE
 	      };
 	    }
 
@@ -864,36 +864,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	// license that can be found in the LICENSE file.
 	/*jshint -W079 */
 
+	function assign(obj, source) {
+	  if (source) {
+	    for (var prop in source) {
+	      var propDescriptor = Object.getOwnPropertyDescriptor(source, prop);
+	      propDescriptor ? Object.defineProperty(obj, prop, propDescriptor) : obj[prop] = source[prop];
+	    }
+	  }
+	  return obj;
+	}
+
 	function extend(parent, properties) {
-	  var pluginName = properties.name || "";
+	  var Surrogate = function (_parent) {
+	    _inherits(Surrogate, _parent);
 
-	  var MergedPlugin = function (_parent) {
-	    _inherits(MergedPlugin, _parent);
+	    function Surrogate() {
+	      _classCallCheck(this, Surrogate);
 
-	    function MergedPlugin(args) {
-	      _classCallCheck(this, MergedPlugin);
+	      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	        args[_key] = arguments[_key];
+	      }
 
-	      var _this = _possibleConstructorReturn(this, _parent.call(this, args));
+	      var _this = _possibleConstructorReturn(this, _parent.call.apply(_parent, [this].concat(args)));
 
 	      if (properties.initialize) {
-	        properties.initialize.apply(_this, Array.prototype.slice.apply(arguments));
+	        properties.initialize.apply(_this, args);
 	      }
 	      return _this;
 	    }
 
-	    _createClass(MergedPlugin, [{
-	      key: 'name',
-	      get: function get() {
-	        return pluginName;
-	      }
-	    }]);
-
-	    return MergedPlugin;
+	    return Surrogate;
 	  }(parent);
 
-	  delete properties.name;
-	  _clapprZepto2.default.extend(MergedPlugin.prototype, properties);
-	  return MergedPlugin;
+	  assign(Surrogate.prototype, properties);
+	  return Surrogate;
 	}
 
 	function formatTime(time, paddedHours) {
@@ -2984,7 +2988,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var LEVEL_INFO = 1;
 	var LEVEL_WARN = 2;
 	var LEVEL_ERROR = 3;
-	var LEVEL_DISABLED = 4;
+	var LEVEL_DISABLED = LEVEL_ERROR;
 
 	var COLORS = [DEBUG, INFO, WARN, ERROR, ERROR];
 	var DESCRIPTIONS = ['debug', 'info', 'warn', 'error', 'disabled'];
@@ -3445,12 +3449,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 	/**
-	 * lodash 4.0.1 (Custom Build) <https://lodash.com/>
+	 * lodash 4.0.2 (Custom Build) <https://lodash.com/>
 	 * Build: `lodash modularize exports="npm" -o ./`
-	 * Copyright 2012-2016 The Dojo Foundation <http://dojofoundation.org/>
+	 * Copyright jQuery Foundation and other contributors <https://jquery.org/>
+	 * Released under MIT license <https://lodash.com/license>
 	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
-	 * Copyright 2009-2016 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-	 * Available under MIT license <https://lodash.com/license>
+	 * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 */
 
 	/** Used as the `TypeError` message for "Functions" methods. */
@@ -3463,7 +3467,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/** `Object#toString` result references. */
 	var funcTag = '[object Function]',
-	    genTag = '[object GeneratorFunction]';
+	    genTag = '[object GeneratorFunction]',
+	    symbolTag = '[object Symbol]';
 
 	/** Used to match leading and trailing whitespace. */
 	var reTrim = /^\s+|\s+$/g;
@@ -3496,6 +3501,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @static
 	 * @memberOf _
+	 * @since 3.0.0
 	 * @category Function
 	 * @param {number} n The number of calls at which `func` is no longer invoked.
 	 * @param {Function} func The function to restrict.
@@ -3527,9 +3533,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @static
 	 * @memberOf _
+	 * @since 0.1.0
 	 * @category Lang
 	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified,
+	 *  else `false`.
 	 * @example
 	 *
 	 * _.isFunction(_);
@@ -3540,8 +3548,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function isFunction(value) {
 	  // The use of `Object#toString` avoids issues with the `typeof` operator
-	  // in Safari 8 which returns 'object' for typed array constructors, and
-	  // PhantomJS 1.9 which returns 'function' for `NodeList` instances.
+	  // in Safari 8 which returns 'object' for typed array and weak map constructors,
+	  // and PhantomJS 1.9 which returns 'function' for `NodeList` instances.
 	  var tag = isObject(value) ? objectToString.call(value) : '';
 	  return tag == funcTag || tag == genTag;
 	}
@@ -3552,6 +3560,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @static
 	 * @memberOf _
+	 * @since 0.1.0
 	 * @category Lang
 	 * @param {*} value The value to check.
 	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
@@ -3575,12 +3584,64 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
-	 * Converts `value` to an integer.
-	 *
-	 * **Note:** This function is loosely based on [`ToInteger`](http://www.ecma-international.org/ecma-262/6.0/#sec-tointeger).
+	 * Checks if `value` is object-like. A value is object-like if it's not `null`
+	 * and has a `typeof` result of "object".
 	 *
 	 * @static
 	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+	 * @example
+	 *
+	 * _.isObjectLike({});
+	 * // => true
+	 *
+	 * _.isObjectLike([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObjectLike(_.noop);
+	 * // => false
+	 *
+	 * _.isObjectLike(null);
+	 * // => false
+	 */
+	function isObjectLike(value) {
+	  return !!value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) == 'object';
+	}
+
+	/**
+	 * Checks if `value` is classified as a `Symbol` primitive or object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified,
+	 *  else `false`.
+	 * @example
+	 *
+	 * _.isSymbol(Symbol.iterator);
+	 * // => true
+	 *
+	 * _.isSymbol('abc');
+	 * // => false
+	 */
+	function isSymbol(value) {
+	  return (typeof value === 'undefined' ? 'undefined' : _typeof(value)) == 'symbol' || isObjectLike(value) && objectToString.call(value) == symbolTag;
+	}
+
+	/**
+	 * Converts `value` to an integer.
+	 *
+	 * **Note:** This function is loosely based on
+	 * [`ToInteger`](http://www.ecma-international.org/ecma-262/6.0/#sec-tointeger).
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
 	 * @category Lang
 	 * @param {*} value The value to convert.
 	 * @returns {number} Returns the converted integer.
@@ -3616,6 +3677,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @static
 	 * @memberOf _
+	 * @since 4.0.0
 	 * @category Lang
 	 * @param {*} value The value to process.
 	 * @returns {number} Returns the number.
@@ -3634,6 +3696,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * // => 3
 	 */
 	function toNumber(value) {
+	  if (typeof value == 'number') {
+	    return value;
+	  }
+	  if (isSymbol(value)) {
+	    return NAN;
+	  }
 	  if (isObject(value)) {
 	    var other = isFunction(value.valueOf) ? value.valueOf() : value;
 	    value = isObject(other) ? other + '' : other;
@@ -4906,7 +4974,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 	/**
-	 * lodash 4.7.0 (Custom Build) <https://lodash.com/>
+	 * lodash 4.7.1 (Custom Build) <https://lodash.com/>
 	 * Build: `lodash modularize exports="npm" -o ./`
 	 * Copyright jQuery Foundation and other contributors <https://jquery.org/>
 	 * Released under MIT license <https://lodash.com/license>
@@ -4931,7 +4999,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	/** Used to match property names within property paths. */
 	var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]/g;
 
-	/** Used to match `RegExp` [syntax characters](http://ecma-international.org/ecma-262/6.0/#sec-patterns). */
+	/**
+	 * Used to match `RegExp`
+	 * [syntax characters](http://ecma-international.org/ecma-262/6.0/#sec-patterns).
+	 */
 	var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
 
 	/** Used to match backslashes in property paths. */
@@ -5013,7 +5084,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var hasOwnProperty = objectProto.hasOwnProperty;
 
 	/**
-	 * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+	 * Used to resolve the
+	 * [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
 	 * of values.
 	 */
 	var objectToString = objectProto.toString;
@@ -5034,7 +5106,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    symbolToString = symbolProto ? symbolProto.toString : undefined;
 
 	/**
-	 * Creates an hash object.
+	 * Creates a hash object.
 	 *
 	 * @private
 	 * @constructor
@@ -5333,8 +5405,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 	/**
+	 * Converts `func` to its source code.
+	 *
+	 * @private
+	 * @param {Function} func The function to process.
+	 * @returns {string} Returns the source code.
+	 */
+	function toSource(func) {
+	  if (func != null) {
+	    try {
+	      return funcToString.call(func);
+	    } catch (e) {}
+	    try {
+	      return func + '';
+	    } catch (e) {}
+	  }
+	  return '';
+	}
+
+	/**
 	 * Creates a function that memoizes the result of `func`. If `resolver` is
-	 * provided it determines the cache key for storing the result based on the
+	 * provided, it determines the cache key for storing the result based on the
 	 * arguments provided to the memoized function. By default, the first argument
 	 * provided to the memoized function is used as the map cache key. The `func`
 	 * is invoked with the `this` binding of the memoized function.
@@ -5462,8 +5553,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
-	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
-	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 * Checks if `value` is the
+	 * [language type](http://www.ecma-international.org/ecma-262/6.0/#sec-ecmascript-language-types)
+	 * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
 	 *
 	 * @static
 	 * @memberOf _
@@ -5537,13 +5629,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * // => false
 	 */
 	function isNative(value) {
-	  if (value == null) {
+	  if (!isObject(value)) {
 	    return false;
 	  }
-	  if (isFunction(value)) {
-	    return reIsNative.test(funcToString.call(value));
-	  }
-	  return isObjectLike(value) && (isHostObject(value) ? reIsNative : reIsHostCtor).test(value);
+	  var pattern = isFunction(value) || isHostObject(value) ? reIsNative : reIsHostCtor;
+	  return pattern.test(toSource(value));
 	}
 
 	/**
@@ -7073,7 +7163,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 	/**
-	 * lodash 4.6.0 (Custom Build) <https://lodash.com/>
+	 * lodash 4.6.1 (Custom Build) <https://lodash.com/>
 	 * Build: `lodash modularize exports="npm" -o ./`
 	 * Copyright jQuery Foundation and other contributors <https://jquery.org/>
 	 * Released under MIT license <https://lodash.com/license>
@@ -7129,7 +7219,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/,
 	    reIsPlainProp = /^\w*$/;
 
-	/** Used to match `RegExp` [syntax characters](http://ecma-international.org/ecma-262/6.0/#sec-patterns). */
+	/**
+	 * Used to match `RegExp`
+	 * [syntax characters](http://ecma-international.org/ecma-262/6.0/#sec-patterns).
+	 */
 	var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
 
 	/** Used to detect host constructors (Safari). */
@@ -7340,7 +7433,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var hasOwnProperty = objectProto.hasOwnProperty;
 
 	/**
-	 * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+	 * Used to resolve the
+	 * [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
 	 * of values.
 	 */
 	var objectToString = objectProto.toString;
@@ -7367,18 +7461,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    nativeCreate = getNative(Object, 'create');
 
 	/** Used to detect maps, sets, and weakmaps. */
-	var dataViewCtorString = DataView ? DataView + '' : '',
-	    mapCtorString = Map ? funcToString.call(Map) : '',
-	    promiseCtorString = Promise ? funcToString.call(Promise) : '',
-	    setCtorString = Set ? funcToString.call(Set) : '',
-	    weakMapCtorString = WeakMap ? funcToString.call(WeakMap) : '';
+	var dataViewCtorString = toSource(DataView),
+	    mapCtorString = toSource(Map),
+	    promiseCtorString = toSource(Promise),
+	    setCtorString = toSource(Set),
+	    weakMapCtorString = toSource(WeakMap);
 
 	/** Used to convert symbols to primitives and strings. */
 	var symbolProto = _Symbol ? _Symbol.prototype : undefined,
 	    symbolValueOf = symbolProto ? symbolProto.valueOf : undefined;
 
 	/**
-	 * Creates an hash object.
+	 * Creates a hash object.
 	 *
 	 * @private
 	 * @constructor
@@ -7980,15 +8074,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function baseMatches(source) {
 	  var matchData = getMatchData(source);
 	  if (matchData.length == 1 && matchData[0][2]) {
-	    var key = matchData[0][0],
-	        value = matchData[0][1];
-
-	    return function (object) {
-	      if (object == null) {
-	        return false;
-	      }
-	      return object[key] === value && (value !== undefined || key in Object(object));
-	    };
+	    return matchesStrictComparable(matchData[0][0], matchData[0][1]);
 	  }
 	  return function (object) {
 	    return object === source || baseIsMatch(object, source, matchData);
@@ -8004,6 +8090,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {Function} Returns the new function.
 	 */
 	function baseMatchesProperty(path, srcValue) {
+	  if (isKey(path) && isStrictComparable(srcValue)) {
+	    return matchesStrictComparable(path, srcValue);
+	  }
 	  return function (object) {
 	    var objValue = get(object, path);
 	    return objValue === undefined && objValue === srcValue ? hasIn(object, path) : baseIsEqual(srcValue, objValue, undefined, UNORDERED_COMPARE_FLAG | PARTIAL_COMPARE_FLAG);
@@ -8150,7 +8239,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    case regexpTag:
 	    case stringTag:
 	      // Coerce regexes to strings and treat strings, primitives and objects,
-	      // as equal. See https://es5.github.io/#x15.10.6.4 for more details.
+	      // as equal. See http://www.ecma-international.org/ecma-262/6.0/#sec-regexp.prototype.tostring
+	      // for more details.
 	      return object == other + '';
 
 	    case mapTag:
@@ -8320,8 +8410,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag || Map && getTag(new Map()) != mapTag || Promise && getTag(Promise.resolve()) != promiseTag || Set && getTag(new Set()) != setTag || WeakMap && getTag(new WeakMap()) != weakMapTag) {
 	  getTag = function getTag(value) {
 	    var result = objectToString.call(value),
-	        Ctor = result == objectTag ? value.constructor : null,
-	        ctorString = typeof Ctor == 'function' ? funcToString.call(Ctor) : '';
+	        Ctor = result == objectTag ? value.constructor : undefined,
+	        ctorString = Ctor ? toSource(Ctor) : undefined;
 
 	    if (ctorString) {
 	      switch (ctorString) {
@@ -8351,26 +8441,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {boolean} Returns `true` if `path` exists, else `false`.
 	 */
 	function hasPath(object, path, hasFunc) {
-	  if (object == null) {
-	    return false;
-	  }
-	  var result = hasFunc(object, path);
-	  if (!result && !isKey(path)) {
-	    path = baseCastPath(path);
+	  path = isKey(path, object) ? [path] : baseCastPath(path);
 
-	    var index = -1,
-	        length = path.length;
+	  var result,
+	      index = -1,
+	      length = path.length;
 
-	    while (object != null && ++index < length) {
-	      var key = path[index];
-	      if (!(result = hasFunc(object, key))) {
-	        break;
-	      }
-	      object = object[key];
+	  while (++index < length) {
+	    var key = path[index];
+	    if (!(result = object != null && hasFunc(object, key))) {
+	      break;
 	    }
+	    object = object[key];
 	  }
-	  var length = object ? object.length : undefined;
-	  return result || !!length && isLength(length) && isIndex(path, length) && (isArray(object) || isString(object) || isArguments(object));
+	  if (result) {
+	    return result;
+	  }
+	  var length = object ? object.length : 0;
+	  return !!length && isLength(length) && isIndex(key, length) && (isArray(object) || isString(object) || isArguments(object));
 	}
 
 	/**
@@ -8441,6 +8529,43 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function isStrictComparable(value) {
 	  return value === value && !isObject(value);
+	}
+
+	/**
+	 * A specialized version of `matchesProperty` for source values suitable
+	 * for strict equality comparisons, i.e. `===`.
+	 *
+	 * @private
+	 * @param {string} key The key of the property to get.
+	 * @param {*} srcValue The value to match.
+	 * @returns {Function} Returns the new function.
+	 */
+	function matchesStrictComparable(key, srcValue) {
+	  return function (object) {
+	    if (object == null) {
+	      return false;
+	    }
+	    return object[key] === srcValue && (srcValue !== undefined || key in Object(object));
+	  };
+	}
+
+	/**
+	 * Converts `func` to its source code.
+	 *
+	 * @private
+	 * @param {Function} func The function to process.
+	 * @returns {string} Returns the source code.
+	 */
+	function toSource(func) {
+	  if (func != null) {
+	    try {
+	      return funcToString.call(func);
+	    } catch (e) {}
+	    try {
+	      return func + '';
+	    } catch (e) {}
+	  }
+	  return '';
 	}
 
 	/**
@@ -8645,8 +8770,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
-	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
-	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 * Checks if `value` is the
+	 * [language type](http://www.ecma-international.org/ecma-262/6.0/#sec-ecmascript-language-types)
+	 * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
 	 *
 	 * @static
 	 * @memberOf _
@@ -8720,13 +8846,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * // => false
 	 */
 	function isNative(value) {
-	  if (value == null) {
+	  if (!isObject(value)) {
 	    return false;
 	  }
-	  if (isFunction(value)) {
-	    return reIsNative.test(funcToString.call(value));
-	  }
-	  return isObjectLike(value) && (isHostObject(value) ? reIsNative : reIsHostCtor).test(value);
+	  var pattern = isFunction(value) || isHostObject(value) ? reIsNative : reIsHostCtor;
+	  return pattern.test(toSource(value));
 	}
 
 	/**
@@ -8797,7 +8921,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/**
 	 * Gets the value at `path` of `object`. If the resolved value is
-	 * `undefined` the `defaultValue` is used in its place.
+	 * `undefined`, the `defaultValue` is used in its place.
 	 *
 	 * @static
 	 * @memberOf _
@@ -8837,22 +8961,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {boolean} Returns `true` if `path` exists, else `false`.
 	 * @example
 	 *
-	 * var object = _.create({ 'a': _.create({ 'b': _.create({ 'c': 3 }) }) });
+	 * var object = _.create({ 'a': _.create({ 'b': 2 }) });
 	 *
 	 * _.hasIn(object, 'a');
 	 * // => true
 	 *
-	 * _.hasIn(object, 'a.b.c');
+	 * _.hasIn(object, 'a.b');
 	 * // => true
 	 *
-	 * _.hasIn(object, ['a', 'b', 'c']);
+	 * _.hasIn(object, ['a', 'b']);
 	 * // => true
 	 *
 	 * _.hasIn(object, 'b');
 	 * // => false
 	 */
 	function hasIn(object, path) {
-	  return hasPath(object, path, baseHasIn);
+	  return object != null && hasPath(object, path, baseHasIn);
 	}
 
 	/**
@@ -8960,14 +9084,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @example
 	 *
 	 * var objects = [
-	 *   { 'a': { 'b': { 'c': 2 } } },
-	 *   { 'a': { 'b': { 'c': 1 } } }
+	 *   { 'a': { 'b': 2 } },
+	 *   { 'a': { 'b': 1 } }
 	 * ];
 	 *
-	 * _.map(objects, _.property('a.b.c'));
+	 * _.map(objects, _.property('a.b'));
 	 * // => [2, 1]
 	 *
-	 * _.map(_.sortBy(objects, _.property(['a', 'b', 'c'])), 'a.b.c');
+	 * _.map(_.sortBy(objects, _.property(['a', 'b'])), 'a.b');
 	 * // => [1, 2]
 	 */
 	function property(path) {
@@ -9278,7 +9402,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.trigger(_events2.default.MEDIACONTROL_PLAYING);
 	    } else {
 	      this.$playPauseToggle.append(_play2.default);
-	      this.$playStopToggle.append(_pause2.default);
+	      this.$playStopToggle.append(_play2.default);
 	      this.trigger(_events2.default.MEDIACONTROL_NOTPLAYING);
 	    }
 	    this.applyButtonStyle(this.$playPauseToggle);
@@ -9772,6 +9896,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	}(_ui_object2.default);
 
 	exports.default = MediaControl;
+
+
+	MediaControl.extend = function (properties) {
+	  return (0, _utils.extend)(MediaControl, properties);
+	};
 	module.exports = exports['default'];
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(35)))
 
@@ -10840,7 +10969,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 	/**
-	 * lodash 4.1.2 (Custom Build) <https://lodash.com/>
+	 * lodash 4.1.3 (Custom Build) <https://lodash.com/>
 	 * Build: `lodash modularize exports="npm" -o ./`
 	 * Copyright jQuery Foundation and other contributors <https://jquery.org/>
 	 * Released under MIT license <https://lodash.com/license>
@@ -10855,7 +10984,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var funcTag = '[object Function]',
 	    genTag = '[object GeneratorFunction]';
 
-	/** Used to match `RegExp` [syntax characters](http://ecma-international.org/ecma-262/6.0/#sec-patterns). */
+	/**
+	 * Used to match `RegExp`
+	 * [syntax characters](http://ecma-international.org/ecma-262/6.0/#sec-patterns).
+	 */
 	var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
 
 	/** Used to detect host constructors (Safari). */
@@ -10934,7 +11066,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var hasOwnProperty = objectProto.hasOwnProperty;
 
 	/**
-	 * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+	 * Used to resolve the
+	 * [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
 	 * of values.
 	 */
 	var objectToString = objectProto.toString;
@@ -10950,7 +11083,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    nativeCreate = getNative(Object, 'create');
 
 	/**
-	 * Creates an hash object.
+	 * Creates a hash object.
 	 *
 	 * @private
 	 * @constructor
@@ -11275,6 +11408,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
+	 * Converts `func` to its source code.
+	 *
+	 * @private
+	 * @param {Function} func The function to process.
+	 * @returns {string} Returns the source code.
+	 */
+	function toSource(func) {
+	  if (func != null) {
+	    try {
+	      return funcToString.call(func);
+	    } catch (e) {}
+	    try {
+	      return func + '';
+	    } catch (e) {}
+	  }
+	  return '';
+	}
+
+	/**
 	 * Performs a
 	 * [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)
 	 * comparison between two values to determine if they are equivalent.
@@ -11337,8 +11489,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
-	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
-	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 * Checks if `value` is the
+	 * [language type](http://www.ecma-international.org/ecma-262/6.0/#sec-ecmascript-language-types)
+	 * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
 	 *
 	 * @static
 	 * @memberOf _
@@ -11366,34 +11519,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
-	 * Checks if `value` is object-like. A value is object-like if it's not `null`
-	 * and has a `typeof` result of "object".
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
-	 * @example
-	 *
-	 * _.isObjectLike({});
-	 * // => true
-	 *
-	 * _.isObjectLike([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isObjectLike(_.noop);
-	 * // => false
-	 *
-	 * _.isObjectLike(null);
-	 * // => false
-	 */
-	function isObjectLike(value) {
-	  return !!value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) == 'object';
-	}
-
-	/**
 	 * Checks if `value` is a native function.
 	 *
 	 * @static
@@ -11412,13 +11537,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * // => false
 	 */
 	function isNative(value) {
-	  if (value == null) {
+	  if (!isObject(value)) {
 	    return false;
 	  }
-	  if (isFunction(value)) {
-	    return reIsNative.test(funcToString.call(value));
-	  }
-	  return isObjectLike(value) && (isHostObject(value) ? reIsNative : reIsHostCtor).test(value);
+	  var pattern = isFunction(value) || isHostObject(value) ? reIsNative : reIsHostCtor;
+	  return pattern.test(toSource(value));
 	}
 
 	module.exports = SetCache;
@@ -11433,22 +11556,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 	/**
-	 * lodash 4.0.1 (Custom Build) <https://lodash.com/>
+	 * lodash 4.0.2 (Custom Build) <https://lodash.com/>
 	 * Build: `lodash modularize exports="npm" -o ./`
-	 * Copyright 2012-2016 The Dojo Foundation <http://dojofoundation.org/>
+	 * Copyright jQuery Foundation and other contributors <https://jquery.org/>
+	 * Released under MIT license <https://lodash.com/license>
 	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
-	 * Copyright 2009-2016 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-	 * Available under MIT license <https://lodash.com/license>
+	 * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 */
 
 	/** `Object#toString` result references. */
 	var funcTag = '[object Function]',
 	    genTag = '[object GeneratorFunction]';
 
-	/** Used to match `RegExp` [syntax characters](http://ecma-international.org/ecma-262/6.0/#sec-patterns). */
+	/**
+	 * Used to match `RegExp`
+	 * [syntax characters](http://ecma-international.org/ecma-262/6.0/#sec-patterns).
+	 */
 	var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
 
-	/** Used to detect host constructors (Safari > 5). */
+	/** Used to detect host constructors (Safari). */
 	var reIsHostCtor = /^\[object .+?Constructor\]$/;
 
 	/** Used to determine if values are of the language type `Object`. */
@@ -11523,7 +11649,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var hasOwnProperty = objectProto.hasOwnProperty;
 
 	/**
-	 * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+	 * Used to resolve the
+	 * [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
 	 * of values.
 	 */
 	var objectToString = objectProto.toString;
@@ -11559,13 +11686,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
+	 * Converts `func` to its source code.
+	 *
+	 * @private
+	 * @param {Function} func The function to process.
+	 * @returns {string} Returns the source code.
+	 */
+	function toSource(func) {
+	  if (func != null) {
+	    try {
+	      return funcToString.call(func);
+	    } catch (e) {}
+	    try {
+	      return func + '';
+	    } catch (e) {}
+	  }
+	  return '';
+	}
+
+	/**
 	 * Checks if `value` is classified as a `Function` object.
 	 *
 	 * @static
 	 * @memberOf _
+	 * @since 0.1.0
 	 * @category Lang
 	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified,
+	 *  else `false`.
 	 * @example
 	 *
 	 * _.isFunction(_);
@@ -11583,11 +11731,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
-	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
-	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 * Checks if `value` is the
+	 * [language type](http://www.ecma-international.org/ecma-262/6.0/#sec-ecmascript-language-types)
+	 * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
 	 *
 	 * @static
 	 * @memberOf _
+	 * @since 0.1.0
 	 * @category Lang
 	 * @param {*} value The value to check.
 	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
@@ -11611,40 +11761,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
-	 * Checks if `value` is object-like. A value is object-like if it's not `null`
-	 * and has a `typeof` result of "object".
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
-	 * @example
-	 *
-	 * _.isObjectLike({});
-	 * // => true
-	 *
-	 * _.isObjectLike([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isObjectLike(_.noop);
-	 * // => false
-	 *
-	 * _.isObjectLike(null);
-	 * // => false
-	 */
-	function isObjectLike(value) {
-	  return !!value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) == 'object';
-	}
-
-	/**
 	 * Checks if `value` is a native function.
 	 *
 	 * @static
 	 * @memberOf _
+	 * @since 3.0.0
 	 * @category Lang
 	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a native function, else `false`.
+	 * @returns {boolean} Returns `true` if `value` is a native function,
+	 *  else `false`.
 	 * @example
 	 *
 	 * _.isNative(Array.prototype.push);
@@ -11654,13 +11779,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * // => false
 	 */
 	function isNative(value) {
-	  if (value == null) {
+	  if (!isObject(value)) {
 	    return false;
 	  }
-	  if (isFunction(value)) {
-	    return reIsNative.test(funcToString.call(value));
-	  }
-	  return isObjectLike(value) && (isHostObject(value) ? reIsNative : reIsHostCtor).test(value);
+	  var pattern = isFunction(value) || isHostObject(value) ? reIsNative : reIsHostCtor;
+	  return pattern.test(toSource(value));
 	}
 
 	/**
@@ -11669,6 +11792,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @static
 	 * @memberOf _
+	 * @since 2.3.0
 	 * @category Util
 	 * @example
 	 *
@@ -11892,6 +12016,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  HTML5Video.prototype.onDurationChange = function onDurationChange() {
 	    this.updateSettings();
 	    this.onTimeUpdate();
+	    // onProgress uses the duration
+	    this.onProgress();
 	  };
 
 	  HTML5Video.prototype.updateSettings = function updateSettings() {
@@ -13033,6 +13159,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _mediator2.default.on(this.cid + ':fragmentloaded', function (loadmetrics) {
 	      return _this2.onFragmentLoaded(loadmetrics);
 	    });
+	    _mediator2.default.on(this.cid + ':levelendlist', function (level) {
+	      return _this2.onLevelEndlist(level);
+	    });
 	  };
 
 	  FlasHLS.prototype.stopListening = function stopListening() {
@@ -13044,6 +13173,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _mediator2.default.off(this.cid + ':playbackerror');
 	    _mediator2.default.off(this.cid + ':fragmentloaded');
 	    _mediator2.default.off(this.cid + ':manifestloaded');
+	    _mediator2.default.off(this.cid + ':levelendlist');
 	  };
 
 	  FlasHLS.prototype.bootstrap = function bootstrap() {
@@ -13446,6 +13576,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  };
 
+	  FlasHLS.prototype.onLevelEndlist = function onLevelEndlist(level) {
+	    this.updatePlaybackType();
+	  };
+
 	  FlasHLS.prototype.firstPlay = function firstPlay() {
 	    var _this4 = this;
 
@@ -13674,6 +13808,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _mediator2.default.trigger(this.instanceId + ':levelloaded', loadmetrics);
 	  };
 
+	  HLSEvents.prototype.levelEndlist = function levelEndlist(level) {
+	    _mediator2.default.trigger(this.instanceId + ':levelendlist', level);
+	  };
+
 	  HLSEvents.prototype.fragmentLoaded = function fragmentLoaded(loadmetrics) {
 	    _mediator2.default.trigger(this.instanceId + ':fragmentloaded', loadmetrics);
 	  };
@@ -13716,7 +13854,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "d218edf766218c19b416107bfb05ef0f.swf";
+	module.exports = __webpack_require__.p + "d13d9f4847ef9af04b804c465624c7a8.swf";
 
 /***/ },
 /* 75 */
@@ -13821,6 +13959,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // if content is removed from the beginning then this empty area should
 	    // be ignored. "playableRegionDuration" does not consider this
 	    _this.playableRegionDuration = 0;
+	    // true when the actual duration is longer than hlsjs's live sync point
+	    // when this is false playableRegionDuration will be the actual duration
+	    // when this is true playableRegionDuration will exclude the time after the sync point
+	    _this.durationExcludesAfterLiveSyncPoint = false;
 	    options.autoPlay && _this.setupHls();
 	    _this.recoverAttemptsRemaining = options.hlsRecoverAttempts || 16;
 	    return _this;
@@ -13846,7 +13988,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return _this2.onFragmentLoaded(evt, data);
 	    });
 	    this.hls.on(_hls2.default.Events.ERROR, function (evt, data) {
-	      return _this2.onError(evt, data);
+	      return _this2.onHLSJSError(evt, data);
 	    });
 	    this.hls.attachMedia(this.el);
 	  };
@@ -13934,28 +14076,56 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.trigger(_events2.default.PLAYBACK_SETTINGSUPDATE);
 	  };
 
-	  HLS.prototype.onError = function onError(evt, data) {
-	    if (data && data.fatal && this.recoverAttemptsRemaining > 0) {
-	      this.recoverAttemptsRemaining -= 1;
-	      switch (data.type) {
-	        case _hls2.default.ErrorTypes.NETWORK_ERROR:
-	          _log2.default.warn('hlsjs: trying to recover from network error, evt ' + evt + ', data ' + data + ' ');
-	          this.hls.startLoad();
-	          break;
-	        case _hls2.default.ErrorTypes.MEDIA_ERROR:
-	          _log2.default.warn('hlsjs: trying to recover from media error, evt ' + evt + ', data ' + data + ' ');
-	          this.recover();
-	          break;
-	        default:
-	          _log2.default.error('hlsjs: trying to recover from media error, evt ' + evt + ', data ' + data + ' ');
-	          this.trigger(_events2.default.PLAYBACK_ERROR, 'hlsjs: could not recover from error, evt ' + evt + ', data ' + data + ' ', this.name);
-	          break;
+	  HLS.prototype.onHLSJSError = function onHLSJSError(evt, data) {
+	    // only report/handle errors if they are fatal
+	    // hlsjs should automatically handle non fatal errors
+	    if (data.fatal) {
+	      if (this.recoverAttemptsRemaining > 0) {
+	        this.recoverAttemptsRemaining -= 1;
+	        switch (data.type) {
+	          case _hls2.default.ErrorTypes.NETWORK_ERROR:
+	            _log2.default.warn('hlsjs: trying to recover from network error, evt ' + evt + ', data ' + data + ' ');
+	            this.hls.startLoad();
+	            break;
+	          case _hls2.default.ErrorTypes.MEDIA_ERROR:
+	            _log2.default.warn('hlsjs: trying to recover from media error, evt ' + evt + ', data ' + data + ' ');
+	            this.recover();
+	            break;
+	          default:
+	            _log2.default.error('hlsjs: trying to recover from error, evt ' + evt + ', data ' + data + ' ');
+	            this.trigger(_events2.default.PLAYBACK_ERROR, 'hlsjs: could not recover from error, evt ' + evt + ', data ' + data + ' ', this.name);
+	            break;
+	        }
+	      } else {
+	        _log2.default.error('hlsjs: could not recover from error after maximum number of attempts, evt ' + evt + ', data ' + data + ' ');
+	        this.trigger(_events2.default.PLAYBACK_ERROR, { evt: evt, data: data }, this.name);
 	      }
+	    } else {
+	      _log2.default.warn('hlsjs: non-fatal error occurred, evt ' + evt + ', data ' + data + ' ');
 	    }
 	  };
 
 	  HLS.prototype.onTimeUpdate = function onTimeUpdate() {
 	    this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: this.getCurrentTime(), total: this.getDuration() }, this.name);
+	  };
+
+	  HLS.prototype.onProgress = function onProgress() {
+	    if (!this.el.buffered.length) {
+	      return;
+	    }
+	    var bufferedPos = 0;
+	    for (var i = 0; i < this.el.buffered.length; i++) {
+	      if (this.el.currentTime >= this.el.buffered.start(i) && this.el.currentTime <= this.el.buffered.end(i)) {
+	        bufferedPos = i;
+	        break;
+	      }
+	    }
+	    this.trigger(_events2.default.PLAYBACK_PROGRESS, {
+	      // for a stream with sliding window dvr something that is buffered my slide off the start of the timeline
+	      start: Math.max(0, this.el.buffered.start(bufferedPos) - this.playableRegionStartTime),
+	      current: Math.max(0, this.el.buffered.end(bufferedPos) - this.playableRegionStartTime),
+	      total: this.getDuration()
+	    });
 	  };
 
 	  HLS.prototype.play = function play() {
@@ -13995,12 +14165,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  HLS.prototype.onLevelUpdated = function onLevelUpdated(evt, data) {
+	    var startTimeChanged = false;
+	    var durationChanged = false;
 	    var fragments = data.details.fragments;
-	    if (fragments.length > 0) {
+	    if (fragments.length > 0 && this.playableRegionStartTime !== fragments[0].start) {
+	      startTimeChanged = true;
 	      this.playableRegionStartTime = fragments[0].start;
 	    }
 	    var newDuration = data.details.totalduration;
-
 	    // if it's a live stream then shorten the duration to remove access
 	    // to the area after hlsjs's live sync point
 	    // seeks to areas after this point sometimes have issues
@@ -14012,12 +14184,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var hiddenAreaDuration = fragmentTargetDuration * liveSyncDurationCount;
 	      if (hiddenAreaDuration <= newDuration) {
 	        newDuration -= hiddenAreaDuration;
+	        this.durationExcludesAfterLiveSyncPoint = true;
+	      } else {
+	        this.durationExcludesAfterLiveSyncPoint = false;
 	      }
 	    }
+
 	    if (newDuration !== this.playableRegionDuration) {
+	      durationChanged = true;
 	      this.playableRegionDuration = newDuration;
-	      this.onDurationChange();
 	    }
+
+	    // now that the values have been updated call any methods that use on them so they get the updated values
+	    // immediately
+	    durationChanged && this.onDurationChange();
+	    startTimeChanged && this.onProgress();
 	  };
 
 	  HLS.prototype.onFragmentLoaded = function onFragmentLoaded(evt, data) {
@@ -14055,7 +14236,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(HLS, [{
 	    key: 'dvrEnabled',
 	    get: function get() {
-	      return this.playableRegionDuration >= this.minDvrSize && this.getPlaybackType() === _playback2.default.LIVE;
+	      // enabled when:
+	      // - the duration does not include content after hlsjs's live sync point
+	      // - the playable region duration is longer than the configured duration to enable dvr after
+	      // - the playback type is LIVE.
+	      return this.durationExcludesAfterLiveSyncPoint && this.playableRegionDuration >= this.minDvrSize && this.getPlaybackType() === _playback2.default.LIVE;
 	    }
 	  }]);
 
@@ -14094,6 +14279,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -14105,10 +14294,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 	//import FPSController from './controller/fps-controller';
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
 	var _events = __webpack_require__(79);
 
 	var _events2 = _interopRequireDefault(_events);
@@ -14119,11 +14304,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _playlistLoader2 = _interopRequireDefault(_playlistLoader);
 
-	var _fragmentLoader = __webpack_require__(85);
+	var _fragmentLoader = __webpack_require__(86);
 
 	var _fragmentLoader2 = _interopRequireDefault(_fragmentLoader);
 
-	var _abrController = __webpack_require__(86);
+	var _abrController = __webpack_require__(87);
 
 	var _abrController2 = _interopRequireDefault(_abrController);
 
@@ -14147,7 +14332,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _timelineController2 = _interopRequireDefault(_timelineController);
 
-	var _logger = __webpack_require__(88);
+	var _logger = __webpack_require__(83);
 
 	var _xhrLoader = __webpack_require__(113);
 
@@ -14315,6 +14500,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.playlistLoader.destroy();
 	      this.fragmentLoader.destroy();
 	      this.levelController.destroy();
+	      this.abrController.destroy();
 	      this.bufferController.destroy();
 	      this.capLevelController.destroy();
 	      this.streamController.destroy();
@@ -14656,7 +14842,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // Identifier for a buffer full event
 	  BUFFER_FULL_ERROR: 'bufferFullError',
 	  // Identifier for a buffer seek over hole event
-	  BUFFER_SEEK_OVER_HOLE: 'bufferSeekOverHole'
+	  BUFFER_SEEK_OVER_HOLE: 'bufferSeekOverHole',
+	  // Identifier for an internal exception happening inside hls.js while handling an event
+	  INTERNAL_EXCEPTION: 'internalException'
 	};
 
 /***/ },
@@ -14666,6 +14854,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
 	var _createClass = function () {
 	  function defineProperties(target, props) {
@@ -14677,10 +14869,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}();
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
 	var _events = __webpack_require__(79);
 
 	var _events2 = _interopRequireDefault(_events);
@@ -14691,11 +14879,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _errors = __webpack_require__(80);
 
-	var _url = __webpack_require__(83);
+	var _url = __webpack_require__(84);
 
 	var _url2 = _interopRequireDefault(_url);
 
-	var _attrList = __webpack_require__(84);
+	var _attrList = __webpack_require__(85);
 
 	var _attrList2 = _interopRequireDefault(_attrList);
 
@@ -14785,7 +14973,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'parseMasterPlaylist',
 	    value: function parseMasterPlaylist(string, baseurl) {
 	      var levels = [],
-	          result = undefined;
+	          result = void 0;
 
 	      // https://regex101.com is your friend
 	      var re = /#EXT-X-STREAM-INF:([^\n\r]*)[\r\n]+([^\r\n]+)/g;
@@ -14800,7 +14988,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          level.width = resolution.width;
 	          level.height = resolution.height;
 	        }
-	        level.bitrate = attrs.decimalInteger('BANDWIDTH');
+	        level.bitrate = attrs.decimalInteger('AVERAGE-BANDWIDTH') || attrs.decimalInteger('BANDWIDTH');
 	        level.name = attrs.NAME;
 
 	        var codecs = attrs.CODECS;
@@ -15028,11 +15216,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 82 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
 	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
 	  return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
@@ -15048,25 +15240,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }return function (Constructor, protoProps, staticProps) {
 	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
 	  };
-	}();
+	}(); /*
+	     *
+	     * All objects in the event handling chain should inherit from this class
+	     *
+	     */
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
+	var _logger = __webpack_require__(83);
+
+	var _errors = __webpack_require__(80);
 
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
 	    throw new TypeError("Cannot call a class as a function");
 	  }
 	}
-
-	/*
-	*
-	* All objects in the event handling chain should inherit from this class
-	*
-	*/
-
-	//import {logger} from './utils/logger';
 
 	var EventHandler = function () {
 	  function EventHandler(hls) {
@@ -15136,7 +15324,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return this[funcName].bind(this, data);
 	      };
-	      eventToFunction.call(this, event, data).call();
+	      try {
+	        eventToFunction.call(this, event, data).call();
+	      } catch (err) {
+	        _logger.logger.error('internal error happened while processing ' + event + ':' + err.message);
+	        this.hls.trigger(Event.ERROR, { type: _errors.ErrorTypes.OTHER_ERROR, details: _errors.ErrorDetails.INTERNAL_EXCEPTION, fatal: false, event: event, err: err });
+	      }
 	    }
 	  }]);
 
@@ -15147,6 +15340,98 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 83 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+	  return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	} : function (obj) {
+	  return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	};
+
+	function noop() {}
+
+	var fakeLogger = {
+	  trace: noop,
+	  debug: noop,
+	  log: noop,
+	  warn: noop,
+	  info: noop,
+	  error: noop
+	};
+
+	var exportedLogger = fakeLogger;
+
+	//let lastCallTime;
+	// function formatMsgWithTimeInfo(type, msg) {
+	//   const now = Date.now();
+	//   const diff = lastCallTime ? '+' + (now - lastCallTime) : '0';
+	//   lastCallTime = now;
+	//   msg = (new Date(now)).toISOString() + ' | [' +  type + '] > ' + msg + ' ( ' + diff + ' ms )';
+	//   return msg;
+	// }
+
+	function formatMsg(type, msg) {
+	  msg = '[' + type + '] > ' + msg;
+	  return msg;
+	}
+
+	function consolePrintFn(type) {
+	  var func = window.console[type];
+	  if (func) {
+	    return function () {
+	      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	        args[_key] = arguments[_key];
+	      }
+
+	      if (args[0]) {
+	        args[0] = formatMsg(type, args[0]);
+	      }
+	      func.apply(window.console, args);
+	    };
+	  }
+	  return noop;
+	}
+
+	function exportLoggerFunctions(debugConfig) {
+	  for (var _len2 = arguments.length, functions = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+	    functions[_key2 - 1] = arguments[_key2];
+	  }
+
+	  functions.forEach(function (type) {
+	    exportedLogger[type] = debugConfig[type] ? debugConfig[type].bind(debugConfig) : consolePrintFn(type);
+	  });
+	}
+
+	var enableLogs = exports.enableLogs = function enableLogs(debugConfig) {
+	  if (debugConfig === true || (typeof debugConfig === 'undefined' ? 'undefined' : _typeof(debugConfig)) === 'object') {
+	    exportLoggerFunctions(debugConfig,
+	    // Remove out from list here to hard-disable a log-level
+	    //'trace',
+	    'debug', 'log', 'info', 'warn', 'error');
+	    // Some browsers don't allow to use bind on console object anyway
+	    // fallback to default if needed
+	    try {
+	      exportedLogger.log();
+	    } catch (e) {
+	      exportedLogger = fakeLogger;
+	    }
+	  } else {
+	    exportedLogger = fakeLogger;
+	  }
+	};
+
+	var logger = exports.logger = exportedLogger;
+
+/***/ },
+/* 84 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -15229,10 +15514,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = URLHelper;
 
 /***/ },
-/* 84 */
+/* 85 */
 /***/ function(module, exports) {
 
 	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
 	var _createClass = function () {
 	  function defineProperties(target, props) {
@@ -15243,10 +15532,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
 	  };
 	}();
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
 
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
@@ -15351,12 +15636,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = AttrList;
 
 /***/ },
-/* 85 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
 	var _createClass = function () {
 	  function defineProperties(target, props) {
@@ -15367,10 +15656,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
 	  };
 	}();
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
 
 	var _events = __webpack_require__(79);
 
@@ -15473,12 +15758,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = FragmentLoader;
 
 /***/ },
-/* 86 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
 	var _createClass = function () {
 	  function defineProperties(target, props) {
@@ -15490,10 +15779,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}();
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
 	var _events = __webpack_require__(79);
 
 	var _events2 = _interopRequireDefault(_events);
@@ -15502,13 +15787,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _bufferHelper = __webpack_require__(87);
+	var _bufferHelper = __webpack_require__(88);
 
 	var _bufferHelper2 = _interopRequireDefault(_bufferHelper);
 
 	var _errors = __webpack_require__(80);
 
-	var _logger = __webpack_require__(88);
+	var _logger = __webpack_require__(83);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -15561,7 +15846,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onFragLoading',
 	    value: function onFragLoading(data) {
-	      this.timer = setInterval(this.onCheck, 100);
+	      if (!this.timer) {
+	        this.timer = setInterval(this.onCheck, 100);
+	      }
 	      this.fragCurrent = data.frag;
 	    }
 	  }, {
@@ -15588,6 +15875,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var hls = this.hls,
 	          v = hls.media,
 	          frag = this.fragCurrent;
+
+	      // if loader has been destroyed or loading has been aborted, stop timer and return
+	      if (!frag.loader || frag.loader.stats && frag.loader.stats.aborted) {
+	        _logger.logger.warn('frag loader destroy or aborted, disarm abandonRulesCheck');
+	        this.clearTimer();
+	        return;
+	      }
 	      /* only monitor frag retrieval time if
 	      (video not paused OR first fragment being loaded(ready state === HAVE_NOTHING = 0)) AND autoswitching enabled AND not lowest level (=> means that we have several levels) */
 	      if (v && (!v.paused || !v.readyState) && frag.autoLevel && frag.level) {
@@ -15605,8 +15899,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          // time to finish loading current fragment is bigger than buffer starvation delay
 	          // ie if we risk buffer starvation if bw does not increase quickly
 	          if (bufferStarvationDelay < 2 * frag.duration && fragLoadedDelay > bufferStarvationDelay) {
-	            var fragLevelNextLoadedDelay = undefined,
-	                nextLoadLevel = undefined;
+	            var fragLevelNextLoadedDelay = void 0,
+	                nextLoadLevel = void 0;
 	            // lets iterate through lower level and try to find the biggest one that could avoid rebuffering
 	            // we start from current level - 1 and we step down , until we find a matching level
 	            for (nextLoadLevel = frag.level - 1; nextLoadLevel >= 0; nextLoadLevel--) {
@@ -15691,7 +15985,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          adjustedbw,
 	          i,
 	          maxAutoLevel;
-	      if (this._autoLevelCapping === -1) {
+	      if (this._autoLevelCapping === -1 && hls.levels && hls.levels.length) {
 	        maxAutoLevel = hls.levels.length - 1;
 	      } else {
 	        maxAutoLevel = this._autoLevelCapping;
@@ -15731,10 +16025,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = AbrController;
 
 /***/ },
-/* 87 */
+/* 88 */
 /***/ function(module, exports) {
 
 	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
 	var _createClass = function () {
 	  function defineProperties(target, props) {
@@ -15745,10 +16043,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
 	  };
 	}();
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
 
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
@@ -15850,103 +16144,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = BufferHelper;
 
 /***/ },
-/* 88 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
-	  return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
-	} : function (obj) {
-	  return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
-	};
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	function noop() {}
-
-	var fakeLogger = {
-	  trace: noop,
-	  debug: noop,
-	  log: noop,
-	  warn: noop,
-	  info: noop,
-	  error: noop
-	};
-
-	var exportedLogger = fakeLogger;
-
-	//let lastCallTime;
-	// function formatMsgWithTimeInfo(type, msg) {
-	//   const now = Date.now();
-	//   const diff = lastCallTime ? '+' + (now - lastCallTime) : '0';
-	//   lastCallTime = now;
-	//   msg = (new Date(now)).toISOString() + ' | [' +  type + '] > ' + msg + ' ( ' + diff + ' ms )';
-	//   return msg;
-	// }
-
-	function formatMsg(type, msg) {
-	  msg = '[' + type + '] > ' + msg;
-	  return msg;
-	}
-
-	function consolePrintFn(type) {
-	  var func = window.console[type];
-	  if (func) {
-	    return function () {
-	      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	        args[_key] = arguments[_key];
-	      }
-
-	      if (args[0]) {
-	        args[0] = formatMsg(type, args[0]);
-	      }
-	      func.apply(window.console, args);
-	    };
-	  }
-	  return noop;
-	}
-
-	function exportLoggerFunctions(debugConfig) {
-	  for (var _len2 = arguments.length, functions = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-	    functions[_key2 - 1] = arguments[_key2];
-	  }
-
-	  functions.forEach(function (type) {
-	    exportedLogger[type] = debugConfig[type] ? debugConfig[type].bind(debugConfig) : consolePrintFn(type);
-	  });
-	}
-
-	var enableLogs = exports.enableLogs = function enableLogs(debugConfig) {
-	  if (debugConfig === true || (typeof debugConfig === 'undefined' ? 'undefined' : _typeof(debugConfig)) === 'object') {
-	    exportLoggerFunctions(debugConfig,
-	    // Remove out from list here to hard-disable a log-level
-	    //'trace',
-	    'debug', 'log', 'info', 'warn', 'error');
-	    // Some browsers don't allow to use bind on console object anyway
-	    // fallback to default if needed
-	    try {
-	      exportedLogger.log();
-	    } catch (e) {
-	      exportedLogger = fakeLogger;
-	    }
-	  } else {
-	    exportedLogger = fakeLogger;
-	  }
-	};
-
-	var logger = exports.logger = exportedLogger;
-
-/***/ },
 /* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
 	var _createClass = function () {
 	  function defineProperties(target, props) {
@@ -15958,10 +16165,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}();
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
 	var _events = __webpack_require__(79);
 
 	var _events2 = _interopRequireDefault(_events);
@@ -15970,7 +16173,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _logger = __webpack_require__(88);
+	var _logger = __webpack_require__(83);
 
 	var _errors = __webpack_require__(80);
 
@@ -16368,6 +16571,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -16377,10 +16584,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
 	  };
 	}();
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
 
 	var _events = __webpack_require__(79);
 
@@ -16475,9 +16678,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'getMaxLevel',
 	    value: function getMaxLevel(capLevelIndex) {
-	      var result = undefined,
-	          i = undefined,
-	          level = undefined,
+	      var result = void 0,
+	          i = void 0,
+	          level = void 0,
 	          mWidth = this.mediaWidth,
 	          mHeight = this.mediaHeight,
 	          lWidth = 0,
@@ -16506,7 +16709,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'mediaWidth',
 	    get: function get() {
-	      var width = undefined;
+	      var width = void 0;
 	      if (this.media) {
 	        width = this.media.width || this.media.clientWidth || this.media.offsetWidth;
 	        width *= this.contentScaleFactor;
@@ -16516,7 +16719,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'mediaHeight',
 	    get: function get() {
-	      var height = undefined;
+	      var height = void 0;
 	      if (this.media) {
 	        height = this.media.height || this.media.clientHeight || this.media.offsetHeight;
 	        height *= this.contentScaleFactor;
@@ -16538,6 +16741,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -16547,10 +16754,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
 	  };
 	}();
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
 
 	var _demuxer = __webpack_require__(92);
 
@@ -16564,13 +16767,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _logger = __webpack_require__(88);
+	var _logger = __webpack_require__(83);
 
 	var _binarySearch = __webpack_require__(108);
 
 	var _binarySearch2 = _interopRequireDefault(_binarySearch);
 
-	var _bufferHelper = __webpack_require__(87);
+	var _bufferHelper = __webpack_require__(88);
 
 	var _bufferHelper2 = _interopRequireDefault(_bufferHelper);
 
@@ -16791,7 +16994,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                fragLen = fragments.length,
 	                start = fragments[0].start,
 	                end = fragments[fragLen - 1].start + fragments[fragLen - 1].duration,
-	                frag = undefined;
+	                frag = void 0;
 
 	            // in case of live playlist we need to ensure that requested position is not located before playlist start
 	            if (levelDetails.live) {
@@ -16805,6 +17008,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	                _logger.logger.log('buffer end: ' + bufferEnd + ' is located too far from the end of live sliding playlist, media position will be reseted to: ' + this.seekAfterBuffered.toFixed(3));
 	                bufferEnd = this.seekAfterBuffered;
 	              }
+
+	              // if end of buffer greater than live edge, don't load any fragment
+	              // this could happen if live playlist intermittently slides in the past.
+	              // level 1 loaded [182580161,182580167]
+	              // level 1 loaded [182580162,182580169]
+	              // Loading 182580168 of [182580162 ,182580169],level 1 ..
+	              // Loading 182580169 of [182580162 ,182580169],level 1 ..
+	              // level 1 loaded [182580162,182580168] <============= here we should have bufferEnd > end. in that case break to avoid reloading 182580168
+	              // level 1 loaded [182580164,182580171]
+	              //
+	              if (levelDetails.PTSKnown && bufferEnd > end) {
+	                break;
+	              }
+
 	              if (this.startFragRequested && !levelDetails.PTSKnown) {
 	                /* we are switching level on live playlist, but we don't have any PTS info for that quality level ...
 	                   try to load frag matching with next SN.
@@ -16833,7 +17050,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            if (!frag) {
 	              (function () {
-	                var foundFrag = undefined;
+	                var foundFrag = void 0;
 	                var maxFragLookUpTolerance = config.maxFragLookUpTolerance;
 	                if (bufferEnd < end) {
 	                  if (bufferEnd > end - maxFragLookUpTolerance) {
@@ -17050,13 +17267,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        fragCurrent.loader.abort();
 	      }
 	      this.fragCurrent = null;
-	      // flush everything
-	      this.hls.trigger(_events2.default.BUFFER_FLUSHING, { startOffset: 0, endOffset: Number.POSITIVE_INFINITY });
-	      this.state = State.PAUSED;
 	      // increase fragment load Index to avoid frag loop loading error after buffer flush
 	      this.fragLoadIdx += 2 * this.config.fragLoadingLoopThreshold;
-	      // speed up switching, trigger timer function
-	      this.tick();
+	      this.state = State.PAUSED;
+	      // flush everything
+	      this.hls.trigger(_events2.default.BUFFER_FLUSHING, { startOffset: 0, endOffset: Number.POSITIVE_INFINITY });
 	    }
 
 	    /*
@@ -17083,12 +17298,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        we should take into account new segment fetch time
 	      */
 	      var fetchdelay, currentRange, nextRange;
+	      // increase fragment load Index to avoid frag loop loading error after buffer flush
+	      this.fragLoadIdx += 2 * this.config.fragLoadingLoopThreshold;
 	      currentRange = this.getBufferRange(this.media.currentTime);
 	      if (currentRange && currentRange.start > 1) {
 	        // flush buffer preceding current fragment (flush until current fragment start offset)
 	        // minus 1s to avoid video freezing, that could happen if we flush keyframe of current video ...
-	        this.hls.trigger(_events2.default.BUFFER_FLUSHING, { startOffset: 0, endOffset: currentRange.start - 1 });
 	        this.state = State.PAUSED;
+	        this.hls.trigger(_events2.default.BUFFER_FLUSHING, { startOffset: 0, endOffset: currentRange.start - 1 });
 	      }
 	      if (!this.media.paused) {
 	        // add a safety delay of 1s
@@ -17110,17 +17327,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // we can flush buffer range following this one without stalling playback
 	        nextRange = this.followingBufferRange(nextRange);
 	        if (nextRange) {
-	          // flush position is the start position of this new buffer
-	          this.hls.trigger(_events2.default.BUFFER_FLUSHING, { startOffset: nextRange.start, endOffset: Number.POSITIVE_INFINITY });
-	          this.state = State.PAUSED;
 	          // if we are here, we can also cancel any loading/demuxing in progress, as they are useless
 	          var fragCurrent = this.fragCurrent;
 	          if (fragCurrent && fragCurrent.loader) {
 	            fragCurrent.loader.abort();
 	          }
 	          this.fragCurrent = null;
-	          // increase fragment load Index to avoid frag loop loading error after buffer flush
-	          this.fragLoadIdx += 2 * this.config.fragLoadingLoopThreshold;
+	          // flush position is the start position of this new buffer
+	          this.state = State.PAUSED;
+	          this.hls.trigger(_events2.default.BUFFER_FLUSHING, { startOffset: nextRange.start, endOffset: Number.POSITIVE_INFINITY });
 	        }
 	      }
 	    }
@@ -17546,9 +17761,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        case _errors.ErrorDetails.LEVEL_LOAD_TIMEOUT:
 	        case _errors.ErrorDetails.KEY_LOAD_ERROR:
 	        case _errors.ErrorDetails.KEY_LOAD_TIMEOUT:
-	          // if fatal error, stop processing, otherwise move to IDLE to retry loading
-	          _logger.logger.warn('mediaController: ' + data.details + ' while loading frag,switch to ' + (data.fatal ? 'ERROR' : 'IDLE') + ' state ...');
-	          this.state = data.fatal ? State.ERROR : State.IDLE;
+	          //  when in ERROR state, don't switch back to IDLE state in case a non-fatal error is received
+	          if (this.state !== State.ERROR) {
+	            // if fatal error, stop processing, otherwise move to IDLE to retry loading
+	            this.state = data.fatal ? State.ERROR : State.IDLE;
+	            _logger.logger.warn('mediaController: ' + data.details + ' while loading frag,switch to ' + this.state + ' state ...');
+	          }
 	          break;
 	        case _errors.ErrorDetails.BUFFER_FULL_ERROR:
 	          // trigger a smooth level switch to empty buffers
@@ -17607,11 +17825,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _logger.logger.log('playback not stuck anymore @' + currentTime);
 	          }
 	          // check buffer upfront
-	          // if less than 200ms is buffered, and media is expected to play but playhead is not moving,
+	          // if less than jumpThreshold second is buffered, and media is expected to play but playhead is not moving,
 	          // and we have a new buffer range available upfront, let's seek to that one
-	          if (bufferInfo.len <= jumpThreshold) {
-	            if (playheadMoving || !expectedPlaying) {
-	              // playhead moving or media not playing
+	          if (expectedPlaying && bufferInfo.len <= jumpThreshold) {
+	            if (playheadMoving) {
+	              // playhead moving
 	              jumpThreshold = 0;
 	              this.seekHoleNudgeDuration = 0;
 	            } else {
@@ -17634,8 +17852,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                // next buffer is close ! adjust currentTime to nextBufferStart
 	                // this will ensure effective video decoding
 	                _logger.logger.log('adjust currentTime from ' + media.currentTime + ' to next buffered @ ' + nextBufferStart + ' + nudge ' + this.seekHoleNudgeDuration);
+	                var hole = nextBufferStart + this.seekHoleNudgeDuration - media.currentTime;
 	                media.currentTime = nextBufferStart + this.seekHoleNudgeDuration;
-	                this.hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.BUFFER_SEEK_OVER_HOLE, fatal: false });
+	                this.hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.BUFFER_SEEK_OVER_HOLE, fatal: false, hole: hole });
 	              }
 	            }
 	          } else {
@@ -17739,6 +17958,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -17748,10 +17971,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
 	  };
 	}();
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
 
 	var _events = __webpack_require__(79);
 
@@ -17765,7 +17984,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _demuxerWorker2 = _interopRequireDefault(_demuxerWorker);
 
-	var _logger = __webpack_require__(88);
+	var _logger = __webpack_require__(83);
 
 	var _decrypter = __webpack_require__(104);
 
@@ -17902,6 +18121,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -17913,10 +18136,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	}(); /*  inline demuxer.
 	      *   probe fragments and instantiate appropriate demuxer depending on content type (TSDemuxer, AACDemuxer, ...)
 	      */
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
 
 	var _events = __webpack_require__(79);
 
@@ -18002,6 +18221,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -18014,15 +18237,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      * AAC demuxer
 	      */
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
 	var _adts = __webpack_require__(95);
 
 	var _adts2 = _interopRequireDefault(_adts);
 
-	var _logger = __webpack_require__(88);
+	var _logger = __webpack_require__(83);
 
 	var _id = __webpack_require__(96);
 
@@ -18145,6 +18364,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -18157,11 +18380,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      *  ADTS parser helper
 	      */
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _logger = __webpack_require__(88);
+	var _logger = __webpack_require__(83);
 
 	var _errors = __webpack_require__(80);
 
@@ -18310,6 +18529,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -18322,11 +18545,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      * ID3 parser
 	      */
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _logger = __webpack_require__(88);
+	var _logger = __webpack_require__(83);
 
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
@@ -18477,6 +18696,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -18498,10 +18721,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	// import Hex from '../utils/hex';
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
 	var _adts = __webpack_require__(95);
 
 	var _adts2 = _interopRequireDefault(_adts);
@@ -18514,7 +18733,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _expGolomb2 = _interopRequireDefault(_expGolomb);
 
-	var _logger = __webpack_require__(88);
+	var _logger = __webpack_require__(83);
 
 	var _errors = __webpack_require__(80);
 
@@ -19221,6 +19440,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -19233,11 +19456,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      * Parser for exponential Golomb codes, a variable-bitwidth number encoding scheme used by h264.
 	     */
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _logger = __webpack_require__(88);
+	var _logger = __webpack_require__(83);
 
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
@@ -19526,7 +19745,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // vui_parameters_present_flag
 	        if (this.readBoolean()) {
 	          // aspect_ratio_info_present_flag
-	          var sarRatio = undefined;
+	          var sarRatio = void 0;
 	          var aspectRatioIdc = this.readUByte();
 	          switch (aspectRatioIdc) {
 	            case 1:
@@ -19600,6 +19819,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -19612,15 +19835,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      * fMP4 remuxer
 	     */
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
 	var _events = __webpack_require__(79);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _logger = __webpack_require__(88);
+	var _logger = __webpack_require__(83);
 
 	var _mp4Generator = __webpack_require__(100);
 
@@ -19823,8 +20042,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 	          mp4Sample.duration = sampleDuration;
 	        } else {
-	          var nextAvcDts = undefined,
-	              delta = undefined;
+	          var nextAvcDts = void 0,
+	              delta = void 0;
 	          if (contiguous) {
 	            nextAvcDts = this.nextAvcDts;
 	          } else {
@@ -19834,8 +20053,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          ptsnorm = this._PTSNormalize(pts, nextAvcDts);
 	          dtsnorm = this._PTSNormalize(dts, nextAvcDts);
 	          delta = Math.round((dtsnorm - nextAvcDts) / 90);
-	          // if fragment are contiguous, or delta less than 600ms, ensure there is no overlap/hole between fragments
-	          if (contiguous || Math.abs(delta) < 600) {
+	          // if fragment are contiguous, detect hole/overlapping between fragments
+	          if (contiguous) {
 	            if (delta) {
 	              if (delta > 1) {
 	                _logger.logger.log('AVC:' + delta + ' ms hole between fragments detected,filling it');
@@ -19957,8 +20176,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          mp4Sample.duration = expectedSampleDuration;
 	          dtsnorm = expectedSampleDuration * pes2mp4ScaleFactor + lastDTS;
 	        } else {
-	          var nextAacPts = undefined,
-	              delta = undefined;
+	          var nextAacPts = void 0,
+	              delta = void 0;
 	          if (contiguous) {
 	            nextAacPts = this.nextAacPts;
 	          } else {
@@ -19967,20 +20186,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	          ptsnorm = this._PTSNormalize(pts, nextAacPts);
 	          dtsnorm = this._PTSNormalize(dts, nextAacPts);
 	          delta = Math.round(1000 * (ptsnorm - nextAacPts) / pesTimeScale);
-	          // if fragment are contiguous, or delta less than 600ms, ensure there is no overlap/hole between fragments
-	          if (contiguous || Math.abs(delta) < 600) {
+	          // if fragment are contiguous, detect hole/overlapping between fragments
+	          if (contiguous) {
 	            // log delta
 	            if (delta) {
 	              if (delta > 0) {
 	                _logger.logger.log(delta + ' ms hole between AAC samples detected,filling it');
-	                // if we have frame overlap, overlapping for more than half a frame duraion
+	                // if we have frame overlap, overlapping for more than half a frame duration
 	              } else if (delta < -12) {
 	                  // drop overlapping audio frames... browser will deal with it
 	                  _logger.logger.log(-delta + ' ms overlapping between AAC samples detected, drop frame');
 	                  track.len -= unit.byteLength;
 	                  continue;
 	                }
-	              // set DTS to next DTS
+	              // set PTS/DTS to next PTS/DTS
 	              ptsnorm = dtsnorm = nextAacPts;
 	            }
 	          }
@@ -20131,6 +20350,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -20140,10 +20363,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
 	  };
 	}();
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
 
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
@@ -20656,6 +20875,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -20667,10 +20890,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	}(); /**
 	      * passthrough remuxer
 	     */
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
 
 	var _events = __webpack_require__(79);
 
@@ -21135,6 +21354,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -21147,17 +21370,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      * AES128 decryption.
 	      */
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
 	var _aes128Decrypter = __webpack_require__(105);
 
 	var _aes128Decrypter2 = _interopRequireDefault(_aes128Decrypter);
 
 	var _errors = __webpack_require__(80);
 
-	var _logger = __webpack_require__(88);
+	var _logger = __webpack_require__(83);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -21249,6 +21468,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -21294,10 +21517,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      * are those of the authors and should not be interpreted as representing
 	      * official policies, either expressed or implied, of the authors.
 	      */
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
 
 	var _aes = __webpack_require__(106);
 
@@ -21452,6 +21671,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -21461,10 +21684,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
 	  };
 	}();
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
 
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
@@ -21825,6 +22044,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -21837,11 +22060,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      * Level Helper class, providing methods dealing with playlist sliding and drift
 	     */
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _logger = __webpack_require__(88);
+	var _logger = __webpack_require__(83);
 
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
@@ -21894,10 +22113,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (PTSFrag) {
 	        LevelHelper.updateFragPTS(newDetails, PTSFrag.sn, PTSFrag.startPTS, PTSFrag.endPTS);
 	      } else {
-	        // adjust start by sliding offset
-	        var sliding = oldfragments[delta].start;
-	        for (i = 0; i < newfragments.length; i++) {
-	          newfragments[i].start += sliding;
+	        // ensure that delta is within oldfragments range
+	        // also adjust sliding in case delta is 0 (we could have old=[50-60] and new=old=[50-61])
+	        // in that case we also need to adjust start offset of all fragments
+	        if (delta >= 0 && delta < oldfragments.length) {
+	          // adjust start by sliding offset
+	          var sliding = oldfragments[delta].start;
+	          for (i = 0; i < newfragments.length; i++) {
+	            newfragments[i].start += sliding;
+	          }
 	        }
 	      }
 	      // if we are here, it means we have fragments overlapping between
@@ -21985,6 +22209,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -21995,10 +22223,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}();
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
 	var _events = __webpack_require__(79);
 
 	var _events2 = _interopRequireDefault(_events);
@@ -22007,7 +22231,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _logger = __webpack_require__(88);
+	var _logger = __webpack_require__(83);
 
 	var _errors = __webpack_require__(80);
 
@@ -22053,6 +22277,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function destroy() {
 	      if (this.timer) {
 	        clearInterval(this.timer);
+	        this.timer = null;
 	      }
 	      this._manualLevel = -1;
 	    }
@@ -22231,7 +22456,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	              }
 	              // redispatch same error but with fatal set to true
 	              data.fatal = true;
-	              hls.trigger(event, data);
+	              hls.trigger(_events2.default.ERROR, data);
 	            }
 	        }
 	      }
@@ -22337,6 +22562,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -22346,10 +22575,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
 	  };
 	}();
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
 
 	var _events = __webpack_require__(79);
 
@@ -22460,6 +22685,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -22469,10 +22698,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
 	  };
 	}();
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
 
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
@@ -22895,6 +23120,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -22907,11 +23136,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      * XHR based logger
 	     */
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _logger = __webpack_require__(88);
+	var _logger = __webpack_require__(83);
 
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
@@ -23058,6 +23283,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -23067,10 +23296,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
 	  };
 	}();
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
 
 	var _events = __webpack_require__(79);
 
@@ -25473,11 +25698,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  SourcesPlugin.prototype.onContainersCreated = function onContainersCreated() {
-	    var _this2 = this;
-
 	    var firstValidSource = (0, _lodash2.default)(this.core.containers, function (container) {
-	      return container.playback.name !== 'no_op' || _this2.core.containers[0];
-	    });
+	      return container.playback.name !== 'no_op';
+	    }) || this.core.containers[0];
 	    if (firstValidSource) {
 	      this.core.containers.forEach(function (container) {
 	        if (container !== firstValidSource) {
