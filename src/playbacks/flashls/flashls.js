@@ -382,6 +382,9 @@ export default class FlasHLS extends BaseFlashPlayback {
     if (currentLevel) {
       this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000);
       this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition)
+
+      if (!this._levels || this._levels.length === 0) this.fillLevels()
+
       this.trigger(Events.PLAYBACK_BITRATE, {
         height: currentLevel.height,
         width: currentLevel.width,
@@ -637,6 +640,11 @@ export default class FlasHLS extends BaseFlashPlayback {
       this.el.playerPlay()
     }
 
+    this.fillLevels()
+    this.trigger(Events.PLAYBACK_LOADEDMETADATA, {duration: duration, data: loadmetrics})
+  }
+
+  fillLevels() {
     var levels = this.el.getLevels()
     var levelsLength = levels.length
     this._levels = []
@@ -645,7 +653,6 @@ export default class FlasHLS extends BaseFlashPlayback {
       this._levels.push({id: index, label: `${levels[index].height}p`, level: levels[index]})
     }
     this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this._levels)
-    this.trigger(Events.PLAYBACK_LOADEDMETADATA, {duration: duration, data: loadmetrics})
   }
 
   destroy() {
