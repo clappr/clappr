@@ -186,7 +186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// Use of this source code is governed by a BSD-style
 	// license that can be found in the LICENSE file.
 
-	var version = ("0.2.48");
+	var version = ("0.2.49");
 
 	exports.default = {
 	    Player: _player2.default,
@@ -13427,6 +13427,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (currentLevel) {
 	      this.highDefinition = currentLevel.height >= 720 || currentLevel.bitrate / 1000 >= 2000;
 	      this.trigger(_events2.default.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition);
+
+	      if (!this._levels || this._levels.length === 0) this.fillLevels();
+
 	      this.trigger(_events2.default.PLAYBACK_BITRATE, {
 	        height: currentLevel.height,
 	        width: currentLevel.width,
@@ -13686,6 +13689,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.el.playerPlay();
 	    }
 
+	    this.fillLevels();
+	    this.trigger(_events2.default.PLAYBACK_LOADEDMETADATA, { duration: duration, data: loadmetrics });
+	  };
+
+	  FlasHLS.prototype.fillLevels = function fillLevels() {
 	    var levels = this.el.getLevels();
 	    var levelsLength = levels.length;
 	    this._levels = [];
@@ -13694,7 +13702,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this._levels.push({ id: index, label: levels[index].height + 'p', level: levels[index] });
 	    }
 	    this.trigger(_events2.default.PLAYBACK_LEVELS_AVAILABLE, this._levels);
-	    this.trigger(_events2.default.PLAYBACK_LOADEDMETADATA, { duration: duration, data: loadmetrics });
 	  };
 
 	  FlasHLS.prototype.destroy = function destroy() {
