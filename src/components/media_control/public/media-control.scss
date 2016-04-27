@@ -302,6 +302,7 @@
       .bar-container[data-volume] {
         float: left;
         position: relative;
+        overflow: hidden;
         top: 6px;
         width: 42px;
         height: 18px;
@@ -400,10 +401,10 @@
       .drawer-container[data-volume] {
         .bar-container[data-volume] {
           &.volume-bar-hide {
+            width: 0;
             height: 12px;
             top: 9px;
             padding: 0;
-            width: 0;
           }
         }
       }
