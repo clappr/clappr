@@ -392,7 +392,9 @@ export default class Player extends BaseObject {
    * @param {Number} volume should be a number between 0 and 100, 0 being mute and 100 the max volume.
    */
   setVolume(volume) {
-    this.core.mediaControl.container.setVolume(volume);
+    if (this.core && this.core.mediaControl) {
+      this.core.mediaControl.setVolume(volume);
+    }
   }
 
   /**
@@ -401,7 +403,7 @@ export default class Player extends BaseObject {
    * @return {Number} volume should be a number between 0 and 100, 0 being mute and 100 the max volume.
    */
   getVolume() {
-    return this.core.mediaControl.container.volume;
+    return this.core && this.core.mediaControl ? this.core.mediaControl.volume : 0;
   }
 
   /**
