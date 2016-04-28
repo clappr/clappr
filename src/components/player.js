@@ -444,7 +444,8 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   mute() {
-    this.core.mediaControl.container.setVolume(0);
+    this._mutedVolume = this.getVolume();
+    this.setVolume(0);
     return this;
   }
 
@@ -454,7 +455,8 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   unmute() {
-    this.core.mediaControl.container.setVolume(100);
+    this.setVolume(typeof this._mutedVolume === "number" ? this._mutedVolume : 100);
+    this._mutedVolume = null;
     return this;
   }
 
