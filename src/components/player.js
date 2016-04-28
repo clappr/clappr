@@ -42,7 +42,12 @@ var baseUrl = currentScriptUrl().replace(/\/[^\/]+$/, "")
 export default class Player extends BaseObject {
 
   set loader(loader) { this._loader = loader }
-  get loader() { return this._loader = this._loader || new Loader(this.options.plugins || {}, this.options.playerId) }
+  get loader() {
+    if (! this._loader) {
+      this._loader = new Loader(this.options.plugins || {}, this.options.playerId);
+    }
+    return this._loader;
+  }
 
   /**
    * Determine if the playback has ended.
@@ -140,7 +145,9 @@ export default class Player extends BaseObject {
    * @param {String} [options.preload]
    * video will be preloaded according to `preload` attribute options **default**: `'metadata'`
    * @param {Number} [options.maxBufferLength]
-   * the default behavior for the **HLS playback** is to keep buffering indefinitely, even on VoD. This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks. To change this behavior use `maxBufferLength` where **value is in seconds**.
+   * the default behavior for the **HLS playback** is to keep buffering indefinitely, even on VoD.
+   * This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks.
+   * To change this behavior use `maxBufferLength` where **value is in seconds**.
    * @param {String} [options.gaAccount]
    * enable Google Analytics events dispatch **(play/pause/stop/buffering/etc)** by adding your `gaAccount`
    * @param {String} [options.gaTrackerName]
@@ -152,7 +159,8 @@ export default class Player extends BaseObject {
    * @param {Boolean} [options.hideVolumeBar]
    * when embedded with width less than 320, volume bar will hide. You can force this behavior for all sizes by adding `true` **default**: `false`
    * @param {String} [options.watermark]
-   * put `watermark: 'http://url/img.png'` on your embed parameters to automatically add watermark on your video. You can customize corner position by defining position parameter. Positions can be `bottom-left`, `bottom-right`, `top-left` and `top-right`.
+   * put `watermark: 'http://url/img.png'` on your embed parameters to automatically add watermark on your video.
+   * You can customize corner position by defining position parameter. Positions can be `bottom-left`, `bottom-right`, `top-left` and `top-right`.
    * @param {String} [options.watermarkLink]
    * `watermarkLink: 'http://example.net/'` - define URL to open when the watermark is clicked. If not provided watermark will not be clickable.
    * @param {Boolean} [options.disableVideoTagContextMenu]
