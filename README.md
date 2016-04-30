@@ -28,6 +28,12 @@ A [clappr](https://github.com/clappr/clappr) playback to play dash based on [sha
           plugins: {
             playback: [DashShakaPlayback]
           },
+          shakaConfiguration: {
+            preferredAudioLanguage: 'pt-BR',
+            streaming: {
+              rebufferingGoal: 15
+            }
+          }
           parentId: '#player'
         });
     </script>
