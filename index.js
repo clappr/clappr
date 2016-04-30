@@ -38,7 +38,7 @@ export default class DashShakaPlayback extends HTML5Video {
     this.selectTextTrack = checkIfIsReady((id) => this._player.selectTextTrack(id))
     this.audioTracks = checkIfIsReady(() => this._player.getAudioTracks())
     this.selectAudioTrack = checkIfIsReady((id) => this._player.selectAudioTrack(id))
-    this.videoTracks = checkIfIsReady(() => this._player.getVideoTracks())
+    //this.videoTracks = checkIfIsReady(() => this._player.getVideoTracks())
     this.selectVideoTrack = checkIfIsReady((id) => this._player.selectVideoTrack(id))
 
     this.getPlaybackType = checkIfIsReady(() => (this._player.isLive()?'live':'vod'))
@@ -114,7 +114,7 @@ export default class DashShakaPlayback extends HTML5Video {
   _loaded() {
     this._ready()
     this._startToSendStats()
-    this._levels = this.videoTracks().map((videoTrack) => { return {id: videoTrack.id, label: `${videoTrack.height}p`}})
+    //this._levels = this.videoTracks().map((videoTrack) => { return {id: videoTrack.id, label: `${videoTrack.height}p`}})
     this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this.levels)
   }
 
