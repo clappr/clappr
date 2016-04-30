@@ -115,7 +115,7 @@ export default class DashShakaPlayback extends HTML5Video {
     this._ready()
     this._startToSendStats()
     //this._levels = this.videoTracks().map((videoTrack) => { return {id: videoTrack.id, label: `${videoTrack.height}p`}})
-    this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this.levels)
+    //this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this.levels)
   }
 
   _startToSendStats() {
