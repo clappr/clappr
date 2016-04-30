@@ -43,37 +43,7 @@ A [clappr](https://github.com/clappr/clappr) playback to play dash based on [sha
 
 # DRM
 
-If need to protect your content (DRM) you need to provide a callback for it.
-
-```javascript
-var player = new Clappr.Player(
-  {
-    source: 'https://shaka-player-demo.appspot.com/assets/angel_one.mpd?_=1446383792251',
-    plugins: {
-      playback: [DashShakaPlayback]
-    },
-    shaka: {
-      interpretContentProtection: myInterpretCallback
-    }
-    parentId: '#player'
-  });
-```
-
-The `interpretContentProtection` [callback](http://shaka-player-demo.appspot.com/docs/shaka.player.DashVideoSource.html#ContentProtectionCallback) spec:
-
-```javascript
-/**
-* @param {string} schemeIdUri The ContentProtection's scheme ID URI.
-* @param {!Element} contentProtection The ContentProtection element.
-* @return {!Array.<shaka.player.DrmInfo.Config>} An array of Config
-*     objects or null if the element is not understood by this application.
-*     
-*/
-function interpretContentProtection (schemeIdUri, contentProtection) {
-}
-```
-
-You need to provide a function which receives: the content protection scheme id `schemeIdUri` and the content protection element `contentProtection` and it must return an array of [DRMInfo Config.](http://shaka-player-demo.appspot.com/docs/shaka.player.DrmInfo.html#Config) You can see an example at [shaka tutorial for License Request Pre-processing and License Response Post-processing.](https://shaka-player-demo.appspot.com/docs/tutorial-network.html)
+If need to protect your content (DRM) you must use the `shakaConfiguration` following the [shaka configuration](http://shaka-player-demo.appspot.com/docs/api/tutorial-drm-config.html) need.
 
 # Development
 
