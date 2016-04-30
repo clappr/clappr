@@ -97,17 +97,17 @@ export default class DashShakaPlayback extends HTML5Video {
   _setup() {
     this._player = this._createPlayer()
 
-    var playerLoaded = this._player.load(new shaka.player.DashVideoSource(this.options.src, this.options.shaka.interpretContentProtection))
+    var playerLoaded = this._player.load(this.options.src)
     playerLoaded.then(() => this._loaded())
       .catch((e) => this._setupError(e))
   }
 
   _createPlayer() {
-    var player = new shaka.player.Player(this.el)
-    player.addEventListener('bufferingStart', () => this._bufferingHandler())
-    player.addEventListener('bufferingEnd', () => this._bufferingFullHandler())
-    player.addEventListener('error', (e) => this._error(e))
-    player.addEventListener('adaptation', (e) => this._onAdaptation(e))
+    var player = new shaka.Player(this.el)
+   // player.addEventListener('bufferingStart', () => this._bufferingHandler())
+   // player.addEventListener('bufferingEnd', () => this._bufferingFullHandler())
+    player.addEventListener('error', (type, shakaError) => this._error(type, shakaError))
+   // player.addEventListener('adaptation', (e) => this._onAdaptation(e))
     return player
   }
 
@@ -124,15 +124,15 @@ export default class DashShakaPlayback extends HTML5Video {
 
   _sendStats() {this.trigger(Events.PLAYBACK_STATS_ADD, this._player.getStats())}
 
-  _setupError(e) { this._error({detail: `shaka could not be setup: ${e}`}) }
+  _setupError(e) { this._error('error', {detail: e.detail}) }
 
   _bufferingHandler() { this.trigger(Events.PLAYBACK_BUFFERING, this.name) }
 
   _bufferingFullHandler() { this.trigger(Events.PLAYBACK_BUFFERFULL, this.name) }
 
-  _error(error) {
-    Log.error('an error was raised by shaka player', error.detail)
-    this.trigger(Events.PLAYBACK_ERROR, error.detail, this.name)
+  _error(type, shakaError) {
+    Log.error('an error was raised by shaka player', shakaError.detail)
+    this.trigger(Events.PLAYBACK_ERROR, shakaError.detail, this.name)
   }
 
   _onAdaptation(event) {
@@ -167,10 +167,7 @@ export default class DashShakaPlayback extends HTML5Video {
 DashShakaPlayback.canPlay = (resource, mimeType = '') => {
   shaka.polyfill.installAll()
 
-  if (!shaka.player.Player.isBrowserSupported()) {
-    Log.debug('This browser does not support this video')
-    return false
-  }
+  shaka.Player.support().then((support) => { Log.debug(`TODO: Clappr is sync -> #{support.supported}`) })
 
   var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
   return ('mpd' === resourceParts[1]) || mimeType.indexOf('application/dash+xml') > -1
