@@ -10,9 +10,7 @@
       window.onload = function() {
         var player = new Clappr.Player({
           parentId: '#player',autoPlay:true,
-          plugins: {
-            playback: [DashShakaPlayback]
-          },
+          plugins: [DashShakaPlayback, LevelSelector],
           //source: 'http://live.unified-streaming.com/loop/loop.isml/loop.mpd?format=mp4&session_id=25020', //LIVE
           source: '//storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd', //multi audio, sub
           //source: 'http://dash.edgesuite.net/dash264/TestCases/2c/qualcomm/2/MultiRes.mpd', //VOD multiple qualities
@@ -28,5 +26,6 @@
     </script>
     <script src="https://cdn.jsdelivr.net/clappr/latest/clappr.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="./dash-shaka-playback.js"> </script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/clappr.level-selector/latest/level-selector.min.js"></script>
   </body>
 </html>

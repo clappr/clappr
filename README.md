@@ -67,13 +67,10 @@ Run:
 This playback offers you an API for handling with: audio, video and text tracks.
 
 ```javascript
-enableTextTrack(state)
+selectTrack(track)
 textTracks()
-selectTextTrack(id)
 audioTracks()
-selectAudioTrack(id)
 videoTracks()
-selectVideoTrack(id)
 ```
 
 # observations

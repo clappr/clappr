@@ -17,7 +17,7 @@ export default class DashShakaPlayback extends HTML5Video {
 
     this._player.configure({abr: {enable: !isAuto}})
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_START)
-    !isAuto && this.selectVideoTrack(this._currentLevelId)
+    !isAuto && this.selectTrack(this._player.getTracks().filter((t) => t.id === this._currentLevelId)[0])
   }
   get currentLevel() { return this._currentLevelId || AUTO }
 
@@ -32,13 +32,14 @@ export default class DashShakaPlayback extends HTML5Video {
       }
     }
 
-    this.enableTextTrack = checkIfIsReady((enable) => this._player.enableTextTrack(enable))
-    this.textTracks = checkIfIsReady(() => this._player.getTextTracks())
-    this.selectTextTrack = checkIfIsReady((id) => this._player.selectTextTrack(id))
-    this.audioTracks = checkIfIsReady(() => this._player.getAudioTracks())
-    this.selectAudioTrack = checkIfIsReady((id) => this._player.selectAudioTrack(id))
-    //this.videoTracks = checkIfIsReady(() => this._player.getVideoTracks())
-    this.selectVideoTrack = checkIfIsReady((id) => this._player.selectVideoTrack(id))
+
+    this.textTracks = checkIfIsReady(() => this._player.getTracks().filter((t) => t.type === "text"))
+    this.audioTracks = checkIfIsReady(() => this._player.getTracks().filter((t) => t.type === "audio"))
+    this.videoTracks = checkIfIsReady(() => this._player.getTracks().filter((t) => t.type === "video"))
+    this.selectTrack = checkIfIsReady((track) => {
+      this._player.selectTrack(track)
+      this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
+    })
 
     this.getPlaybackType = checkIfIsReady(() => (this._player.isLive()?'live':'vod'))
 
@@ -105,15 +106,15 @@ export default class DashShakaPlayback extends HTML5Video {
   _createPlayer() {
     var player = new shaka.Player(this.el)
     player.addEventListener('error', (type, shakaError) => this._error(type, shakaError))
-   // player.addEventListener('adaptation', (e) => this._onAdaptation(e))
+    player.addEventListener('adaptation', (e) => this._onAdaptation(e))
     return player
   }
 
   _loaded() {
     this._ready()
     this._startToSendStats()
-    //this._levels = this.videoTracks().map((videoTrack) => { return {id: videoTrack.id, label: `${videoTrack.height}p`}})
-    //this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this.levels)
+    this._levels = this.videoTracks().map((videoTrack) => { return {id: videoTrack.id, label: `${videoTrack.height}p`}}).reverse()
+    this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this.levels)
   }
 
   _startToSendStats() {
@@ -141,10 +142,6 @@ export default class DashShakaPlayback extends HTML5Video {
       height: event.size.height,
       level: event.size.number
     })
-
-    if (this._levels.length > 0) {
-      this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
-    }
   }
 
   _destroy() {
