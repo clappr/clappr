@@ -161,9 +161,12 @@ export default class DashShakaPlayback extends HTML5Video {
 DashShakaPlayback.canPlay = (resource, mimeType = '') => {
   shaka.polyfill.installAll()
 
-  shaka.Player.support().then((support) => { Log.debug(`TODO: Clappr is sync -> #{support.supported}`) })
+  // shaka.Player.support().then((support) => { Log.debug(`TODO: Clappr is sync -> #{support.supported}`) })
+  var basic = !!window.Promise && !!window.Uint8Array && !!Array.prototype.forEach;
+  var mediaSource = (window.MediaSource && window.MediaSource.isTypeSupported('video/mp4; codecs="avc1.42E01E,mp4a.40.2"'))
+  var basicAndMediaSource = basic && mediaSource
 
   var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
-  return ('mpd' === resourceParts[1]) || mimeType.indexOf('application/dash+xml') > -1
+  return basicAndMediaSource && (('mpd' === resourceParts[1]) || mimeType.indexOf('application/dash+xml') > -1)
 }
 
