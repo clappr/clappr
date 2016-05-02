@@ -17,7 +17,10 @@ export default class DashShakaPlayback extends HTML5Video {
 
     this._player.configure({abr: {enable: !isAuto}})
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_START)
-    !isAuto && this.selectTrack(this.videoTracks.filter((t) => t.id === this._currentLevelId)[0])
+    if (!isAuto) {
+      this.selectTrack(this.videoTracks.filter((t) => t.id === this._currentLevelId)[0])
+    }
+    this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
   }
   get currentLevel() { return this._currentLevelId || AUTO }
 
@@ -25,8 +28,6 @@ export default class DashShakaPlayback extends HTML5Video {
     super(options)
     this.isReadyState = false
     this._levels = []
-
-
     options.autoPlay && this.play()
   }
 
@@ -71,7 +72,10 @@ export default class DashShakaPlayback extends HTML5Video {
   get videoTracks() {return this._player.getTracks().filter((t) => t.type === "video")}
   getPlaybackType() {return this._player.isLive()?'live':'vod'}
 
-  selectTrack(track) {this._player.selectTrack(track)}
+  selectTrack(track) {
+    this._player.selectTrack(track)
+    this._onAdaptation()
+  }
 
   destroy() {
     clearInterval(this.sendStatsId)
@@ -131,8 +135,6 @@ export default class DashShakaPlayback extends HTML5Video {
     var activeVideo = this.videoTracks.filter((t) => t.active === true)[0]
 
     this._fillLevels()
-
-    if (this.currentLevel === activeVideo.id) {this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)}
 
     Log.debug('an adaptation has happened:', activeVideo)
     this.highDefinition = (activeVideo.height >= 720)
