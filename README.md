@@ -27,10 +27,8 @@ A [clappr](https://github.com/clappr/clappr) playback to play dash based on [sha
     <script>
       var player = new Clappr.Player(
         {
-          source: 'https://shaka-player-demo.appspot.com/assets/angel_one.mpd?_=1446383792251',
-          plugins: {
-            playback: [DashShakaPlayback]
-          },
+          source: '//storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd',
+          plugins: [DashShakaPlayback],
           shakaConfiguration: {
             preferredAudioLanguage: 'pt-BR',
             streaming: {
