@@ -50,7 +50,10 @@ export default class DashShakaPlayback extends HTML5Video {
   get isReady() {return this.isReadyState}
 
   // skipping error handling on video tag in favor of error on shaka
-  error(event) { Log.error('an error was raised by the video tag', event, this.el.error)}
+  error(event) {
+    Log.error('an error was raised support=', DashShakaPlayback.support)
+    Log.error('an error was raised by the video tag', event, this.el.error)
+  }
 
   isHighDefinitionInUse() { return !!this.highDefinition }
 
@@ -127,6 +130,7 @@ export default class DashShakaPlayback extends HTML5Video {
   _setupError(e) { this._error('error', {detail: e.detail}) }
 
   _error(type, shakaError) {
+    Log.error('an error was raised support=', DashShakaPlayback.support)
     Log.error('an error was raised by shaka player', shakaError.detail)
     this.trigger(Events.PLAYBACK_ERROR, shakaError.detail, this.name)
   }
@@ -161,7 +165,8 @@ export default class DashShakaPlayback extends HTML5Video {
 DashShakaPlayback.canPlay = (resource, mimeType = '') => {
   shaka.polyfill.installAll()
 
-  // shaka.Player.support().then((support) => { Log.debug(`TODO: Clappr is sync -> #{support.supported}`) })
+  shaka.Player.support().then((support) => { DashShakaPlayback.support = support})
+
   var basic = !!window.Promise && !!window.Uint8Array && !!Array.prototype.forEach;
   var mediaSource = (window.MediaSource && window.MediaSource.isTypeSupported('video/mp4; codecs="avc1.42E01E,mp4a.40.2"'))
   var basicAndMediaSource = basic && mediaSource
