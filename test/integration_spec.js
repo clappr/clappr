@@ -19,7 +19,7 @@ describe('integration', function() {
   })
 
   it('plays a video', function(done) {
-    player.on(Events.PLAYER_PLAY, () => {
+    player.once(Events.PLAYER_PLAY, () => {
       expect(player.isPlaying()).to.be.equal(true)
       done()
     })
@@ -28,11 +28,11 @@ describe('integration', function() {
   })
 
   it('pauses a video', function(done) {
-    player.on(Events.PLAYER_PAUSE, () => {
+    player.once(Events.PLAYER_PAUSE, () => {
       expect(player.isPlaying()).to.be.equal(false)
       done()
     })
-    player.on(Events.PLAYER_PLAY, () => { player.pause() })
+    player.once(Events.PLAYER_PLAY, () => { player.pause() })
 
     player.play()
   })
