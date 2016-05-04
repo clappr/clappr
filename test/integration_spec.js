@@ -19,20 +19,20 @@ describe('integration', function() {
   })
 
   it('plays a video', function(done) {
-    player.once(Events.PLAYER_PLAY, () => {
+    player.once(Events.PLAYER_PLAY, function() {
       expect(player.isPlaying()).to.be.equal(true)
       done()
-    })
+    }.bind(this))
 
     player.play()
   })
 
   it('pauses a video', function(done) {
-    player.once(Events.PLAYER_PAUSE, () => {
+    player.once(Events.PLAYER_PAUSE, function() {
       expect(player.isPlaying()).to.be.equal(false)
       done()
-    })
-    player.once(Events.PLAYER_PLAY, () => { player.pause() })
+    }.bind(this))
+    player.once(Events.PLAYER_PLAY, function () { player.pause() }.bind(this))
 
     player.play()
   })
