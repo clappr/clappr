@@ -7,7 +7,6 @@ describe('integration', function() {
   var player
 
   before(function(done){
-
     var containerPlayer = document.createElement('div')
     containerPlayer.id = "player"
     document.body.appendChild(containerPlayer)
@@ -17,6 +16,10 @@ describe('integration', function() {
       parentId: "#player",
       events: {onReady: done}
     })
+  })
+
+  beforeEach(function(){
+    player.stop()
   })
 
   it('plays a video', function(done) {
@@ -29,14 +32,12 @@ describe('integration', function() {
   })
 
   it('pauses a video', function(done) {
-    player.on(Events.PLAYER_TIMEUPDATE, () => {
+    player.on(Events.PLAYER_PAUSE, () => {
       expect(player.isPlaying()).to.be.equal(false)
       done()
     })
+    player.on(Events.PLAYER_PLAY, () => { player.pause() })
 
-    if (!player.isPlaying()) {player.play()}
-
-    player.pause()
+    player.play()
   })
-
 })
