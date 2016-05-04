@@ -2,7 +2,7 @@ import Player from 'components/player'
 import Events from 'base/events'
 
 describe('integration', function() {
-  this.timeout(10 * 1000)
+  this.timeout(20 * 1000)
 
   var player
 
