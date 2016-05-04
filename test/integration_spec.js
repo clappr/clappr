@@ -18,10 +18,6 @@ describe('integration', function() {
     })
   })
 
-  beforeEach(function(){
-    player.stop()
-  })
-
   it('plays a video', function(done) {
     player.on(Events.PLAYER_PLAY, () => {
       expect(player.isPlaying()).to.be.equal(true)
