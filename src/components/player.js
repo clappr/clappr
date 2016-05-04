@@ -343,13 +343,17 @@ export default class Player extends BaseObject {
   /**
    * loads a new source.
    * @method load
-   * @param {Object} sources source or sources of video.
-   * sources can be a string or {source: <<source URL>>, mimeType: <<source mime type>>}
-   * @param {Object} mimeType a mime type, example: `'application/vnd.apple.mpegurl'`
+   * @param {Array|String} sources source or sources of video.
+   * An array item can be a string or {source: <<source URL>>, mimeType: <<source mime type>>}
+   * @param {String} mimeType a mime type, example: `'application/vnd.apple.mpegurl'`
+   * @param {Boolean} [startPlay=false] whether playing should be started immediately
    * @return {Player} itself
    */
-  load(sources, mimeType) {
-    this.core.load(sources, mimeType)
+  load(sources, mimeType, startPlay) {
+    this.core.load(sources, mimeType);
+    if (startPlay) {
+      this.play();
+    }
     return this;
   }
 
@@ -477,26 +481,6 @@ export default class Player extends BaseObject {
    */
   configure(options) {
     this.core.configure(options)
-    return this;
-  }
-
-  /**
-   * loads a new source and plays the loaded video.
-   * @method start
-   * @param {Object|String} data
-   * a string that is specifying video source or an object that is defining new player's configuration options.
-   * @param {String} [mimeType]
-   * a mime type of specified video source, for example: `'application/vnd.apple.mpegurl'`
-   * @return {Player} itself
-   */
-  start(data, mimeType) {
-    if (typeof data === "string") {
-      this.load(data, mimeType);
-    }
-    else {
-      this.configure(data);
-    }
-    this.play();
     return this;
   }
 
