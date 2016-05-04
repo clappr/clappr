@@ -2,6 +2,8 @@ import Player from 'components/player'
 import Events from 'base/events'
 
 describe('integration', function() {
+  this.timeout(10 * 1000)
+
   var player
 
   before(function(done){
