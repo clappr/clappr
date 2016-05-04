@@ -28,6 +28,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'test/**/*.js',
+      {pattern: 'test/fixtures/*.mp4', served: true, included: false}
     ],
 
     // list of files to exclude

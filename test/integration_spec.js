@@ -2,7 +2,7 @@ import Player from 'components/player'
 import Events from 'base/events'
 
 describe('integration', function() {
-  this.timeout(20 * 1000)
+  this.timeout(15 * 1000)
 
   var player
 
@@ -13,7 +13,7 @@ describe('integration', function() {
     document.body.appendChild(containerPlayer)
 
     player = new Player({
-      source: '//www.sample-videos.com/video/mp4/240/big_buck_bunny_240p_5mb.mp4',
+      source: '/base/test/fixtures/SampleVideo_360x240_1mb.mp4',
       parentId: "#player",
       events: {onReady: done}
     })
