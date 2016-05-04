@@ -20,18 +20,23 @@ describe('integration', function() {
   })
 
   it('plays a video', function(done) {
-    player.play()
-
     player.on(Events.PLAYER_PLAY, () => {
       expect(player.isPlaying()).to.be.equal(true)
       done()
     })
+
+    player.play()
   })
 
-  it('pauses a video', function() {
-    player.pause()
+  it('pauses a video', function(done) {
+    player.on(Events.PLAYER_TIMEUPDATE, () => {
+      expect(player.isPlaying()).to.be.equal(false)
+      done()
+    })
 
-    expect(player.isPlaying()).to.be.equal(false)
+    if (!player.isPlaying()) {player.play()}
+
+    player.pause()
   })
 
 })
