@@ -17,10 +17,13 @@ describe('integration', function() {
     })
   })
 
-  it('plays a video', function() {
+  it('plays a video', function(done) {
     player.play()
 
-    expect(player.isPlaying()).to.be.equal(true)
+    player.on(Events.PLAYER_PLAY, () => {
+      expect(player.isPlaying()).to.be.equal(true)
+      done()
+    })
   })
 
   it('pauses a video', function() {
