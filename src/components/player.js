@@ -42,7 +42,12 @@ var baseUrl = currentScriptUrl().replace(/\/[^\/]+$/, "")
 export default class Player extends BaseObject {
 
   set loader(loader) { this._loader = loader }
-  get loader() { return this._loader = this._loader || new Loader(this.options.plugins || {}, this.options.playerId) }
+  get loader() {
+    if (!this._loader) {
+      this._loader = new Loader(this.options.plugins || {}, this.options.playerId);
+    }
+    return this._loader;
+  }
 
   /**
    * Determine if the playback has ended.
@@ -140,7 +145,9 @@ export default class Player extends BaseObject {
    * @param {String} [options.preload]
    * video will be preloaded according to `preload` attribute options **default**: `'metadata'`
    * @param {Number} [options.maxBufferLength]
-   * the default behavior for the **HLS playback** is to keep buffering indefinitely, even on VoD. This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks. To change this behavior use `maxBufferLength` where **value is in seconds**.
+   * the default behavior for the **HLS playback** is to keep buffering indefinitely, even on VoD.
+   * This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks.
+   * To change this behavior use `maxBufferLength` where **value is in seconds**.
    * @param {String} [options.gaAccount]
    * enable Google Analytics events dispatch **(play/pause/stop/buffering/etc)** by adding your `gaAccount`
    * @param {String} [options.gaTrackerName]
@@ -152,7 +159,8 @@ export default class Player extends BaseObject {
    * @param {Boolean} [options.hideVolumeBar]
    * when embedded with width less than 320, volume bar will hide. You can force this behavior for all sizes by adding `true` **default**: `false`
    * @param {String} [options.watermark]
-   * put `watermark: 'http://url/img.png'` on your embed parameters to automatically add watermark on your video. You can customize corner position by defining position parameter. Positions can be `bottom-left`, `bottom-right`, `top-left` and `top-right`.
+   * put `watermark: 'http://url/img.png'` on your embed parameters to automatically add watermark on your video.
+   * You can customize corner position by defining position parameter. Positions can be `bottom-left`, `bottom-right`, `top-left` and `top-right`.
    * @param {String} [options.watermarkLink]
    * `watermarkLink: 'http://example.net/'` - define URL to open when the watermark is clicked. If not provided watermark will not be clickable.
    * @param {Boolean} [options.disableVideoTagContextMenu]
@@ -199,23 +207,27 @@ export default class Player extends BaseObject {
    * Specify a `parentId` to the player.
    * @method setParentId
    * @param {String} parentId the element parent id.
+   * @return {Player} itself
    */
   setParentId(parentId) {
     var el = document.querySelector(parentId)
     if (el) {
       this.attachTo(el)
     }
+    return this;
   }
 
   /**
    * You can use this method to attach the player to a given element. You don't need to do this when you specify it during the player instantiation passing the `parentId` param.
    * @method attachTo
    * @param {Object} element a given element.
+   * @return {Player} itself
    */
   attachTo(element) {
     this.options.parentElement = element
     this.core = this.coreFactory.create()
     this.addEventListeners()
+    return this;
   }
 
   addEventListeners() {
@@ -226,6 +238,7 @@ export default class Player extends BaseObject {
     }
     this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
     this.listenTo(this.core, Events.CORE_FULLSCREEN, this.onFullscreenChange)
+    return this;
   }
 
   addContainerEventListeners() {
@@ -240,6 +253,7 @@ export default class Player extends BaseObject {
       this.listenTo(container, Events.CONTAINER_TIMEUPDATE, this.onTimeUpdate)
       this.listenTo(container, Events.CONTAINER_VOLUME, this.onVolumeUpdate)
     }
+    return this;
   }
 
   registerOptionEventListeners() {
@@ -252,6 +266,7 @@ export default class Player extends BaseObject {
         eventFunction && this.on(eventType, eventFunction)
       }
     })
+    return this;
   }
 
   containerChanged() {
@@ -314,6 +329,7 @@ export default class Player extends BaseObject {
    * resizes the current player canvas.
    * @method resize
    * @param {Object} size should be a literal object with `height` and `width`.
+   * @return {Player} itself
    * @example
    * ```javascript
    * player.resize({height: 360, width: 640})
@@ -321,50 +337,64 @@ export default class Player extends BaseObject {
    */
   resize(size) {
     this.core.resize(size);
+    return this;
   }
 
   /**
    * loads a new source.
    * @method load
-   * @param {Object} sources source or sources of video.
-   * sources can be a string or {source: <<source URL>>, mimeType: <<source mime type>>}
-   * @param {Object} mimeType a mime type, example: `'application/vnd.apple.mpegurl'`
-   *
+   * @param {Array|String} sources source or sources of video.
+   * An array item can be a string or {source: <<source URL>>, mimeType: <<source mime type>>}
+   * @param {String} mimeType a mime type, example: `'application/vnd.apple.mpegurl'`
+   * @param {Boolean} [startPlay=false] whether playing should be started immediately
+   * @return {Player} itself
    */
-  load(sources, mimeType) {
-    this.core.load(sources, mimeType)
+  load(sources, mimeType, startPlay) {
+    this.core.load(sources, mimeType);
+    if (startPlay) {
+      this.play();
+    }
+    return this;
   }
 
   /**
    * destroys the current player and removes it from the DOM.
    * @method destroy
+   * @return {Player} itself
    */
   destroy() {
     this.core.destroy()
+    return this;
   }
 
   /**
    * plays the current video (`source`).
    * @method play
+   * @return {Player} itself
    */
   play() {
     this.core.mediaControl.container.play();
+    return this;
   }
 
   /**
    * pauses the current video (`source`).
    * @method pause
+   * @return {Player} itself
    */
   pause() {
     this.core.mediaControl.container.pause();
+    return this;
   }
 
   /**
    * stops the current video (`source`).
    * @method stop
+   * @return {Player} itself
    */
   stop() {
     this.core.mediaControl.container.stop();
+    return this;
   }
 
 
@@ -372,27 +402,35 @@ export default class Player extends BaseObject {
    * seeks the current video (`source`). For example, `player.seek(120)` will seek to second 120 (2minutes) of the current video.
    * @method seek
    * @param {Number} time should be a number between 0 and the video duration.
+   * @return {Player} itself
    */
   seek(time) {
     this.core.mediaControl.container.seek(time);
+    return this;
   }
 
   /**
    * seeks the current video (`source`). For example, `player.seek(50)` will seek to the middle of the current video.
    * @method seekPercentage
    * @param {Number} time should be a number between 0 and 100.
+   * @return {Player} itself
    */
   seekPercentage(percentage) {
     this.core.mediaControl.container.seekPercentage(percentage);
+    return this;
   }
 
   /**
    * Set the volume for the current video (`source`).
    * @method setVolume
    * @param {Number} volume should be a number between 0 and 100, 0 being mute and 100 the max volume.
+   * @return {Player} itself
    */
   setVolume(volume) {
-    this.core.mediaControl.container.setVolume(volume);
+    if (this.core && this.core.mediaControl) {
+      this.core.mediaControl.setVolume(volume);
+    }
+    return this;
   }
 
   /**
@@ -401,23 +439,29 @@ export default class Player extends BaseObject {
    * @return {Number} volume should be a number between 0 and 100, 0 being mute and 100 the max volume.
    */
   getVolume() {
-    return this.core.mediaControl.container.volume;
+    return this.core && this.core.mediaControl ? this.core.mediaControl.volume : 0;
   }
 
   /**
    * mutes the current video (`source`).
    * @method mute
+   * @return {Player} itself
    */
   mute() {
-    this.core.mediaControl.container.setVolume(0);
+    this._mutedVolume = this.getVolume();
+    this.setVolume(0);
+    return this;
   }
 
   /**
    * unmutes the current video (`source`).
    * @method unmute
+   * @return {Player} itself
    */
   unmute() {
-    this.core.mediaControl.container.setVolume(100);
+    this.setVolume(typeof this._mutedVolume === "number" ? this._mutedVolume : 100);
+    this._mutedVolume = null;
+    return this;
   }
 
   /**
@@ -433,9 +477,11 @@ export default class Player extends BaseObject {
    * enables to configure a player after its creation
    * @method configure
    * @param {Object} options all the options to change in form of a javascript object
+   * @return {Player} itself
    */
   configure(options) {
     this.core.configure(options)
+    return this;
   }
 
   /**
