@@ -105,7 +105,13 @@ export default class DashShakaPlayback extends HTML5Video {
     var player = new shaka.Player(this.el)
     player.addEventListener('error', (type, shakaError) => this._error(type, shakaError))
     player.addEventListener('adaptation', () => this._onAdaptation())
+    player.addEventListener('buffering', (e) => this._onBuffering(e))
     return player
+  }
+
+  _onBuffering(e) {
+    var event = e.buffering ? Events.PLAYBACK_BUFFERING : Events.PLAYBACK_BUFFERFULL
+    this.trigger(event)
   }
 
   _loaded() {
