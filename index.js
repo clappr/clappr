@@ -70,10 +70,10 @@ export default class DashShakaPlayback extends HTML5Video {
       catch(() => { Log.error('shaka could not be unloaded') })
   }
 
-  get textTracks() {return this._player.getTracks().filter((t) => t.type === "text")}
-  get audioTracks() {return this._player.getTracks().filter((t) => t.type === "audio")}
-  get videoTracks() {return this._player.getTracks().filter((t) => t.type === "video")}
-  getPlaybackType() {return this._player.isLive()?'live':'vod'}
+  get textTracks() {return this._player && this._player.getTracks().filter((t) => t.type === "text")}
+  get audioTracks() {return this._player && this._player.getTracks().filter((t) => t.type === "audio")}
+  get videoTracks() {return this._player && this._player.getTracks().filter((t) => t.type === "video")}
+  getPlaybackType() {return (this._player && this._player.isLive()?'live':'vod') || ''}
 
   selectTrack(track) {
     this._player.selectTrack(track)
