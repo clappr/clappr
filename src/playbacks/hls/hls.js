@@ -200,6 +200,9 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   pause() {
+    if (!this.hls) {
+      return
+    }
     super.pause()
     if (this.dvrEnabled) {
       this.updateDvr(true)
@@ -207,8 +210,8 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   stop() {
-    super.stop()
     if (this.hls) {
+      super.stop()
       this.hls.destroy()
       delete this.hls
     }
