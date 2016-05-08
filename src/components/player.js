@@ -474,6 +474,24 @@ export default class Player extends BaseObject {
   }
 
   /**
+   * returns `true` if DVR is enable otherwise `false`.
+   * @method isDvrEnabled
+   * @return {Boolean}
+   */
+  isDvrEnabled() {
+    return this.core.mediaControl.container.isDvrEnabled()
+  }
+
+  /**
+   * returns `true` if DVR is in use otherwise `false`.
+   * @method isDvrInUse
+   * @return {Boolean}
+   */
+  isDvrInUse() {
+    return this.core.mediaControl.container.isDvrInUse()
+  }
+
+  /**
    * enables to configure a player after its creation
    * @method configure
    * @param {Object} options all the options to change in form of a javascript object
