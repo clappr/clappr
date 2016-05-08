@@ -28,6 +28,7 @@ export default class NoOp extends Playback {
   constructor(options) {
     super(options)
     this.options = options
+    this._noiseFrameNum = -1
   }
 
   render() {
@@ -40,6 +41,12 @@ export default class NoOp extends Playback {
   }
 
   noise() {
+    this._noiseFrameNum = (this._noiseFrameNum+1)%5
+    if (this._noiseFrameNum) {
+      // only update noise every 5 frames to save cpu
+      return
+    }
+
     var idata = this.context.createImageData(this.context.canvas.width, this.context.canvas.height)
 
     try {
@@ -56,7 +63,6 @@ export default class NoOp extends Playback {
     var run = 0
     var color = 0
     var m = Math.random() * 6 + 4
-
     for (var i = 0; i < len;) {
       if (run < 0) {
         run = m * Math.random();
