@@ -30,8 +30,8 @@ export default class HLS extends HTML5VideoPlayback {
 
   constructor(options) {
     super(options)
-    this.minDvrSize = (options.hlsMinimumDvrSize === undefined) ? 60 : options.hlsMinimumDvrSize
-    this.playbackType = Playback.VOD
+    this._minDvrSize = (options.hlsMinimumDvrSize === undefined) ? 60 : options.hlsMinimumDvrSize
+    this._playbackType = Playback.VOD
     // for hls streams which have dvr with a sliding window,
     // the content at the start of the playlist is removed as new
     // content is appended at the end.
@@ -39,37 +39,37 @@ export default class HLS extends HTML5VideoPlayback {
     // start content is deleted
     // For streams with dvr where the entire recording is kept from the
     // beginning this should stay as 0
-    this.playableRegionStartTime = 0
+    this._playableRegionStartTime = 0
     // if content is removed from the beginning then this empty area should
     // be ignored. "playableRegionDuration" does not consider this
-    this.playableRegionDuration = 0
+    this._playableRegionDuration = 0
     // true when the actual duration is longer than hlsjs's live sync point
     // when this is false playableRegionDuration will be the actual duration
     // when this is true playableRegionDuration will exclude the time after the sync point
-    this.durationExcludesAfterLiveSyncPoint = false
-    options.autoPlay && this.setupHls()
-    this.recoverAttemptsRemaining = options.hlsRecoverAttempts || 16
+    this._durationExcludesAfterLiveSyncPoint = false
+    options.autoPlay && this._setupHls()
+    this._recoverAttemptsRemaining = options.hlsRecoverAttempts || 16
   }
 
-  setupHls() {
-    this.hls = new HLSJS(this.options.hlsjsConfig || {})
-    this.hls.on(HLSJS.Events.MEDIA_ATTACHED, () => this.hls.loadSource(this.options.src))
-    this.hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this.updatePlaybackType(evt, data))
-    this.hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this.onLevelUpdated(evt, data))
-    this.hls.on(HLSJS.Events.LEVEL_SWITCH, (evt,data) => this.onLevelSwitch(evt, data))
-    this.hls.on(HLSJS.Events.FRAG_LOADED, (evt, data) => this.onFragmentLoaded(evt, data))
-    this.hls.on(HLSJS.Events.ERROR, (evt, data) => this.onHLSJSError(evt, data))
-    this.hls.attachMedia(this.el)
+  _setupHls() {
+    this._hls = new HLSJS(this._options.hlsjsConfig || {})
+    this._hls.on(HLSJS.Events.MEDIA_ATTACHED, () => this._hls.loadSource(this._options.src))
+    this._hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this._updatePlaybackType(evt, data))
+    this._hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this._onLevelUpdated(evt, data))
+    this._hls.on(HLSJS.Events.LEVEL_SWITCH, (evt,data) => this._onLevelSwitch(evt, data))
+    this._hls.on(HLSJS.Events.FRAG_LOADED, (evt, data) => this._onFragmentLoaded(evt, data))
+    this._hls.on(HLSJS.Events.ERROR, (evt, data) => this._onHLSJSError(evt, data))
+    this._hls.attachMedia(this.el)
   }
 
-  recover() {
+  _recover() {
     if (!this._recoveredDecodingError) {
       this._recoveredDecodingError = true
-      this.hls.recoverMediaError()
+      this._hls.recoverMediaError()
     } else if (!this._recoveredAudioCodecError) {
       this._recoveredAudioCodecError = true
-      this.hls.swapAudioCodec()
-      this.hls.recoverMediaError()
+      this._hls.swapAudioCodec()
+      this._hls.recoverMediaError()
     } else {
       Log.error("hlsjs: failed to recover")
       this.trigger(Events.PLAYBACK_ERROR, `hlsjs: could not recover from error, evt ${evt}, data ${data} `, this.name)
@@ -77,7 +77,7 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   // override
-  setupSrc(srcUrl) {
+  _setupSrc(srcUrl) {
     // this playback manages the src on the video element itself
   }
 
@@ -85,24 +85,24 @@ export default class HLS extends HTML5VideoPlayback {
   // as this does not necesarily represent the duration of the stream
   // https://github.com/clappr/clappr/issues/668#issuecomment-157036678
   getDuration() {
-    return this.playableRegionDuration
+    return this._playableRegionDuration
   }
 
   getCurrentTime() {
-    return this.el.currentTime - this.playableRegionStartTime
+    return this.el.currentTime - this._playableRegionStartTime
   }
 
   // the time that "0" now represents relative to when playback started
   // for a stream with a sliding window this will increase as content is
   // removed from the beginning
   getStartTimeOffset() {
-    return this.playableRegionStartTime
+    return this._playableRegionStartTime
   }
 
   seekPercentage(percentage) {
-    var seekTo = this.playableRegionDuration
+    var seekTo = this._playableRegionDuration
     if (percentage > 0) {
-      seekTo = this.playableRegionDuration * (percentage / 100)
+      seekTo = this._playableRegionDuration * (percentage / 100)
     }
     this.seek(seekTo)
   }
@@ -113,8 +113,8 @@ export default class HLS extends HTML5VideoPlayback {
       time = this.getDuration()
     }
     // assume live if time within 3 seconds of end of stream
-    this.dvrEnabled && this.updateDvr(time < this.getDuration()-3)
-    time += this.playableRegionStartTime
+    this.dvrEnabled && this._updateDvr(time < this.getDuration()-3)
+    time += this._playableRegionStartTime
     super.seek(time)
   }
 
@@ -122,13 +122,13 @@ export default class HLS extends HTML5VideoPlayback {
     this.seek(this.getDuration())
   }
 
-  updateDvr(status) {
+  _updateDvr(status) {
     this.trigger(Events.PLAYBACK_DVR, status)
     this.trigger(Events.PLAYBACK_STATS_ADD, {'dvr': status})
   }
 
-  updateSettings() {
-    if (this.playbackType === Playback.VOD) {
+  _updateSettings() {
+    if (this._playbackType === Playback.VOD) {
       this.settings.left = ["playpause", "position", "duration"]
     } else if (this.dvrEnabled) {
       this.settings.left = ["playpause"]
@@ -139,20 +139,20 @@ export default class HLS extends HTML5VideoPlayback {
     this.trigger(Events.PLAYBACK_SETTINGSUPDATE)
   }
 
-  onHLSJSError(evt, data) {
+  _onHLSJSError(evt, data) {
     // only report/handle errors if they are fatal
     // hlsjs should automatically handle non fatal errors
     if (data.fatal) {
-      if (this.recoverAttemptsRemaining > 0) {
-        this.recoverAttemptsRemaining -= 1
+      if (this._recoverAttemptsRemaining > 0) {
+        this._recoverAttemptsRemaining -= 1
         switch (data.type) {
           case HLSJS.ErrorTypes.NETWORK_ERROR:
             Log.warn(`hlsjs: trying to recover from network error, evt ${evt}, data ${data} `)
-            this.hls.startLoad()
+            this._hls.startLoad()
             break
           case HLSJS.ErrorTypes.MEDIA_ERROR:
             Log.warn(`hlsjs: trying to recover from media error, evt ${evt}, data ${data} `)
-            this.recover()
+            this._recover()
             break
           default:
             Log.error(`hlsjs: trying to recover from error, evt ${evt}, data ${data} `)
@@ -169,11 +169,11 @@ export default class HLS extends HTML5VideoPlayback {
     }
   }
 
-  onTimeUpdate() {
+  _onTimeUpdate() {
     this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: this.getCurrentTime(), total: this.getDuration()}, this.name)
   }
 
-  onProgress() {
+  _onProgress() {
     if (!this.el.buffered.length) {
       return
     }
@@ -186,100 +186,101 @@ export default class HLS extends HTML5VideoPlayback {
     }
     this.trigger(Events.PLAYBACK_PROGRESS, {
       // for a stream with sliding window dvr something that is buffered my slide off the start of the timeline
-      start: Math.max(0, this.el.buffered.start(bufferedPos) - this.playableRegionStartTime),
-      current: Math.max(0, this.el.buffered.end(bufferedPos) - this.playableRegionStartTime),
+      start: Math.max(0, this.el.buffered.start(bufferedPos) - this._playableRegionStartTime),
+      current: Math.max(0, this.el.buffered.end(bufferedPos) - this._playableRegionStartTime),
       total: this.getDuration()
     })
   }
 
   play() {
-    if (!this.hls) {
-      this.setupHls()
+    if (!this._hls) {
+      this._setupHls()
     }
     super.play()
   }
 
   pause() {
-    if (!this.hls) {
+    if (!this._hls) {
       return
     }
     super.pause()
     if (this.dvrEnabled) {
-      this.updateDvr(true)
+      this._updateDvr(true)
     }
   }
 
   stop() {
-    if (this.hls) {
+    if (this._hls) {
       super.stop()
-      this.hls.destroy()
-      delete this.hls
+      this._hls.destroy()
+      delete this._hls
     }
   }
 
-  updatePlaybackType(evt, data) {
-    this.playbackType = data.details.live ? Playback.LIVE : Playback.VOD
-    this.fillLevels()
-    this.onLevelUpdated(evt, data)
+  _updatePlaybackType(evt, data) {
+    this._playbackType = data.details.live ? Playback.LIVE : Playback.VOD
+    this._fillLevels()
+    this._onLevelUpdated(evt, data)
   }
 
-  fillLevels() {
-    this._levels = this.hls.levels.map((level, index) => {
+  _fillLevels() {
+    this._levels = this._hls.levels.map((level, index) => {
       return {id: index, level: level, label: `${level.bitrate/1000}Kbps`
     }})
     this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this._levels)
   }
 
-  onLevelUpdated(evt, data) {
+  _onLevelUpdated(evt, data) {
     var startTimeChanged = false
     var durationChanged = false
     var fragments = data.details.fragments
-    if (fragments.length > 0 && this.playableRegionStartTime !== fragments[0].start) {
+    if (fragments.length > 0 && this._playableRegionStartTime !== fragments[0].start) {
       startTimeChanged = true
-      this.playableRegionStartTime = fragments[0].start
+      this._playableRegionStartTime = fragments[0].start
     }
     var newDuration = data.details.totalduration
     // if it's a live stream then shorten the duration to remove access
     // to the area after hlsjs's live sync point
     // seeks to areas after this point sometimes have issues
-    if (this.playbackType === Playback.LIVE) {
-      let currentLevel = this.hls.levels[data.level]
+    if (this._playbackType === Playback.LIVE) {
+      let currentLevel = this._hls.levels[data.level]
       let fragmentTargetDuration = currentLevel.details.targetduration
-      let hlsjsConfig = this.options.hlsjsConfig || {}
+      let hlsjsConfig = this._options.hlsjsConfig || {}
       let liveSyncDurationCount = hlsjsConfig.liveSyncDurationCount || HLSJS.DefaultConfig.liveSyncDurationCount
       let hiddenAreaDuration = fragmentTargetDuration * liveSyncDurationCount
       if (hiddenAreaDuration <= newDuration) {
         newDuration -= hiddenAreaDuration
-        this.durationExcludesAfterLiveSyncPoint = true
+        this._durationExcludesAfterLiveSyncPoint = true
       }
       else {
-        this.durationExcludesAfterLiveSyncPoint = false
+        this._durationExcludesAfterLiveSyncPoint = false
       }
     }
 
-    if (newDuration !== this.playableRegionDuration) {
+    if (newDuration !== this._playableRegionDuration) {
       durationChanged = true
-      this.playableRegionDuration = newDuration
+      this._playableRegionDuration = newDuration
     }
 
     // now that the values have been updated call any methods that use on them so they get the updated values
     // immediately
-    durationChanged && this.onDurationChange()
-    startTimeChanged && this.onProgress()
+    durationChanged && this._onDurationChange()
+    startTimeChanged && this._onProgress()
   }
 
-  onFragmentLoaded(evt, data) {
+  _onFragmentLoaded(evt, data) {
     this.trigger(Events.PLAYBACK_FRAGMENT_LOADED, data)
   }
 
-  onLevelSwitch(evt, data) {
+  _onLevelSwitch(evt, data) {
     if (!this.levels.length) {
-      this.fillLevels()
+      this._fillLevels()
     }
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH, data)
-    var currentLevel = this.hls.levels[data.level]
+    var currentLevel = this._hls.levels[data.level]
     if (currentLevel) {
+      // TODO should highDefinition be private and maybe have a read only accessor if it's used somewhere
       this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000);
       this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition)
       this.trigger(Events.PLAYBACK_BITRATE, {
@@ -297,15 +298,15 @@ export default class HLS extends HTML5VideoPlayback {
     // - the duration does not include content after hlsjs's live sync point
     // - the playable region duration is longer than the configured duration to enable dvr after
     // - the playback type is LIVE.
-    return (this.durationExcludesAfterLiveSyncPoint && this.playableRegionDuration >= this.minDvrSize && this.getPlaybackType() === Playback.LIVE)
+    return (this._durationExcludesAfterLiveSyncPoint && this._playableRegionDuration >= this._minDvrSize && this.getPlaybackType() === Playback.LIVE)
   }
 
   getPlaybackType() {
-    return this.playbackType
+    return this._playbackType
   }
 
   isSeekEnabled() {
-    return (this.playbackType === Playback.VOD || this.dvrEnabled)
+    return (this._playbackType === Playback.VOD || this.dvrEnabled)
   }
 }
 
