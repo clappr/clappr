@@ -186,7 +186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// Use of this source code is governed by a BSD-style
 	// license that can be found in the LICENSE file.
 
-	var version = ("0.2.50");
+	var version = ("0.2.51");
 
 	exports.default = {
 	    Player: _player2.default,
