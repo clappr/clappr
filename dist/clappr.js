@@ -186,7 +186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// Use of this source code is governed by a BSD-style
 	// license that can be found in the LICENSE file.
 
-	var version = ("0.2.49");
+	var version = ("0.2.50");
 
 	exports.default = {
 	    Player: _player2.default,
@@ -315,7 +315,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this._loader = loader;
 	    },
 	    get: function get() {
-	      return this._loader = this._loader || new _loader2.default(this.options.plugins || {}, this.options.playerId);
+	      if (!this._loader) {
+	        this._loader = new _loader2.default(this.options.plugins || {}, this.options.playerId);
+	      }
+	      return this._loader;
 	    }
 
 	    /**
@@ -426,7 +429,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {String} [options.preload]
 	     * video will be preloaded according to `preload` attribute options **default**: `'metadata'`
 	     * @param {Number} [options.maxBufferLength]
-	     * the default behavior for the **HLS playback** is to keep buffering indefinitely, even on VoD. This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks. To change this behavior use `maxBufferLength` where **value is in seconds**.
+	     * the default behavior for the **HLS playback** is to keep buffering indefinitely, even on VoD.
+	     * This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks.
+	     * To change this behavior use `maxBufferLength` where **value is in seconds**.
 	     * @param {String} [options.gaAccount]
 	     * enable Google Analytics events dispatch **(play/pause/stop/buffering/etc)** by adding your `gaAccount`
 	     * @param {String} [options.gaTrackerName]
@@ -438,7 +443,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {Boolean} [options.hideVolumeBar]
 	     * when embedded with width less than 320, volume bar will hide. You can force this behavior for all sizes by adding `true` **default**: `false`
 	     * @param {String} [options.watermark]
-	     * put `watermark: 'http://url/img.png'` on your embed parameters to automatically add watermark on your video. You can customize corner position by defining position parameter. Positions can be `bottom-left`, `bottom-right`, `top-left` and `top-right`.
+	     * put `watermark: 'http://url/img.png'` on your embed parameters to automatically add watermark on your video.
+	     * You can customize corner position by defining position parameter. Positions can be `bottom-left`, `bottom-right`, `top-left` and `top-right`.
 	     * @param {String} [options.watermarkLink]
 	     * `watermarkLink: 'http://example.net/'` - define URL to open when the watermark is clicked. If not provided watermark will not be clickable.
 	     * @param {Boolean} [options.disableVideoTagContextMenu]
@@ -491,6 +497,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * Specify a `parentId` to the player.
 	   * @method setParentId
 	   * @param {String} parentId the element parent id.
+	   * @return {Player} itself
 	   */
 
 
@@ -499,12 +506,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (el) {
 	      this.attachTo(el);
 	    }
+	    return this;
 	  };
 
 	  /**
 	   * You can use this method to attach the player to a given element. You don't need to do this when you specify it during the player instantiation passing the `parentId` param.
 	   * @method attachTo
 	   * @param {Object} element a given element.
+	   * @return {Player} itself
 	   */
 
 
@@ -512,6 +521,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.options.parentElement = element;
 	    this.core = this.coreFactory.create();
 	    this.addEventListeners();
+	    return this;
 	  };
 
 	  Player.prototype.addEventListeners = function addEventListeners() {
@@ -522,6 +532,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    this.listenTo(this.core.mediaControl, _events2.default.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged);
 	    this.listenTo(this.core, _events2.default.CORE_FULLSCREEN, this.onFullscreenChange);
+	    return this;
 	  };
 
 	  Player.prototype.addContainerEventListeners = function addContainerEventListeners() {
@@ -536,6 +547,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.listenTo(container, _events2.default.CONTAINER_TIMEUPDATE, this.onTimeUpdate);
 	      this.listenTo(container, _events2.default.CONTAINER_VOLUME, this.onVolumeUpdate);
 	    }
+	    return this;
 	  };
 
 	  Player.prototype.registerOptionEventListeners = function registerOptionEventListeners() {
@@ -550,6 +562,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        eventFunction && _this2.on(eventType, eventFunction);
 	      }
 	    });
+	    return this;
 	  };
 
 	  Player.prototype.containerChanged = function containerChanged() {
@@ -612,6 +625,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * resizes the current player canvas.
 	   * @method resize
 	   * @param {Object} size should be a literal object with `height` and `width`.
+	   * @return {Player} itself
 	   * @example
 	   * ```javascript
 	   * player.resize({height: 360, width: 640})
@@ -621,93 +635,115 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  Player.prototype.resize = function resize(size) {
 	    this.core.resize(size);
+	    return this;
 	  };
 
 	  /**
 	   * loads a new source.
 	   * @method load
-	   * @param {Object} sources source or sources of video.
-	   * sources can be a string or {source: <<source URL>>, mimeType: <<source mime type>>}
-	   * @param {Object} mimeType a mime type, example: `'application/vnd.apple.mpegurl'`
-	   *
+	   * @param {Array|String} sources source or sources of video.
+	   * An array item can be a string or {source: <<source URL>>, mimeType: <<source mime type>>}
+	   * @param {String} mimeType a mime type, example: `'application/vnd.apple.mpegurl'`
+	   * @param {Boolean} [startPlay=false] whether playing should be started immediately
+	   * @return {Player} itself
 	   */
 
 
-	  Player.prototype.load = function load(sources, mimeType) {
+	  Player.prototype.load = function load(sources, mimeType, startPlay) {
 	    this.core.load(sources, mimeType);
+	    if (startPlay) {
+	      this.play();
+	    }
+	    return this;
 	  };
 
 	  /**
 	   * destroys the current player and removes it from the DOM.
 	   * @method destroy
+	   * @return {Player} itself
 	   */
 
 
 	  Player.prototype.destroy = function destroy() {
 	    this.core.destroy();
+	    return this;
 	  };
 
 	  /**
 	   * plays the current video (`source`).
 	   * @method play
+	   * @return {Player} itself
 	   */
 
 
 	  Player.prototype.play = function play() {
 	    this.core.mediaControl.container.play();
+	    return this;
 	  };
 
 	  /**
 	   * pauses the current video (`source`).
 	   * @method pause
+	   * @return {Player} itself
 	   */
 
 
 	  Player.prototype.pause = function pause() {
 	    this.core.mediaControl.container.pause();
+	    return this;
 	  };
 
 	  /**
 	   * stops the current video (`source`).
 	   * @method stop
+	   * @return {Player} itself
 	   */
 
 
 	  Player.prototype.stop = function stop() {
 	    this.core.mediaControl.container.stop();
+	    return this;
 	  };
 
 	  /**
 	   * seeks the current video (`source`). For example, `player.seek(120)` will seek to second 120 (2minutes) of the current video.
 	   * @method seek
 	   * @param {Number} time should be a number between 0 and the video duration.
+	   * @return {Player} itself
 	   */
 
 
 	  Player.prototype.seek = function seek(time) {
 	    this.core.mediaControl.container.seek(time);
+	    return this;
 	  };
 
 	  /**
 	   * seeks the current video (`source`). For example, `player.seek(50)` will seek to the middle of the current video.
 	   * @method seekPercentage
 	   * @param {Number} time should be a number between 0 and 100.
+	   * @return {Player} itself
 	   */
 
 
 	  Player.prototype.seekPercentage = function seekPercentage(percentage) {
 	    this.core.mediaControl.container.seekPercentage(percentage);
+	    return this;
 	  };
 
 	  /**
 	   * Set the volume for the current video (`source`).
 	   * @method setVolume
 	   * @param {Number} volume should be a number between 0 and 100, 0 being mute and 100 the max volume.
+	   * @return {Player} itself
 	   */
 
 
 	  Player.prototype.setVolume = function setVolume(volume) {
-	    this.core.mediaControl.container.setVolume(volume);
+	    if (this.core && this.core.mediaControl) {
+	      this.core.mediaControl.setVolume(volume);
+	    }
+	    return this;
 	  };
 
 	  /**
@@ -718,27 +754,33 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	  Player.prototype.getVolume = function getVolume() {
-	    return this.core.mediaControl.container.volume;
+	    return this.core && this.core.mediaControl ? this.core.mediaControl.volume : 0;
 	  };
 
 	  /**
 	   * mutes the current video (`source`).
 	   * @method mute
+	   * @return {Player} itself
 	   */
 
 
 	  Player.prototype.mute = function mute() {
-	    this.core.mediaControl.container.setVolume(0);
+	    this._mutedVolume = this.getVolume();
+	    this.setVolume(0);
+	    return this;
 	  };
 
 	  /**
 	   * unmutes the current video (`source`).
 	   * @method unmute
+	   * @return {Player} itself
 	   */
 
 
 	  Player.prototype.unmute = function unmute() {
-	    this.core.mediaControl.container.setVolume(100);
+	    this.setVolume(typeof this._mutedVolume === "number" ? this._mutedVolume : 100);
+	    this._mutedVolume = null;
+	    return this;
 	  };
 
 	  /**
@@ -756,11 +798,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * enables to configure a player after its creation
 	   * @method configure
 	   * @param {Object} options all the options to change in form of a javascript object
+	   * @return {Player} itself
 	   */
 
 
 	  Player.prototype.configure = function configure(options) {
 	    this.core.configure(options);
+	    return this;
 	  };
 
 	  /**
@@ -10358,7 +10402,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".media-control-notransition {\n  -webkit-transition: none !important false;\n  -moz-transition: none !important false false;\n  -o-transition: none !important false false;\n  transition: none !important; }\n\n.media-control[data-media-control] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 9999;\n  pointer-events: none; }\n  .media-control[data-media-control].dragging {\n    pointer-events: auto;\n    cursor: -webkit-grabbing !important;\n    cursor: grabbing !important;\n    cursor: url(" + __webpack_require__(39) + "), move; }\n    .media-control[data-media-control].dragging * {\n      cursor: -webkit-grabbing !important;\n      cursor: grabbing !important;\n      cursor: url(" + __webpack_require__(39) + "), move; }\n  .media-control[data-media-control] .media-control-background[data-background] {\n    position: absolute;\n    height: 40%;\n    width: 100%;\n    bottom: 0;\n    background: -owg-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: -moz-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: -o-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    -pie-background: -pie-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    -webkit-transition: opacity 0.6s ease-out;\n    -moz-transition: opacity 0.6s ease-out false;\n    -o-transition: opacity 0.6s ease-out false;\n    transition: opacity 0.6s ease-out; }\n  .media-control[data-media-control] .media-control-icon {\n    line-height: 0;\n    letter-spacing: 0;\n    speak: none;\n    color: #fff;\n    opacity: 0.5;\n    vertical-align: middle;\n    text-align: left;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease false;\n    -o-transition: all 0.1s ease false;\n    transition: all 0.1s ease; }\n  .media-control[data-media-control] .media-control-icon:hover {\n    color: white;\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .media-control[data-media-control].media-control-hide .media-control-background[data-background] {\n    opacity: 0; }\n  .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {\n    bottom: -50px; }\n    .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n      opacity: 0; }\n  .media-control[data-media-control] .media-control-layer[data-controls] {\n    position: absolute;\n    bottom: 7px;\n    width: 100%;\n    height: 32px;\n    font-size: 0;\n    vertical-align: middle;\n    pointer-events: auto;\n    -webkit-transition: bottom 0.4s ease-out;\n    -moz-transition: bottom 0.4s ease-out false;\n    -o-transition: bottom 0.4s ease-out false;\n    transition: bottom 0.4s ease-out; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      left: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {\n      height: 100%;\n      text-align: center;\n      line-height: 32px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {\n      background-color: transparent;\n      border: 0;\n      margin: 0 6px;\n      padding: 0;\n      cursor: pointer;\n      display: inline-block;\n      width: 32px;\n      height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg {\n        width: 100%;\n        height: 22px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg path {\n          fill: white; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {\n        outline: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {\n        cursor: default;\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%;\n        display: none; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {\n          opacity: 1.0;\n          display: block; }\n          .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {\n            opacity: 1.0;\n            text-shadow: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause] {\n        float: left; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {\n        float: left; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position], .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      display: inline-block;\n      font-size: 10px;\n      color: white;\n      cursor: default;\n      line-height: 32px;\n      position: relative; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {\n      margin: 0 6px 0 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      color: rgba(255, 255, 255, 0.5);\n      margin-right: 6px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {\n        content: \"|\";\n        margin-right: 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {\n      position: absolute;\n      top: -20px;\n      left: 0;\n      display: inline-block;\n      vertical-align: middle;\n      width: 100%;\n      height: 25px;\n      cursor: pointer; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {\n        width: 100%;\n        height: 1px;\n        position: relative;\n        top: 12px;\n        background-color: #666666; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #c2c2c2;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out false;\n          -o-transition: all 0.1s ease-out false;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #005aff;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out false;\n          -o-transition: all 0.1s ease-out false;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0;\n          position: absolute;\n          top: -3px;\n          width: 5px;\n          height: 7px;\n          background-color: rgba(255, 255, 255, 0.5);\n          -webkit-transition: opacity 0.1s ease;\n          -moz-transition: opacity 0.1s ease false;\n          -o-transition: opacity 0.1s ease false;\n          transition: opacity 0.1s ease; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n        opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {\n        cursor: default; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n        position: absolute;\n        -webkit-transform: translateX(-50%);\n        -moz-transform: translateX(-50%);\n        -ms-transform: translateX(-50%);\n        -o-transform: translateX(-50%);\n        transform: translateX(-50%);\n        top: 2px;\n        left: 0;\n        width: 20px;\n        height: 20px;\n        opacity: 1;\n        -webkit-transition: all 0.1s ease-out;\n        -moz-transition: all 0.1s ease-out false;\n        -o-transition: all 0.1s ease-out false;\n        transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {\n          position: absolute;\n          left: 6px;\n          top: 6px;\n          width: 8px;\n          height: 8px;\n          border-radius: 10px;\n          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n          background-color: white; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {\n      float: right;\n      display: inline-block;\n      height: 32px;\n      cursor: pointer;\n      margin: 0 6px;\n      box-sizing: border-box; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {\n        float: left;\n        bottom: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {\n          background-color: transparent;\n          border: 0;\n          box-sizing: content-box;\n          width: 32px;\n          height: 32px;\n          opacity: 0.5; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {\n            opacity: 0.75; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg {\n            height: 24px;\n            position: relative;\n            top: 3px; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg path {\n              fill: white; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted svg {\n            margin-left: 2px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {\n        float: left;\n        position: relative;\n        top: 6px;\n        width: 42px;\n        height: 18px;\n        padding: 3px 0;\n        -webkit-transition: width 0.2s ease-out;\n        -moz-transition: width 0.2s ease-out false;\n        -o-transition: width 0.2s ease-out false;\n        transition: width 0.2s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] {\n          height: 1px;\n          position: relative;\n          top: 7px;\n          margin: 0 3px;\n          background-color: #666666; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #c2c2c2;\n            -webkit-transition: all 0.1s ease-out;\n            -moz-transition: all 0.1s ease-out false;\n            -o-transition: all 0.1s ease-out false;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-2[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #005aff;\n            -webkit-transition: all 0.1s ease-out;\n            -moz-transition: all 0.1s ease-out false;\n            -o-transition: all 0.1s ease-out false;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-hover[data-volume] {\n            opacity: 0;\n            position: absolute;\n            top: -3px;\n            width: 5px;\n            height: 7px;\n            background-color: rgba(255, 255, 255, 0.5);\n            -webkit-transition: opacity 0.1s ease;\n            -moz-transition: opacity 0.1s ease false;\n            -o-transition: opacity 0.1s ease false;\n            transition: opacity 0.1s ease; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] {\n          position: absolute;\n          -webkit-transform: translateX(-50%);\n          -moz-transform: translateX(-50%);\n          -ms-transform: translateX(-50%);\n          -o-transform: translateX(-50%);\n          transform: translateX(-50%);\n          top: 0px;\n          left: 0;\n          width: 20px;\n          height: 20px;\n          opacity: 1;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out false;\n          -o-transition: all 0.1s ease-out false;\n          transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume] {\n            position: absolute;\n            left: 6px;\n            top: 6px;\n            width: 8px;\n            height: 8px;\n            border-radius: 10px;\n            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n            background-color: white; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {\n          float: left;\n          width: 4px;\n          padding-left: 2px;\n          height: 12px;\n          opacity: 0.5;\n          -webkit-box-shadow: inset 2px 0 0 white;\n          -moz-box-shadow: inset 2px 0 0 white;\n          box-shadow: inset 2px 0 0 white;\n          -webkit-transition: -webkit-transform 0.2s ease-out;\n          -moz-transition: -moz-transform 0.2s ease-out false;\n          -o-transition: -o-transform 0.2s ease-out false;\n          transition: transform 0.2s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {\n            -webkit-box-shadow: inset 2px 0 0 #fff;\n            -moz-box-shadow: inset 2px 0 0 #fff;\n            box-shadow: inset 2px 0 0 #fff;\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:nth-of-type(1) {\n            padding-left: 0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {\n            -webkit-transform: scaleY(1.5);\n            -moz-transform: scaleY(1.5);\n            -ms-transform: scaleY(1.5);\n            -o-transform: scaleY(1.5);\n            transform: scaleY(1.5); }\n  .media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {\n    height: 12px;\n    top: 9px;\n    padding: 0;\n    width: 0; }\n", ""]);
+	exports.push([module.id, ".media-control-notransition {\n  -webkit-transition: none !important false;\n  -moz-transition: none !important false false;\n  -o-transition: none !important false false;\n  transition: none !important; }\n\n.media-control[data-media-control] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 9999;\n  pointer-events: none; }\n  .media-control[data-media-control].dragging {\n    pointer-events: auto;\n    cursor: -webkit-grabbing !important;\n    cursor: grabbing !important;\n    cursor: url(" + __webpack_require__(39) + "), move; }\n    .media-control[data-media-control].dragging * {\n      cursor: -webkit-grabbing !important;\n      cursor: grabbing !important;\n      cursor: url(" + __webpack_require__(39) + "), move; }\n  .media-control[data-media-control] .media-control-background[data-background] {\n    position: absolute;\n    height: 40%;\n    width: 100%;\n    bottom: 0;\n    background: -owg-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: -moz-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: -o-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    -pie-background: -pie-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    -webkit-transition: opacity 0.6s ease-out;\n    -moz-transition: opacity 0.6s ease-out false;\n    -o-transition: opacity 0.6s ease-out false;\n    transition: opacity 0.6s ease-out; }\n  .media-control[data-media-control] .media-control-icon {\n    line-height: 0;\n    letter-spacing: 0;\n    speak: none;\n    color: #fff;\n    opacity: 0.5;\n    vertical-align: middle;\n    text-align: left;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease false;\n    -o-transition: all 0.1s ease false;\n    transition: all 0.1s ease; }\n  .media-control[data-media-control] .media-control-icon:hover {\n    color: white;\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .media-control[data-media-control].media-control-hide .media-control-background[data-background] {\n    opacity: 0; }\n  .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {\n    bottom: -50px; }\n    .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n      opacity: 0; }\n  .media-control[data-media-control] .media-control-layer[data-controls] {\n    position: absolute;\n    bottom: 7px;\n    width: 100%;\n    height: 32px;\n    font-size: 0;\n    vertical-align: middle;\n    pointer-events: auto;\n    -webkit-transition: bottom 0.4s ease-out;\n    -moz-transition: bottom 0.4s ease-out false;\n    -o-transition: bottom 0.4s ease-out false;\n    transition: bottom 0.4s ease-out; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      left: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {\n      height: 100%;\n      text-align: center;\n      line-height: 32px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {\n      background-color: transparent;\n      border: 0;\n      margin: 0 6px;\n      padding: 0;\n      cursor: pointer;\n      display: inline-block;\n      width: 32px;\n      height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg {\n        width: 100%;\n        height: 22px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg path {\n          fill: white; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {\n        outline: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {\n        cursor: default;\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%;\n        display: none; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {\n          opacity: 1.0;\n          display: block; }\n          .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {\n            opacity: 1.0;\n            text-shadow: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause] {\n        float: left; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {\n        float: left; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position], .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      display: inline-block;\n      font-size: 10px;\n      color: white;\n      cursor: default;\n      line-height: 32px;\n      position: relative; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {\n      margin: 0 6px 0 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      color: rgba(255, 255, 255, 0.5);\n      margin-right: 6px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {\n        content: \"|\";\n        margin-right: 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {\n      position: absolute;\n      top: -20px;\n      left: 0;\n      display: inline-block;\n      vertical-align: middle;\n      width: 100%;\n      height: 25px;\n      cursor: pointer; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {\n        width: 100%;\n        height: 1px;\n        position: relative;\n        top: 12px;\n        background-color: #666666; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #c2c2c2;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out false;\n          -o-transition: all 0.1s ease-out false;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #005aff;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out false;\n          -o-transition: all 0.1s ease-out false;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0;\n          position: absolute;\n          top: -3px;\n          width: 5px;\n          height: 7px;\n          background-color: rgba(255, 255, 255, 0.5);\n          -webkit-transition: opacity 0.1s ease;\n          -moz-transition: opacity 0.1s ease false;\n          -o-transition: opacity 0.1s ease false;\n          transition: opacity 0.1s ease; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n        opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {\n        cursor: default; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n        position: absolute;\n        -webkit-transform: translateX(-50%);\n        -moz-transform: translateX(-50%);\n        -ms-transform: translateX(-50%);\n        -o-transform: translateX(-50%);\n        transform: translateX(-50%);\n        top: 2px;\n        left: 0;\n        width: 20px;\n        height: 20px;\n        opacity: 1;\n        -webkit-transition: all 0.1s ease-out;\n        -moz-transition: all 0.1s ease-out false;\n        -o-transition: all 0.1s ease-out false;\n        transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {\n          position: absolute;\n          left: 6px;\n          top: 6px;\n          width: 8px;\n          height: 8px;\n          border-radius: 10px;\n          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n          background-color: white; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {\n      float: right;\n      display: inline-block;\n      height: 32px;\n      cursor: pointer;\n      margin: 0 6px;\n      box-sizing: border-box; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {\n        float: left;\n        bottom: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {\n          background-color: transparent;\n          border: 0;\n          box-sizing: content-box;\n          width: 32px;\n          height: 32px;\n          opacity: 0.5; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {\n            opacity: 0.75; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg {\n            height: 24px;\n            position: relative;\n            top: 3px; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg path {\n              fill: white; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted svg {\n            margin-left: 2px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {\n        float: left;\n        position: relative;\n        overflow: hidden;\n        top: 6px;\n        width: 42px;\n        height: 18px;\n        padding: 3px 0;\n        -webkit-transition: width 0.2s ease-out;\n        -moz-transition: width 0.2s ease-out false;\n        -o-transition: width 0.2s ease-out false;\n        transition: width 0.2s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] {\n          height: 1px;\n          position: relative;\n          top: 7px;\n          margin: 0 3px;\n          background-color: #666666; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #c2c2c2;\n            -webkit-transition: all 0.1s ease-out;\n            -moz-transition: all 0.1s ease-out false;\n            -o-transition: all 0.1s ease-out false;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-2[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #005aff;\n            -webkit-transition: all 0.1s ease-out;\n            -moz-transition: all 0.1s ease-out false;\n            -o-transition: all 0.1s ease-out false;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-hover[data-volume] {\n            opacity: 0;\n            position: absolute;\n            top: -3px;\n            width: 5px;\n            height: 7px;\n            background-color: rgba(255, 255, 255, 0.5);\n            -webkit-transition: opacity 0.1s ease;\n            -moz-transition: opacity 0.1s ease false;\n            -o-transition: opacity 0.1s ease false;\n            transition: opacity 0.1s ease; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] {\n          position: absolute;\n          -webkit-transform: translateX(-50%);\n          -moz-transform: translateX(-50%);\n          -ms-transform: translateX(-50%);\n          -o-transform: translateX(-50%);\n          transform: translateX(-50%);\n          top: 0px;\n          left: 0;\n          width: 20px;\n          height: 20px;\n          opacity: 1;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out false;\n          -o-transition: all 0.1s ease-out false;\n          transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume] {\n            position: absolute;\n            left: 6px;\n            top: 6px;\n            width: 8px;\n            height: 8px;\n            border-radius: 10px;\n            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n            background-color: white; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {\n          float: left;\n          width: 4px;\n          padding-left: 2px;\n          height: 12px;\n          opacity: 0.5;\n          -webkit-box-shadow: inset 2px 0 0 white;\n          -moz-box-shadow: inset 2px 0 0 white;\n          box-shadow: inset 2px 0 0 white;\n          -webkit-transition: -webkit-transform 0.2s ease-out;\n          -moz-transition: -moz-transform 0.2s ease-out false;\n          -o-transition: -o-transform 0.2s ease-out false;\n          transition: transform 0.2s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {\n            -webkit-box-shadow: inset 2px 0 0 #fff;\n            -moz-box-shadow: inset 2px 0 0 #fff;\n            box-shadow: inset 2px 0 0 #fff;\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:nth-of-type(1) {\n            padding-left: 0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {\n            -webkit-transform: scaleY(1.5);\n            -moz-transform: scaleY(1.5);\n            -ms-transform: scaleY(1.5);\n            -o-transform: scaleY(1.5);\n            transform: scaleY(1.5); }\n  .media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {\n    width: 0;\n    height: 12px;\n    top: 9px;\n    padding: 0; }\n", ""]);
 
 	// exports
 
@@ -14143,6 +14187,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  HLS.prototype.pause = function pause() {
+	    if (!this.hls) {
+	      return;
+	    }
 	    _HTML5VideoPlayback.prototype.pause.call(this);
 	    if (this.dvrEnabled) {
 	      this.updateDvr(true);
@@ -14150,8 +14197,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  HLS.prototype.stop = function stop() {
-	    _HTML5VideoPlayback.prototype.stop.call(this);
 	    if (this.hls) {
+	      _HTML5VideoPlayback.prototype.stop.call(this);
 	      this.hls.destroy();
 	      delete this.hls;
 	    }
@@ -14397,6 +14444,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          maxBufferHole: 0.5,
 	          maxSeekHole: 2,
 	          seekHoleNudgeDuration: 0.01,
+	          stalledInBufferedNudgeThreshold: 10,
 	          maxFragLookUpTolerance: 0.2,
 	          liveSyncDurationCount: 3,
 	          liveMaxLatencyDurationCount: Infinity,
@@ -14956,6 +15004,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	          retry,
 	          timeout,
 	          retryDelay;
+
+	      if (this.loading && this.loader) {
+	        if (this.url === url && this.id === id1 && this.id2 === id2) {
+	          // same request than last pending one, don't do anything
+	          return;
+	        } else {
+	          // one playlist load request is pending, but with different params, abort it before loading new playlist
+	          this.loader.abort();
+	        }
+	      }
+
 	      this.url = url;
 	      this.id = id1;
 	      this.id2 = id2;
@@ -14969,6 +15028,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        retryDelay = config.levelLoadingRetryDelay;
 	      }
 	      this.loader = typeof config.pLoader !== 'undefined' ? new config.pLoader(config) : new config.loader(config);
+	      this.loading = true;
 	      this.loader.load(url, '', this.loadsuccess.bind(this), this.loaderror.bind(this), this.loadtimeout.bind(this), timeout, retry, retryDelay);
 	    }
 	  }, {
@@ -15150,6 +15210,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          id2 = this.id2,
 	          hls = this.hls,
 	          levels;
+
+	      this.loading = false;
 	      // responseURL not supported on some browsers (it is used to detect URL redirection)
 	      if (url === undefined) {
 	        // fallback to initial URL
@@ -15196,6 +15258,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.loader) {
 	        this.loader.abort();
 	      }
+	      this.loading = false;
 	      this.hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.NETWORK_ERROR, details: details, fatal: fatal, url: this.url, loader: this.loader, response: event.currentTarget, level: this.id, id: this.id2 });
 	    }
 	  }, {
@@ -15212,6 +15275,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.loader) {
 	        this.loader.abort();
 	      }
+	      this.loading = false;
 	      this.hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.NETWORK_ERROR, details: details, fatal: fatal, url: this.url, loader: this.loader, level: this.id, id: this.id2 });
 	    }
 	  }]);
@@ -15256,6 +15320,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _logger = __webpack_require__(83);
 
 	var _errors = __webpack_require__(80);
+
+	var _events = __webpack_require__(79);
+
+	var _events2 = _interopRequireDefault(_events);
+
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { default: obj };
+	}
 
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
@@ -15335,7 +15407,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        eventToFunction.call(this, event, data).call();
 	      } catch (err) {
 	        _logger.logger.error('internal error happened while processing ' + event + ':' + err.message);
-	        this.hls.trigger(Event.ERROR, { type: _errors.ErrorTypes.OTHER_ERROR, details: _errors.ErrorDetails.INTERNAL_EXCEPTION, fatal: false, event: event, err: err });
+	        this.hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.OTHER_ERROR, details: _errors.ErrorDetails.INTERNAL_EXCEPTION, fatal: false, event: event, err: err });
 	      }
 	    }
 	  }]);
@@ -16232,17 +16304,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'onMediaAttaching',
 	    value: function onMediaAttaching(data) {
 	      var media = this.media = data.media;
-	      // setup the media source
-	      var ms = this.mediaSource = new MediaSource();
-	      //Media Source listeners
-	      this.onmso = this.onMediaSourceOpen.bind(this);
-	      this.onmse = this.onMediaSourceEnded.bind(this);
-	      this.onmsc = this.onMediaSourceClose.bind(this);
-	      ms.addEventListener('sourceopen', this.onmso);
-	      ms.addEventListener('sourceended', this.onmse);
-	      ms.addEventListener('sourceclose', this.onmsc);
-	      // link video and media Source
-	      media.src = URL.createObjectURL(ms);
+	      if (media) {
+	        // setup the media source
+	        var ms = this.mediaSource = new MediaSource();
+	        //Media Source listeners
+	        this.onmso = this.onMediaSourceOpen.bind(this);
+	        this.onmse = this.onMediaSourceEnded.bind(this);
+	        this.onmsc = this.onMediaSourceClose.bind(this);
+	        ms.addEventListener('sourceopen', this.onmso);
+	        ms.addEventListener('sourceended', this.onmse);
+	        ms.addEventListener('sourceclose', this.onmsc);
+	        // link video and media Source
+	        media.src = URL.createObjectURL(ms);
+	      }
 	    }
 	  }, {
 	    key: 'onMediaDetaching',
@@ -16263,9 +16337,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        ms.removeEventListener('sourceopen', this.onmso);
 	        ms.removeEventListener('sourceended', this.onmse);
 	        ms.removeEventListener('sourceclose', this.onmsc);
-	        // unlink MediaSource from video tag
-	        this.media.src = '';
-	        this.media.removeAttribute('src');
+
+	        try {
+	          // unlink MediaSource from video tag
+	          this.media.src = '';
+	          this.media.removeAttribute('src');
+	        } catch (err) {
+	          _logger.logger.warn('onMediaDetaching:' + err.message + ' while unlinking video.src');
+	        }
 	        this.mediaSource = null;
 	        this.media = null;
 	        this.pendingTracks = null;
@@ -16346,23 +16425,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onBufferCodecs',
 	    value: function onBufferCodecs(tracks) {
-	      var sb, trackName, track, codec, mimeType;
+	      var mediaSource = this.mediaSource;
 
-	      if (!this.media) {
+	      // delay sourcebuffer creation if media source not opened yet
+	      if (!mediaSource || mediaSource.readyState !== 'open') {
 	        this.pendingTracks = tracks;
 	        return;
 	      }
 
 	      if (!this.sourceBuffer) {
-	        var sourceBuffer = {},
-	            mediaSource = this.mediaSource;
-	        for (trackName in tracks) {
-	          track = tracks[trackName];
+	        var sourceBuffer = {};
+	        for (var trackName in tracks) {
+	          var track = tracks[trackName];
 	          // use levelCodec as first priority
-	          codec = track.levelCodec || track.codec;
-	          mimeType = track.container + ';codecs=' + codec;
+	          var codec = track.levelCodec || track.codec;
+	          var mimeType = track.container + ';codecs=' + codec;
 	          _logger.logger.log('creating sourceBuffer with mimeType:' + mimeType);
-	          sb = sourceBuffer[trackName] = mediaSource.addSourceBuffer(mimeType);
+	          var sb = sourceBuffer[trackName] = mediaSource.addSourceBuffer(mimeType);
 	          sb.addEventListener('updateend', this.onsbue);
 	          sb.addEventListener('error', this.onsbe);
 	        }
@@ -17207,11 +17286,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'isBuffered',
 	    value: function isBuffered(position) {
-	      var v = this.media,
-	          buffered = v.buffered;
-	      for (var i = 0; i < buffered.length; i++) {
-	        if (position >= buffered.start(i) && position <= buffered.end(i)) {
-	          return true;
+	      var media = this.media;
+	      if (media) {
+	        var buffered = media.buffered;
+	        for (var i = 0; i < buffered.length; i++) {
+	          if (position >= buffered.start(i) && position <= buffered.end(i)) {
+	            return true;
+	          }
 	        }
 	      }
 	      return false;
@@ -17291,9 +17372,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'immediateLevelSwitchEnd',
 	    value: function immediateLevelSwitchEnd() {
 	      this.immediateSwitch = false;
-	      this.media.currentTime -= 0.0001;
-	      if (!this.previouslyPaused) {
-	        this.media.play();
+	      var media = this.media;
+	      if (media && media.readyState) {
+	        media.currentTime -= 0.0001;
+	        if (!this.previouslyPaused) {
+	          media.play();
+	        }
 	      }
 	    }
 	  }, {
@@ -17304,45 +17388,51 @@ return /******/ (function(modules) { // webpackBootstrap
 	        we need to find the next flushable buffer range
 	        we should take into account new segment fetch time
 	      */
-	      var fetchdelay, currentRange, nextRange;
-	      // increase fragment load Index to avoid frag loop loading error after buffer flush
-	      this.fragLoadIdx += 2 * this.config.fragLoadingLoopThreshold;
-	      currentRange = this.getBufferRange(this.media.currentTime);
-	      if (currentRange && currentRange.start > 1) {
-	        // flush buffer preceding current fragment (flush until current fragment start offset)
-	        // minus 1s to avoid video freezing, that could happen if we flush keyframe of current video ...
-	        this.state = State.PAUSED;
-	        this.hls.trigger(_events2.default.BUFFER_FLUSHING, { startOffset: 0, endOffset: currentRange.start - 1 });
-	      }
-	      if (!this.media.paused) {
-	        // add a safety delay of 1s
-	        var nextLevelId = this.hls.nextLoadLevel,
-	            nextLevel = this.levels[nextLevelId],
-	            fragLastKbps = this.fragLastKbps;
-	        if (fragLastKbps && this.fragCurrent) {
-	          fetchdelay = this.fragCurrent.duration * nextLevel.bitrate / (1000 * fragLastKbps) + 1;
+	      var media = this.media;
+	      // ensure that media is defined and that metadata are available (to retrieve currentTime)
+	      if (media && media.readyState) {
+	        var fetchdelay = void 0,
+	            currentRange = void 0,
+	            nextRange = void 0;
+	        // increase fragment load Index to avoid frag loop loading error after buffer flush
+	        this.fragLoadIdx += 2 * this.config.fragLoadingLoopThreshold;
+	        currentRange = this.getBufferRange(media.currentTime);
+	        if (currentRange && currentRange.start > 1) {
+	          // flush buffer preceding current fragment (flush until current fragment start offset)
+	          // minus 1s to avoid video freezing, that could happen if we flush keyframe of current video ...
+	          this.state = State.PAUSED;
+	          this.hls.trigger(_events2.default.BUFFER_FLUSHING, { startOffset: 0, endOffset: currentRange.start - 1 });
+	        }
+	        if (!media.paused) {
+	          // add a safety delay of 1s
+	          var nextLevelId = this.hls.nextLoadLevel,
+	              nextLevel = this.levels[nextLevelId],
+	              fragLastKbps = this.fragLastKbps;
+	          if (fragLastKbps && this.fragCurrent) {
+	            fetchdelay = this.fragCurrent.duration * nextLevel.bitrate / (1000 * fragLastKbps) + 1;
+	          } else {
+	            fetchdelay = 0;
+	          }
 	        } else {
 	          fetchdelay = 0;
 	        }
-	      } else {
-	        fetchdelay = 0;
-	      }
-	      //logger.log('fetchdelay:'+fetchdelay);
-	      // find buffer range that will be reached once new fragment will be fetched
-	      nextRange = this.getBufferRange(this.media.currentTime + fetchdelay);
-	      if (nextRange) {
-	        // we can flush buffer range following this one without stalling playback
-	        nextRange = this.followingBufferRange(nextRange);
+	        //logger.log('fetchdelay:'+fetchdelay);
+	        // find buffer range that will be reached once new fragment will be fetched
+	        nextRange = this.getBufferRange(media.currentTime + fetchdelay);
 	        if (nextRange) {
-	          // if we are here, we can also cancel any loading/demuxing in progress, as they are useless
-	          var fragCurrent = this.fragCurrent;
-	          if (fragCurrent && fragCurrent.loader) {
-	            fragCurrent.loader.abort();
+	          // we can flush buffer range following this one without stalling playback
+	          nextRange = this.followingBufferRange(nextRange);
+	          if (nextRange) {
+	            // if we are here, we can also cancel any loading/demuxing in progress, as they are useless
+	            var fragCurrent = this.fragCurrent;
+	            if (fragCurrent && fragCurrent.loader) {
+	              fragCurrent.loader.abort();
+	            }
+	            this.fragCurrent = null;
+	            // flush position is the start position of this new buffer
+	            this.state = State.PAUSED;
+	            this.hls.trigger(_events2.default.BUFFER_FLUSHING, { startOffset: nextRange.start, endOffset: Number.POSITIVE_INFINITY });
 	          }
-	          this.fragCurrent = null;
-	          // flush position is the start position of this new buffer
-	          this.state = State.PAUSED;
-	          this.hls.trigger(_events2.default.BUFFER_FLUSHING, { startOffset: nextRange.start, endOffset: Number.POSITIVE_INFINITY });
 	        }
 	      }
 	    }
@@ -17571,7 +17661,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 	          this.pendingAppending = 0;
 	          _logger.logger.log('Demuxing ' + sn + ' of [' + details.startSN + ' ,' + details.endSN + '],level ' + level);
-	          this.demuxer.push(data.payload, audioCodec, currentLevel.videoCodec, start, fragCurrent.cc, level, sn, duration, fragCurrent.decryptdata);
+	          var demuxer = this.demuxer;
+	          if (demuxer) {
+	            demuxer.push(data.payload, audioCodec, currentLevel.videoCodec, start, fragCurrent.cc, level, sn, duration, fragCurrent.decryptdata);
+	          }
 	        }
 	      }
 	      this.fragLoadError = 0;
@@ -22283,7 +22376,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'destroy',
 	    value: function destroy() {
 	      if (this.timer) {
-	        clearInterval(this.timer);
+	        clearTimeout(this.timer);
 	        this.timer = null;
 	      }
 	      this._manualLevel = -1;
@@ -22383,17 +22476,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'setLevelInternal',
 	    value: function setLevelInternal(newLevel) {
+	      var levels = this._levels;
 	      // check if level idx is valid
-	      if (newLevel >= 0 && newLevel < this._levels.length) {
+	      if (newLevel >= 0 && newLevel < levels.length) {
 	        // stopping live reloading timer if any
 	        if (this.timer) {
-	          clearInterval(this.timer);
+	          clearTimeout(this.timer);
 	          this.timer = null;
 	        }
 	        this._level = newLevel;
 	        _logger.logger.log('switching to level ' + newLevel);
 	        this.hls.trigger(_events2.default.LEVEL_SWITCH, { level: newLevel });
-	        var level = this._levels[newLevel];
+	        var level = levels[newLevel];
 	        // check if we need to load playlist for this level
 	        if (level.details === undefined || level.details.live === true) {
 	          // level not retrieved yet, or live playlist we need to (re)load it
@@ -22458,7 +22552,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	              this._level = undefined;
 	              // stopping live reloading timer if any
 	              if (this.timer) {
-	                clearInterval(this.timer);
+	                clearTimeout(this.timer);
 	                this.timer = null;
 	              }
 	              // redispatch same error but with fatal set to true
@@ -22471,16 +22565,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onLevelLoaded',
 	    value: function onLevelLoaded(data) {
-	      // check if current playlist is a live playlist
-	      if (data.details.live && !this.timer) {
-	        // if live playlist we will have to reload it periodically
-	        // set reload period to playlist target duration
-	        this.timer = setInterval(this.ontick, 1000 * data.details.targetduration);
-	      }
-	      if (!data.details.live && this.timer) {
-	        // playlist is not live and timer is armed : stopping it
-	        clearInterval(this.timer);
-	        this.timer = null;
+	      // only process level loaded events matching with expected level
+	      if (data.level === this._level) {
+	        var newDetails = data.details;
+	        // if current playlist is a live playlist, arm a timer to reload it
+	        if (newDetails.live) {
+	          var reloadInterval = 1000 * newDetails.targetduration,
+	              curLevel = this._levels[data.level],
+	              curDetails = curLevel.details;
+	          if (curDetails && newDetails.endSN === curDetails.endSN) {
+	            // follow HLS Spec, If the client reloads a Playlist file and finds that it has not
+	            // changed then it MUST wait for a period of one-half the target
+	            // duration before retrying.
+	            reloadInterval /= 2;
+	            _logger.logger.log('same live playlist, reload twice faster');
+	          }
+	          // decrement reloadInterval with level loading delay
+	          reloadInterval -= performance.now() - data.stats.trequest;
+	          // in any case, don't reload more than every second
+	          reloadInterval = Math.max(1000, Math.round(reloadInterval));
+	          _logger.logger.log('live playlist, reload in ' + reloadInterval + ' ms');
+	          this.timer = setTimeout(this.ontick, reloadInterval);
+	        } else {
+	          this.timer = null;
+	        }
 	      }
 	    }
 	  }, {
@@ -22504,8 +22612,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return this._level;
 	    },
 	    set: function set(newLevel) {
-	      if (this._level !== newLevel || this._levels[newLevel].details === undefined) {
-	        this.setLevelInternal(newLevel);
+	      var levels = this._levels;
+	      if (levels && levels.length > newLevel) {
+	        if (this._level !== newLevel || levels[newLevel].details === undefined) {
+	          this.setLevelInternal(newLevel);
+	        }
 	      }
 	    }
 	  }, {
@@ -22515,6 +22626,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    set: function set(newLevel) {
 	      this._manualLevel = newLevel;
+	      if (this._startLevel === undefined) {
+	        this._startLevel = newLevel;
+	      }
 	      if (newLevel !== -1) {
 	        this.level = newLevel;
 	      }
@@ -23638,6 +23752,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var _this = _possibleConstructorReturn(this, _Playback.call(this, options));
 
 	    _this.options = options;
+	    _this._noiseFrameNum = -1;
 	    return _this;
 	  }
 
@@ -23651,6 +23766,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  NoOp.prototype.noise = function noise() {
+	    this._noiseFrameNum = (this._noiseFrameNum + 1) % 5;
+	    if (this._noiseFrameNum) {
+	      // only update noise every 5 frames to save cpu
+	      return;
+	    }
+
 	    var idata = this.context.createImageData(this.context.canvas.width, this.context.canvas.height);
 
 	    try {
@@ -23667,7 +23788,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var run = 0;
 	    var color = 0;
 	    var m = Math.random() * 6 + 4;
-
 	    for (var i = 0; i < len;) {
 	      if (run < 0) {
 	        run = m * Math.random();
