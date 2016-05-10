@@ -62,7 +62,7 @@ export default class HLS extends HTML5VideoPlayback {
     this._hls.attachMedia(this.el)
   }
 
-  _recover() {
+  _recover(evt, data) {
     if (!this._recoveredDecodingError) {
       this._recoveredDecodingError = true
       this._hls.recoverMediaError()
@@ -152,7 +152,7 @@ export default class HLS extends HTML5VideoPlayback {
             break
           case HLSJS.ErrorTypes.MEDIA_ERROR:
             Log.warn(`hlsjs: trying to recover from media error, evt ${evt}, data ${data} `)
-            this._recover()
+            this._recover(evt, data)
             break
           default:
             Log.error(`hlsjs: trying to recover from error, evt ${evt}, data ${data} `)
