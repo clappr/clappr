@@ -66,7 +66,7 @@
     "mkdirp": "^0.5.1",
     "mocha": "^2.3.4",
     "node-bourbon": "^4.2.8",
-    "node-sass": "~3.4.2",
+    "node-sass": "^3.7.0",
     "s3": "^4.1.1",
     "sass-loader": "^3.0.0",
     "sinon": "^1.10.2",
