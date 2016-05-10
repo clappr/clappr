@@ -269,7 +269,7 @@ export default class Player extends BaseObject {
     return this;
   }
 
-  containerChanged() {
+  _containerChanged() {
     this.stopListening()
     this._addEventListeners()
   }
