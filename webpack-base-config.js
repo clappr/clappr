@@ -19,7 +19,7 @@ module.exports = {
       {
         test: /\.scss$/,
         loaders: ['css', 'sass?includePaths[]='
-            + path.resolve(__dirname, './node_modules/compass-mixins/lib')
+            + require('node-bourbon').includePaths
             + '&includePaths[]='
             + path.resolve(__dirname, './src/base/scss')
         ],
