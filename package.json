@@ -35,7 +35,7 @@
     "check-dependencies": "^0.12.0",
     "clappr-zepto": "0.0.4",
     "clean-webpack-plugin": "^0.1.3",
-    "compass-mixins": "^0.12.7",
+    "compass-mixins": "git://github.com/tjenkinson/compass-mixins.git#v0.12.8",
     "coveralls": "^2.11.4",
     "css-loader": "^0.23.1",
     "dotenv": "^2.0.0",
