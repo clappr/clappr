@@ -1,3 +1,5 @@
+@import 'compass/css3';
+
 [data-no-op] {
   z-index: 1000;
   position: absolute;
@@ -10,10 +12,13 @@
   position: absolute;
   text-align: center;
   font-size: 25px;
-  top: 40%;
   left: 0;
   right: 0;
   color: white;
+  margin: 10px;
+  /* center vertically */
+  top: 50%;
+  @include translateY(-50%);
 }
 
 [data-no-op] canvas[data-no-op-canvas] {
