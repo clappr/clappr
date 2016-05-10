@@ -40,7 +40,7 @@ export default class BaseFlashPlayback extends Playback {
     this.el = element[0]
   }
 
-  setupFirefox() {
+  _setupFirefox() {
     var $el = this.$('embed')
     $el.attr('data-flash-playback', this.name)
     $el.addClass(this.attributes.class)
@@ -66,7 +66,7 @@ export default class BaseFlashPlayback extends Playback {
     }
 
     if (Browser.isFirefox) {
-      this.setupFirefox()
+      this._setupFirefox()
     }
 
     this.el.id = this.cid
