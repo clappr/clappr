@@ -75,7 +75,7 @@ export default class Player extends BaseObject {
    * @type {Boolean} `true` if the player is ready. ie PLAYER_READY event has fired
    */
   get isReady() {
-    return !!this.ready
+    return !!this._ready
   }
 
   /**
@@ -181,7 +181,7 @@ export default class Player extends BaseObject {
     super(options)
     var defaultOptions = {playerId: uniqueId(""), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl, allowUserInteraction: Browser.isMobile}
     this.options = $.extend(defaultOptions, options)
-    this.options.sources = this.normalizeSources(options)
+    this.options.sources = this._normalizeSources(options)
     if (!this.options.chromeless) {
       // "allowUserInteraction" cannot be false if not in chromeless mode.
       this.options.allowUserInteraction = true
@@ -190,8 +190,8 @@ export default class Player extends BaseObject {
       // if user iteraction is not allowed ensure keyboard shortcuts are disabled
       this.options.disableKeyboardShortcuts = true
     }
-    this.registerOptionEventListeners()
-    this.coreFactory = new CoreFactory(this)
+    this._registerOptionEventListeners()
+    this._coreFactory = new CoreFactory(this)
     this.playerInfo = PlayerInfo.getInstance(this.options.playerId)
     this.playerInfo.currentSize = {width: options.width, height: options.height}
     this.playerInfo.options = this.options
@@ -225,38 +225,38 @@ export default class Player extends BaseObject {
    */
   attachTo(element) {
     this.options.parentElement = element
-    this.core = this.coreFactory.create()
-    this.addEventListeners()
+    this.core = this._coreFactory.create()
+    this._addEventListeners()
     return this;
   }
 
-  addEventListeners() {
+  _addEventListeners() {
     if (!this.core.isReady) {
-      this.listenToOnce(this.core, Events.CORE_READY, this.onReady)
+      this.listenToOnce(this.core, Events.CORE_READY, this._onReady)
     } else {
-      this.onReady()
+      this._onReady()
     }
-    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
-    this.listenTo(this.core, Events.CORE_FULLSCREEN, this.onFullscreenChange)
+    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this._containerChanged)
+    this.listenTo(this.core, Events.CORE_FULLSCREEN, this._onFullscreenChange)
     return this;
   }
 
-  addContainerEventListeners() {
+  _addContainerEventListeners() {
     var container = this.core.mediaControl.container
     if (!!container) {
-      this.listenTo(container, Events.CONTAINER_PLAY, this.onPlay)
-      this.listenTo(container, Events.CONTAINER_PAUSE, this.onPause)
-      this.listenTo(container, Events.CONTAINER_STOP, this.onStop)
-      this.listenTo(container, Events.CONTAINER_ENDED, this.onEnded)
-      this.listenTo(container, Events.CONTAINER_SEEK, this.onSeek)
-      this.listenTo(container, Events.CONTAINER_ERROR, this.onError)
-      this.listenTo(container, Events.CONTAINER_TIMEUPDATE, this.onTimeUpdate)
-      this.listenTo(container, Events.CONTAINER_VOLUME, this.onVolumeUpdate)
+      this.listenTo(container, Events.CONTAINER_PLAY, this._onPlay)
+      this.listenTo(container, Events.CONTAINER_PAUSE, this._onPause)
+      this.listenTo(container, Events.CONTAINER_STOP, this._onStop)
+      this.listenTo(container, Events.CONTAINER_ENDED, this._onEnded)
+      this.listenTo(container, Events.CONTAINER_SEEK, this._onSeek)
+      this.listenTo(container, Events.CONTAINER_ERROR, this._onError)
+      this.listenTo(container, Events.CONTAINER_TIMEUPDATE, this._onTimeUpdate)
+      this.listenTo(container, Events.CONTAINER_VOLUME, this._onVolumeUpdate)
     }
     return this;
   }
 
-  registerOptionEventListeners() {
+  _registerOptionEventListeners() {
     var userEvents = this.options.events || {}
     Object.keys(userEvents).forEach((userEvent) => {
       var eventType = this.eventsMapping[userEvent]
@@ -271,56 +271,57 @@ export default class Player extends BaseObject {
 
   containerChanged() {
     this.stopListening()
-    this.addEventListeners()
+    this._addEventListeners()
   }
 
-  onReady() {
-    this.ready = true
-    this.addContainerEventListeners()
+  _onReady() {
+    this._ready = true
+    this._addContainerEventListeners()
     this.trigger(Events.PLAYER_READY)
   }
 
-  onFullscreenChange(fullscreen) {
+  _onFullscreenChange(fullscreen) {
     this.trigger(Events.PLAYER_FULLSCREEN, fullscreen)
   }
 
-  onVolumeUpdate(volume) {
+  _onVolumeUpdate(volume) {
     this.trigger(Events.PLAYER_VOLUMEUPDATE, volume)
   }
 
-  onPlay() {
+  _onPlay() {
     this.trigger(Events.PLAYER_PLAY)
   }
 
-  onPause() {
+  _onPause() {
     this.trigger(Events.PLAYER_PAUSE)
   }
 
-  onStop() {
+  _onStop() {
     this.trigger(Events.PLAYER_STOP, this.getCurrentTime())
   }
 
-  onEnded() {
+  _onEnded() {
     this.trigger(Events.PLAYER_ENDED)
   }
 
-  onSeek(time) {
+  _onSeek(time) {
     this.trigger(Events.PLAYER_SEEK, time)
   }
 
-  onTimeUpdate(timeProgress) {
+  _onTimeUpdate(timeProgress) {
     this.trigger(Events.PLAYER_TIMEUPDATE, timeProgress)
   }
 
-  onError(error) {
+  _onError(error) {
     this.trigger(Events.PLAYER_ERROR, error)
   }
 
+  // TODO what is this here for?
   is(value, type) {
     return value.constructor === type
   }
 
-  normalizeSources(options) {
+  _normalizeSources(options) {
     var sources = options.sources || (options.source !== undefined? [options.source] : [])
     return sources.length === 0 ? [{source:"", mimeType:""}] : sources
   }
