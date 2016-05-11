@@ -1,4 +1,4 @@
-@import 'compass/css3';
+@import 'bourbon';
 
 [data-no-op] {
   z-index: 1000;
@@ -18,7 +18,7 @@
   margin: 10px;
   /* center vertically */
   top: 50%;
-  @include translateY(-50%);
+  @include transform(translateY(-50%));
 }
 
 [data-no-op] canvas[data-no-op-canvas] {

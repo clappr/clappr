@@ -1,4 +1,4 @@
-@import 'compass/css3';
+@import 'bourbon';
 
 .media-control-notransition {
   @include transition(none !important);
@@ -246,7 +246,7 @@
 
       .bar-scrubber[data-seekbar] {
         position: absolute;
-        @include translateX(-50%);
+        @include transform(translateX(-50%));
         top: 2px;
         left: 0;
         width: 20px;
@@ -349,7 +349,7 @@
 
         .bar-scrubber[data-volume] {
           position: absolute;
-          @include translateX(-50%);
+          @include transform(translateX(-50%));
           top: 0px;
           left: 0;
           width: 20px;
@@ -375,12 +375,12 @@
           padding-left: 2px;
           height: 12px;
           opacity: 0.5;
-          @include box-shadow(inset 2px 0 0 white);
+          box-shadow: inset 2px 0 0 white;
 
           @include transition(transform .2s ease-out);
 
           &.fill {
-            @include box-shadow(inset 2px 0 0 #fff);
+            box-shadow: inset 2px 0 0 #fff;
             opacity: 1;
           }
 
