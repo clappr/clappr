@@ -16,7 +16,7 @@ import $ from 'clappr-zepto'
 export default class PosterPlugin extends UIContainerPlugin {
   get name() { return 'poster' }
   get template() { return template(posterHTML) }
-  get shouldRender() { return this.container.playback.name !== 'html_img'}
+  get shouldRender() { return this.container.playback.name !== 'html_img' }
 
   get attributes() {
     return {
@@ -43,8 +43,8 @@ export default class PosterPlugin extends UIContainerPlugin {
     this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
     this.listenTo(this.container, Events.CONTAINER_PLAY, this.onPlay)
     this.listenTo(this.container, Events.CONTAINER_ENDED, this.onStop)
-    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.update)
-    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.update)
+    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering)
+    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferfull)
     this.listenTo(this.container, Events.CONTAINER_OPTIONS_CHANGE, this.render)
   }
 
@@ -60,6 +60,14 @@ export default class PosterPlugin extends UIContainerPlugin {
   onStop() {
     this.hasStartedPlaying = false
     this.playRequested = false
+    this.update()
+  }
+
+  onBuffering() {
+    this.update()
+  }
+
+  onBufferfull() {
     this.update()
   }
 
