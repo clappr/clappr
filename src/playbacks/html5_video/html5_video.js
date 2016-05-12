@@ -296,10 +296,9 @@ export default class HTML5Video extends Playback {
   }
 
   destroy() {
-    this.stop()
+    this.$el.remove()
     this.el.src = ''
     this._src = null
-    this.$el.remove()
   }
 
   seek(time) {
