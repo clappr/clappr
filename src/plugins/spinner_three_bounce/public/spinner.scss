@@ -6,11 +6,13 @@
   width: 70px;
   text-align: center;
   z-index: 999;
-  top: 47%;
   left: 0;
   right: 0;
   margin-left: auto;
   margin-right: auto;
+  /* center vertically */
+  top: 50%;
+  @include transform(translateY(-50%));
 
   &> div {
     width: 18px;
