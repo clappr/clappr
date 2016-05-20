@@ -54,6 +54,7 @@ export default class Core extends UIObject {
   constructor(options) {
     super(options)
     this.playerInfo = PlayerInfo.getInstance(options.playerId)
+    this.firstResize = true
     this.options = options
     this.plugins = []
     this.containers = []
@@ -81,7 +82,6 @@ export default class Core extends UIObject {
     } else {
       this.setPlayerSize()
     }
-    Mediator.trigger(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerInfo.currentSize)
   }
 
   setFullscreen() {
@@ -112,7 +112,7 @@ export default class Core extends UIObject {
     this.options.width = options.width
     this.options.height = options.height
     this.playerInfo.currentSize = options
-    Mediator.trigger(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerInfo.currentSize)
+    this.triggerResize(this.playerInfo.currentSize)
   }
 
   enableResizeObserver() {
@@ -120,10 +120,20 @@ export default class Core extends UIObject {
       if (this.playerInfo.computedSize.width != this.el.clientWidth ||
           this.playerInfo.computedSize.height != this.el.clientHeight) {
         this.playerInfo.computedSize = { width: this.el.clientWidth, height: this.el.clientHeight }
-        Mediator.trigger(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerInfo.computedSize)
+        this.triggerResize(this.playerInfo.computedSize)
       }
     }
     this.resizeObserverInterval = setInterval(checkSizeCallback, 500)
+  }
+
+  triggerResize(newSize) {
+    var thereWasChange = this.firstResize || this.oldHeight !== newSize.height || this.oldWidth !== newSize.width
+    if (thereWasChange) {
+      Mediator.trigger(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, newSize)
+      this.oldHeight = newSize.height
+      this.oldWidth = newSize.width
+      this.firstResize = false
+    }
   }
 
   disableResizeObserver() {
