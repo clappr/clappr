@@ -25,7 +25,7 @@ export default class HLS extends HTML5VideoPlayback {
   set currentLevel(id) {
     this._currentLevel = id
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_START)
-    this.hls.currentLevel = this._currentLevel
+    this._hls.currentLevel = this._currentLevel
   }
 
   constructor(options) {
