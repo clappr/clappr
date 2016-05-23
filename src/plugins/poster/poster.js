@@ -94,14 +94,14 @@ export default class PosterPlugin extends UIContainerPlugin {
     if (!this.hasStartedPlaying) {
       this.container.disableMediaControl()
       this.$el.show()
-      let showPlayButton = !this.playRequested && !this.container.buffering
-      this.showPlayButton(showPlayButton)
     } else {
       this.container.enableMediaControl()
       if (this.shouldHideOnPlay()) {
         this.$el.hide()
       }
     }
+    let showPlayButton = !this.playRequested && !this.container.buffering && this.shouldHideOnPlay()
+    this.showPlayButton(showPlayButton)
   }
 
   render() {
