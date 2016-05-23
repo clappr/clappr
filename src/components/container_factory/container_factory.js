@@ -38,17 +38,14 @@ export default class ContainerFactory extends BaseObject {
     if (typeof source === "string" || source instanceof String) {
       resolvedSource = source.toString()
     }
-    else if (typeof source === "object" && !source.constructor) {
+    else {
       resolvedSource = source.source.toString()
       if (source.mimeType) {
         mimeType = source.mimeType
       }
     }
-    else {
-      resolvedSource = source
-    }
     
-    if (typeof resolvedSource === "string" && !!resolvedSource.match(/^\/\//)) resolvedSource = window.location.protocol + resolvedSource
+    if (!!resolvedSource.match(/^\/\//)) resolvedSource = window.location.protocol + resolvedSource
 
     var options = $.extend({}, this.options, {
       src: resolvedSource,
