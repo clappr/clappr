@@ -19,6 +19,7 @@ export default class StatsPlugin extends ContainerPlugin {
   bindEvents() {
     this.listenTo(this.container.playback, Events.PLAYBACK_PLAY, this.onPlay)
     this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
+    this.listenTo(this.container, Events.CONTAINER_ENDED, this.onStop)
     this.listenTo(this.container, Events.CONTAINER_DESTROYED, this.onStop)
     this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering)
     this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferFull)
@@ -46,6 +47,7 @@ export default class StatsPlugin extends ContainerPlugin {
 
   onStop() {
     clearInterval(this.intervalId)
+    this.report()
     this.intervalId = undefined
     this.state = "STOPPED"
   }
