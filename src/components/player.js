@@ -350,11 +350,11 @@ export default class Player extends BaseObject {
    * @param {Boolean} [startPlay=false] whether playing should be started immediately
    * @return {Player} itself
    */
-  load(sources, mimeType, startPlay) {
-    this.core.load(sources, mimeType);
-    if (startPlay) {
-      this.play();
+  load(sources, mimeType, autoPlay) {
+    if (startPlay !== undefined) {
+      this.configure({autoPlay: !!autoPlay})
     }
+    this.core.load(sources, mimeType);
     return this;
   }
 
