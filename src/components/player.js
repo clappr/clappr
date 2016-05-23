@@ -347,11 +347,11 @@ export default class Player extends BaseObject {
    * @param {Array|String} sources source or sources of video.
    * An array item can be a string or {source: <<source URL>>, mimeType: <<source mime type>>}
    * @param {String} mimeType a mime type, example: `'application/vnd.apple.mpegurl'`
-   * @param {Boolean} [startPlay=false] whether playing should be started immediately
+   * @param {Boolean} [autoPlay=false] whether playing should be started immediately
    * @return {Player} itself
    */
   load(sources, mimeType, autoPlay) {
-    if (startPlay !== undefined) {
+    if (autoPlay !== undefined) {
       this.configure({autoPlay: !!autoPlay})
     }
     this.core.load(sources, mimeType);
