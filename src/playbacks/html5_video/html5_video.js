@@ -93,7 +93,7 @@ export default class HTML5Video extends Playback {
       autoplay: playbackConfig.autoplay || options.autoPlay,
       poster: playbackConfig.poster || options.poster,
       preload: preload || 'metadata',
-      controls: playbackConfig.preload || options.useVideoTagDefaultControls,
+      controls: playbackConfig.controls || options.useVideoTagDefaultControls,
       crossorigin: playbackConfig.crossorigin
     })
 
