@@ -216,6 +216,12 @@ export function getBrowserLanguage() {
   return null
 }
 
+export function setupObject(object, att) {
+  for (var key in att) {
+    if(att.hasOwnProperty(key)) { object[key] = att[key] }
+  }
+}
+
 export default {
   Config,
   Fullscreen,
