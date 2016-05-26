@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {seekStringToSeconds, setupObject} from 'base/utils'
+import {seekStringToSeconds} from 'base/utils'
 
 import Playback from 'base/playback'
 import template from 'base/template'
@@ -12,6 +12,7 @@ import Events from 'base/events'
 import tagStyle from './public/style.scss'
 import sourceHTML from './public/index.html'
 import find from 'lodash.find'
+import $ from "clappr-zepto"
 
 const MIMETYPES = {
   'mp4': ["avc1.42E01E", "avc1.58A01E", "avc1.4D401E", "avc1.64001E", "mp4v.20.8", "mp4v.20.240", "mp4a.40.2"].map(
@@ -88,7 +89,7 @@ export default class HTML5Video extends Playback {
     var playbackConfig = (options.playbackConfig || {})
     var preload = playbackConfig.preload || ((Browser.isSafari)?'auto':options.preload)
 
-    setupObject(this.el, {
+    $.extend(this.el, {
       loop: playbackConfig.loop || options.loop,
       autoplay: playbackConfig.autoplay || options.autoPlay,
       poster: playbackConfig.poster || options.poster,

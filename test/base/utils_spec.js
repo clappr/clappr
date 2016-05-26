@@ -147,24 +147,6 @@ describe('Utils', function() {
     expect(utils.seekStringToSeconds()).to.equal(0);
   })
 
-  describe('setupObject', function() {
-    it('sets up an object with attributes', function() {
-      var object = {}
-      var options = {config1: 'clappr'}
-      utils.setupObject(object, options)
-
-      expect(object.config1).to.equal('clappr')
-    })
-
-    it('only sets attribute not undefined', function() {
-      var object = {}
-      var options = {config1: undefined}
-      utils.setupObject(object, options)
-
-      expect(object.config1).to.be.undefined
-    })
-  })
-
   describe('Config', function() {
     beforeEach(function() {
       localStorage.removeItem("clappr.localhost.volume")
