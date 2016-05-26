@@ -95,7 +95,7 @@ export default class HTML5Video extends Playback {
       poster: playbackConfig.poster || options.poster,
       preload: preload || 'metadata',
       controls: playbackConfig.controls || options.useVideoTagDefaultControls,
-      crossorigin: playbackConfig.crossOrigin
+      crossOrigin: playbackConfig.crossOrigin
     })
 
     // TODO should settings be private?
