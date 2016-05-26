@@ -218,7 +218,10 @@ export function getBrowserLanguage() {
 
 export function setupObject(object, att) {
   for (var key in att) {
-    if(att.hasOwnProperty(key)) { object[key] = att[key] }
+    if(att.hasOwnProperty(key)) {
+       var value = att[key]
+       if (value !== undefined) {object[key] = value}
+    }
   }
 }
 

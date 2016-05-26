@@ -155,6 +155,14 @@ describe('Utils', function() {
 
       expect(object.config1).to.equal('clappr')
     })
+
+    it('only sets attribute not undefined', function() {
+      var object = {}
+      var options = {config1: undefined}
+      utils.setupObject(object, options)
+
+      expect(object.config1).to.be.undefined
+    })
   })
 
   describe('Config', function() {
