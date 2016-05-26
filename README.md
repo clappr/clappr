@@ -125,6 +125,22 @@ In case you're loading a on demand video (mp4), it's possible to define the way 
 ##### HLS Buffer Length
 The default behavior for the HLS playback is to keep buffering indefinitely, even on VoD. This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks. To change this behavior, add `maxBufferLength: <value>` to embed parameters, where `value` is in seconds.
 
+##### Playback configuration
+The configuration for the playback, it's still only compatible with `html5_video` playback.
+
+```javascript
+{
+  playbackConfig: {
+    loop: 'loop',
+    autoplay: 'autoplay',
+    poster: 'http://example.com/example.png',
+    preload: 'metadata',
+    controls: 'controls',
+    crossorigin: 'use-credentials'
+  }
+}
+```
+
 ##### Google Analytics Plugin
 Enable Google Analytics events dispatch (play/pause/stop/buffering/etc) adding your `gaAccount`. Optionally, pass your favorite trackerName as `gaTrackerName`. Example:
 
