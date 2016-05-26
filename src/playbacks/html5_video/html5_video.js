@@ -91,11 +91,11 @@ export default class HTML5Video extends Playback {
 
     $.extend(this.el, {
       loop: playbackConfig.loop || options.loop,
-      autoplay: playbackConfig.autoplay || options.autoPlay,
+      autoplay: options.autoPlay,
       poster: playbackConfig.poster || options.poster,
       preload: preload || 'metadata',
       controls: playbackConfig.controls || options.useVideoTagDefaultControls,
-      crossorigin: playbackConfig.crossorigin
+      crossorigin: playbackConfig.crossOrigin
     })
 
     // TODO should settings be private?
