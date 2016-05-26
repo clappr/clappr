@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {seekStringToSeconds} from 'base/utils'
+import {seekStringToSeconds, setupObject} from 'base/utils'
 
 import Playback from 'base/playback'
 import template from 'base/template'
@@ -84,16 +84,19 @@ export default class HTML5Video extends Playback {
     this._stopped = false
     this._options = options
     this._setupSrc(options.src)
-    this.el.loop = options.loop
-    if (options.poster) {
-      this.$el.attr("poster", options.poster)
-    }
-    this.el.autoplay = options.autoPlay
-    if (Browser.isSafari) {
-      this._setupSafari()
-    } else {
-      this.el.preload = options.preload ? options.preload: 'metadata'
-    }
+
+    var playbackConfig = (options.playbackConfig || {})
+    var preload = playbackConfig.preload || ((Browser.isSafari)?'auto':options.preload)
+
+    setupObject(this.el, {
+      loop: playbackConfig.loop || options.loop,
+      autoplay: playbackConfig.autoplay || options.autoPlay,
+      poster: playbackConfig.poster || options.poster,
+      preload: preload || 'metadata',
+      controls: playbackConfig.preload || options.useVideoTagDefaultControls,
+      crossorigin: playbackConfig.crossorigin
+    })
+
     // TODO should settings be private?
     this.settings = {default: ['seekbar']}
     this.settings.left = ["playpause", "position", "duration"]
@@ -109,10 +112,6 @@ export default class HTML5Video extends Playback {
   _setupSrc(srcUrl) {
     this._src = srcUrl
     this.el.src = srcUrl
-  }
-
-  _setupSafari() {
-    this.el.preload = 'auto'
   }
 
   _onLoadedMetadata(e) {
