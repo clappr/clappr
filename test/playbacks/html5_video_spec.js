@@ -42,6 +42,6 @@ describe('HTML5Video playback', () => {
     }
     var playback = new HTML5Video(options)
 
-    expect(playback.el.crossorigin).to.be.equal('use-credentials')
+    expect(playback.el.crossOrigin).to.be.equal('use-credentials')
   })
 })
