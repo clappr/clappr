@@ -34,4 +34,14 @@ describe('HTML5Video playback', () => {
 
     expect(playback.isReady).to.be.true
   })
+
+  it('setup crossorigin attribute', () => {
+    var options = {
+      src: 'http://example.com/dash.ogg',
+      playbackConfig: {crossOrigin: 'use-credentials'}
+    }
+    var playback = new HTML5Video(options)
+
+    expect(playback.el.crossorigin).to.be.equal('use-credentials')
+  })
 })
