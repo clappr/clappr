@@ -90,9 +90,9 @@ export default class HTML5Video extends Playback {
     var preload = playbackConfig.preload || ((Browser.isSafari)?'auto':options.preload)
 
     $.extend(this.el, {
-      loop: playbackConfig.loop || options.loop,
+      loop: options.loop,
       autoplay: options.autoPlay,
-      poster: playbackConfig.poster || options.poster,
+      poster: options.poster,
       preload: preload || 'metadata',
       controls: playbackConfig.controls || options.useVideoTagDefaultControls,
       crossOrigin: playbackConfig.crossOrigin
