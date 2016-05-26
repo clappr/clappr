@@ -38,7 +38,7 @@ describe('HTML5Video playback', () => {
   it('setup crossorigin attribute', () => {
     var options = {
       src: 'http://example.com/dash.ogg',
-      playbackConfig: {crossorigin: 'use-credentials'}
+      playbackConfig: {crossOrigin: 'use-credentials'}
     }
     var playback = new HTML5Video(options)
 
