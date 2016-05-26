@@ -7,7 +7,7 @@ export default class SourcesPlugin extends CorePlugin {
   get name() { return 'sources' }
 
   bindEvents() {
-    this.listenToOnce(this.core, Events.CORE_CONTAINERS_CREATED, this.onContainersCreated)
+    this.listenTo(this.core, Events.CORE_CONTAINERS_CREATED, this.onContainersCreated)
   }
 
   onContainersCreated() {
