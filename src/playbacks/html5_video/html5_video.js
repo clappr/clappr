@@ -12,6 +12,7 @@ import Events from 'base/events'
 import tagStyle from './public/style.scss'
 import sourceHTML from './public/index.html'
 import find from 'lodash.find'
+import $ from "clappr-zepto"
 
 const MIMETYPES = {
   'mp4': ["avc1.42E01E", "avc1.58A01E", "avc1.4D401E", "avc1.64001E", "mp4v.20.8", "mp4v.20.240", "mp4a.40.2"].map(
@@ -84,16 +85,19 @@ export default class HTML5Video extends Playback {
     this._stopped = false
     this._options = options
     this._setupSrc(options.src)
-    this.el.loop = options.loop
-    if (options.poster) {
-      this.$el.attr("poster", options.poster)
-    }
-    this.el.autoplay = options.autoPlay
-    if (Browser.isSafari) {
-      this._setupSafari()
-    } else {
-      this.el.preload = options.preload ? options.preload: 'metadata'
-    }
+
+    var playbackConfig = (options.playbackConfig || {})
+    var preload = playbackConfig.preload || ((Browser.isSafari)?'auto':options.preload)
+
+    $.extend(this.el, {
+      loop: playbackConfig.loop || options.loop,
+      autoplay: options.autoPlay,
+      poster: playbackConfig.poster || options.poster,
+      preload: preload || 'metadata',
+      controls: playbackConfig.controls || options.useVideoTagDefaultControls,
+      crossorigin: playbackConfig.crossOrigin
+    })
+
     // TODO should settings be private?
     this.settings = {default: ['seekbar']}
     this.settings.left = ["playpause", "position", "duration"]
@@ -109,10 +113,6 @@ export default class HTML5Video extends Playback {
   _setupSrc(srcUrl) {
     this._src = srcUrl
     this.el.src = srcUrl
-  }
-
-  _setupSafari() {
-    this.el.preload = 'auto'
   }
 
   _onLoadedMetadata(e) {
