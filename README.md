@@ -244,7 +244,7 @@ The project is on npm at https://www.npmjs.com/package/clappr
 By default Clappr will assume that assets are located at the same location as the script.
 If this is not the case you need to set your base url immediately BEFORE requiring Clappr, or importing the script.
 
-```javascript
+```html
   <script type="text/javascript">
     window.CLAPPR_ASSETS_BASE_URL = "http://mycdn.example.com/assets/clappr";
   </script>
