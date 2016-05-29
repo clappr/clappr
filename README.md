@@ -242,18 +242,16 @@ The project is on npm at https://www.npmjs.com/package/clappr
 `npm install clappr --save-dev`
 
 By default Clappr will assume that assets are located at the same location as the script.
-If this is not the case you need to set your base url immediately BEFORE requiring Clappr, or importing the script.
-
+If this is not the case you need to set your base url immediately BEFORE clappr is loaded.
 ```html
   <script type="text/javascript">
-    window.CLAPPR_ASSETS_BASE_URL = "http://mycdn.example.com/assets/clappr";
+    window.clapprAssetsBaseUrl = "http://mycdn.example.com/assets/clappr";
   </script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/clappr/latest/clappr.min.js"></script>
 ```
-or
+If you are using webpack you can inject `clapprAssetsBaseUrl` into the module using the [webpack imports loader](https://github.com/webpack/imports-loader), and therefore don't need to set a global.
 ```javascript
-  window.CLAPPR_ASSETS_BASE_URL = "http://mycdn.example.com/assets/clappr";
-  var Clappr = require("clappr");
+  var Clappr = require("imports?clapprAssetsBaseUrl=>'http://mycdn.example.com/assets/clappr'!clappr");
 ```
 In the above case clappr will expect all of the [assets (in the dist folder)](https://github.com/clappr/clappr/tree/master/dist) to be accessible at "http://mycdn.example.com/assets/clappr".
 You need to arrange for the assets to be located at this url.
