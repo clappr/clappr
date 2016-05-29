@@ -17,7 +17,8 @@ const AUTO = -1
 
 export default class FlasHLS extends BaseFlashPlayback {
   get name() { return 'flashls' }
-  get swfPath() { return hlsSwf }
+  // TODO remove this._baseUrl in next major version
+  get swfPath() { return this._baseUrl+hlsSwf }
 
   get levels() { return this._levels || [] }
   get currentLevel() {

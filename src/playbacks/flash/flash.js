@@ -16,7 +16,8 @@ var MAX_ATTEMPTS = 60
 
 export default class Flash extends BaseFlashPlayback {
   get name() { return 'flash' }
-  get swfPath() { return flashSwf }
+  // TODO remove this._baseUrl in next major version
+  get swfPath() { return this._baseUrl+flashSwf }
 
   /**
    * Determine if the playback has ended.

@@ -51,6 +51,8 @@ export default class BaseFlashPlayback extends Playback {
     this.$el.html(this.template({
       cid: this.cid,
       swfPath: this.swfPath,
+      // TODO remove in next major version
+      baseUrl: this.baseUrl,
       playbackId: this.uniqueId,
       wmode: this.wmode,
       callbackName: `window.Clappr.flashlsCallbacks.${this.cid}`})

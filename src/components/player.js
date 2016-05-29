@@ -12,6 +12,7 @@ import Loader from 'components/loader'
 import PlayerInfo from 'components/player_info'
 import $ from 'clappr-zepto'
 import find from 'lodash.find'
+import Log from 'plugins/log'
 
 /**
  * @class Player
@@ -177,7 +178,12 @@ export default class Player extends BaseObject {
    */
   constructor(options) {
     super(options)
-    var defaultOptions = {playerId: uniqueId(""), persistConfig: true, width: 640, height: 360, allowUserInteraction: Browser.isMobile}
+    // TODO remove baseUrl in next major version
+    var defaultOptions = {playerId: uniqueId(""), persistConfig: true, width: 640, height: 360, baseUrl: '', allowUserInteraction: Browser.isMobile}
+    if (options.baseUrl) {
+      Log.warn("The 'baseUrl' option is deprecated and will be removed in the next version. Look at https://github.com/clappr/clappr#installing-for-production")
+      options.baseUrl = options.baseUrl+"/";
+    }
     this.options = $.extend(defaultOptions, options)
     this.options.sources = this._normalizeSources(options)
     if (!this.options.chromeless) {
