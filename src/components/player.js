@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {uniqueId, currentScriptUrl} from 'base/utils'
+import {uniqueId} from 'base/utils'
 
 import BaseObject from 'base/base_object'
 import Events from 'base/events'
@@ -12,8 +12,6 @@ import Loader from 'components/loader'
 import PlayerInfo from 'components/player_info'
 import $ from 'clappr-zepto'
 import find from 'lodash.find'
-
-var baseUrl = currentScriptUrl().replace(/\/[^\/]+$/, "")
 
 /**
  * @class Player
@@ -179,7 +177,7 @@ export default class Player extends BaseObject {
    */
   constructor(options) {
     super(options)
-    var defaultOptions = {playerId: uniqueId(""), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl, allowUserInteraction: Browser.isMobile}
+    var defaultOptions = {playerId: uniqueId(""), persistConfig: true, width: 640, height: 360, allowUserInteraction: Browser.isMobile}
     this.options = $.extend(defaultOptions, options)
     this.options.sources = this._normalizeSources(options)
     if (!this.options.chromeless) {

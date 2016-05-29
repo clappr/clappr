@@ -80,7 +80,7 @@ export default class DVRControls extends UICorePlugin {
   }
 
   render() {
-    this.style = this.style || Styler.getStyleFor(dvrStyle, { baseUrl: this.core.options.baseUrl })
+    this.style = this.style || Styler.getStyleFor(dvrStyle)
     this.$el.html(this.template())
     this.$el.append(this.style)
     if (this.shouldRender()) {

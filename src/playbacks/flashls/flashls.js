@@ -4,7 +4,6 @@
 
 import BaseFlashPlayback from 'playbacks/base_flash_playback'
 import Events from 'base/events'
-import template from 'base/template'
 import Playback from 'base/playback'
 import Mediator from 'components/mediator'
 import Browser from 'components/browser'
@@ -18,7 +17,7 @@ const AUTO = -1
 
 export default class FlasHLS extends BaseFlashPlayback {
   get name() { return 'flashls' }
-  get swfPath() { return template(hlsSwf)({baseUrl: this._baseUrl}) }
+  get swfPath() { return hlsSwf }
 
   get levels() { return this._levels || [] }
   get currentLevel() {
