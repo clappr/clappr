@@ -2,7 +2,7 @@
   "name": "clappr",
   "version": "0.2.52",
   "description": "An extensible media player for the web",
-  "main": "./src/main.js",
+  "main": "./dist/clappr.js",
   "browser": "./dist/clappr.min.js",
   "scripts": {
     "release": "node_modules/.bin/webpack --progress -d --optimize-mangle --optimize-dedupe --optimize-occurence-order --output-filename clappr.min.js",
