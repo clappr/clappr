@@ -7,6 +7,7 @@ import {isNumber,Fullscreen, requestAnimationFrame, cancelAnimationFrame} from '
 import Events from 'base/events'
 import Styler from 'base/styler'
 import UIObject from 'base/ui_object'
+import mocks from 'base/mocks'
 import Browser from 'components/browser'
 import ContainerFactory from 'components/container_factory'
 import MediaControl from 'components/media_control'
@@ -61,9 +62,9 @@ export default class Core extends UIObject {
     this.setupMediaControl(null)
     //FIXME fullscreen api sucks
     this._boundFullscreenHandler = () => this.handleFullscreenChange()
-    $(document).bind('fullscreenchange', this._boundFullscreenHandler)
-    $(document).bind('MSFullscreenChange', this._boundFullscreenHandler)
-    $(document).bind('mozfullscreenchange', this._boundFullscreenHandler)
+    $(mocks.window.document).bind('fullscreenchange', this._boundFullscreenHandler)
+    $(mocks.window.document).bind('MSFullscreenChange', this._boundFullscreenHandler)
+    $(mocks.window.document).bind('mozfullscreenchange', this._boundFullscreenHandler)
   }
 
   createContainers(options) {
@@ -89,14 +90,14 @@ export default class Core extends UIObject {
       this.$el.addClass('fullscreen')
       this.$el.removeAttr('style')
       this.playerInfo.previousSize = { width: this.options.width, height: this.options.height }
-      this.playerInfo.currentSize = { width: $(window).width(), height: $(window).height() }
+      this.playerInfo.currentSize = { width: $(mocks.window).width(), height: $(mocks.window).height() }
     }
   }
 
   setPlayerSize() {
     this.$el.removeClass('fullscreen')
     this.playerInfo.currentSize = this.playerInfo.previousSize
-    this.playerInfo.previousSize = { width: $(window).width(), height: $(window).height() }
+    this.playerInfo.previousSize = { width: $(mocks.window).width(), height: $(mocks.window).height() }
     this.resize(this.playerInfo.currentSize)
   }
 
@@ -177,9 +178,9 @@ export default class Core extends UIObject {
     this.plugins.forEach((plugin) => plugin.destroy())
     this.$el.remove()
     this.mediaControl.destroy()
-    $(document).unbind('fullscreenchange', this._boundFullscreenHandler)
-    $(document).unbind('MSFullscreenChange', this._boundFullscreenHandler)
-    $(document).unbind('mozfullscreenchange', this._boundFullscreenHandler)
+    $(mocks.window.document).unbind('fullscreenchange', this._boundFullscreenHandler)
+    $(mocks.window.document).unbind('MSFullscreenChange', this._boundFullscreenHandler)
+    $(mocks.window.document).unbind('mozfullscreenchange', this._boundFullscreenHandler)
   }
 
   handleFullscreenChange() {

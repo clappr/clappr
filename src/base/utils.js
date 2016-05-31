@@ -4,6 +4,7 @@
 /*jshint -W079 */
 
 import Browser from 'components/browser'
+import mocks from 'base/mocks'
 import $ from 'clappr-zepto'
 
 function assign(obj, source) {
@@ -55,10 +56,10 @@ export function formatTime(time, paddedHours) {
 export var Fullscreen = {
   isFullscreen: function() {
     return !!(
-      document.webkitFullscreenElement ||
-      document.webkitIsFullScreen ||
-      document.mozFullScreen ||
-      document.msFullscreenElement
+      mocks.window.document.webkitFullscreenElement ||
+      mocks.window.document.webkitIsFullScreen ||
+      mocks.window.document.mozFullScreen ||
+      mocks.window.document.msFullscreenElement
     )
   },
   requestFullscreen: function(el) {
@@ -75,16 +76,16 @@ export var Fullscreen = {
     }
   },
   cancelFullscreen: function() {
-    if(document.exitFullscreen) {
-      document.exitFullscreen()
-    } else if(document.webkitCancelFullScreen) {
-      document.webkitCancelFullScreen()
-    } else if(document.webkitExitFullscreen) {
-      document.webkitExitFullscreen()
-    } else if(document.mozCancelFullScreen) {
-      document.mozCancelFullScreen()
-    } else if(document.msExitFullscreen) {
-      document.msExitFullscreen()
+    if(mocks.window.document.exitFullscreen) {
+      mocks.window.document.exitFullscreen()
+    } else if(mocks.window.document.webkitCancelFullScreen) {
+      mocks.window.document.webkitCancelFullScreen()
+    } else if(mocks.window.document.webkitExitFullscreen) {
+      mocks.window.document.webkitExitFullscreen()
+    } else if(mocks.window.document.mozCancelFullScreen) {
+      mocks.window.document.mozCancelFullScreen()
+    } else if(mocks.window.document.msExitFullscreen) {
+      mocks.window.document.msExitFullscreen()
     }
   }
 }
@@ -109,7 +110,7 @@ export class Config {
   }
 
   static _createKeyspace(key){
-    return `clappr.${document.domain}.${key}`
+    return `clappr.${mocks.window.document.domain}.${key}`
   }
 
   static restore(key) {
@@ -133,7 +134,7 @@ export class Config {
 
 export class QueryString {
   static get params() {
-    var query = window.location.search.substring(1)
+    var query = mocks.window.location.search.substring(1)
     if (query !== this.query) {
       this._urlParams = this.parse(query)
       this.query = query
@@ -142,7 +143,7 @@ export class QueryString {
   }
 
   static get hashParams() {
-    var hash = window.location.hash.substring(1)
+    var hash = mocks.window.location.hash.substring(1)
     if (hash !== this.hash) {
       this._hashParams = this.parse(hash)
       this.hash = hash
@@ -195,23 +196,31 @@ export function isNumber(value) {
 }
 
 export function currentScriptUrl() {
-  var scripts = document.getElementsByTagName('script')
+  // TODO issue here because this is called before new Clappr.player();
+  // think it's possible to remove. look at #1008
+  var scripts = window.document.getElementsByTagName('script')
   return scripts[scripts.length - 1].src
 }
 
-export var requestAnimationFrame = (window.requestAnimationFrame ||
-                            window.mozRequestAnimationFrame ||
-                            window.webkitRequestAnimationFrame ||
-                            function(fn) { window.setTimeout(fn, 1000/60) }).bind(window)
+export function requestAnimationFrame(callback) {
+  var fn = mocks.window.requestAnimationFrame ||
+            mocks.window.mozRequestAnimationFrame ||
+            mocks.window.webkitRequestAnimationFrame ||
+            function(callback) { mocks.window.setTimeout(callback, 1000/60) }
+  return fn(callback.bind(mocks.window))
+}
 
-export var cancelAnimationFrame = (window.cancelAnimationFrame ||
-                           window.mozCancelAnimationFrame ||
-                           window.webkitCancelAnimationFrame ||
-                           window.clearTimeout).bind(window)
+export function cancelAnimationFrame(callback) {
+  var fn = mocks.window.cancelAnimationFrame ||
+            mocks.window.cancelAnimationFrame ||
+            mocks.window.cancelAnimationFrame ||
+            function(callback) { mocks.window.clearTimeout(callback) }
+  return fn(callback.bind(mocks.window))
+}
 
 export function getBrowserLanguage() {
-  if (window.navigator && window.navigator.language) {
-    return window.navigator.language.toLowerCase()
+  if (mocks.window.navigator && mocks.window.navigator.language) {
+    return mocks.window.navigator.language.toLowerCase()
   }
   return null
 }

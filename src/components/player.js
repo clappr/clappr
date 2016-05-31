@@ -6,6 +6,7 @@ import {uniqueId, currentScriptUrl} from 'base/utils'
 
 import BaseObject from 'base/base_object'
 import Events from 'base/events'
+import mocks from 'base/mocks'
 import Browser from 'components/browser'
 import CoreFactory from 'components/core_factory'
 import Loader from 'components/loader'
@@ -210,7 +211,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   setParentId(parentId) {
-    var el = document.querySelector(parentId)
+    var el = mocks.window.document.querySelector(parentId)
     if (el) {
       this.attachTo(el)
     }

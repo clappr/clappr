@@ -12,6 +12,7 @@ import Events from 'base/events'
 import Kibo from 'base/kibo'
 import Styler from 'base/styler'
 import UIObject from 'base/ui_object'
+import mocks from 'base/mocks'
 import Browser from 'components/browser'
 import Mediator from 'components/mediator'
 import template from 'base/template'
@@ -102,8 +103,8 @@ export default class MediaControl extends UIObject {
     }
     this.stopDragHandler = (event) => this.stopDrag(event)
     this.updateDragHandler = (event) => this.updateDrag(event)
-    $(document).bind('mouseup', this.stopDragHandler)
-    $(document).bind('mousemove', this.updateDragHandler)
+    $(mocks.window.document).bind('mouseup', this.stopDragHandler)
+    $(mocks.window.document).bind('mousemove', this.updateDragHandler)
   }
 
   addEventListeners() {
@@ -452,7 +453,7 @@ export default class MediaControl extends UIObject {
   show(event) {
     if (this.disabled) return
     var timeout = 2000
-    if (!event || (event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY) || navigator.userAgent.match(/firefox/i)) {
+    if (!event || (event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY) || mocks.window.navigator.userAgent.match(/firefox/i)) {
       clearTimeout(this.hideId)
       this.$el.show()
       this.trigger(Events.MEDIACONTROL_SHOW, this.name)
@@ -591,8 +592,8 @@ export default class MediaControl extends UIObject {
 
   destroy() {
     this.remove()
-    $(document).unbind('mouseup', this.stopDragHandler)
-    $(document).unbind('mousemove', this.updateDragHandler)
+    $(mocks.window.document).unbind('mouseup', this.stopDragHandler)
+    $(mocks.window.document).unbind('mousemove', this.updateDragHandler)
     this.unbindKeyEvents()
   }
 

@@ -8,6 +8,7 @@ import BaseFlashPlayback from 'playbacks/base_flash_playback'
 import Browser from 'components/browser'
 import Mediator from 'components/mediator'
 import template from 'base/template'
+import mocks from 'base/mocks'
 import $ from 'clappr-zepto'
 import Events from 'base/events'
 import Playback from 'base/playback'
@@ -154,7 +155,7 @@ export default class Flash extends BaseFlashPlayback {
   }
 
   _checkInitialSeek() {
-    var seekTime = seekStringToSeconds(window.location.href)
+    var seekTime = seekStringToSeconds(mocks.window.location.href)
     if (seekTime !== 0) {
       this.seekSeconds(seekTime)
     }

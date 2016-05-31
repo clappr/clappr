@@ -4,6 +4,7 @@
 
 import ContainerPlugin from 'base/container_plugin';
 import Events from 'base/events'
+import mocks from 'base/mocks'
 
 export default class GoogleAnalytics extends ContainerPlugin {
   get name() { return 'google_analytics' }
@@ -19,13 +20,13 @@ export default class GoogleAnalytics extends ContainerPlugin {
   }
 
   embedScript() {
-    if (!window._gat) {
-      var script = document.createElement('script')
+    if (!mocks.window._gat) {
+      var script = mocks.window.document.createElement('script')
       script.setAttribute("type", "text/javascript")
       script.setAttribute("async", "async")
       script.setAttribute("src", "//www.google-analytics.com/ga.js")
       script.onload = () => this.addEventListeners()
-      document.body.appendChild(script)
+      mocks.window.document.body.appendChild(script)
     } else {
       this.addEventListeners()
     }

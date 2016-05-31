@@ -1,5 +1,7 @@
+import mocks from 'base/mocks'
+
 var Kibo = function(element) {
-  this.element = element || window.document;
+  this.element = element || mocks.window.document;
   this.initialize();
 };
 
@@ -27,32 +29,6 @@ Kibo.KEY_CODES_BY_NAME = {};
 })();
 
 Kibo.MODIFIERS = ['shift', 'ctrl', 'alt'];
-
-Kibo.registerEvent = (function() {
-  if(document.addEventListener) {
-    return function(element, eventName, func) {
-      element.addEventListener(eventName, func, false);
-    };
-  }
-  else if(document.attachEvent) {
-    return function(element, eventName, func) {
-      element.attachEvent('on' + eventName, func);
-    };
-  }
-})();
-
-Kibo.unregisterEvent = (function() {
-  if(document.removeEventListener) {
-    return function(element, eventName, func) {
-      element.removeEventListener(eventName, func, false);
-    };
-  }
-  else if(document.detachEvent) {
-    return function(element, eventName, func) {
-      element.detachEvent('on' + eventName, func);
-    };
-  }
-})();
 
 Kibo.stringContains = function(string, substring) {
   return string.indexOf(substring) !== -1;
@@ -137,6 +113,33 @@ Kibo.keyCode = function(keyName) {
 Kibo.prototype.initialize = function() {
   var i, that = this;
 
+  Kibo.registerEvent = (function() {
+    if(mocks.window.document.addEventListener) {
+      return function(element, eventName, func) {
+        element.addEventListener(eventName, func, false);
+      };
+    }
+    else if(mocks.window.document.attachEvent) {
+      return function(element, eventName, func) {
+        element.attachEvent('on' + eventName, func);
+      };
+    }
+  })();
+
+  Kibo.unregisterEvent = (function() {
+    if(mocks.window.document.removeEventListener) {
+      return function(element, eventName, func) {
+        element.removeEventListener(eventName, func, false);
+      };
+    }
+    else if(mocks.window.document.detachEvent) {
+      return function(element, eventName, func) {
+        element.detachEvent('on' + eventName, func);
+      };
+    }
+  })();
+
+
   this.lastKeyCode = -1;
   this.lastModifiers = {};
   for(i = 0; i < Kibo.MODIFIERS.length; i++) {
@@ -150,10 +153,10 @@ Kibo.prototype.initialize = function() {
 
   Kibo.registerEvent(this.element, 'keydown', this.downHandler);
   Kibo.registerEvent(this.element, 'keyup', this.upHandler);
-  Kibo.registerEvent(window, 'unload', function unloader() {
+  Kibo.registerEvent(mocks.window, 'unload', function unloader() {
     Kibo.unregisterEvent(that.element, 'keydown', that.downHandler);
     Kibo.unregisterEvent(that.element, 'keyup', that.upHandler);
-    Kibo.unregisterEvent(window, 'unload', unloader);
+    Kibo.unregisterEvent(mocks.window, 'unload', unloader);
   });
 };
 
@@ -162,7 +165,7 @@ Kibo.prototype.handler = function(upOrDown) {
   return function(e) {
     var i, registeredKeys, lastModifiersAndKey;
 
-    e = e || window.event;
+    e = e || mocks.window.event;
 
     that.lastKeyCode = e.keyCode;
     for(i = 0; i < Kibo.MODIFIERS.length; i++) {

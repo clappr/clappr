@@ -6,6 +6,7 @@ import BaseFlashPlayback from 'playbacks/base_flash_playback'
 import Events from 'base/events'
 import template from 'base/template'
 import Playback from 'base/playback'
+import mocks from 'base/mocks'
 import Mediator from 'components/mediator'
 import Browser from 'components/browser'
 import HLSEvents from './flashls_events'
@@ -675,14 +676,14 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   _createCallbacks() {
-    if (!window.Clappr) {
-      window.Clappr = {}
+    if (!mocks.window.Clappr) {
+      mocks.window.Clappr = {}
     }
-    if (!window.Clappr.flashlsCallbacks) {
-      window.Clappr.flashlsCallbacks = {}
+    if (!mocks.window.Clappr.flashlsCallbacks) {
+      mocks.window.Clappr.flashlsCallbacks = {}
     }
     this.flashlsEvents = new HLSEvents(this.cid)
-    window.Clappr.flashlsCallbacks[this.cid] = (eventName, args) => {
+    mocks.window.Clappr.flashlsCallbacks[this.cid] = (eventName, args) => {
       this.flashlsEvents[eventName].apply(this.flashlsEvents, args)
     }
   }
