@@ -19,7 +19,7 @@ describe('Player', function() {
 
     it('uses the baseUrl passed from initialization', function() {
       var player = new Player({source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest'})
-      expect(player.options.baseUrl).to.be.equal('http://cdn.clappr.io/latest')
+      expect(player.options.baseUrl).to.be.equal('http://cdn.clappr.io/latest/')
     })
 
     it('persists config by default', function() {

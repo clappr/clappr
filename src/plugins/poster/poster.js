@@ -108,7 +108,7 @@ export default class PosterPlugin extends UIContainerPlugin {
     if (!this.shouldRender) {
       return
     }
-    var style = Styler.getStyleFor(posterStyle, {baseUrl: this.options.baseUrl})
+    var style = Styler.getStyleFor(posterStyle)
     this.$el.html(this.template())
     this.$el.append(style)
     if (this.options.poster) {

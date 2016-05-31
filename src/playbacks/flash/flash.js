@@ -7,7 +7,6 @@ import {seekStringToSeconds} from 'base/utils'
 import BaseFlashPlayback from 'playbacks/base_flash_playback'
 import Browser from 'components/browser'
 import Mediator from 'components/mediator'
-import template from 'base/template'
 import $ from 'clappr-zepto'
 import Events from 'base/events'
 import Playback from 'base/playback'
@@ -17,7 +16,8 @@ var MAX_ATTEMPTS = 60
 
 export default class Flash extends BaseFlashPlayback {
   get name() { return 'flash' }
-  get swfPath() { return template(flashSwf)({baseUrl: this._baseUrl}) }
+  // TODO remove this._baseUrl in next major version
+  get swfPath() { return this._baseUrl+flashSwf }
 
   /**
    * Determine if the playback has ended.

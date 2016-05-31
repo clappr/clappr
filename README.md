@@ -241,15 +241,20 @@ The project is on npm at https://www.npmjs.com/package/clappr
 
 `npm install clappr --save-dev`
 
-You should specify the base url for where the assets are located using the `baseUrl` option:
-```javascript
-  var player = new Clappr.Player({
-  	source: "http://your.video/here.mp4",
-	baseUrl: "http://example.com/assets/clappr"
-  });
+By default Clappr will assume that assets are located at the same location as the script.
+If this is not the case you need to set your base url immediately BEFORE clappr is loaded.
+```html
+  <script type="text/javascript">
+    window.clapprAssetsBaseUrl = "http://mycdn.example.com/assets/clappr";
+  </script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/clappr/latest/clappr.min.js"></script>
 ```
-In the above case clappr will expect all of the [assets (in the dist folder)](https://github.com/clappr/clappr/tree/master/dist) to be accessible at "http://example.com/assets/clappr".
-You need to arrange for the assets to be located at `baseUrl` during your build process.
+If you are using webpack you can inject `clapprAssetsBaseUrl` into the module using the [webpack imports loader](https://github.com/webpack/imports-loader), and therefore don't need to set a global.
+```javascript
+  var Clappr = require("imports?clapprAssetsBaseUrl=>'http://mycdn.example.com/assets/clappr'!clappr");
+```
+In the above case clappr will expect all of the [assets (in the dist folder)](https://github.com/clappr/clappr/tree/master/dist) to be accessible at "http://mycdn.example.com/assets/clappr".
+You need to arrange for the assets to be located at this url.
 
 #### Installing for [webpack](https://webpack.github.io/)
 By default webpack will look at the `browser` field in `package.json` and use the built version of the project. If this is all you want there is nothing else for you to do.
