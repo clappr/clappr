@@ -5,6 +5,7 @@
 import Playback from 'base/playback'
 import Styler from 'base/styler'
 import template from 'base/template'
+import mocks from 'base/mocks'
 import Browser from 'components/browser'
 
 import $ from 'clappr-zepto'
@@ -54,7 +55,7 @@ export default class BaseFlashPlayback extends Playback {
       baseUrl: this.baseUrl,
       playbackId: this.uniqueId,
       wmode: this.wmode,
-      callbackName: `window.Clappr.flashlsCallbacks.${this.cid}`})
+      callbackName: `mocks.window.Clappr.flashlsCallbacks.${this.cid}`})
     )
 
     if (Browser.isIE) {

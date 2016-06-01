@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 import Kibo from 'base/kibo'
+import mocks from 'base/mocks'
 
 var BOLD = 'font-weight: bold; font-size: 13px;'
 var INFO = 'color: #006600;' + BOLD
@@ -41,7 +42,7 @@ export default class Log {
       this.level = this.offLevel
     }
     // handle instances where console.log is unavailable
-    if (window.console && window.console.log) {
+    if (mocks.window.console && mocks.window.console.log) {
       console.log("%c[Clappr.Log] set log level to " + DESCRIPTIONS[this.level], WARN)
     }
   }
@@ -63,7 +64,7 @@ export default class Log {
     if (klass) {
       klassDescription = "[" + klass + "]"
     }
-    if (window.console && window.console.log) {
+    if (mocks.window.console && mocks.window.console.log) {
       console.log.apply(console, ["%c[" + DESCRIPTIONS[level] + "]" + klassDescription, color].concat(message))
     }
   }

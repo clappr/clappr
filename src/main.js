@@ -31,6 +31,7 @@ import Poster from 'plugins/poster'
 import Log from 'plugins/log'
 import Styler from 'base/styler'
 import template from 'base/template'
+import mocks from 'base/mocks'
 
 import $ from 'clappr-zepto'
 
@@ -67,5 +68,6 @@ export default {
     Styler,
     version,
     template,
+    mocks,
     $
 }

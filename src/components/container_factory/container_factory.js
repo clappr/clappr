@@ -8,6 +8,7 @@
 
 import BaseObject from 'base/base_object'
 import Events from 'base/events'
+import mocks from 'base/mocks'
 import Container from 'components/container'
 import $ from 'clappr-zepto'
 
@@ -45,7 +46,7 @@ export default class ContainerFactory extends BaseObject {
       }
     }
     
-    if (!!resolvedSource.match(/^\/\//)) resolvedSource = window.location.protocol + resolvedSource
+    if (!!resolvedSource.match(/^\/\//)) resolvedSource = mocks.window.location.protocol + resolvedSource
 
     var options = $.extend({}, this.options, {
       src: resolvedSource,

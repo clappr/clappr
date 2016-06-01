@@ -9,6 +9,7 @@ import template from 'base/template'
 import Styler from 'base/styler'
 import Browser from 'components/browser'
 import Events from 'base/events'
+import mocks from 'base/mocks'
 import tagStyle from './public/style.scss'
 import sourceHTML from './public/index.html'
 import find from 'lodash.find'
@@ -311,7 +312,7 @@ export default class HTML5Video extends Playback {
   }
 
   _checkInitialSeek() {
-    var seekTime = seekStringToSeconds(window.location.href)
+    var seekTime = seekStringToSeconds(mocks.window.location.href)
     if (seekTime !== 0) {
       this.seek(seekTime)
     }
@@ -392,7 +393,7 @@ HTML5Video._canPlay = function(type, mimeTypesByExtension, resourceUrl, mimeType
   var mimeTypes = mimeType || mimeTypesByExtension[extension] || []
   mimeTypes = (mimeTypes.constructor === Array) ? mimeTypes : [mimeTypes]
 
-  var media = document.createElement(type)
+  var media = mocks.window.document.createElement(type)
   return !!find(mimeTypes, (mediaType) => !!media.canPlayType(mediaType).replace(/no/, ''))
 }
 
