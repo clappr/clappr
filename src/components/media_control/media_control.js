@@ -7,9 +7,9 @@
  */
 
 import {Config, Fullscreen, formatTime, extend} from 'base/utils'
+import {Kibo} from 'vendor'
 
 import Events from 'base/events'
-import Kibo from 'base/kibo'
 import Styler from 'base/styler'
 import UIObject from 'base/ui_object'
 import Browser from 'components/browser'

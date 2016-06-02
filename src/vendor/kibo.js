@@ -1,3 +1,6 @@
+// Kibo is released under the MIT License. Copyright (c) 2013 marquete.
+// see https://github.com/marquete/kibo
+
 var Kibo = function(element) {
   this.element = element || window.document;
   this.initialize();
