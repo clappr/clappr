@@ -228,6 +228,10 @@ Add `disableVideoTagContextMenu: true` to disable the context menu (right click)
 ##### Disable Exiting Full Screen When Media Ends
 By default the player will automatically exit full screen when the media ends. To disable this add `exitFullscreenOnEnd: false` on your player options.
 
+### Vendors
+
+You can re-use some vendors used internally, for instance you can use `Kibo` through `Clappr.Vendor.Kibo`.
+
 ### Status
 
 Clappr is under heavy development but production-ready. Feel free to open issues and send us pull requests.
