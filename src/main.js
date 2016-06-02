@@ -30,6 +30,7 @@ import NoOp from 'playbacks/no_op'
 import Poster from 'plugins/poster'
 import Log from 'plugins/log'
 import Styler from 'base/styler'
+import Vendor from 'vendor'
 import template from 'base/template'
 
 import $ from 'clappr-zepto'
@@ -65,6 +66,7 @@ export default {
     Poster,
     Log,
     Styler,
+    Vendor,
     version,
     template,
     $
