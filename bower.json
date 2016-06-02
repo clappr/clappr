@@ -11,7 +11,7 @@
     "Globo.com"
   ],
   "main": [
-    "./src/main.js"
+    "./dist/clappr.js"
   ],
   "devDependencies": {
     "babel-core": "^6.5.1",
@@ -28,7 +28,7 @@
     "dotenv": "^2.0.0",
     "file-loader": "^0.8.4",
     "gulp": "^3.8.1",
-    "hls.js": "^0.5.32",
+    "hls.js": "^0.5.33",
     "html-loader": "^0.4.3",
     "isparta": "^4.0.0",
     "istanbul": "^0.4.2",
