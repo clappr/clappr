@@ -164,7 +164,7 @@ export default class DashShakaPlayback extends HTML5Video {
   }
 
   _ready() {
-    super.ready()
+    super._ready()
   }
 }
 
