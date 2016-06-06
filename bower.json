@@ -66,7 +66,7 @@
     "url-loader": "^0.5.6",
     "webpack": "^1.12.1",
     "webpack-dev-server": "^1.14.0",
-    "webworkify-webpack": "^1.0.4",
+    "webworkify-webpack": "1.0.6",
     "yargs": "^4.1.0"
   }
 }
