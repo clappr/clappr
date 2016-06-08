@@ -430,6 +430,12 @@ Events.PLAYBACK_MEDIACONTROL_ENABLE = 'playback:mediacontrol:enable'
  */
 Events.PLAYBACK_ENDED = 'playback:ended'
 /**
+ * Fired when user requests `play()`
+ *
+ * @event PLAYBACK_PLAY_INTENT
+ */
+Events.PLAYBACK_PLAY_INTENT = 'playback:play:intent'
+/**
  * Fired when the media for a playback starts playing.
  * This is not necessarily when the user requests `play()`
  * The media may have to buffer first.
