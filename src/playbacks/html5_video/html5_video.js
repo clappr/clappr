@@ -157,6 +157,7 @@ export default class HTML5Video extends Playback {
   }
 
   play() {
+    this.trigger(Events.PLAYBACK_PLAY_INTENT)
     this._stopped = false
     this._handleBufferingEvents()
     this.el.play()
