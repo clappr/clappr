@@ -10,6 +10,18 @@ describe('HLS playback', function() {
       this.hls.el.getType = function() { return 'live' }
     })
 
+  it('triggers PLAYBACK_PLAY_INTENT on play request', function() {
+    var thereWasPlayIntent = false
+
+    this.hls.on(Events.PLAYBACK_PLAY_INTENT, function() {
+      thereWasPlayIntent = true
+    })
+
+    this.hls.play()
+
+    expect(thereWasPlayIntent).to.be.true
+  })
+
     it('should trigger a buffering event on buffering states', function() {
       var buffering = false
       this.hls.on(Events.PLAYBACK_BUFFERING, function() { buffering = true })
