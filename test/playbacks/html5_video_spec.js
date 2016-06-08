@@ -1,4 +1,5 @@
 import HTML5Video from 'playbacks/html5_video'
+import Events from 'base/events.js'
 
 describe('HTML5Video playback', () => {
   it('checks if it can play a resource', () => {
@@ -33,6 +34,20 @@ describe('HTML5Video playback', () => {
     playback._ready()
 
     expect(playback.isReady).to.be.true
+  })
+
+  it('triggers PLAYBACK_PLAY_INTENT on play request', () => {
+    var thereWasPlayIntent = false
+    var options = {src: 'http://example.com/dash.ogg'}
+    var playback = new HTML5Video(options)
+
+    playback.on(Events.PLAYBACK_PLAY_INTENT, function() {
+      thereWasPlayIntent = true
+    })
+
+    playback.play()
+
+    expect(thereWasPlayIntent).to.be.true
   })
 
   it('setup crossorigin attribute', () => {
