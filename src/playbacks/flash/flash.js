@@ -161,6 +161,7 @@ export default class Flash extends BaseFlashPlayback {
   }
 
   play() {
+    this.trigger(Events.PLAYBACK_PLAY_INTENT)
     if (this._currentState === 'PAUSED' || this._currentState === 'PLAYING_BUFFERING') {
       this._currentState = "PLAYING"
       this.el.playerResume()
