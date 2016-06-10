@@ -6,12 +6,9 @@ import UIContainerPlugin from 'base/ui_container_plugin'
 import Events from 'base/events'
 import Styler from 'base/styler'
 import template from 'base/template'
-import Mediator from 'components/mediator'
 import posterStyle from './public/poster.scss'
 import posterHTML from './public/poster.html'
 import playIcon from 'icons/01-play.svg'
-
-import $ from 'clappr-zepto'
 
 export default class PosterPlugin extends UIContainerPlugin {
   get name() { return 'poster' }
@@ -66,10 +63,10 @@ export default class PosterPlugin extends UIContainerPlugin {
   showPlayButton(show) {
     if (show && (!this.options.chromeless || this.options.allowUserInteraction)) {
       this.$playButton.show()
-      this.$el.addClass("clickable")
+      this.$el.addClass('clickable')
     } else {
       this.$playButton.hide()
-      this.$el.removeClass("clickable")
+      this.$el.removeClass('clickable')
     }
   }
 
@@ -84,7 +81,7 @@ export default class PosterPlugin extends UIContainerPlugin {
 
   shouldHideOnPlay() {
     // Audio broadcasts should keep the poster up; video should hide poster while playing.
-    return !((this.container.playback.name == 'html5_audio') || this.options.audioOnly);
+    return !((this.container.playback.name == 'html5_audio') || this.options.audioOnly)
   }
 
   update() {
@@ -108,7 +105,7 @@ export default class PosterPlugin extends UIContainerPlugin {
     if (!this.shouldRender) {
       return
     }
-    var style = Styler.getStyleFor(posterStyle, {baseUrl: this.options.baseUrl})
+    let style = Styler.getStyleFor(posterStyle, {baseUrl: this.options.baseUrl})
     this.$el.html(this.template())
     this.$el.append(style)
     if (this.options.poster) {
@@ -121,14 +118,14 @@ export default class PosterPlugin extends UIContainerPlugin {
     this.$playButton.addClass('poster-icon')
     this.$playButton.attr('data-poster', '')
 
-    var buttonsColor = this.options.mediacontrol && this.options.mediacontrol.buttons
+    let buttonsColor = this.options.mediacontrol && this.options.mediacontrol.buttons
     if (buttonsColor) {
       this.$el.find('svg path').css('fill', buttonsColor)
     }
 
     if (this.options.mediacontrol && this.options.mediacontrol.buttons) {
-      var buttonsColor = this.options.mediacontrol.buttons;
-      this.$playButton.css('color', buttonsColor);
+      buttonsColor = this.options.mediacontrol.buttons
+      this.$playButton.css('color', buttonsColor)
     }
     this.update()
     return this

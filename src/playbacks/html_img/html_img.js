@@ -40,12 +40,12 @@ export default class HTMLImg extends Playback {
     return this
   }
 
-  _onLoad(evt) {
+  _onLoad() {
     this.trigger(Events.PLAYBACK_ENDED, this.name)
   }
 
   _onError(evt) {
-    var m = (evt.type === 'error') ? 'load error' : 'loading aborted';
+    var m = (evt.type === 'error') ? 'load error' : 'loading aborted'
     this.trigger(Events.PLAYBACK_ERROR, {message: m}, this.name)
   }
 }

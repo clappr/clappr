@@ -13,7 +13,7 @@ import PlayerInfo from 'components/player_info'
 import $ from 'clappr-zepto'
 import find from 'lodash.find'
 
-var baseUrl = currentScriptUrl().replace(/\/[^\/]+$/, "")
+var baseUrl = currentScriptUrl().replace(/\/[^\/]+$/, '')
 
 /**
  * @class Player
@@ -44,9 +44,9 @@ export default class Player extends BaseObject {
   set loader(loader) { this._loader = loader }
   get loader() {
     if (!this._loader) {
-      this._loader = new Loader(this.options.plugins || {}, this.options.playerId);
+      this._loader = new Loader(this.options.plugins || {}, this.options.playerId)
     }
-    return this._loader;
+    return this._loader
   }
 
   /**
@@ -179,7 +179,7 @@ export default class Player extends BaseObject {
    */
   constructor(options) {
     super(options)
-    var defaultOptions = {playerId: uniqueId(""), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl, allowUserInteraction: Browser.isMobile}
+    var defaultOptions = {playerId: uniqueId(''), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl, allowUserInteraction: Browser.isMobile}
     this.options = $.extend(defaultOptions, options)
     this.options.sources = this._normalizeSources(options)
     if (!this.options.chromeless) {
@@ -214,7 +214,7 @@ export default class Player extends BaseObject {
     if (el) {
       this.attachTo(el)
     }
-    return this;
+    return this
   }
 
   /**
@@ -227,7 +227,7 @@ export default class Player extends BaseObject {
     this.options.parentElement = element
     this.core = this._coreFactory.create()
     this._addEventListeners()
-    return this;
+    return this
   }
 
   _addEventListeners() {
@@ -238,12 +238,12 @@ export default class Player extends BaseObject {
     }
     this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this._containerChanged)
     this.listenTo(this.core, Events.CORE_FULLSCREEN, this._onFullscreenChange)
-    return this;
+    return this
   }
 
   _addContainerEventListeners() {
     var container = this.core.mediaControl.container
-    if (!!container) {
+    if (container) {
       this.listenTo(container, Events.CONTAINER_PLAY, this._onPlay)
       this.listenTo(container, Events.CONTAINER_PAUSE, this._onPause)
       this.listenTo(container, Events.CONTAINER_STOP, this._onStop)
@@ -253,7 +253,7 @@ export default class Player extends BaseObject {
       this.listenTo(container, Events.CONTAINER_TIMEUPDATE, this._onTimeUpdate)
       this.listenTo(container, Events.CONTAINER_VOLUME, this._onVolumeUpdate)
     }
-    return this;
+    return this
   }
 
   _registerOptionEventListeners() {
@@ -262,11 +262,11 @@ export default class Player extends BaseObject {
       var eventType = this.eventsMapping[userEvent]
       if (eventType) {
         var eventFunction = userEvents[userEvent]
-        eventFunction = typeof eventFunction === "function" && eventFunction
+        eventFunction = typeof eventFunction === 'function' && eventFunction
         eventFunction && this.on(eventType, eventFunction)
       }
     })
-    return this;
+    return this
   }
 
   _containerChanged() {
@@ -323,7 +323,7 @@ export default class Player extends BaseObject {
 
   _normalizeSources(options) {
     var sources = options.sources || (options.source !== undefined? [options.source] : [])
-    return sources.length === 0 ? [{source:"", mimeType:""}] : sources
+    return sources.length === 0 ? [{source:'', mimeType:''}] : sources
   }
 
   /**
@@ -337,8 +337,8 @@ export default class Player extends BaseObject {
    * ```
    */
   resize(size) {
-    this.core.resize(size);
-    return this;
+    this.core.resize(size)
+    return this
   }
 
   /**
@@ -354,8 +354,8 @@ export default class Player extends BaseObject {
     if (autoPlay !== undefined) {
       this.configure({autoPlay: !!autoPlay})
     }
-    this.core.load(sources, mimeType);
-    return this;
+    this.core.load(sources, mimeType)
+    return this
   }
 
   /**
@@ -365,7 +365,7 @@ export default class Player extends BaseObject {
    */
   destroy() {
     this.core.destroy()
-    return this;
+    return this
   }
 
   /**
@@ -374,8 +374,8 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   play() {
-    this.core.mediaControl.container.play();
-    return this;
+    this.core.mediaControl.container.play()
+    return this
   }
 
   /**
@@ -384,8 +384,8 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   pause() {
-    this.core.mediaControl.container.pause();
-    return this;
+    this.core.mediaControl.container.pause()
+    return this
   }
 
   /**
@@ -394,8 +394,8 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   stop() {
-    this.core.mediaControl.container.stop();
-    return this;
+    this.core.mediaControl.container.stop()
+    return this
   }
 
 
@@ -406,8 +406,8 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   seek(time) {
-    this.core.mediaControl.container.seek(time);
-    return this;
+    this.core.mediaControl.container.seek(time)
+    return this
   }
 
   /**
@@ -417,8 +417,8 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   seekPercentage(percentage) {
-    this.core.mediaControl.container.seekPercentage(percentage);
-    return this;
+    this.core.mediaControl.container.seekPercentage(percentage)
+    return this
   }
 
   /**
@@ -429,9 +429,9 @@ export default class Player extends BaseObject {
    */
   setVolume(volume) {
     if (this.core && this.core.mediaControl) {
-      this.core.mediaControl.setVolume(volume);
+      this.core.mediaControl.setVolume(volume)
     }
-    return this;
+    return this
   }
 
   /**
@@ -440,7 +440,7 @@ export default class Player extends BaseObject {
    * @return {Number} volume should be a number between 0 and 100, 0 being mute and 100 the max volume.
    */
   getVolume() {
-    return this.core && this.core.mediaControl ? this.core.mediaControl.volume : 0;
+    return this.core && this.core.mediaControl ? this.core.mediaControl.volume : 0
   }
 
   /**
@@ -449,9 +449,9 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   mute() {
-    this._mutedVolume = this.getVolume();
-    this.setVolume(0);
-    return this;
+    this._mutedVolume = this.getVolume()
+    this.setVolume(0)
+    return this
   }
 
   /**
@@ -460,9 +460,9 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   unmute() {
-    this.setVolume(typeof this._mutedVolume === "number" ? this._mutedVolume : 100);
-    this._mutedVolume = null;
-    return this;
+    this.setVolume(typeof this._mutedVolume === 'number' ? this._mutedVolume : 100)
+    this._mutedVolume = null
+    return this
   }
 
   /**
@@ -471,7 +471,7 @@ export default class Player extends BaseObject {
    * @return {Boolean} `true` if the current source is playing, otherwise `false`
    */
   isPlaying() {
-    return this.core.mediaControl.container.isPlaying();
+    return this.core.mediaControl.container.isPlaying()
   }
 
   /**
@@ -500,7 +500,7 @@ export default class Player extends BaseObject {
    */
   configure(options) {
     this.core.configure(options)
-    return this;
+    return this
   }
 
   /**
@@ -515,10 +515,10 @@ export default class Player extends BaseObject {
    * ```
    */
   getPlugin(name) {
-    var plugins = this.core.plugins.concat(this.core.mediaControl.container.plugins);
+    var plugins = this.core.plugins.concat(this.core.mediaControl.container.plugins)
     return find(plugins, function(plugin) {
-      return plugin.name === name;
-    });
+      return plugin.name === name
+    })
   }
 
   /**
@@ -538,7 +538,7 @@ export default class Player extends BaseObject {
    * @return {Number} time (in seconds) that time "0" represents.
    */
   getStartTimeOffset() {
-   return this.core.mediaControl.container.getStartTimeOffset()
+    return this.core.mediaControl.container.getStartTimeOffset()
   }
 
   /**

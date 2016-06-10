@@ -23,9 +23,9 @@ export default class FlasHLS extends BaseFlashPlayback {
   get levels() { return this._levels || [] }
   get currentLevel() {
     if (this._currentLevel === null || this._currentLevel === undefined) {
-      return AUTO;
+      return AUTO
     } else {
-      return this._currentLevel; //0 is a valid level ID
+      return this._currentLevel //0 is a valid level ID
     }
   }
   set currentLevel(id) {
@@ -63,9 +63,9 @@ export default class FlasHLS extends BaseFlashPlayback {
     this._autoPlay = options.autoPlay
     this._loop = options.loop
     this._defaultSettings = {
-      left: ["playstop"],
+      left: ['playstop'],
       default: ['seekbar'],
-      right: ["fullscreen", "volume", "hd-indicator"],
+      right: ['fullscreen', 'volume', 'hd-indicator'],
       seekEnabled: false
     }
     this.settings = $.extend({}, this._defaultSettings)
@@ -77,7 +77,7 @@ export default class FlasHLS extends BaseFlashPlayback {
   _initHlsParameters(options) {
     this._autoStartLoad = (options.autoStartLoad === undefined) ? true : options.autoStartLoad
     this._capLevelToStage = (options.capLevelToStage === undefined) ? false : options.capLevelToStage
-    this._maxLevelCappingMode = (options.maxLevelCappingMode === undefined) ? "downscale" : options.maxLevelCappingMode
+    this._maxLevelCappingMode = (options.maxLevelCappingMode === undefined) ? 'downscale' : options.maxLevelCappingMode
     this._minBufferLength = (options.minBufferLength === undefined) ? -1 : options.minBufferLength
     this._minBufferLengthCapping = (options.minBufferLengthCapping === undefined) ? -1 : options.minBufferLengthCapping
     this._maxBufferLength = (options.maxBufferLength === undefined) ? 120 : options.maxBufferLength
@@ -89,7 +89,7 @@ export default class FlasHLS extends BaseFlashPlayback {
     this._capLevelonFPSDrop = (options.capLevelonFPSDrop === undefined) ? false : options.capLevelonFPSDrop
     this._smoothAutoSwitchonFPSDrop = (options.smoothAutoSwitchonFPSDrop === undefined) ? this.capLevelonFPSDrop : options.smoothAutoSwitchonFPSDrop
     this._switchDownOnLevelError = (options.switchDownOnLevelError === undefined) ? true : options.switchDownOnLevelError
-    this._seekMode = (options.seekMode === undefined) ? "ACCURATE" : options.seekMode
+    this._seekMode = (options.seekMode === undefined) ? 'ACCURATE' : options.seekMode
     this._keyLoadMaxRetry = (options.keyLoadMaxRetry === undefined) ? 3 : options.keyLoadMaxRetry
     this._keyLoadMaxRetryTimeout = (options.keyLoadMaxRetryTimeout === undefined) ? 64000 : options.keyLoadMaxRetryTimeout
     this._fragmentLoadMaxRetry = (options.fragmentLoadMaxRetry === undefined) ? 3 : options.fragmentLoadMaxRetry
@@ -136,13 +136,13 @@ export default class FlasHLS extends BaseFlashPlayback {
     Mediator.off(this.cid + ':levelendlist')
   }
 
- _bootstrap() {
+  _bootstrap() {
     if (this.el.playerLoad) {
-      this.el.width = "100%"
-      this.el.height = "100%"
+      this.el.width = '100%'
+      this.el.height = '100%'
       this._isReadyState = true
       this._srcLoaded = false
-      this._currentState = "IDLE"
+      this._currentState = 'IDLE'
       this._setFlashSettings()
       this._updatePlaybackType()
       if (this._autoPlay || this._shouldPlayOnManifestLoaded) {
@@ -154,7 +154,7 @@ export default class FlasHLS extends BaseFlashPlayback {
       if (++this._bootstrapAttempts <= MAX_ATTEMPTS) {
         setTimeout(() => this._bootstrap(), 50)
       } else {
-        this.trigger(Events.PLAYBACK_ERROR, {message: "Max number of attempts reached"}, this.name)
+        this.trigger(Events.PLAYBACK_ERROR, {message: 'Max number of attempts reached'}, this.name)
       }
     }
   }
@@ -381,7 +381,7 @@ export default class FlasHLS extends BaseFlashPlayback {
   _levelChanged(level) {
     var currentLevel = this.el.getLevels()[level]
     if (currentLevel) {
-      this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000);
+      this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000)
       this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition)
 
       if (!this._levels || this._levels.length === 0) this._fillLevels()
@@ -399,7 +399,7 @@ export default class FlasHLS extends BaseFlashPlayback {
 
   _updateTime(timeMetrics) {
     if (this._currentState === 'IDLE') {
-        return
+      return
     }
 
     var duration = this._normalizeDuration(timeMetrics.duration)
@@ -409,7 +409,7 @@ export default class FlasHLS extends BaseFlashPlayback {
     this._dvrEnabled = (livePlayback && duration > this._hlsMinimumDvrSize)
 
     if (duration === 100 || livePlayback === undefined) {
-      return;
+      return
     }
 
     if (this._dvrEnabled !== previousDVRStatus) {
@@ -428,7 +428,7 @@ export default class FlasHLS extends BaseFlashPlayback {
     this.trigger(Events.PLAYBACK_PLAY_INTENT)
     if(this._currentState === 'PAUSED') {
       this.el.playerResume()
-    } else if (!this._srcLoaded && this._currentState !== "PLAYING") {
+    } else if (!this._srcLoaded && this._currentState !== 'PLAYING') {
       this._firstPlay()
     } else {
       this.el.playerPlay()
@@ -464,19 +464,19 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   _setPlaybackState(state) {
-    if (["PLAYING_BUFFERING", "PAUSED_BUFFERING"].indexOf(state) >= 0)  {
+    if (['PLAYING_BUFFERING', 'PAUSED_BUFFERING'].indexOf(state) >= 0)  {
       this._bufferingState = true
       this.trigger(Events.PLAYBACK_BUFFERING, this.name)
       this._updateCurrentState(state)
-    } else if (["PLAYING", "PAUSED"].indexOf(state) >= 0) {
-      if (["PLAYING_BUFFERING", "PAUSED_BUFFERING", "IDLE"].indexOf(this._currentState) >= 0) {
+    } else if (['PLAYING', 'PAUSED'].indexOf(state) >= 0) {
+      if (['PLAYING_BUFFERING', 'PAUSED_BUFFERING', 'IDLE'].indexOf(this._currentState) >= 0) {
         this._bufferingState = false
         this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
       }
       this._updateCurrentState(state)
-    } else if (state === "IDLE") {
+    } else if (state === 'IDLE') {
       this._srcLoaded = false
-      if (this._loop && ["PLAYING_BUFFERING", "PLAYING"].indexOf(this._currentState) >= 0) {
+      if (this._loop && ['PLAYING_BUFFERING', 'PLAYING'].indexOf(this._currentState) >= 0) {
         this.play()
         this.seek(0)
       } else {
@@ -490,13 +490,13 @@ export default class FlasHLS extends BaseFlashPlayback {
 
   _updateCurrentState(state) {
     this._currentState = state
-    if (state !== "IDLE") {
+    if (state !== 'IDLE') {
       this._hasEnded = false
     }
     this._updatePlaybackType()
-    if (state === "PLAYING") {
+    if (state === 'PLAYING') {
       this.trigger(Events.PLAYBACK_PLAY, this.name)
-    } else if (state === "PAUSED") {
+    } else if (state === 'PAUSED') {
       this.trigger(Events.PLAYBACK_PAUSE, this.name)
     }
   }
@@ -536,7 +536,7 @@ export default class FlasHLS extends BaseFlashPlayback {
     }
   }
 
-  _onLevelEndlist(level) {
+  _onLevelEndlist() {
     this._updatePlaybackType()
   }
 
@@ -665,10 +665,10 @@ export default class FlasHLS extends BaseFlashPlayback {
   _updateSettings() {
     this.settings = $.extend({}, this._defaultSettings)
     if (this._playbackType === Playback.VOD || this._dvrInUse) {
-      this.settings.left = ["playpause", "position", "duration"]
+      this.settings.left = ['playpause', 'position', 'duration']
       this.settings.seekEnabled = true
     } else if (this._dvrEnabled) {
-      this.settings.left = ["playpause"]
+      this.settings.left = ['playpause']
       this.settings.seekEnabled = true
     } else {
       this.settings.seekEnabled = false
@@ -698,6 +698,6 @@ export default class FlasHLS extends BaseFlashPlayback {
 FlasHLS.canPlay = function(resource, mimeType) {
   var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
   return Browser.hasFlash &&
-        ((resourceParts.length > 1 && resourceParts[1] === "m3u8") ||
+        ((resourceParts.length > 1 && resourceParts[1] === 'm3u8') ||
           mimeType === 'application/x-mpegURL' || mimeType === 'application/vnd.apple.mpegurl')
 }

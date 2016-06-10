@@ -1,2 +1,1 @@
-module.exports = require('./stats');
-
+module.exports = require('./stats')

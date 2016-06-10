@@ -12,10 +12,10 @@ import Events from 'base/events'
 import tagStyle from './public/style.scss'
 import sourceHTML from './public/index.html'
 import find from 'lodash.find'
-import $ from "clappr-zepto"
+import $ from 'clappr-zepto'
 
 const MIMETYPES = {
-  'mp4': ["avc1.42E01E", "avc1.58A01E", "avc1.4D401E", "avc1.64001E", "mp4v.20.8", "mp4v.20.240", "mp4a.40.2"].map(
+  'mp4': ['avc1.42E01E', 'avc1.58A01E', 'avc1.4D401E', 'avc1.64001E', 'mp4v.20.8', 'mp4v.20.240', 'mp4a.40.2'].map(
     (codec) => { return 'video/mp4; codecs="' + codec + ', mp4a.40.2"'}),
   'ogg': ['video/ogg; codecs="theora, vorbis"', 'video/ogg; codecs="dirac"', 'video/ogg; codecs="theora, speex"'],
   '3gpp': ['video/3gpp; codecs="mp4v.20.8, samr"'],
@@ -100,8 +100,8 @@ export default class HTML5Video extends Playback {
 
     // TODO should settings be private?
     this.settings = {default: ['seekbar']}
-    this.settings.left = ["playpause", "position", "duration"]
-    this.settings.right = ["fullscreen", "volume", "hd-indicator"]
+    this.settings.left = ['playpause', 'position', 'duration']
+    this.settings.right = ['fullscreen', 'volume', 'hd-indicator']
   }
 
   /**
@@ -119,7 +119,7 @@ export default class HTML5Video extends Playback {
     this._handleBufferingEvents()
     this.trigger(Events.PLAYBACK_LOADEDMETADATA, {duration: e.target.duration, data: e})
     this._updateSettings()
-    var autoSeekFromUrl = typeof(this._options.autoSeekFromUrl) === "undefined" || this._options.autoSeekFromUrl
+    var autoSeekFromUrl = typeof(this._options.autoSeekFromUrl) === 'undefined' || this._options.autoSeekFromUrl
     if (this.getPlaybackType() !== Playback.LIVE && autoSeekFromUrl) {
       this._checkInitialSeek()
     }
@@ -136,9 +136,9 @@ export default class HTML5Video extends Playback {
     // we can't figure out if hls resource is VoD or not until it is being loaded or duration has changed.
     // that's why we check it again and update media control accordingly.
     if (this.getPlaybackType() === Playback.VOD) {
-      this.settings.left = ["playpause", "position", "duration"]
+      this.settings.left = ['playpause', 'position', 'duration']
     } else {
-      this.settings.left = ["playstop"]
+      this.settings.left = ['playstop']
     }
     this.settings.seekEnabled = this.isSeekEnabled()
     this.trigger(Events.PLAYBACK_SETTINGSUPDATE)
@@ -292,7 +292,7 @@ export default class HTML5Video extends Playback {
     }
   }
 
-  _onError(event) {
+  _onError() {
     this.trigger(Events.PLAYBACK_ERROR, this.el.error, this.name)
   }
 
@@ -355,7 +355,7 @@ export default class HTML5Video extends Playback {
 
   _typeFor(src) {
     var resourceParts = src.split('?')[0].match(/.*\.(.*)$/) || []
-    var isHls = resourceParts.length > 1 && resourceParts[1] === "m3u8"
+    var isHls = resourceParts.length > 1 && resourceParts[1] === 'm3u8'
     return isHls ? 'application/vnd.apple.mpegurl' : 'video/mp4'
   }
 
@@ -377,7 +377,7 @@ export default class HTML5Video extends Playback {
     }
 
     if (this._options.disableVideoTagContextMenu) {
-      this.$el.on("contextmenu", () => {
+      this.$el.on('contextmenu', () => {
         return false
       })
     }

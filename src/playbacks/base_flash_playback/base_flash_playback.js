@@ -7,8 +7,6 @@ import Styler from 'base/styler'
 import template from 'base/template'
 import Browser from 'components/browser'
 
-import $ from 'clappr-zepto'
-
 import flashHTML from './public/flash.html'
 import flashStyle from './public/flash.scss'
 
@@ -20,10 +18,10 @@ export default class BaseFlashPlayback extends Playback {
   get wmode() { return 'transparent' }
   get template() { return template(flashHTML) }
   get attributes() {
-    var type = 'application/x-shockwave-flash';
+    var type = 'application/x-shockwave-flash'
 
     if (Browser.isLegacyIE) {
-      type = '';
+      type = ''
     }
 
     return {

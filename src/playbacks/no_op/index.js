@@ -1,1 +1,1 @@
-module.exports = require('./no_op');
+module.exports = require('./no_op')

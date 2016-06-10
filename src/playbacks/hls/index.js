@@ -1,1 +1,1 @@
-module.exports = require('./hls');
+module.exports = require('./hls')

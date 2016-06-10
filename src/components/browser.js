@@ -16,11 +16,11 @@ var hasLocalstorage = function(){
 
 var hasFlash = function() {
   try {
-    var fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
-    return !!fo;
+    var fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash')
+    return !!fo
   } catch (e) {
     return !!(navigator.mimeTypes && navigator.mimeTypes['application/x-shockwave-flash'] !== undefined &&
-        navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin);
+        navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin)
   }
 }
 

@@ -4,7 +4,6 @@
 /*jshint -W079 */
 
 import Browser from 'components/browser'
-import $ from 'clappr-zepto'
 
 function assign(obj, source) {
   if (source) {
@@ -30,26 +29,26 @@ export function extend(parent, properties) {
 }
 
 export function formatTime(time, paddedHours) {
-    if (!isFinite(time)) {
-      return "--:--"
-    }
-    time = time * 1000
-    time = parseInt(time/1000)
-    var seconds = time % 60
-    time = parseInt(time/60)
-    var minutes = time % 60
-    time = parseInt(time/60)
-    var hours = time % 24
-    var days = parseInt(time/24)
-    var out = ""
-    if (days && days > 0) {
-      out += days + ":"
-      if (hours < 1) {out += "00:"}
-    }
-    if (hours && hours > 0 || paddedHours) {out += ("0" + hours).slice(-2) + ":"}
-    out += ("0" + minutes).slice(-2) + ":"
-    out += ("0" + seconds).slice(-2)
-    return out.trim()
+  if (!isFinite(time)) {
+    return '--:--'
+  }
+  time = time * 1000
+  time = parseInt(time/1000)
+  var seconds = time % 60
+  time = parseInt(time/60)
+  var minutes = time % 60
+  time = parseInt(time/60)
+  var hours = time % 24
+  var days = parseInt(time/24)
+  var out = ''
+  if (days && days > 0) {
+    out += days + ':'
+    if (hours < 1) {out += '00:'}
+  }
+  if (hours && hours > 0 || paddedHours) {out += ('0' + hours).slice(-2) + ':'}
+  out += ('0' + minutes).slice(-2) + ':'
+  out += ('0' + seconds).slice(-2)
+  return out.trim()
 }
 
 export var Fullscreen = {
@@ -70,8 +69,8 @@ export var Fullscreen = {
       el.mozRequestFullScreen()
     } else if(el.msRequestFullscreen) {
       el.msRequestFullscreen()
-    } else if (el.querySelector && el.querySelector("video") && el.querySelector("video").webkitEnterFullScreen) {
-      el.querySelector("video").webkitEnterFullScreen()
+    } else if (el.querySelector && el.querySelector('video') && el.querySelector('video').webkitEnterFullScreen) {
+      el.querySelector('video').webkitEnterFullScreen()
     }
   },
   cancelFullscreen: function() {
@@ -152,11 +151,11 @@ export class QueryString {
 
   static parse(paramsString) {
     var match,
-        pl     = /\+/g,  // Regex for replacing addition symbol with a space
-        search = /([^&=]+)=?([^&]*)/g,
-        decode = (s) => decodeURIComponent(s.replace(pl, " "))
+      pl     = /\+/g,  // Regex for replacing addition symbol with a space
+      search = /([^&=]+)=?([^&]*)/g,
+      decode = (s) => decodeURIComponent(s.replace(pl, ' '))
     var params = {}
-    while (match = search.exec(paramsString)) {
+    while (match = search.exec(paramsString)) { // eslint-disable-line no-cond-assign
       params[decode(match[1]).toLowerCase()] = decode(match[2])
     }
     return params
@@ -178,8 +177,8 @@ export function seekStringToSeconds(paramName = 't') {
     })
   } else if (seekString) {
     seconds = parseInt(seekString, 10)
-   }
-   return seconds
+  }
+  return seconds
 }
 
 var idsCounter = {}

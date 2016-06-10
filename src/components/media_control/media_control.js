@@ -78,7 +78,7 @@ export default class MediaControl extends UIObject {
     this.container = options.container
     this.currentPositionValue = null
     this.currentDurationValue = null
-    var initialVolume = (this.persistConfig) ? Config.restore("volume") : 100
+    var initialVolume = (this.persistConfig) ? Config.restore('volume') : 100
     this.setVolume(this.options.mute ? 0 : initialVolume)
     this.keepVisible = false
     this.addEventListeners()
@@ -311,7 +311,7 @@ export default class MediaControl extends UIObject {
     // it may not actually get set to this straight away
     // if the container is not ready etc
     this.intendedVolume = value
-    this.persistConfig && Config.persist("volume", value)
+    this.persistConfig && Config.persist('volume', value)
     var setWhenContainerReady = () => {
       if (this.container.isReady) {
         this.container.setVolume(value)
@@ -487,7 +487,7 @@ export default class MediaControl extends UIObject {
   }
 
   highDefinitionUpdate(isHD) {
-    var method = !!isHD ? 'addClass' : 'removeClass'
+    var method = isHD ? 'addClass' : 'removeClass'
     this.$hdIndicator[method]('enabled')
   }
 
@@ -579,7 +579,7 @@ export default class MediaControl extends UIObject {
       var seekbarColor = this.options.mediacontrol.seekbar
       this.$el.find('.bar-fill-2[data-seekbar]').css('background-color', seekbarColor)
       this.$el.find('.media-control-icon svg path').css('fill', this.buttonsColor)
-      this.$el.find('.segmented-bar-element[data-volume]').css('boxShadow', "inset 2px 0 0 " + this.buttonsColor)
+      this.$el.find('.segmented-bar-element[data-volume]').css('boxShadow', 'inset 2px 0 0 ' + this.buttonsColor)
     }
   }
 

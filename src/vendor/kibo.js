@@ -1,3 +1,4 @@
+/* eslint-disable */
 // Kibo is released under the MIT License. Copyright (c) 2013 marquete.
 // see https://github.com/marquete/kibo
 

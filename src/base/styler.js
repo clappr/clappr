@@ -7,8 +7,8 @@ import template from './template'
 
 var Styler = {
   getStyleFor: function(style, options={baseUrl: ''}) {
-    return $('<style class="clappr-style"></style>').html(template(style.toString())(options));
+    return $('<style class="clappr-style"></style>').html(template(style.toString())(options))
   }
-};
+}
 
-export default Styler;
+export default Styler

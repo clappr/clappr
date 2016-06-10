@@ -1,2 +1,1 @@
-module.exports = require('./html_img');
-
+module.exports = require('./html_img')

@@ -1,1 +1,1 @@
-module.exports = require('./seek_time');
+module.exports = require('./seek_time')

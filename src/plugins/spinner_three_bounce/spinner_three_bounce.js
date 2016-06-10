@@ -20,7 +20,7 @@ export default class SpinnerThreeBouncePlugin extends UIContainerPlugin {
 
   constructor(container) {
     super(container)
-    this.template = template(spinnerHTML);
+    this.template = template(spinnerHTML)
     this.showTimeout = null
     this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering)
     this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferFull)
@@ -58,7 +58,7 @@ export default class SpinnerThreeBouncePlugin extends UIContainerPlugin {
 
   render() {
     this.$el.html(this.template())
-    var style = Styler.getStyleFor(spinnerStyle);
+    var style = Styler.getStyleFor(spinnerStyle)
     this.container.$el.append(style)
     this.container.$el.append(this.$el)
     this.$el.hide()

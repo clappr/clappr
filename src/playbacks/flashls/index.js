@@ -1,2 +1,1 @@
-module.exports = require('./flashls');
-
+module.exports = require('./flashls')

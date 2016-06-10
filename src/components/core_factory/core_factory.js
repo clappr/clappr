@@ -20,9 +20,8 @@ export default class CoreFactory extends BaseObject {
    * it builds the core factory
    * @method constructor
    * @param {Player} player the player object
-   * @param {Loader} loader the loader object
    */
-  constructor(player, loader) {
+  constructor(player) {
     super()
     this.player = player
     this.options = player.options
@@ -56,7 +55,7 @@ export default class CoreFactory extends BaseObject {
   }
 
   setupExternalInterface(plugin) {
-    var externalFunctions = plugin.getExternalInterface();
+    var externalFunctions = plugin.getExternalInterface()
     for (var key in externalFunctions) {
       this.player[key] = externalFunctions[key].bind(plugin)
     }

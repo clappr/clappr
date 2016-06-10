@@ -1,2 +1,1 @@
-module.exports = require('./flash');
-
+module.exports = require('./flash')

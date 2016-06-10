@@ -1,2 +1,1 @@
-module.exports = require('./media_control');
-
+module.exports = require('./media_control')

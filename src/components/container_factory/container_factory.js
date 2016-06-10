@@ -15,17 +15,17 @@ import find from 'lodash.find'
 
 export default class ContainerFactory extends BaseObject {
   constructor(options, loader) {
-    super(options);
-    this.options = options;
-    this.loader = loader;
+    super(options)
+    this.options = options
+    this.loader = loader
   }
 
   createContainers() {
     return $.Deferred((promise) => {
       promise.resolve(this.options.sources.map((source) => {
-        return this.createContainer(source);
-      }));
-    });
+        return this.createContainer(source)
+      }))
+    })
   }
 
   findPlaybackPlugin(source, mimeType) {
@@ -35,7 +35,7 @@ export default class ContainerFactory extends BaseObject {
   createContainer(source) {
     var resolvedSource = null
     var mimeType = this.options.mimeType
-    if (typeof source === "string" || source instanceof String) {
+    if (typeof source === 'string' || source instanceof String) {
       resolvedSource = source.toString()
     }
     else {
@@ -44,8 +44,8 @@ export default class ContainerFactory extends BaseObject {
         mimeType = source.mimeType
       }
     }
-    
-    if (!!resolvedSource.match(/^\/\//)) resolvedSource = window.location.protocol + resolvedSource
+
+    if (resolvedSource.match(/^\/\//)) resolvedSource = window.location.protocol + resolvedSource
 
     var options = $.extend({}, this.options, {
       src: resolvedSource,
@@ -59,14 +59,14 @@ export default class ContainerFactory extends BaseObject {
     var container = new Container(options)
     var defer = $.Deferred()
     defer.promise(container)
-    this.addContainerPlugins(container, resolvedSource)
+    this.addContainerPlugins(container)
     this.listenToOnce(container, Events.CONTAINER_READY, () => defer.resolve(container))
     return container
   }
 
-  addContainerPlugins(container, source) {
+  addContainerPlugins(container) {
     this.loader.containerPlugins.forEach((Plugin) => {
       container.addPlugin(new Plugin(container))
-    });
+    })
   }
 }

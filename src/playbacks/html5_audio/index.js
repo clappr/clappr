@@ -1,2 +1,1 @@
-module.exports = require('./html5_audio');
-
+module.exports = require('./html5_audio')
