@@ -1,2 +1,1 @@
-module.exports = require('./loader');
-
+module.exports = require('./loader')

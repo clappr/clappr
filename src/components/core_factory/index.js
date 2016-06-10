@@ -1,2 +1,1 @@
-module.exports = require('./core_factory');
-
+module.exports = require('./core_factory')

@@ -42,7 +42,7 @@ export default class Log {
     }
     // handle instances where console.log is unavailable
     if (window.console && window.console.log) {
-      console.log("%c[Clappr.Log] set log level to " + DESCRIPTIONS[this.level], WARN)
+      window.console.log('%c[Clappr.Log] set log level to ' + DESCRIPTIONS[this.level], WARN)
     }
   }
 
@@ -58,13 +58,13 @@ export default class Log {
       message = klass
       klass = null
     }
-    var klassDescription = ""
+    var klassDescription = ''
     var color = COLORS[level]
     if (klass) {
-      klassDescription = "[" + klass + "]"
+      klassDescription = '[' + klass + ']'
     }
     if (window.console && window.console.log) {
-      console.log.apply(console, ["%c[" + DESCRIPTIONS[level] + "]" + klassDescription, color].concat(message))
+      window.console.log.apply(console, ['%c[' + DESCRIPTIONS[level] + ']' + klassDescription, color].concat(message))
     }
   }
 }
@@ -85,7 +85,7 @@ Log.getInstance = function() {
 
 Log.setLevel = function(level) { this.getInstance().level = level }
 
-Log.debug = function(klass) { this.getInstance().debug.apply(this.getInstance(), arguments) }
-Log.info = function(klass) { this.getInstance().info.apply(this.getInstance(), arguments) }
-Log.warn = function(klass) { this.getInstance().warn.apply(this.getInstance(), arguments) }
-Log.error = function(klass) { this.getInstance().error.apply(this.getInstance(), arguments) }
+Log.debug = function() { this.getInstance().debug.apply(this.getInstance(), arguments) }
+Log.info = function() { this.getInstance().info.apply(this.getInstance(), arguments) }
+Log.warn = function() { this.getInstance().warn.apply(this.getInstance(), arguments) }
+Log.error = function() { this.getInstance().error.apply(this.getInstance(), arguments) }

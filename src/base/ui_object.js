@@ -93,9 +93,9 @@ export default class UIObject extends BaseObject {
    */
   constructor(options) {
     super(options)
-    this.cid = uniqueId('c');
-    this._ensureElement();
-    this.delegateEvents();
+    this.cid = uniqueId('c')
+    this._ensureElement()
+    this.delegateEvents()
   }
 
   /**
@@ -202,4 +202,3 @@ export default class UIObject extends BaseObject {
     }
   }
 }
-

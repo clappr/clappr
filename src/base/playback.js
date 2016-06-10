@@ -61,14 +61,14 @@ export default class Playback extends UIObject {
    * @method seek
    * @param {Number} time should be a number between 0 and the video duration
    */
-  seek(time) { /*jshint unused:false*/ }
+  seek(time) {} // eslint-disable-line no-unused-vars
 
   /**
    * seeks the playback to a given `percentage` in percentage
    * @method seekPercentage
    * @param {Number} time should be a number between 0 and 100
    */
-  seekPercentage(percentage) {/*jshint unused:false*/}
+  seekPercentage(percentage) {} // eslint-disable-line no-unused-vars
 
 
   /**
@@ -135,7 +135,7 @@ export default class Playback extends UIObject {
    * @method volume
    * @param {Number} value a number between 0 (`muted`) to 100 (`max`)
    */
-  volume(value) {/*jshint unused:false*/}
+  volume(value) {} // eslint-disable-line no-unused-vars
 
   /**
    * destroys the playback, removing it from DOM
@@ -160,8 +160,7 @@ Playback.extend = function(properties) {
  * @param {String} [mimeType] the given mime type, ex: `'application/vnd.apple.mpegurl'`
  * @return {Boolean} `true` if the playback is playable, otherwise `false`
  */
-Playback.canPlay = (source, mimeType) => {
-  /*jshint unused:false*/
+Playback.canPlay = (source, mimeType) => { // eslint-disable-line no-unused-vars
   return false
 }
 

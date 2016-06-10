@@ -98,10 +98,10 @@ export default class Loader extends BaseObject {
    * @param {Object} plugins the config object with all plugins
    */
   validateExternalPluginsType(plugins) {
-    var plugintypes = ["playback", "container", "core"]
+    var plugintypes = ['playback', 'container', 'core']
     plugintypes.forEach((type) => {
       (plugins[type] || []).forEach((el) => {
-        var errorMessage = "external " + el.type + " plugin on " + type + " array"
+        var errorMessage = 'external ' + el.type + ' plugin on ' + type + ' array'
         if (el.type !== type) { throw new ReferenceError(errorMessage) }
       })
     })
