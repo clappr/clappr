@@ -69,9 +69,9 @@ export default class DashShakaPlayback extends HTML5Video {
       catch(() => { Log.error('shaka could not be unloaded') })
   }
 
-  get textTracks() {return this._player && this._player.getTracks().filter((t) => t.type === "text")}
-  get audioTracks() {return this._player && this._player.getTracks().filter((t) => t.type === "audio")}
-  get videoTracks() {return this._player && this._player.getTracks().filter((t) => t.type === "video")}
+  get textTracks() {return this._player && this._player.getTracks().filter((t) => t.type === 'text')}
+  get audioTracks() {return this._player && this._player.getTracks().filter((t) => t.type === 'audio')}
+  get videoTracks() {return this._player && this._player.getTracks().filter((t) => t.type === 'video')}
   getPlaybackType() {return (this._player && this._player.isLive()?'live':'vod') || ''}
 
   selectTrack(track) {
@@ -173,11 +173,10 @@ DashShakaPlayback.canPlay = (resource, mimeType = '') => {
 
   shaka.Player.support().then((support) => { DashShakaPlayback.support = support})
 
-  var basic = !!window.Promise && !!window.Uint8Array && !!Array.prototype.forEach;
+  var basic = !!window.Promise && !!window.Uint8Array && !!Array.prototype.forEach
   var mediaSource = (window.MediaSource && window.MediaSource.isTypeSupported('video/mp4; codecs="avc1.42E01E,mp4a.40.2"'))
   var basicAndMediaSource = basic && mediaSource
 
   var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
   return basicAndMediaSource && (('mpd' === resourceParts[1]) || mimeType.indexOf('application/dash+xml') > -1)
 }
-
