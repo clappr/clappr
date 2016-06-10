@@ -4,7 +4,7 @@
 
 import ContainerPlugin from 'base/container_plugin'
 import Events from 'base/events'
-import $ from "clappr-zepto"
+import $ from 'clappr-zepto'
 
 export default class StatsPlugin extends ContainerPlugin {
   get name() { return 'stats' }
@@ -13,7 +13,7 @@ export default class StatsPlugin extends ContainerPlugin {
     super(container)
     this.setInitialAttrs()
     this.reportInterval = this.options.reportInterval || 5000
-    this.state = "IDLE"
+    this.state = 'IDLE'
   }
 
   bindEvents() {
@@ -38,7 +38,7 @@ export default class StatsPlugin extends ContainerPlugin {
   }
 
   onPlay() {
-    this.state = "PLAYING"
+    this.state = 'PLAYING'
     this.watchingTimeInit = Date.now()
     if (!this.intervalId) {
       this.intervalId = setInterval(this.report.bind(this), this.reportInterval)
@@ -49,7 +49,7 @@ export default class StatsPlugin extends ContainerPlugin {
     clearInterval(this.intervalId)
     this.report()
     this.intervalId = undefined
-    this.state = "STOPPED"
+    this.state = 'STOPPED'
   }
 
   onBuffering() {
@@ -58,20 +58,20 @@ export default class StatsPlugin extends ContainerPlugin {
     } else {
       this.rebufferingTimeInit = Date.now()
     }
-    this.state = "BUFFERING"
+    this.state = 'BUFFERING'
     this.rebuffers++
   }
 
   onBufferFull() {
-    if (this.firstPlay && !!this.startupTimeInit) {
+    if (this.firstPlay && this.startupTimeInit) {
       this.firstPlay = false
       this.startupTime = Date.now() - this.startupTimeInit
       this.watchingTimeInit = Date.now()
-    } else if (!!this.rebufferingTimeInit) {
+    } else if (this.rebufferingTimeInit) {
       this.rebufferingTime += this.getRebufferingTime()
     }
     this.rebufferingTimeInit = undefined
-    this.state = "PLAYING"
+    this.state = 'PLAYING'
   }
 
   getRebufferingTime() {

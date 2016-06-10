@@ -5,7 +5,6 @@ import Styler from 'base/styler'
 import Events from 'base/events'
 import dvrStyle from './public/dvr_controls.scss'
 import dvrHTML from './public/index.html'
-import $ from 'clappr-zepto'
 
 export default class DVRControls extends UICorePlugin {
   get template() { return template(dvrHTML) }
@@ -18,7 +17,7 @@ export default class DVRControls extends UICorePlugin {
   get attributes() {
     return {
       'class': 'dvr-controls',
-      'data-dvr-controls': '',
+      'data-dvr-controls': ''
     }
   }
 

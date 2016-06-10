@@ -26,7 +26,7 @@ export default class WaterMarkPlugin extends UIContainerPlugin {
   }
 
   configure() {
-    this.position = this.options.position || "bottom-right"
+    this.position = this.options.position || 'bottom-right'
     if (this.options.watermark) {
       this.imageUrl = this.options.watermark
       this.imageLink = this.options.watermarkLink

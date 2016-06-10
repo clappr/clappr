@@ -35,7 +35,7 @@ export default class SeekTime extends UICorePlugin {
     this.duration = null
     this.actualLiveTime = !!this.mediaControl.options.actualLiveTime
     if (this.actualLiveTime) {
-      if (!!this.mediaControl.options.actualLiveServerTime) {
+      if (this.mediaControl.options.actualLiveServerTime) {
         this.actualLiveServerTimeDiff = new Date().getTime() - new Date(this.mediaControl.options.actualLiveServerTime).getTime()
       } else {
         this.actualLiveServerTimeDiff = 0
@@ -103,7 +103,7 @@ export default class SeekTime extends UICorePlugin {
     }
     if (!this.shouldBeVisible()) {
       this.$el.hide()
-      this.$el.css('left', "-100%")
+      this.$el.css('left', '-100%')
     }
     else {
       var seekTime = this.getSeekTime()

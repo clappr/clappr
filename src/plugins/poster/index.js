@@ -1,2 +1,1 @@
-module.exports = require('./poster');
-
+module.exports = require('./poster')
