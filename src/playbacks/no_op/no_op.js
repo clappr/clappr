@@ -33,9 +33,9 @@ export default class NoOp extends Playback {
   }
 
   render() {
-    var style = Styler.getStyleFor(noOpStyle);
+    var style = Styler.getStyleFor(noOpStyle)
     this.$el.html(this.template({message:this.options.playbackNotSupportedMessage || this._getNoOpMessage()}))
-    this.$el.append(style);
+    this.$el.append(style)
     this._animate()
     this.trigger(Events.PLAYBACK_READY, this.name)
     return this
@@ -48,32 +48,32 @@ export default class NoOp extends Playback {
       return
     }
 
-    var idata = this.context.createImageData(this.context.canvas.width, this.context.canvas.height)
-
+    let idata = this.context.createImageData(this.context.canvas.width, this.context.canvas.height)
+    let buffer32
     try {
-      var buffer32 = new Uint32Array(idata.data.buffer)
+      buffer32 = new Uint32Array(idata.data.buffer)
     } catch (err) {
-        var buffer32 = new Uint32Array(this.context.canvas.width * this.context.canvas.height * 4)
-        var data=idata.data
-        for(var i = 0; i < data.length; i++){
-            buffer32[i]=data[i]
-        }
+      buffer32 = new Uint32Array(this.context.canvas.width * this.context.canvas.height * 4)
+      let data=idata.data
+      for(let i = 0; i < data.length; i++){
+        buffer32[i]=data[i]
+      }
     }
 
-    var len = buffer32.length
-    var run = 0
-    var color = 0
-    var m = Math.random() * 6 + 4
-    for (var i = 0; i < len;) {
+    let len = buffer32.length
+    let run = 0
+    let color = 0
+    let m = Math.random() * 6 + 4
+    for (let i = 0; i < len;) {
       if (run < 0) {
-        run = m * Math.random();
-        var p = Math.pow(Math.random(), 0.4);
-        color = (255 * p) << 24;
+        run = m * Math.random()
+        let p = Math.pow(Math.random(), 0.4)
+        color = (255 * p) << 24
       }
-      run -= 1;
-      buffer32[i++] = color;
+      run -= 1
+      buffer32[i++] = color
     }
-    this.context.putImageData(idata, 0, 0);
+    this.context.putImageData(idata, 0, 0)
   }
 
   _loop() {
@@ -86,8 +86,8 @@ export default class NoOp extends Playback {
 
   destroy() {
     if (this._animationHandle) {
-      cancelAnimationFrame(this._animationHandle);
-      this._stop = true;
+      cancelAnimationFrame(this._animationHandle)
+      this._stop = true
     }
   }
 
@@ -98,6 +98,6 @@ export default class NoOp extends Playback {
   }
 }
 
-NoOp.canPlay = (source) => {
+NoOp.canPlay = (source) => { // eslint-disable-line no-unused-vars
   return true
 }

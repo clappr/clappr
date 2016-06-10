@@ -17,9 +17,9 @@ export default class HLS extends HTML5VideoPlayback {
   get levels() { return this._levels || [] }
   get currentLevel() {
     if (this._currentLevel === null || this._currentLevel === undefined) {
-      return AUTO;
+      return AUTO
     } else {
-      return this._currentLevel; //0 is a valid level ID
+      return this._currentLevel //0 is a valid level ID
     }
   }
   set currentLevel(id) {
@@ -71,13 +71,13 @@ export default class HLS extends HTML5VideoPlayback {
       this._hls.swapAudioCodec()
       this._hls.recoverMediaError()
     } else {
-      Log.error("hlsjs: failed to recover")
+      Log.error('hlsjs: failed to recover')
       this.trigger(Events.PLAYBACK_ERROR, `hlsjs: could not recover from error, evt ${evt}, data ${data} `, this.name)
     }
   }
 
   // override
-  _setupSrc(srcUrl) {
+  _setupSrc(srcUrl) { // eslint-disable-line no-unused-vars
     // this playback manages the src on the video element itself
   }
 
@@ -109,7 +109,7 @@ export default class HLS extends HTML5VideoPlayback {
 
   seek(time) {
     if (time < 0) {
-      Log.warn("Attempt to seek to a negative time. Resetting to live point. Use seekToLivePoint() to seek to the live point.")
+      Log.warn('Attempt to seek to a negative time. Resetting to live point. Use seekToLivePoint() to seek to the live point.')
       time = this.getDuration()
     }
     // assume live if time within 3 seconds of end of stream
@@ -129,11 +129,11 @@ export default class HLS extends HTML5VideoPlayback {
 
   _updateSettings() {
     if (this._playbackType === Playback.VOD) {
-      this.settings.left = ["playpause", "position", "duration"]
+      this.settings.left = ['playpause', 'position', 'duration']
     } else if (this.dvrEnabled) {
-      this.settings.left = ["playpause"]
+      this.settings.left = ['playpause']
     } else {
-      this.settings.left = ["playstop"]
+      this.settings.left = ['playstop']
     }
     this.settings.seekEnabled = this.isSeekEnabled()
     this.trigger(Events.PLAYBACK_SETTINGSUPDATE)
@@ -146,18 +146,18 @@ export default class HLS extends HTML5VideoPlayback {
       if (this._recoverAttemptsRemaining > 0) {
         this._recoverAttemptsRemaining -= 1
         switch (data.type) {
-          case HLSJS.ErrorTypes.NETWORK_ERROR:
-            Log.warn(`hlsjs: trying to recover from network error, evt ${evt}, data ${data} `)
-            this._hls.startLoad()
-            break
-          case HLSJS.ErrorTypes.MEDIA_ERROR:
-            Log.warn(`hlsjs: trying to recover from media error, evt ${evt}, data ${data} `)
-            this._recover(evt, data)
-            break
-          default:
-            Log.error(`hlsjs: trying to recover from error, evt ${evt}, data ${data} `)
-            this.trigger(Events.PLAYBACK_ERROR, `hlsjs: could not recover from error, evt ${evt}, data ${data} `, this.name)
-            break
+        case HLSJS.ErrorTypes.NETWORK_ERROR:
+          Log.warn(`hlsjs: trying to recover from network error, evt ${evt}, data ${data} `)
+          this._hls.startLoad()
+          break
+        case HLSJS.ErrorTypes.MEDIA_ERROR:
+          Log.warn(`hlsjs: trying to recover from media error, evt ${evt}, data ${data} `)
+          this._recover(evt, data)
+          break
+        default:
+          Log.error(`hlsjs: trying to recover from error, evt ${evt}, data ${data} `)
+          this.trigger(Events.PLAYBACK_ERROR, `hlsjs: could not recover from error, evt ${evt}, data ${data} `, this.name)
+          break
         }
       } else {
         Log.error(`hlsjs: could not recover from error after maximum number of attempts, evt ${evt}, data ${data} `)
@@ -281,7 +281,7 @@ export default class HLS extends HTML5VideoPlayback {
     var currentLevel = this._hls.levels[data.level]
     if (currentLevel) {
       // TODO should highDefinition be private and maybe have a read only accessor if it's used somewhere
-      this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000);
+      this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000)
       this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition)
       this.trigger(Events.PLAYBACK_BITRATE, {
         height: currentLevel.height,
@@ -312,7 +312,7 @@ export default class HLS extends HTML5VideoPlayback {
 
 HLS.canPlay = function(resource, mimeType) {
   var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
-  var isHls = ((resourceParts.length > 1 && resourceParts[1] === "m3u8") ||
+  var isHls = ((resourceParts.length > 1 && resourceParts[1] === 'm3u8') ||
         mimeType === 'application/x-mpegURL' || mimeType === 'application/vnd.apple.mpegurl')
 
   return !!(HLSJS.isSupported() && isHls && !Browser.isSafari)
