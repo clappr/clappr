@@ -28,11 +28,11 @@ Now, create the player:
 </body>
 ```
 
-## [Supported Formats](SUPPORTED_FORMATS.md)
-
 ## CDN
 
 You can use the latest published version at `https://cdn.jsdelivr.net/clappr/latest/clappr.min.js`
+
+## [Supported Formats](SUPPORTED_FORMATS.md)
 
 ## [External Plugins](EXTERNAL_PLUGINS.md)
 
