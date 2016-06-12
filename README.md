@@ -52,6 +52,8 @@ You can find it [here](http://clappr.github.io/).
 
 ## [Installing](INSTALLING.md)
 
+## [Troubleshooting](TROUBLESHOOTING.md)
+
 ## [Read this before open an issue](BEFORE_OPEN_AN_ISSUE.md)
 
 ## Contributors
