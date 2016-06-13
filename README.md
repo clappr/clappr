@@ -32,11 +32,11 @@ Now, create the player:
 
 You can use the latest published version at `https://cdn.jsdelivr.net/clappr/latest/clappr.min.js`
 
-## [Supported Formats](SUPPORTED_FORMATS.md)
+## [Supported Formats](doc/SUPPORTED_FORMATS.md)
 
-## [External Plugins](EXTERNAL_PLUGINS.md)
+## [External Plugins](doc/EXTERNAL_PLUGINS.md)
 
-## [Built-in Plugins & Embed Parameters](BUILTIN_PLUGINS.md)
+## [Built-in Plugins & Embed Parameters](doc/BUILTIN_PLUGINS.md)
 
 ## Vendors
 
@@ -50,17 +50,17 @@ Clappr is under heavy development but production-ready. Feel free to open issues
 
 You can find it [here](http://clappr.github.io/).
 
-## [Installing](INSTALLING.md)
+## [Installing](doc/INSTALLING.md)
 
-## [Troubleshooting](TROUBLESHOOTING.md)
+## [Troubleshooting](doc/TROUBLESHOOTING.md)
 
-## [Read this before open an issue](BEFORE_OPEN_AN_ISSUE.md)
+## [Read this before open an issue](doc/BEFORE_OPEN_AN_ISSUE.md)
 
 ## Contributors
 
 The culprits of this project are listed [here](https://github.com/globocom/clappr/graphs/contributors).
 
-## [Contributing](CONTRIBUTING.md)
+## [Contributing](doc/CONTRIBUTING.md)
 
 ## Sponsor
 
