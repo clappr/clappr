@@ -14,7 +14,7 @@ In the above case clappr will expect all of the [assets (in the dist folder)](ht
 You need to arrange for the assets to be located at `baseUrl` during your build process.
 
 #### Installing for [webpack](https://webpack.github.io/)
-By default webpack will look at the `browser` field in `package.json` and use the built version of the project. If this is all you want there is nothing else for you to do.
+By default webpack will look at the `main` field in `package.json` and use the built version of the project. If this is all you want there is nothing else for you to do.
 
 If you would like to build the project yourself into your project during your build process then add the following to your webpack config:
 ```javascript
@@ -26,7 +26,7 @@ resolve: {
 ```
 
 #### Installing for [browserify](http://browserify.org/)
-Browserify will look at the `browser` field in `package.json` and use the built verison of the project.
+Browserify will look at the `main` field in `package.json` and use the built verison of the project.
 
 ### Installing for development
 
