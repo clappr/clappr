@@ -57,7 +57,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 
 	var _player = __webpack_require__(1);
@@ -68,7 +68,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _utils2 = _interopRequireDefault(_utils);
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -92,7 +92,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _ui_container_plugin2 = _interopRequireDefault(_ui_container_plugin);
 
-	var _base_object = __webpack_require__(5);
+	var _base_object = __webpack_require__(4);
 
 	var _base_object2 = _interopRequireDefault(_base_object);
 
@@ -108,7 +108,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _container2 = _interopRequireDefault(_container);
 
-	var _core = __webpack_require__(15);
+	var _core = __webpack_require__(14);
 
 	var _core2 = _interopRequireDefault(_core);
 
@@ -164,15 +164,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _poster2 = _interopRequireDefault(_poster);
 
-	var _log = __webpack_require__(7);
+	var _log = __webpack_require__(6);
 
 	var _log2 = _interopRequireDefault(_log);
 
-	var _styler = __webpack_require__(17);
+	var _styler = __webpack_require__(16);
 
 	var _styler2 = _interopRequireDefault(_styler);
 
-	var _vendor = __webpack_require__(9);
+	var _vendor = __webpack_require__(8);
 
 	var _vendor2 = _interopRequireDefault(_vendor);
 
@@ -180,49 +180,49 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _template2 = _interopRequireDefault(_template);
 
-	var _clapprZepto = __webpack_require__(4);
+	var _clapprZepto = __webpack_require__(17);
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var version = ("0.2.54"); // Copyright 2014 Globo.com Player authors. All rights reserved.
+	var version = ("0.2.55"); // Copyright 2014 Globo.com Player authors. All rights reserved.
 	// Use of this source code is governed by a BSD-style
 	// license that can be found in the LICENSE file.
 
 	exports.default = {
-	    Player: _player2.default,
-	    Mediator: _mediator2.default,
-	    Events: _events2.default,
-	    Browser: _browser2.default,
-	    PlayerInfo: _player_info2.default,
-	    MediaControl: _media_control2.default,
-	    ContainerPlugin: _container_plugin2.default,
-	    UIContainerPlugin: _ui_container_plugin2.default,
-	    CorePlugin: _core_plugin2.default,
-	    UICorePlugin: _ui_core_plugin2.default,
-	    Playback: _playback2.default,
-	    Container: _container2.default,
-	    Core: _core2.default,
-	    Loader: _loader2.default,
-	    BaseObject: _base_object2.default,
-	    UIObject: _ui_object2.default,
-	    Utils: _utils2.default,
-	    BaseFlashPlayback: _base_flash_playback2.default,
-	    Flash: _flash2.default,
-	    FlasHLS: _flashls2.default,
-	    HLS: _hls2.default,
-	    HTML5Audio: _html5_audio2.default,
-	    HTML5Video: _html5_video2.default,
-	    HTMLImg: _html_img2.default,
-	    NoOp: _no_op2.default,
-	    Poster: _poster2.default,
-	    Log: _log2.default,
-	    Styler: _styler2.default,
-	    Vendor: _vendor2.default,
-	    version: version,
-	    template: _template2.default,
-	    $: _clapprZepto2.default
+	  Player: _player2.default,
+	  Mediator: _mediator2.default,
+	  Events: _events2.default,
+	  Browser: _browser2.default,
+	  PlayerInfo: _player_info2.default,
+	  MediaControl: _media_control2.default,
+	  ContainerPlugin: _container_plugin2.default,
+	  UIContainerPlugin: _ui_container_plugin2.default,
+	  CorePlugin: _core_plugin2.default,
+	  UICorePlugin: _ui_core_plugin2.default,
+	  Playback: _playback2.default,
+	  Container: _container2.default,
+	  Core: _core2.default,
+	  Loader: _loader2.default,
+	  BaseObject: _base_object2.default,
+	  UIObject: _ui_object2.default,
+	  Utils: _utils2.default,
+	  BaseFlashPlayback: _base_flash_playback2.default,
+	  Flash: _flash2.default,
+	  FlasHLS: _flashls2.default,
+	  HLS: _hls2.default,
+	  HTML5Audio: _html5_audio2.default,
+	  HTML5Video: _html5_video2.default,
+	  HTMLImg: _html_img2.default,
+	  NoOp: _no_op2.default,
+	  Poster: _poster2.default,
+	  Log: _log2.default,
+	  Styler: _styler2.default,
+	  Vendor: _vendor2.default,
+	  version: version,
+	  template: _template2.default,
+	  $: _clapprZepto2.default
 	};
 	module.exports = exports['default'];
 
@@ -240,11 +240,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _utils = __webpack_require__(2);
 
-	var _base_object = __webpack_require__(5);
+	var _base_object = __webpack_require__(4);
 
 	var _base_object2 = _interopRequireDefault(_base_object);
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -252,7 +252,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _browser2 = _interopRequireDefault(_browser);
 
-	var _core_factory = __webpack_require__(13);
+	var _core_factory = __webpack_require__(12);
 
 	var _core_factory2 = _interopRequireDefault(_core_factory);
 
@@ -264,7 +264,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _player_info2 = _interopRequireDefault(_player_info);
 
-	var _clapprZepto = __webpack_require__(4);
+	var _clapprZepto = __webpack_require__(17);
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
@@ -282,7 +282,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// Use of this source code is governed by a BSD-style
 	// license that can be found in the LICENSE file.
 
-	var baseUrl = (0, _utils.currentScriptUrl)().replace(/\/[^\/]+$/, "");
+	var baseUrl = (0, _utils.currentScriptUrl)().replace(/\/[^\/]+$/, '');
 
 	/**
 	 * @class Player
@@ -472,7 +472,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var _this = _possibleConstructorReturn(this, _BaseObject.call(this, options));
 
-	    var defaultOptions = { playerId: (0, _utils.uniqueId)(""), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl, allowUserInteraction: _browser2.default.isMobile };
+	    var defaultOptions = { playerId: (0, _utils.uniqueId)(''), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl, allowUserInteraction: _browser2.default.isMobile };
 	    _this.options = _clapprZepto2.default.extend(defaultOptions, options);
 	    _this.options.sources = _this._normalizeSources(options);
 	    if (!_this.options.chromeless) {
@@ -540,7 +540,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  Player.prototype._addContainerEventListeners = function _addContainerEventListeners() {
 	    var container = this.core.mediaControl.container;
-	    if (!!container) {
+	    if (container) {
 	      this.listenTo(container, _events2.default.CONTAINER_PLAY, this._onPlay);
 	      this.listenTo(container, _events2.default.CONTAINER_PAUSE, this._onPause);
 	      this.listenTo(container, _events2.default.CONTAINER_STOP, this._onStop);
@@ -561,7 +561,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var eventType = _this2.eventsMapping[userEvent];
 	      if (eventType) {
 	        var eventFunction = userEvents[userEvent];
-	        eventFunction = typeof eventFunction === "function" && eventFunction;
+	        eventFunction = typeof eventFunction === 'function' && eventFunction;
 	        eventFunction && _this2.on(eventType, eventFunction);
 	      }
 	    });
@@ -624,7 +624,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  Player.prototype._normalizeSources = function _normalizeSources(options) {
 	    var sources = options.sources || (options.source !== undefined ? [options.source] : []);
-	    return sources.length === 0 ? [{ source: "", mimeType: "" }] : sources;
+	    return sources.length === 0 ? [{ source: '', mimeType: '' }] : sources;
 	  };
 
 	  /**
@@ -784,7 +784,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	  Player.prototype.unmute = function unmute() {
-	    this.setVolume(typeof this._mutedVolume === "number" ? this._mutedVolume : 100);
+	    this.setVolume(typeof this._mutedVolume === 'number' ? this._mutedVolume : 100);
 	    this._mutedVolume = null;
 	    return this;
 	  };
@@ -921,10 +921,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _browser2 = _interopRequireDefault(_browser);
 
-	var _clapprZepto = __webpack_require__(4);
-
-	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -974,7 +970,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function formatTime(time, paddedHours) {
 	  if (!isFinite(time)) {
-	    return "--:--";
+	    return '--:--';
 	  }
 	  time = time * 1000;
 	  time = parseInt(time / 1000);
@@ -984,18 +980,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	  time = parseInt(time / 60);
 	  var hours = time % 24;
 	  var days = parseInt(time / 24);
-	  var out = "";
+	  var out = '';
 	  if (days && days > 0) {
-	    out += days + ":";
+	    out += days + ':';
 	    if (hours < 1) {
-	      out += "00:";
+	      out += '00:';
 	    }
 	  }
 	  if (hours && hours > 0 || paddedHours) {
-	    out += ("0" + hours).slice(-2) + ":";
+	    out += ('0' + hours).slice(-2) + ':';
 	  }
-	  out += ("0" + minutes).slice(-2) + ":";
-	  out += ("0" + seconds).slice(-2);
+	  out += ('0' + minutes).slice(-2) + ':';
+	  out += ('0' + seconds).slice(-2);
 	  return out.trim();
 	}
 
@@ -1012,8 +1008,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      el.mozRequestFullScreen();
 	    } else if (el.msRequestFullscreen) {
 	      el.msRequestFullscreen();
-	    } else if (el.querySelector && el.querySelector("video") && el.querySelector("video").webkitEnterFullScreen) {
-	      el.querySelector("video").webkitEnterFullScreen();
+	    } else if (el.querySelector && el.querySelector('video') && el.querySelector('video').webkitEnterFullScreen) {
+	      el.querySelector('video').webkitEnterFullScreen();
 	    }
 	  },
 	  cancelFullscreen: function cancelFullscreen() {
@@ -1089,10 +1085,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // Regex for replacing addition symbol with a space
 	    search = /([^&=]+)=?([^&]*)/g,
 	        decode = function decode(s) {
-	      return decodeURIComponent(s.replace(pl, " "));
+	      return decodeURIComponent(s.replace(pl, ' '));
 	    };
 	    var params = {};
 	    while (match = search.exec(paramsString)) {
+	      // eslint-disable-line no-cond-assign
 	      params[decode(match[1]).toLowerCase()] = decode(match[2]);
 	    }
 	    return params;
@@ -1271,6 +1268,2233 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _utils = __webpack_require__(2);
+
+	var _events = __webpack_require__(5);
+
+	var _events2 = _interopRequireDefault(_events);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // Copyright 2014 Globo.com Player authors. All rights reserved.
+	// Use of this source code is governed by a BSD-style
+	// license that can be found in the LICENSE file.
+
+	/**
+	 * @class BaseObject
+	 * @constructor
+	 * @extends Events
+	 * @module base
+	 */
+
+	var BaseObject = function (_Events) {
+	  _inherits(BaseObject, _Events);
+
+	  /**
+	   * @method constructor
+	   * @param {Object} options
+	   */
+
+	  function BaseObject() {
+	    var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	    _classCallCheck(this, BaseObject);
+
+	    var _this = _possibleConstructorReturn(this, _Events.call(this, options));
+
+	    _this.uniqueId = (0, _utils.uniqueId)('o');
+	    return _this;
+	  }
+	  /**
+	  * a unique id prefixed with `'o'`, `o1, o232`
+	  *
+	  * @property uniqueId
+	  * @type String
+	  */
+
+
+	  return BaseObject;
+	}(_events2.default);
+
+	exports.default = BaseObject;
+	module.exports = exports['default'];
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; }; // Copyright 2014 Globo.com Player authors. All rights reserved.
+	// Use of this source code is governed by a BSD-style
+	// license that can be found in the LICENSE file.
+
+	var _log = __webpack_require__(6);
+
+	var _log2 = _interopRequireDefault(_log);
+
+	var _utils = __webpack_require__(2);
+
+	var _lodash = __webpack_require__(10);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var slice = Array.prototype.slice;
+
+	var eventSplitter = /\s+/;
+
+	var eventsApi = function eventsApi(obj, action, name, rest) {
+	  if (!name) {
+	    return true;
+	  }
+
+	  // Handle event maps.
+	  if ((typeof name === 'undefined' ? 'undefined' : _typeof(name)) === 'object') {
+	    for (var key in name) {
+	      obj[action].apply(obj, [key, name[key]].concat(rest));
+	    }
+	    return false;
+	  }
+
+	  // Handle space separated event names.
+	  if (eventSplitter.test(name)) {
+	    var names = name.split(eventSplitter);
+	    for (var i = 0, l = names.length; i < l; i++) {
+	      obj[action].apply(obj, [names[i]].concat(rest));
+	    }
+	    return false;
+	  }
+
+	  return true;
+	};
+
+	var triggerEvents = function triggerEvents(events, args) {
+	  var ev,
+	      i = -1,
+	      l = events.length,
+	      a1 = args[0],
+	      a2 = args[1],
+	      a3 = args[2];
+	  switch (args.length) {
+	    case 0:
+	      while (++i < l) {
+	        (ev = events[i]).callback.call(ev.ctx);
+	      }return;
+	    case 1:
+	      while (++i < l) {
+	        (ev = events[i]).callback.call(ev.ctx, a1);
+	      }return;
+	    case 2:
+	      while (++i < l) {
+	        (ev = events[i]).callback.call(ev.ctx, a1, a2);
+	      }return;
+	    case 3:
+	      while (++i < l) {
+	        (ev = events[i]).callback.call(ev.ctx, a1, a2, a3);
+	      }return;
+	    default:
+	      while (++i < l) {
+	        (ev = events[i]).callback.apply(ev.ctx, args);
+	      }return;
+	  }
+	};
+
+	/**
+	 * @class Events
+	 * @constructor
+	 * @module base
+	 */
+
+	var Events = function () {
+	  function Events() {
+	    _classCallCheck(this, Events);
+	  }
+
+	  /**
+	   * listen to an event indefinitely, if you want to stop you need to call `off`
+	   * @method on
+	   * @param {String} name
+	   * @param {Function} callback
+	   * @param {Object} context
+	   */
+
+	  Events.prototype.on = function on(name, callback, context) {
+	    if (!eventsApi(this, 'on', name, [callback, context]) || !callback) {
+	      return this;
+	    }
+	    this._events || (this._events = {});
+	    var events = this._events[name] || (this._events[name] = []);
+	    events.push({ callback: callback, context: context, ctx: context || this });
+	    return this;
+	  };
+
+	  /**
+	   * listen to an event only once
+	   * @method once
+	   * @param {String} name
+	   * @param {Function} callback
+	   * @param {Object} context
+	   */
+
+
+	  Events.prototype.once = function once(name, callback, context) {
+	    if (!eventsApi(this, 'once', name, [callback, context]) || !callback) {
+	      return this;
+	    }
+	    var self = this;
+	    var once = (0, _lodash2.default)(function () {
+	      self.off(name, once);
+	      callback.apply(this, arguments);
+	    });
+	    once._callback = callback;
+	    return this.on(name, once, context);
+	  };
+
+	  /**
+	   * stop listening to an event
+	   * @method off
+	   * @param {String} name
+	   * @param {Function} callback
+	   * @param {Object} context
+	   */
+
+
+	  Events.prototype.off = function off(name, callback, context) {
+	    var retain, ev, events, names, i, l, j, k;
+	    if (!this._events || !eventsApi(this, 'off', name, [callback, context])) {
+	      return this;
+	    }
+	    if (!name && !callback && !context) {
+	      this._events = void 0;
+	      return this;
+	    }
+	    names = name ? [name] : Object.keys(this._events);
+	    // jshint maxdepth:5
+	    for (i = 0, l = names.length; i < l; i++) {
+	      name = names[i];
+	      events = this._events[name];
+	      if (events) {
+	        this._events[name] = retain = [];
+	        if (callback || context) {
+	          for (j = 0, k = events.length; j < k; j++) {
+	            ev = events[j];
+	            if (callback && callback !== ev.callback && callback !== ev.callback._callback || context && context !== ev.context) {
+	              retain.push(ev);
+	            }
+	          }
+	        }
+	        if (!retain.length) {
+	          delete this._events[name];
+	        }
+	      }
+	    }
+	    return this;
+	  };
+
+	  /**
+	   * triggers an event given its `name`
+	   * @method trigger
+	   * @param {String} name
+	   */
+
+
+	  Events.prototype.trigger = function trigger(name) {
+	    var klass = this.name || this.constructor.name;
+	    try {
+	      _log2.default.debug.apply(_log2.default, [klass].concat(Array.prototype.slice.call(arguments)));
+	      if (!this._events) {
+	        return this;
+	      }
+	      var args = slice.call(arguments, 1);
+	      if (!eventsApi(this, 'trigger', name, args)) {
+	        return this;
+	      }
+	      var events = this._events[name];
+	      var allEvents = this._events.all;
+	      if (events) {
+	        triggerEvents(events, args);
+	      }
+	      if (allEvents) {
+	        triggerEvents(allEvents, arguments);
+	      }
+	    } catch (exception) {
+	      _log2.default.error.apply(_log2.default, [klass, 'error on event', name, 'trigger', '-', exception]);
+	    }
+	    return this;
+	  };
+
+	  /**
+	   * stop listening an event for a given object
+	   * @method stopListening
+	   * @param {Object} obj
+	   * @param {String} name
+	   * @param {Function} callback
+	   */
+
+
+	  Events.prototype.stopListening = function stopListening(obj, name, callback) {
+	    var listeningTo = this._listeningTo;
+	    if (!listeningTo) {
+	      return this;
+	    }
+	    var remove = !name && !callback;
+	    if (!callback && (typeof name === 'undefined' ? 'undefined' : _typeof(name)) === 'object') {
+	      callback = this;
+	    }
+	    if (obj) {
+	      (listeningTo = {})[obj._listenId] = obj;
+	    }
+	    for (var id in listeningTo) {
+	      obj = listeningTo[id];
+	      obj.off(name, callback, this);
+	      if (remove || Object.keys(obj._events).length === 0) {
+	        delete this._listeningTo[id];
+	      }
+	    }
+	    return this;
+	  };
+
+	  return Events;
+	}();
+
+	/**
+	 * listen to an event indefinitely for a given `obj`
+	 * @method listenTo
+	 * @param {Object} obj
+	 * @param {String} name
+	 * @param {Function} callback
+	 * @param {Object} context
+	 * @example
+	 * ```javascript
+	 * this.listenTo(this.core.playback, Events.PLAYBACK_PAUSE, this.callback)
+	 * ```
+	 */
+	/**
+	 * listen to an event once for a given `obj`
+	 * @method listenToOnce
+	 * @param {Object} obj
+	 * @param {String} name
+	 * @param {Function} callback
+	 * @param {Object} context
+	 * @example
+	 * ```javascript
+	 * this.listenToOnce(this.core.playback, Events.PLAYBACK_PAUSE, this.callback)
+	 * ```
+	 */
+
+
+	exports.default = Events;
+	var listenMethods = { listenTo: 'on', listenToOnce: 'once' };
+
+	Object.keys(listenMethods).forEach(function (method) {
+	  Events.prototype[method] = function (obj, name, callback) {
+	    var listeningTo = this._listeningTo || (this._listeningTo = {});
+	    var id = obj._listenId || (obj._listenId = (0, _utils.uniqueId)('l'));
+	    listeningTo[id] = obj;
+	    if (!callback && (typeof name === 'undefined' ? 'undefined' : _typeof(name)) === 'object') {
+	      callback = this;
+	    }
+	    obj[listenMethods[method]](name, callback, this);
+	    return this;
+	  };
+	});
+
+	// PLAYER EVENTS
+	/**
+	 * Fired when the player is ready on startup
+	 *
+	 * @event PLAYER_READY
+	 */
+	Events.PLAYER_READY = 'ready';
+	/**
+	 * Fired when player resizes
+	 *
+	 * @event PLAYER_RESIZE
+	 * @param {Object} currentSize an object with the current size
+	 */
+	Events.PLAYER_RESIZE = 'resize';
+	/**
+	 * Fired when player changes its fullscreen state
+	 *
+	 * @event PLAYER_FULLSCREEN
+	 * @param {Boolean} whether or not the player is on fullscreen mode
+	 */
+	Events.PLAYER_FULLSCREEN = 'fullscreen';
+	/**
+	 * Fired when player starts to play
+	 *
+	 * @event PLAYER_PLAY
+	 */
+	Events.PLAYER_PLAY = 'play';
+	/**
+	 * Fired when player pauses
+	 *
+	 * @event PLAYER_PAUSE
+	 */
+	Events.PLAYER_PAUSE = 'pause';
+	/**
+	 * Fired when player stops
+	 *
+	 * @event PLAYER_STOP
+	 */
+	Events.PLAYER_STOP = 'stop';
+	/**
+	 * Fired when player ends the video
+	 *
+	 * @event PLAYER_ENDED
+	 */
+	Events.PLAYER_ENDED = 'ended';
+	/**
+	 * Fired when player seeks the video
+	 *
+	 * @event PLAYER_SEEK
+	 * @param {Number} time the current time in seconds
+	 */
+	Events.PLAYER_SEEK = 'seek';
+	/**
+	 * Fired when player receives an error
+	 *
+	 * @event PLAYER_ERROR
+	 * @param {Object} error the error
+	 */
+	Events.PLAYER_ERROR = 'error';
+	/**
+	 * Fired when the time is updated on player
+	 *
+	 * @event PLAYER_TIMEUPDATE
+	 * @param {Object} progress Data
+	 * progress object
+	 * @param {Number} [progress.current]
+	 * current time
+	 * @param {Number} [progress.total]
+	 * total time
+	 */
+	Events.PLAYER_TIMEUPDATE = 'timeupdate';
+	/**
+	 * Fired when player updates its volume
+	 *
+	 * @event PLAYER_VOLUMEUPDATE
+	 * @param {Number} volume the current volume
+	 */
+	Events.PLAYER_VOLUMEUPDATE = 'volumeupdate';
+
+	// Playback Events
+	/**
+	 * Fired when the playback is downloading the media
+	 *
+	 * @event PLAYBACK_PROGRESS
+	 * @param {Object} progress Data
+	 * progress object
+	 * @param {Number} [progress.start]
+	 * initial downloaded content
+	 * @param {Number} [progress.current]
+	 * current dowloaded content
+	 * @param {Number} [progress.total]
+	 * total content to be downloaded
+	 */
+	Events.PLAYBACK_PROGRESS = 'playback:progress';
+	/**
+	 * Fired when the time is updated on playback
+	 *
+	 * @event PLAYBACK_TIMEUPDATE
+	 * @param {Object} progress Data
+	 * progress object
+	 * @param {Number} [progress.current]
+	 * current time
+	 * @param {Number} [progress.total]
+	 * total time
+	 */
+	Events.PLAYBACK_TIMEUPDATE = 'playback:timeupdate';
+	/**
+	 * Fired when playback is ready
+	 *
+	 * @event PLAYBACK_READY
+	 */
+	Events.PLAYBACK_READY = 'playback:ready';
+	/**
+	 * Fired when the playback starts having to buffer because
+	 * playback can currently not be smooth.
+	 *
+	 * This corresponds to the playback `buffering` property being
+	 * `true`.
+	 *
+	 * @event PLAYBACK_BUFFERING
+	 */
+	Events.PLAYBACK_BUFFERING = 'playback:buffering';
+	/**
+	 * Fired when the playback has enough in the buffer to be
+	 * able to play smoothly, after previously being unable to
+	 * do this.
+	 *
+	 * This corresponds to the playback `buffering` property being
+	 * `false`.
+	 *
+	 * @event PLAYBACK_BUFFERFULL
+	 */
+	Events.PLAYBACK_BUFFERFULL = 'playback:bufferfull';
+	/**
+	 * Fired when playback changes any settings (volume, seek and etc)
+	 *
+	 * @event PLAYBACK_SETTINGSUPDATE
+	 */
+	Events.PLAYBACK_SETTINGSUPDATE = 'playback:settingsupdate';
+	/**
+	 * Fired when playback loaded its metadata
+	 *
+	 * @event PLAYBACK_LOADEDMETADATA
+	 * @param {Object} metadata Data
+	 * settings object
+	 * @param {Number} [metadata.duration]
+	 * the playback duration
+	 * @param {Object} [metadata.data]
+	 * extra meta data
+	 */
+	Events.PLAYBACK_LOADEDMETADATA = 'playback:loadedmetadata';
+	/**
+	 * Fired when playback updates its video quality
+	 *
+	 * @event PLAYBACK_HIGHDEFINITIONUPDATE
+	 * @param {Boolean} isHD
+	 * true when is on HD, false otherwise
+	 */
+	Events.PLAYBACK_HIGHDEFINITIONUPDATE = 'playback:highdefinitionupdate';
+	/**
+	 * Fired when playback updates its bitrate
+	 *
+	 * @event PLAYBACK_BITRATE
+	 * @param {Object} bitrate Data
+	 * bitrate object
+	 * @param {Number} [bitrate.bandwidth]
+	 * bitrate bandwidth when it's available
+	 * @param {Number} [bitrate.width]
+	 * playback width (ex: 720, 640, 1080)
+	 * @param {Number} [bitrate.height]
+	 * playback height (ex: 240, 480, 720)
+	 * @param {Number} [bitrate.level]
+	 * playback level when it's available, it could be just a map for width (0 => 240, 1 => 480, 2 => 720)
+	 */
+	Events.PLAYBACK_BITRATE = 'playback:bitrate';
+	/**
+	 * Fired when the playback has its levels
+	 *
+	 * @event PLAYBACK_LEVELS_AVAILABLE
+	 * @param {Array} levels
+	 * the ordered levels, each one with the following format `{id: 1, label: '500kbps'}` ps: id should be a number >= 0
+	 * @param {Number} initial
+	 * the initial level otherwise -1 (AUTO)
+	 */
+	Events.PLAYBACK_LEVELS_AVAILABLE = 'playback:levels:available';
+	/**
+	 * Fired when the playback starts to switch level
+	 *
+	 * @event PLAYBACK_LEVEL_SWITCH_START
+	 *
+	 */
+	Events.PLAYBACK_LEVEL_SWITCH_START = 'playback:levels:switch:start';
+	/**
+	 * Fired when the playback ends the level switch
+	 *
+	 * @event PLAYBACK_LEVEL_SWITCH_END
+	 *
+	 */
+	Events.PLAYBACK_LEVEL_SWITCH_END = 'playback:levels:switch:end';
+
+	/**
+	 * Fired when playback internal state changes
+	 *
+	 * @event PLAYBACK_PLAYBACKSTATE
+	 * @param {Object} state Data
+	 * state object
+	 * @param {String} [state.type]
+	 * the playback type
+	 */
+	Events.PLAYBACK_PLAYBACKSTATE = 'playback:playbackstate';
+	/**
+	 * Fired when DVR becomes enabled/disabled.
+	 *
+	 * @event PLAYBACK_DVR
+	 * @param {boolean} state true if dvr enabled
+	 */
+	Events.PLAYBACK_DVR = 'playback:dvr';
+	// TODO doc
+	Events.PLAYBACK_MEDIACONTROL_DISABLE = 'playback:mediacontrol:disable';
+	// TODO doc
+	Events.PLAYBACK_MEDIACONTROL_ENABLE = 'playback:mediacontrol:enable';
+	/**
+	 * Fired when the media for a playback ends.
+	 *
+	 * @event PLAYBACK_ENDED
+	 * @param {String} name the name of the playback
+	 */
+	Events.PLAYBACK_ENDED = 'playback:ended';
+	/**
+	 * Fired when user requests `play()`
+	 *
+	 * @event PLAYBACK_PLAY_INTENT
+	 */
+	Events.PLAYBACK_PLAY_INTENT = 'playback:play:intent';
+	/**
+	 * Fired when the media for a playback starts playing.
+	 * This is not necessarily when the user requests `play()`
+	 * The media may have to buffer first.
+	 * I.e. `isPlaying()` might return `true` before this event is fired,
+	 * because `isPlaying()` represents the intended state.
+	 *
+	 * @event PLAYBACK_PLAY
+	 */
+	Events.PLAYBACK_PLAY = 'playback:play';
+	/**
+	 * Fired when the media for a playback pauses.
+	 *
+	 * @event PLAYBACK_PAUSE
+	 */
+	Events.PLAYBACK_PAUSE = 'playback:pause';
+	/**
+	 * Fired when the media for a playback is stopped.
+	 *
+	 * @event PLAYBACK_STOP
+	 */
+	Events.PLAYBACK_STOP = 'playback:stop';
+	/**
+	 * Fired if an error occurs in the playback.
+	 *
+	 * @event PLAYBACK_ERROR
+	 * @param {Object} error An object containing the error details
+	 * @param {String} name Playback name
+	 */
+	Events.PLAYBACK_ERROR = 'playback:error';
+	// TODO doc
+	Events.PLAYBACK_STATS_ADD = 'playback:stats:add';
+	// TODO doc
+	Events.PLAYBACK_FRAGMENT_LOADED = 'playback:fragment:loaded';
+	// TODO doc
+	Events.PLAYBACK_LEVEL_SWITCH = 'playback:level:switch';
+
+	/**
+	 * Fired when the options were changed for the core
+	 *
+	 * @event CORE_OPTIONS_CHANGE
+	 */
+	Events.CORE_OPTIONS_CHANGE = 'core:options:change';
+	/**
+	 * Fired after creating containers, when the core is ready
+	 *
+	 * @event CORE_READY
+	 */
+	Events.CORE_READY = 'core:ready';
+	/**
+	 * Fired when the fullscreen state change
+	 *
+	 * @param {Boolean} whether or not the player is on fullscreen mode
+	 * @event CORE_READY
+	 */
+	Events.CORE_FULLSCREEN = 'core:fullscreen';
+
+	// Container Events
+	/**
+	 * Fired when the container internal state changes
+	 *
+	 * @event CONTAINER_PLAYBACKSTATE
+	 * @param {Object} state Data
+	 * state object
+	 * @param {String} [state.type]
+	 * the playback type
+	 */
+	Events.CONTAINER_PLAYBACKSTATE = 'container:playbackstate';
+	Events.CONTAINER_PLAYBACKDVRSTATECHANGED = 'container:dvr';
+	/**
+	 * Fired when the container updates its bitrate
+	 *
+	 * @event CONTAINER_BITRATE
+	 * @param {Object} bitrate Data
+	 * bitrate object
+	 * @param {Number} [bitrate.bandwidth]
+	 * bitrate bandwidth when it's available
+	 * @param {Number} [bitrate.width]
+	 * playback width (ex: 720, 640, 1080)
+	 * @param {Number} [bitrate.height]
+	 * playback height (ex: 240, 480, 720)
+	 * @param {Number} [bitrate.level]
+	 * playback level when it's available, it could be just a map for width (0 => 240, 1 => 480, 2 => 720)
+	 */
+	Events.CONTAINER_BITRATE = 'container:bitrate';
+	Events.CONTAINER_STATS_REPORT = 'container:stats:report';
+	Events.CONTAINER_DESTROYED = 'container:destroyed';
+	/**
+	 * Fired when the container is ready
+	 *
+	 * @event CONTAINER_READY
+	 */
+	Events.CONTAINER_READY = 'container:ready';
+	Events.CONTAINER_ERROR = 'container:error';
+	/**
+	 * Fired when the container loaded its metadata
+	 *
+	 * @event CONTAINER_LOADEDMETADATA
+	 * @param {Object} metadata Data
+	 * settings object
+	 * @param {Number} [metadata.duration]
+	 * the playback duration
+	 * @param {Object} [metadata.data]
+	 * extra meta data
+	 */
+	Events.CONTAINER_LOADEDMETADATA = 'container:loadedmetadata';
+	/**
+	 * Fired when the time is updated on container
+	 *
+	 * @event CONTAINER_TIMEUPDATE
+	 * @param {Object} progress Data
+	 * progress object
+	 * @param {Number} [progress.current]
+	 * current time
+	 * @param {Number} [progress.total]
+	 * total time
+	 */
+	Events.CONTAINER_TIMEUPDATE = 'container:timeupdate';
+	/**
+	 * Fired when the container is downloading the media
+	 *
+	 * @event CONTAINER_PROGRESS
+	 * @param {Object} progress Data
+	 * progress object
+	 * @param {Number} [progress.start]
+	 * initial downloaded content
+	 * @param {Number} [progress.current]
+	 * current dowloaded content
+	 * @param {Number} [progress.total]
+	 * total content to be downloaded
+	 */
+	Events.CONTAINER_PROGRESS = 'container:progress';
+	Events.CONTAINER_PLAY = 'container:play';
+	Events.CONTAINER_STOP = 'container:stop';
+	Events.CONTAINER_PAUSE = 'container:pause';
+	Events.CONTAINER_ENDED = 'container:ended';
+	Events.CONTAINER_CLICK = 'container:click';
+	Events.CONTAINER_DBLCLICK = 'container:dblclick';
+	Events.CONTAINER_CONTEXTMENU = 'container:contextmenu';
+	Events.CONTAINER_MOUSE_ENTER = 'container:mouseenter';
+	Events.CONTAINER_MOUSE_LEAVE = 'container:mouseleave';
+	/**
+	 * Fired when the container seeks the video
+	 *
+	 * @event CONTAINER_SEEK
+	 * @param {Number} time the current time in seconds
+	 */
+	Events.CONTAINER_SEEK = 'container:seek';
+	Events.CONTAINER_VOLUME = 'container:volume';
+	Events.CONTAINER_FULLSCREEN = 'container:fullscreen';
+	/**
+	 * Fired when container is buffering
+	 *
+	 * @event CONTAINER_STATE_BUFFERING
+	 */
+	Events.CONTAINER_STATE_BUFFERING = 'container:state:buffering';
+	/**
+	 * Fired when the container filled the buffer
+	 *
+	 * @event CONTAINER_STATE_BUFFERFULL
+	 */
+	Events.CONTAINER_STATE_BUFFERFULL = 'container:state:bufferfull';
+	/**
+	 * Fired when the container changes any settings (volume, seek and etc)
+	 *
+	 * @event CONTAINER_SETTINGSUPDATE
+	 */
+	Events.CONTAINER_SETTINGSUPDATE = 'container:settingsupdate';
+	/**
+	 * Fired when container updates its video quality
+	 *
+	 * @event CONTAINER_HIGHDEFINITIONUPDATE
+	 * @param {Boolean} isHD
+	 * true when is on HD, false otherwise
+	 */
+	Events.CONTAINER_HIGHDEFINITIONUPDATE = 'container:highdefinitionupdate';
+
+	/**
+	 * Fired when the media control shows
+	 *
+	 * @event CONTAINER_MEDIACONTROL_SHOW
+	 */
+	Events.CONTAINER_MEDIACONTROL_SHOW = 'container:mediacontrol:show';
+	/**
+	 * Fired when the media control hides
+	 *
+	 * @event CONTAINER_MEDIACONTROL_HIDE
+	 */
+	Events.CONTAINER_MEDIACONTROL_HIDE = 'container:mediacontrol:hide';
+
+	Events.CONTAINER_MEDIACONTROL_DISABLE = 'container:mediacontrol:disable';
+	Events.CONTAINER_MEDIACONTROL_ENABLE = 'container:mediacontrol:enable';
+	Events.CONTAINER_STATS_ADD = 'container:stats:add';
+	/**
+	 * Fired when the options were changed for the container
+	 *
+	 * @event CONTAINER_OPTIONS_CHANGE
+	 */
+	Events.CONTAINER_OPTIONS_CHANGE = 'container:options:change';
+
+	// MediaControl Events
+	Events.MEDIACONTROL_RENDERED = 'mediacontrol:rendered';
+	/**
+	 * Fired when the player enters/exit on fullscreen
+	 *
+	 * @event MEDIACONTROL_FULLSCREEN
+	 */
+	Events.MEDIACONTROL_FULLSCREEN = 'mediacontrol:fullscreen';
+	/**
+	 * Fired when the media control shows
+	 *
+	 * @event MEDIACONTROL_SHOW
+	 */
+	Events.MEDIACONTROL_SHOW = 'mediacontrol:show';
+	/**
+	 * Fired when the media control hides
+	 *
+	 * @event MEDIACONTROL_HIDE
+	 */
+	Events.MEDIACONTROL_HIDE = 'mediacontrol:hide';
+	/**
+	 * Fired when mouse enters on the seekbar
+	 *
+	 * @event MEDIACONTROL_MOUSEMOVE_SEEKBAR
+	 * @param {Object} event
+	 * the javascript event
+	 */
+	Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR = 'mediacontrol:mousemove:seekbar';
+	/**
+	 * Fired when mouse leaves the seekbar
+	 *
+	 * @event MEDIACONTROL_MOUSELEAVE_SEEKBAR
+	 * @param {Object} event
+	 * the javascript event
+	 */
+	Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR = 'mediacontrol:mouseleave:seekbar';
+	/**
+	 * Fired when the media is being played
+	 *
+	 * @event MEDIACONTROL_PLAYING
+	 */
+	Events.MEDIACONTROL_PLAYING = 'mediacontrol:playing';
+	/**
+	 * Fired when the media is not being played
+	 *
+	 * @event MEDIACONTROL_NOTPLAYING
+	 */
+	Events.MEDIACONTROL_NOTPLAYING = 'mediacontrol:notplaying';
+	/**
+	 * Fired when the container was changed
+	 *
+	 * @event MEDIACONTROL_CONTAINERCHANGED
+	 */
+	Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged';
+
+	// Core Events
+	Events.CORE_CONTAINERS_CREATED = 'core:containers:created';
+	module.exports = exports['default'];
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	module.exports = __webpack_require__(7);
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _vendor = __webpack_require__(8);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	// Use of this source code is governed by a BSD-style
+	// license that can be found in the LICENSE file.
+
+	var BOLD = 'font-weight: bold; font-size: 13px;';
+	var INFO = 'color: #006600;' + BOLD;
+	var DEBUG = 'color: #0000ff;' + BOLD;
+	var WARN = 'color: #ff8000;' + BOLD;
+	var ERROR = 'color: #ff0000;' + BOLD;
+
+	var LEVEL_DEBUG = 0;
+	var LEVEL_INFO = 1;
+	var LEVEL_WARN = 2;
+	var LEVEL_ERROR = 3;
+	var LEVEL_DISABLED = LEVEL_ERROR;
+
+	var COLORS = [DEBUG, INFO, WARN, ERROR, ERROR];
+	var DESCRIPTIONS = ['debug', 'info', 'warn', 'error', 'disabled'];
+
+	var Log = function () {
+	  function Log() {
+	    var _this = this;
+
+	    var level = arguments.length <= 0 || arguments[0] === undefined ? LEVEL_INFO : arguments[0];
+	    var offLevel = arguments.length <= 1 || arguments[1] === undefined ? LEVEL_DISABLED : arguments[1];
+
+	    _classCallCheck(this, Log);
+
+	    this.kibo = new _vendor.Kibo();
+	    this.kibo.down(['ctrl shift d'], function () {
+	      return _this.onOff();
+	    });
+	    this.BLACKLIST = ['timeupdate', 'playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress'];
+	    this.level = level;
+	    this.offLevel = offLevel;
+	  }
+
+	  Log.prototype.debug = function debug(klass) {
+	    this.log(klass, LEVEL_DEBUG, Array.prototype.slice.call(arguments, 1));
+	  };
+
+	  Log.prototype.info = function info(klass) {
+	    this.log(klass, LEVEL_INFO, Array.prototype.slice.call(arguments, 1));
+	  };
+
+	  Log.prototype.warn = function warn(klass) {
+	    this.log(klass, LEVEL_WARN, Array.prototype.slice.call(arguments, 1));
+	  };
+
+	  Log.prototype.error = function error(klass) {
+	    this.log(klass, LEVEL_ERROR, Array.prototype.slice.call(arguments, 1));
+	  };
+
+	  Log.prototype.onOff = function onOff() {
+	    if (this.level === this.offLevel) {
+	      this.level = this.previousLevel;
+	    } else {
+	      this.previousLevel = this.level;
+	      this.level = this.offLevel;
+	    }
+	    // handle instances where console.log is unavailable
+	    if (window.console && window.console.log) {
+	      window.console.log('%c[Clappr.Log] set log level to ' + DESCRIPTIONS[this.level], WARN);
+	    }
+	  };
+
+	  Log.prototype.level = function level(newLevel) {
+	    this.level = newLevel;
+	  };
+
+	  Log.prototype.log = function log(klass, level, message) {
+	    if (this.BLACKLIST.indexOf(message[0]) >= 0) return;
+	    if (level < this.level) return;
+
+	    if (!message) {
+	      message = klass;
+	      klass = null;
+	    }
+	    var klassDescription = '';
+	    var color = COLORS[level];
+	    if (klass) {
+	      klassDescription = '[' + klass + ']';
+	    }
+	    if (window.console && window.console.log) {
+	      window.console.log.apply(console, ['%c[' + DESCRIPTIONS[level] + ']' + klassDescription, color].concat(message));
+	    }
+	  };
+
+	  return Log;
+	}();
+
+	exports.default = Log;
+
+
+	Log.LEVEL_DEBUG = LEVEL_DEBUG;
+	Log.LEVEL_INFO = LEVEL_INFO;
+	Log.LEVEL_WARN = LEVEL_WARN;
+	Log.LEVEL_ERROR = LEVEL_ERROR;
+
+	Log.getInstance = function () {
+	  if (this._instance === undefined) {
+	    this._instance = new this();
+	    this._instance.previousLevel = this._instance.level;
+	    this._instance.level = this._instance.offLevel;
+	  }
+	  return this._instance;
+	};
+
+	Log.setLevel = function (level) {
+	  this.getInstance().level = level;
+	};
+
+	Log.debug = function () {
+	  this.getInstance().debug.apply(this.getInstance(), arguments);
+	};
+	Log.info = function () {
+	  this.getInstance().info.apply(this.getInstance(), arguments);
+	};
+	Log.warn = function () {
+	  this.getInstance().warn.apply(this.getInstance(), arguments);
+	};
+	Log.error = function () {
+	  this.getInstance().error.apply(this.getInstance(), arguments);
+	};
+	module.exports = exports['default'];
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _kibo = __webpack_require__(9);
+
+	var _kibo2 = _interopRequireDefault(_kibo);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = { Kibo: _kibo2.default };
+	module.exports = exports['default'];
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	/* eslint-disable */
+	// Kibo is released under the MIT License. Copyright (c) 2013 marquete.
+	// see https://github.com/marquete/kibo
+
+	var Kibo = function Kibo(element) {
+	  this.element = element || window.document;
+	  this.initialize();
+	};
+
+	Kibo.KEY_NAMES_BY_CODE = {
+	  8: 'backspace', 9: 'tab', 13: 'enter',
+	  16: 'shift', 17: 'ctrl', 18: 'alt',
+	  20: 'caps_lock',
+	  27: 'esc',
+	  32: 'space',
+	  37: 'left', 38: 'up', 39: 'right', 40: 'down',
+	  48: '0', 49: '1', 50: '2', 51: '3', 52: '4', 53: '5', 54: '6', 55: '7', 56: '8', 57: '9',
+	  65: 'a', 66: 'b', 67: 'c', 68: 'd', 69: 'e', 70: 'f', 71: 'g', 72: 'h', 73: 'i', 74: 'j',
+	  75: 'k', 76: 'l', 77: 'm', 78: 'n', 79: 'o', 80: 'p', 81: 'q', 82: 'r', 83: 's', 84: 't',
+	  85: 'u', 86: 'v', 87: 'w', 88: 'x', 89: 'y', 90: 'z', 112: 'f1', 113: 'f2', 114: 'f3',
+	  115: 'f4', 116: 'f5', 117: 'f6', 118: 'f7', 119: 'f8', 120: 'f9', 121: 'f10', 122: 'f11', 123: 'f12'
+	};
+
+	Kibo.KEY_CODES_BY_NAME = {};
+	(function () {
+	  for (var key in Kibo.KEY_NAMES_BY_CODE) {
+	    if (Object.prototype.hasOwnProperty.call(Kibo.KEY_NAMES_BY_CODE, key)) {
+	      Kibo.KEY_CODES_BY_NAME[Kibo.KEY_NAMES_BY_CODE[key]] = +key;
+	    }
+	  }
+	})();
+
+	Kibo.MODIFIERS = ['shift', 'ctrl', 'alt'];
+
+	Kibo.registerEvent = function () {
+	  if (document.addEventListener) {
+	    return function (element, eventName, func) {
+	      element.addEventListener(eventName, func, false);
+	    };
+	  } else if (document.attachEvent) {
+	    return function (element, eventName, func) {
+	      element.attachEvent('on' + eventName, func);
+	    };
+	  }
+	}();
+
+	Kibo.unregisterEvent = function () {
+	  if (document.removeEventListener) {
+	    return function (element, eventName, func) {
+	      element.removeEventListener(eventName, func, false);
+	    };
+	  } else if (document.detachEvent) {
+	    return function (element, eventName, func) {
+	      element.detachEvent('on' + eventName, func);
+	    };
+	  }
+	}();
+
+	Kibo.stringContains = function (string, substring) {
+	  return string.indexOf(substring) !== -1;
+	};
+
+	Kibo.neatString = function (string) {
+	  return string.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ');
+	};
+
+	Kibo.capitalize = function (string) {
+	  return string.toLowerCase().replace(/^./, function (match) {
+	    return match.toUpperCase();
+	  });
+	};
+
+	Kibo.isString = function (what) {
+	  return Kibo.stringContains(Object.prototype.toString.call(what), 'String');
+	};
+
+	Kibo.arrayIncludes = function () {
+	  if (Array.prototype.indexOf) {
+	    return function (haystack, needle) {
+	      return haystack.indexOf(needle) !== -1;
+	    };
+	  } else {
+	    return function (haystack, needle) {
+	      for (var i = 0; i < haystack.length; i++) {
+	        if (haystack[i] === needle) {
+	          return true;
+	        }
+	      }
+	      return false;
+	    };
+	  }
+	}();
+
+	Kibo.extractModifiers = function (keyCombination) {
+	  var modifiers, i;
+	  modifiers = [];
+	  for (i = 0; i < Kibo.MODIFIERS.length; i++) {
+	    if (Kibo.stringContains(keyCombination, Kibo.MODIFIERS[i])) {
+	      modifiers.push(Kibo.MODIFIERS[i]);
+	    }
+	  }
+	  return modifiers;
+	};
+
+	Kibo.extractKey = function (keyCombination) {
+	  var keys, i;
+	  keys = Kibo.neatString(keyCombination).split(' ');
+	  for (i = 0; i < keys.length; i++) {
+	    if (!Kibo.arrayIncludes(Kibo.MODIFIERS, keys[i])) {
+	      return keys[i];
+	    }
+	  }
+	};
+
+	Kibo.modifiersAndKey = function (keyCombination) {
+	  var result, key;
+
+	  if (Kibo.stringContains(keyCombination, 'any')) {
+	    return Kibo.neatString(keyCombination).split(' ').slice(0, 2).join(' ');
+	  }
+
+	  result = Kibo.extractModifiers(keyCombination);
+
+	  key = Kibo.extractKey(keyCombination);
+	  if (key && !Kibo.arrayIncludes(Kibo.MODIFIERS, key)) {
+	    result.push(key);
+	  }
+
+	  return result.join(' ');
+	};
+
+	Kibo.keyName = function (keyCode) {
+	  return Kibo.KEY_NAMES_BY_CODE[keyCode + ''];
+	};
+
+	Kibo.keyCode = function (keyName) {
+	  return +Kibo.KEY_CODES_BY_NAME[keyName];
+	};
+
+	Kibo.prototype.initialize = function () {
+	  var i,
+	      that = this;
+
+	  this.lastKeyCode = -1;
+	  this.lastModifiers = {};
+	  for (i = 0; i < Kibo.MODIFIERS.length; i++) {
+	    this.lastModifiers[Kibo.MODIFIERS[i]] = false;
+	  }
+
+	  this.keysDown = { any: [] };
+	  this.keysUp = { any: [] };
+	  this.downHandler = this.handler('down');
+	  this.upHandler = this.handler('up');
+
+	  Kibo.registerEvent(this.element, 'keydown', this.downHandler);
+	  Kibo.registerEvent(this.element, 'keyup', this.upHandler);
+	  Kibo.registerEvent(window, 'unload', function unloader() {
+	    Kibo.unregisterEvent(that.element, 'keydown', that.downHandler);
+	    Kibo.unregisterEvent(that.element, 'keyup', that.upHandler);
+	    Kibo.unregisterEvent(window, 'unload', unloader);
+	  });
+	};
+
+	Kibo.prototype.handler = function (upOrDown) {
+	  var that = this;
+	  return function (e) {
+	    var i, registeredKeys, lastModifiersAndKey;
+
+	    e = e || window.event;
+
+	    that.lastKeyCode = e.keyCode;
+	    for (i = 0; i < Kibo.MODIFIERS.length; i++) {
+	      that.lastModifiers[Kibo.MODIFIERS[i]] = e[Kibo.MODIFIERS[i] + 'Key'];
+	    }
+	    if (Kibo.arrayIncludes(Kibo.MODIFIERS, Kibo.keyName(that.lastKeyCode))) {
+	      that.lastModifiers[Kibo.keyName(that.lastKeyCode)] = true;
+	    }
+
+	    registeredKeys = that['keys' + Kibo.capitalize(upOrDown)];
+
+	    for (i = 0; i < registeredKeys.any.length; i++) {
+	      if (registeredKeys.any[i](e) === false && e.preventDefault) {
+	        e.preventDefault();
+	      }
+	    }
+
+	    lastModifiersAndKey = that.lastModifiersAndKey();
+	    if (registeredKeys[lastModifiersAndKey]) {
+	      for (i = 0; i < registeredKeys[lastModifiersAndKey].length; i++) {
+	        if (registeredKeys[lastModifiersAndKey][i](e) === false && e.preventDefault) {
+	          e.preventDefault();
+	        }
+	      }
+	    }
+	  };
+	};
+
+	Kibo.prototype.registerKeys = function (upOrDown, newKeys, func) {
+	  var i,
+	      keys,
+	      registeredKeys = this['keys' + Kibo.capitalize(upOrDown)];
+
+	  if (Kibo.isString(newKeys)) {
+	    newKeys = [newKeys];
+	  }
+
+	  for (i = 0; i < newKeys.length; i++) {
+	    keys = newKeys[i];
+	    keys = Kibo.modifiersAndKey(keys + '');
+
+	    if (registeredKeys[keys]) {
+	      registeredKeys[keys].push(func);
+	    } else {
+	      registeredKeys[keys] = [func];
+	    }
+	  }
+
+	  return this;
+	};
+
+	// jshint maxdepth:5
+	Kibo.prototype.unregisterKeys = function (upOrDown, newKeys, func) {
+	  var i,
+	      j,
+	      keys,
+	      registeredKeys = this['keys' + Kibo.capitalize(upOrDown)];
+
+	  if (Kibo.isString(newKeys)) {
+	    newKeys = [newKeys];
+	  }
+
+	  for (i = 0; i < newKeys.length; i++) {
+	    keys = newKeys[i];
+	    keys = Kibo.modifiersAndKey(keys + '');
+
+	    if (func === null) {
+	      delete registeredKeys[keys];
+	    } else {
+	      if (registeredKeys[keys]) {
+	        for (j = 0; j < registeredKeys[keys].length; j++) {
+	          if (String(registeredKeys[keys][j]) === String(func)) {
+	            registeredKeys[keys].splice(j, 1);
+	            break;
+	          }
+	        }
+	      }
+	    }
+	  }
+
+	  return this;
+	};
+
+	Kibo.prototype.off = function (keys) {
+	  return this.unregisterKeys('down', keys, null);
+	};
+
+	Kibo.prototype.delegate = function (upOrDown, keys, func) {
+	  return func !== null || func !== undefined ? this.registerKeys(upOrDown, keys, func) : this.unregisterKeys(upOrDown, keys, func);
+	};
+
+	Kibo.prototype.down = function (keys, func) {
+	  return this.delegate('down', keys, func);
+	};
+
+	Kibo.prototype.up = function (keys, func) {
+	  return this.delegate('up', keys, func);
+	};
+
+	Kibo.prototype.lastKey = function (modifier) {
+	  if (!modifier) {
+	    return Kibo.keyName(this.lastKeyCode);
+	  }
+
+	  return this.lastModifiers[modifier];
+	};
+
+	Kibo.prototype.lastModifiersAndKey = function () {
+	  var result, i;
+
+	  result = [];
+	  for (i = 0; i < Kibo.MODIFIERS.length; i++) {
+	    if (this.lastKey(Kibo.MODIFIERS[i])) {
+	      result.push(Kibo.MODIFIERS[i]);
+	    }
+	  }
+
+	  if (!Kibo.arrayIncludes(result, this.lastKey())) {
+	    result.push(this.lastKey());
+	  }
+
+	  return result.join(' ');
+	};
+
+	exports.default = Kibo;
+	module.exports = exports['default'];
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	/**
+	 * lodash 4.0.0 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modularize exports="npm" -o ./`
+	 * Copyright 2012-2016 The Dojo Foundation <http://dojofoundation.org/>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright 2009-2016 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 * Available under MIT license <https://lodash.com/license>
+	 */
+	var before = __webpack_require__(11);
+
+	/**
+	 * Creates a function that is restricted to invoking `func` once. Repeat calls
+	 * to the function return the value of the first invocation. The `func` is
+	 * invoked with the `this` binding and arguments of the created function.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Function
+	 * @param {Function} func The function to restrict.
+	 * @returns {Function} Returns the new restricted function.
+	 * @example
+	 *
+	 * var initialize = _.once(createApplication);
+	 * initialize();
+	 * initialize();
+	 * // `initialize` invokes `createApplication` once
+	 */
+	function once(func) {
+	  return before(2, func);
+	}
+
+	module.exports = once;
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	/**
+	 * lodash 4.0.2 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modularize exports="npm" -o ./`
+	 * Copyright jQuery Foundation and other contributors <https://jquery.org/>
+	 * Released under MIT license <https://lodash.com/license>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 */
+
+	/** Used as the `TypeError` message for "Functions" methods. */
+	var FUNC_ERROR_TEXT = 'Expected a function';
+
+	/** Used as references for various `Number` constants. */
+	var INFINITY = 1 / 0,
+	    MAX_INTEGER = 1.7976931348623157e+308,
+	    NAN = 0 / 0;
+
+	/** `Object#toString` result references. */
+	var funcTag = '[object Function]',
+	    genTag = '[object GeneratorFunction]',
+	    symbolTag = '[object Symbol]';
+
+	/** Used to match leading and trailing whitespace. */
+	var reTrim = /^\s+|\s+$/g;
+
+	/** Used to detect bad signed hexadecimal string values. */
+	var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
+
+	/** Used to detect binary string values. */
+	var reIsBinary = /^0b[01]+$/i;
+
+	/** Used to detect octal string values. */
+	var reIsOctal = /^0o[0-7]+$/i;
+
+	/** Built-in method references without a dependency on `root`. */
+	var freeParseInt = parseInt;
+
+	/** Used for built-in method references. */
+	var objectProto = Object.prototype;
+
+	/**
+	 * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var objectToString = objectProto.toString;
+
+	/**
+	 * Creates a function that invokes `func`, with the `this` binding and arguments
+	 * of the created function, while it's called less than `n` times. Subsequent
+	 * calls to the created function return the result of the last `func` invocation.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 3.0.0
+	 * @category Function
+	 * @param {number} n The number of calls at which `func` is no longer invoked.
+	 * @param {Function} func The function to restrict.
+	 * @returns {Function} Returns the new restricted function.
+	 * @example
+	 *
+	 * jQuery(element).on('click', _.before(5, addContactToList));
+	 * // => allows adding up to 4 contacts to the list
+	 */
+	function before(n, func) {
+	  var result;
+	  if (typeof func != 'function') {
+	    throw new TypeError(FUNC_ERROR_TEXT);
+	  }
+	  n = toInteger(n);
+	  return function () {
+	    if (--n > 0) {
+	      result = func.apply(this, arguments);
+	    }
+	    if (n <= 1) {
+	      func = undefined;
+	    }
+	    return result;
+	  };
+	}
+
+	/**
+	 * Checks if `value` is classified as a `Function` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified,
+	 *  else `false`.
+	 * @example
+	 *
+	 * _.isFunction(_);
+	 * // => true
+	 *
+	 * _.isFunction(/abc/);
+	 * // => false
+	 */
+	function isFunction(value) {
+	  // The use of `Object#toString` avoids issues with the `typeof` operator
+	  // in Safari 8 which returns 'object' for typed array and weak map constructors,
+	  // and PhantomJS 1.9 which returns 'function' for `NodeList` instances.
+	  var tag = isObject(value) ? objectToString.call(value) : '';
+	  return tag == funcTag || tag == genTag;
+	}
+
+	/**
+	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
+	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+	 * @example
+	 *
+	 * _.isObject({});
+	 * // => true
+	 *
+	 * _.isObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObject(_.noop);
+	 * // => true
+	 *
+	 * _.isObject(null);
+	 * // => false
+	 */
+	function isObject(value) {
+	  var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
+	  return !!value && (type == 'object' || type == 'function');
+	}
+
+	/**
+	 * Checks if `value` is object-like. A value is object-like if it's not `null`
+	 * and has a `typeof` result of "object".
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+	 * @example
+	 *
+	 * _.isObjectLike({});
+	 * // => true
+	 *
+	 * _.isObjectLike([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObjectLike(_.noop);
+	 * // => false
+	 *
+	 * _.isObjectLike(null);
+	 * // => false
+	 */
+	function isObjectLike(value) {
+	  return !!value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) == 'object';
+	}
+
+	/**
+	 * Checks if `value` is classified as a `Symbol` primitive or object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified,
+	 *  else `false`.
+	 * @example
+	 *
+	 * _.isSymbol(Symbol.iterator);
+	 * // => true
+	 *
+	 * _.isSymbol('abc');
+	 * // => false
+	 */
+	function isSymbol(value) {
+	  return (typeof value === 'undefined' ? 'undefined' : _typeof(value)) == 'symbol' || isObjectLike(value) && objectToString.call(value) == symbolTag;
+	}
+
+	/**
+	 * Converts `value` to an integer.
+	 *
+	 * **Note:** This function is loosely based on
+	 * [`ToInteger`](http://www.ecma-international.org/ecma-262/6.0/#sec-tointeger).
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to convert.
+	 * @returns {number} Returns the converted integer.
+	 * @example
+	 *
+	 * _.toInteger(3);
+	 * // => 3
+	 *
+	 * _.toInteger(Number.MIN_VALUE);
+	 * // => 0
+	 *
+	 * _.toInteger(Infinity);
+	 * // => 1.7976931348623157e+308
+	 *
+	 * _.toInteger('3');
+	 * // => 3
+	 */
+	function toInteger(value) {
+	  if (!value) {
+	    return value === 0 ? value : 0;
+	  }
+	  value = toNumber(value);
+	  if (value === INFINITY || value === -INFINITY) {
+	    var sign = value < 0 ? -1 : 1;
+	    return sign * MAX_INTEGER;
+	  }
+	  var remainder = value % 1;
+	  return value === value ? remainder ? value - remainder : value : 0;
+	}
+
+	/**
+	 * Converts `value` to a number.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to process.
+	 * @returns {number} Returns the number.
+	 * @example
+	 *
+	 * _.toNumber(3);
+	 * // => 3
+	 *
+	 * _.toNumber(Number.MIN_VALUE);
+	 * // => 5e-324
+	 *
+	 * _.toNumber(Infinity);
+	 * // => Infinity
+	 *
+	 * _.toNumber('3');
+	 * // => 3
+	 */
+	function toNumber(value) {
+	  if (typeof value == 'number') {
+	    return value;
+	  }
+	  if (isSymbol(value)) {
+	    return NAN;
+	  }
+	  if (isObject(value)) {
+	    var other = isFunction(value.valueOf) ? value.valueOf() : value;
+	    value = isObject(other) ? other + '' : other;
+	  }
+	  if (typeof value != 'string') {
+	    return value === 0 ? value : +value;
+	  }
+	  value = value.replace(reTrim, '');
+	  var isBinary = reIsBinary.test(value);
+	  return isBinary || reIsOctal.test(value) ? freeParseInt(value.slice(2), isBinary ? 2 : 8) : reIsBadHex.test(value) ? NAN : +value;
+	}
+
+	module.exports = before;
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	module.exports = __webpack_require__(13);
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _base_object = __webpack_require__(4);
+
+	var _base_object2 = _interopRequireDefault(_base_object);
+
+	var _core = __webpack_require__(14);
+
+	var _core2 = _interopRequireDefault(_core);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // Copyright 2014 Globo.com Player authors. All rights reserved.
+	// Use of this source code is governed by a BSD-style
+	// license that can be found in the LICENSE file.
+
+	/**
+	 * The Core Factory is responsible for instantiate the core and it's plugins.
+	 * @class CoreFactory
+	 * @constructor
+	 * @extends BaseObject
+	 * @module components
+	 */
+
+	var CoreFactory = function (_BaseObject) {
+	  _inherits(CoreFactory, _BaseObject);
+
+	  _createClass(CoreFactory, [{
+	    key: 'loader',
+	    get: function get() {
+	      return this.player.loader;
+	    }
+
+	    /**
+	     * it builds the core factory
+	     * @method constructor
+	     * @param {Player} player the player object
+	     */
+
+	  }]);
+
+	  function CoreFactory(player) {
+	    _classCallCheck(this, CoreFactory);
+
+	    var _this = _possibleConstructorReturn(this, _BaseObject.call(this));
+
+	    _this.player = player;
+	    _this.options = player.options;
+	    return _this;
+	  }
+
+	  /**
+	   * creates a core and its plugins
+	   * @method create
+	   * @return {Core} created core
+	   */
+
+
+	  CoreFactory.prototype.create = function create() {
+	    this.options.loader = this.loader;
+	    this.core = new _core2.default(this.options);
+	    this.addCorePlugins();
+	    this.core.createContainers(this.options);
+	    return this.core;
+	  };
+
+	  /**
+	   * given the core plugins (`loader.corePlugins`) it builds each one
+	   * @method addCorePlugins
+	   * @return {Core} the core with all plugins
+	   */
+
+
+	  CoreFactory.prototype.addCorePlugins = function addCorePlugins() {
+	    var _this2 = this;
+
+	    this.loader.corePlugins.forEach(function (Plugin) {
+	      var plugin = new Plugin(_this2.core);
+	      _this2.core.addPlugin(plugin);
+	      _this2.setupExternalInterface(plugin);
+	    });
+	    return this.core;
+	  };
+
+	  CoreFactory.prototype.setupExternalInterface = function setupExternalInterface(plugin) {
+	    var externalFunctions = plugin.getExternalInterface();
+	    for (var key in externalFunctions) {
+	      this.player[key] = externalFunctions[key].bind(plugin);
+	    }
+	  };
+
+	  return CoreFactory;
+	}(_base_object2.default);
+
+	exports.default = CoreFactory;
+	module.exports = exports['default'];
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	module.exports = __webpack_require__(15);
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _utils = __webpack_require__(2);
+
+	var _events = __webpack_require__(5);
+
+	var _events2 = _interopRequireDefault(_events);
+
+	var _styler = __webpack_require__(16);
+
+	var _styler2 = _interopRequireDefault(_styler);
+
+	var _ui_object = __webpack_require__(19);
+
+	var _ui_object2 = _interopRequireDefault(_ui_object);
+
+	var _browser = __webpack_require__(3);
+
+	var _browser2 = _interopRequireDefault(_browser);
+
+	var _container_factory = __webpack_require__(24);
+
+	var _container_factory2 = _interopRequireDefault(_container_factory);
+
+	var _media_control = __webpack_require__(35);
+
+	var _media_control2 = _interopRequireDefault(_media_control);
+
+	var _mediator = __webpack_require__(38);
+
+	var _mediator2 = _interopRequireDefault(_mediator);
+
+	var _player_info = __webpack_require__(51);
+
+	var _player_info2 = _interopRequireDefault(_player_info);
+
+	var _lodash = __webpack_require__(30);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _clapprZepto = __webpack_require__(17);
+
+	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
+
+	var _style = __webpack_require__(52);
+
+	var _style2 = _interopRequireDefault(_style);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // Copyright 2014 Globo.com Player authors. All rights reserved.
+	// Use of this source code is governed by a BSD-style
+	// license that can be found in the LICENSE file.
+
+	/**
+	 * The Core is responsible to manage Containers, the mediator, MediaControl
+	 * and the player state.
+	 * @class Core
+	 * @constructor
+	 * @extends UIObject
+	 * @module components
+	 */
+
+	var Core = function (_UIObject) {
+	  _inherits(Core, _UIObject);
+
+	  _createClass(Core, [{
+	    key: 'events',
+	    get: function get() {
+	      return {
+	        'webkitfullscreenchange': 'handleFullscreenChange',
+	        'mousemove': 'showMediaControl',
+	        'mouseleave': 'hideMediaControl'
+	      };
+	    }
+	  }, {
+	    key: 'attributes',
+	    get: function get() {
+	      return {
+	        'data-player': '',
+	        tabindex: 9999
+	      };
+	    }
+
+	    /**
+	     * checks if the core is ready.
+	     * @property isReady
+	     * @type {Boolean} `true` if the core is ready, otherwise `false`
+	     */
+
+	  }, {
+	    key: 'isReady',
+	    get: function get() {
+	      return !!this.ready;
+	    }
+	  }]);
+
+	  function Core(options) {
+	    _classCallCheck(this, Core);
+
+	    var _this = _possibleConstructorReturn(this, _UIObject.call(this, options));
+
+	    _this.playerInfo = _player_info2.default.getInstance(options.playerId);
+	    _this.firstResize = true;
+	    _this.options = options;
+	    _this.plugins = [];
+	    _this.containers = [];
+	    _this.setupMediaControl(null);
+	    //FIXME fullscreen api sucks
+	    _this._boundFullscreenHandler = function () {
+	      return _this.handleFullscreenChange();
+	    };
+	    (0, _clapprZepto2.default)(document).bind('fullscreenchange', _this._boundFullscreenHandler);
+	    (0, _clapprZepto2.default)(document).bind('MSFullscreenChange', _this._boundFullscreenHandler);
+	    (0, _clapprZepto2.default)(document).bind('mozfullscreenchange', _this._boundFullscreenHandler);
+	    return _this;
+	  }
+
+	  Core.prototype.createContainers = function createContainers(options) {
+	    var _this2 = this;
+
+	    this.defer = _clapprZepto2.default.Deferred();
+	    this.defer.promise(this);
+	    this.containerFactory = new _container_factory2.default(options, options.loader);
+	    this.containerFactory.createContainers().then(function (containers) {
+	      return _this2.setupContainers(containers);
+	    }).then(function (containers) {
+	      return _this2.resolveOnContainersReady(containers);
+	    });
+	  };
+
+	  Core.prototype.updateSize = function updateSize() {
+	    if (_utils.Fullscreen.isFullscreen()) {
+	      this.setFullscreen();
+	    } else {
+	      this.setPlayerSize();
+	    }
+	  };
+
+	  Core.prototype.setFullscreen = function setFullscreen() {
+	    if (!_browser2.default.isiOS) {
+	      this.$el.addClass('fullscreen');
+	      this.$el.removeAttr('style');
+	      this.playerInfo.previousSize = { width: this.options.width, height: this.options.height };
+	      this.playerInfo.currentSize = { width: (0, _clapprZepto2.default)(window).width(), height: (0, _clapprZepto2.default)(window).height() };
+	    }
+	  };
+
+	  Core.prototype.setPlayerSize = function setPlayerSize() {
+	    this.$el.removeClass('fullscreen');
+	    this.playerInfo.currentSize = this.playerInfo.previousSize;
+	    this.playerInfo.previousSize = { width: (0, _clapprZepto2.default)(window).width(), height: (0, _clapprZepto2.default)(window).height() };
+	    this.resize(this.playerInfo.currentSize);
+	  };
+
+	  Core.prototype.resize = function resize(options) {
+	    if (!(0, _utils.isNumber)(options.height) && !(0, _utils.isNumber)(options.width)) {
+	      this.el.style.height = '' + options.height;
+	      this.el.style.width = '' + options.width;
+	    } else {
+	      this.el.style.height = options.height + 'px';
+	      this.el.style.width = options.width + 'px';
+	    }
+	    this.playerInfo.previousSize = { width: this.options.width, height: this.options.height };
+	    this.options.width = options.width;
+	    this.options.height = options.height;
+	    this.playerInfo.currentSize = options;
+	    this.triggerResize(this.playerInfo.currentSize);
+	  };
+
+	  Core.prototype.enableResizeObserver = function enableResizeObserver() {
+	    var _this3 = this;
+
+	    var checkSizeCallback = function checkSizeCallback() {
+	      if (_this3.playerInfo.computedSize.width != _this3.el.clientWidth || _this3.playerInfo.computedSize.height != _this3.el.clientHeight) {
+	        _this3.playerInfo.computedSize = { width: _this3.el.clientWidth, height: _this3.el.clientHeight };
+	        _this3.triggerResize(_this3.playerInfo.computedSize);
+	      }
+	    };
+	    this.resizeObserverInterval = setInterval(checkSizeCallback, 500);
+	  };
+
+	  Core.prototype.triggerResize = function triggerResize(newSize) {
+	    var thereWasChange = this.firstResize || this.oldHeight !== newSize.height || this.oldWidth !== newSize.width;
+	    if (thereWasChange) {
+	      _mediator2.default.trigger(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, newSize);
+	      this.oldHeight = newSize.height;
+	      this.oldWidth = newSize.width;
+	      this.firstResize = false;
+	    }
+	  };
+
+	  Core.prototype.disableResizeObserver = function disableResizeObserver() {
+	    if (this.resizeObserverInterval) clearInterval(this.resizeObserverInterval);
+	  };
+
+	  Core.prototype.resolveOnContainersReady = function resolveOnContainersReady(containers) {
+	    var _this4 = this;
+
+	    _clapprZepto2.default.when.apply(_clapprZepto2.default, containers).done(function () {
+	      _this4.defer.resolve(_this4);
+	      _this4.ready = true;
+	      _this4.trigger(_events2.default.CORE_READY);
+	    });
+	  };
+
+	  Core.prototype.addPlugin = function addPlugin(plugin) {
+	    this.plugins.push(plugin);
+	  };
+
+	  Core.prototype.hasPlugin = function hasPlugin(name) {
+	    return !!this.getPlugin(name);
+	  };
+
+	  Core.prototype.getPlugin = function getPlugin(name) {
+	    return (0, _lodash2.default)(this.plugins, function (plugin) {
+	      return plugin.name === name;
+	    });
+	  };
+
+	  Core.prototype.load = function load(sources, mimeType) {
+	    var _this5 = this;
+
+	    this.options.mimeType = mimeType;
+	    sources = sources && sources.constructor === Array ? sources : [sources];
+	    this.containers.forEach(function (container) {
+	      return container.destroy();
+	    });
+	    this.mediaControl.container = null;
+	    this.containerFactory.options = _clapprZepto2.default.extend(this.options, { sources: sources });
+	    this.containerFactory.createContainers().then(function (containers) {
+	      _this5.setupContainers(containers);
+	    });
+	  };
+
+	  Core.prototype.destroy = function destroy() {
+	    this.disableResizeObserver();
+	    this.containers.forEach(function (container) {
+	      return container.destroy();
+	    });
+	    this.plugins.forEach(function (plugin) {
+	      return plugin.destroy();
+	    });
+	    this.$el.remove();
+	    this.mediaControl.destroy();
+	    (0, _clapprZepto2.default)(document).unbind('fullscreenchange', this._boundFullscreenHandler);
+	    (0, _clapprZepto2.default)(document).unbind('MSFullscreenChange', this._boundFullscreenHandler);
+	    (0, _clapprZepto2.default)(document).unbind('mozfullscreenchange', this._boundFullscreenHandler);
+	  };
+
+	  Core.prototype.handleFullscreenChange = function handleFullscreenChange() {
+	    this.trigger(_events2.default.CORE_FULLSCREEN, _utils.Fullscreen.isFullscreen());
+	    this.updateSize();
+	    this.mediaControl.show();
+	  };
+
+	  Core.prototype.setMediaControlContainer = function setMediaControlContainer(container) {
+	    this.mediaControl.setContainer(container);
+	    this.mediaControl.render();
+	  };
+
+	  Core.prototype.disableMediaControl = function disableMediaControl() {
+	    this.mediaControl.disable();
+	    this.$el.removeClass('nocursor');
+	  };
+
+	  Core.prototype.enableMediaControl = function enableMediaControl() {
+	    this.mediaControl.enable();
+	  };
+
+	  Core.prototype.removeContainer = function removeContainer(container) {
+	    this.stopListening(container);
+	    this.containers = this.containers.filter(function (c) {
+	      return c !== container;
+	    });
+	  };
+
+	  Core.prototype.appendContainer = function appendContainer(container) {
+	    this.listenTo(container, _events2.default.CONTAINER_DESTROYED, this.removeContainer);
+	    this.containers.push(container);
+	  };
+
+	  Core.prototype.setupContainers = function setupContainers(containers) {
+	    containers.map(this.appendContainer.bind(this));
+	    this.trigger(_events2.default.CORE_CONTAINERS_CREATED);
+	    this.renderContainers();
+	    this.setupMediaControl(this.getCurrentContainer());
+	    this.render();
+	    this.$el.appendTo(this.options.parentElement);
+	    return this.containers;
+	  };
+
+	  Core.prototype.renderContainers = function renderContainers() {
+	    var _this6 = this;
+
+	    this.containers.map(function (container) {
+	      return _this6.el.appendChild(container.render().el);
+	    });
+	  };
+
+	  Core.prototype.createContainer = function createContainer(source, options) {
+	    var container = this.containerFactory.createContainer(source, options);
+	    this.appendContainer(container);
+	    this.el.appendChild(container.render().el);
+	    return container;
+	  };
+
+	  Core.prototype.setupMediaControl = function setupMediaControl(container) {
+	    if (this.mediaControl) {
+	      this.mediaControl.setContainer(container);
+	    } else {
+	      this.mediaControl = this.createMediaControl(_clapprZepto2.default.extend({ container: container, focusElement: this.el }, this.options));
+	      this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_FULLSCREEN, this.toggleFullscreen);
+	      this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_SHOW, this.onMediaControlShow.bind(this, true));
+	      this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_HIDE, this.onMediaControlShow.bind(this, false));
+	    }
+	  };
+
+	  Core.prototype.createMediaControl = function createMediaControl(options) {
+	    if (options.mediacontrol && options.mediacontrol.external) {
+	      return new options.mediacontrol.external(options).render();
+	    } else {
+	      return new _media_control2.default(options).render();
+	    }
+	  };
+
+	  Core.prototype.getCurrentContainer = function getCurrentContainer() {
+	    if (!this.mediaControl || !this.mediaControl.container) {
+	      return this.containers[0];
+	    }
+	    return this.mediaControl.container;
+	  };
+
+	  Core.prototype.getCurrentPlayback = function getCurrentPlayback() {
+	    var container = this.getCurrentContainer();
+	    return container && container.playback;
+	  };
+
+	  Core.prototype.getPlaybackType = function getPlaybackType() {
+	    var container = this.getCurrentContainer();
+	    return container && container.getPlaybackType();
+	  };
+
+	  Core.prototype.toggleFullscreen = function toggleFullscreen() {
+	    if (!_utils.Fullscreen.isFullscreen()) {
+	      _utils.Fullscreen.requestFullscreen(this.el);
+	      if (!_browser2.default.isiOS) {
+	        this.$el.addClass('fullscreen');
+	      }
+	    } else {
+	      _utils.Fullscreen.cancelFullscreen();
+	      if (!_browser2.default.isiOS) {
+	        this.$el.removeClass('fullscreen nocursor');
+	      }
+	    }
+	    this.mediaControl.show();
+	  };
+
+	  Core.prototype.showMediaControl = function showMediaControl(event) {
+	    this.mediaControl.show(event);
+	  };
+
+	  Core.prototype.hideMediaControl = function hideMediaControl() {
+	    this.mediaControl.hide(this.options.hideMediaControlDelay);
+	  };
+
+	  Core.prototype.onMediaControlShow = function onMediaControlShow(showing) {
+	    this.getCurrentContainer().trigger(showing ? _events2.default.CONTAINER_MEDIACONTROL_SHOW : _events2.default.CONTAINER_MEDIACONTROL_HIDE);
+
+	    if (showing) this.$el.removeClass('nocursor');else if (_utils.Fullscreen.isFullscreen()) this.$el.addClass('nocursor');
+	  };
+
+	  /**
+	   * enables to configure the container after its creation
+	   * @method configure
+	   * @param {Object} options all the options to change in form of a javascript object
+	   */
+
+
+	  Core.prototype.configure = function configure(options) {
+	    var _this7 = this;
+
+	    this.options = _clapprZepto2.default.extend(this.options, options);
+	    var sources = options.source || options.sources;
+
+	    if (sources) {
+	      this.load(sources, options.mimeType || this.options.mimeType);
+	    } else {
+	      this.trigger(_events2.default.CORE_OPTIONS_CHANGE);
+
+	      this.containers.forEach(function (container) {
+	        container.configure(_this7.options);
+	      });
+	    }
+	  };
+
+	  Core.prototype.render = function render() {
+	    var style = _styler2.default.getStyleFor(_style2.default, { baseUrl: this.options.baseUrl });
+	    this.$el.append(style);
+	    this.$el.append(this.mediaControl.render().el);
+
+	    this.options.width = this.options.width || this.$el.width();
+	    this.options.height = this.options.height || this.$el.height();
+	    var size = { width: this.options.width, height: this.options.height };
+	    this.playerInfo.previousSize = this.playerInfo.currentSize = this.playerInfo.computedSize = size;
+	    this.updateSize();
+
+	    this.previousSize = { width: this.$el.width(), height: this.$el.height() };
+
+	    this.enableResizeObserver();
+
+	    return this;
+	  };
+
+	  return Core;
+	}(_ui_object2.default);
+
+	exports.default = Core;
+	module.exports = exports['default'];
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _clapprZepto = __webpack_require__(17);
+
+	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
+
+	var _template = __webpack_require__(18);
+
+	var _template2 = _interopRequireDefault(_template);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// Copyright 2014 Globo.com Player authors. All rights reserved.
+	// Use of this source code is governed by a BSD-style
+	// license that can be found in the LICENSE file.
+
+	var Styler = {
+	  getStyleFor: function getStyleFor(style) {
+	    var options = arguments.length <= 1 || arguments[1] === undefined ? { baseUrl: '' } : arguments[1];
+
+	    return (0, _clapprZepto2.default)('<style class="clappr-style"></style>').html((0, _template2.default)(style.toString())(options));
+	  }
+	};
+
+	exports.default = Styler;
+	module.exports = exports['default'];
+
+/***/ },
+/* 17 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2183,2231 +4407,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Zepto;
 
 /***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _utils = __webpack_require__(2);
-
-	var _events = __webpack_require__(6);
-
-	var _events2 = _interopRequireDefault(_events);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // Copyright 2014 Globo.com Player authors. All rights reserved.
-	// Use of this source code is governed by a BSD-style
-	// license that can be found in the LICENSE file.
-
-	/**
-	 * @class BaseObject
-	 * @constructor
-	 * @extends Events
-	 * @module base
-	 */
-
-	var BaseObject = function (_Events) {
-	  _inherits(BaseObject, _Events);
-
-	  /**
-	   * @method constructor
-	   * @param {Object} options
-	   */
-
-	  function BaseObject() {
-	    var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-	    _classCallCheck(this, BaseObject);
-
-	    var _this = _possibleConstructorReturn(this, _Events.call(this, options));
-
-	    _this.uniqueId = (0, _utils.uniqueId)('o');
-	    return _this;
-	  }
-	  /**
-	  * a unique id prefixed with `'o'`, `o1, o232`
-	  *
-	  * @property uniqueId
-	  * @type String
-	  */
-
-
-	  return BaseObject;
-	}(_events2.default);
-
-	exports.default = BaseObject;
-	module.exports = exports['default'];
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; }; // Copyright 2014 Globo.com Player authors. All rights reserved.
-	// Use of this source code is governed by a BSD-style
-	// license that can be found in the LICENSE file.
-
-	var _log = __webpack_require__(7);
-
-	var _log2 = _interopRequireDefault(_log);
-
-	var _utils = __webpack_require__(2);
-
-	var _lodash = __webpack_require__(11);
-
-	var _lodash2 = _interopRequireDefault(_lodash);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var slice = Array.prototype.slice;
-
-	var eventSplitter = /\s+/;
-
-	var eventsApi = function eventsApi(obj, action, name, rest) {
-	  if (!name) {
-	    return true;
-	  }
-
-	  // Handle event maps.
-	  if ((typeof name === 'undefined' ? 'undefined' : _typeof(name)) === 'object') {
-	    for (var key in name) {
-	      obj[action].apply(obj, [key, name[key]].concat(rest));
-	    }
-	    return false;
-	  }
-
-	  // Handle space separated event names.
-	  if (eventSplitter.test(name)) {
-	    var names = name.split(eventSplitter);
-	    for (var i = 0, l = names.length; i < l; i++) {
-	      obj[action].apply(obj, [names[i]].concat(rest));
-	    }
-	    return false;
-	  }
-
-	  return true;
-	};
-
-	var triggerEvents = function triggerEvents(events, args) {
-	  var ev,
-	      i = -1,
-	      l = events.length,
-	      a1 = args[0],
-	      a2 = args[1],
-	      a3 = args[2];
-	  switch (args.length) {
-	    case 0:
-	      while (++i < l) {
-	        (ev = events[i]).callback.call(ev.ctx);
-	      }return;
-	    case 1:
-	      while (++i < l) {
-	        (ev = events[i]).callback.call(ev.ctx, a1);
-	      }return;
-	    case 2:
-	      while (++i < l) {
-	        (ev = events[i]).callback.call(ev.ctx, a1, a2);
-	      }return;
-	    case 3:
-	      while (++i < l) {
-	        (ev = events[i]).callback.call(ev.ctx, a1, a2, a3);
-	      }return;
-	    default:
-	      while (++i < l) {
-	        (ev = events[i]).callback.apply(ev.ctx, args);
-	      }return;
-	  }
-	};
-
-	/**
-	 * @class Events
-	 * @constructor
-	 * @module base
-	 */
-
-	var Events = function () {
-	  function Events() {
-	    _classCallCheck(this, Events);
-	  }
-
-	  /**
-	   * listen to an event indefinitely, if you want to stop you need to call `off`
-	   * @method on
-	   * @param {String} name
-	   * @param {Function} callback
-	   * @param {Object} context
-	   */
-
-	  Events.prototype.on = function on(name, callback, context) {
-	    if (!eventsApi(this, 'on', name, [callback, context]) || !callback) {
-	      return this;
-	    }
-	    this._events || (this._events = {});
-	    var events = this._events[name] || (this._events[name] = []);
-	    events.push({ callback: callback, context: context, ctx: context || this });
-	    return this;
-	  };
-
-	  /**
-	   * listen to an event only once
-	   * @method once
-	   * @param {String} name
-	   * @param {Function} callback
-	   * @param {Object} context
-	   */
-
-
-	  Events.prototype.once = function once(name, callback, context) {
-	    if (!eventsApi(this, 'once', name, [callback, context]) || !callback) {
-	      return this;
-	    }
-	    var self = this;
-	    var once = (0, _lodash2.default)(function () {
-	      self.off(name, once);
-	      callback.apply(this, arguments);
-	    });
-	    once._callback = callback;
-	    return this.on(name, once, context);
-	  };
-
-	  /**
-	   * stop listening to an event
-	   * @method off
-	   * @param {String} name
-	   * @param {Function} callback
-	   * @param {Object} context
-	   */
-
-
-	  Events.prototype.off = function off(name, callback, context) {
-	    var retain, ev, events, names, i, l, j, k;
-	    if (!this._events || !eventsApi(this, 'off', name, [callback, context])) {
-	      return this;
-	    }
-	    if (!name && !callback && !context) {
-	      this._events = void 0;
-	      return this;
-	    }
-	    names = name ? [name] : Object.keys(this._events);
-	    // jshint maxdepth:5
-	    for (i = 0, l = names.length; i < l; i++) {
-	      name = names[i];
-	      events = this._events[name];
-	      if (events) {
-	        this._events[name] = retain = [];
-	        if (callback || context) {
-	          for (j = 0, k = events.length; j < k; j++) {
-	            ev = events[j];
-	            if (callback && callback !== ev.callback && callback !== ev.callback._callback || context && context !== ev.context) {
-	              retain.push(ev);
-	            }
-	          }
-	        }
-	        if (!retain.length) {
-	          delete this._events[name];
-	        }
-	      }
-	    }
-	    return this;
-	  };
-
-	  /**
-	   * triggers an event given its `name`
-	   * @method trigger
-	   * @param {String} name
-	   */
-
-
-	  Events.prototype.trigger = function trigger(name) {
-	    var klass = this.name || this.constructor.name;
-	    try {
-	      _log2.default.debug.apply(_log2.default, [klass].concat(Array.prototype.slice.call(arguments)));
-	      if (!this._events) {
-	        return this;
-	      }
-	      var args = slice.call(arguments, 1);
-	      if (!eventsApi(this, 'trigger', name, args)) {
-	        return this;
-	      }
-	      var events = this._events[name];
-	      var allEvents = this._events.all;
-	      if (events) {
-	        triggerEvents(events, args);
-	      }
-	      if (allEvents) {
-	        triggerEvents(allEvents, arguments);
-	      }
-	    } catch (exception) {
-	      _log2.default.error.apply(_log2.default, [klass, 'error on event', name, 'trigger', '-', exception]);
-	    }
-	    return this;
-	  };
-
-	  /**
-	   * stop listening an event for a given object
-	   * @method stopListening
-	   * @param {Object} obj
-	   * @param {String} name
-	   * @param {Function} callback
-	   */
-
-
-	  Events.prototype.stopListening = function stopListening(obj, name, callback) {
-	    var listeningTo = this._listeningTo;
-	    if (!listeningTo) {
-	      return this;
-	    }
-	    var remove = !name && !callback;
-	    if (!callback && (typeof name === 'undefined' ? 'undefined' : _typeof(name)) === 'object') {
-	      callback = this;
-	    }
-	    if (obj) {
-	      (listeningTo = {})[obj._listenId] = obj;
-	    }
-	    for (var id in listeningTo) {
-	      obj = listeningTo[id];
-	      obj.off(name, callback, this);
-	      if (remove || Object.keys(obj._events).length === 0) {
-	        delete this._listeningTo[id];
-	      }
-	    }
-	    return this;
-	  };
-
-	  return Events;
-	}();
-
-	/**
-	 * listen to an event indefinitely for a given `obj`
-	 * @method listenTo
-	 * @param {Object} obj
-	 * @param {String} name
-	 * @param {Function} callback
-	 * @param {Object} context
-	 * @example
-	 * ```javascript
-	 * this.listenTo(this.core.playback, Events.PLAYBACK_PAUSE, this.callback)
-	 * ```
-	 */
-	/**
-	 * listen to an event once for a given `obj`
-	 * @method listenToOnce
-	 * @param {Object} obj
-	 * @param {String} name
-	 * @param {Function} callback
-	 * @param {Object} context
-	 * @example
-	 * ```javascript
-	 * this.listenToOnce(this.core.playback, Events.PLAYBACK_PAUSE, this.callback)
-	 * ```
-	 */
-
-
-	exports.default = Events;
-	var listenMethods = { listenTo: 'on', listenToOnce: 'once' };
-
-	Object.keys(listenMethods).forEach(function (method) {
-	  Events.prototype[method] = function (obj, name, callback) {
-	    var listeningTo = this._listeningTo || (this._listeningTo = {});
-	    var id = obj._listenId || (obj._listenId = (0, _utils.uniqueId)('l'));
-	    listeningTo[id] = obj;
-	    if (!callback && (typeof name === 'undefined' ? 'undefined' : _typeof(name)) === 'object') {
-	      callback = this;
-	    }
-	    obj[listenMethods[method]](name, callback, this);
-	    return this;
-	  };
-	});
-
-	// PLAYER EVENTS
-	/**
-	 * Fired when the player is ready on startup
-	 *
-	 * @event PLAYER_READY
-	 */
-	Events.PLAYER_READY = 'ready';
-	/**
-	 * Fired when player resizes
-	 *
-	 * @event PLAYER_RESIZE
-	 * @param {Object} currentSize an object with the current size
-	 */
-	Events.PLAYER_RESIZE = 'resize';
-	/**
-	 * Fired when player changes its fullscreen state
-	 *
-	 * @event PLAYER_FULLSCREEN
-	 * @param {Boolean} whether or not the player is on fullscreen mode
-	 */
-	Events.PLAYER_FULLSCREEN = 'fullscreen';
-	/**
-	 * Fired when player starts to play
-	 *
-	 * @event PLAYER_PLAY
-	 */
-	Events.PLAYER_PLAY = 'play';
-	/**
-	 * Fired when player pauses
-	 *
-	 * @event PLAYER_PAUSE
-	 */
-	Events.PLAYER_PAUSE = 'pause';
-	/**
-	 * Fired when player stops
-	 *
-	 * @event PLAYER_STOP
-	 */
-	Events.PLAYER_STOP = 'stop';
-	/**
-	 * Fired when player ends the video
-	 *
-	 * @event PLAYER_ENDED
-	 */
-	Events.PLAYER_ENDED = 'ended';
-	/**
-	 * Fired when player seeks the video
-	 *
-	 * @event PLAYER_SEEK
-	 * @param {Number} time the current time in seconds
-	 */
-	Events.PLAYER_SEEK = 'seek';
-	/**
-	 * Fired when player receives an error
-	 *
-	 * @event PLAYER_ERROR
-	 * @param {Object} error the error
-	 */
-	Events.PLAYER_ERROR = 'error';
-	/**
-	 * Fired when the time is updated on player
-	 *
-	 * @event PLAYER_TIMEUPDATE
-	 * @param {Object} progress Data
-	 * progress object
-	 * @param {Number} [progress.current]
-	 * current time
-	 * @param {Number} [progress.total]
-	 * total time
-	 */
-	Events.PLAYER_TIMEUPDATE = 'timeupdate';
-	/**
-	 * Fired when player updates its volume
-	 *
-	 * @event PLAYER_VOLUMEUPDATE
-	 * @param {Number} volume the current volume
-	 */
-	Events.PLAYER_VOLUMEUPDATE = 'volumeupdate';
-
-	// Playback Events
-	/**
-	 * Fired when the playback is downloading the media
-	 *
-	 * @event PLAYBACK_PROGRESS
-	 * @param {Object} progress Data
-	 * progress object
-	 * @param {Number} [progress.start]
-	 * initial downloaded content
-	 * @param {Number} [progress.current]
-	 * current dowloaded content
-	 * @param {Number} [progress.total]
-	 * total content to be downloaded
-	 */
-	Events.PLAYBACK_PROGRESS = 'playback:progress';
-	/**
-	 * Fired when the time is updated on playback
-	 *
-	 * @event PLAYBACK_TIMEUPDATE
-	 * @param {Object} progress Data
-	 * progress object
-	 * @param {Number} [progress.current]
-	 * current time
-	 * @param {Number} [progress.total]
-	 * total time
-	 */
-	Events.PLAYBACK_TIMEUPDATE = 'playback:timeupdate';
-	/**
-	 * Fired when playback is ready
-	 *
-	 * @event PLAYBACK_READY
-	 */
-	Events.PLAYBACK_READY = 'playback:ready';
-	/**
-	 * Fired when the playback starts having to buffer because
-	 * playback can currently not be smooth.
-	 *
-	 * This corresponds to the playback `buffering` property being
-	 * `true`.
-	 *
-	 * @event PLAYBACK_BUFFERING
-	 */
-	Events.PLAYBACK_BUFFERING = 'playback:buffering';
-	/**
-	 * Fired when the playback has enough in the buffer to be
-	 * able to play smoothly, after previously being unable to
-	 * do this.
-	 *
-	 * This corresponds to the playback `buffering` property being
-	 * `false`.
-	 *
-	 * @event PLAYBACK_BUFFERFULL
-	 */
-	Events.PLAYBACK_BUFFERFULL = 'playback:bufferfull';
-	/**
-	 * Fired when playback changes any settings (volume, seek and etc)
-	 *
-	 * @event PLAYBACK_SETTINGSUPDATE
-	 */
-	Events.PLAYBACK_SETTINGSUPDATE = 'playback:settingsupdate';
-	/**
-	 * Fired when playback loaded its metadata
-	 *
-	 * @event PLAYBACK_LOADEDMETADATA
-	 * @param {Object} metadata Data
-	 * settings object
-	 * @param {Number} [metadata.duration]
-	 * the playback duration
-	 * @param {Object} [metadata.data]
-	 * extra meta data
-	 */
-	Events.PLAYBACK_LOADEDMETADATA = 'playback:loadedmetadata';
-	/**
-	 * Fired when playback updates its video quality
-	 *
-	 * @event PLAYBACK_HIGHDEFINITIONUPDATE
-	 * @param {Boolean} isHD
-	 * true when is on HD, false otherwise
-	 */
-	Events.PLAYBACK_HIGHDEFINITIONUPDATE = 'playback:highdefinitionupdate';
-	/**
-	 * Fired when playback updates its bitrate
-	 *
-	 * @event PLAYBACK_BITRATE
-	 * @param {Object} bitrate Data
-	 * bitrate object
-	 * @param {Number} [bitrate.bandwidth]
-	 * bitrate bandwidth when it's available
-	 * @param {Number} [bitrate.width]
-	 * playback width (ex: 720, 640, 1080)
-	 * @param {Number} [bitrate.height]
-	 * playback height (ex: 240, 480, 720)
-	 * @param {Number} [bitrate.level]
-	 * playback level when it's available, it could be just a map for width (0 => 240, 1 => 480, 2 => 720)
-	 */
-	Events.PLAYBACK_BITRATE = 'playback:bitrate';
-	/**
-	 * Fired when the playback has its levels
-	 *
-	 * @event PLAYBACK_LEVELS_AVAILABLE
-	 * @param {Array} levels
-	 * the ordered levels, each one with the following format `{id: 1, label: '500kbps'}` ps: id should be a number >= 0
-	 * @param {Number} initial
-	 * the initial level otherwise -1 (AUTO)
-	 */
-	Events.PLAYBACK_LEVELS_AVAILABLE = 'playback:levels:available';
-	/**
-	 * Fired when the playback starts to switch level
-	 *
-	 * @event PLAYBACK_LEVEL_SWITCH_START
-	 *
-	 */
-	Events.PLAYBACK_LEVEL_SWITCH_START = 'playback:levels:switch:start';
-	/**
-	 * Fired when the playback ends the level switch
-	 *
-	 * @event PLAYBACK_LEVEL_SWITCH_END
-	 *
-	 */
-	Events.PLAYBACK_LEVEL_SWITCH_END = 'playback:levels:switch:end';
-
-	/**
-	 * Fired when playback internal state changes
-	 *
-	 * @event PLAYBACK_PLAYBACKSTATE
-	 * @param {Object} state Data
-	 * state object
-	 * @param {String} [state.type]
-	 * the playback type
-	 */
-	Events.PLAYBACK_PLAYBACKSTATE = 'playback:playbackstate';
-	/**
-	 * Fired when DVR becomes enabled/disabled.
-	 *
-	 * @event PLAYBACK_DVR
-	 * @param {boolean} state true if dvr enabled
-	 */
-	Events.PLAYBACK_DVR = 'playback:dvr';
-	// TODO doc
-	Events.PLAYBACK_MEDIACONTROL_DISABLE = 'playback:mediacontrol:disable';
-	// TODO doc
-	Events.PLAYBACK_MEDIACONTROL_ENABLE = 'playback:mediacontrol:enable';
-	/**
-	 * Fired when the media for a playback ends.
-	 *
-	 * @event PLAYBACK_ENDED
-	 * @param {String} name the name of the playback
-	 */
-	Events.PLAYBACK_ENDED = 'playback:ended';
-	/**
-	 * Fired when the media for a playback starts playing.
-	 * This is not necessarily when the user requests `play()`
-	 * The media may have to buffer first.
-	 * I.e. `isPlaying()` might return `true` before this event is fired,
-	 * because `isPlaying()` represents the intended state.
-	 *
-	 * @event PLAYBACK_PLAY
-	 */
-	Events.PLAYBACK_PLAY = 'playback:play';
-	/**
-	 * Fired when the media for a playback pauses.
-	 *
-	 * @event PLAYBACK_PAUSE
-	 */
-	Events.PLAYBACK_PAUSE = 'playback:pause';
-	/**
-	 * Fired when the media for a playback is stopped.
-	 *
-	 * @event PLAYBACK_STOP
-	 */
-	Events.PLAYBACK_STOP = 'playback:stop';
-	/**
-	 * Fired if an error occurs in the playback.
-	 *
-	 * @event PLAYBACK_ERROR
-	 * @param {Object} error An object containing the error details
-	 * @param {String} name Playback name
-	 */
-	Events.PLAYBACK_ERROR = 'playback:error';
-	// TODO doc
-	Events.PLAYBACK_STATS_ADD = 'playback:stats:add';
-	// TODO doc
-	Events.PLAYBACK_FRAGMENT_LOADED = 'playback:fragment:loaded';
-	// TODO doc
-	Events.PLAYBACK_LEVEL_SWITCH = 'playback:level:switch';
-
-	/**
-	 * Fired when the options were changed for the core
-	 *
-	 * @event CORE_OPTIONS_CHANGE
-	 */
-	Events.CORE_OPTIONS_CHANGE = 'core:options:change';
-	/**
-	 * Fired after creating containers, when the core is ready
-	 *
-	 * @event CORE_READY
-	 */
-	Events.CORE_READY = 'core:ready';
-	/**
-	 * Fired when the fullscreen state change
-	 *
-	 * @param {Boolean} whether or not the player is on fullscreen mode
-	 * @event CORE_READY
-	 */
-	Events.CORE_FULLSCREEN = 'core:fullscreen';
-
-	// Container Events
-	/**
-	 * Fired when the container internal state changes
-	 *
-	 * @event CONTAINER_PLAYBACKSTATE
-	 * @param {Object} state Data
-	 * state object
-	 * @param {String} [state.type]
-	 * the playback type
-	 */
-	Events.CONTAINER_PLAYBACKSTATE = 'container:playbackstate';
-	Events.CONTAINER_PLAYBACKDVRSTATECHANGED = 'container:dvr';
-	/**
-	 * Fired when the container updates its bitrate
-	 *
-	 * @event CONTAINER_BITRATE
-	 * @param {Object} bitrate Data
-	 * bitrate object
-	 * @param {Number} [bitrate.bandwidth]
-	 * bitrate bandwidth when it's available
-	 * @param {Number} [bitrate.width]
-	 * playback width (ex: 720, 640, 1080)
-	 * @param {Number} [bitrate.height]
-	 * playback height (ex: 240, 480, 720)
-	 * @param {Number} [bitrate.level]
-	 * playback level when it's available, it could be just a map for width (0 => 240, 1 => 480, 2 => 720)
-	 */
-	Events.CONTAINER_BITRATE = 'container:bitrate';
-	Events.CONTAINER_STATS_REPORT = 'container:stats:report';
-	Events.CONTAINER_DESTROYED = 'container:destroyed';
-	/**
-	 * Fired when the container is ready
-	 *
-	 * @event CONTAINER_READY
-	 */
-	Events.CONTAINER_READY = 'container:ready';
-	Events.CONTAINER_ERROR = 'container:error';
-	/**
-	 * Fired when the container loaded its metadata
-	 *
-	 * @event CONTAINER_LOADEDMETADATA
-	 * @param {Object} metadata Data
-	 * settings object
-	 * @param {Number} [metadata.duration]
-	 * the playback duration
-	 * @param {Object} [metadata.data]
-	 * extra meta data
-	 */
-	Events.CONTAINER_LOADEDMETADATA = 'container:loadedmetadata';
-	/**
-	 * Fired when the time is updated on container
-	 *
-	 * @event CONTAINER_TIMEUPDATE
-	 * @param {Object} progress Data
-	 * progress object
-	 * @param {Number} [progress.current]
-	 * current time
-	 * @param {Number} [progress.total]
-	 * total time
-	 */
-	Events.CONTAINER_TIMEUPDATE = 'container:timeupdate';
-	/**
-	 * Fired when the container is downloading the media
-	 *
-	 * @event CONTAINER_PROGRESS
-	 * @param {Object} progress Data
-	 * progress object
-	 * @param {Number} [progress.start]
-	 * initial downloaded content
-	 * @param {Number} [progress.current]
-	 * current dowloaded content
-	 * @param {Number} [progress.total]
-	 * total content to be downloaded
-	 */
-	Events.CONTAINER_PROGRESS = 'container:progress';
-	Events.CONTAINER_PLAY = 'container:play';
-	Events.CONTAINER_STOP = 'container:stop';
-	Events.CONTAINER_PAUSE = 'container:pause';
-	Events.CONTAINER_ENDED = 'container:ended';
-	Events.CONTAINER_CLICK = 'container:click';
-	Events.CONTAINER_DBLCLICK = 'container:dblclick';
-	Events.CONTAINER_CONTEXTMENU = 'container:contextmenu';
-	Events.CONTAINER_MOUSE_ENTER = 'container:mouseenter';
-	Events.CONTAINER_MOUSE_LEAVE = 'container:mouseleave';
-	/**
-	 * Fired when the container seeks the video
-	 *
-	 * @event CONTAINER_SEEK
-	 * @param {Number} time the current time in seconds
-	 */
-	Events.CONTAINER_SEEK = 'container:seek';
-	Events.CONTAINER_VOLUME = 'container:volume';
-	Events.CONTAINER_FULLSCREEN = 'container:fullscreen';
-	/**
-	 * Fired when container is buffering
-	 *
-	 * @event CONTAINER_STATE_BUFFERING
-	 */
-	Events.CONTAINER_STATE_BUFFERING = 'container:state:buffering';
-	/**
-	 * Fired when the container filled the buffer
-	 *
-	 * @event CONTAINER_STATE_BUFFERFULL
-	 */
-	Events.CONTAINER_STATE_BUFFERFULL = 'container:state:bufferfull';
-	/**
-	 * Fired when the container changes any settings (volume, seek and etc)
-	 *
-	 * @event CONTAINER_SETTINGSUPDATE
-	 */
-	Events.CONTAINER_SETTINGSUPDATE = 'container:settingsupdate';
-	/**
-	 * Fired when container updates its video quality
-	 *
-	 * @event CONTAINER_HIGHDEFINITIONUPDATE
-	 * @param {Boolean} isHD
-	 * true when is on HD, false otherwise
-	 */
-	Events.CONTAINER_HIGHDEFINITIONUPDATE = 'container:highdefinitionupdate';
-
-	/**
-	 * Fired when the media control shows
-	 *
-	 * @event CONTAINER_MEDIACONTROL_SHOW
-	 */
-	Events.CONTAINER_MEDIACONTROL_SHOW = 'container:mediacontrol:show';
-	/**
-	 * Fired when the media control hides
-	 *
-	 * @event CONTAINER_MEDIACONTROL_HIDE
-	 */
-	Events.CONTAINER_MEDIACONTROL_HIDE = 'container:mediacontrol:hide';
-
-	Events.CONTAINER_MEDIACONTROL_DISABLE = 'container:mediacontrol:disable';
-	Events.CONTAINER_MEDIACONTROL_ENABLE = 'container:mediacontrol:enable';
-	Events.CONTAINER_STATS_ADD = 'container:stats:add';
-	/**
-	 * Fired when the options were changed for the container
-	 *
-	 * @event CONTAINER_OPTIONS_CHANGE
-	 */
-	Events.CONTAINER_OPTIONS_CHANGE = 'container:options:change';
-
-	// MediaControl Events
-	Events.MEDIACONTROL_RENDERED = 'mediacontrol:rendered';
-	/**
-	 * Fired when the player enters/exit on fullscreen
-	 *
-	 * @event MEDIACONTROL_FULLSCREEN
-	 */
-	Events.MEDIACONTROL_FULLSCREEN = 'mediacontrol:fullscreen';
-	/**
-	 * Fired when the media control shows
-	 *
-	 * @event MEDIACONTROL_SHOW
-	 */
-	Events.MEDIACONTROL_SHOW = 'mediacontrol:show';
-	/**
-	 * Fired when the media control hides
-	 *
-	 * @event MEDIACONTROL_HIDE
-	 */
-	Events.MEDIACONTROL_HIDE = 'mediacontrol:hide';
-	/**
-	 * Fired when mouse enters on the seekbar
-	 *
-	 * @event MEDIACONTROL_MOUSEMOVE_SEEKBAR
-	 * @param {Object} event
-	 * the javascript event
-	 */
-	Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR = 'mediacontrol:mousemove:seekbar';
-	/**
-	 * Fired when mouse leaves the seekbar
-	 *
-	 * @event MEDIACONTROL_MOUSELEAVE_SEEKBAR
-	 * @param {Object} event
-	 * the javascript event
-	 */
-	Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR = 'mediacontrol:mouseleave:seekbar';
-	/**
-	 * Fired when the media is being played
-	 *
-	 * @event MEDIACONTROL_PLAYING
-	 */
-	Events.MEDIACONTROL_PLAYING = 'mediacontrol:playing';
-	/**
-	 * Fired when the media is not being played
-	 *
-	 * @event MEDIACONTROL_NOTPLAYING
-	 */
-	Events.MEDIACONTROL_NOTPLAYING = 'mediacontrol:notplaying';
-	/**
-	 * Fired when the container was changed
-	 *
-	 * @event MEDIACONTROL_CONTAINERCHANGED
-	 */
-	Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged';
-
-	// Core Events
-	Events.CORE_CONTAINERS_CREATED = 'core:containers:created';
-	module.exports = exports['default'];
-
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	module.exports = __webpack_require__(8);
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _vendor = __webpack_require__(9);
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	// Use of this source code is governed by a BSD-style
-	// license that can be found in the LICENSE file.
-
-	var BOLD = 'font-weight: bold; font-size: 13px;';
-	var INFO = 'color: #006600;' + BOLD;
-	var DEBUG = 'color: #0000ff;' + BOLD;
-	var WARN = 'color: #ff8000;' + BOLD;
-	var ERROR = 'color: #ff0000;' + BOLD;
-
-	var LEVEL_DEBUG = 0;
-	var LEVEL_INFO = 1;
-	var LEVEL_WARN = 2;
-	var LEVEL_ERROR = 3;
-	var LEVEL_DISABLED = LEVEL_ERROR;
-
-	var COLORS = [DEBUG, INFO, WARN, ERROR, ERROR];
-	var DESCRIPTIONS = ['debug', 'info', 'warn', 'error', 'disabled'];
-
-	var Log = function () {
-	  function Log() {
-	    var _this = this;
-
-	    var level = arguments.length <= 0 || arguments[0] === undefined ? LEVEL_INFO : arguments[0];
-	    var offLevel = arguments.length <= 1 || arguments[1] === undefined ? LEVEL_DISABLED : arguments[1];
-
-	    _classCallCheck(this, Log);
-
-	    this.kibo = new _vendor.Kibo();
-	    this.kibo.down(['ctrl shift d'], function () {
-	      return _this.onOff();
-	    });
-	    this.BLACKLIST = ['timeupdate', 'playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress'];
-	    this.level = level;
-	    this.offLevel = offLevel;
-	  }
-
-	  Log.prototype.debug = function debug(klass) {
-	    this.log(klass, LEVEL_DEBUG, Array.prototype.slice.call(arguments, 1));
-	  };
-
-	  Log.prototype.info = function info(klass) {
-	    this.log(klass, LEVEL_INFO, Array.prototype.slice.call(arguments, 1));
-	  };
-
-	  Log.prototype.warn = function warn(klass) {
-	    this.log(klass, LEVEL_WARN, Array.prototype.slice.call(arguments, 1));
-	  };
-
-	  Log.prototype.error = function error(klass) {
-	    this.log(klass, LEVEL_ERROR, Array.prototype.slice.call(arguments, 1));
-	  };
-
-	  Log.prototype.onOff = function onOff() {
-	    if (this.level === this.offLevel) {
-	      this.level = this.previousLevel;
-	    } else {
-	      this.previousLevel = this.level;
-	      this.level = this.offLevel;
-	    }
-	    // handle instances where console.log is unavailable
-	    if (window.console && window.console.log) {
-	      console.log("%c[Clappr.Log] set log level to " + DESCRIPTIONS[this.level], WARN);
-	    }
-	  };
-
-	  Log.prototype.level = function level(newLevel) {
-	    this.level = newLevel;
-	  };
-
-	  Log.prototype.log = function log(klass, level, message) {
-	    if (this.BLACKLIST.indexOf(message[0]) >= 0) return;
-	    if (level < this.level) return;
-
-	    if (!message) {
-	      message = klass;
-	      klass = null;
-	    }
-	    var klassDescription = "";
-	    var color = COLORS[level];
-	    if (klass) {
-	      klassDescription = "[" + klass + "]";
-	    }
-	    if (window.console && window.console.log) {
-	      console.log.apply(console, ["%c[" + DESCRIPTIONS[level] + "]" + klassDescription, color].concat(message));
-	    }
-	  };
-
-	  return Log;
-	}();
-
-	exports.default = Log;
-
-
-	Log.LEVEL_DEBUG = LEVEL_DEBUG;
-	Log.LEVEL_INFO = LEVEL_INFO;
-	Log.LEVEL_WARN = LEVEL_WARN;
-	Log.LEVEL_ERROR = LEVEL_ERROR;
-
-	Log.getInstance = function () {
-	  if (this._instance === undefined) {
-	    this._instance = new this();
-	    this._instance.previousLevel = this._instance.level;
-	    this._instance.level = this._instance.offLevel;
-	  }
-	  return this._instance;
-	};
-
-	Log.setLevel = function (level) {
-	  this.getInstance().level = level;
-	};
-
-	Log.debug = function (klass) {
-	  this.getInstance().debug.apply(this.getInstance(), arguments);
-	};
-	Log.info = function (klass) {
-	  this.getInstance().info.apply(this.getInstance(), arguments);
-	};
-	Log.warn = function (klass) {
-	  this.getInstance().warn.apply(this.getInstance(), arguments);
-	};
-	Log.error = function (klass) {
-	  this.getInstance().error.apply(this.getInstance(), arguments);
-	};
-	module.exports = exports['default'];
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _kibo = __webpack_require__(10);
-
-	var _kibo2 = _interopRequireDefault(_kibo);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = { Kibo: _kibo2.default };
-	module.exports = exports['default'];
-
-/***/ },
-/* 10 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	// Kibo is released under the MIT License. Copyright (c) 2013 marquete.
-	// see https://github.com/marquete/kibo
-
-	var Kibo = function Kibo(element) {
-	  this.element = element || window.document;
-	  this.initialize();
-	};
-
-	Kibo.KEY_NAMES_BY_CODE = {
-	  8: 'backspace', 9: 'tab', 13: 'enter',
-	  16: 'shift', 17: 'ctrl', 18: 'alt',
-	  20: 'caps_lock',
-	  27: 'esc',
-	  32: 'space',
-	  37: 'left', 38: 'up', 39: 'right', 40: 'down',
-	  48: '0', 49: '1', 50: '2', 51: '3', 52: '4', 53: '5', 54: '6', 55: '7', 56: '8', 57: '9',
-	  65: 'a', 66: 'b', 67: 'c', 68: 'd', 69: 'e', 70: 'f', 71: 'g', 72: 'h', 73: 'i', 74: 'j',
-	  75: 'k', 76: 'l', 77: 'm', 78: 'n', 79: 'o', 80: 'p', 81: 'q', 82: 'r', 83: 's', 84: 't',
-	  85: 'u', 86: 'v', 87: 'w', 88: 'x', 89: 'y', 90: 'z', 112: 'f1', 113: 'f2', 114: 'f3',
-	  115: 'f4', 116: 'f5', 117: 'f6', 118: 'f7', 119: 'f8', 120: 'f9', 121: 'f10', 122: 'f11', 123: 'f12'
-	};
-
-	Kibo.KEY_CODES_BY_NAME = {};
-	(function () {
-	  for (var key in Kibo.KEY_NAMES_BY_CODE) {
-	    if (Object.prototype.hasOwnProperty.call(Kibo.KEY_NAMES_BY_CODE, key)) {
-	      Kibo.KEY_CODES_BY_NAME[Kibo.KEY_NAMES_BY_CODE[key]] = +key;
-	    }
-	  }
-	})();
-
-	Kibo.MODIFIERS = ['shift', 'ctrl', 'alt'];
-
-	Kibo.registerEvent = function () {
-	  if (document.addEventListener) {
-	    return function (element, eventName, func) {
-	      element.addEventListener(eventName, func, false);
-	    };
-	  } else if (document.attachEvent) {
-	    return function (element, eventName, func) {
-	      element.attachEvent('on' + eventName, func);
-	    };
-	  }
-	}();
-
-	Kibo.unregisterEvent = function () {
-	  if (document.removeEventListener) {
-	    return function (element, eventName, func) {
-	      element.removeEventListener(eventName, func, false);
-	    };
-	  } else if (document.detachEvent) {
-	    return function (element, eventName, func) {
-	      element.detachEvent('on' + eventName, func);
-	    };
-	  }
-	}();
-
-	Kibo.stringContains = function (string, substring) {
-	  return string.indexOf(substring) !== -1;
-	};
-
-	Kibo.neatString = function (string) {
-	  return string.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ');
-	};
-
-	Kibo.capitalize = function (string) {
-	  return string.toLowerCase().replace(/^./, function (match) {
-	    return match.toUpperCase();
-	  });
-	};
-
-	Kibo.isString = function (what) {
-	  return Kibo.stringContains(Object.prototype.toString.call(what), 'String');
-	};
-
-	Kibo.arrayIncludes = function () {
-	  if (Array.prototype.indexOf) {
-	    return function (haystack, needle) {
-	      return haystack.indexOf(needle) !== -1;
-	    };
-	  } else {
-	    return function (haystack, needle) {
-	      for (var i = 0; i < haystack.length; i++) {
-	        if (haystack[i] === needle) {
-	          return true;
-	        }
-	      }
-	      return false;
-	    };
-	  }
-	}();
-
-	Kibo.extractModifiers = function (keyCombination) {
-	  var modifiers, i;
-	  modifiers = [];
-	  for (i = 0; i < Kibo.MODIFIERS.length; i++) {
-	    if (Kibo.stringContains(keyCombination, Kibo.MODIFIERS[i])) {
-	      modifiers.push(Kibo.MODIFIERS[i]);
-	    }
-	  }
-	  return modifiers;
-	};
-
-	Kibo.extractKey = function (keyCombination) {
-	  var keys, i;
-	  keys = Kibo.neatString(keyCombination).split(' ');
-	  for (i = 0; i < keys.length; i++) {
-	    if (!Kibo.arrayIncludes(Kibo.MODIFIERS, keys[i])) {
-	      return keys[i];
-	    }
-	  }
-	};
-
-	Kibo.modifiersAndKey = function (keyCombination) {
-	  var result, key;
-
-	  if (Kibo.stringContains(keyCombination, 'any')) {
-	    return Kibo.neatString(keyCombination).split(' ').slice(0, 2).join(' ');
-	  }
-
-	  result = Kibo.extractModifiers(keyCombination);
-
-	  key = Kibo.extractKey(keyCombination);
-	  if (key && !Kibo.arrayIncludes(Kibo.MODIFIERS, key)) {
-	    result.push(key);
-	  }
-
-	  return result.join(' ');
-	};
-
-	Kibo.keyName = function (keyCode) {
-	  return Kibo.KEY_NAMES_BY_CODE[keyCode + ''];
-	};
-
-	Kibo.keyCode = function (keyName) {
-	  return +Kibo.KEY_CODES_BY_NAME[keyName];
-	};
-
-	Kibo.prototype.initialize = function () {
-	  var i,
-	      that = this;
-
-	  this.lastKeyCode = -1;
-	  this.lastModifiers = {};
-	  for (i = 0; i < Kibo.MODIFIERS.length; i++) {
-	    this.lastModifiers[Kibo.MODIFIERS[i]] = false;
-	  }
-
-	  this.keysDown = { any: [] };
-	  this.keysUp = { any: [] };
-	  this.downHandler = this.handler('down');
-	  this.upHandler = this.handler('up');
-
-	  Kibo.registerEvent(this.element, 'keydown', this.downHandler);
-	  Kibo.registerEvent(this.element, 'keyup', this.upHandler);
-	  Kibo.registerEvent(window, 'unload', function unloader() {
-	    Kibo.unregisterEvent(that.element, 'keydown', that.downHandler);
-	    Kibo.unregisterEvent(that.element, 'keyup', that.upHandler);
-	    Kibo.unregisterEvent(window, 'unload', unloader);
-	  });
-	};
-
-	Kibo.prototype.handler = function (upOrDown) {
-	  var that = this;
-	  return function (e) {
-	    var i, registeredKeys, lastModifiersAndKey;
-
-	    e = e || window.event;
-
-	    that.lastKeyCode = e.keyCode;
-	    for (i = 0; i < Kibo.MODIFIERS.length; i++) {
-	      that.lastModifiers[Kibo.MODIFIERS[i]] = e[Kibo.MODIFIERS[i] + 'Key'];
-	    }
-	    if (Kibo.arrayIncludes(Kibo.MODIFIERS, Kibo.keyName(that.lastKeyCode))) {
-	      that.lastModifiers[Kibo.keyName(that.lastKeyCode)] = true;
-	    }
-
-	    registeredKeys = that['keys' + Kibo.capitalize(upOrDown)];
-
-	    for (i = 0; i < registeredKeys.any.length; i++) {
-	      if (registeredKeys.any[i](e) === false && e.preventDefault) {
-	        e.preventDefault();
-	      }
-	    }
-
-	    lastModifiersAndKey = that.lastModifiersAndKey();
-	    if (registeredKeys[lastModifiersAndKey]) {
-	      for (i = 0; i < registeredKeys[lastModifiersAndKey].length; i++) {
-	        if (registeredKeys[lastModifiersAndKey][i](e) === false && e.preventDefault) {
-	          e.preventDefault();
-	        }
-	      }
-	    }
-	  };
-	};
-
-	Kibo.prototype.registerKeys = function (upOrDown, newKeys, func) {
-	  var i,
-	      keys,
-	      registeredKeys = this['keys' + Kibo.capitalize(upOrDown)];
-
-	  if (Kibo.isString(newKeys)) {
-	    newKeys = [newKeys];
-	  }
-
-	  for (i = 0; i < newKeys.length; i++) {
-	    keys = newKeys[i];
-	    keys = Kibo.modifiersAndKey(keys + '');
-
-	    if (registeredKeys[keys]) {
-	      registeredKeys[keys].push(func);
-	    } else {
-	      registeredKeys[keys] = [func];
-	    }
-	  }
-
-	  return this;
-	};
-
-	// jshint maxdepth:5
-	Kibo.prototype.unregisterKeys = function (upOrDown, newKeys, func) {
-	  var i,
-	      j,
-	      keys,
-	      registeredKeys = this['keys' + Kibo.capitalize(upOrDown)];
-
-	  if (Kibo.isString(newKeys)) {
-	    newKeys = [newKeys];
-	  }
-
-	  for (i = 0; i < newKeys.length; i++) {
-	    keys = newKeys[i];
-	    keys = Kibo.modifiersAndKey(keys + '');
-
-	    if (func === null) {
-	      delete registeredKeys[keys];
-	    } else {
-	      if (registeredKeys[keys]) {
-	        for (j = 0; j < registeredKeys[keys].length; j++) {
-	          if (String(registeredKeys[keys][j]) === String(func)) {
-	            registeredKeys[keys].splice(j, 1);
-	            break;
-	          }
-	        }
-	      }
-	    }
-	  }
-
-	  return this;
-	};
-
-	Kibo.prototype.off = function (keys) {
-	  return this.unregisterKeys('down', keys, null);
-	};
-
-	Kibo.prototype.delegate = function (upOrDown, keys, func) {
-	  return func !== null || func !== undefined ? this.registerKeys(upOrDown, keys, func) : this.unregisterKeys(upOrDown, keys, func);
-	};
-
-	Kibo.prototype.down = function (keys, func) {
-	  return this.delegate('down', keys, func);
-	};
-
-	Kibo.prototype.up = function (keys, func) {
-	  return this.delegate('up', keys, func);
-	};
-
-	Kibo.prototype.lastKey = function (modifier) {
-	  if (!modifier) {
-	    return Kibo.keyName(this.lastKeyCode);
-	  }
-
-	  return this.lastModifiers[modifier];
-	};
-
-	Kibo.prototype.lastModifiersAndKey = function () {
-	  var result, i;
-
-	  result = [];
-	  for (i = 0; i < Kibo.MODIFIERS.length; i++) {
-	    if (this.lastKey(Kibo.MODIFIERS[i])) {
-	      result.push(Kibo.MODIFIERS[i]);
-	    }
-	  }
-
-	  if (!Kibo.arrayIncludes(result, this.lastKey())) {
-	    result.push(this.lastKey());
-	  }
-
-	  return result.join(' ');
-	};
-
-	exports.default = Kibo;
-	module.exports = exports['default'];
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	/**
-	 * lodash 4.0.0 (Custom Build) <https://lodash.com/>
-	 * Build: `lodash modularize exports="npm" -o ./`
-	 * Copyright 2012-2016 The Dojo Foundation <http://dojofoundation.org/>
-	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
-	 * Copyright 2009-2016 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-	 * Available under MIT license <https://lodash.com/license>
-	 */
-	var before = __webpack_require__(12);
-
-	/**
-	 * Creates a function that is restricted to invoking `func` once. Repeat calls
-	 * to the function return the value of the first invocation. The `func` is
-	 * invoked with the `this` binding and arguments of the created function.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Function
-	 * @param {Function} func The function to restrict.
-	 * @returns {Function} Returns the new restricted function.
-	 * @example
-	 *
-	 * var initialize = _.once(createApplication);
-	 * initialize();
-	 * initialize();
-	 * // `initialize` invokes `createApplication` once
-	 */
-	function once(func) {
-	  return before(2, func);
-	}
-
-	module.exports = once;
-
-/***/ },
-/* 12 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	/**
-	 * lodash 4.0.2 (Custom Build) <https://lodash.com/>
-	 * Build: `lodash modularize exports="npm" -o ./`
-	 * Copyright jQuery Foundation and other contributors <https://jquery.org/>
-	 * Released under MIT license <https://lodash.com/license>
-	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
-	 * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-	 */
-
-	/** Used as the `TypeError` message for "Functions" methods. */
-	var FUNC_ERROR_TEXT = 'Expected a function';
-
-	/** Used as references for various `Number` constants. */
-	var INFINITY = 1 / 0,
-	    MAX_INTEGER = 1.7976931348623157e+308,
-	    NAN = 0 / 0;
-
-	/** `Object#toString` result references. */
-	var funcTag = '[object Function]',
-	    genTag = '[object GeneratorFunction]',
-	    symbolTag = '[object Symbol]';
-
-	/** Used to match leading and trailing whitespace. */
-	var reTrim = /^\s+|\s+$/g;
-
-	/** Used to detect bad signed hexadecimal string values. */
-	var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
-
-	/** Used to detect binary string values. */
-	var reIsBinary = /^0b[01]+$/i;
-
-	/** Used to detect octal string values. */
-	var reIsOctal = /^0o[0-7]+$/i;
-
-	/** Built-in method references without a dependency on `root`. */
-	var freeParseInt = parseInt;
-
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-
-	/**
-	 * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
-	 * of values.
-	 */
-	var objectToString = objectProto.toString;
-
-	/**
-	 * Creates a function that invokes `func`, with the `this` binding and arguments
-	 * of the created function, while it's called less than `n` times. Subsequent
-	 * calls to the created function return the result of the last `func` invocation.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 3.0.0
-	 * @category Function
-	 * @param {number} n The number of calls at which `func` is no longer invoked.
-	 * @param {Function} func The function to restrict.
-	 * @returns {Function} Returns the new restricted function.
-	 * @example
-	 *
-	 * jQuery(element).on('click', _.before(5, addContactToList));
-	 * // => allows adding up to 4 contacts to the list
-	 */
-	function before(n, func) {
-	  var result;
-	  if (typeof func != 'function') {
-	    throw new TypeError(FUNC_ERROR_TEXT);
-	  }
-	  n = toInteger(n);
-	  return function () {
-	    if (--n > 0) {
-	      result = func.apply(this, arguments);
-	    }
-	    if (n <= 1) {
-	      func = undefined;
-	    }
-	    return result;
-	  };
-	}
-
-	/**
-	 * Checks if `value` is classified as a `Function` object.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is correctly classified,
-	 *  else `false`.
-	 * @example
-	 *
-	 * _.isFunction(_);
-	 * // => true
-	 *
-	 * _.isFunction(/abc/);
-	 * // => false
-	 */
-	function isFunction(value) {
-	  // The use of `Object#toString` avoids issues with the `typeof` operator
-	  // in Safari 8 which returns 'object' for typed array and weak map constructors,
-	  // and PhantomJS 1.9 which returns 'function' for `NodeList` instances.
-	  var tag = isObject(value) ? objectToString.call(value) : '';
-	  return tag == funcTag || tag == genTag;
-	}
-
-	/**
-	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
-	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
-	 * @example
-	 *
-	 * _.isObject({});
-	 * // => true
-	 *
-	 * _.isObject([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isObject(_.noop);
-	 * // => true
-	 *
-	 * _.isObject(null);
-	 * // => false
-	 */
-	function isObject(value) {
-	  var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
-	  return !!value && (type == 'object' || type == 'function');
-	}
-
-	/**
-	 * Checks if `value` is object-like. A value is object-like if it's not `null`
-	 * and has a `typeof` result of "object".
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
-	 * @example
-	 *
-	 * _.isObjectLike({});
-	 * // => true
-	 *
-	 * _.isObjectLike([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isObjectLike(_.noop);
-	 * // => false
-	 *
-	 * _.isObjectLike(null);
-	 * // => false
-	 */
-	function isObjectLike(value) {
-	  return !!value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) == 'object';
-	}
-
-	/**
-	 * Checks if `value` is classified as a `Symbol` primitive or object.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is correctly classified,
-	 *  else `false`.
-	 * @example
-	 *
-	 * _.isSymbol(Symbol.iterator);
-	 * // => true
-	 *
-	 * _.isSymbol('abc');
-	 * // => false
-	 */
-	function isSymbol(value) {
-	  return (typeof value === 'undefined' ? 'undefined' : _typeof(value)) == 'symbol' || isObjectLike(value) && objectToString.call(value) == symbolTag;
-	}
-
-	/**
-	 * Converts `value` to an integer.
-	 *
-	 * **Note:** This function is loosely based on
-	 * [`ToInteger`](http://www.ecma-international.org/ecma-262/6.0/#sec-tointeger).
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to convert.
-	 * @returns {number} Returns the converted integer.
-	 * @example
-	 *
-	 * _.toInteger(3);
-	 * // => 3
-	 *
-	 * _.toInteger(Number.MIN_VALUE);
-	 * // => 0
-	 *
-	 * _.toInteger(Infinity);
-	 * // => 1.7976931348623157e+308
-	 *
-	 * _.toInteger('3');
-	 * // => 3
-	 */
-	function toInteger(value) {
-	  if (!value) {
-	    return value === 0 ? value : 0;
-	  }
-	  value = toNumber(value);
-	  if (value === INFINITY || value === -INFINITY) {
-	    var sign = value < 0 ? -1 : 1;
-	    return sign * MAX_INTEGER;
-	  }
-	  var remainder = value % 1;
-	  return value === value ? remainder ? value - remainder : value : 0;
-	}
-
-	/**
-	 * Converts `value` to a number.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to process.
-	 * @returns {number} Returns the number.
-	 * @example
-	 *
-	 * _.toNumber(3);
-	 * // => 3
-	 *
-	 * _.toNumber(Number.MIN_VALUE);
-	 * // => 5e-324
-	 *
-	 * _.toNumber(Infinity);
-	 * // => Infinity
-	 *
-	 * _.toNumber('3');
-	 * // => 3
-	 */
-	function toNumber(value) {
-	  if (typeof value == 'number') {
-	    return value;
-	  }
-	  if (isSymbol(value)) {
-	    return NAN;
-	  }
-	  if (isObject(value)) {
-	    var other = isFunction(value.valueOf) ? value.valueOf() : value;
-	    value = isObject(other) ? other + '' : other;
-	  }
-	  if (typeof value != 'string') {
-	    return value === 0 ? value : +value;
-	  }
-	  value = value.replace(reTrim, '');
-	  var isBinary = reIsBinary.test(value);
-	  return isBinary || reIsOctal.test(value) ? freeParseInt(value.slice(2), isBinary ? 2 : 8) : reIsBadHex.test(value) ? NAN : +value;
-	}
-
-	module.exports = before;
-
-/***/ },
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	module.exports = __webpack_require__(14);
-
-/***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _base_object = __webpack_require__(5);
-
-	var _base_object2 = _interopRequireDefault(_base_object);
-
-	var _core = __webpack_require__(15);
-
-	var _core2 = _interopRequireDefault(_core);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // Copyright 2014 Globo.com Player authors. All rights reserved.
-	// Use of this source code is governed by a BSD-style
-	// license that can be found in the LICENSE file.
-
-	/**
-	 * The Core Factory is responsible for instantiate the core and it's plugins.
-	 * @class CoreFactory
-	 * @constructor
-	 * @extends BaseObject
-	 * @module components
-	 */
-
-	var CoreFactory = function (_BaseObject) {
-	  _inherits(CoreFactory, _BaseObject);
-
-	  _createClass(CoreFactory, [{
-	    key: 'loader',
-	    get: function get() {
-	      return this.player.loader;
-	    }
-
-	    /**
-	     * it builds the core factory
-	     * @method constructor
-	     * @param {Player} player the player object
-	     * @param {Loader} loader the loader object
-	     */
-
-	  }]);
-
-	  function CoreFactory(player, loader) {
-	    _classCallCheck(this, CoreFactory);
-
-	    var _this = _possibleConstructorReturn(this, _BaseObject.call(this));
-
-	    _this.player = player;
-	    _this.options = player.options;
-	    return _this;
-	  }
-
-	  /**
-	   * creates a core and its plugins
-	   * @method create
-	   * @return {Core} created core
-	   */
-
-
-	  CoreFactory.prototype.create = function create() {
-	    this.options.loader = this.loader;
-	    this.core = new _core2.default(this.options);
-	    this.addCorePlugins();
-	    this.core.createContainers(this.options);
-	    return this.core;
-	  };
-
-	  /**
-	   * given the core plugins (`loader.corePlugins`) it builds each one
-	   * @method addCorePlugins
-	   * @return {Core} the core with all plugins
-	   */
-
-
-	  CoreFactory.prototype.addCorePlugins = function addCorePlugins() {
-	    var _this2 = this;
-
-	    this.loader.corePlugins.forEach(function (Plugin) {
-	      var plugin = new Plugin(_this2.core);
-	      _this2.core.addPlugin(plugin);
-	      _this2.setupExternalInterface(plugin);
-	    });
-	    return this.core;
-	  };
-
-	  CoreFactory.prototype.setupExternalInterface = function setupExternalInterface(plugin) {
-	    var externalFunctions = plugin.getExternalInterface();
-	    for (var key in externalFunctions) {
-	      this.player[key] = externalFunctions[key].bind(plugin);
-	    }
-	  };
-
-	  return CoreFactory;
-	}(_base_object2.default);
-
-	exports.default = CoreFactory;
-	module.exports = exports['default'];
-
-/***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	module.exports = __webpack_require__(16);
-
-/***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _utils = __webpack_require__(2);
-
-	var _events = __webpack_require__(6);
-
-	var _events2 = _interopRequireDefault(_events);
-
-	var _styler = __webpack_require__(17);
-
-	var _styler2 = _interopRequireDefault(_styler);
-
-	var _ui_object = __webpack_require__(19);
-
-	var _ui_object2 = _interopRequireDefault(_ui_object);
-
-	var _browser = __webpack_require__(3);
-
-	var _browser2 = _interopRequireDefault(_browser);
-
-	var _container_factory = __webpack_require__(24);
-
-	var _container_factory2 = _interopRequireDefault(_container_factory);
-
-	var _media_control = __webpack_require__(35);
-
-	var _media_control2 = _interopRequireDefault(_media_control);
-
-	var _mediator = __webpack_require__(38);
-
-	var _mediator2 = _interopRequireDefault(_mediator);
-
-	var _player_info = __webpack_require__(51);
-
-	var _player_info2 = _interopRequireDefault(_player_info);
-
-	var _lodash = __webpack_require__(30);
-
-	var _lodash2 = _interopRequireDefault(_lodash);
-
-	var _clapprZepto = __webpack_require__(4);
-
-	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
-
-	var _style = __webpack_require__(52);
-
-	var _style2 = _interopRequireDefault(_style);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // Copyright 2014 Globo.com Player authors. All rights reserved.
-	// Use of this source code is governed by a BSD-style
-	// license that can be found in the LICENSE file.
-
-	/**
-	 * The Core is responsible to manage Containers, the mediator, MediaControl
-	 * and the player state.
-	 * @class Core
-	 * @constructor
-	 * @extends UIObject
-	 * @module components
-	 */
-
-	var Core = function (_UIObject) {
-	  _inherits(Core, _UIObject);
-
-	  _createClass(Core, [{
-	    key: 'events',
-	    get: function get() {
-	      return {
-	        'webkitfullscreenchange': 'handleFullscreenChange',
-	        'mousemove': 'showMediaControl',
-	        'mouseleave': 'hideMediaControl'
-	      };
-	    }
-	  }, {
-	    key: 'attributes',
-	    get: function get() {
-	      return {
-	        'data-player': '',
-	        tabindex: 9999
-	      };
-	    }
-
-	    /**
-	     * checks if the core is ready.
-	     * @property isReady
-	     * @type {Boolean} `true` if the core is ready, otherwise `false`
-	     */
-
-	  }, {
-	    key: 'isReady',
-	    get: function get() {
-	      return !!this.ready;
-	    }
-	  }]);
-
-	  function Core(options) {
-	    _classCallCheck(this, Core);
-
-	    var _this = _possibleConstructorReturn(this, _UIObject.call(this, options));
-
-	    _this.playerInfo = _player_info2.default.getInstance(options.playerId);
-	    _this.firstResize = true;
-	    _this.options = options;
-	    _this.plugins = [];
-	    _this.containers = [];
-	    _this.setupMediaControl(null);
-	    //FIXME fullscreen api sucks
-	    _this._boundFullscreenHandler = function () {
-	      return _this.handleFullscreenChange();
-	    };
-	    (0, _clapprZepto2.default)(document).bind('fullscreenchange', _this._boundFullscreenHandler);
-	    (0, _clapprZepto2.default)(document).bind('MSFullscreenChange', _this._boundFullscreenHandler);
-	    (0, _clapprZepto2.default)(document).bind('mozfullscreenchange', _this._boundFullscreenHandler);
-	    return _this;
-	  }
-
-	  Core.prototype.createContainers = function createContainers(options) {
-	    var _this2 = this;
-
-	    this.defer = _clapprZepto2.default.Deferred();
-	    this.defer.promise(this);
-	    this.containerFactory = new _container_factory2.default(options, options.loader);
-	    this.containerFactory.createContainers().then(function (containers) {
-	      return _this2.setupContainers(containers);
-	    }).then(function (containers) {
-	      return _this2.resolveOnContainersReady(containers);
-	    });
-	  };
-
-	  Core.prototype.updateSize = function updateSize() {
-	    if (_utils.Fullscreen.isFullscreen()) {
-	      this.setFullscreen();
-	    } else {
-	      this.setPlayerSize();
-	    }
-	  };
-
-	  Core.prototype.setFullscreen = function setFullscreen() {
-	    if (!_browser2.default.isiOS) {
-	      this.$el.addClass('fullscreen');
-	      this.$el.removeAttr('style');
-	      this.playerInfo.previousSize = { width: this.options.width, height: this.options.height };
-	      this.playerInfo.currentSize = { width: (0, _clapprZepto2.default)(window).width(), height: (0, _clapprZepto2.default)(window).height() };
-	    }
-	  };
-
-	  Core.prototype.setPlayerSize = function setPlayerSize() {
-	    this.$el.removeClass('fullscreen');
-	    this.playerInfo.currentSize = this.playerInfo.previousSize;
-	    this.playerInfo.previousSize = { width: (0, _clapprZepto2.default)(window).width(), height: (0, _clapprZepto2.default)(window).height() };
-	    this.resize(this.playerInfo.currentSize);
-	  };
-
-	  Core.prototype.resize = function resize(options) {
-	    if (!(0, _utils.isNumber)(options.height) && !(0, _utils.isNumber)(options.width)) {
-	      this.el.style.height = '' + options.height;
-	      this.el.style.width = '' + options.width;
-	    } else {
-	      this.el.style.height = options.height + 'px';
-	      this.el.style.width = options.width + 'px';
-	    }
-	    this.playerInfo.previousSize = { width: this.options.width, height: this.options.height };
-	    this.options.width = options.width;
-	    this.options.height = options.height;
-	    this.playerInfo.currentSize = options;
-	    this.triggerResize(this.playerInfo.currentSize);
-	  };
-
-	  Core.prototype.enableResizeObserver = function enableResizeObserver() {
-	    var _this3 = this;
-
-	    var checkSizeCallback = function checkSizeCallback() {
-	      if (_this3.playerInfo.computedSize.width != _this3.el.clientWidth || _this3.playerInfo.computedSize.height != _this3.el.clientHeight) {
-	        _this3.playerInfo.computedSize = { width: _this3.el.clientWidth, height: _this3.el.clientHeight };
-	        _this3.triggerResize(_this3.playerInfo.computedSize);
-	      }
-	    };
-	    this.resizeObserverInterval = setInterval(checkSizeCallback, 500);
-	  };
-
-	  Core.prototype.triggerResize = function triggerResize(newSize) {
-	    var thereWasChange = this.firstResize || this.oldHeight !== newSize.height || this.oldWidth !== newSize.width;
-	    if (thereWasChange) {
-	      _mediator2.default.trigger(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, newSize);
-	      this.oldHeight = newSize.height;
-	      this.oldWidth = newSize.width;
-	      this.firstResize = false;
-	    }
-	  };
-
-	  Core.prototype.disableResizeObserver = function disableResizeObserver() {
-	    if (this.resizeObserverInterval) clearInterval(this.resizeObserverInterval);
-	  };
-
-	  Core.prototype.resolveOnContainersReady = function resolveOnContainersReady(containers) {
-	    var _this4 = this;
-
-	    _clapprZepto2.default.when.apply(_clapprZepto2.default, containers).done(function () {
-	      _this4.defer.resolve(_this4);
-	      _this4.ready = true;
-	      _this4.trigger(_events2.default.CORE_READY);
-	    });
-	  };
-
-	  Core.prototype.addPlugin = function addPlugin(plugin) {
-	    this.plugins.push(plugin);
-	  };
-
-	  Core.prototype.hasPlugin = function hasPlugin(name) {
-	    return !!this.getPlugin(name);
-	  };
-
-	  Core.prototype.getPlugin = function getPlugin(name) {
-	    return (0, _lodash2.default)(this.plugins, function (plugin) {
-	      return plugin.name === name;
-	    });
-	  };
-
-	  Core.prototype.load = function load(sources, mimeType) {
-	    var _this5 = this;
-
-	    this.options.mimeType = mimeType;
-	    sources = sources && sources.constructor === Array ? sources : [sources];
-	    this.containers.forEach(function (container) {
-	      return container.destroy();
-	    });
-	    this.mediaControl.container = null;
-	    this.containerFactory.options = _clapprZepto2.default.extend(this.options, { sources: sources });
-	    this.containerFactory.createContainers().then(function (containers) {
-	      _this5.setupContainers(containers);
-	    });
-	  };
-
-	  Core.prototype.destroy = function destroy() {
-	    this.disableResizeObserver();
-	    this.containers.forEach(function (container) {
-	      return container.destroy();
-	    });
-	    this.plugins.forEach(function (plugin) {
-	      return plugin.destroy();
-	    });
-	    this.$el.remove();
-	    this.mediaControl.destroy();
-	    (0, _clapprZepto2.default)(document).unbind('fullscreenchange', this._boundFullscreenHandler);
-	    (0, _clapprZepto2.default)(document).unbind('MSFullscreenChange', this._boundFullscreenHandler);
-	    (0, _clapprZepto2.default)(document).unbind('mozfullscreenchange', this._boundFullscreenHandler);
-	  };
-
-	  Core.prototype.handleFullscreenChange = function handleFullscreenChange() {
-	    this.trigger(_events2.default.CORE_FULLSCREEN, _utils.Fullscreen.isFullscreen());
-	    this.updateSize();
-	    this.mediaControl.show();
-	  };
-
-	  Core.prototype.setMediaControlContainer = function setMediaControlContainer(container) {
-	    this.mediaControl.setContainer(container);
-	    this.mediaControl.render();
-	  };
-
-	  Core.prototype.disableMediaControl = function disableMediaControl() {
-	    this.mediaControl.disable();
-	    this.$el.removeClass('nocursor');
-	  };
-
-	  Core.prototype.enableMediaControl = function enableMediaControl() {
-	    this.mediaControl.enable();
-	  };
-
-	  Core.prototype.removeContainer = function removeContainer(container) {
-	    this.stopListening(container);
-	    this.containers = this.containers.filter(function (c) {
-	      return c !== container;
-	    });
-	  };
-
-	  Core.prototype.appendContainer = function appendContainer(container) {
-	    this.listenTo(container, _events2.default.CONTAINER_DESTROYED, this.removeContainer);
-	    this.containers.push(container);
-	  };
-
-	  Core.prototype.setupContainers = function setupContainers(containers) {
-	    containers.map(this.appendContainer.bind(this));
-	    this.trigger(_events2.default.CORE_CONTAINERS_CREATED);
-	    this.renderContainers();
-	    this.setupMediaControl(this.getCurrentContainer());
-	    this.render();
-	    this.$el.appendTo(this.options.parentElement);
-	    return this.containers;
-	  };
-
-	  Core.prototype.renderContainers = function renderContainers() {
-	    var _this6 = this;
-
-	    this.containers.map(function (container) {
-	      return _this6.el.appendChild(container.render().el);
-	    });
-	  };
-
-	  Core.prototype.createContainer = function createContainer(source, options) {
-	    var container = this.containerFactory.createContainer(source, options);
-	    this.appendContainer(container);
-	    this.el.appendChild(container.render().el);
-	    return container;
-	  };
-
-	  Core.prototype.setupMediaControl = function setupMediaControl(container) {
-	    if (this.mediaControl) {
-	      this.mediaControl.setContainer(container);
-	    } else {
-	      this.mediaControl = this.createMediaControl(_clapprZepto2.default.extend({ container: container, focusElement: this.el }, this.options));
-	      this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_FULLSCREEN, this.toggleFullscreen);
-	      this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_SHOW, this.onMediaControlShow.bind(this, true));
-	      this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_HIDE, this.onMediaControlShow.bind(this, false));
-	    }
-	  };
-
-	  Core.prototype.createMediaControl = function createMediaControl(options) {
-	    if (options.mediacontrol && options.mediacontrol.external) {
-	      return new options.mediacontrol.external(options).render();
-	    } else {
-	      return new _media_control2.default(options).render();
-	    }
-	  };
-
-	  Core.prototype.getCurrentContainer = function getCurrentContainer() {
-	    if (!this.mediaControl || !this.mediaControl.container) {
-	      return this.containers[0];
-	    }
-	    return this.mediaControl.container;
-	  };
-
-	  Core.prototype.getCurrentPlayback = function getCurrentPlayback() {
-	    var container = this.getCurrentContainer();
-	    return container && container.playback;
-	  };
-
-	  Core.prototype.getPlaybackType = function getPlaybackType() {
-	    var container = this.getCurrentContainer();
-	    return container && container.getPlaybackType();
-	  };
-
-	  Core.prototype.toggleFullscreen = function toggleFullscreen() {
-	    if (!_utils.Fullscreen.isFullscreen()) {
-	      _utils.Fullscreen.requestFullscreen(this.el);
-	      if (!_browser2.default.isiOS) {
-	        this.$el.addClass('fullscreen');
-	      }
-	    } else {
-	      _utils.Fullscreen.cancelFullscreen();
-	      if (!_browser2.default.isiOS) {
-	        this.$el.removeClass('fullscreen nocursor');
-	      }
-	    }
-	    this.mediaControl.show();
-	  };
-
-	  Core.prototype.showMediaControl = function showMediaControl(event) {
-	    this.mediaControl.show(event);
-	  };
-
-	  Core.prototype.hideMediaControl = function hideMediaControl(event) {
-	    this.mediaControl.hide(this.options.hideMediaControlDelay);
-	  };
-
-	  Core.prototype.onMediaControlShow = function onMediaControlShow(showing) {
-	    this.getCurrentContainer().trigger(showing ? _events2.default.CONTAINER_MEDIACONTROL_SHOW : _events2.default.CONTAINER_MEDIACONTROL_HIDE);
-
-	    if (showing) this.$el.removeClass('nocursor');else if (_utils.Fullscreen.isFullscreen()) this.$el.addClass('nocursor');
-	  };
-
-	  /**
-	   * enables to configure the container after its creation
-	   * @method configure
-	   * @param {Object} options all the options to change in form of a javascript object
-	   */
-
-
-	  Core.prototype.configure = function configure(options) {
-	    var _this7 = this;
-
-	    this.options = _clapprZepto2.default.extend(this.options, options);
-	    var sources = options.source || options.sources;
-
-	    if (sources) {
-	      this.load(sources, options.mimeType || this.options.mimeType);
-	    } else {
-	      this.trigger(_events2.default.CORE_OPTIONS_CHANGE);
-
-	      this.containers.forEach(function (container) {
-	        container.configure(_this7.options);
-	      });
-	    }
-	  };
-
-	  Core.prototype.render = function render() {
-	    var style = _styler2.default.getStyleFor(_style2.default, { baseUrl: this.options.baseUrl });
-	    this.$el.append(style);
-	    this.$el.append(this.mediaControl.render().el);
-
-	    this.options.width = this.options.width || this.$el.width();
-	    this.options.height = this.options.height || this.$el.height();
-	    var size = { width: this.options.width, height: this.options.height };
-	    this.playerInfo.previousSize = this.playerInfo.currentSize = this.playerInfo.computedSize = size;
-	    this.updateSize();
-
-	    this.previousSize = { width: this.$el.width(), height: this.$el.height() };
-
-	    this.enableResizeObserver();
-
-	    return this;
-	  };
-
-	  return Core;
-	}(_ui_object2.default);
-
-	exports.default = Core;
-	module.exports = exports['default'];
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _clapprZepto = __webpack_require__(4);
-
-	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
-
-	var _template = __webpack_require__(18);
-
-	var _template2 = _interopRequireDefault(_template);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	// Copyright 2014 Globo.com Player authors. All rights reserved.
-	// Use of this source code is governed by a BSD-style
-	// license that can be found in the LICENSE file.
-
-	var Styler = {
-	  getStyleFor: function getStyleFor(style) {
-	    var options = arguments.length <= 1 || arguments[1] === undefined ? { baseUrl: '' } : arguments[1];
-
-	    return (0, _clapprZepto2.default)('<style class="clappr-style"></style>').html((0, _template2.default)(style.toString())(options));
-	  }
-	};
-
-	exports.default = Styler;
-	module.exports = exports['default'];
-
-/***/ },
 /* 18 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	// Simple JavaScript Templating
 	// Paul Miller (http://paulmillr.com)
@@ -4430,13 +4433,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	// Certain characters need to be escaped so that they can be put into a
 	// string literal.
 	var escapes = {
-	  "'": "'",
+	  '\'': '\'',
 	  '\\': '\\',
 	  '\r': 'r',
 	  '\n': 'n',
 	  '\t': 't',
-	  "\u2028": 'u2028',
-	  "\u2029": 'u2029'
+	  '\u2028': 'u2028',
+	  '\u2029': 'u2029'
 	};
 
 	var escaper = /\\|'|\r|\n|\t|\u2028|\u2029/g;
@@ -4447,7 +4450,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  '<': '&lt;',
 	  '>': '&gt;',
 	  '"': '&quot;',
-	  "'": '&#x27;'
+	  '\'': '&#x27;'
 	};
 
 	var entityRe = new RegExp('[&<>"\']', 'g');
@@ -4474,32 +4477,32 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  // Compile the template source, escaping string literals appropriately.
 	  var index = 0;
-	  var source = "__p+='";
+	  var source = '__p+=\'';
 	  text.replace(matcher, function (match, escape, interpolate, evaluate, offset) {
 	    source += text.slice(index, offset).replace(escaper, function (match) {
 	      return '\\' + escapes[match];
 	    });
 
 	    if (escape) {
-	      source += "'+\n((__t=(" + escape + "))==null?'':escapeExpr(__t))+\n'";
+	      source += '\'+\n((__t=(' + escape + '))==null?\'\':escapeExpr(__t))+\n\'';
 	    }
 	    if (interpolate) {
-	      source += "'+\n((__t=(" + interpolate + "))==null?'':__t)+\n'";
+	      source += '\'+\n((__t=(' + interpolate + '))==null?\'\':__t)+\n\'';
 	    }
 	    if (evaluate) {
-	      source += "';\n" + evaluate + "\n__p+='";
+	      source += '\';\n' + evaluate + '\n__p+=\'';
 	    }
 	    index = offset + match.length;
 	    return match;
 	  });
-	  source += "';\n";
+	  source += '\';\n';
 
 	  // If a variable is not specified, place data values in local scope.
 	  if (!settings.variable) {
 	    source = 'with(obj||{}){\n' + source + '}\n';
 	  }
 
-	  source = "var __t,__p='',__j=Array.prototype.join," + "print=function(){__p+=__j.call(arguments,'');};\n" + source + "return __p;\n//# sourceURL=/microtemplates/source[" + counter++ + "]";
+	  source = 'var __t,__p=\'\',__j=Array.prototype.join,' + 'print=function(){__p+=__j.call(arguments,\'\');};\n' + source + 'return __p;\n//# sourceURL=/microtemplates/source[' + counter++ + ']';
 
 	  try {
 	    /*jshint -W054 */
@@ -4540,7 +4543,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _utils = __webpack_require__(2);
 
-	var _clapprZepto = __webpack_require__(4);
+	var _clapprZepto = __webpack_require__(17);
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
@@ -4548,7 +4551,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _base_object = __webpack_require__(5);
+	var _base_object = __webpack_require__(4);
 
 	var _base_object2 = _interopRequireDefault(_base_object);
 
@@ -6018,11 +6021,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _base_object = __webpack_require__(5);
+	var _base_object = __webpack_require__(4);
 
 	var _base_object2 = _interopRequireDefault(_base_object);
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -6030,7 +6033,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _container2 = _interopRequireDefault(_container);
 
-	var _clapprZepto = __webpack_require__(4);
+	var _clapprZepto = __webpack_require__(17);
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
@@ -6084,7 +6087,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  ContainerFactory.prototype.createContainer = function createContainer(source) {
 	    var resolvedSource = null;
 	    var mimeType = this.options.mimeType;
-	    if (typeof source === "string" || source instanceof String) {
+	    if (typeof source === 'string' || source instanceof String) {
 	      resolvedSource = source.toString();
 	    } else {
 	      resolvedSource = source.source.toString();
@@ -6093,7 +6096,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 
-	    if (!!resolvedSource.match(/^\/\//)) resolvedSource = window.location.protocol + resolvedSource;
+	    if (resolvedSource.match(/^\/\//)) resolvedSource = window.location.protocol + resolvedSource;
 
 	    var options = _clapprZepto2.default.extend({}, this.options, {
 	      src: resolvedSource,
@@ -6107,14 +6110,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var container = new _container2.default(options);
 	    var defer = _clapprZepto2.default.Deferred();
 	    defer.promise(container);
-	    this.addContainerPlugins(container, resolvedSource);
+	    this.addContainerPlugins(container);
 	    this.listenToOnce(container, _events2.default.CONTAINER_READY, function () {
 	      return defer.resolve(container);
 	    });
 	    return container;
 	  };
 
-	  ContainerFactory.prototype.addContainerPlugins = function addContainerPlugins(container, source) {
+	  ContainerFactory.prototype.addContainerPlugins = function addContainerPlugins(container) {
 	    this.loader.containerPlugins.forEach(function (Plugin) {
 	      container.addPlugin(new Plugin(container));
 	    });
@@ -6146,7 +6149,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -6154,7 +6157,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _ui_object2 = _interopRequireDefault(_ui_object);
 
-	var _styler = __webpack_require__(17);
+	var _styler = __webpack_require__(16);
 
 	var _styler2 = _interopRequireDefault(_styler);
 
@@ -6166,7 +6169,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _clapprZepto = __webpack_require__(4);
+	var _clapprZepto = __webpack_require__(17);
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
@@ -9567,13 +9570,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _utils = __webpack_require__(2);
 
-	var _vendor = __webpack_require__(9);
+	var _vendor = __webpack_require__(8);
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _styler = __webpack_require__(17);
+	var _styler = __webpack_require__(16);
 
 	var _styler2 = _interopRequireDefault(_styler);
 
@@ -9597,7 +9600,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _playback2 = _interopRequireDefault(_playback);
 
-	var _clapprZepto = __webpack_require__(4);
+	var _clapprZepto = __webpack_require__(17);
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
@@ -9727,7 +9730,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _this.container = options.container;
 	    _this.currentPositionValue = null;
 	    _this.currentDurationValue = null;
-	    var initialVolume = _this.persistConfig ? _utils.Config.restore("volume") : 100;
+	    var initialVolume = _this.persistConfig ? _utils.Config.restore('volume') : 100;
 	    _this.setVolume(_this.options.mute ? 0 : initialVolume);
 	    _this.keepVisible = false;
 	    _this.addEventListeners();
@@ -9967,7 +9970,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // it may not actually get set to this straight away
 	    // if the container is not ready etc
 	    this.intendedVolume = value;
-	    this.persistConfig && _utils.Config.persist("volume", value);
+	    this.persistConfig && _utils.Config.persist('volume', value);
 	    var setWhenContainerReady = function setWhenContainerReady() {
 	      if (_this2.container.isReady) {
 	        _this2.container.setVolume(value);
@@ -10161,7 +10164,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  MediaControl.prototype.highDefinitionUpdate = function highDefinitionUpdate(isHD) {
-	    var method = !!isHD ? 'addClass' : 'removeClass';
+	    var method = isHD ? 'addClass' : 'removeClass';
 	    this.$hdIndicator[method]('enabled');
 	  };
 
@@ -10265,7 +10268,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var seekbarColor = this.options.mediacontrol.seekbar;
 	      this.$el.find('.bar-fill-2[data-seekbar]').css('background-color', seekbarColor);
 	      this.$el.find('.media-control-icon svg path').css('fill', this.buttonsColor);
-	      this.$el.find('.segmented-bar-element[data-volume]').css('boxShadow', "inset 2px 0 0 " + this.buttonsColor);
+	      this.$el.find('.segmented-bar-element[data-volume]').css('boxShadow', 'inset 2px 0 0 ' + this.buttonsColor);
 	    }
 	  };
 
@@ -10461,7 +10464,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -10499,8 +10502,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return;
 	};
 
-	Mediator.trigger = function (name, opts) {
-	  events.trigger.apply(events, Array.prototype.slice.call(arguments));
+	Mediator.trigger = function (name) {
+	  for (var _len = arguments.length, opts = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	    opts[_key - 1] = arguments[_key];
+	  }
+
+	  events.trigger.apply(events, [name].concat(opts));
 	  return;
 	};
 
@@ -10620,16 +10627,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 
 
-	  Playback.prototype.seek = function seek(time) {} /*jshint unused:false*/
+	  Playback.prototype.seek = function seek(time) {}; // eslint-disable-line no-unused-vars
 
 	  /**
 	   * seeks the playback to a given `percentage` in percentage
 	   * @method seekPercentage
 	   * @param {Number} time should be a number between 0 and 100
 	   */
-	  ;
 
-	  Playback.prototype.seekPercentage = function seekPercentage(percentage) {} /*jshint unused:false*/
+
+	  Playback.prototype.seekPercentage = function seekPercentage(percentage) {}; // eslint-disable-line no-unused-vars
 
 	  /**
 	   * The time that "0" now represents relative to when playback started.
@@ -10638,7 +10645,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @method getStartTimeOffset
 	   * @return {Number} time (in seconds) that time "0" represents.
 	   */
-	  ;
+
 
 	  Playback.prototype.getStartTimeOffset = function getStartTimeOffset() {
 	    return 0;
@@ -10708,13 +10715,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 
 
-	  Playback.prototype.volume = function volume(value) {} /*jshint unused:false*/
+	  Playback.prototype.volume = function volume(value) {}; // eslint-disable-line no-unused-vars
 
 	  /**
 	   * destroys the playback, removing it from DOM
 	   * @method destroy
 	   */
-	  ;
+
 
 	  Playback.prototype.destroy = function destroy() {
 	    this.$el.remove();
@@ -10748,7 +10755,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @return {Boolean} `true` if the playback is playable, otherwise `false`
 	 */
 	Playback.canPlay = function (source, mimeType) {
-	  /*jshint unused:false*/
+	  // eslint-disable-line no-unused-vars
 	  return false;
 	};
 
@@ -10939,7 +10946,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _base_object = __webpack_require__(5);
+	var _base_object = __webpack_require__(4);
 
 	var _base_object2 = _interopRequireDefault(_base_object);
 
@@ -11132,10 +11139,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	  Loader.prototype.validateExternalPluginsType = function validateExternalPluginsType(plugins) {
-	    var plugintypes = ["playback", "container", "core"];
+	    var plugintypes = ['playback', 'container', 'core'];
 	    plugintypes.forEach(function (type) {
 	      (plugins[type] || []).forEach(function (el) {
-	        var errorMessage = "external " + el.type + " plugin on " + type + " array";
+	        var errorMessage = 'external ' + el.type + ' plugin on ' + type + ' array';
 	        if (el.type !== type) {
 	          throw new ReferenceError(errorMessage);
 	        }
@@ -12367,7 +12374,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _template2 = _interopRequireDefault(_template);
 
-	var _styler = __webpack_require__(17);
+	var _styler = __webpack_require__(16);
 
 	var _styler2 = _interopRequireDefault(_styler);
 
@@ -12375,7 +12382,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _browser2 = _interopRequireDefault(_browser);
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -12391,7 +12398,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _clapprZepto = __webpack_require__(4);
+	var _clapprZepto = __webpack_require__(17);
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
@@ -12406,7 +12413,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// license that can be found in the LICENSE file.
 
 	var MIMETYPES = {
-	  'mp4': ["avc1.42E01E", "avc1.58A01E", "avc1.4D401E", "avc1.64001E", "mp4v.20.8", "mp4v.20.240", "mp4a.40.2"].map(function (codec) {
+	  'mp4': ['avc1.42E01E', 'avc1.58A01E', 'avc1.4D401E', 'avc1.64001E', 'mp4v.20.8', 'mp4v.20.240', 'mp4a.40.2'].map(function (codec) {
 	    return 'video/mp4; codecs="' + codec + ', mp4a.40.2"';
 	  }),
 	  'ogg': ['video/ogg; codecs="theora, vorbis"', 'video/ogg; codecs="dirac"', 'video/ogg; codecs="theora, speex"'],
@@ -12518,8 +12525,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    // TODO should settings be private?
 	    _this.settings = { default: ['seekbar'] };
-	    _this.settings.left = ["playpause", "position", "duration"];
-	    _this.settings.right = ["fullscreen", "volume", "hd-indicator"];
+	    _this.settings.left = ['playpause', 'position', 'duration'];
+	    _this.settings.right = ['fullscreen', 'volume', 'hd-indicator'];
 	    return _this;
 	  }
 
@@ -12540,7 +12547,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._handleBufferingEvents();
 	    this.trigger(_events2.default.PLAYBACK_LOADEDMETADATA, { duration: e.target.duration, data: e });
 	    this._updateSettings();
-	    var autoSeekFromUrl = typeof this._options.autoSeekFromUrl === "undefined" || this._options.autoSeekFromUrl;
+	    var autoSeekFromUrl = typeof this._options.autoSeekFromUrl === 'undefined' || this._options.autoSeekFromUrl;
 	    if (this.getPlaybackType() !== _playback2.default.LIVE && autoSeekFromUrl) {
 	      this._checkInitialSeek();
 	    }
@@ -12557,9 +12564,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // we can't figure out if hls resource is VoD or not until it is being loaded or duration has changed.
 	    // that's why we check it again and update media control accordingly.
 	    if (this.getPlaybackType() === _playback2.default.VOD) {
-	      this.settings.left = ["playpause", "position", "duration"];
+	      this.settings.left = ['playpause', 'position', 'duration'];
 	    } else {
-	      this.settings.left = ["playstop"];
+	      this.settings.left = ['playstop'];
 	    }
 	    this.settings.seekEnabled = this.isSeekEnabled();
 	    this.trigger(_events2.default.PLAYBACK_SETTINGSUPDATE);
@@ -12578,6 +12585,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  HTML5Video.prototype.play = function play() {
+	    this.trigger(_events2.default.PLAYBACK_PLAY_INTENT);
 	    this._stopped = false;
 	    this._handleBufferingEvents();
 	    this.el.play();
@@ -12715,7 +12723,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  };
 
-	  HTML5Video.prototype._onError = function _onError(event) {
+	  HTML5Video.prototype._onError = function _onError() {
 	    this.trigger(_events2.default.PLAYBACK_ERROR, this.el.error, this.name);
 	  };
 
@@ -12778,7 +12786,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  HTML5Video.prototype._typeFor = function _typeFor(src) {
 	    var resourceParts = src.split('?')[0].match(/.*\.(.*)$/) || [];
-	    var isHls = resourceParts.length > 1 && resourceParts[1] === "m3u8";
+	    var isHls = resourceParts.length > 1 && resourceParts[1] === 'm3u8';
 	    return isHls ? 'application/vnd.apple.mpegurl' : 'video/mp4';
 	  };
 
@@ -12800,7 +12808,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    if (this._options.disableVideoTagContextMenu) {
-	      this.$el.on("contextmenu", function () {
+	      this.$el.on('contextmenu', function () {
 	        return false;
 	      });
 	    }
@@ -12899,11 +12907,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _template2 = _interopRequireDefault(_template);
 
-	var _clapprZepto = __webpack_require__(4);
+	var _clapprZepto = __webpack_require__(17);
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -12950,7 +12958,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'ended',
 	    get: function get() {
-	      return this._currentState === "ENDED";
+	      return this._currentState === 'ENDED';
 	    }
 
 	    /**
@@ -12963,7 +12971,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'buffering',
 	    get: function get() {
-	      return !!this._bufferingState && this._currentState !== "ENDED";
+	      return !!this._bufferingState && this._currentState !== 'ENDED';
 	    }
 	  }]);
 
@@ -12976,8 +12984,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _this._baseUrl = options.baseUrl;
 	    _this._autoPlay = options.autoPlay;
 	    _this.settings = { default: ['seekbar'] };
-	    _this.settings.left = ["playpause", "position", "duration"];
-	    _this.settings.right = ["fullscreen", "volume"];
+	    _this.settings.left = ['playpause', 'position', 'duration'];
+	    _this.settings.right = ['fullscreen', 'volume'];
 	    _this.settings.seekEnabled = true;
 	    _this._isReadyState = false;
 	    _this._addListeners();
@@ -12988,12 +12996,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var _this2 = this;
 
 	    if (this.el.playerPlay) {
-	      this.el.width = "100%";
-	      this.el.height = "100%";
+	      this.el.width = '100%';
+	      this.el.height = '100%';
 	      if (this._currentState === 'PLAYING') {
 	        this._firstPlay();
 	      } else {
-	        this._currentState = "IDLE";
+	        this._currentState = 'IDLE';
 	        this._autoPlay && this.play();
 	      }
 	      (0, _clapprZepto2.default)('<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%" />').insertAfter(this.$el);
@@ -13009,7 +13017,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          return _this2._bootstrap();
 	        }, 50);
 	      } else {
-	        this.trigger(_events2.default.PLAYBACK_ERROR, { message: "Max number of attempts reached" }, this.name);
+	        this.trigger(_events2.default.PLAYBACK_ERROR, { message: 'Max number of attempts reached' }, this.name);
 	      }
 	    }
 	  };
@@ -13048,28 +13056,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  Flash.prototype._checkState = function _checkState() {
-	    if (this._isIdle || this._currentState === "PAUSED") {
+	    if (this._isIdle || this._currentState === 'PAUSED') {
 	      return;
-	    } else if (this._currentState !== "PLAYING_BUFFERING" && this.el.getState() === "PLAYING_BUFFERING") {
+	    } else if (this._currentState !== 'PLAYING_BUFFERING' && this.el.getState() === 'PLAYING_BUFFERING') {
 	      this._bufferingState = true;
 	      this.trigger(_events2.default.PLAYBACK_BUFFERING, this.name);
-	      this._currentState = "PLAYING_BUFFERING";
-	    } else if (this.el.getState() === "PLAYING") {
+	      this._currentState = 'PLAYING_BUFFERING';
+	    } else if (this.el.getState() === 'PLAYING') {
 	      this._bufferingState = false;
 	      this.trigger(_events2.default.PLAYBACK_BUFFERFULL, this.name);
-	      this._currentState = "PLAYING";
-	    } else if (this.el.getState() === "IDLE") {
-	      this._currentState = "IDLE";
-	    } else if (this.el.getState() === "ENDED") {
+	      this._currentState = 'PLAYING';
+	    } else if (this.el.getState() === 'IDLE') {
+	      this._currentState = 'IDLE';
+	    } else if (this.el.getState() === 'ENDED') {
 	      this.trigger(_events2.default.PLAYBACK_ENDED, this.name);
 	      this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: 0, total: this.el.getDuration() }, this.name);
-	      this._currentState = "ENDED";
+	      this._currentState = 'ENDED';
 	      this._isIdle = true;
 	    }
 	  };
 
 	  Flash.prototype._progress = function _progress() {
-	    if (this._currentState !== "IDLE" && this._currentState !== "ENDED") {
+	    if (this._currentState !== 'IDLE' && this._currentState !== 'ENDED') {
 	      this.trigger(_events2.default.PLAYBACK_PROGRESS, {
 	        start: 0,
 	        current: this.el.getBytesLoaded(),
@@ -13087,7 +13095,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.listenToOnce(this, _events2.default.PLAYBACK_BUFFERFULL, function () {
 	        return _this3._checkInitialSeek();
 	      });
-	      this._currentState = "PLAYING";
+	      this._currentState = 'PLAYING';
 	    } else {
 	      this.listenToOnce(this, _events2.default.PLAYBACK_READY, this._firstPlay);
 	    }
@@ -13101,8 +13109,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  Flash.prototype.play = function play() {
+	    this.trigger(_events2.default.PLAYBACK_PLAY_INTENT);
 	    if (this._currentState === 'PAUSED' || this._currentState === 'PLAYING_BUFFERING') {
-	      this._currentState = "PLAYING";
+	      this._currentState = 'PLAYING';
 	      this.el.playerResume();
 	      this.trigger(_events2.default.PLAYBACK_PLAY, this.name);
 	    } else if (this._currentState !== 'PLAYING') {
@@ -13124,7 +13133,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  Flash.prototype.pause = function pause() {
-	    this._currentState = "PAUSED";
+	    this._currentState = 'PAUSED';
 	    this.el.playerPause();
 	    this.trigger(_events2.default.PLAYBACK_PAUSE, this.name);
 	  };
@@ -13136,7 +13145,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  Flash.prototype.isPlaying = function isPlaying() {
-	    return !!(this.isReady && this._currentState.indexOf("PLAYING") > -1);
+	    return !!(this.isReady && this._currentState.indexOf('PLAYING') > -1);
 	  };
 
 	  Flash.prototype.getDuration = function getDuration() {
@@ -13162,7 +13171,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (this.isReady && this.el.playerSeek) {
 	      this.el.playerSeek(time);
 	      this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: time, total: this.el.getDuration() }, this.name);
-	      if (this._currentState === "PAUSED") {
+	      if (this._currentState === 'PAUSED') {
 	        this.el.playerPause();
 	      }
 	    } else {
@@ -13229,7 +13238,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _playback2 = _interopRequireDefault(_playback);
 
-	var _styler = __webpack_require__(17);
+	var _styler = __webpack_require__(16);
 
 	var _styler2 = _interopRequireDefault(_styler);
 
@@ -13240,10 +13249,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _browser = __webpack_require__(3);
 
 	var _browser2 = _interopRequireDefault(_browser);
-
-	var _clapprZepto = __webpack_require__(4);
-
-	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 	var _flash = __webpack_require__(68);
 
@@ -13404,7 +13409,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -13415,10 +13420,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _html5_video = __webpack_require__(60);
 
 	var _html5_video2 = _interopRequireDefault(_html5_video);
-
-	var _lodash = __webpack_require__(30);
-
-	var _lodash2 = _interopRequireDefault(_lodash);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -13440,7 +13441,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  HTML5Audio.prototype.updateSettings = function updateSettings() {
-	    this.settings.left = ["playpause", "position", "duration"];
+	    this.settings.left = ['playpause', 'position', 'duration'];
 	    this.settings.seekEnabled = this.isSeekEnabled();
 	    this.trigger(_events2.default.PLAYBACK_SETTINGSUPDATE);
 	  };
@@ -13502,7 +13503,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _base_flash_playback2 = _interopRequireDefault(_base_flash_playback);
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -13530,7 +13531,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _HLSPlayer2 = _interopRequireDefault(_HLSPlayer);
 
-	var _clapprZepto = __webpack_require__(4);
+	var _clapprZepto = __webpack_require__(17);
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
@@ -13619,9 +13620,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _this._autoPlay = options.autoPlay;
 	    _this._loop = options.loop;
 	    _this._defaultSettings = {
-	      left: ["playstop"],
+	      left: ['playstop'],
 	      default: ['seekbar'],
-	      right: ["fullscreen", "volume", "hd-indicator"],
+	      right: ['fullscreen', 'volume', 'hd-indicator'],
 	      seekEnabled: false
 	    };
 	    _this.settings = _clapprZepto2.default.extend({}, _this._defaultSettings);
@@ -13634,7 +13635,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  FlasHLS.prototype._initHlsParameters = function _initHlsParameters(options) {
 	    this._autoStartLoad = options.autoStartLoad === undefined ? true : options.autoStartLoad;
 	    this._capLevelToStage = options.capLevelToStage === undefined ? false : options.capLevelToStage;
-	    this._maxLevelCappingMode = options.maxLevelCappingMode === undefined ? "downscale" : options.maxLevelCappingMode;
+	    this._maxLevelCappingMode = options.maxLevelCappingMode === undefined ? 'downscale' : options.maxLevelCappingMode;
 	    this._minBufferLength = options.minBufferLength === undefined ? -1 : options.minBufferLength;
 	    this._minBufferLengthCapping = options.minBufferLengthCapping === undefined ? -1 : options.minBufferLengthCapping;
 	    this._maxBufferLength = options.maxBufferLength === undefined ? 120 : options.maxBufferLength;
@@ -13646,7 +13647,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._capLevelonFPSDrop = options.capLevelonFPSDrop === undefined ? false : options.capLevelonFPSDrop;
 	    this._smoothAutoSwitchonFPSDrop = options.smoothAutoSwitchonFPSDrop === undefined ? this.capLevelonFPSDrop : options.smoothAutoSwitchonFPSDrop;
 	    this._switchDownOnLevelError = options.switchDownOnLevelError === undefined ? true : options.switchDownOnLevelError;
-	    this._seekMode = options.seekMode === undefined ? "ACCURATE" : options.seekMode;
+	    this._seekMode = options.seekMode === undefined ? 'ACCURATE' : options.seekMode;
 	    this._keyLoadMaxRetry = options.keyLoadMaxRetry === undefined ? 3 : options.keyLoadMaxRetry;
 	    this._keyLoadMaxRetryTimeout = options.keyLoadMaxRetryTimeout === undefined ? 64000 : options.keyLoadMaxRetryTimeout;
 	    this._fragmentLoadMaxRetry = options.fragmentLoadMaxRetry === undefined ? 3 : options.fragmentLoadMaxRetry;
@@ -13713,11 +13714,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var _this3 = this;
 
 	    if (this.el.playerLoad) {
-	      this.el.width = "100%";
-	      this.el.height = "100%";
+	      this.el.width = '100%';
+	      this.el.height = '100%';
 	      this._isReadyState = true;
 	      this._srcLoaded = false;
-	      this._currentState = "IDLE";
+	      this._currentState = 'IDLE';
 	      this._setFlashSettings();
 	      this._updatePlaybackType();
 	      if (this._autoPlay || this._shouldPlayOnManifestLoaded) {
@@ -13731,7 +13732,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          return _this3._bootstrap();
 	        }, 50);
 	      } else {
-	        this.trigger(_events2.default.PLAYBACK_ERROR, { message: "Max number of attempts reached" }, this.name);
+	        this.trigger(_events2.default.PLAYBACK_ERROR, { message: 'Max number of attempts reached' }, this.name);
 	      }
 	    }
 	  };
@@ -14002,9 +14003,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  FlasHLS.prototype.play = function play() {
+	    this.trigger(_events2.default.PLAYBACK_PLAY_INTENT);
 	    if (this._currentState === 'PAUSED') {
 	      this.el.playerResume();
-	    } else if (!this._srcLoaded && this._currentState !== "PLAYING") {
+	    } else if (!this._srcLoaded && this._currentState !== 'PLAYING') {
 	      this._firstPlay();
 	    } else {
 	      this.el.playerPlay();
@@ -14040,19 +14042,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  FlasHLS.prototype._setPlaybackState = function _setPlaybackState(state) {
-	    if (["PLAYING_BUFFERING", "PAUSED_BUFFERING"].indexOf(state) >= 0) {
+	    if (['PLAYING_BUFFERING', 'PAUSED_BUFFERING'].indexOf(state) >= 0) {
 	      this._bufferingState = true;
 	      this.trigger(_events2.default.PLAYBACK_BUFFERING, this.name);
 	      this._updateCurrentState(state);
-	    } else if (["PLAYING", "PAUSED"].indexOf(state) >= 0) {
-	      if (["PLAYING_BUFFERING", "PAUSED_BUFFERING", "IDLE"].indexOf(this._currentState) >= 0) {
+	    } else if (['PLAYING', 'PAUSED'].indexOf(state) >= 0) {
+	      if (['PLAYING_BUFFERING', 'PAUSED_BUFFERING', 'IDLE'].indexOf(this._currentState) >= 0) {
 	        this._bufferingState = false;
 	        this.trigger(_events2.default.PLAYBACK_BUFFERFULL, this.name);
 	      }
 	      this._updateCurrentState(state);
-	    } else if (state === "IDLE") {
+	    } else if (state === 'IDLE') {
 	      this._srcLoaded = false;
-	      if (this._loop && ["PLAYING_BUFFERING", "PLAYING"].indexOf(this._currentState) >= 0) {
+	      if (this._loop && ['PLAYING_BUFFERING', 'PLAYING'].indexOf(this._currentState) >= 0) {
 	        this.play();
 	        this.seek(0);
 	      } else {
@@ -14066,13 +14068,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  FlasHLS.prototype._updateCurrentState = function _updateCurrentState(state) {
 	    this._currentState = state;
-	    if (state !== "IDLE") {
+	    if (state !== 'IDLE') {
 	      this._hasEnded = false;
 	    }
 	    this._updatePlaybackType();
-	    if (state === "PLAYING") {
+	    if (state === 'PLAYING') {
 	      this.trigger(_events2.default.PLAYBACK_PLAY, this.name);
-	    } else if (state === "PAUSED") {
+	    } else if (state === 'PAUSED') {
 	      this.trigger(_events2.default.PLAYBACK_PAUSE, this.name);
 	    }
 	  };
@@ -14112,7 +14114,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  };
 
-	  FlasHLS.prototype._onLevelEndlist = function _onLevelEndlist(level) {
+	  FlasHLS.prototype._onLevelEndlist = function _onLevelEndlist() {
 	    this._updatePlaybackType();
 	  };
 
@@ -14245,10 +14247,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  FlasHLS.prototype._updateSettings = function _updateSettings() {
 	    this.settings = _clapprZepto2.default.extend({}, this._defaultSettings);
 	    if (this._playbackType === _playback2.default.VOD || this._dvrInUse) {
-	      this.settings.left = ["playpause", "position", "duration"];
+	      this.settings.left = ['playpause', 'position', 'duration'];
 	      this.settings.seekEnabled = true;
 	    } else if (this._dvrEnabled) {
-	      this.settings.left = ["playpause"];
+	      this.settings.left = ['playpause'];
 	      this.settings.seekEnabled = true;
 	    } else {
 	      this.settings.seekEnabled = false;
@@ -14291,7 +14293,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	FlasHLS.canPlay = function (resource, mimeType) {
 	  var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || [];
-	  return _browser2.default.hasFlash && (resourceParts.length > 1 && resourceParts[1] === "m3u8" || mimeType === 'application/x-mpegURL' || mimeType === 'application/vnd.apple.mpegurl');
+	  return _browser2.default.hasFlash && (resourceParts.length > 1 && resourceParts[1] === 'm3u8' || mimeType === 'application/x-mpegURL' || mimeType === 'application/vnd.apple.mpegurl');
 	};
 	module.exports = exports['default'];
 
@@ -14424,7 +14426,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _hls2 = _interopRequireDefault(_hls);
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -14436,7 +14438,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _browser2 = _interopRequireDefault(_browser);
 
-	var _log = __webpack_require__(7);
+	var _log = __webpack_require__(6);
 
 	var _log2 = _interopRequireDefault(_log);
 
@@ -14542,7 +14544,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this._hls.swapAudioCodec();
 	      this._hls.recoverMediaError();
 	    } else {
-	      _log2.default.error("hlsjs: failed to recover");
+	      _log2.default.error('hlsjs: failed to recover');
 	      this.trigger(_events2.default.PLAYBACK_ERROR, 'hlsjs: could not recover from error, evt ' + evt + ', data ' + data + ' ', this.name);
 	    }
 	  };
@@ -14550,7 +14552,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // override
 
 
-	  HLS.prototype._setupSrc = function _setupSrc(srcUrl) {}
+	  HLS.prototype._setupSrc = function _setupSrc(srcUrl) {} // eslint-disable-line no-unused-vars
 	  // this playback manages the src on the video element itself
 
 
@@ -14586,7 +14588,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  HLS.prototype.seek = function seek(time) {
 	    if (time < 0) {
-	      _log2.default.warn("Attempt to seek to a negative time. Resetting to live point. Use seekToLivePoint() to seek to the live point.");
+	      _log2.default.warn('Attempt to seek to a negative time. Resetting to live point. Use seekToLivePoint() to seek to the live point.');
 	      time = this.getDuration();
 	    }
 	    // assume live if time within 3 seconds of end of stream
@@ -14606,11 +14608,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  HLS.prototype._updateSettings = function _updateSettings() {
 	    if (this._playbackType === _playback2.default.VOD) {
-	      this.settings.left = ["playpause", "position", "duration"];
+	      this.settings.left = ['playpause', 'position', 'duration'];
 	    } else if (this.dvrEnabled) {
-	      this.settings.left = ["playpause"];
+	      this.settings.left = ['playpause'];
 	    } else {
-	      this.settings.left = ["playstop"];
+	      this.settings.left = ['playstop'];
 	    }
 	    this.settings.seekEnabled = this.isSeekEnabled();
 	    this.trigger(_events2.default.PLAYBACK_SETTINGSUPDATE);
@@ -14796,7 +14798,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	HLS.canPlay = function (resource, mimeType) {
 	  var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || [];
-	  var isHls = resourceParts.length > 1 && resourceParts[1] === "m3u8" || mimeType === 'application/x-mpegURL' || mimeType === 'application/vnd.apple.mpegurl';
+	  var isHls = resourceParts.length > 1 && resourceParts[1] === 'm3u8' || mimeType === 'application/x-mpegURL' || mimeType === 'application/vnd.apple.mpegurl';
 
 	  return !!(_hls2.default.isSupported() && isHls && !_browser2.default.isSafari);
 	};
@@ -16780,8 +16782,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.defaultEstimate_ = 5e5; // 500kbps
 	    this.minWeight_ = 0.001;
 	    this.minDelayMs_ = 50;
-	    this.fast_ = new _ewma2.default(hls.config.abrEwmaFast);
-	    this.slow_ = new _ewma2.default(hls.config.abrEwmaSlow);
 	  }
 
 	  _createClass(EwmaBandWidthEstimator, [{
@@ -16792,6 +16792,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      //console.log('instant bw:'+ Math.round(bandwidth));
 	      // we weight sample using loading duration....
 	      var weigth = durationMs / 1000;
+
+	      // lazy initialization. this allows to take into account config param changes that could happen after Hls instantiation,
+	      // but before first fragment loading. this is useful to A/B tests those params
+	      if (!this.fast_) {
+	        var config = this.hls.config;
+	        this.fast_ = new _ewma2.default(config.abrEwmaFast);
+	        this.slow_ = new _ewma2.default(config.abrEwmaSlow);
+	      }
 	      this.fast_.sample(weigth, bandwidth);
 	      this.slow_.sample(weigth, bandwidth);
 	    }
@@ -16955,10 +16963,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function BufferController(hls) {
 	    _classCallCheck(this, BufferController);
 
+	    // the value that we have set mediasource.duration to
+	    // (the actual duration may be tweaked slighly by the browser)
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(BufferController).call(this, hls, _events2.default.MEDIA_ATTACHING, _events2.default.MEDIA_DETACHING, _events2.default.BUFFER_RESET, _events2.default.BUFFER_APPENDING, _events2.default.BUFFER_CODECS, _events2.default.BUFFER_EOS, _events2.default.BUFFER_FLUSHING, _events2.default.LEVEL_UPDATED));
+
+	    _this._msDuration = null;
+	    // the value that we want to set mediaSource.duration to
+	    _this._levelDuration = null;
+
 	    // Source Buffer listeners
-
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(BufferController).call(this, hls, _events2.default.MEDIA_ATTACHING, _events2.default.MEDIA_DETACHING, _events2.default.BUFFER_RESET, _events2.default.BUFFER_APPENDING, _events2.default.BUFFER_CODECS, _events2.default.BUFFER_EOS, _events2.default.BUFFER_FLUSHING));
-
 	    _this.onsbue = _this.onSBUpdateEnd.bind(_this);
 	    _this.onsbe = _this.onSBUpdateError.bind(_this);
 	    return _this;
@@ -17160,6 +17174,50 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // attempt flush immediatly
 	      this.flushBufferCounter = 0;
 	      this.doFlush();
+	    }
+	  }, {
+	    key: 'onLevelUpdated',
+	    value: function onLevelUpdated(event) {
+	      var details = event.details;
+	      if (details.fragments.length === 0) {
+	        return;
+	      }
+	      this._levelDuration = details.totalduration + details.fragments[0].start;
+	      this.updateMediaElementDuration();
+	    }
+
+	    // https://github.com/dailymotion/hls.js/issues/355
+
+	  }, {
+	    key: 'updateMediaElementDuration',
+	    value: function updateMediaElementDuration() {
+	      if (this._levelDuration === null) {
+	        return;
+	      }
+	      var media = this.media;
+	      var mediaSource = this.mediaSource;
+	      if (!media || !mediaSource || media.readyState === 0 || mediaSource.readyState !== 'open') {
+	        return;
+	      }
+	      for (var type in mediaSource.sourceBuffers) {
+	        if (mediaSource.sourceBuffers[type].updating) {
+	          // can't set duration whilst a buffer is updating
+	          return;
+	        }
+	      }
+	      if (this._msDuration === null) {
+	        // initialise to the value that the media source is reporting
+	        this._msDuration = mediaSource.duration;
+	      }
+	      // this._levelDuration was the last value we set.
+	      // not using mediaSource.duration as the browser may tweak this value
+	      // only update mediasource duration if its value increase, this is to avoid
+	      // flushing already buffered portion when switching between quality level, as they
+	      if (this._levelDuration > this._msDuration) {
+	        _logger.logger.log('Updating mediasource duration to ' + this._levelDuration);
+	        mediaSource.duration = this._levelDuration;
+	        this._msDuration = this._levelDuration;
+	      }
 	    }
 	  }, {
 	    key: 'doFlush',
@@ -17668,13 +17726,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'doTick',
 	    value: function doTick() {
-	      var _this2 = this;
-
 	      var pos,
 	          level,
 	          levelDetails,
 	          hls = this.hls,
-	          config = hls.config;
+	          config = hls.config,
+	          media = this.media,
+	          isSeeking = media && media.seeking;
 	      //logger.log(this.state);
 	      switch (this.state) {
 	        case State.ERROR:
@@ -17701,7 +17759,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          // start fragment already requested OR start frag prefetch disable
 	          // exit loop
 	          // => if media not attached but start frag prefetch is enabled and start frag not requested yet, we will not exit loop
-	          if (!this.media && (this.startFragRequested || !config.startFragPrefetch)) {
+	          if (!media && (this.startFragRequested || !config.startFragPrefetch)) {
 	            break;
 	          }
 	          // determine next candidate fragment to be loaded, based on current position and
@@ -17709,12 +17767,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	          //  ensure 60s of buffer upfront
 	          // if we have not yet loaded any fragment, start loading from start position
 	          if (this.loadedmetadata) {
-	            pos = this.media.currentTime;
+	            pos = media.currentTime;
 	          } else {
 	            pos = this.nextLoadPosition;
 	          }
 	          level = hls.nextLoadLevel;
-	          var bufferInfo = _bufferHelper2.default.bufferInfo(this.media, pos, config.maxBufferHole),
+	          var bufferInfo = _bufferHelper2.default.bufferInfo(media, pos, config.maxBufferHole),
 	              bufferLen = bufferInfo.len,
 	              bufferEnd = bufferInfo.end,
 	              fragPrevious = this.fragPrevious,
@@ -17749,7 +17807,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // in case of live playlist we need to ensure that requested position is not located before playlist start
 	            if (levelDetails.live) {
 	              // check if requested position is within seekable boundaries :
-	              //logger.log(`start/pos/bufEnd/seeking:${start.toFixed(3)}/${pos.toFixed(3)}/${bufferEnd.toFixed(3)}/${this.media.seeking}`);
+	              //logger.log(`start/pos/bufEnd/seeking:${start.toFixed(3)}/${pos.toFixed(3)}/${bufferEnd.toFixed(3)}/${media.seeking}`);
 	              var maxLatency = config.liveMaxLatencyDuration !== undefined ? config.liveMaxLatencyDuration : config.liveMaxLatencyDurationCount * levelDetails.targetduration;
 
 	              if (bufferEnd < Math.max(start, end - maxLatency)) {
@@ -17800,13 +17858,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            if (!frag) {
 	              (function () {
-	                var foundFrag = void 0;
 	                var maxFragLookUpTolerance = config.maxFragLookUpTolerance;
 	                if (bufferEnd < end) {
-	                  if (bufferEnd > end - maxFragLookUpTolerance) {
+	                  // no frag look up tolerance in case bufferEnd close to end, or media seeking
+	                  if (bufferEnd > end - maxFragLookUpTolerance || isSeeking) {
 	                    maxFragLookUpTolerance = 0;
 	                  }
-	                  foundFrag = _binarySearch2.default.search(fragments, function (candidate) {
+	                  frag = _binarySearch2.default.search(fragments, function (candidate) {
 	                    // offset should be within fragment boundary - config.maxFragLookUpTolerance
 	                    // this is to cope with situations like
 	                    // bufferEnd = 9.991
@@ -17829,35 +17887,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	                  });
 	                } else {
 	                  // reach end of playlist
-	                  foundFrag = fragments[fragLen - 1];
-	                }
-	                if (foundFrag) {
-	                  frag = foundFrag;
-	                  start = foundFrag.start;
-	                  //logger.log('find SN matching with pos:' +  bufferEnd + ':' + frag.sn);
-	                  if (fragPrevious && frag.level === fragPrevious.level && frag.sn === fragPrevious.sn) {
-	                    if (frag.sn < levelDetails.endSN) {
-	                      frag = fragments[frag.sn + 1 - levelDetails.startSN];
-	                      _logger.logger.log('SN just loaded, load next one: ' + frag.sn);
-	                    } else {
-	                      // have we reached end of VOD playlist ?
-	                      if (!levelDetails.live) {
-	                        // Finalize the media stream
-	                        _this2.hls.trigger(_events2.default.BUFFER_EOS);
-	                        // We might be loading the last fragment but actually the media
-	                        // is currently processing a seek command and waiting for new data to resume at another point.
-	                        // Going to ended state while media is seeking can spawn an infinite buffering broken state.
-	                        if (!_this2.media.seeking) {
-	                          _this2.state = State.ENDED;
-	                        }
-	                      }
-	                      frag = null;
-	                    }
-	                  }
+	                  frag = fragments[fragLen - 1];
 	                }
 	              })();
 	            }
 	            if (frag) {
+	              start = frag.start;
+	              //logger.log('find SN matching with pos:' +  bufferEnd + ':' + frag.sn);
+	              if (fragPrevious && frag.level === fragPrevious.level && frag.sn === fragPrevious.sn) {
+	                if (frag.sn < levelDetails.endSN) {
+	                  frag = fragments[frag.sn + 1 - levelDetails.startSN];
+	                  _logger.logger.log('SN just loaded, load next one: ' + frag.sn);
+	                } else {
+	                  // have we reached end of VOD playlist ?
+	                  if (!levelDetails.live) {
+	                    // Finalize the media stream
+	                    this.hls.trigger(_events2.default.BUFFER_EOS);
+	                    // We might be loading the last fragment but actually the media
+	                    // is currently processing a seek command and waiting for new data to resume at another point.
+	                    // Going to ended state while media is seeking can spawn an infinite buffering broken state.
+	                    if (!isSeeking) {
+	                      this.state = State.ENDED;
+	                    }
+	                  }
+	                  return;
+	                }
+	              }
 	              //logger.log('      loading frag ' + i +',pos/bufEnd:' + pos.toFixed(3) + '/' + bufferEnd.toFixed(3));
 	              if (frag.decryptdata.uri != null && frag.decryptdata.key == null) {
 	                _logger.logger.log('Loading key for ' + frag.sn + ' of [' + levelDetails.startSN + ' ,' + levelDetails.endSN + '],level ' + level);
@@ -17906,8 +17961,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        case State.FRAG_LOADING_WAITING_RETRY:
 	          var now = performance.now();
 	          var retryDate = this.retryDate;
-	          var media = this.media;
-	          var isSeeking = media && media.seeking;
 	          // if current time is gt than retryDate, or if media seeking let's switch to IDLE state to retry loading
 	          if (!retryDate || now >= retryDate || isSeeking) {
 	            _logger.logger.log('mediaController: retryDate reached, switch back to IDLE state');
@@ -18428,7 +18481,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onFragParsingData',
 	    value: function onFragParsingData(data) {
-	      var _this3 = this;
+	      var _this2 = this;
 
 	      if (this.state === State.PARSING) {
 	        this.tparse2 = Date.now();
@@ -18443,7 +18496,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        [data.data1, data.data2].forEach(function (buffer) {
 	          if (buffer) {
-	            _this3.pendingAppending++;
+	            _this2.pendingAppending++;
 	            hls.trigger(_events2.default.BUFFER_APPENDING, { type: data.type, data: buffer });
 	          }
 	        });
@@ -18587,8 +18640,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _logger.logger.log('target seek position:' + targetSeekPosition);
 	          }
 	          var bufferInfo = _bufferHelper2.default.bufferInfo(media, currentTime, 0),
-	              expectedPlaying = !(media.paused || media.ended || media.seeking || media.buffered.length === 0),
-	              jumpThreshold = 0.4,
+	              expectedPlaying = !(media.paused || // not playing when media is paused
+	          media.ended || // not playing when media is ended
+	          media.buffered.length === 0),
+
+	          // not playing if nothing buffered
+	          jumpThreshold = 0.4,
 
 	          // tolerance needed as some browsers stalls playback before reaching buffered range end
 	          playheadMoving = currentTime > media.playbackRate * this.lastCurrentTime;
@@ -18621,7 +18678,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	              // no buffer available @ currentTime, check if next buffer is close (within a config.maxSeekHole second range)
 	              var nextBufferStart = bufferInfo.nextStart,
 	                  delta = nextBufferStart - currentTime;
-	              if (nextBufferStart && delta < this.config.maxSeekHole && delta > 0 && !media.seeking) {
+	              if (nextBufferStart && delta < this.config.maxSeekHole && delta > 0) {
 	                // next buffer is close ! adjust currentTime to nextBufferStart
 	                // this will ensure effective video decoding
 	                _logger.logger.log('adjust currentTime from ' + media.currentTime + ' to next buffered @ ' + nextBufferStart + ' + nudge ' + this.seekHoleNudgeDuration);
@@ -19879,7 +19936,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      pes.data = null;
 	      var debugString = '';
 
-	      var pushAccesUnit = function pushAccesUnit() {
+	      var pushAccesUnit = function () {
 	        if (units2.length) {
 	          // only push AVC sample if keyframe already found in this fragment OR
 	          //    keyframe found in last fragment (track.sps) AND
@@ -19893,7 +19950,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          units2 = [];
 	          length = 0;
 	        }
-	      };
+	      }.bind(this);
 
 	      units.forEach(function (unit) {
 	        switch (unit.type) {
@@ -24282,7 +24339,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _playback2 = _interopRequireDefault(_playback);
 
-	var _styler = __webpack_require__(17);
+	var _styler = __webpack_require__(16);
 
 	var _styler2 = _interopRequireDefault(_styler);
 
@@ -24290,7 +24347,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _style2 = _interopRequireDefault(_style);
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -24355,7 +24412,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return this;
 	  };
 
-	  HTMLImg.prototype._onLoad = function _onLoad(evt) {
+	  HTMLImg.prototype._onLoad = function _onLoad() {
 	    this.trigger(_events2.default.PLAYBACK_ENDED, this.name);
 	  };
 
@@ -24420,11 +24477,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _template2 = _interopRequireDefault(_template);
 
-	var _styler = __webpack_require__(17);
+	var _styler = __webpack_require__(16);
 
 	var _styler2 = _interopRequireDefault(_styler);
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -24504,11 +24561,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    var idata = this.context.createImageData(this.context.canvas.width, this.context.canvas.height);
-
+	    var buffer32 = void 0;
 	    try {
-	      var buffer32 = new Uint32Array(idata.data.buffer);
+	      buffer32 = new Uint32Array(idata.data.buffer);
 	    } catch (err) {
-	      var buffer32 = new Uint32Array(this.context.canvas.width * this.context.canvas.height * 4);
+	      buffer32 = new Uint32Array(this.context.canvas.width * this.context.canvas.height * 4);
 	      var data = idata.data;
 	      for (var i = 0; i < data.length; i++) {
 	        buffer32[i] = data[i];
@@ -24519,14 +24576,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var run = 0;
 	    var color = 0;
 	    var m = Math.random() * 6 + 4;
-	    for (var i = 0; i < len;) {
+	    for (var _i = 0; _i < len;) {
 	      if (run < 0) {
 	        run = m * Math.random();
 	        var p = Math.pow(Math.random(), 0.4);
 	        color = 255 * p << 24;
 	      }
 	      run -= 1;
-	      buffer32[i++] = color;
+	      buffer32[_i++] = color;
 	    }
 	    this.context.putImageData(idata, 0, 0);
 	  };
@@ -24563,6 +24620,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	NoOp.canPlay = function (source) {
+	  // eslint-disable-line no-unused-vars
 	  return true;
 	};
 	module.exports = exports['default'];
@@ -24611,11 +24669,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _ui_container_plugin2 = _interopRequireDefault(_ui_container_plugin);
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _styler = __webpack_require__(17);
+	var _styler = __webpack_require__(16);
 
 	var _styler2 = _interopRequireDefault(_styler);
 
@@ -24865,11 +24923,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _container_plugin2 = _interopRequireDefault(_container_plugin);
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _clapprZepto = __webpack_require__(4);
+	var _clapprZepto = __webpack_require__(17);
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
@@ -24900,7 +24958,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _this.setInitialAttrs();
 	    _this.reportInterval = _this.options.reportInterval || 5000;
-	    _this.state = "IDLE";
+	    _this.state = 'IDLE';
 	    return _this;
 	  }
 
@@ -24926,7 +24984,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  StatsPlugin.prototype.onPlay = function onPlay() {
-	    this.state = "PLAYING";
+	    this.state = 'PLAYING';
 	    this.watchingTimeInit = Date.now();
 	    if (!this.intervalId) {
 	      this.intervalId = setInterval(this.report.bind(this), this.reportInterval);
@@ -24937,7 +24995,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    clearInterval(this.intervalId);
 	    this.report();
 	    this.intervalId = undefined;
-	    this.state = "STOPPED";
+	    this.state = 'STOPPED';
 	  };
 
 	  StatsPlugin.prototype.onBuffering = function onBuffering() {
@@ -24946,20 +25004,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    } else {
 	      this.rebufferingTimeInit = Date.now();
 	    }
-	    this.state = "BUFFERING";
+	    this.state = 'BUFFERING';
 	    this.rebuffers++;
 	  };
 
 	  StatsPlugin.prototype.onBufferFull = function onBufferFull() {
-	    if (this.firstPlay && !!this.startupTimeInit) {
+	    if (this.firstPlay && this.startupTimeInit) {
 	      this.firstPlay = false;
 	      this.startupTime = Date.now() - this.startupTimeInit;
 	      this.watchingTimeInit = Date.now();
-	    } else if (!!this.rebufferingTimeInit) {
+	    } else if (this.rebufferingTimeInit) {
 	      this.rebufferingTime += this.getRebufferingTime();
 	    }
 	    this.rebufferingTimeInit = undefined;
-	    this.state = "PLAYING";
+	    this.state = 'PLAYING';
 	  };
 
 	  StatsPlugin.prototype.getRebufferingTime = function getRebufferingTime() {
@@ -25012,7 +25070,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _base_object = __webpack_require__(5);
+	var _base_object = __webpack_require__(4);
 
 	var _base_object2 = _interopRequireDefault(_base_object);
 
@@ -25120,11 +25178,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _ui_container_plugin2 = _interopRequireDefault(_ui_container_plugin);
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _styler = __webpack_require__(17);
+	var _styler = __webpack_require__(16);
 
 	var _styler2 = _interopRequireDefault(_styler);
 
@@ -25181,7 +25239,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  WaterMarkPlugin.prototype.configure = function configure() {
-	    this.position = this.options.position || "bottom-right";
+	    this.position = this.options.position || 'bottom-right';
 	    if (this.options.watermark) {
 	      this.imageUrl = this.options.watermark;
 	      this.imageLink = this.options.watermarkLink;
@@ -25259,21 +25317,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _ui_container_plugin2 = _interopRequireDefault(_ui_container_plugin);
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _styler = __webpack_require__(17);
+	var _styler = __webpack_require__(16);
 
 	var _styler2 = _interopRequireDefault(_styler);
 
 	var _template = __webpack_require__(18);
 
 	var _template2 = _interopRequireDefault(_template);
-
-	var _mediator = __webpack_require__(38);
-
-	var _mediator2 = _interopRequireDefault(_mediator);
 
 	var _poster = __webpack_require__(140);
 
@@ -25286,10 +25340,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _play = __webpack_require__(43);
 
 	var _play2 = _interopRequireDefault(_play);
-
-	var _clapprZepto = __webpack_require__(4);
-
-	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -25377,10 +25427,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  PosterPlugin.prototype.showPlayButton = function showPlayButton(show) {
 	    if (show && (!this.options.chromeless || this.options.allowUserInteraction)) {
 	      this.$playButton.show();
-	      this.$el.addClass("clickable");
+	      this.$el.addClass('clickable');
 	    } else {
 	      this.$playButton.hide();
-	      this.$el.removeClass("clickable");
+	      this.$el.removeClass('clickable');
 	    }
 	  };
 
@@ -25438,7 +25488,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    if (this.options.mediacontrol && this.options.mediacontrol.buttons) {
-	      var buttonsColor = this.options.mediacontrol.buttons;
+	      buttonsColor = this.options.mediacontrol.buttons;
 	      this.$playButton.css('color', buttonsColor);
 	    }
 	    this.update();
@@ -25496,7 +25546,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _container_plugin2 = _interopRequireDefault(_container_plugin);
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -25527,7 +25577,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    if (_this.container.options.gaAccount) {
 	      _this.account = _this.container.options.gaAccount;
-	      _this.trackerName = _this.container.options.gaTrackerName ? _this.container.options.gaTrackerName + "." : 'Clappr.';
+	      _this.trackerName = _this.container.options.gaTrackerName ? _this.container.options.gaTrackerName + '.' : 'Clappr.';
 	      _this.domainName = _this.container.options.gaDomainName;
 	      _this.currentHDState = undefined;
 	      _this.embedScript();
@@ -25540,9 +25590,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    if (!window._gat) {
 	      var script = document.createElement('script');
-	      script.setAttribute("type", "text/javascript");
-	      script.setAttribute("async", "async");
-	      script.setAttribute("src", "//www.google-analytics.com/ga.js");
+	      script.setAttribute('type', 'text/javascript');
+	      script.setAttribute('async', 'async');
+	      script.setAttribute('src', '//www.google-analytics.com/ga.js');
 	      script.onload = function () {
 	        return _this2.addEventListeners();
 	      };
@@ -25577,74 +25627,74 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.listenTo(this.container, _events2.default.CONTAINER_PLAYBACKDVRSTATECHANGED, this.onDVR);
 	    }
 	    _gaq.push([this.trackerName + '_setAccount', this.account]);
-	    if (!!this.domainName) _gaq.push([this.trackerName + '_setDomainName', this.domainName]);
+	    if (this.domainName) _gaq.push([this.trackerName + '_setDomainName', this.domainName]);
 	  };
 
 	  GoogleAnalytics.prototype.onReady = function onReady() {
-	    this.push(["Video", "Playback", this.container.playback.name]);
+	    this.push(['Video', 'Playback', this.container.playback.name]);
 	  };
 
 	  GoogleAnalytics.prototype.onPlay = function onPlay() {
-	    this.push(["Video", "Play", this.container.playback.src]);
+	    this.push(['Video', 'Play', this.container.playback.src]);
 	  };
 
 	  GoogleAnalytics.prototype.onStop = function onStop() {
-	    this.push(["Video", "Stop", this.container.playback.src]);
+	    this.push(['Video', 'Stop', this.container.playback.src]);
 	  };
 
 	  GoogleAnalytics.prototype.onEnded = function onEnded() {
-	    this.push(["Video", "Ended", this.container.playback.src]);
+	    this.push(['Video', 'Ended', this.container.playback.src]);
 	  };
 
 	  GoogleAnalytics.prototype.onBuffering = function onBuffering() {
-	    this.push(["Video", "Buffering", this.container.playback.src]);
+	    this.push(['Video', 'Buffering', this.container.playback.src]);
 	  };
 
 	  GoogleAnalytics.prototype.onBufferFull = function onBufferFull() {
-	    this.push(["Video", "Bufferfull", this.container.playback.src]);
+	    this.push(['Video', 'Bufferfull', this.container.playback.src]);
 	  };
 
 	  GoogleAnalytics.prototype.onError = function onError() {
-	    this.push(["Video", "Error", this.container.playback.src]);
+	    this.push(['Video', 'Error', this.container.playback.src]);
 	  };
 
 	  GoogleAnalytics.prototype.onHD = function onHD(isHD) {
-	    var status = isHD ? "ON" : "OFF";
+	    var status = isHD ? 'ON' : 'OFF';
 	    if (status !== this.currentHDState) {
 	      this.currentHDState = status;
-	      this.push(["Video", "HD - " + status, this.container.playback.src]);
+	      this.push(['Video', 'HD - ' + status, this.container.playback.src]);
 	    }
 	  };
 
 	  GoogleAnalytics.prototype.onPlaybackChanged = function onPlaybackChanged(playbackState) {
 	    if (playbackState.type !== null) {
-	      this.push(["Video", "Playback Type - " + playbackState.type, this.container.playback.src]);
+	      this.push(['Video', 'Playback Type - ' + playbackState.type, this.container.playback.src]);
 	    }
 	  };
 
 	  GoogleAnalytics.prototype.onDVR = function onDVR(dvrInUse) {
-	    var status = dvrInUse ? "ON" : "OFF";
-	    this.push(["Interaction", "DVR - " + status, this.container.playback.src]);
+	    var status = dvrInUse ? 'ON' : 'OFF';
+	    this.push(['Interaction', 'DVR - ' + status, this.container.playback.src]);
 	  };
 
 	  GoogleAnalytics.prototype.onPause = function onPause() {
-	    this.push(["Video", "Pause", this.container.playback.src]);
+	    this.push(['Video', 'Pause', this.container.playback.src]);
 	  };
 
 	  GoogleAnalytics.prototype.onSeek = function onSeek() {
-	    this.push(["Video", "Seek", this.container.playback.src]);
+	    this.push(['Video', 'Seek', this.container.playback.src]);
 	  };
 
 	  GoogleAnalytics.prototype.onVolumeChanged = function onVolumeChanged() {
-	    this.push(["Interaction", "Volume", this.container.playback.src]);
+	    this.push(['Interaction', 'Volume', this.container.playback.src]);
 	  };
 
 	  GoogleAnalytics.prototype.onFullscreen = function onFullscreen() {
-	    this.push(["Interaction", "Fullscreen", this.container.playback.src]);
+	    this.push(['Interaction', 'Fullscreen', this.container.playback.src]);
 	  };
 
 	  GoogleAnalytics.prototype.push = function push(array) {
-	    var res = [this.trackerName + "_trackEvent"].concat(array);
+	    var res = [this.trackerName + '_trackEvent'].concat(array);
 	    _gaq.push(res);
 	  };
 
@@ -25678,7 +25728,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _container_plugin2 = _interopRequireDefault(_container_plugin);
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -25772,11 +25822,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _playback2 = _interopRequireDefault(_playback);
 
-	var _styler = __webpack_require__(17);
+	var _styler = __webpack_require__(16);
 
 	var _styler2 = _interopRequireDefault(_styler);
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -25787,10 +25837,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _index = __webpack_require__(150);
 
 	var _index2 = _interopRequireDefault(_index);
-
-	var _clapprZepto = __webpack_require__(4);
-
-	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26036,11 +26082,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _core_plugin2 = _interopRequireDefault(_core_plugin);
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _clapprZepto = __webpack_require__(4);
+	var _clapprZepto = __webpack_require__(17);
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
@@ -26184,7 +26230,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _utils = __webpack_require__(2);
 
-	var _base_object = __webpack_require__(5);
+	var _base_object = __webpack_require__(4);
 
 	var _base_object2 = _interopRequireDefault(_base_object);
 
@@ -26273,7 +26319,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _ui_core_plugin2 = _interopRequireDefault(_ui_core_plugin);
 
-	var _styler = __webpack_require__(17);
+	var _styler = __webpack_require__(16);
 
 	var _styler2 = _interopRequireDefault(_styler);
 
@@ -26281,7 +26327,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _template2 = _interopRequireDefault(_template);
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -26365,7 +26411,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _this.duration = null;
 	    _this.actualLiveTime = !!_this.mediaControl.options.actualLiveTime;
 	    if (_this.actualLiveTime) {
-	      if (!!_this.mediaControl.options.actualLiveServerTime) {
+	      if (_this.mediaControl.options.actualLiveServerTime) {
 	        _this.actualLiveServerTimeDiff = new Date().getTime() - new Date(_this.mediaControl.options.actualLiveServerTime).getTime();
 	      } else {
 	        _this.actualLiveServerTimeDiff = 0;
@@ -26435,7 +26481,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    if (!this.shouldBeVisible()) {
 	      this.$el.hide();
-	      this.$el.css('left', "-100%");
+	      this.$el.css('left', '-100%');
 	    } else {
 	      var seekTime = this.getSeekTime();
 	      var currentSeekTime = (0, _utils.formatTime)(seekTime.seekTime, this.useActualLiveTime);
@@ -26528,7 +26574,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _core_plugin2 = _interopRequireDefault(_core_plugin);
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -26595,7 +26641,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _events = __webpack_require__(6);
+	var _events = __webpack_require__(5);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -26637,7 +26683,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  EndVideo.prototype.ended = function ended() {
-	    var exitOnEnd = typeof this.core.options.exitFullscreenOnEnd === "undefined" || this.core.options.exitFullscreenOnEnd;
+	    var exitOnEnd = typeof this.core.options.exitFullscreenOnEnd === 'undefined' || this.core.options.exitFullscreenOnEnd;
 	    if (exitOnEnd && _utils.Fullscreen.isFullscreen()) {
 	      this.core.toggleFullscreen();
 	    }
