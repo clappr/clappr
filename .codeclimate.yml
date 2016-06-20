@@ -28,5 +28,8 @@ exclude_paths:
 - dist/
 - test/
 - "public/j/editor/worker-javascript.js"
+- "public/j/editor/theme-katzenmilch.js"
+- "public/j/editor/mode-javascript.js"
+- "public/j/editor/ace.js"
 
 #comment to test
