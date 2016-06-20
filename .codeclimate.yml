@@ -27,5 +27,6 @@ ratings:
 exclude_paths:
 - dist/
 - test/
+- "public/j/editor/worker-javascript.js"
 
 #comment to test
