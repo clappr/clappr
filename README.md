@@ -45,6 +45,20 @@ Clappr is under heavy development but production-ready. Feel free to open issues
 
 ## [External Plugins](doc/EXTERNAL_PLUGINS.md)
 
+<a href="https://github.com/tjenkinson/clappr-thumbnails-plugin/">
+  <img src='https://github.com/tjenkinson/clappr-thumbnails-plugin/raw/master/screenshot.jpg' width="280px"></img>
+</a> <a href="https://github.com/tjenkinson/clappr-markers-plugin/">
+  <img src='https://github.com/tjenkinson/clappr-markers-plugin/blob/master/screenshot.jpg' width="280px"></img>
+</a> <a href="https://github.com/clappr/dash-shaka-playback">
+  <img src='http://influxis.com/app/uploads/2012/03/cropped-mpeg-dashpg_logo_light_rgb-5.jpeg' width="280px"></img>
+</a> <a href="https://github.com/clappr/clappr-chromecast-plugin">
+  <img src='http://www.googlechromecastsetup.com/wp-content/uploads/2015/11/chromecast-banner.png' width="280px"></img>
+</a> <a href="https://github.com/clappr/clappr-level-selector-plugin">
+  <img src='https://raw.githubusercontent.com/lucasmundim/clappr-level-selector-plugin/master/screenshot.png' width="280px"></img>
+</a> <a href="https://raw.githubusercontent.com/bikegriffith/clappr-playback-rate-plugin/">
+  <img src='https://raw.githubusercontent.com/bikegriffith/clappr-playback-rate-plugin/master/screenshot.png' width="280px"></img>
+</a>
+
 ## [Built-in Plugins & Embed Parameters](doc/BUILTIN_PLUGINS.md)
 
 ## [API Documentation](http://clappr.github.io/)
