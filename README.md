@@ -41,7 +41,7 @@ You can re-use some vendors used internally, for instance you can use `Kibo` thr
 
 Clappr is under heavy development but production-ready. Feel free to open issues and send us pull requests.
 
-## [Supported Formats](doc/SUPPORTED_FORMATS.md)
+## [Built-in Plugins & Embed Parameters](doc/BUILTIN_PLUGINS.md)
 
 ## [External Plugins](doc/EXTERNAL_PLUGINS.md)
 
@@ -65,7 +65,7 @@ Clappr is under heavy development but production-ready. Feel free to open issues
   <img src='https://raw.githubusercontent.com/clappr/clappr/master/images/youtube.jpg' width="280px"></img>
 </a>
 
-## [Built-in Plugins & Embed Parameters](doc/BUILTIN_PLUGINS.md)
+## [Supported Formats](doc/SUPPORTED_FORMATS.md)
 
 ## [API Documentation](http://clappr.github.io/)
 
