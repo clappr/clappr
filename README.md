@@ -33,12 +33,6 @@ Now, create the player:
 
 You can use the latest published version at `https://cdn.jsdelivr.net/clappr/latest/clappr.min.js`
 
-## [Supported Formats](doc/SUPPORTED_FORMATS.md)
-
-## [External Plugins](doc/EXTERNAL_PLUGINS.md)
-
-## [Built-in Plugins & Embed Parameters](doc/BUILTIN_PLUGINS.md)
-
 ## Vendors
 
 You can re-use some vendors used internally, for instance you can use `Kibo` through `Clappr.Vendor.Kibo`.
@@ -47,9 +41,13 @@ You can re-use some vendors used internally, for instance you can use `Kibo` thr
 
 Clappr is under heavy development but production-ready. Feel free to open issues and send us pull requests.
 
-## Documentation
+## [Supported Formats](doc/SUPPORTED_FORMATS.md)
 
-You can find it [here](http://clappr.github.io/).
+## [External Plugins](doc/EXTERNAL_PLUGINS.md)
+
+## [Built-in Plugins & Embed Parameters](doc/BUILTIN_PLUGINS.md)
+
+## [API Documentation](http://clappr.github.io/)
 
 ## [Installing](doc/INSTALLING.md)
 
@@ -57,9 +55,7 @@ You can find it [here](http://clappr.github.io/).
 
 ## [Read this before open an issue](doc/BEFORE_OPEN_AN_ISSUE.md)
 
-## Contributors
-
-The culprits of this project are listed [here](https://github.com/globocom/clappr/graphs/contributors).
+## [Contributors](https://github.com/globocom/clappr/graphs/contributors)
 
 ## [Contributing](doc/CONTRIBUTING.md)
 
