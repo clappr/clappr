@@ -71,7 +71,7 @@ Clappr is under heavy development but production-ready. Feel free to open issues
 
 ## [Installing](doc/INSTALLING.md)
 
-## [Troubleshooting](doc/TROUBLESHOOTING.md)
+## [FAQ & Troubleshooting](doc/TROUBLESHOOTING.md)
 
 ## [Read this before open an issue](doc/BEFORE_OPEN_AN_ISSUE.md)
 
