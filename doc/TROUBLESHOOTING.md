@@ -1,6 +1,6 @@
 ## FAQ & Troubleshooting
 
-### How to use clappr with ReactJS?
+### How can I use clappr with ReactJS?
 
 https://medium.com/@bikegriffith/using-clappr-with-reactjs-14a338e3451f#.9a36w0dpj
 
