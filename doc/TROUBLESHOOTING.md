@@ -1,4 +1,10 @@
-## Troubleshooting
+## FAQ & Troubleshooting
+
+### How to use clappr with ReactJS?
+
+https://medium.com/@bikegriffith/using-clappr-with-reactjs-14a338e3451f#.9a36w0dpj
+
+### Common steps to verify issues
 
 Very often people open issues related to: **stream not working, freezing, glitching, stopping and so on.** You can try the steps bellow, taking notes about the results:
 
