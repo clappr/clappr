@@ -12,6 +12,7 @@ import Container from 'components/container'
 import $ from 'clappr-zepto'
 
 import find from 'lodash.find'
+import isPlainObject from 'lodash.isplainobject'
 
 export default class ContainerFactory extends BaseObject {
   constructor(options, loader) {
@@ -35,14 +36,13 @@ export default class ContainerFactory extends BaseObject {
   createContainer(source) {
     var resolvedSource = null
     var mimeType = this.options.mimeType
-    if (typeof source === 'string' || source instanceof String) {
-      resolvedSource = source.toString()
-    }
-    else {
+    if (isPlainObject(source)) {
       resolvedSource = source.source.toString()
       if (source.mimeType) {
         mimeType = source.mimeType
       }
+    } else {
+      resolvedSource = source.toString()
     }
 
     if (resolvedSource.match(/^\/\//)) resolvedSource = window.location.protocol + resolvedSource
