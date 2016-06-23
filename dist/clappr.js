@@ -72,23 +72,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _playback = __webpack_require__(39);
+	var _playback = __webpack_require__(40);
 
 	var _playback2 = _interopRequireDefault(_playback);
 
-	var _container_plugin = __webpack_require__(133);
+	var _container_plugin = __webpack_require__(134);
 
 	var _container_plugin2 = _interopRequireDefault(_container_plugin);
 
-	var _core_plugin = __webpack_require__(153);
+	var _core_plugin = __webpack_require__(154);
 
 	var _core_plugin2 = _interopRequireDefault(_core_plugin);
 
-	var _ui_core_plugin = __webpack_require__(148);
+	var _ui_core_plugin = __webpack_require__(149);
 
 	var _ui_core_plugin2 = _interopRequireDefault(_ui_core_plugin);
 
-	var _ui_container_plugin = __webpack_require__(128);
+	var _ui_container_plugin = __webpack_require__(129);
 
 	var _ui_container_plugin2 = _interopRequireDefault(_ui_container_plugin);
 
@@ -112,55 +112,55 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _core2 = _interopRequireDefault(_core);
 
-	var _loader = __webpack_require__(54);
+	var _loader = __webpack_require__(55);
 
 	var _loader2 = _interopRequireDefault(_loader);
 
-	var _mediator = __webpack_require__(38);
+	var _mediator = __webpack_require__(39);
 
 	var _mediator2 = _interopRequireDefault(_mediator);
 
-	var _media_control = __webpack_require__(35);
+	var _media_control = __webpack_require__(36);
 
 	var _media_control2 = _interopRequireDefault(_media_control);
 
-	var _player_info = __webpack_require__(51);
+	var _player_info = __webpack_require__(52);
 
 	var _player_info2 = _interopRequireDefault(_player_info);
 
-	var _base_flash_playback = __webpack_require__(66);
+	var _base_flash_playback = __webpack_require__(67);
 
 	var _base_flash_playback2 = _interopRequireDefault(_base_flash_playback);
 
-	var _flash = __webpack_require__(64);
+	var _flash = __webpack_require__(65);
 
 	var _flash2 = _interopRequireDefault(_flash);
 
-	var _flashls = __webpack_require__(73);
+	var _flashls = __webpack_require__(74);
 
 	var _flashls2 = _interopRequireDefault(_flashls);
 
-	var _hls = __webpack_require__(77);
+	var _hls = __webpack_require__(78);
 
 	var _hls2 = _interopRequireDefault(_hls);
 
-	var _html5_audio = __webpack_require__(71);
+	var _html5_audio = __webpack_require__(72);
 
 	var _html5_audio2 = _interopRequireDefault(_html5_audio);
 
-	var _html5_video = __webpack_require__(60);
+	var _html5_video = __webpack_require__(61);
 
 	var _html5_video2 = _interopRequireDefault(_html5_video);
 
-	var _html_img = __webpack_require__(119);
+	var _html_img = __webpack_require__(120);
 
 	var _html_img2 = _interopRequireDefault(_html_img);
 
-	var _no_op = __webpack_require__(122);
+	var _no_op = __webpack_require__(123);
 
 	var _no_op2 = _interopRequireDefault(_no_op);
 
-	var _poster = __webpack_require__(138);
+	var _poster = __webpack_require__(139);
 
 	var _poster2 = _interopRequireDefault(_poster);
 
@@ -186,7 +186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var version = ("0.2.56"); // Copyright 2014 Globo.com Player authors. All rights reserved.
+	var version = ("0.2.57"); // Copyright 2014 Globo.com Player authors. All rights reserved.
 	// Use of this source code is governed by a BSD-style
 	// license that can be found in the LICENSE file.
 
@@ -256,11 +256,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _core_factory2 = _interopRequireDefault(_core_factory);
 
-	var _loader = __webpack_require__(54);
+	var _loader = __webpack_require__(55);
 
 	var _loader2 = _interopRequireDefault(_loader);
 
-	var _player_info = __webpack_require__(51);
+	var _player_info = __webpack_require__(52);
 
 	var _player_info2 = _interopRequireDefault(_player_info);
 
@@ -3089,15 +3089,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _container_factory2 = _interopRequireDefault(_container_factory);
 
-	var _media_control = __webpack_require__(35);
+	var _media_control = __webpack_require__(36);
 
 	var _media_control2 = _interopRequireDefault(_media_control);
 
-	var _mediator = __webpack_require__(38);
+	var _mediator = __webpack_require__(39);
 
 	var _mediator2 = _interopRequireDefault(_mediator);
 
-	var _player_info = __webpack_require__(51);
+	var _player_info = __webpack_require__(52);
 
 	var _player_info2 = _interopRequireDefault(_player_info);
 
@@ -3109,7 +3109,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var _style = __webpack_require__(52);
+	var _style = __webpack_require__(53);
 
 	var _style2 = _interopRequireDefault(_style);
 
@@ -6072,6 +6072,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
+	var _lodash3 = __webpack_require__(35);
+
+	var _lodash4 = _interopRequireDefault(_lodash3);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -6118,13 +6122,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  ContainerFactory.prototype.createContainer = function createContainer(source) {
 	    var resolvedSource = null;
 	    var mimeType = this.options.mimeType;
-	    if (typeof source === 'string' || source instanceof String) {
-	      resolvedSource = source.toString();
-	    } else {
+	    if ((0, _lodash4.default)(source)) {
 	      resolvedSource = source.source.toString();
 	      if (source.mimeType) {
 	        mimeType = source.mimeType;
 	      }
+	    } else {
+	      resolvedSource = source.toString();
 	    }
 
 	    if (resolvedSource.match(/^\/\//)) resolvedSource = window.location.protocol + resolvedSource;
@@ -9581,14 +9585,156 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 35 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	/**
+	 * lodash 4.0.4 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modularize exports="npm" -o ./`
+	 * Copyright jQuery Foundation and other contributors <https://jquery.org/>
+	 * Released under MIT license <https://lodash.com/license>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 */
+
+	/** `Object#toString` result references. */
+	var objectTag = '[object Object]';
+
+	/**
+	 * Checks if `value` is a host object in IE < 9.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a host object, else `false`.
+	 */
+	function isHostObject(value) {
+	  // Many host objects are `Object` objects that can coerce to strings
+	  // despite having improperly defined `toString` methods.
+	  var result = false;
+	  if (value != null && typeof value.toString != 'function') {
+	    try {
+	      result = !!(value + '');
+	    } catch (e) {}
+	  }
+	  return result;
+	}
+
+	/** Used for built-in method references. */
+	var objectProto = Object.prototype;
+
+	/** Used to resolve the decompiled source of functions. */
+	var funcToString = Function.prototype.toString;
+
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+
+	/** Used to infer the `Object` constructor. */
+	var objectCtorString = funcToString.call(Object);
+
+	/**
+	 * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var objectToString = objectProto.toString;
+
+	/* Built-in method references for those with the same name as other `lodash` methods. */
+	var nativeGetPrototype = Object.getPrototypeOf;
+
+	/**
+	 * Gets the `[[Prototype]]` of `value`.
+	 *
+	 * @private
+	 * @param {*} value The value to query.
+	 * @returns {null|Object} Returns the `[[Prototype]]`.
+	 */
+	function getPrototype(value) {
+	  return nativeGetPrototype(Object(value));
+	}
+
+	/**
+	 * Checks if `value` is object-like. A value is object-like if it's not `null`
+	 * and has a `typeof` result of "object".
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+	 * @example
+	 *
+	 * _.isObjectLike({});
+	 * // => true
+	 *
+	 * _.isObjectLike([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObjectLike(_.noop);
+	 * // => false
+	 *
+	 * _.isObjectLike(null);
+	 * // => false
+	 */
+	function isObjectLike(value) {
+	  return !!value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) == 'object';
+	}
+
+	/**
+	 * Checks if `value` is a plain object, that is, an object created by the
+	 * `Object` constructor or one with a `[[Prototype]]` of `null`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.8.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a plain object,
+	 *  else `false`.
+	 * @example
+	 *
+	 * function Foo() {
+	 *   this.a = 1;
+	 * }
+	 *
+	 * _.isPlainObject(new Foo);
+	 * // => false
+	 *
+	 * _.isPlainObject([1, 2, 3]);
+	 * // => false
+	 *
+	 * _.isPlainObject({ 'x': 0, 'y': 0 });
+	 * // => true
+	 *
+	 * _.isPlainObject(Object.create(null));
+	 * // => true
+	 */
+	function isPlainObject(value) {
+	  if (!isObjectLike(value) || objectToString.call(value) != objectTag || isHostObject(value)) {
+	    return false;
+	  }
+	  var proto = getPrototype(value);
+	  if (proto === null) {
+	    return true;
+	  }
+	  var Ctor = hasOwnProperty.call(proto, 'constructor') && proto.constructor;
+	  return typeof Ctor == 'function' && Ctor instanceof Ctor && funcToString.call(Ctor) == objectCtorString;
+	}
+
+	module.exports = isPlainObject;
+
+/***/ },
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(36);
+	module.exports = __webpack_require__(37);
 
 /***/ },
-/* 36 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -9619,7 +9765,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _browser2 = _interopRequireDefault(_browser);
 
-	var _mediator = __webpack_require__(38);
+	var _mediator = __webpack_require__(39);
 
 	var _mediator2 = _interopRequireDefault(_mediator);
 
@@ -9627,7 +9773,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _template2 = _interopRequireDefault(_template);
 
-	var _playback = __webpack_require__(39);
+	var _playback = __webpack_require__(40);
 
 	var _playback2 = _interopRequireDefault(_playback);
 
@@ -9635,43 +9781,43 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var _mediaControl = __webpack_require__(40);
+	var _mediaControl = __webpack_require__(41);
 
 	var _mediaControl2 = _interopRequireDefault(_mediaControl);
 
-	var _mediaControl3 = __webpack_require__(42);
+	var _mediaControl3 = __webpack_require__(43);
 
 	var _mediaControl4 = _interopRequireDefault(_mediaControl3);
 
-	var _play = __webpack_require__(43);
+	var _play = __webpack_require__(44);
 
 	var _play2 = _interopRequireDefault(_play);
 
-	var _pause = __webpack_require__(44);
+	var _pause = __webpack_require__(45);
 
 	var _pause2 = _interopRequireDefault(_pause);
 
-	var _stop = __webpack_require__(45);
+	var _stop = __webpack_require__(46);
 
 	var _stop2 = _interopRequireDefault(_stop);
 
-	var _volume = __webpack_require__(46);
+	var _volume = __webpack_require__(47);
 
 	var _volume2 = _interopRequireDefault(_volume);
 
-	var _mute = __webpack_require__(47);
+	var _mute = __webpack_require__(48);
 
 	var _mute2 = _interopRequireDefault(_mute);
 
-	var _expand = __webpack_require__(48);
+	var _expand = __webpack_require__(49);
 
 	var _expand2 = _interopRequireDefault(_expand);
 
-	var _shrink = __webpack_require__(49);
+	var _shrink = __webpack_require__(50);
 
 	var _shrink2 = _interopRequireDefault(_shrink);
 
-	var _hd = __webpack_require__(50);
+	var _hd = __webpack_require__(51);
 
 	var _hd2 = _interopRequireDefault(_hd);
 
@@ -10378,10 +10524,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return (0, _utils.extend)(MediaControl, properties);
 	};
 	module.exports = exports['default'];
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(37)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(38)))
 
 /***/ },
-/* 37 */
+/* 38 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -10511,7 +10657,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 38 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10574,7 +10720,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 39 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10858,7 +11004,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(29)();
@@ -10866,73 +11012,73 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".media-control-notransition {\n  -webkit-transition: none !important;\n  -moz-transition: none !important;\n  transition: none !important; }\n\n.media-control[data-media-control] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 9999;\n  pointer-events: none; }\n  .media-control[data-media-control].dragging {\n    pointer-events: auto;\n    cursor: -webkit-grabbing !important;\n    cursor: grabbing !important;\n    cursor: url(" + __webpack_require__(41) + "), move; }\n    .media-control[data-media-control].dragging * {\n      cursor: -webkit-grabbing !important;\n      cursor: grabbing !important;\n      cursor: url(" + __webpack_require__(41) + "), move; }\n  .media-control[data-media-control] .media-control-background[data-background] {\n    position: absolute;\n    height: 40%;\n    width: 100%;\n    bottom: 0;\n    background: -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    -webkit-transition: opacity 0.6s ease-out;\n    -moz-transition: opacity 0.6s ease-out;\n    transition: opacity 0.6s ease-out; }\n  .media-control[data-media-control] .media-control-icon {\n    line-height: 0;\n    letter-spacing: 0;\n    speak: none;\n    color: #fff;\n    opacity: 0.5;\n    vertical-align: middle;\n    text-align: left;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease;\n    transition: all 0.1s ease; }\n  .media-control[data-media-control] .media-control-icon:hover {\n    color: white;\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .media-control[data-media-control].media-control-hide .media-control-background[data-background] {\n    opacity: 0; }\n  .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {\n    bottom: -50px; }\n    .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n      opacity: 0; }\n  .media-control[data-media-control] .media-control-layer[data-controls] {\n    position: absolute;\n    bottom: 7px;\n    width: 100%;\n    height: 32px;\n    font-size: 0;\n    vertical-align: middle;\n    pointer-events: auto;\n    -webkit-transition: bottom 0.4s ease-out;\n    -moz-transition: bottom 0.4s ease-out;\n    transition: bottom 0.4s ease-out; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      left: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {\n      height: 100%;\n      text-align: center;\n      line-height: 32px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {\n      background-color: transparent;\n      border: 0;\n      margin: 0 6px;\n      padding: 0;\n      cursor: pointer;\n      display: inline-block;\n      width: 32px;\n      height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg {\n        width: 100%;\n        height: 22px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg path {\n          fill: white; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {\n        outline: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {\n        cursor: default;\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%;\n        display: none; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {\n          opacity: 1.0;\n          display: block; }\n          .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {\n            opacity: 1.0;\n            text-shadow: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause] {\n        float: left; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {\n        float: left; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position], .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      display: inline-block;\n      font-size: 10px;\n      color: white;\n      cursor: default;\n      line-height: 32px;\n      position: relative; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {\n      margin: 0 6px 0 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      color: rgba(255, 255, 255, 0.5);\n      margin-right: 6px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {\n        content: \"|\";\n        margin-right: 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {\n      position: absolute;\n      top: -20px;\n      left: 0;\n      display: inline-block;\n      vertical-align: middle;\n      width: 100%;\n      height: 25px;\n      cursor: pointer; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {\n        width: 100%;\n        height: 1px;\n        position: relative;\n        top: 12px;\n        background-color: #666666; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #c2c2c2;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #005aff;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0;\n          position: absolute;\n          top: -3px;\n          width: 5px;\n          height: 7px;\n          background-color: rgba(255, 255, 255, 0.5);\n          -webkit-transition: opacity 0.1s ease;\n          -moz-transition: opacity 0.1s ease;\n          transition: opacity 0.1s ease; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n        opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {\n        cursor: default; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n        position: absolute;\n        -webkit-transform: translateX(-50%);\n        -moz-transform: translateX(-50%);\n        -ms-transform: translateX(-50%);\n        -o-transform: translateX(-50%);\n        transform: translateX(-50%);\n        top: 2px;\n        left: 0;\n        width: 20px;\n        height: 20px;\n        opacity: 1;\n        -webkit-transition: all 0.1s ease-out;\n        -moz-transition: all 0.1s ease-out;\n        transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {\n          position: absolute;\n          left: 6px;\n          top: 6px;\n          width: 8px;\n          height: 8px;\n          border-radius: 10px;\n          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n          background-color: white; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {\n      float: right;\n      display: inline-block;\n      height: 32px;\n      cursor: pointer;\n      margin: 0 6px;\n      box-sizing: border-box; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {\n        float: left;\n        bottom: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {\n          background-color: transparent;\n          border: 0;\n          box-sizing: content-box;\n          width: 32px;\n          height: 32px;\n          opacity: 0.5; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {\n            opacity: 0.75; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg {\n            height: 24px;\n            position: relative;\n            top: 3px; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg path {\n              fill: white; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted svg {\n            margin-left: 2px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {\n        float: left;\n        position: relative;\n        overflow: hidden;\n        top: 6px;\n        width: 42px;\n        height: 18px;\n        padding: 3px 0;\n        -webkit-transition: width 0.2s ease-out;\n        -moz-transition: width 0.2s ease-out;\n        transition: width 0.2s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] {\n          height: 1px;\n          position: relative;\n          top: 7px;\n          margin: 0 3px;\n          background-color: #666666; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #c2c2c2;\n            -webkit-transition: all 0.1s ease-out;\n            -moz-transition: all 0.1s ease-out;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-2[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #005aff;\n            -webkit-transition: all 0.1s ease-out;\n            -moz-transition: all 0.1s ease-out;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-hover[data-volume] {\n            opacity: 0;\n            position: absolute;\n            top: -3px;\n            width: 5px;\n            height: 7px;\n            background-color: rgba(255, 255, 255, 0.5);\n            -webkit-transition: opacity 0.1s ease;\n            -moz-transition: opacity 0.1s ease;\n            transition: opacity 0.1s ease; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] {\n          position: absolute;\n          -webkit-transform: translateX(-50%);\n          -moz-transform: translateX(-50%);\n          -ms-transform: translateX(-50%);\n          -o-transform: translateX(-50%);\n          transform: translateX(-50%);\n          top: 0px;\n          left: 0;\n          width: 20px;\n          height: 20px;\n          opacity: 1;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out;\n          transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume] {\n            position: absolute;\n            left: 6px;\n            top: 6px;\n            width: 8px;\n            height: 8px;\n            border-radius: 10px;\n            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n            background-color: white; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {\n          float: left;\n          width: 4px;\n          padding-left: 2px;\n          height: 12px;\n          opacity: 0.5;\n          box-shadow: inset 2px 0 0 white;\n          -webkit-transition: -webkit-transform 0.2s ease-out;\n          -moz-transition: -moz-transform 0.2s ease-out;\n          transition: transform 0.2s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {\n            box-shadow: inset 2px 0 0 #fff;\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:nth-of-type(1) {\n            padding-left: 0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {\n            -webkit-transform: scaleY(1.5);\n            -moz-transform: scaleY(1.5);\n            -ms-transform: scaleY(1.5);\n            -o-transform: scaleY(1.5);\n            transform: scaleY(1.5); }\n  .media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {\n    width: 0;\n    height: 12px;\n    top: 9px;\n    padding: 0; }\n", ""]);
+	exports.push([module.id, ".media-control-notransition {\n  -webkit-transition: none !important;\n  -moz-transition: none !important;\n  transition: none !important; }\n\n.media-control[data-media-control] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 9999;\n  pointer-events: none; }\n  .media-control[data-media-control].dragging {\n    pointer-events: auto;\n    cursor: -webkit-grabbing !important;\n    cursor: grabbing !important;\n    cursor: url(" + __webpack_require__(42) + "), move; }\n    .media-control[data-media-control].dragging * {\n      cursor: -webkit-grabbing !important;\n      cursor: grabbing !important;\n      cursor: url(" + __webpack_require__(42) + "), move; }\n  .media-control[data-media-control] .media-control-background[data-background] {\n    position: absolute;\n    height: 40%;\n    width: 100%;\n    bottom: 0;\n    background: -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    -webkit-transition: opacity 0.6s ease-out;\n    -moz-transition: opacity 0.6s ease-out;\n    transition: opacity 0.6s ease-out; }\n  .media-control[data-media-control] .media-control-icon {\n    line-height: 0;\n    letter-spacing: 0;\n    speak: none;\n    color: #fff;\n    opacity: 0.5;\n    vertical-align: middle;\n    text-align: left;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease;\n    transition: all 0.1s ease; }\n  .media-control[data-media-control] .media-control-icon:hover {\n    color: white;\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .media-control[data-media-control].media-control-hide .media-control-background[data-background] {\n    opacity: 0; }\n  .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {\n    bottom: -50px; }\n    .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n      opacity: 0; }\n  .media-control[data-media-control] .media-control-layer[data-controls] {\n    position: absolute;\n    bottom: 7px;\n    width: 100%;\n    height: 32px;\n    font-size: 0;\n    vertical-align: middle;\n    pointer-events: auto;\n    -webkit-transition: bottom 0.4s ease-out;\n    -moz-transition: bottom 0.4s ease-out;\n    transition: bottom 0.4s ease-out; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      left: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {\n      height: 100%;\n      text-align: center;\n      line-height: 32px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {\n      background-color: transparent;\n      border: 0;\n      margin: 0 6px;\n      padding: 0;\n      cursor: pointer;\n      display: inline-block;\n      width: 32px;\n      height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg {\n        width: 100%;\n        height: 22px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg path {\n          fill: white; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {\n        outline: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {\n        cursor: default;\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%;\n        display: none; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {\n          opacity: 1.0;\n          display: block; }\n          .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {\n            opacity: 1.0;\n            text-shadow: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause] {\n        float: left; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {\n        float: left; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position], .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      display: inline-block;\n      font-size: 10px;\n      color: white;\n      cursor: default;\n      line-height: 32px;\n      position: relative; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {\n      margin: 0 6px 0 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      color: rgba(255, 255, 255, 0.5);\n      margin-right: 6px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {\n        content: \"|\";\n        margin-right: 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {\n      position: absolute;\n      top: -20px;\n      left: 0;\n      display: inline-block;\n      vertical-align: middle;\n      width: 100%;\n      height: 25px;\n      cursor: pointer; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {\n        width: 100%;\n        height: 1px;\n        position: relative;\n        top: 12px;\n        background-color: #666666; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #c2c2c2;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #005aff;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0;\n          position: absolute;\n          top: -3px;\n          width: 5px;\n          height: 7px;\n          background-color: rgba(255, 255, 255, 0.5);\n          -webkit-transition: opacity 0.1s ease;\n          -moz-transition: opacity 0.1s ease;\n          transition: opacity 0.1s ease; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n        opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {\n        cursor: default; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n        position: absolute;\n        -webkit-transform: translateX(-50%);\n        -moz-transform: translateX(-50%);\n        -ms-transform: translateX(-50%);\n        -o-transform: translateX(-50%);\n        transform: translateX(-50%);\n        top: 2px;\n        left: 0;\n        width: 20px;\n        height: 20px;\n        opacity: 1;\n        -webkit-transition: all 0.1s ease-out;\n        -moz-transition: all 0.1s ease-out;\n        transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {\n          position: absolute;\n          left: 6px;\n          top: 6px;\n          width: 8px;\n          height: 8px;\n          border-radius: 10px;\n          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n          background-color: white; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {\n      float: right;\n      display: inline-block;\n      height: 32px;\n      cursor: pointer;\n      margin: 0 6px;\n      box-sizing: border-box; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {\n        float: left;\n        bottom: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {\n          background-color: transparent;\n          border: 0;\n          box-sizing: content-box;\n          width: 32px;\n          height: 32px;\n          opacity: 0.5; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {\n            opacity: 0.75; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg {\n            height: 24px;\n            position: relative;\n            top: 3px; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg path {\n              fill: white; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted svg {\n            margin-left: 2px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {\n        float: left;\n        position: relative;\n        overflow: hidden;\n        top: 6px;\n        width: 42px;\n        height: 18px;\n        padding: 3px 0;\n        -webkit-transition: width 0.2s ease-out;\n        -moz-transition: width 0.2s ease-out;\n        transition: width 0.2s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] {\n          height: 1px;\n          position: relative;\n          top: 7px;\n          margin: 0 3px;\n          background-color: #666666; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #c2c2c2;\n            -webkit-transition: all 0.1s ease-out;\n            -moz-transition: all 0.1s ease-out;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-2[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #005aff;\n            -webkit-transition: all 0.1s ease-out;\n            -moz-transition: all 0.1s ease-out;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-hover[data-volume] {\n            opacity: 0;\n            position: absolute;\n            top: -3px;\n            width: 5px;\n            height: 7px;\n            background-color: rgba(255, 255, 255, 0.5);\n            -webkit-transition: opacity 0.1s ease;\n            -moz-transition: opacity 0.1s ease;\n            transition: opacity 0.1s ease; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] {\n          position: absolute;\n          -webkit-transform: translateX(-50%);\n          -moz-transform: translateX(-50%);\n          -ms-transform: translateX(-50%);\n          -o-transform: translateX(-50%);\n          transform: translateX(-50%);\n          top: 0px;\n          left: 0;\n          width: 20px;\n          height: 20px;\n          opacity: 1;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out;\n          transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume] {\n            position: absolute;\n            left: 6px;\n            top: 6px;\n            width: 8px;\n            height: 8px;\n            border-radius: 10px;\n            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n            background-color: white; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {\n          float: left;\n          width: 4px;\n          padding-left: 2px;\n          height: 12px;\n          opacity: 0.5;\n          box-shadow: inset 2px 0 0 white;\n          -webkit-transition: -webkit-transform 0.2s ease-out;\n          -moz-transition: -moz-transform 0.2s ease-out;\n          transition: transform 0.2s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {\n            box-shadow: inset 2px 0 0 #fff;\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:nth-of-type(1) {\n            padding-left: 0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {\n            -webkit-transform: scaleY(1.5);\n            -moz-transform: scaleY(1.5);\n            -ms-transform: scaleY(1.5);\n            -o-transform: scaleY(1.5);\n            transform: scaleY(1.5); }\n  .media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {\n    width: 0;\n    height: 12px;\n    top: 9px;\n    padding: 0; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "a8c874b93b3d848f39a71260c57e3863.cur";
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"media-control-background\" data-background></div>\n<div class=\"media-control-layer\" data-controls>\n  <%  var renderBar = function(name) { %>\n      <div class=\"bar-container\" data-<%= name %>>\n        <div class=\"bar-background\" data-<%= name %>>\n          <div class=\"bar-fill-1\" data-<%= name %>></div>\n          <div class=\"bar-fill-2\" data-<%= name %>></div>\n          <div class=\"bar-hover\" data-<%= name %>></div>\n        </div>\n        <div class=\"bar-scrubber\" data-<%= name %>>\n          <div class=\"bar-scrubber-icon\" data-<%= name %>></div>\n        </div>\n      </div>\n  <%  }; %>\n  <%  var renderSegmentedBar = function(name, segments) {\n      segments = segments || 10; %>\n    <div class=\"bar-container\" data-<%= name %>>\n    <% for (var i = 0; i < segments; i++) { %>\n      <div class=\"segmented-bar-element\" data-<%= name %>></div>\n    <% } %>\n    </div>\n  <% }; %>\n  <% var renderDrawer = function(name, renderContent) { %>\n      <div class=\"drawer-container\" data-<%= name %>>\n        <div class=\"drawer-icon-container\" data-<%= name %>>\n          <div class=\"drawer-icon media-control-icon\" data-<%= name %>></div>\n          <span class=\"drawer-text\" data-<%= name %>></span>\n        </div>\n        <% renderContent(name); %>\n      </div>\n  <% }; %>\n  <% var renderIndicator = function(name) { %>\n      <div class=\"media-control-indicator\" data-<%= name %>></div>\n  <% }; %>\n  <% var renderButton = function(name) { %>\n      <button class=\"media-control-button media-control-icon\" data-<%= name %>></button>\n  <% }; %>\n  <%  var templates = {\n        bar: renderBar,\n        segmentedBar: renderSegmentedBar,\n      };\n      var render = function(settingsList) {\n        settingsList.forEach(function(setting) {\n          if(setting === \"seekbar\") {\n            renderBar(setting);\n          } else if (setting === \"volume\") {\n            renderDrawer(setting, settings.volumeBarTemplate ? templates[settings.volumeBarTemplate] : function(name) { return renderSegmentedBar(name); });\n          } else if (setting === \"duration\" || setting === \"position\") {\n            renderIndicator(setting);\n          } else {\n            renderButton(setting);\n          }\n        });\n      }; %>\n  <% if (settings.default && settings.default.length) { %>\n  <div class=\"media-control-center-panel\" data-media-control>\n    <% render(settings.default); %>\n  </div>\n  <% } %>\n  <% if (settings.left && settings.left.length) { %>\n  <div class=\"media-control-left-panel\" data-media-control>\n    <% render(settings.left); %>\n  </div>\n  <% } %>\n  <% if (settings.right && settings.right.length) { %>\n  <div class=\"media-control-right-panel\" data-media-control>\n    <% render(settings.right); %>\n  </div>\n  <% } %>\n</div>\n";
 
 /***/ },
-/* 43 */
+/* 44 */
 /***/ function(module, exports) {
 
 	module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M1.425.35L14.575 8l-13.15 7.65V.35z\"></path></svg>"
 
 /***/ },
-/* 44 */
+/* 45 */
 /***/ function(module, exports) {
 
 	module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M1.712 14.76H6.43V1.24H1.71v13.52zm7.86-13.52v13.52h4.716V1.24H9.573z\"></path></svg>"
 
 /***/ },
-/* 45 */
+/* 46 */
 /***/ function(module, exports) {
 
 	module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M1.712 1.24h12.6v13.52h-12.6z\"></path></svg>"
 
 /***/ },
-/* 46 */
+/* 47 */
 /***/ function(module, exports) {
 
 	module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M11.5 11h-.002v1.502L7.798 10H4.5V6h3.297l3.7-2.502V4.5h.003V11zM11 4.49L7.953 6.5H5v3h2.953L11 11.51V4.49z\"></path></svg>"
 
 /***/ },
-/* 47 */
+/* 48 */
 /***/ function(module, exports) {
 
 	module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M9.75 11.51L6.7 9.5H3.75v-3H6.7L9.75 4.49v.664l.497.498V3.498L6.547 6H3.248v4h3.296l3.7 2.502v-2.154l-.497.5v.662zm3-5.165L12.404 6l-1.655 1.653L9.093 6l-.346.345L10.402 8 8.747 9.654l.346.347 1.655-1.653L12.403 10l.348-.346L11.097 8l1.655-1.655z\"></path></svg>"
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports) {
 
 	module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M7.156 8L4 11.156V8.5H3V13h4.5v-1H4.844L8 8.844 7.156 8zM8.5 3v1h2.657L8 7.157 8.846 8 12 4.844V7.5h1V3H8.5z\"></path></svg>"
 
 /***/ },
-/* 49 */
+/* 50 */
 /***/ function(module, exports) {
 
 	module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M13.5 3.344l-.844-.844L9.5 5.656V3h-1v4.5H13v-1h-2.656L13.5 3.344zM3 9.5h2.656L2.5 12.656l.844.844L6.5 10.344V13h1V8.5H3v1z\"></path></svg>"
 
 /***/ },
-/* 50 */
+/* 51 */
 /***/ function(module, exports) {
 
 	module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M5.375 7.062H2.637V4.26H.502v7.488h2.135V8.9h2.738v2.848h2.133V4.26H5.375v2.802zm5.97-2.81h-2.84v7.496h2.798c2.65 0 4.195-1.607 4.195-3.77v-.022c0-2.162-1.523-3.704-4.154-3.704zm2.06 3.758c0 1.21-.81 1.896-2.03 1.896h-.83V6.093h.83c1.22 0 2.03.696 2.03 1.896v.02z\"></path></svg>"
 
 /***/ },
-/* 51 */
+/* 52 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -10965,7 +11111,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 52 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(29)();
@@ -10973,27 +11119,27 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "@font-face {\n  font-family: \"Roboto\";\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Roboto\"), local(\"Roboto-Regular\"), url(" + __webpack_require__(53) + ") format(\"truetype\"); }\n\n[data-player] {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  -o-user-select: none;\n  user-select: none;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  -webkit-transform: translate3d(0, 0, 0);\n  -moz-transform: translate3d(0, 0, 0);\n  -ms-transform: translate3d(0, 0, 0);\n  -o-transform: translate3d(0, 0, 0);\n  transform: translate3d(0, 0, 0);\n  position: relative;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-style: normal;\n  font-weight: normal;\n  text-align: center;\n  overflow: hidden;\n  font-size: 100%;\n  font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n  text-shadow: 0 0 0;\n  box-sizing: border-box; }\n  [data-player] div, [data-player] span, [data-player] applet, [data-player] object, [data-player] iframe,\n  [data-player] h1, [data-player] h2, [data-player] h3, [data-player] h4, [data-player] h5, [data-player] h6, [data-player] p, [data-player] blockquote, [data-player] pre,\n  [data-player] a, [data-player] abbr, [data-player] acronym, [data-player] address, [data-player] big, [data-player] cite, [data-player] code,\n  [data-player] del, [data-player] dfn, [data-player] em, [data-player] img, [data-player] ins, [data-player] kbd, [data-player] q, [data-player] s, [data-player] samp,\n  [data-player] small, [data-player] strike, [data-player] strong, [data-player] sub, [data-player] sup, [data-player] tt, [data-player] var,\n  [data-player] b, [data-player] u, [data-player] i, [data-player] center,\n  [data-player] dl, [data-player] dt, [data-player] dd, [data-player] ol, [data-player] ul, [data-player] li,\n  [data-player] fieldset, [data-player] form, [data-player] label, [data-player] legend,\n  [data-player] table, [data-player] caption, [data-player] tbody, [data-player] tfoot, [data-player] thead, [data-player] tr, [data-player] th, [data-player] td,\n  [data-player] article, [data-player] aside, [data-player] canvas, [data-player] details, [data-player] embed,\n  [data-player] figure, [data-player] figcaption, [data-player] footer, [data-player] header, [data-player] hgroup,\n  [data-player] menu, [data-player] nav, [data-player] output, [data-player] ruby, [data-player] section, [data-player] summary,\n  [data-player] time, [data-player] mark, [data-player] audio, [data-player] video {\n    margin: 0;\n    padding: 0;\n    border: 0;\n    font: inherit;\n    font-size: 100%;\n    vertical-align: baseline; }\n  [data-player] table {\n    border-collapse: collapse;\n    border-spacing: 0; }\n  [data-player] caption, [data-player] th, [data-player] td {\n    text-align: left;\n    font-weight: normal;\n    vertical-align: middle; }\n  [data-player] q, [data-player] blockquote {\n    quotes: none; }\n    [data-player] q:before, [data-player] q:after, [data-player] blockquote:before, [data-player] blockquote:after {\n      content: \"\";\n      content: none; }\n  [data-player] a img {\n    border: none; }\n  [data-player]:focus {\n    outline: 0; }\n  [data-player] * {\n    max-width: none;\n    box-sizing: inherit;\n    float: none; }\n  [data-player] div {\n    display: block; }\n  [data-player].fullscreen {\n    width: 100% !important;\n    height: 100% !important;\n    top: 0;\n    left: 0; }\n  [data-player].nocursor {\n    cursor: none; }\n\n.clappr-style {\n  display: none !important; }\n", ""]);
+	exports.push([module.id, "@font-face {\n  font-family: \"Roboto\";\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Roboto\"), local(\"Roboto-Regular\"), url(" + __webpack_require__(54) + ") format(\"truetype\"); }\n\n[data-player] {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  -o-user-select: none;\n  user-select: none;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  -webkit-transform: translate3d(0, 0, 0);\n  -moz-transform: translate3d(0, 0, 0);\n  -ms-transform: translate3d(0, 0, 0);\n  -o-transform: translate3d(0, 0, 0);\n  transform: translate3d(0, 0, 0);\n  position: relative;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-style: normal;\n  font-weight: normal;\n  text-align: center;\n  overflow: hidden;\n  font-size: 100%;\n  font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n  text-shadow: 0 0 0;\n  box-sizing: border-box; }\n  [data-player] div, [data-player] span, [data-player] applet, [data-player] object, [data-player] iframe,\n  [data-player] h1, [data-player] h2, [data-player] h3, [data-player] h4, [data-player] h5, [data-player] h6, [data-player] p, [data-player] blockquote, [data-player] pre,\n  [data-player] a, [data-player] abbr, [data-player] acronym, [data-player] address, [data-player] big, [data-player] cite, [data-player] code,\n  [data-player] del, [data-player] dfn, [data-player] em, [data-player] img, [data-player] ins, [data-player] kbd, [data-player] q, [data-player] s, [data-player] samp,\n  [data-player] small, [data-player] strike, [data-player] strong, [data-player] sub, [data-player] sup, [data-player] tt, [data-player] var,\n  [data-player] b, [data-player] u, [data-player] i, [data-player] center,\n  [data-player] dl, [data-player] dt, [data-player] dd, [data-player] ol, [data-player] ul, [data-player] li,\n  [data-player] fieldset, [data-player] form, [data-player] label, [data-player] legend,\n  [data-player] table, [data-player] caption, [data-player] tbody, [data-player] tfoot, [data-player] thead, [data-player] tr, [data-player] th, [data-player] td,\n  [data-player] article, [data-player] aside, [data-player] canvas, [data-player] details, [data-player] embed,\n  [data-player] figure, [data-player] figcaption, [data-player] footer, [data-player] header, [data-player] hgroup,\n  [data-player] menu, [data-player] nav, [data-player] output, [data-player] ruby, [data-player] section, [data-player] summary,\n  [data-player] time, [data-player] mark, [data-player] audio, [data-player] video {\n    margin: 0;\n    padding: 0;\n    border: 0;\n    font: inherit;\n    font-size: 100%;\n    vertical-align: baseline; }\n  [data-player] table {\n    border-collapse: collapse;\n    border-spacing: 0; }\n  [data-player] caption, [data-player] th, [data-player] td {\n    text-align: left;\n    font-weight: normal;\n    vertical-align: middle; }\n  [data-player] q, [data-player] blockquote {\n    quotes: none; }\n    [data-player] q:before, [data-player] q:after, [data-player] blockquote:before, [data-player] blockquote:after {\n      content: \"\";\n      content: none; }\n  [data-player] a img {\n    border: none; }\n  [data-player]:focus {\n    outline: 0; }\n  [data-player] * {\n    max-width: none;\n    box-sizing: inherit;\n    float: none; }\n  [data-player] div {\n    display: block; }\n  [data-player].fullscreen {\n    width: 100% !important;\n    height: 100% !important;\n    top: 0;\n    left: 0; }\n  [data-player].nocursor {\n    cursor: none; }\n\n.clappr-style {\n  display: none !important; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 53 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "38861cba61c66739c1452c3a71e39852.ttf";
 
 /***/ },
-/* 54 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(55);
+	module.exports = __webpack_require__(56);
 
 /***/ },
-/* 55 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11006,83 +11152,83 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _base_object2 = _interopRequireDefault(_base_object);
 
-	var _player_info = __webpack_require__(51);
+	var _player_info = __webpack_require__(52);
 
 	var _player_info2 = _interopRequireDefault(_player_info);
 
-	var _lodash = __webpack_require__(56);
+	var _lodash = __webpack_require__(57);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _html5_video = __webpack_require__(60);
+	var _html5_video = __webpack_require__(61);
 
 	var _html5_video2 = _interopRequireDefault(_html5_video);
 
-	var _flash = __webpack_require__(64);
+	var _flash = __webpack_require__(65);
 
 	var _flash2 = _interopRequireDefault(_flash);
 
-	var _html5_audio = __webpack_require__(71);
+	var _html5_audio = __webpack_require__(72);
 
 	var _html5_audio2 = _interopRequireDefault(_html5_audio);
 
-	var _flashls = __webpack_require__(73);
+	var _flashls = __webpack_require__(74);
 
 	var _flashls2 = _interopRequireDefault(_flashls);
 
-	var _hls = __webpack_require__(77);
+	var _hls = __webpack_require__(78);
 
 	var _hls2 = _interopRequireDefault(_hls);
 
-	var _html_img = __webpack_require__(119);
+	var _html_img = __webpack_require__(120);
 
 	var _html_img2 = _interopRequireDefault(_html_img);
 
-	var _no_op = __webpack_require__(122);
+	var _no_op = __webpack_require__(123);
 
 	var _no_op2 = _interopRequireDefault(_no_op);
 
-	var _spinner_three_bounce = __webpack_require__(126);
+	var _spinner_three_bounce = __webpack_require__(127);
 
 	var _spinner_three_bounce2 = _interopRequireDefault(_spinner_three_bounce);
 
-	var _stats = __webpack_require__(131);
+	var _stats = __webpack_require__(132);
 
 	var _stats2 = _interopRequireDefault(_stats);
 
-	var _watermark = __webpack_require__(134);
+	var _watermark = __webpack_require__(135);
 
 	var _watermark2 = _interopRequireDefault(_watermark);
 
-	var _poster = __webpack_require__(138);
+	var _poster = __webpack_require__(139);
 
 	var _poster2 = _interopRequireDefault(_poster);
 
-	var _google_analytics = __webpack_require__(142);
+	var _google_analytics = __webpack_require__(143);
 
 	var _google_analytics2 = _interopRequireDefault(_google_analytics);
 
-	var _click_to_pause = __webpack_require__(144);
+	var _click_to_pause = __webpack_require__(145);
 
 	var _click_to_pause2 = _interopRequireDefault(_click_to_pause);
 
-	var _dvr_controls = __webpack_require__(146);
+	var _dvr_controls = __webpack_require__(147);
 
 	var _dvr_controls2 = _interopRequireDefault(_dvr_controls);
 
-	var _favicon = __webpack_require__(151);
+	var _favicon = __webpack_require__(152);
 
 	var _favicon2 = _interopRequireDefault(_favicon);
 
-	var _seek_time = __webpack_require__(154);
+	var _seek_time = __webpack_require__(155);
 
 	var _seek_time2 = _interopRequireDefault(_seek_time);
 
-	var _sources = __webpack_require__(158);
+	var _sources = __webpack_require__(159);
 
 	var _sources2 = _interopRequireDefault(_sources);
 
-	var _end_video = __webpack_require__(159);
+	var _end_video = __webpack_require__(160);
 
 	var _end_video2 = _interopRequireDefault(_end_video);
 
@@ -11213,7 +11359,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 56 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11227,7 +11373,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 */
 	var baseIteratee = __webpack_require__(34),
-	    baseUniq = __webpack_require__(57);
+	    baseUniq = __webpack_require__(58);
 
 	/**
 	 * This method is like `_.uniq` except that it accepts `iteratee` which is
@@ -11258,7 +11404,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = uniqBy;
 
 /***/ },
-/* 57 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11273,8 +11419,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
 	 * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 */
-	var createSet = __webpack_require__(58),
-	    root = __webpack_require__(59);
+	var createSet = __webpack_require__(59),
+	    root = __webpack_require__(60);
 
 	/** Used as the size to enable large array optimizations. */
 	var LARGE_ARRAY_SIZE = 200;
@@ -12057,7 +12203,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = baseUniq;
 
 /***/ },
-/* 58 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module, global) {'use strict';
@@ -12338,7 +12484,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)(module), (function() { return this; }())))
 
 /***/ },
-/* 59 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module, global) {'use strict';
@@ -12401,15 +12547,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)(module), (function() { return this; }())))
 
 /***/ },
-/* 60 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(61);
+	module.exports = __webpack_require__(62);
 
 /***/ },
-/* 61 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12422,7 +12568,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _utils = __webpack_require__(2);
 
-	var _playback = __webpack_require__(39);
+	var _playback = __webpack_require__(40);
 
 	var _playback2 = _interopRequireDefault(_playback);
 
@@ -12442,11 +12588,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _style = __webpack_require__(62);
+	var _style = __webpack_require__(63);
 
 	var _style2 = _interopRequireDefault(_style);
 
-	var _index = __webpack_require__(63);
+	var _index = __webpack_require__(64);
 
 	var _index2 = _interopRequireDefault(_index);
 
@@ -12906,7 +13052,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 62 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(29)();
@@ -12920,21 +13066,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 63 */
+/* 64 */
 /***/ function(module, exports) {
 
 	module.exports = "<source src=\"<%=src%>\" type=\"<%=type%>\">\n";
 
 /***/ },
-/* 64 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(65);
+	module.exports = __webpack_require__(66);
 
 /***/ },
-/* 65 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12947,7 +13093,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _utils = __webpack_require__(2);
 
-	var _base_flash_playback = __webpack_require__(66);
+	var _base_flash_playback = __webpack_require__(67);
 
 	var _base_flash_playback2 = _interopRequireDefault(_base_flash_playback);
 
@@ -12955,7 +13101,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _browser2 = _interopRequireDefault(_browser);
 
-	var _mediator = __webpack_require__(38);
+	var _mediator = __webpack_require__(39);
 
 	var _mediator2 = _interopRequireDefault(_mediator);
 
@@ -12971,11 +13117,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _playback = __webpack_require__(39);
+	var _playback = __webpack_require__(40);
 
 	var _playback2 = _interopRequireDefault(_playback);
 
-	var _Player = __webpack_require__(70);
+	var _Player = __webpack_require__(71);
 
 	var _Player2 = _interopRequireDefault(_Player);
 
@@ -13267,7 +13413,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 66 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13275,11 +13421,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = __webpack_require__(67);
+	exports.default = __webpack_require__(68);
 	module.exports = exports['default'];
 
 /***/ },
-/* 67 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13290,7 +13436,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _playback = __webpack_require__(39);
+	var _playback = __webpack_require__(40);
 
 	var _playback2 = _interopRequireDefault(_playback);
 
@@ -13306,11 +13452,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _browser2 = _interopRequireDefault(_browser);
 
-	var _flash = __webpack_require__(68);
+	var _flash = __webpack_require__(69);
 
 	var _flash2 = _interopRequireDefault(_flash);
 
-	var _flash3 = __webpack_require__(69);
+	var _flash3 = __webpack_require__(70);
 
 	var _flash4 = _interopRequireDefault(_flash3);
 
@@ -13420,13 +13566,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 68 */
+/* 69 */
 /***/ function(module, exports) {
 
 	module.exports = "<param name=\"movie\" value=\"<%= swfPath %>?inline=1\">\n<param name=\"quality\" value=\"autohigh\">\n<param name=\"swliveconnect\" value=\"true\">\n<param name=\"allowScriptAccess\" value=\"always\">\n<param name=\"bgcolor\" value=\"#000000\">\n<param name=\"allowFullScreen\" value=\"false\">\n<param name=\"wmode\" value=\"<%= wmode %>\">\n<param name=\"tabindex\" value=\"1\">\n<param name=\"FlashVars\" value=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\">\n<embed\n  name=\"<%= cid %>\"\n  type=\"application/x-shockwave-flash\"\n  disabled=\"disabled\"\n  tabindex=\"-1\"\n  enablecontextmenu=\"false\"\n  allowScriptAccess=\"always\"\n  quality=\"autohigh\"\n  pluginspage=\"http://www.macromedia.com/go/getflashplayer\"\n  wmode=\"<%= wmode %>\"\n  swliveconnect=\"true\"\n  allowfullscreen=\"false\"\n  bgcolor=\"#000000\"\n  FlashVars=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\"\n  src=\"<%= swfPath %>\"\n  width=\"100%\"\n  height=\"100%\">\n</embed>\n";
 
 /***/ },
-/* 69 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(29)();
@@ -13440,21 +13586,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 70 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "4b76590b32dab62bc95c1b7951efae78.swf";
 
 /***/ },
-/* 71 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(72);
+	module.exports = __webpack_require__(73);
 
 /***/ },
-/* 72 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13469,11 +13615,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _playback = __webpack_require__(39);
+	var _playback = __webpack_require__(40);
 
 	var _playback2 = _interopRequireDefault(_playback);
 
-	var _html5_video = __webpack_require__(60);
+	var _html5_video = __webpack_require__(61);
 
 	var _html5_video2 = _interopRequireDefault(_html5_video);
 
@@ -13536,15 +13682,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 73 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(74);
+	module.exports = __webpack_require__(75);
 
 /***/ },
-/* 74 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13555,7 +13701,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _base_flash_playback = __webpack_require__(66);
+	var _base_flash_playback = __webpack_require__(67);
 
 	var _base_flash_playback2 = _interopRequireDefault(_base_flash_playback);
 
@@ -13567,11 +13713,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _template2 = _interopRequireDefault(_template);
 
-	var _playback = __webpack_require__(39);
+	var _playback = __webpack_require__(40);
 
 	var _playback2 = _interopRequireDefault(_playback);
 
-	var _mediator = __webpack_require__(38);
+	var _mediator = __webpack_require__(39);
 
 	var _mediator2 = _interopRequireDefault(_mediator);
 
@@ -13579,11 +13725,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _browser2 = _interopRequireDefault(_browser);
 
-	var _flashls_events = __webpack_require__(75);
+	var _flashls_events = __webpack_require__(76);
 
 	var _flashls_events2 = _interopRequireDefault(_flashls_events);
 
-	var _HLSPlayer = __webpack_require__(76);
+	var _HLSPlayer = __webpack_require__(77);
 
 	var _HLSPlayer2 = _interopRequireDefault(_HLSPlayer);
 
@@ -14354,7 +14500,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 75 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14363,7 +14509,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _mediator = __webpack_require__(38);
+	var _mediator = __webpack_require__(39);
 
 	var _mediator2 = _interopRequireDefault(_mediator);
 
@@ -14449,21 +14595,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 76 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "d13d9f4847ef9af04b804c465624c7a8.swf";
 
 /***/ },
-/* 77 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(78);
+	module.exports = __webpack_require__(79);
 
 /***/ },
-/* 78 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14474,11 +14620,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _html5_video = __webpack_require__(60);
+	var _html5_video = __webpack_require__(61);
 
 	var _html5_video2 = _interopRequireDefault(_html5_video);
 
-	var _hls = __webpack_require__(79);
+	var _hls = __webpack_require__(80);
 
 	var _hls2 = _interopRequireDefault(_hls);
 
@@ -14486,7 +14632,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _playback = __webpack_require__(39);
+	var _playback = __webpack_require__(40);
 
 	var _playback2 = _interopRequireDefault(_playback);
 
@@ -14861,7 +15007,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 79 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14870,10 +15016,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	// syntax with the babel compiler, it looks like it doesnt support
 	// function exports like we are used to in node/commonjs
 
-	module.exports = __webpack_require__(80).default;
+	module.exports = __webpack_require__(81).default;
 
 /***/ },
-/* 80 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -14896,55 +15042,55 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 	//import FPSController from './controller/fps-controller';
 
-	var _events = __webpack_require__(81);
+	var _events = __webpack_require__(82);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _errors = __webpack_require__(82);
+	var _errors = __webpack_require__(83);
 
-	var _playlistLoader = __webpack_require__(83);
+	var _playlistLoader = __webpack_require__(84);
 
 	var _playlistLoader2 = _interopRequireDefault(_playlistLoader);
 
-	var _fragmentLoader = __webpack_require__(88);
+	var _fragmentLoader = __webpack_require__(89);
 
 	var _fragmentLoader2 = _interopRequireDefault(_fragmentLoader);
 
-	var _abrController = __webpack_require__(89);
+	var _abrController = __webpack_require__(90);
 
 	var _abrController2 = _interopRequireDefault(_abrController);
 
-	var _bufferController = __webpack_require__(93);
+	var _bufferController = __webpack_require__(94);
 
 	var _bufferController2 = _interopRequireDefault(_bufferController);
 
-	var _capLevelController = __webpack_require__(94);
+	var _capLevelController = __webpack_require__(95);
 
 	var _capLevelController2 = _interopRequireDefault(_capLevelController);
 
-	var _streamController = __webpack_require__(95);
+	var _streamController = __webpack_require__(96);
 
 	var _streamController2 = _interopRequireDefault(_streamController);
 
-	var _levelController = __webpack_require__(114);
+	var _levelController = __webpack_require__(115);
 
 	var _levelController2 = _interopRequireDefault(_levelController);
 
-	var _timelineController = __webpack_require__(115);
+	var _timelineController = __webpack_require__(116);
 
 	var _timelineController2 = _interopRequireDefault(_timelineController);
 
-	var _logger = __webpack_require__(85);
+	var _logger = __webpack_require__(86);
 
-	var _xhrLoader = __webpack_require__(117);
+	var _xhrLoader = __webpack_require__(118);
 
 	var _xhrLoader2 = _interopRequireDefault(_xhrLoader);
 
-	var _events3 = __webpack_require__(107);
+	var _events3 = __webpack_require__(108);
 
 	var _events4 = _interopRequireDefault(_events3);
 
-	var _keyLoader = __webpack_require__(118);
+	var _keyLoader = __webpack_require__(119);
 
 	var _keyLoader2 = _interopRequireDefault(_keyLoader);
 
@@ -15025,8 +15171,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	          timelineController: _timelineController2.default,
 	          enableCEA708Captions: true,
 	          enableMP2TPassThrough: false,
-	          abrEwmaFast: 0,
-	          abrEwmaSlow: 0,
+	          abrEwmaFastLive: 5,
+	          abrEwmaSlowLive: 9,
+	          abrEwmaFastVoD: 4,
+	          abrEwmaSlowVoD: 15,
 	          abrBandWidthFactor: 0.8,
 	          abrBandWidthUpFactor: 0.7
 	        };
@@ -15315,7 +15463,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Hls;
 
 /***/ },
-/* 81 */
+/* 82 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -15394,7 +15542,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 82 */
+/* 83 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -15455,7 +15603,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 83 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15476,21 +15624,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}();
 
-	var _events = __webpack_require__(81);
+	var _events = __webpack_require__(82);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = __webpack_require__(84);
+	var _eventHandler = __webpack_require__(85);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _errors = __webpack_require__(82);
+	var _errors = __webpack_require__(83);
 
-	var _url = __webpack_require__(86);
+	var _url = __webpack_require__(87);
 
 	var _url2 = _interopRequireDefault(_url);
 
-	var _attrList = __webpack_require__(87);
+	var _attrList = __webpack_require__(88);
 
 	var _attrList2 = _interopRequireDefault(_attrList);
 
@@ -15842,7 +15990,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = PlaylistLoader;
 
 /***/ },
-/* 84 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15873,11 +16021,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     */
 
-	var _logger = __webpack_require__(85);
+	var _logger = __webpack_require__(86);
 
-	var _errors = __webpack_require__(82);
+	var _errors = __webpack_require__(83);
 
-	var _events = __webpack_require__(81);
+	var _events = __webpack_require__(82);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -15974,7 +16122,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = EventHandler;
 
 /***/ },
-/* 85 */
+/* 86 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -16066,7 +16214,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var logger = exports.logger = exportedLogger;
 
 /***/ },
-/* 86 */
+/* 87 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -16157,7 +16305,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = URLHelper;
 
 /***/ },
-/* 87 */
+/* 88 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -16279,7 +16427,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = AttrList;
 
 /***/ },
-/* 88 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16300,15 +16448,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}();
 
-	var _events = __webpack_require__(81);
+	var _events = __webpack_require__(82);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = __webpack_require__(84);
+	var _eventHandler = __webpack_require__(85);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _errors = __webpack_require__(82);
+	var _errors = __webpack_require__(83);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -16401,7 +16549,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = FragmentLoader;
 
 /***/ },
-/* 89 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16422,23 +16570,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}();
 
-	var _events = __webpack_require__(81);
+	var _events = __webpack_require__(82);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = __webpack_require__(84);
+	var _eventHandler = __webpack_require__(85);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _bufferHelper = __webpack_require__(90);
+	var _bufferHelper = __webpack_require__(91);
 
 	var _bufferHelper2 = _interopRequireDefault(_bufferHelper);
 
-	var _errors = __webpack_require__(82);
+	var _errors = __webpack_require__(83);
 
-	var _logger = __webpack_require__(85);
+	var _logger = __webpack_require__(86);
 
-	var _ewmaBandwidthEstimator = __webpack_require__(91);
+	var _ewmaBandwidthEstimator = __webpack_require__(92);
 
 	var _ewmaBandwidthEstimator2 = _interopRequireDefault(_ewmaBandwidthEstimator);
 
@@ -16480,7 +16628,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _this._autoLevelCapping = -1;
 	    _this._nextAutoLevel = -1;
 	    _this.hls = hls;
-	    _this.bwEstimator = new _ewmaBandwidthEstimator2.default(hls);
 	    _this.onCheck = _this.abandonRulesCheck.bind(_this);
 	    return _this;
 	  }
@@ -16497,6 +16644,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (!this.timer) {
 	        this.timer = setInterval(this.onCheck, 100);
 	      }
+
+	      // lazy init of bw Estimator, rationale is that we use different params for Live/VoD
+	      // so we need to wait for stream manifest / playlist type to instantiate it.
+	      if (!this.bwEstimator) {
+	        var hls = this.hls,
+	            level = data.frag.level,
+	            isLive = hls.levels[level].details.live,
+	            config = hls.config,
+	            ewmaFast = void 0,
+	            ewmaSlow = void 0;
+
+	        if (isLive) {
+	          ewmaFast = config.abrEwmaFastLive;
+	          ewmaSlow = config.abrEwmaSlowLive;
+	        } else {
+	          ewmaFast = config.abrEwmaFastVoD;
+	          ewmaSlow = config.abrEwmaSlowVoD;
+	        }
+	        this.bwEstimator = new _ewmaBandwidthEstimator2.default(hls, ewmaSlow, ewmaFast);
+	      }
+
 	      var frag = data.frag;
 	      frag.trequest = performance.now();
 	      this.fragCurrent = frag;
@@ -16677,7 +16845,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = AbrController;
 
 /***/ },
-/* 90 */
+/* 91 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -16796,7 +16964,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = BufferHelper;
 
 /***/ },
-/* 91 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16821,7 +16989,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      * different half-lives.
 	      */
 
-	var _ewma = __webpack_require__(92);
+	var _ewma = __webpack_require__(93);
 
 	var _ewma2 = _interopRequireDefault(_ewma);
 
@@ -16836,33 +17004,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	var EwmaBandWidthEstimator = function () {
-	  function EwmaBandWidthEstimator(hls) {
+	  function EwmaBandWidthEstimator(hls, slow, fast) {
 	    _classCallCheck(this, EwmaBandWidthEstimator);
 
 	    this.hls = hls;
 	    this.defaultEstimate_ = 5e5; // 500kbps
 	    this.minWeight_ = 0.001;
 	    this.minDelayMs_ = 50;
+	    this.slow_ = new _ewma2.default(slow);
+	    this.fast_ = new _ewma2.default(fast);
 	  }
 
 	  _createClass(EwmaBandWidthEstimator, [{
 	    key: 'sample',
 	    value: function sample(durationMs, numBytes) {
 	      durationMs = Math.max(durationMs, this.minDelayMs_);
-	      var bandwidth = 8000 * numBytes / durationMs;
+	      var bandwidth = 8000 * numBytes / durationMs,
+
+
 	      //console.log('instant bw:'+ Math.round(bandwidth));
 	      // we weight sample using loading duration....
-	      var weigth = durationMs / 1000;
-
-	      // lazy initialization. this allows to take into account config param changes that could happen after Hls instantiation,
-	      // but before first fragment loading. this is useful to A/B tests those params
-	      if (!this.fast_) {
-	        var config = this.hls.config;
-	        this.fast_ = new _ewma2.default(config.abrEwmaFast);
-	        this.slow_ = new _ewma2.default(config.abrEwmaSlow);
-	      }
-	      this.fast_.sample(weigth, bandwidth);
-	      this.slow_.sample(weigth, bandwidth);
+	      weight = durationMs / 1000;
+	      this.fast_.sample(weight, bandwidth);
+	      this.slow_.sample(weight, bandwidth);
 	    }
 	  }, {
 	    key: 'getEstimate',
@@ -16887,7 +17051,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = EwmaBandWidthEstimator;
 
 /***/ },
-/* 92 */
+/* 93 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -16961,7 +17125,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = EWMA;
 
 /***/ },
-/* 93 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16982,17 +17146,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}();
 
-	var _events = __webpack_require__(81);
+	var _events = __webpack_require__(82);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = __webpack_require__(84);
+	var _eventHandler = __webpack_require__(85);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _logger = __webpack_require__(85);
+	var _logger = __webpack_require__(86);
 
-	var _errors = __webpack_require__(82);
+	var _errors = __webpack_require__(83);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -17367,9 +17531,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            } else {
 	              // QuotaExceededError: http://www.w3.org/TR/html5/infrastructure.html#quotaexceedederror
 	              // let's stop appending any segments, and report BUFFER_FULL_ERROR error
-	              segments = [];
+	              this.segments = [];
 	              event.details = _errors.ErrorDetails.BUFFER_FULL_ERROR;
 	              hls.trigger(_events2.default.ERROR, event);
+	              return;
 	            }
 	          }
 	        }
@@ -17438,7 +17603,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = BufferController;
 
 /***/ },
-/* 94 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17459,11 +17624,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}();
 
-	var _events = __webpack_require__(81);
+	var _events = __webpack_require__(82);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = __webpack_require__(84);
+	var _eventHandler = __webpack_require__(85);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
@@ -17608,7 +17773,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = CapLevelController;
 
 /***/ },
-/* 95 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17629,33 +17794,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}();
 
-	var _demuxer = __webpack_require__(96);
+	var _demuxer = __webpack_require__(97);
 
 	var _demuxer2 = _interopRequireDefault(_demuxer);
 
-	var _events = __webpack_require__(81);
+	var _events = __webpack_require__(82);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = __webpack_require__(84);
+	var _eventHandler = __webpack_require__(85);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _logger = __webpack_require__(85);
+	var _logger = __webpack_require__(86);
 
-	var _binarySearch = __webpack_require__(112);
+	var _binarySearch = __webpack_require__(113);
 
 	var _binarySearch2 = _interopRequireDefault(_binarySearch);
 
-	var _bufferHelper = __webpack_require__(90);
+	var _bufferHelper = __webpack_require__(91);
 
 	var _bufferHelper2 = _interopRequireDefault(_bufferHelper);
 
-	var _levelHelper = __webpack_require__(113);
+	var _levelHelper = __webpack_require__(114);
 
 	var _levelHelper2 = _interopRequireDefault(_levelHelper);
 
-	var _errors = __webpack_require__(82);
+	var _errors = __webpack_require__(83);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -17960,8 +18125,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	              //logger.log('find SN matching with pos:' +  bufferEnd + ':' + frag.sn);
 	              if (fragPrevious && frag.level === fragPrevious.level && frag.sn === fragPrevious.sn) {
 	                if (frag.sn < levelDetails.endSN) {
-	                  frag = fragments[frag.sn + 1 - levelDetails.startSN];
-	                  _logger.logger.log('SN just loaded, load next one: ' + frag.sn);
+	                  var deltaPTS = fragPrevious.deltaPTS,
+	                      curSNIdx = frag.sn - levelDetails.startSN;
+	                  // if there is a significant delta between audio and video, larger than max allowed hole,
+	                  // it might be because video fragment does not start with a keyframe.
+	                  // let's try to load previous fragment again to get last keyframe
+	                  // then we will reload again current fragment (that way we should be able to fill the buffer hole ...)
+	                  if (deltaPTS && deltaPTS > config.maxBufferHole) {
+	                    frag = fragments[curSNIdx - 1];
+	                    _logger.logger.warn('SN just loaded, with large PTS gap between audio and video, maybe frag is not starting with a keyframe ? load previous one to try to overcome this');
+	                    // decrement previous frag load counter to avoid frag loop loading error when next fragment will get reloaded
+	                    fragPrevious.loadCounter--;
+	                  } else {
+	                    frag = fragments[curSNIdx + 1];
+	                    _logger.logger.log('SN just loaded, load next one: ' + frag.sn);
+	                  }
 	                } else {
 	                  // have we reached end of VOD playlist ?
 	                  if (!levelDetails.live) {
@@ -17974,7 +18152,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                      this.state = State.ENDED;
 	                    }
 	                  }
-	                  return;
+	                  break;
 	                }
 	              }
 	              //logger.log('      loading frag ' + i +',pos/bufEnd:' + pos.toFixed(3) + '/' + bufferEnd.toFixed(3));
@@ -18655,11 +18833,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 	          break;
 	        case _errors.ErrorDetails.BUFFER_FULL_ERROR:
-	          // trigger a smooth level switch to empty buffers
-	          // also reduce max buffer length as it might be too high. we do this to avoid loop flushing ...
-	          this.config.maxMaxBufferLength /= 2;
-	          _logger.logger.warn('reduce max buffer length to ' + this.config.maxMaxBufferLength + 's and trigger a nextLevelSwitch to flush old buffer and fix QuotaExceededError');
-	          this.nextLevelSwitch();
+	          // only reduce max buf len if in appending state
+	          if (this.state === State.PARSING || this.state === State.PARSED) {
+	            // reduce max buffer length as it might be too high. we do this to avoid loop flushing ...
+	            this.config.maxMaxBufferLength /= 2;
+	            _logger.logger.warn('reduce max buffer length to ' + this.config.maxMaxBufferLength + 's and switch to IDLE state');
+	            // increase fragment load Index to avoid frag loop loading error after buffer flush
+	            this.fragLoadIdx += 2 * this.config.fragLoadingLoopThreshold;
+	            this.state = State.IDLE;
+	          }
 	          break;
 	        default:
 	          break;
@@ -18833,7 +19015,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = StreamController;
 
 /***/ },
-/* 96 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18852,21 +19034,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}();
 
-	var _events = __webpack_require__(81);
+	var _events = __webpack_require__(82);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _demuxerInline = __webpack_require__(97);
+	var _demuxerInline = __webpack_require__(98);
 
 	var _demuxerInline2 = _interopRequireDefault(_demuxerInline);
 
-	var _demuxerWorker = __webpack_require__(106);
+	var _demuxerWorker = __webpack_require__(107);
 
 	var _demuxerWorker2 = _interopRequireDefault(_demuxerWorker);
 
-	var _logger = __webpack_require__(85);
+	var _logger = __webpack_require__(86);
 
-	var _decrypter = __webpack_require__(108);
+	var _decrypter = __webpack_require__(109);
 
 	var _decrypter2 = _interopRequireDefault(_decrypter);
 
@@ -18892,7 +19074,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (hls.config.enableWorker && typeof Worker !== 'undefined') {
 	      _logger.logger.log('demuxing in webworker');
 	      try {
-	        var work = __webpack_require__(111);
+	        var work = __webpack_require__(112);
 	        this.w = work(_demuxerWorker2.default);
 	        this.onwmsg = this.onWorkerMessage.bind(this);
 	        this.w.addEventListener('message', this.onwmsg);
@@ -18996,7 +19178,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Demuxer;
 
 /***/ },
-/* 97 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19017,25 +19199,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	      *   probe fragments and instantiate appropriate demuxer depending on content type (TSDemuxer, AACDemuxer, ...)
 	      */
 
-	var _events = __webpack_require__(81);
+	var _events = __webpack_require__(82);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _errors = __webpack_require__(82);
+	var _errors = __webpack_require__(83);
 
-	var _aacdemuxer = __webpack_require__(98);
+	var _aacdemuxer = __webpack_require__(99);
 
 	var _aacdemuxer2 = _interopRequireDefault(_aacdemuxer);
 
-	var _tsdemuxer = __webpack_require__(101);
+	var _tsdemuxer = __webpack_require__(102);
 
 	var _tsdemuxer2 = _interopRequireDefault(_tsdemuxer);
 
-	var _mp4Remuxer = __webpack_require__(103);
+	var _mp4Remuxer = __webpack_require__(104);
 
 	var _mp4Remuxer2 = _interopRequireDefault(_mp4Remuxer);
 
-	var _passthroughRemuxer = __webpack_require__(105);
+	var _passthroughRemuxer = __webpack_require__(106);
 
 	var _passthroughRemuxer2 = _interopRequireDefault(_passthroughRemuxer);
 
@@ -19096,7 +19278,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = DemuxerInline;
 
 /***/ },
-/* 98 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19117,13 +19299,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      * AAC demuxer
 	      */
 
-	var _adts = __webpack_require__(99);
+	var _adts = __webpack_require__(100);
 
 	var _adts2 = _interopRequireDefault(_adts);
 
-	var _logger = __webpack_require__(85);
+	var _logger = __webpack_require__(86);
 
-	var _id = __webpack_require__(100);
+	var _id = __webpack_require__(101);
 
 	var _id2 = _interopRequireDefault(_id);
 
@@ -19239,7 +19421,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = AACDemuxer;
 
 /***/ },
-/* 99 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19260,9 +19442,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      *  ADTS parser helper
 	      */
 
-	var _logger = __webpack_require__(85);
+	var _logger = __webpack_require__(86);
 
-	var _errors = __webpack_require__(82);
+	var _errors = __webpack_require__(83);
 
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
@@ -19404,7 +19586,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = ADTS;
 
 /***/ },
-/* 100 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19425,7 +19607,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      * ID3 parser
 	      */
 
-	var _logger = __webpack_require__(85);
+	var _logger = __webpack_require__(86);
 
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
@@ -19571,7 +19753,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = ID3;
 
 /***/ },
-/* 101 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19601,21 +19783,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	// import Hex from '../utils/hex';
 
-	var _adts = __webpack_require__(99);
+	var _adts = __webpack_require__(100);
 
 	var _adts2 = _interopRequireDefault(_adts);
 
-	var _events = __webpack_require__(81);
+	var _events = __webpack_require__(82);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _expGolomb = __webpack_require__(102);
+	var _expGolomb = __webpack_require__(103);
 
 	var _expGolomb2 = _interopRequireDefault(_expGolomb);
 
-	var _logger = __webpack_require__(85);
+	var _logger = __webpack_require__(86);
 
-	var _errors = __webpack_require__(82);
+	var _errors = __webpack_require__(83);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -20354,7 +20536,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = TSDemuxer;
 
 /***/ },
-/* 102 */
+/* 103 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20375,7 +20557,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      * Parser for exponential Golomb codes, a variable-bitwidth number encoding scheme used by h264.
 	     */
 
-	var _logger = __webpack_require__(85);
+	var _logger = __webpack_require__(86);
 
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
@@ -20733,7 +20915,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = ExpGolomb;
 
 /***/ },
-/* 103 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20754,17 +20936,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      * fMP4 remuxer
 	     */
 
-	var _events = __webpack_require__(81);
+	var _events = __webpack_require__(82);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _logger = __webpack_require__(85);
+	var _logger = __webpack_require__(86);
 
-	var _mp4Generator = __webpack_require__(104);
+	var _mp4Generator = __webpack_require__(105);
 
 	var _mp4Generator2 = _interopRequireDefault(_mp4Generator);
 
-	var _errors = __webpack_require__(82);
+	var _errors = __webpack_require__(83);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -20926,6 +21108,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	          dtsnorm,
 	          flags,
 	          samples = [];
+
+	      // handle broken streams with PTS < DTS, tolerance up 200ms (18000 in 90kHz timescale)
+	      var PTSDTSshift = track.samples.reduce(function (prev, curr) {
+	        return Math.max(Math.min(prev, curr.pts - curr.dts), -18000);
+	      }, 0);
+	      if (PTSDTSshift < 0) {
+	        _logger.logger.warn('PTS < DTS detected in video samples, shifting DTS by ' + Math.round(PTSDTSshift / 90) + ' ms to overcome this issue');
+	      }
 	      /* concatenate the video data and construct the mdat in place
 	        (need 8 more bytes to fill length and mpdat type) */
 	      mdat = new Uint8Array(track.len + 4 * track.nbNalu + 8);
@@ -20945,10 +21135,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	          mp4SampleLength += 4 + unit.data.byteLength;
 	        }
 	        pts = avcSample.pts - this._initDTS;
-	        dts = avcSample.dts - this._initDTS;
-	        // ensure DTS is not bigger than PTS
+	        // shift dts by PTSDTSshift, to ensure that PTS >= DTS
+	        dts = avcSample.dts - this._initDTS + PTSDTSshift;
+	        // ensure DTS is not bigger than PTS // strap belt !!!
 	        dts = Math.min(pts, dts);
-	        //logger.log(`Video/PTS/DTS:${Math.round(pts/90)}/${Math.round(dts/90)}`);
+	        //logger.log(`Video/PTS/DTS/ptsnorm/DTSnorm:${Math.round(avcSample.pts/90)}/${Math.round(avcSample.dts/90)}/${Math.round(pts/90)}/${Math.round(dts/90)}`);
 	        // if not first AVC sample of video track, normalize PTS/DTS with previous sample value
 	        // and ensure that sample duration is positive
 	        if (lastDTS !== undefined) {
@@ -20991,7 +21182,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          firstPTS = Math.max(0, ptsnorm);
 	          firstDTS = Math.max(0, dtsnorm);
 	        }
-	        //console.log('PTS/DTS/initDTS/normPTS/normDTS/relative PTS : ${avcSample.pts}/${avcSample.dts}/${this._initDTS}/${ptsnorm}/${dtsnorm}/${(avcSample.pts/4294967296).toFixed(3)}');
+	        //console.log(`PTS/DTS/initDTS/normPTS/normDTS/relative PTS : ${avcSample.pts}/${avcSample.dts}/${this._initDTS}/${ptsnorm}/${dtsnorm}/${(avcSample.pts/4294967296).toFixed(3)});
 	        mp4Sample = {
 	          size: mp4SampleLength,
 	          duration: 0,
@@ -21264,7 +21455,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = MP4Remuxer;
 
 /***/ },
-/* 104 */
+/* 105 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -21789,7 +21980,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = MP4;
 
 /***/ },
-/* 105 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21810,7 +22001,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      * passthrough remuxer
 	     */
 
-	var _events = __webpack_require__(81);
+	var _events = __webpack_require__(82);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -21900,7 +22091,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = PassThroughRemuxer;
 
 /***/ },
-/* 106 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21909,15 +22100,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _demuxerInline = __webpack_require__(97);
+	var _demuxerInline = __webpack_require__(98);
 
 	var _demuxerInline2 = _interopRequireDefault(_demuxerInline);
 
-	var _events = __webpack_require__(81);
+	var _events = __webpack_require__(82);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _events3 = __webpack_require__(107);
+	var _events3 = __webpack_require__(108);
 
 	var _events4 = _interopRequireDefault(_events3);
 
@@ -21994,7 +22185,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = DemuxerWorker;
 
 /***/ },
-/* 107 */
+/* 108 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22268,7 +22459,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 108 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22289,13 +22480,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      * AES128 decryption.
 	      */
 
-	var _aes128Decrypter = __webpack_require__(109);
+	var _aes128Decrypter = __webpack_require__(110);
 
 	var _aes128Decrypter2 = _interopRequireDefault(_aes128Decrypter);
 
-	var _errors = __webpack_require__(82);
+	var _errors = __webpack_require__(83);
 
-	var _logger = __webpack_require__(85);
+	var _logger = __webpack_require__(86);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -22382,7 +22573,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Decrypter;
 
 /***/ },
-/* 109 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22437,7 +22628,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      * official policies, either expressed or implied, of the authors.
 	      */
 
-	var _aes = __webpack_require__(110);
+	var _aes = __webpack_require__(111);
 
 	var _aes2 = _interopRequireDefault(_aes);
 
@@ -22585,7 +22776,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = AES128Decrypter;
 
 /***/ },
-/* 110 */
+/* 111 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22845,7 +23036,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = AES;
 
 /***/ },
-/* 111 */
+/* 112 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22910,7 +23101,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 112 */
+/* 113 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -22958,7 +23149,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = BinarySearch;
 
 /***/ },
-/* 113 */
+/* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22979,7 +23170,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      * Level Helper class, providing methods dealing with playlist sliding and drift
 	     */
 
-	var _logger = __webpack_require__(85);
+	var _logger = __webpack_require__(86);
 
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
@@ -23060,6 +23251,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      fragments = details.fragments;
 	      frag = fragments[fragIdx];
 	      if (!isNaN(frag.startPTS)) {
+	        // delta PTS between audio and video
+	        var deltaPTS = Math.abs(frag.startPTS - startPTS);
+	        if (isNaN(frag.deltaPTS)) {
+	          frag.deltaPTS = deltaPTS;
+	        } else {
+	          frag.deltaPTS = Math.max(deltaPTS, frag.deltaPTS);
+	        }
 	        startPTS = Math.min(startPTS, frag.startPTS);
 	        endPTS = Math.max(endPTS, frag.endPTS);
 	        startDTS = Math.min(startDTS, frag.startDTS);
@@ -23125,7 +23323,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = LevelHelper;
 
 /***/ },
-/* 114 */
+/* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23146,17 +23344,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}();
 
-	var _events = __webpack_require__(81);
+	var _events = __webpack_require__(82);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = __webpack_require__(84);
+	var _eventHandler = __webpack_require__(85);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _logger = __webpack_require__(85);
+	var _logger = __webpack_require__(86);
 
-	var _errors = __webpack_require__(82);
+	var _errors = __webpack_require__(83);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -23505,7 +23703,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = LevelController;
 
 /***/ },
-/* 115 */
+/* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23526,15 +23724,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}();
 
-	var _events = __webpack_require__(81);
+	var _events = __webpack_require__(82);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = __webpack_require__(84);
+	var _eventHandler = __webpack_require__(85);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _cea708Interpreter = __webpack_require__(116);
+	var _cea708Interpreter = __webpack_require__(117);
 
 	var _cea708Interpreter2 = _interopRequireDefault(_cea708Interpreter);
 
@@ -23630,7 +23828,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = TimelineController;
 
 /***/ },
-/* 116 */
+/* 117 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -24065,7 +24263,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = CEA708Interpreter;
 
 /***/ },
-/* 117 */
+/* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24086,7 +24284,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      * XHR based logger
 	     */
 
-	var _logger = __webpack_require__(85);
+	var _logger = __webpack_require__(86);
 
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
@@ -24227,7 +24425,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = XhrLoader;
 
 /***/ },
-/* 118 */
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24248,15 +24446,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}();
 
-	var _events = __webpack_require__(81);
+	var _events = __webpack_require__(82);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = __webpack_require__(84);
+	var _eventHandler = __webpack_require__(85);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _errors = __webpack_require__(82);
+	var _errors = __webpack_require__(83);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -24359,15 +24557,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = KeyLoader;
 
 /***/ },
-/* 119 */
+/* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(120);
+	module.exports = __webpack_require__(121);
 
 /***/ },
-/* 120 */
+/* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24378,7 +24576,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _playback = __webpack_require__(39);
+	var _playback = __webpack_require__(40);
 
 	var _playback2 = _interopRequireDefault(_playback);
 
@@ -24386,7 +24584,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _styler2 = _interopRequireDefault(_styler);
 
-	var _style = __webpack_require__(121);
+	var _style = __webpack_require__(122);
 
 	var _style2 = _interopRequireDefault(_style);
 
@@ -24477,7 +24675,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 121 */
+/* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(29)();
@@ -24491,15 +24689,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 122 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(123);
+	module.exports = __webpack_require__(124);
 
 /***/ },
-/* 123 */
+/* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24512,7 +24710,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _utils = __webpack_require__(2);
 
-	var _playback = __webpack_require__(39);
+	var _playback = __webpack_require__(40);
 
 	var _playback2 = _interopRequireDefault(_playback);
 
@@ -24528,11 +24726,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _style = __webpack_require__(124);
+	var _style = __webpack_require__(125);
 
 	var _style2 = _interopRequireDefault(_style);
 
-	var _error = __webpack_require__(125);
+	var _error = __webpack_require__(126);
 
 	var _error2 = _interopRequireDefault(_error);
 
@@ -24669,7 +24867,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 124 */
+/* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(29)();
@@ -24683,21 +24881,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 125 */
+/* 126 */
 /***/ function(module, exports) {
 
 	module.exports = "<canvas data-no-op-canvas></canvas>\n<p data-no-op-msg><%=message%><p>\n";
 
 /***/ },
-/* 126 */
+/* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(127);
+	module.exports = __webpack_require__(128);
 
 /***/ },
-/* 127 */
+/* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24708,7 +24906,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _ui_container_plugin = __webpack_require__(128);
+	var _ui_container_plugin = __webpack_require__(129);
 
 	var _ui_container_plugin2 = _interopRequireDefault(_ui_container_plugin);
 
@@ -24724,11 +24922,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _template2 = _interopRequireDefault(_template);
 
-	var _spinner = __webpack_require__(129);
+	var _spinner = __webpack_require__(130);
 
 	var _spinner2 = _interopRequireDefault(_spinner);
 
-	var _spinner3 = __webpack_require__(130);
+	var _spinner3 = __webpack_require__(131);
 
 	var _spinner4 = _interopRequireDefault(_spinner3);
 
@@ -24825,7 +25023,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 128 */
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24923,13 +25121,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 129 */
+/* 130 */
 /***/ function(module, exports) {
 
 	module.exports = "<div data-bounce1></div><div data-bounce2></div><div data-bounce3></div>\n";
 
 /***/ },
-/* 130 */
+/* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(29)();
@@ -24943,15 +25141,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 131 */
+/* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(132);
+	module.exports = __webpack_require__(133);
 
 /***/ },
-/* 132 */
+/* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24962,7 +25160,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _container_plugin = __webpack_require__(133);
+	var _container_plugin = __webpack_require__(134);
 
 	var _container_plugin2 = _interopRequireDefault(_container_plugin);
 
@@ -25102,7 +25300,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 133 */
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25198,15 +25396,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 134 */
+/* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(135);
+	module.exports = __webpack_require__(136);
 
 /***/ },
-/* 135 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25217,7 +25415,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _ui_container_plugin = __webpack_require__(128);
+	var _ui_container_plugin = __webpack_require__(129);
 
 	var _ui_container_plugin2 = _interopRequireDefault(_ui_container_plugin);
 
@@ -25233,11 +25431,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _template2 = _interopRequireDefault(_template);
 
-	var _watermark = __webpack_require__(136);
+	var _watermark = __webpack_require__(137);
 
 	var _watermark2 = _interopRequireDefault(_watermark);
 
-	var _watermark3 = __webpack_require__(137);
+	var _watermark3 = __webpack_require__(138);
 
 	var _watermark4 = _interopRequireDefault(_watermark3);
 
@@ -25317,7 +25515,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 136 */
+/* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(29)();
@@ -25331,21 +25529,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 137 */
+/* 138 */
 /***/ function(module, exports) {
 
 	module.exports = "<div data-watermark data-watermark-<%=position %>>\n<% if(typeof imageLink !== 'undefined') { %>\n<a target=_blank href=\"<%= imageLink %>\">\n<% } %>\n<img src=\"<%= imageUrl %>\">\n<% if(typeof imageLink !== 'undefined') { %>\n</a>\n<% } %>\n</div>\n";
 
 /***/ },
-/* 138 */
+/* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(139);
+	module.exports = __webpack_require__(140);
 
 /***/ },
-/* 139 */
+/* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -25356,7 +25554,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _ui_container_plugin = __webpack_require__(128);
+	var _ui_container_plugin = __webpack_require__(129);
 
 	var _ui_container_plugin2 = _interopRequireDefault(_ui_container_plugin);
 
@@ -25372,15 +25570,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _template2 = _interopRequireDefault(_template);
 
-	var _poster = __webpack_require__(140);
+	var _poster = __webpack_require__(141);
 
 	var _poster2 = _interopRequireDefault(_poster);
 
-	var _poster3 = __webpack_require__(141);
+	var _poster3 = __webpack_require__(142);
 
 	var _poster4 = _interopRequireDefault(_poster3);
 
-	var _play = __webpack_require__(43);
+	var _play = __webpack_require__(44);
 
 	var _play2 = _interopRequireDefault(_play);
 
@@ -25543,10 +25741,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = PosterPlugin;
 	module.exports = exports['default'];
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(37)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(38)))
 
 /***/ },
-/* 140 */
+/* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(29)();
@@ -25560,21 +25758,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 141 */
+/* 142 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"play-wrapper\" data-poster></div>\n";
 
 /***/ },
-/* 142 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(143);
+	module.exports = __webpack_require__(144);
 
 /***/ },
-/* 143 */
+/* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25585,7 +25783,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _container_plugin = __webpack_require__(133);
+	var _container_plugin = __webpack_require__(134);
 
 	var _container_plugin2 = _interopRequireDefault(_container_plugin);
 
@@ -25748,15 +25946,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 144 */
+/* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(145);
+	module.exports = __webpack_require__(146);
 
 /***/ },
-/* 145 */
+/* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25767,7 +25965,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _container_plugin = __webpack_require__(133);
+	var _container_plugin = __webpack_require__(134);
 
 	var _container_plugin2 = _interopRequireDefault(_container_plugin);
 
@@ -25775,7 +25973,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _playback = __webpack_require__(39);
+	var _playback = __webpack_require__(40);
 
 	var _playback2 = _interopRequireDefault(_playback);
 
@@ -25834,15 +26032,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 146 */
+/* 147 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(147);
+	module.exports = __webpack_require__(148);
 
 /***/ },
-/* 147 */
+/* 148 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25853,7 +26051,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _ui_core_plugin = __webpack_require__(148);
+	var _ui_core_plugin = __webpack_require__(149);
 
 	var _ui_core_plugin2 = _interopRequireDefault(_ui_core_plugin);
 
@@ -25861,7 +26059,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _template2 = _interopRequireDefault(_template);
 
-	var _playback = __webpack_require__(39);
+	var _playback = __webpack_require__(40);
 
 	var _playback2 = _interopRequireDefault(_playback);
 
@@ -25873,11 +26071,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _dvr_controls = __webpack_require__(149);
+	var _dvr_controls = __webpack_require__(150);
 
 	var _dvr_controls2 = _interopRequireDefault(_dvr_controls);
 
-	var _index = __webpack_require__(150);
+	var _index = __webpack_require__(151);
 
 	var _index2 = _interopRequireDefault(_index);
 
@@ -26002,7 +26200,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 148 */
+/* 149 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26082,7 +26280,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 149 */
+/* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(29)();
@@ -26096,21 +26294,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 150 */
+/* 151 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"live-info\">LIVE</div>\n<button class=\"live-button\">BACK TO LIVE</button>\n";
 
 /***/ },
-/* 151 */
+/* 152 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(152);
+	module.exports = __webpack_require__(153);
 
 /***/ },
-/* 152 */
+/* 153 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26121,7 +26319,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _core_plugin = __webpack_require__(153);
+	var _core_plugin = __webpack_require__(154);
 
 	var _core_plugin2 = _interopRequireDefault(_core_plugin);
 
@@ -26133,11 +26331,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-	var _play = __webpack_require__(43);
+	var _play = __webpack_require__(44);
 
 	var _play2 = _interopRequireDefault(_play);
 
-	var _pause = __webpack_require__(44);
+	var _pause = __webpack_require__(45);
 
 	var _pause2 = _interopRequireDefault(_pause);
 
@@ -26262,7 +26460,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 153 */
+/* 154 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26337,15 +26535,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 154 */
+/* 155 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(155);
+	module.exports = __webpack_require__(156);
 
 /***/ },
-/* 155 */
+/* 156 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26358,7 +26556,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _utils = __webpack_require__(2);
 
-	var _ui_core_plugin = __webpack_require__(148);
+	var _ui_core_plugin = __webpack_require__(149);
 
 	var _ui_core_plugin2 = _interopRequireDefault(_ui_core_plugin);
 
@@ -26374,15 +26572,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _playback = __webpack_require__(39);
+	var _playback = __webpack_require__(40);
 
 	var _playback2 = _interopRequireDefault(_playback);
 
-	var _seek_time = __webpack_require__(156);
+	var _seek_time = __webpack_require__(157);
 
 	var _seek_time2 = _interopRequireDefault(_seek_time);
 
-	var _seek_time3 = __webpack_require__(157);
+	var _seek_time3 = __webpack_require__(158);
 
 	var _seek_time4 = _interopRequireDefault(_seek_time3);
 
@@ -26582,7 +26780,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 156 */
+/* 157 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(29)();
@@ -26596,13 +26794,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 157 */
+/* 158 */
 /***/ function(module, exports) {
 
 	module.exports = "<span data-seek-time></span>\n<span data-duration></span>\n";
 
 /***/ },
-/* 158 */
+/* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26613,7 +26811,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _core_plugin = __webpack_require__(153);
+	var _core_plugin = __webpack_require__(154);
 
 	var _core_plugin2 = _interopRequireDefault(_core_plugin);
 
@@ -26673,7 +26871,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 159 */
+/* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26688,7 +26886,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _core_plugin = __webpack_require__(153);
+	var _core_plugin = __webpack_require__(154);
 
 	var _core_plugin2 = _interopRequireDefault(_core_plugin);
 
