@@ -69,6 +69,8 @@ Clappr is under heavy development but production-ready. Feel free to open issues
 
 ## [API Documentation](http://clappr.github.io/)
 
+## [How to write a plugin?](https://github.com/clappr/clappr/wiki)
+
 ## [Installing](doc/INSTALLING.md)
 
 ## [FAQ & Troubleshooting](doc/TROUBLESHOOTING.md)
