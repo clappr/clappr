@@ -17,6 +17,22 @@ describe('Container', function() {
     expect(this.container.getPlaybackType()).to.equal(Playback.NO_OP)
   })
 
+  it('treats the playback as a plugin', function() {
+    expect(this.container.plugins[0]).to.equal(this.playback)
+  })
+
+  it('call destroys in all the plugins once', function() {
+    var fakePlugin = {destroy: function(){}}
+    sinon.spy(this.playback, 'destroy')
+    sinon.spy(fakePlugin, 'destroy')
+
+    this.container.addPlugin(fakePlugin)
+    this.container.destroy()
+
+    assert.ok(this.playback.destroy.calledOnce)
+    assert.ok(fakePlugin.destroy.calledOnce)
+  })
+
   it('listens to playback:progress event', function() {
     sinon.spy(this.container, 'progress')
 
