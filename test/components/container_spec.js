@@ -21,16 +21,23 @@ describe('Container', function() {
     expect(this.container.plugins[0]).to.equal(this.playback)
   })
 
-  it('call destroys in all the plugins once', function() {
+  it('destroys all the plugins', function() {
     var fakePlugin = {destroy: function(){}}
+
     sinon.spy(this.playback, 'destroy')
     sinon.spy(fakePlugin, 'destroy')
-
+    sinon.spy(this.container, 'stopListening')
+    sinon.spy(this.container, 'trigger')
+    sinon.spy(this.container.$el, 'remove')
     this.container.addPlugin(fakePlugin)
+
     this.container.destroy()
 
+    assert.ok(this.container.trigger.calledWith(Events.CONTAINER_DESTROYED, this.container, this.container.name))
+    assert.ok(this.container.stopListening.calledOnce)
     assert.ok(this.playback.destroy.calledOnce)
     assert.ok(fakePlugin.destroy.calledOnce)
+    assert.ok(this.container.$el.remove.calledOnce)
   })
 
   it('listens to playback:progress event', function() {
