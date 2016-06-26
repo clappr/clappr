@@ -63,6 +63,8 @@ Clappr is under heavy development but production-ready. Feel free to open issues
   <img src='https://raw.githubusercontent.com/clappr/clappr/master/images/stats.jpg' width="280px"></img>
 </a> <a href="https://github.com/towerz/clappr-youtube-playback/">
   <img src='https://raw.githubusercontent.com/clappr/clappr/master/images/youtube.jpg' width="280px"></img>
+</a> <a href="https://github.com/thiagopnts/clappr-video360/">
+  <img src='https://raw.githubusercontent.com/thiagopnts/clappr-video360/master/360.gif' width="280px"></img>
 </a>
 
 ## [Supported Formats](doc/SUPPORTED_FORMATS.md)
