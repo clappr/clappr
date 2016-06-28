@@ -46,7 +46,7 @@ export default class DashShakaPlayback extends HTML5Video {
   // skipping ready event on video tag in favor of ready on shaka
   ready() {}
 
-  get isReady() {return this._isReadyState}
+  get isReady() {return this._isShakaReadyState}
 
   // skipping error handling on video tag in favor of error on shaka
   error(event) {
@@ -64,7 +64,7 @@ export default class DashShakaPlayback extends HTML5Video {
     this._player.unload().
       then(() => {
         this._player = null
-        this._isReadyState = false
+        this._isShakaReadyState = false
       }).
       catch(() => { Log.error('shaka could not be unloaded') })
   }
@@ -92,7 +92,7 @@ export default class DashShakaPlayback extends HTML5Video {
 
 
   _setup() {
-    this._isReadyState = false
+    this._isShakaReadyState = false
     this._player = this._createPlayer()
     this._options.shakaConfiguration && this._player.configure(this._options.shakaConfiguration)
 
@@ -159,11 +159,12 @@ export default class DashShakaPlayback extends HTML5Video {
 
   _destroy() {
     super.destroy()
-    this._isReadyState = false
+    this._isShakaReadyState = false
     Log.debug('shaka was destroyed')
   }
 
   _ready() {
+    this._isShakaReadyState = true
     super._ready()
   }
 }
