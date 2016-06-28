@@ -3,6 +3,7 @@ import shaka from 'shaka-player'
 
 const SEND_STATS_AT = 30 * 1000
 const AUTO = -1
+const SHAKA_READY = 'shaka:ready'
 
 export default class DashShakaPlayback extends HTML5Video {
   get name() {return 'dash_shaka_playback'}
@@ -34,7 +35,7 @@ export default class DashShakaPlayback extends HTML5Video {
     !this._player && this._setup()
 
     if (!this.isReady) {
-      this.once(Events.PLAYBACK_READY, this.play)
+      this.once(SHAKA_READY, this.play)
       return
     }
     super.play()
@@ -120,6 +121,7 @@ export default class DashShakaPlayback extends HTML5Video {
 
   _loaded() {
     this._isShakaReadyState = true
+    this.trigger(SHAKA_READY)
     this._ready()
     this._startToSendStats()
     this._fillLevels()
