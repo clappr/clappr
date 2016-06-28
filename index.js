@@ -115,6 +115,7 @@ export default class DashShakaPlayback extends HTML5Video {
   }
 
   _loaded() {
+    this._isShakaReadyState = true
     this._ready()
     this._startToSendStats()
     this._fillLevels()
@@ -164,7 +165,6 @@ export default class DashShakaPlayback extends HTML5Video {
   }
 
   _ready() {
-    this._isShakaReadyState = true
     super._ready()
   }
 }
