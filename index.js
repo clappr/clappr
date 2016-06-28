@@ -82,12 +82,16 @@ export default class DashShakaPlayback extends HTML5Video {
   destroy() {
     clearInterval(this.sendStatsId)
 
-    this._player.destroy().
-      then(() => this._destroy()).
-      catch(() => {
-        this._destroy()
-        Log.error('shaka could not be destroyed')
-      })
+    if (this._player) {
+      this._destroy()
+    } else {
+      this._player.destroy().
+        then(() => this._destroy()).
+        catch(() => {
+          this._destroy()
+          Log.error('shaka could not be destroyed')
+        })
+    }
   }
 
 
