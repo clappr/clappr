@@ -8,6 +8,10 @@ https://medium.com/@bikegriffith/using-clappr-with-reactjs-14a338e3451f#.9a36w0d
 
 https://github.com/clappr/clappr/issues/933#issuecomment-228540381
 
+### How can I Log messages with Clappr?
+
+Add this snipet before you instantiate the player `Clappr.Log.setLevel(0)`
+
 ### Common steps to verify issues
 
 Very often people open issues related to: **stream not working, freezing, glitching, stopping and so on.** You can try the steps bellow, taking notes about the results:
