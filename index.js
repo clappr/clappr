@@ -59,11 +59,12 @@ export default class DashShakaPlayback extends HTML5Video {
 
   stop() {
     clearInterval(this.sendStatsId)
-    this.trigger(Events.PLAYBACK_STOP, this.name)
     this._sendStats()
 
     this._player.unload().
       then(() => {
+        this._bufferingFullHandler()
+        super.stop()
         this._player = null
         this._isShakaReadyState = false
       }).
