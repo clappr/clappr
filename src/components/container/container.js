@@ -330,8 +330,9 @@ export default class Container extends UIObject {
 
   /**
    * checks if a plugin, given its name, exist
-   * @method addPlugin
+   * @method hasPlugin
    * @param {String} name
+   * @return {Boolean}
    */
   hasPlugin(name) {
     return !!this.getPlugin(name)
