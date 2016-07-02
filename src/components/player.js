@@ -316,11 +316,6 @@ export default class Player extends BaseObject {
     this.trigger(Events.PLAYER_ERROR, error)
   }
 
-  // TODO what is this here for?
-  is(value, type) {
-    return value.constructor === type
-  }
-
   _normalizeSources(options) {
     var sources = options.sources || (options.source !== undefined? [options.source] : [])
     return sources.length === 0 ? [{source:'', mimeType:''}] : sources
