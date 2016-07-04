@@ -13,11 +13,19 @@ import Events from './events'
  */
 export default class BaseObject extends Events {
   /**
+   * returns the object options
+   * @property options
+   * @type Object
+   */
+  get options() { return this._options }
+
+  /**
    * @method constructor
    * @param {Object} options
    */
   constructor(options={}) {
     super(options)
+    this._options = options
     this.uniqueId = uniqueId('o')
   }
   /**
@@ -27,4 +35,3 @@ export default class BaseObject extends Events {
   * @type String
   */
 }
-

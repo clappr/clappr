@@ -28,7 +28,6 @@ export default class NoOp extends Playback {
 
   constructor(options) {
     super(options)
-    this.options = options
     this._noiseFrameNum = -1
   }
 
