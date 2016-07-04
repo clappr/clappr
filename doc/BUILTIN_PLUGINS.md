@@ -57,7 +57,7 @@ The configuration for the playback, it's still only compatible with `html5_video
 
 ```javascript
 {
-  playbackConfig: {
+  playback: {
     preload: 'metadata',
     controls: true,
     crossOrigin: 'use-credentials'
