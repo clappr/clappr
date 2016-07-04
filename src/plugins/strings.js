@@ -51,7 +51,7 @@ export default class Strings extends CorePlugin {
     }, this.core.options.strings || {})
 
     this._messages['pt-BR'] = this._messages['pt']
-    this._messages['en-us'] = this._messages['en']
+    this._messages['en-US'] = this._messages['en']
     this._messages['es-419'] = this._messages['es']
   }
 }
