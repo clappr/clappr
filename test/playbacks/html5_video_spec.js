@@ -65,7 +65,7 @@ describe('HTML5Video playback', () => {
       expect(HTML5Video.canPlay('http://domain.com/Audio.oga')).to.be.true
       expect(HTML5Video.canPlay('http://domain.com/Audio.oga?query_string=here')).to.be.true
       expect(HTML5Video.canPlay('/relative/Audio.oga')).to.be.true
-      expect(HTML5Video.canPlay('/relative/Audio.mp3')).to.be.true
+      expect(HTML5Video.canPlay('/relative/Audio.wav')).to.be.true
     })
 
     it('should play audio resources on an audio tag', () => {
