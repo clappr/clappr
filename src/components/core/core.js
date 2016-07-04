@@ -51,6 +51,15 @@ export default class Core extends UIObject {
     return !!this.ready
   }
 
+  /**
+   * The internationalization plugin.
+   * @property i18n
+   * @type {Strings}
+   */
+  get i18n() {
+    return this.getPlugin('strings') || { t: (key) => key }
+  }
+
   constructor(options) {
     super(options)
     this.playerInfo = PlayerInfo.getInstance(options.playerId)
@@ -68,7 +77,7 @@ export default class Core extends UIObject {
   createContainers(options) {
     this.defer = $.Deferred()
     this.defer.promise(this)
-    this.containerFactory = new ContainerFactory(options, options.loader)
+    this.containerFactory = new ContainerFactory(options, options.loader, this.i18n)
     this.containerFactory
       .createContainers()
       .then((containers) => this.setupContainers(containers))
