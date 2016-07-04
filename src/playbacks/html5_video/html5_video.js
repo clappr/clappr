@@ -90,26 +90,25 @@ export default class HTML5Video extends Playback {
     return !!this._bufferingState
   }
 
-  constructor(options) {
-    super(options)
+  constructor(...args) {
+    super(...args)
     this._loadStarted = false
     this._playheadMoving = false
     this._playheadMovingTimer = null
     this._stopped = false
-    this._setupSrc(options.src)
-
+    this._setupSrc(this.options.src)
     // backwards compatibility (TODO: remove on 0.3.0)
-    options.playback || (options.playback = options.playbackConfig)
+    this.options.playback || (this.options.playback = this.options.playbackConfig)
 
-    var playbackConfig = (options.playback || {})
-    var preload = playbackConfig.preload || (Browser.isSafari ? 'auto' : options.preload)
+    var playbackConfig = (this.options.playback || {})
+    var preload = playbackConfig.preload || (Browser.isSafari ? 'auto' : this.options.preload)
 
     $.extend(this.el, {
-      loop: options.loop,
-      autoplay: options.autoPlay,
-      poster: options.poster,
+      loop: this.options.loop,
+      autoplay: this.options.autoPlay,
+      poster: this.options.poster,
       preload: preload || 'metadata',
-      controls: playbackConfig.controls || options.useVideoTagDefaultControls,
+      controls: playbackConfig.controls || this.options.useVideoTagDefaultControls,
       crossOrigin: playbackConfig.crossOrigin
     })
 
