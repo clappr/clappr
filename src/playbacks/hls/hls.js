@@ -30,6 +30,8 @@ export default class HLS extends HTML5VideoPlayback {
 
   constructor(options) {
     super(options)
+    // backwards compatibility (TODO: remove on 0.3.0)
+    this.options.playback || (this.options.playback = this.options.hlsjsConfig)
     this._minDvrSize = (options.hlsMinimumDvrSize === undefined) ? 60 : options.hlsMinimumDvrSize
     this._playbackType = Playback.VOD
     // for hls streams which have dvr with a sliding window,
@@ -52,8 +54,8 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   _setupHls() {
-    this._hls = new HLSJS(this._options.hlsjsConfig || {})
-    this._hls.on(HLSJS.Events.MEDIA_ATTACHED, () => this._hls.loadSource(this._options.src))
+    this._hls = new HLSJS(this.options.playback || {})
+    this._hls.on(HLSJS.Events.MEDIA_ATTACHED, () => this._hls.loadSource(this.options.src))
     this._hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this._updatePlaybackType(evt, data))
     this._hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this._onLevelUpdated(evt, data))
     this._hls.on(HLSJS.Events.LEVEL_SWITCH, (evt,data) => this._onLevelSwitch(evt, data))
@@ -245,7 +247,7 @@ export default class HLS extends HTML5VideoPlayback {
     if (this._playbackType === Playback.LIVE) {
       let currentLevel = this._hls.levels[data.level]
       let fragmentTargetDuration = currentLevel.details.targetduration
-      let hlsjsConfig = this._options.hlsjsConfig || {}
+      let hlsjsConfig = this.options.playback || {}
       let liveSyncDurationCount = hlsjsConfig.liveSyncDurationCount || HLSJS.DefaultConfig.liveSyncDurationCount
       let hiddenAreaDuration = fragmentTargetDuration * liveSyncDurationCount
       if (hiddenAreaDuration <= newDuration) {
