@@ -53,7 +53,7 @@ describe('HTML5Video playback', () => {
   it('setup crossorigin attribute', () => {
     var options = {
       src: 'http://example.com/dash.ogg',
-      playbackConfig: {crossOrigin: 'use-credentials'}
+      playback: {crossOrigin: 'use-credentials'}
     }
     var playback = new HTML5Video(options)
 
@@ -77,7 +77,7 @@ describe('HTML5Video playback', () => {
     it('should use an audio tag when the audioOnly option is set to true', () => {
       var options = {
         src: 'http://example.com/dash.m3u8',
-        playbackConfig: { audioOnly: true }
+        playback: { audioOnly: true }
       }
       var playback = new HTML5Video(options)
       expect(playback.tagName).to.be.equal('audio')
