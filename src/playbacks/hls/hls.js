@@ -28,9 +28,9 @@ export default class HLS extends HTML5VideoPlayback {
     this._hls.currentLevel = this._currentLevel
   }
 
-  constructor(options) {
-    super(options)
-    this._minDvrSize = (options.hlsMinimumDvrSize === undefined) ? 60 : options.hlsMinimumDvrSize
+  constructor(...args) {
+    super(...args)
+    this._minDvrSize = (this.options.hlsMinimumDvrSize === undefined) ? 60 : this.options.hlsMinimumDvrSize
     this._playbackType = Playback.VOD
     // for hls streams which have dvr with a sliding window,
     // the content at the start of the playlist is removed as new
@@ -47,8 +47,8 @@ export default class HLS extends HTML5VideoPlayback {
     // when this is false playableRegionDuration will be the actual duration
     // when this is true playableRegionDuration will exclude the time after the sync point
     this._durationExcludesAfterLiveSyncPoint = false
-    options.autoPlay && this._setupHls()
-    this._recoverAttemptsRemaining = options.hlsRecoverAttempts || 16
+    this.options.autoPlay && this._setupHls()
+    this._recoverAttemptsRemaining = this.options.hlsRecoverAttempts || 16
   }
 
   _setupHls() {

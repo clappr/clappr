@@ -13,8 +13,8 @@ export default class NoOp extends Playback {
     return {'data-no-op': ''}
   }
 
-  constructor(options) {
-    super(options)
+  constructor(...args) {
+    super(...args)
     this._noiseFrameNum = -1
   }
 

@@ -53,15 +53,15 @@ export default class FlasHLS extends BaseFlashPlayback {
     return !!this._bufferingState && !this._hasEnded
   }
 
-  constructor(options) {
-    super(options)
-    this._src = options.src
-    this._baseUrl = options.baseUrl
-    this._initHlsParameters(options)
+  constructor(...args) {
+    super(...args)
+    this._src = this.options.src
+    this._baseUrl = this.options.baseUrl
+    this._initHlsParameters(this.options)
     // TODO can this be private?
     this.highDefinition = false
-    this._autoPlay = options.autoPlay
-    this._loop = options.loop
+    this._autoPlay = this.options.autoPlay
+    this._loop = this.options.loop
     this._defaultSettings = {
       left: ['playstop'],
       default: ['seekbar'],
