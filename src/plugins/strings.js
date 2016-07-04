@@ -19,17 +19,17 @@ export default class Strings extends CorePlugin {
     this._messages = this.core.options.strings || {
       'en': {
         'live': 'live',
-        'back_to_live': 'back to live'
+        'back_to_live': 'back to live',
         'doesnt_support_playback': 'Your browser does not support the playback of this video. Please try using a different browser.'
       },
       'pt': {
         'live': 'ao vivo',
-        'back_to_live': 'voltar para o ao vivo'
+        'back_to_live': 'voltar para o ao vivo',
         'doesnt_support_playback': 'Seu navegador não supporta a reprodução deste video. Por favor, tente usar um navegador diferente.'
       },
       'es': {
         'live': 'vivo',
-        'back_to_live': 'volver a vivo'
+        'back_to_live': 'volver a vivo',
         'doesnt_support_playback': 'Su navegador no soporta la reproducción de un video. Por favor, trate de usar un navegador diferente.'
       }
     }
