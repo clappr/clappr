@@ -33,6 +33,7 @@ describe('Strings', function() {
   it('translates based on user options', function() {
     var fakeCore = {
       options: {
+        language: 'en',
         strings: {
           'en': {
             'live': 'Company Live'
@@ -41,7 +42,6 @@ describe('Strings', function() {
       }
     }
     var strings = new Strings(fakeCore)
-    strings._language = function(){return 'en'}
 
     expect(strings.t('live')).to.equal('Company Live')
   })
@@ -49,6 +49,7 @@ describe('Strings', function() {
   it('merges user translations with default translations', function() {
     var fakeCore = {
       options: {
+        language: 'en',
         strings: {
           'en': {
             'live': 'Company Live'
@@ -59,5 +60,6 @@ describe('Strings', function() {
     var strings = new Strings(fakeCore)
 
     expect(strings.t('back_to_live')).to.equal('back to live')
+    expect(strings.t('live')).to.equal('Company Live')
   })
 })
