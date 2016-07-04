@@ -180,7 +180,7 @@ export default class Player extends BaseObject {
   constructor(options) {
     super(options)
     var defaultOptions = {playerId: uniqueId(''), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl, allowUserInteraction: Browser.isMobile}
-    this.options = $.extend(defaultOptions, options)
+    this._options = $.extend(defaultOptions, options)
     this.options.sources = this._normalizeSources(options)
     if (!this.options.chromeless) {
       // "allowUserInteraction" cannot be false if not in chromeless mode.

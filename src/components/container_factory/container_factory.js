@@ -17,7 +17,6 @@ import isPlainObject from 'lodash.isplainobject'
 export default class ContainerFactory extends BaseObject {
   constructor(options, loader) {
     super(options)
-    this.options = options
     this.loader = loader
   }
 
