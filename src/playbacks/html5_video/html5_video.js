@@ -41,7 +41,7 @@ export default class HTML5Video extends Playback {
   get isAudioOnly() {
     let resourceUrl = this.options.src
     let mimeType = this.options.mimeType
-    return this.options.playbackConfig && this.options.playbackConfig.audioOnly || HTML5Video._canPlay('audio', AUDIO_MIMETYPES, resourceUrl, mimeType)
+    return this.options.playback && this.options.playback.audioOnly || HTML5Video._canPlay('audio', AUDIO_MIMETYPES, resourceUrl, mimeType)
   }
 
   get attributes() {
@@ -98,8 +98,11 @@ export default class HTML5Video extends Playback {
     this._stopped = false
     this._setupSrc(options.src)
 
-    var playbackConfig = (options.playbackConfig || {})
-    var preload = playbackConfig.preload || ((Browser.isSafari)?'auto':options.preload)
+    // backwards compatibility (TODO: remove on 0.3.0)
+    options.playback || (options.playback = options.playbackConfig)
+
+    var playbackConfig = (options.playback || {})
+    var preload = playbackConfig.preload || (Browser.isSafari ? 'auto' : options.preload)
 
     $.extend(this.el, {
       loop: options.loop,
