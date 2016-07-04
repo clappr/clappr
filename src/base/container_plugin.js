@@ -16,14 +16,6 @@ export default class ContainerPlugin extends BaseObject {
     this.bindEvents()
   }
 
-  /**
-   * provides the read-only options to the container plugin
-   * @property options
-   * @type Object
-   * @default "`{}`"
-   */
-  get options() {return (this.container && this.container.options) || {}}
-
   enable() {
     if (!this.enabled) {
       this.bindEvents()

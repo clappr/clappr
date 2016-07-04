@@ -18,7 +18,6 @@ export default class ContainerFactory extends BaseObject {
   constructor(options, loader, i18n) {
     super(options)
     this._i18n = i18n
-    this.options = options
     this.loader = loader
   }
 

@@ -83,7 +83,6 @@ export default class HTML5Video extends Playback {
     this._playheadMoving = false
     this._playheadMovingTimer = null
     this._stopped = false
-    this._options = options
     this._setupSrc(options.src)
 
     var playbackConfig = (options.playbackConfig || {})

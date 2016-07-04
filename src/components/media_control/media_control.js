@@ -73,7 +73,6 @@ export default class MediaControl extends UIObject {
 
   constructor(options) {
     super(options)
-    this.options = options
     this.persistConfig = this.options.persistConfig
     this.container = options.container
     this.currentPositionValue = null
