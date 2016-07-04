@@ -24,6 +24,23 @@ Add `loop: true` if you want the video to automatically replay after it ends.
 ##### Chromeless
 Add `chromeless: true` if you want the player to act in chromeless mode.
 
+##### Internationalization (I18N)
+You can force the player to use a specific language `language` and you can also provide your own translations.
+
+```javascript
+var options = {
+  source: 'example.com/example.mpd',
+  language: 'pt-BR',
+  strings: {
+    'pt-BR': {
+      'live': 'ao vivo',
+      'back_to_live': 'voltar para o ao vivo',
+      'playback_not_supported': 'Seu navegador não supporta a reprodução deste video. Por favor, tente usar um navegador diferente.'
+     }
+  }
+}
+```
+
 ##### Allow user interaction (in chromeless mode)
 Add `allowUserInteraction: true` if you want the player to handle clicks/taps when in chromeless mode. By default it's set to `false` on desktop browsers, and `true` on mobile browsers (due to playback start only being allowed when started through user interaction).
 
