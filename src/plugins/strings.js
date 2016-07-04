@@ -1,6 +1,7 @@
 import {getBrowserLanguage} from 'base/utils'
 
 import CorePlugin from 'base/core_plugin'
+import  $ from 'clappr-zepto'
 
 export default class Strings extends CorePlugin {
   constructor(core) {
@@ -17,7 +18,7 @@ export default class Strings extends CorePlugin {
   _language() {return this.core.options.language || getBrowserLanguage()}
 
   _initializeMessages() {
-    this._messages = this.core.options.strings || {
+    this._messages = $.extend({
       'en': {
         'live': 'live',
         'back_to_live': 'back to live',
@@ -33,7 +34,8 @@ export default class Strings extends CorePlugin {
         'back_to_live': 'volver a vivo',
         'doesnt_support_playback': 'Su navegador no soporta la reproducción de un video. Por favor, trate de usar un navegador diferente.'
       }
-    }
+    }, this.core.options.strings || {})
+
     this._messages['pt-BR'] = this._messages['pt']
     this._messages['en-us'] = this._messages['en']
     this._messages['es-419'] = this._messages['es']
