@@ -11,6 +11,8 @@ import merge from 'lodash.merge'
  * @module plugins
  */
 export default class Strings extends CorePlugin {
+  get name() {return 'strings'}
+
   constructor(core) {
     super(core)
     this._initializeMessages()
