@@ -64,7 +64,6 @@ export default class Core extends UIObject {
     super(options)
     this.playerInfo = PlayerInfo.getInstance(options.playerId)
     this.firstResize = true
-    this.options = options
     this.plugins = []
     this.containers = []
     this.setupMediaControl(null)
@@ -316,7 +315,7 @@ export default class Core extends UIObject {
    * @param {Object} options all the options to change in form of a javascript object
    */
   configure(options) {
-    this.options = $.extend(this.options, options)
+    this._options = $.extend(this._options, options)
     var sources = options.source || options.sources
 
     if (sources) {

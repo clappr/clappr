@@ -21,14 +21,6 @@ export default class UIContainerPlugin extends UIObject {
     this.bindEvents()
   }
 
-  /**
-   * provides the read-only options to the ui container plugin
-   * @property options
-   * @type Object
-   * @default "`{}`"
-   */
-  get options() {return (this.container && this.container.options) || {}}
-
   enable() {
     if (!this.enabled) {
       this.bindEvents()
