@@ -3,12 +3,24 @@ import {getBrowserLanguage} from 'base/utils'
 import CorePlugin from 'base/core_plugin'
 import merge from 'lodash.merge'
 
+/**
+ * The internationalization (i18n) plugin
+ * @class Strings
+ * @constructor
+ * @extends CorePlugin
+ * @module plugins
+ */
 export default class Strings extends CorePlugin {
   constructor(core) {
     super(core)
     this._initializeMessages()
   }
-
+  /**
+   * Gets a translated string for the given key.
+   * @method t
+   * @param {String} key the key to all messages
+   * @return {String} translated label
+   */
   t(key) {
     var lang = this._language()
     var i18n = lang && this._messages[lang] || this._messages['en']
