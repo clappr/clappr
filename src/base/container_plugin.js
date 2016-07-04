@@ -50,4 +50,3 @@ ContainerPlugin.extend = function(properties) {
 }
 
 ContainerPlugin.type = 'container'
-

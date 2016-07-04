@@ -19,6 +19,15 @@ export default class Playback extends UIObject {
   }
 
   /**
+   * The internationalization plugin.
+   * @property i18n
+   * @type {Strings}
+   */
+  get i18n() {
+    return this._i18n
+  }
+
+  /**
    * Determine if the playback is having to buffer in order for
    * playback to be smooth.
    * (i.e if a live stream is playing smoothly, this will be false)
@@ -32,10 +41,12 @@ export default class Playback extends UIObject {
   /**
    * @method constructor
    * @param {Object} options the options object
+   * @param {Strings} i18n the internationalization component
    */
-  constructor(options) {
+  constructor(options, i18n) {
     super(options)
     this.settings = {}
+    this._i18n = i18n
   }
 
   /**

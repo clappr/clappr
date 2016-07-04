@@ -62,12 +62,23 @@ export default class Container extends UIObject {
   }
 
   /**
+   * The internationalization plugin.
+   * @property i18n
+   * @type {Strings}
+   */
+  get i18n() {
+    return this._i18n
+  }
+
+  /**
    * it builds a container
    * @method constructor
    * @param {Object} options the options object
+   * @param {Strings} i18n the internationalization component
    */
-  constructor(options) {
+  constructor(options, i18n) {
     super(options)
+    this._i18n = i18n
     this.currentTime = 0
     this.volume = 100
     this.options = options
