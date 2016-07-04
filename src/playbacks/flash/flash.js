@@ -38,11 +38,11 @@ export default class Flash extends BaseFlashPlayback {
     return !!this._bufferingState && this._currentState !== 'ENDED'
   }
 
-  constructor(options) {
-    super(options)
-    this._src = options.src
-    this._baseUrl = options.baseUrl
-    this._autoPlay = options.autoPlay
+  constructor(...args) {
+    super(...args)
+    this._src = this.options.src
+    this._baseUrl = this.options.baseUrl
+    this._autoPlay = this.options.autoPlay
     this.settings = {default: ['seekbar']}
     this.settings.left = ['playpause', 'position', 'duration']
     this.settings.right = ['fullscreen', 'volume']

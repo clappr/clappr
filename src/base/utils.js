@@ -209,10 +209,7 @@ export var cancelAnimationFrame = (window.cancelAnimationFrame ||
                            window.clearTimeout).bind(window)
 
 export function getBrowserLanguage() {
-  if (window.navigator && window.navigator.language) {
-    return window.navigator.language.toLowerCase()
-  }
-  return null
+  return window.navigator && window.navigator.language
 }
 
 export default {
