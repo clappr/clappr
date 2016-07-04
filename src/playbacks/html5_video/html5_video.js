@@ -26,10 +26,23 @@ const MIMETYPES = {
 MIMETYPES['ogv'] = MIMETYPES['ogg']
 MIMETYPES['3gp'] = MIMETYPES['3gpp']
 
+const AUDIO_MIMETYPES = {
+  'wav': ['audio/wav'],
+  'mp3': ['audio/mp3', 'audio/mpeg;codecs="mp3"'],
+  'aac': ['audio/mp4;codecs="mp4a.40.5"'],
+  'oga': ['audio/ogg']
+}
+
 export default class HTML5Video extends Playback {
   get name() { return 'html5_video' }
-  get tagName() { return 'video' }
+  get tagName() { return this.isAudioOnly ? 'audio' : 'video' }
   get template() { return template(sourceHTML) }
+
+  get isAudioOnly() {
+    let resourceUrl = this.options.src
+    let mimeType = this.options.mimeType
+    return this.options.playback && this.options.playback.audioOnly || HTML5Video._canPlay('audio', AUDIO_MIMETYPES, resourceUrl, mimeType)
+  }
 
   get attributes() {
     return {
@@ -84,9 +97,11 @@ export default class HTML5Video extends Playback {
     this._playheadMovingTimer = null
     this._stopped = false
     this._setupSrc(this.options.src)
+    // backwards compatibility (TODO: remove on 0.3.0)
+    this.options.playback || (this.options.playback = this.options.playbackConfig)
 
-    var playbackConfig = (this.options.playbackConfig || {})
-    var preload = playbackConfig.preload || ((Browser.isSafari)?'auto':this.options.preload)
+    var playbackConfig = (this.options.playback || {})
+    var preload = playbackConfig.preload || (Browser.isSafari ? 'auto' : this.options.preload)
 
     $.extend(this.el, {
       loop: this.options.loop,
@@ -134,7 +149,7 @@ export default class HTML5Video extends Playback {
   _updateSettings() {
     // we can't figure out if hls resource is VoD or not until it is being loaded or duration has changed.
     // that's why we check it again and update media control accordingly.
-    if (this.getPlaybackType() === Playback.VOD) {
+    if (this.getPlaybackType() === Playback.VOD || this.getPlaybackType() === Playback.AOD) {
       this.settings.left = ['playpause', 'position', 'duration']
     } else {
       this.settings.left = ['playstop']
@@ -148,7 +163,8 @@ export default class HTML5Video extends Playback {
   }
 
   getPlaybackType() {
-    return [0, undefined, Infinity].indexOf(this.el.duration) >= 0 ? Playback.LIVE : Playback.VOD
+    const onDemandType = this.tagName === 'audio' ? Playback.AOD : Playback.VOD
+    return [0, undefined, Infinity].indexOf(this.el.duration) >= 0 ? Playback.LIVE : onDemandType
   }
 
   isHighDefinitionInUse() {
@@ -397,7 +413,8 @@ HTML5Video._canPlay = function(type, mimeTypesByExtension, resourceUrl, mimeType
 }
 
 HTML5Video.canPlay = function(resourceUrl, mimeType) {
-  return HTML5Video._canPlay('video', MIMETYPES, resourceUrl, mimeType)
+  return HTML5Video._canPlay('audio', AUDIO_MIMETYPES, resourceUrl, mimeType) ||
+         HTML5Video._canPlay('video', MIMETYPES, resourceUrl, mimeType)
 }
 
 module.exports = HTML5Video

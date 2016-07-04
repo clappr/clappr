@@ -8,7 +8,11 @@ module.exports = {
         "_gaq": false,
         "process": false,
         "ActiveXObject": false,
-        "VERSION": false
+        "VERSION": false,
+        // Test globals
+        "describe": false,
+        "expect": false,
+        "it": false
     },
     "extends": "eslint:recommended",
     "parserOptions": {
