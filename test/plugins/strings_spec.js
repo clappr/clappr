@@ -9,6 +9,27 @@ describe('Strings', function() {
     expect(strings.t('live')).to.equal('live')
   })
 
+  it('fallback to English language', function() {
+    var fakeCore = { options: { language: '404' } }
+    var strings = new Strings(fakeCore)
+
+    expect(strings.t('live')).to.equal('live')
+  })
+
+  it('shows key when it does not find the translation', function() {
+    var fakeCore = { options: {} }
+    var strings = new Strings(fakeCore)
+
+    expect(strings.t('Example')).to.equal('Example')
+  })
+
+  it('translates based on user language', function() {
+    var fakeCore = { options: { language: 'es' } }
+    var strings = new Strings(fakeCore)
+
+    expect(strings.t('live')).to.equal('vivo')
+  })
+
   it('translates based on user options', function() {
     var fakeCore = {
       options: {
