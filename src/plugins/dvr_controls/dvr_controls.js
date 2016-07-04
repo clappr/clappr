@@ -80,7 +80,10 @@ export default class DVRControls extends UICorePlugin {
 
   render() {
     this.style = this.style || Styler.getStyleFor(dvrStyle, { baseUrl: this.core.options.baseUrl })
-    this.$el.html(this.template())
+    this.$el.html(this.template({
+      live: this.core.i18n.t('live'),
+      backToLive: this.core.i18n.t('back_to_live')
+    }))
     this.$el.append(this.style)
     if (this.shouldRender()) {
       this.core.mediaControl.$el.addClass('live')

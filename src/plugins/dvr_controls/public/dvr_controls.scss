@@ -21,6 +21,7 @@ $circle-radius: 3.5px;
   .live-info {
     cursor: default;
     font-family: "Roboto", "Open Sans", Arial, sans-serif;
+    text-transform: uppercase;
     &:before {
       content: "";
       display: inline-block;
@@ -50,6 +51,7 @@ $circle-radius: 3.5px;
     padding: 0;
     opacity: 0.7;
     font-family: "Roboto", "Open Sans", Arial, sans-serif;
+    text-transform: uppercase;
     @include transition(all 0.1s ease);
 
     &:before {
