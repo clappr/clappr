@@ -31,7 +31,7 @@ export default class Strings extends CorePlugin {
       },
       'es': {
         'live': 'vivo',
-        'back_to_live': 'volver a vivo',
+        'back_to_live': 'volver en vivo',
         'doesnt_support_playback': 'Su navegador no soporta la reproducción de un video. Por favor, trate de usar un navegador diferente.'
       }
     }, this.core.options.strings || {})
