@@ -33,6 +33,7 @@ const AUDIO_MIMETYPES = {
   'oga': ['audio/ogg']
 }
 
+// TODO: rename this Playback to HTML5Playback (breaking change, only after 0.3.0)
 export default class HTML5Video extends Playback {
   get name() { return 'html5_video' }
   get tagName() { return this.isAudioOnly ? 'audio' : 'video' }
