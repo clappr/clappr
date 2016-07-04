@@ -20,7 +20,8 @@ export default class NoOp extends Playback {
 
   render() {
     var style = Styler.getStyleFor(noOpStyle)
-    this.$el.html(this.template({message:this.options.playbackNotSupportedMessage || this.i18n.t('playback_not_supported')}))
+    const playbackNotSupported = this.options.playbackNotSupportedMessage || this.i18n.t('playback_not_supported')
+    this.$el.html(this.template({message: playbackNotSupported}))
     this.$el.append(style)
     this._animate()
     this.trigger(Events.PLAYBACK_READY, this.name)
