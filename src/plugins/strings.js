@@ -9,11 +9,12 @@ export default class Strings extends CorePlugin {
   }
 
   t(key) {
-    var i18n = this._messages[this._language()] || this._messages['en']
-    return i18n[key] || 'nontranslated'
+    var lang = this._language()
+    var i18n = lang && this._messages[lang] || this._messages['en']
+    return i18n[key] || key
   }
 
-  _language() {return getBrowserLanguage()}
+  _language() {return this.core.options.language || getBrowserLanguage()}
 
   _initializeMessages() {
     this._messages = this.core.options.strings || {
