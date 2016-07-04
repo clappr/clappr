@@ -1,4 +1,4 @@
-import {requestAnimationFrame, cancelAnimationFrame, getBrowserLanguage} from 'base/utils'
+import {requestAnimationFrame, cancelAnimationFrame} from 'base/utils'
 import Playback from 'base/playback'
 import template from 'base/template'
 import Styler from 'base/styler'
@@ -13,19 +13,6 @@ export default class NoOp extends Playback {
     return {'data-no-op': ''}
   }
 
-  _getNoOpMessage(){
-    var messages = {
-      'en': 'Your browser does not support the playback of this video. Please try using a different browser.',
-      'es': 'Su navegador no soporta la reproducción de un video. Por favor, trate de usar un navegador diferente.',
-      'pt': 'Seu navegador não supporta a reprodução deste video. Por favor, tente usar um navegador diferente.'
-    }
-    messages['en-us'] = messages['en']
-    messages['es-419'] = messages['es']
-    messages['pt-br'] = messages['pt']
-    var language = getBrowserLanguage()
-    return (language && messages[language]) || messages['en']
-  }
-
   constructor(options) {
     super(options)
     this.options = options
@@ -34,7 +21,7 @@ export default class NoOp extends Playback {
 
   render() {
     var style = Styler.getStyleFor(noOpStyle)
-    this.$el.html(this.template({message:this.options.playbackNotSupportedMessage || this._getNoOpMessage()}))
+    this.$el.html(this.template({message:this.options.playbackNotSupportedMessage || this.i18n.t('playback_not_supported')}))
     this.$el.append(style)
     this._animate()
     this.trigger(Events.PLAYBACK_READY, this.name)
