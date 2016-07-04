@@ -49,7 +49,6 @@ describe('Strings', function() {
   it('merges user translations with default translations', function() {
     var fakeCore = {
       options: {
-        language: 'es',
         strings: {
           'en': {
             'live': 'Company Live'
@@ -59,6 +58,6 @@ describe('Strings', function() {
     }
     var strings = new Strings(fakeCore)
 
-    expect(strings.t('live')).to.equal('vivo')
+    expect(strings.t('back_to_live')).to.equal('back to live')
   })
 })

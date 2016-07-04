@@ -1,7 +1,7 @@
 import {getBrowserLanguage} from 'base/utils'
 
 import CorePlugin from 'base/core_plugin'
-import  $ from 'clappr-zepto'
+import merge from 'lodash.merge'
 
 export default class Strings extends CorePlugin {
   constructor(core) {
@@ -18,7 +18,7 @@ export default class Strings extends CorePlugin {
   _language() {return this.core.options.language || getBrowserLanguage()}
 
   _initializeMessages() {
-    this._messages = $.extend({
+    this._messages = merge({
       'en': {
         'live': 'live',
         'back_to_live': 'back to live',
