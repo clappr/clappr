@@ -9,7 +9,7 @@ describe('Strings', function() {
     expect(strings.t('live')).to.equal('live')
   })
 
-  it('fallback to English language', function() {
+  it('fallbacks to English language', function() {
     var fakeCore = { options: { language: '404' } }
     var strings = new Strings(fakeCore)
 
@@ -44,5 +44,21 @@ describe('Strings', function() {
     strings._language = function(){return 'en'}
 
     expect(strings.t('live')).to.equal('Company Live')
+  })
+
+  it('merges user translations with default translations', function() {
+    var fakeCore = {
+      options: {
+        language: 'es',
+        strings: {
+          'en': {
+            'live': 'Company Live'
+          }
+        }
+      }
+    }
+    var strings = new Strings(fakeCore)
+
+    expect(strings.t('live')).to.equal('vivo')
   })
 })
