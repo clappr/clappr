@@ -41,6 +41,8 @@ var options = {
 }
 ```
 
+If you want to provide your translations, create a PR by editing the [Strings][https://github.com/clappr/clappr/blob/master/src/plugins/strings.js#L36-L50] plugin.
+
 ##### Allow user interaction (in chromeless mode)
 Add `allowUserInteraction: true` if you want the player to handle clicks/taps when in chromeless mode. By default it's set to `false` on desktop browsers, and `true` on mobile browsers (due to playback start only being allowed when started through user interaction).
 
