@@ -296,7 +296,7 @@ export default class HTML5Video extends Playback {
   // - loading has started
   _handleBufferingEvents() {
     var playheadShouldBeMoving = !this.el.ended && !this.el.paused
-    var buffering = this._loadStarted && !this.el.ended && !this.stopped && ((playheadShouldBeMoving && !this._playheadMoving) || this.el.readyState < this.el.HAVE_FUTURE_DATA)
+    var buffering = this._loadStarted && !this.el.ended && !this._stopped && ((playheadShouldBeMoving && !this._playheadMoving) || this.el.readyState < this.el.HAVE_FUTURE_DATA)
     if (this._bufferingState !== buffering) {
       this._bufferingState = buffering
       if (buffering) {
