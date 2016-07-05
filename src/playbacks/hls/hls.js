@@ -4,6 +4,7 @@
 
 import HTML5VideoPlayback from 'playbacks/html5_video'
 import HLSJS from 'hls.js'
+import isEqual from 'lodash.isEqual'
 import Events from 'base/events'
 import Playback from 'base/playback'
 import Browser from 'components/browser'
@@ -65,6 +66,7 @@ export default class HLS extends HTML5VideoPlayback {
     this.options.playback || (this.options.playback = this.options.hlsjsConfig)
     this._minDvrSize = (this.options.hlsMinimumDvrSize === undefined) ? 60 : this.options.hlsMinimumDvrSize
     this._playbackType = Playback.VOD
+    this._lastTimeUpdate = null
     // for hls streams which have dvr with a sliding window,
     // the content at the start of the playlist is removed as new
     // content is appended at the end.
@@ -74,7 +76,7 @@ export default class HLS extends HTML5VideoPlayback {
     // beginning this should stay as 0
     this._playableRegionStartTime = 0
     // {local, remote} remote is the start time offset of the first segment in the playlist
-    //                 local is the system time that the 'remote' measurment took place
+    //                 local is the system time when the 'remote' measurment took place
     this._localStartTimeCorrelation = null
     // if content is removed from the beginning then this empty area should
     // be ignored. "playableRegionDuration" does not consider this
@@ -85,6 +87,7 @@ export default class HLS extends HTML5VideoPlayback {
     this._durationExcludesAfterLiveSyncPoint = false
     this.options.autoPlay && this._setupHls()
     this._recoverAttemptsRemaining = this.options.hlsRecoverAttempts || 16
+    this._startTimeUpdateTimer()
   }
 
   _setupHls() {
@@ -115,6 +118,16 @@ export default class HLS extends HTML5VideoPlayback {
   // override
   _setupSrc(srcUrl) { // eslint-disable-line no-unused-vars
     // this playback manages the src on the video element itself
+  }
+
+  _startTimeUpdateTimer() {
+    this._timeUpdateTimer = setInterval(() => {
+      this._onTimeUpdate()
+    }, 100)
+  }
+
+  _stopTimeUpdateTimer() {
+    clearInterval(this._timeUpdateTimer)
   }
 
   // the duration on the video element itself should not be used
@@ -209,7 +222,12 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   _onTimeUpdate() {
-    this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: this.getCurrentTime(), total: this.getDuration()}, this.name)
+    var update = {current: this.getCurrentTime(), total: this.getDuration()}
+    if (isEqual(update, this._lastTimeUpdate)) {
+      return
+    }
+    this._lastTimeUpdate = update
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, update, this.name)
   }
 
   _onProgress() {
@@ -254,6 +272,11 @@ export default class HLS extends HTML5VideoPlayback {
       this._hls.destroy()
       delete this._hls
     }
+  }
+
+  destroy() {
+    this._stopTimeUpdateTimer()
+    super.destroy()
   }
 
   _updatePlaybackType(evt, data) {
