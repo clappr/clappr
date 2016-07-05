@@ -28,6 +28,37 @@ export default class HLS extends HTML5VideoPlayback {
     this._hls.currentLevel = this._currentLevel
   }
 
+  get _duration() {
+    return this._playableRegionDuration
+  }
+
+  get _startTime() {
+    if (this._playbackType === Playback.LIVE) {
+      // TODO do not use if playlist is type EVENT
+      return this._extrapolatedStartTime
+    }
+    return this._playableRegionStartTime
+  }
+
+  get _now() {
+    if (window.performance && window.performance.now) {
+      return performance.now()
+    }
+    return Date.now()
+  }
+
+  // the time in the video element which should represent the start of the sliding window
+  // extrapolated to increase in real time (instead of jumping as the early segments are removed)
+  get _extrapolatedStartTime() {
+    if (!this._localStartTimeCorrelation) {
+      return this._playableRegionStartTime
+    }
+    var corr = this._localStartTimeCorrelation
+    var timePassed = this._now - corr.local
+    var windowStartTime = (corr.remote + timePassed) / 1000
+    return windowStartTime
+  }
+
   constructor(...args) {
     super(...args)
     // backwards compatibility (TODO: remove on 0.3.0)
@@ -42,6 +73,9 @@ export default class HLS extends HTML5VideoPlayback {
     // For streams with dvr where the entire recording is kept from the
     // beginning this should stay as 0
     this._playableRegionStartTime = 0
+    // {local, remote} remote is the start time offset of the first segment in the playlist
+    //                 local is the system time that the 'remote' measurment took place
+    this._localStartTimeCorrelation = null
     // if content is removed from the beginning then this empty area should
     // be ignored. "playableRegionDuration" does not consider this
     this._playableRegionDuration = 0
@@ -87,24 +121,27 @@ export default class HLS extends HTML5VideoPlayback {
   // as this does not necesarily represent the duration of the stream
   // https://github.com/clappr/clappr/issues/668#issuecomment-157036678
   getDuration() {
-    return this._playableRegionDuration
+    return this._duration
   }
 
   getCurrentTime() {
-    return this.el.currentTime - this._playableRegionStartTime
+    // e.g. can be < 0 if user pauses near the start
+    // eventually they will then be kicked to the end by hlsjs if they run out of buffer
+    // before the official start time
+    return Math.max(0, this.el.currentTime - this._startTime)
   }
 
   // the time that "0" now represents relative to when playback started
   // for a stream with a sliding window this will increase as content is
   // removed from the beginning
   getStartTimeOffset() {
-    return this._playableRegionStartTime
+    return this._startTime
   }
 
   seekPercentage(percentage) {
     var seekTo = this._playableRegionDuration
     if (percentage > 0) {
-      seekTo = this._playableRegionDuration * (percentage / 100)
+      seekTo = this._duration * (percentage / 100)
     }
     this.seek(seekTo)
   }
@@ -116,7 +153,7 @@ export default class HLS extends HTML5VideoPlayback {
     }
     // assume live if time within 3 seconds of end of stream
     this.dvrEnabled && this._updateDvr(time < this.getDuration()-3)
-    time += this._playableRegionStartTime
+    time += this._startTime
     super.seek(time)
   }
 
@@ -188,8 +225,8 @@ export default class HLS extends HTML5VideoPlayback {
     }
     this.trigger(Events.PLAYBACK_PROGRESS, {
       // for a stream with sliding window dvr something that is buffered my slide off the start of the timeline
-      start: Math.max(0, this.el.buffered.start(bufferedPos) - this._playableRegionStartTime),
-      current: Math.max(0, this.el.buffered.end(bufferedPos) - this._playableRegionStartTime),
+      start: Math.max(0, this.el.buffered.start(bufferedPos) - this._startTime),
+      current: Math.max(0, this.el.buffered.end(bufferedPos) - this._startTime),
       total: this.getDuration()
     })
   }
@@ -240,13 +277,38 @@ export default class HLS extends HTML5VideoPlayback {
       startTimeChanged = true
       this._playableRegionStartTime = fragments[0].start
     }
+
+    if (fragments.length > 0) {
+      if (!this._localStartTimeCorrelation) {
+        this._localStartTimeCorrelation = {
+          local: this._now,
+          remote: fragments[0].start * 1000
+        }
+      }
+      else {
+        // check if the start time correlation still works
+        let corr = this._localStartTimeCorrelation
+        let timePassed = this._now - corr.local
+        // this should point to a time within the first segment start time + segment target duration
+        // as expecting a chunk to be removed once every segment target duration
+        let newRemoteTime = (corr.remote + timePassed) / 1000
+        if (newRemoteTime < fragments[0].start || newRemoteTime >= fragments[0].start + data.details.targetduration) {
+          // time has drifted
+          // setup a new correlation
+          this._localStartTimeCorrelation = {
+            local: this._now,
+            remote: fragments[0].start * 1000
+          }
+        }
+      }
+    }
+
     var newDuration = data.details.totalduration
     // if it's a live stream then shorten the duration to remove access
     // to the area after hlsjs's live sync point
     // seeks to areas after this point sometimes have issues
     if (this._playbackType === Playback.LIVE) {
-      let currentLevel = this._hls.levels[data.level]
-      let fragmentTargetDuration = currentLevel.details.targetduration
+      let fragmentTargetDuration = data.details.targetduration
       let hlsjsConfig = this.options.playback || {}
       let liveSyncDurationCount = hlsjsConfig.liveSyncDurationCount || HLSJS.DefaultConfig.liveSyncDurationCount
       let hiddenAreaDuration = fragmentTargetDuration * liveSyncDurationCount
@@ -300,7 +362,7 @@ export default class HLS extends HTML5VideoPlayback {
     // - the duration does not include content after hlsjs's live sync point
     // - the playable region duration is longer than the configured duration to enable dvr after
     // - the playback type is LIVE.
-    return (this._durationExcludesAfterLiveSyncPoint && this._playableRegionDuration >= this._minDvrSize && this.getPlaybackType() === Playback.LIVE)
+    return (this._durationExcludesAfterLiveSyncPoint && this._duration >= this._minDvrSize && this.getPlaybackType() === Playback.LIVE)
   }
 
   getPlaybackType() {
