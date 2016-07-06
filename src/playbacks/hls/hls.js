@@ -4,7 +4,7 @@
 
 import HTML5VideoPlayback from 'playbacks/html5_video'
 import HLSJS from 'hls.js'
-import isEqual from 'lodash.isEqual'
+import isEqual from 'lodash.isequal'
 import Events from 'base/events'
 import Playback from 'base/playback'
 import Browser from 'components/browser'
