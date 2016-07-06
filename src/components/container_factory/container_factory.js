@@ -54,7 +54,7 @@ export default class ContainerFactory extends BaseObject {
     var playbackPlugin = this.findPlaybackPlugin(resolvedSource, mimeType)
     var playback = new playbackPlugin(options, this._i18n)
 
-    options = $.extend(options, {playback: playback})
+    options = $.extend({}, options, {playback: playback})
 
     var container = new Container(options, this._i18n)
     var defer = $.Deferred()
