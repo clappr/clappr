@@ -352,7 +352,6 @@ export default class HLS extends HTML5VideoPlayback {
         let startTime = (corr.remote + timePassed) / 1000
         
         if (startTime < fragments[0].start) {
-          console.log("BUMP UP")
           // our start time is now earlier than the first chunk
           // (maybe the chunk was removed early)
           // reset correlation so that it sits at the beginning of the first available chunk
@@ -362,8 +361,6 @@ export default class HLS extends HTML5VideoPlayback {
           }
         }
         else if (startTime > previousPlayableRegionStartTime + this._extrapolatedWindowDuration) {
-            console.log("BUMP DOWN") 
-
           // start time was past the end of the old extrapolation window
           // see if now that time would be inside the window, and if it would be set the correlation
           // so that it resumes from the time it was at at the end of the old window
