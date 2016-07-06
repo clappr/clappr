@@ -56,15 +56,45 @@ export default class HLS extends HTML5VideoPlayback {
     }
     var corr = this._localStartTimeCorrelation
     var timePassed = this._now - corr.local
-    var windowStartTime = (corr.remote + timePassed) / 1000
-    return windowStartTime
+    var extrapolatedWindowStartTime = (corr.remote + timePassed) / 1000
+    // cap at the end of the extrapolated window duration
+    return Math.min(extrapolatedWindowStartTime, this._playableRegionStartTime + this._extrapolatedWindowDuration)
+  }
+
+  // Returns the duration (seconds) of the window that the extrapolated start time is allowed
+  // to move in before being capped.
+  // The extrapolated start time should never reach the cap at the end of the window as the
+  // window should slide as chunks are removed from the start.
+  //
+  // If chunks aren't being removed for some reason that the start time will reach and remain fixed at
+  // playableRegionStartTime + extrapolatedWindowDuration
+  //
+  //                                <-- window duration --> 
+  // I.e   playableRegionStartTime |-----------------------|
+  //                               | -->   .       .       .
+  //                               .   --> | -->   .       .
+  //                               .       .   --> | -->   .
+  //                               .       .       .   --> |
+  //                               .       .       .       .
+  //                                 extrapolatedStartTime                 
+  get _extrapolatedWindowDuration() {
+    if (this._segmentTargetDuration === null) {
+      return 0
+    }
+    return this._extrapolatedWindowNumSegments * this._segmentTargetDuration
   }
 
   constructor(...args) {
     super(...args)
     // backwards compatibility (TODO: remove on 0.3.0)
     this.options.playback || (this.options.playback = this.options.hlsjsConfig)
-    this._minDvrSize = (this.options.hlsMinimumDvrSize === undefined) ? 60 : this.options.hlsMinimumDvrSize
+    this._minDvrSize = typeof(this.options.hlsMinimumDvrSize) === "undefined" ? 60 : this.options.hlsMinimumDvrSize
+    // The size of the start time extrapolation window measured as a multiple of segments.
+    // Should be 2 or higher, or 0 to disable. Should only need to be increased above 2 if more than one segment is
+    // removed from the start of the playlist at a time. E.g if the playlist is cached for 10 seconds and new chunks are
+    // added/removed every 5.
+    this._extrapolatedWindowNumSegments = typeof(this.options.playback.extrapolatedWindowNumSegments) === "undefined" ? 2 :  this.options.playback.extrapolatedWindowNumSegments
+
     this._playbackType = Playback.VOD
     this._lastTimeUpdate = null
     // for hls streams which have dvr with a sliding window,
@@ -85,6 +115,7 @@ export default class HLS extends HTML5VideoPlayback {
     // when this is false playableRegionDuration will be the actual duration
     // when this is true playableRegionDuration will exclude the time after the sync point
     this._durationExcludesAfterLiveSyncPoint = false
+    this._segmentTargetDuration = null
     this.options.autoPlay && this._setupHls()
     this._recoverAttemptsRemaining = this.options.hlsRecoverAttempts || 16
     this._startTimeUpdateTimer()
@@ -293,16 +324,20 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   _onLevelUpdated(evt, data) {
+    this._segmentTargetDuration = data.details.targetduration
+
     var startTimeChanged = false
     var durationChanged = false
     var fragments = data.details.fragments
+    var previousPlayableRegionStartTime = this._playableRegionStartTime
     if (fragments.length > 0 && this._playableRegionStartTime !== fragments[0].start) {
       startTimeChanged = true
       this._playableRegionStartTime = fragments[0].start
     }
 
-    if (fragments.length > 0) {
+    if (fragments.length > 0 && startTimeChanged) {
       if (!this._localStartTimeCorrelation) {
+        // set the correlation to map to the start of the first chunk
         this._localStartTimeCorrelation = {
           local: this._now,
           remote: fragments[0].start * 1000
@@ -312,15 +347,30 @@ export default class HLS extends HTML5VideoPlayback {
         // check if the start time correlation still works
         let corr = this._localStartTimeCorrelation
         let timePassed = this._now - corr.local
-        // this should point to a time within the first segment start time + segment target duration
-        // as expecting a chunk to be removed once every segment target duration
-        let newRemoteTime = (corr.remote + timePassed) / 1000
-        if (newRemoteTime < fragments[0].start || newRemoteTime >= fragments[0].start + data.details.targetduration) {
-          // time has drifted
-          // setup a new correlation
+        // this should point to a time within the extrapolation window
+        let startTime = (corr.remote + timePassed) / 1000
+        
+        if (startTime < fragments[0].start) {
+          console.log("BUMP UP")
+          // our start time is now earlier than the first chunk
+          // (maybe the chunk was removed early)
+          // reset correlation so that it sits at the beginning of the first available chunk
           this._localStartTimeCorrelation = {
             local: this._now,
             remote: fragments[0].start * 1000
+          }
+        }
+        else if (startTime > previousPlayableRegionStartTime + this._extrapolatedWindowDuration) {
+            console.log("BUMP DOWN") 
+
+          // start time was past the end of the old extrapolation window
+          // see if now that time would be inside the window, and if it would be set the correlation
+          // so that it resumes from the time it was at at the end of the old window
+          
+          // update the correlation so that the time starts counting again from the value it's on now
+          this._localStartTimeCorrelation = {
+            local: this._now,
+            remote: Math.max(fragments[0].start, previousPlayableRegionStartTime + this._extrapolatedWindowDuration) * 1000
           }
         }
       }
@@ -335,6 +385,9 @@ export default class HLS extends HTML5VideoPlayback {
       let hlsjsConfig = this.options.playback || {}
       let liveSyncDurationCount = hlsjsConfig.liveSyncDurationCount || HLSJS.DefaultConfig.liveSyncDurationCount
       let hiddenAreaDuration = fragmentTargetDuration * liveSyncDurationCount
+      // as the start time moves to the end of the window the user is able to seek closer to the live point
+      // this makes sure if the start time reaches the end of the window the live point is hlsjs's live sync point and not past it
+      hiddenAreaDuration += this._extrapolatedWindowDuration
       if (hiddenAreaDuration <= newDuration) {
         newDuration -= hiddenAreaDuration
         this._durationExcludesAfterLiveSyncPoint = true
