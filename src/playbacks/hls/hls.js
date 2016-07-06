@@ -104,7 +104,7 @@ export default class HLS extends HTML5VideoPlayback {
     // For streams with dvr where the entire recording is kept from the
     // beginning this should stay as 0
     this._playableRegionStartTime = 0
-    // {local, remote} remote is the start time offset of the first segment in the playlist
+    // {local, remote} remote is the time in the video element that should represent 0
     //                 local is the system time when the 'remote' measurment took place
     this._localStartTimeCorrelation = null
     // if content is removed from the beginning then this empty area should
@@ -114,7 +114,9 @@ export default class HLS extends HTML5VideoPlayback {
     // when this is false playableRegionDuration will be the actual duration
     // when this is true playableRegionDuration will exclude the time after the sync point
     this._durationExcludesAfterLiveSyncPoint = false
+    // #EXT-X-TARGETDURATION
     this._segmentTargetDuration = null
+    // #EXT-X-PLAYLIST-TYPE
     this._playlistType = null
     this.options.autoPlay && this._setupHls()
     this._recoverAttemptsRemaining = this.options.hlsRecoverAttempts || 16
@@ -350,7 +352,6 @@ export default class HLS extends HTML5VideoPlayback {
         let timePassed = this._now - corr.local
         // this should point to a time within the extrapolation window
         let startTime = (corr.remote + timePassed) / 1000
-        
         if (startTime < fragments[0].start) {
           // our start time is now earlier than the first chunk
           // (maybe the chunk was removed early)
@@ -364,7 +365,6 @@ export default class HLS extends HTML5VideoPlayback {
           // start time was past the end of the old extrapolation window
           // see if now that time would be inside the window, and if it would be set the correlation
           // so that it resumes from the time it was at at the end of the old window
-          
           // update the correlation so that the time starts counting again from the value it's on now
           this._localStartTimeCorrelation = {
             local: this._now,
