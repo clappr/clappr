@@ -34,8 +34,7 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   get _startTime() {
-    if (this._playbackType === Playback.LIVE) {
-      // TODO do not use if playlist is type EVENT
+    if (this._playbackType === Playback.LIVE && this._playlistType !== "EVENT") {
       return this._extrapolatedStartTime
     }
     return this._playableRegionStartTime
@@ -116,6 +115,7 @@ export default class HLS extends HTML5VideoPlayback {
     // when this is true playableRegionDuration will exclude the time after the sync point
     this._durationExcludesAfterLiveSyncPoint = false
     this._segmentTargetDuration = null
+    this._playlistType = null
     this.options.autoPlay && this._setupHls()
     this._recoverAttemptsRemaining = this.options.hlsRecoverAttempts || 16
     this._startTimeUpdateTimer()
@@ -325,6 +325,7 @@ export default class HLS extends HTML5VideoPlayback {
 
   _onLevelUpdated(evt, data) {
     this._segmentTargetDuration = data.details.targetduration
+    this._playlistType = data.details.type || null
 
     var startTimeChanged = false
     var durationChanged = false
