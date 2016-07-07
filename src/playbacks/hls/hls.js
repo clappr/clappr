@@ -8,6 +8,7 @@ import isEqual from 'lodash.isequal'
 import Events from 'base/events'
 import Playback from 'base/playback'
 import Browser from 'components/browser'
+import {now} from 'base/utils'
 import Log from 'plugins/log'
 
 const AUTO = -1
@@ -41,10 +42,7 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   get _now() {
-    if (window.performance && window.performance.now) {
-      return performance.now()
-    }
-    return Date.now()
+    return now()
   }
 
   // the time in the video element which should represent the start of the sliding window
