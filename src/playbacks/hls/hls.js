@@ -92,7 +92,7 @@ export default class HLS extends HTML5VideoPlayback {
     // Should be 2 or higher, or 0 to disable. Should only need to be increased above 2 if more than one segment is
     // removed from the start of the playlist at a time. E.g if the playlist is cached for 10 seconds and new chunks are
     // added/removed every 5.
-    this._extrapolatedWindowNumSegments = typeof(this.options.playback.extrapolatedWindowNumSegments) === "undefined" ? 2 :  this.options.playback.extrapolatedWindowNumSegments
+    this._extrapolatedWindowNumSegments = !this.options.playback || typeof(this.options.playback.extrapolatedWindowNumSegments) === "undefined" ? 2 :  this.options.playback.extrapolatedWindowNumSegments
 
     this._playbackType = Playback.VOD
     this._lastTimeUpdate = null
@@ -340,10 +340,10 @@ export default class HLS extends HTML5VideoPlayback {
 
     if (fragments.length > 0 && startTimeChanged) {
       if (!this._localStartTimeCorrelation) {
-        // set the correlation to map to the start of the first chunk
+        // set the correlation to map to middle of the extrapolation window
         this._localStartTimeCorrelation = {
           local: this._now,
-          remote: fragments[0].start * 1000
+          remote: (fragments[0].start + (this._extrapolatedWindowDuration/2)) * 1000
         }
       }
       else {
