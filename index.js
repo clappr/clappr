@@ -63,7 +63,6 @@ export default class DashShakaPlayback extends HTML5Video {
 
     this._player.unload().
       then(() => {
-        this._bufferingFullHandler()
         super.stop()
         this._player = null
         this._isShakaReadyState = false
