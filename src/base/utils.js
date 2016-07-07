@@ -212,6 +212,13 @@ export function getBrowserLanguage() {
   return window.navigator && window.navigator.language
 }
 
+export function now() {
+  if (window.performance && window.performance.now) {
+    return performance.now()
+  }
+  return Date.now()
+}
+
 export default {
   Config,
   Fullscreen,
@@ -224,5 +231,6 @@ export default {
   isNumber,
   requestAnimationFrame,
   cancelAnimationFrame,
-  getBrowserLanguage
+  getBrowserLanguage,
+  now
 }
