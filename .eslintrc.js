@@ -12,7 +12,9 @@ module.exports = {
         // Test globals
         "describe": false,
         "expect": false,
-        "it": false
+        "it": false,
+        "beforeEach": false,
+        "sinon": false
     },
     "extends": "eslint:recommended",
     "parserOptions": {
