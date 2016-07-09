@@ -58,6 +58,12 @@ describe('HTML5Video playback', function() {
     expect(playback.el.crossOrigin).to.be.equal('use-credentials')
   })
 
+  it('enables inline playback for webviews when playInline flag is set', function() {
+    const options = $.extend({playback: {playInline: true}}, this.options)
+    const playback = new HTML5Video(options)
+    expect(playback.el['x-webkit-playsinline']).to.be.true
+  })
+
   it('allows displaying default video tag controls', function() {
     const options = $.extend({playback: {controls: 'controls'}}, this.options)
     const playback = new HTML5Video(options)
