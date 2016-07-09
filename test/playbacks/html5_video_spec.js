@@ -58,6 +58,12 @@ describe('HTML5Video playback', function() {
     expect(playback.el.crossOrigin).to.be.equal('use-credentials')
   })
 
+  it('allows displaying default video tag controls', function() {
+    const options = $.extend({playback: {controls: 'controls'}}, this.options)
+    const playback = new HTML5Video(options)
+    expect(playback.el.controls).to.be.true
+  })
+
   describe('audio resources', function() {
     it('should be able to play audio resources', function() {
       expect(HTML5Video.canPlay('http://domain.com/Audio.oga')).to.be.true
