@@ -99,9 +99,9 @@ export default class HTML5Video extends Playback {
     this._stopped = false
     this._setupSrc(this.options.src)
     // backwards compatibility (TODO: remove on 0.3.0)
-    this.options.playback || (this.options.playback = this.options.playbackConfig)
+    this.options.playback || (this.options.playback = this.options.playbackConfig || {})
 
-    var playbackConfig = (this.options.playback || {})
+    var playbackConfig = this.options.playback
     var preload = playbackConfig.preload || (Browser.isSafari ? 'auto' : this.options.preload)
 
     $.extend(this.el, {
