@@ -110,7 +110,8 @@ export default class HTML5Video extends Playback {
       poster: this.options.poster,
       preload: preload || 'metadata',
       controls: (playbackConfig.controls || this.options.useVideoTagDefaultControls) && 'controls',
-      crossOrigin: playbackConfig.crossOrigin
+      crossOrigin: playbackConfig.crossOrigin,
+      'x-webkit-playsinline': playbackConfig.playInline
     })
 
     // TODO should settings be private?
