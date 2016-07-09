@@ -109,7 +109,7 @@ export default class HTML5Video extends Playback {
       autoplay: this.options.autoPlay,
       poster: this.options.poster,
       preload: preload || 'metadata',
-      controls: playbackConfig.controls || this.options.useVideoTagDefaultControls,
+      controls: (playbackConfig.controls || this.options.useVideoTagDefaultControls) && 'controls',
       crossOrigin: playbackConfig.crossOrigin
     })
 
@@ -387,10 +387,6 @@ export default class HTML5Video extends Playback {
     var style = Styler.getStyleFor(tagStyle)
 
     this._src && this.$el.html(this.template({ src: this._src, type: this._typeFor(this._src) }))
-
-    if (this._options.useVideoTagDefaultControls) {
-      this.$el.attr('controls', 'controls')
-    }
 
     if (this._options.disableVideoTagContextMenu) {
       this.$el.on('contextmenu', () => {
