@@ -51,6 +51,11 @@ describe('HTML5Video playback', function() {
     expect(thereWasPlayIntent).to.be.true
   })
 
+  it('isPlaying() is true immediately when autoPlay is true', function() {
+    const playback = new HTML5Video({src: 'http://example.com/dash.ogg', autoPlay: true})
+    expect(playback.isPlaying()).to.be.true
+  })
+
   it('setup crossorigin attribute', function() {
     const options = $.extend({playback: {crossOrigin: 'use-credentials'}}, this.options)
     const playback = new HTML5Video(options)
