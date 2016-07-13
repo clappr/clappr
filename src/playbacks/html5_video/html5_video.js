@@ -42,7 +42,8 @@ export default class HTML5Video extends Playback {
   get isAudioOnly() {
     let resourceUrl = this.options.src
     let mimeType = this.options.mimeType
-    return this.options.playback && this.options.playback.audioOnly || HTML5Video._canPlay('audio', AUDIO_MIMETYPES, resourceUrl, mimeType)
+    let skipAudioCheck = Boolean(this.options.skipAudioCheck)
+    return !skipAudioCheck && (this.options.playback && this.options.playback.audioOnly || HTML5Video._canPlay('audio', AUDIO_MIMETYPES, resourceUrl, mimeType))
   }
 
   get attributes() {
@@ -112,7 +113,8 @@ export default class HTML5Video extends Playback {
       preload: preload || 'metadata',
       controls: (playbackConfig.controls || this.options.useVideoTagDefaultControls) && 'controls',
       crossOrigin: playbackConfig.crossOrigin,
-      'x-webkit-playsinline': playbackConfig.playInline
+      'x-webkit-playsinline': playbackConfig.playInline,
+      skipAudioCheck: this.options.skipAudioCheck || false
     })
 
     // TODO should settings be private?
