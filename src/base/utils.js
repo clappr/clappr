@@ -85,6 +85,14 @@ export var Fullscreen = {
     } else if(document.msExitFullscreen) {
       document.msExitFullscreen()
     }
+  },
+  canGoFullscreen: function() {
+    return !(
+      document.fullscreenEnabled === false ||
+      document.webkitFullscreenEnabled === false ||
+      document.mozFullScreenEnabled === false ||
+      document.msFullscreenEnabled === false
+    )
   }
 }
 
@@ -212,6 +220,14 @@ export function getBrowserLanguage() {
   return window.navigator && window.navigator.language
 }
 
+// remove the item from the array if it exists in the array
+export function removeArrayItem(arr, item) {
+  var i = arr.indexOf(item)
+  if (i >= 0) {
+    arr.splice(i, 1)
+  }
+}
+
 export default {
   Config,
   Fullscreen,
@@ -224,5 +240,6 @@ export default {
   isNumber,
   requestAnimationFrame,
   cancelAnimationFrame,
-  getBrowserLanguage
+  getBrowserLanguage,
+  removeArrayItem
 }
