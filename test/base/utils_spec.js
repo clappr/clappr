@@ -147,6 +147,21 @@ describe('Utils', function() {
     expect(utils.seekStringToSeconds()).to.equal(0);
   })
 
+  describe('removeArrayItem', function() {
+    it('removes an item when it exists', function() {
+      var a = [1, 2, 3]
+      utils.removeArrayItem(a, 2)
+      expect(a.indexOf(2)).to.be.equal(-1)
+      expect(a.length).to.be.equal(2)
+    })
+
+    it('does not remove anything when item doesn\'t exist', function() {
+      var a = [1, 2, 3]
+      utils.removeArrayItem(a, 4)
+      expect(a.length).to.be.equal(3)
+    })
+  })
+
   describe('Config', function() {
     beforeEach(function() {
       localStorage.removeItem("clappr.localhost.volume")

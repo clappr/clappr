@@ -6,7 +6,7 @@
  * The MediaControl is responsible for displaying the Player controls.
  */
 
-import {Config, Fullscreen, formatTime, extend} from 'base/utils'
+import {Config, Fullscreen, formatTime, extend, removeArrayItem} from 'base/utils'
 import {Kibo} from 'vendor'
 
 import Events from 'base/events'
@@ -478,9 +478,16 @@ export default class MediaControl extends UIObject {
   }
 
   settingsUpdate() {
-    var settingsChanged = (JSON.stringify(this.settings) !== JSON.stringify(this.container.settings))
+    var newSettings = $.extend({}, this.container.settings)
+    if (!Fullscreen.canGoFullscreen()) {
+      // remove fullscreen from settings if it is present
+      removeArrayItem(newSettings.default, "fullscreen")
+      removeArrayItem(newSettings.left, "fullscreen")
+      removeArrayItem(newSettings.right, "fullscreen")
+    }
+    var settingsChanged = JSON.stringify(this.settings) !== JSON.stringify(newSettings)
     if (this.container.getPlaybackType() && settingsChanged) {
-      this.settings = $.extend({}, this.container.settings)
+      this.settings = newSettings
       this.render()
     }
   }
