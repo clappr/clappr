@@ -479,7 +479,7 @@ export default class MediaControl extends UIObject {
 
   settingsUpdate() {
     var newSettings = $.extend({}, this.container.settings)
-    if (newSettings && !Fullscreen.canGoFullscreen()) {
+    if (newSettings && !Fullscreen.fullscreenEnabled()) {
       // remove fullscreen from settings if it is present
       newSettings.default && removeArrayItem(newSettings.default, "fullscreen")
       newSettings.left && removeArrayItem(newSettings.left, "fullscreen")
