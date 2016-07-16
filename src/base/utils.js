@@ -86,7 +86,7 @@ export var Fullscreen = {
       document.msExitFullscreen()
     }
   },
-  canGoFullscreen: function() {
+  fullscreenEnabled: function() {
     return !(
       document.fullscreenEnabled === false ||
       document.webkitFullscreenEnabled === false ||
