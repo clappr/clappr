@@ -10,11 +10,16 @@ module.exports = {
         "ActiveXObject": false,
         "VERSION": false,
         // Test globals
+        "after": false,
+        "afterEach": false,
+        "assert": false,
+        "before": false,
+        "beforeEach": false,
         "describe": false,
         "expect": false,
         "it": false,
-        "beforeEach": false,
-        "sinon": false
+        "sinon": false,
+        "xit": false
     },
     "extends": "eslint:recommended",
     "parserOptions": {
