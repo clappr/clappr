@@ -7,13 +7,13 @@ describe('UIObject', function() {
   })
 
   it('is a div tag by default', function(){
-    expect(this.uiObject.tagName).to.be.equal("div")
+    expect(this.uiObject.tagName).to.be.equal('div')
   })
 
   it('can be any tag', function(){
     class MyButton extends UIObject { get tagName() { return 'button' } }
     var myButton = new MyButton()
-    expect(myButton.tagName).to.be.equal("button")
+    expect(myButton.tagName).to.be.equal('button')
   })
 
   it('has an unique id', function(){

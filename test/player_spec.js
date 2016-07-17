@@ -34,17 +34,17 @@ describe('Player', function() {
 
     it('should normalize sources', function() {
       var player = new Player({source: '/playlist.m3u8', persistConfig: false})
-      var normalizedSources = player._normalizeSources({sources: ["http://test.mp4"]})
+      var normalizedSources = player._normalizeSources({sources: ['http://test.mp4']})
       expect(normalizedSources).to.have.length(1)
       expect(normalizedSources[0]).to.be.equal('http://test.mp4')
 
-      normalizedSources = player._normalizeSources({source: "http://test.mp4"})
+      normalizedSources = player._normalizeSources({source: 'http://test.mp4'})
       expect(normalizedSources).to.have.length(1)
       expect(normalizedSources[0]).to.be.equal('http://test.mp4')
 
       normalizedSources = player._normalizeSources({sources: []})
       expect(normalizedSources).to.have.length(1)
-      expect(JSON.stringify(normalizedSources[0])).to.be.equal(JSON.stringify({source: "", mimeType: ""}))
+      expect(JSON.stringify(normalizedSources[0])).to.be.equal(JSON.stringify({source: '', mimeType: ''}))
     })
 
     it('should trigger error events', function() {

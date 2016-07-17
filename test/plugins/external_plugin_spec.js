@@ -6,7 +6,7 @@ describe('External Plugin', function() {
     var myPluginInstance
     var nativePluginInstance
     var testMethod = function() {
-      return "test"
+      return 'test'
     }
 
     MyPluginClass = Clappr.Playback.extend({testMethod: testMethod})
