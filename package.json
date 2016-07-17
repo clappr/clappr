@@ -9,7 +9,7 @@
     "build": "node_modules/.bin/webpack --progress",
     "watch": "node_modules/.bin/webpack --progress --watch",
     "test": "node_modules/.bin/karma start --single-run",
-    "lint": "node_modules/.bin/jshint src/",
+    "lint": "node_modules/.bin/eslint src/ test/",
     "check_code_style": "node_modules/.bin/jscs src/ --esnext",
     "fix_code_style": "node_modules/.bin/jscs src/ --esnext --fix",
     "start": "node_modules/.bin/webpack-dev-server --host 0.0.0.0 --content-base public/ --output-public-path latest/ --hot",
