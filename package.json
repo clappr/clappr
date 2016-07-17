@@ -71,7 +71,7 @@
     "node-bourbon": "^4.2.8",
     "node-sass": "^3.7.0",
     "s3": "^4.1.1",
-    "sass-loader": "^3.0.0",
+    "sass-loader": "^4.0.0",
     "sinon": "^1.10.2",
     "sinon-chai": "^2.8.0",
     "sshpk": "^1.6.2",
