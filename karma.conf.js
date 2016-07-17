@@ -2,18 +2,18 @@
 // Generated on Wed Jul 02 2014 11:05:24 GMT-0300 (BRT)
 
 
-var dotenv = require('dotenv');
+var dotenv = require('dotenv')
 
-dotenv.load();
+dotenv.load()
 
-var webpackConfig = require("./webpack-base-config");
+var webpackConfig = require('./webpack-base-config')
 
 // add subject as webpack's postloader
 webpackConfig.module.postLoaders = [{
-    test: /\.js$/,
-    exclude: /(test|node_modules|bower_components)\//,
-    loader: 'istanbul-instrumenter'
-}];
+  test: /\.js$/,
+  exclude: /(test|node_modules|bower_components)\//,
+  loader: 'istanbul-instrumenter'
+}]
 
 module.exports = function(config) {
   config.set({
@@ -38,7 +38,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'test/**/*.js': ['webpack'],
+      'test/**/*.js': ['webpack']
     },
 
 
@@ -50,12 +50,12 @@ module.exports = function(config) {
       dir: 'coverage'
     },
     plugins: [
-        require('karma-webpack'),
-        require('karma-mocha'),
-        'karma-chrome-launcher',
-        'karma-firefox-launcher',
-        'karma-chai-sinon',
-        'karma-coverage',
+      require('karma-webpack'),
+      require('karma-mocha'),
+      'karma-chrome-launcher',
+      'karma-firefox-launcher',
+      'karma-chai-sinon',
+      'karma-coverage'
     ],
 
     // test results reporter to use
@@ -103,5 +103,5 @@ module.exports = function(config) {
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: false
-  });
-};
+  })
+}
