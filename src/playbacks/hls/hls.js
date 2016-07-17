@@ -49,7 +49,6 @@ export default class HLS extends HTML5VideoPlayback {
     // when this is false playableRegionDuration will be the actual duration
     // when this is true playableRegionDuration will exclude the time after the sync point
     this._durationExcludesAfterLiveSyncPoint = false
-    this.options.autoPlay && this._setupHls()
     this._recoverAttemptsRemaining = this.options.hlsRecoverAttempts || 16
   }
 

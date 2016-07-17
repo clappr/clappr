@@ -107,7 +107,6 @@ export default class HTML5Video extends Playback {
 
     $.extend(this.el, {
       loop: this.options.loop,
-      autoplay: this.options.autoPlay,
       poster: this.options.poster,
       preload: preload || 'metadata',
       controls: (playbackConfig.controls || this.options.useVideoTagDefaultControls) && 'controls',
@@ -119,6 +118,9 @@ export default class HTML5Video extends Playback {
     this.settings = {default: ['seekbar']}
     this.settings.left = ['playpause', 'position', 'duration']
     this.settings.right = ['fullscreen', 'volume', 'hd-indicator']
+
+    // https://github.com/clappr/clappr/issues/1076
+    this.options.autoPlay && this.play()
   }
 
   /**
