@@ -87,11 +87,11 @@ export var Fullscreen = {
     }
   },
   fullscreenEnabled: function() {
-    return !(
-      document.fullscreenEnabled === false ||
-      document.webkitFullscreenEnabled === false ||
-      document.mozFullScreenEnabled === false ||
-      document.msFullscreenEnabled === false
+    return !!(
+      document.fullscreenEnabled ||
+      document.webkitFullscreenEnabled ||
+      document.mozFullScreenEnabled ||
+      document.msFullscreenEnabled
     )
   }
 }
