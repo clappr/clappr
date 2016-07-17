@@ -3,13 +3,12 @@ import Loader from '../../src/components/loader'
 import PlaybackPlugin from 'base/playback'
 import CorePlugin from 'base/core_plugin'
 import ContainerPlugin from 'base/container_plugin'
-import UICorePlugin from 'base/ui_core_plugin'
 import UIContainerPlugin from 'base/ui_container_plugin'
 
 describe('Loader', function() {
 
   describe('addExternalPlugins function', function() {
-    it("should extend the plugins array with the external ones", function() {
+    it('should extend the plugins array with the external ones', function() {
       var playbackPlugin = PlaybackPlugin.extend({name: 'playbackPlugin'})
       var containerPlugin = ContainerPlugin.extend({name: 'containerPlugin'})
       var corePlugin = CorePlugin.extend({name: 'corePlugin'})
@@ -30,7 +29,7 @@ describe('Loader', function() {
       expect(loader.corePlugins.length).to.be.equal(nativeCorePluginsCount + 1)
     })
 
-    it("should support an array of plugins and group them by type", function() {
+    it('should support an array of plugins and group them by type', function() {
       var playbackPlugin = PlaybackPlugin.extend({name: 'playbackPlugin'})
       var containerPlugin = ContainerPlugin.extend({name: 'containerPlugin'})
       var corePlugin = CorePlugin.extend({name: 'corePlugin'})
@@ -47,31 +46,31 @@ describe('Loader', function() {
       expect(loader.corePlugins.length).to.be.equal(nativeCorePluginsCount + 1)
     })
 
-    it("should prioritize external plugins if their names collide", function() {
+    it('should prioritize external plugins if their names collide', function() {
       var spinnerPlugin = ContainerPlugin.extend({container: {},  name: 'spinner'})
       var loader = new Loader()
       expect(loader.containerPlugins.filter((plugin) => {
-        return plugin.prototype.name === "spinner"
+        return plugin.prototype.name === 'spinner'
       })[0]).to.not.be.equal(spinnerPlugin)
 
       loader.addExternalPlugins({container: [spinnerPlugin]})
 
       expect(loader.containerPlugins.filter((plugin) => {
-        return plugin.prototype.name === "spinner"
+        return plugin.prototype.name === 'spinner'
       })[0]).to.be.equal(spinnerPlugin)
     })
 
-    it("should allow only a plugin with a given name", function() {
+    it('should allow only a plugin with a given name', function() {
       var spinnerPlugin = ContainerPlugin.extend({container: {},  name: 'spinner'})
       var loader = new Loader()
       expect(loader.containerPlugins.filter((plugin) => {
-        return plugin.prototype.name === "spinner"
+        return plugin.prototype.name === 'spinner'
       }).length).to.be.equal(1)
 
       loader.addExternalPlugins({container: [spinnerPlugin]})
 
       expect(loader.containerPlugins.filter((plugin) => {
-        return plugin.prototype.name === "spinner"
+        return plugin.prototype.name === 'spinner'
       }).length).to.be.equal(1)
     })
   })
