@@ -3,7 +3,7 @@ import BaseObject from './base_object'
 
 export default class CorePlugin extends BaseObject {
   constructor(core) {
-    super(core)
+    super(core.options)
     this.core = core
     this.enabled = true
     this.bindEvents()
