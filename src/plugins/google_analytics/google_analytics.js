@@ -40,7 +40,6 @@ export default class GoogleAnalytics extends ContainerPlugin {
       this.listenTo(this.container, Events.CONTAINER_ENDED, this.onEnded)
       this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering)
       this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferFull)
-      this.listenTo(this.container, Events.CONTAINER_ENDED, this.onEnded)
       this.listenTo(this.container, Events.CONTAINER_ERROR, this.onError)
       this.listenTo(this.container, Events.CONTAINER_PLAYBACKSTATE, this.onPlaybackChanged)
       this.listenTo(this.container, Events.CONTAINER_VOLUME, (event) => this.onVolumeChanged(event))
