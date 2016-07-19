@@ -234,8 +234,8 @@ export default class Container extends UIObject {
     this.trigger(Events.CONTAINER_TIMEUPDATE, timeProgress, this.name)
   }
 
-  progress(progressObj) {
-    this.trigger(Events.CONTAINER_PROGRESS, progressObj, this.name)
+  progress(...args) {
+    this.trigger(Events.CONTAINER_PROGRESS, ...args, this.name)
   }
 
   playing() {
