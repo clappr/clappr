@@ -178,19 +178,24 @@ export default class HLS extends HTML5VideoPlayback {
     if (!this.el.buffered.length) {
       return
     }
-    var bufferedPos = 0
-    for (var i = 0; i < this.el.buffered.length; i++) {
-      if (this.el.currentTime >= this.el.buffered.start(i) && this.el.currentTime <= this.el.buffered.end(i)) {
+    let buffered = []
+    let bufferedPos = 0
+    for (let i = 0; i < this.el.buffered.length; i++) {
+      buffered = [...buffered, {
+        // for a stream with sliding window dvr something that is buffered my slide off the start of the timeline
+        start: Math.max(0, this.el.buffered.start(i) - this._playableRegionStartTime),
+        end: Math.max(0, this.el.buffered.end(i) - this._playableRegionStartTime)
+      }]
+      if (this.el.currentTime >= buffered[i].start && this.el.currentTime <= buffered[i].end) {
         bufferedPos = i
-        break
       }
     }
-    this.trigger(Events.PLAYBACK_PROGRESS, {
-      // for a stream with sliding window dvr something that is buffered my slide off the start of the timeline
-      start: Math.max(0, this.el.buffered.start(bufferedPos) - this._playableRegionStartTime),
-      current: Math.max(0, this.el.buffered.end(bufferedPos) - this._playableRegionStartTime),
+    const progress = {
+      start: buffered[bufferedPos].start,
+      current: buffered[bufferedPos].end,
       total: this.getDuration()
-    })
+    }
+    this.trigger(Events.PLAYBACK_PROGRESS, progress, buffered)
   }
 
   play() {
