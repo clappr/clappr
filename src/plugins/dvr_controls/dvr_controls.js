@@ -23,7 +23,6 @@ export default class DVRControls extends UICorePlugin {
 
   constructor(core) {
     super(core)
-    this.core = core
     this.settingsUpdate()
   }
 
