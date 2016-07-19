@@ -75,6 +75,61 @@ describe('HTML5Video playback', function() {
     expect(playback.el.controls).to.be.true
   })
 
+  describe('progress', function() {
+    let start, end, currentTime
+    const duration = 300
+    beforeEach(function() {
+      this.playback = new HTML5Video(this.options)
+      currentTime = 0
+      start = [0]
+      end = [30]
+      let fakeEl = {
+        get currentTime() { return currentTime },
+        get duration() { return duration },
+        get buffered() { return {start: (i) => start[i], end: (i) => end[i], get length() { return start.length }} }
+      }
+      this.playback.setElement(fakeEl)
+    })
+
+    it('should trigger PLAYBACK_PROGRESS with current buffer position', function() {
+      let progress
+      this.playback.on(Events.PLAYBACK_PROGRESS, function(currentProgress) {
+        progress = currentProgress
+      })
+      this.playback._onProgress() // cannot trigger event on fake element (improve later?)
+      expect(progress.start).to.be.equal(start[0])
+      expect(progress.current).to.be.equal(end[0])
+      expect(progress.total).to.be.equal(duration)
+    })
+
+    it('should find current buffer position', function() {
+      start = [0, 50, 180]
+      end = [30, 90, 280]
+      currentTime = 75 // this should be located at index 1
+      let progress
+      this.playback.on(Events.PLAYBACK_PROGRESS, function(currentProgress) {
+        progress = currentProgress
+      })
+      this.playback._onProgress() // cannot trigger event on fake element (improve later?)
+      expect(progress.start).to.be.equal(start[1])
+      expect(progress.current).to.be.equal(end[1])
+    })
+
+    it('should return an array of buffer segments as {start, end} objects', function() {
+      start = [0, 50, 180]
+      end = [30, 90, 280]
+      let buffered
+      this.playback.on(Events.PLAYBACK_PROGRESS, function(currentProgress, bufferedSegments) {
+        buffered = bufferedSegments
+      })
+      this.playback._onProgress() // cannot trigger event on fake element (improve later?)
+      expect(buffered.length).to.be.equal(start.length)
+      expect(buffered[0]).to.deep.equal({start: start[0], end: end[0]})
+      expect(buffered[1]).to.deep.equal({start: start[1], end: end[1]})
+      expect(buffered[2]).to.deep.equal({start: start[2], end: end[2]})
+    })
+  })
+
   describe('audio resources', function() {
     it('should be able to play audio resources', function() {
       expect(HTML5Video.canPlay('http://domain.com/Audio.oga')).to.be.true
