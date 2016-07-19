@@ -285,14 +285,16 @@ Events.PLAYER_VOLUMEUPDATE = 'volumeupdate'
  * Fired when the playback is downloading the media
  *
  * @event PLAYBACK_PROGRESS
- * @param {Object} progress Data
- * progress object
- * @param {Number} [progress.start]
- * initial downloaded content
- * @param {Number} [progress.current]
- * current dowloaded content
- * @param {Number} [progress.total]
+ * @param progress {Object}
+ * Data progress object
+ * @param [progress.start] {Number}
+ * start position of buffered content at current position
+ * @param [progress.current] {Number}
+ * end position of buffered content at current position
+ * @param [progress.total] {Number}
  * total content to be downloaded
+ * @param buffered {Array}
+ * array of buffered segments ({start, end}). [Only for supported playbacks]
  */
 Events.PLAYBACK_PROGRESS = 'playback:progress'
 /**
