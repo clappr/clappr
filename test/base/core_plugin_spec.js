@@ -3,14 +3,14 @@ import CorePlugin from 'base/core_plugin'
 describe('Core Plugin', function() {
   describe('#constructor', () => {
     it('enables', function() {
-      var plugin = new CorePlugin({})
+      const plugin = new CorePlugin({})
 
       expect(plugin.enabled).to.be.true
     })
 
     it('binds all events', () => {
-      var bind = false
-      var Plugin = class MyPlugin extends CorePlugin{
+      let bind = false
+      const Plugin = class MyPlugin extends CorePlugin{
         bindEvents() {
           bind = true
         }
@@ -23,7 +23,7 @@ describe('Core Plugin', function() {
   })
 
   it('disables', () => {
-    var plugin = new CorePlugin({})
+    const plugin = new CorePlugin({})
 
     plugin.disable()
 
@@ -31,8 +31,8 @@ describe('Core Plugin', function() {
   })
 
   it('stops listening when disable an enabled plugin', () => {
-    var plugin = new CorePlugin({})
-    var spy = sinon.spy(plugin, 'stopListening')
+    const plugin = new CorePlugin({})
+    const spy = sinon.spy(plugin, 'stopListening')
 
     plugin.disable()
 
@@ -40,8 +40,8 @@ describe('Core Plugin', function() {
   })
 
   it('doesnt stops listening when disable a disabled plugin', () => {
-    var plugin = new CorePlugin({})
-    var spy = sinon.spy(plugin, 'stopListening')
+    const plugin = new CorePlugin({})
+    const spy = sinon.spy(plugin, 'stopListening')
 
     plugin.enabled = false
     plugin.disable()
@@ -50,8 +50,8 @@ describe('Core Plugin', function() {
   })
 
   it('stops listening when destroyed', () => {
-    var plugin = new CorePlugin({})
-    var spy = sinon.spy(plugin, 'stopListening')
+    const plugin = new CorePlugin({})
+    const spy = sinon.spy(plugin, 'stopListening')
 
     plugin.destroy()
 
@@ -59,8 +59,8 @@ describe('Core Plugin', function() {
   })
 
   it('binds events once', () => {
-    var plugin = new CorePlugin({})
-    var spy = sinon.spy(plugin, 'bindEvents')
+    const plugin = new CorePlugin({})
+    const spy = sinon.spy(plugin, 'bindEvents')
 
     plugin.enable()
     plugin.enable()

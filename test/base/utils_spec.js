@@ -1,6 +1,6 @@
 import * as utils from '../../src/base/utils'
 
-var pushUrl = function(path) {
+const pushUrl = function(path) {
   window.history.pushState({},'', path)
 }
 
@@ -16,42 +16,42 @@ describe('Utils', function() {
     }
 
     it('should create a new class that extends parent', function() {
-      var Derived = utils.extend(Base, {})
-      var d = new Derived(1, 'some-value')
+      const Derived = utils.extend(Base, {})
+      const d = new Derived(1, 'some-value')
       expect(d.name).to.be.equal('base')
       expect(d.test()).to.be.undefined
     })
 
     it('should pass constructor parameters to super constructor', function() {
-      var Derived = utils.extend(Base, {})
-      var d = new Derived(1, 'some-value')
+      const Derived = utils.extend(Base, {})
+      const d = new Derived(1, 'some-value')
       expect(d.prop1).to.be.equal(1)
       expect(d.prop2).to.be.equal('some-value')
     })
 
     it('should pass constructor parameters to initialize method', function() {
-      var Derived = utils.extend(Base, {
+      const Derived = utils.extend(Base, {
         initialize(p1, p2, p3) {
           this.prop3 = p3
         }
       })
-      var d = new Derived(1, 'some-value', 42)
+      const d = new Derived(1, 'some-value', 42)
       expect(d.prop3).to.be.equal(42)
     })
 
     it ('should support overriding methods', function() {
-      var Derived = utils.extend(Base, {
+      const Derived = utils.extend(Base, {
         test() { return true }
       })
-      var d = new Derived()
+      const d = new Derived()
       expect(d.test()).to.be.true
     })
 
     it ('should support overriding read-only properties', function() {
-      var Derived = utils.extend(Base, {
+      const Derived = utils.extend(Base, {
         get name() { return 'derived' }
       })
-      var d = new Derived()
+      const d = new Derived()
       expect(d.name).to.be.equal('derived')
     })
   })
@@ -149,14 +149,14 @@ describe('Utils', function() {
 
   describe('removeArrayItem', function() {
     it('removes an item when it exists', function() {
-      var a = [1, 2, 3]
+      const a = [1, 2, 3]
       utils.removeArrayItem(a, 2)
       expect(a.indexOf(2)).to.be.equal(-1)
       expect(a.length).to.be.equal(2)
     })
 
     it('does not remove anything when item doesn\'t exist', function() {
-      var a = [1, 2, 3]
+      const a = [1, 2, 3]
       utils.removeArrayItem(a, 4)
       expect(a.length).to.be.equal(3)
     })

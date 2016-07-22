@@ -39,7 +39,7 @@ describe('HTML5Video playback', function() {
   })
 
   it('triggers PLAYBACK_PLAY_INTENT on play request', function() {
-    var thereWasPlayIntent = false
+    let thereWasPlayIntent = false
     const playback = new HTML5Video(this.options)
 
     playback.on(Events.PLAYBACK_PLAY_INTENT, function() {
@@ -83,7 +83,7 @@ describe('HTML5Video playback', function() {
       currentTime = 0
       start = [0]
       end = [30]
-      let fakeEl = {
+      const fakeEl = {
         get currentTime() { return currentTime },
         get duration() { return duration },
         get buffered() { return {start: (i) => start[i], end: (i) => end[i], get length() { return start.length }} }

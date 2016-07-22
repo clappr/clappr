@@ -26,7 +26,7 @@ describe('Playback', function() {
   })
 
   it('destroys by removing element from DOM', () => {
-    var spy = sinon.spy()
+    const spy = sinon.spy()
     this.basePlayback.$el = {remove: spy}
 
     this.basePlayback.destroy()

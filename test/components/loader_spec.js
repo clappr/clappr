@@ -9,15 +9,15 @@ describe('Loader', function() {
 
   describe('addExternalPlugins function', function() {
     it('should extend the plugins array with the external ones', function() {
-      var playbackPlugin = PlaybackPlugin.extend({name: 'playbackPlugin'})
-      var containerPlugin = ContainerPlugin.extend({name: 'containerPlugin'})
-      var corePlugin = CorePlugin.extend({name: 'corePlugin'})
+      const playbackPlugin = PlaybackPlugin.extend({name: 'playbackPlugin'})
+      const containerPlugin = ContainerPlugin.extend({name: 'containerPlugin'})
+      const corePlugin = CorePlugin.extend({name: 'corePlugin'})
 
-      var loader = new Loader()
+      const loader = new Loader()
 
-      var nativePlaybackPluginsCount = loader.playbackPlugins.length
-      var nativeContainerPluginsCount = loader.containerPlugins.length
-      var nativeCorePluginsCount = loader.corePlugins.length
+      const nativePlaybackPluginsCount = loader.playbackPlugins.length
+      const nativeContainerPluginsCount = loader.containerPlugins.length
+      const nativeCorePluginsCount = loader.corePlugins.length
 
       loader.addExternalPlugins({playback: [playbackPlugin]})
       expect(loader.playbackPlugins.length).to.be.equal(nativePlaybackPluginsCount + 1)
@@ -30,15 +30,15 @@ describe('Loader', function() {
     })
 
     it('should support an array of plugins and group them by type', function() {
-      var playbackPlugin = PlaybackPlugin.extend({name: 'playbackPlugin'})
-      var containerPlugin = ContainerPlugin.extend({name: 'containerPlugin'})
-      var corePlugin = CorePlugin.extend({name: 'corePlugin'})
+      const playbackPlugin = PlaybackPlugin.extend({name: 'playbackPlugin'})
+      const containerPlugin = ContainerPlugin.extend({name: 'containerPlugin'})
+      const corePlugin = CorePlugin.extend({name: 'corePlugin'})
 
-      var loader = new Loader()
+      const loader = new Loader()
 
-      var nativePlaybackPluginsCount = loader.playbackPlugins.length
-      var nativeContainerPluginsCount = loader.containerPlugins.length
-      var nativeCorePluginsCount = loader.corePlugins.length
+      const nativePlaybackPluginsCount = loader.playbackPlugins.length
+      const nativeContainerPluginsCount = loader.containerPlugins.length
+      const nativeCorePluginsCount = loader.corePlugins.length
 
       loader.addExternalPlugins([playbackPlugin, containerPlugin, corePlugin])
       expect(loader.playbackPlugins.length).to.be.equal(nativePlaybackPluginsCount + 1)
@@ -47,8 +47,8 @@ describe('Loader', function() {
     })
 
     it('should prioritize external plugins if their names collide', function() {
-      var spinnerPlugin = ContainerPlugin.extend({container: {},  name: 'spinner'})
-      var loader = new Loader()
+      const spinnerPlugin = ContainerPlugin.extend({container: {},  name: 'spinner'})
+      const loader = new Loader()
       expect(loader.containerPlugins.filter((plugin) => {
         return plugin.prototype.name === 'spinner'
       })[0]).to.not.be.equal(spinnerPlugin)
@@ -61,8 +61,8 @@ describe('Loader', function() {
     })
 
     it('should allow only a plugin with a given name', function() {
-      var spinnerPlugin = ContainerPlugin.extend({container: {},  name: 'spinner'})
-      var loader = new Loader()
+      const spinnerPlugin = ContainerPlugin.extend({container: {},  name: 'spinner'})
+      const loader = new Loader()
       expect(loader.containerPlugins.filter((plugin) => {
         return plugin.prototype.name === 'spinner'
       }).length).to.be.equal(1)
@@ -77,7 +77,7 @@ describe('Loader', function() {
 
   describe('validateExternalPluginsType function', function() {
     it('should throw an exception if its not core plugin', function() {
-      var loader = new Loader()
+      const loader = new Loader()
       expect(function() { loader.validateExternalPluginsType({core: [PlaybackPlugin]}) }).to.throw('external playback plugin on core array')
       expect(function() { loader.validateExternalPluginsType({container: [PlaybackPlugin]}) }).to.throw('external playback plugin on container array')
 
