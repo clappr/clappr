@@ -1,7 +1,4 @@
-// Karma configuration
-// Generated on Wed Jul 02 2014 11:05:24 GMT-0300 (BRT)
-
-
+/* eslint-disable no-var */
 var dotenv = require('dotenv')
 
 dotenv.load()
