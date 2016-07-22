@@ -237,6 +237,6 @@ Flash.canPlay = function(resource) {
     return false
   } else {
     var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
-    return resourceParts.length > 1 && !Browser.isMobile && resourceParts[1].match(/^(mp4|mov|f4v|3gpp|3gp)$/)
+    return resourceParts.length > 1 && !Browser.isMobile && resourceParts[1].toLowerCase().match(/^(mp4|mov|f4v|3gpp|3gp)$/)
   }
 }

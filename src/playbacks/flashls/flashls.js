@@ -698,6 +698,6 @@ export default class FlasHLS extends BaseFlashPlayback {
 FlasHLS.canPlay = function(resource, mimeType) {
   var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
   return Browser.hasFlash &&
-        ((resourceParts.length > 1 && resourceParts[1] === 'm3u8') ||
+        ((resourceParts.length > 1 && resourceParts[1].toLowerCase() === 'm3u8') ||
           mimeType === 'application/x-mpegURL' || mimeType === 'application/vnd.apple.mpegurl')
 }
