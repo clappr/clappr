@@ -158,6 +158,13 @@ describe('HTML5Video playback', function() {
       expect(playback.tagName).to.be.equal('audio')
     })
 
+    it('should not play video resources on an audio tag if audioOnly flag is not set and there\'s a video mime-type', function() {
+      const options = { src: 'http://example.com/video.mp4', mimeType: 'video/mp4' }
+      const playback = new HTML5Video(options)
+      expect(playback.isAudioOnly).to.be.false
+      expect(playback.tagName).to.be.equal('video')
+    })
+
     it('should not play video resources on an audio tag if audioOnly flag is not set', function() {
       const options = { src: 'http://example.com/dash.m3u8' }
       const playback = new HTML5Video(options)
