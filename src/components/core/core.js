@@ -124,7 +124,7 @@ export default class Core extends UIObject {
   }
 
   enableResizeObserver() {
-    var checkSizeCallback = () => {
+    const checkSizeCallback = () => {
       if (this.playerInfo.computedSize.width != this.el.clientWidth ||
           this.playerInfo.computedSize.height != this.el.clientHeight) {
         this.playerInfo.computedSize = { width: this.el.clientWidth, height: this.el.clientHeight }
@@ -135,7 +135,7 @@ export default class Core extends UIObject {
   }
 
   triggerResize(newSize) {
-    var thereWasChange = this.firstResize || this.oldHeight !== newSize.height || this.oldWidth !== newSize.width
+    const thereWasChange = this.firstResize || this.oldHeight !== newSize.height || this.oldWidth !== newSize.width
     if (thereWasChange) {
       Mediator.trigger(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, newSize)
       this.oldHeight = newSize.height
@@ -235,7 +235,7 @@ export default class Core extends UIObject {
   }
 
   createContainer(source, options) {
-    var container = this.containerFactory.createContainer(source, options)
+    const container = this.containerFactory.createContainer(source, options)
     this.appendContainer(container)
     this.el.appendChild(container.render().el)
     return container
@@ -268,12 +268,12 @@ export default class Core extends UIObject {
   }
 
   getCurrentPlayback() {
-    var container = this.getCurrentContainer()
+    const container = this.getCurrentContainer()
     return container && container.playback
   }
 
   getPlaybackType() {
-    var container = this.getCurrentContainer()
+    const container = this.getCurrentContainer()
     return container && container.getPlaybackType()
   }
 
@@ -316,7 +316,7 @@ export default class Core extends UIObject {
    */
   configure(options) {
     this._options = $.extend(this._options, options)
-    var sources = options.source || options.sources
+    const sources = options.source || options.sources
 
     if (sources) {
       this.load(sources, options.mimeType || this.options.mimeType)
@@ -330,13 +330,13 @@ export default class Core extends UIObject {
   }
 
   render() {
-    var style = Styler.getStyleFor(coreStyle, {baseUrl: this.options.baseUrl})
+    const style = Styler.getStyleFor(coreStyle, {baseUrl: this.options.baseUrl})
     this.$el.append(style)
     this.$el.append(this.mediaControl.render().el)
 
     this.options.width = this.options.width || this.$el.width()
     this.options.height = this.options.height || this.$el.height()
-    var size = {width: this.options.width, height: this.options.height}
+    const size = {width: this.options.width, height: this.options.height}
     this.playerInfo.previousSize = this.playerInfo.currentSize = this.playerInfo.computedSize = size
     this.updateSize()
 

@@ -304,9 +304,9 @@ export default class Container extends UIObject {
   }
 
   seekPercentage(percentage) {
-    var duration = this.getDuration()
+    const duration = this.getDuration()
     if (percentage >= 0 && percentage <= 100) {
-      var time = duration * (percentage / 100)
+      const time = duration * (percentage / 100)
       this.seek(time)
     }
   }
@@ -416,7 +416,7 @@ export default class Container extends UIObject {
   }
 
   render() {
-    var s = Styler.getStyleFor(style)
+    const s = Styler.getStyleFor(style)
     this.$el.append(s)
     this.$el.append(this.playback.render().el)
     this.updateStyle()

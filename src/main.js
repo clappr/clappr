@@ -35,7 +35,7 @@ import template from 'base/template'
 
 import $ from 'clappr-zepto'
 
-var version = VERSION
+const version = VERSION
 
 export default {
   Player,

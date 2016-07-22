@@ -85,7 +85,7 @@ export default class Loader extends BaseObject {
    */
   addExternalPlugins(plugins) {
     plugins = this.groupPluginsByType(plugins)
-    var pluginName = function(plugin) { return plugin.prototype.name }
+    const pluginName = function(plugin) { return plugin.prototype.name }
     if (plugins.playback) { this.playbackPlugins = uniqBy(plugins.playback.concat(this.playbackPlugins), pluginName) }
     if (plugins.container) { this.containerPlugins = uniqBy(plugins.container.concat(this.containerPlugins), pluginName) }
     if (plugins.core) { this.corePlugins = uniqBy(plugins.core.concat(this.corePlugins), pluginName) }
@@ -99,10 +99,10 @@ export default class Loader extends BaseObject {
    * @param {Object} plugins the config object with all plugins
    */
   validateExternalPluginsType(plugins) {
-    var plugintypes = ['playback', 'container', 'core']
+    const plugintypes = ['playback', 'container', 'core']
     plugintypes.forEach((type) => {
       (plugins[type] || []).forEach((el) => {
-        var errorMessage = 'external ' + el.type + ' plugin on ' + type + ' array'
+        const errorMessage = 'external ' + el.type + ' plugin on ' + type + ' array'
         if (el.type !== type) { throw new ReferenceError(errorMessage) }
       })
     })
