@@ -1,10 +1,10 @@
 import HLS from 'playbacks/hls'
 
 xit('HLS playback', () => {
-  var playback
+  let playback
 
   beforeEach(() => {
-    var options = {src: 'http://example.com/foo.m3u8'}
+    const options = {src: 'http://example.com/foo.m3u8'}
     playback = new HLS(options)
     playback.setupHls()
     // NOTE: rather than trying to call playback.setupHls, we'll punch a new one in place
