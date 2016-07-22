@@ -76,16 +76,16 @@ export default class SeekTime extends UICorePlugin {
   }
 
   calculateHoverPosition(event) {
-    var offset = event.pageX - this.mediaControl.$seekBarContainer.offset().left
+    const offset = event.pageX - this.mediaControl.$seekBarContainer.offset().left
     // proportion into the seek bar that the mouse is hovered over 0-1
     this.hoverPosition = Math.min(1, Math.max(offset/this.mediaControl.$seekBarContainer.width(), 0))
   }
 
   getSeekTime() {
-    var seekTime = null
+    let seekTime, secondsSinceMidnight
     if (this.useActualLiveTime) {
-      var d = new Date(new Date().getTime() - this.actualLiveServerTimeDiff), e = new Date(d)
-      var secondsSinceMidnight = (e - d.setHours(0,0,0,0)) / 1000
+      const d = new Date(new Date().getTime() - this.actualLiveServerTimeDiff), e = new Date(d)
+      secondsSinceMidnight = (e - d.setHours(0,0,0,0)) / 1000
       seekTime = (secondsSinceMidnight - this.duration) + (this.hoverPosition * this.duration)
       if (seekTime < 0) {
         seekTime += 86400
@@ -93,7 +93,7 @@ export default class SeekTime extends UICorePlugin {
     } else {
       seekTime = this.hoverPosition * this.duration
     }
-    return {seekTime: seekTime, secondsSinceMidnight: secondsSinceMidnight}
+    return {seekTime, secondsSinceMidnight}
   }
 
   update() {
@@ -104,10 +104,9 @@ export default class SeekTime extends UICorePlugin {
     if (!this.shouldBeVisible()) {
       this.$el.hide()
       this.$el.css('left', '-100%')
-    }
-    else {
-      var seekTime = this.getSeekTime()
-      var currentSeekTime = formatTime(seekTime.seekTime, this.useActualLiveTime)
+    } else {
+      const seekTime = this.getSeekTime()
+      const currentSeekTime = formatTime(seekTime.seekTime, this.useActualLiveTime)
       // only update dom if necessary, ie time actually changed
       if (currentSeekTime !== this.displayedSeekTime) {
         this.$seekTimeEl.text(currentSeekTime)
@@ -116,21 +115,20 @@ export default class SeekTime extends UICorePlugin {
 
       if (this.durationShown) {
         this.$durationEl.show()
-        var currentDuration = formatTime(this.actualLiveTime ? seekTime.secondsSinceMidnight : this.duration, this.actualLiveTime)
+        const currentDuration = formatTime(this.actualLiveTime ? seekTime.secondsSinceMidnight : this.duration, this.actualLiveTime)
         if (currentDuration !== this.displayedDuration) {
           this.$durationEl.text(currentDuration)
           this.displayedDuration = currentDuration
         }
-      }
-      else {
+      } else {
         this.$durationEl.hide()
       }
 
       // the element must be unhidden before its width is requested, otherwise it's width will be reported as 0
       this.$el.show()
-      var containerWidth = this.mediaControl.$seekBarContainer.width()
-      var elWidth = this.$el.width()
-      var elLeftPos = this.hoverPosition * containerWidth
+      const containerWidth = this.mediaControl.$seekBarContainer.width()
+      const elWidth = this.$el.width()
+      let elLeftPos = this.hoverPosition * containerWidth
       elLeftPos -= elWidth / 2
       elLeftPos = Math.max(0, Math.min(elLeftPos, containerWidth - elWidth))
       this.$el.css('left', elLeftPos)
@@ -145,7 +143,7 @@ export default class SeekTime extends UICorePlugin {
     this.rendered = true
     this.displayedDuration = null
     this.displayedSeekTime = null
-    var style = Styler.getStyleFor(seekTimeStyle)
+    const style = Styler.getStyleFor(seekTimeStyle)
     this.$el.html(this.template())
     this.$el.append(style)
     this.$el.hide()
