@@ -101,7 +101,7 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   seekPercentage(percentage) {
-    var seekTo = this._playableRegionDuration
+    let seekTo = this._playableRegionDuration
     if (percentage > 0) {
       seekTo = this._playableRegionDuration * (percentage / 100)
     }
@@ -237,14 +237,14 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   _onLevelUpdated(evt, data) {
-    var startTimeChanged = false
-    var durationChanged = false
-    var fragments = data.details.fragments
+    let startTimeChanged = false
+    let durationChanged = false
+    let fragments = data.details.fragments
     if (fragments.length > 0 && this._playableRegionStartTime !== fragments[0].start) {
       startTimeChanged = true
       this._playableRegionStartTime = fragments[0].start
     }
-    var newDuration = data.details.totalduration
+    let newDuration = data.details.totalduration
     // if it's a live stream then shorten the duration to remove access
     // to the area after hlsjs's live sync point
     // seeks to areas after this point sometimes have issues
@@ -284,7 +284,7 @@ export default class HLS extends HTML5VideoPlayback {
     }
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH, data)
-    var currentLevel = this._hls.levels[data.level]
+    let currentLevel = this._hls.levels[data.level]
     if (currentLevel) {
       // TODO should highDefinition be private and maybe have a read only accessor if it's used somewhere
       this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000)
@@ -317,8 +317,8 @@ export default class HLS extends HTML5VideoPlayback {
 }
 
 HLS.canPlay = function(resource, mimeType) {
-  var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
-  var isHls = ((resourceParts.length > 1 && resourceParts[1].toLowerCase() === 'm3u8') ||
+  const resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
+  const isHls = ((resourceParts.length > 1 && resourceParts[1].toLowerCase() === 'm3u8') ||
         mimeType === 'application/x-mpegURL' || mimeType === 'application/vnd.apple.mpegurl')
 
   return !!(HLSJS.isSupported() && isHls && !Browser.isSafari)

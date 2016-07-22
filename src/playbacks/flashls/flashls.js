@@ -379,7 +379,7 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   _levelChanged(level) {
-    var currentLevel = this.el.getLevels()[level]
+    const currentLevel = this.el.getLevels()[level]
     if (currentLevel) {
       this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000)
       this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition)
@@ -402,10 +402,10 @@ export default class FlasHLS extends BaseFlashPlayback {
       return
     }
 
-    var duration = this._normalizeDuration(timeMetrics.duration)
-    var position = Math.min(Math.max(timeMetrics.position, 0), duration)
-    var previousDVRStatus = this._dvrEnabled
-    var livePlayback = (this._playbackType === Playback.LIVE)
+    const duration = this._normalizeDuration(timeMetrics.duration)
+    let position = Math.min(Math.max(timeMetrics.position, 0), duration)
+    const previousDVRStatus = this._dvrEnabled
+    const livePlayback = (this._playbackType === Playback.LIVE)
     this._dvrEnabled = (livePlayback && duration > this._hlsMinimumDvrSize)
 
     if (duration === 100 || livePlayback === undefined) {
@@ -527,7 +527,7 @@ export default class FlasHLS extends BaseFlashPlayback {
   _onFragmentLoaded(loadmetrics) {
     this.trigger(Events.PLAYBACK_FRAGMENT_LOADED, loadmetrics)
     if (this._reportingProgress && this.el.getPosition) {
-      var buffered = this.el.getPosition() + this.el.getbufferLength()
+      const buffered = this.el.getPosition() + this.el.getbufferLength()
       this.trigger(Events.PLAYBACK_PROGRESS, {
         start: this.el.getPosition(),
         current: buffered,
@@ -598,8 +598,8 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   seekPercentage(percentage) {
-    var duration = this.el.getDuration()
-    var time = 0
+    const duration = this.el.getDuration()
+    let time = 0
     if (percentage > 0) {
       time = duration * percentage / 100
     }
@@ -607,10 +607,10 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   seek(time) {
-    var duration = this.getDuration()
+    const duration = this.getDuration()
     if (this._playbackType === Playback.LIVE) {
       // seek operations to a time within 3 seconds from live stream will position playhead back to live
-      var dvrInUse = duration - time > 3
+      const dvrInUse = duration - time > 3
       this._updateDvr(dvrInUse)
     }
     this.el.playerSeek(time)
@@ -618,7 +618,7 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   _updateDvr(dvrInUse) {
-    var previousDvrInUse = !!this._dvrInUse
+    const previousDvrInUse = !!this._dvrInUse
     this._dvrInUse = dvrInUse
     if (this._dvrInUse !== previousDvrInUse) {
       this._updateSettings()
@@ -647,11 +647,11 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   _fillLevels() {
-    var levels = this.el.getLevels()
-    var levelsLength = levels.length
+    const levels = this.el.getLevels()
+    const levelsLength = levels.length
     this._levels = []
 
-    for (var index = 0 ; index < levelsLength ; index++) {
+    for (let index = 0 ; index < levelsLength ; index++) {
       this._levels.push({id: index, label: `${levels[index].height}p`, level: levels[index]})
     }
     this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this._levels)
@@ -696,7 +696,7 @@ export default class FlasHLS extends BaseFlashPlayback {
 }
 
 FlasHLS.canPlay = function(resource, mimeType) {
-  var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
+  const resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
   return Browser.hasFlash &&
         ((resourceParts.length > 1 && resourceParts[1].toLowerCase() === 'm3u8') ||
           mimeType === 'application/x-mpegURL' || mimeType === 'application/vnd.apple.mpegurl')

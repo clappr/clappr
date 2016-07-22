@@ -8,7 +8,7 @@
 
 import Events from 'base/events'
 
-var events = new Events()
+const events = new Events()
 
 export default class Mediator {
 }

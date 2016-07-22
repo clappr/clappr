@@ -47,9 +47,9 @@ export default class WaterMarkPlugin extends UIContainerPlugin {
 
   render() {
     this.$el.hide()
-    var templateOptions = {position: this.position, imageUrl: this.imageUrl, imageLink: this.imageLink}
+    const templateOptions = {position: this.position, imageUrl: this.imageUrl, imageLink: this.imageLink}
     this.$el.html(this.template(templateOptions))
-    var style = Styler.getStyleFor(watermarkStyle)
+    const style = Styler.getStyleFor(watermarkStyle)
     this.container.$el.append(style)
     this.container.$el.append(this.$el)
     return this

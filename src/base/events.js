@@ -6,16 +6,16 @@ import Log from 'plugins/log'
 import {uniqueId} from './utils'
 import execOnce from 'lodash.once'
 
-var slice = Array.prototype.slice
+const slice = Array.prototype.slice
 
-var eventSplitter = /\s+/
+const eventSplitter = /\s+/
 
-var eventsApi = function(obj, action, name, rest) {
+const eventsApi = function(obj, action, name, rest) {
   if (!name) {return true}
 
   // Handle event maps.
   if (typeof name === 'object') {
-    for (var key in name) {
+    for (const key in name) {
       obj[action].apply(obj, [key, name[key]].concat(rest))
     }
     return false
@@ -23,8 +23,8 @@ var eventsApi = function(obj, action, name, rest) {
 
   // Handle space separated event names.
   if (eventSplitter.test(name)) {
-    var names = name.split(eventSplitter)
-    for (var i = 0, l = names.length; i < l; i++) {
+    const names = name.split(eventSplitter)
+    for (let i = 0, l = names.length; i < l; i++) {
       obj[action].apply(obj, [names[i]].concat(rest))
     }
     return false
@@ -33,8 +33,9 @@ var eventsApi = function(obj, action, name, rest) {
   return true
 }
 
-var triggerEvents = function(events, args) {
-  var ev, i = -1, l = events.length, a1 = args[0], a2 = args[1], a3 = args[2]
+const triggerEvents = function(events, args) {
+  let ev, i = -1
+  const l = events.length, a1 = args[0], a2 = args[1], a3 = args[2]
   switch (args.length) {
   case 0: while (++i < l) { (ev = events[i]).callback.call(ev.ctx) } return
   case 1: while (++i < l) { (ev = events[i]).callback.call(ev.ctx, a1) } return
@@ -60,7 +61,7 @@ export default class Events {
   on(name, callback, context) {
     if (!eventsApi(this, 'on', name, [callback, context]) || !callback) {return this}
     this._events || (this._events = {})
-    var events = this._events[name] || (this._events[name] = [])
+    const events = this._events[name] || (this._events[name] = [])
     events.push({callback: callback, context: context, ctx: context || this})
     return this
   }
@@ -74,8 +75,8 @@ export default class Events {
    */
   once(name, callback, context) {
     if (!eventsApi(this, 'once', name, [callback, context]) || !callback) {return this}
-    var self = this
-    var once = execOnce(function() {
+    const self = this
+    const once = execOnce(function() {
       self.off(name, once)
       callback.apply(this, arguments)
     })
@@ -91,7 +92,7 @@ export default class Events {
    * @param {Object} context
    */
   off(name, callback, context) {
-    var retain, ev, events, names, i, l, j, k
+    let retain, ev, events, names, i, l, j, k
     if (!this._events || !eventsApi(this, 'off', name, [callback, context])) {return this}
     if (!name && !callback && !context) {
       this._events = void 0
@@ -125,14 +126,14 @@ export default class Events {
    * @param {String} name
    */
   trigger(name) {
-    var klass = this.name || this.constructor.name
+    const klass = this.name || this.constructor.name
     try {
       Log.debug.apply(Log, [klass].concat(Array.prototype.slice.call(arguments)))
       if (!this._events) {return this}
-      var args = slice.call(arguments, 1)
+      const args = slice.call(arguments, 1)
       if (!eventsApi(this, 'trigger', name, args)) {return this}
-      var events = this._events[name]
-      var allEvents = this._events.all
+      const events = this._events[name]
+      const allEvents = this._events.all
       if (events) {triggerEvents(events, args)}
       if (allEvents) {triggerEvents(allEvents, arguments)}
     } catch (exception) {
@@ -149,12 +150,12 @@ export default class Events {
    * @param {Function} callback
    */
   stopListening(obj, name, callback) {
-    var listeningTo = this._listeningTo
+    let listeningTo = this._listeningTo
     if (!listeningTo) {return this}
-    var remove = !name && !callback
+    const remove = !name && !callback
     if (!callback && typeof name === 'object') {callback = this}
     if (obj) {(listeningTo = {})[obj._listenId] = obj}
-    for (var id in listeningTo) {
+    for (const id in listeningTo) {
       obj = listeningTo[id]
       obj.off(name, callback, this)
       if (remove || Object.keys(obj._events).length === 0) {delete this._listeningTo[id]}
@@ -188,12 +189,12 @@ export default class Events {
  * this.listenToOnce(this.core.playback, Events.PLAYBACK_PAUSE, this.callback)
  * ```
  */
-var listenMethods = {listenTo: 'on', listenToOnce: 'once'}
+const listenMethods = {listenTo: 'on', listenToOnce: 'once'}
 
 Object.keys(listenMethods).forEach(function(method) {
   Events.prototype[method] = function(obj, name, callback) {
-    var listeningTo = this._listeningTo || (this._listeningTo = {})
-    var id = obj._listenId || (obj._listenId = uniqueId('l'))
+    const listeningTo = this._listeningTo || (this._listeningTo = {})
+    const id = obj._listenId || (obj._listenId = uniqueId('l'))
     listeningTo[id] = obj
     if (!callback && typeof name === 'object') {callback = this}
     obj[listenMethods[method]](name, callback, this)

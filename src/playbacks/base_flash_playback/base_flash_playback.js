@@ -10,7 +10,7 @@ import Browser from 'components/browser'
 import flashHTML from './public/flash.html'
 import flashStyle from './public/flash.scss'
 
-var IE_CLASSID = 'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000'
+const IE_CLASSID = 'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000'
 
 export default class BaseFlashPlayback extends Playback {
   get tagName() { return 'object' }
@@ -18,7 +18,7 @@ export default class BaseFlashPlayback extends Playback {
   get wmode() { return 'transparent' }
   get template() { return template(flashHTML) }
   get attributes() {
-    var type = 'application/x-shockwave-flash'
+    let type = 'application/x-shockwave-flash'
 
     if (Browser.isLegacyIE) {
       type = ''
@@ -39,7 +39,7 @@ export default class BaseFlashPlayback extends Playback {
   }
 
   _setupFirefox() {
-    var $el = this.$('embed')
+    const $el = this.$('embed')
     $el.attr('data-flash-playback', this.name)
     $el.addClass(this.attributes.class)
     this.setElement($el)

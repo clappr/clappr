@@ -23,7 +23,7 @@ export default class HTML5Audio extends HTML5Video {
 }
 
 HTML5Audio.canPlay = function(resourceUrl, mimeType) {
-  var mimetypes = {
+  const mimetypes = {
     'wav': ['audio/wav'],
     'mp3': ['audio/mp3', 'audio/mpeg;codecs="mp3"'],
     'aac': ['audio/mp4;codecs="mp4a.40.5"'],

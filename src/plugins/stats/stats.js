@@ -79,7 +79,7 @@ export default class StatsPlugin extends ContainerPlugin {
   }
 
   getWatchingTime() {
-    var totalTime = (Date.now() - this.watchingTimeInit)
+    const totalTime = (Date.now() - this.watchingTimeInit)
     return totalTime - this.rebufferingTime
   }
 
@@ -92,7 +92,7 @@ export default class StatsPlugin extends ContainerPlugin {
   }
 
   getStats() {
-    var metrics = {
+    const metrics = {
       startupTime:     this.startupTime,
       rebuffers:       this.rebuffers,
       rebufferingTime: this.isRebuffering()? this.rebufferingTime + this.getRebufferingTime(): this.rebufferingTime,

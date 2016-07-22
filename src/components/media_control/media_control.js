@@ -77,7 +77,7 @@ export default class MediaControl extends UIObject {
     this.container = options.container
     this.currentPositionValue = null
     this.currentDurationValue = null
-    var initialVolume = (this.persistConfig) ? Config.restore('volume') : 100
+    const initialVolume = (this.persistConfig) ? Config.restore('volume') : 100
     this.setVolume(this.options.mute ? 0 : initialVolume)
     this.keepVisible = false
     this.addEventListeners()
@@ -158,16 +158,16 @@ export default class MediaControl extends UIObject {
     }
     // update volume bar scrubber/fill on bar mode
     this.$volumeBarContainer.find('.bar-fill-2').css({})
-    var containerWidth = this.$volumeBarContainer.width()
-    var barWidth = this.$volumeBarBackground.width()
-    var offset = (containerWidth - barWidth) / 2.0
-    var pos = barWidth * this.volume / 100.0 + offset
+    const containerWidth = this.$volumeBarContainer.width()
+    const barWidth = this.$volumeBarBackground.width()
+    const offset = (containerWidth - barWidth) / 2.0
+    const pos = barWidth * this.volume / 100.0 + offset
     this.$volumeBarFill.css({ width: `${this.volume}%` })
     this.$volumeBarScrubber.css({ left: pos })
 
     // update volume bar segments on segmented bar mode
     this.$volumeBarContainer.find('.segmented-bar-element').removeClass('fill')
-    var item = Math.ceil(this.volume / 10.0)
+    const item = Math.ceil(this.volume / 10.0)
     this.$volumeBarContainer.find('.segmented-bar-element').slice(0, item).addClass('fill')
     this.$volumeIcon.html('')
     this.$volumeIcon.removeClass('muted')
@@ -198,7 +198,7 @@ export default class MediaControl extends UIObject {
 
   mousemoveOnSeekBar(event) {
     if (this.container.settings.seekEnabled) {
-      var offsetX = event.pageX - this.$seekBarContainer.offset().left - (this.$seekBarHover.width() / 2)
+      const offsetX = event.pageX - this.$seekBarContainer.offset().left - (this.$seekBarHover.width() / 2)
       this.$seekBarHover.css({left: offsetX})
     }
     this.trigger(Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR, event)
@@ -284,8 +284,8 @@ export default class MediaControl extends UIObject {
   updateDrag(event) {
     if (this.draggingSeekBar) {
       event.preventDefault()
-      var offsetX = event.pageX - this.$seekBarContainer.offset().left
-      var pos = offsetX / this.$seekBarContainer.width() * 100
+      const offsetX = event.pageX - this.$seekBarContainer.offset().left
+      let pos = offsetX / this.$seekBarContainer.width() * 100
       pos = Math.min(100, Math.max(pos, 0))
       this.setSeekPercentage(pos)
     } else if (this.draggingVolumeBar) {
@@ -295,8 +295,8 @@ export default class MediaControl extends UIObject {
   }
 
   getVolumeFromUIEvent(event) {
-    var offsetY = event.pageX - this.$volumeBarContainer.offset().left
-    var volumeFromUI = (offsetY / this.$volumeBarContainer.width()) * 100
+    const offsetY = event.pageX - this.$volumeBarContainer.offset().left
+    const volumeFromUI = (offsetY / this.$volumeBarContainer.width()) * 100
     return volumeFromUI
   }
 
@@ -311,7 +311,7 @@ export default class MediaControl extends UIObject {
     // if the container is not ready etc
     this.intendedVolume = value
     this.persistConfig && Config.persist('volume', value)
-    var setWhenContainerReady = () => {
+    const setWhenContainerReady = () => {
       if (this.container.isReady) {
         this.container.setVolume(value)
       } else {
@@ -378,15 +378,15 @@ export default class MediaControl extends UIObject {
   }
 
   updateProgressBar(progress) {
-    var loadedStart = progress.start / progress.total * 100
-    var loadedEnd = progress.current / progress.total * 100
+    const loadedStart = progress.start / progress.total * 100
+    const loadedEnd = progress.current / progress.total * 100
     this.$seekBarLoaded.css({ left: `${loadedStart}%`, width: `${loadedEnd - loadedStart}%` })
   }
 
   onTimeUpdate(timeProgress) {
     if (this.draggingSeekBar) return
     // TODO why should current time ever be negative?
-    var position = (timeProgress.current < 0) ? timeProgress.total : timeProgress.current
+    const position = (timeProgress.current < 0) ? timeProgress.total : timeProgress.current
 
     this.currentPositionValue = position
     this.currentDurationValue = timeProgress.total
@@ -406,8 +406,8 @@ export default class MediaControl extends UIObject {
     }
     this.setSeekPercentage(this.currentSeekBarPercentage)
 
-    var newPosition = formatTime(this.currentPositionValue)
-    var newDuration = formatTime(this.currentDurationValue)
+    const newPosition = formatTime(this.currentPositionValue)
+    const newDuration = formatTime(this.currentDurationValue)
     if (newPosition !== this.displayedPosition) {
       this.$position.text(newPosition)
       this.displayedPosition = newPosition
@@ -420,8 +420,8 @@ export default class MediaControl extends UIObject {
 
   seek(event) {
     if (!this.container.settings.seekEnabled) return
-    var offsetX = event.pageX - this.$seekBarContainer.offset().left
-    var pos = offsetX / this.$seekBarContainer.width() * 100
+    const offsetX = event.pageX - this.$seekBarContainer.offset().left
+    let pos = offsetX / this.$seekBarContainer.width() * 100
     pos = Math.min(100, Math.max(pos, 0))
     this.container.seekPercentage(pos)
     this.setSeekPercentage(pos)
@@ -450,7 +450,7 @@ export default class MediaControl extends UIObject {
 
   show(event) {
     if (this.disabled) return
-    var timeout = 2000
+    const timeout = 2000
     if (!event || (event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY) || navigator.userAgent.match(/firefox/i)) {
       clearTimeout(this.hideId)
       this.$el.show()
@@ -465,7 +465,7 @@ export default class MediaControl extends UIObject {
   }
 
   hide(delay = 0) {
-    var timeout = delay || 2000
+    const timeout = delay || 2000
     clearTimeout(this.hideId)
     if (!this.isVisible() || this.options.hideMediaControl === false) return
     if (delay || this.userKeepVisible || this.keepVisible || this.draggingSeekBar || this.draggingVolumeBar) {
@@ -478,14 +478,14 @@ export default class MediaControl extends UIObject {
   }
 
   settingsUpdate() {
-    var newSettings = $.extend({}, this.container.settings)
+    const newSettings = $.extend({}, this.container.settings)
     if (newSettings && !Fullscreen.fullscreenEnabled()) {
       // remove fullscreen from settings if it is present
       newSettings.default && removeArrayItem(newSettings.default, 'fullscreen')
       newSettings.left && removeArrayItem(newSettings.left, 'fullscreen')
       newSettings.right && removeArrayItem(newSettings.right, 'fullscreen')
     }
-    var settingsChanged = JSON.stringify(this.settings) !== JSON.stringify(newSettings)
+    const settingsChanged = JSON.stringify(this.settings) !== JSON.stringify(newSettings)
     if (this.container.getPlaybackType() && settingsChanged) {
       this.settings = newSettings
       this.render()
@@ -493,12 +493,12 @@ export default class MediaControl extends UIObject {
   }
 
   highDefinitionUpdate(isHD) {
-    var method = isHD ? 'addClass' : 'removeClass'
+    const method = isHD ? 'addClass' : 'removeClass'
     this.$hdIndicator[method]('enabled')
   }
 
   createCachedElements() {
-    var $layer = this.$el.find('.media-control-layer')
+    const $layer = this.$el.find('.media-control-layer')
     this.$duration = $layer.find('.media-control-indicator[data-duration]')
     this.$fullscreenToggle = $layer.find('button.media-control-button[data-fullscreen]')
     this.$playPauseToggle = $layer.find('button.media-control-button[data-playpause]')
@@ -526,7 +526,7 @@ export default class MediaControl extends UIObject {
   }
 
   initializeIcons() {
-    var $layer = this.$el.find('.media-control-layer')
+    const $layer = this.$el.find('.media-control-layer')
     $layer.find('button.media-control-button[data-play]').append(playIcon)
     $layer.find('button.media-control-button[data-pause]').append(pauseIcon)
     $layer.find('button.media-control-button[data-stop]').append(stopIcon)
@@ -553,9 +553,9 @@ export default class MediaControl extends UIObject {
 
   seekRelative(delta) {
     if (!this.container.settings.seekEnabled) return
-    var currentTime = this.container.getCurrentTime()
-    var duration = this.container.getDuration()
-    var position = Math.min(Math.max(currentTime + delta, 0), duration)
+    const currentTime = this.container.getCurrentTime()
+    const duration = this.container.getDuration()
+    let position = Math.min(Math.max(currentTime + delta, 0), duration)
     position = Math.min(position * 100 / duration, 100)
     this.container.seekPercentage(position)
   }
@@ -566,7 +566,7 @@ export default class MediaControl extends UIObject {
     this.kibo.down(['space'], () => this.togglePlayPause())
     this.kibo.down(['left'], () => this.seekRelative(-15))
     this.kibo.down(['right'], () => this.seekRelative(15))
-    var keys = [1,2,3,4,5,6,7,8,9,0]
+    const keys = [1,2,3,4,5,6,7,8,9,0]
     keys.forEach((i) => { this.kibo.down(i.toString(), () => this.container.settings.seekEnabled && this.container.seekPercentage(i * 10)) })
   }
 
@@ -582,7 +582,7 @@ export default class MediaControl extends UIObject {
   parseColors() {
     if (this.options.mediacontrol) {
       this.buttonsColor = this.options.mediacontrol.buttons
-      var seekbarColor = this.options.mediacontrol.seekbar
+      const seekbarColor = this.options.mediacontrol.seekbar
       this.$el.find('.bar-fill-2[data-seekbar]').css('background-color', seekbarColor)
       this.$el.find('.media-control-icon svg path').css('fill', this.buttonsColor)
       this.$el.find('.segmented-bar-element[data-volume]').css('boxShadow', 'inset 2px 0 0 ' + this.buttonsColor)
@@ -603,7 +603,7 @@ export default class MediaControl extends UIObject {
   }
 
   render() {
-    var timeout = 1000
+    const timeout = 1000
     this.$el.html(this.template({ settings: this.settings }))
     this.$el.append(this.stylesheet)
     this.createCachedElements()
@@ -623,7 +623,7 @@ export default class MediaControl extends UIObject {
     this.$seekBarPosition.addClass('media-control-notransition')
     this.$seekBarScrubber.addClass('media-control-notransition')
 
-    var previousSeekPercentage = 0
+    let previousSeekPercentage = 0
     if (this.displayedSeekBarPercentage) {
       previousSeekPercentage = this.displayedSeekBarPercentage
     }
