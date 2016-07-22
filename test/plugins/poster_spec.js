@@ -44,7 +44,7 @@ describe('Poster', function() {
     expect(this.container.disableMediaControl).called.once
     expect(this.poster.showPlayButton).called.once
 
-    var spy = sinon.spy(this.poster, 'onStop')
+    const spy = sinon.spy(this.poster, 'onStop')
     this.poster.bindEvents()
 
     this.container.trigger(Events.CONTAINER_STOP)
