@@ -408,7 +408,7 @@ export default class HTML5Video extends Playback {
 
 HTML5Video._canPlay = function(type, mimeTypesByExtension, resourceUrl, mimeType) {
   var extension = (resourceUrl.split('?')[0].match(/.*\.(.*)$/) || [])[1]
-  var mimeTypes = mimeType || mimeTypesByExtension[extension] || []
+  var mimeTypes = mimeType || (extension && mimeTypesByExtension[extension.toLowerCase()]) || []
   mimeTypes = (mimeTypes.constructor === Array) ? mimeTypes : [mimeTypes]
 
   var media = document.createElement(type)
