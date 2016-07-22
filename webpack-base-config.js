@@ -1,5 +1,6 @@
-var path = require('path');
-var webpack = require('webpack');
+/* eslint-disable no-var */
+var path = require('path')
+var webpack = require('webpack')
 
 module.exports = {
   plugins: [
@@ -23,7 +24,7 @@ module.exports = {
             + '&includePaths[]='
             + path.resolve(__dirname, './src/base/scss')
         ],
-        include: path.resolve(__dirname, 'src'),
+        include: path.resolve(__dirname, 'src')
       },
       {
         test: /\.(png|woff|eot|ttf|swf|cur)/, loader: 'url-loader?limit=1'
@@ -34,10 +35,10 @@ module.exports = {
       {
         test: /\.html/, loader: 'html?minimize=false'
       }
-    ],
+    ]
   },
   resolve: {
     root: path.resolve(__dirname, 'src'),
-    extensions: ['', '.js'],
+    extensions: ['', '.js']
   }
-};
+}
