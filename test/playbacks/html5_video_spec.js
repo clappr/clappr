@@ -158,11 +158,18 @@ describe('HTML5Video playback', function() {
       expect(playback.tagName).to.be.equal('audio')
     })
 
-    it('should not play video resources on an audio tag if audioOnly flag is not set and there\'s a video mime-type', function() {
+    it('should not play video resources on an audio tag if audioOnly flag is not set and a video mime-type is set', function() {
       const options = { src: 'http://example.com/video.mp4', mimeType: 'video/mp4' }
       const playback = new HTML5Video(options)
       expect(playback.isAudioOnly).to.be.false
       expect(playback.tagName).to.be.equal('video')
+    })
+
+    it('should play on audio tag if audioOnly flag is not set and the mime-type specified is audio only', function() {
+      let options = { src: 'http://example.com/audio?some_parameter=value', mimeType: 'audio/ogg' },
+        playback = new HTML5Video(options)
+      expect(playback.isAudioOnly).to.be.true
+      expect(playback.tagName).to.be.equal('audio')
     })
 
     it('should not play video resources on an audio tag if audioOnly flag is not set', function() {
