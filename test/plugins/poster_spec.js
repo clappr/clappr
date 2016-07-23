@@ -67,7 +67,7 @@ describe('Poster', function() {
 
     // HLS audio-only needs overridden manually via config
     this.playback.name = 'html5_video'
-    this.poster.options.audioOnly = true
+    this.playback.isAudioOnly = true
     expect(this.poster.shouldHideOnPlay()).to.equal(false)
   })
 
