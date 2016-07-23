@@ -131,8 +131,8 @@ describe('HTML5Video playback', function() {
   })
 
   it('should be able to identify it can play resources independently of the file extension case', function() {
-    expect(HTML5Video.canPlay('/relative/video.mp4')).to.be.true
-    expect(HTML5Video.canPlay('/relative/VIDEO.MP4')).to.be.true
+    expect(HTML5Video.canPlay('/relative/video.ogg')).to.be.true
+    expect(HTML5Video.canPlay('/relative/VIDEO.OGG')).to.be.true
   })
 
   describe('audio resources', function() {
