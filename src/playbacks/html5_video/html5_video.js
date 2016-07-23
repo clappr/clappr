@@ -44,7 +44,7 @@ export default class HTML5Video extends Playback {
   get isAudioOnly() {
     const resourceUrl = this.options.src
     let mimeTypes = HTML5Video._mimeTypesForUrl(resourceUrl, AUDIO_MIMETYPES, this.options.mimeType)
-    return this.options.playback && this.options.playback.audioOnly || KNOWN_AUDIO_MIMETYPES.indexOf(mimeTypes[0]) > 0
+    return this.options.playback && this.options.playback.audioOnly || this.options.audioOnly || KNOWN_AUDIO_MIMETYPES.indexOf(mimeTypes[0]) > 0
   }
 
   get attributes() {
