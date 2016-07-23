@@ -33,6 +33,8 @@ const AUDIO_MIMETYPES = {
   'oga': ['audio/ogg']
 }
 
+const KNOWN_AUDIO_MIMETYPES = Object.keys(AUDIO_MIMETYPES).reduce((acc, k) => [...acc, ...AUDIO_MIMETYPES[k]], [])
+
 // TODO: rename this Playback to HTML5Playback (breaking change, only after 0.3.0)
 export default class HTML5Video extends Playback {
   get name() { return 'html5_video' }
@@ -41,8 +43,8 @@ export default class HTML5Video extends Playback {
 
   get isAudioOnly() {
     const resourceUrl = this.options.src
-    const mimeType = this.options.mimeType
-    return this.options.playback && this.options.playback.audioOnly || (HTML5Video._canPlay('audio', AUDIO_MIMETYPES, resourceUrl, mimeType) && !HTML5Video._canPlay('video', MIMETYPES, resourceUrl, mimeType))
+    let mimeTypes = HTML5Video._mimeTypesForUrl(resourceUrl, AUDIO_MIMETYPES, this.options.mimeType)
+    return this.options.playback && this.options.playback.audioOnly || KNOWN_AUDIO_MIMETYPES.indexOf(mimeTypes[0]) > 0
   }
 
   get attributes() {
@@ -406,11 +408,14 @@ export default class HTML5Video extends Playback {
   }
 }
 
-HTML5Video._canPlay = function(type, mimeTypesByExtension, resourceUrl, mimeType) {
+HTML5Video._mimeTypesForUrl = function(resourceUrl, mimeTypesByExtension, mimeType) {
   const extension = (resourceUrl.split('?')[0].match(/.*\.(.*)$/) || [])[1]
   let mimeTypes = mimeType || (extension && mimeTypesByExtension[extension.toLowerCase()]) || []
-  mimeTypes = (mimeTypes.constructor === Array) ? mimeTypes : [mimeTypes]
+  return (mimeTypes.constructor === Array) ? mimeTypes : [mimeTypes]
+}
 
+HTML5Video._canPlay = function(type, mimeTypesByExtension, resourceUrl, mimeType) {
+  let mimeTypes = HTML5Video._mimeTypesForUrl(resourceUrl, mimeTypesByExtension, mimeType)
   const media = document.createElement(type)
   return !!find(mimeTypes, (mediaType) => !!media.canPlayType(mediaType).replace(/no/, ''))
 }
