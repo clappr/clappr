@@ -52,6 +52,18 @@ describe('Poster', function() {
     expect(spy).called.once
   })
 
+  it('disables handling container:ended event as container:stop', function() {
+    this.container = new Container({playback: this.playback, poster: {showOnVideoEnd: false}})
+    this.poster = new Poster(this.container)
+    this.container.addPlugin(this.poster)
+    sinon.spy(this.container, 'disableMediaControl')
+    sinon.spy(this.poster, 'showPlayButton')
+    this.container.trigger(Events.CONTAINER_ENDED)
+
+    expect(this.container.disableMediaControl).not.called
+    expect(this.poster.showPlayButton).not.called
+  })
+
   it('plays the container on click', function() {
     sinon.spy(this.container, 'play')
     $(this.poster.$el).click()

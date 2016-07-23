@@ -28,6 +28,10 @@ export default class PosterPlugin extends UIContainerPlugin {
     }
   }
 
+  get showOnVideoEnd() {
+    return !this.options.poster || this.options.poster.showOnVideoEnd || this.options.poster.showOnVideoEnd === undefined
+  }
+
   constructor(container) {
     super(container)
     this.hasStartedPlaying = false
@@ -39,10 +43,10 @@ export default class PosterPlugin extends UIContainerPlugin {
   bindEvents() {
     this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
     this.listenTo(this.container, Events.CONTAINER_PLAY, this.onPlay)
-    this.listenTo(this.container, Events.CONTAINER_ENDED, this.onStop)
     this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.update)
     this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.update)
     this.listenTo(this.container, Events.CONTAINER_OPTIONS_CHANGE, this.render)
+    this.showOnVideoEnd && this.listenTo(this.container, Events.CONTAINER_ENDED, this.onStop)
   }
 
   stopListening() {
@@ -109,7 +113,8 @@ export default class PosterPlugin extends UIContainerPlugin {
     this.$el.html(this.template())
     this.$el.append(style)
     if (this.options.poster) {
-      this.$el.css({'background-image': 'url(' + this.options.poster + ')'})
+      const posterUrl = this.options.poster.url || this.options.poster
+      this.$el.css({'background-image': 'url(' + posterUrl + ')'})
     }
     this.container.$el.append(this.el)
     this.$playWrapper = this.$el.find('.play-wrapper')
