@@ -170,6 +170,11 @@ describe('HTML5Video playback', function() {
         playback = new HTML5Video(options)
       expect(playback.isAudioOnly).to.be.true
       expect(playback.tagName).to.be.equal('audio')
+
+      options = { src: 'http://example.com/audio?some_parameter=value', mimeType: 'audio/wav' }
+      playback = new HTML5Video(options)
+      expect(playback.isAudioOnly).to.be.true
+      expect(playback.tagName).to.be.equal('audio')
     })
 
     it('should not play video resources on an audio tag if audioOnly flag is not set', function() {
