@@ -23,3 +23,10 @@ Very often people open issues related to: **stream not working, freezing, glitch
 * try to run on your page the following source: `http://www.streambox.fr/playlists/x36xhzz/x36xhzz.m3u8`
 * try different browsers/OS's to see if the problems remain
 * try to use a tool to check the health of your stream (both input, ie: RTMP, and segmentation, ie: DASH or HLS): like `mediainfo`, `mediastreamvalidator`, [`hls-analyzer`](https://github.com/epiclabs-io/hls-analyzer) and etc.
+
+##### HLS-Analyzer usage example
+```bash
+git clone https://github.com/epiclabs-io/hls-analyzer.git
+cd hls-analyzer
+python hls-analyzer.py http://www.streambox.fr/playlists/x36xhzz/x36xhzz.m3u8
+```
