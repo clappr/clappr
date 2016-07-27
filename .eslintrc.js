@@ -9,10 +9,19 @@ module.exports = {
         "process": false,
         "ActiveXObject": false,
         "VERSION": false,
+        // Build globals
+        "__dirname": false,
         // Test globals
+        "after": false,
+        "afterEach": false,
+        "assert": false,
+        "before": false,
+        "beforeEach": false,
         "describe": false,
         "expect": false,
-        "it": false
+        "it": false,
+        "sinon": false,
+        "xit": false
     },
     "extends": "eslint:recommended",
     "parserOptions": {
@@ -34,6 +43,7 @@ module.exports = {
         "semi": [
             "error",
             "never"
-        ]
+        ],
+        "no-var": "error"
     }
 };

@@ -79,6 +79,7 @@ The configuration for the playback, it's still only compatible with `html5_video
   playback: {
     preload: 'metadata',
     controls: true,
+    playInline: true, // allows inline playback when running on iOS UIWebview
     crossOrigin: 'use-credentials'
   }
 }

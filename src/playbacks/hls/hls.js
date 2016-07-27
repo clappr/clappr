@@ -183,7 +183,7 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   seekPercentage(percentage) {
-    var seekTo = this._playableRegionDuration
+    let seekTo = this._playableRegionDuration
     if (percentage > 0) {
       seekTo = this._duration * (percentage / 100)
     }
@@ -265,19 +265,24 @@ export default class HLS extends HTML5VideoPlayback {
     if (!this.el.buffered.length) {
       return
     }
-    var bufferedPos = 0
-    for (var i = 0; i < this.el.buffered.length; i++) {
-      if (this.el.currentTime >= this.el.buffered.start(i) && this.el.currentTime <= this.el.buffered.end(i)) {
+    let buffered = []
+    let bufferedPos = 0
+    for (let i = 0; i < this.el.buffered.length; i++) {
+      buffered = [...buffered, {
+        // for a stream with sliding window dvr something that is buffered my slide off the start of the timeline
+        start: Math.max(0, this.el.buffered.start(i) - this._playableRegionStartTime),
+        end: Math.max(0, this.el.buffered.end(i) - this._playableRegionStartTime)
+      }]
+      if (this.el.currentTime >= buffered[i].start && this.el.currentTime <= buffered[i].end) {
         bufferedPos = i
-        break
       }
     }
-    this.trigger(Events.PLAYBACK_PROGRESS, {
-      // for a stream with sliding window dvr something that is buffered my slide off the start of the timeline
-      start: Math.max(0, this.el.buffered.start(bufferedPos) - this._startTime),
-      current: Math.max(0, this.el.buffered.end(bufferedPos) - this._startTime),
+    const progress = {
+      start: buffered[bufferedPos].start,
+      current: buffered[bufferedPos].end,
       total: this.getDuration()
-    })
+    }
+    this.trigger(Events.PLAYBACK_PROGRESS, progress, buffered)
   }
 
   play() {
@@ -327,10 +332,11 @@ export default class HLS extends HTML5VideoPlayback {
     this._segmentTargetDuration = data.details.targetduration
     this._playlistType = data.details.type || null
 
-    var startTimeChanged = false
-    var durationChanged = false
-    var fragments = data.details.fragments
-    var previousPlayableRegionStartTime = this._playableRegionStartTime
+    let startTimeChanged = false
+    let durationChanged = false
+    let fragments = data.details.fragments
+    let previousPlayableRegionStartTime = this._playableRegionStartTime
+
     if (fragments.length > 0 && this._playableRegionStartTime !== fragments[0].start) {
       startTimeChanged = true
       this._playableRegionStartTime = fragments[0].start
@@ -372,7 +378,7 @@ export default class HLS extends HTML5VideoPlayback {
       }
     }
 
-    var newDuration = data.details.totalduration
+    let newDuration = data.details.totalduration
     // if it's a live stream then shorten the duration to remove access
     // to the area after hlsjs's live sync point
     // seeks to areas after this point sometimes have issues
@@ -414,7 +420,7 @@ export default class HLS extends HTML5VideoPlayback {
     }
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH, data)
-    var currentLevel = this._hls.levels[data.level]
+    let currentLevel = this._hls.levels[data.level]
     if (currentLevel) {
       // TODO should highDefinition be private and maybe have a read only accessor if it's used somewhere
       this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000)
@@ -447,8 +453,8 @@ export default class HLS extends HTML5VideoPlayback {
 }
 
 HLS.canPlay = function(resource, mimeType) {
-  var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
-  var isHls = ((resourceParts.length > 1 && resourceParts[1] === 'm3u8') ||
+  const resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
+  const isHls = ((resourceParts.length > 1 && resourceParts[1].toLowerCase() === 'm3u8') ||
         mimeType === 'application/x-mpegURL' || mimeType === 'application/vnd.apple.mpegurl')
 
   return !!(HLSJS.isSupported() && isHls && !Browser.isSafari)
