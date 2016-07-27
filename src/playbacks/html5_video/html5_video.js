@@ -33,6 +33,8 @@ const AUDIO_MIMETYPES = {
   'oga': ['audio/ogg']
 }
 
+const KNOWN_AUDIO_MIMETYPES = Object.keys(AUDIO_MIMETYPES).reduce((acc, k) => [...acc, ...AUDIO_MIMETYPES[k]], [])
+
 // TODO: rename this Playback to HTML5Playback (breaking change, only after 0.3.0)
 export default class HTML5Video extends Playback {
   get name() { return 'html5_video' }
@@ -40,9 +42,9 @@ export default class HTML5Video extends Playback {
   get template() { return template(sourceHTML) }
 
   get isAudioOnly() {
-    let resourceUrl = this.options.src
-    let mimeType = this.options.mimeType
-    return this.options.playback && this.options.playback.audioOnly || HTML5Video._canPlay('audio', AUDIO_MIMETYPES, resourceUrl, mimeType)
+    const resourceUrl = this.options.src
+    let mimeTypes = HTML5Video._mimeTypesForUrl(resourceUrl, AUDIO_MIMETYPES, this.options.mimeType)
+    return this.options.playback && this.options.playback.audioOnly || this.options.audioOnly || KNOWN_AUDIO_MIMETYPES.indexOf(mimeTypes[0]) >= 0
   }
 
   get attributes() {
@@ -99,24 +101,28 @@ export default class HTML5Video extends Playback {
     this._stopped = false
     this._setupSrc(this.options.src)
     // backwards compatibility (TODO: remove on 0.3.0)
-    this.options.playback || (this.options.playback = this.options.playbackConfig)
+    this.options.playback || (this.options.playback = this.options.playbackConfig || {})
+    this.options.playback.disableContextMenu = this.options.playback.disableContextMenu || this.options.disableVideoTagContextMenu
 
-    var playbackConfig = (this.options.playback || {})
-    var preload = playbackConfig.preload || (Browser.isSafari ? 'auto' : this.options.preload)
+    const playbackConfig = this.options.playback
+    const preload = playbackConfig.preload || (Browser.isSafari ? 'auto' : this.options.preload)
 
     $.extend(this.el, {
       loop: this.options.loop,
-      autoplay: this.options.autoPlay,
       poster: this.options.poster,
       preload: preload || 'metadata',
-      controls: playbackConfig.controls || this.options.useVideoTagDefaultControls,
-      crossOrigin: playbackConfig.crossOrigin
+      controls: (playbackConfig.controls || this.options.useVideoTagDefaultControls) && 'controls',
+      crossOrigin: playbackConfig.crossOrigin,
+      'x-webkit-playsinline': playbackConfig.playInline
     })
 
     // TODO should settings be private?
     this.settings = {default: ['seekbar']}
     this.settings.left = ['playpause', 'position', 'duration']
     this.settings.right = ['fullscreen', 'volume', 'hd-indicator']
+
+    // https://github.com/clappr/clappr/issues/1076
+    this.options.autoPlay && this.play()
   }
 
   /**
@@ -134,7 +140,7 @@ export default class HTML5Video extends Playback {
     this._handleBufferingEvents()
     this.trigger(Events.PLAYBACK_LOADEDMETADATA, {duration: e.target.duration, data: e})
     this._updateSettings()
-    var autoSeekFromUrl = typeof(this._options.autoSeekFromUrl) === 'undefined' || this._options.autoSeekFromUrl
+    const autoSeekFromUrl = typeof(this._options.autoSeekFromUrl) === 'undefined' || this._options.autoSeekFromUrl
     if (this.getPlaybackType() !== Playback.LIVE && autoSeekFromUrl) {
       this._checkInitialSeek()
     }
@@ -235,8 +241,8 @@ export default class HTML5Video extends Playback {
   }
 
   _determineIfPlayheadMoving() {
-    var before = this._playheadMovingTimeOnCheck
-    var now = this.el.currentTime
+    const before = this._playheadMovingTimeOnCheck
+    const now = this.el.currentTime
     this._playheadMoving = before !== now
     this._playheadMovingTimeOnCheck = now
     this._handleBufferingEvents()
@@ -295,8 +301,8 @@ export default class HTML5Video extends Playback {
   // - the media hasn't been stopped
   // - loading has started
   _handleBufferingEvents() {
-    var playheadShouldBeMoving = !this.el.ended && !this.el.paused
-    var buffering = this._loadStarted && !this.el.ended && !this._stopped && ((playheadShouldBeMoving && !this._playheadMoving) || this.el.readyState < this.el.HAVE_FUTURE_DATA)
+    const playheadShouldBeMoving = !this.el.ended && !this.el.paused
+    const buffering = this._loadStarted && !this.el.ended && !this._stopped && ((playheadShouldBeMoving && !this._playheadMoving) || this.el.readyState < this.el.HAVE_FUTURE_DATA)
     if (this._bufferingState !== buffering) {
       this._bufferingState = buffering
       if (buffering) {
@@ -323,12 +329,12 @@ export default class HTML5Video extends Playback {
   }
 
   seekPercentage(percentage) {
-    var time = this.el.duration * (percentage / 100)
+    const time = this.el.duration * (percentage / 100)
     this.seek(time)
   }
 
   _checkInitialSeek() {
-    var seekTime = seekStringToSeconds(window.location.href)
+    const seekTime = seekStringToSeconds(window.location.href)
     if (seekTime !== 0) {
       this.seek(seekTime)
     }
@@ -355,23 +361,25 @@ export default class HTML5Video extends Playback {
     if (!this.el.buffered.length) {
       return
     }
-    var bufferedPos = 0
-    for (var i = 0;  i < this.el.buffered.length; i++) {
-      if (this.el.currentTime >= this.el.buffered.start(i) && this.el.currentTime <= this.el.buffered.end(i)) {
+    let buffered = []
+    let bufferedPos = 0
+    for (let i = 0;  i < this.el.buffered.length; i++) {
+      buffered = [...buffered, {start: this.el.buffered.start(i), end: this.el.buffered.end(i)}]
+      if (this.el.currentTime >= buffered[i].start && this.el.currentTime <= buffered[i].end) {
         bufferedPos = i
-        break
       }
     }
-    this.trigger(Events.PLAYBACK_PROGRESS, {
-      start: this.el.buffered.start(bufferedPos),
-      current: this.el.buffered.end(bufferedPos),
+    const progress = {
+      start: buffered[bufferedPos].start,
+      current: buffered[bufferedPos].end,
       total: this.el.duration
-    })
+    }
+    this.trigger(Events.PLAYBACK_PROGRESS, progress, buffered)
   }
 
   _typeFor(src) {
-    var resourceParts = src.split('?')[0].match(/.*\.(.*)$/) || []
-    var isHls = resourceParts.length > 1 && resourceParts[1] === 'm3u8'
+    const resourceParts = src.split('?')[0].match(/.*\.(.*)$/) || []
+    const isHls = resourceParts.length > 1 && resourceParts[1] === 'm3u8'
     return isHls ? 'application/vnd.apple.mpegurl' : 'video/mp4'
   }
 
@@ -384,15 +392,11 @@ export default class HTML5Video extends Playback {
   }
 
   render() {
-    var style = Styler.getStyleFor(tagStyle)
+    const style = Styler.getStyleFor(tagStyle)
 
     this._src && this.$el.html(this.template({ src: this._src, type: this._typeFor(this._src) }))
 
-    if (this._options.useVideoTagDefaultControls) {
-      this.$el.attr('controls', 'controls')
-    }
-
-    if (this._options.disableVideoTagContextMenu) {
+    if (this.options.playback.disableContextMenu) {
       this.$el.on('contextmenu', () => {
         return false
       })
@@ -404,12 +408,15 @@ export default class HTML5Video extends Playback {
   }
 }
 
-HTML5Video._canPlay = function(type, mimeTypesByExtension, resourceUrl, mimeType) {
-  var extension = (resourceUrl.split('?')[0].match(/.*\.(.*)$/) || [])[1]
-  var mimeTypes = mimeType || mimeTypesByExtension[extension] || []
-  mimeTypes = (mimeTypes.constructor === Array) ? mimeTypes : [mimeTypes]
+HTML5Video._mimeTypesForUrl = function(resourceUrl, mimeTypesByExtension, mimeType) {
+  const extension = (resourceUrl.split('?')[0].match(/.*\.(.*)$/) || [])[1]
+  let mimeTypes = mimeType || (extension && mimeTypesByExtension[extension.toLowerCase()]) || []
+  return (mimeTypes.constructor === Array) ? mimeTypes : [mimeTypes]
+}
 
-  var media = document.createElement(type)
+HTML5Video._canPlay = function(type, mimeTypesByExtension, resourceUrl, mimeType) {
+  let mimeTypes = HTML5Video._mimeTypesForUrl(resourceUrl, mimeTypesByExtension, mimeType)
+  const media = document.createElement(type)
   return !!find(mimeTypes, (mediaType) => !!media.canPlayType(mediaType).replace(/no/, ''))
 }
 

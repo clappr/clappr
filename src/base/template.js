@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 // Simple JavaScript Templating
 // Paul Miller (http://paulmillr.com)
 // http://underscorejs.org

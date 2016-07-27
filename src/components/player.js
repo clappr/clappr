@@ -13,7 +13,7 @@ import PlayerInfo from 'components/player_info'
 import $ from 'clappr-zepto'
 import find from 'lodash.find'
 
-var baseUrl = currentScriptUrl().replace(/\/[^\/]+$/, '')
+const baseUrl = currentScriptUrl().replace(/\/[^\/]+$/, '')
 
 /**
  * @class Player
@@ -179,7 +179,7 @@ export default class Player extends BaseObject {
    */
   constructor(options) {
     super(options)
-    var defaultOptions = {playerId: uniqueId(''), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl, allowUserInteraction: Browser.isMobile}
+    const defaultOptions = {playerId: uniqueId(''), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl, allowUserInteraction: Browser.isMobile}
     this._options = $.extend(defaultOptions, options)
     this.options.sources = this._normalizeSources(options)
     if (!this.options.chromeless) {
@@ -210,7 +210,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   setParentId(parentId) {
-    var el = document.querySelector(parentId)
+    const el = document.querySelector(parentId)
     if (el) {
       this.attachTo(el)
     }
@@ -242,7 +242,7 @@ export default class Player extends BaseObject {
   }
 
   _addContainerEventListeners() {
-    var container = this.core.mediaControl.container
+    const container = this.core.mediaControl.container
     if (container) {
       this.listenTo(container, Events.CONTAINER_PLAY, this._onPlay)
       this.listenTo(container, Events.CONTAINER_PAUSE, this._onPause)
@@ -257,11 +257,11 @@ export default class Player extends BaseObject {
   }
 
   _registerOptionEventListeners() {
-    var userEvents = this.options.events || {}
+    const userEvents = this.options.events || {}
     Object.keys(userEvents).forEach((userEvent) => {
-      var eventType = this.eventsMapping[userEvent]
+      const eventType = this.eventsMapping[userEvent]
       if (eventType) {
-        var eventFunction = userEvents[userEvent]
+        let eventFunction = userEvents[userEvent]
         eventFunction = typeof eventFunction === 'function' && eventFunction
         eventFunction && this.on(eventType, eventFunction)
       }
@@ -317,7 +317,7 @@ export default class Player extends BaseObject {
   }
 
   _normalizeSources(options) {
-    var sources = options.sources || (options.source !== undefined? [options.source] : [])
+    const sources = options.sources || (options.source !== undefined? [options.source] : [])
     return sources.length === 0 ? [{source:'', mimeType:''}] : sources
   }
 
@@ -510,7 +510,7 @@ export default class Player extends BaseObject {
    * ```
    */
   getPlugin(name) {
-    var plugins = this.core.plugins.concat(this.core.mediaControl.container.plugins)
+    const plugins = this.core.plugins.concat(this.core.mediaControl.container.plugins)
     return find(plugins, function(plugin) {
       return plugin.name === name
     })

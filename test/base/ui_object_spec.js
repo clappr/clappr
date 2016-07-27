@@ -7,29 +7,29 @@ describe('UIObject', function() {
   })
 
   it('is a div tag by default', function(){
-    expect(this.uiObject.tagName).to.be.equal("div")
+    expect(this.uiObject.tagName).to.be.equal('div')
   })
 
   it('can be any tag', function(){
     class MyButton extends UIObject { get tagName() { return 'button' } }
-    var myButton = new MyButton()
-    expect(myButton.tagName).to.be.equal("button")
+    const myButton = new MyButton()
+    expect(myButton.tagName).to.be.equal('button')
   })
 
   it('has an unique id', function(){
-    var uiObjectA = new UIObject()
-    var uiObjectB = new UIObject()
+    const uiObjectA = new UIObject()
+    const uiObjectB = new UIObject()
     expect(uiObjectA.cid).to.be.not.equal(uiObjectB.cid)
   })
 
   it('creates element for a given ui component', function(){
-    var component = $('<div></div>')
+    const component = $('<div></div>')
     expect(this.uiObject.el).to.be.not.equal(component[0])
     expect(this.uiObject.$el).to.be.not.equal(component)
   })
 
   it('can set element', function(){
-    var element = $('<section></section>')
+    const element = $('<section></section>')
     this.uiObject.setElement(element)
 
     expect(this.uiObject.el).to.be.equal(element[0])
@@ -42,7 +42,7 @@ describe('UIObject', function() {
       get attributes() { return { class: 'my-button'} }
     }
 
-    var myButton = new MyButton()
+    const myButton = new MyButton()
 
     expect(myButton.el.className).to.be.equal('my-button')
   })
@@ -57,7 +57,7 @@ describe('UIObject', function() {
       myClick(){ this.myId = 42 }
     }
 
-    var myButton = new MyButton()
+    const myButton = new MyButton()
 
     expect(myButton.myId).to.be.equal(0)
 
@@ -67,7 +67,7 @@ describe('UIObject', function() {
   })
 
   it('selects elements within the component', function(){
-    var insideComponent = $('<p id="special-id">here</p>')[0]
+    const insideComponent = $('<p id="special-id">here</p>')[0]
     class MySpecialButton extends UIObject {
       constructor(options) {
         super(options)
@@ -75,7 +75,7 @@ describe('UIObject', function() {
       render() { this.$el.append(insideComponent) }
     }
 
-    var myButton = new MySpecialButton()
+    const myButton = new MySpecialButton()
     myButton.render()
 
     expect(myButton.$('#special-id')[0]).to.be.equal(insideComponent)
@@ -89,7 +89,7 @@ describe('UIObject', function() {
       get attributes() { return { id: 'my-0-button'} }
     }
 
-    var myButton = new FullscreenButton()
+    const myButton = new FullscreenButton()
     $(document.body).append(myButton.$el)
 
     expect($('#my-0-button').length).to.be.equal(1)
@@ -109,7 +109,7 @@ describe('UIObject', function() {
       myClick(){ this.myId += 1 }
     }
 
-    var myButton = new FullscreenButton()
+    const myButton = new FullscreenButton()
 
     myButton.$el.trigger('click')
     expect(myButton.myId).to.be.equal(1)

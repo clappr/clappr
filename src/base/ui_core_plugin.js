@@ -3,7 +3,7 @@ import UIObject from './ui_object'
 
 export default class UICorePlugin extends UIObject {
   constructor(core) {
-    super(core)
+    super(core.options)
     this.core = core
     this.enabled = true
     this.bindEvents()

@@ -3,14 +3,14 @@ import UIContainerPlugin from 'base/ui_container_plugin'
 describe('UI Container Plugin', function() {
   describe('#constructor', () => {
     it('enables', function() {
-      var plugin = new UIContainerPlugin({})
+      const plugin = new UIContainerPlugin({})
 
       expect(plugin.enabled).to.be.true
     })
 
     it('binds all events', () => {
-      var bind = false
-      var Plugin = class MyPlugin extends UIContainerPlugin{
+      let bind = false
+      const Plugin = class MyPlugin extends UIContainerPlugin{
         bindEvents() {
           bind = true
         }
@@ -23,9 +23,9 @@ describe('UI Container Plugin', function() {
   })
 
   it('enables', () => {
-    var plugin = new UIContainerPlugin({})
-    var spy = sinon.spy(plugin, 'bindEvents')
-    var show = sinon.spy()
+    const plugin = new UIContainerPlugin({})
+    const spy = sinon.spy(plugin, 'bindEvents')
+    const show = sinon.spy()
     plugin.$el = {show: show}
     plugin.enabled = false
 
@@ -37,9 +37,9 @@ describe('UI Container Plugin', function() {
   })
 
   it('disables', () => {
-    var plugin = new UIContainerPlugin({})
-    var spy = sinon.spy(plugin, 'stopListening')
-    var hide = sinon.spy()
+    const plugin = new UIContainerPlugin({})
+    const spy = sinon.spy(plugin, 'stopListening')
+    const hide = sinon.spy()
     plugin.$el = {hide: hide}
 
     plugin.disable()
@@ -50,8 +50,8 @@ describe('UI Container Plugin', function() {
   })
 
   it('destroys', () => {
-    var plugin = new UIContainerPlugin({})
-    var spy = sinon.spy(plugin, 'remove')
+    const plugin = new UIContainerPlugin({})
+    const spy = sinon.spy(plugin, 'remove')
 
     plugin.destroy()
 

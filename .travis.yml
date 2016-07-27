@@ -18,4 +18,6 @@ notifications:
     - videos5@corp.globo.com
   slack: globo:F1iVlyrzR4iX8OS7h8fwMcqx
 
+before_script: "npm run lint"
+
 after_script: "cat coverage/C*/lcov.info | ./node_modules/coveralls/bin/coveralls.js"

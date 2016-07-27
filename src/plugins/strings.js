@@ -24,8 +24,8 @@ export default class Strings extends CorePlugin {
    * @return {String} translated label
    */
   t(key) {
-    var lang = this._language()
-    var i18n = lang && this._messages[lang] || this._messages['en']
+    const lang = this._language()
+    const i18n = lang && this._messages[lang] || this._messages['en']
     return i18n[key] || key
   }
 
