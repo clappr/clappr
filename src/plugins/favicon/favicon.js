@@ -57,15 +57,15 @@ export default class Favicon extends CorePlugin {
   }
 
   createIcon(svg) {
-    var canvas = $('<canvas/>')
+    const canvas = $('<canvas/>')
     canvas[0].width = 16
     canvas[0].height = 16
-    var ctx = canvas[0].getContext('2d')
+    const ctx = canvas[0].getContext('2d')
     ctx.fillStyle = '#000'
-    var d = $(svg).find('path').attr('d')
-    var path = new Path2D(d)
+    const d = $(svg).find('path').attr('d')
+    const path = new Path2D(d)
     ctx.fill(path)
-    var icon = $('<link rel="shortcut icon" type="image/png"/>')
+    const icon = $('<link rel="shortcut icon" type="image/png"/>')
     icon.attr('href', canvas[0].toDataURL('image/png'))
     return icon
   }

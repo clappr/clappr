@@ -103,7 +103,7 @@ describe('StatsPlugin', function() {
     sinon.spy(this.container, 'statsReport')
     this.container.reportInterval = 10
 
-    var stats = new Stats(this.container)
+    const stats = new Stats(this.container)
     this.container.addPlugin(stats)
     this.playback.trigger(Events.PLAYBACK_PLAY)
     // clock.tick freezes when used with {set,clear}Interval and I don't know why

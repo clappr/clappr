@@ -20,7 +20,7 @@ export default class GoogleAnalytics extends ContainerPlugin {
 
   embedScript() {
     if (!window._gat) {
-      var script = document.createElement('script')
+      const script = document.createElement('script')
       script.setAttribute('type', 'text/javascript')
       script.setAttribute('async', 'async')
       script.setAttribute('src', '//www.google-analytics.com/ga.js')
@@ -40,7 +40,6 @@ export default class GoogleAnalytics extends ContainerPlugin {
       this.listenTo(this.container, Events.CONTAINER_ENDED, this.onEnded)
       this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering)
       this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferFull)
-      this.listenTo(this.container, Events.CONTAINER_ENDED, this.onEnded)
       this.listenTo(this.container, Events.CONTAINER_ERROR, this.onError)
       this.listenTo(this.container, Events.CONTAINER_PLAYBACKSTATE, this.onPlaybackChanged)
       this.listenTo(this.container, Events.CONTAINER_VOLUME, (event) => this.onVolumeChanged(event))
@@ -83,7 +82,7 @@ export default class GoogleAnalytics extends ContainerPlugin {
   }
 
   onHD(isHD) {
-    var status = isHD ? 'ON': 'OFF'
+    const status = isHD ? 'ON': 'OFF'
     if (status !== this.currentHDState) {
       this.currentHDState = status
       this.push(['Video', 'HD - ' + status, this.container.playback.src])
@@ -97,7 +96,7 @@ export default class GoogleAnalytics extends ContainerPlugin {
   }
 
   onDVR(dvrInUse) {
-    var status = dvrInUse? 'ON': 'OFF'
+    const status = dvrInUse? 'ON': 'OFF'
     this.push(['Interaction', 'DVR - ' + status, this.container.playback.src])
   }
 
@@ -119,7 +118,7 @@ export default class GoogleAnalytics extends ContainerPlugin {
 
 
   push(array) {
-    var res = [this.trackerName + '_trackEvent'].concat(array)
+    const res = [this.trackerName + '_trackEvent'].concat(array)
     _gaq.push(res)
   }
 
