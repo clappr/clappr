@@ -13,7 +13,7 @@ import Events from 'base/events'
 import Playback from 'base/playback'
 import flashSwf from './public/Player.swf'
 
-var MAX_ATTEMPTS = 60
+const MAX_ATTEMPTS = 60
 
 export default class Flash extends BaseFlashPlayback {
   get name() { return 'flash' }
@@ -154,7 +154,7 @@ export default class Flash extends BaseFlashPlayback {
   }
 
   _checkInitialSeek() {
-    var seekTime = seekStringToSeconds(window.location.href)
+    let seekTime = seekStringToSeconds(window.location.href)
     if (seekTime !== 0) {
       this.seekSeconds(seekTime)
     }
@@ -206,7 +206,7 @@ export default class Flash extends BaseFlashPlayback {
 
   seekPercentage(percentage) {
     if (this.el.getDuration() > 0) {
-      var seekSeconds = this.el.getDuration() * (percentage / 100)
+      let seekSeconds = this.el.getDuration() * (percentage / 100)
       this.seek(seekSeconds)
     } else {
       this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this.seekPercentage(percentage))
@@ -236,7 +236,8 @@ Flash.canPlay = function(resource) {
   if (!Browser.hasFlash || !resource || resource.constructor !== String) {
     return false
   } else {
-    var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
-    return resourceParts.length > 1 && !Browser.isMobile && resourceParts[1].match(/^(mp4|mov|f4v|3gpp|3gp)$/)
+    const resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
+    return resourceParts.length > 1 && !Browser.isMobile && resourceParts[1].toLowerCase().match(/^(mp4|mov|f4v|3gpp|3gp)$/)
+
   }
 }

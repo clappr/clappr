@@ -7,8 +7,8 @@ import Browser from 'components/browser'
 
 function assign(obj, source) {
   if (source) {
-    for (var prop in source) {
-      var propDescriptor = Object.getOwnPropertyDescriptor(source, prop)
+    for (const prop in source) {
+      const propDescriptor = Object.getOwnPropertyDescriptor(source, prop)
       propDescriptor ? Object.defineProperty(obj, prop, propDescriptor) : obj[prop] = source[prop]
     }
   }
@@ -34,13 +34,13 @@ export function formatTime(time, paddedHours) {
   }
   time = time * 1000
   time = parseInt(time/1000)
-  var seconds = time % 60
+  const seconds = time % 60
   time = parseInt(time/60)
-  var minutes = time % 60
+  const minutes = time % 60
   time = parseInt(time/60)
-  var hours = time % 24
-  var days = parseInt(time/24)
-  var out = ''
+  const hours = time % 24
+  const days = parseInt(time/24)
+  let out = ''
   if (days && days > 0) {
     out += days + ':'
     if (hours < 1) {out += '00:'}
@@ -51,7 +51,7 @@ export function formatTime(time, paddedHours) {
   return out.trim()
 }
 
-export var Fullscreen = {
+export const Fullscreen = {
   isFullscreen: function() {
     return !!(
       document.webkitFullscreenElement ||
@@ -85,6 +85,14 @@ export var Fullscreen = {
     } else if(document.msExitFullscreen) {
       document.msExitFullscreen()
     }
+  },
+  fullscreenEnabled: function() {
+    return !!(
+      document.fullscreenEnabled ||
+      document.webkitFullscreenEnabled ||
+      document.mozFullScreenEnabled ||
+      document.msFullscreenEnabled
+    )
   }
 }
 
@@ -132,7 +140,7 @@ export class Config {
 
 export class QueryString {
   static get params() {
-    var query = window.location.search.substring(1)
+    const query = window.location.search.substring(1)
     if (query !== this.query) {
       this._urlParams = this.parse(query)
       this.query = query
@@ -141,7 +149,7 @@ export class QueryString {
   }
 
   static get hashParams() {
-    var hash = window.location.hash.substring(1)
+    const hash = window.location.hash.substring(1)
     if (hash !== this.hash) {
       this._hashParams = this.parse(hash)
       this.hash = hash
@@ -150,11 +158,11 @@ export class QueryString {
   }
 
   static parse(paramsString) {
-    var match,
-      pl     = /\+/g,  // Regex for replacing addition symbol with a space
+    let match
+    const pl = /\+/g,  // Regex for replacing addition symbol with a space
       search = /([^&=]+)=?([^&]*)/g,
-      decode = (s) => decodeURIComponent(s.replace(pl, ' '))
-    var params = {}
+      decode = (s) => decodeURIComponent(s.replace(pl, ' ')),
+      params = {}
     while (match = search.exec(paramsString)) { // eslint-disable-line no-cond-assign
       params[decode(match[1]).toLowerCase()] = decode(match[2])
     }
@@ -163,15 +171,15 @@ export class QueryString {
 }
 
 export function seekStringToSeconds(paramName = 't') {
-  var seconds = 0
-  var seekString = QueryString.params[paramName] || QueryString.hashParams[paramName] || ''
-  var parts = seekString.match(/[0-9]+[hms]+/g) || []
+  let seconds = 0
+  const seekString = QueryString.params[paramName] || QueryString.hashParams[paramName] || ''
+  const parts = seekString.match(/[0-9]+[hms]+/g) || []
   if (parts.length > 0) {
-    var factor = {'h': 3600, 'm': 60, 's': 1}
+    const factor = {'h': 3600, 'm': 60, 's': 1}
     parts.forEach(function(el) {
       if (el) {
-        var suffix = el[el.length - 1]
-        var time = parseInt(el.slice(0, el.length - 1), 10)
+        const suffix = el[el.length - 1]
+        const time = parseInt(el.slice(0, el.length - 1), 10)
         seconds += time * (factor[suffix])
       }
     })
@@ -181,11 +189,11 @@ export function seekStringToSeconds(paramName = 't') {
   return seconds
 }
 
-var idsCounter = {}
+const idsCounter = {}
 
 export function uniqueId(prefix) {
   idsCounter[prefix] || (idsCounter[prefix] = 0)
-  var id = ++idsCounter[prefix]
+  const id = ++idsCounter[prefix]
   return prefix + id
 }
 
@@ -194,16 +202,16 @@ export function isNumber(value) {
 }
 
 export function currentScriptUrl() {
-  var scripts = document.getElementsByTagName('script')
+  const scripts = document.getElementsByTagName('script')
   return scripts[scripts.length - 1].src
 }
 
-export var requestAnimationFrame = (window.requestAnimationFrame ||
+export const requestAnimationFrame = (window.requestAnimationFrame ||
                             window.mozRequestAnimationFrame ||
                             window.webkitRequestAnimationFrame ||
                             function(fn) { window.setTimeout(fn, 1000/60) }).bind(window)
 
-export var cancelAnimationFrame = (window.cancelAnimationFrame ||
+export const cancelAnimationFrame = (window.cancelAnimationFrame ||
                            window.mozCancelAnimationFrame ||
                            window.webkitCancelAnimationFrame ||
                            window.clearTimeout).bind(window)
@@ -219,6 +227,14 @@ export function now() {
   return Date.now()
 }
 
+// remove the item from the array if it exists in the array
+export function removeArrayItem(arr, item) {
+  const i = arr.indexOf(item)
+  if (i >= 0) {
+    arr.splice(i, 1)
+  }
+}
+
 export default {
   Config,
   Fullscreen,
@@ -232,5 +248,6 @@ export default {
   requestAnimationFrame,
   cancelAnimationFrame,
   getBrowserLanguage,
-  now
+  now,
+  removeArrayItem
 }

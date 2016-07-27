@@ -4,20 +4,20 @@
 
 import {Kibo} from 'vendor'
 
-var BOLD = 'font-weight: bold; font-size: 13px;'
-var INFO = 'color: #006600;' + BOLD
-var DEBUG = 'color: #0000ff;' + BOLD
-var WARN = 'color: #ff8000;' + BOLD
-var ERROR = 'color: #ff0000;' + BOLD
+const BOLD = 'font-weight: bold; font-size: 13px;'
+const INFO = 'color: #006600;' + BOLD
+const DEBUG = 'color: #0000ff;' + BOLD
+const WARN = 'color: #ff8000;' + BOLD
+const ERROR = 'color: #ff0000;' + BOLD
 
-var LEVEL_DEBUG = 0
-var LEVEL_INFO = 1
-var LEVEL_WARN = 2
-var LEVEL_ERROR = 3
-var LEVEL_DISABLED = LEVEL_ERROR
+const LEVEL_DEBUG = 0
+const LEVEL_INFO = 1
+const LEVEL_WARN = 2
+const LEVEL_ERROR = 3
+const LEVEL_DISABLED = LEVEL_ERROR
 
-var COLORS = [DEBUG, INFO, WARN, ERROR, ERROR]
-var DESCRIPTIONS = ['debug', 'info', 'warn', 'error', 'disabled']
+const COLORS = [DEBUG, INFO, WARN, ERROR, ERROR]
+const DESCRIPTIONS = ['debug', 'info', 'warn', 'error', 'disabled']
 
 export default class Log {
   constructor(level = LEVEL_INFO, offLevel = LEVEL_DISABLED) {
@@ -58,8 +58,8 @@ export default class Log {
       message = klass
       klass = null
     }
-    var klassDescription = ''
-    var color = COLORS[level]
+    const color = COLORS[level]
+    let klassDescription = ''
     if (klass) {
       klassDescription = '[' + klass + ']'
     }

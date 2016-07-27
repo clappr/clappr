@@ -5,7 +5,7 @@
 import $ from 'clappr-zepto'
 import template from './template'
 
-var Styler = {
+const Styler = {
   getStyleFor: function(style, options={baseUrl: ''}) {
     return $('<style class="clappr-style"></style>').html(template(style.toString())(options))
   }

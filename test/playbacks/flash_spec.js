@@ -15,7 +15,7 @@ describe('Flash playback', function() {
   })
   it('should trigger error when swf is not ready after max retries', function() {
     this.flash.el.playerPlay = null
-    var spy = sinon.spy()
+    const spy = sinon.spy()
     this.flash.on(Events.PLAYBACK_ERROR, spy)
     Mediator.trigger(`${this.flash.uniqueId}:flashready`)
     this.clock.tick(2950)
@@ -24,7 +24,7 @@ describe('Flash playback', function() {
     expect(spy).called.once
   })
   it('should trigger ready only when metadata is loaded', function() {
-    var spy = sinon.spy()
+    const spy = sinon.spy()
     this.flash.on(Events.PLAYBACK_READY, spy)
     Mediator.trigger(`${this.flash.uniqueId}:flashready`)
     expect(spy).not.called

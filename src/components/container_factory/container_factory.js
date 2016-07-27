@@ -15,6 +15,9 @@ import find from 'lodash.find'
 import isPlainObject from 'lodash.isplainobject'
 
 export default class ContainerFactory extends BaseObject {
+  get options() { return this._options }
+  set options(options) { this._options = options }
+
   constructor(options, loader, i18n) {
     super(options)
     this._i18n = i18n
@@ -34,8 +37,8 @@ export default class ContainerFactory extends BaseObject {
   }
 
   createContainer(source) {
-    var resolvedSource = null
-    var mimeType = this.options.mimeType
+    let resolvedSource = null,
+      mimeType = this.options.mimeType
     if (isPlainObject(source)) {
       resolvedSource = source.source.toString()
       if (source.mimeType) {
@@ -47,17 +50,17 @@ export default class ContainerFactory extends BaseObject {
 
     if (resolvedSource.match(/^\/\//)) resolvedSource = window.location.protocol + resolvedSource
 
-    var options = $.extend({}, this.options, {
+    let options = $.extend({}, this.options, {
       src: resolvedSource,
       mimeType: mimeType
     })
-    var playbackPlugin = this.findPlaybackPlugin(resolvedSource, mimeType)
-    var playback = new playbackPlugin(options, this._i18n)
+    const playbackPlugin = this.findPlaybackPlugin(resolvedSource, mimeType)
+    const playback = new playbackPlugin(options, this._i18n)
 
-    options = $.extend(options, {playback: playback})
+    options = $.extend({}, options, {playback: playback})
 
-    var container = new Container(options, this._i18n)
-    var defer = $.Deferred()
+    const container = new Container(options, this._i18n)
+    const defer = $.Deferred()
     defer.promise(container)
     this.addContainerPlugins(container)
     this.listenToOnce(container, Events.CONTAINER_READY, () => defer.resolve(container))

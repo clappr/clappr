@@ -19,7 +19,7 @@ export default class NoOp extends Playback {
   }
 
   render() {
-    var style = Styler.getStyleFor(noOpStyle)
+    const style = Styler.getStyleFor(noOpStyle)
     const playbackNotSupported = this.options.playbackNotSupportedMessage || this.i18n.t('playback_not_supported')
     this.$el.html(this.template({message: playbackNotSupported}))
     this.$el.append(style)
@@ -35,26 +35,26 @@ export default class NoOp extends Playback {
       return
     }
 
-    let idata = this.context.createImageData(this.context.canvas.width, this.context.canvas.height)
+    const idata = this.context.createImageData(this.context.canvas.width, this.context.canvas.height)
     let buffer32
     try {
       buffer32 = new Uint32Array(idata.data.buffer)
     } catch (err) {
       buffer32 = new Uint32Array(this.context.canvas.width * this.context.canvas.height * 4)
-      let data=idata.data
+      const data=idata.data
       for(let i = 0; i < data.length; i++){
         buffer32[i]=data[i]
       }
     }
 
-    let len = buffer32.length
-    let run = 0
-    let color = 0
-    let m = Math.random() * 6 + 4
+    const len = buffer32.length,
+      m = Math.random() * 6 + 4
+    let run = 0,
+      color = 0
     for (let i = 0; i < len;) {
       if (run < 0) {
         run = m * Math.random()
-        let p = Math.pow(Math.random(), 0.4)
+        const p = Math.pow(Math.random(), 0.4)
         color = (255 * p) << 24
       }
       run -= 1

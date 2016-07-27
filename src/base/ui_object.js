@@ -7,7 +7,7 @@ import $ from 'clappr-zepto'
 import result from 'lodash.result'
 import BaseObject from './base_object'
 
-var delegateEventSplitter = /^(\S+)\s*(.*)$/
+const delegateEventSplitter = /^(\S+)\s*(.*)$/
 
 /**
  * A base class to create ui object.
@@ -157,13 +157,13 @@ export default class UIObject extends BaseObject {
   delegateEvents(events) {
     if (!(events || (events = result(this, 'events')))) {return this}
     this.undelegateEvents()
-    for (var key in events) {
-      var method = events[key]
+    for (const key in events) {
+      let method = events[key]
       if ((method && method.constructor !== Function)) {method = this[events[key]]}
       if (!method) {continue}
 
-      var match = key.match(delegateEventSplitter)
-      var eventName = match[1], selector = match[2]
+      const match = key.match(delegateEventSplitter)
+      let eventName = match[1], selector = match[2]
       //method = _.bind(method, this)
       eventName += '.delegateEvents' + this.cid
       if (selector === '') {
@@ -192,10 +192,10 @@ export default class UIObject extends BaseObject {
    */
   _ensureElement() {
     if (!this.el) {
-      var attrs = $.extend({}, result(this, 'attributes'))
+      const attrs = $.extend({}, result(this, 'attributes'))
       if (this.id) {attrs.id = result(this, 'id')}
       if (this.className) {attrs['class'] = result(this, 'className')}
-      var $el = $('<' + result(this, 'tagName') + '>').attr(attrs)
+      const $el = $('<' + result(this, 'tagName') + '>').attr(attrs)
       this.setElement($el, false)
     } else {
       this.setElement(result(this, 'el'), false)

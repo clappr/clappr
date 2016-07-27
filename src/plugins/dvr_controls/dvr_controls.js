@@ -23,7 +23,6 @@ export default class DVRControls extends UICorePlugin {
 
   constructor(core) {
     super(core)
-    this.core = core
     this.settingsUpdate()
   }
 
@@ -54,8 +53,8 @@ export default class DVRControls extends UICorePlugin {
   }
 
   click() {
-    var mediaControl = this.core.mediaControl
-    var container = mediaControl.container
+    const mediaControl = this.core.mediaControl
+    const container = mediaControl.container
     if (!container.isPlaying()) {
       container.play()
     }
@@ -74,7 +73,7 @@ export default class DVRControls extends UICorePlugin {
   }
 
   shouldRender() {
-    var useDvrControls = this.core.options.useDvrControls === undefined || !!this.core.options.useDvrControls
+    const useDvrControls = this.core.options.useDvrControls === undefined || !!this.core.options.useDvrControls
     return useDvrControls && this.core.getPlaybackType() === Playback.LIVE
   }
 

@@ -22,7 +22,7 @@ describe('Container', function() {
   })
 
   it('destroys all the plugins', function() {
-    var fakePlugin = {destroy: function(){}}
+    const fakePlugin = {destroy: function(){}}
 
     sinon.spy(this.playback, 'destroy')
     sinon.spy(fakePlugin, 'destroy')
@@ -96,7 +96,7 @@ describe('Container', function() {
   })
 
   it('listens to playback:highdefinitionupdate event', function() {
-    var isHD = true
+    const isHD = true
     sinon.spy(this.container, 'highDefinitionUpdate')
 
     this.container.bindEvents()
