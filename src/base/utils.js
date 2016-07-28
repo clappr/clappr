@@ -220,6 +220,13 @@ export function getBrowserLanguage() {
   return window.navigator && window.navigator.language
 }
 
+export function now() {
+  if (window.performance && window.performance.now) {
+    return performance.now()
+  }
+  return Date.now()
+}
+
 // remove the item from the array if it exists in the array
 export function removeArrayItem(arr, item) {
   const i = arr.indexOf(item)
@@ -241,5 +248,6 @@ export default {
   requestAnimationFrame,
   cancelAnimationFrame,
   getBrowserLanguage,
+  now,
   removeArrayItem
 }
