@@ -66,14 +66,14 @@ export default class HLS extends HTML5VideoPlayback {
   // If chunks aren't being removed for some reason that the start time will reach and remain fixed at
   // playableRegionStartTime + extrapolatedWindowDuration
   //
-  //                                <-- window duration --> 
+  //                                <-- window duration -->
   // I.e   playableRegionStartTime |-----------------------|
   //                               | -->   .       .       .
   //                               .   --> | -->   .       .
   //                               .       .   --> | -->   .
   //                               .       .       .   --> |
   //                               .       .       .       .
-  //                                 extrapolatedStartTime                 
+  //                                 extrapolatedStartTime
   get _extrapolatedWindowDuration() {
     if (this._segmentTargetDuration === null) {
       return 0
@@ -84,7 +84,7 @@ export default class HLS extends HTML5VideoPlayback {
   constructor(...args) {
     super(...args)
     // backwards compatibility (TODO: remove on 0.3.0)
-    this.options.playback || (this.options.playback = this.options.hlsjsConfig)
+    this.options.playback || (this.options.playback = this.options)
     this._minDvrSize = typeof(this.options.hlsMinimumDvrSize) === 'undefined' ? 60 : this.options.hlsMinimumDvrSize
     // The size of the start time extrapolation window measured as a multiple of segments.
     // Should be 2 or higher, or 0 to disable. Should only need to be increased above 2 if more than one segment is
@@ -122,7 +122,7 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   _setupHls() {
-    this._hls = new HLSJS(this.options.playback || {})
+    this._hls = new HLSJS(this.options.playback.hlsjsConfig || {})
     this._hls.on(HLSJS.Events.MEDIA_ATTACHED, () => this._hls.loadSource(this.options.src))
     this._hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this._updatePlaybackType(evt, data))
     this._hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this._onLevelUpdated(evt, data))
