@@ -135,6 +135,32 @@ describe('HTML5Video playback', function() {
     expect(HTML5Video.canPlay('/relative/VIDEO.OGG')).to.be.true
   })
 
+  describe('options', function() {
+    it('should use the playback object within player options', function() {
+      const options = {
+        src: 'http://example.com/video.m3u8',
+        nonPlaybackOption: false,
+        playback: {
+          somePlaybackOption: true
+        }
+      }
+      const html5Video = new HTML5Video(options)
+      expect(html5Video.options.playback.somePlaybackOption).to.be.true
+      expect(html5Video.options.playback).not.to.include.keys('nonPlaybackOption')
+    })
+
+    it('should use hlsjsConfig from player options as fallback', function() {
+      const options = {
+        src: 'http://example.com/video.m3u8',
+        nonPlaybackOption: false,
+        somePlaybackOption: true
+      }
+      const html5Video = new HTML5Video(options)
+      expect(html5Video.options.playback.somePlaybackOption).to.be.true
+      expect(html5Video.options.playback.nonPlaybackOption).to.be.false
+    })
+  })
+
   describe('audio resources', function() {
     it('should be able to play audio resources', function() {
       expect(HTML5Video.canPlay('http://domain.com/Audio.oga')).to.be.true
