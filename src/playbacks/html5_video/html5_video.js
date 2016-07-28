@@ -101,7 +101,7 @@ export default class HTML5Video extends Playback {
     this._stopped = false
     this._setupSrc(this.options.src)
     // backwards compatibility (TODO: remove on 0.3.0)
-    this.options.playback || (this.options.playback = this.options.playbackConfig || {})
+    this.options.playback || (this.options.playback = this.options || {})
     this.options.playback.disableContextMenu = this.options.playback.disableContextMenu || this.options.disableVideoTagContextMenu
 
     const playbackConfig = this.options.playback
