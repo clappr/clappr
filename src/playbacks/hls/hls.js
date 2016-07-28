@@ -116,7 +116,6 @@ export default class HLS extends HTML5VideoPlayback {
     this._segmentTargetDuration = null
     // #EXT-X-PLAYLIST-TYPE
     this._playlistType = null
-    this.options.autoPlay && this._setupHls()
     this._recoverAttemptsRemaining = this.options.hlsRecoverAttempts || 16
     this._startTimeUpdateTimer()
   }
