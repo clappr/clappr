@@ -1,14 +1,20 @@
 {
   "name": "clappr",
   "description": "An extensible media player for the web",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:clappr/clappr.git"
-  },
-  "license": "BSD-3-Clause",
-  "homepage": "https://github.com/clappr/clappr",
+  "version": "0.2.60",
+  "homepage": "https://github.com/Bruno%20Torres/clappr",
   "authors": [
     "Globo.com"
+  ],
+  "repository": "Bruno%20Torres/clappr",
+  "bugs": {
+    "url": "https://github.com/clappr/clappr/issues"
+  },
+  "license": "BSD-3-Clause",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
   ],
   "main": [
     "./dist/clappr.js"
@@ -26,32 +32,33 @@
     "coveralls": "^2.11.4",
     "css-loader": "^0.23.1",
     "dotenv": "^2.0.0",
-    "eslint": "^2.12.0",
-    "file-loader": "^0.8.4",
+    "eslint": "^3.1.0",
+    "file-loader": "^0.9.0",
     "gulp": "^3.8.1",
-    "hls.js": "^0.5.41",
+    "hls.js": "^0.5.42",
     "html-loader": "^0.4.3",
     "isparta": "^4.0.0",
     "istanbul": "^0.4.2",
     "istanbul-instrumenter-loader": "^0.2.0",
     "jscs": "^3.0.3",
     "jshint": "^2.9.1",
-    "karma": "^0.13.15",
+    "karma": "^1.1.1",
     "karma-chai": "^0.1.0",
     "karma-chai-sinon": "^0.1.5",
     "karma-chrome-launcher": "^1.0.1",
     "karma-cli": "^1.0.0",
-    "karma-coverage": "^1.0.0",
+    "karma-coverage": "^1.1.1",
     "karma-firefox-launcher": "^1.0.0",
-    "karma-mocha": "^1.0.1",
+    "karma-mocha": "^1.1.0",
     "karma-sinon": "^1.0.4",
     "karma-sinon-chai": "^1.1.0",
     "karma-webpack": "^1.7.0",
     "lodash.find": "^4.3.0",
+    "lodash.isequal": "^4.2.0",
     "lodash.isplainobject": "^4.0.4",
+    "lodash.merge": "^4.4.0",
     "lodash.once": "^4.0.0",
     "lodash.result": "^4.3.0",
-    "lodash.merge": "^4.4.0",
     "lodash.uniqby": "^4.3.0",
     "lolex": "^1.4.0",
     "mkdirp": "^0.5.1",
@@ -59,17 +66,31 @@
     "node-bourbon": "^4.2.8",
     "node-sass": "^3.7.0",
     "s3": "^4.1.1",
-    "sass-loader": "^3.0.0",
+    "sass-loader": "^4.0.0",
     "sinon": "^1.10.2",
     "sinon-chai": "^2.8.0",
     "sshpk": "^1.6.2",
-    "svg-inline-loader": "^0.4.1",
-    "sync-pkg": "^0.6.2",
+    "svg-inline-loader": "^0.6.1",
+    "sync-pkg": "^0.7.0",
     "uglify-js": "^2.5.0",
     "url-loader": "^0.5.6",
     "webpack": "^1.12.1",
     "webpack-dev-server": "^1.14.0",
-    "webworkify-webpack": "1.0.6",
+    "webworkify-webpack": "1.1.4",
     "yargs": "^4.1.0"
-  }
+  },
+  "keywords": [
+    "clappr"
+  ],
+  "browser": "./dist/clappr.min.js",
+  "ignore": [
+    "actual",
+    "bower_components",
+    "fixtures",
+    "node_modules",
+    "temp",
+    "test",
+    "test.js",
+    "tmp"
+  ]
 }
