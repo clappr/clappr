@@ -29,6 +29,10 @@ Now, create the player:
 </body>
 ```
 
+## Live Demo
+
+Test it at [cdn.clappr.io.](http://cdn.clappr.io/?src=http://www.streambox.fr/playlists/x36xhzz/x36xhzz.m3u8)
+
 ## CDN
 
 You can use the latest published version at `https://cdn.jsdelivr.net/clappr/latest/clappr.min.js`
