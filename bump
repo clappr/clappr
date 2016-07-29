@@ -13,7 +13,7 @@ update_version() {
 }
 
 update_bower() {
-  ./node_modules/sync-pkg/cli.js package.json
+  ./node_modules/sync-pkg/bin/sync.js
 }
 
 build() {
