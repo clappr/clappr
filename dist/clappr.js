@@ -186,7 +186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var version = ("0.2.60"); // Copyright 2014 Globo.com Player authors. All rights reserved.
+	var version = ("0.2.61"); // Copyright 2014 Globo.com Player authors. All rights reserved.
 	// Use of this source code is governed by a BSD-style
 	// license that can be found in the LICENSE file.
 
@@ -15530,7 +15530,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _this._segmentTargetDuration = null;
 	    // #EXT-X-PLAYLIST-TYPE
 	    _this._playlistType = null;
-	    _this.options.autoPlay && _this._setupHls();
 	    _this._recoverAttemptsRemaining = _this.options.hlsRecoverAttempts || 16;
 	    _this._startTimeUpdateTimer();
 	    return _this;
