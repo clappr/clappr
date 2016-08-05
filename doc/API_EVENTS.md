@@ -11,7 +11,7 @@ var player = new Clappr.Player({
     onResize: function() { ... },//Fired when player resizes
     onPlay: function() { ... },//Fired when player starts to play
     onPause: function() { ... },//Fired when player pauses
-    onStop: function() { ... },Fired when player stops
+    onStop: function() { ... },//Fired when player stops
     onEnded: function() { ... },//Fired when player ends the video
     onSeek: function() { ... },//Fired when player seeks the video
     onError: function() { ... },//Fired when player receives an error
