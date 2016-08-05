@@ -47,6 +47,8 @@ Clappr is under heavy development but production-ready. Feel free to open issues
 
 ## [Built-in Plugins & Embed Parameters](doc/BUILTIN_PLUGINS.md)
 
+## [Events API](doc/API_EVENTS.md)
+
 ## [External Plugins](doc/EXTERNAL_PLUGINS.md)
 
 <a href="https://github.com/tjenkinson/clappr-thumbnails-plugin/">
