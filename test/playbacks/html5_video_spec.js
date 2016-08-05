@@ -184,6 +184,15 @@ describe('HTML5Video playback', function() {
       expect(sourceEl.src).to.be.equal(options.src)
       expect(sourceEl.type).to.be.equal('video/mp4')
     })
+
+    it('should set up source tag with value extracted from url when mimeType parameter is not set', function() {
+      const options = {src: 'http://example.com/video.m3u8'}
+      const html5Video = new HTML5Video(options)
+      html5Video.render()
+      const sourceEl = html5Video.$el.find('source')[0]
+      expect(sourceEl.src).to.be.equal(options.src)
+      expect(sourceEl.type).to.be.equal('application/x-mpegurl')
+    })
   })
 
   describe('audio resources', function() {
