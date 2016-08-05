@@ -394,7 +394,7 @@ export default class HTML5Video extends Playback {
   render() {
     const style = Styler.getStyleFor(tagStyle)
 
-    this._src && this.$el.html(this.template({ src: this._src, type: this._typeFor(this._src) }))
+    this._src && this.$el.html(this.template({ src: this._src, type: this.options.mimeType || this._typeFor(this._src) }))
 
     if (this.options.playback.disableContextMenu) {
       this.$el.on('contextmenu', () => {
