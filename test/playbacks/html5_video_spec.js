@@ -161,6 +161,31 @@ describe('HTML5Video playback', function() {
     })
   })
 
+  describe('sources', function() {
+    it('should set up source tag with values from options', function() {
+      const options = {
+        src: 'http://example.com/some_source?query_string=here',
+        mimeType: 'application/x-mpegURL'
+      }
+      const html5Video = new HTML5Video(options)
+      html5Video.render()
+      const sourceEl = html5Video.$el.find('source')[0]
+      expect(sourceEl.src).to.be.equal(options.src)
+      expect(sourceEl.type).to.be.equal(options.mimeType)
+    })
+
+    it('should set up source tag with inferred values when not set by options', function() {
+      const options = {
+        src: 'http://example.com/video.mp4'
+      }
+      const html5Video = new HTML5Video(options)
+      html5Video.render()
+      const sourceEl = html5Video.$el.find('source')[0]
+      expect(sourceEl.src).to.be.equal(options.src)
+      expect(sourceEl.type).to.be.equal('video/mp4')
+    })
+  })
+
   describe('audio resources', function() {
     it('should be able to play audio resources', function() {
       expect(HTML5Video.canPlay('http://domain.com/Audio.oga')).to.be.true
