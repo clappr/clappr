@@ -1,9 +1,8 @@
 # Events API
 
-You can listen several [events from Clappr](http://clappr.github.io/classes/Events.html), some examples:
+You can listen to several [events from Clappr](http://clappr.github.io/classes/Events.html).
 
 ```javascript
-var player = new Clappr.Player(...)
 // You can either listen some events this way
 var player = new Clappr.Player({
   events: {
