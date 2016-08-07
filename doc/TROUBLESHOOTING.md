@@ -26,6 +26,7 @@ Very often people open issues related to: **stream not working, freezing, glitch
 
 ##### HLS-Analyzer usage example
 ```bash
+pip install m3u8
 git clone https://github.com/epiclabs-io/hls-analyzer.git
 cd hls-analyzer
 python hls-analyzer.py http://www.streambox.fr/playlists/x36xhzz/x36xhzz.m3u8
