@@ -174,7 +174,7 @@ describe('Events', function(){
   it('still calls later handlers if one throws an exception', function(){
     let secondHandlerCalled = false
     const handlerThatThrows = function() {
-      throw new Error("Whoops")
+      throw new Error('Whoops')
     }
     const handler = function() {
       secondHandlerCalled = true
