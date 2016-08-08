@@ -15,10 +15,12 @@
   left: 0;
   right: 0;
   color: white;
-  margin: 10px;
+  padding: 10px;
   /* center vertically */
   top: 50%;
   @include transform(translateY(-50%));
+  max-height: 100%;
+  overflow: auto;
 }
 
 [data-no-op] canvas[data-no-op-canvas] {
