@@ -51,7 +51,6 @@ export default class DashShakaPlayback extends HTML5Video {
 
   // skipping error handling on video tag in favor of error on shaka
   error(event) {
-    Log.error('an error was raised support=', DashShakaPlayback.support)
     Log.error('an error was raised by the video tag', event, this.el.error)
   }
 
@@ -177,13 +176,8 @@ export default class DashShakaPlayback extends HTML5Video {
 
 DashShakaPlayback.canPlay = (resource, mimeType = '') => {
   shaka.polyfill.installAll()
-
-  shaka.Player.support().then((support) => { DashShakaPlayback.support = support})
-
-  var basic = !!window.Promise && !!window.Uint8Array && !!Array.prototype.forEach
-  var mediaSource = (window.MediaSource && window.MediaSource.isTypeSupported('video/mp4; codecs="avc1.42E01E,mp4a.40.2"'))
-  var basicAndMediaSource = basic && mediaSource
+  var browserSupported = shaka.Player.isBrowserSupported()
 
   var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
-  return basicAndMediaSource && (('mpd' === resourceParts[1]) || mimeType.indexOf('application/dash+xml') > -1)
+  return browserSupported && (('mpd' === resourceParts[1]) || mimeType.indexOf('application/dash+xml') > -1)
 }
