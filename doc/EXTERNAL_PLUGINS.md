@@ -12,7 +12,6 @@ Playback Speed | Ready | Yes | https://github.com/bikegriffith/clappr-playback-r
 Clappr Stats | Ready | Yes | https://github.com/leandromoreira/clappr-stats
 Pause while far| Ready | Yes | https://github.com/leandromoreira/clappr-pause-tab-visibility
 RTMP           | Ready | Yes | https://github.com/clappr/clappr-rtmp-plugin
-Bandwidth Analyzer | Ready | Yes | https://github.com/mediahub-bg/clappr-bandwidth-analyzer
 Picture-in-Picture | Ready | Yes | https://github.com/tjenkinson/clappr-pip-plugin
 HLS+P2P        | Ready | [WIP](https://github.com/bemtv/clappr-p2phls-plugin/issues/148) | http://bem.tv
 Comments on seekbar| Ready | ? | http://labs.jordane.net/clappr-comment/
