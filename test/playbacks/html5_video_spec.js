@@ -51,9 +51,12 @@ describe('HTML5Video playback', function() {
     expect(thereWasPlayIntent).to.be.true
   })
 
-  it('isPlaying() is true immediately when autoPlay is true', function() {
+  it('isPlaying() is true after constructor when autoPlay is true', function(done) {
     const playback = new HTML5Video({src: 'http://example.com/dash.ogg', autoPlay: true})
-    expect(playback.isPlaying()).to.be.true
+    process.nextTick(function(){
+      expect(playback.isPlaying()).to.be.true
+      done()
+    })
   })
 
   it('setup crossorigin attribute', function() {

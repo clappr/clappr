@@ -122,7 +122,7 @@ export default class HTML5Video extends Playback {
     this.settings.right = ['fullscreen', 'volume', 'hd-indicator']
 
     // https://github.com/clappr/clappr/issues/1076
-    this.options.autoPlay && this.play()
+    this.options.autoPlay && process.nextTick(() => this.play())
   }
 
   /**
