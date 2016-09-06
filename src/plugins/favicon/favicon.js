@@ -13,6 +13,7 @@ export default class Favicon extends CorePlugin {
 
   constructor(core) {
     super(core)
+    this._container = null
     this.configure()
   }
 
@@ -37,12 +38,13 @@ export default class Favicon extends CorePlugin {
   }
 
   containerChanged() {
-    this.stopListening(this.core.mediaControl.container)
-    this.listenTo(this.core.mediaControl.container, Events.CONTAINER_PLAY, this.setPlayIcon)
-    this.listenTo(this.core.mediaControl.container, Events.CONTAINER_PAUSE, this.setPauseIcon)
-    this.listenTo(this.core.mediaControl.container, Events.CONTAINER_STOP, this.resetIcon)
-    this.listenTo(this.core.mediaControl.container, Events.CONTAINER_ENDED, this.resetIcon)
-    this.listenTo(this.core.mediaControl.container, Events.CONTAINER_ERROR, this.resetIcon)
+    this._container && this.stopListening(this._container)
+    this._container = this.core.mediaControl.container
+    this.listenTo(this._container, Events.CONTAINER_PLAY, this.setPlayIcon)
+    this.listenTo(this._container, Events.CONTAINER_PAUSE, this.setPauseIcon)
+    this.listenTo(this._container, Events.CONTAINER_STOP, this.resetIcon)
+    this.listenTo(this._container, Events.CONTAINER_ENDED, this.resetIcon)
+    this.listenTo(this._container, Events.CONTAINER_ERROR, this.resetIcon)
     this.resetIcon()
   }
 
