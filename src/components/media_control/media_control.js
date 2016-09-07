@@ -197,7 +197,7 @@ export default class MediaControl extends UIObject {
   }
 
   mousemoveOnSeekBar(event) {
-    if (this.container.settings.seekEnabled) {
+    if (this.settings.seekEnabled) {
       const offsetX = event.pageX - this.$seekBarContainer.offset().left - (this.$seekBarHover.width() / 2)
       this.$seekBarHover.css({left: offsetX})
     }
@@ -250,7 +250,7 @@ export default class MediaControl extends UIObject {
   }
 
   startSeekDrag(event) {
-    if (!this.container.settings.seekEnabled) return
+    if (!this.settings.seekEnabled) return
     this.draggingSeekBar = true
     this.$el.addClass('dragging')
     this.$seekBarLoaded.addClass('media-control-notransition')
@@ -419,7 +419,7 @@ export default class MediaControl extends UIObject {
   }
 
   seek(event) {
-    if (!this.container.settings.seekEnabled) return
+    if (!this.settings.seekEnabled) return
     const offsetX = event.pageX - this.$seekBarContainer.offset().left
     let pos = offsetX / this.$seekBarContainer.width() * 100
     pos = Math.min(100, Math.max(pos, 0))
@@ -478,7 +478,7 @@ export default class MediaControl extends UIObject {
   }
 
   settingsUpdate() {
-    const newSettings = $.extend({}, this.container.settings)
+    const newSettings = this.getSettings()
     if (newSettings && !Fullscreen.fullscreenEnabled()) {
       // remove fullscreen from settings if it is present
       newSettings.default && removeArrayItem(newSettings.default, 'fullscreen')
@@ -490,6 +490,10 @@ export default class MediaControl extends UIObject {
       this.settings = newSettings
       this.render()
     }
+  }
+
+  getSettings() {
+    return $.extend({}, this.container.settings)
   }
 
   highDefinitionUpdate(isHD) {
@@ -552,7 +556,7 @@ export default class MediaControl extends UIObject {
   }
 
   seekRelative(delta) {
-    if (!this.container.settings.seekEnabled) return
+    if (!this.settings.seekEnabled) return
     const currentTime = this.container.getCurrentTime()
     const duration = this.container.getDuration()
     let position = Math.min(Math.max(currentTime + delta, 0), duration)
@@ -567,7 +571,7 @@ export default class MediaControl extends UIObject {
     this.kibo.down(['left'], () => this.seekRelative(-15))
     this.kibo.down(['right'], () => this.seekRelative(15))
     const keys = [1,2,3,4,5,6,7,8,9,0]
-    keys.forEach((i) => { this.kibo.down(i.toString(), () => this.container.settings.seekEnabled && this.container.seekPercentage(i * 10)) })
+    keys.forEach((i) => { this.kibo.down(i.toString(), () => this.settings.seekEnabled && this.container.seekPercentage(i * 10)) })
   }
 
   unbindKeyEvents() {
@@ -631,7 +635,7 @@ export default class MediaControl extends UIObject {
     this.setSeekPercentage(previousSeekPercentage)
 
     process.nextTick(() => {
-      if (!this.container.settings.seekEnabled) {
+      if (!this.settings.seekEnabled) {
         this.$seekBarContainer.addClass('seek-disabled')
       }
       if (!this.options.disableKeyboardShortcuts) {
