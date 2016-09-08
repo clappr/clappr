@@ -1,7 +1,7 @@
 [![npm version](https://badge.fury.io/js/dash-shaka-playback.svg)](https://badge.fury.io/js/dash-shaka-playback)
 [![license](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)
 
-# For the latest stable version [check](https://github.com/clappr/dash-shaka-playback/tree/releases)
+# For the older versions [check](https://github.com/clappr/dash-shaka-playback/tree/releases)
 
 # dash-shaka-playback
 
