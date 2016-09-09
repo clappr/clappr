@@ -30,10 +30,6 @@ export default class HLS extends HTML5VideoPlayback {
     this._hls.currentLevel = this._currentLevel
   }
 
-  get _duration() {
-    return this._playableRegionDuration
-  }
-
   get _startTime() {
     if (this._playbackType === Playback.LIVE && this._playlistType !== 'EVENT') {
       return this._extrapolatedStartTime
@@ -58,10 +54,28 @@ export default class HLS extends HTML5VideoPlayback {
     return Math.min(extrapolatedWindowStartTime, this._playableRegionStartTime + this._extrapolatedWindowDuration)
   }
 
+  // the time in the video element which should represent the end of the content
+  // extrapolated to increase in real time (instead of jumping as segments are added)
+  get _extrapolatedEndTime() {
+    let actualEndTime = this._playableRegionStartTime + this._playableRegionDuration
+    if (!this._localEndTimeCorrelation) {
+      return actualEndTime
+    }
+    let corr = this._localEndTimeCorrelation
+    let timePassed = this._now - corr.local
+    let extrapolatedEndTime = (corr.remote + timePassed) / 1000
+    return Math.max(actualEndTime - this._extrapolatedWindowDuration, Math.min(extrapolatedEndTime, actualEndTime))
+  }
+
+  get _duration() {
+    return this._extrapolatedEndTime - this._startTime
+  }
+
   // Returns the duration (seconds) of the window that the extrapolated start time is allowed
   // to move in before being capped.
   // The extrapolated start time should never reach the cap at the end of the window as the
   // window should slide as chunks are removed from the start.
+  // This also applies to the extrapolated end time in the same way.
   //
   // If chunks aren't being removed for some reason that the start time will reach and remain fixed at
   // playableRegionStartTime + extrapolatedWindowDuration
@@ -94,6 +108,7 @@ export default class HLS extends HTML5VideoPlayback {
 
     this._playbackType = Playback.VOD
     this._lastTimeUpdate = null
+    this._lastDuration = null
     // for hls streams which have dvr with a sliding window,
     // the content at the start of the playlist is removed as new
     // content is appended at the end.
@@ -105,8 +120,11 @@ export default class HLS extends HTML5VideoPlayback {
     // {local, remote} remote is the time in the video element that should represent 0
     //                 local is the system time when the 'remote' measurment took place
     this._localStartTimeCorrelation = null
+    // {local, remote} remote is the time in the video element that should represents the end
+    //                 local is the system time when the 'remote' measurment took place
+    this._localEndTimeCorrelation = null
     // if content is removed from the beginning then this empty area should
-    // be ignored. "playableRegionDuration" does not consider this
+    // be ignored. "playableRegionDuration" excludes the empty area
     this._playableRegionDuration = 0
     // true when the actual duration is longer than hlsjs's live sync point
     // when this is false playableRegionDuration will be the actual duration
@@ -152,6 +170,7 @@ export default class HLS extends HTML5VideoPlayback {
 
   _startTimeUpdateTimer() {
     this._timeUpdateTimer = setInterval(() => {
+      this._onDurationChange()
       this._onTimeUpdate()
     }, 100)
   }
@@ -182,7 +201,7 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   seekPercentage(percentage) {
-    let seekTo = this._playableRegionDuration
+    let seekTo = this._duration
     if (percentage > 0) {
       seekTo = this._duration * (percentage / 100)
     }
@@ -260,6 +279,15 @@ export default class HLS extends HTML5VideoPlayback {
     this.trigger(Events.PLAYBACK_TIMEUPDATE, update, this.name)
   }
 
+  _onDurationChange() {
+    let duration = this.getDuration()
+    if (this._lastDuration === duration) {
+      return
+    }
+    this._lastDuration = duration
+    super._onDurationChange()
+  }
+
   _onProgress() {
     if (!this.el.buffered.length) {
       return
@@ -335,13 +363,18 @@ export default class HLS extends HTML5VideoPlayback {
     let durationChanged = false
     let fragments = data.details.fragments
     let previousPlayableRegionStartTime = this._playableRegionStartTime
+    let previousPlayableRegionDuration = this._playableRegionDuration
 
-    if (fragments.length > 0 && this._playableRegionStartTime !== fragments[0].start) {
+    if (fragments.length === 0) {
+      return
+    }
+
+    if (this._playableRegionStartTime !== fragments[0].start) {
       startTimeChanged = true
       this._playableRegionStartTime = fragments[0].start
     }
 
-    if (fragments.length > 0 && startTimeChanged) {
+    if (startTimeChanged) {
       if (!this._localStartTimeCorrelation) {
         // set the correlation to map to middle of the extrapolation window
         this._localStartTimeCorrelation = {
@@ -350,7 +383,7 @@ export default class HLS extends HTML5VideoPlayback {
         }
       }
       else {
-        // check if the start time correlation still works
+        // check if the correlation still works
         let corr = this._localStartTimeCorrelation
         let timePassed = this._now - corr.local
         // this should point to a time within the extrapolation window
@@ -365,7 +398,7 @@ export default class HLS extends HTML5VideoPlayback {
           }
         }
         else if (startTime > previousPlayableRegionStartTime + this._extrapolatedWindowDuration) {
-          // start time was past the end of the old extrapolation window
+          // start time was past the end of the old extrapolation window (so would have been capped)
           // see if now that time would be inside the window, and if it would be set the correlation
           // so that it resumes from the time it was at at the end of the old window
           // update the correlation so that the time starts counting again from the value it's on now
@@ -386,9 +419,6 @@ export default class HLS extends HTML5VideoPlayback {
       let hlsjsConfig = this.options.playback || {}
       let liveSyncDurationCount = hlsjsConfig.liveSyncDurationCount || HLSJS.DefaultConfig.liveSyncDurationCount
       let hiddenAreaDuration = fragmentTargetDuration * liveSyncDurationCount
-      // as the start time moves to the end of the window the user is able to seek closer to the live point
-      // this makes sure if the start time reaches the end of the window the live point is hlsjs's live sync point and not past it
-      hiddenAreaDuration += this._extrapolatedWindowDuration
       if (hiddenAreaDuration <= newDuration) {
         newDuration -= hiddenAreaDuration
         this._durationExcludesAfterLiveSyncPoint = true
@@ -401,6 +431,51 @@ export default class HLS extends HTML5VideoPlayback {
     if (newDuration !== this._playableRegionDuration) {
       durationChanged = true
       this._playableRegionDuration = newDuration
+    }
+
+    // Note the end time is not the playableRegionDuration
+    // The end time will always increase even if content is removed from the beginning
+    let endTime = fragments[0].start + newDuration
+    let previousEndTime = previousPlayableRegionStartTime + previousPlayableRegionDuration
+    let endTimeChanged = endTime !== previousEndTime
+    if (endTimeChanged) {
+      if (!this._localEndTimeCorrelation) {
+        // set the correlation to map to the end
+        this._localEndTimeCorrelation = {
+          local: this._now,
+          remote: endTime * 1000
+        }
+      }
+      else {
+        // check if the correlation still works
+        let corr = this._localEndTimeCorrelation
+        let timePassed = this._now - corr.local
+        // this should point to a time within the extrapolation window from the end
+        let extrapolatedEndTime = (corr.remote + timePassed) / 1000
+        if (extrapolatedEndTime > endTime) {
+          this._localEndTimeCorrelation = {
+            local: this._now,
+            remote: endTime * 1000
+          }
+        }
+        else if (extrapolatedEndTime < endTime - this._extrapolatedWindowDuration) {
+          // our extrapolated end time is now earlier than the extrapolation window from the actual end time
+          // (maybe a chunk became available early)
+          // reset correlation so that it sits at the beginning of the extrapolation window from the end time
+          this._localEndTimeCorrelation = {
+            local: this._now,
+            remote: (endTime - this._extrapolatedWindowDuration) * 1000
+          }
+        }
+        else if (extrapolatedEndTime > previousEndTime) {
+          // end time was past the old end time (so would have been capped)
+          // set the correlation so that it resumes from the time it was at at the end of the old window
+          this._localEndTimeCorrelation = {
+            local: this._now,
+            remote: previousEndTime * 1000
+          }
+        }
+      }
     }
 
     // now that the values have been updated call any methods that use on them so they get the updated values
