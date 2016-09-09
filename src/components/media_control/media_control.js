@@ -18,6 +18,7 @@ import template from 'base/template'
 import Playback from 'base/playback'
 
 import $ from 'clappr-zepto'
+import merge from 'lodash.merge'
 
 import mediaControlStyle from './public/media-control.scss'
 import mediaControlHTML from './public/media-control.html'
@@ -80,6 +81,7 @@ export default class MediaControl extends UIObject {
     const initialVolume = (this.persistConfig) ? Config.restore('volume') : 100
     this.setVolume(this.options.mute ? 0 : initialVolume)
     this.keepVisible = false
+    this.fullScreenOnVideoTagSupported = null // unknown
     this.addEventListeners()
     this.settings = {
       left: ['play', 'stop', 'pause'],
@@ -120,6 +122,10 @@ export default class MediaControl extends UIObject {
       this.listenTo(this.container, Events.CONTAINER_MEDIACONTROL_ENABLE, this.enable)
       this.listenTo(this.container, Events.CONTAINER_ENDED, this.ended)
       this.listenTo(this.container, Events.CONTAINER_VOLUME, this.onVolumeChanged)
+      if (this.container.playback.el.nodeName.toLowerCase() === 'video') {
+        // wait until the metadata has loaded and then check if fullscreen on video tag is supported
+        this.listenToOnce(this.container, Events.CONTAINER_LOADEDMETADATA, this.onLoadedMetadataOnVideoTag)
+      }
     }
   }
 
@@ -149,6 +155,16 @@ export default class MediaControl extends UIObject {
 
   onVolumeChanged() {
     this.updateVolumeUI()
+  }
+
+  onLoadedMetadataOnVideoTag() {
+    let video = this.container.playback.el
+    // video.webkitSupportsFullscreen is deprecated but iOS appears to only use this
+    // see https://github.com/clappr/clappr/issues/1127
+    if (!Fullscreen.fullscreenEnabled() && video.webkitSupportsFullscreen) {
+      this.fullScreenOnVideoTagSupported = true
+      this.settingsUpdate()
+    }
   }
 
   updateVolumeUI() {
@@ -339,6 +355,7 @@ export default class MediaControl extends UIObject {
   setContainer(container) {
     if (this.container) {
       this.stopListening(this.container)
+      this.fullScreenOnVideoTagSupported = null
     }
     Mediator.off(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
     this.container = container
@@ -478,8 +495,8 @@ export default class MediaControl extends UIObject {
   }
 
   settingsUpdate() {
-    const newSettings = $.extend({}, this.container.settings)
-    if (newSettings && !Fullscreen.fullscreenEnabled()) {
+    const newSettings = merge({}, this.container.settings)
+    if (newSettings && !this.fullScreenOnVideoTagSupported && !Fullscreen.fullscreenEnabled()) {
       // remove fullscreen from settings if it is present
       newSettings.default && removeArrayItem(newSettings.default, 'fullscreen')
       newSettings.left && removeArrayItem(newSettings.left, 'fullscreen')
