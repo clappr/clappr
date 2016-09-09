@@ -33,15 +33,24 @@ const eventsApi = function(obj, action, name, rest) {
   return true
 }
 
-const triggerEvents = function(events, args) {
+const triggerEvents = function(events, args, klass, name) {
   let ev, i = -1
   const l = events.length, a1 = args[0], a2 = args[1], a3 = args[2]
-  switch (args.length) {
-  case 0: while (++i < l) { (ev = events[i]).callback.call(ev.ctx) } return
-  case 1: while (++i < l) { (ev = events[i]).callback.call(ev.ctx, a1) } return
-  case 2: while (++i < l) { (ev = events[i]).callback.call(ev.ctx, a1, a2) } return
-  case 3: while (++i < l) { (ev = events[i]).callback.call(ev.ctx, a1, a2, a3) } return
-  default: while (++i < l) { (ev = events[i]).callback.apply(ev.ctx, args) } return
+  run()
+
+  function run() {
+    try {
+      switch (args.length) {
+      case 0: while (++i < l) { (ev = events[i]).callback.call(ev.ctx) } return
+      case 1: while (++i < l) { (ev = events[i]).callback.call(ev.ctx, a1) } return
+      case 2: while (++i < l) { (ev = events[i]).callback.call(ev.ctx, a1, a2) } return
+      case 3: while (++i < l) { (ev = events[i]).callback.call(ev.ctx, a1, a2, a3) } return
+      default: while (++i < l) { (ev = events[i]).callback.apply(ev.ctx, args) } return
+      }
+    } catch (exception) {
+      Log.error.apply(Log, [klass, 'error on event', name, 'trigger','-', exception])
+      run()
+    }
   }
 }
 
@@ -127,18 +136,14 @@ export default class Events {
    */
   trigger(name) {
     const klass = this.name || this.constructor.name
-    try {
-      Log.debug.apply(Log, [klass].concat(Array.prototype.slice.call(arguments)))
-      if (!this._events) {return this}
-      const args = slice.call(arguments, 1)
-      if (!eventsApi(this, 'trigger', name, args)) {return this}
-      const events = this._events[name]
-      const allEvents = this._events.all
-      if (events) {triggerEvents(events, args)}
-      if (allEvents) {triggerEvents(allEvents, arguments)}
-    } catch (exception) {
-      Log.error.apply(Log, [klass, 'error on event', name, 'trigger','-', exception])
-    }
+    Log.debug.apply(Log, [klass].concat(Array.prototype.slice.call(arguments)))
+    if (!this._events) {return this}
+    const args = slice.call(arguments, 1)
+    if (!eventsApi(this, 'trigger', name, args)) {return this}
+    const events = this._events[name]
+    const allEvents = this._events.all
+    if (events) {triggerEvents(events, args, klass, name)}
+    if (allEvents) {triggerEvents(allEvents, arguments, klass, name)}
     return this
   }
 

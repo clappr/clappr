@@ -154,4 +154,36 @@ describe('Events', function(){
     this.events.trigger('clappr.any.event')
     expect(counter).to.be.equal(1)
   })
+
+  it('calls handlers in the order they were registered', function(){
+    let calls = []
+    const Handler = function(id) {
+      return function() {
+        calls.push(id)
+      }
+    }
+
+    this.events.on('clappr.any.event', new Handler(1))
+    this.events.on('clappr.any.event', new Handler(2))
+    this.events.on('clappr.any.event', new Handler(3))
+    this.events.trigger('clappr.any.event')
+
+    expect(calls).to.be.eql([1, 2, 3])
+  })
+
+  it('still calls later handlers if one throws an exception', function(){
+    let secondHandlerCalled = false
+    const handlerThatThrows = function() {
+      throw new Error('Whoops')
+    }
+    const handler = function() {
+      secondHandlerCalled = true
+    }
+
+    this.events.on('clappr.any.event', handlerThatThrows)
+    this.events.on('clappr.any.event', handler)
+    this.events.trigger('clappr.any.event')
+
+    expect(secondHandlerCalled).to.be.true
+  })
 })
