@@ -19,7 +19,7 @@ webpackConfig.output = {
   path: path.resolve(__dirname, 'dist'),
   publicPath: '<%=baseUrl%>/',
   filename: 'clappr.js',
-  library: ['clappr', 'Clappr'],
+  library: 'Clappr',
   libraryTarget: 'umd'
 }
 
