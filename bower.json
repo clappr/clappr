@@ -1,7 +1,7 @@
 {
   "name": "clappr",
   "description": "An extensible media player for the web",
-  "version": "0.2.62",
+  "version": "0.2.63",
   "homepage": "https://github.com/Leandro%20Moreira/clappr",
   "authors": [
     "Globo.com"

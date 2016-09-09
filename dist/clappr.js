@@ -6,7 +6,7 @@
 	else if(typeof exports === 'object')
 		exports["Clappr"] = factory();
 	else
-		root["clappr"] = root["clappr"] || {}, root["clappr"]["Clappr"] = factory();
+		root["Clappr"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -186,7 +186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var version = ("0.2.62"); // Copyright 2014 Globo.com Player authors. All rights reserved.
+	var version = ("0.2.63"); // Copyright 2014 Globo.com Player authors. All rights reserved.
 	// Use of this source code is governed by a BSD-style
 	// license that can be found in the LICENSE file.
 
@@ -17549,11 +17549,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this._hls.currentLevel = this._currentLevel;
 	    }
 	  }, {
-	    key: '_duration',
-	    get: function get() {
-	      return this._playableRegionDuration;
-	    }
-	  }, {
 	    key: '_startTime',
 	    get: function get() {
 	      if (this._playbackType === _playback2.default.LIVE && this._playlistType !== 'EVENT') {
@@ -17583,10 +17578,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return Math.min(extrapolatedWindowStartTime, this._playableRegionStartTime + this._extrapolatedWindowDuration);
 	    }
 
+	    // the time in the video element which should represent the end of the content
+	    // extrapolated to increase in real time (instead of jumping as segments are added)
+
+	  }, {
+	    key: '_extrapolatedEndTime',
+	    get: function get() {
+	      var actualEndTime = this._playableRegionStartTime + this._playableRegionDuration;
+	      if (!this._localEndTimeCorrelation) {
+	        return actualEndTime;
+	      }
+	      var corr = this._localEndTimeCorrelation;
+	      var timePassed = this._now - corr.local;
+	      var extrapolatedEndTime = (corr.remote + timePassed) / 1000;
+	      return Math.max(actualEndTime - this._extrapolatedWindowDuration, Math.min(extrapolatedEndTime, actualEndTime));
+	    }
+	  }, {
+	    key: '_duration',
+	    get: function get() {
+	      return this._extrapolatedEndTime - this._startTime;
+	    }
+
 	    // Returns the duration (seconds) of the window that the extrapolated start time is allowed
 	    // to move in before being capped.
 	    // The extrapolated start time should never reach the cap at the end of the window as the
 	    // window should slide as chunks are removed from the start.
+	    // This also applies to the extrapolated end time in the same way.
 	    //
 	    // If chunks aren't being removed for some reason that the start time will reach and remain fixed at
 	    // playableRegionStartTime + extrapolatedWindowDuration
@@ -17630,6 +17647,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _this._playbackType = _playback2.default.VOD;
 	    _this._lastTimeUpdate = null;
+	    _this._lastDuration = null;
 	    // for hls streams which have dvr with a sliding window,
 	    // the content at the start of the playlist is removed as new
 	    // content is appended at the end.
@@ -17641,8 +17659,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // {local, remote} remote is the time in the video element that should represent 0
 	    //                 local is the system time when the 'remote' measurment took place
 	    _this._localStartTimeCorrelation = null;
+	    // {local, remote} remote is the time in the video element that should represents the end
+	    //                 local is the system time when the 'remote' measurment took place
+	    _this._localEndTimeCorrelation = null;
 	    // if content is removed from the beginning then this empty area should
-	    // be ignored. "playableRegionDuration" does not consider this
+	    // be ignored. "playableRegionDuration" excludes the empty area
 	    _this._playableRegionDuration = 0;
 	    // true when the actual duration is longer than hlsjs's live sync point
 	    // when this is false playableRegionDuration will be the actual duration
@@ -17707,6 +17728,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var _this3 = this;
 
 	    this._timeUpdateTimer = setInterval(function () {
+	      _this3._onDurationChange();
 	      _this3._onTimeUpdate();
 	    }, 100);
 	  };
@@ -17741,7 +17763,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  HLS.prototype.seekPercentage = function seekPercentage(percentage) {
-	    var seekTo = this._playableRegionDuration;
+	    var seekTo = this._duration;
 	    if (percentage > 0) {
 	      seekTo = this._duration * (percentage / 100);
 	    }
@@ -17816,6 +17838,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    this._lastTimeUpdate = update;
 	    this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, update, this.name);
+	  };
+
+	  HLS.prototype._onDurationChange = function _onDurationChange() {
+	    var duration = this.getDuration();
+	    if (this._lastDuration === duration) {
+	      return;
+	    }
+	    this._lastDuration = duration;
+	    _HTML5VideoPlayback.prototype._onDurationChange.call(this);
 	  };
 
 	  HLS.prototype._onProgress = function _onProgress() {
@@ -17894,13 +17925,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var durationChanged = false;
 	    var fragments = data.details.fragments;
 	    var previousPlayableRegionStartTime = this._playableRegionStartTime;
+	    var previousPlayableRegionDuration = this._playableRegionDuration;
 
-	    if (fragments.length > 0 && this._playableRegionStartTime !== fragments[0].start) {
+	    if (fragments.length === 0) {
+	      return;
+	    }
+
+	    if (this._playableRegionStartTime !== fragments[0].start) {
 	      startTimeChanged = true;
 	      this._playableRegionStartTime = fragments[0].start;
 	    }
 
-	    if (fragments.length > 0 && startTimeChanged) {
+	    if (startTimeChanged) {
 	      if (!this._localStartTimeCorrelation) {
 	        // set the correlation to map to middle of the extrapolation window
 	        this._localStartTimeCorrelation = {
@@ -17908,7 +17944,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          remote: (fragments[0].start + this._extrapolatedWindowDuration / 2) * 1000
 	        };
 	      } else {
-	        // check if the start time correlation still works
+	        // check if the correlation still works
 	        var corr = this._localStartTimeCorrelation;
 	        var timePassed = this._now - corr.local;
 	        // this should point to a time within the extrapolation window
@@ -17922,7 +17958,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            remote: fragments[0].start * 1000
 	          };
 	        } else if (startTime > previousPlayableRegionStartTime + this._extrapolatedWindowDuration) {
-	          // start time was past the end of the old extrapolation window
+	          // start time was past the end of the old extrapolation window (so would have been capped)
 	          // see if now that time would be inside the window, and if it would be set the correlation
 	          // so that it resumes from the time it was at at the end of the old window
 	          // update the correlation so that the time starts counting again from the value it's on now
@@ -17943,9 +17979,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var hlsjsConfig = this.options.playback || {};
 	      var liveSyncDurationCount = hlsjsConfig.liveSyncDurationCount || _hls2.default.DefaultConfig.liveSyncDurationCount;
 	      var hiddenAreaDuration = fragmentTargetDuration * liveSyncDurationCount;
-	      // as the start time moves to the end of the window the user is able to seek closer to the live point
-	      // this makes sure if the start time reaches the end of the window the live point is hlsjs's live sync point and not past it
-	      hiddenAreaDuration += this._extrapolatedWindowDuration;
 	      if (hiddenAreaDuration <= newDuration) {
 	        newDuration -= hiddenAreaDuration;
 	        this._durationExcludesAfterLiveSyncPoint = true;
@@ -17957,6 +17990,48 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (newDuration !== this._playableRegionDuration) {
 	      durationChanged = true;
 	      this._playableRegionDuration = newDuration;
+	    }
+
+	    // Note the end time is not the playableRegionDuration
+	    // The end time will always increase even if content is removed from the beginning
+	    var endTime = fragments[0].start + newDuration;
+	    var previousEndTime = previousPlayableRegionStartTime + previousPlayableRegionDuration;
+	    var endTimeChanged = endTime !== previousEndTime;
+	    if (endTimeChanged) {
+	      if (!this._localEndTimeCorrelation) {
+	        // set the correlation to map to the end
+	        this._localEndTimeCorrelation = {
+	          local: this._now,
+	          remote: endTime * 1000
+	        };
+	      } else {
+	        // check if the correlation still works
+	        var _corr = this._localEndTimeCorrelation;
+	        var _timePassed = this._now - _corr.local;
+	        // this should point to a time within the extrapolation window from the end
+	        var extrapolatedEndTime = (_corr.remote + _timePassed) / 1000;
+	        if (extrapolatedEndTime > endTime) {
+	          this._localEndTimeCorrelation = {
+	            local: this._now,
+	            remote: endTime * 1000
+	          };
+	        } else if (extrapolatedEndTime < endTime - this._extrapolatedWindowDuration) {
+	          // our extrapolated end time is now earlier than the extrapolation window from the actual end time
+	          // (maybe a chunk became available early)
+	          // reset correlation so that it sits at the beginning of the extrapolation window from the end time
+	          this._localEndTimeCorrelation = {
+	            local: this._now,
+	            remote: (endTime - this._extrapolatedWindowDuration) * 1000
+	          };
+	        } else if (extrapolatedEndTime > previousEndTime) {
+	          // end time was past the old end time (so would have been capped)
+	          // set the correlation so that it resumes from the time it was at at the end of the old window
+	          this._localEndTimeCorrelation = {
+	            local: this._now,
+	            remote: previousEndTime * 1000
+	          };
+	        }
+	      }
 	    }
 
 	    // now that the values have been updated call any methods that use on them so they get the updated values
