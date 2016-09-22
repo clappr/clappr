@@ -389,7 +389,7 @@ export default class FlasHLS extends BaseFlashPlayback {
       this.trigger(Events.PLAYBACK_BITRATE, {
         height: currentLevel.height,
         width: currentLevel.width,
-        bandwidth: currentLevel.bandwidth,
+        bandwidth: currentLevel.bitrate,
         bitrate: currentLevel.bitrate,
         level: level
       })
