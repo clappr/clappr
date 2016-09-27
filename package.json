@@ -68,7 +68,7 @@
     "lodash.uniqby": "^4.3.0",
     "lolex": "^1.4.0",
     "mkdirp": "^0.5.1",
-    "mocha": "^2.3.4",
+    "mocha": "^3.1.0",
     "node-bourbon": "^4.2.8",
     "node-sass": "^3.7.0",
     "s3": "^4.1.1",
