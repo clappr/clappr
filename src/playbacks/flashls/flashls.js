@@ -676,7 +676,7 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   get dvrEnabled() {
-    return this._dvrEnabled
+    return !!this._dvrEnabled
   }
 
   _createCallbacks() {
