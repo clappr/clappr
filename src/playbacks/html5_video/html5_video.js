@@ -192,7 +192,7 @@ export default class HTML5Video extends Playback {
   stop() {
     this.pause()
     this._stopped = true
-    this.el.currentTime = 0
+    this.el.currentTime = this._getStopCurrentTime()
     this._stopPlayheadMovingChecks()
     this._handleBufferingEvents()
     this.trigger(Events.PLAYBACK_STOP)
@@ -220,6 +220,18 @@ export default class HTML5Video extends Playback {
 
   get isReady() {
     return this._isReadyState
+  }
+
+  _getStopCurrentTime() {
+    // Return beginning position if not LIVE or not Safari browser
+    if (this.getPlaybackType() !== Playback.LIVE || !Browser.isSafari) return 0
+
+    // Return beginning position if LIVE and not seekable
+    let timeRanges = this.el.seekable
+    if (timeRanges.length === 0) return 0
+
+    // Return "latest" seekable position if LIVE and seekable
+    return timeRanges.end(timeRanges.length - 1)
   }
 
   _startPlayheadMovingChecks() {
