@@ -72,7 +72,7 @@ describe('Poster', function() {
 
   it('keeps the poster up for audio only sources', function() {
     expect(this.poster.shouldHideOnPlay()).to.equal(true)
-    Object.defineProperty(this.playback, "isAudioOnly", { get: function () { return true } })
+    Object.defineProperty(this.playback, 'isAudioOnly', { get: function () { return true } })
     expect(this.poster.shouldHideOnPlay()).to.equal(false)
   })
 
