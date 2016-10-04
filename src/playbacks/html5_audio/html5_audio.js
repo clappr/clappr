@@ -10,6 +10,10 @@ import HTML5Video from 'playbacks/html5_video'
 export default class HTML5Audio extends HTML5Video {
   get name() { return 'html5_audio' }
   get tagName() { return 'audio' }
+  
+  get isAudioOnly() {
+    return true
+  }
 
   updateSettings() {
     this.settings.left = ['playpause', 'position', 'duration']

@@ -10,6 +10,15 @@ import UIObject from './ui_object'
  */
 export default class Playback extends UIObject {
   /**
+  * Determine if the playback does not contain video/has video but video should be ignored.
+  * @property isAudioOnly
+  * @type Boolean
+  */
+  get isAudioOnly() {
+    return false
+  }
+
+  /**
    * Determine if the playback has ended.
    * @property ended
    * @type Boolean
