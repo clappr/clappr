@@ -16,6 +16,7 @@ export default class NoOp extends Playback {
   constructor(...args) {
     super(...args)
     this._noiseFrameNum = -1
+    this.started = false
   }
 
   render() {
@@ -23,9 +24,17 @@ export default class NoOp extends Playback {
     const playbackNotSupported = this.options.playbackNotSupportedMessage || this.i18n.t('playback_not_supported')
     this.$el.html(this.template({message: playbackNotSupported}))
     this.$el.append(style)
-    this._animate()
     this.trigger(Events.PLAYBACK_READY, this.name)
+    this._options.autoPlay && this.play()
     return this
+  }
+
+  play() {
+    if (!this.started) {
+      this.started = true
+      this.trigger(Events.PLAYBACK_PLAY)
+      this._animate()
+    }
   }
 
   _noise() {
