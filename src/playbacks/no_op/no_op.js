@@ -16,7 +16,7 @@ export default class NoOp extends Playback {
   constructor(...args) {
     super(...args)
     this._noiseFrameNum = -1
-    this.started = false
+    this._started = false
   }
 
   render() {
@@ -30,8 +30,8 @@ export default class NoOp extends Playback {
   }
 
   play() {
-    if (!this.started) {
-      this.started = true
+    if (!this._started) {
+      this._started = true
       this.trigger(Events.PLAYBACK_PLAY)
       this._animate()
     }
