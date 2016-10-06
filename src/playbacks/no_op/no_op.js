@@ -25,7 +25,10 @@ export default class NoOp extends Playback {
     this.$el.html(this.template({message: playbackNotSupported}))
     this.$el.append(style)
     this.trigger(Events.PLAYBACK_READY, this.name)
-    this._options.autoPlay && this.play()
+    const showForNoOp = !!(this.options.poster && this.options.poster.showForNoOp);
+    if (this.options.autoPlay || !showForNoOp) {
+      this.play()
+    }
     return this
   }
 
