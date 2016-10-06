@@ -339,6 +339,10 @@ export default class HLS extends HTML5VideoPlayback {
 
   destroy() {
     this._stopTimeUpdateTimer()
+    if (this._hls) {
+      this._hls.destroy()
+      delete this._hls
+    }
     super.destroy()
   }
 
