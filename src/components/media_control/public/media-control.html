@@ -33,7 +33,7 @@
       <div class="media-control-indicator" data-<%= name %>></div>
   <% }; %>
   <% var renderButton = function(name) { %>
-      <button type="button" class="media-control-button media-control-icon" data-<%= name %>></button>
+    <button type="button" class="media-control-button media-control-icon" data-<%= name %> aria-label="<%= name %> button"></button>
   <% }; %>
   <%  var templates = {
         bar: renderBar,
