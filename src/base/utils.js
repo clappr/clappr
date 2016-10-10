@@ -203,7 +203,7 @@ export function isNumber(value) {
 
 export function currentScriptUrl() {
   const scripts = document.getElementsByTagName('script')
-  return scripts[scripts.length - 1].src
+  return scripts.length ? scripts[scripts.length - 1].src : ''
 }
 
 export const requestAnimationFrame = (window.requestAnimationFrame ||
