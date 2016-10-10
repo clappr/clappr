@@ -85,7 +85,7 @@ export default class PosterPlugin extends UIContainerPlugin {
 
   shouldHideOnPlay() {
     // Audio broadcasts should keep the poster up; video should hide poster while playing.
-    return !((this.container.playback.name == 'html5_audio') || this.container.playback.isAudioOnly)
+    return !this.container.playback.isAudioOnly
   }
 
   update() {
