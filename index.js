@@ -45,7 +45,7 @@ export default class DashShakaPlayback extends HTML5Video {
   setupSrc() {}
 
   // skipping ready event on video tag in favor of ready on shaka
-  ready() {}
+  _ready() {}
 
   get isReady() {return this._isShakaReadyState}
 
@@ -121,7 +121,7 @@ export default class DashShakaPlayback extends HTML5Video {
   _loaded() {
     this._isShakaReadyState = true
     this.trigger(SHAKA_READY)
-    this._ready()
+    this._shakaReady()
     this._startToSendStats()
     this._fillLevels()
   }
@@ -169,7 +169,7 @@ export default class DashShakaPlayback extends HTML5Video {
     Log.debug('shaka was destroyed')
   }
 
-  _ready() {
+  _shakaReady() {
     super._ready()
   }
 }
