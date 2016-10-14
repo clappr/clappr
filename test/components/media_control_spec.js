@@ -101,7 +101,7 @@ describe('MediaControl', function() {
   })
 
   it('never appears when playback type is NO_OP', function() {
-     this.playback.getPlaybackType = function() {
+    this.playback.getPlaybackType = function() {
       return Playback.NO_OP
     }
     const mediaControl = new MediaControl({container: this.container})
