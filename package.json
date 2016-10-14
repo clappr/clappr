@@ -1,6 +1,6 @@
 {
   "name": "dash-shaka-playback",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "clappr dash playback based on shaka player",
   "main": "index.js",
   "repository": {
