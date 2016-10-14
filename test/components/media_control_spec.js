@@ -2,12 +2,15 @@ import {Config} from '../../src/base/utils'
 import Styler from '../../src/base/styler'
 import template from '../../src/base/template'
 import MediaControl from '../../src/components/media_control'
-import FakePlayback from '../../src/base/playback'
+import Playback from '../../src/base/playback'
 import Container from '../../src/components/container'
 
 describe('MediaControl', function() {
   beforeEach(function() {
-    this.playback = new FakePlayback()
+    this.playback = new Playback()
+    this.playback.getPlaybackType = function() {
+      return Playback.VOD
+    }
     this.container = new Container({playback: this.playback})
     this.mediaControl = new MediaControl({container: this.container})
     localStorage.removeItem('clappr.localhost.volume')
@@ -87,6 +90,25 @@ describe('MediaControl', function() {
     mediacontrol.setVolume(78)
 
     expect(Config.restore('volume')).to.be.equal(78)
+  })
+
+  it('can appear when playback type is not NO_OP', function() {
+    const mediaControl = new MediaControl({container: this.container})
+    mediaControl.render()
+    mediaControl.enable()
+    expect(mediaControl.$el.hasClass('media-control-hide')).to.be.false
+    expect(mediaControl.disabled).to.be.false
+  })
+
+  it('never appears when playback type is NO_OP', function() {
+    this.playback.getPlaybackType = function() {
+      return Playback.NO_OP
+    }
+    const mediaControl = new MediaControl({container: this.container})
+    mediaControl.render()
+    mediaControl.enable()
+    expect(mediaControl.$el.hasClass('media-control-hide')).to.be.true
+    expect(mediaControl.disabled).to.be.true
   })
 
   describe('custom media control', function() {
