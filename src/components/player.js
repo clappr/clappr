@@ -11,7 +11,6 @@ import CoreFactory from 'components/core_factory'
 import Loader from 'components/loader'
 import PlayerInfo from 'components/player_info'
 import $ from 'clappr-zepto'
-import find from 'lodash.find'
 
 const baseUrl = currentScriptUrl().replace(/\/[^\/]+$/, '')
 
@@ -511,9 +510,7 @@ export default class Player extends BaseObject {
    */
   getPlugin(name) {
     const plugins = this.core.plugins.concat(this.core.mediaControl.container.plugins)
-    return find(plugins, function(plugin) {
-      return plugin.name === name
-    })
+    return plugins.filter(plugin => plugin.name === name)[0]
   }
 
   /**
