@@ -24,7 +24,7 @@ describe('Container', function() {
   it('gets a plugin by name', function() {
     const plugin = {name: 'fake'}
     this.container.addPlugin(plugin)
-    assert.equal(plugin, this.container.getPlugin('fake'));
+    assert.equal(plugin, this.container.getPlugin('fake'))
   })
 
   it('destroys all the plugins', function() {
