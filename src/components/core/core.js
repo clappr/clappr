@@ -13,7 +13,6 @@ import MediaControl from 'components/media_control'
 import Mediator from 'components/mediator'
 import PlayerInfo from 'components/player_info'
 
-import find from 'lodash.find'
 import $ from 'clappr-zepto'
 
 import coreStyle from './public/style.scss'
@@ -165,7 +164,7 @@ export default class Core extends UIObject {
   }
 
   getPlugin(name) {
-    return find(this.plugins, (plugin) => plugin.name === name)
+    return this.plugins.filter(plugin => plugin.name === name)[0]
   }
 
   load(sources, mimeType) {
