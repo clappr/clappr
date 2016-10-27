@@ -9,7 +9,6 @@ import Styler from 'base/styler'
 import Browser from 'components/browser'
 import Events from 'base/events'
 import tagStyle from './public/style.scss'
-import find from 'lodash.find'
 import $ from 'clappr-zepto'
 
 const MIMETYPES = {
@@ -420,7 +419,7 @@ HTML5Video._mimeTypesForUrl = function(resourceUrl, mimeTypesByExtension, mimeTy
 HTML5Video._canPlay = function(type, mimeTypesByExtension, resourceUrl, mimeType) {
   let mimeTypes = HTML5Video._mimeTypesForUrl(resourceUrl, mimeTypesByExtension, mimeType)
   const media = document.createElement(type)
-  return !!find(mimeTypes, (mediaType) => !!media.canPlayType(mediaType).replace(/no/, ''))
+  return !!(mimeTypes.filter(mediaType => !!media.canPlayType(mediaType).replace(/no/, ''))[0])
 }
 
 HTML5Video.canPlay = function(resourceUrl, mimeType) {
