@@ -1,9 +1,8 @@
 {
   "name": "clappr",
-  "version": "0.2.61",
+  "version": "0.2.63",
   "description": "An extensible media player for the web",
   "main": "./dist/clappr.js",
-  "browser": "./dist/clappr.min.js",
   "scripts": {
     "release": "node_modules/.bin/webpack --progress -d --optimize-mangle --optimize-dedupe --optimize-occurence-order --output-filename clappr.min.js",
     "build": "node_modules/.bin/webpack --progress",
@@ -41,7 +40,7 @@
     "eslint": "^3.1.0",
     "file-loader": "^0.9.0",
     "gulp": "^3.8.1",
-    "hls.js": "^0.5.44",
+    "hls.js": "^0.6.7",
     "html-loader": "^0.4.3",
     "isparta": "^4.0.0",
     "istanbul": "^0.4.2",
@@ -59,7 +58,6 @@
     "karma-sinon": "^1.0.4",
     "karma-sinon-chai": "^1.1.0",
     "karma-webpack": "^1.7.0",
-    "lodash.find": "^4.3.0",
     "lodash.isequal": "^4.2.0",
     "lodash.isplainobject": "^4.0.4",
     "lodash.merge": "^4.4.0",
@@ -70,7 +68,7 @@
     "mkdirp": "^0.5.1",
     "mocha": "^2.3.4",
     "node-bourbon": "^4.2.8",
-    "node-sass": "^3.7.0",
+    "node-sass": "^3.11.1",
     "s3": "^4.1.1",
     "sass-loader": "^4.0.0",
     "sinon": "^1.10.2",
@@ -82,7 +80,6 @@
     "url-loader": "^0.5.6",
     "webpack": "^1.12.1",
     "webpack-dev-server": "^1.14.0",
-    "webworkify-webpack": "1.1.4",
     "yargs": "^4.1.0"
   },
   "dependencies": {}
