@@ -208,6 +208,9 @@ export default class MediaControl extends UIObject {
       this.$playPauseToggle.append(playIcon)
       this.$playStopToggle.append(playIcon)
       this.trigger(Events.MEDIACONTROL_NOTPLAYING)
+      if (Browser.isMobile) {
+        this.show()
+      }
     }
     this.applyButtonStyle(this.$playPauseToggle)
     this.applyButtonStyle(this.$playStopToggle)
@@ -485,7 +488,7 @@ export default class MediaControl extends UIObject {
   }
 
   hide(delay = 0) {
-    if (!this.isVisible()) {
+    if (!this.isVisible() || (Browser.isMobile && !this.container.isPlaying())) {
       return
     }
     const timeout = delay || 2000
