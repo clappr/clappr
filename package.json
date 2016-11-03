@@ -68,7 +68,7 @@
     "mkdirp": "^0.5.1",
     "mocha": "^2.3.4",
     "node-bourbon": "^4.2.8",
-    "node-sass": "^3.7.0",
+    "node-sass": "^3.11.1",
     "s3": "^4.1.1",
     "sass-loader": "^4.0.0",
     "sinon": "^1.10.2",
@@ -80,7 +80,6 @@
     "url-loader": "^0.5.6",
     "webpack": "^1.12.1",
     "webpack-dev-server": "^1.14.0",
-    "webworkify-webpack": "1.1.4",
     "yargs": "^4.1.0"
   },
   "dependencies": {}
