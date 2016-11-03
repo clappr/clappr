@@ -2,6 +2,8 @@
 
 Please, try to follow this to open new bugs (questions, suggestions and others are welcome)
 
+Before you open the bug please follow the [common steps to verify issues]( https://github.com/clappr/clappr/blob/master/doc/TROUBLESHOOTING.md#common-steps-to-verify-issues)
+
 For the **issue title**: A **meaningful title** (like: HLS doesn't work at windows 10). Try to **avoid helpless title** (like: it doesn't work, IE10, bug, problem)
 
 **Be sure to**:

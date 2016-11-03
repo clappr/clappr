@@ -7,14 +7,13 @@ module.exports = {
     new webpack.DefinePlugin({
       VERSION: JSON.stringify(require('./package.json').version)
     }),
-    // Per https://github.com/dailymotion/hls.js/issues/187
-    new webpack.NormalModuleReplacementPlugin(/^webworkify$/, 'webworkify-webpack')
   ],
   module: {
     loaders: [
       {
         test: /\.js$/,
-        loader: 'babel-loader'
+        loader: 'babel-loader',
+        exclude: [path.resolve(__dirname, './node_modules')]
         // config in .babelrc
       },
       {

@@ -18,6 +18,7 @@ import template from 'base/template'
 import Playback from 'base/playback'
 
 import $ from 'clappr-zepto'
+import merge from 'lodash.merge'
 
 import mediaControlStyle from './public/media-control.scss'
 import mediaControlHTML from './public/media-control.html'
@@ -33,6 +34,7 @@ import hdIcon from 'icons/08-hd.svg'
 
 export default class MediaControl extends UIObject {
   get name() { return 'MediaControl' }
+  get disabled() { return this.userDisabled || (this.container && this.container.getPlaybackType() === Playback.NO_OP)}
 
   get attributes() {
     return {
@@ -80,6 +82,7 @@ export default class MediaControl extends UIObject {
     const initialVolume = (this.persistConfig) ? Config.restore('volume') : 100
     this.setVolume(this.options.mute ? 0 : initialVolume)
     this.keepVisible = false
+    this.fullScreenOnVideoTagSupported = null // unknown
     this.addEventListeners()
     this.settings = {
       left: ['play', 'stop', 'pause'],
@@ -95,7 +98,7 @@ export default class MediaControl extends UIObject {
       this.settings = {}
     }
 
-    this.disabled = false
+    this.userDisabled = false
     if ((this.container && this.container.mediaControlDisabled) || this.options.chromeless) {
       this.disable()
     }
@@ -120,18 +123,22 @@ export default class MediaControl extends UIObject {
       this.listenTo(this.container, Events.CONTAINER_MEDIACONTROL_ENABLE, this.enable)
       this.listenTo(this.container, Events.CONTAINER_ENDED, this.ended)
       this.listenTo(this.container, Events.CONTAINER_VOLUME, this.onVolumeChanged)
+      if (this.container.playback.el.nodeName.toLowerCase() === 'video') {
+        // wait until the metadata has loaded and then check if fullscreen on video tag is supported
+        this.listenToOnce(this.container, Events.CONTAINER_LOADEDMETADATA, this.onLoadedMetadataOnVideoTag)
+      }
     }
   }
 
   disable() {
-    this.disabled = true
+    this.userDisabled = true
     this.hide()
     this.$el.hide()
   }
 
   enable() {
     if (this.options.chromeless) return
-    this.disabled = false
+    this.userDisabled = false
     this.show()
   }
 
@@ -149,6 +156,16 @@ export default class MediaControl extends UIObject {
 
   onVolumeChanged() {
     this.updateVolumeUI()
+  }
+
+  onLoadedMetadataOnVideoTag() {
+    let video = this.container.playback.el
+    // video.webkitSupportsFullscreen is deprecated but iOS appears to only use this
+    // see https://github.com/clappr/clappr/issues/1127
+    if (!Fullscreen.fullscreenEnabled() && video.webkitSupportsFullscreen) {
+      this.fullScreenOnVideoTagSupported = true
+      this.settingsUpdate()
+    }
   }
 
   updateVolumeUI() {
@@ -339,6 +356,7 @@ export default class MediaControl extends UIObject {
   setContainer(container) {
     if (this.container) {
       this.stopListening(this.container)
+      this.fullScreenOnVideoTagSupported = null
     }
     Mediator.off(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
     this.container = container
@@ -449,7 +467,9 @@ export default class MediaControl extends UIObject {
   }
 
   show(event) {
-    if (this.disabled) return
+    if (this.disabled) {
+      return
+    }
     const timeout = 2000
     if (!event || (event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY) || navigator.userAgent.match(/firefox/i)) {
       clearTimeout(this.hideId)
@@ -465,10 +485,15 @@ export default class MediaControl extends UIObject {
   }
 
   hide(delay = 0) {
+    if (!this.isVisible()) {
+      return
+    }
     const timeout = delay || 2000
     clearTimeout(this.hideId)
-    if (!this.isVisible() || this.options.hideMediaControl === false) return
-    if (delay || this.userKeepVisible || this.keepVisible || this.draggingSeekBar || this.draggingVolumeBar) {
+    if (!this.disabled && this.options.hideMediaControl === false) {
+      return
+    }
+    if (!this.disabled && (delay || this.userKeepVisible || this.keepVisible || this.draggingSeekBar || this.draggingVolumeBar)) {
       this.hideId = setTimeout(() => this.hide(), timeout)
     } else {
       this.trigger(Events.MEDIACONTROL_HIDE, this.name)
@@ -479,21 +504,21 @@ export default class MediaControl extends UIObject {
 
   settingsUpdate() {
     const newSettings = this.getSettings()
-    if (newSettings && !Fullscreen.fullscreenEnabled()) {
+    if (newSettings && !this.fullScreenOnVideoTagSupported && !Fullscreen.fullscreenEnabled()) {
       // remove fullscreen from settings if it is present
       newSettings.default && removeArrayItem(newSettings.default, 'fullscreen')
       newSettings.left && removeArrayItem(newSettings.left, 'fullscreen')
       newSettings.right && removeArrayItem(newSettings.right, 'fullscreen')
     }
     const settingsChanged = JSON.stringify(this.settings) !== JSON.stringify(newSettings)
-    if (this.container.getPlaybackType() && settingsChanged) {
+    if (settingsChanged) {
       this.settings = newSettings
       this.render()
     }
   }
 
   getSettings() {
-    return $.extend({}, this.container.settings)
+    return merge({}, this.container.settings)
   }
 
   highDefinitionUpdate(isHD) {

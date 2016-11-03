@@ -11,7 +11,6 @@ import Events from 'base/events'
 import Container from 'components/container'
 import $ from 'clappr-zepto'
 
-import find from 'lodash.find'
 import isPlainObject from 'lodash.isplainobject'
 
 export default class ContainerFactory extends BaseObject {
@@ -33,7 +32,7 @@ export default class ContainerFactory extends BaseObject {
   }
 
   findPlaybackPlugin(source, mimeType) {
-    return find(this.loader.playbackPlugins, (p) => { return p.canPlay(source, mimeType) })
+    return this.loader.playbackPlugins.filter(p => p.canPlay(source, mimeType))[0]
   }
 
   createContainer(source) {

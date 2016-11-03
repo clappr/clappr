@@ -10,7 +10,6 @@ import Events from 'base/events'
 import UIObject from 'base/ui_object'
 import Styler from 'base/styler'
 import style from './public/style.scss'
-import find from 'lodash.find'
 import $ from 'clappr-zepto'
 
 /**
@@ -354,7 +353,7 @@ export default class Container extends UIObject {
    * @param {String} name
    */
   getPlugin(name) {
-    return find(this.plugins, (plugin) => { return plugin.name === name })
+    return this.plugins.filter(plugin => plugin.name === name)[0]
   }
 
   mouseEnter() {

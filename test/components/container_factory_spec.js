@@ -8,9 +8,15 @@ describe('ContainerFactory', function() {
       source: 'http://some.url/for/video.mp4',
       autoPlay: false
     }
-    this.loader = {}
+    this.playback = {canPlay: () => true}
+    this.loader = {playbackPlugins: [this.playback]}
     this.i18n = {}
     this.containerFactory = new ContainerFactory(this.options, this.loader, this.i18n)
+  })
+
+  it('finds playback based on source', function() {
+    const playback = this.containerFactory.findPlaybackPlugin('video.mp4')
+    assert.equal(this.playback, playback)
   })
 
   it('allows overriding options', function() {
