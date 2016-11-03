@@ -14,7 +14,10 @@ import playIcon from 'icons/01-play.svg'
 export default class PosterPlugin extends UIContainerPlugin {
   get name() { return 'poster' }
   get template() { return template(posterHTML) }
-  get shouldRender() { return this.container.playback.name !== 'html_img' && this.container.playback.getPlaybackType() !== Playback.NO_OP}
+  get shouldRender() {
+    const showForNoOp = !!(this.options.poster && this.options.poster.showForNoOp)
+    return this.container.playback.name !== 'html_img' && (this.container.playback.getPlaybackType() !== Playback.NO_OP || showForNoOp)
+  }
 
   get attributes() {
     return {
