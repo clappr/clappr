@@ -12,6 +12,7 @@ addons:
 
 env:
   - COVERALLS_SERVICE_NAME="travis-ci" COVERALLS_REPO_TOKEN="sj8SOxUBGaVeFGSY9ryrC2eTFpVjCPHJl"
+  - CHROME_BIN="chromium-browser"
 
 notifications:
   email:
