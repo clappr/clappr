@@ -6,6 +6,7 @@ import UIContainerPlugin from 'base/ui_container_plugin'
 import Events from 'base/events'
 import Styler from 'base/styler'
 import template from 'base/template'
+import Playback from 'base/playback'
 import posterStyle from './public/poster.scss'
 import posterHTML from './public/poster.html'
 import playIcon from 'icons/01-play.svg'
@@ -13,7 +14,7 @@ import playIcon from 'icons/01-play.svg'
 export default class PosterPlugin extends UIContainerPlugin {
   get name() { return 'poster' }
   get template() { return template(posterHTML) }
-  get shouldRender() { return this.container.playback.name !== 'html_img'}
+  get shouldRender() { return this.container.playback.name !== 'html_img' && this.container.playback.getPlaybackType() !== Playback.NO_OP}
 
   get attributes() {
     return {
@@ -85,7 +86,7 @@ export default class PosterPlugin extends UIContainerPlugin {
 
   shouldHideOnPlay() {
     // Audio broadcasts should keep the poster up; video should hide poster while playing.
-    return !((this.container.playback.name == 'html5_audio') || this.container.playback.isAudioOnly)
+    return !this.container.playback.isAudioOnly
   }
 
   update() {
