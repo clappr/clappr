@@ -80,7 +80,7 @@
     "url-loader": "^0.5.6",
     "webpack": "^1.12.1",
     "webpack-dev-server": "^1.14.0",
-    "yargs": "^4.1.0"
+    "yargs": "^5.0.0"
   },
   "dependencies": {}
 }
