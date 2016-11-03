@@ -21,6 +21,12 @@ describe('Container', function() {
     expect(this.container.plugins[0]).to.equal(this.playback)
   })
 
+  it('gets a plugin by name', function() {
+    const plugin = {name: 'fake'}
+    this.container.addPlugin(plugin)
+    assert.equal(plugin, this.container.getPlugin('fake'))
+  })
+
   it('destroys all the plugins', function() {
     const fakePlugin = {destroy: function(){}}
 

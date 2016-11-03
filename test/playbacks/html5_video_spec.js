@@ -164,37 +164,28 @@ describe('HTML5Video playback', function() {
     })
   })
 
-  describe('sources', function() {
-    it('should set up source tag with values from options', function() {
+  describe('video element', function() {
+    it('should set src url from options', function() {
       const options = {
         src: 'http://example.com/some_source?query_string=here',
         mimeType: 'application/x-mpegURL'
       }
       const html5Video = new HTML5Video(options)
       html5Video.render()
-      const sourceEl = html5Video.$el.find('source')[0]
-      expect(sourceEl.src).to.be.equal(options.src)
-      expect(sourceEl.type).to.be.equal(options.mimeType)
+      expect(html5Video.el.getAttribute('src')).to.be.equal(options.src)
     })
 
-    it('should set up source tag with inferred values when not set by options', function() {
+    it('should have src attribute removed after stop, and then added after play', function() {
       const options = {
         src: 'http://example.com/video.mp4'
       }
       const html5Video = new HTML5Video(options)
       html5Video.render()
-      const sourceEl = html5Video.$el.find('source')[0]
-      expect(sourceEl.src).to.be.equal(options.src)
-      expect(sourceEl.type).to.be.equal('video/mp4')
-    })
-
-    it('should set up source tag with value extracted from url when mimeType parameter is not set', function() {
-      const options = {src: 'http://example.com/video.m3u8'}
-      const html5Video = new HTML5Video(options)
-      html5Video.render()
-      const sourceEl = html5Video.$el.find('source')[0]
-      expect(sourceEl.src).to.be.equal(options.src)
-      expect(sourceEl.type).to.be.equal('application/x-mpegurl')
+      html5Video.play()
+      html5Video.stop()
+      expect(html5Video.el.hasAttribute('src')).to.be.false
+      html5Video.play()
+      expect(html5Video.el.getAttribute('src')).to.be.equal(options.src)
     })
   })
 
