@@ -18,4 +18,5 @@ Comments on seekbar| Ready | ? | http://labs.jordane.net/clappr-comment/
 Voice control| Ready | ? | https://github.com/flavioribeiro/clappr-speech-control-plugin
 Dash           | WIP | No | https://github.com/shankardevy/clappr-dash-plugin
 Youtube        | Ready | No | https://github.com/towerz/clappr-youtube-playback
+Ad plugin | WIP | No | https://github.com/vix-simplex/clappr-ad-plugin
 
