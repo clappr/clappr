@@ -91,6 +91,7 @@ export default class HTML5Video extends Playback {
 
   constructor(...args) {
     super(...args)
+    this._destroyed = false
     this._loadStarted = false
     this._playheadMoving = false
     this._playheadMovingTimer = null
@@ -118,7 +119,7 @@ export default class HTML5Video extends Playback {
     this.settings.right = ['fullscreen', 'volume', 'hd-indicator']
 
     // https://github.com/clappr/clappr/issues/1076
-    this.options.autoPlay && process.nextTick(() => this.play())
+    this.options.autoPlay && process.nextTick(() => !this._destroyed && this.play())
   }
 
   /**
@@ -320,6 +321,7 @@ export default class HTML5Video extends Playback {
   }
 
   destroy() {
+    this._destroyed = true
     this.$el.remove()
     this.el.src = ''
     this._src = null
