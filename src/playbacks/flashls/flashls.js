@@ -417,7 +417,7 @@ export default class FlasHLS extends BaseFlashPlayback {
       this.trigger(Events.PLAYBACK_SETTINGSUPDATE, this.name)
     }
 
-    if (livePlayback && (!this._dvrEnabled || !this._dvrInUse)) {
+    if (livePlayback && !this._dvrEnabled) {
       position = duration
     }
 
