@@ -98,19 +98,18 @@ package
     }
     private function netStatusHandler(event:NetStatusEvent):void {
       if (event.info.code === "NetStream.Buffer.Full") {
-        playbackState = "PLAYING";
+        _changeStateAndNotify("PLAYING")
         _ns.bufferTime = 15;
       } else if (isBuffering(event.info.code)) {
-        playbackState = "PLAYING_BUFFERING";
+        _changeStateAndNotify("PLAYING_BUFFERING")
       } else if (event.info.code == "NetStream.Video.DimensionChange") {
         setVideoSize(stage.stageWidth, stage.stageHeight);
       } else if (event.info.code == "NetStream.Play.Stop") {
-        playbackState = "ENDED";
+        _changeStateAndNotify("ENDED")
         heartbeat.stop();
       } else if (event.info.code == "NetStream.Buffer.Empty") {
         _ns.bufferTime = 5;
       }
-      _triggerEvent('statechanged');
     }
     private function isBuffering(code:String):Boolean {
       return Boolean(code == "NetStream.Buffer.Empty" && playbackState != "ENDED" ||
@@ -134,19 +133,19 @@ package
       if (_ns.bytesLoaded == _ns.bytesTotal) {
         heartbeat.stop();
       }
-      playbackState = "PAUSED";
+      _changeStateAndNotify("PAUSED");
     }
     private function playerStop():void {
       _ns.pause();
       _ns.seek(0);
       heartbeat.stop();
-      playbackState = "IDLE";
+      _changeStateAndNotify("IDLE");
     }
     private function playerSeek(position:Number):void {
       _ns.seek(position);
     }
     private function playerResume():void {
-      playbackState = "PLAYING";
+      _changeStateAndNotify("PLAYING");
       _ns.resume();
       heartbeat.start();
     }
@@ -240,5 +239,10 @@ package
     }
 	public function onPlayStatus(infoObject:Object):void {
 	}
+
+    private function _changeStateAndNotify(state: String):void {
+      playbackState = state;
+      _triggerEvent('statechanged');
+    }
   }
 }

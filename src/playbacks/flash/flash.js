@@ -112,16 +112,21 @@ export default class Flash extends BaseFlashPlayback {
   }
 
   _checkState() {
-    if (this._isIdle || this._currentState === 'PAUSED') {
-      return
+    if (this._isIdle) {
+        return;
+    } else if (this.el.getState()  === 'PAUSED') {
+      this._currentState = 'PAUSED'
+      this.trigger(Events.PLAYBACK_PAUSE, this.name)
     } else if (this._currentState !== 'PLAYING_BUFFERING' && this.el.getState() === 'PLAYING_BUFFERING') {
       this._bufferingState = true
       this.trigger(Events.PLAYBACK_BUFFERING, this.name)
       this._currentState = 'PLAYING_BUFFERING'
     } else if (this.el.getState() === 'PLAYING') {
+      this._isIdle = false
       this._bufferingState = false
       this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
       this._currentState = 'PLAYING'
+      this.trigger(Events.PLAYBACK_PLAY, this.name)
     } else if (this.el.getState() === 'IDLE') {
       this._currentState = 'IDLE'
     } else if (this.el.getState() === 'ENDED') {
@@ -147,7 +152,6 @@ export default class Flash extends BaseFlashPlayback {
       this._isIdle = false
       this.el.playerPlay(this._src)
       this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this._checkInitialSeek())
-      this._currentState = 'PLAYING'
     } else {
       this.listenToOnce(this, Events.PLAYBACK_READY, this._firstPlay)
     }
@@ -163,12 +167,9 @@ export default class Flash extends BaseFlashPlayback {
   play() {
     this.trigger(Events.PLAYBACK_PLAY_INTENT)
     if (this._currentState === 'PAUSED' || this._currentState === 'PLAYING_BUFFERING') {
-      this._currentState = 'PLAYING'
       this.el.playerResume()
-      this.trigger(Events.PLAYBACK_PLAY, this.name)
     } else if (this._currentState !== 'PLAYING') {
       this._firstPlay()
-      this.trigger(Events.PLAYBACK_PLAY, this.name)
     }
   }
 
