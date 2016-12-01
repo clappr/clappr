@@ -101,6 +101,8 @@ export default class DashShakaPlayback extends HTML5Video {
     this._isShakaReadyState = false
     this._player = this._createPlayer()
     this._options.shakaConfiguration && this._player.configure(this._options.shakaConfiguration)
+    this._options.shakaOnBeforeLoad && this._options.shakaOnBeforeLoad(this._player)
+
     var playerLoaded = this._player.load(this._options.src)
     playerLoaded.then(() => this._loaded())
       .catch((e) => this._setupError(e))
