@@ -34,7 +34,10 @@ A [clappr](https://github.com/clappr/clappr) playback to play dash based on [sha
             streaming: {
               rebufferingGoal: 15
             }
-          }
+          },
+          shakaOnBeforeLoad: function(shaka_player) {
+            // shaka_player.getNetworkingEngine().registerRequestFilter() ...
+          },
           parentId: '#player'
         });
     </script>
@@ -45,6 +48,10 @@ A [clappr](https://github.com/clappr/clappr) playback to play dash based on [sha
 # DRM
 
 If need to protect your content (DRM) you must use the `shakaConfiguration` following the [shaka configuration](http://shaka-player-demo.appspot.com/docs/api/tutorial-drm-config.html) need.
+
+# License Wrapping
+
+If need to wrap DRM license requests or responses you use `shakaOnBeforeLoad` following [shaka License Wrapping](http://shaka-player-demo.appspot.com/docs/api/tutorial-license-wrapping.html) guide.
 
 # Development
 
