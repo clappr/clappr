@@ -117,8 +117,12 @@ export default class PosterPlugin extends UIContainerPlugin {
     this.$el.html(this.template())
     this.$el.append(style)
     if (this.options.poster) {
-      const posterUrl = this.options.poster.url || this.options.poster
-      this.$el.css({'background-image': 'url(' + posterUrl + ')'})
+      if (this.options.poster.custom) {
+        this.$el.css({'background': this.options.poster.custom})
+      } else {
+        const posterUrl = this.options.poster.url || this.options.poster
+        this.$el.css({'background-image': 'url(' + posterUrl + ')'})
+      }
     }
     this.container.$el.append(this.el)
     this.$playWrapper = this.$el.find('.play-wrapper')
