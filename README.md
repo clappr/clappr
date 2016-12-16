@@ -5,8 +5,10 @@
 
 A [clappr](https://github.com/clappr/clappr) playback to play dash based on [shaka-player](https://github.com/google/shaka-player).
 
-> (please change version to use the lastest) CDN CDNJS: https://cdnjs.cloudflare.com/ajax/libs/dash-shaka-playback/2.0.3/dash-shaka-playback.js
+> CDNJS: https://cdnjs.cloudflare.com/ajax/libs/dash-shaka-playback/2.0.3/dash-shaka-playback.js
+>
 > (for some reason jsdelivr is not working) CDN JSDELIVR: https://cdn.jsdelivr.net/clappr.dash-shaka-playback/latest/dash-shaka-playback.js
+>
 > NPM: https://www.npmjs.com/package/dash-shaka-playback/
 
 # Demo
