@@ -7,11 +7,13 @@
 
 A [clappr](https://github.com/clappr/clappr) playback to play dash based on [shaka-player](https://github.com/google/shaka-player).
 
-> CDN: https://cdn.jsdelivr.net/clappr.dash-shaka-playback/latest/dash-shaka-playback.js
-> 
+> (please change version to use the lastest) CDN CDNJS: https://cdnjs.cloudflare.com/ajax/libs/dash-shaka-playback/2.0.3/dash-shaka-playback.js
+> (for some reason jsdelivr is not working) CDN JSDELIVR: https://cdn.jsdelivr.net/clappr.dash-shaka-playback/latest/dash-shaka-playback.js
 > NPM: https://www.npmjs.com/package/dash-shaka-playback/
 
-[![dash shaka playback screenshot](https://raw.githubusercontent.com/clappr/dash-shaka-playback/master/public/screen-shot-dash-clappr.png)](https://jsfiddle.net/m8ndduLo/16/)
+# Demo
+
+[![dash shaka playback screenshot](https://raw.githubusercontent.com/clappr/dash-shaka-playback/master/public/screen-shot-dash-clappr.png)](https://jsfiddle.net/leandromoreira/m8ndduLo/26/)
 
 # Usage
 
@@ -19,7 +21,7 @@ A [clappr](https://github.com/clappr/clappr) playback to play dash based on [sha
 <html>
   <head>
     <script src="https://cdn.jsdelivr.net/clappr/latest/clappr.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/clappr.dash-shaka-playback/latest/dash-shaka-playback.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dash-shaka-playback/2.0.3/dash-shaka-playback.js"></script>
   </head>
 
   <body>
