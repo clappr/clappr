@@ -36,7 +36,7 @@
     "clean-webpack-plugin": "^0.1.14",
     "coveralls": "^2.11.4",
     "css-loader": "^0.26.0",
-    "dotenv": "^2.0.0",
+    "dotenv": "^4.0.0",
     "eslint": "^3.1.0",
     "file-loader": "^0.9.0",
     "gulp": "^3.8.1",
