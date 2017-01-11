@@ -8,7 +8,7 @@ import isEqual from 'lodash.isequal'
 import Events from 'base/events'
 import Playback from 'base/playback'
 import Browser from 'components/browser'
-import {now} from 'base/utils'
+import {now, seekStringToSeconds} from 'base/utils'
 import Log from 'plugins/log'
 
 const AUTO = -1
@@ -139,7 +139,11 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   _setupHls() {
-    this._hls = new HLSJS(this.options.playback.hlsjsConfig || {})
+    const autoSeekFromUrl = typeof(this.options.autoSeekFromUrl) === 'undefined' || this.options.autoSeekFromUrl
+    const startPosition = this.getPlaybackType() !== Playback.LIVE && autoSeekFromUrl && seekStringToSeconds();
+    const hlsjsConfig = Object.assign({}, this.options.playback.hlsjsConfig, {startPosition})
+
+    this._hls = new HLSJS(hlsjsConfig)
     this._hls.on(HLSJS.Events.MEDIA_ATTACHED, () => this._hls.loadSource(this.options.src))
     this._hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this._updatePlaybackType(evt, data))
     this._hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this._onLevelUpdated(evt, data))
