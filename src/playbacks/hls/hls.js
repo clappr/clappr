@@ -10,6 +10,7 @@ import Playback from 'base/playback'
 import Browser from 'components/browser'
 import {now, seekStringToSeconds} from 'base/utils'
 import Log from 'plugins/log'
+import $ from 'clappr-zepto';
 
 const AUTO = -1
 
@@ -138,7 +139,7 @@ export default class HLS extends HTML5VideoPlayback {
 
     const autoSeekFromUrl = typeof(this.options.autoSeekFromUrl) === 'undefined' || this.options.autoSeekFromUrl
     const startPosition = this.getPlaybackType() !== Playback.LIVE && autoSeekFromUrl && seekStringToSeconds()
-    this._hlsjsConfig = Object.assign({}, this.options.playback.hlsjsConfig, {startPosition})
+    this._hlsjsConfig = $.extend({}, this.options.playback.hlsjsConfig, {startPosition})
 
     this._startTimeUpdateTimer()
   }
