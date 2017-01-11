@@ -140,7 +140,7 @@ export default class HLS extends HTML5VideoPlayback {
 
   _setupHls() {
     const autoSeekFromUrl = typeof(this.options.autoSeekFromUrl) === 'undefined' || this.options.autoSeekFromUrl
-    const startPosition = this.getPlaybackType() !== Playback.LIVE && autoSeekFromUrl && seekStringToSeconds();
+    const startPosition = this.getPlaybackType() !== Playback.LIVE && autoSeekFromUrl && seekStringToSeconds()
     const hlsjsConfig = Object.assign({}, this.options.playback.hlsjsConfig, {startPosition})
 
     this._hls = new HLSJS(hlsjsConfig)
