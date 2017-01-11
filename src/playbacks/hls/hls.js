@@ -135,15 +135,16 @@ export default class HLS extends HTML5VideoPlayback {
     // #EXT-X-PLAYLIST-TYPE
     this._playlistType = null
     this._recoverAttemptsRemaining = this.options.hlsRecoverAttempts || 16
+
+    const autoSeekFromUrl = typeof(this.options.autoSeekFromUrl) === 'undefined' || this.options.autoSeekFromUrl
+    const startPosition = this.getPlaybackType() !== Playback.LIVE && autoSeekFromUrl && seekStringToSeconds()
+    this._hlsjsConfig = Object.assign({}, this.options.playback.hlsjsConfig, {startPosition})
+
     this._startTimeUpdateTimer()
   }
 
   _setupHls() {
-    const autoSeekFromUrl = typeof(this.options.autoSeekFromUrl) === 'undefined' || this.options.autoSeekFromUrl
-    const startPosition = this.getPlaybackType() !== Playback.LIVE && autoSeekFromUrl && seekStringToSeconds()
-    const hlsjsConfig = Object.assign({}, this.options.playback.hlsjsConfig, {startPosition})
-
-    this._hls = new HLSJS(hlsjsConfig)
+    this._hls = new HLSJS(this._hlsjsConfig)
     this._hls.on(HLSJS.Events.MEDIA_ATTACHED, () => this._hls.loadSource(this.options.src))
     this._hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this._updatePlaybackType(evt, data))
     this._hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this._onLevelUpdated(evt, data))
