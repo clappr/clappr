@@ -10,7 +10,7 @@ import Playback from 'base/playback'
 import Browser from 'components/browser'
 import {now, seekStringToSeconds} from 'base/utils'
 import Log from 'plugins/log'
-import $ from 'clappr-zepto';
+import $ from 'clappr-zepto'
 
 const AUTO = -1
 
