@@ -1,3 +1,11 @@
-Having the zepto code, build with:
+# clappr-zepto
 
-`$ MODULES="zepto event ajax callbacks deferred touch selector ie" npm run dist`
+[Zepto.js](https://github.com/madrobby/zepto) custom build used by [Clappr player](https://github.com/clappr/clappr).
+
+Zepto is build with `ajax callbacks deferred event ie selector touch zepto` modules.
+
+## Building
+
+```shell
+$ npm run build
+```
