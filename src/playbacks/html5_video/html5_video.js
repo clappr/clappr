@@ -109,8 +109,7 @@ export default class HTML5Video extends Playback {
       poster: this.options.poster,
       preload: preload || 'metadata',
       controls: (playbackConfig.controls || this.options.useVideoTagDefaultControls) && 'controls',
-      crossOrigin: playbackConfig.crossOrigin,
-      'x-webkit-playsinline': playbackConfig.playInline
+      crossOrigin: playbackConfig.crossOrigin
     })
 
     // TODO should settings be private?
@@ -118,8 +117,20 @@ export default class HTML5Video extends Playback {
     this.settings.left = ['playpause', 'position', 'duration']
     this.settings.right = ['fullscreen', 'volume', 'hd-indicator']
 
-    // https://github.com/clappr/clappr/issues/1076
-    this.options.autoPlay && process.nextTick(() => !this._destroyed && this.play())
+
+    if(Browser.isMobile) {
+        if(this.options.autoPlay) {
+            this.el.setAttribute('muted', 'true')
+            this.el.setAttribute('autoplay', 'true')
+        }
+        if(playbackConfig.playInline) {
+          this.el.setAttribute('playsinline', 'true')
+        }
+    }
+    else {
+        // https://github.com/clappr/clappr/issues/1076
+        this.options.autoPlay && process.nextTick(() => !this._destroyed && this.play())
+    }
   }
 
   /**
