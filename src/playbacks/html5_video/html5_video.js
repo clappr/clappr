@@ -119,17 +119,17 @@ export default class HTML5Video extends Playback {
 
 
     if(Browser.isMobile) {
-        if(this.options.autoPlay) {
-            this.el.setAttribute('muted', 'true')
-            this.el.setAttribute('autoplay', 'true')
-        }
-        if(playbackConfig.playInline) {
-          this.el.setAttribute('playsinline', 'true')
-        }
+      if(this.options.autoPlay) {
+        this.el.setAttribute('muted', 'true')
+        this.el.setAttribute('autoplay', 'true')
+      }
+      if(playbackConfig.playInline) {
+        this.el.setAttribute('playsinline', 'true')
+      }
     }
     else {
-        // https://github.com/clappr/clappr/issues/1076
-        this.options.autoPlay && process.nextTick(() => !this._destroyed && this.play())
+      // https://github.com/clappr/clappr/issues/1076
+      this.options.autoPlay && process.nextTick(() => !this._destroyed && this.play())
     }
   }
 
