@@ -162,13 +162,16 @@ patch_zepto()
 
 copy_zepto()
 {
-  info "Copy zepto.js to $OUTPUT_PATH"
+  info "Copy Zepto files to $OUTPUT_PATH"
   # OUTPUT_PATH may be relative, change to current folder
   if ! cd $CURRENT_DIR; then
     error "failed to change directory to $CURRENT_DIR"
   fi
   if ! cp ${TMP_PATH}/zepto/dist/zepto.js $OUTPUT_PATH; then
     error "failed to copy zepto.js to $OUTPUT_PATH"
+  fi
+  if ! cp ${TMP_PATH}/zepto/dist/zepto.min.js $OUTPUT_PATH; then
+    error "failed to copy zepto.min.js to $OUTPUT_PATH"
   fi
 }
 
