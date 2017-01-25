@@ -6,7 +6,7 @@ SCRIPT_DIR=$(dirname "${SCRIPT_FILE}")
 SCRIPT_NAME=$(basename "$SCRIPT_FILE")
 
 if [[ -z "$ZEPTO_MODULES" ]]; then
-   ZEPTO_MODULES="ajax callbacks deferred event ie selector zepto"
+   ZEPTO_MODULES="zepto ajax callbacks deferred event ie selector"
 fi
 
 OUTPUT_PATH=$CURRENT_DIR    # Default is current folder
