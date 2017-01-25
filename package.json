@@ -1,6 +1,6 @@
 {
   "name": "clappr-zepto",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Clappr's zepto custom build",
   "main": "zepto.min.js",
   "scripts": {
