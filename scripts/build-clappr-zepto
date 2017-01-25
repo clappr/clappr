@@ -5,7 +5,10 @@ SCRIPT_FILE=$(cd `dirname "${BASH_SOURCE[0]}"` && pwd)/`basename "${BASH_SOURCE[
 SCRIPT_DIR=$(dirname "${SCRIPT_FILE}")
 SCRIPT_NAME=$(basename "$SCRIPT_FILE")
 
-ZEPTO_MODULES="ajax callbacks deferred event ie selector touch zepto"
+if [[ -z "$ZEPTO_MODULES" ]]; then
+   ZEPTO_MODULES="ajax callbacks deferred event ie selector zepto"
+fi
+
 OUTPUT_PATH=$CURRENT_DIR    # Default is current folder
 COMMIT=""
 
