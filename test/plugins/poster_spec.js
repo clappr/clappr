@@ -95,4 +95,13 @@ describe('Poster', function() {
     expect(this.poster.shouldHideOnPlay()).to.equal(false)
   })
 
+  it('renders custom background', function() {
+    this.container = new Container({
+      playback: this.playback,
+      poster: {custom: 'linear-gradient(rgb(238, 238, 238), rgb(153, 153, 153))'}
+    })
+    this.poster = new Poster(this.container)
+    this.container.addPlugin(this.poster)
+    expect($(this.poster.$el).css('background')).include('linear-gradient(rgb(238, 238, 238), rgb(153, 153, 153))')
+  })
 })
