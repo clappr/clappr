@@ -1,5 +1,6 @@
 #!/bin/bash
 
+export NOAMD="true"
 CURRENT_DIR=$(pwd)
 SCRIPT_FILE=$(cd `dirname "${BASH_SOURCE[0]}"` && pwd)/`basename "${BASH_SOURCE[0]}"`
 SCRIPT_DIR=$(dirname "${SCRIPT_FILE}")
