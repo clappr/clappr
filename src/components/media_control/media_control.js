@@ -113,6 +113,7 @@ export default class MediaControl extends UIObject {
       Mediator.on(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
       this.listenTo(this.container, Events.CONTAINER_PLAY, this.changeTogglePlay)
       this.listenTo(this.container, Events.CONTAINER_PAUSE, this.changeTogglePlay)
+      this.listenTo(this.container, Events.CONTAINER_STOP, this.changeTogglePlay)
       this.listenTo(this.container, Events.CONTAINER_DBLCLICK, this.toggleFullscreen)
       this.listenTo(this.container, Events.CONTAINER_TIMEUPDATE, this.onTimeUpdate)
       this.listenTo(this.container, Events.CONTAINER_PROGRESS, this.updateProgressBar)
