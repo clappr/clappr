@@ -6,7 +6,7 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       VERSION: JSON.stringify(require('./package.json').version)
-    }),
+    })
   ],
   module: {
     loaders: [
@@ -37,6 +37,7 @@ module.exports = {
     ]
   },
   resolve: {
+    alias: { 'clappr-zepto': 'clappr-zepto/zepto.js' },
     root: path.resolve(__dirname, 'src'),
     extensions: ['', '.js']
   }
