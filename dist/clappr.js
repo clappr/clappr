@@ -186,7 +186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var version = ("0.2.64"); // Copyright 2014 Globo.com Player authors. All rights reserved.
+	var version = ("0.2.65"); // Copyright 2014 Globo.com Player authors. All rights reserved.
 	// Use of this source code is governed by a BSD-style
 	// license that can be found in the LICENSE file.
 
@@ -3528,9 +3528,1928 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 16 */
 /***/ function(module, exports) {
 
-	/* Zepto v1.1.4-80-ga9184b2 - zepto event ajax callbacks deferred touch selector ie - zeptojs.com/license */
-	var Zepto=function(){function D(t){return null==t?String(t):j[S.call(t)]||"object"}function L(t){return"function"==D(t)}function k(t){return null!=t&&t==t.window}function Z(t){return null!=t&&t.nodeType==t.DOCUMENT_NODE}function $(t){return"object"==D(t)}function F(t){return $(t)&&!k(t)&&Object.getPrototypeOf(t)==Object.prototype}function R(t){return"number"==typeof t.length}function q(t){return s.call(t,function(t){return null!=t})}function W(t){return t.length>0?n.fn.concat.apply([],t):t}function z(t){return t.replace(/::/g,"/").replace(/([A-Z]+)([A-Z][a-z])/g,"$1_$2").replace(/([a-z\d])([A-Z])/g,"$1_$2").replace(/_/g,"-").toLowerCase()}function H(t){return t in c?c[t]:c[t]=new RegExp("(^|\\s)"+t+"(\\s|$)")}function _(t,e){return"number"!=typeof e||l[z(t)]?e:e+"px"}function I(t){var e,n;return f[t]||(e=u.createElement(t),u.body.appendChild(e),n=getComputedStyle(e,"").getPropertyValue("display"),e.parentNode.removeChild(e),"none"==n&&(n="block"),f[t]=n),f[t]}function U(t){return"children"in t?a.call(t.children):n.map(t.childNodes,function(t){return 1==t.nodeType?t:void 0})}function X(t,e){var n,i=t?t.length:0;for(n=0;i>n;n++)this[n]=t[n];this.length=i,this.selector=e||""}function B(n,i,r){for(e in i)r&&(F(i[e])||A(i[e]))?(F(i[e])&&!F(n[e])&&(n[e]={}),A(i[e])&&!A(n[e])&&(n[e]=[]),B(n[e],i[e],r)):i[e]!==t&&(n[e]=i[e])}function V(t,e){return null==e?n(t):n(t).filter(e)}function Y(t,e,n,i){return L(e)?e.call(t,n,i):e}function J(t,e,n){null==n?t.removeAttribute(e):t.setAttribute(e,n)}function G(e,n){var i=e.className||"",r=i&&i.baseVal!==t;return n===t?r?i.baseVal:i:void(r?i.baseVal=n:e.className=n)}function K(t){try{return t?"true"==t||("false"==t?!1:"null"==t?null:+t+""==t?+t:/^[\[\{]/.test(t)?n.parseJSON(t):t):t}catch(e){return t}}function Q(t,e){e(t);for(var n=0,i=t.childNodes.length;i>n;n++)Q(t.childNodes[n],e)}var t,e,n,i,N,P,r=[],o=r.concat,s=r.filter,a=r.slice,u=window.document,f={},c={},l={"column-count":1,columns:1,"font-weight":1,"line-height":1,opacity:1,"z-index":1,zoom:1},h=/^\s*<(\w+|!)[^>]*>/,p=/^<(\w+)\s*\/?>(?:<\/\1>|)$/,d=/<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/gi,m=/^(?:body|html)$/i,g=/([A-Z])/g,v=["val","css","html","text","data","width","height","offset"],y=["after","prepend","before","append"],w=u.createElement("table"),x=u.createElement("tr"),b={tr:u.createElement("tbody"),tbody:w,thead:w,tfoot:w,td:x,th:x,"*":u.createElement("div")},E=/complete|loaded|interactive/,T=/^[\w-]*$/,j={},S=j.toString,C={},O=u.createElement("div"),M={tabindex:"tabIndex",readonly:"readOnly","for":"htmlFor","class":"className",maxlength:"maxLength",cellspacing:"cellSpacing",cellpadding:"cellPadding",rowspan:"rowSpan",colspan:"colSpan",usemap:"useMap",frameborder:"frameBorder",contenteditable:"contentEditable"},A=Array.isArray||function(t){return t instanceof Array};return C.matches=function(t,e){if(!e||!t||1!==t.nodeType)return!1;var n=t.webkitMatchesSelector||t.mozMatchesSelector||t.oMatchesSelector||t.matchesSelector;if(n)return n.call(t,e);var i,r=t.parentNode,o=!r;return o&&(r=O).appendChild(t),i=~C.qsa(r,e).indexOf(t),o&&O.removeChild(t),i},N=function(t){return t.replace(/-+(.)?/g,function(t,e){return e?e.toUpperCase():""})},P=function(t){return s.call(t,function(e,n){return t.indexOf(e)==n})},C.fragment=function(e,i,r){var o,s,f;return p.test(e)&&(o=n(u.createElement(RegExp.$1))),o||(e.replace&&(e=e.replace(d,"<$1></$2>")),i===t&&(i=h.test(e)&&RegExp.$1),i in b||(i="*"),f=b[i],f.innerHTML=""+e,o=n.each(a.call(f.childNodes),function(){f.removeChild(this)})),F(r)&&(s=n(o),n.each(r,function(t,e){v.indexOf(t)>-1?s[t](e):s.attr(t,e)})),o},C.Z=function(t,e){return new X(t,e)},C.isZ=function(t){return t instanceof C.Z},C.init=function(e,i){var r;if(!e)return C.Z();if("string"==typeof e)if(e=e.trim(),"<"==e[0]&&h.test(e))r=C.fragment(e,RegExp.$1,i),e=null;else{if(i!==t)return n(i).find(e);r=C.qsa(u,e)}else{if(L(e))return n(u).ready(e);if(C.isZ(e))return e;if(A(e))r=q(e);else if($(e))r=[e],e=null;else if(h.test(e))r=C.fragment(e.trim(),RegExp.$1,i),e=null;else{if(i!==t)return n(i).find(e);r=C.qsa(u,e)}}return C.Z(r,e)},n=function(t,e){return C.init(t,e)},n.extend=function(t){var e,n=a.call(arguments,1);return"boolean"==typeof t&&(e=t,t=n.shift()),n.forEach(function(n){B(t,n,e)}),t},C.qsa=function(t,e){var n,i="#"==e[0],r=!i&&"."==e[0],o=i||r?e.slice(1):e,s=T.test(o);return t.getElementById&&s&&i?(n=t.getElementById(o))?[n]:[]:1!==t.nodeType&&9!==t.nodeType&&11!==t.nodeType?[]:a.call(s&&!i&&t.getElementsByClassName?r?t.getElementsByClassName(o):t.getElementsByTagName(e):t.querySelectorAll(e))},n.contains=u.documentElement.contains?function(t,e){return t!==e&&t.contains(e)}:function(t,e){for(;e&&(e=e.parentNode);)if(e===t)return!0;return!1},n.type=D,n.isFunction=L,n.isWindow=k,n.isArray=A,n.isPlainObject=F,n.isEmptyObject=function(t){var e;for(e in t)return!1;return!0},n.inArray=function(t,e,n){return r.indexOf.call(e,t,n)},n.camelCase=N,n.trim=function(t){return null==t?"":String.prototype.trim.call(t)},n.uuid=0,n.support={},n.expr={},n.noop=function(){},n.map=function(t,e){var n,r,o,i=[];if(R(t))for(r=0;r<t.length;r++)n=e(t[r],r),null!=n&&i.push(n);else for(o in t)n=e(t[o],o),null!=n&&i.push(n);return W(i)},n.each=function(t,e){var n,i;if(R(t)){for(n=0;n<t.length;n++)if(e.call(t[n],n,t[n])===!1)return t}else for(i in t)if(e.call(t[i],i,t[i])===!1)return t;return t},n.grep=function(t,e){return s.call(t,e)},window.JSON&&(n.parseJSON=JSON.parse),n.each("Boolean Number String Function Array Date RegExp Object Error".split(" "),function(t,e){j["[object "+e+"]"]=e.toLowerCase()}),n.fn={constructor:C.Z,length:0,forEach:r.forEach,reduce:r.reduce,push:r.push,sort:r.sort,splice:r.splice,indexOf:r.indexOf,concat:function(){var t,e,n=[];for(t=0;t<arguments.length;t++)e=arguments[t],n[t]=C.isZ(e)?e.toArray():e;return o.apply(C.isZ(this)?this.toArray():this,n)},map:function(t){return n(n.map(this,function(e,n){return t.call(e,n,e)}))},slice:function(){return n(a.apply(this,arguments))},ready:function(t){return E.test(u.readyState)&&u.body?t(n):u.addEventListener("DOMContentLoaded",function(){t(n)},!1),this},get:function(e){return e===t?a.call(this):this[e>=0?e:e+this.length]},toArray:function(){return this.get()},size:function(){return this.length},remove:function(){return this.each(function(){null!=this.parentNode&&this.parentNode.removeChild(this)})},each:function(t){return r.every.call(this,function(e,n){return t.call(e,n,e)!==!1}),this},filter:function(t){return L(t)?this.not(this.not(t)):n(s.call(this,function(e){return C.matches(e,t)}))},add:function(t,e){return n(P(this.concat(n(t,e))))},is:function(t){return this.length>0&&C.matches(this[0],t)},not:function(e){var i=[];if(L(e)&&e.call!==t)this.each(function(t){e.call(this,t)||i.push(this)});else{var r="string"==typeof e?this.filter(e):R(e)&&L(e.item)?a.call(e):n(e);this.forEach(function(t){r.indexOf(t)<0&&i.push(t)})}return n(i)},has:function(t){return this.filter(function(){return $(t)?n.contains(this,t):n(this).find(t).size()})},eq:function(t){return-1===t?this.slice(t):this.slice(t,+t+1)},first:function(){var t=this[0];return t&&!$(t)?t:n(t)},last:function(){var t=this[this.length-1];return t&&!$(t)?t:n(t)},find:function(t){var e,i=this;return e=t?"object"==typeof t?n(t).filter(function(){var t=this;return r.some.call(i,function(e){return n.contains(e,t)})}):1==this.length?n(C.qsa(this[0],t)):this.map(function(){return C.qsa(this,t)}):n()},closest:function(t,e){var i=this[0],r=!1;for("object"==typeof t&&(r=n(t));i&&!(r?r.indexOf(i)>=0:C.matches(i,t));)i=i!==e&&!Z(i)&&i.parentNode;return n(i)},parents:function(t){for(var e=[],i=this;i.length>0;)i=n.map(i,function(t){return(t=t.parentNode)&&!Z(t)&&e.indexOf(t)<0?(e.push(t),t):void 0});return V(e,t)},parent:function(t){return V(P(this.pluck("parentNode")),t)},children:function(t){return V(this.map(function(){return U(this)}),t)},contents:function(){return this.map(function(){return this.contentDocument||a.call(this.childNodes)})},siblings:function(t){return V(this.map(function(t,e){return s.call(U(e.parentNode),function(t){return t!==e})}),t)},empty:function(){return this.each(function(){this.innerHTML=""})},pluck:function(t){return n.map(this,function(e){return e[t]})},show:function(){return this.each(function(){"none"==this.style.display&&(this.style.display=""),"none"==getComputedStyle(this,"").getPropertyValue("display")&&(this.style.display=I(this.nodeName))})},replaceWith:function(t){return this.before(t).remove()},wrap:function(t){var e=L(t);if(this[0]&&!e)var i=n(t).get(0),r=i.parentNode||this.length>1;return this.each(function(o){n(this).wrapAll(e?t.call(this,o):r?i.cloneNode(!0):i)})},wrapAll:function(t){if(this[0]){n(this[0]).before(t=n(t));for(var e;(e=t.children()).length;)t=e.first();n(t).append(this)}return this},wrapInner:function(t){var e=L(t);return this.each(function(i){var r=n(this),o=r.contents(),s=e?t.call(this,i):t;o.length?o.wrapAll(s):r.append(s)})},unwrap:function(){return this.parent().each(function(){n(this).replaceWith(n(this).children())}),this},clone:function(){return this.map(function(){return this.cloneNode(!0)})},hide:function(){return this.css("display","none")},toggle:function(e){return this.each(function(){var i=n(this);(e===t?"none"==i.css("display"):e)?i.show():i.hide()})},prev:function(t){return n(this.pluck("previousElementSibling")).filter(t||"*")},next:function(t){return n(this.pluck("nextElementSibling")).filter(t||"*")},html:function(t){return 0 in arguments?this.each(function(e){var i=this.innerHTML;n(this).empty().append(Y(this,t,e,i))}):0 in this?this[0].innerHTML:null},text:function(t){return 0 in arguments?this.each(function(e){var n=Y(this,t,e,this.textContent);this.textContent=null==n?"":""+n}):0 in this?this[0].textContent:null},attr:function(n,i){var r;return"string"!=typeof n||1 in arguments?this.each(function(t){if(1===this.nodeType)if($(n))for(e in n)J(this,e,n[e]);else J(this,n,Y(this,i,t,this.getAttribute(n)))}):this.length&&1===this[0].nodeType?!(r=this[0].getAttribute(n))&&n in this[0]?this[0][n]:r:t},removeAttr:function(t){return this.each(function(){1===this.nodeType&&t.split(" ").forEach(function(t){J(this,t)},this)})},prop:function(t,e){return t=M[t]||t,1 in arguments?this.each(function(n){this[t]=Y(this,e,n,this[t])}):this[0]&&this[0][t]},data:function(e,n){var i="data-"+e.replace(g,"-$1").toLowerCase(),r=1 in arguments?this.attr(i,n):this.attr(i);return null!==r?K(r):t},val:function(t){return 0 in arguments?this.each(function(e){this.value=Y(this,t,e,this.value)}):this[0]&&(this[0].multiple?n(this[0]).find("option").filter(function(){return this.selected}).pluck("value"):this[0].value)},offset:function(t){if(t)return this.each(function(e){var i=n(this),r=Y(this,t,e,i.offset()),o=i.offsetParent().offset(),s={top:r.top-o.top,left:r.left-o.left};"static"==i.css("position")&&(s.position="relative"),i.css(s)});if(!this.length)return null;if(!n.contains(u.documentElement,this[0]))return{top:0,left:0};var e=this[0].getBoundingClientRect();return{left:e.left+window.pageXOffset,top:e.top+window.pageYOffset,width:Math.round(e.width),height:Math.round(e.height)}},css:function(t,i){if(arguments.length<2){var r,o=this[0];if(!o)return;if(r=getComputedStyle(o,""),"string"==typeof t)return o.style[N(t)]||r.getPropertyValue(t);if(A(t)){var s={};return n.each(t,function(t,e){s[e]=o.style[N(e)]||r.getPropertyValue(e)}),s}}var a="";if("string"==D(t))i||0===i?a=z(t)+":"+_(t,i):this.each(function(){this.style.removeProperty(z(t))});else for(e in t)t[e]||0===t[e]?a+=z(e)+":"+_(e,t[e])+";":this.each(function(){this.style.removeProperty(z(e))});return this.each(function(){this.style.cssText+=";"+a})},index:function(t){return t?this.indexOf(n(t)[0]):this.parent().children().indexOf(this[0])},hasClass:function(t){return t?r.some.call(this,function(t){return this.test(G(t))},H(t)):!1},addClass:function(t){return t?this.each(function(e){if("className"in this){i=[];var r=G(this),o=Y(this,t,e,r);o.split(/\s+/g).forEach(function(t){n(this).hasClass(t)||i.push(t)},this),i.length&&G(this,r+(r?" ":"")+i.join(" "))}}):this},removeClass:function(e){return this.each(function(n){if("className"in this){if(e===t)return G(this,"");i=G(this),Y(this,e,n,i).split(/\s+/g).forEach(function(t){i=i.replace(H(t)," ")}),G(this,i.trim())}})},toggleClass:function(e,i){return e?this.each(function(r){var o=n(this),s=Y(this,e,r,G(this));s.split(/\s+/g).forEach(function(e){(i===t?!o.hasClass(e):i)?o.addClass(e):o.removeClass(e)})}):this},scrollTop:function(e){if(this.length){var n="scrollTop"in this[0];return e===t?n?this[0].scrollTop:this[0].pageYOffset:this.each(n?function(){this.scrollTop=e}:function(){this.scrollTo(this.scrollX,e)})}},scrollLeft:function(e){if(this.length){var n="scrollLeft"in this[0];return e===t?n?this[0].scrollLeft:this[0].pageXOffset:this.each(n?function(){this.scrollLeft=e}:function(){this.scrollTo(e,this.scrollY)})}},position:function(){if(this.length){var t=this[0],e=this.offsetParent(),i=this.offset(),r=m.test(e[0].nodeName)?{top:0,left:0}:e.offset();return i.top-=parseFloat(n(t).css("margin-top"))||0,i.left-=parseFloat(n(t).css("margin-left"))||0,r.top+=parseFloat(n(e[0]).css("border-top-width"))||0,r.left+=parseFloat(n(e[0]).css("border-left-width"))||0,{top:i.top-r.top,left:i.left-r.left}}},offsetParent:function(){return this.map(function(){for(var t=this.offsetParent||u.body;t&&!m.test(t.nodeName)&&"static"==n(t).css("position");)t=t.offsetParent;return t})}},n.fn.detach=n.fn.remove,["width","height"].forEach(function(e){var i=e.replace(/./,function(t){return t[0].toUpperCase()});n.fn[e]=function(r){var o,s=this[0];return r===t?k(s)?s["inner"+i]:Z(s)?s.documentElement["scroll"+i]:(o=this.offset())&&o[e]:this.each(function(t){s=n(this),s.css(e,Y(this,r,t,s[e]()))})}}),y.forEach(function(t,e){var i=e%2;n.fn[t]=function(){var t,o,r=n.map(arguments,function(e){return t=D(e),"object"==t||"array"==t||null==e?e:C.fragment(e)}),s=this.length>1;return r.length<1?this:this.each(function(t,a){o=i?a:a.parentNode,a=0==e?a.nextSibling:1==e?a.firstChild:2==e?a:null;var f=n.contains(u.documentElement,o);r.forEach(function(t){if(s)t=t.cloneNode(!0);else if(!o)return n(t).remove();o.insertBefore(t,a),f&&Q(t,function(t){null==t.nodeName||"SCRIPT"!==t.nodeName.toUpperCase()||t.type&&"text/javascript"!==t.type||t.src||window.eval.call(window,t.innerHTML)})})})},n.fn[i?t+"To":"insert"+(e?"Before":"After")]=function(e){return n(e)[t](this),this}}),C.Z.prototype=X.prototype=n.fn,C.uniq=P,C.deserializeValue=K,n.zepto=C,n}();window.Zepto=Zepto,void 0===window.$&&(window.$=Zepto),function(t){function l(t){return t._zid||(t._zid=e++)}function h(t,e,n,i){if(e=p(e),e.ns)var r=d(e.ns);return(s[l(t)]||[]).filter(function(t){return!(!t||e.e&&t.e!=e.e||e.ns&&!r.test(t.ns)||n&&l(t.fn)!==l(n)||i&&t.sel!=i)})}function p(t){var e=(""+t).split(".");return{e:e[0],ns:e.slice(1).sort().join(" ")}}function d(t){return new RegExp("(?:^| )"+t.replace(" "," .* ?")+"(?: |$)")}function m(t,e){return t.del&&!u&&t.e in f||!!e}function g(t){return c[t]||u&&f[t]||t}function v(e,i,r,o,a,u,f){var h=l(e),d=s[h]||(s[h]=[]);i.split(/\s/).forEach(function(i){if("ready"==i)return t(document).ready(r);var s=p(i);s.fn=r,s.sel=a,s.e in c&&(r=function(e){var n=e.relatedTarget;return!n||n!==this&&!t.contains(this,n)?s.fn.apply(this,arguments):void 0}),s.del=u;var l=u||r;s.proxy=function(t){if(t=T(t),!t.isImmediatePropagationStopped()){t.data=o;var i=l.apply(e,t._args==n?[t]:[t].concat(t._args));return i===!1&&(t.preventDefault(),t.stopPropagation()),i}},s.i=d.length,d.push(s),"addEventListener"in e&&e.addEventListener(g(s.e),s.proxy,m(s,f))})}function y(t,e,n,i,r){var o=l(t);(e||"").split(/\s/).forEach(function(e){h(t,e,n,i).forEach(function(e){delete s[o][e.i],"removeEventListener"in t&&t.removeEventListener(g(e.e),e.proxy,m(e,r))})})}function T(e,i){return(i||!e.isDefaultPrevented)&&(i||(i=e),t.each(E,function(t,n){var r=i[t];e[t]=function(){return this[n]=w,r&&r.apply(i,arguments)},e[n]=x}),(i.defaultPrevented!==n?i.defaultPrevented:"returnValue"in i?i.returnValue===!1:i.getPreventDefault&&i.getPreventDefault())&&(e.isDefaultPrevented=w)),e}function j(t){var e,i={originalEvent:t};for(e in t)b.test(e)||t[e]===n||(i[e]=t[e]);return T(i,t)}var n,e=1,i=Array.prototype.slice,r=t.isFunction,o=function(t){return"string"==typeof t},s={},a={},u="onfocusin"in window,f={focus:"focusin",blur:"focusout"},c={mouseenter:"mouseover",mouseleave:"mouseout"};a.click=a.mousedown=a.mouseup=a.mousemove="MouseEvents",t.event={add:v,remove:y},t.proxy=function(e,n){var s=2 in arguments&&i.call(arguments,2);if(r(e)){var a=function(){return e.apply(n,s?s.concat(i.call(arguments)):arguments)};return a._zid=l(e),a}if(o(n))return s?(s.unshift(e[n],e),t.proxy.apply(null,s)):t.proxy(e[n],e);throw new TypeError("expected function")},t.fn.bind=function(t,e,n){return this.on(t,e,n)},t.fn.unbind=function(t,e){return this.off(t,e)},t.fn.one=function(t,e,n,i){return this.on(t,e,n,i,1)};var w=function(){return!0},x=function(){return!1},b=/^([A-Z]|returnValue$|layer[XY]$)/,E={preventDefault:"isDefaultPrevented",stopImmediatePropagation:"isImmediatePropagationStopped",stopPropagation:"isPropagationStopped"};t.fn.delegate=function(t,e,n){return this.on(e,t,n)},t.fn.undelegate=function(t,e,n){return this.off(e,t,n)},t.fn.live=function(e,n){return t(document.body).delegate(this.selector,e,n),this},t.fn.die=function(e,n){return t(document.body).undelegate(this.selector,e,n),this},t.fn.on=function(e,s,a,u,f){var c,l,h=this;return e&&!o(e)?(t.each(e,function(t,e){h.on(t,s,a,e,f)}),h):(o(s)||r(u)||u===!1||(u=a,a=s,s=n),(u===n||a===!1)&&(u=a,a=n),u===!1&&(u=x),h.each(function(n,r){f&&(c=function(t){return y(r,t.type,u),u.apply(this,arguments)}),s&&(l=function(e){var n,o=t(e.target).closest(s,r).get(0);return o&&o!==r?(n=t.extend(j(e),{currentTarget:o,liveFired:r}),(c||u).apply(o,[n].concat(i.call(arguments,1)))):void 0}),v(r,e,u,a,s,l||c)}))},t.fn.off=function(e,i,s){var a=this;return e&&!o(e)?(t.each(e,function(t,e){a.off(t,i,e)}),a):(o(i)||r(s)||s===!1||(s=i,i=n),s===!1&&(s=x),a.each(function(){y(this,e,s,i)}))},t.fn.trigger=function(e,n){return e=o(e)||t.isPlainObject(e)?t.Event(e):T(e),e._args=n,this.each(function(){e.type in f&&"function"==typeof this[e.type]?this[e.type]():"dispatchEvent"in this?this.dispatchEvent(e):t(this).triggerHandler(e,n)})},t.fn.triggerHandler=function(e,n){var i,r;return this.each(function(s,a){i=j(o(e)?t.Event(e):e),i._args=n,i.target=a,t.each(h(a,e.type||e),function(t,e){return r=e.proxy(i),i.isImmediatePropagationStopped()?!1:void 0})}),r},"focusin focusout focus blur load resize scroll unload click dblclick mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave change select keydown keypress keyup error".split(" ").forEach(function(e){t.fn[e]=function(t){return 0 in arguments?this.bind(e,t):this.trigger(e)}}),t.Event=function(t,e){o(t)||(e=t,t=e.type);var n=document.createEvent(a[t]||"Events"),i=!0;if(e)for(var r in e)"bubbles"==r?i=!!e[r]:n[r]=e[r];return n.initEvent(t,i,!0),T(n)}}(Zepto),function(t){function h(e,n,i){var r=t.Event(n);return t(e).trigger(r,i),!r.isDefaultPrevented()}function p(t,e,i,r){return t.global?h(e||n,i,r):void 0}function d(e){e.global&&0===t.active++&&p(e,null,"ajaxStart")}function m(e){e.global&&!--t.active&&p(e,null,"ajaxStop")}function g(t,e){var n=e.context;return e.beforeSend.call(n,t,e)===!1||p(e,n,"ajaxBeforeSend",[t,e])===!1?!1:void p(e,n,"ajaxSend",[t,e])}function v(t,e,n,i){var r=n.context,o="success";n.success.call(r,t,o,e),i&&i.resolveWith(r,[t,o,e]),p(n,r,"ajaxSuccess",[e,n,t]),w(o,e,n)}function y(t,e,n,i,r){var o=i.context;i.error.call(o,n,e,t),r&&r.rejectWith(o,[n,e,t]),p(i,o,"ajaxError",[n,i,t||e]),w(e,n,i)}function w(t,e,n){var i=n.context;n.complete.call(i,e,t),p(n,i,"ajaxComplete",[e,n]),m(n)}function x(){}function b(t){return t&&(t=t.split(";",2)[0]),t&&(t==f?"html":t==u?"json":s.test(t)?"script":a.test(t)&&"xml")||"text"}function E(t,e){return""==e?t:(t+"&"+e).replace(/[&?]{1,2}/,"?")}function T(e){e.processData&&e.data&&"string"!=t.type(e.data)&&(e.data=t.param(e.data,e.traditional)),!e.data||e.type&&"GET"!=e.type.toUpperCase()||(e.url=E(e.url,e.data),e.data=void 0)}function j(e,n,i,r){return t.isFunction(n)&&(r=i,i=n,n=void 0),t.isFunction(i)||(r=i,i=void 0),{url:e,data:n,success:i,dataType:r}}function C(e,n,i,r){var o,s=t.isArray(n),a=t.isPlainObject(n);t.each(n,function(n,u){o=t.type(u),r&&(n=i?r:r+"["+(a||"object"==o||"array"==o?n:"")+"]"),!r&&s?e.add(u.name,u.value):"array"==o||!i&&"object"==o?C(e,u,i,n):e.add(n,u)})}var i,r,e=0,n=window.document,o=/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,s=/^(?:text|application)\/javascript/i,a=/^(?:text|application)\/xml/i,u="application/json",f="text/html",c=/^\s*$/,l=n.createElement("a");l.href=window.location.href,t.active=0,t.ajaxJSONP=function(i,r){if(!("type"in i))return t.ajax(i);var f,h,o=i.jsonpCallback,s=(t.isFunction(o)?o():o)||"jsonp"+ ++e,a=n.createElement("script"),u=window[s],c=function(e){t(a).triggerHandler("error",e||"abort")},l={abort:c};return r&&r.promise(l),t(a).on("load error",function(e,n){clearTimeout(h),t(a).off().remove(),"error"!=e.type&&f?v(f[0],l,i,r):y(null,n||"error",l,i,r),window[s]=u,f&&t.isFunction(u)&&u(f[0]),u=f=void 0}),g(l,i)===!1?(c("abort"),l):(window[s]=function(){f=arguments},a.src=i.url.replace(/\?(.+)=\?/,"?$1="+s),n.head.appendChild(a),i.timeout>0&&(h=setTimeout(function(){c("timeout")},i.timeout)),l)},t.ajaxSettings={type:"GET",beforeSend:x,success:x,error:x,complete:x,context:null,global:!0,xhr:function(){return new window.XMLHttpRequest},accepts:{script:"text/javascript, application/javascript, application/x-javascript",json:u,xml:"application/xml, text/xml",html:f,text:"text/plain"},crossDomain:!1,timeout:0,processData:!0,cache:!0},t.ajax=function(e){var a,u,o=t.extend({},e||{}),s=t.Deferred&&t.Deferred();for(i in t.ajaxSettings)void 0===o[i]&&(o[i]=t.ajaxSettings[i]);d(o),o.crossDomain||(a=n.createElement("a"),a.href=o.url,a.href=a.href,o.crossDomain=l.protocol+"//"+l.host!=a.protocol+"//"+a.host),o.url||(o.url=window.location.toString()),(u=o.url.indexOf("#"))>-1&&(o.url=o.url.slice(0,u)),T(o);var f=o.dataType,h=/\?.+=\?/.test(o.url);if(h&&(f="jsonp"),o.cache!==!1&&(e&&e.cache===!0||"script"!=f&&"jsonp"!=f)||(o.url=E(o.url,"_="+Date.now())),"jsonp"==f)return h||(o.url=E(o.url,o.jsonp?o.jsonp+"=?":o.jsonp===!1?"":"callback=?")),t.ajaxJSONP(o,s);var N,p=o.accepts[f],m={},w=function(t,e){m[t.toLowerCase()]=[t,e]},j=/^([\w-]+:)\/\//.test(o.url)?RegExp.$1:window.location.protocol,S=o.xhr(),C=S.setRequestHeader;if(s&&s.promise(S),o.crossDomain||w("X-Requested-With","XMLHttpRequest"),w("Accept",p||"*/*"),(p=o.mimeType||p)&&(p.indexOf(",")>-1&&(p=p.split(",",2)[0]),S.overrideMimeType&&S.overrideMimeType(p)),(o.contentType||o.contentType!==!1&&o.data&&"GET"!=o.type.toUpperCase())&&w("Content-Type",o.contentType||"application/x-www-form-urlencoded"),o.headers)for(r in o.headers)w(r,o.headers[r]);if(S.setRequestHeader=w,S.onreadystatechange=function(){if(4==S.readyState){S.onreadystatechange=x,clearTimeout(N);var e,n=!1;if(S.status>=200&&S.status<300||304==S.status||0==S.status&&"file:"==j){f=f||b(o.mimeType||S.getResponseHeader("content-type")),e=S.responseText;try{"script"==f?(1,eval)(e):"xml"==f?e=S.responseXML:"json"==f&&(e=c.test(e)?null:t.parseJSON(e))}catch(i){n=i}n?y(n,"parsererror",S,o,s):v(e,S,o,s)}else y(S.statusText||null,S.status?"error":"abort",S,o,s)}},g(S,o)===!1)return S.abort(),y(null,"abort",S,o,s),S;if(o.xhrFields)for(r in o.xhrFields)S[r]=o.xhrFields[r];var P="async"in o?o.async:!0;S.open(o.type,o.url,P,o.username,o.password);for(r in m)C.apply(S,m[r]);return o.timeout>0&&(N=setTimeout(function(){S.onreadystatechange=x,S.abort(),y(null,"timeout",S,o,s)},o.timeout)),S.send(o.data?o.data:null),S},t.get=function(){return t.ajax(j.apply(null,arguments))},t.post=function(){var e=j.apply(null,arguments);return e.type="POST",t.ajax(e)},t.getJSON=function(){var e=j.apply(null,arguments);return e.dataType="json",t.ajax(e)},t.fn.load=function(e,n,i){if(!this.length)return this;var a,r=this,s=e.split(/\s/),u=j(e,n,i),f=u.success;return s.length>1&&(u.url=s[0],a=s[1]),u.success=function(e){r.html(a?t("<div>").html(e.replace(o,"")).find(a):e),f&&f.apply(r,arguments)},t.ajax(u),this};var S=encodeURIComponent;t.param=function(e,n){var i=[];return i.add=function(e,n){t.isFunction(n)&&(n=n()),null==n&&(n=""),this.push(S(e)+"="+S(n))},C(i,e,n),i.join("&").replace(/%20/g,"+")}}(Zepto),function(t){t.Callbacks=function(e){e=t.extend({},e);var n,i,r,o,s,a,u=[],f=!e.once&&[],c=function(t){for(n=e.memory&&t,i=!0,a=o||0,o=0,s=u.length,r=!0;u&&s>a;++a)if(u[a].apply(t[0],t[1])===!1&&e.stopOnFalse){n=!1;break}r=!1,u&&(f?f.length&&c(f.shift()):n?u.length=0:l.disable())},l={add:function(){if(u){var i=u.length,a=function(n){t.each(n,function(t,n){"function"==typeof n?e.unique&&l.has(n)||u.push(n):n&&n.length&&"string"!=typeof n&&a(n)})};a(arguments),r?s=u.length:n&&(o=i,c(n))}return this},remove:function(){return u&&t.each(arguments,function(e,n){for(var i;(i=t.inArray(n,u,i))>-1;)u.splice(i,1),r&&(s>=i&&--s,a>=i&&--a)}),this},has:function(e){return!(!u||!(e?t.inArray(e,u)>-1:u.length))},empty:function(){return s=u.length=0,this},disable:function(){return u=f=n=void 0,this},disabled:function(){return!u},lock:function(){return f=void 0,n||l.disable(),this},locked:function(){return!f},fireWith:function(t,e){return!u||i&&!f||(e=e||[],e=[t,e.slice?e.slice():e],r?f.push(e):c(e)),this},fire:function(){return l.fireWith(this,arguments)},fired:function(){return!!i}};return l}}(Zepto),function(t){function n(e){var i=[["resolve","done",t.Callbacks({once:1,memory:1}),"resolved"],["reject","fail",t.Callbacks({once:1,memory:1}),"rejected"],["notify","progress",t.Callbacks({memory:1})]],r="pending",o={state:function(){return r},always:function(){return s.done(arguments).fail(arguments),this},then:function(){var e=arguments;return n(function(n){t.each(i,function(i,r){var a=t.isFunction(e[i])&&e[i];s[r[1]](function(){var e=a&&a.apply(this,arguments);if(e&&t.isFunction(e.promise))e.promise().done(n.resolve).fail(n.reject).progress(n.notify);else{var i=this===o?n.promise():this,s=a?[e]:arguments;n[r[0]+"With"](i,s)}})}),e=null}).promise()},promise:function(e){return null!=e?t.extend(e,o):o}},s={};return t.each(i,function(t,e){var n=e[2],a=e[3];o[e[1]]=n.add,a&&n.add(function(){r=a},i[1^t][2].disable,i[2][2].lock),s[e[0]]=function(){return s[e[0]+"With"](this===s?o:this,arguments),this},s[e[0]+"With"]=n.fireWith}),o.promise(s),e&&e.call(s,s),s}var e=Array.prototype.slice;t.when=function(i){var f,c,l,r=e.call(arguments),o=r.length,s=0,a=1!==o||i&&t.isFunction(i.promise)?o:0,u=1===a?i:n(),h=function(t,n,i){return function(r){n[t]=this,i[t]=arguments.length>1?e.call(arguments):r,i===f?u.notifyWith(n,i):--a||u.resolveWith(n,i)}};if(o>1)for(f=new Array(o),c=new Array(o),l=new Array(o);o>s;++s)r[s]&&t.isFunction(r[s].promise)?r[s].promise().done(h(s,l,r)).fail(u.reject).progress(h(s,c,f)):--a;return a||u.resolveWith(l,r),u.promise()},t.Deferred=n}(Zepto),function(t){function u(t,e,n,i){return Math.abs(t-e)>=Math.abs(n-i)?t-e>0?"Left":"Right":n-i>0?"Up":"Down"}function f(){o=null,e.last&&(e.el.trigger("longTap"),e={})}function c(){o&&clearTimeout(o),o=null}function l(){n&&clearTimeout(n),i&&clearTimeout(i),r&&clearTimeout(r),o&&clearTimeout(o),n=i=r=o=null,e={}}function h(t){return("touch"==t.pointerType||t.pointerType==t.MSPOINTER_TYPE_TOUCH)&&t.isPrimary}function p(t,e){return t.type=="pointer"+e||t.type.toLowerCase()=="mspointer"+e}var n,i,r,o,a,e={},s=750;t(document).ready(function(){var d,m,y,w,g=0,v=0;"MSGesture"in window&&(a=new MSGesture,a.target=document.body),t(document).bind("MSGestureEnd",function(t){var n=t.velocityX>1?"Right":t.velocityX<-1?"Left":t.velocityY>1?"Down":t.velocityY<-1?"Up":null;n&&(e.el.trigger("swipe"),e.el.trigger("swipe"+n))}).on("touchstart MSPointerDown pointerdown",function(i){(!(w=p(i,"down"))||h(i))&&(y=w?i:i.touches[0],i.touches&&1===i.touches.length&&e.x2&&(e.x2=void 0,e.y2=void 0),d=Date.now(),m=d-(e.last||d),e.el=t("tagName"in y.target?y.target:y.target.parentNode),n&&clearTimeout(n),e.x1=y.pageX,e.y1=y.pageY,m>0&&250>=m&&(e.isDoubleTap=!0),e.last=d,o=setTimeout(f,s),a&&w&&a.addPointer(i.pointerId))}).on("touchmove MSPointerMove pointermove",function(t){(!(w=p(t,"move"))||h(t))&&(y=w?t:t.touches[0],c(),e.x2=y.pageX,e.y2=y.pageY,g+=Math.abs(e.x1-e.x2),v+=Math.abs(e.y1-e.y2))}).on("touchend MSPointerUp pointerup",function(o){(!(w=p(o,"up"))||h(o))&&(c(),e.x2&&Math.abs(e.x1-e.x2)>30||e.y2&&Math.abs(e.y1-e.y2)>30?r=setTimeout(function(){e.el.trigger("swipe"),e.el.trigger("swipe"+u(e.x1,e.x2,e.y1,e.y2)),e={}},0):"last"in e&&(30>g&&30>v?i=setTimeout(function(){var i=t.Event("tap");i.cancelTouch=l,e.el.trigger(i),e.isDoubleTap?(e.el&&e.el.trigger("doubleTap"),e={}):n=setTimeout(function(){n=null,e.el&&e.el.trigger("singleTap"),e={}},250)},0):e={}),g=v=0)}).on("touchcancel MSPointerCancel pointercancel",l),t(window).on("scroll",l)}),["swipe","swipeLeft","swipeRight","swipeUp","swipeDown","doubleTap","tap","singleTap","longTap"].forEach(function(e){t.fn[e]=function(t){return this.on(e,t)}})}(Zepto),function(t){function r(e){return e=t(e),!(!e.width()&&!e.height())&&"none"!==e.css("display")}function f(t,e){t=t.replace(/=#\]/g,'="#"]');var n,i,r=s.exec(t);if(r&&r[2]in o&&(n=o[r[2]],i=r[3],t=r[1],i)){var a=Number(i);i=isNaN(a)?i.replace(/^["']|["']$/g,""):a}return e(t,n,i)}var e=t.zepto,n=e.qsa,i=e.matches,o=t.expr[":"]={visible:function(){return r(this)?this:void 0},hidden:function(){return r(this)?void 0:this},selected:function(){return this.selected?this:void 0},checked:function(){return this.checked?this:void 0},parent:function(){return this.parentNode},first:function(t){return 0===t?this:void 0},last:function(t,e){return t===e.length-1?this:void 0},eq:function(t,e,n){return t===n?this:void 0},contains:function(e,n,i){return t(this).text().indexOf(i)>-1?this:void 0},has:function(t,n,i){return e.qsa(this,i).length?this:void 0}},s=new RegExp("(.*):(\\w+)(?:\\(([^)]+)\\))?$\\s*"),a=/^\s*>/,u="Zepto"+ +new Date;e.qsa=function(i,r){return f(r,function(o,s,f){try{var c;!o&&s?o="*":a.test(o)&&(c=t(i).addClass(u),o="."+u+" "+o);var l=n(i,o)}catch(h){throw console.error("error performing selector: %o",r),h}finally{c&&c.removeClass(u)}return s?e.uniq(t.map(l,function(t,e){return s.call(t,e,l,f)})):l})},e.matches=function(t,e){return f(e,function(e,n,r){return!(e&&!i(t,e)||n&&n.call(t,null,r)!==t)})}}(Zepto),function(){try{getComputedStyle(void 0)}catch(t){var e=getComputedStyle;window.getComputedStyle=function(t){try{return e(t)}catch(n){return null}}}}();
-	module.exports = Zepto;
+	/* Zepto v1.2.0 - zepto ajax callbacks deferred event ie selector - zeptojs.com/license */
+
+
+	var Zepto = (function() {
+	  var undefined, key, $, classList, emptyArray = [], concat = emptyArray.concat, filter = emptyArray.filter, slice = emptyArray.slice,
+	    document = window.document,
+	    elementDisplay = {}, classCache = {},
+	    cssNumber = { 'column-count': 1, 'columns': 1, 'font-weight': 1, 'line-height': 1,'opacity': 1, 'z-index': 1, 'zoom': 1 },
+	    fragmentRE = /^\s*<(\w+|!)[^>]*>/,
+	    singleTagRE = /^<(\w+)\s*\/?>(?:<\/\1>|)$/,
+	    tagExpanderRE = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/ig,
+	    rootNodeRE = /^(?:body|html)$/i,
+	    capitalRE = /([A-Z])/g,
+
+	    // special attributes that should be get/set via method calls
+	    methodAttributes = ['val', 'css', 'html', 'text', 'data', 'width', 'height', 'offset'],
+
+	    adjacencyOperators = [ 'after', 'prepend', 'before', 'append' ],
+	    table = document.createElement('table'),
+	    tableRow = document.createElement('tr'),
+	    containers = {
+	      'tr': document.createElement('tbody'),
+	      'tbody': table, 'thead': table, 'tfoot': table,
+	      'td': tableRow, 'th': tableRow,
+	      '*': document.createElement('div')
+	    },
+	    readyRE = /complete|loaded|interactive/,
+	    simpleSelectorRE = /^[\w-]*$/,
+	    class2type = {},
+	    toString = class2type.toString,
+	    zepto = {},
+	    camelize, uniq,
+	    tempParent = document.createElement('div'),
+	    propMap = {
+	      'tabindex': 'tabIndex',
+	      'readonly': 'readOnly',
+	      'for': 'htmlFor',
+	      'class': 'className',
+	      'maxlength': 'maxLength',
+	      'cellspacing': 'cellSpacing',
+	      'cellpadding': 'cellPadding',
+	      'rowspan': 'rowSpan',
+	      'colspan': 'colSpan',
+	      'usemap': 'useMap',
+	      'frameborder': 'frameBorder',
+	      'contenteditable': 'contentEditable'
+	    },
+	    isArray = Array.isArray ||
+	      function(object){ return object instanceof Array }
+
+	  zepto.matches = function(element, selector) {
+	    if (!selector || !element || element.nodeType !== 1) return false
+	    var matchesSelector = element.matches || element.webkitMatchesSelector ||
+	                          element.mozMatchesSelector || element.oMatchesSelector ||
+	                          element.matchesSelector
+	    if (matchesSelector) return matchesSelector.call(element, selector)
+	    // fall back to performing a selector:
+	    var match, parent = element.parentNode, temp = !parent
+	    if (temp) (parent = tempParent).appendChild(element)
+	    match = ~zepto.qsa(parent, selector).indexOf(element)
+	    temp && tempParent.removeChild(element)
+	    return match
+	  }
+
+	  function type(obj) {
+	    return obj == null ? String(obj) :
+	      class2type[toString.call(obj)] || "object"
+	  }
+
+	  function isFunction(value) { return type(value) == "function" }
+	  function isWindow(obj)     { return obj != null && obj == obj.window }
+	  function isDocument(obj)   { return obj != null && obj.nodeType == obj.DOCUMENT_NODE }
+	  function isObject(obj)     { return type(obj) == "object" }
+	  function isPlainObject(obj) {
+	    return isObject(obj) && !isWindow(obj) && Object.getPrototypeOf(obj) == Object.prototype
+	  }
+
+	  function likeArray(obj) {
+	    var length = !!obj && 'length' in obj && obj.length,
+	      type = $.type(obj)
+
+	    return 'function' != type && !isWindow(obj) && (
+	      'array' == type || length === 0 ||
+	        (typeof length == 'number' && length > 0 && (length - 1) in obj)
+	    )
+	  }
+
+	  function compact(array) { return filter.call(array, function(item){ return item != null }) }
+	  function flatten(array) { return array.length > 0 ? $.fn.concat.apply([], array) : array }
+	  camelize = function(str){ return str.replace(/-+(.)?/g, function(match, chr){ return chr ? chr.toUpperCase() : '' }) }
+	  function dasherize(str) {
+	    return str.replace(/::/g, '/')
+	           .replace(/([A-Z]+)([A-Z][a-z])/g, '$1_$2')
+	           .replace(/([a-z\d])([A-Z])/g, '$1_$2')
+	           .replace(/_/g, '-')
+	           .toLowerCase()
+	  }
+	  uniq = function(array){ return filter.call(array, function(item, idx){ return array.indexOf(item) == idx }) }
+
+	  function classRE(name) {
+	    return name in classCache ?
+	      classCache[name] : (classCache[name] = new RegExp('(^|\\s)' + name + '(\\s|$)'))
+	  }
+
+	  function maybeAddPx(name, value) {
+	    return (typeof value == "number" && !cssNumber[dasherize(name)]) ? value + "px" : value
+	  }
+
+	  function defaultDisplay(nodeName) {
+	    var element, display
+	    if (!elementDisplay[nodeName]) {
+	      element = document.createElement(nodeName)
+	      document.body.appendChild(element)
+	      display = getComputedStyle(element, '').getPropertyValue("display")
+	      element.parentNode.removeChild(element)
+	      display == "none" && (display = "block")
+	      elementDisplay[nodeName] = display
+	    }
+	    return elementDisplay[nodeName]
+	  }
+
+	  function children(element) {
+	    return 'children' in element ?
+	      slice.call(element.children) :
+	      $.map(element.childNodes, function(node){ if (node.nodeType == 1) return node })
+	  }
+
+	  function Z(dom, selector) {
+	    var i, len = dom ? dom.length : 0
+	    for (i = 0; i < len; i++) this[i] = dom[i]
+	    this.length = len
+	    this.selector = selector || ''
+	  }
+
+	  // `$.zepto.fragment` takes a html string and an optional tag name
+	  // to generate DOM nodes from the given html string.
+	  // The generated DOM nodes are returned as an array.
+	  // This function can be overridden in plugins for example to make
+	  // it compatible with browsers that don't support the DOM fully.
+	  zepto.fragment = function(html, name, properties) {
+	    var dom, nodes, container
+
+	    // A special case optimization for a single tag
+	    if (singleTagRE.test(html)) dom = $(document.createElement(RegExp.$1))
+
+	    if (!dom) {
+	      if (html.replace) html = html.replace(tagExpanderRE, "<$1></$2>")
+	      if (name === undefined) name = fragmentRE.test(html) && RegExp.$1
+	      if (!(name in containers)) name = '*'
+
+	      container = containers[name]
+	      container.innerHTML = '' + html
+	      dom = $.each(slice.call(container.childNodes), function(){
+	        container.removeChild(this)
+	      })
+	    }
+
+	    if (isPlainObject(properties)) {
+	      nodes = $(dom)
+	      $.each(properties, function(key, value) {
+	        if (methodAttributes.indexOf(key) > -1) nodes[key](value)
+	        else nodes.attr(key, value)
+	      })
+	    }
+
+	    return dom
+	  }
+
+	  // `$.zepto.Z` swaps out the prototype of the given `dom` array
+	  // of nodes with `$.fn` and thus supplying all the Zepto functions
+	  // to the array. This method can be overridden in plugins.
+	  zepto.Z = function(dom, selector) {
+	    return new Z(dom, selector)
+	  }
+
+	  // `$.zepto.isZ` should return `true` if the given object is a Zepto
+	  // collection. This method can be overridden in plugins.
+	  zepto.isZ = function(object) {
+	    return object instanceof zepto.Z
+	  }
+
+	  // `$.zepto.init` is Zepto's counterpart to jQuery's `$.fn.init` and
+	  // takes a CSS selector and an optional context (and handles various
+	  // special cases).
+	  // This method can be overridden in plugins.
+	  zepto.init = function(selector, context) {
+	    var dom
+	    // If nothing given, return an empty Zepto collection
+	    if (!selector) return zepto.Z()
+	    // Optimize for string selectors
+	    else if (typeof selector == 'string') {
+	      selector = selector.trim()
+	      // If it's a html fragment, create nodes from it
+	      // Note: In both Chrome 21 and Firefox 15, DOM error 12
+	      // is thrown if the fragment doesn't begin with <
+	      if (selector[0] == '<' && fragmentRE.test(selector))
+	        dom = zepto.fragment(selector, RegExp.$1, context), selector = null
+	      // If there's a context, create a collection on that context first, and select
+	      // nodes from there
+	      else if (context !== undefined) return $(context).find(selector)
+	      // If it's a CSS selector, use it to select nodes.
+	      else dom = zepto.qsa(document, selector)
+	    }
+	    // If a function is given, call it when the DOM is ready
+	    else if (isFunction(selector)) return $(document).ready(selector)
+	    // If a Zepto collection is given, just return it
+	    else if (zepto.isZ(selector)) return selector
+	    else {
+	      // normalize array if an array of nodes is given
+	      if (isArray(selector)) dom = compact(selector)
+	      // Wrap DOM nodes.
+	      else if (isObject(selector))
+	        dom = [selector], selector = null
+	      // If it's a html fragment, create nodes from it
+	      else if (fragmentRE.test(selector))
+	        dom = zepto.fragment(selector.trim(), RegExp.$1, context), selector = null
+	      // If there's a context, create a collection on that context first, and select
+	      // nodes from there
+	      else if (context !== undefined) return $(context).find(selector)
+	      // And last but no least, if it's a CSS selector, use it to select nodes.
+	      else dom = zepto.qsa(document, selector)
+	    }
+	    // create a new Zepto collection from the nodes found
+	    return zepto.Z(dom, selector)
+	  }
+
+	  // `$` will be the base `Zepto` object. When calling this
+	  // function just call `$.zepto.init, which makes the implementation
+	  // details of selecting nodes and creating Zepto collections
+	  // patchable in plugins.
+	  $ = function(selector, context){
+	    return zepto.init(selector, context)
+	  }
+
+	  function extend(target, source, deep) {
+	    for (key in source)
+	      if (deep && (isPlainObject(source[key]) || isArray(source[key]))) {
+	        if (isPlainObject(source[key]) && !isPlainObject(target[key]))
+	          target[key] = {}
+	        if (isArray(source[key]) && !isArray(target[key]))
+	          target[key] = []
+	        extend(target[key], source[key], deep)
+	      }
+	      else if (source[key] !== undefined) target[key] = source[key]
+	  }
+
+	  // Copy all but undefined properties from one or more
+	  // objects to the `target` object.
+	  $.extend = function(target){
+	    var deep, args = slice.call(arguments, 1)
+	    if (typeof target == 'boolean') {
+	      deep = target
+	      target = args.shift()
+	    }
+	    args.forEach(function(arg){ extend(target, arg, deep) })
+	    return target
+	  }
+
+	  // `$.zepto.qsa` is Zepto's CSS selector implementation which
+	  // uses `document.querySelectorAll` and optimizes for some special cases, like `#id`.
+	  // This method can be overridden in plugins.
+	  zepto.qsa = function(element, selector){
+	    var found,
+	        maybeID = selector[0] == '#',
+	        maybeClass = !maybeID && selector[0] == '.',
+	        nameOnly = maybeID || maybeClass ? selector.slice(1) : selector, // Ensure that a 1 char tag name still gets checked
+	        isSimple = simpleSelectorRE.test(nameOnly)
+	    return (element.getElementById && isSimple && maybeID) ? // Safari DocumentFragment doesn't have getElementById
+	      ( (found = element.getElementById(nameOnly)) ? [found] : [] ) :
+	      (element.nodeType !== 1 && element.nodeType !== 9 && element.nodeType !== 11) ? [] :
+	      slice.call(
+	        isSimple && !maybeID && element.getElementsByClassName ? // DocumentFragment doesn't have getElementsByClassName/TagName
+	          maybeClass ? element.getElementsByClassName(nameOnly) : // If it's simple, it could be a class
+	          element.getElementsByTagName(selector) : // Or a tag
+	          element.querySelectorAll(selector) // Or it's not simple, and we need to query all
+	      )
+	  }
+
+	  function filtered(nodes, selector) {
+	    return selector == null ? $(nodes) : $(nodes).filter(selector)
+	  }
+
+	  $.contains = document.documentElement.contains ?
+	    function(parent, node) {
+	      return parent !== node && parent.contains(node)
+	    } :
+	    function(parent, node) {
+	      while (node && (node = node.parentNode))
+	        if (node === parent) return true
+	      return false
+	    }
+
+	  function funcArg(context, arg, idx, payload) {
+	    return isFunction(arg) ? arg.call(context, idx, payload) : arg
+	  }
+
+	  function setAttribute(node, name, value) {
+	    value == null ? node.removeAttribute(name) : node.setAttribute(name, value)
+	  }
+
+	  // access className property while respecting SVGAnimatedString
+	  function className(node, value){
+	    var klass = node.className || '',
+	        svg   = klass && klass.baseVal !== undefined
+
+	    if (value === undefined) return svg ? klass.baseVal : klass
+	    svg ? (klass.baseVal = value) : (node.className = value)
+	  }
+
+	  // "true"  => true
+	  // "false" => false
+	  // "null"  => null
+	  // "42"    => 42
+	  // "42.5"  => 42.5
+	  // "08"    => "08"
+	  // JSON    => parse if valid
+	  // String  => self
+	  function deserializeValue(value) {
+	    try {
+	      return value ?
+	        value == "true" ||
+	        ( value == "false" ? false :
+	          value == "null" ? null :
+	          +value + "" == value ? +value :
+	          /^[\[\{]/.test(value) ? $.parseJSON(value) :
+	          value )
+	        : value
+	    } catch(e) {
+	      return value
+	    }
+	  }
+
+	  $.type = type
+	  $.isFunction = isFunction
+	  $.isWindow = isWindow
+	  $.isArray = isArray
+	  $.isPlainObject = isPlainObject
+
+	  $.isEmptyObject = function(obj) {
+	    var name
+	    for (name in obj) return false
+	    return true
+	  }
+
+	  $.isNumeric = function(val) {
+	    var num = Number(val), type = typeof val
+	    return val != null && type != 'boolean' &&
+	      (type != 'string' || val.length) &&
+	      !isNaN(num) && isFinite(num) || false
+	  }
+
+	  $.inArray = function(elem, array, i){
+	    return emptyArray.indexOf.call(array, elem, i)
+	  }
+
+	  $.camelCase = camelize
+	  $.trim = function(str) {
+	    return str == null ? "" : String.prototype.trim.call(str)
+	  }
+
+	  // plugin compatibility
+	  $.uuid = 0
+	  $.support = { }
+	  $.expr = { }
+	  $.noop = function() {}
+
+	  $.map = function(elements, callback){
+	    var value, values = [], i, key
+	    if (likeArray(elements))
+	      for (i = 0; i < elements.length; i++) {
+	        value = callback(elements[i], i)
+	        if (value != null) values.push(value)
+	      }
+	    else
+	      for (key in elements) {
+	        value = callback(elements[key], key)
+	        if (value != null) values.push(value)
+	      }
+	    return flatten(values)
+	  }
+
+	  $.each = function(elements, callback){
+	    var i, key
+	    if (likeArray(elements)) {
+	      for (i = 0; i < elements.length; i++)
+	        if (callback.call(elements[i], i, elements[i]) === false) return elements
+	    } else {
+	      for (key in elements)
+	        if (callback.call(elements[key], key, elements[key]) === false) return elements
+	    }
+
+	    return elements
+	  }
+
+	  $.grep = function(elements, callback){
+	    return filter.call(elements, callback)
+	  }
+
+	  if (window.JSON) $.parseJSON = JSON.parse
+
+	  // Populate the class2type map
+	  $.each("Boolean Number String Function Array Date RegExp Object Error".split(" "), function(i, name) {
+	    class2type[ "[object " + name + "]" ] = name.toLowerCase()
+	  })
+
+	  // Define methods that will be available on all
+	  // Zepto collections
+	  $.fn = {
+	    constructor: zepto.Z,
+	    length: 0,
+
+	    // Because a collection acts like an array
+	    // copy over these useful array functions.
+	    forEach: emptyArray.forEach,
+	    reduce: emptyArray.reduce,
+	    push: emptyArray.push,
+	    sort: emptyArray.sort,
+	    splice: emptyArray.splice,
+	    indexOf: emptyArray.indexOf,
+	    concat: function(){
+	      var i, value, args = []
+	      for (i = 0; i < arguments.length; i++) {
+	        value = arguments[i]
+	        args[i] = zepto.isZ(value) ? value.toArray() : value
+	      }
+	      return concat.apply(zepto.isZ(this) ? this.toArray() : this, args)
+	    },
+
+	    // `map` and `slice` in the jQuery API work differently
+	    // from their array counterparts
+	    map: function(fn){
+	      return $($.map(this, function(el, i){ return fn.call(el, i, el) }))
+	    },
+	    slice: function(){
+	      return $(slice.apply(this, arguments))
+	    },
+
+	    ready: function(callback){
+	      // need to check if document.body exists for IE as that browser reports
+	      // document ready when it hasn't yet created the body element
+	      if (readyRE.test(document.readyState) && document.body) callback($)
+	      else document.addEventListener('DOMContentLoaded', function(){ callback($) }, false)
+	      return this
+	    },
+	    get: function(idx){
+	      return idx === undefined ? slice.call(this) : this[idx >= 0 ? idx : idx + this.length]
+	    },
+	    toArray: function(){ return this.get() },
+	    size: function(){
+	      return this.length
+	    },
+	    remove: function(){
+	      return this.each(function(){
+	        if (this.parentNode != null)
+	          this.parentNode.removeChild(this)
+	      })
+	    },
+	    each: function(callback){
+	      emptyArray.every.call(this, function(el, idx){
+	        return callback.call(el, idx, el) !== false
+	      })
+	      return this
+	    },
+	    filter: function(selector){
+	      if (isFunction(selector)) return this.not(this.not(selector))
+	      return $(filter.call(this, function(element){
+	        return zepto.matches(element, selector)
+	      }))
+	    },
+	    add: function(selector,context){
+	      return $(uniq(this.concat($(selector,context))))
+	    },
+	    is: function(selector){
+	      return this.length > 0 && zepto.matches(this[0], selector)
+	    },
+	    not: function(selector){
+	      var nodes=[]
+	      if (isFunction(selector) && selector.call !== undefined)
+	        this.each(function(idx){
+	          if (!selector.call(this,idx)) nodes.push(this)
+	        })
+	      else {
+	        var excludes = typeof selector == 'string' ? this.filter(selector) :
+	          (likeArray(selector) && isFunction(selector.item)) ? slice.call(selector) : $(selector)
+	        this.forEach(function(el){
+	          if (excludes.indexOf(el) < 0) nodes.push(el)
+	        })
+	      }
+	      return $(nodes)
+	    },
+	    has: function(selector){
+	      return this.filter(function(){
+	        return isObject(selector) ?
+	          $.contains(this, selector) :
+	          $(this).find(selector).size()
+	      })
+	    },
+	    eq: function(idx){
+	      return idx === -1 ? this.slice(idx) : this.slice(idx, + idx + 1)
+	    },
+	    first: function(){
+	      var el = this[0]
+	      return el && !isObject(el) ? el : $(el)
+	    },
+	    last: function(){
+	      var el = this[this.length - 1]
+	      return el && !isObject(el) ? el : $(el)
+	    },
+	    find: function(selector){
+	      var result, $this = this
+	      if (!selector) result = $()
+	      else if (typeof selector == 'object')
+	        result = $(selector).filter(function(){
+	          var node = this
+	          return emptyArray.some.call($this, function(parent){
+	            return $.contains(parent, node)
+	          })
+	        })
+	      else if (this.length == 1) result = $(zepto.qsa(this[0], selector))
+	      else result = this.map(function(){ return zepto.qsa(this, selector) })
+	      return result
+	    },
+	    closest: function(selector, context){
+	      var nodes = [], collection = typeof selector == 'object' && $(selector)
+	      this.each(function(_, node){
+	        while (node && !(collection ? collection.indexOf(node) >= 0 : zepto.matches(node, selector)))
+	          node = node !== context && !isDocument(node) && node.parentNode
+	        if (node && nodes.indexOf(node) < 0) nodes.push(node)
+	      })
+	      return $(nodes)
+	    },
+	    parents: function(selector){
+	      var ancestors = [], nodes = this
+	      while (nodes.length > 0)
+	        nodes = $.map(nodes, function(node){
+	          if ((node = node.parentNode) && !isDocument(node) && ancestors.indexOf(node) < 0) {
+	            ancestors.push(node)
+	            return node
+	          }
+	        })
+	      return filtered(ancestors, selector)
+	    },
+	    parent: function(selector){
+	      return filtered(uniq(this.pluck('parentNode')), selector)
+	    },
+	    children: function(selector){
+	      return filtered(this.map(function(){ return children(this) }), selector)
+	    },
+	    contents: function() {
+	      return this.map(function() { return this.contentDocument || slice.call(this.childNodes) })
+	    },
+	    siblings: function(selector){
+	      return filtered(this.map(function(i, el){
+	        return filter.call(children(el.parentNode), function(child){ return child!==el })
+	      }), selector)
+	    },
+	    empty: function(){
+	      return this.each(function(){ this.innerHTML = '' })
+	    },
+	    // `pluck` is borrowed from Prototype.js
+	    pluck: function(property){
+	      return $.map(this, function(el){ return el[property] })
+	    },
+	    show: function(){
+	      return this.each(function(){
+	        this.style.display == "none" && (this.style.display = '')
+	        if (getComputedStyle(this, '').getPropertyValue("display") == "none")
+	          this.style.display = defaultDisplay(this.nodeName)
+	      })
+	    },
+	    replaceWith: function(newContent){
+	      return this.before(newContent).remove()
+	    },
+	    wrap: function(structure){
+	      var func = isFunction(structure)
+	      if (this[0] && !func)
+	        var dom   = $(structure).get(0),
+	            clone = dom.parentNode || this.length > 1
+
+	      return this.each(function(index){
+	        $(this).wrapAll(
+	          func ? structure.call(this, index) :
+	            clone ? dom.cloneNode(true) : dom
+	        )
+	      })
+	    },
+	    wrapAll: function(structure){
+	      if (this[0]) {
+	        $(this[0]).before(structure = $(structure))
+	        var children
+	        // drill down to the inmost element
+	        while ((children = structure.children()).length) structure = children.first()
+	        $(structure).append(this)
+	      }
+	      return this
+	    },
+	    wrapInner: function(structure){
+	      var func = isFunction(structure)
+	      return this.each(function(index){
+	        var self = $(this), contents = self.contents(),
+	            dom  = func ? structure.call(this, index) : structure
+	        contents.length ? contents.wrapAll(dom) : self.append(dom)
+	      })
+	    },
+	    unwrap: function(){
+	      this.parent().each(function(){
+	        $(this).replaceWith($(this).children())
+	      })
+	      return this
+	    },
+	    clone: function(){
+	      return this.map(function(){ return this.cloneNode(true) })
+	    },
+	    hide: function(){
+	      return this.css("display", "none")
+	    },
+	    toggle: function(setting){
+	      return this.each(function(){
+	        var el = $(this)
+	        ;(setting === undefined ? el.css("display") == "none" : setting) ? el.show() : el.hide()
+	      })
+	    },
+	    prev: function(selector){ return $(this.pluck('previousElementSibling')).filter(selector || '*') },
+	    next: function(selector){ return $(this.pluck('nextElementSibling')).filter(selector || '*') },
+	    html: function(html){
+	      return 0 in arguments ?
+	        this.each(function(idx){
+	          var originHtml = this.innerHTML
+	          $(this).empty().append( funcArg(this, html, idx, originHtml) )
+	        }) :
+	        (0 in this ? this[0].innerHTML : null)
+	    },
+	    text: function(text){
+	      return 0 in arguments ?
+	        this.each(function(idx){
+	          var newText = funcArg(this, text, idx, this.textContent)
+	          this.textContent = newText == null ? '' : ''+newText
+	        }) :
+	        (0 in this ? this.pluck('textContent').join("") : null)
+	    },
+	    attr: function(name, value){
+	      var result
+	      return (typeof name == 'string' && !(1 in arguments)) ?
+	        (0 in this && this[0].nodeType == 1 && (result = this[0].getAttribute(name)) != null ? result : undefined) :
+	        this.each(function(idx){
+	          if (this.nodeType !== 1) return
+	          if (isObject(name)) for (key in name) setAttribute(this, key, name[key])
+	          else setAttribute(this, name, funcArg(this, value, idx, this.getAttribute(name)))
+	        })
+	    },
+	    removeAttr: function(name){
+	      return this.each(function(){ this.nodeType === 1 && name.split(' ').forEach(function(attribute){
+	        setAttribute(this, attribute)
+	      }, this)})
+	    },
+	    prop: function(name, value){
+	      name = propMap[name] || name
+	      return (1 in arguments) ?
+	        this.each(function(idx){
+	          this[name] = funcArg(this, value, idx, this[name])
+	        }) :
+	        (this[0] && this[0][name])
+	    },
+	    removeProp: function(name){
+	      name = propMap[name] || name
+	      return this.each(function(){ delete this[name] })
+	    },
+	    data: function(name, value){
+	      var attrName = 'data-' + name.replace(capitalRE, '-$1').toLowerCase()
+
+	      var data = (1 in arguments) ?
+	        this.attr(attrName, value) :
+	        this.attr(attrName)
+
+	      return data !== null ? deserializeValue(data) : undefined
+	    },
+	    val: function(value){
+	      if (0 in arguments) {
+	        if (value == null) value = ""
+	        return this.each(function(idx){
+	          this.value = funcArg(this, value, idx, this.value)
+	        })
+	      } else {
+	        return this[0] && (this[0].multiple ?
+	           $(this[0]).find('option').filter(function(){ return this.selected }).pluck('value') :
+	           this[0].value)
+	      }
+	    },
+	    offset: function(coordinates){
+	      if (coordinates) return this.each(function(index){
+	        var $this = $(this),
+	            coords = funcArg(this, coordinates, index, $this.offset()),
+	            parentOffset = $this.offsetParent().offset(),
+	            props = {
+	              top:  coords.top  - parentOffset.top,
+	              left: coords.left - parentOffset.left
+	            }
+
+	        if ($this.css('position') == 'static') props['position'] = 'relative'
+	        $this.css(props)
+	      })
+	      if (!this.length) return null
+	      if (document.documentElement !== this[0] && !$.contains(document.documentElement, this[0]))
+	        return {top: 0, left: 0}
+	      var obj = this[0].getBoundingClientRect()
+	      return {
+	        left: obj.left + window.pageXOffset,
+	        top: obj.top + window.pageYOffset,
+	        width: Math.round(obj.width),
+	        height: Math.round(obj.height)
+	      }
+	    },
+	    css: function(property, value){
+	      if (arguments.length < 2) {
+	        var element = this[0]
+	        if (typeof property == 'string') {
+	          if (!element) return
+	          return element.style[camelize(property)] || getComputedStyle(element, '').getPropertyValue(property)
+	        } else if (isArray(property)) {
+	          if (!element) return
+	          var props = {}
+	          var computedStyle = getComputedStyle(element, '')
+	          $.each(property, function(_, prop){
+	            props[prop] = (element.style[camelize(prop)] || computedStyle.getPropertyValue(prop))
+	          })
+	          return props
+	        }
+	      }
+
+	      var css = ''
+	      if (type(property) == 'string') {
+	        if (!value && value !== 0)
+	          this.each(function(){ this.style.removeProperty(dasherize(property)) })
+	        else
+	          css = dasherize(property) + ":" + maybeAddPx(property, value)
+	      } else {
+	        for (key in property)
+	          if (!property[key] && property[key] !== 0)
+	            this.each(function(){ this.style.removeProperty(dasherize(key)) })
+	          else
+	            css += dasherize(key) + ':' + maybeAddPx(key, property[key]) + ';'
+	      }
+
+	      return this.each(function(){ this.style.cssText += ';' + css })
+	    },
+	    index: function(element){
+	      return element ? this.indexOf($(element)[0]) : this.parent().children().indexOf(this[0])
+	    },
+	    hasClass: function(name){
+	      if (!name) return false
+	      return emptyArray.some.call(this, function(el){
+	        return this.test(className(el))
+	      }, classRE(name))
+	    },
+	    addClass: function(name){
+	      if (!name) return this
+	      return this.each(function(idx){
+	        if (!('className' in this)) return
+	        classList = []
+	        var cls = className(this), newName = funcArg(this, name, idx, cls)
+	        newName.split(/\s+/g).forEach(function(klass){
+	          if (!$(this).hasClass(klass)) classList.push(klass)
+	        }, this)
+	        classList.length && className(this, cls + (cls ? " " : "") + classList.join(" "))
+	      })
+	    },
+	    removeClass: function(name){
+	      return this.each(function(idx){
+	        if (!('className' in this)) return
+	        if (name === undefined) return className(this, '')
+	        classList = className(this)
+	        funcArg(this, name, idx, classList).split(/\s+/g).forEach(function(klass){
+	          classList = classList.replace(classRE(klass), " ")
+	        })
+	        className(this, classList.trim())
+	      })
+	    },
+	    toggleClass: function(name, when){
+	      if (!name) return this
+	      return this.each(function(idx){
+	        var $this = $(this), names = funcArg(this, name, idx, className(this))
+	        names.split(/\s+/g).forEach(function(klass){
+	          (when === undefined ? !$this.hasClass(klass) : when) ?
+	            $this.addClass(klass) : $this.removeClass(klass)
+	        })
+	      })
+	    },
+	    scrollTop: function(value){
+	      if (!this.length) return
+	      var hasScrollTop = 'scrollTop' in this[0]
+	      if (value === undefined) return hasScrollTop ? this[0].scrollTop : this[0].pageYOffset
+	      return this.each(hasScrollTop ?
+	        function(){ this.scrollTop = value } :
+	        function(){ this.scrollTo(this.scrollX, value) })
+	    },
+	    scrollLeft: function(value){
+	      if (!this.length) return
+	      var hasScrollLeft = 'scrollLeft' in this[0]
+	      if (value === undefined) return hasScrollLeft ? this[0].scrollLeft : this[0].pageXOffset
+	      return this.each(hasScrollLeft ?
+	        function(){ this.scrollLeft = value } :
+	        function(){ this.scrollTo(value, this.scrollY) })
+	    },
+	    position: function() {
+	      if (!this.length) return
+
+	      var elem = this[0],
+	        // Get *real* offsetParent
+	        offsetParent = this.offsetParent(),
+	        // Get correct offsets
+	        offset       = this.offset(),
+	        parentOffset = rootNodeRE.test(offsetParent[0].nodeName) ? { top: 0, left: 0 } : offsetParent.offset()
+
+	      // Subtract element margins
+	      // note: when an element has margin: auto the offsetLeft and marginLeft
+	      // are the same in Safari causing offset.left to incorrectly be 0
+	      offset.top  -= parseFloat( $(elem).css('margin-top') ) || 0
+	      offset.left -= parseFloat( $(elem).css('margin-left') ) || 0
+
+	      // Add offsetParent borders
+	      parentOffset.top  += parseFloat( $(offsetParent[0]).css('border-top-width') ) || 0
+	      parentOffset.left += parseFloat( $(offsetParent[0]).css('border-left-width') ) || 0
+
+	      // Subtract the two offsets
+	      return {
+	        top:  offset.top  - parentOffset.top,
+	        left: offset.left - parentOffset.left
+	      }
+	    },
+	    offsetParent: function() {
+	      return this.map(function(){
+	        var parent = this.offsetParent || document.body
+	        while (parent && !rootNodeRE.test(parent.nodeName) && $(parent).css("position") == "static")
+	          parent = parent.offsetParent
+	        return parent
+	      })
+	    }
+	  }
+
+	  // for now
+	  $.fn.detach = $.fn.remove
+
+	  // Generate the `width` and `height` functions
+	  ;['width', 'height'].forEach(function(dimension){
+	    var dimensionProperty =
+	      dimension.replace(/./, function(m){ return m[0].toUpperCase() })
+
+	    $.fn[dimension] = function(value){
+	      var offset, el = this[0]
+	      if (value === undefined) return isWindow(el) ? el['inner' + dimensionProperty] :
+	        isDocument(el) ? el.documentElement['scroll' + dimensionProperty] :
+	        (offset = this.offset()) && offset[dimension]
+	      else return this.each(function(idx){
+	        el = $(this)
+	        el.css(dimension, funcArg(this, value, idx, el[dimension]()))
+	      })
+	    }
+	  })
+
+	  function traverseNode(node, fun) {
+	    fun(node)
+	    for (var i = 0, len = node.childNodes.length; i < len; i++)
+	      traverseNode(node.childNodes[i], fun)
+	  }
+
+	  // Generate the `after`, `prepend`, `before`, `append`,
+	  // `insertAfter`, `insertBefore`, `appendTo`, and `prependTo` methods.
+	  adjacencyOperators.forEach(function(operator, operatorIndex) {
+	    var inside = operatorIndex % 2 //=> prepend, append
+
+	    $.fn[operator] = function(){
+	      // arguments can be nodes, arrays of nodes, Zepto objects and HTML strings
+	      var argType, nodes = $.map(arguments, function(arg) {
+	            var arr = []
+	            argType = type(arg)
+	            if (argType == "array") {
+	              arg.forEach(function(el) {
+	                if (el.nodeType !== undefined) return arr.push(el)
+	                else if ($.zepto.isZ(el)) return arr = arr.concat(el.get())
+	                arr = arr.concat(zepto.fragment(el))
+	              })
+	              return arr
+	            }
+	            return argType == "object" || arg == null ?
+	              arg : zepto.fragment(arg)
+	          }),
+	          parent, copyByClone = this.length > 1
+	      if (nodes.length < 1) return this
+
+	      return this.each(function(_, target){
+	        parent = inside ? target : target.parentNode
+
+	        // convert all methods to a "before" operation
+	        target = operatorIndex == 0 ? target.nextSibling :
+	                 operatorIndex == 1 ? target.firstChild :
+	                 operatorIndex == 2 ? target :
+	                 null
+
+	        var parentInDocument = $.contains(document.documentElement, parent)
+
+	        nodes.forEach(function(node){
+	          if (copyByClone) node = node.cloneNode(true)
+	          else if (!parent) return $(node).remove()
+
+	          parent.insertBefore(node, target)
+	          if (parentInDocument) traverseNode(node, function(el){
+	            if (el.nodeName != null && el.nodeName.toUpperCase() === 'SCRIPT' &&
+	               (!el.type || el.type === 'text/javascript') && !el.src){
+	              var target = el.ownerDocument ? el.ownerDocument.defaultView : window
+	              target['eval'].call(target, el.innerHTML)
+	            }
+	          })
+	        })
+	      })
+	    }
+
+	    // after    => insertAfter
+	    // prepend  => prependTo
+	    // before   => insertBefore
+	    // append   => appendTo
+	    $.fn[inside ? operator+'To' : 'insert'+(operatorIndex ? 'Before' : 'After')] = function(html){
+	      $(html)[operator](this)
+	      return this
+	    }
+	  })
+
+	  zepto.Z.prototype = Z.prototype = $.fn
+
+	  // Export internal API functions in the `$.zepto` namespace
+	  zepto.uniq = uniq
+	  zepto.deserializeValue = deserializeValue
+	  $.zepto = zepto
+
+	  return $
+	})()
+
+	window.Zepto = Zepto
+	window.$ === undefined && (window.$ = Zepto)
+
+	;(function($){
+	  var jsonpID = +new Date(),
+	      document = window.document,
+	      key,
+	      name,
+	      rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
+	      scriptTypeRE = /^(?:text|application)\/javascript/i,
+	      xmlTypeRE = /^(?:text|application)\/xml/i,
+	      jsonType = 'application/json',
+	      htmlType = 'text/html',
+	      blankRE = /^\s*$/,
+	      originAnchor = document.createElement('a')
+
+	  originAnchor.href = window.location.href
+
+	  // trigger a custom event and return false if it was cancelled
+	  function triggerAndReturn(context, eventName, data) {
+	    var event = $.Event(eventName)
+	    $(context).trigger(event, data)
+	    return !event.isDefaultPrevented()
+	  }
+
+	  // trigger an Ajax "global" event
+	  function triggerGlobal(settings, context, eventName, data) {
+	    if (settings.global) return triggerAndReturn(context || document, eventName, data)
+	  }
+
+	  // Number of active Ajax requests
+	  $.active = 0
+
+	  function ajaxStart(settings) {
+	    if (settings.global && $.active++ === 0) triggerGlobal(settings, null, 'ajaxStart')
+	  }
+	  function ajaxStop(settings) {
+	    if (settings.global && !(--$.active)) triggerGlobal(settings, null, 'ajaxStop')
+	  }
+
+	  // triggers an extra global event "ajaxBeforeSend" that's like "ajaxSend" but cancelable
+	  function ajaxBeforeSend(xhr, settings) {
+	    var context = settings.context
+	    if (settings.beforeSend.call(context, xhr, settings) === false ||
+	        triggerGlobal(settings, context, 'ajaxBeforeSend', [xhr, settings]) === false)
+	      return false
+
+	    triggerGlobal(settings, context, 'ajaxSend', [xhr, settings])
+	  }
+	  function ajaxSuccess(data, xhr, settings, deferred) {
+	    var context = settings.context, status = 'success'
+	    settings.success.call(context, data, status, xhr)
+	    if (deferred) deferred.resolveWith(context, [data, status, xhr])
+	    triggerGlobal(settings, context, 'ajaxSuccess', [xhr, settings, data])
+	    ajaxComplete(status, xhr, settings)
+	  }
+	  // type: "timeout", "error", "abort", "parsererror"
+	  function ajaxError(error, type, xhr, settings, deferred) {
+	    var context = settings.context
+	    settings.error.call(context, xhr, type, error)
+	    if (deferred) deferred.rejectWith(context, [xhr, type, error])
+	    triggerGlobal(settings, context, 'ajaxError', [xhr, settings, error || type])
+	    ajaxComplete(type, xhr, settings)
+	  }
+	  // status: "success", "notmodified", "error", "timeout", "abort", "parsererror"
+	  function ajaxComplete(status, xhr, settings) {
+	    var context = settings.context
+	    settings.complete.call(context, xhr, status)
+	    triggerGlobal(settings, context, 'ajaxComplete', [xhr, settings])
+	    ajaxStop(settings)
+	  }
+
+	  function ajaxDataFilter(data, type, settings) {
+	    if (settings.dataFilter == empty) return data
+	    var context = settings.context
+	    return settings.dataFilter.call(context, data, type)
+	  }
+
+	  // Empty function, used as default callback
+	  function empty() {}
+
+	  $.ajaxJSONP = function(options, deferred){
+	    if (!('type' in options)) return $.ajax(options)
+
+	    var _callbackName = options.jsonpCallback,
+	      callbackName = ($.isFunction(_callbackName) ?
+	        _callbackName() : _callbackName) || ('Zepto' + (jsonpID++)),
+	      script = document.createElement('script'),
+	      originalCallback = window[callbackName],
+	      responseData,
+	      abort = function(errorType) {
+	        $(script).triggerHandler('error', errorType || 'abort')
+	      },
+	      xhr = { abort: abort }, abortTimeout
+
+	    if (deferred) deferred.promise(xhr)
+
+	    $(script).on('load error', function(e, errorType){
+	      clearTimeout(abortTimeout)
+	      $(script).off().remove()
+
+	      if (e.type == 'error' || !responseData) {
+	        ajaxError(null, errorType || 'error', xhr, options, deferred)
+	      } else {
+	        ajaxSuccess(responseData[0], xhr, options, deferred)
+	      }
+
+	      window[callbackName] = originalCallback
+	      if (responseData && $.isFunction(originalCallback))
+	        originalCallback(responseData[0])
+
+	      originalCallback = responseData = undefined
+	    })
+
+	    if (ajaxBeforeSend(xhr, options) === false) {
+	      abort('abort')
+	      return xhr
+	    }
+
+	    window[callbackName] = function(){
+	      responseData = arguments
+	    }
+
+	    script.src = options.url.replace(/\?(.+)=\?/, '?$1=' + callbackName)
+	    document.head.appendChild(script)
+
+	    if (options.timeout > 0) abortTimeout = setTimeout(function(){
+	      abort('timeout')
+	    }, options.timeout)
+
+	    return xhr
+	  }
+
+	  $.ajaxSettings = {
+	    // Default type of request
+	    type: 'GET',
+	    // Callback that is executed before request
+	    beforeSend: empty,
+	    // Callback that is executed if the request succeeds
+	    success: empty,
+	    // Callback that is executed the the server drops error
+	    error: empty,
+	    // Callback that is executed on request complete (both: error and success)
+	    complete: empty,
+	    // The context for the callbacks
+	    context: null,
+	    // Whether to trigger "global" Ajax events
+	    global: true,
+	    // Transport
+	    xhr: function () {
+	      return new window.XMLHttpRequest()
+	    },
+	    // MIME types mapping
+	    // IIS returns Javascript as "application/x-javascript"
+	    accepts: {
+	      script: 'text/javascript, application/javascript, application/x-javascript',
+	      json:   jsonType,
+	      xml:    'application/xml, text/xml',
+	      html:   htmlType,
+	      text:   'text/plain'
+	    },
+	    // Whether the request is to another domain
+	    crossDomain: false,
+	    // Default timeout
+	    timeout: 0,
+	    // Whether data should be serialized to string
+	    processData: true,
+	    // Whether the browser should be allowed to cache GET responses
+	    cache: true,
+	    //Used to handle the raw response data of XMLHttpRequest.
+	    //This is a pre-filtering function to sanitize the response.
+	    //The sanitized response should be returned
+	    dataFilter: empty
+	  }
+
+	  function mimeToDataType(mime) {
+	    if (mime) mime = mime.split(';', 2)[0]
+	    return mime && ( mime == htmlType ? 'html' :
+	      mime == jsonType ? 'json' :
+	      scriptTypeRE.test(mime) ? 'script' :
+	      xmlTypeRE.test(mime) && 'xml' ) || 'text'
+	  }
+
+	  function appendQuery(url, query) {
+	    if (query == '') return url
+	    return (url + '&' + query).replace(/[&?]{1,2}/, '?')
+	  }
+
+	  // serialize payload and append it to the URL for GET requests
+	  function serializeData(options) {
+	    if (options.processData && options.data && $.type(options.data) != "string")
+	      options.data = $.param(options.data, options.traditional)
+	    if (options.data && (!options.type || options.type.toUpperCase() == 'GET' || 'jsonp' == options.dataType))
+	      options.url = appendQuery(options.url, options.data), options.data = undefined
+	  }
+
+	  $.ajax = function(options){
+	    var settings = $.extend({}, options || {}),
+	        deferred = $.Deferred && $.Deferred(),
+	        urlAnchor, hashIndex
+	    for (key in $.ajaxSettings) if (settings[key] === undefined) settings[key] = $.ajaxSettings[key]
+
+	    ajaxStart(settings)
+
+	    if (!settings.crossDomain) {
+	      urlAnchor = document.createElement('a')
+	      urlAnchor.href = settings.url
+	      // cleans up URL for .href (IE only), see https://github.com/madrobby/zepto/pull/1049
+	      urlAnchor.href = urlAnchor.href
+	      settings.crossDomain = (originAnchor.protocol + '//' + originAnchor.host) !== (urlAnchor.protocol + '//' + urlAnchor.host)
+	    }
+
+	    if (!settings.url) settings.url = window.location.toString()
+	    if ((hashIndex = settings.url.indexOf('#')) > -1) settings.url = settings.url.slice(0, hashIndex)
+	    serializeData(settings)
+
+	    var dataType = settings.dataType, hasPlaceholder = /\?.+=\?/.test(settings.url)
+	    if (hasPlaceholder) dataType = 'jsonp'
+
+	    if (settings.cache === false || (
+	         (!options || options.cache !== true) &&
+	         ('script' == dataType || 'jsonp' == dataType)
+	        ))
+	      settings.url = appendQuery(settings.url, '_=' + Date.now())
+
+	    if ('jsonp' == dataType) {
+	      if (!hasPlaceholder)
+	        settings.url = appendQuery(settings.url,
+	          settings.jsonp ? (settings.jsonp + '=?') : settings.jsonp === false ? '' : 'callback=?')
+	      return $.ajaxJSONP(settings, deferred)
+	    }
+
+	    var mime = settings.accepts[dataType],
+	        headers = { },
+	        setHeader = function(name, value) { headers[name.toLowerCase()] = [name, value] },
+	        protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol,
+	        xhr = settings.xhr(),
+	        nativeSetHeader = xhr.setRequestHeader,
+	        abortTimeout
+
+	    if (deferred) deferred.promise(xhr)
+
+	    if (!settings.crossDomain) setHeader('X-Requested-With', 'XMLHttpRequest')
+	    setHeader('Accept', mime || '*/*')
+	    if (mime = settings.mimeType || mime) {
+	      if (mime.indexOf(',') > -1) mime = mime.split(',', 2)[0]
+	      xhr.overrideMimeType && xhr.overrideMimeType(mime)
+	    }
+	    if (settings.contentType || (settings.contentType !== false && settings.data && settings.type.toUpperCase() != 'GET'))
+	      setHeader('Content-Type', settings.contentType || 'application/x-www-form-urlencoded')
+
+	    if (settings.headers) for (name in settings.headers) setHeader(name, settings.headers[name])
+	    xhr.setRequestHeader = setHeader
+
+	    xhr.onreadystatechange = function(){
+	      if (xhr.readyState == 4) {
+	        xhr.onreadystatechange = empty
+	        clearTimeout(abortTimeout)
+	        var result, error = false
+	        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304 || (xhr.status == 0 && protocol == 'file:')) {
+	          dataType = dataType || mimeToDataType(settings.mimeType || xhr.getResponseHeader('content-type'))
+
+	          if (xhr.responseType == 'arraybuffer' || xhr.responseType == 'blob')
+	            result = xhr.response
+	          else {
+	            result = xhr.responseText
+
+	            try {
+	              // http://perfectionkills.com/global-eval-what-are-the-options/
+	              // sanitize response accordingly if data filter callback provided
+	              result = ajaxDataFilter(result, dataType, settings)
+	              if (dataType == 'script')    (1,eval)(result)
+	              else if (dataType == 'xml')  result = xhr.responseXML
+	              else if (dataType == 'json') result = blankRE.test(result) ? null : $.parseJSON(result)
+	            } catch (e) { error = e }
+
+	            if (error) return ajaxError(error, 'parsererror', xhr, settings, deferred)
+	          }
+
+	          ajaxSuccess(result, xhr, settings, deferred)
+	        } else {
+	          ajaxError(xhr.statusText || null, xhr.status ? 'error' : 'abort', xhr, settings, deferred)
+	        }
+	      }
+	    }
+
+	    if (ajaxBeforeSend(xhr, settings) === false) {
+	      xhr.abort()
+	      ajaxError(null, 'abort', xhr, settings, deferred)
+	      return xhr
+	    }
+
+	    var async = 'async' in settings ? settings.async : true
+	    xhr.open(settings.type, settings.url, async, settings.username, settings.password)
+
+	    if (settings.xhrFields) for (name in settings.xhrFields) xhr[name] = settings.xhrFields[name]
+
+	    for (name in headers) nativeSetHeader.apply(xhr, headers[name])
+
+	    if (settings.timeout > 0) abortTimeout = setTimeout(function(){
+	        xhr.onreadystatechange = empty
+	        xhr.abort()
+	        ajaxError(null, 'timeout', xhr, settings, deferred)
+	      }, settings.timeout)
+
+	    // avoid sending empty string (#319)
+	    xhr.send(settings.data ? settings.data : null)
+	    return xhr
+	  }
+
+	  // handle optional data/success arguments
+	  function parseArguments(url, data, success, dataType) {
+	    if ($.isFunction(data)) dataType = success, success = data, data = undefined
+	    if (!$.isFunction(success)) dataType = success, success = undefined
+	    return {
+	      url: url
+	    , data: data
+	    , success: success
+	    , dataType: dataType
+	    }
+	  }
+
+	  $.get = function(/* url, data, success, dataType */){
+	    return $.ajax(parseArguments.apply(null, arguments))
+	  }
+
+	  $.post = function(/* url, data, success, dataType */){
+	    var options = parseArguments.apply(null, arguments)
+	    options.type = 'POST'
+	    return $.ajax(options)
+	  }
+
+	  $.getJSON = function(/* url, data, success */){
+	    var options = parseArguments.apply(null, arguments)
+	    options.dataType = 'json'
+	    return $.ajax(options)
+	  }
+
+	  $.fn.load = function(url, data, success){
+	    if (!this.length) return this
+	    var self = this, parts = url.split(/\s/), selector,
+	        options = parseArguments(url, data, success),
+	        callback = options.success
+	    if (parts.length > 1) options.url = parts[0], selector = parts[1]
+	    options.success = function(response){
+	      self.html(selector ?
+	        $('<div>').html(response.replace(rscript, "")).find(selector)
+	        : response)
+	      callback && callback.apply(self, arguments)
+	    }
+	    $.ajax(options)
+	    return this
+	  }
+
+	  var escape = encodeURIComponent
+
+	  function serialize(params, obj, traditional, scope){
+	    var type, array = $.isArray(obj), hash = $.isPlainObject(obj)
+	    $.each(obj, function(key, value) {
+	      type = $.type(value)
+	      if (scope) key = traditional ? scope :
+	        scope + '[' + (hash || type == 'object' || type == 'array' ? key : '') + ']'
+	      // handle data in serializeArray() format
+	      if (!scope && array) params.add(value.name, value.value)
+	      // recurse into nested objects
+	      else if (type == "array" || (!traditional && type == "object"))
+	        serialize(params, value, traditional, key)
+	      else params.add(key, value)
+	    })
+	  }
+
+	  $.param = function(obj, traditional){
+	    var params = []
+	    params.add = function(key, value) {
+	      if ($.isFunction(value)) value = value()
+	      if (value == null) value = ""
+	      this.push(escape(key) + '=' + escape(value))
+	    }
+	    serialize(params, obj, traditional)
+	    return params.join('&').replace(/%20/g, '+')
+	  }
+	})(Zepto)
+
+	;(function($){
+	  // Create a collection of callbacks to be fired in a sequence, with configurable behaviour
+	  // Option flags:
+	  //   - once: Callbacks fired at most one time.
+	  //   - memory: Remember the most recent context and arguments
+	  //   - stopOnFalse: Cease iterating over callback list
+	  //   - unique: Permit adding at most one instance of the same callback
+	  $.Callbacks = function(options) {
+	    options = $.extend({}, options)
+
+	    var memory, // Last fire value (for non-forgettable lists)
+	        fired,  // Flag to know if list was already fired
+	        firing, // Flag to know if list is currently firing
+	        firingStart, // First callback to fire (used internally by add and fireWith)
+	        firingLength, // End of the loop when firing
+	        firingIndex, // Index of currently firing callback (modified by remove if needed)
+	        list = [], // Actual callback list
+	        stack = !options.once && [], // Stack of fire calls for repeatable lists
+	        fire = function(data) {
+	          memory = options.memory && data
+	          fired = true
+	          firingIndex = firingStart || 0
+	          firingStart = 0
+	          firingLength = list.length
+	          firing = true
+	          for ( ; list && firingIndex < firingLength ; ++firingIndex ) {
+	            if (list[firingIndex].apply(data[0], data[1]) === false && options.stopOnFalse) {
+	              memory = false
+	              break
+	            }
+	          }
+	          firing = false
+	          if (list) {
+	            if (stack) stack.length && fire(stack.shift())
+	            else if (memory) list.length = 0
+	            else Callbacks.disable()
+	          }
+	        },
+
+	        Callbacks = {
+	          add: function() {
+	            if (list) {
+	              var start = list.length,
+	                  add = function(args) {
+	                    $.each(args, function(_, arg){
+	                      if (typeof arg === "function") {
+	                        if (!options.unique || !Callbacks.has(arg)) list.push(arg)
+	                      }
+	                      else if (arg && arg.length && typeof arg !== 'string') add(arg)
+	                    })
+	                  }
+	              add(arguments)
+	              if (firing) firingLength = list.length
+	              else if (memory) {
+	                firingStart = start
+	                fire(memory)
+	              }
+	            }
+	            return this
+	          },
+	          remove: function() {
+	            if (list) {
+	              $.each(arguments, function(_, arg){
+	                var index
+	                while ((index = $.inArray(arg, list, index)) > -1) {
+	                  list.splice(index, 1)
+	                  // Handle firing indexes
+	                  if (firing) {
+	                    if (index <= firingLength) --firingLength
+	                    if (index <= firingIndex) --firingIndex
+	                  }
+	                }
+	              })
+	            }
+	            return this
+	          },
+	          has: function(fn) {
+	            return !!(list && (fn ? $.inArray(fn, list) > -1 : list.length))
+	          },
+	          empty: function() {
+	            firingLength = list.length = 0
+	            return this
+	          },
+	          disable: function() {
+	            list = stack = memory = undefined
+	            return this
+	          },
+	          disabled: function() {
+	            return !list
+	          },
+	          lock: function() {
+	            stack = undefined
+	            if (!memory) Callbacks.disable()
+	            return this
+	          },
+	          locked: function() {
+	            return !stack
+	          },
+	          fireWith: function(context, args) {
+	            if (list && (!fired || stack)) {
+	              args = args || []
+	              args = [context, args.slice ? args.slice() : args]
+	              if (firing) stack.push(args)
+	              else fire(args)
+	            }
+	            return this
+	          },
+	          fire: function() {
+	            return Callbacks.fireWith(this, arguments)
+	          },
+	          fired: function() {
+	            return !!fired
+	          }
+	        }
+
+	    return Callbacks
+	  }
+	})(Zepto)
+
+	;(function($){
+	  var slice = Array.prototype.slice
+
+	  function Deferred(func) {
+	    var tuples = [
+	          // action, add listener, listener list, final state
+	          [ "resolve", "done", $.Callbacks({once:1, memory:1}), "resolved" ],
+	          [ "reject", "fail", $.Callbacks({once:1, memory:1}), "rejected" ],
+	          [ "notify", "progress", $.Callbacks({memory:1}) ]
+	        ],
+	        state = "pending",
+	        promise = {
+	          state: function() {
+	            return state
+	          },
+	          always: function() {
+	            deferred.done(arguments).fail(arguments)
+	            return this
+	          },
+	          then: function(/* fnDone [, fnFailed [, fnProgress]] */) {
+	            var fns = arguments
+	            return Deferred(function(defer){
+	              $.each(tuples, function(i, tuple){
+	                var fn = $.isFunction(fns[i]) && fns[i]
+	                deferred[tuple[1]](function(){
+	                  var returned = fn && fn.apply(this, arguments)
+	                  if (returned && $.isFunction(returned.promise)) {
+	                    returned.promise()
+	                      .done(defer.resolve)
+	                      .fail(defer.reject)
+	                      .progress(defer.notify)
+	                  } else {
+	                    var context = this === promise ? defer.promise() : this,
+	                        values = fn ? [returned] : arguments
+	                    defer[tuple[0] + "With"](context, values)
+	                  }
+	                })
+	              })
+	              fns = null
+	            }).promise()
+	          },
+
+	          promise: function(obj) {
+	            return obj != null ? $.extend( obj, promise ) : promise
+	          }
+	        },
+	        deferred = {}
+
+	    $.each(tuples, function(i, tuple){
+	      var list = tuple[2],
+	          stateString = tuple[3]
+
+	      promise[tuple[1]] = list.add
+
+	      if (stateString) {
+	        list.add(function(){
+	          state = stateString
+	        }, tuples[i^1][2].disable, tuples[2][2].lock)
+	      }
+
+	      deferred[tuple[0]] = function(){
+	        deferred[tuple[0] + "With"](this === deferred ? promise : this, arguments)
+	        return this
+	      }
+	      deferred[tuple[0] + "With"] = list.fireWith
+	    })
+
+	    promise.promise(deferred)
+	    if (func) func.call(deferred, deferred)
+	    return deferred
+	  }
+
+	  $.when = function(sub) {
+	    var resolveValues = slice.call(arguments),
+	        len = resolveValues.length,
+	        i = 0,
+	        remain = len !== 1 || (sub && $.isFunction(sub.promise)) ? len : 0,
+	        deferred = remain === 1 ? sub : Deferred(),
+	        progressValues, progressContexts, resolveContexts,
+	        updateFn = function(i, ctx, val){
+	          return function(value){
+	            ctx[i] = this
+	            val[i] = arguments.length > 1 ? slice.call(arguments) : value
+	            if (val === progressValues) {
+	              deferred.notifyWith(ctx, val)
+	            } else if (!(--remain)) {
+	              deferred.resolveWith(ctx, val)
+	            }
+	          }
+	        }
+
+	    if (len > 1) {
+	      progressValues = new Array(len)
+	      progressContexts = new Array(len)
+	      resolveContexts = new Array(len)
+	      for ( ; i < len; ++i ) {
+	        if (resolveValues[i] && $.isFunction(resolveValues[i].promise)) {
+	          resolveValues[i].promise()
+	            .done(updateFn(i, resolveContexts, resolveValues))
+	            .fail(deferred.reject)
+	            .progress(updateFn(i, progressContexts, progressValues))
+	        } else {
+	          --remain
+	        }
+	      }
+	    }
+	    if (!remain) deferred.resolveWith(resolveContexts, resolveValues)
+	    return deferred.promise()
+	  }
+
+	  $.Deferred = Deferred
+	})(Zepto)
+
+	;(function($){
+	  var _zid = 1, undefined,
+	      slice = Array.prototype.slice,
+	      isFunction = $.isFunction,
+	      isString = function(obj){ return typeof obj == 'string' },
+	      handlers = {},
+	      specialEvents={},
+	      focusinSupported = 'onfocusin' in window,
+	      focus = { focus: 'focusin', blur: 'focusout' },
+	      hover = { mouseenter: 'mouseover', mouseleave: 'mouseout' }
+
+	  specialEvents.click = specialEvents.mousedown = specialEvents.mouseup = specialEvents.mousemove = 'MouseEvents'
+
+	  function zid(element) {
+	    return element._zid || (element._zid = _zid++)
+	  }
+	  function findHandlers(element, event, fn, selector) {
+	    event = parse(event)
+	    if (event.ns) var matcher = matcherFor(event.ns)
+	    return (handlers[zid(element)] || []).filter(function(handler) {
+	      return handler
+	        && (!event.e  || handler.e == event.e)
+	        && (!event.ns || matcher.test(handler.ns))
+	        && (!fn       || zid(handler.fn) === zid(fn))
+	        && (!selector || handler.sel == selector)
+	    })
+	  }
+	  function parse(event) {
+	    var parts = ('' + event).split('.')
+	    return {e: parts[0], ns: parts.slice(1).sort().join(' ')}
+	  }
+	  function matcherFor(ns) {
+	    return new RegExp('(?:^| )' + ns.replace(' ', ' .* ?') + '(?: |$)')
+	  }
+
+	  function eventCapture(handler, captureSetting) {
+	    return handler.del &&
+	      (!focusinSupported && (handler.e in focus)) ||
+	      !!captureSetting
+	  }
+
+	  function realEvent(type) {
+	    return hover[type] || (focusinSupported && focus[type]) || type
+	  }
+
+	  function add(element, events, fn, data, selector, delegator, capture){
+	    var id = zid(element), set = (handlers[id] || (handlers[id] = []))
+	    events.split(/\s/).forEach(function(event){
+	      if (event == 'ready') return $(document).ready(fn)
+	      var handler   = parse(event)
+	      handler.fn    = fn
+	      handler.sel   = selector
+	      // emulate mouseenter, mouseleave
+	      if (handler.e in hover) fn = function(e){
+	        var related = e.relatedTarget
+	        if (!related || (related !== this && !$.contains(this, related)))
+	          return handler.fn.apply(this, arguments)
+	      }
+	      handler.del   = delegator
+	      var callback  = delegator || fn
+	      handler.proxy = function(e){
+	        e = compatible(e)
+	        if (e.isImmediatePropagationStopped()) return
+	        e.data = data
+	        var result = callback.apply(element, e._args == undefined ? [e] : [e].concat(e._args))
+	        if (result === false) e.preventDefault(), e.stopPropagation()
+	        return result
+	      }
+	      handler.i = set.length
+	      set.push(handler)
+	      if ('addEventListener' in element)
+	        element.addEventListener(realEvent(handler.e), handler.proxy, eventCapture(handler, capture))
+	    })
+	  }
+	  function remove(element, events, fn, selector, capture){
+	    var id = zid(element)
+	    ;(events || '').split(/\s/).forEach(function(event){
+	      findHandlers(element, event, fn, selector).forEach(function(handler){
+	        delete handlers[id][handler.i]
+	      if ('removeEventListener' in element)
+	        element.removeEventListener(realEvent(handler.e), handler.proxy, eventCapture(handler, capture))
+	      })
+	    })
+	  }
+
+	  $.event = { add: add, remove: remove }
+
+	  $.proxy = function(fn, context) {
+	    var args = (2 in arguments) && slice.call(arguments, 2)
+	    if (isFunction(fn)) {
+	      var proxyFn = function(){ return fn.apply(context, args ? args.concat(slice.call(arguments)) : arguments) }
+	      proxyFn._zid = zid(fn)
+	      return proxyFn
+	    } else if (isString(context)) {
+	      if (args) {
+	        args.unshift(fn[context], fn)
+	        return $.proxy.apply(null, args)
+	      } else {
+	        return $.proxy(fn[context], fn)
+	      }
+	    } else {
+	      throw new TypeError("expected function")
+	    }
+	  }
+
+	  $.fn.bind = function(event, data, callback){
+	    return this.on(event, data, callback)
+	  }
+	  $.fn.unbind = function(event, callback){
+	    return this.off(event, callback)
+	  }
+	  $.fn.one = function(event, selector, data, callback){
+	    return this.on(event, selector, data, callback, 1)
+	  }
+
+	  var returnTrue = function(){return true},
+	      returnFalse = function(){return false},
+	      ignoreProperties = /^([A-Z]|returnValue$|layer[XY]$|webkitMovement[XY]$)/,
+	      eventMethods = {
+	        preventDefault: 'isDefaultPrevented',
+	        stopImmediatePropagation: 'isImmediatePropagationStopped',
+	        stopPropagation: 'isPropagationStopped'
+	      }
+
+	  function compatible(event, source) {
+	    if (source || !event.isDefaultPrevented) {
+	      source || (source = event)
+
+	      $.each(eventMethods, function(name, predicate) {
+	        var sourceMethod = source[name]
+	        event[name] = function(){
+	          this[predicate] = returnTrue
+	          return sourceMethod && sourceMethod.apply(source, arguments)
+	        }
+	        event[predicate] = returnFalse
+	      })
+
+	      event.timeStamp || (event.timeStamp = Date.now())
+
+	      if (source.defaultPrevented !== undefined ? source.defaultPrevented :
+	          'returnValue' in source ? source.returnValue === false :
+	          source.getPreventDefault && source.getPreventDefault())
+	        event.isDefaultPrevented = returnTrue
+	    }
+	    return event
+	  }
+
+	  function createProxy(event) {
+	    var key, proxy = { originalEvent: event }
+	    for (key in event)
+	      if (!ignoreProperties.test(key) && event[key] !== undefined) proxy[key] = event[key]
+
+	    return compatible(proxy, event)
+	  }
+
+	  $.fn.delegate = function(selector, event, callback){
+	    return this.on(event, selector, callback)
+	  }
+	  $.fn.undelegate = function(selector, event, callback){
+	    return this.off(event, selector, callback)
+	  }
+
+	  $.fn.live = function(event, callback){
+	    $(document.body).delegate(this.selector, event, callback)
+	    return this
+	  }
+	  $.fn.die = function(event, callback){
+	    $(document.body).undelegate(this.selector, event, callback)
+	    return this
+	  }
+
+	  $.fn.on = function(event, selector, data, callback, one){
+	    var autoRemove, delegator, $this = this
+	    if (event && !isString(event)) {
+	      $.each(event, function(type, fn){
+	        $this.on(type, selector, data, fn, one)
+	      })
+	      return $this
+	    }
+
+	    if (!isString(selector) && !isFunction(callback) && callback !== false)
+	      callback = data, data = selector, selector = undefined
+	    if (callback === undefined || data === false)
+	      callback = data, data = undefined
+
+	    if (callback === false) callback = returnFalse
+
+	    return $this.each(function(_, element){
+	      if (one) autoRemove = function(e){
+	        remove(element, e.type, callback)
+	        return callback.apply(this, arguments)
+	      }
+
+	      if (selector) delegator = function(e){
+	        var evt, match = $(e.target).closest(selector, element).get(0)
+	        if (match && match !== element) {
+	          evt = $.extend(createProxy(e), {currentTarget: match, liveFired: element})
+	          return (autoRemove || callback).apply(match, [evt].concat(slice.call(arguments, 1)))
+	        }
+	      }
+
+	      add(element, event, callback, data, selector, delegator || autoRemove)
+	    })
+	  }
+	  $.fn.off = function(event, selector, callback){
+	    var $this = this
+	    if (event && !isString(event)) {
+	      $.each(event, function(type, fn){
+	        $this.off(type, selector, fn)
+	      })
+	      return $this
+	    }
+
+	    if (!isString(selector) && !isFunction(callback) && callback !== false)
+	      callback = selector, selector = undefined
+
+	    if (callback === false) callback = returnFalse
+
+	    return $this.each(function(){
+	      remove(this, event, callback, selector)
+	    })
+	  }
+
+	  $.fn.trigger = function(event, args){
+	    event = (isString(event) || $.isPlainObject(event)) ? $.Event(event) : compatible(event)
+	    event._args = args
+	    return this.each(function(){
+	      // handle focus(), blur() by calling them directly
+	      if (event.type in focus && typeof this[event.type] == "function") this[event.type]()
+	      // items in the collection might not be DOM elements
+	      else if ('dispatchEvent' in this) this.dispatchEvent(event)
+	      else $(this).triggerHandler(event, args)
+	    })
+	  }
+
+	  // triggers event handlers on current element just as if an event occurred,
+	  // doesn't trigger an actual event, doesn't bubble
+	  $.fn.triggerHandler = function(event, args){
+	    var e, result
+	    this.each(function(i, element){
+	      e = createProxy(isString(event) ? $.Event(event) : event)
+	      e._args = args
+	      e.target = element
+	      $.each(findHandlers(element, event.type || event), function(i, handler){
+	        result = handler.proxy(e)
+	        if (e.isImmediatePropagationStopped()) return false
+	      })
+	    })
+	    return result
+	  }
+
+	  // shortcut methods for `.bind(event, fn)` for each event type
+	  ;('focusin focusout focus blur load resize scroll unload click dblclick '+
+	  'mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave '+
+	  'change select keydown keypress keyup error').split(' ').forEach(function(event) {
+	    $.fn[event] = function(callback) {
+	      return (0 in arguments) ?
+	        this.bind(event, callback) :
+	        this.trigger(event)
+	    }
+	  })
+
+	  $.Event = function(type, props) {
+	    if (!isString(type)) props = type, type = props.type
+	    var event = document.createEvent(specialEvents[type] || 'Events'), bubbles = true
+	    if (props) for (var name in props) (name == 'bubbles') ? (bubbles = !!props[name]) : (event[name] = props[name])
+	    event.initEvent(type, bubbles, true)
+	    return compatible(event)
+	  }
+
+	})(Zepto)
+
+	;(function(){
+	  // getComputedStyle shouldn't freak out when called
+	  // without a valid element as argument
+	  try {
+	    getComputedStyle(undefined)
+	  } catch(e) {
+	    var nativeGetComputedStyle = getComputedStyle
+	    window.getComputedStyle = function(element, pseudoElement){
+	      try {
+	        return nativeGetComputedStyle(element, pseudoElement)
+	      } catch(e) {
+	        return null
+	      }
+	    }
+	  }
+	})()
+
+	;(function($){
+	  var zepto = $.zepto, oldQsa = zepto.qsa, oldMatches = zepto.matches
+
+	  function visible(elem){
+	    elem = $(elem)
+	    return !!(elem.width() || elem.height()) && elem.css("display") !== "none"
+	  }
+
+	  // Implements a subset from:
+	  // http://api.jquery.com/category/selectors/jquery-selector-extensions/
+	  //
+	  // Each filter function receives the current index, all nodes in the
+	  // considered set, and a value if there were parentheses. The value
+	  // of `this` is the node currently being considered. The function returns the
+	  // resulting node(s), null, or undefined.
+	  //
+	  // Complex selectors are not supported:
+	  //   li:has(label:contains("foo")) + li:has(label:contains("bar"))
+	  //   ul.inner:first > li
+	  var filters = $.expr[':'] = {
+	    visible:  function(){ if (visible(this)) return this },
+	    hidden:   function(){ if (!visible(this)) return this },
+	    selected: function(){ if (this.selected) return this },
+	    checked:  function(){ if (this.checked) return this },
+	    parent:   function(){ return this.parentNode },
+	    first:    function(idx){ if (idx === 0) return this },
+	    last:     function(idx, nodes){ if (idx === nodes.length - 1) return this },
+	    eq:       function(idx, _, value){ if (idx === value) return this },
+	    contains: function(idx, _, text){ if ($(this).text().indexOf(text) > -1) return this },
+	    has:      function(idx, _, sel){ if (zepto.qsa(this, sel).length) return this }
+	  }
+
+	  var filterRe = new RegExp('(.*):(\\w+)(?:\\(([^)]+)\\))?$\\s*'),
+	      childRe  = /^\s*>/,
+	      classTag = 'Zepto' + (+new Date())
+
+	  function process(sel, fn) {
+	    // quote the hash in `a[href^=#]` expression
+	    sel = sel.replace(/=#\]/g, '="#"]')
+	    var filter, arg, match = filterRe.exec(sel)
+	    if (match && match[2] in filters) {
+	      filter = filters[match[2]], arg = match[3]
+	      sel = match[1]
+	      if (arg) {
+	        var num = Number(arg)
+	        if (isNaN(num)) arg = arg.replace(/^["']|["']$/g, '')
+	        else arg = num
+	      }
+	    }
+	    return fn(sel, filter, arg)
+	  }
+
+	  zepto.qsa = function(node, selector) {
+	    return process(selector, function(sel, filter, arg){
+	      try {
+	        var taggedParent
+	        if (!sel && filter) sel = '*'
+	        else if (childRe.test(sel))
+	          // support "> *" child queries by tagging the parent node with a
+	          // unique class and prepending that classname onto the selector
+	          taggedParent = $(node).addClass(classTag), sel = '.'+classTag+' '+sel
+
+	        var nodes = oldQsa(node, sel)
+	      } catch(e) {
+	        console.error('error performing selector: %o', selector)
+	        throw e
+	      } finally {
+	        if (taggedParent) taggedParent.removeClass(classTag)
+	      }
+	      return !filter ? nodes :
+	        zepto.uniq($.map(nodes, function(n, i){ return filter.call(n, i, nodes, arg) }))
+	    })
+	  }
+
+	  zepto.matches = function(node, selector){
+	    return process(selector, function(sel, filter, arg){
+	      return (!sel || oldMatches(node, sel)) &&
+	        (!filter || filter.call(node, null, arg) === node)
+	    })
+	  }
+	})(Zepto)
+	module.exports = Zepto
 
 
 /***/ },
@@ -5998,6 +7917,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      _mediator2.default.on(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.playerResize, this);
 	      this.listenTo(this.container, _events2.default.CONTAINER_PLAY, this.changeTogglePlay);
 	      this.listenTo(this.container, _events2.default.CONTAINER_PAUSE, this.changeTogglePlay);
+	      this.listenTo(this.container, _events2.default.CONTAINER_STOP, this.changeTogglePlay);
 	      this.listenTo(this.container, _events2.default.CONTAINER_DBLCLICK, this.toggleFullscreen);
 	      this.listenTo(this.container, _events2.default.CONTAINER_TIMEUPDATE, this.onTimeUpdate);
 	      this.listenTo(this.container, _events2.default.CONTAINER_PROGRESS, this.updateProgressBar);
@@ -6587,7 +8507,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (!_this7.settings.seekEnabled) {
 	        _this7.$seekBarContainer.addClass('seek-disabled');
 	      }
-	      if (!_this7.options.disableKeyboardShortcuts) {
+	      if (!_browser2.default.isMobile && !_this7.options.disableKeyboardShortcuts) {
 	        _this7.bindKeyEvents();
 	      }
 	      _this7.playerResize({ width: _this7.options.width, height: _this7.options.height });
@@ -9427,7 +11347,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 36 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"media-control-background\" data-background></div>\n<div class=\"media-control-layer\" data-controls>\n  <%  var renderBar = function(name) { %>\n      <div class=\"bar-container\" data-<%= name %>>\n        <div class=\"bar-background\" data-<%= name %>>\n          <div class=\"bar-fill-1\" data-<%= name %>></div>\n          <div class=\"bar-fill-2\" data-<%= name %>></div>\n          <div class=\"bar-hover\" data-<%= name %>></div>\n        </div>\n        <div class=\"bar-scrubber\" data-<%= name %>>\n          <div class=\"bar-scrubber-icon\" data-<%= name %>></div>\n        </div>\n      </div>\n  <%  }; %>\n  <%  var renderSegmentedBar = function(name, segments) {\n      segments = segments || 10; %>\n    <div class=\"bar-container\" data-<%= name %>>\n    <% for (var i = 0; i < segments; i++) { %>\n      <div class=\"segmented-bar-element\" data-<%= name %>></div>\n    <% } %>\n    </div>\n  <% }; %>\n  <% var renderDrawer = function(name, renderContent) { %>\n      <div class=\"drawer-container\" data-<%= name %>>\n        <div class=\"drawer-icon-container\" data-<%= name %>>\n          <div class=\"drawer-icon media-control-icon\" data-<%= name %>></div>\n          <span class=\"drawer-text\" data-<%= name %>></span>\n        </div>\n        <% renderContent(name); %>\n      </div>\n  <% }; %>\n  <% var renderIndicator = function(name) { %>\n      <div class=\"media-control-indicator\" data-<%= name %>></div>\n  <% }; %>\n  <% var renderButton = function(name) { %>\n      <button type=\"button\" class=\"media-control-button media-control-icon\" data-<%= name %>></button>\n  <% }; %>\n  <%  var templates = {\n        bar: renderBar,\n        segmentedBar: renderSegmentedBar,\n      };\n      var render = function(settingsList) {\n        settingsList.forEach(function(setting) {\n          if(setting === \"seekbar\") {\n            renderBar(setting);\n          } else if (setting === \"volume\") {\n            renderDrawer(setting, settings.volumeBarTemplate ? templates[settings.volumeBarTemplate] : function(name) { return renderSegmentedBar(name); });\n          } else if (setting === \"duration\" || setting === \"position\") {\n            renderIndicator(setting);\n          } else {\n            renderButton(setting);\n          }\n        });\n      }; %>\n  <% if (settings.default && settings.default.length) { %>\n  <div class=\"media-control-center-panel\" data-media-control>\n    <% render(settings.default); %>\n  </div>\n  <% } %>\n  <% if (settings.left && settings.left.length) { %>\n  <div class=\"media-control-left-panel\" data-media-control>\n    <% render(settings.left); %>\n  </div>\n  <% } %>\n  <% if (settings.right && settings.right.length) { %>\n  <div class=\"media-control-right-panel\" data-media-control>\n    <% render(settings.right); %>\n  </div>\n  <% } %>\n</div>\n";
+	module.exports = "<div class=\"media-control-background\" data-background></div>\n<div class=\"media-control-layer\" data-controls>\n  <%  var renderBar = function(name) { %>\n      <div class=\"bar-container\" data-<%= name %>>\n        <div class=\"bar-background\" data-<%= name %>>\n          <div class=\"bar-fill-1\" data-<%= name %>></div>\n          <div class=\"bar-fill-2\" data-<%= name %>></div>\n          <div class=\"bar-hover\" data-<%= name %>></div>\n        </div>\n        <div class=\"bar-scrubber\" data-<%= name %>>\n          <div class=\"bar-scrubber-icon\" data-<%= name %>></div>\n        </div>\n      </div>\n  <%  }; %>\n  <%  var renderSegmentedBar = function(name, segments) {\n      segments = segments || 10; %>\n    <div class=\"bar-container\" data-<%= name %>>\n    <% for (var i = 0; i < segments; i++) { %>\n      <div class=\"segmented-bar-element\" data-<%= name %>></div>\n    <% } %>\n    </div>\n  <% }; %>\n  <% var renderDrawer = function(name, renderContent) { %>\n      <div class=\"drawer-container\" data-<%= name %>>\n        <div class=\"drawer-icon-container\" data-<%= name %>>\n          <div class=\"drawer-icon media-control-icon\" data-<%= name %>></div>\n          <span class=\"drawer-text\" data-<%= name %>></span>\n        </div>\n        <% renderContent(name); %>\n      </div>\n  <% }; %>\n  <% var renderIndicator = function(name) { %>\n      <div class=\"media-control-indicator\" data-<%= name %>></div>\n  <% }; %>\n  <% var renderButton = function(name) { %>\n    <button type=\"button\" class=\"media-control-button media-control-icon\" data-<%= name %> aria-label=\"<%= name %>\"></button>\n  <% }; %>\n  <%  var templates = {\n        bar: renderBar,\n        segmentedBar: renderSegmentedBar,\n      };\n      var render = function(settingsList) {\n        settingsList.forEach(function(setting) {\n          if(setting === \"seekbar\") {\n            renderBar(setting);\n          } else if (setting === \"volume\") {\n            renderDrawer(setting, settings.volumeBarTemplate ? templates[settings.volumeBarTemplate] : function(name) { return renderSegmentedBar(name); });\n          } else if (setting === \"duration\" || setting === \"position\") {\n            renderIndicator(setting);\n          } else {\n            renderButton(setting);\n          }\n        });\n      }; %>\n  <% if (settings.default && settings.default.length) { %>\n  <div class=\"media-control-center-panel\" data-media-control>\n    <% render(settings.default); %>\n  </div>\n  <% } %>\n  <% if (settings.left && settings.left.length) { %>\n  <div class=\"media-control-left-panel\" data-media-control>\n    <% render(settings.left); %>\n  </div>\n  <% } %>\n  <% if (settings.right && settings.right.length) { %>\n  <div class=\"media-control-right-panel\" data-media-control>\n    <% render(settings.right); %>\n  </div>\n  <% } %>\n</div>\n";
 
 /***/ },
 /* 37 */
@@ -12350,6 +14270,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var _this = _possibleConstructorReturn(this, _Playback.call.apply(_Playback, [this].concat(args)));
 
+	    _this._destroyed = false;
 	    _this._loadStarted = false;
 	    _this._playheadMoving = false;
 	    _this._playheadMovingTimer = null;
@@ -12378,7 +14299,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    // https://github.com/clappr/clappr/issues/1076
 	    _this.options.autoPlay && process.nextTick(function () {
-	      return _this.play();
+	      return !_this._destroyed && _this.play();
 	    });
 	    return _this;
 	  }
@@ -12587,6 +14508,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  HTML5Video.prototype.destroy = function destroy() {
+	    this._destroyed = true;
 	    this.$el.remove();
 	    this.el.src = '';
 	    this._src = null;
@@ -14981,8 +16903,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      er = arguments[1];
 	      if (er instanceof Error) {
 	        throw er; // Unhandled 'error' event
+	      } else {
+	        // At least give some kind of context to the user
+	        var err = new Error('Uncaught, unspecified "error" event. (' + er + ')');
+	        err.context = er;
+	        throw err;
 	      }
-	      throw TypeError('Uncaught, unspecified "error" event.');
 	    }
 	  }
 
@@ -15222,6 +17148,105 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	},{}],2:[function(_dereq_,module,exports){
+	/* jshint ignore:start */
+	(function(root) { 
+	/* jshint ignore:end */
+	  var URLToolkit = {
+	    // build an absolute URL from a relative one using the provided baseURL
+	    // if relativeURL is an absolute URL it will be returned as is.
+	    buildAbsoluteURL: function(baseURL, relativeURL) {
+	      // remove any remaining space and CRLF
+	      relativeURL = relativeURL.trim();
+	      if (/^[a-z]+:/i.test(relativeURL)) {
+	        // complete url, not relative
+	        return relativeURL;
+	      }
+
+	      var relativeURLQuery = null;
+	      var relativeURLHash = null;
+
+	      var relativeURLHashSplit = /^([^#]*)(.*)$/.exec(relativeURL);
+	      if (relativeURLHashSplit) {
+	        relativeURLHash = relativeURLHashSplit[2];
+	        relativeURL = relativeURLHashSplit[1];
+	      }
+	      var relativeURLQuerySplit = /^([^\?]*)(.*)$/.exec(relativeURL);
+	      if (relativeURLQuerySplit) {
+	        relativeURLQuery = relativeURLQuerySplit[2];
+	        relativeURL = relativeURLQuerySplit[1];
+	      }
+
+	      var baseURLHashSplit = /^([^#]*)(.*)$/.exec(baseURL);
+	      if (baseURLHashSplit) {
+	        baseURL = baseURLHashSplit[1];
+	      }
+	      var baseURLQuerySplit = /^([^\?]*)(.*)$/.exec(baseURL);
+	      if (baseURLQuerySplit) {
+	        baseURL = baseURLQuerySplit[1];
+	      }
+
+	      var baseURLDomainSplit = /^(([a-z]+:)?\/\/[a-z0-9\.\-_~]+(:[0-9]+)?)?(\/.*)$/i.exec(baseURL);
+	      if (!baseURLDomainSplit) {
+	        throw new Error('Error trying to parse base URL.');
+	      }
+	      
+	      // e.g. 'http:', 'https:', ''
+	      var baseURLProtocol = baseURLDomainSplit[2] || '';
+	      // e.g. 'http://example.com', '//example.com', ''
+	      var baseURLProtocolDomain = baseURLDomainSplit[1] || '';
+	      // e.g. '/a/b/c/playlist.m3u8'
+	      var baseURLPath = baseURLDomainSplit[4];
+
+	      var builtURL = null;
+	      if (/^\/\//.test(relativeURL)) {
+	        // relative url starts wth '//' so copy protocol (which may be '' if baseUrl didn't provide one)
+	        builtURL = baseURLProtocol+'//'+URLToolkit.buildAbsolutePath('', relativeURL.substring(2));
+	      }
+	      else if (/^\//.test(relativeURL)) {
+	        // relative url starts with '/' so start from root of domain
+	        builtURL = baseURLProtocolDomain+'/'+URLToolkit.buildAbsolutePath('', relativeURL.substring(1));
+	      }
+	      else {
+	        builtURL = URLToolkit.buildAbsolutePath(baseURLProtocolDomain+baseURLPath, relativeURL);
+	      }
+
+	      // put the query and hash parts back
+	      if (relativeURLQuery) {
+	        builtURL += relativeURLQuery;
+	      }
+	      if (relativeURLHash) {
+	        builtURL += relativeURLHash;
+	      }
+	      return builtURL;
+	    },
+
+	    // build an absolute path using the provided basePath
+	    // adapted from https://developer.mozilla.org/en-US/docs/Web/API/document/cookie#Using_relative_URLs_in_the_path_parameter
+	    // this does not handle the case where relativePath is "/" or "//". These cases should be handled outside this.
+	    buildAbsolutePath: function(basePath, relativePath) {
+	      var sRelPath = relativePath;
+	      var nUpLn, sDir = '', sPath = basePath.replace(/[^\/]*$/, sRelPath.replace(/(\/|^)(?:\.?\/+)+/g, '$1'));
+	      for (var nEnd, nStart = 0; nEnd = sPath.indexOf('/../', nStart), nEnd > -1; nStart = nEnd + nUpLn) {
+	        nUpLn = /^\/(?:\.\.\/)*/.exec(sPath.slice(nEnd))[0].length;
+	        sDir = (sDir + sPath.substring(nStart, nEnd)).replace(new RegExp('(?:\\\/+[^\\\/]*){0,' + ((nUpLn - 1) / 3) + '}$'), '/');
+	      }
+	      return sDir + sPath.substr(nStart);
+	    }
+	  };
+
+	/* jshint ignore:start */
+	  if(typeof exports === 'object' && typeof module === 'object')
+	    module.exports = URLToolkit;
+	  else if(typeof define === 'function' && define.amd)
+	    define([], function() { return URLToolkit; });
+	  else if(typeof exports === 'object')
+	    exports["URLToolkit"] = URLToolkit;
+	  else
+	    root["URLToolkit"] = URLToolkit;
+	})(this);
+	/* jshint ignore:end */
+
+	},{}],3:[function(_dereq_,module,exports){
 	var bundleFn = arguments[3];
 	var sources = arguments[4];
 	var cache = arguments[5];
@@ -15304,7 +17329,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return worker;
 	};
 
-	},{}],3:[function(_dereq_,module,exports){
+	},{}],4:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -15313,23 +17338,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _events = _dereq_(26);
+	var _events = _dereq_(28);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = _dereq_(25);
+	var _eventHandler = _dereq_(27);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _bufferHelper = _dereq_(28);
+	var _bufferHelper = _dereq_(30);
 
 	var _bufferHelper2 = _interopRequireDefault(_bufferHelper);
 
-	var _errors = _dereq_(24);
+	var _errors = _dereq_(26);
 
-	var _logger = _dereq_(43);
+	var _logger = _dereq_(45);
 
-	var _ewmaBandwidthEstimator = _dereq_(8);
+	var _ewmaBandwidthEstimator = _dereq_(9);
 
 	var _ewmaBandwidthEstimator2 = _interopRequireDefault(_ewmaBandwidthEstimator);
 
@@ -15351,7 +17376,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function AbrController(hls) {
 	    _classCallCheck(this, AbrController);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AbrController).call(this, hls, _events2.default.FRAG_LOADING, _events2.default.FRAG_LOADED, _events2.default.FRAG_BUFFERED, _events2.default.ERROR));
+	    var _this = _possibleConstructorReturn(this, (AbrController.__proto__ || Object.getPrototypeOf(AbrController)).call(this, hls, _events2.default.FRAG_LOADING, _events2.default.FRAG_LOADED, _events2.default.FRAG_BUFFERED, _events2.default.ERROR));
 
 	    _this.lastLoadedFragLevel = 0;
 	    _this._autoLevelCapping = -1;
@@ -15408,7 +17433,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var hls = this.hls,
 	          v = hls.media,
 	          frag = this.fragCurrent,
-	          loader = frag.loader;
+	          loader = frag.loader,
+	          minAutoLevel = this.minAutoLevel;
 
 	      // if loader has been destroyed or loading has been aborted, stop timer and return
 	      if (!loader || loader.stats && loader.stats.aborted) {
@@ -15440,7 +17466,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                nextLoadLevel = void 0;
 	            // lets iterate through lower level and try to find the biggest one that could avoid rebuffering
 	            // we start from current level - 1 and we step down , until we find a matching level
-	            for (nextLoadLevel = frag.level - 1; nextLoadLevel >= 0; nextLoadLevel--) {
+	            for (nextLoadLevel = frag.level - 1; nextLoadLevel > minAutoLevel; nextLoadLevel--) {
 	              // compute time to load next fragment at lower level
 	              // 0.8 : consider only 80% of current bw to be conservative
 	              // 8 = bits per byte (bps/Bps)
@@ -15453,8 +17479,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // only emergency switch down if it takes less time to load new fragment at lowest level instead
 	            // of finishing loading current one ...
 	            if (fragLevelNextLoadedDelay < fragLoadedDelay) {
-	              // ensure nextLoadLevel is not negative
-	              nextLoadLevel = Math.max(0, nextLoadLevel);
 	              _logger.logger.warn('loading too slow, abort fragment loading and switch to level ' + nextLoadLevel + ':fragLoadedDelay[' + nextLoadLevel + ']<fragLoadedDelay[' + (frag.level - 1) + '];bufferStarvationDelay:' + fragLevelNextLoadedDelay.toFixed(1) + '<' + fragLoadedDelay.toFixed(1) + ':' + bufferStarvationDelay.toFixed(1));
 	              // force next load level in auto mode
 	              hls.nextLoadLevel = nextLoadLevel;
@@ -15499,7 +17523,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // and leading to wrong bw estimation
 	      // on bitrate test, also only update stats once (if tload = tbuffered == on FRAG_LOADED)
 	      if (stats.aborted !== true && frag.loadCounter === 1 && frag.type === 'main' && (!frag.bitrateTest || stats.tload === stats.tbuffered)) {
-	        var fragLoadingProcessingMs = stats.tbuffered - stats.trequest;
+	        // use tparsed-trequest instead of tbuffered-trequest to compute fragLoadingProcessing; rationale is that  buffer appending only happens once media is attached
+	        // in case we use config.startFragPrefetch while media is not attached yet, fragment might be parsed while media not attached yet, but it will only be buffered on media attached
+	        // as a consequence it could happen really late in the process. meaning that appending duration might appears huge ... leading to underestimated throughput estimation
+	        var fragLoadingProcessingMs = stats.tparsed - stats.trequest;
 	        _logger.logger.log('latency/loading/parsing/append/kbps:' + Math.round(stats.tfirst - stats.trequest) + '/' + Math.round(stats.tload - stats.tfirst) + '/' + Math.round(stats.tparsed - stats.tload) + '/' + Math.round(stats.tbuffered - stats.tparsed) + '/' + Math.round(8 * stats.loaded / (stats.tbuffered - stats.trequest)));
 	        this.bwEstimator.sample(fragLoadingProcessingMs, stats.loaded);
 	        // if fragment has been loaded to perform a bitrate test, (hls.startLevel = -1), store bitrate test delay duration
@@ -15541,6 +17568,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var levelInfo = levels[i],
 	            levelDetails = levelInfo.details,
 	            avgDuration = levelDetails ? levelDetails.totalduration / levelDetails.fragments.length : currentFragDuration,
+	            live = levelDetails ? levelDetails.live : false,
 	            adjustedbw = void 0;
 	        // follow algorithm captured from stagefright :
 	        // https://android.googlesource.com/platform/frameworks/av/+/master/media/libstagefright/httplive/LiveSession.cpp
@@ -15559,8 +17587,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _logger.logger.trace('level/adjustedbw/bitrate/avgDuration/maxFetchDuration/fetchDuration: ' + i + '/' + Math.round(adjustedbw) + '/' + bitrate + '/' + avgDuration + '/' + maxFetchDuration + '/' + fetchDuration);
 	        // if adjusted bw is greater than level bitrate AND
 	        if (adjustedbw > bitrate && (
-	        // fragment fetchDuration unknown or fragment fetchDuration less than max allowed fetch duration, then this level matches
-	        !fetchDuration || fetchDuration < maxFetchDuration)) {
+	        // fragment fetchDuration unknown OR live stream OR fragment fetchDuration less than max allowed fetch duration, then this level matches
+	        // we don't account for max Fetch Duration for live streams, this is to avoid switching down when near the edge of live sliding window ...
+	        !fetchDuration || live || fetchDuration < maxFetchDuration)) {
 	          // as we are looping from highest to lowest, this will return the best achievable quality level
 
 	          return i;
@@ -15614,8 +17643,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    get: function get() {
 	      var hls = this.hls,
 	          levels = hls.levels,
-	          minAutoBitrate = hls.config.minAutoBitrate;
-	      for (var i = 0; i < levels.length; i++) {
+	          minAutoBitrate = hls.config.minAutoBitrate,
+	          len = levels ? levels.length : 0;
+	      for (var i = 0; i < len; i++) {
 	        if (levels[i].bitrate > minAutoBitrate) {
 	          return i;
 	        }
@@ -15692,46 +17722,48 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = AbrController;
 
-	},{"24":24,"25":25,"26":26,"28":28,"43":43,"8":8}],4:[function(_dereq_,module,exports){
+	},{"26":26,"27":27,"28":28,"30":30,"45":45,"9":9}],5:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _binarySearch = _dereq_(39);
+	var _binarySearch = _dereq_(41);
 
 	var _binarySearch2 = _interopRequireDefault(_binarySearch);
 
-	var _bufferHelper = _dereq_(28);
+	var _bufferHelper = _dereq_(30);
 
 	var _bufferHelper2 = _interopRequireDefault(_bufferHelper);
 
-	var _demuxer = _dereq_(20);
+	var _demuxer = _dereq_(22);
 
 	var _demuxer2 = _interopRequireDefault(_demuxer);
 
-	var _events = _dereq_(26);
+	var _events = _dereq_(28);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = _dereq_(25);
+	var _eventHandler = _dereq_(27);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _levelHelper = _dereq_(29);
+	var _levelHelper = _dereq_(31);
 
 	var _levelHelper2 = _interopRequireDefault(_levelHelper);
 
-	var _timeRanges = _dereq_(45);
+	var _timeRanges = _dereq_(46);
 
 	var _timeRanges2 = _interopRequireDefault(_timeRanges);
 
-	var _errors = _dereq_(24);
+	var _errors = _dereq_(26);
 
-	var _logger = _dereq_(43);
+	var _logger = _dereq_(45);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -15754,8 +17786,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  WAITING_TRACK: 'WAITING_TRACK',
 	  PARSING: 'PARSING',
 	  PARSED: 'PARSED',
+	  BUFFER_FLUSHING: 'BUFFER_FLUSHING',
 	  ENDED: 'ENDED',
-	  ERROR: 'ERROR'
+	  ERROR: 'ERROR',
+	  WAITING_INIT_PTS: 'WAITING_INIT_PTS'
 	};
 
 	var AudioStreamController = function (_EventHandler) {
@@ -15764,12 +17798,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function AudioStreamController(hls) {
 	    _classCallCheck(this, AudioStreamController);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AudioStreamController).call(this, hls, _events2.default.MEDIA_ATTACHED, _events2.default.MEDIA_DETACHING, _events2.default.AUDIO_TRACKS_UPDATED, _events2.default.AUDIO_TRACK_SWITCH, _events2.default.AUDIO_TRACK_LOADED, _events2.default.KEY_LOADED, _events2.default.FRAG_LOADED, _events2.default.FRAG_PARSING_INIT_SEGMENT, _events2.default.FRAG_PARSING_DATA, _events2.default.FRAG_PARSED, _events2.default.ERROR, _events2.default.BUFFER_CREATED, _events2.default.BUFFER_APPENDED, _events2.default.BUFFER_FLUSHED));
+	    var _this = _possibleConstructorReturn(this, (AudioStreamController.__proto__ || Object.getPrototypeOf(AudioStreamController)).call(this, hls, _events2.default.MEDIA_ATTACHED, _events2.default.MEDIA_DETACHING, _events2.default.AUDIO_TRACKS_UPDATED, _events2.default.AUDIO_TRACK_SWITCHING, _events2.default.AUDIO_TRACK_LOADED, _events2.default.KEY_LOADED, _events2.default.FRAG_LOADED, _events2.default.FRAG_PARSING_INIT_SEGMENT, _events2.default.FRAG_PARSING_DATA, _events2.default.FRAG_PARSED, _events2.default.ERROR, _events2.default.BUFFER_CREATED, _events2.default.BUFFER_APPENDED, _events2.default.BUFFER_FLUSHED, _events2.default.INIT_PTS_FOUND));
 
 	    _this.config = hls.config;
 	    _this.audioCodecSwap = false;
 	    _this.ticks = 0;
 	    _this.ontick = _this.tick.bind(_this);
+	    _this.initPTS = [];
+	    _this.waitingFragment = null;
 	    return _this;
 	  }
 
@@ -15784,19 +17820,46 @@ return /******/ (function(modules) { // webpackBootstrap
 	      _eventHandler2.default.prototype.destroy.call(this);
 	      this.state = State.STOPPED;
 	    }
+
+	    //Signal that video PTS was found
+
+	  }, {
+	    key: 'onInitPtsFound',
+	    value: function onInitPtsFound(data) {
+	      var demuxerId = data.id,
+	          cc = data.cc,
+	          initPTS = data.initPTS;
+	      if (demuxerId === 'main') {
+	        //Always update the new INIT PTS
+	        //Can change due level switch
+	        this.initPTS[cc] = initPTS;
+	        _logger.logger.log('InitPTS for cc:' + cc + ' found from video track:' + initPTS);
+
+	        //If we are waiting we need to demux/remux the waiting frag
+	        //With the new initPTS
+	        if (this.state === State.WAITING_INIT_PTS) {
+	          _logger.logger.log('sending pending audio frag to demuxer');
+	          this.state = State.FRAG_LOADING;
+	          //We have audio frag waiting or video pts
+	          //Let process it
+	          this.onFragLoaded(this.waitingFragment);
+	          //Lets clean the waiting frag
+	          this.waitingFragment = null;
+	        }
+	      }
+	    }
 	  }, {
 	    key: 'startLoad',
 	    value: function startLoad(startPosition) {
 	      if (this.tracks) {
-	        var media = this.media,
-	            lastCurrentTime = this.lastCurrentTime;
+	        var lastCurrentTime = this.lastCurrentTime;
 	        this.stopLoad();
 	        if (!this.timer) {
 	          this.timer = setInterval(this.ontick, 100);
 	        }
 	        this.fragLoadError = 0;
-	        if (media && lastCurrentTime) {
-	          _logger.logger.log('configure startPosition @' + lastCurrentTime);
+	        if (lastCurrentTime > 0 && startPosition === -1) {
+	          _logger.logger.log('audio:override startPosition with lastCurrentTime @' + lastCurrentTime.toFixed(3));
 	          this.state = State.IDLE;
 	        } else {
 	          this.lastCurrentTime = this.startPosition ? this.startPosition : startPosition;
@@ -15841,186 +17904,226 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'doTick',
 	    value: function doTick() {
+	      var _this2 = this;
+
 	      var pos,
 	          track,
 	          trackDetails,
 	          hls = this.hls,
 	          config = hls.config;
 	      //logger.log('audioStream:' + this.state);
-	      switch (this.state) {
-	        case State.ERROR:
-	        //don't do anything in error state to avoid breaking further ...
-	        case State.PAUSED:
-	          //don't do anything in paused state either ...
-	          break;
-	        case State.STARTING:
-	          this.state = State.WAITING_TRACK;
-	          this.loadedmetadata = false;
-	          break;
-	        case State.IDLE:
-	          // if video not attached AND
-	          // start fragment already requested OR start frag prefetch disable
-	          // exit loop
-	          // => if media not attached but start frag prefetch is enabled and start frag not requested yet, we will not exit loop
-	          if (!this.media && (this.startFragRequested || !config.startFragPrefetch)) {
-	            break;
-	          }
-	          // determine next candidate fragment to be loaded, based on current position and
-	          //  end of buffer position
-	          // if we have not yet loaded any fragment, start loading from start position
-	          if (this.loadedmetadata) {
-	            pos = this.media.currentTime;
-	          } else {
-	            pos = this.nextLoadPosition;
-	          }
-	          var media = this.mediaBuffer ? this.mediaBuffer : this.media;
-	          var bufferInfo = _bufferHelper2.default.bufferInfo(media, pos, config.maxBufferHole),
-	              bufferLen = bufferInfo.len,
-	              bufferEnd = bufferInfo.end,
-	              fragPrevious = this.fragPrevious,
-	              maxBufLen = config.maxMaxBufferLength;
+	      var now;
+	      var retryDate;
+	      var isSeeking;
 
-	          // if buffer length is less than maxBufLen try to load a new fragment
-	          if (bufferLen < maxBufLen && this.trackId < this.tracks.length) {
-	            trackDetails = this.tracks[this.trackId].details;
-	            // if track info not retrieved yet, switch state and wait for track retrieval
-	            if (typeof trackDetails === 'undefined') {
-	              this.state = State.WAITING_TRACK;
+	      var _ret = function () {
+	        switch (_this2.state) {
+	          case State.ERROR:
+	          //don't do anything in error state to avoid breaking further ...
+	          case State.PAUSED:
+	          //don't do anything in paused state either ...
+	          case State.BUFFER_FLUSHING:
+	            break;
+	          case State.STARTING:
+	            _this2.state = State.WAITING_TRACK;
+	            _this2.loadedmetadata = false;
+	            break;
+	          case State.IDLE:
+	            // if video not attached AND
+	            // start fragment already requested OR start frag prefetch disable
+	            // exit loop
+	            // => if media not attached but start frag prefetch is enabled and start frag not requested yet, we will not exit loop
+	            if (!_this2.media && (_this2.startFragRequested || !config.startFragPrefetch)) {
 	              break;
 	            }
+	            // determine next candidate fragment to be loaded, based on current position and
+	            //  end of buffer position
+	            // if we have not yet loaded any fragment, start loading from start position
+	            if (_this2.loadedmetadata) {
+	              pos = _this2.media.currentTime;
+	            } else {
+	              pos = _this2.nextLoadPosition;
+	            }
+	            var media = _this2.mediaBuffer ? _this2.mediaBuffer : _this2.media,
+	                bufferInfo = _bufferHelper2.default.bufferInfo(media, pos, config.maxBufferHole),
+	                bufferLen = bufferInfo.len,
+	                bufferEnd = bufferInfo.end,
+	                fragPrevious = _this2.fragPrevious,
+	                maxBufLen = config.maxMaxBufferLength,
+	                audioSwitch = _this2.audioSwitch;
 
-	            // we just got done loading the final fragment, check if we need to finalize media stream
-	            if (!trackDetails.live && fragPrevious && fragPrevious.sn === trackDetails.endSN) {
-	              // if we are not seeking or if we are seeking but everything (almost) til the end is buffered, let's signal eos
-	              // we don't compare exactly media.duration === bufferInfo.end as there could be some subtle media duration difference when switching
-	              // between different renditions. using half frag duration should help cope with these cases.
-	              if (!this.media.seeking || this.media.duration - bufferEnd < fragPrevious.duration / 2) {
-	                // Finalize the media stream
-	                this.hls.trigger(_events2.default.BUFFER_EOS, { type: 'audio' });
-	                this.state = State.ENDED;
+	            // if buffer length is less than maxBufLen try to load a new fragment
+	            if (bufferLen < maxBufLen && _this2.trackId < _this2.tracks.length) {
+	              trackDetails = _this2.tracks[_this2.trackId].details;
+	              // if track info not retrieved yet, switch state and wait for track retrieval
+	              if (typeof trackDetails === 'undefined') {
+	                _this2.state = State.WAITING_TRACK;
 	                break;
 	              }
-	            }
 
-	            // find fragment index, contiguous with end of buffer position
-	            var fragments = trackDetails.fragments,
-	                fragLen = fragments.length,
-	                start = fragments[0].start,
-	                end = fragments[fragLen - 1].start + fragments[fragLen - 1].duration,
-	                frag = void 0;
-
-	            // if bufferEnd before start of playlist, load first fragment
-	            if (bufferEnd < start) {
-	              frag = fragments[0];
-	            } else {
-	              (function () {
-	                var foundFrag = void 0;
-	                var maxFragLookUpTolerance = config.maxFragLookUpTolerance;
-	                if (bufferEnd < end) {
-	                  if (bufferEnd > end - maxFragLookUpTolerance) {
-	                    maxFragLookUpTolerance = 0;
-	                  }
-	                  foundFrag = _binarySearch2.default.search(fragments, function (candidate) {
-	                    // offset should be within fragment boundary - config.maxFragLookUpTolerance
-	                    // this is to cope with situations like
-	                    // bufferEnd = 9.991
-	                    // frag[Ø] : [0,10]
-	                    // frag[1] : [10,20]
-	                    // bufferEnd is within frag[0] range ... although what we are expecting is to return frag[1] here
-	                    //              frag start               frag start+duration
-	                    //                  |-----------------------------|
-	                    //              <--->                         <--->
-	                    //  ...--------><-----------------------------><---------....
-	                    // previous frag         matching fragment         next frag
-	                    //  return -1             return 0                 return 1
-	                    //logger.log(`level/sn/start/end/bufEnd:${level}/${candidate.sn}/${candidate.start}/${(candidate.start+candidate.duration)}/${bufferEnd}`);
-	                    if (candidate.start + candidate.duration - maxFragLookUpTolerance <= bufferEnd) {
-	                      return 1;
-	                    } else if (candidate.start - maxFragLookUpTolerance > bufferEnd) {
-	                      return -1;
-	                    }
-	                    return 0;
-	                  });
-	                } else {
-	                  // reach end of playlist
-	                  foundFrag = fragments[fragLen - 1];
+	              // we just got done loading the final fragment, check if we need to finalize media stream
+	              if (!audioSwitch && !trackDetails.live && fragPrevious && fragPrevious.sn === trackDetails.endSN) {
+	                // if we are not seeking or if we are seeking but everything (almost) til the end is buffered, let's signal eos
+	                // we don't compare exactly media.duration === bufferInfo.end as there could be some subtle media duration difference when switching
+	                // between different renditions. using half frag duration should help cope with these cases.
+	                if (!_this2.media.seeking || _this2.media.duration - bufferEnd < fragPrevious.duration / 2) {
+	                  // Finalize the media stream
+	                  _this2.hls.trigger(_events2.default.BUFFER_EOS, { type: 'audio' });
+	                  _this2.state = State.ENDED;
+	                  break;
 	                }
-	                if (foundFrag) {
-	                  frag = foundFrag;
-	                  start = foundFrag.start;
-	                  //logger.log('find SN matching with pos:' +  bufferEnd + ':' + frag.sn);
-	                  if (fragPrevious && frag.level === fragPrevious.level && frag.sn === fragPrevious.sn) {
-	                    if (frag.sn < trackDetails.endSN) {
-	                      frag = fragments[frag.sn + 1 - trackDetails.startSN];
-	                      _logger.logger.log('SN just loaded, load next one: ' + frag.sn);
+	              }
+
+	              // find fragment index, contiguous with end of buffer position
+	              var fragments = trackDetails.fragments,
+	                  fragLen = fragments.length,
+	                  start = fragments[0].start,
+	                  end = fragments[fragLen - 1].start + fragments[fragLen - 1].duration,
+	                  frag = void 0;
+
+	              // When switching audio track, reload audio as close as possible to currentTime
+	              if (audioSwitch) {
+	                if (trackDetails.live && !trackDetails.PTSKnown) {
+	                  _logger.logger.log('switching audiotrack, live stream, unknown PTS,load first fragment');
+	                  bufferEnd = 0;
+	                } else {
+	                  bufferEnd = pos;
+	                  // if currentTime (pos) is less than alt audio playlist start time, it means that alt audio is ahead of currentTime
+	                  if (trackDetails.PTSKnown && pos < start) {
+	                    // if everything is buffered from pos to start or if audio buffer upfront, let's seek to start
+	                    if (bufferInfo.end > start || bufferInfo.nextStart) {
+	                      _logger.logger.log('alt audio track ahead of main track, seek to start of alt audio track');
+	                      _this2.media.currentTime = start + 0.05;
 	                    } else {
-	                      frag = null;
+	                      return {
+	                        v: void 0
+	                      };
 	                    }
 	                  }
 	                }
-	              })();
-	            }
-	            if (frag) {
-	              //logger.log('      loading frag ' + i +',pos/bufEnd:' + pos.toFixed(3) + '/' + bufferEnd.toFixed(3));
-	              if (frag.decryptdata.uri != null && frag.decryptdata.key == null) {
-	                _logger.logger.log('Loading key for ' + frag.sn + ' of [' + trackDetails.startSN + ' ,' + trackDetails.endSN + '],track ' + this.trackId);
-	                this.state = State.KEY_LOADING;
-	                hls.trigger(_events2.default.KEY_LOADING, { frag: frag });
+	              }
+
+	              // if bufferEnd before start of playlist, load first fragment
+	              if (bufferEnd < start) {
+	                frag = fragments[0];
 	              } else {
-	                _logger.logger.log('Loading ' + frag.sn + ' of [' + trackDetails.startSN + ' ,' + trackDetails.endSN + '],track ' + this.trackId + ', currentTime:' + pos + ',bufferEnd:' + bufferEnd.toFixed(3));
-	                // ensure that we are not reloading the same fragments in loop ...
-	                if (this.fragLoadIdx !== undefined) {
-	                  this.fragLoadIdx++;
-	                } else {
-	                  this.fragLoadIdx = 0;
-	                }
-	                if (frag.loadCounter) {
-	                  frag.loadCounter++;
-	                  var maxThreshold = config.fragLoadingLoopThreshold;
-	                  // if this frag has already been loaded 3 times, and if it has been reloaded recently
-	                  if (frag.loadCounter > maxThreshold && Math.abs(this.fragLoadIdx - frag.loadIdx) < maxThreshold) {
-	                    hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.FRAG_LOOP_LOADING_ERROR, fatal: false, frag: frag });
-	                    return;
+	                (function () {
+	                  var foundFrag = void 0;
+	                  var maxFragLookUpTolerance = config.maxFragLookUpTolerance;
+	                  if (bufferEnd < end) {
+	                    if (bufferEnd > end - maxFragLookUpTolerance) {
+	                      maxFragLookUpTolerance = 0;
+	                    }
+	                    foundFrag = _binarySearch2.default.search(fragments, function (candidate) {
+	                      // offset should be within fragment boundary - config.maxFragLookUpTolerance
+	                      // this is to cope with situations like
+	                      // bufferEnd = 9.991
+	                      // frag[Ø] : [0,10]
+	                      // frag[1] : [10,20]
+	                      // bufferEnd is within frag[0] range ... although what we are expecting is to return frag[1] here
+	                      //              frag start               frag start+duration
+	                      //                  |-----------------------------|
+	                      //              <--->                         <--->
+	                      //  ...--------><-----------------------------><---------....
+	                      // previous frag         matching fragment         next frag
+	                      //  return -1             return 0                 return 1
+	                      //logger.log(`level/sn/start/end/bufEnd:${level}/${candidate.sn}/${candidate.start}/${(candidate.start+candidate.duration)}/${bufferEnd}`);
+	                      if (candidate.start + candidate.duration - maxFragLookUpTolerance <= bufferEnd) {
+	                        return 1;
+	                      } else if (candidate.start - maxFragLookUpTolerance > bufferEnd) {
+	                        return -1;
+	                      }
+	                      return 0;
+	                    });
+	                  } else {
+	                    // reach end of playlist
+	                    foundFrag = fragments[fragLen - 1];
 	                  }
+	                  if (foundFrag) {
+	                    frag = foundFrag;
+	                    start = foundFrag.start;
+	                    //logger.log('find SN matching with pos:' +  bufferEnd + ':' + frag.sn);
+	                    if (fragPrevious && frag.level === fragPrevious.level && frag.sn === fragPrevious.sn) {
+	                      if (frag.sn < trackDetails.endSN) {
+	                        frag = fragments[frag.sn + 1 - trackDetails.startSN];
+	                        _logger.logger.log('SN just loaded, load next one: ' + frag.sn);
+	                      } else {
+	                        frag = null;
+	                      }
+	                    }
+	                  }
+	                })();
+	              }
+	              if (frag) {
+	                //logger.log('      loading frag ' + i +',pos/bufEnd:' + pos.toFixed(3) + '/' + bufferEnd.toFixed(3));
+	                if (frag.decryptdata.uri != null && frag.decryptdata.key == null) {
+	                  _logger.logger.log('Loading key for ' + frag.sn + ' of [' + trackDetails.startSN + ' ,' + trackDetails.endSN + '],track ' + _this2.trackId);
+	                  _this2.state = State.KEY_LOADING;
+	                  hls.trigger(_events2.default.KEY_LOADING, { frag: frag });
 	                } else {
-	                  frag.loadCounter = 1;
+	                  _logger.logger.log('Loading ' + frag.sn + ' of [' + trackDetails.startSN + ' ,' + trackDetails.endSN + '],track ' + _this2.trackId + ', currentTime:' + pos + ',bufferEnd:' + bufferEnd.toFixed(3));
+	                  // ensure that we are not reloading the same fragments in loop ...
+	                  if (_this2.fragLoadIdx !== undefined) {
+	                    _this2.fragLoadIdx++;
+	                  } else {
+	                    _this2.fragLoadIdx = 0;
+	                  }
+	                  if (frag.loadCounter) {
+	                    frag.loadCounter++;
+	                    var maxThreshold = config.fragLoadingLoopThreshold;
+	                    // if this frag has already been loaded 3 times, and if it has been reloaded recently
+	                    if (frag.loadCounter > maxThreshold && Math.abs(_this2.fragLoadIdx - frag.loadIdx) < maxThreshold) {
+	                      hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.FRAG_LOOP_LOADING_ERROR, fatal: false, frag: frag });
+	                      return {
+	                        v: void 0
+	                      };
+	                    }
+	                  } else {
+	                    frag.loadCounter = 1;
+	                  }
+	                  frag.loadIdx = _this2.fragLoadIdx;
+	                  _this2.fragCurrent = frag;
+	                  _this2.startFragRequested = true;
+	                  _this2.nextLoadPosition = frag.start + frag.duration;
+	                  hls.trigger(_events2.default.FRAG_LOADING, { frag: frag });
+	                  _this2.state = State.FRAG_LOADING;
 	                }
-	                frag.loadIdx = this.fragLoadIdx;
-	                this.fragCurrent = frag;
-	                this.startFragRequested = true;
-	                hls.trigger(_events2.default.FRAG_LOADING, { frag: frag });
-	                this.state = State.FRAG_LOADING;
 	              }
 	            }
-	          }
-	          break;
-	        case State.WAITING_TRACK:
-	          track = this.tracks[this.trackId];
-	          // check if playlist is already loaded
-	          if (track && track.details) {
-	            this.state = State.IDLE;
-	          }
-	          break;
-	        case State.FRAG_LOADING_WAITING_RETRY:
-	          var now = performance.now();
-	          var retryDate = this.retryDate;
-	          media = this.media;
-	          var isSeeking = media && media.seeking;
-	          // if current time is gt than retryDate, or if media seeking let's switch to IDLE state to retry loading
-	          if (!retryDate || now >= retryDate || isSeeking) {
-	            _logger.logger.log('audioStreamController: retryDate reached, switch back to IDLE state');
-	            this.state = State.IDLE;
-	          }
-	          break;
-	        case State.STOPPED:
-	        case State.FRAG_LOADING:
-	        case State.PARSING:
-	        case State.PARSED:
-	        case State.ENDED:
-	          break;
-	        default:
-	          break;
-	      }
+	            break;
+	          case State.WAITING_TRACK:
+	            track = _this2.tracks[_this2.trackId];
+	            // check if playlist is already loaded
+	            if (track && track.details) {
+	              _this2.state = State.IDLE;
+	            }
+	            break;
+	          case State.FRAG_LOADING_WAITING_RETRY:
+	            now = performance.now();
+	            retryDate = _this2.retryDate;
+
+	            media = _this2.media;
+	            isSeeking = media && media.seeking;
+	            // if current time is gt than retryDate, or if media seeking let's switch to IDLE state to retry loading
+
+	            if (!retryDate || now >= retryDate || isSeeking) {
+	              _logger.logger.log('audioStreamController: retryDate reached, switch back to IDLE state');
+	              _this2.state = State.IDLE;
+	            }
+	            break;
+	          case State.WAITING_INIT_PTS:
+	          case State.STOPPED:
+	          case State.FRAG_LOADING:
+	          case State.PARSING:
+	          case State.PARSED:
+	          case State.ENDED:
+	            break;
+	          default:
+	            break;
+	        }
+	      }();
+
+	      if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
 	    }
 	  }, {
 	    key: 'onMediaAttached',
@@ -16062,7 +18165,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        media.removeEventListener('ended', this.onvended);
 	        this.onvseeking = this.onvseeked = this.onvended = null;
 	      }
-	      this.media = null;
+	      this.media = this.mediaBuffer = null;
 	      this.loadedmetadata = false;
 	      this.stopLoad();
 	    }
@@ -16096,8 +18199,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.tracks = data.audioTracks;
 	    }
 	  }, {
-	    key: 'onAudioTrackSwitch',
-	    value: function onAudioTrackSwitch(data) {
+	    key: 'onAudioTrackSwitching',
+	    value: function onAudioTrackSwitching(data) {
 	      // if any URL found on new audio track, it is an alternate audio track
 	      var altAudio = !!data.url;
 	      this.trackId = data.id;
@@ -16105,6 +18208,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      this.fragCurrent = null;
 	      this.state = State.PAUSED;
+	      this.waitingFragment = null;
 	      // destroy useless demuxer when switching audio to main
 	      if (!altAudio) {
 	        if (this.demuxer) {
@@ -16117,28 +18221,56 @@ return /******/ (function(modules) { // webpackBootstrap
 	          this.timer = setInterval(this.ontick, 100);
 	        }
 	      }
-	      // flush audio source buffer
-	      this.hls.trigger(_events2.default.BUFFER_FLUSHING, { startOffset: 0, endOffset: Number.POSITIVE_INFINITY, type: 'audio' });
+
+	      //should we switch tracks ?
+	      if (altAudio) {
+	        this.audioSwitch = true;
+	        //main audio track are handled by stream-controller, just do something if switching to alt audio track
+	        this.state = State.IDLE;
+	        // increase fragment load Index to avoid frag loop loading error after buffer flush
+	        this.fragLoadIdx += 2 * this.config.fragLoadingLoopThreshold;
+	      }
 	      this.tick();
 	    }
 	  }, {
 	    key: 'onAudioTrackLoaded',
 	    value: function onAudioTrackLoaded(data) {
-	      var details = data.details,
+	      var newDetails = data.details,
 	          trackId = data.id,
 	          track = this.tracks[trackId],
-	          duration = details.totalduration;
+	          duration = newDetails.totalduration,
+	          sliding = 0;
 
-	      _logger.logger.log('track ' + trackId + ' loaded [' + details.startSN + ',' + details.endSN + '],duration:' + duration);
-	      details.PTSKnown = false;
-	      track.details = details;
+	      _logger.logger.log('track ' + trackId + ' loaded [' + newDetails.startSN + ',' + newDetails.endSN + '],duration:' + duration);
+
+	      if (newDetails.live) {
+	        var curDetails = track.details;
+	        if (curDetails && newDetails.fragments.length > 0) {
+	          // we already have details for that level, merge them
+	          _levelHelper2.default.mergeDetails(curDetails, newDetails);
+	          sliding = newDetails.fragments[0].start;
+	          // TODO
+	          //this.liveSyncPosition = this.computeLivePosition(sliding, curDetails);
+	          if (newDetails.PTSKnown) {
+	            _logger.logger.log('live audio playlist sliding:' + sliding.toFixed(3));
+	          } else {
+	            _logger.logger.log('live audio playlist - outdated PTS, unknown sliding');
+	          }
+	        } else {
+	          newDetails.PTSKnown = false;
+	          _logger.logger.log('live audio playlist - first load, unknown sliding');
+	        }
+	      } else {
+	        newDetails.PTSKnown = false;
+	      }
+	      track.details = newDetails;
 
 	      // compute start position
 	      if (!this.startFragRequested) {
 	        // compute start position if set to -1. use it straight away if value is defined
 	        if (this.startPosition === -1) {
 	          // first, check if start time offset has been set in playlist, if yes, use this value
-	          var startTimeOffset = details.startTimeOffset;
+	          var startTimeOffset = newDetails.startTimeOffset;
 	          if (!isNaN(startTimeOffset)) {
 	            _logger.logger.log('start time offset found in playlist, adjust startPosition to ' + startTimeOffset);
 	            this.startPosition = startTimeOffset;
@@ -16177,15 +18309,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	            start = fragCurrent.start,
 	            trackId = fragCurrent.level,
 	            sn = fragCurrent.sn,
+	            cc = fragCurrent.cc,
 	            audioCodec = this.config.defaultAudioCodec || track.audioCodec;
-	        this.pendingAppending = 0;
+	        this.appended = false;
 	        if (!this.demuxer) {
 	          this.demuxer = new _demuxer2.default(this.hls, 'audio');
 	        }
-	        _logger.logger.log('Demuxing ' + sn + ' of [' + details.startSN + ' ,' + details.endSN + '],track ' + trackId);
-	        // time Offset is accurate if level PTS is known, or if playlist is not sliding (not live)
-	        var accurateTimeOffset = details.PTSKnown || !details.live;
-	        this.demuxer.push(data.payload, audioCodec, null, start, fragCurrent.cc, trackId, sn, duration, fragCurrent.decryptdata, accurateTimeOffset);
+	        //Check if we have video initPTS
+	        // If not we need to wait for it
+	        var initPTS = this.initPTS[cc];
+	        if (initPTS !== undefined) {
+	          this.pendingBuffering = true;
+	          _logger.logger.log('Demuxing ' + sn + ' of [' + details.startSN + ' ,' + details.endSN + '],track ' + trackId);
+	          // time Offset is accurate if level PTS is known, or if playlist is not sliding (not live)
+	          var accurateTimeOffset = false; //details.PTSKnown || !details.live;
+	          this.demuxer.push(data.payload, audioCodec, null, start, cc, trackId, sn, duration, fragCurrent.decryptdata, accurateTimeOffset, initPTS);
+	        } else {
+	          _logger.logger.log('unknown video PTS for continuity counter ' + cc + ', waiting for video PTS before demuxing audio frag ' + sn + ' of [' + details.startSN + ' ,' + details.endSN + '],track ' + trackId);
+	          this.waitingFragment = data;
+	          this.state = State.WAITING_INIT_PTS;
+	        }
 	      }
 	      this.fragLoadError = 0;
 	    }
@@ -16197,6 +18340,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var tracks = data.tracks,
 	            track = void 0;
 
+	        // delete any video track found on audio demuxer
+	        if (tracks.video) {
+	          delete tracks.video;
+	        }
+
 	        // include levelCodec in audio and video tracks
 	        track = tracks.audio;
 	        if (track) {
@@ -16206,8 +18354,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	          _logger.logger.log('audio track:audio,container:' + track.container + ',codecs[level/parsed]=[' + track.levelCodec + '/' + track.codec + ']');
 	          var initSegment = track.initSegment;
 	          if (initSegment) {
-	            this.pendingAppending++;
-	            this.hls.trigger(_events2.default.BUFFER_APPENDING, { type: 'audio', data: initSegment, parent: 'audio', content: 'initSegment' });
+	            var appendObj = { type: 'audio', data: initSegment, parent: 'audio', content: 'initSegment' };
+	            if (this.audioSwitch) {
+	              this.pendingData = [appendObj];
+	            } else {
+	              this.appended = true;
+	              // arm pending Buffering flag before appending a segment
+	              this.pendingBuffering = true;
+	              this.hls.trigger(_events2.default.BUFFER_APPENDING, appendObj);
+	            }
 	          }
 	          //trigger handler right now
 	          this.tick();
@@ -16217,25 +18372,63 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onFragParsingData',
 	    value: function onFragParsingData(data) {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      var fragCurrent = this.fragCurrent;
-	      if (fragCurrent && data.id === 'audio' && data.sn === fragCurrent.sn && data.level === fragCurrent.level && this.state === State.PARSING) {
-	        var track = this.tracks[this.trackId],
-	            frag = this.fragCurrent;
+	      if (fragCurrent && data.id === 'audio' && data.type === 'audio' && data.sn === fragCurrent.sn && data.level === fragCurrent.level && this.state === State.PARSING) {
+	        (function () {
+	          var trackId = _this3.trackId,
+	              track = _this3.tracks[trackId],
+	              frag = _this3.fragCurrent,
+	              hls = _this3.hls;
 
-	        _logger.logger.log('parsed ' + data.type + ',PTS:[' + data.startPTS.toFixed(3) + ',' + data.endPTS.toFixed(3) + '],DTS:[' + data.startDTS.toFixed(3) + '/' + data.endDTS.toFixed(3) + '],nb:' + data.nb);
-	        _levelHelper2.default.updateFragPTSDTS(track.details, frag.sn, data.startPTS, data.endPTS);
+	          _logger.logger.log('parsed ' + data.type + ',PTS:[' + data.startPTS.toFixed(3) + ',' + data.endPTS.toFixed(3) + '],DTS:[' + data.startDTS.toFixed(3) + '/' + data.endDTS.toFixed(3) + '],nb:' + data.nb);
+	          _levelHelper2.default.updateFragPTSDTS(track.details, frag.sn, data.startPTS, data.endPTS);
 
-	        [data.data1, data.data2].forEach(function (buffer) {
-	          if (buffer) {
-	            _this2.pendingAppending++;
-	            _this2.hls.trigger(_events2.default.BUFFER_APPENDING, { type: data.type, data: buffer, parent: 'audio', content: 'data' });
+	          var audioSwitch = _this3.audioSwitch,
+	              media = _this3.media,
+	              appendOnBufferFlush = false;
+	          //Only flush audio from old audio tracks when PTS is known on new audio track
+	          if (audioSwitch && media) {
+	            if (media.readyState) {
+	              var currentTime = media.currentTime;
+	              _logger.logger.log('switching audio track : currentTime:' + currentTime);
+	              if (currentTime >= data.startPTS) {
+	                _logger.logger.log('switching audio track : flushing all audio');
+	                _this3.state = State.BUFFER_FLUSHING;
+	                hls.trigger(_events2.default.BUFFER_FLUSHING, { startOffset: 0, endOffset: Number.POSITIVE_INFINITY, type: 'audio' });
+	                appendOnBufferFlush = true;
+	                //Lets announce that the initial audio track switch flush occur
+	                _this3.audioSwitch = false;
+	                hls.trigger(_events2.default.AUDIO_TRACK_SWITCHED, { id: trackId });
+	              }
+	            } else {
+	              //Lets announce that the initial audio track switch flush occur
+	              _this3.audioSwitch = false;
+	              hls.trigger(_events2.default.AUDIO_TRACK_SWITCHED, { id: trackId });
+	            }
 	          }
-	        });
-	        this.nextLoadPosition = data.endPTS;
-	        //trigger handler right now
-	        this.tick();
+
+	          var pendingData = _this3.pendingData;
+	          if (!_this3.audioSwitch) {
+	            [data.data1, data.data2].forEach(function (buffer) {
+	              if (buffer) {
+	                pendingData.push({ type: data.type, data: buffer, parent: 'audio', content: 'data' });
+	              }
+	            });
+	            if (!appendOnBufferFlush && pendingData.length) {
+	              pendingData.forEach(function (appendObj) {
+	                // arm pending Buffering flag before appending a segment
+	                _this3.pendingBuffering = true;
+	                _this3.hls.trigger(_events2.default.BUFFER_APPENDING, appendObj);
+	              });
+	              _this3.pendingData = [];
+	              _this3.appended = true;
+	            }
+	          }
+	          //trigger handler right now
+	          _this3.tick();
+	        })();
 	      }
 	    }
 	  }, {
@@ -16261,14 +18454,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'onBufferAppended',
 	    value: function onBufferAppended(data) {
 	      if (data.parent === 'audio') {
-	        switch (this.state) {
-	          case State.PARSING:
-	          case State.PARSED:
-	            this.pendingAppending--;
-	            this._checkAppendedParsed();
-	            break;
-	          default:
-	            break;
+	        var state = this.state;
+	        if (state === State.PARSING || state === State.PARSED) {
+	          // check if all buffers have been appended
+	          this.pendingBuffering = data.pending > 0;
+	          this._checkAppendedParsed();
 	        }
 	      }
 	    }
@@ -16276,15 +18466,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: '_checkAppendedParsed',
 	    value: function _checkAppendedParsed() {
 	      //trigger handler right now
-	      if (this.state === State.PARSED && this.pendingAppending === 0) {
+	      if (this.state === State.PARSED && (!this.appended || !this.pendingBuffering)) {
 	        var frag = this.fragCurrent,
-	            stats = this.stats;
+	            stats = this.stats,
+	            hls = this.hls;
 	        if (frag) {
 	          this.fragPrevious = frag;
 	          stats.tbuffered = performance.now();
-	          this.hls.trigger(_events2.default.FRAG_BUFFERED, { stats: stats, frag: frag, id: 'audio' });
+	          hls.trigger(_events2.default.FRAG_BUFFERED, { stats: stats, frag: frag, id: 'audio' });
 	          var media = this.mediaBuffer ? this.mediaBuffer : this.media;
 	          _logger.logger.log('audio buffered : ' + _timeRanges2.default.toString(media.buffered));
+	          if (this.audioSwitch && this.appended) {
+	            this.audioSwitch = false;
+	            hls.trigger(_events2.default.AUDIO_TRACK_SWITCHED, { id: this.trackId });
+	          }
 	          this.state = State.IDLE;
 	        }
 	        this.tick();
@@ -16347,13 +18542,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onBufferFlushed',
 	    value: function onBufferFlushed() {
-	      // increase fragment load Index to avoid frag loop loading error after buffer flush
-	      this.fragLoadIdx += 2 * this.config.fragLoadingLoopThreshold;
-	      // move to IDLE once flush complete. this should trigger new fragment loading
-	      this.state = State.IDLE;
-	      // reset reference to frag
-	      this.fragPrevious = null;
-	      this.tick();
+	      var _this4 = this;
+
+	      var pendingData = this.pendingData;
+	      if (pendingData && pendingData.length) {
+	        _logger.logger.log('appending pending audio data on Buffer Flushed');
+	        pendingData.forEach(function (appendObj) {
+	          _this4.hls.trigger(_events2.default.BUFFER_APPENDING, appendObj);
+	        });
+	        this.appended = true;
+	        this.pendingData = [];
+	        this.state = State.PARSED;
+	      } else {
+	        // move to IDLE once flush complete. this should trigger new fragment loading
+	        this.state = State.IDLE;
+	        // reset reference to frag
+	        this.fragPrevious = null;
+	        this.tick();
+	      }
 	    }
 	  }]);
 
@@ -16362,7 +18568,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = AudioStreamController;
 
-	},{"20":20,"24":24,"25":25,"26":26,"28":28,"29":29,"39":39,"43":43,"45":45}],5:[function(_dereq_,module,exports){
+	},{"22":22,"26":26,"27":27,"28":28,"30":30,"31":31,"41":41,"45":45,"46":46}],6:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -16371,15 +18577,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _events = _dereq_(26);
+	var _events = _dereq_(28);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = _dereq_(25);
+	var _eventHandler = _dereq_(27);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _logger = _dereq_(43);
+	var _logger = _dereq_(45);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -16397,13 +18603,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function AudioTrackController(hls) {
 	    _classCallCheck(this, AudioTrackController);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(AudioTrackController).call(this, hls, _events2.default.MANIFEST_LOADING, _events2.default.MANIFEST_LOADED, _events2.default.AUDIO_TRACK_LOADED));
+	    var _this = _possibleConstructorReturn(this, (AudioTrackController.__proto__ || Object.getPrototypeOf(AudioTrackController)).call(this, hls, _events2.default.MANIFEST_LOADING, _events2.default.MANIFEST_LOADED, _events2.default.AUDIO_TRACK_LOADED));
+
+	    _this.ticks = 0;
+	    _this.ontick = _this.tick.bind(_this);
+	    return _this;
 	  }
 
 	  _createClass(AudioTrackController, [{
 	    key: 'destroy',
 	    value: function destroy() {
 	      _eventHandler2.default.prototype.destroy.call(this);
+	    }
+	  }, {
+	    key: 'tick',
+	    value: function tick() {
+	      this.ticks++;
+	      if (this.ticks === 1) {
+	        this.doTick();
+	        if (this.ticks > 1) {
+	          setTimeout(this.tick, 1);
+	        }
+	        this.ticks = 0;
+	      }
+	    }
+	  }, {
+	    key: 'doTick',
+	    value: function doTick() {
+	      this.updateTrack(this.trackId);
 	    }
 	  }, {
 	    key: 'onManifestLoading',
@@ -16471,9 +18698,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.trackId = newId;
 	        _logger.logger.log('switching to audioTrack ' + newId);
 	        var audioTrack = this.tracks[newId],
+	            hls = this.hls,
 	            type = audioTrack.type,
+	            url = audioTrack.url,
+	            eventObj = { id: newId, type: type, url: url };
+	        // keep AUDIO_TRACK_SWITCH for legacy reason
+	        hls.trigger(_events2.default.AUDIO_TRACK_SWITCH, eventObj);
+	        hls.trigger(_events2.default.AUDIO_TRACK_SWITCHING, eventObj);
+	        // check if we need to load playlist for this audio Track
+	        var details = audioTrack.details;
+	        if (url && (details === undefined || details.live === true)) {
+	          // track not retrieved yet, or live playlist we need to (re)load it
+	          _logger.logger.log('(re)loading playlist for audioTrack ' + newId);
+	          hls.trigger(_events2.default.AUDIO_TRACK_LOADING, { url: url, id: newId });
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'updateTrack',
+	    value: function updateTrack(newId) {
+	      // check if level idx is valid
+	      if (newId >= 0 && newId < this.tracks.length) {
+	        // stopping live reloading timer if any
+	        if (this.timer) {
+	          clearInterval(this.timer);
+	          this.timer = null;
+	        }
+	        this.trackId = newId;
+	        _logger.logger.log('updating audioTrack ' + newId);
+	        var audioTrack = this.tracks[newId],
 	            url = audioTrack.url;
-	        this.hls.trigger(_events2.default.AUDIO_TRACK_SWITCH, { id: newId, type: type, url: url });
 	        // check if we need to load playlist for this audio Track
 	        var details = audioTrack.details;
 	        if (url && (details === undefined || details.live === true)) {
@@ -16511,7 +18765,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = AudioTrackController;
 
-	},{"25":25,"26":26,"43":43}],6:[function(_dereq_,module,exports){
+	},{"27":27,"28":28,"45":45}],7:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -16520,17 +18774,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _events = _dereq_(26);
+	var _events = _dereq_(28);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = _dereq_(25);
+	var _eventHandler = _dereq_(27);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _logger = _dereq_(43);
+	var _logger = _dereq_(45);
 
-	var _errors = _dereq_(24);
+	var _errors = _dereq_(26);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -16550,8 +18804,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    // the value that we have set mediasource.duration to
 	    // (the actual duration may be tweaked slighly by the browser)
-
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(BufferController).call(this, hls, _events2.default.MEDIA_ATTACHING, _events2.default.MEDIA_DETACHING, _events2.default.MANIFEST_PARSED, _events2.default.BUFFER_RESET, _events2.default.BUFFER_APPENDING, _events2.default.BUFFER_CODECS, _events2.default.BUFFER_EOS, _events2.default.BUFFER_FLUSHING, _events2.default.LEVEL_UPDATED));
+	    var _this = _possibleConstructorReturn(this, (BufferController.__proto__ || Object.getPrototypeOf(BufferController)).call(this, hls, _events2.default.MEDIA_ATTACHING, _events2.default.MEDIA_DETACHING, _events2.default.MANIFEST_PARSED, _events2.default.BUFFER_RESET, _events2.default.BUFFER_APPENDING, _events2.default.BUFFER_CODECS, _events2.default.BUFFER_EOS, _events2.default.BUFFER_FLUSHING, _events2.default.LEVEL_PTS_UPDATED, _events2.default.LEVEL_UPDATED));
 
 	    _this._msDuration = null;
 	    // the value that we want to set mediaSource.duration to
@@ -16561,6 +18814,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _this.onsbue = _this.onSBUpdateEnd.bind(_this);
 	    _this.onsbe = _this.onSBUpdateError.bind(_this);
 	    _this.pendingTracks = {};
+	    _this.tracks = {};
 	    return _this;
 	  }
 
@@ -16568,6 +18822,44 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'destroy',
 	    value: function destroy() {
 	      _eventHandler2.default.prototype.destroy.call(this);
+	    }
+	  }, {
+	    key: 'onLevelPtsUpdated',
+	    value: function onLevelPtsUpdated(data) {
+	      var type = data.type;
+	      var audioTrack = this.tracks.audio;
+
+	      // Adjusting `SourceBuffer.timestampOffset` (desired point in the timeline where the next frames should be appended)
+	      // in Chrome browser when we detect MPEG audio container and time delta between level PTS and `SourceBuffer.timestampOffset`
+	      // is greater than 100ms (this is enough to handle seek for VOD or level change for LIVE videos). At the time of change we issue
+	      // `SourceBuffer.abort()` and adjusting `SourceBuffer.timestampOffset` if `SourceBuffer.updating` is false or awaiting `updateend`
+	      // event if SB is in updating state.
+	      // More info here: https://github.com/dailymotion/hls.js/issues/332#issuecomment-257986486
+
+	      if (type === 'audio' && audioTrack && audioTrack.container === 'audio/mpeg') {
+	        // Chrome audio mp3 track
+	        var audioBuffer = this.sourceBuffer.audio;
+	        var delta = Math.abs(audioBuffer.timestampOffset - data.start);
+
+	        // adjust timestamp offset if time delta is greater than 100ms
+	        if (delta > 0.1) {
+	          var updating = audioBuffer.updating;
+
+	          try {
+	            audioBuffer.abort();
+	          } catch (err) {
+	            updating = true;
+	            _logger.logger.warn('can not abort audio buffer: ' + err);
+	          }
+
+	          if (!updating) {
+	            _logger.logger.warn('change mpeg audio timestamp offset from ' + audioBuffer.timestampOffset + ' to ' + data.start);
+	            audioBuffer.timestampOffset = data.start;
+	          } else {
+	            this.audioTimestampOffset = data.start;
+	          }
+	        }
+	      }
 	    }
 	  }, {
 	    key: 'onManifestParsed',
@@ -16627,6 +18919,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // Detach properly the MediaSource from the HTMLMediaElement as
 	        // suggested in https://github.com/w3c/media-source/issues/53.
 	        if (this.media) {
+	          URL.revokeObjectURL(this.media.src);
 	          this.media.removeAttribute('src');
 	          this.media.load();
 	        }
@@ -16634,6 +18927,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.mediaSource = null;
 	        this.media = null;
 	        this.pendingTracks = {};
+	        this.tracks = {};
 	        this.sourceBuffer = {};
 	        this.flushRange = [];
 	        this.segments = [];
@@ -16682,6 +18976,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onSBUpdateEnd',
 	    value: function onSBUpdateEnd() {
+	      // update timestampOffset
+	      if (this.audioTimestampOffset) {
+	        var audioBuffer = this.sourceBuffer.audio;
+	        _logger.logger.warn('change mpeg audio timestamp offset from ' + audioBuffer.timestampOffset + ' to ' + this.audioTimestampOffset);
+	        audioBuffer.timestampOffset = this.audioTimestampOffset;
+	        delete this.audioTimestampOffset;
+	      }
 
 	      if (this._needsFlush) {
 	        this.doFlush();
@@ -16691,7 +18992,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.checkEos();
 	      }
 	      this.appending = false;
-	      this.hls.trigger(_events2.default.BUFFER_APPENDED, { parent: this.parent });
+	      var parent = this.parent;
+	      // count nb of pending segments waiting for appending on this sourcebuffer
+	      var pending = this.segments.reduce(function (counter, segment) {
+	        return segment.parent === parent ? counter + 1 : counter;
+	      }, 0);
+	      this.hls.trigger(_events2.default.BUFFER_APPENDED, { parent: parent, pending: pending });
 
 	      // don't append in flushing mode
 	      if (!this._needsFlush) {
@@ -16760,6 +19066,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var sb = sourceBuffer[trackName] = mediaSource.addSourceBuffer(mimeType);
 	            sb.addEventListener('updateend', this.onsbue);
 	            sb.addEventListener('error', this.onsbe);
+	            this.tracks[trackName] = { codec: codec, container: track.container };
 	            track.buffer = sb;
 	          } catch (err) {
 	            _logger.logger.error('error while trying to add sourceBuffer:' + err.message);
@@ -16784,7 +19091,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onBufferAppendFail',
 	    value: function onBufferAppendFail(data) {
-	      _logger.logger.error('sourceBuffer error:' + data.event);
+	      _logger.logger.error('sourceBuffer error:', data.event);
 	      // according to http://www.w3.org/TR/media-source/#sourcebuffer-append-error
 	      // this error might not always be fatal (it is fatal if decode error is set, in that case
 	      // it will be followed by a mediaElement error ...)
@@ -16821,17 +19128,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return;
 	      }
 	      for (var type in sb) {
-	        if (!sb[type].ended) {
+	        var sbobj = sb[type];
+	        if (!sbobj.ended) {
 	          return;
 	        }
-	        if (sb[type].updating) {
+	        if (sbobj.updating) {
 	          this._needsEos = true;
 	          return;
 	        }
 	      }
 	      _logger.logger.log('all media data available, signal endOfStream() to MediaSource and stop loading fragment');
 	      //Notify the media element that it now has all of the media data
-	      mediaSource.endOfStream();
+	      try {
+	        mediaSource.endOfStream();
+	      } catch (e) {
+	        _logger.logger.warn('exception while calling mediaSource.endOfStream()');
+	      }
 	      this._needsEos = false;
 	    }
 	  }, {
@@ -16858,13 +19170,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'updateMediaElementDuration',
 	    value: function updateMediaElementDuration() {
-	      if (this._levelDuration === null) {
-	        return;
-	      }
 	      var media = this.media,
 	          mediaSource = this.mediaSource,
-	          sourceBuffer = this.sourceBuffer;
-	      if (!media || !mediaSource || !sourceBuffer || media.readyState === 0 || mediaSource.readyState !== 'open') {
+	          sourceBuffer = this.sourceBuffer,
+	          levelDuration = this._levelDuration;
+	      if (levelDuration === null || !media || !mediaSource || !sourceBuffer || media.readyState === 0 || mediaSource.readyState !== 'open') {
 	        return;
 	      }
 	      for (var type in sourceBuffer) {
@@ -16877,14 +19187,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // initialise to the value that the media source is reporting
 	        this._msDuration = mediaSource.duration;
 	      }
-	      // this._levelDuration was the last value we set.
+	      var duration = media.duration;
+	      // levelDuration was the last value we set.
 	      // not using mediaSource.duration as the browser may tweak this value
 	      // only update mediasource duration if its value increase, this is to avoid
-	      // flushing already buffered portion when switching between quality level, as they
-	      if (this._levelDuration > this._msDuration) {
-	        _logger.logger.log('Updating mediasource duration to ' + this._levelDuration);
-	        mediaSource.duration = this._levelDuration;
-	        this._msDuration = this._levelDuration;
+	      // flushing already buffered portion when switching between quality level
+	      if (levelDuration > this._msDuration && levelDuration > duration || duration === Infinity || isNaN(duration)) {
+	        _logger.logger.log('Updating mediasource duration to ' + levelDuration.toFixed(3));
+	        this._msDuration = mediaSource.duration = levelDuration;
 	      }
 	    }
 	  }, {
@@ -16911,8 +19221,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // let's recompute this.appended, which is used to avoid flush looping
 	        var appended = 0;
 	        var sourceBuffer = this.sourceBuffer;
-	        for (var type in sourceBuffer) {
-	          appended += sourceBuffer[type].buffered.length;
+	        try {
+	          for (var type in sourceBuffer) {
+	            appended += sourceBuffer[type].buffered.length;
+	          }
+	        } catch (error) {
+	          // error could be thrown while accessing buffered, in case sourcebuffer has already been removed from MediaSource
+	          // this is harmess at this stage, catch this to avoid reporting an internal exception
+	          _logger.logger.error('error while accessing sourceBuffer.buffered');
 	        }
 	        this.appended = appended;
 	        this.hls.trigger(_events2.default.BUFFER_FLUSHED);
@@ -16937,16 +19253,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (segments && segments.length) {
 	          var segment = segments.shift();
 	          try {
-	            var type = segment.type;
-	            if (sourceBuffer[type]) {
-	              // reset sourceBuffer ended flag before appending segment
-	              sourceBuffer[type].ended = false;
-	              //logger.log(`appending ${segment.content} ${segment.type} SB, size:${segment.data.length}, ${segment.parent}`);
-	              this.parent = segment.parent;
-	              sourceBuffer[type].appendBuffer(segment.data);
-	              this.appendError = 0;
-	              this.appended++;
-	              this.appending = true;
+	            var type = segment.type,
+	                sb = sourceBuffer[type];
+	            if (sb) {
+	              if (!sb.updating) {
+	                // reset sourceBuffer ended flag before appending segment
+	                sb.ended = false;
+	                //logger.log(`appending ${segment.content} ${type} SB, size:${segment.data.length}, ${segment.parent}`);
+	                this.parent = segment.parent;
+	                sb.appendBuffer(segment.data);
+	                this.appendError = 0;
+	                this.appended++;
+	                this.appending = true;
+	              } else {
+	                segments.unshift(segment);
+	              }
 	            } else {
 	              // in case we don't have any source buffer matching with this segment type,
 	              // it means that Mediasource fails to create sourcebuffer
@@ -16984,6 +19305,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	              // let's stop appending any segments, and report BUFFER_FULL_ERROR error
 	              this.segments = [];
 	              event.details = _errors.ErrorDetails.BUFFER_FULL_ERROR;
+	              event.fatal = false;
 	              hls.trigger(_events2.default.ERROR, event);
 	              return;
 	            }
@@ -17009,7 +19331,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          flushEnd,
 	          sourceBuffer = this.sourceBuffer;
 	      if (Object.keys(sourceBuffer).length) {
-	        _logger.logger.log('flushBuffer,pos/start/end: ' + this.media.currentTime + '/' + startOffset + '/' + endOffset);
+	        _logger.logger.log('flushBuffer,pos/start/end: ' + this.media.currentTime.toFixed(3) + '/' + startOffset + '/' + endOffset);
 	        // safeguard to avoid infinite looping : don't try to flush more than the nb of appended segments
 	        if (this.flushBufferCounter < this.appended) {
 	          for (var type in sourceBuffer) {
@@ -17022,28 +19344,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // we are going to flush buffer, mark source buffer as 'not ended'
 	            sb.ended = false;
 	            if (!sb.updating) {
-	              for (i = 0; i < sb.buffered.length; i++) {
-	                bufStart = sb.buffered.start(i);
-	                bufEnd = sb.buffered.end(i);
-	                // workaround firefox not able to properly flush multiple buffered range.
-	                if (navigator.userAgent.toLowerCase().indexOf('firefox') !== -1 && endOffset === Number.POSITIVE_INFINITY) {
-	                  flushStart = startOffset;
-	                  flushEnd = endOffset;
-	                } else {
-	                  flushStart = Math.max(bufStart, startOffset);
-	                  flushEnd = Math.min(bufEnd, endOffset);
+	              try {
+	                for (i = 0; i < sb.buffered.length; i++) {
+	                  bufStart = sb.buffered.start(i);
+	                  bufEnd = sb.buffered.end(i);
+	                  // workaround firefox not able to properly flush multiple buffered range.
+	                  if (navigator.userAgent.toLowerCase().indexOf('firefox') !== -1 && endOffset === Number.POSITIVE_INFINITY) {
+	                    flushStart = startOffset;
+	                    flushEnd = endOffset;
+	                  } else {
+	                    flushStart = Math.max(bufStart, startOffset);
+	                    flushEnd = Math.min(bufEnd, endOffset);
+	                  }
+	                  /* sometimes sourcebuffer.remove() does not flush
+	                     the exact expected time range.
+	                     to avoid rounding issues/infinite loop,
+	                     only flush buffer range of length greater than 500ms.
+	                  */
+	                  if (Math.min(flushEnd, bufEnd) - flushStart > 0.5) {
+	                    this.flushBufferCounter++;
+	                    _logger.logger.log('flush ' + type + ' [' + flushStart + ',' + flushEnd + '], of [' + bufStart + ',' + bufEnd + '], pos:' + this.media.currentTime);
+	                    sb.remove(flushStart, flushEnd);
+	                    return false;
+	                  }
 	                }
-	                /* sometimes sourcebuffer.remove() does not flush
-	                   the exact expected time range.
-	                   to avoid rounding issues/infinite loop,
-	                   only flush buffer range of length greater than 500ms.
-	                */
-	                if (Math.min(flushEnd, bufEnd) - flushStart > 0.5) {
-	                  this.flushBufferCounter++;
-	                  _logger.logger.log('flush ' + type + ' [' + flushStart + ',' + flushEnd + '], of [' + bufStart + ',' + bufEnd + '], pos:' + this.media.currentTime);
-	                  sb.remove(flushStart, flushEnd);
-	                  return false;
-	                }
+	              } catch (e) {
+	                _logger.logger.warn('exception while accessing sourcebuffer, it might have been removed from MediaSource');
 	              }
 	            } else {
 	              //logger.log('abort ' + type + ' append in progress');
@@ -17068,7 +19394,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = BufferController;
 
-	},{"24":24,"25":25,"26":26,"43":43}],7:[function(_dereq_,module,exports){
+	},{"26":26,"27":27,"28":28,"45":45}],8:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -17077,11 +19403,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _events = _dereq_(26);
+	var _events = _dereq_(28);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = _dereq_(25);
+	var _eventHandler = _dereq_(27);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
@@ -17101,7 +19427,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function CapLevelController(hls) {
 	    _classCallCheck(this, CapLevelController);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(CapLevelController).call(this, hls, _events2.default.FPS_DROP_LEVEL_CAPPING, _events2.default.MEDIA_ATTACHING, _events2.default.MANIFEST_PARSED));
+	    return _possibleConstructorReturn(this, (CapLevelController.__proto__ || Object.getPrototypeOf(CapLevelController)).call(this, hls, _events2.default.FPS_DROP_LEVEL_CAPPING, _events2.default.MEDIA_ATTACHING, _events2.default.MANIFEST_PARSED));
 	  }
 
 	  _createClass(CapLevelController, [{
@@ -17133,10 +19459,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onManifestParsed',
 	    value: function onManifestParsed(data) {
-	      if (this.hls.config.capLevelToPlayerSize) {
+	      var hls = this.hls;
+	      if (hls.config.capLevelToPlayerSize) {
 	        this.autoLevelCapping = Number.POSITIVE_INFINITY;
 	        this.levels = data.levels;
-	        this.hls.firstLevel = this.getMaxLevel(data.firstLevel);
+	        hls.firstLevel = this.getMaxLevel(data.firstLevel);
 	        clearInterval(this.timer);
 	        this.timer = setInterval(this.detectPlayerSize.bind(this), 1000);
 	        this.detectPlayerSize();
@@ -17148,13 +19475,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.media) {
 	        var levelsLength = this.levels ? this.levels.length : 0;
 	        if (levelsLength) {
-	          this.hls.autoLevelCapping = this.getMaxLevel(levelsLength - 1);
-	          if (this.hls.autoLevelCapping > this.autoLevelCapping) {
+	          var hls = this.hls;
+	          hls.autoLevelCapping = this.getMaxLevel(levelsLength - 1);
+	          if (hls.autoLevelCapping > this.autoLevelCapping) {
 	            // if auto level capping has a higher value for the previous one, flush the buffer using nextLevelSwitch
 	            // usually happen when the user go to the fullscreen mode.
-	            this.hls.streamController.nextLevelSwitch();
+	            hls.streamController.nextLevelSwitch();
 	          }
-	          this.autoLevelCapping = this.hls.autoLevelCapping;
+	          this.autoLevelCapping = hls.autoLevelCapping;
 	        }
 	      }
 	    }
@@ -17206,8 +19534,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'mediaWidth',
 	    get: function get() {
 	      var width = void 0;
-	      if (this.media) {
-	        width = this.media.width || this.media.clientWidth || this.media.offsetWidth;
+	      var media = this.media;
+	      if (media) {
+	        width = media.width || media.clientWidth || media.offsetWidth;
 	        width *= this.contentScaleFactor;
 	      }
 	      return width;
@@ -17216,8 +19545,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'mediaHeight',
 	    get: function get() {
 	      var height = void 0;
-	      if (this.media) {
-	        height = this.media.height || this.media.clientHeight || this.media.offsetHeight;
+	      var media = this.media;
+	      if (media) {
+	        height = media.height || media.clientHeight || media.offsetHeight;
 	        height *= this.contentScaleFactor;
 	      }
 	      return height;
@@ -17229,7 +19559,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = CapLevelController;
 
-	},{"25":25,"26":26}],8:[function(_dereq_,module,exports){
+	},{"27":27,"28":28}],9:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -17244,7 +19574,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * different half-lives.
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 
-	var _ewma = _dereq_(42);
+	var _ewma = _dereq_(44);
 
 	var _ewma2 = _interopRequireDefault(_ewma);
 
@@ -17305,7 +19635,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = EwmaBandWidthEstimator;
 
-	},{"42":42}],9:[function(_dereq_,module,exports){
+	},{"44":44}],10:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -17314,15 +19644,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _events = _dereq_(26);
+	var _events = _dereq_(28);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = _dereq_(25);
+	var _eventHandler = _dereq_(27);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _logger = _dereq_(43);
+	var _logger = _dereq_(45);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -17340,7 +19670,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function FPSController(hls) {
 	    _classCallCheck(this, FPSController);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(FPSController).call(this, hls, _events2.default.MEDIA_ATTACHING));
+	    return _possibleConstructorReturn(this, (FPSController.__proto__ || Object.getPrototypeOf(FPSController)).call(this, hls, _events2.default.MEDIA_ATTACHING));
 	  }
 
 	  _createClass(FPSController, [{
@@ -17354,13 +19684,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onMediaAttaching',
 	    value: function onMediaAttaching(data) {
-	      if (this.hls.config.capLevelOnFPSDrop) {
-	        this.video = data.media instanceof HTMLVideoElement ? data.media : null;
-	        if (typeof this.video.getVideoPlaybackQuality === 'function') {
+	      var config = this.hls.config;
+	      if (config.capLevelOnFPSDrop) {
+	        var video = this.video = data.media instanceof HTMLVideoElement ? data.media : null;
+	        if (typeof video.getVideoPlaybackQuality === 'function') {
 	          this.isVideoPlaybackQualityAvailable = true;
 	        }
 	        clearInterval(this.timer);
-	        this.timer = setInterval(this.checkFPSInterval.bind(this), this.hls.config.fpsDroppedMonitoringPeriod);
+	        this.timer = setInterval(this.checkFPSInterval.bind(this), config.fpsDroppedMonitoringPeriod);
 	      }
 	    }
 	  }, {
@@ -17372,18 +19703,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	          var currentPeriod = currentTime - this.lastTime,
 	              currentDropped = droppedFrames - this.lastDroppedFrames,
 	              currentDecoded = decodedFrames - this.lastDecodedFrames,
-	              droppedFPS = 1000 * currentDropped / currentPeriod;
-	          this.hls.trigger(_events2.default.FPS_DROP, { currentDropped: currentDropped, currentDecoded: currentDecoded, totalDroppedFrames: droppedFrames });
+	              droppedFPS = 1000 * currentDropped / currentPeriod,
+	              hls = this.hls;
+	          hls.trigger(_events2.default.FPS_DROP, { currentDropped: currentDropped, currentDecoded: currentDecoded, totalDroppedFrames: droppedFrames });
 	          if (droppedFPS > 0) {
 	            //logger.log('checkFPS : droppedFPS/decodedFPS:' + droppedFPS/(1000 * currentDecoded / currentPeriod));
-	            if (currentDropped > this.hls.config.fpsDroppedMonitoringThreshold * currentDecoded) {
-	              var currentLevel = this.hls.currentLevel;
+	            if (currentDropped > hls.config.fpsDroppedMonitoringThreshold * currentDecoded) {
+	              var currentLevel = hls.currentLevel;
 	              _logger.logger.warn('drop FPS ratio greater than max allowed value for currentLevel: ' + currentLevel);
-	              if (currentLevel > 0 && (this.hls.autoLevelCapping === -1 || this.hls.autoLevelCapping >= currentLevel)) {
+	              if (currentLevel > 0 && (hls.autoLevelCapping === -1 || hls.autoLevelCapping >= currentLevel)) {
 	                currentLevel = currentLevel - 1;
-	                this.hls.trigger(_events2.default.FPS_DROP_LEVEL_CAPPING, { level: currentLevel, droppedLevel: this.hls.currentLevel });
-	                this.hls.autoLevelCapping = currentLevel;
-	                this.hls.streamController.nextLevelSwitch();
+	                hls.trigger(_events2.default.FPS_DROP_LEVEL_CAPPING, { level: currentLevel, droppedLevel: hls.currentLevel });
+	                hls.autoLevelCapping = currentLevel;
+	                hls.streamController.nextLevelSwitch();
 	              }
 	            }
 	          }
@@ -17396,12 +19728,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'checkFPSInterval',
 	    value: function checkFPSInterval() {
-	      if (this.video) {
+	      var video = this.video;
+	      if (video) {
 	        if (this.isVideoPlaybackQualityAvailable) {
-	          var videoPlaybackQuality = this.video.getVideoPlaybackQuality();
-	          this.checkFPS(this.video, videoPlaybackQuality.totalVideoFrames, videoPlaybackQuality.droppedVideoFrames);
+	          var videoPlaybackQuality = video.getVideoPlaybackQuality();
+	          this.checkFPS(video, videoPlaybackQuality.totalVideoFrames, videoPlaybackQuality.droppedVideoFrames);
 	        } else {
-	          this.checkFPS(this.video, this.video.webkitDecodedFrameCount, this.video.webkitDroppedFrameCount);
+	          this.checkFPS(video, video.webkitDecodedFrameCount, video.webkitDroppedFrameCount);
 	        }
 	      }
 	    }
@@ -17412,7 +19745,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = FPSController;
 
-	},{"25":25,"26":26,"43":43}],10:[function(_dereq_,module,exports){
+	},{"27":27,"28":28,"45":45}],11:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -17421,19 +19754,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _events = _dereq_(26);
+	var _events = _dereq_(28);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = _dereq_(25);
+	var _eventHandler = _dereq_(27);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _logger = _dereq_(43);
+	var _logger = _dereq_(45);
 
-	var _errors = _dereq_(24);
+	var _errors = _dereq_(26);
 
-	var _bufferHelper = _dereq_(28);
+	var _bufferHelper = _dereq_(30);
 
 	var _bufferHelper2 = _interopRequireDefault(_bufferHelper);
 
@@ -17453,7 +19786,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function LevelController(hls) {
 	    _classCallCheck(this, LevelController);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LevelController).call(this, hls, _events2.default.MANIFEST_LOADED, _events2.default.LEVEL_LOADED, _events2.default.ERROR));
+	    var _this = _possibleConstructorReturn(this, (LevelController.__proto__ || Object.getPrototypeOf(LevelController)).call(this, hls, _events2.default.MANIFEST_LOADED, _events2.default.LEVEL_LOADED, _events2.default.FRAG_LOADED, _events2.default.ERROR));
 
 	    _this.ontick = _this.tick.bind(_this);
 	    _this._manualLevel = _this._autoLevelCapping = -1;
@@ -17473,6 +19806,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'startLoad',
 	    value: function startLoad() {
 	      this.canload = true;
+	      var levels = this._levels;
+	      // clean up live level details to force reload them, and reset load errors
+	      if (levels) {
+	        levels.forEach(function (level) {
+	          level.loadError = 0;
+	          var levelDetails = level.details;
+	          if (levelDetails && levelDetails.live) {
+	            level.details = undefined;
+	          }
+	        });
+	      }
 	      // speed up live playlist refresh if timer exists
 	      if (this.timer) {
 	        this.tick();
@@ -17489,16 +19833,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var levels0 = [],
 	          levels = [],
 	          bitrateStart,
-	          i,
 	          bitrateSet = {},
 	          videoCodecFound = false,
 	          audioCodecFound = false,
-	          hls = this.hls;
+	          hls = this.hls,
+	          brokenmp4inmp3 = /chrome|firefox/.test(navigator.userAgent.toLowerCase()),
+	          checkSupported = function checkSupported(type, codec) {
+	        return MediaSource.isTypeSupported(type + '/mp4;codecs=' + codec);
+	      };
 
 	      // regroup redundant level together
 	      data.levels.forEach(function (level) {
 	        if (level.videoCodec) {
 	          videoCodecFound = true;
+	        }
+	        // erase audio codec info if browser does not support mp4a.40.34. demuxer will autodetect codec and fallback to mpeg/audio
+	        if (brokenmp4inmp3 && level.audioCodec && level.audioCodec.indexOf('mp4a.40.34') !== -1) {
+	          level.audioCodec = undefined;
 	        }
 	        if (level.audioCodec || level.attrs && level.attrs.AUDIO) {
 	          audioCodecFound = true;
@@ -17524,19 +19875,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      } else {
 	        levels = levels0;
 	      }
-
 	      // only keep level with supported audio/video codecs
 	      levels = levels.filter(function (level) {
-	        var checkSupportedAudio = function checkSupportedAudio(codec) {
-	          return MediaSource.isTypeSupported('audio/mp4;codecs=' + codec);
-	        };
-	        var checkSupportedVideo = function checkSupportedVideo(codec) {
-	          return MediaSource.isTypeSupported('video/mp4;codecs=' + codec);
-	        };
 	        var audioCodec = level.audioCodec,
 	            videoCodec = level.videoCodec;
-
-	        return (!audioCodec || checkSupportedAudio(audioCodec)) && (!videoCodec || checkSupportedVideo(videoCodec));
+	        return (!audioCodec || checkSupported('audio', audioCodec)) && (!videoCodec || checkSupported('video', videoCodec));
 	      });
 
 	      if (levels.length) {
@@ -17548,14 +19891,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	        this._levels = levels;
 	        // find index of first level in sorted levels
-	        for (i = 0; i < levels.length; i++) {
+	        for (var i = 0; i < levels.length; i++) {
 	          if (levels[i].bitrate === bitrateStart) {
 	            this._firstLevel = i;
 	            _logger.logger.log('manifest loaded,' + levels.length + ' level(s) found, first bitrate:' + bitrateStart);
 	            break;
 	          }
 	        }
-	        hls.trigger(_events2.default.MANIFEST_PARSED, { levels: this._levels, firstLevel: this._firstLevel, stats: data.stats, audio: audioCodecFound, video: videoCodecFound, altAudio: data.audioTracks.length > 0 });
+	        hls.trigger(_events2.default.MANIFEST_PARSED, { levels: levels, firstLevel: this._firstLevel, stats: data.stats, audio: audioCodecFound, video: videoCodecFound, altAudio: data.audioTracks.length > 0 });
 	      } else {
 	        hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.MANIFEST_INCOMPATIBLE_CODECS_ERROR, fatal: true, url: hls.url, reason: 'no level with compatible codecs found in manifest' });
 	      }
@@ -17575,8 +19918,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (this._level !== newLevel) {
 	          _logger.logger.log('switching to level ' + newLevel);
 	          this._level = newLevel;
+	          this.hls.trigger(_events2.default.LEVEL_SWITCH, { level: newLevel });
 	        }
-	        this.hls.trigger(_events2.default.LEVEL_SWITCH, { level: newLevel });
 	        var level = levels[newLevel],
 	            levelDetails = level.details;
 	        // check if we need to load playlist for this level
@@ -17601,7 +19944,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          hls = this.hls,
 	          levelId = void 0,
 	          level = void 0,
-	          levelError = false;
+	          levelError = false,
+	          abrController = hls.abrController,
+	          minAutoLevel = abrController.minAutoLevel;
 	      // try to recover not fatal errors
 	      switch (details) {
 	        case _errors.ErrorDetails.FRAG_LOAD_ERROR:
@@ -17616,6 +19961,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          levelId = data.context.level;
 	          levelError = true;
 	          break;
+	        case _errors.ErrorDetails.REMUX_ALLOC_ERROR:
+	          levelId = data.level;
+	          break;
 	        default:
 	          break;
 	      }
@@ -17625,16 +19973,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	       */
 	      if (levelId !== undefined) {
 	        level = this._levels[levelId];
-	        if (level.urlId < level.url.length - 1) {
-	          level.urlId++;
+	        if (!level.loadError) {
+	          level.loadError = 1;
+	        } else {
+	          level.loadError++;
+	        }
+	        // if any redundant streams available and if we haven't try them all (level.loadError is reseted on successful frag/level load.
+	        // if level.loadError reaches nbRedundantLevel it means that we tried them all, no hope  => let's switch down
+	        var nbRedundantLevel = level.url.length;
+	        if (nbRedundantLevel > 1 && level.loadError < nbRedundantLevel) {
+	          level.urlId = (level.urlId + 1) % nbRedundantLevel;
 	          level.details = undefined;
 	          _logger.logger.warn('level controller,' + details + ' for level ' + levelId + ': switching to redundant stream id ' + level.urlId);
 	        } else {
 	          // we could try to recover if in auto mode and current level not lowest level (0)
 	          var recoverable = this._manualLevel === -1 && levelId;
 	          if (recoverable) {
-	            _logger.logger.warn('level controller,' + details + ': emergency switch-down for next fragment');
-	            hls.abrController.nextAutoLevel = 0;
+	            _logger.logger.warn('level controller,' + details + ': switch-down for next fragment');
+	            abrController.nextAutoLevel = Math.max(minAutoLevel, levelId - 1);
 	          } else if (level && level.details && level.details.live) {
 	            _logger.logger.warn('level controller,' + details + ' on live stream, discard');
 	            if (levelError) {
@@ -17643,41 +19999,57 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            // other errors are handled by stream controller
 	          } else if (details === _errors.ErrorDetails.LEVEL_LOAD_ERROR || details === _errors.ErrorDetails.LEVEL_LOAD_TIMEOUT) {
-	              var _hls = this.hls,
-	                  media = _hls.media,
+	            var media = hls.media,
 
-	              // 0.5 : tolerance needed as some browsers stalls playback before reaching buffered end
-	              mediaBuffered = media && _bufferHelper2.default.isBuffered(media, media.currentTime) && _bufferHelper2.default.isBuffered(media, media.currentTime + 0.5);
-	              if (mediaBuffered) {
-	                var retryDelay = _hls.config.levelLoadingRetryDelay;
-	                _logger.logger.warn('level controller,' + details + ', but media buffered, retry in ' + retryDelay + 'ms');
-	                this.timer = setTimeout(this.ontick, retryDelay);
-	              } else {
-	                _logger.logger.error('cannot recover ' + details + ' error');
-	                this._level = undefined;
-	                // stopping live reloading timer if any
-	                if (this.timer) {
-	                  clearTimeout(this.timer);
-	                  this.timer = null;
-	                }
-	                // redispatch same error but with fatal set to true
-	                data.fatal = true;
-	                _hls.trigger(_events2.default.ERROR, data);
+	            // 0.5 : tolerance needed as some browsers stalls playback before reaching buffered end
+	            mediaBuffered = media && _bufferHelper2.default.isBuffered(media, media.currentTime) && _bufferHelper2.default.isBuffered(media, media.currentTime + 0.5);
+	            if (mediaBuffered) {
+	              var retryDelay = hls.config.levelLoadingRetryDelay;
+	              _logger.logger.warn('level controller,' + details + ', but media buffered, retry in ' + retryDelay + 'ms');
+	              this.timer = setTimeout(this.ontick, retryDelay);
+	            } else {
+	              _logger.logger.error('cannot recover ' + details + ' error');
+	              this._level = undefined;
+	              // stopping live reloading timer if any
+	              if (this.timer) {
+	                clearTimeout(this.timer);
+	                this.timer = null;
 	              }
+	              // redispatch same error but with fatal set to true
+	              data.fatal = true;
+	              hls.trigger(_events2.default.ERROR, data);
 	            }
+	          }
+	        }
+	      }
+	    }
+
+	    // reset level load error counter on successful frag loaded
+
+	  }, {
+	    key: 'onFragLoaded',
+	    value: function onFragLoaded(data) {
+	      var fragLoaded = data.frag;
+	      if (fragLoaded && fragLoaded.type === 'main') {
+	        var level = this._levels[fragLoaded.level];
+	        if (level) {
+	          level.loadError = 0;
 	        }
 	      }
 	    }
 	  }, {
 	    key: 'onLevelLoaded',
 	    value: function onLevelLoaded(data) {
+	      var levelId = data.level;
 	      // only process level loaded events matching with expected level
-	      if (data.level === this._level) {
+	      if (levelId === this._level) {
+	        var curLevel = this._levels[levelId];
+	        // reset level load error counter on successful level loaded
+	        curLevel.loadError = 0;
 	        var newDetails = data.details;
 	        // if current playlist is a live playlist, arm a timer to reload it
 	        if (newDetails.live) {
 	          var reloadInterval = 1000 * (newDetails.averagetargetduration ? newDetails.averagetargetduration : newDetails.targetduration),
-	              curLevel = this._levels[data.level],
 	              curDetails = curLevel.details;
 	          if (curDetails && newDetails.endSN === curDetails.endSN) {
 	            // follow HLS Spec, If the client reloads a Playlist file and finds that it has not
@@ -17764,6 +20136,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    },
 	    set: function set(newLevel) {
+	      // if not in autostart level, ensure startLevel is greater than minAutoLevel
+	      if (newLevel !== -1) {
+	        newLevel = Math.max(newLevel, this.hls.abrController.minAutoLevel);
+	      }
 	      this._startLevel = newLevel;
 	    }
 	  }, {
@@ -17788,7 +20164,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = LevelController;
 
-	},{"24":24,"25":25,"26":26,"28":28,"43":43}],11:[function(_dereq_,module,exports){
+	},{"26":26,"27":27,"28":28,"30":30,"45":45}],12:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -17797,37 +20173,37 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _binarySearch = _dereq_(39);
+	var _binarySearch = _dereq_(41);
 
 	var _binarySearch2 = _interopRequireDefault(_binarySearch);
 
-	var _bufferHelper = _dereq_(28);
+	var _bufferHelper = _dereq_(30);
 
 	var _bufferHelper2 = _interopRequireDefault(_bufferHelper);
 
-	var _demuxer = _dereq_(20);
+	var _demuxer = _dereq_(22);
 
 	var _demuxer2 = _interopRequireDefault(_demuxer);
 
-	var _events = _dereq_(26);
+	var _events = _dereq_(28);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = _dereq_(25);
+	var _eventHandler = _dereq_(27);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _levelHelper = _dereq_(29);
+	var _levelHelper = _dereq_(31);
 
 	var _levelHelper2 = _interopRequireDefault(_levelHelper);
 
-	var _timeRanges = _dereq_(45);
+	var _timeRanges = _dereq_(46);
 
 	var _timeRanges2 = _interopRequireDefault(_timeRanges);
 
-	var _errors = _dereq_(24);
+	var _errors = _dereq_(26);
 
-	var _logger = _dereq_(43);
+	var _logger = _dereq_(45);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -17842,13 +20218,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	var State = {
 	  STOPPED: 'STOPPED',
 	  IDLE: 'IDLE',
-	  PAUSED: 'PAUSED',
 	  KEY_LOADING: 'KEY_LOADING',
 	  FRAG_LOADING: 'FRAG_LOADING',
 	  FRAG_LOADING_WAITING_RETRY: 'FRAG_LOADING_WAITING_RETRY',
 	  WAITING_LEVEL: 'WAITING_LEVEL',
 	  PARSING: 'PARSING',
 	  PARSED: 'PARSED',
+	  BUFFER_FLUSHING: 'BUFFER_FLUSHING',
 	  ENDED: 'ENDED',
 	  ERROR: 'ERROR'
 	};
@@ -17859,7 +20235,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function StreamController(hls) {
 	    _classCallCheck(this, StreamController);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(StreamController).call(this, hls, _events2.default.MEDIA_ATTACHED, _events2.default.MEDIA_DETACHING, _events2.default.MANIFEST_LOADING, _events2.default.MANIFEST_PARSED, _events2.default.LEVEL_LOADED, _events2.default.KEY_LOADED, _events2.default.FRAG_LOADED, _events2.default.FRAG_LOAD_EMERGENCY_ABORTED, _events2.default.FRAG_PARSING_INIT_SEGMENT, _events2.default.FRAG_PARSING_DATA, _events2.default.FRAG_PARSED, _events2.default.ERROR, _events2.default.AUDIO_TRACK_SWITCH, _events2.default.BUFFER_CREATED, _events2.default.BUFFER_APPENDED, _events2.default.BUFFER_FLUSHED));
+	    var _this = _possibleConstructorReturn(this, (StreamController.__proto__ || Object.getPrototypeOf(StreamController)).call(this, hls, _events2.default.MEDIA_ATTACHED, _events2.default.MEDIA_DETACHING, _events2.default.MANIFEST_LOADING, _events2.default.MANIFEST_PARSED, _events2.default.LEVEL_LOADED, _events2.default.KEY_LOADED, _events2.default.FRAG_LOADED, _events2.default.FRAG_LOAD_EMERGENCY_ABORTED, _events2.default.FRAG_PARSING_INIT_SEGMENT, _events2.default.FRAG_PARSING_DATA, _events2.default.FRAG_PARSED, _events2.default.ERROR, _events2.default.AUDIO_TRACK_SWITCHING, _events2.default.AUDIO_TRACK_SWITCHED, _events2.default.BUFFER_CREATED, _events2.default.BUFFER_APPENDED, _events2.default.BUFFER_FLUSHED));
 
 	    _this.config = hls.config;
 	    _this.audioCodecSwap = false;
@@ -17883,8 +20259,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'startLoad',
 	    value: function startLoad(startPosition) {
 	      if (this.levels) {
-	        var media = this.media,
-	            lastCurrentTime = this.lastCurrentTime,
+	        var lastCurrentTime = this.lastCurrentTime,
 	            hls = this.hls;
 	        this.stopLoad();
 	        if (!this.timer) {
@@ -17892,15 +20267,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        this.level = -1;
 	        this.fragLoadError = 0;
-	        if (media && lastCurrentTime > 0) {
-	          _logger.logger.log('configure startPosition @' + lastCurrentTime.toFixed(3));
-	          if (!this.lastPaused) {
-	            _logger.logger.log('resuming video');
-	            media.play();
-	          }
-	        } else {
-	          this.lastCurrentTime = this.startPosition ? this.startPosition : startPosition;
-	        }
 	        if (!this.startFragRequested) {
 	          // determine load level
 	          var startLevel = hls.startLevel;
@@ -17914,8 +20280,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	          this.level = hls.nextLoadLevel = startLevel;
 	          this.loadedmetadata = false;
 	        }
+	        // if startPosition undefined but lastCurrentTime set, set startPosition to last currentTime
+	        if (lastCurrentTime > 0 && startPosition === -1) {
+	          _logger.logger.log('override startPosition with lastCurrentTime @' + lastCurrentTime.toFixed(3));
+	          startPosition = lastCurrentTime;
+	        }
 	        this.state = State.IDLE;
-	        this.nextLoadPosition = this.startPosition = this.lastCurrentTime;
+	        this.nextLoadPosition = this.startPosition = this.lastCurrentTime = startPosition;
 	        this.tick();
 	      } else {
 	        _logger.logger.warn('cannot start loading as manifest not parsed yet');
@@ -17956,9 +20327,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function doTick() {
 	      switch (this.state) {
 	        case State.ERROR:
-	        //don't do anything in error state to avoid breaking further ...
-	        case State.PAUSED:
-	          //don't do anything in paused state either ...
+	          //don't do anything in error state to avoid breaking further ...
+	          break;
+	        case State.BUFFER_FLUSHING:
+	          // in buffer flushing state, reset fragLoadError counter
+	          this.fragLoadError = 0;
 	          break;
 	        case State.IDLE:
 	          // when this returns false there was an error and we shall return immediatly
@@ -17984,7 +20357,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 	          break;
 	        case State.ERROR:
-	        case State.PAUSED:
 	        case State.STOPPED:
 	        case State.FRAG_LOADING:
 	        case State.PARSING:
@@ -18014,8 +20386,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // if video not attached AND
 	      // start fragment already requested OR start frag prefetch disable
 	      // exit loop
-	      // => if media not attached but start frag prefetch is enabled and start frag not requested yet, we will not exit loop
-	      if (!media && (this.startFragRequested || !config.startFragPrefetch)) {
+	      // => if start level loaded and media not attached but start frag prefetch is enabled and start frag not requested yet, we will not exit loop
+	      if (this.levelLastLoaded !== undefined && !media && (this.startFragRequested || !config.startFragPrefetch)) {
 	        return true;
 	      }
 
@@ -18027,12 +20399,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        pos = this.nextLoadPosition;
 	      }
 	      // determine next load level
-	      var level = hls.nextLoadLevel;
+	      var level = hls.nextLoadLevel,
+	          levelInfo = this.levels[level],
+	          levelBitrate = levelInfo.bitrate,
+	          maxBufLen = void 0;
 
 	      // compute max Buffer Length that we could get from this load level, based on level bitrate. don't buffer more than 60 MB and more than 30s
-	      var maxBufLen = void 0;
-	      if (this.levels[level].hasOwnProperty('bitrate')) {
-	        maxBufLen = Math.max(8 * config.maxBufferSize / this.levels[level].bitrate, config.maxBufferLength);
+	      if (levelBitrate) {
+	        maxBufLen = Math.max(8 * config.maxBufferSize / levelBitrate, config.maxBufferLength);
 	      } else {
 	        maxBufLen = config.maxBufferLength;
 	      }
@@ -18052,10 +20426,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      _logger.logger.trace('buffer length of ' + bufferLen.toFixed(3) + ' is below max of ' + maxBufLen.toFixed(3) + '. checking for more payload ...');
 
 	      // set next load level : this will trigger a playlist load if needed
-	      hls.nextLoadLevel = level;
-	      this.level = level;
+	      this.level = hls.nextLoadLevel = level;
 
-	      var levelDetails = this.levels[level].details;
+	      var levelDetails = levelInfo.details;
 	      // if level info not retrieved yet, switch state and wait for level retrieval
 	      // if live playlist, ensure that new playlist has been refreshed to avoid loading/try to load
 	      // a useless and outdated fragment (that might even introduce load error if it is already out of the live playlist)
@@ -18067,10 +20440,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // we just got done loading the final fragment, check if we need to finalize media stream
 	      var fragPrevious = this.fragPrevious;
 	      if (!levelDetails.live && fragPrevious && fragPrevious.sn === levelDetails.endSN) {
-	        // if (we are not seeking AND current position is buffered) OR (if we are seeking but everything (almost) til the end is buffered), let's signal eos
-	        // we don't compare exactly media.duration === bufferInfo.end as there could be some subtle media duration difference when switching
-	        // between different renditions. using half frag duration should help cope with these cases.
-	        if (!media.seeking && bufferInfo.len || media.duration - bufferInfo.end <= fragPrevious.duration / 2) {
+	        // if everything (almost) til the end is buffered, let's signal eos
+	        // we don't compare exactly media.duration === bufferInfo.end as there could be some subtle media duration difference
+	        // using half frag duration should help cope with these cases.
+	        // also cope with almost zero last frag duration (max last frag duration with 100ms) refer to https://github.com/dailymotion/hls.js/pull/657
+	        if (media.duration - Math.max(bufferInfo.end, fragPrevious.start) <= Math.max(0.1, fragPrevious.duration / 2)) {
 	          // Finalize the media stream
 	          var data = {};
 	          if (this.altAudio) {
@@ -18088,9 +20462,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: '_fetchPayloadOrEos',
 	    value: function _fetchPayloadOrEos(_ref) {
-	      var pos = _ref.pos;
-	      var bufferInfo = _ref.bufferInfo;
-	      var levelDetails = _ref.levelDetails;
+	      var pos = _ref.pos,
+	          bufferInfo = _ref.bufferInfo,
+	          levelDetails = _ref.levelDetails;
 
 	      var fragPrevious = this.fragPrevious,
 	          level = this.level,
@@ -18110,6 +20484,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      // in case of live playlist we need to ensure that requested position is not located before playlist start
 	      if (levelDetails.live) {
+	        var initialLiveManifestSize = this.config.initialLiveManifestSize;
+	        if (fragLen < initialLiveManifestSize) {
+	          _logger.logger.warn('Can not start playback of a level, reason: not enough fragments ' + fragLen + ' < ' + initialLiveManifestSize);
+	          return false;
+	        }
+
 	        frag = this._ensureFragmentAtLivePoint({ levelDetails: levelDetails, bufferEnd: bufferEnd, start: start, end: end, fragPrevious: fragPrevious, fragments: fragments, fragLen: fragLen });
 	        // if it explicitely returns null don't load any fragment and exit function now
 	        if (frag === null) {
@@ -18132,13 +20512,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: '_ensureFragmentAtLivePoint',
 	    value: function _ensureFragmentAtLivePoint(_ref2) {
-	      var levelDetails = _ref2.levelDetails;
-	      var bufferEnd = _ref2.bufferEnd;
-	      var start = _ref2.start;
-	      var end = _ref2.end;
-	      var fragPrevious = _ref2.fragPrevious;
-	      var fragments = _ref2.fragments;
-	      var fragLen = _ref2.fragLen;
+	      var levelDetails = _ref2.levelDetails,
+	          bufferEnd = _ref2.bufferEnd,
+	          start = _ref2.start,
+	          end = _ref2.end,
+	          fragPrevious = _ref2.fragPrevious,
+	          fragments = _ref2.fragments,
+	          fragLen = _ref2.fragLen;
 
 	      var config = this.hls.config,
 	          media = this.media;
@@ -18149,7 +20529,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      //logger.log(`start/pos/bufEnd/seeking:${start.toFixed(3)}/${pos.toFixed(3)}/${bufferEnd.toFixed(3)}/${this.media.seeking}`);
 	      var maxLatency = config.liveMaxLatencyDuration !== undefined ? config.liveMaxLatencyDuration : config.liveMaxLatencyDurationCount * levelDetails.targetduration;
 
-	      if (bufferEnd < Math.max(start, end - maxLatency)) {
+	      if (bufferEnd < Math.max(start - config.maxFragLookUpTolerance, end - maxLatency)) {
 	        var liveSyncPosition = this.liveSyncPosition = this.computeLivePosition(start, levelDetails);
 	        _logger.logger.log('buffer end: ' + bufferEnd.toFixed(3) + ' is located too far from the end of live sliding playlist, reset currentTime to : ' + liveSyncPosition.toFixed(3));
 	        bufferEnd = liveSyncPosition;
@@ -18197,13 +20577,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: '_findFragment',
 	    value: function _findFragment(_ref3) {
-	      var start = _ref3.start;
-	      var fragPrevious = _ref3.fragPrevious;
-	      var fragLen = _ref3.fragLen;
-	      var fragments = _ref3.fragments;
-	      var bufferEnd = _ref3.bufferEnd;
-	      var end = _ref3.end;
-	      var levelDetails = _ref3.levelDetails;
+	      var start = _ref3.start,
+	          fragPrevious = _ref3.fragPrevious,
+	          fragLen = _ref3.fragLen,
+	          fragments = _ref3.fragments,
+	          bufferEnd = _ref3.bufferEnd,
+	          end = _ref3.end,
+	          levelDetails = _ref3.levelDetails;
 
 	      var config = this.hls.config;
 
@@ -18272,11 +20652,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: '_loadFragmentOrKey',
 	    value: function _loadFragmentOrKey(_ref4) {
-	      var frag = _ref4.frag;
-	      var level = _ref4.level;
-	      var levelDetails = _ref4.levelDetails;
-	      var pos = _ref4.pos;
-	      var bufferEnd = _ref4.bufferEnd;
+	      var frag = _ref4.frag,
+	          level = _ref4.level,
+	          levelDetails = _ref4.levelDetails,
+	          pos = _ref4.pos,
+	          bufferEnd = _ref4.bufferEnd;
 
 	      var hls = this.hls,
 	          config = hls.config;
@@ -18308,9 +20688,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        frag.loadIdx = this.fragLoadIdx;
 	        this.fragCurrent = frag;
 	        this.startFragRequested = true;
+	        this.nextLoadPosition = frag.start + frag.duration;
 	        frag.autoLevel = hls.autoLevelEnabled;
 	        frag.bitrateTest = this.bitrateTest;
 	        hls.trigger(_events2.default.FRAG_LOADING, { frag: frag });
+	        // lazy demuxer init, as this could take some time ... do it during frag loading
+	        if (!this.demuxer) {
+	          this.demuxer = new _demuxer2.default(hls, 'main');
+	        }
 	        this.state = State.FRAG_LOADING;
 	        return true;
 	      }
@@ -18318,18 +20703,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'getBufferRange',
 	    value: function getBufferRange(position) {
-	      var i,
-	          range,
-	          bufferRange = this.bufferRange;
-	      if (bufferRange) {
-	        for (i = bufferRange.length - 1; i >= 0; i--) {
-	          range = bufferRange[i];
-	          if (position >= range.start && position <= range.end) {
-	            return range;
-	          }
+	      return _binarySearch2.default.search(this.bufferRange, function (range) {
+	        if (position < range.start) {
+	          return -1;
+	        } else if (position > range.end) {
+	          return 1;
 	        }
-	      }
-	      return null;
+	        return 0;
+	      });
 	    }
 	  }, {
 	    key: 'followingBufferRange',
@@ -18406,9 +20787,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        fragCurrent.loader.abort();
 	      }
 	      this.fragCurrent = null;
-	      this.state = State.PAUSED;
+	      // increase fragment load Index to avoid frag loop loading error after buffer flush
+	      this.fragLoadIdx += 2 * this.config.fragLoadingLoopThreshold;
 	      // flush everything
-	      this.hls.trigger(_events2.default.BUFFER_FLUSHING, { startOffset: 0, endOffset: Number.POSITIVE_INFINITY });
+	      this.flushMainBuffer(0, Number.POSITIVE_INFINITY);
 	    }
 
 	    /*
@@ -18452,8 +20834,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (currentRange && currentRange.start > 1) {
 	          // flush buffer preceding current fragment (flush until current fragment start offset)
 	          // minus 1s to avoid video freezing, that could happen if we flush keyframe of current video ...
-	          this.state = State.PAUSED;
-	          this.hls.trigger(_events2.default.BUFFER_FLUSHING, { startOffset: 0, endOffset: currentRange.start - 1 });
+	          this.flushMainBuffer(0, currentRange.start - 1);
 	        }
 	        if (!media.paused) {
 	          // add a safety delay of 1s
@@ -18482,11 +20863,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            this.fragCurrent = null;
 	            // flush position is the start position of this new buffer
-	            this.state = State.PAUSED;
-	            this.hls.trigger(_events2.default.BUFFER_FLUSHING, { startOffset: nextRange.start, endOffset: Number.POSITIVE_INFINITY });
+	            this.flushMainBuffer(nextRange.start, Number.POSITIVE_INFINITY);
 	          }
 	        }
 	      }
+	    }
+	  }, {
+	    key: 'flushMainBuffer',
+	    value: function flushMainBuffer(startOffset, endOffset) {
+	      this.state = State.BUFFER_FLUSHING;
+	      var flushScope = { startOffset: startOffset, endOffset: endOffset };
+	      // if alternate audio tracks are used, only flush video, otherwise flush everything
+	      if (this.altAudio) {
+	        flushScope.type = 'video';
+	      }
+	      this.hls.trigger(_events2.default.BUFFER_FLUSHING, flushScope);
 	    }
 	  }, {
 	    key: 'onMediaAttached',
@@ -18531,7 +20922,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        media.removeEventListener('ended', this.onvended);
 	        this.onvseeking = this.onvseeked = this.onvended = null;
 	      }
-	      this.media = null;
+	      this.media = this.mediaBuffer = null;
 	      this.loadedmetadata = false;
 	      this.stopLoad();
 	    }
@@ -18543,7 +20934,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          config = this.config;
 	      _logger.logger.log('media seeking to ' + currentTime.toFixed(3));
 	      if (this.state === State.FRAG_LOADING) {
-	        var bufferInfo = _bufferHelper2.default.bufferInfo(media, currentTime, this.config.maxBufferHole),
+	        var mediaBuffer = this.mediaBuffer ? this.mediaBuffer : media;
+	        var bufferInfo = _bufferHelper2.default.bufferInfo(mediaBuffer, currentTime, this.config.maxBufferHole),
 	            fragCurrent = this.fragCurrent;
 	        // check if we are seeking to a unbuffered area AND if frag loading is in progress
 	        if (bufferInfo.len === 0 && fragCurrent) {
@@ -18574,6 +20966,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // avoid reporting fragment loop loading error in case user is seeking several times on same position
 	      if (this.state !== State.FRAG_LOADING && this.fragLoadIdx !== undefined) {
 	        this.fragLoadIdx += 2 * config.fragLoadingLoopThreshold;
+	      }
+	      // in case seeking occurs although no media buffered, adjust startPosition and nextLoadPosition to seek target
+	      if (!this.loadedmetadata) {
+	        this.nextLoadPosition = this.startPosition = currentTime;
 	      }
 	      // tick to speed up processing
 	      this.tick();
@@ -18688,6 +21084,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	              this.startPosition = 0;
 	            }
 	          }
+	          this.lastCurrentTime = this.startPosition;
 	        }
 	        this.nextLoadPosition = this.startPosition;
 	      }
@@ -18749,15 +21146,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	              }
 	            }
 	          }
-	          this.pendingAppending = 0;
+	          this.pendingBuffering = true;
+	          this.appended = false;
 	          _logger.logger.log('Parsing ' + sn + ' of [' + details.startSN + ' ,' + details.endSN + '],level ' + level + ', cc ' + fragCurrent.cc);
 	          var demuxer = this.demuxer;
 	          if (!demuxer) {
 	            demuxer = this.demuxer = new _demuxer2.default(this.hls, 'main');
 	          }
-	          // time Offset is accurate if level PTS is known, or if playlist is not sliding (not live)
-	          var accurateTimeOffset = details.PTSKnown || !details.live;
-	          demuxer.push(data.payload, audioCodec, currentLevel.videoCodec, start, fragCurrent.cc, level, sn, duration, fragCurrent.decryptdata, accurateTimeOffset);
+	          // time Offset is accurate if level PTS is known, or if playlist is not sliding (not live) and if media is not seeking (this is to overcome potential timestamp drifts between playlists and fragments)
+	          var media = this.media;
+	          var mediaSeeking = media && media.seeking;
+	          var accurateTimeOffset = !mediaSeeking && (details.PTSKnown || !details.live);
+	          demuxer.push(data.payload, audioCodec, currentLevel.videoCodec, start, fragCurrent.cc, level, sn, duration, fragCurrent.decryptdata, accurateTimeOffset, null);
 	        }
 	      }
 	      this.fragLoadError = 0;
@@ -18801,9 +21201,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	          }
 	          // HE-AAC is broken on Android, always signal audio codec as AAC even if variant manifest states otherwise
-	          if (ua.indexOf('android') !== -1) {
+	          if (ua.indexOf('android') !== -1 && track.container !== 'audio/mpeg') {
+	            // Exclude mpeg audio
 	            audioCodec = 'mp4a.40.2';
-	            _logger.logger.log('Android: force audio codec to' + audioCodec);
+	            _logger.logger.log('Android: force audio codec to ' + audioCodec);
 	          }
 	          track.levelCodec = audioCodec;
 	          track.id = data.id;
@@ -18844,7 +21245,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          _logger.logger.log('main track:' + trackName + ',container:' + track.container + ',codecs[level/parsed]=[' + track.levelCodec + '/' + track.codec + ']');
 	          var initSegment = track.initSegment;
 	          if (initSegment) {
-	            this.pendingAppending++;
+	            this.appended = true;
+	            // arm pending Buffering flag before appending a segment
+	            this.pendingBuffering = true;
 	            this.hls.trigger(_events2.default.BUFFER_APPENDING, { type: trackName, data: initSegment, parent: 'main', content: 'initSegment' });
 	          }
 	        }
@@ -18867,7 +21270,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var drift = _levelHelper2.default.updateFragPTSDTS(level.details, frag.sn, data.startPTS, data.endPTS, data.startDTS, data.endDTS),
 	            hls = this.hls;
-	        hls.trigger(_events2.default.LEVEL_PTS_UPDATED, { details: level.details, level: this.level, drift: drift });
+	        hls.trigger(_events2.default.LEVEL_PTS_UPDATED, { details: level.details, level: this.level, drift: drift, type: data.type, start: data.startPTS, end: data.endPTS });
 
 	        // has remuxer dropped video frames located before first keyframe ?
 	        if (data.type === 'video') {
@@ -18876,14 +21279,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        [data.data1, data.data2].forEach(function (buffer) {
 	          if (buffer) {
-	            _this2.pendingAppending++;
+	            _this2.appended = true;
+	            // arm pending Buffering flag before appending a segment
+	            _this2.pendingBuffering = true;
 	            hls.trigger(_events2.default.BUFFER_APPENDING, { type: data.type, data: buffer, parent: 'main', content: 'data' });
 	          }
 	        });
-
-	        this.nextLoadPosition = data.endPTS;
-	        this.bufferRange.push({ type: data.type, start: data.startPTS, end: data.endPTS, frag: frag });
-
 	        //trigger handler right now
 	        this.tick();
 	      }
@@ -18899,11 +21300,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	  }, {
-	    key: 'onAudioTrackSwitch',
-	    value: function onAudioTrackSwitch(data) {
+	    key: 'onAudioTrackSwitching',
+	    value: function onAudioTrackSwitching(data) {
 	      // if any URL found on new audio track, it is an alternate audio track
-	      var altAudio = !!data.url;
+	      var altAudio = !!data.url,
+	          trackId = data.id;
 	      // if we switch on main audio, ensure that main fragment scheduling is synced with media.buffered
+	      // don't do anything if we switch to alt audio: audio stream controller is handling it.
+	      // we will just have to change buffer scheduling on audioTrackSwitched
 	      if (!altAudio) {
 	        if (this.mediaBuffer !== this.media) {
 	          _logger.logger.log('switching on main audio, use media.buffered to schedule main fragment loading');
@@ -18924,14 +21328,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	          // switch to IDLE state to load new fragment
 	          this.state = State.IDLE;
 	        }
-	      } else {
-	        // if we switch on alternate audio, ensure that main fragment scheduling is synced with video sourcebuffer buffered
-	        if (this.videoBuffer && this.mediaBuffer !== this.videoBuffer) {
+	        var hls = this.hls;
+	        // switching to main audio, flush all audio and trigger track switched
+	        hls.trigger(_events2.default.BUFFER_FLUSHING, { startOffset: 0, endOffset: Number.POSITIVE_INFINITY, type: 'audio' });
+	        hls.trigger(_events2.default.AUDIO_TRACK_SWITCHED, { id: trackId });
+	        this.altAudio = false;
+	      }
+	    }
+	  }, {
+	    key: 'onAudioTrackSwitched',
+	    value: function onAudioTrackSwitched(data) {
+	      var trackId = data.id,
+	          altAudio = !!this.hls.audioTracks[trackId].url;
+	      if (altAudio) {
+	        var videoBuffer = this.videoBuffer;
+	        // if we switched on alternate audio, ensure that main fragment scheduling is synced with video sourcebuffer buffered
+	        if (videoBuffer && this.mediaBuffer !== videoBuffer) {
 	          _logger.logger.log('switching on alternate audio, use video.buffered to schedule main fragment loading');
-	          this.mediaBuffer = this.videoBuffer;
+	          this.mediaBuffer = videoBuffer;
 	        }
 	      }
 	      this.altAudio = altAudio;
+	      this.tick();
 	    }
 	  }, {
 	    key: 'onBufferCreated',
@@ -18964,33 +21382,44 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'onBufferAppended',
 	    value: function onBufferAppended(data) {
 	      if (data.parent === 'main') {
-	        switch (this.state) {
-	          case State.PARSING:
-	          case State.PARSED:
-	            this.pendingAppending--;
-	            this._checkAppendedParsed();
-	            break;
-	          default:
-	            break;
+	        var state = this.state;
+	        if (state === State.PARSING || state === State.PARSED) {
+	          // check if all buffers have been appended
+	          this.pendingBuffering = data.pending > 0;
+	          this._checkAppendedParsed();
 	        }
 	      }
 	    }
 	  }, {
 	    key: '_checkAppendedParsed',
 	    value: function _checkAppendedParsed() {
+	      var _this3 = this;
+
 	      //trigger handler right now
-	      if (this.state === State.PARSED && this.pendingAppending === 0) {
-	        var frag = this.fragCurrent,
-	            stats = this.stats;
+	      if (this.state === State.PARSED && (!this.appended || !this.pendingBuffering)) {
+	        var frag = this.fragCurrent;
 	        if (frag) {
-	          this.fragPrevious = frag;
-	          stats.tbuffered = performance.now();
-	          // we should get rid of this.fragLastKbps
-	          this.fragLastKbps = Math.round(8 * stats.total / (stats.tbuffered - stats.tfirst));
-	          this.hls.trigger(_events2.default.FRAG_BUFFERED, { stats: stats, frag: frag, id: 'main' });
-	          var media = this.mediaBuffer ? this.mediaBuffer : this.media;
-	          _logger.logger.log('main buffered : ' + _timeRanges2.default.toString(media.buffered));
-	          this.state = State.IDLE;
+	          (function () {
+	            var media = _this3.mediaBuffer ? _this3.mediaBuffer : _this3.media;
+	            _logger.logger.log('main buffered : ' + _timeRanges2.default.toString(media.buffered));
+	            // filter potentially evicted bufferRange. this is to avoid memleak on live streams
+	            var bufferRange = _this3.bufferRange.filter(function (range) {
+	              return _bufferHelper2.default.isBuffered(media, (range.start + range.end) / 2);
+	            });
+	            // push new range
+	            bufferRange.push({ type: frag.type, start: frag.startPTS, end: frag.endPTS, frag: frag });
+	            // sort, as we use BinarySearch for lookup in getBufferRange ...
+	            _this3.bufferRange = bufferRange.sort(function (a, b) {
+	              return a.start - b.start;
+	            });
+	            _this3.fragPrevious = frag;
+	            var stats = _this3.stats;
+	            stats.tbuffered = performance.now();
+	            // we should get rid of this.fragLastKbps
+	            _this3.fragLastKbps = Math.round(8 * stats.total / (stats.tbuffered - stats.tfirst));
+	            _this3.hls.trigger(_events2.default.FRAG_BUFFERED, { stats: stats, frag: frag, id: 'main' });
+	            _this3.state = State.IDLE;
+	          })();
 	        }
 	        this.tick();
 	      }
@@ -19010,6 +21439,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      switch (data.details) {
 	        case _errors.ErrorDetails.FRAG_LOAD_ERROR:
 	        case _errors.ErrorDetails.FRAG_LOAD_TIMEOUT:
+	        case _errors.ErrorDetails.KEY_LOAD_ERROR:
+	        case _errors.ErrorDetails.KEY_LOAD_TIMEOUT:
 	          if (!data.fatal) {
 	            var loadError = this.fragLoadError;
 	            if (loadError) {
@@ -19018,8 +21449,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	              loadError = 1;
 	            }
 	            var config = this.config;
-	            // keep retrying / don't raise fatal network error if current position is buffered
-	            if (loadError <= config.fragLoadingMaxRetry || mediaBuffered) {
+	            // keep retrying / don't raise fatal network error if current position is buffered or if in automode with current level not 0
+	            if (loadError <= config.fragLoadingMaxRetry || mediaBuffered || frag.autoLevel && frag.level) {
 	              this.fragLoadError = loadError;
 	              // reset load counter to avoid frag loop loading error
 	              frag.loadCounter = 0;
@@ -19028,6 +21459,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	              _logger.logger.warn('mediaController: frag loading failed, retry in ' + delay + ' ms');
 	              this.retryDate = performance.now() + delay;
 	              // retry loading state
+	              // if loadedmetadata is not set, it means that we are emergency switch down on first frag
+	              // in that case, reset startFragRequested flag
+	              if (!this.loadedmetadata) {
+	                this.startFragRequested = false;
+	                this.nextLoadPosition = this.startPosition;
+	              }
 	              this.state = State.FRAG_LOADING_WAITING_RETRY;
 	            } else {
 	              _logger.logger.error('mediaController: ' + data.details + ' reaches max retry, redispatch as fatal ...');
@@ -19060,13 +21497,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	          break;
 	        case _errors.ErrorDetails.LEVEL_LOAD_ERROR:
 	        case _errors.ErrorDetails.LEVEL_LOAD_TIMEOUT:
-	        case _errors.ErrorDetails.KEY_LOAD_ERROR:
-	        case _errors.ErrorDetails.KEY_LOAD_TIMEOUT:
-	          //  when in ERROR state, don't switch back to IDLE state in case a non-fatal error is received
 	          if (this.state !== State.ERROR) {
-	            // if fatal error, stop processing, otherwise move to IDLE to retry loading
-	            this.state = data.fatal ? State.ERROR : State.IDLE;
-	            _logger.logger.warn('mediaController: ' + data.details + ' while loading frag,switch to ' + this.state + ' state ...');
+	            if (data.fatal) {
+	              // if fatal error, stop processing
+	              this.state = State.ERROR;
+	              _logger.logger.warn('streamController: ' + data.details + ',switch to ' + this.state + ' state ...');
+	            } else {
+	              // in cas of non fatal error while waiting level load to be completed, switch back to IDLE
+	              if (this.state === State.WAITING_LEVEL) {
+	                this.state = State.IDLE;
+	              }
+	            }
 	          }
 	          break;
 	        case _errors.ErrorDetails.BUFFER_FULL_ERROR:
@@ -19082,9 +21523,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	              // in that case flush the whole buffer to recover
 	              _logger.logger.warn('buffer full error also media.currentTime is not buffered, flush everything');
 	              this.fragCurrent = null;
-	              this.state = State.PAUSED;
 	              // flush everything
-	              this.hls.trigger(_events2.default.BUFFER_FLUSHING, { startOffset: 0, endOffset: Number.POSITIVE_INFINITY });
+	              this.flushMainBuffer(0, Number.POSITIVE_INFINITY);
 	            }
 	          }
 	          break;
@@ -19111,14 +21551,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // if ready state different from HAVE_NOTHING (numeric value 0), we are allowed to seek
 	      if (media && media.readyState) {
 	        var currentTime = media.currentTime,
-	            buffered = media.buffered;
+	            mediaBuffer = this.mediaBuffer ? this.mediaBuffer : media,
+	            buffered = mediaBuffer.buffered;
 	        // adjust currentTime to start position on loaded metadata
-	        if (!this.loadedmetadata && buffered.length) {
+	        if (!this.loadedmetadata && buffered.length && !media.seeking) {
 	          this.loadedmetadata = true;
+	          this.nudgeRetry = 0;
 	          // only adjust currentTime if different from startPosition or if startPosition not buffered
 	          // at that stage, there should be only one buffered range, as we reach that code after first fragment has been buffered
 	          var startPosition = this.startPosition,
-	              startPositionBuffered = _bufferHelper2.default.isBuffered(media, startPosition);
+	              startPositionBuffered = _bufferHelper2.default.isBuffered(mediaBuffer, startPosition);
 	          // if currentTime not matching with expected startPosition or startPosition not buffered
 	          if (currentTime !== startPosition || !startPositionBuffered) {
 	            _logger.logger.log('target start position:' + startPosition);
@@ -19143,40 +21585,69 @@ return /******/ (function(modules) { // webpackBootstrap
 	          playheadMoving = currentTime > media.playbackRate * this.lastCurrentTime,
 	              config = this.config;
 
-	          if (this.stalled && playheadMoving) {
-	            this.stalled = false;
-	            _logger.logger.log('playback not stuck anymore @' + currentTime);
-	          }
-	          // check buffer upfront
-	          // if less than jumpThreshold second is buffered, let's check in more details
-	          if (expectedPlaying && bufferInfo.len <= jumpThreshold) {
-	            if (playheadMoving) {
-	              // playhead moving
-	              jumpThreshold = 0;
-	              this.seekHoleNudgeDuration = 0;
-	            } else {
-	              // playhead not moving AND media expected to play
-	              if (!this.stalled) {
-	                this.seekHoleNudgeDuration = 0;
-	                _logger.logger.log('playback seems stuck @' + currentTime);
-	                this.hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.BUFFER_STALLED_ERROR, fatal: false });
-	                this.stalled = true;
-	              } else {
-	                this.seekHoleNudgeDuration += config.seekHoleNudgeDuration;
+	          if (playheadMoving) {
+	            // played moving, but was previously stalled => now not stuck anymore
+	            if (this.stalled) {
+	              if (this.stallReported) {
+	                _logger.logger.warn('playback not stuck anymore @' + currentTime + ', after ' + Math.round(performance.now() - this.stalled) + 'ms');
+	                this.stallReported = false;
 	              }
+	              this.stalled = undefined;
 	            }
-	            // if we are below threshold, try to jump to start of next buffer range if close
-	            if (bufferInfo.len <= jumpThreshold) {
-	              // no buffer available @ currentTime, check if next buffer is close (within a config.maxSeekHole second range)
-	              var nextBufferStart = bufferInfo.nextStart,
-	                  delta = nextBufferStart - currentTime;
-	              if (nextBufferStart && delta < config.maxSeekHole && delta > 0) {
-	                // next buffer is close ! adjust currentTime to nextBufferStart
-	                // this will ensure effective video decoding
-	                _logger.logger.log('adjust currentTime from ' + media.currentTime + ' to next buffered @ ' + nextBufferStart + ' + nudge ' + this.seekHoleNudgeDuration);
-	                var hole = nextBufferStart + this.seekHoleNudgeDuration - media.currentTime;
-	                media.currentTime = nextBufferStart + this.seekHoleNudgeDuration;
-	                this.hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.BUFFER_SEEK_OVER_HOLE, fatal: false, hole: hole });
+	          } else {
+	            // playhead not moving
+	            if (expectedPlaying) {
+	              // playhead not moving BUT media expected to play
+	              var tnow = performance.now();
+	              var hls = this.hls;
+	              if (!this.stalled) {
+	                // stall just detected, store current time
+	                this.stalled = tnow;
+	                this.stallReported = false;
+	              } else {
+	                // playback already stalled, check stalling duration
+	                // if stalling for more than a given threshold, let's try to recover
+	                var stalledDuration = tnow - this.stalled;
+	                var bufferLen = bufferInfo.len;
+	                // have we reached stall deadline ?
+	                if (bufferLen <= jumpThreshold && stalledDuration > config.lowBufferWatchdogPeriod * 1000) {
+	                  // report stalled error once
+	                  if (!this.stallReported) {
+	                    this.stallReported = true;
+	                    _logger.logger.warn('playback stalling in low buffer @' + currentTime);
+	                    hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.BUFFER_STALLED_ERROR, fatal: false, buffer: bufferLen });
+	                  }
+	                  // if buffer len is below threshold, try to jump to start of next buffer range if close
+	                  // no buffer available @ currentTime, check if next buffer is close (within a config.maxSeekHole second range)
+	                  var nextBufferStart = bufferInfo.nextStart,
+	                      delta = nextBufferStart - currentTime;
+	                  if (nextBufferStart && delta < config.maxSeekHole && delta > 0) {
+	                    var nudgeRetry = this.nudgeRetry++;
+	                    var nudgeOffset = nudgeRetry * config.nudgeOffset;
+	                    // next buffer is close ! adjust currentTime to nextBufferStart
+	                    // this will ensure effective video decoding
+	                    _logger.logger.log('adjust currentTime from ' + media.currentTime + ' to next buffered @ ' + nextBufferStart + ' + nudge ' + nudgeOffset);
+	                    var hole = nextBufferStart + nudgeOffset - media.currentTime;
+	                    media.currentTime = nextBufferStart + nudgeOffset;
+	                    this.stalled = undefined;
+	                    hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.BUFFER_SEEK_OVER_HOLE, fatal: false, hole: hole });
+	                  }
+	                } else if (bufferLen > jumpThreshold && stalledDuration > config.highBufferWatchdogPeriod * 1000) {
+	                  _logger.logger.warn('playback stalling in high buffer @' + currentTime);
+	                  hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.BUFFER_STALLED_ERROR, fatal: false, buffer: bufferLen });
+	                  this.stalled = undefined;
+	                  var _nudgeRetry = this.nudgeRetry++;
+	                  if (_nudgeRetry < config.nudgeMaxRetry) {
+	                    var _currentTime = media.currentTime;
+	                    var targetTime = _currentTime + (_nudgeRetry + 1) * config.nudgeOffset;
+	                    _logger.logger.log('adjust currentTime from ' + _currentTime + ' to ' + targetTime);
+	                    // playback stalled in buffered area ... let's nudge currentTime to try to overcome this
+	                    media.currentTime = targetTime;
+	                    hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.BUFFER_NUDGE_ON_STALL, fatal: false });
+	                  } else {
+	                    hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.BUFFER_STALLED_ERROR, fatal: true });
+	                  }
+	                }
 	              }
 	            }
 	          }
@@ -19191,29 +21662,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // in that case, reset startFragRequested flag
 	      if (!this.loadedmetadata) {
 	        this.startFragRequested = false;
+	        this.nextLoadPosition = this.startPosition;
 	      }
 	      this.tick();
 	    }
 	  }, {
 	    key: 'onBufferFlushed',
 	    value: function onBufferFlushed() {
-	      /* after successful buffer flushing, rebuild buffer Range array
-	        loop through existing buffer range and check if
-	        corresponding range is still buffered. only push to new array already buffered range
+	      /* after successful buffer flushing, filter flushed fragments from bufferRange
 	        use mediaBuffered instead of media (so that we will check against video.buffered ranges in case of alt audio track)
 	      */
-	      var media = this.mediaBuffer ? this.mediaBuffer : this.media,
-	          bufferRange = this.bufferRange,
-	          newRange = [],
-	          range = void 0,
-	          i = void 0;
-	      for (i = 0; i < bufferRange.length; i++) {
-	        range = bufferRange[i];
-	        if (_bufferHelper2.default.isBuffered(media, (range.start + range.end) / 2)) {
-	          newRange.push(range);
-	        }
-	      }
-	      this.bufferRange = newRange;
+	      var media = this.mediaBuffer ? this.mediaBuffer : this.media;
+	      this.bufferRange = this.bufferRange.filter(function (range) {
+	        return _bufferHelper2.default.isBuffered(media, (range.start + range.end) / 2);
+	      });
 
 	      // increase fragment load Index to avoid frag loop loading error after buffer flush
 	      this.fragLoadIdx += 2 * this.config.fragLoadingLoopThreshold;
@@ -19294,7 +21756,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = StreamController;
 
-	},{"20":20,"24":24,"25":25,"26":26,"28":28,"29":29,"39":39,"43":43,"45":45}],12:[function(_dereq_,module,exports){
+	},{"22":22,"26":26,"27":27,"28":28,"30":30,"31":31,"41":41,"45":45,"46":46}],13:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -19303,15 +21765,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _events = _dereq_(26);
+	var _events = _dereq_(28);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = _dereq_(25);
+	var _eventHandler = _dereq_(27);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _cea608Parser = _dereq_(40);
+	var _cea608Parser = _dereq_(42);
 
 	var _cea608Parser2 = _interopRequireDefault(_cea608Parser);
 
@@ -19331,7 +21793,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function TimelineController(hls) {
 	    _classCallCheck(this, TimelineController);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TimelineController).call(this, hls, _events2.default.MEDIA_ATTACHING, _events2.default.MEDIA_DETACHING, _events2.default.FRAG_PARSING_USERDATA, _events2.default.MANIFEST_LOADING, _events2.default.FRAG_LOADED, _events2.default.LEVEL_SWITCH));
+	    var _this = _possibleConstructorReturn(this, (TimelineController.__proto__ || Object.getPrototypeOf(TimelineController)).call(this, hls, _events2.default.MEDIA_ATTACHING, _events2.default.MEDIA_DETACHING, _events2.default.FRAG_PARSING_USERDATA, _events2.default.MANIFEST_LOADING, _events2.default.FRAG_LOADED, _events2.default.LEVEL_SWITCH));
 
 	    _this.hls = hls;
 	    _this.config = hls.config;
@@ -19340,6 +21802,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    if (_this.config.enableCEA708Captions) {
 	      var self = _this;
+	      var sendAddTrackEvent = function sendAddTrackEvent(track, media) {
+	        var e = null;
+	        try {
+	          e = new window.Event('addtrack');
+	        } catch (err) {
+	          //for IE11
+	          e = document.createEvent('Event');
+	          e.initEvent('addtrack', false, false);
+	        }
+	        e.track = track;
+	        media.dispatchEvent(e);
+	      };
 
 	      var channel1 = {
 	        'newCue': function newCue(startTime, endTime, screen) {
@@ -19353,9 +21827,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	              self.textTrack1 = existingTrack1;
 	              self.clearCurrentCues(self.textTrack1);
 
-	              var e = new window.Event('addtrack');
-	              e.track = self.textTrack1;
-	              self.media.dispatchEvent(e);
+	              sendAddTrackEvent(self.textTrack1, self.media);
 	            }
 	          }
 
@@ -19375,9 +21847,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	              self.textTrack2 = existingTrack2;
 	              self.clearCurrentCues(self.textTrack2);
 
-	              var e = new window.Event('addtrack');
-	              e.track = self.textTrack2;
-	              self.media.dispatchEvent(e);
+	              sendAddTrackEvent(self.textTrack2, self.media);
 	            }
 	          }
 
@@ -19433,7 +21903,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'onMediaDetaching',
-	    value: function onMediaDetaching() {}
+	    value: function onMediaDetaching() {
+	      this.clearCurrentCues(this.textTrack1);
+	      this.clearCurrentCues(this.textTrack2);
+	    }
 	  }, {
 	    key: 'onManifestLoading',
 	    value: function onManifestLoading() {
@@ -19467,7 +21940,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function onFragParsingUserdata(data) {
 	      // push all of the CEA-708 messages into the interpreter
 	      // immediately. It will create the proper timestamps based on our PTS value
-	      if (this.enabled) {
+	      if (this.enabled && this.config.enableCEA708Captions) {
 	        for (var i = 0; i < data.samples.length; i++) {
 	          var ccdatas = this.extractCea608Data(data.samples[i].bytes);
 	          this.cea608Parser.addData(data.samples[i].pts, ccdatas);
@@ -19510,7 +21983,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = TimelineController;
 
-	},{"25":25,"26":26,"40":40}],13:[function(_dereq_,module,exports){
+	},{"27":27,"28":28,"42":42}],14:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -19521,513 +21994,436 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	/*
-	 *
-	 * This file contains an adaptation of the AES decryption algorithm
-	 * from the Standford Javascript Cryptography Library. That work is
-	 * covered by the following copyright and permissions notice:
-	 *
-	 * Copyright 2009-2010 Emily Stark, Mike Hamburg, Dan Boneh.
-	 * All rights reserved.
-	 *
-	 * Redistribution and use in source and binary forms, with or without
-	 * modification, are permitted provided that the following conditions are
-	 * met:
-	 *
-	 * 1. Redistributions of source code must retain the above copyright
-	 *    notice, this list of conditions and the following disclaimer.
-	 *
-	 * 2. Redistributions in binary form must reproduce the above
-	 *    copyright notice, this list of conditions and the following
-	 *    disclaimer in the documentation and/or other materials provided
-	 *    with the distribution.
-	 *
-	 * THIS SOFTWARE IS PROVIDED BY THE AUTHORS ``AS IS'' AND ANY EXPRESS OR
-	 * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	 * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> OR CONTRIBUTORS BE
-	 * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-	 * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-	 * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
-	 * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-	 * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
-	 * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
-	 * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	 *
-	 * The views and conclusions contained in the software and documentation
-	 * are those of the authors and should not be interpreted as representing
-	 * official policies, either expressed or implied, of the authors.
-	 */
+	var AESCrypto = function () {
+	  function AESCrypto(subtle, iv) {
+	    _classCallCheck(this, AESCrypto);
 
-	var AES = function () {
-
-	  /**
-	   * Schedule out an AES key for both encryption and decryption. This
-	   * is a low-level class. Use a cipher mode to do bulk encryption.
-	   *
-	   * @constructor
-	   * @param key {Array} The key as an array of 4, 6 or 8 words.
-	   */
-
-	  function AES(key) {
-	    _classCallCheck(this, AES);
-
-	    /**
-	     * The expanded S-box and inverse S-box tables. These will be computed
-	     * on the client so that we don't have to send them down the wire.
-	     *
-	     * There are two tables, _tables[0] is for encryption and
-	     * _tables[1] is for decryption.
-	     *
-	     * The first 4 sub-tables are the expanded S-box with MixColumns. The
-	     * last (_tables[01][4]) is the S-box itself.
-	     *
-	     * @private
-	     */
-	    this._tables = [[[], [], [], [], []], [[], [], [], [], []]];
-
-	    this._precompute();
-
-	    var i,
-	        j,
-	        tmp,
-	        encKey,
-	        decKey,
-	        sbox = this._tables[0][4],
-	        decTable = this._tables[1],
-	        keyLen = key.length,
-	        rcon = 1;
-
-	    if (keyLen !== 4 && keyLen !== 6 && keyLen !== 8) {
-	      throw new Error('Invalid aes key size=' + keyLen);
-	    }
-
-	    encKey = key.slice(0);
-	    decKey = [];
-	    this._key = [encKey, decKey];
-
-	    // schedule encryption keys
-	    for (i = keyLen; i < 4 * keyLen + 28; i++) {
-	      tmp = encKey[i - 1];
-
-	      // apply sbox
-	      if (i % keyLen === 0 || keyLen === 8 && i % keyLen === 4) {
-	        tmp = sbox[tmp >>> 24] << 24 ^ sbox[tmp >> 16 & 255] << 16 ^ sbox[tmp >> 8 & 255] << 8 ^ sbox[tmp & 255];
-
-	        // shift rows and add rcon
-	        if (i % keyLen === 0) {
-	          tmp = tmp << 8 ^ tmp >>> 24 ^ rcon << 24;
-	          rcon = rcon << 1 ^ (rcon >> 7) * 283;
-	        }
-	      }
-
-	      encKey[i] = encKey[i - keyLen] ^ tmp;
-	    }
-
-	    // schedule decryption keys
-	    for (j = 0; i; j++, i--) {
-	      tmp = encKey[j & 3 ? i : i - 4];
-	      if (i <= 4 || j < 4) {
-	        decKey[j] = tmp;
-	      } else {
-	        decKey[j] = decTable[0][sbox[tmp >>> 24]] ^ decTable[1][sbox[tmp >> 16 & 255]] ^ decTable[2][sbox[tmp >> 8 & 255]] ^ decTable[3][sbox[tmp & 255]];
-	      }
-	    }
+	    this.subtle = subtle;
+	    this.aesIV = iv;
 	  }
 
-	  /**
-	   * Expand the S-box tables.
-	   *
-	   * @private
-	   */
-
-
-	  _createClass(AES, [{
-	    key: '_precompute',
-	    value: function _precompute() {
-	      var encTable = this._tables[0],
-	          decTable = this._tables[1],
-	          sbox = encTable[4],
-	          sboxInv = decTable[4],
-	          i,
-	          x,
-	          xInv,
-	          d = [],
-	          th = [],
-	          x2,
-	          x4,
-	          x8,
-	          s,
-	          tEnc,
-	          tDec;
-
-	      // Compute double and third tables
-	      for (i = 0; i < 256; i++) {
-	        th[(d[i] = i << 1 ^ (i >> 7) * 283) ^ i] = i;
-	      }
-
-	      for (x = xInv = 0; !sbox[x]; x ^= x2 || 1, xInv = th[xInv] || 1) {
-	        // Compute sbox
-	        s = xInv ^ xInv << 1 ^ xInv << 2 ^ xInv << 3 ^ xInv << 4;
-	        s = s >> 8 ^ s & 255 ^ 99;
-	        sbox[x] = s;
-	        sboxInv[s] = x;
-
-	        // Compute MixColumns
-	        x8 = d[x4 = d[x2 = d[x]]];
-	        tDec = x8 * 0x1010101 ^ x4 * 0x10001 ^ x2 * 0x101 ^ x * 0x1010100;
-	        tEnc = d[s] * 0x101 ^ s * 0x1010100;
-
-	        for (i = 0; i < 4; i++) {
-	          encTable[i][x] = tEnc = tEnc << 24 ^ tEnc >>> 8;
-	          decTable[i][s] = tDec = tDec << 24 ^ tDec >>> 8;
-	        }
-	      }
-
-	      // Compactify. Considerable speedup on Firefox.
-	      for (i = 0; i < 5; i++) {
-	        encTable[i] = encTable[i].slice(0);
-	        decTable[i] = decTable[i].slice(0);
-	      }
-	    }
-
-	    /**
-	     * Decrypt 16 bytes, specified as four 32-bit words.
-	     * @param encrypted0 {number} the first word to decrypt
-	     * @param encrypted1 {number} the second word to decrypt
-	     * @param encrypted2 {number} the third word to decrypt
-	     * @param encrypted3 {number} the fourth word to decrypt
-	     * @param out {Int32Array} the array to write the decrypted words
-	     * into
-	     * @param offset {number} the offset into the output array to start
-	     * writing results
-	     * @return {Array} The plaintext.
-	     */
-
-	  }, {
+	  _createClass(AESCrypto, [{
 	    key: 'decrypt',
-	    value: function decrypt(encrypted0, encrypted1, encrypted2, encrypted3, out, offset) {
-	      var key = this._key[1],
-
-	      // state variables a,b,c,d are loaded with pre-whitened data
-	      a = encrypted0 ^ key[0],
-	          b = encrypted3 ^ key[1],
-	          c = encrypted2 ^ key[2],
-	          d = encrypted1 ^ key[3],
-	          a2,
-	          b2,
-	          c2,
-	          nInnerRounds = key.length / 4 - 2,
-	          // key.length === 2 ?
-	      i,
-	          kIndex = 4,
-	          table = this._tables[1],
-
-
-	      // load up the tables
-	      table0 = table[0],
-	          table1 = table[1],
-	          table2 = table[2],
-	          table3 = table[3],
-	          sbox = table[4];
-
-	      // Inner rounds. Cribbed from OpenSSL.
-	      for (i = 0; i < nInnerRounds; i++) {
-	        a2 = table0[a >>> 24] ^ table1[b >> 16 & 255] ^ table2[c >> 8 & 255] ^ table3[d & 255] ^ key[kIndex];
-	        b2 = table0[b >>> 24] ^ table1[c >> 16 & 255] ^ table2[d >> 8 & 255] ^ table3[a & 255] ^ key[kIndex + 1];
-	        c2 = table0[c >>> 24] ^ table1[d >> 16 & 255] ^ table2[a >> 8 & 255] ^ table3[b & 255] ^ key[kIndex + 2];
-	        d = table0[d >>> 24] ^ table1[a >> 16 & 255] ^ table2[b >> 8 & 255] ^ table3[c & 255] ^ key[kIndex + 3];
-	        kIndex += 4;
-	        a = a2;b = b2;c = c2;
-	      }
-
-	      // Last round.
-	      for (i = 0; i < 4; i++) {
-	        out[(3 & -i) + offset] = sbox[a >>> 24] << 24 ^ sbox[b >> 16 & 255] << 16 ^ sbox[c >> 8 & 255] << 8 ^ sbox[d & 255] ^ key[kIndex++];
-	        a2 = a;a = b;b = c;c = d;d = a2;
-	      }
+	    value: function decrypt(data, key) {
+	      return this.subtle.decrypt({ name: 'AES-CBC', iv: this.aesIV }, key, data);
 	    }
 	  }]);
 
-	  return AES;
+	  return AESCrypto;
 	}();
 
-	exports.default = AES;
+	exports.default = AESCrypto;
 
-	},{}],14:[function(_dereq_,module,exports){
+	},{}],15:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * This file contains an adaptation of the AES decryption algorithm
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * from the Standford Javascript Cryptography Library. That work is
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * covered by the following copyright and permissions notice:
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Copyright 2009-2010 Emily Stark, Mike Hamburg, Dan Boneh.
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * All rights reserved.
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Redistribution and use in source and binary forms, with or without
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * modification, are permitted provided that the following conditions are
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * met:
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * 1. Redistributions of source code must retain the above copyright
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *    notice, this list of conditions and the following disclaimer.
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * 2. Redistributions in binary form must reproduce the above
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *    copyright notice, this list of conditions and the following
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *    disclaimer in the documentation and/or other materials provided
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *    with the distribution.
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * THIS SOFTWARE IS PROVIDED BY THE AUTHORS ``AS IS'' AND ANY EXPRESS OR
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> OR CONTRIBUTORS BE
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * The views and conclusions contained in the software and documentation
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * are those of the authors and should not be interpreted as representing
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * official policies, either expressed or implied, of the authors.
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
-
-	var _aes = _dereq_(13);
-
-	var _aes2 = _interopRequireDefault(_aes);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var AES128Decrypter = function () {
-	  function AES128Decrypter(key, initVector) {
-	    _classCallCheck(this, AES128Decrypter);
+	var AESDecryptor = function () {
+	  function AESDecryptor() {
+	    _classCallCheck(this, AESDecryptor);
 
-	    this.key = key;
-	    this.iv = initVector;
+	    // Static after running initTable
+	    this.rcon = [0x0, 0x1, 0x2, 0x4, 0x8, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36];
+
+	    this.subMix = [];
+	    this.subMix[0] = new Uint32Array(256);
+	    this.subMix[1] = new Uint32Array(256);
+	    this.subMix[2] = new Uint32Array(256);
+	    this.subMix[3] = new Uint32Array(256);
+
+	    this.invSubMix = [];
+	    this.invSubMix[0] = new Uint32Array(256);
+	    this.invSubMix[1] = new Uint32Array(256);
+	    this.invSubMix[2] = new Uint32Array(256);
+	    this.invSubMix[3] = new Uint32Array(256);
+
+	    this.sBox = new Uint32Array(256);
+	    this.invSBox = new Uint32Array(256);
+
+	    // Changes during runtime
+	    this.key = new Uint32Array(0);
+
+	    this.initTable();
 	  }
 
-	  /**
-	   * Convert network-order (big-endian) bytes into their little-endian
-	   * representation.
-	   */
+	  // Using view.getUint32() also swaps the byte order.
 
 
-	  _createClass(AES128Decrypter, [{
-	    key: 'ntoh',
-	    value: function ntoh(word) {
+	  _createClass(AESDecryptor, [{
+	    key: 'uint8ArrayToUint32Array_',
+	    value: function uint8ArrayToUint32Array_(arrayBuffer) {
+	      var view = new DataView(arrayBuffer);
+	      var newArray = new Uint32Array(4);
+	      for (var i = 0; i < newArray.length; i++) {
+	        newArray[i] = view.getUint32(i * 4);
+	      }
+	      return newArray;
+	    }
+	  }, {
+	    key: 'initTable',
+	    value: function initTable() {
+	      var sBox = this.sBox;
+	      var invSBox = this.invSBox;
+	      var subMix0 = this.subMix[0];
+	      var subMix1 = this.subMix[1];
+	      var subMix2 = this.subMix[2];
+	      var subMix3 = this.subMix[3];
+	      var invSubMix0 = this.invSubMix[0];
+	      var invSubMix1 = this.invSubMix[1];
+	      var invSubMix2 = this.invSubMix[2];
+	      var invSubMix3 = this.invSubMix[3];
+
+	      var d = new Uint32Array(256);
+	      var x = 0;
+	      var xi = 0;
+	      var i = 0;
+	      for (i = 0; i < 256; i++) {
+	        if (i < 128) {
+	          d[i] = i << 1;
+	        } else {
+	          d[i] = i << 1 ^ 0x11b;
+	        }
+	      }
+
+	      for (i = 0; i < 256; i++) {
+	        var sx = xi ^ xi << 1 ^ xi << 2 ^ xi << 3 ^ xi << 4;
+	        sx = sx >>> 8 ^ sx & 0xff ^ 0x63;
+	        sBox[x] = sx;
+	        invSBox[sx] = x;
+
+	        // Compute multiplication
+	        var x2 = d[x];
+	        var x4 = d[x2];
+	        var x8 = d[x4];
+
+	        // Compute sub/invSub bytes, mix columns tables
+	        var t = d[sx] * 0x101 ^ sx * 0x1010100;
+	        subMix0[x] = t << 24 | t >>> 8;
+	        subMix1[x] = t << 16 | t >>> 16;
+	        subMix2[x] = t << 8 | t >>> 24;
+	        subMix3[x] = t;
+
+	        // Compute inv sub bytes, inv mix columns tables
+	        t = x8 * 0x1010101 ^ x4 * 0x10001 ^ x2 * 0x101 ^ x * 0x1010100;
+	        invSubMix0[sx] = t << 24 | t >>> 8;
+	        invSubMix1[sx] = t << 16 | t >>> 16;
+	        invSubMix2[sx] = t << 8 | t >>> 24;
+	        invSubMix3[sx] = t;
+
+	        // Compute next counter
+	        if (!x) {
+	          x = xi = 1;
+	        } else {
+	          x = x2 ^ d[d[d[x8 ^ x2]]];
+	          xi ^= d[d[xi]];
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'expandKey',
+	    value: function expandKey(keyBuffer) {
+	      // convert keyBuffer to Uint32Array
+	      var key = this.uint8ArrayToUint32Array_(keyBuffer);
+	      var sameKey = true;
+	      var offset = 0;
+
+	      while (offset < key.length && sameKey) {
+	        sameKey = key[offset] === this.key[offset];
+	        offset++;
+	      }
+
+	      if (sameKey) {
+	        return;
+	      }
+
+	      this.key = key;
+	      var keySize = this.keySize = key.length;
+
+	      if (keySize !== 4 && keySize !== 6 && keySize !== 8) {
+	        throw new Error('Invalid aes key size=' + keySize);
+	      }
+
+	      var ksRows = this.ksRows = (keySize + 6 + 1) * 4;
+	      var ksRow = void 0;
+	      var invKsRow = void 0;
+
+	      var keySchedule = this.keySchedule = new Uint32Array(this.ksRows);
+	      var invKeySchedule = this.invKeySchedule = new Uint32Array(this.ksRows);
+	      var sbox = this.sBox;
+	      var rcon = this.rcon;
+
+	      var invSubMix0 = this.invSubMix[0];
+	      var invSubMix1 = this.invSubMix[1];
+	      var invSubMix2 = this.invSubMix[2];
+	      var invSubMix3 = this.invSubMix[3];
+
+	      var prev = void 0;
+	      var t = void 0;
+
+	      for (ksRow = 0; ksRow < ksRows; ksRow++) {
+	        if (ksRow < keySize) {
+	          prev = keySchedule[ksRow] = key[ksRow];
+	          continue;
+	        }
+	        t = prev;
+
+	        if (ksRow % keySize === 0) {
+	          // Rot word
+	          t = t << 8 | t >>> 24;
+
+	          // Sub word
+	          t = sbox[t >>> 24] << 24 | sbox[t >>> 16 & 0xff] << 16 | sbox[t >>> 8 & 0xff] << 8 | sbox[t & 0xff];
+
+	          // Mix Rcon
+	          t ^= rcon[ksRow / keySize | 0] << 24;
+	        } else if (keySize > 6 && ksRow % keySize === 4) {
+	          // Sub word
+	          t = sbox[t >>> 24] << 24 | sbox[t >>> 16 & 0xff] << 16 | sbox[t >>> 8 & 0xff] << 8 | sbox[t & 0xff];
+	        }
+
+	        keySchedule[ksRow] = prev = (keySchedule[ksRow - keySize] ^ t) >>> 0;
+	      }
+
+	      for (invKsRow = 0; invKsRow < ksRows; invKsRow++) {
+	        ksRow = ksRows - invKsRow;
+	        if (invKsRow & 3) {
+	          t = keySchedule[ksRow];
+	        } else {
+	          t = keySchedule[ksRow - 4];
+	        }
+
+	        if (invKsRow < 4 || ksRow <= 4) {
+	          invKeySchedule[invKsRow] = t;
+	        } else {
+	          invKeySchedule[invKsRow] = invSubMix0[sbox[t >>> 24]] ^ invSubMix1[sbox[t >>> 16 & 0xff]] ^ invSubMix2[sbox[t >>> 8 & 0xff]] ^ invSubMix3[sbox[t & 0xff]];
+	        }
+
+	        invKeySchedule[invKsRow] = invKeySchedule[invKsRow] >>> 0;
+	      }
+	    }
+
+	    // Adding this as a method greatly improves performance.
+
+	  }, {
+	    key: 'networkToHostOrderSwap',
+	    value: function networkToHostOrderSwap(word) {
 	      return word << 24 | (word & 0xff00) << 8 | (word & 0xff0000) >> 8 | word >>> 24;
 	    }
-
-	    /**
-	     * Decrypt bytes using AES-128 with CBC and PKCS#7 padding.
-	     * @param encrypted {Uint8Array} the encrypted bytes
-	     * @param key {Uint32Array} the bytes of the decryption key
-	     * @param initVector {Uint32Array} the initialization vector (IV) to
-	     * use for the first round of CBC.
-	     * @return {Uint8Array} the decrypted bytes
-	     *
-	     * @see http://en.wikipedia.org/wiki/Advanced_Encryption_Standard
-	     * @see http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher_Block_Chaining_.28CBC.29
-	     * @see https://tools.ietf.org/html/rfc2315
-	     */
-
-	  }, {
-	    key: 'doDecrypt',
-	    value: function doDecrypt(encrypted, key, initVector) {
-	      var
-	      // word-level access to the encrypted bytes
-	      encrypted32 = new Int32Array(encrypted.buffer, encrypted.byteOffset, encrypted.byteLength >> 2),
-	          decipher = new _aes2.default(Array.prototype.slice.call(key)),
-
-
-	      // byte and word-level access for the decrypted output
-	      decrypted = new Uint8Array(encrypted.byteLength),
-	          decrypted32 = new Int32Array(decrypted.buffer),
-
-
-	      // temporary variables for working with the IV, encrypted, and
-	      // decrypted data
-	      init0,
-	          init1,
-	          init2,
-	          init3,
-	          encrypted0,
-	          encrypted1,
-	          encrypted2,
-	          encrypted3,
-
-
-	      // iteration variable
-	      wordIx;
-
-	      // pull out the words of the IV to ensure we don't modify the
-	      // passed-in reference and easier access
-	      init0 = ~ ~initVector[0];
-	      init1 = ~ ~initVector[1];
-	      init2 = ~ ~initVector[2];
-	      init3 = ~ ~initVector[3];
-
-	      // decrypt four word sequences, applying cipher-block chaining (CBC)
-	      // to each decrypted block
-	      for (wordIx = 0; wordIx < encrypted32.length; wordIx += 4) {
-	        // convert big-endian (network order) words into little-endian
-	        // (javascript order)
-	        encrypted0 = ~ ~this.ntoh(encrypted32[wordIx]);
-	        encrypted1 = ~ ~this.ntoh(encrypted32[wordIx + 1]);
-	        encrypted2 = ~ ~this.ntoh(encrypted32[wordIx + 2]);
-	        encrypted3 = ~ ~this.ntoh(encrypted32[wordIx + 3]);
-
-	        // decrypt the block
-	        decipher.decrypt(encrypted0, encrypted1, encrypted2, encrypted3, decrypted32, wordIx);
-
-	        // XOR with the IV, and restore network byte-order to obtain the
-	        // plaintext
-	        decrypted32[wordIx] = this.ntoh(decrypted32[wordIx] ^ init0);
-	        decrypted32[wordIx + 1] = this.ntoh(decrypted32[wordIx + 1] ^ init1);
-	        decrypted32[wordIx + 2] = this.ntoh(decrypted32[wordIx + 2] ^ init2);
-	        decrypted32[wordIx + 3] = this.ntoh(decrypted32[wordIx + 3] ^ init3);
-
-	        // setup the IV for the next round
-	        init0 = encrypted0;
-	        init1 = encrypted1;
-	        init2 = encrypted2;
-	        init3 = encrypted3;
-	      }
-
-	      return decrypted;
-	    }
-	  }, {
-	    key: 'localDecrypt',
-	    value: function localDecrypt(encrypted, key, initVector, decrypted) {
-	      var bytes = this.doDecrypt(encrypted, key, initVector);
-	      decrypted.set(bytes, encrypted.byteOffset);
-	    }
 	  }, {
 	    key: 'decrypt',
-	    value: function decrypt(encrypted) {
-	      var step = 4 * 8000,
+	    value: function decrypt(inputArrayBuffer, offset, aesIV) {
+	      var nRounds = this.keySize + 6;
+	      var invKeySchedule = this.invKeySchedule;
+	      var invSBOX = this.invSBox;
 
-	      //encrypted32 = new Int32Array(encrypted.buffer),
-	      encrypted32 = new Int32Array(encrypted),
-	          decrypted = new Uint8Array(encrypted.byteLength),
-	          i = 0;
+	      var invSubMix0 = this.invSubMix[0];
+	      var invSubMix1 = this.invSubMix[1];
+	      var invSubMix2 = this.invSubMix[2];
+	      var invSubMix3 = this.invSubMix[3];
 
-	      // split up the encryption job and do the individual chunks asynchronously
-	      var key = this.key;
-	      var initVector = this.iv;
-	      this.localDecrypt(encrypted32.subarray(i, i + step), key, initVector, decrypted);
+	      var initVector = this.uint8ArrayToUint32Array_(aesIV);
+	      var initVector0 = initVector[0];
+	      var initVector1 = initVector[1];
+	      var initVector2 = initVector[2];
+	      var initVector3 = initVector[3];
 
-	      for (i = step; i < encrypted32.length; i += step) {
-	        initVector = new Uint32Array([this.ntoh(encrypted32[i - 4]), this.ntoh(encrypted32[i - 3]), this.ntoh(encrypted32[i - 2]), this.ntoh(encrypted32[i - 1])]);
-	        this.localDecrypt(encrypted32.subarray(i, i + step), key, initVector, decrypted);
+	      var inputInt32 = new Int32Array(inputArrayBuffer);
+	      var outputInt32 = new Int32Array(inputInt32.length);
+
+	      var t0 = void 0,
+	          t1 = void 0,
+	          t2 = void 0,
+	          t3 = void 0;
+	      var s0 = void 0,
+	          s1 = void 0,
+	          s2 = void 0,
+	          s3 = void 0;
+	      var inputWords0 = void 0,
+	          inputWords1 = void 0,
+	          inputWords2 = void 0,
+	          inputWords3 = void 0;
+
+	      var ksRow, i;
+
+	      while (offset < inputInt32.length) {
+	        inputWords0 = this.networkToHostOrderSwap(inputInt32[offset]);
+	        inputWords1 = this.networkToHostOrderSwap(inputInt32[offset + 1]);
+	        inputWords2 = this.networkToHostOrderSwap(inputInt32[offset + 2]);
+	        inputWords3 = this.networkToHostOrderSwap(inputInt32[offset + 3]);
+
+	        s0 = inputWords0 ^ invKeySchedule[0];
+	        s1 = inputWords3 ^ invKeySchedule[1];
+	        s2 = inputWords2 ^ invKeySchedule[2];
+	        s3 = inputWords1 ^ invKeySchedule[3];
+
+	        ksRow = 4;
+
+	        // Iterate through the rounds of decryption
+	        for (i = 1; i < nRounds; i++) {
+	          t0 = invSubMix0[s0 >>> 24] ^ invSubMix1[s1 >> 16 & 0xff] ^ invSubMix2[s2 >> 8 & 0xff] ^ invSubMix3[s3 & 0xff] ^ invKeySchedule[ksRow];
+	          t1 = invSubMix0[s1 >>> 24] ^ invSubMix1[s2 >> 16 & 0xff] ^ invSubMix2[s3 >> 8 & 0xff] ^ invSubMix3[s0 & 0xff] ^ invKeySchedule[ksRow + 1];
+	          t2 = invSubMix0[s2 >>> 24] ^ invSubMix1[s3 >> 16 & 0xff] ^ invSubMix2[s0 >> 8 & 0xff] ^ invSubMix3[s1 & 0xff] ^ invKeySchedule[ksRow + 2];
+	          t3 = invSubMix0[s3 >>> 24] ^ invSubMix1[s0 >> 16 & 0xff] ^ invSubMix2[s1 >> 8 & 0xff] ^ invSubMix3[s2 & 0xff] ^ invKeySchedule[ksRow + 3];
+	          // Update state
+	          s0 = t0;
+	          s1 = t1;
+	          s2 = t2;
+	          s3 = t3;
+
+	          ksRow = ksRow + 4;
+	        }
+
+	        // Shift rows, sub bytes, add round key
+	        t0 = invSBOX[s0 >>> 24] << 24 ^ invSBOX[s1 >> 16 & 0xff] << 16 ^ invSBOX[s2 >> 8 & 0xff] << 8 ^ invSBOX[s3 & 0xff] ^ invKeySchedule[ksRow];
+	        t1 = invSBOX[s1 >>> 24] << 24 ^ invSBOX[s2 >> 16 & 0xff] << 16 ^ invSBOX[s3 >> 8 & 0xff] << 8 ^ invSBOX[s0 & 0xff] ^ invKeySchedule[ksRow + 1];
+	        t2 = invSBOX[s2 >>> 24] << 24 ^ invSBOX[s3 >> 16 & 0xff] << 16 ^ invSBOX[s0 >> 8 & 0xff] << 8 ^ invSBOX[s1 & 0xff] ^ invKeySchedule[ksRow + 2];
+	        t3 = invSBOX[s3 >>> 24] << 24 ^ invSBOX[s0 >> 16 & 0xff] << 16 ^ invSBOX[s1 >> 8 & 0xff] << 8 ^ invSBOX[s2 & 0xff] ^ invKeySchedule[ksRow + 3];
+	        ksRow = ksRow + 3;
+
+	        // Write
+	        outputInt32[offset] = this.networkToHostOrderSwap(t0 ^ initVector0);
+	        outputInt32[offset + 1] = this.networkToHostOrderSwap(t3 ^ initVector1);
+	        outputInt32[offset + 2] = this.networkToHostOrderSwap(t2 ^ initVector2);
+	        outputInt32[offset + 3] = this.networkToHostOrderSwap(t1 ^ initVector3);
+
+	        // reset initVector to last 4 unsigned int
+	        initVector0 = inputWords0;
+	        initVector1 = inputWords1;
+	        initVector2 = inputWords2;
+	        initVector3 = inputWords3;
+
+	        offset = offset + 4;
 	      }
 
-	      return decrypted;
+	      return outputInt32.buffer;
+	    }
+	  }, {
+	    key: 'destroy',
+	    value: function destroy() {
+	      this.key = undefined;
+	      this.keySize = undefined;
+	      this.ksRows = undefined;
+
+	      this.sBox = undefined;
+	      this.invSBox = undefined;
+	      this.subMix = undefined;
+	      this.invSubMix = undefined;
+	      this.keySchedule = undefined;
+	      this.invKeySchedule = undefined;
+
+	      this.rcon = undefined;
 	    }
 	  }]);
 
-	  return AES128Decrypter;
+	  return AESDecryptor;
 	}();
 
-	exports.default = AES128Decrypter;
+	exports.default = AESDecryptor;
 
-	},{"13":13}],15:[function(_dereq_,module,exports){
+	},{}],16:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * AES128 decryption.
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _aes128Decrypter = _dereq_(14);
+	var _aesCrypto = _dereq_(14);
 
-	var _aes128Decrypter2 = _interopRequireDefault(_aes128Decrypter);
+	var _aesCrypto2 = _interopRequireDefault(_aesCrypto);
 
-	var _errors = _dereq_(24);
+	var _fastAesKey = _dereq_(17);
 
-	var _logger = _dereq_(43);
+	var _fastAesKey2 = _interopRequireDefault(_fastAesKey);
+
+	var _aesDecryptor = _dereq_(15);
+
+	var _aesDecryptor2 = _interopRequireDefault(_aesDecryptor);
+
+	var _errors = _dereq_(26);
+
+	var _logger = _dereq_(45);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+	/*globals self: false */
+
 	var Decrypter = function () {
-	  function Decrypter(hls) {
+	  function Decrypter(observer, config) {
 	    _classCallCheck(this, Decrypter);
 
-	    this.hls = hls;
+	    this.observer = observer;
+	    this.config = config;
 	    try {
-	      var browserCrypto = window ? window.crypto : crypto;
+	      var browserCrypto = crypto ? crypto : self.crypto;
 	      this.subtle = browserCrypto.subtle || browserCrypto.webkitSubtle;
-	      this.disableWebCrypto = !this.subtle;
-	    } catch (e) {
-	      this.disableWebCrypto = true;
-	    }
+	    } catch (e) {}
+	    this.disableWebCrypto = !this.subtle;
 	  }
 
 	  _createClass(Decrypter, [{
-	    key: 'destroy',
-	    value: function destroy() {}
-	  }, {
 	    key: 'decrypt',
 	    value: function decrypt(data, key, iv, callback) {
-	      if (this.disableWebCrypto && this.hls.config.enableSoftwareAES) {
-	        this.decryptBySoftware(data, key, iv, callback);
-	      } else {
-	        this.decryptByWebCrypto(data, key, iv, callback);
-	      }
-	    }
-	  }, {
-	    key: 'decryptByWebCrypto',
-	    value: function decryptByWebCrypto(data, key, iv, callback) {
 	      var _this = this;
 
-	      _logger.logger.log('decrypting by WebCrypto API');
+	      if (this.disableWebCrypto && this.config.enableSoftwareAES) {
+	        _logger.logger.log('JS AES decrypt');
+	        var decryptor = this.decryptor;
+	        if (!decryptor) {
+	          this.decryptor = decryptor = new _aesDecryptor2.default();
+	        }
+	        decryptor.expandKey(key);
+	        callback(decryptor.decrypt(data, 0, iv));
+	      } else {
+	        (function () {
+	          _logger.logger.log('WebCrypto AES decrypt');
+	          var subtle = _this.subtle;
+	          if (_this.key !== key) {
+	            _this.key = key;
+	            _this.fastAesKey = new _fastAesKey2.default(subtle, key);
+	          }
 
-	      this.subtle.importKey('raw', key, { name: 'AES-CBC', length: 128 }, false, ['decrypt']).then(function (importedKey) {
-	        _this.subtle.decrypt({ name: 'AES-CBC', iv: iv.buffer }, importedKey, data).then(callback).catch(function (err) {
-	          _this.onWebCryptoError(err, data, key, iv, callback);
-	        });
-	      }).catch(function (err) {
-	        _this.onWebCryptoError(err, data, key, iv, callback);
-	      });
-	    }
-	  }, {
-	    key: 'decryptBySoftware',
-	    value: function decryptBySoftware(data, key8, iv8, callback) {
-	      _logger.logger.log('decrypting by JavaScript Implementation');
-
-	      var view = new DataView(key8.buffer);
-	      var key = new Uint32Array([view.getUint32(0), view.getUint32(4), view.getUint32(8), view.getUint32(12)]);
-
-	      view = new DataView(iv8.buffer);
-	      var iv = new Uint32Array([view.getUint32(0), view.getUint32(4), view.getUint32(8), view.getUint32(12)]);
-
-	      var decrypter = new _aes128Decrypter2.default(key, iv);
-	      callback(decrypter.decrypt(data).buffer);
+	          _this.fastAesKey.expandKey().then(function (aesKey) {
+	            // decrypt using web crypto
+	            var crypto = new _aesCrypto2.default(subtle, iv);
+	            crypto.decrypt(data, aesKey).then(function (result) {
+	              callback(result);
+	            });
+	          }).catch(function (err) {
+	            _this.onWebCryptoError(err, data, key, iv, callback);
+	          });
+	        })();
+	      }
 	    }
 	  }, {
 	    key: 'onWebCryptoError',
 	    value: function onWebCryptoError(err, data, key, iv, callback) {
-	      if (this.hls.config.enableSoftwareAES) {
-	        _logger.logger.log('disabling to use WebCrypto API');
+	      if (this.config.enableSoftwareAES) {
+	        _logger.logger.log('WebCrypto Error, disable WebCrypto API');
 	        this.disableWebCrypto = true;
-	        this.decryptBySoftware(data, key, iv, callback);
+	        this.decrypt(data, key, iv, callback);
 	      } else {
 	        _logger.logger.error('decrypting error : ' + err.message);
-	        this.hls.trigger(Event.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.FRAG_DECRYPT_ERROR, fatal: true, reason: err.message });
+	        this.observer.trigger(Event.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.FRAG_DECRYPT_ERROR, fatal: true, reason: err.message });
+	      }
+	    }
+	  }, {
+	    key: 'destroy',
+	    value: function destroy() {
+	      var decryptor = this.decryptor;
+	      if (decryptor) {
+	        decryptor.destroy();
+	        this.decryptor = undefined;
 	      }
 	    }
 	  }]);
@@ -20037,7 +22433,38 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = Decrypter;
 
-	},{"14":14,"24":24,"43":43}],16:[function(_dereq_,module,exports){
+	},{"14":14,"15":15,"17":17,"26":26,"45":45}],17:[function(_dereq_,module,exports){
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var FastAESKey = function () {
+	  function FastAESKey(subtle, key) {
+	    _classCallCheck(this, FastAESKey);
+
+	    this.subtle = subtle;
+	    this.key = key;
+	  }
+
+	  _createClass(FastAESKey, [{
+	    key: 'expandKey',
+	    value: function expandKey() {
+	      return this.subtle.importKey('raw', this.key, { name: 'AES-CBC' }, false, ['encrypt', 'decrypt']);
+	    }
+	  }]);
+
+	  return FastAESKey;
+	}();
+
+	exports.default = FastAESKey;
+
+	},{}],18:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -20049,13 +22476,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 
 
-	var _adts = _dereq_(17);
+	var _adts = _dereq_(19);
 
 	var _adts2 = _interopRequireDefault(_adts);
 
-	var _logger = _dereq_(43);
+	var _logger = _dereq_(45);
 
-	var _id = _dereq_(22);
+	var _id = _dereq_(24);
 
 	var _id2 = _interopRequireDefault(_id);
 
@@ -20064,28 +22491,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var AACDemuxer = function () {
-	  function AACDemuxer(observer, id, remuxerClass, config) {
+	  function AACDemuxer(observer, id, remuxerClass, config, typeSupported) {
 	    _classCallCheck(this, AACDemuxer);
 
 	    this.observer = observer;
 	    this.id = id;
 	    this.remuxerClass = remuxerClass;
 	    this.config = config;
-	    this.remuxer = new this.remuxerClass(observer, id, config);
+	    this.remuxer = new this.remuxerClass(observer, id, config, typeSupported);
 	    this.insertDiscontinuity();
 	  }
 
 	  _createClass(AACDemuxer, [{
 	    key: 'insertDiscontinuity',
 	    value: function insertDiscontinuity() {
-	      this._aacTrack = { container: 'audio/adts', type: 'audio', id: -1, sequenceNumber: 0, samples: [], len: 0 };
+	      this._aacTrack = { container: 'audio/adts', type: 'audio', id: -1, sequenceNumber: 0, isAAC: true, samples: [], len: 0 };
 	    }
 	  }, {
 	    key: 'push',
 
 
 	    // feed incoming data to the front of the parsing pipeline
-	    value: function push(data, audioCodec, videoCodec, timeOffset, cc, level, sn, duration, accurateTimeOffset) {
+	    value: function push(data, audioCodec, videoCodec, timeOffset, cc, level, sn, duration, accurateTimeOffset, defaultInitPTS) {
 	      var track,
 	          id3 = new _id2.default(data),
 	          pts = 90 * id3.timeStamp,
@@ -20131,6 +22558,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        track.audiosamplerate = config.samplerate;
 	        track.channelCount = config.channelCount;
 	        track.codec = config.codec;
+	        track.manifestCodec = config.manifestCodec;
 	        track.duration = duration;
 	        _logger.logger.log('parsed codec:' + track.codec + ',rate:' + config.samplerate + ',nb channel:' + config.channelCount);
 	      }
@@ -20162,7 +22590,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          break;
 	        }
 	      }
-	      this.remuxer.remux(level, sn, this._aacTrack, { samples: [] }, { samples: [{ pts: pts, dts: pts, unit: id3.payload }] }, { samples: [] }, timeOffset, contiguous, accurateTimeOffset);
+	      this.remuxer.remux(level, sn, cc, this._aacTrack, { samples: [] }, { samples: [{ pts: pts, dts: pts, unit: id3.payload }] }, { samples: [] }, timeOffset, contiguous, accurateTimeOffset, defaultInitPTS);
 	    }
 	  }, {
 	    key: 'destroy',
@@ -20192,7 +22620,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = AACDemuxer;
 
-	},{"17":17,"22":22,"43":43}],17:[function(_dereq_,module,exports){
+	},{"19":19,"24":24,"45":45}],19:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -20204,9 +22632,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 
 
-	var _logger = _dereq_(43);
+	var _logger = _dereq_(45);
 
-	var _errors = _dereq_(24);
+	var _errors = _dereq_(26);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -20228,6 +22656,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          // :int
 	      config,
 	          userAgent = navigator.userAgent.toLowerCase(),
+	          manifestCodec = audioCodec,
 	          adtsSampleingRates = [96000, 88200, 64000, 48000, 44100, 32000, 24000, 22050, 16000, 12000, 11025, 8000, 7350];
 	      // byte 2
 	      adtsObjectType = ((data[offset + 2] & 0xC0) >>> 6) + 1;
@@ -20256,31 +22685,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        // Android : always use AAC
 	      } else if (userAgent.indexOf('android') !== -1) {
-	          adtsObjectType = 2;
-	          config = new Array(2);
-	          adtsExtensionSampleingIndex = adtsSampleingIndex;
+	        adtsObjectType = 2;
+	        config = new Array(2);
+	        adtsExtensionSampleingIndex = adtsSampleingIndex;
+	      } else {
+	        /*  for other browsers (Chrome/Vivaldi ...)
+	            always force audio type to be HE-AAC SBR, as some browsers do not support audio codec switch properly (like Chrome ...)
+	        */
+	        adtsObjectType = 5;
+	        config = new Array(4);
+	        // if (manifest codec is HE-AAC or HE-AACv2) OR (manifest codec not specified AND frequency less than 24kHz)
+	        if (audioCodec && (audioCodec.indexOf('mp4a.40.29') !== -1 || audioCodec.indexOf('mp4a.40.5') !== -1) || !audioCodec && adtsSampleingIndex >= 6) {
+	          // HE-AAC uses SBR (Spectral Band Replication) , high frequencies are constructed from low frequencies
+	          // there is a factor 2 between frame sample rate and output sample rate
+	          // multiply frequency by 2 (see table below, equivalent to substract 3)
+	          adtsExtensionSampleingIndex = adtsSampleingIndex - 3;
 	        } else {
-	          /*  for other browsers (Chrome/Vivaldi ...)
-	              always force audio type to be HE-AAC SBR, as some browsers do not support audio codec switch properly (like Chrome ...)
-	          */
-	          adtsObjectType = 5;
-	          config = new Array(4);
-	          // if (manifest codec is HE-AAC or HE-AACv2) OR (manifest codec not specified AND frequency less than 24kHz)
-	          if (audioCodec && (audioCodec.indexOf('mp4a.40.29') !== -1 || audioCodec.indexOf('mp4a.40.5') !== -1) || !audioCodec && adtsSampleingIndex >= 6) {
-	            // HE-AAC uses SBR (Spectral Band Replication) , high frequencies are constructed from low frequencies
-	            // there is a factor 2 between frame sample rate and output sample rate
-	            // multiply frequency by 2 (see table below, equivalent to substract 3)
-	            adtsExtensionSampleingIndex = adtsSampleingIndex - 3;
-	          } else {
-	            // if (manifest codec is AAC) AND (frequency less than 24kHz AND nb channel is 1) OR (manifest codec not specified and mono audio)
-	            // Chrome fails to play back with low frequency AAC LC mono when initialized with HE-AAC.  This is not a problem with stereo.
-	            if (audioCodec && audioCodec.indexOf('mp4a.40.2') !== -1 && adtsSampleingIndex >= 6 && adtsChanelConfig === 1 || !audioCodec && adtsChanelConfig === 1) {
-	              adtsObjectType = 2;
-	              config = new Array(2);
-	            }
-	            adtsExtensionSampleingIndex = adtsSampleingIndex;
+	          // if (manifest codec is AAC) AND (frequency less than 24kHz AND nb channel is 1) OR (manifest codec not specified and mono audio)
+	          // Chrome fails to play back with low frequency AAC LC mono when initialized with HE-AAC.  This is not a problem with stereo.
+	          if (audioCodec && audioCodec.indexOf('mp4a.40.2') !== -1 && adtsSampleingIndex >= 6 && adtsChanelConfig === 1 || !audioCodec && adtsChanelConfig === 1) {
+	            adtsObjectType = 2;
+	            config = new Array(2);
 	          }
+	          adtsExtensionSampleingIndex = adtsSampleingIndex;
 	        }
+	      }
 	      /* refer to http://wiki.multimedia.cx/index.php?title=MPEG-4_Audio#Audio_Specific_Config
 	          ISO 14496-3 (AAC).pdf - Table 1.13 — Syntax of AudioSpecificConfig()
 	        Audio Profile / Audio Object Type
@@ -20330,7 +22759,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        config[2] |= 2 << 2;
 	        config[3] = 0;
 	      }
-	      return { config: config, samplerate: adtsSampleingRates[adtsSampleingIndex], channelCount: adtsChanelConfig, codec: 'mp4a.40.' + adtsObjectType };
+	      // trick manifest codec on Opera and Vivaldi, always use AAC LC
+	      if (/Vivaldi|OPR/i.test(userAgent)) {
+	        manifestCodec = 'mp4a.40.2';
+	      }
+	      return { config: config, samplerate: adtsSampleingRates[adtsSampleingIndex], channelCount: adtsChanelConfig, codec: 'mp4a.40.' + adtsObjectType, manifestCodec: manifestCodec };
 	    }
 	  }]);
 
@@ -20339,7 +22772,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = ADTS;
 
-	},{"24":24,"43":43}],18:[function(_dereq_,module,exports){
+	},{"26":26,"45":45}],20:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -20350,25 +22783,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *   probe fragments and instantiate appropriate demuxer depending on content type (TSDemuxer, AACDemuxer, ...)
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 
-	var _events = _dereq_(26);
+	var _events = _dereq_(28);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _errors = _dereq_(24);
+	var _errors = _dereq_(26);
 
-	var _aacdemuxer = _dereq_(16);
+	var _decrypter = _dereq_(16);
+
+	var _decrypter2 = _interopRequireDefault(_decrypter);
+
+	var _aacdemuxer = _dereq_(18);
 
 	var _aacdemuxer2 = _interopRequireDefault(_aacdemuxer);
 
-	var _tsdemuxer = _dereq_(23);
+	var _tsdemuxer = _dereq_(25);
 
 	var _tsdemuxer2 = _interopRequireDefault(_tsdemuxer);
 
-	var _mp4Remuxer = _dereq_(36);
+	var _mp4Remuxer = _dereq_(38);
 
 	var _mp4Remuxer2 = _interopRequireDefault(_mp4Remuxer);
 
-	var _passthroughRemuxer = _dereq_(37);
+	var _passthroughRemuxer = _dereq_(39);
 
 	var _passthroughRemuxer2 = _interopRequireDefault(_passthroughRemuxer);
 
@@ -20378,7 +22815,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var DemuxerInline = function () {
 	  function DemuxerInline(hls, id, typeSupported) {
-	    var config = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
+	    var config = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
 
 	    _classCallCheck(this, DemuxerInline);
 
@@ -20398,27 +22835,64 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'push',
-	    value: function push(data, audioCodec, videoCodec, timeOffset, cc, level, sn, duration, accurateTimeOffset) {
+	    value: function push(data, audioCodec, videoCodec, timeOffset, cc, level, sn, duration, decryptdata, accurateTimeOffset, defaultInitPTS) {
+	      if (data.byteLength > 0 && decryptdata != null && decryptdata.key != null && decryptdata.method === 'AES-128') {
+	        if (this.decrypter == null) {
+	          this.decrypter = new _decrypter2.default(this.hls, this.config);
+	        }
+	        var localthis = this;
+	        // performance.now() not available on WebWorker, at least on Safari Desktop
+	        var startTime;
+	        try {
+	          startTime = performance.now();
+	        } catch (error) {
+	          startTime = Date.now();
+	        }
+	        this.decrypter.decrypt(data, decryptdata.key.buffer, decryptdata.iv.buffer, function (decryptedData) {
+	          var endTime;
+	          try {
+	            endTime = performance.now();
+	          } catch (error) {
+	            endTime = Date.now();
+	          }
+	          localthis.hls.trigger(_events2.default.FRAG_DECRYPTED, { level: level, sn: sn, stats: { tstart: startTime, tdecrypt: endTime } });
+	          localthis.pushDecrypted(new Uint8Array(decryptedData), audioCodec, videoCodec, timeOffset, cc, level, sn, duration, accurateTimeOffset, defaultInitPTS);
+	        });
+	      } else {
+	        this.pushDecrypted(new Uint8Array(data), audioCodec, videoCodec, timeOffset, cc, level, sn, duration, accurateTimeOffset, defaultInitPTS);
+	      }
+	    }
+	  }, {
+	    key: 'pushDecrypted',
+	    value: function pushDecrypted(data, audioCodec, videoCodec, timeOffset, cc, level, sn, duration, accurateTimeOffset, defaultInitPTS) {
 	      var demuxer = this.demuxer;
-	      if (!demuxer) {
+	      if (!demuxer ||
+	      // in case of continuity change, we might switch from content type (AAC container to TS container for example)
+	      // so let's check that current demuxer is still valid
+	      cc !== this.cc && !demuxer.probe(data)) {
 	        var hls = this.hls,
-	            id = this.id;
+	            id = this.id,
+	            config = this.config,
+	            typeSupported = this.typeSupported;
 	        // probe for content type
 	        if (_tsdemuxer2.default.probe(data)) {
 	          if (this.typeSupported.mp2t === true) {
-	            demuxer = new _tsdemuxer2.default(hls, id, _passthroughRemuxer2.default, this.config);
+	            demuxer = new _tsdemuxer2.default(hls, id, _passthroughRemuxer2.default, config, typeSupported);
 	          } else {
-	            demuxer = new _tsdemuxer2.default(hls, id, _mp4Remuxer2.default, this.config);
+	            demuxer = new _tsdemuxer2.default(hls, id, _mp4Remuxer2.default, config, typeSupported);
 	          }
+	          demuxer.probe = _tsdemuxer2.default.probe;
 	        } else if (_aacdemuxer2.default.probe(data)) {
-	          demuxer = new _aacdemuxer2.default(hls, id, _mp4Remuxer2.default, this.config);
+	          demuxer = new _aacdemuxer2.default(hls, id, _mp4Remuxer2.default, config, typeSupported);
+	          demuxer.probe = _aacdemuxer2.default.probe;
 	        } else {
 	          hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, id: id, details: _errors.ErrorDetails.FRAG_PARSING_ERROR, fatal: true, reason: 'no demux matching with content found' });
 	          return;
 	        }
 	        this.demuxer = demuxer;
 	      }
-	      demuxer.push(data, audioCodec, videoCodec, timeOffset, cc, level, sn, duration, accurateTimeOffset);
+	      demuxer.push(data, audioCodec, videoCodec, timeOffset, cc, level, sn, duration, accurateTimeOffset, defaultInitPTS);
+	      this.cc = cc;
 	    }
 	  }]);
 
@@ -20427,22 +22901,22 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = DemuxerInline;
 
-	},{"16":16,"23":23,"24":24,"26":26,"36":36,"37":37}],19:[function(_dereq_,module,exports){
+	},{"16":16,"18":18,"25":25,"26":26,"28":28,"38":38,"39":39}],21:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 
-	var _demuxerInline = _dereq_(18);
+	var _demuxerInline = _dereq_(20);
 
 	var _demuxerInline2 = _interopRequireDefault(_demuxerInline);
 
-	var _events = _dereq_(26);
+	var _events = _dereq_(28);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _logger = _dereq_(43);
+	var _logger = _dereq_(45);
 
 	var _events3 = _dereq_(1);
 
@@ -20486,7 +22960,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var config = JSON.parse(data.config);
 	        self.demuxer = new _demuxerInline2.default(observer, data.id, data.typeSupported, config);
 	        try {
-	          (0, _logger.enableLogs)(config.debug);
+	          (0, _logger.enableLogs)(config.debug === true);
 	        } catch (err) {
 	          console.warn('demuxerWorker: unable to enable logs');
 	        }
@@ -20494,7 +22968,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        forwardMessage('init', null);
 	        break;
 	      case 'demux':
-	        self.demuxer.push(new Uint8Array(data.data), data.audioCodec, data.videoCodec, data.timeOffset, data.cc, data.level, data.sn, data.duration, data.accurateTimeOffset);
+	        self.demuxer.push(data.data, data.audioCodec, data.videoCodec, data.timeOffset, data.cc, data.level, data.sn, data.duration, data.decryptdata, data.accurateTimeOffset, data.defaultInitPTS);
 	        break;
 	      default:
 	        break;
@@ -20502,11 +22976,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  });
 
 	  // forward events to main thread
+	  observer.on(_events2.default.FRAG_DECRYPTED, forwardMessage);
 	  observer.on(_events2.default.FRAG_PARSING_INIT_SEGMENT, forwardMessage);
 	  observer.on(_events2.default.FRAG_PARSED, forwardMessage);
 	  observer.on(_events2.default.ERROR, forwardMessage);
 	  observer.on(_events2.default.FRAG_PARSING_METADATA, forwardMessage);
 	  observer.on(_events2.default.FRAG_PARSING_USERDATA, forwardMessage);
+	  observer.on(_events2.default.INIT_PTS_FOUND, forwardMessage);
 
 	  // special case for FRAG_PARSING_DATA: pass data1/data2 as transferable object (no copy)
 	  observer.on(_events2.default.FRAG_PARSING_DATA, function (ev, data) {
@@ -20521,7 +22997,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = DemuxerWorker;
 
-	},{"1":1,"18":18,"26":26,"43":43}],20:[function(_dereq_,module,exports){
+	},{"1":1,"20":20,"28":28,"45":45}],22:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -20530,25 +23006,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _events = _dereq_(26);
+	var _events = _dereq_(28);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _demuxerInline = _dereq_(18);
+	var _demuxerInline = _dereq_(20);
 
 	var _demuxerInline2 = _interopRequireDefault(_demuxerInline);
 
-	var _demuxerWorker = _dereq_(19);
+	var _demuxerWorker = _dereq_(21);
 
 	var _demuxerWorker2 = _interopRequireDefault(_demuxerWorker);
 
-	var _logger = _dereq_(43);
+	var _logger = _dereq_(45);
 
-	var _decrypter = _dereq_(15);
-
-	var _decrypter2 = _interopRequireDefault(_decrypter);
-
-	var _errors = _dereq_(24);
+	var _errors = _dereq_(26);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20562,13 +23034,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.id = id;
 	    var typeSupported = {
 	      mp4: MediaSource.isTypeSupported('video/mp4'),
-	      mp2t: hls.config.enableMP2TPassThrough && MediaSource.isTypeSupported('video/mp2t')
+	      mp2t: hls.config.enableMP2TPassThrough && MediaSource.isTypeSupported('video/mp2t'),
+	      mpeg: MediaSource.isTypeSupported('audio/mpeg'),
+	      mp3: MediaSource.isTypeSupported('audio/mp4; codecs="mp3"')
 	    };
 	    if (hls.config.enableWorker && typeof Worker !== 'undefined') {
 	      _logger.logger.log('demuxing in webworker');
 	      var w = void 0;
 	      try {
-	        var work = _dereq_(2);
+	        var work = _dereq_(3);
 	        w = this.w = work(_demuxerWorker2.default);
 	        this.onwmsg = this.onWorkerMessage.bind(this);
 	        w.addEventListener('message', this.onwmsg);
@@ -20605,40 +23079,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	          this.demuxer = null;
 	        }
 	      }
-	      var decrypter = this.decrypter;
-	      if (decrypter) {
-	        decrypter.destroy();
-	        this.decrypter = null;
-	      }
-	    }
-	  }, {
-	    key: 'pushDecrypted',
-	    value: function pushDecrypted(data, audioCodec, videoCodec, timeOffset, cc, level, sn, duration, accurateTimeOffset) {
-	      var w = this.w;
-	      if (w) {
-	        // post fragment payload as transferable objects (no copy)
-	        w.postMessage({ cmd: 'demux', data: data, audioCodec: audioCodec, videoCodec: videoCodec, timeOffset: timeOffset, cc: cc, level: level, sn: sn, duration: duration, accurateTimeOffset: accurateTimeOffset }, [data]);
-	      } else {
-	        var demuxer = this.demuxer;
-	        if (demuxer) {
-	          demuxer.push(new Uint8Array(data), audioCodec, videoCodec, timeOffset, cc, level, sn, duration, accurateTimeOffset);
-	        }
-	      }
 	    }
 	  }, {
 	    key: 'push',
-	    value: function push(data, audioCodec, videoCodec, timeOffset, cc, level, sn, duration, decryptdata, accurateTimeOffset) {
-	      if (data.byteLength > 0 && decryptdata != null && decryptdata.key != null && decryptdata.method === 'AES-128') {
-	        if (this.decrypter == null) {
-	          this.decrypter = new _decrypter2.default(this.hls);
-	        }
-
-	        var localthis = this;
-	        this.decrypter.decrypt(data, decryptdata.key, decryptdata.iv, function (decryptedData) {
-	          localthis.pushDecrypted(decryptedData, audioCodec, videoCodec, timeOffset, cc, level, sn, duration, accurateTimeOffset);
-	        });
+	    value: function push(data, audioCodec, videoCodec, timeOffset, cc, level, sn, duration, decryptdata, accurateTimeOffset, defaultInitPTS) {
+	      var w = this.w;
+	      if (w) {
+	        // post fragment payload as transferable objects (no copy)
+	        w.postMessage({ cmd: 'demux', data: data, audioCodec: audioCodec, videoCodec: videoCodec, timeOffset: timeOffset, cc: cc, level: level, sn: sn, duration: duration, decryptdata: decryptdata, accurateTimeOffset: accurateTimeOffset, defaultInitPTS: defaultInitPTS }, [data]);
 	      } else {
-	        this.pushDecrypted(data, audioCodec, videoCodec, timeOffset, cc, level, sn, duration, accurateTimeOffset);
+	        var demuxer = this.demuxer;
+	        if (demuxer) {
+	          demuxer.push(data, audioCodec, videoCodec, timeOffset, cc, level, sn, duration, decryptdata, accurateTimeOffset, defaultInitPTS);
+	        }
 	      }
 	    }
 	  }, {
@@ -20669,7 +23122,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = Demuxer;
 
-	},{"15":15,"18":18,"19":19,"2":2,"24":24,"26":26,"43":43}],21:[function(_dereq_,module,exports){
+	},{"20":20,"21":21,"26":26,"28":28,"3":3,"45":45}],23:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -20680,7 +23133,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Parser for exponential Golomb codes, a variable-bitwidth number encoding scheme used by h264.
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     */
 
-	var _logger = _dereq_(43);
+	var _logger = _dereq_(45);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -20690,7 +23143,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    this.data = data;
 	    // the number of bytes left to examine in this.data
-	    this.bytesAvailable = this.data.byteLength;
+	    this.bytesAvailable = data.byteLength;
 	    // the current word being examined
 	    this.word = 0; // :uint
 	    // the number of bits left to examine in the current word
@@ -20703,13 +23156,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(ExpGolomb, [{
 	    key: 'loadWord',
 	    value: function loadWord() {
-	      var position = this.data.byteLength - this.bytesAvailable,
+	      var data = this.data,
+	          bytesAvailable = this.bytesAvailable,
+	          position = data.byteLength - bytesAvailable,
 	          workingBytes = new Uint8Array(4),
-	          availableBytes = Math.min(4, this.bytesAvailable);
+	          availableBytes = Math.min(4, bytesAvailable);
 	      if (availableBytes === 0) {
 	        throw new Error('no bytes available');
 	      }
-	      workingBytes.set(this.data.subarray(position, position + availableBytes));
+	      workingBytes.set(data.subarray(position, position + availableBytes));
 	      this.word = new DataView(workingBytes.buffer).getUint32(0);
 	      // track the amount of this.data that has been processed
 	      this.bitsAvailable = availableBytes * 8;
@@ -20815,8 +23270,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // the number is odd if the low order bit is set
 	        return 1 + valu >>> 1; // add 1 to make it even, and divide by 2
 	      } else {
-	          return -1 * (valu >>> 1); // divide by two then make it negative
-	        }
+	        return -1 * (valu >>> 1); // divide by two then make it negative
+	      }
 	    }
 
 	    // Some convenience functions
@@ -20892,7 +23347,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	          frameCropRightOffset = 0,
 	          frameCropTopOffset = 0,
 	          frameCropBottomOffset = 0,
-	          sarScale = 1,
 	          profileIdc,
 	          profileCompat,
 	          levelIdc,
@@ -20901,119 +23355,126 @@ return /******/ (function(modules) { // webpackBootstrap
 	          picHeightInMapUnitsMinus1,
 	          frameMbsOnlyFlag,
 	          scalingListCount,
-	          i;
-	      this.readUByte();
-	      profileIdc = this.readUByte(); // profile_idc
-	      profileCompat = this.readBits(5); // constraint_set[0-4]_flag, u(5)
-	      this.skipBits(3); // reserved_zero_3bits u(3),
-	      levelIdc = this.readUByte(); //level_idc u(8)
-	      this.skipUEG(); // seq_parameter_set_id
+	          i,
+	          readUByte = this.readUByte.bind(this),
+	          readBits = this.readBits.bind(this),
+	          readUEG = this.readUEG.bind(this),
+	          readBoolean = this.readBoolean.bind(this),
+	          skipBits = this.skipBits.bind(this),
+	          skipEG = this.skipEG.bind(this),
+	          skipUEG = this.skipUEG.bind(this),
+	          skipScalingList = this.skipScalingList.bind(this);
+
+	      readUByte();
+	      profileIdc = readUByte(); // profile_idc
+	      profileCompat = readBits(5); // constraint_set[0-4]_flag, u(5)
+	      skipBits(3); // reserved_zero_3bits u(3),
+	      levelIdc = readUByte(); //level_idc u(8)
+	      skipUEG(); // seq_parameter_set_id
 	      // some profiles have more optional data we don't need
 	      if (profileIdc === 100 || profileIdc === 110 || profileIdc === 122 || profileIdc === 244 || profileIdc === 44 || profileIdc === 83 || profileIdc === 86 || profileIdc === 118 || profileIdc === 128) {
-	        var chromaFormatIdc = this.readUEG();
+	        var chromaFormatIdc = readUEG();
 	        if (chromaFormatIdc === 3) {
-	          this.skipBits(1); // separate_colour_plane_flag
+	          skipBits(1); // separate_colour_plane_flag
 	        }
-	        this.skipUEG(); // bit_depth_luma_minus8
-	        this.skipUEG(); // bit_depth_chroma_minus8
-	        this.skipBits(1); // qpprime_y_zero_transform_bypass_flag
-	        if (this.readBoolean()) {
+	        skipUEG(); // bit_depth_luma_minus8
+	        skipUEG(); // bit_depth_chroma_minus8
+	        skipBits(1); // qpprime_y_zero_transform_bypass_flag
+	        if (readBoolean()) {
 	          // seq_scaling_matrix_present_flag
 	          scalingListCount = chromaFormatIdc !== 3 ? 8 : 12;
 	          for (i = 0; i < scalingListCount; i++) {
-	            if (this.readBoolean()) {
+	            if (readBoolean()) {
 	              // seq_scaling_list_present_flag[ i ]
 	              if (i < 6) {
-	                this.skipScalingList(16);
+	                skipScalingList(16);
 	              } else {
-	                this.skipScalingList(64);
+	                skipScalingList(64);
 	              }
 	            }
 	          }
 	        }
 	      }
-	      this.skipUEG(); // log2_max_frame_num_minus4
-	      var picOrderCntType = this.readUEG();
+	      skipUEG(); // log2_max_frame_num_minus4
+	      var picOrderCntType = readUEG();
 	      if (picOrderCntType === 0) {
-	        this.readUEG(); //log2_max_pic_order_cnt_lsb_minus4
+	        readUEG(); //log2_max_pic_order_cnt_lsb_minus4
 	      } else if (picOrderCntType === 1) {
-	          this.skipBits(1); // delta_pic_order_always_zero_flag
-	          this.skipEG(); // offset_for_non_ref_pic
-	          this.skipEG(); // offset_for_top_to_bottom_field
-	          numRefFramesInPicOrderCntCycle = this.readUEG();
-	          for (i = 0; i < numRefFramesInPicOrderCntCycle; i++) {
-	            this.skipEG(); // offset_for_ref_frame[ i ]
-	          }
+	        skipBits(1); // delta_pic_order_always_zero_flag
+	        skipEG(); // offset_for_non_ref_pic
+	        skipEG(); // offset_for_top_to_bottom_field
+	        numRefFramesInPicOrderCntCycle = readUEG();
+	        for (i = 0; i < numRefFramesInPicOrderCntCycle; i++) {
+	          skipEG(); // offset_for_ref_frame[ i ]
 	        }
-	      this.skipUEG(); // max_num_ref_frames
-	      this.skipBits(1); // gaps_in_frame_num_value_allowed_flag
-	      picWidthInMbsMinus1 = this.readUEG();
-	      picHeightInMapUnitsMinus1 = this.readUEG();
-	      frameMbsOnlyFlag = this.readBits(1);
+	      }
+	      skipUEG(); // max_num_ref_frames
+	      skipBits(1); // gaps_in_frame_num_value_allowed_flag
+	      picWidthInMbsMinus1 = readUEG();
+	      picHeightInMapUnitsMinus1 = readUEG();
+	      frameMbsOnlyFlag = readBits(1);
 	      if (frameMbsOnlyFlag === 0) {
-	        this.skipBits(1); // mb_adaptive_frame_field_flag
+	        skipBits(1); // mb_adaptive_frame_field_flag
 	      }
-	      this.skipBits(1); // direct_8x8_inference_flag
-	      if (this.readBoolean()) {
+	      skipBits(1); // direct_8x8_inference_flag
+	      if (readBoolean()) {
 	        // frame_cropping_flag
-	        frameCropLeftOffset = this.readUEG();
-	        frameCropRightOffset = this.readUEG();
-	        frameCropTopOffset = this.readUEG();
-	        frameCropBottomOffset = this.readUEG();
+	        frameCropLeftOffset = readUEG();
+	        frameCropRightOffset = readUEG();
+	        frameCropTopOffset = readUEG();
+	        frameCropBottomOffset = readUEG();
 	      }
-	      if (this.readBoolean()) {
+	      var pixelRatio = [1, 1];
+	      if (readBoolean()) {
 	        // vui_parameters_present_flag
-	        if (this.readBoolean()) {
+	        if (readBoolean()) {
 	          // aspect_ratio_info_present_flag
-	          var sarRatio = void 0;
-	          var aspectRatioIdc = this.readUByte();
+	          var aspectRatioIdc = readUByte();
 	          switch (aspectRatioIdc) {
 	            case 1:
-	              sarRatio = [1, 1];break;
+	              pixelRatio = [1, 1];break;
 	            case 2:
-	              sarRatio = [12, 11];break;
+	              pixelRatio = [12, 11];break;
 	            case 3:
-	              sarRatio = [10, 11];break;
+	              pixelRatio = [10, 11];break;
 	            case 4:
-	              sarRatio = [16, 11];break;
+	              pixelRatio = [16, 11];break;
 	            case 5:
-	              sarRatio = [40, 33];break;
+	              pixelRatio = [40, 33];break;
 	            case 6:
-	              sarRatio = [24, 11];break;
+	              pixelRatio = [24, 11];break;
 	            case 7:
-	              sarRatio = [20, 11];break;
+	              pixelRatio = [20, 11];break;
 	            case 8:
-	              sarRatio = [32, 11];break;
+	              pixelRatio = [32, 11];break;
 	            case 9:
-	              sarRatio = [80, 33];break;
+	              pixelRatio = [80, 33];break;
 	            case 10:
-	              sarRatio = [18, 11];break;
+	              pixelRatio = [18, 11];break;
 	            case 11:
-	              sarRatio = [15, 11];break;
+	              pixelRatio = [15, 11];break;
 	            case 12:
-	              sarRatio = [64, 33];break;
+	              pixelRatio = [64, 33];break;
 	            case 13:
-	              sarRatio = [160, 99];break;
+	              pixelRatio = [160, 99];break;
 	            case 14:
-	              sarRatio = [4, 3];break;
+	              pixelRatio = [4, 3];break;
 	            case 15:
-	              sarRatio = [3, 2];break;
+	              pixelRatio = [3, 2];break;
 	            case 16:
-	              sarRatio = [2, 1];break;
+	              pixelRatio = [2, 1];break;
 	            case 255:
 	              {
-	                sarRatio = [this.readUByte() << 8 | this.readUByte(), this.readUByte() << 8 | this.readUByte()];
+	                pixelRatio = [readUByte() << 8 | readUByte(), readUByte() << 8 | readUByte()];
 	                break;
 	              }
-	          }
-	          if (sarRatio) {
-	            sarScale = sarRatio[0] / sarRatio[1];
 	          }
 	        }
 	      }
 	      return {
-	        width: Math.ceil(((picWidthInMbsMinus1 + 1) * 16 - frameCropLeftOffset * 2 - frameCropRightOffset * 2) * sarScale),
-	        height: (2 - frameMbsOnlyFlag) * (picHeightInMapUnitsMinus1 + 1) * 16 - (frameMbsOnlyFlag ? 2 : 4) * (frameCropTopOffset + frameCropBottomOffset)
+	        width: Math.ceil((picWidthInMbsMinus1 + 1) * 16 - frameCropLeftOffset * 2 - frameCropRightOffset * 2),
+	        height: (2 - frameMbsOnlyFlag) * (picHeightInMapUnitsMinus1 + 1) * 16 - (frameMbsOnlyFlag ? 2 : 4) * (frameCropTopOffset + frameCropBottomOffset),
+	        pixelRatio: pixelRatio
 	      };
 	    }
 	  }, {
@@ -21033,7 +23494,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = ExpGolomb;
 
-	},{"43":43}],22:[function(_dereq_,module,exports){
+	},{"45":45}],24:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -21045,7 +23506,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 
 
-	var _logger = _dereq_(43);
+	var _logger = _dereq_(45);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -21186,7 +23647,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = ID3;
 
-	},{"43":43}],23:[function(_dereq_,module,exports){
+	},{"45":45}],25:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -21207,36 +23668,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	// import Hex from '../utils/hex';
 
 
-	var _adts = _dereq_(17);
+	var _adts = _dereq_(19);
 
 	var _adts2 = _interopRequireDefault(_adts);
 
-	var _events = _dereq_(26);
+	var _events = _dereq_(28);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _expGolomb = _dereq_(21);
+	var _expGolomb = _dereq_(23);
 
 	var _expGolomb2 = _interopRequireDefault(_expGolomb);
 
-	var _logger = _dereq_(43);
+	var _logger = _dereq_(45);
 
-	var _errors = _dereq_(24);
+	var _errors = _dereq_(26);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var TSDemuxer = function () {
-	  function TSDemuxer(observer, id, remuxerClass, config) {
+	  function TSDemuxer(observer, id, remuxerClass, config, typeSupported) {
 	    _classCallCheck(this, TSDemuxer);
 
 	    this.observer = observer;
 	    this.id = id;
 	    this.remuxerClass = remuxerClass;
 	    this.config = config;
+	    this.typeSupported = typeSupported;
 	    this.lastCC = 0;
-	    this.remuxer = new this.remuxerClass(observer, id, config);
+	    this.remuxer = new this.remuxerClass(observer, id, config, typeSupported);
 	  }
 
 	  _createClass(TSDemuxer, [{
@@ -21245,7 +23707,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.pmtParsed = false;
 	      this._pmtId = -1;
 	      this._avcTrack = { container: 'video/mp2t', type: 'video', id: -1, sequenceNumber: 0, samples: [], len: 0, dropped: 0 };
-	      this._aacTrack = { container: 'video/mp2t', type: 'audio', id: -1, sequenceNumber: 0, samples: [], len: 0 };
+	      this._audioTrack = { container: 'video/mp2t', type: 'audio', id: -1, sequenceNumber: 0, samples: [], len: 0, isAAC: true };
 	      this._id3Track = { type: 'id3', id: -1, sequenceNumber: 0, samples: [], len: 0 };
 	      this._txtTrack = { type: 'text', id: -1, sequenceNumber: 0, samples: [], len: 0 };
 	      // flush any partial content
@@ -21265,7 +23727,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  }, {
 	    key: 'push',
-	    value: function push(data, audioCodec, videoCodec, timeOffset, cc, level, sn, duration, accurateTimeOffset) {
+	    value: function push(data, audioCodec, videoCodec, timeOffset, cc, level, sn, duration, accurateTimeOffset, defaultInitPTS) {
 	      var start,
 	          len = data.length,
 	          stt,
@@ -21297,20 +23759,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      var pmtParsed = this.pmtParsed,
 	          avcTrack = this._avcTrack,
-	          aacTrack = this._aacTrack,
+	          audioTrack = this._audioTrack,
 	          id3Track = this._id3Track,
 	          avcId = avcTrack.id,
-	          aacId = aacTrack.id,
+	          audioId = audioTrack.id,
 	          id3Id = id3Track.id,
 	          pmtId = this._pmtId,
 	          avcData = avcTrack.pesData,
-	          aacData = aacTrack.pesData,
+	          audioData = audioTrack.pesData,
 	          id3Data = id3Track.pesData,
 	          parsePAT = this._parsePAT,
 	          parsePMT = this._parsePMT,
 	          parsePES = this._parsePES,
 	          parseAVCPES = this._parseAVCPES.bind(this),
 	          parseAACPES = this._parseAACPES.bind(this),
+	          parseMPEGPES = this._parseMPEGPES.bind(this),
 	          parseID3PES = this._parseID3PES.bind(this);
 
 	      // don't parse last TS packet if incomplete
@@ -21341,8 +23804,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    // if we have video codec info AND
 	                    // if audio PID is undefined OR if we have audio codec info,
 	                    // we have all codec info !
-	                    if (avcTrack.codec && (aacId === -1 || aacTrack.codec)) {
-	                      this.remux(level, sn, data, timeOffset);
+	                    if (avcTrack.codec && (audioId === -1 || audioTrack.codec)) {
+	                      this.remux(level, sn, cc, data, timeOffset);
 	                      return;
 	                    }
 	                  }
@@ -21354,25 +23817,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	                avcData.size += start + 188 - offset;
 	              }
 	              break;
-	            case aacId:
+	            case audioId:
 	              if (stt) {
-	                if (aacData && (pes = parsePES(aacData))) {
-	                  parseAACPES(pes);
+	                if (audioData && (pes = parsePES(audioData))) {
+	                  if (audioTrack.isAAC) {
+	                    parseAACPES(pes);
+	                  } else {
+	                    parseMPEGPES(pes);
+	                  }
 	                  if (codecsOnly) {
 	                    // here we now that we have audio codec info
 	                    // if video PID is undefined OR if we have video codec info,
 	                    // we have all codec infos !
-	                    if (aacTrack.codec && (avcId === -1 || avcTrack.codec)) {
-	                      this.remux(level, sn, data, timeOffset);
+	                    if (audioTrack.codec && (avcId === -1 || avcTrack.codec)) {
+	                      this.remux(level, sn, cc, data, timeOffset);
 	                      return;
 	                    }
 	                  }
 	                }
-	                aacData = { data: [], size: 0 };
+	                audioData = { data: [], size: 0 };
 	              }
-	              if (aacData) {
-	                aacData.data.push(data.subarray(offset, start + 188));
-	                aacData.size += start + 188 - offset;
+	              if (audioData) {
+	                audioData.data.push(data.subarray(offset, start + 188));
+	                audioData.size += start + 188 - offset;
 	              }
 	              break;
 	            case id3Id:
@@ -21397,10 +23864,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	              if (stt) {
 	                offset += data[offset] + 1;
 	              }
-	              var parsedPIDs = parsePMT(data, offset);
-	              avcId = avcTrack.id = parsedPIDs.avc;
-	              aacId = aacTrack.id = parsedPIDs.aac;
-	              id3Id = id3Track.id = parsedPIDs.id3;
+	              var parsedPIDs = parsePMT(data, offset, this.typeSupported.mpeg === true || this.typeSupported.mp3 === true);
+
+	              // only update track id if track PID found while parsing PMT
+	              // this is to avoid resetting the PID to -1 in case
+	              // track PID transiently disappears from the stream
+	              // this could happen in case of transient missing audio samples for example
+	              avcId = parsedPIDs.avc;
+	              if (avcId > 0) {
+	                avcTrack.id = avcId;
+	              }
+	              audioId = parsedPIDs.audio;
+	              if (audioId > 0) {
+	                audioTrack.id = audioId;
+	                audioTrack.isAAC = parsedPIDs.isAAC;
+	              }
+	              id3Id = parsedPIDs.id3;
+	              if (id3Id > 0) {
+	                id3Track.id = id3Id;
+	              }
 	              if (unknownPIDs && !pmtParsed) {
 	                _logger.logger.log('reparse from beginning');
 	                unknownPIDs = false;
@@ -21429,15 +23911,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        avcTrack.pesData = avcData;
 	      }
 
-	      if (aacData && (pes = parsePES(aacData))) {
-	        parseAACPES(pes);
-	        aacTrack.pesData = null;
+	      if (audioData && (pes = parsePES(audioData))) {
+	        if (audioTrack.isAAC) {
+	          parseAACPES(pes);
+	        } else {
+	          parseMPEGPES(pes);
+	        }
+	        audioTrack.pesData = null;
 	      } else {
-	        if (aacData && aacData.size) {
+	        if (audioData && audioData.size) {
 	          _logger.logger.log('last AAC PES packet truncated,might overlap between fragments');
 	        }
-	        // either aacData null or PES truncated, keep it for next frag parsing
-	        aacTrack.pesData = aacData;
+	        // either audioData null or PES truncated, keep it for next frag parsing
+	        audioTrack.pesData = audioData;
 	      }
 
 	      if (id3Data && (pes = parsePES(id3Data))) {
@@ -21447,31 +23933,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // either id3Data null or PES truncated, keep it for next frag parsing
 	        id3Track.pesData = id3Data;
 	      }
-	      this.remux(level, sn, null, timeOffset);
+	      this.remux(level, sn, cc, null, timeOffset, defaultInitPTS);
 	    }
 	  }, {
 	    key: 'remux',
-	    value: function remux(level, sn, data, timeOffset) {
+	    value: function remux(level, sn, cc, data, timeOffset, defaultInitPTS) {
 	      var avcTrack = this._avcTrack,
-	          samples = avcTrack.samples;
+	          samples = avcTrack.samples,
+	          nbNalu = 0,
+	          naluLen = 0;
 
 	      // compute total/avc sample length and nb of NAL units
-	      var trackData = samples.reduce(function (prevSampleData, curSample) {
-	        var sampleData = curSample.units.units.reduce(function (prevUnitData, curUnit) {
-	          return {
-	            len: prevUnitData.len + curUnit.data.length,
-	            nbNalu: prevUnitData.nbNalu + 1
-	          };
-	        }, { len: 0, nbNalu: 0 });
-	        curSample.length = sampleData.len;
-	        return {
-	          len: prevSampleData.len + sampleData.len,
-	          nbNalu: prevSampleData.nbNalu + sampleData.nbNalu
-	        };
-	      }, { len: 0, nbNalu: 0 });
-	      avcTrack.len = trackData.len;
-	      avcTrack.nbNalu = trackData.nbNalu;
-	      this.remuxer.remux(level, sn, this._aacTrack, this._avcTrack, this._id3Track, this._txtTrack, timeOffset, this.contiguous, this.accurateTimeOffset, data);
+	      for (var i = 0; i < samples.length; i++) {
+	        var sample = samples[i],
+	            units = sample.units.units,
+	            nbUnits = units.length,
+	            sampleLen = 0;
+	        for (var j = 0; j < nbUnits; j++) {
+	          sampleLen += units[j].data.length;
+	        }
+	        naluLen += sampleLen;
+	        nbNalu += nbUnits;
+	        sample.length = sampleLen;
+	      }
+	      avcTrack.len = naluLen;
+	      avcTrack.nbNalu = nbNalu;
+	      this.remuxer.remux(level, sn, cc, this._audioTrack, this._avcTrack, this._id3Track, this._txtTrack, timeOffset, this.contiguous, this.accurateTimeOffset, defaultInitPTS, data);
 	    }
 	  }, {
 	    key: 'destroy',
@@ -21489,12 +23976,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: '_parsePMT',
-	    value: function _parsePMT(data, offset) {
+	    value: function _parsePMT(data, offset, mpegSupported) {
 	      var sectionLength,
 	          tableEnd,
 	          programInfoLength,
 	          pid,
-	          result = { aac: -1, avc: -1, id3: -1 };
+	          result = { audio: -1, avc: -1, id3: -1, isAAC: true };
 	      sectionLength = (data[offset + 1] & 0x0f) << 8 | data[offset + 2];
 	      tableEnd = offset + 3 + sectionLength - 4;
 	      // to determine where the table is, we have to figure out how
@@ -21508,8 +23995,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          // ISO/IEC 13818-7 ADTS AAC (MPEG-2 lower bit-rate audio)
 	          case 0x0f:
 	            //logger.log('AAC PID:'  + pid);
-	            if (result.aac === -1) {
-	              result.aac = pid;
+	            if (result.audio === -1) {
+	              result.audio = pid;
 	            }
 	            break;
 	          // Packetized metadata (ID3)
@@ -21524,6 +24011,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	            //logger.log('AVC PID:'  + pid);
 	            if (result.avc === -1) {
 	              result.avc = pid;
+	            }
+	            break;
+	          // ISO/IEC 11172-3 (MPEG-1 audio)
+	          // or ISO/IEC 13818-3 (MPEG-2 halved sample rate audio)
+	          case 0x03:
+	          case 0x04:
+	            //logger.log('MPEG PID:'  + pid);
+	            if (!mpegSupported) {
+	              _logger.logger.log('MPEG audio found, not supported in this browser for now');
+	            } else if (result.audio === -1) {
+	              result.audio = pid;
+	              result.isAAC = false;
 	            }
 	            break;
 	          case 0x24:
@@ -21573,9 +24072,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      pesPrefix = (frag[0] << 16) + (frag[1] << 8) + frag[2];
 	      if (pesPrefix === 1) {
 	        pesLen = (frag[4] << 8) + frag[5];
-	        // if PES len is not zero and not matching with total len, stop parsing. PES might be truncated
+	        // if PES parsed length is not zero and greater than total received length, stop parsing. PES might be truncated
 	        // minus 6 : PES header size
-	        if (pesLen && pesLen !== stream.size - 6) {
+	        if (pesLen && pesLen > stream.size - 6) {
 	          return null;
 	        }
 	        pesFlags = frag[7];
@@ -21604,6 +24103,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	              // decrement 2^33
 	              pesDts -= 8589934592;
 	            }
+	            if (pesPts - pesDts > 60 * 90000) {
+	              _logger.logger.warn(Math.round((pesPts - pesDts) / 90000) + 's delta between PTS and DTS, align them');
+	              pesPts = pesDts;
+	            }
 	          } else {
 	            pesDts = pesPts;
 	          }
@@ -21615,8 +24118,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        stream.size -= payloadStartOffset;
 	        //reassemble PES packet
 	        pesData = new Uint8Array(stream.size);
-	        while (data.length) {
-	          frag = data.shift();
+	        for (var j = 0, dataLen = data.length; j < dataLen; j++) {
+	          frag = data[j];
 	          var len = frag.byteLength;
 	          if (payloadStartOffset) {
 	            if (payloadStartOffset > len) {
@@ -21645,7 +24148,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'pushAccesUnit',
 	    value: function pushAccesUnit(avcSample, avcTrack) {
-	      if (avcSample.units.units.length) {
+	      if (avcSample.units.units.length && avcSample.frame) {
 	        // only push AVC sample if starting with a keyframe is not mandatory OR
 	        //    if keyframe already found in this fragment OR
 	        //       keyframe found in last fragment (track.sps) AND
@@ -21685,6 +24188,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (debug && avcSample) {
 	              avcSample.debug += 'NDR ';
 	            }
+	            avcSample.frame = true;
+	            // retrieve slice type by parsing beginning of NAL unit (follow H264 spec, slice_header definition) to detect keyframe embedded in NDR
+	            var data = unit.data;
+	            if (data.length > 4) {
+	              var sliceType = new _expGolomb2.default(data).readSliceType();
+	              // 2 : I slice, 4 : SI slice, 7 : I slice, 9: SI slice
+	              // SI slice : A slice that is coded using intra prediction only and using quantisation of the prediction samples.
+	              // An SI slice can be coded such that its decoded samples can be constructed identically to an SP slice.
+	              // I slice: A slice that is not an SI slice that is decoded using intra prediction only.
+	              //if (sliceType === 2 || sliceType === 7) {
+	              if (sliceType === 2 || sliceType === 4 || sliceType === 7 || sliceType === 9) {
+	                avcSample.key = true;
+	              }
+	            }
 	            break;
 	          //IDR
 	          case 5:
@@ -21697,6 +24214,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	              avcSample.debug += 'IDR ';
 	            }
 	            avcSample.key = true;
+	            avcSample.frame = true;
 	            break;
 	          //SEI
 	          case 6:
@@ -21783,6 +24301,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	              var config = expGolombDecoder.readSPS();
 	              track.width = config.width;
 	              track.height = config.height;
+	              track.pixelRatio = config.pixelRatio;
 	              track.sps = [unit.data];
 	              track.duration = _this._duration;
 	              var codecarray = unit.data.subarray(1, 4);
@@ -21894,82 +24413,75 @@ return /******/ (function(modules) { // webpackBootstrap
 	          lastUnitStart = -1,
 	          lastUnitType;
 	      //logger.log('PES:' + Hex.hexDump(array));
+
+	      if (state === -1) {
+	        // special use case where we found 3 or 4-byte start codes exactly at the end of previous PES packet
+	        lastUnitStart = 0;
+	        // NALu type is value read from offset 0
+	        lastUnitType = array[0] & 0x1f;
+	        state = 0;
+	        i = 1;
+	      }
+
 	      while (i < len) {
 	        value = array[i++];
-	        // finding 3 or 4-byte start codes (00 00 01 OR 00 00 00 01)
-	        switch (state) {
-	          case 0:
-	            if (value === 0) {
-	              state = 1;
-	            }
-	            break;
-	          case 1:
-	            if (value === 0) {
-	              state = 2;
-	            } else {
-	              state = 0;
-	            }
-	            break;
-	          case 2:
-	          case 3:
-	            if (value === 0) {
-	              state = 3;
-	            } else if (value === 1) {
-	              if (lastUnitStart >= 0) {
-	                unit = { data: array.subarray(lastUnitStart, i - state - 1), type: lastUnitType };
-	                //logger.log('pushing NALU, type/size:' + unit.type + '/' + unit.data.byteLength);
-	                units.push(unit);
-	              } else {
-	                // lastUnitStart is undefined => this is the first start code found in this PES packet
-	                // first check if start code delimiter is overlapping between 2 PES packets,
-	                // ie it started in last packet (lastState not zero)
-	                // and ended at the beginning of this PES packet (i <= 4 - lastState)
-	                var lastUnit = this._getLastNalUnit();
-	                if (lastUnit) {
-	                  if (lastState && i <= 4 - lastState) {
-	                    // start delimiter overlapping between PES packets
-	                    // strip start delimiter bytes from the end of last NAL unit
-	                    // check if lastUnit had a state different from zero
-	                    if (lastUnit.state) {
-	                      // strip last bytes
-	                      lastUnit.data = lastUnit.data.subarray(0, lastUnit.data.byteLength - lastState);
-	                    }
-	                  }
-	                  // If NAL units are not starting right at the beginning of the PES packet, push preceding data into previous NAL unit.
-	                  overflow = i - state - 1;
-	                  if (overflow > 0) {
-	                    //logger.log('first NALU found with overflow:' + overflow);
-	                    var tmp = new Uint8Array(lastUnit.data.byteLength + overflow);
-	                    tmp.set(lastUnit.data, 0);
-	                    tmp.set(array.subarray(0, overflow), lastUnit.data.byteLength);
-	                    lastUnit.data = tmp;
-	                  }
+	        // optimization. state 0 and 1 are the predominant case. let's handle them outside of the switch/case
+	        if (!state) {
+	          state = value ? 0 : 1;
+	          continue;
+	        }
+	        if (state === 1) {
+	          state = value ? 0 : 2;
+	          continue;
+	        }
+	        // here we have state either equal to 2 or 3
+	        if (!value) {
+	          state = 3;
+	        } else if (value === 1) {
+	          if (lastUnitStart >= 0) {
+	            unit = { data: array.subarray(lastUnitStart, i - state - 1), type: lastUnitType };
+	            //logger.log('pushing NALU, type/size:' + unit.type + '/' + unit.data.byteLength);
+	            units.push(unit);
+	          } else {
+	            // lastUnitStart is undefined => this is the first start code found in this PES packet
+	            // first check if start code delimiter is overlapping between 2 PES packets,
+	            // ie it started in last packet (lastState not zero)
+	            // and ended at the beginning of this PES packet (i <= 4 - lastState)
+	            var lastUnit = this._getLastNalUnit();
+	            if (lastUnit) {
+	              if (lastState && i <= 4 - lastState) {
+	                // start delimiter overlapping between PES packets
+	                // strip start delimiter bytes from the end of last NAL unit
+	                // check if lastUnit had a state different from zero
+	                if (lastUnit.state) {
+	                  // strip last bytes
+	                  lastUnit.data = lastUnit.data.subarray(0, lastUnit.data.byteLength - lastState);
 	                }
 	              }
-	              // check if we can read unit type
-	              if (i < len) {
-	                unitType = array[i] & 0x1f;
-	                //logger.log('find NALU @ offset:' + i + ',type:' + unitType);
-	                lastUnitStart = i;
-	                lastUnitType = unitType;
-	                state = 0;
-	              } else {
-	                // not enough byte to read unit type. let's read it on next PES parsing
-	                state = -1;
+	              // If NAL units are not starting right at the beginning of the PES packet, push preceding data into previous NAL unit.
+	              overflow = i - state - 1;
+	              if (overflow > 0) {
+	                //logger.log('first NALU found with overflow:' + overflow);
+	                var tmp = new Uint8Array(lastUnit.data.byteLength + overflow);
+	                tmp.set(lastUnit.data, 0);
+	                tmp.set(array.subarray(0, overflow), lastUnit.data.byteLength);
+	                lastUnit.data = tmp;
 	              }
-	            } else {
-	              state = 0;
 	            }
-	            break;
-	          case -1:
-	            // special use case where we found 3 or 4-byte start codes exactly at the end of previous PES packet
-	            lastUnitStart = 0;
-	            // NALu type is value read from offset 0
-	            lastUnitType = value & 0x1f;
+	          }
+	          // check if we can read unit type
+	          if (i < len) {
+	            unitType = array[i] & 0x1f;
+	            //logger.log('find NALU @ offset:' + i + ',type:' + unitType);
+	            lastUnitStart = i;
+	            lastUnitType = unitType;
 	            state = 0;
-	            break;
-	          default:
-	            break;
+	          } else {
+	            // not enough byte to read unit type. let's read it on next PES parsing
+	            state = -1;
+	          }
+	        } else {
+	          state = 0;
 	        }
 	      }
 	      if (lastUnitStart >= 0 && state >= 0) {
@@ -22040,7 +24552,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: '_parseAACPES',
 	    value: function _parseAACPES(pes) {
-	      var track = this._aacTrack,
+	      var track = this._audioTrack,
 	          data = pes.data,
 	          pts = pes.pts,
 	          startOffset = 0,
@@ -22085,11 +24597,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      }
 	      if (!track.audiosamplerate) {
-	        config = _adts2.default.getAudioConfig(this.observer, data, offset, this.audioCodec);
+	        var audioCodec = this.audioCodec;
+	        config = _adts2.default.getAudioConfig(this.observer, data, offset, audioCodec);
 	        track.config = config.config;
 	        track.audiosamplerate = config.samplerate;
 	        track.channelCount = config.channelCount;
 	        track.codec = config.codec;
+	        track.manifestCodec = config.manifestCodec;
 	        track.duration = this._duration;
 	        _logger.logger.log('parsed codec:' + track.codec + ',rate:' + config.samplerate + ',nb channel:' + config.channelCount);
 	      }
@@ -22136,10 +24650,93 @@ return /******/ (function(modules) { // webpackBootstrap
 	        aacOverFlow = data.subarray(offset, len);
 	        //logger.log(`AAC: overflow detected:${len-offset}`);
 	      } else {
-	          aacOverFlow = null;
-	        }
+	        aacOverFlow = null;
+	      }
 	      this.aacOverFlow = aacOverFlow;
 	      this.aacLastPTS = stamp;
+	    }
+	  }, {
+	    key: '_parseMPEGPES',
+	    value: function _parseMPEGPES(pes) {
+	      var data = pes.data;
+	      var pts = pes.pts;
+	      var length = data.length;
+	      var frameIndex = 0;
+	      var offset = 0;
+	      var parsed;
+
+	      while (offset < length && (parsed = this._parseMpeg(data, offset, length, frameIndex++, pts)) > 0) {
+	        offset += parsed;
+	      }
+	    }
+	  }, {
+	    key: '_onMpegFrame',
+	    value: function _onMpegFrame(data, bitRate, sampleRate, channelCount, frameIndex, pts) {
+	      var frameDuration = 1152 / sampleRate * 1000;
+	      var stamp = pts + frameIndex * frameDuration;
+	      var track = this._audioTrack;
+
+	      track.config = [];
+	      track.channelCount = channelCount;
+	      track.audiosamplerate = sampleRate;
+	      track.duration = this._duration;
+	      track.samples.push({ unit: data, pts: stamp, dts: stamp });
+	      track.len += data.length;
+	    }
+	  }, {
+	    key: '_onMpegNoise',
+	    value: function _onMpegNoise(data) {
+	      _logger.logger.warn('mpeg audio has noise: ' + data.length + ' bytes');
+	    }
+	  }, {
+	    key: '_parseMpeg',
+	    value: function _parseMpeg(data, start, end, frameIndex, pts) {
+	      var BitratesMap = [32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 32, 48, 56, 64, 80, 96, 112, 128, 144, 160, 176, 192, 224, 256, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160];
+	      var SamplingRateMap = [44100, 48000, 32000, 22050, 24000, 16000, 11025, 12000, 8000];
+
+	      if (start + 2 > end) {
+	        return -1; // we need at least 2 bytes to detect sync pattern
+	      }
+	      if (data[start] === 0xFF || (data[start + 1] & 0xE0) === 0xE0) {
+	        // Using http://www.datavoyage.com/mpgscript/mpeghdr.htm as a reference
+	        if (start + 24 > end) {
+	          return -1;
+	        }
+	        var headerB = data[start + 1] >> 3 & 3;
+	        var headerC = data[start + 1] >> 1 & 3;
+	        var headerE = data[start + 2] >> 4 & 15;
+	        var headerF = data[start + 2] >> 2 & 3;
+	        var headerG = !!(data[start + 2] & 2);
+	        if (headerB !== 1 && headerE !== 0 && headerE !== 15 && headerF !== 3) {
+	          var columnInBitrates = headerB === 3 ? 3 - headerC : headerC === 3 ? 3 : 4;
+	          var bitRate = BitratesMap[columnInBitrates * 14 + headerE - 1] * 1000;
+	          var columnInSampleRates = headerB === 3 ? 0 : headerB === 2 ? 1 : 2;
+	          var sampleRate = SamplingRateMap[columnInSampleRates * 3 + headerF];
+	          var padding = headerG ? 1 : 0;
+	          var channelCount = data[start + 3] >> 6 === 3 ? 1 : 2; // If bits of channel mode are `11` then it is a single channel (Mono)
+	          var frameLength = headerC === 3 ? (headerB === 3 ? 12 : 6) * bitRate / sampleRate + padding << 2 : (headerB === 3 ? 144 : 72) * bitRate / sampleRate + padding | 0;
+	          if (start + frameLength > end) {
+	            return -1;
+	          }
+	          if (this._onMpegFrame) {
+	            this._onMpegFrame(data.subarray(start, start + frameLength), bitRate, sampleRate, channelCount, frameIndex, pts);
+	          }
+	          return frameLength;
+	        }
+	      }
+	      // noise or ID3, trying to skip
+	      var offset = start + 2;
+	      while (offset < end) {
+	        if (data[offset - 1] === 0xFF && (data[offset] & 0xE0) === 0xE0) {
+	          // sync pattern is found
+	          if (this._onMpegNoise) {
+	            this._onMpegNoise(data.subarray(start, offset - 1));
+	          }
+	          return offset - start - 1;
+	        }
+	        offset++;
+	      }
+	      return -1;
 	    }
 	  }, {
 	    key: '_parseID3PES',
@@ -22163,7 +24760,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = TSDemuxer;
 
-	},{"17":17,"21":21,"24":24,"26":26,"43":43}],24:[function(_dereq_,module,exports){
+	},{"19":19,"23":23,"26":26,"28":28,"45":45}],26:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -22174,6 +24771,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  NETWORK_ERROR: 'networkError',
 	  // Identifier for a media Error (video/parsing/mediasource error)
 	  MEDIA_ERROR: 'mediaError',
+	  // Identifier for a mux Error (demuxing/remuxing)
+	  MUX_ERROR: 'muxError',
 	  // Identifier for all other errors
 	  OTHER_ERROR: 'otherError'
 	};
@@ -22205,8 +24804,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  FRAG_LOAD_TIMEOUT: 'fragLoadTimeOut',
 	  // Identifier for a fragment decryption error event - data: parsing error description
 	  FRAG_DECRYPT_ERROR: 'fragDecryptError',
-	  // Identifier for a fragment parsing error event - data: parsing error description
+	  // Identifier for a fragment parsing error event - data: { id : demuxer Id, reason : parsing error description }
+	  // will be renamed DEMUX_PARSING_ERROR and switched to MUX_ERROR in the next major release
 	  FRAG_PARSING_ERROR: 'fragParsingError',
+	  // Identifier for a remux alloc error event - data: { id : demuxer Id, bytes : nb of bytes on which allocation failed , reason : error text }
+	  REMUX_ALLOC_ERROR: 'remuxAllocError',
 	  // Identifier for decrypt key load error - data: { frag : fragment object, response : { code: error code, text: error text }}
 	  KEY_LOAD_ERROR: 'keyLoadError',
 	  // Identifier for decrypt key load timeout error - data: { frag : fragment object}
@@ -22223,18 +24825,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	  BUFFER_FULL_ERROR: 'bufferFullError',
 	  // Identifier for a buffer seek over hole event
 	  BUFFER_SEEK_OVER_HOLE: 'bufferSeekOverHole',
+	  // Identifier for a buffer nudge on stall (playback is stuck although currentTime is in a buffered area)
+	  BUFFER_NUDGE_ON_STALL: 'bufferNudgeOnStall',
 	  // Identifier for an internal exception happening inside hls.js while handling an event
 	  INTERNAL_EXCEPTION: 'internalException'
 	};
 
-	},{}],25:[function(_dereq_,module,exports){
+	},{}],27:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     *
@@ -22242,11 +24846,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     *
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     */
 
-	var _logger = _dereq_(43);
+	var _logger = _dereq_(45);
 
-	var _errors = _dereq_(24);
+	var _errors = _dereq_(26);
 
-	var _events = _dereq_(26);
+	var _events = _dereq_(28);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -22336,7 +24940,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = EventHandler;
 
-	},{"24":24,"26":26,"43":43}],26:[function(_dereq_,module,exports){
+	},{"26":26,"28":28,"45":45}],28:[function(_dereq_,module,exports){
 	'use strict';
 
 	module.exports = {
@@ -22356,7 +24960,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  BUFFER_CREATED: 'hlsBufferCreated',
 	  // fired when we append a segment to the buffer - data: { segment: segment object }
 	  BUFFER_APPENDING: 'hlsBufferAppending',
-	  // fired when we are done with appending a media segment to the buffer data : { parent : segment parent that triggered BUFFER_APPENDING }
+	  // fired when we are done with appending a media segment to the buffer data : { parent : segment parent that triggered BUFFER_APPENDING , pending : nb of segments waiting for appending for this segment parent}
 	  BUFFER_APPENDED: 'hlsBufferAppended',
 	  // fired when the stream is finished and we want to notify the media buffer that there will be no more data
 	  BUFFER_EOS: 'hlsBufferEos',
@@ -22382,12 +24986,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	  LEVEL_SWITCH: 'hlsLevelSwitch',
 	  // fired to notify that audio track lists has been updated data: { audioTracks : audioTracks}
 	  AUDIO_TRACKS_UPDATED: 'hlsAudioTracksUpdated',
-	  // fired when an audio track switch occurs - data: {  id : audio track id}
+	  // fired when an audio track switch occurs - data: {  id : audio track id} // deprecated
 	  AUDIO_TRACK_SWITCH: 'hlsAudioTrackSwitch',
+	  // fired when an audio track switching is requested - data: {  id : audio track id}
+	  AUDIO_TRACK_SWITCHING: 'hlsAudioTrackSwitching',
+	  // fired when an audio track switch actually occurs - data: {  id : audio track id}
+	  AUDIO_TRACK_SWITCHED: 'hlsAudioTrackSwitched',
 	  // fired when an audio track loading starts - data: { url : audio track URL  id : audio track id}
 	  AUDIO_TRACK_LOADING: 'hlsAudioTrackLoading',
 	  // fired when an audio track loading  finishes - data: { details : levelDetails object, id : audio track id, stats : { trequest, tfirst, tload, mtime} }
 	  AUDIO_TRACK_LOADED: 'hlsAudioTrackLoaded',
+	  // fired when the first timestamp is found. - data: { id : demuxer id, initPTS: initPTS }
+	  INIT_PTS_FOUND: 'hlsInitPtsFound',
 	  // fired when a fragment loading starts - data: { frag : fragment object}
 	  FRAG_LOADING: 'hlsFragLoading',
 	  // fired when a fragment loading is progressing - data: { frag : fragment object, { trequest, tfirst, loaded}}
@@ -22396,6 +25006,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  FRAG_LOAD_EMERGENCY_ABORTED: 'hlsFragLoadEmergencyAborted',
 	  // fired when a fragment loading is completed - data: { frag : fragment object, payload : fragment payload, stats : { trequest, tfirst, tload, length}}
 	  FRAG_LOADED: 'hlsFragLoaded',
+	  // fired when a fragment has finished decrypting - data: { level : levelId, sn : sequence number }
+	  FRAG_DECRYPTED: 'hlsFragDecrypted',
 	  // fired when Init Segment has been extracted from fragment - data: { id : demuxer id, level : levelId, sn : sequence number, moov : moov MP4 box, codecs : codecs found while parsing fragment}
 	  FRAG_PARSING_INIT_SEGMENT: 'hlsFragParsingInitSegment',
 	  // fired when parsing sei text is completed - data: { id : demuxer id, , level : levelId, sn : sequence number, samples : [ sei samples pes ] }
@@ -22426,8 +25038,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  STREAM_STATE_TRANSITION: 'hlsStreamStateTransition'
 	};
 
-	},{}],27:[function(_dereq_,module,exports){
-	"use strict";
+	},{}],29:[function(_dereq_,module,exports){
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -22447,20 +25059,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  _createClass(AAC, null, [{
-	    key: "getSilentFrame",
-	    value: function getSilentFrame(channelCount) {
-	      if (channelCount === 1) {
-	        return new Uint8Array([0x00, 0xc8, 0x00, 0x80, 0x23, 0x80]);
-	      } else if (channelCount === 2) {
-	        return new Uint8Array([0x21, 0x00, 0x49, 0x90, 0x02, 0x19, 0x00, 0x23, 0x80]);
-	      } else if (channelCount === 3) {
-	        return new Uint8Array([0x00, 0xc8, 0x00, 0x80, 0x20, 0x84, 0x01, 0x26, 0x40, 0x08, 0x64, 0x00, 0x8e]);
-	      } else if (channelCount === 4) {
-	        return new Uint8Array([0x00, 0xc8, 0x00, 0x80, 0x20, 0x84, 0x01, 0x26, 0x40, 0x08, 0x64, 0x00, 0x80, 0x2c, 0x80, 0x08, 0x02, 0x38]);
-	      } else if (channelCount === 5) {
-	        return new Uint8Array([0x00, 0xc8, 0x00, 0x80, 0x20, 0x84, 0x01, 0x26, 0x40, 0x08, 0x64, 0x00, 0x82, 0x30, 0x04, 0x99, 0x00, 0x21, 0x90, 0x02, 0x38]);
-	      } else if (channelCount === 6) {
-	        return new Uint8Array([0x00, 0xc8, 0x00, 0x80, 0x20, 0x84, 0x01, 0x26, 0x40, 0x08, 0x64, 0x00, 0x82, 0x30, 0x04, 0x99, 0x00, 0x21, 0x90, 0x02, 0x00, 0xb2, 0x00, 0x20, 0x08, 0xe0]);
+	    key: 'getSilentFrame',
+	    value: function getSilentFrame(codec, channelCount) {
+	      switch (codec) {
+	        case 'mp4a.40.2':
+	          if (channelCount === 1) {
+	            return new Uint8Array([0x00, 0xc8, 0x00, 0x80, 0x23, 0x80]);
+	          } else if (channelCount === 2) {
+	            return new Uint8Array([0x21, 0x00, 0x49, 0x90, 0x02, 0x19, 0x00, 0x23, 0x80]);
+	          } else if (channelCount === 3) {
+	            return new Uint8Array([0x00, 0xc8, 0x00, 0x80, 0x20, 0x84, 0x01, 0x26, 0x40, 0x08, 0x64, 0x00, 0x8e]);
+	          } else if (channelCount === 4) {
+	            return new Uint8Array([0x00, 0xc8, 0x00, 0x80, 0x20, 0x84, 0x01, 0x26, 0x40, 0x08, 0x64, 0x00, 0x80, 0x2c, 0x80, 0x08, 0x02, 0x38]);
+	          } else if (channelCount === 5) {
+	            return new Uint8Array([0x00, 0xc8, 0x00, 0x80, 0x20, 0x84, 0x01, 0x26, 0x40, 0x08, 0x64, 0x00, 0x82, 0x30, 0x04, 0x99, 0x00, 0x21, 0x90, 0x02, 0x38]);
+	          } else if (channelCount === 6) {
+	            return new Uint8Array([0x00, 0xc8, 0x00, 0x80, 0x20, 0x84, 0x01, 0x26, 0x40, 0x08, 0x64, 0x00, 0x82, 0x30, 0x04, 0x99, 0x00, 0x21, 0x90, 0x02, 0x00, 0xb2, 0x00, 0x20, 0x08, 0xe0]);
+	          }
+	          break;
+	        // handle HE-AAC below (mp4a.40.5 / mp4a.40.29)
+	        default:
+	          if (channelCount === 1) {
+	            // ffmpeg -y -f lavfi -i "aevalsrc=0:d=0.05" -c:a libfdk_aac -profile:a aac_he -b:a 4k output.aac && hexdump -v -e '16/1 "0x%x," "\n"' -v output.aac
+	            return new Uint8Array([0x1, 0x40, 0x22, 0x80, 0xa3, 0x4e, 0xe6, 0x80, 0xba, 0x8, 0x0, 0x0, 0x0, 0x1c, 0x6, 0xf1, 0xc1, 0xa, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5e]);
+	          } else if (channelCount === 2) {
+	            // ffmpeg -y -f lavfi -i "aevalsrc=0|0:d=0.05" -c:a libfdk_aac -profile:a aac_he_v2 -b:a 4k output.aac && hexdump -v -e '16/1 "0x%x," "\n"' -v output.aac
+	            return new Uint8Array([0x1, 0x40, 0x22, 0x80, 0xa3, 0x5e, 0xe6, 0x80, 0xba, 0x8, 0x0, 0x0, 0x0, 0x0, 0x95, 0x0, 0x6, 0xf1, 0xa1, 0xa, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5e]);
+	          } else if (channelCount === 3) {
+	            // ffmpeg -y -f lavfi -i "aevalsrc=0|0|0:d=0.05" -c:a libfdk_aac -profile:a aac_he_v2 -b:a 4k output.aac && hexdump -v -e '16/1 "0x%x," "\n"' -v output.aac
+	            return new Uint8Array([0x1, 0x40, 0x22, 0x80, 0xa3, 0x5e, 0xe6, 0x80, 0xba, 0x8, 0x0, 0x0, 0x0, 0x0, 0x95, 0x0, 0x6, 0xf1, 0xa1, 0xa, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5e]);
+	          }
+	          break;
 	      }
 	      return null;
 	    }
@@ -22471,7 +25100,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = AAC;
 
-	},{}],28:[function(_dereq_,module,exports){
+	},{}],30:[function(_dereq_,module,exports){
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
@@ -22587,7 +25216,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = BufferHelper;
 
-	},{}],29:[function(_dereq_,module,exports){
+	},{}],31:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -22598,7 +25227,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Level Helper class, providing methods dealing with playlist sliding and drift
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     */
 
-	var _logger = _dereq_(43);
+	var _logger = _dereq_(45);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -22670,7 +25299,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function updateFragPTSDTS(details, sn, startPTS, endPTS, startDTS, endDTS) {
 	      var fragIdx, fragments, frag, i;
 	      // exit if sn out of range
-	      if (sn < details.startSN || sn > details.endSN) {
+	      if (!details || sn < details.startSN || sn > details.endSN) {
 	        return 0;
 	      }
 	      fragIdx = sn - details.startSN;
@@ -22748,7 +25377,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = LevelHelper;
 
-	},{"43":43}],30:[function(_dereq_,module,exports){
+	},{"45":45}],32:[function(_dereq_,module,exports){
 	/**
 	 * HLS interface
 	 */
@@ -22762,57 +25391,57 @@ return /******/ (function(modules) { // webpackBootstrap
 	//import FetchLoader from './utils/fetch-loader';
 
 
-	var _events = _dereq_(26);
+	var _events = _dereq_(28);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _errors = _dereq_(24);
+	var _errors = _dereq_(26);
 
-	var _playlistLoader = _dereq_(34);
+	var _playlistLoader = _dereq_(36);
 
 	var _playlistLoader2 = _interopRequireDefault(_playlistLoader);
 
-	var _fragmentLoader = _dereq_(32);
+	var _fragmentLoader = _dereq_(34);
 
 	var _fragmentLoader2 = _interopRequireDefault(_fragmentLoader);
 
-	var _abrController = _dereq_(3);
+	var _abrController = _dereq_(4);
 
 	var _abrController2 = _interopRequireDefault(_abrController);
 
-	var _bufferController = _dereq_(6);
+	var _bufferController = _dereq_(7);
 
 	var _bufferController2 = _interopRequireDefault(_bufferController);
 
-	var _capLevelController = _dereq_(7);
+	var _capLevelController = _dereq_(8);
 
 	var _capLevelController2 = _interopRequireDefault(_capLevelController);
 
-	var _audioStreamController = _dereq_(4);
+	var _audioStreamController = _dereq_(5);
 
 	var _audioStreamController2 = _interopRequireDefault(_audioStreamController);
 
-	var _streamController = _dereq_(11);
+	var _streamController = _dereq_(12);
 
 	var _streamController2 = _interopRequireDefault(_streamController);
 
-	var _levelController = _dereq_(10);
+	var _levelController = _dereq_(11);
 
 	var _levelController2 = _interopRequireDefault(_levelController);
 
-	var _timelineController = _dereq_(12);
+	var _timelineController = _dereq_(13);
 
 	var _timelineController2 = _interopRequireDefault(_timelineController);
 
-	var _fpsController = _dereq_(9);
+	var _fpsController = _dereq_(10);
 
 	var _fpsController2 = _interopRequireDefault(_fpsController);
 
-	var _audioTrackController = _dereq_(5);
+	var _audioTrackController = _dereq_(6);
 
 	var _audioTrackController2 = _interopRequireDefault(_audioTrackController);
 
-	var _logger = _dereq_(43);
+	var _logger = _dereq_(45);
 
 	var _xhrLoader = _dereq_(47);
 
@@ -22822,11 +25451,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events4 = _interopRequireDefault(_events3);
 
-	var _keyLoader = _dereq_(33);
+	var _keyLoader = _dereq_(35);
 
 	var _keyLoader2 = _interopRequireDefault(_keyLoader);
 
-	var _cues = _dereq_(41);
+	var _cues = _dereq_(43);
 
 	var _cues2 = _interopRequireDefault(_cues);
 
@@ -22838,13 +25467,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(Hls, null, [{
 	    key: 'isSupported',
 	    value: function isSupported() {
+	      window.MediaSource = window.MediaSource || window.WebKitMediaSource;
 	      return window.MediaSource && typeof window.MediaSource.isTypeSupported === 'function' && window.MediaSource.isTypeSupported('video/mp4; codecs="avc1.42E01E,mp4a.40.2"');
 	    }
 	  }, {
 	    key: 'version',
 	    get: function get() {
 	      // replaced with browserify-versionify transform
-	      return '0.6.7';
+	      return '0.6.18';
 	    }
 	  }, {
 	    key: 'Events',
@@ -22872,18 +25502,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	          debug: false,
 	          capLevelOnFPSDrop: false,
 	          capLevelToPlayerSize: false,
+	          initialLiveManifestSize: 1,
 	          maxBufferLength: 30,
 	          maxBufferSize: 60 * 1000 * 1000,
 	          maxBufferHole: 0.5,
+	          maxMaxBufferLength: 600,
 	          maxSeekHole: 2,
-	          seekHoleNudgeDuration: 0.01,
-	          stalledInBufferedNudgeThreshold: 10,
+	          lowBufferWatchdogPeriod: 0.5,
+	          highBufferWatchdogPeriod: 3,
+	          nudgeOffset: 0.1,
+	          nudgeMaxRetry: 3,
 	          maxFragLookUpTolerance: 0.2,
 	          liveSyncDurationCount: 3,
 	          liveMaxLatencyDurationCount: Infinity,
 	          liveSyncDuration: undefined,
 	          liveMaxLatencyDuration: undefined,
-	          maxMaxBufferLength: 600,
 	          enableWorker: true,
 	          enableSoftwareAES: true,
 	          manifestLoadingTimeOut: 10000,
@@ -22922,12 +25555,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	          enableMP2TPassThrough: false,
 	          stretchShortVideoTrack: false,
 	          forceKeyFrameOnDiscontinuity: true,
-	          abrEwmaFastLive: 5,
+	          abrEwmaFastLive: 3,
 	          abrEwmaSlowLive: 9,
 	          abrEwmaFastVoD: 3,
 	          abrEwmaSlowVoD: 9,
 	          abrEwmaDefaultEstimate: 5e5, // 500 kbps
-	          abrBandWidthFactor: 0.8,
+	          abrBandWidthFactor: 0.95,
 	          abrBandWidthUpFactor: 0.7,
 	          maxStarvationDelay: 4,
 	          maxLoadingDelay: 4,
@@ -22942,7 +25575,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }]);
 
 	  function Hls() {
-	    var config = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	    var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
 	    _classCallCheck(this, Hls);
 
@@ -23049,9 +25682,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'startLoad',
 	    value: function startLoad() {
-	      var startPosition = arguments.length <= 0 || arguments[0] === undefined ? -1 : arguments[0];
+	      var startPosition = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : -1;
 
-	      _logger.logger.log('startLoad');
+	      _logger.logger.log('startLoad(' + startPosition + ')');
 	      this.levelController.startLoad();
 	      this.streamController.startLoad(startPosition);
 	      this.audioStreamController.startLoad(startPosition);
@@ -23154,7 +25787,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'firstLevel',
 	    get: function get() {
-	      return this.levelController.firstLevel;
+	      return Math.max(this.levelController.firstLevel, this.abrController.minAutoLevel);
 	    }
 
 	    /** set first level (index of first level referenced in manifest)
@@ -23250,15 +25883,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = Hls;
 
-	},{"1":1,"10":10,"11":11,"12":12,"24":24,"26":26,"3":3,"32":32,"33":33,"34":34,"4":4,"41":41,"43":43,"47":47,"5":5,"6":6,"7":7,"9":9}],31:[function(_dereq_,module,exports){
+	},{"1":1,"10":10,"11":11,"12":12,"13":13,"26":26,"28":28,"34":34,"35":35,"36":36,"4":4,"43":43,"45":45,"47":47,"5":5,"6":6,"7":7,"8":8}],33:[function(_dereq_,module,exports){
 	'use strict';
 
 	// This is mostly for support of the es6 module export
 	// syntax with the babel compiler, it looks like it doesnt support
 	// function exports like we are used to in node/commonjs
-	module.exports = _dereq_(30).default;
+	module.exports = _dereq_(32).default;
 
-	},{"30":30}],32:[function(_dereq_,module,exports){
+	},{"32":32}],34:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -23267,17 +25900,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _events = _dereq_(26);
+	var _events = _dereq_(28);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = _dereq_(25);
+	var _eventHandler = _dereq_(27);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _errors = _dereq_(24);
+	var _errors = _dereq_(26);
 
-	var _logger = _dereq_(43);
+	var _logger = _dereq_(45);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -23295,7 +25928,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function FragmentLoader(hls) {
 	    _classCallCheck(this, FragmentLoader);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(FragmentLoader).call(this, hls, _events2.default.FRAG_LOADING));
+	    var _this = _possibleConstructorReturn(this, (FragmentLoader.__proto__ || Object.getPrototypeOf(FragmentLoader)).call(this, hls, _events2.default.FRAG_LOADING));
 
 	    _this.loaders = {};
 	    return _this;
@@ -23391,7 +26024,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = FragmentLoader;
 
-	},{"24":24,"25":25,"26":26,"43":43}],33:[function(_dereq_,module,exports){
+	},{"26":26,"27":27,"28":28,"45":45}],35:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -23400,17 +26033,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _events = _dereq_(26);
+	var _events = _dereq_(28);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = _dereq_(25);
+	var _eventHandler = _dereq_(27);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _errors = _dereq_(24);
+	var _errors = _dereq_(26);
 
-	var _logger = _dereq_(43);
+	var _logger = _dereq_(45);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -23428,7 +26061,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function KeyLoader(hls) {
 	    _classCallCheck(this, KeyLoader);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(KeyLoader).call(this, hls, _events2.default.KEY_LOADING));
+	    var _this = _possibleConstructorReturn(this, (KeyLoader.__proto__ || Object.getPrototypeOf(KeyLoader)).call(this, hls, _events2.default.KEY_LOADING));
 
 	    _this.loaders = {};
 	    _this.decryptkey = null;
@@ -23461,7 +26094,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var config = this.hls.config;
 
 	        if (loader) {
-	          _logger.logger.warn('abort previous fragment loader for type:' + type);
+	          _logger.logger.warn('abort previous key loader for type:' + type);
 	          loader.abort();
 	        }
 	        frag.loader = this.loaders[type] = new config.loader(config);
@@ -23488,7 +26121,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.decryptkey = frag.decryptdata.key = new Uint8Array(response.data);
 	      // detach fragment loader on load success
 	      frag.loader = undefined;
-	      this.loaders[context.type] = undefined;
+	      this.loaders[frag.type] = undefined;
 	      this.hls.trigger(_events2.default.KEY_LOADED, { frag: frag });
 	    }
 	  }, {
@@ -23520,44 +26153,187 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = KeyLoader;
 
-	},{"24":24,"25":25,"26":26,"43":43}],34:[function(_dereq_,module,exports){
+	},{"26":26,"27":27,"28":28,"45":45}],36:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Playlist Loader
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     */
 
-	var _events = _dereq_(26);
+	var _urlToolkit = _dereq_(2);
+
+	var _urlToolkit2 = _interopRequireDefault(_urlToolkit);
+
+	var _events = _dereq_(28);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _eventHandler = _dereq_(25);
+	var _eventHandler = _dereq_(27);
 
 	var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
-	var _errors = _dereq_(24);
+	var _errors = _dereq_(26);
 
-	var _url = _dereq_(46);
-
-	var _url2 = _interopRequireDefault(_url);
-
-	var _attrList = _dereq_(38);
+	var _attrList = _dereq_(40);
 
 	var _attrList2 = _interopRequireDefault(_attrList);
 
-	var _logger = _dereq_(43);
+	var _logger = _dereq_(45);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Playlist Loader
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               */
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	// https://regex101.com is your friend
+	var MASTER_PLAYLIST_REGEX = /#EXT-X-STREAM-INF:([^\n\r]*)[\r\n]+([^\r\n]+)/g;
+	var MASTER_PLAYLIST_MEDIA_REGEX = /#EXT-X-MEDIA:(.*)/g;
+	var LEVEL_PLAYLIST_REGEX_FAST = /#EXTINF:(\d*(?:\.\d+)?)(?:,(.*))?|(?!#)(\S.+)|#EXT-X-BYTERANGE: *(.+)|#EXT-X-PROGRAM-DATE-TIME:(.+)|#.*/g;
+	var LEVEL_PLAYLIST_REGEX_SLOW = /(?:(?:#(EXTM3U))|(?:#EXT-X-(PLAYLIST-TYPE):(.+))|(?:#EXT-X-(MEDIA-SEQUENCE): *(\d+))|(?:#EXT-X-(TARGETDURATION): *(\d+))|(?:#EXT-X-(KEY):(.+))|(?:#EXT-X-(START):(.+))|(?:#EXT-X-(ENDLIST))|(?:#EXT-X-(DISCONTINUITY-SEQ)UENCE:(\d+))|(?:#EXT-X-(DIS)CONTINUITY))|(?:#EXT-X-(VERSION):(\d+))|(?:(#)(.*):(.*))|(?:(#)(.*))(?:.*)\r?\n?/;
+
+	var LevelKey = function () {
+	  function LevelKey() {
+	    _classCallCheck(this, LevelKey);
+
+	    this.method = null;
+	    this.key = null;
+	    this.iv = null;
+	    this._uri = null;
+	  }
+
+	  _createClass(LevelKey, [{
+	    key: 'uri',
+	    get: function get() {
+	      if (!this._uri && this.reluri) {
+	        this._uri = _urlToolkit2.default.buildAbsoluteURL(this.baseuri, this.reluri);
+	      }
+	      return this._uri;
+	    }
+	  }]);
+
+	  return LevelKey;
+	}();
+
+	var Fragment = function () {
+	  function Fragment() {
+	    _classCallCheck(this, Fragment);
+
+	    this._url = null;
+	    this._byteRange = null;
+	    this._decryptdata = null;
+	  }
+
+	  _createClass(Fragment, [{
+	    key: 'createInitializationVector',
+
+
+	    /**
+	     * Utility method for parseLevelPlaylist to create an initialization vector for a given segment
+	     * @returns {Uint8Array}
+	     */
+	    value: function createInitializationVector(segmentNumber) {
+	      var uint8View = new Uint8Array(16);
+
+	      for (var i = 12; i < 16; i++) {
+	        uint8View[i] = segmentNumber >> 8 * (15 - i) & 0xff;
+	      }
+
+	      return uint8View;
+	    }
+
+	    /**
+	     * Utility method for parseLevelPlaylist to get a fragment's decryption data from the currently parsed encryption key data
+	     * @param levelkey - a playlist's encryption info
+	     * @param segmentNumber - the fragment's segment number
+	     * @returns {*} - an object to be applied as a fragment's decryptdata
+	     */
+
+	  }, {
+	    key: 'fragmentDecryptdataFromLevelkey',
+	    value: function fragmentDecryptdataFromLevelkey(levelkey, segmentNumber) {
+	      var decryptdata = levelkey;
+
+	      if (levelkey && levelkey.method && levelkey.uri && !levelkey.iv) {
+	        decryptdata = new LevelKey();
+	        decryptdata.method = levelkey.method;
+	        decryptdata.baseuri = levelkey.baseuri;
+	        decryptdata.reluri = levelkey.reluri;
+	        decryptdata.iv = this.createInitializationVector(segmentNumber);
+	      }
+
+	      return decryptdata;
+	    }
+	  }, {
+	    key: 'cloneObj',
+	    value: function cloneObj(obj) {
+	      return JSON.parse(JSON.stringify(obj));
+	    }
+	  }, {
+	    key: 'url',
+	    get: function get() {
+	      if (!this._url && this.relurl) {
+	        this._url = _urlToolkit2.default.buildAbsoluteURL(this.baseurl, this.relurl);
+	      }
+	      return this._url;
+	    },
+	    set: function set(value) {
+	      this._url = value;
+	    }
+	  }, {
+	    key: 'programDateTime',
+	    get: function get() {
+	      if (!this._programDateTime && this.rawProgramDateTime) {
+	        this._programDateTime = new Date(Date.parse(this.rawProgramDateTime));
+	      }
+	      return this._programDateTime;
+	    }
+	  }, {
+	    key: 'byteRange',
+	    get: function get() {
+	      if (!this._byteRange) {
+	        var byteRange = this._byteRange = [];
+	        if (this.rawByteRange) {
+	          var params = this.rawByteRange.split('@', 2);
+	          if (params.length === 1) {
+	            var lastByteRangeEndOffset = this.lastByteRangeEndOffset;
+	            byteRange[0] = lastByteRangeEndOffset ? lastByteRangeEndOffset : 0;
+	          } else {
+	            byteRange[0] = parseInt(params[1]);
+	          }
+	          byteRange[1] = parseInt(params[0]) + byteRange[0];
+	        }
+	      }
+	      return this._byteRange;
+	    }
+	  }, {
+	    key: 'byteRangeStartOffset',
+	    get: function get() {
+	      return this.byteRange[0];
+	    }
+	  }, {
+	    key: 'byteRangeEndOffset',
+	    get: function get() {
+	      return this.byteRange[1];
+	    }
+	  }, {
+	    key: 'decryptdata',
+	    get: function get() {
+	      if (!this._decryptdata) {
+	        this._decryptdata = this.fragmentDecryptdataFromLevelkey(this.levelkey, this.sn);
+	      }
+	      return this._decryptdata;
+	    }
+	  }]);
+
+	  return Fragment;
+	}();
 
 	var PlaylistLoader = function (_EventHandler) {
 	  _inherits(PlaylistLoader, _EventHandler);
@@ -23565,7 +26341,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function PlaylistLoader(hls) {
 	    _classCallCheck(this, PlaylistLoader);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PlaylistLoader).call(this, hls, _events2.default.MANIFEST_LOADING, _events2.default.LEVEL_LOADING, _events2.default.AUDIO_TRACK_LOADING));
+	    var _this = _possibleConstructorReturn(this, (PlaylistLoader.__proto__ || Object.getPrototypeOf(PlaylistLoader)).call(this, hls, _events2.default.MANIFEST_LOADING, _events2.default.LEVEL_LOADING, _events2.default.AUDIO_TRACK_LOADING));
 
 	    _this.loaders = {};
 	    return _this;
@@ -23621,13 +26397,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        retry = config.manifestLoadingMaxRetry;
 	        timeout = config.manifestLoadingTimeOut;
 	        retryDelay = config.manifestLoadingRetryDelay;
-	        maxRetryDelay = config.manifestLoadingMaxRetryTimeOut;
+	        maxRetryDelay = config.manifestLoadingMaxRetryTimeout;
 	      } else {
 	        retry = config.levelLoadingMaxRetry;
 	        timeout = config.levelLoadingTimeOut;
 	        retryDelay = config.levelLoadingRetryDelay;
-	        maxRetryDelay = config.levelLoadingMaxRetryTimeOut;
-	        _logger.logger.log('loading playlist for level ' + context.level);
+	        maxRetryDelay = config.levelLoadingMaxRetryTimeout;
+	        _logger.logger.log('loading playlist for ' + context.type + ' ' + (context.level || context.id));
 	      }
 	      loader = this.loaders[context.type] = context.loader = typeof config.pLoader !== 'undefined' ? new config.pLoader(config) : new config.loader(config);
 	      context.url = url;
@@ -23642,17 +26418,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'resolve',
 	    value: function resolve(url, baseUrl) {
-	      return _url2.default.buildAbsoluteURL(baseUrl, url);
+	      return _urlToolkit2.default.buildAbsoluteURL(baseUrl, url);
 	    }
 	  }, {
 	    key: 'parseMasterPlaylist',
 	    value: function parseMasterPlaylist(string, baseurl) {
 	      var levels = [],
 	          result = void 0;
-
-	      // https://regex101.com is your friend
-	      var re = /#EXT-X-STREAM-INF:([^\n\r]*)[\r\n]+([^\r\n]+)/g;
-	      while ((result = re.exec(string)) != null) {
+	      MASTER_PLAYLIST_REGEX.lastIndex = 0;
+	      while ((result = MASTER_PLAYLIST_REGEX.exec(string)) != null) {
 	        var level = {};
 
 	        var attrs = level.attrs = new _attrList2.default(result[1]);
@@ -23668,7 +26442,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var codecs = attrs.CODECS;
 	        if (codecs) {
-	          codecs = codecs.split(',');
+	          codecs = codecs.split(/[ ,]+/);
 	          for (var i = 0; i < codecs.length; i++) {
 	            var codec = codecs[i];
 	            if (codec.indexOf('avc1') !== -1) {
@@ -23688,10 +26462,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function parseMasterPlaylistMedia(string, baseurl, type) {
 	      var result = void 0,
 	          medias = [];
-
-	      // https://regex101.com is your friend
-	      var re = /#EXT-X-MEDIA:(.*)/g;
-	      while ((result = re.exec(string)) != null) {
+	      MASTER_PLAYLIST_MEDIA_REGEX.lastIndex = 0;
+	      while ((result = MASTER_PLAYLIST_MEDIA_REGEX.exec(string)) != null) {
 	        var media = {};
 	        var attrs = new _attrList2.default(result[1]);
 	        if (attrs.TYPE === type) {
@@ -23713,42 +26485,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      return medias;
 	    }
-	    /**
-	     * Utility method for parseLevelPlaylist to create an initialization vector for a given segment
-	     * @returns {Uint8Array}
-	     */
-
-	  }, {
-	    key: 'createInitializationVector',
-	    value: function createInitializationVector(segmentNumber) {
-	      var uint8View = new Uint8Array(16);
-
-	      for (var i = 12; i < 16; i++) {
-	        uint8View[i] = segmentNumber >> 8 * (15 - i) & 0xff;
-	      }
-
-	      return uint8View;
-	    }
-
-	    /**
-	     * Utility method for parseLevelPlaylist to get a fragment's decryption data from the currently parsed encryption key data
-	     * @param levelkey - a playlist's encryption info
-	     * @param segmentNumber - the fragment's segment number
-	     * @returns {*} - an object to be applied as a fragment's decryptdata
-	     */
-
-	  }, {
-	    key: 'fragmentDecryptdataFromLevelkey',
-	    value: function fragmentDecryptdataFromLevelkey(levelkey, segmentNumber) {
-	      var decryptdata = levelkey;
-
-	      if (levelkey && levelkey.method && levelkey.uri && !levelkey.iv) {
-	        decryptdata = this.cloneObj(levelkey);
-	        decryptdata.iv = this.createInitializationVector(segmentNumber);
-	      }
-
-	      return decryptdata;
-	    }
 	  }, {
 	    key: 'avc1toavcoti',
 	    value: function avc1toavcoti(codec) {
@@ -23764,145 +26500,144 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return result;
 	    }
 	  }, {
-	    key: 'cloneObj',
-	    value: function cloneObj(obj) {
-	      return JSON.parse(JSON.stringify(obj));
-	    }
-	  }, {
 	    key: 'parseLevelPlaylist',
 	    value: function parseLevelPlaylist(string, baseurl, id, type) {
 	      var currentSN = 0,
-	          fragdecryptdata,
 	          totalduration = 0,
 	          level = { type: null, version: null, url: baseurl, fragments: [], live: true, startSN: 0 },
-	          levelkey = { method: null, key: null, iv: null, uri: null },
+	          levelkey = new LevelKey(),
 	          cc = 0,
-	          programDateTime = null,
-	          frag = null,
+	          prevFrag = null,
+	          frag = new Fragment(),
 	          result,
-	          regexp,
-	          duration = null,
-	          title = null,
-	          byteRangeEndOffset = null,
-	          byteRangeStartOffset = null,
-	          tagList = [];
+	          i;
 
-	      regexp = /(?:(?:#(EXTM3U))|(?:#EXT-X-(PLAYLIST-TYPE):(.+))|(?:#EXT-X-(MEDIA-SEQUENCE):(\d+))|(?:#EXT-X-(TARGETDURATION):(\d+))|(?:#EXT-X-(KEY):(.+))|(?:#EXT-X-(START):(.+))|(?:#EXT(INF):(\d+(?:\.\d+)?)(?:,(.*))?)|(?:(?!#)()(\S.+))|(?:#EXT-X-(BYTERANGE):(\d+(?:@\d+(?:\.\d+)?)?)|(?:#EXT-X-(ENDLIST))|(?:#EXT-X-(DIS)CONTINUITY))|(?:#EXT-X-(PROGRAM-DATE-TIME):(.+))|(?:#EXT-X-(VERSION):(\d+))|(?:(#)(.*):(.*))|(?:(#)(.*)))(?:.*)\r?\n?/g;
-	      while ((result = regexp.exec(string)) !== null) {
-	        result.shift();
-	        result = result.filter(function (n) {
-	          return n !== undefined;
-	        });
-	        switch (result[0]) {
-	          case 'PLAYLIST-TYPE':
-	            level.type = result[1].toUpperCase();
-	            break;
-	          case 'MEDIA-SEQUENCE':
-	            currentSN = level.startSN = parseInt(result[1]);
-	            break;
-	          case 'TARGETDURATION':
-	            level.targetduration = parseFloat(result[1]);
-	            break;
-	          case 'VERSION':
-	            level.version = parseInt(result[1]);
-	            break;
-	          case 'EXTM3U':
-	            break;
-	          case 'ENDLIST':
-	            level.live = false;
-	            break;
-	          case 'DIS':
-	            cc++;
-	            tagList.push(result);
-	            break;
-	          case 'BYTERANGE':
-	            var params = result[1].split('@');
-	            if (params.length === 1) {
-	              byteRangeStartOffset = byteRangeEndOffset;
-	            } else {
-	              byteRangeStartOffset = parseInt(params[1]);
+	      frag.tagList = [];
+
+	      LEVEL_PLAYLIST_REGEX_FAST.lastIndex = 0;
+
+	      while ((result = LEVEL_PLAYLIST_REGEX_FAST.exec(string)) !== null) {
+	        var duration = result[1];
+	        if (duration) {
+	          // INF
+	          frag.duration = parseFloat(duration);
+	          // avoid sliced strings    https://github.com/dailymotion/hls.js/issues/939
+	          var title = (' ' + result[2]).slice(1);
+	          frag.title = title ? title : null;
+	          frag.tagList.push(title ? ['INF', duration, title] : ['INF', duration]);
+	        } else if (result[3]) {
+	          // url
+	          if (!isNaN(frag.duration)) {
+	            var sn = currentSN++;
+	            frag.type = type;
+	            frag.start = totalduration;
+	            frag.levelkey = levelkey;
+	            frag.sn = sn;
+	            frag.level = id;
+	            frag.cc = cc;
+	            frag.baseurl = baseurl;
+	            // avoid sliced strings    https://github.com/dailymotion/hls.js/issues/939
+	            frag.relurl = (' ' + result[3]).slice(1);
+
+	            level.fragments.push(frag);
+	            prevFrag = frag;
+	            totalduration += frag.duration;
+
+	            frag = new Fragment();
+	            frag.tagList = [];
+	          }
+	        } else if (result[4]) {
+	          // X-BYTERANGE
+	          frag.rawByteRange = (' ' + result[4]).slice(1);
+	          if (prevFrag) {
+	            var lastByteRangeEndOffset = prevFrag.byteRangeEndOffset;
+	            if (lastByteRangeEndOffset) {
+	              frag.lastByteRangeEndOffset = lastByteRangeEndOffset;
 	            }
-	            byteRangeEndOffset = parseInt(params[0]) + byteRangeStartOffset;
-	            break;
-	          case 'INF':
-	            duration = parseFloat(result[1]);
-	            title = result[2] ? result[2] : null;
-	            tagList.push(result);
-	            break;
-	          case '':
-	            // url
-	            if (!isNaN(duration)) {
-	              var sn = currentSN++;
-	              fragdecryptdata = this.fragmentDecryptdataFromLevelkey(levelkey, sn);
-	              var url = result[1] ? this.resolve(result[1], baseurl) : null;
-	              frag = { url: url,
-	                type: type,
-	                duration: duration,
-	                title: title,
-	                start: totalduration,
-	                sn: sn,
-	                level: id,
-	                cc: cc,
-	                decryptdata: fragdecryptdata,
-	                programDateTime: programDateTime,
-	                tagList: tagList };
-	              // only include byte range options if used/needed
-	              if (byteRangeStartOffset !== null) {
-	                frag.byteRangeStartOffset = byteRangeStartOffset;
-	                frag.byteRangeEndOffset = byteRangeEndOffset;
+	          }
+	        } else if (result[5]) {
+	          // PROGRAM-DATE-TIME
+	          // avoid sliced strings    https://github.com/dailymotion/hls.js/issues/939
+	          frag.rawProgramDateTime = (' ' + result[5]).slice(1);
+	          frag.tagList.push(['PROGRAM-DATE-TIME', frag.rawProgramDateTime]);
+	        } else {
+	          result = result[0].match(LEVEL_PLAYLIST_REGEX_SLOW);
+	          for (i = 1; i < result.length; i++) {
+	            if (result[i] !== undefined) {
+	              break;
+	            }
+	          }
+
+	          // avoid sliced strings    https://github.com/dailymotion/hls.js/issues/939
+	          var value1 = (' ' + result[i + 1]).slice(1);
+	          var value2 = (' ' + result[i + 2]).slice(1);
+
+	          switch (result[i]) {
+	            case '#':
+	              frag.tagList.push(value2 ? [value1, value2] : [value1]);
+	              break;
+	            case 'PLAYLIST-TYPE':
+	              level.type = value1.toUpperCase();
+	              break;
+	            case 'MEDIA-SEQUENCE':
+	              currentSN = level.startSN = parseInt(value1);
+	              break;
+	            case 'TARGETDURATION':
+	              level.targetduration = parseFloat(value1);
+	              break;
+	            case 'VERSION':
+	              level.version = parseInt(value1);
+	              break;
+	            case 'EXTM3U':
+	              break;
+	            case 'ENDLIST':
+	              level.live = false;
+	              break;
+	            case 'DIS':
+	              cc++;
+	              frag.tagList.push(['DIS']);
+	              break;
+	            case 'DISCONTINUITY-SEQ':
+	              cc = parseInt(value1);
+	              break;
+	            case 'KEY':
+	              // https://tools.ietf.org/html/draft-pantos-http-live-streaming-08#section-3.4.4
+	              var decryptparams = value1;
+	              var keyAttrs = new _attrList2.default(decryptparams);
+	              var decryptmethod = keyAttrs.enumeratedString('METHOD'),
+	                  decrypturi = keyAttrs.URI,
+	                  decryptiv = keyAttrs.hexadecimalInteger('IV');
+	              if (decryptmethod) {
+	                levelkey = new LevelKey();
+	                if (decrypturi && decryptmethod === 'AES-128') {
+	                  levelkey.method = decryptmethod;
+	                  // URI to get the key
+	                  levelkey.baseuri = baseurl;
+	                  levelkey.reluri = decrypturi;
+	                  levelkey.key = null;
+	                  // Initialization Vector (IV)
+	                  levelkey.iv = decryptiv;
+	                }
 	              }
-	              level.fragments.push(frag);
-	              totalduration += duration;
-	              duration = null;
-	              title = null;
-	              byteRangeStartOffset = null;
-	              programDateTime = null;
-	              tagList = [];
-	            }
-	            break;
-	          case 'KEY':
-	            // https://tools.ietf.org/html/draft-pantos-http-live-streaming-08#section-3.4.4
-	            var decryptparams = result[1];
-	            var keyAttrs = new _attrList2.default(decryptparams);
-	            var decryptmethod = keyAttrs.enumeratedString('METHOD'),
-	                decrypturi = keyAttrs.URI,
-	                decryptiv = keyAttrs.hexadecimalInteger('IV');
-	            if (decryptmethod) {
-	              levelkey = { method: null, key: null, iv: null, uri: null };
-	              if (decrypturi && decryptmethod === 'AES-128') {
-	                levelkey.method = decryptmethod;
-	                // URI to get the key
-	                levelkey.uri = this.resolve(decrypturi, baseurl);
-	                levelkey.key = null;
-	                // Initialization Vector (IV)
-	                levelkey.iv = decryptiv;
+	              break;
+	            case 'START':
+	              var startParams = value1;
+	              var startAttrs = new _attrList2.default(startParams);
+	              var startTimeOffset = startAttrs.decimalFloatingPoint('TIME-OFFSET');
+	              //TIME-OFFSET can be 0
+	              if (!isNaN(startTimeOffset)) {
+	                level.startTimeOffset = startTimeOffset;
 	              }
-	            }
-	            break;
-	          case 'START':
-	            var startParams = result[1];
-	            var startAttrs = new _attrList2.default(startParams);
-	            var startTimeOffset = startAttrs.decimalFloatingPoint('TIME-OFFSET');
-	            //TIME-OFFSET can be 0
-	            if (!isNaN(startTimeOffset)) {
-	              level.startTimeOffset = startTimeOffset;
-	            }
-	            break;
-	          case 'PROGRAM-DATE-TIME':
-	            programDateTime = new Date(Date.parse(result[1]));
-	            tagList.push(result);
-	            break;
-	          case '#':
-	            result.shift();
-	            tagList.push(result);
-	            break;
-	          default:
-	            _logger.logger.warn('line parsed but not handled: ' + result);
-	            break;
+	              break;
+	            default:
+	              _logger.logger.warn('line parsed but not handled: ' + result);
+	              break;
+	          }
 	        }
 	      }
+	      frag = prevFrag;
 	      //logger.log('found ' + level.fragments.length + ' fragments');
-	      if (frag && !frag.url) {
+	      if (frag && !frag.relurl) {
 	        level.fragments.pop();
 	        totalduration -= frag.duration;
 	      }
@@ -23939,10 +26674,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            hls.trigger(_events2.default.MANIFEST_LOADED, { levels: [{ url: url, details: levelDetails }], audioTracks: [], url: url, stats: stats });
 	          }
 	          stats.tparsed = performance.now();
-	          if (isLevel) {
-	            hls.trigger(_events2.default.LEVEL_LOADED, { details: levelDetails, level: level || 0, id: id || 0, stats: stats });
+	          if (levelDetails.targetduration) {
+	            if (isLevel) {
+	              hls.trigger(_events2.default.LEVEL_LOADED, { details: levelDetails, level: level || 0, id: id || 0, stats: stats });
+	            } else {
+	              hls.trigger(_events2.default.AUDIO_TRACK_LOADED, { details: levelDetails, id: id, stats: stats });
+	            }
 	          } else {
-	            hls.trigger(_events2.default.AUDIO_TRACK_LOADED, { details: levelDetails, id: id, stats: stats });
+	            hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.NETWORK_ERROR, details: _errors.ErrorDetails.MANIFEST_PARSING_ERROR, fatal: true, url: url, reason: 'invalid targetduration' });
 	          }
 	        } else {
 	          var levels = this.parseMasterPlaylist(string, url);
@@ -24032,7 +26771,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = PlaylistLoader;
 
-	},{"24":24,"25":25,"26":26,"38":38,"43":43,"46":46}],35:[function(_dereq_,module,exports){
+	},{"2":2,"26":26,"27":27,"28":28,"40":40,"45":45}],37:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -24048,7 +26787,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	*/
 
 	//import Hex from '../utils/hex';
-
 	var MP4 = function () {
 	  function MP4() {
 	    _classCallCheck(this, MP4);
@@ -24074,8 +26812,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        moof: [],
 	        moov: [],
 	        mp4a: [],
+	        '.mp3': [],
 	        mvex: [],
 	        mvhd: [],
+	        pasp: [],
 	        sdtp: [],
 	        stbl: [],
 	        stco: [],
@@ -24146,7 +26886,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      0x00, 0x00, 0x00, // flags
 	      0x00, 0x00, 0x00, 0x00, // sample_size
 	      0x00, 0x00, 0x00, 0x00]);
-	      // sample_count
 	      MP4.VMHD = new Uint8Array([0x00, // version
 	      0x00, 0x00, 0x01, // flags
 	      0x00, 0x00, // graphicsmode
@@ -24231,7 +26970,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'minf',
-	    // sequence_number
 	    value: function minf(track) {
 	      if (track.type === 'audio') {
 	        return MP4.box(MP4.types.minf, MP4.box(MP4.types.smhd, MP4.SMHD), MP4.DINF, MP4.stbl(track));
@@ -24350,7 +27088,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      ]).concat(pps))),
 	          // "PPS"
 	      width = track.width,
-	          height = track.height;
+	          height = track.height,
+	          hSpacing = track.pixelRatio[0],
+	          vSpacing = track.pixelRatio[1];
 	      //console.log('avcc:' + Hex.hexDump(avcc));
 	      return MP4.box(MP4.types.avc1, new Uint8Array([0x00, 0x00, 0x00, // reserved
 	      0x00, 0x00, 0x00, // reserved
@@ -24370,8 +27110,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      0x11, 0x11]), // pre_defined = -1
 	      avcc, MP4.box(MP4.types.btrt, new Uint8Array([0x00, 0x1c, 0x9c, 0x80, // bufferSizeDB
 	      0x00, 0x2d, 0xc6, 0xc0, // maxBitrate
-	      0x00, 0x2d, 0xc6, 0xc0])) // avgBitrate
-	      );
+	      0x00, 0x2d, 0xc6, 0xc0])), // avgBitrate
+	      MP4.box(MP4.types.pasp, new Uint8Array([hSpacing >> 24, // hSpacing
+	      hSpacing >> 16 & 0xFF, hSpacing >> 8 & 0xFF, hSpacing & 0xFF, vSpacing >> 24, // vSpacing
+	      vSpacing >> 16 & 0xFF, vSpacing >> 8 & 0xFF, vSpacing & 0xFF])));
 	    }
 	  }, {
 	    key: 'esds',
@@ -24411,9 +27153,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	      0x00, 0x00]), MP4.box(MP4.types.esds, MP4.esds(track)));
 	    }
 	  }, {
+	    key: 'mp3',
+	    value: function mp3(track) {
+	      var audiosamplerate = track.audiosamplerate;
+	      return MP4.box(MP4.types['.mp3'], new Uint8Array([0x00, 0x00, 0x00, // reserved
+	      0x00, 0x00, 0x00, // reserved
+	      0x00, 0x01, // data_reference_index
+	      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // reserved
+	      0x00, track.channelCount, // channelcount
+	      0x00, 0x10, // sampleSize:16bits
+	      0x00, 0x00, 0x00, 0x00, // reserved2
+	      audiosamplerate >> 8 & 0xFF, audiosamplerate & 0xff, //
+	      0x00, 0x00]));
+	    }
+	  }, {
 	    key: 'stsd',
 	    value: function stsd(track) {
 	      if (track.type === 'audio') {
+	        if (!track.isAAC && track.codec === 'mp3') {
+	          return MP4.box(MP4.types.stsd, MP4.STSD, MP4.mp3(track));
+	        }
 	        return MP4.box(MP4.types.stsd, MP4.STSD, MP4.mp4a(track));
 	      } else {
 	        return MP4.box(MP4.types.stsd, MP4.STSD, MP4.avc1(track));
@@ -24450,11 +27209,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          id = track.id;
 	      return MP4.box(MP4.types.traf, MP4.box(MP4.types.tfhd, new Uint8Array([0x00, // version 0
 	      0x00, 0x00, 0x00, // flags
-	      id >> 24, id >> 16 & 0XFF, id >> 8 & 0XFF, id & 0xFF])), // track_ID
-	      MP4.box(MP4.types.tfdt, new Uint8Array([0x00, // version 0
+	      id >> 24, id >> 16 & 0XFF, id >> 8 & 0XFF, id & 0xFF])), MP4.box(MP4.types.tfdt, new Uint8Array([0x00, // version 0
 	      0x00, 0x00, 0x00, // flags
-	      baseMediaDecodeTime >> 24, baseMediaDecodeTime >> 16 & 0XFF, baseMediaDecodeTime >> 8 & 0XFF, baseMediaDecodeTime & 0xFF])), // baseMediaDecodeTime
-	      MP4.trun(track, sampleDependencyTable.length + 16 + // tfhd
+	      baseMediaDecodeTime >> 24, baseMediaDecodeTime >> 16 & 0XFF, baseMediaDecodeTime >> 8 & 0XFF, baseMediaDecodeTime & 0xFF])), MP4.trun(track, sampleDependencyTable.length + 16 + // tfhd
 	      16 + // tfdt
 	      8 + // traf header
 	      16 + // mfhd
@@ -24541,7 +27298,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = MP4;
 
-	},{}],36:[function(_dereq_,module,exports){
+	},{}],38:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -24552,35 +27309,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * fMP4 remuxer
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     */
 
-	var _aac = _dereq_(27);
+	var _aac = _dereq_(29);
 
 	var _aac2 = _interopRequireDefault(_aac);
 
-	var _events = _dereq_(26);
+	var _events = _dereq_(28);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _logger = _dereq_(43);
+	var _logger = _dereq_(45);
 
-	var _mp4Generator = _dereq_(35);
+	var _mp4Generator = _dereq_(37);
 
 	var _mp4Generator2 = _interopRequireDefault(_mp4Generator);
 
-	var _errors = _dereq_(24);
-
-	_dereq_(44);
+	var _errors = _dereq_(26);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var MP4Remuxer = function () {
-	  function MP4Remuxer(observer, id, config) {
+	  function MP4Remuxer(observer, id, config, typeSupported) {
 	    _classCallCheck(this, MP4Remuxer);
 
 	    this.observer = observer;
 	    this.id = id;
 	    this.config = config;
+	    this.typeSupported = typeSupported;
 	    this.ISGenerated = false;
 	    this.PES2MP4SCALEFACTOR = 4;
 	    this.PES_TIMESCALE = 90000;
@@ -24602,16 +27358,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'remux',
-	    value: function remux(level, sn, audioTrack, videoTrack, id3Track, textTrack, timeOffset, contiguous, accurateTimeOffset) {
+	    value: function remux(level, sn, cc, audioTrack, videoTrack, id3Track, textTrack, timeOffset, contiguous, accurateTimeOffset, defaultInitPTS) {
 	      this.level = level;
 	      this.sn = sn;
 	      // generate Init Segment if needed
 	      if (!this.ISGenerated) {
-	        this.generateIS(audioTrack, videoTrack, timeOffset);
+	        this.generateIS(audioTrack, videoTrack, timeOffset, cc);
+	      }
+
+	      if (defaultInitPTS !== null) {
+	        this._initPTS = this._initDTS = defaultInitPTS;
 	      }
 
 	      if (this.ISGenerated) {
-	        // Purposefully remuxing audio before video, so that remuxVideo can use nextAacPts, which is
+	        // Purposefully remuxing audio before video, so that remuxVideo can use nextAudioPts, which is
 	        // calculated in remuxAudio.
 	        //logger.log('nb AAC samples:' + audioTrack.samples.length);
 	        if (audioTrack.samples.length) {
@@ -24648,11 +27408,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'generateIS',
-	    value: function generateIS(audioTrack, videoTrack, timeOffset) {
+	    value: function generateIS(audioTrack, videoTrack, timeOffset, cc) {
 	      var observer = this.observer,
 	          audioSamples = audioTrack.samples,
 	          videoSamples = videoTrack.samples,
 	          pesTimeScale = this.PES_TIMESCALE,
+	          typeSupported = this.typeSupported,
+	          container = 'audio/mp4',
 	          tracks = {},
 	          data = { id: this.id, level: this.level, sn: this.sn, tracks: tracks, unique: false },
 	          computePTSDTS = this._initPTS === undefined,
@@ -24676,14 +27438,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	              }
 	              return greatestCommonDivisor(b, a % b);
 	            };
-	            audioTrack.timescale = audioTrack.audiosamplerate / greatestCommonDivisor(audioTrack.audiosamplerate, 1024);
+	            audioTrack.timescale = audioTrack.audiosamplerate / greatestCommonDivisor(audioTrack.audiosamplerate, audioTrack.isAAC ? 1024 : 1152);
 	          })();
 	        }
 	        _logger.logger.log('audio mp4 timescale :' + audioTrack.timescale);
+	        if (!audioTrack.isAAC) {
+	          if (typeSupported.mpeg) {
+	            // Chrome and Safari
+	            container = 'audio/mpeg';
+	            audioTrack.codec = '';
+	          } else if (typeSupported.mp3) {
+	            // Firefox
+	            audioTrack.codec = 'mp3';
+	          }
+	        }
 	        tracks.audio = {
-	          container: 'audio/mp4',
+	          container: container,
 	          codec: audioTrack.codec,
-	          initSegment: _mp4Generator2.default.initSegment([audioTrack]),
+	          initSegment: !audioTrack.isAAC && typeSupported.mpeg ? new Uint8Array() : _mp4Generator2.default.initSegment([audioTrack]),
 	          metadata: {
 	            channelCount: audioTrack.channelCount
 	          }
@@ -24708,6 +27480,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (computePTSDTS) {
 	          initPTS = Math.min(initPTS, videoSamples[0].pts - pesTimeScale * timeOffset);
 	          initDTS = Math.min(initDTS, videoSamples[0].dts - pesTimeScale * timeOffset);
+	          this.observer.trigger(_events2.default.INIT_PTS_FOUND, { id: this.id, initPTS: initPTS, cc: cc });
 	        }
 	      }
 
@@ -24737,7 +27510,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	          lastPTS,
 	          lastDTS,
 	          inputSamples = track.samples,
-	          outputSamples = [];
+	          outputSamples = [],
+	          nbSamples = inputSamples.length,
+	          ptsNormalize = this._PTSNormalize,
+	          initDTS = this._initDTS;
 
 	      // for (let i = 0; i < track.samples.length; i++) {
 	      //   let avcSample = track.samples[i];
@@ -24752,6 +27528,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      //   logger.log(avcSample.pts + '/' + avcSample.dts + ',' + unitsString + avcSample.units.length);
 	      // }
 
+	      // sort video samples by DTS then PTS order
+	      inputSamples.sort(function (a, b) {
+	        var deltadts = a.dts - b.dts;
+	        return deltadts ? deltadts : a.pts - b.pts;
+	      });
+
 	      // handle broken streams with PTS < DTS, tolerance up 200ms (18000 in 90kHz timescale)
 	      var PTSDTSshift = inputSamples.reduce(function (prev, curr) {
 	        return Math.max(Math.min(prev, curr.pts - curr.dts), -18000);
@@ -24764,7 +27546,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 
 	      // PTS is coded on 33bits, and can loop from -2^32 to 2^32
-	      // PTSNormalize will make PTS/DTS value monotonic, we use last known DTS value as reference value
+	      // ptsNormalize will make PTS/DTS value monotonic, we use last known DTS value as reference value
 	      var nextAvcDts = void 0;
 	      // contiguous fragments are consecutive fragments from same quality level (same level, new SN = old SN + 1)
 	      if (contiguous) {
@@ -24777,8 +27559,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      // compute first DTS and last DTS, normalize them against reference value
 	      var sample = inputSamples[0];
-	      firstDTS = Math.max(this._PTSNormalize(sample.dts - this._initDTS, nextAvcDts), 0);
-	      firstPTS = Math.max(this._PTSNormalize(sample.pts - this._initDTS, nextAvcDts), 0);
+	      firstDTS = Math.max(ptsNormalize(sample.dts - initDTS, nextAvcDts), 0);
+	      firstPTS = Math.max(ptsNormalize(sample.pts - initDTS, nextAvcDts), 0);
 
 	      // check timestamp continuity accross consecutive fragments (this is to remove inter-fragment gap/hole)
 	      var delta = Math.round((firstDTS - nextAvcDts) / 90);
@@ -24792,10 +27574,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 	          // remove hole/gap : set DTS to next expected DTS
 	          firstDTS = nextAvcDts;
-	          inputSamples[0].dts = firstDTS + this._initDTS;
+	          inputSamples[0].dts = firstDTS + initDTS;
 	          // offset PTS as well, ensure that PTS is smaller or equal than new DTS
 	          firstPTS = Math.max(firstPTS - delta, nextAvcDts);
-	          inputSamples[0].pts = firstPTS + this._initDTS;
+	          inputSamples[0].pts = firstPTS + initDTS;
 	          _logger.logger.log('Video/PTS/DTS adjusted: ' + Math.round(firstPTS / 90) + '/' + Math.round(firstDTS / 90) + ',delta:' + delta + ' ms');
 	        }
 	      }
@@ -24803,8 +27585,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      // compute lastPTS/lastDTS
 	      sample = inputSamples[inputSamples.length - 1];
-	      lastDTS = Math.max(this._PTSNormalize(sample.dts - this._initDTS, nextAvcDts), 0);
-	      lastPTS = Math.max(this._PTSNormalize(sample.pts - this._initDTS, nextAvcDts), 0);
+	      lastDTS = Math.max(ptsNormalize(sample.dts - initDTS, nextAvcDts), 0);
+	      lastPTS = Math.max(ptsNormalize(sample.pts - initDTS, nextAvcDts), 0);
 	      lastPTS = Math.max(lastPTS, lastDTS);
 
 	      var vendor = navigator.vendor,
@@ -24819,48 +27601,57 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 
 	      // normalize all PTS/DTS now ...
-	      for (var _i = 0; _i < inputSamples.length; _i++) {
+	      for (var _i = 0; _i < nbSamples; _i++) {
 	        var _sample = inputSamples[_i];
 	        if (isSafari) {
 	          // sample DTS is computed using a constant decoding offset (mp4SampleDuration) between samples
 	          _sample.dts = firstDTS + _i * pes2mp4ScaleFactor * mp4SampleDuration;
 	        } else {
 	          // ensure sample monotonic DTS
-	          _sample.dts = Math.max(this._PTSNormalize(_sample.dts - this._initDTS, nextAvcDts), firstDTS);
+	          _sample.dts = Math.max(ptsNormalize(_sample.dts - initDTS, nextAvcDts), firstDTS);
 	          // ensure dts is a multiple of scale factor to avoid rounding issues
 	          _sample.dts = Math.round(_sample.dts / pes2mp4ScaleFactor) * pes2mp4ScaleFactor;
 	        }
 	        // we normalize PTS against nextAvcDts, we also substract initDTS (some streams don't start @ PTS O)
 	        // and we ensure that computed value is greater or equal than sample DTS
-	        _sample.pts = Math.max(this._PTSNormalize(_sample.pts - this._initDTS, nextAvcDts), _sample.dts);
+	        _sample.pts = Math.max(ptsNormalize(_sample.pts - initDTS, nextAvcDts), _sample.dts);
 	        // ensure pts is a multiple of scale factor to avoid rounding issues
 	        _sample.pts = Math.round(_sample.pts / pes2mp4ScaleFactor) * pes2mp4ScaleFactor;
 	      }
 
 	      /* concatenate the video data and construct the mdat in place
 	        (need 8 more bytes to fill length and mpdat type) */
-	      mdat = new Uint8Array(track.len + 4 * track.nbNalu + 8);
+	      var mdatSize = track.len + 4 * track.nbNalu + 8;
+	      try {
+	        mdat = new Uint8Array(mdatSize);
+	      } catch (err) {
+	        this.observer.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MUX_ERROR, level: this.level, id: this.id, details: _errors.ErrorDetails.REMUX_ALLOC_ERROR, fatal: false, bytes: mdatSize, reason: 'fail allocating video mdat ' + mdatSize });
+	        return;
+	      }
 	      var view = new DataView(mdat.buffer);
-	      view.setUint32(0, mdat.byteLength);
+	      view.setUint32(0, mdatSize);
 	      mdat.set(_mp4Generator2.default.types.mdat, 4);
 
-	      for (var _i2 = 0; _i2 < inputSamples.length; _i2++) {
+	      for (var _i2 = 0; _i2 < nbSamples; _i2++) {
 	        var avcSample = inputSamples[_i2],
+	            avcSampleUnits = avcSample.units.units,
 	            mp4SampleLength = 0,
 	            compositionTimeOffset = void 0;
 	        // convert NALU bitstream to MP4 format (prepend NALU with size field)
-	        while (avcSample.units.units.length) {
-	          var unit = avcSample.units.units.shift();
-	          view.setUint32(offset, unit.data.byteLength);
+	        for (var j = 0, nbUnits = avcSampleUnits.length; j < nbUnits; j++) {
+	          var unit = avcSampleUnits[j],
+	              unitData = unit.data,
+	              unitDataLen = unit.data.byteLength;
+	          view.setUint32(offset, unitDataLen);
 	          offset += 4;
-	          mdat.set(unit.data, offset);
-	          offset += unit.data.byteLength;
-	          mp4SampleLength += 4 + unit.data.byteLength;
+	          mdat.set(unitData, offset);
+	          offset += unitDataLen;
+	          mp4SampleLength += 4 + unitDataLen;
 	        }
 
 	        if (!isSafari) {
 	          // expected sample duration is the Decoding Timestamp diff of consecutive samples
-	          if (_i2 < inputSamples.length - 1) {
+	          if (_i2 < nbSamples - 1) {
 	            mp4SampleDuration = inputSamples[_i2 + 1].dts - avcSample.dts;
 	          } else {
 	            var config = this.config,
@@ -24874,7 +27665,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	              var maxBufferHole = config.maxBufferHole,
 	                  maxSeekHole = config.maxSeekHole,
 	                  gapTolerance = Math.floor(Math.min(maxBufferHole, maxSeekHole) * pesTimeScale),
-	                  deltaToFrameEnd = (audioTrackLength ? firstPTS + audioTrackLength * pesTimeScale : this.nextAacPts) - avcSample.pts;
+	                  deltaToFrameEnd = (audioTrackLength ? firstPTS + audioTrackLength * pesTimeScale : this.nextAudioPts) - avcSample.pts;
 	              if (deltaToFrameEnd > gapTolerance) {
 	                // We subtract lastFrameDuration from deltaToFrameEnd to try to prevent any video
 	                // frame overlap. maxBufferHole/maxSeekHole should be >> lastFrameDuration anyway.
@@ -24896,7 +27687,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          compositionTimeOffset = Math.max(0, mp4SampleDuration * Math.round((avcSample.pts - avcSample.dts) / (pes2mp4ScaleFactor * mp4SampleDuration)));
 	        }
 
-	        //console.log('PTS/DTS/initDTS/normPTS/normDTS/relative PTS : ${avcSample.pts}/${avcSample.dts}/${this._initDTS}/${ptsnorm}/${dtsnorm}/${(avcSample.pts/4294967296).toFixed(3)}');
+	        //console.log('PTS/DTS/initDTS/normPTS/normDTS/relative PTS : ${avcSample.pts}/${avcSample.dts}/${initDTS}/${ptsnorm}/${dtsnorm}/${(avcSample.pts/4294967296).toFixed(3)}');
 	        outputSamples.push({
 	          size: mp4SampleLength,
 	          // constant duration
@@ -24952,10 +27743,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var pesTimeScale = this.PES_TIMESCALE,
 	          mp4timeScale = track.timescale,
 	          pes2mp4ScaleFactor = pesTimeScale / mp4timeScale,
-	          expectedSampleDuration = track.timescale * 1024 / track.audiosamplerate;
+	          expectedSampleDuration = track.timescale * (track.isAAC ? 1024 : 1152) / track.audiosamplerate,
+	          pesFrameDuration = expectedSampleDuration * pes2mp4ScaleFactor,
+	          ptsNormalize = this._PTSNormalize,
+	          initDTS = this._initDTS,
+	          rawMPEG = !track.isAAC && this.typeSupported.mpeg;
+
 	      var view,
-	          offset = 8,
-	          aacSample,
+	          offset = rawMPEG ? 0 : 8,
+	          audioSample,
 	          mp4Sample,
 	          unit,
 	          mdat,
@@ -24967,47 +27763,51 @@ return /******/ (function(modules) { // webpackBootstrap
 	          dts,
 	          ptsnorm,
 	          dtsnorm,
-	          samples = [],
-	          samples0 = [],
+	          outputSamples = [],
+	          inputSamples = [],
 	          fillFrame,
-	          newStamp;
+	          newStamp,
+	          nextAudioPts;
 
 	      track.samples.sort(function (a, b) {
 	        return a.pts - b.pts;
 	      });
-	      samples0 = track.samples;
+	      inputSamples = track.samples;
 
 	      // for audio samples, also consider consecutive fragments as being contiguous (even if a level switch occurs),
 	      // for sake of clarity:
-	      // consecutive fragments are frags with less than 100ms gaps between new time offset and next expected PTS
+	      // consecutive fragments are frags with
+	      //  - less than 100ms gaps between new time offset and next expected PTS OR
+	      //  - less than 20 audio frames distance
 	      // contiguous fragments are consecutive fragments from same quality level (same level, new SN = old SN + 1)
 	      // this helps ensuring audio continuity
 	      // and this also avoids audio glitches/cut when switching quality, or reporting wrong duration on first audio frame
 
-	      contiguous |= samples0.length && this.nextAacPts && Math.abs(timeOffset - this.nextAacPts / pesTimeScale) < 0.1;
+	      nextAudioPts = this.nextAudioPts;
+	      contiguous |= inputSamples.length && nextAudioPts && (Math.abs(timeOffset - nextAudioPts / pesTimeScale) < 0.1 || Math.abs(inputSamples[0].pts - nextAudioPts - this._initDTS) < 20 * pesFrameDuration);
 
-	      var nextAacPts = contiguous ? this.nextAacPts : timeOffset * pesTimeScale;
-
+	      if (!contiguous) {
+	        // if fragments are not contiguous, let's use timeOffset to compute next Audio PTS
+	        nextAudioPts = timeOffset * pesTimeScale;
+	      }
 	      // If the audio track is missing samples, the frames seem to get "left-shifted" within the
 	      // resulting mp4 segment, causing sync issues and leaving gaps at the end of the audio segment.
 	      // In an effort to prevent this from happening, we inject frames here where there are gaps.
 	      // When possible, we inject a silent frame; when that's not possible, we duplicate the last
 	      // frame.
-	      var pesFrameDuration = expectedSampleDuration * pes2mp4ScaleFactor;
-	      var nextPtsNorm = nextAacPts;
 
 	      // only inject/drop audio frames in case time offset is accurate
-	      if (accurateTimeOffset) {
-	        for (var i = 0; i < samples0.length;) {
+	      if (accurateTimeOffset && track.isAAC) {
+	        for (var i = 0, nextPtsNorm = nextAudioPts; i < inputSamples.length;) {
 	          // First, let's see how far off this frame is from where we expect it to be
-	          var sample = samples0[i],
-	              ptsNorm = this._PTSNormalize(sample.pts - this._initDTS, nextAacPts),
+	          var sample = inputSamples[i],
+	              ptsNorm = ptsNormalize(sample.pts - initDTS, nextAudioPts),
 	              delta = ptsNorm - nextPtsNorm;
 
 	          // If we're overlapping by more than a duration, drop this sample
 	          if (delta <= -pesFrameDuration) {
 	            _logger.logger.warn('Dropping 1 audio frame @ ' + Math.round(nextPtsNorm / 90) / 1000 + 's due to ' + Math.round(Math.abs(delta / 90)) + ' ms overlap.');
-	            samples0.splice(i, 1);
+	            inputSamples.splice(i, 1);
 	            track.len -= sample.unit.length;
 	            // Don't touch nextPtsNorm or i
 	          }
@@ -25016,21 +27816,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	              var missing = Math.round(delta / pesFrameDuration);
 	              _logger.logger.warn('Injecting ' + missing + ' audio frame @ ' + Math.round(nextPtsNorm / 90) / 1000 + 's due to ' + Math.round(delta / 90) + ' ms gap.');
 	              for (var j = 0; j < missing; j++) {
-	                newStamp = nextPtsNorm + this._initDTS;
-	                newStamp = Math.max(newStamp, this._initDTS);
-	                fillFrame = _aac2.default.getSilentFrame(track.channelCount);
+	                newStamp = nextPtsNorm + initDTS;
+	                newStamp = Math.max(newStamp, initDTS);
+	                fillFrame = _aac2.default.getSilentFrame(track.manifestCodec || track.codec, track.channelCount);
 	                if (!fillFrame) {
 	                  _logger.logger.log('Unable to get silent frame for given audio codec; duplicating last frame instead.');
-	                  fillFrame = sample.unit.slice(0);
+	                  fillFrame = sample.unit.subarray();
 	                }
-	                samples0.splice(i, 0, { unit: fillFrame, pts: newStamp, dts: newStamp });
+	                inputSamples.splice(i, 0, { unit: fillFrame, pts: newStamp, dts: newStamp });
 	                track.len += fillFrame.length;
 	                nextPtsNorm += pesFrameDuration;
 	                i += 1;
 	              }
 
 	              // Adjust sample to next expected pts
-	              sample.pts = sample.dts = nextPtsNorm + this._initDTS;
+	              sample.pts = sample.dts = nextPtsNorm + initDTS;
 	              nextPtsNorm += pesFrameDuration;
 	              i += 1;
 	            }
@@ -25041,77 +27841,86 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	                nextPtsNorm += pesFrameDuration;
 	                if (i === 0) {
-	                  sample.pts = sample.dts = this._initDTS + nextAacPts;
+	                  sample.pts = sample.dts = initDTS + nextAudioPts;
 	                } else {
-	                  sample.pts = sample.dts = samples0[i - 1].pts + pesFrameDuration;
+	                  sample.pts = sample.dts = inputSamples[i - 1].pts + pesFrameDuration;
 	                }
 	                i += 1;
 	              }
 	        }
 	      }
 
-	      while (samples0.length) {
-	        aacSample = samples0.shift();
-	        unit = aacSample.unit;
-	        pts = aacSample.pts - this._initDTS;
-	        dts = aacSample.dts - this._initDTS;
+	      for (var _j = 0, _nbSamples = inputSamples.length; _j < _nbSamples; _j++) {
+	        audioSample = inputSamples[_j];
+	        unit = audioSample.unit;
+	        pts = audioSample.pts - initDTS;
+	        dts = audioSample.dts - initDTS;
 	        //logger.log(`Audio/PTS:${Math.round(pts/90)}`);
 	        // if not first sample
 	        if (lastDTS !== undefined) {
-	          ptsnorm = this._PTSNormalize(pts, lastDTS);
-	          dtsnorm = this._PTSNormalize(dts, lastDTS);
+	          ptsnorm = ptsNormalize(pts, lastDTS);
+	          dtsnorm = ptsNormalize(dts, lastDTS);
 	          mp4Sample.duration = Math.round((dtsnorm - lastDTS) / pes2mp4ScaleFactor);
 	        } else {
-	          ptsnorm = this._PTSNormalize(pts, nextAacPts);
-	          dtsnorm = this._PTSNormalize(dts, nextAacPts);
-	          var _delta = Math.round(1000 * (ptsnorm - nextAacPts) / pesTimeScale),
+	          ptsnorm = ptsNormalize(pts, nextAudioPts);
+	          dtsnorm = ptsNormalize(dts, nextAudioPts);
+	          var _delta = Math.round(1000 * (ptsnorm - nextAudioPts) / pesTimeScale),
 	              numMissingFrames = 0;
 	          // if fragment are contiguous, detect hole/overlapping between fragments
 	          // contiguous fragments are consecutive fragments from same quality level (same level, new SN = old SN + 1)
-	          if (contiguous) {
+	          if (contiguous && track.isAAC) {
 	            // log delta
 	            if (_delta) {
 	              if (_delta > 0) {
-	                numMissingFrames = Math.round((ptsnorm - nextAacPts) / pesFrameDuration);
+	                numMissingFrames = Math.round((ptsnorm - nextAudioPts) / pesFrameDuration);
 	                _logger.logger.log(_delta + ' ms hole between AAC samples detected,filling it');
 	                if (numMissingFrames > 0) {
-	                  fillFrame = _aac2.default.getSilentFrame(track.channelCount);
+	                  fillFrame = _aac2.default.getSilentFrame(track.manifestCodec || track.codec, track.channelCount);
 	                  if (!fillFrame) {
-	                    fillFrame = unit.slice(0);
+	                    fillFrame = unit.subarray();
 	                  }
 	                  track.len += numMissingFrames * fillFrame.length;
 	                }
 	                // if we have frame overlap, overlapping for more than half a frame duraion
 	              } else if (_delta < -12) {
-	                  // drop overlapping audio frames... browser will deal with it
-	                  _logger.logger.log(-_delta + ' ms overlapping between AAC samples detected, drop frame');
-	                  track.len -= unit.byteLength;
-	                  continue;
-	                }
+	                // drop overlapping audio frames... browser will deal with it
+	                _logger.logger.log(-_delta + ' ms overlapping between AAC samples detected, drop frame');
+	                track.len -= unit.byteLength;
+	                continue;
+	              }
 	              // set PTS/DTS to expected PTS/DTS
-	              ptsnorm = dtsnorm = nextAacPts;
+	              ptsnorm = dtsnorm = nextAudioPts;
 	            }
 	          }
-	          // remember first PTS of our aacSamples, ensure value is positive
+	          // remember first PTS of our audioSamples, ensure value is positive
 	          firstPTS = Math.max(0, ptsnorm);
 	          firstDTS = Math.max(0, dtsnorm);
 	          if (track.len > 0) {
 	            /* concatenate the audio data and construct the mdat in place
 	              (need 8 more bytes to fill length and mdat type) */
-	            mdat = new Uint8Array(track.len + 8);
-	            view = new DataView(mdat.buffer);
-	            view.setUint32(0, mdat.byteLength);
-	            mdat.set(_mp4Generator2.default.types.mdat, 4);
+
+	            var mdatSize = rawMPEG ? track.len : track.len + 8;
+	            try {
+	              mdat = new Uint8Array(mdatSize);
+	            } catch (err) {
+	              this.observer.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MUX_ERROR, level: this.level, id: this.id, details: _errors.ErrorDetails.REMUX_ALLOC_ERROR, fatal: false, bytes: mdatSize, reason: 'fail allocating audio mdat ' + mdatSize });
+	              return;
+	            }
+	            if (!rawMPEG) {
+	              view = new DataView(mdat.buffer);
+	              view.setUint32(0, mdatSize);
+	              mdat.set(_mp4Generator2.default.types.mdat, 4);
+	            }
 	          } else {
 	            // no audio samples
 	            return;
 	          }
 	          for (var _i3 = 0; _i3 < numMissingFrames; _i3++) {
 	            newStamp = ptsnorm - (numMissingFrames - _i3) * pesFrameDuration;
-	            fillFrame = _aac2.default.getSilentFrame(track.channelCount);
+	            fillFrame = _aac2.default.getSilentFrame(track.manifestCodec || track.codec, track.channelCount);
 	            if (!fillFrame) {
 	              _logger.logger.log('Unable to get silent frame for given audio codec; duplicating this frame instead.');
-	              fillFrame = unit.slice(0);
+	              fillFrame = unit.subarray();
 	            }
 	            mdat.set(fillFrame, offset);
 	            offset += fillFrame.byteLength;
@@ -25127,14 +27936,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	                dependsOn: 1
 	              }
 	            };
-	            samples.push(mp4Sample);
+	            outputSamples.push(mp4Sample);
 	          }
 	        }
 	        mdat.set(unit, offset);
-	        offset += unit.byteLength;
-	        //console.log('PTS/DTS/initDTS/normPTS/normDTS/relative PTS : ${aacSample.pts}/${aacSample.dts}/${this._initDTS}/${ptsnorm}/${dtsnorm}/${(aacSample.pts/4294967296).toFixed(3)}');
+	        var unitLen = unit.byteLength;
+	        offset += unitLen;
+	        //console.log('PTS/DTS/initDTS/normPTS/normDTS/relative PTS : ${audioSample.pts}/${audioSample.dts}/${initDTS}/${ptsnorm}/${dtsnorm}/${(audioSample.pts/4294967296).toFixed(3)}');
 	        mp4Sample = {
-	          size: unit.byteLength,
+	          size: unitLen,
 	          cts: 0,
 	          duration: 0,
 	          flags: {
@@ -25145,23 +27955,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	            dependsOn: 1
 	          }
 	        };
-	        samples.push(mp4Sample);
+	        outputSamples.push(mp4Sample);
 	        lastDTS = dtsnorm;
 	      }
 	      var lastSampleDuration = 0;
-	      var nbSamples = samples.length;
+	      var nbSamples = outputSamples.length;
 	      //set last sample duration as being identical to previous sample
 	      if (nbSamples >= 2) {
-	        lastSampleDuration = samples[nbSamples - 2].duration;
+	        lastSampleDuration = outputSamples[nbSamples - 2].duration;
 	        mp4Sample.duration = lastSampleDuration;
 	      }
 	      if (nbSamples) {
-	        // next aac sample PTS should be equal to last sample PTS + duration
-	        this.nextAacPts = ptsnorm + pes2mp4ScaleFactor * lastSampleDuration;
-	        //logger.log('Audio/PTS/PTSend:' + aacSample.pts.toFixed(0) + '/' + this.nextAacDts.toFixed(0));
+	        // next audio sample PTS should be equal to last sample PTS + duration
+	        this.nextAudioPts = ptsnorm + pes2mp4ScaleFactor * lastSampleDuration;
+	        //logger.log('Audio/PTS/PTSend:' + audioSample.pts.toFixed(0) + '/' + this.nextAacDts.toFixed(0));
 	        track.len = 0;
-	        track.samples = samples;
-	        moof = _mp4Generator2.default.moof(track.sequenceNumber++, firstDTS / pes2mp4ScaleFactor, track);
+	        track.samples = outputSamples;
+	        if (rawMPEG) {
+	          moof = new Uint8Array();
+	        } else {
+	          moof = _mp4Generator2.default.moof(track.sequenceNumber++, firstDTS / pes2mp4ScaleFactor, track);
+	        }
 	        track.samples = [];
 	        var audioData = {
 	          id: this.id,
@@ -25170,7 +27984,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          data1: moof,
 	          data2: mdat,
 	          startPTS: firstPTS / pesTimeScale,
-	          endPTS: this.nextAacPts / pesTimeScale,
+	          endPTS: this.nextAudioPts / pesTimeScale,
 	          startDTS: firstDTS / pesTimeScale,
 	          endDTS: (dtsnorm + pes2mp4ScaleFactor * lastSampleDuration) / pesTimeScale,
 	          type: 'audio',
@@ -25187,12 +28001,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var pesTimeScale = this.PES_TIMESCALE,
 	          mp4timeScale = track.timescale ? track.timescale : track.audiosamplerate,
 	          pes2mp4ScaleFactor = pesTimeScale / mp4timeScale,
+	          nextAudioPts = this.nextAudioPts,
 
 
 	      // sync with video's timestamp
-	      startDTS = videoData.startDTS * pesTimeScale + this._initDTS,
+	      startDTS = (nextAudioPts !== undefined ? nextAudioPts : videoData.startDTS * pesTimeScale) + this._initDTS,
 	          endDTS = videoData.endDTS * pesTimeScale + this._initDTS,
-
 
 	      // one sample's duration value
 	      sampleDuration = 1024,
@@ -25204,8 +28018,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	      // silent frame
-	      silentFrame = _aac2.default.getSilentFrame(track.channelCount);
+	      silentFrame = _aac2.default.getSilentFrame(track.manifestCodec || track.codec, track.channelCount);
 
+	      _logger.logger.warn('remux empty Audio');
 	      // Can't remux if we can't generate a silent frame...
 	      if (!silentFrame) {
 	        _logger.logger.trace('Unable to remuxEmptyAudio since we were unable to get a silent frame for given audio codec!');
@@ -25215,7 +28030,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var samples = [];
 	      for (var i = 0; i < nbSamples; i++) {
 	        var stamp = startDTS + i * frameDuration;
-	        samples.push({ unit: silentFrame.slice(0), pts: stamp, dts: stamp });
+	        samples.push({ unit: silentFrame, pts: stamp, dts: stamp });
 	        track.len += silentFrame.length;
 	      }
 	      track.samples = samples;
@@ -25309,7 +28124,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = MP4Remuxer;
 
-	},{"24":24,"26":26,"27":27,"35":35,"43":43,"44":44}],37:[function(_dereq_,module,exports){
+	},{"26":26,"28":28,"29":29,"37":37,"45":45}],39:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -25321,7 +28136,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     */
 
 
-	var _events = _dereq_(26);
+	var _events = _dereq_(28);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -25407,7 +28222,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = PassThroughRemuxer;
 
-	},{"26":26}],38:[function(_dereq_,module,exports){
+	},{"28":28}],40:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -25417,6 +28232,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var DECIMAL_RESOLUTION_REGEX = /^(\d+)x(\d+)$/;
+	var ATTR_LIST_REGEX = /\s*(.+?)\s*=((?:\".*?\")|.*?)(?:,|$)/g;
 
 	// adapted from https://github.com/kanongil/node-m3u8parse/blob/master/attrlist.js
 
@@ -25481,7 +28299,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'decimalResolution',
 	    value: function decimalResolution(attrName) {
-	      var res = /^(\d+)x(\d+)$/.exec(this[attrName]);
+	      var res = DECIMAL_RESOLUTION_REGEX.exec(this[attrName]);
 	      if (res === null) {
 	        return undefined;
 	      }
@@ -25493,10 +28311,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }], [{
 	    key: 'parseAttrList',
 	    value: function parseAttrList(input) {
-	      var re = /\s*(.+?)\s*=((?:\".*?\")|.*?)(?:,|$)/g;
 	      var match,
 	          attrs = {};
-	      while ((match = re.exec(input)) !== null) {
+	      ATTR_LIST_REGEX.lastIndex = 0;
+	      while ((match = ATTR_LIST_REGEX.exec(input)) !== null) {
 	        var value = match[2],
 	            quote = '"';
 
@@ -25514,7 +28332,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = AttrList;
 
-	},{}],39:[function(_dereq_,module,exports){
+	},{}],41:[function(_dereq_,module,exports){
 	"use strict";
 
 	var BinarySearch = {
@@ -25559,7 +28377,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	module.exports = BinarySearch;
 
-	},{}],40:[function(_dereq_,module,exports){
+	},{}],42:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -26132,12 +28950,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    }, {
 	        key: 'setPAC',
-	        value: function setPAC(pacData) {
+	        value: function setPAC(pacData, lastOutputScreen) {
 	            logger.log('INFO', 'pacData = ' + JSON.stringify(pacData));
 	            var newRow = pacData.row - 1;
 	            if (this.nrRollUpRows && newRow < this.nrRollUpRows - 1) {
 	                newRow = this.nrRollUpRows - 1;
 	            }
+
+	            //Make sure this only affects Roll-up Captions by checking this.nrRollUpRows
+	            if (this.nrRollUpRows && this.currRow !== newRow) {
+	                //clear all rows first
+	                for (var i = 0; i < NR_ROWS; i++) {
+	                    this.rows[i].clear();
+	                }
+
+	                //Copy this.nrRollUpRows rows from lastOutputScreen and place it in the newRow location
+	                //topRowIndex - the start of rows to copy (inclusive index)
+	                var topRowIndex = this.currRow + 1 - this.nrRollUpRows;
+	                //We only copy if the last position was already shown.
+	                //We use the cueStartTime value to check this.
+	                var prevLineTime = lastOutputScreen.rows[topRowIndex].cueStartTime;
+	                if (prevLineTime && prevLineTime < logger.time) {
+	                    for (i = 0; i < this.nrRollUpRows; i++) {
+	                        this.rows[newRow - this.nrRollUpRows + i + 1].copy(lastOutputScreen.rows[topRowIndex + i]);
+	                    }
+	                }
+	            }
+
 	            this.currRow = newRow;
 	            var row = this.rows[this.currRow];
 	            if (pacData.indent !== null) {
@@ -26270,7 +29109,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'setPAC',
 	        value: function setPAC(pacData) {
-	            this.writeScreen.setPAC(pacData);
+	            this.writeScreen.setPAC(pacData, this.lastOutputScreen);
 	        }
 	    }, {
 	        key: 'setBkgData',
@@ -26290,6 +29129,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            } else {
 	                this.writeScreen = this.displayedMemory;
 	                this.writeScreen.reset();
+	                this.lastOutputScreen.reset();
 	            }
 	            if (this.mode !== 'MODE_ROLL-UP') {
 	                this.displayedMemory.nrRollUpRows = null;
@@ -26862,7 +29702,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = Cea608Parser;
 
-	},{}],41:[function(_dereq_,module,exports){
+	},{}],43:[function(_dereq_,module,exports){
 	'use strict';
 
 	var Cues = {
@@ -26890,6 +29730,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            indenting = false;
 	          }
 	        }
+	        //To be used for cleaning-up orphaned roll-up captions
+	        row.cueStartTime = startTime;
 	        cue = new VTTCue(startTime, endTime, text.trim());
 
 	        if (indent >= 16) {
@@ -26906,7 +29748,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          cue.line = r > 7 ? r - 2 : r + 1;
 	        }
 	        cue.align = 'left';
-	        cue.position = 100 * (indent / 32) + (navigator.userAgent.match(/Firefox\//) ? 50 : 0);
+	        // Clamp the position between 0 and 100 - if out of these bounds, Firefox throws an exception and captions break
+	        cue.position = Math.max(0, Math.min(100, 100 * (indent / 32) + (navigator.userAgent.match(/Firefox\//) ? 50 : 0)));
 	        track.addCue(cue);
 	      }
 	    }
@@ -26916,7 +29759,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	module.exports = Cues;
 
-	},{}],42:[function(_dereq_,module,exports){
+	},{}],44:[function(_dereq_,module,exports){
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
@@ -26936,7 +29779,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var EWMA = function () {
 
 	  //  About half of the estimated value will be from the last |halfLife| samples by weight.
-
 	  function EWMA(halfLife) {
 	    _classCallCheck(this, EWMA);
 
@@ -26975,14 +29817,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = EWMA;
 
-	},{}],43:[function(_dereq_,module,exports){
+	},{}],45:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	function noop() {}
 
@@ -27060,25 +29902,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var logger = exports.logger = exportedLogger;
 
-	},{}],44:[function(_dereq_,module,exports){
-	'use strict';
-
-	if (typeof ArrayBuffer !== 'undefined' && !ArrayBuffer.prototype.slice) {
-	  ArrayBuffer.prototype.slice = function (start, end) {
-	    var that = new Uint8Array(this);
-	    if (end === undefined) {
-	      end = that.length;
-	    }
-	    var result = new ArrayBuffer(end - start);
-	    var resultArray = new Uint8Array(result);
-	    for (var i = 0; i < resultArray.length; i++) {
-	      resultArray[i] = that[i + start];
-	    }
-	    return result;
-	  };
-	}
-
-	},{}],45:[function(_dereq_,module,exports){
+	},{}],46:[function(_dereq_,module,exports){
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -27115,94 +29939,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = TimeRanges;
 
-	},{}],46:[function(_dereq_,module,exports){
-	'use strict';
-
-	var URLHelper = {
-	  // build an absolute URL from a relative one using the provided baseURL
-	  // if relativeURL is an absolute URL it will be returned as is.
-	  buildAbsoluteURL: function buildAbsoluteURL(baseURL, relativeURL) {
-	    // remove any remaining space and CRLF
-	    relativeURL = relativeURL.trim();
-	    if (/^[a-z]+:/i.test(relativeURL)) {
-	      // complete url, not relative
-	      return relativeURL;
-	    }
-
-	    var relativeURLQuery = null;
-	    var relativeURLHash = null;
-
-	    var relativeURLHashSplit = /^([^#]*)(.*)$/.exec(relativeURL);
-	    if (relativeURLHashSplit) {
-	      relativeURLHash = relativeURLHashSplit[2];
-	      relativeURL = relativeURLHashSplit[1];
-	    }
-	    var relativeURLQuerySplit = /^([^\?]*)(.*)$/.exec(relativeURL);
-	    if (relativeURLQuerySplit) {
-	      relativeURLQuery = relativeURLQuerySplit[2];
-	      relativeURL = relativeURLQuerySplit[1];
-	    }
-
-	    var baseURLHashSplit = /^([^#]*)(.*)$/.exec(baseURL);
-	    if (baseURLHashSplit) {
-	      baseURL = baseURLHashSplit[1];
-	    }
-	    var baseURLQuerySplit = /^([^\?]*)(.*)$/.exec(baseURL);
-	    if (baseURLQuerySplit) {
-	      baseURL = baseURLQuerySplit[1];
-	    }
-
-	    var baseURLDomainSplit = /^(([a-z]+:)?\/\/[a-z0-9\.\-_~]+(:[0-9]+)?)?(\/.*)$/i.exec(baseURL);
-	    if (!baseURLDomainSplit) {
-	      throw new Error('Error trying to parse base URL.');
-	    }
-
-	    // e.g. 'http:', 'https:', ''
-	    var baseURLProtocol = baseURLDomainSplit[2] || '';
-	    // e.g. 'http://example.com', '//example.com', ''
-	    var baseURLProtocolDomain = baseURLDomainSplit[1] || '';
-	    // e.g. '/a/b/c/playlist.m3u8'
-	    var baseURLPath = baseURLDomainSplit[4];
-
-	    var builtURL = null;
-	    if (/^\/\//.test(relativeURL)) {
-	      // relative url starts wth '//' so copy protocol (which may be '' if baseUrl didn't provide one)
-	      builtURL = baseURLProtocol + '//' + URLHelper.buildAbsolutePath('', relativeURL.substring(2));
-	    } else if (/^\//.test(relativeURL)) {
-	      // relative url starts with '/' so start from root of domain
-	      builtURL = baseURLProtocolDomain + '/' + URLHelper.buildAbsolutePath('', relativeURL.substring(1));
-	    } else {
-	      builtURL = URLHelper.buildAbsolutePath(baseURLProtocolDomain + baseURLPath, relativeURL);
-	    }
-
-	    // put the query and hash parts back
-	    if (relativeURLQuery) {
-	      builtURL += relativeURLQuery;
-	    }
-	    if (relativeURLHash) {
-	      builtURL += relativeURLHash;
-	    }
-	    return builtURL;
-	  },
-
-	  // build an absolute path using the provided basePath
-	  // adapted from https://developer.mozilla.org/en-US/docs/Web/API/document/cookie#Using_relative_URLs_in_the_path_parameter
-	  // this does not handle the case where relativePath is "/" or "//". These cases should be handled outside this.
-	  buildAbsolutePath: function buildAbsolutePath(basePath, relativePath) {
-	    var sRelPath = relativePath;
-	    var nUpLn,
-	        sDir = '',
-	        sPath = basePath.replace(/[^\/]*$/, sRelPath.replace(/(\/|^)(?:\.?\/+)+/g, '$1'));
-	    for (var nEnd, nStart = 0; nEnd = sPath.indexOf('/../', nStart), nEnd > -1; nStart = nEnd + nUpLn) {
-	      nUpLn = /^\/(?:\.\.\/)*/.exec(sPath.slice(nEnd))[0].length;
-	      sDir = (sDir + sPath.substring(nStart, nEnd)).replace(new RegExp('(?:\\\/+[^\\\/]*){0,' + (nUpLn - 1) / 3 + '}$'), '/');
-	    }
-	    return sDir + sPath.substr(nStart);
-	  }
-	};
-
-	module.exports = URLHelper;
-
 	},{}],47:[function(_dereq_,module,exports){
 	'use strict';
 
@@ -27214,7 +29950,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * XHR based logger
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     */
 
-	var _logger = _dereq_(43);
+	var _logger = _dereq_(45);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -27302,15 +30038,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return;
 	      }
 
-	      // in any case clear the current xhrs timeout
-	      window.clearTimeout(this.requestTimeout);
-
-	      // HEADERS_RECEIVED
+	      // >= HEADERS_RECEIVED
 	      if (readyState >= 2) {
+	        // clear xhr timeout and rearm it if readyState less than 4
+	        window.clearTimeout(this.requestTimeout);
 	        if (stats.tfirst === 0) {
 	          stats.tfirst = Math.max(performance.now(), stats.trequest);
-	          // reset timeout to total timeout duration minus the time it took to receive headers
-	          this.requestTimeout = window.setTimeout(this.loadtimeout.bind(this), config.timeout - (stats.tfirst - stats.trequest));
 	        }
 	        if (readyState === 4) {
 	          var status = xhr.status;
@@ -27346,6 +30079,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	              stats.retry++;
 	            }
 	          }
+	        } else {
+	          // readyState >= 2 AND readyState !==4 (readyState = HEADERS_RECEIVED || LOADING) rearm timeout as xhr not finished yet
+	          this.requestTimeout = window.setTimeout(this.loadtimeout.bind(this), config.timeout);
 	        }
 	      }
 	    }
@@ -27376,7 +30112,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = XhrLoader;
 
-	},{"43":43}]},{},[31])(31)
+	},{"45":45}]},{},[33])(33)
 	});
 	//# sourceMappingURL=hls.js.map
 
@@ -27386,9 +30122,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, module) {/**
-	 * lodash (Custom Build) <https://lodash.com/>
+	 * Lodash (Custom Build) <https://lodash.com/>
 	 * Build: `lodash modularize exports="npm" -o ./`
-	 * Copyright jQuery Foundation and other contributors <https://jquery.org/>
+	 * Copyright JS Foundation and other contributors <https://js.foundation/>
 	 * Released under MIT license <https://lodash.com/license>
 	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
 	 * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -27400,9 +30136,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	/** Used to stand-in for `undefined` hash values. */
 	var HASH_UNDEFINED = '__lodash_hash_undefined__';
 
-	/** Used to compose bitmasks for comparison styles. */
-	var UNORDERED_COMPARE_FLAG = 1,
-	    PARTIAL_COMPARE_FLAG = 2;
+	/** Used to compose bitmasks for value comparisons. */
+	var COMPARE_PARTIAL_FLAG = 1,
+	    COMPARE_UNORDERED_FLAG = 2;
 
 	/** Used as references for various `Number` constants. */
 	var MAX_SAFE_INTEGER = 9007199254740991;
@@ -27410,6 +30146,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/** `Object#toString` result references. */
 	var argsTag = '[object Arguments]',
 	    arrayTag = '[object Array]',
+	    asyncTag = '[object AsyncFunction]',
 	    boolTag = '[object Boolean]',
 	    dateTag = '[object Date]',
 	    errorTag = '[object Error]',
@@ -27417,12 +30154,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    genTag = '[object GeneratorFunction]',
 	    mapTag = '[object Map]',
 	    numberTag = '[object Number]',
+	    nullTag = '[object Null]',
 	    objectTag = '[object Object]',
 	    promiseTag = '[object Promise]',
+	    proxyTag = '[object Proxy]',
 	    regexpTag = '[object RegExp]',
 	    setTag = '[object Set]',
 	    stringTag = '[object String]',
 	    symbolTag = '[object Symbol]',
+	    undefinedTag = '[object Undefined]',
 	    weakMapTag = '[object WeakMap]';
 
 	var arrayBufferTag = '[object ArrayBuffer]',
@@ -27489,12 +30229,55 @@ return /******/ (function(modules) { // webpackBootstrap
 	/** Used to access faster Node.js helpers. */
 	var nodeUtil = (function() {
 	  try {
-	    return freeProcess && freeProcess.binding('util');
+	    return freeProcess && freeProcess.binding && freeProcess.binding('util');
 	  } catch (e) {}
 	}());
 
 	/* Node.js helper references. */
 	var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
+
+	/**
+	 * A specialized version of `_.filter` for arrays without support for
+	 * iteratee shorthands.
+	 *
+	 * @private
+	 * @param {Array} [array] The array to iterate over.
+	 * @param {Function} predicate The function invoked per iteration.
+	 * @returns {Array} Returns the new filtered array.
+	 */
+	function arrayFilter(array, predicate) {
+	  var index = -1,
+	      length = array == null ? 0 : array.length,
+	      resIndex = 0,
+	      result = [];
+
+	  while (++index < length) {
+	    var value = array[index];
+	    if (predicate(value, index, array)) {
+	      result[resIndex++] = value;
+	    }
+	  }
+	  return result;
+	}
+
+	/**
+	 * Appends the elements of `values` to `array`.
+	 *
+	 * @private
+	 * @param {Array} array The array to modify.
+	 * @param {Array} values The values to append.
+	 * @returns {Array} Returns `array`.
+	 */
+	function arrayPush(array, values) {
+	  var index = -1,
+	      length = values.length,
+	      offset = array.length;
+
+	  while (++index < length) {
+	    array[offset + index] = values[index];
+	  }
+	  return array;
+	}
 
 	/**
 	 * A specialized version of `_.some` for arrays without support for iteratee
@@ -27508,7 +30291,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function arraySome(array, predicate) {
 	  var index = -1,
-	      length = array ? array.length : 0;
+	      length = array == null ? 0 : array.length;
 
 	  while (++index < length) {
 	    if (predicate(array[index], index, array)) {
@@ -27551,6 +30334,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
+	 * Checks if a `cache` value for `key` exists.
+	 *
+	 * @private
+	 * @param {Object} cache The cache to query.
+	 * @param {string} key The key of the entry to check.
+	 * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
+	 */
+	function cacheHas(cache, key) {
+	  return cache.has(key);
+	}
+
+	/**
 	 * Gets the value at `key` of `object`.
 	 *
 	 * @private
@@ -27560,25 +30355,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function getValue(object, key) {
 	  return object == null ? undefined : object[key];
-	}
-
-	/**
-	 * Checks if `value` is a host object in IE < 9.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a host object, else `false`.
-	 */
-	function isHostObject(value) {
-	  // Many host objects are `Object` objects that can coerce to strings
-	  // despite having improperly defined `toString` methods.
-	  var result = false;
-	  if (value != null && typeof value.toString != 'function') {
-	    try {
-	      result = !!(value + '');
-	    } catch (e) {}
-	  }
-	  return result;
 	}
 
 	/**
@@ -27637,24 +30413,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	/** Used to detect overreaching core-js shims. */
 	var coreJsData = root['__core-js_shared__'];
 
-	/** Used to detect methods masquerading as native. */
-	var maskSrcKey = (function() {
-	  var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || '');
-	  return uid ? ('Symbol(src)_1.' + uid) : '';
-	}());
-
 	/** Used to resolve the decompiled source of functions. */
 	var funcToString = funcProto.toString;
 
 	/** Used to check objects for own properties. */
 	var hasOwnProperty = objectProto.hasOwnProperty;
 
+	/** Used to detect methods masquerading as native. */
+	var maskSrcKey = (function() {
+	  var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || '');
+	  return uid ? ('Symbol(src)_1.' + uid) : '';
+	}());
+
 	/**
 	 * Used to resolve the
 	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
 	 * of values.
 	 */
-	var objectToString = objectProto.toString;
+	var nativeObjectToString = objectProto.toString;
 
 	/** Used to detect if a method is native. */
 	var reIsNative = RegExp('^' +
@@ -27663,13 +30439,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	);
 
 	/** Built-in value references. */
-	var Symbol = root.Symbol,
+	var Buffer = moduleExports ? root.Buffer : undefined,
+	    Symbol = root.Symbol,
 	    Uint8Array = root.Uint8Array,
 	    propertyIsEnumerable = objectProto.propertyIsEnumerable,
-	    splice = arrayProto.splice;
+	    splice = arrayProto.splice,
+	    symToStringTag = Symbol ? Symbol.toStringTag : undefined;
 
 	/* Built-in method references for those with the same name as other `lodash` methods. */
-	var nativeKeys = overArg(Object.keys, Object);
+	var nativeGetSymbols = Object.getOwnPropertySymbols,
+	    nativeIsBuffer = Buffer ? Buffer.isBuffer : undefined,
+	    nativeKeys = overArg(Object.keys, Object);
 
 	/* Built-in method references that are verified to be native. */
 	var DataView = getNative(root, 'DataView'),
@@ -27699,7 +30479,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function Hash(entries) {
 	  var index = -1,
-	      length = entries ? entries.length : 0;
+	      length = entries == null ? 0 : entries.length;
 
 	  this.clear();
 	  while (++index < length) {
@@ -27717,6 +30497,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function hashClear() {
 	  this.__data__ = nativeCreate ? nativeCreate(null) : {};
+	  this.size = 0;
 	}
 
 	/**
@@ -27730,7 +30511,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {boolean} Returns `true` if the entry was removed, else `false`.
 	 */
 	function hashDelete(key) {
-	  return this.has(key) && delete this.__data__[key];
+	  var result = this.has(key) && delete this.__data__[key];
+	  this.size -= result ? 1 : 0;
+	  return result;
 	}
 
 	/**
@@ -27762,7 +30545,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function hashHas(key) {
 	  var data = this.__data__;
-	  return nativeCreate ? data[key] !== undefined : hasOwnProperty.call(data, key);
+	  return nativeCreate ? (data[key] !== undefined) : hasOwnProperty.call(data, key);
 	}
 
 	/**
@@ -27777,6 +30560,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function hashSet(key, value) {
 	  var data = this.__data__;
+	  this.size += this.has(key) ? 0 : 1;
 	  data[key] = (nativeCreate && value === undefined) ? HASH_UNDEFINED : value;
 	  return this;
 	}
@@ -27797,7 +30581,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function ListCache(entries) {
 	  var index = -1,
-	      length = entries ? entries.length : 0;
+	      length = entries == null ? 0 : entries.length;
 
 	  this.clear();
 	  while (++index < length) {
@@ -27815,6 +30599,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function listCacheClear() {
 	  this.__data__ = [];
+	  this.size = 0;
 	}
 
 	/**
@@ -27839,6 +30624,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  } else {
 	    splice.call(data, index, 1);
 	  }
+	  --this.size;
 	  return true;
 	}
 
@@ -27886,6 +30672,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      index = assocIndexOf(data, key);
 
 	  if (index < 0) {
+	    ++this.size;
 	    data.push([key, value]);
 	  } else {
 	    data[index][1] = value;
@@ -27909,7 +30696,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function MapCache(entries) {
 	  var index = -1,
-	      length = entries ? entries.length : 0;
+	      length = entries == null ? 0 : entries.length;
 
 	  this.clear();
 	  while (++index < length) {
@@ -27926,6 +30713,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @memberOf MapCache
 	 */
 	function mapCacheClear() {
+	  this.size = 0;
 	  this.__data__ = {
 	    'hash': new Hash,
 	    'map': new (Map || ListCache),
@@ -27943,7 +30731,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {boolean} Returns `true` if the entry was removed, else `false`.
 	 */
 	function mapCacheDelete(key) {
-	  return getMapData(this, key)['delete'](key);
+	  var result = getMapData(this, key)['delete'](key);
+	  this.size -= result ? 1 : 0;
+	  return result;
 	}
 
 	/**
@@ -27983,7 +30773,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {Object} Returns the map cache instance.
 	 */
 	function mapCacheSet(key, value) {
-	  getMapData(this, key).set(key, value);
+	  var data = getMapData(this, key),
+	      size = data.size;
+
+	  data.set(key, value);
+	  this.size += data.size == size ? 0 : 1;
 	  return this;
 	}
 
@@ -28004,7 +30798,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function SetCache(values) {
 	  var index = -1,
-	      length = values ? values.length : 0;
+	      length = values == null ? 0 : values.length;
 
 	  this.__data__ = new MapCache;
 	  while (++index < length) {
@@ -28052,7 +30846,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {Array} [entries] The key-value pairs to cache.
 	 */
 	function Stack(entries) {
-	  this.__data__ = new ListCache(entries);
+	  var data = this.__data__ = new ListCache(entries);
+	  this.size = data.size;
 	}
 
 	/**
@@ -28064,6 +30859,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function stackClear() {
 	  this.__data__ = new ListCache;
+	  this.size = 0;
 	}
 
 	/**
@@ -28076,7 +30872,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {boolean} Returns `true` if the entry was removed, else `false`.
 	 */
 	function stackDelete(key) {
-	  return this.__data__['delete'](key);
+	  var data = this.__data__,
+	      result = data['delete'](key);
+
+	  this.size = data.size;
+	  return result;
 	}
 
 	/**
@@ -28116,16 +30916,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {Object} Returns the stack cache instance.
 	 */
 	function stackSet(key, value) {
-	  var cache = this.__data__;
-	  if (cache instanceof ListCache) {
-	    var pairs = cache.__data__;
+	  var data = this.__data__;
+	  if (data instanceof ListCache) {
+	    var pairs = data.__data__;
 	    if (!Map || (pairs.length < LARGE_ARRAY_SIZE - 1)) {
 	      pairs.push([key, value]);
+	      this.size = ++data.size;
 	      return this;
 	    }
-	    cache = this.__data__ = new MapCache(pairs);
+	    data = this.__data__ = new MapCache(pairs);
 	  }
-	  cache.set(key, value);
+	  data.set(key, value);
+	  this.size = data.size;
 	  return this;
 	}
 
@@ -28145,18 +30947,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {Array} Returns the array of property names.
 	 */
 	function arrayLikeKeys(value, inherited) {
-	  // Safari 8.1 makes `arguments.callee` enumerable in strict mode.
-	  // Safari 9 makes `arguments.length` enumerable in strict mode.
-	  var result = (isArray(value) || isArguments(value))
-	    ? baseTimes(value.length, String)
-	    : [];
-
-	  var length = result.length,
-	      skipIndexes = !!length;
+	  var isArr = isArray(value),
+	      isArg = !isArr && isArguments(value),
+	      isBuff = !isArr && !isArg && isBuffer(value),
+	      isType = !isArr && !isArg && !isBuff && isTypedArray(value),
+	      skipIndexes = isArr || isArg || isBuff || isType,
+	      result = skipIndexes ? baseTimes(value.length, String) : [],
+	      length = result.length;
 
 	  for (var key in value) {
 	    if ((inherited || hasOwnProperty.call(value, key)) &&
-	        !(skipIndexes && (key == 'length' || isIndex(key, length)))) {
+	        !(skipIndexes && (
+	           // Safari 9 has enumerable `arguments.length` in strict mode.
+	           key == 'length' ||
+	           // Node.js 0.10 has enumerable non-index properties on buffers.
+	           (isBuff && (key == 'offset' || key == 'parent')) ||
+	           // PhantomJS 2 has enumerable non-index properties on typed arrays.
+	           (isType && (key == 'buffer' || key == 'byteLength' || key == 'byteOffset')) ||
+	           // Skip index properties.
+	           isIndex(key, length)
+	        ))) {
 	      result.push(key);
 	    }
 	  }
@@ -28182,14 +30992,46 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
-	 * The base implementation of `getTag`.
+	 * The base implementation of `getAllKeys` and `getAllKeysIn` which uses
+	 * `keysFunc` and `symbolsFunc` to get the enumerable property names and
+	 * symbols of `object`.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @param {Function} keysFunc The function to get the keys of `object`.
+	 * @param {Function} symbolsFunc The function to get the symbols of `object`.
+	 * @returns {Array} Returns the array of property names and symbols.
+	 */
+	function baseGetAllKeys(object, keysFunc, symbolsFunc) {
+	  var result = keysFunc(object);
+	  return isArray(object) ? result : arrayPush(result, symbolsFunc(object));
+	}
+
+	/**
+	 * The base implementation of `getTag` without fallbacks for buggy environments.
 	 *
 	 * @private
 	 * @param {*} value The value to query.
 	 * @returns {string} Returns the `toStringTag`.
 	 */
 	function baseGetTag(value) {
-	  return objectToString.call(value);
+	  if (value == null) {
+	    return value === undefined ? undefinedTag : nullTag;
+	  }
+	  return (symToStringTag && symToStringTag in Object(value))
+	    ? getRawTag(value)
+	    : objectToString(value);
+	}
+
+	/**
+	 * The base implementation of `_.isArguments`.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an `arguments` object,
+	 */
+	function baseIsArguments(value) {
+	  return isObjectLike(value) && baseGetTag(value) == argsTag;
 	}
 
 	/**
@@ -28199,22 +31041,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @private
 	 * @param {*} value The value to compare.
 	 * @param {*} other The other value to compare.
+	 * @param {boolean} bitmask The bitmask flags.
+	 *  1 - Unordered comparison
+	 *  2 - Partial comparison
 	 * @param {Function} [customizer] The function to customize comparisons.
-	 * @param {boolean} [bitmask] The bitmask of comparison flags.
-	 *  The bitmask may be composed of the following flags:
-	 *     1 - Unordered comparison
-	 *     2 - Partial comparison
 	 * @param {Object} [stack] Tracks traversed `value` and `other` objects.
 	 * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
 	 */
-	function baseIsEqual(value, other, customizer, bitmask, stack) {
+	function baseIsEqual(value, other, bitmask, customizer, stack) {
 	  if (value === other) {
 	    return true;
 	  }
-	  if (value == null || other == null || (!isObject(value) && !isObjectLike(other))) {
+	  if (value == null || other == null || (!isObjectLike(value) && !isObjectLike(other))) {
 	    return value !== value && other !== other;
 	  }
-	  return baseIsEqualDeep(value, other, baseIsEqual, customizer, bitmask, stack);
+	  return baseIsEqualDeep(value, other, bitmask, customizer, baseIsEqual, stack);
 	}
 
 	/**
@@ -28225,38 +31066,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @private
 	 * @param {Object} object The object to compare.
 	 * @param {Object} other The other object to compare.
+	 * @param {number} bitmask The bitmask flags. See `baseIsEqual` for more details.
+	 * @param {Function} customizer The function to customize comparisons.
 	 * @param {Function} equalFunc The function to determine equivalents of values.
-	 * @param {Function} [customizer] The function to customize comparisons.
-	 * @param {number} [bitmask] The bitmask of comparison flags. See `baseIsEqual`
-	 *  for more details.
 	 * @param {Object} [stack] Tracks traversed `object` and `other` objects.
 	 * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
 	 */
-	function baseIsEqualDeep(object, other, equalFunc, customizer, bitmask, stack) {
+	function baseIsEqualDeep(object, other, bitmask, customizer, equalFunc, stack) {
 	  var objIsArr = isArray(object),
 	      othIsArr = isArray(other),
-	      objTag = arrayTag,
-	      othTag = arrayTag;
+	      objTag = objIsArr ? arrayTag : getTag(object),
+	      othTag = othIsArr ? arrayTag : getTag(other);
 
-	  if (!objIsArr) {
-	    objTag = getTag(object);
-	    objTag = objTag == argsTag ? objectTag : objTag;
-	  }
-	  if (!othIsArr) {
-	    othTag = getTag(other);
-	    othTag = othTag == argsTag ? objectTag : othTag;
-	  }
-	  var objIsObj = objTag == objectTag && !isHostObject(object),
-	      othIsObj = othTag == objectTag && !isHostObject(other),
+	  objTag = objTag == argsTag ? objectTag : objTag;
+	  othTag = othTag == argsTag ? objectTag : othTag;
+
+	  var objIsObj = objTag == objectTag,
+	      othIsObj = othTag == objectTag,
 	      isSameTag = objTag == othTag;
 
+	  if (isSameTag && isBuffer(object)) {
+	    if (!isBuffer(other)) {
+	      return false;
+	    }
+	    objIsArr = true;
+	    objIsObj = false;
+	  }
 	  if (isSameTag && !objIsObj) {
 	    stack || (stack = new Stack);
 	    return (objIsArr || isTypedArray(object))
-	      ? equalArrays(object, other, equalFunc, customizer, bitmask, stack)
-	      : equalByTag(object, other, objTag, equalFunc, customizer, bitmask, stack);
+	      ? equalArrays(object, other, bitmask, customizer, equalFunc, stack)
+	      : equalByTag(object, other, objTag, bitmask, customizer, equalFunc, stack);
 	  }
-	  if (!(bitmask & PARTIAL_COMPARE_FLAG)) {
+	  if (!(bitmask & COMPARE_PARTIAL_FLAG)) {
 	    var objIsWrapped = objIsObj && hasOwnProperty.call(object, '__wrapped__'),
 	        othIsWrapped = othIsObj && hasOwnProperty.call(other, '__wrapped__');
 
@@ -28265,14 +31107,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	          othUnwrapped = othIsWrapped ? other.value() : other;
 
 	      stack || (stack = new Stack);
-	      return equalFunc(objUnwrapped, othUnwrapped, customizer, bitmask, stack);
+	      return equalFunc(objUnwrapped, othUnwrapped, bitmask, customizer, stack);
 	    }
 	  }
 	  if (!isSameTag) {
 	    return false;
 	  }
 	  stack || (stack = new Stack);
-	  return equalObjects(object, other, equalFunc, customizer, bitmask, stack);
+	  return equalObjects(object, other, bitmask, customizer, equalFunc, stack);
 	}
 
 	/**
@@ -28287,7 +31129,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!isObject(value) || isMasked(value)) {
 	    return false;
 	  }
-	  var pattern = (isFunction(value) || isHostObject(value)) ? reIsNative : reIsHostCtor;
+	  var pattern = isFunction(value) ? reIsNative : reIsHostCtor;
 	  return pattern.test(toSource(value));
 	}
 
@@ -28300,7 +31142,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function baseIsTypedArray(value) {
 	  return isObjectLike(value) &&
-	    isLength(value.length) && !!typedArrayTags[objectToString.call(value)];
+	    isLength(value.length) && !!typedArrayTags[baseGetTag(value)];
 	}
 
 	/**
@@ -28330,15 +31172,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @private
 	 * @param {Array} array The array to compare.
 	 * @param {Array} other The other array to compare.
-	 * @param {Function} equalFunc The function to determine equivalents of values.
+	 * @param {number} bitmask The bitmask flags. See `baseIsEqual` for more details.
 	 * @param {Function} customizer The function to customize comparisons.
-	 * @param {number} bitmask The bitmask of comparison flags. See `baseIsEqual`
-	 *  for more details.
+	 * @param {Function} equalFunc The function to determine equivalents of values.
 	 * @param {Object} stack Tracks traversed `array` and `other` objects.
 	 * @returns {boolean} Returns `true` if the arrays are equivalent, else `false`.
 	 */
-	function equalArrays(array, other, equalFunc, customizer, bitmask, stack) {
-	  var isPartial = bitmask & PARTIAL_COMPARE_FLAG,
+	function equalArrays(array, other, bitmask, customizer, equalFunc, stack) {
+	  var isPartial = bitmask & COMPARE_PARTIAL_FLAG,
 	      arrLength = array.length,
 	      othLength = other.length;
 
@@ -28352,7 +31193,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	  var index = -1,
 	      result = true,
-	      seen = (bitmask & UNORDERED_COMPARE_FLAG) ? new SetCache : undefined;
+	      seen = (bitmask & COMPARE_UNORDERED_FLAG) ? new SetCache : undefined;
 
 	  stack.set(array, other);
 	  stack.set(other, array);
@@ -28377,9 +31218,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // Recursively compare arrays (susceptible to call stack limits).
 	    if (seen) {
 	      if (!arraySome(other, function(othValue, othIndex) {
-	            if (!seen.has(othIndex) &&
-	                (arrValue === othValue || equalFunc(arrValue, othValue, customizer, bitmask, stack))) {
-	              return seen.add(othIndex);
+	            if (!cacheHas(seen, othIndex) &&
+	                (arrValue === othValue || equalFunc(arrValue, othValue, bitmask, customizer, stack))) {
+	              return seen.push(othIndex);
 	            }
 	          })) {
 	        result = false;
@@ -28387,7 +31228,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    } else if (!(
 	          arrValue === othValue ||
-	            equalFunc(arrValue, othValue, customizer, bitmask, stack)
+	            equalFunc(arrValue, othValue, bitmask, customizer, stack)
 	        )) {
 	      result = false;
 	      break;
@@ -28409,14 +31250,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {Object} object The object to compare.
 	 * @param {Object} other The other object to compare.
 	 * @param {string} tag The `toStringTag` of the objects to compare.
-	 * @param {Function} equalFunc The function to determine equivalents of values.
+	 * @param {number} bitmask The bitmask flags. See `baseIsEqual` for more details.
 	 * @param {Function} customizer The function to customize comparisons.
-	 * @param {number} bitmask The bitmask of comparison flags. See `baseIsEqual`
-	 *  for more details.
+	 * @param {Function} equalFunc The function to determine equivalents of values.
 	 * @param {Object} stack Tracks traversed `object` and `other` objects.
 	 * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
 	 */
-	function equalByTag(object, other, tag, equalFunc, customizer, bitmask, stack) {
+	function equalByTag(object, other, tag, bitmask, customizer, equalFunc, stack) {
 	  switch (tag) {
 	    case dataViewTag:
 	      if ((object.byteLength != other.byteLength) ||
@@ -28454,7 +31294,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var convert = mapToArray;
 
 	    case setTag:
-	      var isPartial = bitmask & PARTIAL_COMPARE_FLAG;
+	      var isPartial = bitmask & COMPARE_PARTIAL_FLAG;
 	      convert || (convert = setToArray);
 
 	      if (object.size != other.size && !isPartial) {
@@ -28465,11 +31305,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (stacked) {
 	        return stacked == other;
 	      }
-	      bitmask |= UNORDERED_COMPARE_FLAG;
+	      bitmask |= COMPARE_UNORDERED_FLAG;
 
 	      // Recursively compare objects (susceptible to call stack limits).
 	      stack.set(object, other);
-	      var result = equalArrays(convert(object), convert(other), equalFunc, customizer, bitmask, stack);
+	      var result = equalArrays(convert(object), convert(other), bitmask, customizer, equalFunc, stack);
 	      stack['delete'](object);
 	      return result;
 
@@ -28488,18 +31328,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @private
 	 * @param {Object} object The object to compare.
 	 * @param {Object} other The other object to compare.
-	 * @param {Function} equalFunc The function to determine equivalents of values.
+	 * @param {number} bitmask The bitmask flags. See `baseIsEqual` for more details.
 	 * @param {Function} customizer The function to customize comparisons.
-	 * @param {number} bitmask The bitmask of comparison flags. See `baseIsEqual`
-	 *  for more details.
+	 * @param {Function} equalFunc The function to determine equivalents of values.
 	 * @param {Object} stack Tracks traversed `object` and `other` objects.
 	 * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
 	 */
-	function equalObjects(object, other, equalFunc, customizer, bitmask, stack) {
-	  var isPartial = bitmask & PARTIAL_COMPARE_FLAG,
-	      objProps = keys(object),
+	function equalObjects(object, other, bitmask, customizer, equalFunc, stack) {
+	  var isPartial = bitmask & COMPARE_PARTIAL_FLAG,
+	      objProps = getAllKeys(object),
 	      objLength = objProps.length,
-	      othProps = keys(other),
+	      othProps = getAllKeys(other),
 	      othLength = othProps.length;
 
 	  if (objLength != othLength && !isPartial) {
@@ -28534,7 +31373,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    // Recursively compare objects (susceptible to call stack limits).
 	    if (!(compared === undefined
-	          ? (objValue === othValue || equalFunc(objValue, othValue, customizer, bitmask, stack))
+	          ? (objValue === othValue || equalFunc(objValue, othValue, bitmask, customizer, stack))
 	          : compared
 	        )) {
 	      result = false;
@@ -28557,6 +31396,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  stack['delete'](object);
 	  stack['delete'](other);
 	  return result;
+	}
+
+	/**
+	 * Creates an array of own enumerable property names and symbols of `object`.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @returns {Array} Returns the array of property names and symbols.
+	 */
+	function getAllKeys(object) {
+	  return baseGetAllKeys(object, keys, getSymbols);
 	}
 
 	/**
@@ -28588,6 +31438,50 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
+	 * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
+	 *
+	 * @private
+	 * @param {*} value The value to query.
+	 * @returns {string} Returns the raw `toStringTag`.
+	 */
+	function getRawTag(value) {
+	  var isOwn = hasOwnProperty.call(value, symToStringTag),
+	      tag = value[symToStringTag];
+
+	  try {
+	    value[symToStringTag] = undefined;
+	    var unmasked = true;
+	  } catch (e) {}
+
+	  var result = nativeObjectToString.call(value);
+	  if (unmasked) {
+	    if (isOwn) {
+	      value[symToStringTag] = tag;
+	    } else {
+	      delete value[symToStringTag];
+	    }
+	  }
+	  return result;
+	}
+
+	/**
+	 * Creates an array of the own enumerable symbols of `object`.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @returns {Array} Returns the array of symbols.
+	 */
+	var getSymbols = !nativeGetSymbols ? stubArray : function(object) {
+	  if (object == null) {
+	    return [];
+	  }
+	  object = Object(object);
+	  return arrayFilter(nativeGetSymbols(object), function(symbol) {
+	    return propertyIsEnumerable.call(object, symbol);
+	  });
+	};
+
+	/**
 	 * Gets the `toStringTag` of `value`.
 	 *
 	 * @private
@@ -28596,17 +31490,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	var getTag = baseGetTag;
 
-	// Fallback for data views, maps, sets, and weak maps in IE 11,
-	// for data views in Edge < 14, and promises in Node.js.
+	// Fallback for data views, maps, sets, and weak maps in IE 11 and promises in Node.js < 6.
 	if ((DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag) ||
 	    (Map && getTag(new Map) != mapTag) ||
 	    (Promise && getTag(Promise.resolve()) != promiseTag) ||
 	    (Set && getTag(new Set) != setTag) ||
 	    (WeakMap && getTag(new WeakMap) != weakMapTag)) {
 	  getTag = function(value) {
-	    var result = objectToString.call(value),
+	    var result = baseGetTag(value),
 	        Ctor = result == objectTag ? value.constructor : undefined,
-	        ctorString = Ctor ? toSource(Ctor) : undefined;
+	        ctorString = Ctor ? toSource(Ctor) : '';
 
 	    if (ctorString) {
 	      switch (ctorString) {
@@ -28676,10 +31569,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
+	 * Converts `value` to a string using `Object.prototype.toString`.
+	 *
+	 * @private
+	 * @param {*} value The value to convert.
+	 * @returns {string} Returns the converted string.
+	 */
+	function objectToString(value) {
+	  return nativeObjectToString.call(value);
+	}
+
+	/**
 	 * Converts `func` to its source code.
 	 *
 	 * @private
-	 * @param {Function} func The function to process.
+	 * @param {Function} func The function to convert.
 	 * @returns {string} Returns the source code.
 	 */
 	function toSource(func) {
@@ -28748,11 +31652,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * _.isArguments([1, 2, 3]);
 	 * // => false
 	 */
-	function isArguments(value) {
-	  // Safari 8.1 makes `arguments.callee` enumerable in strict mode.
-	  return isArrayLikeObject(value) && hasOwnProperty.call(value, 'callee') &&
-	    (!propertyIsEnumerable.call(value, 'callee') || objectToString.call(value) == argsTag);
-	}
+	var isArguments = baseIsArguments(function() { return arguments; }()) ? baseIsArguments : function(value) {
+	  return isObjectLike(value) && hasOwnProperty.call(value, 'callee') &&
+	    !propertyIsEnumerable.call(value, 'callee');
+	};
 
 	/**
 	 * Checks if `value` is classified as an `Array` object.
@@ -28809,33 +31712,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
-	 * This method is like `_.isArrayLike` except that it also checks if `value`
-	 * is an object.
+	 * Checks if `value` is a buffer.
 	 *
 	 * @static
 	 * @memberOf _
-	 * @since 4.0.0
+	 * @since 4.3.0
 	 * @category Lang
 	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is an array-like object,
-	 *  else `false`.
+	 * @returns {boolean} Returns `true` if `value` is a buffer, else `false`.
 	 * @example
 	 *
-	 * _.isArrayLikeObject([1, 2, 3]);
+	 * _.isBuffer(new Buffer(2));
 	 * // => true
 	 *
-	 * _.isArrayLikeObject(document.body.children);
-	 * // => true
-	 *
-	 * _.isArrayLikeObject('abc');
-	 * // => false
-	 *
-	 * _.isArrayLikeObject(_.noop);
+	 * _.isBuffer(new Uint8Array(2));
 	 * // => false
 	 */
-	function isArrayLikeObject(value) {
-	  return isObjectLike(value) && isArrayLike(value);
-	}
+	var isBuffer = nativeIsBuffer || stubFalse;
 
 	/**
 	 * Performs a deep comparison between two values to determine if they are
@@ -28845,7 +31738,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * date objects, error objects, maps, numbers, `Object` objects, regexes,
 	 * sets, strings, symbols, and typed arrays. `Object` objects are compared
 	 * by their own, not inherited, enumerable properties. Functions and DOM
-	 * nodes are **not** supported.
+	 * nodes are compared by strict equality, i.e. `===`.
 	 *
 	 * @static
 	 * @memberOf _
@@ -28887,10 +31780,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * // => false
 	 */
 	function isFunction(value) {
+	  if (!isObject(value)) {
+	    return false;
+	  }
 	  // The use of `Object#toString` avoids issues with the `typeof` operator
-	  // in Safari 8-9 which returns 'object' for typed array and other constructors.
-	  var tag = isObject(value) ? objectToString.call(value) : '';
-	  return tag == funcTag || tag == genTag;
+	  // in Safari 9 which returns 'object' for typed arrays and other constructors.
+	  var tag = baseGetTag(value);
+	  return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag;
 	}
 
 	/**
@@ -28951,7 +31847,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function isObject(value) {
 	  var type = typeof value;
-	  return !!value && (type == 'object' || type == 'function');
+	  return value != null && (type == 'object' || type == 'function');
 	}
 
 	/**
@@ -28979,7 +31875,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * // => false
 	 */
 	function isObjectLike(value) {
-	  return !!value && typeof value == 'object';
+	  return value != null && typeof value == 'object';
 	}
 
 	/**
@@ -29031,6 +31927,45 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function keys(object) {
 	  return isArrayLike(object) ? arrayLikeKeys(object) : baseKeys(object);
+	}
+
+	/**
+	 * This method returns a new empty array.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.13.0
+	 * @category Util
+	 * @returns {Array} Returns the new empty array.
+	 * @example
+	 *
+	 * var arrays = _.times(2, _.stubArray);
+	 *
+	 * console.log(arrays);
+	 * // => [[], []]
+	 *
+	 * console.log(arrays[0] === arrays[1]);
+	 * // => false
+	 */
+	function stubArray() {
+	  return [];
+	}
+
+	/**
+	 * This method returns `false`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.13.0
+	 * @category Util
+	 * @returns {boolean} Returns `false`.
+	 * @example
+	 *
+	 * _.times(2, _.stubFalse);
+	 * // => [false, false]
+	 */
+	function stubFalse() {
+	  return false;
 	}
 
 	module.exports = isEqual;
@@ -30171,9 +33106,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var style = _styler2.default.getStyleFor(_poster2.default, { baseUrl: this.options.baseUrl });
 	    this.$el.html(this.template());
 	    this.$el.append(style);
-	    if (this.options.poster) {
+
+	    var isRegularPoster = this.options.poster && this.options.poster.custom == undefined;
+
+	    if (isRegularPoster) {
 	      var posterUrl = this.options.poster.url || this.options.poster;
 	      this.$el.css({ 'background-image': 'url(' + posterUrl + ')' });
+	    } else if (this.options.poster) {
+	      this.$el.css({ 'background': this.options.poster.custom });
 	    }
 	    this.container.$el.append(this.el);
 	    this.$playWrapper = this.$el.find('.play-wrapper');
@@ -30757,7 +33697,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 102 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"live-info\"><%= live %></div>\n<button type=\"button\" class=\"live-button\"><%= backToLive %></button>\n";
+	module.exports = "<div class=\"live-info\"><%= live %></div>\n<button type=\"button\" class=\"live-button\" aria-label=\"<%= backToLive %>\"><%= backToLive %></button>\n";
 
 /***/ },
 /* 103 */
