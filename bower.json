@@ -1,12 +1,12 @@
 {
   "name": "clappr",
   "description": "An extensible media player for the web",
-  "version": "0.2.64",
-  "homepage": "https://github.com/Leandro%20Moreira/clappr",
+  "version": "0.2.65",
+  "homepage": "https://github.com/clappr/clappr",
   "authors": [
     "Globo.com"
   ],
-  "repository": "Leandro%20Moreira/clappr",
+  "repository": "clappr/clappr",
   "bugs": {
     "url": "https://github.com/clappr/clappr/issues"
   },
@@ -27,15 +27,15 @@
     "babel-preset-es2015": "^6.5.0",
     "chai": "^3.2.0",
     "check-dependencies": "^1.0.1",
-    "clappr-zepto": "0.0.4",
+    "clappr-zepto": "0.0.7",
     "clean-webpack-plugin": "^0.1.14",
     "coveralls": "^2.11.4",
-    "css-loader": "^0.25.0",
-    "dotenv": "^2.0.0",
+    "css-loader": "^0.26.0",
+    "dotenv": "^4.0.0",
     "eslint": "^3.1.0",
     "file-loader": "^0.9.0",
     "gulp": "^3.8.1",
-    "hls.js": "^0.6.7",
+    "hls.js": "^0.6.17",
     "html-loader": "^0.4.3",
     "isparta": "^4.0.0",
     "istanbul": "^0.4.2",
@@ -52,18 +52,18 @@
     "karma-mocha": "^1.1.0",
     "karma-sinon": "^1.0.4",
     "karma-sinon-chai": "^1.1.0",
-    "karma-webpack": "^1.7.0",
+    "karma-webpack": "^2.0.1",
     "lodash.isequal": "^4.2.0",
     "lodash.isplainobject": "^4.0.4",
     "lodash.merge": "^4.4.0",
     "lodash.once": "^4.0.0",
     "lodash.result": "^4.3.0",
     "lodash.uniqby": "^4.3.0",
-    "lolex": "^1.4.0",
+    "lolex": "^1.5.2",
     "mkdirp": "^0.5.1",
     "mocha": "^3.1.2",
     "node-bourbon": "^4.2.8",
-    "node-sass": "^3.11.1",
+    "node-sass": "^4.3.0",
     "s3": "^4.1.1",
     "sass-loader": "^4.0.0",
     "sinon": "^1.10.2",
@@ -75,7 +75,7 @@
     "url-loader": "^0.5.6",
     "webpack": "^1.12.1",
     "webpack-dev-server": "^1.14.0",
-    "yargs": "^5.0.0"
+    "yargs": "^6.4.0"
   },
   "keywords": [
     "clappr"
