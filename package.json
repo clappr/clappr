@@ -81,6 +81,5 @@
     "webpack": "^1.12.1",
     "webpack-dev-server": "^1.14.0",
     "yargs": "^6.4.0"
-  },
-  "dependencies": {}
+  }
 }
