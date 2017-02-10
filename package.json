@@ -4,14 +4,14 @@
   "description": "An extensible media player for the web",
   "main": "./dist/clappr.js",
   "scripts": {
-    "release": "node_modules/.bin/webpack --progress -d --optimize-mangle --optimize-dedupe --optimize-occurence-order --output-filename clappr.min.js",
-    "build": "node_modules/.bin/webpack --progress",
-    "watch": "node_modules/.bin/webpack --progress --watch",
-    "test": "node_modules/.bin/karma start --single-run",
-    "lint": "node_modules/.bin/eslint src/ test/",
-    "check_code_style": "node_modules/.bin/jscs src/ --esnext",
-    "fix_code_style": "node_modules/.bin/jscs src/ --esnext --fix",
-    "start": "node_modules/.bin/webpack-dev-server --host 0.0.0.0 --content-base public/ --output-public-path latest/ --hot",
+    "release": "webpack --progress -d --optimize-mangle --optimize-dedupe --optimize-occurence-order --output-filename clappr.min.js",
+    "build": "webpack --progress",
+    "watch": "webpack --progress --watch",
+    "test": "karma start --single-run",
+    "lint": "eslint src/ test/",
+    "check_code_style": "jscs src/ --esnext",
+    "fix_code_style": "jscs src/ --esnext --fix",
+    "start": "webpack-dev-server --host 0.0.0.0 --content-base public/ --output-public-path latest/ --hot",
     "lock": "rm -rf npm-shrinkwrap.json node_modules && npm install --silent && npm shrinkwrap"
   },
   "repository": {
