@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {uniqueId} from './utils'
+import {uniqueId, DomRecycler} from './utils'
 import $ from 'clappr-zepto'
 import result from 'lodash.result'
 import BaseObject from './base_object'
@@ -195,7 +195,7 @@ export default class UIObject extends BaseObject {
       const attrs = $.extend({}, result(this, 'attributes'))
       if (this.id) {attrs.id = result(this, 'id')}
       if (this.className) {attrs['class'] = result(this, 'className')}
-      const $el = $('<' + result(this, 'tagName') + '>').attr(attrs)
+      const $el = DomRecycler.create(result(this, 'tagName')).attr(attrs)
       this.setElement($el, false)
     } else {
       this.setElement(result(this, 'el'), false)

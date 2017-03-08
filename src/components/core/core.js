@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {isNumber,Fullscreen} from 'base/utils'
+import {isNumber, Fullscreen, DomRecycler} from 'base/utils'
 
 import Events from 'base/events'
 import Styler from 'base/styler'
@@ -61,6 +61,7 @@ export default class Core extends UIObject {
 
   constructor(options) {
     super(options)
+    this.configureDomRecycler()
     this.playerInfo = PlayerInfo.getInstance(options.playerId)
     this.firstResize = true
     this.plugins = []
@@ -71,6 +72,13 @@ export default class Core extends UIObject {
     $(document).bind('fullscreenchange', this._boundFullscreenHandler)
     $(document).bind('MSFullscreenChange', this._boundFullscreenHandler)
     $(document).bind('mozfullscreenchange', this._boundFullscreenHandler)
+  }
+
+  configureDomRecycler() {
+    let recycleVideo = (this.options && this.options.playback && this.options.playback.recycleVideo) ? true : false
+    DomRecycler.configure({
+      recycleVideo: recycleVideo
+    })
   }
 
   createContainers(options) {
@@ -315,6 +323,7 @@ export default class Core extends UIObject {
    */
   configure(options) {
     this._options = $.extend(this._options, options)
+    this.configureDomRecycler()
     const sources = options.source || options.sources
 
     if (sources) {
