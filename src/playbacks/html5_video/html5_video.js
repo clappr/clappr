@@ -113,6 +113,8 @@ export default class HTML5Video extends Playback {
       'x-webkit-playsinline': playbackConfig.playInline
     })
 
+    playbackConfig.playInline && (this.$el.attr({playsinline: 'playsinline'}))
+
     // TODO should settings be private?
     this.settings = {default: ['seekbar']}
     this.settings.left = ['playpause', 'position', 'duration']
