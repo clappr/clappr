@@ -80,7 +80,8 @@ The configuration for the playback, it's still only compatible with `html5_video
     preload: 'metadata',
     controls: true,
     playInline: true, // allows inline playback when running on iOS UIWebview
-    crossOrigin: 'use-credentials'
+    crossOrigin: 'use-credentials',
+    recycleVideo: true // Recycle <video> element for mobile device. (default is false)
   }
 }
 ```
