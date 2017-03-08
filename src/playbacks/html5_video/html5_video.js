@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {seekStringToSeconds} from 'base/utils'
+import {seekStringToSeconds, DomRecycler} from 'base/utils'
 
 import Playback from 'base/playback'
 import Styler from 'base/styler'
@@ -325,6 +325,7 @@ export default class HTML5Video extends Playback {
     this.$el.remove()
     this.el.src = ''
     this._src = null
+    DomRecycler.garbage(this.$el)
   }
 
   seek(time) {

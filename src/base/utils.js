@@ -4,6 +4,7 @@
 /*jshint -W079 */
 
 import Browser from 'components/browser'
+import $ from 'clappr-zepto'
 
 function assign(obj, source) {
   if (source) {
@@ -235,10 +236,36 @@ export function removeArrayItem(arr, item) {
   }
 }
 
+// Simple Zepto element factory with video recycle feature.
+const videoStack = []
+
+export class DomRecycler {
+  static configure(options) {
+    this.options = $.extend(this.options, options)
+  }
+
+  static create(name) {
+    if (this.options.recycleVideo && name === 'video' && videoStack.length > 0) {
+      return videoStack.shift()
+    }
+    return $('<' + name + '>')
+  }
+
+  static garbage($el) {
+    // Expect Zepto collection with single element (does not iterate!)
+    if (!this.options.recycleVideo || $el[0].tagName.toUpperCase() !== 'VIDEO') return
+    $el.children().remove()
+    videoStack.push($el)
+  }
+}
+
+DomRecycler.options = { recycleVideo: false }
+
 export default {
   Config,
   Fullscreen,
   QueryString,
+  DomRecycler,
   extend,
   formatTime,
   seekStringToSeconds,
