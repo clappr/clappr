@@ -69,7 +69,9 @@ describe('HTML5Video playback', function() {
   it('enables inline playback for webviews when playInline flag is set', function() {
     const options = $.extend({playback: {playInline: true}}, this.options)
     const playback = new HTML5Video(options)
+
     expect(playback.el['x-webkit-playsinline']).to.be.true
+    expect(playback.el.getAttribute('playsinline')).equal('playsinline')
   })
 
   it('allows displaying default video tag controls', function() {
