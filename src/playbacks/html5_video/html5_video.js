@@ -180,6 +180,12 @@ export default class HTML5Video extends Playback {
     return false
   }
 
+  // On mobile device, HTML5 video element "retains" user action consent if
+  // load() method is called. See Player.consent().
+  consent() {
+    !this.isPlaying() && this.el.load()
+  }
+
   play() {
     this.trigger(Events.PLAYBACK_PLAY_INTENT)
     this._stopped = false

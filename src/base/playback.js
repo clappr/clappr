@@ -59,6 +59,12 @@ export default class Playback extends UIObject {
   }
 
   /**
+   * Gives user consent to playback (mobile devices).
+   * @method consent
+   */
+  consent() {}
+
+  /**
    * plays the playback.
    * @method play
    */
