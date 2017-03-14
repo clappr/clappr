@@ -597,10 +597,15 @@ export default class MediaControl extends UIObject {
     this.unbindKeyEvents()
     this.kibo = new Kibo(this.options.focusElement)
     this.kibo.down(['space'], () => this.togglePlayPause())
-    this.kibo.down(['left'], () => this.seekRelative(-15))
-    this.kibo.down(['right'], () => this.seekRelative(15))
+    this.kibo.down(['left'], () => this.show() || this.seekRelative(-5))
+    this.kibo.down(['right'], () => this.show() || this.seekRelative(5))
+    this.kibo.down(['ctrl left'], () => this.show() || this.seekRelative(-10))
+    this.kibo.down(['ctrl right'], () => this.show() || this.seekRelative(10))
+    this.kibo.down(['ctrl shift left'], () => this.show() || this.seekRelative(-15))
+    this.kibo.down(['ctrl shift right'], () => this.show() || this.seekRelative(15))
+    this.kibo.down([''])
     const keys = [1,2,3,4,5,6,7,8,9,0]
-    keys.forEach((i) => { this.kibo.down(i.toString(), () => this.settings.seekEnabled && this.container.seekPercentage(i * 10)) })
+    keys.forEach((i) => { this.kibo.down(i.toString(), () => this.show() || this.settings.seekEnabled && this.container.seekPercentage(i * 10)) })
   }
 
   unbindKeyEvents() {
@@ -608,6 +613,10 @@ export default class MediaControl extends UIObject {
       this.kibo.off('space')
       this.kibo.off('left')
       this.kibo.off('right')
+      this.kibo.off('ctrl left')
+      this.kibo.off('ctrl right')
+      this.kibo.off('ctrl shift left')
+      this.kibo.off('ctrl shift right')
       this.kibo.off([1,2,3,4,5,6,7,8,9,0])
     }
   }
