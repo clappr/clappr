@@ -1,9 +1,9 @@
-import {HTML5Video, Log, Events} from 'clappr'
-import shaka from 'shaka-player'
+const SEND_STATS_AT = 30 * 1000;
+const AUTO = -1;
+const SHAKA_READY = 'shaka:ready';
 
-const SEND_STATS_AT = 30 * 1000
-const AUTO = -1
-const SHAKA_READY = 'shaka:ready'
+const {HTML5Video, Log, Events} = window.Clappr;
+const shaka = window.shaka;
 
 export default class DashShakaPlayback extends HTML5Video {
   get name() {return 'dash_shaka_playback'}
