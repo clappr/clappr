@@ -52,6 +52,11 @@ export default class Strings extends CorePlugin {
         'live': 'прямой эфир',
         'back_to_live': 'к прямому эфиру',
         'playback_not_supported': 'Ваш браузер не поддерживает воспроизведение этого видео. Пожалуйста, попробуйте другой браузер.'
+      },
+      'fr': {
+        'live': 'en direct',
+        'back_to_live': 'retour au direct',
+        'playback_not_supported': 'Votre navigateur ne supporte pas la lecture de cette vidéo. Merci de tenter sur un autre navigateur.'
       }
     }, this.core.options.strings || {})
 
