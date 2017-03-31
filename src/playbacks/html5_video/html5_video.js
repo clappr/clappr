@@ -339,7 +339,7 @@ export default class HTML5Video extends Playback {
   }
 
   _checkInitialSeek() {
-    const seekTime = seekStringToSeconds(window.location.href)
+    const seekTime = seekStringToSeconds()
     if (seekTime !== 0) {
       this.seek(seekTime)
     }
