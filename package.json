@@ -38,7 +38,7 @@
     "css-loader": "^0.26.0",
     "dotenv": "^4.0.0",
     "eslint": "^3.1.0",
-    "file-loader": "^0.10.0",
+    "file-loader": "^0.11.1",
     "gulp": "^3.8.1",
     "hls.js": "^0.7.2",
     "html-loader": "^0.4.3",
