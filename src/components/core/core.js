@@ -338,8 +338,9 @@ export default class Core extends UIObject {
   }
 
   render() {
-    const style = Styler.getStyleFor(coreStyle, {baseUrl: this.options.baseUrl})
-    this.$el.append(style)
+    this.$style && this.$style.remove()
+    this.$style = Styler.getStyleFor(coreStyle, {baseUrl: this.options.baseUrl})
+    this.$el.append(this.$style)
     this.$el.append(this.mediaControl.render().el)
 
     this.options.width = this.options.width || this.$el.width()
