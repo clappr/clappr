@@ -57,6 +57,11 @@ export default class Strings extends CorePlugin {
         'live': 'en direct',
         'back_to_live': 'retour au direct',
         'playback_not_supported': 'Votre navigateur ne supporte pas la lecture de cette vidéo. Merci de tenter sur un autre navigateur.'
+      },
+      'tr': {
+        'live': 'canlı',
+        'back_to_live': 'canlı yayına dön',
+        'playback_not_supported': 'Tarayıcınız bu videoyu oynatma desteğine sahip değil. Lütfen farklı bir tarayıcı ile deneyin.',
       }
     }, this.core.options.strings || {})
 
@@ -64,5 +69,6 @@ export default class Strings extends CorePlugin {
     this._messages['en-US'] = this._messages['en']
     this._messages['es-419'] = this._messages['es']
     this._messages['fr-FR'] = this._messages['fr']
+    this._messages['tr-TR'] = this._messages['tr']
   }
 }
