@@ -104,9 +104,18 @@ export default class HTML5Video extends Playback {
     const playbackConfig = this.options.playback
     const preload = playbackConfig.preload || (Browser.isSafari ? 'auto' : this.options.preload)
 
+    let posterUrl // FIXME: poster plugin should always convert poster to object with expected properties ?
+    if (this.options.poster) {
+      if (typeof this.options.poster === 'string') {
+        posterUrl = this.options.poster
+      } else if (typeof this.options.poster.url === 'string') {
+        posterUrl = this.options.poster.url
+      }
+    }
+
     $.extend(this.el, {
       loop: this.options.loop,
-      poster: this.options.poster,
+      poster: posterUrl,
       preload: preload || 'metadata',
       controls: (playbackConfig.controls || this.options.useVideoTagDefaultControls) && 'controls',
       crossOrigin: playbackConfig.crossOrigin,
