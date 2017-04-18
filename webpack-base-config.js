@@ -2,8 +2,11 @@
 var path = require('path')
 var webpack = require('webpack')
 
+var DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
+
 module.exports = {
   plugins: [
+    new DirectoryNamedWebpackPlugin(true),
     new webpack.DefinePlugin({
       VERSION: JSON.stringify(require('./package.json').version)
     })
@@ -18,7 +21,7 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loaders: ['css', 'sass?includePaths[]='
+        loaders: ['css-loader', 'sass-loader?includePaths[]='
             + require('node-bourbon').includePaths
             + '&includePaths[]='
             + path.resolve(__dirname, './src/base/scss')
@@ -29,16 +32,17 @@ module.exports = {
         test: /\.(png|woff|eot|ttf|swf|cur)/, loader: 'url-loader?limit=1'
       },
       {
-        test: /\.svg/, loader: 'svg-inline'
+        test: /\.svg/, loader: 'svg-inline-loader'
       },
       {
-        test: /\.html/, loader: 'html?minimize=false'
+        test: /\.html/, loader: 'html-loader?minimize=false'
       }
     ]
   },
   resolve: {
-    alias: { 'clappr-zepto': 'clappr-zepto/zepto.js' },
-    root: path.resolve(__dirname, 'src'),
-    extensions: ['', '.js']
+    alias: {
+      'clappr-zepto': 'clappr-zepto/zepto.js'
+    },
+    modules: [path.resolve(__dirname, 'src'), 'node_modules']
   }
 }
