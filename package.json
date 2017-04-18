@@ -71,7 +71,7 @@
     "node-sass": "^4.3.0",
     "s3": "^4.1.1",
     "sass-loader": "^6.0.2",
-    "sinon": "^1.10.2",
+    "sinon": "^2.0.0",
     "sinon-chai": "^2.8.0",
     "sshpk": "^1.6.2",
     "svg-inline-loader": "^0.7.1",
