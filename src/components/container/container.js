@@ -291,9 +291,9 @@ export default class Container extends UIObject {
     }
   }
 
-  onContextMenu() {
+  onContextMenu(event) {
     if (!this.options.chromeless || this.options.allowUserInteraction) {
-      this.trigger(Events.CONTAINER_CONTEXTMENU, this, this.name)
+      this.trigger(Events.CONTAINER_CONTEXTMENU, event, this.name)
     }
   }
 
