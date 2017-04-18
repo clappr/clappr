@@ -76,7 +76,7 @@
     "sinon-chai": "^2.8.0",
     "sshpk": "^1.6.2",
     "svg-inline-loader": "^0.7.1",
-    "sync-pkg": "^0.7.0",
+    "sync-pkg": "^0.7.1",
     "uglify-js": "^2.5.0",
     "url-loader": "^0.5.6",
     "webpack": "^2.4.1",
