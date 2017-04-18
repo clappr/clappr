@@ -44,7 +44,7 @@
     "html-loader": "^0.4.3",
     "isparta": "^4.0.0",
     "istanbul": "^0.4.2",
-    "istanbul-instrumenter-loader": "^1.0.0",
+    "istanbul-instrumenter-loader": "^2.0.0",
     "jscs": "^3.0.3",
     "jshint": "^2.9.1",
     "karma": "^1.1.1",
