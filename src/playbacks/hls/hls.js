@@ -535,5 +535,5 @@ HLS.canPlay = function(resource, mimeType) {
   const isHls = ((resourceParts.length > 1 && resourceParts[1].toLowerCase() === 'm3u8') ||
         mimeType === 'application/x-mpegURL' || mimeType === 'application/vnd.apple.mpegurl')
 
-  return !!(HLSJS.isSupported() && isHls && !Browser.isSafari)
+  return !!(HLSJS.isSupported() && isHls)
 }
