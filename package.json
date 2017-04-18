@@ -36,6 +36,7 @@
     "clean-webpack-plugin": "^0.1.14",
     "coveralls": "^2.11.4",
     "css-loader": "^0.28.0",
+    "directory-named-webpack-plugin": "^2.1.0",
     "dotenv": "^4.0.0",
     "eslint": "^3.1.0",
     "file-loader": "^0.11.1",
@@ -78,8 +79,8 @@
     "sync-pkg": "^0.7.0",
     "uglify-js": "^2.5.0",
     "url-loader": "^0.5.6",
-    "webpack": "^1.12.1",
-    "webpack-dev-server": "^1.14.0",
+    "webpack": "^2.4.1",
+    "webpack-dev-server": "^2.4.2",
     "yargs": "^7.1.0"
   }
 }
