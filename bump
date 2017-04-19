@@ -2,7 +2,7 @@
 
 update_dependencies() {
   echo 'updating dependencies' &&
-  npm update --silent
+  yarn install
 }
 
 update_version() {
@@ -18,13 +18,13 @@ update_bower() {
 
 build() {
   echo 'building clappr.js' &&
-  npm run build --silent &&
+  yarn build &&
   echo 'building clappr.min.js' &&
-  npm run release --silent
+  yarn release
 }
 
 run_tests() {
-  npm test
+  yarn test
 }
 
 git_push() {
@@ -41,7 +41,7 @@ upload() {
 }
 
 npm_publish() {
-  npm publish
+  yarn publish
 }
 
 send_mail() {
