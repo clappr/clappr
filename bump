@@ -35,11 +35,6 @@ git_push() {
   git push origin master --tags
 }
 
-upload() {
-  node upload.js --tag=$1 &&
-  node upload.js --tag=latest
-}
-
 npm_publish() {
   yarn publish
 }
@@ -64,7 +59,6 @@ main() {
   run_tests
   if (("$?" == "0")); then
     git_push $1 &&
-    upload $1 &&
     npm_publish &&
     send_mail $1 &&
     exit 0
