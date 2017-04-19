@@ -4,7 +4,7 @@
   "description": "An extensible media player for the web",
   "main": "./dist/clappr.js",
   "scripts": {
-    "release": "webpack --progress -d --optimize-mangle --optimize-dedupe --optimize-occurence-order --output-filename clappr.min.js",
+    "release": "webpack --progress --output-filename clappr.min.js",
     "build": "webpack --progress",
     "watch": "webpack --progress --watch",
     "test": "karma start --single-run",

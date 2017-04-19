@@ -7,10 +7,17 @@ var webpackConfig = require('./webpack-base-config')
 webpackConfig.entry = path.resolve(__dirname, 'src/main.js')
 
 if (process.env.npm_lifecycle_event === 'release') {
+  webpackConfig.plugins.push(new webpack.LoaderOptionsPlugin({ minimize: true, debug: false }))
   webpackConfig.plugins.push(new webpack.optimize.UglifyJsPlugin({
-    compress: {warnings: false},
+    compress: {
+      warnings: false
+    },
+    mangle: true,
+    sourceMap: true,
+    comments: false,
     output: {comments: false}
-  }))
+  })
+  )
 } else {
   webpackConfig.plugins.push(new Clean(['dist'], {verbose: false}))
 }
