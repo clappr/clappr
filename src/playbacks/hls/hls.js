@@ -8,7 +8,7 @@ import isEqual from 'lodash.isequal'
 import Events from 'base/events'
 import Playback from 'base/playback'
 import Browser from 'components/browser'
-import {now} from 'base/utils'
+import {now, seekStringToSeconds} from 'base/utils'
 import Log from 'plugins/log'
 
 const AUTO = -1
@@ -349,7 +349,20 @@ export default class HLS extends HTML5VideoPlayback {
   _updatePlaybackType(evt, data) {
     this._playbackType = data.details.live ? Playback.LIVE : Playback.VOD
     this._fillLevels()
+
+    const autoSeekFromUrl = typeof(this.options.autoSeekFromUrl) === 'undefined' || this.options.autoSeekFromUrl
+    if (this.getPlaybackType() !== Playback.LIVE && autoSeekFromUrl) {
+      this._checkInitialSeek()
+    }
+
     this._onLevelUpdated(evt, data)
+  }
+
+  _checkInitialSeek() {
+    const seekTime = seekStringToSeconds()
+    if (seekTime !== 0) {
+      this.seek(seekTime)
+    }
   }
 
   _fillLevels() {
