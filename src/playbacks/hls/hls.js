@@ -7,7 +7,6 @@ import HLSJS from 'hls.js'
 import isEqual from 'lodash.isequal'
 import Events from 'base/events'
 import Playback from 'base/playback'
-import Browser from 'components/browser'
 import {now} from 'base/utils'
 import Log from 'plugins/log'
 
@@ -248,8 +247,20 @@ export default class HLS extends HTML5VideoPlayback {
         this._recoverAttemptsRemaining -= 1
         switch (data.type) {
         case HLSJS.ErrorTypes.NETWORK_ERROR:
-          Log.warn(`hlsjs: trying to recover from network error, evt ${evt}, data ${data} `)
-          this._hls.startLoad()
+          switch(data.details) {
+            // The following network errors cannot be recovered with HLS.startLoad()
+            // For more details, see https://github.com/video-dev/hls.js/blob/master/doc/design.md#error-detection-and-handling
+            case HLSJS.ErrorDetails.MANIFEST_LOAD_ERROR:
+            case HLSJS.ErrorDetails.MANIFEST_LOAD_TIMEOUT:
+            case HLSJS.ErrorDetails.MANIFEST_PARSING_ERROR:
+              Log.error(`hlsjs: unrecoverable network fatal error, evt ${evt}, data ${data} `)
+              this.trigger(Events.PLAYBACK_ERROR, {evt, data}, this.name)
+              break;
+            default:
+              Log.warn(`hlsjs: trying to recover from network error, evt ${evt}, data ${data} `)
+              this._hls.startLoad()
+              break;
+          }
           break
         case HLSJS.ErrorTypes.MEDIA_ERROR:
           Log.warn(`hlsjs: trying to recover from media error, evt ${evt}, data ${data} `)
