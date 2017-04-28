@@ -7,7 +7,6 @@ import HLSJS from 'hls.js'
 import isEqual from 'lodash.isequal'
 import Events from 'base/events'
 import Playback from 'base/playback'
-import Browser from 'components/browser'
 import {now} from 'base/utils'
 import Log from 'plugins/log'
 
@@ -93,6 +92,10 @@ export default class HLS extends HTML5VideoPlayback {
       return 0
     }
     return this._extrapolatedWindowNumSegments * this._segmentTargetDuration
+  }
+
+  static get HLSJS() {
+    return HLSJS
   }
 
   constructor(...args) {
