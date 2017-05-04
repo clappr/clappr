@@ -245,18 +245,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: '_createPlayer',
 	    value: function _createPlayer() {
-	      var _this5 = this;
-
 	      var player = new shaka.Player(this.el);
-	      player.addEventListener('error', function (type, shakaError) {
-	        return _this5._error(type, shakaError);
-	      });
-	      player.addEventListener('adaptation', function () {
-	        return _this5._onAdaptation();
-	      });
-	      player.addEventListener('buffering', function (e) {
-	        return _this5._onBuffering(e);
-	      });
+	      player.addEventListener('error', this._error);
+	      player.addEventListener('adaptation', this._onAdaptation);
+	      player.addEventListener('buffering', this._onBuffering);
 	      return player;
 	    }
 	  }, {
@@ -287,10 +279,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: '_startToSendStats',
 	    value: function _startToSendStats() {
-	      var _this6 = this;
+	      var _this5 = this;
 
 	      this.sendStatsId = setInterval(function () {
-	        return _this6._sendStats();
+	        return _this5._sendStats();
 	      }, SEND_STATS_AT);
 	    }
 	  }, {
@@ -304,11 +296,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this._error('error', { detail: e.detail });
 	    }
 	  }, {
-	    key: '_error',
-	    value: function _error(type, shakaError) {
-	      Log.error('an error was raised support=', DashShakaPlayback.support);
-	      Log.error('an error was raised by shaka player', shakaError.detail);
-	      this.trigger(Events.PLAYBACK_ERROR, shakaError.detail, this.name);
+	    key: '_onError',
+	    value: function _onError(event) {
+	      Log.error('Shaka error event:', event);
+	      this.trigger(Events.PLAYBACK_ERROR, event.detail, this.name);
 	    }
 	  }, {
 	    key: '_onAdaptation',
