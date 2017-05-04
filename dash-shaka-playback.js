@@ -68,10 +68,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var SEND_STATS_AT = 30 * 1000;
-	var AUTO = -1;
-	var SHAKA_READY = 'shaka:ready';
-
 	var _window$Clappr = window.Clappr;
 	var HTML5Video = _window$Clappr.HTML5Video;
 	var Log = _window$Clappr.Log;
@@ -79,13 +75,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var shaka = window.shaka;
 
+	var SEND_STATS_AT = 30 * 1000;
+	var AUTO = -1;
+
 	var DashShakaPlayback = (function (_HTML5Video) {
 	  _inherits(DashShakaPlayback, _HTML5Video);
 
 	  _createClass(DashShakaPlayback, [{
 	    key: 'name',
 	    get: function get() {
-	      return 'dash_shaka_playback';
+	      return 'DashShakaPlayback';
 	    }
 	  }, {
 	    key: 'shakaVersion',
@@ -117,6 +116,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	    get: function get() {
 	      return this._currentLevelId || AUTO;
 	    }
+	  }], [{
+	    key: 'canPlay',
+	    value: function canPlay(resource) {
+	      var mimeType = arguments.length <= 1 || arguments[1] === undefined ? '' : arguments[1];
+
+	      shaka.polyfill.installAll();
+	      var browserSupported = shaka.Player.isBrowserSupported();
+	      var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || [];
+	      return browserSupported && ('mpd' === resourceParts[1] || mimeType.indexOf('application/dash+xml') > -1);
+	    }
+	  }, {
+	    key: 'Events',
+	    get: function get() {
+	      return {
+	        SHAKA_READY: 'shaka:ready'
+	      };
+	    }
 	  }]);
 
 	  function DashShakaPlayback(options) {
@@ -130,10 +146,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(DashShakaPlayback, [{
 	    key: 'play',
 	    value: function play() {
-	      !this._player && this._setup();
+	      if (!this._player) {
+	        this._setup();
+	      }
 
 	      if (!this.isReady) {
-	        this.once(SHAKA_READY, this.play);
+	        this.once(DashShakaPlayback.Events.SHAKA_READY, this.play);
 	        return;
 	      }
 
@@ -251,7 +269,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: '_loaded',
 	    value: function _loaded() {
 	      this._isShakaReadyState = true;
-	      this.trigger(SHAKA_READY);
+	      this.trigger(DashShakaPlayback.Events.SHAKA_READY);
 	      this._shakaReady();
 	      this._startToSendStats();
 	      this._fillLevels();
@@ -331,21 +349,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'textTracks',
 	    get: function get() {
-	      return this._player && this._player.getTracks().filter(function (t) {
+	      return this._player && this._player.getVariantTracks().filter(function (t) {
 	        return t.type === 'text';
 	      });
 	    }
 	  }, {
 	    key: 'audioTracks',
 	    get: function get() {
-	      return this._player && this._player.getTracks().filter(function (t) {
+	      return this._player && this._player.getVariantTracks().filter(function (t) {
 	        return t.type === 'audio';
 	      });
 	    }
 	  }, {
 	    key: 'videoTracks',
 	    get: function get() {
-	      return this._player && this._player.getTracks().filter(function (t) {
+	      return this._player && this._player.getVariantTracks().filter(function (t) {
 	        return t.type === 'video';
 	      });
 	    }
@@ -354,17 +372,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return DashShakaPlayback;
 	})(HTML5Video);
 
+	;
+
 	exports['default'] = DashShakaPlayback;
-
-	DashShakaPlayback.canPlay = function (resource) {
-	  var mimeType = arguments.length <= 1 || arguments[1] === undefined ? '' : arguments[1];
-
-	  shaka.polyfill.installAll();
-	  var browserSupported = shaka.Player.isBrowserSupported();
-
-	  var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || [];
-	  return browserSupported && ('mpd' === resourceParts[1] || mimeType.indexOf('application/dash+xml') > -1);
-	};
 	module.exports = exports['default'];
 
 /***/ }
