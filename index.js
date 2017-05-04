@@ -100,15 +100,15 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   get textTracks() { 
-    return this._player && this._player.getVariantTracks().filter((t) => t.type === 'text');
+    return this._player && this._player.getTracks().filter((t) => t.type === 'text');
   }
   
   get audioTracks() { 
-    return this._player && this._player.getVariantTracks().filter((t) => t.type === 'audio');
+    return this._player && this._player.getTracks().filter((t) => t.type === 'audio');
   }
   
   get videoTracks() {
-    return this._player && this._player.getVariantTracks().filter((t) => t.type === 'video');
+    return this._player && this._player.getTracks().filter((t) => t.type === 'video');
   }
 
   getPlaybackType() {

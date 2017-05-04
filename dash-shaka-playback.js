@@ -349,21 +349,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'textTracks',
 	    get: function get() {
-	      return this._player && this._player.getVariantTracks().filter(function (t) {
+	      return this._player && this._player.getTracks().filter(function (t) {
 	        return t.type === 'text';
 	      });
 	    }
 	  }, {
 	    key: 'audioTracks',
 	    get: function get() {
-	      return this._player && this._player.getVariantTracks().filter(function (t) {
+	      return this._player && this._player.getTracks().filter(function (t) {
 	        return t.type === 'audio';
 	      });
 	    }
 	  }, {
 	    key: 'videoTracks',
 	    get: function get() {
-	      return this._player && this._player.getVariantTracks().filter(function (t) {
+	      return this._player && this._player.getTracks().filter(function (t) {
 	        return t.type === 'video';
 	      });
 	    }
