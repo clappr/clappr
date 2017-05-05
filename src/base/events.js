@@ -286,6 +286,9 @@ Events.PLAYER_TIMEUPDATE = 'timeupdate'
  */
 Events.PLAYER_VOLUMEUPDATE = 'volumeupdate'
 
+// TODO doc
+Events.PLAYER_TEXTTRACKLOADED = 'texttrackloaded'
+
 // Playback Events
 /**
  * Fired when the playback is downloading the media
@@ -479,6 +482,9 @@ Events.PLAYBACK_STATS_ADD = 'playback:stats:add'
 Events.PLAYBACK_FRAGMENT_LOADED = 'playback:fragment:loaded'
 // TODO doc
 Events.PLAYBACK_LEVEL_SWITCH = 'playback:level:switch'
+// TODO doc
+Events.PLAYBACK_SUBTITLE_LOADED = 'playback:subtitle:loaded'
+
 
 /**
  * Fired when the options were changed for the core
@@ -549,6 +555,14 @@ Events.CONTAINER_ERROR = 'container:error'
  * extra meta data
  */
 Events.CONTAINER_LOADEDMETADATA = 'container:loadedmetadata'
+
+/**
+ * Fired when a text track is loaded and available on container for display
+ * 
+ * @event CONTAINER_LOADEDTEXTTRACK
+ */
+Events.CONTAINER_LOADEDTEXTTRACK = 'container:loadedtexttrack'
+
 /**
  * Fired when the time is updated on container
  *
