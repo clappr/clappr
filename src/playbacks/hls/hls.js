@@ -149,6 +149,7 @@ export default class HLS extends HTML5VideoPlayback {
     this._hls.on(HLSJS.Events.LEVEL_SWITCH, (evt,data) => this._onLevelSwitch(evt, data))
     this._hls.on(HLSJS.Events.FRAG_LOADED, (evt, data) => this._onFragmentLoaded(evt, data))
     this._hls.on(HLSJS.Events.ERROR, (evt, data) => this._onHLSJSError(evt, data))
+    this._hls.on(HLSJS.Events.SUBTITLE_TRACK_LOADED, (evt, data) => this._onSubtitleLoaded(evt, data))
     this._hls.attachMedia(this.el)
   }
 
@@ -493,6 +494,11 @@ export default class HLS extends HTML5VideoPlayback {
 
   _onFragmentLoaded(evt, data) {
     this.trigger(Events.PLAYBACK_FRAGMENT_LOADED, data)
+  }
+
+  _onSubtitleLoaded(evt, data) {
+    this.el.textTracks[data.id].mode = 'hidden'
+    this.trigger(Events.PLAYBACK_SUBTITLE_LOADED, evt, data)
   }
 
   _onLevelSwitch(evt, data) {
