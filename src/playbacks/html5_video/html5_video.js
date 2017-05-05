@@ -200,7 +200,11 @@ export default class HTML5Video extends Playback {
     this._stopped = false
     this._setupSrc(this._src)
     this._handleBufferingEvents()
-    this.el.play()
+    let promise = this.el.play()
+    // For more details, see https://developers.google.com/web/updates/2016/03/play-returns-promise
+    if (promise && promise.catch) {
+      promise.catch(() => {})
+    }
   }
 
   pause() {
