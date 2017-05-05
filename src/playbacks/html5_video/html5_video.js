@@ -127,7 +127,7 @@ export default class HTML5Video extends Playback {
     // TODO should settings be private?
     this.settings = {default: ['seekbar']}
     this.settings.left = ['playpause', 'position', 'duration']
-    this.settings.right = ['fullscreen', 'volume', 'hd-indicator']
+    this.settings.right = ['fullscreen', 'volume', 'cc-button', 'hd-indicator']
 
     // https://github.com/clappr/clappr/issues/1076
     this.options.autoPlay && process.nextTick(() => !this._destroyed && this.play())
