@@ -94,6 +94,10 @@ export default class HLS extends HTML5VideoPlayback {
     return this._extrapolatedWindowNumSegments * this._segmentTargetDuration
   }
 
+  static get HLSJS() {
+    return HLSJS
+  }
+
   constructor(...args) {
     super(...args)
     // backwards compatibility (TODO: remove on 0.3.0)
