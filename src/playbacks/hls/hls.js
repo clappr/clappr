@@ -250,7 +250,7 @@ export default class HLS extends HTML5VideoPlayback {
           switch(data.details) {
           // The following network errors cannot be recovered with HLS.startLoad()
           // For more details, see https://github.com/video-dev/hls.js/blob/master/doc/design.md#error-detection-and-handling
-          // Note that level load error & timeout are fatal ONLY when media is not buffered and therefore unrecoverable. This happen with dynamic manifest and stream not yet available.
+          // For "level load" fatal errors, see https://github.com/video-dev/hls.js/issues/1138
           case HLSJS.ErrorDetails.MANIFEST_LOAD_ERROR:
           case HLSJS.ErrorDetails.MANIFEST_LOAD_TIMEOUT:
           case HLSJS.ErrorDetails.MANIFEST_PARSING_ERROR:
