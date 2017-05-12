@@ -3,8 +3,8 @@
 }
 
 .vhs-buffering-container[data-spinner] {
-    z-index: 9999;
-    position: relative;
+    z-index: 999;
+    position: absolute;
     width: 100%;
     height: 100%;
     font-size: 8px;

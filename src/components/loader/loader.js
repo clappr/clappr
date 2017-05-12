@@ -16,6 +16,7 @@ import HTMLImgPlayback from 'playbacks/html_img'
 import NoOp from 'playbacks/no_op'
 
 /* Container Plugins */
+import SpinnerVHS from 'plugins/spinner_vhs'
 import SpinnerThreeBouncePlugin from 'plugins/spinner_three_bounce'
 import StatsPlugin from 'plugins/stats'
 import WaterMarkPlugin from 'plugins/watermark'
@@ -49,7 +50,7 @@ export default class Loader extends BaseObject {
     super()
     this.playerId = playerId
     this.playbackPlugins = [HLSVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, FlashVideoPlayback, FlasHLSVideoPlayback, HTMLImgPlayback, NoOp]
-    this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
+    this.containerPlugins = [SpinnerVHS, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
     this.corePlugins = [DVRControls, Favicon, SeekTime, SourcesPlugin, EndVideo, Strings]
     if (externalPlugins) {
       if (!Array.isArray(externalPlugins)) {
