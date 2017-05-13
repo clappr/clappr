@@ -4,7 +4,6 @@
 
 import HTML5VideoPlayback from 'playbacks/html5_video'
 import HLSJS from 'hls.js'
-import isEqual from 'lodash.isequal'
 import Events from 'base/events'
 import Playback from 'base/playback'
 import {now} from 'base/utils'
@@ -276,7 +275,10 @@ export default class HLS extends HTML5VideoPlayback {
 
   _onTimeUpdate() {
     let update = {current: this.getCurrentTime(), total: this.getDuration()}
-    if (isEqual(update, this._lastTimeUpdate)) {
+    let isSame = this._lastTimeUpdate && (
+      update.current === this._lastTimeUpdate.current &&
+      update.total === this._lastTimeUpdate.total)
+    if (isSame) {
       return
     }
     this._lastTimeUpdate = update
