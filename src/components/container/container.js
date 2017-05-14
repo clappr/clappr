@@ -135,6 +135,11 @@ export default class Container extends UIObject {
     this.listenTo(this.playback, Events.PLAYBACK_PAUSE, this.paused)
     this.listenTo(this.playback, Events.PLAYBACK_STOP, this.stopped)
     this.listenTo(this.playback, Events.PLAYBACK_ERROR, this.error)
+    this.listenTo(this.playback, Events.PLAYBACK_SUBTITLE_LOADED, this.subtitleLoaded)
+  }
+
+  subtitleLoaded(evt, data) {
+    this.trigger(Events.CONTAINER_LOADEDTEXTTRACK, evt, data)
   }
 
   playbackStateChanged(state) {

@@ -4,7 +4,6 @@
 
 import BaseObject from 'base/base_object'
 import PlayerInfo from 'components/player_info'
-import uniqBy from 'lodash.uniqby'
 
 /* Playback Plugins */
 import HTML5VideoPlayback from 'playbacks/html5_video'
@@ -77,6 +76,20 @@ export default class Loader extends BaseObject {
     return plugins
   }
 
+  removeDups(list) {
+    const groupUp = (plugins, plugin) => {
+      plugins[plugin.prototype.name] = plugin
+      return plugins
+    }
+    const pluginsMap = list.reduceRight(groupUp, Object.create(null))
+
+    const plugins = []
+    for (let key in pluginsMap) {
+      plugins.push(pluginsMap[key])
+    }
+    return plugins
+  }
+
   /**
    * adds all the external plugins that were passed through `options.plugins`
    * @method addExternalPlugins
@@ -85,10 +98,16 @@ export default class Loader extends BaseObject {
    */
   addExternalPlugins(plugins) {
     plugins = this.groupPluginsByType(plugins)
-    const pluginName = function(plugin) { return plugin.prototype.name }
-    if (plugins.playback) { this.playbackPlugins = uniqBy(plugins.playback.concat(this.playbackPlugins), pluginName) }
-    if (plugins.container) { this.containerPlugins = uniqBy(plugins.container.concat(this.containerPlugins), pluginName) }
-    if (plugins.core) { this.corePlugins = uniqBy(plugins.core.concat(this.corePlugins), pluginName) }
+    if (plugins.playback) {
+      this.playbackPlugins = this.removeDups(plugins.playback.concat(this.playbackPlugins))
+    }
+    if (plugins.container) {
+      this.containerPlugins = this.removeDups(plugins.container.concat(this.containerPlugins))
+    }
+    if (plugins.core) {
+      this.corePlugins = this.removeDups(plugins.core.concat(this.corePlugins))
+    }
+
     PlayerInfo.getInstance(this.playerId).playbackPlugins = this.playbackPlugins
   }
 
