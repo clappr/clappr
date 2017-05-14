@@ -127,7 +127,7 @@ export default class HTML5Video extends Playback {
     // TODO should settings be private?
     this.settings = {default: ['seekbar']}
     this.settings.left = ['playpause', 'position', 'duration']
-    this.settings.right = ['fullscreen', 'volume', 'hd-indicator']
+    this.settings.right = ['fullscreen', 'volume', 'cc-button', 'hd-indicator']
 
     // https://github.com/clappr/clappr/issues/1076
     this.options.autoPlay && process.nextTick(() => !this._destroyed && this.play())
@@ -200,7 +200,11 @@ export default class HTML5Video extends Playback {
     this._stopped = false
     this._setupSrc(this._src)
     this._handleBufferingEvents()
-    this.el.play()
+    let promise = this.el.play()
+    // For more details, see https://developers.google.com/web/updates/2016/03/play-returns-promise
+    if (promise && promise.catch) {
+      promise.catch(() => {})
+    }
   }
 
   pause() {
