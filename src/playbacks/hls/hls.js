@@ -4,10 +4,8 @@
 
 import HTML5VideoPlayback from 'playbacks/html5_video'
 import HLSJS from 'hls.js'
-import isEqual from 'lodash.isequal'
 import Events from 'base/events'
 import Playback from 'base/playback'
-import Browser from 'components/browser'
 import {now} from 'base/utils'
 import Log from 'plugins/log'
 
@@ -95,6 +93,10 @@ export default class HLS extends HTML5VideoPlayback {
     return this._extrapolatedWindowNumSegments * this._segmentTargetDuration
   }
 
+  static get HLSJS() {
+    return HLSJS
+  }
+
   constructor(...args) {
     super(...args)
     // backwards compatibility (TODO: remove on 0.3.0)
@@ -146,6 +148,7 @@ export default class HLS extends HTML5VideoPlayback {
     this._hls.on(HLSJS.Events.LEVEL_SWITCH, (evt,data) => this._onLevelSwitch(evt, data))
     this._hls.on(HLSJS.Events.FRAG_LOADED, (evt, data) => this._onFragmentLoaded(evt, data))
     this._hls.on(HLSJS.Events.ERROR, (evt, data) => this._onHLSJSError(evt, data))
+    this._hls.on(HLSJS.Events.SUBTITLE_TRACK_LOADED, (evt, data) => this._onSubtitleLoaded(evt, data))
     this._hls.attachMedia(this.el)
   }
 
@@ -248,8 +251,23 @@ export default class HLS extends HTML5VideoPlayback {
         this._recoverAttemptsRemaining -= 1
         switch (data.type) {
         case HLSJS.ErrorTypes.NETWORK_ERROR:
-          Log.warn(`hlsjs: trying to recover from network error, evt ${evt}, data ${data} `)
-          this._hls.startLoad()
+          switch(data.details) {
+          // The following network errors cannot be recovered with HLS.startLoad()
+          // For more details, see https://github.com/video-dev/hls.js/blob/master/doc/design.md#error-detection-and-handling
+          // For "level load" fatal errors, see https://github.com/video-dev/hls.js/issues/1138
+          case HLSJS.ErrorDetails.MANIFEST_LOAD_ERROR:
+          case HLSJS.ErrorDetails.MANIFEST_LOAD_TIMEOUT:
+          case HLSJS.ErrorDetails.MANIFEST_PARSING_ERROR:
+          case HLSJS.ErrorDetails.LEVEL_LOAD_ERROR:
+          case HLSJS.ErrorDetails.LEVEL_LOAD_TIMEOUT:
+            Log.error(`hlsjs: unrecoverable network fatal error, evt ${evt}, data ${data} `)
+            this.trigger(Events.PLAYBACK_ERROR, {evt, data}, this.name)
+            break
+          default:
+            Log.warn(`hlsjs: trying to recover from network error, evt ${evt}, data ${data} `)
+            this._hls.startLoad()
+            break
+          }
           break
         case HLSJS.ErrorTypes.MEDIA_ERROR:
           Log.warn(`hlsjs: trying to recover from media error, evt ${evt}, data ${data} `)
@@ -272,7 +290,10 @@ export default class HLS extends HTML5VideoPlayback {
 
   _onTimeUpdate() {
     let update = {current: this.getCurrentTime(), total: this.getDuration()}
-    if (isEqual(update, this._lastTimeUpdate)) {
+    let isSame = this._lastTimeUpdate && (
+      update.current === this._lastTimeUpdate.current &&
+      update.total === this._lastTimeUpdate.total)
+    if (isSame) {
       return
     }
     this._lastTimeUpdate = update
@@ -490,6 +511,11 @@ export default class HLS extends HTML5VideoPlayback {
 
   _onFragmentLoaded(evt, data) {
     this.trigger(Events.PLAYBACK_FRAGMENT_LOADED, data)
+  }
+
+  _onSubtitleLoaded(evt, data) {
+    this.el.textTracks[data.id].mode = 'hidden'
+    this.trigger(Events.PLAYBACK_SUBTITLE_LOADED, evt, data)
   }
 
   _onLevelSwitch(evt, data) {

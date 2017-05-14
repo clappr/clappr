@@ -1,4 +1,6 @@
+import Events from 'base/events.js'
 import HLS from 'playbacks/hls'
+import HLSJS from 'hls.js'
 
 describe('HLS playback', () => {
   // Disabled due to missing support for Firefox on Linux - breaks travis build
@@ -64,6 +66,17 @@ describe('HLS playback', () => {
       expect(playback._hls.config.someHlsjsOption).to.be.equal('value')
       expect(playback._hls.config).not.to.include.keys('hlsMinimumDvrSize')
     })
+  })
+
+  it('should trigger a playback error if source load failed', function(done) {
+    let options = {src: 'http://dns.will.fail/notfound.m3u8'}
+    const playback = new HLS(options)
+    playback.on(Events.PLAYBACK_ERROR, (e) => {
+      expect(e.data.type).to.be.equal(HLSJS.ErrorTypes.NETWORK_ERROR)
+      expect(e.data.details).to.be.equal(HLSJS.ErrorDetails.MANIFEST_LOAD_ERROR)
+      done()
+    })
+    playback.play()
   })
 
   xit('levels', function() {
