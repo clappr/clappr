@@ -93,7 +93,8 @@ export default class Player extends BaseObject {
       onSeek: Events.PLAYER_SEEK,
       onError: Events.PLAYER_ERROR,
       onTimeUpdate: Events.PLAYER_TIMEUPDATE,
-      onVolumeUpdate: Events.PLAYER_VOLUMEUPDATE
+      onVolumeUpdate: Events.PLAYER_VOLUMEUPDATE,
+      onTextTrackLoaded: Events.PLAYER_TEXTTRACKLOADED
     }
   }
 
@@ -251,6 +252,7 @@ export default class Player extends BaseObject {
       this.listenTo(container, Events.CONTAINER_ERROR, this._onError)
       this.listenTo(container, Events.CONTAINER_TIMEUPDATE, this._onTimeUpdate)
       this.listenTo(container, Events.CONTAINER_VOLUME, this._onVolumeUpdate)
+      this.listenTo(container, Events.CONTAINER_LOADEDTEXTTRACK, this._onTextTrackLoaded)
     }
     return this
   }
@@ -285,6 +287,10 @@ export default class Player extends BaseObject {
 
   _onVolumeUpdate(volume) {
     this.trigger(Events.PLAYER_VOLUMEUPDATE, volume)
+  }
+
+  _onTextTrackLoaded(evt, data) {
+    this.trigger(Events.PLAYER_TEXTTRACKLOADED, evt, data)
   }
 
   _onPlay() {
