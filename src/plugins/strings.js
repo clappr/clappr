@@ -1,7 +1,6 @@
 import {getBrowserLanguage} from 'base/utils'
-
+import $ from 'clappr-zepto'
 import CorePlugin from 'base/core_plugin'
-import merge from 'lodash.merge'
 
 /**
  * The internationalization (i18n) plugin
@@ -32,7 +31,7 @@ export default class Strings extends CorePlugin {
   _language() {return this.core.options.language || getBrowserLanguage()}
 
   _initializeMessages() {
-    this._messages = merge({
+    const defaultMessages = {
       'en': {
         'live': 'live',
         'back_to_live': 'back to live',
@@ -63,7 +62,12 @@ export default class Strings extends CorePlugin {
         'back_to_live': 'canlı yayına dön',
         'playback_not_supported': 'Tarayıcınız bu videoyu oynatma desteğine sahip değil. Lütfen farklı bir tarayıcı ile deneyin.',
       }
-    }, this.core.options.strings || {})
+    }
+    const strings = this.core.options.strings || {}
+    this._messages = Object.keys(defaultMessages).reduce((messages, lang) => {
+      messages[lang] = $.extend({}, defaultMessages[lang], strings[lang])
+      return messages
+    }, {})
 
     this._messages['pt-BR'] = this._messages['pt']
     this._messages['en-US'] = this._messages['en']
