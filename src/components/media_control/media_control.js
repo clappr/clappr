@@ -18,7 +18,6 @@ import template from 'base/template'
 import Playback from 'base/playback'
 
 import $ from 'clappr-zepto'
-import merge from 'lodash.merge'
 
 import mediaControlStyle from './public/media-control.scss'
 import mediaControlHTML from './public/media-control.html'
@@ -535,7 +534,7 @@ export default class MediaControl extends UIObject {
   }
 
   getSettings() {
-    return merge({}, this.container.settings)
+    return $.extend({}, this.container.settings)
   }
 
   highDefinitionUpdate(isHD) {
