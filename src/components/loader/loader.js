@@ -85,7 +85,7 @@ export default class Loader extends BaseObject {
 
     const plugins = []
     for (let key in pluginsMap) {
-      plugins.push(pluginsMap[key])
+      plugins.unshift(pluginsMap[key])
     }
     return plugins
   }
