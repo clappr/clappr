@@ -81,6 +81,8 @@ Clappr is under heavy development but production-ready. Feel free to open issues
 
 ## [How to write a plugin?](https://github.com/clappr/clappr/wiki)
 
+## [How to handle player fatal errors?](doc/PLAYER_ERRORS.md)
+
 ## [Installing](doc/INSTALLING.md)
 
 ## [FAQ & Troubleshooting](doc/TROUBLESHOOTING.md)
