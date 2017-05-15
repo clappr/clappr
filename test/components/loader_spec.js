@@ -10,6 +10,7 @@ describe('Loader', function() {
   describe('addExternalPlugins function', function() {
     it('should extend the plugins array with the external ones', function() {
       const playbackPlugin = PlaybackPlugin.extend({name: 'playbackPlugin'})
+      playbackPlugin.canPlay = () => true
       const containerPlugin = ContainerPlugin.extend({name: 'containerPlugin'})
       const corePlugin = CorePlugin.extend({name: 'corePlugin'})
 
@@ -21,6 +22,8 @@ describe('Loader', function() {
 
       loader.addExternalPlugins({playback: [playbackPlugin]})
       expect(loader.playbackPlugins.length).to.be.equal(nativePlaybackPluginsCount + 1)
+      const selected = loader.playbackPlugins.filter((p) => p.canPlay('source'))[0]
+      expect(selected.prototype.name).to.eq('playbackPlugin')
 
       loader.addExternalPlugins({container: [containerPlugin]})
       expect(loader.containerPlugins.length).to.be.equal(nativeContainerPluginsCount + 1)
