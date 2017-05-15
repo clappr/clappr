@@ -74,7 +74,7 @@
     "sshpk": "^1.6.2",
     "svg-inline-loader": "^0.7.1",
     "sync-pkg": "^0.7.1",
-    "uglify-js": "^2.8.22",
+    "uglify-js": "^3.0.5",
     "url-loader": "^0.5.6",
     "webpack": "^2.5.0",
     "webpack-dev-server": "^2.4.5",
