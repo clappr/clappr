@@ -4,7 +4,6 @@
 
 import Log from 'plugins/log'
 import {uniqueId} from './utils'
-import execOnce from 'lodash.once'
 
 const slice = Array.prototype.slice
 
@@ -84,11 +83,10 @@ export default class Events {
    */
   once(name, callback, context) {
     if (!eventsApi(this, 'once', name, [callback, context]) || !callback) {return this}
-    const self = this
-    const once = execOnce(function() {
-      self.off(name, once)
-      callback.apply(this, arguments)
-    })
+    const once = () => {
+      this.off(name, once)
+      callback.apply(context || this, arguments)
+    }
     once._callback = callback
     return this.on(name, once, context)
   }
@@ -558,7 +556,7 @@ Events.CONTAINER_LOADEDMETADATA = 'container:loadedmetadata'
 
 /**
  * Fired when a text track is loaded and available on container for display
- * 
+ *
  * @event CONTAINER_LOADEDTEXTTRACK
  */
 Events.CONTAINER_LOADEDTEXTTRACK = 'container:loadedtexttrack'
