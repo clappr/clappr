@@ -149,7 +149,7 @@ class DashShakaPlayback extends HTML5Video {
 
   _createPlayer() {
     var player = new shaka.Player(this.el);
-    player.addEventListener('error', this._error);
+    player.addEventListener('error', this._onError);
     player.addEventListener('adaptation', this._onAdaptation);
     player.addEventListener('buffering', this._onBuffering);
     return player
@@ -183,13 +183,13 @@ class DashShakaPlayback extends HTML5Video {
     this.trigger(Events.PLAYBACK_STATS_ADD, this._player.getStats());
   }
 
-  _setupError(e) { 
-    this._error('error', {detail: e.detail}); 
+  _setupError(err) { 
+    this._onError(err); 
   }
 
-  _onError(event) {
-    Log.error('Shaka error event:', event);
-    this.trigger(Events.PLAYBACK_ERROR, event.detail, this.name);
+  _onError(err) {
+    Log.error('Shaka error event:', err);
+    this.trigger(Events.PLAYBACK_ERROR, err, this.name);
   }
 
   _onAdaptation() {
