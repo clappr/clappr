@@ -246,7 +246,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: '_createPlayer',
 	    value: function _createPlayer() {
 	      var player = new shaka.Player(this.el);
-	      player.addEventListener('error', this._error);
+	      player.addEventListener('error', this._onError);
 	      player.addEventListener('adaptation', this._onAdaptation);
 	      player.addEventListener('buffering', this._onBuffering);
 	      return player;
@@ -292,14 +292,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: '_setupError',
-	    value: function _setupError(e) {
-	      this._error('error', { detail: e.detail });
+	    value: function _setupError(err) {
+	      this._onError(err);
 	    }
 	  }, {
 	    key: '_onError',
-	    value: function _onError(event) {
-	      Log.error('Shaka error event:', event);
-	      this.trigger(Events.PLAYBACK_ERROR, event.detail, this.name);
+	    value: function _onError(err) {
+	      Log.error('Shaka error event:', err);
+	      this.trigger(Events.PLAYBACK_ERROR, err, this.name);
 	    }
 	  }, {
 	    key: '_onAdaptation',
