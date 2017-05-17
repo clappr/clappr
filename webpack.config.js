@@ -28,7 +28,8 @@ module.exports = [
   {
     entry: path.resolve(__dirname, 'index.js'),
     externals: {
-      clappr: 'Clappr'
+      "clappr": 'Clappr',
+      "shaka-player": 'shaka'
     },
     module: {
       loaders: [
