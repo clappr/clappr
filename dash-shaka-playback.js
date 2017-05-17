@@ -92,6 +92,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return shaka.player.Player.version;
 	    }
 	  }, {
+	    key: 'shakaPlayerInstance',
+	    get: function get() {
+	      return this._player;
+	    }
+	  }, {
 	    key: 'levels',
 	    get: function get() {
 	      return this._levels;
