@@ -512,6 +512,19 @@ Events.CORE_READY = 'core:ready'
  * @param {Boolean} whether or not the player is on fullscreen mode
  */
 Events.CORE_FULLSCREEN = 'core:fullscreen'
+/**
+ * Fired when the screen orientation has changed.
+ * This event is trigger only for mobile devices.
+ *
+ * @event CORE_SCREEN_ORIENTATION_CHANGED
+ * @param {Object} screen An object with screen orientation
+ * screen object
+ * @param {Object} [screen.event]
+ * window resize event object
+ * @param {String} [screen.orientation]
+ * screen orientation (ie: 'landscape' or 'portrait')
+ */
+Events.CORE_SCREEN_ORIENTATION_CHANGED = 'core:screen:orientation:changed'
 
 
 // Container Events
