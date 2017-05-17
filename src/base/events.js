@@ -486,6 +486,13 @@ Events.PLAYBACK_LEVEL_SWITCH = 'playback:level:switch'
 Events.PLAYBACK_SUBTITLE_LOADED = 'playback:subtitle:loaded'
 
 
+// Core Events
+/**
+ * Fired when the containers are created
+ *
+ * @event CORE_CONTAINERS_CREATED
+ */
+Events.CORE_CONTAINERS_CREATED = 'core:containers:created'
 /**
  * Fired when the options were changed for the core
  *
@@ -501,10 +508,11 @@ Events.CORE_READY = 'core:ready'
 /**
  * Fired when the fullscreen state change
  *
+ * @event CORE_FULLSCREEN
  * @param {Boolean} whether or not the player is on fullscreen mode
- * @event CORE_READY
  */
 Events.CORE_FULLSCREEN = 'core:fullscreen'
+
 
 // Container Events
 /**
@@ -711,6 +719,3 @@ Events.MEDIACONTROL_NOTPLAYING = 'mediacontrol:notplaying'
  * @event MEDIACONTROL_CONTAINERCHANGED
  */
 Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged'
-
-// Core Events
-Events.CORE_CONTAINERS_CREATED = 'core:containers:created'
