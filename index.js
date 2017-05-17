@@ -1,41 +1,40 @@
-const {HTML5Video, Log, Events} = require('clappr');
-const shaka = require('shaka-player');
+const {HTML5Video, Log, Events} = require('clappr')
+const shaka = require('shaka-player')
 
-const SEND_STATS_AT = 30 * 1000;
-const AUTO = -1;
+const SEND_STATS_AT = 30 * 1000
+const AUTO = -1
 
 class DashShakaPlayback extends HTML5Video {
-
-  static get Events() {
+  static get Events () {
     return {
       SHAKA_READY: 'shaka:ready'
-    };
+    }
   }
 
-  static canPlay(resource, mimeType = '') {
-    shaka.polyfill.installAll();
-    var browserSupported = shaka.Player.isBrowserSupported();
-    var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || [];
-    return browserSupported && (('mpd' === resourceParts[1]) || mimeType.indexOf('application/dash+xml') > -1);
+  static canPlay (resource, mimeType = '') {
+    shaka.polyfill.installAll()
+    var browserSupported = shaka.Player.isBrowserSupported()
+    var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
+    return browserSupported && ((resourceParts[1] === 'mpd') || mimeType.indexOf('application/dash+xml') > -1)
   }
 
-  get name() {
+  get name () {
     return 'DashShakaPlayback'
   }
 
-  get shakaVersion() {
+  get shakaVersion () {
     return shaka.player.Player.version
   }
 
-  get shakaPlayerInstance() {
-    return this._player;
+  get shakaPlayerInstance () {
+    return this._player
   }
 
-  get levels() { 
-    return this._levels 
+  get levels () {
+    return this._levels
   }
 
-  set currentLevel(id) {
+  set currentLevel (id) {
     this._currentLevelId = id
     var isAuto = this._currentLevelId === AUTO
 
@@ -47,19 +46,19 @@ class DashShakaPlayback extends HTML5Video {
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
   }
 
-  get currentLevel() { 
-    return this._currentLevelId || AUTO 
+  get currentLevel () {
+    return this._currentLevelId || AUTO
   }
 
-  constructor(options) {
+  constructor (options) {
     super(options)
     this._levels = []
     options.autoPlay && this.play()
   }
 
-  play() {
+  play () {
     if (!this._player) {
-        this._setup();
+      this._setup()
     }
 
     if (!this.isReady) {
@@ -67,137 +66,136 @@ class DashShakaPlayback extends HTML5Video {
       return
     }
 
-    this._src = this.el.src;
+    this._src = this.el.src
     super.play()
   }
 
   // skipping setup `setupSrc` on tag video
-  setupSrc() {}
+  setupSrc () {}
 
   // skipping ready event on video tag in favor of ready on shaka
-  _ready() {}
+  _ready () {}
 
-  get isReady() {
+  get isReady () {
     return this._isShakaReadyState
   }
 
   // skipping error handling on video tag in favor of error on shaka
-  error(event) {
+  error (event) {
     Log.error('an error was raised by the video tag', event, this.el.error)
   }
 
-  isHighDefinitionInUse() { 
-    return !!this.highDefinition 
+  isHighDefinitionInUse () {
+    return !!this.highDefinition
   }
 
-  stop() {
+  stop () {
     clearInterval(this.sendStatsId)
     this._sendStats()
 
     this._player.unload().then(() => {
-        super.stop()
-        this._player = null
-        this._isShakaReadyState = false
-    }).catch(() => { 
-      Log.error('shaka could not be unloaded') 
-    });
+      super.stop()
+      this._player = null
+      this._isShakaReadyState = false
+    }).catch(() => {
+      Log.error('shaka could not be unloaded')
+    })
   }
 
-  get textTracks() { 
-    return this._player && this._player.getTracks().filter((t) => t.type === 'text');
-  }
-  
-  get audioTracks() { 
-    return this._player && this._player.getTracks().filter((t) => t.type === 'audio');
-  }
-  
-  get videoTracks() {
-    return this._player && this._player.getTracks().filter((t) => t.type === 'video');
+  get textTracks () {
+    return this._player && this._player.getTracks().filter((t) => t.type === 'text')
   }
 
-  getPlaybackType() {
-    return (this._player && this._player.isLive() ? 'live' : 'vod') || '';
+  get audioTracks () {
+    return this._player && this._player.getTracks().filter((t) => t.type === 'audio')
   }
 
-  selectTrack(track) {
-    this._player.selectTrack(track);
-    this._onAdaptation();
+  get videoTracks () {
+    return this._player && this._player.getTracks().filter((t) => t.type === 'video')
   }
 
-  destroy() {
-    clearInterval(this.sendStatsId);
+  getPlaybackType () {
+    return (this._player && this._player.isLive() ? 'live' : 'vod') || ''
+  }
+
+  selectTrack (track) {
+    this._player.selectTrack(track)
+    this._onAdaptation()
+  }
+
+  destroy () {
+    clearInterval(this.sendStatsId)
 
     if (this._player) {
       this._destroy()
     } else {
-      this._player.destroy().
-        then(() => this._destroy()).
-        catch(() => {
+      this._player.destroy()
+        .then(() => this._destroy())
+        .catch(() => {
           this._destroy()
-          Log.error('shaka could not be destroyed');
+          Log.error('shaka could not be destroyed')
         })
     }
   }
 
+  _setup () {
+    this._isShakaReadyState = false
+    this._player = this._createPlayer()
+    this._options.shakaConfiguration && this._player.configure(this._options.shakaConfiguration)
+    this._options.shakaOnBeforeLoad && this._options.shakaOnBeforeLoad(this._player)
 
-  _setup() {
-    this._isShakaReadyState = false;
-    this._player = this._createPlayer();
-    this._options.shakaConfiguration && this._player.configure(this._options.shakaConfiguration);
-    this._options.shakaOnBeforeLoad && this._options.shakaOnBeforeLoad(this._player);
-
-    var playerLoaded = this._player.load(this._options.src);
+    var playerLoaded = this._player.load(this._options.src)
     playerLoaded.then(() => this._loaded())
-      .catch((e) => this._setupError(e));
+      .catch((e) => this._setupError(e))
   }
 
-  _createPlayer() {
-    var player = new shaka.Player(this.el);
-    player.addEventListener('error', this._onError);
-    player.addEventListener('adaptation', this._onAdaptation);
-    player.addEventListener('buffering', this._onBuffering);
+  _createPlayer () {
+    var player = new shaka.Player(this.el)
+    player.addEventListener('error', this._onError)
+    player.addEventListener('adaptation', this._onAdaptation)
+    player.addEventListener('buffering', this._onBuffering)
     return player
   }
 
-  _onBuffering(e) {
-    var event = e.buffering ? Events.PLAYBACK_BUFFERING : Events.PLAYBACK_BUFFERFULL;
-    this.trigger(event);
+  _onBuffering (e) {
+    var event = e.buffering ? Events.PLAYBACK_BUFFERING : Events.PLAYBACK_BUFFERFULL
+    this.trigger(event)
   }
 
-  _loaded() {
-    this._isShakaReadyState = true;
-    this.trigger(DashShakaPlayback.Events.SHAKA_READY);
-    this._shakaReady();
-    this._startToSendStats();
-    this._fillLevels();
+  _loaded () {
+    this._isShakaReadyState = true
+    this.trigger(DashShakaPlayback.Events.SHAKA_READY)
+    this._shakaReady()
+    this._startToSendStats()
+    this._fillLevels()
   }
 
-  _fillLevels(){
+  _fillLevels () {
     if (this._levels.length === 0) {
-      this._levels = this.videoTracks.map((videoTrack) => { return {id: videoTrack.id, label: `${videoTrack.height}p`}}).reverse();
-      this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this.levels);
+      this._levels = this.videoTracks.map((videoTrack) => { return {id: videoTrack.id, label: `${videoTrack.height}p`} }).reverse()
+      this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this.levels)
     }
   }
 
-  _startToSendStats() {
-    this.sendStatsId = setInterval(() => this._sendStats(), SEND_STATS_AT);
+  _startToSendStats () {
+    this.sendStatsId = setInterval(() => this._sendStats(), SEND_STATS_AT)
   }
 
-  _sendStats() {
-    this.trigger(Events.PLAYBACK_STATS_ADD, this._player.getStats());
+  _sendStats () {
+    this.trigger(Events.PLAYBACK_STATS_ADD, this._player.getStats())
   }
 
-  _setupError(err) { 
-    this._onError(err); 
+  _setupError (err) {
+    this._onError(err)
   }
 
-  _onError(err) {
-    Log.error('Shaka error event:', err);
-    this.trigger(Events.PLAYBACK_ERROR, err, this.name);
+  _onError (err) {
+    Log.error('Shaka error event:', err)
+    this.trigger(Events.PLAYBACK_ERROR, err, this.name)
   }
 
-  _onAdaptation() {
-    var activeVideo = this.videoTracks.filter((t) => t.active === true)[0];
+  _onAdaptation () {
+    var activeVideo = this.videoTracks.filter((t) => t.active === true)[0]
 
     this._fillLevels()
 
@@ -209,18 +207,18 @@ class DashShakaPlayback extends HTML5Video {
       width: activeVideo.width,
       height: activeVideo.height,
       level: activeVideo.id
-    });
+    })
   }
 
-  _destroy() {
-    super.destroy();
-    this._isShakaReadyState = false;
-    Log.debug('shaka was destroyed');
+  _destroy () {
+    super.destroy()
+    this._isShakaReadyState = false
+    Log.debug('shaka was destroyed')
   }
 
-  _shakaReady() {
-    super._ready();
+  _shakaReady () {
+    super._ready()
   }
 };
 
-export default DashShakaPlayback;
+export default DashShakaPlayback
