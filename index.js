@@ -1,5 +1,5 @@
-const {HTML5Video, Log, Events} = require('clappr')
-const shaka = require('shaka-player')
+import {HTML5Video, Log, Events} from 'clappr'
+import shaka from 'shaka-player'
 
 const SEND_STATS_AT = 30 * 1000
 const AUTO = -1
