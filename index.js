@@ -1,8 +1,8 @@
 import {HTML5Video, Log, Events} from 'clappr'
 import shaka from 'shaka-player'
 
-const SEND_STATS_AT = 30 * 1000
-const AUTO = -1
+const SEND_STATS_INTERVAL_MS = 30 * 1e3
+const DEFAULT_LEVEL_AUTO = -1
 
 class DashShakaPlayback extends HTML5Video {
   static get Events () {
@@ -36,7 +36,7 @@ class DashShakaPlayback extends HTML5Video {
 
   set currentLevel (id) {
     this._currentLevelId = id
-    var isAuto = this._currentLevelId === AUTO
+    var isAuto = this._currentLevelId === DEFAULT_LEVEL_AUTO
 
     this._player.configure({abr: {enable: !isAuto}})
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_START)
@@ -47,7 +47,7 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   get currentLevel () {
-    return this._currentLevelId || AUTO
+    return this._currentLevelId || DEFAULT_LEVEL_AUTO
   }
 
   constructor (options) {
@@ -178,7 +178,8 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   _startToSendStats () {
-    this.sendStatsId = setInterval(() => this._sendStats(), SEND_STATS_AT)
+    const intervalMs = this._options.shakaSendStatsInterval || SEND_STATS_INTERVAL_MS
+    this.sendStatsId = setInterval(() => this._sendStats(), intervalMs)
   }
 
   _sendStats () {
