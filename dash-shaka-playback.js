@@ -64,20 +64,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _require = __webpack_require__(1);
+	var _clappr = __webpack_require__(1);
 
-	var HTML5Video = _require.HTML5Video;
-	var Log = _require.Log;
-	var Events = _require.Events;
+	var _shakaPlayer = __webpack_require__(2);
 
-	var shaka = __webpack_require__(2);
+	var _shakaPlayer2 = _interopRequireDefault(_shakaPlayer);
 
-	var SEND_STATS_AT = 30 * 1000;
-	var AUTO = -1;
+	var SEND_STATS_INTERVAL_MS = 30 * 1e3;
+	var DEFAULT_LEVEL_AUTO = -1;
 
 	var DashShakaPlayback = (function (_HTML5Video) {
 	  _inherits(DashShakaPlayback, _HTML5Video);
@@ -90,7 +90,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'shakaVersion',
 	    get: function get() {
-	      return shaka.player.Player.version;
+	      return _shakaPlayer2['default'].player.Player.version;
 	    }
 	  }, {
 	    key: 'shakaPlayerInstance',
@@ -108,29 +108,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _this = this;
 
 	      this._currentLevelId = id;
-	      var isAuto = this._currentLevelId === AUTO;
+	      var isAuto = this._currentLevelId === DEFAULT_LEVEL_AUTO;
 
 	      this._player.configure({ abr: { enable: !isAuto } });
-	      this.trigger(Events.PLAYBACK_LEVEL_SWITCH_START);
+	      this.trigger(_clappr.Events.PLAYBACK_LEVEL_SWITCH_START);
 	      if (!isAuto) {
 	        this.selectTrack(this.videoTracks.filter(function (t) {
 	          return t.id === _this._currentLevelId;
 	        })[0]);
 	      }
-	      this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END);
+	      this.trigger(_clappr.Events.PLAYBACK_LEVEL_SWITCH_END);
 	    },
 	    get: function get() {
-	      return this._currentLevelId || AUTO;
+	      return this._currentLevelId || DEFAULT_LEVEL_AUTO;
 	    }
 	  }], [{
 	    key: 'canPlay',
 	    value: function canPlay(resource) {
 	      var mimeType = arguments.length <= 1 || arguments[1] === undefined ? '' : arguments[1];
 
-	      shaka.polyfill.installAll();
-	      var browserSupported = shaka.Player.isBrowserSupported();
+	      _shakaPlayer2['default'].polyfill.installAll();
+	      var browserSupported = _shakaPlayer2['default'].Player.isBrowserSupported();
 	      var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || [];
-	      return browserSupported && ('mpd' === resourceParts[1] || mimeType.indexOf('application/dash+xml') > -1);
+	      return browserSupported && (resourceParts[1] === 'mpd' || mimeType.indexOf('application/dash+xml') > -1);
 	    }
 	  }, {
 	    key: 'Events',
@@ -179,7 +179,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    // skipping error handling on video tag in favor of error on shaka
 	    value: function error(event) {
-	      Log.error('an error was raised by the video tag', event, this.el.error);
+	      _clappr.Log.error('an error was raised by the video tag', event, this.el.error);
 	    }
 	  }, {
 	    key: 'isHighDefinitionInUse',
@@ -199,7 +199,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _this2._player = null;
 	        _this2._isShakaReadyState = false;
 	      })['catch'](function () {
-	        Log.error('shaka could not be unloaded');
+	        _clappr.Log.error('shaka could not be unloaded');
 	      });
 	    }
 	  }, {
@@ -227,7 +227,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          return _this3._destroy();
 	        })['catch'](function () {
 	          _this3._destroy();
-	          Log.error('shaka could not be destroyed');
+	          _clappr.Log.error('shaka could not be destroyed');
 	        });
 	      }
 	    }
@@ -251,7 +251,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: '_createPlayer',
 	    value: function _createPlayer() {
-	      var player = new shaka.Player(this.el);
+	      var player = new _shakaPlayer2['default'].Player(this.el);
 	      player.addEventListener('error', this._onError);
 	      player.addEventListener('adaptation', this._onAdaptation);
 	      player.addEventListener('buffering', this._onBuffering);
@@ -260,7 +260,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: '_onBuffering',
 	    value: function _onBuffering(e) {
-	      var event = e.buffering ? Events.PLAYBACK_BUFFERING : Events.PLAYBACK_BUFFERFULL;
+	      var event = e.buffering ? _clappr.Events.PLAYBACK_BUFFERING : _clappr.Events.PLAYBACK_BUFFERFULL;
 	      this.trigger(event);
 	    }
 	  }, {
@@ -279,7 +279,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this._levels = this.videoTracks.map(function (videoTrack) {
 	          return { id: videoTrack.id, label: videoTrack.height + 'p' };
 	        }).reverse();
-	        this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this.levels);
+	        this.trigger(_clappr.Events.PLAYBACK_LEVELS_AVAILABLE, this.levels);
 	      }
 	    }
 	  }, {
@@ -287,14 +287,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function _startToSendStats() {
 	      var _this5 = this;
 
+	      var intervalMs = this._options.shakaSendStatsInterval || SEND_STATS_INTERVAL_MS;
 	      this.sendStatsId = setInterval(function () {
 	        return _this5._sendStats();
-	      }, SEND_STATS_AT);
+	      }, intervalMs);
 	    }
 	  }, {
 	    key: '_sendStats',
 	    value: function _sendStats() {
-	      this.trigger(Events.PLAYBACK_STATS_ADD, this._player.getStats());
+	      this.trigger(_clappr.Events.PLAYBACK_STATS_ADD, this._player.getStats());
 	    }
 	  }, {
 	    key: '_setupError',
@@ -304,8 +305,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: '_onError',
 	    value: function _onError(err) {
-	      Log.error('Shaka error event:', err);
-	      this.trigger(Events.PLAYBACK_ERROR, err, this.name);
+	      _clappr.Log.error('Shaka error event:', err);
+	      this.trigger(_clappr.Events.PLAYBACK_ERROR, err, this.name);
 	    }
 	  }, {
 	    key: '_onAdaptation',
@@ -316,10 +317,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      this._fillLevels();
 
-	      Log.debug('an adaptation has happened:', activeVideo);
+	      _clappr.Log.debug('an adaptation has happened:', activeVideo);
 	      this.highDefinition = activeVideo.height >= 720;
-	      this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition);
-	      this.trigger(Events.PLAYBACK_BITRATE, {
+	      this.trigger(_clappr.Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition);
+	      this.trigger(_clappr.Events.PLAYBACK_BITRATE, {
 	        bandwidth: activeVideo.bandwidth,
 	        width: activeVideo.width,
 	        height: activeVideo.height,
@@ -331,7 +332,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function _destroy() {
 	      _get(Object.getPrototypeOf(DashShakaPlayback.prototype), 'destroy', this).call(this);
 	      this._isShakaReadyState = false;
-	      Log.debug('shaka was destroyed');
+	      _clappr.Log.debug('shaka was destroyed');
 	    }
 	  }, {
 	    key: '_shakaReady',
@@ -367,7 +368,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }]);
 
 	  return DashShakaPlayback;
-	})(HTML5Video);
+	})(_clappr.HTML5Video);
 
 	;
 
