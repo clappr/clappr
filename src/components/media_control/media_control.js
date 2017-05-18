@@ -534,7 +534,7 @@ export default class MediaControl extends UIObject {
   }
 
   getSettings() {
-    return $.extend({}, this.container.settings)
+    return $.extend(true, {}, this.container.settings)
   }
 
   highDefinitionUpdate(isHD) {
