@@ -72,19 +72,21 @@ export const Fullscreen = {
       el.msRequestFullscreen()
     } else if (el.querySelector && el.querySelector('video') && el.querySelector('video').webkitEnterFullScreen) {
       el.querySelector('video').webkitEnterFullScreen()
+    } else if (el.webkitEnterFullScreen) {
+      el.webkitEnterFullScreen()
     }
   },
-  cancelFullscreen: function() {
-    if(document.exitFullscreen) {
-      document.exitFullscreen()
-    } else if(document.webkitCancelFullScreen) {
-      document.webkitCancelFullScreen()
-    } else if(document.webkitExitFullscreen) {
-      document.webkitExitFullscreen()
-    } else if(document.mozCancelFullScreen) {
-      document.mozCancelFullScreen()
-    } else if(document.msExitFullscreen) {
-      document.msExitFullscreen()
+  cancelFullscreen: function(el=document) {
+    if(el.exitFullscreen) {
+      el.exitFullscreen()
+    } else if(el.webkitCancelFullScreen) {
+      el.webkitCancelFullScreen()
+    } else if(el.webkitExitFullscreen) {
+      el.webkitExitFullscreen()
+    } else if(el.mozCancelFullScreen) {
+      el.mozCancelFullScreen()
+    } else if(el.msExitFullscreen) {
+      el.msExitFullscreen()
     }
   },
   fullscreenEnabled: function() {
