@@ -1,1 +1,1 @@
-module.exports = require('./watermark')
+export { default as WatermarkPlugin } from './watermark'

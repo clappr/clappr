@@ -1,1 +1,1 @@
-module.exports = require('./google_analytics')
+export { default as GoogleAnalyticsPlugin } from './google_analytics'

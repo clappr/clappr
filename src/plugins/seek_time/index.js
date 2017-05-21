@@ -1,1 +1,1 @@
-module.exports = require('./seek_time')
+export { default as SeekTime } from './seek_time'

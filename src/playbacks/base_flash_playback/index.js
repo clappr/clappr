@@ -1,1 +1,1 @@
-export default require('./base_flash_playback')
+export { default as BaseFlashPlayback } from './base_flash_playback'
