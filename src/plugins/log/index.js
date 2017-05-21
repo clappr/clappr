@@ -1,1 +1,1 @@
-module.exports = require('./log')
+export { default as Log } from './log'
