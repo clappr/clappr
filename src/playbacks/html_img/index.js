@@ -1,1 +1,1 @@
-export { default as HTMLImg } from './html_img'
+module.exports = require('./html_img')

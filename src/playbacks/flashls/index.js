@@ -1,1 +1,1 @@
-export { default as FlasHLS } from './flashls'
+module.exports = require('./flashls')
