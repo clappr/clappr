@@ -1,1 +1,1 @@
-export { default as Poster } from './poster'
+module.exports = require('./poster')

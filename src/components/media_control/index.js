@@ -1,1 +1,1 @@
-export { default as MediaControl } from './media_control'
+module.exports = require('./media_control')

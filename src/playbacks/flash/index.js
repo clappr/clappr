@@ -1,1 +1,1 @@
-export { default as Flash } from './flash'
+module.exports = require('./flash')

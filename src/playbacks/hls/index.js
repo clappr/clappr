@@ -1,1 +1,1 @@
-export { default as HLS } from './hls'
+module.exports = require('./hls')

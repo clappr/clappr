@@ -1,1 +1,1 @@
-export { default as SpinnerThreeBouncePlugin } from './spinner_three_bounce'
+module.exports = require('./spinner_three_bounce')

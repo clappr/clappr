@@ -1,1 +1,1 @@
-export { default as NoOp } from './no_op'
+module.exports = require('./no_op')

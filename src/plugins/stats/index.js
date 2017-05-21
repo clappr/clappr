@@ -1,1 +1,1 @@
-export { default as StatsPlugin } from './stats'
+module.exports = require('./stats')

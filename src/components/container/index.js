@@ -1,1 +1,1 @@
-export { default as Container } from './container'
+module.exports = require('./container')
