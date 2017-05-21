@@ -1,1 +1,1 @@
-export { default as CoreFactory } from './core_factory'
+module.exports = require('./core_factory')

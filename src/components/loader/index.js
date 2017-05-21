@@ -1,1 +1,1 @@
-export { default as Loader } from './loader'
+module.exports = require('./loader')
