@@ -1,1 +1,1 @@
-export { default as ClickToPausePlugin } from './click_to_pause'
+module.exports = require('./click_to_pause')
