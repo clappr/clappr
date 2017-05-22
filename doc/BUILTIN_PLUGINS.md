@@ -81,7 +81,7 @@ The configuration for the playback, it's still only compatible with `html5_video
     controls: true,
     playInline: true, // allows inline playback when running on iOS UIWebview
     crossOrigin: 'use-credentials',
-    recycleVideo: true // Recycle <video> element for mobile device. (default is false)
+    recycleVideo: Clappr.Browser.isMobile // Recycle <video> element only for mobile. (default is false)
   }
 }
 ```
