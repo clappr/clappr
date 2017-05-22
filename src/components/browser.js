@@ -47,8 +47,8 @@ const getBrowserInfo = function() {
 
 const browserInfo = getBrowserInfo()
 
-Browser.isSafari = /safari/i.test(navigator.userAgent) && navigator.userAgent.indexOf('Chrome') === -1
 Browser.isChrome = /chrome|CriOS/i.test(navigator.userAgent)
+Browser.isSafari = /safari/i.test(navigator.userAgent) && !Browser.isChrome
 Browser.isFirefox = /firefox/i.test(navigator.userAgent)
 Browser.isLegacyIE = !!(window.ActiveXObject)
 Browser.isIE = Browser.isLegacyIE || /trident.*rv:1\d/i.test(navigator.userAgent)
