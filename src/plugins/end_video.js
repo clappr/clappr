@@ -1,6 +1,6 @@
-import Events from 'base/events'
-import CorePlugin from 'base/core_plugin'
-import {Fullscreen} from 'base/utils'
+import Events from '../base/events'
+import CorePlugin from '../base/core_plugin'
+import {Fullscreen} from '../base/utils'
 
 export default class EndVideo extends CorePlugin {
   get name() { return 'end_video' }

@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {formatTime} from 'base/utils'
+import {formatTime} from '../../base/utils'
 
-import UICorePlugin from 'base/ui_core_plugin'
-import Styler from 'base/styler'
-import template from 'base/template'
-import Events from 'base/events'
-import Playback from 'base/playback'
+import UICorePlugin from '../../base/ui_core_plugin'
+import Styler from '../../base/styler'
+import template from '../../base/template'
+import Events from '../../base/events'
+import Playback from '../../base/playback'
 import seekTimeStyle from './public/seek_time.scss'
 import seekTimeHTML from './public/seek_time.html'
 
