@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {seekStringToSeconds, DomRecycler} from 'base/utils'
+import {seekStringToSeconds, DomRecycler} from '../../base/utils'
 
-import Playback from 'base/playback'
-import Styler from 'base/styler'
-import Browser from 'components/browser'
-import Events from 'base/events'
+import Playback from '../../base/playback'
+import Styler from '../../base/styler'
+import Browser from '../../components/browser'
+import Events from '../../base/events'
 import tagStyle from './public/style.scss'
 import $ from 'clappr-zepto'
 

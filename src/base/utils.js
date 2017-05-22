@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 /*jshint -W079 */
 
-import Browser from 'components/browser'
+import Browser from '../components/browser'
 import $ from 'clappr-zepto'
 
 function assign(obj, source) {

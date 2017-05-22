@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import BaseObject from 'base/base_object'
-import Core from 'components/core'
+import BaseObject from '../../base/base_object'
+import Core from '../core'
 
 /**
  * The Core Factory is responsible for instantiate the core and it's plugins.

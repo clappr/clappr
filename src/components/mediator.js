@@ -6,7 +6,7 @@
  * The mediator is a singleton for handling global events.
  */
 
-import Events from 'base/events'
+import Events from '../base/events'
 
 const events = new Events()
 
