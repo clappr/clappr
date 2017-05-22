@@ -6,9 +6,9 @@
  * Container is responsible for the video rendering and state
  */
 
-import Events from 'base/events'
-import UIObject from 'base/ui_object'
-import Styler from 'base/styler'
+import Events from '../../base/events'
+import UIObject from '../../base/ui_object'
+import Styler from '../../base/styler'
 import style from './public/style.scss'
 import $ from 'clappr-zepto'
 

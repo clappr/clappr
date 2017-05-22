@@ -2,15 +2,15 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {seekStringToSeconds} from 'base/utils'
+import {seekStringToSeconds} from '../../base/utils'
 
-import BaseFlashPlayback from 'playbacks/base_flash_playback'
-import Browser from 'components/browser'
-import Mediator from 'components/mediator'
-import template from 'base/template'
+import BaseFlashPlayback from '../../playbacks/base_flash_playback'
+import Browser from '../../components/browser'
+import Mediator from '../../components/mediator'
+import template from '../../base/template'
 import $ from 'clappr-zepto'
-import Events from 'base/events'
-import Playback from 'base/playback'
+import Events from '../../base/events'
+import Playback from '../../base/playback'
 import flashSwf from './public/Player.swf'
 
 const MAX_ATTEMPTS = 60

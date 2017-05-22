@@ -2,16 +2,16 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {isNumber, Fullscreen, DomRecycler} from 'base/utils'
+import {isNumber, Fullscreen, DomRecycler} from '../../base/utils'
 
-import Events from 'base/events'
-import Styler from 'base/styler'
-import UIObject from 'base/ui_object'
-import Browser from 'components/browser'
-import ContainerFactory from 'components/container_factory'
-import MediaControl from 'components/media_control'
-import Mediator from 'components/mediator'
-import PlayerInfo from 'components/player_info'
+import Events from '../../base/events'
+import Styler from '../../base/styler'
+import UIObject from '../../base/ui_object'
+import Browser from '../../components/browser'
+import ContainerFactory from '../../components/container_factory'
+import MediaControl from '../../components/media_control'
+import Mediator from '../../components/mediator'
+import PlayerInfo from '../../components/player_info'
 
 import $ from 'clappr-zepto'
 

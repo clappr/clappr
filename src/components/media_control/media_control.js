@@ -6,31 +6,31 @@
  * The MediaControl is responsible for displaying the Player controls.
  */
 
-import {Config, Fullscreen, formatTime, extend, removeArrayItem} from 'base/utils'
-import {Kibo} from 'vendor'
+import {Config, Fullscreen, formatTime, extend, removeArrayItem} from '../../base/utils'
+import {Kibo} from '../../vendor'
 
-import Events from 'base/events'
-import Styler from 'base/styler'
-import UIObject from 'base/ui_object'
-import Browser from 'components/browser'
-import Mediator from 'components/mediator'
-import template from 'base/template'
-import Playback from 'base/playback'
+import Events from '../../base/events'
+import Styler from '../../base/styler'
+import UIObject from '../../base/ui_object'
+import Browser from '../../components/browser'
+import Mediator from '../../components/mediator'
+import template from '../../base/template'
+import Playback from '../../base/playback'
 
 import $ from 'clappr-zepto'
 
 import mediaControlStyle from './public/media-control.scss'
 import mediaControlHTML from './public/media-control.html'
 
-import playIcon from 'icons/01-play.svg'
-import pauseIcon from 'icons/02-pause.svg'
-import stopIcon from 'icons/03-stop.svg'
-import volumeIcon from 'icons/04-volume.svg'
-import volumeMuteIcon from 'icons/05-mute.svg'
-import fullscreenIcon from 'icons/06-expand.svg'
-import exitFullscreenIcon from 'icons/07-shrink.svg'
-import hdIcon from 'icons/08-hd.svg'
-import ccIcon from 'icons/09-cc.svg'
+import playIcon from '../../icons/01-play.svg'
+import pauseIcon from '../../icons/02-pause.svg'
+import stopIcon from '../../icons/03-stop.svg'
+import volumeIcon from '../../icons/04-volume.svg'
+import volumeMuteIcon from '../../icons/05-mute.svg'
+import fullscreenIcon from '../../icons/06-expand.svg'
+import exitFullscreenIcon from '../../icons/07-shrink.svg'
+import hdIcon from '../../icons/08-hd.svg'
+import ccIcon from '../../icons/09-cc.svg'
 
 export default class MediaControl extends UIObject {
   get name() { return 'MediaControl' }

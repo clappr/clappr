@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import Log from 'plugins/log'
+import Log from '../plugins/log'
 import {uniqueId} from './utils'
 import execOnce from 'lodash.once'
 
@@ -558,7 +558,7 @@ Events.CONTAINER_LOADEDMETADATA = 'container:loadedmetadata'
 
 /**
  * Fired when a text track is loaded and available on container for display
- * 
+ *
  * @event CONTAINER_LOADEDTEXTTRACK
  */
 Events.CONTAINER_LOADEDTEXTTRACK = 'container:loadedtexttrack'

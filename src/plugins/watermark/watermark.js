@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import UIContainerPlugin from 'base/ui_container_plugin'
-import Events from 'base/events'
-import Styler from 'base/styler'
-import template from 'base/template'
+import UIContainerPlugin from '../../base/ui_container_plugin'
+import Events from '../../base/events'
+import Styler from '../../base/styler'
+import template from '../../base/template'
 import watermarkStyle from './public/watermark.scss'
 import watermarkHTML from './public/watermark.html'
 

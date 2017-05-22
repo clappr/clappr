@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import Playback from 'base/playback'
-import Styler from 'base/styler'
-import template from 'base/template'
-import Browser from 'components/browser'
+import Playback from '../../base/playback'
+import Styler from '../../base/styler'
+import template from '../../base/template'
+import Browser from '../../components/browser'
 
 import flashHTML from './public/flash.html'
 import flashStyle from './public/flash.scss'

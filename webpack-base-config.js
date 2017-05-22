@@ -44,7 +44,7 @@ module.exports = {
     alias: {
       'clappr-zepto': 'clappr-zepto/zepto.js'
     },
-    modules: [path.resolve(__dirname, 'src'), 'node_modules']
+    modules: ['node_modules']
   },
   devServer: {
     disableHostCheck: true, // https://github.com/webpack/webpack-dev-server/issues/882

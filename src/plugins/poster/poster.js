@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import UIContainerPlugin from 'base/ui_container_plugin'
-import Events from 'base/events'
-import Styler from 'base/styler'
-import template from 'base/template'
-import Playback from 'base/playback'
+import UIContainerPlugin from '../../base/ui_container_plugin'
+import Events from '../../base/events'
+import Styler from '../../base/styler'
+import template from '../../base/template'
+import Playback from '../../base/playback'
 import posterStyle from './public/poster.scss'
 import posterHTML from './public/poster.html'
-import playIcon from 'icons/01-play.svg'
+import playIcon from '../../icons/01-play.svg'
 
 export default class PosterPlugin extends UIContainerPlugin {
   get name() { return 'poster' }

@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {uniqueId, DomRecycler} from './utils'
 import $ from 'clappr-zepto'
 import result from 'lodash.result'
+import {uniqueId, DomRecycler} from './utils'
 import BaseObject from './base_object'
 
 const delegateEventSplitter = /^(\S+)\s*(.*)$/

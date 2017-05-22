@@ -1,8 +1,8 @@
-import UICorePlugin from 'base/ui_core_plugin'
-import template from 'base/template'
-import Playback from 'base/playback'
-import Styler from 'base/styler'
-import Events from 'base/events'
+import UICorePlugin from '../../base/ui_core_plugin'
+import template from '../../base/template'
+import Playback from '../../base/playback'
+import Styler from '../../base/styler'
+import Events from '../../base/events'
 import dvrStyle from './public/dvr_controls.scss'
 import dvrHTML from './public/index.html'
 

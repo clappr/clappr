@@ -6,9 +6,9 @@
  * The ContainerFactory is responsible for manage playback bootstrap and create containers.
  */
 
-import BaseObject from 'base/base_object'
-import Events from 'base/events'
-import Container from 'components/container'
+import BaseObject from '../../base/base_object'
+import Events from '../../base/events'
+import Container from '../../components/container'
 import $ from 'clappr-zepto'
 
 import isPlainObject from 'lodash.isplainobject'
