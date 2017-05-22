@@ -1,5 +1,6 @@
 /* eslint-disable no-var */
 var dotenv = require('dotenv')
+var path = require('path')
 
 dotenv.load()
 
@@ -12,6 +13,8 @@ webpackConfig.module.loaders.push({
   loader: 'istanbul-instrumenter-loader',
   enforce: 'post'
 })
+
+webpackConfig.resolve.modules.push(path.resolve(__dirname, 'src'))
 
 module.exports = function(config) {
   config.set({
