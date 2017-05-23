@@ -18,7 +18,7 @@ if (process.env.npm_lifecycle_event === 'release') {
     output: {comments: false}
   })
   )
-} else {
+} else if (process.env.npm_lifecycle_event !== 'start') {
   webpackConfig.plugins.push(new Clean(['dist'], {verbose: false}))
 }
 
