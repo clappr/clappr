@@ -50,7 +50,7 @@ describe('Loader', function() {
     })
 
     it('should prioritize external plugins if their names collide', function() {
-      const spinnerPlugin = ContainerPlugin.extend({container: {},  name: 'spinner'})
+      const spinnerPlugin = ContainerPlugin.extend({container: {},  name: 'spinner', myprop: 'myvalue'})
       const loader = new Loader()
       expect(loader.containerPlugins.filter((plugin) => {
         return plugin.prototype.name === 'spinner'
@@ -58,9 +58,9 @@ describe('Loader', function() {
 
       loader.addExternalPlugins({container: [spinnerPlugin]})
 
-      expect(loader.containerPlugins.filter((plugin) => {
-        return plugin.prototype.name === 'spinner'
-      })[0]).to.be.equal(spinnerPlugin)
+      const firstLoadedPlugin = loader.containerPlugins[0]
+      expect(firstLoadedPlugin).to.be.equal(spinnerPlugin)
+      expect(firstLoadedPlugin.prototype.myprop).to.be.equal('myvalue')
     })
 
     it('should allow only a plugin with a given name', function() {
