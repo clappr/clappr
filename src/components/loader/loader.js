@@ -78,6 +78,7 @@ export default class Loader extends BaseObject {
 
   removeDups(list) {
     const groupUp = (plugins, plugin) => {
+      plugins[plugin.prototype.name] && delete plugins[plugin.prototype.name]
       plugins[plugin.prototype.name] = plugin
       return plugins
     }
