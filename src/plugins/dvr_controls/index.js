@@ -1,1 +1,2 @@
-module.exports = require('./dvr_controls')
+import DVRControls from './dvr_controls'
+export default DVRControls

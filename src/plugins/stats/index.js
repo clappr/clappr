@@ -1,1 +1,2 @@
-module.exports = require('./stats')
+import StatsPlugin from './stats'
+export default StatsPlugin

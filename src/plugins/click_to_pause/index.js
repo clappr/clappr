@@ -1,1 +1,2 @@
-module.exports = require('./click_to_pause')
+import ClickToPausePlugin from './click_to_pause'
+export default ClickToPausePlugin

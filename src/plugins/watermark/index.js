@@ -1,1 +1,2 @@
-module.exports = require('./watermark')
+import WaterMarkPlugin from './watermark'
+export default WaterMarkPlugin
