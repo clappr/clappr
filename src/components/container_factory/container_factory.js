@@ -11,8 +11,6 @@ import Events from '../../base/events'
 import Container from '../../components/container'
 import $ from 'clappr-zepto'
 
-import isPlainObject from 'lodash.isplainobject'
-
 export default class ContainerFactory extends BaseObject {
   get options() { return this._options }
   set options(options) { this._options = options }
@@ -38,7 +36,7 @@ export default class ContainerFactory extends BaseObject {
   createContainer(source) {
     let resolvedSource = null,
       mimeType = this.options.mimeType
-    if (isPlainObject(source)) {
+    if (typeof source === 'object') {
       resolvedSource = source.source.toString()
       if (source.mimeType) {
         mimeType = source.mimeType
