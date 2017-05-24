@@ -1,1 +1,2 @@
-module.exports = require('./core_factory')
+import CoreFactory from './core_factory'
+export default CoreFactory
