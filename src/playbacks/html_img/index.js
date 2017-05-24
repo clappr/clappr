@@ -1,1 +1,2 @@
-module.exports = require('./html_img')
+import HTMLImg from './html_img'
+export default HTMLImg

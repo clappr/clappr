@@ -1,1 +1,2 @@
-module.exports = require('./hls')
+import HLS from './hls'
+export default HLS

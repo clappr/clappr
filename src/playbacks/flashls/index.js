@@ -1,1 +1,2 @@
-module.exports = require('./flashls')
+import FlasHLS from './flashls'
+export default FlasHLS

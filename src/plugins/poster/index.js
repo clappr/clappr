@@ -1,1 +1,2 @@
-module.exports = require('./poster')
+import PosterPlugin from './poster'
+export default PosterPlugin

@@ -1,1 +1,2 @@
-module.exports = require('./google_analytics')
+import GoogleAnalytics from './google_analytics'
+export default GoogleAnalytics

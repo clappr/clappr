@@ -1,1 +1,2 @@
-module.exports = require('./favicon.js')
+import Favicon from './favicon.js'
+export default Favicon

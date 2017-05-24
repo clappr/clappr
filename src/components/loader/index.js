@@ -1,1 +1,2 @@
-module.exports = require('./loader')
+import Loader from './loader'
+export default Loader

@@ -1,1 +1,2 @@
-module.exports = require('./core')
+import Core from './core'
+export default Core

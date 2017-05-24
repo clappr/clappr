@@ -1,1 +1,2 @@
-module.exports = require('./log')
+import Log from './log'
+export default Log

@@ -1,1 +1,2 @@
-module.exports = require('./seek_time')
+import SeekTime from './seek_time'
+export default SeekTime
