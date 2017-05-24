@@ -451,4 +451,3 @@ HTML5Video.canPlay = function(resourceUrl, mimeType) {
          HTML5Video._canPlay('video', MIMETYPES, resourceUrl, mimeType)
 }
 
-module.exports = HTML5Video
