@@ -70,7 +70,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "<%=baseUrl%>/";
 /******/
 /******/ 	// Load entry module and return exports
+<<<<<<< HEAD
 /******/ 	return __webpack_require__(__webpack_require__.s = 87);
+=======
+/******/ 	return __webpack_require__(__webpack_require__.s = 86);
+>>>>>>> draft skinnier version
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -81,6 +85,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 exports.__esModule = true;
+<<<<<<< HEAD
 
 exports.default = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -211,22 +216,43 @@ var _log = __webpack_require__(55);
 var _log2 = _interopRequireDefault(_log);
 
 var _utils = __webpack_require__(5);
+=======
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+exports.default = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
 
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _setPrototypeOf = __webpack_require__(98);
+>>>>>>> draft skinnier version
+
+var _setPrototypeOf2 = _interopRequireDefault(_setPrototypeOf);
+
+<<<<<<< HEAD
 // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
+=======
+var _create = __webpack_require__(60);
+>>>>>>> draft skinnier version
 
-var slice = Array.prototype.slice;
+var _create2 = _interopRequireDefault(_create);
 
-var eventSplitter = /\s+/;
+var _typeof2 = __webpack_require__(30);
 
-var eventsApi = function eventsApi(obj, action, name, rest) {
-  if (!name) {
-    return true;
-  }
+var _typeof3 = _interopRequireDefault(_typeof2);
 
+<<<<<<< HEAD
   // Handle event maps.
   if ((typeof name === 'undefined' ? 'undefined' : (0, _typeof3.default)(name)) === 'object') {
     for (var key in name) {
@@ -234,96 +260,62 @@ var eventsApi = function eventsApi(obj, action, name, rest) {
     }
     return false;
   }
+=======
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+>>>>>>> draft skinnier version
 
-  // Handle space separated event names.
-  if (eventSplitter.test(name)) {
-    var names = name.split(eventSplitter);
-    for (var i = 0, l = names.length; i < l; i++) {
-      obj[action].apply(obj, [names[i]].concat(rest));
-    }
-    return false;
+exports.default = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : (0, _typeof3.default)(superClass)));
   }
 
-  return true;
-};
-
-var triggerEvents = function triggerEvents(events, args, klass, name) {
-  var ev = void 0,
-      i = -1;
-  var l = events.length,
-      a1 = args[0],
-      a2 = args[1],
-      a3 = args[2];
-  run();
-
-  function run() {
-    try {
-      switch (args.length) {
-        case 0:
-          while (++i < l) {
-            (ev = events[i]).callback.call(ev.ctx);
-          }return;
-        case 1:
-          while (++i < l) {
-            (ev = events[i]).callback.call(ev.ctx, a1);
-          }return;
-        case 2:
-          while (++i < l) {
-            (ev = events[i]).callback.call(ev.ctx, a1, a2);
-          }return;
-        case 3:
-          while (++i < l) {
-            (ev = events[i]).callback.call(ev.ctx, a1, a2, a3);
-          }return;
-        default:
-          while (++i < l) {
-            (ev = events[i]).callback.apply(ev.ctx, args);
-          }return;
-      }
-    } catch (exception) {
-      _log2.default.error.apply(_log2.default, [klass, 'error on event', name, 'trigger', '-', exception]);
-      run();
+  subClass.prototype = (0, _create2.default)(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
     }
-  }
+  });
+  if (superClass) _setPrototypeOf2.default ? (0, _setPrototypeOf2.default)(subClass, superClass) : subClass.__proto__ = superClass;
 };
 
-/**
- * @class Events
- * @constructor
- * @module base
- */
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+<<<<<<< HEAD
 var Events = function () {
   function Events() {
     (0, _classCallCheck3.default)(this, Events);
+=======
+exports.__esModule = true;
+
+var _typeof2 = __webpack_require__(30);
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+>>>>>>> draft skinnier version
   }
 
-  /**
-   * listen to an event indefinitely, if you want to stop you need to call `off`
-   * @method on
-   * @param {String} name
-   * @param {Function} callback
-   * @param {Object} context
-   */
-  Events.prototype.on = function on(name, callback, context) {
-    if (!eventsApi(this, 'on', name, [callback, context]) || !callback) {
-      return this;
-    }
-    this._events || (this._events = {});
-    var events = this._events[name] || (this._events[name] = []);
-    events.push({ callback: callback, context: context, ctx: context || this });
-    return this;
-  };
+  return call && ((typeof call === "undefined" ? "undefined" : (0, _typeof3.default)(call)) === "object" || typeof call === "function") ? call : self;
+};
 
-  /**
-   * listen to an event only once
-   * @method once
-   * @param {String} name
-   * @param {Function} callback
-   * @param {Object} context
-   */
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
 
+<<<<<<< HEAD
   Events.prototype.once = function once(name, callback, context) {
     var _this = this;
 
@@ -339,16 +331,17 @@ var Events = function () {
     };
     return this.on(name, once, context);
   };
+=======
+>>>>>>> draft skinnier version
 
-  /**
-   * stop listening to an event
-   * @method off
-   * @param {String} name
-   * @param {Function} callback
-   * @param {Object} context
-   */
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.DomRecycler = exports.cancelAnimationFrame = exports.requestAnimationFrame = exports.QueryString = exports.Config = exports.Fullscreen = undefined;
 
+var _createClass2 = __webpack_require__(4);
 
+<<<<<<< HEAD
   Events.prototype.off = function off(name, callback, context) {
     var retain = void 0,
         ev = void 0,
@@ -387,44 +380,21 @@ var Events = function () {
     }
     return this;
   };
+=======
+var _createClass3 = _interopRequireDefault(_createClass2);
+>>>>>>> draft skinnier version
 
-  /**
-   * triggers an event given its `name`
-   * @method trigger
-   * @param {String} name
-   */
+var _classCallCheck2 = __webpack_require__(0);
 
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-  Events.prototype.trigger = function trigger(name) {
-    var klass = this.name || this.constructor.name;
-    _log2.default.debug.apply(_log2.default, [klass].concat(Array.prototype.slice.call(arguments)));
-    if (!this._events) {
-      return this;
-    }
-    var args = slice.call(arguments, 1);
-    if (!eventsApi(this, 'trigger', name, args)) {
-      return this;
-    }
-    var events = this._events[name];
-    var allEvents = this._events.all;
-    if (events) {
-      triggerEvents(events, args, klass, name);
-    }
-    if (allEvents) {
-      triggerEvents(allEvents, arguments, klass, name);
-    }
-    return this;
-  };
+var _possibleConstructorReturn2 = __webpack_require__(2);
 
-  /**
-   * stop listening an event for a given object
-   * @method stopListening
-   * @param {Object} obj
-   * @param {String} name
-   * @param {Function} callback
-   */
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
+var _inherits2 = __webpack_require__(1);
 
+<<<<<<< HEAD
   Events.prototype.stopListening = function stopListening(obj, name, callback) {
     var listeningTo = this._listeningTo;
     if (!listeningTo) {
@@ -469,36 +439,19 @@ var Events = function () {
 
   return Events;
 }();
+=======
+var _inherits3 = _interopRequireDefault(_inherits2);
 
-/**
- * listen to an event indefinitely for a given `obj`
- * @method listenTo
- * @param {Object} obj
- * @param {String} name
- * @param {Function} callback
- * @param {Object} context
- * @example
- * ```javascript
- * this.listenTo(this.core.playback, Events.PLAYBACK_PAUSE, this.callback)
- * ```
- */
-/**
- * listen to an event once for a given `obj`
- * @method listenToOnce
- * @param {Object} obj
- * @param {String} name
- * @param {Function} callback
- * @param {Object} context
- * @example
- * ```javascript
- * this.listenToOnce(this.core.playback, Events.PLAYBACK_PAUSE, this.callback)
- * ```
- */
+var _defineProperty = __webpack_require__(61);
+>>>>>>> draft skinnier version
 
+var _defineProperty2 = _interopRequireDefault(_defineProperty);
 
-exports.default = Events;
-var listenMethods = { listenTo: 'on', listenToOnce: 'once' };
+var _getOwnPropertyDescriptor = __webpack_require__(97);
 
+var _getOwnPropertyDescriptor2 = _interopRequireDefault(_getOwnPropertyDescriptor);
+
+<<<<<<< HEAD
 (0, _keys2.default)(listenMethods).forEach(function (method) {
   Events.prototype[method] = function (obj, name, callback) {
     var listeningTo = this._listeningTo || (this._listeningTo = {});
@@ -1101,6 +1054,8 @@ var _getOwnPropertyDescriptor = __webpack_require__(125);
 
 var _getOwnPropertyDescriptor2 = _interopRequireDefault(_getOwnPropertyDescriptor);
 
+=======
+>>>>>>> draft skinnier version
 exports.extend = extend;
 exports.formatTime = formatTime;
 exports.seekStringToSeconds = seekStringToSeconds;
@@ -1110,6 +1065,7 @@ exports.currentScriptUrl = currentScriptUrl;
 exports.getBrowserLanguage = getBrowserLanguage;
 exports.now = now;
 exports.removeArrayItem = removeArrayItem;
+<<<<<<< HEAD
 
 __webpack_require__(128);
 
@@ -12088,10 +12044,481 @@ module.exports = exports['default'];
 /***/ }),
 /* 164 */
 /***/ (function(module, exports, __webpack_require__) {
+=======
+
+var _browser = __webpack_require__(20);
+
+var _browser2 = _interopRequireDefault(_browser);
+
+var _clapprZepto = __webpack_require__(7);
+
+var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+/*jshint -W079 */
+
+function assign(obj, source) {
+  if (source) {
+    for (var prop in source) {
+      var propDescriptor = (0, _getOwnPropertyDescriptor2.default)(source, prop);
+      propDescriptor ? (0, _defineProperty2.default)(obj, prop, propDescriptor) : obj[prop] = source[prop];
+    }
+  }
+  return obj;
+}
+
+function extend(parent, properties) {
+  var Surrogate = function (_parent) {
+    (0, _inherits3.default)(Surrogate, _parent);
+
+    function Surrogate() {
+      (0, _classCallCheck3.default)(this, Surrogate);
+
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      var _this = (0, _possibleConstructorReturn3.default)(this, _parent.call.apply(_parent, [this].concat(args)));
+
+      if (properties.initialize) {
+        properties.initialize.apply(_this, args);
+      }
+      return _this;
+    }
+
+    return Surrogate;
+  }(parent);
+
+  assign(Surrogate.prototype, properties);
+  return Surrogate;
+}
+
+function formatTime(time, paddedHours) {
+  if (!isFinite(time)) {
+    return '--:--';
+  }
+  time = time * 1000;
+  time = parseInt(time / 1000);
+  var seconds = time % 60;
+  time = parseInt(time / 60);
+  var minutes = time % 60;
+  time = parseInt(time / 60);
+  var hours = time % 24;
+  var days = parseInt(time / 24);
+  var out = '';
+  if (days && days > 0) {
+    out += days + ':';
+    if (hours < 1) {
+      out += '00:';
+    }
+  }
+  if (hours && hours > 0 || paddedHours) {
+    out += ('0' + hours).slice(-2) + ':';
+  }
+  out += ('0' + minutes).slice(-2) + ':';
+  out += ('0' + seconds).slice(-2);
+  return out.trim();
+}
+
+var Fullscreen = exports.Fullscreen = {
+  isFullscreen: function isFullscreen() {
+    return !!(document.webkitFullscreenElement || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement);
+  },
+  requestFullscreen: function requestFullscreen(el) {
+    if (el.requestFullscreen) {
+      el.requestFullscreen();
+    } else if (el.webkitRequestFullscreen) {
+      el.webkitRequestFullscreen();
+    } else if (el.mozRequestFullScreen) {
+      el.mozRequestFullScreen();
+    } else if (el.msRequestFullscreen) {
+      el.msRequestFullscreen();
+    } else if (el.querySelector && el.querySelector('video') && el.querySelector('video').webkitEnterFullScreen) {
+      el.querySelector('video').webkitEnterFullScreen();
+    } else if (el.webkitEnterFullScreen) {
+      el.webkitEnterFullScreen();
+    }
+  },
+  cancelFullscreen: function cancelFullscreen() {
+    var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document;
+
+    if (el.exitFullscreen) {
+      el.exitFullscreen();
+    } else if (el.webkitCancelFullScreen) {
+      el.webkitCancelFullScreen();
+    } else if (el.webkitExitFullscreen) {
+      el.webkitExitFullscreen();
+    } else if (el.mozCancelFullScreen) {
+      el.mozCancelFullScreen();
+    } else if (el.msExitFullscreen) {
+      el.msExitFullscreen();
+    }
+  },
+  fullscreenEnabled: function fullscreenEnabled() {
+    return !!(document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled || document.msFullscreenEnabled);
+  }
+};
+
+var Config = exports.Config = function () {
+  function Config() {
+    (0, _classCallCheck3.default)(this, Config);
+  }
+
+  Config._defaultConfig = function _defaultConfig() {
+    return {
+      volume: {
+        value: 100,
+        parse: parseInt
+      }
+    };
+  };
+
+  Config._defaultValueFor = function _defaultValueFor(key) {
+    try {
+      return this._defaultConfig()[key].parse(this._defaultConfig()[key].value);
+    } catch (e) {
+      return undefined;
+    }
+  };
+
+  Config._createKeyspace = function _createKeyspace(key) {
+    return 'clappr.' + document.domain + '.' + key;
+  };
+
+  Config.restore = function restore(key) {
+    if (_browser2.default.hasLocalstorage && localStorage[this._createKeyspace(key)]) {
+      return this._defaultConfig()[key].parse(localStorage[this._createKeyspace(key)]);
+    }
+    return this._defaultValueFor(key);
+  };
+
+  Config.persist = function persist(key, value) {
+    if (_browser2.default.hasLocalstorage) {
+      try {
+        localStorage[this._createKeyspace(key)] = value;
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+  };
+
+  return Config;
+}();
+
+var QueryString = exports.QueryString = function () {
+  function QueryString() {
+    (0, _classCallCheck3.default)(this, QueryString);
+  }
+
+  QueryString.parse = function parse(paramsString) {
+    var match = void 0;
+    var pl = /\+/g,
+        // Regex for replacing addition symbol with a space
+    search = /([^&=]+)=?([^&]*)/g,
+        decode = function decode(s) {
+      return decodeURIComponent(s.replace(pl, ' '));
+    },
+        params = {};
+    while (match = search.exec(paramsString)) {
+      // eslint-disable-line no-cond-assign
+      params[decode(match[1]).toLowerCase()] = decode(match[2]);
+    }
+    return params;
+  };
+
+  (0, _createClass3.default)(QueryString, null, [{
+    key: 'params',
+    get: function get() {
+      var query = window.location.search.substring(1);
+      if (query !== this.query) {
+        this._urlParams = this.parse(query);
+        this.query = query;
+      }
+      return this._urlParams;
+    }
+  }, {
+    key: 'hashParams',
+    get: function get() {
+      var hash = window.location.hash.substring(1);
+      if (hash !== this.hash) {
+        this._hashParams = this.parse(hash);
+        this.hash = hash;
+      }
+      return this._hashParams;
+    }
+  }]);
+  return QueryString;
+}();
+
+function seekStringToSeconds() {
+  var paramName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 't';
+
+  var seconds = 0;
+  var seekString = QueryString.params[paramName] || QueryString.hashParams[paramName] || '';
+  var parts = seekString.match(/[0-9]+[hms]+/g) || [];
+  if (parts.length > 0) {
+    (function () {
+      var factor = { 'h': 3600, 'm': 60, 's': 1 };
+      parts.forEach(function (el) {
+        if (el) {
+          var suffix = el[el.length - 1];
+          var time = parseInt(el.slice(0, el.length - 1), 10);
+          seconds += time * factor[suffix];
+        }
+      });
+    })();
+  } else if (seekString) {
+    seconds = parseInt(seekString, 10);
+  }
+  return seconds;
+}
+
+var idsCounter = {};
+
+function uniqueId(prefix) {
+  idsCounter[prefix] || (idsCounter[prefix] = 0);
+  var id = ++idsCounter[prefix];
+  return prefix + id;
+}
+
+function isNumber(value) {
+  return value - parseFloat(value) + 1 >= 0;
+}
+
+function currentScriptUrl() {
+  var scripts = document.getElementsByTagName('script');
+  return scripts.length ? scripts[scripts.length - 1].src : '';
+}
+
+var requestAnimationFrame = exports.requestAnimationFrame = (window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || function (fn) {
+  window.setTimeout(fn, 1000 / 60);
+}).bind(window);
+
+var cancelAnimationFrame = exports.cancelAnimationFrame = (window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame || window.clearTimeout).bind(window);
+
+function getBrowserLanguage() {
+  return window.navigator && window.navigator.language;
+}
+
+function now() {
+  if (window.performance && window.performance.now) {
+    return performance.now();
+  }
+  return Date.now();
+}
+
+// remove the item from the array if it exists in the array
+function removeArrayItem(arr, item) {
+  var i = arr.indexOf(item);
+  if (i >= 0) {
+    arr.splice(i, 1);
+  }
+}
+
+// Simple Zepto element factory with video recycle feature.
+var videoStack = [];
+
+var DomRecycler = exports.DomRecycler = function () {
+  function DomRecycler() {
+    (0, _classCallCheck3.default)(this, DomRecycler);
+  }
+
+  DomRecycler.configure = function configure(options) {
+    this.options = _clapprZepto2.default.extend(this.options, options);
+  };
+
+  DomRecycler.create = function create(name) {
+    if (this.options.recycleVideo && name === 'video' && videoStack.length > 0) {
+      return videoStack.shift();
+    }
+    return (0, _clapprZepto2.default)('<' + name + '>');
+  };
+
+  DomRecycler.garbage = function garbage($el) {
+    // Expect Zepto collection with single element (does not iterate!)
+    if (!this.options.recycleVideo || $el[0].tagName.toUpperCase() !== 'VIDEO') return;
+    $el.children().remove();
+    videoStack.push($el);
+  };
+
+  return DomRecycler;
+}();
+
+DomRecycler.options = { recycleVideo: false };
+
+exports.default = {
+  Config: Config,
+  Fullscreen: Fullscreen,
+  QueryString: QueryString,
+  DomRecycler: DomRecycler,
+  extend: extend,
+  formatTime: formatTime,
+  seekStringToSeconds: seekStringToSeconds,
+  uniqueId: uniqueId,
+  currentScriptUrl: currentScriptUrl,
+  isNumber: isNumber,
+  requestAnimationFrame: requestAnimationFrame,
+  cancelAnimationFrame: cancelAnimationFrame,
+  getBrowserLanguage: getBrowserLanguage,
+  now: now,
+  removeArrayItem: removeArrayItem
+};
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
+exports.__esModule = true;
+
+var _defineProperty = __webpack_require__(61);
+
+var _defineProperty2 = _interopRequireDefault(_defineProperty);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      (0, _defineProperty2.default)(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _keys = __webpack_require__(35);
+
+var _keys2 = _interopRequireDefault(_keys);
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _typeof2 = __webpack_require__(30);
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+var _log = __webpack_require__(59);
+
+var _log2 = _interopRequireDefault(_log);
+
+var _utils = __webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+var slice = Array.prototype.slice;
+
+var eventSplitter = /\s+/;
+
+var eventsApi = function eventsApi(obj, action, name, rest) {
+  if (!name) {
+    return true;
+  }
+
+  // Handle event maps.
+  if ((typeof name === 'undefined' ? 'undefined' : (0, _typeof3.default)(name)) === 'object') {
+    for (var key in name) {
+      obj[action].apply(obj, [key, name[key]].concat(rest));
+    }
+    return false;
+  }
+
+  // Handle space separated event names.
+  if (eventSplitter.test(name)) {
+    var names = name.split(eventSplitter);
+    for (var i = 0, l = names.length; i < l; i++) {
+      obj[action].apply(obj, [names[i]].concat(rest));
+    }
+    return false;
+  }
+
+  return true;
+};
+
+var triggerEvents = function triggerEvents(events, args, klass, name) {
+  var ev = void 0,
+      i = -1;
+  var l = events.length,
+      a1 = args[0],
+      a2 = args[1],
+      a3 = args[2];
+  run();
+
+  function run() {
+    try {
+      switch (args.length) {
+        case 0:
+          while (++i < l) {
+            (ev = events[i]).callback.call(ev.ctx);
+          }return;
+        case 1:
+          while (++i < l) {
+            (ev = events[i]).callback.call(ev.ctx, a1);
+          }return;
+        case 2:
+          while (++i < l) {
+            (ev = events[i]).callback.call(ev.ctx, a1, a2);
+          }return;
+        case 3:
+          while (++i < l) {
+            (ev = events[i]).callback.call(ev.ctx, a1, a2, a3);
+          }return;
+        default:
+          while (++i < l) {
+            (ev = events[i]).callback.apply(ev.ctx, args);
+          }return;
+      }
+    } catch (exception) {
+      _log2.default.error.apply(_log2.default, [klass, 'error on event', name, 'trigger', '-', exception]);
+      run();
+    }
+  }
+};
+>>>>>>> draft skinnier version
+
+/**
+ * @class Events
+ * @constructor
+ * @module base
+ */
+
+var Events = function () {
+  function Events() {
+    (0, _classCallCheck3.default)(this, Events);
+  }
+
+<<<<<<< HEAD
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -13585,8 +14012,2172 @@ var HLS = function (_HTML5VideoPlayback) {
   // the time that "0" now represents relative to when playback started
   // for a stream with a sliding window this will increase as content is
   // removed from the beginning
+=======
+  /**
+   * listen to an event indefinitely, if you want to stop you need to call `off`
+   * @method on
+   * @param {String} name
+   * @param {Function} callback
+   * @param {Object} context
+   */
+  Events.prototype.on = function on(name, callback, context) {
+    if (!eventsApi(this, 'on', name, [callback, context]) || !callback) {
+      return this;
+    }
+    this._events || (this._events = {});
+    var events = this._events[name] || (this._events[name] = []);
+    events.push({ callback: callback, context: context, ctx: context || this });
+    return this;
+  };
+
+  /**
+   * listen to an event only once
+   * @method once
+   * @param {String} name
+   * @param {Function} callback
+   * @param {Object} context
+   */
 
 
+  Events.prototype.once = function once(name, callback, context) {
+    var _this = this,
+        _arguments = arguments;
+
+    if (!eventsApi(this, 'once', name, [callback, context]) || !callback) {
+      return this;
+    }
+    var once = function once() {
+      _this.off(name, once);
+      callback.apply(context || _this, _arguments);
+    };
+    once._callback = callback;
+    return this.on(name, once, context);
+  };
+
+  /**
+   * stop listening to an event
+   * @method off
+   * @param {String} name
+   * @param {Function} callback
+   * @param {Object} context
+   */
+
+
+  Events.prototype.off = function off(name, callback, context) {
+    var retain = void 0,
+        ev = void 0,
+        events = void 0,
+        names = void 0,
+        i = void 0,
+        l = void 0,
+        j = void 0,
+        k = void 0;
+    if (!this._events || !eventsApi(this, 'off', name, [callback, context])) {
+      return this;
+    }
+    if (!name && !callback && !context) {
+      this._events = void 0;
+      return this;
+    }
+    names = name ? [name] : (0, _keys2.default)(this._events);
+    // jshint maxdepth:5
+    for (i = 0, l = names.length; i < l; i++) {
+      name = names[i];
+      events = this._events[name];
+      if (events) {
+        this._events[name] = retain = [];
+        if (callback || context) {
+          for (j = 0, k = events.length; j < k; j++) {
+            ev = events[j];
+            if (callback && callback !== ev.callback && callback !== ev.callback._callback || context && context !== ev.context) {
+              retain.push(ev);
+            }
+          }
+        }
+        if (!retain.length) {
+          delete this._events[name];
+        }
+      }
+    }
+    return this;
+  };
+
+  /**
+   * triggers an event given its `name`
+   * @method trigger
+   * @param {String} name
+   */
+
+
+  Events.prototype.trigger = function trigger(name) {
+    var klass = this.name || this.constructor.name;
+    _log2.default.debug.apply(_log2.default, [klass].concat(Array.prototype.slice.call(arguments)));
+    if (!this._events) {
+      return this;
+    }
+    var args = slice.call(arguments, 1);
+    if (!eventsApi(this, 'trigger', name, args)) {
+      return this;
+    }
+    var events = this._events[name];
+    var allEvents = this._events.all;
+    if (events) {
+      triggerEvents(events, args, klass, name);
+    }
+    if (allEvents) {
+      triggerEvents(allEvents, arguments, klass, name);
+    }
+    return this;
+  };
+
+  /**
+   * stop listening an event for a given object
+   * @method stopListening
+   * @param {Object} obj
+   * @param {String} name
+   * @param {Function} callback
+   */
+
+
+  Events.prototype.stopListening = function stopListening(obj, name, callback) {
+    var listeningTo = this._listeningTo;
+    if (!listeningTo) {
+      return this;
+    }
+    var remove = !name && !callback;
+    if (!callback && (typeof name === 'undefined' ? 'undefined' : (0, _typeof3.default)(name)) === 'object') {
+      callback = this;
+    }
+    if (obj) {
+      (listeningTo = {})[obj._listenId] = obj;
+    }
+    for (var id in listeningTo) {
+      obj = listeningTo[id];
+      obj.off(name, callback, this);
+      if (remove || (0, _keys2.default)(obj._events).length === 0) {
+        delete this._listeningTo[id];
+      }
+    }
+    return this;
+  };
+
+  return Events;
+}();
+
+/**
+ * listen to an event indefinitely for a given `obj`
+ * @method listenTo
+ * @param {Object} obj
+ * @param {String} name
+ * @param {Function} callback
+ * @param {Object} context
+ * @example
+ * ```javascript
+ * this.listenTo(this.core.playback, Events.PLAYBACK_PAUSE, this.callback)
+ * ```
+ */
+/**
+ * listen to an event once for a given `obj`
+ * @method listenToOnce
+ * @param {Object} obj
+ * @param {String} name
+ * @param {Function} callback
+ * @param {Object} context
+ * @example
+ * ```javascript
+ * this.listenToOnce(this.core.playback, Events.PLAYBACK_PAUSE, this.callback)
+ * ```
+ */
+
+
+exports.default = Events;
+var listenMethods = { listenTo: 'on', listenToOnce: 'once' };
+
+(0, _keys2.default)(listenMethods).forEach(function (method) {
+  Events.prototype[method] = function (obj, name, callback) {
+    var listeningTo = this._listeningTo || (this._listeningTo = {});
+    var id = obj._listenId || (obj._listenId = (0, _utils.uniqueId)('l'));
+    listeningTo[id] = obj;
+    if (!callback && (typeof name === 'undefined' ? 'undefined' : (0, _typeof3.default)(name)) === 'object') {
+      callback = this;
+    }
+    obj[listenMethods[method]](name, callback, this);
+    return this;
+  };
+});
+
+// PLAYER EVENTS
+/**
+ * Fired when the player is ready on startup
+ *
+ * @event PLAYER_READY
+ */
+Events.PLAYER_READY = 'ready';
+/**
+ * Fired when player resizes
+ *
+ * @event PLAYER_RESIZE
+ * @param {Object} currentSize an object with the current size
+ */
+Events.PLAYER_RESIZE = 'resize';
+/**
+ * Fired when player changes its fullscreen state
+ *
+ * @event PLAYER_FULLSCREEN
+ * @param {Boolean} whether or not the player is on fullscreen mode
+ */
+Events.PLAYER_FULLSCREEN = 'fullscreen';
+/**
+ * Fired when player starts to play
+ *
+ * @event PLAYER_PLAY
+ */
+Events.PLAYER_PLAY = 'play';
+/**
+ * Fired when player pauses
+ *
+ * @event PLAYER_PAUSE
+ */
+Events.PLAYER_PAUSE = 'pause';
+/**
+ * Fired when player stops
+ *
+ * @event PLAYER_STOP
+ */
+Events.PLAYER_STOP = 'stop';
+/**
+ * Fired when player ends the video
+ *
+ * @event PLAYER_ENDED
+ */
+Events.PLAYER_ENDED = 'ended';
+/**
+ * Fired when player seeks the video
+ *
+ * @event PLAYER_SEEK
+ * @param {Number} time the current time in seconds
+ */
+Events.PLAYER_SEEK = 'seek';
+/**
+ * Fired when player receives an error
+ *
+ * @event PLAYER_ERROR
+ * @param {Object} error the error
+ */
+Events.PLAYER_ERROR = 'error';
+/**
+ * Fired when the time is updated on player
+ *
+ * @event PLAYER_TIMEUPDATE
+ * @param {Object} progress Data
+ * progress object
+ * @param {Number} [progress.current]
+ * current time
+ * @param {Number} [progress.total]
+ * total time
+ */
+Events.PLAYER_TIMEUPDATE = 'timeupdate';
+/**
+ * Fired when player updates its volume
+ *
+ * @event PLAYER_VOLUMEUPDATE
+ * @param {Number} volume the current volume
+ */
+Events.PLAYER_VOLUMEUPDATE = 'volumeupdate';
+
+// TODO doc
+Events.PLAYER_TEXTTRACKLOADED = 'texttrackloaded';
+
+// Playback Events
+/**
+ * Fired when the playback is downloading the media
+ *
+ * @event PLAYBACK_PROGRESS
+ * @param progress {Object}
+ * Data progress object
+ * @param [progress.start] {Number}
+ * start position of buffered content at current position
+ * @param [progress.current] {Number}
+ * end position of buffered content at current position
+ * @param [progress.total] {Number}
+ * total content to be downloaded
+ * @param buffered {Array}
+ * array of buffered segments ({start, end}). [Only for supported playbacks]
+ */
+Events.PLAYBACK_PROGRESS = 'playback:progress';
+/**
+ * Fired when the time is updated on playback
+ *
+ * @event PLAYBACK_TIMEUPDATE
+ * @param {Object} progress Data
+ * progress object
+ * @param {Number} [progress.current]
+ * current time
+ * @param {Number} [progress.total]
+ * total time
+ */
+Events.PLAYBACK_TIMEUPDATE = 'playback:timeupdate';
+/**
+ * Fired when playback is ready
+ *
+ * @event PLAYBACK_READY
+ */
+Events.PLAYBACK_READY = 'playback:ready';
+/**
+ * Fired when the playback starts having to buffer because
+ * playback can currently not be smooth.
+ *
+ * This corresponds to the playback `buffering` property being
+ * `true`.
+ *
+ * @event PLAYBACK_BUFFERING
+ */
+Events.PLAYBACK_BUFFERING = 'playback:buffering';
+/**
+ * Fired when the playback has enough in the buffer to be
+ * able to play smoothly, after previously being unable to
+ * do this.
+ *
+ * This corresponds to the playback `buffering` property being
+ * `false`.
+ *
+ * @event PLAYBACK_BUFFERFULL
+ */
+Events.PLAYBACK_BUFFERFULL = 'playback:bufferfull';
+/**
+ * Fired when playback changes any settings (volume, seek and etc)
+ *
+ * @event PLAYBACK_SETTINGSUPDATE
+ */
+Events.PLAYBACK_SETTINGSUPDATE = 'playback:settingsupdate';
+/**
+ * Fired when playback loaded its metadata
+ *
+ * @event PLAYBACK_LOADEDMETADATA
+ * @param {Object} metadata Data
+ * settings object
+ * @param {Number} [metadata.duration]
+ * the playback duration
+ * @param {Object} [metadata.data]
+ * extra meta data
+ */
+Events.PLAYBACK_LOADEDMETADATA = 'playback:loadedmetadata';
+/**
+ * Fired when playback updates its video quality
+ *
+ * @event PLAYBACK_HIGHDEFINITIONUPDATE
+ * @param {Boolean} isHD
+ * true when is on HD, false otherwise
+ */
+Events.PLAYBACK_HIGHDEFINITIONUPDATE = 'playback:highdefinitionupdate';
+/**
+ * Fired when playback updates its bitrate
+ *
+ * @event PLAYBACK_BITRATE
+ * @param {Object} bitrate Data
+ * bitrate object
+ * @param {Number} [bitrate.bandwidth]
+ * bitrate bandwidth when it's available
+ * @param {Number} [bitrate.width]
+ * playback width (ex: 720, 640, 1080)
+ * @param {Number} [bitrate.height]
+ * playback height (ex: 240, 480, 720)
+ * @param {Number} [bitrate.level]
+ * playback level when it's available, it could be just a map for width (0 => 240, 1 => 480, 2 => 720)
+ */
+Events.PLAYBACK_BITRATE = 'playback:bitrate';
+/**
+ * Fired when the playback has its levels
+ *
+ * @event PLAYBACK_LEVELS_AVAILABLE
+ * @param {Array} levels
+ * the ordered levels, each one with the following format `{id: 1, label: '500kbps'}` ps: id should be a number >= 0
+ * @param {Number} initial
+ * the initial level otherwise -1 (AUTO)
+ */
+Events.PLAYBACK_LEVELS_AVAILABLE = 'playback:levels:available';
+/**
+ * Fired when the playback starts to switch level
+ *
+ * @event PLAYBACK_LEVEL_SWITCH_START
+ *
+ */
+Events.PLAYBACK_LEVEL_SWITCH_START = 'playback:levels:switch:start';
+/**
+ * Fired when the playback ends the level switch
+ *
+ * @event PLAYBACK_LEVEL_SWITCH_END
+ *
+ */
+Events.PLAYBACK_LEVEL_SWITCH_END = 'playback:levels:switch:end';
+
+/**
+ * Fired when playback internal state changes
+ *
+ * @event PLAYBACK_PLAYBACKSTATE
+ * @param {Object} state Data
+ * state object
+ * @param {String} [state.type]
+ * the playback type
+ */
+Events.PLAYBACK_PLAYBACKSTATE = 'playback:playbackstate';
+/**
+ * Fired when DVR becomes enabled/disabled.
+ *
+ * @event PLAYBACK_DVR
+ * @param {boolean} state true if dvr enabled
+ */
+Events.PLAYBACK_DVR = 'playback:dvr';
+// TODO doc
+Events.PLAYBACK_MEDIACONTROL_DISABLE = 'playback:mediacontrol:disable';
+// TODO doc
+Events.PLAYBACK_MEDIACONTROL_ENABLE = 'playback:mediacontrol:enable';
+/**
+ * Fired when the media for a playback ends.
+ *
+ * @event PLAYBACK_ENDED
+ * @param {String} name the name of the playback
+ */
+Events.PLAYBACK_ENDED = 'playback:ended';
+/**
+ * Fired when user requests `play()`
+ *
+ * @event PLAYBACK_PLAY_INTENT
+ */
+Events.PLAYBACK_PLAY_INTENT = 'playback:play:intent';
+/**
+ * Fired when the media for a playback starts playing.
+ * This is not necessarily when the user requests `play()`
+ * The media may have to buffer first.
+ * I.e. `isPlaying()` might return `true` before this event is fired,
+ * because `isPlaying()` represents the intended state.
+ *
+ * @event PLAYBACK_PLAY
+ */
+Events.PLAYBACK_PLAY = 'playback:play';
+/**
+ * Fired when the media for a playback pauses.
+ *
+ * @event PLAYBACK_PAUSE
+ */
+Events.PLAYBACK_PAUSE = 'playback:pause';
+/**
+ * Fired when the media for a playback is stopped.
+ *
+ * @event PLAYBACK_STOP
+ */
+Events.PLAYBACK_STOP = 'playback:stop';
+/**
+ * Fired if an error occurs in the playback.
+ *
+ * @event PLAYBACK_ERROR
+ * @param {Object} error An object containing the error details
+ * @param {String} name Playback name
+ */
+Events.PLAYBACK_ERROR = 'playback:error';
+// TODO doc
+Events.PLAYBACK_STATS_ADD = 'playback:stats:add';
+// TODO doc
+Events.PLAYBACK_FRAGMENT_LOADED = 'playback:fragment:loaded';
+// TODO doc
+Events.PLAYBACK_LEVEL_SWITCH = 'playback:level:switch';
+// TODO doc
+Events.PLAYBACK_SUBTITLE_LOADED = 'playback:subtitle:loaded';
+
+// Core Events
+/**
+ * Fired when the containers are created
+ *
+ * @event CORE_CONTAINERS_CREATED
+ */
+Events.CORE_CONTAINERS_CREATED = 'core:containers:created';
+/**
+ * Fired when the options were changed for the core
+ *
+ * @event CORE_OPTIONS_CHANGE
+ */
+Events.CORE_OPTIONS_CHANGE = 'core:options:change';
+/**
+ * Fired after creating containers, when the core is ready
+ *
+ * @event CORE_READY
+ */
+Events.CORE_READY = 'core:ready';
+/**
+ * Fired when the fullscreen state change
+ *
+ * @event CORE_FULLSCREEN
+ * @param {Boolean} whether or not the player is on fullscreen mode
+ */
+Events.CORE_FULLSCREEN = 'core:fullscreen';
+/**
+ * Fired when the screen orientation has changed.
+ * This event is trigger only for mobile devices.
+ *
+ * @event CORE_SCREEN_ORIENTATION_CHANGED
+ * @param {Object} screen An object with screen orientation
+ * screen object
+ * @param {Object} [screen.event]
+ * window resize event object
+ * @param {String} [screen.orientation]
+ * screen orientation (ie: 'landscape' or 'portrait')
+ */
+Events.CORE_SCREEN_ORIENTATION_CHANGED = 'core:screen:orientation:changed';
+
+// Container Events
+/**
+ * Fired when the container internal state changes
+ *
+ * @event CONTAINER_PLAYBACKSTATE
+ * @param {Object} state Data
+ * state object
+ * @param {String} [state.type]
+ * the playback type
+ */
+Events.CONTAINER_PLAYBACKSTATE = 'container:playbackstate';
+Events.CONTAINER_PLAYBACKDVRSTATECHANGED = 'container:dvr';
+/**
+ * Fired when the container updates its bitrate
+ *
+ * @event CONTAINER_BITRATE
+ * @param {Object} bitrate Data
+ * bitrate object
+ * @param {Number} [bitrate.bandwidth]
+ * bitrate bandwidth when it's available
+ * @param {Number} [bitrate.width]
+ * playback width (ex: 720, 640, 1080)
+ * @param {Number} [bitrate.height]
+ * playback height (ex: 240, 480, 720)
+ * @param {Number} [bitrate.level]
+ * playback level when it's available, it could be just a map for width (0 => 240, 1 => 480, 2 => 720)
+ */
+Events.CONTAINER_BITRATE = 'container:bitrate';
+Events.CONTAINER_STATS_REPORT = 'container:stats:report';
+Events.CONTAINER_DESTROYED = 'container:destroyed';
+/**
+ * Fired when the container is ready
+ *
+ * @event CONTAINER_READY
+ */
+Events.CONTAINER_READY = 'container:ready';
+Events.CONTAINER_ERROR = 'container:error';
+/**
+ * Fired when the container loaded its metadata
+ *
+ * @event CONTAINER_LOADEDMETADATA
+ * @param {Object} metadata Data
+ * settings object
+ * @param {Number} [metadata.duration]
+ * the playback duration
+ * @param {Object} [metadata.data]
+ * extra meta data
+ */
+Events.CONTAINER_LOADEDMETADATA = 'container:loadedmetadata';
+
+/**
+ * Fired when a text track is loaded and available on container for display
+ *
+ * @event CONTAINER_LOADEDTEXTTRACK
+ */
+Events.CONTAINER_LOADEDTEXTTRACK = 'container:loadedtexttrack';
+
+/**
+ * Fired when the time is updated on container
+ *
+ * @event CONTAINER_TIMEUPDATE
+ * @param {Object} progress Data
+ * progress object
+ * @param {Number} [progress.current]
+ * current time
+ * @param {Number} [progress.total]
+ * total time
+ */
+Events.CONTAINER_TIMEUPDATE = 'container:timeupdate';
+/**
+ * Fired when the container is downloading the media
+ *
+ * @event CONTAINER_PROGRESS
+ * @param {Object} progress Data
+ * progress object
+ * @param {Number} [progress.start]
+ * initial downloaded content
+ * @param {Number} [progress.current]
+ * current dowloaded content
+ * @param {Number} [progress.total]
+ * total content to be downloaded
+ */
+Events.CONTAINER_PROGRESS = 'container:progress';
+Events.CONTAINER_PLAY = 'container:play';
+Events.CONTAINER_STOP = 'container:stop';
+Events.CONTAINER_PAUSE = 'container:pause';
+Events.CONTAINER_ENDED = 'container:ended';
+Events.CONTAINER_CLICK = 'container:click';
+Events.CONTAINER_DBLCLICK = 'container:dblclick';
+Events.CONTAINER_CONTEXTMENU = 'container:contextmenu';
+Events.CONTAINER_MOUSE_ENTER = 'container:mouseenter';
+Events.CONTAINER_MOUSE_LEAVE = 'container:mouseleave';
+/**
+ * Fired when the container seeks the video
+ *
+ * @event CONTAINER_SEEK
+ * @param {Number} time the current time in seconds
+ */
+Events.CONTAINER_SEEK = 'container:seek';
+Events.CONTAINER_VOLUME = 'container:volume';
+Events.CONTAINER_FULLSCREEN = 'container:fullscreen';
+/**
+ * Fired when container is buffering
+ *
+ * @event CONTAINER_STATE_BUFFERING
+ */
+Events.CONTAINER_STATE_BUFFERING = 'container:state:buffering';
+/**
+ * Fired when the container filled the buffer
+ *
+ * @event CONTAINER_STATE_BUFFERFULL
+ */
+Events.CONTAINER_STATE_BUFFERFULL = 'container:state:bufferfull';
+/**
+ * Fired when the container changes any settings (volume, seek and etc)
+ *
+ * @event CONTAINER_SETTINGSUPDATE
+ */
+Events.CONTAINER_SETTINGSUPDATE = 'container:settingsupdate';
+/**
+ * Fired when container updates its video quality
+ *
+ * @event CONTAINER_HIGHDEFINITIONUPDATE
+ * @param {Boolean} isHD
+ * true when is on HD, false otherwise
+ */
+Events.CONTAINER_HIGHDEFINITIONUPDATE = 'container:highdefinitionupdate';
+
+/**
+ * Fired when the media control shows
+ *
+ * @event CONTAINER_MEDIACONTROL_SHOW
+ */
+Events.CONTAINER_MEDIACONTROL_SHOW = 'container:mediacontrol:show';
+/**
+ * Fired when the media control hides
+ *
+ * @event CONTAINER_MEDIACONTROL_HIDE
+ */
+Events.CONTAINER_MEDIACONTROL_HIDE = 'container:mediacontrol:hide';
+
+Events.CONTAINER_MEDIACONTROL_DISABLE = 'container:mediacontrol:disable';
+Events.CONTAINER_MEDIACONTROL_ENABLE = 'container:mediacontrol:enable';
+Events.CONTAINER_STATS_ADD = 'container:stats:add';
+/**
+ * Fired when the options were changed for the container
+ *
+ * @event CONTAINER_OPTIONS_CHANGE
+ */
+Events.CONTAINER_OPTIONS_CHANGE = 'container:options:change';
+
+// MediaControl Events
+Events.MEDIACONTROL_RENDERED = 'mediacontrol:rendered';
+/**
+ * Fired when the player enters/exit on fullscreen
+ *
+ * @event MEDIACONTROL_FULLSCREEN
+ */
+Events.MEDIACONTROL_FULLSCREEN = 'mediacontrol:fullscreen';
+/**
+ * Fired when the media control shows
+ *
+ * @event MEDIACONTROL_SHOW
+ */
+Events.MEDIACONTROL_SHOW = 'mediacontrol:show';
+/**
+ * Fired when the media control hides
+ *
+ * @event MEDIACONTROL_HIDE
+ */
+Events.MEDIACONTROL_HIDE = 'mediacontrol:hide';
+/**
+ * Fired when mouse enters on the seekbar
+ *
+ * @event MEDIACONTROL_MOUSEMOVE_SEEKBAR
+ * @param {Object} event
+ * the javascript event
+ */
+Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR = 'mediacontrol:mousemove:seekbar';
+/**
+ * Fired when mouse leaves the seekbar
+ *
+ * @event MEDIACONTROL_MOUSELEAVE_SEEKBAR
+ * @param {Object} event
+ * the javascript event
+ */
+Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR = 'mediacontrol:mouseleave:seekbar';
+/**
+ * Fired when the media is being played
+ *
+ * @event MEDIACONTROL_PLAYING
+ */
+Events.MEDIACONTROL_PLAYING = 'mediacontrol:playing';
+/**
+ * Fired when the media is not being played
+ *
+ * @event MEDIACONTROL_NOTPLAYING
+ */
+Events.MEDIACONTROL_NOTPLAYING = 'mediacontrol:notplaying';
+/**
+ * Fired when the container was changed
+ *
+ * @event MEDIACONTROL_CONTAINERCHANGED
+ */
+Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged';
+module.exports = exports['default'];
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+var core = module.exports = {version: '2.4.0'};
+if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports) {
+
+/* Zepto v1.2.0 - zepto ajax callbacks deferred event ie selector - zeptojs.com/license */
+
+
+var Zepto = (function() {
+  var undefined, key, $, classList, emptyArray = [], concat = emptyArray.concat, filter = emptyArray.filter, slice = emptyArray.slice,
+    document = window.document,
+    elementDisplay = {}, classCache = {},
+    cssNumber = { 'column-count': 1, 'columns': 1, 'font-weight': 1, 'line-height': 1,'opacity': 1, 'z-index': 1, 'zoom': 1 },
+    fragmentRE = /^\s*<(\w+|!)[^>]*>/,
+    singleTagRE = /^<(\w+)\s*\/?>(?:<\/\1>|)$/,
+    tagExpanderRE = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/ig,
+    rootNodeRE = /^(?:body|html)$/i,
+    capitalRE = /([A-Z])/g,
+
+    // special attributes that should be get/set via method calls
+    methodAttributes = ['val', 'css', 'html', 'text', 'data', 'width', 'height', 'offset'],
+
+    adjacencyOperators = [ 'after', 'prepend', 'before', 'append' ],
+    table = document.createElement('table'),
+    tableRow = document.createElement('tr'),
+    containers = {
+      'tr': document.createElement('tbody'),
+      'tbody': table, 'thead': table, 'tfoot': table,
+      'td': tableRow, 'th': tableRow,
+      '*': document.createElement('div')
+    },
+    readyRE = /complete|loaded|interactive/,
+    simpleSelectorRE = /^[\w-]*$/,
+    class2type = {},
+    toString = class2type.toString,
+    zepto = {},
+    camelize, uniq,
+    tempParent = document.createElement('div'),
+    propMap = {
+      'tabindex': 'tabIndex',
+      'readonly': 'readOnly',
+      'for': 'htmlFor',
+      'class': 'className',
+      'maxlength': 'maxLength',
+      'cellspacing': 'cellSpacing',
+      'cellpadding': 'cellPadding',
+      'rowspan': 'rowSpan',
+      'colspan': 'colSpan',
+      'usemap': 'useMap',
+      'frameborder': 'frameBorder',
+      'contenteditable': 'contentEditable'
+    },
+    isArray = Array.isArray ||
+      function(object){ return object instanceof Array }
+
+  zepto.matches = function(element, selector) {
+    if (!selector || !element || element.nodeType !== 1) return false
+    var matchesSelector = element.matches || element.webkitMatchesSelector ||
+                          element.mozMatchesSelector || element.oMatchesSelector ||
+                          element.matchesSelector
+    if (matchesSelector) return matchesSelector.call(element, selector)
+    // fall back to performing a selector:
+    var match, parent = element.parentNode, temp = !parent
+    if (temp) (parent = tempParent).appendChild(element)
+    match = ~zepto.qsa(parent, selector).indexOf(element)
+    temp && tempParent.removeChild(element)
+    return match
+  }
+
+  function type(obj) {
+    return obj == null ? String(obj) :
+      class2type[toString.call(obj)] || "object"
+  }
+
+  function isFunction(value) { return type(value) == "function" }
+  function isWindow(obj)     { return obj != null && obj == obj.window }
+  function isDocument(obj)   { return obj != null && obj.nodeType == obj.DOCUMENT_NODE }
+  function isObject(obj)     { return type(obj) == "object" }
+  function isPlainObject(obj) {
+    return isObject(obj) && !isWindow(obj) && Object.getPrototypeOf(obj) == Object.prototype
+  }
+
+  function likeArray(obj) {
+    var length = !!obj && 'length' in obj && obj.length,
+      type = $.type(obj)
+
+    return 'function' != type && !isWindow(obj) && (
+      'array' == type || length === 0 ||
+        (typeof length == 'number' && length > 0 && (length - 1) in obj)
+    )
+  }
+
+  function compact(array) { return filter.call(array, function(item){ return item != null }) }
+  function flatten(array) { return array.length > 0 ? $.fn.concat.apply([], array) : array }
+  camelize = function(str){ return str.replace(/-+(.)?/g, function(match, chr){ return chr ? chr.toUpperCase() : '' }) }
+  function dasherize(str) {
+    return str.replace(/::/g, '/')
+           .replace(/([A-Z]+)([A-Z][a-z])/g, '$1_$2')
+           .replace(/([a-z\d])([A-Z])/g, '$1_$2')
+           .replace(/_/g, '-')
+           .toLowerCase()
+  }
+  uniq = function(array){ return filter.call(array, function(item, idx){ return array.indexOf(item) == idx }) }
+
+  function classRE(name) {
+    return name in classCache ?
+      classCache[name] : (classCache[name] = new RegExp('(^|\\s)' + name + '(\\s|$)'))
+  }
+
+  function maybeAddPx(name, value) {
+    return (typeof value == "number" && !cssNumber[dasherize(name)]) ? value + "px" : value
+  }
+
+  function defaultDisplay(nodeName) {
+    var element, display
+    if (!elementDisplay[nodeName]) {
+      element = document.createElement(nodeName)
+      document.body.appendChild(element)
+      display = getComputedStyle(element, '').getPropertyValue("display")
+      element.parentNode.removeChild(element)
+      display == "none" && (display = "block")
+      elementDisplay[nodeName] = display
+    }
+    return elementDisplay[nodeName]
+  }
+
+  function children(element) {
+    return 'children' in element ?
+      slice.call(element.children) :
+      $.map(element.childNodes, function(node){ if (node.nodeType == 1) return node })
+  }
+
+  function Z(dom, selector) {
+    var i, len = dom ? dom.length : 0
+    for (i = 0; i < len; i++) this[i] = dom[i]
+    this.length = len
+    this.selector = selector || ''
+  }
+
+  // `$.zepto.fragment` takes a html string and an optional tag name
+  // to generate DOM nodes from the given html string.
+  // The generated DOM nodes are returned as an array.
+  // This function can be overridden in plugins for example to make
+  // it compatible with browsers that don't support the DOM fully.
+  zepto.fragment = function(html, name, properties) {
+    var dom, nodes, container
+
+    // A special case optimization for a single tag
+    if (singleTagRE.test(html)) dom = $(document.createElement(RegExp.$1))
+
+    if (!dom) {
+      if (html.replace) html = html.replace(tagExpanderRE, "<$1></$2>")
+      if (name === undefined) name = fragmentRE.test(html) && RegExp.$1
+      if (!(name in containers)) name = '*'
+
+      container = containers[name]
+      container.innerHTML = '' + html
+      dom = $.each(slice.call(container.childNodes), function(){
+        container.removeChild(this)
+      })
+    }
+
+    if (isPlainObject(properties)) {
+      nodes = $(dom)
+      $.each(properties, function(key, value) {
+        if (methodAttributes.indexOf(key) > -1) nodes[key](value)
+        else nodes.attr(key, value)
+      })
+    }
+
+    return dom
+  }
+
+  // `$.zepto.Z` swaps out the prototype of the given `dom` array
+  // of nodes with `$.fn` and thus supplying all the Zepto functions
+  // to the array. This method can be overridden in plugins.
+  zepto.Z = function(dom, selector) {
+    return new Z(dom, selector)
+  }
+
+  // `$.zepto.isZ` should return `true` if the given object is a Zepto
+  // collection. This method can be overridden in plugins.
+  zepto.isZ = function(object) {
+    return object instanceof zepto.Z
+  }
+
+  // `$.zepto.init` is Zepto's counterpart to jQuery's `$.fn.init` and
+  // takes a CSS selector and an optional context (and handles various
+  // special cases).
+  // This method can be overridden in plugins.
+  zepto.init = function(selector, context) {
+    var dom
+    // If nothing given, return an empty Zepto collection
+    if (!selector) return zepto.Z()
+    // Optimize for string selectors
+    else if (typeof selector == 'string') {
+      selector = selector.trim()
+      // If it's a html fragment, create nodes from it
+      // Note: In both Chrome 21 and Firefox 15, DOM error 12
+      // is thrown if the fragment doesn't begin with <
+      if (selector[0] == '<' && fragmentRE.test(selector))
+        dom = zepto.fragment(selector, RegExp.$1, context), selector = null
+      // If there's a context, create a collection on that context first, and select
+      // nodes from there
+      else if (context !== undefined) return $(context).find(selector)
+      // If it's a CSS selector, use it to select nodes.
+      else dom = zepto.qsa(document, selector)
+    }
+    // If a function is given, call it when the DOM is ready
+    else if (isFunction(selector)) return $(document).ready(selector)
+    // If a Zepto collection is given, just return it
+    else if (zepto.isZ(selector)) return selector
+    else {
+      // normalize array if an array of nodes is given
+      if (isArray(selector)) dom = compact(selector)
+      // Wrap DOM nodes.
+      else if (isObject(selector))
+        dom = [selector], selector = null
+      // If it's a html fragment, create nodes from it
+      else if (fragmentRE.test(selector))
+        dom = zepto.fragment(selector.trim(), RegExp.$1, context), selector = null
+      // If there's a context, create a collection on that context first, and select
+      // nodes from there
+      else if (context !== undefined) return $(context).find(selector)
+      // And last but no least, if it's a CSS selector, use it to select nodes.
+      else dom = zepto.qsa(document, selector)
+    }
+    // create a new Zepto collection from the nodes found
+    return zepto.Z(dom, selector)
+  }
+
+  // `$` will be the base `Zepto` object. When calling this
+  // function just call `$.zepto.init, which makes the implementation
+  // details of selecting nodes and creating Zepto collections
+  // patchable in plugins.
+  $ = function(selector, context){
+    return zepto.init(selector, context)
+  }
+
+  function extend(target, source, deep) {
+    for (key in source)
+      if (deep && (isPlainObject(source[key]) || isArray(source[key]))) {
+        if (isPlainObject(source[key]) && !isPlainObject(target[key]))
+          target[key] = {}
+        if (isArray(source[key]) && !isArray(target[key]))
+          target[key] = []
+        extend(target[key], source[key], deep)
+      }
+      else if (source[key] !== undefined) target[key] = source[key]
+  }
+
+  // Copy all but undefined properties from one or more
+  // objects to the `target` object.
+  $.extend = function(target){
+    var deep, args = slice.call(arguments, 1)
+    if (typeof target == 'boolean') {
+      deep = target
+      target = args.shift()
+    }
+    args.forEach(function(arg){ extend(target, arg, deep) })
+    return target
+  }
+
+  // `$.zepto.qsa` is Zepto's CSS selector implementation which
+  // uses `document.querySelectorAll` and optimizes for some special cases, like `#id`.
+  // This method can be overridden in plugins.
+  zepto.qsa = function(element, selector){
+    var found,
+        maybeID = selector[0] == '#',
+        maybeClass = !maybeID && selector[0] == '.',
+        nameOnly = maybeID || maybeClass ? selector.slice(1) : selector, // Ensure that a 1 char tag name still gets checked
+        isSimple = simpleSelectorRE.test(nameOnly)
+    return (element.getElementById && isSimple && maybeID) ? // Safari DocumentFragment doesn't have getElementById
+      ( (found = element.getElementById(nameOnly)) ? [found] : [] ) :
+      (element.nodeType !== 1 && element.nodeType !== 9 && element.nodeType !== 11) ? [] :
+      slice.call(
+        isSimple && !maybeID && element.getElementsByClassName ? // DocumentFragment doesn't have getElementsByClassName/TagName
+          maybeClass ? element.getElementsByClassName(nameOnly) : // If it's simple, it could be a class
+          element.getElementsByTagName(selector) : // Or a tag
+          element.querySelectorAll(selector) // Or it's not simple, and we need to query all
+      )
+  }
+
+  function filtered(nodes, selector) {
+    return selector == null ? $(nodes) : $(nodes).filter(selector)
+  }
+
+  $.contains = document.documentElement.contains ?
+    function(parent, node) {
+      return parent !== node && parent.contains(node)
+    } :
+    function(parent, node) {
+      while (node && (node = node.parentNode))
+        if (node === parent) return true
+      return false
+    }
+
+  function funcArg(context, arg, idx, payload) {
+    return isFunction(arg) ? arg.call(context, idx, payload) : arg
+  }
+
+  function setAttribute(node, name, value) {
+    value == null ? node.removeAttribute(name) : node.setAttribute(name, value)
+  }
+
+  // access className property while respecting SVGAnimatedString
+  function className(node, value){
+    var klass = node.className || '',
+        svg   = klass && klass.baseVal !== undefined
+
+    if (value === undefined) return svg ? klass.baseVal : klass
+    svg ? (klass.baseVal = value) : (node.className = value)
+  }
+
+  // "true"  => true
+  // "false" => false
+  // "null"  => null
+  // "42"    => 42
+  // "42.5"  => 42.5
+  // "08"    => "08"
+  // JSON    => parse if valid
+  // String  => self
+  function deserializeValue(value) {
+    try {
+      return value ?
+        value == "true" ||
+        ( value == "false" ? false :
+          value == "null" ? null :
+          +value + "" == value ? +value :
+          /^[\[\{]/.test(value) ? $.parseJSON(value) :
+          value )
+        : value
+    } catch(e) {
+      return value
+    }
+  }
+
+  $.type = type
+  $.isFunction = isFunction
+  $.isWindow = isWindow
+  $.isArray = isArray
+  $.isPlainObject = isPlainObject
+
+  $.isEmptyObject = function(obj) {
+    var name
+    for (name in obj) return false
+    return true
+  }
+
+  $.isNumeric = function(val) {
+    var num = Number(val), type = typeof val
+    return val != null && type != 'boolean' &&
+      (type != 'string' || val.length) &&
+      !isNaN(num) && isFinite(num) || false
+  }
+
+  $.inArray = function(elem, array, i){
+    return emptyArray.indexOf.call(array, elem, i)
+  }
+
+  $.camelCase = camelize
+  $.trim = function(str) {
+    return str == null ? "" : String.prototype.trim.call(str)
+  }
+
+  // plugin compatibility
+  $.uuid = 0
+  $.support = { }
+  $.expr = { }
+  $.noop = function() {}
+
+  $.map = function(elements, callback){
+    var value, values = [], i, key
+    if (likeArray(elements))
+      for (i = 0; i < elements.length; i++) {
+        value = callback(elements[i], i)
+        if (value != null) values.push(value)
+      }
+    else
+      for (key in elements) {
+        value = callback(elements[key], key)
+        if (value != null) values.push(value)
+      }
+    return flatten(values)
+  }
+
+  $.each = function(elements, callback){
+    var i, key
+    if (likeArray(elements)) {
+      for (i = 0; i < elements.length; i++)
+        if (callback.call(elements[i], i, elements[i]) === false) return elements
+    } else {
+      for (key in elements)
+        if (callback.call(elements[key], key, elements[key]) === false) return elements
+    }
+
+    return elements
+  }
+
+  $.grep = function(elements, callback){
+    return filter.call(elements, callback)
+  }
+
+  if (window.JSON) $.parseJSON = JSON.parse
+
+  // Populate the class2type map
+  $.each("Boolean Number String Function Array Date RegExp Object Error".split(" "), function(i, name) {
+    class2type[ "[object " + name + "]" ] = name.toLowerCase()
+  })
+
+  // Define methods that will be available on all
+  // Zepto collections
+  $.fn = {
+    constructor: zepto.Z,
+    length: 0,
+
+    // Because a collection acts like an array
+    // copy over these useful array functions.
+    forEach: emptyArray.forEach,
+    reduce: emptyArray.reduce,
+    push: emptyArray.push,
+    sort: emptyArray.sort,
+    splice: emptyArray.splice,
+    indexOf: emptyArray.indexOf,
+    concat: function(){
+      var i, value, args = []
+      for (i = 0; i < arguments.length; i++) {
+        value = arguments[i]
+        args[i] = zepto.isZ(value) ? value.toArray() : value
+      }
+      return concat.apply(zepto.isZ(this) ? this.toArray() : this, args)
+    },
+
+    // `map` and `slice` in the jQuery API work differently
+    // from their array counterparts
+    map: function(fn){
+      return $($.map(this, function(el, i){ return fn.call(el, i, el) }))
+    },
+    slice: function(){
+      return $(slice.apply(this, arguments))
+    },
+
+    ready: function(callback){
+      // need to check if document.body exists for IE as that browser reports
+      // document ready when it hasn't yet created the body element
+      if (readyRE.test(document.readyState) && document.body) callback($)
+      else document.addEventListener('DOMContentLoaded', function(){ callback($) }, false)
+      return this
+    },
+    get: function(idx){
+      return idx === undefined ? slice.call(this) : this[idx >= 0 ? idx : idx + this.length]
+    },
+    toArray: function(){ return this.get() },
+    size: function(){
+      return this.length
+    },
+    remove: function(){
+      return this.each(function(){
+        if (this.parentNode != null)
+          this.parentNode.removeChild(this)
+      })
+    },
+    each: function(callback){
+      emptyArray.every.call(this, function(el, idx){
+        return callback.call(el, idx, el) !== false
+      })
+      return this
+    },
+    filter: function(selector){
+      if (isFunction(selector)) return this.not(this.not(selector))
+      return $(filter.call(this, function(element){
+        return zepto.matches(element, selector)
+      }))
+    },
+    add: function(selector,context){
+      return $(uniq(this.concat($(selector,context))))
+    },
+    is: function(selector){
+      return this.length > 0 && zepto.matches(this[0], selector)
+    },
+    not: function(selector){
+      var nodes=[]
+      if (isFunction(selector) && selector.call !== undefined)
+        this.each(function(idx){
+          if (!selector.call(this,idx)) nodes.push(this)
+        })
+      else {
+        var excludes = typeof selector == 'string' ? this.filter(selector) :
+          (likeArray(selector) && isFunction(selector.item)) ? slice.call(selector) : $(selector)
+        this.forEach(function(el){
+          if (excludes.indexOf(el) < 0) nodes.push(el)
+        })
+      }
+      return $(nodes)
+    },
+    has: function(selector){
+      return this.filter(function(){
+        return isObject(selector) ?
+          $.contains(this, selector) :
+          $(this).find(selector).size()
+      })
+    },
+    eq: function(idx){
+      return idx === -1 ? this.slice(idx) : this.slice(idx, + idx + 1)
+    },
+    first: function(){
+      var el = this[0]
+      return el && !isObject(el) ? el : $(el)
+    },
+    last: function(){
+      var el = this[this.length - 1]
+      return el && !isObject(el) ? el : $(el)
+    },
+    find: function(selector){
+      var result, $this = this
+      if (!selector) result = $()
+      else if (typeof selector == 'object')
+        result = $(selector).filter(function(){
+          var node = this
+          return emptyArray.some.call($this, function(parent){
+            return $.contains(parent, node)
+          })
+        })
+      else if (this.length == 1) result = $(zepto.qsa(this[0], selector))
+      else result = this.map(function(){ return zepto.qsa(this, selector) })
+      return result
+    },
+    closest: function(selector, context){
+      var nodes = [], collection = typeof selector == 'object' && $(selector)
+      this.each(function(_, node){
+        while (node && !(collection ? collection.indexOf(node) >= 0 : zepto.matches(node, selector)))
+          node = node !== context && !isDocument(node) && node.parentNode
+        if (node && nodes.indexOf(node) < 0) nodes.push(node)
+      })
+      return $(nodes)
+    },
+    parents: function(selector){
+      var ancestors = [], nodes = this
+      while (nodes.length > 0)
+        nodes = $.map(nodes, function(node){
+          if ((node = node.parentNode) && !isDocument(node) && ancestors.indexOf(node) < 0) {
+            ancestors.push(node)
+            return node
+          }
+        })
+      return filtered(ancestors, selector)
+    },
+    parent: function(selector){
+      return filtered(uniq(this.pluck('parentNode')), selector)
+    },
+    children: function(selector){
+      return filtered(this.map(function(){ return children(this) }), selector)
+    },
+    contents: function() {
+      return this.map(function() { return this.contentDocument || slice.call(this.childNodes) })
+    },
+    siblings: function(selector){
+      return filtered(this.map(function(i, el){
+        return filter.call(children(el.parentNode), function(child){ return child!==el })
+      }), selector)
+    },
+    empty: function(){
+      return this.each(function(){ this.innerHTML = '' })
+    },
+    // `pluck` is borrowed from Prototype.js
+    pluck: function(property){
+      return $.map(this, function(el){ return el[property] })
+    },
+    show: function(){
+      return this.each(function(){
+        this.style.display == "none" && (this.style.display = '')
+        if (getComputedStyle(this, '').getPropertyValue("display") == "none")
+          this.style.display = defaultDisplay(this.nodeName)
+      })
+    },
+    replaceWith: function(newContent){
+      return this.before(newContent).remove()
+    },
+    wrap: function(structure){
+      var func = isFunction(structure)
+      if (this[0] && !func)
+        var dom   = $(structure).get(0),
+            clone = dom.parentNode || this.length > 1
+
+      return this.each(function(index){
+        $(this).wrapAll(
+          func ? structure.call(this, index) :
+            clone ? dom.cloneNode(true) : dom
+        )
+      })
+    },
+    wrapAll: function(structure){
+      if (this[0]) {
+        $(this[0]).before(structure = $(structure))
+        var children
+        // drill down to the inmost element
+        while ((children = structure.children()).length) structure = children.first()
+        $(structure).append(this)
+      }
+      return this
+    },
+    wrapInner: function(structure){
+      var func = isFunction(structure)
+      return this.each(function(index){
+        var self = $(this), contents = self.contents(),
+            dom  = func ? structure.call(this, index) : structure
+        contents.length ? contents.wrapAll(dom) : self.append(dom)
+      })
+    },
+    unwrap: function(){
+      this.parent().each(function(){
+        $(this).replaceWith($(this).children())
+      })
+      return this
+    },
+    clone: function(){
+      return this.map(function(){ return this.cloneNode(true) })
+    },
+    hide: function(){
+      return this.css("display", "none")
+    },
+    toggle: function(setting){
+      return this.each(function(){
+        var el = $(this)
+        ;(setting === undefined ? el.css("display") == "none" : setting) ? el.show() : el.hide()
+      })
+    },
+    prev: function(selector){ return $(this.pluck('previousElementSibling')).filter(selector || '*') },
+    next: function(selector){ return $(this.pluck('nextElementSibling')).filter(selector || '*') },
+    html: function(html){
+      return 0 in arguments ?
+        this.each(function(idx){
+          var originHtml = this.innerHTML
+          $(this).empty().append( funcArg(this, html, idx, originHtml) )
+        }) :
+        (0 in this ? this[0].innerHTML : null)
+    },
+    text: function(text){
+      return 0 in arguments ?
+        this.each(function(idx){
+          var newText = funcArg(this, text, idx, this.textContent)
+          this.textContent = newText == null ? '' : ''+newText
+        }) :
+        (0 in this ? this.pluck('textContent').join("") : null)
+    },
+    attr: function(name, value){
+      var result
+      return (typeof name == 'string' && !(1 in arguments)) ?
+        (0 in this && this[0].nodeType == 1 && (result = this[0].getAttribute(name)) != null ? result : undefined) :
+        this.each(function(idx){
+          if (this.nodeType !== 1) return
+          if (isObject(name)) for (key in name) setAttribute(this, key, name[key])
+          else setAttribute(this, name, funcArg(this, value, idx, this.getAttribute(name)))
+        })
+    },
+    removeAttr: function(name){
+      return this.each(function(){ this.nodeType === 1 && name.split(' ').forEach(function(attribute){
+        setAttribute(this, attribute)
+      }, this)})
+    },
+    prop: function(name, value){
+      name = propMap[name] || name
+      return (1 in arguments) ?
+        this.each(function(idx){
+          this[name] = funcArg(this, value, idx, this[name])
+        }) :
+        (this[0] && this[0][name])
+    },
+    removeProp: function(name){
+      name = propMap[name] || name
+      return this.each(function(){ delete this[name] })
+    },
+    data: function(name, value){
+      var attrName = 'data-' + name.replace(capitalRE, '-$1').toLowerCase()
+
+      var data = (1 in arguments) ?
+        this.attr(attrName, value) :
+        this.attr(attrName)
+
+      return data !== null ? deserializeValue(data) : undefined
+    },
+    val: function(value){
+      if (0 in arguments) {
+        if (value == null) value = ""
+        return this.each(function(idx){
+          this.value = funcArg(this, value, idx, this.value)
+        })
+      } else {
+        return this[0] && (this[0].multiple ?
+           $(this[0]).find('option').filter(function(){ return this.selected }).pluck('value') :
+           this[0].value)
+      }
+    },
+    offset: function(coordinates){
+      if (coordinates) return this.each(function(index){
+        var $this = $(this),
+            coords = funcArg(this, coordinates, index, $this.offset()),
+            parentOffset = $this.offsetParent().offset(),
+            props = {
+              top:  coords.top  - parentOffset.top,
+              left: coords.left - parentOffset.left
+            }
+
+        if ($this.css('position') == 'static') props['position'] = 'relative'
+        $this.css(props)
+      })
+      if (!this.length) return null
+      if (document.documentElement !== this[0] && !$.contains(document.documentElement, this[0]))
+        return {top: 0, left: 0}
+      var obj = this[0].getBoundingClientRect()
+      return {
+        left: obj.left + window.pageXOffset,
+        top: obj.top + window.pageYOffset,
+        width: Math.round(obj.width),
+        height: Math.round(obj.height)
+      }
+    },
+    css: function(property, value){
+      if (arguments.length < 2) {
+        var element = this[0]
+        if (typeof property == 'string') {
+          if (!element) return
+          return element.style[camelize(property)] || getComputedStyle(element, '').getPropertyValue(property)
+        } else if (isArray(property)) {
+          if (!element) return
+          var props = {}
+          var computedStyle = getComputedStyle(element, '')
+          $.each(property, function(_, prop){
+            props[prop] = (element.style[camelize(prop)] || computedStyle.getPropertyValue(prop))
+          })
+          return props
+        }
+      }
+
+      var css = ''
+      if (type(property) == 'string') {
+        if (!value && value !== 0)
+          this.each(function(){ this.style.removeProperty(dasherize(property)) })
+        else
+          css = dasherize(property) + ":" + maybeAddPx(property, value)
+      } else {
+        for (key in property)
+          if (!property[key] && property[key] !== 0)
+            this.each(function(){ this.style.removeProperty(dasherize(key)) })
+          else
+            css += dasherize(key) + ':' + maybeAddPx(key, property[key]) + ';'
+      }
+
+      return this.each(function(){ this.style.cssText += ';' + css })
+    },
+    index: function(element){
+      return element ? this.indexOf($(element)[0]) : this.parent().children().indexOf(this[0])
+    },
+    hasClass: function(name){
+      if (!name) return false
+      return emptyArray.some.call(this, function(el){
+        return this.test(className(el))
+      }, classRE(name))
+    },
+    addClass: function(name){
+      if (!name) return this
+      return this.each(function(idx){
+        if (!('className' in this)) return
+        classList = []
+        var cls = className(this), newName = funcArg(this, name, idx, cls)
+        newName.split(/\s+/g).forEach(function(klass){
+          if (!$(this).hasClass(klass)) classList.push(klass)
+        }, this)
+        classList.length && className(this, cls + (cls ? " " : "") + classList.join(" "))
+      })
+    },
+    removeClass: function(name){
+      return this.each(function(idx){
+        if (!('className' in this)) return
+        if (name === undefined) return className(this, '')
+        classList = className(this)
+        funcArg(this, name, idx, classList).split(/\s+/g).forEach(function(klass){
+          classList = classList.replace(classRE(klass), " ")
+        })
+        className(this, classList.trim())
+      })
+    },
+    toggleClass: function(name, when){
+      if (!name) return this
+      return this.each(function(idx){
+        var $this = $(this), names = funcArg(this, name, idx, className(this))
+        names.split(/\s+/g).forEach(function(klass){
+          (when === undefined ? !$this.hasClass(klass) : when) ?
+            $this.addClass(klass) : $this.removeClass(klass)
+        })
+      })
+    },
+    scrollTop: function(value){
+      if (!this.length) return
+      var hasScrollTop = 'scrollTop' in this[0]
+      if (value === undefined) return hasScrollTop ? this[0].scrollTop : this[0].pageYOffset
+      return this.each(hasScrollTop ?
+        function(){ this.scrollTop = value } :
+        function(){ this.scrollTo(this.scrollX, value) })
+    },
+    scrollLeft: function(value){
+      if (!this.length) return
+      var hasScrollLeft = 'scrollLeft' in this[0]
+      if (value === undefined) return hasScrollLeft ? this[0].scrollLeft : this[0].pageXOffset
+      return this.each(hasScrollLeft ?
+        function(){ this.scrollLeft = value } :
+        function(){ this.scrollTo(value, this.scrollY) })
+    },
+    position: function() {
+      if (!this.length) return
+
+      var elem = this[0],
+        // Get *real* offsetParent
+        offsetParent = this.offsetParent(),
+        // Get correct offsets
+        offset       = this.offset(),
+        parentOffset = rootNodeRE.test(offsetParent[0].nodeName) ? { top: 0, left: 0 } : offsetParent.offset()
+
+      // Subtract element margins
+      // note: when an element has margin: auto the offsetLeft and marginLeft
+      // are the same in Safari causing offset.left to incorrectly be 0
+      offset.top  -= parseFloat( $(elem).css('margin-top') ) || 0
+      offset.left -= parseFloat( $(elem).css('margin-left') ) || 0
+
+      // Add offsetParent borders
+      parentOffset.top  += parseFloat( $(offsetParent[0]).css('border-top-width') ) || 0
+      parentOffset.left += parseFloat( $(offsetParent[0]).css('border-left-width') ) || 0
+
+      // Subtract the two offsets
+      return {
+        top:  offset.top  - parentOffset.top,
+        left: offset.left - parentOffset.left
+      }
+    },
+    offsetParent: function() {
+      return this.map(function(){
+        var parent = this.offsetParent || document.body
+        while (parent && !rootNodeRE.test(parent.nodeName) && $(parent).css("position") == "static")
+          parent = parent.offsetParent
+        return parent
+      })
+    }
+  }
+
+  // for now
+  $.fn.detach = $.fn.remove
+
+  // Generate the `width` and `height` functions
+  ;['width', 'height'].forEach(function(dimension){
+    var dimensionProperty =
+      dimension.replace(/./, function(m){ return m[0].toUpperCase() })
+
+    $.fn[dimension] = function(value){
+      var offset, el = this[0]
+      if (value === undefined) return isWindow(el) ? el['inner' + dimensionProperty] :
+        isDocument(el) ? el.documentElement['scroll' + dimensionProperty] :
+        (offset = this.offset()) && offset[dimension]
+      else return this.each(function(idx){
+        el = $(this)
+        el.css(dimension, funcArg(this, value, idx, el[dimension]()))
+      })
+    }
+  })
+
+  function traverseNode(node, fun) {
+    fun(node)
+    for (var i = 0, len = node.childNodes.length; i < len; i++)
+      traverseNode(node.childNodes[i], fun)
+  }
+
+  // Generate the `after`, `prepend`, `before`, `append`,
+  // `insertAfter`, `insertBefore`, `appendTo`, and `prependTo` methods.
+  adjacencyOperators.forEach(function(operator, operatorIndex) {
+    var inside = operatorIndex % 2 //=> prepend, append
+
+    $.fn[operator] = function(){
+      // arguments can be nodes, arrays of nodes, Zepto objects and HTML strings
+      var argType, nodes = $.map(arguments, function(arg) {
+            var arr = []
+            argType = type(arg)
+            if (argType == "array") {
+              arg.forEach(function(el) {
+                if (el.nodeType !== undefined) return arr.push(el)
+                else if ($.zepto.isZ(el)) return arr = arr.concat(el.get())
+                arr = arr.concat(zepto.fragment(el))
+              })
+              return arr
+            }
+            return argType == "object" || arg == null ?
+              arg : zepto.fragment(arg)
+          }),
+          parent, copyByClone = this.length > 1
+      if (nodes.length < 1) return this
+
+      return this.each(function(_, target){
+        parent = inside ? target : target.parentNode
+
+        // convert all methods to a "before" operation
+        target = operatorIndex == 0 ? target.nextSibling :
+                 operatorIndex == 1 ? target.firstChild :
+                 operatorIndex == 2 ? target :
+                 null
+
+        var parentInDocument = $.contains(document.documentElement, parent)
+
+        nodes.forEach(function(node){
+          if (copyByClone) node = node.cloneNode(true)
+          else if (!parent) return $(node).remove()
+
+          parent.insertBefore(node, target)
+          if (parentInDocument) traverseNode(node, function(el){
+            if (el.nodeName != null && el.nodeName.toUpperCase() === 'SCRIPT' &&
+               (!el.type || el.type === 'text/javascript') && !el.src){
+              var target = el.ownerDocument ? el.ownerDocument.defaultView : window
+              target['eval'].call(target, el.innerHTML)
+            }
+          })
+        })
+      })
+    }
+
+    // after    => insertAfter
+    // prepend  => prependTo
+    // before   => insertBefore
+    // append   => appendTo
+    $.fn[inside ? operator+'To' : 'insert'+(operatorIndex ? 'Before' : 'After')] = function(html){
+      $(html)[operator](this)
+      return this
+    }
+  })
+
+  zepto.Z.prototype = Z.prototype = $.fn
+
+  // Export internal API functions in the `$.zepto` namespace
+  zepto.uniq = uniq
+  zepto.deserializeValue = deserializeValue
+  $.zepto = zepto
+
+  return $
+})()
+
+window.Zepto = Zepto
+window.$ === undefined && (window.$ = Zepto)
+
+;(function($){
+  var jsonpID = +new Date(),
+      document = window.document,
+      key,
+      name,
+      rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
+      scriptTypeRE = /^(?:text|application)\/javascript/i,
+      xmlTypeRE = /^(?:text|application)\/xml/i,
+      jsonType = 'application/json',
+      htmlType = 'text/html',
+      blankRE = /^\s*$/,
+      originAnchor = document.createElement('a')
+
+  originAnchor.href = window.location.href
+
+  // trigger a custom event and return false if it was cancelled
+  function triggerAndReturn(context, eventName, data) {
+    var event = $.Event(eventName)
+    $(context).trigger(event, data)
+    return !event.isDefaultPrevented()
+  }
+
+  // trigger an Ajax "global" event
+  function triggerGlobal(settings, context, eventName, data) {
+    if (settings.global) return triggerAndReturn(context || document, eventName, data)
+  }
+
+  // Number of active Ajax requests
+  $.active = 0
+
+  function ajaxStart(settings) {
+    if (settings.global && $.active++ === 0) triggerGlobal(settings, null, 'ajaxStart')
+  }
+  function ajaxStop(settings) {
+    if (settings.global && !(--$.active)) triggerGlobal(settings, null, 'ajaxStop')
+  }
+
+  // triggers an extra global event "ajaxBeforeSend" that's like "ajaxSend" but cancelable
+  function ajaxBeforeSend(xhr, settings) {
+    var context = settings.context
+    if (settings.beforeSend.call(context, xhr, settings) === false ||
+        triggerGlobal(settings, context, 'ajaxBeforeSend', [xhr, settings]) === false)
+      return false
+
+    triggerGlobal(settings, context, 'ajaxSend', [xhr, settings])
+  }
+  function ajaxSuccess(data, xhr, settings, deferred) {
+    var context = settings.context, status = 'success'
+    settings.success.call(context, data, status, xhr)
+    if (deferred) deferred.resolveWith(context, [data, status, xhr])
+    triggerGlobal(settings, context, 'ajaxSuccess', [xhr, settings, data])
+    ajaxComplete(status, xhr, settings)
+  }
+  // type: "timeout", "error", "abort", "parsererror"
+  function ajaxError(error, type, xhr, settings, deferred) {
+    var context = settings.context
+    settings.error.call(context, xhr, type, error)
+    if (deferred) deferred.rejectWith(context, [xhr, type, error])
+    triggerGlobal(settings, context, 'ajaxError', [xhr, settings, error || type])
+    ajaxComplete(type, xhr, settings)
+  }
+  // status: "success", "notmodified", "error", "timeout", "abort", "parsererror"
+  function ajaxComplete(status, xhr, settings) {
+    var context = settings.context
+    settings.complete.call(context, xhr, status)
+    triggerGlobal(settings, context, 'ajaxComplete', [xhr, settings])
+    ajaxStop(settings)
+  }
+
+  function ajaxDataFilter(data, type, settings) {
+    if (settings.dataFilter == empty) return data
+    var context = settings.context
+    return settings.dataFilter.call(context, data, type)
+  }
+
+  // Empty function, used as default callback
+  function empty() {}
+
+  $.ajaxJSONP = function(options, deferred){
+    if (!('type' in options)) return $.ajax(options)
+
+    var _callbackName = options.jsonpCallback,
+      callbackName = ($.isFunction(_callbackName) ?
+        _callbackName() : _callbackName) || ('Zepto' + (jsonpID++)),
+      script = document.createElement('script'),
+      originalCallback = window[callbackName],
+      responseData,
+      abort = function(errorType) {
+        $(script).triggerHandler('error', errorType || 'abort')
+      },
+      xhr = { abort: abort }, abortTimeout
+
+    if (deferred) deferred.promise(xhr)
+
+    $(script).on('load error', function(e, errorType){
+      clearTimeout(abortTimeout)
+      $(script).off().remove()
+
+      if (e.type == 'error' || !responseData) {
+        ajaxError(null, errorType || 'error', xhr, options, deferred)
+      } else {
+        ajaxSuccess(responseData[0], xhr, options, deferred)
+      }
+
+      window[callbackName] = originalCallback
+      if (responseData && $.isFunction(originalCallback))
+        originalCallback(responseData[0])
+
+      originalCallback = responseData = undefined
+    })
+
+    if (ajaxBeforeSend(xhr, options) === false) {
+      abort('abort')
+      return xhr
+    }
+
+    window[callbackName] = function(){
+      responseData = arguments
+    }
+
+    script.src = options.url.replace(/\?(.+)=\?/, '?$1=' + callbackName)
+    document.head.appendChild(script)
+
+    if (options.timeout > 0) abortTimeout = setTimeout(function(){
+      abort('timeout')
+    }, options.timeout)
+
+    return xhr
+  }
+
+  $.ajaxSettings = {
+    // Default type of request
+    type: 'GET',
+    // Callback that is executed before request
+    beforeSend: empty,
+    // Callback that is executed if the request succeeds
+    success: empty,
+    // Callback that is executed the the server drops error
+    error: empty,
+    // Callback that is executed on request complete (both: error and success)
+    complete: empty,
+    // The context for the callbacks
+    context: null,
+    // Whether to trigger "global" Ajax events
+    global: true,
+    // Transport
+    xhr: function () {
+      return new window.XMLHttpRequest()
+    },
+    // MIME types mapping
+    // IIS returns Javascript as "application/x-javascript"
+    accepts: {
+      script: 'text/javascript, application/javascript, application/x-javascript',
+      json:   jsonType,
+      xml:    'application/xml, text/xml',
+      html:   htmlType,
+      text:   'text/plain'
+    },
+    // Whether the request is to another domain
+    crossDomain: false,
+    // Default timeout
+    timeout: 0,
+    // Whether data should be serialized to string
+    processData: true,
+    // Whether the browser should be allowed to cache GET responses
+    cache: true,
+    //Used to handle the raw response data of XMLHttpRequest.
+    //This is a pre-filtering function to sanitize the response.
+    //The sanitized response should be returned
+    dataFilter: empty
+  }
+
+  function mimeToDataType(mime) {
+    if (mime) mime = mime.split(';', 2)[0]
+    return mime && ( mime == htmlType ? 'html' :
+      mime == jsonType ? 'json' :
+      scriptTypeRE.test(mime) ? 'script' :
+      xmlTypeRE.test(mime) && 'xml' ) || 'text'
+  }
+
+  function appendQuery(url, query) {
+    if (query == '') return url
+    return (url + '&' + query).replace(/[&?]{1,2}/, '?')
+  }
+
+  // serialize payload and append it to the URL for GET requests
+  function serializeData(options) {
+    if (options.processData && options.data && $.type(options.data) != "string")
+      options.data = $.param(options.data, options.traditional)
+    if (options.data && (!options.type || options.type.toUpperCase() == 'GET' || 'jsonp' == options.dataType))
+      options.url = appendQuery(options.url, options.data), options.data = undefined
+  }
+
+  $.ajax = function(options){
+    var settings = $.extend({}, options || {}),
+        deferred = $.Deferred && $.Deferred(),
+        urlAnchor, hashIndex
+    for (key in $.ajaxSettings) if (settings[key] === undefined) settings[key] = $.ajaxSettings[key]
+
+    ajaxStart(settings)
+
+    if (!settings.crossDomain) {
+      urlAnchor = document.createElement('a')
+      urlAnchor.href = settings.url
+      // cleans up URL for .href (IE only), see https://github.com/madrobby/zepto/pull/1049
+      urlAnchor.href = urlAnchor.href
+      settings.crossDomain = (originAnchor.protocol + '//' + originAnchor.host) !== (urlAnchor.protocol + '//' + urlAnchor.host)
+    }
+
+    if (!settings.url) settings.url = window.location.toString()
+    if ((hashIndex = settings.url.indexOf('#')) > -1) settings.url = settings.url.slice(0, hashIndex)
+    serializeData(settings)
+
+    var dataType = settings.dataType, hasPlaceholder = /\?.+=\?/.test(settings.url)
+    if (hasPlaceholder) dataType = 'jsonp'
+
+    if (settings.cache === false || (
+         (!options || options.cache !== true) &&
+         ('script' == dataType || 'jsonp' == dataType)
+        ))
+      settings.url = appendQuery(settings.url, '_=' + Date.now())
+
+    if ('jsonp' == dataType) {
+      if (!hasPlaceholder)
+        settings.url = appendQuery(settings.url,
+          settings.jsonp ? (settings.jsonp + '=?') : settings.jsonp === false ? '' : 'callback=?')
+      return $.ajaxJSONP(settings, deferred)
+    }
+
+    var mime = settings.accepts[dataType],
+        headers = { },
+        setHeader = function(name, value) { headers[name.toLowerCase()] = [name, value] },
+        protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol,
+        xhr = settings.xhr(),
+        nativeSetHeader = xhr.setRequestHeader,
+        abortTimeout
+
+    if (deferred) deferred.promise(xhr)
+
+    if (!settings.crossDomain) setHeader('X-Requested-With', 'XMLHttpRequest')
+    setHeader('Accept', mime || '*/*')
+    if (mime = settings.mimeType || mime) {
+      if (mime.indexOf(',') > -1) mime = mime.split(',', 2)[0]
+      xhr.overrideMimeType && xhr.overrideMimeType(mime)
+    }
+    if (settings.contentType || (settings.contentType !== false && settings.data && settings.type.toUpperCase() != 'GET'))
+      setHeader('Content-Type', settings.contentType || 'application/x-www-form-urlencoded')
+
+    if (settings.headers) for (name in settings.headers) setHeader(name, settings.headers[name])
+    xhr.setRequestHeader = setHeader
+
+    xhr.onreadystatechange = function(){
+      if (xhr.readyState == 4) {
+        xhr.onreadystatechange = empty
+        clearTimeout(abortTimeout)
+        var result, error = false
+        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304 || (xhr.status == 0 && protocol == 'file:')) {
+          dataType = dataType || mimeToDataType(settings.mimeType || xhr.getResponseHeader('content-type'))
+
+          if (xhr.responseType == 'arraybuffer' || xhr.responseType == 'blob')
+            result = xhr.response
+          else {
+            result = xhr.responseText
+
+            try {
+              // http://perfectionkills.com/global-eval-what-are-the-options/
+              // sanitize response accordingly if data filter callback provided
+              result = ajaxDataFilter(result, dataType, settings)
+              if (dataType == 'script')    (1,eval)(result)
+              else if (dataType == 'xml')  result = xhr.responseXML
+              else if (dataType == 'json') result = blankRE.test(result) ? null : $.parseJSON(result)
+            } catch (e) { error = e }
+
+            if (error) return ajaxError(error, 'parsererror', xhr, settings, deferred)
+          }
+
+          ajaxSuccess(result, xhr, settings, deferred)
+        } else {
+          ajaxError(xhr.statusText || null, xhr.status ? 'error' : 'abort', xhr, settings, deferred)
+        }
+      }
+    }
+
+    if (ajaxBeforeSend(xhr, settings) === false) {
+      xhr.abort()
+      ajaxError(null, 'abort', xhr, settings, deferred)
+      return xhr
+    }
+
+    var async = 'async' in settings ? settings.async : true
+    xhr.open(settings.type, settings.url, async, settings.username, settings.password)
+
+    if (settings.xhrFields) for (name in settings.xhrFields) xhr[name] = settings.xhrFields[name]
+
+    for (name in headers) nativeSetHeader.apply(xhr, headers[name])
+
+    if (settings.timeout > 0) abortTimeout = setTimeout(function(){
+        xhr.onreadystatechange = empty
+        xhr.abort()
+        ajaxError(null, 'timeout', xhr, settings, deferred)
+      }, settings.timeout)
+
+    // avoid sending empty string (#319)
+    xhr.send(settings.data ? settings.data : null)
+    return xhr
+  }
+
+  // handle optional data/success arguments
+  function parseArguments(url, data, success, dataType) {
+    if ($.isFunction(data)) dataType = success, success = data, data = undefined
+    if (!$.isFunction(success)) dataType = success, success = undefined
+    return {
+      url: url
+    , data: data
+    , success: success
+    , dataType: dataType
+    }
+  }
+
+  $.get = function(/* url, data, success, dataType */){
+    return $.ajax(parseArguments.apply(null, arguments))
+  }
+
+  $.post = function(/* url, data, success, dataType */){
+    var options = parseArguments.apply(null, arguments)
+    options.type = 'POST'
+    return $.ajax(options)
+  }
+
+  $.getJSON = function(/* url, data, success */){
+    var options = parseArguments.apply(null, arguments)
+    options.dataType = 'json'
+    return $.ajax(options)
+  }
+
+  $.fn.load = function(url, data, success){
+    if (!this.length) return this
+    var self = this, parts = url.split(/\s/), selector,
+        options = parseArguments(url, data, success),
+        callback = options.success
+    if (parts.length > 1) options.url = parts[0], selector = parts[1]
+    options.success = function(response){
+      self.html(selector ?
+        $('<div>').html(response.replace(rscript, "")).find(selector)
+        : response)
+      callback && callback.apply(self, arguments)
+    }
+    $.ajax(options)
+    return this
+  }
+
+  var escape = encodeURIComponent
+
+  function serialize(params, obj, traditional, scope){
+    var type, array = $.isArray(obj), hash = $.isPlainObject(obj)
+    $.each(obj, function(key, value) {
+      type = $.type(value)
+      if (scope) key = traditional ? scope :
+        scope + '[' + (hash || type == 'object' || type == 'array' ? key : '') + ']'
+      // handle data in serializeArray() format
+      if (!scope && array) params.add(value.name, value.value)
+      // recurse into nested objects
+      else if (type == "array" || (!traditional && type == "object"))
+        serialize(params, value, traditional, key)
+      else params.add(key, value)
+    })
+  }
+
+  $.param = function(obj, traditional){
+    var params = []
+    params.add = function(key, value) {
+      if ($.isFunction(value)) value = value()
+      if (value == null) value = ""
+      this.push(escape(key) + '=' + escape(value))
+    }
+    serialize(params, obj, traditional)
+    return params.join('&').replace(/%20/g, '+')
+  }
+})(Zepto)
+
+;(function($){
+  // Create a collection of callbacks to be fired in a sequence, with configurable behaviour
+  // Option flags:
+  //   - once: Callbacks fired at most one time.
+  //   - memory: Remember the most recent context and arguments
+  //   - stopOnFalse: Cease iterating over callback list
+  //   - unique: Permit adding at most one instance of the same callback
+  $.Callbacks = function(options) {
+    options = $.extend({}, options)
+
+    var memory, // Last fire value (for non-forgettable lists)
+        fired,  // Flag to know if list was already fired
+        firing, // Flag to know if list is currently firing
+        firingStart, // First callback to fire (used internally by add and fireWith)
+        firingLength, // End of the loop when firing
+        firingIndex, // Index of currently firing callback (modified by remove if needed)
+        list = [], // Actual callback list
+        stack = !options.once && [], // Stack of fire calls for repeatable lists
+        fire = function(data) {
+          memory = options.memory && data
+          fired = true
+          firingIndex = firingStart || 0
+          firingStart = 0
+          firingLength = list.length
+          firing = true
+          for ( ; list && firingIndex < firingLength ; ++firingIndex ) {
+            if (list[firingIndex].apply(data[0], data[1]) === false && options.stopOnFalse) {
+              memory = false
+              break
+            }
+          }
+          firing = false
+          if (list) {
+            if (stack) stack.length && fire(stack.shift())
+            else if (memory) list.length = 0
+            else Callbacks.disable()
+          }
+        },
+>>>>>>> draft skinnier version
+
+        Callbacks = {
+          add: function() {
+            if (list) {
+              var start = list.length,
+                  add = function(args) {
+                    $.each(args, function(_, arg){
+                      if (typeof arg === "function") {
+                        if (!options.unique || !Callbacks.has(arg)) list.push(arg)
+                      }
+                      else if (arg && arg.length && typeof arg !== 'string') add(arg)
+                    })
+                  }
+              add(arguments)
+              if (firing) firingLength = list.length
+              else if (memory) {
+                firingStart = start
+                fire(memory)
+              }
+            }
+            return this
+          },
+          remove: function() {
+            if (list) {
+              $.each(arguments, function(_, arg){
+                var index
+                while ((index = $.inArray(arg, list, index)) > -1) {
+                  list.splice(index, 1)
+                  // Handle firing indexes
+                  if (firing) {
+                    if (index <= firingLength) --firingLength
+                    if (index <= firingIndex) --firingIndex
+                  }
+                }
+              })
+            }
+            return this
+          },
+          has: function(fn) {
+            return !!(list && (fn ? $.inArray(fn, list) > -1 : list.length))
+          },
+          empty: function() {
+            firingLength = list.length = 0
+            return this
+          },
+          disable: function() {
+            list = stack = memory = undefined
+            return this
+          },
+          disabled: function() {
+            return !list
+          },
+          lock: function() {
+            stack = undefined
+            if (!memory) Callbacks.disable()
+            return this
+          },
+          locked: function() {
+            return !stack
+          },
+          fireWith: function(context, args) {
+            if (list && (!fired || stack)) {
+              args = args || []
+              args = [context, args.slice ? args.slice() : args]
+              if (firing) stack.push(args)
+              else fire(args)
+            }
+            return this
+          },
+          fire: function() {
+            return Callbacks.fireWith(this, arguments)
+          },
+          fired: function() {
+            return !!fired
+          }
+        }
+
+<<<<<<< HEAD
   HLS.prototype.getStartTimeOffset = function getStartTimeOffset() {
     return this._startTime;
   };
@@ -13992,588 +16583,706 @@ function EventEmitter() {
   this._maxListeners = this._maxListeners || undefined;
 }
 module.exports = EventEmitter;
+=======
+    return Callbacks
+  }
+})(Zepto)
 
-// Backwards-compat with node 0.10.x
-EventEmitter.EventEmitter = EventEmitter;
+;(function($){
+  var slice = Array.prototype.slice
 
-EventEmitter.prototype._events = undefined;
-EventEmitter.prototype._maxListeners = undefined;
+  function Deferred(func) {
+    var tuples = [
+          // action, add listener, listener list, final state
+          [ "resolve", "done", $.Callbacks({once:1, memory:1}), "resolved" ],
+          [ "reject", "fail", $.Callbacks({once:1, memory:1}), "rejected" ],
+          [ "notify", "progress", $.Callbacks({memory:1}) ]
+        ],
+        state = "pending",
+        promise = {
+          state: function() {
+            return state
+          },
+          always: function() {
+            deferred.done(arguments).fail(arguments)
+            return this
+          },
+          then: function(/* fnDone [, fnFailed [, fnProgress]] */) {
+            var fns = arguments
+            return Deferred(function(defer){
+              $.each(tuples, function(i, tuple){
+                var fn = $.isFunction(fns[i]) && fns[i]
+                deferred[tuple[1]](function(){
+                  var returned = fn && fn.apply(this, arguments)
+                  if (returned && $.isFunction(returned.promise)) {
+                    returned.promise()
+                      .done(defer.resolve)
+                      .fail(defer.reject)
+                      .progress(defer.notify)
+                  } else {
+                    var context = this === promise ? defer.promise() : this,
+                        values = fn ? [returned] : arguments
+                    defer[tuple[0] + "With"](context, values)
+                  }
+                })
+              })
+              fns = null
+            }).promise()
+          },
 
-// By default EventEmitters will print a warning if more than 10 listeners are
-// added to it. This is a useful default which helps finding memory leaks.
-EventEmitter.defaultMaxListeners = 10;
+          promise: function(obj) {
+            return obj != null ? $.extend( obj, promise ) : promise
+          }
+        },
+        deferred = {}
 
-// Obviously not all Emitters should be limited to 10. This function allows
-// that to be increased. Set to zero for unlimited.
-EventEmitter.prototype.setMaxListeners = function(n) {
-  if (!isNumber(n) || n < 0 || isNaN(n))
-    throw TypeError('n must be a positive number');
-  this._maxListeners = n;
-  return this;
-};
+    $.each(tuples, function(i, tuple){
+      var list = tuple[2],
+          stateString = tuple[3]
 
-EventEmitter.prototype.emit = function(type) {
-  var er, handler, len, args, i, listeners;
+      promise[tuple[1]] = list.add
 
-  if (!this._events)
-    this._events = {};
-
-  // If there is no 'error' event listener then throw.
-  if (type === 'error') {
-    if (!this._events.error ||
-        (isObject(this._events.error) && !this._events.error.length)) {
-      er = arguments[1];
-      if (er instanceof Error) {
-        throw er; // Unhandled 'error' event
-      } else {
-        // At least give some kind of context to the user
-        var err = new Error('Uncaught, unspecified "error" event. (' + er + ')');
-        err.context = er;
-        throw err;
+      if (stateString) {
+        list.add(function(){
+          state = stateString
+        }, tuples[i^1][2].disable, tuples[2][2].lock)
       }
-    }
+
+      deferred[tuple[0]] = function(){
+        deferred[tuple[0] + "With"](this === deferred ? promise : this, arguments)
+        return this
+      }
+      deferred[tuple[0] + "With"] = list.fireWith
+    })
+
+    promise.promise(deferred)
+    if (func) func.call(deferred, deferred)
+    return deferred
   }
 
-  handler = this._events[type];
-
-  if (isUndefined(handler))
-    return false;
-
-  if (isFunction(handler)) {
-    switch (arguments.length) {
-      // fast cases
-      case 1:
-        handler.call(this);
-        break;
-      case 2:
-        handler.call(this, arguments[1]);
-        break;
-      case 3:
-        handler.call(this, arguments[1], arguments[2]);
-        break;
-      // slower
-      default:
-        args = Array.prototype.slice.call(arguments, 1);
-        handler.apply(this, args);
-    }
-  } else if (isObject(handler)) {
-    args = Array.prototype.slice.call(arguments, 1);
-    listeners = handler.slice();
-    len = listeners.length;
-    for (i = 0; i < len; i++)
-      listeners[i].apply(this, args);
-  }
-
-  return true;
-};
-
-EventEmitter.prototype.addListener = function(type, listener) {
-  var m;
-
-  if (!isFunction(listener))
-    throw TypeError('listener must be a function');
-
-  if (!this._events)
-    this._events = {};
-
-  // To avoid recursion in the case that type === "newListener"! Before
-  // adding it to the listeners, first emit "newListener".
-  if (this._events.newListener)
-    this.emit('newListener', type,
-              isFunction(listener.listener) ?
-              listener.listener : listener);
-
-  if (!this._events[type])
-    // Optimize the case of one listener. Don't need the extra array object.
-    this._events[type] = listener;
-  else if (isObject(this._events[type]))
-    // If we've already got an array, just append.
-    this._events[type].push(listener);
-  else
-    // Adding the second element, need to change to array.
-    this._events[type] = [this._events[type], listener];
-
-  // Check for listener leak
-  if (isObject(this._events[type]) && !this._events[type].warned) {
-    if (!isUndefined(this._maxListeners)) {
-      m = this._maxListeners;
-    } else {
-      m = EventEmitter.defaultMaxListeners;
-    }
-
-    if (m && m > 0 && this._events[type].length > m) {
-      this._events[type].warned = true;
-      console.error('(node) warning: possible EventEmitter memory ' +
-                    'leak detected. %d listeners added. ' +
-                    'Use emitter.setMaxListeners() to increase limit.',
-                    this._events[type].length);
-      if (typeof console.trace === 'function') {
-        // not supported in IE 10
-        console.trace();
-      }
-    }
-  }
-
-  return this;
-};
-
-EventEmitter.prototype.on = EventEmitter.prototype.addListener;
-
-EventEmitter.prototype.once = function(type, listener) {
-  if (!isFunction(listener))
-    throw TypeError('listener must be a function');
-
-  var fired = false;
-
-  function g() {
-    this.removeListener(type, g);
-
-    if (!fired) {
-      fired = true;
-      listener.apply(this, arguments);
-    }
-  }
-
-  g.listener = listener;
-  this.on(type, g);
-
-  return this;
-};
-
-// emits a 'removeListener' event iff the listener was removed
-EventEmitter.prototype.removeListener = function(type, listener) {
-  var list, position, length, i;
-
-  if (!isFunction(listener))
-    throw TypeError('listener must be a function');
-
-  if (!this._events || !this._events[type])
-    return this;
-
-  list = this._events[type];
-  length = list.length;
-  position = -1;
-
-  if (list === listener ||
-      (isFunction(list.listener) && list.listener === listener)) {
-    delete this._events[type];
-    if (this._events.removeListener)
-      this.emit('removeListener', type, listener);
-
-  } else if (isObject(list)) {
-    for (i = length; i-- > 0;) {
-      if (list[i] === listener ||
-          (list[i].listener && list[i].listener === listener)) {
-        position = i;
-        break;
-      }
-    }
-
-    if (position < 0)
-      return this;
-
-    if (list.length === 1) {
-      list.length = 0;
-      delete this._events[type];
-    } else {
-      list.splice(position, 1);
-    }
-
-    if (this._events.removeListener)
-      this.emit('removeListener', type, listener);
-  }
-
-  return this;
-};
-
-EventEmitter.prototype.removeAllListeners = function(type) {
-  var key, listeners;
-
-  if (!this._events)
-    return this;
-
-  // not listening for removeListener, no need to emit
-  if (!this._events.removeListener) {
-    if (arguments.length === 0)
-      this._events = {};
-    else if (this._events[type])
-      delete this._events[type];
-    return this;
-  }
-
-  // emit removeListener for all listeners on all events
-  if (arguments.length === 0) {
-    for (key in this._events) {
-      if (key === 'removeListener') continue;
-      this.removeAllListeners(key);
-    }
-    this.removeAllListeners('removeListener');
-    this._events = {};
-    return this;
-  }
-
-  listeners = this._events[type];
-
-  if (isFunction(listeners)) {
-    this.removeListener(type, listeners);
-  } else if (listeners) {
-    // LIFO order
-    while (listeners.length)
-      this.removeListener(type, listeners[listeners.length - 1]);
-  }
-  delete this._events[type];
-
-  return this;
-};
-
-EventEmitter.prototype.listeners = function(type) {
-  var ret;
-  if (!this._events || !this._events[type])
-    ret = [];
-  else if (isFunction(this._events[type]))
-    ret = [this._events[type]];
-  else
-    ret = this._events[type].slice();
-  return ret;
-};
-
-EventEmitter.prototype.listenerCount = function(type) {
-  if (this._events) {
-    var evlistener = this._events[type];
-
-    if (isFunction(evlistener))
-      return 1;
-    else if (evlistener)
-      return evlistener.length;
-  }
-  return 0;
-};
-
-EventEmitter.listenerCount = function(emitter, type) {
-  return emitter.listenerCount(type);
-};
-
-function isFunction(arg) {
-  return typeof arg === 'function';
-}
-
-function isNumber(arg) {
-  return typeof arg === 'number';
-}
-
-function isObject(arg) {
-  return typeof arg === 'object' && arg !== null;
-}
-
-function isUndefined(arg) {
-  return arg === void 0;
-}
-
-},{}],2:[function(_dereq_,module,exports){
-// see https://tools.ietf.org/html/rfc1808
-
-/* jshint ignore:start */
-(function(root) { 
-/* jshint ignore:end */
-
-  var URL_REGEX = /^((?:[^\/;?#]+:)?)(\/\/[^\/\;?#]*)?(.*?)??(;.*?)?(\?.*?)?(#.*?)?$/;
-  var FIRST_SEGMENT_REGEX = /^([^\/;?#]*)(.*)$/;
-  var SLASH_DOT_REGEX = /(?:\/|^)\.(?=\/)/g;
-  var SLASH_DOT_DOT_REGEX = /(?:\/|^)\.\.\/(?!\.\.\/).*?(?=\/)/g;
-
-  var URLToolkit = { // jshint ignore:line
-    // If opts.alwaysNormalize is true then the path will always be normalized even when it starts with / or //
-    // E.g
-    // With opts.alwaysNormalize = false (default, spec compliant)
-    // http://a.com/b/cd + /e/f/../g => http://a.com/e/f/../g
-    // With opts.alwaysNormalize = true (default, not spec compliant)
-    // http://a.com/b/cd + /e/f/../g => http://a.com/e/g
-    buildAbsoluteURL: function(baseURL, relativeURL, opts) {
-      opts = opts || {};
-      // remove any remaining space and CRLF
-      baseURL = baseURL.trim();
-      relativeURL = relativeURL.trim();
-      if (!relativeURL) {
-        // 2a) If the embedded URL is entirely empty, it inherits the
-        // entire base URL (i.e., is set equal to the base URL)
-        // and we are done.
-        if (!opts.alwaysNormalize) {
-          return baseURL;
-        }
-        var basePartsForNormalise = this.parseURL(baseURL);
-        if (!baseParts) {
-          throw new Error('Error trying to parse base URL.');
-        }
-        basePartsForNormalise.path = URLToolkit.normalizePath(basePartsForNormalise.path);
-        return URLToolkit.buildURLFromParts(basePartsForNormalise);
-      }
-      var relativeParts = this.parseURL(relativeURL);
-      if (!relativeParts) {
-        throw new Error('Error trying to parse relative URL.');
-      }
-      if (relativeParts.scheme) {
-        // 2b) If the embedded URL starts with a scheme name, it is
-        // interpreted as an absolute URL and we are done.
-        if (!opts.alwaysNormalize) {
-          return relativeURL;
-        }
-        relativeParts.path = URLToolkit.normalizePath(relativeParts.path);
-        return URLToolkit.buildURLFromParts(relativeParts);
-      }
-      var baseParts = this.parseURL(baseURL);
-      if (!baseParts) {
-        throw new Error('Error trying to parse base URL.');
-      }
-      if (!baseParts.netLoc && baseParts.path && baseParts.path[0] !== '/') {
-        // If netLoc missing and path doesn't start with '/', assume everthing before the first '/' is the netLoc
-        // This causes 'example.com/a' to be handled as '//example.com/a' instead of '/example.com/a'
-        var pathParts = FIRST_SEGMENT_REGEX.exec(baseParts.path);
-        baseParts.netLoc = pathParts[1];
-        baseParts.path = pathParts[2];
-      }
-      if (baseParts.netLoc && !baseParts.path) {
-        baseParts.path = '/';
-      }
-      var builtParts = {
-        // 2c) Otherwise, the embedded URL inherits the scheme of
-        // the base URL.
-        scheme: baseParts.scheme,
-        netLoc: relativeParts.netLoc,
-        path: null,
-        params: relativeParts.params,
-        query: relativeParts.query,
-        fragment: relativeParts.fragment
-      };
-      if (!relativeParts.netLoc) {
-        // 3) If the embedded URL's <net_loc> is non-empty, we skip to
-        // Step 7.  Otherwise, the embedded URL inherits the <net_loc>
-        // (if any) of the base URL.
-        builtParts.netLoc = baseParts.netLoc;
-        // 4) If the embedded URL path is preceded by a slash "/", the
-        // path is not relative and we skip to Step 7.
-        if (relativeParts.path[0] !== '/') {
-          if (!relativeParts.path) {
-            // 5) If the embedded URL path is empty (and not preceded by a
-            // slash), then the embedded URL inherits the base URL path
-            builtParts.path = baseParts.path;
-            // 5a) if the embedded URL's <params> is non-empty, we skip to
-            // step 7; otherwise, it inherits the <params> of the base
-            // URL (if any) and
-            if (!relativeParts.params) {
-              builtParts.params = baseParts.params;
-              // 5b) if the embedded URL's <query> is non-empty, we skip to
-              // step 7; otherwise, it inherits the <query> of the base
-              // URL (if any) and we skip to step 7.
-              if (!relativeParts.query) {
-                builtParts.query = baseParts.query;
-              }
+  $.when = function(sub) {
+    var resolveValues = slice.call(arguments),
+        len = resolveValues.length,
+        i = 0,
+        remain = len !== 1 || (sub && $.isFunction(sub.promise)) ? len : 0,
+        deferred = remain === 1 ? sub : Deferred(),
+        progressValues, progressContexts, resolveContexts,
+        updateFn = function(i, ctx, val){
+          return function(value){
+            ctx[i] = this
+            val[i] = arguments.length > 1 ? slice.call(arguments) : value
+            if (val === progressValues) {
+              deferred.notifyWith(ctx, val)
+            } else if (!(--remain)) {
+              deferred.resolveWith(ctx, val)
             }
-          } else {
-            // 6) The last segment of the base URL's path (anything
-            // following the rightmost slash "/", or the entire path if no
-            // slash is present) is removed and the embedded URL's path is
-            // appended in its place.
-            var baseURLPath = baseParts.path;
-            var newPath = baseURLPath.substring(0, baseURLPath.lastIndexOf('/') + 1) + relativeParts.path;
-            builtParts.path = URLToolkit.normalizePath(newPath);
           }
         }
-      }
-      if (builtParts.path === null) {
-        builtParts.path = opts.alwaysNormalize ? URLToolkit.normalizePath(relativeParts.path) : relativeParts.path;
-      }
-      return URLToolkit.buildURLFromParts(builtParts);
-    },
-    parseURL: function(url) {
-      var parts = URL_REGEX.exec(url);
-      if (!parts) {
-        return null;
-      }
-      return {
-        scheme: parts[1] || '',
-        netLoc: parts[2] || '',
-        path: parts[3] || '',
-        params: parts[4] || '',
-        query: parts[5] || '',
-        fragment: parts[6] || ''
-      };
-    },
-    normalizePath: function(path) {
-      // The following operations are
-      // then applied, in order, to the new path:
-      // 6a) All occurrences of "./", where "." is a complete path
-      // segment, are removed.
-      // 6b) If the path ends with "." as a complete path segment,
-      // that "." is removed.
-      path = path.split('').reverse().join('').replace(SLASH_DOT_REGEX, '');
-      // 6c) All occurrences of "<segment>/../", where <segment> is a
-      // complete path segment not equal to "..", are removed.
-      // Removal of these path segments is performed iteratively,
-      // removing the leftmost matching pattern on each iteration,
-      // until no matching pattern remains.
-      // 6d) If the path ends with "<segment>/..", where <segment> is a
-      // complete path segment not equal to "..", that
-      // "<segment>/.." is removed.
-      while (path.length !== (path = path.replace(SLASH_DOT_DOT_REGEX, '')).length) {} // jshint ignore:line
-      return path.split('').reverse().join('');
-    },
-    buildURLFromParts: function(parts) {
-      return parts.scheme + parts.netLoc + parts.path + parts.params + parts.query + parts.fragment;
-    }
-  };
 
-/* jshint ignore:start */
-  if(typeof exports === 'object' && typeof module === 'object')
-    module.exports = URLToolkit;
-  else if(typeof define === 'function' && define.amd)
-    define([], function() { return URLToolkit; });
-  else if(typeof exports === 'object')
-    exports["URLToolkit"] = URLToolkit;
-  else
-    root["URLToolkit"] = URLToolkit;
-})(this);
-/* jshint ignore:end */
-
-},{}],3:[function(_dereq_,module,exports){
-var bundleFn = arguments[3];
-var sources = arguments[4];
-var cache = arguments[5];
-
-var stringify = JSON.stringify;
-
-module.exports = function (fn, options) {
-    var wkey;
-    var cacheKeys = Object.keys(cache);
-
-    for (var i = 0, l = cacheKeys.length; i < l; i++) {
-        var key = cacheKeys[i];
-        var exp = cache[key].exports;
-        // Using babel as a transpiler to use esmodule, the export will always
-        // be an object with the default export as a property of it. To ensure
-        // the existing api and babel esmodule exports are both supported we
-        // check for both
-        if (exp === fn || exp && exp.default === fn) {
-            wkey = key;
-            break;
+    if (len > 1) {
+      progressValues = new Array(len)
+      progressContexts = new Array(len)
+      resolveContexts = new Array(len)
+      for ( ; i < len; ++i ) {
+        if (resolveValues[i] && $.isFunction(resolveValues[i].promise)) {
+          resolveValues[i].promise()
+            .done(updateFn(i, resolveContexts, resolveValues))
+            .fail(deferred.reject)
+            .progress(updateFn(i, progressContexts, progressValues))
+        } else {
+          --remain
         }
+      }
     }
+    if (!remain) deferred.resolveWith(resolveContexts, resolveValues)
+    return deferred.promise()
+  }
 
-    if (!wkey) {
-        wkey = Math.floor(Math.pow(16, 8) * Math.random()).toString(16);
-        var wcache = {};
-        for (var i = 0, l = cacheKeys.length; i < l; i++) {
-            var key = cacheKeys[i];
-            wcache[key] = key;
+  $.Deferred = Deferred
+})(Zepto)
+
+;(function($){
+  var _zid = 1, undefined,
+      slice = Array.prototype.slice,
+      isFunction = $.isFunction,
+      isString = function(obj){ return typeof obj == 'string' },
+      handlers = {},
+      specialEvents={},
+      focusinSupported = 'onfocusin' in window,
+      focus = { focus: 'focusin', blur: 'focusout' },
+      hover = { mouseenter: 'mouseover', mouseleave: 'mouseout' }
+
+  specialEvents.click = specialEvents.mousedown = specialEvents.mouseup = specialEvents.mousemove = 'MouseEvents'
+
+  function zid(element) {
+    return element._zid || (element._zid = _zid++)
+  }
+  function findHandlers(element, event, fn, selector) {
+    event = parse(event)
+    if (event.ns) var matcher = matcherFor(event.ns)
+    return (handlers[zid(element)] || []).filter(function(handler) {
+      return handler
+        && (!event.e  || handler.e == event.e)
+        && (!event.ns || matcher.test(handler.ns))
+        && (!fn       || zid(handler.fn) === zid(fn))
+        && (!selector || handler.sel == selector)
+    })
+  }
+  function parse(event) {
+    var parts = ('' + event).split('.')
+    return {e: parts[0], ns: parts.slice(1).sort().join(' ')}
+  }
+  function matcherFor(ns) {
+    return new RegExp('(?:^| )' + ns.replace(' ', ' .* ?') + '(?: |$)')
+  }
+
+  function eventCapture(handler, captureSetting) {
+    return handler.del &&
+      (!focusinSupported && (handler.e in focus)) ||
+      !!captureSetting
+  }
+
+  function realEvent(type) {
+    return hover[type] || (focusinSupported && focus[type]) || type
+  }
+
+  function add(element, events, fn, data, selector, delegator, capture){
+    var id = zid(element), set = (handlers[id] || (handlers[id] = []))
+    events.split(/\s/).forEach(function(event){
+      if (event == 'ready') return $(document).ready(fn)
+      var handler   = parse(event)
+      handler.fn    = fn
+      handler.sel   = selector
+      // emulate mouseenter, mouseleave
+      if (handler.e in hover) fn = function(e){
+        var related = e.relatedTarget
+        if (!related || (related !== this && !$.contains(this, related)))
+          return handler.fn.apply(this, arguments)
+      }
+      handler.del   = delegator
+      var callback  = delegator || fn
+      handler.proxy = function(e){
+        e = compatible(e)
+        if (e.isImmediatePropagationStopped()) return
+        e.data = data
+        var result = callback.apply(element, e._args == undefined ? [e] : [e].concat(e._args))
+        if (result === false) e.preventDefault(), e.stopPropagation()
+        return result
+      }
+      handler.i = set.length
+      set.push(handler)
+      if ('addEventListener' in element)
+        element.addEventListener(realEvent(handler.e), handler.proxy, eventCapture(handler, capture))
+    })
+  }
+  function remove(element, events, fn, selector, capture){
+    var id = zid(element)
+    ;(events || '').split(/\s/).forEach(function(event){
+      findHandlers(element, event, fn, selector).forEach(function(handler){
+        delete handlers[id][handler.i]
+      if ('removeEventListener' in element)
+        element.removeEventListener(realEvent(handler.e), handler.proxy, eventCapture(handler, capture))
+      })
+    })
+  }
+
+  $.event = { add: add, remove: remove }
+
+  $.proxy = function(fn, context) {
+    var args = (2 in arguments) && slice.call(arguments, 2)
+    if (isFunction(fn)) {
+      var proxyFn = function(){ return fn.apply(context, args ? args.concat(slice.call(arguments)) : arguments) }
+      proxyFn._zid = zid(fn)
+      return proxyFn
+    } else if (isString(context)) {
+      if (args) {
+        args.unshift(fn[context], fn)
+        return $.proxy.apply(null, args)
+      } else {
+        return $.proxy(fn[context], fn)
+      }
+    } else {
+      throw new TypeError("expected function")
+    }
+  }
+
+  $.fn.bind = function(event, data, callback){
+    return this.on(event, data, callback)
+  }
+  $.fn.unbind = function(event, callback){
+    return this.off(event, callback)
+  }
+  $.fn.one = function(event, selector, data, callback){
+    return this.on(event, selector, data, callback, 1)
+  }
+
+  var returnTrue = function(){return true},
+      returnFalse = function(){return false},
+      ignoreProperties = /^([A-Z]|returnValue$|layer[XY]$|webkitMovement[XY]$)/,
+      eventMethods = {
+        preventDefault: 'isDefaultPrevented',
+        stopImmediatePropagation: 'isImmediatePropagationStopped',
+        stopPropagation: 'isPropagationStopped'
+      }
+
+  function compatible(event, source) {
+    if (source || !event.isDefaultPrevented) {
+      source || (source = event)
+
+      $.each(eventMethods, function(name, predicate) {
+        var sourceMethod = source[name]
+        event[name] = function(){
+          this[predicate] = returnTrue
+          return sourceMethod && sourceMethod.apply(source, arguments)
         }
-        sources[wkey] = [
-            Function(['require','module','exports'], '(' + fn + ')(self)'),
-            wcache
-        ];
+        event[predicate] = returnFalse
+      })
+
+      event.timeStamp || (event.timeStamp = Date.now())
+
+      if (source.defaultPrevented !== undefined ? source.defaultPrevented :
+          'returnValue' in source ? source.returnValue === false :
+          source.getPreventDefault && source.getPreventDefault())
+        event.isDefaultPrevented = returnTrue
     }
-    var skey = Math.floor(Math.pow(16, 8) * Math.random()).toString(16);
+    return event
+  }
 
-    var scache = {}; scache[wkey] = wkey;
-    sources[skey] = [
-        Function(['require'], (
-            // try to call default if defined to also support babel esmodule
-            // exports
-            'var f = require(' + stringify(wkey) + ');' +
-            '(f.default ? f.default : f)(self);'
-        )),
-        scache
-    ];
+  function createProxy(event) {
+    var key, proxy = { originalEvent: event }
+    for (key in event)
+      if (!ignoreProperties.test(key) && event[key] !== undefined) proxy[key] = event[key]
 
-    var workerSources = {};
-    resolveSources(skey);
+    return compatible(proxy, event)
+  }
 
-    function resolveSources(key) {
-        workerSources[key] = true;
+  $.fn.delegate = function(selector, event, callback){
+    return this.on(event, selector, callback)
+  }
+  $.fn.undelegate = function(selector, event, callback){
+    return this.off(event, selector, callback)
+  }
 
-        for (var depPath in sources[key][1]) {
-            var depKey = sources[key][1][depPath];
-            if (!workerSources[depKey]) {
-                resolveSources(depKey);
-            }
+  $.fn.live = function(event, callback){
+    $(document.body).delegate(this.selector, event, callback)
+    return this
+  }
+  $.fn.die = function(event, callback){
+    $(document.body).undelegate(this.selector, event, callback)
+    return this
+  }
+
+  $.fn.on = function(event, selector, data, callback, one){
+    var autoRemove, delegator, $this = this
+    if (event && !isString(event)) {
+      $.each(event, function(type, fn){
+        $this.on(type, selector, data, fn, one)
+      })
+      return $this
+    }
+
+    if (!isString(selector) && !isFunction(callback) && callback !== false)
+      callback = data, data = selector, selector = undefined
+    if (callback === undefined || data === false)
+      callback = data, data = undefined
+
+    if (callback === false) callback = returnFalse
+
+    return $this.each(function(_, element){
+      if (one) autoRemove = function(e){
+        remove(element, e.type, callback)
+        return callback.apply(this, arguments)
+      }
+
+      if (selector) delegator = function(e){
+        var evt, match = $(e.target).closest(selector, element).get(0)
+        if (match && match !== element) {
+          evt = $.extend(createProxy(e), {currentTarget: match, liveFired: element})
+          return (autoRemove || callback).apply(match, [evt].concat(slice.call(arguments, 1)))
         }
+      }
+
+      add(element, event, callback, data, selector, delegator || autoRemove)
+    })
+  }
+  $.fn.off = function(event, selector, callback){
+    var $this = this
+    if (event && !isString(event)) {
+      $.each(event, function(type, fn){
+        $this.off(type, selector, fn)
+      })
+      return $this
     }
 
-    var src = '(' + bundleFn + ')({'
-        + Object.keys(workerSources).map(function (key) {
-            return stringify(key) + ':['
-                + sources[key][0]
-                + ',' + stringify(sources[key][1]) + ']'
-            ;
-        }).join(',')
-        + '},{},[' + stringify(skey) + '])'
-    ;
+    if (!isString(selector) && !isFunction(callback) && callback !== false)
+      callback = selector, selector = undefined
 
-    var URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
+    if (callback === false) callback = returnFalse
+>>>>>>> draft skinnier version
 
-    var blob = new Blob([src], { type: 'text/javascript' });
-    if (options && options.bare) { return blob; }
-    var workerUrl = URL.createObjectURL(blob);
-    var worker = new Worker(workerUrl);
-    worker.objectURL = workerUrl;
-    return worker;
+    return $this.each(function(){
+      remove(this, event, callback, selector)
+    })
+  }
+
+  $.fn.trigger = function(event, args){
+    event = (isString(event) || $.isPlainObject(event)) ? $.Event(event) : compatible(event)
+    event._args = args
+    return this.each(function(){
+      // handle focus(), blur() by calling them directly
+      if (event.type in focus && typeof this[event.type] == "function") this[event.type]()
+      // items in the collection might not be DOM elements
+      else if ('dispatchEvent' in this) this.dispatchEvent(event)
+      else $(this).triggerHandler(event, args)
+    })
+  }
+
+  // triggers event handlers on current element just as if an event occurred,
+  // doesn't trigger an actual event, doesn't bubble
+  $.fn.triggerHandler = function(event, args){
+    var e, result
+    this.each(function(i, element){
+      e = createProxy(isString(event) ? $.Event(event) : event)
+      e._args = args
+      e.target = element
+      $.each(findHandlers(element, event.type || event), function(i, handler){
+        result = handler.proxy(e)
+        if (e.isImmediatePropagationStopped()) return false
+      })
+    })
+    return result
+  }
+
+  // shortcut methods for `.bind(event, fn)` for each event type
+  ;('focusin focusout focus blur load resize scroll unload click dblclick '+
+  'mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave '+
+  'change select keydown keypress keyup error').split(' ').forEach(function(event) {
+    $.fn[event] = function(callback) {
+      return (0 in arguments) ?
+        this.bind(event, callback) :
+        this.trigger(event)
+    }
+  })
+
+  $.Event = function(type, props) {
+    if (!isString(type)) props = type, type = props.type
+    var event = document.createEvent(specialEvents[type] || 'Events'), bubbles = true
+    if (props) for (var name in props) (name == 'bubbles') ? (bubbles = !!props[name]) : (event[name] = props[name])
+    event.initEvent(type, bubbles, true)
+    return compatible(event)
+  }
+
+})(Zepto)
+
+;(function(){
+  // getComputedStyle shouldn't freak out when called
+  // without a valid element as argument
+  try {
+    getComputedStyle(undefined)
+  } catch(e) {
+    var nativeGetComputedStyle = getComputedStyle
+    window.getComputedStyle = function(element, pseudoElement){
+      try {
+        return nativeGetComputedStyle(element, pseudoElement)
+      } catch(e) {
+        return null
+      }
+    }
+  }
+})()
+
+;(function($){
+  var zepto = $.zepto, oldQsa = zepto.qsa, oldMatches = zepto.matches
+
+  function visible(elem){
+    elem = $(elem)
+    return !!(elem.width() || elem.height()) && elem.css("display") !== "none"
+  }
+
+  // Implements a subset from:
+  // http://api.jquery.com/category/selectors/jquery-selector-extensions/
+  //
+  // Each filter function receives the current index, all nodes in the
+  // considered set, and a value if there were parentheses. The value
+  // of `this` is the node currently being considered. The function returns the
+  // resulting node(s), null, or undefined.
+  //
+  // Complex selectors are not supported:
+  //   li:has(label:contains("foo")) + li:has(label:contains("bar"))
+  //   ul.inner:first > li
+  var filters = $.expr[':'] = {
+    visible:  function(){ if (visible(this)) return this },
+    hidden:   function(){ if (!visible(this)) return this },
+    selected: function(){ if (this.selected) return this },
+    checked:  function(){ if (this.checked) return this },
+    parent:   function(){ return this.parentNode },
+    first:    function(idx){ if (idx === 0) return this },
+    last:     function(idx, nodes){ if (idx === nodes.length - 1) return this },
+    eq:       function(idx, _, value){ if (idx === value) return this },
+    contains: function(idx, _, text){ if ($(this).text().indexOf(text) > -1) return this },
+    has:      function(idx, _, sel){ if (zepto.qsa(this, sel).length) return this }
+  }
+
+  var filterRe = new RegExp('(.*):(\\w+)(?:\\(([^)]+)\\))?$\\s*'),
+      childRe  = /^\s*>/,
+      classTag = 'Zepto' + (+new Date())
+
+  function process(sel, fn) {
+    // quote the hash in `a[href^=#]` expression
+    sel = sel.replace(/=#\]/g, '="#"]')
+    var filter, arg, match = filterRe.exec(sel)
+    if (match && match[2] in filters) {
+      filter = filters[match[2]], arg = match[3]
+      sel = match[1]
+      if (arg) {
+        var num = Number(arg)
+        if (isNaN(num)) arg = arg.replace(/^["']|["']$/g, '')
+        else arg = num
+      }
+    }
+    return fn(sel, filter, arg)
+  }
+
+  zepto.qsa = function(node, selector) {
+    return process(selector, function(sel, filter, arg){
+      try {
+        var taggedParent
+        if (!sel && filter) sel = '*'
+        else if (childRe.test(sel))
+          // support "> *" child queries by tagging the parent node with a
+          // unique class and prepending that classname onto the selector
+          taggedParent = $(node).addClass(classTag), sel = '.'+classTag+' '+sel
+
+        var nodes = oldQsa(node, sel)
+      } catch(e) {
+        console.error('error performing selector: %o', selector)
+        throw e
+      } finally {
+        if (taggedParent) taggedParent.removeClass(classTag)
+      }
+      return !filter ? nodes :
+        zepto.uniq($.map(nodes, function(n, i){ return filter.call(n, i, nodes, arg) }))
+    })
+  }
+
+  zepto.matches = function(node, selector){
+    return process(selector, function(sel, filter, arg){
+      return (!sel || oldMatches(node, sel)) &&
+        (!filter || filter.call(node, null, arg) === node)
+    })
+  }
+})(Zepto)
+module.exports = Zepto
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var store      = __webpack_require__(46)('wks')
+  , uid        = __webpack_require__(31)
+  , Symbol     = __webpack_require__(11).Symbol
+  , USE_SYMBOL = typeof Symbol == 'function';
+
+var $exports = module.exports = function(name){
+  return store[name] || (store[name] =
+    USE_SYMBOL && Symbol[name] || (USE_SYMBOL ? Symbol : uid)('Symbol.' + name));
 };
 
-},{}],4:[function(_dereq_,module,exports){
-/**
- * HLS config
- */
-'use strict';
+$exports.store = store;
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 
 Object.defineProperty(exports, "__esModule", {
-      value: true
+  value: true
 });
-exports.hlsDefaultConfig = undefined;
 
-var _abrController = _dereq_(5);
+var _classCallCheck2 = __webpack_require__(0);
 
-var _abrController2 = _interopRequireDefault(_abrController);
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-var _bufferController = _dereq_(8);
+var _possibleConstructorReturn2 = __webpack_require__(2);
 
-var _bufferController2 = _interopRequireDefault(_bufferController);
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-var _capLevelController = _dereq_(9);
+var _createClass2 = __webpack_require__(4);
 
-var _capLevelController2 = _interopRequireDefault(_capLevelController);
+var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _fpsController = _dereq_(10);
+var _inherits2 = __webpack_require__(1);
 
-var _fpsController2 = _interopRequireDefault(_fpsController);
+var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _xhrLoader = _dereq_(58);
+var _utils = __webpack_require__(3);
 
-var _xhrLoader2 = _interopRequireDefault(_xhrLoader);
+var _events = __webpack_require__(5);
 
-var _audioTrackController = _dereq_(7);
-
-var _audioTrackController2 = _interopRequireDefault(_audioTrackController);
-
-var _audioStreamController = _dereq_(6);
-
-var _audioStreamController2 = _interopRequireDefault(_audioStreamController);
-
-var _cues = _dereq_(50);
-
-var _cues2 = _interopRequireDefault(_cues);
-
-var _timelineController = _dereq_(16);
-
-var _timelineController2 = _interopRequireDefault(_timelineController);
-
-var _subtitleTrackController = _dereq_(15);
-
-var _subtitleTrackController2 = _interopRequireDefault(_subtitleTrackController);
-
-var _subtitleStreamController = _dereq_(14);
-
-var _subtitleStreamController2 = _interopRequireDefault(_subtitleStreamController);
+var _events2 = _interopRequireDefault(_events);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/**
+ * @class BaseObject
+ * @constructor
+ * @extends Events
+ * @module base
+ */
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+var BaseObject = function (_Events) {
+  (0, _inherits3.default)(BaseObject, _Events);
+  (0, _createClass3.default)(BaseObject, [{
+    key: 'options',
+
+    /**
+     * returns the object options
+     * @property options
+     * @type Object
+     */
+    get: function get() {
+      return this._options;
+    }
+
+    /**
+     * @method constructor
+     * @param {Object} options
+     */
+
+  }]);
+
+  function BaseObject() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    (0, _classCallCheck3.default)(this, BaseObject);
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, _Events.call(this, options));
+
+    _this._options = options;
+    _this.uniqueId = (0, _utils.uniqueId)('o');
+    return _this;
+  }
+  /**
+  * a unique id prefixed with `'o'`, `o1, o232`
+  *
+  * @property uniqueId
+  * @type String
+  */
+
+
+  return BaseObject;
+}(_events2.default);
+
+exports.default = BaseObject;
+module.exports = exports['default'];
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _clapprZepto = __webpack_require__(7);
+
+<<<<<<< HEAD
+var _xhrLoader = _dereq_(58);
+=======
+var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
+>>>>>>> draft skinnier version
+
+var _template = __webpack_require__(19);
+
+var _template2 = _interopRequireDefault(_template);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+var Styler = {
+  getStyleFor: function getStyleFor(style) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : { baseUrl: '' };
+
+<<<<<<< HEAD
+var _cues = _dereq_(50);
+=======
+    return (0, _clapprZepto2.default)('<style class="clappr-style"></style>').html((0, _template2.default)(style.toString())(options));
+  }
+};
+>>>>>>> draft skinnier version
+
+exports.default = Styler;
+module.exports = exports['default'];
+
+<<<<<<< HEAD
+var _timelineController = _dereq_(16);
+=======
+/***/ }),
+/* 11 */
+/***/ (function(module, exports) {
+>>>>>>> draft skinnier version
+
+// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+var global = module.exports = typeof window != 'undefined' && window.Math == Math
+  ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
+if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
+
+<<<<<<< HEAD
+var _subtitleTrackController = _dereq_(15);
+=======
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+>>>>>>> draft skinnier version
+
+var anObject       = __webpack_require__(21)
+  , IE8_DOM_DEFINE = __webpack_require__(63)
+  , toPrimitive    = __webpack_require__(49)
+  , dP             = Object.defineProperty;
+
+exports.f = __webpack_require__(15) ? Object.defineProperty : function defineProperty(O, P, Attributes){
+  anObject(O);
+  P = toPrimitive(P, true);
+  anObject(Attributes);
+  if(IE8_DOM_DEFINE)try {
+    return dP(O, P, Attributes);
+  } catch(e){ /* empty */ }
+  if('get' in Attributes || 'set' in Attributes)throw TypeError('Accessors not supported!');
+  if('value' in Attributes)O[P] = Attributes.value;
+  return O;
+};
+
+<<<<<<< HEAD
+var _subtitleStreamController = _dereq_(14);
+=======
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+>>>>>>> draft skinnier version
+
+// to indexed object, toObject with fallback for non-array-like ES3 strings
+var IObject = __webpack_require__(118)
+  , defined = __webpack_require__(38);
+module.exports = function(it){
+  return IObject(defined(it));
+};
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+<<<<<<< HEAD
 //#endif
 
 //#endif
@@ -14667,60 +17376,101 @@ var hlsDefaultConfig = exports.hlsDefaultConfig = {
 
 },{"10":10,"14":14,"15":15,"16":16,"5":5,"50":50,"58":58,"6":6,"7":7,"8":8,"9":9}],5:[function(_dereq_,module,exports){
 'use strict';
+=======
+"use strict";
+
+>>>>>>> draft skinnier version
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _classCallCheck2 = __webpack_require__(0);
 
+<<<<<<< HEAD
 var _events = _dereq_(35);
 
 var _events2 = _interopRequireDefault(_events);
 
 var _eventHandler = _dereq_(34);
+=======
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-var _eventHandler2 = _interopRequireDefault(_eventHandler);
+var _possibleConstructorReturn2 = __webpack_require__(2);
+>>>>>>> draft skinnier version
 
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+<<<<<<< HEAD
 var _bufferHelper = _dereq_(37);
+=======
+var _createClass2 = __webpack_require__(4);
+>>>>>>> draft skinnier version
 
-var _bufferHelper2 = _interopRequireDefault(_bufferHelper);
+var _createClass3 = _interopRequireDefault(_createClass2);
 
+<<<<<<< HEAD
 var _errors = _dereq_(33);
 
 var _logger = _dereq_(53);
 
 var _ewmaBandwidthEstimator = _dereq_(51);
+=======
+var _inherits2 = __webpack_require__(1);
 
-var _ewmaBandwidthEstimator2 = _interopRequireDefault(_ewmaBandwidthEstimator);
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _clapprZepto = __webpack_require__(7);
+>>>>>>> draft skinnier version
+
+var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
+
+var _utils = __webpack_require__(3);
+
+var _base_object = __webpack_require__(9);
+
+var _base_object2 = _interopRequireDefault(_base_object);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var delegateEventSplitter = /^(\S+)\s*(.*)$/;
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+/**
+ * A base class to create ui object.
+ * @class UIObject
+ * @constructor
+ * @extends BaseObject
+ * @module base
+ */
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * simple ABR Controller
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *  - compute next level based on last fragment bw heuristics
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *  - implement an abandon rules triggered if we have less than 2 frag buffered and if computed bw shows that we risk buffer stalling
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+var UIObject = function (_BaseObject) {
+  (0, _inherits3.default)(UIObject, _BaseObject);
+  (0, _createClass3.default)(UIObject, [{
+    key: 'tagName',
 
-var AbrController = function (_EventHandler) {
-  _inherits(AbrController, _EventHandler);
+    /**
+     * a unique id prefixed with `'c'`, `c1, c232`
+     *
+     * @property cid
+     * @type String
+     */
+    /**
+     * the dom element itself
+     *
+     * @property el
+     * @type HTMLElement
+     */
+    /**
+     * the dom element wrapped by `$`
+     *
+     * @property $el
+     * @type HTMLElement
+     */
 
-  function AbrController(hls) {
-    _classCallCheck(this, AbrController);
-
-    var _this = _possibleConstructorReturn(this, (AbrController.__proto__ || Object.getPrototypeOf(AbrController)).call(this, hls, _events2.default.FRAG_LOADING, _events2.default.FRAG_LOADED, _events2.default.FRAG_BUFFERED, _events2.default.ERROR));
-
-    _this.lastLoadedFragLevel = 0;
-    _this._nextAutoLevel = -1;
-    _this.hls = hls;
-    _this.onCheck = _this._abandonRulesCheck.bind(_this);
-    return _this;
-  }
-
+<<<<<<< HEAD
   _createClass(AbrController, [{
     key: 'destroy',
     value: function destroy() {
@@ -14905,8 +17655,39 @@ var AbrController = function (_EventHandler) {
         clearInterval(this.timer);
         this.timer = null;
       }
+=======
+    /**
+     * gets the tag name for the ui component
+     * @method tagName
+     * @default div
+     * @return {String} tag's name
+     */
+    get: function get() {
+      return 'div';
+>>>>>>> draft skinnier version
     }
+    /**
+     * a literal object mapping element's events to methods
+     * @property events
+     * @type Object
+     * @example
+     *
+     *```javascript
+     *
+     * class MyButton extends UIObject {
+     *   constructor(options) {
+     *     super(options)
+     *     this.myId = 0
+     *   }
+     *   get events() { return { 'click': 'myClick' } }
+     *   myClick(){ this.myId = 42 }
+     * }
+     *
+     * // when you click on MyButton the method `myClick` will be called
+     *```
+     */
 
+<<<<<<< HEAD
     // return next auto level
 
   }, {
@@ -14946,595 +17727,321 @@ var AbrController = function (_EventHandler) {
       // not enough time budget even with quality level 0 ... rebuffering might happen
       return -1;
     }
+=======
+>>>>>>> draft skinnier version
   }, {
-    key: 'nextAutoLevel',
+    key: 'events',
     get: function get() {
-      var forcedAutoLevel = this._nextAutoLevel;
-      var bwEstimator = this._bwEstimator;
-      // in case next auto level has been forced, and bw not available or not reliable, return forced value
-      if (forcedAutoLevel !== -1 && (!bwEstimator || !bwEstimator.canEstimate())) {
-        return forcedAutoLevel;
-      }
-      // compute next level using ABR logic
-      var nextABRAutoLevel = this._nextABRAutoLevel;
-      // if forced auto level has been defined, use it to cap ABR computed quality level
-      if (forcedAutoLevel !== -1) {
-        nextABRAutoLevel = Math.min(forcedAutoLevel, nextABRAutoLevel);
-      }
-      return nextABRAutoLevel;
-    },
-    set: function set(nextLevel) {
-      this._nextAutoLevel = nextLevel;
+      return {};
     }
+    /**
+     * a literal object mapping attributes and values to the element
+     * element's attribute name and the value the attribute value
+     * @property attributes
+     * @type Object
+     * @example
+     *
+     *```javascript
+     *
+     * class MyButton extends UIObject {
+     *    constructor(options) { super(options) }
+     *    get attributes() { return { class: 'my-button'} }
+     * }
+     *
+     * // MyButton.el.className will be 'my-button'
+     * ```
+     */
+
   }, {
-    key: '_nextABRAutoLevel',
+    key: 'attributes',
     get: function get() {
-      var hls = this.hls,
-          maxAutoLevel = hls.maxAutoLevel,
-          levels = hls.levels,
-          config = hls.config,
-          minAutoLevel = hls.minAutoLevel;
-      var v = hls.media,
-          currentLevel = this.lastLoadedFragLevel,
-          currentFragDuration = this.fragCurrent ? this.fragCurrent.duration : 0,
-          pos = v ? v.currentTime : 0,
-
-      // playbackRate is the absolute value of the playback rate; if v.playbackRate is 0, we use 1 to load as
-      // if we're playing back at the normal rate.
-      playbackRate = v && v.playbackRate !== 0 ? Math.abs(v.playbackRate) : 1.0,
-          avgbw = this._bwEstimator ? this._bwEstimator.getEstimate() : config.abrEwmaDefaultEstimate,
-
-      // bufferStarvationDelay is the wall-clock time left until the playback buffer is exhausted.
-      bufferStarvationDelay = (_bufferHelper2.default.bufferInfo(v, pos, config.maxBufferHole).end - pos) / playbackRate;
-
-      // First, look to see if we can find a level matching with our avg bandwidth AND that could also guarantee no rebuffering at all
-      var bestLevel = this._findBestLevel(currentLevel, currentFragDuration, avgbw, minAutoLevel, maxAutoLevel, bufferStarvationDelay, config.abrBandWidthFactor, config.abrBandWidthUpFactor, levels);
-      if (bestLevel >= 0) {
-        return bestLevel;
-      } else {
-        _logger.logger.trace('rebuffering expected to happen, lets try to find a quality level minimizing the rebuffering');
-        // not possible to get rid of rebuffering ... let's try to find level that will guarantee less than maxStarvationDelay of rebuffering
-        // if no matching level found, logic will return 0
-        var maxStarvationDelay = currentFragDuration ? Math.min(currentFragDuration, config.maxStarvationDelay) : config.maxStarvationDelay,
-            bwFactor = config.abrBandWidthFactor,
-            bwUpFactor = config.abrBandWidthUpFactor;
-        if (bufferStarvationDelay === 0) {
-          // in case buffer is empty, let's check if previous fragment was loaded to perform a bitrate test
-          var bitrateTestDelay = this.bitrateTestDelay;
-          if (bitrateTestDelay) {
-            // if it is the case, then we need to adjust our max starvation delay using maxLoadingDelay config value
-            // max video loading delay used in  automatic start level selection :
-            // in that mode ABR controller will ensure that video loading time (ie the time to fetch the first fragment at lowest quality level +
-            // the time to fetch the fragment at the appropriate quality level is less than ```maxLoadingDelay``` )
-            // cap maxLoadingDelay and ensure it is not bigger 'than bitrate test' frag duration
-            var maxLoadingDelay = currentFragDuration ? Math.min(currentFragDuration, config.maxLoadingDelay) : config.maxLoadingDelay;
-            maxStarvationDelay = maxLoadingDelay - bitrateTestDelay;
-            _logger.logger.trace('bitrate test took ' + Math.round(1000 * bitrateTestDelay) + 'ms, set first fragment max fetchDuration to ' + Math.round(1000 * maxStarvationDelay) + ' ms');
-            // don't use conservative factor on bitrate test
-            bwFactor = bwUpFactor = 1;
-          }
-        }
-        bestLevel = this._findBestLevel(currentLevel, currentFragDuration, avgbw, minAutoLevel, maxAutoLevel, bufferStarvationDelay + maxStarvationDelay, bwFactor, bwUpFactor, levels);
-        return Math.max(bestLevel, 0);
-      }
+      return {};
     }
+
+    /**
+     * it builds an ui component by:
+     *  * creating an id for the component `cid`
+     *  * making sure the element is created `$el`
+     *  * delegating all `events` to the element
+     * @method constructor
+     * @param {Object} options the options object
+     */
+
   }]);
 
-  return AbrController;
-}(_eventHandler2.default);
+  function UIObject(options) {
+    (0, _classCallCheck3.default)(this, UIObject);
 
-exports.default = AbrController;
+    var _this = (0, _possibleConstructorReturn3.default)(this, _BaseObject.call(this, options));
 
+<<<<<<< HEAD
 },{"33":33,"34":34,"35":35,"37":37,"51":51,"53":53}],6:[function(_dereq_,module,exports){
 'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _binarySearch = _dereq_(48);
-
-var _binarySearch2 = _interopRequireDefault(_binarySearch);
-
-var _bufferHelper = _dereq_(37);
-
-var _bufferHelper2 = _interopRequireDefault(_bufferHelper);
-
-var _demuxer = _dereq_(25);
-
-var _demuxer2 = _interopRequireDefault(_demuxer);
-
-var _events = _dereq_(35);
-
-var _events2 = _interopRequireDefault(_events);
-
-var _eventHandler = _dereq_(34);
-
-var _eventHandler2 = _interopRequireDefault(_eventHandler);
-
-var _levelHelper = _dereq_(38);
-
-var _levelHelper2 = _interopRequireDefault(_levelHelper);
-
-var _timeRanges = _dereq_(54);
-
-var _timeRanges2 = _interopRequireDefault(_timeRanges);
-
-var _errors = _dereq_(33);
-
-var _logger = _dereq_(53);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Audio Stream Controller
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               */
-
-var State = {
-  STOPPED: 'STOPPED',
-  STARTING: 'STARTING',
-  IDLE: 'IDLE',
-  PAUSED: 'PAUSED',
-  KEY_LOADING: 'KEY_LOADING',
-  FRAG_LOADING: 'FRAG_LOADING',
-  FRAG_LOADING_WAITING_RETRY: 'FRAG_LOADING_WAITING_RETRY',
-  WAITING_TRACK: 'WAITING_TRACK',
-  PARSING: 'PARSING',
-  PARSED: 'PARSED',
-  BUFFER_FLUSHING: 'BUFFER_FLUSHING',
-  ENDED: 'ENDED',
-  ERROR: 'ERROR',
-  WAITING_INIT_PTS: 'WAITING_INIT_PTS'
-};
-
-var AudioStreamController = function (_EventHandler) {
-  _inherits(AudioStreamController, _EventHandler);
-
-  function AudioStreamController(hls) {
-    _classCallCheck(this, AudioStreamController);
-
-    var _this = _possibleConstructorReturn(this, (AudioStreamController.__proto__ || Object.getPrototypeOf(AudioStreamController)).call(this, hls, _events2.default.MEDIA_ATTACHED, _events2.default.MEDIA_DETACHING, _events2.default.AUDIO_TRACKS_UPDATED, _events2.default.AUDIO_TRACK_SWITCHING, _events2.default.AUDIO_TRACK_LOADED, _events2.default.KEY_LOADED, _events2.default.FRAG_LOADED, _events2.default.FRAG_PARSING_INIT_SEGMENT, _events2.default.FRAG_PARSING_DATA, _events2.default.FRAG_PARSED, _events2.default.ERROR, _events2.default.BUFFER_CREATED, _events2.default.BUFFER_APPENDED, _events2.default.BUFFER_FLUSHED, _events2.default.INIT_PTS_FOUND));
-
-    _this.config = hls.config;
-    _this.audioCodecSwap = false;
-    _this.ticks = 0;
-    _this._state = State.STOPPED;
-    _this.ontick = _this.tick.bind(_this);
-    _this.initPTS = [];
-    _this.waitingFragment = null;
+=======
+    _this.cid = (0, _utils.uniqueId)('c');
+    _this._ensureElement();
+    _this.delegateEvents();
     return _this;
   }
 
-  _createClass(AudioStreamController, [{
-    key: 'destroy',
-    value: function destroy() {
-      this.stopLoad();
-      if (this.timer) {
-        clearInterval(this.timer);
-        this.timer = null;
-      }
-      _eventHandler2.default.prototype.destroy.call(this);
-      this.state = State.STOPPED;
+  /**
+   * selects within the component.
+   * @method $
+   * @param {String} selector a selector to find within the component.
+   * @return {HTMLElement} an element, if it exists.
+   * @example
+   * ```javascript
+   * fullScreenBarUIComponent.$('.button-full') //will return only `.button-full` within the component
+   * ```
+   */
+>>>>>>> draft skinnier version
+
+
+  UIObject.prototype.$ = function $(selector) {
+    return this.$el.find(selector);
+  };
+
+<<<<<<< HEAD
+var _binarySearch = _dereq_(48);
+=======
+  /**
+   * render the component, usually attach it to a real existent `element`
+   * @method render
+   * @return {UIObject} itself
+   */
+>>>>>>> draft skinnier version
+
+
+<<<<<<< HEAD
+var _bufferHelper = _dereq_(37);
+=======
+  UIObject.prototype.render = function render() {
+    return this;
+  };
+>>>>>>> draft skinnier version
+
+  /**
+   * removes the ui component from DOM
+   * @method remove
+   * @return {UIObject} itself
+   */
+
+<<<<<<< HEAD
+var _demuxer = _dereq_(25);
+=======
+>>>>>>> draft skinnier version
+
+  UIObject.prototype.remove = function remove() {
+    this.$el.remove();
+    this.stopListening();
+    this.undelegateEvents();
+    return this;
+  };
+
+<<<<<<< HEAD
+var _events = _dereq_(35);
+=======
+  /**
+   * set element to `el` and `$el`
+   * @method setElement
+   * @param {HTMLElement} element
+   * @param {Boolean} delegate whether is delegate or not
+   * @return {UIObject} itself
+   */
+>>>>>>> draft skinnier version
+
+
+<<<<<<< HEAD
+var _eventHandler = _dereq_(34);
+=======
+  UIObject.prototype.setElement = function setElement(element, delegate) {
+    if (this.$el) {
+      this.undelegateEvents();
     }
-
-    //Signal that video PTS was found
-
-  }, {
-    key: 'onInitPtsFound',
-    value: function onInitPtsFound(data) {
-      var demuxerId = data.id,
-          cc = data.frag.cc,
-          initPTS = data.initPTS;
-      if (demuxerId === 'main') {
-        //Always update the new INIT PTS
-        //Can change due level switch
-        this.initPTS[cc] = initPTS;
-        _logger.logger.log('InitPTS for cc:' + cc + ' found from video track:' + initPTS);
-
-        //If we are waiting we need to demux/remux the waiting frag
-        //With the new initPTS
-        if (this.state === State.WAITING_INIT_PTS) {
-          _logger.logger.log('sending pending audio frag to demuxer');
-          this.state = State.FRAG_LOADING;
-          //We have audio frag waiting or video pts
-          //Let process it
-          this.onFragLoaded(this.waitingFragment);
-          //Lets clean the waiting frag
-          this.waitingFragment = null;
-        }
-      }
+    this.$el = element instanceof _clapprZepto2.default ? element : (0, _clapprZepto2.default)(element);
+    this.el = this.$el[0];
+    if (delegate !== false) {
+      this.delegateEvents();
     }
-  }, {
-    key: 'startLoad',
-    value: function startLoad(startPosition) {
-      if (this.tracks) {
-        var lastCurrentTime = this.lastCurrentTime;
-        this.stopLoad();
-        if (!this.timer) {
-          this.timer = setInterval(this.ontick, 100);
-        }
-        this.fragLoadError = 0;
-        if (lastCurrentTime > 0 && startPosition === -1) {
-          _logger.logger.log('audio:override startPosition with lastCurrentTime @' + lastCurrentTime.toFixed(3));
-          this.state = State.IDLE;
-        } else {
-          this.lastCurrentTime = this.startPosition ? this.startPosition : startPosition;
-          this.state = State.STARTING;
-        }
-        this.nextLoadPosition = this.startPosition = this.lastCurrentTime;
-        this.tick();
+    return this;
+  };
+>>>>>>> draft skinnier version
+
+  /**
+   * delegates all the original `events` on `element` to its callbacks
+   * @method delegateEvents
+   * @param {Object} events
+   * @return {UIObject} itself
+   */
+
+<<<<<<< HEAD
+var _levelHelper = _dereq_(38);
+=======
+>>>>>>> draft skinnier version
+
+  UIObject.prototype.delegateEvents = function delegateEvents(events) {
+    if (!(events || (events = this.events))) {
+      return this;
+    }
+    this.undelegateEvents();
+    for (var key in events) {
+      var method = events[key];
+      if (method && method.constructor !== Function) {
+        method = this[events[key]];
+      }
+      if (!method) {
+        continue;
+      }
+
+<<<<<<< HEAD
+var _timeRanges = _dereq_(54);
+=======
+      var match = key.match(delegateEventSplitter);
+      var eventName = match[1],
+          selector = match[2];
+      eventName += '.delegateEvents' + this.cid;
+      if (selector === '') {
+        this.$el.on(eventName, method.bind(this));
       } else {
-        this.startPosition = startPosition;
-        this.state = State.STOPPED;
+        this.$el.on(eventName, selector, method.bind(this));
       }
     }
-  }, {
-    key: 'stopLoad',
-    value: function stopLoad() {
-      var frag = this.fragCurrent;
-      if (frag) {
-        if (frag.loader) {
-          frag.loader.abort();
-        }
-        this.fragCurrent = null;
-      }
-      this.fragPrevious = null;
-      if (this.demuxer) {
-        this.demuxer.destroy();
-        this.demuxer = null;
-      }
-      this.state = State.STOPPED;
-    }
-  }, {
-    key: 'tick',
-    value: function tick() {
-      this.ticks++;
-      if (this.ticks === 1) {
-        this.doTick();
-        if (this.ticks > 1) {
-          setTimeout(this.tick, 1);
-        }
-        this.ticks = 0;
-      }
-    }
-  }, {
-    key: 'doTick',
-    value: function doTick() {
-      var pos,
-          track,
-          trackDetails,
-          hls = this.hls,
-          config = hls.config;
-      //logger.log('audioStream:' + this.state);
-      switch (this.state) {
-        case State.ERROR:
-        //don't do anything in error state to avoid breaking further ...
-        case State.PAUSED:
-        //don't do anything in paused state either ...
-        case State.BUFFER_FLUSHING:
-          break;
-        case State.STARTING:
-          this.state = State.WAITING_TRACK;
-          this.loadedmetadata = false;
-          break;
-        case State.IDLE:
-          var tracks = this.tracks;
-          // audio tracks not received => exit loop
-          if (!tracks) {
-            break;
-          }
-          // if video not attached AND
-          // start fragment already requested OR start frag prefetch disable
-          // exit loop
-          // => if media not attached but start frag prefetch is enabled and start frag not requested yet, we will not exit loop
-          if (!this.media && (this.startFragRequested || !config.startFragPrefetch)) {
-            break;
-          }
-          // determine next candidate fragment to be loaded, based on current position and
-          //  end of buffer position
-          // if we have not yet loaded any fragment, start loading from start position
-          if (this.loadedmetadata) {
-            pos = this.media.currentTime;
-          } else {
-            pos = this.nextLoadPosition;
-          }
-          var media = this.mediaBuffer ? this.mediaBuffer : this.media,
-              bufferInfo = _bufferHelper2.default.bufferInfo(media, pos, config.maxBufferHole),
-              bufferLen = bufferInfo.len,
-              bufferEnd = bufferInfo.end,
-              fragPrevious = this.fragPrevious,
-              maxBufLen = config.maxMaxBufferLength,
-              audioSwitch = this.audioSwitch,
-              trackId = this.trackId;
+    return this;
+  };
+>>>>>>> draft skinnier version
 
-          // if buffer length is less than maxBufLen try to load a new fragment
-          if ((bufferLen < maxBufLen || audioSwitch) && trackId < tracks.length) {
-            trackDetails = tracks[trackId].details;
-            // if track info not retrieved yet, switch state and wait for track retrieval
-            if (typeof trackDetails === 'undefined') {
-              this.state = State.WAITING_TRACK;
-              break;
-            }
+  /**
+   * undelegats all the `events`
+   * @method undelegateEvents
+   * @return {UIObject} itself
+   */
 
-            // we just got done loading the final fragment, check if we need to finalize media stream
-            if (!audioSwitch && !trackDetails.live && fragPrevious && fragPrevious.sn === trackDetails.endSN) {
-              // if we are not seeking or if we are seeking but everything (almost) til the end is buffered, let's signal eos
-              // we don't compare exactly media.duration === bufferInfo.end as there could be some subtle media duration difference when switching
-              // between different renditions. using half frag duration should help cope with these cases.
-              if (!this.media.seeking || this.media.duration - bufferEnd < fragPrevious.duration / 2) {
-                // Finalize the media stream
-                this.hls.trigger(_events2.default.BUFFER_EOS, { type: 'audio' });
-                this.state = State.ENDED;
-                break;
-              }
-            }
+<<<<<<< HEAD
+var _errors = _dereq_(33);
 
-            // find fragment index, contiguous with end of buffer position
-            var fragments = trackDetails.fragments,
-                fragLen = fragments.length,
-                start = fragments[0].start,
-                end = fragments[fragLen - 1].start + fragments[fragLen - 1].duration,
-                frag = void 0;
+var _logger = _dereq_(53);
+=======
 
-            // When switching audio track, reload audio as close as possible to currentTime
-            if (audioSwitch) {
-              if (trackDetails.live && !trackDetails.PTSKnown) {
-                _logger.logger.log('switching audiotrack, live stream, unknown PTS,load first fragment');
-                bufferEnd = 0;
-              } else {
-                bufferEnd = pos;
-                // if currentTime (pos) is less than alt audio playlist start time, it means that alt audio is ahead of currentTime
-                if (trackDetails.PTSKnown && pos < start) {
-                  // if everything is buffered from pos to start or if audio buffer upfront, let's seek to start
-                  if (bufferInfo.end > start || bufferInfo.nextStart) {
-                    _logger.logger.log('alt audio track ahead of main track, seek to start of alt audio track');
-                    this.media.currentTime = start + 0.05;
-                  } else {
-                    return;
-                  }
-                }
-              }
-            }
-            if (trackDetails.initSegment && !trackDetails.initSegment.data) {
-              frag = trackDetails.initSegment;
-            }
-            // if bufferEnd before start of playlist, load first fragment
-            else if (bufferEnd <= start) {
-                frag = fragments[0];
-                if (trackDetails.live && frag.loadIdx && frag.loadIdx === this.fragLoadIdx) {
-                  // we just loaded this first fragment, and we are still lagging behind the start of the live playlist
-                  // let's force seek to start
-                  var nextBuffered = bufferInfo.nextStart ? bufferInfo.nextStart : start;
-                  _logger.logger.log('no alt audio available @currentTime:' + this.media.currentTime + ', seeking @' + (nextBuffered + 0.05));
-                  this.media.currentTime = nextBuffered + 0.05;
-                  return;
-                }
-              } else {
-                var foundFrag = void 0;
-                var maxFragLookUpTolerance = config.maxFragLookUpTolerance;
-                var fragNext = fragPrevious ? fragments[fragPrevious.sn - fragments[0].sn + 1] : undefined;
-                var fragmentWithinToleranceTest = function fragmentWithinToleranceTest(candidate) {
-                  // offset should be within fragment boundary - config.maxFragLookUpTolerance
-                  // this is to cope with situations like
-                  // bufferEnd = 9.991
-                  // frag[Ø] : [0,10]
-                  // frag[1] : [10,20]
-                  // bufferEnd is within frag[0] range ... although what we are expecting is to return frag[1] here
-                  //              frag start               frag start+duration
-                  //                  |-----------------------------|
-                  //              <--->                         <--->
-                  //  ...--------><-----------------------------><---------....
-                  // previous frag         matching fragment         next frag
-                  //  return -1             return 0                 return 1
-                  //logger.log(`level/sn/start/end/bufEnd:${level}/${candidate.sn}/${candidate.start}/${(candidate.start+candidate.duration)}/${bufferEnd}`);
-                  // Set the lookup tolerance to be small enough to detect the current segment - ensures we don't skip over very small segments
-                  var candidateLookupTolerance = Math.min(maxFragLookUpTolerance, candidate.duration);
-                  if (candidate.start + candidate.duration - candidateLookupTolerance <= bufferEnd) {
-                    return 1;
-                  } // if maxFragLookUpTolerance will have negative value then don't return -1 for first element
-                  else if (candidate.start - candidateLookupTolerance > bufferEnd && candidate.start) {
-                      return -1;
-                    }
-                  return 0;
-                };
+  UIObject.prototype.undelegateEvents = function undelegateEvents() {
+    this.$el.off('.delegateEvents' + this.cid);
+    return this;
+  };
+>>>>>>> draft skinnier version
 
-                if (bufferEnd < end) {
-                  if (bufferEnd > end - maxFragLookUpTolerance) {
-                    maxFragLookUpTolerance = 0;
-                  }
-                  // Prefer the next fragment if it's within tolerance
-                  if (fragNext && !fragmentWithinToleranceTest(fragNext)) {
-                    foundFrag = fragNext;
-                  } else {
-                    foundFrag = _binarySearch2.default.search(fragments, fragmentWithinToleranceTest);
-                  }
-                } else {
-                  // reach end of playlist
-                  foundFrag = fragments[fragLen - 1];
-                }
-                if (foundFrag) {
-                  frag = foundFrag;
-                  start = foundFrag.start;
-                  //logger.log('find SN matching with pos:' +  bufferEnd + ':' + frag.sn);
-                  if (fragPrevious && frag.level === fragPrevious.level && frag.sn === fragPrevious.sn) {
-                    if (frag.sn < trackDetails.endSN) {
-                      frag = fragments[frag.sn + 1 - trackDetails.startSN];
-                      _logger.logger.log('SN just loaded, load next one: ' + frag.sn);
-                    } else {
-                      frag = null;
-                    }
-                  }
-                }
-              }
-            if (frag) {
-              //logger.log('      loading frag ' + i +',pos/bufEnd:' + pos.toFixed(3) + '/' + bufferEnd.toFixed(3));
-              if (frag.decryptdata && frag.decryptdata.uri != null && frag.decryptdata.key == null) {
-                _logger.logger.log('Loading key for ' + frag.sn + ' of [' + trackDetails.startSN + ' ,' + trackDetails.endSN + '],track ' + trackId);
-                this.state = State.KEY_LOADING;
-                hls.trigger(_events2.default.KEY_LOADING, { frag: frag });
-              } else {
-                _logger.logger.log('Loading ' + frag.sn + ' of [' + trackDetails.startSN + ' ,' + trackDetails.endSN + '],track ' + trackId + ', currentTime:' + pos + ',bufferEnd:' + bufferEnd.toFixed(3));
-                // ensure that we are not reloading the same fragments in loop ...
-                if (this.fragLoadIdx !== undefined) {
-                  this.fragLoadIdx++;
-                } else {
-                  this.fragLoadIdx = 0;
-                }
-                if (frag.loadCounter) {
-                  frag.loadCounter++;
-                  var maxThreshold = config.fragLoadingLoopThreshold;
-                  // if this frag has already been loaded 3 times, and if it has been reloaded recently
-                  if (frag.loadCounter > maxThreshold && Math.abs(this.fragLoadIdx - frag.loadIdx) < maxThreshold) {
-                    hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.FRAG_LOOP_LOADING_ERROR, fatal: false, frag: frag });
-                    return;
-                  }
-                } else {
-                  frag.loadCounter = 1;
-                }
-                frag.loadIdx = this.fragLoadIdx;
-                this.fragCurrent = frag;
-                this.startFragRequested = true;
-                if (!isNaN(frag.sn)) {
-                  this.nextLoadPosition = frag.start + frag.duration;
-                }
-                hls.trigger(_events2.default.FRAG_LOADING, { frag: frag });
-                this.state = State.FRAG_LOADING;
-              }
-            }
-          }
-          break;
-        case State.WAITING_TRACK:
-          track = this.tracks[this.trackId];
-          // check if playlist is already loaded
-          if (track && track.details) {
-            this.state = State.IDLE;
-          }
-          break;
-        case State.FRAG_LOADING_WAITING_RETRY:
-          var now = performance.now();
-          var retryDate = this.retryDate;
-          media = this.media;
-          var isSeeking = media && media.seeking;
-          // if current time is gt than retryDate, or if media seeking let's switch to IDLE state to retry loading
-          if (!retryDate || now >= retryDate || isSeeking) {
-            _logger.logger.log('audioStreamController: retryDate reached, switch back to IDLE state');
-            this.state = State.IDLE;
-          }
-          break;
-        case State.WAITING_INIT_PTS:
-        case State.STOPPED:
-        case State.FRAG_LOADING:
-        case State.PARSING:
-        case State.PARSED:
-        case State.ENDED:
-          break;
-        default:
-          break;
+  /**
+   * ensures the creation of this ui component
+   * @method _ensureElement
+   * @private
+   */
+
+
+  UIObject.prototype._ensureElement = function _ensureElement() {
+    if (!this.el) {
+      var attrs = _clapprZepto2.default.extend({}, this.attributes);
+      if (this.id) {
+        attrs.id = this.id;
       }
+      if (this.className) {
+        attrs['class'] = this.className;
+      }
+      var $el = _utils.DomRecycler.create(this.tagName).attr(attrs);
+      this.setElement($el, false);
+    } else {
+      this.setElement(this.el, false);
     }
-  }, {
-    key: 'onMediaAttached',
-    value: function onMediaAttached(data) {
-      var media = this.media = this.mediaBuffer = data.media;
-      this.onvseeking = this.onMediaSeeking.bind(this);
-      this.onvended = this.onMediaEnded.bind(this);
-      media.addEventListener('seeking', this.onvseeking);
-      media.addEventListener('ended', this.onvended);
-      var config = this.config;
-      if (this.tracks && config.autoStartLoad) {
-        this.startLoad(config.startPosition);
-      }
-    }
-  }, {
-    key: 'onMediaDetaching',
-    value: function onMediaDetaching() {
-      var media = this.media;
-      if (media && media.ended) {
-        _logger.logger.log('MSE detaching and video ended, reset startPosition');
-        this.startPosition = this.lastCurrentTime = 0;
-      }
+  };
 
-      // reset fragment loading counter on MSE detaching to avoid reporting FRAG_LOOP_LOADING_ERROR after error recovery
-      var tracks = this.tracks;
-      if (tracks) {
-        // reset fragment load counter
-        tracks.forEach(function (track) {
-          if (track.details) {
-            track.details.fragments.forEach(function (fragment) {
-              fragment.loadCounter = undefined;
-            });
-          }
-        });
-      }
-      // remove video listeners
-      if (media) {
-        media.removeEventListener('seeking', this.onvseeking);
-        media.removeEventListener('ended', this.onvended);
-        this.onvseeking = this.onvseeked = this.onvended = null;
-      }
-      this.media = this.mediaBuffer = null;
-      this.loadedmetadata = false;
-      this.stopLoad();
-    }
-  }, {
-    key: 'onMediaSeeking',
-    value: function onMediaSeeking() {
-      if (this.state === State.ENDED) {
-        // switch to IDLE state to check for potential new fragment
-        this.state = State.IDLE;
-      }
-      if (this.media) {
-        this.lastCurrentTime = this.media.currentTime;
-      }
-      // avoid reporting fragment loop loading error in case user is seeking several times on same position
-      if (this.fragLoadIdx !== undefined) {
-        this.fragLoadIdx += 2 * this.config.fragLoadingLoopThreshold;
-      }
-      // tick to speed up processing
-      this.tick();
-    }
-  }, {
-    key: 'onMediaEnded',
-    value: function onMediaEnded() {
-      // reset startPosition and lastCurrentTime to restart playback @ stream beginning
-      this.startPosition = this.lastCurrentTime = 0;
-    }
-  }, {
-    key: 'onAudioTracksUpdated',
-    value: function onAudioTracksUpdated(data) {
-      _logger.logger.log('audio tracks updated');
-      this.tracks = data.audioTracks;
-    }
-  }, {
-    key: 'onAudioTrackSwitching',
-    value: function onAudioTrackSwitching(data) {
-      // if any URL found on new audio track, it is an alternate audio track
-      var altAudio = !!data.url;
-      this.trackId = data.id;
-      this.state = State.IDLE;
+  return UIObject;
+}(_base_object2.default);
 
-      this.fragCurrent = null;
-      this.state = State.PAUSED;
-      this.waitingFragment = null;
-      // destroy useless demuxer when switching audio to main
-      if (!altAudio) {
-        if (this.demuxer) {
-          this.demuxer.destroy();
-          this.demuxer = null;
-        }
-      } else {
-        // switching to audio track, start timer if not already started
-        if (!this.timer) {
-          this.timer = setInterval(this.ontick, 100);
-        }
-      }
+exports.default = UIObject;
+module.exports = exports['default'];
 
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Thank's IE8 for his funny defineProperty
+module.exports = !__webpack_require__(24)(function(){
+  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
+});
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var global    = __webpack_require__(11)
+  , core      = __webpack_require__(6)
+  , ctx       = __webpack_require__(37)
+  , hide      = __webpack_require__(22)
+  , PROTOTYPE = 'prototype';
+
+var $export = function(type, name, source){
+  var IS_FORCED = type & $export.F
+    , IS_GLOBAL = type & $export.G
+    , IS_STATIC = type & $export.S
+    , IS_PROTO  = type & $export.P
+    , IS_BIND   = type & $export.B
+    , IS_WRAP   = type & $export.W
+    , exports   = IS_GLOBAL ? core : core[name] || (core[name] = {})
+    , expProto  = exports[PROTOTYPE]
+    , target    = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE]
+    , key, own, out;
+  if(IS_GLOBAL)source = name;
+  for(key in source){
+    // contains in native
+    own = !IS_FORCED && target && target[key] !== undefined;
+    if(own && key in exports)continue;
+    // export native or passed
+    out = own ? target[key] : source[key];
+    // prevent global pollution for namespaces
+    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
+    // bind timers to global for call from export context
+    : IS_BIND && own ? ctx(out, global)
+    // wrap global constructors for prevent change them in library
+    : IS_WRAP && target[key] == out ? (function(C){
+      var F = function(a, b, c){
+        if(this instanceof C){
+          switch(arguments.length){
+            case 0: return new C;
+            case 1: return new C(a);
+            case 2: return new C(a, b);
+          } return new C(a, b, c);
+        } return C.apply(this, arguments);
+      };
+      F[PROTOTYPE] = C[PROTOTYPE];
+      return F;
+    // make static versions for prototype methods
+    })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
+    // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
+    if(IS_PROTO){
+      (exports.virtual || (exports.virtual = {}))[key] = out;
+      // export proto methods to core.%CONSTRUCTOR%.prototype.%NAME%
+      if(type & $export.R && expProto && !expProto[key])hide(expProto, key, out);
+    }
+  }
+};
+// type bitmap
+$export.F = 1;   // forced
+$export.G = 2;   // global
+$export.S = 4;   // static
+$export.P = 8;   // proto
+$export.B = 16;  // bind
+$export.W = 32;  // wrap
+$export.U = 64;  // safe
+$export.R = 128; // real proto method for `library` 
+module.exports = $export;
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports) {
+
+var hasOwnProperty = {}.hasOwnProperty;
+module.exports = function(it, key){
+  return hasOwnProperty.call(it, key);
+};
+
+<<<<<<< HEAD
       //should we switch tracks ?
       if (altAudio) {
         this.audioSwitch = true;
@@ -15670,48 +18177,21 @@ var AudioStreamController = function (_EventHandler) {
         if (tracks.video) {
           delete tracks.video;
         }
+=======
+/***/ }),
+/* 18 */
+/***/ (function(module, exports) {
+>>>>>>> draft skinnier version
 
-        // include levelCodec in audio and video tracks
-        track = tracks.audio;
-        if (track) {
-          track.levelCodec = 'mp4a.40.2';
-          track.id = data.id;
-          this.hls.trigger(_events2.default.BUFFER_CODECS, tracks);
-          _logger.logger.log('audio track:audio,container:' + track.container + ',codecs[level/parsed]=[' + track.levelCodec + '/' + track.codec + ']');
-          var initSegment = track.initSegment;
-          if (initSegment) {
-            var appendObj = { type: 'audio', data: initSegment, parent: 'audio', content: 'initSegment' };
-            if (this.audioSwitch) {
-              this.pendingData = [appendObj];
-            } else {
-              this.appended = true;
-              // arm pending Buffering flag before appending a segment
-              this.pendingBuffering = true;
-              this.hls.trigger(_events2.default.BUFFER_APPENDING, appendObj);
-            }
-          }
-          //trigger handler right now
-          this.tick();
-        }
-      }
-    }
-  }, {
-    key: 'onFragParsingData',
-    value: function onFragParsingData(data) {
-      var _this2 = this;
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
 
-      var fragCurrent = this.fragCurrent;
-      var fragNew = data.frag;
-      if (fragCurrent && data.id === 'audio' && data.type === 'audio' && fragNew.sn === fragCurrent.sn && fragNew.level === fragCurrent.level && this.state === State.PARSING) {
-        var trackId = this.trackId,
-            track = this.tracks[trackId],
-            hls = this.hls;
-
-        if (isNaN(data.endPTS)) {
-          data.endPTS = data.startPTS + fragCurrent.duration;
-          data.endDTS = data.startDTS + fragCurrent.duration;
-        }
-
+<<<<<<< HEAD
         _logger.logger.log('parsed ' + data.type + ',PTS:[' + data.startPTS.toFixed(3) + ',' + data.endPTS.toFixed(3) + '],DTS:[' + data.startDTS.toFixed(3) + '/' + data.endDTS.toFixed(3) + '],nb:' + data.nb);
         _levelHelper2.default.updateFragPTSDTS(track.details, fragCurrent, data.startPTS, data.endPTS);
 
@@ -15738,1030 +18218,450 @@ var AudioStreamController = function (_EventHandler) {
             hls.trigger(_events2.default.AUDIO_TRACK_SWITCHED, { id: trackId });
           }
         }
+=======
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+>>>>>>> draft skinnier version
 
-        var pendingData = this.pendingData;
-        if (!this.audioSwitch) {
-          [data.data1, data.data2].forEach(function (buffer) {
-            if (buffer && buffer.length) {
-              pendingData.push({ type: data.type, data: buffer, parent: 'audio', content: 'data' });
-            }
-          });
-          if (!appendOnBufferFlush && pendingData.length) {
-            pendingData.forEach(function (appendObj) {
-              // only append in PARSING state (rationale is that an appending error could happen synchronously on first segment appending)
-              // in that case it is useless to append following segments
-              if (_this2.state === State.PARSING) {
-                // arm pending Buffering flag before appending a segment
-                _this2.pendingBuffering = true;
-                _this2.hls.trigger(_events2.default.BUFFER_APPENDING, appendObj);
-              }
-            });
-            this.pendingData = [];
-            this.appended = true;
-          }
-        }
-        //trigger handler right now
-        this.tick();
-      }
-    }
-  }, {
-    key: 'onFragParsed',
-    value: function onFragParsed(data) {
-      var fragCurrent = this.fragCurrent;
-      var fragNew = data.frag;
-      if (fragCurrent && data.id === 'audio' && fragNew.sn === fragCurrent.sn && fragNew.level === fragCurrent.level && this.state === State.PARSING) {
-        this.stats.tparsed = performance.now();
-        this.state = State.PARSED;
-        this._checkAppendedParsed();
-      }
-    }
-  }, {
-    key: 'onBufferCreated',
-    value: function onBufferCreated(data) {
-      var audioTrack = data.tracks.audio;
-      if (audioTrack) {
-        this.mediaBuffer = audioTrack.buffer;
-        this.loadedmetadata = true;
-      }
-    }
-  }, {
-    key: 'onBufferAppended',
-    value: function onBufferAppended(data) {
-      if (data.parent === 'audio') {
-        var state = this.state;
-        if (state === State.PARSING || state === State.PARSED) {
-          // check if all buffers have been appended
-          this.pendingBuffering = data.pending > 0;
-          this._checkAppendedParsed();
-        }
-      }
-    }
-  }, {
-    key: '_checkAppendedParsed',
-    value: function _checkAppendedParsed() {
-      //trigger handler right now
-      if (this.state === State.PARSED && (!this.appended || !this.pendingBuffering)) {
-        var frag = this.fragCurrent,
-            stats = this.stats,
-            hls = this.hls;
-        if (frag) {
-          this.fragPrevious = frag;
-          stats.tbuffered = performance.now();
-          hls.trigger(_events2.default.FRAG_BUFFERED, { stats: stats, frag: frag, id: 'audio' });
-          var media = this.mediaBuffer ? this.mediaBuffer : this.media;
-          _logger.logger.log('audio buffered : ' + _timeRanges2.default.toString(media.buffered));
-          if (this.audioSwitch && this.appended) {
-            this.audioSwitch = false;
-            hls.trigger(_events2.default.AUDIO_TRACK_SWITCHED, { id: this.trackId });
-          }
-          this.state = State.IDLE;
-        }
-        this.tick();
-      }
-    }
-  }, {
-    key: 'onError',
-    value: function onError(data) {
-      var frag = data.frag;
-      // don't handle frag error not related to audio fragment
-      if (frag && frag.type !== 'audio') {
-        return;
-      }
-      switch (data.details) {
-        case _errors.ErrorDetails.FRAG_LOAD_ERROR:
-        case _errors.ErrorDetails.FRAG_LOAD_TIMEOUT:
-          if (!data.fatal) {
-            var loadError = this.fragLoadError;
-            if (loadError) {
-              loadError++;
-            } else {
-              loadError = 1;
-            }
-            var config = this.config;
-            if (loadError <= config.fragLoadingMaxRetry) {
-              this.fragLoadError = loadError;
-              // reset load counter to avoid frag loop loading error
-              frag.loadCounter = 0;
-              // exponential backoff capped to config.fragLoadingMaxRetryTimeout
-              var delay = Math.min(Math.pow(2, loadError - 1) * config.fragLoadingRetryDelay, config.fragLoadingMaxRetryTimeout);
-              _logger.logger.warn('audioStreamController: frag loading failed, retry in ' + delay + ' ms');
-              this.retryDate = performance.now() + delay;
-              // retry loading state
-              this.state = State.FRAG_LOADING_WAITING_RETRY;
-            } else {
-              _logger.logger.error('audioStreamController: ' + data.details + ' reaches max retry, redispatch as fatal ...');
-              // switch error to fatal
-              data.fatal = true;
-              this.state = State.ERROR;
-            }
-          }
-          break;
-        case _errors.ErrorDetails.FRAG_LOOP_LOADING_ERROR:
-        case _errors.ErrorDetails.AUDIO_TRACK_LOAD_ERROR:
-        case _errors.ErrorDetails.AUDIO_TRACK_LOAD_TIMEOUT:
-        case _errors.ErrorDetails.KEY_LOAD_ERROR:
-        case _errors.ErrorDetails.KEY_LOAD_TIMEOUT:
-          //  when in ERROR state, don't switch back to IDLE state in case a non-fatal error is received
-          if (this.state !== State.ERROR) {
-            // if fatal error, stop processing, otherwise move to IDLE to retry loading
-            this.state = data.fatal ? State.ERROR : State.IDLE;
-            _logger.logger.warn('audioStreamController: ' + data.details + ' while loading frag,switch to ' + this.state + ' state ...');
-          }
-          break;
-        case _errors.ErrorDetails.BUFFER_FULL_ERROR:
-          // if in appending state
-          if (data.parent === 'audio' && (this.state === State.PARSING || this.state === State.PARSED)) {
-            var media = this.mediaBuffer,
-                currentTime = this.media.currentTime,
-                mediaBuffered = media && _bufferHelper2.default.isBuffered(media, currentTime) && _bufferHelper2.default.isBuffered(media, currentTime + 0.5);
-            // reduce max buf len if current position is buffered
-            if (mediaBuffered) {
-              var _config = this.config;
-              if (_config.maxMaxBufferLength >= _config.maxBufferLength) {
-                // reduce max buffer length as it might be too high. we do this to avoid loop flushing ...
-                _config.maxMaxBufferLength /= 2;
-                _logger.logger.warn('audio:reduce max buffer length to ' + _config.maxMaxBufferLength + 's');
-                // increase fragment load Index to avoid frag loop loading error after buffer flush
-                this.fragLoadIdx += 2 * _config.fragLoadingLoopThreshold;
-              }
-              this.state = State.IDLE;
-            } else {
-              // current position is not buffered, but browser is still complaining about buffer full error
-              // this happens on IE/Edge, refer to https://github.com/video-dev/hls.js/pull/708
-              // in that case flush the whole audio buffer to recover
-              _logger.logger.warn('buffer full error also media.currentTime is not buffered, flush audio buffer');
-              this.fragCurrent = null;
-              // flush everything
-              this.state = State.BUFFER_FLUSHING;
-              this.hls.trigger(_events2.default.BUFFER_FLUSHING, { startOffset: 0, endOffset: Number.POSITIVE_INFINITY, type: 'audio' });
-            }
-          }
-          break;
-        default:
-          break;
-      }
-    }
-  }, {
-    key: 'onBufferFlushed',
-    value: function onBufferFlushed() {
-      var _this3 = this;
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
 
-      var pendingData = this.pendingData;
-      if (pendingData && pendingData.length) {
-        _logger.logger.log('appending pending audio data on Buffer Flushed');
-        pendingData.forEach(function (appendObj) {
-          _this3.hls.trigger(_events2.default.BUFFER_APPENDING, appendObj);
-        });
-        this.appended = true;
-        this.pendingData = [];
-        this.state = State.PARSED;
-      } else {
-        // move to IDLE once flush complete. this should trigger new fragment loading
-        this.state = State.IDLE;
-        // reset reference to frag
-        this.fragPrevious = null;
-        this.tick();
-      }
-    }
-  }, {
-    key: 'state',
-    set: function set(nextState) {
-      if (this.state !== nextState) {
-        var previousState = this.state;
-        this._state = nextState;
-        _logger.logger.log('audio stream:' + previousState + '->' + nextState);
-      }
-    },
-    get: function get() {
-      return this._state;
-    }
-  }]);
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
 
-  return AudioStreamController;
-}(_eventHandler2.default);
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
 
-exports.default = AudioStreamController;
-
+<<<<<<< HEAD
 },{"25":25,"33":33,"34":34,"35":35,"37":37,"38":38,"48":48,"53":53,"54":54}],7:[function(_dereq_,module,exports){
 'use strict';
+=======
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+>>>>>>> draft skinnier version
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+<<<<<<< HEAD
+var _events = _dereq_(35);
+=======
+	return '/*# ' + data + ' */';
+}
+>>>>>>> draft skinnier version
+
+
+<<<<<<< HEAD
+var _eventHandler = _dereq_(34);
+=======
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+>>>>>>> draft skinnier version
+
+"use strict";
+
+<<<<<<< HEAD
+var _logger = _dereq_(53);
+=======
+>>>>>>> draft skinnier version
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+/* eslint-disable no-var */
+// Simple JavaScript Templating
+// Paul Miller (http://paulmillr.com)
+// http://underscorejs.org
+// (c) 2009-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+// By default, Underscore uses ERB-style template delimiters, change the
+// following template settings to use alternative delimiters.
+var settings = {
+  evaluate: /<%([\s\S]+?)%>/g,
+  interpolate: /<%=([\s\S]+?)%>/g,
+  escape: /<%-([\s\S]+?)%>/g
+};
 
-var _events = _dereq_(35);
+// When customizing `templateSettings`, if you don't want to define an
+// interpolation, evaluation or escaping regex, we need one that is
+// guaranteed not to match.
+var noMatch = /(.)^/;
 
-var _events2 = _interopRequireDefault(_events);
+// Certain characters need to be escaped so that they can be put into a
+// string literal.
+var escapes = {
+  '\'': '\'',
+  '\\': '\\',
+  '\r': 'r',
+  '\n': 'n',
+  '\t': 't',
+  '\u2028': 'u2028',
+  '\u2029': 'u2029'
+};
 
-var _eventHandler = _dereq_(34);
+var escaper = /\\|'|\r|\n|\t|\u2028|\u2029/g;
 
-var _eventHandler2 = _interopRequireDefault(_eventHandler);
+// List of HTML entities for escaping.
+var htmlEntities = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  '\'': '&#x27;'
+};
 
-var _logger = _dereq_(53);
+var entityRe = new RegExp('[&<>"\']', 'g');
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var escapeExpr = function escapeExpr(string) {
+  if (string === null) {
+    return '';
+  }
+  return ('' + string).replace(entityRe, function (match) {
+    return htmlEntities[match];
+  });
+};
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var counter = 0;
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+// JavaScript micro-templating, similar to John Resig's implementation.
+// Underscore templating handles arbitrary delimiters, preserves whitespace,
+// and correctly escapes quotes within interpolated code.
+var tmpl = function tmpl(text, data) {
+  var render;
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * audio track controller
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               */
+  // Combine delimiters into one regular expression via alternation.
+  var matcher = new RegExp([(settings.escape || noMatch).source, (settings.interpolate || noMatch).source, (settings.evaluate || noMatch).source].join('|') + '|$', 'g');
 
-var AudioTrackController = function (_EventHandler) {
-  _inherits(AudioTrackController, _EventHandler);
+  // Compile the template source, escaping string literals appropriately.
+  var index = 0;
+  var source = '__p+=\'';
+  text.replace(matcher, function (match, escape, interpolate, evaluate, offset) {
+    source += text.slice(index, offset).replace(escaper, function (match) {
+      return '\\' + escapes[match];
+    });
 
-  function AudioTrackController(hls) {
-    _classCallCheck(this, AudioTrackController);
+    if (escape) {
+      source += '\'+\n((__t=(' + escape + '))==null?\'\':escapeExpr(__t))+\n\'';
+    }
+    if (interpolate) {
+      source += '\'+\n((__t=(' + interpolate + '))==null?\'\':__t)+\n\'';
+    }
+    if (evaluate) {
+      source += '\';\n' + evaluate + '\n__p+=\'';
+    }
+    index = offset + match.length;
+    return match;
+  });
+  source += '\';\n';
 
-    var _this = _possibleConstructorReturn(this, (AudioTrackController.__proto__ || Object.getPrototypeOf(AudioTrackController)).call(this, hls, _events2.default.MANIFEST_LOADING, _events2.default.MANIFEST_LOADED, _events2.default.AUDIO_TRACK_LOADED));
-
-    _this.ticks = 0;
-    _this.ontick = _this.tick.bind(_this);
-    return _this;
+  // If a variable is not specified, place data values in local scope.
+  if (!settings.variable) {
+    source = 'with(obj||{}){\n' + source + '}\n';
   }
 
-  _createClass(AudioTrackController, [{
-    key: 'destroy',
-    value: function destroy() {
-      _eventHandler2.default.prototype.destroy.call(this);
-    }
-  }, {
-    key: 'tick',
-    value: function tick() {
-      this.ticks++;
-      if (this.ticks === 1) {
-        this.doTick();
-        if (this.ticks > 1) {
-          setTimeout(this.tick, 1);
-        }
-        this.ticks = 0;
-      }
-    }
-  }, {
-    key: 'doTick',
-    value: function doTick() {
-      this.updateTrack(this.trackId);
-    }
-  }, {
-    key: 'onManifestLoading',
-    value: function onManifestLoading() {
-      // reset audio tracks on manifest loading
-      this.tracks = [];
-      this.trackId = -1;
-    }
-  }, {
-    key: 'onManifestLoaded',
-    value: function onManifestLoaded(data) {
-      var _this2 = this;
+  source = 'var __t,__p=\'\',__j=Array.prototype.join,' + 'print=function(){__p+=__j.call(arguments,\'\');};\n' + source + 'return __p;\n//# sourceURL=/microtemplates/source[' + counter++ + ']';
 
-      var tracks = data.audioTracks || [];
-      var defaultFound = false;
-      this.tracks = tracks;
-      this.hls.trigger(_events2.default.AUDIO_TRACKS_UPDATED, { audioTracks: tracks });
-      // loop through available audio tracks and autoselect default if needed
-      var id = 0;
-      tracks.forEach(function (track) {
-        if (track.default) {
-          _this2.audioTrack = id;
-          defaultFound = true;
-          return;
-        }
-        id++;
-      });
-      if (defaultFound === false && tracks.length) {
-        _logger.logger.log('no default audio track defined, use first audio track as default');
-        this.audioTrack = 0;
-      }
-    }
-  }, {
-    key: 'onAudioTrackLoaded',
-    value: function onAudioTrackLoaded(data) {
-      if (data.id < this.tracks.length) {
-        _logger.logger.log('audioTrack ' + data.id + ' loaded');
-        this.tracks[data.id].details = data.details;
-        // check if current playlist is a live playlist
-        if (data.details.live && !this.timer) {
-          // if live playlist we will have to reload it periodically
-          // set reload period to playlist target duration
-          this.timer = setInterval(this.ontick, 1000 * data.details.targetduration);
-        }
-        if (!data.details.live && this.timer) {
-          // playlist is not live and timer is armed : stopping it
-          clearInterval(this.timer);
-          this.timer = null;
-        }
-      }
-    }
+  try {
+    /*jshint -W054 */
+    // TODO: find a way to avoid eval
+    render = new Function(settings.variable || 'obj', 'escapeExpr', source);
+  } catch (e) {
+    e.source = source;
+    throw e;
+  }
 
-    /** get alternate audio tracks list from playlist **/
+  if (data) {
+    return render(data, escapeExpr);
+  }
+  var template = function template(data) {
+    return render.call(this, data, escapeExpr);
+  };
 
-  }, {
-    key: 'setAudioTrackInternal',
-    value: function setAudioTrackInternal(newId) {
-      // check if level idx is valid
-      if (newId >= 0 && newId < this.tracks.length) {
-        // stopping live reloading timer if any
-        if (this.timer) {
-          clearInterval(this.timer);
-          this.timer = null;
-        }
-        this.trackId = newId;
-        _logger.logger.log('switching to audioTrack ' + newId);
-        var audioTrack = this.tracks[newId],
-            hls = this.hls,
-            type = audioTrack.type,
-            url = audioTrack.url,
-            eventObj = { id: newId, type: type, url: url };
-        // keep AUDIO_TRACK_SWITCH for legacy reason
-        hls.trigger(_events2.default.AUDIO_TRACK_SWITCH, eventObj);
-        hls.trigger(_events2.default.AUDIO_TRACK_SWITCHING, eventObj);
-        // check if we need to load playlist for this audio Track
-        var details = audioTrack.details;
-        if (url && (details === undefined || details.live === true)) {
-          // track not retrieved yet, or live playlist we need to (re)load it
-          _logger.logger.log('(re)loading playlist for audioTrack ' + newId);
-          hls.trigger(_events2.default.AUDIO_TRACK_LOADING, { url: url, id: newId });
-        }
-      }
-    }
-  }, {
-    key: 'updateTrack',
-    value: function updateTrack(newId) {
-      // check if level idx is valid
-      if (newId >= 0 && newId < this.tracks.length) {
-        // stopping live reloading timer if any
-        if (this.timer) {
-          clearInterval(this.timer);
-          this.timer = null;
-        }
-        this.trackId = newId;
-        _logger.logger.log('updating audioTrack ' + newId);
-        var audioTrack = this.tracks[newId],
-            url = audioTrack.url;
-        // check if we need to load playlist for this audio Track
-        var details = audioTrack.details;
-        if (url && (details === undefined || details.live === true)) {
-          // track not retrieved yet, or live playlist we need to (re)load it
-          _logger.logger.log('(re)loading playlist for audioTrack ' + newId);
-          this.hls.trigger(_events2.default.AUDIO_TRACK_LOADING, { url: url, id: newId });
-        }
-      }
-    }
-  }, {
-    key: 'audioTracks',
-    get: function get() {
-      return this.tracks;
-    }
+  // Provide the compiled function source as a convenience for precompilation.
+  template.source = 'function(' + (settings.variable || 'obj') + '){\n' + source + '}';
 
-    /** get index of the selected audio track (index in audio track lists) **/
+  return template;
+};
+tmpl.settings = settings;
 
-  }, {
-    key: 'audioTrack',
-    get: function get() {
-      return this.trackId;
-    }
+exports.default = tmpl;
+module.exports = exports['default'];
 
-    /** select an audio track, based on its index in audio track lists**/
-    ,
-    set: function set(audioTrackId) {
-      if (this.trackId !== audioTrackId || this.tracks[audioTrackId].details === undefined) {
-        this.setAudioTrackInternal(audioTrackId);
-      }
-    }
-  }]);
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
 
-  return AudioTrackController;
-}(_eventHandler2.default);
+"use strict";
 
-exports.default = AudioTrackController;
-
+<<<<<<< HEAD
 },{"34":34,"35":35,"53":53}],8:[function(_dereq_,module,exports){
 'use strict';
+=======
+>>>>>>> draft skinnier version
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var Browser = {};
 
+var hasLocalstorage = function hasLocalstorage() {
+  try {
+    localStorage.setItem('clappr', 'clappr');
+    localStorage.removeItem('clappr');
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+var hasFlash = function hasFlash() {
+  try {
+    var fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
+    return !!fo;
+  } catch (e) {
+    return !!(navigator.mimeTypes && navigator.mimeTypes['application/x-shockwave-flash'] !== undefined && navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin);
+  }
+};
+
+var getBrowserInfo = function getBrowserInfo() {
+  var ua = navigator.userAgent;
+  var parts = ua.match(/\b(playstation 4|nx|opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [],
+      extra = void 0;
+  if (/trident/i.test(parts[1])) {
+    extra = /\brv[ :]+(\d+)/g.exec(ua) || [];
+    return { name: 'IE', version: parseInt(extra[1] || '') };
+  } else if (parts[1] === 'Chrome') {
+    extra = ua.match(/\bOPR\/(\d+)/);
+    if (extra != null) {
+      return { name: 'Opera', version: parseInt(extra[1]) };
+    }
+  }
+  parts = parts[2] ? [parts[1], parts[2]] : [navigator.appName, navigator.appVersion, '-?'];
+
+  if (extra = ua.match(/version\/(\d+)/i)) {
+    parts.splice(1, 1, extra[1]);
+  }
+  return { name: parts[0], version: parseInt(parts[1]) };
+};
+
+var browserInfo = getBrowserInfo();
+
+Browser.isChrome = /chrome|CriOS/i.test(navigator.userAgent);
+Browser.isSafari = /safari/i.test(navigator.userAgent) && !Browser.isChrome;
+Browser.isFirefox = /firefox/i.test(navigator.userAgent);
+Browser.isLegacyIE = !!window.ActiveXObject;
+Browser.isIE = Browser.isLegacyIE || /trident.*rv:1\d/i.test(navigator.userAgent);
+Browser.isIE11 = /trident.*rv:11/i.test(navigator.userAgent);
+Browser.isChromecast = Browser.isChrome && /CrKey/i.test(navigator.userAgent);
+Browser.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|IEMobile|Opera Mini/i.test(navigator.userAgent);
+Browser.isiOS = /iPad|iPhone|iPod/i.test(navigator.userAgent);
+Browser.isAndroid = /Android/i.test(navigator.userAgent);
+Browser.isWindowsPhone = /Windows Phone/i.test(navigator.userAgent);
+Browser.isWin8App = /MSAppHost/i.test(navigator.userAgent);
+Browser.isWiiU = /WiiU/i.test(navigator.userAgent);
+Browser.isPS4 = /PlayStation 4/i.test(navigator.userAgent);
+Browser.hasLocalstorage = hasLocalstorage();
+Browser.hasFlash = hasFlash();
+
+Browser.name = browserInfo.name;
+Browser.version = browserInfo.version;
+
+exports.default = Browser;
+module.exports = exports['default'];
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+<<<<<<< HEAD
 var _events = _dereq_(35);
+=======
+var isObject = __webpack_require__(25);
+module.exports = function(it){
+  if(!isObject(it))throw TypeError(it + ' is not an object!');
+  return it;
+};
+>>>>>>> draft skinnier version
 
-var _events2 = _interopRequireDefault(_events);
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
 
+<<<<<<< HEAD
 var _eventHandler = _dereq_(34);
+=======
+var dP         = __webpack_require__(12)
+  , createDesc = __webpack_require__(28);
+module.exports = __webpack_require__(15) ? function(object, key, value){
+  return dP.f(object, key, createDesc(1, value));
+} : function(object, key, value){
+  object[key] = value;
+  return object;
+};
+>>>>>>> draft skinnier version
 
-var _eventHandler2 = _interopRequireDefault(_eventHandler);
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
 
+<<<<<<< HEAD
 var _logger = _dereq_(53);
 
 var _errors = _dereq_(33);
+=======
+"use strict";
+
+>>>>>>> draft skinnier version
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _createClass2 = __webpack_require__(4);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _inherits2 = __webpack_require__(1);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _utils = __webpack_require__(3);
+
+var _ui_object = __webpack_require__(14);
+
+var _ui_object2 = _interopRequireDefault(_ui_object);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+/**
+ * An abstraction to represent a generic playback, it's like an interface to be implemented by subclasses.
+ * @class Playback
+ * @constructor
+ * @extends UIObject
+ * @module base
+ */
+var Playback = function (_UIObject) {
+  (0, _inherits3.default)(Playback, _UIObject);
+  (0, _createClass3.default)(Playback, [{
+    key: 'isAudioOnly',
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Buffer Controller
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               */
-
-var BufferController = function (_EventHandler) {
-  _inherits(BufferController, _EventHandler);
-
-  function BufferController(hls) {
-    _classCallCheck(this, BufferController);
-
-    // the value that we have set mediasource.duration to
-    // (the actual duration may be tweaked slighly by the browser)
-    var _this = _possibleConstructorReturn(this, (BufferController.__proto__ || Object.getPrototypeOf(BufferController)).call(this, hls, _events2.default.MEDIA_ATTACHING, _events2.default.MEDIA_DETACHING, _events2.default.MANIFEST_PARSED, _events2.default.BUFFER_RESET, _events2.default.BUFFER_APPENDING, _events2.default.BUFFER_CODECS, _events2.default.BUFFER_EOS, _events2.default.BUFFER_FLUSHING, _events2.default.LEVEL_PTS_UPDATED, _events2.default.LEVEL_UPDATED));
-
-    _this._msDuration = null;
-    // the value that we want to set mediaSource.duration to
-    _this._levelDuration = null;
-
-    // Source Buffer listeners
-    _this.onsbue = _this.onSBUpdateEnd.bind(_this);
-    _this.onsbe = _this.onSBUpdateError.bind(_this);
-    _this.pendingTracks = {};
-    _this.tracks = {};
-    return _this;
-  }
-
-  _createClass(BufferController, [{
-    key: 'destroy',
-    value: function destroy() {
-      _eventHandler2.default.prototype.destroy.call(this);
-    }
-  }, {
-    key: 'onLevelPtsUpdated',
-    value: function onLevelPtsUpdated(data) {
-      var type = data.type;
-      var audioTrack = this.tracks.audio;
-
-      // Adjusting `SourceBuffer.timestampOffset` (desired point in the timeline where the next frames should be appended)
-      // in Chrome browser when we detect MPEG audio container and time delta between level PTS and `SourceBuffer.timestampOffset`
-      // is greater than 100ms (this is enough to handle seek for VOD or level change for LIVE videos). At the time of change we issue
-      // `SourceBuffer.abort()` and adjusting `SourceBuffer.timestampOffset` if `SourceBuffer.updating` is false or awaiting `updateend`
-      // event if SB is in updating state.
-      // More info here: https://github.com/video-dev/hls.js/issues/332#issuecomment-257986486
-
-      if (type === 'audio' && audioTrack && audioTrack.container === 'audio/mpeg') {
-        // Chrome audio mp3 track
-        var audioBuffer = this.sourceBuffer.audio;
-        var delta = Math.abs(audioBuffer.timestampOffset - data.start);
-
-        // adjust timestamp offset if time delta is greater than 100ms
-        if (delta > 0.1) {
-          var updating = audioBuffer.updating;
-
-          try {
-            audioBuffer.abort();
-          } catch (err) {
-            updating = true;
-            _logger.logger.warn('can not abort audio buffer: ' + err);
-          }
-
-          if (!updating) {
-            _logger.logger.warn('change mpeg audio timestamp offset from ' + audioBuffer.timestampOffset + ' to ' + data.start);
-            audioBuffer.timestampOffset = data.start;
-          } else {
-            this.audioTimestampOffset = data.start;
-          }
-        }
-      }
-    }
-  }, {
-    key: 'onManifestParsed',
-    value: function onManifestParsed(data) {
-      var audioExpected = data.audio,
-          videoExpected = data.video,
-          sourceBufferNb = 0;
-      // in case of alt audio 2 BUFFER_CODECS events will be triggered, one per stream controller
-      // sourcebuffers will be created all at once when the expected nb of tracks will be reached
-      // in case alt audio is not used, only one BUFFER_CODEC event will be fired from main stream controller
-      // it will contain the expected nb of source buffers, no need to compute it
-      if (data.altAudio && (audioExpected || videoExpected)) {
-        sourceBufferNb = (audioExpected ? 1 : 0) + (videoExpected ? 1 : 0);
-        _logger.logger.log(sourceBufferNb + ' sourceBuffer(s) expected');
-      }
-      this.sourceBufferNb = sourceBufferNb;
-    }
-  }, {
-    key: 'onMediaAttaching',
-    value: function onMediaAttaching(data) {
-      var media = this.media = data.media;
-      if (media) {
-        // setup the media source
-        var ms = this.mediaSource = new MediaSource();
-        //Media Source listeners
-        this.onmso = this.onMediaSourceOpen.bind(this);
-        this.onmse = this.onMediaSourceEnded.bind(this);
-        this.onmsc = this.onMediaSourceClose.bind(this);
-        ms.addEventListener('sourceopen', this.onmso);
-        ms.addEventListener('sourceended', this.onmse);
-        ms.addEventListener('sourceclose', this.onmsc);
-        // link video and media Source
-        media.src = URL.createObjectURL(ms);
-      }
-    }
-  }, {
-    key: 'onMediaDetaching',
-    value: function onMediaDetaching() {
-      _logger.logger.log('media source detaching');
-      var ms = this.mediaSource;
-      if (ms) {
-        if (ms.readyState === 'open') {
-          try {
-            // endOfStream could trigger exception if any sourcebuffer is in updating state
-            // we don't really care about checking sourcebuffer state here,
-            // as we are anyway detaching the MediaSource
-            // let's just avoid this exception to propagate
-            ms.endOfStream();
-          } catch (err) {
-            _logger.logger.warn('onMediaDetaching:' + err.message + ' while calling endOfStream');
-          }
-        }
-        ms.removeEventListener('sourceopen', this.onmso);
-        ms.removeEventListener('sourceended', this.onmse);
-        ms.removeEventListener('sourceclose', this.onmsc);
-
-        // Detach properly the MediaSource from the HTMLMediaElement as
-        // suggested in https://github.com/w3c/media-source/issues/53.
-        if (this.media) {
-          URL.revokeObjectURL(this.media.src);
-          this.media.removeAttribute('src');
-          this.media.load();
-        }
-
-        this.mediaSource = null;
-        this.media = null;
-        this.pendingTracks = {};
-        this.tracks = {};
-        this.sourceBuffer = {};
-        this.flushRange = [];
-        this.segments = [];
-        this.appended = 0;
-      }
-      this.onmso = this.onmse = this.onmsc = null;
-      this.hls.trigger(_events2.default.MEDIA_DETACHED);
-    }
-  }, {
-    key: 'onMediaSourceOpen',
-    value: function onMediaSourceOpen() {
-      _logger.logger.log('media source opened');
-      this.hls.trigger(_events2.default.MEDIA_ATTACHED, { media: this.media });
-      var mediaSource = this.mediaSource;
-      if (mediaSource) {
-        // once received, don't listen anymore to sourceopen event
-        mediaSource.removeEventListener('sourceopen', this.onmso);
-      }
-      this.checkPendingTracks();
-    }
-  }, {
-    key: 'checkPendingTracks',
-    value: function checkPendingTracks() {
-      // if any buffer codecs pending, check if we have enough to create sourceBuffers
-      var pendingTracks = this.pendingTracks,
-          pendingTracksNb = Object.keys(pendingTracks).length;
-      // if any pending tracks and (if nb of pending tracks gt or equal than expected nb or if unknown expected nb)
-      if (pendingTracksNb && (this.sourceBufferNb <= pendingTracksNb || this.sourceBufferNb === 0)) {
-        // ok, let's create them now !
-        this.createSourceBuffers(pendingTracks);
-        this.pendingTracks = {};
-        // append any pending segments now !
-        this.doAppending();
-      }
-    }
-  }, {
-    key: 'onMediaSourceClose',
-    value: function onMediaSourceClose() {
-      _logger.logger.log('media source closed');
-    }
-  }, {
-    key: 'onMediaSourceEnded',
-    value: function onMediaSourceEnded() {
-      _logger.logger.log('media source ended');
-    }
-  }, {
-    key: 'onSBUpdateEnd',
-    value: function onSBUpdateEnd() {
-      // update timestampOffset
-      if (this.audioTimestampOffset) {
-        var audioBuffer = this.sourceBuffer.audio;
-        _logger.logger.warn('change mpeg audio timestamp offset from ' + audioBuffer.timestampOffset + ' to ' + this.audioTimestampOffset);
-        audioBuffer.timestampOffset = this.audioTimestampOffset;
-        delete this.audioTimestampOffset;
-      }
-
-      if (this._needsFlush) {
-        this.doFlush();
-      }
-
-      if (this._needsEos) {
-        this.checkEos();
-      }
-      this.appending = false;
-      var parent = this.parent;
-      // count nb of pending segments waiting for appending on this sourcebuffer
-      var pending = this.segments.reduce(function (counter, segment) {
-        return segment.parent === parent ? counter + 1 : counter;
-      }, 0);
-      this.hls.trigger(_events2.default.BUFFER_APPENDED, { parent: parent, pending: pending });
-
-      // don't append in flushing mode
-      if (!this._needsFlush) {
-        this.doAppending();
-      }
-
-      this.updateMediaElementDuration();
-    }
-  }, {
-    key: 'onSBUpdateError',
-    value: function onSBUpdateError(event) {
-      _logger.logger.error('sourceBuffer error:', event);
-      // according to http://www.w3.org/TR/media-source/#sourcebuffer-append-error
-      // this error might not always be fatal (it is fatal if decode error is set, in that case
-      // it will be followed by a mediaElement error ...)
-      this.hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.BUFFER_APPENDING_ERROR, fatal: false });
-      // we don't need to do more than that, as accordin to the spec, updateend will be fired just after
-    }
-  }, {
-    key: 'onBufferReset',
-    value: function onBufferReset() {
-      var sourceBuffer = this.sourceBuffer;
-      for (var type in sourceBuffer) {
-        var sb = sourceBuffer[type];
-        try {
-          this.mediaSource.removeSourceBuffer(sb);
-          sb.removeEventListener('updateend', this.onsbue);
-          sb.removeEventListener('error', this.onsbe);
-        } catch (err) {}
-      }
-      this.sourceBuffer = {};
-      this.flushRange = [];
-      this.segments = [];
-      this.appended = 0;
-    }
-  }, {
-    key: 'onBufferCodecs',
-    value: function onBufferCodecs(tracks) {
-      // if source buffer(s) not created yet, appended buffer tracks in this.pendingTracks
-      // if sourcebuffers already created, do nothing ...
-      if (Object.keys(this.sourceBuffer).length === 0) {
-        for (var trackName in tracks) {
-          this.pendingTracks[trackName] = tracks[trackName];
-        }
-        var mediaSource = this.mediaSource;
-        if (mediaSource && mediaSource.readyState === 'open') {
-          // try to create sourcebuffers if mediasource opened
-          this.checkPendingTracks();
-        }
-      }
-    }
-  }, {
-    key: 'createSourceBuffers',
-    value: function createSourceBuffers(tracks) {
-      var sourceBuffer = this.sourceBuffer,
-          mediaSource = this.mediaSource;
-
-      for (var trackName in tracks) {
-        if (!sourceBuffer[trackName]) {
-          var track = tracks[trackName];
-          // use levelCodec as first priority
-          var codec = track.levelCodec || track.codec;
-          var mimeType = track.container + ';codecs=' + codec;
-          _logger.logger.log('creating sourceBuffer(' + mimeType + ')');
-          try {
-            var sb = sourceBuffer[trackName] = mediaSource.addSourceBuffer(mimeType);
-            sb.addEventListener('updateend', this.onsbue);
-            sb.addEventListener('error', this.onsbe);
-            this.tracks[trackName] = { codec: codec, container: track.container };
-            track.buffer = sb;
-          } catch (err) {
-            _logger.logger.error('error while trying to add sourceBuffer:' + err.message);
-            this.hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.BUFFER_ADD_CODEC_ERROR, fatal: false, err: err, mimeType: mimeType });
-          }
-        }
-      }
-      this.hls.trigger(_events2.default.BUFFER_CREATED, { tracks: tracks });
-    }
-  }, {
-    key: 'onBufferAppending',
-    value: function onBufferAppending(data) {
-      if (!this._needsFlush) {
-        if (!this.segments) {
-          this.segments = [data];
-        } else {
-          this.segments.push(data);
-        }
-        this.doAppending();
-      }
-    }
-  }, {
-    key: 'onBufferAppendFail',
-    value: function onBufferAppendFail(data) {
-      _logger.logger.error('sourceBuffer error:', data.event);
-      // according to http://www.w3.org/TR/media-source/#sourcebuffer-append-error
-      // this error might not always be fatal (it is fatal if decode error is set, in that case
-      // it will be followed by a mediaElement error ...)
-      this.hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.BUFFER_APPENDING_ERROR, fatal: false });
-    }
-
-    // on BUFFER_EOS mark matching sourcebuffer(s) as ended and trigger checkEos()
-
-  }, {
-    key: 'onBufferEos',
-    value: function onBufferEos(data) {
-      var sb = this.sourceBuffer;
-      var dataType = data.type;
-      for (var type in sb) {
-        if (!dataType || type === dataType) {
-          if (!sb[type].ended) {
-            sb[type].ended = true;
-            _logger.logger.log(type + ' sourceBuffer now EOS');
-          }
-        }
-      }
-      this.checkEos();
-    }
-
-    // if all source buffers are marked as ended, signal endOfStream() to MediaSource.
-
-  }, {
-    key: 'checkEos',
-    value: function checkEos() {
-      var sb = this.sourceBuffer,
-          mediaSource = this.mediaSource;
-      if (!mediaSource || mediaSource.readyState !== 'open') {
-        this._needsEos = false;
-        return;
-      }
-      for (var type in sb) {
-        var sbobj = sb[type];
-        if (!sbobj.ended) {
-          return;
-        }
-        if (sbobj.updating) {
-          this._needsEos = true;
-          return;
-        }
-      }
-      _logger.logger.log('all media data available, signal endOfStream() to MediaSource and stop loading fragment');
-      //Notify the media element that it now has all of the media data
-      try {
-        mediaSource.endOfStream();
-      } catch (e) {
-        _logger.logger.warn('exception while calling mediaSource.endOfStream()');
-      }
-      this._needsEos = false;
-    }
-  }, {
-    key: 'onBufferFlushing',
-    value: function onBufferFlushing(data) {
-      this.flushRange.push({ start: data.startOffset, end: data.endOffset, type: data.type });
-      // attempt flush immediatly
-      this.flushBufferCounter = 0;
-      this.doFlush();
-    }
-  }, {
-    key: 'onLevelUpdated',
-    value: function onLevelUpdated(event) {
-      var details = event.details;
-      if (details.fragments.length === 0) {
-        return;
-      }
-      this._levelDuration = details.totalduration + details.fragments[0].start;
-      this.updateMediaElementDuration();
-    }
-
-    // https://github.com/video-dev/hls.js/issues/355
-
-  }, {
-    key: 'updateMediaElementDuration',
-    value: function updateMediaElementDuration() {
-      var media = this.media,
-          mediaSource = this.mediaSource,
-          sourceBuffer = this.sourceBuffer,
-          levelDuration = this._levelDuration;
-      if (levelDuration === null || !media || !mediaSource || !sourceBuffer || media.readyState === 0 || mediaSource.readyState !== 'open') {
-        return;
-      }
-      for (var type in sourceBuffer) {
-        if (sourceBuffer[type].updating) {
-          // can't set duration whilst a buffer is updating
-          return;
-        }
-      }
-      if (this._msDuration === null) {
-        // initialise to the value that the media source is reporting
-        this._msDuration = mediaSource.duration;
-      }
-      var duration = media.duration;
-      // levelDuration was the last value we set.
-      // not using mediaSource.duration as the browser may tweak this value
-      // only update mediasource duration if its value increase, this is to avoid
-      // flushing already buffered portion when switching between quality level
-      if (levelDuration > this._msDuration && levelDuration > duration || duration === Infinity || isNaN(duration)) {
-        _logger.logger.log('Updating mediasource duration to ' + levelDuration.toFixed(3));
-        this._msDuration = mediaSource.duration = levelDuration;
-      }
-    }
-  }, {
-    key: 'doFlush',
-    value: function doFlush() {
-      // loop through all buffer ranges to flush
-      while (this.flushRange.length) {
-        var range = this.flushRange[0];
-        // flushBuffer will abort any buffer append in progress and flush Audio/Video Buffer
-        if (this.flushBuffer(range.start, range.end, range.type)) {
-          // range flushed, remove from flush array
-          this.flushRange.shift();
-          this.flushBufferCounter = 0;
-        } else {
-          this._needsFlush = true;
-          // avoid looping, wait for SB update end to retrigger a flush
-          return;
-        }
-      }
-      if (this.flushRange.length === 0) {
-        // everything flushed
-        this._needsFlush = false;
-
-        // let's recompute this.appended, which is used to avoid flush looping
-        var appended = 0;
-        var sourceBuffer = this.sourceBuffer;
-        try {
-          for (var type in sourceBuffer) {
-            appended += sourceBuffer[type].buffered.length;
-          }
-        } catch (error) {
-          // error could be thrown while accessing buffered, in case sourcebuffer has already been removed from MediaSource
-          // this is harmess at this stage, catch this to avoid reporting an internal exception
-          _logger.logger.error('error while accessing sourceBuffer.buffered');
-        }
-        this.appended = appended;
-        this.hls.trigger(_events2.default.BUFFER_FLUSHED);
-      }
-    }
-  }, {
-    key: 'doAppending',
-    value: function doAppending() {
-      var hls = this.hls,
-          sourceBuffer = this.sourceBuffer,
-          segments = this.segments;
-      if (Object.keys(sourceBuffer).length) {
-        if (this.media.error) {
-          this.segments = [];
-          _logger.logger.error('trying to append although a media error occured, flush segment and abort');
-          return;
-        }
-        if (this.appending) {
-          //logger.log(`sb appending in progress`);
-          return;
-        }
-        if (segments && segments.length) {
-          var segment = segments.shift();
-          try {
-            var type = segment.type,
-                sb = sourceBuffer[type];
-            if (sb) {
-              if (!sb.updating) {
-                // reset sourceBuffer ended flag before appending segment
-                sb.ended = false;
-                //logger.log(`appending ${segment.content} ${type} SB, size:${segment.data.length}, ${segment.parent}`);
-                this.parent = segment.parent;
-                sb.appendBuffer(segment.data);
-                this.appendError = 0;
-                this.appended++;
-                this.appending = true;
-              } else {
-                segments.unshift(segment);
-              }
-            } else {
-              // in case we don't have any source buffer matching with this segment type,
-              // it means that Mediasource fails to create sourcebuffer
-              // discard this segment, and trigger update end
-              this.onSBUpdateEnd();
-            }
-          } catch (err) {
-            // in case any error occured while appending, put back segment in segments table
-            _logger.logger.error('error while trying to append buffer:' + err.message);
-            segments.unshift(segment);
-            var event = { type: _errors.ErrorTypes.MEDIA_ERROR, parent: segment.parent };
-            if (err.code !== 22) {
-              if (this.appendError) {
-                this.appendError++;
-              } else {
-                this.appendError = 1;
-              }
-              event.details = _errors.ErrorDetails.BUFFER_APPEND_ERROR;
-              /* with UHD content, we could get loop of quota exceeded error until
-                browser is able to evict some data from sourcebuffer. retrying help recovering this
-              */
-              if (this.appendError > hls.config.appendErrorMaxRetry) {
-                _logger.logger.log('fail ' + hls.config.appendErrorMaxRetry + ' times to append segment in sourceBuffer');
-                segments = [];
-                event.fatal = true;
-                hls.trigger(_events2.default.ERROR, event);
-                return;
-              } else {
-                event.fatal = false;
-                hls.trigger(_events2.default.ERROR, event);
-              }
-            } else {
-              // QuotaExceededError: http://www.w3.org/TR/html5/infrastructure.html#quotaexceedederror
-              // let's stop appending any segments, and report BUFFER_FULL_ERROR error
-              this.segments = [];
-              event.details = _errors.ErrorDetails.BUFFER_FULL_ERROR;
-              event.fatal = false;
-              hls.trigger(_events2.default.ERROR, event);
-              return;
-            }
-          }
-        }
-      }
-    }
-
-    /*
-      flush specified buffered range,
-      return true once range has been flushed.
-      as sourceBuffer.remove() is asynchronous, flushBuffer will be retriggered on sourceBuffer update end
+    /**
+    * Determine if the playback does not contain video/has video but video should be ignored.
+    * @property isAudioOnly
+    * @type Boolean
     */
+    get: function get() {
+      return false;
+    }
+
+    /**
+     * Determine if the playback has ended.
+     * @property ended
+     * @type Boolean
+     */
 
   }, {
-    key: 'flushBuffer',
-    value: function flushBuffer(startOffset, endOffset, typeIn) {
-      var sb,
-          i,
-          bufStart,
-          bufEnd,
-          flushStart,
-          flushEnd,
-          sourceBuffer = this.sourceBuffer;
-      if (Object.keys(sourceBuffer).length) {
-        _logger.logger.log('flushBuffer,pos/start/end: ' + this.media.currentTime.toFixed(3) + '/' + startOffset + '/' + endOffset);
-        // safeguard to avoid infinite looping : don't try to flush more than the nb of appended segments
-        if (this.flushBufferCounter < this.appended) {
-          for (var type in sourceBuffer) {
-            // check if sourcebuffer type is defined (typeIn): if yes, let's only flush this one
-            // if no, let's flush all sourcebuffers
-            if (typeIn && type !== typeIn) {
-              continue;
-            }
-            sb = sourceBuffer[type];
-            // we are going to flush buffer, mark source buffer as 'not ended'
-            sb.ended = false;
-            if (!sb.updating) {
-              try {
-                for (i = 0; i < sb.buffered.length; i++) {
-                  bufStart = sb.buffered.start(i);
-                  bufEnd = sb.buffered.end(i);
-                  // workaround firefox not able to properly flush multiple buffered range.
-                  if (navigator.userAgent.toLowerCase().indexOf('firefox') !== -1 && endOffset === Number.POSITIVE_INFINITY) {
-                    flushStart = startOffset;
-                    flushEnd = endOffset;
-                  } else {
-                    flushStart = Math.max(bufStart, startOffset);
-                    flushEnd = Math.min(bufEnd, endOffset);
-                  }
-                  /* sometimes sourcebuffer.remove() does not flush
-                     the exact expected time range.
-                     to avoid rounding issues/infinite loop,
-                     only flush buffer range of length greater than 500ms.
-                  */
-                  if (Math.min(flushEnd, bufEnd) - flushStart > 0.5) {
-                    this.flushBufferCounter++;
-                    _logger.logger.log('flush ' + type + ' [' + flushStart + ',' + flushEnd + '], of [' + bufStart + ',' + bufEnd + '], pos:' + this.media.currentTime);
-                    sb.remove(flushStart, flushEnd);
-                    return false;
-                  }
-                }
-              } catch (e) {
-                _logger.logger.warn('exception while accessing sourcebuffer, it might have been removed from MediaSource');
-              }
-            } else {
-              //logger.log('abort ' + type + ' append in progress');
-              // this will abort any appending in progress
-              //sb.abort();
-              _logger.logger.warn('cannot flush, sb updating in progress');
-              return false;
-            }
-          }
-        } else {
-          _logger.logger.warn('abort flushing too many retries');
-        }
-        _logger.logger.log('buffer flushed');
-      }
-      // everything flushed !
-      return true;
+    key: 'ended',
+    get: function get() {
+      return false;
     }
+
+    /**
+     * The internationalization plugin.
+     * @property i18n
+     * @type {Strings}
+     */
+
+  }, {
+    key: 'i18n',
+    get: function get() {
+      return this._i18n;
+    }
+
+    /**
+     * Determine if the playback is having to buffer in order for
+     * playback to be smooth.
+     * (i.e if a live stream is playing smoothly, this will be false)
+     * @property buffering
+     * @type Boolean
+     */
+
+  }, {
+    key: 'buffering',
+    get: function get() {
+      return false;
+    }
+
+    /**
+     * @method constructor
+     * @param {Object} options the options object
+     * @param {Strings} i18n the internationalization component
+     */
+
   }]);
 
+<<<<<<< HEAD
   return BufferController;
 }(_eventHandler2.default);
 
@@ -16785,263 +18685,118 @@ var _eventHandler = _dereq_(34);
 var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+=======
+  function Playback(options, i18n) {
+    (0, _classCallCheck3.default)(this, Playback);
+>>>>>>> draft skinnier version
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+    var _this = (0, _possibleConstructorReturn3.default)(this, _UIObject.call(this, options));
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * cap stream level to media size dimension controller
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               */
-
-var CapLevelController = function (_EventHandler) {
-  _inherits(CapLevelController, _EventHandler);
-
-  function CapLevelController(hls) {
-    _classCallCheck(this, CapLevelController);
-
-    return _possibleConstructorReturn(this, (CapLevelController.__proto__ || Object.getPrototypeOf(CapLevelController)).call(this, hls, _events2.default.FPS_DROP_LEVEL_CAPPING, _events2.default.MEDIA_ATTACHING, _events2.default.MANIFEST_PARSED));
+    _this.settings = {};
+    _this._i18n = i18n;
+    return _this;
   }
 
-  _createClass(CapLevelController, [{
-    key: 'destroy',
-    value: function destroy() {
-      if (this.hls.config.capLevelToPlayerSize) {
-        this.media = this.restrictedLevels = null;
-        this.autoLevelCapping = Number.POSITIVE_INFINITY;
-        if (this.timer) {
-          this.timer = clearInterval(this.timer);
-        }
-      }
-    }
-  }, {
-    key: 'onFpsDropLevelCapping',
-    value: function onFpsDropLevelCapping(data) {
-      if (!this.restrictedLevels) {
-        this.restrictedLevels = [];
-      }
-      if (!this.isLevelRestricted(data.droppedLevel)) {
-        this.restrictedLevels.push(data.droppedLevel);
-      }
-    }
-  }, {
-    key: 'onMediaAttaching',
-    value: function onMediaAttaching(data) {
-      this.media = data.media instanceof HTMLVideoElement ? data.media : null;
-    }
-  }, {
-    key: 'onManifestParsed',
-    value: function onManifestParsed(data) {
-      var hls = this.hls;
-      if (hls.config.capLevelToPlayerSize) {
-        this.autoLevelCapping = Number.POSITIVE_INFINITY;
-        this.levels = data.levels;
-        hls.firstLevel = this.getMaxLevel(data.firstLevel);
-        clearInterval(this.timer);
-        this.timer = setInterval(this.detectPlayerSize.bind(this), 1000);
-        this.detectPlayerSize();
-      }
-    }
-  }, {
-    key: 'detectPlayerSize',
-    value: function detectPlayerSize() {
-      if (this.media) {
-        var levelsLength = this.levels ? this.levels.length : 0;
-        if (levelsLength) {
-          var hls = this.hls;
-          hls.autoLevelCapping = this.getMaxLevel(levelsLength - 1);
-          if (hls.autoLevelCapping > this.autoLevelCapping) {
-            // if auto level capping has a higher value for the previous one, flush the buffer using nextLevelSwitch
-            // usually happen when the user go to the fullscreen mode.
-            hls.streamController.nextLevelSwitch();
-          }
-          this.autoLevelCapping = hls.autoLevelCapping;
-        }
-      }
-    }
+  /**
+   * Gives user consent to playback (mobile devices).
+   * @method consent
+   */
 
-    /*
-    * returns level should be the one with the dimensions equal or greater than the media (player) dimensions (so the video will be downscaled)
-    */
 
-  }, {
-    key: 'getMaxLevel',
-    value: function getMaxLevel(capLevelIndex) {
-      var result = 0,
-          i = void 0,
-          level = void 0,
-          mWidth = this.mediaWidth,
-          mHeight = this.mediaHeight,
-          lWidth = 0,
-          lHeight = 0;
+  Playback.prototype.consent = function consent() {};
 
-      for (i = 0; i <= capLevelIndex; i++) {
-        level = this.levels[i];
-        if (this.isLevelRestricted(i)) {
-          break;
-        }
-        result = i;
-        lWidth = level.width;
-        lHeight = level.height;
-        if (mWidth <= lWidth || mHeight <= lHeight) {
-          break;
-        }
-      }
-      return result;
-    }
-  }, {
-    key: 'isLevelRestricted',
-    value: function isLevelRestricted(level) {
-      return this.restrictedLevels && this.restrictedLevels.indexOf(level) !== -1 ? true : false;
-    }
-  }, {
-    key: 'contentScaleFactor',
-    get: function get() {
-      var pixelRatio = 1;
-      try {
-        pixelRatio = window.devicePixelRatio;
-      } catch (e) {}
-      return pixelRatio;
-    }
-  }, {
-    key: 'mediaWidth',
-    get: function get() {
-      var width = void 0;
-      var media = this.media;
-      if (media) {
-        width = media.width || media.clientWidth || media.offsetWidth;
-        width *= this.contentScaleFactor;
-      }
-      return width;
-    }
-  }, {
-    key: 'mediaHeight',
-    get: function get() {
-      var height = void 0;
-      var media = this.media;
-      if (media) {
-        height = media.height || media.clientHeight || media.offsetHeight;
-        height *= this.contentScaleFactor;
-      }
-      return height;
-    }
-  }]);
+  /**
+   * plays the playback.
+   * @method play
+   */
 
-  return CapLevelController;
-}(_eventHandler2.default);
 
-exports.default = CapLevelController;
+  Playback.prototype.play = function play() {};
 
+  /**
+   * pauses the playback.
+   * @method pause
+   */
+
+
+  Playback.prototype.pause = function pause() {};
+
+<<<<<<< HEAD
 },{"34":34,"35":35}],10:[function(_dereq_,module,exports){
 'use strict';
+=======
+  /**
+   * stops the playback.
+   * @method stop
+   */
+>>>>>>> draft skinnier version
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+  Playback.prototype.stop = function stop() {};
 
+<<<<<<< HEAD
 var _events = _dereq_(35);
+=======
+  /**
+   * seeks the playback to a given `time` in seconds
+   * @method seek
+   * @param {Number} time should be a number between 0 and the video duration
+   */
+>>>>>>> draft skinnier version
 
-var _events2 = _interopRequireDefault(_events);
 
+<<<<<<< HEAD
 var _eventHandler = _dereq_(34);
+=======
+  Playback.prototype.seek = function seek(time) {}; // eslint-disable-line no-unused-vars
+>>>>>>> draft skinnier version
 
-var _eventHandler2 = _interopRequireDefault(_eventHandler);
+  /**
+   * seeks the playback to a given `percentage` in percentage
+   * @method seekPercentage
+   * @param {Number} time should be a number between 0 and 100
+   */
 
+<<<<<<< HEAD
 var _logger = _dereq_(53);
+=======
+>>>>>>> draft skinnier version
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  Playback.prototype.seekPercentage = function seekPercentage(percentage) {}; // eslint-disable-line no-unused-vars
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+  /**
+   * The time that "0" now represents relative to when playback started.
+   * For a stream with a sliding window this will increase as content is
+   * removed from the beginning.
+   * @method getStartTimeOffset
+   * @return {Number} time (in seconds) that time "0" represents.
+   */
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * FPS Controller
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               */
 
-var FPSController = function (_EventHandler) {
-  _inherits(FPSController, _EventHandler);
+  Playback.prototype.getStartTimeOffset = function getStartTimeOffset() {
+    return 0;
+  };
 
-  function FPSController(hls) {
-    _classCallCheck(this, FPSController);
+  /**
+   * gets the duration in seconds
+   * @method getDuration
+   * @return {Number} duration (in seconds) of the current source
+   */
 
-    return _possibleConstructorReturn(this, (FPSController.__proto__ || Object.getPrototypeOf(FPSController)).call(this, hls, _events2.default.MEDIA_ATTACHING));
-  }
 
-  _createClass(FPSController, [{
-    key: 'destroy',
-    value: function destroy() {
-      if (this.timer) {
-        clearInterval(this.timer);
-      }
-      this.isVideoPlaybackQualityAvailable = false;
-    }
-  }, {
-    key: 'onMediaAttaching',
-    value: function onMediaAttaching(data) {
-      var config = this.hls.config;
-      if (config.capLevelOnFPSDrop) {
-        var video = this.video = data.media instanceof HTMLVideoElement ? data.media : null;
-        if (typeof video.getVideoPlaybackQuality === 'function') {
-          this.isVideoPlaybackQualityAvailable = true;
-        }
-        clearInterval(this.timer);
-        this.timer = setInterval(this.checkFPSInterval.bind(this), config.fpsDroppedMonitoringPeriod);
-      }
-    }
-  }, {
-    key: 'checkFPS',
-    value: function checkFPS(video, decodedFrames, droppedFrames) {
-      var currentTime = performance.now();
-      if (decodedFrames) {
-        if (this.lastTime) {
-          var currentPeriod = currentTime - this.lastTime,
-              currentDropped = droppedFrames - this.lastDroppedFrames,
-              currentDecoded = decodedFrames - this.lastDecodedFrames,
-              droppedFPS = 1000 * currentDropped / currentPeriod,
-              hls = this.hls;
-          hls.trigger(_events2.default.FPS_DROP, { currentDropped: currentDropped, currentDecoded: currentDecoded, totalDroppedFrames: droppedFrames });
-          if (droppedFPS > 0) {
-            //logger.log('checkFPS : droppedFPS/decodedFPS:' + droppedFPS/(1000 * currentDecoded / currentPeriod));
-            if (currentDropped > hls.config.fpsDroppedMonitoringThreshold * currentDecoded) {
-              var currentLevel = hls.currentLevel;
-              _logger.logger.warn('drop FPS ratio greater than max allowed value for currentLevel: ' + currentLevel);
-              if (currentLevel > 0 && (hls.autoLevelCapping === -1 || hls.autoLevelCapping >= currentLevel)) {
-                currentLevel = currentLevel - 1;
-                hls.trigger(_events2.default.FPS_DROP_LEVEL_CAPPING, { level: currentLevel, droppedLevel: hls.currentLevel });
-                hls.autoLevelCapping = currentLevel;
-                hls.streamController.nextLevelSwitch();
-              }
-            }
-          }
-        }
-        this.lastTime = currentTime;
-        this.lastDroppedFrames = droppedFrames;
-        this.lastDecodedFrames = decodedFrames;
-      }
-    }
-  }, {
-    key: 'checkFPSInterval',
-    value: function checkFPSInterval() {
-      var video = this.video;
-      if (video) {
-        if (this.isVideoPlaybackQualityAvailable) {
-          var videoPlaybackQuality = video.getVideoPlaybackQuality();
-          this.checkFPS(video, videoPlaybackQuality.totalVideoFrames, videoPlaybackQuality.droppedVideoFrames);
-        } else {
-          this.checkFPS(video, video.webkitDecodedFrameCount, video.webkitDroppedFrameCount);
-        }
-      }
-    }
-  }]);
+  Playback.prototype.getDuration = function getDuration() {
+    return 0;
+  };
 
-  return FPSController;
-}(_eventHandler2.default);
+  /**
+   * checks if the playback is playing.
+   * @method isPlaying
+   * @return {Boolean} `true` if the current playback is playing, otherwise `false`
+   */
 
-exports.default = FPSController;
 
+<<<<<<< HEAD
 },{"34":34,"35":35,"53":53}],11:[function(_dereq_,module,exports){
 'use strict';
 
@@ -17292,204 +19047,181 @@ exports.default = ID3TrackController;
 
 },{"34":34,"35":35}],12:[function(_dereq_,module,exports){
 'use strict';
+=======
+  Playback.prototype.isPlaying = function isPlaying() {
+    return false;
+  };
+>>>>>>> draft skinnier version
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+  /**
+   * checks if the playback is ready.
+   * @property isReady
+   * @type {Boolean} `true` if the current playback is ready, otherwise `false`
+   */
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+  /**
+   * gets the playback type (`'vod', 'live', 'aod'`)
+   * @method getPlaybackType
+   * @return {String} you should write the playback type otherwise it'll assume `'no_op'`
+   * @example
+   * ```javascript
+   * html5VideoPlayback.getPlaybackType() //vod
+   * html5AudioPlayback.getPlaybackType() //aod
+   * html5VideoPlayback.getPlaybackType() //live
+   * flashHlsPlayback.getPlaybackType() //live
+   * ```
+   */
+  Playback.prototype.getPlaybackType = function getPlaybackType() {
+    return Playback.NO_OP;
+  };
+
+  /**
+   * checks if the playback is in HD.
+   * @method isHighDefinitionInUse
+   * @return {Boolean} `true` if the playback is playing in HD, otherwise `false`
+   */
+
+<<<<<<< HEAD
 var _events = _dereq_(35);
+=======
+>>>>>>> draft skinnier version
 
-var _events2 = _interopRequireDefault(_events);
+  Playback.prototype.isHighDefinitionInUse = function isHighDefinitionInUse() {
+    return false;
+  };
 
+<<<<<<< HEAD
 var _eventHandler = _dereq_(34);
+=======
+  /**
+   * sets the volume for the playback
+   * @method volume
+   * @param {Number} value a number between 0 (`muted`) to 100 (`max`)
+   */
+>>>>>>> draft skinnier version
 
-var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
+<<<<<<< HEAD
 var _logger = _dereq_(53);
 
 var _errors = _dereq_(33);
 
 var _bufferHelper = _dereq_(37);
+=======
+  Playback.prototype.volume = function volume(value) {}; // eslint-disable-line no-unused-vars
 
-var _bufferHelper2 = _interopRequireDefault(_bufferHelper);
+  /**
+   * destroys the playback, removing it from DOM
+   * @method destroy
+   */
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+>>>>>>> draft skinnier version
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+  Playback.prototype.destroy = function destroy() {
+    this.$el.remove();
+  };
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+  (0, _createClass3.default)(Playback, [{
+    key: 'isReady',
+    get: function get() {
+      return false;
+    }
+  }]);
+  return Playback;
+}(_ui_object2.default);
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Level Controller
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               */
+exports.default = Playback;
 
-var LevelController = function (_EventHandler) {
-  _inherits(LevelController, _EventHandler);
 
-  function LevelController(hls) {
-    _classCallCheck(this, LevelController);
+Playback.extend = function (properties) {
+  return (0, _utils.extend)(Playback, properties);
+};
 
-    var _this = _possibleConstructorReturn(this, (LevelController.__proto__ || Object.getPrototypeOf(LevelController)).call(this, hls, _events2.default.MANIFEST_LOADED, _events2.default.LEVEL_LOADED, _events2.default.FRAG_LOADED, _events2.default.ERROR));
+/**
+ * checks if the playback can play a given `source`
+ * If a mimeType is provided then this will be used instead of inferring the mimetype
+ * from the source extension.
+ * @method canPlay
+ * @static
+ * @param {String} source the given source ex: `http://example.com/play.mp4`
+ * @param {String} [mimeType] the given mime type, ex: `'application/vnd.apple.mpegurl'`
+ * @return {Boolean} `true` if the playback is playable, otherwise `false`
+ */
+Playback.canPlay = function (source, mimeType) {
+  // eslint-disable-line no-unused-vars
+  return false;
+};
 
-    _this.ontick = _this.tick.bind(_this);
-    _this._manualLevel = -1;
-    return _this;
+/**
+ * a playback type for video on demand
+ *
+ * @property VOD
+ * @static
+ * @type String
+ */
+Playback.VOD = 'vod';
+/**
+ * a playback type for audio on demand
+ *
+ * @property AOD
+ * @static
+ * @type String
+ */
+Playback.AOD = 'aod';
+/**
+ * a playback type for live video
+ *
+ * @property LIVE
+ * @static
+ * @type String
+ */
+Playback.LIVE = 'live';
+/**
+ * a default playback type
+ *
+ * @property NO_OP
+ * @static
+ * @type String
+ */
+Playback.NO_OP = 'no_op';
+/**
+ * the plugin type
+ *
+ * @property type
+ * @static
+ * @type String
+ */
+Playback.type = 'playback';
+module.exports = exports['default'];
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports) {
+
+module.exports = function(exec){
+  try {
+    return !!exec();
+  } catch(e){
+    return true;
   }
+};
 
-  _createClass(LevelController, [{
-    key: 'destroy',
-    value: function destroy() {
-      if (this.timer) {
-        clearTimeout(this.timer);
-        this.timer = null;
-      }
-      this._manualLevel = -1;
-    }
-  }, {
-    key: 'startLoad',
-    value: function startLoad() {
-      this.canload = true;
-      var levels = this._levels;
-      // clean up live level details to force reload them, and reset load errors
-      if (levels) {
-        levels.forEach(function (level) {
-          level.loadError = 0;
-          var levelDetails = level.details;
-          if (levelDetails && levelDetails.live) {
-            level.details = undefined;
-          }
-        });
-      }
-      // speed up live playlist refresh if timer exists
-      if (this.timer) {
-        this.tick();
-      }
-    }
-  }, {
-    key: 'stopLoad',
-    value: function stopLoad() {
-      this.canload = false;
-    }
-  }, {
-    key: 'onManifestLoaded',
-    value: function onManifestLoaded(data) {
-      var levels0 = [],
-          levels = [],
-          bitrateStart,
-          bitrateSet = {},
-          videoCodecFound = false,
-          audioCodecFound = false,
-          hls = this.hls,
-          brokenmp4inmp3 = /chrome|firefox/.test(navigator.userAgent.toLowerCase()),
-          checkSupported = function checkSupported(type, codec) {
-        return MediaSource.isTypeSupported(type + '/mp4;codecs=' + codec);
-      };
+/***/ }),
+/* 25 */
+/***/ (function(module, exports) {
 
-      // regroup redundant level together
-      data.levels.forEach(function (level) {
-        if (level.videoCodec) {
-          videoCodecFound = true;
-        }
-        // erase audio codec info if browser does not support mp4a.40.34. demuxer will autodetect codec and fallback to mpeg/audio
-        if (brokenmp4inmp3 && level.audioCodec && level.audioCodec.indexOf('mp4a.40.34') !== -1) {
-          level.audioCodec = undefined;
-        }
-        if (level.audioCodec || level.attrs && level.attrs.AUDIO) {
-          audioCodecFound = true;
-        }
-        var redundantLevelId = bitrateSet[level.bitrate];
-        if (redundantLevelId === undefined) {
-          bitrateSet[level.bitrate] = levels0.length;
-          level.url = [level.url];
-          level.urlId = 0;
-          levels0.push(level);
-        } else {
-          levels0[redundantLevelId].url.push(level.url);
-        }
-      });
+module.exports = function(it){
+  return typeof it === 'object' ? it !== null : typeof it === 'function';
+};
 
-      // remove audio-only level if we also have levels with audio+video codecs signalled
-      if (videoCodecFound && audioCodecFound) {
-        levels0.forEach(function (level) {
-          if (level.videoCodec) {
-            levels.push(level);
-          }
-        });
-      } else {
-        levels = levels0;
-      }
-      // only keep level with supported audio/video codecs
-      levels = levels.filter(function (level) {
-        var audioCodec = level.audioCodec,
-            videoCodec = level.videoCodec;
-        return (!audioCodec || checkSupported('audio', audioCodec)) && (!videoCodec || checkSupported('video', videoCodec));
-      });
+/***/ }),
+/* 26 */
+/***/ (function(module, exports) {
 
-      if (levels.length) {
-        // start bitrate is the first bitrate of the manifest
-        bitrateStart = levels[0].bitrate;
-        // sort level on bitrate
-        levels.sort(function (a, b) {
-          return a.bitrate - b.bitrate;
-        });
-        this._levels = levels;
-        // find index of first level in sorted levels
-        for (var i = 0; i < levels.length; i++) {
-          if (levels[i].bitrate === bitrateStart) {
-            this._firstLevel = i;
-            _logger.logger.log('manifest loaded,' + levels.length + ' level(s) found, first bitrate:' + bitrateStart);
-            break;
-          }
-        }
-        hls.trigger(_events2.default.MANIFEST_PARSED, { levels: levels, firstLevel: this._firstLevel, stats: data.stats, audio: audioCodecFound, video: videoCodecFound, altAudio: data.audioTracks.length > 0 });
-      } else {
-        hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.MEDIA_ERROR, details: _errors.ErrorDetails.MANIFEST_INCOMPATIBLE_CODECS_ERROR, fatal: true, url: hls.url, reason: 'no level with compatible codecs found in manifest' });
-      }
-      return;
-    }
-  }, {
-    key: 'setLevelInternal',
-    value: function setLevelInternal(newLevel) {
-      var levels = this._levels;
-      var hls = this.hls;
-      // check if level idx is valid
-      if (newLevel >= 0 && newLevel < levels.length) {
-        // stopping live reloading timer if any
-        if (this.timer) {
-          clearTimeout(this.timer);
-          this.timer = null;
-        }
-        if (this._level !== newLevel) {
-          _logger.logger.log('switching to level ' + newLevel);
-          this._level = newLevel;
-          var levelProperties = levels[newLevel];
-          levelProperties.level = newLevel;
-          // LEVEL_SWITCH to be deprecated in next major release
-          hls.trigger(_events2.default.LEVEL_SWITCH, levelProperties);
-          hls.trigger(_events2.default.LEVEL_SWITCHING, levelProperties);
-        }
-        var level = levels[newLevel],
-            levelDetails = level.details;
-        // check if we need to load playlist for this level
-        if (!levelDetails || levelDetails.live === true) {
-          // level not retrieved yet, or live playlist we need to (re)load it
-          var urlId = level.urlId;
-          hls.trigger(_events2.default.LEVEL_LOADING, { url: level.url[urlId], level: newLevel, id: urlId });
-        }
-      } else {
-        // invalid level id given, trigger error
-        hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.OTHER_ERROR, details: _errors.ErrorDetails.LEVEL_SWITCH_ERROR, level: newLevel, fatal: false, reason: 'invalid level idx' });
-      }
-    }
-  }, {
-    key: 'onError',
-    value: function onError(data) {
-      if (data.fatal) {
-        return;
-      }
+module.exports = {};
 
+<<<<<<< HEAD
       var details = data.details,
           hls = this.hls,
           levelId = void 0,
@@ -17572,226 +19304,154 @@ var LevelController = function (_EventHandler) {
         }
       }
     }
+=======
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+>>>>>>> draft skinnier version
 
-    // reset level load error counter on successful frag loaded
+// 19.1.2.14 / 15.2.3.14 Object.keys(O)
+var $keys       = __webpack_require__(67)
+  , enumBugKeys = __webpack_require__(39);
 
-  }, {
-    key: 'onFragLoaded',
-    value: function onFragLoaded(data) {
-      var fragLoaded = data.frag;
-      if (fragLoaded && fragLoaded.type === 'main') {
-        var level = this._levels[fragLoaded.level];
-        if (level) {
-          level.loadError = 0;
-        }
-      }
-    }
-  }, {
-    key: 'onLevelLoaded',
-    value: function onLevelLoaded(data) {
-      var levelId = data.level;
-      // only process level loaded events matching with expected level
-      if (levelId === this._level) {
-        var curLevel = this._levels[levelId];
-        // reset level load error counter on successful level loaded
-        curLevel.loadError = 0;
-        var newDetails = data.details;
-        // if current playlist is a live playlist, arm a timer to reload it
-        if (newDetails.live) {
-          var reloadInterval = 1000 * (newDetails.averagetargetduration ? newDetails.averagetargetduration : newDetails.targetduration),
-              curDetails = curLevel.details;
-          if (curDetails && newDetails.endSN === curDetails.endSN) {
-            // follow HLS Spec, If the client reloads a Playlist file and finds that it has not
-            // changed then it MUST wait for a period of one-half the target
-            // duration before retrying.
-            reloadInterval /= 2;
-            _logger.logger.log('same live playlist, reload twice faster');
-          }
-          // decrement reloadInterval with level loading delay
-          reloadInterval -= performance.now() - data.stats.trequest;
-          // in any case, don't reload more than every second
-          reloadInterval = Math.max(1000, Math.round(reloadInterval));
-          _logger.logger.log('live playlist, reload in ' + reloadInterval + ' ms');
-          this.timer = setTimeout(this.ontick, reloadInterval);
-        } else {
-          this.timer = null;
-        }
-      }
-    }
-  }, {
-    key: 'tick',
-    value: function tick() {
-      var levelId = this._level;
-      if (levelId !== undefined && this.canload) {
-        var level = this._levels[levelId];
-        if (level && level.url) {
-          var urlId = level.urlId;
-          this.hls.trigger(_events2.default.LEVEL_LOADING, { url: level.url[urlId], level: levelId, id: urlId });
-        }
-      }
-    }
-  }, {
-    key: 'levels',
-    get: function get() {
-      return this._levels;
-    }
-  }, {
-    key: 'level',
-    get: function get() {
-      return this._level;
-    },
-    set: function set(newLevel) {
-      var levels = this._levels;
-      if (levels && levels.length > newLevel) {
-        if (this._level !== newLevel || levels[newLevel].details === undefined) {
-          this.setLevelInternal(newLevel);
-        }
-      }
-    }
-  }, {
-    key: 'manualLevel',
-    get: function get() {
-      return this._manualLevel;
-    },
-    set: function set(newLevel) {
-      this._manualLevel = newLevel;
-      if (this._startLevel === undefined) {
-        this._startLevel = newLevel;
-      }
-      if (newLevel !== -1) {
-        this.level = newLevel;
-      }
-    }
-  }, {
-    key: 'firstLevel',
-    get: function get() {
-      return this._firstLevel;
-    },
-    set: function set(newLevel) {
-      this._firstLevel = newLevel;
-    }
-  }, {
-    key: 'startLevel',
-    get: function get() {
-      // hls.startLevel takes precedence over config.startLevel
-      // if none of these values are defined, fallback on this._firstLevel (first quality level appearing in variant manifest)
-      if (this._startLevel === undefined) {
-        var configStartLevel = this.hls.config.startLevel;
-        if (configStartLevel !== undefined) {
-          return configStartLevel;
-        } else {
-          return this._firstLevel;
-        }
-      } else {
-        return this._startLevel;
-      }
-    },
-    set: function set(newLevel) {
-      this._startLevel = newLevel;
-    }
-  }, {
-    key: 'nextLoadLevel',
-    get: function get() {
-      if (this._manualLevel !== -1) {
-        return this._manualLevel;
-      } else {
-        return this.hls.nextAutoLevel;
-      }
-    },
-    set: function set(nextLevel) {
-      this.level = nextLevel;
-      if (this._manualLevel === -1) {
-        this.hls.nextAutoLevel = nextLevel;
-      }
-    }
-  }]);
+module.exports = Object.keys || function keys(O){
+  return $keys(O, enumBugKeys);
+};
 
-  return LevelController;
-}(_eventHandler2.default);
+/***/ }),
+/* 28 */
+/***/ (function(module, exports) {
 
-exports.default = LevelController;
+module.exports = function(bitmap, value){
+  return {
+    enumerable  : !(bitmap & 1),
+    configurable: !(bitmap & 2),
+    writable    : !(bitmap & 4),
+    value       : value
+  };
+};
 
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+<<<<<<< HEAD
 },{"33":33,"34":34,"35":35,"37":37,"53":53}],13:[function(_dereq_,module,exports){
 'use strict';
+=======
+>>>>>>> draft skinnier version
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _classCallCheck2 = __webpack_require__(0);
 
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+<<<<<<< HEAD
 var _binarySearch = _dereq_(48);
+=======
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+>>>>>>> draft skinnier version
 
-var _binarySearch2 = _interopRequireDefault(_binarySearch);
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 
+<<<<<<< HEAD
 var _bufferHelper = _dereq_(37);
+=======
+var PlayerInfo = function PlayerInfo() {
+  (0, _classCallCheck3.default)(this, PlayerInfo);
+>>>>>>> draft skinnier version
 
-var _bufferHelper2 = _interopRequireDefault(_bufferHelper);
+  this.options = {};
+  this.playbackPlugins = [];
+  this.currentSize = { width: 0, height: 0 };
+};
 
+<<<<<<< HEAD
 var _demuxer = _dereq_(25);
+=======
+PlayerInfo._players = {};
+>>>>>>> draft skinnier version
 
-var _demuxer2 = _interopRequireDefault(_demuxer);
+PlayerInfo.getInstance = function (playerId) {
+  return PlayerInfo._players[playerId] || (PlayerInfo._players[playerId] = new PlayerInfo());
+};
 
+<<<<<<< HEAD
 var _events = _dereq_(35);
+=======
+exports.default = PlayerInfo;
+module.exports = exports["default"];
+>>>>>>> draft skinnier version
 
-var _events2 = _interopRequireDefault(_events);
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
 
+<<<<<<< HEAD
 var _eventHandler = _dereq_(34);
+=======
+"use strict";
+>>>>>>> draft skinnier version
 
-var _eventHandler2 = _interopRequireDefault(_eventHandler);
 
+<<<<<<< HEAD
 var _levelHelper = _dereq_(38);
+=======
+exports.__esModule = true;
+>>>>>>> draft skinnier version
 
-var _levelHelper2 = _interopRequireDefault(_levelHelper);
+var _iterator = __webpack_require__(100);
 
+<<<<<<< HEAD
 var _timeRanges = _dereq_(54);
+=======
+var _iterator2 = _interopRequireDefault(_iterator);
+>>>>>>> draft skinnier version
 
-var _timeRanges2 = _interopRequireDefault(_timeRanges);
+var _symbol = __webpack_require__(99);
 
+<<<<<<< HEAD
 var _errors = _dereq_(33);
 
 var _logger = _dereq_(53);
+=======
+var _symbol2 = _interopRequireDefault(_symbol);
+
+var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj; };
+>>>>>>> draft skinnier version
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Stream Controller
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               */
-
-var State = {
-  STOPPED: 'STOPPED',
-  IDLE: 'IDLE',
-  KEY_LOADING: 'KEY_LOADING',
-  FRAG_LOADING: 'FRAG_LOADING',
-  FRAG_LOADING_WAITING_RETRY: 'FRAG_LOADING_WAITING_RETRY',
-  WAITING_LEVEL: 'WAITING_LEVEL',
-  PARSING: 'PARSING',
-  PARSED: 'PARSED',
-  BUFFER_FLUSHING: 'BUFFER_FLUSHING',
-  ENDED: 'ENDED',
-  ERROR: 'ERROR'
+exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.default) === "symbol" ? function (obj) {
+  return typeof obj === "undefined" ? "undefined" : _typeof(obj);
+} : function (obj) {
+  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
 };
 
-var StreamController = function (_EventHandler) {
-  _inherits(StreamController, _EventHandler);
+/***/ }),
+/* 31 */
+/***/ (function(module, exports) {
 
-  function StreamController(hls) {
-    _classCallCheck(this, StreamController);
+var id = 0
+  , px = Math.random();
+module.exports = function(key){
+  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
+};
 
-    var _this = _possibleConstructorReturn(this, (StreamController.__proto__ || Object.getPrototypeOf(StreamController)).call(this, hls, _events2.default.MEDIA_ATTACHED, _events2.default.MEDIA_DETACHING, _events2.default.MANIFEST_LOADING, _events2.default.MANIFEST_PARSED, _events2.default.LEVEL_LOADED, _events2.default.KEY_LOADED, _events2.default.FRAG_LOADED, _events2.default.FRAG_LOAD_EMERGENCY_ABORTED, _events2.default.FRAG_PARSING_INIT_SEGMENT, _events2.default.FRAG_PARSING_DATA, _events2.default.FRAG_PARSED, _events2.default.ERROR, _events2.default.AUDIO_TRACK_SWITCHING, _events2.default.AUDIO_TRACK_SWITCHED, _events2.default.BUFFER_CREATED, _events2.default.BUFFER_APPENDED, _events2.default.BUFFER_FLUSHED));
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
 
-    _this.config = hls.config;
-    _this.audioCodecSwap = false;
-    _this.ticks = 0;
-    _this._state = State.STOPPED;
-    _this.ontick = _this.tick.bind(_this);
-    return _this;
-  }
+"use strict";
 
+<<<<<<< HEAD
   _createClass(StreamController, [{
     key: 'destroy',
     value: function destroy() {
@@ -17916,11 +19576,14 @@ var StreamController = function (_EventHandler) {
       // check/update current fragment
       this._checkFragmentChanged();
     }
+=======
+>>>>>>> draft skinnier version
 
-    // Ironically the "idle" state is the on we do the most logic in it seems ....
-    // NOTE: Maybe we could rather schedule a check for buffer length after half of the currently
-    //       played segment, or on pause/play/seek instead of naively checking every 100ms?
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
+<<<<<<< HEAD
   }, {
     key: '_doTickIdle',
     value: function _doTickIdle() {
@@ -17961,23 +19624,30 @@ var StreamController = function (_EventHandler) {
         maxBufLen = config.maxBufferLength;
       }
       maxBufLen = Math.min(maxBufLen, config.maxMaxBufferLength);
+=======
+var _classCallCheck2 = __webpack_require__(0);
 
-      // determine next candidate fragment to be loaded, based on current position and end of buffer position
-      // ensure up to `config.maxMaxBufferLength` of buffer upfront
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+>>>>>>> draft skinnier version
 
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+<<<<<<< HEAD
       var bufferInfo = _bufferHelper2.default.bufferInfo(this.mediaBuffer ? this.mediaBuffer : media, pos, config.maxBufferHole),
           bufferLen = bufferInfo.len;
       // Stay idle if we are still with buffer margins
       if (bufferLen >= maxBufLen) {
         return;
       }
+=======
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+>>>>>>> draft skinnier version
 
-      // if buffer length is less than maxBufLen try to load a new fragment ...
-      _logger.logger.trace('buffer length of ' + bufferLen.toFixed(3) + ' is below max of ' + maxBufLen.toFixed(3) + '. checking for more payload ...');
+var _inherits2 = __webpack_require__(1);
 
-      // set next load level : this will trigger a playlist load if needed
-      this.level = hls.nextLoadLevel = level;
+var _inherits3 = _interopRequireDefault(_inherits2);
 
+<<<<<<< HEAD
       var levelDetails = levelInfo.details;
       // if level info not retrieved yet, switch state and wait for level retrieval
       // if live playlist, ensure that new playlist has been refreshed to avoid loading/try to load
@@ -18024,13 +19694,17 @@ var StreamController = function (_EventHandler) {
       if (fragLen === 0) {
         return;
       }
+=======
+var _utils = __webpack_require__(3);
 
-      // find fragment index, contiguous with end of buffer position
-      var start = fragments[0].start,
-          end = fragments[fragLen - 1].start + fragments[fragLen - 1].duration,
-          bufferEnd = bufferInfo.end,
-          frag = void 0;
+var _ui_object = __webpack_require__(14);
 
+var _ui_object2 = _interopRequireDefault(_ui_object);
+>>>>>>> draft skinnier version
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+<<<<<<< HEAD
       if (levelDetails.initSegment && !levelDetails.initSegment.data) {
         frag = levelDetails.initSegment;
       } else {
@@ -18082,76 +19756,28 @@ var StreamController = function (_EventHandler) {
           media.currentTime = liveSyncPosition;
         }
       }
+=======
+/**
+ * The base class for an ui container plugin
+ * @class UIContainerPlugin
+ * @constructor
+ * @extends UIObject
+ * @module base
+ */
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 
-      // if end of buffer greater than live edge, don't load any fragment
-      // this could happen if live playlist intermittently slides in the past.
-      // level 1 loaded [182580161,182580167]
-      // level 1 loaded [182580162,182580169]
-      // Loading 182580168 of [182580162 ,182580169],level 1 ..
-      // Loading 182580169 of [182580162 ,182580169],level 1 ..
-      // level 1 loaded [182580162,182580168] <============= here we should have bufferEnd > end. in that case break to avoid reloading 182580168
-      // level 1 loaded [182580164,182580171]
-      //
-      // don't return null in case media not loaded yet (readystate === 0)
-      if (levelDetails.PTSKnown && bufferEnd > end && media && media.readyState) {
-        return null;
-      }
+var UIContainerPlugin = function (_UIObject) {
+  (0, _inherits3.default)(UIContainerPlugin, _UIObject);
+>>>>>>> draft skinnier version
 
-      if (this.startFragRequested && !levelDetails.PTSKnown) {
-        /* we are switching level on live playlist, but we don't have any PTS info for that quality level ...
-           try to load frag matching with next SN.
-           even if SN are not synchronized between playlists, loading this frag will help us
-           compute playlist sliding and find the right one after in case it was not the right consecutive one */
-        if (fragPrevious) {
-          var targetSN = fragPrevious.sn + 1;
-          if (targetSN >= levelDetails.startSN && targetSN <= levelDetails.endSN) {
-            frag = fragments[targetSN - levelDetails.startSN];
-            _logger.logger.log('live playlist, switching playlist, load frag with next SN: ' + frag.sn);
-          }
-        }
-        if (!frag) {
-          /* we have no idea about which fragment should be loaded.
-             so let's load mid fragment. it will help computing playlist sliding and find the right one
-          */
-          frag = fragments[Math.min(fragLen - 1, Math.round(fragLen / 2))];
-          _logger.logger.log('live playlist, switching playlist, unknown, load middle frag : ' + frag.sn);
-        }
-      }
-      return frag;
-    }
-  }, {
-    key: '_findFragment',
-    value: function _findFragment(start, fragPrevious, fragLen, fragments, bufferEnd, end, levelDetails) {
-      var config = this.hls.config;
-      var frag = void 0;
-      var foundFrag = void 0;
-      var maxFragLookUpTolerance = config.maxFragLookUpTolerance;
-      var fragNext = fragPrevious ? fragments[fragPrevious.sn - fragments[0].sn + 1] : undefined;
-      var fragmentWithinToleranceTest = function fragmentWithinToleranceTest(candidate) {
-        // offset should be within fragment boundary - config.maxFragLookUpTolerance
-        // this is to cope with situations like
-        // bufferEnd = 9.991
-        // frag[Ø] : [0,10]
-        // frag[1] : [10,20]
-        // bufferEnd is within frag[0] range ... although what we are expecting is to return frag[1] here
-        //              frag start               frag start+duration
-        //                  |-----------------------------|
-        //              <--->                         <--->
-        //  ...--------><-----------------------------><---------....
-        // previous frag         matching fragment         next frag
-        //  return -1             return 0                 return 1
-        //logger.log(`level/sn/start/end/bufEnd:${level}/${candidate.sn}/${candidate.start}/${(candidate.start+candidate.duration)}/${bufferEnd}`);
-        // Set the lookup tolerance to be small enough to detect the current segment - ensures we don't skip over very small segments
-        var candidateLookupTolerance = Math.min(maxFragLookUpTolerance, candidate.duration);
-        if (candidate.start + candidate.duration - candidateLookupTolerance <= bufferEnd) {
-          return 1;
-        } // if maxFragLookUpTolerance will have negative value then don't return -1 for first element
-        else if (candidate.start - candidateLookupTolerance > bufferEnd && candidate.start) {
-            return -1;
-          }
-        return 0;
-      };
+  function UIContainerPlugin(container) {
+    (0, _classCallCheck3.default)(this, UIContainerPlugin);
 
+    var _this = (0, _possibleConstructorReturn3.default)(this, _UIObject.call(this, container.options));
+
+<<<<<<< HEAD
       if (bufferEnd < end) {
         if (bufferEnd > end - maxFragLookUpTolerance) {
           maxFragLookUpTolerance = 0;
@@ -18325,153 +19951,61 @@ var StreamController = function (_EventHandler) {
           }
         }
       }
-    }
+=======
+    _this.container = container;
+    _this.enabled = true;
+    _this.bindEvents();
+    return _this;
+  }
 
-    /*
-      on immediate level switch :
-       - pause playback if playing
-       - cancel any pending load request
-       - and trigger a buffer flush
-    */
+  UIContainerPlugin.prototype.enable = function enable() {
+    if (!this.enabled) {
+      this.bindEvents();
+      this.$el.show();
+      this.enabled = true;
+>>>>>>> draft skinnier version
+    }
+  };
 
-  }, {
-    key: 'immediateLevelSwitch',
-    value: function immediateLevelSwitch() {
-      _logger.logger.log('immediateLevelSwitch');
-      if (!this.immediateSwitch) {
-        this.immediateSwitch = true;
-        var media = this.media,
-            previouslyPaused = void 0;
-        if (media) {
-          previouslyPaused = media.paused;
-          media.pause();
-        } else {
-          // don't restart playback after instant level switch in case media not attached
-          previouslyPaused = true;
-        }
-        this.previouslyPaused = previouslyPaused;
-      }
-      var fragCurrent = this.fragCurrent;
-      if (fragCurrent && fragCurrent.loader) {
-        fragCurrent.loader.abort();
-      }
-      this.fragCurrent = null;
-      // increase fragment load Index to avoid frag loop loading error after buffer flush
-      this.fragLoadIdx += 2 * this.config.fragLoadingLoopThreshold;
-      // flush everything
-      this.flushMainBuffer(0, Number.POSITIVE_INFINITY);
-    }
+  UIContainerPlugin.prototype.disable = function disable() {
+    this.stopListening();
+    this.$el.hide();
+    this.enabled = false;
+  };
 
-    /*
-       on immediate level switch end, after new fragment has been buffered :
-        - nudge video decoder by slightly adjusting video currentTime (if currentTime buffered)
-        - resume the playback if needed
-    */
+  UIContainerPlugin.prototype.bindEvents = function bindEvents() {};
 
-  }, {
-    key: 'immediateLevelSwitchEnd',
-    value: function immediateLevelSwitchEnd() {
-      var media = this.media;
-      if (media && media.buffered.length) {
-        this.immediateSwitch = false;
-        if (_bufferHelper2.default.isBuffered(media, media.currentTime)) {
-          // only nudge if currentTime is buffered
-          media.currentTime -= 0.0001;
-        }
-        if (!this.previouslyPaused) {
-          media.play();
-        }
-      }
-    }
-  }, {
-    key: 'nextLevelSwitch',
-    value: function nextLevelSwitch() {
-      /* try to switch ASAP without breaking video playback :
-         in order to ensure smooth but quick level switching,
-        we need to find the next flushable buffer range
-        we should take into account new segment fetch time
-      */
-      var media = this.media;
-      // ensure that media is defined and that metadata are available (to retrieve currentTime)
-      if (media && media.readyState) {
-        var fetchdelay = void 0,
-            fragPlayingCurrent = void 0,
-            nextBufferedFrag = void 0;
-        // increase fragment load Index to avoid frag loop loading error after buffer flush
-        this.fragLoadIdx += 2 * this.config.fragLoadingLoopThreshold;
-        fragPlayingCurrent = this.getBufferedFrag(media.currentTime);
-        if (fragPlayingCurrent && fragPlayingCurrent.startPTS > 1) {
-          // flush buffer preceding current fragment (flush until current fragment start offset)
-          // minus 1s to avoid video freezing, that could happen if we flush keyframe of current video ...
-          this.flushMainBuffer(0, fragPlayingCurrent.startPTS - 1);
-        }
-        if (!media.paused) {
-          // add a safety delay of 1s
-          var nextLevelId = this.hls.nextLoadLevel,
-              nextLevel = this.levels[nextLevelId],
-              fragLastKbps = this.fragLastKbps;
-          if (fragLastKbps && this.fragCurrent) {
-            fetchdelay = this.fragCurrent.duration * nextLevel.bitrate / (1000 * fragLastKbps) + 1;
-          } else {
-            fetchdelay = 0;
-          }
-        } else {
-          fetchdelay = 0;
-        }
-        //logger.log('fetchdelay:'+fetchdelay);
-        // find buffer range that will be reached once new fragment will be fetched
-        nextBufferedFrag = this.getBufferedFrag(media.currentTime + fetchdelay);
-        if (nextBufferedFrag) {
-          // we can flush buffer range following this one without stalling playback
-          nextBufferedFrag = this.followingBufferedFrag(nextBufferedFrag);
-          if (nextBufferedFrag) {
-            // if we are here, we can also cancel any loading/demuxing in progress, as they are useless
-            var fragCurrent = this.fragCurrent;
-            if (fragCurrent && fragCurrent.loader) {
-              fragCurrent.loader.abort();
-            }
-            this.fragCurrent = null;
-            // flush position is the start position of this new buffer
-            this.flushMainBuffer(nextBufferedFrag.startPTS, Number.POSITIVE_INFINITY);
-          }
-        }
-      }
-    }
-  }, {
-    key: 'flushMainBuffer',
-    value: function flushMainBuffer(startOffset, endOffset) {
-      this.state = State.BUFFER_FLUSHING;
-      var flushScope = { startOffset: startOffset, endOffset: endOffset };
-      // if alternate audio tracks are used, only flush video, otherwise flush everything
-      if (this.altAudio) {
-        flushScope.type = 'video';
-      }
-      this.hls.trigger(_events2.default.BUFFER_FLUSHING, flushScope);
-    }
-  }, {
-    key: 'onMediaAttached',
-    value: function onMediaAttached(data) {
-      var media = this.media = this.mediaBuffer = data.media;
-      this.onvseeking = this.onMediaSeeking.bind(this);
-      this.onvseeked = this.onMediaSeeked.bind(this);
-      this.onvended = this.onMediaEnded.bind(this);
-      media.addEventListener('seeking', this.onvseeking);
-      media.addEventListener('seeked', this.onvseeked);
-      media.addEventListener('ended', this.onvended);
-      var config = this.config;
-      if (this.levels && config.autoStartLoad) {
-        this.hls.startLoad(config.startPosition);
-      }
-    }
-  }, {
-    key: 'onMediaDetaching',
-    value: function onMediaDetaching() {
-      var media = this.media;
-      if (media && media.ended) {
-        _logger.logger.log('MSE detaching and video ended, reset startPosition');
-        this.startPosition = this.lastCurrentTime = 0;
-      }
+  UIContainerPlugin.prototype.destroy = function destroy() {
+    this.remove();
+  };
 
+  return UIContainerPlugin;
+}(_ui_object2.default);
+
+exports.default = UIContainerPlugin;
+
+
+UIContainerPlugin.extend = function (properties) {
+  return (0, _utils.extend)(UIContainerPlugin, properties);
+};
+
+UIContainerPlugin.type = 'container';
+module.exports = exports['default'];
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(0);
+
+<<<<<<< HEAD
       // reset fragment loading counter on MSE detaching to avoid reporting FRAG_LOOP_LOADING_ERROR after error recovery
       var levels = this.levels;
       if (levels) {
@@ -19266,188 +20800,432 @@ var StreamController = function (_EventHandler) {
       this._bufferedFrags = this._bufferedFrags.filter(function (frag) {
         return _bufferHelper2.default.isBuffered(media, (frag.startPTS + frag.endPTS) / 2);
       });
+=======
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-      // increase fragment load Index to avoid frag loop loading error after buffer flush
-      this.fragLoadIdx += 2 * this.config.fragLoadingLoopThreshold;
-      // move to IDLE once flush complete. this should trigger new fragment loading
-      this.state = State.IDLE;
-      // reset reference to frag
-      this.fragPrevious = null;
-    }
-  }, {
-    key: 'swapAudioCodec',
-    value: function swapAudioCodec() {
-      this.audioCodecSwap = !this.audioCodecSwap;
-    }
-  }, {
-    key: 'computeLivePosition',
-    value: function computeLivePosition(sliding, levelDetails) {
-      var targetLatency = this.config.liveSyncDuration !== undefined ? this.config.liveSyncDuration : this.config.liveSyncDurationCount * levelDetails.targetduration;
-      return sliding + Math.max(0, levelDetails.totalduration - targetLatency);
-    }
-  }, {
-    key: 'state',
-    set: function set(nextState) {
-      if (this.state !== nextState) {
-        var previousState = this.state;
-        this._state = nextState;
-        _logger.logger.log('main stream:' + previousState + '->' + nextState);
-        this.hls.trigger(_events2.default.STREAM_STATE_TRANSITION, { previousState: previousState, nextState: nextState });
-      }
-    },
-    get: function get() {
-      return this._state;
-    }
-  }, {
-    key: 'currentLevel',
-    get: function get() {
-      var media = this.media;
-      if (media) {
-        var frag = this.getBufferedFrag(media.currentTime);
-        if (frag) {
-          return frag.level;
-        }
-      }
-      return -1;
-    }
-  }, {
-    key: 'nextBufferedFrag',
-    get: function get() {
-      var media = this.media;
-      if (media) {
-        // first get end range of current fragment
-        return this.followingBufferedFrag(this.getBufferedFrag(media.currentTime));
-      } else {
-        return null;
-      }
-    }
-  }, {
-    key: 'nextLevel',
-    get: function get() {
-      var frag = this.nextBufferedFrag;
-      if (frag) {
-        return frag.level;
-      } else {
-        return -1;
-      }
-    }
-  }, {
-    key: 'liveSyncPosition',
-    get: function get() {
-      return this._liveSyncPosition;
-    },
-    set: function set(value) {
-      this._liveSyncPosition = value;
-    }
-  }]);
+var _events = __webpack_require__(5);
 
-  return StreamController;
-}(_eventHandler2.default);
+var _events2 = _interopRequireDefault(_events);
+>>>>>>> draft skinnier version
 
-exports.default = StreamController;
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var events = new _events2.default(); // Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+/**
+ * The mediator is a singleton for handling global events.
+ */
+
+var Mediator = function Mediator() {
+  (0, _classCallCheck3.default)(this, Mediator);
+};
+
+exports.default = Mediator;
+
+
+Mediator.on = function (name, callback, context) {
+  events.on(name, callback, context);
+  return;
+};
+
+Mediator.once = function (name, callback, context) {
+  events.once(name, callback, context);
+  return;
+};
+
+Mediator.off = function (name, callback, context) {
+  events.off(name, callback, context);
+  return;
+};
+
+Mediator.trigger = function (name) {
+  for (var _len = arguments.length, opts = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    opts[_key - 1] = arguments[_key];
+  }
+
+  events.trigger.apply(events, [name].concat(opts));
+  return;
+};
+
+Mediator.stopListening = function (obj, name, callback) {
+  events.stopListening(obj, name, callback);
+  return;
+};
+module.exports = exports['default'];
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+<<<<<<< HEAD
 },{"25":25,"33":33,"34":34,"35":35,"37":37,"38":38,"48":48,"53":53,"54":54}],14:[function(_dereq_,module,exports){
 'use strict';
+=======
+>>>>>>> draft skinnier version
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _kibo = __webpack_require__(94);
 
+<<<<<<< HEAD
 var _events = _dereq_(35);
-
-var _events2 = _interopRequireDefault(_events);
-
-var _eventHandler = _dereq_(34);
-
-var _eventHandler2 = _interopRequireDefault(_eventHandler);
-
-var _logger = _dereq_(53);
+=======
+var _kibo2 = _interopRequireDefault(_kibo);
+>>>>>>> draft skinnier version
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+exports.default = { Kibo: _kibo2.default };
+module.exports = exports['default'];
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+<<<<<<< HEAD
+var _eventHandler = _dereq_(34);
+=======
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+>>>>>>> draft skinnier version
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Subtitle Stream Controller
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               */
+module.exports = { "default": __webpack_require__(107), __esModule: true };
 
-var SubtitleStreamController = function (_EventHandler) {
-  _inherits(SubtitleStreamController, _EventHandler);
+<<<<<<< HEAD
+var _logger = _dereq_(53);
+=======
+/***/ }),
+/* 36 */
+/***/ (function(module, exports) {
+>>>>>>> draft skinnier version
 
-  function SubtitleStreamController(hls) {
-    _classCallCheck(this, SubtitleStreamController);
+var toString = {}.toString;
 
-    var _this = _possibleConstructorReturn(this, (SubtitleStreamController.__proto__ || Object.getPrototypeOf(SubtitleStreamController)).call(this, hls, _events2.default.ERROR, _events2.default.SUBTITLE_TRACKS_UPDATED, _events2.default.SUBTITLE_TRACK_SWITCH, _events2.default.SUBTITLE_TRACK_LOADED, _events2.default.SUBTITLE_FRAG_PROCESSED));
+module.exports = function(it){
+  return toString.call(it).slice(8, -1);
+};
 
-    _this.config = hls.config;
-    _this.vttFragSNsProcessed = {};
-    _this.vttFragQueues = undefined;
-    _this.currentlyProcessing = null;
-    _this.currentTrackId = -1;
-    return _this;
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// optional / simple context binding
+var aFunction = __webpack_require__(111);
+module.exports = function(fn, that, length){
+  aFunction(fn);
+  if(that === undefined)return fn;
+  switch(length){
+    case 1: return function(a){
+      return fn.call(that, a);
+    };
+    case 2: return function(a, b){
+      return fn.call(that, a, b);
+    };
+    case 3: return function(a, b, c){
+      return fn.call(that, a, b, c);
+    };
   }
+  return function(/* ...args */){
+    return fn.apply(that, arguments);
+  };
+};
 
-  _createClass(SubtitleStreamController, [{
-    key: 'destroy',
-    value: function destroy() {
-      _eventHandler2.default.prototype.destroy.call(this);
+/***/ }),
+/* 38 */
+/***/ (function(module, exports) {
+
+// 7.2.1 RequireObjectCoercible(argument)
+module.exports = function(it){
+  if(it == undefined)throw TypeError("Can't call method on  " + it);
+  return it;
+};
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports) {
+
+// IE 8- don't enum bug keys
+module.exports = (
+  'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
+).split(',');
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports) {
+
+module.exports = true;
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+var anObject    = __webpack_require__(21)
+  , dPs         = __webpack_require__(127)
+  , enumBugKeys = __webpack_require__(39)
+  , IE_PROTO    = __webpack_require__(45)('IE_PROTO')
+  , Empty       = function(){ /* empty */ }
+  , PROTOTYPE   = 'prototype';
+
+// Create object with fake `null` prototype: use iframe Object with cleared prototype
+var createDict = function(){
+  // Thrash, waste and sodomy: IE GC bug
+  var iframe = __webpack_require__(62)('iframe')
+    , i      = enumBugKeys.length
+    , lt     = '<'
+    , gt     = '>'
+    , iframeDocument;
+  iframe.style.display = 'none';
+  __webpack_require__(117).appendChild(iframe);
+  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
+  // createDict = iframe.contentWindow.Object;
+  // html.removeChild(iframe);
+  iframeDocument = iframe.contentWindow.document;
+  iframeDocument.open();
+  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
+  iframeDocument.close();
+  createDict = iframeDocument.F;
+  while(i--)delete createDict[PROTOTYPE][enumBugKeys[i]];
+  return createDict();
+};
+
+module.exports = Object.create || function create(O, Properties){
+  var result;
+  if(O !== null){
+    Empty[PROTOTYPE] = anObject(O);
+    result = new Empty;
+    Empty[PROTOTYPE] = null;
+    // add "__proto__" for Object.getPrototypeOf polyfill
+    result[IE_PROTO] = O;
+  } else result = createDict();
+  return Properties === undefined ? result : dPs(result, Properties);
+};
+
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var pIE            = __webpack_require__(43)
+  , createDesc     = __webpack_require__(28)
+  , toIObject      = __webpack_require__(13)
+  , toPrimitive    = __webpack_require__(49)
+  , has            = __webpack_require__(17)
+  , IE8_DOM_DEFINE = __webpack_require__(63)
+  , gOPD           = Object.getOwnPropertyDescriptor;
+
+exports.f = __webpack_require__(15) ? gOPD : function getOwnPropertyDescriptor(O, P){
+  O = toIObject(O);
+  P = toPrimitive(P, true);
+  if(IE8_DOM_DEFINE)try {
+    return gOPD(O, P);
+  } catch(e){ /* empty */ }
+  if(has(O, P))return createDesc(!pIE.f.call(O, P), O[P]);
+};
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports) {
+
+exports.f = {}.propertyIsEnumerable;
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var def = __webpack_require__(12).f
+  , has = __webpack_require__(17)
+  , TAG = __webpack_require__(8)('toStringTag');
+
+module.exports = function(it, tag, stat){
+  if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
+};
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var shared = __webpack_require__(46)('keys')
+  , uid    = __webpack_require__(31);
+module.exports = function(key){
+  return shared[key] || (shared[key] = uid(key));
+};
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var global = __webpack_require__(11)
+  , SHARED = '__core-js_shared__'
+  , store  = global[SHARED] || (global[SHARED] = {});
+module.exports = function(key){
+  return store[key] || (store[key] = {});
+};
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports) {
+
+// 7.1.4 ToInteger
+var ceil  = Math.ceil
+  , floor = Math.floor;
+module.exports = function(it){
+  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
+};
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.1.13 ToObject(argument)
+var defined = __webpack_require__(38);
+module.exports = function(it){
+  return Object(defined(it));
+};
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.1.1 ToPrimitive(input [, PreferredType])
+var isObject = __webpack_require__(25);
+// instead of the ES6 spec version, we didn't implement @@toPrimitive case
+// and the second argument - flag - preferred type is a string
+module.exports = function(it, S){
+  if(!isObject(it))return it;
+  var fn, val;
+  if(S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
+  if(typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it)))return val;
+  if(!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
+  throw TypeError("Can't convert object to primitive value");
+};
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var global         = __webpack_require__(11)
+  , core           = __webpack_require__(6)
+  , LIBRARY        = __webpack_require__(40)
+  , wksExt         = __webpack_require__(51)
+  , defineProperty = __webpack_require__(12).f;
+module.exports = function(name){
+  var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
+  if(name.charAt(0) != '_' && !(name in $Symbol))defineProperty($Symbol, name, {value: wksExt.f(name)});
+};
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports.f = __webpack_require__(8);
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports) {
+
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
     }
 
-    // Remove all queued items and create a new, empty queue for each track.
 
-  }, {
-    key: 'clearVttFragQueues',
-    value: function clearVttFragQueues() {
-      var _this2 = this;
-
-      this.vttFragQueues = {};
-      this.tracks.forEach(function (track) {
-        _this2.vttFragQueues[track.id] = [];
-      });
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
     }
 
-    // If no frag is being processed and queue isn't empty, initiate processing of next frag in line.
 
-  }, {
-    key: 'nextFrag',
-    value: function nextFrag() {
-      if (this.currentlyProcessing === null && this.currentTrackId > -1 && this.vttFragQueues[this.currentTrackId].length) {
-        var frag = this.currentlyProcessing = this.vttFragQueues[this.currentTrackId].shift();
-        this.hls.trigger(_events2.default.FRAG_LOADING, { frag: frag });
-      }
-    }
 
-    // When fragment has finished processing, add sn to list of completed if successful.
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
 
-  }, {
-    key: 'onSubtitleFragProcessed',
-    value: function onSubtitleFragProcessed(data) {
-      if (data.success) {
-        this.vttFragSNsProcessed[data.frag.trackId].push(data.frag.sn);
-      }
-      this.currentlyProcessing = null;
-      this.nextFrag();
-    }
-
-    // If something goes wrong, procede to next frag, if we were processing one.
-
-  }, {
-    key: 'onError',
-    value: function onError(data) {
-      var frag = data.frag;
-      // don't handle frag error not related to subtitle fragment
-      if (frag && frag.type !== 'subtitle') {
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
         return;
-      }
-      if (this.currentlyProcessing) {
-        this.currentlyProcessing = null;
-        this.nextFrag();
-      }
     }
+<<<<<<< HEAD
 
     // Got all new subtitle tracks.
 
@@ -19707,8 +21485,57 @@ var SubtitleTrackController = function (_EventHandler) {
     key: 'subtitleTracks',
     get: function get() {
       return this.tracks;
+=======
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
     }
+    if (queue.length) {
+        drainQueue();
+    }
+}
 
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+>>>>>>> draft skinnier version
+    }
+};
+
+<<<<<<< HEAD
     /** get index of the selected subtitle track (index in subtitle track lists) **/
 
   }, {
@@ -19734,11 +21561,56 @@ exports.default = SubtitleTrackController;
 
 },{"34":34,"35":35,"53":53}],16:[function(_dereq_,module,exports){
 'use strict';
+=======
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+>>>>>>> draft skinnier version
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+<<<<<<< HEAD
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _events = _dereq_(35);
@@ -19758,13 +21630,22 @@ var _webvttParser = _dereq_(57);
 var _webvttParser2 = _interopRequireDefault(_webvttParser);
 
 var _logger = _dereq_(53);
+=======
+var _container = __webpack_require__(78);
+
+var _container2 = _interopRequireDefault(_container);
+>>>>>>> draft skinnier version
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+exports.default = _container2.default;
+module.exports = exports['default'];
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
 
+<<<<<<< HEAD
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * Timeline Controller
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
@@ -20110,13 +21991,78 @@ exports.default = TimelineController;
 
 },{"34":34,"35":35,"49":49,"53":53,"57":57}],17:[function(_dereq_,module,exports){
 'use strict';
+=======
+"use strict";
+
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _core = __webpack_require__(81);
 
+var _core2 = _interopRequireDefault(_core);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _core2.default;
+module.exports = exports['default'];
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _loader = __webpack_require__(84);
+
+var _loader2 = _interopRequireDefault(_loader);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _loader2.default;
+module.exports = exports['default'];
+
+/***/ }),
+/* 56 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _media_control = __webpack_require__(85);
+
+var _media_control2 = _interopRequireDefault(_media_control);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _media_control2.default;
+module.exports = exports['default'];
+
+/***/ }),
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+>>>>>>> draft skinnier version
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _html5_video = __webpack_require__(87);
+
+<<<<<<< HEAD
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var AESCrypto = function () {
@@ -20448,13 +22394,180 @@ exports.default = AESDecryptor;
 
 },{}],19:[function(_dereq_,module,exports){
 'use strict';
+=======
+var _html5_video2 = _interopRequireDefault(_html5_video);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _html5_video2.default;
+module.exports = exports['default'];
+
+/***/ }),
+/* 58 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _no_op = __webpack_require__(88);
 
+var _no_op2 = _interopRequireDefault(_no_op);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _no_op2.default;
+module.exports = exports['default'];
+
+/***/ }),
+/* 59 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _log = __webpack_require__(89);
+
+var _log2 = _interopRequireDefault(_log);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _log2.default;
+module.exports = exports['default'];
+
+/***/ }),
+/* 60 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(104), __esModule: true };
+
+/***/ }),
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(105), __esModule: true };
+
+/***/ }),
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(25)
+  , document = __webpack_require__(11).document
+  // in old IE typeof document.createElement is 'object'
+  , is = isObject(document) && isObject(document.createElement);
+module.exports = function(it){
+  return is ? document.createElement(it) : {};
+};
+
+/***/ }),
+/* 63 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = !__webpack_require__(15) && !__webpack_require__(24)(function(){
+  return Object.defineProperty(__webpack_require__(62)('div'), 'a', {get: function(){ return 7; }}).a != 7;
+});
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var LIBRARY        = __webpack_require__(40)
+  , $export        = __webpack_require__(16)
+  , redefine       = __webpack_require__(69)
+  , hide           = __webpack_require__(22)
+  , has            = __webpack_require__(17)
+  , Iterators      = __webpack_require__(26)
+  , $iterCreate    = __webpack_require__(122)
+  , setToStringTag = __webpack_require__(44)
+  , getPrototypeOf = __webpack_require__(129)
+  , ITERATOR       = __webpack_require__(8)('iterator')
+  , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
+  , FF_ITERATOR    = '@@iterator'
+  , KEYS           = 'keys'
+  , VALUES         = 'values';
+
+var returnThis = function(){ return this; };
+
+module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED){
+  $iterCreate(Constructor, NAME, next);
+  var getMethod = function(kind){
+    if(!BUGGY && kind in proto)return proto[kind];
+    switch(kind){
+      case KEYS: return function keys(){ return new Constructor(this, kind); };
+      case VALUES: return function values(){ return new Constructor(this, kind); };
+    } return function entries(){ return new Constructor(this, kind); };
+  };
+  var TAG        = NAME + ' Iterator'
+    , DEF_VALUES = DEFAULT == VALUES
+    , VALUES_BUG = false
+    , proto      = Base.prototype
+    , $native    = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT]
+    , $default   = $native || getMethod(DEFAULT)
+    , $entries   = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined
+    , $anyNative = NAME == 'Array' ? proto.entries || $native : $native
+    , methods, key, IteratorPrototype;
+  // Fix native
+  if($anyNative){
+    IteratorPrototype = getPrototypeOf($anyNative.call(new Base));
+    if(IteratorPrototype !== Object.prototype){
+      // Set @@toStringTag to native iterators
+      setToStringTag(IteratorPrototype, TAG, true);
+      // fix for some old engines
+      if(!LIBRARY && !has(IteratorPrototype, ITERATOR))hide(IteratorPrototype, ITERATOR, returnThis);
+    }
+  }
+  // fix Array#{values, @@iterator}.name in V8 / FF
+  if(DEF_VALUES && $native && $native.name !== VALUES){
+    VALUES_BUG = true;
+    $default = function values(){ return $native.call(this); };
+  }
+  // Define iterator
+  if((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])){
+    hide(proto, ITERATOR, $default);
+  }
+  // Plug for library
+  Iterators[NAME] = $default;
+  Iterators[TAG]  = returnThis;
+  if(DEFAULT){
+    methods = {
+      values:  DEF_VALUES ? $default : getMethod(VALUES),
+      keys:    IS_SET     ? $default : getMethod(KEYS),
+      entries: $entries
+    };
+    if(FORCED)for(key in methods){
+      if(!(key in proto))redefine(proto, key, methods[key]);
+    } else $export($export.P + $export.F * (BUGGY || VALUES_BUG), NAME, methods);
+  }
+  return methods;
+};
+
+/***/ }),
+/* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
+var $keys      = __webpack_require__(67)
+  , hiddenKeys = __webpack_require__(39).concat('length', 'prototype');
+>>>>>>> draft skinnier version
+
+exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
+  return $keys(O, hiddenKeys);
+};
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports) {
+
+<<<<<<< HEAD
 var _aesCrypto = _dereq_(17);
 
 var _aesCrypto2 = _interopRequireDefault(_aesCrypto);
@@ -20489,8 +22602,33 @@ var Decrypter = function () {
       this.subtle = browserCrypto.subtle || browserCrypto.webkitSubtle;
     } catch (e) {}
     this.disableWebCrypto = !this.subtle;
-  }
+=======
+exports.f = Object.getOwnPropertySymbols;
 
+/***/ }),
+/* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var has          = __webpack_require__(17)
+  , toIObject    = __webpack_require__(13)
+  , arrayIndexOf = __webpack_require__(113)(false)
+  , IE_PROTO     = __webpack_require__(45)('IE_PROTO');
+
+module.exports = function(object, names){
+  var O      = toIObject(object)
+    , i      = 0
+    , result = []
+    , key;
+  for(key in O)if(key != IE_PROTO)has(O, key) && result.push(key);
+  // Don't enum bug & hidden keys
+  while(names.length > i)if(has(O, key = names[i++])){
+    ~arrayIndexOf(result, key) || result.push(key);
+>>>>>>> draft skinnier version
+  }
+  return result;
+};
+
+<<<<<<< HEAD
   _createClass(Decrypter, [{
     key: 'isSync',
     value: function isSync() {
@@ -20567,15 +22705,45 @@ exports.default = Decrypter;
 
 },{"17":17,"18":18,"20":20,"33":33,"53":53}],20:[function(_dereq_,module,exports){
 'use strict';
+=======
+/***/ }),
+/* 68 */
+/***/ (function(module, exports, __webpack_require__) {
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+// most Object methods by ES6 should accept primitives
+var $export = __webpack_require__(16)
+  , core    = __webpack_require__(6)
+  , fails   = __webpack_require__(24);
+module.exports = function(KEY, exec){
+  var fn  = (core.Object || {})[KEY] || Object[KEY]
+    , exp = {};
+  exp[KEY] = exec(fn);
+  $export($export.S + $export.F * fails(function(){ fn(1); }), 'Object', exp);
+};
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+/***/ }),
+/* 69 */
+/***/ (function(module, exports, __webpack_require__) {
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+module.exports = __webpack_require__(22);
+>>>>>>> draft skinnier version
 
+/***/ }),
+/* 70 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.1.15 ToLength
+var toInteger = __webpack_require__(47)
+  , min       = Math.min;
+module.exports = function(it){
+  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
+};
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+<<<<<<< HEAD
 var FastAESKey = function () {
   function FastAESKey(subtle, key) {
     _classCallCheck(this, FastAESKey);
@@ -20890,9 +23058,134 @@ var _decrypter2 = _interopRequireDefault(_decrypter);
 var _aacdemuxer = _dereq_(21);
 
 var _aacdemuxer2 = _interopRequireDefault(_aacdemuxer);
+=======
+"use strict";
+
+var $at  = __webpack_require__(131)(true);
+
+// 21.1.3.27 String.prototype[@@iterator]()
+__webpack_require__(64)(String, 'String', function(iterated){
+  this._t = String(iterated); // target
+  this._i = 0;                // next index
+// 21.1.5.2.1 %StringIteratorPrototype%.next()
+}, function(){
+  var O     = this._t
+    , index = this._i
+    , point;
+  if(index >= O.length)return {value: undefined, done: true};
+  point = $at(O, index);
+  this._i += point.length;
+  return {value: point, done: false};
+});
+
+/***/ }),
+/* 72 */
+/***/ (function(module, exports) {
+
+module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M1.425.35L14.575 8l-13.15 7.65V.35z\"></path></svg>"
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "a8c874b93b3d848f39a71260c57e3863.cur";
+
+/***/ }),
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(1);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _base_object = __webpack_require__(9);
+
+var _base_object2 = _interopRequireDefault(_base_object);
+
+var _utils = __webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * The base class for a container plugin
+ * @class ContainerPlugin
+ * @constructor
+ * @extends UIObject
+ * @module base
+ */
+var ContainerPlugin = function (_BaseObject) {
+  (0, _inherits3.default)(ContainerPlugin, _BaseObject);
+
+  function ContainerPlugin(container) {
+    (0, _classCallCheck3.default)(this, ContainerPlugin);
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, _BaseObject.call(this, container.options));
+
+    _this.container = container;
+    _this.enabled = true;
+    _this.bindEvents();
+    return _this;
+  }
+
+  ContainerPlugin.prototype.enable = function enable() {
+    if (!this.enabled) {
+      this.bindEvents();
+      this.enabled = true;
+    }
+  };
+
+  ContainerPlugin.prototype.disable = function disable() {
+    if (this.enabled) {
+      this.stopListening();
+      this.enabled = false;
+    }
+  };
+
+  ContainerPlugin.prototype.bindEvents = function bindEvents() {};
+
+  ContainerPlugin.prototype.destroy = function destroy() {
+    this.stopListening();
+  };
+
+  return ContainerPlugin;
+}(_base_object2.default);
+
+exports.default = ContainerPlugin;
+
+
+ContainerPlugin.extend = function (properties) {
+  return (0, _utils.extend)(ContainerPlugin, properties);
+};
+
+ContainerPlugin.type = 'container';
+module.exports = exports['default'];
+
+/***/ }),
+/* 75 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+>>>>>>> draft skinnier version
 
 var _mp4demuxer = _dereq_(29);
 
+<<<<<<< HEAD
 var _mp4demuxer2 = _interopRequireDefault(_mp4demuxer);
 
 var _tsdemuxer = _dereq_(32);
@@ -20910,11 +23203,32 @@ var _mp4Remuxer2 = _interopRequireDefault(_mp4Remuxer);
 var _passthroughRemuxer = _dereq_(46);
 
 var _passthroughRemuxer2 = _interopRequireDefault(_passthroughRemuxer);
+=======
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(1);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _utils = __webpack_require__(3);
+
+var _base_object = __webpack_require__(9);
+
+var _base_object2 = _interopRequireDefault(_base_object);
+>>>>>>> draft skinnier version
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var CorePlugin = function (_BaseObject) {
+  (0, _inherits3.default)(CorePlugin, _BaseObject);
 
+<<<<<<< HEAD
 var DemuxerInline = function () {
   function DemuxerInline(observer, typeSupported, config, vendor) {
     _classCallCheck(this, DemuxerInline);
@@ -21017,11 +23331,44 @@ exports.default = DemuxerInline;
 
 },{"19":19,"21":21,"28":28,"29":29,"32":32,"33":33,"35":35,"45":45,"46":46}],24:[function(_dereq_,module,exports){
 'use strict';
+=======
+  function CorePlugin(core) {
+    (0, _classCallCheck3.default)(this, CorePlugin);
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+    var _this = (0, _possibleConstructorReturn3.default)(this, _BaseObject.call(this, core.options));
 
+    _this.core = core;
+    _this.enabled = true;
+    _this.bindEvents();
+    return _this;
+  }
+
+  CorePlugin.prototype.bindEvents = function bindEvents() {};
+
+  CorePlugin.prototype.enable = function enable() {
+    if (!this.enabled) {
+      this.bindEvents();
+      this.enabled = true;
+    }
+  };
+
+  CorePlugin.prototype.disable = function disable() {
+    if (this.enabled) {
+      this.stopListening();
+      this.enabled = false;
+    }
+  };
+
+  CorePlugin.prototype.getExternalInterface = function getExternalInterface() {
+    return {};
+  };
+>>>>>>> draft skinnier version
+
+  CorePlugin.prototype.destroy = function destroy() {
+    this.stopListening();
+  };
+
+<<<<<<< HEAD
 var _demuxerInline = _dereq_(23);
 
 var _demuxerInline2 = _interopRequireDefault(_demuxerInline);
@@ -21120,11 +23467,33 @@ exports.default = DemuxerWorker;
 
 },{"1":1,"23":23,"35":35,"53":53}],25:[function(_dereq_,module,exports){
 'use strict';
+=======
+  return CorePlugin;
+}(_base_object2.default);
+
+exports.default = CorePlugin;
+
+
+CorePlugin.extend = function (properties) {
+  return (0, _utils.extend)(CorePlugin, properties);
+};
+
+CorePlugin.type = 'core';
+module.exports = exports['default'];
+
+/***/ }),
+/* 76 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+>>>>>>> draft skinnier version
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+<<<<<<< HEAD
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _events = _dereq_(35);
@@ -21146,11 +23515,35 @@ var _errors = _dereq_(33);
 var _events3 = _dereq_(1);
 
 var _events4 = _interopRequireDefault(_events3);
+=======
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(1);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _utils = __webpack_require__(3);
+
+var _ui_object = __webpack_require__(14);
+
+var _ui_object2 = _interopRequireDefault(_ui_object);
+>>>>>>> draft skinnier version
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var UICorePlugin = function (_UIObject) {
+  (0, _inherits3.default)(UICorePlugin, _UIObject);
 
+  function UICorePlugin(core) {
+    (0, _classCallCheck3.default)(this, UICorePlugin);
+
+<<<<<<< HEAD
 var Demuxer = function () {
   function Demuxer(hls, id) {
     _classCallCheck(this, Demuxer);
@@ -21301,9 +23694,32 @@ var Demuxer = function () {
           hls.trigger(data.event, data.data);
           break;
       }
-    }
-  }]);
+=======
+    var _this = (0, _possibleConstructorReturn3.default)(this, _UIObject.call(this, core.options));
 
+    _this.core = core;
+    _this.enabled = true;
+    _this.bindEvents();
+    _this.render();
+    return _this;
+  }
+
+  UICorePlugin.prototype.bindEvents = function bindEvents() {};
+
+  UICorePlugin.prototype.getExternalInterface = function getExternalInterface() {
+    return {};
+  };
+
+  UICorePlugin.prototype.enable = function enable() {
+    if (!this.enabled) {
+      this.bindEvents();
+      this.$el.show();
+      this.enabled = true;
+>>>>>>> draft skinnier version
+    }
+  };
+
+<<<<<<< HEAD
   return Demuxer;
 }();
 
@@ -21338,6 +23754,40 @@ var ExpGolomb = function () {
   }
 
   // ():void
+=======
+  UICorePlugin.prototype.disable = function disable() {
+    this.stopListening();
+    this.$el.hide();
+    this.enabled = false;
+  };
+
+  UICorePlugin.prototype.destroy = function destroy() {
+    this.remove();
+  };
+
+  UICorePlugin.prototype.render = function render() {
+    return this;
+  };
+
+  return UICorePlugin;
+}(_ui_object2.default);
+
+exports.default = UICorePlugin;
+
+
+UICorePlugin.extend = function (properties) {
+  return (0, _utils.extend)(UICorePlugin, properties);
+};
+
+UICorePlugin.type = 'core';
+module.exports = exports['default'];
+
+/***/ }),
+/* 77 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+>>>>>>> draft skinnier version
 
 
   _createClass(ExpGolomb, [{
@@ -21358,6 +23808,7 @@ var ExpGolomb = function () {
       this.bytesAvailable -= availableBytes;
     }
 
+<<<<<<< HEAD
     // (count:int):void
 
   }, {
@@ -21469,9 +23920,61 @@ var ExpGolomb = function () {
     value: function readBoolean() {
       return 1 === this.readBits(1);
     }
+=======
+var _keys = __webpack_require__(35);
+
+var _keys2 = _interopRequireDefault(_keys);
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _createClass2 = __webpack_require__(4);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _inherits2 = __webpack_require__(1);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _utils = __webpack_require__(3);
+
+var _base_object = __webpack_require__(9);
+
+var _base_object2 = _interopRequireDefault(_base_object);
+
+var _events = __webpack_require__(5);
+
+var _events2 = _interopRequireDefault(_events);
+
+var _browser = __webpack_require__(20);
+
+var _browser2 = _interopRequireDefault(_browser);
+
+var _core_factory = __webpack_require__(83);
+
+var _core_factory2 = _interopRequireDefault(_core_factory);
+
+var _loader = __webpack_require__(55);
+
+var _loader2 = _interopRequireDefault(_loader);
+
+var _player_info = __webpack_require__(29);
+
+var _player_info2 = _interopRequireDefault(_player_info);
+
+var _clapprZepto = __webpack_require__(7);
+
+var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
+>>>>>>> draft skinnier version
 
     // ():int
 
+<<<<<<< HEAD
   }, {
     key: 'readUByte',
     value: function readUByte() {
@@ -21514,10 +24017,55 @@ var ExpGolomb = function () {
           nextScale = (lastScale + deltaScale + 256) % 256;
         }
         lastScale = nextScale === 0 ? lastScale : nextScale;
+=======
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+var baseUrl = (0, _utils.currentScriptUrl)().replace(/\/[^\/]+$/, '');
+
+/**
+ * @class Player
+ * @constructor
+ * @extends BaseObject
+ * @module components
+ * @example
+ * ### Using the Player
+ *
+ * Add the following script on your HTML:
+ * ```html
+ * <head>
+ *   <script type="text/javascript" src="http://cdn.clappr.io/latest/clappr.min.js"></script>
+ * </head>
+ * ```
+ * Now, create the player:
+ * ```html
+ * <body>
+ *   <div id="player"></div>
+ *   <script>
+ *     var player = new Clappr.Player({source: "http://your.video/here.mp4", parentId: "#player"});
+ *   </script>
+ * </body>
+ * ```
+ */
+
+var Player = function (_BaseObject) {
+  (0, _inherits3.default)(Player, _BaseObject);
+  (0, _createClass3.default)(Player, [{
+    key: 'loader',
+    set: function set(loader) {
+      this._loader = loader;
+    },
+    get: function get() {
+      if (!this._loader) {
+        this._loader = new _loader2.default(this.options.plugins || {}, this.options.playerId);
+>>>>>>> draft skinnier version
       }
+      return this._loader;
     }
 
     /**
+<<<<<<< HEAD
      * Read a sequence parameter set and return some interesting video
      * properties. A sequence parameter set is the H264 metadata that
      * describes the properties of upcoming video frames.
@@ -21673,9 +24221,20 @@ var ExpGolomb = function () {
       this.readUEG();
       // return slice_type
       return this.readUEG();
-    }
-  }]);
+=======
+     * Determine if the playback has ended.
+     * @property ended
+     * @type Boolean
+     */
 
+  }, {
+    key: 'ended',
+    get: function get() {
+      return this.core.mediaControl.container.ended;
+>>>>>>> draft skinnier version
+    }
+
+<<<<<<< HEAD
   return ExpGolomb;
 }();
 
@@ -21683,11 +24242,35 @@ exports.default = ExpGolomb;
 
 },{"53":53}],27:[function(_dereq_,module,exports){
 'use strict';
+=======
+    /**
+     * Determine if the playback is having to buffer in order for
+     * playback to be smooth.
+     * (i.e if a live stream is playing smoothly, this will be false)
+     * @property buffering
+     * @type Boolean
+     */
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+  }, {
+    key: 'buffering',
+    get: function get() {
+      return this.core.mediaControl.container.buffering;
+    }
 
+    /*
+     * determine if the player is ready.
+     * @property isReady
+     * @type {Boolean} `true` if the player is ready. ie PLAYER_READY event has fired
+     */
+>>>>>>> draft skinnier version
+
+  }, {
+    key: 'isReady',
+    get: function get() {
+      return !!this._ready;
+    }
+
+<<<<<<< HEAD
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * ID3 parser
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
@@ -21837,11 +24420,205 @@ exports.default = ID3;
 
 },{"53":53}],28:[function(_dereq_,module,exports){
 'use strict';
+=======
+    /**
+     * An events map that allows the user to add custom callbacks in player's options.
+     * @property eventsMapping
+     * @type {Object}
+     */
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+  }, {
+    key: 'eventsMapping',
+    get: function get() {
+      return {
+        onReady: _events2.default.PLAYER_READY,
+        onResize: _events2.default.PLAYER_RESIZE,
+        onPlay: _events2.default.PLAYER_PLAY,
+        onPause: _events2.default.PLAYER_PAUSE,
+        onStop: _events2.default.PLAYER_STOP,
+        onEnded: _events2.default.PLAYER_ENDED,
+        onSeek: _events2.default.PLAYER_SEEK,
+        onError: _events2.default.PLAYER_ERROR,
+        onTimeUpdate: _events2.default.PLAYER_TIMEUPDATE,
+        onVolumeUpdate: _events2.default.PLAYER_VOLUMEUPDATE,
+        onTextTrackLoaded: _events2.default.PLAYER_TEXTTRACKLOADED
+      };
+    }
 
+    /**
+     * ## Player's constructor
+     *
+     * You might pass the options object to build the player.
+     * ```javascript
+     * var options = {source: "http://example.com/video.mp4", param1: "val1"};
+     * var player = new Clappr.Player(options);
+     * ```
+     *
+     * @method constructor
+     * @param {Object} options Data
+     * options to build a player instance
+     * @param {Number} [options.width]
+     * player's width **default**: `640`
+     * @param {Number} [options.height]
+     * player's height **default**: `360`
+     * @param {String} [options.parentId]
+     * the id of the element on the page that the player should be inserted into
+     * @param {Object} [options.parent]
+     * a reference to a dom element that the player should be inserted into
+     * @param {String} [options.source]
+     * The media source URL, or {source: <<source URL>>, mimeType: <<source mime type>>}
+     * @param {Object} [options.sources]
+     * An array of media source URL's, or an array of {source: <<source URL>>, mimeType: <<source mime type>>}
+     * @param {Boolean} [options.autoPlay]
+     * automatically play after page load **default**: `false`
+     * @param {Boolean} [options.loop]
+     * automatically replay after it ends **default**: `false`
+     * @param {Boolean} [options.chromeless]
+     * player acts in chromeless mode **default**: `false`
+     * @param {Boolean} [options.allowUserInteraction]
+     * whether or not the player should handle click events when in chromeless mode **default**: `false` on desktops browsers, `true` on mobile.
+     * @param {Boolean} [options.disableKeyboardShortcuts]
+     * disable keyboard shortcuts. **default**: `false`. `true` if `allowUserInteraction` is `false`.
+     * @param {Boolean} [options.muted]
+     * start the video muted **default**: `false`
+     * @param {String} [options.mimeType]
+     * add `mimeType: "application/vnd.apple.mpegurl"` if you need to use a url without extension.
+     * @param {String} [options.actualLiveTime]
+     * show duration and seek time relative to actual time.
+     * @param {String} [options.actualLiveServerTime]
+     * specify server time as a string, format: "2015/11/26 06:01:03". This option is meant to be used with actualLiveTime.
+     * @param {Boolean} [options.persistConfig]
+     * persist player's settings (volume) through the same domain **default**: `true`
+     * @param {String} [options.preload]
+     * video will be preloaded according to `preload` attribute options **default**: `'metadata'`
+     * @param {Number} [options.maxBufferLength]
+     * the default behavior for the **HLS playback** is to keep buffering indefinitely, even on VoD.
+     * This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks.
+     * To change this behavior use `maxBufferLength` where **value is in seconds**.
+     * @param {String} [options.gaAccount]
+     * enable Google Analytics events dispatch **(play/pause/stop/buffering/etc)** by adding your `gaAccount`
+     * @param {String} [options.gaTrackerName]
+     * besides `gaAccount` you can optionally, pass your favorite trackerName as `gaTrackerName`
+     * @param {Object} [options.mediacontrol]
+     * customize control bar colors, example: `mediacontrol: {seekbar: "#E113D3", buttons: "#66B2FF"}`
+     * @param {Boolean} [options.hideMediaControl]
+     * control media control auto hide **default**: `true`
+     * @param {Boolean} [options.hideVolumeBar]
+     * when embedded with width less than 320, volume bar will hide. You can force this behavior for all sizes by adding `true` **default**: `false`
+     * @param {String} [options.watermark]
+     * put `watermark: 'http://url/img.png'` on your embed parameters to automatically add watermark on your video.
+     * You can customize corner position by defining position parameter. Positions can be `bottom-left`, `bottom-right`, `top-left` and `top-right`.
+     * @param {String} [options.watermarkLink]
+     * `watermarkLink: 'http://example.net/'` - define URL to open when the watermark is clicked. If not provided watermark will not be clickable.
+     * @param {Boolean} [options.disableVideoTagContextMenu]
+     * disables the context menu (right click) on the video element if a HTML5Video playback is used.
+     * @param {Boolean} [options.autoSeekFromUrl]
+     * Automatically seek to the seconds provided in the url (e.g example.com?t=100) **default**: `true`
+     * @param {Boolean} [options.exitFullscreenOnEnd]
+     * Automatically exit full screen when the media finishes. **default**: `true`
+     * @param {String} [options.poster]
+     * define a poster by adding its address `poster: 'http://url/img.png'`. It will appear after video embed, disappear on play and go back when user stops the video.
+     * @param {String} [options.playbackNotSupportedMessage]
+     * define a custom message to be displayed when a playback is not supported.
+     * @param {Object} [options.events]
+     * Specify listeners which will be registered with their corresponding player events.
+     * E.g. onReady -> "PLAYER_READY", onTimeUpdate -> "PLAYER_TIMEUPDATE"
+     */
+
+  }]);
+
+  function Player(options) {
+    (0, _classCallCheck3.default)(this, Player);
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, _BaseObject.call(this, options));
+
+    var defaultOptions = { playerId: (0, _utils.uniqueId)(''), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl, allowUserInteraction: _browser2.default.isMobile };
+    _this._options = _clapprZepto2.default.extend(defaultOptions, options);
+    _this.options.sources = _this._normalizeSources(options);
+    if (!_this.options.chromeless) {
+      // "allowUserInteraction" cannot be false if not in chromeless mode.
+      _this.options.allowUserInteraction = true;
+    }
+    if (!_this.options.allowUserInteraction) {
+      // if user iteraction is not allowed ensure keyboard shortcuts are disabled
+      _this.options.disableKeyboardShortcuts = true;
+    }
+    _this._registerOptionEventListeners();
+    _this._coreFactory = new _core_factory2.default(_this);
+    _this.playerInfo = _player_info2.default.getInstance(_this.options.playerId);
+    _this.playerInfo.currentSize = { width: options.width, height: options.height };
+    _this.playerInfo.options = _this.options;
+    if (_this.options.parentId) {
+      _this.setParentId(_this.options.parentId);
+    } else if (_this.options.parent) {
+      _this.attachTo(_this.options.parent);
+    }
+    return _this;
+  }
+
+  /**
+   * Specify a `parentId` to the player.
+   * @method setParentId
+   * @param {String} parentId the element parent id.
+   * @return {Player} itself
+   */
+
+
+  Player.prototype.setParentId = function setParentId(parentId) {
+    var el = document.querySelector(parentId);
+    if (el) {
+      this.attachTo(el);
+    }
+    return this;
+  };
+
+  /**
+   * You can use this method to attach the player to a given element. You don't need to do this when you specify it during the player instantiation passing the `parentId` param.
+   * @method attachTo
+   * @param {Object} element a given element.
+   * @return {Player} itself
+   */
+
+
+  Player.prototype.attachTo = function attachTo(element) {
+    this.options.parentElement = element;
+    this.core = this._coreFactory.create();
+    this._addEventListeners();
+    return this;
+  };
+
+  Player.prototype._addEventListeners = function _addEventListeners() {
+    if (!this.core.isReady) {
+      this.listenToOnce(this.core, _events2.default.CORE_READY, this._onReady);
+    } else {
+      this._onReady();
+    }
+    this.listenTo(this.core.mediaControl, _events2.default.MEDIACONTROL_CONTAINERCHANGED, this._containerChanged);
+    this.listenTo(this.core, _events2.default.CORE_FULLSCREEN, this._onFullscreenChange);
+    return this;
+  };
+
+  Player.prototype._addContainerEventListeners = function _addContainerEventListeners() {
+    var container = this.core.mediaControl.container;
+    if (container) {
+      this.listenTo(container, _events2.default.CONTAINER_PLAY, this._onPlay);
+      this.listenTo(container, _events2.default.CONTAINER_PAUSE, this._onPause);
+      this.listenTo(container, _events2.default.CONTAINER_STOP, this._onStop);
+      this.listenTo(container, _events2.default.CONTAINER_ENDED, this._onEnded);
+      this.listenTo(container, _events2.default.CONTAINER_SEEK, this._onSeek);
+      this.listenTo(container, _events2.default.CONTAINER_ERROR, this._onError);
+      this.listenTo(container, _events2.default.CONTAINER_TIMEUPDATE, this._onTimeUpdate);
+      this.listenTo(container, _events2.default.CONTAINER_VOLUME, this._onVolumeUpdate);
+      this.listenTo(container, _events2.default.CONTAINER_LOADEDTEXTTRACK, this._onTextTrackLoaded);
+    }
+    return this;
+  };
+>>>>>>> draft skinnier version
+
+  Player.prototype._registerOptionEventListeners = function _registerOptionEventListeners() {
+    var _this2 = this;
+
+<<<<<<< HEAD
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * MP3 demuxer
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
@@ -21854,11 +24631,72 @@ var _id2 = _interopRequireDefault(_id);
 var _mpegaudio = _dereq_(30);
 
 var _mpegaudio2 = _interopRequireDefault(_mpegaudio);
+=======
+    var userEvents = this.options.events || {};
+    (0, _keys2.default)(userEvents).forEach(function (userEvent) {
+      var eventType = _this2.eventsMapping[userEvent];
+      if (eventType) {
+        var eventFunction = userEvents[userEvent];
+        eventFunction = typeof eventFunction === 'function' && eventFunction;
+        eventFunction && _this2.on(eventType, eventFunction);
+      }
+    });
+    return this;
+  };
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  Player.prototype._containerChanged = function _containerChanged() {
+    this.stopListening();
+    this._addEventListeners();
+  };
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+  Player.prototype._onReady = function _onReady() {
+    this._ready = true;
+    this._addContainerEventListeners();
+    this.trigger(_events2.default.PLAYER_READY);
+  };
 
+  Player.prototype._onFullscreenChange = function _onFullscreenChange(fullscreen) {
+    this.trigger(_events2.default.PLAYER_FULLSCREEN, fullscreen);
+  };
+
+  Player.prototype._onVolumeUpdate = function _onVolumeUpdate(volume) {
+    this.trigger(_events2.default.PLAYER_VOLUMEUPDATE, volume);
+  };
+
+  Player.prototype._onTextTrackLoaded = function _onTextTrackLoaded(evt, data) {
+    this.trigger(_events2.default.PLAYER_TEXTTRACKLOADED, evt, data);
+  };
+
+  Player.prototype._onPlay = function _onPlay() {
+    this.trigger(_events2.default.PLAYER_PLAY);
+  };
+
+  Player.prototype._onPause = function _onPause() {
+    this.trigger(_events2.default.PLAYER_PAUSE);
+  };
+
+  Player.prototype._onStop = function _onStop() {
+    this.trigger(_events2.default.PLAYER_STOP, this.getCurrentTime());
+  };
+
+  Player.prototype._onEnded = function _onEnded() {
+    this.trigger(_events2.default.PLAYER_ENDED);
+  };
+
+  Player.prototype._onSeek = function _onSeek(time) {
+    this.trigger(_events2.default.PLAYER_SEEK, time);
+  };
+>>>>>>> draft skinnier version
+
+  Player.prototype._onTimeUpdate = function _onTimeUpdate(timeProgress) {
+    this.trigger(_events2.default.PLAYER_TIMEUPDATE, timeProgress);
+  };
+
+  Player.prototype._onError = function _onError(error) {
+    this.trigger(_events2.default.PLAYER_ERROR, error);
+  };
+
+<<<<<<< HEAD
 var MP3Demuxer = function () {
   function MP3Demuxer(observer, remuxer, config) {
     _classCallCheck(this, MP3Demuxer);
@@ -21948,11 +24786,60 @@ var _events2 = _interopRequireDefault(_events);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+=======
+  Player.prototype._normalizeSources = function _normalizeSources(options) {
+    var sources = options.sources || (options.source !== undefined ? [options.source] : []);
+    return sources.length === 0 ? [{ source: '', mimeType: '' }] : sources;
+  };
+
+  /**
+   * resizes the current player canvas.
+   * @method resize
+   * @param {Object} size should be a literal object with `height` and `width`.
+   * @return {Player} itself
+   * @example
+   * ```javascript
+   * player.resize({height: 360, width: 640})
+   * ```
+   */
+
+
+  Player.prototype.resize = function resize(size) {
+    this.core.resize(size);
+    return this;
+  };
+
+  /**
+   * loads a new source.
+   * @method load
+   * @param {Array|String} sources source or sources of video.
+   * An array item can be a string or {source: <<source URL>>, mimeType: <<source mime type>>}
+   * @param {String} mimeType a mime type, example: `'application/vnd.apple.mpegurl'`
+   * @param {Boolean} [autoPlay=false] whether playing should be started immediately
+   * @return {Player} itself
+   */
+
+
+  Player.prototype.load = function load(sources, mimeType, autoPlay) {
+    if (autoPlay !== undefined) {
+      this.configure({ autoPlay: !!autoPlay });
+    }
+    this.core.load(sources, mimeType);
+    return this;
+  };
+
+  /**
+   * destroys the current player and removes it from the DOM.
+   * @method destroy
+   * @return {Player} itself
+   */
+>>>>>>> draft skinnier version
 
 var MP4Demuxer = function () {
   function MP4Demuxer(observer, remuxer) {
     _classCallCheck(this, MP4Demuxer);
 
+<<<<<<< HEAD
     this.observer = observer;
     this.remuxer = remuxer;
   }
@@ -22259,11 +25146,133 @@ module.exports = MpegAudio;
 
 },{"53":53}],31:[function(_dereq_,module,exports){
 'use strict';
+=======
+  Player.prototype.destroy = function destroy() {
+    this.core.destroy();
+    return this;
+  };
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+  /**
+   * Gives user consent to playback. Required by mobile device after a click event before Player.load().
+   * @method consent
+   * @return {Player} itself
+   */
 
+
+  Player.prototype.consent = function consent() {
+    this.core.getCurrentPlayback().consent();
+    return this;
+  };
+
+  /**
+   * plays the current video (`source`).
+   * @method play
+   * @return {Player} itself
+   */
+
+
+  Player.prototype.play = function play() {
+    this.core.mediaControl.container.play();
+    return this;
+  };
+
+  /**
+   * pauses the current video (`source`).
+   * @method pause
+   * @return {Player} itself
+   */
+
+
+  Player.prototype.pause = function pause() {
+    this.core.mediaControl.container.pause();
+    return this;
+  };
+
+  /**
+   * stops the current video (`source`).
+   * @method stop
+   * @return {Player} itself
+   */
+
+
+  Player.prototype.stop = function stop() {
+    this.core.mediaControl.container.stop();
+    return this;
+  };
+
+  /**
+   * seeks the current video (`source`). For example, `player.seek(120)` will seek to second 120 (2minutes) of the current video.
+   * @method seek
+   * @param {Number} time should be a number between 0 and the video duration.
+   * @return {Player} itself
+   */
+
+
+  Player.prototype.seek = function seek(time) {
+    this.core.mediaControl.container.seek(time);
+    return this;
+  };
+
+  /**
+   * seeks the current video (`source`). For example, `player.seek(50)` will seek to the middle of the current video.
+   * @method seekPercentage
+   * @param {Number} time should be a number between 0 and 100.
+   * @return {Player} itself
+   */
+
+
+  Player.prototype.seekPercentage = function seekPercentage(percentage) {
+    this.core.mediaControl.container.seekPercentage(percentage);
+    return this;
+  };
+
+  /**
+   * Set the volume for the current video (`source`).
+   * @method setVolume
+   * @param {Number} volume should be a number between 0 and 100, 0 being mute and 100 the max volume.
+   * @return {Player} itself
+   */
+
+
+  Player.prototype.setVolume = function setVolume(volume) {
+    if (this.core && this.core.mediaControl) {
+      this.core.mediaControl.setVolume(volume);
+    }
+    return this;
+  };
+
+  /**
+   * Get the volume for the current video
+   * @method getVolume
+   * @return {Number} volume should be a number between 0 and 100, 0 being mute and 100 the max volume.
+   */
+
+
+  Player.prototype.getVolume = function getVolume() {
+    return this.core && this.core.mediaControl ? this.core.mediaControl.volume : 0;
+  };
+
+  /**
+   * mutes the current video (`source`).
+   * @method mute
+   * @return {Player} itself
+   */
+
+
+  Player.prototype.mute = function mute() {
+    this._mutedVolume = this.getVolume();
+    this.setVolume(0);
+    return this;
+  };
+>>>>>>> draft skinnier version
+
+  /**
+   * unmutes the current video (`source`).
+   * @method unmute
+   * @return {Player} itself
+   */
+
+<<<<<<< HEAD
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * SAMPLE-AES decrypter
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
@@ -22452,11 +25461,57 @@ var _sampleAes2 = _interopRequireDefault(_sampleAes);
 var _logger = _dereq_(53);
 
 var _errors = _dereq_(33);
+=======
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  Player.prototype.unmute = function unmute() {
+    this.setVolume(typeof this._mutedVolume === 'number' ? this._mutedVolume : 100);
+    this._mutedVolume = null;
+    return this;
+  };
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+  /**
+   * checks if the player is playing.
+   * @method isPlaying
+   * @return {Boolean} `true` if the current source is playing, otherwise `false`
+   */
 
+
+  Player.prototype.isPlaying = function isPlaying() {
+    return this.core.mediaControl.container.isPlaying();
+  };
+
+  /**
+   * returns `true` if DVR is enable otherwise `false`.
+   * @method isDvrEnabled
+   * @return {Boolean}
+   */
+
+
+  Player.prototype.isDvrEnabled = function isDvrEnabled() {
+    return this.core.mediaControl.container.isDvrEnabled();
+  };
+
+  /**
+   * returns `true` if DVR is in use otherwise `false`.
+   * @method isDvrInUse
+   * @return {Boolean}
+   */
+
+
+  Player.prototype.isDvrInUse = function isDvrInUse() {
+    return this.core.mediaControl.container.isDvrInUse();
+  };
+>>>>>>> draft skinnier version
+
+  /**
+   * enables to configure a player after its creation
+   * @method configure
+   * @param {Object} options all the options to change in form of a javascript object
+   * @return {Player} itself
+   */
+
+
+<<<<<<< HEAD
 var TSDemuxer = function () {
   function TSDemuxer(observer, remuxer, config, typeSupported) {
     _classCallCheck(this, TSDemuxer);
@@ -24147,9 +27202,450 @@ var Hls = function () {
     },
     set: function set(defaultConfig) {
       Hls.defaultConfig = defaultConfig;
+=======
+  Player.prototype.configure = function configure(options) {
+    this.core.configure(options);
+    return this;
+  };
+
+  /**
+   * get a plugin by its name.
+   * @method getPlugin
+   * @param {String} name of the plugin.
+   * @return {Object} the plugin instance
+   * @example
+   * ```javascript
+   * var poster = player.getPlugin('poster');
+   * poster.hidePlayButton();
+   * ```
+   */
+
+
+  Player.prototype.getPlugin = function getPlugin(name) {
+    var plugins = this.core.plugins.concat(this.core.mediaControl.container.plugins);
+    return plugins.filter(function (plugin) {
+      return plugin.name === name;
+    })[0];
+  };
+
+  /**
+   * the current time in seconds.
+   * @method getCurrentTime
+   * @return {Number} current time (in seconds) of the current source
+   */
+
+
+  Player.prototype.getCurrentTime = function getCurrentTime() {
+    return this.core.mediaControl.container.getCurrentTime();
+  };
+
+  /**
+   * The time that "0" now represents relative to when playback started.
+   * For a stream with a sliding window this will increase as content is
+   * removed from the beginning.
+   * @method getStartTimeOffset
+   * @return {Number} time (in seconds) that time "0" represents.
+   */
+
+
+  Player.prototype.getStartTimeOffset = function getStartTimeOffset() {
+    return this.core.mediaControl.container.getStartTimeOffset();
+  };
+
+  /**
+   * the duration time in seconds.
+   * @method getDuration
+   * @return {Number} duration time (in seconds) of the current source
+   */
+
+
+  Player.prototype.getDuration = function getDuration() {
+    return this.core.mediaControl.container.getDuration();
+  };
+
+  return Player;
+}(_base_object2.default);
+
+exports.default = Player;
+module.exports = exports['default'];
+
+/***/ }),
+/* 78 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _createClass2 = __webpack_require__(4);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _inherits2 = __webpack_require__(1);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _events = __webpack_require__(5);
+
+var _events2 = _interopRequireDefault(_events);
+
+var _ui_object = __webpack_require__(14);
+
+var _ui_object2 = _interopRequireDefault(_ui_object);
+
+var _styler = __webpack_require__(10);
+
+var _styler2 = _interopRequireDefault(_styler);
+
+var _style = __webpack_require__(146);
+
+var _style2 = _interopRequireDefault(_style);
+
+var _clapprZepto = __webpack_require__(7);
+
+var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * An abstraction to represent a container for a given playback
+ * TODO: describe its responsabilities
+ * @class Container
+ * @constructor
+ * @extends UIObject
+ * @module base
+ */
+var Container = function (_UIObject) {
+  (0, _inherits3.default)(Container, _UIObject);
+  (0, _createClass3.default)(Container, [{
+    key: 'name',
+
+    /**
+     * container's name
+     * @method name
+     * @default Container
+     * @return {String} container's name
+     */
+    get: function get() {
+      return 'Container';
     }
+  }, {
+    key: 'attributes',
+    get: function get() {
+      return { class: 'container', 'data-container': '' };
+    }
+  }, {
+    key: 'events',
+    get: function get() {
+      return {
+        'click': 'clicked',
+        'dblclick': 'dblClicked',
+        'doubleTap': 'dblClicked',
+        'contextmenu': 'onContextMenu',
+        'mouseenter': 'mouseEnter',
+        'mouseleave': 'mouseLeave'
+      };
+    }
+
+    /**
+     * Determine if the playback has ended.
+     * @property ended
+     * @type Boolean
+     */
+
+  }, {
+    key: 'ended',
+    get: function get() {
+      return this.playback.ended;
+    }
+
+    /**
+     * Determine if the playback is having to buffer in order for
+     * playback to be smooth.
+     * (i.e if a live stream is playing smoothly, this will be false)
+     * @property buffering
+     * @type Boolean
+     */
+
+  }, {
+    key: 'buffering',
+    get: function get() {
+      return this.playback.buffering;
+    }
+
+    /**
+     * The internationalization plugin.
+     * @property i18n
+     * @type {Strings}
+     */
+
+  }, {
+    key: 'i18n',
+    get: function get() {
+      return this._i18n;
+    }
+
+    /**
+     * it builds a container
+     * @method constructor
+     * @param {Object} options the options object
+     * @param {Strings} i18n the internationalization component
+     */
+
   }]);
 
+  function Container(options, i18n) {
+    (0, _classCallCheck3.default)(this, Container);
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, _UIObject.call(this, options));
+
+    _this._i18n = i18n;
+    _this.currentTime = 0;
+    _this.volume = 100;
+    _this.playback = options.playback;
+    _this.settings = _clapprZepto2.default.extend({}, _this.playback.settings);
+    _this.isReady = false;
+    _this.mediaControlDisabled = false;
+    _this.plugins = [_this.playback];
+    _this.bindEvents();
+    return _this;
+  }
+
+  /**
+   * binds playback events to the methods of the container.
+   * it listens to playback's events and triggers them as container events.
+   *
+   * | Playback |
+   * |----------|
+   * | progress |
+   * | timeupdate |
+   * | ready |
+   * | buffering |
+   * | bufferfull |
+   * | settingsupdate |
+   * | loadedmetadata |
+   * | highdefinitionupdate |
+   * | bitrate |
+   * | playbackstate |
+   * | dvr |
+   * | mediacontrol_disable |
+   * | mediacontrol_enable |
+   * | ended |
+   * | play |
+   * | pause |
+   * | error |
+   *
+   * ps: the events usually translate from PLABACK_x to CONTAINER_x, you can check all the events at `Event` class.
+   *
+   * @method bindEvents
+   */
+
+
+  Container.prototype.bindEvents = function bindEvents() {
+    this.listenTo(this.playback, _events2.default.PLAYBACK_PROGRESS, this.progress);
+    this.listenTo(this.playback, _events2.default.PLAYBACK_TIMEUPDATE, this.timeUpdated);
+    this.listenTo(this.playback, _events2.default.PLAYBACK_READY, this.ready);
+    this.listenTo(this.playback, _events2.default.PLAYBACK_BUFFERING, this.onBuffering);
+    this.listenTo(this.playback, _events2.default.PLAYBACK_BUFFERFULL, this.bufferfull);
+    this.listenTo(this.playback, _events2.default.PLAYBACK_SETTINGSUPDATE, this.settingsUpdate);
+    this.listenTo(this.playback, _events2.default.PLAYBACK_LOADEDMETADATA, this.loadedMetadata);
+    this.listenTo(this.playback, _events2.default.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinitionUpdate);
+    this.listenTo(this.playback, _events2.default.PLAYBACK_BITRATE, this.updateBitrate);
+    this.listenTo(this.playback, _events2.default.PLAYBACK_PLAYBACKSTATE, this.playbackStateChanged);
+    this.listenTo(this.playback, _events2.default.PLAYBACK_DVR, this.playbackDvrStateChanged);
+    this.listenTo(this.playback, _events2.default.PLAYBACK_MEDIACONTROL_DISABLE, this.disableMediaControl);
+    this.listenTo(this.playback, _events2.default.PLAYBACK_MEDIACONTROL_ENABLE, this.enableMediaControl);
+    this.listenTo(this.playback, _events2.default.PLAYBACK_ENDED, this.onEnded);
+    this.listenTo(this.playback, _events2.default.PLAYBACK_PLAY, this.playing);
+    this.listenTo(this.playback, _events2.default.PLAYBACK_PAUSE, this.paused);
+    this.listenTo(this.playback, _events2.default.PLAYBACK_STOP, this.stopped);
+    this.listenTo(this.playback, _events2.default.PLAYBACK_ERROR, this.error);
+    this.listenTo(this.playback, _events2.default.PLAYBACK_SUBTITLE_LOADED, this.subtitleLoaded);
+  };
+
+  Container.prototype.subtitleLoaded = function subtitleLoaded(evt, data) {
+    this.trigger(_events2.default.CONTAINER_LOADEDTEXTTRACK, evt, data);
+  };
+
+  Container.prototype.playbackStateChanged = function playbackStateChanged(state) {
+    this.trigger(_events2.default.CONTAINER_PLAYBACKSTATE, state);
+  };
+
+  Container.prototype.playbackDvrStateChanged = function playbackDvrStateChanged(dvrInUse) {
+    this.settings = this.playback.settings;
+    this.dvrInUse = dvrInUse;
+    this.trigger(_events2.default.CONTAINER_PLAYBACKDVRSTATECHANGED, dvrInUse);
+  };
+
+  Container.prototype.updateBitrate = function updateBitrate(newBitrate) {
+    this.trigger(_events2.default.CONTAINER_BITRATE, newBitrate);
+  };
+
+  Container.prototype.statsReport = function statsReport(metrics) {
+    this.trigger(_events2.default.CONTAINER_STATS_REPORT, metrics);
+  };
+
+  Container.prototype.getPlaybackType = function getPlaybackType() {
+    return this.playback.getPlaybackType();
+  };
+
+  /**
+   * returns `true` if DVR is enable otherwise `false`.
+   * @method isDvrEnabled
+   * @return {Boolean}
+   */
+
+
+  Container.prototype.isDvrEnabled = function isDvrEnabled() {
+    return !!this.playback.dvrEnabled;
+  };
+
+  /**
+   * returns `true` if DVR is in use otherwise `false`.
+   * @method isDvrInUse
+   * @return {Boolean}
+   */
+
+
+  Container.prototype.isDvrInUse = function isDvrInUse() {
+    return !!this.dvrInUse;
+  };
+
+  /**
+   * destroys the container
+   * @method destroy
+   */
+
+
+  Container.prototype.destroy = function destroy() {
+    this.trigger(_events2.default.CONTAINER_DESTROYED, this, this.name);
+    this.stopListening();
+    this.plugins.forEach(function (plugin) {
+      return plugin.destroy();
+    });
+    this.$el.remove();
+  };
+
+  Container.prototype.setStyle = function setStyle(style) {
+    this.$el.css(style);
+  };
+
+  Container.prototype.animate = function animate(style, duration) {
+    return this.$el.animate(style, duration).promise();
+  };
+
+  Container.prototype.ready = function ready() {
+    this.isReady = true;
+    this.trigger(_events2.default.CONTAINER_READY, this.name);
+  };
+
+  Container.prototype.isPlaying = function isPlaying() {
+    return this.playback.isPlaying();
+  };
+
+  Container.prototype.getStartTimeOffset = function getStartTimeOffset() {
+    return this.playback.getStartTimeOffset();
+  };
+
+  Container.prototype.getCurrentTime = function getCurrentTime() {
+    return this.currentTime;
+  };
+
+  Container.prototype.getDuration = function getDuration() {
+    return this.playback.getDuration();
+  };
+
+  Container.prototype.error = function error(errorObj) {
+    if (!this.isReady) {
+      this.ready();
+    }
+    this.trigger(_events2.default.CONTAINER_ERROR, { error: errorObj, container: this }, this.name);
+  };
+
+  Container.prototype.loadedMetadata = function loadedMetadata(metadata) {
+    this.trigger(_events2.default.CONTAINER_LOADEDMETADATA, metadata);
+  };
+
+  Container.prototype.timeUpdated = function timeUpdated(timeProgress) {
+    this.currentTime = timeProgress.current;
+    this.trigger(_events2.default.CONTAINER_TIMEUPDATE, timeProgress, this.name);
+  };
+
+  Container.prototype.progress = function progress() {
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    this.trigger.apply(this, [_events2.default.CONTAINER_PROGRESS].concat(args, [this.name]));
+  };
+
+  Container.prototype.playing = function playing() {
+    this.trigger(_events2.default.CONTAINER_PLAY, this.name);
+  };
+
+  Container.prototype.paused = function paused() {
+    this.trigger(_events2.default.CONTAINER_PAUSE, this.name);
+  };
+
+  /**
+   * plays the playback
+   * @method play
+   */
+
+
+  Container.prototype.play = function play() {
+    this.playback.play();
+  };
+
+  /**
+   * stops the playback
+   * @method stop
+   */
+
+
+  Container.prototype.stop = function stop() {
+    this.playback.stop();
+    this.currentTime = 0;
+  };
+
+  /**
+   * pauses the playback
+   * @method pause
+   */
+
+
+  Container.prototype.pause = function pause() {
+    this.playback.pause();
+  };
+
+  Container.prototype.onEnded = function onEnded() {
+    this.trigger(_events2.default.CONTAINER_ENDED, this, this.name);
+    this.currentTime = 0;
+  };
+
+  Container.prototype.stopped = function stopped() {
+    this.trigger(_events2.default.CONTAINER_STOP);
+  };
+
+  Container.prototype.clicked = function clicked() {
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
+      this.trigger(_events2.default.CONTAINER_CLICK, this, this.name);
+>>>>>>> draft skinnier version
+    }
+  };
+
+<<<<<<< HEAD
   function Hls() {
     var _this = this;
 
@@ -24232,8 +27728,94 @@ var Hls = function () {
       var audioTrackController = new Controller(this);
       this.audioTrackController = audioTrackController;
       coreComponents.push(audioTrackController);
+=======
+  Container.prototype.dblClicked = function dblClicked() {
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
+      this.trigger(_events2.default.CONTAINER_DBLCLICK, this, this.name);
     }
+  };
 
+  Container.prototype.onContextMenu = function onContextMenu(event) {
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
+      this.trigger(_events2.default.CONTAINER_CONTEXTMENU, event, this.name);
+    }
+  };
+
+  Container.prototype.seek = function seek(time) {
+    this.trigger(_events2.default.CONTAINER_SEEK, time, this.name);
+    this.playback.seek(time);
+  };
+
+  Container.prototype.seekPercentage = function seekPercentage(percentage) {
+    var duration = this.getDuration();
+    if (percentage >= 0 && percentage <= 100) {
+      var time = duration * (percentage / 100);
+      this.seek(time);
+    }
+  };
+
+  Container.prototype.setVolume = function setVolume(value) {
+    this.volume = parseInt(value, 10);
+    this.trigger(_events2.default.CONTAINER_VOLUME, value, this.name);
+    this.playback.volume(value);
+  };
+
+  Container.prototype.fullscreen = function fullscreen() {
+    this.trigger(_events2.default.CONTAINER_FULLSCREEN, this.name);
+  };
+
+  Container.prototype.onBuffering = function onBuffering() {
+    this.trigger(_events2.default.CONTAINER_STATE_BUFFERING, this.name);
+  };
+
+  Container.prototype.bufferfull = function bufferfull() {
+    this.trigger(_events2.default.CONTAINER_STATE_BUFFERFULL, this.name);
+  };
+
+  /**
+   * adds plugin to the container
+   * @method addPlugin
+   * @param {Object} plugin
+   */
+
+
+  Container.prototype.addPlugin = function addPlugin(plugin) {
+    this.plugins.push(plugin);
+  };
+
+  /**
+   * checks if a plugin, given its name, exist
+   * @method hasPlugin
+   * @param {String} name
+   * @return {Boolean}
+   */
+
+
+  Container.prototype.hasPlugin = function hasPlugin(name) {
+    return !!this.getPlugin(name);
+  };
+
+  /**
+   * get the plugin given its name
+   * @method getPlugin
+   * @param {String} name
+   */
+
+
+  Container.prototype.getPlugin = function getPlugin(name) {
+    return this.plugins.filter(function (plugin) {
+      return plugin.name === name;
+    })[0];
+  };
+
+  Container.prototype.mouseEnter = function mouseEnter() {
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
+      this.trigger(_events2.default.CONTAINER_MOUSE_ENTER);
+>>>>>>> draft skinnier version
+    }
+  };
+
+<<<<<<< HEAD
     Controller = config.subtitleTrackController;
     if (Controller) {
       var subtitleTrackController = new Controller(this);
@@ -24724,17 +28306,156 @@ exports.default = FragmentLoader;
 
 },{"33":33,"34":34,"35":35,"53":53}],42:[function(_dereq_,module,exports){
 'use strict';
+=======
+  Container.prototype.mouseLeave = function mouseLeave() {
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
+      this.trigger(_events2.default.CONTAINER_MOUSE_LEAVE);
+    }
+  };
+
+  Container.prototype.settingsUpdate = function settingsUpdate() {
+    this.settings = this.playback.settings;
+    this.trigger(_events2.default.CONTAINER_SETTINGSUPDATE);
+  };
+
+  Container.prototype.highDefinitionUpdate = function highDefinitionUpdate(isHD) {
+    this.trigger(_events2.default.CONTAINER_HIGHDEFINITIONUPDATE, isHD);
+  };
+
+  Container.prototype.isHighDefinitionInUse = function isHighDefinitionInUse() {
+    return this.playback.isHighDefinitionInUse();
+  };
+
+  Container.prototype.disableMediaControl = function disableMediaControl() {
+    if (!this.mediaControlDisabled) {
+      this.mediaControlDisabled = true;
+      this.trigger(_events2.default.CONTAINER_MEDIACONTROL_DISABLE);
+    }
+  };
+
+  Container.prototype.enableMediaControl = function enableMediaControl() {
+    if (this.mediaControlDisabled) {
+      this.mediaControlDisabled = false;
+      this.trigger(_events2.default.CONTAINER_MEDIACONTROL_ENABLE);
+    }
+  };
+
+  Container.prototype.updateStyle = function updateStyle() {
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
+      this.$el.removeClass('chromeless');
+    } else {
+      this.$el.addClass('chromeless');
+    }
+  };
+
+  /**
+   * enables to configure the container after its creation
+   * @method configure
+   * @param {Object} options all the options to change in form of a javascript object
+   */
+
+
+  Container.prototype.configure = function configure(options) {
+    this._options = _clapprZepto2.default.extend(this._options, options);
+    this.updateStyle();
+    this.trigger(_events2.default.CONTAINER_OPTIONS_CHANGE);
+  };
+
+  Container.prototype.render = function render() {
+    var s = _styler2.default.getStyleFor(_style2.default);
+    this.$el.append(s);
+    this.$el.append(this.playback.render().el);
+    this.updateStyle();
+    return this;
+  };
+
+  return Container;
+}(_ui_object2.default); // Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+/**
+ * Container is responsible for the video rendering and state
+ */
+
+exports.default = Container;
+module.exports = exports['default'];
+
+/***/ }),
+/* 79 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _typeof2 = __webpack_require__(30);
 
-var _events = _dereq_(35);
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _createClass2 = __webpack_require__(4);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _inherits2 = __webpack_require__(1);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _base_object = __webpack_require__(9);
+
+var _base_object2 = _interopRequireDefault(_base_object);
+
+var _events = __webpack_require__(5);
 
 var _events2 = _interopRequireDefault(_events);
 
+var _container = __webpack_require__(53);
+
+var _container2 = _interopRequireDefault(_container);
+>>>>>>> draft skinnier version
+
+var _clapprZepto = __webpack_require__(7);
+
+var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
+
+<<<<<<< HEAD
+var _events = _dereq_(35);
+=======
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+/**
+ * The ContainerFactory is responsible for manage playback bootstrap and create containers.
+ */
+>>>>>>> draft skinnier version
+
+var ContainerFactory = function (_BaseObject) {
+  (0, _inherits3.default)(ContainerFactory, _BaseObject);
+  (0, _createClass3.default)(ContainerFactory, [{
+    key: 'options',
+    get: function get() {
+      return this._options;
+    },
+    set: function set(options) {
+      this._options = options;
+    }
+  }]);
+
+<<<<<<< HEAD
 var _eventHandler = _dereq_(34);
 
 var _eventHandler2 = _interopRequireDefault(_eventHandler);
@@ -25484,9 +29205,331 @@ var PlaylistLoader = function (_EventHandler) {
         this.loaders[context.type] = undefined;
       }
       this.hls.trigger(_events2.default.ERROR, { type: _errors.ErrorTypes.NETWORK_ERROR, details: details, fatal: fatal, url: loader.url, loader: loader, context: context });
+=======
+  function ContainerFactory(options, loader, i18n) {
+    (0, _classCallCheck3.default)(this, ContainerFactory);
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, _BaseObject.call(this, options));
+
+    _this._i18n = i18n;
+    _this.loader = loader;
+    return _this;
+  }
+
+  ContainerFactory.prototype.createContainers = function createContainers() {
+    var _this2 = this;
+
+    return _clapprZepto2.default.Deferred(function (promise) {
+      promise.resolve(_this2.options.sources.map(function (source) {
+        return _this2.createContainer(source);
+      }));
+    });
+  };
+
+  ContainerFactory.prototype.findPlaybackPlugin = function findPlaybackPlugin(source, mimeType) {
+    return this.loader.playbackPlugins.filter(function (p) {
+      return p.canPlay(source, mimeType);
+    })[0];
+  };
+
+  ContainerFactory.prototype.createContainer = function createContainer(source) {
+    var resolvedSource = null,
+        mimeType = this.options.mimeType;
+    if ((typeof source === 'undefined' ? 'undefined' : (0, _typeof3.default)(source)) === 'object') {
+      resolvedSource = source.source.toString();
+      if (source.mimeType) {
+        mimeType = source.mimeType;
+      }
+    } else {
+      resolvedSource = source.toString();
+    }
+
+    if (resolvedSource.match(/^\/\//)) resolvedSource = window.location.protocol + resolvedSource;
+
+    var options = _clapprZepto2.default.extend({}, this.options, {
+      src: resolvedSource,
+      mimeType: mimeType
+    });
+    var playbackPlugin = this.findPlaybackPlugin(resolvedSource, mimeType);
+    var playback = new playbackPlugin(options, this._i18n);
+
+    options = _clapprZepto2.default.extend({}, options, { playback: playback });
+
+    var container = new _container2.default(options, this._i18n);
+    var defer = _clapprZepto2.default.Deferred();
+    defer.promise(container);
+    this.addContainerPlugins(container);
+    this.listenToOnce(container, _events2.default.CONTAINER_READY, function () {
+      return defer.resolve(container);
+    });
+    return container;
+  };
+
+  ContainerFactory.prototype.addContainerPlugins = function addContainerPlugins(container) {
+    this.loader.containerPlugins.forEach(function (Plugin) {
+      container.addPlugin(new Plugin(container));
+    });
+  };
+
+  return ContainerFactory;
+}(_base_object2.default);
+
+exports.default = ContainerFactory;
+module.exports = exports['default'];
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _container_factory = __webpack_require__(79);
+
+var _container_factory2 = _interopRequireDefault(_container_factory);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _container_factory2.default;
+module.exports = exports['default'];
+
+/***/ }),
+/* 81 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _createClass2 = __webpack_require__(4);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _inherits2 = __webpack_require__(1);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _utils = __webpack_require__(3);
+
+var _events = __webpack_require__(5);
+
+var _events2 = _interopRequireDefault(_events);
+
+var _styler = __webpack_require__(10);
+
+var _styler2 = _interopRequireDefault(_styler);
+
+var _ui_object = __webpack_require__(14);
+
+var _ui_object2 = _interopRequireDefault(_ui_object);
+
+var _browser = __webpack_require__(20);
+
+var _browser2 = _interopRequireDefault(_browser);
+
+var _container_factory = __webpack_require__(80);
+
+var _container_factory2 = _interopRequireDefault(_container_factory);
+
+var _media_control = __webpack_require__(56);
+
+var _media_control2 = _interopRequireDefault(_media_control);
+
+var _mediator = __webpack_require__(33);
+
+var _mediator2 = _interopRequireDefault(_mediator);
+
+var _player_info = __webpack_require__(29);
+
+var _player_info2 = _interopRequireDefault(_player_info);
+
+var _clapprZepto = __webpack_require__(7);
+
+var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
+
+var _style = __webpack_require__(147);
+
+var _style2 = _interopRequireDefault(_style);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * The Core is responsible to manage Containers, the mediator, MediaControl
+ * and the player state.
+ * @class Core
+ * @constructor
+ * @extends UIObject
+ * @module components
+ */
+var Core = function (_UIObject) {
+  (0, _inherits3.default)(Core, _UIObject);
+  (0, _createClass3.default)(Core, [{
+    key: 'events',
+    get: function get() {
+      return {
+        'webkitfullscreenchange': 'handleFullscreenChange',
+        'mousemove': 'showMediaControl',
+        'mouseleave': 'hideMediaControl'
+      };
+    }
+  }, {
+    key: 'attributes',
+    get: function get() {
+      return {
+        'data-player': '',
+        tabindex: 9999
+      };
+    }
+
+    /**
+     * checks if the core is ready.
+     * @property isReady
+     * @type {Boolean} `true` if the core is ready, otherwise `false`
+     */
+
+  }, {
+    key: 'isReady',
+    get: function get() {
+      return !!this.ready;
+    }
+
+    /**
+     * The internationalization plugin.
+     * @property i18n
+     * @type {Strings}
+     */
+
+  }, {
+    key: 'i18n',
+    get: function get() {
+      return this.getPlugin('strings') || { t: function t(key) {
+          return key;
+        } };
     }
   }]);
 
+  function Core(options) {
+    (0, _classCallCheck3.default)(this, Core);
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, _UIObject.call(this, options));
+
+    _this.configureDomRecycler();
+    _this.playerInfo = _player_info2.default.getInstance(options.playerId);
+    _this.firstResize = true;
+    _this.plugins = [];
+    _this.containers = [];
+    _this.setupMediaControl(null);
+    //FIXME fullscreen api sucks
+    _this._boundFullscreenHandler = function () {
+      return _this.handleFullscreenChange();
+    };
+    (0, _clapprZepto2.default)(document).bind('fullscreenchange', _this._boundFullscreenHandler);
+    (0, _clapprZepto2.default)(document).bind('MSFullscreenChange', _this._boundFullscreenHandler);
+    (0, _clapprZepto2.default)(document).bind('mozfullscreenchange', _this._boundFullscreenHandler);
+    _browser2.default.isMobile && (0, _clapprZepto2.default)(window).bind('resize', function (o) {
+      _this.handleWindowResize(o);
+    });
+    return _this;
+  }
+
+  Core.prototype.configureDomRecycler = function configureDomRecycler() {
+    var recycleVideo = this.options && this.options.playback && this.options.playback.recycleVideo ? true : false;
+    _utils.DomRecycler.configure({
+      recycleVideo: recycleVideo
+    });
+  };
+
+  Core.prototype.createContainers = function createContainers(options) {
+    var _this2 = this;
+
+    this.defer = _clapprZepto2.default.Deferred();
+    this.defer.promise(this);
+    this.containerFactory = new _container_factory2.default(options, options.loader, this.i18n);
+    this.containerFactory.createContainers().then(function (containers) {
+      return _this2.setupContainers(containers);
+    }).then(function (containers) {
+      return _this2.resolveOnContainersReady(containers);
+    });
+  };
+
+  Core.prototype.updateSize = function updateSize() {
+    if (_utils.Fullscreen.isFullscreen()) {
+      this.setFullscreen();
+    } else {
+      this.setPlayerSize();
+    }
+  };
+
+  Core.prototype.setFullscreen = function setFullscreen() {
+    if (!_browser2.default.isiOS) {
+      this.$el.addClass('fullscreen');
+      this.$el.removeAttr('style');
+      this.playerInfo.previousSize = { width: this.options.width, height: this.options.height };
+      this.playerInfo.currentSize = { width: (0, _clapprZepto2.default)(window).width(), height: (0, _clapprZepto2.default)(window).height() };
+    }
+  };
+
+  Core.prototype.setPlayerSize = function setPlayerSize() {
+    this.$el.removeClass('fullscreen');
+    this.playerInfo.currentSize = this.playerInfo.previousSize;
+    this.playerInfo.previousSize = { width: (0, _clapprZepto2.default)(window).width(), height: (0, _clapprZepto2.default)(window).height() };
+    this.resize(this.playerInfo.currentSize);
+  };
+
+  Core.prototype.resize = function resize(options) {
+    if (!(0, _utils.isNumber)(options.height) && !(0, _utils.isNumber)(options.width)) {
+      this.el.style.height = '' + options.height;
+      this.el.style.width = '' + options.width;
+    } else {
+      this.el.style.height = options.height + 'px';
+      this.el.style.width = options.width + 'px';
+    }
+    this.playerInfo.previousSize = { width: this.options.width, height: this.options.height };
+    this.options.width = options.width;
+    this.options.height = options.height;
+    this.playerInfo.currentSize = options;
+    this.triggerResize(this.playerInfo.currentSize);
+  };
+
+  Core.prototype.enableResizeObserver = function enableResizeObserver() {
+    var _this3 = this;
+
+    var checkSizeCallback = function checkSizeCallback() {
+      if (_this3.playerInfo.computedSize.width != _this3.el.clientWidth || _this3.playerInfo.computedSize.height != _this3.el.clientHeight) {
+        _this3.playerInfo.computedSize = { width: _this3.el.clientWidth, height: _this3.el.clientHeight };
+        _this3.triggerResize(_this3.playerInfo.computedSize);
+      }
+    };
+    this.resizeObserverInterval = setInterval(checkSizeCallback, 500);
+  };
+
+  Core.prototype.triggerResize = function triggerResize(newSize) {
+    var thereWasChange = this.firstResize || this.oldHeight !== newSize.height || this.oldWidth !== newSize.width;
+    if (thereWasChange) {
+      _mediator2.default.trigger(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, newSize);
+      this.oldHeight = newSize.height;
+      this.oldWidth = newSize.width;
+      this.firstResize = false;
+>>>>>>> draft skinnier version
+    }
+  };
+
+<<<<<<< HEAD
   return PlaylistLoader;
 }(_eventHandler2.default);
 
@@ -25494,13 +29537,40 @@ exports.default = PlaylistLoader;
 
 },{"2":2,"33":33,"34":34,"35":35,"47":47,"53":53}],44:[function(_dereq_,module,exports){
 'use strict';
+=======
+  Core.prototype.disableResizeObserver = function disableResizeObserver() {
+    if (this.resizeObserverInterval) clearInterval(this.resizeObserverInterval);
+  };
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+  Core.prototype.resolveOnContainersReady = function resolveOnContainersReady(containers) {
+    var _this4 = this;
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+    _clapprZepto2.default.when.apply(_clapprZepto2.default, containers).done(function () {
+      _this4.defer.resolve(_this4);
+      _this4.ready = true;
+      _this4.trigger(_events2.default.CORE_READY);
+    });
+  };
 
+  Core.prototype.addPlugin = function addPlugin(plugin) {
+    this.plugins.push(plugin);
+  };
+
+  Core.prototype.hasPlugin = function hasPlugin(name) {
+    return !!this.getPlugin(name);
+  };
+>>>>>>> draft skinnier version
+
+  Core.prototype.getPlugin = function getPlugin(name) {
+    return this.plugins.filter(function (plugin) {
+      return plugin.name === name;
+    })[0];
+  };
+
+  Core.prototype.load = function load(sources, mimeType) {
+    var _this5 = this;
+
+<<<<<<< HEAD
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
@@ -26964,8 +31034,449 @@ var AttrList = function () {
         return value;
       } else {
         return null;
+=======
+    this.options.mimeType = mimeType;
+    sources = sources && sources.constructor === Array ? sources : [sources];
+    this.containers.forEach(function (container) {
+      return container.destroy();
+    });
+    this.mediaControl.container = null;
+    this.containerFactory.options = _clapprZepto2.default.extend(this.options, { sources: sources });
+    this.containerFactory.createContainers().then(function (containers) {
+      _this5.setupContainers(containers);
+    });
+  };
+
+  Core.prototype.destroy = function destroy() {
+    this.disableResizeObserver();
+    this.containers.forEach(function (container) {
+      return container.destroy();
+    });
+    this.plugins.forEach(function (plugin) {
+      return plugin.destroy();
+    });
+    this.$el.remove();
+    this.mediaControl.destroy();
+    (0, _clapprZepto2.default)(document).unbind('fullscreenchange', this._boundFullscreenHandler);
+    (0, _clapprZepto2.default)(document).unbind('MSFullscreenChange', this._boundFullscreenHandler);
+    (0, _clapprZepto2.default)(document).unbind('mozfullscreenchange', this._boundFullscreenHandler);
+  };
+
+  Core.prototype.handleFullscreenChange = function handleFullscreenChange() {
+    this.trigger(_events2.default.CORE_FULLSCREEN, _utils.Fullscreen.isFullscreen());
+    this.updateSize();
+    this.mediaControl.show();
+  };
+
+  Core.prototype.handleWindowResize = function handleWindowResize(event) {
+    var orientation = (0, _clapprZepto2.default)(window).width() > (0, _clapprZepto2.default)(window).height() ? 'landscape' : 'portrait';
+    if (this._screenOrientation === orientation) return;
+    this._screenOrientation = orientation;
+
+    this.trigger(_events2.default.CORE_SCREEN_ORIENTATION_CHANGED, {
+      event: event,
+      orientation: this._screenOrientation
+    });
+  };
+
+  Core.prototype.setMediaControlContainer = function setMediaControlContainer(container) {
+    this.mediaControl.setContainer(container);
+    this.mediaControl.render();
+  };
+
+  Core.prototype.disableMediaControl = function disableMediaControl() {
+    this.mediaControl.disable();
+    this.$el.removeClass('nocursor');
+  };
+
+  Core.prototype.enableMediaControl = function enableMediaControl() {
+    this.mediaControl.enable();
+  };
+
+  Core.prototype.removeContainer = function removeContainer(container) {
+    this.stopListening(container);
+    this.containers = this.containers.filter(function (c) {
+      return c !== container;
+    });
+  };
+
+  Core.prototype.appendContainer = function appendContainer(container) {
+    this.listenTo(container, _events2.default.CONTAINER_DESTROYED, this.removeContainer);
+    this.containers.push(container);
+  };
+
+  Core.prototype.setupContainers = function setupContainers(containers) {
+    containers.map(this.appendContainer.bind(this));
+    this.trigger(_events2.default.CORE_CONTAINERS_CREATED);
+    this.renderContainers();
+    this.setupMediaControl(this.getCurrentContainer());
+    this.render();
+    this.$el.appendTo(this.options.parentElement);
+    return this.containers;
+  };
+
+  Core.prototype.renderContainers = function renderContainers() {
+    var _this6 = this;
+
+    this.containers.map(function (container) {
+      return _this6.el.appendChild(container.render().el);
+    });
+  };
+
+  Core.prototype.createContainer = function createContainer(source, options) {
+    var container = this.containerFactory.createContainer(source, options);
+    this.appendContainer(container);
+    this.el.appendChild(container.render().el);
+    return container;
+  };
+
+  Core.prototype.setupMediaControl = function setupMediaControl(container) {
+    if (this.mediaControl) {
+      this.mediaControl.setContainer(container);
+    } else {
+      this.mediaControl = this.createMediaControl(_clapprZepto2.default.extend({ container: container, focusElement: this.el }, this.options));
+      this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_FULLSCREEN, this.toggleFullscreen);
+      this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_SHOW, this.onMediaControlShow.bind(this, true));
+      this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_HIDE, this.onMediaControlShow.bind(this, false));
+    }
+  };
+
+  Core.prototype.createMediaControl = function createMediaControl(options) {
+    if (options.mediacontrol && options.mediacontrol.external) {
+      return new options.mediacontrol.external(options).render();
+    } else {
+      return new _media_control2.default(options).render();
+    }
+  };
+
+  Core.prototype.getCurrentContainer = function getCurrentContainer() {
+    if (!this.mediaControl || !this.mediaControl.container) {
+      return this.containers[0];
+    }
+    return this.mediaControl.container;
+  };
+
+  Core.prototype.getCurrentPlayback = function getCurrentPlayback() {
+    var container = this.getCurrentContainer();
+    return container && container.playback;
+  };
+
+  Core.prototype.getPlaybackType = function getPlaybackType() {
+    var container = this.getCurrentContainer();
+    return container && container.getPlaybackType();
+  };
+
+  Core.prototype.toggleFullscreen = function toggleFullscreen() {
+    if (!_utils.Fullscreen.isFullscreen()) {
+      _utils.Fullscreen.requestFullscreen(this.el);
+      if (!_browser2.default.isiOS) {
+        this.$el.addClass('fullscreen');
+      }
+    } else {
+      _utils.Fullscreen.cancelFullscreen();
+      if (!_browser2.default.isiOS) {
+        this.$el.removeClass('fullscreen nocursor');
       }
     }
+    this.mediaControl.show();
+  };
+
+  Core.prototype.showMediaControl = function showMediaControl(event) {
+    this.mediaControl.show(event);
+  };
+
+  Core.prototype.hideMediaControl = function hideMediaControl() {
+    this.mediaControl.hide(this.options.hideMediaControlDelay);
+  };
+
+  Core.prototype.onMediaControlShow = function onMediaControlShow(showing) {
+    this.getCurrentContainer().trigger(showing ? _events2.default.CONTAINER_MEDIACONTROL_SHOW : _events2.default.CONTAINER_MEDIACONTROL_HIDE);
+
+    if (showing) this.$el.removeClass('nocursor');else if (_utils.Fullscreen.isFullscreen()) this.$el.addClass('nocursor');
+  };
+
+  /**
+   * enables to configure the container after its creation
+   * @method configure
+   * @param {Object} options all the options to change in form of a javascript object
+   */
+
+
+  Core.prototype.configure = function configure(options) {
+    var _this7 = this;
+
+    this._options = _clapprZepto2.default.extend(this._options, options);
+    this.configureDomRecycler();
+    var sources = options.source || options.sources;
+
+    if (sources) {
+      this.load(sources, options.mimeType || this.options.mimeType);
+    } else {
+      this.trigger(_events2.default.CORE_OPTIONS_CHANGE);
+
+      this.containers.forEach(function (container) {
+        container.configure(_this7.options);
+      });
+    }
+  };
+
+  Core.prototype.render = function render() {
+    this.$style && this.$style.remove();
+    this.$style = _styler2.default.getStyleFor(_style2.default, { baseUrl: this.options.baseUrl });
+    this.$el.append(this.$style);
+    this.$el.append(this.mediaControl.render().el);
+
+    this.options.width = this.options.width || this.$el.width();
+    this.options.height = this.options.height || this.$el.height();
+    var size = { width: this.options.width, height: this.options.height };
+    this.playerInfo.previousSize = this.playerInfo.currentSize = this.playerInfo.computedSize = size;
+    this.updateSize();
+
+    this.previousSize = { width: this.$el.width(), height: this.$el.height() };
+
+    this.enableResizeObserver();
+
+    return this;
+  };
+
+  return Core;
+}(_ui_object2.default); // Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+exports.default = Core;
+module.exports = exports['default'];
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _createClass2 = __webpack_require__(4);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _inherits2 = __webpack_require__(1);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _base_object = __webpack_require__(9);
+
+var _base_object2 = _interopRequireDefault(_base_object);
+
+var _core = __webpack_require__(54);
+
+var _core2 = _interopRequireDefault(_core);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * The Core Factory is responsible for instantiate the core and it's plugins.
+ * @class CoreFactory
+ * @constructor
+ * @extends BaseObject
+ * @module components
+ */
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+var CoreFactory = function (_BaseObject) {
+  (0, _inherits3.default)(CoreFactory, _BaseObject);
+  (0, _createClass3.default)(CoreFactory, [{
+    key: 'loader',
+    get: function get() {
+      return this.player.loader;
+    }
+
+    /**
+     * it builds the core factory
+     * @method constructor
+     * @param {Player} player the player object
+     */
+
+  }]);
+
+  function CoreFactory(player) {
+    (0, _classCallCheck3.default)(this, CoreFactory);
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, _BaseObject.call(this));
+
+    _this.player = player;
+    _this._options = player.options;
+    return _this;
+  }
+
+  /**
+   * creates a core and its plugins
+   * @method create
+   * @return {Core} created core
+   */
+
+
+  CoreFactory.prototype.create = function create() {
+    this.options.loader = this.loader;
+    this.core = new _core2.default(this.options);
+    this.addCorePlugins();
+    this.core.createContainers(this.options);
+    return this.core;
+  };
+
+  /**
+   * given the core plugins (`loader.corePlugins`) it builds each one
+   * @method addCorePlugins
+   * @return {Core} the core with all plugins
+   */
+
+
+  CoreFactory.prototype.addCorePlugins = function addCorePlugins() {
+    var _this2 = this;
+
+    this.loader.corePlugins.forEach(function (Plugin) {
+      var plugin = new Plugin(_this2.core);
+      _this2.core.addPlugin(plugin);
+      _this2.setupExternalInterface(plugin);
+    });
+    return this.core;
+  };
+
+  CoreFactory.prototype.setupExternalInterface = function setupExternalInterface(plugin) {
+    var externalFunctions = plugin.getExternalInterface();
+    for (var key in externalFunctions) {
+      this.player[key] = externalFunctions[key].bind(plugin);
+    }
+  };
+
+  return CoreFactory;
+}(_base_object2.default);
+
+exports.default = CoreFactory;
+module.exports = exports['default'];
+
+/***/ }),
+/* 83 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _core_factory = __webpack_require__(82);
+
+var _core_factory2 = _interopRequireDefault(_core_factory);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _core_factory2.default;
+module.exports = exports['default'];
+
+/***/ }),
+/* 84 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _create = __webpack_require__(60);
+
+var _create2 = _interopRequireDefault(_create);
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(1);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _base_object = __webpack_require__(9);
+
+var _base_object2 = _interopRequireDefault(_base_object);
+
+var _player_info = __webpack_require__(29);
+
+var _player_info2 = _interopRequireDefault(_player_info);
+
+var _html5_video = __webpack_require__(57);
+
+var _html5_video2 = _interopRequireDefault(_html5_video);
+
+var _no_op = __webpack_require__(58);
+
+var _no_op2 = _interopRequireDefault(_no_op);
+
+var _spinner_three_bounce = __webpack_require__(92);
+
+var _spinner_three_bounce2 = _interopRequireDefault(_spinner_three_bounce);
+
+var _poster = __webpack_require__(90);
+
+var _poster2 = _interopRequireDefault(_poster);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * It keeps a list of the default plugins (playback, container, core) and it merges external plugins with its internals.
+ * @class Loader
+ * @constructor
+ * @extends BaseObject
+ * @module components
+ */
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+var Loader = function (_BaseObject) {
+  (0, _inherits3.default)(Loader, _BaseObject);
+
+  /**
+   * builds the loader
+   * @method constructor
+   * @param {Object} externalPlugins the external plugins
+   * @param {Number} playerId you can embed multiple instances of clappr, therefore this is the unique id of each one.
+   */
+  function Loader(externalPlugins, playerId) {
+    (0, _classCallCheck3.default)(this, Loader);
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, _BaseObject.call(this));
+
+    _this.playerId = playerId;
+    _this.playbackPlugins = [_html5_video2.default, _no_op2.default];
+    _this.containerPlugins = [_spinner_three_bounce2.default, _poster2.default];
+    _this.corePlugins = [];
+    if (externalPlugins) {
+      if (!Array.isArray(externalPlugins)) {
+        _this.validateExternalPluginsType(externalPlugins);
+>>>>>>> draft skinnier version
+      }
+      _this.addExternalPlugins(externalPlugins);
+    }
+<<<<<<< HEAD
   }, {
     key: 'hexadecimalIntegerAsNumber',
     value: function hexadecimalIntegerAsNumber(attrName) {
@@ -27013,9 +31524,67 @@ var AttrList = function () {
         attrs[match[1]] = value;
       }
       return attrs;
-    }
-  }]);
+=======
+    return _this;
+  }
 
+  /**
+   * groups by type the external plugins that were passed through `options.plugins` it they're on a flat array
+   * @method addExternalPlugins
+   * @private
+   * @param {Object} an config object or an array of plugins
+   * @return {Object} plugins the config object with the plugins separated by type
+   */
+
+
+  Loader.prototype.groupPluginsByType = function groupPluginsByType(plugins) {
+    if (Array.isArray(plugins)) {
+      plugins = plugins.reduce(function (memo, plugin) {
+        memo[plugin.type] || (memo[plugin.type] = []);
+        memo[plugin.type].push(plugin);
+        return memo;
+      }, {});
+    }
+    return plugins;
+  };
+
+  Loader.prototype.removeDups = function removeDups(list) {
+    var groupUp = function groupUp(plugins, plugin) {
+      plugins[plugin.prototype.name] && delete plugins[plugin.prototype.name];
+      plugins[plugin.prototype.name] = plugin;
+      return plugins;
+    };
+    var pluginsMap = list.reduceRight(groupUp, (0, _create2.default)(null));
+
+    var plugins = [];
+    for (var key in pluginsMap) {
+      plugins.unshift(pluginsMap[key]);
+    }
+    return plugins;
+  };
+
+  /**
+   * adds all the external plugins that were passed through `options.plugins`
+   * @method addExternalPlugins
+   * @private
+   * @param {Object} plugins the config object with all plugins
+   */
+
+
+  Loader.prototype.addExternalPlugins = function addExternalPlugins(plugins) {
+    plugins = this.groupPluginsByType(plugins);
+    if (plugins.playback) {
+      this.playbackPlugins = this.removeDups(plugins.playback.concat(this.playbackPlugins));
+    }
+    if (plugins.container) {
+      this.containerPlugins = this.removeDups(plugins.container.concat(this.containerPlugins));
+    }
+    if (plugins.core) {
+      this.corePlugins = this.removeDups(plugins.core.concat(this.corePlugins));
+>>>>>>> draft skinnier version
+    }
+
+<<<<<<< HEAD
   return AttrList;
 }();
 
@@ -27068,15 +31637,81 @@ module.exports = BinarySearch;
 
 },{}],49:[function(_dereq_,module,exports){
 'use strict';
+=======
+    _player_info2.default.getInstance(this.playerId).playbackPlugins = this.playbackPlugins;
+  };
+
+  /**
+   * validate if the external plugins that were passed through `options.plugins` are associated to the correct type
+   * @method validateExternalPluginsType
+   * @private
+   * @param {Object} plugins the config object with all plugins
+   */
+
+
+  Loader.prototype.validateExternalPluginsType = function validateExternalPluginsType(plugins) {
+    var plugintypes = ['playback', 'container', 'core'];
+    plugintypes.forEach(function (type) {
+      (plugins[type] || []).forEach(function (el) {
+        var errorMessage = 'external ' + el.type + ' plugin on ' + type + ' array';
+        if (el.type !== type) {
+          throw new ReferenceError(errorMessage);
+        }
+      });
+    });
+  };
+
+  return Loader;
+}(_base_object2.default);
+
+exports.default = Loader;
+module.exports = exports['default'];
+
+/***/ }),
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+>>>>>>> draft skinnier version
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+<<<<<<< HEAD
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+=======
+var _stringify = __webpack_require__(96);
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _createClass2 = __webpack_require__(4);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _inherits2 = __webpack_require__(1);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _utils = __webpack_require__(3);
+
+var _vendor = __webpack_require__(34);
+
+var _events = __webpack_require__(5);
+>>>>>>> draft skinnier version
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+<<<<<<< HEAD
 /**
  *
  * This code was ported from the dash.js project at:
@@ -29633,19 +34268,920 @@ module.exports = WebVTTParser;
 
 },{"56":56}],58:[function(_dereq_,module,exports){
 'use strict';
+=======
+var _styler = __webpack_require__(10);
+
+var _styler2 = _interopRequireDefault(_styler);
+
+var _ui_object = __webpack_require__(14);
+
+var _ui_object2 = _interopRequireDefault(_ui_object);
+
+var _browser = __webpack_require__(20);
+
+var _browser2 = _interopRequireDefault(_browser);
+
+var _mediator = __webpack_require__(33);
+
+var _mediator2 = _interopRequireDefault(_mediator);
+
+var _template = __webpack_require__(19);
+
+var _template2 = _interopRequireDefault(_template);
+
+var _playback = __webpack_require__(23);
+
+var _playback2 = _interopRequireDefault(_playback);
+
+var _clapprZepto = __webpack_require__(7);
+
+var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
+
+var _mediaControl = __webpack_require__(148);
+
+var _mediaControl2 = _interopRequireDefault(_mediaControl);
+
+var _mediaControl3 = __webpack_require__(153);
+
+var _mediaControl4 = _interopRequireDefault(_mediaControl3);
+
+var _play = __webpack_require__(72);
+
+var _play2 = _interopRequireDefault(_play);
+
+var _pause = __webpack_require__(157);
+
+var _pause2 = _interopRequireDefault(_pause);
+
+var _stop = __webpack_require__(158);
+
+var _stop2 = _interopRequireDefault(_stop);
+
+var _volume = __webpack_require__(159);
+
+var _volume2 = _interopRequireDefault(_volume);
+
+var _mute = __webpack_require__(160);
+
+var _mute2 = _interopRequireDefault(_mute);
+
+var _expand = __webpack_require__(161);
+
+var _expand2 = _interopRequireDefault(_expand);
+
+var _shrink = __webpack_require__(162);
+
+var _shrink2 = _interopRequireDefault(_shrink);
+
+var _hd = __webpack_require__(163);
+
+var _hd2 = _interopRequireDefault(_hd);
+
+var _cc = __webpack_require__(164);
+
+var _cc2 = _interopRequireDefault(_cc);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var MediaControl = function (_UIObject) {
+  (0, _inherits3.default)(MediaControl, _UIObject);
+  (0, _createClass3.default)(MediaControl, [{
+    key: 'name',
+    get: function get() {
+      return 'MediaControl';
+    }
+  }, {
+    key: 'disabled',
+    get: function get() {
+      return this.userDisabled || this.container && this.container.getPlaybackType() === _playback2.default.NO_OP;
+    }
+  }, {
+    key: 'attributes',
+    get: function get() {
+      return {
+        'class': 'media-control',
+        'data-media-control': ''
+      };
+    }
+  }, {
+    key: 'events',
+    get: function get() {
+      return {
+        'click [data-play]': 'play',
+        'click [data-pause]': 'pause',
+        'click [data-playpause]': 'togglePlayPause',
+        'click [data-stop]': 'stop',
+        'click [data-playstop]': 'togglePlayStop',
+        'click [data-fullscreen]': 'toggleFullscreen',
+        'click .bar-container[data-seekbar]': 'seek',
+        'click .bar-container[data-volume]': 'onVolumeClick',
+        'click .drawer-icon[data-volume]': 'toggleMute',
+        'click [data-cc-button]': 'toggleClosedCaptions',
+        'mouseenter .drawer-container[data-volume]': 'showVolumeBar',
+        'mouseleave .drawer-container[data-volume]': 'hideVolumeBar',
+        'mousedown .bar-container[data-volume]': 'startVolumeDrag',
+        'mousemove .bar-container[data-volume]': 'mousemoveOnVolumeBar',
+        'mousedown .bar-scrubber[data-seekbar]': 'startSeekDrag',
+        'mousemove .bar-container[data-seekbar]': 'mousemoveOnSeekBar',
+        'mouseleave .bar-container[data-seekbar]': 'mouseleaveOnSeekBar',
+        'mouseenter .media-control-layer[data-controls]': 'setUserKeepVisible',
+        'mouseleave .media-control-layer[data-controls]': 'resetUserKeepVisible'
+      };
+    }
+  }, {
+    key: 'template',
+    get: function get() {
+      return (0, _template2.default)(_mediaControl4.default);
+    }
+  }, {
+    key: 'stylesheet',
+    get: function get() {
+      return _styler2.default.getStyleFor(_mediaControl2.default, { baseUrl: this.options.baseUrl });
+    }
+  }, {
+    key: 'volume',
+    get: function get() {
+      return this.container && this.container.isReady ? this.container.volume : this.intendedVolume;
+    }
+  }, {
+    key: 'muted',
+    get: function get() {
+      return this.volume === 0;
+    }
+  }]);
+
+  function MediaControl(options) {
+    (0, _classCallCheck3.default)(this, MediaControl);
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, _UIObject.call(this, options));
+
+    _this.persistConfig = _this.options.persistConfig;
+    _this.container = options.container;
+    _this.currentPositionValue = null;
+    _this.currentDurationValue = null;
+    var initialVolume = _this.persistConfig ? _utils.Config.restore('volume') : 100;
+    _this.setVolume(_this.options.mute ? 0 : initialVolume);
+    _this.keepVisible = false;
+    _this.fullScreenOnVideoTagSupported = null; // unknown
+    _this.addEventListeners();
+    _this.settings = {
+      left: ['play', 'stop', 'pause'],
+      right: ['volume'],
+      default: ['position', 'seekbar', 'duration']
+    };
+
+    if (_this.container) {
+      if (!_clapprZepto2.default.isEmptyObject(_this.container.settings)) {
+        _this.settings = _clapprZepto2.default.extend({}, _this.container.settings);
+      }
+    } else {
+      _this.settings = {};
+    }
+
+    _this.userDisabled = false;
+    if (_this.container && _this.container.mediaControlDisabled || _this.options.chromeless) {
+      _this.disable();
+    }
+    _this.stopDragHandler = function (event) {
+      return _this.stopDrag(event);
+    };
+    _this.updateDragHandler = function (event) {
+      return _this.updateDrag(event);
+    };
+    (0, _clapprZepto2.default)(document).bind('mouseup', _this.stopDragHandler);
+    (0, _clapprZepto2.default)(document).bind('mousemove', _this.updateDragHandler);
+    return _this;
+  }
+
+  MediaControl.prototype.addEventListeners = function addEventListeners() {
+    if (this.container) {
+      _mediator2.default.on(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.playerResize, this);
+      this.listenTo(this.container, _events2.default.CONTAINER_PLAY, this.changeTogglePlay);
+      this.listenTo(this.container, _events2.default.CONTAINER_PAUSE, this.changeTogglePlay);
+      this.listenTo(this.container, _events2.default.CONTAINER_STOP, this.changeTogglePlay);
+      this.listenTo(this.container, _events2.default.CONTAINER_DBLCLICK, this.toggleFullscreen);
+      this.listenTo(this.container, _events2.default.CONTAINER_TIMEUPDATE, this.onTimeUpdate);
+      this.listenTo(this.container, _events2.default.CONTAINER_PROGRESS, this.updateProgressBar);
+      this.listenTo(this.container, _events2.default.CONTAINER_SETTINGSUPDATE, this.settingsUpdate);
+      this.listenTo(this.container, _events2.default.CONTAINER_PLAYBACKDVRSTATECHANGED, this.settingsUpdate);
+      this.listenTo(this.container, _events2.default.CONTAINER_HIGHDEFINITIONUPDATE, this.highDefinitionUpdate);
+      this.listenTo(this.container, _events2.default.CONTAINER_LOADEDTEXTTRACK, this.ccAvailable.bind(this, true));
+      this.listenTo(this.container, _events2.default.CONTAINER_MEDIACONTROL_DISABLE, this.disable);
+      this.listenTo(this.container, _events2.default.CONTAINER_MEDIACONTROL_ENABLE, this.enable);
+      this.listenTo(this.container, _events2.default.CONTAINER_ENDED, this.ended);
+      this.listenTo(this.container, _events2.default.CONTAINER_VOLUME, this.onVolumeChanged);
+      if (this.container.playback.el.nodeName.toLowerCase() === 'video') {
+        // wait until the metadata has loaded and then check if fullscreen on video tag is supported
+        this.listenToOnce(this.container, _events2.default.CONTAINER_LOADEDMETADATA, this.onLoadedMetadataOnVideoTag);
+      }
+    }
+  };
+
+  MediaControl.prototype.disable = function disable() {
+    this.userDisabled = true;
+    this.hide();
+    this.$el.hide();
+  };
+
+  MediaControl.prototype.enable = function enable() {
+    if (this.options.chromeless) return;
+    this.userDisabled = false;
+    this.show();
+  };
+
+  MediaControl.prototype.play = function play() {
+    this.container.play();
+  };
+
+  MediaControl.prototype.pause = function pause() {
+    this.container.pause();
+  };
+
+  MediaControl.prototype.stop = function stop() {
+    this.container.stop();
+  };
+
+  MediaControl.prototype.onVolumeChanged = function onVolumeChanged() {
+    this.updateVolumeUI();
+  };
+
+  MediaControl.prototype.onLoadedMetadataOnVideoTag = function onLoadedMetadataOnVideoTag() {
+    var video = this.container.playback.el;
+    // video.webkitSupportsFullscreen is deprecated but iOS appears to only use this
+    // see https://github.com/clappr/clappr/issues/1127
+    if (!_utils.Fullscreen.fullscreenEnabled() && video.webkitSupportsFullscreen) {
+      this.fullScreenOnVideoTagSupported = true;
+      this.settingsUpdate();
+    }
+  };
+
+  MediaControl.prototype.updateVolumeUI = function updateVolumeUI() {
+    if (!this.rendered) {
+      // this will be called after a render
+      return;
+    }
+    // update volume bar scrubber/fill on bar mode
+    this.$volumeBarContainer.find('.bar-fill-2').css({});
+    var containerWidth = this.$volumeBarContainer.width();
+    var barWidth = this.$volumeBarBackground.width();
+    var offset = (containerWidth - barWidth) / 2.0;
+    var pos = barWidth * this.volume / 100.0 + offset;
+    this.$volumeBarFill.css({ width: this.volume + '%' });
+    this.$volumeBarScrubber.css({ left: pos });
+
+    // update volume bar segments on segmented bar mode
+    this.$volumeBarContainer.find('.segmented-bar-element').removeClass('fill');
+    var item = Math.ceil(this.volume / 10.0);
+    this.$volumeBarContainer.find('.segmented-bar-element').slice(0, item).addClass('fill');
+    this.$volumeIcon.html('');
+    this.$volumeIcon.removeClass('muted');
+    if (!this.muted) {
+      this.$volumeIcon.append(_volume2.default);
+    } else {
+      this.$volumeIcon.append(_mute2.default);
+      this.$volumeIcon.addClass('muted');
+    }
+    this.applyButtonStyle(this.$volumeIcon);
+  };
+
+  MediaControl.prototype.changeTogglePlay = function changeTogglePlay() {
+    this.$playPauseToggle.html('');
+    this.$playStopToggle.html('');
+    if (this.container && this.container.isPlaying()) {
+      this.$playPauseToggle.append(_pause2.default);
+      this.$playStopToggle.append(_stop2.default);
+      this.trigger(_events2.default.MEDIACONTROL_PLAYING);
+    } else {
+      this.$playPauseToggle.append(_play2.default);
+      this.$playStopToggle.append(_play2.default);
+      this.trigger(_events2.default.MEDIACONTROL_NOTPLAYING);
+      if (_browser2.default.isMobile) {
+        this.show();
+      }
+    }
+    this.applyButtonStyle(this.$playPauseToggle);
+    this.applyButtonStyle(this.$playStopToggle);
+  };
+
+  MediaControl.prototype.mousemoveOnSeekBar = function mousemoveOnSeekBar(event) {
+    if (this.settings.seekEnabled) {
+      var offsetX = event.pageX - this.$seekBarContainer.offset().left - this.$seekBarHover.width() / 2;
+      this.$seekBarHover.css({ left: offsetX });
+    }
+    this.trigger(_events2.default.MEDIACONTROL_MOUSEMOVE_SEEKBAR, event);
+  };
+
+  MediaControl.prototype.mouseleaveOnSeekBar = function mouseleaveOnSeekBar(event) {
+    this.trigger(_events2.default.MEDIACONTROL_MOUSELEAVE_SEEKBAR, event);
+  };
+
+  MediaControl.prototype.onVolumeClick = function onVolumeClick(event) {
+    this.setVolume(this.getVolumeFromUIEvent(event));
+  };
+
+  MediaControl.prototype.mousemoveOnVolumeBar = function mousemoveOnVolumeBar(event) {
+    if (this.draggingVolumeBar) {
+      this.setVolume(this.getVolumeFromUIEvent(event));
+    }
+  };
+
+  MediaControl.prototype.playerResize = function playerResize(size) {
+    this.$fullscreenToggle.html('');
+    if (_utils.Fullscreen.isFullscreen()) {
+      this.$fullscreenToggle.append(_shrink2.default);
+    } else {
+      this.$fullscreenToggle.append(_expand2.default);
+    }
+    this.applyButtonStyle(this.$fullscreenToggle);
+    this.$el.removeClass('w320');
+    if (size.width <= 320 || this.options.hideVolumeBar) {
+      this.$el.addClass('w320');
+    }
+  };
+
+  MediaControl.prototype.toggleClosedCaptions = function toggleClosedCaptions() {
+    if (this.container.playback.el.textTracks[0].mode === 'showing') {
+      this.container.playback.el.textTracks[0].mode = 'hidden';
+      this.$ccButton.removeClass('enabled');
+    } else {
+      this.container.playback.el.textTracks[0].mode = 'showing';
+      this.$ccButton.addClass('enabled');
+    }
+  };
+
+  MediaControl.prototype.togglePlayPause = function togglePlayPause() {
+    if (this.container.isPlaying()) {
+      this.container.pause();
+    } else {
+      this.container.play();
+    }
+    return false;
+  };
+
+  MediaControl.prototype.togglePlayStop = function togglePlayStop() {
+    if (this.container.isPlaying()) {
+      this.container.stop();
+    } else {
+      this.container.play();
+    }
+  };
+
+  MediaControl.prototype.startSeekDrag = function startSeekDrag(event) {
+    if (!this.settings.seekEnabled) return;
+    this.draggingSeekBar = true;
+    this.$el.addClass('dragging');
+    this.$seekBarLoaded.addClass('media-control-notransition');
+    this.$seekBarPosition.addClass('media-control-notransition');
+    this.$seekBarScrubber.addClass('media-control-notransition');
+    if (event) {
+      event.preventDefault();
+    }
+  };
+
+  MediaControl.prototype.startVolumeDrag = function startVolumeDrag(event) {
+    this.draggingVolumeBar = true;
+    this.$el.addClass('dragging');
+    if (event) {
+      event.preventDefault();
+    }
+  };
+
+  MediaControl.prototype.stopDrag = function stopDrag(event) {
+    if (this.draggingSeekBar) {
+      this.seek(event);
+    }
+    this.$el.removeClass('dragging');
+    this.$seekBarLoaded.removeClass('media-control-notransition');
+    this.$seekBarPosition.removeClass('media-control-notransition');
+    this.$seekBarScrubber.removeClass('media-control-notransition dragging');
+    this.draggingSeekBar = false;
+    this.draggingVolumeBar = false;
+  };
+
+  MediaControl.prototype.updateDrag = function updateDrag(event) {
+    if (this.draggingSeekBar) {
+      event.preventDefault();
+      var offsetX = event.pageX - this.$seekBarContainer.offset().left;
+      var pos = offsetX / this.$seekBarContainer.width() * 100;
+      pos = Math.min(100, Math.max(pos, 0));
+      this.setSeekPercentage(pos);
+    } else if (this.draggingVolumeBar) {
+      event.preventDefault();
+      this.setVolume(this.getVolumeFromUIEvent(event));
+    }
+  };
+
+  MediaControl.prototype.getVolumeFromUIEvent = function getVolumeFromUIEvent(event) {
+    var offsetY = event.pageX - this.$volumeBarContainer.offset().left;
+    var volumeFromUI = offsetY / this.$volumeBarContainer.width() * 100;
+    return volumeFromUI;
+  };
+
+  MediaControl.prototype.toggleMute = function toggleMute() {
+    this.setVolume(this.muted ? 100 : 0);
+  };
+
+  MediaControl.prototype.setVolume = function setVolume(value) {
+    var _this2 = this;
+
+    value = Math.min(100, Math.max(value, 0));
+    // this will hold the intended volume
+    // it may not actually get set to this straight away
+    // if the container is not ready etc
+    this.intendedVolume = value;
+    this.persistConfig && _utils.Config.persist('volume', value);
+    var setWhenContainerReady = function setWhenContainerReady() {
+      if (_this2.container.isReady) {
+        _this2.container.setVolume(value);
+      } else {
+        _this2.listenToOnce(_this2.container, _events2.default.CONTAINER_READY, function () {
+          _this2.container.setVolume(value);
+        });
+      }
+    };
+
+    if (!this.container) {
+      this.listenToOnce(this, _events2.default.MEDIACONTROL_CONTAINERCHANGED, function () {
+        setWhenContainerReady();
+      });
+    } else {
+      setWhenContainerReady();
+    }
+  };
+
+  MediaControl.prototype.toggleFullscreen = function toggleFullscreen() {
+    this.trigger(_events2.default.MEDIACONTROL_FULLSCREEN, this.name);
+    this.container.fullscreen();
+    this.resetUserKeepVisible();
+  };
+
+  MediaControl.prototype.setContainer = function setContainer(container) {
+    if (this.container) {
+      this.stopListening(this.container);
+      this.fullScreenOnVideoTagSupported = null;
+    }
+    _mediator2.default.off(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.playerResize, this);
+    this.container = container;
+    // set the new container to match the volume of the last one
+    this.setVolume(this.intendedVolume);
+    this.changeTogglePlay();
+    this.addEventListeners();
+    this.settingsUpdate();
+    this.container.trigger(_events2.default.CONTAINER_PLAYBACKDVRSTATECHANGED, this.container.isDvrInUse());
+    if (this.container.mediaControlDisabled) {
+      this.disable();
+    }
+    this.trigger(_events2.default.MEDIACONTROL_CONTAINERCHANGED);
+  };
+
+  MediaControl.prototype.showVolumeBar = function showVolumeBar() {
+    if (this.hideVolumeId) {
+      clearTimeout(this.hideVolumeId);
+    }
+    this.$volumeBarContainer.removeClass('volume-bar-hide');
+  };
+
+  MediaControl.prototype.hideVolumeBar = function hideVolumeBar() {
+    var _this3 = this;
+
+    var timeout = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 400;
+
+    if (!this.$volumeBarContainer) return;
+    if (this.draggingVolumeBar) {
+      this.hideVolumeId = setTimeout(function () {
+        return _this3.hideVolumeBar();
+      }, timeout);
+    } else {
+      if (this.hideVolumeId) {
+        clearTimeout(this.hideVolumeId);
+      }
+      this.hideVolumeId = setTimeout(function () {
+        return _this3.$volumeBarContainer.addClass('volume-bar-hide');
+      }, timeout);
+    }
+  };
+
+  MediaControl.prototype.ended = function ended() {
+    this.changeTogglePlay();
+  };
+
+  MediaControl.prototype.updateProgressBar = function updateProgressBar(progress) {
+    var loadedStart = progress.start / progress.total * 100;
+    var loadedEnd = progress.current / progress.total * 100;
+    this.$seekBarLoaded.css({ left: loadedStart + '%', width: loadedEnd - loadedStart + '%' });
+  };
+
+  MediaControl.prototype.onTimeUpdate = function onTimeUpdate(timeProgress) {
+    if (this.draggingSeekBar) return;
+    // TODO why should current time ever be negative?
+    var position = timeProgress.current < 0 ? timeProgress.total : timeProgress.current;
+
+    this.currentPositionValue = position;
+    this.currentDurationValue = timeProgress.total;
+    this.renderSeekBar();
+  };
+
+  MediaControl.prototype.renderSeekBar = function renderSeekBar() {
+    if (this.currentPositionValue === null || this.currentDurationValue === null) {
+      // this will be triggered as soon as these beocome available
+      return;
+    }
+
+    // default to 100%
+    this.currentSeekBarPercentage = 100;
+    if (this.container.getPlaybackType() !== _playback2.default.LIVE || this.container.isDvrInUse()) {
+      this.currentSeekBarPercentage = this.currentPositionValue / this.currentDurationValue * 100;
+    }
+    this.setSeekPercentage(this.currentSeekBarPercentage);
+
+    var newPosition = (0, _utils.formatTime)(this.currentPositionValue);
+    var newDuration = (0, _utils.formatTime)(this.currentDurationValue);
+    if (newPosition !== this.displayedPosition) {
+      this.$position.text(newPosition);
+      this.displayedPosition = newPosition;
+    }
+    if (newDuration !== this.displayedDuration) {
+      this.$duration.text(newDuration);
+      this.displayedDuration = newDuration;
+    }
+  };
+
+  MediaControl.prototype.seek = function seek(event) {
+    if (!this.settings.seekEnabled) return;
+    var offsetX = event.pageX - this.$seekBarContainer.offset().left;
+    var pos = offsetX / this.$seekBarContainer.width() * 100;
+    pos = Math.min(100, Math.max(pos, 0));
+    this.container.seekPercentage(pos);
+    this.setSeekPercentage(pos);
+    return false;
+  };
+
+  MediaControl.prototype.setKeepVisible = function setKeepVisible() {
+    this.keepVisible = true;
+  };
+
+  MediaControl.prototype.resetKeepVisible = function resetKeepVisible() {
+    this.keepVisible = false;
+  };
+
+  MediaControl.prototype.setUserKeepVisible = function setUserKeepVisible() {
+    this.userKeepVisible = true;
+  };
+
+  MediaControl.prototype.resetUserKeepVisible = function resetUserKeepVisible() {
+    this.userKeepVisible = false;
+  };
+
+  MediaControl.prototype.isVisible = function isVisible() {
+    return !this.$el.hasClass('media-control-hide');
+  };
+
+  MediaControl.prototype.show = function show(event) {
+    var _this4 = this;
+
+    if (this.disabled) {
+      return;
+    }
+    var timeout = 2000;
+    if (!event || event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY || navigator.userAgent.match(/firefox/i)) {
+      clearTimeout(this.hideId);
+      this.$el.show();
+      this.trigger(_events2.default.MEDIACONTROL_SHOW, this.name);
+      this.$el.removeClass('media-control-hide');
+      this.hideId = setTimeout(function () {
+        return _this4.hide();
+      }, timeout);
+      if (event) {
+        this.lastMouseX = event.clientX;
+        this.lastMouseY = event.clientY;
+      }
+    }
+  };
+
+  MediaControl.prototype.hide = function hide() {
+    var _this5 = this;
+
+    var delay = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+
+    if (!this.isVisible() || _browser2.default.isMobile && !this.container.isPlaying()) {
+      return;
+    }
+    var timeout = delay || 2000;
+    clearTimeout(this.hideId);
+    if (!this.disabled && this.options.hideMediaControl === false) {
+      return;
+    }
+    if (!this.disabled && (delay || this.userKeepVisible || this.keepVisible || this.draggingSeekBar || this.draggingVolumeBar)) {
+      this.hideId = setTimeout(function () {
+        return _this5.hide();
+      }, timeout);
+    } else {
+      this.trigger(_events2.default.MEDIACONTROL_HIDE, this.name);
+      this.$el.addClass('media-control-hide');
+      this.hideVolumeBar(0);
+    }
+  };
+
+  MediaControl.prototype.settingsUpdate = function settingsUpdate() {
+    var newSettings = this.getSettings();
+    if (newSettings && !this.fullScreenOnVideoTagSupported && !_utils.Fullscreen.fullscreenEnabled()) {
+      // remove fullscreen from settings if it is present
+      newSettings.default && (0, _utils.removeArrayItem)(newSettings.default, 'fullscreen');
+      newSettings.left && (0, _utils.removeArrayItem)(newSettings.left, 'fullscreen');
+      newSettings.right && (0, _utils.removeArrayItem)(newSettings.right, 'fullscreen');
+    }
+    var settingsChanged = (0, _stringify2.default)(this.settings) !== (0, _stringify2.default)(newSettings);
+    if (settingsChanged) {
+      this.settings = newSettings;
+      this.render();
+    }
+  };
+
+  MediaControl.prototype.getSettings = function getSettings() {
+    return _clapprZepto2.default.extend(true, {}, this.container.settings);
+  };
+
+  MediaControl.prototype.highDefinitionUpdate = function highDefinitionUpdate(isHD) {
+    var method = isHD ? 'addClass' : 'removeClass';
+    this.$hdIndicator[method]('enabled');
+  };
+
+  MediaControl.prototype.ccAvailable = function ccAvailable(hasCC) {
+    var method = hasCC ? 'addClass' : 'removeClass';
+    this.$ccButton[method]('available');
+  };
+
+  MediaControl.prototype.createCachedElements = function createCachedElements() {
+    var $layer = this.$el.find('.media-control-layer');
+    this.$duration = $layer.find('.media-control-indicator[data-duration]');
+    this.$fullscreenToggle = $layer.find('button.media-control-button[data-fullscreen]');
+    this.$playPauseToggle = $layer.find('button.media-control-button[data-playpause]');
+    this.$playStopToggle = $layer.find('button.media-control-button[data-playstop]');
+    this.$position = $layer.find('.media-control-indicator[data-position]');
+    this.$seekBarContainer = $layer.find('.bar-container[data-seekbar]');
+    this.$seekBarHover = $layer.find('.bar-hover[data-seekbar]');
+    this.$seekBarLoaded = $layer.find('.bar-fill-1[data-seekbar]');
+    this.$seekBarPosition = $layer.find('.bar-fill-2[data-seekbar]');
+    this.$seekBarScrubber = $layer.find('.bar-scrubber[data-seekbar]');
+    this.$volumeBarContainer = $layer.find('.bar-container[data-volume]');
+    this.$volumeContainer = $layer.find('.drawer-container[data-volume]');
+    this.$volumeIcon = $layer.find('.drawer-icon[data-volume]');
+    this.$volumeBarBackground = this.$el.find('.bar-background[data-volume]');
+    this.$volumeBarFill = this.$el.find('.bar-fill-1[data-volume]');
+    this.$volumeBarScrubber = this.$el.find('.bar-scrubber[data-volume]');
+    this.$hdIndicator = this.$el.find('button.media-control-button[data-hd-indicator]');
+    this.$ccButton = this.$el.find('button.media-control-button[data-cc-button]');
+    this.resetIndicators();
+    this.initializeIcons();
+  };
+
+  MediaControl.prototype.resetIndicators = function resetIndicators() {
+    this.displayedPosition = this.$position.text();
+    this.displayedDuration = this.$duration.text();
+  };
+
+  MediaControl.prototype.initializeIcons = function initializeIcons() {
+    var $layer = this.$el.find('.media-control-layer');
+    $layer.find('button.media-control-button[data-play]').append(_play2.default);
+    $layer.find('button.media-control-button[data-pause]').append(_pause2.default);
+    $layer.find('button.media-control-button[data-stop]').append(_stop2.default);
+    this.$playPauseToggle.append(_play2.default);
+    this.$playStopToggle.append(_play2.default);
+    this.$volumeIcon.append(_volume2.default);
+    this.$fullscreenToggle.append(_expand2.default);
+    this.$hdIndicator.append(_hd2.default);
+    this.$ccButton.append(_cc2.default);
+  };
+
+  MediaControl.prototype.setSeekPercentage = function setSeekPercentage(value) {
+    value = Math.max(Math.min(value, 100.0), 0);
+    if (this.displayedSeekBarPercentage === value) {
+      // not changed since last update
+      return;
+    }
+    this.displayedSeekBarPercentage = value;
+
+    this.$seekBarPosition.removeClass('media-control-notransition');
+    this.$seekBarScrubber.removeClass('media-control-notransition');
+    this.$seekBarPosition.css({ width: value + '%' });
+    this.$seekBarScrubber.css({ left: value + '%' });
+  };
+
+  MediaControl.prototype.seekRelative = function seekRelative(delta) {
+    if (!this.settings.seekEnabled) return;
+    var currentTime = this.container.getCurrentTime();
+    var duration = this.container.getDuration();
+    var position = Math.min(Math.max(currentTime + delta, 0), duration);
+    position = Math.min(position * 100 / duration, 100);
+    this.container.seekPercentage(position);
+  };
+
+  MediaControl.prototype.bindKeyAndShow = function bindKeyAndShow(key, cb) {
+    var _this6 = this;
+
+    this.kibo.down(key, function () {
+      _this6.show();
+      return cb();
+    });
+  };
+
+  MediaControl.prototype.bindKeyEvents = function bindKeyEvents() {
+    var _this7 = this;
+
+    this.unbindKeyEvents();
+    this.kibo = new _vendor.Kibo(this.options.focusElement);
+
+    this.bindKeyAndShow('space', function () {
+      return _this7.togglePlayPause();
+    });
+    this.bindKeyAndShow('left', function () {
+      return _this7.seekRelative(-5);
+    });
+    this.bindKeyAndShow('right', function () {
+      return _this7.seekRelative(5);
+    });
+    this.bindKeyAndShow('shift left', function () {
+      return _this7.seekRelative(-10);
+    });
+    this.bindKeyAndShow('shift right', function () {
+      return _this7.seekRelative(10);
+    });
+    this.bindKeyAndShow('shift ctrl left', function () {
+      return _this7.seekRelative(-15);
+    });
+    this.bindKeyAndShow('shift ctrl right', function () {
+      return _this7.seekRelative(15);
+    });
+    // this.kibo.down(['']) // should it be here?
+    var keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+    keys.forEach(function (i) {
+      _this7.bindKeyAndShow(i, function () {
+        return _this7.settings.seekEnabled && _this7.container.seekPercentage(i * 10);
+      });
+    });
+  };
+
+  MediaControl.prototype.unbindKeyEvents = function unbindKeyEvents() {
+    if (this.kibo) {
+      this.kibo.off('space');
+      this.kibo.off('left');
+      this.kibo.off('right');
+      this.kibo.off('shift left');
+      this.kibo.off('shift right');
+      this.kibo.off('shift ctrl left');
+      this.kibo.off('shift ctrl right');
+      this.kibo.off(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']);
+    }
+  };
+
+  MediaControl.prototype.parseColors = function parseColors() {
+    if (this.options.mediacontrol) {
+      this.buttonsColor = this.options.mediacontrol.buttons;
+      var seekbarColor = this.options.mediacontrol.seekbar;
+      this.$el.find('.bar-fill-2[data-seekbar]').css('background-color', seekbarColor);
+      this.$el.find('.media-control-icon svg path').css('fill', this.buttonsColor);
+      this.$el.find('.segmented-bar-element[data-volume]').css('boxShadow', 'inset 2px 0 0 ' + this.buttonsColor);
+    }
+  };
+
+  MediaControl.prototype.applyButtonStyle = function applyButtonStyle(element) {
+    if (this.buttonsColor && element) {
+      (0, _clapprZepto2.default)(element).find('svg path').css('fill', this.buttonsColor);
+    }
+  };
+
+  MediaControl.prototype.destroy = function destroy() {
+    this.remove();
+    (0, _clapprZepto2.default)(document).unbind('mouseup', this.stopDragHandler);
+    (0, _clapprZepto2.default)(document).unbind('mousemove', this.updateDragHandler);
+    this.unbindKeyEvents();
+  };
+
+  MediaControl.prototype.render = function render() {
+    var _this8 = this;
+
+    var timeout = 1000;
+    this.$el.html(this.template({ settings: this.settings }));
+    this.$el.append(this.stylesheet);
+    this.createCachedElements();
+    this.$playPauseToggle.addClass('paused');
+    this.$playStopToggle.addClass('stopped');
+
+    this.changeTogglePlay();
+    this.hideId = setTimeout(function () {
+      return _this8.hide();
+    }, timeout);
+    if (this.disabled) {
+      this.hide();
+    }
+
+    if (_browser2.default.isSafari && _browser2.default.isMobile) {
+      this.$volumeContainer.css('display', 'none');
+    }
+
+    this.$seekBarPosition.addClass('media-control-notransition');
+    this.$seekBarScrubber.addClass('media-control-notransition');
+
+    var previousSeekPercentage = 0;
+    if (this.displayedSeekBarPercentage) {
+      previousSeekPercentage = this.displayedSeekBarPercentage;
+    }
+    this.displayedSeekBarPercentage = null;
+    this.setSeekPercentage(previousSeekPercentage);
+
+    process.nextTick(function () {
+      if (!_this8.settings.seekEnabled) {
+        _this8.$seekBarContainer.addClass('seek-disabled');
+      }
+      if (!_browser2.default.isMobile && !_this8.options.disableKeyboardShortcuts) {
+        _this8.bindKeyEvents();
+      }
+      _this8.playerResize({ width: _this8.options.width, height: _this8.options.height });
+      _this8.hideVolumeBar(0);
+    });
+
+    this.parseColors();
+    this.highDefinitionUpdate();
+    this.ccAvailable(false);
+
+    this.rendered = true;
+    this.updateVolumeUI();
+    this.trigger(_events2.default.MEDIACONTROL_RENDERED);
+    return this;
+  };
+
+  return MediaControl;
+}(_ui_object2.default); // Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+/**
+ * The MediaControl is responsible for displaying the Player controls.
+ */
+
+exports.default = MediaControl;
+
+
+MediaControl.extend = function (properties) {
+  return (0, _utils.extend)(MediaControl, properties);
+};
+module.exports = exports['default'];
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(52)))
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.Utils = exports.UIObject = exports.BaseObject = exports.Loader = exports.Core = exports.Container = exports.Playback = exports.UICorePlugin = exports.CorePlugin = exports.UIContainerPlugin = exports.ContainerPlugin = exports.MediaControl = exports.PlayerInfo = exports.Browser = exports.Events = exports.Mediator = exports.NoOp = exports.HTML5Video = exports.$ = exports.Styler = exports.Vendor = exports.Log = exports.template = exports.version = exports.Player = undefined;
 
+var _player = __webpack_require__(77);
+
+var _player2 = _interopRequireDefault(_player);
+
+var _utils = __webpack_require__(3);
+
+var _utils2 = _interopRequireDefault(_utils);
+
+var _events = __webpack_require__(5);
+
+var _events2 = _interopRequireDefault(_events);
+
+var _playback = __webpack_require__(23);
+
+var _playback2 = _interopRequireDefault(_playback);
+
+var _container_plugin = __webpack_require__(74);
+
+var _container_plugin2 = _interopRequireDefault(_container_plugin);
+>>>>>>> draft skinnier version
+
+var _core_plugin = __webpack_require__(75);
+
+<<<<<<< HEAD
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * XHR based logger
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 
 var _logger = _dereq_(53);
+=======
+var _core_plugin2 = _interopRequireDefault(_core_plugin);
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _ui_core_plugin = __webpack_require__(76);
 
+var _ui_core_plugin2 = _interopRequireDefault(_ui_core_plugin);
+
+var _ui_container_plugin = __webpack_require__(32);
+>>>>>>> draft skinnier version
+
+var _ui_container_plugin2 = _interopRequireDefault(_ui_container_plugin);
+
+<<<<<<< HEAD
 var XhrLoader = function () {
   function XhrLoader(config) {
     _classCallCheck(this, XhrLoader);
@@ -29831,11 +35367,47 @@ exports.default = XhrLoader;
 
 "use strict";
 
+=======
+var _base_object = __webpack_require__(9);
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+var _base_object2 = _interopRequireDefault(_base_object);
 
+var _ui_object = __webpack_require__(14);
+
+var _ui_object2 = _interopRequireDefault(_ui_object);
+
+var _browser = __webpack_require__(20);
+
+var _browser2 = _interopRequireDefault(_browser);
+
+var _container = __webpack_require__(53);
+
+var _container2 = _interopRequireDefault(_container);
+
+var _core = __webpack_require__(54);
+
+var _core2 = _interopRequireDefault(_core);
+
+var _loader = __webpack_require__(55);
+
+var _loader2 = _interopRequireDefault(_loader);
+
+var _mediator = __webpack_require__(33);
+
+var _mediator2 = _interopRequireDefault(_mediator);
+
+var _media_control = __webpack_require__(56);
+
+var _media_control2 = _interopRequireDefault(_media_control);
+
+var _player_info = __webpack_require__(29);
+
+var _player_info2 = _interopRequireDefault(_player_info);
+>>>>>>> draft skinnier version
+
+var _log = __webpack_require__(59);
+
+<<<<<<< HEAD
 var _classCallCheck2 = __webpack_require__(0);
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
@@ -29867,9 +35439,79 @@ var _style2 = _interopRequireDefault(_style);
 var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
+=======
+var _log2 = _interopRequireDefault(_log);
+
+var _styler = __webpack_require__(10);
+
+var _styler2 = _interopRequireDefault(_styler);
+
+var _vendor = __webpack_require__(34);
+
+var _vendor2 = _interopRequireDefault(_vendor);
+
+var _template = __webpack_require__(19);
+
+var _template2 = _interopRequireDefault(_template);
+
+var _html5_video = __webpack_require__(57);
+
+var _html5_video2 = _interopRequireDefault(_html5_video);
+
+var _no_op = __webpack_require__(58);
+
+var _no_op2 = _interopRequireDefault(_no_op);
+
+var _clapprZepto = __webpack_require__(7);
+
+var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+var version = "0.2.66";
+
+exports.default = _player2.default;
+exports.Player = _player2.default;
+exports.version = version;
+exports.template = _template2.default;
+exports.Log = _log2.default;
+exports.Vendor = _vendor2.default;
+exports.Styler = _styler2.default;
+exports.$ = _clapprZepto2.default;
+exports.HTML5Video = _html5_video2.default;
+exports.NoOp = _no_op2.default;
+exports.Mediator = _mediator2.default;
+exports.Events = _events2.default;
+exports.Browser = _browser2.default;
+exports.PlayerInfo = _player_info2.default;
+exports.MediaControl = _media_control2.default;
+exports.ContainerPlugin = _container_plugin2.default;
+exports.UIContainerPlugin = _ui_container_plugin2.default;
+exports.CorePlugin = _core_plugin2.default;
+exports.UICorePlugin = _ui_core_plugin2.default;
+exports.Playback = _playback2.default;
+exports.Container = _container2.default;
+exports.Core = _core2.default;
+exports.Loader = _loader2.default;
+exports.BaseObject = _base_object2.default;
+exports.UIObject = _ui_object2.default;
+exports.Utils = _utils2.default;
+
+/***/ }),
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+>>>>>>> draft skinnier version
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+<<<<<<< HEAD
 // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
@@ -30231,9 +35873,357 @@ var _spinner2 = _interopRequireDefault(_spinner);
 var _spinner3 = __webpack_require__(182);
 
 var _spinner4 = _interopRequireDefault(_spinner3);
+=======
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _createClass2 = __webpack_require__(4);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _inherits2 = __webpack_require__(1);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _toConsumableArray2 = __webpack_require__(101);
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+var _keys = __webpack_require__(35);
+
+var _keys2 = _interopRequireDefault(_keys);
+
+var _utils = __webpack_require__(3);
+
+var _playback = __webpack_require__(23);
+
+var _playback2 = _interopRequireDefault(_playback);
+
+var _styler = __webpack_require__(10);
+
+var _styler2 = _interopRequireDefault(_styler);
+
+var _browser = __webpack_require__(20);
+
+var _browser2 = _interopRequireDefault(_browser);
+
+var _events = __webpack_require__(5);
+
+var _events2 = _interopRequireDefault(_events);
+
+var _style = __webpack_require__(149);
+
+var _style2 = _interopRequireDefault(_style);
+
+var _clapprZepto = __webpack_require__(7);
+
+var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var MIMETYPES = {
+  'mp4': ['avc1.42E01E', 'avc1.58A01E', 'avc1.4D401E', 'avc1.64001E', 'mp4v.20.8', 'mp4v.20.240', 'mp4a.40.2'].map(function (codec) {
+    return 'video/mp4; codecs="' + codec + ', mp4a.40.2"';
+  }),
+  'ogg': ['video/ogg; codecs="theora, vorbis"', 'video/ogg; codecs="dirac"', 'video/ogg; codecs="theora, speex"'],
+  '3gpp': ['video/3gpp; codecs="mp4v.20.8, samr"'],
+  'webm': ['video/webm; codecs="vp8, vorbis"'],
+  'mkv': ['video/x-matroska; codecs="theora, vorbis"'],
+  'm3u8': ['application/x-mpegurl']
+}; // Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+MIMETYPES['ogv'] = MIMETYPES['ogg'];
+MIMETYPES['3gp'] = MIMETYPES['3gpp'];
+
+var AUDIO_MIMETYPES = {
+  'wav': ['audio/wav'],
+  'mp3': ['audio/mp3', 'audio/mpeg;codecs="mp3"'],
+  'aac': ['audio/mp4;codecs="mp4a.40.5"'],
+  'oga': ['audio/ogg']
+};
+
+var KNOWN_AUDIO_MIMETYPES = (0, _keys2.default)(AUDIO_MIMETYPES).reduce(function (acc, k) {
+  return [].concat((0, _toConsumableArray3.default)(acc), (0, _toConsumableArray3.default)(AUDIO_MIMETYPES[k]));
+}, []);
+
+// TODO: rename this Playback to HTML5Playback (breaking change, only after 0.3.0)
+
+var HTML5Video = function (_Playback) {
+  (0, _inherits3.default)(HTML5Video, _Playback);
+  (0, _createClass3.default)(HTML5Video, [{
+    key: 'name',
+    get: function get() {
+      return 'html5_video';
+    }
+  }, {
+    key: 'tagName',
+    get: function get() {
+      return this.isAudioOnly ? 'audio' : 'video';
+    }
+  }, {
+    key: 'isAudioOnly',
+    get: function get() {
+      var resourceUrl = this.options.src;
+      var mimeTypes = HTML5Video._mimeTypesForUrl(resourceUrl, AUDIO_MIMETYPES, this.options.mimeType);
+      return this.options.playback && this.options.playback.audioOnly || this.options.audioOnly || KNOWN_AUDIO_MIMETYPES.indexOf(mimeTypes[0]) >= 0;
+    }
+  }, {
+    key: 'attributes',
+    get: function get() {
+      return {
+        'data-html5-video': ''
+      };
+    }
+  }, {
+    key: 'events',
+    get: function get() {
+      return {
+        'canplay': '_onCanPlay',
+        'canplaythrough': '_handleBufferingEvents',
+        'durationchange': '_onDurationChange',
+        'ended': '_onEnded',
+        'error': '_onError',
+        'loadeddata': '_onLoadedData',
+        'loadedmetadata': '_onLoadedMetadata',
+        'pause': '_onPause',
+        'playing': '_onPlaying',
+        'progress': '_onProgress',
+        'seeked': '_handleBufferingEvents',
+        'seeking': '_handleBufferingEvents',
+        'stalled': '_handleBufferingEvents',
+        'timeupdate': '_onTimeUpdate',
+        'waiting': '_onWaiting'
+      };
+    }
+
+    /**
+     * Determine if the playback has ended.
+     * @property ended
+     * @type Boolean
+     */
+
+  }, {
+    key: 'ended',
+    get: function get() {
+      return this.el.ended;
+    }
+
+    /**
+     * Determine if the playback is having to buffer in order for
+     * playback to be smooth.
+     * This is related to the PLAYBACK_BUFFERING and PLAYBACK_BUFFERFULL events
+     * @property buffering
+     * @type Boolean
+     */
+
+  }, {
+    key: 'buffering',
+    get: function get() {
+      return !!this._bufferingState;
+    }
+  }]);
+
+  function HTML5Video() {
+    (0, _classCallCheck3.default)(this, HTML5Video);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, _Playback.call.apply(_Playback, [this].concat(args)));
+
+    _this._destroyed = false;
+    _this._loadStarted = false;
+    _this._playheadMoving = false;
+    _this._playheadMovingTimer = null;
+    _this._stopped = false;
+    _this._setupSrc(_this.options.src);
+    // backwards compatibility (TODO: remove on 0.3.0)
+    _this.options.playback || (_this.options.playback = _this.options || {});
+    _this.options.playback.disableContextMenu = _this.options.playback.disableContextMenu || _this.options.disableVideoTagContextMenu;
+
+    var playbackConfig = _this.options.playback;
+    var preload = playbackConfig.preload || (_browser2.default.isSafari ? 'auto' : _this.options.preload);
+
+    var posterUrl = void 0; // FIXME: poster plugin should always convert poster to object with expected properties ?
+    if (_this.options.poster) {
+      if (typeof _this.options.poster === 'string') {
+        posterUrl = _this.options.poster;
+      } else if (typeof _this.options.poster.url === 'string') {
+        posterUrl = _this.options.poster.url;
+      }
+    }
+
+    _clapprZepto2.default.extend(_this.el, {
+      loop: _this.options.loop,
+      poster: posterUrl,
+      preload: preload || 'metadata',
+      controls: (playbackConfig.controls || _this.options.useVideoTagDefaultControls) && 'controls',
+      crossOrigin: playbackConfig.crossOrigin,
+      'x-webkit-playsinline': playbackConfig.playInline
+    });
+
+    playbackConfig.playInline && _this.$el.attr({ playsinline: 'playsinline' });
+
+    // TODO should settings be private?
+    _this.settings = { default: ['seekbar'] };
+    _this.settings.left = ['playpause', 'position', 'duration'];
+    _this.settings.right = ['fullscreen', 'volume', 'cc-button', 'hd-indicator'];
+
+    // https://github.com/clappr/clappr/issues/1076
+    _this.options.autoPlay && process.nextTick(function () {
+      return !_this._destroyed && _this.play();
+    });
+    return _this;
+  }
+
+  /**
+   * Sets the source url on the <video> element, and also the 'src' property.
+   * @method setupSrc
+   * @private
+   * @param {String} srcUrl The source URL.
+   */
+
+
+  HTML5Video.prototype._setupSrc = function _setupSrc(srcUrl) {
+    if (this.el.src === srcUrl) {
+      return;
+    }
+    this._src = srcUrl;
+    this.el.src = srcUrl;
+  };
+
+  HTML5Video.prototype._onLoadedMetadata = function _onLoadedMetadata(e) {
+    this._handleBufferingEvents();
+    this.trigger(_events2.default.PLAYBACK_LOADEDMETADATA, { duration: e.target.duration, data: e });
+    this._updateSettings();
+    var autoSeekFromUrl = typeof this._options.autoSeekFromUrl === 'undefined' || this._options.autoSeekFromUrl;
+    if (this.getPlaybackType() !== _playback2.default.LIVE && autoSeekFromUrl) {
+      this._checkInitialSeek();
+    }
+  };
+
+  HTML5Video.prototype._onDurationChange = function _onDurationChange() {
+    this._updateSettings();
+    this._onTimeUpdate();
+    // onProgress uses the duration
+    this._onProgress();
+  };
+
+  HTML5Video.prototype._updateSettings = function _updateSettings() {
+    // we can't figure out if hls resource is VoD or not until it is being loaded or duration has changed.
+    // that's why we check it again and update media control accordingly.
+    if (this.getPlaybackType() === _playback2.default.VOD || this.getPlaybackType() === _playback2.default.AOD) {
+      this.settings.left = ['playpause', 'position', 'duration'];
+    } else {
+      this.settings.left = ['playstop'];
+    }
+    this.settings.seekEnabled = this.isSeekEnabled();
+    this.trigger(_events2.default.PLAYBACK_SETTINGSUPDATE);
+  };
+
+  HTML5Video.prototype.isSeekEnabled = function isSeekEnabled() {
+    return isFinite(this.getDuration());
+  };
+
+  HTML5Video.prototype.getPlaybackType = function getPlaybackType() {
+    var onDemandType = this.tagName === 'audio' ? _playback2.default.AOD : _playback2.default.VOD;
+    return [0, undefined, Infinity].indexOf(this.el.duration) >= 0 ? _playback2.default.LIVE : onDemandType;
+  };
+
+  HTML5Video.prototype.isHighDefinitionInUse = function isHighDefinitionInUse() {
+    return false;
+  };
+
+  // On mobile device, HTML5 video element "retains" user action consent if
+  // load() method is called. See Player.consent().
+
+
+  HTML5Video.prototype.consent = function consent() {
+    !this.isPlaying() && this.el.load();
+  };
+
+  HTML5Video.prototype.play = function play() {
+    this.trigger(_events2.default.PLAYBACK_PLAY_INTENT);
+    this._stopped = false;
+    this._setupSrc(this._src);
+    this._handleBufferingEvents();
+    var promise = this.el.play();
+    // For more details, see https://developers.google.com/web/updates/2016/03/play-returns-promise
+    if (promise && promise.catch) {
+      promise.catch(function () {});
+    }
+  };
+
+  HTML5Video.prototype.pause = function pause() {
+    this.el.pause();
+  };
+
+  HTML5Video.prototype.stop = function stop() {
+    this.pause();
+    this._stopped = true;
+    // src will be added again in play()
+    this.el.removeAttribute('src');
+    this._stopPlayheadMovingChecks();
+    this._handleBufferingEvents();
+    this.trigger(_events2.default.PLAYBACK_STOP);
+  };
+
+  HTML5Video.prototype.volume = function volume(value) {
+    this.el.volume = value / 100;
+  };
+
+  HTML5Video.prototype.mute = function mute() {
+    this.el.volume = 0;
+  };
+
+  HTML5Video.prototype.unmute = function unmute() {
+    this.el.volume = 1;
+  };
+
+  HTML5Video.prototype.isMuted = function isMuted() {
+    return !!this.el.volume;
+  };
+
+  HTML5Video.prototype.isPlaying = function isPlaying() {
+    return !this.el.paused && !this.el.ended;
+  };
+
+  HTML5Video.prototype._startPlayheadMovingChecks = function _startPlayheadMovingChecks() {
+    if (this._playheadMovingTimer !== null) {
+      return;
+    }
+    this._playheadMovingTimeOnCheck = null;
+    this._determineIfPlayheadMoving();
+    this._playheadMovingTimer = setInterval(this._determineIfPlayheadMoving.bind(this), 500);
+  };
+
+  HTML5Video.prototype._stopPlayheadMovingChecks = function _stopPlayheadMovingChecks() {
+    if (this._playheadMovingTimer === null) {
+      return;
+    }
+    clearInterval(this._playheadMovingTimer);
+    this._playheadMovingTimer = null;
+    this._playheadMoving = false;
+  };
+>>>>>>> draft skinnier version
+
+  HTML5Video.prototype._determineIfPlayheadMoving = function _determineIfPlayheadMoving() {
+    var before = this._playheadMovingTimeOnCheck;
+    var now = this.el.currentTime;
+    this._playheadMoving = before !== now;
+    this._playheadMovingTimeOnCheck = now;
+    this._handleBufferingEvents();
+  };
+
+<<<<<<< HEAD
 // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
@@ -30365,11 +36355,98 @@ module.exports = exports['default'];
 
 "use strict";
 
+=======
+  // this seems to happen when the user is having to wait
+  // for something to happen AFTER A USER INTERACTION
+  // e.g the player might be buffering, but when `play()` is called
+  // only at this point will this be called.
+  // Or the user may seek somewhere but the new area requires buffering,
+  // so it will fire then as well.
+  // On devices where playing is blocked until requested with a user action,
+  // buffering may start, but never finish until the user initiates a play,
+  // but this only happens when play is actually requested
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 
+  HTML5Video.prototype._onWaiting = function _onWaiting() {
+    this._loadStarted = true;
+    this._handleBufferingEvents();
+  };
+
+  // called after the first frame has loaded
+  // note this doesn't fire on ios before the user has requested play
+  // ideally the "loadstart" event would be used instead, but this fires
+  // before a user has requested play on iOS, and also this is always fired
+  // even if the preload setting is "none". In both these cases this causes
+  // infinite buffering until the user does something which isn't great.
+
+
+  HTML5Video.prototype._onLoadedData = function _onLoadedData() {
+    this._loadStarted = true;
+    this._handleBufferingEvents();
+  };
+
+  // note this doesn't fire on ios before user has requested play
+
+
+  HTML5Video.prototype._onCanPlay = function _onCanPlay() {
+    this._handleBufferingEvents();
+  };
+
+  HTML5Video.prototype._onPlaying = function _onPlaying() {
+    this._startPlayheadMovingChecks();
+    this._handleBufferingEvents();
+    this.trigger(_events2.default.PLAYBACK_PLAY);
+  };
+
+  HTML5Video.prototype._onPause = function _onPause() {
+    this._stopPlayheadMovingChecks();
+    this._handleBufferingEvents();
+    this.trigger(_events2.default.PLAYBACK_PAUSE);
+  };
+
+  HTML5Video.prototype._onEnded = function _onEnded() {
+    this._handleBufferingEvents();
+    this.trigger(_events2.default.PLAYBACK_ENDED, this.name);
+  };
+
+  // The playback should be classed as buffering if the following are true:
+  // - the ready state is less then HAVE_FUTURE_DATA or the playhead isn't moving and it should be
+  // - the media hasn't "ended",
+  // - the media hasn't been stopped
+  // - loading has started
+
+
+  HTML5Video.prototype._handleBufferingEvents = function _handleBufferingEvents() {
+    var playheadShouldBeMoving = !this.el.ended && !this.el.paused;
+    var buffering = this._loadStarted && !this.el.ended && !this._stopped && (playheadShouldBeMoving && !this._playheadMoving || this.el.readyState < this.el.HAVE_FUTURE_DATA);
+    if (this._bufferingState !== buffering) {
+      this._bufferingState = buffering;
+      if (buffering) {
+        this.trigger(_events2.default.PLAYBACK_BUFFERING, this.name);
+      } else {
+        this.trigger(_events2.default.PLAYBACK_BUFFERFULL, this.name);
+      }
+    }
+  };
+
+  HTML5Video.prototype._onError = function _onError() {
+    this.trigger(_events2.default.PLAYBACK_ERROR, this.el.error, this.name);
+  };
+
+  HTML5Video.prototype.destroy = function destroy() {
+    this._destroyed = true;
+    this.$el.remove();
+    this.el.src = '';
+    this._src = null;
+    _utils.DomRecycler.garbage(this.$el);
+  };
+>>>>>>> draft skinnier version
+
+  HTML5Video.prototype.seek = function seek(time) {
+    this.el.currentTime = time;
+  };
+
+<<<<<<< HEAD
 var _classCallCheck2 = __webpack_require__(0);
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
@@ -30948,6 +37025,121 @@ module.exports = exports['default'];
 
 /***/ }),
 /* 193 */
+=======
+  HTML5Video.prototype.seekPercentage = function seekPercentage(percentage) {
+    var time = this.el.duration * (percentage / 100);
+    this.seek(time);
+  };
+
+  HTML5Video.prototype._checkInitialSeek = function _checkInitialSeek() {
+    var seekTime = (0, _utils.seekStringToSeconds)();
+    if (seekTime !== 0) {
+      this.seek(seekTime);
+    }
+  };
+
+  HTML5Video.prototype.getCurrentTime = function getCurrentTime() {
+    return this.el.currentTime;
+  };
+
+  HTML5Video.prototype.getDuration = function getDuration() {
+    return this.el.duration;
+  };
+
+  HTML5Video.prototype._onTimeUpdate = function _onTimeUpdate() {
+    this._handleBufferingEvents();
+    if (this.getPlaybackType() === _playback2.default.LIVE) {
+      this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: 1, total: 1 }, this.name);
+    } else {
+      this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: this.el.currentTime, total: this.el.duration }, this.name);
+    }
+  };
+
+  HTML5Video.prototype._onProgress = function _onProgress() {
+    if (!this.el.buffered.length) {
+      return;
+    }
+    var buffered = [];
+    var bufferedPos = 0;
+    for (var i = 0; i < this.el.buffered.length; i++) {
+      buffered = [].concat((0, _toConsumableArray3.default)(buffered), [{ start: this.el.buffered.start(i), end: this.el.buffered.end(i) }]);
+      if (this.el.currentTime >= buffered[i].start && this.el.currentTime <= buffered[i].end) {
+        bufferedPos = i;
+      }
+    }
+    var progress = {
+      start: buffered[bufferedPos].start,
+      current: buffered[bufferedPos].end,
+      total: this.el.duration
+    };
+    this.trigger(_events2.default.PLAYBACK_PROGRESS, progress, buffered);
+  };
+
+  HTML5Video.prototype._typeFor = function _typeFor(src) {
+    var mimeTypes = HTML5Video._mimeTypesForUrl(src, MIMETYPES, this.options.mimeType);
+    if (mimeTypes.length == 0) {
+      mimeTypes = HTML5Video._mimeTypesForUrl(src, AUDIO_MIMETYPES, this.options.mimeType);
+    }
+    var mimeType = mimeTypes[0] || '';
+    return mimeType.split(';')[0];
+  };
+
+  HTML5Video.prototype._ready = function _ready() {
+    if (this._isReadyState) {
+      return;
+    }
+    this._isReadyState = true;
+    this.trigger(_events2.default.PLAYBACK_READY, this.name);
+  };
+
+  HTML5Video.prototype.render = function render() {
+    var style = _styler2.default.getStyleFor(_style2.default);
+
+    if (this.options.playback.disableContextMenu) {
+      this.$el.on('contextmenu', function () {
+        return false;
+      });
+    }
+
+    this.$el.append(style);
+    this._ready();
+    return this;
+  };
+
+  (0, _createClass3.default)(HTML5Video, [{
+    key: 'isReady',
+    get: function get() {
+      return this._isReadyState;
+    }
+  }]);
+  return HTML5Video;
+}(_playback2.default);
+
+exports.default = HTML5Video;
+
+
+HTML5Video._mimeTypesForUrl = function (resourceUrl, mimeTypesByExtension, mimeType) {
+  var extension = (resourceUrl.split('?')[0].match(/.*\.(.*)$/) || [])[1];
+  var mimeTypes = mimeType || extension && mimeTypesByExtension[extension.toLowerCase()] || [];
+  return mimeTypes.constructor === Array ? mimeTypes : [mimeTypes];
+};
+
+HTML5Video._canPlay = function (type, mimeTypesByExtension, resourceUrl, mimeType) {
+  var mimeTypes = HTML5Video._mimeTypesForUrl(resourceUrl, mimeTypesByExtension, mimeType);
+  var media = document.createElement(type);
+  return !!mimeTypes.filter(function (mediaType) {
+    return !!media.canPlayType(mediaType).replace(/no/, '');
+  })[0];
+};
+
+HTML5Video.canPlay = function (resourceUrl, mimeType) {
+  return HTML5Video._canPlay('audio', AUDIO_MIMETYPES, resourceUrl, mimeType) || HTML5Video._canPlay('video', MIMETYPES, resourceUrl, mimeType);
+};
+module.exports = exports['default'];
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(52)))
+
+/***/ }),
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30957,6 +37149,332 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _createClass2 = __webpack_require__(4);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _inherits2 = __webpack_require__(1);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _utils = __webpack_require__(3);
+
+var _playback = __webpack_require__(23);
+
+var _playback2 = _interopRequireDefault(_playback);
+
+var _template = __webpack_require__(19);
+
+var _template2 = _interopRequireDefault(_template);
+
+var _styler = __webpack_require__(10);
+
+var _styler2 = _interopRequireDefault(_styler);
+
+var _events = __webpack_require__(5);
+
+var _events2 = _interopRequireDefault(_events);
+
+var _style = __webpack_require__(150);
+
+var _style2 = _interopRequireDefault(_style);
+
+var _error = __webpack_require__(154);
+
+var _error2 = _interopRequireDefault(_error);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var NoOp = function (_Playback) {
+  (0, _inherits3.default)(NoOp, _Playback);
+  (0, _createClass3.default)(NoOp, [{
+    key: 'name',
+    get: function get() {
+      return 'no_op';
+    }
+  }, {
+    key: 'template',
+    get: function get() {
+      return (0, _template2.default)(_error2.default);
+    }
+  }, {
+    key: 'attributes',
+    get: function get() {
+      return { 'data-no-op': '' };
+    }
+  }]);
+
+  function NoOp() {
+    (0, _classCallCheck3.default)(this, NoOp);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, _Playback.call.apply(_Playback, [this].concat(args)));
+
+    _this._noiseFrameNum = -1;
+    _this._started = false;
+    return _this;
+  }
+
+  NoOp.prototype.render = function render() {
+    var style = _styler2.default.getStyleFor(_style2.default);
+    var playbackNotSupported = this.options.playbackNotSupportedMessage || this.i18n.t('playback_not_supported');
+    this.$el.html(this.template({ message: playbackNotSupported }));
+    this.$el.append(style);
+    this.trigger(_events2.default.PLAYBACK_READY, this.name);
+    var showForNoOp = !!(this.options.poster && this.options.poster.showForNoOp);
+    if (this.options.autoPlay || !showForNoOp) {
+      this.play();
+    }
+    return this;
+  };
+
+  NoOp.prototype.play = function play() {
+    if (!this._started) {
+      this._started = true;
+      this.trigger(_events2.default.PLAYBACK_PLAY);
+      this._animate();
+    }
+  };
+
+  NoOp.prototype._noise = function _noise() {
+    this._noiseFrameNum = (this._noiseFrameNum + 1) % 5;
+    if (this._noiseFrameNum) {
+      // only update noise every 5 frames to save cpu
+      return;
+    }
+
+    var idata = this.context.createImageData(this.context.canvas.width, this.context.canvas.height);
+    var buffer32 = void 0;
+    try {
+      buffer32 = new Uint32Array(idata.data.buffer);
+    } catch (err) {
+      buffer32 = new Uint32Array(this.context.canvas.width * this.context.canvas.height * 4);
+      var data = idata.data;
+      for (var i = 0; i < data.length; i++) {
+        buffer32[i] = data[i];
+      }
+    }
+
+    var len = buffer32.length,
+        m = Math.random() * 6 + 4;
+    var run = 0,
+        color = 0;
+    for (var _i = 0; _i < len;) {
+      if (run < 0) {
+        run = m * Math.random();
+        var p = Math.pow(Math.random(), 0.4);
+        color = 255 * p << 24;
+      }
+      run -= 1;
+      buffer32[_i++] = color;
+    }
+    this.context.putImageData(idata, 0, 0);
+  };
+
+  NoOp.prototype._loop = function _loop() {
+    var _this2 = this;
+
+    if (this._stop) {
+      return;
+    }
+    this._noise();
+    this._animationHandle = (0, _utils.requestAnimationFrame)(function () {
+      return _this2._loop();
+    });
+  };
+
+  NoOp.prototype.destroy = function destroy() {
+    if (this._animationHandle) {
+      (0, _utils.cancelAnimationFrame)(this._animationHandle);
+      this._stop = true;
+    }
+  };
+
+  NoOp.prototype._animate = function _animate() {
+    this.canvas = this.$el.find('canvas[data-no-op-canvas]')[0];
+    this.context = this.canvas.getContext('2d');
+    this._loop();
+  };
+
+  return NoOp;
+}(_playback2.default);
+
+exports.default = NoOp;
+
+
+NoOp.canPlay = function (source) {
+  // eslint-disable-line no-unused-vars
+  return true;
+};
+module.exports = exports['default'];
+
+/***/ }),
+/* 89 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _vendor = __webpack_require__(34);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var BOLD = 'font-weight: bold; font-size: 13px;';
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+var INFO = 'color: #006600;' + BOLD;
+var DEBUG = 'color: #0000ff;' + BOLD;
+var WARN = 'color: #ff8000;' + BOLD;
+var ERROR = 'color: #ff0000;' + BOLD;
+
+var LEVEL_DEBUG = 0;
+var LEVEL_INFO = 1;
+var LEVEL_WARN = 2;
+var LEVEL_ERROR = 3;
+var LEVEL_DISABLED = LEVEL_ERROR;
+
+var COLORS = [DEBUG, INFO, WARN, ERROR, ERROR];
+var DESCRIPTIONS = ['debug', 'info', 'warn', 'error', 'disabled'];
+
+var Log = function () {
+  function Log() {
+    var _this = this;
+
+    var level = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : LEVEL_INFO;
+    var offLevel = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : LEVEL_DISABLED;
+    (0, _classCallCheck3.default)(this, Log);
+
+    this.kibo = new _vendor.Kibo();
+    this.kibo.down(['ctrl shift d'], function () {
+      return _this.onOff();
+    });
+    this.BLACKLIST = ['timeupdate', 'playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress'];
+    this.level = level;
+    this.offLevel = offLevel;
+  }
+
+  Log.prototype.debug = function debug(klass) {
+    this.log(klass, LEVEL_DEBUG, Array.prototype.slice.call(arguments, 1));
+  };
+
+  Log.prototype.info = function info(klass) {
+    this.log(klass, LEVEL_INFO, Array.prototype.slice.call(arguments, 1));
+  };
+
+  Log.prototype.warn = function warn(klass) {
+    this.log(klass, LEVEL_WARN, Array.prototype.slice.call(arguments, 1));
+  };
+
+  Log.prototype.error = function error(klass) {
+    this.log(klass, LEVEL_ERROR, Array.prototype.slice.call(arguments, 1));
+  };
+
+  Log.prototype.onOff = function onOff() {
+    if (this.level === this.offLevel) {
+      this.level = this.previousLevel;
+    } else {
+      this.previousLevel = this.level;
+      this.level = this.offLevel;
+    }
+    // handle instances where console.log is unavailable
+    if (window.console && window.console.log) {
+      window.console.log('%c[Clappr.Log] set log level to ' + DESCRIPTIONS[this.level], WARN);
+    }
+  };
+
+  Log.prototype.level = function level(newLevel) {
+    this.level = newLevel;
+  };
+
+  Log.prototype.log = function log(klass, level, message) {
+    if (this.BLACKLIST.indexOf(message[0]) >= 0) return;
+    if (level < this.level) return;
+
+    if (!message) {
+      message = klass;
+      klass = null;
+    }
+    var color = COLORS[level];
+    var klassDescription = '';
+    if (klass) {
+      klassDescription = '[' + klass + ']';
+    }
+    if (window.console && window.console.log) {
+      window.console.log.apply(console, ['%c[' + DESCRIPTIONS[level] + ']' + klassDescription, color].concat(message));
+    }
+  };
+
+  return Log;
+}();
+
+exports.default = Log;
+
+
+Log.LEVEL_DEBUG = LEVEL_DEBUG;
+Log.LEVEL_INFO = LEVEL_INFO;
+Log.LEVEL_WARN = LEVEL_WARN;
+Log.LEVEL_ERROR = LEVEL_ERROR;
+
+Log.getInstance = function () {
+  if (this._instance === undefined) {
+    this._instance = new this();
+    this._instance.previousLevel = this._instance.level;
+    this._instance.level = this._instance.offLevel;
+  }
+  return this._instance;
+};
+
+Log.setLevel = function (level) {
+  this.getInstance().level = level;
+};
+
+Log.debug = function () {
+  this.getInstance().debug.apply(this.getInstance(), arguments);
+};
+Log.info = function () {
+  this.getInstance().info.apply(this.getInstance(), arguments);
+};
+Log.warn = function () {
+  this.getInstance().warn.apply(this.getInstance(), arguments);
+};
+Log.error = function () {
+  this.getInstance().error.apply(this.getInstance(), arguments);
+};
+module.exports = exports['default'];
+
+/***/ }),
+/* 90 */
+>>>>>>> draft skinnier version
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+<<<<<<< HEAD
 var _classCallCheck2 = __webpack_require__(0);
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
@@ -32350,21 +38868,1852 @@ var _createClass2 = __webpack_require__(3);
 var _createClass3 = _interopRequireDefault(_createClass2);
 
 var _inherits2 = __webpack_require__(2);
+=======
+var _poster = __webpack_require__(91);
 
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _utils = __webpack_require__(5);
-
-var _clapprZepto = __webpack_require__(6);
-
-var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
-
-var _core_plugin = __webpack_require__(30);
-
-var _core_plugin2 = _interopRequireDefault(_core_plugin);
+var _poster2 = _interopRequireDefault(_poster);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+exports.default = _poster2.default;
+module.exports = exports['default'];
+
+/***/ }),
+/* 91 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _createClass2 = __webpack_require__(4);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _inherits2 = __webpack_require__(1);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _ui_container_plugin = __webpack_require__(32);
+
+var _ui_container_plugin2 = _interopRequireDefault(_ui_container_plugin);
+
+var _events = __webpack_require__(5);
+
+var _events2 = _interopRequireDefault(_events);
+
+var _styler = __webpack_require__(10);
+
+var _styler2 = _interopRequireDefault(_styler);
+
+var _template = __webpack_require__(19);
+
+var _template2 = _interopRequireDefault(_template);
+
+var _playback = __webpack_require__(23);
+
+var _playback2 = _interopRequireDefault(_playback);
+
+var _poster = __webpack_require__(151);
+
+var _poster2 = _interopRequireDefault(_poster);
+
+var _poster3 = __webpack_require__(155);
+
+var _poster4 = _interopRequireDefault(_poster3);
+
+var _play = __webpack_require__(72);
+
+var _play2 = _interopRequireDefault(_play);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+var PosterPlugin = function (_UIContainerPlugin) {
+  (0, _inherits3.default)(PosterPlugin, _UIContainerPlugin);
+  (0, _createClass3.default)(PosterPlugin, [{
+    key: 'name',
+    get: function get() {
+      return 'poster';
+    }
+  }, {
+    key: 'template',
+    get: function get() {
+      return (0, _template2.default)(_poster4.default);
+    }
+  }, {
+    key: 'shouldRender',
+    get: function get() {
+      var showForNoOp = !!(this.options.poster && this.options.poster.showForNoOp);
+      return this.container.playback.name !== 'html_img' && (this.container.playback.getPlaybackType() !== _playback2.default.NO_OP || showForNoOp);
+    }
+  }, {
+    key: 'attributes',
+    get: function get() {
+      return {
+        'class': 'player-poster',
+        'data-poster': ''
+      };
+    }
+  }, {
+    key: 'events',
+    get: function get() {
+      return {
+        'click': 'clicked'
+      };
+    }
+  }, {
+    key: 'showOnVideoEnd',
+    get: function get() {
+      return !this.options.poster || this.options.poster.showOnVideoEnd || this.options.poster.showOnVideoEnd === undefined;
+    }
+  }]);
+
+  function PosterPlugin(container) {
+    (0, _classCallCheck3.default)(this, PosterPlugin);
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, _UIContainerPlugin.call(this, container));
+
+    _this.hasStartedPlaying = false;
+    _this.playRequested = false;
+    _this.render();
+    process.nextTick(function () {
+      return _this.update();
+    });
+    return _this;
+  }
+
+  PosterPlugin.prototype.bindEvents = function bindEvents() {
+    this.listenTo(this.container, _events2.default.CONTAINER_STOP, this.onStop);
+    this.listenTo(this.container, _events2.default.CONTAINER_PLAY, this.onPlay);
+    this.listenTo(this.container, _events2.default.CONTAINER_STATE_BUFFERING, this.update);
+    this.listenTo(this.container, _events2.default.CONTAINER_STATE_BUFFERFULL, this.update);
+    this.listenTo(this.container, _events2.default.CONTAINER_OPTIONS_CHANGE, this.render);
+    this.showOnVideoEnd && this.listenTo(this.container, _events2.default.CONTAINER_ENDED, this.onStop);
+  };
+
+  PosterPlugin.prototype.stopListening = function stopListening() {
+    _UIContainerPlugin.prototype.stopListening.call(this);
+  };
+
+  PosterPlugin.prototype.onPlay = function onPlay() {
+    this.hasStartedPlaying = true;
+    this.update();
+  };
+
+  PosterPlugin.prototype.onStop = function onStop() {
+    this.hasStartedPlaying = false;
+    this.playRequested = false;
+    this.update();
+  };
+
+  PosterPlugin.prototype.showPlayButton = function showPlayButton(show) {
+    if (show && (!this.options.chromeless || this.options.allowUserInteraction)) {
+      this.$playButton.show();
+      this.$el.addClass('clickable');
+    } else {
+      this.$playButton.hide();
+      this.$el.removeClass('clickable');
+    }
+  };
+
+  PosterPlugin.prototype.clicked = function clicked() {
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
+      this.playRequested = true;
+      this.update();
+      this.container.play();
+    }
+    return false;
+  };
+
+  PosterPlugin.prototype.shouldHideOnPlay = function shouldHideOnPlay() {
+    // Audio broadcasts should keep the poster up; video should hide poster while playing.
+    return !this.container.playback.isAudioOnly;
+  };
+
+  PosterPlugin.prototype.update = function update() {
+    if (!this.shouldRender) {
+      return;
+    }
+    var showPlayButton = !this.playRequested && !this.hasStartedPlaying && !this.container.buffering;
+    this.showPlayButton(showPlayButton);
+    if (!this.hasStartedPlaying) {
+      this.container.disableMediaControl();
+      this.$el.show();
+    } else {
+      this.container.enableMediaControl();
+      if (this.shouldHideOnPlay()) {
+        this.$el.hide();
+      }
+    }
+  };
+
+  PosterPlugin.prototype.render = function render() {
+    if (!this.shouldRender) {
+      return;
+    }
+    var style = _styler2.default.getStyleFor(_poster2.default, { baseUrl: this.options.baseUrl });
+    this.$el.html(this.template());
+    this.$el.append(style);
+
+    var isRegularPoster = this.options.poster && this.options.poster.custom == undefined;
+
+    if (isRegularPoster) {
+      var posterUrl = this.options.poster.url || this.options.poster;
+      this.$el.css({ 'background-image': 'url(' + posterUrl + ')' });
+    } else if (this.options.poster) {
+      this.$el.css({ 'background': this.options.poster.custom });
+    }
+    this.container.$el.append(this.el);
+    this.$playWrapper = this.$el.find('.play-wrapper');
+    this.$playWrapper.append(_play2.default);
+    this.$playButton = this.$playWrapper.find('svg');
+    this.$playButton.addClass('poster-icon');
+    this.$playButton.attr('data-poster', '');
+
+    var buttonsColor = this.options.mediacontrol && this.options.mediacontrol.buttons;
+    if (buttonsColor) {
+      this.$el.find('svg path').css('fill', buttonsColor);
+    }
+
+    if (this.options.mediacontrol && this.options.mediacontrol.buttons) {
+      buttonsColor = this.options.mediacontrol.buttons;
+      this.$playButton.css('color', buttonsColor);
+    }
+    this.update();
+    return this;
+  };
+
+  return PosterPlugin;
+}(_ui_container_plugin2.default);
+
+exports.default = PosterPlugin;
+module.exports = exports['default'];
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(52)))
+
+/***/ }),
+/* 92 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _spinner_three_bounce = __webpack_require__(93);
+
+var _spinner_three_bounce2 = _interopRequireDefault(_spinner_three_bounce);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _spinner_three_bounce2.default;
+module.exports = exports['default'];
+
+/***/ }),
+/* 93 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__(2);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _createClass2 = __webpack_require__(4);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _inherits2 = __webpack_require__(1);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _ui_container_plugin = __webpack_require__(32);
+
+var _ui_container_plugin2 = _interopRequireDefault(_ui_container_plugin);
+
+var _events = __webpack_require__(5);
+
+var _events2 = _interopRequireDefault(_events);
+
+var _styler = __webpack_require__(10);
+
+var _styler2 = _interopRequireDefault(_styler);
+
+var _template = __webpack_require__(19);
+
+var _template2 = _interopRequireDefault(_template);
+
+var _spinner = __webpack_require__(156);
+
+var _spinner2 = _interopRequireDefault(_spinner);
+
+var _spinner3 = __webpack_require__(152);
+
+var _spinner4 = _interopRequireDefault(_spinner3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+var SpinnerThreeBouncePlugin = function (_UIContainerPlugin) {
+  (0, _inherits3.default)(SpinnerThreeBouncePlugin, _UIContainerPlugin);
+  (0, _createClass3.default)(SpinnerThreeBouncePlugin, [{
+    key: 'name',
+    get: function get() {
+      return 'spinner';
+    }
+  }, {
+    key: 'attributes',
+    get: function get() {
+      return {
+        'data-spinner': '',
+        'class': 'spinner-three-bounce'
+      };
+    }
+  }]);
+
+  function SpinnerThreeBouncePlugin(container) {
+    (0, _classCallCheck3.default)(this, SpinnerThreeBouncePlugin);
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, _UIContainerPlugin.call(this, container));
+
+    _this.template = (0, _template2.default)(_spinner2.default);
+    _this.showTimeout = null;
+    _this.listenTo(_this.container, _events2.default.CONTAINER_STATE_BUFFERING, _this.onBuffering);
+    _this.listenTo(_this.container, _events2.default.CONTAINER_STATE_BUFFERFULL, _this.onBufferFull);
+    _this.listenTo(_this.container, _events2.default.CONTAINER_STOP, _this.onStop);
+    _this.listenTo(_this.container, _events2.default.CONTAINER_ENDED, _this.onStop);
+    _this.listenTo(_this.container, _events2.default.CONTAINER_ERROR, _this.onStop);
+    _this.render();
+    return _this;
+  }
+
+  SpinnerThreeBouncePlugin.prototype.onBuffering = function onBuffering() {
+    this.show();
+  };
+
+  SpinnerThreeBouncePlugin.prototype.onBufferFull = function onBufferFull() {
+    this.hide();
+  };
+
+  SpinnerThreeBouncePlugin.prototype.onStop = function onStop() {
+    this.hide();
+  };
+
+  SpinnerThreeBouncePlugin.prototype.show = function show() {
+    var _this2 = this;
+
+    if (this.showTimeout === null) {
+      this.showTimeout = setTimeout(function () {
+        return _this2.$el.show();
+      }, 300);
+    }
+  };
+
+  SpinnerThreeBouncePlugin.prototype.hide = function hide() {
+    if (this.showTimeout !== null) {
+      clearTimeout(this.showTimeout);
+      this.showTimeout = null;
+    }
+    this.$el.hide();
+  };
+
+  SpinnerThreeBouncePlugin.prototype.render = function render() {
+    this.$el.html(this.template());
+    var style = _styler2.default.getStyleFor(_spinner4.default);
+    this.container.$el.append(style);
+    this.container.$el.append(this.$el);
+    this.$el.hide();
+    if (this.container.buffering) {
+      this.onBuffering();
+    }
+    return this;
+  };
+
+  return SpinnerThreeBouncePlugin;
+}(_ui_container_plugin2.default);
+
+exports.default = SpinnerThreeBouncePlugin;
+module.exports = exports['default'];
+
+/***/ }),
+/* 94 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/* eslint-disable */
+// Kibo is released under the MIT License. Copyright (c) 2013 marquete.
+// see https://github.com/marquete/kibo
+
+var Kibo = function Kibo(element) {
+  this.element = element || window.document;
+  this.initialize();
+};
+
+Kibo.KEY_NAMES_BY_CODE = {
+  8: 'backspace', 9: 'tab', 13: 'enter',
+  16: 'shift', 17: 'ctrl', 18: 'alt',
+  20: 'caps_lock',
+  27: 'esc',
+  32: 'space',
+  37: 'left', 38: 'up', 39: 'right', 40: 'down',
+  48: '0', 49: '1', 50: '2', 51: '3', 52: '4', 53: '5', 54: '6', 55: '7', 56: '8', 57: '9',
+  65: 'a', 66: 'b', 67: 'c', 68: 'd', 69: 'e', 70: 'f', 71: 'g', 72: 'h', 73: 'i', 74: 'j',
+  75: 'k', 76: 'l', 77: 'm', 78: 'n', 79: 'o', 80: 'p', 81: 'q', 82: 'r', 83: 's', 84: 't',
+  85: 'u', 86: 'v', 87: 'w', 88: 'x', 89: 'y', 90: 'z', 112: 'f1', 113: 'f2', 114: 'f3',
+  115: 'f4', 116: 'f5', 117: 'f6', 118: 'f7', 119: 'f8', 120: 'f9', 121: 'f10', 122: 'f11', 123: 'f12'
+};
+
+Kibo.KEY_CODES_BY_NAME = {};
+(function () {
+  for (var key in Kibo.KEY_NAMES_BY_CODE) {
+    if (Object.prototype.hasOwnProperty.call(Kibo.KEY_NAMES_BY_CODE, key)) {
+      Kibo.KEY_CODES_BY_NAME[Kibo.KEY_NAMES_BY_CODE[key]] = +key;
+    }
+  }
+})();
+
+Kibo.MODIFIERS = ['shift', 'ctrl', 'alt'];
+
+Kibo.registerEvent = function () {
+  if (document.addEventListener) {
+    return function (element, eventName, func) {
+      element.addEventListener(eventName, func, false);
+    };
+  } else if (document.attachEvent) {
+    return function (element, eventName, func) {
+      element.attachEvent('on' + eventName, func);
+    };
+  }
+}();
+
+Kibo.unregisterEvent = function () {
+  if (document.removeEventListener) {
+    return function (element, eventName, func) {
+      element.removeEventListener(eventName, func, false);
+    };
+  } else if (document.detachEvent) {
+    return function (element, eventName, func) {
+      element.detachEvent('on' + eventName, func);
+    };
+  }
+}();
+
+Kibo.stringContains = function (string, substring) {
+  return string.indexOf(substring) !== -1;
+};
+
+Kibo.neatString = function (string) {
+  return string.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ');
+};
+
+Kibo.capitalize = function (string) {
+  return string.toLowerCase().replace(/^./, function (match) {
+    return match.toUpperCase();
+  });
+};
+
+Kibo.isString = function (what) {
+  return Kibo.stringContains(Object.prototype.toString.call(what), 'String');
+};
+
+Kibo.arrayIncludes = function () {
+  if (Array.prototype.indexOf) {
+    return function (haystack, needle) {
+      return haystack.indexOf(needle) !== -1;
+    };
+  } else {
+    return function (haystack, needle) {
+      for (var i = 0; i < haystack.length; i++) {
+        if (haystack[i] === needle) {
+          return true;
+        }
+      }
+      return false;
+    };
+  }
+}();
+
+Kibo.extractModifiers = function (keyCombination) {
+  var modifiers, i;
+  modifiers = [];
+  for (i = 0; i < Kibo.MODIFIERS.length; i++) {
+    if (Kibo.stringContains(keyCombination, Kibo.MODIFIERS[i])) {
+      modifiers.push(Kibo.MODIFIERS[i]);
+    }
+  }
+  return modifiers;
+};
+
+Kibo.extractKey = function (keyCombination) {
+  var keys, i;
+  keys = Kibo.neatString(keyCombination).split(' ');
+  for (i = 0; i < keys.length; i++) {
+    if (!Kibo.arrayIncludes(Kibo.MODIFIERS, keys[i])) {
+      return keys[i];
+    }
+  }
+};
+
+Kibo.modifiersAndKey = function (keyCombination) {
+  var result, key;
+
+  if (Kibo.stringContains(keyCombination, 'any')) {
+    return Kibo.neatString(keyCombination).split(' ').slice(0, 2).join(' ');
+  }
+
+  result = Kibo.extractModifiers(keyCombination);
+
+  key = Kibo.extractKey(keyCombination);
+  if (key && !Kibo.arrayIncludes(Kibo.MODIFIERS, key)) {
+    result.push(key);
+  }
+
+  return result.join(' ');
+};
+
+Kibo.keyName = function (keyCode) {
+  return Kibo.KEY_NAMES_BY_CODE[keyCode + ''];
+};
+
+Kibo.keyCode = function (keyName) {
+  return +Kibo.KEY_CODES_BY_NAME[keyName];
+};
+
+Kibo.prototype.initialize = function () {
+  var i,
+      that = this;
+
+  this.lastKeyCode = -1;
+  this.lastModifiers = {};
+  for (i = 0; i < Kibo.MODIFIERS.length; i++) {
+    this.lastModifiers[Kibo.MODIFIERS[i]] = false;
+  }
+
+  this.keysDown = { any: [] };
+  this.keysUp = { any: [] };
+  this.downHandler = this.handler('down');
+  this.upHandler = this.handler('up');
+
+  Kibo.registerEvent(this.element, 'keydown', this.downHandler);
+  Kibo.registerEvent(this.element, 'keyup', this.upHandler);
+  Kibo.registerEvent(window, 'unload', function unloader() {
+    Kibo.unregisterEvent(that.element, 'keydown', that.downHandler);
+    Kibo.unregisterEvent(that.element, 'keyup', that.upHandler);
+    Kibo.unregisterEvent(window, 'unload', unloader);
+  });
+};
+
+Kibo.prototype.handler = function (upOrDown) {
+  var that = this;
+  return function (e) {
+    var i, registeredKeys, lastModifiersAndKey;
+
+    e = e || window.event;
+
+    that.lastKeyCode = e.keyCode;
+    for (i = 0; i < Kibo.MODIFIERS.length; i++) {
+      that.lastModifiers[Kibo.MODIFIERS[i]] = e[Kibo.MODIFIERS[i] + 'Key'];
+    }
+    if (Kibo.arrayIncludes(Kibo.MODIFIERS, Kibo.keyName(that.lastKeyCode))) {
+      that.lastModifiers[Kibo.keyName(that.lastKeyCode)] = true;
+    }
+
+    registeredKeys = that['keys' + Kibo.capitalize(upOrDown)];
+
+    for (i = 0; i < registeredKeys.any.length; i++) {
+      if (registeredKeys.any[i](e) === false && e.preventDefault) {
+        e.preventDefault();
+      }
+    }
+
+    lastModifiersAndKey = that.lastModifiersAndKey();
+    if (registeredKeys[lastModifiersAndKey]) {
+      for (i = 0; i < registeredKeys[lastModifiersAndKey].length; i++) {
+        if (registeredKeys[lastModifiersAndKey][i](e) === false && e.preventDefault) {
+          e.preventDefault();
+        }
+      }
+    }
+  };
+};
+
+Kibo.prototype.registerKeys = function (upOrDown, newKeys, func) {
+  var i,
+      keys,
+      registeredKeys = this['keys' + Kibo.capitalize(upOrDown)];
+
+  if (Kibo.isString(newKeys)) {
+    newKeys = [newKeys];
+  }
+
+  for (i = 0; i < newKeys.length; i++) {
+    keys = newKeys[i];
+    keys = Kibo.modifiersAndKey(keys + '');
+
+    if (registeredKeys[keys]) {
+      registeredKeys[keys].push(func);
+    } else {
+      registeredKeys[keys] = [func];
+    }
+  }
+
+  return this;
+};
+
+// jshint maxdepth:5
+Kibo.prototype.unregisterKeys = function (upOrDown, newKeys, func) {
+  var i,
+      j,
+      keys,
+      registeredKeys = this['keys' + Kibo.capitalize(upOrDown)];
+
+  if (Kibo.isString(newKeys)) {
+    newKeys = [newKeys];
+  }
+
+  for (i = 0; i < newKeys.length; i++) {
+    keys = newKeys[i];
+    keys = Kibo.modifiersAndKey(keys + '');
+
+    if (func === null) {
+      delete registeredKeys[keys];
+    } else {
+      if (registeredKeys[keys]) {
+        for (j = 0; j < registeredKeys[keys].length; j++) {
+          if (String(registeredKeys[keys][j]) === String(func)) {
+            registeredKeys[keys].splice(j, 1);
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  return this;
+};
+
+Kibo.prototype.off = function (keys) {
+  return this.unregisterKeys('down', keys, null);
+};
+
+Kibo.prototype.delegate = function (upOrDown, keys, func) {
+  return func !== null || func !== undefined ? this.registerKeys(upOrDown, keys, func) : this.unregisterKeys(upOrDown, keys, func);
+};
+
+Kibo.prototype.down = function (keys, func) {
+  return this.delegate('down', keys, func);
+};
+
+Kibo.prototype.up = function (keys, func) {
+  return this.delegate('up', keys, func);
+};
+
+Kibo.prototype.lastKey = function (modifier) {
+  if (!modifier) {
+    return Kibo.keyName(this.lastKeyCode);
+  }
+
+  return this.lastModifiers[modifier];
+};
+
+Kibo.prototype.lastModifiersAndKey = function () {
+  var result, i;
+
+  result = [];
+  for (i = 0; i < Kibo.MODIFIERS.length; i++) {
+    if (this.lastKey(Kibo.MODIFIERS[i])) {
+      result.push(Kibo.MODIFIERS[i]);
+    }
+  }
+
+  if (!Kibo.arrayIncludes(result, this.lastKey())) {
+    result.push(this.lastKey());
+  }
+
+  return result.join(' ');
+};
+
+exports.default = Kibo;
+module.exports = exports['default'];
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(102), __esModule: true };
+
+/***/ }),
+/* 96 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(103), __esModule: true };
+
+/***/ }),
+/* 97 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(106), __esModule: true };
+
+/***/ }),
+/* 98 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(108), __esModule: true };
+
+/***/ }),
+/* 99 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(109), __esModule: true };
+
+/***/ }),
+/* 100 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(110), __esModule: true };
+
+/***/ }),
+/* 101 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _from = __webpack_require__(95);
+
+var _from2 = _interopRequireDefault(_from);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
+
+    return arr2;
+  } else {
+    return (0, _from2.default)(arr);
+  }
+};
+
+/***/ }),
+/* 102 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(71);
+__webpack_require__(134);
+module.exports = __webpack_require__(6).Array.from;
+
+/***/ }),
+/* 103 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var core  = __webpack_require__(6)
+  , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
+module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
+  return $JSON.stringify.apply($JSON, arguments);
+};
+
+/***/ }),
+/* 104 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(136);
+var $Object = __webpack_require__(6).Object;
+module.exports = function create(P, D){
+  return $Object.create(P, D);
+};
+
+/***/ }),
+/* 105 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(137);
+var $Object = __webpack_require__(6).Object;
+module.exports = function defineProperty(it, key, desc){
+  return $Object.defineProperty(it, key, desc);
+};
+
+/***/ }),
+/* 106 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(138);
+var $Object = __webpack_require__(6).Object;
+module.exports = function getOwnPropertyDescriptor(it, key){
+  return $Object.getOwnPropertyDescriptor(it, key);
+};
+
+/***/ }),
+/* 107 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(139);
+module.exports = __webpack_require__(6).Object.keys;
+
+/***/ }),
+/* 108 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(140);
+module.exports = __webpack_require__(6).Object.setPrototypeOf;
+
+/***/ }),
+/* 109 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(142);
+__webpack_require__(141);
+__webpack_require__(143);
+__webpack_require__(144);
+module.exports = __webpack_require__(6).Symbol;
+
+/***/ }),
+/* 110 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(71);
+__webpack_require__(145);
+module.exports = __webpack_require__(51).f('iterator');
+
+/***/ }),
+/* 111 */
+/***/ (function(module, exports) {
+
+module.exports = function(it){
+  if(typeof it != 'function')throw TypeError(it + ' is not a function!');
+  return it;
+};
+
+/***/ }),
+/* 112 */
+/***/ (function(module, exports) {
+
+module.exports = function(){ /* empty */ };
+
+/***/ }),
+/* 113 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// false -> Array#indexOf
+// true  -> Array#includes
+var toIObject = __webpack_require__(13)
+  , toLength  = __webpack_require__(70)
+  , toIndex   = __webpack_require__(132);
+module.exports = function(IS_INCLUDES){
+  return function($this, el, fromIndex){
+    var O      = toIObject($this)
+      , length = toLength(O.length)
+      , index  = toIndex(fromIndex, length)
+      , value;
+    // Array#includes uses SameValueZero equality algorithm
+    if(IS_INCLUDES && el != el)while(length > index){
+      value = O[index++];
+      if(value != value)return true;
+    // Array#toIndex ignores holes, Array#includes - not
+    } else for(;length > index; index++)if(IS_INCLUDES || index in O){
+      if(O[index] === el)return IS_INCLUDES || index || 0;
+    } return !IS_INCLUDES && -1;
+  };
+};
+
+/***/ }),
+/* 114 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// getting tag from 19.1.3.6 Object.prototype.toString()
+var cof = __webpack_require__(36)
+  , TAG = __webpack_require__(8)('toStringTag')
+  // ES3 wrong here
+  , ARG = cof(function(){ return arguments; }()) == 'Arguments';
+
+// fallback for IE11 Script Access Denied error
+var tryGet = function(it, key){
+  try {
+    return it[key];
+  } catch(e){ /* empty */ }
+};
+
+module.exports = function(it){
+  var O, T, B;
+  return it === undefined ? 'Undefined' : it === null ? 'Null'
+    // @@toStringTag case
+    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
+    // builtinTag case
+    : ARG ? cof(O)
+    // ES3 arguments fallback
+    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
+};
+
+/***/ }),
+/* 115 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $defineProperty = __webpack_require__(12)
+  , createDesc      = __webpack_require__(28);
+
+module.exports = function(object, index, value){
+  if(index in object)$defineProperty.f(object, index, createDesc(0, value));
+  else object[index] = value;
+};
+
+/***/ }),
+/* 116 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// all enumerable object keys, includes symbols
+var getKeys = __webpack_require__(27)
+  , gOPS    = __webpack_require__(66)
+  , pIE     = __webpack_require__(43);
+module.exports = function(it){
+  var result     = getKeys(it)
+    , getSymbols = gOPS.f;
+  if(getSymbols){
+    var symbols = getSymbols(it)
+      , isEnum  = pIE.f
+      , i       = 0
+      , key;
+    while(symbols.length > i)if(isEnum.call(it, key = symbols[i++]))result.push(key);
+  } return result;
+};
+
+/***/ }),
+/* 117 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(11).document && document.documentElement;
+
+/***/ }),
+/* 118 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// fallback for non-array-like ES3 and non-enumerable old V8 strings
+var cof = __webpack_require__(36);
+module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
+  return cof(it) == 'String' ? it.split('') : Object(it);
+};
+
+/***/ }),
+/* 119 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// check on default Array iterator
+var Iterators  = __webpack_require__(26)
+  , ITERATOR   = __webpack_require__(8)('iterator')
+  , ArrayProto = Array.prototype;
+
+module.exports = function(it){
+  return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
+};
+
+/***/ }),
+/* 120 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.2.2 IsArray(argument)
+var cof = __webpack_require__(36);
+module.exports = Array.isArray || function isArray(arg){
+  return cof(arg) == 'Array';
+};
+
+/***/ }),
+/* 121 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// call something on iterator step with safe closing on error
+var anObject = __webpack_require__(21);
+module.exports = function(iterator, fn, value, entries){
+  try {
+    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
+  // 7.4.6 IteratorClose(iterator, completion)
+  } catch(e){
+    var ret = iterator['return'];
+    if(ret !== undefined)anObject(ret.call(iterator));
+    throw e;
+  }
+};
+
+/***/ }),
+/* 122 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var create         = __webpack_require__(41)
+  , descriptor     = __webpack_require__(28)
+  , setToStringTag = __webpack_require__(44)
+  , IteratorPrototype = {};
+
+// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
+__webpack_require__(22)(IteratorPrototype, __webpack_require__(8)('iterator'), function(){ return this; });
+
+module.exports = function(Constructor, NAME, next){
+  Constructor.prototype = create(IteratorPrototype, {next: descriptor(1, next)});
+  setToStringTag(Constructor, NAME + ' Iterator');
+};
+
+/***/ }),
+/* 123 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var ITERATOR     = __webpack_require__(8)('iterator')
+  , SAFE_CLOSING = false;
+
+try {
+  var riter = [7][ITERATOR]();
+  riter['return'] = function(){ SAFE_CLOSING = true; };
+  Array.from(riter, function(){ throw 2; });
+} catch(e){ /* empty */ }
+
+module.exports = function(exec, skipClosing){
+  if(!skipClosing && !SAFE_CLOSING)return false;
+  var safe = false;
+  try {
+    var arr  = [7]
+      , iter = arr[ITERATOR]();
+    iter.next = function(){ return {done: safe = true}; };
+    arr[ITERATOR] = function(){ return iter; };
+    exec(arr);
+  } catch(e){ /* empty */ }
+  return safe;
+};
+
+/***/ }),
+/* 124 */
+/***/ (function(module, exports) {
+
+module.exports = function(done, value){
+  return {value: value, done: !!done};
+};
+
+/***/ }),
+/* 125 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var getKeys   = __webpack_require__(27)
+  , toIObject = __webpack_require__(13);
+module.exports = function(object, el){
+  var O      = toIObject(object)
+    , keys   = getKeys(O)
+    , length = keys.length
+    , index  = 0
+    , key;
+  while(length > index)if(O[key = keys[index++]] === el)return key;
+};
+
+/***/ }),
+/* 126 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var META     = __webpack_require__(31)('meta')
+  , isObject = __webpack_require__(25)
+  , has      = __webpack_require__(17)
+  , setDesc  = __webpack_require__(12).f
+  , id       = 0;
+var isExtensible = Object.isExtensible || function(){
+  return true;
+};
+var FREEZE = !__webpack_require__(24)(function(){
+  return isExtensible(Object.preventExtensions({}));
+});
+var setMeta = function(it){
+  setDesc(it, META, {value: {
+    i: 'O' + ++id, // object ID
+    w: {}          // weak collections IDs
+  }});
+};
+var fastKey = function(it, create){
+  // return primitive with prefix
+  if(!isObject(it))return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
+  if(!has(it, META)){
+    // can't set metadata to uncaught frozen object
+    if(!isExtensible(it))return 'F';
+    // not necessary to add metadata
+    if(!create)return 'E';
+    // add missing metadata
+    setMeta(it);
+  // return object ID
+  } return it[META].i;
+};
+var getWeak = function(it, create){
+  if(!has(it, META)){
+    // can't set metadata to uncaught frozen object
+    if(!isExtensible(it))return true;
+    // not necessary to add metadata
+    if(!create)return false;
+    // add missing metadata
+    setMeta(it);
+  // return hash weak collections IDs
+  } return it[META].w;
+};
+// add metadata on freeze-family methods calling
+var onFreeze = function(it){
+  if(FREEZE && meta.NEED && isExtensible(it) && !has(it, META))setMeta(it);
+  return it;
+};
+var meta = module.exports = {
+  KEY:      META,
+  NEED:     false,
+  fastKey:  fastKey,
+  getWeak:  getWeak,
+  onFreeze: onFreeze
+};
+
+/***/ }),
+/* 127 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var dP       = __webpack_require__(12)
+  , anObject = __webpack_require__(21)
+  , getKeys  = __webpack_require__(27);
+
+module.exports = __webpack_require__(15) ? Object.defineProperties : function defineProperties(O, Properties){
+  anObject(O);
+  var keys   = getKeys(Properties)
+    , length = keys.length
+    , i = 0
+    , P;
+  while(length > i)dP.f(O, P = keys[i++], Properties[P]);
+  return O;
+};
+
+/***/ }),
+/* 128 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
+var toIObject = __webpack_require__(13)
+  , gOPN      = __webpack_require__(65).f
+  , toString  = {}.toString;
+
+var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
+  ? Object.getOwnPropertyNames(window) : [];
+
+var getWindowNames = function(it){
+  try {
+    return gOPN(it);
+  } catch(e){
+    return windowNames.slice();
+  }
+};
+
+module.exports.f = function getOwnPropertyNames(it){
+  return windowNames && toString.call(it) == '[object Window]' ? getWindowNames(it) : gOPN(toIObject(it));
+};
+
+
+/***/ }),
+/* 129 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
+var has         = __webpack_require__(17)
+  , toObject    = __webpack_require__(48)
+  , IE_PROTO    = __webpack_require__(45)('IE_PROTO')
+  , ObjectProto = Object.prototype;
+
+module.exports = Object.getPrototypeOf || function(O){
+  O = toObject(O);
+  if(has(O, IE_PROTO))return O[IE_PROTO];
+  if(typeof O.constructor == 'function' && O instanceof O.constructor){
+    return O.constructor.prototype;
+  } return O instanceof Object ? ObjectProto : null;
+};
+
+/***/ }),
+/* 130 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Works with __proto__ only. Old v8 can't work with null proto objects.
+/* eslint-disable no-proto */
+var isObject = __webpack_require__(25)
+  , anObject = __webpack_require__(21);
+var check = function(O, proto){
+  anObject(O);
+  if(!isObject(proto) && proto !== null)throw TypeError(proto + ": can't set as prototype!");
+};
+module.exports = {
+  set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
+    function(test, buggy, set){
+      try {
+        set = __webpack_require__(37)(Function.call, __webpack_require__(42).f(Object.prototype, '__proto__').set, 2);
+        set(test, []);
+        buggy = !(test instanceof Array);
+      } catch(e){ buggy = true; }
+      return function setPrototypeOf(O, proto){
+        check(O, proto);
+        if(buggy)O.__proto__ = proto;
+        else set(O, proto);
+        return O;
+      };
+    }({}, false) : undefined),
+  check: check
+};
+
+/***/ }),
+/* 131 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var toInteger = __webpack_require__(47)
+  , defined   = __webpack_require__(38);
+// true  -> String#at
+// false -> String#codePointAt
+module.exports = function(TO_STRING){
+  return function(that, pos){
+    var s = String(defined(that))
+      , i = toInteger(pos)
+      , l = s.length
+      , a, b;
+    if(i < 0 || i >= l)return TO_STRING ? '' : undefined;
+    a = s.charCodeAt(i);
+    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
+      ? TO_STRING ? s.charAt(i) : a
+      : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
+  };
+};
+
+/***/ }),
+/* 132 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var toInteger = __webpack_require__(47)
+  , max       = Math.max
+  , min       = Math.min;
+module.exports = function(index, length){
+  index = toInteger(index);
+  return index < 0 ? max(index + length, 0) : min(index, length);
+};
+
+/***/ }),
+/* 133 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var classof   = __webpack_require__(114)
+  , ITERATOR  = __webpack_require__(8)('iterator')
+  , Iterators = __webpack_require__(26);
+module.exports = __webpack_require__(6).getIteratorMethod = function(it){
+  if(it != undefined)return it[ITERATOR]
+    || it['@@iterator']
+    || Iterators[classof(it)];
+};
+
+/***/ }),
+/* 134 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var ctx            = __webpack_require__(37)
+  , $export        = __webpack_require__(16)
+  , toObject       = __webpack_require__(48)
+  , call           = __webpack_require__(121)
+  , isArrayIter    = __webpack_require__(119)
+  , toLength       = __webpack_require__(70)
+  , createProperty = __webpack_require__(115)
+  , getIterFn      = __webpack_require__(133);
+
+$export($export.S + $export.F * !__webpack_require__(123)(function(iter){ Array.from(iter); }), 'Array', {
+  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
+  from: function from(arrayLike/*, mapfn = undefined, thisArg = undefined*/){
+    var O       = toObject(arrayLike)
+      , C       = typeof this == 'function' ? this : Array
+      , aLen    = arguments.length
+      , mapfn   = aLen > 1 ? arguments[1] : undefined
+      , mapping = mapfn !== undefined
+      , index   = 0
+      , iterFn  = getIterFn(O)
+      , length, result, step, iterator;
+    if(mapping)mapfn = ctx(mapfn, aLen > 2 ? arguments[2] : undefined, 2);
+    // if object isn't iterable or it's array with default iterator - use simple case
+    if(iterFn != undefined && !(C == Array && isArrayIter(iterFn))){
+      for(iterator = iterFn.call(O), result = new C; !(step = iterator.next()).done; index++){
+        createProperty(result, index, mapping ? call(iterator, mapfn, [step.value, index], true) : step.value);
+      }
+    } else {
+      length = toLength(O.length);
+      for(result = new C(length); length > index; index++){
+        createProperty(result, index, mapping ? mapfn(O[index], index) : O[index]);
+      }
+    }
+    result.length = index;
+    return result;
+  }
+});
+
+
+/***/ }),
+/* 135 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var addToUnscopables = __webpack_require__(112)
+  , step             = __webpack_require__(124)
+  , Iterators        = __webpack_require__(26)
+  , toIObject        = __webpack_require__(13);
+
+// 22.1.3.4 Array.prototype.entries()
+// 22.1.3.13 Array.prototype.keys()
+// 22.1.3.29 Array.prototype.values()
+// 22.1.3.30 Array.prototype[@@iterator]()
+module.exports = __webpack_require__(64)(Array, 'Array', function(iterated, kind){
+  this._t = toIObject(iterated); // target
+  this._i = 0;                   // next index
+  this._k = kind;                // kind
+// 22.1.5.2.1 %ArrayIteratorPrototype%.next()
+}, function(){
+  var O     = this._t
+    , kind  = this._k
+    , index = this._i++;
+  if(!O || index >= O.length){
+    this._t = undefined;
+    return step(1);
+  }
+  if(kind == 'keys'  )return step(0, index);
+  if(kind == 'values')return step(0, O[index]);
+  return step(0, [index, O[index]]);
+}, 'values');
+
+// argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7)
+Iterators.Arguments = Iterators.Array;
+
+addToUnscopables('keys');
+addToUnscopables('values');
+addToUnscopables('entries');
+
+/***/ }),
+/* 136 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $export = __webpack_require__(16)
+// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+$export($export.S, 'Object', {create: __webpack_require__(41)});
+
+/***/ }),
+/* 137 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $export = __webpack_require__(16);
+// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
+$export($export.S + $export.F * !__webpack_require__(15), 'Object', {defineProperty: __webpack_require__(12).f});
+
+/***/ }),
+/* 138 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
+var toIObject                 = __webpack_require__(13)
+  , $getOwnPropertyDescriptor = __webpack_require__(42).f;
+
+__webpack_require__(68)('getOwnPropertyDescriptor', function(){
+  return function getOwnPropertyDescriptor(it, key){
+    return $getOwnPropertyDescriptor(toIObject(it), key);
+  };
+});
+
+/***/ }),
+/* 139 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.14 Object.keys(O)
+var toObject = __webpack_require__(48)
+  , $keys    = __webpack_require__(27);
+
+__webpack_require__(68)('keys', function(){
+  return function keys(it){
+    return $keys(toObject(it));
+  };
+});
+
+/***/ }),
+/* 140 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.3.19 Object.setPrototypeOf(O, proto)
+var $export = __webpack_require__(16);
+$export($export.S, 'Object', {setPrototypeOf: __webpack_require__(130).set});
+
+/***/ }),
+/* 141 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 142 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// ECMAScript 6 symbols shim
+var global         = __webpack_require__(11)
+  , has            = __webpack_require__(17)
+  , DESCRIPTORS    = __webpack_require__(15)
+  , $export        = __webpack_require__(16)
+  , redefine       = __webpack_require__(69)
+  , META           = __webpack_require__(126).KEY
+  , $fails         = __webpack_require__(24)
+  , shared         = __webpack_require__(46)
+  , setToStringTag = __webpack_require__(44)
+  , uid            = __webpack_require__(31)
+  , wks            = __webpack_require__(8)
+  , wksExt         = __webpack_require__(51)
+  , wksDefine      = __webpack_require__(50)
+  , keyOf          = __webpack_require__(125)
+  , enumKeys       = __webpack_require__(116)
+  , isArray        = __webpack_require__(120)
+  , anObject       = __webpack_require__(21)
+  , toIObject      = __webpack_require__(13)
+  , toPrimitive    = __webpack_require__(49)
+  , createDesc     = __webpack_require__(28)
+  , _create        = __webpack_require__(41)
+  , gOPNExt        = __webpack_require__(128)
+  , $GOPD          = __webpack_require__(42)
+  , $DP            = __webpack_require__(12)
+  , $keys          = __webpack_require__(27)
+  , gOPD           = $GOPD.f
+  , dP             = $DP.f
+  , gOPN           = gOPNExt.f
+  , $Symbol        = global.Symbol
+  , $JSON          = global.JSON
+  , _stringify     = $JSON && $JSON.stringify
+  , PROTOTYPE      = 'prototype'
+  , HIDDEN         = wks('_hidden')
+  , TO_PRIMITIVE   = wks('toPrimitive')
+  , isEnum         = {}.propertyIsEnumerable
+  , SymbolRegistry = shared('symbol-registry')
+  , AllSymbols     = shared('symbols')
+  , OPSymbols      = shared('op-symbols')
+  , ObjectProto    = Object[PROTOTYPE]
+  , USE_NATIVE     = typeof $Symbol == 'function'
+  , QObject        = global.QObject;
+// Don't use setters in Qt Script, https://github.com/zloirock/core-js/issues/173
+var setter = !QObject || !QObject[PROTOTYPE] || !QObject[PROTOTYPE].findChild;
+
+// fallback for old Android, https://code.google.com/p/v8/issues/detail?id=687
+var setSymbolDesc = DESCRIPTORS && $fails(function(){
+  return _create(dP({}, 'a', {
+    get: function(){ return dP(this, 'a', {value: 7}).a; }
+  })).a != 7;
+}) ? function(it, key, D){
+  var protoDesc = gOPD(ObjectProto, key);
+  if(protoDesc)delete ObjectProto[key];
+  dP(it, key, D);
+  if(protoDesc && it !== ObjectProto)dP(ObjectProto, key, protoDesc);
+} : dP;
+
+var wrap = function(tag){
+  var sym = AllSymbols[tag] = _create($Symbol[PROTOTYPE]);
+  sym._k = tag;
+  return sym;
+};
+
+var isSymbol = USE_NATIVE && typeof $Symbol.iterator == 'symbol' ? function(it){
+  return typeof it == 'symbol';
+} : function(it){
+  return it instanceof $Symbol;
+};
+
+var $defineProperty = function defineProperty(it, key, D){
+  if(it === ObjectProto)$defineProperty(OPSymbols, key, D);
+  anObject(it);
+  key = toPrimitive(key, true);
+  anObject(D);
+  if(has(AllSymbols, key)){
+    if(!D.enumerable){
+      if(!has(it, HIDDEN))dP(it, HIDDEN, createDesc(1, {}));
+      it[HIDDEN][key] = true;
+    } else {
+      if(has(it, HIDDEN) && it[HIDDEN][key])it[HIDDEN][key] = false;
+      D = _create(D, {enumerable: createDesc(0, false)});
+    } return setSymbolDesc(it, key, D);
+  } return dP(it, key, D);
+};
+var $defineProperties = function defineProperties(it, P){
+  anObject(it);
+  var keys = enumKeys(P = toIObject(P))
+    , i    = 0
+    , l = keys.length
+    , key;
+  while(l > i)$defineProperty(it, key = keys[i++], P[key]);
+  return it;
+};
+var $create = function create(it, P){
+  return P === undefined ? _create(it) : $defineProperties(_create(it), P);
+};
+var $propertyIsEnumerable = function propertyIsEnumerable(key){
+  var E = isEnum.call(this, key = toPrimitive(key, true));
+  if(this === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key))return false;
+  return E || !has(this, key) || !has(AllSymbols, key) || has(this, HIDDEN) && this[HIDDEN][key] ? E : true;
+};
+var $getOwnPropertyDescriptor = function getOwnPropertyDescriptor(it, key){
+  it  = toIObject(it);
+  key = toPrimitive(key, true);
+  if(it === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key))return;
+  var D = gOPD(it, key);
+  if(D && has(AllSymbols, key) && !(has(it, HIDDEN) && it[HIDDEN][key]))D.enumerable = true;
+  return D;
+};
+var $getOwnPropertyNames = function getOwnPropertyNames(it){
+  var names  = gOPN(toIObject(it))
+    , result = []
+    , i      = 0
+    , key;
+  while(names.length > i){
+    if(!has(AllSymbols, key = names[i++]) && key != HIDDEN && key != META)result.push(key);
+  } return result;
+};
+var $getOwnPropertySymbols = function getOwnPropertySymbols(it){
+  var IS_OP  = it === ObjectProto
+    , names  = gOPN(IS_OP ? OPSymbols : toIObject(it))
+    , result = []
+    , i      = 0
+    , key;
+  while(names.length > i){
+    if(has(AllSymbols, key = names[i++]) && (IS_OP ? has(ObjectProto, key) : true))result.push(AllSymbols[key]);
+  } return result;
+};
+
+// 19.4.1.1 Symbol([description])
+if(!USE_NATIVE){
+  $Symbol = function Symbol(){
+    if(this instanceof $Symbol)throw TypeError('Symbol is not a constructor!');
+    var tag = uid(arguments.length > 0 ? arguments[0] : undefined);
+    var $set = function(value){
+      if(this === ObjectProto)$set.call(OPSymbols, value);
+      if(has(this, HIDDEN) && has(this[HIDDEN], tag))this[HIDDEN][tag] = false;
+      setSymbolDesc(this, tag, createDesc(1, value));
+    };
+    if(DESCRIPTORS && setter)setSymbolDesc(ObjectProto, tag, {configurable: true, set: $set});
+    return wrap(tag);
+  };
+  redefine($Symbol[PROTOTYPE], 'toString', function toString(){
+    return this._k;
+  });
+
+  $GOPD.f = $getOwnPropertyDescriptor;
+  $DP.f   = $defineProperty;
+  __webpack_require__(65).f = gOPNExt.f = $getOwnPropertyNames;
+  __webpack_require__(43).f  = $propertyIsEnumerable;
+  __webpack_require__(66).f = $getOwnPropertySymbols;
+
+  if(DESCRIPTORS && !__webpack_require__(40)){
+    redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
+  }
+
+  wksExt.f = function(name){
+    return wrap(wks(name));
+  }
+}
+
+$export($export.G + $export.W + $export.F * !USE_NATIVE, {Symbol: $Symbol});
+
+for(var symbols = (
+  // 19.4.2.2, 19.4.2.3, 19.4.2.4, 19.4.2.6, 19.4.2.8, 19.4.2.9, 19.4.2.10, 19.4.2.11, 19.4.2.12, 19.4.2.13, 19.4.2.14
+  'hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables'
+).split(','), i = 0; symbols.length > i; )wks(symbols[i++]);
+
+for(var symbols = $keys(wks.store), i = 0; symbols.length > i; )wksDefine(symbols[i++]);
+
+$export($export.S + $export.F * !USE_NATIVE, 'Symbol', {
+  // 19.4.2.1 Symbol.for(key)
+  'for': function(key){
+    return has(SymbolRegistry, key += '')
+      ? SymbolRegistry[key]
+      : SymbolRegistry[key] = $Symbol(key);
+  },
+  // 19.4.2.5 Symbol.keyFor(sym)
+  keyFor: function keyFor(key){
+    if(isSymbol(key))return keyOf(SymbolRegistry, key);
+    throw TypeError(key + ' is not a symbol!');
+  },
+  useSetter: function(){ setter = true; },
+  useSimple: function(){ setter = false; }
+});
+
+$export($export.S + $export.F * !USE_NATIVE, 'Object', {
+  // 19.1.2.2 Object.create(O [, Properties])
+  create: $create,
+  // 19.1.2.4 Object.defineProperty(O, P, Attributes)
+  defineProperty: $defineProperty,
+  // 19.1.2.3 Object.defineProperties(O, Properties)
+  defineProperties: $defineProperties,
+  // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
+  getOwnPropertyDescriptor: $getOwnPropertyDescriptor,
+  // 19.1.2.7 Object.getOwnPropertyNames(O)
+  getOwnPropertyNames: $getOwnPropertyNames,
+  // 19.1.2.8 Object.getOwnPropertySymbols(O)
+  getOwnPropertySymbols: $getOwnPropertySymbols
+});
+
+// 24.3.2 JSON.stringify(value [, replacer [, space]])
+$JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function(){
+  var S = $Symbol();
+  // MS Edge converts symbol values to JSON as {}
+  // WebKit converts symbol values to JSON as null
+  // V8 throws on boxed symbols
+  return _stringify([S]) != '[null]' || _stringify({a: S}) != '{}' || _stringify(Object(S)) != '{}';
+})), 'JSON', {
+  stringify: function stringify(it){
+    if(it === undefined || isSymbol(it))return; // IE8 returns string on undefined
+    var args = [it]
+      , i    = 1
+      , replacer, $replacer;
+    while(arguments.length > i)args.push(arguments[i++]);
+    replacer = args[1];
+    if(typeof replacer == 'function')$replacer = replacer;
+    if($replacer || !isArray(replacer))replacer = function(key, value){
+      if($replacer)value = $replacer.call(this, key, value);
+      if(!isSymbol(value))return value;
+    };
+    args[1] = replacer;
+    return _stringify.apply($JSON, args);
+  }
+});
+
+// 19.4.3.4 Symbol.prototype[@@toPrimitive](hint)
+$Symbol[PROTOTYPE][TO_PRIMITIVE] || __webpack_require__(22)($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
+// 19.4.3.5 Symbol.prototype[@@toStringTag]
+setToStringTag($Symbol, 'Symbol');
+// 20.2.1.9 Math[@@toStringTag]
+setToStringTag(Math, 'Math', true);
+// 24.3.3 JSON[@@toStringTag]
+setToStringTag(global.JSON, 'JSON', true);
+
+/***/ }),
+/* 143 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(50)('asyncIterator');
+
+/***/ }),
+/* 144 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(50)('observable');
+
+/***/ }),
+/* 145 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(135);
+var global        = __webpack_require__(11)
+  , hide          = __webpack_require__(22)
+  , Iterators     = __webpack_require__(26)
+  , TO_STRING_TAG = __webpack_require__(8)('toStringTag');
+
+for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList', 'CSSRuleList'], i = 0; i < 5; i++){
+  var NAME       = collections[i]
+    , Collection = global[NAME]
+    , proto      = Collection && Collection.prototype;
+  if(proto && !proto[TO_STRING_TAG])hide(proto, TO_STRING_TAG, NAME);
+  Iterators[NAME] = Iterators.Array;
+}
+
+/***/ }),
+/* 146 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(18)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".container[data-container] {\n  position: absolute;\n  background-color: black;\n  height: 100%;\n  width: 100%; }\n  .container[data-container] .chromeless {\n    cursor: default; }\n\n[data-player]:not(.nocursor) .container[data-container]:not(.chromeless).pointer-enabled {\n  cursor: pointer; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 147 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(18)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "@font-face {\n  font-family: \"Roboto\";\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Roboto\"), local(\"Roboto-Regular\"), url(" + __webpack_require__(165) + ") format(\"truetype\"); }\n\n[data-player] {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  -o-user-select: none;\n  user-select: none;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  -webkit-transform: translate3d(0, 0, 0);\n  -moz-transform: translate3d(0, 0, 0);\n  -ms-transform: translate3d(0, 0, 0);\n  -o-transform: translate3d(0, 0, 0);\n  transform: translate3d(0, 0, 0);\n  position: relative;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-style: normal;\n  font-weight: normal;\n  text-align: center;\n  overflow: hidden;\n  font-size: 100%;\n  font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n  text-shadow: 0 0 0;\n  box-sizing: border-box; }\n  [data-player] div, [data-player] span, [data-player] applet, [data-player] object, [data-player] iframe,\n  [data-player] h1, [data-player] h2, [data-player] h3, [data-player] h4, [data-player] h5, [data-player] h6, [data-player] p, [data-player] blockquote, [data-player] pre,\n  [data-player] a, [data-player] abbr, [data-player] acronym, [data-player] address, [data-player] big, [data-player] cite, [data-player] code,\n  [data-player] del, [data-player] dfn, [data-player] em, [data-player] img, [data-player] ins, [data-player] kbd, [data-player] q, [data-player] s, [data-player] samp,\n  [data-player] small, [data-player] strike, [data-player] strong, [data-player] sub, [data-player] sup, [data-player] tt, [data-player] var,\n  [data-player] b, [data-player] u, [data-player] i, [data-player] center,\n  [data-player] dl, [data-player] dt, [data-player] dd, [data-player] ol, [data-player] ul, [data-player] li,\n  [data-player] fieldset, [data-player] form, [data-player] label, [data-player] legend,\n  [data-player] table, [data-player] caption, [data-player] tbody, [data-player] tfoot, [data-player] thead, [data-player] tr, [data-player] th, [data-player] td,\n  [data-player] article, [data-player] aside, [data-player] canvas, [data-player] details, [data-player] embed,\n  [data-player] figure, [data-player] figcaption, [data-player] footer, [data-player] header, [data-player] hgroup,\n  [data-player] menu, [data-player] nav, [data-player] output, [data-player] ruby, [data-player] section, [data-player] summary,\n  [data-player] time, [data-player] mark, [data-player] audio, [data-player] video {\n    margin: 0;\n    padding: 0;\n    border: 0;\n    font: inherit;\n    font-size: 100%;\n    vertical-align: baseline; }\n  [data-player] table {\n    border-collapse: collapse;\n    border-spacing: 0; }\n  [data-player] caption, [data-player] th, [data-player] td {\n    text-align: left;\n    font-weight: normal;\n    vertical-align: middle; }\n  [data-player] q, [data-player] blockquote {\n    quotes: none; }\n    [data-player] q:before, [data-player] q:after, [data-player] blockquote:before, [data-player] blockquote:after {\n      content: \"\";\n      content: none; }\n  [data-player] a img {\n    border: none; }\n  [data-player]:focus {\n    outline: 0; }\n  [data-player] * {\n    max-width: none;\n    box-sizing: inherit;\n    float: none; }\n  [data-player] div {\n    display: block; }\n  [data-player].fullscreen {\n    width: 100% !important;\n    height: 100% !important;\n    top: 0;\n    left: 0; }\n  [data-player].nocursor {\n    cursor: none; }\n\n.clappr-style {\n  display: none !important; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 148 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(18)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".media-control-notransition {\n  -webkit-transition: none !important;\n  -moz-transition: none !important;\n  transition: none !important; }\n\n.media-control[data-media-control] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 9999;\n  pointer-events: none; }\n  .media-control[data-media-control].dragging {\n    pointer-events: auto;\n    cursor: -webkit-grabbing !important;\n    cursor: grabbing !important;\n    cursor: url(" + __webpack_require__(73) + "), move; }\n    .media-control[data-media-control].dragging * {\n      cursor: -webkit-grabbing !important;\n      cursor: grabbing !important;\n      cursor: url(" + __webpack_require__(73) + "), move; }\n  .media-control[data-media-control] .media-control-background[data-background] {\n    position: absolute;\n    height: 40%;\n    width: 100%;\n    bottom: 0;\n    background: -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    -webkit-transition: opacity 0.6s ease-out;\n    -moz-transition: opacity 0.6s ease-out;\n    transition: opacity 0.6s ease-out; }\n  .media-control[data-media-control] .media-control-icon {\n    line-height: 0;\n    letter-spacing: 0;\n    speak: none;\n    color: #fff;\n    opacity: 0.5;\n    vertical-align: middle;\n    text-align: left;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease;\n    transition: all 0.1s ease; }\n  .media-control[data-media-control] .media-control-icon:hover {\n    color: white;\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .media-control[data-media-control].media-control-hide .media-control-background[data-background] {\n    opacity: 0; }\n  .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {\n    bottom: -50px; }\n    .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n      opacity: 0; }\n  .media-control[data-media-control] .media-control-layer[data-controls] {\n    position: absolute;\n    bottom: 7px;\n    width: 100%;\n    height: 32px;\n    font-size: 0;\n    vertical-align: middle;\n    pointer-events: auto;\n    -webkit-transition: bottom 0.4s ease-out;\n    -moz-transition: bottom 0.4s ease-out;\n    transition: bottom 0.4s ease-out; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      left: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {\n      height: 100%;\n      text-align: center;\n      line-height: 32px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {\n      background-color: transparent;\n      border: 0;\n      margin: 0 6px;\n      padding: 0;\n      cursor: pointer;\n      display: inline-block;\n      width: 32px;\n      height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg {\n        width: 100%;\n        height: 22px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg path {\n          fill: white; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {\n        outline: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {\n        background-color: transparent;\n        border: 0;\n        cursor: default;\n        display: none;\n        float: right;\n        height: 100%; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {\n          display: block;\n          opacity: 1.0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {\n            opacity: 1.0;\n            text-shadow: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-cc-button] {\n        background-color: transparent;\n        border: 0;\n        cursor: pointer;\n        display: none;\n        float: right;\n        height: 100%;\n        padding: 6px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-cc-button].available, .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-cc-button].enabled {\n          display: block; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-cc-button].available {\n          opacity: .5; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-cc-button]:hover {\n          opacity: .7;\n          text-shadow: none; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-cc-button].enabled {\n          opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause] {\n        float: left; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {\n        float: left; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position], .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      display: inline-block;\n      font-size: 10px;\n      color: white;\n      cursor: default;\n      line-height: 32px;\n      position: relative; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {\n      margin: 0 6px 0 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      color: rgba(255, 255, 255, 0.5);\n      margin-right: 6px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {\n        content: \"|\";\n        margin-right: 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {\n      position: absolute;\n      top: -20px;\n      left: 0;\n      display: inline-block;\n      vertical-align: middle;\n      width: 100%;\n      height: 25px;\n      cursor: pointer; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {\n        width: 100%;\n        height: 1px;\n        position: relative;\n        top: 12px;\n        background-color: #666666; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #c2c2c2;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #005aff;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0;\n          position: absolute;\n          top: -3px;\n          width: 5px;\n          height: 7px;\n          background-color: rgba(255, 255, 255, 0.5);\n          -webkit-transition: opacity 0.1s ease;\n          -moz-transition: opacity 0.1s ease;\n          transition: opacity 0.1s ease; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n        opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {\n        cursor: default; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n        position: absolute;\n        -webkit-transform: translateX(-50%);\n        -moz-transform: translateX(-50%);\n        -ms-transform: translateX(-50%);\n        -o-transform: translateX(-50%);\n        transform: translateX(-50%);\n        top: 2px;\n        left: 0;\n        width: 20px;\n        height: 20px;\n        opacity: 1;\n        -webkit-transition: all 0.1s ease-out;\n        -moz-transition: all 0.1s ease-out;\n        transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {\n          position: absolute;\n          left: 6px;\n          top: 6px;\n          width: 8px;\n          height: 8px;\n          border-radius: 10px;\n          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n          background-color: white; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {\n      float: right;\n      display: inline-block;\n      height: 32px;\n      cursor: pointer;\n      margin: 0 6px;\n      box-sizing: border-box; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {\n        float: left;\n        bottom: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {\n          background-color: transparent;\n          border: 0;\n          box-sizing: content-box;\n          width: 32px;\n          height: 32px;\n          opacity: 0.5; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {\n            opacity: 0.75; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg {\n            height: 24px;\n            position: relative;\n            top: 3px; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg path {\n              fill: white; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted svg {\n            margin-left: 2px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {\n        float: left;\n        position: relative;\n        overflow: hidden;\n        top: 6px;\n        width: 42px;\n        height: 18px;\n        padding: 3px 0;\n        -webkit-transition: width 0.2s ease-out;\n        -moz-transition: width 0.2s ease-out;\n        transition: width 0.2s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] {\n          height: 1px;\n          position: relative;\n          top: 7px;\n          margin: 0 3px;\n          background-color: #666666; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #c2c2c2;\n            -webkit-transition: all 0.1s ease-out;\n            -moz-transition: all 0.1s ease-out;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-2[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #005aff;\n            -webkit-transition: all 0.1s ease-out;\n            -moz-transition: all 0.1s ease-out;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-hover[data-volume] {\n            opacity: 0;\n            position: absolute;\n            top: -3px;\n            width: 5px;\n            height: 7px;\n            background-color: rgba(255, 255, 255, 0.5);\n            -webkit-transition: opacity 0.1s ease;\n            -moz-transition: opacity 0.1s ease;\n            transition: opacity 0.1s ease; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] {\n          position: absolute;\n          -webkit-transform: translateX(-50%);\n          -moz-transform: translateX(-50%);\n          -ms-transform: translateX(-50%);\n          -o-transform: translateX(-50%);\n          transform: translateX(-50%);\n          top: 0px;\n          left: 0;\n          width: 20px;\n          height: 20px;\n          opacity: 1;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out;\n          transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume] {\n            position: absolute;\n            left: 6px;\n            top: 6px;\n            width: 8px;\n            height: 8px;\n            border-radius: 10px;\n            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n            background-color: white; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {\n          float: left;\n          width: 4px;\n          padding-left: 2px;\n          height: 12px;\n          opacity: 0.5;\n          box-shadow: inset 2px 0 0 white;\n          -webkit-transition: -webkit-transform 0.2s ease-out;\n          -moz-transition: -moz-transform 0.2s ease-out;\n          transition: transform 0.2s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {\n            box-shadow: inset 2px 0 0 #fff;\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:nth-of-type(1) {\n            padding-left: 0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {\n            -webkit-transform: scaleY(1.5);\n            -moz-transform: scaleY(1.5);\n            -ms-transform: scaleY(1.5);\n            -o-transform: scaleY(1.5);\n            transform: scaleY(1.5); }\n  .media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {\n    width: 0;\n    height: 12px;\n    top: 9px;\n    padding: 0; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 149 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(18)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "[data-html5-video] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  display: block; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 150 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(18)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "[data-no-op] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  text-align: center; }\n\n[data-no-op] p[data-no-op-msg] {\n  position: absolute;\n  text-align: center;\n  font-size: 25px;\n  left: 0;\n  right: 0;\n  color: white;\n  padding: 10px;\n  /* center vertically */\n  top: 50%;\n  -webkit-transform: translateY(-50%);\n  -moz-transform: translateY(-50%);\n  -ms-transform: translateY(-50%);\n  -o-transform: translateY(-50%);\n  transform: translateY(-50%);\n  max-height: 100%;\n  overflow: auto; }\n\n[data-no-op] canvas[data-no-op-canvas] {\n  background-color: #777;\n  height: 100%;\n  width: 100%; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 151 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(18)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".player-poster[data-poster] {\n  display: -webkit-box;\n  display: -moz-box;\n  display: box;\n  display: -webkit-flex;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: center;\n  -moz-box-pack: center;\n  box-pack: center;\n  -webkit-justify-content: center;\n  -moz-justify-content: center;\n  -ms-justify-content: center;\n  -o-justify-content: center;\n  justify-content: center;\n  -ms-flex-pack: center;\n  -webkit-box-align: center;\n  -moz-box-align: center;\n  box-align: center;\n  -webkit-align-items: center;\n  -moz-align-items: center;\n  -ms-align-items: center;\n  -o-align-items: center;\n  align-items: center;\n  -ms-flex-align: center;\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  z-index: 998;\n  top: 0;\n  left: 0;\n  background-color: #000;\n  background-size: cover;\n  background-repeat: no-repeat;\n  background-position: 50% 50%; }\n  .player-poster[data-poster].clickable {\n    cursor: pointer; }\n  .player-poster[data-poster]:hover .play-wrapper[data-poster] {\n    opacity: 1; }\n  .player-poster[data-poster] .play-wrapper[data-poster] {\n    width: 100%;\n    height: 25%;\n    margin: 0 auto;\n    opacity: 0.75;\n    -webkit-transition: opacity 0.1s ease;\n    -moz-transition: opacity 0.1s ease;\n    transition: opacity 0.1s ease; }\n    .player-poster[data-poster] .play-wrapper[data-poster] svg {\n      height: 100%; }\n      .player-poster[data-poster] .play-wrapper[data-poster] svg path {\n        fill: #fff; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 152 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(18)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".spinner-three-bounce[data-spinner] {\n  position: absolute;\n  margin: 0 auto;\n  width: 70px;\n  text-align: center;\n  z-index: 999;\n  left: 0;\n  right: 0;\n  margin-left: auto;\n  margin-right: auto;\n  /* center vertically */\n  top: 50%;\n  -webkit-transform: translateY(-50%);\n  -moz-transform: translateY(-50%);\n  -ms-transform: translateY(-50%);\n  -o-transform: translateY(-50%);\n  transform: translateY(-50%); }\n  .spinner-three-bounce[data-spinner] > div {\n    width: 18px;\n    height: 18px;\n    background-color: #FFFFFF;\n    border-radius: 100%;\n    display: inline-block;\n    -webkit-animation: bouncedelay 1.4s infinite ease-in-out;\n    -moz-animation: bouncedelay 1.4s infinite ease-in-out;\n    animation: bouncedelay 1.4s infinite ease-in-out;\n    /* Prevent first frame from flickering when animation starts */\n    -webkit-animation-fill-mode: both;\n    -moz-animation-fill-mode: both;\n    animation-fill-mode: both; }\n  .spinner-three-bounce[data-spinner] [data-bounce1] {\n    -webkit-animation-delay: -0.32s;\n    -moz-animation-delay: -0.32s;\n    animation-delay: -0.32s; }\n  .spinner-three-bounce[data-spinner] [data-bounce2] {\n    -webkit-animation-delay: -0.16s;\n    -moz-animation-delay: -0.16s;\n    animation-delay: -0.16s; }\n\n@-webkit-keyframes bouncedelay {\n  0%, 80%, 100% {\n    -webkit-transform: scale(0); }\n  40% {\n    -webkit-transform: scale(1); } }\n\n@-moz-keyframes bouncedelay {\n  0%, 80%, 100% {\n    -moz-transform: scale(0); }\n  40% {\n    -moz-transform: scale(1); } }\n\n@keyframes bouncedelay {\n  0%, 80%, 100% {\n    -webkit-transform: scale(0);\n    -moz-transform: scale(0);\n    -ms-transform: scale(0);\n    -o-transform: scale(0);\n    transform: scale(0); }\n  40% {\n    -webkit-transform: scale(1);\n    -moz-transform: scale(1);\n    -ms-transform: scale(1);\n    -o-transform: scale(1);\n    transform: scale(1); } }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 153 */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"media-control-background\" data-background></div>\n<div class=\"media-control-layer\" data-controls>\n  <%  var renderBar = function(name) { %>\n      <div class=\"bar-container\" data-<%= name %>>\n        <div class=\"bar-background\" data-<%= name %>>\n          <div class=\"bar-fill-1\" data-<%= name %>></div>\n          <div class=\"bar-fill-2\" data-<%= name %>></div>\n          <div class=\"bar-hover\" data-<%= name %>></div>\n        </div>\n        <div class=\"bar-scrubber\" data-<%= name %>>\n          <div class=\"bar-scrubber-icon\" data-<%= name %>></div>\n        </div>\n      </div>\n  <%  }; %>\n  <%  var renderSegmentedBar = function(name, segments) {\n      segments = segments || 10; %>\n    <div class=\"bar-container\" data-<%= name %>>\n    <% for (var i = 0; i < segments; i++) { %>\n      <div class=\"segmented-bar-element\" data-<%= name %>></div>\n    <% } %>\n    </div>\n  <% }; %>\n  <% var renderDrawer = function(name, renderContent) { %>\n      <div class=\"drawer-container\" data-<%= name %>>\n        <div class=\"drawer-icon-container\" data-<%= name %>>\n          <div class=\"drawer-icon media-control-icon\" data-<%= name %>></div>\n          <span class=\"drawer-text\" data-<%= name %>></span>\n        </div>\n        <% renderContent(name); %>\n      </div>\n  <% }; %>\n  <% var renderIndicator = function(name) { %>\n      <div class=\"media-control-indicator\" data-<%= name %>></div>\n  <% }; %>\n  <% var renderButton = function(name) { %>\n    <button type=\"button\" class=\"media-control-button media-control-icon\" data-<%= name %> aria-label=\"<%= name %>\"></button>\n  <% }; %>\n  <%  var templates = {\n        bar: renderBar,\n        segmentedBar: renderSegmentedBar,\n      };\n      var render = function(settingsList) {\n        settingsList.forEach(function(setting) {\n          if(setting === \"seekbar\") {\n            renderBar(setting);\n          } else if (setting === \"volume\") {\n            renderDrawer(setting, settings.volumeBarTemplate ? templates[settings.volumeBarTemplate] : function(name) { return renderSegmentedBar(name); });\n          } else if (setting === \"duration\" || setting === \"position\") {\n            renderIndicator(setting);\n          } else {\n            renderButton(setting);\n          }\n        });\n      }; %>\n  <% if (settings.default && settings.default.length) { %>\n  <div class=\"media-control-center-panel\" data-media-control>\n    <% render(settings.default); %>\n  </div>\n  <% } %>\n  <% if (settings.left && settings.left.length) { %>\n  <div class=\"media-control-left-panel\" data-media-control>\n    <% render(settings.left); %>\n  </div>\n  <% } %>\n  <% if (settings.right && settings.right.length) { %>\n  <div class=\"media-control-right-panel\" data-media-control>\n    <% render(settings.right); %>\n  </div>\n  <% } %>\n</div>\n";
+
+/***/ }),
+/* 154 */
+/***/ (function(module, exports) {
+
+module.exports = "<canvas data-no-op-canvas></canvas>\n<p data-no-op-msg><%=message%><p>\n";
+
+/***/ }),
+/* 155 */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"play-wrapper\" data-poster></div>\n";
+
+/***/ }),
+/* 156 */
+/***/ (function(module, exports) {
+
+module.exports = "<div data-bounce1></div><div data-bounce2></div><div data-bounce3></div>\n";
+
+/***/ }),
+/* 157 */
+/***/ (function(module, exports) {
+
+module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M1.712 14.76H6.43V1.24H1.71v13.52zm7.86-13.52v13.52h4.716V1.24H9.573z\"></path></svg>"
+
+/***/ }),
+/* 158 */
+/***/ (function(module, exports) {
+>>>>>>> draft skinnier version
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+<<<<<<< HEAD
+var _utils = __webpack_require__(5);
+=======
+/***/ }),
+/* 159 */
+/***/ (function(module, exports) {
+>>>>>>> draft skinnier version
+
+var _clapprZepto = __webpack_require__(6);
+
+<<<<<<< HEAD
+var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
+=======
+/***/ }),
+/* 160 */
+/***/ (function(module, exports) {
+>>>>>>> draft skinnier version
+
+var _core_plugin = __webpack_require__(30);
+
+<<<<<<< HEAD
+var _core_plugin2 = _interopRequireDefault(_core_plugin);
+=======
+/***/ }),
+/* 161 */
+/***/ (function(module, exports) {
+>>>>>>> draft skinnier version
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+<<<<<<< HEAD
 /**
  * The internationalization (i18n) plugin
  * @class Strings
@@ -32380,11 +40729,22 @@ var Strings = function (_CorePlugin) {
       return 'strings';
     }
   }]);
+=======
+/***/ }),
+/* 162 */
+/***/ (function(module, exports) {
+>>>>>>> draft skinnier version
 
   function Strings(core) {
     (0, _classCallCheck3.default)(this, Strings);
 
+<<<<<<< HEAD
     var _this = (0, _possibleConstructorReturn3.default)(this, _CorePlugin.call(this, core));
+=======
+/***/ }),
+/* 163 */
+/***/ (function(module, exports) {
+>>>>>>> draft skinnier version
 
     _this._initializeMessages();
     return _this;
@@ -32396,6 +40756,7 @@ var Strings = function (_CorePlugin) {
    * @return {String} translated label
    */
 
+<<<<<<< HEAD
 
   Strings.prototype.t = function t(key) {
     var lang = this._language();
@@ -32464,6 +40825,19 @@ var Strings = function (_CorePlugin) {
 
 exports.default = Strings;
 module.exports = exports['default'];
+=======
+/***/ }),
+/* 164 */
+/***/ (function(module, exports) {
+
+module.exports = "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" viewBox=\"0 0 49 41.8\" style=\"enable-background:new 0 0 49 41.8;\" xml:space=\"preserve\"><path d=\"M47.1,0H3.2C1.6,0,0,1.2,0,2.8v31.5C0,35.9,1.6,37,3.2,37h11.9l3.2,1.9l4.7,2.7c0.9,0.5,2-0.1,2-1.1V37h22.1 c1.6,0,1.9-1.1,1.9-2.7V2.8C49,1.2,48.7,0,47.1,0z M7.2,18.6c0-4.8,3.5-9.3,9.9-9.3c4.8,0,7.1,2.7,7.1,2.7l-2.5,4 c0,0-1.7-1.7-4.2-1.7c-2.8,0-4.3,2.1-4.3,4.3c0,2.1,1.5,4.4,4.5,4.4c2.5,0,4.9-2.1,4.9-2.1l2.2,4.2c0,0-2.7,2.9-7.6,2.9 C10.8,27.9,7.2,23.5,7.2,18.6z M36.9,27.9c-6.4,0-9.9-4.4-9.9-9.3c0-4.8,3.5-9.3,9.9-9.3C41.7,9.3,44,12,44,12l-2.5,4 c0,0-1.7-1.7-4.2-1.7c-2.8,0-4.3,2.1-4.3,4.3c0,2.1,1.5,4.4,4.5,4.4c2.5,0,4.9-2.1,4.9-2.1l2.2,4.2C44.5,25,41.9,27.9,36.9,27.9z\"></path></svg>"
+
+/***/ }),
+/* 165 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "38861cba61c66739c1452c3a71e39852.ttf";
+>>>>>>> draft skinnier version
 
 /***/ })
 /******/ ]);

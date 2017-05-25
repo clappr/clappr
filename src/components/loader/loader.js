@@ -5,31 +5,11 @@
 import BaseObject from '../../base/base_object'
 import PlayerInfo from '../player_info'
 
-/* Playback Plugins */
 import HTML5VideoPlayback from '../../playbacks/html5_video'
-import FlashVideoPlayback from '../../playbacks/flash'
-import HTML5AudioPlayback from '../../playbacks/html5_audio'
-import FlasHLSVideoPlayback from '../../playbacks/flashls'
-import HLSVideoPlayback from '../../playbacks/hls'
-import HTMLImgPlayback from '../../playbacks/html_img'
 import NoOp from '../../playbacks/no_op'
 
-/* Container Plugins */
 import SpinnerThreeBouncePlugin from '../../plugins/spinner_three_bounce'
-import StatsPlugin from '../../plugins/stats'
-import WaterMarkPlugin from '../../plugins/watermark'
 import PosterPlugin from '../../plugins/poster'
-import GoogleAnalyticsPlugin from '../../plugins/google_analytics'
-import ClickToPausePlugin from '../../plugins/click_to_pause'
-
-/* Core Plugins */
-import DVRControls from '../../plugins/dvr_controls'
-import ClosedCaptions from '../../plugins/closed_captions'
-import Favicon from '../../plugins/favicon'
-import SeekTime from '../../plugins/seek_time'
-import SourcesPlugin from '../../plugins/sources'
-import EndVideo from '../../plugins/end_video'
-import Strings from '../../plugins/strings'
 
 /**
  * It keeps a list of the default plugins (playback, container, core) and it merges external plugins with its internals.
@@ -48,9 +28,9 @@ export default class Loader extends BaseObject {
   constructor(externalPlugins, playerId) {
     super()
     this.playerId = playerId
-    this.playbackPlugins = [HLSVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, FlashVideoPlayback, FlasHLSVideoPlayback, HTMLImgPlayback, NoOp]
-    this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
-    this.corePlugins = [DVRControls, ClosedCaptions, Favicon, SeekTime, SourcesPlugin, EndVideo, Strings]
+    this.playbackPlugins = [HTML5VideoPlayback, NoOp]
+    this.containerPlugins = [SpinnerThreeBouncePlugin, PosterPlugin]
+    this.corePlugins = []
     if (externalPlugins) {
       if (!Array.isArray(externalPlugins)) {
         this.validateExternalPluginsType(externalPlugins)
