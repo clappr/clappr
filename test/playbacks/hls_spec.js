@@ -69,6 +69,7 @@ describe('HLS playback', () => {
   })
 
   it('should trigger a playback error if source load failed', function(done) {
+    this.timeout(5000)
     let options = {src: 'http://dns.will.fail/notfound.m3u8'}
     const playback = new HLS(options)
     playback.on(Events.PLAYBACK_ERROR, (e) => {
