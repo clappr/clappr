@@ -80,6 +80,16 @@ describe('HTML5Video playback', function() {
     expect(playback.el.controls).to.be.true
   })
 
+  it('adds or remove muted attribute when volume is changed', function() {
+    const playback = new HTML5Video(this.options)
+
+    expect(playback.el.getAttribute('muted')).to.be.null
+    playback.volume(0)
+    expect(playback.el.getAttribute('muted')).equal('true')
+    playback.volume(0.5)
+    expect(playback.el.getAttribute('muted')).to.be.null
+  })
+
   describe('progress', function() {
     let start, end, currentTime
     const duration = 300
