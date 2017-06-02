@@ -132,11 +132,8 @@ export default class HTML5Video extends Playback {
 
     if(Browser.isMobile) {
       if(this.options.autoPlay) {
-        this.el.setAttribute('muted', 'true')
-        this.el.setAttribute('autoplay', 'true')
-      }
-      if(playbackConfig.playInline) {
-        this.el.setAttribute('playsinline', 'true')
+        this.$el.attr({muted: 'true'})
+        this.$el.attr({autoplay: 'true'})
       }
     }
     else {
