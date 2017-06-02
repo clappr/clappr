@@ -220,6 +220,6 @@ class DashShakaPlayback extends HTML5Video {
   _shakaReady () {
     super._ready()
   }
-};
+}
 
 export default DashShakaPlayback
