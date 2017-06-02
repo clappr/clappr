@@ -17,7 +17,7 @@
   "license": "BSD-3-Clause",
   "dependencies": {
     "shaka-player": "2.0.8",
-    "clappr": "0.2.66",
+    "clappr": "0.2.66"
   },
   "devDependencies": {
     "babel-core": "^5.8.25",
