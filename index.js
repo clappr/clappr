@@ -1,20 +1,42 @@
 import {HTML5Video, Log, Events} from 'clappr'
 import shaka from 'shaka-player'
 
-const SEND_STATS_AT = 30 * 1000
-const AUTO = -1
-const SHAKA_READY = 'shaka:ready'
+const SEND_STATS_INTERVAL_MS = 30 * 1e3
+const DEFAULT_LEVEL_AUTO = -1
 
-export default class DashShakaPlayback extends HTML5Video {
-  get name() {return 'dash_shaka_playback'}
+class DashShakaPlayback extends HTML5Video {
+  static get Events () {
+    return {
+      SHAKA_READY: 'shaka:ready'
+    }
+  }
 
-  get shakaVersion() {return shaka.player.Player.version}
+  static canPlay (resource, mimeType = '') {
+    shaka.polyfill.installAll()
+    var browserSupported = shaka.Player.isBrowserSupported()
+    var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
+    return browserSupported && ((resourceParts[1] === 'mpd') || mimeType.indexOf('application/dash+xml') > -1)
+  }
 
-  get levels() { return this._levels }
+  get name () {
+    return 'DashShakaPlayback'
+  }
 
-  set currentLevel(id) {
+  get shakaVersion () {
+    return shaka.player.Player.version
+  }
+
+  get shakaPlayerInstance () {
+    return this._player
+  }
+
+  get levels () {
+    return this._levels
+  }
+
+  set currentLevel (id) {
     this._currentLevelId = id
-    var isAuto = this._currentLevelId === AUTO
+    var isAuto = this._currentLevelId === DEFAULT_LEVEL_AUTO
 
     this._player.configure({abr: {enable: !isAuto}})
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_START)
@@ -23,81 +45,100 @@ export default class DashShakaPlayback extends HTML5Video {
     }
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
   }
-  get currentLevel() { return this._currentLevelId || AUTO }
 
-  constructor(options) {
+  get currentLevel () {
+    return this._currentLevelId || DEFAULT_LEVEL_AUTO
+  }
+
+  constructor (options) {
     super(options)
     this._levels = []
     options.autoPlay && this.play()
   }
 
-  play() {
-    !this._player && this._setup()
+  play () {
+    if (!this._player) {
+      this._setup()
+    }
 
     if (!this.isReady) {
-      this.once(SHAKA_READY, this.play)
+      this.once(DashShakaPlayback.Events.SHAKA_READY, this.play)
       return
     }
 
-    this._src = this.el.src;
+    this._src = this.el.src
     super.play()
   }
 
   // skipping setup `setupSrc` on tag video
-  setupSrc() {}
+  setupSrc () {}
 
   // skipping ready event on video tag in favor of ready on shaka
-  _ready() {}
+  _ready () {}
 
-  get isReady() {return this._isShakaReadyState}
+  get isReady () {
+    return this._isShakaReadyState
+  }
 
   // skipping error handling on video tag in favor of error on shaka
-  error(event) {
+  error (event) {
     Log.error('an error was raised by the video tag', event, this.el.error)
   }
 
-  isHighDefinitionInUse() { return !!this.highDefinition }
+  isHighDefinitionInUse () {
+    return !!this.highDefinition
+  }
 
-  stop() {
+  stop () {
     clearInterval(this.sendStatsId)
     this._sendStats()
 
-    this._player.unload().
-      then(() => {
-        super.stop()
-        this._player = null
-        this._isShakaReadyState = false
-      }).
-      catch(() => { Log.error('shaka could not be unloaded') })
+    this._player.unload().then(() => {
+      super.stop()
+      this._player = null
+      this._isShakaReadyState = false
+    }).catch(() => {
+      Log.error('shaka could not be unloaded')
+    })
   }
 
-  get textTracks() {return this._player && this._player.getTracks().filter((t) => t.type === 'text')}
-  get audioTracks() {return this._player && this._player.getTracks().filter((t) => t.type === 'audio')}
-  get videoTracks() {return this._player && this._player.getTracks().filter((t) => t.type === 'video')}
-  getPlaybackType() {return (this._player && this._player.isLive()?'live':'vod') || ''}
+  get textTracks () {
+    return this._player && this._player.getTracks().filter((t) => t.type === 'text')
+  }
 
-  selectTrack(track) {
+  get audioTracks () {
+    return this._player && this._player.getTracks().filter((t) => t.type === 'audio')
+  }
+
+  get videoTracks () {
+    return this._player && this._player.getTracks().filter((t) => t.type === 'video')
+  }
+
+  getPlaybackType () {
+    return (this._player && this._player.isLive() ? 'live' : 'vod') || ''
+  }
+
+  selectTrack (track) {
     this._player.selectTrack(track)
     this._onAdaptation()
   }
 
-  destroy() {
+  destroy () {
     clearInterval(this.sendStatsId)
 
     if (this._player) {
       this._destroy()
     } else {
-      this._player.destroy().
-        then(() => this._destroy()).
-        catch(() => {
+      this._player.destroy()
+        .then(() => this._destroy())
+        .catch(() => {
           this._destroy()
           Log.error('shaka could not be destroyed')
         })
     }
   }
 
-
-  _setup() {
+  _setup () {
     this._isShakaReadyState = false
     this._player = this._createPlayer()
     this._options.shakaConfiguration && this._player.configure(this._options.shakaConfiguration)
@@ -108,49 +149,53 @@ export default class DashShakaPlayback extends HTML5Video {
       .catch((e) => this._setupError(e))
   }
 
-  _createPlayer() {
+  _createPlayer () {
     var player = new shaka.Player(this.el)
-    player.addEventListener('error', (type, shakaError) => this._error(type, shakaError))
-    player.addEventListener('adaptation', () => this._onAdaptation())
-    player.addEventListener('buffering', (e) => this._onBuffering(e))
+    player.addEventListener('error', this._onError)
+    player.addEventListener('adaptation', this._onAdaptation)
+    player.addEventListener('buffering', this._onBuffering)
     return player
   }
 
-  _onBuffering(e) {
+  _onBuffering (e) {
     var event = e.buffering ? Events.PLAYBACK_BUFFERING : Events.PLAYBACK_BUFFERFULL
     this.trigger(event)
   }
 
-  _loaded() {
+  _loaded () {
     this._isShakaReadyState = true
-    this.trigger(SHAKA_READY)
+    this.trigger(DashShakaPlayback.Events.SHAKA_READY)
     this._shakaReady()
     this._startToSendStats()
     this._fillLevels()
   }
 
-  _fillLevels(){
+  _fillLevels () {
     if (this._levels.length === 0) {
-      this._levels = this.videoTracks.map((videoTrack) => { return {id: videoTrack.id, label: `${videoTrack.height}p`}}).reverse()
+      this._levels = this.videoTracks.map((videoTrack) => { return {id: videoTrack.id, label: `${videoTrack.height}p`} }).reverse()
       this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this.levels)
     }
   }
 
-  _startToSendStats() {
-    this.sendStatsId = setInterval(() => this._sendStats(), SEND_STATS_AT)
+  _startToSendStats () {
+    const intervalMs = this._options.shakaSendStatsInterval || SEND_STATS_INTERVAL_MS
+    this.sendStatsId = setInterval(() => this._sendStats(), intervalMs)
   }
 
-  _sendStats() {this.trigger(Events.PLAYBACK_STATS_ADD, this._player.getStats())}
-
-  _setupError(e) { this._error('error', {detail: e.detail}) }
-
-  _error(type, shakaError) {
-    Log.error('an error was raised support=', DashShakaPlayback.support)
-    Log.error('an error was raised by shaka player', shakaError.detail)
-    this.trigger(Events.PLAYBACK_ERROR, shakaError.detail, this.name)
+  _sendStats () {
+    this.trigger(Events.PLAYBACK_STATS_ADD, this._player.getStats())
   }
 
-  _onAdaptation() {
+  _setupError (err) {
+    this._onError(err)
+  }
+
+  _onError (err) {
+    Log.error('Shaka error event:', err)
+    this.trigger(Events.PLAYBACK_ERROR, err, this.name)
+  }
+
+  _onAdaptation () {
     var activeVideo = this.videoTracks.filter((t) => t.active === true)[0]
 
     this._fillLevels()
@@ -166,21 +211,15 @@ export default class DashShakaPlayback extends HTML5Video {
     })
   }
 
-  _destroy() {
+  _destroy () {
     super.destroy()
     this._isShakaReadyState = false
     Log.debug('shaka was destroyed')
   }
 
-  _shakaReady() {
+  _shakaReady () {
     super._ready()
   }
 }
 
-DashShakaPlayback.canPlay = (resource, mimeType = '') => {
-  shaka.polyfill.installAll()
-  var browserSupported = shaka.Player.isBrowserSupported()
-
-  var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
-  return browserSupported && (('mpd' === resourceParts[1]) || mimeType.indexOf('application/dash+xml') > -1)
-}
+export default DashShakaPlayback

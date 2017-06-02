@@ -10,18 +10,25 @@
   "scripts": {
     "build": "node_modules/.bin/webpack",
     "start": "node_modules/.bin/webpack-dev-server --host 0.0.0.0 --content-base public/ --hot",
-    "release": "node_modules/.bin/webpack -p"
+    "release": "node_modules/.bin/webpack",
+    "lint": "node_modules/.bin/eslint index.js"
   },
   "author": "Clappr team",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "shaka-player": "v2.0.9",
+    "shaka-player": "2.0.8",
     "clappr": "0.2.66"
   },
   "devDependencies": {
-    "webpack": "^1.12.1",
-    "webpack-dev-server": "^1.10.1",
     "babel-core": "^5.8.25",
-    "babel-loader": "^5.3.2"
+    "babel-loader": "^5.3.2",
+    "eslint": "^3.19.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-node": "^4.2.2",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "webpack": "^1.12.1",
+    "webpack-dev-server": "^1.10.1"
   }
 }
