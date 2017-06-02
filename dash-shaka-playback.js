@@ -370,8 +370,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return DashShakaPlayback;
 	})(_clappr.HTML5Video);
 
-	;
-
 	exports['default'] = DashShakaPlayback;
 	module.exports = exports['default'];
 
