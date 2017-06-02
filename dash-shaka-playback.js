@@ -11,41 +11,41 @@
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-
+/******/
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			exports: {},
 /******/ 			id: moduleId,
 /******/ 			loaded: false
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.loaded = true;
-
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(0);
 /******/ })
@@ -55,33 +55,33 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-
+	
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
-
+	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
+	
 	var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
+	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
+	
 	var _clappr = __webpack_require__(1);
-
+	
 	var _shakaPlayer = __webpack_require__(2);
-
+	
 	var _shakaPlayer2 = _interopRequireDefault(_shakaPlayer);
-
+	
 	var SEND_STATS_INTERVAL_MS = 30 * 1e3;
 	var DEFAULT_LEVEL_AUTO = -1;
-
+	
 	var DashShakaPlayback = (function (_HTML5Video) {
 	  _inherits(DashShakaPlayback, _HTML5Video);
-
+	
 	  _createClass(DashShakaPlayback, [{
 	    key: 'name',
 	    get: function get() {
@@ -106,10 +106,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'currentLevel',
 	    set: function set(id) {
 	      var _this = this;
-
+	
 	      this._currentLevelId = id;
 	      var isAuto = this._currentLevelId === DEFAULT_LEVEL_AUTO;
-
+	
 	      this._player.configure({ abr: { enable: !isAuto } });
 	      this.trigger(_clappr.Events.PLAYBACK_LEVEL_SWITCH_START);
 	      if (!isAuto) {
@@ -126,7 +126,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'canPlay',
 	    value: function canPlay(resource) {
 	      var mimeType = arguments.length <= 1 || arguments[1] === undefined ? '' : arguments[1];
-
+	
 	      _shakaPlayer2['default'].polyfill.installAll();
 	      var browserSupported = _shakaPlayer2['default'].Player.isBrowserSupported();
 	      var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || [];
@@ -140,43 +140,43 @@ return /******/ (function(modules) { // webpackBootstrap
 	      };
 	    }
 	  }]);
-
+	
 	  function DashShakaPlayback(options) {
 	    _classCallCheck(this, DashShakaPlayback);
-
+	
 	    _get(Object.getPrototypeOf(DashShakaPlayback.prototype), 'constructor', this).call(this, options);
 	    this._levels = [];
 	    options.autoPlay && this.play();
 	  }
-
+	
 	  _createClass(DashShakaPlayback, [{
 	    key: 'play',
 	    value: function play() {
 	      if (!this._player) {
 	        this._setup();
 	      }
-
+	
 	      if (!this.isReady) {
 	        this.once(DashShakaPlayback.Events.SHAKA_READY, this.play);
 	        return;
 	      }
-
+	
 	      this._src = this.el.src;
 	      _get(Object.getPrototypeOf(DashShakaPlayback.prototype), 'play', this).call(this);
 	    }
-
+	
 	    // skipping setup `setupSrc` on tag video
 	  }, {
 	    key: 'setupSrc',
 	    value: function setupSrc() {}
-
+	
 	    // skipping ready event on video tag in favor of ready on shaka
 	  }, {
 	    key: '_ready',
 	    value: function _ready() {}
 	  }, {
 	    key: 'error',
-
+	
 	    // skipping error handling on video tag in favor of error on shaka
 	    value: function error(event) {
 	      _clappr.Log.error('an error was raised by the video tag', event, this.el.error);
@@ -190,10 +190,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'stop',
 	    value: function stop() {
 	      var _this2 = this;
-
+	
 	      clearInterval(this.sendStatsId);
 	      this._sendStats();
-
+	
 	      this._player.unload().then(function () {
 	        _get(Object.getPrototypeOf(DashShakaPlayback.prototype), 'stop', _this2).call(_this2);
 	        _this2._player = null;
@@ -217,9 +217,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'destroy',
 	    value: function destroy() {
 	      var _this3 = this;
-
+	
 	      clearInterval(this.sendStatsId);
-
+	
 	      if (this._player) {
 	        this._destroy();
 	      } else {
@@ -235,12 +235,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: '_setup',
 	    value: function _setup() {
 	      var _this4 = this;
-
+	
 	      this._isShakaReadyState = false;
 	      this._player = this._createPlayer();
 	      this._options.shakaConfiguration && this._player.configure(this._options.shakaConfiguration);
 	      this._options.shakaOnBeforeLoad && this._options.shakaOnBeforeLoad(this._player);
-
+	
 	      var playerLoaded = this._player.load(this._options.src);
 	      playerLoaded.then(function () {
 	        return _this4._loaded();
@@ -286,7 +286,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: '_startToSendStats',
 	    value: function _startToSendStats() {
 	      var _this5 = this;
-
+	
 	      var intervalMs = this._options.shakaSendStatsInterval || SEND_STATS_INTERVAL_MS;
 	      this.sendStatsId = setInterval(function () {
 	        return _this5._sendStats();
@@ -314,9 +314,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var activeVideo = this.videoTracks.filter(function (t) {
 	        return t.active === true;
 	      })[0];
-
+	
 	      this._fillLevels();
-
+	
 	      _clappr.Log.debug('an adaptation has happened:', activeVideo);
 	      this.highDefinition = activeVideo.height >= 720;
 	      this.trigger(_clappr.Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition);
@@ -366,10 +366,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      });
 	    }
 	  }]);
-
+	
 	  return DashShakaPlayback;
 	})(_clappr.HTML5Video);
-
+	
 	exports['default'] = DashShakaPlayback;
 	module.exports = exports['default'];
 
@@ -389,3 +389,4 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])
 });
 ;
+//# sourceMappingURL=dash-shaka-playback.js.map
