@@ -2,7 +2,7 @@
 
 update_dependencies() {
   echo 'updating dependencies' &&
-  npm update --silent
+  yarn install
 }
 
 update_version() {
@@ -18,26 +18,21 @@ update_bower() {
 
 build() {
   echo 'building clappr.js' &&
-  npm run build --silent &&
+  yarn build &&
   echo 'building clappr.min.js' &&
-  npm run release --silent
+  yarn release
 }
 
 run_tests() {
-  npm test
+  yarn test
 }
 
 git_push() {
   echo 'pushing to github' &&
-  git add package.json bower.json yuidoc.json dist &&
+  git add package.json bower.json yarn.lock yuidoc.json dist &&
   git commit -m 'bump to '$1 &&
   git tag $1 &&
   git push origin master --tags
-}
-
-upload() {
-  node upload.js --tag=$1 &&
-  node upload.js --tag=latest
 }
 
 npm_publish() {
@@ -64,7 +59,6 @@ main() {
   run_tests
   if (("$?" == "0")); then
     git_push $1 &&
-    upload $1 &&
     npm_publish &&
     send_mail $1 &&
     exit 0

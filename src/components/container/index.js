@@ -1,1 +1,2 @@
-module.exports = require('./container')
+import Container from './container'
+export default Container

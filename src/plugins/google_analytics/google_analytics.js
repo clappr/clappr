@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import ContainerPlugin from 'base/container_plugin'
-import Events from 'base/events'
+import ContainerPlugin from '../../base/container_plugin'
+import Events from '../../base/events'
 
 export default class GoogleAnalytics extends ContainerPlugin {
   get name() { return 'google_analytics' }

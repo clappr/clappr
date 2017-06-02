@@ -2,9 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import Log from 'plugins/log'
+import Log from '../plugins/log'
 import {uniqueId} from './utils'
-import execOnce from 'lodash.once'
 
 const slice = Array.prototype.slice
 
@@ -84,11 +83,10 @@ export default class Events {
    */
   once(name, callback, context) {
     if (!eventsApi(this, 'once', name, [callback, context]) || !callback) {return this}
-    const self = this
-    const once = execOnce(function() {
-      self.off(name, once)
-      callback.apply(this, arguments)
-    })
+    const once = () => {
+      this.off(name, once)
+      callback.apply(context || this, arguments)
+    }
     once._callback = callback
     return this.on(name, once, context)
   }
@@ -286,6 +284,9 @@ Events.PLAYER_TIMEUPDATE = 'timeupdate'
  */
 Events.PLAYER_VOLUMEUPDATE = 'volumeupdate'
 
+// TODO doc
+Events.PLAYER_TEXTTRACKLOADED = 'texttrackloaded'
+
 // Playback Events
 /**
  * Fired when the playback is downloading the media
@@ -479,7 +480,17 @@ Events.PLAYBACK_STATS_ADD = 'playback:stats:add'
 Events.PLAYBACK_FRAGMENT_LOADED = 'playback:fragment:loaded'
 // TODO doc
 Events.PLAYBACK_LEVEL_SWITCH = 'playback:level:switch'
+// TODO doc
+Events.PLAYBACK_SUBTITLE_LOADED = 'playback:subtitle:loaded'
 
+
+// Core Events
+/**
+ * Fired when the containers are created
+ *
+ * @event CORE_CONTAINERS_CREATED
+ */
+Events.CORE_CONTAINERS_CREATED = 'core:containers:created'
 /**
  * Fired when the options were changed for the core
  *
@@ -495,10 +506,24 @@ Events.CORE_READY = 'core:ready'
 /**
  * Fired when the fullscreen state change
  *
+ * @event CORE_FULLSCREEN
  * @param {Boolean} whether or not the player is on fullscreen mode
- * @event CORE_READY
  */
 Events.CORE_FULLSCREEN = 'core:fullscreen'
+/**
+ * Fired when the screen orientation has changed.
+ * This event is trigger only for mobile devices.
+ *
+ * @event CORE_SCREEN_ORIENTATION_CHANGED
+ * @param {Object} screen An object with screen orientation
+ * screen object
+ * @param {Object} [screen.event]
+ * window resize event object
+ * @param {String} [screen.orientation]
+ * screen orientation (ie: 'landscape' or 'portrait')
+ */
+Events.CORE_SCREEN_ORIENTATION_CHANGED = 'core:screen:orientation:changed'
+
 
 // Container Events
 /**
@@ -549,6 +574,14 @@ Events.CONTAINER_ERROR = 'container:error'
  * extra meta data
  */
 Events.CONTAINER_LOADEDMETADATA = 'container:loadedmetadata'
+
+/**
+ * Fired when a text track is loaded and available on container for display
+ *
+ * @event CONTAINER_LOADEDTEXTTRACK
+ */
+Events.CONTAINER_LOADEDTEXTTRACK = 'container:loadedtexttrack'
+
 /**
  * Fired when the time is updated on container
  *
@@ -697,6 +730,3 @@ Events.MEDIACONTROL_NOTPLAYING = 'mediacontrol:notplaying'
  * @event MEDIACONTROL_CONTAINERCHANGED
  */
 Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged'
-
-// Core Events
-Events.CORE_CONTAINERS_CREATED = 'core:containers:created'

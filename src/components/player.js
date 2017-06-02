@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {uniqueId, currentScriptUrl} from 'base/utils'
+import {uniqueId, currentScriptUrl} from '../base/utils'
 
-import BaseObject from 'base/base_object'
-import Events from 'base/events'
-import Browser from 'components/browser'
-import CoreFactory from 'components/core_factory'
-import Loader from 'components/loader'
-import PlayerInfo from 'components/player_info'
+import BaseObject from '../base/base_object'
+import Events from '../base/events'
+import Browser from './browser'
+import CoreFactory from './core_factory'
+import Loader from './loader'
+import PlayerInfo from './player_info'
 import $ from 'clappr-zepto'
 
 const baseUrl = currentScriptUrl().replace(/\/[^\/]+$/, '')
@@ -93,7 +93,8 @@ export default class Player extends BaseObject {
       onSeek: Events.PLAYER_SEEK,
       onError: Events.PLAYER_ERROR,
       onTimeUpdate: Events.PLAYER_TIMEUPDATE,
-      onVolumeUpdate: Events.PLAYER_VOLUMEUPDATE
+      onVolumeUpdate: Events.PLAYER_VOLUMEUPDATE,
+      onTextTrackLoaded: Events.PLAYER_TEXTTRACKLOADED
     }
   }
 
@@ -251,6 +252,7 @@ export default class Player extends BaseObject {
       this.listenTo(container, Events.CONTAINER_ERROR, this._onError)
       this.listenTo(container, Events.CONTAINER_TIMEUPDATE, this._onTimeUpdate)
       this.listenTo(container, Events.CONTAINER_VOLUME, this._onVolumeUpdate)
+      this.listenTo(container, Events.CONTAINER_LOADEDTEXTTRACK, this._onTextTrackLoaded)
     }
     return this
   }
@@ -285,6 +287,10 @@ export default class Player extends BaseObject {
 
   _onVolumeUpdate(volume) {
     this.trigger(Events.PLAYER_VOLUMEUPDATE, volume)
+  }
+
+  _onTextTrackLoaded(evt, data) {
+    this.trigger(Events.PLAYER_TEXTTRACKLOADED, evt, data)
   }
 
   _onPlay() {
@@ -359,6 +365,16 @@ export default class Player extends BaseObject {
    */
   destroy() {
     this.core.destroy()
+    return this
+  }
+
+  /**
+   * Gives user consent to playback. Required by mobile device after a click event before Player.load().
+   * @method consent
+   * @return {Player} itself
+   */
+  consent() {
+    this.core.getCurrentPlayback().consent()
     return this
   }
 

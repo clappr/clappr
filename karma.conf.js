@@ -1,16 +1,20 @@
 /* eslint-disable no-var */
 var dotenv = require('dotenv')
+var path = require('path')
 
 dotenv.load()
 
 var webpackConfig = require('./webpack-base-config')
 
 // add subject as webpack's postloader
-webpackConfig.module.postLoaders = [{
+webpackConfig.module.loaders.push({
   test: /\.js$/,
   exclude: /(test|node_modules|bower_components)\//,
-  loader: 'istanbul-instrumenter'
-}]
+  loader: 'istanbul-instrumenter-loader',
+  enforce: 'post'
+})
+
+webpackConfig.resolve.modules.push(path.resolve(__dirname, 'src'))
 
 module.exports = function(config) {
   config.set({

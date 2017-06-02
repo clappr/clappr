@@ -6,9 +6,9 @@
  * Container is responsible for the video rendering and state
  */
 
-import Events from 'base/events'
-import UIObject from 'base/ui_object'
-import Styler from 'base/styler'
+import Events from '../../base/events'
+import UIObject from '../../base/ui_object'
+import Styler from '../../base/styler'
 import style from './public/style.scss'
 import $ from 'clappr-zepto'
 
@@ -135,6 +135,11 @@ export default class Container extends UIObject {
     this.listenTo(this.playback, Events.PLAYBACK_PAUSE, this.paused)
     this.listenTo(this.playback, Events.PLAYBACK_STOP, this.stopped)
     this.listenTo(this.playback, Events.PLAYBACK_ERROR, this.error)
+    this.listenTo(this.playback, Events.PLAYBACK_SUBTITLE_LOADED, this.subtitleLoaded)
+  }
+
+  subtitleLoaded(evt, data) {
+    this.trigger(Events.CONTAINER_LOADEDTEXTTRACK, evt, data)
   }
 
   playbackStateChanged(state) {
@@ -291,9 +296,9 @@ export default class Container extends UIObject {
     }
   }
 
-  onContextMenu() {
+  onContextMenu(event) {
     if (!this.options.chromeless || this.options.allowUserInteraction) {
-      this.trigger(Events.CONTAINER_CONTEXTMENU, this, this.name)
+      this.trigger(Events.CONTAINER_CONTEXTMENU, event, this.name)
     }
   }
 

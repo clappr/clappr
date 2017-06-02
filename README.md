@@ -11,6 +11,8 @@
 
 ## Using the Player
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/clappr/clappr.svg)](https://greenkeeper.io/)
+
 [![Join the chat at https://gitter.im/clappr/clappr](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/clappr/clappr?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Add the following script on your HTML:
@@ -78,6 +80,8 @@ Clappr is under heavy development but production-ready. Feel free to open issues
 ## [API Documentation](http://clappr.github.io/)
 
 ## [How to write a plugin?](https://github.com/clappr/clappr/wiki)
+
+## [How to handle player fatal errors?](doc/PLAYER_ERRORS.md)
 
 ## [Installing](doc/INSTALLING.md)
 

@@ -1,1 +1,2 @@
-module.exports = require('./media_control')
+import MediaControl from './media_control'
+export default MediaControl

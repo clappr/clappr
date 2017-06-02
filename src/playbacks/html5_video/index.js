@@ -1,1 +1,2 @@
-module.exports = require('./html5_video')
+import HTML5Video from  './html5_video'
+export default HTML5Video

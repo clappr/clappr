@@ -85,10 +85,11 @@ describe('Events', function(){
   it('restricts to trigger only once', function(){
     let counter = 1
     const eventsCounter = function() {
+      expect(this === eventsCounter).to.be.true
       counter += 1
     }
 
-    this.events.once('clappr.any.event', eventsCounter)
+    this.events.once('clappr.any.event', eventsCounter, eventsCounter)
     expect(counter).to.be.equal(1)
 
     this.events.trigger('clappr.any.event')

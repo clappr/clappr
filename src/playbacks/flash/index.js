@@ -1,1 +1,2 @@
-module.exports = require('./flash')
+import Flash from './flash'
+export default Flash

@@ -1,8 +1,8 @@
-import {requestAnimationFrame, cancelAnimationFrame} from 'base/utils'
-import Playback from 'base/playback'
-import template from 'base/template'
-import Styler from 'base/styler'
-import Events from 'base/events'
+import {requestAnimationFrame, cancelAnimationFrame} from '../../base/utils'
+import Playback from '../../base/playback'
+import template from '../../base/template'
+import Styler from '../../base/styler'
+import Events from '../../base/events'
 import noOpStyle from './public/style.scss'
 import noOpHTML from './public/error.html'
 

@@ -1,4 +1,6 @@
+import Events from 'base/events.js'
 import HLS from 'playbacks/hls'
+import HLSJS from 'hls.js'
 
 describe('HLS playback', () => {
   // Disabled due to missing support for Firefox on Linux - breaks travis build
@@ -8,16 +10,16 @@ describe('HLS playback', () => {
   })
 
   it('should ensure it does not create an audio tag if audioOnly is not set', function() {
-    let options = { src: 'http://example.com/video.m3u8' },
+    let options = { src: 'http://clappr.io/video.m3u8' },
       playback = new HLS(options)
     expect(playback.tagName).to.be.equal('video')
-    options = { src: 'http://example.com/video.m3u8', mimeType: 'application/x-mpegurl' }
+    options = { src: 'http://clappr.io/video.m3u8', mimeType: 'application/x-mpegurl' }
     playback = new HLS(options)
     expect(playback.tagName).to.be.equal('video')
   })
 
   it('should play on an audio tag if audioOnly is set', function() {
-    let options = { src: 'http://example.com/video.m3u8', playback: { audioOnly: true } },
+    let options = { src: 'http://clappr.io/video.m3u8', playback: { audioOnly: true } },
       playback = new HLS(options)
     expect(playback.tagName).to.be.equal('audio')
   })
@@ -25,10 +27,10 @@ describe('HLS playback', () => {
   describe('options backwards compatibility', function() {
     // backwards compatibility (TODO: remove on 0.3.0)
     it('should set options.playback as a reference to options if options.playback not set', function() {
-      let options = { src: 'http://example.com/video.m3u8' },
+      let options = { src: 'http://clappr.io/video.m3u8' },
         hls = new HLS(options)
       expect(hls.options.playback).to.be.equal(hls.options)
-      options = { src: 'http://example.com/video.m3u8', playback: {test: true} }
+      options = { src: 'http://clappr.io/video.m3u8', playback: {test: true} }
       hls = new HLS(options)
       expect(hls.options.playback.test).to.be.equal(true)
     })
@@ -37,7 +39,7 @@ describe('HLS playback', () => {
   describe('hls.js configuration', function() {
     it('should use hlsjsConfig from playback options', function() {
       const options = {
-        src: 'http://example.com/video.m3u8',
+        src: 'http://clappr.io/video.m3u8',
         playback: {
           hlsMinimumDvrSize: 1,
           hlsjsConfig: {
@@ -53,7 +55,7 @@ describe('HLS playback', () => {
 
     it('should use hlsjsConfig from player options as fallback', function() {
       const options = {
-        src: 'http://example.com/video.m3u8',
+        src: 'http://clappr.io/video.m3u8',
         hlsMinimumDvrSize: 1,
         hlsjsConfig: {
           someHlsjsOption: 'value'
@@ -66,10 +68,22 @@ describe('HLS playback', () => {
     })
   })
 
+  it('should trigger a playback error if source load failed', function(done) {
+    this.timeout(5000)
+    let options = {src: 'http://clappr.io/notfound.m3u8'}
+    const playback = new HLS(options)
+    playback.on(Events.PLAYBACK_ERROR, (e) => {
+      expect(e.data.type).to.be.equal(HLSJS.ErrorTypes.NETWORK_ERROR)
+      expect(e.data.details).to.be.equal(HLSJS.ErrorDetails.MANIFEST_LOAD_ERROR)
+      done()
+    })
+    playback.play()
+  })
+
   xit('levels', function() {
     let playback
     beforeEach(() => {
-      const options = {src: 'http://example.com/foo.m3u8'}
+      const options = {src: 'http://clappr.io/foo.m3u8'}
       playback = new HLS(options)
       playback.setupHls()
       // NOTE: rather than trying to call playback.setupHls, we'll punch a new one in place

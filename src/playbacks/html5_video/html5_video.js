@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {seekStringToSeconds} from 'base/utils'
+import {seekStringToSeconds, DomRecycler} from '../../base/utils'
 
-import Playback from 'base/playback'
-import Styler from 'base/styler'
-import Browser from 'components/browser'
-import Events from 'base/events'
+import Playback from '../../base/playback'
+import Styler from '../../base/styler'
+import Browser from '../../components/browser'
+import Events from '../../base/events'
 import tagStyle from './public/style.scss'
 import $ from 'clappr-zepto'
 
@@ -104,19 +104,30 @@ export default class HTML5Video extends Playback {
     const playbackConfig = this.options.playback
     const preload = playbackConfig.preload || (Browser.isSafari ? 'auto' : this.options.preload)
 
+    let posterUrl // FIXME: poster plugin should always convert poster to object with expected properties ?
+    if (this.options.poster) {
+      if (typeof this.options.poster === 'string') {
+        posterUrl = this.options.poster
+      } else if (typeof this.options.poster.url === 'string') {
+        posterUrl = this.options.poster.url
+      }
+    }
+
     $.extend(this.el, {
       loop: this.options.loop,
-      poster: this.options.poster,
+      poster: posterUrl,
       preload: preload || 'metadata',
       controls: (playbackConfig.controls || this.options.useVideoTagDefaultControls) && 'controls',
       crossOrigin: playbackConfig.crossOrigin,
       'x-webkit-playsinline': playbackConfig.playInline
     })
 
+    playbackConfig.playInline && (this.$el.attr({playsinline: 'playsinline'}))
+
     // TODO should settings be private?
     this.settings = {default: ['seekbar']}
     this.settings.left = ['playpause', 'position', 'duration']
-    this.settings.right = ['fullscreen', 'volume', 'hd-indicator']
+    this.settings.right = ['fullscreen', 'volume', 'cc-button', 'hd-indicator']
 
 
     if(Browser.isMobile) {
@@ -190,12 +201,22 @@ export default class HTML5Video extends Playback {
     return false
   }
 
+  // On mobile device, HTML5 video element "retains" user action consent if
+  // load() method is called. See Player.consent().
+  consent() {
+    !this.isPlaying() && this.el.load()
+  }
+
   play() {
     this.trigger(Events.PLAYBACK_PLAY_INTENT)
     this._stopped = false
     this._setupSrc(this._src)
     this._handleBufferingEvents()
-    this.el.play()
+    let promise = this.el.play()
+    // For more details, see https://developers.google.com/web/updates/2016/03/play-returns-promise
+    if (promise && promise.catch) {
+      promise.catch(() => {})
+    }
   }
 
   pause() {
@@ -337,6 +358,7 @@ export default class HTML5Video extends Playback {
     this.$el.remove()
     this.el.src = ''
     this._src = null
+    DomRecycler.garbage(this.$el)
   }
 
   seek(time) {
@@ -349,7 +371,7 @@ export default class HTML5Video extends Playback {
   }
 
   _checkInitialSeek() {
-    const seekTime = seekStringToSeconds(window.location.href)
+    const seekTime = seekStringToSeconds()
     if (seekTime !== 0) {
       this.seek(seekTime)
     }
@@ -441,4 +463,3 @@ HTML5Video.canPlay = function(resourceUrl, mimeType) {
          HTML5Video._canPlay('video', MIMETYPES, resourceUrl, mimeType)
 }
 
-module.exports = HTML5Video

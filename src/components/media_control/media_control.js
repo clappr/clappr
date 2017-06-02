@@ -6,31 +6,31 @@
  * The MediaControl is responsible for displaying the Player controls.
  */
 
-import {Config, Fullscreen, formatTime, extend, removeArrayItem} from 'base/utils'
-import {Kibo} from 'vendor'
+import {Config, Fullscreen, formatTime, extend, removeArrayItem} from '../../base/utils'
+import {Kibo} from '../../vendor'
 
-import Events from 'base/events'
-import Styler from 'base/styler'
-import UIObject from 'base/ui_object'
-import Browser from 'components/browser'
-import Mediator from 'components/mediator'
-import template from 'base/template'
-import Playback from 'base/playback'
+import Events from '../../base/events'
+import Styler from '../../base/styler'
+import UIObject from '../../base/ui_object'
+import Browser from '../../components/browser'
+import Mediator from '../../components/mediator'
+import template from '../../base/template'
+import Playback from '../../base/playback'
 
 import $ from 'clappr-zepto'
-import merge from 'lodash.merge'
 
 import mediaControlStyle from './public/media-control.scss'
 import mediaControlHTML from './public/media-control.html'
 
-import playIcon from 'icons/01-play.svg'
-import pauseIcon from 'icons/02-pause.svg'
-import stopIcon from 'icons/03-stop.svg'
-import volumeIcon from 'icons/04-volume.svg'
-import volumeMuteIcon from 'icons/05-mute.svg'
-import fullscreenIcon from 'icons/06-expand.svg'
-import exitFullscreenIcon from 'icons/07-shrink.svg'
-import hdIcon from 'icons/08-hd.svg'
+import playIcon from '../../icons/01-play.svg'
+import pauseIcon from '../../icons/02-pause.svg'
+import stopIcon from '../../icons/03-stop.svg'
+import volumeIcon from '../../icons/04-volume.svg'
+import volumeMuteIcon from '../../icons/05-mute.svg'
+import fullscreenIcon from '../../icons/06-expand.svg'
+import exitFullscreenIcon from '../../icons/07-shrink.svg'
+import hdIcon from '../../icons/08-hd.svg'
+import ccIcon from '../../icons/09-cc.svg'
 
 export default class MediaControl extends UIObject {
   get name() { return 'MediaControl' }
@@ -54,6 +54,7 @@ export default class MediaControl extends UIObject {
       'click .bar-container[data-seekbar]': 'seek',
       'click .bar-container[data-volume]': 'onVolumeClick',
       'click .drawer-icon[data-volume]': 'toggleMute',
+      'click [data-cc-button]': 'toggleClosedCaptions',
       'mouseenter .drawer-container[data-volume]': 'showVolumeBar',
       'mouseleave .drawer-container[data-volume]': 'hideVolumeBar',
       'mousedown .bar-container[data-volume]': 'startVolumeDrag',
@@ -113,12 +114,14 @@ export default class MediaControl extends UIObject {
       Mediator.on(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
       this.listenTo(this.container, Events.CONTAINER_PLAY, this.changeTogglePlay)
       this.listenTo(this.container, Events.CONTAINER_PAUSE, this.changeTogglePlay)
+      this.listenTo(this.container, Events.CONTAINER_STOP, this.changeTogglePlay)
       this.listenTo(this.container, Events.CONTAINER_DBLCLICK, this.toggleFullscreen)
       this.listenTo(this.container, Events.CONTAINER_TIMEUPDATE, this.onTimeUpdate)
       this.listenTo(this.container, Events.CONTAINER_PROGRESS, this.updateProgressBar)
       this.listenTo(this.container, Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate)
       this.listenTo(this.container, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.settingsUpdate)
       this.listenTo(this.container, Events.CONTAINER_HIGHDEFINITIONUPDATE, this.highDefinitionUpdate)
+      this.listenTo(this.container, Events.CONTAINER_LOADEDTEXTTRACK, this.ccAvailable.bind(this, true))
       this.listenTo(this.container, Events.CONTAINER_MEDIACONTROL_DISABLE, this.disable)
       this.listenTo(this.container, Events.CONTAINER_MEDIACONTROL_ENABLE, this.enable)
       this.listenTo(this.container, Events.CONTAINER_ENDED, this.ended)
@@ -249,6 +252,16 @@ export default class MediaControl extends UIObject {
     this.$el.removeClass('w320')
     if (size.width <= 320 || this.options.hideVolumeBar) {
       this.$el.addClass('w320')
+    }
+  }
+
+  toggleClosedCaptions() {
+    if (this.container.playback.el.textTracks[0].mode === 'showing') {
+      this.container.playback.el.textTracks[0].mode = 'hidden'
+      this.$ccButton.removeClass('enabled')
+    } else {
+      this.container.playback.el.textTracks[0].mode = 'showing'
+      this.$ccButton.addClass('enabled')
     }
   }
 
@@ -521,12 +534,17 @@ export default class MediaControl extends UIObject {
   }
 
   getSettings() {
-    return merge({}, this.container.settings)
+    return $.extend(true, {}, this.container.settings)
   }
 
   highDefinitionUpdate(isHD) {
     const method = isHD ? 'addClass' : 'removeClass'
     this.$hdIndicator[method]('enabled')
+  }
+
+  ccAvailable(hasCC) {
+    const method = hasCC ? 'addClass' : 'removeClass'
+    this.$ccButton[method]('available')
   }
 
   createCachedElements() {
@@ -548,6 +566,7 @@ export default class MediaControl extends UIObject {
     this.$volumeBarFill = this.$el.find('.bar-fill-1[data-volume]')
     this.$volumeBarScrubber = this.$el.find('.bar-scrubber[data-volume]')
     this.$hdIndicator = this.$el.find('button.media-control-button[data-hd-indicator]')
+    this.$ccButton = this.$el.find('button.media-control-button[data-cc-button]')
     this.resetIndicators()
     this.initializeIcons()
   }
@@ -567,6 +586,7 @@ export default class MediaControl extends UIObject {
     this.$volumeIcon.append(volumeIcon)
     this.$fullscreenToggle.append(fullscreenIcon)
     this.$hdIndicator.append(hdIcon)
+    this.$ccButton.append(ccIcon)
   }
 
   setSeekPercentage(value) {
@@ -592,14 +612,27 @@ export default class MediaControl extends UIObject {
     this.container.seekPercentage(position)
   }
 
+  bindKeyAndShow(key, cb) {
+    this.kibo.down(key, () => {
+      this.show()
+      return cb()
+    })
+  }
+
   bindKeyEvents() {
     this.unbindKeyEvents()
     this.kibo = new Kibo(this.options.focusElement)
-    this.kibo.down(['space'], () => this.togglePlayPause())
-    this.kibo.down(['left'], () => this.seekRelative(-15))
-    this.kibo.down(['right'], () => this.seekRelative(15))
-    const keys = [1,2,3,4,5,6,7,8,9,0]
-    keys.forEach((i) => { this.kibo.down(i.toString(), () => this.settings.seekEnabled && this.container.seekPercentage(i * 10)) })
+
+    this.bindKeyAndShow('space', () => this.togglePlayPause())
+    this.bindKeyAndShow('left', () => this.seekRelative(-5))
+    this.bindKeyAndShow('right', () => this.seekRelative(5))
+    this.bindKeyAndShow('shift left', () => this.seekRelative(-10))
+    this.bindKeyAndShow('shift right', () => this.seekRelative(10))
+    this.bindKeyAndShow('shift ctrl left', () => this.seekRelative(-15))
+    this.bindKeyAndShow('shift ctrl right', () => this.seekRelative(15))
+    // this.kibo.down(['']) // should it be here?
+    const keys = ['1','2','3','4','5','6','7','8','9','0']
+    keys.forEach((i) => { this.bindKeyAndShow(i, () => this.settings.seekEnabled && this.container.seekPercentage(i * 10)) })
   }
 
   unbindKeyEvents() {
@@ -607,7 +640,11 @@ export default class MediaControl extends UIObject {
       this.kibo.off('space')
       this.kibo.off('left')
       this.kibo.off('right')
-      this.kibo.off([1,2,3,4,5,6,7,8,9,0])
+      this.kibo.off('shift left')
+      this.kibo.off('shift right')
+      this.kibo.off('shift ctrl left')
+      this.kibo.off('shift ctrl right')
+      this.kibo.off(['1','2','3','4','5','6','7','8','9','0'])
     }
   }
 
@@ -666,7 +703,7 @@ export default class MediaControl extends UIObject {
       if (!this.settings.seekEnabled) {
         this.$seekBarContainer.addClass('seek-disabled')
       }
-      if (!this.options.disableKeyboardShortcuts) {
+      if (!Browser.isMobile && !this.options.disableKeyboardShortcuts) {
         this.bindKeyEvents()
       }
       this.playerResize({width: this.options.width, height: this.options.height})
@@ -675,6 +712,7 @@ export default class MediaControl extends UIObject {
 
     this.parseColors()
     this.highDefinitionUpdate()
+    this.ccAvailable(false)
 
     this.rendered = true
     this.updateVolumeUI()

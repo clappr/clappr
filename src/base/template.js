@@ -113,4 +113,4 @@ var tmpl = function(text, data) {
 }
 tmpl.settings = settings
 
-module.exports = tmpl
+export default tmpl
