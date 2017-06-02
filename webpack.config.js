@@ -3,6 +3,7 @@ var webpack = require('webpack');
 
 module.exports = [
   {
+    devtool: 'source-maps',
     entry: path.resolve(__dirname, 'index.js'),
     externals: {
       "clappr": 'Clappr',
@@ -27,6 +28,7 @@ module.exports = [
   },
 
   {
+    devtool: 'source-maps',
     entry: path.resolve(__dirname, 'index.js'),
     externals: {
       "clappr": 'Clappr',
