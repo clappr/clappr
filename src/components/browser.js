@@ -31,10 +31,14 @@ const getBrowserInfo = function() {
   if (/trident/i.test(parts[1])) {
     extra = /\brv[ :]+(\d+)/g.exec(ua) || []
     return { name: 'IE', version: parseInt(extra[1] || '') }
-  } else if (parts[1] === 'Chrome' ) {
+  } else if (parts[1] === 'Chrome') {
     extra = ua.match(/\bOPR\/(\d+)/)
     if (extra != null) {
-      return { name:'Opera', version: parseInt(extra[1]) }
+      return { name: 'Opera', version: parseInt(extra[1]) }
+    }
+    extra = ua.match(/\bEdge\/(\d+)/)
+    if (extra != null) {
+      return { name: 'Edge', version: parseInt(extra[1]) }
     }
   }
   parts = parts[2] ? [parts[1], parts[2]] : [navigator.appName, navigator.appVersion, '-?']
@@ -47,14 +51,15 @@ const getBrowserInfo = function() {
 
 const browserInfo = getBrowserInfo()
 
-Browser.isChrome = /chrome|CriOS/i.test(navigator.userAgent)
+Browser.isEdge = /edge/i.test(navigator.userAgent)
+Browser.isChrome = /chrome|CriOS/i.test(navigator.userAgent) && !Browser.isEdge
 Browser.isSafari = /safari/i.test(navigator.userAgent) && !Browser.isChrome
 Browser.isFirefox = /firefox/i.test(navigator.userAgent)
 Browser.isLegacyIE = !!(window.ActiveXObject)
 Browser.isIE = Browser.isLegacyIE || /trident.*rv:1\d/i.test(navigator.userAgent)
 Browser.isIE11 = /trident.*rv:11/i.test(navigator.userAgent)
 Browser.isChromecast = Browser.isChrome && /CrKey/i.test(navigator.userAgent)
-Browser.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|IEMobile|Opera Mini/i.test(navigator.userAgent)
+Browser.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|IEMobile|Mobile Safari|Opera Mini/i.test(navigator.userAgent)
 Browser.isiOS = /iPad|iPhone|iPod/i.test(navigator.userAgent)
 Browser.isAndroid = /Android/i.test(navigator.userAgent)
 Browser.isWindowsPhone = /Windows Phone/i.test(navigator.userAgent)
