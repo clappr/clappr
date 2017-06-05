@@ -151,10 +151,17 @@ export default class HTML5Video extends Playback {
     this._handleBufferingEvents()
     this.trigger(Events.PLAYBACK_LOADEDMETADATA, {duration: e.target.duration, data: e})
     this._updateSettings()
+    this._checkHighDefinition(e)
     const autoSeekFromUrl = typeof(this._options.autoSeekFromUrl) === 'undefined' || this._options.autoSeekFromUrl
     if (this.getPlaybackType() !== Playback.LIVE && autoSeekFromUrl) {
       this._checkInitialSeek()
     }
+  }
+
+  _checkHighDefinition(e) {
+    const currentHeight = e.target.videoHeight
+    this.highDefinition = currentHeight >= 720
+    this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition)
   }
 
   _onDurationChange() {
