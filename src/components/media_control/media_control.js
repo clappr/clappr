@@ -685,8 +685,14 @@ export default class MediaControl extends UIObject {
       this.hide()
     }
 
+    // Video volume cannot be changed with Safari on mobile devices
+    // Display mute/unmute icon only if Safari version >= 10
     if(Browser.isSafari && Browser.isMobile) {
-      this.$volumeContainer.css('display','none')
+      if (Browser.version < 10) {
+        this.$volumeContainer.css('display','none')
+      } else {
+        this.$volumeBarContainer.css('display','none')
+      }
     }
 
     this.$seekBarPosition.addClass('media-control-notransition')
