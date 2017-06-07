@@ -1,7 +1,7 @@
 /* eslint-disable no-var */
 var path = require('path')
 var webpack = require('webpack')
-
+var bourbonPaths = require('bourbon').includePaths
 var DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
 
 module.exports = {
@@ -23,7 +23,7 @@ module.exports = {
       {
         test: /\.scss$/,
         loaders: ['css-loader', 'sass-loader?includePaths[]='
-            + require('node-bourbon').includePaths
+            + bourbonPaths
             + '&includePaths[]='
             + path.resolve(__dirname, './src/base/scss')
         ],
