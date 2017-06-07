@@ -129,8 +129,17 @@ export default class HTML5Video extends Playback {
     this.settings.left = ['playpause', 'position', 'duration']
     this.settings.right = ['fullscreen', 'volume', 'cc-button', 'hd-indicator']
 
-    // https://github.com/clappr/clappr/issues/1076
-    this.options.autoPlay && process.nextTick(() => !this._destroyed && this.play())
+
+    if(Browser.isMobile) {
+      if(this.options.autoPlay) {
+        this.$el.attr({muted: 'true'})
+        this.$el.attr({autoplay: 'true'})
+      }
+    }
+    else {
+      // https://github.com/clappr/clappr/issues/1076
+      this.options.autoPlay && process.nextTick(() => !this._destroyed && this.play())
+    }
   }
 
   /**
