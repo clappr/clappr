@@ -426,6 +426,17 @@ export default class HTML5Video extends Playback {
     this.trigger(Events.PLAYBACK_READY, this.name)
   }
 
+  getTextTrackFromLang(lang) {
+    let tracks = this.el.textTracks || []
+    for (let i = 0; i < tracks.length; i++) {
+      let track = tracks[i]
+      if (track.kind === 'subtitles' && track.language === lang) {
+        return track
+      }
+    }
+    return null
+  }
+
   render() {
     const style = Styler.getStyleFor(tagStyle)
 
