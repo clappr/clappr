@@ -514,7 +514,14 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   _onSubtitleLoaded(evt, data) {
-    this.el.textTracks[data.id].mode = 'hidden'
+    // data.id is hls.js internal track index (not the video element textTrack index)
+    // hls.js has no mechanisms *yet* to change subtitle track
+    let textTrack = this._getCurrentSubtitleTrack()
+    // By default, CC is hidden
+    if (textTrack) {
+      textTrack.mode = 'hidden'
+    }
+    // FIXME: data should be an expected "cross-playback" formatted object ?
     this.trigger(Events.PLAYBACK_SUBTITLE_LOADED, evt, data)
   }
 
@@ -537,6 +544,29 @@ export default class HLS extends HTML5VideoPlayback {
         level: data.level
       })
     }
+  }
+
+  _getHlsCurrentSubtitleTrack() {
+    // Get the internal hls.js subtitle track object
+    let trackId = this._hls ? this._hls.subtitleTrack : -1
+    if (trackId < 0) {
+      return null
+    }
+    return this._hls.subtitleTracks[trackId]
+  }
+
+  _getCurrentSubtitleTrack() {
+    let hlsTrack = this._getHlsCurrentSubtitleTrack()
+    return hlsTrack ? this.getTextTrackFromLang(hlsTrack.lang) : null
+  }
+
+  toggleClosedCaptions() {
+    let textTrack = this._getCurrentSubtitleTrack()
+    if (!textTrack) {
+      return false
+    }
+    textTrack.mode = (textTrack.mode === 'showing') ? 'hidden' : 'showing'
+    return true
   }
 
   get dvrEnabled() {
