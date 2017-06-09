@@ -256,12 +256,12 @@ export default class MediaControl extends UIObject {
   }
 
   toggleClosedCaptions() {
-    if (this.container.playback.el.textTracks[0].mode === 'showing') {
-      this.container.playback.el.textTracks[0].mode = 'hidden'
-      this.$ccButton.removeClass('enabled')
-    } else {
-      this.container.playback.el.textTracks[0].mode = 'showing'
-      this.$ccButton.addClass('enabled')
+    if (this.container.playback.toggleClosedCaptions()) {
+      if (this.$ccButton.hasClass('enabled')) {
+        this.$ccButton.removeClass('enabled')
+      } else {
+        this.$ccButton.addClass('enabled')
+      }
     }
   }
 

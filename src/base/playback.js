@@ -132,6 +132,15 @@ export default class Playback extends UIObject {
   }
 
   /**
+   * show/hide closed caption (if available).
+   * @method toggleClosedCaptions
+   * @return {Boolean} `true` on success, otherwise `false`
+   */
+  toggleClosedCaptions() {
+    return false
+  }
+
+  /**
    * gets the playback type (`'vod', 'live', 'aod'`)
    * @method getPlaybackType
    * @return {String} you should write the playback type otherwise it'll assume `'no_op'`
