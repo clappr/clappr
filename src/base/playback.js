@@ -132,15 +132,6 @@ export default class Playback extends UIObject {
   }
 
   /**
-   * show/hide closed caption (if available).
-   * @method toggleClosedCaptions
-   * @return {Boolean} `true` on success, otherwise `false`
-   */
-  toggleClosedCaptions() {
-    return false
-  }
-
-  /**
    * gets the playback available closed caption tracks.
    * @property closedCaptionsTracks
    * @type {Array} an array of objects with at least 'id' and 'name' properties
