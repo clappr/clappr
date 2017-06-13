@@ -96,6 +96,7 @@ export default class HTML5Video extends Playback {
     this._playheadMoving = false
     this._playheadMovingTimer = null
     this._stopped = false
+    this._ccTrackId = -1
     this._setupSrc(this.options.src)
     // backwards compatibility (TODO: remove on 0.3.0)
     this.options.playback || (this.options.playback = this.options || {})
@@ -127,7 +128,7 @@ export default class HTML5Video extends Playback {
     // TODO should settings be private?
     this.settings = {default: ['seekbar']}
     this.settings.left = ['playpause', 'position', 'duration']
-    this.settings.right = ['fullscreen', 'volume', 'cc-button', 'hd-indicator']
+    this.settings.right = ['fullscreen', 'volume', 'hd-indicator']
 
     // https://github.com/clappr/clappr/issues/1076
     this.options.autoPlay && process.nextTick(() => !this._destroyed && this.play())
@@ -426,15 +427,47 @@ export default class HTML5Video extends Playback {
     this.trigger(Events.PLAYBACK_READY, this.name)
   }
 
-  getTextTrackFromLang(lang) {
-    let tracks = this.el.textTracks || []
-    for (let i = 0; i < tracks.length; i++) {
-      let track = tracks[i]
-      if (track.kind === 'subtitles' && track.language === lang) {
-        return track
+  get closedCaptionsTracks() {
+    let tracks = []
+    let textTracks = this.el.textTracks || []
+    let id = 0
+    for (let i = 0; i < textTracks.length; i++) {
+      let track = textTracks[i]
+      if (track.kind === 'subtitles') {
+        tracks.push({
+          id: id,
+          name: track.label,
+          track: track
+        })
+        id++
       }
     }
-    return null
+    return tracks
+  }
+
+  getClosedCaptionsTrack() {
+    return this._ccTrackId
+  }
+
+  setClosedCaptionsTrack(trackId) {
+    let tracks = this.closedCaptionsTracks
+    for (let i = 0; i < tracks.length; i++) {
+      let track = tracks[i]
+      if (trackId === track.id) {
+        if (track.track.mode === 'hidden') {
+          track.track.mode = 'showing'
+          this._ccTrackId = trackId
+        }
+      } else if (track.track.mode === 'showing') {
+        track.track.mode = 'hidden'
+      }
+    }
+
+    if (trackId === -1) {
+      this._ccTrackId = trackId
+    }
+
+    return this._ccTrackId === trackId
   }
 
   render() {

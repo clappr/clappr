@@ -35,31 +35,37 @@ export default class Strings extends CorePlugin {
       'en': {
         'live': 'live',
         'back_to_live': 'back to live',
+        'disabled': 'Disabled',
         'playback_not_supported': 'Your browser does not support the playback of this video. Please try using a different browser.'
       },
       'pt': {
         'live': 'ao vivo',
         'back_to_live': 'voltar para o ao vivo',
+        'disabled': 'Desativado',
         'playback_not_supported': 'Seu navegador não supporta a reprodução deste video. Por favor, tente usar um navegador diferente.'
       },
       'es': {
         'live': 'vivo',
         'back_to_live': 'volver en vivo',
+        'disabled': 'Discapacitado',
         'playback_not_supported': 'Su navegador no soporta la reproducción de un video. Por favor, trate de usar un navegador diferente.'
       },
       'ru': {
         'live': 'прямой эфир',
         'back_to_live': 'к прямому эфиру',
+        'disabled': 'Отключено',
         'playback_not_supported': 'Ваш браузер не поддерживает воспроизведение этого видео. Пожалуйста, попробуйте другой браузер.'
       },
       'fr': {
         'live': 'en direct',
+        'disabled': 'Désactivé',
         'back_to_live': 'retour au direct',
         'playback_not_supported': 'Votre navigateur ne supporte pas la lecture de cette vidéo. Merci de tenter sur un autre navigateur.'
       },
       'tr': {
         'live': 'canlı',
         'back_to_live': 'canlı yayına dön',
+        'disabled': 'Engelli',
         'playback_not_supported': 'Tarayıcınız bu videoyu oynatma desteğine sahip değil. Lütfen farklı bir tarayıcı ile deneyin.',
       }
     }
