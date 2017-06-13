@@ -285,7 +285,7 @@ Events.PLAYER_TIMEUPDATE = 'timeupdate'
 Events.PLAYER_VOLUMEUPDATE = 'volumeupdate'
 
 // TODO doc
-Events.PLAYER_TEXTTRACKLOADED = 'texttrackloaded'
+Events.PLAYER_SUBTITLE_LOADED = 'subtitleloaded'
 
 // Playback Events
 /**
@@ -576,11 +576,11 @@ Events.CONTAINER_ERROR = 'container:error'
 Events.CONTAINER_LOADEDMETADATA = 'container:loadedmetadata'
 
 /**
- * Fired when a text track is loaded and available on container for display
+ * Fired when subtitle is loaded and available on container for display
  *
- * @event CONTAINER_LOADEDTEXTTRACK
+ * @event CONTAINER_SUBTITLE_LOADED
  */
-Events.CONTAINER_LOADEDTEXTTRACK = 'container:loadedtexttrack'
+Events.CONTAINER_SUBTITLE_LOADED = 'container:subtitle:loaded'
 
 /**
  * Fired when the time is updated on container

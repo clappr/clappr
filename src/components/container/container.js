@@ -70,6 +70,34 @@ export default class Container extends UIObject {
   }
 
   /**
+   * gets the available closed caption tracks.
+   * @property closedCaptionsTracks
+   * @type {Array} an array of objects with at least 'id' and 'name' properties
+   */
+  get closedCaptionsTracks() {
+    return this.playback.closedCaptionsTracks
+  }
+
+  /**
+   * gets the selected closed caption track index.
+   * @method getClosedCaptionsTrack
+   * @return {Number}
+   */
+  getClosedCaptionsTrack() {
+    return this.playback.getClosedCaptionsTrack()
+  }
+
+  /**
+   * sets the selected closed caption track index.
+   * @method setClosedCaptionsTrack
+   * @param {Number} trackId
+   * @return {Boolean} `true` on success, otherwise `false`
+   */
+  setClosedCaptionsTrack(trackId) {
+    return this.playback.setClosedCaptionsTrack(trackId)
+  }
+
+  /**
    * it builds a container
    * @method constructor
    * @param {Object} options the options object
@@ -139,7 +167,7 @@ export default class Container extends UIObject {
   }
 
   subtitleLoaded(evt, data) {
-    this.trigger(Events.CONTAINER_LOADEDTEXTTRACK, evt, data)
+    this.trigger(Events.CONTAINER_SUBTITLE_LOADED, evt, data)
   }
 
   playbackStateChanged(state) {
