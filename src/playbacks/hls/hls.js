@@ -514,16 +514,15 @@ export default class HLS extends HTML5VideoPlayback {
     this.trigger(Events.PLAYBACK_FRAGMENT_LOADED, data)
   }
 
-  _onSubtitleLoaded(evt, data) {
-    // This event may be trigger multiple times
+  _onSubtitleLoaded() {
+    // This event may be triggered multiple times
     // Setup CC only once (disable CC by default)
     if (!this._ccIsSetup) {
-      const trackId = this.getClosedCaptionsTrack()
-      this.setClosedCaptionsTrack(trackId)
+      this.trigger(Events.PLAYBACK_SUBTITLE_AVAILABLE)
+      const trackId = this.getClosedCaptionsTrackId()
+      this.setClosedCaptionsTrackId(trackId)
+      this._ccIsSetup = true
     }
-
-    // FIXME: data should be an expected "cross-playback" formatted object ?
-    this.trigger(Events.PLAYBACK_SUBTITLE_LOADED, evt, data)
   }
 
   _onLevelSwitch(evt, data) {

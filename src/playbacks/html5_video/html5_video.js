@@ -144,6 +144,7 @@ export default class HTML5Video extends Playback {
     if (this.el.src === srcUrl) {
       return
     }
+    this._ccIsSetup = false
     this._src = srcUrl
     this.el.src = srcUrl
   }
@@ -310,6 +311,7 @@ export default class HTML5Video extends Playback {
   }
 
   _onPlaying() {
+    this._checkForClosedCaptions()
     this._startPlayheadMovingChecks()
     this._handleBufferingEvents()
     this.trigger(Events.PLAYBACK_PLAY)
@@ -351,6 +353,7 @@ export default class HTML5Video extends Playback {
 
   destroy() {
     this._destroyed = true
+    this.handleTextTrackChange && this.el.textTracks.removeEventListener('change', this.handleTextTrackChange)
     this.$el.remove()
     this.el.src = ''
     this._src = null
@@ -427,6 +430,46 @@ export default class HTML5Video extends Playback {
     this.trigger(Events.PLAYBACK_READY, this.name)
   }
 
+  _checkForClosedCaptions() {
+    // Check if CC available only if current playback is HTML5Video
+    if (this.isHTML5Video && !this._ccIsSetup) {
+      if (this.hasClosedCaptionsTracks) {
+        this.trigger(Events.PLAYBACK_SUBTITLE_AVAILABLE)
+        const trackId = this.getClosedCaptionsTrackId()
+        this.setClosedCaptionsTrackId(trackId)
+        this.handleTextTrackChange = this._handleTextTrackChange.bind(this)
+        this.el.textTracks.addEventListener('change', this.handleTextTrackChange)
+      }
+      this._ccIsSetup = true
+    }
+  }
+
+  _handleTextTrackChange() {
+    let textTracks = this.el.textTracks || []
+    let trackId = -1
+    let id = 0
+    for (let i = 0; i < textTracks.length; i++) {
+      let track = textTracks[i]
+      if (track.kind === 'subtitles') {
+        if (track.mode === 'showing') {
+          trackId = id
+          break
+        }
+        id++
+      }
+    }
+    if (this._ccTrackId !== trackId) {
+      this._ccTrackId = trackId
+      this.trigger(Events.PLAYBACK_SUBTITLE_CHANGED, {
+        id: trackId
+      })
+    }
+  }
+
+  get isHTML5Video() {
+    return this.name === HTML5Video.prototype.name
+  }
+
   get closedCaptionsTracks() {
     let tracks = []
     let textTracks = this.el.textTracks || []
@@ -445,16 +488,16 @@ export default class HTML5Video extends Playback {
     return tracks
   }
 
-  getClosedCaptionsTrack() {
+  getClosedCaptionsTrackId() {
     return this._ccTrackId
   }
 
-  setClosedCaptionsTrack(trackId) {
+  setClosedCaptionsTrackId(trackId) {
     let tracks = this.closedCaptionsTracks
     for (let i = 0; i < tracks.length; i++) {
       let track = tracks[i]
       if (trackId === track.id) {
-        if (track.track.mode === 'hidden') {
+        if (track.track.mode === 'hidden' || track.track.mode === 'disabled') {
           track.track.mode = 'showing'
           this._ccTrackId = trackId
         }
@@ -462,12 +505,14 @@ export default class HTML5Video extends Playback {
         track.track.mode = 'hidden'
       }
     }
-
     if (trackId === -1) {
       this._ccTrackId = trackId
     }
-
-    return this._ccTrackId === trackId
+    if (this._ccTrackId === trackId) {
+      this.trigger(Events.PLAYBACK_SUBTITLE_CHANGED, {
+        id: trackId
+      })
+    }
   }
 
   render() {

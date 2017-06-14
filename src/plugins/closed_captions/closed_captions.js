@@ -41,7 +41,8 @@ export default class ClosedCaptions extends UICorePlugin {
     this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_HIDE, this.hideContextMenu)
     this.container = this.core.getCurrentContainer()
     if (this.container) {
-      this.listenTo(this.container, Events.CONTAINER_SUBTITLE_LOADED, this.onSubtitleLoaded)
+      this.listenTo(this.container, Events.CONTAINER_SUBTITLE_AVAILABLE, this.onSubtitleAvailable)
+      this.listenTo(this.container, Events.CONTAINER_SUBTITLE_CHANGED, this.onSubtitleChanged)
     }
   }
 
@@ -51,18 +52,18 @@ export default class ClosedCaptions extends UICorePlugin {
     this.bindEvents()
   }
 
-  onSubtitleLoaded() {
-    const trackId = this.container.getClosedCaptionsTrack()
+  onSubtitleAvailable() {
     this.renderCcButton()
-    this.setCurrentContextMenuElement(trackId)
     this.ccAvailable(true)
+  }
+
+  onSubtitleChanged(track) {
+    this.setCurrentContextMenuElement(track.id)
   }
 
   onTrackSelect(event) {
     const trackId = parseInt(event.target.dataset.ccSelect, 10)
-    if (this.container.setClosedCaptionsTrack(trackId)) {
-      this.setCurrentContextMenuElement(trackId)
-    }
+    this.container.setClosedCaptionsTrackId(trackId)
     this.hideContextMenu()
     event.stopPropagation()
     return false
@@ -86,10 +87,13 @@ export default class ClosedCaptions extends UICorePlugin {
   }
 
   setCurrentContextMenuElement(trackId) {
-    this.contextMenuElement().removeClass('current')
-    this.contextMenuElement(trackId).addClass('current')
-    const method = trackId > -1 ? 'addClass' : 'removeClass'
-    this.$ccButton[method]('enabled')
+    if (this._trackId !== trackId) {
+      this.contextMenuElement().removeClass('current')
+      this.contextMenuElement(trackId).addClass('current')
+      const method = trackId > -1 ? 'addClass' : 'removeClass'
+      this.$ccButton[method]('enabled')
+      this._trackId = trackId
+    }
   }
 
   renderCcButton() {
