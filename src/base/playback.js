@@ -132,6 +132,15 @@ export default class Playback extends UIObject {
   }
 
   /**
+   * checks if the playback has closed caption tracks.
+   * @property hasClosedCaptionsTracks
+   * @type {Boolean}
+   */
+  get hasClosedCaptionsTracks() {
+    return this.closedCaptionsTracks.length > 0
+  }
+
+  /**
    * gets the playback available closed caption tracks.
    * @property closedCaptionsTracks
    * @type {Array} an array of objects with at least 'id' and 'name' properties
@@ -142,20 +151,19 @@ export default class Playback extends UIObject {
 
   /**
    * gets the selected closed caption track index.
-   * @method getClosedCaptionsTrack
+   * @method getClosedCaptionsTrackId
    * @return {Number}
    */
-  getClosedCaptionsTrack() {
+  getClosedCaptionsTrackId() {
     return -1
   }
 
   /**
    * sets the selected closed caption track index.
-   * @method setClosedCaptionsTrack
+   * @method setClosedCaptionsTrackId
    * @param {Number} trackId
-   * @return {Boolean} `true` on success, otherwise `false`
    */
-  setClosedCaptionsTrack(trackId) {} // eslint-disable-line no-unused-vars
+  setClosedCaptionsTrackId(trackId) {} // eslint-disable-line no-unused-vars
 
   /**
    * gets the playback type (`'vod', 'live', 'aod'`)

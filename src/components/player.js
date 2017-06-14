@@ -94,7 +94,7 @@ export default class Player extends BaseObject {
       onError: Events.PLAYER_ERROR,
       onTimeUpdate: Events.PLAYER_TIMEUPDATE,
       onVolumeUpdate: Events.PLAYER_VOLUMEUPDATE,
-      onSubtitleLoaded: Events.PLAYER_SUBTITLE_LOADED
+      onSubtitleAvailable: Events.PLAYER_SUBTITLE_AVAILABLE
     }
   }
 
@@ -252,7 +252,7 @@ export default class Player extends BaseObject {
       this.listenTo(container, Events.CONTAINER_ERROR, this._onError)
       this.listenTo(container, Events.CONTAINER_TIMEUPDATE, this._onTimeUpdate)
       this.listenTo(container, Events.CONTAINER_VOLUME, this._onVolumeUpdate)
-      this.listenTo(container, Events.CONTAINER_SUBTITLE_LOADED, this._onSubtitleLoaded)
+      this.listenTo(container, Events.CONTAINER_SUBTITLE_AVAILABLE, this._onSubtitleAvailable)
     }
     return this
   }
@@ -289,8 +289,8 @@ export default class Player extends BaseObject {
     this.trigger(Events.PLAYER_VOLUMEUPDATE, volume)
   }
 
-  _onSubtitleLoaded(evt, data) {
-    this.trigger(Events.PLAYER_SUBTITLE_LOADED, evt, data)
+  _onSubtitleAvailable() {
+    this.trigger(Events.PLAYER_SUBTITLE_AVAILABLE)
   }
 
   _onPlay() {

@@ -70,6 +70,15 @@ export default class Container extends UIObject {
   }
 
   /**
+   * checks if has closed caption tracks.
+   * @property hasClosedCaptionsTracks
+   * @type {Boolean}
+   */
+  get hasClosedCaptionsTracks() {
+    return this.playback.hasClosedCaptionsTracks
+  }
+
+  /**
    * gets the available closed caption tracks.
    * @property closedCaptionsTracks
    * @type {Array} an array of objects with at least 'id' and 'name' properties
@@ -80,21 +89,20 @@ export default class Container extends UIObject {
 
   /**
    * gets the selected closed caption track index.
-   * @method getClosedCaptionsTrack
+   * @method getClosedCaptionsTrackId
    * @return {Number}
    */
-  getClosedCaptionsTrack() {
-    return this.playback.getClosedCaptionsTrack()
+  getClosedCaptionsTrackId() {
+    return this.playback.getClosedCaptionsTrackId()
   }
 
   /**
    * sets the selected closed caption track index.
-   * @method setClosedCaptionsTrack
+   * @method setClosedCaptionsTrackId
    * @param {Number} trackId
-   * @return {Boolean} `true` on success, otherwise `false`
    */
-  setClosedCaptionsTrack(trackId) {
-    return this.playback.setClosedCaptionsTrack(trackId)
+  setClosedCaptionsTrackId(trackId) {
+    this.playback.setClosedCaptionsTrackId(trackId)
   }
 
   /**
@@ -163,11 +171,16 @@ export default class Container extends UIObject {
     this.listenTo(this.playback, Events.PLAYBACK_PAUSE, this.paused)
     this.listenTo(this.playback, Events.PLAYBACK_STOP, this.stopped)
     this.listenTo(this.playback, Events.PLAYBACK_ERROR, this.error)
-    this.listenTo(this.playback, Events.PLAYBACK_SUBTITLE_LOADED, this.subtitleLoaded)
+    this.listenTo(this.playback, Events.PLAYBACK_SUBTITLE_AVAILABLE, this.subtitleAvailable)
+    this.listenTo(this.playback, Events.PLAYBACK_SUBTITLE_CHANGED, this.subtitleChanged)
   }
 
-  subtitleLoaded(evt, data) {
-    this.trigger(Events.CONTAINER_SUBTITLE_LOADED, evt, data)
+  subtitleAvailable() {
+    this.trigger(Events.CONTAINER_SUBTITLE_AVAILABLE)
+  }
+
+  subtitleChanged(track) {
+    this.trigger(Events.CONTAINER_SUBTITLE_CHANGED, track)
   }
 
   playbackStateChanged(state) {
