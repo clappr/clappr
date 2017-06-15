@@ -10,6 +10,8 @@ import Browser from '../../components/browser'
 import Events from '../../base/events'
 import tagStyle from './public/style.scss'
 import $ from 'clappr-zepto'
+import template from '../../base/template'
+import tracksHTML from './public/tracks.html'
 
 const MIMETYPES = {
   'mp4': ['avc1.42E01E', 'avc1.58A01E', 'avc1.4D401E', 'avc1.64001E', 'mp4v.20.8', 'mp4v.20.240', 'mp4a.40.2'].map(
@@ -130,8 +132,25 @@ export default class HTML5Video extends Playback {
     this.settings.left = ['playpause', 'position', 'duration']
     this.settings.right = ['fullscreen', 'volume', 'hd-indicator']
 
+    if (playbackConfig.externalTracks) {
+      this._setupExternalTracks(playbackConfig.externalTracks)
+    }
+
     // https://github.com/clappr/clappr/issues/1076
     this.options.autoPlay && process.nextTick(() => !this._destroyed && this.play())
+  }
+
+  _setupExternalTracks(tracks) {
+    this._externalTracks = []
+    for (let i = 0; i < tracks.length; i++) {
+      let track = tracks[i]
+      this._externalTracks.push({
+        kind: track.kind || 'subtitles', // Default is 'subtitles'
+        label: track.label,
+        lang: track.lang,
+        src: track.src,
+      })
+    }
   }
 
   /**
@@ -524,6 +543,8 @@ export default class HTML5Video extends Playback {
     })
   }
 
+  get template() { return template(tracksHTML) }
+
   render() {
     const style = Styler.getStyleFor(tagStyle)
 
@@ -531,6 +552,12 @@ export default class HTML5Video extends Playback {
       this.$el.on('contextmenu', () => {
         return false
       })
+    }
+
+    if (this._externalTracks && this._externalTracks.length > 0) {
+      this.$el.html(this.template({
+        tracks: this._externalTracks,
+      }))
     }
 
     this.$el.append(style)
