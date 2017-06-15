@@ -519,8 +519,8 @@ export default class HLS extends HTML5VideoPlayback {
     // Setup CC only once (disable CC by default)
     if (!this._ccIsSetup) {
       this.trigger(Events.PLAYBACK_SUBTITLE_AVAILABLE)
-      const trackId = this.getClosedCaptionsTrackId()
-      this.setClosedCaptionsTrackId(trackId)
+      const trackId = this.closedCaptionsTrackId
+      this.closedCaptionsTrackId = trackId
       this._ccIsSetup = true
     }
   }
