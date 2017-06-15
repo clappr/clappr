@@ -89,20 +89,20 @@ export default class Container extends UIObject {
 
   /**
    * gets the selected closed caption track index.
-   * @method getClosedCaptionsTrackId
-   * @return {Number}
+   * @property closedCaptionsTrackId
+   * @type {Number}
    */
-  getClosedCaptionsTrackId() {
-    return this.playback.getClosedCaptionsTrackId()
+  get closedCaptionsTrackId() {
+    return this.playback.closedCaptionsTrackId
   }
 
   /**
    * sets the selected closed caption track index.
-   * @method setClosedCaptionsTrackId
-   * @param {Number} trackId
+   * @property closedCaptionsTrackId
+   * @type {Number}
    */
-  setClosedCaptionsTrackId(trackId) {
-    this.playback.setClosedCaptionsTrackId(trackId)
+  set closedCaptionsTrackId(trackId) {
+    this.playback.closedCaptionsTrackId = trackId
   }
 
   /**

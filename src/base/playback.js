@@ -151,19 +151,19 @@ export default class Playback extends UIObject {
 
   /**
    * gets the selected closed caption track index.
-   * @method getClosedCaptionsTrackId
-   * @return {Number}
+   * @property closedCaptionsTrackId
+   * @type {Number}
    */
-  getClosedCaptionsTrackId() {
+  get closedCaptionsTrackId() {
     return -1
   }
 
   /**
    * sets the selected closed caption track index.
-   * @method setClosedCaptionsTrackId
-   * @param {Number} trackId
+   * @property closedCaptionsTrackId
+   * @type {Number}
    */
-  setClosedCaptionsTrackId(trackId) {} // eslint-disable-line no-unused-vars
+  set closedCaptionsTrackId(trackId) {} // eslint-disable-line no-unused-vars
 
   /**
    * gets the playback type (`'vod', 'live', 'aod'`)
