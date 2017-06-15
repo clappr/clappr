@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {seekStringToSeconds, DomRecycler} from '../../base/utils'
+import {isNumber, seekStringToSeconds, DomRecycler} from '../../base/utils'
 
 import Playback from '../../base/playback'
 import Styler from '../../base/styler'
@@ -141,16 +141,14 @@ export default class HTML5Video extends Playback {
   }
 
   _setupExternalTracks(tracks) {
-    this._externalTracks = []
-    for (let i = 0; i < tracks.length; i++) {
-      let track = tracks[i]
-      this._externalTracks.push({
+    this._externalTracks = tracks.map((track) => {
+      return {
         kind: track.kind || 'subtitles', // Default is 'subtitles'
         label: track.label,
         lang: track.lang,
         src: track.src,
-      })
-    }
+      }
+    })
   }
 
   /**
@@ -454,8 +452,8 @@ export default class HTML5Video extends Playback {
     if (this.isHTML5Video && !this._ccIsSetup) {
       if (this.hasClosedCaptionsTracks) {
         this.trigger(Events.PLAYBACK_SUBTITLE_AVAILABLE)
-        const trackId = this.getClosedCaptionsTrackId()
-        this.setClosedCaptionsTrackId(trackId)
+        const trackId = this.closedCaptionsTrackId
+        this.closedCaptionsTrackId = trackId
         this.handleTextTrackChange = this._handleTextTrackChange.bind(this)
         this.el.textTracks.addEventListener('change', this.handleTextTrackChange)
       }
@@ -464,23 +462,16 @@ export default class HTML5Video extends Playback {
   }
 
   _handleTextTrackChange() {
-    let textTracks = this.el.textTracks || []
-    let trackId = -1
-    let id = 0
-    for (let i = 0; i < textTracks.length; i++) {
-      let track = textTracks[i]
-      if (track.kind === 'subtitles') {
-        if (track.mode === 'showing') {
-          trackId = id
-          break
-        }
-        id++
+    let tracks = this.closedCaptionsTracks
+    let track = tracks.find((track) => {
+      if (track.track.mode === 'showing') {
+        return track
       }
-    }
-    if (this._ccTrackId !== trackId) {
-      this._ccTrackId = trackId
+    }) || {id: -1}
+    if (this._ccTrackId !== track.id) {
+      this._ccTrackId = track.id
       this.trigger(Events.PLAYBACK_SUBTITLE_CHANGED, {
-        id: trackId
+        id: track.id
       })
     }
   }
@@ -490,51 +481,52 @@ export default class HTML5Video extends Playback {
   }
 
   get closedCaptionsTracks() {
-    let tracks = []
-    let textTracks = this.el.textTracks || []
     let id = 0
-    for (let i = 0; i < textTracks.length; i++) {
-      let track = textTracks[i]
-      // Could also add 'captions' ?
-      if (track.kind === 'subtitles') {
-        tracks.push({
-          id: id,
-          name: track.label,
-          track: track
-        })
-        id++
-      }
-    }
-    return tracks
+    let newId = () => { return id++ }
+    let onlySubtitles = (track) => { return track.kind === 'subtitles' }
+    let makeTrack = (track) => { return {id: newId(), name: track.label, track: track} }
+    let textTracks = this.el.textTracks ? Array.from(this.el.textTracks) : []
+
+    return textTracks.filter(onlySubtitles).map(makeTrack)
   }
 
-  getClosedCaptionsTrackId() {
+  get closedCaptionsTrackId() {
     return this._ccTrackId
   }
 
-  setClosedCaptionsTrackId(trackId) {
+  set closedCaptionsTrackId(trackId) {
+    if (!isNumber(trackId)) {
+      return
+    }
+
     let tracks = this.closedCaptionsTracks
+    let showingTrack
+
+    if (trackId !== -1) {
+      // Get track to show
+      showingTrack = tracks.find((track) => {
+        if (track.id == trackId) {
+          return track
+        }
+      })
+    }
+
+    // Ensure track is not already displayed
+    if (showingTrack && showingTrack.track.mode === 'showing') {
+      return
+    }
+
     // Since it is possible to display multiple tracks,
     // ensure that all tracks are hidden.
-    let showingTrack
-    for (let i = 0; i < tracks.length; i++) {
-      let track = tracks[i]
-      // Check if track to show
-      if (trackId === track.id) {
-        showingTrack = track
-      }
-      if (track.track.mode !== 'hidden') {
-        // In theory 'disabled' may be more optimized, but
-        // it leads to weird behaviours with some browsers.
-        // FIXME: value set could be browser specific ?
-        track.track.mode = 'hidden'
-      }
-    }
-    // Display matched track
+    tracks
+      .filter((track) => { return track.track.mode !== 'hidden' })
+      .forEach((track) => { track.track.mode = 'hidden' })
+
+    // Display track
     if (showingTrack) {
       showingTrack.track.mode = 'showing'
     } else if (trackId !== -1) {
-      // Track id did not match
+      // Track id not found
       return
     }
     this._ccTrackId = trackId
