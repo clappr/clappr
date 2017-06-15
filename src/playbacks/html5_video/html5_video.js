@@ -476,6 +476,7 @@ export default class HTML5Video extends Playback {
     let id = 0
     for (let i = 0; i < textTracks.length; i++) {
       let track = textTracks[i]
+      // Could also add 'captions' ?
       if (track.kind === 'subtitles') {
         tracks.push({
           id: id,
@@ -494,25 +495,33 @@ export default class HTML5Video extends Playback {
 
   setClosedCaptionsTrackId(trackId) {
     let tracks = this.closedCaptionsTracks
+    // Since it is possible to display multiple tracks,
+    // ensure that all tracks are hidden.
+    let showingTrack
     for (let i = 0; i < tracks.length; i++) {
       let track = tracks[i]
+      // Check if track to show
       if (trackId === track.id) {
-        if (track.track.mode === 'hidden' || track.track.mode === 'disabled') {
-          track.track.mode = 'showing'
-          this._ccTrackId = trackId
-        }
-      } else if (track.track.mode === 'showing') {
+        showingTrack = track
+      }
+      if (track.track.mode !== 'hidden') {
+        // In theory 'disabled' may be more optimized, but
+        // it leads to weird behaviours with some browsers.
+        // FIXME: value set could be browser specific ?
         track.track.mode = 'hidden'
       }
     }
-    if (trackId === -1) {
-      this._ccTrackId = trackId
+    // Display matched track
+    if (showingTrack) {
+      showingTrack.track.mode = 'showing'
+    } else if (trackId !== -1) {
+      // Track id did not match
+      return
     }
-    if (this._ccTrackId === trackId) {
-      this.trigger(Events.PLAYBACK_SUBTITLE_CHANGED, {
-        id: trackId
-      })
-    }
+    this._ccTrackId = trackId
+    this.trigger(Events.PLAYBACK_SUBTITLE_CHANGED, {
+      id: trackId
+    })
   }
 
   render() {
