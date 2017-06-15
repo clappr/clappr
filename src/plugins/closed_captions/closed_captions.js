@@ -32,7 +32,7 @@ export default class ClosedCaptions extends UICorePlugin {
     this._ariaLabel = config && config.ariaLabel ? config.ariaLabel : 'cc-button'
     this._labelCb = config && config.labelCallback && typeof config.labelCallback === 'function'
       ? config.labelCallback
-      : function (track) { return track.name }
+      : track => { return track.name }
   }
 
   bindEvents() {
@@ -63,7 +63,7 @@ export default class ClosedCaptions extends UICorePlugin {
 
   onTrackSelect(event) {
     const trackId = parseInt(event.target.dataset.ccSelect, 10)
-    this.container.setClosedCaptionsTrackId(trackId)
+    this.container.closedCaptionsTrackId = trackId
     this.hideContextMenu()
     event.stopPropagation()
     return false
