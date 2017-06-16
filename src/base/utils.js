@@ -263,6 +263,15 @@ export class DomRecycler {
 
 DomRecycler.options = { recycleVideo: false }
 
+// An (very simplist) alternative to Array.find() until fully supported by browsers
+export function arrayFind(arr, func) {
+  for (let i = 0; i < arr.length; i++) {
+    if (func(arr[i])) {
+      return arr[i]
+    }
+  }
+}
+
 export default {
   Config,
   Fullscreen,
