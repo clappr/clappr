@@ -150,7 +150,7 @@ export default class Playback extends UIObject {
   }
 
   /**
-   * gets the selected closed caption track index.
+   * gets the selected closed caption track index. (-1 is disabled)
    * @property closedCaptionsTrackId
    * @type {Number}
    */
@@ -159,7 +159,7 @@ export default class Playback extends UIObject {
   }
 
   /**
-   * sets the selected closed caption track index.
+   * sets the selected closed caption track index. (-1 is disabled)
    * @property closedCaptionsTrackId
    * @type {Number}
    */

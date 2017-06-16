@@ -495,6 +495,8 @@ export default class HTML5Video extends Playback {
 
     let tracks = this.closedCaptionsTracks
     let showingTrack
+
+    // Note: -1 is for hide all tracks
     if (trackId !== -1) {
       showingTrack = arrayFind(tracks, track => track.id === trackId)
       if (!showingTrack) {
