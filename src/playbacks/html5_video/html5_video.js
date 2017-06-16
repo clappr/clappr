@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {isNumber, seekStringToSeconds, DomRecycler} from '../../base/utils'
+import {arrayFind, isNumber, seekStringToSeconds, DomRecycler} from '../../base/utils'
 
 import Playback from '../../base/playback'
 import Styler from '../../base/styler'
@@ -132,16 +132,14 @@ export default class HTML5Video extends Playback {
     this.settings.left = ['playpause', 'position', 'duration']
     this.settings.right = ['fullscreen', 'volume', 'hd-indicator']
 
-    if (playbackConfig.externalTracks) {
-      this._setupExternalTracks(playbackConfig.externalTracks)
-    }
+    playbackConfig.externalTracks && (this._setupExternalTracks(playbackConfig.externalTracks))
 
     // https://github.com/clappr/clappr/issues/1076
     this.options.autoPlay && process.nextTick(() => !this._destroyed && this.play())
   }
 
   _setupExternalTracks(tracks) {
-    this._externalTracks = tracks.map((track) => {
+    this._externalTracks = tracks.map(track => {
       return {
         kind: track.kind || 'subtitles', // Default is 'subtitles'
         label: track.label,
@@ -463,11 +461,7 @@ export default class HTML5Video extends Playback {
 
   _handleTextTrackChange() {
     let tracks = this.closedCaptionsTracks
-    let track = tracks.find((track) => {
-      if (track.track.mode === 'showing') {
-        return track
-      }
-    }) || {id: -1}
+    let track = arrayFind(tracks, track => track.track.mode === 'showing') || {id: -1}
     if (this._ccTrackId !== track.id) {
       this._ccTrackId = track.id
       this.trigger(Events.PLAYBACK_SUBTITLE_CHANGED, {
@@ -482,12 +476,12 @@ export default class HTML5Video extends Playback {
 
   get closedCaptionsTracks() {
     let id = 0
-    let newId = () => { return id++ }
-    let onlySubtitles = (track) => { return track.kind === 'subtitles' }
-    let makeTrack = (track) => { return {id: newId(), name: track.label, track: track} }
+    let trackId = () => { return id++ }
     let textTracks = this.el.textTracks ? Array.from(this.el.textTracks) : []
 
-    return textTracks.filter(onlySubtitles).map(makeTrack)
+    return textTracks
+      .filter(track => track.kind === 'subtitles')
+      .map(track => { return {id: trackId(), name: track.label, track: track} })
   }
 
   get closedCaptionsTrackId() {
@@ -501,34 +495,24 @@ export default class HTML5Video extends Playback {
 
     let tracks = this.closedCaptionsTracks
     let showingTrack
-
     if (trackId !== -1) {
-      // Get track to show
-      showingTrack = tracks.find((track) => {
-        if (track.id == trackId) {
-          return track
-        }
-      })
-    }
-
-    // Ensure track is not already displayed
-    if (showingTrack && showingTrack.track.mode === 'showing') {
-      return
+      showingTrack = arrayFind(tracks, track => track.id === trackId)
+      if (!showingTrack) {
+        return // Track id not found
+      }
+      if (showingTrack.track.mode === 'showing') {
+        return // Track already showing
+      }
     }
 
     // Since it is possible to display multiple tracks,
     // ensure that all tracks are hidden.
     tracks
-      .filter((track) => { return track.track.mode !== 'hidden' })
-      .forEach((track) => { track.track.mode = 'hidden' })
+      .filter(track => track.track.mode !== 'hidden')
+      .forEach(track => track.track.mode = 'hidden')
 
-    // Display track
-    if (showingTrack) {
-      showingTrack.track.mode = 'showing'
-    } else if (trackId !== -1) {
-      // Track id not found
-      return
-    }
+    showingTrack && (showingTrack.track.mode = 'showing')
+
     this._ccTrackId = trackId
     this.trigger(Events.PLAYBACK_SUBTITLE_CHANGED, {
       id: trackId
