@@ -75,7 +75,7 @@
     "sync-pkg": "^0.7.1",
     "uglify-js": "^3.0.5",
     "url-loader": "^0.5.6",
-    "webpack": "^2.5.0",
+    "webpack": "^3.0.0",
     "webpack-dev-server": "^2.4.5",
     "yargs": "^8.0.1"
   }
