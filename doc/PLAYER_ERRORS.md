@@ -80,6 +80,7 @@ var ErrorPlugin = Clappr.ContainerPlugin.extend({
   bindEvents: function() { this.listenTo(this.container, Clappr.Events.CONTAINER_ERROR, this.onError) },
   hide: function() { this._err && this._err.remove() },
   show: function() {
+    var $ = Clappr.$
     this.hide();
     var txt = (this.options.errorPlugin && this.options.errorPlugin.text) ? this.options.errorPlugin.text : 'A fatal error occured.';
     this._err = $('<div>')
