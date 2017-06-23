@@ -10,8 +10,9 @@
  */
 if (!Array.prototype.find) {
   Object.defineProperty(Array.prototype, 'find', {
+    // Note: ES6 arrow function syntax is not used on purpose to avoid this to be undefined
     value: function(predicate) {
-     // 1. Let O be ? ToObject(this value).
+      // 1. Let O be ? ToObject(this value).
       if (this == null) {
         throw new TypeError('"this" is null or not defined')
       }
