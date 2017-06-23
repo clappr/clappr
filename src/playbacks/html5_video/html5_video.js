@@ -126,6 +126,7 @@ export default class HTML5Video extends Playback {
     })
 
     playbackConfig.playInline && (this.$el.attr({playsinline: 'playsinline'}))
+    playbackConfig.crossOrigin && (this.$el.attr({crossorigin: playbackConfig.crossOrigin}))
 
     // TODO should settings be private?
     this.settings = {default: ['seekbar']}
