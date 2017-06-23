@@ -94,6 +94,62 @@ describe('HTML5Video playback', function() {
     expect(playback.el.muted).to.be.false
   })
 
+  it('setup external tracks', function() {
+    let newTrackUrl = () => { URL.createObjectURL(new Blob([], {type: 'text/vtt'})) }
+    const options = $.extend({playback: {
+      externalTracks: [
+        {lang: 'en', label: 'English', src: newTrackUrl(), kind: 'subtitles'},
+        {lang: 'fr', label: 'French', src: newTrackUrl()}
+      ]
+    }}, this.options)
+    const playback = new HTML5Video(options)
+    playback.render()
+    const $tracks = playback.$el.find('track[data-html5-video-track]')
+
+    expect($tracks[0].getAttribute('data-html5-video-track')).to.be.equal('0')
+    expect($tracks[0].getAttribute('kind')).to.be.equal('subtitles')
+    expect($tracks[0].getAttribute('label')).to.be.equal('English')
+    expect($tracks[0].getAttribute('srclang')).to.be.equal('en')
+
+    expect($tracks[1].getAttribute('data-html5-video-track')).to.be.equal('1')
+    expect($tracks[1].getAttribute('kind')).to.be.equal('subtitles')
+    expect($tracks[1].getAttribute('label')).to.be.equal('French')
+    expect($tracks[1].getAttribute('srclang')).to.be.equal('fr')
+  })
+
+  it('can switch text tracks', function() {
+    let newTrackUrl = () => { URL.createObjectURL(new Blob([], {type: 'text/vtt'})) }
+    const options = $.extend({playback: {
+      externalTracks: [
+        {lang: 'en', label: 'English', src: newTrackUrl(), kind: 'subtitles'},
+        {lang: 'fr', label: 'French', src: newTrackUrl()}
+      ]
+    }}, this.options)
+    const playback = new HTML5Video(options)
+    playback.render()
+
+    expect(playback.hasClosedCaptionsTracks).to.be.true
+    expect(playback.closedCaptionsTracks.length).equal(2)
+    expect(playback.closedCaptionsTrackId).equal(-1)
+    expect(playback.closedCaptionsTracks[0].track.mode).to.not.equal('showing')
+    expect(playback.closedCaptionsTracks[1].track.mode).to.not.equal('showing')
+
+    playback.closedCaptionsTrackId = 0
+    expect(playback.closedCaptionsTrackId).equal(0)
+    expect(playback.closedCaptionsTracks[0].track.mode).equal('showing')
+    expect(playback.closedCaptionsTracks[1].track.mode).to.not.equal('showing')
+
+    playback.closedCaptionsTrackId = 1
+    expect(playback.closedCaptionsTrackId).equal(1)
+    expect(playback.closedCaptionsTracks[0].track.mode).to.not.equal('showing')
+    expect(playback.closedCaptionsTracks[1].track.mode).equal('showing')
+
+    playback.closedCaptionsTrackId = -1
+    expect(playback.closedCaptionsTrackId).equal(-1)
+    expect(playback.closedCaptionsTracks[0].track.mode).to.not.equal('showing')
+    expect(playback.closedCaptionsTracks[1].track.mode).to.not.equal('showing')
+  })
+
   describe('progress', function() {
     let start, end, currentTime
     const duration = 300
