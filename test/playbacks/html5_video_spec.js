@@ -64,6 +64,7 @@ describe('HTML5Video playback', function() {
     const playback = new HTML5Video(options)
 
     expect(playback.el.crossOrigin).to.be.equal('use-credentials')
+    expect(playback.el.getAttribute('crossorigin')).equal('use-credentials')
   })
 
   it('enables inline playback for webviews when playInline flag is set', function() {
