@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 /*jshint -W079 */
 
+import './polyfills'
 import Browser from '../components/browser'
 import $ from 'clappr-zepto'
 
@@ -262,15 +263,6 @@ export class DomRecycler {
 }
 
 DomRecycler.options = { recycleVideo: false }
-
-// An (very simplist) alternative to Array.find() until fully supported by browsers
-export function arrayFind(arr, func) {
-  for (let i = 0; i < arr.length; i++) {
-    if (func(arr[i])) {
-      return arr[i]
-    }
-  }
-}
 
 export default {
   Config,
