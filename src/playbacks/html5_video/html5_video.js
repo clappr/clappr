@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {arrayFind, isNumber, seekStringToSeconds, DomRecycler} from '../../base/utils'
+import {isNumber, seekStringToSeconds, DomRecycler} from '../../base/utils'
 
 import Playback from '../../base/playback'
 import Styler from '../../base/styler'
@@ -461,7 +461,8 @@ export default class HTML5Video extends Playback {
 
   _handleTextTrackChange() {
     let tracks = this.closedCaptionsTracks
-    let track = arrayFind(tracks, track => track.track.mode === 'showing') || {id: -1}
+    let track = tracks.find(track => track.track.mode === 'showing') || {id: -1}
+
     if (this._ccTrackId !== track.id) {
       this._ccTrackId = track.id
       this.trigger(Events.PLAYBACK_SUBTITLE_CHANGED, {
@@ -498,7 +499,7 @@ export default class HTML5Video extends Playback {
 
     // Note: -1 is for hide all tracks
     if (trackId !== -1) {
-      showingTrack = arrayFind(tracks, track => track.id === trackId)
+      showingTrack = tracks.find(track => track.id === trackId)
       if (!showingTrack) {
         return // Track id not found
       }
