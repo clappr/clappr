@@ -39,7 +39,7 @@
     "css-loader": "^0.28.1",
     "directory-named-webpack-plugin": "^2.1.0",
     "dotenv": "^4.0.0",
-    "eslint": "^3.1.0",
+    "eslint": "^4.1.0",
     "file-loader": "^0.11.1",
     "gulp": "^3.8.1",
     "hls.js": "^0.7.9",
