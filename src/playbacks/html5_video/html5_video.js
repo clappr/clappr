@@ -143,8 +143,8 @@ export default class HTML5Video extends Playback {
     if (this.el.src === srcUrl) {
       return
     }
-    this._src = srcUrl
     this.el.src = srcUrl
+    this._src = this.el.src
   }
 
   _onLoadedMetadata(e) {
