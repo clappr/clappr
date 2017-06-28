@@ -161,8 +161,8 @@ export default class HTML5Video extends Playback {
       return
     }
     this._ccIsSetup = false
-    this._src = srcUrl
     this.el.src = srcUrl
+    this._src = this.el.src
   }
 
   _onLoadedMetadata(e) {
