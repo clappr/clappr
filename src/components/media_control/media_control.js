@@ -45,23 +45,38 @@ export default class MediaControl extends UIObject {
 
   get events() {
     return {
+      // play/pause/stop
       'click [data-play]': 'play',
       'click [data-pause]': 'pause',
       'click [data-playpause]': 'togglePlayPause',
       'click [data-stop]': 'stop',
       'click [data-playstop]': 'togglePlayStop',
+
+      // fullscreen toggle
       'click [data-fullscreen]': 'toggleFullscreen',
-      'click .bar-container[data-seekbar]': 'seek',
+
+      // volume
       'click .bar-container[data-volume]': 'onVolumeClick',
       'click .drawer-icon[data-volume]': 'toggleMute',
-      'click [data-cc-button]': 'toggleClosedCaptions',
       'mouseenter .drawer-container[data-volume]': 'showVolumeBar',
       'mouseleave .drawer-container[data-volume]': 'hideVolumeBar',
       'mousedown .bar-container[data-volume]': 'startVolumeDrag',
       'mousemove .bar-container[data-volume]': 'mousemoveOnVolumeBar',
+
+      // closed captions
+      'click [data-cc-button]': 'toggleClosedCaptions',
+
+      // seek
+      'click .bar-container[data-seekbar]': 'seek',
       'mousedown .bar-scrubber[data-seekbar]': 'startSeekDrag',
       'mousemove .bar-container[data-seekbar]': 'mousemoveOnSeekBar',
       'mouseleave .bar-container[data-seekbar]': 'mouseleaveOnSeekBar',
+      // ... seek with touch
+      'touchstart .bar-scrubber[data-seekbar]': 'startSeekDrag',
+      'touchmove .bar-container[data-seekbar]': 'touchMoveOnSeekBar',
+      'touchend .bar-container[data-seekbar]': 'touchEndOnSeekbar',
+
+      // show/hide when mouse over
       'mouseenter .media-control-layer[data-controls]': 'setUserKeepVisible',
       'mouseleave .media-control-layer[data-controls]': 'resetUserKeepVisible'
     }
@@ -110,26 +125,36 @@ export default class MediaControl extends UIObject {
   }
 
   addEventListeners() {
-    if (this.container) {
-      Mediator.on(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
-      this.listenTo(this.container, Events.CONTAINER_PLAY, this.changeTogglePlay)
-      this.listenTo(this.container, Events.CONTAINER_PAUSE, this.changeTogglePlay)
-      this.listenTo(this.container, Events.CONTAINER_STOP, this.changeTogglePlay)
-      this.listenTo(this.container, Events.CONTAINER_DBLCLICK, this.toggleFullscreen)
-      this.listenTo(this.container, Events.CONTAINER_TIMEUPDATE, this.onTimeUpdate)
-      this.listenTo(this.container, Events.CONTAINER_PROGRESS, this.updateProgressBar)
-      this.listenTo(this.container, Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate)
-      this.listenTo(this.container, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.settingsUpdate)
-      this.listenTo(this.container, Events.CONTAINER_HIGHDEFINITIONUPDATE, this.highDefinitionUpdate)
-      this.listenTo(this.container, Events.CONTAINER_LOADEDTEXTTRACK, this.ccAvailable.bind(this, true))
-      this.listenTo(this.container, Events.CONTAINER_MEDIACONTROL_DISABLE, this.disable)
-      this.listenTo(this.container, Events.CONTAINER_MEDIACONTROL_ENABLE, this.enable)
-      this.listenTo(this.container, Events.CONTAINER_ENDED, this.ended)
-      this.listenTo(this.container, Events.CONTAINER_VOLUME, this.onVolumeChanged)
-      if (this.container.playback.el.nodeName.toLowerCase() === 'video') {
-        // wait until the metadata has loaded and then check if fullscreen on video tag is supported
-        this.listenToOnce(this.container, Events.CONTAINER_LOADEDMETADATA, this.onLoadedMetadataOnVideoTag)
-      }
+    if (!this.container) {
+      return;
+    }
+
+    Mediator.on(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
+
+    this.listenTo(this.container, Events.CONTAINER_PLAY, this.changeTogglePlay)
+    this.listenTo(this.container, Events.CONTAINER_PAUSE, this.changeTogglePlay)
+    this.listenTo(this.container, Events.CONTAINER_STOP, this.changeTogglePlay)
+    this.listenTo(this.container, Events.CONTAINER_DBLCLICK, this.toggleFullscreen)
+    this.listenTo(this.container, Events.CONTAINER_TIMEUPDATE, this.onTimeUpdate)
+    this.listenTo(this.container, Events.CONTAINER_PROGRESS, this.updateProgressBar)
+    this.listenTo(this.container, Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate)
+    this.listenTo(this.container, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.settingsUpdate)
+    this.listenTo(this.container, Events.CONTAINER_HIGHDEFINITIONUPDATE, this.highDefinitionUpdate)
+    this.listenTo(this.container, Events.CONTAINER_LOADEDTEXTTRACK, this.ccAvailable.bind(this, true))
+    this.listenTo(this.container, Events.CONTAINER_MEDIACONTROL_DISABLE, this.disable)
+    this.listenTo(this.container, Events.CONTAINER_MEDIACONTROL_ENABLE, this.enable)
+    this.listenTo(this.container, Events.CONTAINER_ENDED, this.ended)
+    this.listenTo(this.container, Events.CONTAINER_VOLUME, this.onVolumeChanged)
+
+    var video = this.container.playback.el;
+    if (video.nodeName.toLowerCase() === 'video') {
+      // wait until the metadata has loaded and then check if fullscreen on video tag is supported
+      this.listenToOnce(this.container, Events.CONTAINER_LOADEDMETADATA, this.onLoadedMetadataOnVideoTag)
+
+      // watch for user to come out of fullscreen and remove the native controls that iOS tends to add
+      video.addEventListener('webkitendfullscreen', function() {
+        video.removeAttribute('controls');
+      }, false);
     }
   }
 
@@ -325,6 +350,38 @@ export default class MediaControl extends UIObject {
       event.preventDefault()
       this.setVolume(this.getVolumeFromUIEvent(event))
     }
+  }
+
+  clickOrTapToSeek(event) {
+    this.seek(event);
+
+    // Make sure to also hide the hover indicator if it were there on touch devices
+    this.mouseleaveOnSeekBar(event);
+  }
+
+  touchMoveOnSeekBar(event) {
+    this.mousemoveOnSeekBar(event);
+
+    // If we hid the seek dot on touchEnd from last time, make sure to restore it
+    // so you can see where you're dragging
+    this.$seekBarHover.css({opacity: 1});
+  }
+
+  touchEndOnSeekbar(event) {
+    // Touch event is a little different than mouse hover, in that we actually
+    // want to perform a seek when they're done dragging.  For mouse, we let
+    // them hover to see the scrub thumbnail but require a separate click to seek.
+    this.mouseleaveOnSeekBar(event);
+
+    // Pretend this was part of the grab/drag functionality with mouse-based interaction,
+    // which will perform a seek when done dragging.
+    this.draggingSeekBar = true;
+    this.stopDrag(event);
+    event.preventDefault();
+
+    // Also, that silly `bar-hover` dot is useless for touch, and gets stuck being displayed
+    // when iOS decides to keep the :hover selector on. Just get rid of it.
+    this.$seekBarHover.css({opacity: 0});
   }
 
   getVolumeFromUIEvent(event) {
