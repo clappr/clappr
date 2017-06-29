@@ -1,10 +1,12 @@
 var path = require('path');
 var webpack = require('webpack');
 
+var ENTRY_POINT = 'src/clappr-dash-shaka-playback.js'
+
 module.exports = [
   {
     devtool: 'source-maps',
-    entry: path.resolve(__dirname, 'index.js'),
+    entry: path.resolve(__dirname, ENTRY_POINT),
     externals: {
       "clappr": 'Clappr',
       "shaka-player": 'shaka'
@@ -29,7 +31,7 @@ module.exports = [
 
   {
     devtool: 'source-maps',
-    entry: path.resolve(__dirname, 'index.js'),
+    entry: path.resolve(__dirname, ENTRY_POINT),
     externals: {
       "clappr": 'Clappr',
       "shaka-player": 'shaka'
