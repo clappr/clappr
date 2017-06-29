@@ -103,15 +103,15 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   get textTracks () {
-    return this._player && this._player.getTracks().filter((t) => t.type === 'text')
+    return this._player && this._player.getTextTracks()
   }
 
   get audioTracks () {
-    return this._player && this._player.getTracks().filter((t) => t.type === 'audio')
+    return this._player && this._player.getVariantTracks().filter((t) => t.mimeType.startsWith('audio/'))
   }
 
   get videoTracks () {
-    return this._player && this._player.getTracks().filter((t) => t.type === 'video')
+    return this._player && this._player.getVariantTracks().filter((t) => t.mimeType.startsWith('video/'))
   }
 
   getPlaybackType () {
@@ -151,9 +151,9 @@ class DashShakaPlayback extends HTML5Video {
 
   _createPlayer () {
     var player = new shaka.Player(this.el)
-    player.addEventListener('error', this._onError)
-    player.addEventListener('adaptation', this._onAdaptation)
-    player.addEventListener('buffering', this._onBuffering)
+    player.addEventListener('error', this._onError.bind(this))
+    player.addEventListener('adaptation', this._onAdaptation.bind(this))
+    player.addEventListener('buffering', this._onBuffering.bind(this))
     return player
   }
 
@@ -165,7 +165,7 @@ class DashShakaPlayback extends HTML5Video {
   _loaded () {
     this._isShakaReadyState = true
     this.trigger(DashShakaPlayback.Events.SHAKA_READY)
-    this._shakaReady()
+    super._ready()
     this._startToSendStats()
     this._fillLevels()
   }
@@ -215,10 +215,6 @@ class DashShakaPlayback extends HTML5Video {
     super.destroy()
     this._isShakaReadyState = false
     Log.debug('shaka was destroyed')
-  }
-
-  _shakaReady () {
-    super._ready()
   }
 }
 

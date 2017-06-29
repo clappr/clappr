@@ -52,7 +52,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
@@ -252,9 +252,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: '_createPlayer',
 	    value: function _createPlayer() {
 	      var player = new _shakaPlayer2['default'].Player(this.el);
-	      player.addEventListener('error', this._onError);
-	      player.addEventListener('adaptation', this._onAdaptation);
-	      player.addEventListener('buffering', this._onBuffering);
+	      player.addEventListener('error', this._onError.bind(this));
+	      player.addEventListener('adaptation', this._onAdaptation.bind(this));
+	      player.addEventListener('buffering', this._onBuffering.bind(this));
 	      return player;
 	    }
 	  }, {
@@ -268,7 +268,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function _loaded() {
 	      this._isShakaReadyState = true;
 	      this.trigger(DashShakaPlayback.Events.SHAKA_READY);
-	      this._shakaReady();
+	      _get(Object.getPrototypeOf(DashShakaPlayback.prototype), '_ready', this).call(this);
 	      this._startToSendStats();
 	      this._fillLevels();
 	    }
@@ -335,11 +335,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      _clappr.Log.debug('shaka was destroyed');
 	    }
 	  }, {
-	    key: '_shakaReady',
-	    value: function _shakaReady() {
-	      _get(Object.getPrototypeOf(DashShakaPlayback.prototype), '_ready', this).call(this);
-	    }
-	  }, {
 	    key: 'isReady',
 	    get: function get() {
 	      return this._isShakaReadyState;
@@ -347,22 +342,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'textTracks',
 	    get: function get() {
-	      return this._player && this._player.getTracks().filter(function (t) {
-	        return t.type === 'text';
-	      });
+	      return this._player && this._player.getTextTracks();
 	    }
 	  }, {
 	    key: 'audioTracks',
 	    get: function get() {
-	      return this._player && this._player.getTracks().filter(function (t) {
-	        return t.type === 'audio';
+	      return this._player && this._player.getVariantTracks().filter(function (t) {
+	        return t.mimeType.startsWith('audio/');
 	      });
 	    }
 	  }, {
 	    key: 'videoTracks',
 	    get: function get() {
-	      return this._player && this._player.getTracks().filter(function (t) {
-	        return t.type === 'video';
+	      return this._player && this._player.getVariantTracks().filter(function (t) {
+	        return t.mimeType.startsWith('video/');
 	      });
 	    }
 	  }]);
@@ -373,19 +366,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = DashShakaPlayback;
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 1 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
 
-/***/ },
+/***/ }),
 /* 2 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
 
-/***/ }
+/***/ })
 /******/ ])
 });
 ;

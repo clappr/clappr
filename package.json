@@ -2,7 +2,7 @@
   "name": "dash-shaka-playback",
   "version": "2.0.7",
   "description": "clappr dash playback based on shaka player",
-  "main": "index.js",
+  "main": "dash-shaka-playback.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:clappr/dash-shaka-playback.git"
@@ -16,7 +16,7 @@
   "author": "Clappr team",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "shaka-player": "2.0.8",
+    "shaka-player": "2.1.4",
     "clappr": "0.2.66"
   },
   "devDependencies": {
