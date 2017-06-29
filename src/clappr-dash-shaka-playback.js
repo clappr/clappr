@@ -151,7 +151,7 @@ class DashShakaPlayback extends HTML5Video {
 
   _createPlayer () {
     var player = new shaka.Player(this.el)
-    player.addEventListener('error', this._onError)
+    player.addEventListener('error', this._onError.bind(this))
     player.addEventListener('adaptation', this._onAdaptation.bind(this))
     player.addEventListener('buffering', this._onBuffering.bind(this))
     return player

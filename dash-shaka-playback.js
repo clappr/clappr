@@ -252,7 +252,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: '_createPlayer',
 	    value: function _createPlayer() {
 	      var player = new _shakaPlayer2['default'].Player(this.el);
-	      player.addEventListener('error', this._onError);
+	      player.addEventListener('error', this._onError.bind(this));
 	      player.addEventListener('adaptation', this._onAdaptation.bind(this));
 	      player.addEventListener('buffering', this._onBuffering.bind(this));
 	      return player;
