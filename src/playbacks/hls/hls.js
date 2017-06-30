@@ -141,6 +141,7 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   _setupHls() {
+    this._ccIsSetup = false
     this._hls = new HLSJS(this.options.playback.hlsjsConfig || {})
     this._hls.on(HLSJS.Events.MEDIA_ATTACHED, () => this._hls.loadSource(this.options.src))
     this._hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this._updatePlaybackType(evt, data))
@@ -513,9 +514,15 @@ export default class HLS extends HTML5VideoPlayback {
     this.trigger(Events.PLAYBACK_FRAGMENT_LOADED, data)
   }
 
-  _onSubtitleLoaded(evt, data) {
-    this.el.textTracks[data.id].mode = 'hidden'
-    this.trigger(Events.PLAYBACK_SUBTITLE_LOADED, evt, data)
+  _onSubtitleLoaded() {
+    // This event may be triggered multiple times
+    // Setup CC only once (disable CC by default)
+    if (!this._ccIsSetup) {
+      this.trigger(Events.PLAYBACK_SUBTITLE_AVAILABLE)
+      const trackId = this.closedCaptionsTrackId
+      this.closedCaptionsTrackId = trackId
+      this._ccIsSetup = true
+    }
   }
 
   _onLevelSwitch(evt, data) {

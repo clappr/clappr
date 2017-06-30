@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 /*jshint -W079 */
 
+import './polyfills'
 import Browser from '../components/browser'
 import $ from 'clappr-zepto'
 

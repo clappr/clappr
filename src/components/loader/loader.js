@@ -24,6 +24,7 @@ import ClickToPausePlugin from '../../plugins/click_to_pause'
 
 /* Core Plugins */
 import DVRControls from '../../plugins/dvr_controls'
+import ClosedCaptions from '../../plugins/closed_captions'
 import Favicon from '../../plugins/favicon'
 import SeekTime from '../../plugins/seek_time'
 import SourcesPlugin from '../../plugins/sources'
@@ -49,7 +50,7 @@ export default class Loader extends BaseObject {
     this.playerId = playerId
     this.playbackPlugins = [HLSVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, FlashVideoPlayback, FlasHLSVideoPlayback, HTMLImgPlayback, NoOp]
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
-    this.corePlugins = [DVRControls, Favicon, SeekTime, SourcesPlugin, EndVideo, Strings]
+    this.corePlugins = [DVRControls, ClosedCaptions, Favicon, SeekTime, SourcesPlugin, EndVideo, Strings]
     if (externalPlugins) {
       if (!Array.isArray(externalPlugins)) {
         this.validateExternalPluginsType(externalPlugins)
