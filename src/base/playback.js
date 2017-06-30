@@ -132,6 +132,40 @@ export default class Playback extends UIObject {
   }
 
   /**
+   * checks if the playback has closed caption tracks.
+   * @property hasClosedCaptionsTracks
+   * @type {Boolean}
+   */
+  get hasClosedCaptionsTracks() {
+    return this.closedCaptionsTracks.length > 0
+  }
+
+  /**
+   * gets the playback available closed caption tracks.
+   * @property closedCaptionsTracks
+   * @type {Array} an array of objects with at least 'id' and 'name' properties
+   */
+  get closedCaptionsTracks() {
+    return []
+  }
+
+  /**
+   * gets the selected closed caption track index. (-1 is disabled)
+   * @property closedCaptionsTrackId
+   * @type {Number}
+   */
+  get closedCaptionsTrackId() {
+    return -1
+  }
+
+  /**
+   * sets the selected closed caption track index. (-1 is disabled)
+   * @property closedCaptionsTrackId
+   * @type {Number}
+   */
+  set closedCaptionsTrackId(trackId) {} // eslint-disable-line no-unused-vars
+
+  /**
    * gets the playback type (`'vod', 'live', 'aod'`)
    * @method getPlaybackType
    * @return {String} you should write the playback type otherwise it'll assume `'no_op'`

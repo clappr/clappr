@@ -35,6 +35,7 @@ var options = {
     'pt-BR': {
       'live': 'ao vivo',
       'back_to_live': 'voltar para o ao vivo',
+      'disabled': 'Desativado',
       'playback_not_supported': 'Seu navegador não supporta a reprodução deste video. Por favor, tente usar um navegador diferente.'
      }
   }
@@ -81,9 +82,27 @@ The configuration for the playback, it's still only compatible with `html5_video
     controls: true,
     playInline: true, // allows inline playback when running on iOS UIWebview
     crossOrigin: 'use-credentials',
-    recycleVideo: Clappr.Browser.isMobile // Recycle <video> element only for mobile. (default is false)
+    recycleVideo: Clappr.Browser.isMobile, // Recycle <video> element only for mobile. (default is false)
+    externalTracks: [ // Add external <track> (if supported by browser, see also https://www.w3.org/TR/html5/embedded-content-0.html#the-track-element)
+      {lang: 'en', label: 'English', src: 'http://example.com/en.vtt', kind: 'subtitles'},
+      {lang: 'fr', label: 'French', src: 'http://example.com/fr.vtt'} // 'kind' default value is 'subtitles'
+    ]
   }
 }
+```
+
+##### Closed Captions Plugin
+Customize the labels and title:
+
+```javascript
+  var player = new Clappr.Player({
+    source: "http://your.video/here.mp4",
+    closedCaptionsConfig: {
+      title: 'Subtitles', // default is none
+      ariaLabel: 'Closed Captions', // Default is 'cc-button'
+      labelCallback: function (track) { return track.name }, // track is an object with id, name and track properties (track is TextTrack object)
+    },
+  });
 ```
 
 ##### Google Analytics Plugin

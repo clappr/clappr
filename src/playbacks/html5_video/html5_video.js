@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {seekStringToSeconds, DomRecycler} from '../../base/utils'
+import {isNumber, seekStringToSeconds, DomRecycler} from '../../base/utils'
 
 import Playback from '../../base/playback'
 import Styler from '../../base/styler'
@@ -10,6 +10,8 @@ import Browser from '../../components/browser'
 import Events from '../../base/events'
 import tagStyle from './public/style.scss'
 import $ from 'clappr-zepto'
+import template from '../../base/template'
+import tracksHTML from './public/tracks.html'
 
 const MIMETYPES = {
   'mp4': ['avc1.42E01E', 'avc1.58A01E', 'avc1.4D401E', 'avc1.64001E', 'mp4v.20.8', 'mp4v.20.240', 'mp4a.40.2'].map(
@@ -96,6 +98,7 @@ export default class HTML5Video extends Playback {
     this._playheadMoving = false
     this._playheadMovingTimer = null
     this._stopped = false
+    this._ccTrackId = -1
     this._setupSrc(this.options.src)
     // backwards compatibility (TODO: remove on 0.3.0)
     this.options.playback || (this.options.playback = this.options || {})
@@ -123,14 +126,28 @@ export default class HTML5Video extends Playback {
     })
 
     playbackConfig.playInline && (this.$el.attr({playsinline: 'playsinline'}))
+    playbackConfig.crossOrigin && (this.$el.attr({crossorigin: playbackConfig.crossOrigin}))
 
     // TODO should settings be private?
     this.settings = {default: ['seekbar']}
     this.settings.left = ['playpause', 'position', 'duration']
-    this.settings.right = ['fullscreen', 'volume', 'cc-button', 'hd-indicator']
+    this.settings.right = ['fullscreen', 'volume', 'hd-indicator']
+
+    playbackConfig.externalTracks && (this._setupExternalTracks(playbackConfig.externalTracks))
 
     // https://github.com/clappr/clappr/issues/1076
     this.options.autoPlay && process.nextTick(() => !this._destroyed && this.play())
+  }
+
+  _setupExternalTracks(tracks) {
+    this._externalTracks = tracks.map(track => {
+      return {
+        kind: track.kind || 'subtitles', // Default is 'subtitles'
+        label: track.label,
+        lang: track.lang,
+        src: track.src,
+      }
+    })
   }
 
   /**
@@ -143,6 +160,7 @@ export default class HTML5Video extends Playback {
     if (this.el.src === srcUrl) {
       return
     }
+    this._ccIsSetup = false
     this.el.src = srcUrl
     this._src = this.el.src
   }
@@ -309,6 +327,7 @@ export default class HTML5Video extends Playback {
   }
 
   _onPlaying() {
+    this._checkForClosedCaptions()
     this._startPlayheadMovingChecks()
     this._handleBufferingEvents()
     this.trigger(Events.PLAYBACK_PLAY)
@@ -350,6 +369,7 @@ export default class HTML5Video extends Playback {
 
   destroy() {
     this._destroyed = true
+    this.handleTextTrackChange && this.el.textTracks.removeEventListener('change', this.handleTextTrackChange)
     this.$el.remove()
     this.el.src = ''
     this._src = null
@@ -426,6 +446,85 @@ export default class HTML5Video extends Playback {
     this.trigger(Events.PLAYBACK_READY, this.name)
   }
 
+  _checkForClosedCaptions() {
+    // Check if CC available only if current playback is HTML5Video
+    if (this.isHTML5Video && !this._ccIsSetup) {
+      if (this.hasClosedCaptionsTracks) {
+        this.trigger(Events.PLAYBACK_SUBTITLE_AVAILABLE)
+        const trackId = this.closedCaptionsTrackId
+        this.closedCaptionsTrackId = trackId
+        this.handleTextTrackChange = this._handleTextTrackChange.bind(this)
+        this.el.textTracks.addEventListener('change', this.handleTextTrackChange)
+      }
+      this._ccIsSetup = true
+    }
+  }
+
+  _handleTextTrackChange() {
+    let tracks = this.closedCaptionsTracks
+    let track = tracks.find(track => track.track.mode === 'showing') || {id: -1}
+
+    if (this._ccTrackId !== track.id) {
+      this._ccTrackId = track.id
+      this.trigger(Events.PLAYBACK_SUBTITLE_CHANGED, {
+        id: track.id
+      })
+    }
+  }
+
+  get isHTML5Video() {
+    return this.name === HTML5Video.prototype.name
+  }
+
+  get closedCaptionsTracks() {
+    let id = 0
+    let trackId = () => { return id++ }
+    let textTracks = this.el.textTracks ? Array.from(this.el.textTracks) : []
+
+    return textTracks
+      .filter(track => track.kind === 'subtitles')
+      .map(track => { return {id: trackId(), name: track.label, track: track} })
+  }
+
+  get closedCaptionsTrackId() {
+    return this._ccTrackId
+  }
+
+  set closedCaptionsTrackId(trackId) {
+    if (!isNumber(trackId)) {
+      return
+    }
+
+    let tracks = this.closedCaptionsTracks
+    let showingTrack
+
+    // Note: -1 is for hide all tracks
+    if (trackId !== -1) {
+      showingTrack = tracks.find(track => track.id === trackId)
+      if (!showingTrack) {
+        return // Track id not found
+      }
+      if (showingTrack.track.mode === 'showing') {
+        return // Track already showing
+      }
+    }
+
+    // Since it is possible to display multiple tracks,
+    // ensure that all tracks are hidden.
+    tracks
+      .filter(track => track.track.mode !== 'hidden')
+      .forEach(track => track.track.mode = 'hidden')
+
+    showingTrack && (showingTrack.track.mode = 'showing')
+
+    this._ccTrackId = trackId
+    this.trigger(Events.PLAYBACK_SUBTITLE_CHANGED, {
+      id: trackId
+    })
+  }
+
+  get template() { return template(tracksHTML) }
+
   render() {
     const style = Styler.getStyleFor(tagStyle)
 
@@ -433,6 +532,12 @@ export default class HTML5Video extends Playback {
       this.$el.on('contextmenu', () => {
         return false
       })
+    }
+
+    if (this._externalTracks && this._externalTracks.length > 0) {
+      this.$el.html(this.template({
+        tracks: this._externalTracks,
+      }))
     }
 
     this.$el.append(style)

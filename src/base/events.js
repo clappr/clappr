@@ -284,8 +284,12 @@ Events.PLAYER_TIMEUPDATE = 'timeupdate'
  */
 Events.PLAYER_VOLUMEUPDATE = 'volumeupdate'
 
-// TODO doc
-Events.PLAYER_TEXTTRACKLOADED = 'texttrackloaded'
+/**
+ * Fired when subtitle is available
+ *
+ * @event PLAYER_SUBTITLE_AVAILABLE
+ */
+Events.PLAYER_SUBTITLE_AVAILABLE = 'subtitleavailable'
 
 // Playback Events
 /**
@@ -480,9 +484,22 @@ Events.PLAYBACK_STATS_ADD = 'playback:stats:add'
 Events.PLAYBACK_FRAGMENT_LOADED = 'playback:fragment:loaded'
 // TODO doc
 Events.PLAYBACK_LEVEL_SWITCH = 'playback:level:switch'
-// TODO doc
-Events.PLAYBACK_SUBTITLE_LOADED = 'playback:subtitle:loaded'
-
+/**
+ * Fired when subtitle is available on playback for display
+ *
+ * @event PLAYBACK_SUBTITLE_AVAILABLE
+ */
+Events.PLAYBACK_SUBTITLE_AVAILABLE = 'playback:subtitle:available'
+/**
+ * Fired when playback subtitle track has changed
+ *
+ * @event CONTAINER_SUBTITLE_CHANGED
+ * @param {Object} track Data
+ * track object
+ * @param {Number} [track.id]
+ * selected track id
+ */
+Events.PLAYBACK_SUBTITLE_CHANGED = 'playback:subtitle:changed'
 
 // Core Events
 /**
@@ -576,11 +593,21 @@ Events.CONTAINER_ERROR = 'container:error'
 Events.CONTAINER_LOADEDMETADATA = 'container:loadedmetadata'
 
 /**
- * Fired when a text track is loaded and available on container for display
+ * Fired when subtitle is available on container for display
  *
- * @event CONTAINER_LOADEDTEXTTRACK
+ * @event CONTAINER_SUBTITLE_AVAILABLE
  */
-Events.CONTAINER_LOADEDTEXTTRACK = 'container:loadedtexttrack'
+Events.CONTAINER_SUBTITLE_AVAILABLE = 'container:subtitle:available'
+/**
+ * Fired when subtitle track has changed
+ *
+ * @event CONTAINER_SUBTITLE_CHANGED
+ * @param {Object} track Data
+ * track object
+ * @param {Number} [track.id]
+ * selected track id
+ */
+Events.CONTAINER_SUBTITLE_CHANGED = 'container:subtitle:changed'
 
 /**
  * Fired when the time is updated on container
