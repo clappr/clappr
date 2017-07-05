@@ -34,17 +34,17 @@ describe('MediaControl', function() {
   describe('#setVolume', function() {
     // TODO fix. needs to wait for container to be ready because
     // setVolume only called at this point
-   // it('sets the volume', function() {
-   //   sinon.spy(this.container, 'setVolume');
-   //   sinon.spy(this.mediaControl, 'updateVolumeUI');
+    // it('sets the volume', function() {
+    //   sinon.spy(this.container, 'setVolume');
+    //   sinon.spy(this.mediaControl, 'updateVolumeUI');
 
-   //   this.mediaControl.setVolume(42)
+    //   this.mediaControl.setVolume(42)
 
-   //   expect(this.mediaControl.volume).to.be.equal(42)
-   //   expect(this.mediaControl.muted).to.be.equal(false)
-   //   expect(this.container.setVolume).called.once;
-   //   expect(this.mediaControl.updateVolumeUI).called.once;
-   // });
+    //   expect(this.mediaControl.volume).to.be.equal(42)
+    //   expect(this.mediaControl.muted).to.be.equal(false)
+    //   expect(this.container.setVolume).called.once;
+    //   expect(this.mediaControl.updateVolumeUI).called.once;
+    // });
 
     it('limits volume to an integer between 0 and 100', function() {
       this.mediaControl.setVolume(1000)
