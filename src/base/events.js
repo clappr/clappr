@@ -165,8 +165,25 @@ export default class Events {
     }
     return this
   }
-}
 
+  static register(eventName) {
+    Events.custom || (Events.custom = {})
+    let property = typeof eventName === 'string' && eventName.toUpperCase().trim()
+
+    if(property && !Events.custom[property]) {
+      Events.custom[property] = property.toLowerCase().split('_').map(
+        (value, index) => index == 0 ? value : value = (value[0].toUpperCase() + value.slice(1))
+      ).join('')
+    } else {
+      Log.error('Events', 'Error when register event: ' + eventName)
+    }
+  }
+
+  static listCustomAvailable() {
+    Events.custom || (Events.custom = {})
+    return Object.keys(Events.custom).filter((property) => typeof Events.custom[property] === 'string')
+  }
+}
 
 /**
  * listen to an event indefinitely for a given `obj`
