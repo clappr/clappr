@@ -1,9 +1,11 @@
 import Events from '../../src/base/events'
+import Log from '../../src/plugins/log'
 
 describe('Events', function(){
   beforeEach(function(){
     this.events = new Events()
     this.callback = sinon.spy()
+    Events.custom = {}
   })
 
   it('subcribes to a given event', function(){
@@ -134,5 +136,68 @@ describe('Events', function(){
     this.events.trigger('clappr.any.event')
 
     this.callback.should.have.been.calledOnce
+  })
+
+  it('trigger custom event when registered', function(){
+    const eventName = 'PLUGIN_CUSTOM_EVENT'
+
+    Events.register(eventName)
+    this.events.on(Events[eventName], this.callback)
+    this.events.trigger(Events[eventName])
+
+    this.callback.should.have.been.calledOnce
+  })
+
+  it('put the label of custom event in camel case', function(){
+    const eventName = 'PLUGIN_CUSTOM_EVENT'
+    Events.register(eventName)
+
+    expect(Events.custom[eventName]).to.be.equal('pluginCustomEvent')
+  })
+
+  it('does not override event when exist', function(){
+    const eventName = 'PLAYBACK_READY'
+    Events.register(eventName)
+
+    expect(Events[eventName]).to.be.equal('playback:ready')
+  })
+
+  it('list all available custom events', function(){
+    let eventName = 'PLUGIN_CUSTOM_EVENT'
+    let events
+
+    Events.register(eventName)
+    events = Events.listCustomAvailable()
+
+    expect(events).to.include(eventName)
+    expect(events).to.not.include('PLAYBACK_READY')
+    expect(events).to.not.include('register')
+    expect(events).to.not.include('listEvents')
+  })
+
+  describe('does not register an event when eventName is', function() {
+
+    beforeEach(function() {
+      this.stubLogError = sinon.stub(Log.getInstance(), 'error')
+    })
+
+    afterEach(function() {
+      Log.getInstance().error.restore()
+    })
+
+    it('an empty string', function(){
+      Events.register('')
+      Events.register('      ')
+
+      this.stubLogError.should.have.been.calledTwice
+    })
+
+    it('not a string', function(){
+      for(let arg of [function(){}, {}, [], null, undefined]) {
+        Events.register(arg)
+      }
+
+      expect(this.stubLogError.callCount).to.be.equal(5)
+    })
   })
 })
