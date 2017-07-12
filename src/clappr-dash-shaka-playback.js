@@ -19,7 +19,7 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   get name () {
-    return 'DashShakaPlayback'
+    return 'dash_shaka_playback'
   }
 
   get shakaVersion () {
