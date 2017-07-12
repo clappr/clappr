@@ -85,7 +85,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(DashShakaPlayback, [{
 	    key: 'name',
 	    get: function get() {
-	      return 'DashShakaPlayback';
+	      return 'dash_shaka_playback';
 	    }
 	  }, {
 	    key: 'shakaVersion',
