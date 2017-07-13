@@ -21,7 +21,7 @@ A [clappr](https://github.com/clappr/clappr) playback to play dash based on [sha
 <html>
   <head>
     <script src="https://cdn.jsdelivr.net/clappr/latest/clappr.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dash-shaka-playback/2.0.5/dash-shaka-playback.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dash-shaka-playback/2.0.7/dash-shaka-playback.js"></script>
   </head>
 
   <body>
@@ -61,13 +61,17 @@ Install dependencies:
 
 `npm install`
 
-Build:
-
-`npm run build`
-
-Run:
+Run dev. server :
 
 `npm start`
+
+By default, dev. server is listening on `http://0.0.0.0:8080`.
+
+Build plugin:
+
+`npm run dist`
+
+By default, Shaka player is bundled with plugin. A "lightweight" version of this plugin, without shaka player bundled, `dash-shaka-playback-external.min.js` is available.
 
 # "extra" features
 
