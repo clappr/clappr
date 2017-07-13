@@ -15,19 +15,17 @@
   },
   "author": "Clappr team",
   "license": "BSD-3-Clause",
-  "dependencies": {
-    "shaka-player": "2.1.4",
-    "clappr": "0.2.66"
-  },
   "devDependencies": {
     "babel-core": "^5.8.25",
     "babel-loader": "^5.3.2",
-    "eslint": "^3.19.0",
+    "clappr": "^0.2.66",
+    "eslint": "^4.2.0",
     "eslint-config-standard": "^10.2.1",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-node": "^4.2.2",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-node": "^5.1.0",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
+    "shaka-player": "2.1.4",
     "webpack": "^1.12.1",
     "webpack-dev-server": "^1.10.1"
   }
