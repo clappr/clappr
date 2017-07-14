@@ -12,7 +12,7 @@ import Loader from './loader'
 import PlayerInfo from './player_info'
 import $ from 'clappr-zepto'
 
-const baseUrl = currentScriptUrl().replace(/\/[^\/]+$/, '')
+const baseUrl = currentScriptUrl().replace(/\/[^/]+$/, '')
 
 /**
  * @class Player
