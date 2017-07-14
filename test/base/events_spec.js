@@ -5,7 +5,7 @@ describe('Events', function(){
   beforeEach(function(){
     this.events = new Events()
     this.callback = sinon.spy()
-    Events.custom = {}
+    Events.Custom = {}
   })
 
   it('subcribes to a given event', function(){
@@ -142,8 +142,8 @@ describe('Events', function(){
     const eventName = 'PLUGIN_CUSTOM_EVENT'
 
     Events.register(eventName)
-    this.events.on(Events[eventName], this.callback)
-    this.events.trigger(Events[eventName])
+    this.events.on(Events.Custom[eventName], this.callback)
+    this.events.trigger(Events.Custom[eventName])
 
     this.callback.should.have.been.calledOnce
   })
@@ -152,7 +152,7 @@ describe('Events', function(){
     const eventName = 'PLUGIN_CUSTOM_EVENT'
     Events.register(eventName)
 
-    expect(Events.custom[eventName]).to.be.equal('pluginCustomEvent')
+    expect(Events.Custom[eventName]).to.be.equal('pluginCustomEvent')
   })
 
   it('does not override event when exist', function(){
@@ -167,7 +167,7 @@ describe('Events', function(){
     let events
 
     Events.register(eventName)
-    events = Events.listCustomAvailable()
+    events = Events.listAvailableCustomEvents()
 
     expect(events).to.include(eventName)
     expect(events).to.not.include('PLAYBACK_READY')
