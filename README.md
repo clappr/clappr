@@ -18,7 +18,7 @@
 Add the following script on your HTML:
 ```html
 <head>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/clappr/latest/clappr.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/clappr/clappr@latest/dist/clappr.min.js"></script>
 </head>
 ```
 Now, create the player:
@@ -37,7 +37,7 @@ Test it at [cdn.clappr.io.](http://cdn.clappr.io/?src=http://www.streambox.fr/pl
 
 ## CDN
 
-You can use the latest published version at `https://cdn.jsdelivr.net/clappr/latest/clappr.min.js`
+You can use the latest published version at `https://cdn.jsdelivr.net/gh/clappr/clappr@latest/dist/clappr.min.js`
 
 ## Vendors
 
