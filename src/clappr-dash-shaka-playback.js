@@ -38,10 +38,13 @@ class DashShakaPlayback extends HTML5Video {
     this._currentLevelId = id
     var isAuto = this._currentLevelId === DEFAULT_LEVEL_AUTO
 
-    this._player.configure({abr: {enable: !isAuto}})
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_START)
     if (!isAuto) {
+      this._player.configure({abr: {enabled: false}})
       this.selectTrack(this.videoTracks.filter((t) => t.id === this._currentLevelId)[0])
+    }
+    else {
+      this._player.configure({abr: {enabled: true}})
     }
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
   }
