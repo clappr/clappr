@@ -62,6 +62,15 @@ if (NPM_RUN === 'build' || NPM_RUN === 'start') {
     plugins: [],
     externals: externals()
   }))
+
+  // Unminified bundle without shaka-player
+  var customExt = externals()
+  customExt['shaka-player'] = 'shaka'
+  configurations.push(webpackConfig({
+    filename: 'dash-shaka-playback.external.js',
+    plugins: [],
+    externals: customExt
+  }))
 }
 
 if (NPM_RUN === 'release') {
@@ -83,7 +92,7 @@ if (NPM_RUN === 'release') {
   var customExt = externals()
   customExt['shaka-player'] = 'shaka'
   configurations.push(webpackConfig({
-    filename: 'dash-shaka-playback-external.min.js',
+    filename: 'dash-shaka-playback.external.min.js',
     plugins: [
       new webpack.optimize.UglifyJsPlugin({
         compress: {
