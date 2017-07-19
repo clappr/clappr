@@ -45,6 +45,7 @@ const webpackConfig = (config) => {
       ],
     },
     output: {
+      path: path.resolve(__dirname, 'dist'),
       filename: config.filename,
       library: 'DashShakaPlayback',
       libraryTarget: 'umd',
