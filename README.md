@@ -20,7 +20,7 @@ A [clappr](https://github.com/clappr/clappr) playback to play dash based on [sha
 ```html
 <html>
   <head>
-    <script src="https://cdn.jsdelivr.net/clappr/latest/clappr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/clappr/clappr@latest/dist/clappr.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dash-shaka-playback/2.0.7/dash-shaka-playback.js"></script>
   </head>
 
