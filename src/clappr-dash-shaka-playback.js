@@ -158,10 +158,12 @@ class DashShakaPlayback extends HTML5Video {
     if (trackId !== -1) {
       showingTrack = tracks.find(track => track.id === trackId)
       if (!showingTrack) {
-        return // Track id not found
+        Log.warn(`Track id "${trackId}" not found`)
+        return
       }
       if (this._shakaTTVisible && showingTrack.track.active === true) {
-        return // Track already showing
+        Log.info(`Track id "${trackId}" already showing`)
+        return
       }
     }
 
