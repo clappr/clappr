@@ -123,6 +123,90 @@ class DashShakaPlayback extends HTML5Video {
     this._onAdaptation()
   }
 
+  /**
+   * @override
+   */
+  get closedCaptionsTracks() {
+    let id = 0
+    let trackId = () => { return id++ }
+    let tracks = this.textTracks || []
+
+    return tracks
+      .filter(track => track.kind === 'subtitle')
+      .map(track => { return {id: trackId(), name: track.label || track.language, track: track} })
+  }
+
+  /**
+   * @override
+   */
+  get closedCaptionsTrackId() {
+    return super.closedCaptionsTrackId
+  }
+
+  /**
+   * @override
+   */
+  set closedCaptionsTrackId(trackId) {
+    if (!this._player) {
+      return
+    }
+
+    let tracks = this.closedCaptionsTracks
+    let showingTrack
+
+    // Note: -1 is for hide all tracks
+    if (trackId !== -1) {
+      showingTrack = tracks.find(track => track.id === trackId)
+      if (!showingTrack) {
+        Log.warn(`Track id "${trackId}" not found`)
+        return
+      }
+      if (this._shakaTTVisible && showingTrack.track.active === true) {
+        Log.info(`Track id "${trackId}" already showing`)
+        return
+      }
+    }
+
+    if (showingTrack) {
+      this._player.selectTextTrack(showingTrack.track)
+      this._enableShakaTextTrack(true)
+    } else {
+      this._enableShakaTextTrack(false)
+    }
+
+    this._ccTrackId = trackId
+    this.trigger(Events.PLAYBACK_SUBTITLE_CHANGED, {
+      id: trackId
+    })
+  }
+
+  _enableShakaTextTrack(isEnable) {
+    // Shaka player use only one TextTrack object with video element to handle all text tracks
+    // It must be enabled or disabled in addition to call selectTextTrack()
+    if (!this.el.textTracks) {
+      return
+    }
+
+    this._shakaTTVisible = isEnable
+
+    Array.from(this.el.textTracks)
+      .filter(track => track.kind === 'subtitles')
+      .forEach(track => track.mode = isEnable === true ? 'showing' : 'hidden')
+  }
+
+  _checkForClosedCaptions() {
+    if (this._ccIsSetup) {
+      return
+    }
+
+    if (this.hasClosedCaptionsTracks) {
+      this.trigger(Events.PLAYBACK_SUBTITLE_AVAILABLE)
+      const trackId = this.closedCaptionsTrackId
+      this.closedCaptionsTrackId = trackId
+    }
+    this._ccIsSetup = true
+  }
+
   destroy () {
     clearInterval(this.sendStatsId)
 
@@ -140,6 +224,7 @@ class DashShakaPlayback extends HTML5Video {
 
   _setup () {
     this._isShakaReadyState = false
+    this._ccIsSetup = false
     this._player = this._createPlayer()
     this._options.shakaConfiguration && this._player.configure(this._options.shakaConfiguration)
     this._options.shakaOnBeforeLoad && this._options.shakaOnBeforeLoad(this._player)
@@ -168,6 +253,7 @@ class DashShakaPlayback extends HTML5Video {
     super._ready()
     this._startToSendStats()
     this._fillLevels()
+    this._checkForClosedCaptions()
   }
 
   _fillLevels () {
