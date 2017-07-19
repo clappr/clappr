@@ -57,19 +57,23 @@ If need to wrap DRM license requests or responses you use `shakaOnBeforeLoad` fo
 
 # Development
 
+Install yarn:
+
+https://yarnpkg.com/lang/en/docs/install/
+
 Install dependencies:
 
-`npm install`
+`yarn install`
 
 Run dev. server :
 
-`npm start`
+`yarn start`
 
 By default, dev. server is listening on `http://0.0.0.0:8080`.
 
 Build plugin:
 
-`npm run dist`
+`yarn dist`
 
 By default, Shaka player is bundled with plugin. A "lightweight" version of this plugin, without shaka player bundled, `dash-shaka-playback-external.min.js` is available.
 
