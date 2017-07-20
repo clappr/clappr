@@ -29,6 +29,7 @@ export default class BaseFlashPlayback extends Playback {
       type: type,
       width: '100%',
       height: '100%',
+      data: this.swfPath,
       'data-flash-playback': this.name
     }
   }
@@ -36,13 +37,6 @@ export default class BaseFlashPlayback extends Playback {
   setElement(element) {
     this.$el = element
     this.el = element[0]
-  }
-
-  _setupFirefox() {
-    const $el = this.$('embed')
-    $el.attr('data-flash-playback', this.name)
-    $el.addClass(this.attributes.class)
-    this.setElement($el)
   }
 
   render() {
@@ -61,10 +55,6 @@ export default class BaseFlashPlayback extends Playback {
       if (Browser.isLegacyIE) {
         this.$el.attr('classid', IE_CLASSID)
       }
-    }
-
-    if (Browser.isFirefox) {
-      this._setupFirefox()
     }
 
     this.el.id = this.cid
