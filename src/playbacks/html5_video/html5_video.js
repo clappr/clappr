@@ -482,7 +482,7 @@ export default class HTML5Video extends Playback {
     let textTracks = this.el.textTracks ? Array.from(this.el.textTracks) : []
 
     return textTracks
-      .filter(track => track.kind === 'subtitles')
+      .filter(track => track.kind === 'subtitles' || track.kind === 'captions')
       .map(track => { return {id: trackId(), name: track.label, track: track} })
   }
 
