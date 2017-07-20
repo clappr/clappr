@@ -4065,7 +4065,7 @@ var browserInfo = getBrowserInfo();
 
 Browser.isEdge = /edge/i.test(navigator.userAgent);
 Browser.isChrome = /chrome|CriOS/i.test(navigator.userAgent) && !Browser.isEdge;
-Browser.isSafari = /safari/i.test(navigator.userAgent) && !Browser.isChrome;
+Browser.isSafari = /safari/i.test(navigator.userAgent) && !Browser.isChrome && !Browser.isEdge;
 Browser.isFirefox = /firefox/i.test(navigator.userAgent);
 Browser.isLegacyIE = !!window.ActiveXObject;
 Browser.isIE = Browser.isLegacyIE || /trident.*rv:1\d/i.test(navigator.userAgent);
@@ -6256,7 +6256,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.2.69"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.2.70"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -11479,7 +11479,7 @@ var HTML5Video = function (_Playback) {
       var textTracks = this.el.textTracks ? (0, _from2.default)(this.el.textTracks) : [];
 
       return textTracks.filter(function (track) {
-        return track.kind === 'subtitles';
+        return track.kind === 'subtitles' || track.kind === 'captions';
       }).map(function (track) {
         return { id: trackId(), name: track.label, track: track };
       });
@@ -13502,6 +13502,7 @@ var HLS = function (_HTML5VideoPlayback) {
     var _this2 = this;
 
     this._ccIsSetup = false;
+    this._ccTracksUpdated = false;
     this._hls = new _hls2.default(this.options.playback.hlsjsConfig || {});
     this._hls.on(_hls2.default.Events.MEDIA_ATTACHED, function () {
       return _this2._hls.loadSource(_this2.options.src);
@@ -13523,6 +13524,9 @@ var HLS = function (_HTML5VideoPlayback) {
     });
     this._hls.on(_hls2.default.Events.SUBTITLE_TRACK_LOADED, function (evt, data) {
       return _this2._onSubtitleLoaded(evt, data);
+    });
+    this._hls.on(_hls2.default.Events.SUBTITLE_TRACKS_UPDATED, function () {
+      return _this2._ccTracksUpdated = true;
     });
     this._hls.attachMedia(this.el);
   };
@@ -13751,6 +13755,11 @@ var HLS = function (_HTML5VideoPlayback) {
     this._playbackType = data.details.live ? _playback2.default.LIVE : _playback2.default.VOD;
     this._fillLevels();
     this._onLevelUpdated(evt, data);
+
+    // Live stream subtitle tracks detection hack (may not immediately available)
+    if (this._ccTracksUpdated && this._playbackType === _playback2.default.LIVE && this.hasClosedCaptionsTracks) {
+      this._onSubtitleLoaded();
+    }
   };
 
   HLS.prototype._fillLevels = function _fillLevels() {
@@ -13892,7 +13901,7 @@ var HLS = function (_HTML5VideoPlayback) {
     // Setup CC only once (disable CC by default)
     if (!this._ccIsSetup) {
       this.trigger(_events2.default.PLAYBACK_SUBTITLE_AVAILABLE);
-      var trackId = this.closedCaptionsTrackId;
+      var trackId = this._playbackType === _playback2.default.LIVE ? -1 : this.closedCaptionsTrackId;
       this.closedCaptionsTrackId = trackId;
       this._ccIsSetup = true;
     }
@@ -31563,7 +31572,12 @@ var ClosedCaptions = function (_UICorePlugin) {
     if (this.container) {
       this.listenTo(this.container, _events2.default.CONTAINER_SUBTITLE_AVAILABLE, this.onSubtitleAvailable);
       this.listenTo(this.container, _events2.default.CONTAINER_SUBTITLE_CHANGED, this.onSubtitleChanged);
+      this.listenTo(this.container, _events2.default.CONTAINER_STOP, this.onContainerStop);
     }
+  };
+
+  ClosedCaptions.prototype.onContainerStop = function onContainerStop() {
+    this.ccAvailable(false);
   };
 
   ClosedCaptions.prototype.containerChanged = function containerChanged() {
