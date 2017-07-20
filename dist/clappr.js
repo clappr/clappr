@@ -6256,7 +6256,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.2.68"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.2.69"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -12156,13 +12156,6 @@ var BaseFlashPlayback = function (_Playback) {
     this.el = element[0];
   };
 
-  BaseFlashPlayback.prototype._setupFirefox = function _setupFirefox() {
-    var $el = this.$('embed');
-    $el.attr('data-flash-playback', this.name);
-    $el.addClass(this.attributes.class);
-    this.setElement($el);
-  };
-
   BaseFlashPlayback.prototype.render = function render() {
     this.$el.html(this.template({
       cid: this.cid,
@@ -12178,10 +12171,6 @@ var BaseFlashPlayback = function (_Playback) {
       if (_browser2.default.isLegacyIE) {
         this.$el.attr('classid', IE_CLASSID);
       }
-    }
-
-    if (_browser2.default.isFirefox) {
-      this._setupFirefox();
     }
 
     this.el.id = this.cid;
@@ -12224,6 +12213,7 @@ var BaseFlashPlayback = function (_Playback) {
         type: type,
         width: '100%',
         height: '100%',
+        data: this.swfPath,
         'data-flash-playback': this.name
       };
     }
@@ -12238,7 +12228,7 @@ module.exports = exports['default'];
 /* 165 */
 /***/ (function(module, exports) {
 
-module.exports = "<param name=\"movie\" value=\"<%= swfPath %>\">\n<param name=\"quality\" value=\"autohigh\">\n<param name=\"swliveconnect\" value=\"true\">\n<param name=\"allowScriptAccess\" value=\"always\">\n<param name=\"bgcolor\" value=\"#000000\">\n<param name=\"allowFullScreen\" value=\"false\">\n<param name=\"wmode\" value=\"<%= wmode %>\">\n<param name=\"tabindex\" value=\"1\">\n<param name=\"FlashVars\" value=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\">\n<embed\n  name=\"<%= cid %>\"\n  type=\"application/x-shockwave-flash\"\n  disabled=\"disabled\"\n  tabindex=\"-1\"\n  enablecontextmenu=\"false\"\n  allowScriptAccess=\"always\"\n  quality=\"autohigh\"\n  pluginspage=\"http://www.macromedia.com/go/getflashplayer\"\n  wmode=\"<%= wmode %>\"\n  swliveconnect=\"true\"\n  allowfullscreen=\"false\"\n  bgcolor=\"#000000\"\n  FlashVars=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\"\n  src=\"<%= swfPath %>\"\n  width=\"100%\"\n  height=\"100%\">\n</embed>\n";
+module.exports = "<param name=\"movie\" value=\"<%= swfPath %>\">\n<param name=\"quality\" value=\"autohigh\">\n<param name=\"swliveconnect\" value=\"true\">\n<param name=\"allowScriptAccess\" value=\"always\">\n<param name=\"bgcolor\" value=\"#000000\">\n<param name=\"allowFullScreen\" value=\"false\">\n<param name=\"wmode\" value=\"<%= wmode %>\">\n<param name=\"tabindex\" value=\"1\">\n<param name=\"FlashVars\" value=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\">\n<embed\n  name=\"<%= cid %>\"\n  type=\"application/x-shockwave-flash\"\n  disabled=\"disabled\"\n  tabindex=\"-1\"\n  enablecontextmenu=\"false\"\n  allowScriptAccess=\"always\"\n  quality=\"autohigh\"\n  pluginspage=\"http://www.macromedia.com/go/getflashplayer\"\n  wmode=\"<%= wmode %>\"\n  swliveconnect=\"true\"\n  allowfullscreen=\"false\"\n  bgcolor=\"#000000\"\n  FlashVars=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\"\n  data=\"<%= swfPath %>\"\n  src=\"<%= swfPath %>\"\n  width=\"100%\"\n  height=\"100%\">\n</embed>\n";
 
 /***/ }),
 /* 166 */
