@@ -53,7 +53,7 @@ const browserInfo = getBrowserInfo()
 
 Browser.isEdge = /edge/i.test(navigator.userAgent)
 Browser.isChrome = /chrome|CriOS/i.test(navigator.userAgent) && !Browser.isEdge
-Browser.isSafari = /safari/i.test(navigator.userAgent) && !Browser.isChrome
+Browser.isSafari = /safari/i.test(navigator.userAgent) && !Browser.isChrome && !Browser.isEdge
 Browser.isFirefox = /firefox/i.test(navigator.userAgent)
 Browser.isLegacyIE = !!(window.ActiveXObject)
 Browser.isIE = Browser.isLegacyIE || /trident.*rv:1\d/i.test(navigator.userAgent)
