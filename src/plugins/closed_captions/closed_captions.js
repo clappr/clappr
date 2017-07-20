@@ -43,7 +43,12 @@ export default class ClosedCaptions extends UICorePlugin {
     if (this.container) {
       this.listenTo(this.container, Events.CONTAINER_SUBTITLE_AVAILABLE, this.onSubtitleAvailable)
       this.listenTo(this.container, Events.CONTAINER_SUBTITLE_CHANGED, this.onSubtitleChanged)
+      this.listenTo(this.container, Events.CONTAINER_STOP, this.onContainerStop)
     }
+  }
+
+  onContainerStop() {
+    this.ccAvailable(false)
   }
 
   containerChanged() {
