@@ -97,6 +97,20 @@ describe('Events', function(){
     this.callback.should.have.been.calledThrice
   })
 
+  it('permits to listen once events in other objects', function(){
+    const myEvents = new Events()
+
+    this.events.on('clappr.any.event', this.callback)
+    myEvents.listenToOnce(this.events, 'clappr.any.event', this.callback)
+
+    this.callback.should.not.have.been.called
+
+    this.events.trigger('clappr.any.event', 42, 'some string')
+    this.events.trigger('clappr.any.event', 42, 'some string')
+    this.callback.should.always.have.been.calledWithExactly(42, 'some string')
+    this.callback.should.have.been.calledThrice
+  })
+
   it('permits to stop listening events in other objects', function(){
     const myEvents = new Events()
 
