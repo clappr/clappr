@@ -325,17 +325,18 @@ var Events = function () {
 
 
   Events.prototype.once = function once(name, callback, context) {
-    var _this = this,
-        _arguments = arguments;
+    var _this = this;
 
     if (!eventsApi(this, 'once', name, [callback, context]) || !callback) {
       return this;
     }
-    var once = function once() {
-      _this.off(name, once);
-      callback.apply(context || _this, _arguments);
+    var off = function off() {
+      return _this.off(name, once);
     };
-    once._callback = callback;
+    var once = function once() {
+      off(name, once);
+      callback.apply(this, arguments);
+    };
     return this.on(name, once, context);
   };
 
@@ -6256,7 +6257,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.2.70"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.2.71"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
