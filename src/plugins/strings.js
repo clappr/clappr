@@ -67,6 +67,12 @@ export default class Strings extends CorePlugin {
         'back_to_live': 'canlı yayına dön',
         'disabled': 'Engelli',
         'playback_not_supported': 'Tarayıcınız bu videoyu oynatma desteğine sahip değil. Lütfen farklı bir tarayıcı ile deneyin.',
+      },
+      'et': {
+        'live': 'Otseülekanne',
+        'back_to_live': 'Tagasi otseülekande juurde',
+        'disabled': 'Keelatud',
+        'playback_not_supported': 'Teie brauser ei toeta selle video taasesitust. Proovige kasutada muud brauserit.'
       }
     }
     const strings = this.core.options.strings || {}
