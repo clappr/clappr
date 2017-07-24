@@ -86,7 +86,7 @@ export default class Strings extends CorePlugin {
     this._messages['es-419'] = this._messages['es']
     this._messages['fr-FR'] = this._messages['fr']
     this._messages['tr-TR'] = this._messages['tr']
-    this._messages['et-EE'] = this._messages['ee']
+    this._messages['et-EE'] = this._messages['et']
 
   }
 }
