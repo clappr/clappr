@@ -298,7 +298,7 @@ class DashShakaPlayback extends HTML5Video {
     
     if (this._pendingAdaptationEvent_) {
       this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
-      this._pendingAdaptationEvent_ = false
+      this._pendingAdaptationEvent = false
     }
     
     Log.debug('an adaptation has happened:', activeVideo)
