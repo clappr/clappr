@@ -41,7 +41,7 @@ class DashShakaPlayback extends HTML5Video {
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_START)
     if (!isAuto) {
       this._player.configure({abr: {enabled: false}})
-      this._pendingAdaptationEvent = true;
+      this._pendingAdaptationEvent = true
       this.selectTrack(this.videoTracks.filter((t) => t.id === this._currentLevelId)[0])
     }
     else {
