@@ -400,7 +400,6 @@ export default class HTML5Video extends Playback {
   }
 
   _onTimeUpdate() {
-    this._handleBufferingEvents()
     if (this.getPlaybackType() === Playback.LIVE) {
       this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: 1, total: 1}, this.name)
     } else {
