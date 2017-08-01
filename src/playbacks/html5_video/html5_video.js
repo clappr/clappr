@@ -561,4 +561,3 @@ HTML5Video.canPlay = function(resourceUrl, mimeType) {
   return HTML5Video._canPlay('audio', AUDIO_MIMETYPES, resourceUrl, mimeType) ||
          HTML5Video._canPlay('video', MIMETYPES, resourceUrl, mimeType)
 }
-
