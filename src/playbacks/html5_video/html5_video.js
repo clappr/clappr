@@ -356,8 +356,7 @@ export default class HTML5Video extends Playback {
       this._bufferingState = buffering
       if (buffering) {
         this.trigger(Events.PLAYBACK_BUFFERING, this.name)
-      }
-      else {
+      } else {
         this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
       }
     }
