@@ -97,15 +97,20 @@ class DashShakaPlayback extends HTML5Video {
 
   stop () {
     clearInterval(this.sendStatsId)
-    this._sendStats()
 
-    this._player.unload().then(() => {
+    if (this._player) {
+      this._sendStats()
+
+      this._player.unload().then(() => {
+        super.stop()
+        this._player = null
+        this._isShakaReadyState = false
+      }).catch(() => {
+        Log.error('shaka could not be unloaded')
+      })
+    } else {
       super.stop()
-      this._player = null
-      this._isShakaReadyState = false
-    }).catch(() => {
-      Log.error('shaka could not be unloaded')
-    })
+    }
   }
 
   get textTracks () {
@@ -217,14 +222,14 @@ class DashShakaPlayback extends HTML5Video {
     clearInterval(this.sendStatsId)
 
     if (this._player) {
-      this._destroy()
-    } else {
       this._player.destroy()
         .then(() => this._destroy())
         .catch(() => {
           this._destroy()
           Log.error('shaka could not be destroyed')
         })
+    } else {
+      this._destroy()
     }
   }
 
