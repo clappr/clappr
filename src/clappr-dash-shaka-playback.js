@@ -80,7 +80,11 @@ class DashShakaPlayback extends HTML5Video {
   setupSrc () {}
 
   // skipping ready event on video tag in favor of ready on shaka
-  _ready () {}
+  _ready () {
+    this._isShakaReadyState = true
+    this.trigger(DashShakaPlayback.Events.SHAKA_READY)
+    this.trigger(Events.PLAYBACK_READY, this.name)
+  }
 
   get isReady () {
     return this._isShakaReadyState
@@ -259,9 +263,7 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   _loaded () {
-    this._isShakaReadyState = true
-    this.trigger(DashShakaPlayback.Events.SHAKA_READY)
-    super._ready()
+    this._ready()
     this._startToSendStats()
     this._fillLevels()
     this._checkForClosedCaptions()
