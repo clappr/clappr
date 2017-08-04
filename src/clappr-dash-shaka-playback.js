@@ -13,8 +13,8 @@ class DashShakaPlayback extends HTML5Video {
 
   static canPlay (resource, mimeType = '') {
     shaka.polyfill.installAll()
-    var browserSupported = shaka.Player.isBrowserSupported()
-    var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
+    let browserSupported = shaka.Player.isBrowserSupported()
+    let resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
     return browserSupported && ((resourceParts[1] === 'mpd') || mimeType.indexOf('application/dash+xml') > -1)
   }
 
@@ -36,7 +36,7 @@ class DashShakaPlayback extends HTML5Video {
 
   set currentLevel (id) {
     this._currentLevelId = id
-    var isAuto = this._currentLevelId === DEFAULT_LEVEL_AUTO
+    let isAuto = this._currentLevelId === DEFAULT_LEVEL_AUTO
 
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_START)
     if (!isAuto) {
@@ -72,6 +72,7 @@ class DashShakaPlayback extends HTML5Video {
       return
     }
 
+    this._stopped = false
     this._src = this.el.src
     super.play()
   }
@@ -101,6 +102,7 @@ class DashShakaPlayback extends HTML5Video {
 
   stop () {
     clearInterval(this.sendStatsId)
+    this._stopped = true
 
     if (this._player) {
       this._sendStats()
@@ -244,13 +246,13 @@ class DashShakaPlayback extends HTML5Video {
     this._options.shakaConfiguration && this._player.configure(this._options.shakaConfiguration)
     this._options.shakaOnBeforeLoad && this._options.shakaOnBeforeLoad(this._player)
 
-    var playerLoaded = this._player.load(this._options.src)
+    let playerLoaded = this._player.load(this._options.src)
     playerLoaded.then(() => this._loaded())
       .catch((e) => this._setupError(e))
   }
 
   _createPlayer () {
-    var player = new shaka.Player(this.el)
+    let player = new shaka.Player(this.el)
     player.addEventListener('error', this._onError.bind(this))
     player.addEventListener('adaptation', this._onAdaptation.bind(this))
     player.addEventListener('buffering', this._onBuffering.bind(this))
@@ -258,7 +260,8 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   _onBuffering (e) {
-    var event = e.buffering ? Events.PLAYBACK_BUFFERING : Events.PLAYBACK_BUFFERFULL
+    if (!this._stopped) return
+    let event = e.buffering ? Events.PLAYBACK_BUFFERING : Events.PLAYBACK_BUFFERFULL
     this.trigger(event)
   }
 
@@ -295,19 +298,19 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   _onAdaptation () {
-    var activeVideo = this.videoTracks.filter((t) => t.active === true)[0]
+    let activeVideo = this.videoTracks.filter((t) => t.active === true)[0]
 
     this._fillLevels()
 
     // update stats that may have changed before we trigger event
     // so that user can rely on stats data when handling event
-    this._sendStats()   
-    
+    this._sendStats()
+
     if (this._pendingAdaptationEvent_) {
       this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
       this._pendingAdaptationEvent = false
     }
-    
+
     Log.debug('an adaptation has happened:', activeVideo)
     this.highDefinition = (activeVideo.height >= 720)
     this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition)
