@@ -304,13 +304,13 @@ class DashShakaPlayback extends HTML5Video {
 
     // update stats that may have changed before we trigger event
     // so that user can rely on stats data when handling event
-    this._sendStats()   
-    
+    this._sendStats()
+
     if (this._pendingAdaptationEvent_) {
       this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
       this._pendingAdaptationEvent = false
     }
-    
+
     Log.debug('an adaptation has happened:', activeVideo)
     this.highDefinition = (activeVideo.height >= 720)
     this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition)
