@@ -72,6 +72,7 @@ class DashShakaPlayback extends HTML5Video {
       return
     }
 
+    this._stopped = false
     this._src = this.el.src
     super.play()
   }
@@ -101,6 +102,7 @@ class DashShakaPlayback extends HTML5Video {
 
   stop () {
     clearInterval(this.sendStatsId)
+    this._stopped = true
 
     if (this._player) {
       this._sendStats()
@@ -258,6 +260,7 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   _onBuffering (e) {
+    if (!this._stopped) return
     var event = e.buffering ? Events.PLAYBACK_BUFFERING : Events.PLAYBACK_BUFFERFULL
     this.trigger(event)
   }
