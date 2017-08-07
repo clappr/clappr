@@ -260,7 +260,7 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   _onBuffering (e) {
-    if (!this._stopped) return
+    if (this._stopped) return
     let event = e.buffering ? Events.PLAYBACK_BUFFERING : Events.PLAYBACK_BUFFERFULL
     this.trigger(event)
   }
