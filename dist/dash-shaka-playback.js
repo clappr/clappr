@@ -136,14 +136,17 @@ var DashShakaPlayback = function (_HTML5Video) {
       this._currentLevelId = id;
       var isAuto = this._currentLevelId === DEFAULT_LEVEL_AUTO;
 
-      this._player.configure({ abr: { enable: !isAuto } });
       this.trigger(_clappr.Events.PLAYBACK_LEVEL_SWITCH_START);
       if (!isAuto) {
+        this._player.configure({ abr: { enabled: false } });
+        this._pendingAdaptationEvent = true;
         this.selectTrack(this.videoTracks.filter(function (t) {
           return t.id === _this2._currentLevelId;
         })[0]);
+      } else {
+        this._player.configure({ abr: { enabled: true } });
+        this.trigger(_clappr.Events.PLAYBACK_LEVEL_SWITCH_END);
       }
-      this.trigger(_clappr.Events.PLAYBACK_LEVEL_SWITCH_END);
     },
     get: function get() {
       return this._currentLevelId || DEFAULT_LEVEL_AUTO;
@@ -173,6 +176,8 @@ var DashShakaPlayback = function (_HTML5Video) {
     var _this = _possibleConstructorReturn(this, (DashShakaPlayback.__proto__ || Object.getPrototypeOf(DashShakaPlayback)).call(this, options));
 
     _this._levels = [];
+    _this._pendingAdaptationEvent = false;
+
     options.autoPlay && _this.play();
     return _this;
   }
@@ -189,6 +194,7 @@ var DashShakaPlayback = function (_HTML5Video) {
         return;
       }
 
+      this._stopped = false;
       this._src = this.el.src;
       _get(DashShakaPlayback.prototype.__proto__ || Object.getPrototypeOf(DashShakaPlayback.prototype), 'play', this).call(this);
     }
@@ -203,7 +209,11 @@ var DashShakaPlayback = function (_HTML5Video) {
 
   }, {
     key: '_ready',
-    value: function _ready() {}
+    value: function _ready() {
+      this._isShakaReadyState = true;
+      this.trigger(DashShakaPlayback.Events.SHAKA_READY);
+      this.trigger(_clappr.Events.PLAYBACK_READY, this.name);
+    }
   }, {
     key: 'error',
 
@@ -223,15 +233,21 @@ var DashShakaPlayback = function (_HTML5Video) {
       var _this3 = this;
 
       clearInterval(this.sendStatsId);
-      this._sendStats();
+      this._stopped = true;
 
-      this._player.unload().then(function () {
-        _get(DashShakaPlayback.prototype.__proto__ || Object.getPrototypeOf(DashShakaPlayback.prototype), 'stop', _this3).call(_this3);
-        _this3._player = null;
-        _this3._isShakaReadyState = false;
-      }).catch(function () {
-        _clappr.Log.error('shaka could not be unloaded');
-      });
+      if (this._player) {
+        this._sendStats();
+
+        this._player.unload().then(function () {
+          _get(DashShakaPlayback.prototype.__proto__ || Object.getPrototypeOf(DashShakaPlayback.prototype), 'stop', _this3).call(_this3);
+          _this3._player = null;
+          _this3._isShakaReadyState = false;
+        }).catch(function () {
+          _clappr.Log.error('shaka could not be unloaded');
+        });
+      } else {
+        _get(DashShakaPlayback.prototype.__proto__ || Object.getPrototypeOf(DashShakaPlayback.prototype), 'stop', this).call(this);
+      }
     }
   }, {
     key: 'getPlaybackType',
@@ -288,14 +304,14 @@ var DashShakaPlayback = function (_HTML5Video) {
       clearInterval(this.sendStatsId);
 
       if (this._player) {
-        this._destroy();
-      } else {
         this._player.destroy().then(function () {
           return _this4._destroy();
         }).catch(function () {
           _this4._destroy();
           _clappr.Log.error('shaka could not be destroyed');
         });
+      } else {
+        this._destroy();
       }
     }
   }, {
@@ -328,15 +344,14 @@ var DashShakaPlayback = function (_HTML5Video) {
   }, {
     key: '_onBuffering',
     value: function _onBuffering(e) {
+      if (this._stopped) return;
       var event = e.buffering ? _clappr.Events.PLAYBACK_BUFFERING : _clappr.Events.PLAYBACK_BUFFERFULL;
       this.trigger(event);
     }
   }, {
     key: '_loaded',
     value: function _loaded() {
-      this._isShakaReadyState = true;
-      this.trigger(DashShakaPlayback.Events.SHAKA_READY);
-      _get(DashShakaPlayback.prototype.__proto__ || Object.getPrototypeOf(DashShakaPlayback.prototype), '_ready', this).call(this);
+      this._ready();
       this._startToSendStats();
       this._fillLevels();
       this._checkForClosedCaptions();
@@ -385,6 +400,15 @@ var DashShakaPlayback = function (_HTML5Video) {
       })[0];
 
       this._fillLevels();
+
+      // update stats that may have changed before we trigger event
+      // so that user can rely on stats data when handling event
+      this._sendStats();
+
+      if (this._pendingAdaptationEvent_) {
+        this.trigger(_clappr.Events.PLAYBACK_LEVEL_SWITCH_END);
+        this._pendingAdaptationEvent = false;
+      }
 
       _clappr.Log.debug('an adaptation has happened:', activeVideo);
       this.highDefinition = activeVideo.height >= 720;
