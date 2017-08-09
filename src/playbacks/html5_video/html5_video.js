@@ -95,6 +95,7 @@ export default class HTML5Video extends Playback {
     super(...args)
     this._destroyed = false
     this._loadStarted = false
+    this._bufferingState = false
     this._playheadMoving = false
     this._playheadMovingTimer = null
     this._stopped = false

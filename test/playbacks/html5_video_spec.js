@@ -190,6 +190,14 @@ describe('HTML5Video playback', function() {
       expect(progress.current).to.be.equal(end[1])
     })
 
+    it('does not trigger PLAYBACK_BUFFERFULL when playback is initialized', function() {
+      let callback = sinon.spy()
+      this.playback.on(Events.PLAYBACK_BUFFERFULL, callback)
+      this.playback._handleBufferingEvents()
+
+      callback.should.not.have.been.called
+    })
+
     it('should return an array of buffer segments as {start, end} objects', function() {
       start = [0, 50, 180]
       end = [30, 90, 280]
