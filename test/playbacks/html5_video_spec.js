@@ -190,11 +190,27 @@ describe('HTML5Video playback', function() {
       expect(progress.current).to.be.equal(end[1])
     })
 
-    it('does not trigger PLAYBACK_BUFFERFULL when playback is initialized', function() {
-      let callback = sinon.spy()
-      this.playback.on(Events.PLAYBACK_BUFFERFULL, callback)
-      this.playback._handleBufferingEvents()
+    it('does not trigger buffer event when the playback is initialized', function() {
+      /*
+        Only trigger buffer events when buffer state change. 
+        The default value for _bufferState is false.
+      */
 
+      let builtInEvents = ['loadedmetadata', 'progress', 'timeupdate'].map(
+        function(label) {
+          let event = document.createEvent('HTMLEvents')
+          event.initEvent(label, true, true)
+          return event
+        }
+      )
+
+      let callback = sinon.spy()
+      let playback = new HTML5Video(this.options)
+
+      playback.on(Events.PLAYBACK_BUFFERING, callback)
+      playback.on(Events.PLAYBACK_BUFFERFULL, callback)
+
+      builtInEvents.map(function(event) { playback.el.dispatchEvent(event) })
       callback.should.not.have.been.called
     })
 
