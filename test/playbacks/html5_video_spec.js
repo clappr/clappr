@@ -198,9 +198,7 @@ describe('HTML5Video playback', function() {
 
       let builtInEvents = ['loadedmetadata', 'progress', 'timeupdate'].map(
         function(label) {
-          let event = document.createEvent('HTMLEvents')
-          event.initEvent(label, true, true)
-          return event
+          return new Event(label)
         }
       )
 
