@@ -3162,9 +3162,9 @@ sha.js@^2.4.0, sha.js@^2.4.8:
   dependencies:
     inherits "^2.0.1"
 
-shaka-player@2.1.5:
-  version "2.1.5"
-  resolved "https://registry.yarnpkg.com/shaka-player/-/shaka-player-2.1.5.tgz#d4a928526f940319d5a4959296285a3269806a07"
+shaka-player@2.1.7:
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/shaka-player/-/shaka-player-2.1.7.tgz#b2158a90dd22fcee0434c7341ca8e9fc147bb176"
 
 signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.2"

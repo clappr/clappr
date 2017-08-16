@@ -28,7 +28,7 @@
     "eslint-plugin-node": "^5.1.0",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
-    "shaka-player": "2.1.5",
+    "shaka-player": "2.1.7",
     "webpack": "^3.0.0",
     "webpack-dev-server": "^2.5.1"
   }
