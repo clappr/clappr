@@ -63,8 +63,8 @@ export default class HTML5Video extends Playback {
       'pause': '_onPause',
       'playing': '_onPlaying',
       'progress': '_onProgress',
-      'seeked': '_handleBufferingEvents',
-      'seeking': '_onSeeked',
+      'seeking': '_handleBufferingEvents',
+      'seeked': '_onSeeked',
       'stalled': '_handleBufferingEvents',
       'timeupdate': '_onTimeUpdate',
       'waiting': '_onWaiting'
