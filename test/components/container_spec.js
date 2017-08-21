@@ -1,5 +1,6 @@
 import Container from '../../src/components/container'
 import FakePlayback from '../../src/base/playback'
+import HTML5Playback from '../../src/playbacks/html5_video/index'
 import Playback from '../../src/base/playback'
 import Events from '../../src/base/events'
 
@@ -61,6 +62,21 @@ describe('Container', function() {
     this.playback.trigger(Events.PLAYBACK_TIMEUPDATE, {current: 2, total: 40})
 
     assert.ok(this.container.timeUpdated.calledWith({current: 2, total: 40}))
+  })
+
+  it('listens to playback:seeked event', function(done) {
+    let playback = new HTML5Playback({src: '/base/test/fixtures/SampleVideo_360x240_1mb.mp4'})
+    let container = new Container({playback: playback})
+    let callback = sinon.spy()
+
+    container.bindEvents()
+    container.on(Events.CONTAINER_SEEKED, callback)
+    container.on(Events.CONTAINER_SEEKED, () => {
+      assert.ok(callback.called)
+      done()
+    })
+
+    playback.seek(2)
   })
 
   it('listens to playback:ready event', function() {
