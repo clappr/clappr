@@ -65,6 +65,7 @@ describe('Container', function() {
   })
 
   it('listens to playback:seeked event', function(done) {
+    this.timeout(5000)
     let playback = new HTML5Playback({src: '/base/test/fixtures/SampleVideo_360x240_1mb.mp4'})
     let container = new Container({playback: playback})
     let callback = sinon.spy()
@@ -76,7 +77,7 @@ describe('Container', function() {
       done()
     })
 
-    playback.seek(2)
+    playback.el.dispatchEvent(new Event('seeked'))
   })
 
   it('listens to playback:ready event', function() {
