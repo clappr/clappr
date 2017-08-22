@@ -49,6 +49,7 @@ describe('HTML5Video playback', function() {
   })
 
   it('triggers PLAYBACK_SEEKED on media seeked event', function(done) {
+    this.timeout(5000)
     const callback = sinon.spy()
     const playback = new HTML5Video({src: '/base/test/fixtures/SampleVideo_360x240_1mb.mp4'})
 
@@ -58,7 +59,7 @@ describe('HTML5Video playback', function() {
       done()
     }, this)
 
-    playback.seek(1)
+    playback.el.dispatchEvent(new Event('seeked'))
   })
 
   it('isPlaying() is true after constructor when autoPlay is true', function(done) {
