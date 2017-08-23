@@ -362,8 +362,7 @@ export default class HTML5Video extends Playback {
       this._isBuffering = buffering
       if (buffering) {
         this.trigger(Events.PLAYBACK_BUFFERING, this.name)
-      }
-      else {
+      } else {
         this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
       }
     }
@@ -407,7 +406,6 @@ export default class HTML5Video extends Playback {
   }
 
   _onTimeUpdate() {
-    this._handleBufferingEvents()
     if (this.getPlaybackType() === Playback.LIVE) {
       this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: 1, total: 1}, this.name)
     } else {
@@ -568,4 +566,3 @@ HTML5Video.canPlay = function(resourceUrl, mimeType) {
   return HTML5Video._canPlay('audio', AUDIO_MIMETYPES, resourceUrl, mimeType) ||
          HTML5Video._canPlay('video', MIMETYPES, resourceUrl, mimeType)
 }
-
