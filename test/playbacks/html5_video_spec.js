@@ -48,6 +48,20 @@ describe('HTML5Video playback', function() {
     callback.should.have.been.calledOnce
   })
 
+  it('triggers PLAYBACK_SEEKED on media seeked event', function(done) {
+    this.timeout(5000)
+    const callback = sinon.spy()
+    const playback = new HTML5Video({src: '/base/test/fixtures/SampleVideo_360x240_1mb.mp4'})
+
+    playback.on(Events.PLAYBACK_SEEKED, callback)
+    playback.on(Events.PLAYBACK_SEEKED, () => {
+      callback.should.have.been.calledOnce
+      done()
+    }, this)
+
+    playback.el.dispatchEvent(new Event('seeked'))
+  })
+
   it('isPlaying() is true after constructor when autoPlay is true', function(done) {
     const playback = new HTML5Video({src: 'http://example.com/dash.ogg', autoPlay: true})
     process.nextTick(function(){
