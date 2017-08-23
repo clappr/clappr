@@ -88,13 +88,14 @@ export default class HTML5Video extends Playback {
    * @type Boolean
    */
   get buffering() {
-    return !!this._bufferingState
+    return this._isBuffering
   }
 
   constructor(...args) {
     super(...args)
     this._destroyed = false
     this._loadStarted = false
+    this._isBuffering = false
     this._playheadMoving = false
     this._playheadMovingTimer = null
     this._stopped = false
@@ -352,8 +353,8 @@ export default class HTML5Video extends Playback {
   _handleBufferingEvents() {
     const playheadShouldBeMoving = !this.el.ended && !this.el.paused
     const buffering = this._loadStarted && !this.el.ended && !this._stopped && ((playheadShouldBeMoving && !this._playheadMoving) || this.el.readyState < this.el.HAVE_FUTURE_DATA)
-    if (this._bufferingState !== buffering) {
-      this._bufferingState = buffering
+    if (this._isBuffering !== buffering) {
+      this._isBuffering = buffering
       if (buffering) {
         this.trigger(Events.PLAYBACK_BUFFERING, this.name)
       }
