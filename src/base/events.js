@@ -482,6 +482,12 @@ Events.PLAYBACK_PLAY = 'playback:play'
  */
 Events.PLAYBACK_PAUSE = 'playback:pause'
 /**
+ * Fired when the media for a playback is seeked.
+ *
+ * @event PLAYBACK_SEEKED
+ */
+Events.PLAYBACK_SEEKED = 'playback:seeked'
+/**
  * Fired when the media for a playback is stopped.
  *
  * @event PLAYBACK_STOP
@@ -668,6 +674,13 @@ Events.CONTAINER_MOUSE_LEAVE = 'container:mouseleave'
  * @param {Number} time the current time in seconds
  */
 Events.CONTAINER_SEEK = 'container:seek'
+/**
+ * Fired when the container was finished the seek video
+ *
+ * @event CONTAINER_SEEKED
+ * @param {Number} time the current time in seconds
+ */
+Events.CONTAINER_SEEKED = 'container:seeked'
 Events.CONTAINER_VOLUME = 'container:volume'
 Events.CONTAINER_FULLSCREEN = 'container:fullscreen'
 /**
