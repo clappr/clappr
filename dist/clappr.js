@@ -772,6 +772,12 @@ Events.PLAYBACK_PLAY = 'playback:play';
  */
 Events.PLAYBACK_PAUSE = 'playback:pause';
 /**
+ * Fired when the media for a playback is seeked.
+ *
+ * @event PLAYBACK_SEEKED
+ */
+Events.PLAYBACK_SEEKED = 'playback:seeked';
+/**
  * Fired when the media for a playback is stopped.
  *
  * @event PLAYBACK_STOP
@@ -957,6 +963,13 @@ Events.CONTAINER_MOUSE_LEAVE = 'container:mouseleave';
  * @param {Number} time the current time in seconds
  */
 Events.CONTAINER_SEEK = 'container:seek';
+/**
+ * Fired when the container was finished the seek video
+ *
+ * @event CONTAINER_SEEKED
+ * @param {Number} time the current time in seconds
+ */
+Events.CONTAINER_SEEKED = 'container:seeked';
 Events.CONTAINER_VOLUME = 'container:volume';
 Events.CONTAINER_FULLSCREEN = 'container:fullscreen';
 /**
@@ -6257,7 +6270,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.2.71"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.2.72"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -9283,6 +9296,7 @@ var Container = function (_UIObject) {
     this.listenTo(this.playback, _events2.default.PLAYBACK_DVR, this.playbackDvrStateChanged);
     this.listenTo(this.playback, _events2.default.PLAYBACK_MEDIACONTROL_DISABLE, this.disableMediaControl);
     this.listenTo(this.playback, _events2.default.PLAYBACK_MEDIACONTROL_ENABLE, this.enableMediaControl);
+    this.listenTo(this.playback, _events2.default.PLAYBACK_SEEKED, this.onSeeked);
     this.listenTo(this.playback, _events2.default.PLAYBACK_ENDED, this.onEnded);
     this.listenTo(this.playback, _events2.default.PLAYBACK_PLAY, this.playing);
     this.listenTo(this.playback, _events2.default.PLAYBACK_PAUSE, this.paused);
@@ -9481,6 +9495,10 @@ var Container = function (_UIObject) {
   Container.prototype.seek = function seek(time) {
     this.trigger(_events2.default.CONTAINER_SEEK, time, this.name);
     this.playback.seek(time);
+  };
+
+  Container.prototype.onSeeked = function onSeeked() {
+    this.trigger(_events2.default.CONTAINER_SEEKED, this.name);
   };
 
   Container.prototype.seekPercentage = function seekPercentage(percentage) {
@@ -11005,8 +11023,8 @@ var HTML5Video = function (_Playback) {
         'pause': '_onPause',
         'playing': '_onPlaying',
         'progress': '_onProgress',
-        'seeked': '_handleBufferingEvents',
         'seeking': '_handleBufferingEvents',
+        'seeked': '_onSeeked',
         'stalled': '_handleBufferingEvents',
         'timeupdate': '_onTimeUpdate',
         'waiting': '_onWaiting'
@@ -11036,7 +11054,7 @@ var HTML5Video = function (_Playback) {
   }, {
     key: 'buffering',
     get: function get() {
-      return !!this._bufferingState;
+      return this._isBuffering;
     }
   }]);
 
@@ -11051,6 +11069,7 @@ var HTML5Video = function (_Playback) {
 
     _this._destroyed = false;
     _this._loadStarted = false;
+    _this._isBuffering = false;
     _this._playheadMoving = false;
     _this._playheadMovingTimer = null;
     _this._stopped = false;
@@ -11304,6 +11323,11 @@ var HTML5Video = function (_Playback) {
     this.trigger(_events2.default.PLAYBACK_PAUSE);
   };
 
+  HTML5Video.prototype._onSeeked = function _onSeeked() {
+    this._handleBufferingEvents();
+    this.trigger(_events2.default.PLAYBACK_SEEKED);
+  };
+
   HTML5Video.prototype._onEnded = function _onEnded() {
     this._handleBufferingEvents();
     this.trigger(_events2.default.PLAYBACK_ENDED, this.name);
@@ -11319,8 +11343,8 @@ var HTML5Video = function (_Playback) {
   HTML5Video.prototype._handleBufferingEvents = function _handleBufferingEvents() {
     var playheadShouldBeMoving = !this.el.ended && !this.el.paused;
     var buffering = this._loadStarted && !this.el.ended && !this._stopped && (playheadShouldBeMoving && !this._playheadMoving || this.el.readyState < this.el.HAVE_FUTURE_DATA);
-    if (this._bufferingState !== buffering) {
-      this._bufferingState = buffering;
+    if (this._isBuffering !== buffering) {
+      this._isBuffering = buffering;
       if (buffering) {
         this.trigger(_events2.default.PLAYBACK_BUFFERING, this.name);
       } else {
@@ -11367,7 +11391,6 @@ var HTML5Video = function (_Playback) {
   };
 
   HTML5Video.prototype._onTimeUpdate = function _onTimeUpdate() {
-    this._handleBufferingEvents();
     if (this.getPlaybackType() === _playback2.default.LIVE) {
       this.trigger(_events2.default.PLAYBACK_TIMEUPDATE, { current: 1, total: 1 }, this.name);
     } else {
@@ -32444,6 +32467,12 @@ var Strings = function (_CorePlugin) {
         'back_to_live': 'canlı yayına dön',
         'disabled': 'Engelli',
         'playback_not_supported': 'Tarayıcınız bu videoyu oynatma desteğine sahip değil. Lütfen farklı bir tarayıcı ile deneyin.'
+      },
+      'et': {
+        'live': 'Otseülekanne',
+        'back_to_live': 'Tagasi otseülekande juurde',
+        'disabled': 'Keelatud',
+        'playback_not_supported': 'Teie brauser ei toeta selle video taasesitust. Proovige kasutada muud brauserit.'
       }
     };
     var strings = this.core.options.strings || {};
@@ -32457,6 +32486,7 @@ var Strings = function (_CorePlugin) {
     this._messages['es-419'] = this._messages['es'];
     this._messages['fr-FR'] = this._messages['fr'];
     this._messages['tr-TR'] = this._messages['tr'];
+    this._messages['et-EE'] = this._messages['et'];
   };
 
   return Strings;
