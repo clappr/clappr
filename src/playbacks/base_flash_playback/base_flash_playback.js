@@ -40,6 +40,7 @@ export default class BaseFlashPlayback extends Playback {
   }
 
   render() {
+    this.$el.attr('data', this.swfPath)
     this.$el.html(this.template({
       cid: this.cid,
       swfPath: this.swfPath,
