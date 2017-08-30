@@ -40,4 +40,11 @@ describe('Flash playback', function() {
     this.callback.should.have.been.calledOnce
     expect(this.flash.isReady).to.be.true
   })
+
+  it('should update data element attribute with base url on render', function() {
+    const playback = new Flash({baseUrl: '/foo/bar'})
+    expect(playback.el.getAttribute('data')).to.not.match(/^\/foo\/bar/)
+    playback.render()
+    expect(playback.el.getAttribute('data')).to.match(/^\/foo\/bar/)
+  })
 })
