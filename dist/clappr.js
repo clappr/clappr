@@ -67,7 +67,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "<%=baseUrl%>/";
+/******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(__webpack_require__.s = 87);
@@ -5930,9 +5930,9 @@ module.exports = exports['default'];
 
 /***/ }),
 /* 75 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-module.exports = __webpack_require__.p + "a8c874b93b3d848f39a71260c57e3863.cur";
+module.exports = "<%=baseUrl%>/a8c874b93b3d848f39a71260c57e3863.cur";
 
 /***/ }),
 /* 76 */
@@ -6270,7 +6270,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.2.72"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.2.73"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -10627,9 +10627,9 @@ exports.push([module.i, "@font-face {\n  font-family: \"Roboto\";\n  font-style:
 
 /***/ }),
 /* 150 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-module.exports = __webpack_require__.p + "38861cba61c66739c1452c3a71e39852.ttf";
+module.exports = "<%=baseUrl%>/38861cba61c66739c1452c3a71e39852.ttf";
 
 /***/ }),
 /* 151 */
@@ -12181,6 +12181,7 @@ var BaseFlashPlayback = function (_Playback) {
   };
 
   BaseFlashPlayback.prototype.render = function render() {
+    this.$el.attr('data', this.swfPath);
     this.$el.html(this.template({
       cid: this.cid,
       swfPath: this.swfPath,
@@ -12270,9 +12271,9 @@ exports.push([module.i, ".clappr-flash-playback[data-flash-playback] {\n  displa
 
 /***/ }),
 /* 167 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-module.exports = __webpack_require__.p + "4b76590b32dab62bc95c1b7951efae78.swf";
+module.exports = "<%=baseUrl%>/4b76590b32dab62bc95c1b7951efae78.swf";
 
 /***/ }),
 /* 168 */
@@ -13296,9 +13297,9 @@ module.exports = exports['default'];
 
 /***/ }),
 /* 171 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-module.exports = __webpack_require__.p + "809981e5b09d5336c45d72d0869ada2a.swf";
+module.exports = "<%=baseUrl%>/809981e5b09d5336c45d72d0869ada2a.swf";
 
 /***/ }),
 /* 172 */
