@@ -24,7 +24,6 @@ if (process.env.npm_lifecycle_event === 'release') {
 
 webpackConfig.output = {
   path: path.resolve(__dirname, 'dist'),
-  publicPath: '<%=baseUrl%>/',
   filename: 'clappr.js',
   library: 'Clappr',
   libraryTarget: 'umd'
