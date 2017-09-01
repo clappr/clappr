@@ -856,10 +856,6 @@ circular-json@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/circular-json/-/circular-json-0.3.1.tgz#be8b36aefccde8b3ca7aa2d6afc07a37242c0d2d"
 
-clappr@^0.2.68:
-  version "0.2.68"
-  resolved "https://registry.yarnpkg.com/clappr/-/clappr-0.2.68.tgz#72c4178f43cd4670d4706202400a951a0d89a76b"
-
 cli-cursor@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/cli-cursor/-/cli-cursor-2.1.0.tgz#b35dac376479facc3e94747d41d0d0f5238ffcb5"
@@ -3162,9 +3158,9 @@ sha.js@^2.4.0, sha.js@^2.4.8:
   dependencies:
     inherits "^2.0.1"
 
-shaka-player@2.1.7:
-  version "2.1.7"
-  resolved "https://registry.yarnpkg.com/shaka-player/-/shaka-player-2.1.7.tgz#b2158a90dd22fcee0434c7341ca8e9fc147bb176"
+shaka-player@2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/shaka-player/-/shaka-player-2.2.1.tgz#d163aa4cf239990947186d1c564335cb97331431"
 
 signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.2"
