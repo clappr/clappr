@@ -29,15 +29,11 @@ export default class ClickToPausePlugin extends ContainerPlugin {
   }
 
   settingsUpdate() {
-    const shouldEnablePointer = this.container.getPlaybackType() !== Playback.LIVE || this.container.isDvrEnabled()
-    if (shouldEnablePointer === this.pointerEnabled) return
+    const pointerEnabled = this.container.getPlaybackType() !== Playback.LIVE || this.container.isDvrEnabled()
+    if (pointerEnabled === this.pointerEnabled) return
 
-    if (shouldEnablePointer){
-      this.container.$el.addClass('pointer-enabled')
-      this.pointerEnabled = true
-    } else {
-      this.container.$el.removeClass('pointer-enabled')
-      this.pointerEnabled = false
-    }
+    const method = pointerEnabled ? 'addClass' : 'removeClass'
+    this.container.$el[method]('pointer-enabled')
+    this.pointerEnabled = pointerEnabled
   }
 }
