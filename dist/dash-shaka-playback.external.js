@@ -177,6 +177,7 @@ var DashShakaPlayback = function (_HTML5Video) {
 
     _this._levels = [];
     _this._pendingAdaptationEvent = false;
+    _this._isShakaReadyState = false;
 
     options.autoPlay && _this.play();
     return _this;
@@ -210,6 +211,11 @@ var DashShakaPlayback = function (_HTML5Video) {
   }, {
     key: '_ready',
     value: function _ready() {
+      // override with no-op
+    }
+  }, {
+    key: '_onShakaReady',
+    value: function _onShakaReady() {
       this._isShakaReadyState = true;
       this.trigger(DashShakaPlayback.Events.SHAKA_READY);
       this.trigger(_clappr.Events.PLAYBACK_READY, this.name);
@@ -252,7 +258,7 @@ var DashShakaPlayback = function (_HTML5Video) {
   }, {
     key: 'getPlaybackType',
     value: function getPlaybackType() {
-      return (this._player && this._player.isLive() ? 'live' : 'vod') || '';
+      return (this.isReady && this._player.isLive() ? 'live' : 'vod') || '';
     }
   }, {
     key: 'selectTrack',
@@ -351,7 +357,7 @@ var DashShakaPlayback = function (_HTML5Video) {
   }, {
     key: '_loaded',
     value: function _loaded() {
-      this._ready();
+      this._onShakaReady();
       this._startToSendStats();
       this._fillLevels();
       this._checkForClosedCaptions();
@@ -435,19 +441,19 @@ var DashShakaPlayback = function (_HTML5Video) {
   }, {
     key: 'textTracks',
     get: function get() {
-      return this._player && this._player.getTextTracks();
+      return this.isReady && this._player.getTextTracks();
     }
   }, {
     key: 'audioTracks',
     get: function get() {
-      return this._player && this._player.getVariantTracks().filter(function (t) {
+      return this.isReady && this._player.getVariantTracks().filter(function (t) {
         return t.mimeType.startsWith('audio/');
       });
     }
   }, {
     key: 'videoTracks',
     get: function get() {
-      return this._player && this._player.getVariantTracks().filter(function (t) {
+      return this.isReady && this._player.getVariantTracks().filter(function (t) {
         return t.mimeType.startsWith('video/');
       });
     }
