@@ -58,6 +58,7 @@ class DashShakaPlayback extends HTML5Video {
     super(options)
     this._levels = []
     this._pendingAdaptationEvent = false
+    this._isShakaReadyState = false
 
     options.autoPlay && this.play()
   }
@@ -82,6 +83,10 @@ class DashShakaPlayback extends HTML5Video {
 
   // skipping ready event on video tag in favor of ready on shaka
   _ready () {
+    // override with no-op
+  }
+
+  _onShakaReady() {
     this._isShakaReadyState = true
     this.trigger(DashShakaPlayback.Events.SHAKA_READY)
     this.trigger(Events.PLAYBACK_READY, this.name)
@@ -120,19 +125,19 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   get textTracks () {
-    return this._player && this._player.getTextTracks()
+    return this.isReady && this._player.getTextTracks()
   }
 
   get audioTracks () {
-    return this._player && this._player.getVariantTracks().filter((t) => t.mimeType.startsWith('audio/'))
+    return this.isReady && this._player.getVariantTracks().filter((t) => t.mimeType.startsWith('audio/'))
   }
 
   get videoTracks () {
-    return this._player && this._player.getVariantTracks().filter((t) => t.mimeType.startsWith('video/'))
+    return this.isReady && this._player.getVariantTracks().filter((t) => t.mimeType.startsWith('video/'))
   }
 
   getPlaybackType () {
-    return (this._player && this._player.isLive() ? 'live' : 'vod') || ''
+    return (this.isReady && this._player.isLive() ? 'live' : 'vod') || ''
   }
 
   selectTrack (track) {
@@ -266,7 +271,7 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   _loaded () {
-    this._ready()
+    this._onShakaReady();
     this._startToSendStats()
     this._fillLevels()
     this._checkForClosedCaptions()
