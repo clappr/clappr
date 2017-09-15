@@ -263,8 +263,18 @@ var DashShakaPlayback = function (_HTML5Video) {
   }, {
     key: 'selectTrack',
     value: function selectTrack(track) {
-      this._player.selectTrack(track);
-      this._onAdaptation();
+      if (track.type === 'text') {
+        this._player.selectTextTrack(track);
+      } else if (track.type === 'variant') {
+        this._player.selectVariantTrack(track);
+        if (track.mimeType.startsWith('video/')) {
+          // we trigger the adaptation event here
+          // because Shaka doesn't trigger its event on "manual" selection.
+          this._onAdaptation();
+        }
+      } else {
+        throw new Error('Unhandled track type:', track.type);
+      }
     }
 
     /**
