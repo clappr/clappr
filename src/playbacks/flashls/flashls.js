@@ -439,6 +439,10 @@ export default class FlasHLS extends BaseFlashPlayback {
     return this._playbackType? this._playbackType: null
   }
 
+  getCurrentTime() {
+    return this.el.getPosition()
+  }
+
   getCurrentLevelIndex() {
     return this._currentLevel
   }
@@ -526,10 +530,10 @@ export default class FlasHLS extends BaseFlashPlayback {
 
   _onFragmentLoaded(loadmetrics) {
     this.trigger(Events.PLAYBACK_FRAGMENT_LOADED, loadmetrics)
-    if (this._reportingProgress && this.el.getPosition) {
-      const buffered = this.el.getPosition() + this.el.getbufferLength()
+    if (this._reportingProgress && this.getCurrentTime()) {
+      const buffered = this.getCurrentTime() + this.el.getbufferLength()
       this.trigger(Events.PLAYBACK_PROGRESS, {
-        start: this.el.getPosition(),
+        start: this.getCurrentTime(),
         current: buffered,
         total: this.el.getDuration()
       })
