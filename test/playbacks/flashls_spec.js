@@ -9,6 +9,11 @@ describe('HLS playback', function() {
       this.hls.el.getbufferLength = function() { return 0 }
       this.hls.el.getDuration = function() { return 30 }
       this.hls.el.getType = function() { return 'live' }
+      this.hls.el.getPosition = function() { return 10 }
+    })
+
+    it('get current video time', function() {
+      expect(this.hls.getCurrentTime()).to.be.equal(10)
     })
 
     it('triggers PLAYBACK_PLAY_INTENT on play request', function() {
