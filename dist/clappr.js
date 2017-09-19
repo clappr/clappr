@@ -6270,7 +6270,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.2.73"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.2.74"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -12913,6 +12913,10 @@ var FlasHLS = function (_BaseFlashPlayback) {
     return this._playbackType ? this._playbackType : null;
   };
 
+  FlasHLS.prototype.getCurrentTime = function getCurrentTime() {
+    return this.el.getPosition();
+  };
+
   FlasHLS.prototype.getCurrentLevelIndex = function getCurrentLevelIndex() {
     return this._currentLevel;
   };
@@ -13000,10 +13004,10 @@ var FlasHLS = function (_BaseFlashPlayback) {
 
   FlasHLS.prototype._onFragmentLoaded = function _onFragmentLoaded(loadmetrics) {
     this.trigger(_events2.default.PLAYBACK_FRAGMENT_LOADED, loadmetrics);
-    if (this._reportingProgress && this.el.getPosition) {
-      var buffered = this.el.getPosition() + this.el.getbufferLength();
+    if (this._reportingProgress && this.getCurrentTime()) {
+      var buffered = this.getCurrentTime() + this.el.getbufferLength();
       this.trigger(_events2.default.PLAYBACK_PROGRESS, {
-        start: this.el.getPosition(),
+        start: this.getCurrentTime(),
         current: buffered,
         total: this.el.getDuration()
       });
@@ -31244,10 +31248,12 @@ var ClickToPausePlugin = function (_ContainerPlugin) {
   };
 
   ClickToPausePlugin.prototype.settingsUpdate = function settingsUpdate() {
-    this.container.$el.removeClass('pointer-enabled');
-    if (this.container.getPlaybackType() !== _playback2.default.LIVE || this.container.isDvrEnabled()) {
-      this.container.$el.addClass('pointer-enabled');
-    }
+    var pointerEnabled = this.container.getPlaybackType() !== _playback2.default.LIVE || this.container.isDvrEnabled();
+    if (pointerEnabled === this.pointerEnabled) return;
+
+    var method = pointerEnabled ? 'addClass' : 'removeClass';
+    this.container.$el[method]('pointer-enabled');
+    this.pointerEnabled = pointerEnabled;
   };
 
   return ClickToPausePlugin;
