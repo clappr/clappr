@@ -128,6 +128,8 @@ export default class HLS extends HTML5VideoPlayback {
     // if content is removed from the beginning then this empty area should
     // be ignored. "playableRegionDuration" excludes the empty area
     this._playableRegionDuration = 0
+    // #EXT-X-PROGRAM-DATE-TIME
+    this._programDateTime = 0
     // true when the actual duration is longer than hlsjs's live sync point
     // when this is false playableRegionDuration will be the actual duration
     // when this is true playableRegionDuration will exclude the time after the sync point
@@ -185,6 +187,9 @@ export default class HLS extends HTML5VideoPlayback {
     clearInterval(this._timeUpdateTimer)
   }
 
+  getProgramDateTime() {
+    return this._programDateTime
+  }
   // the duration on the video element itself should not be used
   // as this does not necesarily represent the duration of the stream
   // https://github.com/clappr/clappr/issues/668#issuecomment-157036678
@@ -292,7 +297,7 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   _onTimeUpdate() {
-    let update = {current: this.getCurrentTime(), total: this.getDuration()}
+    let update = {current: this.getCurrentTime(), total: this.getDuration(), firstFragDateTime: this.getProgramDateTime()}
     let isSame = this._lastTimeUpdate && (
       update.current === this._lastTimeUpdate.current &&
       update.total === this._lastTimeUpdate.total)
@@ -400,6 +405,11 @@ export default class HLS extends HTML5VideoPlayback {
 
     if (fragments.length === 0) {
       return
+    }
+
+    // #EXT-X-PROGRAM-DATE-TIME
+    if (fragments[0].rawProgramDateTime) {
+      this._programDateTime = fragments[0].rawProgramDateTime
     }
 
     if (this._playableRegionStartTime !== fragments[0].start) {
