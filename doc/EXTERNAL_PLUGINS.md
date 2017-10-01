@@ -10,6 +10,7 @@
 |DASH with shaka| Ready | Yes | https://github.com/clappr/dash-shaka-playback |
 |Playback Speed | Ready | Yes | https://github.com/bikegriffith/clappr-playback-rate-plugin |
 |Clappr Stats | Ready | Yes | https://github.com/leandromoreira/clappr-stats |
+|Clappr Nerd Stats | Ready | Yes | https://github.com/lucasrodcosta/clappr-nerd-stats |
 |Pause while far| Ready | Yes | https://github.com/leandromoreira/clappr-pause-tab-visibility |
 |RTMP           | Ready | Yes | https://github.com/clappr/clappr-rtmp-plugin |
 |Picture-in-Picture | Ready | Yes | https://github.com/tjenkinson/clappr-pip-plugin |
