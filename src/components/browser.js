@@ -24,8 +24,7 @@ const hasFlash = function() {
   }
 }
 
-const getBrowserInfo = function() {
-  const ua = navigator.userAgent
+export const getBrowserInfo = function(ua) {
   let parts = ua.match(/\b(playstation 4|nx|opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [],
     extra
   if (/trident/i.test(parts[1])) {
@@ -40,16 +39,16 @@ const getBrowserInfo = function() {
     if (extra != null) {
       return { name: 'Edge', version: parseInt(extra[1]) }
     }
+  } else if (/android/i.test(ua) && (extra = ua.match(/version\/(\d+)/i))) {
+    parts.splice(1, 1, 'Android WebView')
+    parts.splice(2, 1, extra[1])
   }
   parts = parts[2] ? [parts[1], parts[2]] : [navigator.appName, navigator.appVersion, '-?']
 
-  if ((extra = ua.match(/version\/(\d+)/i))) {
-    parts.splice(1, 1, extra[1])
-  }
   return { name: parts[0], version: parseInt(parts[1]) }
 }
 
-const browserInfo = getBrowserInfo()
+const browserInfo = getBrowserInfo(navigator.userAgent)
 
 Browser.isEdge = /edge/i.test(navigator.userAgent)
 Browser.isChrome = /chrome|CriOS/i.test(navigator.userAgent) && !Browser.isEdge
