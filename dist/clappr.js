@@ -4050,8 +4050,7 @@ var hasFlash = function hasFlash() {
   }
 };
 
-var getBrowserInfo = function getBrowserInfo() {
-  var ua = navigator.userAgent;
+var getBrowserInfo = exports.getBrowserInfo = function getBrowserInfo(ua) {
   var parts = ua.match(/\b(playstation 4|nx|opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [],
       extra = void 0;
   if (/trident/i.test(parts[1])) {
@@ -4066,16 +4065,16 @@ var getBrowserInfo = function getBrowserInfo() {
     if (extra != null) {
       return { name: 'Edge', version: parseInt(extra[1]) };
     }
+  } else if (/android/i.test(ua) && (extra = ua.match(/version\/(\d+)/i))) {
+    parts.splice(1, 1, 'Android WebView');
+    parts.splice(2, 1, extra[1]);
   }
   parts = parts[2] ? [parts[1], parts[2]] : [navigator.appName, navigator.appVersion, '-?'];
 
-  if (extra = ua.match(/version\/(\d+)/i)) {
-    parts.splice(1, 1, extra[1]);
-  }
   return { name: parts[0], version: parseInt(parts[1]) };
 };
 
-var browserInfo = getBrowserInfo();
+var browserInfo = getBrowserInfo(navigator.userAgent);
 
 Browser.isEdge = /edge/i.test(navigator.userAgent);
 Browser.isChrome = /chrome|CriOS/i.test(navigator.userAgent) && !Browser.isEdge;
@@ -4099,7 +4098,6 @@ Browser.name = browserInfo.name;
 Browser.version = browserInfo.version;
 
 exports.default = Browser;
-module.exports = exports['default'];
 
 /***/ }),
 /* 14 */
@@ -6270,7 +6268,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.2.74"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.2.75"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
