@@ -3,7 +3,7 @@
   "version": "0.2.75",
   "description": "An extensible media player for the web",
   "main": "./dist/clappr.js",
-  "module": "./src/index.js",
+  "module": "./src/main.js",
   "scripts": {
     "release": "webpack --progress --output-filename clappr.min.js",
     "build": "webpack --progress",
