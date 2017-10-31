@@ -449,7 +449,7 @@ export default class HLS extends HTML5VideoPlayback {
     // seeks to areas after this point sometimes have issues
     if (this._playbackType === Playback.LIVE) {
       let fragmentTargetDuration = data.details.targetduration
-      let hlsjsConfig = this.options.playback || {}
+      let hlsjsConfig = this.options.playback.hlsjsConfig || {}
       let liveSyncDurationCount = hlsjsConfig.liveSyncDurationCount || HLSJS.DefaultConfig.liveSyncDurationCount
       let hiddenAreaDuration = fragmentTargetDuration * liveSyncDurationCount
       if (hiddenAreaDuration <= newDuration) {
