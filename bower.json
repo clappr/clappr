@@ -1,7 +1,7 @@
 {
   "name": "clappr",
   "description": "An extensible media player for the web",
-  "version": "0.2.75",
+  "version": "0.2.76",
   "homepage": "https://github.com/clappr/clappr",
   "authors": [
     "Globo.com"
@@ -13,8 +13,7 @@
   "license": "BSD-3-Clause",
   "files": [
     "LICENSE",
-    "README.md",
-    "dist"
+    "README.md"
   ],
   "main": [
     "./dist/clappr.js"
@@ -37,7 +36,7 @@
     "eslint": "^4.1.0",
     "file-loader": "^0.11.1",
     "gulp": "^3.8.1",
-    "hls.js": "^0.7.9",
+    "hls.js": "^0.8.5",
     "html-loader": "^0.4.3",
     "isparta": "^4.0.0",
     "istanbul": "^0.4.2",
@@ -60,7 +59,7 @@
     "mkdirp": "^0.5.1",
     "mocha": "^3.3.0",
     "node-bourbon": "^4.2.8",
-    "node-sass": "^4.3.0",
+    "node-sass": "^4.5.3",
     "s3": "^4.1.1",
     "sass-loader": "^6.0.2",
     "sinon": "^2.2.0",

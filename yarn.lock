@@ -3211,9 +3211,11 @@ he@1.1.x:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/he/-/he-1.1.1.tgz#93410fd21b009735151f8868c2f271f3427e23fd"
 
-hls.js@^0.7.9:
-  version "0.7.9"
-  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-0.7.9.tgz#6ff84f1e1cad34d22b9f147b8f5a04ab406c5605"
+hls.js@^0.8.5:
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-0.8.5.tgz#1f76a0db72ab9eaeca788d282bcf0f1cd7443f41"
+  dependencies:
+    url-toolkit "^2.0.1"
 
 hmac-drbg@^1.0.0:
   version "1.0.1"
@@ -4872,9 +4874,9 @@ node-pre-gyp@^0.6.29:
     tar "~2.2.1"
     tar-pack "~3.3.0"
 
-node-sass@^4.3.0:
-  version "4.5.2"
-  resolved "https://registry.yarnpkg.com/node-sass/-/node-sass-4.5.2.tgz#4012fa2bd129b1d6365117e88d9da0500d99da64"
+node-sass@^4.5.3:
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/node-sass/-/node-sass-4.5.3.tgz#d09c9d1179641239d1b97ffc6231fdcec53e1568"
   dependencies:
     async-foreach "^0.1.3"
     chalk "^1.1.1"
@@ -7094,6 +7096,10 @@ url-parse@^1.1.1:
   dependencies:
     querystringify "0.0.x"
     requires-port "1.0.x"
+
+url-toolkit@^2.0.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/url-toolkit/-/url-toolkit-2.1.1.tgz#96c2da3cd672df1aa2ac7fc89240b2dcf5c99a80"
 
 url@^0.11.0:
   version "0.11.0"
