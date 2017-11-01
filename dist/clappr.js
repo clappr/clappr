@@ -6268,7 +6268,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.2.76"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.2.77"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -8755,7 +8755,7 @@ var Core = function (_UIObject) {
     this.renderContainers();
     this.setupMediaControl(this.getCurrentContainer());
     this.render();
-    this.$el.appendTo(this.options.parentElement);
+    this.appendToParent();
     return this.containers;
   };
 
@@ -8862,6 +8862,11 @@ var Core = function (_UIObject) {
         container.configure(_this7.options);
       });
     }
+  };
+
+  Core.prototype.appendToParent = function appendToParent() {
+    var hasCoreParent = this.$el.parent() && this.$el.parent().length;
+    !hasCoreParent && this.$el.appendTo(this.options.parentElement);
   };
 
   Core.prototype.render = function render() {
