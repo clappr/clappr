@@ -21,4 +21,5 @@
 |Youtube        | Ready | No | https://github.com/towerz/clappr-youtube-playback |
 |VAST Ad plugin | WIP | No | https://github.com/vix-simplex/clappr-ad-plugin |
 |Dynamic Overlay | Ready | Yes | https://github.com/Lethea/clappr-dynamic-text-overlay |
+|Scroll Text Overlay | Ready | Yes | https://github.com/Lethea/clappr-marquee-overlay |
 
