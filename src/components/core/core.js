@@ -245,7 +245,7 @@ export default class Core extends UIObject {
     this.renderContainers()
     this.setupMediaControl(this.getCurrentContainer())
     this.render()
-    this.$el.appendTo(this.options.parentElement)
+    this.appendToParent()
     return this.containers
   }
 
@@ -347,6 +347,11 @@ export default class Core extends UIObject {
         container.configure(this.options)
       })
     }
+  }
+
+  appendToParent() {
+    let hasCoreParent = this.$el.parent() && this.$el.parent().length
+    !hasCoreParent && this.$el.appendTo(this.options.parentElement)
   }
 
   render() {
