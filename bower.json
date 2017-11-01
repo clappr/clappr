@@ -1,7 +1,7 @@
 {
   "name": "clappr",
   "description": "An extensible media player for the web",
-  "version": "0.2.76",
+  "version": "0.2.77",
   "homepage": "https://github.com/clappr/clappr",
   "authors": [
     "Globo.com"
@@ -12,6 +12,7 @@
   },
   "license": "BSD-3-Clause",
   "files": [
+    "dist",
     "LICENSE",
     "README.md"
   ],
