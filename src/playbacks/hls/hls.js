@@ -140,7 +140,7 @@ export default class HLS extends HTML5VideoPlayback {
     this._startTimeUpdateTimer()
   }
 
-  _setupHls() {
+  _setup() {
     this._ccIsSetup = false
     this._ccTracksUpdated = false
     this._hls = new HLSJS(this.options.playback.hlsjsConfig || {})
@@ -338,7 +338,7 @@ export default class HLS extends HTML5VideoPlayback {
 
   play() {
     if (!this._hls) {
-      this._setupHls()
+      this._setup()
     }
     super.play()
   }
