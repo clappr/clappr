@@ -6268,7 +6268,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.2.77"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.2.78"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -13396,6 +13396,11 @@ var HLS = function (_HTML5VideoPlayback) {
       this._hls.currentLevel = this._currentLevel;
     }
   }, {
+    key: 'isReady',
+    get: function get() {
+      return this._isReadyState;
+    }
+  }, {
     key: '_startTime',
     get: function get() {
       if (this._playbackType === _playback2.default.LIVE && this._playlistType !== 'EVENT') {
@@ -13530,7 +13535,7 @@ var HLS = function (_HTML5VideoPlayback) {
     return _this;
   }
 
-  HLS.prototype._setupHls = function _setupHls() {
+  HLS.prototype._setup = function _setup() {
     var _this2 = this;
 
     this._ccIsSetup = false;
@@ -13561,6 +13566,15 @@ var HLS = function (_HTML5VideoPlayback) {
       return _this2._ccTracksUpdated = true;
     });
     this._hls.attachMedia(this.el);
+    this._ready();
+  };
+
+  HLS.prototype._ready = function _ready() {
+    if (!this._hls) {
+      return;
+    }
+    this._isReadyState = true;
+    this.trigger(_events2.default.PLAYBACK_READY, this.name);
   };
 
   HLS.prototype._recover = function _recover(evt, data) {
@@ -13751,7 +13765,7 @@ var HLS = function (_HTML5VideoPlayback) {
 
   HLS.prototype.play = function play() {
     if (!this._hls) {
-      this._setupHls();
+      this._setup();
     }
     _HTML5VideoPlayback.prototype.play.call(this);
   };
