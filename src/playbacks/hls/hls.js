@@ -15,6 +15,7 @@ export default class HLS extends HTML5VideoPlayback {
   get name() { return 'hls' }
 
   get levels() { return this._levels || [] }
+
   get currentLevel() {
     if (this._currentLevel === null || this._currentLevel === undefined) {
       return AUTO
@@ -22,6 +23,11 @@ export default class HLS extends HTML5VideoPlayback {
       return this._currentLevel //0 is a valid level ID
     }
   }
+
+  get isReady() {
+    return this._isReadyState
+  }
+
   set currentLevel(id) {
     this._currentLevel = id
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_START)
@@ -140,7 +146,7 @@ export default class HLS extends HTML5VideoPlayback {
     this._startTimeUpdateTimer()
   }
 
-  _setupHls() {
+  _setup() {
     this._ccIsSetup = false
     this._ccTracksUpdated = false
     this._hls = new HLSJS(this.options.playback.hlsjsConfig || {})
@@ -153,6 +159,15 @@ export default class HLS extends HTML5VideoPlayback {
     this._hls.on(HLSJS.Events.SUBTITLE_TRACK_LOADED, (evt, data) => this._onSubtitleLoaded(evt, data))
     this._hls.on(HLSJS.Events.SUBTITLE_TRACKS_UPDATED, () => this._ccTracksUpdated = true)
     this._hls.attachMedia(this.el)
+    this._ready()
+  }
+
+  _ready() {
+    if (!this._hls) {
+      return
+    }
+    this._isReadyState = true
+    this.trigger(Events.PLAYBACK_READY, this.name)
   }
 
   _recover(evt, data) {
@@ -338,7 +353,7 @@ export default class HLS extends HTML5VideoPlayback {
 
   play() {
     if (!this._hls) {
-      this._setupHls()
+      this._setup()
     }
     super.play()
   }
