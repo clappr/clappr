@@ -48,7 +48,7 @@ describe('HLS playback', () => {
         }
       }
       const playback = new HLS(options)
-      playback._setupHls()
+      playback._setup()
       expect(playback._hls.config.someHlsjsOption).to.be.equal('value')
       expect(playback._hls.config).not.to.include.keys('hlsMinimumDvrSize')
     })
@@ -62,7 +62,7 @@ describe('HLS playback', () => {
         }
       }
       const playback = new HLS(options)
-      playback._setupHls()
+      playback._setup()
       expect(playback._hls.config.someHlsjsOption).to.be.equal('value')
       expect(playback._hls.config).not.to.include.keys('hlsMinimumDvrSize')
     })
