@@ -64,7 +64,6 @@
     "lolex": "^2.0.0",
     "mkdirp": "^0.5.1",
     "mocha": "^3.3.0",
-    "node-bourbon": "^4.2.8",
     "node-sass": "^4.5.3",
     "postcss-loader": "^2.0.9",
     "s3": "^4.1.1",
