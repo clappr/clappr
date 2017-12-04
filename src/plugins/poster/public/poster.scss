@@ -1,9 +1,7 @@
-@import "bourbon";
-
 .player-poster[data-poster] {
-  @include display(flex);
-  @include justify-content(center);
-  @include align-items(center);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   height: 100%;
   width: 100%;
@@ -23,7 +21,7 @@
     height: 25%;
     margin: 0 auto;
     opacity: 0.75;
-    @include transition(opacity 0.1s ease);
+    transition: opacity 0.1s ease;
     svg {
       height: 100%;
       path { fill: #fff; }

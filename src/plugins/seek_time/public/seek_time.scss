@@ -1,5 +1,3 @@
-@import "bourbon";
-
 .seek-time[data-seek-time] {
   position: absolute;
   white-space: nowrap;
@@ -10,7 +8,7 @@
   bottom: 55px;
   background-color: rgba(2, 2, 2, 0.5);
   z-index: 9999;
-  @include transition(opacity 0.1s ease);
+  transition: opacity 0.1s ease;
 
   &.hidden[data-seek-time] {
     opacity: 0;
