@@ -4,12 +4,11 @@
 
 import UIContainerPlugin from '../../base/ui_container_plugin'
 import Events from '../../base/events'
-import Styler from '../../base/styler'
 import template from '../../base/template'
 import Playback from '../../base/playback'
-import posterStyle from './public/poster.scss'
 import posterHTML from './public/poster.html'
 import playIcon from '../../icons/01-play.svg'
+import './public/poster.scss'
 
 export default class PosterPlugin extends UIContainerPlugin {
   get name() { return 'poster' }
@@ -113,9 +112,7 @@ export default class PosterPlugin extends UIContainerPlugin {
     if (!this.shouldRender) {
       return
     }
-    let style = Styler.getStyleFor(posterStyle, {baseUrl: this.options.baseUrl})
     this.$el.html(this.template())
-    this.$el.append(style)
 
     const isRegularPoster = this.options.poster && this.options.poster.custom == undefined
 

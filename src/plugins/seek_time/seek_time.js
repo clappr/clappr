@@ -5,12 +5,11 @@
 import {formatTime} from '../../base/utils'
 
 import UICorePlugin from '../../base/ui_core_plugin'
-import Styler from '../../base/styler'
 import template from '../../base/template'
 import Events from '../../base/events'
 import Playback from '../../base/playback'
-import seekTimeStyle from './public/seek_time.scss'
 import seekTimeHTML from './public/seek_time.html'
+import './public/seek_time.scss'
 
 export default class SeekTime extends UICorePlugin {
   get name() { return 'seek_time' }
@@ -143,9 +142,7 @@ export default class SeekTime extends UICorePlugin {
     this.rendered = true
     this.displayedDuration = null
     this.displayedSeekTime = null
-    const style = Styler.getStyleFor(seekTimeStyle)
     this.$el.html(this.template())
-    this.$el.append(style)
     this.$el.hide()
     this.mediaControl.$el.append(this.el)
     this.$seekTimeEl = this.$el.find('[data-seek-time]')
