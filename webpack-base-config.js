@@ -22,7 +22,7 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loaders: ['style-loader?singleton=true', 'postcss-loader', 'sass-loader?includePaths[]='
+        loaders: ['style-loader?singleton=true', 'css-loader', 'postcss-loader', 'sass-loader?includePaths[]='
             + path.resolve(__dirname, './src/base/scss')
         ],
         include: path.resolve(__dirname, 'src')
