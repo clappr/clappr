@@ -66,6 +66,7 @@
     "mocha": "^3.3.0",
     "node-bourbon": "^4.2.8",
     "node-sass": "^4.5.3",
+    "postcss-loader": "^2.0.9",
     "s3": "^4.1.1",
     "sass-loader": "^6.0.2",
     "sinon": "^2.2.0",
