@@ -22,9 +22,7 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loaders: ['css-loader', 'sass-loader?includePaths[]='
-            + require('node-bourbon').includePaths
-            + '&includePaths[]='
+        loaders: ['css-loader', 'postcss-loader', 'sass-loader?includePaths[]='
             + path.resolve(__dirname, './src/base/scss')
         ],
         include: path.resolve(__dirname, 'src')

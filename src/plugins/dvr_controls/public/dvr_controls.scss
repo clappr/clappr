@@ -1,5 +1,3 @@
-@import "bourbon";
-
 $live-color: #ff0101;
 $dvr-color: #fff;
 $vod-color: #005aff;
@@ -52,7 +50,7 @@ $circle-radius: 3.5px;
     opacity: 0.7;
     font-family: "Roboto", "Open Sans", Arial, sans-serif;
     text-transform: uppercase;
-    @include transition(all 0.1s ease);
+    transition: all 0.1s ease;
 
     &:before {
       content: "";

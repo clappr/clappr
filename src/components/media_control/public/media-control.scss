@@ -1,7 +1,5 @@
-@import 'bourbon';
-
 .media-control-notransition {
-  @include transition(none !important);
+  transition: none !important;
 }
 
 .media-control[data-media-control] {
@@ -28,8 +26,8 @@
     height: 40%;
     width: 100%;
     bottom: 0;
-    @include background(linear-gradient(transparent, rgba(0, 0, 0, 0.9)));
-    @include transition(opacity 0.6s ease-out);
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+    transition: opacity 0.6s ease-out;
   }
 
   .media-control-icon {
@@ -40,7 +38,7 @@
     opacity: 0.5;
     vertical-align: middle;
     text-align: left;
-    @include transition(all 0.1s ease);
+    transition: all 0.1s ease;
   }
 
   .media-control-icon:hover {
@@ -71,7 +69,7 @@
     font-size: 0;
     vertical-align: middle;
     pointer-events: auto;
-    @include transition(bottom 0.4s ease-out);
+    transition: bottom 0.4s ease-out;
 
     .media-control-left-panel[data-media-control] {
       position: absolute;
@@ -142,12 +140,12 @@
         display: none;
         float: right;
         height: 100%;
-        
+
         &.enabled {
           display: block;
           opacity: 1.0;
 
-          &:hover { 
+          &:hover {
             opacity: 1.0;
             text-shadow: none;
           }
@@ -206,7 +204,7 @@
           width: 0;
           height: 100%;
           background-color: #c2c2c2;
-          @include transition(all 0.1s ease-out);
+          transition: all 0.1s ease-out;
         }
 
         .bar-fill-2[data-seekbar] {
@@ -216,7 +214,7 @@
           width: 0;
           height: 100%;
           background-color: #005aff;
-          @include transition(all 0.1s ease-out);
+          transition: all 0.1s ease-out;
         }
 
         .bar-hover[data-seekbar] {
@@ -226,7 +224,7 @@
           width: 5px;
           height: 7px;
           background-color: rgba(255,255,255,0.5);
-          @include transition(opacity 0.1s ease);
+          transition: opacity 0.1s ease;
         }
       }
 
@@ -251,13 +249,13 @@
 
       .bar-scrubber[data-seekbar] {
         position: absolute;
-        @include transform(translateX(-50%));
+        transform: translateX(-50%);
         top: 2px;
         left: 0;
         width: 20px;
         height: 20px;
         opacity: 1;
-        @include transition(all 0.1s ease-out);
+        transition: all 0.1s ease-out;
 
         .bar-scrubber-icon[data-seekbar] {
           position: absolute;
@@ -312,7 +310,7 @@
         width: 42px;
         height: 18px;
         padding: 3px 0;
-        @include transition(width .2s ease-out);
+        transition: width .2s ease-out;
 
         .bar-background[data-volume] {
           height: 1px;
@@ -328,7 +326,7 @@
             width: 0;
             height: 100%;
             background-color: #c2c2c2;
-            @include transition(all 0.1s ease-out);
+            transition: all 0.1s ease-out;
           }
 
           .bar-fill-2[data-volume] {
@@ -338,7 +336,7 @@
             width: 0;
             height: 100%;
             background-color: #005aff;
-            @include transition(all 0.1s ease-out);
+            transition: all 0.1s ease-out;
           }
 
           .bar-hover[data-volume] {
@@ -348,19 +346,19 @@
             width: 5px;
             height: 7px;
             background-color: rgba(255,255,255,0.5);
-            @include transition(opacity 0.1s ease);
+            transition: opacity 0.1s ease;
           }
         }
 
         .bar-scrubber[data-volume] {
           position: absolute;
-          @include transform(translateX(-50%));
+          transform: translateX(-50%);
           top: 0px;
           left: 0;
           width: 20px;
           height: 20px;
           opacity: 1;
-          @include transition(all 0.1s ease-out);
+          transition: all 0.1s ease-out;
 
           .bar-scrubber-icon[data-volume] {
             position: absolute;
@@ -381,8 +379,7 @@
           height: 12px;
           opacity: 0.5;
           box-shadow: inset 2px 0 0 white;
-
-          @include transition(transform .2s ease-out);
+          transition: transform .2s ease-out;
 
           &.fill {
             box-shadow: inset 2px 0 0 #fff;
@@ -394,7 +391,7 @@
           }
 
           &:hover {
-            @include transform(scaleY(1.5));
+            transform: scaleY(1.5);
           }
         }
       }
