@@ -41,6 +41,7 @@ export default class DVRControls extends UICorePlugin {
   }
 
   dvrChanged(dvrEnabled) {
+    if (this.core.getPlaybackType() !== Playback.LIVE) return
     this.settingsUpdate()
     this.core.mediaControl.$el.addClass('live')
     if (dvrEnabled) {
@@ -64,7 +65,8 @@ export default class DVRControls extends UICorePlugin {
 
   settingsUpdate() {
     this.stopListening()
-    if(this.shouldRender()) {
+    this.core.mediaControl.$el.removeClass('live')
+    if (this.shouldRender()) {
       this.render()
       this.$el.click(() => this.click())
     }
@@ -81,7 +83,6 @@ export default class DVRControls extends UICorePlugin {
       live: this.core.i18n.t('live'),
       backToLive: this.core.i18n.t('back_to_live')
     }))
-    this.$el.append(this.style)
     if (this.shouldRender()) {
       this.core.mediaControl.$el.addClass('live')
       this.core.mediaControl.$('.media-control-left-panel[data-media-control]').append(this.$el)
