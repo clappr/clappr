@@ -1072,10 +1072,6 @@ boom@2.x.x:
   dependencies:
     hoek "2.x.x"
 
-bourbon@^4.2.6:
-  version "4.2.7"
-  resolved "https://registry.yarnpkg.com/bourbon/-/bourbon-4.2.7.tgz#48a805dff475fbf61e002a64e1e4db68d2f82fba"
-
 bower-config@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/bower-config/-/bower-config-1.4.0.tgz#16c38c1135f8071c19f25938d61b0d8cbf18d3f1"
