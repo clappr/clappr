@@ -1,5 +1,3 @@
-@import 'bourbon';
-
 [data-no-op] {
   position: absolute;
   height: 100%;
@@ -17,7 +15,7 @@
   padding: 10px;
   /* center vertically */
   top: 50%;
-  @include transform(translateY(-50%));
+  transform: translateY(-50%);
   max-height: 100%;
   overflow: auto;
 }
