@@ -17,7 +17,7 @@ describe('MediaControl', function() {
 
   describe('#constructor', function() {
     it('can be built muted', function() {
-      const mediaControl = new MediaControl({mute: true, container: this.container})
+      const mediaControl = new MediaControl({muted: true, container: this.container})
       expect(mediaControl.muted).to.be.equal(true)
       expect(mediaControl.volume).to.be.equal(0)
     })
@@ -117,7 +117,7 @@ describe('MediaControl', function() {
         constructor(options) { super(options) }
       }
 
-      const mediaControl = new MyMediaControl({mute: true, container: this.container})
+      const mediaControl = new MyMediaControl({muted: true, container: this.container})
       mediaControl.render()
       expect(mediaControl.muted).to.be.equal(true)
       expect(mediaControl.volume).to.be.equal(0)
