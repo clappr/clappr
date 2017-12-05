@@ -3385,42 +3385,6 @@ module.exports = Zepto
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _clapprZepto = __webpack_require__(6);
-
-var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
-
-var _template = __webpack_require__(8);
-
-var _template2 = _interopRequireDefault(_template);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-var Styler = {
-  getStyleFor: function getStyleFor(style) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : { baseUrl: '' };
-
-    return (0, _clapprZepto2.default)('<style class="clappr-style"></style>').html((0, _template2.default)(style.toString())(options));
-  }
-};
-
-exports.default = Styler;
-module.exports = exports['default'];
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 /* eslint-disable no-var */
 // Simple JavaScript Templating
 // Paul Miller (http://paulmillr.com)
@@ -3541,7 +3505,7 @@ exports.default = tmpl;
 module.exports = exports['default'];
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3911,7 +3875,7 @@ Playback.type = 'playback';
 module.exports = exports['default'];
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports) {
 
 /*
@@ -3989,6 +3953,378 @@ function toComment(sourceMap) {
 	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
 
 	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+
+var stylesInDom = {};
+
+var	memoize = function (fn) {
+	var memo;
+
+	return function () {
+		if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+		return memo;
+	};
+};
+
+var isOldIE = memoize(function () {
+	// Test for IE <= 9 as proposed by Browserhacks
+	// @see http://browserhacks.com/#hack-e71d8692f65334173fee715c222cb805
+	// Tests for existence of standard globals is to allow style-loader
+	// to operate correctly into non-standard environments
+	// @see https://github.com/webpack-contrib/style-loader/issues/177
+	return window && document && document.all && !window.atob;
+});
+
+var getElement = (function (fn) {
+	var memo = {};
+
+	return function(selector) {
+		if (typeof memo[selector] === "undefined") {
+			var styleTarget = fn.call(this, selector);
+			// Special case to return head of iframe instead of iframe itself
+			if (styleTarget instanceof window.HTMLIFrameElement) {
+				try {
+					// This will throw an exception if access to iframe is blocked
+					// due to cross-origin restrictions
+					styleTarget = styleTarget.contentDocument.head;
+				} catch(e) {
+					styleTarget = null;
+				}
+			}
+			memo[selector] = styleTarget;
+		}
+		return memo[selector]
+	};
+})(function (target) {
+	return document.querySelector(target)
+});
+
+var singleton = null;
+var	singletonCounter = 0;
+var	stylesInsertedAtTop = [];
+
+var	fixUrls = __webpack_require__(139);
+
+module.exports = function(list, options) {
+	if (typeof DEBUG !== "undefined" && DEBUG) {
+		if (typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+	}
+
+	options = options || {};
+
+	options.attrs = typeof options.attrs === "object" ? options.attrs : {};
+
+	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+	// tags it will allow on a page
+	if (!options.singleton) options.singleton = isOldIE();
+
+	// By default, add <style> tags to the <head> element
+	if (!options.insertInto) options.insertInto = "head";
+
+	// By default, add <style> tags to the bottom of the target
+	if (!options.insertAt) options.insertAt = "bottom";
+
+	var styles = listToStyles(list, options);
+
+	addStylesToDom(styles, options);
+
+	return function update (newList) {
+		var mayRemove = [];
+
+		for (var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+
+			domStyle.refs--;
+			mayRemove.push(domStyle);
+		}
+
+		if(newList) {
+			var newStyles = listToStyles(newList, options);
+			addStylesToDom(newStyles, options);
+		}
+
+		for (var i = 0; i < mayRemove.length; i++) {
+			var domStyle = mayRemove[i];
+
+			if(domStyle.refs === 0) {
+				for (var j = 0; j < domStyle.parts.length; j++) domStyle.parts[j]();
+
+				delete stylesInDom[domStyle.id];
+			}
+		}
+	};
+};
+
+function addStylesToDom (styles, options) {
+	for (var i = 0; i < styles.length; i++) {
+		var item = styles[i];
+		var domStyle = stylesInDom[item.id];
+
+		if(domStyle) {
+			domStyle.refs++;
+
+			for(var j = 0; j < domStyle.parts.length; j++) {
+				domStyle.parts[j](item.parts[j]);
+			}
+
+			for(; j < item.parts.length; j++) {
+				domStyle.parts.push(addStyle(item.parts[j], options));
+			}
+		} else {
+			var parts = [];
+
+			for(var j = 0; j < item.parts.length; j++) {
+				parts.push(addStyle(item.parts[j], options));
+			}
+
+			stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+		}
+	}
+}
+
+function listToStyles (list, options) {
+	var styles = [];
+	var newStyles = {};
+
+	for (var i = 0; i < list.length; i++) {
+		var item = list[i];
+		var id = options.base ? item[0] + options.base : item[0];
+		var css = item[1];
+		var media = item[2];
+		var sourceMap = item[3];
+		var part = {css: css, media: media, sourceMap: sourceMap};
+
+		if(!newStyles[id]) styles.push(newStyles[id] = {id: id, parts: [part]});
+		else newStyles[id].parts.push(part);
+	}
+
+	return styles;
+}
+
+function insertStyleElement (options, style) {
+	var target = getElement(options.insertInto)
+
+	if (!target) {
+		throw new Error("Couldn't find a style target. This probably means that the value for the 'insertInto' parameter is invalid.");
+	}
+
+	var lastStyleElementInsertedAtTop = stylesInsertedAtTop[stylesInsertedAtTop.length - 1];
+
+	if (options.insertAt === "top") {
+		if (!lastStyleElementInsertedAtTop) {
+			target.insertBefore(style, target.firstChild);
+		} else if (lastStyleElementInsertedAtTop.nextSibling) {
+			target.insertBefore(style, lastStyleElementInsertedAtTop.nextSibling);
+		} else {
+			target.appendChild(style);
+		}
+		stylesInsertedAtTop.push(style);
+	} else if (options.insertAt === "bottom") {
+		target.appendChild(style);
+	} else if (typeof options.insertAt === "object" && options.insertAt.before) {
+		var nextSibling = getElement(options.insertInto + " " + options.insertAt.before);
+		target.insertBefore(style, nextSibling);
+	} else {
+		throw new Error("[Style Loader]\n\n Invalid value for parameter 'insertAt' ('options.insertAt') found.\n Must be 'top', 'bottom', or Object.\n (https://github.com/webpack-contrib/style-loader#insertat)\n");
+	}
+}
+
+function removeStyleElement (style) {
+	if (style.parentNode === null) return false;
+	style.parentNode.removeChild(style);
+
+	var idx = stylesInsertedAtTop.indexOf(style);
+	if(idx >= 0) {
+		stylesInsertedAtTop.splice(idx, 1);
+	}
+}
+
+function createStyleElement (options) {
+	var style = document.createElement("style");
+
+	options.attrs.type = "text/css";
+
+	addAttrs(style, options.attrs);
+	insertStyleElement(options, style);
+
+	return style;
+}
+
+function createLinkElement (options) {
+	var link = document.createElement("link");
+
+	options.attrs.type = "text/css";
+	options.attrs.rel = "stylesheet";
+
+	addAttrs(link, options.attrs);
+	insertStyleElement(options, link);
+
+	return link;
+}
+
+function addAttrs (el, attrs) {
+	Object.keys(attrs).forEach(function (key) {
+		el.setAttribute(key, attrs[key]);
+	});
+}
+
+function addStyle (obj, options) {
+	var style, update, remove, result;
+
+	// If a transform function was defined, run it on the css
+	if (options.transform && obj.css) {
+	    result = options.transform(obj.css);
+
+	    if (result) {
+	    	// If transform returns a value, use that instead of the original css.
+	    	// This allows running runtime transformations on the css.
+	    	obj.css = result;
+	    } else {
+	    	// If the transform function returns a falsy value, don't add this css.
+	    	// This allows conditional loading of css
+	    	return function() {
+	    		// noop
+	    	};
+	    }
+	}
+
+	if (options.singleton) {
+		var styleIndex = singletonCounter++;
+
+		style = singleton || (singleton = createStyleElement(options));
+
+		update = applyToSingletonTag.bind(null, style, styleIndex, false);
+		remove = applyToSingletonTag.bind(null, style, styleIndex, true);
+
+	} else if (
+		obj.sourceMap &&
+		typeof URL === "function" &&
+		typeof URL.createObjectURL === "function" &&
+		typeof URL.revokeObjectURL === "function" &&
+		typeof Blob === "function" &&
+		typeof btoa === "function"
+	) {
+		style = createLinkElement(options);
+		update = updateLink.bind(null, style, options);
+		remove = function () {
+			removeStyleElement(style);
+
+			if(style.href) URL.revokeObjectURL(style.href);
+		};
+	} else {
+		style = createStyleElement(options);
+		update = applyToTag.bind(null, style);
+		remove = function () {
+			removeStyleElement(style);
+		};
+	}
+
+	update(obj);
+
+	return function updateStyle (newObj) {
+		if (newObj) {
+			if (
+				newObj.css === obj.css &&
+				newObj.media === obj.media &&
+				newObj.sourceMap === obj.sourceMap
+			) {
+				return;
+			}
+
+			update(obj = newObj);
+		} else {
+			remove();
+		}
+	};
+}
+
+var replaceText = (function () {
+	var textStore = [];
+
+	return function (index, replacement) {
+		textStore[index] = replacement;
+
+		return textStore.filter(Boolean).join('\n');
+	};
+})();
+
+function applyToSingletonTag (style, index, remove, obj) {
+	var css = remove ? "" : obj.css;
+
+	if (style.styleSheet) {
+		style.styleSheet.cssText = replaceText(index, css);
+	} else {
+		var cssNode = document.createTextNode(css);
+		var childNodes = style.childNodes;
+
+		if (childNodes[index]) style.removeChild(childNodes[index]);
+
+		if (childNodes.length) {
+			style.insertBefore(cssNode, childNodes[index]);
+		} else {
+			style.appendChild(cssNode);
+		}
+	}
+}
+
+function applyToTag (style, obj) {
+	var css = obj.css;
+	var media = obj.media;
+
+	if(media) {
+		style.setAttribute("media", media)
+	}
+
+	if(style.styleSheet) {
+		style.styleSheet.cssText = css;
+	} else {
+		while(style.firstChild) {
+			style.removeChild(style.firstChild);
+		}
+
+		style.appendChild(document.createTextNode(css));
+	}
+}
+
+function updateLink (link, options, obj) {
+	var css = obj.css;
+	var sourceMap = obj.sourceMap;
+
+	/*
+		If convertToAbsoluteUrls isn't defined, but sourcemaps are enabled
+		and there is no publicPath defined then lets turn convertToAbsoluteUrls
+		on by default.  Otherwise default to the convertToAbsoluteUrls option
+		directly
+	*/
+	var autoFixUrls = options.convertToAbsoluteUrls === undefined && sourceMap;
+
+	if (options.convertToAbsoluteUrls || autoFixUrls) {
+		css = fixUrls(css);
+	}
+
+	if (sourceMap) {
+		// http://stackoverflow.com/a/26603875
+		css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+	}
+
+	var blob = new Blob([css], { type: "text/css" });
+
+	var oldSrc = link.href;
+
+	link.href = URL.createObjectURL(blob);
+
+	if(oldSrc) URL.revokeObjectURL(oldSrc);
 }
 
 
@@ -4923,7 +5259,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _html5_video = __webpack_require__(152);
+var _html5_video = __webpack_require__(156);
 
 var _html5_video2 = _interopRequireDefault(_html5_video);
 
@@ -5660,7 +5996,7 @@ module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = __webpack_require__(164);
+exports.default = __webpack_require__(169);
 module.exports = exports['default'];
 
 /***/ }),
@@ -5917,7 +6253,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _media_control = __webpack_require__(138);
+var _media_control = __webpack_require__(140);
 
 var _media_control2 = _interopRequireDefault(_media_control);
 
@@ -5949,7 +6285,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _loader = __webpack_require__(151);
+var _loader = __webpack_require__(155);
 
 var _loader2 = _interopRequireDefault(_loader);
 
@@ -5962,7 +6298,7 @@ module.exports = exports['default'];
 /* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = { "default": __webpack_require__(153), __esModule: true };
+module.exports = { "default": __webpack_require__(157), __esModule: true };
 
 /***/ }),
 /* 79 */
@@ -6002,7 +6338,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _flash = __webpack_require__(163);
+var _flash = __webpack_require__(168);
 
 var _flash2 = _interopRequireDefault(_flash);
 
@@ -6022,7 +6358,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _html5_audio = __webpack_require__(168);
+var _html5_audio = __webpack_require__(174);
 
 var _html5_audio2 = _interopRequireDefault(_html5_audio);
 
@@ -6042,7 +6378,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _flashls = __webpack_require__(169);
+var _flashls = __webpack_require__(175);
 
 var _flashls2 = _interopRequireDefault(_flashls);
 
@@ -6062,7 +6398,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _hls = __webpack_require__(172);
+var _hls = __webpack_require__(178);
 
 var _hls2 = _interopRequireDefault(_hls);
 
@@ -6082,7 +6418,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _html_img = __webpack_require__(174);
+var _html_img = __webpack_require__(180);
 
 var _html_img2 = _interopRequireDefault(_html_img);
 
@@ -6102,7 +6438,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _no_op = __webpack_require__(176);
+var _no_op = __webpack_require__(183);
 
 var _no_op2 = _interopRequireDefault(_no_op);
 
@@ -6122,7 +6458,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _poster = __webpack_require__(189);
+var _poster = __webpack_require__(199);
 
 var _poster2 = _interopRequireDefault(_poster);
 
@@ -6154,7 +6490,7 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _playback = __webpack_require__(9);
+var _playback = __webpack_require__(8);
 
 var _playback2 = _interopRequireDefault(_playback);
 
@@ -6250,7 +6586,7 @@ var _log = __webpack_require__(55);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _styler = __webpack_require__(7);
+var _styler = __webpack_require__(228);
 
 var _styler2 = _interopRequireDefault(_styler);
 
@@ -6258,7 +6594,7 @@ var _vendor = __webpack_require__(56);
 
 var _vendor2 = _interopRequireDefault(_vendor);
 
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
@@ -6268,7 +6604,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.2.78"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.2.79"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -8450,10 +8786,6 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _styler = __webpack_require__(7);
-
-var _styler2 = _interopRequireDefault(_styler);
-
 var _ui_object = __webpack_require__(21);
 
 var _ui_object2 = _interopRequireDefault(_ui_object);
@@ -8482,9 +8814,7 @@ var _clapprZepto = __webpack_require__(6);
 
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-var _style = __webpack_require__(149);
-
-var _style2 = _interopRequireDefault(_style);
+__webpack_require__(152);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -8496,6 +8826,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @extends UIObject
  * @module components
  */
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
 var Core = function (_UIObject) {
   (0, _inherits3.default)(Core, _UIObject);
   (0, _createClass3.default)(Core, [{
@@ -8870,9 +9204,6 @@ var Core = function (_UIObject) {
   };
 
   Core.prototype.render = function render() {
-    this.$style && this.$style.remove();
-    this.$style = _styler2.default.getStyleFor(_style2.default, { baseUrl: this.options.baseUrl });
-    this.$el.append(this.$style);
     this.$el.append(this.mediaControl.render().el);
 
     this.options.width = this.options.width || this.$el.width();
@@ -8889,9 +9220,7 @@ var Core = function (_UIObject) {
   };
 
   return Core;
-}(_ui_object2.default); // Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
+}(_ui_object2.default);
 
 exports.default = Core;
 module.exports = exports['default'];
@@ -9091,13 +9420,7 @@ var _ui_object = __webpack_require__(21);
 
 var _ui_object2 = _interopRequireDefault(_ui_object);
 
-var _styler = __webpack_require__(7);
-
-var _styler2 = _interopRequireDefault(_styler);
-
-var _style = __webpack_require__(137);
-
-var _style2 = _interopRequireDefault(_style);
+__webpack_require__(137);
 
 var _clapprZepto = __webpack_require__(6);
 
@@ -9113,6 +9436,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @extends UIObject
  * @module base
  */
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+/**
+ * Container is responsible for the video rendering and state
+ */
+
 var Container = function (_UIObject) {
   (0, _inherits3.default)(Container, _UIObject);
   (0, _createClass3.default)(Container, [{
@@ -9627,21 +9958,13 @@ var Container = function (_UIObject) {
   };
 
   Container.prototype.render = function render() {
-    var s = _styler2.default.getStyleFor(_style2.default);
-    this.$el.append(s);
     this.$el.append(this.playback.render().el);
     this.updateStyle();
     return this;
   };
 
   return Container;
-}(_ui_object2.default); // Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-/**
- * Container is responsible for the video rendering and state
- */
+}(_ui_object2.default);
 
 exports.default = Container;
 module.exports = exports['default'];
@@ -9650,7 +9973,38 @@ module.exports = exports['default'];
 /* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(10)(undefined);
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(138);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"singleton":true,"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(10)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./style.scss", function() {
+			var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./style.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 138 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(9)(undefined);
 // imports
 
 
@@ -9661,7 +10015,102 @@ exports.push([module.i, ".container[data-container] {\n  position: absolute;\n  
 
 
 /***/ }),
-/* 138 */
+/* 139 */
+/***/ (function(module, exports) {
+
+
+/**
+ * When source maps are enabled, `style-loader` uses a link element with a data-uri to
+ * embed the css on the page. This breaks all relative urls because now they are relative to a
+ * bundle instead of the current page.
+ *
+ * One solution is to only use full urls, but that may be impossible.
+ *
+ * Instead, this function "fixes" the relative urls to be absolute according to the current page location.
+ *
+ * A rudimentary test suite is located at `test/fixUrls.js` and can be run via the `npm test` command.
+ *
+ */
+
+module.exports = function (css) {
+  // get current location
+  var location = typeof window !== "undefined" && window.location;
+
+  if (!location) {
+    throw new Error("fixUrls requires window.location");
+  }
+
+	// blank or null?
+	if (!css || typeof css !== "string") {
+	  return css;
+  }
+
+  var baseUrl = location.protocol + "//" + location.host;
+  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
+
+	// convert each url(...)
+	/*
+	This regular expression is just a way to recursively match brackets within
+	a string.
+
+	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
+	   (  = Start a capturing group
+	     (?:  = Start a non-capturing group
+	         [^)(]  = Match anything that isn't a parentheses
+	         |  = OR
+	         \(  = Match a start parentheses
+	             (?:  = Start another non-capturing groups
+	                 [^)(]+  = Match anything that isn't a parentheses
+	                 |  = OR
+	                 \(  = Match a start parentheses
+	                     [^)(]*  = Match anything that isn't a parentheses
+	                 \)  = Match a end parentheses
+	             )  = End Group
+              *\) = Match anything and then a close parens
+          )  = Close non-capturing group
+          *  = Match anything
+       )  = Close capturing group
+	 \)  = Match a close parens
+
+	 /gi  = Get all matches, not the first.  Be case insensitive.
+	 */
+	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function(fullMatch, origUrl) {
+		// strip quotes (if they exist)
+		var unquotedOrigUrl = origUrl
+			.trim()
+			.replace(/^"(.*)"$/, function(o, $1){ return $1; })
+			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
+
+		// already a full url? no change
+		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/)/i.test(unquotedOrigUrl)) {
+		  return fullMatch;
+		}
+
+		// convert the url to a full url
+		var newUrl;
+
+		if (unquotedOrigUrl.indexOf("//") === 0) {
+		  	//TODO: should we add protocol?
+			newUrl = unquotedOrigUrl;
+		} else if (unquotedOrigUrl.indexOf("/") === 0) {
+			// path should be relative to the base url
+			newUrl = baseUrl + unquotedOrigUrl; // already starts with '/'
+		} else {
+			// path should be relative to current directory
+			newUrl = currentDir + unquotedOrigUrl.replace(/^\.\//, ""); // Strip leading './'
+		}
+
+		// send back the fixed url(...)
+		return "url(" + JSON.stringify(newUrl) + ")";
+	});
+
+	// send back the fixed css
+	return fixedCss;
+};
+
+
+/***/ }),
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9671,7 +10120,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _stringify = __webpack_require__(139);
+var _stringify = __webpack_require__(141);
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
@@ -9699,10 +10148,6 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _styler = __webpack_require__(7);
-
-var _styler2 = _interopRequireDefault(_styler);
-
 var _ui_object = __webpack_require__(21);
 
 var _ui_object2 = _interopRequireDefault(_ui_object);
@@ -9715,11 +10160,11 @@ var _mediator = __webpack_require__(24);
 
 var _mediator2 = _interopRequireDefault(_mediator);
 
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
-var _playback = __webpack_require__(9);
+var _playback = __webpack_require__(8);
 
 var _playback2 = _interopRequireDefault(_playback);
 
@@ -9727,13 +10172,11 @@ var _clapprZepto = __webpack_require__(6);
 
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-var _mediaControl = __webpack_require__(141);
+__webpack_require__(143);
+
+var _mediaControl = __webpack_require__(145);
 
 var _mediaControl2 = _interopRequireDefault(_mediaControl);
-
-var _mediaControl3 = __webpack_require__(142);
-
-var _mediaControl4 = _interopRequireDefault(_mediaControl3);
 
 var _play = __webpack_require__(58);
 
@@ -9743,39 +10186,31 @@ var _pause = __webpack_require__(76);
 
 var _pause2 = _interopRequireDefault(_pause);
 
-var _stop = __webpack_require__(143);
+var _stop = __webpack_require__(146);
 
 var _stop2 = _interopRequireDefault(_stop);
 
-var _volume = __webpack_require__(144);
+var _volume = __webpack_require__(147);
 
 var _volume2 = _interopRequireDefault(_volume);
 
-var _mute = __webpack_require__(145);
+var _mute = __webpack_require__(148);
 
 var _mute2 = _interopRequireDefault(_mute);
 
-var _expand = __webpack_require__(146);
+var _expand = __webpack_require__(149);
 
 var _expand2 = _interopRequireDefault(_expand);
 
-var _shrink = __webpack_require__(147);
+var _shrink = __webpack_require__(150);
 
 var _shrink2 = _interopRequireDefault(_shrink);
 
-var _hd = __webpack_require__(148);
+var _hd = __webpack_require__(151);
 
 var _hd2 = _interopRequireDefault(_hd);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-/**
- * The MediaControl is responsible for displaying the Player controls.
- */
 
 var MediaControl = function (_UIObject) {
   (0, _inherits3.default)(MediaControl, _UIObject);
@@ -9824,12 +10259,7 @@ var MediaControl = function (_UIObject) {
   }, {
     key: 'template',
     get: function get() {
-      return (0, _template2.default)(_mediaControl4.default);
-    }
-  }, {
-    key: 'stylesheet',
-    get: function get() {
-      return _styler2.default.getStyleFor(_mediaControl2.default, { baseUrl: this.options.baseUrl });
+      return (0, _template2.default)(_mediaControl2.default);
     }
   }, {
     key: 'volume',
@@ -10477,7 +10907,6 @@ var MediaControl = function (_UIObject) {
 
     var timeout = 1000;
     this.$el.html(this.template({ settings: this.settings }));
-    this.$el.append(this.stylesheet);
     this.createCachedElements();
     this.$playPauseToggle.addClass('paused');
     this.$playStopToggle.addClass('stopped');
@@ -10531,7 +10960,13 @@ var MediaControl = function (_UIObject) {
   };
 
   return MediaControl;
-}(_ui_object2.default);
+}(_ui_object2.default); // Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+/**
+ * The MediaControl is responsible for displaying the Player controls.
+ */
 
 exports.default = MediaControl;
 
@@ -10543,13 +10978,13 @@ module.exports = exports['default'];
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(57)))
 
 /***/ }),
-/* 139 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = { "default": __webpack_require__(140), __esModule: true };
+module.exports = { "default": __webpack_require__(142), __esModule: true };
 
 /***/ }),
-/* 140 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var core  = __webpack_require__(11)
@@ -10559,83 +10994,145 @@ module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
 };
 
 /***/ }),
-/* 141 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(10)(undefined);
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(144);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"singleton":true,"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(10)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./media-control.scss", function() {
+			var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./media-control.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 144 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(9)(undefined);
 // imports
 
 
 // module
-exports.push([module.i, ".media-control-notransition {\n  -webkit-transition: none !important;\n  -moz-transition: none !important;\n  transition: none !important; }\n\n.media-control[data-media-control] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 9999;\n  pointer-events: none; }\n  .media-control[data-media-control].dragging {\n    pointer-events: auto;\n    cursor: -webkit-grabbing !important;\n    cursor: grabbing !important;\n    cursor: url(" + __webpack_require__(75) + "), move; }\n    .media-control[data-media-control].dragging * {\n      cursor: -webkit-grabbing !important;\n      cursor: grabbing !important;\n      cursor: url(" + __webpack_require__(75) + "), move; }\n  .media-control[data-media-control] .media-control-background[data-background] {\n    position: absolute;\n    height: 40%;\n    width: 100%;\n    bottom: 0;\n    background: -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    -webkit-transition: opacity 0.6s ease-out;\n    -moz-transition: opacity 0.6s ease-out;\n    transition: opacity 0.6s ease-out; }\n  .media-control[data-media-control] .media-control-icon {\n    line-height: 0;\n    letter-spacing: 0;\n    speak: none;\n    color: #fff;\n    opacity: 0.5;\n    vertical-align: middle;\n    text-align: left;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease;\n    transition: all 0.1s ease; }\n  .media-control[data-media-control] .media-control-icon:hover {\n    color: white;\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .media-control[data-media-control].media-control-hide .media-control-background[data-background] {\n    opacity: 0; }\n  .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {\n    bottom: -50px; }\n    .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n      opacity: 0; }\n  .media-control[data-media-control] .media-control-layer[data-controls] {\n    position: absolute;\n    bottom: 7px;\n    width: 100%;\n    height: 32px;\n    font-size: 0;\n    vertical-align: middle;\n    pointer-events: auto;\n    -webkit-transition: bottom 0.4s ease-out;\n    -moz-transition: bottom 0.4s ease-out;\n    transition: bottom 0.4s ease-out; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      left: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {\n      height: 100%;\n      text-align: center;\n      line-height: 32px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {\n      background-color: transparent;\n      border: 0;\n      margin: 0 6px;\n      padding: 0;\n      cursor: pointer;\n      display: inline-block;\n      width: 32px;\n      height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg {\n        width: 100%;\n        height: 22px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg path {\n          fill: white; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {\n        outline: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {\n        background-color: transparent;\n        border: 0;\n        cursor: default;\n        display: none;\n        float: right;\n        height: 100%; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {\n          display: block;\n          opacity: 1.0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {\n            opacity: 1.0;\n            text-shadow: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause] {\n        float: left; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {\n        float: left; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position], .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      display: inline-block;\n      font-size: 10px;\n      color: white;\n      cursor: default;\n      line-height: 32px;\n      position: relative; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {\n      margin: 0 6px 0 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      color: rgba(255, 255, 255, 0.5);\n      margin-right: 6px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {\n        content: \"|\";\n        margin-right: 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {\n      position: absolute;\n      top: -20px;\n      left: 0;\n      display: inline-block;\n      vertical-align: middle;\n      width: 100%;\n      height: 25px;\n      cursor: pointer; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {\n        width: 100%;\n        height: 1px;\n        position: relative;\n        top: 12px;\n        background-color: #666666; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #c2c2c2;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #005aff;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0;\n          position: absolute;\n          top: -3px;\n          width: 5px;\n          height: 7px;\n          background-color: rgba(255, 255, 255, 0.5);\n          -webkit-transition: opacity 0.1s ease;\n          -moz-transition: opacity 0.1s ease;\n          transition: opacity 0.1s ease; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n        opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {\n        cursor: default; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n        position: absolute;\n        -webkit-transform: translateX(-50%);\n        -moz-transform: translateX(-50%);\n        -ms-transform: translateX(-50%);\n        -o-transform: translateX(-50%);\n        transform: translateX(-50%);\n        top: 2px;\n        left: 0;\n        width: 20px;\n        height: 20px;\n        opacity: 1;\n        -webkit-transition: all 0.1s ease-out;\n        -moz-transition: all 0.1s ease-out;\n        transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {\n          position: absolute;\n          left: 6px;\n          top: 6px;\n          width: 8px;\n          height: 8px;\n          border-radius: 10px;\n          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n          background-color: white; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {\n      float: right;\n      display: inline-block;\n      height: 32px;\n      cursor: pointer;\n      margin: 0 6px;\n      box-sizing: border-box; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {\n        float: left;\n        bottom: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {\n          background-color: transparent;\n          border: 0;\n          box-sizing: content-box;\n          width: 32px;\n          height: 32px;\n          opacity: 0.5; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {\n            opacity: 0.75; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg {\n            height: 24px;\n            position: relative;\n            top: 3px; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg path {\n              fill: white; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted svg {\n            margin-left: 2px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {\n        float: left;\n        position: relative;\n        overflow: hidden;\n        top: 6px;\n        width: 42px;\n        height: 18px;\n        padding: 3px 0;\n        -webkit-transition: width 0.2s ease-out;\n        -moz-transition: width 0.2s ease-out;\n        transition: width 0.2s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] {\n          height: 1px;\n          position: relative;\n          top: 7px;\n          margin: 0 3px;\n          background-color: #666666; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #c2c2c2;\n            -webkit-transition: all 0.1s ease-out;\n            -moz-transition: all 0.1s ease-out;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-2[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #005aff;\n            -webkit-transition: all 0.1s ease-out;\n            -moz-transition: all 0.1s ease-out;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-hover[data-volume] {\n            opacity: 0;\n            position: absolute;\n            top: -3px;\n            width: 5px;\n            height: 7px;\n            background-color: rgba(255, 255, 255, 0.5);\n            -webkit-transition: opacity 0.1s ease;\n            -moz-transition: opacity 0.1s ease;\n            transition: opacity 0.1s ease; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] {\n          position: absolute;\n          -webkit-transform: translateX(-50%);\n          -moz-transform: translateX(-50%);\n          -ms-transform: translateX(-50%);\n          -o-transform: translateX(-50%);\n          transform: translateX(-50%);\n          top: 0px;\n          left: 0;\n          width: 20px;\n          height: 20px;\n          opacity: 1;\n          -webkit-transition: all 0.1s ease-out;\n          -moz-transition: all 0.1s ease-out;\n          transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume] {\n            position: absolute;\n            left: 6px;\n            top: 6px;\n            width: 8px;\n            height: 8px;\n            border-radius: 10px;\n            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n            background-color: white; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {\n          float: left;\n          width: 4px;\n          padding-left: 2px;\n          height: 12px;\n          opacity: 0.5;\n          box-shadow: inset 2px 0 0 white;\n          -webkit-transition: -webkit-transform 0.2s ease-out;\n          -moz-transition: -moz-transform 0.2s ease-out;\n          transition: transform 0.2s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {\n            box-shadow: inset 2px 0 0 #fff;\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:nth-of-type(1) {\n            padding-left: 0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {\n            -webkit-transform: scaleY(1.5);\n            -moz-transform: scaleY(1.5);\n            -ms-transform: scaleY(1.5);\n            -o-transform: scaleY(1.5);\n            transform: scaleY(1.5); }\n  .media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {\n    width: 0;\n    height: 12px;\n    top: 9px;\n    padding: 0; }\n", ""]);
+exports.push([module.i, ".media-control-notransition {\n  transition: none !important; }\n\n.media-control[data-media-control] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 9999;\n  pointer-events: none; }\n  .media-control[data-media-control].dragging {\n    pointer-events: auto;\n    cursor: -webkit-grabbing !important;\n    cursor: grabbing !important;\n    cursor: url(" + __webpack_require__(75) + "), move; }\n    .media-control[data-media-control].dragging * {\n      cursor: -webkit-grabbing !important;\n      cursor: grabbing !important;\n      cursor: url(" + __webpack_require__(75) + "), move; }\n  .media-control[data-media-control] .media-control-background[data-background] {\n    position: absolute;\n    height: 40%;\n    width: 100%;\n    bottom: 0;\n    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    transition: opacity 0.6s ease-out; }\n  .media-control[data-media-control] .media-control-icon {\n    line-height: 0;\n    letter-spacing: 0;\n    speak: none;\n    color: #fff;\n    opacity: 0.5;\n    vertical-align: middle;\n    text-align: left;\n    transition: all 0.1s ease; }\n  .media-control[data-media-control] .media-control-icon:hover {\n    color: white;\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .media-control[data-media-control].media-control-hide .media-control-background[data-background] {\n    opacity: 0; }\n  .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {\n    bottom: -50px; }\n    .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n      opacity: 0; }\n  .media-control[data-media-control] .media-control-layer[data-controls] {\n    position: absolute;\n    bottom: 7px;\n    width: 100%;\n    height: 32px;\n    font-size: 0;\n    vertical-align: middle;\n    pointer-events: auto;\n    transition: bottom 0.4s ease-out; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      left: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {\n      height: 100%;\n      text-align: center;\n      line-height: 32px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {\n      background-color: transparent;\n      border: 0;\n      margin: 0 6px;\n      padding: 0;\n      cursor: pointer;\n      display: inline-block;\n      width: 32px;\n      height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg {\n        width: 100%;\n        height: 22px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg path {\n          fill: white; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {\n        outline: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {\n        background-color: transparent;\n        border: 0;\n        cursor: default;\n        display: none;\n        float: right;\n        height: 100%; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {\n          display: block;\n          opacity: 1.0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {\n            opacity: 1.0;\n            text-shadow: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause] {\n        float: left; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {\n        float: left; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position], .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      display: inline-block;\n      font-size: 10px;\n      color: white;\n      cursor: default;\n      line-height: 32px;\n      position: relative; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {\n      margin: 0 6px 0 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      color: rgba(255, 255, 255, 0.5);\n      margin-right: 6px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {\n        content: \"|\";\n        margin-right: 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {\n      position: absolute;\n      top: -20px;\n      left: 0;\n      display: inline-block;\n      vertical-align: middle;\n      width: 100%;\n      height: 25px;\n      cursor: pointer; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {\n        width: 100%;\n        height: 1px;\n        position: relative;\n        top: 12px;\n        background-color: #666666; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #c2c2c2;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #005aff;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0;\n          position: absolute;\n          top: -3px;\n          width: 5px;\n          height: 7px;\n          background-color: rgba(255, 255, 255, 0.5);\n          transition: opacity 0.1s ease; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n        opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {\n        cursor: default; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n        position: absolute;\n        -webkit-transform: translateX(-50%);\n                transform: translateX(-50%);\n        top: 2px;\n        left: 0;\n        width: 20px;\n        height: 20px;\n        opacity: 1;\n        transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {\n          position: absolute;\n          left: 6px;\n          top: 6px;\n          width: 8px;\n          height: 8px;\n          border-radius: 10px;\n          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n          background-color: white; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {\n      float: right;\n      display: inline-block;\n      height: 32px;\n      cursor: pointer;\n      margin: 0 6px;\n      box-sizing: border-box; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {\n        float: left;\n        bottom: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {\n          background-color: transparent;\n          border: 0;\n          box-sizing: content-box;\n          width: 32px;\n          height: 32px;\n          opacity: 0.5; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {\n            opacity: 0.75; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg {\n            height: 24px;\n            position: relative;\n            top: 3px; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg path {\n              fill: white; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted svg {\n            margin-left: 2px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {\n        float: left;\n        position: relative;\n        overflow: hidden;\n        top: 6px;\n        width: 42px;\n        height: 18px;\n        padding: 3px 0;\n        transition: width .2s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] {\n          height: 1px;\n          position: relative;\n          top: 7px;\n          margin: 0 3px;\n          background-color: #666666; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #c2c2c2;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-2[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #005aff;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-hover[data-volume] {\n            opacity: 0;\n            position: absolute;\n            top: -3px;\n            width: 5px;\n            height: 7px;\n            background-color: rgba(255, 255, 255, 0.5);\n            transition: opacity 0.1s ease; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] {\n          position: absolute;\n          -webkit-transform: translateX(-50%);\n                  transform: translateX(-50%);\n          top: 0px;\n          left: 0;\n          width: 20px;\n          height: 20px;\n          opacity: 1;\n          transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume] {\n            position: absolute;\n            left: 6px;\n            top: 6px;\n            width: 8px;\n            height: 8px;\n            border-radius: 10px;\n            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n            background-color: white; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {\n          float: left;\n          width: 4px;\n          padding-left: 2px;\n          height: 12px;\n          opacity: 0.5;\n          box-shadow: inset 2px 0 0 white;\n          transition: -webkit-transform .2s ease-out;\n          transition: transform .2s ease-out;\n          transition: transform .2s ease-out, -webkit-transform .2s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {\n            box-shadow: inset 2px 0 0 #fff;\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:nth-of-type(1) {\n            padding-left: 0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {\n            -webkit-transform: scaleY(1.5);\n                    transform: scaleY(1.5); }\n  .media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {\n    width: 0;\n    height: 12px;\n    top: 9px;\n    padding: 0; }\n", ""]);
 
 // exports
 
-
-/***/ }),
-/* 142 */
-/***/ (function(module, exports) {
-
-module.exports = "<div class=\"media-control-background\" data-background></div>\n<div class=\"media-control-layer\" data-controls>\n  <%  var renderBar = function(name) { %>\n      <div class=\"bar-container\" data-<%= name %>>\n        <div class=\"bar-background\" data-<%= name %>>\n          <div class=\"bar-fill-1\" data-<%= name %>></div>\n          <div class=\"bar-fill-2\" data-<%= name %>></div>\n          <div class=\"bar-hover\" data-<%= name %>></div>\n        </div>\n        <div class=\"bar-scrubber\" data-<%= name %>>\n          <div class=\"bar-scrubber-icon\" data-<%= name %>></div>\n        </div>\n      </div>\n  <%  }; %>\n  <%  var renderSegmentedBar = function(name, segments) {\n      segments = segments || 10; %>\n    <div class=\"bar-container\" data-<%= name %>>\n    <% for (var i = 0; i < segments; i++) { %>\n      <div class=\"segmented-bar-element\" data-<%= name %>></div>\n    <% } %>\n    </div>\n  <% }; %>\n  <% var renderDrawer = function(name, renderContent) { %>\n      <div class=\"drawer-container\" data-<%= name %>>\n        <div class=\"drawer-icon-container\" data-<%= name %>>\n          <div class=\"drawer-icon media-control-icon\" data-<%= name %>></div>\n          <span class=\"drawer-text\" data-<%= name %>></span>\n        </div>\n        <% renderContent(name); %>\n      </div>\n  <% }; %>\n  <% var renderIndicator = function(name) { %>\n      <div class=\"media-control-indicator\" data-<%= name %>></div>\n  <% }; %>\n  <% var renderButton = function(name) { %>\n    <button type=\"button\" class=\"media-control-button media-control-icon\" data-<%= name %> aria-label=\"<%= name %>\"></button>\n  <% }; %>\n  <%  var templates = {\n        bar: renderBar,\n        segmentedBar: renderSegmentedBar,\n      };\n      var render = function(settingsList) {\n        settingsList.forEach(function(setting) {\n          if(setting === \"seekbar\") {\n            renderBar(setting);\n          } else if (setting === \"volume\") {\n            renderDrawer(setting, settings.volumeBarTemplate ? templates[settings.volumeBarTemplate] : function(name) { return renderSegmentedBar(name); });\n          } else if (setting === \"duration\" || setting === \"position\") {\n            renderIndicator(setting);\n          } else {\n            renderButton(setting);\n          }\n        });\n      }; %>\n  <% if (settings.default && settings.default.length) { %>\n  <div class=\"media-control-center-panel\" data-media-control>\n    <% render(settings.default); %>\n  </div>\n  <% } %>\n  <% if (settings.left && settings.left.length) { %>\n  <div class=\"media-control-left-panel\" data-media-control>\n    <% render(settings.left); %>\n  </div>\n  <% } %>\n  <% if (settings.right && settings.right.length) { %>\n  <div class=\"media-control-right-panel\" data-media-control>\n    <% render(settings.right); %>\n  </div>\n  <% } %>\n</div>\n";
-
-/***/ }),
-/* 143 */
-/***/ (function(module, exports) {
-
-module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M1.712 1.24h12.6v13.52h-12.6z\"></path></svg>"
-
-/***/ }),
-/* 144 */
-/***/ (function(module, exports) {
-
-module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M11.5 11h-.002v1.502L7.798 10H4.5V6h3.297l3.7-2.502V4.5h.003V11zM11 4.49L7.953 6.5H5v3h2.953L11 11.51V4.49z\"></path></svg>"
 
 /***/ }),
 /* 145 */
 /***/ (function(module, exports) {
 
-module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M9.75 11.51L6.7 9.5H3.75v-3H6.7L9.75 4.49v.664l.497.498V3.498L6.547 6H3.248v4h3.296l3.7 2.502v-2.154l-.497.5v.662zm3-5.165L12.404 6l-1.655 1.653L9.093 6l-.346.345L10.402 8 8.747 9.654l.346.347 1.655-1.653L12.403 10l.348-.346L11.097 8l1.655-1.655z\"></path></svg>"
+module.exports = "<div class=\"media-control-background\" data-background></div>\n<div class=\"media-control-layer\" data-controls>\n  <%  var renderBar = function(name) { %>\n      <div class=\"bar-container\" data-<%= name %>>\n        <div class=\"bar-background\" data-<%= name %>>\n          <div class=\"bar-fill-1\" data-<%= name %>></div>\n          <div class=\"bar-fill-2\" data-<%= name %>></div>\n          <div class=\"bar-hover\" data-<%= name %>></div>\n        </div>\n        <div class=\"bar-scrubber\" data-<%= name %>>\n          <div class=\"bar-scrubber-icon\" data-<%= name %>></div>\n        </div>\n      </div>\n  <%  }; %>\n  <%  var renderSegmentedBar = function(name, segments) {\n      segments = segments || 10; %>\n    <div class=\"bar-container\" data-<%= name %>>\n    <% for (var i = 0; i < segments; i++) { %>\n      <div class=\"segmented-bar-element\" data-<%= name %>></div>\n    <% } %>\n    </div>\n  <% }; %>\n  <% var renderDrawer = function(name, renderContent) { %>\n      <div class=\"drawer-container\" data-<%= name %>>\n        <div class=\"drawer-icon-container\" data-<%= name %>>\n          <div class=\"drawer-icon media-control-icon\" data-<%= name %>></div>\n          <span class=\"drawer-text\" data-<%= name %>></span>\n        </div>\n        <% renderContent(name); %>\n      </div>\n  <% }; %>\n  <% var renderIndicator = function(name) { %>\n      <div class=\"media-control-indicator\" data-<%= name %>></div>\n  <% }; %>\n  <% var renderButton = function(name) { %>\n    <button type=\"button\" class=\"media-control-button media-control-icon\" data-<%= name %> aria-label=\"<%= name %>\"></button>\n  <% }; %>\n  <%  var templates = {\n        bar: renderBar,\n        segmentedBar: renderSegmentedBar,\n      };\n      var render = function(settingsList) {\n        settingsList.forEach(function(setting) {\n          if(setting === \"seekbar\") {\n            renderBar(setting);\n          } else if (setting === \"volume\") {\n            renderDrawer(setting, settings.volumeBarTemplate ? templates[settings.volumeBarTemplate] : function(name) { return renderSegmentedBar(name); });\n          } else if (setting === \"duration\" || setting === \"position\") {\n            renderIndicator(setting);\n          } else {\n            renderButton(setting);\n          }\n        });\n      }; %>\n  <% if (settings.default && settings.default.length) { %>\n  <div class=\"media-control-center-panel\" data-media-control>\n    <% render(settings.default); %>\n  </div>\n  <% } %>\n  <% if (settings.left && settings.left.length) { %>\n  <div class=\"media-control-left-panel\" data-media-control>\n    <% render(settings.left); %>\n  </div>\n  <% } %>\n  <% if (settings.right && settings.right.length) { %>\n  <div class=\"media-control-right-panel\" data-media-control>\n    <% render(settings.right); %>\n  </div>\n  <% } %>\n</div>\n";
 
 /***/ }),
 /* 146 */
 /***/ (function(module, exports) {
 
-module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M7.156 8L4 11.156V8.5H3V13h4.5v-1H4.844L8 8.844 7.156 8zM8.5 3v1h2.657L8 7.157 8.846 8 12 4.844V7.5h1V3H8.5z\"></path></svg>"
+module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M1.712 1.24h12.6v13.52h-12.6z\"></path></svg>"
 
 /***/ }),
 /* 147 */
 /***/ (function(module, exports) {
 
-module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M13.5 3.344l-.844-.844L9.5 5.656V3h-1v4.5H13v-1h-2.656L13.5 3.344zM3 9.5h2.656L2.5 12.656l.844.844L6.5 10.344V13h1V8.5H3v1z\"></path></svg>"
+module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M11.5 11h-.002v1.502L7.798 10H4.5V6h3.297l3.7-2.502V4.5h.003V11zM11 4.49L7.953 6.5H5v3h2.953L11 11.51V4.49z\"></path></svg>"
 
 /***/ }),
 /* 148 */
 /***/ (function(module, exports) {
 
-module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M5.375 7.062H2.637V4.26H.502v7.488h2.135V8.9h2.738v2.848h2.133V4.26H5.375v2.802zm5.97-2.81h-2.84v7.496h2.798c2.65 0 4.195-1.607 4.195-3.77v-.022c0-2.162-1.523-3.704-4.154-3.704zm2.06 3.758c0 1.21-.81 1.896-2.03 1.896h-.83V6.093h.83c1.22 0 2.03.696 2.03 1.896v.02z\"></path></svg>"
+module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M9.75 11.51L6.7 9.5H3.75v-3H6.7L9.75 4.49v.664l.497.498V3.498L6.547 6H3.248v4h3.296l3.7 2.502v-2.154l-.497.5v.662zm3-5.165L12.404 6l-1.655 1.653L9.093 6l-.346.345L10.402 8 8.747 9.654l.346.347 1.655-1.653L12.403 10l.348-.346L11.097 8l1.655-1.655z\"></path></svg>"
 
 /***/ }),
 /* 149 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-exports = module.exports = __webpack_require__(10)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "@font-face {\n  font-family: \"Roboto\";\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Roboto\"), local(\"Roboto-Regular\"), url(" + __webpack_require__(150) + ") format(\"truetype\"); }\n\n[data-player] {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -khtml-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  -o-user-select: none;\n  user-select: none;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  -webkit-transform: translate3d(0, 0, 0);\n  -moz-transform: translate3d(0, 0, 0);\n  -ms-transform: translate3d(0, 0, 0);\n  -o-transform: translate3d(0, 0, 0);\n  transform: translate3d(0, 0, 0);\n  position: relative;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-style: normal;\n  font-weight: normal;\n  text-align: center;\n  overflow: hidden;\n  font-size: 100%;\n  font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n  text-shadow: 0 0 0;\n  box-sizing: border-box; }\n  [data-player] div, [data-player] span, [data-player] applet, [data-player] object, [data-player] iframe,\n  [data-player] h1, [data-player] h2, [data-player] h3, [data-player] h4, [data-player] h5, [data-player] h6, [data-player] p, [data-player] blockquote, [data-player] pre,\n  [data-player] a, [data-player] abbr, [data-player] acronym, [data-player] address, [data-player] big, [data-player] cite, [data-player] code,\n  [data-player] del, [data-player] dfn, [data-player] em, [data-player] img, [data-player] ins, [data-player] kbd, [data-player] q, [data-player] s, [data-player] samp,\n  [data-player] small, [data-player] strike, [data-player] strong, [data-player] sub, [data-player] sup, [data-player] tt, [data-player] var,\n  [data-player] b, [data-player] u, [data-player] i, [data-player] center,\n  [data-player] dl, [data-player] dt, [data-player] dd, [data-player] ol, [data-player] ul, [data-player] li,\n  [data-player] fieldset, [data-player] form, [data-player] label, [data-player] legend,\n  [data-player] table, [data-player] caption, [data-player] tbody, [data-player] tfoot, [data-player] thead, [data-player] tr, [data-player] th, [data-player] td,\n  [data-player] article, [data-player] aside, [data-player] canvas, [data-player] details, [data-player] embed,\n  [data-player] figure, [data-player] figcaption, [data-player] footer, [data-player] header, [data-player] hgroup,\n  [data-player] menu, [data-player] nav, [data-player] output, [data-player] ruby, [data-player] section, [data-player] summary,\n  [data-player] time, [data-player] mark, [data-player] audio, [data-player] video {\n    margin: 0;\n    padding: 0;\n    border: 0;\n    font: inherit;\n    font-size: 100%;\n    vertical-align: baseline; }\n  [data-player] table {\n    border-collapse: collapse;\n    border-spacing: 0; }\n  [data-player] caption, [data-player] th, [data-player] td {\n    text-align: left;\n    font-weight: normal;\n    vertical-align: middle; }\n  [data-player] q, [data-player] blockquote {\n    quotes: none; }\n    [data-player] q:before, [data-player] q:after, [data-player] blockquote:before, [data-player] blockquote:after {\n      content: \"\";\n      content: none; }\n  [data-player] a img {\n    border: none; }\n  [data-player]:focus {\n    outline: 0; }\n  [data-player] * {\n    max-width: none;\n    box-sizing: inherit;\n    float: none; }\n  [data-player] div {\n    display: block; }\n  [data-player].fullscreen {\n    width: 100% !important;\n    height: 100% !important;\n    top: 0;\n    left: 0; }\n  [data-player].nocursor {\n    cursor: none; }\n\n.clappr-style {\n  display: none !important; }\n", ""]);
-
-// exports
-
+module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M7.156 8L4 11.156V8.5H3V13h4.5v-1H4.844L8 8.844 7.156 8zM8.5 3v1h2.657L8 7.157 8.846 8 12 4.844V7.5h1V3H8.5z\"></path></svg>"
 
 /***/ }),
 /* 150 */
 /***/ (function(module, exports) {
 
-module.exports = "<%=baseUrl%>/38861cba61c66739c1452c3a71e39852.ttf";
+module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M13.5 3.344l-.844-.844L9.5 5.656V3h-1v4.5H13v-1h-2.656L13.5 3.344zM3 9.5h2.656L2.5 12.656l.844.844L6.5 10.344V13h1V8.5H3v1z\"></path></svg>"
 
 /***/ }),
 /* 151 */
+/***/ (function(module, exports) {
+
+module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M5.375 7.062H2.637V4.26H.502v7.488h2.135V8.9h2.738v2.848h2.133V4.26H5.375v2.802zm5.97-2.81h-2.84v7.496h2.798c2.65 0 4.195-1.607 4.195-3.77v-.022c0-2.162-1.523-3.704-4.154-3.704zm2.06 3.758c0 1.21-.81 1.896-2.03 1.896h-.83V6.093h.83c1.22 0 2.03.696 2.03 1.896v.02z\"></path></svg>"
+
+/***/ }),
+/* 152 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(153);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"singleton":true,"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(10)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./style.scss", function() {
+			var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./style.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 153 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(9)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "@font-face {\n  font-family: \"Roboto\";\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Roboto\"), local(\"Roboto-Regular\"), url(" + __webpack_require__(154) + ") format(\"truetype\"); }\n\n[data-player] {\n  -webkit-touch-callout: none;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  -o-user-select: none;\n  user-select: none;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  -webkit-transform: translate3d(0, 0, 0);\n          transform: translate3d(0, 0, 0);\n  position: relative;\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-style: normal;\n  font-weight: normal;\n  text-align: center;\n  overflow: hidden;\n  font-size: 100%;\n  font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n  text-shadow: 0 0 0;\n  box-sizing: border-box; }\n  [data-player] div, [data-player] span, [data-player] applet, [data-player] object, [data-player] iframe,\n  [data-player] h1, [data-player] h2, [data-player] h3, [data-player] h4, [data-player] h5, [data-player] h6, [data-player] p, [data-player] blockquote, [data-player] pre,\n  [data-player] a, [data-player] abbr, [data-player] acronym, [data-player] address, [data-player] big, [data-player] cite, [data-player] code,\n  [data-player] del, [data-player] dfn, [data-player] em, [data-player] img, [data-player] ins, [data-player] kbd, [data-player] q, [data-player] s, [data-player] samp,\n  [data-player] small, [data-player] strike, [data-player] strong, [data-player] sub, [data-player] sup, [data-player] tt, [data-player] var,\n  [data-player] b, [data-player] u, [data-player] i, [data-player] center,\n  [data-player] dl, [data-player] dt, [data-player] dd, [data-player] ol, [data-player] ul, [data-player] li,\n  [data-player] fieldset, [data-player] form, [data-player] label, [data-player] legend,\n  [data-player] table, [data-player] caption, [data-player] tbody, [data-player] tfoot, [data-player] thead, [data-player] tr, [data-player] th, [data-player] td,\n  [data-player] article, [data-player] aside, [data-player] canvas, [data-player] details, [data-player] embed,\n  [data-player] figure, [data-player] figcaption, [data-player] footer, [data-player] header, [data-player] hgroup,\n  [data-player] menu, [data-player] nav, [data-player] output, [data-player] ruby, [data-player] section, [data-player] summary,\n  [data-player] time, [data-player] mark, [data-player] audio, [data-player] video {\n    margin: 0;\n    padding: 0;\n    border: 0;\n    font: inherit;\n    font-size: 100%;\n    vertical-align: baseline; }\n  [data-player] table {\n    border-collapse: collapse;\n    border-spacing: 0; }\n  [data-player] caption, [data-player] th, [data-player] td {\n    text-align: left;\n    font-weight: normal;\n    vertical-align: middle; }\n  [data-player] q, [data-player] blockquote {\n    quotes: none; }\n    [data-player] q:before, [data-player] q:after, [data-player] blockquote:before, [data-player] blockquote:after {\n      content: \"\";\n      content: none; }\n  [data-player] a img {\n    border: none; }\n  [data-player]:focus {\n    outline: 0; }\n  [data-player] * {\n    max-width: none;\n    box-sizing: inherit;\n    float: none; }\n  [data-player] div {\n    display: block; }\n  [data-player].fullscreen {\n    width: 100% !important;\n    height: 100% !important;\n    top: 0;\n    left: 0; }\n  [data-player].nocursor {\n    cursor: none; }\n\n.clappr-style {\n  display: none !important; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 154 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "38861cba61c66739c1452c3a71e39852.ttf";
+
+/***/ }),
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10697,15 +11194,15 @@ var _no_op = __webpack_require__(85);
 
 var _no_op2 = _interopRequireDefault(_no_op);
 
-var _spinner_three_bounce = __webpack_require__(179);
+var _spinner_three_bounce = __webpack_require__(187);
 
 var _spinner_three_bounce2 = _interopRequireDefault(_spinner_three_bounce);
 
-var _stats = __webpack_require__(183);
+var _stats = __webpack_require__(192);
 
 var _stats2 = _interopRequireDefault(_stats);
 
-var _watermark = __webpack_require__(185);
+var _watermark = __webpack_require__(194);
 
 var _watermark2 = _interopRequireDefault(_watermark);
 
@@ -10713,39 +11210,39 @@ var _poster = __webpack_require__(86);
 
 var _poster2 = _interopRequireDefault(_poster);
 
-var _google_analytics = __webpack_require__(192);
+var _google_analytics = __webpack_require__(203);
 
 var _google_analytics2 = _interopRequireDefault(_google_analytics);
 
-var _click_to_pause = __webpack_require__(194);
+var _click_to_pause = __webpack_require__(205);
 
 var _click_to_pause2 = _interopRequireDefault(_click_to_pause);
 
-var _dvr_controls = __webpack_require__(196);
+var _dvr_controls = __webpack_require__(207);
 
 var _dvr_controls2 = _interopRequireDefault(_dvr_controls);
 
-var _closed_captions = __webpack_require__(200);
+var _closed_captions = __webpack_require__(212);
 
 var _closed_captions2 = _interopRequireDefault(_closed_captions);
 
-var _favicon = __webpack_require__(205);
+var _favicon = __webpack_require__(218);
 
 var _favicon2 = _interopRequireDefault(_favicon);
 
-var _seek_time = __webpack_require__(207);
+var _seek_time = __webpack_require__(220);
 
 var _seek_time2 = _interopRequireDefault(_seek_time);
 
-var _sources = __webpack_require__(211);
+var _sources = __webpack_require__(225);
 
 var _sources2 = _interopRequireDefault(_sources);
 
-var _end_video = __webpack_require__(212);
+var _end_video = __webpack_require__(226);
 
 var _end_video2 = _interopRequireDefault(_end_video);
 
-var _strings = __webpack_require__(213);
+var _strings = __webpack_require__(227);
 
 var _strings2 = _interopRequireDefault(_strings);
 
@@ -10883,7 +11380,7 @@ exports.default = Loader;
 module.exports = exports['default'];
 
 /***/ }),
-/* 152 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10923,13 +11420,9 @@ var _keys2 = _interopRequireDefault(_keys);
 
 var _utils = __webpack_require__(5);
 
-var _playback = __webpack_require__(9);
+var _playback = __webpack_require__(8);
 
 var _playback2 = _interopRequireDefault(_playback);
-
-var _styler = __webpack_require__(7);
-
-var _styler2 = _interopRequireDefault(_styler);
 
 var _browser = __webpack_require__(13);
 
@@ -10939,23 +11432,25 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _style = __webpack_require__(161);
-
-var _style2 = _interopRequireDefault(_style);
-
 var _clapprZepto = __webpack_require__(6);
 
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
-var _tracks = __webpack_require__(162);
+var _tracks = __webpack_require__(165);
 
 var _tracks2 = _interopRequireDefault(_tracks);
 
+__webpack_require__(166);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 
 var MIMETYPES = {
   'mp4': ['avc1.42E01E', 'avc1.58A01E', 'avc1.4D401E', 'avc1.64001E', 'mp4v.20.8', 'mp4v.20.240', 'mp4a.40.2'].map(function (codec) {
@@ -10966,10 +11461,7 @@ var MIMETYPES = {
   'webm': ['video/webm; codecs="vp8, vorbis"'],
   'mkv': ['video/x-matroska; codecs="theora, vorbis"'],
   'm3u8': ['application/x-mpegurl']
-}; // Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
+};
 MIMETYPES['ogv'] = MIMETYPES['ogg'];
 MIMETYPES['3gp'] = MIMETYPES['3gpp'];
 
@@ -11467,8 +11959,6 @@ var HTML5Video = function (_Playback) {
   };
 
   HTML5Video.prototype.render = function render() {
-    var style = _styler2.default.getStyleFor(_style2.default);
-
     if (this.options.playback.disableContextMenu) {
       this.$el.on('contextmenu', function () {
         return false;
@@ -11481,7 +11971,6 @@ var HTML5Video = function (_Playback) {
       }));
     }
 
-    this.$el.append(style);
     this._ready();
     return this;
   };
@@ -11585,15 +12074,15 @@ module.exports = exports['default'];
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(57)))
 
 /***/ }),
-/* 153 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(65);
-__webpack_require__(154);
+__webpack_require__(158);
 module.exports = __webpack_require__(11).Array.from;
 
 /***/ }),
-/* 154 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11601,13 +12090,13 @@ module.exports = __webpack_require__(11).Array.from;
 var ctx            = __webpack_require__(46)
   , $export        = __webpack_require__(19)
   , toObject       = __webpack_require__(39)
-  , call           = __webpack_require__(155)
-  , isArrayIter    = __webpack_require__(156)
+  , call           = __webpack_require__(159)
+  , isArrayIter    = __webpack_require__(160)
   , toLength       = __webpack_require__(61)
-  , createProperty = __webpack_require__(157)
-  , getIterFn      = __webpack_require__(158);
+  , createProperty = __webpack_require__(161)
+  , getIterFn      = __webpack_require__(162);
 
-$export($export.S + $export.F * !__webpack_require__(160)(function(iter){ Array.from(iter); }), 'Array', {
+$export($export.S + $export.F * !__webpack_require__(164)(function(iter){ Array.from(iter); }), 'Array', {
   // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
   from: function from(arrayLike/*, mapfn = undefined, thisArg = undefined*/){
     var O       = toObject(arrayLike)
@@ -11637,7 +12126,7 @@ $export($export.S + $export.F * !__webpack_require__(160)(function(iter){ Array.
 
 
 /***/ }),
-/* 155 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // call something on iterator step with safe closing on error
@@ -11654,7 +12143,7 @@ module.exports = function(iterator, fn, value, entries){
 };
 
 /***/ }),
-/* 156 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // check on default Array iterator
@@ -11667,7 +12156,7 @@ module.exports = function(it){
 };
 
 /***/ }),
-/* 157 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11681,10 +12170,10 @@ module.exports = function(object, index, value){
 };
 
 /***/ }),
-/* 158 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var classof   = __webpack_require__(159)
+var classof   = __webpack_require__(163)
   , ITERATOR  = __webpack_require__(12)('iterator')
   , Iterators = __webpack_require__(29);
 module.exports = __webpack_require__(11).getIteratorMethod = function(it){
@@ -11694,7 +12183,7 @@ module.exports = __webpack_require__(11).getIteratorMethod = function(it){
 };
 
 /***/ }),
-/* 159 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // getting tag from 19.1.3.6 Object.prototype.toString()
@@ -11722,7 +12211,7 @@ module.exports = function(it){
 };
 
 /***/ }),
-/* 160 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var ITERATOR     = __webpack_require__(12)('iterator')
@@ -11748,10 +12237,47 @@ module.exports = function(exec, skipClosing){
 };
 
 /***/ }),
-/* 161 */
+/* 165 */
+/***/ (function(module, exports) {
+
+module.exports = "<% for (var i = 0; i < tracks.length; i++) { %>\n  <track data-html5-video-track=\"<%= i %>\" kind=\"<%= tracks[i].kind %>\" label=\"<%= tracks[i].label %>\" srclang=\"<%= tracks[i].lang %>\" src=\"<%= tracks[i].src %>\" />\n<% }; %>\n";
+
+/***/ }),
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(10)(undefined);
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(167);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"singleton":true,"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(10)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./style.scss", function() {
+			var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./style.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 167 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(9)(undefined);
 // imports
 
 
@@ -11762,13 +12288,7 @@ exports.push([module.i, "[data-html5-video] {\n  position: absolute;\n  height: 
 
 
 /***/ }),
-/* 162 */
-/***/ (function(module, exports) {
-
-module.exports = "<% for (var i = 0; i < tracks.length; i++) { %>\n  <track data-html5-video-track=\"<%= i %>\" kind=\"<%= tracks[i].kind %>\" label=\"<%= tracks[i].label %>\" srclang=\"<%= tracks[i].lang %>\" src=\"<%= tracks[i].src %>\" />\n<% }; %>\n";
-
-/***/ }),
-/* 163 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11808,7 +12328,7 @@ var _mediator = __webpack_require__(24);
 
 var _mediator2 = _interopRequireDefault(_mediator);
 
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
@@ -11820,11 +12340,11 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _playback = __webpack_require__(9);
+var _playback = __webpack_require__(8);
 
 var _playback2 = _interopRequireDefault(_playback);
 
-var _Player = __webpack_require__(167);
+var _Player = __webpack_require__(173);
 
 var _Player2 = _interopRequireDefault(_Player);
 
@@ -12112,7 +12632,7 @@ Flash.canPlay = function (resource) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 164 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12138,15 +12658,11 @@ var _inherits2 = __webpack_require__(2);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _playback = __webpack_require__(9);
+var _playback = __webpack_require__(8);
 
 var _playback2 = _interopRequireDefault(_playback);
 
-var _styler = __webpack_require__(7);
-
-var _styler2 = _interopRequireDefault(_styler);
-
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
@@ -12154,21 +12670,17 @@ var _browser = __webpack_require__(13);
 
 var _browser2 = _interopRequireDefault(_browser);
 
-var _flash = __webpack_require__(165);
+var _flash = __webpack_require__(170);
 
 var _flash2 = _interopRequireDefault(_flash);
 
-var _flash3 = __webpack_require__(166);
-
-var _flash4 = _interopRequireDefault(_flash3);
+__webpack_require__(171);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// Copyright 2015 Globo.com Player authors. All rights reserved.
+var IE_CLASSID = 'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000'; // Copyright 2015 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
-
-var IE_CLASSID = 'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000';
 
 var BaseFlashPlayback = function (_Playback) {
   (0, _inherits3.default)(BaseFlashPlayback, _Playback);
@@ -12202,7 +12714,6 @@ var BaseFlashPlayback = function (_Playback) {
     }
 
     this.el.id = this.cid;
-    this.$el.append(_styler2.default.getStyleFor(_flash4.default));
 
     return this;
   };
@@ -12253,16 +12764,47 @@ exports.default = BaseFlashPlayback;
 module.exports = exports['default'];
 
 /***/ }),
-/* 165 */
+/* 170 */
 /***/ (function(module, exports) {
 
 module.exports = "<param name=\"movie\" value=\"<%= swfPath %>\">\n<param name=\"quality\" value=\"autohigh\">\n<param name=\"swliveconnect\" value=\"true\">\n<param name=\"allowScriptAccess\" value=\"always\">\n<param name=\"bgcolor\" value=\"#000000\">\n<param name=\"allowFullScreen\" value=\"false\">\n<param name=\"wmode\" value=\"<%= wmode %>\">\n<param name=\"tabindex\" value=\"1\">\n<param name=\"FlashVars\" value=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\">\n<embed\n  name=\"<%= cid %>\"\n  type=\"application/x-shockwave-flash\"\n  disabled=\"disabled\"\n  tabindex=\"-1\"\n  enablecontextmenu=\"false\"\n  allowScriptAccess=\"always\"\n  quality=\"autohigh\"\n  pluginspage=\"http://www.macromedia.com/go/getflashplayer\"\n  wmode=\"<%= wmode %>\"\n  swliveconnect=\"true\"\n  allowfullscreen=\"false\"\n  bgcolor=\"#000000\"\n  FlashVars=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\"\n  data=\"<%= swfPath %>\"\n  src=\"<%= swfPath %>\"\n  width=\"100%\"\n  height=\"100%\">\n</embed>\n";
 
 /***/ }),
-/* 166 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(10)(undefined);
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(172);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"singleton":true,"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(10)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./flash.scss", function() {
+			var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./flash.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 172 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(9)(undefined);
 // imports
 
 
@@ -12273,13 +12815,13 @@ exports.push([module.i, ".clappr-flash-playback[data-flash-playback] {\n  displa
 
 
 /***/ }),
-/* 167 */
+/* 173 */
 /***/ (function(module, exports) {
 
 module.exports = "<%=baseUrl%>/4b76590b32dab62bc95c1b7951efae78.swf";
 
 /***/ }),
-/* 168 */
+/* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12309,7 +12851,7 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _playback = __webpack_require__(9);
+var _playback = __webpack_require__(8);
 
 var _playback2 = _interopRequireDefault(_playback);
 
@@ -12374,7 +12916,7 @@ HTML5Audio.canPlay = function (resourceUrl, mimeType) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 169 */
+/* 175 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12408,11 +12950,11 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
-var _playback = __webpack_require__(9);
+var _playback = __webpack_require__(8);
 
 var _playback2 = _interopRequireDefault(_playback);
 
@@ -12424,11 +12966,11 @@ var _browser = __webpack_require__(13);
 
 var _browser2 = _interopRequireDefault(_browser);
 
-var _flashls_events = __webpack_require__(170);
+var _flashls_events = __webpack_require__(176);
 
 var _flashls_events2 = _interopRequireDefault(_flashls_events);
 
-var _HLSPlayer = __webpack_require__(171);
+var _HLSPlayer = __webpack_require__(177);
 
 var _HLSPlayer2 = _interopRequireDefault(_HLSPlayer);
 
@@ -13205,7 +13747,7 @@ FlasHLS.canPlay = function (resource, mimeType) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 170 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13303,13 +13845,13 @@ exports.default = HLSEvents;
 module.exports = exports['default'];
 
 /***/ }),
-/* 171 */
+/* 177 */
 /***/ (function(module, exports) {
 
 module.exports = "<%=baseUrl%>/809981e5b09d5336c45d72d0869ada2a.swf";
 
 /***/ }),
-/* 172 */
+/* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13343,7 +13885,7 @@ var _html5_video = __webpack_require__(35);
 
 var _html5_video2 = _interopRequireDefault(_html5_video);
 
-var _hls = __webpack_require__(173);
+var _hls = __webpack_require__(179);
 
 var _hls2 = _interopRequireDefault(_hls);
 
@@ -13351,7 +13893,7 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _playback = __webpack_require__(9);
+var _playback = __webpack_require__(8);
 
 var _playback2 = _interopRequireDefault(_playback);
 
@@ -14007,7 +14549,7 @@ HLS.canPlay = function (resource, mimeType) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 173 */
+/* 179 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -14358,6 +14900,366 @@ var ErrorDetails = {
 
 /***/ }),
 /* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return utf8ArrayToStr; });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * ID3 parser
+ */
+var ID3 = function () {
+  function ID3() {
+    _classCallCheck(this, ID3);
+  }
+
+  /**
+   * Returns true if an ID3 header can be found at offset in data
+   * @param {Uint8Array} data - The data to search in
+   * @param {number} offset - The offset at which to start searching
+   * @return {boolean} - True if an ID3 header is found
+   */
+  ID3.isHeader = function isHeader(data, offset) {
+    /*
+    * http://id3.org/id3v2.3.0
+    * [0]     = 'I'
+    * [1]     = 'D'
+    * [2]     = '3'
+    * [3,4]   = {Version}
+    * [5]     = {Flags}
+    * [6-9]   = {ID3 Size}
+    *
+    * An ID3v2 tag can be detected with the following pattern:
+    *  $49 44 33 yy yy xx zz zz zz zz
+    * Where yy is less than $FF, xx is the 'flags' byte and zz is less than $80
+    */
+    if (offset + 10 <= data.length) {
+      //look for 'ID3' identifier
+      if (data[offset] === 0x49 && data[offset + 1] === 0x44 && data[offset + 2] === 0x33) {
+        //check version is within range
+        if (data[offset + 3] < 0xFF && data[offset + 4] < 0xFF) {
+          //check size is within range
+          if (data[offset + 6] < 0x80 && data[offset + 7] < 0x80 && data[offset + 8] < 0x80 && data[offset + 9] < 0x80) {
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
+  };
+
+  /**
+   * Returns true if an ID3 footer can be found at offset in data
+   * @param {Uint8Array} data - The data to search in
+   * @param {number} offset - The offset at which to start searching
+   * @return {boolean} - True if an ID3 footer is found
+   */
+
+
+  ID3.isFooter = function isFooter(data, offset) {
+    /*
+    * The footer is a copy of the header, but with a different identifier
+    */
+    if (offset + 10 <= data.length) {
+      //look for '3DI' identifier
+      if (data[offset] === 0x33 && data[offset + 1] === 0x44 && data[offset + 2] === 0x49) {
+        //check version is within range
+        if (data[offset + 3] < 0xFF && data[offset + 4] < 0xFF) {
+          //check size is within range
+          if (data[offset + 6] < 0x80 && data[offset + 7] < 0x80 && data[offset + 8] < 0x80 && data[offset + 9] < 0x80) {
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
+  };
+
+  /**
+   * Returns any adjacent ID3 tags found in data starting at offset, as one block of data
+   * @param {Uint8Array} data - The data to search in
+   * @param {number} offset - The offset at which to start searching
+   * @return {Uint8Array} - The block of data containing any ID3 tags found
+   */
+
+
+  ID3.getID3Data = function getID3Data(data, offset) {
+    var front = offset;
+    var length = 0;
+
+    while (ID3.isHeader(data, offset)) {
+      //ID3 header is 10 bytes
+      length += 10;
+
+      var size = ID3._readSize(data, offset + 6);
+      length += size;
+
+      if (ID3.isFooter(data, offset + 10)) {
+        //ID3 footer is 10 bytes
+        length += 10;
+      }
+
+      offset += length;
+    }
+
+    if (length > 0) {
+      return data.subarray(front, front + length);
+    }
+
+    return undefined;
+  };
+
+  ID3._readSize = function _readSize(data, offset) {
+    var size = 0;
+    size = (data[offset] & 0x7f) << 21;
+    size |= (data[offset + 1] & 0x7f) << 14;
+    size |= (data[offset + 2] & 0x7f) << 7;
+    size |= data[offset + 3] & 0x7f;
+    return size;
+  };
+
+  /**
+   * Searches for the Elementary Stream timestamp found in the ID3 data chunk
+   * @param {Uint8Array} data - Block of data containing one or more ID3 tags
+   * @return {number} - The timestamp
+   */
+
+
+  ID3.getTimeStamp = function getTimeStamp(data) {
+    var frames = ID3.getID3Frames(data);
+    for (var i = 0; i < frames.length; i++) {
+      var frame = frames[i];
+      if (ID3.isTimeStampFrame(frame)) {
+        return ID3._readTimeStamp(frame);
+      }
+    }
+
+    return undefined;
+  };
+
+  /**
+   * Returns true if the ID3 frame is an Elementary Stream timestamp frame
+   * @param {ID3 frame} frame
+   */
+
+
+  ID3.isTimeStampFrame = function isTimeStampFrame(frame) {
+    return frame && frame.key === 'PRIV' && frame.info === 'com.apple.streaming.transportStreamTimestamp';
+  };
+
+  ID3._getFrameData = function _getFrameData(data) {
+    /*
+    Frame ID       $xx xx xx xx (four characters)
+    Size           $xx xx xx xx
+    Flags          $xx xx
+    */
+    var type = String.fromCharCode(data[0], data[1], data[2], data[3]);
+    var size = ID3._readSize(data, 4);
+
+    //skip frame id, size, and flags
+    var offset = 10;
+
+    return { type: type, size: size, data: data.subarray(offset, offset + size) };
+  };
+
+  /**
+   * Returns an array of ID3 frames found in all the ID3 tags in the id3Data
+   * @param {Uint8Array} id3Data - The ID3 data containing one or more ID3 tags
+   * @return {ID3 frame[]} - Array of ID3 frame objects
+   */
+
+
+  ID3.getID3Frames = function getID3Frames(id3Data) {
+    var offset = 0;
+    var frames = [];
+
+    while (ID3.isHeader(id3Data, offset)) {
+      var size = ID3._readSize(id3Data, offset + 6);
+      //skip past ID3 header
+      offset += 10;
+      var end = offset + size;
+      //loop through frames in the ID3 tag
+      while (offset + 8 < end) {
+        var frameData = ID3._getFrameData(id3Data.subarray(offset));
+        var frame = ID3._decodeFrame(frameData);
+        if (frame) {
+          frames.push(frame);
+        }
+        //skip frame header and frame data
+        offset += frameData.size + 10;
+      }
+
+      if (ID3.isFooter(id3Data, offset)) {
+        offset += 10;
+      }
+    }
+
+    return frames;
+  };
+
+  ID3._decodeFrame = function _decodeFrame(frame) {
+    if (frame.type === 'PRIV') {
+      return ID3._decodePrivFrame(frame);
+    } else if (frame.type[0] === 'T') {
+      return ID3._decodeTextFrame(frame);
+    } else if (frame.type[0] === 'W') {
+      return ID3._decodeURLFrame(frame);
+    }
+
+    return undefined;
+  };
+
+  ID3._readTimeStamp = function _readTimeStamp(timeStampFrame) {
+    if (timeStampFrame.data.byteLength === 8) {
+      var data = new Uint8Array(timeStampFrame.data);
+      // timestamp is 33 bit expressed as a big-endian eight-octet number,
+      // with the upper 31 bits set to zero.
+      var pts33Bit = data[3] & 0x1;
+      var timestamp = (data[4] << 23) + (data[5] << 15) + (data[6] << 7) + data[7];
+      timestamp /= 45;
+
+      if (pts33Bit) {
+        timestamp += 47721858.84; // 2^32 / 90
+      }
+
+      return Math.round(timestamp);
+    }
+
+    return undefined;
+  };
+
+  ID3._decodePrivFrame = function _decodePrivFrame(frame) {
+    /*
+    Format: <text string>\0<binary data>
+    */
+    if (frame.size < 2) {
+      return undefined;
+    }
+
+    var owner = ID3._utf8ArrayToStr(frame.data);
+    var privateData = new Uint8Array(frame.data.subarray(owner.length + 1));
+
+    return { key: frame.type, info: owner, data: privateData.buffer };
+  };
+
+  ID3._decodeTextFrame = function _decodeTextFrame(frame) {
+    if (frame.size < 2) {
+      return undefined;
+    }
+
+    if (frame.type === 'TXXX') {
+      /*
+      Format:
+      [0]   = {Text Encoding}
+      [1-?] = {Description}\0{Value}
+      */
+      var index = 1;
+      var description = ID3._utf8ArrayToStr(frame.data.subarray(index));
+
+      index += description.length + 1;
+      var value = ID3._utf8ArrayToStr(frame.data.subarray(index));
+
+      return { key: frame.type, info: description, data: value };
+    } else {
+      /*
+      Format:
+      [0]   = {Text Encoding}
+      [1-?] = {Value}
+      */
+      var text = ID3._utf8ArrayToStr(frame.data.subarray(1));
+      return { key: frame.type, data: text };
+    }
+  };
+
+  ID3._decodeURLFrame = function _decodeURLFrame(frame) {
+    if (frame.type === 'WXXX') {
+      /*
+      Format:
+      [0]   = {Text Encoding}
+      [1-?] = {Description}\0{URL}
+      */
+      if (frame.size < 2) {
+        return undefined;
+      }
+
+      var index = 1;
+      var description = ID3._utf8ArrayToStr(frame.data.subarray(index));
+
+      index += description.length + 1;
+      var value = ID3._utf8ArrayToStr(frame.data.subarray(index));
+
+      return { key: frame.type, info: description, data: value };
+    } else {
+      /*
+      Format:
+      [0-?] = {URL}
+      */
+      var url = ID3._utf8ArrayToStr(frame.data);
+      return { key: frame.type, data: url };
+    }
+  };
+
+  // http://stackoverflow.com/questions/8936984/uint8array-to-string-in-javascript/22373197
+  // http://www.onicos.com/staff/iz/amuse/javascript/expert/utf.txt
+  /* utf.js - UTF-8 <=> UTF-16 convertion
+   *
+   * Copyright (C) 1999 Masanao Izumo <iz@onicos.co.jp>
+   * Version: 1.0
+   * LastModified: Dec 25 1999
+   * This library is free.  You can redistribute it and/or modify it.
+   */
+
+
+  ID3._utf8ArrayToStr = function _utf8ArrayToStr(array) {
+
+    var len = array.length;
+    var c = void 0;
+    var char2 = void 0;
+    var char3 = void 0;
+    var out = '';
+    var i = 0;
+    while (i < len) {
+      c = array[i++];
+      // If the character is 3 (END_OF_TEXT) or 0 (NULL) then skip it
+      if (c === 0x00 || c === 0x03) {
+        continue;
+      }
+      switch (c >> 4) {
+        case 0:case 1:case 2:case 3:case 4:case 5:case 6:case 7:
+          // 0xxxxxxx
+          out += String.fromCharCode(c);
+          break;
+        case 12:case 13:
+          // 110x xxxx   10xx xxxx
+          char2 = array[i++];
+          out += String.fromCharCode((c & 0x1F) << 6 | char2 & 0x3F);
+          break;
+        case 14:
+          // 1110 xxxx  10xx xxxx  10xx xxxx
+          char2 = array[i++];
+          char3 = array[i++];
+          out += String.fromCharCode((c & 0x0F) << 12 | (char2 & 0x3F) << 6 | (char3 & 0x3F) << 0);
+          break;
+        default:
+      }
+    }
+    return out;
+  };
+
+  return ID3;
+}();
+
+var utf8ArrayToStr = ID3._utf8ArrayToStr;
+
+/* harmony default export */ __webpack_exports__["a"] = (ID3);
+
+
+
+/***/ }),
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14789,359 +15691,6 @@ var decrypter_Decrypter = function () {
 }();
 
 /* harmony default export */ var decrypter = __webpack_exports__["a"] = (decrypter_Decrypter);
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * ID3 parser
- */
-var ID3 = function () {
-  function ID3() {
-    _classCallCheck(this, ID3);
-  }
-
-  /**
-   * Returns true if an ID3 header can be found at offset in data
-   * @param {Uint8Array} data - The data to search in
-   * @param {number} offset - The offset at which to start searching
-   * @return {boolean} - True if an ID3 header is found
-   */
-  ID3.isHeader = function isHeader(data, offset) {
-    /*
-    * http://id3.org/id3v2.3.0
-    * [0]     = 'I'
-    * [1]     = 'D'
-    * [2]     = '3'
-    * [3,4]   = {Version}
-    * [5]     = {Flags}
-    * [6-9]   = {ID3 Size}
-    *
-    * An ID3v2 tag can be detected with the following pattern:
-    *  $49 44 33 yy yy xx zz zz zz zz
-    * Where yy is less than $FF, xx is the 'flags' byte and zz is less than $80
-    */
-    if (offset + 10 <= data.length) {
-      //look for 'ID3' identifier
-      if (data[offset] === 0x49 && data[offset + 1] === 0x44 && data[offset + 2] === 0x33) {
-        //check version is within range
-        if (data[offset + 3] < 0xFF && data[offset + 4] < 0xFF) {
-          //check size is within range
-          if (data[offset + 6] < 0x80 && data[offset + 7] < 0x80 && data[offset + 8] < 0x80 && data[offset + 9] < 0x80) {
-            return true;
-          }
-        }
-      }
-    }
-
-    return false;
-  };
-
-  /**
-   * Returns true if an ID3 footer can be found at offset in data
-   * @param {Uint8Array} data - The data to search in
-   * @param {number} offset - The offset at which to start searching
-   * @return {boolean} - True if an ID3 footer is found
-   */
-
-
-  ID3.isFooter = function isFooter(data, offset) {
-    /*
-    * The footer is a copy of the header, but with a different identifier
-    */
-    if (offset + 10 <= data.length) {
-      //look for '3DI' identifier
-      if (data[offset] === 0x33 && data[offset + 1] === 0x44 && data[offset + 2] === 0x49) {
-        //check version is within range
-        if (data[offset + 3] < 0xFF && data[offset + 4] < 0xFF) {
-          //check size is within range
-          if (data[offset + 6] < 0x80 && data[offset + 7] < 0x80 && data[offset + 8] < 0x80 && data[offset + 9] < 0x80) {
-            return true;
-          }
-        }
-      }
-    }
-
-    return false;
-  };
-
-  /**
-   * Returns any adjacent ID3 tags found in data starting at offset, as one block of data
-   * @param {Uint8Array} data - The data to search in
-   * @param {number} offset - The offset at which to start searching
-   * @return {Uint8Array} - The block of data containing any ID3 tags found
-   */
-
-
-  ID3.getID3Data = function getID3Data(data, offset) {
-    var front = offset;
-    var length = 0;
-
-    while (ID3.isHeader(data, offset)) {
-      //ID3 header is 10 bytes
-      length += 10;
-
-      var size = ID3._readSize(data, offset + 6);
-      length += size;
-
-      if (ID3.isFooter(data, offset + 10)) {
-        //ID3 footer is 10 bytes
-        length += 10;
-      }
-
-      offset += length;
-    }
-
-    if (length > 0) {
-      return data.subarray(front, front + length);
-    }
-
-    return undefined;
-  };
-
-  ID3._readSize = function _readSize(data, offset) {
-    var size = 0;
-    size = (data[offset] & 0x7f) << 21;
-    size |= (data[offset + 1] & 0x7f) << 14;
-    size |= (data[offset + 2] & 0x7f) << 7;
-    size |= data[offset + 3] & 0x7f;
-    return size;
-  };
-
-  /**
-   * Searches for the Elementary Stream timestamp found in the ID3 data chunk
-   * @param {Uint8Array} data - Block of data containing one or more ID3 tags
-   * @return {number} - The timestamp
-   */
-
-
-  ID3.getTimeStamp = function getTimeStamp(data) {
-    var frames = ID3.getID3Frames(data);
-    for (var i = 0; i < frames.length; i++) {
-      var frame = frames[i];
-      if (ID3.isTimeStampFrame(frame)) {
-        return ID3._readTimeStamp(frame);
-      }
-    }
-
-    return undefined;
-  };
-
-  /**
-   * Returns true if the ID3 frame is an Elementary Stream timestamp frame
-   * @param {ID3 frame} frame
-   */
-
-
-  ID3.isTimeStampFrame = function isTimeStampFrame(frame) {
-    return frame && frame.key === 'PRIV' && frame.info === 'com.apple.streaming.transportStreamTimestamp';
-  };
-
-  ID3._getFrameData = function _getFrameData(data) {
-    /*
-    Frame ID       $xx xx xx xx (four characters)
-    Size           $xx xx xx xx
-    Flags          $xx xx
-    */
-    var type = String.fromCharCode(data[0], data[1], data[2], data[3]);
-    var size = ID3._readSize(data, 4);
-
-    //skip frame id, size, and flags
-    var offset = 10;
-
-    return { type: type, size: size, data: data.subarray(offset, offset + size) };
-  };
-
-  /**
-   * Returns an array of ID3 frames found in all the ID3 tags in the id3Data
-   * @param {Uint8Array} id3Data - The ID3 data containing one or more ID3 tags
-   * @return {ID3 frame[]} - Array of ID3 frame objects
-   */
-
-
-  ID3.getID3Frames = function getID3Frames(id3Data) {
-    var offset = 0;
-    var frames = [];
-
-    while (ID3.isHeader(id3Data, offset)) {
-      var size = ID3._readSize(id3Data, offset + 6);
-      //skip past ID3 header
-      offset += 10;
-      var end = offset + size;
-      //loop through frames in the ID3 tag
-      while (offset + 8 < end) {
-        var frameData = ID3._getFrameData(id3Data.subarray(offset));
-        var frame = ID3._decodeFrame(frameData);
-        if (frame) {
-          frames.push(frame);
-        }
-        //skip frame header and frame data
-        offset += frameData.size + 10;
-      }
-
-      if (ID3.isFooter(id3Data, offset)) {
-        offset += 10;
-      }
-    }
-
-    return frames;
-  };
-
-  ID3._decodeFrame = function _decodeFrame(frame) {
-    if (frame.type === 'PRIV') {
-      return ID3._decodePrivFrame(frame);
-    } else if (frame.type[0] === 'T') {
-      return ID3._decodeTextFrame(frame);
-    } else if (frame.type[0] === 'W') {
-      return ID3._decodeURLFrame(frame);
-    }
-
-    return undefined;
-  };
-
-  ID3._readTimeStamp = function _readTimeStamp(timeStampFrame) {
-    if (timeStampFrame.data.byteLength === 8) {
-      var data = new Uint8Array(timeStampFrame.data);
-      // timestamp is 33 bit expressed as a big-endian eight-octet number,
-      // with the upper 31 bits set to zero.
-      var pts33Bit = data[3] & 0x1;
-      var timestamp = (data[4] << 23) + (data[5] << 15) + (data[6] << 7) + data[7];
-      timestamp /= 45;
-
-      if (pts33Bit) {
-        timestamp += 47721858.84; // 2^32 / 90
-      }
-
-      return Math.round(timestamp);
-    }
-
-    return undefined;
-  };
-
-  ID3._decodePrivFrame = function _decodePrivFrame(frame) {
-    /*
-    Format: <text string>\0<binary data>
-    */
-    if (frame.size < 2) {
-      return undefined;
-    }
-
-    var owner = ID3._utf8ArrayToStr(frame.data);
-    var privateData = new Uint8Array(frame.data.subarray(owner.length + 1));
-
-    return { key: frame.type, info: owner, data: privateData.buffer };
-  };
-
-  ID3._decodeTextFrame = function _decodeTextFrame(frame) {
-    if (frame.size < 2) {
-      return undefined;
-    }
-
-    if (frame.type === 'TXXX') {
-      /*
-      Format:
-      [0]   = {Text Encoding}
-      [1-?] = {Description}\0{Value}
-      */
-      var index = 1;
-      var description = ID3._utf8ArrayToStr(frame.data.subarray(index));
-
-      index += description.length + 1;
-      var value = ID3._utf8ArrayToStr(frame.data.subarray(index));
-
-      return { key: frame.type, info: description, data: value };
-    } else {
-      /*
-      Format:
-      [0]   = {Text Encoding}
-      [1-?] = {Value}
-      */
-      var text = ID3._utf8ArrayToStr(frame.data.subarray(1));
-      return { key: frame.type, data: text };
-    }
-  };
-
-  ID3._decodeURLFrame = function _decodeURLFrame(frame) {
-    if (frame.type === 'WXXX') {
-      /*
-      Format:
-      [0]   = {Text Encoding}
-      [1-?] = {Description}\0{URL}
-      */
-      if (frame.size < 2) {
-        return undefined;
-      }
-
-      var index = 1;
-      var description = ID3._utf8ArrayToStr(frame.data.subarray(index));
-
-      index += description.length + 1;
-      var value = ID3._utf8ArrayToStr(frame.data.subarray(index));
-
-      return { key: frame.type, info: description, data: value };
-    } else {
-      /*
-      Format:
-      [0-?] = {URL}
-      */
-      var url = ID3._utf8ArrayToStr(frame.data);
-      return { key: frame.type, data: url };
-    }
-  };
-
-  // http://stackoverflow.com/questions/8936984/uint8array-to-string-in-javascript/22373197
-  // http://www.onicos.com/staff/iz/amuse/javascript/expert/utf.txt
-  /* utf.js - UTF-8 <=> UTF-16 convertion
-   *
-   * Copyright (C) 1999 Masanao Izumo <iz@onicos.co.jp>
-   * Version: 1.0
-   * LastModified: Dec 25 1999
-   * This library is free.  You can redistribute it and/or modify it.
-   */
-
-
-  ID3._utf8ArrayToStr = function _utf8ArrayToStr(array) {
-
-    var char2 = void 0;
-    var char3 = void 0;
-    var out = '';
-    var i = 0;
-    var length = array.length;
-
-    while (i < length) {
-      var c = array[i++];
-      switch (c >> 4) {
-        case 0:
-          return out;
-        case 1:case 2:case 3:case 4:case 5:case 6:case 7:
-          // 0xxxxxxx
-          out += String.fromCharCode(c);
-          break;
-        case 12:case 13:
-          // 110x xxxx   10xx xxxx
-          char2 = array[i++];
-          out += String.fromCharCode((c & 0x1F) << 6 | char2 & 0x3F);
-          break;
-        case 14:
-          // 1110 xxxx  10xx xxxx  10xx xxxx
-          char2 = array[i++];
-          char3 = array[i++];
-          out += String.fromCharCode((c & 0x0F) << 12 | (char2 & 0x3F) << 6 | (char3 & 0x3F) << 0);
-          break;
-      }
-    }
-
-    return out;
-  };
-
-  return ID3;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (ID3);
 
 /***/ }),
 /* 5 */
@@ -15633,7 +16182,7 @@ var events = __webpack_require__(1);
 var errors = __webpack_require__(2);
 
 // EXTERNAL MODULE: ./src/crypt/decrypter.js + 3 modules
-var crypt_decrypter = __webpack_require__(3);
+var crypt_decrypter = __webpack_require__(4);
 
 // EXTERNAL MODULE: ./src/utils/logger.js
 var logger = __webpack_require__(0);
@@ -15862,7 +16411,7 @@ function appendFrame(track, data, offset, pts, frameIndex) {
   return undefined;
 }
 // EXTERNAL MODULE: ./src/demux/id3.js
-var id3 = __webpack_require__(4);
+var id3 = __webpack_require__(3);
 
 // CONCATENATED MODULE: ./src/demux/aacdemuxer.js
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -16863,6 +17412,21 @@ function tsdemuxer__classCallCheck(instance, Constructor) { if (!(instance insta
 
 
 
+// We are using fixed track IDs for driving the MP4 remuxer
+// instead of following the TS PIDs.
+// There is no reason not to do this and some browsers/SourceBuffer-demuxers
+// may not like if there are TrackID "switches"
+// See https://github.com/video-dev/hls.js/issues/1331
+// Here we are mapping our internal track types to constant MP4 track IDs
+// With MSE currently one can only have one track of each, and we are muxing
+// whatever video/audio rendition in them.
+var RemuxerTrackIdConfig = {
+  video: 0,
+  audio: 1,
+  id3: 2,
+  text: 3
+};
+
 var tsdemuxer_TSDemuxer = function () {
   function TSDemuxer(observer, remuxer, config, typeSupported) {
     tsdemuxer__classCallCheck(this, TSDemuxer);
@@ -16909,13 +17473,52 @@ var tsdemuxer_TSDemuxer = function () {
     return -1;
   };
 
+  /**
+   * Creates a track model internal to demuxer used to drive remuxing input
+   *
+   * @param {string} type 'audio' | 'video' | 'id3' | 'text'
+   * @param {number} duration
+   * @return {object} TSDemuxer's internal track model
+   */
+
+
+  TSDemuxer.createTrack = function createTrack(type, duration) {
+    return {
+      container: type === 'video' || type === 'audio' ? 'video/mp2t' : undefined,
+      type: type,
+      id: RemuxerTrackIdConfig[type],
+      pid: -1,
+      inputTimeScale: 90000,
+      sequenceNumber: 0,
+      samples: [],
+      len: 0,
+      dropped: type === 'video' ? 0 : undefined,
+      isAAC: type === 'audio' ? true : undefined,
+      duration: type === 'audio' ? duration : undefined
+    };
+  };
+
+  /**
+   * Initializes a new init segment on the demuxer/remuxer interface. Needed for discontinuities/track-switches (or at stream start) 
+   * Resets all internal track instances of the demuxer.
+   *
+   * @override Implements generic demuxing/remuxing interface (see DemuxerInline)
+   * @param {object} initSegment
+   * @param {string} audioCodec
+   * @param {string} videoCodec
+   * @param {number} duration (in TS timescale = 90kHz)
+   */
+
+
   TSDemuxer.prototype.resetInitSegment = function resetInitSegment(initSegment, audioCodec, videoCodec, duration) {
     this.pmtParsed = false;
     this._pmtId = -1;
-    this._avcTrack = { container: 'video/mp2t', type: 'video', id: -1, inputTimeScale: 90000, sequenceNumber: 0, samples: [], len: 0, dropped: 0 };
-    this._audioTrack = { container: 'video/mp2t', type: 'audio', id: -1, inputTimeScale: 90000, duration: duration, sequenceNumber: 0, samples: [], len: 0, isAAC: true };
-    this._id3Track = { type: 'id3', id: -1, inputTimeScale: 90000, sequenceNumber: 0, samples: [], len: 0 };
-    this._txtTrack = { type: 'text', id: -1, inputTimeScale: 90000, sequenceNumber: 0, samples: [], len: 0 };
+
+    this._avcTrack = TSDemuxer.createTrack('video', duration);
+    this._audioTrack = TSDemuxer.createTrack('audio', duration);
+    this._id3Track = TSDemuxer.createTrack('id3', duration);
+    this._txtTrack = TSDemuxer.createTrack('text', duration);
+
     // flush any partial content
     this.aacOverFlow = null;
     this.aacLastPTS = null;
@@ -16924,6 +17527,12 @@ var tsdemuxer_TSDemuxer = function () {
     this.videoCodec = videoCodec;
     this._duration = duration;
   };
+
+  /**
+   * 
+   * @override
+   */
+
 
   TSDemuxer.prototype.resetTimeStamp = function resetTimeStamp() {};
 
@@ -16944,9 +17553,9 @@ var tsdemuxer_TSDemuxer = function () {
         avcTrack = this._avcTrack,
         audioTrack = this._audioTrack,
         id3Track = this._id3Track,
-        avcId = avcTrack.id,
-        audioId = audioTrack.id,
-        id3Id = id3Track.id,
+        avcId = avcTrack.pid,
+        audioId = audioTrack.pid,
+        id3Id = id3Track.pid,
         pmtId = this._pmtId,
         avcData = avcTrack.pesData,
         audioData = audioTrack.pesData,
@@ -17038,18 +17647,20 @@ var tsdemuxer_TSDemuxer = function () {
             // this is to avoid resetting the PID to -1 in case
             // track PID transiently disappears from the stream
             // this could happen in case of transient missing audio samples for example
+            // NOTE this is only the PID of the track as found in TS,
+            // but we are not using this for MP4 track IDs.
             avcId = parsedPIDs.avc;
             if (avcId > 0) {
-              avcTrack.id = avcId;
+              avcTrack.pid = avcId;
             }
             audioId = parsedPIDs.audio;
             if (audioId > 0) {
-              audioTrack.id = audioId;
+              audioTrack.pid = audioId;
               audioTrack.isAAC = parsedPIDs.isAAC;
             }
             id3Id = parsedPIDs.id3;
             if (id3Id > 0) {
-              id3Track.id = id3Id;
+              id3Track.pid = id3Id;
             }
             if (unknownPIDs && !pmtParsed) {
               logger["b" /* logger */].log('reparse from beginning');
@@ -19735,8 +20346,8 @@ function isCodecType(codec, type) {
     return !!typeCodes && typeCodes[codec.slice(0, 4)] === true;
 }
 
-function isCodecSupportedInMp4(codec) {
-    return MediaSource.isTypeSupported('video/mp4;codecs="' + codec + '"');
+function isCodecSupportedInMp4(codec, type) {
+    return MediaSource.isTypeSupported((type || 'video') + '/mp4;codecs="' + codec + '"');
 }
 
 
@@ -19765,7 +20376,7 @@ function playlist_loader__classCallCheck(instance, Constructor) { if (!(instance
 var MASTER_PLAYLIST_REGEX = /#EXT-X-STREAM-INF:([^\n\r]*)[\r\n]+([^\r\n]+)/g;
 var MASTER_PLAYLIST_MEDIA_REGEX = /#EXT-X-MEDIA:(.*)/g;
 
-var LEVEL_PLAYLIST_REGEX_FAST = new RegExp([/#EXTINF:(\d*(?:\.\d+)?)(?:,(.*)\s+)?/.source, // duration (#EXTINF:<duration>,<title>), group 1 => duration, group 2 => title
+var LEVEL_PLAYLIST_REGEX_FAST = new RegExp([/#EXTINF:\s*(\d*(?:\.\d+)?)(?:,(.*)\s+)?/.source, // duration (#EXTINF:<duration>,<title>), group 1 => duration, group 2 => title
 /|(?!#)(\S+)/.source, // segment URI, group 3 => the URI (note newline is not eaten)
 /|#EXT-X-BYTERANGE:*(.+)/.source, // next segment's byterange, group 4 => range spec (x@y)
 /|#EXT-X-PROGRAM-DATE-TIME:(.+)/.source, // next segment's program date/time group 5 => the datetime spec
@@ -19907,6 +20518,23 @@ var playlist_loader_Fragment = function () {
   return Fragment;
 }();
 
+function findGroup(groups, mediaGroupId) {
+  if (!groups) {
+    return null;
+  }
+
+  var matchingGroup = null;
+
+  for (var i = 0; i < groups.length; i++) {
+    var group = groups[i];
+    if (group.id === mediaGroupId) {
+      matchingGroup = group;
+    }
+  }
+
+  return matchingGroup;
+}
+
 var playlist_loader_PlaylistLoader = function (_EventHandler) {
   _inherits(PlaylistLoader, _EventHandler);
 
@@ -20042,13 +20670,13 @@ var playlist_loader_PlaylistLoader = function (_EventHandler) {
   };
 
   PlaylistLoader.prototype.parseMasterPlaylistMedia = function parseMasterPlaylistMedia(string, baseurl, type) {
-    var audioCodec = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+    var audioGroups = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
 
-    var result = void 0,
-        medias = [],
-        id = 0;
+    var result = void 0;
+    var medias = [];
+    var id = 0;
     MASTER_PLAYLIST_MEDIA_REGEX.lastIndex = 0;
-    while ((result = MASTER_PLAYLIST_MEDIA_REGEX.exec(string)) != null) {
+    while ((result = MASTER_PLAYLIST_MEDIA_REGEX.exec(string)) !== null) {
       var media = {};
       var attrs = new attr_list(result[1]);
       if (attrs.TYPE === type) {
@@ -20065,8 +20693,9 @@ var playlist_loader_PlaylistLoader = function (_EventHandler) {
         if (!media.name) {
           media.name = media.lang;
         }
-        if (audioCodec) {
-          media.audioCodec = audioCodec;
+        if (audioGroups.length) {
+          var groupCodec = findGroup(audioGroups, media.groupId);
+          media.audioCodec = groupCodec ? groupCodec.codec : audioGroups[0].codec;
         }
         media.id = id++;
         medias.push(media);
@@ -20294,7 +20923,10 @@ var playlist_loader_PlaylistLoader = function (_EventHandler) {
         var levels = this.parseMasterPlaylist(string, url);
         // multi level playlist, parse level info
         if (levels.length) {
-          var audioTracks = this.parseMasterPlaylistMedia(string, url, 'AUDIO', levels[0].audioCodec);
+          var audioGroups = levels.map(function (l) {
+            return { id: l.attrs.AUDIO, codec: l.audioCodec };
+          });
+          var audioTracks = this.parseMasterPlaylistMedia(string, url, 'AUDIO', audioGroups);
           var subtitles = this.parseMasterPlaylistMedia(string, url, 'SUBTITLES');
           if (audioTracks.length) {
             // check if we have found an audio track embedded in main playlist (audio track without URI attribute)
@@ -22849,13 +23481,14 @@ var level_controller_LevelController = function (_EventHandler) {
   };
 
   LevelController.prototype.onManifestLoaded = function onManifestLoaded(data) {
-    var levels = [],
-        bitrateStart = void 0,
-        levelSet = {},
-        levelFromSet = null,
-        videoCodecFound = false,
-        audioCodecFound = false,
-        chromeOrFirefox = /chrome|firefox/.test(navigator.userAgent.toLowerCase());
+    var levels = [];
+    var bitrateStart = void 0;
+    var levelSet = {};
+    var levelFromSet = null;
+    var videoCodecFound = false;
+    var audioCodecFound = false;
+    var chromeOrFirefox = /chrome|firefox/.test(navigator.userAgent.toLowerCase());
+    var audioTracks = [];
 
     // regroup redundant levels together
     data.levels.forEach(function (level) {
@@ -22899,7 +23532,13 @@ var level_controller_LevelController = function (_EventHandler) {
       return (!audioCodec || isCodecSupportedInMp4(audioCodec)) && (!videoCodec || isCodecSupportedInMp4(videoCodec));
     });
 
-    if (levels.length > 0) {
+    if (data.audioTracks) {
+      audioTracks = data.audioTracks.filter(function (track) {
+        return !track.audioCodec || isCodecSupportedInMp4(track.audioCodec, 'audio');
+      });
+    }
+
+    if (levels.length) {
       // start bitrate is the first bitrate of the manifest
       bitrateStart = levels[0].bitrate;
       // sort level on bitrate
@@ -22915,14 +23554,7 @@ var level_controller_LevelController = function (_EventHandler) {
           break;
         }
       }
-      this.hls.trigger(events["a" /* default */].MANIFEST_PARSED, {
-        levels: levels,
-        firstLevel: this._firstLevel,
-        stats: data.stats,
-        audio: audioCodecFound,
-        video: videoCodecFound,
-        altAudio: data.audioTracks.length > 0
-      });
+      this.hls.trigger(events["a" /* default */].MANIFEST_PARSED, { levels: levels, audioTracks: audioTracks, firstLevel: this._firstLevel, stats: data.stats, audio: audioCodecFound, video: videoCodecFound, altAudio: audioTracks.length > 0 });
     } else {
       this.hls.trigger(events["a" /* default */].ERROR, {
         type: errors["b" /* ErrorTypes */].MEDIA_ERROR,
@@ -23204,7 +23836,7 @@ var level_controller_LevelController = function (_EventHandler) {
 
 /* harmony default export */ var level_controller = (level_controller_LevelController);
 // EXTERNAL MODULE: ./src/demux/id3.js
-var id3 = __webpack_require__(4);
+var id3 = __webpack_require__(3);
 
 // CONCATENATED MODULE: ./src/controller/id3-track-controller.js
 function id3_track_controller__classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -24769,7 +25401,7 @@ var audio_track_controller_AudioTrackController = function (_EventHandler) {
   function AudioTrackController(hls) {
     audio_track_controller__classCallCheck(this, AudioTrackController);
 
-    var _this = audio_track_controller__possibleConstructorReturn(this, _EventHandler.call(this, hls, events["a" /* default */].MANIFEST_LOADING, events["a" /* default */].MANIFEST_LOADED, events["a" /* default */].AUDIO_TRACK_LOADED, events["a" /* default */].ERROR));
+    var _this = audio_track_controller__possibleConstructorReturn(this, _EventHandler.call(this, hls, events["a" /* default */].MANIFEST_LOADING, events["a" /* default */].MANIFEST_PARSED, events["a" /* default */].AUDIO_TRACK_LOADED, events["a" /* default */].ERROR));
 
     _this.ticks = 0;
     _this.ontick = _this.tick.bind(_this);
@@ -24815,7 +25447,7 @@ var audio_track_controller_AudioTrackController = function (_EventHandler) {
     this.trackId = -1;
   };
 
-  AudioTrackController.prototype.onManifestLoaded = function onManifestLoaded(data) {
+  AudioTrackController.prototype.onManifestParsed = function onManifestParsed(data) {
     var _this2 = this;
 
     var tracks = data.audioTracks || [];
@@ -27412,14 +28044,14 @@ var Cea608Channel = function () {
         // Erase Displayed Memory
         cea_608_parser_logger.log('INFO', 'EDM - Erase Displayed Memory');
         this.displayedMemory.reset();
-        this.outputDataUpdate();
+        this.outputDataUpdate(true);
     };
 
     Cea608Channel.prototype.ccCR = function ccCR() {
         // Carriage Return
         cea_608_parser_logger.log('CR - Carriage Return');
         this.writeScreen.rollUp();
-        this.outputDataUpdate();
+        this.outputDataUpdate(true);
     };
 
     Cea608Channel.prototype.ccENM = function ccENM() {
@@ -27438,7 +28070,7 @@ var Cea608Channel = function () {
             this.writeScreen = this.nonDisplayedMemory;
             cea_608_parser_logger.log('TEXT', 'DISP: ' + this.displayedMemory.getDisplayText());
         }
-        this.outputDataUpdate();
+        this.outputDataUpdate(true);
     };
 
     Cea608Channel.prototype.ccTO = function ccTO(nrCols) {
@@ -27464,14 +28096,13 @@ var Cea608Channel = function () {
     };
 
     Cea608Channel.prototype.outputDataUpdate = function outputDataUpdate() {
+        var dispatch = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
         var t = cea_608_parser_logger.time;
         if (t === null) {
             return;
         }
         if (this.outputFilter) {
-            if (this.outputFilter.updateData) {
-                this.outputFilter.updateData(t, this.displayedMemory);
-            }
             if (this.cueStartTime === null && !this.displayedMemory.isEmpty()) {
                 // Start of a new cue
                 this.cueStartTime = t;
@@ -27479,6 +28110,9 @@ var Cea608Channel = function () {
                 if (!this.displayedMemory.equals(this.lastOutputScreen)) {
                     if (this.outputFilter.newCue) {
                         this.outputFilter.newCue(this.cueStartTime, t, this.lastOutputScreen);
+                        if (dispatch === true && this.outputFilter.dispatchCue) {
+                            this.outputFilter.dispatchCue();
+                        }
                     }
                     this.cueStartTime = this.displayedMemory.isEmpty() ? null : t;
                 }
@@ -27859,7 +28493,43 @@ var Cea608Parser = function () {
 }();
 
 /* harmony default export */ var cea_608_parser = (Cea608Parser);
+// CONCATENATED MODULE: ./src/utils/output-filter.js
+function output_filter__classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var OutputFilter = function () {
+  function OutputFilter(timelineController, track) {
+    output_filter__classCallCheck(this, OutputFilter);
+
+    this.timelineController = timelineController;
+    this.track = track;
+    this.startTime = null;
+    this.endTime = null;
+    this.screen = null;
+  }
+
+  OutputFilter.prototype.dispatchCue = function dispatchCue() {
+    if (this.startTime === null) {
+      return;
+    }
+    this.timelineController.addCues('textTrack' + this.track, this.startTime, this.endTime, this.screen);
+    this.startTime = null;
+  };
+
+  OutputFilter.prototype.newCue = function newCue(startTime, endTime, screen) {
+    if (this.startTime === null || this.startTime > startTime) {
+      this.startTime = startTime;
+    }
+    this.endTime = endTime;
+    this.screen = screen;
+    this.timelineController.createCaptionsTrack(this.track);
+  };
+
+  return OutputFilter;
+}();
+
+/* harmony default export */ var output_filter = (OutputFilter);
 // CONCATENATED MODULE: ./src/utils/webvtt-parser.js
+
 
 
 // String.prototype.startsWith is not supported in IE11
@@ -27922,9 +28592,8 @@ var WebVTTParser = {
     parse: function parse(vttByteArray, syncPTS, vttCCs, cc, callBack, errorCallBack) {
         // Convert byteArray into string, replacing any somewhat exotic linefeeds with "\n", then split on that character.
         var re = /\r\n|\n\r|\n|\r/g;
-        var vttLines = new Uint8Array(vttByteArray).reduce(function (raw, vttByte) {
-            return raw + String.fromCharCode(vttByte);
-        }, '').trim().replace(re, '\n').split('\n');
+        // Uint8Array.prototype.reduce is not implemented in IE11
+        var vttLines = Object(id3["b" /* utf8ArrayToStr */])(new Uint8Array(vttByteArray)).trim().replace(re, '\n').split('\n');
 
         var cueTime = '00:00.000';
         var mpegTs = 0;
@@ -27963,10 +28632,10 @@ var WebVTTParser = {
 
             // Create a unique hash id for a cue based on start/end times and text.
             // This helps timeline-controller to avoid showing repeated captions.
-            cue.id = hash(cue.startTime) + hash(cue.endTime) + hash(cue.text);
+            cue.id = hash(cue.startTime.toString()) + hash(cue.endTime.toString()) + hash(cue.text);
 
             // Fix encoding of special characters. TODO: Test with all sorts of weird characters.
-            cue.text = decodeURIComponent(escape(cue.text));
+            cue.text = decodeURIComponent(encodeURIComponent(cue.text));
             if (cue.endTime > 0) {
                 cues.push(cue);
             }
@@ -28048,6 +28717,7 @@ function timeline_controller__inherits(subClass, superClass) { if (typeof superC
 
 
 
+
 function clearCurrentCues(track) {
   if (track && track.cues) {
     while (track.cues.length > 0) {
@@ -28083,63 +28753,8 @@ var timeline_controller_TimelineController = function (_EventHandler) {
     _this.cueRanges = [];
 
     if (_this.config.enableCEA708Captions) {
-      var self = _this;
-      var sendAddTrackEvent = function sendAddTrackEvent(track, media) {
-        var e = null;
-        try {
-          e = new window.Event('addtrack');
-        } catch (err) {
-          //for IE11
-          e = document.createEvent('Event');
-          e.initEvent('addtrack', false, false);
-        }
-        e.track = track;
-        media.dispatchEvent(e);
-      };
-
-      var channel1 = {
-        'newCue': function newCue(startTime, endTime, screen) {
-          if (!self.textTrack1) {
-            //Enable reuse of existing text track.
-            var existingTrack1 = self.getExistingTrack('1');
-            if (!existingTrack1) {
-              var textTrack1 = self.createTextTrack('captions', self.config.captionsTextTrack1Label, self.config.captionsTextTrack1LanguageCode);
-              if (textTrack1) {
-                textTrack1.textTrack1 = true;
-                self.textTrack1 = textTrack1;
-              }
-            } else {
-              self.textTrack1 = existingTrack1;
-              clearCurrentCues(self.textTrack1);
-
-              sendAddTrackEvent(self.textTrack1, self.media);
-            }
-          }
-          self.addCues('textTrack1', startTime, endTime, screen);
-        }
-      };
-
-      var channel2 = {
-        'newCue': function newCue(startTime, endTime, screen) {
-          if (!self.textTrack2) {
-            //Enable reuse of existing text track.
-            var existingTrack2 = self.getExistingTrack('2');
-            if (!existingTrack2) {
-              var textTrack2 = self.createTextTrack('captions', self.config.captionsTextTrack2Label, self.config.captionsTextTrack1LanguageCode);
-              if (textTrack2) {
-                textTrack2.textTrack2 = true;
-                self.textTrack2 = textTrack2;
-              }
-            } else {
-              self.textTrack2 = existingTrack2;
-              clearCurrentCues(self.textTrack2);
-
-              sendAddTrackEvent(self.textTrack2, self.media);
-            }
-          }
-          self.addCues('textTrack2', startTime, endTime, screen);
-        }
-      };
+      var channel1 = new output_filter(_this, 1);
+      var channel2 = new output_filter(_this, 2);
 
       _this.cea608Parser = new cea_608_parser(0, channel1, channel2);
     }
@@ -28202,6 +28817,39 @@ var timeline_controller_TimelineController = function (_EventHandler) {
     return null;
   };
 
+  TimelineController.prototype.sendAddTrackEvent = function sendAddTrackEvent(track, media) {
+    var e = null;
+    try {
+      e = new window.Event('addtrack');
+    } catch (err) {
+      //for IE11
+      e = document.createEvent('Event');
+      e.initEvent('addtrack', false, false);
+    }
+    e.track = track;
+    media.dispatchEvent(e);
+  };
+
+  TimelineController.prototype.createCaptionsTrack = function createCaptionsTrack(track) {
+    var trackVar = 'textTrack' + track;
+    if (!this[trackVar]) {
+      //Enable reuse of existing text track.
+      var existingTrack = this.getExistingTrack(track);
+      if (!existingTrack) {
+        var textTrack = this.createTextTrack('captions', this.config['captionsTextTrack' + track + 'Label'], this.config.captionsTextTrack1LanguageCode);
+        if (textTrack) {
+          textTrack[trackVar] = true;
+          this[trackVar] = textTrack;
+        }
+      } else {
+        this[trackVar] = existingTrack;
+        clearCurrentCues(this[trackVar]);
+
+        this.sendAddTrackEvent(this[trackVar], this.media);
+      }
+    }
+  };
+
   TimelineController.prototype.createTextTrack = function createTextTrack(kind, label, lang) {
     var media = this.media;
     if (media) {
@@ -28215,6 +28863,7 @@ var timeline_controller_TimelineController = function (_EventHandler) {
 
   TimelineController.prototype.onMediaAttaching = function onMediaAttaching(data) {
     this.media = data.media;
+    this._cleanTracks();
   };
 
   TimelineController.prototype.onMediaDetaching = function onMediaDetaching() {
@@ -28226,7 +28875,10 @@ var timeline_controller_TimelineController = function (_EventHandler) {
     this.lastSn = -1; // Detect discontiguity in fragment parsing
     this.prevCC = -1;
     this.vttCCs = { ccOffset: 0, presentationOffset: 0 }; // Detect discontinuity in subtitle manifests
+    this._cleanTracks();
+  };
 
+  TimelineController.prototype._cleanTracks = function _cleanTracks() {
     // clear outdated subtitles
     var media = this.media;
     if (media) {
@@ -28475,6 +29127,11 @@ var subtitle_track_controller_SubtitleTrackController = function (_EventHandler)
       return;
     }
 
+    if (this.queuedDefaultTrack !== undefined) {
+      this.subtitleTrack = this.queuedDefaultTrack;
+      delete this.queuedDefaultTrack;
+    }
+
     this.trackChangeListener = this._onTextTracksChanged.bind(this);
 
     this.useTextTrackPolling = !(this.media.textTracks && 'onchange' in this.media.textTracks);
@@ -28515,7 +29172,6 @@ var subtitle_track_controller_SubtitleTrackController = function (_EventHandler)
     var _this3 = this;
 
     var tracks = data.subtitles || [];
-    var defaultFound = false;
     this.tracks = tracks;
     this.trackId = -1;
     this.hls.trigger(events["a" /* default */].SUBTITLE_TRACKS_UPDATED, { subtitleTracks: tracks });
@@ -28524,8 +29180,15 @@ var subtitle_track_controller_SubtitleTrackController = function (_EventHandler)
     // TODO: improve selection logic to handle forced, etc
     tracks.forEach(function (track) {
       if (track.default) {
-        _this3.subtitleTrack = track.id;
-        defaultFound = true;
+        // setting this.subtitleTrack will trigger internal logic
+        // if media has not been attached yet, it will fail
+        // we keep a reference to the default track id
+        // and we'll set subtitleTrack when onMediaAttached is triggered
+        if (_this3.media) {
+          _this3.subtitleTrack = track.id;
+        } else {
+          _this3.queuedDefaultTrack = track.id;
+        }
       }
     });
   };
@@ -28644,7 +29307,7 @@ var subtitle_track_controller_SubtitleTrackController = function (_EventHandler)
 
 /* harmony default export */ var subtitle_track_controller = (subtitle_track_controller_SubtitleTrackController);
 // EXTERNAL MODULE: ./src/crypt/decrypter.js + 3 modules
-var decrypter = __webpack_require__(3);
+var decrypter = __webpack_require__(4);
 
 // CONCATENATED MODULE: ./src/controller/subtitle-stream-controller.js
 function subtitle_stream_controller__classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -29028,7 +29691,7 @@ var hls_Hls = function () {
   hls__createClass(Hls, null, [{
     key: 'version',
     get: function get() {
-      return "0.8.5";
+      return "0.8.7";
     }
   }, {
     key: 'Events',
@@ -29726,7 +30389,7 @@ var DemuxerWorker = function DemuxerWorker(self) {
 //# sourceMappingURL=hls.js.map
 
 /***/ }),
-/* 174 */
+/* 180 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29752,27 +30415,17 @@ var _inherits2 = __webpack_require__(2);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _playback = __webpack_require__(9);
+var _playback = __webpack_require__(8);
 
 var _playback2 = _interopRequireDefault(_playback);
-
-var _styler = __webpack_require__(7);
-
-var _styler2 = _interopRequireDefault(_styler);
-
-var _style = __webpack_require__(175);
-
-var _style2 = _interopRequireDefault(_style);
 
 var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+__webpack_require__(181);
 
-// Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var HTMLImg = function (_Playback) {
   (0, _inherits3.default)(HTMLImg, _Playback);
@@ -29819,8 +30472,6 @@ var HTMLImg = function (_Playback) {
   }
 
   HTMLImg.prototype.render = function render() {
-    var style = _styler2.default.getStyleFor(_style2.default);
-    this.$el.append(style);
     this.trigger(_events2.default.PLAYBACK_READY, this.name);
     return this;
   };
@@ -29835,7 +30486,9 @@ var HTMLImg = function (_Playback) {
   };
 
   return HTMLImg;
-}(_playback2.default);
+}(_playback2.default); // Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 
 exports.default = HTMLImg;
 
@@ -29847,10 +30500,41 @@ HTMLImg.canPlay = function (resource) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 175 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(10)(undefined);
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(182);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"singleton":true,"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(10)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./style.scss", function() {
+			var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./style.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 182 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(9)(undefined);
 // imports
 
 
@@ -29861,7 +30545,7 @@ exports.push([module.i, "[data-html-img] {\n  max-width: 100%;\n  max-height: 10
 
 
 /***/ }),
-/* 176 */
+/* 183 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29889,29 +30573,23 @@ var _inherits3 = _interopRequireDefault(_inherits2);
 
 var _utils = __webpack_require__(5);
 
-var _playback = __webpack_require__(9);
+var _playback = __webpack_require__(8);
 
 var _playback2 = _interopRequireDefault(_playback);
 
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
-
-var _styler = __webpack_require__(7);
-
-var _styler2 = _interopRequireDefault(_styler);
 
 var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _style = __webpack_require__(177);
-
-var _style2 = _interopRequireDefault(_style);
-
-var _error = __webpack_require__(178);
+var _error = __webpack_require__(184);
 
 var _error2 = _interopRequireDefault(_error);
+
+__webpack_require__(185);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29949,10 +30627,8 @@ var NoOp = function (_Playback) {
   }
 
   NoOp.prototype.render = function render() {
-    var style = _styler2.default.getStyleFor(_style2.default);
     var playbackNotSupported = this.options.playbackNotSupportedMessage || this.i18n.t('playback_not_supported');
     this.$el.html(this.template({ message: playbackNotSupported }));
-    this.$el.append(style);
     this.trigger(_events2.default.PLAYBACK_READY, this.name);
     var showForNoOp = !!(this.options.poster && this.options.poster.showForNoOp);
     if (this.options.autoPlay || !showForNoOp) {
@@ -30042,27 +30718,58 @@ NoOp.canPlay = function (source) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 177 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(10)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "[data-no-op] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  text-align: center; }\n\n[data-no-op] p[data-no-op-msg] {\n  position: absolute;\n  text-align: center;\n  font-size: 25px;\n  left: 0;\n  right: 0;\n  color: white;\n  padding: 10px;\n  /* center vertically */\n  top: 50%;\n  -webkit-transform: translateY(-50%);\n  -moz-transform: translateY(-50%);\n  -ms-transform: translateY(-50%);\n  -o-transform: translateY(-50%);\n  transform: translateY(-50%);\n  max-height: 100%;\n  overflow: auto; }\n\n[data-no-op] canvas[data-no-op-canvas] {\n  background-color: #777;\n  height: 100%;\n  width: 100%; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 178 */
+/* 184 */
 /***/ (function(module, exports) {
 
 module.exports = "<canvas data-no-op-canvas></canvas>\n<p data-no-op-msg><%=message%><p>\n";
 
 /***/ }),
-/* 179 */
+/* 185 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(186);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"singleton":true,"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(10)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./style.scss", function() {
+			var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./style.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 186 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(9)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "[data-no-op] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  text-align: center; }\n\n[data-no-op] p[data-no-op-msg] {\n  position: absolute;\n  text-align: center;\n  font-size: 25px;\n  left: 0;\n  right: 0;\n  color: white;\n  padding: 10px;\n  /* center vertically */\n  top: 50%;\n  -webkit-transform: translateY(-50%);\n          transform: translateY(-50%);\n  max-height: 100%;\n  overflow: auto; }\n\n[data-no-op] canvas[data-no-op-canvas] {\n  background-color: #777;\n  height: 100%;\n  width: 100%; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30072,7 +30779,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _spinner_three_bounce = __webpack_require__(180);
+var _spinner_three_bounce = __webpack_require__(188);
 
 var _spinner_three_bounce2 = _interopRequireDefault(_spinner_three_bounce);
 
@@ -30082,7 +30789,7 @@ exports.default = _spinner_three_bounce2.default;
 module.exports = exports['default'];
 
 /***/ }),
-/* 180 */
+/* 188 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30116,27 +30823,17 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _styler = __webpack_require__(7);
-
-var _styler2 = _interopRequireDefault(_styler);
-
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
-var _spinner = __webpack_require__(181);
+var _spinner = __webpack_require__(189);
 
 var _spinner2 = _interopRequireDefault(_spinner);
 
-var _spinner3 = __webpack_require__(182);
-
-var _spinner4 = _interopRequireDefault(_spinner3);
+__webpack_require__(190);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
 
 var SpinnerThreeBouncePlugin = function (_UIContainerPlugin) {
   (0, _inherits3.default)(SpinnerThreeBouncePlugin, _UIContainerPlugin);
@@ -30203,8 +30900,6 @@ var SpinnerThreeBouncePlugin = function (_UIContainerPlugin) {
 
   SpinnerThreeBouncePlugin.prototype.render = function render() {
     this.$el.html(this.template());
-    var style = _styler2.default.getStyleFor(_spinner4.default);
-    this.container.$el.append(style);
     this.container.$el.append(this.$el);
     this.$el.hide();
     if (this.container.buffering) {
@@ -30214,33 +30909,66 @@ var SpinnerThreeBouncePlugin = function (_UIContainerPlugin) {
   };
 
   return SpinnerThreeBouncePlugin;
-}(_ui_container_plugin2.default);
+}(_ui_container_plugin2.default); // Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 
 exports.default = SpinnerThreeBouncePlugin;
 module.exports = exports['default'];
 
 /***/ }),
-/* 181 */
+/* 189 */
 /***/ (function(module, exports) {
 
 module.exports = "<div data-bounce1></div><div data-bounce2></div><div data-bounce3></div>\n";
 
 /***/ }),
-/* 182 */
+/* 190 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(10)(undefined);
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(191);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"singleton":true,"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(10)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./spinner.scss", function() {
+			var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./spinner.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 191 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(9)(undefined);
 // imports
 
 
 // module
-exports.push([module.i, ".spinner-three-bounce[data-spinner] {\n  position: absolute;\n  margin: 0 auto;\n  width: 70px;\n  text-align: center;\n  z-index: 999;\n  left: 0;\n  right: 0;\n  margin-left: auto;\n  margin-right: auto;\n  /* center vertically */\n  top: 50%;\n  -webkit-transform: translateY(-50%);\n  -moz-transform: translateY(-50%);\n  -ms-transform: translateY(-50%);\n  -o-transform: translateY(-50%);\n  transform: translateY(-50%); }\n  .spinner-three-bounce[data-spinner] > div {\n    width: 18px;\n    height: 18px;\n    background-color: #FFFFFF;\n    border-radius: 100%;\n    display: inline-block;\n    -webkit-animation: bouncedelay 1.4s infinite ease-in-out;\n    -moz-animation: bouncedelay 1.4s infinite ease-in-out;\n    animation: bouncedelay 1.4s infinite ease-in-out;\n    /* Prevent first frame from flickering when animation starts */\n    -webkit-animation-fill-mode: both;\n    -moz-animation-fill-mode: both;\n    animation-fill-mode: both; }\n  .spinner-three-bounce[data-spinner] [data-bounce1] {\n    -webkit-animation-delay: -0.32s;\n    -moz-animation-delay: -0.32s;\n    animation-delay: -0.32s; }\n  .spinner-three-bounce[data-spinner] [data-bounce2] {\n    -webkit-animation-delay: -0.16s;\n    -moz-animation-delay: -0.16s;\n    animation-delay: -0.16s; }\n\n@-webkit-keyframes bouncedelay {\n  0%, 80%, 100% {\n    -webkit-transform: scale(0); }\n  40% {\n    -webkit-transform: scale(1); } }\n\n@-moz-keyframes bouncedelay {\n  0%, 80%, 100% {\n    -moz-transform: scale(0); }\n  40% {\n    -moz-transform: scale(1); } }\n\n@keyframes bouncedelay {\n  0%, 80%, 100% {\n    -webkit-transform: scale(0);\n    -moz-transform: scale(0);\n    -ms-transform: scale(0);\n    -o-transform: scale(0);\n    transform: scale(0); }\n  40% {\n    -webkit-transform: scale(1);\n    -moz-transform: scale(1);\n    -ms-transform: scale(1);\n    -o-transform: scale(1);\n    transform: scale(1); } }\n", ""]);
+exports.push([module.i, ".spinner-three-bounce[data-spinner] {\n  position: absolute;\n  margin: 0 auto;\n  width: 70px;\n  text-align: center;\n  z-index: 999;\n  left: 0;\n  right: 0;\n  margin-left: auto;\n  margin-right: auto;\n  /* center vertically */\n  top: 50%;\n  -webkit-transform: translateY(-50%);\n          transform: translateY(-50%); }\n  .spinner-three-bounce[data-spinner] > div {\n    width: 18px;\n    height: 18px;\n    background-color: #FFFFFF;\n    border-radius: 100%;\n    display: inline-block;\n    -webkit-animation: bouncedelay 1.4s infinite ease-in-out;\n            animation: bouncedelay 1.4s infinite ease-in-out;\n    /* Prevent first frame from flickering when animation starts */\n    -webkit-animation-fill-mode: both;\n            animation-fill-mode: both; }\n  .spinner-three-bounce[data-spinner] [data-bounce1] {\n    -webkit-animation-delay: -0.32s;\n            animation-delay: -0.32s; }\n  .spinner-three-bounce[data-spinner] [data-bounce2] {\n    -webkit-animation-delay: -0.16s;\n            animation-delay: -0.16s; }\n\n@-webkit-keyframes : bouncedelay {\n  0%, 80%, 100% {\n    -webkit-transform: scale(0);\n            transform: scale(0); }\n  40% {\n    -webkit-transform: scale(1);\n            transform: scale(1); } }\n\n@keyframes : bouncedelay {\n  0%, 80%, 100% {\n    -webkit-transform: scale(0);\n            transform: scale(0); }\n  40% {\n    -webkit-transform: scale(1);\n            transform: scale(1); } }\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 183 */
+/* 192 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30250,7 +30978,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _stats = __webpack_require__(184);
+var _stats = __webpack_require__(193);
 
 var _stats2 = _interopRequireDefault(_stats);
 
@@ -30260,7 +30988,7 @@ exports.default = _stats2.default;
 module.exports = exports['default'];
 
 /***/ }),
-/* 184 */
+/* 193 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30419,7 +31147,7 @@ exports.default = StatsPlugin;
 module.exports = exports['default'];
 
 /***/ }),
-/* 185 */
+/* 194 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30429,7 +31157,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _watermark = __webpack_require__(186);
+var _watermark = __webpack_require__(195);
 
 var _watermark2 = _interopRequireDefault(_watermark);
 
@@ -30439,7 +31167,7 @@ exports.default = _watermark2.default;
 module.exports = exports['default'];
 
 /***/ }),
-/* 186 */
+/* 195 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30473,27 +31201,17 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _styler = __webpack_require__(7);
-
-var _styler2 = _interopRequireDefault(_styler);
-
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
-var _watermark = __webpack_require__(187);
+var _watermark = __webpack_require__(196);
 
 var _watermark2 = _interopRequireDefault(_watermark);
 
-var _watermark3 = __webpack_require__(188);
-
-var _watermark4 = _interopRequireDefault(_watermark3);
+__webpack_require__(197);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
 
 var WaterMarkPlugin = function (_UIContainerPlugin) {
   (0, _inherits3.default)(WaterMarkPlugin, _UIContainerPlugin);
@@ -30505,7 +31223,7 @@ var WaterMarkPlugin = function (_UIContainerPlugin) {
   }, {
     key: 'template',
     get: function get() {
-      return (0, _template2.default)(_watermark4.default);
+      return (0, _template2.default)(_watermark2.default);
     }
   }]);
 
@@ -30547,23 +31265,60 @@ var WaterMarkPlugin = function (_UIContainerPlugin) {
     this.$el.hide();
     var templateOptions = { position: this.position, imageUrl: this.imageUrl, imageLink: this.imageLink };
     this.$el.html(this.template(templateOptions));
-    var style = _styler2.default.getStyleFor(_watermark2.default);
-    this.container.$el.append(style);
     this.container.$el.append(this.$el);
     return this;
   };
 
   return WaterMarkPlugin;
-}(_ui_container_plugin2.default);
+}(_ui_container_plugin2.default); // Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 
 exports.default = WaterMarkPlugin;
 module.exports = exports['default'];
 
 /***/ }),
-/* 187 */
+/* 196 */
+/***/ (function(module, exports) {
+
+module.exports = "<div data-watermark data-watermark-<%=position %>>\n<% if(typeof imageLink !== 'undefined') { %>\n<a target=_blank href=\"<%= imageLink %>\">\n<% } %>\n<img src=\"<%= imageUrl %>\">\n<% if(typeof imageLink !== 'undefined') { %>\n</a>\n<% } %>\n</div>\n";
+
+/***/ }),
+/* 197 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(10)(undefined);
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(198);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"singleton":true,"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(10)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./watermark.scss", function() {
+			var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./watermark.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 198 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(9)(undefined);
 // imports
 
 
@@ -30574,13 +31329,7 @@ exports.push([module.i, "[data-watermark] {\n  position: absolute;\n  min-width:
 
 
 /***/ }),
-/* 188 */
-/***/ (function(module, exports) {
-
-module.exports = "<div data-watermark data-watermark-<%=position %>>\n<% if(typeof imageLink !== 'undefined') { %>\n<a target=_blank href=\"<%= imageLink %>\">\n<% } %>\n<img src=\"<%= imageUrl %>\">\n<% if(typeof imageLink !== 'undefined') { %>\n</a>\n<% } %>\n</div>\n";
-
-/***/ }),
-/* 189 */
+/* 199 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30614,35 +31363,25 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _styler = __webpack_require__(7);
-
-var _styler2 = _interopRequireDefault(_styler);
-
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
-var _playback = __webpack_require__(9);
+var _playback = __webpack_require__(8);
 
 var _playback2 = _interopRequireDefault(_playback);
 
-var _poster = __webpack_require__(190);
+var _poster = __webpack_require__(200);
 
 var _poster2 = _interopRequireDefault(_poster);
-
-var _poster3 = __webpack_require__(191);
-
-var _poster4 = _interopRequireDefault(_poster3);
 
 var _play = __webpack_require__(58);
 
 var _play2 = _interopRequireDefault(_play);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+__webpack_require__(201);
 
-//Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var PosterPlugin = function (_UIContainerPlugin) {
   (0, _inherits3.default)(PosterPlugin, _UIContainerPlugin);
@@ -30654,7 +31393,7 @@ var PosterPlugin = function (_UIContainerPlugin) {
   }, {
     key: 'template',
     get: function get() {
-      return (0, _template2.default)(_poster4.default);
+      return (0, _template2.default)(_poster2.default);
     }
   }, {
     key: 'shouldRender',
@@ -30767,9 +31506,7 @@ var PosterPlugin = function (_UIContainerPlugin) {
     if (!this.shouldRender) {
       return;
     }
-    var style = _styler2.default.getStyleFor(_poster2.default, { baseUrl: this.options.baseUrl });
     this.$el.html(this.template());
-    this.$el.append(style);
 
     var isRegularPoster = this.options.poster && this.options.poster.custom == undefined;
 
@@ -30800,34 +31537,67 @@ var PosterPlugin = function (_UIContainerPlugin) {
   };
 
   return PosterPlugin;
-}(_ui_container_plugin2.default);
+}(_ui_container_plugin2.default); //Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 
 exports.default = PosterPlugin;
 module.exports = exports['default'];
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(57)))
 
 /***/ }),
-/* 190 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(10)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, ".player-poster[data-poster] {\n  display: -webkit-box;\n  display: -moz-box;\n  display: box;\n  display: -webkit-flex;\n  display: -moz-flex;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: center;\n  -moz-box-pack: center;\n  box-pack: center;\n  -webkit-justify-content: center;\n  -moz-justify-content: center;\n  -ms-justify-content: center;\n  -o-justify-content: center;\n  justify-content: center;\n  -ms-flex-pack: center;\n  -webkit-box-align: center;\n  -moz-box-align: center;\n  box-align: center;\n  -webkit-align-items: center;\n  -moz-align-items: center;\n  -ms-align-items: center;\n  -o-align-items: center;\n  align-items: center;\n  -ms-flex-align: center;\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  z-index: 998;\n  top: 0;\n  left: 0;\n  background-color: #000;\n  background-size: cover;\n  background-repeat: no-repeat;\n  background-position: 50% 50%; }\n  .player-poster[data-poster].clickable {\n    cursor: pointer; }\n  .player-poster[data-poster]:hover .play-wrapper[data-poster] {\n    opacity: 1; }\n  .player-poster[data-poster] .play-wrapper[data-poster] {\n    width: 100%;\n    height: 25%;\n    margin: 0 auto;\n    opacity: 0.75;\n    -webkit-transition: opacity 0.1s ease;\n    -moz-transition: opacity 0.1s ease;\n    transition: opacity 0.1s ease; }\n    .player-poster[data-poster] .play-wrapper[data-poster] svg {\n      height: 100%; }\n      .player-poster[data-poster] .play-wrapper[data-poster] svg path {\n        fill: #fff; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 191 */
+/* 200 */
 /***/ (function(module, exports) {
 
 module.exports = "<div class=\"play-wrapper\" data-poster></div>\n";
 
 /***/ }),
-/* 192 */
+/* 201 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(202);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"singleton":true,"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(10)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./poster.scss", function() {
+			var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./poster.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 202 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(9)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".player-poster[data-poster] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  z-index: 998;\n  top: 0;\n  left: 0;\n  background-color: #000;\n  background-size: cover;\n  background-repeat: no-repeat;\n  background-position: 50% 50%; }\n  .player-poster[data-poster].clickable {\n    cursor: pointer; }\n  .player-poster[data-poster]:hover .play-wrapper[data-poster] {\n    opacity: 1; }\n  .player-poster[data-poster] .play-wrapper[data-poster] {\n    width: 100%;\n    height: 25%;\n    margin: 0 auto;\n    opacity: 0.75;\n    transition: opacity 0.1s ease; }\n    .player-poster[data-poster] .play-wrapper[data-poster] svg {\n      height: 100%; }\n      .player-poster[data-poster] .play-wrapper[data-poster] svg path {\n        fill: #fff; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 203 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30837,7 +31607,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _google_analytics = __webpack_require__(193);
+var _google_analytics = __webpack_require__(204);
 
 var _google_analytics2 = _interopRequireDefault(_google_analytics);
 
@@ -30847,7 +31617,7 @@ exports.default = _google_analytics2.default;
 module.exports = exports['default'];
 
 /***/ }),
-/* 193 */
+/* 204 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31030,7 +31800,7 @@ exports.default = GoogleAnalytics;
 module.exports = exports['default'];
 
 /***/ }),
-/* 194 */
+/* 205 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31040,7 +31810,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _click_to_pause = __webpack_require__(195);
+var _click_to_pause = __webpack_require__(206);
 
 var _click_to_pause2 = _interopRequireDefault(_click_to_pause);
 
@@ -31050,7 +31820,7 @@ exports.default = _click_to_pause2.default;
 module.exports = exports['default'];
 
 /***/ }),
-/* 195 */
+/* 206 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31084,7 +31854,7 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _playback = __webpack_require__(9);
+var _playback = __webpack_require__(8);
 
 var _playback2 = _interopRequireDefault(_playback);
 
@@ -31137,7 +31907,7 @@ exports.default = ClickToPausePlugin;
 module.exports = exports['default'];
 
 /***/ }),
-/* 196 */
+/* 207 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31147,7 +31917,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _dvr_controls = __webpack_require__(197);
+var _dvr_controls = __webpack_require__(208);
 
 var _dvr_controls2 = _interopRequireDefault(_dvr_controls);
 
@@ -31157,7 +31927,7 @@ exports.default = _dvr_controls2.default;
 module.exports = exports['default'];
 
 /***/ }),
-/* 197 */
+/* 208 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31187,29 +31957,23 @@ var _ui_core_plugin = __webpack_require__(38);
 
 var _ui_core_plugin2 = _interopRequireDefault(_ui_core_plugin);
 
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
-var _playback = __webpack_require__(9);
+var _playback = __webpack_require__(8);
 
 var _playback2 = _interopRequireDefault(_playback);
-
-var _styler = __webpack_require__(7);
-
-var _styler2 = _interopRequireDefault(_styler);
 
 var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _dvr_controls = __webpack_require__(198);
-
-var _dvr_controls2 = _interopRequireDefault(_dvr_controls);
-
-var _index = __webpack_require__(199);
+var _index = __webpack_require__(209);
 
 var _index2 = _interopRequireDefault(_index);
+
+__webpack_require__(210);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31267,6 +32031,7 @@ var DVRControls = function (_UICorePlugin) {
   };
 
   DVRControls.prototype.dvrChanged = function dvrChanged(dvrEnabled) {
+    if (this.core.getPlaybackType() !== _playback2.default.LIVE) return;
     this.settingsUpdate();
     this.core.mediaControl.$el.addClass('live');
     if (dvrEnabled) {
@@ -31292,6 +32057,7 @@ var DVRControls = function (_UICorePlugin) {
     var _this2 = this;
 
     this.stopListening();
+    this.core.mediaControl.$el.removeClass('live');
     if (this.shouldRender()) {
       this.render();
       this.$el.click(function () {
@@ -31307,12 +32073,10 @@ var DVRControls = function (_UICorePlugin) {
   };
 
   DVRControls.prototype.render = function render() {
-    this.style = this.style || _styler2.default.getStyleFor(_dvr_controls2.default, { baseUrl: this.core.options.baseUrl });
     this.$el.html(this.template({
       live: this.core.i18n.t('live'),
       backToLive: this.core.i18n.t('back_to_live')
     }));
-    this.$el.append(this.style);
     if (this.shouldRender()) {
       this.core.mediaControl.$el.addClass('live');
       this.core.mediaControl.$('.media-control-left-panel[data-media-control]').append(this.$el);
@@ -31327,27 +32091,58 @@ exports.default = DVRControls;
 module.exports = exports['default'];
 
 /***/ }),
-/* 198 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(10)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, ".dvr-controls[data-dvr-controls] {\n  display: inline-block;\n  float: left;\n  color: #fff;\n  line-height: 32px;\n  font-size: 10px;\n  font-weight: bold;\n  margin-left: 6px; }\n  .dvr-controls[data-dvr-controls] .live-info {\n    cursor: default;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    text-transform: uppercase; }\n    .dvr-controls[data-dvr-controls] .live-info:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #ff0101; }\n    .dvr-controls[data-dvr-controls] .live-info.disabled {\n      opacity: 0.3; }\n      .dvr-controls[data-dvr-controls] .live-info.disabled:before {\n        background-color: #fff; }\n  .dvr-controls[data-dvr-controls] .live-button {\n    cursor: pointer;\n    outline: none;\n    display: none;\n    border: 0;\n    color: #fff;\n    background-color: transparent;\n    height: 32px;\n    padding: 0;\n    opacity: 0.7;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    text-transform: uppercase;\n    -webkit-transition: all 0.1s ease;\n    -moz-transition: all 0.1s ease;\n    transition: all 0.1s ease; }\n    .dvr-controls[data-dvr-controls] .live-button:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #fff; }\n    .dvr-controls[data-dvr-controls] .live-button:hover {\n      opacity: 1;\n      text-shadow: rgba(255, 255, 255, 0.75) 0 0 5px; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-info {\n  display: none; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-button {\n  display: block; }\n\n.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #005aff; }\n\n.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #ff0101; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 199 */
+/* 209 */
 /***/ (function(module, exports) {
 
 module.exports = "<div class=\"live-info\"><%= live %></div>\n<button type=\"button\" class=\"live-button\" aria-label=\"<%= backToLive %>\"><%= backToLive %></button>\n";
 
 /***/ }),
-/* 200 */
+/* 210 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(211);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"singleton":true,"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(10)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./dvr_controls.scss", function() {
+			var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./dvr_controls.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 211 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(9)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".dvr-controls[data-dvr-controls] {\n  display: inline-block;\n  float: left;\n  color: #fff;\n  line-height: 32px;\n  font-size: 10px;\n  font-weight: bold;\n  margin-left: 6px; }\n  .dvr-controls[data-dvr-controls] .live-info {\n    cursor: default;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    text-transform: uppercase; }\n    .dvr-controls[data-dvr-controls] .live-info:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #ff0101; }\n    .dvr-controls[data-dvr-controls] .live-info.disabled {\n      opacity: 0.3; }\n      .dvr-controls[data-dvr-controls] .live-info.disabled:before {\n        background-color: #fff; }\n  .dvr-controls[data-dvr-controls] .live-button {\n    cursor: pointer;\n    outline: none;\n    display: none;\n    border: 0;\n    color: #fff;\n    background-color: transparent;\n    height: 32px;\n    padding: 0;\n    opacity: 0.7;\n    font-family: \"Roboto\", \"Open Sans\", Arial, sans-serif;\n    text-transform: uppercase;\n    transition: all 0.1s ease; }\n    .dvr-controls[data-dvr-controls] .live-button:before {\n      content: \"\";\n      display: inline-block;\n      position: relative;\n      width: 7px;\n      height: 7px;\n      border-radius: 3.5px;\n      margin-right: 3.5px;\n      background-color: #fff; }\n    .dvr-controls[data-dvr-controls] .live-button:hover {\n      opacity: 1;\n      text-shadow: rgba(255, 255, 255, 0.75) 0 0 5px; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-info {\n  display: none; }\n\n.dvr .dvr-controls[data-dvr-controls] .live-button {\n  display: block; }\n\n.dvr.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #005aff; }\n\n.media-control.live[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n  background-color: #ff0101; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 212 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31357,7 +32152,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _closed_captions = __webpack_require__(201);
+var _closed_captions = __webpack_require__(213);
 
 var _closed_captions2 = _interopRequireDefault(_closed_captions);
 
@@ -31367,7 +32162,7 @@ exports.default = _closed_captions2.default;
 module.exports = exports['default'];
 
 /***/ }),
-/* 201 */
+/* 213 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31397,29 +32192,23 @@ var _ui_core_plugin = __webpack_require__(38);
 
 var _ui_core_plugin2 = _interopRequireDefault(_ui_core_plugin);
 
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
-
-var _styler = __webpack_require__(7);
-
-var _styler2 = _interopRequireDefault(_styler);
 
 var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _cc = __webpack_require__(202);
+var _cc = __webpack_require__(214);
 
 var _cc2 = _interopRequireDefault(_cc);
 
-var _closed_captions = __webpack_require__(203);
+var _closed_captions = __webpack_require__(215);
 
 var _closed_captions2 = _interopRequireDefault(_closed_captions);
 
-var _closed_captions3 = __webpack_require__(204);
-
-var _closed_captions4 = _interopRequireDefault(_closed_captions3);
+__webpack_require__(216);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31433,7 +32222,7 @@ var ClosedCaptions = function (_UICorePlugin) {
   }, {
     key: 'template',
     get: function get() {
-      return (0, _template2.default)(_closed_captions4.default);
+      return (0, _template2.default)(_closed_captions2.default);
     }
   }, {
     key: 'events',
@@ -31552,10 +32341,6 @@ var ClosedCaptions = function (_UICorePlugin) {
   };
 
   ClosedCaptions.prototype.render = function render() {
-    if (!this.style) {
-      this.style = _styler2.default.getStyleFor(_closed_captions2.default, { baseUrl: this.core.options.baseUrl });
-    }
-
     this.renderCcButton();
 
     var $fullscreen = this.core.mediaControl.$el.find('button[data-fullscreen]');
@@ -31575,16 +32360,53 @@ exports.default = ClosedCaptions;
 module.exports = exports['default'];
 
 /***/ }),
-/* 202 */
+/* 214 */
 /***/ (function(module, exports) {
 
 module.exports = "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" viewBox=\"0 0 49 41.8\" style=\"enable-background:new 0 0 49 41.8;\" xml:space=\"preserve\"><path d=\"M47.1,0H3.2C1.6,0,0,1.2,0,2.8v31.5C0,35.9,1.6,37,3.2,37h11.9l3.2,1.9l4.7,2.7c0.9,0.5,2-0.1,2-1.1V37h22.1 c1.6,0,1.9-1.1,1.9-2.7V2.8C49,1.2,48.7,0,47.1,0z M7.2,18.6c0-4.8,3.5-9.3,9.9-9.3c4.8,0,7.1,2.7,7.1,2.7l-2.5,4 c0,0-1.7-1.7-4.2-1.7c-2.8,0-4.3,2.1-4.3,4.3c0,2.1,1.5,4.4,4.5,4.4c2.5,0,4.9-2.1,4.9-2.1l2.2,4.2c0,0-2.7,2.9-7.6,2.9 C10.8,27.9,7.2,23.5,7.2,18.6z M36.9,27.9c-6.4,0-9.9-4.4-9.9-9.3c0-4.8,3.5-9.3,9.9-9.3C41.7,9.3,44,12,44,12l-2.5,4 c0,0-1.7-1.7-4.2-1.7c-2.8,0-4.3,2.1-4.3,4.3c0,2.1,1.5,4.4,4.5,4.4c2.5,0,4.9-2.1,4.9-2.1l2.2,4.2C44.5,25,41.9,27.9,36.9,27.9z\"></path></svg>"
 
 /***/ }),
-/* 203 */
+/* 215 */
+/***/ (function(module, exports) {
+
+module.exports = "<button type=\"button\" class=\"cc-button media-control-button media-control-icon\" data-cc-button aria-label=\"<%= ariaLabel %>\"></button>\n<ul>\n  <% if (title) { %>\n  <li data-title><%= title %></li>\n  <% }; %>\n  <li><a href=\"#\" data-cc-select=\"-1\"><%= disabledLabel %></a></li>\n  <% for (var i = 0; i < tracks.length; i++) { %>\n    <li><a href=\"#\" data-cc-select=\"<%= tracks[i].id %>\"><%= tracks[i].label %></a></li>\n  <% }; %>\n</ul>\n";
+
+/***/ }),
+/* 216 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(10)(undefined);
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(217);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"singleton":true,"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(10)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./closed_captions.scss", function() {
+			var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./closed_captions.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 217 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(9)(undefined);
 // imports
 
 
@@ -31595,13 +32417,7 @@ exports.push([module.i, ".cc-controls[data-cc-controls] {\n  float: right;\n  po
 
 
 /***/ }),
-/* 204 */
-/***/ (function(module, exports) {
-
-module.exports = "<button type=\"button\" class=\"cc-button media-control-button media-control-icon\" data-cc-button aria-label=\"<%= ariaLabel %>\"></button>\n<ul>\n  <% if (title) { %>\n  <li data-title><%= title %></li>\n  <% }; %>\n  <li><a href=\"#\" data-cc-select=\"-1\"><%= disabledLabel %></a></li>\n  <% for (var i = 0; i < tracks.length; i++) { %>\n    <li><a href=\"#\" data-cc-select=\"<%= tracks[i].id %>\"><%= tracks[i].label %></a></li>\n  <% }; %>\n</ul>\n";
-
-/***/ }),
-/* 205 */
+/* 218 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31611,7 +32427,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _favicon = __webpack_require__(206);
+var _favicon = __webpack_require__(219);
 
 var _favicon2 = _interopRequireDefault(_favicon);
 
@@ -31621,7 +32437,7 @@ exports.default = _favicon2.default;
 module.exports = exports['default'];
 
 /***/ }),
-/* 206 */
+/* 219 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31783,7 +32599,7 @@ exports.default = Favicon;
 module.exports = exports['default'];
 
 /***/ }),
-/* 207 */
+/* 220 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31793,7 +32609,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _seek_time = __webpack_require__(208);
+var _seek_time = __webpack_require__(221);
 
 var _seek_time2 = _interopRequireDefault(_seek_time);
 
@@ -31803,7 +32619,7 @@ exports.default = _seek_time2.default;
 module.exports = exports['default'];
 
 /***/ }),
-/* 208 */
+/* 221 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31835,11 +32651,7 @@ var _ui_core_plugin = __webpack_require__(38);
 
 var _ui_core_plugin2 = _interopRequireDefault(_ui_core_plugin);
 
-var _styler = __webpack_require__(7);
-
-var _styler2 = _interopRequireDefault(_styler);
-
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
@@ -31847,23 +32659,17 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _playback = __webpack_require__(9);
+var _playback = __webpack_require__(8);
 
 var _playback2 = _interopRequireDefault(_playback);
 
-var _seek_time = __webpack_require__(209);
+var _seek_time = __webpack_require__(222);
 
 var _seek_time2 = _interopRequireDefault(_seek_time);
 
-var _seek_time3 = __webpack_require__(210);
-
-var _seek_time4 = _interopRequireDefault(_seek_time3);
+__webpack_require__(223);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
 
 var SeekTime = function (_UICorePlugin) {
   (0, _inherits3.default)(SeekTime, _UICorePlugin);
@@ -31875,7 +32681,7 @@ var SeekTime = function (_UICorePlugin) {
   }, {
     key: 'template',
     get: function get() {
-      return (0, _template2.default)(_seek_time4.default);
+      return (0, _template2.default)(_seek_time2.default);
     }
   }, {
     key: 'attributes',
@@ -32033,9 +32839,7 @@ var SeekTime = function (_UICorePlugin) {
     this.rendered = true;
     this.displayedDuration = null;
     this.displayedSeekTime = null;
-    var style = _styler2.default.getStyleFor(_seek_time2.default);
     this.$el.html(this.template());
-    this.$el.append(style);
     this.$el.hide();
     this.mediaControl.$el.append(this.el);
     this.$seekTimeEl = this.$el.find('[data-seek-time]');
@@ -32045,33 +32849,66 @@ var SeekTime = function (_UICorePlugin) {
   };
 
   return SeekTime;
-}(_ui_core_plugin2.default);
+}(_ui_core_plugin2.default); // Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 
 exports.default = SeekTime;
 module.exports = exports['default'];
 
 /***/ }),
-/* 209 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(10)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, ".seek-time[data-seek-time] {\n  position: absolute;\n  white-space: nowrap;\n  height: 20px;\n  line-height: 20px;\n  font-size: 0;\n  left: -100%;\n  bottom: 55px;\n  background-color: rgba(2, 2, 2, 0.5);\n  z-index: 9999;\n  -webkit-transition: opacity 0.1s ease;\n  -moz-transition: opacity 0.1s ease;\n  transition: opacity 0.1s ease; }\n  .seek-time[data-seek-time].hidden[data-seek-time] {\n    opacity: 0; }\n  .seek-time[data-seek-time] [data-seek-time] {\n    display: inline-block;\n    color: white;\n    font-size: 10px;\n    padding-left: 7px;\n    padding-right: 7px;\n    vertical-align: top; }\n  .seek-time[data-seek-time] [data-duration] {\n    display: inline-block;\n    color: rgba(255, 255, 255, 0.5);\n    font-size: 10px;\n    padding-right: 7px;\n    vertical-align: top; }\n    .seek-time[data-seek-time] [data-duration]:before {\n      content: \"|\";\n      margin-right: 7px; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 210 */
+/* 222 */
 /***/ (function(module, exports) {
 
 module.exports = "<span data-seek-time></span>\n<span data-duration></span>\n";
 
 /***/ }),
-/* 211 */
+/* 223 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(224);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"singleton":true,"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(10)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./seek_time.scss", function() {
+			var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/player/clappr/src/base/scss!./seek_time.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 224 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(9)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".seek-time[data-seek-time] {\n  position: absolute;\n  white-space: nowrap;\n  height: 20px;\n  line-height: 20px;\n  font-size: 0;\n  left: -100%;\n  bottom: 55px;\n  background-color: rgba(2, 2, 2, 0.5);\n  z-index: 9999;\n  transition: opacity 0.1s ease; }\n  .seek-time[data-seek-time].hidden[data-seek-time] {\n    opacity: 0; }\n  .seek-time[data-seek-time] [data-seek-time] {\n    display: inline-block;\n    color: white;\n    font-size: 10px;\n    padding-left: 7px;\n    padding-right: 7px;\n    vertical-align: top; }\n  .seek-time[data-seek-time] [data-duration] {\n    display: inline-block;\n    color: rgba(255, 255, 255, 0.5);\n    font-size: 10px;\n    padding-right: 7px;\n    vertical-align: top; }\n    .seek-time[data-seek-time] [data-duration]:before {\n      content: \"|\";\n      margin-right: 7px; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 225 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32145,7 +32982,7 @@ exports.default = SourcesPlugin;
 module.exports = exports['default'];
 
 /***/ }),
-/* 212 */
+/* 226 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32225,7 +33062,7 @@ exports.default = EndVideo;
 module.exports = exports['default'];
 
 /***/ }),
-/* 213 */
+/* 227 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32372,6 +33209,42 @@ var Strings = function (_CorePlugin) {
 }(_core_plugin2.default);
 
 exports.default = Strings;
+module.exports = exports['default'];
+
+/***/ }),
+/* 228 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _clapprZepto = __webpack_require__(6);
+
+var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
+
+var _template = __webpack_require__(7);
+
+var _template2 = _interopRequireDefault(_template);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+var Styler = {
+  getStyleFor: function getStyleFor(style) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : { baseUrl: '' };
+
+    return (0, _clapprZepto2.default)('<style class="clappr-style"></style>').html((0, _template2.default)(style.toString())(options));
+  }
+};
+
+exports.default = Styler;
 module.exports = exports['default'];
 
 /***/ })
