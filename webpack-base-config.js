@@ -28,11 +28,18 @@ module.exports = {
         include: path.resolve(__dirname, 'src')
       },
       {
-        test: /\.(png|woff|eot|ttf|swf|cur)/,
+        test: /\.(ttf)/,
+        loader: 'url-loader',
+        options: {
+          limit: 1
+        },
+      },
+      {
+        test: /\.(png|woff|eot|swf|cur)/,
         loader: 'url-loader',
         options: {
           limit: 1,
-          publicPath: ''
+          publicPath: '<%=baseUrl%>/'
         },
       },
       {
