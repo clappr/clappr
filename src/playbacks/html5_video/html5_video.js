@@ -253,11 +253,11 @@ export default class HTML5Video extends Playback {
   }
 
   mute() {
-    this.el.volume = 0
+    this.el.muted = true;
   }
 
   unmute() {
-    this.el.volume = 1
+    this.el.muted = false;
   }
 
   isMuted() {
