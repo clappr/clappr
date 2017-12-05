@@ -1,5 +1,4 @@
 import {Config} from '../../src/base/utils'
-import Styler from '../../src/base/styler'
 import template from '../../src/base/template'
 import MediaControl from '../../src/components/media_control'
 import Playback from '../../src/base/playback'
