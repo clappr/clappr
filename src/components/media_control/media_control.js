@@ -76,7 +76,7 @@ export default class MediaControl extends UIObject {
     this.currentPositionValue = null
     this.currentDurationValue = null
     const initialVolume = (this.persistConfig) ? Config.restore('volume') : 100
-    this.setVolume(this.options.mute ? 0 : initialVolume)
+    this.setVolume(this.options.muted ? 0 : initialVolume)
     this.keepVisible = false
     this.fullScreenOnVideoTagSupported = null // unknown
     this.addEventListeners()
