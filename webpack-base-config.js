@@ -9,7 +9,8 @@ module.exports = {
   plugins: [
     new DirectoryNamedWebpackPlugin(true),
     new webpack.DefinePlugin({
-      VERSION: JSON.stringify(require('./package.json').version)
+      VERSION: JSON.stringify(require('./package.json').version),
+      PLAIN_HTML5_ONLY: JSON.stringify(process.env.CLAPPR_PLAIN_HTML5_ONLY)
     })
   ],
   module: {
