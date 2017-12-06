@@ -257,7 +257,7 @@ export default class HTML5Video extends Playback {
    * @private
    */
   mute() {
-    this.el.muted = true;
+    this.el.muted = true
   }
 
   /**
@@ -265,7 +265,7 @@ export default class HTML5Video extends Playback {
    * @private
    */
   unmute() {
-    this.el.muted = false;
+    this.el.muted = false
   }
 
   isMuted() {
