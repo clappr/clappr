@@ -22,6 +22,7 @@ if (process.env.npm_lifecycle_event === 'release') {
   webpackConfig.plugins.push(new Clean(['dist'], {verbose: false}))
 }
 
+webpackConfig.devtool = 'source-map';
 
 const voidModulePath = path.resolve('./src/base/void');
 
