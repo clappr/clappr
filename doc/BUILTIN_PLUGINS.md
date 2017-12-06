@@ -153,7 +153,7 @@ you might consider subclassing the base `MediaControl` and using your own custom
   }
   let player = new Clappr.Player({
     source: "http://your.video/here.mp4",
-    mediacontrol: MyMediaControl
+    mediacontrol: { external: MyMediaControl }
   });
 ```
 
