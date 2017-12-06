@@ -141,7 +141,7 @@ export default class UIObject extends BaseObject {
    */
   setElement(element, delegate) {
     if (this.$el) {this.undelegateEvents()}
-    this.$el = element instanceof $ ? element : $(element)
+    this.$el = $.zepto.isZ(element) ? element : $(element)
     this.el = this.$el[0]
     if (delegate !== false) {this.delegateEvents()}
     return this
