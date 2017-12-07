@@ -1,5 +1,4 @@
 import {Config} from '../../src/base/utils'
-import Styler from '../../src/base/styler'
 import template from '../../src/base/template'
 import MediaControl from '../../src/components/media_control'
 import Playback from '../../src/base/playback'
@@ -112,10 +111,9 @@ describe('MediaControl', function() {
   })
 
   describe('custom media control', function() {
-    it('can be extend the base mediacontrol with a custom template and stylesheet', function() {
+    it('can be extend the base mediacontrol with a custom template', function() {
       class MyMediaControl extends MediaControl {
         get template() { return template('<div>My HTML here</div>') }
-        get stylesheet () { return Styler.getStyleFor('.my-css-class {}') }
         constructor(options) { super(options) }
       }
 
@@ -124,7 +122,7 @@ describe('MediaControl', function() {
       expect(mediaControl.muted).to.be.equal(true)
       expect(mediaControl.volume).to.be.equal(0)
       expect(mediaControl.$el.html()).to.be.equal(
-        '<div>My HTML here</div><style class="clappr-style">.my-css-class {}</style>'
+        '<div>My HTML here</div>'
       )
     })
   })

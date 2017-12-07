@@ -132,7 +132,7 @@ export default class Player extends BaseObject {
    * whether or not the player should handle click events when in chromeless mode **default**: `false` on desktops browsers, `true` on mobile.
    * @param {Boolean} [options.disableKeyboardShortcuts]
    * disable keyboard shortcuts. **default**: `false`. `true` if `allowUserInteraction` is `false`.
-   * @param {Boolean} [options.muted]
+   * @param {Boolean} [options.mute]
    * start the video muted **default**: `false`
    * @param {String} [options.mimeType]
    * add `mimeType: "application/vnd.apple.mpegurl"` if you need to use a url without extension.

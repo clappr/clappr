@@ -3,12 +3,11 @@
 // license that can be found in the LICENSE file.
 
 import Playback from '../../base/playback'
-import Styler from '../../base/styler'
 import template from '../../base/template'
 import Browser from '../../components/browser'
 
 import flashHTML from './public/flash.html'
-import flashStyle from './public/flash.scss'
+import './public/flash.scss'
 
 const IE_CLASSID = 'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000'
 
@@ -59,7 +58,6 @@ export default class BaseFlashPlayback extends Playback {
     }
 
     this.el.id = this.cid
-    this.$el.append(Styler.getStyleFor(flashStyle))
 
     return this
   }

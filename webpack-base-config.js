@@ -22,13 +22,20 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loaders: ['css-loader', 'postcss-loader', 'sass-loader?includePaths[]='
+        loaders: ['style-loader?singleton=true', 'css-loader', 'postcss-loader', 'sass-loader?includePaths[]='
             + path.resolve(__dirname, './src/base/scss')
         ],
         include: path.resolve(__dirname, 'src')
       },
       {
-        test: /\.(png|woff|eot|ttf|swf|cur)/,
+        test: /\.(ttf)/,
+        loader: 'url-loader',
+        options: {
+          limit: 1
+        },
+      },
+      {
+        test: /\.(png|woff|eot|swf|cur)/,
         loader: 'url-loader',
         options: {
           limit: 1,
