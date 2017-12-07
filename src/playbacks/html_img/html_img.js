@@ -3,9 +3,8 @@
 // license that can be found in the LICENSE file.
 
 import Playback from '../../base/playback'
-import Styler from '../../base/styler'
-import imgStyle from './public/style.scss'
 import Events from '../../base/events'
+import './public/style.scss'
 
 export default class HTMLImg extends Playback {
   get name() { return 'html_img' }
@@ -34,8 +33,6 @@ export default class HTMLImg extends Playback {
   }
 
   render() {
-    const style = Styler.getStyleFor(imgStyle)
-    this.$el.append(style)
     this.trigger(Events.PLAYBACK_READY, this.name)
     return this
   }

@@ -5,13 +5,12 @@
 import {isNumber, seekStringToSeconds, DomRecycler} from '../../base/utils'
 
 import Playback from '../../base/playback'
-import Styler from '../../base/styler'
 import Browser from '../../components/browser'
 import Events from '../../base/events'
-import tagStyle from './public/style.scss'
 import $ from 'clappr-zepto'
 import template from '../../base/template'
 import tracksHTML from './public/tracks.html'
+import './public/style.scss'
 
 const MIMETYPES = {
   'mp4': ['avc1.42E01E', 'avc1.58A01E', 'avc1.4D401E', 'avc1.64001E', 'mp4v.20.8', 'mp4v.20.240', 'mp4a.40.2'].map(
@@ -118,6 +117,8 @@ export default class HTML5Video extends Playback {
     }
 
     $.extend(this.el, {
+      muted: this.options.mute,
+      defaultMuted: this.options.mute,
       loop: this.options.loop,
       poster: posterUrl,
       preload: preload || 'metadata',
@@ -251,12 +252,20 @@ export default class HTML5Video extends Playback {
     this.el.volume = value / 100
   }
 
+  /**
+   * @deprecated
+   * @private
+   */
   mute() {
-    this.el.volume = 0
+    this.el.muted = true
   }
 
+  /**
+   * @deprecated
+   * @private
+   */
   unmute() {
-    this.el.volume = 1
+    this.el.muted = false
   }
 
   isMuted() {
@@ -530,8 +539,6 @@ export default class HTML5Video extends Playback {
   get template() { return template(tracksHTML) }
 
   render() {
-    const style = Styler.getStyleFor(tagStyle)
-
     if (this.options.playback.disableContextMenu) {
       this.$el.on('contextmenu', () => {
         return false
@@ -544,7 +551,6 @@ export default class HTML5Video extends Playback {
       }))
     }
 
-    this.$el.append(style)
     this._ready()
     return this
   }
