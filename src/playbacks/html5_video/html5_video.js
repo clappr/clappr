@@ -117,6 +117,8 @@ export default class HTML5Video extends Playback {
     }
 
     $.extend(this.el, {
+      muted: this.options.mute,
+      defaultMuted: this.options.mute,
       loop: this.options.loop,
       poster: posterUrl,
       preload: preload || 'metadata',
@@ -250,12 +252,20 @@ export default class HTML5Video extends Playback {
     this.el.volume = value / 100
   }
 
+  /**
+   * @deprecated
+   * @private
+   */
   mute() {
-    this.el.volume = 0
+    this.el.muted = true
   }
 
+  /**
+   * @deprecated
+   * @private
+   */
   unmute() {
-    this.el.volume = 1
+    this.el.muted = false
   }
 
   isMuted() {
