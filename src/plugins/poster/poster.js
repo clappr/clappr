@@ -117,7 +117,7 @@ export default class PosterPlugin extends UIContainerPlugin {
     this.$el.html(this.template())
     this.$el.append(style)
 
-    const isRegularPoster = this.options.poster && this.options.poster.custom == undefined
+    const isRegularPoster = this.options.poster && this.options.poster.custom === undefined
 
     if (isRegularPoster) {
       const posterUrl = this.options.poster.url || this.options.poster
