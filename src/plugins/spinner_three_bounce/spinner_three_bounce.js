@@ -4,10 +4,9 @@
 
 import UIContainerPlugin from '../../base/ui_container_plugin'
 import Events from '../../base/events'
-import Styler from '../../base/styler'
 import template from '../../base/template'
 import spinnerHTML from './public/spinner.html'
-import spinnerStyle from './public/spinner.scss'
+import './public/spinner.scss'
 
 export default class SpinnerThreeBouncePlugin extends UIContainerPlugin {
   get name() { return 'spinner' }
@@ -58,8 +57,6 @@ export default class SpinnerThreeBouncePlugin extends UIContainerPlugin {
 
   render() {
     this.$el.html(this.template())
-    const style = Styler.getStyleFor(spinnerStyle)
-    this.container.$el.append(style)
     this.container.$el.append(this.$el)
     this.$el.hide()
     if (this.container.buffering) {

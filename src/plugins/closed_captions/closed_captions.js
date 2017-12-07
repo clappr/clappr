@@ -1,10 +1,9 @@
 import UICorePlugin from '../../base/ui_core_plugin'
 import template from '../../base/template'
-import Styler from '../../base/styler'
 import Events from '../../base/events'
 import ccIcon from '../../icons/09-cc.svg'
-import ccStyle from './public/closed_captions.scss'
 import ccHTML from './public/closed_captions.html'
+import './public/closed_captions.scss'
 
 export default class ClosedCaptions extends UICorePlugin {
   get name() { return 'closed_captions' }
@@ -120,10 +119,6 @@ export default class ClosedCaptions extends UICorePlugin {
   }
 
   render() {
-    if (!this.style) {
-      this.style = Styler.getStyleFor(ccStyle, { baseUrl: this.core.options.baseUrl })
-    }
-
     this.renderCcButton()
 
     const $fullscreen = this.core.mediaControl.$el.find('button[data-fullscreen]')
