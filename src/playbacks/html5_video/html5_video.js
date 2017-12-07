@@ -170,7 +170,7 @@ export default class HTML5Video extends Playback {
     this._handleBufferingEvents()
     this.trigger(Events.PLAYBACK_LOADEDMETADATA, {duration: e.target.duration, data: e})
     this._updateSettings()
-    const autoSeekFromUrl = typeof(this._options.autoSeekFromUrl) === 'undefined' || this._options.autoSeekFromUrl
+    const autoSeekFromUrl = typeof (this._options.autoSeekFromUrl) === 'undefined' || this._options.autoSeekFromUrl
     if (this.getPlaybackType() !== Playback.LIVE && autoSeekFromUrl) {
       this._checkInitialSeek()
     }
@@ -435,7 +435,7 @@ export default class HTML5Video extends Playback {
 
   _typeFor(src) {
     let mimeTypes = HTML5Video._mimeTypesForUrl(src, MIMETYPES, this.options.mimeType)
-    if (mimeTypes.length == 0) {
+    if (mimeTypes.length === 0) {
       mimeTypes = HTML5Video._mimeTypesForUrl(src, AUDIO_MIMETYPES, this.options.mimeType)
     }
     const mimeType = mimeTypes[0] || ''
