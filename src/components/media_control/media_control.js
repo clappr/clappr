@@ -137,7 +137,7 @@ export default class MediaControl extends UIObject {
   }
 
   enable() {
-    if (this.options.chromeless) return
+    if (this.options.chromeless) {return}
     this.userDisabled = false
     this.show()
   }
@@ -270,7 +270,7 @@ export default class MediaControl extends UIObject {
   }
 
   startSeekDrag(event) {
-    if (!this.settings.seekEnabled) return
+    if (!this.settings.seekEnabled) {return}
     this.draggingSeekBar = true
     this.$el.addClass('dragging')
     this.$seekBarLoaded.addClass('media-control-notransition')
@@ -383,7 +383,7 @@ export default class MediaControl extends UIObject {
   }
 
   hideVolumeBar(timeout = 400) {
-    if (!this.$volumeBarContainer) return
+    if (!this.$volumeBarContainer) {return}
     if (this.draggingVolumeBar) {
       this.hideVolumeId = setTimeout(() => this.hideVolumeBar(), timeout)
     } else {
@@ -405,7 +405,7 @@ export default class MediaControl extends UIObject {
   }
 
   onTimeUpdate(timeProgress) {
-    if (this.draggingSeekBar) return
+    if (this.draggingSeekBar) {return}
     // TODO why should current time ever be negative?
     const position = (timeProgress.current < 0) ? timeProgress.total : timeProgress.current
 
@@ -440,7 +440,7 @@ export default class MediaControl extends UIObject {
   }
 
   seek(event) {
-    if (!this.settings.seekEnabled) return
+    if (!this.settings.seekEnabled) {return}
     const offsetX = event.pageX - this.$seekBarContainer.offset().left
     let pos = offsetX / this.$seekBarContainer.width() * 100
     pos = Math.min(100, Math.max(pos, 0))
@@ -584,7 +584,7 @@ export default class MediaControl extends UIObject {
   }
 
   seekRelative(delta) {
-    if (!this.settings.seekEnabled) return
+    if (!this.settings.seekEnabled) {return}
     const currentTime = this.container.getCurrentTime()
     const duration = this.container.getDuration()
     let position = Math.min(Math.max(currentTime + delta, 0), duration)

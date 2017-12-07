@@ -45,7 +45,7 @@ export default class ContainerFactory extends BaseObject {
       resolvedSource = source.toString()
     }
 
-    if (resolvedSource.match(/^\/\//)) resolvedSource = window.location.protocol + resolvedSource
+    if (resolvedSource.match(/^\/\//)) {resolvedSource = window.location.protocol + resolvedSource}
 
     let options = $.extend({}, this.options, {
       src: resolvedSource,

@@ -50,7 +50,7 @@ export default class GoogleAnalytics extends ContainerPlugin {
     }
     _gaq.push([this.trackerName + '_setAccount', this.account])
     if (this.domainName)
-      _gaq.push([this.trackerName + '_setDomainName', this.domainName])
+    {_gaq.push([this.trackerName + '_setDomainName', this.domainName])}
   }
 
   onReady(){

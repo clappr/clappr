@@ -30,7 +30,7 @@ export default class ClickToPausePlugin extends ContainerPlugin {
 
   settingsUpdate() {
     const pointerEnabled = this.container.getPlaybackType() !== Playback.LIVE || this.container.isDvrEnabled()
-    if (pointerEnabled === this.pointerEnabled) return
+    if (pointerEnabled === this.pointerEnabled) {return}
 
     const method = pointerEnabled ? 'addClass' : 'removeClass'
     this.container.$el[method]('pointer-enabled')

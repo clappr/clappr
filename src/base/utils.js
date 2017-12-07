@@ -256,7 +256,7 @@ export class DomRecycler {
 
   static garbage($el) {
     // Expect Zepto collection with single element (does not iterate!)
-    if (!this.options.recycleVideo || $el[0].tagName.toUpperCase() !== 'VIDEO') return
+    if (!this.options.recycleVideo || $el[0].tagName.toUpperCase() !== 'VIDEO') {return}
     $el.children().remove()
     videoStack.push($el)
   }

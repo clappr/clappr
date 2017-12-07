@@ -9,6 +9,7 @@
  * See also : https://tc39.github.io/ecma262/#sec-array.prototype.find
  */
 if (!Array.prototype.find) {
+  // eslint-disable-next-line
   Object.defineProperty(Array.prototype, 'find', {
     // Note: ES6 arrow function syntax is not used on purpose to avoid this to be undefined
     value: function(predicate) {

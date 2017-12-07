@@ -32,11 +32,11 @@ export const getBrowserInfo = function(ua) {
     return { name: 'IE', version: parseInt(extra[1] || '') }
   } else if (parts[1] === 'Chrome') {
     extra = ua.match(/\bOPR\/(\d+)/)
-    if (extra != null) {
+    if (extra !== null) {
       return { name: 'Opera', version: parseInt(extra[1]) }
     }
     extra = ua.match(/\bEdge\/(\d+)/)
-    if (extra != null) {
+    if (extra !== null) {
       return { name: 'Edge', version: parseInt(extra[1]) }
     }
   } else if (/android/i.test(ua) && (extra = ua.match(/version\/(\d+)/i))) {

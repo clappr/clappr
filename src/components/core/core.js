@@ -133,8 +133,8 @@ export default class Core extends UIObject {
 
   enableResizeObserver() {
     const checkSizeCallback = () => {
-      if (this.playerInfo.computedSize.width != this.el.clientWidth ||
-          this.playerInfo.computedSize.height != this.el.clientHeight) {
+      if (this.playerInfo.computedSize.width !== this.el.clientWidth ||
+          this.playerInfo.computedSize.height !== this.el.clientHeight) {
         this.playerInfo.computedSize = { width: this.el.clientWidth, height: this.el.clientHeight }
         this.triggerResize(this.playerInfo.computedSize)
       }
@@ -153,7 +153,7 @@ export default class Core extends UIObject {
   }
 
   disableResizeObserver() {
-    if (this.resizeObserverInterval) clearInterval(this.resizeObserverInterval)
+    if (this.resizeObserverInterval) {clearInterval(this.resizeObserverInterval)}
   }
 
   resolveOnContainersReady(containers) {
@@ -206,7 +206,7 @@ export default class Core extends UIObject {
 
   handleWindowResize(event) {
     let orientation = ($(window).width() > $(window).height()) ? 'landscape' : 'portrait'
-    if (this._screenOrientation === orientation) return
+    if (this._screenOrientation === orientation) {return}
     this._screenOrientation = orientation
 
     this.trigger(Events.CORE_SCREEN_ORIENTATION_CHANGED, {
@@ -323,9 +323,9 @@ export default class Core extends UIObject {
     this.getCurrentContainer().trigger(showing?Events.CONTAINER_MEDIACONTROL_SHOW:Events.CONTAINER_MEDIACONTROL_HIDE)
 
     if (showing)
-      this.$el.removeClass('nocursor')
+    {this.$el.removeClass('nocursor')}
     else if (Fullscreen.isFullscreen())
-      this.$el.addClass('nocursor')
+    {this.$el.addClass('nocursor')}
   }
 
   /**

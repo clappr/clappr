@@ -38,7 +38,7 @@ export default class WaterMarkPlugin extends UIContainerPlugin {
 
   onPlay() {
     if (!this.hidden)
-      this.$el.show()
+    {this.$el.show()}
   }
 
   onStop() {

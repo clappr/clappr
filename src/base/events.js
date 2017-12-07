@@ -82,9 +82,10 @@ export default class Events {
    * @param {Object} context
    */
   once(name, callback, context) {
+    let once
     if (!eventsApi(this, 'once', name, [callback, context]) || !callback) {return this}
     const off = () => this.off(name, once)
-    const once = function() {
+    once = function() {
       off(name, once)
       callback.apply(this, arguments)
     }
@@ -172,7 +173,7 @@ export default class Events {
 
     if(property && !Events.Custom[property]) {
       Events.Custom[property] = property.toLowerCase().split('_').map(
-        (value, index) => index == 0 ? value : value = (value[0].toUpperCase() + value.slice(1))
+        (value, index) => index === 0 ? value : value = (value[0].toUpperCase() + value.slice(1))
       ).join('')
     } else {
       Log.error('Events', 'Error when register event: ' + eventName)
