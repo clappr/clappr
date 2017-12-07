@@ -5,7 +5,6 @@
 import {isNumber, Fullscreen, DomRecycler} from '../../base/utils'
 
 import Events from '../../base/events'
-import Styler from '../../base/styler'
 import UIObject from '../../base/ui_object'
 import Browser from '../../components/browser'
 import ContainerFactory from '../../components/container_factory'
@@ -15,7 +14,7 @@ import PlayerInfo from '../../components/player_info'
 
 import $ from 'clappr-zepto'
 
-import coreStyle from './public/style.scss'
+import './public/style.scss'
 
 /**
  * The Core is responsible to manage Containers, the mediator, MediaControl
@@ -355,9 +354,6 @@ export default class Core extends UIObject {
   }
 
   render() {
-    this.$style && this.$style.remove()
-    this.$style = Styler.getStyleFor(coreStyle, {baseUrl: this.options.baseUrl})
-    this.$el.append(this.$style)
     this.$el.append(this.mediaControl.render().el)
 
     this.options.width = this.options.width || this.$el.width()
