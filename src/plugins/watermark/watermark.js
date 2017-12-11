@@ -30,8 +30,7 @@ export default class WaterMarkPlugin extends UIContainerPlugin {
       this.imageUrl = this.options.watermark
       this.imageLink = this.options.watermarkLink
       this.render()
-    } else
-      this.$el.remove()
+    } else {this.$el.remove()}
 
   }
 
