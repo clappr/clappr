@@ -10,7 +10,7 @@ describe('Poster', function() {
     this.playback.getPlaybackType = function() {
       return Playback.VOD
     }
-    this.container = new Container({playback: this.playback})
+    this.container = new Container({ playback: this.playback })
     this.poster = new Poster(this.container)
     this.container.addPlugin(this.poster)
   })
@@ -72,7 +72,7 @@ describe('Poster', function() {
   })
 
   it('disables handling container:ended event as container:stop', function() {
-    this.container = new Container({playback: this.playback, poster: {showOnVideoEnd: false}})
+    this.container = new Container({ playback: this.playback, poster: { showOnVideoEnd: false } })
     this.poster = new Poster(this.container)
     this.container.addPlugin(this.poster)
     sinon.spy(this.container, 'disableMediaControl')
@@ -98,7 +98,7 @@ describe('Poster', function() {
   it('renders custom background', function() {
     this.container = new Container({
       playback: this.playback,
-      poster: {custom: 'linear-gradient(rgb(238, 238, 238), rgb(153, 153, 153))'}
+      poster: { custom: 'linear-gradient(rgb(238, 238, 238), rgb(153, 153, 153))' }
     })
     this.poster = new Poster(this.container)
     this.container.addPlugin(this.poster)

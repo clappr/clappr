@@ -6,7 +6,7 @@ describe('GoogleAnalytics', function() {
   describe('constructor without gaAccount', function() {
     it('no trackerName by default', function() {
       const fakePlayback = new FakePlayback()
-      const container = new Container({playback: fakePlayback})
+      const container = new Container({ playback: fakePlayback })
       const gaControl = new GoogleAnalytics(container)
 
       expect(gaControl.trackerName).to.not.exist
@@ -19,14 +19,14 @@ describe('GoogleAnalytics', function() {
     })
     it('trackerName equals to Clappr. by default', function() {
       const fakePlayback = new FakePlayback()
-      const container = new Container({playback: fakePlayback, gaAccount: 'UA-XXXXX-X'})
+      const container = new Container({ playback: fakePlayback, gaAccount: 'UA-XXXXX-X' })
       const gaControl = new GoogleAnalytics(container)
 
       expect(gaControl.trackerName).to.equal('Clappr.')
     })
     it('tracks data with Clappr. as trackerName', function() {
       const fakePlayback = new FakePlayback()
-      const container = new Container({playback: fakePlayback, gaAccount: 'UA-XXXXX-X'})
+      const container = new Container({ playback: fakePlayback, gaAccount: 'UA-XXXXX-X' })
       const gaControl = new GoogleAnalytics(container)
 
       gaControl.push(['Video', 'Play', 'video.mp4'])
@@ -45,7 +45,7 @@ describe('GoogleAnalytics', function() {
     })
     it('trackerName equals to gaTrackerName parameter', function() {
       const fakePlayback = new FakePlayback()
-      const options = {playback: fakePlayback, gaAccount: 'UA-XXXXX-X', gaTrackerName: 'MyPlayerInstance', gaDomainName: 'some.domain.com'}
+      const options = { playback: fakePlayback, gaAccount: 'UA-XXXXX-X', gaTrackerName: 'MyPlayerInstance', gaDomainName: 'some.domain.com' }
       const container = new Container(options)
       const gaControl = new GoogleAnalytics(container)
 
@@ -53,7 +53,7 @@ describe('GoogleAnalytics', function() {
     })
     it('sets the account to gaAccount value', function() {
       const fakePlayback = new FakePlayback()
-      const options = {playback: fakePlayback, gaAccount: 'UA-XXXXX-X', gaTrackerName: 'MyPlayerInstance', gaDomainName: 'some.domain.com'}
+      const options = { playback: fakePlayback, gaAccount: 'UA-XXXXX-X', gaTrackerName: 'MyPlayerInstance', gaDomainName: 'some.domain.com' }
       const container = new Container(options)
       const gaControl = new GoogleAnalytics(container) // eslint-disable-line no-unused-vars
 
@@ -62,7 +62,7 @@ describe('GoogleAnalytics', function() {
     })
     it('sets the domain name to gaDomainName value', function() {
       const fakePlayback = new FakePlayback()
-      const options = {playback: fakePlayback, gaAccount: 'UA-XXXXX-X', gaTrackerName: 'MyPlayerInstance', gaDomainName: 'some.domain.com'}
+      const options = { playback: fakePlayback, gaAccount: 'UA-XXXXX-X', gaTrackerName: 'MyPlayerInstance', gaDomainName: 'some.domain.com' }
       const container = new Container(options)
       const gaControl = new GoogleAnalytics(container) // eslint-disable-line no-unused-vars
 
@@ -71,7 +71,7 @@ describe('GoogleAnalytics', function() {
     })
     it('tracks data with gaTrackerName parameter as trackerName', function() {
       const fakePlayback = new FakePlayback()
-      const options = {playback: fakePlayback, gaAccount: 'UA-XXXXX-X', gaTrackerName: 'MyPlayerInstance', gaDomainName: 'some.domain.com'}
+      const options = { playback: fakePlayback, gaAccount: 'UA-XXXXX-X', gaTrackerName: 'MyPlayerInstance', gaDomainName: 'some.domain.com' }
       const container = new Container(options)
       const gaControl = new GoogleAnalytics(container)
       gaControl.push(['Video', 'Play', 'video.mp4'])

@@ -26,9 +26,9 @@ export default class GoogleAnalytics extends ContainerPlugin {
       script.setAttribute('src', '//www.google-analytics.com/ga.js')
       script.onload = () => this.addEventListeners()
       document.body.appendChild(script)
-    } else {
+    } else
       this.addEventListeners()
-    }
+
   }
 
   addEventListeners() {
@@ -90,9 +90,9 @@ export default class GoogleAnalytics extends ContainerPlugin {
   }
 
   onPlaybackChanged(playbackState) {
-    if (playbackState.type !== null) {
+    if (playbackState.type !== null)
       this.push(['Video', 'Playback Type - ' + playbackState.type, this.container.playback.src])
-    }
+
   }
 
   onDVR(dvrInUse) {

@@ -30,9 +30,9 @@ export default class WaterMarkPlugin extends UIContainerPlugin {
       this.imageUrl = this.options.watermark
       this.imageLink = this.options.watermarkLink
       this.render()
-    } else {
+    } else
       this.$el.remove()
-    }
+
   }
 
   onPlay() {
@@ -46,7 +46,7 @@ export default class WaterMarkPlugin extends UIContainerPlugin {
 
   render() {
     this.$el.hide()
-    const templateOptions = {position: this.position, imageUrl: this.imageUrl, imageLink: this.imageLink}
+    const templateOptions = { position: this.position, imageUrl: this.imageUrl, imageLink: this.imageLink }
     this.$el.html(this.template(templateOptions))
     this.container.$el.append(this.$el)
     return this

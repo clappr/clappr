@@ -92,9 +92,9 @@ export default class PosterPlugin extends UIContainerPlugin {
   }
 
   update() {
-    if (!this.shouldRender) {
+    if (!this.shouldRender)
       return
-    }
+
     let showPlayButton = !this.playRequested  && !this.hasStartedPlaying && !this.container.buffering
     this.showPlayButton(showPlayButton)
     if (!this.hasStartedPlaying) {
@@ -102,26 +102,26 @@ export default class PosterPlugin extends UIContainerPlugin {
       this.$el.show()
     } else {
       this.container.enableMediaControl()
-      if (this.shouldHideOnPlay()) {
+      if (this.shouldHideOnPlay())
         this.$el.hide()
-      }
+
     }
   }
 
   render() {
-    if (!this.shouldRender) {
+    if (!this.shouldRender)
       return
-    }
+
     this.$el.html(this.template())
 
-    const isRegularPoster = this.options.poster && this.options.poster.custom == undefined
+    const isRegularPoster = this.options.poster && this.options.poster.custom === undefined
 
     if (isRegularPoster) {
       const posterUrl = this.options.poster.url || this.options.poster
-      this.$el.css({'background-image': 'url(' + posterUrl + ')'})
-    } else if (this.options.poster) {
-      this.$el.css({'background': this.options.poster.custom})
-    }
+      this.$el.css({ 'background-image': 'url(' + posterUrl + ')' })
+    } else if (this.options.poster)
+      this.$el.css({ 'background': this.options.poster.custom })
+
     this.container.$el.append(this.el)
     this.$playWrapper = this.$el.find('.play-wrapper')
     this.$playWrapper.append(playIcon)
@@ -130,9 +130,9 @@ export default class PosterPlugin extends UIContainerPlugin {
     this.$playButton.attr('data-poster', '')
 
     let buttonsColor = this.options.mediacontrol && this.options.mediacontrol.buttons
-    if (buttonsColor) {
+    if (buttonsColor)
       this.$el.find('svg path').css('fill', buttonsColor)
-    }
+
 
     if (this.options.mediacontrol && this.options.mediacontrol.buttons) {
       buttonsColor = this.options.mediacontrol.buttons
