@@ -113,7 +113,7 @@ package
       _triggerEvent('statechanged');
     }
     private function isBuffering(code:String):Boolean {
-      return Boolean(code == "NetStream.Buffer.Empty" && playbackState !== "ENDED" ||
+      return Boolean(code == "NetStream.Buffer.Empty" && playbackState != "ENDED" ||
                      code == "NetStream.SeekStart.Notify" ||
                      code == "NetStream.Play.Start");
     }
