@@ -90,7 +90,7 @@ export default class MediaControl extends UIObject {
       if (!$.isEmptyObject(this.container.settings))
         this.settings = $.extend({}, this.container.settings)
 
-    } else {this.settings = {}}
+    } else this.settings = {}
 
 
     this.userDisabled = false
@@ -337,7 +337,7 @@ export default class MediaControl extends UIObject {
       this.listenToOnce(this, Events.MEDIACONTROL_CONTAINERCHANGED, () => {
         setWhenContainerReady()
       })
-    } else {setWhenContainerReady()}
+    } else setWhenContainerReady()
 
   }
 

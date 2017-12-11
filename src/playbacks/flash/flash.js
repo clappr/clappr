@@ -142,7 +142,7 @@ export default class Flash extends BaseFlashPlayback {
       this.el.playerPlay(this._src)
       this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this._checkInitialSeek())
       this._currentState = 'PLAYING'
-    } else {this.listenToOnce(this, Events.PLAYBACK_READY, this._firstPlay)}
+    } else this.listenToOnce(this, Events.PLAYBACK_READY, this._firstPlay)
 
   }
 
@@ -201,7 +201,7 @@ export default class Flash extends BaseFlashPlayback {
     if (this.el.getDuration() > 0) {
       let seekSeconds = this.el.getDuration() * (percentage / 100)
       this.seek(seekSeconds)
-    } else {this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this.seekPercentage(percentage))}
+    } else this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this.seekPercentage(percentage))
 
   }
 
@@ -212,7 +212,7 @@ export default class Flash extends BaseFlashPlayback {
       if (this._currentState === 'PAUSED')
         this.el.playerPause()
 
-    } else {this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this.seek(time))}
+    } else this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this.seek(time))
 
   }
 

@@ -67,7 +67,7 @@ export default class StatsPlugin extends ContainerPlugin {
       this.firstPlay = false
       this.startupTime = Date.now() - this.startupTimeInit
       this.watchingTimeInit = Date.now()
-    } else if (this.rebufferingTimeInit) {this.rebufferingTime += this.getRebufferingTime()}
+    } else if (this.rebufferingTimeInit) this.rebufferingTime += this.getRebufferingTime()
 
     this.rebufferingTimeInit = undefined
     this.state = 'PLAYING'
