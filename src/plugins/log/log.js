@@ -34,7 +34,9 @@ export default class Log {
   error(klass) {this.log(klass, LEVEL_ERROR, Array.prototype.slice.call(arguments, 1))}
 
   onOff() {
-    if (this.level === this.offLevel) {this.level = this.previousLevel} else {
+    if (this.level === this.offLevel)
+      this.level = this.previousLevel
+    else {
       this.previousLevel = this.level
       this.level = this.offLevel
     }
