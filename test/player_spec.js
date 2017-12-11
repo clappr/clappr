@@ -5,9 +5,9 @@ describe('Player', function() {
   describe('constructor', function() {
 
     it('has unique sequential id', function() {
-      const player1 = new Player({source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest'})
-      const player2 = new Player({source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest'})
-      const player3 = new Player({source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest'})
+      const player1 = new Player({ source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest' })
+      const player2 = new Player({ source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest' })
+      const player3 = new Player({ source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest' })
 
       const p1Id = player1.options.playerId
       const p2Id = player2.options.playerId
@@ -18,44 +18,44 @@ describe('Player', function() {
     })
 
     it('uses the baseUrl passed from initialization', function() {
-      const player = new Player({source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest'})
+      const player = new Player({ source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest' })
       expect(player.options.baseUrl).to.be.equal('http://cdn.clappr.io/latest')
     })
 
     it('persists config by default', function() {
-      const player = new Player({source: '/playlist.m3u8'})
+      const player = new Player({ source: '/playlist.m3u8' })
       expect(player.options.persistConfig).to.be.equal(true)
     })
 
     it('can set persists config', function() {
-      const player = new Player({source: '/playlist.m3u8', persistConfig: false})
+      const player = new Player({ source: '/playlist.m3u8', persistConfig: false })
       expect(player.options.persistConfig).to.be.equal(false)
     })
 
     it('gets plugins by name', function() {
-      const player = new Player({source: '/playlist.m3u8', persistConfig: false})
-      const plugin = {name: 'fake'}
-      player.core = {plugins: [plugin], mediaControl: {container: {plugins: []}}}
+      const player = new Player({ source: '/playlist.m3u8', persistConfig: false })
+      const plugin = { name: 'fake' }
+      player.core = { plugins: [plugin], mediaControl: { container: { plugins: [] } } }
       assert.equal(plugin, player.getPlugin('fake'))
     })
 
     it('should normalize sources', function() {
-      const player = new Player({source: '/playlist.m3u8', persistConfig: false})
-      let normalizedSources = player._normalizeSources({sources: ['http://test.mp4']})
+      const player = new Player({ source: '/playlist.m3u8', persistConfig: false })
+      let normalizedSources = player._normalizeSources({ sources: ['http://test.mp4'] })
       expect(normalizedSources).to.have.length(1)
       expect(normalizedSources[0]).to.be.equal('http://test.mp4')
 
-      normalizedSources = player._normalizeSources({source: 'http://test.mp4'})
+      normalizedSources = player._normalizeSources({ source: 'http://test.mp4' })
       expect(normalizedSources).to.have.length(1)
       expect(normalizedSources[0]).to.be.equal('http://test.mp4')
 
-      normalizedSources = player._normalizeSources({sources: []})
+      normalizedSources = player._normalizeSources({ sources: [] })
       expect(normalizedSources).to.have.length(1)
-      expect(JSON.stringify(normalizedSources[0])).to.be.equal(JSON.stringify({source: '', mimeType: ''}))
+      expect(JSON.stringify(normalizedSources[0])).to.be.equal(JSON.stringify({ source: '', mimeType: '' }))
     })
 
     it('should trigger error events', function() {
-      const player = new Player({source: '/video.mp4', persistConfig: false})
+      const player = new Player({ source: '/video.mp4', persistConfig: false })
       const element = document.createElement('div')
       const onError = sinon.spy()
       player.on(Events.PLAYER_ERROR, onError)

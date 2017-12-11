@@ -21,9 +21,9 @@ export function extend(parent, properties) {
   class Surrogate extends parent {
     constructor(...args) {
       super(...args)
-      if (properties.initialize) {
+      if (properties.initialize)
         properties.initialize.apply(this, args)
-      }
+
     }
   }
   assign(Surrogate.prototype, properties)
@@ -31,9 +31,9 @@ export function extend(parent, properties) {
 }
 
 export function formatTime(time, paddedHours) {
-  if (!isFinite(time)) {
+  if (!isFinite(time))
     return '--:--'
-  }
+
   time = time * 1000
   time = parseInt(time/1000)
   const seconds = time % 60
@@ -45,9 +45,9 @@ export function formatTime(time, paddedHours) {
   let out = ''
   if (days && days > 0) {
     out += days + ':'
-    if (hours < 1) {out += '00:'}
+    if (hours < 1) out += '00:'
   }
-  if (hours && hours > 0 || paddedHours) {out += ('0' + hours).slice(-2) + ':'}
+  if (hours && hours > 0 || paddedHours) out += ('0' + hours).slice(-2) + ':'
   out += ('0' + minutes).slice(-2) + ':'
   out += ('0' + seconds).slice(-2)
   return out.trim()
@@ -63,32 +63,32 @@ export const Fullscreen = {
     )
   },
   requestFullscreen: function(el) {
-    if(el.requestFullscreen) {
+    if(el.requestFullscreen)
       el.requestFullscreen()
-    } else if(el.webkitRequestFullscreen) {
+    else if(el.webkitRequestFullscreen)
       el.webkitRequestFullscreen()
-    } else if(el.mozRequestFullScreen) {
+    else if(el.mozRequestFullScreen)
       el.mozRequestFullScreen()
-    } else if(el.msRequestFullscreen) {
+    else if(el.msRequestFullscreen)
       el.msRequestFullscreen()
-    } else if (el.querySelector && el.querySelector('video') && el.querySelector('video').webkitEnterFullScreen) {
+    else if (el.querySelector && el.querySelector('video') && el.querySelector('video').webkitEnterFullScreen)
       el.querySelector('video').webkitEnterFullScreen()
-    } else if (el.webkitEnterFullScreen) {
+    else if (el.webkitEnterFullScreen)
       el.webkitEnterFullScreen()
-    }
+
   },
   cancelFullscreen: function(el=document) {
-    if(el.exitFullscreen) {
+    if(el.exitFullscreen)
       el.exitFullscreen()
-    } else if(el.webkitCancelFullScreen) {
+    else if(el.webkitCancelFullScreen)
       el.webkitCancelFullScreen()
-    } else if(el.webkitExitFullscreen) {
+    else if(el.webkitExitFullscreen)
       el.webkitExitFullscreen()
-    } else if(el.mozCancelFullScreen) {
+    else if(el.mozCancelFullScreen)
       el.mozCancelFullScreen()
-    } else if(el.msExitFullscreen) {
+    else if(el.msExitFullscreen)
       el.msExitFullscreen()
-    }
+
   },
   fullscreenEnabled: function() {
     return !!(
@@ -124,9 +124,9 @@ export class Config {
   }
 
   static restore(key) {
-    if (Browser.hasLocalstorage && localStorage[this._createKeyspace(key)]){
+    if (Browser.hasLocalstorage && localStorage[this._createKeyspace(key)])
       return this._defaultConfig()[key].parse(localStorage[this._createKeyspace(key)])
-    }
+
     return this._defaultValueFor(key)
   }
 
@@ -179,7 +179,7 @@ export function seekStringToSeconds(paramName = 't') {
   const seekString = QueryString.params[paramName] || QueryString.hashParams[paramName] || ''
   const parts = seekString.match(/[0-9]+[hms]+/g) || []
   if (parts.length > 0) {
-    const factor = {'h': 3600, 'm': 60, 's': 1}
+    const factor = { 'h': 3600, 'm': 60, 's': 1 }
     parts.forEach(function(el) {
       if (el) {
         const suffix = el[el.length - 1]
@@ -187,9 +187,9 @@ export function seekStringToSeconds(paramName = 't') {
         seconds += time * (factor[suffix])
       }
     })
-  } else if (seekString) {
+  } else if (seekString)
     seconds = parseInt(seekString, 10)
-  }
+
   return seconds
 }
 
@@ -225,18 +225,18 @@ export function getBrowserLanguage() {
 }
 
 export function now() {
-  if (window.performance && window.performance.now) {
+  if (window.performance && window.performance.now)
     return performance.now()
-  }
+
   return Date.now()
 }
 
 // remove the item from the array if it exists in the array
 export function removeArrayItem(arr, item) {
   const i = arr.indexOf(item)
-  if (i >= 0) {
+  if (i >= 0)
     arr.splice(i, 1)
-  }
+
 }
 
 // Simple Zepto element factory with video recycle feature.
@@ -248,9 +248,9 @@ export class DomRecycler {
   }
 
   static create(name) {
-    if (this.options.recycleVideo && name === 'video' && videoStack.length > 0) {
+    if (this.options.recycleVideo && name === 'video' && videoStack.length > 0)
       return videoStack.shift()
-    }
+
     return $('<' + name + '>')
   }
 

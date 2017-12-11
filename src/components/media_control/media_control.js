@@ -6,8 +6,8 @@
  * The MediaControl is responsible for displaying the Player controls.
  */
 
-import {Config, Fullscreen, formatTime, extend, removeArrayItem} from '../../base/utils'
-import {Kibo} from '../../vendor'
+import { Config, Fullscreen, formatTime, extend, removeArrayItem } from '../../base/utils'
+import { Kibo } from '../../vendor'
 
 import Events from '../../base/events'
 import UIObject from '../../base/ui_object'
@@ -87,17 +87,17 @@ export default class MediaControl extends UIObject {
     }
 
     if (this.container) {
-      if (!$.isEmptyObject(this.container.settings)) {
+      if (!$.isEmptyObject(this.container.settings))
         this.settings = $.extend({}, this.container.settings)
-      }
-    } else {
+
+    } else
       this.settings = {}
-    }
+
 
     this.userDisabled = false
-    if ((this.container && this.container.mediaControlDisabled) || this.options.chromeless) {
+    if ((this.container && this.container.mediaControlDisabled) || this.options.chromeless)
       this.disable()
-    }
+
     this.stopDragHandler = (event) => this.stopDrag(event)
     this.updateDragHandler = (event) => this.updateDrag(event)
     $(document).bind('mouseup', this.stopDragHandler)
@@ -185,9 +185,9 @@ export default class MediaControl extends UIObject {
     this.$volumeBarContainer.find('.segmented-bar-element').slice(0, item).addClass('fill')
     this.$volumeIcon.html('')
     this.$volumeIcon.removeClass('muted')
-    if (!this.muted) {
+    if (!this.muted)
       this.$volumeIcon.append(volumeIcon)
-    } else {
+    else {
       this.$volumeIcon.append(volumeMuteIcon)
       this.$volumeIcon.addClass('muted')
     }
@@ -205,9 +205,9 @@ export default class MediaControl extends UIObject {
       this.$playPauseToggle.append(playIcon)
       this.$playStopToggle.append(playIcon)
       this.trigger(Events.MEDIACONTROL_NOTPLAYING)
-      if (Browser.isMobile) {
+      if (Browser.isMobile)
         this.show()
-      }
+
     }
     this.applyButtonStyle(this.$playPauseToggle)
     this.applyButtonStyle(this.$playStopToggle)
@@ -216,7 +216,7 @@ export default class MediaControl extends UIObject {
   mousemoveOnSeekBar(event) {
     if (this.settings.seekEnabled) {
       const offsetX = event.pageX - this.$seekBarContainer.offset().left - (this.$seekBarHover.width() / 2)
-      this.$seekBarHover.css({left: offsetX})
+      this.$seekBarHover.css({ left: offsetX })
     }
     this.trigger(Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR, event)
   }
@@ -230,40 +230,40 @@ export default class MediaControl extends UIObject {
   }
 
   mousemoveOnVolumeBar(event) {
-    if(this.draggingVolumeBar) {
+    if(this.draggingVolumeBar)
       this.setVolume(this.getVolumeFromUIEvent(event))
-    }
+
   }
 
   playerResize(size) {
     this.$fullscreenToggle.html('')
-    if (Fullscreen.isFullscreen()) {
+    if (Fullscreen.isFullscreen())
       this.$fullscreenToggle.append(exitFullscreenIcon)
-    } else {
+    else
       this.$fullscreenToggle.append(fullscreenIcon)
-    }
+
     this.applyButtonStyle(this.$fullscreenToggle)
     this.$el.removeClass('w320')
-    if (size.width <= 320 || this.options.hideVolumeBar) {
+    if (size.width <= 320 || this.options.hideVolumeBar)
       this.$el.addClass('w320')
-    }
+
   }
 
   togglePlayPause() {
-    if (this.container.isPlaying()) {
+    if (this.container.isPlaying())
       this.container.pause()
-    } else {
+    else
       this.container.play()
-    }
+
     return false
   }
 
   togglePlayStop() {
-    if (this.container.isPlaying()) {
+    if (this.container.isPlaying())
       this.container.stop()
-    } else {
+    else
       this.container.play()
-    }
+
   }
 
   startSeekDrag(event) {
@@ -273,23 +273,23 @@ export default class MediaControl extends UIObject {
     this.$seekBarLoaded.addClass('media-control-notransition')
     this.$seekBarPosition.addClass('media-control-notransition')
     this.$seekBarScrubber.addClass('media-control-notransition')
-    if (event) {
+    if (event)
       event.preventDefault()
-    }
+
   }
 
   startVolumeDrag(event) {
     this.draggingVolumeBar = true
     this.$el.addClass('dragging')
-    if (event) {
+    if (event)
       event.preventDefault()
-    }
+
   }
 
   stopDrag(event) {
-    if (this.draggingSeekBar) {
+    if (this.draggingSeekBar)
       this.seek(event)
-    }
+
     this.$el.removeClass('dragging')
     this.$seekBarLoaded.removeClass('media-control-notransition')
     this.$seekBarPosition.removeClass('media-control-notransition')
@@ -329,9 +329,9 @@ export default class MediaControl extends UIObject {
     this.intendedVolume = value
     this.persistConfig && Config.persist('volume', value)
     const setWhenContainerReady = () => {
-      if (this.container.isReady) {
+      if (this.container.isReady)
         this.container.setVolume(value)
-      } else {
+      else {
         this.listenToOnce(this.container, Events.CONTAINER_READY, () => {
           this.container.setVolume(value)
         })
@@ -342,9 +342,9 @@ export default class MediaControl extends UIObject {
       this.listenToOnce(this, Events.MEDIACONTROL_CONTAINERCHANGED, () => {
         setWhenContainerReady()
       })
-    } else {
+    } else
       setWhenContainerReady()
-    }
+
   }
 
   toggleFullscreen() {
@@ -366,27 +366,27 @@ export default class MediaControl extends UIObject {
     this.addEventListeners()
     this.settingsUpdate()
     this.container.trigger(Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.container.isDvrInUse())
-    if (this.container.mediaControlDisabled) {
+    if (this.container.mediaControlDisabled)
       this.disable()
-    }
+
     this.trigger(Events.MEDIACONTROL_CONTAINERCHANGED)
   }
 
   showVolumeBar() {
-    if (this.hideVolumeId) {
+    if (this.hideVolumeId)
       clearTimeout(this.hideVolumeId)
-    }
+
     this.$volumeBarContainer.removeClass('volume-bar-hide')
   }
 
   hideVolumeBar(timeout = 400) {
     if (!this.$volumeBarContainer) return
-    if (this.draggingVolumeBar) {
+    if (this.draggingVolumeBar)
       this.hideVolumeId = setTimeout(() => this.hideVolumeBar(), timeout)
-    } else {
-      if (this.hideVolumeId) {
+    else {
+      if (this.hideVolumeId)
         clearTimeout(this.hideVolumeId)
-      }
+
       this.hideVolumeId = setTimeout(() => this.$volumeBarContainer.addClass('volume-bar-hide'), timeout)
     }
   }
@@ -419,9 +419,9 @@ export default class MediaControl extends UIObject {
 
     // default to 100%
     this.currentSeekBarPercentage = 100
-    if (this.container.getPlaybackType() !== Playback.LIVE || this.container.isDvrInUse()) {
+    if (this.container.getPlaybackType() !== Playback.LIVE || this.container.isDvrInUse())
       this.currentSeekBarPercentage = (this.currentPositionValue / this.currentDurationValue) * 100
-    }
+
     this.setSeekPercentage(this.currentSeekBarPercentage)
 
     const newPosition = formatTime(this.currentPositionValue)
@@ -467,9 +467,9 @@ export default class MediaControl extends UIObject {
   }
 
   show(event) {
-    if (this.disabled) {
+    if (this.disabled)
       return
-    }
+
     const timeout = 2000
     if (!event || (event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY) || navigator.userAgent.match(/firefox/i)) {
       clearTimeout(this.hideId)
@@ -485,17 +485,17 @@ export default class MediaControl extends UIObject {
   }
 
   hide(delay = 0) {
-    if (!this.isVisible() || (Browser.isMobile && !this.container.isPlaying())) {
+    if (!this.isVisible() || (Browser.isMobile && !this.container.isPlaying()))
       return
-    }
+
     const timeout = delay || 2000
     clearTimeout(this.hideId)
-    if (!this.disabled && this.options.hideMediaControl === false) {
+    if (!this.disabled && this.options.hideMediaControl === false)
       return
-    }
-    if (!this.disabled && (delay || this.userKeepVisible || this.keepVisible || this.draggingSeekBar || this.draggingVolumeBar)) {
+
+    if (!this.disabled && (delay || this.userKeepVisible || this.keepVisible || this.draggingSeekBar || this.draggingVolumeBar))
       this.hideId = setTimeout(() => this.hide(), timeout)
-    } else {
+    else {
       this.trigger(Events.MEDIACONTROL_HIDE, this.name)
       this.$el.addClass('media-control-hide')
       this.hideVolumeBar(0)
@@ -636,9 +636,9 @@ export default class MediaControl extends UIObject {
   }
 
   applyButtonStyle(element) {
-    if (this.buttonsColor && element) {
+    if (this.buttonsColor && element)
       $(element).find('svg path').css('fill', this.buttonsColor)
-    }
+
   }
 
   destroy() {
@@ -657,38 +657,38 @@ export default class MediaControl extends UIObject {
 
     this.changeTogglePlay()
     this.hideId = setTimeout(() => this.hide(), timeout)
-    if (this.disabled) {
+    if (this.disabled)
       this.hide()
-    }
+
 
     // Video volume cannot be changed with Safari on mobile devices
     // Display mute/unmute icon only if Safari version >= 10
     if(Browser.isSafari && Browser.isMobile) {
-      if (Browser.version < 10) {
+      if (Browser.version < 10)
         this.$volumeContainer.css('display','none')
-      } else {
+      else
         this.$volumeBarContainer.css('display','none')
-      }
+
     }
 
     this.$seekBarPosition.addClass('media-control-notransition')
     this.$seekBarScrubber.addClass('media-control-notransition')
 
     let previousSeekPercentage = 0
-    if (this.displayedSeekBarPercentage) {
+    if (this.displayedSeekBarPercentage)
       previousSeekPercentage = this.displayedSeekBarPercentage
-    }
+
     this.displayedSeekBarPercentage = null
     this.setSeekPercentage(previousSeekPercentage)
 
     process.nextTick(() => {
-      if (!this.settings.seekEnabled) {
+      if (!this.settings.seekEnabled)
         this.$seekBarContainer.addClass('seek-disabled')
-      }
-      if (!Browser.isMobile && !this.options.disableKeyboardShortcuts) {
+
+      if (!Browser.isMobile && !this.options.disableKeyboardShortcuts)
         this.bindKeyEvents()
-      }
-      this.playerResize({width: this.options.width, height: this.options.height})
+
+      this.playerResize({ width: this.options.width, height: this.options.height })
       this.hideVolumeBar(0)
     })
 

@@ -18,15 +18,15 @@ const AUTO = -1
 
 export default class FlasHLS extends BaseFlashPlayback {
   get name() { return 'flashls' }
-  get swfPath() { return template(hlsSwf)({baseUrl: this._baseUrl}) }
+  get swfPath() { return template(hlsSwf)({ baseUrl: this._baseUrl }) }
 
   get levels() { return this._levels || [] }
   get currentLevel() {
-    if (this._currentLevel === null || this._currentLevel === undefined) {
+    if (this._currentLevel === null || this._currentLevel === undefined)
       return AUTO
-    } else {
+    else
       return this._currentLevel //0 is a valid level ID
-    }
+
   }
   set currentLevel(id) {
     this._currentLevel = id
@@ -145,17 +145,17 @@ export default class FlasHLS extends BaseFlashPlayback {
       this._currentState = 'IDLE'
       this._setFlashSettings()
       this._updatePlaybackType()
-      if (this._autoPlay || this._shouldPlayOnManifestLoaded) {
+      if (this._autoPlay || this._shouldPlayOnManifestLoaded)
         this.play()
-      }
+
       this.trigger(Events.PLAYBACK_READY, this.name)
     } else {
       this._bootstrapAttempts = this._bootstrapAttempts || 0
-      if (++this._bootstrapAttempts <= MAX_ATTEMPTS) {
+      if (++this._bootstrapAttempts <= MAX_ATTEMPTS)
         setTimeout(() => this._bootstrap(), 50)
-      } else {
-        this.trigger(Events.PLAYBACK_ERROR, {message: 'Max number of attempts reached'}, this.name)
-      }
+      else
+        this.trigger(Events.PLAYBACK_ERROR, { message: 'Max number of attempts reached' }, this.name)
+
     }
   }
 
@@ -398,9 +398,9 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   _updateTime(timeMetrics) {
-    if (this._currentState === 'IDLE') {
+    if (this._currentState === 'IDLE')
       return
-    }
+
 
     const duration = this._normalizeDuration(timeMetrics.duration)
     let position = Math.min(Math.max(timeMetrics.position, 0), duration)
@@ -408,31 +408,31 @@ export default class FlasHLS extends BaseFlashPlayback {
     const livePlayback = (this._playbackType === Playback.LIVE)
     this._dvrEnabled = (livePlayback && duration > this._hlsMinimumDvrSize)
 
-    if (duration === 100 || livePlayback === undefined) {
+    if (duration === 100 || livePlayback === undefined)
       return
-    }
+
 
     if (this._dvrEnabled !== previousDVRStatus) {
       this._updateSettings()
       this.trigger(Events.PLAYBACK_SETTINGSUPDATE, this.name)
     }
 
-    if (livePlayback && (!this._dvrEnabled || !this._dvrInUse)) {
+    if (livePlayback && (!this._dvrEnabled || !this._dvrInUse))
       position = duration
-    }
 
-    this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: position, total: duration}, this.name)
+
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, { current: position, total: duration }, this.name)
   }
 
   play() {
     this.trigger(Events.PLAYBACK_PLAY_INTENT)
-    if(this._currentState === 'PAUSED') {
+    if(this._currentState === 'PAUSED')
       this.el.playerResume()
-    } else if (!this._srcLoaded && this._currentState !== 'PLAYING') {
+    else if (!this._srcLoaded && this._currentState !== 'PLAYING')
       this._firstPlay()
-    } else {
+    else
       this.el.playerPlay()
-    }
+
   }
 
   getPlaybackType() {
@@ -486,7 +486,7 @@ export default class FlasHLS extends BaseFlashPlayback {
       } else {
         this._updateCurrentState(state)
         this._hasEnded = true
-        this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: 0, total: this.getDuration()}, this.name)
+        this.trigger(Events.PLAYBACK_TIMEUPDATE, { current: 0, total: this.getDuration() }, this.name)
         this.trigger(Events.PLAYBACK_ENDED, this.name)
       }
     }
@@ -494,34 +494,34 @@ export default class FlasHLS extends BaseFlashPlayback {
 
   _updateCurrentState(state) {
     this._currentState = state
-    if (state !== 'IDLE') {
+    if (state !== 'IDLE')
       this._hasEnded = false
-    }
+
     this._updatePlaybackType()
-    if (state === 'PLAYING') {
+    if (state === 'PLAYING')
       this.trigger(Events.PLAYBACK_PLAY, this.name)
-    } else if (state === 'PAUSED') {
+    else if (state === 'PAUSED')
       this.trigger(Events.PLAYBACK_PAUSE, this.name)
-    }
+
   }
 
   _updatePlaybackType() {
     this._playbackType = this.el.getType()
     if (this._playbackType) {
       this._playbackType = this._playbackType.toLowerCase()
-      if (this._playbackType === Playback.VOD) {
+      if (this._playbackType === Playback.VOD)
         this._startReportingProgress()
-      } else {
+      else
         this._stopReportingProgress()
-      }
+
     }
-    this.trigger(Events.PLAYBACK_PLAYBACKSTATE, {type: this._playbackType})
+    this.trigger(Events.PLAYBACK_PLAYBACKSTATE, { type: this._playbackType })
   }
 
   _startReportingProgress() {
-    if (!this._reportingProgress) {
+    if (!this._reportingProgress)
       this._reportingProgress = true
-    }
+
   }
 
   _stopReportingProgress() {
@@ -555,19 +555,19 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   volume(value) {
-    if (this.isReady) {
+    if (this.isReady)
       this.el.playerVolume(value)
-    } else {
+    else
       this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this.volume(value))
-    }
+
   }
 
   pause() {
     if (this._playbackType !== Playback.LIVE || this._dvrEnabled) {
       this.el.playerPause()
-      if (this._playbackType === Playback.LIVE && this._dvrEnabled) {
+      if (this._playbackType === Playback.LIVE && this._dvrEnabled)
         this._updateDvr(true)
-      }
+
     }
   }
 
@@ -575,13 +575,13 @@ export default class FlasHLS extends BaseFlashPlayback {
     this._srcLoaded = false
     this.el.playerStop()
     this.trigger(Events.PLAYBACK_STOP)
-    this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: 0, total: 0}, this.name)
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, { current: 0, total: 0 }, this.name)
   }
 
   isPlaying() {
-    if (this._currentState) {
+    if (this._currentState)
       return !!(this._currentState.match(/playing/i))
-    }
+
     return false
   }
 
@@ -604,9 +604,9 @@ export default class FlasHLS extends BaseFlashPlayback {
   seekPercentage(percentage) {
     const duration = this.el.getDuration()
     let time = 0
-    if (percentage > 0) {
+    if (percentage > 0)
       time = duration * percentage / 100
-    }
+
     this.seek(time)
   }
 
@@ -618,7 +618,7 @@ export default class FlasHLS extends BaseFlashPlayback {
       this._updateDvr(dvrInUse)
     }
     this.el.playerSeek(time)
-    this.trigger(Events.PLAYBACK_TIMEUPDATE, {current: time, total: duration}, this.name)
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, { current: time, total: duration }, this.name)
   }
 
   _updateDvr(dvrInUse) {
@@ -627,12 +627,12 @@ export default class FlasHLS extends BaseFlashPlayback {
     if (this._dvrInUse !== previousDvrInUse) {
       this._updateSettings()
       this.trigger(Events.PLAYBACK_DVR, this._dvrInUse)
-      this.trigger(Events.PLAYBACK_STATS_ADD, {'dvr': this._dvrInUse})
+      this.trigger(Events.PLAYBACK_STATS_ADD, { 'dvr': this._dvrInUse })
     }
   }
 
   _flashPlaybackError(code, url, message) {
-    this.trigger(Events.PLAYBACK_ERROR, {code: code, url: url, message: message})
+    this.trigger(Events.PLAYBACK_ERROR, { code: code, url: url, message: message })
     this.trigger(Events.PLAYBACK_STOP)
   }
 
@@ -647,7 +647,7 @@ export default class FlasHLS extends BaseFlashPlayback {
     }
 
     this._fillLevels()
-    this.trigger(Events.PLAYBACK_LOADEDMETADATA, {duration: duration, data: loadmetrics})
+    this.trigger(Events.PLAYBACK_LOADEDMETADATA, { duration: duration, data: loadmetrics })
   }
 
   _fillLevels() {
@@ -655,9 +655,9 @@ export default class FlasHLS extends BaseFlashPlayback {
     const levelsLength = levels.length
     this._levels = []
 
-    for (let index = 0 ; index < levelsLength ; index++) {
-      this._levels.push({id: index, label: `${levels[index].height}p`, level: levels[index]})
-    }
+    for (let index = 0 ; index < levelsLength ; index++)
+      this._levels.push({ id: index, label: `${levels[index].height}p`, level: levels[index] })
+
     this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this._levels)
   }
 
@@ -674,9 +674,9 @@ export default class FlasHLS extends BaseFlashPlayback {
     } else if (this._dvrEnabled) {
       this.settings.left = ['playpause']
       this.settings.seekEnabled = true
-    } else {
+    } else
       this.settings.seekEnabled = false
-    }
+
   }
 
   get dvrEnabled() {
@@ -684,12 +684,12 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   _createCallbacks() {
-    if (!window.Clappr) {
+    if (!window.Clappr)
       window.Clappr = {}
-    }
-    if (!window.Clappr.flashlsCallbacks) {
+
+    if (!window.Clappr.flashlsCallbacks)
       window.Clappr.flashlsCallbacks = {}
-    }
+
     this.flashlsEvents = new HLSEvents(this.cid)
     window.Clappr.flashlsCallbacks[this.cid] = (eventName, args) => {
       this.flashlsEvents[eventName].apply(this.flashlsEvents, args)
