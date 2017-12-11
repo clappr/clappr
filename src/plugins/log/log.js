@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {Kibo} from '../../vendor'
+import { Kibo } from '../../vendor'
 
 const BOLD = 'font-weight: bold; font-size: 13px;'
 const INFO = 'color: #006600;' + BOLD
@@ -34,16 +34,16 @@ export default class Log {
   error(klass) {this.log(klass, LEVEL_ERROR, Array.prototype.slice.call(arguments, 1))}
 
   onOff() {
-    if (this.level === this.offLevel) {
+    if (this.level === this.offLevel)
       this.level = this.previousLevel
-    } else {
+    else {
       this.previousLevel = this.level
       this.level = this.offLevel
     }
     // handle instances where console.log is unavailable
-    if (window.console && window.console.log) {
+    if (window.console && window.console.log)
       window.console.log('%c[Clappr.Log] set log level to ' + DESCRIPTIONS[this.level], WARN)
-    }
+
   }
 
   level(newLevel) {
@@ -60,12 +60,12 @@ export default class Log {
     }
     const color = COLORS[level]
     let klassDescription = ''
-    if (klass) {
+    if (klass)
       klassDescription = '[' + klass + ']'
-    }
-    if (window.console && window.console.log) {
+
+    if (window.console && window.console.log)
       window.console.log.apply(console, ['%c[' + DESCRIPTIONS[level] + ']' + klassDescription, color].concat(message))
-    }
+
   }
 }
 

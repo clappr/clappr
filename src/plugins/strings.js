@@ -1,4 +1,4 @@
-import {getBrowserLanguage} from '../base/utils'
+import { getBrowserLanguage } from '../base/utils'
 import $ from 'clappr-zepto'
 import CorePlugin from '../base/core_plugin'
 

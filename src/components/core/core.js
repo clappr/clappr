@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {isNumber, Fullscreen, DomRecycler} from '../../base/utils'
+import { isNumber, Fullscreen, DomRecycler } from '../../base/utils'
 
 import Events from '../../base/events'
 import UIObject from '../../base/ui_object'
@@ -92,11 +92,11 @@ export default class Core extends UIObject {
   }
 
   updateSize() {
-    if (Fullscreen.isFullscreen()) {
+    if (Fullscreen.isFullscreen())
       this.setFullscreen()
-    } else {
+    else
       this.setPlayerSize()
-    }
+
   }
 
   setFullscreen() {
@@ -132,8 +132,8 @@ export default class Core extends UIObject {
 
   enableResizeObserver() {
     const checkSizeCallback = () => {
-      if (this.playerInfo.computedSize.width != this.el.clientWidth ||
-          this.playerInfo.computedSize.height != this.el.clientHeight) {
+      if (this.playerInfo.computedSize.width !== this.el.clientWidth ||
+          this.playerInfo.computedSize.height !== this.el.clientHeight) {
         this.playerInfo.computedSize = { width: this.el.clientWidth, height: this.el.clientHeight }
         this.triggerResize(this.playerInfo.computedSize)
       }
@@ -180,7 +180,7 @@ export default class Core extends UIObject {
     sources = sources && sources.constructor === Array ? sources : [sources]
     this.containers.forEach((container) => container.destroy())
     this.mediaControl.container = null
-    this.containerFactory.options = $.extend(this.options, {sources})
+    this.containerFactory.options = $.extend(this.options, { sources })
     this.containerFactory.createContainers().then((containers) => {
       this.setupContainers(containers)
     })
@@ -260,10 +260,10 @@ export default class Core extends UIObject {
   }
 
   setupMediaControl(container) {
-    if (this.mediaControl) {
+    if (this.mediaControl)
       this.mediaControl.setContainer(container)
-    } else {
-      this.mediaControl = this.createMediaControl($.extend({container: container, focusElement: this.el}, this.options))
+    else {
+      this.mediaControl = this.createMediaControl($.extend({ container: container, focusElement: this.el }, this.options))
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_FULLSCREEN, this.toggleFullscreen)
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_SHOW, this.onMediaControlShow.bind(this, true))
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_HIDE, this.onMediaControlShow.bind(this, false))
@@ -271,17 +271,17 @@ export default class Core extends UIObject {
   }
 
   createMediaControl(options) {
-    if(options.mediacontrol && options.mediacontrol.external) {
+    if(options.mediacontrol && options.mediacontrol.external)
       return new options.mediacontrol.external(options).render()
-    } else {
+    else
       return new MediaControl(options).render()
-    }
+
   }
 
   getCurrentContainer() {
-    if (!this.mediaControl || !this.mediaControl.container) {
+    if (!this.mediaControl || !this.mediaControl.container)
       return this.containers[0]
-    }
+
     return this.mediaControl.container
   }
 
@@ -298,14 +298,14 @@ export default class Core extends UIObject {
   toggleFullscreen() {
     if (!Fullscreen.isFullscreen()) {
       Fullscreen.requestFullscreen(this.el)
-      if(!Browser.isiOS) {
+      if(!Browser.isiOS)
         this.$el.addClass('fullscreen')
-      }
+
     } else {
       Fullscreen.cancelFullscreen()
-      if(!Browser.isiOS) {
+      if(!Browser.isiOS)
         this.$el.removeClass('fullscreen nocursor')
-      }
+
     }
     this.mediaControl.show()
   }
@@ -337,9 +337,9 @@ export default class Core extends UIObject {
     this.configureDomRecycler()
     const sources = options.source || options.sources
 
-    if (sources) {
+    if (sources)
       this.load(sources, options.mimeType || this.options.mimeType)
-    } else {
+    else {
       this.trigger(Events.CORE_OPTIONS_CHANGE)
 
       this.containers.forEach((container) => {
@@ -358,7 +358,7 @@ export default class Core extends UIObject {
 
     this.options.width = this.options.width || this.$el.width()
     this.options.height = this.options.height || this.$el.height()
-    const size = {width: this.options.width, height: this.options.height}
+    const size = { width: this.options.width, height: this.options.height }
     this.playerInfo.previousSize = this.playerInfo.currentSize = this.playerInfo.computedSize = size
     this.updateSize()
 
