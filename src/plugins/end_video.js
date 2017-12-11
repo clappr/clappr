@@ -19,7 +19,7 @@ export default class EndVideo extends CorePlugin {
   }
 
   ended() {
-    const exitOnEnd = typeof (this.core.options.exitFullscreenOnEnd) === 'undefined' || this.core.options.exitFullscreenOnEnd
+    const exitOnEnd = typeof(this.core.options.exitFullscreenOnEnd) === 'undefined' || this.core.options.exitFullscreenOnEnd
     if (exitOnEnd && Fullscreen.isFullscreen()) {
       this.core.toggleFullscreen()
     }
