@@ -107,12 +107,12 @@ export default class HLS extends HTML5VideoPlayback {
     super(...args)
     // backwards compatibility (TODO: remove on 0.3.0)
     this.options.playback || (this.options.playback = this.options)
-    this._minDvrSize = typeof (this.options.hlsMinimumDvrSize) === 'undefined' ? 60 : this.options.hlsMinimumDvrSize
+    this._minDvrSize = typeof(this.options.hlsMinimumDvrSize) === 'undefined' ? 60 : this.options.hlsMinimumDvrSize
     // The size of the start time extrapolation window measured as a multiple of segments.
     // Should be 2 or higher, or 0 to disable. Should only need to be increased above 2 if more than one segment is
     // removed from the start of the playlist at a time. E.g if the playlist is cached for 10 seconds and new chunks are
     // added/removed every 5.
-    this._extrapolatedWindowNumSegments = !this.options.playback || typeof (this.options.playback.extrapolatedWindowNumSegments) === 'undefined' ? 2 :  this.options.playback.extrapolatedWindowNumSegments
+    this._extrapolatedWindowNumSegments = !this.options.playback || typeof(this.options.playback.extrapolatedWindowNumSegments) === 'undefined' ? 2 :  this.options.playback.extrapolatedWindowNumSegments
 
     this._playbackType = Playback.VOD
     this._lastTimeUpdate = null

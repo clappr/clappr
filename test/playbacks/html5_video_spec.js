@@ -206,7 +206,7 @@ describe('HTML5Video playback', function() {
 
     it('does not trigger buffer event when the playback is initialized', function() {
       /*
-        Only trigger buffer events when buffer state change.
+        Only trigger buffer events when buffer state change. 
         The default value for _bufferState is false.
       */
 
