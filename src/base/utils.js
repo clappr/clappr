@@ -187,8 +187,7 @@ export function seekStringToSeconds(paramName = 't') {
         seconds += time * (factor[suffix])
       }
     })
-  } else if (seekString)
-    seconds = parseInt(seekString, 10)
+  } else if (seekString) {seconds = parseInt(seekString, 10)}
 
   return seconds
 }

@@ -41,8 +41,7 @@ export default class ContainerFactory extends BaseObject {
       if (source.mimeType)
         mimeType = source.mimeType
 
-    } else
-      resolvedSource = source.toString()
+    } else {resolvedSource = source.toString()}
 
 
     if (resolvedSource.match(/^\/\//)) resolvedSource = window.location.protocol + resolvedSource

@@ -90,8 +90,7 @@ export default class MediaControl extends UIObject {
       if (!$.isEmptyObject(this.container.settings))
         this.settings = $.extend({}, this.container.settings)
 
-    } else
-      this.settings = {}
+    } else {this.settings = {}}
 
 
     this.userDisabled = false
@@ -185,9 +184,7 @@ export default class MediaControl extends UIObject {
     this.$volumeBarContainer.find('.segmented-bar-element').slice(0, item).addClass('fill')
     this.$volumeIcon.html('')
     this.$volumeIcon.removeClass('muted')
-    if (!this.muted)
-      this.$volumeIcon.append(volumeIcon)
-    else {
+    if (!this.muted) {this.$volumeIcon.append(volumeIcon)} else {
       this.$volumeIcon.append(volumeMuteIcon)
       this.$volumeIcon.addClass('muted')
     }
@@ -329,9 +326,7 @@ export default class MediaControl extends UIObject {
     this.intendedVolume = value
     this.persistConfig && Config.persist('volume', value)
     const setWhenContainerReady = () => {
-      if (this.container.isReady)
-        this.container.setVolume(value)
-      else {
+      if (this.container.isReady) {this.container.setVolume(value)} else {
         this.listenToOnce(this.container, Events.CONTAINER_READY, () => {
           this.container.setVolume(value)
         })
@@ -342,8 +337,7 @@ export default class MediaControl extends UIObject {
       this.listenToOnce(this, Events.MEDIACONTROL_CONTAINERCHANGED, () => {
         setWhenContainerReady()
       })
-    } else
-      setWhenContainerReady()
+    } else {setWhenContainerReady()}
 
   }
 
@@ -381,9 +375,7 @@ export default class MediaControl extends UIObject {
 
   hideVolumeBar(timeout = 400) {
     if (!this.$volumeBarContainer) return
-    if (this.draggingVolumeBar)
-      this.hideVolumeId = setTimeout(() => this.hideVolumeBar(), timeout)
-    else {
+    if (this.draggingVolumeBar) {this.hideVolumeId = setTimeout(() => this.hideVolumeBar(), timeout)} else {
       if (this.hideVolumeId)
         clearTimeout(this.hideVolumeId)
 
@@ -493,9 +485,7 @@ export default class MediaControl extends UIObject {
     if (!this.disabled && this.options.hideMediaControl === false)
       return
 
-    if (!this.disabled && (delay || this.userKeepVisible || this.keepVisible || this.draggingSeekBar || this.draggingVolumeBar))
-      this.hideId = setTimeout(() => this.hide(), timeout)
-    else {
+    if (!this.disabled && (delay || this.userKeepVisible || this.keepVisible || this.draggingSeekBar || this.draggingVolumeBar)) {this.hideId = setTimeout(() => this.hide(), timeout)} else {
       this.trigger(Events.MEDIACONTROL_HIDE, this.name)
       this.$el.addClass('media-control-hide')
       this.hideVolumeBar(0)
