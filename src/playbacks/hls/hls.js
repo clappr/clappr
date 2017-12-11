@@ -300,7 +300,7 @@ export default class HLS extends HTML5VideoPlayback {
         Log.error(`hlsjs: could not recover from error after maximum number of attempts, evt ${evt}, data ${data} `)
         this.trigger(Events.PLAYBACK_ERROR, { evt, data }, this.name)
       }
-    } else {Log.warn(`hlsjs: non-fatal error occurred, evt ${evt}, data ${data} `)}
+    } else Log.warn(`hlsjs: non-fatal error occurred, evt ${evt}, data ${data} `)
 
   }
 
@@ -466,7 +466,7 @@ export default class HLS extends HTML5VideoPlayback {
       if (hiddenAreaDuration <= newDuration) {
         newDuration -= hiddenAreaDuration
         this._durationExcludesAfterLiveSyncPoint = true
-      } else {this._durationExcludesAfterLiveSyncPoint = false}
+      } else this._durationExcludesAfterLiveSyncPoint = false
 
     }
 
