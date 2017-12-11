@@ -56,7 +56,9 @@ export default class Flash extends BaseFlashPlayback {
     if (this.el.playerPlay) {
       this.el.width = '100%'
       this.el.height = '100%'
-      if (this._currentState === 'PLAYING') {this._firstPlay()} else {
+      if (this._currentState === 'PLAYING')
+        this._firstPlay()
+      else {
         this._currentState = 'IDLE'
         this._autoPlay && this.play()
       }
@@ -110,7 +112,9 @@ export default class Flash extends BaseFlashPlayback {
   }
 
   _checkState() {
-    if (this._isIdle || this._currentState === 'PAUSED') {return} else if (this._currentState !== 'PLAYING_BUFFERING' && this.el.getState() === 'PLAYING_BUFFERING') {
+    if (this._isIdle || this._currentState === 'PAUSED')
+      return
+    else if (this._currentState !== 'PLAYING_BUFFERING' && this.el.getState() === 'PLAYING_BUFFERING') {
       this._bufferingState = true
       this.trigger(Events.PLAYBACK_BUFFERING, this.name)
       this._currentState = 'PLAYING_BUFFERING'
@@ -118,7 +122,9 @@ export default class Flash extends BaseFlashPlayback {
       this._bufferingState = false
       this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
       this._currentState = 'PLAYING'
-    } else if (this.el.getState() === 'IDLE') {this._currentState = 'IDLE'} else if (this.el.getState() === 'ENDED') {
+    } else if (this.el.getState() === 'IDLE')
+      this._currentState = 'IDLE'
+    else if (this.el.getState() === 'ENDED') {
       this.trigger(Events.PLAYBACK_ENDED, this.name)
       this.trigger(Events.PLAYBACK_TIMEUPDATE, { current: 0, total: this.el.getDuration() }, this.name)
       this._currentState = 'ENDED'
@@ -224,7 +230,9 @@ export default class Flash extends BaseFlashPlayback {
 }
 
 Flash.canPlay = function(resource) {
-  if (!Browser.hasFlash || !resource || resource.constructor !== String) {return false} else {
+  if (!Browser.hasFlash || !resource || resource.constructor !== String)
+    return false
+  else {
     const resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
     return resourceParts.length > 1 && !Browser.isMobile && resourceParts[1].toLowerCase().match(/^(mp4|mov|f4v|3gpp|3gp)$/)
 
