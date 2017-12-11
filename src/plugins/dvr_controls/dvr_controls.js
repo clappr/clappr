@@ -41,7 +41,7 @@ export default class DVRControls extends UICorePlugin {
   }
 
   dvrChanged(dvrEnabled) {
-    if (this.core.getPlaybackType() !== Playback.LIVE) {return}
+    if (this.core.getPlaybackType() !== Playback.LIVE) return
     this.settingsUpdate()
     this.core.mediaControl.$el.addClass('live')
     if (dvrEnabled) {
