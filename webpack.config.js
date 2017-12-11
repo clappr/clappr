@@ -26,7 +26,7 @@ webpackConfig.devtool = 'source-map';
 
 const voidModulePath = path.resolve('./src/base/void');
 
-if (process.env.CLAPPR_PLAIN_HTML5_ONLY === 'yes') {
+if (!!process.env.CLAPPR_PLAIN_HTML5_ONLY) {
     console.log('NOTE: Building only with plain HTML5 playback plugins, but will result in smaller build size');
     webpackConfig.plugins.push(
         new webpack.NormalModuleReplacementPlugin(/playbacks\/flash/, voidModulePath),
