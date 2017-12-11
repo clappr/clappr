@@ -195,8 +195,7 @@ export default class UIObject extends BaseObject {
       if (this.className) attrs['class'] = this.className
       const $el = DomRecycler.create(this.tagName).attr(attrs)
       this.setElement($el, false)
-    } else
-      this.setElement(this.el, false)
+    } else {this.setElement(this.el, false)}
 
   }
 }
