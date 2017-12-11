@@ -48,8 +48,8 @@ module.exports = {
         // part of Node Style-guide but ignored
         "max-len": 0,
         "max-statements": 0,
-        "object-curly-spacing": 0,
-        "brace-style": 0,
+        "object-curly-spacing": ["error", "always"],
+        "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
         "space-after-keywords": 0
     }
 };
