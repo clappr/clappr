@@ -55,7 +55,7 @@ export default class Loader extends BaseObject {
       NoOp
     ]
 
-    if (!PLAIN_HTML5_ONLY === 'yes') {
+    if (!PLAIN_HTML5_ONLY) {
       this.playbackPlugins = this.playbackPlugins.concat([
         HLSVideoPlayback,
         FlashVideoPlayback,
