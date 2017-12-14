@@ -4,6 +4,7 @@
   "description": "An extensible media player for the web",
   "main": "./dist/clappr.js",
   "scripts": {
+    "bundle-check": "webpack -p --config './webpack.config.bundle-analyzer.js'",
     "release": "webpack --progress --output-filename clappr.min.js",
     "build": "webpack --progress",
     "watch": "webpack --progress --watch",
@@ -77,6 +78,7 @@
     "uglify-js": "^3.0.5",
     "url-loader": "^0.5.6",
     "webpack": "^3.0.0",
+    "webpack-bundle-analyzer": "^2.9.1",
     "webpack-dev-server": "^2.4.5",
     "yargs": "^8.0.1"
   }
