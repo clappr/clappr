@@ -45,12 +45,12 @@ module.exports = {
             "never"
         ],
         "no-var": "error",
+        "curly": ["error", "multi-or-nest", "consistent"],
+        "object-curly-spacing": ["error", "always"],
+        "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
         // part of Node Style-guide but ignored
         "max-len": 0,
         "max-statements": 0,
-        "curly": ["error", "multi-or-nest"],
-        "object-curly-spacing": ["error", "always"],
-        "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
         "space-after-keywords": 0
     }
 };
