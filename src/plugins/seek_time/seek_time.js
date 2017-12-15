@@ -89,7 +89,7 @@ export default class SeekTime extends UICorePlugin {
       if (seekTime < 0)
         seekTime += 86400
 
-    } else seekTime = this.hoverPosition * this.duration
+    } else { seekTime = this.hoverPosition * this.duration }
 
     return { seekTime, secondsSinceMidnight }
   }
@@ -118,7 +118,7 @@ export default class SeekTime extends UICorePlugin {
           this.$durationEl.text(currentDuration)
           this.displayedDuration = currentDuration
         }
-      } else this.$durationEl.hide()
+      } else { this.$durationEl.hide() }
 
 
       // the element must be unhidden before its width is requested, otherwise it's width will be reported as 0

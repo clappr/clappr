@@ -674,7 +674,7 @@ export default class FlasHLS extends BaseFlashPlayback {
     } else if (this._dvrEnabled) {
       this.settings.left = ['playpause']
       this.settings.seekEnabled = true
-    } else this.settings.seekEnabled = false
+    } else { this.settings.seekEnabled = false }
 
   }
 

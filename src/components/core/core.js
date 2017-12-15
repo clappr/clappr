@@ -71,7 +71,7 @@ export default class Core extends UIObject {
     $(document).bind('fullscreenchange', this._boundFullscreenHandler)
     $(document).bind('MSFullscreenChange', this._boundFullscreenHandler)
     $(document).bind('mozfullscreenchange', this._boundFullscreenHandler)
-    Browser.isMobile && $(window).bind('resize', (o) => {this.handleWindowResize(o)})
+    Browser.isMobile && $(window).bind('resize', (o) => { this.handleWindowResize(o) })
   }
 
   configureDomRecycler() {
@@ -260,9 +260,7 @@ export default class Core extends UIObject {
   }
 
   setupMediaControl(container) {
-    if (this.mediaControl)
-      this.mediaControl.setContainer(container)
-    else {
+    if (this.mediaControl) { this.mediaControl.setContainer(container) } else {
       this.mediaControl = this.createMediaControl($.extend({ container: container, focusElement: this.el }, this.options))
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_FULLSCREEN, this.toggleFullscreen)
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_SHOW, this.onMediaControlShow.bind(this, true))
@@ -337,9 +335,7 @@ export default class Core extends UIObject {
     this.configureDomRecycler()
     const sources = options.source || options.sources
 
-    if (sources)
-      this.load(sources, options.mimeType || this.options.mimeType)
-    else {
+    if (sources) { this.load(sources, options.mimeType || this.options.mimeType) } else {
       this.trigger(Events.CORE_OPTIONS_CHANGE)
 
       this.containers.forEach((container) => {

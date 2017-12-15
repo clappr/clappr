@@ -4,7 +4,7 @@ describe('Strings', function() {
   it('translates', function() {
     const fakeCore = { options: { } }
     const strings = new Strings(fakeCore)
-    strings._language = function(){return 'en'}
+    strings._language = function(){ return 'en' }
 
     expect(strings.t('live')).to.equal('live')
   })
