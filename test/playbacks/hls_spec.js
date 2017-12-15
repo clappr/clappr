@@ -3,8 +3,7 @@ import HLS from 'playbacks/hls'
 import HLSJS from 'hls.js'
 
 describe('HLS playback', () => {
-  // Disabled due to missing support for Firefox on Linux - breaks travis build
-  xit('should be able to identify it can play resources independently of the file extension case', function() {
+  it('should be able to identify it can play resources independently of the file extension case', function() {
     expect(HLS.canPlay('/relative/video.m3u8')).to.be.true
     expect(HLS.canPlay('/relative/VIDEO.M3U8')).to.be.true
   })
