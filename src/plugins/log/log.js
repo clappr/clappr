@@ -28,15 +28,13 @@ export default class Log {
     this.offLevel = offLevel
   }
 
-  debug(klass) {this.log(klass, LEVEL_DEBUG, Array.prototype.slice.call(arguments, 1))}
-  info(klass) {this.log(klass, LEVEL_INFO, Array.prototype.slice.call(arguments, 1))}
-  warn(klass) {this.log(klass, LEVEL_WARN, Array.prototype.slice.call(arguments, 1))}
-  error(klass) {this.log(klass, LEVEL_ERROR, Array.prototype.slice.call(arguments, 1))}
+  debug(klass) { this.log(klass, LEVEL_DEBUG, Array.prototype.slice.call(arguments, 1)) }
+  info(klass) { this.log(klass, LEVEL_INFO, Array.prototype.slice.call(arguments, 1)) }
+  warn(klass) { this.log(klass, LEVEL_WARN, Array.prototype.slice.call(arguments, 1)) }
+  error(klass) { this.log(klass, LEVEL_ERROR, Array.prototype.slice.call(arguments, 1)) }
 
   onOff() {
-    if (this.level === this.offLevel)
-      this.level = this.previousLevel
-    else {
+    if (this.level === this.offLevel) { this.level = this.previousLevel } else {
       this.previousLevel = this.level
       this.level = this.offLevel
     }
