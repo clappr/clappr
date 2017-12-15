@@ -7,7 +7,7 @@ describe('HLS playback', () => {
 
     // FIXME: why is this not working in Firefox?
     if(window.navigator.userAgent.match(/Firefox\//)) {
-      return;
+      return
     }
 
     // FIXME: this should actually use a mock of HlsJs
