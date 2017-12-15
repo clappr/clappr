@@ -45,6 +45,7 @@ module.exports = {
             "never"
         ],
         "no-var": "error",
+        "block-spacing": "error",
         "curly": ["error", "multi-or-nest", "consistent"],
         "object-curly-spacing": ["error", "always"],
         "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
