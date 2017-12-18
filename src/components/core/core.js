@@ -12,9 +12,14 @@ import MediaControl from '../../components/media_control'
 import Mediator from '../../components/mediator'
 import PlayerInfo from '../../components/player_info'
 
+import Styler from '../../base/styler'
+
 import $ from 'clappr-zepto'
 
 import './public/style.scss'
+import fontStyle from './public/fonts.css'
+
+let style
 
 /**
  * The Core is responsible to manage Containers, the mediator, MediaControl
@@ -351,6 +356,11 @@ export default class Core extends UIObject {
 
   render() {
     this.$el.append(this.mediaControl.render().el)
+
+    if (!style)
+      style = Styler.getStyleFor(fontStyle, { baseUrl: this.options.baseUrl })
+
+    $('head').append(style)
 
     this.options.width = this.options.width || this.$el.width()
     this.options.height = this.options.height || this.$el.height()
