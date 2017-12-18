@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {uniqueId, currentScriptUrl} from '../base/utils'
+import { uniqueId, currentScriptUrl } from '../base/utils'
 
 import BaseObject from '../base/base_object'
 import Events from '../base/events'
@@ -42,9 +42,9 @@ export default class Player extends BaseObject {
 
   set loader(loader) { this._loader = loader }
   get loader() {
-    if (!this._loader) {
+    if (!this._loader)
       this._loader = new Loader(this.options.plugins || {}, this.options.playerId)
-    }
+
     return this._loader
   }
 
@@ -179,7 +179,7 @@ export default class Player extends BaseObject {
    */
   constructor(options) {
     super(options)
-    const defaultOptions = {playerId: uniqueId(''), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl, allowUserInteraction: Browser.isMobile}
+    const defaultOptions = { playerId: uniqueId(''), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl, allowUserInteraction: Browser.isMobile }
     this._options = $.extend(defaultOptions, options)
     this.options.sources = this._normalizeSources(options)
     if (!this.options.chromeless) {
@@ -193,14 +193,14 @@ export default class Player extends BaseObject {
     this._registerOptionEventListeners()
     this._coreFactory = new CoreFactory(this)
     this.playerInfo = PlayerInfo.getInstance(this.options.playerId)
-    this.playerInfo.currentSize = {width: options.width, height: options.height}
+    this.playerInfo.currentSize = { width: options.width, height: options.height }
     this.playerInfo.options = this.options
-    if (this.options.parentId) {
+    if (this.options.parentId)
       this.setParentId(this.options.parentId)
-    }
-    else if (this.options.parent) {
+
+    else if (this.options.parent)
       this.attachTo(this.options.parent)
-    }
+
   }
 
   /**
@@ -211,9 +211,9 @@ export default class Player extends BaseObject {
    */
   setParentId(parentId) {
     const el = document.querySelector(parentId)
-    if (el) {
+    if (el)
       this.attachTo(el)
-    }
+
     return this
   }
 
@@ -231,11 +231,11 @@ export default class Player extends BaseObject {
   }
 
   _addEventListeners() {
-    if (!this.core.isReady) {
+    if (!this.core.isReady)
       this.listenToOnce(this.core, Events.CORE_READY, this._onReady)
-    } else {
+    else
       this._onReady()
-    }
+
     this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this._containerChanged)
     this.listenTo(this.core, Events.CORE_FULLSCREEN, this._onFullscreenChange)
     return this
@@ -323,7 +323,7 @@ export default class Player extends BaseObject {
 
   _normalizeSources(options) {
     const sources = options.sources || (options.source !== undefined? [options.source] : [])
-    return sources.length === 0 ? [{source:'', mimeType:''}] : sources
+    return sources.length === 0 ? [{ source:'', mimeType:'' }] : sources
   }
 
   /**
@@ -351,9 +351,9 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   load(sources, mimeType, autoPlay) {
-    if (autoPlay !== undefined) {
-      this.configure({autoPlay: !!autoPlay})
-    }
+    if (autoPlay !== undefined)
+      this.configure({ autoPlay: !!autoPlay })
+
     this.core.load(sources, mimeType)
     return this
   }
@@ -438,9 +438,9 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   setVolume(volume) {
-    if (this.core && this.core.mediaControl) {
+    if (this.core && this.core.mediaControl)
       this.core.mediaControl.setVolume(volume)
-    }
+
     return this
   }
 

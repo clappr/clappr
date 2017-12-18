@@ -1,4 +1,4 @@
-import {extend} from './utils'
+import { extend } from './utils'
 import BaseObject from './base_object'
 
 export default class CorePlugin extends BaseObject {

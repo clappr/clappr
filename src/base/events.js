@@ -3,29 +3,29 @@
 // license that can be found in the LICENSE file.
 
 import Log from '../plugins/log'
-import {uniqueId} from './utils'
+import { uniqueId } from './utils'
 
 const slice = Array.prototype.slice
 
 const eventSplitter = /\s+/
 
 const eventsApi = function(obj, action, name, rest) {
-  if (!name) {return true}
+  if (!name) return true
 
   // Handle event maps.
   if (typeof name === 'object') {
-    for (const key in name) {
+    for (const key in name)
       obj[action].apply(obj, [key, name[key]].concat(rest))
-    }
+
     return false
   }
 
   // Handle space separated event names.
   if (eventSplitter.test(name)) {
     const names = name.split(eventSplitter)
-    for (let i = 0, l = names.length; i < l; i++) {
+    for (let i = 0, l = names.length; i < l; i++)
       obj[action].apply(obj, [names[i]].concat(rest))
-    }
+
     return false
   }
 
@@ -40,6 +40,7 @@ const triggerEvents = function(events, args, klass, name) {
   function run() {
     try {
       switch (args.length) {
+      /* eslint-disable curly */
       case 0: while (++i < l) { (ev = events[i]).callback.call(ev.ctx) } return
       case 1: while (++i < l) { (ev = events[i]).callback.call(ev.ctx, a1) } return
       case 2: while (++i < l) { (ev = events[i]).callback.call(ev.ctx, a1, a2) } return
@@ -67,10 +68,10 @@ export default class Events {
    * @param {Object} context
    */
   on(name, callback, context) {
-    if (!eventsApi(this, 'on', name, [callback, context]) || !callback) {return this}
+    if (!eventsApi(this, 'on', name, [callback, context]) || !callback) return this
     this._events || (this._events = {})
     const events = this._events[name] || (this._events[name] = [])
-    events.push({callback: callback, context: context, ctx: context || this})
+    events.push({ callback: callback, context: context, ctx: context || this })
     return this
   }
 
@@ -82,9 +83,10 @@ export default class Events {
    * @param {Object} context
    */
   once(name, callback, context) {
-    if (!eventsApi(this, 'once', name, [callback, context]) || !callback) {return this}
+    let once
+    if (!eventsApi(this, 'once', name, [callback, context]) || !callback) return this
     const off = () => this.off(name, once)
-    const once = function() {
+    once = function() {
       off(name, once)
       callback.apply(this, arguments)
     }
@@ -100,7 +102,7 @@ export default class Events {
    */
   off(name, callback, context) {
     let retain, ev, events, names, i, l, j, k
-    if (!this._events || !eventsApi(this, 'off', name, [callback, context])) {return this}
+    if (!this._events || !eventsApi(this, 'off', name, [callback, context])) return this
     if (!name && !callback && !context) {
       this._events = void 0
       return this
@@ -116,12 +118,12 @@ export default class Events {
           for (j = 0, k = events.length; j < k; j++) {
             ev = events[j]
             if ((callback && callback !== ev.callback && callback !== ev.callback._callback) ||
-                (context && context !== ev.context)) {
+                (context && context !== ev.context))
               retain.push(ev)
-            }
+
           }
         }
-        if (!retain.length) {delete this._events[name]}
+        if (!retain.length) delete this._events[name]
       }
     }
     return this
@@ -135,13 +137,13 @@ export default class Events {
   trigger(name) {
     const klass = this.name || this.constructor.name
     Log.debug.apply(Log, [klass].concat(Array.prototype.slice.call(arguments)))
-    if (!this._events) {return this}
+    if (!this._events) return this
     const args = slice.call(arguments, 1)
-    if (!eventsApi(this, 'trigger', name, args)) {return this}
+    if (!eventsApi(this, 'trigger', name, args)) return this
     const events = this._events[name]
     const allEvents = this._events.all
-    if (events) {triggerEvents(events, args, klass, name)}
-    if (allEvents) {triggerEvents(allEvents, arguments, klass, name)}
+    if (events) triggerEvents(events, args, klass, name)
+    if (allEvents) triggerEvents(allEvents, arguments, klass, name)
     return this
   }
 
@@ -154,14 +156,14 @@ export default class Events {
    */
   stopListening(obj, name, callback) {
     let listeningTo = this._listeningTo
-    if (!listeningTo) {return this}
+    if (!listeningTo) return this
     const remove = !name && !callback
-    if (!callback && typeof name === 'object') {callback = this}
-    if (obj) {(listeningTo = {})[obj._listenId] = obj}
+    if (!callback && typeof name === 'object') callback = this
+    if (obj) (listeningTo = {})[obj._listenId] = obj
     for (const id in listeningTo) {
       obj = listeningTo[id]
       obj.off(name, callback, this)
-      if (remove || Object.keys(obj._events).length === 0) {delete this._listeningTo[id]}
+      if (remove || Object.keys(obj._events).length === 0) delete this._listeningTo[id]
     }
     return this
   }
@@ -172,11 +174,11 @@ export default class Events {
 
     if(property && !Events.Custom[property]) {
       Events.Custom[property] = property.toLowerCase().split('_').map(
-        (value, index) => index == 0 ? value : value = (value[0].toUpperCase() + value.slice(1))
+        (value, index) => index === 0 ? value : value = (value[0].toUpperCase() + value.slice(1))
       ).join('')
-    } else {
+    } else
       Log.error('Events', 'Error when register event: ' + eventName)
-    }
+
   }
 
   static listAvailableCustomEvents() {
@@ -209,14 +211,14 @@ export default class Events {
  * this.listenToOnce(this.core.playback, Events.PLAYBACK_PAUSE, this.callback)
  * ```
  */
-const listenMethods = {listenTo: 'on', listenToOnce: 'once'}
+const listenMethods = { listenTo: 'on', listenToOnce: 'once' }
 
 Object.keys(listenMethods).forEach(function(method) {
   Events.prototype[method] = function(obj, name, callback) {
     const listeningTo = this._listeningTo || (this._listeningTo = {})
     const id = obj._listenId || (obj._listenId = uniqueId('l'))
     listeningTo[id] = obj
-    if (!callback && typeof name === 'object') {callback = this}
+    if (!callback && typeof name === 'object') callback = this
     obj[listenMethods[method]](name, callback, this)
     return this
   }
