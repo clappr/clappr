@@ -42,9 +42,9 @@ export default class SpinnerThreeBouncePlugin extends UIContainerPlugin {
   }
 
   show() {
-    if (this.showTimeout === null) {
+    if (this.showTimeout === null)
       this.showTimeout = setTimeout(() => this.$el.show(), 300)
-    }
+
   }
 
   hide() {
@@ -59,9 +59,9 @@ export default class SpinnerThreeBouncePlugin extends UIContainerPlugin {
     this.$el.html(this.template())
     this.container.$el.append(this.$el)
     this.$el.hide()
-    if (this.container.buffering) {
+    if (this.container.buffering)
       this.onBuffering()
-    }
+
     return this
   }
 }

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {formatTime} from '../../base/utils'
+import { formatTime } from '../../base/utils'
 
 import UICorePlugin from '../../base/ui_core_plugin'
 import template from '../../base/template'
@@ -34,11 +34,11 @@ export default class SeekTime extends UICorePlugin {
     this.duration = null
     this.actualLiveTime = !!this.mediaControl.options.actualLiveTime
     if (this.actualLiveTime) {
-      if (this.mediaControl.options.actualLiveServerTime) {
+      if (this.mediaControl.options.actualLiveServerTime)
         this.actualLiveServerTimeDiff = new Date().getTime() - new Date(this.mediaControl.options.actualLiveServerTime).getTime()
-      } else {
+      else
         this.actualLiveServerTimeDiff = 0
-      }
+
     }
   }
 
@@ -86,13 +86,12 @@ export default class SeekTime extends UICorePlugin {
       const d = new Date(new Date().getTime() - this.actualLiveServerTimeDiff), e = new Date(d)
       secondsSinceMidnight = (e - d.setHours(0,0,0,0)) / 1000
       seekTime = (secondsSinceMidnight - this.duration) + (this.hoverPosition * this.duration)
-      if (seekTime < 0) {
+      if (seekTime < 0)
         seekTime += 86400
-      }
-    } else {
-      seekTime = this.hoverPosition * this.duration
-    }
-    return {seekTime, secondsSinceMidnight}
+
+    } else { seekTime = this.hoverPosition * this.duration }
+
+    return { seekTime, secondsSinceMidnight }
   }
 
   update() {
@@ -119,9 +118,8 @@ export default class SeekTime extends UICorePlugin {
           this.$durationEl.text(currentDuration)
           this.displayedDuration = currentDuration
         }
-      } else {
-        this.$durationEl.hide()
-      }
+      } else { this.$durationEl.hide() }
+
 
       // the element must be unhidden before its width is requested, otherwise it's width will be reported as 0
       this.$el.show()
