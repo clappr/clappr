@@ -1,6 +1,6 @@
 {
   "name": "dash-shaka-playback",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "clappr dash playback based on shaka player",
   "main": "./dist/dash-shaka-playback.js",
   "repository": {
@@ -30,7 +30,7 @@
     "eslint-plugin-node": "^5.1.0",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
-    "shaka-player": "2.2.1",
+    "shaka-player": "2.2.8",
     "webpack": "^3.5.5",
     "webpack-dev-server": "^2.7.1"
   }
