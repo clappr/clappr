@@ -1,4 +1,4 @@
-import {extend} from './utils'
+import { extend } from './utils'
 import UIObject from './ui_object'
 
 export default class UICorePlugin extends UIObject {

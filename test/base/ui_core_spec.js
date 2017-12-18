@@ -21,7 +21,7 @@ describe('UI Core Plugin', function() {
     const plugin = new MyPlugin({})
     const spy = sinon.spy(plugin, 'bindEvents')
     const show = sinon.spy()
-    plugin.$el = {show: show}
+    plugin.$el = { show: show }
     plugin.enabled = false
 
     plugin.enable()
@@ -35,7 +35,7 @@ describe('UI Core Plugin', function() {
     const plugin = new MyPlugin({})
     const spy = sinon.spy(plugin, 'stopListening')
     const hide = sinon.spy()
-    plugin.$el = {hide: hide}
+    plugin.$el = { hide: hide }
 
     plugin.disable()
 

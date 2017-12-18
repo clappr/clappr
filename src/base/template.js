@@ -43,7 +43,7 @@ var htmlEntities = {
 var entityRe = new RegExp('[&<>"\']', 'g')
 
 var escapeExpr = function(string) {
-  if (string === null) {return ''}
+  if (string === null) return ''
   return ('' + string).replace(entityRe, function(match) {
     return htmlEntities[match]
   })
@@ -71,22 +71,22 @@ var tmpl = function(text, data) {
     source += text.slice(index, offset)
       .replace(escaper, function(match) { return '\\' + escapes[match] })
 
-    if (escape) {
+    if (escape)
       source += '\'+\n((__t=(' + escape + '))==null?\'\':escapeExpr(__t))+\n\''
-    }
-    if (interpolate) {
+
+    if (interpolate)
       source += '\'+\n((__t=(' + interpolate + '))==null?\'\':__t)+\n\''
-    }
-    if (evaluate) {
+
+    if (evaluate)
       source += '\';\n' + evaluate + '\n__p+=\''
-    }
+
     index = offset + match.length
     return match
   })
   source += '\';\n'
 
   // If a variable is not specified, place data values in local scope.
-  if (!settings.variable) {source = 'with(obj||{}){\n' + source + '}\n'}
+  if (!settings.variable) source = 'with(obj||{}){\n' + source + '}\n'
 
   source = 'var __t,__p=\'\',__j=Array.prototype.join,' +
     'print=function(){__p+=__j.call(arguments,\'\');};\n' +
@@ -101,7 +101,7 @@ var tmpl = function(text, data) {
     throw e
   }
 
-  if (data) {return render(data, escapeExpr)}
+  if (data) return render(data, escapeExpr)
   var template = function(data) {
     return render.call(this, data, escapeExpr)
   }

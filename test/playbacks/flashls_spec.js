@@ -79,7 +79,7 @@ describe('HLS playback', function() {
     })
 
     it('should update data element attribute with base url on render', function() {
-      const playback = new FlasHLS({baseUrl: '/foo/bar'})
+      const playback = new FlasHLS({ baseUrl: '/foo/bar' })
       expect(playback.el.getAttribute('data')).to.not.match(/^\/foo\/bar/)
       playback.render()
       expect(playback.el.getAttribute('data')).to.match(/^\/foo\/bar/)

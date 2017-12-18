@@ -1,4 +1,4 @@
-import {requestAnimationFrame, cancelAnimationFrame} from '../../base/utils'
+import { requestAnimationFrame, cancelAnimationFrame } from '../../base/utils'
 import Playback from '../../base/playback'
 import template from '../../base/template'
 import Events from '../../base/events'
@@ -9,7 +9,7 @@ export default class NoOp extends Playback {
   get name() { return 'no_op' }
   get template() { return template(noOpHTML) }
   get attributes() {
-    return {'data-no-op': ''}
+    return { 'data-no-op': '' }
   }
 
   constructor(...args) {
@@ -20,12 +20,12 @@ export default class NoOp extends Playback {
 
   render() {
     const playbackNotSupported = this.options.playbackNotSupportedMessage || this.i18n.t('playback_not_supported')
-    this.$el.html(this.template({message: playbackNotSupported}))
+    this.$el.html(this.template({ message: playbackNotSupported }))
     this.trigger(Events.PLAYBACK_READY, this.name)
     const showForNoOp = !!(this.options.poster && this.options.poster.showForNoOp)
-    if (this.options.autoPlay || !showForNoOp) {
+    if (this.options.autoPlay || !showForNoOp)
       this.play()
-    }
+
     return this
   }
 
@@ -51,9 +51,9 @@ export default class NoOp extends Playback {
     } catch (err) {
       buffer32 = new Uint32Array(this.context.canvas.width * this.context.canvas.height * 4)
       const data=idata.data
-      for(let i = 0; i < data.length; i++){
+      for(let i = 0; i < data.length; i++)
         buffer32[i]=data[i]
-      }
+
     }
 
     const len = buffer32.length,
@@ -73,9 +73,9 @@ export default class NoOp extends Playback {
   }
 
   _loop() {
-    if (this._stop) {
+    if (this._stop)
       return
-    }
+
     this._noise()
     this._animationHandle = requestAnimationFrame(() => this._loop())
   }

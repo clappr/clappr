@@ -266,10 +266,10 @@ export default class Container extends UIObject {
   }
 
   error(errorObj) {
-    if (!this.isReady) {
+    if (!this.isReady)
       this.ready()
-    }
-    this.trigger(Events.CONTAINER_ERROR, {error: errorObj, container: this}, this.name)
+
+    this.trigger(Events.CONTAINER_ERROR, { error: errorObj, container: this }, this.name)
   }
 
   loadedMetadata(metadata) {
@@ -328,21 +328,21 @@ export default class Container extends UIObject {
   }
 
   clicked() {
-    if (!this.options.chromeless || this.options.allowUserInteraction) {
+    if (!this.options.chromeless || this.options.allowUserInteraction)
       this.trigger(Events.CONTAINER_CLICK, this, this.name)
-    }
+
   }
 
   dblClicked() {
-    if (!this.options.chromeless || this.options.allowUserInteraction) {
+    if (!this.options.chromeless || this.options.allowUserInteraction)
       this.trigger(Events.CONTAINER_DBLCLICK, this, this.name)
-    }
+
   }
 
   onContextMenu(event) {
-    if (!this.options.chromeless || this.options.allowUserInteraction) {
+    if (!this.options.chromeless || this.options.allowUserInteraction)
       this.trigger(Events.CONTAINER_CONTEXTMENU, event, this.name)
-    }
+
   }
 
   seek(time) {
@@ -409,15 +409,15 @@ export default class Container extends UIObject {
   }
 
   mouseEnter() {
-    if (!this.options.chromeless || this.options.allowUserInteraction) {
+    if (!this.options.chromeless || this.options.allowUserInteraction)
       this.trigger(Events.CONTAINER_MOUSE_ENTER)
-    }
+
   }
 
   mouseLeave() {
-    if (!this.options.chromeless || this.options.allowUserInteraction) {
+    if (!this.options.chromeless || this.options.allowUserInteraction)
       this.trigger(Events.CONTAINER_MOUSE_LEAVE)
-    }
+
   }
 
   settingsUpdate() {
@@ -448,11 +448,11 @@ export default class Container extends UIObject {
   }
 
   updateStyle() {
-    if (!this.options.chromeless || this.options.allowUserInteraction) {
+    if (!this.options.chromeless || this.options.allowUserInteraction)
       this.$el.removeClass('chromeless')
-    } else {
+    else
       this.$el.addClass('chromeless')
-    }
+
   }
 
   /**

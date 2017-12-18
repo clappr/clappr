@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 import $ from 'clappr-zepto'
-import {uniqueId, DomRecycler} from './utils'
+import { uniqueId, DomRecycler } from './utils'
 import BaseObject from './base_object'
 
 const delegateEventSplitter = /^(\S+)\s*(.*)$/
@@ -140,10 +140,10 @@ export default class UIObject extends BaseObject {
    * @return {UIObject} itself
    */
   setElement(element, delegate) {
-    if (this.$el) {this.undelegateEvents()}
+    if (this.$el) this.undelegateEvents()
     this.$el = $.zepto.isZ(element) ? element : $(element)
     this.el = this.$el[0]
-    if (delegate !== false) {this.delegateEvents()}
+    if (delegate !== false) this.delegateEvents()
     return this
   }
 
@@ -154,21 +154,21 @@ export default class UIObject extends BaseObject {
    * @return {UIObject} itself
    */
   delegateEvents(events) {
-    if (!(events || (events = this.events))) {return this}
+    if (!(events || (events = this.events))) return this
     this.undelegateEvents()
     for (const key in events) {
       let method = events[key]
-      if ((method && method.constructor !== Function)) {method = this[events[key]]}
-      if (!method) {continue}
+      if ((method && method.constructor !== Function)) method = this[events[key]]
+      if (!method) continue
 
       const match = key.match(delegateEventSplitter)
       let eventName = match[1], selector = match[2]
       eventName += '.delegateEvents' + this.cid
-      if (selector === '') {
+      if (selector === '')
         this.$el.on(eventName, method.bind(this))
-      } else {
+      else
         this.$el.on(eventName, selector, method.bind(this))
-      }
+
     }
     return this
   }
@@ -191,12 +191,11 @@ export default class UIObject extends BaseObject {
   _ensureElement() {
     if (!this.el) {
       const attrs = $.extend({}, this.attributes)
-      if (this.id) {attrs.id = this.id}
-      if (this.className) {attrs['class'] = this.className}
+      if (this.id) attrs.id = this.id
+      if (this.className) attrs['class'] = this.className
       const $el = DomRecycler.create(this.tagName).attr(attrs)
       this.setElement($el, false)
-    } else {
-      this.setElement(this.el, false)
-    }
+    } else { this.setElement(this.el, false) }
+
   }
 }
