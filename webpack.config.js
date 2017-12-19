@@ -36,11 +36,7 @@ const webpackConfig = (config) => {
           loader: 'babel-loader',
           include: [
             path.resolve(__dirname, 'src')
-          ],
-          options: {
-            presets: ['es2015'],
-            plugins: ['add-module-exports'],
-          },
+          ]
         },
       ],
     },
