@@ -1,7 +1,7 @@
 {
   "name": "clappr",
   "description": "An extensible media player for the web",
-  "version": "0.2.79",
+  "version": "0.2.80",
   "homepage": "https://github.com/clappr/clappr",
   "authors": [
     "Globo.com"
@@ -35,15 +35,14 @@
     "directory-named-webpack-plugin": "^2.1.0",
     "dotenv": "^4.0.0",
     "eslint": "^4.1.0",
+    "eslint-config-node-style-guide": "^3.0.0",
     "file-loader": "^0.11.1",
     "gulp": "^3.8.1",
-    "hls.js": "^0.8.7",
+    "hls.js": "^0.8.9",
     "html-loader": "^0.4.3",
     "isparta": "^4.0.0",
     "istanbul": "^0.4.2",
     "istanbul-instrumenter-loader": "^2.0.0",
-    "jscs": "^3.0.3",
-    "jshint": "^2.9.1",
     "karma": "^1.1.1",
     "karma-chai": "^0.1.0",
     "karma-chai-sinon": "^0.1.5",
@@ -72,6 +71,7 @@
     "uglify-js": "^3.0.5",
     "url-loader": "^0.5.6",
     "webpack": "^3.0.0",
+    "webpack-bundle-analyzer": "^2.9.1",
     "webpack-dev-server": "^2.4.5",
     "yargs": "^8.0.1"
   },
