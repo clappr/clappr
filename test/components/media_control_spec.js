@@ -1,4 +1,4 @@
-import {Config} from '../../src/base/utils'
+import { Config } from '../../src/base/utils'
 import template from '../../src/base/template'
 import MediaControl from '../../src/components/media_control'
 import Playback from '../../src/base/playback'
@@ -11,21 +11,21 @@ describe('MediaControl', function() {
     this.playback.getPlaybackType = function() {
       return Playback.VOD
     }
-    this.container = new Container({playback: this.playback})
-    this.mediaControl = new MediaControl({container: this.container})
+    this.container = new Container({ playback: this.playback })
+    this.mediaControl = new MediaControl({ container: this.container })
     localStorage.removeItem('clappr.localhost.volume')
   })
 
   describe('#constructor', function() {
     it('can be built muted', function() {
-      const mediaControl = new MediaControl({mute: true, container: this.container})
+      const mediaControl = new MediaControl({ mute: true, container: this.container })
       expect(mediaControl.muted).to.be.equal(true)
       expect(mediaControl.volume).to.be.equal(0)
     })
 
     it('restores saved volume', function() {
       Config.persist('volume', 42)
-      const mediaControl = new MediaControl({persistConfig: true, container: this.container})
+      const mediaControl = new MediaControl({ persistConfig: true, container: this.container })
 
       expect(mediaControl.volume).to.be.equal(42)
     })
@@ -76,7 +76,7 @@ describe('MediaControl', function() {
       // expected to be default value (100)
       expect(Config.restore('volume')).to.be.equal(100)
 
-      const mediacontrol = new MediaControl({persistConfig: true, container: this.container})
+      const mediacontrol = new MediaControl({ persistConfig: true, container: this.container })
       mediacontrol.setVolume(78)
 
       expect(Config.restore('volume')).to.be.equal(78)
@@ -87,14 +87,14 @@ describe('MediaControl', function() {
     // expected to be default value (100)
     expect(Config.restore('volume')).to.be.equal(100)
 
-    const mediacontrol = new MediaControl({persistConfig: true, container: this.container})
+    const mediacontrol = new MediaControl({ persistConfig: true, container: this.container })
     mediacontrol.setVolume(78)
 
     expect(Config.restore('volume')).to.be.equal(78)
   })
 
   it('can appear when playback type is not NO_OP', function() {
-    const mediaControl = new MediaControl({container: this.container})
+    const mediaControl = new MediaControl({ container: this.container })
     mediaControl.render()
     mediaControl.enable()
     expect(mediaControl.$el.hasClass('media-control-hide')).to.be.false
@@ -105,7 +105,7 @@ describe('MediaControl', function() {
     this.playback.getPlaybackType = function() {
       return Playback.NO_OP
     }
-    const mediaControl = new MediaControl({container: this.container})
+    const mediaControl = new MediaControl({ container: this.container })
     mediaControl.render()
     mediaControl.enable()
     expect(mediaControl.$el.hasClass('media-control-hide')).to.be.true
@@ -119,7 +119,7 @@ describe('MediaControl', function() {
         constructor(options) { super(options) }
       }
 
-      const mediaControl = new MyMediaControl({mute: true, container: this.container})
+      const mediaControl = new MyMediaControl({ mute: true, container: this.container })
       mediaControl.render()
       expect(mediaControl.muted).to.be.equal(true)
       expect(mediaControl.volume).to.be.equal(0)

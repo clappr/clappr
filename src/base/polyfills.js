@@ -9,13 +9,14 @@
  * See also : https://tc39.github.io/ecma262/#sec-array.prototype.find
  */
 if (!Array.prototype.find) {
+  // eslint-disable-next-line
   Object.defineProperty(Array.prototype, 'find', {
     // Note: ES6 arrow function syntax is not used on purpose to avoid this to be undefined
     value: function(predicate) {
       // 1. Let O be ? ToObject(this value).
-      if (this == null) {
+      if (this == null)
         throw new TypeError('"this" is null or not defined')
-      }
+
 
       let o = Object(this)
 
@@ -23,9 +24,9 @@ if (!Array.prototype.find) {
       let len = o.length >>> 0
 
       // 3. If IsCallable(predicate) is false, throw a TypeError exception.
-      if (typeof predicate !== 'function') {
+      if (typeof predicate !== 'function')
         throw new TypeError('predicate must be a function')
-      }
+
 
       // 4. If thisArg was supplied, let T be thisArg; else let T be undefined.
       let thisArg = arguments[1]
@@ -40,9 +41,9 @@ if (!Array.prototype.find) {
         // c. Let testResult be ToBoolean(? Call(predicate, T, « kValue, k, O »)).
         // d. If testResult is true, return kValue.
         let kValue = o[k]
-        if (predicate.call(thisArg, kValue, k, o)) {
+        if (predicate.call(thisArg, kValue, k, o))
           return kValue
-        }
+
         // e. Increase k by 1.
         k++
       }

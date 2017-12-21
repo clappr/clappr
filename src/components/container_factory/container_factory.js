@@ -38,12 +38,11 @@ export default class ContainerFactory extends BaseObject {
       mimeType = this.options.mimeType
     if (typeof source === 'object') {
       resolvedSource = source.source.toString()
-      if (source.mimeType) {
+      if (source.mimeType)
         mimeType = source.mimeType
-      }
-    } else {
-      resolvedSource = source.toString()
-    }
+
+    } else { resolvedSource = source.toString() }
+
 
     if (resolvedSource.match(/^\/\//)) resolvedSource = window.location.protocol + resolvedSource
 
@@ -54,7 +53,7 @@ export default class ContainerFactory extends BaseObject {
     const playbackPlugin = this.findPlaybackPlugin(resolvedSource, mimeType)
     const playback = new playbackPlugin(options, this._i18n)
 
-    options = $.extend({}, options, {playback: playback})
+    options = $.extend({}, options, { playback: playback })
 
     const container = new Container(options, this._i18n)
     const defer = $.Deferred()

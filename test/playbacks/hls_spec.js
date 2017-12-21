@@ -42,7 +42,7 @@ describe('HLS playback', () => {
       let options = { src: 'http://clappr.io/video.m3u8' },
         hls = new HLS(options)
       expect(hls.options.playback).to.be.equal(hls.options)
-      options = { src: 'http://clappr.io/video.m3u8', playback: {test: true} }
+      options = { src: 'http://clappr.io/video.m3u8', playback: { test: true } }
       hls = new HLS(options)
       expect(hls.options.playback.test).to.be.equal(true)
     })
@@ -82,7 +82,7 @@ describe('HLS playback', () => {
 
   it('should trigger a playback error if source load failed', function(done) {
     this.timeout(5000)
-    let options = {src: 'http://clappr.io/notfound.m3u8'}
+    let options = { src: 'http://clappr.io/notfound.m3u8' }
     const playback = new HLS(options)
     playback.on(Events.PLAYBACK_ERROR, (e) => {
       expect(e.data.type).to.be.equal(HLSJS.ErrorTypes.NETWORK_ERROR)
@@ -95,7 +95,7 @@ describe('HLS playback', () => {
   xit('levels', function() {
     let playback
     beforeEach(() => {
-      const options = {src: 'http://clappr.io/foo.m3u8'}
+      const options = { src: 'http://clappr.io/foo.m3u8' }
       playback = new HLS(options)
       playback.setupHls()
       // NOTE: rather than trying to call playback.setupHls, we'll punch a new one in place

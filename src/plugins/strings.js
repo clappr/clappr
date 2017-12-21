@@ -1,4 +1,4 @@
-import {getBrowserLanguage} from '../base/utils'
+import { getBrowserLanguage } from '../base/utils'
 import $ from 'clappr-zepto'
 import CorePlugin from '../base/core_plugin'
 
@@ -10,7 +10,7 @@ import CorePlugin from '../base/core_plugin'
  * @module plugins
  */
 export default class Strings extends CorePlugin {
-  get name() {return 'strings'}
+  get name() { return 'strings' }
 
   constructor(core) {
     super(core)
@@ -28,7 +28,7 @@ export default class Strings extends CorePlugin {
     return i18n[key] || key
   }
 
-  _language() {return this.core.options.language || getBrowserLanguage()}
+  _language() { return this.core.options.language || getBrowserLanguage() }
 
   _initializeMessages() {
     const defaultMessages = {

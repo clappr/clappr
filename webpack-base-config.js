@@ -22,6 +22,11 @@ module.exports = {
         // config in .babelrc
       },
       {
+        test: /fonts\.css$/,
+        loaders: ['css-loader', 'postcss-loader'],
+        include: path.resolve(__dirname, 'src/components/core/public')
+      },
+      {
         test: /\.scss$/,
         loaders: ['style-loader?singleton=true', 'css-loader', 'postcss-loader', 'sass-loader?includePaths[]='
             + path.resolve(__dirname, './src/base/scss')
@@ -29,14 +34,7 @@ module.exports = {
         include: path.resolve(__dirname, 'src')
       },
       {
-        test: /\.(ttf)/,
-        loader: 'url-loader',
-        options: {
-          limit: 1
-        },
-      },
-      {
-        test: /\.(png|woff|eot|swf|cur)/,
+        test: /\.(png|woff|eot|swf|cur|ttf)/,
         loader: 'url-loader',
         options: {
           limit: 1,

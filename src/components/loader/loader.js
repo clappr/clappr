@@ -66,9 +66,9 @@ export default class Loader extends BaseObject {
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
     this.corePlugins = [DVRControls, ClosedCaptions, Favicon, SeekTime, SourcesPlugin, EndVideo, Strings]
     if (externalPlugins) {
-      if (!Array.isArray(externalPlugins)) {
+      if (!Array.isArray(externalPlugins))
         this.validateExternalPluginsType(externalPlugins)
-      }
+
       this.addExternalPlugins(externalPlugins)
     }
   }
@@ -100,9 +100,9 @@ export default class Loader extends BaseObject {
     const pluginsMap = list.reduceRight(groupUp, Object.create(null))
 
     const plugins = []
-    for (let key in pluginsMap) {
+    for (let key in pluginsMap)
       plugins.unshift(pluginsMap[key])
-    }
+
     return plugins
   }
 
@@ -114,15 +114,15 @@ export default class Loader extends BaseObject {
    */
   addExternalPlugins(plugins) {
     plugins = this.groupPluginsByType(plugins)
-    if (plugins.playback) {
+    if (plugins.playback)
       this.playbackPlugins = this.removeDups(plugins.playback.concat(this.playbackPlugins))
-    }
-    if (plugins.container) {
+
+    if (plugins.container)
       this.containerPlugins = this.removeDups(plugins.container.concat(this.containerPlugins))
-    }
-    if (plugins.core) {
+
+    if (plugins.core)
       this.corePlugins = this.removeDups(plugins.core.concat(this.corePlugins))
-    }
+
 
     PlayerInfo.getInstance(this.playerId).playbackPlugins = this.playbackPlugins
   }
@@ -138,7 +138,7 @@ export default class Loader extends BaseObject {
     plugintypes.forEach((type) => {
       (plugins[type] || []).forEach((el) => {
         const errorMessage = 'external ' + el.type + ' plugin on ' + type + ' array'
-        if (el.type !== type) { throw new ReferenceError(errorMessage) }
+        if (el.type !== type)  throw new ReferenceError(errorMessage)
       })
     })
   }

@@ -39,7 +39,7 @@ describe('UIObject', function() {
   it('creates an element with attributes', function() {
     class MyButton extends UIObject {
       constructor(options) { super(options) }
-      get attributes() { return { class: 'my-button'} }
+      get attributes() { return { class: 'my-button' } }
     }
 
     const myButton = new MyButton()
@@ -86,7 +86,7 @@ describe('UIObject', function() {
       constructor(options) {
         super(options)
       }
-      get attributes() { return { id: 'my-0-button'} }
+      get attributes() { return { id: 'my-0-button' } }
     }
 
     const myButton = new FullscreenButton()
