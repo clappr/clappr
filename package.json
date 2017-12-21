@@ -4,6 +4,7 @@
   "description": "An extensible media player for the web",
   "main": "./dist/clappr.js",
   "scripts": {
+    "bundle-check": "webpack -p --config './webpack.config.bundle-analyzer.js'",
     "release": "MINIMIZE=true webpack --progress",
     "release:plainhtml5": "MINIMIZE=true CLAPPR_PLAIN_HTML5_ONLY=true webpack --progress",
     "build": "webpack --progress",
@@ -12,8 +13,7 @@
     "test": "karma start --single-run",
     "test:watch": "karma start --no-single-run --watch",
     "lint": "eslint src/ test/",
-    "check_code_style": "jscs src/ --esnext",
-    "fix_code_style": "jscs src/ --esnext --fix",
+    "lint:fix": "eslint --fix src/ test/",
     "start": "webpack-dev-server --host 0.0.0.0 --content-base public/ --output-public-path latest/ --hot",
     "lock": "rm -rf npm-shrinkwrap.json node_modules && npm install --silent && npm shrinkwrap"
   },
@@ -43,6 +43,7 @@
     "directory-named-webpack-plugin": "^2.1.0",
     "dotenv": "^4.0.0",
     "eslint": "^4.1.0",
+    "eslint-config-node-style-guide": "^3.0.0",
     "file-loader": "^0.11.1",
     "gulp": "^3.8.1",
     "hls.js": "^0.8.7",
@@ -50,8 +51,6 @@
     "isparta": "^4.0.0",
     "istanbul": "^0.4.2",
     "istanbul-instrumenter-loader": "^2.0.0",
-    "jscs": "^3.0.3",
-    "jshint": "^2.9.1",
     "karma": "^1.1.1",
     "karma-chai": "^0.1.0",
     "karma-chai-sinon": "^0.1.5",
@@ -80,6 +79,7 @@
     "uglify-js": "^3.0.5",
     "url-loader": "^0.5.6",
     "webpack": "^3.0.0",
+    "webpack-bundle-analyzer": "^2.9.1",
     "webpack-dev-server": "^2.4.5",
     "yargs": "^8.0.1"
   }

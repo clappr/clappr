@@ -6,7 +6,7 @@ import Events from '../../src/base/events'
 describe('StatsPlugin', function() {
   beforeEach(function() {
     this.playback = new FakePlayback()
-    this.container = new Container({playback: this.playback})
+    this.container = new Container({ playback: this.playback })
     this.stats = new Stats(this.container)
     this.container.addPlugin(this.stats)
     this.clock = sinon.useFakeTimers(Date.now())
