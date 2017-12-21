@@ -59,5 +59,6 @@ module.exports = {
   },
   devServer: {
     disableHostCheck: true, // https://github.com/webpack/webpack-dev-server/issues/882
-  }
+  },
+  devtool: 'source-map'
 }
