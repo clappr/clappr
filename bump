@@ -20,7 +20,11 @@ build() {
   echo 'building clappr.js' &&
   yarn build &&
   echo 'building clappr.min.js' &&
-  yarn release
+  yarn release &&
+  echo 'building clappr.plainhtml5.js' &&
+  yarn build:plainhtml5 &&
+  echo 'building clappr.plainhtml5.min.js' &&
+  yarn release:plainhtml5
 }
 
 run_tests() {
