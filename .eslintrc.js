@@ -24,7 +24,7 @@ module.exports = {
         "sinon": false,
         "xit": false
     },
-    "extends": "eslint:recommended",
+    "extends": "node-style-guide",
     "parserOptions": {
         "sourceType": "module"
     },
@@ -45,6 +45,14 @@ module.exports = {
             "error",
             "never"
         ],
-        "no-var": "error"
+        "no-var": "error",
+        "block-spacing": "error",
+        "curly": ["error", "multi-or-nest", "consistent"],
+        "object-curly-spacing": ["error", "always"],
+        "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+        // part of Node Style-guide but ignored
+        "max-len": 0,
+        "max-statements": 0,
+        "space-after-keywords": 0
     }
 };
