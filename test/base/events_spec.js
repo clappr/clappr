@@ -25,7 +25,7 @@ describe('Events', function(){
   })
 
   it('subscribes to a given event using an object', function(){
-    this.events.on({'clappr.any.event': this.callback})
+    this.events.on({ 'clappr.any.event': this.callback })
     this.callback.should.not.have.been.called
 
     this.events.trigger('clappr.any.event')
@@ -207,9 +207,9 @@ describe('Events', function(){
     })
 
     it('not a string', function(){
-      for(let arg of [function(){}, {}, [], null, undefined]) {
+      for(let arg of [function(){}, {}, [], null, undefined])
         Events.register(arg)
-      }
+
 
       expect(this.stubLogError.callCount).to.be.equal(5)
     })

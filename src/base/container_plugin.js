@@ -1,5 +1,5 @@
 import BaseObject from './base_object'
-import {extend} from './utils'
+import { extend } from './utils'
 
 /**
  * The base class for a container plugin

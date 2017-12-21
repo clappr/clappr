@@ -7,7 +7,7 @@ import Events from '../../src/base/events'
 describe('Container', function() {
   beforeEach(function() {
     this.playback = new FakePlayback()
-    this.container = new Container({playback: this.playback})
+    this.container = new Container({ playback: this.playback })
   })
 
   it('uses settings from playback', function() {
@@ -23,13 +23,13 @@ describe('Container', function() {
   })
 
   it('gets a plugin by name', function() {
-    const plugin = {name: 'fake'}
+    const plugin = { name: 'fake' }
     this.container.addPlugin(plugin)
     assert.equal(plugin, this.container.getPlugin('fake'))
   })
 
   it('destroys all the plugins', function() {
-    const fakePlugin = {destroy: function(){}}
+    const fakePlugin = { destroy: function(){} }
 
     sinon.spy(this.playback, 'destroy')
     sinon.spy(fakePlugin, 'destroy')
@@ -51,23 +51,23 @@ describe('Container', function() {
     sinon.spy(this.container, 'progress')
 
     this.container.bindEvents()
-    this.playback.trigger(Events.PLAYBACK_PROGRESS, {start: 0, current: 3000, total: 6000})
+    this.playback.trigger(Events.PLAYBACK_PROGRESS, { start: 0, current: 3000, total: 6000 })
 
-    assert.ok(this.container.progress.calledWith({start: 0, current: 3000, total: 6000}))
+    assert.ok(this.container.progress.calledWith({ start: 0, current: 3000, total: 6000 }))
   })
 
   it('listens to playback:timeupdate event', function() {
     sinon.spy(this.container, 'timeUpdated')
     this.container.bindEvents()
-    this.playback.trigger(Events.PLAYBACK_TIMEUPDATE, {current: 2, total: 40})
+    this.playback.trigger(Events.PLAYBACK_TIMEUPDATE, { current: 2, total: 40 })
 
-    assert.ok(this.container.timeUpdated.calledWith({current: 2, total: 40}))
+    assert.ok(this.container.timeUpdated.calledWith({ current: 2, total: 40 }))
   })
 
   it('listens to playback:seeked event', function(done) {
     this.timeout(5000)
-    let playback = new HTML5Playback({src: '/base/test/fixtures/SampleVideo_360x240_1mb.mp4'})
-    let container = new Container({playback: playback})
+    let playback = new HTML5Playback({ src: '/base/test/fixtures/SampleVideo_360x240_1mb.mp4' })
+    let container = new Container({ playback: playback })
     let callback = sinon.spy()
 
     container.bindEvents()
@@ -113,9 +113,9 @@ describe('Container', function() {
     sinon.spy(this.container, 'loadedMetadata')
 
     this.container.bindEvents()
-    this.playback.trigger(Events.PLAYBACK_LOADEDMETADATA, {duration: 45, data: {hold: 'on'}})
+    this.playback.trigger(Events.PLAYBACK_LOADEDMETADATA, { duration: 45, data: { hold: 'on' } })
 
-    assert.ok(this.container.loadedMetadata.calledWith({duration: 45, data: {hold: 'on'}}))
+    assert.ok(this.container.loadedMetadata.calledWith({ duration: 45, data: { hold: 'on' } }))
   })
 
   it('listens to playback:highdefinitionupdate event', function() {
