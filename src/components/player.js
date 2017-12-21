@@ -148,6 +148,26 @@ export default class Player extends BaseObject {
    * the default behavior for the **HLS playback** is to keep buffering indefinitely, even on VoD.
    * This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks.
    * To change this behavior use `maxBufferLength` where **value is in seconds**.
+   * @param {Number} [options.maxBackBufferLength]
+   * After how much distance of the playhead data should be pruned from the buffer (influences memory consumption
+   * of adaptive media-engines like Hls.js or Shaka)
+   * @param {Number} [options.minBufferLength]
+   * After how much data in the buffer at least we attempt to consume it (influences QoS-related behavior
+   * of adaptive media-engines like Hls.js or Shaka). If this is too low, and the available bandwidth is varying a lot
+   * and too close to the streamed bitrate, we may continuously hit under-runs.
+   * @param {Number} [options.initialBandwidthEstimate]
+   * define an initial bandwidth "guess" (or previously stored/established value) for underlying adaptive-bitreate engines
+   * of adaptive playback implementations, like Hls.js or Shaka
+   * @param {Number} [options.maxAdaptiveBitrate]
+   * Limits the streamed bitrate (for adaptive media-engines in underlying playback implementations)
+   * @param {Object} [options.maxAdaptiveVideoDimensions]
+   * Limits the video dimensions in adaptive media-engines. Should be a literal object with `height` and `width`.
+   * @param {Boolean}[options.enableAutomaticABR] **default**: `true`
+   * Allows to enable/disable automatic bitrate switching in adaptive media-engines
+   * @param {String} [options.preferredTextLanguage] **default**: `'pt-BR'`
+   * Allows to set a preferred text language, that may be enabled by the media-engine if available.
+   * @param {String} [options.preferredAudioLanguage] **default**: `'pt-BR'`
+   * Allows to set a preferred audio language, that may be enabled by the media-engine if available.
    * @param {String} [options.gaAccount]
    * enable Google Analytics events dispatch **(play/pause/stop/buffering/etc)** by adding your `gaAccount`
    * @param {String} [options.gaTrackerName]
