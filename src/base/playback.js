@@ -18,6 +18,10 @@ export default class Playback extends UIObject {
     return false
   }
 
+  get isAdaptive() {
+    return false
+  }
+
   /**
    * Determine if the playback has ended.
    * @property ended
