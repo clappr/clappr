@@ -70,16 +70,15 @@ export default class AdaptivePlayback extends Playback {
    */
   get isAutoAdaptive() { return false }
 
+  /**
+   * @returns {VideoQualityLevel[]}
+   */
+  get activeVideoQualityLevels() {}
 
   /**
    * @returns {VideoQualityLevel[]}
    */
-  get activeVideoQualityLevel() {}
-
-  /**
-   * @returns {VideoQualityLevel[]}
-   */
-  get availableVideoQualityLevels() {}
+  get videoQualityLevels() {}
 
   /**
    * @returns {AudioOption[]}
@@ -89,8 +88,7 @@ export default class AdaptivePlayback extends Playback {
   /**
    * @returns {AudioOption[]}
    */
-  get activeAudioOptions() {}
-
+  get audioOptions() {}
 
   /**
    * @returns {ClosedCaptionOption[]}
@@ -100,5 +98,5 @@ export default class AdaptivePlayback extends Playback {
   /**
    * @returns {ClosedCaptionOption[]}
    */
-  get activeClosedCaptions() {}
+  get closedCaptions() {}
 }
