@@ -385,7 +385,6 @@ export default class HLS extends HTML5VideoPlayback {
 
   _updatePlaybackType(evt, data) {
     this._playbackType = data.details.live ? Playback.LIVE : Playback.VOD
-    this._fillLevels()
     this._onLevelUpdated(evt, data)
 
     // Live stream subtitle tracks detection hack (may not immediately available)
