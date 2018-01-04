@@ -14,9 +14,7 @@ indent_size = 2
 trim_trailing_whitespace = true
 
 [*.md]
-trim_trailing_whitespace = true
+# add Markdown specifics if needed
 
-[{package.json}]
-indent_style = space
-indent_size = 2
-insert_final_newline = true
+[*json]
+# add JSON specifics if needed
