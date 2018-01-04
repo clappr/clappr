@@ -5,7 +5,7 @@ import Playback from './playback'
  * @function
  * @param {Boolean} scheduleActivity Enable/disable activity, switch to a different media representation
  * @param {Boolean} immediateFlush (default = false) Immediate switching, flushes playout buffer
- * @returns {Boolean} Wether the switch request could be processed
+ * @returns {Boolean} Whether the switch request could be processed
  *
  */
 
