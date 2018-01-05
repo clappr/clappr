@@ -1434,12 +1434,6 @@ clean-css@4.0.x:
   dependencies:
     source-map "0.5.x"
 
-clean-webpack-plugin@^0.1.14:
-  version "0.1.15"
-  resolved "https://registry.yarnpkg.com/clean-webpack-plugin/-/clean-webpack-plugin-0.1.15.tgz#facc04e0c8dba99bf451ae865ad0361f51af1df1"
-  dependencies:
-    rimraf "~2.5.1"
-
 cli-cursor@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/cli-cursor/-/cli-cursor-1.0.2.tgz#64da3f7d56a54412e59794bd62dc35295e8f2987"
