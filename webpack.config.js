@@ -6,6 +6,7 @@ const webpackConfig = require('./webpack-base-config')
 const voidModulePath = path.resolve('./src/base/void');
 
 const minimize = !!process.env.MINIMIZE;
+const forceInlineDebug = !!process.env.CLAPPR_INLINE_DEBUG
 const plainHtml5Only = !!process.env.CLAPPR_PLAIN_HTML5_ONLY;
 const devServer = (process.env.npm_lifecycle_event === 'start');
 
@@ -43,9 +44,18 @@ if (plainHtml5Only) {
     );
 }
 
+if (forceInlineDebug) {
+  console.log('NOTE: Enabling inline source-maps - this may not be suitable for production usage')
+  webpackConfig.devtool = 'inline-source-map'
+}
+
+
+const filename =
+  `clappr${ distroFlavor ? '.' + distroFlavor : '' }${ forceInlineDebug ? '.debug' : '' }${ minimize ? '.min' : '' }.js`
+
 webpackConfig.output = {
   path: path.resolve(__dirname, 'dist'),
-  filename: `clappr${ distroFlavor ? '.' + distroFlavor : '' }${ minimize ? '.min' : '' }.js`,
+  filename,
   library: 'Clappr',
   libraryTarget: 'umd'
 }
