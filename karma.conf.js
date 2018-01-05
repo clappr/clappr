@@ -29,7 +29,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'test/**/*.js',
-      {pattern: 'test/fixtures/*.mp4', served: true, included: false}
+      { pattern: 'test/fixtures/*.mp4', served: true, included: false }
     ],
 
     // list of files to exclude
@@ -45,8 +45,8 @@ module.exports = function(config) {
 
     coverageReporter: {
       reporters: [
-        {type: 'lcovonly'},
-        {type: 'text-summary'}
+        { type: 'lcovonly' },
+        { type: 'text-summary' }
       ],
       dir: 'coverage'
     },
