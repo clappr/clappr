@@ -28,7 +28,8 @@ if (minimize) {
   }))
 
 } else if (!devServer) {
-  webpackConfig.plugins.push(new CleanPlugin(['dist'], {verbose: false}))
+  // Cleans up whole dist folder before building
+  webpackConfig.plugins.push(new CleanPlugin(['dist'], {verbose: true}))
 }
 
 if (plainHtml5Only) {
