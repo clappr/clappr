@@ -52,6 +52,7 @@ if (forceInlineDebug) {
   webpackConfig.devtool = 'inline-source-map'
 }
 
+console.log('\n')
 
 const filename =
   `clappr${ distroFlavor ? '.' + distroFlavor : '' }${ forceInlineDebug ? '.debug' : '' }${ minimize ? '.min' : '' }.js`
