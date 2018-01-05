@@ -8,6 +8,7 @@
     "release": "MINIMIZE=true webpack --progress",
     "release:plainhtml5": "MINIMIZE=true CLAPPR_PLAIN_HTML5_ONLY=true webpack --progress",
     "build": "webpack --progress",
+    "build:debug": "CLAPPR_INLINE_DEBUG=true webpack --progress",
     "build:plainhtml5": "CLAPPR_PLAIN_HTML5_ONLY=true webpack --progress",
     "watch": "webpack --progress --watch",
     "test": "karma start --single-run",
