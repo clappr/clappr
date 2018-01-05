@@ -6,6 +6,7 @@ const webpackConfig = require('./webpack-base-config')
 const voidModulePath = path.resolve('./src/base/void');
 
 const minimize = !!process.env.MINIMIZE;
+const forceInlineDebug = !!process.env.CLAPPR_INLINE_DEBUG
 const plainHtml5Only = !!process.env.CLAPPR_PLAIN_HTML5_ONLY;
 const devServer = (process.env.npm_lifecycle_event === 'start');
 
@@ -14,6 +15,8 @@ let distroFlavor;
 webpackConfig.entry = path.resolve(__dirname, 'src/main.js')
 
 if (minimize) {
+
+  console.log('NOTE: Enabled minifying bundle (uglify)')
 
   webpackConfig.plugins.push(new webpack.LoaderOptionsPlugin({ minimize, debug: !minimize }))
   webpackConfig.plugins.push(new webpack.optimize.UglifyJsPlugin({
@@ -27,7 +30,8 @@ if (minimize) {
   }))
 
 } else if (!devServer) {
-  webpackConfig.plugins.push(new CleanPlugin(['dist'], {verbose: false}))
+  // Cleans up whole dist folder before building
+  webpackConfig.plugins.push(new CleanPlugin(['dist'], {verbose: true}))
 }
 
 if (plainHtml5Only) {
@@ -43,9 +47,19 @@ if (plainHtml5Only) {
     );
 }
 
+if (forceInlineDebug) {
+  console.log('NOTE: Enabling inline source-maps - this may not be suitable for production usage')
+  webpackConfig.devtool = 'inline-source-map'
+}
+
+console.log('\n')
+
+const filename =
+  `clappr${ distroFlavor ? '.' + distroFlavor : '' }${ forceInlineDebug ? '.debug' : '' }${ minimize ? '.min' : '' }.js`
+
 webpackConfig.output = {
   path: path.resolve(__dirname, 'dist'),
-  filename: `clappr${ distroFlavor ? '.' + distroFlavor : '' }${ minimize ? '.min' : '' }.js`,
+  filename,
   library: 'Clappr',
   libraryTarget: 'umd'
 }
