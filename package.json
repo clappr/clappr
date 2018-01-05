@@ -12,7 +12,7 @@
     "watch": "webpack --progress --watch",
     "test": "karma start --single-run",
     "test:watch": "karma start --no-single-run --watch",
-    "lint": "eslint src/ test/",
+    "lint": "eslint *.js src/ test/",
     "lint:fix": "eslint --fix src/ test/",
     "start": "webpack-dev-server --host 0.0.0.0 --content-base public/ --output-public-path latest/ --hot",
     "lock": "rm -rf npm-shrinkwrap.json node_modules && npm install --silent && npm shrinkwrap"
