@@ -1,16 +1,14 @@
 const path = require('path')
 const webpack = require('webpack')
-const CleanPlugin = require('clean-webpack-plugin')
 
 const webpackConfig = require('./webpack-base-config')
-const voidModulePath = path.resolve('./src/base/void');
+const voidModulePath = path.resolve('./src/base/void')
 
-const minimize = !!process.env.MINIMIZE;
+const minimize = !!process.env.MINIMIZE
 const forceInlineDebug = !!process.env.CLAPPR_INLINE_DEBUG
-const plainHtml5Only = !!process.env.CLAPPR_PLAIN_HTML5_ONLY;
-const devServer = (process.env.npm_lifecycle_event === 'start');
+const plainHtml5Only = !!process.env.CLAPPR_PLAIN_HTML5_ONLY
 
-let distroFlavor;
+let distroFlavor
 
 webpackConfig.entry = path.resolve(__dirname, 'src/main.js')
 
@@ -26,21 +24,21 @@ if (minimize) {
     mangle: true,
     sourceMap: true,
     comments: false,
-    output: {comments: false}
+    output: { comments: false }
   }))
 }
 
 if (plainHtml5Only) {
-    console.log('NOTE: Building only with plain HTML5 playback plugins, but will result in smaller build size');
+  console.log('NOTE: Building only with plain HTML5 playback plugins, but will result in smaller build size')
 
-    distroFlavor = 'plainhtml5';
+  distroFlavor = 'plainhtml5'
 
-    webpackConfig.plugins.push(
-        new webpack.NormalModuleReplacementPlugin(/playbacks\/flash/, voidModulePath),
-        new webpack.NormalModuleReplacementPlugin(/playbacks\/base_flash_playback/, voidModulePath),
-        new webpack.NormalModuleReplacementPlugin(/playbacks\/flashls/, voidModulePath),
-        new webpack.NormalModuleReplacementPlugin(/playbacks\/hls/, voidModulePath)
-    );
+  webpackConfig.plugins.push(
+    new webpack.NormalModuleReplacementPlugin(/playbacks\/flash/, voidModulePath),
+    new webpack.NormalModuleReplacementPlugin(/playbacks\/base_flash_playback/, voidModulePath),
+    new webpack.NormalModuleReplacementPlugin(/playbacks\/flashls/, voidModulePath),
+    new webpack.NormalModuleReplacementPlugin(/playbacks\/hls/, voidModulePath)
+  )
 }
 
 if (forceInlineDebug) {
