@@ -6546,7 +6546,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.2.82"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.2.83"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -11160,7 +11160,7 @@ var Loader = function (_BaseObject) {
     _this.playbackPlugins = [_html5_video2.default, _html5_audio2.default, _html_img2.default, _no_op2.default];
 
     if (true) {
-      _this.playbackPlugins = _this.playbackPlugins.concat([_hls2.default, _flash2.default, _flashls2.default]);
+      _this.playbackPlugins = [_hls2.default, _flash2.default, _flashls2.default].concat(_this.playbackPlugins);
     }
 
     _this.containerPlugins = [_spinner_three_bounce2.default, _watermark2.default, _poster2.default, _stats2.default, _google_analytics2.default, _click_to_pause2.default];
