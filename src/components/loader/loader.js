@@ -56,11 +56,11 @@ export default class Loader extends BaseObject {
     ]
 
     if (!PLAIN_HTML5_ONLY) {
-      this.playbackPlugins = this.playbackPlugins.concat([
+      this.playbackPlugins = [
         HLSVideoPlayback,
         FlashVideoPlayback,
         FlasHLSVideoPlayback
-      ])
+      ].concat(this.playbackPlugins)
     }
 
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
