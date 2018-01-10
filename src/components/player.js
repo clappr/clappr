@@ -257,12 +257,16 @@ export default class Player extends BaseObject {
     return this
   }
 
-  _registerOptionEventListeners() {
-    const userEvents = this.options.events || {}
-    Object.keys(userEvents).forEach((userEvent) => {
+  _registerOptionEventListeners(events = {}, newEvents = {}) {
+    Object.keys(events).forEach((userEvent) => {
+      const eventType = this.eventsMapping[userEvent]
+      eventType && this.off(eventType)
+    })
+
+    Object.keys(newEvents).forEach((userEvent) => {
       const eventType = this.eventsMapping[userEvent]
       if (eventType) {
-        let eventFunction = userEvents[userEvent]
+        let eventFunction = newEvents[userEvent]
         eventFunction = typeof eventFunction === 'function' && eventFunction
         eventFunction && this.on(eventType, eventFunction)
       }
@@ -508,7 +512,8 @@ export default class Player extends BaseObject {
    * @param {Object} options all the options to change in form of a javascript object
    * @return {Player} itself
    */
-  configure(options) {
+  configure(options = {}) {
+    this._registerOptionEventListeners(this.options.events, options.events)
     this.core.configure(options)
     return this
   }
