@@ -67,4 +67,89 @@ describe('Player', function() {
       }
     })
   })
+
+  describe('register options event listeners', function () {
+    beforeEach(function () {
+      this.player = new Player({ source: '/video.mp4' })
+      const element = document.createElement('div')
+      this.player.attachTo(element)
+      sinon.spy(this.player, '_registerOptionEventListeners')
+    })
+
+    it('should register on configure', function () {
+      this.player.configure({
+        events: {
+          onPlay: () => {}
+        }
+      })
+
+      expect(this.player._registerOptionEventListeners).called.once
+    })
+
+    it('should call only last registered callback', function () {
+      const callbacks = {
+        callbackA: sinon.spy(),
+        callbackB: sinon.spy(),
+      }
+      this.player.configure({
+        events: {
+          onPlay: callbacks.callbackA
+        }
+      })
+
+      this.player.configure({
+        events: {
+          onPlay: callbacks.callbackB
+        }
+      })
+
+      this.player._onPlay()
+
+      expect(callbacks.callbackA).not.called
+      expect(callbacks.callbackB).called.once
+    })
+
+    it('should add a new event callback', function () {
+      const callbacks = {
+        callbackC: sinon.spy()
+      }
+      this.player.configure({
+        events: {}
+      })
+
+      this.player.configure({
+        events: {
+          onPause: callbacks.callbackC,
+        }
+      })
+
+      this.player._onPause()
+
+      expect(callbacks.callbackC).called.once
+    })
+
+    it('should remove previous event callbacks', function () {
+      const callbacks = {
+        callbackA: sinon.spy(),
+        callbackB: sinon.spy()
+      }
+      this.player.configure({
+        events: {
+          onPlay: callbacks.callbackA,
+        }
+      })
+
+      this.player.configure({
+        events: {
+          onPause: callbacks.callbackB,
+        }
+      })
+
+      this.player._onPlay()
+      this.player._onPause()
+
+      expect(callbacks.callbackA).not.called
+      expect(callbacks.callbackB).called.once
+    })
+  })
 })

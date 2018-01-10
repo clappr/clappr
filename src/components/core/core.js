@@ -186,9 +186,9 @@ export default class Core extends UIObject {
     this.containers.forEach((container) => container.destroy())
     this.mediaControl.container = null
     this.containerFactory.options = $.extend(this.options, { sources })
-    this.containerFactory.createContainers().then((containers) => {
-      this.setupContainers(containers)
-    })
+    this.containerFactory.createContainers()
+      .then((containers) => this.setupContainers(containers))
+      .then((containers) => this.resolveOnContainersReady(containers))
   }
 
   destroy() {
