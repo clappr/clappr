@@ -6455,7 +6455,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.2.83"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.2.84"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -6829,11 +6829,18 @@ var Player = function (_BaseObject) {
   Player.prototype._registerOptionEventListeners = function _registerOptionEventListeners() {
     var _this2 = this;
 
-    var userEvents = this.options.events || {};
-    (0, _keys2.default)(userEvents).forEach(function (userEvent) {
+    var events = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var newEvents = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    (0, _keys2.default)(events).forEach(function (userEvent) {
+      var eventType = _this2.eventsMapping[userEvent];
+      eventType && _this2.off(eventType);
+    });
+
+    (0, _keys2.default)(newEvents).forEach(function (userEvent) {
       var eventType = _this2.eventsMapping[userEvent];
       if (eventType) {
-        var eventFunction = userEvents[userEvent];
+        var eventFunction = newEvents[userEvent];
         eventFunction = typeof eventFunction === 'function' && eventFunction;
         eventFunction && _this2.on(eventType, eventFunction);
       }
@@ -7110,7 +7117,10 @@ var Player = function (_BaseObject) {
    */
 
 
-  Player.prototype.configure = function configure(options) {
+  Player.prototype.configure = function configure() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    this._registerOptionEventListeners(this.options.events, options.events);
     this.core.configure(options);
     return this;
   };
@@ -8860,7 +8870,9 @@ var Core = function (_UIObject) {
     this.mediaControl.container = null;
     this.containerFactory.options = _clapprZepto2.default.extend(this.options, { sources: sources });
     this.containerFactory.createContainers().then(function (containers) {
-      _this5.setupContainers(containers);
+      return _this5.setupContainers(containers);
+    }).then(function (containers) {
+      return _this5.resolveOnContainersReady(containers);
     });
   };
 
@@ -12409,7 +12421,6 @@ var NoOp = function (_Playback) {
     var _this = (0, _possibleConstructorReturn3.default)(this, _Playback.call.apply(_Playback, [this].concat(args)));
 
     _this._noiseFrameNum = -1;
-    _this._started = false;
     return _this;
   }
 
@@ -12418,17 +12429,9 @@ var NoOp = function (_Playback) {
     this.$el.html(this.template({ message: playbackNotSupported }));
     this.trigger(_events2.default.PLAYBACK_READY, this.name);
     var showForNoOp = !!(this.options.poster && this.options.poster.showForNoOp);
-    if (this.options.autoPlay || !showForNoOp) this.play();
+    if (this.options.autoPlay || !showForNoOp) this._animate();
 
     return this;
-  };
-
-  NoOp.prototype.play = function play() {
-    if (!this._started) {
-      this._started = true;
-      this.trigger(_events2.default.PLAYBACK_PLAY);
-      this._animate();
-    }
   };
 
   NoOp.prototype._noise = function _noise() {
