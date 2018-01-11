@@ -43,6 +43,11 @@ npm_publish() {
   npm publish
 }
 
+purge_cdn_cache() {
+  echo 'purging cdn cache'
+  curl -q http://purge.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js
+}
+
 send_mail() {
   last_tag=$(git log --tags --no-walk --pretty="format:%d" | sed 2q | sed 's/[()]//g' | sed 's/ tag: //' | sed -n 2p)
   changelog=$(git log --pretty='%h %s (%an)\n' $last_tag..master)
@@ -65,6 +70,7 @@ main() {
     git_push $1 &&
     npm_publish &&
     send_mail $1 &&
+    purge_cdn_cache &&
     exit 0
 
     echo "something failed"
