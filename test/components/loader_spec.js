@@ -5,7 +5,32 @@ import CorePlugin from 'base/core_plugin'
 import ContainerPlugin from 'base/container_plugin'
 import UIContainerPlugin from 'base/ui_container_plugin'
 
+import HTML5VideoPlayback from 'playbacks/html5_video'
+import FlashVideoPlayback from 'playbacks/flash'
+import HTML5AudioPlayback from 'playbacks/html5_audio'
+import FlasHLSVideoPlayback from 'playbacks/flashls'
+import HLSVideoPlayback from 'playbacks/hls'
+import HTMLImgPlayback from 'playbacks/html_img'
+import NoOp from 'playbacks/no_op'
+
 describe('Loader', function() {
+  describe('default playback order', function() {
+    it('should have the priority MSE > HTML5 > Flash', function() {
+      const loader = new Loader()
+
+      // expected order from previous Clappr versions
+      const expectedPlaybacks = [HLSVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, FlashVideoPlayback, FlasHLSVideoPlayback, HTMLImgPlayback, NoOp]
+      expect(loader.playbackPlugins).to.deep.equal(expectedPlaybacks)
+    })
+
+    it('should not contain the MSE/Flash based playbacks when PLAIN_HTML5_ONLY is set', function() {
+      PLAIN_HTML5_ONLY == true
+      const loader = new Loader([], 0, true)
+      // expected order from previous Clappr versions
+      const expectedPlaybacks = [HTML5VideoPlayback, HTML5AudioPlayback, HTMLImgPlayback, NoOp]
+      expect(loader.playbackPlugins).to.deep.equal(expectedPlaybacks)
+    })
+  })
 
   describe('addExternalPlugins function', function() {
     it('should extend the plugins array with the external ones', function() {
