@@ -45,32 +45,45 @@ export default class Loader extends BaseObject {
    * @param {Object} externalPlugins the external plugins
    * @param {Number} playerId you can embed multiple instances of clappr, therefore this is the unique id of each one.
    */
-  constructor(externalPlugins, playerId) {
+  constructor(externalPlugins = [], playerId = 0, useOnlyPlainHtml5Plugins = PLAIN_HTML5_ONLY) {
     super()
     this.playerId = playerId
+    this.playbackPlugins = []
+
+    if (!useOnlyPlainHtml5Plugins) {
+      this.playbackPlugins = [
+        ...this.playbackPlugins,
+        HLSVideoPlayback,
+      ]
+    }
+
     this.playbackPlugins = [
+      ...this.playbackPlugins,
       HTML5VideoPlayback,
       HTML5AudioPlayback,
+    ]
+    
+    if (!useOnlyPlainHtml5Plugins) {
+      this.playbackPlugins = [
+        ...this.playbackPlugins,
+        FlashVideoPlayback,
+        FlasHLSVideoPlayback
+      ]
+    }
+
+    this.playbackPlugins = [
+      ...this.playbackPlugins,
       HTMLImgPlayback,
       NoOp
     ]
 
-    if (!PLAIN_HTML5_ONLY) {
-      this.playbackPlugins = [
-        HLSVideoPlayback,
-        FlashVideoPlayback,
-        FlasHLSVideoPlayback
-      ].concat(this.playbackPlugins)
-    }
-
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
     this.corePlugins = [DVRControls, ClosedCaptions, Favicon, SeekTime, SourcesPlugin, EndVideo, Strings]
-    if (externalPlugins) {
-      if (!Array.isArray(externalPlugins))
-        this.validateExternalPluginsType(externalPlugins)
 
-      this.addExternalPlugins(externalPlugins)
-    }
+    if (!Array.isArray(externalPlugins))
+      this.validateExternalPluginsType(externalPlugins)
+
+    this.addExternalPlugins(externalPlugins)
   }
 
   /**
