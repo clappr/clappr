@@ -24,7 +24,6 @@ describe('Loader', function() {
     })
 
     it('should not contain the MSE/Flash based playbacks when PLAIN_HTML5_ONLY is set', function() {
-      PLAIN_HTML5_ONLY == true
       const loader = new Loader([], 0, true)
       // expected order from previous Clappr versions
       const expectedPlaybacks = [HTML5VideoPlayback, HTML5AudioPlayback, HTMLImgPlayback, NoOp]
