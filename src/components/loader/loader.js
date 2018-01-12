@@ -62,7 +62,7 @@ export default class Loader extends BaseObject {
       HTML5VideoPlayback,
       HTML5AudioPlayback,
     ]
-    
+
     if (!useOnlyPlainHtml5Plugins) {
       this.playbackPlugins = [
         ...this.playbackPlugins,
