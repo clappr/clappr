@@ -190,7 +190,7 @@ export default class Player extends BaseObject {
       // if user iteraction is not allowed ensure keyboard shortcuts are disabled
       this.options.disableKeyboardShortcuts = true
     }
-    this._registerOptionEventListeners()
+    this._registerOptionEventListeners(this.options.events)
     this._coreFactory = new CoreFactory(this)
     this.playerInfo = PlayerInfo.getInstance(this.options.playerId)
     this.playerInfo.currentSize = { width: options.width, height: options.height }
@@ -257,7 +257,7 @@ export default class Player extends BaseObject {
     return this
   }
 
-  _registerOptionEventListeners(events = {}, newEvents = {}) {
+  _registerOptionEventListeners(newEvents = {}, events = {}) {
     Object.keys(events).forEach((userEvent) => {
       const eventType = this.eventsMapping[userEvent]
       eventType && this.off(eventType)
@@ -513,7 +513,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   configure(options = {}) {
-    this._registerOptionEventListeners(this.options.events, options.events)
+    this._registerOptionEventListeners(options.events, this.options.events)
     this.core.configure(options)
     return this
   }
