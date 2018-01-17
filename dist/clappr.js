@@ -6546,7 +6546,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.2.85"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.2.86"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -6853,7 +6853,7 @@ var Player = function (_BaseObject) {
       // if user iteraction is not allowed ensure keyboard shortcuts are disabled
       _this.options.disableKeyboardShortcuts = true;
     }
-    _this._registerOptionEventListeners();
+    _this._registerOptionEventListeners(_this.options.events);
     _this._coreFactory = new _core_factory2.default(_this);
     _this.playerInfo = _player_info2.default.getInstance(_this.options.playerId);
     _this.playerInfo.currentSize = { width: options.width, height: options.height };
@@ -6920,8 +6920,8 @@ var Player = function (_BaseObject) {
   Player.prototype._registerOptionEventListeners = function _registerOptionEventListeners() {
     var _this2 = this;
 
-    var events = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var newEvents = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var newEvents = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var events = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
     (0, _keys2.default)(events).forEach(function (userEvent) {
       var eventType = _this2.eventsMapping[userEvent];
@@ -7211,7 +7211,7 @@ var Player = function (_BaseObject) {
   Player.prototype.configure = function configure() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-    this._registerOptionEventListeners(this.options.events, options.events);
+    this._registerOptionEventListeners(options.events, this.options.events);
     this.core.configure(options);
     return this;
   };
