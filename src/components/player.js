@@ -184,6 +184,12 @@ export default class Player extends BaseObject {
    * specify server time as a string, format: "2015/11/26 06:01:03". This option is meant to be used with actualLiveTime.
    * @param {Boolean} [options.persistConfig]
    * persist player's settings (volume) through the same domain **default**: `true`
+   * @param {String} [options.preload]
+   * video will be preloaded according to `preload` attribute options **default**: `'metadata'`
+   * @param {Number} [options.maxBufferLength]
+   * the default behavior for the **HLS playback** is to keep buffering indefinitely, even on VoD.
+   * This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks.
+   * To change this behavior use `maxBufferLength` where **value is in seconds**.
    * @param {String} [options.gaAccount]
    * enable Google Analytics events dispatch **(play/pause/stop/buffering/etc)** by adding your `gaAccount`
    * @param {String} [options.gaTrackerName]
@@ -199,6 +205,8 @@ export default class Player extends BaseObject {
    * You can customize corner position by defining position parameter. Positions can be `bottom-left`, `bottom-right`, `top-left` and `top-right`.
    * @param {String} [options.watermarkLink]
    * `watermarkLink: 'http://example.net/'` - define URL to open when the watermark is clicked. If not provided watermark will not be clickable.
+   * @param {Boolean} [options.disableVideoTagContextMenu]
+   * disables the context menu (right click) on the video element if a HTML5Video playback is used.
    * @param {Boolean} [options.autoSeekFromUrl]
    * Automatically seek to the seconds provided in the url (e.g example.com?t=100) **default**: `true`
    * @param {Boolean} [options.exitFullscreenOnEnd]
