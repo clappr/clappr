@@ -99,6 +99,48 @@ export default class Player extends BaseObject {
   }
 
   /**
+   * @typedef {Object} PlaybackConfig
+   * @prop {boolean} disableContextMenu
+   * disables the context menu (right click) on the video element if a HTML5Video playback is used.
+   * @prop {boolean} preload 
+   * video will be preloaded according to `preload` attribute options **default**: `'metadata'`
+   * @prop {boolean} controls
+   * enabled/disables displaying controls
+   * @prop {boolean} crossOrigin
+   * enables cross-origin capability for media-resources
+   * @prop {boolean} playInline
+   * enables in-line video elements
+   * @prop {boolean} audioOnly
+   * enforce audio-only playback (when possible)
+   * @prop {Object} externalTracks
+   * pass externaly loaded track to playback
+   * @prop {Number} [maxBufferLength] 
+   * The default behavior for the **HLS playback** is to keep buffering indefinitely, even on VoD.
+   * This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks.
+   * To change this behavior use `maxBufferLength` where **value is in seconds**.
+   * @prop {Number} [maxBackBufferLength]
+   * After how much distance of the playhead data should be pruned from the buffer (influences memory consumption
+   * of adaptive media-engines like Hls.js or Shaka)
+   * @prop {Number} [minBufferLength]
+   * After how much data in the buffer at least we attempt to consume it (influences QoS-related behavior
+   * of adaptive media-engines like Hls.js or Shaka). If this is too low, and the available bandwidth is varying a lot
+   * and too close to the streamed bitrate, we may continuously hit under-runs.
+   * @prop {Number} [initialBandwidthEstimate]
+   * define an initial bandwidth "guess" (or previously stored/established value) for underlying adaptive-bitreate engines
+   * of adaptive playback implementations, like Hls.js or Shaka
+   * @prop {Number} [maxAdaptiveBitrate]
+   * Limits the streamed bitrate (for adaptive media-engines in underlying playback implementations)
+   * @prop {Object} [maxAdaptiveVideoDimensions]
+   * Limits the video dimensions in adaptive media-engines. Should be a literal object with `height` and `width`.
+   * @prop {Boolean}[enableAutomaticABR] **default**: `true`
+   * Allows to enable/disable automatic bitrate switching in adaptive media-engines
+   * @prop {String} [preferredTextLanguage] **default**: `'pt-BR'`
+   * Allows to set a preferred text language, that may be enabled by the media-engine if available.
+   * @prop {String} [preferredAudioLanguage] **default**: `'pt-BR'`
+   * Allows to set a preferred audio language, that may be enabled by the media-engine if available.
+   */
+
+  /**
    * ## Player's constructor
    *
    * You might pass the options object to build the player.
@@ -142,9 +184,9 @@ export default class Player extends BaseObject {
    * specify server time as a string, format: "2015/11/26 06:01:03". This option is meant to be used with actualLiveTime.
    * @param {Boolean} [options.persistConfig]
    * persist player's settings (volume) through the same domain **default**: `true`
-   * @param {String} [options.preload]
+   * @param {String} [options.preload] @deprecated
    * video will be preloaded according to `preload` attribute options **default**: `'metadata'`
-   * @param {Number} [options.maxBufferLength]
+   * @param {Number} [options.maxBufferLength] @deprecated
    * the default behavior for the **HLS playback** is to keep buffering indefinitely, even on VoD.
    * This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks.
    * To change this behavior use `maxBufferLength` where **value is in seconds**.
@@ -163,7 +205,7 @@ export default class Player extends BaseObject {
    * You can customize corner position by defining position parameter. Positions can be `bottom-left`, `bottom-right`, `top-left` and `top-right`.
    * @param {String} [options.watermarkLink]
    * `watermarkLink: 'http://example.net/'` - define URL to open when the watermark is clicked. If not provided watermark will not be clickable.
-   * @param {Boolean} [options.disableVideoTagContextMenu]
+   * @param {Boolean} [options.disableVideoTagContextMenu] @deprecated
    * disables the context menu (right click) on the video element if a HTML5Video playback is used.
    * @param {Boolean} [options.autoSeekFromUrl]
    * Automatically seek to the seconds provided in the url (e.g example.com?t=100) **default**: `true`
@@ -176,7 +218,10 @@ export default class Player extends BaseObject {
    * @param {Object} [options.events]
    * Specify listeners which will be registered with their corresponding player events.
    * E.g. onReady -> "PLAYER_READY", onTimeUpdate -> "PLAYER_TIMEUPDATE"
+   * @param {PlaybackConfig} [options.playback]
+   * Generic `Playback` component related configuration
    */
+
   constructor(options) {
     super(options)
     const defaultOptions = { playerId: uniqueId(''), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl, allowUserInteraction: Browser.isMobile }
