@@ -340,13 +340,12 @@ export default class Core extends UIObject {
     this.configureDomRecycler()
     const sources = options.source || options.sources
 
-    if (sources) { this.load(sources, options.mimeType || this.options.mimeType) } else {
-      this.trigger(Events.CORE_OPTIONS_CHANGE)
+    if (sources) this.load(sources, options.mimeType || this.options.mimeType)
 
-      this.containers.forEach((container) => {
-        container.configure(this.options)
-      })
-    }
+    this.trigger(Events.CORE_OPTIONS_CHANGE)
+    this.containers.forEach((container) => {
+      container.configure(this.options)
+    })
   }
 
   appendToParent() {
