@@ -63,7 +63,7 @@ Clappr is under heavy development but production-ready. Feel free to open issues
   <img src='https://raw.githubusercontent.com/clappr/clappr/master/images/chromecast.jpg' width="280px"></img>
 </a> <a href="https://github.com/clappr/clappr-level-selector-plugin">
   <img src='https://raw.githubusercontent.com/clappr/clappr/master/images/level-selector.jpg' width="280px"></img>
-</a> <a href="https://raw.githubusercontent.com/bikegriffith/clappr-playback-rate-plugin/">
+</a> <a href="https://github.com/bikegriffith/clappr-playback-rate-plugin">
   <img src='https://raw.githubusercontent.com/clappr/clappr/master/images/playback-rate-plugin.jpg' width="280px"></img>
 </a> <a href="https://github.com/mediahub-bg/clappr-bandwidth-analyzer/">
   <img src='https://raw.githubusercontent.com/clappr/clappr/master/images/bandwitdh.jpg' width="280px"></img>
