@@ -75,10 +75,9 @@ export default class MediaControl extends UIObject {
     this.container = options.container
     this.currentPositionValue = null
     this.currentDurationValue = null
-    const initialVolume = (this.persistConfig) ? Config.restore('volume') : 100
-    this.setVolume(this.options.mute ? 0 : initialVolume)
     this.keepVisible = false
     this.fullScreenOnVideoTagSupported = null // unknown
+    this.setInitialVolume()
     this.addEventListeners()
     this.settings = {
       left: ['play', 'stop', 'pause'],
@@ -119,6 +118,7 @@ export default class MediaControl extends UIObject {
       this.listenTo(this.container, Events.CONTAINER_MEDIACONTROL_ENABLE, this.enable)
       this.listenTo(this.container, Events.CONTAINER_ENDED, this.ended)
       this.listenTo(this.container, Events.CONTAINER_VOLUME, this.onVolumeChanged)
+      this.listenTo(this.container, Events.CONTAINER_OPTIONS_CHANGE, this.setInitialVolume)
       if (this.container.playback.el.nodeName.toLowerCase() === 'video') {
         // wait until the metadata has loaded and then check if fullscreen on video tag is supported
         this.listenToOnce(this.container, Events.CONTAINER_LOADEDMETADATA, this.onLoadedMetadataOnVideoTag)
@@ -148,6 +148,12 @@ export default class MediaControl extends UIObject {
 
   stop() {
     this.container.stop()
+  }
+
+  setInitialVolume() {
+    const initialVolume = (this.persistConfig) ? Config.restore('volume') : 100
+    const options = this.container && this.container.options || this.options
+    this.setVolume(options.mute ? 0 : initialVolume, true)
   }
 
   onVolumeChanged() {
@@ -318,13 +324,13 @@ export default class MediaControl extends UIObject {
     this.setVolume(this.muted ? 100 : 0)
   }
 
-  setVolume(value) {
+  setVolume(value, isInitialVolume = false) {
     value = Math.min(100, Math.max(value, 0))
     // this will hold the intended volume
     // it may not actually get set to this straight away
     // if the container is not ready etc
     this.intendedVolume = value
-    this.persistConfig && Config.persist('volume', value)
+    this.persistConfig && !isInitialVolume && Config.persist('volume', value)
     const setWhenContainerReady = () => {
       if (this.container.isReady) { this.container.setVolume(value) } else {
         this.listenToOnce(this.container, Events.CONTAINER_READY, () => {
@@ -355,7 +361,7 @@ export default class MediaControl extends UIObject {
     Mediator.off(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
     this.container = container
     // set the new container to match the volume of the last one
-    this.setVolume(this.intendedVolume)
+    this.setVolume(this.intendedVolume, true)
     this.changeTogglePlay()
     this.addEventListeners()
     this.settingsUpdate()

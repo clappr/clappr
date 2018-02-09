@@ -18,7 +18,8 @@ describe('MediaControl', function() {
 
   describe('#constructor', function() {
     it('can be built muted', function() {
-      const mediaControl = new MediaControl({ mute: true, container: this.container })
+      const container = new Container({ playback: this.playback, mute: true })
+      const mediaControl = new MediaControl({ container })
       expect(mediaControl.muted).to.be.equal(true)
       expect(mediaControl.volume).to.be.equal(0)
     })
@@ -81,6 +82,24 @@ describe('MediaControl', function() {
 
       expect(Config.restore('volume')).to.be.equal(78)
     })
+
+    it('reset volume after configure', function () {
+      const container = new Container({ playback: this.playback, mute: true })
+      const mediacontrol = new MediaControl({ persistConfig: true, container })
+
+      container.configure({ mute: false })
+
+      expect(mediacontrol.volume).to.be.equal(100)
+    })
+
+    it('do not persist when is initial volume', function () {
+      Config.persist = sinon.spy()
+
+      const container = new Container({ playback: this.playback, mute: false })
+      const mediacontrol = new MediaControl({ persistConfig: true, container })
+
+      Config.persist.should.not.have.been.called
+    })
   })
 
   it('persists volume when persistence is on', function() {
@@ -119,7 +138,8 @@ describe('MediaControl', function() {
         constructor(options) { super(options) }
       }
 
-      const mediaControl = new MyMediaControl({ mute: true, container: this.container })
+      const container = new Container({ playback: this.playback, mute: true })
+      const mediaControl = new MyMediaControl({ container })
       mediaControl.render()
       expect(mediaControl.muted).to.be.equal(true)
       expect(mediaControl.volume).to.be.equal(0)
