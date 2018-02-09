@@ -91,6 +91,15 @@ describe('MediaControl', function() {
 
       expect(mediacontrol.volume).to.be.equal(100)
     })
+
+    it('do not persist when is initial volume', function () {
+      Config.persist = sinon.spy()
+
+      const container = new Container({ playback: this.playback, mute: false })
+      const mediacontrol = new MediaControl({ persistConfig: true, container })
+
+      Config.persist.should.not.have.been.called
+    })
   })
 
   it('persists volume when persistence is on', function() {
