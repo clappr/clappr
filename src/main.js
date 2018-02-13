@@ -64,6 +64,7 @@ export default {
   HTML5Video,
   HTMLImg,
   NoOp,
+  ClickToPausePlugin,
   Poster,
   Log,
   Styler,
