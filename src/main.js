@@ -28,6 +28,7 @@ import HTML5Video from './playbacks/html5_video'
 import HTMLImg from './playbacks/html_img'
 import NoOp from './playbacks/no_op'
 import ClickToPausePlugin from './plugins/click_to_pause'
+import Favicon from './plugins/spinner_three_bounce'
 import Poster from './plugins/poster'
 import Log from './plugins/log'
 import Styler from './base/styler'
@@ -65,6 +66,7 @@ export default {
   HTMLImg,
   NoOp,
   ClickToPausePlugin,
+  Favicon,
   Poster,
   Log,
   Styler,
