@@ -28,9 +28,11 @@ import HTML5Video from './playbacks/html5_video'
 import HTMLImg from './playbacks/html_img'
 import NoOp from './playbacks/no_op'
 import ClickToPausePlugin from './plugins/click_to_pause'
-import Favicon from './plugins/spinner_three_bounce'
-import Poster from './plugins/poster'
+import Favicon from './plugins/favicon'
 import Log from './plugins/log'
+import Poster from './plugins/poster'
+import SpinnerThreeBouncePlugin from './plugins/spinner_three_bounce'
+import WaterMarkPlugin from './plugins/watermark'
 import Styler from './base/styler'
 import Vendor from './vendor'
 import template from './base/template'
@@ -67,8 +69,10 @@ export default {
   NoOp,
   ClickToPausePlugin,
   Favicon,
-  Poster,
   Log,
+  Poster,
+  SpinnerThreeBouncePlugin,
+  WaterMarkPlugin,
   Styler,
   Vendor,
   version,
