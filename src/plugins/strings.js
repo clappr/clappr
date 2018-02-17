@@ -31,7 +31,7 @@ export default class Strings extends CorePlugin {
   _language() { return this.core.options.language || getBrowserLanguage() }
 
   _initializeMessages() {
-    const defaultMessages = $.extend({
+    const defaultMessages = $.extend(true, {
       'en': {
         'live': 'live',
         'back_to_live': 'back to live',
