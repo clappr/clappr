@@ -31,7 +31,7 @@ export default class Strings extends CorePlugin {
   _language() { return this.core.options.language || getBrowserLanguage() }
 
   _initializeMessages() {
-    const defaultMessages = $.extend(true, {
+    const defaultMessages = {
       'en': {
         'live': 'live',
         'back_to_live': 'back to live',
@@ -74,19 +74,14 @@ export default class Strings extends CorePlugin {
         'disabled': 'Keelatud',
         'playback_not_supported': 'Teie brauser ei toeta selle video taasesitust. Proovige kasutada muud brauserit.'
       }
-    }, this.core.options.strings || {})
+    }
 
-    this._messages = Object.keys(defaultMessages).reduce((messages, lang) => {
-      messages[lang] = $.extend({}, defaultMessages[lang])
-      return messages
-    }, {})
-
+    this._messages = $.extend(true, defaultMessages, this.core.options.strings || {})
     this._messages['pt-BR'] = this._messages['pt']
     this._messages['en-US'] = this._messages['en']
     this._messages['es-419'] = this._messages['es']
     this._messages['fr-FR'] = this._messages['fr']
     this._messages['tr-TR'] = this._messages['tr']
     this._messages['et-EE'] = this._messages['et']
-
   }
 }
