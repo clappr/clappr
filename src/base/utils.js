@@ -7,7 +7,7 @@ import './polyfills'
 import Browser from '../components/browser'
 import $ from 'clappr-zepto'
 
-function assign(obj, source) {
+export function assign(obj, source) {
   if (source) {
     for (const prop in source) {
       const propDescriptor = Object.getOwnPropertyDescriptor(source, prop)
