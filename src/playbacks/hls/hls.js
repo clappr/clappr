@@ -6,7 +6,7 @@ import HTML5VideoPlayback from '../../playbacks/html5_video'
 import HLSJS from 'hls.js'
 import Events from '../../base/events'
 import Playback from '../../base/playback'
-import { now } from '../../base/utils'
+import { now, assign } from '../../base/utils'
 import Log from '../../plugins/log'
 
 const AUTO = -1
@@ -149,7 +149,7 @@ export default class HLS extends HTML5VideoPlayback {
   _setup() {
     this._ccIsSetup = false
     this._ccTracksUpdated = false
-    this._hls = new HLSJS(this.options.playback.hlsjsConfig || {})
+    this._hls = new HLSJS(assign({}, this.options.playback.hlsjsConfig))
     this._hls.on(HLSJS.Events.MEDIA_ATTACHED, () => this._hls.loadSource(this.options.src))
     this._hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this._updatePlaybackType(evt, data))
     this._hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this._onLevelUpdated(evt, data))
