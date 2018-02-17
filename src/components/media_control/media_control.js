@@ -518,6 +518,7 @@ export default class MediaControl extends UIObject {
   }
 
   highDefinitionUpdate(isHD) {
+    this.isHD = isHD
     const method = isHD ? 'addClass' : 'removeClass'
     this.$hdIndicator[method]('enabled')
   }
@@ -689,7 +690,7 @@ export default class MediaControl extends UIObject {
     })
 
     this.parseColors()
-    this.highDefinitionUpdate()
+    this.highDefinitionUpdate(this.isHD)
 
     this.rendered = true
     this.updateVolumeUI()
