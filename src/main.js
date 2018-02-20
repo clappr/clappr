@@ -28,6 +28,7 @@ import HTML5Video from './playbacks/html5_video'
 import HTMLImg from './playbacks/html_img'
 import NoOp from './playbacks/no_op'
 import ClickToPausePlugin from './plugins/click_to_pause'
+import DVRControls from './plugins/dvr_controls'
 import Favicon from './plugins/favicon'
 import Log from './plugins/log'
 import Poster from './plugins/poster'
@@ -68,6 +69,7 @@ export default {
   HTMLImg,
   NoOp,
   ClickToPausePlugin,
+  DVRControls,
   Favicon,
   Log,
   Poster,
