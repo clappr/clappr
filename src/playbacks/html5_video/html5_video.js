@@ -62,7 +62,7 @@ export default class HTML5Video extends Playback {
       'pause': '_onPause',
       'playing': '_onPlaying',
       'progress': '_onProgress',
-      'seeking': '_handleBufferingEvents',
+      'seeking': '_onSeeking',
       'seeked': '_onSeeked',
       'stalled': '_handleBufferingEvents',
       'timeupdate': '_onTimeUpdate',
@@ -347,6 +347,11 @@ export default class HTML5Video extends Playback {
     this._stopPlayheadMovingChecks()
     this._handleBufferingEvents()
     this.trigger(Events.PLAYBACK_PAUSE)
+  }
+
+  _onSeeking() {
+    this._handleBufferingEvents()
+    this.trigger(Events.PLAYBACK_SEEK)
   }
 
   _onSeeked() {
