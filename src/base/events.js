@@ -484,6 +484,12 @@ Events.PLAYBACK_PLAY = 'playback:play'
  */
 Events.PLAYBACK_PAUSE = 'playback:pause'
 /**
+ * Fired when the media for a playback is seeking.
+ *
+ * @event PLAYBACK_SEEK
+ */
+Events.PLAYBACK_SEEK = 'playback:seek'
+/**
  * Fired when the media for a playback is seeked.
  *
  * @event PLAYBACK_SEEKED
