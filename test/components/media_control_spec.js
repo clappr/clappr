@@ -120,15 +120,23 @@ describe('MediaControl', function() {
     expect(mediaControl.disabled).to.be.false
   })
 
-  it('never appears when playback type is NO_OP', function() {
-    this.playback.getPlaybackType = function() {
-      return Playback.NO_OP
-    }
-    const mediaControl = new MediaControl({ container: this.container })
-    mediaControl.render()
-    mediaControl.enable()
-    expect(mediaControl.$el.hasClass('media-control-hide')).to.be.true
-    expect(mediaControl.disabled).to.be.true
+  describe('never appears when', function() {
+    it('playback type is NO_OP', function() {
+      this.playback.getPlaybackType = function() {
+        return Playback.NO_OP
+      }
+      const mediaControl = new MediaControl({ container: this.container })
+      mediaControl.render()
+      mediaControl.enable()
+      expect(mediaControl.$el.hasClass('media-control-hide')).to.be.true
+      expect(mediaControl.disabled).to.be.true
+    })
+
+    it('option chromeless has value true', function() {
+      const mediaControl = new MediaControl({ container: this.container, chromeless: true }).render()
+      expect(mediaControl.$el.hasClass('media-control-hide')).to.be.true
+      expect(mediaControl.disabled).to.be.true
+    })
   })
 
   describe('custom media control', function() {
