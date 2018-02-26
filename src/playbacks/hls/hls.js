@@ -115,7 +115,7 @@ export default class HLS extends HTML5VideoPlayback {
     this._extrapolatedWindowNumSegments = !this.options.playback || typeof (this.options.playback.extrapolatedWindowNumSegments) === 'undefined' ? 2 :  this.options.playback.extrapolatedWindowNumSegments
 
     this._playbackType = Playback.VOD
-    this._lastTimeUpdate = null
+    this._lastTimeUpdate = { current: 0, total: 0 }
     this._lastDuration = null
     // for hls streams which have dvr with a sliding window,
     // the content at the start of the playlist is removed as new
@@ -143,7 +143,6 @@ export default class HLS extends HTML5VideoPlayback {
     // #EXT-X-PLAYLIST-TYPE
     this._playlistType = null
     this._recoverAttemptsRemaining = this.options.hlsRecoverAttempts || 16
-    this._startTimeUpdateTimer()
   }
 
   _setup() {
@@ -354,6 +353,7 @@ export default class HLS extends HTML5VideoPlayback {
       this._setup()
 
     super.play()
+    this._startTimeUpdateTimer()
   }
 
   pause() {
