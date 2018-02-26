@@ -48,10 +48,24 @@ describe('HTML5Video playback', function() {
     callback.should.have.been.calledOnce
   })
 
+  it('trigger PLAYBACK_SEEK on media seeking event', function(done) {
+    this.timeout(5000)
+    const callback = sinon.spy()
+    const playback = new HTML5Video({ src: '/test/fixtures/SampleVideo_360x240_1mb.mp4' })
+
+    playback.on(Events.PLAYBACK_SEEK, callback)
+    playback.on(Events.PLAYBACK_SEEK, () => {
+      callback.should.have.been.calledOnce
+      done()
+    }, this)
+
+    playback.el.dispatchEvent(new Event('seeking'))
+  })
+
   it('triggers PLAYBACK_SEEKED on media seeked event', function(done) {
     this.timeout(5000)
     const callback = sinon.spy()
-    const playback = new HTML5Video({ src: '/base/test/fixtures/SampleVideo_360x240_1mb.mp4' })
+    const playback = new HTML5Video({ src: '/test/fixtures/SampleVideo_360x240_1mb.mp4' })
 
     playback.on(Events.PLAYBACK_SEEKED, callback)
     playback.on(Events.PLAYBACK_SEEKED, () => {

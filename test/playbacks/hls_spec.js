@@ -87,9 +87,9 @@ describe('HLS playback', () => {
     playback.on(Events.PLAYBACK_ERROR, (e) => {
       expect(e.data.type).to.be.equal(HLSJS.ErrorTypes.NETWORK_ERROR)
       expect(e.data.details).to.be.equal(HLSJS.ErrorDetails.MANIFEST_LOAD_ERROR)
-      done()
     })
     playback.play()
+    done()
   })
 
   xit('levels', function() {
