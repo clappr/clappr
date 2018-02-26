@@ -62,4 +62,22 @@ describe('Strings', function() {
     expect(strings.t('back_to_live')).to.equal('back to live')
     expect(strings.t('live')).to.equal('Company Live')
   })
+
+  it('merges user translations with a language not existing in default translations', function() {
+    const fakeCore = {
+      options: {
+        language: 'hu',
+        strings: {
+          'hu': {
+            'live': 'Élő',
+            'back_to_live': 'Ugrás élő képre'
+          }
+        }
+      }
+    }
+    const strings = new Strings(fakeCore)
+
+    expect(strings.t('back_to_live')).to.equal('Ugrás élő képre')
+    expect(strings.t('live')).to.equal('Élő')
+  })
 })
