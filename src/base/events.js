@@ -290,9 +290,9 @@ Events.PLAYER_ERROR = 'error'
  * @param {Object} progress Data
  * progress object
  * @param {Number} [progress.current]
- * current time
+ * current time (in seconds)
  * @param {Number} [progress.total]
- * total time
+ * total time (in seconds)
  */
 Events.PLAYER_TIMEUPDATE = 'timeupdate'
 /**
@@ -334,9 +334,9 @@ Events.PLAYBACK_PROGRESS = 'playback:progress'
  * @param {Object} progress Data
  * progress object
  * @param {Number} [progress.current]
- * current time
+ * current time (in seconds)
  * @param {Number} [progress.total]
- * total time
+ * total time (in seconds)
  */
 Events.PLAYBACK_TIMEUPDATE = 'playback:timeupdate'
 /**
@@ -647,9 +647,9 @@ Events.CONTAINER_SUBTITLE_CHANGED = 'container:subtitle:changed'
  * @param {Object} progress Data
  * progress object
  * @param {Number} [progress.current]
- * current time
+ * current time (in seconds)
  * @param {Number} [progress.total]
- * total time
+ * total time (in seconds)
  */
 Events.CONTAINER_TIMEUPDATE = 'container:timeupdate'
 /**
