@@ -158,13 +158,14 @@ export default class HLS extends HTML5VideoPlayback {
     this._hls.on(HLSJS.Events.SUBTITLE_TRACK_LOADED, (evt, data) => this._onSubtitleLoaded(evt, data))
     this._hls.on(HLSJS.Events.SUBTITLE_TRACKS_UPDATED, () => this._ccTracksUpdated = true)
     this._hls.attachMedia(this.el)
+  }
+
+  render() {
     this._ready()
+    return super.render()
   }
 
   _ready() {
-    if (!this._hls)
-      return
-
     this._isReadyState = true
     this.trigger(Events.PLAYBACK_READY, this.name)
   }
