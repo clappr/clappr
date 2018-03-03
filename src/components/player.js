@@ -102,7 +102,7 @@ export default class Player extends BaseObject {
    * @typedef {Object} PlaybackConfig
    * @prop {boolean} disableContextMenu
    * disables the context menu (right click) on the video element if a HTML5Video playback is used.
-   * @prop {boolean} preload 
+   * @prop {boolean} preload
    * video will be preloaded according to `preload` attribute options **default**: `'metadata'`
    * @prop {boolean} controls
    * enabled/disables displaying controls
@@ -114,7 +114,7 @@ export default class Player extends BaseObject {
    * enforce audio-only playback (when possible)
    * @prop {Object} externalTracks
    * pass externaly loaded track to playback
-   * @prop {Number} [maxBufferLength] 
+   * @prop {Number} [maxBufferLength]
    * The default behavior for the **HLS playback** is to keep buffering indefinitely, even on VoD.
    * This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks.
    * To change this behavior use `maxBufferLength` where **value is in seconds**.
