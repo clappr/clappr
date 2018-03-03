@@ -1,8 +1,5 @@
 /* eslint-disable no-var */
-var dotenv = require('dotenv')
 var path = require('path')
-
-dotenv.load()
 
 var webpackConfig = require('./webpack-base-config')
 
