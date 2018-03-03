@@ -44,15 +44,15 @@ describe('Poster', function() {
     sinon.spy(this.poster, 'showPlayButton')
     this.container.trigger(Events.CONTAINER_STOP)
 
-    expect(this.container.disableMediaControl).called.once
-    expect(this.poster.showPlayButton).called.once
+    expect(this.container.disableMediaControl).to.have.been.calledOnce
+    expect(this.poster.showPlayButton).to.have.been.calledOnce
 
     sinon.spy(this.poster, 'onStop')
     this.poster.bindEvents()
 
     this.container.trigger(Events.CONTAINER_STOP)
 
-    expect(this.poster.onStop).called.once
+    expect(this.poster.onStop).to.have.been.calledOnce
   })
 
   it('treats container:ended event as container:stop', function() {
@@ -60,15 +60,15 @@ describe('Poster', function() {
     sinon.spy(this.poster, 'showPlayButton')
     this.container.trigger(Events.CONTAINER_ENDED)
 
-    expect(this.container.disableMediaControl).called.once
-    expect(this.poster.showPlayButton).called.once
+    expect(this.container.disableMediaControl).to.have.been.calledOnce
+    expect(this.poster.showPlayButton).to.have.been.calledOnce
 
     const spy = sinon.spy(this.poster, 'onStop')
     this.poster.bindEvents()
 
     this.container.trigger(Events.CONTAINER_STOP)
 
-    expect(spy).called.once
+    expect(spy).to.have.been.calledOnce
   })
 
   it('disables handling container:ended event as container:stop', function() {
@@ -79,14 +79,14 @@ describe('Poster', function() {
     sinon.spy(this.poster, 'showPlayButton')
     this.container.trigger(Events.CONTAINER_ENDED)
 
-    expect(this.container.disableMediaControl).not.called
-    expect(this.poster.showPlayButton).not.called
+    expect(this.container.disableMediaControl).to.not.have.been.called
+    expect(this.poster.showPlayButton).to.not.have.been.called
   })
 
   it('plays the container on click', function() {
     sinon.spy(this.container, 'play')
     $(this.poster.$el).click()
-    expect(this.container.play).called.once
+    expect(this.container.play).to.have.been.calledOnce
   })
 
   it('keeps the poster up for audio only sources', function() {
