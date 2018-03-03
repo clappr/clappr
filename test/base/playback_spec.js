@@ -31,6 +31,6 @@ describe('Playback', function() {
 
     this.basePlayback.destroy()
 
-    expect(spy).called.once
+    expect(spy).to.have.been.calledOnce
   })
 })

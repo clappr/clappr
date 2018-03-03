@@ -9,9 +9,9 @@ describe('Player', function() {
       const player2 = new Player({ source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest' })
       const player3 = new Player({ source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest' })
 
-      const p1Id = player1.options.playerId
-      const p2Id = player2.options.playerId
-      const p3Id = player3.options.playerId
+      const p1Id = parseInt(player1.options.playerId)
+      const p2Id = parseInt(player2.options.playerId)
+      const p3Id = parseInt(player3.options.playerId)
 
       expect(p2Id).to.be.above(p1Id)
       expect(p3Id).to.be.above(p2Id)
@@ -83,7 +83,7 @@ describe('Player', function() {
         }
       })
 
-      expect(this.player._registerOptionEventListeners).called.once
+      expect(this.player._registerOptionEventListeners).to.have.been.calledOnce
     })
 
     it('should call only last registered callback', function () {
@@ -105,8 +105,8 @@ describe('Player', function() {
 
       this.player._onPlay()
 
-      expect(callbacks.callbackA).not.called
-      expect(callbacks.callbackB).called.once
+      expect(callbacks.callbackA).to.not.have.been.called
+      expect(callbacks.callbackB).to.have.been.calledOnce
     })
 
     it('should add a new event callback', function () {
@@ -125,7 +125,7 @@ describe('Player', function() {
 
       this.player._onPause()
 
-      expect(callbacks.callbackC).called.once
+      expect(callbacks.callbackC).to.have.been.calledOnce
     })
 
     it('should remove previous event callbacks', function () {
@@ -148,8 +148,8 @@ describe('Player', function() {
       this.player._onPlay()
       this.player._onPause()
 
-      expect(callbacks.callbackA).not.called
-      expect(callbacks.callbackB).called.once
+      expect(callbacks.callbackA).to.not.have.been.called
+      expect(callbacks.callbackB).to.have.been.calledOnce
     })
   })
 })

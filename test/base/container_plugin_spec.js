@@ -36,7 +36,7 @@ describe('Container Plugin', function() {
 
     plugin.disable()
 
-    expect(spy).called.once
+    expect(spy).to.have.been.calledOnce
   })
 
   it('doesnt stops listening when disable a disabled plugin', () => {
@@ -46,7 +46,7 @@ describe('Container Plugin', function() {
     plugin.enabled = false
     plugin.disable()
 
-    expect(spy).not.called
+    expect(spy).to.not.have.been.called
   })
 
   it('stops listening when destroyed', () => {
@@ -55,7 +55,7 @@ describe('Container Plugin', function() {
 
     plugin.destroy()
 
-    expect(spy).called.once
+    expect(spy).to.have.been.calledOnce
   })
 
   it('binds events once', () => {
@@ -66,6 +66,6 @@ describe('Container Plugin', function() {
     plugin.enable()
     plugin.enable()
 
-    expect(spy).not.called
+    expect(spy).to.not.have.been.called
   })
 })
