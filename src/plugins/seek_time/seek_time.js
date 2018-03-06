@@ -82,7 +82,7 @@ export default class SeekTime extends UICorePlugin {
   }
 
   getSeekTime() {
-    let seekTime, secondsSinceMidnight, d, e, timezoneOffset
+    let seekTime, secondsSinceMidnight, d, e
     if (this.useActualLiveTime) {
       if (this.actualLiveServerTimeDiff) {
         d = new Date(new Date().getTime() - this.actualLiveServerTimeDiff)
@@ -91,9 +91,8 @@ export default class SeekTime extends UICorePlugin {
       } else if (this.firstFragDateTime) {
         e = new Date(this.firstFragDateTime)
         d = new Date(this.firstFragDateTime)
-        timezoneOffset = e.getTimezoneOffset() * 60
         d.setHours(0,0,0,0)
-        secondsSinceMidnight = ((e.getTime() - d.getTime()) / 1000) + timezoneOffset + this.duration
+        secondsSinceMidnight = ((e.getTime() - d.getTime()) / 1000) + this.duration
       }
       seekTime = (secondsSinceMidnight - this.duration) + (this.hoverPosition * this.duration)
       if (seekTime < 0)
