@@ -31,8 +31,8 @@ describe('UI Container Plugin', function() {
 
     plugin.enable()
 
-    expect(spy).called.once
-    expect(show).called.once
+    expect(spy).to.have.been.calledOnce
+    expect(show).to.have.been.calledOnce
     expect(plugin.enabled).to.be.true
   })
 
@@ -44,8 +44,8 @@ describe('UI Container Plugin', function() {
 
     plugin.disable()
 
-    expect(spy).called.once
-    expect(hide).called.once
+    expect(spy).to.have.been.calledOnce
+    expect(hide).to.have.been.calledOnce
     expect(plugin.enabled).to.be.false
   })
 
@@ -55,6 +55,6 @@ describe('UI Container Plugin', function() {
 
     plugin.destroy()
 
-    expect(spy).called.once
+    expect(spy).to.have.been.calledOnce
   })
 })

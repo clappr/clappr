@@ -44,8 +44,8 @@ describe('MediaControl', function() {
 
       expect(this.mediaControl.volume).to.be.equal(42)
       expect(this.mediaControl.muted).to.be.equal(false)
-      expect(this.container.setVolume).called.once
-      expect(this.mediaControl.updateVolumeUI).called.once
+      expect(this.container.setVolume).to.have.been.called
+      expect(this.mediaControl.updateVolumeUI).to.have.been.called
     })
 
     it('limits volume to an integer between 0 and 100', function() {
