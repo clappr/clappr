@@ -25,20 +25,20 @@ export default class SeekTime extends UICorePlugin {
   get mediaControl() { return this.core.mediaControl }
   get mediaControlContainer() { return this.mediaControl.container }
   get isLiveStreamWithDvr() { return this.mediaControlContainer && this.mediaControlContainer.getPlaybackType() === Playback.LIVE && this.mediaControlContainer.isDvrEnabled() }
-  get durationShown() { return this.isLiveStreamWithDvr && !this.useActualLiveTime }
+  get durationShown() { return this.isLiveStreamWithDvr && !this.actualLiveTime }
   get useActualLiveTime() { return this.actualLiveTime && this.isLiveStreamWithDvr }
   constructor(core) {
     super(core)
     this.hoveringOverSeekBar = false
     this.hoverPosition = null
     this.duration = null
+    this.firstFragDateTime = null
     this.actualLiveTime = !!this.mediaControl.options.actualLiveTime
     if (this.actualLiveTime) {
       if (this.mediaControl.options.actualLiveServerTime)
         this.actualLiveServerTimeDiff = new Date().getTime() - new Date(this.mediaControl.options.actualLiveServerTime).getTime()
       else
         this.actualLiveServerTimeDiff = 0
-
     }
   }
 
@@ -60,6 +60,7 @@ export default class SeekTime extends UICorePlugin {
 
   updateDuration(timeProgress) {
     this.duration = timeProgress.total
+    this.firstFragDateTime = timeProgress.firstFragDateTime
     this.update()
   }
 
@@ -81,10 +82,18 @@ export default class SeekTime extends UICorePlugin {
   }
 
   getSeekTime() {
-    let seekTime, secondsSinceMidnight
+    let seekTime, secondsSinceMidnight, d, e
     if (this.useActualLiveTime) {
-      const d = new Date(new Date().getTime() - this.actualLiveServerTimeDiff), e = new Date(d)
-      secondsSinceMidnight = (e - d.setHours(0,0,0,0)) / 1000
+      if (this.actualLiveServerTimeDiff) {
+        d = new Date(new Date().getTime() - this.actualLiveServerTimeDiff)
+        e = new Date(d)
+        secondsSinceMidnight = (e - d.setHours(0,0,0,0)) / 1000
+      } else if (this.firstFragDateTime) {
+        e = new Date(this.firstFragDateTime)
+        d = new Date(this.firstFragDateTime)
+        d.setHours(0,0,0,0)
+        secondsSinceMidnight = ((e.getTime() - d.getTime()) / 1000) + this.duration
+      }
       seekTime = (secondsSinceMidnight - this.duration) + (this.hoverPosition * this.duration)
       if (seekTime < 0)
         seekTime += 86400
