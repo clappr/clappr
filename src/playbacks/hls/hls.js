@@ -421,9 +421,9 @@ export default class HLS extends HTML5VideoPlayback {
 
 
     // #EXT-X-PROGRAM-DATE-TIME
-    if (fragments[0].rawProgramDateTime) {
+    if (fragments[0].rawProgramDateTime)
       this._programDateTime = fragments[0].rawProgramDateTime
-    }
+
 
     if (this._playableRegionStartTime !== fragments[0].start) {
       startTimeChanged = true
