@@ -795,3 +795,9 @@ Events.MEDIACONTROL_NOTPLAYING = 'mediacontrol:notplaying'
  * @event MEDIACONTROL_CONTAINERCHANGED
  */
 Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged'
+/**
+ * Fired when the options were changed for the mediacontrol
+ *
+ * @event MEDIACONTROL_OPTIONS_CHANGE
+ */
+Events.MEDIACONTROL_OPTIONS_CHANGE = 'mediacontrol:options:change'
