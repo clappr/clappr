@@ -346,6 +346,7 @@ export default class Core extends UIObject {
     this.containers.forEach((container) => {
       container.configure(this.options)
     })
+    this.mediaControl.configure(this.options)
   }
 
   appendToParent() {
