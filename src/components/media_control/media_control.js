@@ -644,6 +644,16 @@ export default class MediaControl extends UIObject {
     this.unbindKeyEvents()
   }
 
+  /**
+   * enables to configure the media control after its creation
+   * @method configure
+   * @param {Object} options all the options to change in form of a javascript object
+   */
+  configure(options) {
+    this._options = $.extend(this._options, options)
+    this.trigger(Events.MEDIACONTROL_OPTIONS_CHANGE)
+  }
+
   render() {
     const timeout = 1000
     this.$el.html(this.template({ settings: this.settings }))
