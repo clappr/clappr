@@ -1,6 +1,6 @@
 ### Documentation
 
-You can find the official documentation at http://clappr.github.io/classes/Player.html
+You can find the official documentation at https://clappr.github.io/classes/Player.html
 
 ### Install
 
