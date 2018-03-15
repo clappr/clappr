@@ -18,7 +18,7 @@ Very often people open issues related to: **stream not working, freezing, glitch
 
 * try to run the same example at [cdn](cdn.clappr.io)
 * check the [cors headers at your servers](https://github.com/clappr/clappr/issues/703)
-* try to run it on [hls.js demo page](http://dailymotion.github.io/hls.js/demo/)
+* try to run it on [hls.js demo page](https://video-dev.github.io/hls.js/demo/)
 * try to run it on [flashls. demo page](http://www.flashls.org/latest/examples/chromeless/)
 * try to run on your page the following source: `http://www.streambox.fr/playlists/x36xhzz/x36xhzz.m3u8`
 * try different browsers/OS's to see if the problems remain
