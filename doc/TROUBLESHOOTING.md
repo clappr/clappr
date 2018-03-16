@@ -16,7 +16,7 @@ Add this snipet before you instantiate the player `Clappr.Log.setLevel(0)`
 
 Very often people open issues related to: **stream not working, freezing, glitching, stopping and so on.** You can try the steps bellow, taking notes about the results:
 
-* try to run the same example at [cdn](cdn.clappr.io)
+* try to run the same example at [CDN](http://cdn.clappr.io)
 * check the [cors headers at your servers](https://github.com/clappr/clappr/issues/703)
 * try to run it on [hls.js demo page](https://video-dev.github.io/hls.js/demo/)
 * try to run it on [flashls. demo page](http://www.flashls.org/latest/examples/chromeless/)
