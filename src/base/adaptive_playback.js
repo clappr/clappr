@@ -63,7 +63,12 @@ export default class AdaptivePlayback extends Playback {
   /**
    * @param {Boolean} enabled
    */
-  set isAutoAdaptive(enabled) {}
+  set isAutoAdaptive(enabled) {
+    if (this.isAdaptive) {
+      throw new Error('Playback is adaptive but not implemented')
+    }
+    return false
+  }
 
   /**
    * @returns {Boolean}
@@ -73,30 +78,60 @@ export default class AdaptivePlayback extends Playback {
   /**
    * @returns {VideoQualityLevel[]}
    */
-  get activeVideoQualityLevels() {}
+  get activeVideoQualityLevels() {
+    if (this.isAdaptive) {
+      throw new Error('Playback is adaptive but not implemented')
+    }
+    return []
+  }
 
   /**
    * @returns {VideoQualityLevel[]}
    */
-  get videoQualityLevels() {}
+  get videoQualityLevels() {
+    if (this.isAdaptive) {
+      throw new Error('Playback is adaptive but not implemented')
+    }
+    return []
+  }
 
   /**
    * @returns {AudioOption[]}
    */
-  get availableAudioOptions() {}
+  get availableAudioOptions() {
+    if (this.isAdaptive) {
+      throw new Error('Playback is adaptive but not implemented')
+    }
+    return []
+  }
 
   /**
    * @returns {AudioOption[]}
    */
-  get audioOptions() {}
+  get audioOptions() {
+    if (this.isAdaptive) {
+      throw new Error('Playback is adaptive but not implemented')
+    }
+    return []
+  }
 
   /**
    * @returns {ClosedCaptionOption[]}
    */
-  get availableClosedCaptions() {}
+  get availableClosedCaptions() {
+    if (this.isAdaptive) {
+      throw new Error('Playback is adaptive but not implemented')
+    }
+    return []
+  }
 
   /**
    * @returns {ClosedCaptionOption[]}
    */
-  get closedCaptions() {}
+  get closedCaptions() {
+    if (this.isAdaptive) {
+      throw new Error('Playback is adaptive but not implemented')
+    }
+    return []
+  }
 }
