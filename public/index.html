@@ -1,5 +1,7 @@
 <html>
   <head>
+    <title>Clappr Demo</title>
+
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" href="stylesheets/bootstrap.min.css" type="text/css" media="screen" charset="utf-8">
     <link rel="stylesheet" href="stylesheets/bootstrap-theme.min.css" type="text/css" media="screen" charset="utf-8">
@@ -48,18 +50,29 @@
         </div>
       </div>
       <div class="sidebar">
-        <div id="editor">var playerElement = document.getElementById("player-wrapper");
+        <div id="editor">
+var clapprDemo = window.clapprDemo = {}
+
+var playerElement = document.getElementById("player-wrapper");
 
 var player = new Clappr.Player({
-  source: 'http://clappr.io/highline.mp4',
+  source: 'https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8',
   baseUrl: '/latest',
-  poster: 'http://clappr.io/poster.png',
   mute: true,
   height: 360,
   width: 640
 });
 
 player.attachTo(playerElement);
+
+clapprDemo = {}
+clapprDemo.player = player
+
+player.on(Clappr.Events.PLAYER.PLAY, function() {
+
+  clapprDemo.playback = player.core.getCurrentPlayback()
+
+})
 </div>
         <button class="run btn btn-primary">Run</button>
         <div id="console"> </div>
@@ -70,6 +83,31 @@ player.attachTo(playerElement);
     <script type="text/javascript" charset="utf-8" src="j/main.js"></script>
     <script type="text/javascript" charset="utf-8" src="j/editor/ace.js"></script>
     <script>
+
+      function initialize() {
+        var clapprDemo = window.clapprDemo = {}
+
+        var playerElement = document.getElementById("player-wrapper");
+
+        var player = new Clappr.Player({
+          source: 'https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8',
+          baseUrl: '/latest',
+          mute: true,
+          height: 360,
+          width: 640
+        });
+
+        player.attachTo(playerElement);
+
+        clapprDemo.player = player
+
+        player.on(Clappr.Events.PLAYER_PLAY, function() {
+
+          clapprDemo.playback = player.core.getCurrentPlayback()
+
+        })
+      }
+
       var urlParams;
       (function() {
         window.onpopstate = function () {
@@ -86,17 +124,7 @@ player.attachTo(playerElement);
         window.onpopstate();
       })();
 
-      var playerElement = document.getElementById("player-wrapper");
-
-      var player = new Clappr.Player({
-        source: urlParams.src || 'http://clappr.io/highline.mp4',
-        poster: 'http://clappr.io/poster.png',
-        mute: true,
-        height: 360,
-        width: 640
-      });
-
-      player.attachTo(playerElement);
+      initialize()
 
       //editor
       window.onload = function() {
