@@ -8,6 +8,8 @@ src/base/jst.js
 *.cache
 aws.json
 npm-debug.log
+yarn-error.log
+package-lock.json
 
 # bump
 *.bkp
@@ -19,3 +21,4 @@ npm-debug.log
 
 # PhpStorm
 .idea
+
