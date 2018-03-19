@@ -424,14 +424,22 @@ Events.PLAYBACK_LEVELS_AVAILABLE = 'playback:levels:available'
  * @event PLAYBACK_LEVEL_SWITCH_START
  *
  */
-Events.PLAYBACK_LEVEL_SWITCH_START = 'playback:levels:switch:start'
+Events.PLAYBACK_LEVEL_SWITCH_START = 'playback:level:switch:start'
 /**
  * Fired when the playback ends the level switch
  *
  * @event PLAYBACK_LEVEL_SWITCH_END
  *
  */
-Events.PLAYBACK_LEVEL_SWITCH_END = 'playback:levels:switch:end'
+Events.PLAYBACK_LEVEL_SWITCH_END = 'playback:level:switch:end'
+
+Events.PLAYBACK_AUDIO_SWITCH_START = 'playback:audio:switch:start'
+
+Events.PLAYBACK_AUDIO_SWITCH_END = 'playback:audio:switch:end'
+
+Events.PLAYBACK_CC_SWITCH_START = 'playback:cc:switch:start'
+
+Events.PLAYBACK_CC_SWITCH_END = 'playback:cc:switch:end'
 
 /**
  * Fired when playback internal state changes
