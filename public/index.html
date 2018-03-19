@@ -100,6 +100,13 @@ player.attachTo(playerElement);
 
       //editor
       window.onload = function() {
+
+        if (window.location.hash) {
+          var editorContent = atob(window.location.hash.substr(1))
+          document.getElementById("editor").innerHTML = editorContent
+          setTimeout(run, 0)
+        }
+
         var editor = ace.edit("editor");
         var session = editor.getSession();
 
@@ -130,9 +137,15 @@ player.attachTo(playerElement);
         }
 
         $('.run').click(function() {
-          var code = ace.edit('editor').getSession().getValue();
-          load(function(){parser.parse(code)})
+          run()
         });
+
+        function run() {
+          var code = ace.edit('editor').getSession().getValue();
+          var b64EncodedCode = btoa(code)
+          window.location.hash = b64EncodedCode
+          load(function(){parser.parse(code)})
+        }
       }
     </script>
   </body>
