@@ -41,9 +41,9 @@ export default class HLS extends HTML5VideoPlayback {
    * @returns {VideoQualityLevel[]}
    */
   get activeVideoQualityLevels() {
-    if (this.isAdaptive) {
+    if (this.isAdaptive)
       throw new Error('Playback is adaptive but not implemented')
-    }
+
     return this.videoQualityLevels.filter((level) => level.active)
   }
 
@@ -84,9 +84,9 @@ export default class HLS extends HTML5VideoPlayback {
    * @returns {AudioOption[]}
    */
   get availableAudioOptions() {
-    if (this.isAdaptive) {
+    if (this.isAdaptive)
       throw new Error('Playback is adaptive but not implemented')
-    }
+
     return []
   }
 
@@ -94,9 +94,9 @@ export default class HLS extends HTML5VideoPlayback {
    * @returns {AudioOption[]}
    */
   get audioOptions() {
-    if (this.isAdaptive) {
+    if (this.isAdaptive)
       throw new Error('Playback is adaptive but not implemented')
-    }
+
     return []
   }
 
@@ -104,9 +104,9 @@ export default class HLS extends HTML5VideoPlayback {
    * @returns {ClosedCaptionOption[]}
    */
   get availableClosedCaptions() {
-    if (this.isAdaptive) {
+    if (this.isAdaptive)
       throw new Error('Playback is adaptive but not implemented')
-    }
+
     return []
   }
 
@@ -114,9 +114,9 @@ export default class HLS extends HTML5VideoPlayback {
    * @returns {ClosedCaptionOption[]}
    */
   get closedCaptions() {
-    if (this.isAdaptive) {
+    if (this.isAdaptive)
       throw new Error('Playback is adaptive but not implemented')
-    }
+
     return []
   }
 
@@ -138,30 +138,30 @@ export default class HLS extends HTML5VideoPlayback {
       onLevelSwitched = (event, data) => {
         if (data.level === index) {
           removeEventListener()
-          if (callback) {
+          if (callback)
             callback()
-          }
+
         }
       }
 
       if (scheduleActivity) {
         if (!active) {
           addEventListener()
-          if (immediateFlush) {
+          if (immediateFlush)
             this.currentLevel = index
-          } else {
+          else
             this._hls.nextLoadLevel = index
-          }
+
           return true
         }
       } else {
         if (active) {
           addEventListener()
-          if (immediateFlush) {
+          if (immediateFlush)
             this.currentLevel = AUTO
-          } else {
+          else
             this._hls.nextLoadLevel = AUTO
-          }
+
           return true
         }
       }
@@ -187,9 +187,9 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   set currentLevel(id) {
-    if (id === this.currentLevel) {
+    if (id === this.currentLevel)
       return
-    }
+
     this._previousLevel = this._currentLevel
     this._currentLevel = id
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_START)
