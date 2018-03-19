@@ -85,9 +85,9 @@ export default class AdaptivePlayback extends Playback {
    * @param {Boolean} enabled
    */
   set isAutoAdaptive(enabled) {
-    if (this.isAdaptive) {
+    if (this.isAdaptive)
       throw new Error('Playback is adaptive but not implemented')
-    }
+
     return false
   }
 
@@ -100,9 +100,9 @@ export default class AdaptivePlayback extends Playback {
    * @returns {VideoQualityLevel[]}
    */
   get activeVideoQualityLevels() {
-    if (this.isAdaptive) {
+    if (this.isAdaptive)
       throw new Error('Playback is adaptive but not implemented')
-    }
+
     return []
   }
 
@@ -110,9 +110,9 @@ export default class AdaptivePlayback extends Playback {
    * @returns {VideoQualityLevel[]}
    */
   get videoQualityLevels() {
-    if (this.isAdaptive) {
+    if (this.isAdaptive)
       throw new Error('Playback is adaptive but not implemented')
-    }
+
     return []
   }
 
@@ -120,9 +120,9 @@ export default class AdaptivePlayback extends Playback {
    * @returns {AudioOption[]}
    */
   get availableAudioOptions() {
-    if (this.isAdaptive) {
+    if (this.isAdaptive)
       throw new Error('Playback is adaptive but not implemented')
-    }
+
     return []
   }
 
@@ -130,9 +130,9 @@ export default class AdaptivePlayback extends Playback {
    * @returns {AudioOption[]}
    */
   get audioOptions() {
-    if (this.isAdaptive) {
+    if (this.isAdaptive)
       throw new Error('Playback is adaptive but not implemented')
-    }
+
     return []
   }
 
@@ -140,9 +140,9 @@ export default class AdaptivePlayback extends Playback {
    * @returns {ClosedCaptionOption[]}
    */
   get availableClosedCaptions() {
-    if (this.isAdaptive) {
+    if (this.isAdaptive)
       throw new Error('Playback is adaptive but not implemented')
-    }
+
     return []
   }
 
@@ -150,9 +150,9 @@ export default class AdaptivePlayback extends Playback {
    * @returns {ClosedCaptionOption[]}
    */
   get closedCaptions() {
-    if (this.isAdaptive) {
+    if (this.isAdaptive)
       throw new Error('Playback is adaptive but not implemented')
-    }
+
     return []
   }
 }
