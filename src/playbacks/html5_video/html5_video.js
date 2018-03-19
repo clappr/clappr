@@ -4,6 +4,7 @@
 
 import { isNumber, seekStringToSeconds, DomRecycler } from '../../base/utils'
 
+import AdaptivePlayback from '../../base/adaptive_playback'
 import Playback from '../../base/playback'
 import Browser from '../../components/browser'
 import Events from '../../base/events'
@@ -34,9 +35,13 @@ const AUDIO_MIMETYPES = {
 const KNOWN_AUDIO_MIMETYPES = Object.keys(AUDIO_MIMETYPES).reduce((acc, k) => [...acc, ...AUDIO_MIMETYPES[k]], [])
 
 // TODO: rename this Playback to HTML5Playback (breaking change, only after 0.3.0)
-export default class HTML5Video extends Playback {
+export default class HTML5Video extends AdaptivePlayback {
   get name() { return 'html5_video' }
   get tagName() { return this.isAudioOnly ? 'audio' : 'video' }
+
+  // Plain HTML5 browser support is non-adaptive except for Safari built-in HLS support
+  // TODO: allow Safari built-in audio/text track switching to be done via the AdaptivePlayback API here
+  get isAdaptive() { return false }
 
   get isAudioOnly() {
     const resourceUrl = this.options.src
