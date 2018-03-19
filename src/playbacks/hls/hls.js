@@ -12,6 +12,165 @@ import Log from '../../plugins/log'
 const AUTO = -1
 
 export default class HLS extends HTML5VideoPlayback {
+
+  /**
+   * @returns {Boolean}
+   */
+  get isAdaptive() {
+    return true
+  }
+
+  /**
+   * @param {Boolean} enabled
+   */
+  set isAutoAdaptive(enabled) {
+    if (enabled) {
+      this.currentLevel = AUTO
+      this._isAutoAdaptive = true
+    } else {
+      this.currentLevel = this._previousLevel
+    }
+  }
+
+  /**
+   * @returns {Boolean}
+   */
+  get isAutoAdaptive() { return this.currentLevel === AUTO }
+
+  /**
+   * @returns {VideoQualityLevel[]}
+   */
+  get activeVideoQualityLevels() {
+    if (this.isAdaptive) {
+      throw new Error('Playback is adaptive but not implemented')
+    }
+    return this.videoQualityLevels.filter((level) => level.active)
+  }
+
+  /**
+   * @returns {VideoQualityLevel[]}
+   */
+  get videoQualityLevels() {
+    if (this._videoQualityLevels) {
+      // TODO: reset this to null as soon as levels get updated
+      return this._videoQualityLevels
+    }
+
+    return (this._videoQualityLevels = this._hls.levels.map((level, index) => {
+      const id = index
+      const width = level.width
+      const height = level.height
+      const bitrate = level.bitrate
+      const codec = level.videoCodec
+      const setActive = this._createAdaptiveMediaActivatorForVideoQualitLevel(index)
+      const _this = this
+      const videoQualityLevel = {
+        id,
+        get active() {
+          console.log(this.currentLevel, id)
+          return _this.currentLevel === id
+        },
+        width,
+        height,
+        bitrate,
+        codec,
+        setActive
+      }
+      return videoQualityLevel
+    }, this))
+  }
+
+  /**
+   * @returns {AudioOption[]}
+   */
+  get availableAudioOptions() {
+    if (this.isAdaptive) {
+      throw new Error('Playback is adaptive but not implemented')
+    }
+    return []
+  }
+
+  /**
+   * @returns {AudioOption[]}
+   */
+  get audioOptions() {
+    if (this.isAdaptive) {
+      throw new Error('Playback is adaptive but not implemented')
+    }
+    return []
+  }
+
+  /**
+   * @returns {ClosedCaptionOption[]}
+   */
+  get availableClosedCaptions() {
+    if (this.isAdaptive) {
+      throw new Error('Playback is adaptive but not implemented')
+    }
+    return []
+  }
+
+  /**
+   * @returns {ClosedCaptionOption[]}
+   */
+  get closedCaptions() {
+    if (this.isAdaptive) {
+      throw new Error('Playback is adaptive but not implemented')
+    }
+    return []
+  }
+
+  _createAdaptiveMediaActivatorForVideoQualitLevel(index) {
+    const active = this.currentLevel === index
+
+    const setActive = (scheduleActivity, immediateFlush, callback) => {
+
+      let onLevelSwitched
+
+      const addEventListener = () => {
+        this._hls.on(HLSJS.Events.LEVEL_SWITCHED, onLevelSwitched)
+      }
+
+      const removeEventListener = () => {
+        this._hls.off(HLSJS.Events.LEVEL_SWITCHED, onLevelSwitched)
+      }
+
+      onLevelSwitched = (event, data) => {
+        if (data.level === index) {
+          removeEventListener()
+          if (callback) {
+            callback()
+          }
+        }
+      }
+
+      if (scheduleActivity) {
+        if (!active) {
+          addEventListener()
+          if (immediateFlush) {
+            this.currentLevel = index
+          } else {
+            this._hls.nextLoadLevel = index
+          }
+          return true
+        }
+      } else {
+        if (active) {
+          addEventListener()
+          if (immediateFlush) {
+            this.currentLevel = AUTO
+          } else {
+            this._hls.nextLoadLevel = AUTO
+          }
+          return true
+        }
+      }
+      return false
+    }
+
+    return setActive
+  }
+
   get name() { return 'hls' }
 
   get levels() { return this._levels || [] }
@@ -21,7 +180,6 @@ export default class HLS extends HTML5VideoPlayback {
       return AUTO
     else
       return this._currentLevel //0 is a valid level ID
-
   }
 
   get isReady() {
@@ -29,9 +187,13 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   set currentLevel(id) {
+    if (id === this.currentLevel) {
+      return
+    }
+    this._previousLevel = this._currentLevel
     this._currentLevel = id
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_START)
-    this._hls.currentLevel = this._currentLevel
+    this._hls.currentLevel = this.currentLevel
   }
 
   get _startTime() {
@@ -154,7 +316,8 @@ export default class HLS extends HTML5VideoPlayback {
     this._hls.on(HLSJS.Events.MEDIA_ATTACHED, () => this._hls.loadSource(this.options.src))
     this._hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this._updatePlaybackType(evt, data))
     this._hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this._onLevelUpdated(evt, data))
-    this._hls.on(HLSJS.Events.LEVEL_SWITCH, (evt,data) => this._onLevelSwitch(evt, data))
+    this._hls.on(HLSJS.Events.LEVEL_SWITCHING, (evt,data) => this._onLevelSwitching(evt, data))
+    this._hls.on(HLSJS.Events.LEVEL_SWITCHED, (evt,data) => this._onLevelSwitched(evt, data))
     this._hls.on(HLSJS.Events.FRAG_LOADED, (evt, data) => this._onFragmentLoaded(evt, data))
     this._hls.on(HLSJS.Events.ERROR, (evt, data) => this._onHLSJSError(evt, data))
     this._hls.on(HLSJS.Events.SUBTITLE_TRACK_LOADED, (evt, data) => this._onSubtitleLoaded(evt, data))
@@ -548,7 +711,7 @@ export default class HLS extends HTML5VideoPlayback {
     }
   }
 
-  _onLevelSwitch(evt, data) {
+  _onLevelSwitching(evt, data) {
     if (!this.levels.length)
       this._fillLevels()
 
@@ -568,6 +731,8 @@ export default class HLS extends HTML5VideoPlayback {
       })
     }
   }
+
+  _onLevelSwitched(evt, data) {}
 
   get dvrEnabled() {
     // enabled when:
