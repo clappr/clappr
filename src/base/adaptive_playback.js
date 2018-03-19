@@ -1,10 +1,11 @@
 import Playback from './playback'
 
 /**
- * @typedef {Function} AdaptiveMediaActivatorFunction
+ * @typedef {Function} AdaptiveMediaActivator
  * @function
  * @param {Boolean} scheduleActivity Enable/disable activity, switch to a different media representation
  * @param {Boolean} immediateFlush (default = false) Immediate switching, flushes playout buffer
+ * @param {Function} callback
  * @returns {Boolean} Whether the switch request could be processed
  *
  */
@@ -17,12 +18,11 @@ import Playback from './playback'
  * @class
  * @property {String} id
  * @property {Boolean} active
- * @property {String} language
  * @property {Number} width pixel
  * @property {Number} height pixels
  * @property {Number} bitrate bits/s
  * @property {String} codec
- * @member {AdaptiveMediaActivatorFunction} setActive
+ * @member {AdaptiveMediaActivator} setActive
  *
  */
 
@@ -37,7 +37,7 @@ import Playback from './playback'
  * @property {String} codec
  * @property {Number} channels
  * @property {String[]} roles
- * @member {AdaptiveMediaActivatorFunction} setActive
+ * @member {AdaptiveMediaActivator} setActive
  */
 
 /**
@@ -48,7 +48,7 @@ import Playback from './playback'
  * @property {Boolean} active
  * @property {String} language
  * @property {String[]} roles
- * @member {AdaptiveMediaActivatorFunction} setActive
+ * @member {AdaptiveMediaActivator} setActive
  */
 
 export default class AdaptivePlayback extends Playback {
