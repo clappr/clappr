@@ -242,6 +242,8 @@ Playback.VOD = 'vod'
  * @property AOD
  * @static
  * @type String
+ * @deprecated There is technically no difference with VOD.
+ *             Or: if this case exists, it is inconsistent that there is no difference between audio/video "live".
  */
 Playback.AOD = 'aod'
 /**
