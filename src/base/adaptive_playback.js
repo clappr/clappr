@@ -5,12 +5,17 @@ import Playback from './playback'
  * See VideoQualityLevel for explanation and spec.
  * @typedef {Function} AdaptiveMediaActivator
  * @function
- * @param {Boolean} scheduleActivity Enable/disable activity, switch to a different media representation.
- * @param {Boolean} immediateFlush (default = false) Immediate switching, flushes playout buffer.
- * @param {Function} callback Callback for implemenation to indicate switch has succeeded.
+ * @param {Boolean} scheduleActivity Optional (default = true). (Un-)schedule activity, switch to a different media representation.
+ * @param {Boolean} immediateFlush Optional (default = false). Immediate switching, flushes playout buffer.
+ * @param {Function} callback Optional (default = no-op/null). Callback for implemenation to indicate switch has succeeded.
  *                            May be be called in series with triggering the respective ...SWITCH_END event.
  * @returns {Boolean} Whether the switch request could be processed
  *
+ */
+
+/**
+ * @typedef {Object} AdaptiveMediaOption
+ * @member {AdaptiveMediaActivator} setActive Method that allows to activate/deactivate this quality level or audio/text track.
  */
 
 /**
@@ -35,7 +40,7 @@ import Playback from './playback'
  * Helpers for common simple cases, or base classes for easing implementation glue towards media engines
  * may be added on to top for later on to base-implementations of this.
  *
- * @typedef {Object} VideoQualityLevel
+ * @typedef {AdaptiveMediaOption} VideoQualityLevel
  * @readonly @property {String} id An unique identifier for this quality.
  *                                 Should be defined and be proper to underlying imlementations.
  * @readonly @property {Boolean} active Wether this quality level is activated (meaning that it may be used to fill the playback buffer).
@@ -50,31 +55,140 @@ import Playback from './playback'
 /**
  * Audio option available.
  * See VideoQualityLevel.
- * @typedef {Object} AudioOption
- * @property {String} id
- * @property {Boolean} active
- * @property {Number} volume
- * @property {String} language
- * @property {String} codec
- * @property {Number} channels
- * @property {String[]} roles
+ * @typedef {AdaptiveMediaOption} AudioOption
+ * @readonly @property {String} id
+ * @readonly @property {Boolean} active
+ * @readonly @property {Number} volume
+ * @readonly @property {String} language
+ * @readonly @property {String} codec
+ * @readonly @property {Number} channels
+ * @readonly @property {String[]} roles
  * @member {AdaptiveMediaActivator} setActive
  */
 
 /**
  * Closed caption option available.
  * See VideoQualityLevel.
- * @typedef ClosedCaptionOption
- * @property {String} id
- * @property {Boolean} active
- * @property {String} language
- * @property {String[]} roles
+ * @typedef {AdaptiveMediaOption} ClosedCaptionOption
+ * @readonly @property {String} id
+ * @readonly @property {Boolean} active
+ * @readonly @property {String} language
+ * @readonly @property {String[]} roles
  * @member {AdaptiveMediaActivator} setActive
  */
 
 export default class AdaptivePlayback extends Playback {
+  /**
+   * checks if the playback has closed caption tracks.
+   * @property hasClosedCaptionsTracks
+   * @type {Boolean}
+   * @override
+   */
+  get hasClosedCaptionsTracks() {
+    return !!this.closedCaptions.length
+  }
 
   /**
+   * gets the playback available closed caption tracks.
+   * @property closedCaptionsTracks
+   * @type {Array} an array of objects with at least 'id' and 'name' properties
+   * @override
+   */
+  get closedCaptionsTracks() {
+    return this.closedCaptions.map(({ id, language }) => {
+      return {
+        id,
+        name: language
+      }
+    })
+  }
+
+  /**
+   * gets the selected closed caption track id (-1 is disabled)
+   * @property closedCaptionsTrackId
+   * @type {Number}
+   * @override
+   */
+  get closedCaptionsTrackId() {
+    const firstActiveCcOption = this.closedCaptions.filter((ccOption) => ccOption.active)[0]
+    if (!firstActiveCcOption)
+      return -1
+    return parseInt(firstActiveCcOption.id, 10)
+  }
+
+  /**
+   * sets the selected closed caption track index. (-1 is disabled)
+   * @property closedCaptionsTrackId
+   * @type {Number}
+   * @override
+   */
+  set closedCaptionsTrackId(trackId) {
+    this.closedCaptions.forEach((ccOption) => {
+      // disable all CC options!
+      if (trackId === -1) {
+        ccOption.setActive(false)
+        // and return
+        return
+      }
+      // Or, find mathcing id strings in options and activate
+      if (ccOption.id === String(trackId))
+        ccOption.setActive()
+    })
+  }
+
+  /**
+   * Convenience basic use-case method to select video quality levels.
+   * Activates one quality exclusively. Passing an invalid identifier or `null`
+   * will deactivate all options and may therefore have underlying implementation
+   * fall back onto automatic quality selection mode. The latter should also be driveable
+   * through the `isAutoAdaptive` property of the implementation.
+   * @param {String | Number | VideoQualityLevel} id
+   */
+  selectVideoQualityLevel(id) {
+    this.activateAdaptiveMediaOptionExclusively(id, this.videoQualityLevels)
+  }
+
+  /**
+   * Convenience method to select an audio track option.
+   * @param {String | Number | AudioOption} id
+   */
+  selectAudioOption(id) {
+    this.activateAdaptiveMediaOptionExclusively(id, this.audioOptions)
+  }
+
+  /**
+   * Convenience method to select a text track option.
+   * @param {String | Number | ClosedCaptionOption} id
+   */
+  selectClosedCaptionOption(id) {
+    this.activateAdaptiveMediaOptionExclusively(id, this.audioOptions)
+  }
+
+  /**
+   * Base-class logic to facilitate usage of API implementation for common use-cases.
+   * Activates one option exclusively. Passing an invalid identifier or `null`
+   * will deactivate all options. Deactivates all options ot corresponding to this id.
+   * @param {String | Number | AdaptiveMediaOption} id
+   * @param {AdaptiveMediaOption[]} adaptiveMediaOptions
+   */
+  activateAdaptiveMediaOptionExclusively(id, adaptiveMediaOptions) {
+    if (typeof id === 'object') {
+      // assume it's a VideoQualityLevel object
+      id = id.id
+    }
+    adaptiveMediaOptions.forEach((qualityLevel, index) => {
+      if (typeof id === 'string')
+        qualityLevel.setActive(id === qualityLevel.id)
+      else if (typeof id === 'number')
+        qualityLevel.setActive(id === index)
+      else
+        throw new Error('Adaptive media option id should be string or number')
+
+    })
+  }
+
+  /**
+   *
    * @returns {Boolean}
    */
   get isAdaptive() {
@@ -82,6 +196,7 @@ export default class AdaptivePlayback extends Playback {
   }
 
   /**
+   * @abstract
    * @param {Boolean} enabled
    */
   set isAutoAdaptive(enabled) {
@@ -97,16 +212,7 @@ export default class AdaptivePlayback extends Playback {
   get isAutoAdaptive() { return false }
 
   /**
-   * @returns {VideoQualityLevel[]}
-   */
-  get activeVideoQualityLevels() {
-    if (this.isAdaptive)
-      throw new Error('Playback is adaptive but not implemented')
-
-    return []
-  }
-
-  /**
+   * @abstract
    * @returns {VideoQualityLevel[]}
    */
   get videoQualityLevels() {
@@ -117,16 +223,7 @@ export default class AdaptivePlayback extends Playback {
   }
 
   /**
-   * @returns {AudioOption[]}
-   */
-  get availableAudioOptions() {
-    if (this.isAdaptive)
-      throw new Error('Playback is adaptive but not implemented')
-
-    return []
-  }
-
-  /**
+   * @abstract
    * @returns {AudioOption[]}
    */
   get audioOptions() {
@@ -137,22 +234,12 @@ export default class AdaptivePlayback extends Playback {
   }
 
   /**
-   * @returns {ClosedCaptionOption[]}
-   */
-  get availableClosedCaptions() {
-    if (this.isAdaptive)
-      throw new Error('Playback is adaptive but not implemented')
-
-    return []
-  }
-
-  /**
+   * @abstract
    * @returns {ClosedCaptionOption[]}
    */
   get closedCaptions() {
     if (this.isAdaptive)
       throw new Error('Playback is adaptive but not implemented')
-
     return []
   }
 }
