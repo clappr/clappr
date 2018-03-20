@@ -2,8 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+import Hls from 'hls.js'
+
 import HTML5VideoPlayback from '../../playbacks/html5_video'
-import HLSJS from 'hls.js'
 import Events from '../../base/events'
 import Playback from '../../base/playback'
 import { now, assign } from '../../base/utils'
@@ -11,8 +12,121 @@ import Log from '../../plugins/log'
 
 const AUTO = -1
 
-export default class HLS extends HTML5VideoPlayback {
-  get name() { return 'hls' }
+export default class HlsjsPlayback extends HTML5VideoPlayback {
+
+  static get Hls() {
+    return Hls
+  }
+
+  static canPlay(resource, mimeType) {
+    if (!Hls.isSupported())
+      return false
+
+    const resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
+    const isM3u8Extension = resourceParts.length > 1 && resourceParts[1].toLowerCase() === 'm3u8'
+    return isM3u8Extension
+      || mimeType === 'application/x-mpegURL'
+      || mimeType === 'application/vnd.apple.mpegurl'
+  }
+
+  /**
+   * @returns {Boolean}
+   */
+  get isAdaptive() {
+    return true
+  }
+
+  /**
+   * @param {Boolean} enabled
+   */
+  set isAutoAdaptive(enabled) {
+    if (enabled) {
+      this.currentLevel = AUTO
+      this._isAutoAdaptive = true
+    } else {
+      this.currentLevel = this._previousLevel
+    }
+  }
+
+  /**
+   * @returns {Boolean}
+   */
+  get isAutoAdaptive() { return this.currentLevel === AUTO }
+
+  /**
+   * @returns {VideoQualityLevel[]}
+   */
+  get videoQualityLevels() {
+    if (this._videoQualityLevels) {
+      // TODO: reset this to null as soon as levels get updated
+      return this._videoQualityLevels
+    }
+
+    return (this._videoQualityLevels = this._hls.levels.map((level, index) => {
+      const id = index
+      const width = level.width
+      const height = level.height
+      const bitrate = level.bitrate
+      const codec = level.videoCodec
+      const setActive = this._createAdaptiveMediaActivatorForVideoQualitLevel(index)
+      const _this = this
+      const videoQualityLevel = {
+        id,
+        get active() {
+          console.log(this.currentLevel, id)
+          return _this.currentLevel === id
+        },
+        width,
+        height,
+        bitrate,
+        codec,
+        setActive
+      }
+      return videoQualityLevel
+    }, this))
+  }
+
+  /**
+   * @returns {AudioOption[]}
+   */
+  get audioOptions() {
+    if (this.isAdaptive)
+      throw new Error('Playback is adaptive but not implemented')
+
+    return []
+  }
+
+  /**
+   * @returns {ClosedCaptionOption[]}
+   */
+  get closedCaptions() {
+    if (this.isAdaptive)
+      throw new Error('Playback is adaptive but not implemented')
+
+    return []
+  }
+
+  get dvrEnabled() {
+    // enabled when:
+    // - the duration does not include content after hlsjs's live sync point
+    // - the playable region duration is longer than the configured duration to enable dvr after
+    // - the playback type is LIVE.
+    return (this._durationExcludesAfterLiveSyncPoint && this._duration >= this._minDvrSize && this.getPlaybackType() === Playback.LIVE)
+  }
+
+  getPlaybackType() {
+    return this._playbackType
+  }
+
+  isSeekEnabled() {
+    return (this._playbackType === Playback.VOD || this.dvrEnabled)
+  }
+
+  get name() { return 'hls_playback' }
+
+  get isReady() {
+    return this._isReadyState
+  }
 
   get levels() { return this._levels || [] }
 
@@ -21,17 +135,163 @@ export default class HLS extends HTML5VideoPlayback {
       return AUTO
     else
       return this._currentLevel //0 is a valid level ID
-
-  }
-
-  get isReady() {
-    return this._isReadyState
   }
 
   set currentLevel(id) {
+    if (id === this.currentLevel)
+      return
+
+    this._previousLevel = this._currentLevel
     this._currentLevel = id
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_START)
-    this._hls.currentLevel = this._currentLevel
+    this._hls.currentLevel = this.currentLevel
+  }
+
+  constructor(...args) {
+    super(...args)
+    // backwards compatibility (TODO: remove on 0.3.0)
+    this.options.playback || (this.options.playback = this.options)
+    this._minDvrSize = typeof (this.options.hlsMinimumDvrSize) === 'undefined' ? 60 : this.options.hlsMinimumDvrSize
+    // The size of the start time extrapolation window measured as a multiple of segments.
+    // Should be 2 or higher, or 0 to disable. Should only need to be increased above 2 if more than one segment is
+    // removed from the start of the playlist at a time. E.g if the playlist is cached for 10 seconds and new chunks are
+    // added/removed every 5.
+    this._extrapolatedWindowNumSegments = !this.options.playback || typeof (this.options.playback.extrapolatedWindowNumSegments) === 'undefined' ? 2 :  this.options.playback.extrapolatedWindowNumSegments
+
+    this._playbackType = Playback.VOD
+    this._lastTimeUpdate = { current: 0, total: 0 }
+    this._lastDuration = null
+    // for hls streams which have dvr with a sliding window,
+    // the content at the start of the playlist is removed as new
+    // content is appended at the end.
+    // this means the actual playable start time will increase as the
+    // start content is deleted
+    // For streams with dvr where the entire recording is kept from the
+    // beginning this should stay as 0
+    this._playableRegionStartTime = 0
+    // {local, remote} remote is the time in the video element that should represent 0
+    //                 local is the system time when the 'remote' measurment took place
+    this._localStartTimeCorrelation = null
+    // {local, remote} remote is the time in the video element that should represents the end
+    //                 local is the system time when the 'remote' measurment took place
+    this._localEndTimeCorrelation = null
+    // if content is removed from the beginning then this empty area should
+    // be ignored. "playableRegionDuration" excludes the empty area
+    this._playableRegionDuration = 0
+    // #EXT-X-PROGRAM-DATE-TIME
+    this._programDateTime = 0
+    // true when the actual duration is longer than hlsjs's live sync point
+    // when this is false playableRegionDuration will be the actual duration
+    // when this is true playableRegionDuration will exclude the time after the sync point
+    this._durationExcludesAfterLiveSyncPoint = false
+    // #EXT-X-TARGETDURATION
+    this._segmentTargetDuration = null
+    // #EXT-X-PLAYLIST-TYPE
+    this._playlistType = null
+    this._recoverAttemptsRemaining = this.options.hlsRecoverAttempts || 16
+  }
+
+  render() {
+    this._ready()
+    return super.render()
+  }
+
+  play() {
+    if (!this._hls)
+      this._setup()
+
+    super.play()
+    this._startTimeUpdateTimer()
+  }
+
+  pause() {
+    if (!this._hls)
+      return
+
+    super.pause()
+    if (this.dvrEnabled)
+      this._updateDvr(true)
+
+  }
+
+  stop() {
+    if (this._hls) {
+      super.stop()
+      this._hls.destroy()
+      delete this._hls
+    }
+  }
+
+  destroy() {
+    this._stopTimeUpdateTimer()
+    if (this._hls) {
+      this._hls.destroy()
+      delete this._hls
+    }
+    super.destroy()
+  }
+
+  getProgramDateTime() {
+    return this._programDateTime
+  }
+  // the duration on the video element itself should not be used
+  // as this does not necesarily represent the duration of the stream
+  // https://github.com/clappr/clappr/issues/668#issuecomment-157036678
+  getDuration() {
+    return this._duration
+  }
+
+  getCurrentTime() {
+    // e.g. can be < 0 if user pauses near the start
+    // eventually they will then be kicked to the end by hlsjs if they run out of buffer
+    // before the official start time
+    return Math.max(0, this.el.currentTime - this._startTime)
+  }
+
+  // the time that "0" now represents relative to when playback started
+  // for a stream with a sliding window this will increase as content is
+  // removed from the beginning
+  getStartTimeOffset() {
+    return this._startTime
+  }
+
+  seekPercentage(percentage) {
+    let seekTo = this._duration
+    if (percentage > 0)
+      seekTo = this._duration * (percentage / 100)
+
+    this.seek(seekTo)
+  }
+
+  seek(time) {
+    if (time < 0) {
+      Log.warn('Attempt to seek to a negative time. Resetting to live point. Use seekToLivePoint() to seek to the live point.')
+      time = this.getDuration()
+    }
+    // assume live if time within 3 seconds of end of stream
+    this.dvrEnabled && this._updateDvr(time < this.getDuration()-3)
+    time += this._startTime
+    super.seek(time)
+  }
+
+  seekToLivePoint() {
+    this.seek(this.getDuration())
+  }
+
+  _setup() {
+    this._ccIsSetup = false
+    this._ccTracksUpdated = false
+    this._hls = new Hls(assign({}, this.options.playback.hlsjsConfig))
+    this._hls.on(Hls.Events.MEDIA_ATTACHED, () => this._hls.loadSource(this.options.src))
+    this._hls.on(Hls.Events.LEVEL_LOADED, (evt, data) => this._updatePlaybackType(evt, data))
+    this._hls.on(Hls.Events.LEVEL_UPDATED, (evt, data) => this._onLevelUpdated(evt, data))
+    this._hls.on(Hls.Events.LEVEL_SWITCHING, (evt,data) => this._onLevelSwitching(evt, data))
+    this._hls.on(Hls.Events.LEVEL_SWITCHED, (evt,data) => this._onLevelSwitched(evt, data))
+    this._hls.on(Hls.Events.FRAG_LOADED, (evt, data) => this._onFragmentLoaded(evt, data))
+    this._hls.on(Hls.Events.ERROR, (evt, data) => this._onHlsError(evt, data))
+    this._hls.on(Hls.Events.SUBTITLE_TRACK_LOADED, (evt, data) => this._onSubtitleLoaded(evt, data))
+    this._hls.on(Hls.Events.SUBTITLE_TRACKS_UPDATED, () => this._ccTracksUpdated = true)
+    this._hls.attachMedia(this.el)
   }
 
   get _startTime() {
@@ -99,73 +359,6 @@ export default class HLS extends HTML5VideoPlayback {
     return this._extrapolatedWindowNumSegments * this._segmentTargetDuration
   }
 
-  static get HLSJS() {
-    return HLSJS
-  }
-
-  constructor(...args) {
-    super(...args)
-    // backwards compatibility (TODO: remove on 0.3.0)
-    this.options.playback || (this.options.playback = this.options)
-    this._minDvrSize = typeof (this.options.hlsMinimumDvrSize) === 'undefined' ? 60 : this.options.hlsMinimumDvrSize
-    // The size of the start time extrapolation window measured as a multiple of segments.
-    // Should be 2 or higher, or 0 to disable. Should only need to be increased above 2 if more than one segment is
-    // removed from the start of the playlist at a time. E.g if the playlist is cached for 10 seconds and new chunks are
-    // added/removed every 5.
-    this._extrapolatedWindowNumSegments = !this.options.playback || typeof (this.options.playback.extrapolatedWindowNumSegments) === 'undefined' ? 2 :  this.options.playback.extrapolatedWindowNumSegments
-
-    this._playbackType = Playback.VOD
-    this._lastTimeUpdate = { current: 0, total: 0 }
-    this._lastDuration = null
-    // for hls streams which have dvr with a sliding window,
-    // the content at the start of the playlist is removed as new
-    // content is appended at the end.
-    // this means the actual playable start time will increase as the
-    // start content is deleted
-    // For streams with dvr where the entire recording is kept from the
-    // beginning this should stay as 0
-    this._playableRegionStartTime = 0
-    // {local, remote} remote is the time in the video element that should represent 0
-    //                 local is the system time when the 'remote' measurment took place
-    this._localStartTimeCorrelation = null
-    // {local, remote} remote is the time in the video element that should represents the end
-    //                 local is the system time when the 'remote' measurment took place
-    this._localEndTimeCorrelation = null
-    // if content is removed from the beginning then this empty area should
-    // be ignored. "playableRegionDuration" excludes the empty area
-    this._playableRegionDuration = 0
-    // #EXT-X-PROGRAM-DATE-TIME
-    this._programDateTime = 0
-    // true when the actual duration is longer than hlsjs's live sync point
-    // when this is false playableRegionDuration will be the actual duration
-    // when this is true playableRegionDuration will exclude the time after the sync point
-    this._durationExcludesAfterLiveSyncPoint = false
-    // #EXT-X-TARGETDURATION
-    this._segmentTargetDuration = null
-    // #EXT-X-PLAYLIST-TYPE
-    this._playlistType = null
-    this._recoverAttemptsRemaining = this.options.hlsRecoverAttempts || 16
-  }
-
-  _setup() {
-    this._ccIsSetup = false
-    this._ccTracksUpdated = false
-    this._hls = new HLSJS(assign({}, this.options.playback.hlsjsConfig))
-    this._hls.on(HLSJS.Events.MEDIA_ATTACHED, () => this._hls.loadSource(this.options.src))
-    this._hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this._updatePlaybackType(evt, data))
-    this._hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this._onLevelUpdated(evt, data))
-    this._hls.on(HLSJS.Events.LEVEL_SWITCH, (evt,data) => this._onLevelSwitch(evt, data))
-    this._hls.on(HLSJS.Events.FRAG_LOADED, (evt, data) => this._onFragmentLoaded(evt, data))
-    this._hls.on(HLSJS.Events.ERROR, (evt, data) => this._onHLSJSError(evt, data))
-    this._hls.on(HLSJS.Events.SUBTITLE_TRACK_LOADED, (evt, data) => this._onSubtitleLoaded(evt, data))
-    this._hls.on(HLSJS.Events.SUBTITLE_TRACKS_UPDATED, () => this._ccTracksUpdated = true)
-    this._hls.attachMedia(this.el)
-  }
-
-  render() {
-    this._ready()
-    return super.render()
-  }
 
   _ready() {
     this._isReadyState = true
@@ -202,53 +395,6 @@ export default class HLS extends HTML5VideoPlayback {
     clearInterval(this._timeUpdateTimer)
   }
 
-  getProgramDateTime() {
-    return this._programDateTime
-  }
-  // the duration on the video element itself should not be used
-  // as this does not necesarily represent the duration of the stream
-  // https://github.com/clappr/clappr/issues/668#issuecomment-157036678
-  getDuration() {
-    return this._duration
-  }
-
-  getCurrentTime() {
-    // e.g. can be < 0 if user pauses near the start
-    // eventually they will then be kicked to the end by hlsjs if they run out of buffer
-    // before the official start time
-    return Math.max(0, this.el.currentTime - this._startTime)
-  }
-
-  // the time that "0" now represents relative to when playback started
-  // for a stream with a sliding window this will increase as content is
-  // removed from the beginning
-  getStartTimeOffset() {
-    return this._startTime
-  }
-
-  seekPercentage(percentage) {
-    let seekTo = this._duration
-    if (percentage > 0)
-      seekTo = this._duration * (percentage / 100)
-
-    this.seek(seekTo)
-  }
-
-  seek(time) {
-    if (time < 0) {
-      Log.warn('Attempt to seek to a negative time. Resetting to live point. Use seekToLivePoint() to seek to the live point.')
-      time = this.getDuration()
-    }
-    // assume live if time within 3 seconds of end of stream
-    this.dvrEnabled && this._updateDvr(time < this.getDuration()-3)
-    time += this._startTime
-    super.seek(time)
-  }
-
-  seekToLivePoint() {
-    this.seek(this.getDuration())
-  }
-
   _updateDvr(status) {
     this.trigger(Events.PLAYBACK_DVR, status)
     this.trigger(Events.PLAYBACK_STATS_ADD, { 'dvr': status })
@@ -266,23 +412,23 @@ export default class HLS extends HTML5VideoPlayback {
     this.trigger(Events.PLAYBACK_SETTINGSUPDATE)
   }
 
-  _onHLSJSError(evt, data) {
+  _onHlsError(evt, data) {
     // only report/handle errors if they are fatal
     // hlsjs should automatically handle non fatal errors
     if (data.fatal) {
       if (this._recoverAttemptsRemaining > 0) {
         this._recoverAttemptsRemaining -= 1
         switch (data.type) {
-        case HLSJS.ErrorTypes.NETWORK_ERROR:
+        case Hls.ErrorTypes.NETWORK_ERROR:
           switch(data.details) {
-          // The following network errors cannot be recovered with HLS.startLoad()
+          // The following network errors cannot be recovered with hls.startLoad()
           // For more details, see https://github.com/video-dev/hls.js/blob/master/doc/design.md#error-detection-and-handling
           // For "level load" fatal errors, see https://github.com/video-dev/hls.js/issues/1138
-          case HLSJS.ErrorDetails.MANIFEST_LOAD_ERROR:
-          case HLSJS.ErrorDetails.MANIFEST_LOAD_TIMEOUT:
-          case HLSJS.ErrorDetails.MANIFEST_PARSING_ERROR:
-          case HLSJS.ErrorDetails.LEVEL_LOAD_ERROR:
-          case HLSJS.ErrorDetails.LEVEL_LOAD_TIMEOUT:
+          case Hls.ErrorDetails.MANIFEST_LOAD_ERROR:
+          case Hls.ErrorDetails.MANIFEST_LOAD_TIMEOUT:
+          case Hls.ErrorDetails.MANIFEST_PARSING_ERROR:
+          case Hls.ErrorDetails.LEVEL_LOAD_ERROR:
+          case Hls.ErrorDetails.LEVEL_LOAD_TIMEOUT:
             Log.error(`hlsjs: unrecoverable network fatal error, evt ${evt}, data ${data} `)
             this.trigger(Events.PLAYBACK_ERROR, { evt, data }, this.name)
             break
@@ -292,7 +438,7 @@ export default class HLS extends HTML5VideoPlayback {
             break
           }
           break
-        case HLSJS.ErrorTypes.MEDIA_ERROR:
+        case Hls.ErrorTypes.MEDIA_ERROR:
           Log.warn(`hlsjs: trying to recover from media error, evt ${evt}, data ${data} `)
           this._recover(evt, data)
           break
@@ -354,41 +500,6 @@ export default class HLS extends HTML5VideoPlayback {
     this.trigger(Events.PLAYBACK_PROGRESS, progress, buffered)
   }
 
-  play() {
-    if (!this._hls)
-      this._setup()
-
-    super.play()
-    this._startTimeUpdateTimer()
-  }
-
-  pause() {
-    if (!this._hls)
-      return
-
-    super.pause()
-    if (this.dvrEnabled)
-      this._updateDvr(true)
-
-  }
-
-  stop() {
-    if (this._hls) {
-      super.stop()
-      this._hls.destroy()
-      delete this._hls
-    }
-  }
-
-  destroy() {
-    this._stopTimeUpdateTimer()
-    if (this._hls) {
-      this._hls.destroy()
-      delete this._hls
-    }
-    super.destroy()
-  }
-
   _updatePlaybackType(evt, data) {
     this._playbackType = data.details.live ? Playback.LIVE : Playback.VOD
     this._onLevelUpdated(evt, data)
@@ -418,7 +529,6 @@ export default class HLS extends HTML5VideoPlayback {
 
     if (fragments.length === 0)
       return
-
 
     // #EXT-X-PROGRAM-DATE-TIME
     if (fragments[0].rawProgramDateTime)
@@ -471,7 +581,7 @@ export default class HLS extends HTML5VideoPlayback {
     if (this._playbackType === Playback.LIVE) {
       let fragmentTargetDuration = data.details.targetduration
       let hlsjsConfig = this.options.playback.hlsjsConfig || {}
-      let liveSyncDurationCount = hlsjsConfig.liveSyncDurationCount || HLSJS.DefaultConfig.liveSyncDurationCount
+      let liveSyncDurationCount = hlsjsConfig.liveSyncDurationCount || Hls.DefaultConfig.liveSyncDurationCount
       let hiddenAreaDuration = fragmentTargetDuration * liveSyncDurationCount
       if (hiddenAreaDuration <= newDuration) {
         newDuration -= hiddenAreaDuration
@@ -548,7 +658,7 @@ export default class HLS extends HTML5VideoPlayback {
     }
   }
 
-  _onLevelSwitch(evt, data) {
+  _onLevelSwitching(evt, data) {
     if (!this.levels.length)
       this._fillLevels()
 
@@ -569,27 +679,56 @@ export default class HLS extends HTML5VideoPlayback {
     }
   }
 
-  get dvrEnabled() {
-    // enabled when:
-    // - the duration does not include content after hlsjs's live sync point
-    // - the playable region duration is longer than the configured duration to enable dvr after
-    // - the playback type is LIVE.
-    return (this._durationExcludesAfterLiveSyncPoint && this._duration >= this._minDvrSize && this.getPlaybackType() === Playback.LIVE)
+  _onLevelSwitched(evt, data) {}
+
+  _createAdaptiveMediaActivatorForVideoQualitLevel(index) {
+    const active = this.currentLevel === index
+
+    const setActive = (scheduleActivity, immediateFlush, callback) => {
+
+      let onLevelSwitched
+
+      const addEventListener = () => {
+        this._hls.on(Hls.Events.LEVEL_SWITCHED, onLevelSwitched)
+      }
+
+      const removeEventListener = () => {
+        this._hls.off(Hls.Events.LEVEL_SWITCHED, onLevelSwitched)
+      }
+
+      onLevelSwitched = (event, data) => {
+        if (data.level === index) {
+          removeEventListener()
+          if (callback)
+            callback()
+
+        }
+      }
+
+      if (scheduleActivity) {
+        if (!active) {
+          addEventListener()
+          if (immediateFlush)
+            this.currentLevel = index
+          else
+            this._hls.nextLoadLevel = index
+
+          return true
+        }
+      } else {
+        if (active) {
+          addEventListener()
+          if (immediateFlush)
+            this.currentLevel = AUTO
+          else
+            this._hls.nextLoadLevel = AUTO
+
+          return true
+        }
+      }
+      return false
+    }
+
+    return setActive
   }
-
-  getPlaybackType() {
-    return this._playbackType
-  }
-
-  isSeekEnabled() {
-    return (this._playbackType === Playback.VOD || this.dvrEnabled)
-  }
-}
-
-HLS.canPlay = function(resource, mimeType) {
-  const resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
-  const isHls = ((resourceParts.length > 1 && resourceParts[1].toLowerCase() === 'm3u8') ||
-        mimeType === 'application/x-mpegURL' || mimeType === 'application/vnd.apple.mpegurl')
-
-  return !!(HLSJS.isSupported() && isHls)
 }

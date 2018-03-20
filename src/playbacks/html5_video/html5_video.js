@@ -4,6 +4,8 @@
 
 import { isNumber, seekStringToSeconds, DomRecycler } from '../../base/utils'
 
+import { AdaptivePlayback } from '../../base/adaptive_playback'
+
 import Playback from '../../base/playback'
 import Browser from '../../components/browser'
 import Events from '../../base/events'
@@ -34,9 +36,47 @@ const AUDIO_MIMETYPES = {
 const KNOWN_AUDIO_MIMETYPES = Object.keys(AUDIO_MIMETYPES).reduce((acc, k) => [...acc, ...AUDIO_MIMETYPES[k]], [])
 
 // TODO: rename this Playback to HTML5Playback (breaking change, only after 0.3.0)
-export default class HTML5Video extends Playback {
+export default class HTML5Video extends AdaptivePlayback {
+
+  /**
+   * @param {String} resourceUrl
+   * @param {String[]} mimeTypesByExtension
+   * @param {String} mimeType
+   */
+  static _mimeTypesForUrl(resourceUrl, mimeTypesByExtension, mimeType) {
+    const extension = (resourceUrl.split('?')[0].match(/.*\.(.*)$/) || [])[1]
+    let mimeTypes = mimeType || (extension && mimeTypesByExtension[extension.toLowerCase()]) || []
+    return (mimeTypes.constructor === Array) ? mimeTypes : [mimeTypes]
+  }
+
+  /**
+   *
+   * @param {*} type
+   * @param {*} mimeTypesByExtension
+   * @param {*} resourceUrl
+   * @param {*} mimeType
+   */
+  static _canPlay(type, mimeTypesByExtension, resourceUrl, mimeType) {
+    let mimeTypes = HTML5Video._mimeTypesForUrl(resourceUrl, mimeTypesByExtension, mimeType)
+    const media = document.createElement(type)
+    return !!(mimeTypes.filter(mediaType => !!media.canPlayType(mediaType).replace(/no/, ''))[0])
+  }
+
+  /**
+   * @param {String} resourceUrl
+   * @param {String} mimeType
+   */
+  static canPlay(resourceUrl, mimeType) {
+    return HTML5Video._canPlay('audio', AUDIO_MIMETYPES, resourceUrl, mimeType) ||
+           HTML5Video._canPlay('video', MIMETYPES, resourceUrl, mimeType)
+  }
+
   get name() { return 'html5_video' }
   get tagName() { return this.isAudioOnly ? 'audio' : 'video' }
+
+  // Plain HTML5 browser support is non-adaptive except for Safari built-in HLS support
+  // TODO: allow Safari built-in audio/text track switching to be done via the AdaptivePlayback API here
+  get isAdaptive() { return false }
 
   get isAudioOnly() {
     const resourceUrl = this.options.src
@@ -337,7 +377,6 @@ export default class HTML5Video extends Playback {
   }
 
   _onPlaying() {
-    this._checkForClosedCaptions()
     this._startPlayheadMovingChecks()
     this._handleBufferingEvents()
     this.trigger(Events.PLAYBACK_PLAY)
@@ -388,7 +427,6 @@ export default class HTML5Video extends Playback {
 
   destroy() {
     this._destroyed = true
-    this.handleTextTrackChange && this.el.textTracks.removeEventListener('change', this.handleTextTrackChange)
     this.$el.remove()
     this.el.src = ''
     this._src = null
@@ -464,83 +502,6 @@ export default class HTML5Video extends Playback {
     this.trigger(Events.PLAYBACK_READY, this.name)
   }
 
-  _checkForClosedCaptions() {
-    // Check if CC available only if current playback is HTML5Video
-    if (this.isHTML5Video && !this._ccIsSetup) {
-      if (this.hasClosedCaptionsTracks) {
-        this.trigger(Events.PLAYBACK_SUBTITLE_AVAILABLE)
-        const trackId = this.closedCaptionsTrackId
-        this.closedCaptionsTrackId = trackId
-        this.handleTextTrackChange = this._handleTextTrackChange.bind(this)
-        this.el.textTracks.addEventListener('change', this.handleTextTrackChange)
-      }
-      this._ccIsSetup = true
-    }
-  }
-
-  _handleTextTrackChange() {
-    let tracks = this.closedCaptionsTracks
-    let track = tracks.find(track => track.track.mode === 'showing') || { id: -1 }
-
-    if (this._ccTrackId !== track.id) {
-      this._ccTrackId = track.id
-      this.trigger(Events.PLAYBACK_SUBTITLE_CHANGED, {
-        id: track.id
-      })
-    }
-  }
-
-  get isHTML5Video() {
-    return this.name === HTML5Video.prototype.name
-  }
-
-  get closedCaptionsTracks() {
-    let id = 0
-    let trackId = () => { return id++ }
-    let textTracks = this.el.textTracks ? Array.from(this.el.textTracks) : []
-
-    return textTracks
-      .filter(track => track.kind === 'subtitles' || track.kind === 'captions')
-      .map(track => { return { id: trackId(), name: track.label, track: track } })
-  }
-
-  get closedCaptionsTrackId() {
-    return this._ccTrackId
-  }
-
-  set closedCaptionsTrackId(trackId) {
-    if (!isNumber(trackId))
-      return
-
-
-    let tracks = this.closedCaptionsTracks
-    let showingTrack
-
-    // Note: -1 is for hide all tracks
-    if (trackId !== -1) {
-      showingTrack = tracks.find(track => track.id === trackId)
-      if (!showingTrack)
-        return // Track id not found
-
-      if (showingTrack.track.mode === 'showing')
-        return // Track already showing
-
-    }
-
-    // Since it is possible to display multiple tracks,
-    // ensure that all tracks are hidden.
-    tracks
-      .filter(track => track.track.mode !== 'hidden')
-      .forEach(track => track.track.mode = 'hidden')
-
-    showingTrack && (showingTrack.track.mode = 'showing')
-
-    this._ccTrackId = trackId
-    this.trigger(Events.PLAYBACK_SUBTITLE_CHANGED, {
-      id: trackId
-    })
-  }
-
   get template() { return template(tracksHTML) }
 
   render() {
@@ -559,21 +520,4 @@ export default class HTML5Video extends Playback {
     this._ready()
     return this
   }
-}
-
-HTML5Video._mimeTypesForUrl = function(resourceUrl, mimeTypesByExtension, mimeType) {
-  const extension = (resourceUrl.split('?')[0].match(/.*\.(.*)$/) || [])[1]
-  let mimeTypes = mimeType || (extension && mimeTypesByExtension[extension.toLowerCase()]) || []
-  return (mimeTypes.constructor === Array) ? mimeTypes : [mimeTypes]
-}
-
-HTML5Video._canPlay = function(type, mimeTypesByExtension, resourceUrl, mimeType) {
-  let mimeTypes = HTML5Video._mimeTypesForUrl(resourceUrl, mimeTypesByExtension, mimeType)
-  const media = document.createElement(type)
-  return !!(mimeTypes.filter(mediaType => !!media.canPlayType(mediaType).replace(/no/, ''))[0])
-}
-
-HTML5Video.canPlay = function(resourceUrl, mimeType) {
-  return HTML5Video._canPlay('audio', AUDIO_MIMETYPES, resourceUrl, mimeType) ||
-         HTML5Video._canPlay('video', MIMETYPES, resourceUrl, mimeType)
 }

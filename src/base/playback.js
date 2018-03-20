@@ -139,6 +139,7 @@ export default class Playback extends UIObject {
    * checks if the playback has closed caption tracks.
    * @property hasClosedCaptionsTracks
    * @type {Boolean}
+   * @deprecated
    */
   get hasClosedCaptionsTracks() {
     return this.closedCaptionsTracks.length > 0
@@ -148,6 +149,7 @@ export default class Playback extends UIObject {
    * gets the playback available closed caption tracks.
    * @property closedCaptionsTracks
    * @type {Array} an array of objects with at least 'id' and 'name' properties
+   * @deprecated
    */
   get closedCaptionsTracks() {
     return []
@@ -157,6 +159,7 @@ export default class Playback extends UIObject {
    * gets the selected closed caption track index. (-1 is disabled)
    * @property closedCaptionsTrackId
    * @type {Number}
+   * @deprecated
    */
   get closedCaptionsTrackId() {
     return -1
@@ -166,6 +169,7 @@ export default class Playback extends UIObject {
    * sets the selected closed caption track index. (-1 is disabled)
    * @property closedCaptionsTrackId
    * @type {Number}
+   * @deprecated
    */
   set closedCaptionsTrackId(trackId) {} // eslint-disable-line no-unused-vars
 
@@ -242,6 +246,8 @@ Playback.VOD = 'vod'
  * @property AOD
  * @static
  * @type String
+ * @deprecated There is technically no difference with VOD.
+ *             Or: if this case exists, it is inconsistent that there is no difference between audio/video "live".
  */
 Playback.AOD = 'aod'
 /**
