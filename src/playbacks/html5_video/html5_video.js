@@ -4,7 +4,8 @@
 
 import { isNumber, seekStringToSeconds, DomRecycler } from '../../base/utils'
 
-import AdaptivePlayback from '../../base/adaptive_playback'
+import { AdaptivePlayback } from '../../base/adaptive_playback'
+
 import Playback from '../../base/playback'
 import Browser from '../../components/browser'
 import Events from '../../base/events'
