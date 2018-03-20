@@ -7,7 +7,7 @@ import Events from '../../base/events'
 /**
  * @implements {ClosedCaptionOption}
  */
-class HTML5TextTracOption {
+class HTML5TextTrackOption {
   /**
    * @param {TextTrack} textTrack Native HTML5 text track object
    * @param {Number} index Position index in native texttrack list
