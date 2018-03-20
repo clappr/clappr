@@ -15,6 +15,7 @@ import Playback from './playback'
 
 /**
  * @typedef {Object} AdaptiveMediaOption
+ * @readonly @property {Boolean} active
  * @member {AdaptiveMediaActivator} setActive Method that allows to activate/deactivate this quality level or audio/text track.
  */
 
@@ -73,16 +74,48 @@ import Playback from './playback'
  * @readonly @property {String} id
  * @readonly @property {Boolean} active
  * @readonly @property {String} language
+ * @readonly @property {String} label
  * @readonly @property {String[]} roles
  * @member {AdaptiveMediaActivator} setActive
  */
 
-export default class AdaptivePlayback extends Playback {
+export class AdaptivePlayback extends Playback {
+  /**
+   * Helper logic to facilitate usage of API implementation for common use-cases.
+   * Activates one option exclusively. Passing an invalid identifier or `null`
+   * will deactivate all options. Deactivates all options ot corresponding to this id.
+   * @param {AdaptiveMediaOption[]} adaptiveMediaOptions
+   * @param {String | Number | AdaptiveMediaOption} id
+   *
+   */
+  static selectAdaptiveMediaOption(adaptiveMediaOptions, id) {
+    if (typeof id === 'object') {
+      // assuming it's an AdaptiveMediaOption object
+      id = id.id
+    }
+    adaptiveMediaOptions.forEach((option, index) => {
+      if (typeof id === 'string')
+        option.setActive(id === option.id)
+      else if (typeof id === 'number')
+        option.setActive(id === index)
+      else
+        throw new Error('Adaptive media option id should be string or number')
+    })
+  }
+
+  /**
+   * @param {AdaptiveMediaOption[]} adaptiveMediaOptions
+   */
+  static findSelectedAdaptiveMediaOption(adaptiveMediaOptions) {
+    return (adaptiveMediaOptions.filter((option) => option.active)[0] || null)
+  }
+
   /**
    * checks if the playback has closed caption tracks.
    * @property hasClosedCaptionsTracks
    * @type {Boolean}
    * @override
+   * @deprecated
    */
   get hasClosedCaptionsTracks() {
     return !!this.closedCaptions.length
@@ -93,6 +126,7 @@ export default class AdaptivePlayback extends Playback {
    * @property closedCaptionsTracks
    * @type {Array} an array of objects with at least 'id' and 'name' properties
    * @override
+   * @deprecated
    */
   get closedCaptionsTracks() {
     return this.closedCaptions.map(({ id, language }) => {
@@ -108,6 +142,7 @@ export default class AdaptivePlayback extends Playback {
    * @property closedCaptionsTrackId
    * @type {Number}
    * @override
+   * @deprecated
    */
   get closedCaptionsTrackId() {
     const firstActiveCcOption = this.closedCaptions.filter((ccOption) => ccOption.active)[0]
@@ -121,6 +156,7 @@ export default class AdaptivePlayback extends Playback {
    * @property closedCaptionsTrackId
    * @type {Number}
    * @override
+   * @deprecated
    */
   set closedCaptionsTrackId(trackId) {
     this.closedCaptions.forEach((ccOption) => {
@@ -145,7 +181,7 @@ export default class AdaptivePlayback extends Playback {
    * @param {String | Number | VideoQualityLevel} id
    */
   selectVideoQualityLevel(id) {
-    this.activateAdaptiveMediaOptionExclusively(id, this.videoQualityLevels)
+    AdaptivePlayback.selectAdaptiveMediaOption(this.videoQualityLevels, id)
   }
 
   /**
@@ -153,38 +189,27 @@ export default class AdaptivePlayback extends Playback {
    * @param {String | Number | AudioOption} id
    */
   selectAudioOption(id) {
-    this.activateAdaptiveMediaOptionExclusively(id, this.audioOptions)
+    AdaptivePlayback.selectAdaptiveMediaOption(this.audioOptions, id)
   }
 
   /**
    * Convenience method to select a text track option.
    * @param {String | Number | ClosedCaptionOption} id
    */
-  selectClosedCaptionOption(id) {
-    this.activateAdaptiveMediaOptionExclusively(id, this.audioOptions)
+  selectClosedCaption(id) {
+    AdaptivePlayback.selectAdaptiveMediaOption(this.audioOptions, id)
   }
 
-  /**
-   * Base-class logic to facilitate usage of API implementation for common use-cases.
-   * Activates one option exclusively. Passing an invalid identifier or `null`
-   * will deactivate all options. Deactivates all options ot corresponding to this id.
-   * @param {String | Number | AdaptiveMediaOption} id
-   * @param {AdaptiveMediaOption[]} adaptiveMediaOptions
-   */
-  activateAdaptiveMediaOptionExclusively(id, adaptiveMediaOptions) {
-    if (typeof id === 'object') {
-      // assume it's a VideoQualityLevel object
-      id = id.id
-    }
-    adaptiveMediaOptions.forEach((qualityLevel, index) => {
-      if (typeof id === 'string')
-        qualityLevel.setActive(id === qualityLevel.id)
-      else if (typeof id === 'number')
-        qualityLevel.setActive(id === index)
-      else
-        throw new Error('Adaptive media option id should be string or number')
+  get selectedVideoQualityLevel() {
+    return AdaptivePlayback.findSelectedAdaptiveMediaOption(this.videoQualityLevels)
+  }
 
-    })
+  get selectedAudioOption() {
+    return AdaptivePlayback.findSelectedAdaptiveMediaOption(this.audioOptions)
+  }
+
+  get selectedClosedCaption() {
+    return AdaptivePlayback.findSelectedAdaptiveMediaOption(this.closedCaptions)
   }
 
   /**
@@ -201,8 +226,7 @@ export default class AdaptivePlayback extends Playback {
    */
   set isAutoAdaptive(enabled) {
     if (this.isAdaptive)
-      throw new Error('Playback is adaptive but not implemented')
-
+      throw new Error('Playback is adaptive but method not implemented')
     return false
   }
 
