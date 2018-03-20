@@ -36,6 +36,40 @@ const KNOWN_AUDIO_MIMETYPES = Object.keys(AUDIO_MIMETYPES).reduce((acc, k) => [.
 
 // TODO: rename this Playback to HTML5Playback (breaking change, only after 0.3.0)
 export default class HTML5Video extends AdaptivePlayback {
+
+  /**
+   * @param {String} resourceUrl
+   * @param {String[]} mimeTypesByExtension
+   * @param {String} mimeType
+   */
+  static _mimeTypesForUrl(resourceUrl, mimeTypesByExtension, mimeType) {
+    const extension = (resourceUrl.split('?')[0].match(/.*\.(.*)$/) || [])[1]
+    let mimeTypes = mimeType || (extension && mimeTypesByExtension[extension.toLowerCase()]) || []
+    return (mimeTypes.constructor === Array) ? mimeTypes : [mimeTypes]
+  }
+
+  /**
+   *
+   * @param {*} type
+   * @param {*} mimeTypesByExtension
+   * @param {*} resourceUrl
+   * @param {*} mimeType
+   */
+  static _canPlay(type, mimeTypesByExtension, resourceUrl, mimeType) {
+    let mimeTypes = HTML5Video._mimeTypesForUrl(resourceUrl, mimeTypesByExtension, mimeType)
+    const media = document.createElement(type)
+    return !!(mimeTypes.filter(mediaType => !!media.canPlayType(mediaType).replace(/no/, ''))[0])
+  }
+
+  /**
+   * @param {String} resourceUrl
+   * @param {String} mimeType
+   */
+  static canPlay(resourceUrl, mimeType) {
+    return HTML5Video._canPlay('audio', AUDIO_MIMETYPES, resourceUrl, mimeType) ||
+           HTML5Video._canPlay('video', MIMETYPES, resourceUrl, mimeType)
+  }
+
   get name() { return 'html5_video' }
   get tagName() { return this.isAudioOnly ? 'audio' : 'video' }
 
@@ -564,21 +598,4 @@ export default class HTML5Video extends AdaptivePlayback {
     this._ready()
     return this
   }
-}
-
-HTML5Video._mimeTypesForUrl = function(resourceUrl, mimeTypesByExtension, mimeType) {
-  const extension = (resourceUrl.split('?')[0].match(/.*\.(.*)$/) || [])[1]
-  let mimeTypes = mimeType || (extension && mimeTypesByExtension[extension.toLowerCase()]) || []
-  return (mimeTypes.constructor === Array) ? mimeTypes : [mimeTypes]
-}
-
-HTML5Video._canPlay = function(type, mimeTypesByExtension, resourceUrl, mimeType) {
-  let mimeTypes = HTML5Video._mimeTypesForUrl(resourceUrl, mimeTypesByExtension, mimeType)
-  const media = document.createElement(type)
-  return !!(mimeTypes.filter(mediaType => !!media.canPlayType(mediaType).replace(/no/, ''))[0])
-}
-
-HTML5Video.canPlay = function(resourceUrl, mimeType) {
-  return HTML5Video._canPlay('audio', AUDIO_MIMETYPES, resourceUrl, mimeType) ||
-         HTML5Video._canPlay('video', MIMETYPES, resourceUrl, mimeType)
 }
