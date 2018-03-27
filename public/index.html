@@ -52,7 +52,6 @@
 
 var player = new Clappr.Player({
   source: 'http://clappr.io/highline.mp4',
-  baseUrl: '/latest',
   poster: 'http://clappr.io/poster.png',
   mute: true,
   height: 360,
@@ -66,9 +65,6 @@ player.attachTo(playerElement);
       </div>
     </section>
     <footer class="footer"></footer>
-    <script type="text/javascript" charset="utf-8" src="latest/clappr.js"></script>
-    <script type="text/javascript" charset="utf-8" src="j/main.js"></script>
-    <script type="text/javascript" charset="utf-8" src="j/editor/ace.js"></script>
     <script>
       var urlParams;
       (function() {
@@ -90,7 +86,7 @@ player.attachTo(playerElement);
 
       var player = new Clappr.Player({
         source: urlParams.src || 'http://clappr.io/highline.mp4',
-        poster: 'http://clappr.io/poster.png',
+        poster: urlParams.poster || 'http://clappr.io/poster.png',
         mute: true,
         height: 360,
         width: 640
