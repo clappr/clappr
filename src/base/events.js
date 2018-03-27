@@ -282,7 +282,7 @@ Events.PLAYER_SEEK = 'seek'
  * @event PLAYER_ERROR
  * @param {Object} error the error
  */
-Events.PLAYER_ERROR = 'error'
+Events.PLAYER_ERROR = 'playererror'
 /**
  * Fired when the time is updated on player
  *
