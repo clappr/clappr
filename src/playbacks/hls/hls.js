@@ -154,7 +154,7 @@ export default class HLS extends HTML5VideoPlayback {
     this._hls.on(HLSJS.Events.MEDIA_ATTACHED, () => this._hls.loadSource(this.options.src))
     this._hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this._updatePlaybackType(evt, data))
     this._hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this._onLevelUpdated(evt, data))
-    this._hls.on(HLSJS.Events.LEVEL_SWITCH, (evt,data) => this._onLevelSwitch(evt, data))
+    this._hls.on(HLSJS.Events.LEVEL_SWITCHING, (evt,data) => this._onLevelSwitch(evt, data))
     this._hls.on(HLSJS.Events.FRAG_LOADED, (evt, data) => this._onFragmentLoaded(evt, data))
     this._hls.on(HLSJS.Events.ERROR, (evt, data) => this._onHLSJSError(evt, data))
     this._hls.on(HLSJS.Events.SUBTITLE_TRACK_LOADED, (evt, data) => this._onSubtitleLoaded(evt, data))
