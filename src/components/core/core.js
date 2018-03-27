@@ -11,6 +11,7 @@ import ContainerFactory from '../../components/container_factory'
 import MediaControl from '../../components/media_control'
 import Mediator from '../../components/mediator'
 import PlayerInfo from '../../components/player_info'
+import PlayerError from '../../components/error'
 
 import Styler from '../../base/styler'
 
@@ -77,6 +78,7 @@ export default class Core extends UIObject {
     $(document).bind('MSFullscreenChange', this._boundFullscreenHandler)
     $(document).bind('mozfullscreenchange', this._boundFullscreenHandler)
     Browser.isMobile && $(window).bind('resize', (o) => { this.handleWindowResize(o) })
+    PlayerError.setCore(this)
   }
 
   configureDomRecycler() {
