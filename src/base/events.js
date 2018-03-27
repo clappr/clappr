@@ -284,6 +284,14 @@ Events.PLAYER_SEEK = 'seek'
  */
 Events.PLAYER_ERROR = 'playererror'
 /**
+ * Fired when there is an error
+ *
+ * @event ERROR
+ * @param {Object} error
+ * the error with the following format `{code, description, level, raw, origin, scope}`
+ */
+Events.ERROR = 'error'
+/**
  * Fired when the time is updated on player
  *
  * @event PLAYER_TIMEUPDATE
