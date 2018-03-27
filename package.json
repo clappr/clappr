@@ -44,7 +44,7 @@
     "eslint-config-node-style-guide": "^3.0.0",
     "file-loader": "^1.1.11",
     "gulp": "^3.9.1",
-    "hls.js": "^0.8.9",
+    "hls.js": "^0.9.1",
     "html-loader": "^0.5.5",
     "istanbul": "^0.4.2",
     "istanbul-instrumenter-loader": "^3.0.0",
