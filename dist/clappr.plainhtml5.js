@@ -6653,7 +6653,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var version = "0.2.88";
+var version = "0.2.89";
 
 exports.default = {
   Player: _player2.default,
@@ -12155,7 +12155,7 @@ var HTML5Video = function (_Playback) {
     this._destroyed = true;
     this.handleTextTrackChange && this.el.textTracks.removeEventListener('change', this.handleTextTrackChange);
     this.$el.remove();
-    this.el.src = '';
+    delete this.el.src;
     this._src = null;
     _utils.DomRecycler.garbage(this.$el);
   };
