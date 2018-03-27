@@ -6717,7 +6717,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var version = "0.2.89";
+var version = "0.2.90";
 
 exports.default = {
   Player: _player2.default,
@@ -14244,7 +14244,7 @@ var HLS = function (_HTML5VideoPlayback) {
     this._hls.on(_hls2.default.Events.LEVEL_UPDATED, function (evt, data) {
       return _this2._onLevelUpdated(evt, data);
     });
-    this._hls.on(_hls2.default.Events.LEVEL_SWITCH, function (evt, data) {
+    this._hls.on(_hls2.default.Events.LEVEL_SWITCHING, function (evt, data) {
       return _this2._onLevelSwitch(evt, data);
     });
     this._hls.on(_hls2.default.Events.FRAG_LOADED, function (evt, data) {
