@@ -1,5 +1,6 @@
 import Events from '../../base/events'
 import BaseObject from '../../base/base_object'
+import Log from '../../plugins/log'
 
 /**
  * The PlayerError is responsible to receive and propagate errors.
@@ -32,6 +33,10 @@ class PlayerError extends BaseObject {
    * @param {Object} err should be an object with code, description, level, origin, scope and raw error.
    */
   error(err) {
+    if (!this.core) {
+      Log.warn(this.name, 'Core is not setted. Error: ', err)
+      return
+    }
     this.core.trigger(Events.ERROR, err)
   }
 
