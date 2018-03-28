@@ -252,6 +252,8 @@ class DashShakaPlayback extends HTML5Video {
     } else {
       this._destroy()
     }
+
+    super.destroy()
   }
 
   _setup () {
@@ -338,7 +340,6 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   _destroy () {
-    super.destroy()
     this._isShakaReadyState = false
     Log.debug('shaka was destroyed')
   }
