@@ -17,7 +17,7 @@
   "author": "Clappr team",
   "license": "BSD-3-Clause",
   "peerDependencies": {
-    "clappr": "^0.2.73"
+    "clappr": "^0.2.90"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -30,7 +30,7 @@
     "eslint-plugin-node": "^5.1.0",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
-    "shaka-player": "2.2.8",
+    "shaka-player": "2.3.4",
     "webpack": "^3.5.5",
     "webpack-dev-server": "^2.7.1"
   }

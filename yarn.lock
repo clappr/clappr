@@ -3261,9 +3261,9 @@ sha.js@^2.4.0, sha.js@^2.4.8:
   dependencies:
     inherits "^2.0.1"
 
-shaka-player@2.2.8:
-  version "2.2.8"
-  resolved "https://registry.yarnpkg.com/shaka-player/-/shaka-player-2.2.8.tgz#87655f1047bd280d681c0442fc227021ece1eab4"
+shaka-player@2.3.4:
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/shaka-player/-/shaka-player-2.3.4.tgz#e5248fcfd24653da4976c535e1a426c674d9b59d"
 
 shebang-command@^1.2.0:
   version "1.2.0"
