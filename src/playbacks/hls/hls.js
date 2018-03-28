@@ -8,6 +8,7 @@ import Events from '../../base/events'
 import Playback from '../../base/playback'
 import { now, assign } from '../../base/utils'
 import Log from '../../plugins/log'
+import PlayerError from '../../components/error'
 
 const AUTO = -1
 
@@ -172,7 +173,7 @@ export default class HLS extends HTML5VideoPlayback {
     this.trigger(Events.PLAYBACK_READY, this.name)
   }
 
-  _recover(evt, data) {
+  _recover(evt, data, error) {
     if (!this._recoveredDecodingError) {
       this._recoveredDecodingError = true
       this._hls.recoverMediaError()
@@ -182,6 +183,8 @@ export default class HLS extends HTML5VideoPlayback {
       this._hls.recoverMediaError()
     } else {
       Log.error('hlsjs: failed to recover')
+      error.level = PlayerError.Levels.FATAL
+      this.createError(error)
       this.trigger(Events.PLAYBACK_ERROR, `hlsjs: could not recover from error, evt ${evt}, data ${data} `, this.name)
     }
   }
@@ -267,6 +270,12 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   _onHLSJSError(evt, data) {
+    const error = {
+      code: `${data.type}_${data.details}`,
+      description: `${this.name} error: type: ${data.type}, details: ${data.details}`,
+      raw: data,
+    }
+    if (data.response) error.description += `, response: ${JSON.stringify(data.response)}`
     // only report/handle errors if they are fatal
     // hlsjs should automatically handle non fatal errors
     if (data.fatal) {
@@ -284,29 +293,42 @@ export default class HLS extends HTML5VideoPlayback {
           case HLSJS.ErrorDetails.LEVEL_LOAD_ERROR:
           case HLSJS.ErrorDetails.LEVEL_LOAD_TIMEOUT:
             Log.error(`hlsjs: unrecoverable network fatal error, evt ${evt}, data ${data} `)
+            error.level = PlayerError.Levels.FATAL
+            this.createError(error)
             this.trigger(Events.PLAYBACK_ERROR, { evt, data }, this.name)
             break
           default:
             Log.warn(`hlsjs: trying to recover from network error, evt ${evt}, data ${data} `)
+            error.level = PlayerError.Levels.WARN
+            this.createError(error)
             this._hls.startLoad()
             break
           }
           break
         case HLSJS.ErrorTypes.MEDIA_ERROR:
           Log.warn(`hlsjs: trying to recover from media error, evt ${evt}, data ${data} `)
-          this._recover(evt, data)
+          error.level = PlayerError.Levels.WARN
+          this.createError(error)
+          this._recover(evt, data, error)
           break
         default:
           Log.error(`hlsjs: trying to recover from error, evt ${evt}, data ${data} `)
+          error.level = PlayerError.Levels.FATAL
+          this.createError(error)
           this.trigger(Events.PLAYBACK_ERROR, `hlsjs: could not recover from error, evt ${evt}, data ${data} `, this.name)
           break
         }
       } else {
         Log.error(`hlsjs: could not recover from error after maximum number of attempts, evt ${evt}, data ${data} `)
+        error.level = PlayerError.Levels.FATAL
+        this.createError(error)
         this.trigger(Events.PLAYBACK_ERROR, { evt, data }, this.name)
       }
-    } else { Log.warn(`hlsjs: non-fatal error occurred, evt ${evt}, data ${data} `) }
-
+    } else {
+      error.level = PlayerError.Levels.WARN
+      this.createError(error)
+      Log.warn(`hlsjs: non-fatal error occurred, evt ${evt}, data ${data} `)
+    }
   }
 
   _onTimeUpdate() {
