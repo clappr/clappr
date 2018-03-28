@@ -155,13 +155,13 @@ export default class FlasHLS extends BaseFlashPlayback {
       if (++this._bootstrapAttempts <= MAX_ATTEMPTS) {
         setTimeout(() => this._bootstrap(), 50)
       } else {
-        this.createError({
-          code: `playerLoadFail_maxNumberAttemptsReached`,
+        const formattedError = this.createError({
+          code: 'playerLoadFail_maxNumberAttemptsReached',
           description: `${this.name} error: Max number of attempts reached`,
           level: PlayerError.Levels.FATAL,
           raw: {},
         })
-        this.trigger(Events.PLAYBACK_ERROR, { message: 'Max number of attempts reached' }, this.name)
+        this.trigger(Events.PLAYBACK_ERROR, formattedError)
       }
     }
   }
@@ -645,8 +645,8 @@ export default class FlasHLS extends BaseFlashPlayback {
       level: PlayerError.Levels.FATAL,
       raw: { code, url, message },
     }
-    this.createError(error)
-    this.trigger(Events.PLAYBACK_ERROR, { code: code, url: url, message: message })
+    const formattedError = this.createError(error)
+    this.trigger(Events.PLAYBACK_ERROR, formattedError)
     this.trigger(Events.PLAYBACK_STOP)
   }
 
