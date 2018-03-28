@@ -310,8 +310,13 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   _onError (err) {
-    Log.error('Shaka error event:', err)
-    this.trigger(Events.PLAYBACK_ERROR, err, this.name)
+    const error = {
+      shakaError: err,
+      videoError: this.el.error
+    }
+
+    Log.error('Shaka error event:', error)
+    this.trigger(Events.PLAYBACK_ERROR, error, this.name)
   }
 
   _onAdaptation () {
