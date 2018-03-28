@@ -1,5 +1,6 @@
 import { extend } from './utils'
 import UIObject from './ui_object'
+import PlayerError from '../components/error'
 
 /**
  * An abstraction to represent a generic playback, it's like an interface to be implemented by subclasses.
@@ -85,6 +86,30 @@ export default class Playback extends UIObject {
    * @method stop
    */
   stop() {}
+
+  /**
+   * creates playback error.
+   * @method createError
+   * @param {Object} error should be an object with code, description, level and raw error.
+   * @return {Object} Object with formatted error data including origin and scope
+   */
+  createError(error) {
+    const defaultError = {
+      description: '',
+      level: PlayerError.Levels.FATAL,
+      origin: this.name,
+      scope: 'playback',
+      raw: {},
+    }
+
+    const errorData = Object.assign(defaultError, error, {
+      code: `${this.name}:${error.code || 'unknown'}`
+    })
+
+    PlayerError.error(errorData)
+
+    return errorData
+  }
 
   /**
    * seeks the playback to a given `time` in seconds
