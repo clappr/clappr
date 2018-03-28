@@ -8,6 +8,7 @@ import template from '../../base/template'
 import Playback from '../../base/playback'
 import Mediator from '../../components/mediator'
 import Browser from '../../components/browser'
+import PlayerError from '../../components/error'
 import HLSEvents from './flashls_events'
 import hlsSwf from './public/HLSPlayer.swf'
 import $ from 'clappr-zepto'
@@ -151,11 +152,17 @@ export default class FlasHLS extends BaseFlashPlayback {
       this.trigger(Events.PLAYBACK_READY, this.name)
     } else {
       this._bootstrapAttempts = this._bootstrapAttempts || 0
-      if (++this._bootstrapAttempts <= MAX_ATTEMPTS)
+      if (++this._bootstrapAttempts <= MAX_ATTEMPTS) {
         setTimeout(() => this._bootstrap(), 50)
-      else
+      } else {
+        this.createError({
+          code: `playerLoadFail_maxNumberAttemptsReached`,
+          description: `${this.name} error: Max number of attempts reached`,
+          level: PlayerError.Levels.FATAL,
+          raw: {},
+        })
         this.trigger(Events.PLAYBACK_ERROR, { message: 'Max number of attempts reached' }, this.name)
-
+      }
     }
   }
 
@@ -632,6 +639,13 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   _flashPlaybackError(code, url, message) {
+    const error = {
+      code,
+      description: message,
+      level: PlayerError.Levels.FATAL,
+      raw: { code, url, message },
+    }
+    this.createError(error)
     this.trigger(Events.PLAYBACK_ERROR, { code: code, url: url, message: message })
     this.trigger(Events.PLAYBACK_STOP)
   }
