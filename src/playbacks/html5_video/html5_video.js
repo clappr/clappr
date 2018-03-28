@@ -391,7 +391,7 @@ export default class HTML5Video extends Playback {
       raw: this.el.error,
     })
 
-    this.trigger(Events.PLAYBACK_ERROR, this.el.error, this.name)
+    this.trigger(Events.PLAYBACK_ERROR, formattedError)
   }
 
   destroy() {
