@@ -329,6 +329,8 @@ var DashShakaPlayback = function (_HTML5Video) {
       } else {
         this._destroy();
       }
+
+      _get(DashShakaPlayback.prototype.__proto__ || Object.getPrototypeOf(DashShakaPlayback.prototype), 'destroy', this).call(this);
     }
   }, {
     key: '_setup',
@@ -405,8 +407,13 @@ var DashShakaPlayback = function (_HTML5Video) {
   }, {
     key: '_onError',
     value: function _onError(err) {
-      _clappr.Log.error('Shaka error event:', err);
-      this.trigger(_clappr.Events.PLAYBACK_ERROR, err, this.name);
+      var error = {
+        shakaError: err,
+        videoError: this.el.error
+      };
+
+      _clappr.Log.error('Shaka error event:', error);
+      this.trigger(_clappr.Events.PLAYBACK_ERROR, error, this.name);
     }
   }, {
     key: '_onAdaptation',
@@ -439,7 +446,6 @@ var DashShakaPlayback = function (_HTML5Video) {
   }, {
     key: '_destroy',
     value: function _destroy() {
-      _get(DashShakaPlayback.prototype.__proto__ || Object.getPrototypeOf(DashShakaPlayback.prototype), 'destroy', this).call(this);
       this._isShakaReadyState = false;
       _clappr.Log.debug('shaka was destroyed');
     }
