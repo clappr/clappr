@@ -383,6 +383,14 @@ export default class HTML5Video extends Playback {
   }
 
   _onError() {
+    const { code, message } = this.el.error
+
+    const formattedError = this.createError({
+      code,
+      description: message,
+      raw: this.el.error,
+    })
+
     this.trigger(Events.PLAYBACK_ERROR, this.el.error, this.name)
   }
 
