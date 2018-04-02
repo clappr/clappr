@@ -560,6 +560,12 @@ Events.PLAYBACK_SUBTITLE_CHANGED = 'playback:subtitle:changed'
  */
 Events.CORE_CONTAINERS_CREATED = 'core:containers:created'
 /**
+ * Fired when the active container changed
+ *
+ * @event CORE_ACTIVE_CONTAINER_CHANGED
+ */
+Events.CORE_ACTIVE_CONTAINER_CHANGED = 'core:active:container:changed'
+/**
  * Fired when the options were changed for the core
  *
  * @event CORE_OPTIONS_CHANGE
