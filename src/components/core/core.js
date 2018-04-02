@@ -224,28 +224,11 @@ export default class Core extends UIObject {
     const orientation = (window.innerWidth > window.innerHeight) ? 'landscape' : 'portrait'
     if (this._screenOrientation === orientation) return
     this._screenOrientation = orientation
-
     this.triggerResize({ width: this.el.clientWidth, height: this.el.clientHeight })
     this.trigger(Events.CORE_SCREEN_ORIENTATION_CHANGED, {
       event: event,
       orientation: this._screenOrientation
     })
-  }
-
-  setMediaControlContainer(container) {
-    this.mediaControl.setContainer(container)
-    this.mediaControl.render()
-  }
-
-  disableMediaControl() {
-    this.mediaControl.disable()
-    this.$el.removeClass('nocursor')
-  }
-
-  enableMediaControl() {
-    this.mediaControl.enable()
-    let data = { event: event, orientation: this._screenOrientation }
-    this.trigger(Events.CORE_SCREEN_ORIENTATION_CHANGED, data)
   }
 
   removeContainer(container) {
@@ -286,14 +269,6 @@ export default class Core extends UIObject {
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_SHOW, this.onMediaControlShow.bind(this, true))
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_HIDE, this.onMediaControlShow.bind(this, false))
     }
-  }
-
-  createMediaControl(options) {
-    if (options.mediacontrol && options.mediacontrol.external)
-      return new options.mediacontrol.external(options).render()
-    else
-      return new MediaControl(options).render()
-
   }
 
   getCurrentContainer() {
