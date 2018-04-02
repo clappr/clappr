@@ -70,6 +70,15 @@ export default class Core extends UIObject {
     return new UICorePlugin(this)
   }
 
+  get activeContainer() {
+    return this._activeContainer
+  }
+
+  set activeContainer(container) {
+    this._activeContainer = container
+    this.trigger(Events.CORE_ACTIVE_CONTAINER_CHANGED, this._activeContainer)
+  }
+
   constructor(options) {
     super(options)
     this.configureDomRecycler()
@@ -252,6 +261,8 @@ export default class Core extends UIObject {
     containers.map(this.appendContainer.bind(this))
     this.trigger(Events.CORE_CONTAINERS_CREATED)
     this.renderContainers()
+    this.activeContainer = containers[0]
+    this.setupMediaControl()
     this.render()
     this.appendToParent()
     return this.containers
