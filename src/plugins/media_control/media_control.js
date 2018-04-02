@@ -658,7 +658,7 @@ export default class MediaControl extends UICorePlugin {
 
   render() {
     const timeout = 1000
-    this.$el.html(this.template({ settings: this.settings }))
+    this.settings && this.$el.html(this.template({ settings: this.settings }))
     this.createCachedElements()
     this.$playPauseToggle.addClass('paused')
     this.$playStopToggle.addClass('stopped')
