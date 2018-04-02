@@ -103,8 +103,11 @@ export default class Core extends UIObject {
     this.defer = $.Deferred()
     this.defer.promise(this)
     this.containerFactory = new ContainerFactory(options, options.loader, this.i18n)
-    this.containerFactory
-      .createContainers()
+    this.prepareContainers()
+  }
+
+  prepareContainers() {
+    this.containerFactory.createContainers()
       .then((containers) => this.setupContainers(containers))
       .then((containers) => this.resolveOnContainersReady(containers))
   }
@@ -195,9 +198,7 @@ export default class Core extends UIObject {
     this.containers.forEach((container) => container.destroy())
     this.mediaControl && (this.mediaControl.container = null)
     this.containerFactory.options = $.extend(this.options, { sources })
-    this.containerFactory.createContainers()
-      .then((containers) => this.setupContainers(containers))
-      .then((containers) => this.resolveOnContainersReady(containers))
+    this.prepareContainers()
   }
 
   destroy() {
