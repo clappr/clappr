@@ -669,10 +669,11 @@ export default class MediaControl extends UICorePlugin {
     this.$playStopToggle.addClass('stopped')
 
     this.changeTogglePlay()
-    this.hideId = setTimeout(() => this.hide(), timeout)
-    if (this.disabled)
-      this.hide()
 
+    if(this.container) {
+      this.hideId = setTimeout(() => this.hide(), timeout)
+      this.disabled && this.hide()
+    }
 
     // Video volume cannot be changed with Safari on mobile devices
     // Display mute/unmute icon only if Safari version >= 10
