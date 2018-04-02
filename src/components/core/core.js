@@ -95,10 +95,8 @@ export default class Core extends UIObject {
   }
 
   configureDomRecycler() {
-    let recycleVideo = (this.options && this.options.playback && this.options.playback.recycleVideo) ? true : false
-    DomRecycler.configure({
-      recycleVideo: recycleVideo
-    })
+    let recycleVideo = this.options && this.options.playback && this.options.playback.recycleVideo
+    DomRecycler.configure({ recycleVideo })
   }
 
   createContainers(options) {
@@ -112,11 +110,7 @@ export default class Core extends UIObject {
   }
 
   updateSize() {
-    if (Fullscreen.isFullscreen())
-      this.setFullscreen()
-    else
-      this.setPlayerSize()
-
+    Fullscreen.isFullscreen() ? this.setFullscreen() : this.setPlayerSize()
   }
 
   setFullscreen() {
@@ -172,7 +166,7 @@ export default class Core extends UIObject {
   }
 
   disableResizeObserver() {
-    if (this.resizeObserverInterval) clearInterval(this.resizeObserverInterval)
+    this.resizeObserverInterval && clearInterval(this.resizeObserverInterval)
   }
 
   resolveOnContainersReady(containers) {
@@ -245,6 +239,8 @@ export default class Core extends UIObject {
 
   enableMediaControl() {
     this.mediaControl.enable()
+    let data = { event: event, orientation: this._screenOrientation }
+    this.trigger(Events.CORE_SCREEN_ORIENTATION_CHANGED, data)
   }
 
   removeContainer(container) {
@@ -310,14 +306,10 @@ export default class Core extends UIObject {
   toggleFullscreen() {
     if (!Fullscreen.isFullscreen()) {
       Fullscreen.requestFullscreen(this.el)
-      if (!Browser.isiOS)
-        this.$el.addClass('fullscreen')
-
+      !Browser.isiOS && this.$el.addClass('fullscreen')
     } else {
       Fullscreen.cancelFullscreen()
-      if (!Browser.isiOS)
-        this.$el.removeClass('fullscreen nocursor')
-
+      !Browser.isiOS && this.$el.removeClass('fullscreen nocursor')
     }
     this.mediaControl.show()
   }
@@ -331,12 +323,10 @@ export default class Core extends UIObject {
   }
 
   onMediaControlShow(showing) {
-    this.getCurrentContainer().trigger(showing?Events.CONTAINER_MEDIACONTROL_SHOW:Events.CONTAINER_MEDIACONTROL_HIDE)
-
-    if (showing)
-      this.$el.removeClass('nocursor')
-    else if (Fullscreen.isFullscreen())
-      this.$el.addClass('nocursor')
+    let visibilityEvent = showing ? Events.CONTAINER_MEDIACONTROL_SHOW : Events.CONTAINER_MEDIACONTROL_HIDE
+    this.activeContainer.trigger(visibilityEvent)
+    showing && this.$el.removeClass('nocursor')
+    Fullscreen.isFullscreen() && this.$el.addClass('nocursor')
   }
 
   /**
@@ -347,14 +337,12 @@ export default class Core extends UIObject {
   configure(options) {
     this._options = $.extend(this._options, options)
     this.configureDomRecycler()
-    const sources = options.source || options.sources
 
-    if (sources) this.load(sources, options.mimeType || this.options.mimeType)
+    const sources = options.source || options.sources
+    sources && this.load(sources, options.mimeType || this.options.mimeType)
 
     this.trigger(Events.CORE_OPTIONS_CHANGE)
-    this.containers.forEach((container) => {
-      container.configure(this.options)
-    })
+    this.containers.forEach((container) => container.configure(this.options))
     this.mediaControl.configure && this.mediaControl.configure(this.options)
   }
 
