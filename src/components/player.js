@@ -508,9 +508,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   setVolume(volume) {
-    if (this.core && this.core.mediaControl)
-      this.core.mediaControl.setVolume(volume)
-
+    this.core && this.core.mediaControl && this.core.mediaControl.setVolume(volume)
     return this
   }
 
