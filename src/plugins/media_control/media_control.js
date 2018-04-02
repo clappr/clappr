@@ -219,9 +219,7 @@ export default class MediaControl extends UICorePlugin {
       this.$playPauseToggle.append(playIcon)
       this.$playStopToggle.append(playIcon)
       this.trigger(Events.MEDIACONTROL_NOTPLAYING)
-      if (Browser.isMobile)
-        this.show()
-
+      Browser.isMobile && this.show()
     }
     this.applyButtonStyle(this.$playPauseToggle)
     this.applyButtonStyle(this.$playStopToggle)
@@ -244,39 +242,25 @@ export default class MediaControl extends UICorePlugin {
   }
 
   mousemoveOnVolumeBar(event) {
-    if (this.draggingVolumeBar)
-      this.setVolume(this.getVolumeFromUIEvent(event))
+    this.draggingVolumeBar && this.setVolume(this.getVolumeFromUIEvent(event))
   }
 
   playerResize(size) {
     this.$fullscreenToggle.html('')
-    if (Fullscreen.isFullscreen())
-      this.$fullscreenToggle.append(exitFullscreenIcon)
-    else
-      this.$fullscreenToggle.append(fullscreenIcon)
-
+    let icon = Fullscreen.isFullscreen() ? exitFullscreenIcon : fullscreenIcon
+    this.$fullscreenToggle.append(icon)
     this.applyButtonStyle(this.$fullscreenToggle)
-    this.$el.removeClass('w320')
-    if (size.width <= 320 || this.options.hideVolumeBar)
-      this.$el.addClass('w320')
-
+    this.$el.find('.media-control').length !== 0 && this.$el.removeClass('w320')
+    (size.width <= 320 || this.options.hideVolumeBar) && this.$el.addClass('w320')
   }
 
   togglePlayPause() {
-    if (this.container.isPlaying())
-      this.container.pause()
-    else
-      this.container.play()
-
+    this.container.isPlaying() ? this.container.pause() : this.container.play()
     return false
   }
 
   togglePlayStop() {
-    if (this.container.isPlaying())
-      this.container.stop()
-    else
-      this.container.play()
-
+    this.container.isPlaying() ? this.container.stop() : this.container.play()
   }
 
   startSeekDrag(event) {
@@ -286,23 +270,17 @@ export default class MediaControl extends UICorePlugin {
     this.$seekBarLoaded.addClass('media-control-notransition')
     this.$seekBarPosition.addClass('media-control-notransition')
     this.$seekBarScrubber.addClass('media-control-notransition')
-    if (event)
-      event.preventDefault()
-
+    event && event.preventDefault()
   }
 
   startVolumeDrag(event) {
     this.draggingVolumeBar = true
     this.$el.addClass('dragging')
-    if (event)
-      event.preventDefault()
-
+    event && event.preventDefault()
   }
 
   stopDrag(event) {
-    if (this.draggingSeekBar)
-      this.seek(event)
-
+    this.draggingSeekBar && this.seek(event)
     this.$el.removeClass('dragging')
     this.$seekBarLoaded.removeClass('media-control-notransition')
     this.$seekBarPosition.removeClass('media-control-notransition')
@@ -372,21 +350,17 @@ export default class MediaControl extends UICorePlugin {
     Mediator.off(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
     this.container = container
     // set the new container to match the volume of the last one
-    this.setVolume(this.intendedVolume, true)
+    this.setInitialVolume()
     this.changeTogglePlay()
     this.bindEvents()
     this.settingsUpdate()
     this.container.trigger(Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.container.isDvrInUse())
-    if (this.container.mediaControlDisabled)
-      this.disable()
-
+    this.container.mediaControlDisabled && this.disable()
     this.trigger(Events.MEDIACONTROL_CONTAINERCHANGED)
   }
 
   showVolumeBar() {
-    if (this.hideVolumeId)
-      clearTimeout(this.hideVolumeId)
-
+    this.hideVolumeId && clearTimeout(this.hideVolumeId)
     this.$volumeBarContainer.removeClass('volume-bar-hide')
   }
 
@@ -648,9 +622,7 @@ export default class MediaControl extends UICorePlugin {
   }
 
   applyButtonStyle(element) {
-    if (this.buttonsColor && element)
-      $(element).find('svg path').css('fill', this.buttonsColor)
-
+    this.buttonsColor && element && $(element).find('svg path').css('fill', this.buttonsColor)
   }
 
   destroy() {
@@ -706,9 +678,8 @@ export default class MediaControl extends UICorePlugin {
     this.setSeekPercentage(previousSeekPercentage)
 
     process.nextTick(() => {
-      if (!this.settings.seekEnabled)
-        this.$seekBarContainer.addClass('seek-disabled')
-
+      !this.settings.seekEnabled && this.$seekBarContainer.addClass('seek-disabled')
+      !Browser.isMobile && !this.options.disableKeyboardShortcuts && this.bindKeyEvents()
       this.playerResize({ width: this.options.width, height: this.options.height })
       this.hideVolumeBar(0)
     })
