@@ -21,17 +21,17 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
+    "babel-loader": "^7.1.4",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-preset-es2015": "^6.24.1",
-    "eslint": "^4.5.0",
-    "eslint-config-standard": "^10.2.1",
-    "eslint-plugin-import": "^2.3.0",
-    "eslint-plugin-node": "^5.1.0",
-    "eslint-plugin-promise": "^3.5.0",
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.10.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.0.1",
-    "shaka-player": "2.3.4",
-    "webpack": "^3.5.5",
-    "webpack-dev-server": "^2.7.1"
+    "shaka-player": "^2.3.5",
+    "webpack": "^3.11.0",
+    "webpack-dev-server": "^2.11.2"
   }
 }
