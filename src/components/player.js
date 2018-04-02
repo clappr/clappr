@@ -229,7 +229,16 @@ export default class Player extends BaseObject {
 
   constructor(options) {
     super(options)
-    const defaultOptions = { playerId: uniqueId(''), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl, allowUserInteraction: Browser.isMobile }
+    const playbackDefaultOptions = { recycleVideo : true }
+    const defaultOptions = {
+      playerId: uniqueId(''),
+      persistConfig: true,
+      width: 640,
+      height: 360,
+      baseUrl: baseUrl,
+      allowUserInteraction: Browser.isMobile,
+      playback: playbackDefaultOptions
+    }
     this._options = $.extend(defaultOptions, options)
     this.options.sources = this._normalizeSources(options)
     if (!this.options.chromeless) {
