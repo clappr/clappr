@@ -5,8 +5,8 @@ import { Fullscreen } from '../base/utils'
 export default class EndVideo extends CorePlugin {
   get name() { return 'end_video' }
   bindEvents() {
-    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
     const container = this.core.getCurrentContainer()
+    this.listenTo(this.core, Events.CORE_ACTIVE_CONTAINER_CHANGED, this.containerChanged)
     if (container) {
       this.listenTo(container, Events.CONTAINER_ENDED, this.ended)
       this.listenTo(container, Events.CONTAINER_STOP, this.ended)
