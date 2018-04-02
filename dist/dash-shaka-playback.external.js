@@ -7,7 +7,7 @@
 		exports["DashShakaPlayback"] = factory(require("clappr"), require("shaka"));
 	else
 		root["DashShakaPlayback"] = factory(root["Clappr"], root["shaka"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__) {
+})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
