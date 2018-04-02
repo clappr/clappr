@@ -94,6 +94,7 @@ export default class Playback extends UIObject {
    * @return {Object} Object with formatted error data including origin and scope
    */
   createError(error) {
+    !this.name && (this.name = 'playback')
     const defaultError = {
       description: '',
       level: PlayerError.Levels.FATAL,
