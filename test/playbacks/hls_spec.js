@@ -85,11 +85,11 @@ describe('HLS playback', () => {
     let options = { src: 'http://clappr.io/notfound.m3u8' }
     const playback = new HLS(options)
     playback.on(Events.PLAYBACK_ERROR, (e) => {
-      expect(e.data.type).to.be.equal(HLSJS.ErrorTypes.NETWORK_ERROR)
-      expect(e.data.details).to.be.equal(HLSJS.ErrorDetails.MANIFEST_LOAD_ERROR)
+      expect(e.raw.type).to.be.equal(HLSJS.ErrorTypes.NETWORK_ERROR)
+      expect(e.raw.details).to.be.equal(HLSJS.ErrorDetails.MANIFEST_LOAD_ERROR)
+      done()
     })
     playback.play()
-    done()
   })
 
   xit('levels', function() {
