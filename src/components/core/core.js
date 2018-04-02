@@ -304,13 +304,11 @@ export default class Core extends UIObject {
   }
 
   getCurrentPlayback() {
-    const container = this.getCurrentContainer()
-    return container && container.playback
+    return this.activeContainer && this.activeContainer.playback
   }
 
   getPlaybackType() {
-    const container = this.getCurrentContainer()
-    return container && container.getPlaybackType()
+    return this.activeContainer && this.activeContainer.getPlaybackType()
   }
 
   toggleFullscreen() {
