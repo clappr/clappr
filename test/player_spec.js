@@ -35,7 +35,7 @@ describe('Player', function() {
     it('gets plugins by name', function() {
       const player = new Player({ source: '/playlist.m3u8', persistConfig: false })
       const plugin = { name: 'fake' }
-      player.core = { plugins: [plugin], mediaControl: { container: { plugins: [] } } }
+      player.core = { plugins: [plugin], activeContainer: { plugins: [] } }
       assert.equal(plugin, player.getPlugin('fake'))
     })
 
