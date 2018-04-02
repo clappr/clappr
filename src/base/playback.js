@@ -104,7 +104,7 @@ export default class Playback extends UIObject {
     }
 
     const errorData = Object.assign(defaultError, error, {
-      code: `${this.name}:${error.code || 'unknown'}`
+      code: `${this.name}:${error && error.code || 'unknown'}`
     })
 
     PlayerError.error(errorData)
