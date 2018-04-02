@@ -102,16 +102,6 @@ describe('MediaControl', function() {
     })
   })
 
-  it('persists volume when persistence is on', function() {
-    // expected to be default value (100)
-    expect(Config.restore('volume')).to.be.equal(100)
-
-    const mediacontrol = new MediaControl({ persistConfig: true, container: this.container })
-    mediacontrol.setVolume(78)
-
-    expect(Config.restore('volume')).to.be.equal(78)
-  })
-
   it('can appear when playback type is not NO_OP', function() {
     const mediaControl = new MediaControl({ container: this.container })
     mediaControl.render()
