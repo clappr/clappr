@@ -78,7 +78,6 @@ export default class MediaControl extends UICorePlugin {
     this.keepVisible = false
     this.fullScreenOnVideoTagSupported = null // unknown
     this.setInitialVolume()
-    this.addEventListeners()
     this.settings = {
       left: ['play', 'stop', 'pause'],
       right: ['volume'],
@@ -104,27 +103,26 @@ export default class MediaControl extends UICorePlugin {
     $(document).bind('mousemove', this.updateDragHandler)
   }
 
-  addEventListeners() {
-    if (this.container) {
-      Mediator.on(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
-      this.listenTo(this.container, Events.CONTAINER_PLAY, this.changeTogglePlay)
-      this.listenTo(this.container, Events.CONTAINER_PAUSE, this.changeTogglePlay)
-      this.listenTo(this.container, Events.CONTAINER_STOP, this.changeTogglePlay)
-      this.listenTo(this.container, Events.CONTAINER_DBLCLICK, this.toggleFullscreen)
-      this.listenTo(this.container, Events.CONTAINER_TIMEUPDATE, this.onTimeUpdate)
-      this.listenTo(this.container, Events.CONTAINER_PROGRESS, this.updateProgressBar)
-      this.listenTo(this.container, Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate)
-      this.listenTo(this.container, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.settingsUpdate)
-      this.listenTo(this.container, Events.CONTAINER_HIGHDEFINITIONUPDATE, this.highDefinitionUpdate)
-      this.listenTo(this.container, Events.CONTAINER_MEDIACONTROL_DISABLE, this.disable)
-      this.listenTo(this.container, Events.CONTAINER_MEDIACONTROL_ENABLE, this.enable)
-      this.listenTo(this.container, Events.CONTAINER_ENDED, this.ended)
-      this.listenTo(this.container, Events.CONTAINER_VOLUME, this.onVolumeChanged)
-      this.listenTo(this.container, Events.CONTAINER_OPTIONS_CHANGE, this.setInitialVolume)
-      if (this.container.playback.el.nodeName.toLowerCase() === 'video') {
-        // wait until the metadata has loaded and then check if fullscreen on video tag is supported
-        this.listenToOnce(this.container, Events.CONTAINER_LOADEDMETADATA, this.onLoadedMetadataOnVideoTag)
-      }
+  bindEvents() {
+    this.listenTo(this.core, Events.CORE_ACTIVE_CONTAINER_CHANGED, this.setContainer)
+    Mediator.on(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
+    this.listenTo(this.container, Events.CONTAINER_PLAY, this.changeTogglePlay)
+    this.listenTo(this.container, Events.CONTAINER_PAUSE, this.changeTogglePlay)
+    this.listenTo(this.container, Events.CONTAINER_STOP, this.changeTogglePlay)
+    this.listenTo(this.container, Events.CONTAINER_DBLCLICK, this.toggleFullscreen)
+    this.listenTo(this.container, Events.CONTAINER_TIMEUPDATE, this.onTimeUpdate)
+    this.listenTo(this.container, Events.CONTAINER_PROGRESS, this.updateProgressBar)
+    this.listenTo(this.container, Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate)
+    this.listenTo(this.container, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.settingsUpdate)
+    this.listenTo(this.container, Events.CONTAINER_HIGHDEFINITIONUPDATE, this.highDefinitionUpdate)
+    this.listenTo(this.container, Events.CONTAINER_MEDIACONTROL_DISABLE, this.disable)
+    this.listenTo(this.container, Events.CONTAINER_MEDIACONTROL_ENABLE, this.enable)
+    this.listenTo(this.container, Events.CONTAINER_ENDED, this.ended)
+    this.listenTo(this.container, Events.CONTAINER_VOLUME, this.onVolumeChanged)
+    this.listenTo(this.container, Events.CONTAINER_OPTIONS_CHANGE, this.setInitialVolume)
+    if (this.container.playback.el.nodeName.toLowerCase() === 'video') {
+      // wait until the metadata has loaded and then check if fullscreen on video tag is supported
+      this.listenToOnce(this.container, Events.CONTAINER_LOADEDMETADATA, this.onLoadedMetadataOnVideoTag)
     }
   }
 
@@ -366,7 +364,7 @@ export default class MediaControl extends UICorePlugin {
     // set the new container to match the volume of the last one
     this.setVolume(this.intendedVolume, true)
     this.changeTogglePlay()
-    this.addEventListeners()
+    this.bindEvents()
     this.settingsUpdate()
     this.container.trigger(Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.container.isDvrInUse())
     if (this.container.mediaControlDisabled)
