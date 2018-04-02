@@ -300,10 +300,7 @@ export default class Core extends UIObject {
   }
 
   getCurrentContainer() {
-    if (!this.mediaControl || !this.mediaControl.container)
-      return this.containers[0]
-
-    return this.mediaControl.container
+    return this.activeContainer
   }
 
   getCurrentPlayback() {
