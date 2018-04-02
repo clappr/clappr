@@ -1,4 +1,5 @@
 import Playback from 'base/playback'
+import PlayerError from '../../src/components/error'
 
 describe('Playback', function() {
   beforeEach(() => {
@@ -32,5 +33,63 @@ describe('Playback', function() {
     this.basePlayback.destroy()
 
     expect(spy).to.have.been.calledOnce
+  })
+
+  it('creates a default error if no error data is given', () => {
+    const errorData = this.basePlayback.createError()
+    const defaultError = {
+      description: '',
+      level: PlayerError.Levels.FATAL,
+      origin: 'playback',
+      scope: 'playback',
+      raw: {},
+      code: 'playback:unknown',
+    }
+
+    expect(errorData).to.deep.equal(defaultError)
+  })
+
+  it('creates a code error on the following format: name:code', () => {
+    this.basePlayback.name = 'test'
+    const error = { code: '42' }
+    const errorData = this.basePlayback.createError(error)
+
+    expect(errorData.code).to.deep.equal(`${this.basePlayback.name}:${error.code}`)
+  })
+
+  it('creates a code error on the following format: name:code', () => {
+    this.basePlayback.name = 'test'
+    const error = { code: '42' }
+    const errorData = this.basePlayback.createError(error)
+
+    expect(errorData.code).to.deep.equal(`${this.basePlayback.name}:${error.code}`)
+  })
+
+  it('default error level equals to FATAL', () => {
+    const errorData = this.basePlayback.createError()
+
+    expect(errorData.level).to.deep.equal(PlayerError.Levels.FATAL)
+  })
+
+  it('do not use default level when its setted on error', () => {
+    const error = { level: PlayerError.Levels.WARN }
+    const errorData = this.basePlayback.createError(error)
+
+    expect(errorData.level).to.deep.equal(PlayerError.Levels.WARN)
+  })
+
+  it('always call error to trigger ERROR event', () => {
+    const defaultError = {
+      description: '',
+      level: PlayerError.Levels.FATAL,
+      origin: 'playback',
+      scope: 'playback',
+      raw: {},
+      code: 'playback:unknown',
+    }
+    const spy = sinon.spy(PlayerError, 'error')
+    this.basePlayback.createError()
+
+    expect(spy).to.have.been.calledWith(defaultError)
   })
 })
