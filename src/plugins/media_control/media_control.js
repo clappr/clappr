@@ -105,6 +105,7 @@ export default class MediaControl extends UICorePlugin {
 
   bindEvents() {
     this.listenTo(this.core, Events.CORE_ACTIVE_CONTAINER_CHANGED, this.setContainer)
+    this.listenTo(this.core, Events.CORE_FULLSCREEN, this.show)
     Mediator.on(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
     this.listenTo(this.container, Events.CONTAINER_PLAY, this.changeTogglePlay)
     this.listenTo(this.container, Events.CONTAINER_PAUSE, this.changeTogglePlay)
