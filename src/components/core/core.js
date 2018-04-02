@@ -4,15 +4,14 @@
 
 import { isNumber, Fullscreen, DomRecycler } from '../../base/utils'
 
+import Styler from '../../base/styler'
 import Events from '../../base/events'
 import UIObject from '../../base/ui_object'
+import UICorePlugin from '../../base/ui_core_plugin'
 import Browser from '../../components/browser'
 import ContainerFactory from '../../components/container_factory'
-import MediaControl from '../../components/media_control'
 import Mediator from '../../components/mediator'
 import PlayerInfo from '../../components/player_info'
-
-import Styler from '../../base/styler'
 
 import $ from 'clappr-zepto'
 
@@ -63,6 +62,14 @@ export default class Core extends UIObject {
     return this.getPlugin('strings') || { t: (key) => key }
   }
 
+  get mediaControl() {
+    return this.getPlugin('MediaControl') || this.dummyMediaControl
+  }
+
+  get dummyMediaControl() {
+    return new UICorePlugin(this)
+  }
+
   constructor(options) {
     super(options)
     this.configureDomRecycler()
@@ -70,7 +77,6 @@ export default class Core extends UIObject {
     this.firstResize = true
     this.plugins = []
     this.containers = []
-    this.setupMediaControl(null)
     //FIXME fullscreen api sucks
     this._boundFullscreenHandler = () => this.handleFullscreenChange()
     $(document).bind('fullscreenchange', this._boundFullscreenHandler)
@@ -184,7 +190,7 @@ export default class Core extends UIObject {
     this.options.mimeType = mimeType
     sources = sources && sources.constructor === Array ? sources : [sources]
     this.containers.forEach((container) => container.destroy())
-    this.mediaControl.container = null
+    this.mediaControl && (this.mediaControl.container = null)
     this.containerFactory.options = $.extend(this.options, { sources })
     this.containerFactory.createContainers()
       .then((containers) => this.setupContainers(containers))
@@ -196,7 +202,7 @@ export default class Core extends UIObject {
     this.containers.forEach((container) => container.destroy())
     this.plugins.forEach((plugin) => plugin.destroy())
     this.$el.remove()
-    this.mediaControl.destroy()
+    this.mediaControl && this.mediaControl.destroy()
     $(document).unbind('fullscreenchange', this._boundFullscreenHandler)
     $(document).unbind('MSFullscreenChange', this._boundFullscreenHandler)
     $(document).unbind('mozfullscreenchange', this._boundFullscreenHandler)
@@ -205,7 +211,6 @@ export default class Core extends UIObject {
   handleFullscreenChange() {
     this.trigger(Events.CORE_FULLSCREEN, Fullscreen.isFullscreen())
     this.updateSize()
-    this.mediaControl.show()
   }
 
   handleWindowResize(event) {
@@ -247,7 +252,6 @@ export default class Core extends UIObject {
     containers.map(this.appendContainer.bind(this))
     this.trigger(Events.CORE_CONTAINERS_CREATED)
     this.renderContainers()
-    this.setupMediaControl(this.getCurrentContainer())
     this.render()
     this.appendToParent()
     return this.containers
@@ -264,9 +268,8 @@ export default class Core extends UIObject {
     return container
   }
 
-  setupMediaControl(container) {
-    if (this.mediaControl) { this.mediaControl.setContainer(container) } else {
-      this.mediaControl = this.createMediaControl($.extend({ container: container, focusElement: this.el }, this.options))
+  setupMediaControl() {
+    if (this.mediaControl) {
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_FULLSCREEN, this.toggleFullscreen)
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_SHOW, this.onMediaControlShow.bind(this, true))
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_HIDE, this.onMediaControlShow.bind(this, false))
@@ -314,11 +317,11 @@ export default class Core extends UIObject {
   }
 
   showMediaControl(event) {
-    this.mediaControl.show(event)
+    this.mediaControl.show && this.mediaControl.show(event)
   }
 
   hideMediaControl() {
-    this.mediaControl.hide(this.options.hideMediaControlDelay)
+    this.mediaControl.hide && this.mediaControl.hide(this.options.hideMediaControlDelay)
   }
 
   onMediaControlShow(showing) {
@@ -346,7 +349,7 @@ export default class Core extends UIObject {
     this.containers.forEach((container) => {
       container.configure(this.options)
     })
-    this.mediaControl.configure(this.options)
+    this.mediaControl.configure && this.mediaControl.configure(this.options)
   }
 
   appendToParent() {
@@ -355,7 +358,7 @@ export default class Core extends UIObject {
   }
 
   render() {
-    this.$el.append(this.mediaControl.render().el)
+    this.mediaControl && this.$el.append(this.mediaControl.render().el)
 
     if (!style)
       style = Styler.getStyleFor(fontStyle, { baseUrl: this.options.baseUrl })
