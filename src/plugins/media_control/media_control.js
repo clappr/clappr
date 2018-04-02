@@ -10,7 +10,7 @@ import { Config, Fullscreen, formatTime, extend, removeArrayItem } from '../../b
 import { Kibo } from '../../vendor'
 
 import Events from '../../base/events'
-import UIObject from '../../base/ui_object'
+import UICorePlugin from '../../base/ui_core_plugin'
 import Browser from '../../components/browser'
 import Mediator from '../../components/mediator'
 import template from '../../base/template'
@@ -30,7 +30,7 @@ import fullscreenIcon from '../../icons/06-expand.svg'
 import exitFullscreenIcon from '../../icons/07-shrink.svg'
 import hdIcon from '../../icons/08-hd.svg'
 
-export default class MediaControl extends UIObject {
+export default class MediaControl extends UICorePlugin {
   get name() { return 'MediaControl' }
   get disabled() { return this.userDisabled || (this.container && this.container.getPlaybackType() === Playback.NO_OP) }
 
