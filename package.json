@@ -13,7 +13,7 @@
     "watch": "webpack --progress --watch",
     "test": "karma start --single-run",
     "test:watch": "karma start --no-single-run --watch",
-    "lint": "eslint *.js src/ test/",
+    "lint": "eslint *.js src/ test/ public/**/*.html",
     "lint:fix": "npm run lint -- --fix",
     "start": "webpack-dev-server --host 0.0.0.0 --content-base public/ --output-public-path latest/ --hot",
     "lock": "rm -rf npm-shrinkwrap.json node_modules && npm install --silent && npm shrinkwrap"
@@ -42,6 +42,7 @@
     "directory-named-webpack-plugin": "^2.3.0",
     "eslint": "^4.18.2",
     "eslint-config-node-style-guide": "^3.0.0",
+    "eslint-plugin-html": "^4.0.2",
     "file-loader": "^1.1.11",
     "gulp": "^3.9.1",
     "hls.js": "^0.9.1",

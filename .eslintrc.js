@@ -1,4 +1,7 @@
 module.exports = {
+    "plugins": [
+      "html"
+    ],
     "env": {
         "browser": true,
         "commonjs": true,

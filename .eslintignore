@@ -1,2 +1,3 @@
 dist/
-public/
+public/latest/*.js
+public/j
