@@ -31,7 +31,7 @@ import exitFullscreenIcon from '../../icons/07-shrink.svg'
 import hdIcon from '../../icons/08-hd.svg'
 
 export default class MediaControl extends UICorePlugin {
-  get name() { return 'MediaControl' }
+  get name() { return 'media_control' }
   get disabled() {
     let playbackIsNOOP = this.container && this.container.getPlaybackType() === Playback.NO_OP
     return this.userDisabled || playbackIsNOOP

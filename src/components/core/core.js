@@ -63,7 +63,7 @@ export default class Core extends UIObject {
   }
 
   get mediaControl() {
-    return this.getPlugin('MediaControl') || this.dummyMediaControl
+    return this.getPlugin('media_control') || this.dummyMediaControl
   }
 
   get dummyMediaControl() {
