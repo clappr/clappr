@@ -17,7 +17,7 @@ describe('PlayerError', function() {
   })
 
   describe('when error method is called', function() {
-    it('trigger ERROR event with error data', function() {
+    it('trigger ERROR event', function() {
       sinon.spy(this.core, 'trigger')
       PlayerError.error(this.errorData)
 
@@ -32,7 +32,7 @@ describe('PlayerError', function() {
     })
 
     describe('when core is not setted', function() {
-      it('does not trigger ERROR', function() {
+      it('does not trigger ERROR event', function() {
         sinon.spy(this.core, 'trigger')
         PlayerError.core = undefined
         PlayerError.error(this.errorData)
