@@ -1,7 +1,10 @@
 import { extend } from './utils'
 import BaseObject from './base_object'
+import ErrorMixin from './error_mixin'
 
 export default class CorePlugin extends BaseObject {
+  get playerError() { return this.core.playerError }
+
   constructor(core) {
     super(core.options)
     this.core = core
@@ -31,6 +34,8 @@ export default class CorePlugin extends BaseObject {
     this.stopListening()
   }
 }
+
+Object.assign(CorePlugin.prototype, ErrorMixin)
 
 CorePlugin.extend = function(properties) {
   return extend(CorePlugin, properties)

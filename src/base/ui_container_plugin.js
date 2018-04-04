@@ -3,8 +3,8 @@
 // license that can be found in the LICENSE file.
 
 import { extend } from './utils'
-
 import UIObject from './ui_object'
+import ErrorMixin from './error_mixin'
 
 /**
  * The base class for an ui container plugin
@@ -14,6 +14,8 @@ import UIObject from './ui_object'
  * @module base
  */
 export default class UIContainerPlugin extends UIObject {
+  get playerError() { return this.container.playerError }
+
   constructor(container) {
     super(container.options)
     this.container = container
@@ -41,6 +43,8 @@ export default class UIContainerPlugin extends UIObject {
     this.remove()
   }
 }
+
+Object.assign(UIContainerPlugin.prototype, ErrorMixin)
 
 UIContainerPlugin.extend = function(properties) {
   return extend(UIContainerPlugin, properties)
