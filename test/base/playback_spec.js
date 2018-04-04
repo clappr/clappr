@@ -1,5 +1,5 @@
 import Playback from 'base/playback'
-import PlayerError from '../../src/components/error'
+import Core from '../../src/components/core'
 
 describe('Playback', function() {
   beforeEach(() => {
@@ -35,61 +35,69 @@ describe('Playback', function() {
     expect(spy).to.have.been.calledOnce
   })
 
-  it('creates a default error if no error data is given', () => {
-    const errorData = this.basePlayback.createError()
-    const defaultError = {
-      description: '',
-      level: PlayerError.Levels.FATAL,
-      origin: 'playback',
-      scope: 'playback',
-      raw: {},
-      code: 'playback:unknown',
-    }
+  describe('error', () => {
+    beforeEach(() => {
+      this.core = new Core({})
+      this.basePlayback = new Playback({}, null, this.core.playerError)
+      this.playerError = this.basePlayback.playerError
+    })
 
-    expect(errorData).to.deep.equal(defaultError)
-  })
+    it('creates a default error if no error data is given', () => {
+      const errorData = this.basePlayback.createError()
+      const defaultError = {
+        description: '',
+        level: this.playerError.Levels.FATAL,
+        origin: 'playback',
+        scope: 'playback',
+        raw: {},
+        code: 'playback:unknown',
+      }
 
-  it('creates a code error on the following format: name:code', () => {
-    this.basePlayback.name = 'test'
-    const error = { code: '42' }
-    const errorData = this.basePlayback.createError(error)
+      expect(errorData).to.deep.equal(defaultError)
+    })
 
-    expect(errorData.code).to.deep.equal(`${this.basePlayback.name}:${error.code}`)
-  })
+    it('creates a code error on the following format: name:code', () => {
+      this.basePlayback.name = 'test'
+      const error = { code: '42' }
+      const errorData = this.basePlayback.createError(error)
 
-  it('creates a code error on the following format: name:code', () => {
-    this.basePlayback.name = 'test'
-    const error = { code: '42' }
-    const errorData = this.basePlayback.createError(error)
+      expect(errorData.code).to.deep.equal(`${this.basePlayback.name}:${error.code}`)
+    })
 
-    expect(errorData.code).to.deep.equal(`${this.basePlayback.name}:${error.code}`)
-  })
+    it('creates a code error on the following format: name:code', () => {
+      this.basePlayback.name = 'test'
+      const error = { code: '42' }
+      const errorData = this.basePlayback.createError(error)
 
-  it('default error level equals to FATAL', () => {
-    const errorData = this.basePlayback.createError()
+      expect(errorData.code).to.deep.equal(`${this.basePlayback.name}:${error.code}`)
+    })
 
-    expect(errorData.level).to.deep.equal(PlayerError.Levels.FATAL)
-  })
+    it('default error level equals to FATAL', () => {
+      const errorData = this.basePlayback.createError()
 
-  it('do not use default level when its setted on error', () => {
-    const error = { level: PlayerError.Levels.WARN }
-    const errorData = this.basePlayback.createError(error)
+      expect(errorData.level).to.deep.equal(this.playerError.Levels.FATAL)
+    })
 
-    expect(errorData.level).to.deep.equal(PlayerError.Levels.WARN)
-  })
+    it('do not use default level when its setted on error', () => {
+      const error = { level: this.playerError.Levels.WARN }
+      const errorData = this.basePlayback.createError(error)
 
-  it('always call error to trigger ERROR event', () => {
-    const defaultError = {
-      description: '',
-      level: PlayerError.Levels.FATAL,
-      origin: 'playback',
-      scope: 'playback',
-      raw: {},
-      code: 'playback:unknown',
-    }
-    const spy = sinon.spy(PlayerError, 'error')
-    this.basePlayback.createError()
+      expect(errorData.level).to.deep.equal(this.playerError.Levels.WARN)
+    })
 
-    expect(spy).to.have.been.calledWith(defaultError)
+    it('always call error to trigger ERROR event', () => {
+      const defaultError = {
+        description: '',
+        level: this.playerError.Levels.FATAL,
+        origin: 'playback',
+        scope: 'playback',
+        raw: {},
+        code: 'playback:unknown',
+      }
+      const spy = sinon.spy(this.playerError, 'error')
+      this.basePlayback.createError()
+
+      expect(spy).to.have.been.calledWith(defaultError)
+    })
   })
 })
