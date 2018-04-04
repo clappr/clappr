@@ -246,7 +246,7 @@ export default class Core extends UIObject {
   }
 
   setupContainers(containers) {
-    containers.map(this.setupContainer.bind(this))
+    containers.forEach(this.setupContainer.bind(this))
     this.trigger(Events.CORE_CONTAINERS_CREATED)
     this.renderContainers()
     this.setupMediaControl(this.getCurrentContainer())
@@ -256,7 +256,7 @@ export default class Core extends UIObject {
   }
 
   renderContainers() {
-    this.containers.map((container) => this.el.appendChild(container.render().el))
+    this.containers.forEach((container) => this.el.appendChild(container.render().el))
   }
 
   createContainer(source, options) {
