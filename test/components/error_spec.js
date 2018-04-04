@@ -16,7 +16,7 @@ describe('PlayerError', function() {
   })
 
   describe('when error method is called', function() {
-    it('trigger ERROR event', function() {
+    it('triggers ERROR event', function() {
       sinon.spy(this.core, 'trigger')
       this.playerError.error(this.errorData)
 
