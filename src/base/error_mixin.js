@@ -9,7 +9,7 @@ const ErrorMixin = {
    * @return {Object} Object with formatted error data including origin and scope
    */
   createError(error) {
-    const scope = this.constructor && this.constructor.type || 'errorMixin'
+    const scope = this.constructor && this.constructor.type || ''
     const origin = this.name || scope
 
     const defaultError = {
