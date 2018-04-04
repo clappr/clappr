@@ -1,5 +1,6 @@
 import BaseObject from './base_object'
 import { extend } from './utils'
+import ErrorMixin from './error_mixin'
 
 /**
  * The base class for a container plugin
@@ -9,6 +10,8 @@ import { extend } from './utils'
  * @module base
  */
 export default class ContainerPlugin extends BaseObject {
+  get playerError() { return this.container.playerError }
+
   constructor(container) {
     super(container.options)
     this.container = container
@@ -36,6 +39,8 @@ export default class ContainerPlugin extends BaseObject {
     this.stopListening()
   }
 }
+
+Object.assign(ContainerPlugin.prototype, ErrorMixin)
 
 ContainerPlugin.extend = function(properties) {
   return extend(ContainerPlugin, properties)
