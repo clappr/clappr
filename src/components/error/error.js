@@ -16,7 +16,7 @@ class PlayerError extends BaseObject {
    * @property Levels
    * @type {Object} object with error levels
    */
-  get Levels() {
+  static get Levels() {
     return {
       FATAL: 'FATAL',
       WARN: 'WARN',
