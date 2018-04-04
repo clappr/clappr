@@ -2,33 +2,33 @@ import UIObject from '../../src/base/ui_object'
 import  $ from 'clappr-zepto'
 
 describe('UIObject', function() {
-  beforeEach(function(){
+  beforeEach(function() {
     this.uiObject = new UIObject()
   })
 
-  it('is a div tag by default', function(){
+  it('is a div tag by default', function() {
     expect(this.uiObject.tagName).to.be.equal('div')
   })
 
-  it('can be any tag', function(){
+  it('can be any tag', function() {
     class MyButton extends UIObject { get tagName() { return 'button' } }
     const myButton = new MyButton()
     expect(myButton.tagName).to.be.equal('button')
   })
 
-  it('has an unique id', function(){
+  it('has an unique id', function() {
     const uiObjectA = new UIObject()
     const uiObjectB = new UIObject()
     expect(uiObjectA.cid).to.be.not.equal(uiObjectB.cid)
   })
 
-  it('creates element for a given ui component', function(){
+  it('creates element for a given ui component', function() {
     const component = $('<div></div>')
     expect(this.uiObject.el).to.be.not.equal(component[0])
     expect(this.uiObject.$el).to.be.not.equal(component)
   })
 
-  it('can set element', function(){
+  it('can set element', function() {
     const element = $('<section></section>')
     this.uiObject.setElement(element)
 
@@ -47,14 +47,14 @@ describe('UIObject', function() {
     expect(myButton.el.className).to.be.equal('my-button')
   })
 
-  it('binds events of an element to methods', function(){
+  it('binds events of an element to methods', function() {
     class MyButton extends UIObject {
       constructor(options) {
         super(options)
         this.myId = 0
       }
       get events() { return { 'click': 'myClick' } }
-      myClick(){ this.myId = 42 }
+      myClick() { this.myId = 42 }
     }
 
     const myButton = new MyButton()
@@ -66,7 +66,7 @@ describe('UIObject', function() {
     expect(myButton.myId).to.be.equal(42)
   })
 
-  it('selects elements within the component', function(){
+  it('selects elements within the component', function() {
     const insideComponent = $('<p id="special-id">here</p>')[0]
     class MySpecialButton extends UIObject {
       constructor(options) {
@@ -81,7 +81,7 @@ describe('UIObject', function() {
     expect(myButton.$('#special-id')[0]).to.be.equal(insideComponent)
   })
 
-  it('removes it from DOM', function(){
+  it('removes it from DOM', function() {
     class FullscreenButton extends UIObject {
       constructor(options) {
         super(options)
@@ -99,14 +99,14 @@ describe('UIObject', function() {
     expect($('#my-0-button').length).to.be.equal(0)
   })
 
-  it('stops listening', function(){
+  it('stops listening', function() {
     class FullscreenButton extends UIObject {
       constructor(options) {
         super(options)
         this.myId = 0
       }
       get events() { return { 'click': 'myClick' } }
-      myClick(){ this.myId += 1 }
+      myClick() { this.myId += 1 }
     }
 
     const myButton = new FullscreenButton()

@@ -233,9 +233,8 @@ export default class MediaControl extends UIObject {
   }
 
   mousemoveOnVolumeBar(event) {
-    if(this.draggingVolumeBar)
+    if (this.draggingVolumeBar)
       this.setVolume(this.getVolumeFromUIEvent(event))
-
   }
 
   playerResize(size) {
@@ -669,7 +668,7 @@ export default class MediaControl extends UIObject {
 
     // Video volume cannot be changed with Safari on mobile devices
     // Display mute/unmute icon only if Safari version >= 10
-    if(Browser.isSafari && Browser.isMobile) {
+    if (Browser.isSafari && Browser.isMobile) {
       if (Browser.version < 10)
         this.$volumeContainer.css('display','none')
       else

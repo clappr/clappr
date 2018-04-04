@@ -29,7 +29,7 @@ describe('Container', function() {
   })
 
   it('destroys all the plugins', function() {
-    const fakePlugin = { destroy: function(){} }
+    const fakePlugin = { destroy: function() {} }
 
     sinon.spy(this.playback, 'destroy')
     sinon.spy(fakePlugin, 'destroy')

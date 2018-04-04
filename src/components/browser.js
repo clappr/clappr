@@ -4,12 +4,12 @@
 
 const Browser = {}
 
-const hasLocalstorage = function(){
+const hasLocalstorage = function() {
   try {
     localStorage.setItem('clappr', 'clappr')
     localStorage.removeItem('clappr')
     return true
-  } catch(e) {
+  } catch (e) {
     return false
   }
 }

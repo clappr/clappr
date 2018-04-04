@@ -96,7 +96,7 @@ describe('MediaControl', function() {
       Config.persist = sinon.spy()
 
       const container = new Container({ playback: this.playback, mute: false })
-      const mediacontrol = new MediaControl({ persistConfig: true, container })
+      new MediaControl({ persistConfig: true, container })
 
       Config.persist.should.not.have.been.called
     })

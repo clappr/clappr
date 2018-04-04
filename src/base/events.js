@@ -172,7 +172,7 @@ export default class Events {
     Events.Custom || (Events.Custom = {})
     let property = typeof eventName === 'string' && eventName.toUpperCase().trim()
 
-    if(property && !Events.Custom[property]) {
+    if (property && !Events.Custom[property]) {
       Events.Custom[property] = property.toLowerCase().split('_').map(
         (value, index) => index === 0 ? value : value = (value[0].toUpperCase() + value.slice(1))
       ).join('')

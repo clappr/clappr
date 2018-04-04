@@ -42,7 +42,7 @@ export default class NoOp extends Playback {
     } catch (err) {
       buffer32 = new Uint32Array(this.context.canvas.width * this.context.canvas.height * 4)
       const data=idata.data
-      for(let i = 0; i < data.length; i++)
+      for (let i = 0; i < data.length; i++)
         buffer32[i]=data[i]
 
     }
