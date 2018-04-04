@@ -8,7 +8,6 @@ import template from '../../base/template'
 import Playback from '../../base/playback'
 import Mediator from '../../components/mediator'
 import Browser from '../../components/browser'
-import PlayerError from '../../components/error'
 import HLSEvents from './flashls_events'
 import hlsSwf from './public/HLSPlayer.swf'
 import $ from 'clappr-zepto'
@@ -158,7 +157,7 @@ export default class FlasHLS extends BaseFlashPlayback {
         const formattedError = this.createError({
           code: 'playerLoadFail_maxNumberAttemptsReached',
           description: `${this.name} error: Max number of attempts reached`,
-          level: PlayerError.Levels.FATAL,
+          level: this.playerError.Levels.FATAL,
           raw: {},
         })
         this.trigger(Events.PLAYBACK_ERROR, formattedError)
@@ -642,7 +641,7 @@ export default class FlasHLS extends BaseFlashPlayback {
     const error = {
       code,
       description: message,
-      level: PlayerError.Levels.FATAL,
+      level: this.playerError.Levels.FATAL,
       raw: { code, url, message },
     }
     const formattedError = this.createError(error)
