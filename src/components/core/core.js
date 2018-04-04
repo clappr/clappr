@@ -240,13 +240,13 @@ export default class Core extends UIObject {
     this.containers = this.containers.filter((c) => c !== container)
   }
 
-  appendContainer(container) {
+  setupContainer(container) {
     this.listenTo(container, Events.CONTAINER_DESTROYED, this.removeContainer)
     this.containers.push(container)
   }
 
   setupContainers(containers) {
-    containers.map(this.appendContainer.bind(this))
+    containers.map(this.setupContainer.bind(this))
     this.trigger(Events.CORE_CONTAINERS_CREATED)
     this.renderContainers()
     this.setupMediaControl(this.getCurrentContainer())
@@ -261,7 +261,7 @@ export default class Core extends UIObject {
 
   createContainer(source, options) {
     const container = this.containerFactory.createContainer(source, options)
-    this.appendContainer(container)
+    this.setupContainer(container)
     this.el.appendChild(container.render().el)
     return container
   }
