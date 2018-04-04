@@ -28,6 +28,7 @@ build() {
 }
 
 run_tests() {
+  yarn lint
   yarn test
 }
 
