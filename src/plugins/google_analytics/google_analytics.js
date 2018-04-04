@@ -52,7 +52,7 @@ export default class GoogleAnalytics extends ContainerPlugin {
       _gaq.push([this.trackerName + '_setDomainName', this.domainName])
   }
 
-  onReady(){
+  onReady() {
     this.push(['Video', 'Playback', this.container.playback.name])
   }
 
