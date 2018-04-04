@@ -23,8 +23,9 @@ class PlayerError extends BaseObject {
     }
   }
 
-  constructor(options={}) {
+  constructor(options={}, core) {
     super(options)
+    this.core = core
   }
 
   /**
@@ -39,13 +40,6 @@ class PlayerError extends BaseObject {
     }
     this.core.trigger(Events.ERROR, err)
   }
-
-  setCore(core) {
-    this.core = core
-  }
-
 }
 
-const playerError = new PlayerError()
-
-export default playerError
+export default PlayerError

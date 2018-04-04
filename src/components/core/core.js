@@ -66,6 +66,7 @@ export default class Core extends UIObject {
 
   constructor(options) {
     super(options)
+    this.playerError = new PlayerError(options, this)
     this.configureDomRecycler()
     this.playerInfo = PlayerInfo.getInstance(options.playerId)
     this.firstResize = true
@@ -78,7 +79,6 @@ export default class Core extends UIObject {
     $(document).bind('MSFullscreenChange', this._boundFullscreenHandler)
     $(document).bind('mozfullscreenchange', this._boundFullscreenHandler)
     Browser.isMobile && $(window).bind('resize', (o) => { this.handleWindowResize(o) })
-    PlayerError.setCore(this)
   }
 
   configureDomRecycler() {
@@ -91,7 +91,7 @@ export default class Core extends UIObject {
   createContainers(options) {
     this.defer = $.Deferred()
     this.defer.promise(this)
-    this.containerFactory = new ContainerFactory(options, options.loader, this.i18n)
+    this.containerFactory = new ContainerFactory(options, options.loader, this.i18n, this.playerError)
     this.containerFactory
       .createContainers()
       .then((containers) => this.setupContainers(containers))

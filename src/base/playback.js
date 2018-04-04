@@ -1,6 +1,5 @@
 import { extend } from './utils'
 import UIObject from './ui_object'
-import PlayerError from '../components/error'
 
 /**
  * An abstraction to represent a generic playback, it's like an interface to be implemented by subclasses.
@@ -57,10 +56,11 @@ export default class Playback extends UIObject {
    * @param {Object} options the options object
    * @param {Strings} i18n the internationalization component
    */
-  constructor(options, i18n) {
+  constructor(options, i18n, playerError) {
     super(options)
     this.settings = {}
     this._i18n = i18n
+    this.playerError = playerError
   }
 
   /**
@@ -97,7 +97,7 @@ export default class Playback extends UIObject {
     !this.name && (this.name = 'playback')
     const defaultError = {
       description: '',
-      level: PlayerError.Levels.FATAL,
+      level: this.playerError.Levels.FATAL,
       origin: this.name,
       scope: 'playback',
       raw: {},
@@ -107,7 +107,7 @@ export default class Playback extends UIObject {
       code: `${this.name}:${error && error.code || 'unknown'}`
     })
 
-    PlayerError.error(errorData)
+    this.playerError.error(errorData)
 
     return errorData
   }
