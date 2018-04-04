@@ -1,4 +1,5 @@
 import Events from 'base/events.js'
+import Core from '../../src/components/core'
 import HLS from 'playbacks/hls'
 import HLSJS from 'hls.js'
 
@@ -87,7 +88,8 @@ describe('HLS playback', () => {
       rejectFn = reject
     })
     let options = { src: 'http://clappr.io/notfound.m3u8' }
-    const playback = new HLS(options)
+    const core = new Core({})
+    const playback = new HLS(options, null, core.playerError)
     playback.on(Events.PLAYBACK_ERROR, (e) => {
       resolveFn(e)
     })
