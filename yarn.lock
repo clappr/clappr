@@ -2991,12 +2991,6 @@ escope@^3.6.0:
     esrecurse "^4.1.0"
     estraverse "^4.1.1"
 
-eslint-config-node-style-guide@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-node-style-guide/-/eslint-config-node-style-guide-3.0.0.tgz#5c809041443ff62bf7d4b55d2bb50f08b926b1cb"
-  dependencies:
-    node-style-guide "^1.0.0"
-
 eslint-scope@^3.7.1:
   version "3.7.1"
   resolved "https://registry.yarnpkg.com/eslint-scope/-/eslint-scope-3.7.1.tgz#3d63c3edfda02e06e01a452ad88caacc7cdcb6e8"
@@ -6069,10 +6063,6 @@ node-sass@^4.7.2:
     sass-graph "^2.2.4"
     stdout-stream "^1.4.0"
     "true-case-path" "^1.0.2"
-
-node-style-guide@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/node-style-guide/-/node-style-guide-1.0.0.tgz#83360a813b585cb4597329827232a508c222c964"
 
 node-uuid@~1.4.7:
   version "1.4.8"
