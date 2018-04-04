@@ -19,7 +19,8 @@ class PlayerError extends BaseObject {
   get Levels() {
     return {
       FATAL: 'FATAL',
-      WARN: 'WARN'
+      WARN: 'WARN',
+      INFO: 'INFO',
     }
   }
 
