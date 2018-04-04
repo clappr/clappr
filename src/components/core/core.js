@@ -202,6 +202,7 @@ export default class Core extends UIObject {
     $(document).unbind('fullscreenchange', this._boundFullscreenHandler)
     $(document).unbind('MSFullscreenChange', this._boundFullscreenHandler)
     $(document).unbind('mozfullscreenchange', this._boundFullscreenHandler)
+    this.stopListening()
   }
 
   handleFullscreenChange() {
