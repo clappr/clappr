@@ -426,7 +426,7 @@ export default class FlasHLS extends BaseFlashPlayback {
 
   play() {
     this.trigger(Events.PLAYBACK_PLAY_INTENT)
-    if(this._currentState === 'PAUSED')
+    if (this._currentState === 'PAUSED')
       this.el.playerResume()
     else if (!this._srcLoaded && this._currentState !== 'PLAYING')
       this._firstPlay()

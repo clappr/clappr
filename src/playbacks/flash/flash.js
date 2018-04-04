@@ -189,7 +189,7 @@ export default class Flash extends BaseFlashPlayback {
     return !!(this.isReady && this._currentState.indexOf('PLAYING') > -1)
   }
 
-  get isReady(){
+  get isReady() {
     return this._isReadyState
   }
 

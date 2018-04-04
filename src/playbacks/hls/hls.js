@@ -274,7 +274,7 @@ export default class HLS extends HTML5VideoPlayback {
         this._recoverAttemptsRemaining -= 1
         switch (data.type) {
         case HLSJS.ErrorTypes.NETWORK_ERROR:
-          switch(data.details) {
+          switch (data.details) {
           // The following network errors cannot be recovered with HLS.startLoad()
           // For more details, see https://github.com/video-dev/hls.js/blob/master/doc/design.md#error-detection-and-handling
           // For "level load" fatal errors, see https://github.com/video-dev/hls.js/issues/1138

@@ -6,7 +6,7 @@ describe('HLS playback', () => {
   it('should be able to identify it can play resources independently of the file extension case', function() {
 
     // FIXME: why is this not working in Firefox?
-    if(window.navigator.userAgent.match(/Firefox\//))
+    if (window.navigator.userAgent.match(/Firefox\//))
       return
 
 
