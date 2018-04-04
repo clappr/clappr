@@ -105,7 +105,7 @@ export default class Core extends UIObject {
   }
 
   setFullscreen() {
-    if(!Browser.isiOS) {
+    if (!Browser.isiOS) {
       this.$el.addClass('fullscreen')
       this.$el.removeAttr('style')
       this.playerInfo.previousSize = { width: this.options.width, height: this.options.height }
@@ -274,7 +274,7 @@ export default class Core extends UIObject {
   }
 
   createMediaControl(options) {
-    if(options.mediacontrol && options.mediacontrol.external)
+    if (options.mediacontrol && options.mediacontrol.external)
       return new options.mediacontrol.external(options).render()
     else
       return new MediaControl(options).render()
@@ -301,12 +301,12 @@ export default class Core extends UIObject {
   toggleFullscreen() {
     if (!Fullscreen.isFullscreen()) {
       Fullscreen.requestFullscreen(this.el)
-      if(!Browser.isiOS)
+      if (!Browser.isiOS)
         this.$el.addClass('fullscreen')
 
     } else {
       Fullscreen.cancelFullscreen()
-      if(!Browser.isiOS)
+      if (!Browser.isiOS)
         this.$el.removeClass('fullscreen nocursor')
 
     }

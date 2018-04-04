@@ -1,7 +1,7 @@
 import Clappr from '../../src/main'
 
 describe('External Plugin', function() {
-  it('should expose extend method for the plugins exposed on Clappr scope', function(){
+  it('should expose extend method for the plugins exposed on Clappr scope', function() {
     let MyPluginClass
     let myPluginInstance
     let nativePluginInstance

@@ -10,7 +10,7 @@ describe('Core Plugin', function() {
 
     it('binds all events', () => {
       let bind = false
-      const Plugin = class MyPlugin extends CorePlugin{
+      const Plugin = class MyPlugin extends CorePlugin {
         bindEvents() {
           bind = true
         }

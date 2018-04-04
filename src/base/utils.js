@@ -63,13 +63,13 @@ export const Fullscreen = {
     )
   },
   requestFullscreen: function(el) {
-    if(el.requestFullscreen)
+    if (el.requestFullscreen)
       el.requestFullscreen()
-    else if(el.webkitRequestFullscreen)
+    else if (el.webkitRequestFullscreen)
       el.webkitRequestFullscreen()
-    else if(el.mozRequestFullScreen)
+    else if (el.mozRequestFullScreen)
       el.mozRequestFullScreen()
-    else if(el.msRequestFullscreen)
+    else if (el.msRequestFullscreen)
       el.msRequestFullscreen()
     else if (el.querySelector && el.querySelector('video') && el.querySelector('video').webkitEnterFullScreen)
       el.querySelector('video').webkitEnterFullScreen()
@@ -78,15 +78,15 @@ export const Fullscreen = {
 
   },
   cancelFullscreen: function(el=document) {
-    if(el.exitFullscreen)
+    if (el.exitFullscreen)
       el.exitFullscreen()
-    else if(el.webkitCancelFullScreen)
+    else if (el.webkitCancelFullScreen)
       el.webkitCancelFullScreen()
-    else if(el.webkitExitFullscreen)
+    else if (el.webkitExitFullscreen)
       el.webkitExitFullscreen()
-    else if(el.mozCancelFullScreen)
+    else if (el.mozCancelFullScreen)
       el.mozCancelFullScreen()
-    else if(el.msExitFullscreen)
+    else if (el.msExitFullscreen)
       el.msExitFullscreen()
 
   },
@@ -114,12 +114,12 @@ export class Config {
   static _defaultValueFor(key) {
     try {
       return this._defaultConfig()[key].parse(this._defaultConfig()[key].value)
-    } catch(e) {
+    } catch (e) {
       return undefined
     }
   }
 
-  static _createKeyspace(key){
+  static _createKeyspace(key) {
     return `clappr.${document.domain}.${key}`
   }
 
@@ -135,7 +135,7 @@ export class Config {
       try {
         localStorage[this._createKeyspace(key)] = value
         return true
-      } catch(e) {
+      } catch (e) {
         return false
       }
     }

@@ -10,7 +10,7 @@ describe('UI Container Plugin', function() {
 
     it('binds all events', () => {
       let bind = false
-      const Plugin = class MyPlugin extends UIContainerPlugin{
+      const Plugin = class MyPlugin extends UIContainerPlugin {
         bindEvents() {
           bind = true
         }

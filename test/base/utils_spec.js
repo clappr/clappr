@@ -195,14 +195,14 @@ describe('Utils', function() {
       expect($.zepto.isZ($el)).to.be.true
     })
 
-    it('does not recycle video tag by default', function(){
+    it('does not recycle video tag by default', function() {
       const video1 = utils.DomRecycler.create('video')
       utils.DomRecycler.garbage(video1)
       const video2 = utils.DomRecycler.create('video')
       expect(video1[0]).to.not.be.equal(video2[0])
     })
 
-    it('recycle video tag if recycleVideo option is set', function(){
+    it('recycle video tag if recycleVideo option is set', function() {
       utils.DomRecycler.configure({ recycleVideo: true })
       const video1 = utils.DomRecycler.create('video')
       utils.DomRecycler.garbage(video1)
