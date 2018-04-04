@@ -107,7 +107,10 @@ export default class Playback extends UIObject {
       code: `${this.name}:${error && error.code || 'unknown'}`
     })
 
-    this.playerError.error(errorData)
+    if (this.playerError)
+      this.playerError.error(errorData)
+    else
+      Log.warn(this.name, 'PlayerError is not defined. Error: ', err)
 
     return errorData
   }
