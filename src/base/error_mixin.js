@@ -9,25 +9,25 @@ const ErrorMixin = {
    * @return {Object} Object with formatted error data including origin and scope
    */
   createError(error) {
-    !this.name && (this.name = this.constructor && this.constructor.type || 'errorMixin')
-    if (!this.playerError) {
-      Log.warn(this.name, 'PlayerError is not defined. Error: ', error)
-      return error
-    }
+    const scope = this.constructor && this.constructor.type || 'errorMixin'
+    const origin = this.name || scope
 
     const defaultError = {
       description: '',
       level: PlayerError.Levels.FATAL,
-      origin: this.name,
-      scope: this.name,
+      origin,
+      scope,
       raw: {},
     }
 
     const errorData = Object.assign({}, defaultError, error, {
-      code: `${this.name}:${error && error.code || 'unknown'}`
+      code: `${origin}:${error && error.code || 'unknown'}`
     })
 
-    this.playerError.error(errorData)
+    if (this.playerError)
+      this.playerError.error(errorData)
+    else
+      Log.warn(origin, 'PlayerError is not defined. Error: ', errorData)
 
     return errorData
   }
