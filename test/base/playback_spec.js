@@ -1,5 +1,6 @@
 import Playback from 'base/playback'
 import Core from '../../src/components/core'
+import PlayerError from '../../src/components/error'
 
 describe('Playback', function() {
   beforeEach(() => {
@@ -46,7 +47,7 @@ describe('Playback', function() {
       const errorData = this.basePlayback.createError()
       const defaultError = {
         description: '',
-        level: this.playerError.Levels.FATAL,
+        level: PlayerError.Levels.FATAL,
         origin: 'playback',
         scope: 'playback',
         raw: {},
@@ -72,23 +73,23 @@ describe('Playback', function() {
       expect(errorData.code).to.deep.equal(`${this.basePlayback.name}:${error.code}`)
     })
 
-    it('default error level equals to FATAL', () => {
+    it('has default error level equals to FATAL', () => {
       const errorData = this.basePlayback.createError()
 
-      expect(errorData.level).to.deep.equal(this.playerError.Levels.FATAL)
+      expect(errorData.level).to.deep.equal(PlayerError.Levels.FATAL)
     })
 
-    it('do not use default level when its setted on error', () => {
-      const error = { level: this.playerError.Levels.WARN }
+    it('does not use default level when its setted on error', () => {
+      const error = { level: PlayerError.Levels.WARN }
       const errorData = this.basePlayback.createError(error)
 
-      expect(errorData.level).to.deep.equal(this.playerError.Levels.WARN)
+      expect(errorData.level).to.deep.equal(PlayerError.Levels.WARN)
     })
 
     it('always call error to trigger ERROR event', () => {
       const defaultError = {
         description: '',
-        level: this.playerError.Levels.FATAL,
+        level: PlayerError.Levels.FATAL,
         origin: 'playback',
         scope: 'playback',
         raw: {},

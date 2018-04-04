@@ -1,4 +1,5 @@
 import Core from '../../src/components/core'
+import PlayerError from '../../src/components/error'
 import Events from '../../src/base/events'
 
 describe('PlayerError', function() {
@@ -8,7 +9,7 @@ describe('PlayerError', function() {
     this.errorData = {
       code: 'test_01',
       description: 'test error',
-      level: this.playerError.Levels.FATAL,
+      level: PlayerError.Levels.FATAL,
       origin: 'test',
       scope: 'it',
       raw: {},
@@ -23,7 +24,7 @@ describe('PlayerError', function() {
       assert.ok(this.core.trigger.calledWith(Events.ERROR, {
         code: 'test_01',
         description: 'test error',
-        level: this.playerError.Levels.FATAL,
+        level: PlayerError.Levels.FATAL,
         origin: 'test',
         scope: 'it',
         raw: {},
