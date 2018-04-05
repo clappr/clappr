@@ -310,12 +310,15 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   _onError (err) {
-    let { category, code, severity } = err
-    if (err.type === 'error') {
-      category = err.detail.category
-      code = err.detail.code
-      severity = err.detail.severity
+    const error = {
+      shakaError: err,
+      videoError: this.el.error
     }
+
+    if (error.videoError) return super._onError()
+
+    let { category, code, severity } = error.shakaError.detail || error.shakaError
+
 
     const errorData = {
       code: `${category}_${code}`,
