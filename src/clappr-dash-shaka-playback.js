@@ -54,13 +54,13 @@ class DashShakaPlayback extends HTML5Video {
     return this._currentLevelId || DEFAULT_LEVEL_AUTO
   }
 
-  constructor (options) {
-    super(options)
+  constructor (...args) {
+    super(...args)
     this._levels = []
     this._pendingAdaptationEvent = false
     this._isShakaReadyState = false
 
-    options.autoPlay && this.play()
+    this.options.autoPlay && this.play()
   }
 
   play () {
@@ -283,7 +283,7 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   _loaded () {
-    this._onShakaReady();
+    this._onShakaReady()
     this._startToSendStats()
     this._fillLevels()
     this._checkForClosedCaptions()
