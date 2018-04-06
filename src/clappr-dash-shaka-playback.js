@@ -1,4 +1,4 @@
-import {HTML5Video, Log, Events} from 'clappr'
+import {HTML5Video, Log, Events, PlayerError} from 'clappr'
 import shaka from 'shaka-player'
 
 const SEND_STATS_INTERVAL_MS = 30 * 1e3
@@ -54,13 +54,13 @@ class DashShakaPlayback extends HTML5Video {
     return this._currentLevelId || DEFAULT_LEVEL_AUTO
   }
 
-  constructor (options) {
-    super(options)
+  constructor (...args) {
+    super(...args)
     this._levels = []
     this._pendingAdaptationEvent = false
     this._isShakaReadyState = false
 
-    options.autoPlay && this.play()
+    this.options.autoPlay && this.play()
   }
 
   play () {
@@ -283,7 +283,7 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   _loaded () {
-    this._onShakaReady();
+    this._onShakaReady()
     this._startToSendStats()
     this._fillLevels()
     this._checkForClosedCaptions()
@@ -315,8 +315,20 @@ class DashShakaPlayback extends HTML5Video {
       videoError: this.el.error
     }
 
-    Log.error('Shaka error event:', error)
-    this.trigger(Events.PLAYBACK_ERROR, error, this.name)
+    if (error.videoError) return super._onError()
+
+    let { category, code, severity } = error.shakaError.detail || error.shakaError
+
+
+    const errorData = {
+      code: `${category}_${code}`,
+      description: `Category: ${category}, code: ${code}, severity: ${severity}`,
+      level: severity === 1 ? PlayerError.Levels.WARN : PlayerError.Levels.FATAL,
+      raw: err
+    }
+    const formattedError = this.createError(errorData)
+    Log.error('Shaka error event:', formattedError)
+    this.trigger(Events.PLAYBACK_ERROR, formattedError)
   }
 
   _onAdaptation () {
