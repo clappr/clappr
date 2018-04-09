@@ -107,7 +107,8 @@ describe('MediaControl', function() {
       Object.assign(this.core.options, { persistConfig: true })
 
       const container = new Container({ playback: this.playback, mute: false })
-      const mediacontrol = new MediaControl(this.core)
+
+      new MediaControl(this.core)
 
       this.core.trigger(Events.CORE_ACTIVE_CONTAINER_CHANGED, container)
 
