@@ -72,7 +72,6 @@ export default class Core extends UIObject {
     return new UICorePlugin(this)
   }
 
-
   /**
    * gets the active container reference.
    * @property activeContainer
@@ -81,7 +80,6 @@ export default class Core extends UIObject {
   get activeContainer() {
     return this._activeContainer
   }
-
 
   /**
    * sets the active container reference and trigger a event with the new reference.
@@ -281,6 +279,11 @@ export default class Core extends UIObject {
     }
   }
 
+  /**
+   * @deprecated
+   * This method currently exists for retrocompatibility reasons.
+   * If you want the current container reference, use the activeContainer getter.
+   */
   getCurrentContainer() {
     return this.activeContainer
   }
