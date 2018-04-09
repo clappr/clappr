@@ -82,6 +82,12 @@ export default class Core extends UIObject {
     return this._activeContainer
   }
 
+
+  /**
+   * sets the active container reference and trigger a event with the new reference.
+   * @property activeContainer
+   * @type {Object}
+   */
   set activeContainer(container) {
     this._activeContainer = container
     this.trigger(Events.CORE_ACTIVE_CONTAINER_CHANGED, this._activeContainer)
