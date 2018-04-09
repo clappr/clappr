@@ -196,7 +196,6 @@ export default class Core extends UIObject {
     this.options.mimeType = mimeType
     sources = sources && sources.constructor === Array ? sources : [sources]
     this.containers.forEach((container) => container.destroy())
-    this.mediaControl && (this.mediaControl.container = null)
     this.containerFactory.options = $.extend(this.options, { sources })
     this.prepareContainers()
   }
@@ -206,7 +205,6 @@ export default class Core extends UIObject {
     this.containers.forEach((container) => container.destroy())
     this.plugins.forEach((plugin) => plugin.destroy())
     this.$el.remove()
-    this.mediaControl && this.mediaControl.destroy()
     $(document).unbind('fullscreenchange', this._boundFullscreenHandler)
     $(document).unbind('MSFullscreenChange', this._boundFullscreenHandler)
     $(document).unbind('mozfullscreenchange', this._boundFullscreenHandler)
