@@ -82,10 +82,9 @@ describe('HLS playback', () => {
   })
 
   it('should trigger a playback error if source load failed', function() {
-    let resolveFn = undefined, rejectFn = undefined
-    const promise = new Promise((resolve, reject) => {
+    let resolveFn = undefined
+    const promise = new Promise((resolve) => {
       resolveFn = resolve
-      rejectFn = reject
     })
     let options = { src: 'http://clappr.io/notfound.m3u8' }
     const core = new Core({})
