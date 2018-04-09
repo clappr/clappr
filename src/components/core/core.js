@@ -297,8 +297,13 @@ export default class Core extends UIObject {
     return this.activeContainer
   }
 
+  /**
+   * @deprecated
+   * This method currently exists for retrocompatibility reasons.
+   * If you want the current playback reference, use the activePlayback getter.
+   */
   getCurrentPlayback() {
-    return this.activeContainer && this.activeContainer.playback
+    return this.activePlayback
   }
 
   getPlaybackType() {
