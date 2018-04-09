@@ -70,6 +70,12 @@ export default class Core extends UIObject {
     return new UICorePlugin(this)
   }
 
+
+  /**
+   * gets the active container reference.
+   * @property activeContainer
+   * @type {Object}
+   */
   get activeContainer() {
     return this._activeContainer
   }
