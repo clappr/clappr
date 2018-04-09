@@ -91,6 +91,15 @@ export default class Core extends UIObject {
     this.trigger(Events.CORE_ACTIVE_CONTAINER_CHANGED, this._activeContainer)
   }
 
+  /**
+   * gets the active playback reference.
+   * @property activePlayback
+   * @type {Object}
+   */
+  get activePlayback() {
+    return this.activeContainer && this.activeContainer.playback
+  }
+
   constructor(options) {
     super(options)
     this.playerError = new PlayerError(options, this)
