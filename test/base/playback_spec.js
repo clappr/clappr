@@ -57,7 +57,7 @@ describe('Playback', function() {
       expect(errorData).to.deep.equal(defaultError)
     })
 
-    it('creates a code error on the following format: name:code', () => {
+    it('creates a error code on the following format: name:code', () => {
       this.basePlayback.name = 'test'
       const error = { code: '42' }
       const errorData = this.basePlayback.createError(error)
@@ -71,14 +71,14 @@ describe('Playback', function() {
       expect(errorData.level).to.deep.equal(PlayerError.Levels.FATAL)
     })
 
-    it('does not use default level when its setted on error', () => {
+    it('does not use default level when its set on error', () => {
       const error = { level: PlayerError.Levels.WARN }
       const errorData = this.basePlayback.createError(error)
 
       expect(errorData.level).to.deep.equal(PlayerError.Levels.WARN)
     })
 
-    it('always call error to trigger ERROR event', () => {
+    it('always calls error to trigger ERROR event', () => {
       const defaultError = {
         description: '',
         level: PlayerError.Levels.FATAL,

@@ -31,7 +31,7 @@ describe('PlayerError', function() {
       }))
     })
 
-    describe('when core is not setted', function() {
+    describe('when core is not set', function() {
       it('does not trigger ERROR event', function() {
         sinon.spy(this.core, 'trigger')
         this.playerError.core = undefined
