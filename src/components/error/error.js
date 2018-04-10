@@ -36,7 +36,7 @@ class PlayerError extends BaseObject {
    */
   error(err) {
     if (!this.core) {
-      Log.warn(this.name, 'Core is not setted. Error: ', err)
+      Log.warn(this.name, 'Core is not set. Error: ', err)
       return
     }
     this.core.trigger(Events.ERROR, err)
