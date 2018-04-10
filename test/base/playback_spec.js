@@ -65,14 +65,6 @@ describe('Playback', function() {
       expect(errorData.code).to.deep.equal(`${this.basePlayback.name}:${error.code}`)
     })
 
-    it('creates a code error on the following format: name:code', () => {
-      this.basePlayback.name = 'test'
-      const error = { code: '42' }
-      const errorData = this.basePlayback.createError(error)
-
-      expect(errorData.code).to.deep.equal(`${this.basePlayback.name}:${error.code}`)
-    })
-
     it('has default error level equals to FATAL', () => {
       const errorData = this.basePlayback.createError()
 
