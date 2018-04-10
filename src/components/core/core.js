@@ -11,6 +11,7 @@ import ContainerFactory from '../../components/container_factory'
 import MediaControl from '../../components/media_control'
 import Mediator from '../../components/mediator'
 import PlayerInfo from '../../components/player_info'
+import PlayerError from '../../components/error'
 
 import Styler from '../../base/styler'
 
@@ -65,6 +66,7 @@ export default class Core extends UIObject {
 
   constructor(options) {
     super(options)
+    this.playerError = new PlayerError(options, this)
     this.configureDomRecycler()
     this.playerInfo = PlayerInfo.getInstance(options.playerId)
     this.firstResize = true
@@ -89,7 +91,7 @@ export default class Core extends UIObject {
   createContainers(options) {
     this.defer = $.Deferred()
     this.defer.promise(this)
-    this.containerFactory = new ContainerFactory(options, options.loader, this.i18n)
+    this.containerFactory = new ContainerFactory(options, options.loader, this.i18n, this.playerError)
     this.containerFactory
       .createContainers()
       .then((containers) => this.setupContainers(containers))
@@ -200,6 +202,7 @@ export default class Core extends UIObject {
     $(document).unbind('fullscreenchange', this._boundFullscreenHandler)
     $(document).unbind('MSFullscreenChange', this._boundFullscreenHandler)
     $(document).unbind('mozfullscreenchange', this._boundFullscreenHandler)
+    this.stopListening()
   }
 
   handleFullscreenChange() {
@@ -238,13 +241,13 @@ export default class Core extends UIObject {
     this.containers = this.containers.filter((c) => c !== container)
   }
 
-  appendContainer(container) {
+  setupContainer(container) {
     this.listenTo(container, Events.CONTAINER_DESTROYED, this.removeContainer)
     this.containers.push(container)
   }
 
   setupContainers(containers) {
-    containers.map(this.appendContainer.bind(this))
+    containers.forEach(this.setupContainer.bind(this))
     this.trigger(Events.CORE_CONTAINERS_CREATED)
     this.renderContainers()
     this.setupMediaControl(this.getCurrentContainer())
@@ -254,12 +257,12 @@ export default class Core extends UIObject {
   }
 
   renderContainers() {
-    this.containers.map((container) => this.el.appendChild(container.render().el))
+    this.containers.forEach((container) => this.el.appendChild(container.render().el))
   }
 
   createContainer(source, options) {
     const container = this.containerFactory.createContainer(source, options)
-    this.appendContainer(container)
+    this.setupContainer(container)
     this.el.appendChild(container.render().el)
     return container
   }
