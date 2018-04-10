@@ -33,6 +33,8 @@ const AUDIO_MIMETYPES = {
 
 const KNOWN_AUDIO_MIMETYPES = Object.keys(AUDIO_MIMETYPES).reduce((acc, k) => [...acc, ...AUDIO_MIMETYPES[k]], [])
 
+const UNKNOWN_ERROR = { code: 'unknown', message: 'unknown' }
+
 // TODO: rename this Playback to HTML5Playback (breaking change, only after 0.3.0)
 export default class HTML5Video extends Playback {
   get name() { return 'html5_video' }
@@ -383,7 +385,15 @@ export default class HTML5Video extends Playback {
   }
 
   _onError() {
-    this.trigger(Events.PLAYBACK_ERROR, this.el.error, this.name)
+    const { code, message } = this.el.error || UNKNOWN_ERROR
+
+    const formattedError = this.createError({
+      code,
+      description: message,
+      raw: this.el.error,
+    })
+
+    this.trigger(Events.PLAYBACK_ERROR, formattedError)
   }
 
   destroy() {

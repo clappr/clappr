@@ -641,6 +641,7 @@ export default class MediaControl extends UIObject {
     $(document).unbind('mouseup', this.stopDragHandler)
     $(document).unbind('mousemove', this.updateDragHandler)
     this.unbindKeyEvents()
+    this.stopListening()
   }
 
   /**
