@@ -52,10 +52,6 @@ export default class PosterPlugin extends UIContainerPlugin {
     this.showOnVideoEnd && this.listenTo(this.container, Events.CONTAINER_ENDED, this.onStop)
   }
 
-  stopListening() {
-    super.stopListening()
-  }
-
   onPlay() {
     this.hasStartedPlaying = true
     this.update()
