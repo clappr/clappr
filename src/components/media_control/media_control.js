@@ -84,6 +84,8 @@ export default class MediaControl extends UIObject {
       right: ['volume'],
       default: ['position', 'seekbar', 'duration']
     }
+    this.kibo = new Kibo(this.options.focusElement)
+    this.bindKeyEvents()
 
     if (this.container) {
       if (!$.isEmptyObject(this.container.settings))
@@ -129,12 +131,14 @@ export default class MediaControl extends UIObject {
   disable() {
     this.userDisabled = true
     this.hide()
+    this.unbindKeyEvents()
     this.$el.hide()
   }
 
   enable() {
     if (this.options.chromeless) return
     this.userDisabled = false
+    this.bindKeyEvents()
     this.show()
   }
 
@@ -592,8 +596,9 @@ export default class MediaControl extends UIObject {
   }
 
   bindKeyEvents() {
+    if (Browser.isMobile || this.options.disableKeyboardShortcuts) return
+
     this.unbindKeyEvents()
-    this.kibo = new Kibo(this.options.focusElement)
 
     this.bindKeyAndShow('space', () => this.togglePlayPause())
     this.bindKeyAndShow('left', () => this.seekRelative(-5))
@@ -602,7 +607,6 @@ export default class MediaControl extends UIObject {
     this.bindKeyAndShow('shift right', () => this.seekRelative(10))
     this.bindKeyAndShow('shift ctrl left', () => this.seekRelative(-15))
     this.bindKeyAndShow('shift ctrl right', () => this.seekRelative(15))
-    // this.kibo.down(['']) // should it be here?
     const keys = ['1','2','3','4','5','6','7','8','9','0']
     keys.forEach((i) => { this.bindKeyAndShow(i, () => this.settings.seekEnabled && this.container.seekPercentage(i * 10)) })
   }
@@ -690,9 +694,6 @@ export default class MediaControl extends UIObject {
     process.nextTick(() => {
       if (!this.settings.seekEnabled)
         this.$seekBarContainer.addClass('seek-disabled')
-
-      if (!Browser.isMobile && !this.options.disableKeyboardShortcuts)
-        this.bindKeyEvents()
 
       this.playerResize({ width: this.options.width, height: this.options.height })
       this.hideVolumeBar(0)
