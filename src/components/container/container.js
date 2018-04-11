@@ -266,11 +266,11 @@ export default class Container extends UIObject {
     return this.playback.getDuration()
   }
 
-  error(errorObj) {
+  error(error) {
     if (!this.isReady)
       this.ready()
 
-    this.trigger(Events.CONTAINER_ERROR, { error: errorObj, container: this }, this.name)
+    this.trigger(Events.CONTAINER_ERROR, Object.assign(error, { container: this }), this.name)
   }
 
   loadedMetadata(metadata) {
