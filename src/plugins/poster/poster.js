@@ -6,6 +6,7 @@ import UIContainerPlugin from '../../base/ui_container_plugin'
 import Events from '../../base/events'
 import template from '../../base/template'
 import Playback from '../../base/playback'
+import PlayerError from '../../components/error/error'
 import posterHTML from './public/poster.html'
 import playIcon from '../../icons/01-play.svg'
 import './public/poster.scss'
@@ -49,7 +50,15 @@ export default class PosterPlugin extends UIContainerPlugin {
     this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.update)
     this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.update)
     this.listenTo(this.container, Events.CONTAINER_OPTIONS_CHANGE, this.render)
+    this.listenTo(this.container, Events.CONTAINER_ERROR, this.onError)
     this.showOnVideoEnd && this.listenTo(this.container, Events.CONTAINER_ENDED, this.onStop)
+  }
+
+  onError(error) {
+    if (error.level == PlayerError.Levels.FATAL) {
+      this.hasFatalError = true
+      this.hidePlayButton()
+    }
   }
 
   onPlay() {
@@ -71,6 +80,8 @@ export default class PosterPlugin extends UIContainerPlugin {
   }
 
   showPlayButton() {
+    if (this.hasFatalError) return
+
     this.$playButton.show()
     this.$el.addClass('clickable')
   }
