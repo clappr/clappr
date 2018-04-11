@@ -36,44 +36,58 @@ export default class Strings extends CorePlugin {
         'live': 'live',
         'back_to_live': 'back to live',
         'disabled': 'Disabled',
-        'playback_not_supported': 'Your browser does not support the playback of this video. Please try using a different browser.'
+        'playback_not_supported': 'Your browser does not support the playback of this video. Please try using a different browser.',
+        'default_error_title': 'Could not reproduce the video.',
+        'default_error_message': 'There was a problem trying to load the video.',
       },
       'pt': {
         'live': 'ao vivo',
         'back_to_live': 'voltar para o ao vivo',
         'disabled': 'Desativado',
-        'playback_not_supported': 'Seu navegador não supporta a reprodução deste video. Por favor, tente usar um navegador diferente.'
+        'playback_not_supported': 'Seu navegador não supporta a reprodução deste video. Por favor, tente usar um navegador diferente.',
+        'default_error_title': 'N&#227;o foi poss&#237;vel reproduzir o v&#237;deo.',
+        'default_error_message': 'Ocorreu um problema ao tentar carregar o v&#237;deo.',
       },
       'es': {
         'live': 'vivo',
         'back_to_live': 'volver en vivo',
         'disabled': 'Discapacitado',
-        'playback_not_supported': 'Su navegador no soporta la reproducción de un video. Por favor, trate de usar un navegador diferente.'
+        'playback_not_supported': 'Su navegador no soporta la reproducción de un video. Por favor, trate de usar un navegador diferente.',
+        'default_error_title': 'No se pudo reproducir el video.',
+        'default_error_message': 'Hubo un problema al intentar cargar el video.',
       },
       'ru': {
         'live': 'прямой эфир',
         'back_to_live': 'к прямому эфиру',
         'disabled': 'Отключено',
-        'playback_not_supported': 'Ваш браузер не поддерживает воспроизведение этого видео. Пожалуйста, попробуйте другой браузер.'
+        'playback_not_supported': 'Ваш браузер не поддерживает воспроизведение этого видео. Пожалуйста, попробуйте другой браузер.',
+        'default_error_title': 'Не удалось воспроизвести видео.',
+        'default_error_message': 'Возникла проблема с загрузкой видео.',
       },
       'fr': {
         'live': 'en direct',
         'disabled': 'Désactivé',
         'back_to_live': 'retour au direct',
-        'playback_not_supported': 'Votre navigateur ne supporte pas la lecture de cette vidéo. Merci de tenter sur un autre navigateur.'
+        'playback_not_supported': 'Votre navigateur ne supporte pas la lecture de cette vidéo. Merci de tenter sur un autre navigateur.',
+        'default_error_title': 'Impossible de reproduire la vidéo.',
+        'default_error_message': 'Un problème est survenu lors du chargement de la vidéo.',
       },
       'tr': {
         'live': 'canlı',
         'back_to_live': 'canlı yayına dön',
         'disabled': 'Engelli',
         'playback_not_supported': 'Tarayıcınız bu videoyu oynatma desteğine sahip değil. Lütfen farklı bir tarayıcı ile deneyin.',
+        'default_error_title': 'Video yeniden oluşturulamadı.',
+        'default_error_message': 'Videoyu yüklemeye çalışırken bir sorun oluştu.',
       },
       'et': {
         'live': 'Otseülekanne',
         'back_to_live': 'Tagasi otseülekande juurde',
         'disabled': 'Keelatud',
-        'playback_not_supported': 'Teie brauser ei toeta selle video taasesitust. Proovige kasutada muud brauserit.'
-      }
+        'playback_not_supported': 'Teie brauser ei toeta selle video taasesitust. Proovige kasutada muud brauserit.',
+        'default_error_title': 'Video ei saanud taasesitada.',
+        'default_error_message': 'Video üles laadimisel proovisin proovida.',
+      },
     }
 
     this._messages = $.extend(true, defaultMessages, this.core.options.strings || {})
