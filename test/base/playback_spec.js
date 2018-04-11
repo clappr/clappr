@@ -63,6 +63,30 @@ describe('Playback', function() {
 
         expect(errorData.level).to.deep.equal(PlayerError.Levels.FATAL)
       })
+
+      describe('when i18n is defined', () => {
+        beforeEach(() => {
+          this.basePlayback = new Playback({}, this.core.i18n, this.core.playerError)
+          this.playerError = this.basePlayback.playerError
+        })
+
+        it('creates a default error with UI data', () => {
+          const errorData = this.basePlayback.createError()
+          const defaultError = {
+            description: '',
+            level: PlayerError.Levels.FATAL,
+            origin: 'playback',
+            scope: 'playback',
+            raw: {},
+            code: 'playback:unknown',
+            UI: {
+              title: 'default_error_title',
+              message: 'default_error_message'
+            }
+          }
+          expect(errorData).to.deep.equal(defaultError)
+        })
+      })
     })
 
     describe('when some data is given', () => {
@@ -79,6 +103,33 @@ describe('Playback', function() {
         const errorData = this.basePlayback.createError(error)
 
         expect(errorData.level).to.deep.equal(PlayerError.Levels.WARN)
+      })
+
+      describe('when i18n is defined', () => {
+        beforeEach(() => {
+          this.basePlayback = new Playback({}, this.core.i18n, this.core.playerError)
+          this.playerError = this.basePlayback.playerError
+        })
+
+        it('does not overwrite UI when it is defined', () => {
+          const UIData = {
+            title: 'my_title',
+            message: 'my_message'
+          }
+          const errorData = this.basePlayback.createError({
+            UI: UIData
+          })
+          expect(errorData.UI).to.deep.equal(UIData)
+        })
+
+        it('does not add UI data if level is not FATAL', () => {
+          const error = {
+            level: PlayerError.Levels.WARN,
+          }
+          const errorData = this.basePlayback.createError(error)
+
+          expect(errorData.hasOwnProperty('UI')).to.be.false
+        })
       })
     })
 
