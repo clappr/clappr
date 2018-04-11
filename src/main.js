@@ -15,6 +15,7 @@ import UIObject from './base/ui_object'
 import Browser from './components/browser'
 import Container from './components/container'
 import Core from './components/core'
+import PlayerError from './components/error'
 import Loader from './components/loader'
 import Mediator from './components/mediator'
 import MediaControl from './components/media_control'
@@ -56,6 +57,7 @@ export default {
   Playback,
   Container,
   Core,
+  PlayerError,
   Loader,
   BaseObject,
   UIObject,
