@@ -67,14 +67,21 @@ export default class PosterPlugin extends UIContainerPlugin {
     this.update()
   }
 
-  showPlayButton(show) {
-    if (show && (!this.options.chromeless || this.options.allowUserInteraction)) {
-      this.$playButton.show()
-      this.$el.addClass('clickable')
-    } else {
-      this.$playButton.hide()
-      this.$el.removeClass('clickable')
-    }
+  updatePlayButton(show) {
+    if (show && (!this.options.chromeless || this.options.allowUserInteraction))
+      this.showPlayButton()
+    else
+      this.hidePlayButton()
+  }
+
+  showPlayButton() {
+    this.$playButton.show()
+    this.$el.addClass('clickable')
+  }
+
+  hidePlayButton() {
+    this.$playButton.hide()
+    this.$el.removeClass('clickable')
   }
 
   clicked() {
@@ -96,16 +103,24 @@ export default class PosterPlugin extends UIContainerPlugin {
       return
 
     let showPlayButton = !this.playRequested  && !this.hasStartedPlaying && !this.container.buffering
-    this.showPlayButton(showPlayButton)
-    if (!this.hasStartedPlaying) {
-      this.container.disableMediaControl()
-      this.$el.show()
-    } else {
-      this.container.enableMediaControl()
-      if (this.shouldHideOnPlay())
-        this.$el.hide()
+    this.updatePlayButton(showPlayButton)
+    this.updatePoster()
+  }
 
-    }
+  updatePoster() {
+    if (!this.hasStartedPlaying) this.showPoster()
+    else this.hidePoster()
+  }
+
+  showPoster() {
+    this.container.disableMediaControl()
+    this.$el.show()
+  }
+
+  hidePoster() {
+    this.container.enableMediaControl()
+    if (this.shouldHideOnPlay())
+      this.$el.hide()
   }
 
   render() {
@@ -131,7 +146,6 @@ export default class PosterPlugin extends UIContainerPlugin {
     let buttonsColor = this.options.mediacontrol && this.options.mediacontrol.buttons
     if (buttonsColor)
       this.$el.find('svg path').css('fill', buttonsColor)
-
 
     if (this.options.mediacontrol && this.options.mediacontrol.buttons) {
       buttonsColor = this.options.mediacontrol.buttons
