@@ -41,6 +41,7 @@ describe('ErrorScreen', function() {
         this.container = new Container({ playback: this.playback })
         this.core.setupContainer(this.container)
       })
+
       it('disables media control', () => {
         const containerStopSpy = sinon.spy(this.container, 'stop')
 
@@ -65,6 +66,35 @@ describe('ErrorScreen', function() {
 
         expect(pluginShowSpy).to.have.been.called
         expect(pluginRenderSpy).to.have.been.called
+      })
+
+      it('bind method to reload player', () => {
+        const pluginReloadSpy = sinon.spy(this.errorScreen, 'bindReload')
+
+        this.errorScreen.onError(this.fakeError)
+
+        expect(pluginReloadSpy).to.have.been.called
+      })
+
+      describe('when reload is clicked', () => {
+        it('loads media again', () => {
+          this.core.load = sinon.spy()
+
+          this.errorScreen.reload()
+
+          expect(this.core.load).to.have.been.called
+        })
+
+        it('plays when core is ready', () => {
+          this.core.load = () => {}
+          const playSpy = sinon.spy()
+          this.core.getCurrentContainer = () => ({ play: playSpy })
+
+          this.errorScreen.reload()
+          this.core.trigger(Events.CORE_READY)
+
+          expect(this.errorScreen.container.play).to.have.been.called
+        })
       })
     })
   })
