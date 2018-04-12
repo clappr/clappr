@@ -25,11 +25,13 @@ export default class ErrorScreen extends UICorePlugin {
 
   bindReload() {
     this.reloadButton = this.$el.find('.player-error-screen__reload')
-    this.reloadButton && this.reloadButton.on('click', () => {
-      this.listenToOnce(this.core, Events.CORE_READY, () => this.container.play())
-      this.core.load(this.options.sources, this.options.mimeType)
-      this.unbindReload()
-    })
+    this.reloadButton && this.reloadButton.on('click', this.reload.bind(this))
+  }
+
+  reload() {
+    this.listenToOnce(this.core, Events.CORE_READY, () => this.container.play())
+    this.core.load(this.options.sources, this.options.mimeType)
+    this.unbindReload()
   }
 
   unbindReload() {
