@@ -17,10 +17,12 @@ div.player-error-screen {
   &__content[data-error-screen] {
     font-size: 14px;
     color: #CCCACA;
+    margin-top: 45px;
   }
 
   &__title[data-error-screen] {
     font-weight: bold;
+    line-height: 30px;
     font-size: 18px;
   }
 
@@ -30,6 +32,13 @@ div.player-error-screen {
   }
 
   &__code[data-error-screen] {
-    padding-top: 10px;
+    font-size: 13px;
+    margin-top: 15px;
+  }
+
+  &__reload {
+    cursor: pointer;
+    width: 30px;
+    margin: 15px auto 0;
   }
 }
