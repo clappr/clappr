@@ -6,6 +6,7 @@ import { isNumber, seekStringToSeconds, DomRecycler } from '../../base/utils'
 
 import Playback from '../../base/playback'
 import Browser from '../../components/browser'
+import PlayerError from '../../components/error'
 import Events from '../../base/events'
 import $ from 'clappr-zepto'
 import template from '../../base/template'
@@ -391,6 +392,7 @@ export default class HTML5Video extends Playback {
       code,
       description: message,
       raw: this.el.error,
+      level: code === UNKNOWN_ERROR.code ? PlayerError.Levels.WARN : PlayerError.Levels.FATAL
     })
 
     this.trigger(Events.PLAYBACK_ERROR, formattedError)
