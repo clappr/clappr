@@ -185,6 +185,7 @@ export default class Core extends UIObject {
   load(sources, mimeType) {
     this.options.mimeType = mimeType
     sources = sources && sources.constructor === Array ? sources : [sources]
+    this.options.sources = sources
     this.containers.forEach((container) => container.destroy())
     this.mediaControl.container = null
     this.containerFactory.options = $.extend(this.options, { sources })
