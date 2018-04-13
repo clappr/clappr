@@ -30,6 +30,7 @@ import SeekTime from '../../plugins/seek_time'
 import SourcesPlugin from '../../plugins/sources'
 import EndVideo from '../../plugins/end_video'
 import Strings from '../../plugins/strings'
+import ErrorScreen from '../../plugins/error_screen'
 
 /**
  * It keeps a list of the default plugins (playback, container, core) and it merges external plugins with its internals.
@@ -78,7 +79,7 @@ export default class Loader extends BaseObject {
     ]
 
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
-    this.corePlugins = [DVRControls, ClosedCaptions, Favicon, SeekTime, SourcesPlugin, EndVideo, Strings]
+    this.corePlugins = [DVRControls, ClosedCaptions, Favicon, SeekTime, SourcesPlugin, EndVideo, Strings, ErrorScreen]
 
     if (!Array.isArray(externalPlugins))
       this.validateExternalPluginsType(externalPlugins)
