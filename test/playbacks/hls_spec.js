@@ -1,4 +1,5 @@
 import Events from 'base/events.js'
+import Core from '../../src/components/core'
 import HLS from 'playbacks/hls'
 import HLSJS from 'hls.js'
 
@@ -80,16 +81,23 @@ describe('HLS playback', () => {
     })
   })
 
-  it('should trigger a playback error if source load failed', function(done) {
-    this.timeout(5000)
+  it('should trigger a playback error if source load failed', function() {
+    let resolveFn = undefined
+    const promise = new Promise((resolve) => {
+      resolveFn = resolve
+    })
     let options = { src: 'http://clappr.io/notfound.m3u8' }
-    const playback = new HLS(options)
+    const core = new Core({})
+    const playback = new HLS(options, null, core.playerError)
     playback.on(Events.PLAYBACK_ERROR, (e) => {
-      expect(e.data.type).to.be.equal(HLSJS.ErrorTypes.NETWORK_ERROR)
-      expect(e.data.details).to.be.equal(HLSJS.ErrorDetails.MANIFEST_LOAD_ERROR)
+      resolveFn(e)
     })
     playback.play()
-    done()
+
+    return promise.then((e) => {
+      expect(e.raw.type).to.be.equal(HLSJS.ErrorTypes.NETWORK_ERROR)
+      expect(e.raw.details).to.be.equal(HLSJS.ErrorDetails.MANIFEST_LOAD_ERROR)
+    })
   })
 
   xit('levels', function() {

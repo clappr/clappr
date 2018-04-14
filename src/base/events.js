@@ -282,7 +282,27 @@ Events.PLAYER_SEEK = 'seek'
  * @event PLAYER_ERROR
  * @param {Object} error the error
  */
-Events.PLAYER_ERROR = 'error'
+Events.PLAYER_ERROR = 'playererror'
+/**
+ * Fired when there is an error
+ *
+ * @event ERROR
+ * @param {Object} error
+ * the error with the following format `{code, description, level, raw, origin, scope}`
+ * @param {String} [options.code]
+ * error's code: code to identify error in the following format: origin:code
+ * @param {String} [options.description]
+ * error's description: description of the error
+ * @param {String} [options.level]
+ * error's level: FATAL or WARN.
+ * @param {String} [options.origin]
+ * error's origin. Example: hls, html5, etc
+ * @param {String} [options.scope]
+ * error's scope. Example: playback, container, etc
+ * @param {String} [options.raw]
+ * raw error: the initial error received
+ */
+Events.ERROR = 'error'
 /**
  * Fired when the time is updated on player
  *

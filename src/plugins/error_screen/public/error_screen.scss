@@ -1,0 +1,44 @@
+@import 'fontsmoothing';
+
+
+div.player-error-screen {
+  @include font-smoothing(antialiased);
+  color: #CCCACA;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  &__content[data-error-screen] {
+    font-size: 14px;
+    color: #CCCACA;
+    margin-top: 45px;
+  }
+
+  &__title[data-error-screen] {
+    font-weight: bold;
+    line-height: 30px;
+    font-size: 18px;
+  }
+
+  &__message[data-error-screen] {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  &__code[data-error-screen] {
+    font-size: 13px;
+    margin-top: 15px;
+  }
+
+  &__reload {
+    cursor: pointer;
+    width: 30px;
+    margin: 15px auto 0;
+  }
+}

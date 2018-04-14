@@ -112,12 +112,13 @@ export default class Container extends UIObject {
    * @param {Object} options the options object
    * @param {Strings} i18n the internationalization component
    */
-  constructor(options, i18n) {
+  constructor(options, i18n, playerError) {
     super(options)
     this._i18n = i18n
     this.currentTime = 0
     this.volume = 100
     this.playback = options.playback
+    this.playerError = playerError
     this.settings = $.extend({}, this.playback.settings)
     this.isReady = false
     this.mediaControlDisabled = false
@@ -265,11 +266,11 @@ export default class Container extends UIObject {
     return this.playback.getDuration()
   }
 
-  error(errorObj) {
+  error(error) {
     if (!this.isReady)
       this.ready()
 
-    this.trigger(Events.CONTAINER_ERROR, { error: errorObj, container: this }, this.name)
+    this.trigger(Events.CONTAINER_ERROR, Object.assign(error, { container: this }), this.name)
   }
 
   loadedMetadata(metadata) {

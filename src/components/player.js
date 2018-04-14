@@ -422,6 +422,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   destroy() {
+    this.stopListening()
     this.core.destroy()
     return this
   }

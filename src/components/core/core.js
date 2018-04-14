@@ -12,6 +12,7 @@ import Browser from '../../components/browser'
 import ContainerFactory from '../../components/container_factory'
 import Mediator from '../../components/mediator'
 import PlayerInfo from '../../components/player_info'
+import PlayerError from '../../components/error'
 
 import $ from 'clappr-zepto'
 
@@ -100,6 +101,7 @@ export default class Core extends UIObject {
 
   constructor(options) {
     super(options)
+    this.playerError = new PlayerError(options, this)
     this.configureDomRecycler()
     this.playerInfo = PlayerInfo.getInstance(options.playerId)
     this.firstResize = true
@@ -121,7 +123,7 @@ export default class Core extends UIObject {
   createContainers(options) {
     this.defer = $.Deferred()
     this.defer.promise(this)
-    this.containerFactory = new ContainerFactory(options, options.loader, this.i18n)
+    this.containerFactory = new ContainerFactory(options, options.loader, this.i18n, this.playerError)
     this.prepareContainers()
   }
 
@@ -214,6 +216,7 @@ export default class Core extends UIObject {
   load(sources, mimeType) {
     this.options.mimeType = mimeType
     sources = sources && sources.constructor === Array ? sources : [sources]
+    this.options.sources = sources
     this.containers.forEach((container) => container.destroy())
     this.containerFactory.options = $.extend(this.options, { sources })
     this.prepareContainers()
@@ -227,6 +230,7 @@ export default class Core extends UIObject {
     $(document).unbind('fullscreenchange', this._boundFullscreenHandler)
     $(document).unbind('MSFullscreenChange', this._boundFullscreenHandler)
     $(document).unbind('mozfullscreenchange', this._boundFullscreenHandler)
+    this.stopListening()
   }
 
   handleFullscreenChange() {
@@ -247,13 +251,13 @@ export default class Core extends UIObject {
     this.containers = this.containers.filter((c) => c !== container)
   }
 
-  appendContainer(container) {
+  setupContainer(container) {
     this.listenTo(container, Events.CONTAINER_DESTROYED, this.removeContainer)
     this.containers.push(container)
   }
 
   setupContainers(containers) {
-    containers.map(this.appendContainer.bind(this))
+    containers.forEach(this.setupContainer.bind(this))
     this.trigger(Events.CORE_CONTAINERS_CREATED)
     this.renderContainers()
     this.activeContainer = containers[0]
@@ -264,12 +268,12 @@ export default class Core extends UIObject {
   }
 
   renderContainers() {
-    this.containers.map((container) => this.el.appendChild(container.render().el))
+    this.containers.forEach((container) => this.el.appendChild(container.render().el))
   }
 
   createContainer(source, options) {
     const container = this.containerFactory.createContainer(source, options)
-    this.appendContainer(container)
+    this.setupContainer(container)
     this.el.appendChild(container.render().el)
     return container
   }
