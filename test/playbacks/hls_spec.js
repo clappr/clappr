@@ -83,18 +83,14 @@ describe('HLS playback', () => {
 
   it('should trigger a playback error if source load failed', function() {
     let resolveFn = undefined
-    const promise = new Promise((resolve) => {
-      resolveFn = resolve
-    })
+    const promise = new Promise((resolve) => { resolveFn = resolve })
     let options = { src: 'http://clappr.io/notfound.m3u8' }
     const core = new Core({})
     const playback = new HLS(options, null, core.playerError)
-    playback.on(Events.PLAYBACK_ERROR, (e) => {
-      resolveFn(e)
-    })
+    playback.on(Events.PLAYBACK_ERROR, (e) => resolveFn(e))
     playback.play()
 
-    return promise.then((e) => {
+    promise.then((e) => {
       expect(e.raw.type).to.be.equal(HLSJS.ErrorTypes.NETWORK_ERROR)
       expect(e.raw.details).to.be.equal(HLSJS.ErrorDetails.MANIFEST_LOAD_ERROR)
     })
