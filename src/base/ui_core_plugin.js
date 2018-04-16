@@ -31,10 +31,6 @@ export default class UICorePlugin extends UIObject {
     this.enabled = false
   }
 
-  destroy() {
-    this.remove()
-  }
-
   render() {
     return this
   }
