@@ -39,7 +39,7 @@ describe('ErrorScreen', function() {
         }
         this.playback = new Playback()
         this.container = new Container({ playback: this.playback })
-        this.core.setupContainer(this.container)
+        this.core.setupContainers([this.container])
       })
 
       it('disables media control', () => {
