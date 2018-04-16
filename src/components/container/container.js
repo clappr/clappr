@@ -234,7 +234,9 @@ export default class Container extends UIObject {
   destroy() {
     this.trigger(Events.CONTAINER_DESTROYED, this, this.name)
     this.stopListening()
-    this.plugins.forEach((plugin) => plugin.destroy())
+    this.plugins.forEach((plugin) => {
+      plugin.destroy ? plugin.destroy() : plugin.remove()
+    })
     this.$el.remove()
   }
 
