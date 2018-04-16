@@ -53,7 +53,7 @@ describe('UI Container Plugin', function() {
     const plugin = new UIContainerPlugin({})
     const spy = sinon.spy(plugin, 'remove')
 
-    plugin.destroy()
+    plugin.remove()
 
     expect(spy).to.have.been.calledOnce
   })
