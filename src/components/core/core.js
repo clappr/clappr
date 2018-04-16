@@ -224,7 +224,9 @@ export default class Core extends UIObject {
   destroy() {
     this.disableResizeObserver()
     this.containers.forEach((container) => container.destroy())
-    this.plugins.forEach((plugin) => plugin.destroy())
+    this.plugins.forEach((plugin) => {
+      plugin.destroy ? plugin.destroy() : plugin.remove()
+    })
     this.$el.remove()
     $(document).unbind('fullscreenchange', this._boundFullscreenHandler)
     $(document).unbind('MSFullscreenChange', this._boundFullscreenHandler)
