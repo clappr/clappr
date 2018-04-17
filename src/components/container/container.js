@@ -270,7 +270,7 @@ export default class Container extends UIObject {
     if (!this.isReady)
       this.ready()
 
-    this.trigger(Events.CONTAINER_ERROR, Object.assign(error, { container: this }), this.name)
+    this.trigger(Events.CONTAINER_ERROR, error, this.name)
   }
 
   loadedMetadata(metadata) {
