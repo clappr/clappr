@@ -37,7 +37,7 @@ export default class Strings extends CorePlugin {
         'back_to_live': 'back to live',
         'disabled': 'Disabled',
         'playback_not_supported': 'Your browser does not support the playback of this video. Please try using a different browser.',
-        'default_error_title': 'Could not reproduce the video.',
+        'default_error_title': 'Could not play video.',
         'default_error_message': 'There was a problem trying to load the video.',
       },
       'pt': {
