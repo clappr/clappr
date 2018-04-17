@@ -105,6 +105,14 @@ describe('Playback', function() {
         expect(errorData.level).to.deep.equal(PlayerError.Levels.WARN)
       })
 
+      it('does not overwrite code when useCodePrefix is false', () => {
+        const error = { code: 'MY_CODE' }
+        const options = { useCodePrefix: false }
+        const errorData = this.basePlayback.createError(error, options)
+
+        expect(errorData.code).to.equal(error.code)
+      })
+
       describe('when i18n is defined', () => {
         beforeEach(() => {
           this.basePlayback = new Playback({}, this.core.i18n, this.core.playerError)
