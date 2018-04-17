@@ -8,11 +8,12 @@ const ErrorMixin = {
    * @param {Object} error should be an object with code, description, level and raw error.
    * @return {Object} Object with formatted error data including origin and scope
    */
-  createError(error) {
+  createError(error, options = { useCodePrefix: true }) {
     const scope = this.constructor && this.constructor.type || ''
     const origin = this.name || scope
     const i18n = this.i18n || this.core && this.core.i18n || this.container && this.container.i18n
 
+    const prefixedCode = `${origin}:${error && error.code || 'unknown'}`
     const defaultError = {
       description: '',
       level: PlayerError.Levels.FATAL,
@@ -22,7 +23,7 @@ const ErrorMixin = {
     }
 
     const errorData = Object.assign({}, defaultError, error, {
-      code: `${origin}:${error && error.code || 'unknown'}`
+      code: options.useCodePrefix ? prefixedCode : error.code
     })
 
     if (i18n && errorData.level == PlayerError.Levels.FATAL && !errorData.UI) {
