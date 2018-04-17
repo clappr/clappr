@@ -45,8 +45,8 @@ export default class Strings extends CorePlugin {
         'back_to_live': 'voltar para o ao vivo',
         'disabled': 'Desativado',
         'playback_not_supported': 'Seu navegador não supporta a reprodução deste video. Por favor, tente usar um navegador diferente.',
-        'default_error_title': 'N&#227;o foi poss&#237;vel reproduzir o v&#237;deo.',
-        'default_error_message': 'Ocorreu um problema ao tentar carregar o v&#237;deo.',
+        'default_error_title': 'Não foi possível reproduzir o vídeo.',
+        'default_error_message': 'Ocorreu um problema ao tentar carregar o vídeo.',
       },
       'es': {
         'live': 'vivo',
