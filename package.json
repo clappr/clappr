@@ -17,7 +17,7 @@
   "author": "Clappr team",
   "license": "BSD-3-Clause",
   "peerDependencies": {
-    "clappr": "^0.2.90"
+    "clappr": "^0.2.91"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
