@@ -170,16 +170,22 @@ var DashShakaPlayback = function (_HTML5Video) {
     }
   }]);
 
-  function DashShakaPlayback(options) {
+  function DashShakaPlayback() {
+    var _ref;
+
     _classCallCheck(this, DashShakaPlayback);
 
-    var _this = _possibleConstructorReturn(this, (DashShakaPlayback.__proto__ || Object.getPrototypeOf(DashShakaPlayback)).call(this, options));
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    var _this = _possibleConstructorReturn(this, (_ref = DashShakaPlayback.__proto__ || Object.getPrototypeOf(DashShakaPlayback)).call.apply(_ref, [this].concat(args)));
 
     _this._levels = [];
     _this._pendingAdaptationEvent = false;
     _this._isShakaReadyState = false;
 
-    options.autoPlay && _this.play();
+    _this.options.autoPlay && _this.play();
     return _this;
   }
 
@@ -412,8 +418,22 @@ var DashShakaPlayback = function (_HTML5Video) {
         videoError: this.el.error
       };
 
-      _clappr.Log.error('Shaka error event:', error);
-      this.trigger(_clappr.Events.PLAYBACK_ERROR, error, this.name);
+      if (error.videoError) return _get(DashShakaPlayback.prototype.__proto__ || Object.getPrototypeOf(DashShakaPlayback.prototype), '_onError', this).call(this);
+
+      var _ref2 = error.shakaError.detail || error.shakaError,
+          category = _ref2.category,
+          code = _ref2.code,
+          severity = _ref2.severity;
+
+      var errorData = {
+        code: category + '_' + code,
+        description: 'Category: ' + category + ', code: ' + code + ', severity: ' + severity,
+        level: severity === 1 ? _clappr.PlayerError.Levels.WARN : _clappr.PlayerError.Levels.FATAL,
+        raw: err
+      };
+      var formattedError = this.createError(errorData);
+      _clappr.Log.error('Shaka error event:', formattedError);
+      this.trigger(_clappr.Events.PLAYBACK_ERROR, formattedError);
     }
   }, {
     key: '_onAdaptation',
