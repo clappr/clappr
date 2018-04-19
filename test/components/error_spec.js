@@ -19,7 +19,7 @@ describe('PlayerError', function() {
   describe('when error method is called', function() {
     it('triggers ERROR event', function() {
       sinon.spy(this.core, 'trigger')
-      this.playerError.error(this.errorData)
+      this.playerError.createError(this.errorData)
 
       assert.ok(this.core.trigger.calledWith(Events.ERROR, {
         code: 'test_01',
@@ -35,7 +35,7 @@ describe('PlayerError', function() {
       it('does not trigger ERROR event', function() {
         sinon.spy(this.core, 'trigger')
         this.playerError.core = undefined
-        this.playerError.error(this.errorData)
+        this.playerError.createError(this.errorData)
 
         assert.notOk(this.core.trigger.calledWith(Events.ERROR, this.errorData))
       })
