@@ -35,7 +35,7 @@ const ErrorMixin = {
     }
 
     if (this.playerError)
-      this.playerError.error(errorData)
+      this.playerError.createError(errorData)
     else
       Log.warn(origin, 'PlayerError is not defined. Error: ', errorData)
 
