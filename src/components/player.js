@@ -10,6 +10,7 @@ import Browser from './browser'
 import CoreFactory from './core_factory'
 import Loader from './loader'
 import PlayerInfo from './player_info'
+import ErrorMixin from '../base/error_mixin'
 import $ from 'clappr-zepto'
 
 const baseUrl = currentScriptUrl().replace(/\/[^/]+$/, '')
@@ -609,3 +610,5 @@ export default class Player extends BaseObject {
     return this.core.mediaControl.container.getDuration()
   }
 }
+
+Object.assign(Player.prototype, ErrorMixin)

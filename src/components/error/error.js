@@ -31,10 +31,10 @@ class PlayerError extends BaseObject {
 
   /**
    * creates and trigger an error.
-   * @method error
+   * @method createError
    * @param {Object} err should be an object with code, description, level, origin, scope and raw error.
    */
-  error(err) {
+  createError(err) {
     if (!this.core) {
       Log.warn(this.name, 'Core is not set. Error: ', err)
       return

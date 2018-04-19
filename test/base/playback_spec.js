@@ -150,7 +150,7 @@ describe('Playback', function() {
         raw: {},
         code: 'playback:unknown',
       }
-      const spy = sinon.spy(this.playerError, 'error')
+      const spy = sinon.spy(this.playerError, 'createError')
       this.basePlayback.createError()
 
       expect(spy).to.have.been.calledWith(defaultError)

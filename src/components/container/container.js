@@ -8,6 +8,7 @@
 
 import Events from '../../base/events'
 import UIObject from '../../base/ui_object'
+import ErrorMixin from '../../base/error_mixin'
 
 import './public/style.scss'
 
@@ -473,3 +474,5 @@ export default class Container extends UIObject {
     return this
   }
 }
+
+Object.assign(Container.prototype, ErrorMixin)
