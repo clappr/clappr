@@ -315,21 +315,22 @@ class DashShakaPlayback extends HTML5Video {
       videoError: this.el.error
     }
 
-    if (error.videoError) return super._onError()
-
     let { category, code, severity } = error.shakaError.detail || error.shakaError
 
+    if (error.videoError || !code && !category) return super._onError()
 
+    const isCritical = severity === shaka.util.Error.Severity.CRITICAL
     const errorData = {
       code: `${category}_${code}`,
       description: `Category: ${category}, code: ${code}, severity: ${severity}`,
-      level: severity === 1 ? PlayerError.Levels.WARN : PlayerError.Levels.FATAL,
+      level: isCritical ? PlayerError.Levels.FATAL : PlayerError.Levels.WARN,
       raw: err
     }
     const formattedError = this.createError(errorData)
     Log.error('Shaka error event:', formattedError)
     this.trigger(Events.PLAYBACK_ERROR, formattedError)
   }
+
 
   _onAdaptation () {
     let activeVideo = this.videoTracks.filter((t) => t.active === true)[0]
