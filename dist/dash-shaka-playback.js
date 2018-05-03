@@ -418,17 +418,18 @@ var DashShakaPlayback = function (_HTML5Video) {
         videoError: this.el.error
       };
 
-      if (error.videoError) return _get(DashShakaPlayback.prototype.__proto__ || Object.getPrototypeOf(DashShakaPlayback.prototype), '_onError', this).call(this);
-
       var _ref2 = error.shakaError.detail || error.shakaError,
           category = _ref2.category,
           code = _ref2.code,
           severity = _ref2.severity;
 
+      if (error.videoError || !code && !category) return _get(DashShakaPlayback.prototype.__proto__ || Object.getPrototypeOf(DashShakaPlayback.prototype), '_onError', this).call(this);
+
+      var isCritical = severity === _shakaPlayer2.default.util.Error.Severity.CRITICAL;
       var errorData = {
         code: category + '_' + code,
         description: 'Category: ' + category + ', code: ' + code + ', severity: ' + severity,
-        level: severity === 1 ? _clappr.PlayerError.Levels.WARN : _clappr.PlayerError.Levels.FATAL,
+        level: isCritical ? _clappr.PlayerError.Levels.FATAL : _clappr.PlayerError.Levels.WARN,
         raw: err
       };
       var formattedError = this.createError(errorData);
