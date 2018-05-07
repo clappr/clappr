@@ -1,6 +1,6 @@
 import Browser from '../../src/components/browser'
 
-import { getBrowserInfo, getOsData, getBrowserData } from '../../src/components/browser'
+import { getBrowserData, getBrowserInfo, getDevice, getOsData } from '../../src/components/browser'
 
 describe('Browser', function() {
   it('checks localstorage support', function() {
@@ -44,6 +44,13 @@ describe('Browser', function() {
       expect(browserData.majorVersion).to.be.equal(66)
       expect(browserData.minorVersion).to.be.equal(0)
       expect(browserData.fullVersion).to.be.equal('66.0.3359.139')
+    })
+
+    it('reports correctly device name', function() {
+      Browser.userAgent = 'Mozilla/5.0 (Linux; Android 8.0.0; Pixel 2 XL Build/OPD1.170816.004) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Mobile Safari/537.36'
+      Browser.isMobile = true
+      const device = getDevice()
+      expect(device).to.be.equal('Pixel 2 XL Build/OPD1.170816.004')
     })
   })
 })
