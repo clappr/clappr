@@ -57,7 +57,7 @@ export const getBrowserInfo = function(ua) {
   }
 }
 
-//  Set browser data
+//  Get browser data
 export const getBrowserData = function() {
   let browserObject = {}
   let userAgent = Browser.userAgent.toLowerCase()
@@ -100,7 +100,7 @@ const setBrowserVersion = function(version, browserObject) {
   if (splitVersion[1]) browserObject.minorVersion = parseInt(splitVersion[1])
 }
 
-//  Set OS data
+//  Get OS data
 export const getOsData = function() {
   let osObject = {}
   let userAgent = Browser.userAgent.toLowerCase()
@@ -178,6 +178,12 @@ const setViewportOrientation = function() {
   }
 }
 
+export const getDevice = function() {
+  let platformRegExp = Browser.isMobile ? new RegExp(';[^;]+;([^\)]+)') : new RegExp(';([^\)]+)') // eslint-disable-line no-useless-escape
+  let device = platformRegExp.exec(Browser.userAgent)[1].trim()
+  return device
+}
+
 const browserInfo = getBrowserInfo(navigator.userAgent)
 
 Browser.isEdge = /edge/i.test(navigator.userAgent)
@@ -205,6 +211,7 @@ Browser.userAgent = navigator.userAgent
 Browser.data = getBrowserData()
 Browser.os = getOsData()
 Browser.viewport = getViewportSize()
+Browser.device = getDevice()
 typeof window.orientation !== 'undefined' && setViewportOrientation()
 
 export default Browser
