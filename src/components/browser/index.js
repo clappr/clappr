@@ -58,8 +58,9 @@ export const getBrowserInfo = function(ua) {
 }
 
 //  Set browser data
-const setBrowserData = function(browserObject) {
-  let userAgent = navigator.userAgent.toLowerCase()
+export const getBrowserData = function() {
+  let browserObject = {}
+  let userAgent = Browser.userAgent.toLowerCase()
 
   // Check browser type
   for (let i in BROWSER_DATA) {
@@ -100,7 +101,8 @@ const setBrowserVersion = function(version, browserObject) {
 }
 
 //  Set OS data
-const setOsData = function(osObject) {
+export const getOsData = function() {
+  let osObject = {}
   let userAgent = Browser.userAgent.toLowerCase()
 
   // Check browser type
@@ -154,7 +156,9 @@ const setOsVersion = function(version, separator, osObject) {
 }
 
 // Set viewport size
-const setViewportSize = function(init, viewportObject) {
+export const getViewportSize = function() {
+  let viewportObject = {}
+
   viewportObject.width = $(window).width()
   viewportObject.height = $(window).height()
 
@@ -198,9 +202,9 @@ Browser.name = browserInfo.name
 Browser.version = browserInfo.version
 
 Browser.userAgent = navigator.userAgent
-Browser.data = setBrowserData({})
-Browser.os = setOsData({})
-Browser.viewport = setViewportSize(true, {})
+Browser.data = getBrowserData()
+Browser.os = getOsData()
+Browser.viewport = getViewportSize()
 typeof window.orientation !== 'undefined' && setViewportOrientation()
 
 export default Browser
