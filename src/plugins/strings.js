@@ -62,9 +62,11 @@ export default class Strings extends CorePlugin {
       },
       'fr': {
         'live': 'en direct',
-        'disabled': 'Désactivé',
         'back_to_live': 'retour au direct',
+        'disabled': 'Désactivé',
         'playback_not_supported': 'Votre navigateur ne supporte pas la lecture de cette vidéo. Merci de tenter sur un autre navigateur.',
+        'default_error_title': 'Impossible de lire la vidéo.',
+        'default_error_message': 'Un problème est survenu lors du chargement de la vidéo.',
       },
       'tr': {
         'live': 'canlı',
