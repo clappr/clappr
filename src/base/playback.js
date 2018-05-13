@@ -208,7 +208,7 @@ export default class Playback extends UIObject {
    * @method destroy
    */
   destroy() {
-    this.$el.remove()
+    this.remove()
   }
 }
 
