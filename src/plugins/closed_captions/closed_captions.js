@@ -102,9 +102,9 @@ export default class ClosedCaptions extends UICorePlugin {
 
   renderCcButton() {
     let tracks = this.container ? this.container.closedCaptionsTracks : []
-    for (let i = 0; i < tracks.length; i++) {
+    for (let i = 0; i < tracks.length; i++)
       tracks[i].label = this._labelCb(tracks[i])
-    }
+
 
     this.$el.html(this.template({
       ariaLabel: this._ariaLabel,
@@ -122,11 +122,11 @@ export default class ClosedCaptions extends UICorePlugin {
     this.renderCcButton()
 
     const $fullscreen = this.core.mediaControl.$el.find('button[data-fullscreen]')
-    if ($fullscreen[0]) {
+    if ($fullscreen[0])
       this.$el.insertAfter($fullscreen)
-    } else {
+    else
       this.core.mediaControl.$el.find('.media-control-right-panel[data-media-control]').prepend(this.$el)
-    }
+
 
     return this
   }

@@ -20,10 +20,15 @@ build() {
   echo 'building clappr.js' &&
   yarn build &&
   echo 'building clappr.min.js' &&
-  yarn release
+  yarn release &&
+  echo 'building clappr.plainhtml5.js' &&
+  yarn build:plainhtml5 &&
+  echo 'building clappr.plainhtml5.min.js' &&
+  yarn release:plainhtml5
 }
 
 run_tests() {
+  yarn lint
   yarn test
 }
 
@@ -37,6 +42,11 @@ git_push() {
 
 npm_publish() {
   npm publish
+}
+
+purge_cdn_cache() {
+  echo 'purging cdn cache'
+  curl -q http://purge.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js
 }
 
 send_mail() {
@@ -61,6 +71,7 @@ main() {
     git_push $1 &&
     npm_publish &&
     send_mail $1 &&
+    purge_cdn_cache &&
     exit 0
 
     echo "something failed"

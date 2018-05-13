@@ -1,5 +1,6 @@
-import {extend} from './utils'
+import { extend } from './utils'
 import UIObject from './ui_object'
+import ErrorMixin from './error_mixin'
 
 /**
  * An abstraction to represent a generic playback, it's like an interface to be implemented by subclasses.
@@ -15,6 +16,10 @@ export default class Playback extends UIObject {
   * @type Boolean
   */
   get isAudioOnly() {
+    return false
+  }
+
+  get isAdaptive() {
     return false
   }
 
@@ -52,10 +57,11 @@ export default class Playback extends UIObject {
    * @param {Object} options the options object
    * @param {Strings} i18n the internationalization component
    */
-  constructor(options, i18n) {
+  constructor(options, i18n, playerError) {
     super(options)
     this.settings = {}
     this._i18n = i18n
+    this.playerError = playerError
   }
 
   /**
@@ -202,9 +208,11 @@ export default class Playback extends UIObject {
    * @method destroy
    */
   destroy() {
-    this.$el.remove()
+    this.remove()
   }
 }
+
+Object.assign(Playback.prototype, ErrorMixin)
 
 Playback.extend = function(properties) {
   return extend(Playback, properties)

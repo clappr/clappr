@@ -1,6 +1,6 @@
 import Events from '../base/events'
 import CorePlugin from '../base/core_plugin'
-import {Fullscreen} from '../base/utils'
+import { Fullscreen } from '../base/utils'
 
 export default class EndVideo extends CorePlugin {
   get name() { return 'end_video' }
@@ -19,9 +19,9 @@ export default class EndVideo extends CorePlugin {
   }
 
   ended() {
-    const exitOnEnd = typeof(this.core.options.exitFullscreenOnEnd) === 'undefined' || this.core.options.exitFullscreenOnEnd
-    if (exitOnEnd && Fullscreen.isFullscreen()) {
+    const exitOnEnd = typeof (this.core.options.exitFullscreenOnEnd) === 'undefined' || this.core.options.exitFullscreenOnEnd
+    if (exitOnEnd && Fullscreen.isFullscreen())
       this.core.toggleFullscreen()
-    }
+
   }
 }

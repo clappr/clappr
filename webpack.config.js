@@ -1,16 +1,26 @@
-/* eslint-disable no-var */
-var path = require('path')
-var webpack = require('webpack')
-var Clean = require('clean-webpack-plugin')
+/* eslint-disable no-console */
+const path = require('path')
+const webpack = require('webpack')
 
-var webpackConfig = require('./webpack-base-config')
+const webpackConfig = require('./webpack-base-config')
+const voidModulePath = path.resolve('./src/base/void')
+
+const minimize = !!process.env.MINIMIZE
+const forceInlineDebug = !!process.env.CLAPPR_INLINE_DEBUG
+const plainHtml5Only = !!process.env.CLAPPR_PLAIN_HTML5_ONLY
+
+let distroFlavor
+
 webpackConfig.entry = {
   clappr: path.resolve(__dirname, 'src/main.js'),
   events: path.resolve(__dirname, 'src/constants/events_constants.js')
 }
 
-if (process.env.npm_lifecycle_event === 'release') {
-  webpackConfig.plugins.push(new webpack.LoaderOptionsPlugin({ minimize: true, debug: false }))
+if (minimize) {
+
+  console.log('NOTE: Enabled minifying bundle (uglify)')
+
+  webpackConfig.plugins.push(new webpack.LoaderOptionsPlugin({ minimize, debug: !minimize }))
   webpackConfig.plugins.push(new webpack.optimize.UglifyJsPlugin({
     compress: {
       warnings: false
@@ -18,16 +28,36 @@ if (process.env.npm_lifecycle_event === 'release') {
     mangle: true,
     sourceMap: true,
     comments: false,
-    output: {comments: false}
-  })
-  )
-} else if (process.env.npm_lifecycle_event !== 'start') {
-  webpackConfig.plugins.push(new Clean(['dist'], {verbose: false}))
+    output: { comments: false }
+  }))
 }
+
+if (plainHtml5Only) {
+  console.log('NOTE: Building only with plain HTML5 playback plugins, but will result in smaller build size')
+
+  distroFlavor = 'plainhtml5'
+
+  webpackConfig.plugins.push(
+    new webpack.NormalModuleReplacementPlugin(/playbacks\/flash/, voidModulePath),
+    new webpack.NormalModuleReplacementPlugin(/playbacks\/base_flash_playback/, voidModulePath),
+    new webpack.NormalModuleReplacementPlugin(/playbacks\/flashls/, voidModulePath),
+    new webpack.NormalModuleReplacementPlugin(/playbacks\/hls/, voidModulePath)
+  )
+}
+
+if (forceInlineDebug) {
+  console.log('NOTE: Enabling inline source-maps - this may not be suitable for production usage')
+  webpackConfig.devtool = 'inline-source-map'
+}
+
+console.log('\n')
+
+const filename =
+  `[name]${ distroFlavor ? '.' + distroFlavor : '' }${ forceInlineDebug ? '.debug' : '' }${ minimize ? '.min' : '' }.js`
 
 webpackConfig.output = {
   path: path.resolve(__dirname, 'dist'),
-  filename: '[name].js',
+  filename,
   library: 'Clappr',
   libraryTarget: 'umd'
 }

@@ -30,6 +30,7 @@ import SeekTime from '../../plugins/seek_time'
 import SourcesPlugin from '../../plugins/sources'
 import EndVideo from '../../plugins/end_video'
 import Strings from '../../plugins/strings'
+import ErrorScreen from '../../plugins/error_screen'
 
 /**
  * It keeps a list of the default plugins (playback, container, core) and it merges external plugins with its internals.
@@ -45,18 +46,45 @@ export default class Loader extends BaseObject {
    * @param {Object} externalPlugins the external plugins
    * @param {Number} playerId you can embed multiple instances of clappr, therefore this is the unique id of each one.
    */
-  constructor(externalPlugins, playerId) {
+  constructor(externalPlugins = [], playerId = 0, useOnlyPlainHtml5Plugins = PLAIN_HTML5_ONLY) {
     super()
     this.playerId = playerId
-    this.playbackPlugins = [HLSVideoPlayback, HTML5VideoPlayback, HTML5AudioPlayback, FlashVideoPlayback, FlasHLSVideoPlayback, HTMLImgPlayback, NoOp]
-    this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
-    this.corePlugins = [DVRControls, ClosedCaptions, Favicon, SeekTime, SourcesPlugin, EndVideo, Strings]
-    if (externalPlugins) {
-      if (!Array.isArray(externalPlugins)) {
-        this.validateExternalPluginsType(externalPlugins)
-      }
-      this.addExternalPlugins(externalPlugins)
+    this.playbackPlugins = []
+
+    if (!useOnlyPlainHtml5Plugins) {
+      this.playbackPlugins = [
+        ...this.playbackPlugins,
+        HLSVideoPlayback,
+      ]
     }
+
+    this.playbackPlugins = [
+      ...this.playbackPlugins,
+      HTML5VideoPlayback,
+      HTML5AudioPlayback,
+    ]
+
+    if (!useOnlyPlainHtml5Plugins) {
+      this.playbackPlugins = [
+        ...this.playbackPlugins,
+        FlashVideoPlayback,
+        FlasHLSVideoPlayback
+      ]
+    }
+
+    this.playbackPlugins = [
+      ...this.playbackPlugins,
+      HTMLImgPlayback,
+      NoOp
+    ]
+
+    this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
+    this.corePlugins = [DVRControls, ClosedCaptions, Favicon, SeekTime, SourcesPlugin, EndVideo, Strings, ErrorScreen]
+
+    if (!Array.isArray(externalPlugins))
+      this.validateExternalPluginsType(externalPlugins)
+
+    this.addExternalPlugins(externalPlugins)
   }
 
   /**
@@ -86,9 +114,9 @@ export default class Loader extends BaseObject {
     const pluginsMap = list.reduceRight(groupUp, Object.create(null))
 
     const plugins = []
-    for (let key in pluginsMap) {
+    for (let key in pluginsMap)
       plugins.unshift(pluginsMap[key])
-    }
+
     return plugins
   }
 
@@ -100,15 +128,15 @@ export default class Loader extends BaseObject {
    */
   addExternalPlugins(plugins) {
     plugins = this.groupPluginsByType(plugins)
-    if (plugins.playback) {
+    if (plugins.playback)
       this.playbackPlugins = this.removeDups(plugins.playback.concat(this.playbackPlugins))
-    }
-    if (plugins.container) {
+
+    if (plugins.container)
       this.containerPlugins = this.removeDups(plugins.container.concat(this.containerPlugins))
-    }
-    if (plugins.core) {
+
+    if (plugins.core)
       this.corePlugins = this.removeDups(plugins.core.concat(this.corePlugins))
-    }
+
 
     PlayerInfo.getInstance(this.playerId).playbackPlugins = this.playbackPlugins
   }
@@ -124,7 +152,7 @@ export default class Loader extends BaseObject {
     plugintypes.forEach((type) => {
       (plugins[type] || []).forEach((el) => {
         const errorMessage = 'external ' + el.type + ' plugin on ' + type + ' array'
-        if (el.type !== type) { throw new ReferenceError(errorMessage) }
+        if (el.type !== type)  throw new ReferenceError(errorMessage)
       })
     })
   }

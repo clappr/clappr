@@ -1,12 +1,25 @@
 import Events from 'base/events.js'
+import Core from '../../src/components/core'
 import HLS from 'playbacks/hls'
 import HLSJS from 'hls.js'
 
 describe('HLS playback', () => {
-  // Disabled due to missing support for Firefox on Linux - breaks travis build
-  xit('should be able to identify it can play resources independently of the file extension case', function() {
+  it('should be able to identify it can play resources independently of the file extension case', function() {
+
+    // FIXME: why is this not working in Firefox?
+    if (window.navigator.userAgent.match(/Firefox\//))
+      return
+
+
+    // FIXME: this should actually use a mock of HlsJs
+    //        we are not testing Hls.js or browser capabilities here
+    //        but the logic inside HLS-Playback
+
     expect(HLS.canPlay('/relative/video.m3u8')).to.be.true
     expect(HLS.canPlay('/relative/VIDEO.M3U8')).to.be.true
+    expect(HLS.canPlay('/relative/video.m3u8?foobarQuery=1234#somefragment')).to.be.true
+    expect(HLS.canPlay('whatever_no_extension?foobarQuery=1234#somefragment', 'application/x-mpegURL' )).to.be.true
+    expect(HLS.canPlay('//whatever_no_extension?foobarQuery=1234#somefragment', 'application/x-mpegURL' )).to.be.true
   })
 
   it('should ensure it does not create an audio tag if audioOnly is not set', function() {
@@ -30,7 +43,7 @@ describe('HLS playback', () => {
       let options = { src: 'http://clappr.io/video.m3u8' },
         hls = new HLS(options)
       expect(hls.options.playback).to.be.equal(hls.options)
-      options = { src: 'http://clappr.io/video.m3u8', playback: {test: true} }
+      options = { src: 'http://clappr.io/video.m3u8', playback: { test: true } }
       hls = new HLS(options)
       expect(hls.options.playback.test).to.be.equal(true)
     })
@@ -68,22 +81,29 @@ describe('HLS playback', () => {
     })
   })
 
-  it('should trigger a playback error if source load failed', function(done) {
-    this.timeout(5000)
-    let options = {src: 'http://clappr.io/notfound.m3u8'}
-    const playback = new HLS(options)
+  it('should trigger a playback error if source load failed', function() {
+    let resolveFn = undefined
+    const promise = new Promise((resolve) => {
+      resolveFn = resolve
+    })
+    let options = { src: 'http://clappr.io/notfound.m3u8' }
+    const core = new Core({})
+    const playback = new HLS(options, null, core.playerError)
     playback.on(Events.PLAYBACK_ERROR, (e) => {
-      expect(e.data.type).to.be.equal(HLSJS.ErrorTypes.NETWORK_ERROR)
-      expect(e.data.details).to.be.equal(HLSJS.ErrorDetails.MANIFEST_LOAD_ERROR)
-      done()
+      resolveFn(e)
     })
     playback.play()
+
+    return promise.then((e) => {
+      expect(e.raw.type).to.be.equal(HLSJS.ErrorTypes.NETWORK_ERROR)
+      expect(e.raw.details).to.be.equal(HLSJS.ErrorDetails.MANIFEST_LOAD_ERROR)
+    })
   })
 
   xit('levels', function() {
     let playback
     beforeEach(() => {
-      const options = {src: 'http://clappr.io/foo.m3u8'}
+      const options = { src: 'http://clappr.io/foo.m3u8' }
       playback = new HLS(options)
       playback.setupHls()
       // NOTE: rather than trying to call playback.setupHls, we'll punch a new one in place

@@ -10,7 +10,7 @@ describe('UI Container Plugin', function() {
 
     it('binds all events', () => {
       let bind = false
-      const Plugin = class MyPlugin extends UIContainerPlugin{
+      const Plugin = class MyPlugin extends UIContainerPlugin {
         bindEvents() {
           bind = true
         }
@@ -26,13 +26,13 @@ describe('UI Container Plugin', function() {
     const plugin = new UIContainerPlugin({})
     const spy = sinon.spy(plugin, 'bindEvents')
     const show = sinon.spy()
-    plugin.$el = {show: show}
+    plugin.$el = { show: show }
     plugin.enabled = false
 
     plugin.enable()
 
-    expect(spy).called.once
-    expect(show).called.once
+    expect(spy).to.have.been.calledOnce
+    expect(show).to.have.been.calledOnce
     expect(plugin.enabled).to.be.true
   })
 
@@ -40,12 +40,12 @@ describe('UI Container Plugin', function() {
     const plugin = new UIContainerPlugin({})
     const spy = sinon.spy(plugin, 'stopListening')
     const hide = sinon.spy()
-    plugin.$el = {hide: hide}
+    plugin.$el = { hide: hide }
 
     plugin.disable()
 
-    expect(spy).called.once
-    expect(hide).called.once
+    expect(spy).to.have.been.calledOnce
+    expect(hide).to.have.been.calledOnce
     expect(plugin.enabled).to.be.false
   })
 
@@ -55,6 +55,6 @@ describe('UI Container Plugin', function() {
 
     plugin.destroy()
 
-    expect(spy).called.once
+    expect(spy).to.have.been.calledOnce
   })
 })

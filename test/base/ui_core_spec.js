@@ -1,12 +1,12 @@
 import UICorePlugin from 'base/ui_core_plugin'
 
 describe('UI Core Plugin', function() {
-  class MyPlugin extends UICorePlugin{
+  class MyPlugin extends UICorePlugin {
     render() { }
   }
   it('constructs', () => {
     let callCount = 0
-    class MyPlugin extends UICorePlugin{
+    class MyPlugin extends UICorePlugin {
       bindEvents() { callCount += 1 }
       render() { callCount += 1 }
     }
@@ -21,13 +21,13 @@ describe('UI Core Plugin', function() {
     const plugin = new MyPlugin({})
     const spy = sinon.spy(plugin, 'bindEvents')
     const show = sinon.spy()
-    plugin.$el = {show: show}
+    plugin.$el = { show: show }
     plugin.enabled = false
 
     plugin.enable()
 
-    expect(spy).called.once
-    expect(show).called.once
+    expect(spy).to.have.been.calledOnce
+    expect(show).to.have.been.calledOnce
     expect(plugin.enabled).to.be.true
   })
 
@@ -35,12 +35,12 @@ describe('UI Core Plugin', function() {
     const plugin = new MyPlugin({})
     const spy = sinon.spy(plugin, 'stopListening')
     const hide = sinon.spy()
-    plugin.$el = {hide: hide}
+    plugin.$el = { hide: hide }
 
     plugin.disable()
 
-    expect(spy).called.once
-    expect(hide).called.once
+    expect(spy).to.have.been.calledOnce
+    expect(hide).to.have.been.calledOnce
     expect(plugin.enabled).to.be.false
   })
 
@@ -50,6 +50,6 @@ describe('UI Core Plugin', function() {
 
     plugin.destroy()
 
-    expect(spy).called.once
+    expect(spy).to.have.been.calledOnce
   })
 })

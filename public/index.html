@@ -1,6 +1,9 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script type="text/javascript" charset="utf-8" src="latest/clappr.js"></script>
+    <script type="text/javascript" charset="utf-8" src="j/main.js"></script>
+    <script type="text/javascript" charset="utf-8" src="j/editor/ace.js"></script>
     <link rel="stylesheet" href="stylesheets/bootstrap.min.css" type="text/css" media="screen" charset="utf-8">
     <link rel="stylesheet" href="stylesheets/bootstrap-theme.min.css" type="text/css" media="screen" charset="utf-8">
     <link rel="stylesheet" href="stylesheets/style.css" type="text/css" media="screen" charset="utf-8">
@@ -52,7 +55,6 @@
 
 var player = new Clappr.Player({
   source: 'http://clappr.io/highline.mp4',
-  baseUrl: '/latest',
   poster: 'http://clappr.io/poster.png',
   mute: true,
   height: 360,
@@ -66,9 +68,6 @@ player.attachTo(playerElement);
       </div>
     </section>
     <footer class="footer"></footer>
-    <script type="text/javascript" charset="utf-8" src="latest/clappr.js"></script>
-    <script type="text/javascript" charset="utf-8" src="j/main.js"></script>
-    <script type="text/javascript" charset="utf-8" src="j/editor/ace.js"></script>
     <script>
       var urlParams;
       (function() {
@@ -90,7 +89,7 @@ player.attachTo(playerElement);
 
       var player = new Clappr.Player({
         source: urlParams.src || 'http://clappr.io/highline.mp4',
-        poster: 'http://clappr.io/poster.png',
+        poster: urlParams.poster || 'http://clappr.io/poster.png',
         mute: true,
         height: 360,
         width: 640
@@ -100,6 +99,13 @@ player.attachTo(playerElement);
 
       //editor
       window.onload = function() {
+
+        if (window.location.hash) {
+          var editorContent = atob(window.location.hash.substr(1))
+          document.getElementById("editor").innerHTML = editorContent
+          setTimeout(run, 0)
+        }
+
         var editor = ace.edit("editor");
         var session = editor.getSession();
 
@@ -130,9 +136,15 @@ player.attachTo(playerElement);
         }
 
         $('.run').click(function() {
-          var code = ace.edit('editor').getSession().getValue();
-          load(function(){parser.parse(code)})
+          run()
         });
+
+        function run() {
+          var code = ace.edit('editor').getSession().getValue();
+          var b64EncodedCode = btoa(code)
+          window.location.hash = b64EncodedCode
+          load(function(){parser.parse(code)})
+        }
       }
     </script>
   </body>

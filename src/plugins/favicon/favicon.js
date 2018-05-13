@@ -32,9 +32,9 @@ export default class Favicon extends CorePlugin {
   bindEvents() {
     this.listenTo(this.core, Events.CORE_OPTIONS_CHANGE, this.configure)
     this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
-    if (this.core.mediaControl.container) {
+    if (this.core.mediaControl.container)
       this.containerChanged()
-    }
+
   }
 
   containerChanged() {
@@ -73,16 +73,16 @@ export default class Favicon extends CorePlugin {
   }
 
   setPlayIcon() {
-    if (!this.playIcon) {
+    if (!this.playIcon)
       this.playIcon = this.createIcon(playIcon)
-    }
+
     this.changeIcon(this.playIcon)
   }
 
   setPauseIcon() {
-    if (!this.pauseIcon) {
+    if (!this.pauseIcon)
       this.pauseIcon = this.createIcon(pauseIcon)
-    }
+
     this.changeIcon(this.pauseIcon)
   }
 

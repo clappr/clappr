@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import {isNumber, Fullscreen, DomRecycler} from '../../base/utils'
+import { isNumber, Fullscreen, DomRecycler } from '../../base/utils'
 
 import Events from '../../base/events'
 import UIObject from '../../base/ui_object'
@@ -11,10 +11,17 @@ import ContainerFactory from '../../components/container_factory'
 import MediaControl from '../../components/media_control'
 import Mediator from '../../components/mediator'
 import PlayerInfo from '../../components/player_info'
+import PlayerError from '../../components/error'
+import ErrorMixin from '../../base/error_mixin'
+
+import Styler from '../../base/styler'
 
 import $ from 'clappr-zepto'
 
 import './public/style.scss'
+import fontStyle from './public/fonts.css'
+
+let style
 
 /**
  * The Core is responsible to manage Containers, the mediator, MediaControl
@@ -60,6 +67,7 @@ export default class Core extends UIObject {
 
   constructor(options) {
     super(options)
+    this.playerError = new PlayerError(options, this)
     this.configureDomRecycler()
     this.playerInfo = PlayerInfo.getInstance(options.playerId)
     this.firstResize = true
@@ -71,7 +79,7 @@ export default class Core extends UIObject {
     $(document).bind('fullscreenchange', this._boundFullscreenHandler)
     $(document).bind('MSFullscreenChange', this._boundFullscreenHandler)
     $(document).bind('mozfullscreenchange', this._boundFullscreenHandler)
-    Browser.isMobile && $(window).bind('resize', (o) => {this.handleWindowResize(o)})
+    Browser.isMobile && $(window).bind('resize', (o) => { this.handleWindowResize(o) })
   }
 
   configureDomRecycler() {
@@ -84,7 +92,7 @@ export default class Core extends UIObject {
   createContainers(options) {
     this.defer = $.Deferred()
     this.defer.promise(this)
-    this.containerFactory = new ContainerFactory(options, options.loader, this.i18n)
+    this.containerFactory = new ContainerFactory(options, options.loader, this.i18n, this.playerError)
     this.containerFactory
       .createContainers()
       .then((containers) => this.setupContainers(containers))
@@ -92,15 +100,15 @@ export default class Core extends UIObject {
   }
 
   updateSize() {
-    if (Fullscreen.isFullscreen()) {
+    if (Fullscreen.isFullscreen())
       this.setFullscreen()
-    } else {
+    else
       this.setPlayerSize()
-    }
+
   }
 
   setFullscreen() {
-    if(!Browser.isiOS) {
+    if (!Browser.isiOS) {
       this.$el.addClass('fullscreen')
       this.$el.removeAttr('style')
       this.playerInfo.previousSize = { width: this.options.width, height: this.options.height }
@@ -132,8 +140,8 @@ export default class Core extends UIObject {
 
   enableResizeObserver() {
     const checkSizeCallback = () => {
-      if (this.playerInfo.computedSize.width != this.el.clientWidth ||
-          this.playerInfo.computedSize.height != this.el.clientHeight) {
+      if (this.playerInfo.computedSize.width !== this.el.clientWidth ||
+          this.playerInfo.computedSize.height !== this.el.clientHeight) {
         this.playerInfo.computedSize = { width: this.el.clientWidth, height: this.el.clientHeight }
         this.triggerResize(this.playerInfo.computedSize)
       }
@@ -178,12 +186,13 @@ export default class Core extends UIObject {
   load(sources, mimeType) {
     this.options.mimeType = mimeType
     sources = sources && sources.constructor === Array ? sources : [sources]
+    this.options.sources = sources
     this.containers.forEach((container) => container.destroy())
     this.mediaControl.container = null
-    this.containerFactory.options = $.extend(this.options, {sources})
-    this.containerFactory.createContainers().then((containers) => {
-      this.setupContainers(containers)
-    })
+    this.containerFactory.options = $.extend(this.options, { sources })
+    this.containerFactory.createContainers()
+      .then((containers) => this.setupContainers(containers))
+      .then((containers) => this.resolveOnContainersReady(containers))
   }
 
   destroy() {
@@ -195,6 +204,7 @@ export default class Core extends UIObject {
     $(document).unbind('fullscreenchange', this._boundFullscreenHandler)
     $(document).unbind('MSFullscreenChange', this._boundFullscreenHandler)
     $(document).unbind('mozfullscreenchange', this._boundFullscreenHandler)
+    this.stopListening()
   }
 
   handleFullscreenChange() {
@@ -233,13 +243,13 @@ export default class Core extends UIObject {
     this.containers = this.containers.filter((c) => c !== container)
   }
 
-  appendContainer(container) {
+  setupContainer(container) {
     this.listenTo(container, Events.CONTAINER_DESTROYED, this.removeContainer)
     this.containers.push(container)
   }
 
   setupContainers(containers) {
-    containers.map(this.appendContainer.bind(this))
+    containers.forEach(this.setupContainer.bind(this))
     this.trigger(Events.CORE_CONTAINERS_CREATED)
     this.renderContainers()
     this.setupMediaControl(this.getCurrentContainer())
@@ -249,21 +259,19 @@ export default class Core extends UIObject {
   }
 
   renderContainers() {
-    this.containers.map((container) => this.el.appendChild(container.render().el))
+    this.containers.forEach((container) => this.el.appendChild(container.render().el))
   }
 
   createContainer(source, options) {
     const container = this.containerFactory.createContainer(source, options)
-    this.appendContainer(container)
+    this.setupContainer(container)
     this.el.appendChild(container.render().el)
     return container
   }
 
   setupMediaControl(container) {
-    if (this.mediaControl) {
-      this.mediaControl.setContainer(container)
-    } else {
-      this.mediaControl = this.createMediaControl($.extend({container: container, focusElement: this.el}, this.options))
+    if (this.mediaControl) { this.mediaControl.setContainer(container) } else {
+      this.mediaControl = this.createMediaControl($.extend({ container: container, focusElement: this.el }, this.options))
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_FULLSCREEN, this.toggleFullscreen)
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_SHOW, this.onMediaControlShow.bind(this, true))
       this.listenTo(this.mediaControl, Events.MEDIACONTROL_HIDE, this.onMediaControlShow.bind(this, false))
@@ -271,17 +279,17 @@ export default class Core extends UIObject {
   }
 
   createMediaControl(options) {
-    if(options.mediacontrol && options.mediacontrol.external) {
+    if (options.mediacontrol && options.mediacontrol.external)
       return new options.mediacontrol.external(options).render()
-    } else {
+    else
       return new MediaControl(options).render()
-    }
+
   }
 
   getCurrentContainer() {
-    if (!this.mediaControl || !this.mediaControl.container) {
+    if (!this.mediaControl || !this.mediaControl.container)
       return this.containers[0]
-    }
+
     return this.mediaControl.container
   }
 
@@ -298,14 +306,14 @@ export default class Core extends UIObject {
   toggleFullscreen() {
     if (!Fullscreen.isFullscreen()) {
       Fullscreen.requestFullscreen(this.el)
-      if(!Browser.isiOS) {
+      if (!Browser.isiOS)
         this.$el.addClass('fullscreen')
-      }
+
     } else {
       Fullscreen.cancelFullscreen()
-      if(!Browser.isiOS) {
+      if (!Browser.isiOS)
         this.$el.removeClass('fullscreen nocursor')
-      }
+
     }
     this.mediaControl.show()
   }
@@ -337,15 +345,13 @@ export default class Core extends UIObject {
     this.configureDomRecycler()
     const sources = options.source || options.sources
 
-    if (sources) {
-      this.load(sources, options.mimeType || this.options.mimeType)
-    } else {
-      this.trigger(Events.CORE_OPTIONS_CHANGE)
+    if (sources) this.load(sources, options.mimeType || this.options.mimeType)
 
-      this.containers.forEach((container) => {
-        container.configure(this.options)
-      })
-    }
+    this.trigger(Events.CORE_OPTIONS_CHANGE)
+    this.containers.forEach((container) => {
+      container.configure(this.options)
+    })
+    this.mediaControl.configure(this.options)
   }
 
   appendToParent() {
@@ -356,9 +362,14 @@ export default class Core extends UIObject {
   render() {
     this.$el.append(this.mediaControl.render().el)
 
+    if (!style)
+      style = Styler.getStyleFor(fontStyle, { baseUrl: this.options.baseUrl })
+
+    $('head').append(style)
+
     this.options.width = this.options.width || this.$el.width()
     this.options.height = this.options.height || this.$el.height()
-    const size = {width: this.options.width, height: this.options.height}
+    const size = { width: this.options.width, height: this.options.height }
     this.playerInfo.previousSize = this.playerInfo.currentSize = this.playerInfo.computedSize = size
     this.updateSize()
 
@@ -369,3 +380,5 @@ export default class Core extends UIObject {
     return this
   }
 }
+
+Object.assign(Core.prototype, ErrorMixin)

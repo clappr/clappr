@@ -15,6 +15,7 @@ import UIObject from './base/ui_object'
 import Browser from './components/browser'
 import Container from './components/container'
 import Core from './components/core'
+import PlayerError from './components/error'
 import Loader from './components/loader'
 import Mediator from './components/mediator'
 import MediaControl from './components/media_control'
@@ -27,8 +28,13 @@ import HTML5Audio from './playbacks/html5_audio'
 import HTML5Video from './playbacks/html5_video'
 import HTMLImg from './playbacks/html_img'
 import NoOp from './playbacks/no_op'
-import Poster from './plugins/poster'
+import ClickToPausePlugin from './plugins/click_to_pause'
+import DVRControls from './plugins/dvr_controls'
+import Favicon from './plugins/favicon'
 import Log from './plugins/log'
+import Poster from './plugins/poster'
+import SpinnerThreeBouncePlugin from './plugins/spinner_three_bounce'
+import WaterMarkPlugin from './plugins/watermark'
 import Styler from './base/styler'
 import Vendor from './vendor'
 import template from './base/template'
@@ -51,6 +57,7 @@ export default {
   Playback,
   Container,
   Core,
+  PlayerError,
   Loader,
   BaseObject,
   UIObject,
@@ -63,8 +70,13 @@ export default {
   HTML5Video,
   HTMLImg,
   NoOp,
-  Poster,
+  ClickToPausePlugin,
+  DVRControls,
+  Favicon,
   Log,
+  Poster,
+  SpinnerThreeBouncePlugin,
+  WaterMarkPlugin,
   Styler,
   Vendor,
   version,

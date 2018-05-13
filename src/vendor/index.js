@@ -1,3 +1,3 @@
 import Kibo from './kibo'
 
-export default {Kibo}
+export default { Kibo }

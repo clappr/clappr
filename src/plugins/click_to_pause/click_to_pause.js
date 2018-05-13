@@ -20,11 +20,11 @@ export default class ClickToPausePlugin extends ContainerPlugin {
 
   click() {
     if (this.container.getPlaybackType() !== Playback.LIVE || this.container.isDvrEnabled()) {
-      if (this.container.isPlaying()) {
+      if (this.container.isPlaying())
         this.container.pause()
-      } else {
+      else
         this.container.play()
-      }
+
     }
   }
 

@@ -6,8 +6,9 @@ import HTML5VideoPlayback from '../../playbacks/html5_video'
 import HLSJS from 'hls.js'
 import Events from '../../base/events'
 import Playback from '../../base/playback'
-import {now} from '../../base/utils'
+import { now, assign } from '../../base/utils'
 import Log from '../../plugins/log'
+import PlayerError from '../../components/error'
 
 const AUTO = -1
 
@@ -17,11 +18,11 @@ export default class HLS extends HTML5VideoPlayback {
   get levels() { return this._levels || [] }
 
   get currentLevel() {
-    if (this._currentLevel === null || this._currentLevel === undefined) {
+    if (this._currentLevel === null || this._currentLevel === undefined)
       return AUTO
-    } else {
+    else
       return this._currentLevel //0 is a valid level ID
-    }
+
   }
 
   get isReady() {
@@ -35,9 +36,9 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   get _startTime() {
-    if (this._playbackType === Playback.LIVE && this._playlistType !== 'EVENT') {
+    if (this._playbackType === Playback.LIVE && this._playlistType !== 'EVENT')
       return this._extrapolatedStartTime
-    }
+
     return this._playableRegionStartTime
   }
 
@@ -48,9 +49,9 @@ export default class HLS extends HTML5VideoPlayback {
   // the time in the video element which should represent the start of the sliding window
   // extrapolated to increase in real time (instead of jumping as the early segments are removed)
   get _extrapolatedStartTime() {
-    if (!this._localStartTimeCorrelation) {
+    if (!this._localStartTimeCorrelation)
       return this._playableRegionStartTime
-    }
+
     let corr = this._localStartTimeCorrelation
     let timePassed = this._now - corr.local
     let extrapolatedWindowStartTime = (corr.remote + timePassed) / 1000
@@ -62,9 +63,9 @@ export default class HLS extends HTML5VideoPlayback {
   // extrapolated to increase in real time (instead of jumping as segments are added)
   get _extrapolatedEndTime() {
     let actualEndTime = this._playableRegionStartTime + this._playableRegionDuration
-    if (!this._localEndTimeCorrelation) {
+    if (!this._localEndTimeCorrelation)
       return actualEndTime
-    }
+
     let corr = this._localEndTimeCorrelation
     let timePassed = this._now - corr.local
     let extrapolatedEndTime = (corr.remote + timePassed) / 1000
@@ -93,9 +94,9 @@ export default class HLS extends HTML5VideoPlayback {
   //                               .       .       .       .
   //                                 extrapolatedStartTime
   get _extrapolatedWindowDuration() {
-    if (this._segmentTargetDuration === null) {
+    if (this._segmentTargetDuration === null)
       return 0
-    }
+
     return this._extrapolatedWindowNumSegments * this._segmentTargetDuration
   }
 
@@ -107,15 +108,15 @@ export default class HLS extends HTML5VideoPlayback {
     super(...args)
     // backwards compatibility (TODO: remove on 0.3.0)
     this.options.playback || (this.options.playback = this.options)
-    this._minDvrSize = typeof(this.options.hlsMinimumDvrSize) === 'undefined' ? 60 : this.options.hlsMinimumDvrSize
+    this._minDvrSize = typeof (this.options.hlsMinimumDvrSize) === 'undefined' ? 60 : this.options.hlsMinimumDvrSize
     // The size of the start time extrapolation window measured as a multiple of segments.
     // Should be 2 or higher, or 0 to disable. Should only need to be increased above 2 if more than one segment is
     // removed from the start of the playlist at a time. E.g if the playlist is cached for 10 seconds and new chunks are
     // added/removed every 5.
-    this._extrapolatedWindowNumSegments = !this.options.playback || typeof(this.options.playback.extrapolatedWindowNumSegments) === 'undefined' ? 2 :  this.options.playback.extrapolatedWindowNumSegments
+    this._extrapolatedWindowNumSegments = !this.options.playback || typeof (this.options.playback.extrapolatedWindowNumSegments) === 'undefined' ? 2 :  this.options.playback.extrapolatedWindowNumSegments
 
     this._playbackType = Playback.VOD
-    this._lastTimeUpdate = null
+    this._lastTimeUpdate = { current: 0, total: 0 }
     this._lastDuration = null
     // for hls streams which have dvr with a sliding window,
     // the content at the start of the playlist is removed as new
@@ -134,6 +135,8 @@ export default class HLS extends HTML5VideoPlayback {
     // if content is removed from the beginning then this empty area should
     // be ignored. "playableRegionDuration" excludes the empty area
     this._playableRegionDuration = 0
+    // #EXT-X-PROGRAM-DATE-TIME
+    this._programDateTime = 0
     // true when the actual duration is longer than hlsjs's live sync point
     // when this is false playableRegionDuration will be the actual duration
     // when this is true playableRegionDuration will exclude the time after the sync point
@@ -143,34 +146,34 @@ export default class HLS extends HTML5VideoPlayback {
     // #EXT-X-PLAYLIST-TYPE
     this._playlistType = null
     this._recoverAttemptsRemaining = this.options.hlsRecoverAttempts || 16
-    this._startTimeUpdateTimer()
   }
 
   _setup() {
     this._ccIsSetup = false
     this._ccTracksUpdated = false
-    this._hls = new HLSJS(this.options.playback.hlsjsConfig || {})
+    this._hls = new HLSJS(assign({}, this.options.playback.hlsjsConfig))
     this._hls.on(HLSJS.Events.MEDIA_ATTACHED, () => this._hls.loadSource(this.options.src))
     this._hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this._updatePlaybackType(evt, data))
     this._hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this._onLevelUpdated(evt, data))
-    this._hls.on(HLSJS.Events.LEVEL_SWITCH, (evt,data) => this._onLevelSwitch(evt, data))
+    this._hls.on(HLSJS.Events.LEVEL_SWITCHING, (evt,data) => this._onLevelSwitch(evt, data))
     this._hls.on(HLSJS.Events.FRAG_LOADED, (evt, data) => this._onFragmentLoaded(evt, data))
     this._hls.on(HLSJS.Events.ERROR, (evt, data) => this._onHLSJSError(evt, data))
     this._hls.on(HLSJS.Events.SUBTITLE_TRACK_LOADED, (evt, data) => this._onSubtitleLoaded(evt, data))
     this._hls.on(HLSJS.Events.SUBTITLE_TRACKS_UPDATED, () => this._ccTracksUpdated = true)
     this._hls.attachMedia(this.el)
+  }
+
+  render() {
     this._ready()
+    return super.render()
   }
 
   _ready() {
-    if (!this._hls) {
-      return
-    }
     this._isReadyState = true
     this.trigger(Events.PLAYBACK_READY, this.name)
   }
 
-  _recover(evt, data) {
+  _recover(evt, data, error) {
     if (!this._recoveredDecodingError) {
       this._recoveredDecodingError = true
       this._hls.recoverMediaError()
@@ -179,8 +182,10 @@ export default class HLS extends HTML5VideoPlayback {
       this._hls.swapAudioCodec()
       this._hls.recoverMediaError()
     } else {
-      Log.error('hlsjs: failed to recover')
-      this.trigger(Events.PLAYBACK_ERROR, `hlsjs: could not recover from error, evt ${evt}, data ${data} `, this.name)
+      Log.error('hlsjs: failed to recover', { evt, data })
+      error.level = PlayerError.Levels.FATAL
+      const formattedError = this.createError(error)
+      this.trigger(Events.PLAYBACK_ERROR, formattedError)
     }
   }
 
@@ -200,6 +205,9 @@ export default class HLS extends HTML5VideoPlayback {
     clearInterval(this._timeUpdateTimer)
   }
 
+  getProgramDateTime() {
+    return this._programDateTime
+  }
   // the duration on the video element itself should not be used
   // as this does not necesarily represent the duration of the stream
   // https://github.com/clappr/clappr/issues/668#issuecomment-157036678
@@ -223,9 +231,9 @@ export default class HLS extends HTML5VideoPlayback {
 
   seekPercentage(percentage) {
     let seekTo = this._duration
-    if (percentage > 0) {
+    if (percentage > 0)
       seekTo = this._duration * (percentage / 100)
-    }
+
     this.seek(seekTo)
   }
 
@@ -246,22 +254,29 @@ export default class HLS extends HTML5VideoPlayback {
 
   _updateDvr(status) {
     this.trigger(Events.PLAYBACK_DVR, status)
-    this.trigger(Events.PLAYBACK_STATS_ADD, {'dvr': status})
+    this.trigger(Events.PLAYBACK_STATS_ADD, { 'dvr': status })
   }
 
   _updateSettings() {
-    if (this._playbackType === Playback.VOD) {
+    if (this._playbackType === Playback.VOD)
       this.settings.left = ['playpause', 'position', 'duration']
-    } else if (this.dvrEnabled) {
+    else if (this.dvrEnabled)
       this.settings.left = ['playpause']
-    } else {
+    else
       this.settings.left = ['playstop']
-    }
+
     this.settings.seekEnabled = this.isSeekEnabled()
     this.trigger(Events.PLAYBACK_SETTINGSUPDATE)
   }
 
   _onHLSJSError(evt, data) {
+    const error = {
+      code: `${data.type}_${data.details}`,
+      description: `${this.name} error: type: ${data.type}, details: ${data.details}`,
+      raw: data,
+    }
+    let formattedError
+    if (data.response) error.description += `, response: ${JSON.stringify(data.response)}`
     // only report/handle errors if they are fatal
     // hlsjs should automatically handle non fatal errors
     if (data.fatal) {
@@ -269,7 +284,7 @@ export default class HLS extends HTML5VideoPlayback {
         this._recoverAttemptsRemaining -= 1
         switch (data.type) {
         case HLSJS.ErrorTypes.NETWORK_ERROR:
-          switch(data.details) {
+          switch (data.details) {
           // The following network errors cannot be recovered with HLS.startLoad()
           // For more details, see https://github.com/video-dev/hls.js/blob/master/doc/design.md#error-detection-and-handling
           // For "level load" fatal errors, see https://github.com/video-dev/hls.js/issues/1138
@@ -278,59 +293,67 @@ export default class HLS extends HTML5VideoPlayback {
           case HLSJS.ErrorDetails.MANIFEST_PARSING_ERROR:
           case HLSJS.ErrorDetails.LEVEL_LOAD_ERROR:
           case HLSJS.ErrorDetails.LEVEL_LOAD_TIMEOUT:
-            Log.error(`hlsjs: unrecoverable network fatal error, evt ${evt}, data ${data} `)
-            this.trigger(Events.PLAYBACK_ERROR, {evt, data}, this.name)
+            Log.error('hlsjs: unrecoverable network fatal error.', { evt, data })
+            formattedError = this.createError(error)
+            this.trigger(Events.PLAYBACK_ERROR, formattedError)
             break
           default:
-            Log.warn(`hlsjs: trying to recover from network error, evt ${evt}, data ${data} `)
+            Log.warn('hlsjs: trying to recover from network error.', { evt, data })
+            error.level = PlayerError.Levels.WARN
+            this.createError(error)
             this._hls.startLoad()
             break
           }
           break
         case HLSJS.ErrorTypes.MEDIA_ERROR:
-          Log.warn(`hlsjs: trying to recover from media error, evt ${evt}, data ${data} `)
-          this._recover(evt, data)
+          Log.warn('hlsjs: trying to recover from media error.', { evt, data })
+          error.level = PlayerError.Levels.WARN
+          this.createError(error)
+          this._recover(evt, data, error)
           break
         default:
-          Log.error(`hlsjs: trying to recover from error, evt ${evt}, data ${data} `)
-          this.trigger(Events.PLAYBACK_ERROR, `hlsjs: could not recover from error, evt ${evt}, data ${data} `, this.name)
+          Log.error('hlsjs: could not recover from error.', { evt, data })
+          formattedError = this.createError(error)
+          this.trigger(Events.PLAYBACK_ERROR, formattedError)
           break
         }
       } else {
-        Log.error(`hlsjs: could not recover from error after maximum number of attempts, evt ${evt}, data ${data} `)
-        this.trigger(Events.PLAYBACK_ERROR, {evt, data}, this.name)
+        Log.error('hlsjs: could not recover from error after maximum number of attempts.', { evt, data })
+        formattedError = this.createError(error)
+        this.trigger(Events.PLAYBACK_ERROR, formattedError)
       }
-    }
-    else {
-      Log.warn(`hlsjs: non-fatal error occurred, evt ${evt}, data ${data} `)
+    } else {
+      error.level = PlayerError.Levels.WARN
+      this.createError(error)
+      Log.warn('hlsjs: non-fatal error occurred', { evt, data })
     }
   }
 
   _onTimeUpdate() {
-    let update = {current: this.getCurrentTime(), total: this.getDuration()}
+    let update = { current: this.getCurrentTime(), total: this.getDuration(), firstFragDateTime: this.getProgramDateTime() }
     let isSame = this._lastTimeUpdate && (
       update.current === this._lastTimeUpdate.current &&
       update.total === this._lastTimeUpdate.total)
-    if (isSame) {
+    if (isSame)
       return
-    }
+
     this._lastTimeUpdate = update
     this.trigger(Events.PLAYBACK_TIMEUPDATE, update, this.name)
   }
 
   _onDurationChange() {
     let duration = this.getDuration()
-    if (this._lastDuration === duration) {
+    if (this._lastDuration === duration)
       return
-    }
+
     this._lastDuration = duration
     super._onDurationChange()
   }
 
   _onProgress() {
-    if (!this.el.buffered.length) {
+    if (!this.el.buffered.length)
       return
-    }
+
     let buffered = []
     let bufferedPos = 0
     for (let i = 0; i < this.el.buffered.length; i++) {
@@ -339,9 +362,9 @@ export default class HLS extends HTML5VideoPlayback {
         start: Math.max(0, this.el.buffered.start(i) - this._playableRegionStartTime),
         end: Math.max(0, this.el.buffered.end(i) - this._playableRegionStartTime)
       }]
-      if (this.el.currentTime >= buffered[i].start && this.el.currentTime <= buffered[i].end) {
+      if (this.el.currentTime >= buffered[i].start && this.el.currentTime <= buffered[i].end)
         bufferedPos = i
-      }
+
     }
     const progress = {
       start: buffered[bufferedPos].start,
@@ -352,20 +375,21 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   play() {
-    if (!this._hls) {
+    if (!this._hls)
       this._setup()
-    }
+
     super.play()
+    this._startTimeUpdateTimer()
   }
 
   pause() {
-    if (!this._hls) {
+    if (!this._hls)
       return
-    }
+
     super.pause()
-    if (this.dvrEnabled) {
+    if (this.dvrEnabled)
       this._updateDvr(true)
-    }
+
   }
 
   stop() {
@@ -387,18 +411,17 @@ export default class HLS extends HTML5VideoPlayback {
 
   _updatePlaybackType(evt, data) {
     this._playbackType = data.details.live ? Playback.LIVE : Playback.VOD
-    this._fillLevels()
     this._onLevelUpdated(evt, data)
 
     // Live stream subtitle tracks detection hack (may not immediately available)
-    if (this._ccTracksUpdated && this._playbackType === Playback.LIVE && this.hasClosedCaptionsTracks) {
+    if (this._ccTracksUpdated && this._playbackType === Playback.LIVE && this.hasClosedCaptionsTracks)
       this._onSubtitleLoaded()
-    }
+
   }
 
   _fillLevels() {
     this._levels = this._hls.levels.map((level, index) => {
-      return {id: index, level: level, label: `${level.bitrate/1000}Kbps`}
+      return { id: index, level: level, label: `${level.bitrate/1000}Kbps` }
     })
     this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this._levels)
   }
@@ -413,9 +436,14 @@ export default class HLS extends HTML5VideoPlayback {
     let previousPlayableRegionStartTime = this._playableRegionStartTime
     let previousPlayableRegionDuration = this._playableRegionDuration
 
-    if (fragments.length === 0) {
+    if (fragments.length === 0)
       return
-    }
+
+
+    // #EXT-X-PROGRAM-DATE-TIME
+    if (fragments[0].rawProgramDateTime)
+      this._programDateTime = fragments[0].rawProgramDateTime
+
 
     if (this._playableRegionStartTime !== fragments[0].start) {
       startTimeChanged = true
@@ -429,8 +457,7 @@ export default class HLS extends HTML5VideoPlayback {
           local: this._now,
           remote: (fragments[0].start + (this._extrapolatedWindowDuration/2)) * 1000
         }
-      }
-      else {
+      } else {
         // check if the correlation still works
         let corr = this._localStartTimeCorrelation
         let timePassed = this._now - corr.local
@@ -444,8 +471,7 @@ export default class HLS extends HTML5VideoPlayback {
             local: this._now,
             remote: fragments[0].start * 1000
           }
-        }
-        else if (startTime > previousPlayableRegionStartTime + this._extrapolatedWindowDuration) {
+        } else if (startTime > previousPlayableRegionStartTime + this._extrapolatedWindowDuration) {
           // start time was past the end of the old extrapolation window (so would have been capped)
           // see if now that time would be inside the window, and if it would be set the correlation
           // so that it resumes from the time it was at at the end of the old window
@@ -470,10 +496,8 @@ export default class HLS extends HTML5VideoPlayback {
       if (hiddenAreaDuration <= newDuration) {
         newDuration -= hiddenAreaDuration
         this._durationExcludesAfterLiveSyncPoint = true
-      }
-      else {
-        this._durationExcludesAfterLiveSyncPoint = false
-      }
+      } else { this._durationExcludesAfterLiveSyncPoint = false }
+
     }
 
     if (newDuration !== this._playableRegionDuration) {
@@ -493,8 +517,7 @@ export default class HLS extends HTML5VideoPlayback {
           local: this._now,
           remote: endTime * 1000
         }
-      }
-      else {
+      } else {
         // check if the correlation still works
         let corr = this._localEndTimeCorrelation
         let timePassed = this._now - corr.local
@@ -505,8 +528,7 @@ export default class HLS extends HTML5VideoPlayback {
             local: this._now,
             remote: endTime * 1000
           }
-        }
-        else if (extrapolatedEndTime < endTime - this._extrapolatedWindowDuration) {
+        } else if (extrapolatedEndTime < endTime - this._extrapolatedWindowDuration) {
           // our extrapolated end time is now earlier than the extrapolation window from the actual end time
           // (maybe a chunk became available early)
           // reset correlation so that it sits at the beginning of the extrapolation window from the end time
@@ -514,8 +536,7 @@ export default class HLS extends HTML5VideoPlayback {
             local: this._now,
             remote: (endTime - this._extrapolatedWindowDuration) * 1000
           }
-        }
-        else if (extrapolatedEndTime > previousEndTime) {
+        } else if (extrapolatedEndTime > previousEndTime) {
           // end time was past the old end time (so would have been capped)
           // set the correlation so that it resumes from the time it was at at the end of the old window
           this._localEndTimeCorrelation = {
@@ -548,9 +569,9 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   _onLevelSwitch(evt, data) {
-    if (!this.levels.length) {
+    if (!this.levels.length)
       this._fillLevels()
-    }
+
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH, data)
     let currentLevel = this._hls.levels[data.level]

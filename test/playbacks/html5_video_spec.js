@@ -5,7 +5,7 @@ import $ from 'clappr-zepto'
 
 describe('HTML5Video playback', function() {
   beforeEach(function() {
-    this.options = {src: 'http://example.com/dash.ogg'}
+    this.options = { src: 'http://example.com/dash.ogg' }
   })
 
   it('checks if it can play a resource', function() {
@@ -48,10 +48,24 @@ describe('HTML5Video playback', function() {
     callback.should.have.been.calledOnce
   })
 
+  it('trigger PLAYBACK_SEEK on media seeking event', function(done) {
+    this.timeout(5000)
+    const callback = sinon.spy()
+    const playback = new HTML5Video({ src: '/test/fixtures/SampleVideo_360x240_1mb.mp4' })
+
+    playback.on(Events.PLAYBACK_SEEK, callback)
+    playback.on(Events.PLAYBACK_SEEK, () => {
+      callback.should.have.been.calledOnce
+      done()
+    }, this)
+
+    playback.el.dispatchEvent(new Event('seeking'))
+  })
+
   it('triggers PLAYBACK_SEEKED on media seeked event', function(done) {
     this.timeout(5000)
     const callback = sinon.spy()
-    const playback = new HTML5Video({src: '/base/test/fixtures/SampleVideo_360x240_1mb.mp4'})
+    const playback = new HTML5Video({ src: '/test/fixtures/SampleVideo_360x240_1mb.mp4' })
 
     playback.on(Events.PLAYBACK_SEEKED, callback)
     playback.on(Events.PLAYBACK_SEEKED, () => {
@@ -63,15 +77,15 @@ describe('HTML5Video playback', function() {
   })
 
   it('isPlaying() is true after constructor when autoPlay is true', function(done) {
-    const playback = new HTML5Video({src: 'http://example.com/dash.ogg', autoPlay: true})
-    process.nextTick(function(){
+    const playback = new HTML5Video({ src: 'http://example.com/dash.ogg', autoPlay: true })
+    process.nextTick(function() {
       expect(playback.isPlaying()).to.be.true
       done()
     })
   })
 
   it('setup crossorigin attribute', function() {
-    const options = $.extend({playback: {crossOrigin: 'use-credentials'}}, this.options)
+    const options = $.extend({ playback: { crossOrigin: 'use-credentials' } }, this.options)
     const playback = new HTML5Video(options)
 
     expect(playback.el.crossOrigin).to.be.equal('use-credentials')
@@ -79,7 +93,7 @@ describe('HTML5Video playback', function() {
   })
 
   it('enables inline playback for webviews when playInline flag is set', function() {
-    const options = $.extend({playback: {playInline: true}}, this.options)
+    const options = $.extend({ playback: { playInline: true } }, this.options)
     const playback = new HTML5Video(options)
 
     expect(playback.el['x-webkit-playsinline']).to.be.true
@@ -87,7 +101,7 @@ describe('HTML5Video playback', function() {
   })
 
   it('allows displaying default video tag controls', function() {
-    const options = $.extend({playback: {controls: 'controls'}}, this.options)
+    const options = $.extend({ playback: { controls: 'controls' } }, this.options)
     const playback = new HTML5Video(options)
     expect(playback.el.controls).to.be.true
   })
@@ -108,13 +122,13 @@ describe('HTML5Video playback', function() {
   })
 
   it('setup external tracks', function() {
-    let newTrackUrl = () => { URL.createObjectURL(new Blob([], {type: 'text/vtt'})) }
-    const options = $.extend({playback: {
+    let newTrackUrl = () => { URL.createObjectURL(new Blob([], { type: 'text/vtt' })) }
+    const options = $.extend({ playback: {
       externalTracks: [
-        {lang: 'en', label: 'English', src: newTrackUrl(), kind: 'subtitles'},
-        {lang: 'fr', label: 'French', src: newTrackUrl()}
+        { lang: 'en', label: 'English', src: newTrackUrl(), kind: 'subtitles' },
+        { lang: 'fr', label: 'French', src: newTrackUrl() }
       ]
-    }}, this.options)
+    } }, this.options)
     const playback = new HTML5Video(options)
     playback.render()
     const $tracks = playback.$el.find('track[data-html5-video-track]')
@@ -131,13 +145,13 @@ describe('HTML5Video playback', function() {
   })
 
   it('can switch text tracks', function() {
-    let newTrackUrl = () => { URL.createObjectURL(new Blob([], {type: 'text/vtt'})) }
-    const options = $.extend({playback: {
+    let newTrackUrl = () => { URL.createObjectURL(new Blob([], { type: 'text/vtt' })) }
+    const options = $.extend({ playback: {
       externalTracks: [
-        {lang: 'en', label: 'English', src: newTrackUrl(), kind: 'subtitles'},
-        {lang: 'fr', label: 'French', src: newTrackUrl()}
+        { lang: 'en', label: 'English', src: newTrackUrl(), kind: 'subtitles' },
+        { lang: 'fr', label: 'French', src: newTrackUrl() }
       ]
-    }}, this.options)
+    } }, this.options)
     const playback = new HTML5Video(options)
     playback.render()
 
@@ -169,7 +183,7 @@ describe('HTML5Video playback', function() {
     const fakeEl = {
       get currentTime() { return currentTime },
       get duration() { return duration },
-      get buffered() { return {start: (i) => start[i], end: (i) => end[i], get length() { return start.length }} }
+      get buffered() { return { start: (i) => start[i], end: (i) => end[i], get length() { return start.length } } }
     }
 
     beforeEach(function() {
@@ -206,7 +220,7 @@ describe('HTML5Video playback', function() {
 
     it('does not trigger buffer event when the playback is initialized', function() {
       /*
-        Only trigger buffer events when buffer state change. 
+        Only trigger buffer events when buffer state change.
         The default value for _bufferState is false.
       */
 
@@ -234,9 +248,9 @@ describe('HTML5Video playback', function() {
       let buffered = this.callback.getCall(0).args[1]
 
       expect(buffered.length).to.be.equal(start.length)
-      expect(buffered[0]).to.deep.equal({start: start[0], end: end[0]})
-      expect(buffered[1]).to.deep.equal({start: start[1], end: end[1]})
-      expect(buffered[2]).to.deep.equal({start: start[2], end: end[2]})
+      expect(buffered[0]).to.deep.equal({ start: start[0], end: end[0] })
+      expect(buffered[1]).to.deep.equal({ start: start[1], end: end[1] })
+      expect(buffered[2]).to.deep.equal({ start: start[2], end: end[2] })
     })
   })
 

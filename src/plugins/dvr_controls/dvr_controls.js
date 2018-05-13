@@ -47,20 +47,19 @@ export default class DVRControls extends UICorePlugin {
     if (dvrEnabled) {
       this.core.mediaControl.$el.addClass('dvr')
       this.core.mediaControl.$el.find('.media-control-indicator[data-position], .media-control-indicator[data-duration]').hide()
-    } else {
-      this.core.mediaControl.$el.removeClass('dvr')
-    }
+    } else { this.core.mediaControl.$el.removeClass('dvr') }
+
   }
 
   click() {
     const mediaControl = this.core.mediaControl
     const container = mediaControl.container
-    if (!container.isPlaying()) {
+    if (!container.isPlaying())
       container.play()
-    }
-    if (mediaControl.$el.hasClass('dvr')) {
+
+    if (mediaControl.$el.hasClass('dvr'))
       container.seek(container.getDuration())
-    }
+
   }
 
   settingsUpdate() {

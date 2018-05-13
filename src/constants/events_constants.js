@@ -58,7 +58,27 @@ Events.PLAYER_SEEK = 'seek'
  * @event PLAYER_ERROR
  * @param {Object} error the error
  */
-Events.PLAYER_ERROR = 'error'
+Events.PLAYER_ERROR = 'playererror'
+/**
+ * Fired when there is an error
+ *
+ * @event ERROR
+ * @param {Object} error
+ * the error with the following format `{code, description, level, raw, origin, scope}`
+ * @param {String} [options.code]
+ * error's code: code to identify error in the following format: origin:code
+ * @param {String} [options.description]
+ * error's description: description of the error
+ * @param {String} [options.level]
+ * error's level: FATAL or WARN.
+ * @param {String} [options.origin]
+ * error's origin. Example: hls, html5, etc
+ * @param {String} [options.scope]
+ * error's scope. Example: playback, container, etc
+ * @param {String} [options.raw]
+ * raw error: the initial error received
+ */
+Events.ERROR = 'error'
 /**
  * Fired when the time is updated on player
  *
@@ -66,9 +86,9 @@ Events.PLAYER_ERROR = 'error'
  * @param {Object} progress Data
  * progress object
  * @param {Number} [progress.current]
- * current time
+ * current time (in seconds)
  * @param {Number} [progress.total]
- * total time
+ * total time (in seconds)
  */
 Events.PLAYER_TIMEUPDATE = 'timeupdate'
 /**
@@ -110,9 +130,9 @@ Events.PLAYBACK_PROGRESS = 'playback:progress'
  * @param {Object} progress Data
  * progress object
  * @param {Number} [progress.current]
- * current time
+ * current time (in seconds)
  * @param {Number} [progress.total]
- * total time
+ * total time (in seconds)
  */
 Events.PLAYBACK_TIMEUPDATE = 'playback:timeupdate'
 /**
@@ -259,6 +279,12 @@ Events.PLAYBACK_PLAY = 'playback:play'
  * @event PLAYBACK_PAUSE
  */
 Events.PLAYBACK_PAUSE = 'playback:pause'
+/**
+ * Fired when the media for a playback is seeking.
+ *
+ * @event PLAYBACK_SEEK
+ */
+Events.PLAYBACK_SEEK = 'playback:seek'
 /**
  * Fired when the media for a playback is seeked.
  *
@@ -416,9 +442,9 @@ Events.CONTAINER_SUBTITLE_CHANGED = 'container:subtitle:changed'
  * @param {Object} progress Data
  * progress object
  * @param {Number} [progress.current]
- * current time
+ * current time (in seconds)
  * @param {Number} [progress.total]
- * total time
+ * total time (in seconds)
  */
 Events.CONTAINER_TIMEUPDATE = 'container:timeupdate'
 /**
@@ -564,5 +590,11 @@ Events.MEDIACONTROL_NOTPLAYING = 'mediacontrol:notplaying'
  * @event MEDIACONTROL_CONTAINERCHANGED
  */
 Events.MEDIACONTROL_CONTAINERCHANGED = 'mediacontrol:containerchanged'
+/**
+ * Fired when the options were changed for the mediacontrol
+ *
+ * @event MEDIACONTROL_OPTIONS_CHANGE
+ */
+Events.MEDIACONTROL_OPTIONS_CHANGE = 'mediacontrol:options:change'
 
 export default Events

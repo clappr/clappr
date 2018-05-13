@@ -8,6 +8,7 @@
 
 import Events from '../../base/events'
 import UIObject from '../../base/ui_object'
+import ErrorMixin from '../../base/error_mixin'
 
 import './public/style.scss'
 
@@ -112,12 +113,13 @@ export default class Container extends UIObject {
    * @param {Object} options the options object
    * @param {Strings} i18n the internationalization component
    */
-  constructor(options, i18n) {
+  constructor(options, i18n, playerError) {
     super(options)
     this._i18n = i18n
     this.currentTime = 0
     this.volume = 100
     this.playback = options.playback
+    this.playerError = playerError
     this.settings = $.extend({}, this.playback.settings)
     this.isReady = false
     this.mediaControlDisabled = false
@@ -265,11 +267,11 @@ export default class Container extends UIObject {
     return this.playback.getDuration()
   }
 
-  error(errorObj) {
-    if (!this.isReady) {
+  error(error) {
+    if (!this.isReady)
       this.ready()
-    }
-    this.trigger(Events.CONTAINER_ERROR, {error: errorObj, container: this}, this.name)
+
+    this.trigger(Events.CONTAINER_ERROR, error, this.name)
   }
 
   loadedMetadata(metadata) {
@@ -328,21 +330,21 @@ export default class Container extends UIObject {
   }
 
   clicked() {
-    if (!this.options.chromeless || this.options.allowUserInteraction) {
+    if (!this.options.chromeless || this.options.allowUserInteraction)
       this.trigger(Events.CONTAINER_CLICK, this, this.name)
-    }
+
   }
 
   dblClicked() {
-    if (!this.options.chromeless || this.options.allowUserInteraction) {
+    if (!this.options.chromeless || this.options.allowUserInteraction)
       this.trigger(Events.CONTAINER_DBLCLICK, this, this.name)
-    }
+
   }
 
   onContextMenu(event) {
-    if (!this.options.chromeless || this.options.allowUserInteraction) {
+    if (!this.options.chromeless || this.options.allowUserInteraction)
       this.trigger(Events.CONTAINER_CONTEXTMENU, event, this.name)
-    }
+
   }
 
   seek(time) {
@@ -409,15 +411,15 @@ export default class Container extends UIObject {
   }
 
   mouseEnter() {
-    if (!this.options.chromeless || this.options.allowUserInteraction) {
+    if (!this.options.chromeless || this.options.allowUserInteraction)
       this.trigger(Events.CONTAINER_MOUSE_ENTER)
-    }
+
   }
 
   mouseLeave() {
-    if (!this.options.chromeless || this.options.allowUserInteraction) {
+    if (!this.options.chromeless || this.options.allowUserInteraction)
       this.trigger(Events.CONTAINER_MOUSE_LEAVE)
-    }
+
   }
 
   settingsUpdate() {
@@ -448,11 +450,11 @@ export default class Container extends UIObject {
   }
 
   updateStyle() {
-    if (!this.options.chromeless || this.options.allowUserInteraction) {
+    if (!this.options.chromeless || this.options.allowUserInteraction)
       this.$el.removeClass('chromeless')
-    } else {
+    else
       this.$el.addClass('chromeless')
-    }
+
   }
 
   /**
@@ -472,3 +474,5 @@ export default class Container extends UIObject {
     return this
   }
 }
+
+Object.assign(Container.prototype, ErrorMixin)

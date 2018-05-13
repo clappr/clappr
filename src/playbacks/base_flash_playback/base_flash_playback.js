@@ -19,9 +19,9 @@ export default class BaseFlashPlayback extends Playback {
   get attributes() {
     let type = 'application/x-shockwave-flash'
 
-    if (Browser.isLegacyIE) {
+    if (Browser.isLegacyIE)
       type = ''
-    }
+
 
     return {
       class: 'clappr-flash-playback',
@@ -46,15 +46,15 @@ export default class BaseFlashPlayback extends Playback {
       baseUrl: this.baseUrl,
       playbackId: this.uniqueId,
       wmode: this.wmode,
-      callbackName: `window.Clappr.flashlsCallbacks.${this.cid}`})
+      callbackName: `window.Clappr.flashlsCallbacks.${this.cid}` })
     )
 
     if (Browser.isIE) {
       this.$('embed').remove()
 
-      if (Browser.isLegacyIE) {
+      if (Browser.isLegacyIE)
         this.$el.attr('classid', IE_CLASSID)
-      }
+
     }
 
     this.el.id = this.cid
