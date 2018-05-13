@@ -4,7 +4,10 @@ var webpack = require('webpack')
 var Clean = require('clean-webpack-plugin')
 
 var webpackConfig = require('./webpack-base-config')
-webpackConfig.entry = path.resolve(__dirname, 'src/main.js')
+webpackConfig.entry = {
+  clappr: path.resolve(__dirname, 'src/main.js'),
+  events: path.resolve(__dirname, 'src/constants/events_constants.js')
+}
 
 if (process.env.npm_lifecycle_event === 'release') {
   webpackConfig.plugins.push(new webpack.LoaderOptionsPlugin({ minimize: true, debug: false }))
@@ -24,7 +27,7 @@ if (process.env.npm_lifecycle_event === 'release') {
 
 webpackConfig.output = {
   path: path.resolve(__dirname, 'dist'),
-  filename: 'clappr.js',
+  filename: '[name].js',
   library: 'Clappr',
   libraryTarget: 'umd'
 }
