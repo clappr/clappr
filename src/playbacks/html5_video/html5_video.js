@@ -401,7 +401,7 @@ export default class HTML5Video extends Playback {
   destroy() {
     this._destroyed = true
     this.handleTextTrackChange && this.el.textTracks.removeEventListener('change', this.handleTextTrackChange)
-    this.$el.remove()
+    super.destroy()
     this.el.removeAttribute('src')
     this._src = null
     DomRecycler.garbage(this.$el)
