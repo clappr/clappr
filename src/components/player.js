@@ -221,6 +221,8 @@ export default class Player extends BaseObject {
    * E.g. onReady -> "PLAYER_READY", onTimeUpdate -> "PLAYER_TIMEUPDATE"
    * @param {PlaybackConfig} [options.playback]
    * Generic `Playback` component related configuration
+   * @param {Boolean} [options.disableErrorScreen]
+   * disables the error screen plugin.
    */
 
   constructor(options) {
