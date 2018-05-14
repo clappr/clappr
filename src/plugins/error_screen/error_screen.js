@@ -18,6 +18,12 @@ export default class ErrorScreen extends UICorePlugin {
     }
   }
 
+  constructor(core) {
+    super(core)
+
+    if (this.options.disableErrorScreen) return this.disable()
+  }
+
   bindEvents() {
     this.listenTo(this.core, Events.ERROR, this.onError)
     this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.onContainerChanged)
