@@ -1131,7 +1131,7 @@ var _browser = __webpack_require__(28);
 
 var _browser2 = _interopRequireDefault(_browser);
 
-var _clapprZepto = __webpack_require__(8);
+var _clapprZepto = __webpack_require__(6);
 
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
@@ -1416,95 +1416,6 @@ exports.default = {
 
 /***/ }),
 /* 6 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		return this.map(function (item) {
-			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
-				return "@media " + item[2] + "{" + content + "}";
-			} else {
-				return content;
-			}
-		}).join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-function cssWithMappingToString(item, useSourceMap) {
-	var content = item[1] || '';
-	var cssMapping = item[3];
-	if (!cssMapping) {
-		return content;
-	}
-
-	if (useSourceMap && typeof btoa === 'function') {
-		var sourceMapping = toComment(cssMapping);
-		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
-		});
-
-		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-	}
-
-	return [content].join('\n');
-}
-
-// Adapted from convert-source-map (MIT)
-function toComment(sourceMap) {
-	// eslint-disable-next-line no-undef
-	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
-
-	return '/*# ' + data + ' */';
-}
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports) {
-
-var core = module.exports = {version: '2.4.0'};
-if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
-
-/***/ }),
-/* 8 */
 /***/ (function(module, exports) {
 
 /* Zepto v1.2.0 - zepto ajax callbacks deferred event ie selector - zeptojs.com/license */
@@ -3432,6 +3343,95 @@ module.exports = Zepto
 
 
 /***/ }),
+/* 7 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports) {
+
+var core = module.exports = {version: '2.4.0'};
+if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
+
+/***/ }),
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3498,7 +3498,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(150);
+var	fixUrls = __webpack_require__(153);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -4212,7 +4212,7 @@ var Playback = function (_UIObject) {
 
 
   Playback.prototype.destroy = function destroy() {
-    this.$el.remove();
+    this.remove();
   };
 
   (0, _createClass3.default)(Playback, [{
@@ -4435,7 +4435,7 @@ module.exports = exports['default'];
 /***/ (function(module, exports, __webpack_require__) {
 
 var global    = __webpack_require__(16)
-  , core      = __webpack_require__(7)
+  , core      = __webpack_require__(8)
   , ctx       = __webpack_require__(43)
   , hide      = __webpack_require__(24)
   , PROTOTYPE = 'prototype';
@@ -4651,7 +4651,7 @@ var _inherits2 = __webpack_require__(2);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _clapprZepto = __webpack_require__(8);
+var _clapprZepto = __webpack_require__(6);
 
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
@@ -4967,76 +4967,15 @@ module.exports = Object.keys || function keys(O){
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-// Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
 
-var Browser = {};
+var _browser = __webpack_require__(140);
 
-var hasLocalstorage = function hasLocalstorage() {
-  try {
-    localStorage.setItem('clappr', 'clappr');
-    localStorage.removeItem('clappr');
-    return true;
-  } catch (e) {
-    return false;
-  }
-};
+var _browser2 = _interopRequireDefault(_browser);
 
-var hasFlash = function hasFlash() {
-  try {
-    var fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
-    return !!fo;
-  } catch (e) {
-    return !!(navigator.mimeTypes && navigator.mimeTypes['application/x-shockwave-flash'] !== undefined && navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin);
-  }
-};
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var getBrowserInfo = exports.getBrowserInfo = function getBrowserInfo(ua) {
-  var parts = ua.match(/\b(playstation 4|nx|opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [],
-      extra = void 0;
-  if (/trident/i.test(parts[1])) {
-    extra = /\brv[ :]+(\d+)/g.exec(ua) || [];
-    return { name: 'IE', version: parseInt(extra[1] || '') };
-  } else if (parts[1] === 'Chrome') {
-    extra = ua.match(/\bOPR\/(\d+)/);
-    if (extra != null) return { name: 'Opera', version: parseInt(extra[1]) };
-
-    extra = ua.match(/\bEdge\/(\d+)/);
-    if (extra != null) return { name: 'Edge', version: parseInt(extra[1]) };
-  } else if (/android/i.test(ua) && (extra = ua.match(/version\/(\d+)/i))) {
-    parts.splice(1, 1, 'Android WebView');
-    parts.splice(2, 1, extra[1]);
-  }
-  parts = parts[2] ? [parts[1], parts[2]] : [navigator.appName, navigator.appVersion, '-?'];
-
-  return { name: parts[0], version: parseInt(parts[1]) };
-};
-
-var browserInfo = getBrowserInfo(navigator.userAgent);
-
-Browser.isEdge = /edge/i.test(navigator.userAgent);
-Browser.isChrome = /chrome|CriOS/i.test(navigator.userAgent) && !Browser.isEdge;
-Browser.isSafari = /safari/i.test(navigator.userAgent) && !Browser.isChrome && !Browser.isEdge;
-Browser.isFirefox = /firefox/i.test(navigator.userAgent);
-Browser.isLegacyIE = !!window.ActiveXObject;
-Browser.isIE = Browser.isLegacyIE || /trident.*rv:1\d/i.test(navigator.userAgent);
-Browser.isIE11 = /trident.*rv:11/i.test(navigator.userAgent);
-Browser.isChromecast = Browser.isChrome && /CrKey/i.test(navigator.userAgent);
-Browser.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|IEMobile|Mobile Safari|Opera Mini/i.test(navigator.userAgent);
-Browser.isiOS = /iPad|iPhone|iPod/i.test(navigator.userAgent);
-Browser.isAndroid = /Android/i.test(navigator.userAgent);
-Browser.isWindowsPhone = /Windows Phone/i.test(navigator.userAgent);
-Browser.isWin8App = /MSAppHost/i.test(navigator.userAgent);
-Browser.isWiiU = /WiiU/i.test(navigator.userAgent);
-Browser.isPS4 = /PlayStation 4/i.test(navigator.userAgent);
-Browser.hasLocalstorage = hasLocalstorage();
-Browser.hasFlash = hasFlash();
-
-Browser.name = browserInfo.name;
-Browser.version = browserInfo.version;
-
-exports.default = Browser;
+exports.default = _browser2.default;
+module.exports = exports['default'];
 
 /***/ }),
 /* 29 */
@@ -5358,7 +5297,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _log = __webpack_require__(140);
+var _log = __webpack_require__(143);
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -5808,7 +5747,7 @@ exports.f = __webpack_require__(11);
 /***/ (function(module, exports, __webpack_require__) {
 
 var global         = __webpack_require__(16)
-  , core           = __webpack_require__(7)
+  , core           = __webpack_require__(8)
   , LIBRARY        = __webpack_require__(53)
   , wksExt         = __webpack_require__(56)
   , defineProperty = __webpack_require__(17).f;
@@ -5849,7 +5788,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _kibo = __webpack_require__(141);
+var _kibo = __webpack_require__(144);
 
 var _kibo2 = _interopRequireDefault(_kibo);
 
@@ -6127,7 +6066,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _html5_video = __webpack_require__(176);
+var _html5_video = __webpack_require__(179);
 
 var _html5_video2 = _interopRequireDefault(_html5_video);
 
@@ -6205,7 +6144,7 @@ module.exports = function(it){
 
 // most Object methods by ES6 should accept primitives
 var $export = __webpack_require__(15)
-  , core    = __webpack_require__(7)
+  , core    = __webpack_require__(8)
   , fails   = __webpack_require__(26);
 module.exports = function(KEY, exec){
   var fn  = (core.Object || {})[KEY] || Object[KEY]
@@ -6354,7 +6293,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _core = __webpack_require__(144);
+var _core = __webpack_require__(147);
 
 var _core2 = _interopRequireDefault(_core);
 
@@ -6374,7 +6313,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _container = __webpack_require__(147);
+var _container = __webpack_require__(150);
 
 var _container2 = _interopRequireDefault(_container);
 
@@ -6498,7 +6437,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _media_control = __webpack_require__(151);
+var _media_control = __webpack_require__(154);
 
 var _media_control2 = _interopRequireDefault(_media_control);
 
@@ -6552,7 +6491,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _clapprZepto = __webpack_require__(8);
+var _clapprZepto = __webpack_require__(6);
 
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
@@ -6588,7 +6527,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _loader = __webpack_require__(167);
+var _loader = __webpack_require__(170);
 
 var _loader2 = _interopRequireDefault(_loader);
 
@@ -6628,7 +6567,7 @@ exports.default = function (arr) {
 /* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = { "default": __webpack_require__(168), __esModule: true };
+module.exports = { "default": __webpack_require__(171), __esModule: true };
 
 /***/ }),
 /* 87 */
@@ -6641,7 +6580,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _html5_audio = __webpack_require__(180);
+var _html5_audio = __webpack_require__(183);
 
 var _html5_audio2 = _interopRequireDefault(_html5_audio);
 
@@ -6661,7 +6600,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _html_img = __webpack_require__(181);
+var _html_img = __webpack_require__(184);
 
 var _html_img2 = _interopRequireDefault(_html_img);
 
@@ -6681,7 +6620,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _no_op = __webpack_require__(184);
+var _no_op = __webpack_require__(187);
 
 var _no_op2 = _interopRequireDefault(_no_op);
 
@@ -6701,7 +6640,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _spinner_three_bounce = __webpack_require__(188);
+var _spinner_three_bounce = __webpack_require__(191);
 
 var _spinner_three_bounce2 = _interopRequireDefault(_spinner_three_bounce);
 
@@ -6721,7 +6660,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _watermark = __webpack_require__(194);
+var _watermark = __webpack_require__(197);
 
 var _watermark2 = _interopRequireDefault(_watermark);
 
@@ -6741,7 +6680,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _poster = __webpack_require__(198);
+var _poster = __webpack_require__(201);
 
 var _poster2 = _interopRequireDefault(_poster);
 
@@ -6761,7 +6700,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _click_to_pause = __webpack_require__(204);
+var _click_to_pause = __webpack_require__(207);
 
 var _click_to_pause2 = _interopRequireDefault(_click_to_pause);
 
@@ -6781,7 +6720,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _dvr_controls = __webpack_require__(205);
+var _dvr_controls = __webpack_require__(208);
 
 var _dvr_controls2 = _interopRequireDefault(_dvr_controls);
 
@@ -6801,7 +6740,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _favicon = __webpack_require__(215);
+var _favicon = __webpack_require__(218);
 
 var _favicon2 = _interopRequireDefault(_favicon);
 
@@ -6965,13 +6904,13 @@ var _template = __webpack_require__(10);
 
 var _template2 = _interopRequireDefault(_template);
 
-var _clapprZepto = __webpack_require__(8);
+var _clapprZepto = __webpack_require__(6);
 
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.2.92"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.2.93"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -7066,7 +7005,7 @@ var _browser = __webpack_require__(28);
 
 var _browser2 = _interopRequireDefault(_browser);
 
-var _core_factory = __webpack_require__(142);
+var _core_factory = __webpack_require__(145);
 
 var _core_factory2 = _interopRequireDefault(_core_factory);
 
@@ -7082,7 +7021,7 @@ var _error_mixin = __webpack_require__(19);
 
 var _error_mixin2 = _interopRequireDefault(_error_mixin);
 
-var _clapprZepto = __webpack_require__(8);
+var _clapprZepto = __webpack_require__(6);
 
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
@@ -7315,6 +7254,8 @@ var Player = function (_BaseObject) {
      * E.g. onReady -> "PLAYER_READY", onTimeUpdate -> "PLAYER_TIMEUPDATE"
      * @param {PlaybackConfig} [options.playback]
      * Generic `Playback` component related configuration
+     * @param {Boolean} [options.disableErrorScreen]
+     * disables the error screen plugin.
      */
 
   }]);
@@ -7768,7 +7709,7 @@ module.exports = exports['default'];
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(99);
-module.exports = __webpack_require__(7).Object.assign;
+module.exports = __webpack_require__(8).Object.assign;
 
 /***/ }),
 /* 99 */
@@ -7870,7 +7811,7 @@ module.exports = function(index, length){
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(105);
-module.exports = __webpack_require__(7).Object.keys;
+module.exports = __webpack_require__(8).Object.keys;
 
 /***/ }),
 /* 105 */
@@ -8069,7 +8010,7 @@ __webpack_require__(119);
 __webpack_require__(125);
 __webpack_require__(126);
 __webpack_require__(127);
-module.exports = __webpack_require__(7).Symbol;
+module.exports = __webpack_require__(8).Symbol;
 
 /***/ }),
 /* 119 */
@@ -8463,7 +8404,7 @@ __webpack_require__(57)('observable');
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(129);
-var $Object = __webpack_require__(7).Object;
+var $Object = __webpack_require__(8).Object;
 module.exports = function defineProperty(it, key, desc){
   return $Object.defineProperty(it, key, desc);
 };
@@ -8487,7 +8428,7 @@ module.exports = { "default": __webpack_require__(131), __esModule: true };
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(132);
-module.exports = __webpack_require__(7).Object.setPrototypeOf;
+module.exports = __webpack_require__(8).Object.setPrototypeOf;
 
 /***/ }),
 /* 132 */
@@ -8532,7 +8473,7 @@ module.exports = {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(135);
-var $Object = __webpack_require__(7).Object;
+var $Object = __webpack_require__(8).Object;
 module.exports = function create(P, D){
   return $Object.create(P, D);
 };
@@ -8556,7 +8497,7 @@ module.exports = { "default": __webpack_require__(137), __esModule: true };
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(138);
-var $Object = __webpack_require__(7).Object;
+var $Object = __webpack_require__(8).Object;
 module.exports = function getOwnPropertyDescriptor(it, key){
   return $Object.getOwnPropertyDescriptor(it, key);
 };
@@ -8635,6 +8576,510 @@ if (!Array.prototype.find) {
 
 /***/ }),
 /* 140 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getDevice = exports.getViewportSize = exports.getOsData = exports.getBrowserData = exports.getBrowserInfo = undefined;
+
+var _clapprZepto = __webpack_require__(6);
+
+var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
+
+var _browser_data = __webpack_require__(141);
+
+var _browser_data2 = _interopRequireDefault(_browser_data);
+
+var _os_data = __webpack_require__(142);
+
+var _os_data2 = _interopRequireDefault(_os_data);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Browser = {};
+
+var hasLocalstorage = function hasLocalstorage() {
+  try {
+    localStorage.setItem('clappr', 'clappr');
+    localStorage.removeItem('clappr');
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+var hasFlash = function hasFlash() {
+  try {
+    var fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
+    return !!fo;
+  } catch (e) {
+    return !!(navigator.mimeTypes && navigator.mimeTypes['application/x-shockwave-flash'] !== undefined && navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin);
+  }
+};
+
+var getBrowserInfo = exports.getBrowserInfo = function getBrowserInfo(ua) {
+  var parts = ua.match(/\b(playstation 4|nx|opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [],
+      extra = void 0;
+  if (/trident/i.test(parts[1])) {
+    extra = /\brv[ :]+(\d+)/g.exec(ua) || [];
+    return {
+      name: 'IE',
+      version: parseInt(extra[1] || '')
+    };
+  } else if (parts[1] === 'Chrome') {
+    extra = ua.match(/\bOPR\/(\d+)/);
+    if (extra != null) return { name: 'Opera', version: parseInt(extra[1]) };
+
+    extra = ua.match(/\bEdge\/(\d+)/);
+    if (extra != null) return { name: 'Edge', version: parseInt(extra[1]) };
+  } else if (/android/i.test(ua) && (extra = ua.match(/version\/(\d+)/i))) {
+    parts.splice(1, 1, 'Android WebView');
+    parts.splice(2, 1, extra[1]);
+  }
+  parts = parts[2] ? [parts[1], parts[2]] : [navigator.appName, navigator.appVersion, '-?'];
+
+  return {
+    name: parts[0],
+    version: parseInt(parts[1])
+  };
+};
+
+//  Get browser data
+var getBrowserData = exports.getBrowserData = function getBrowserData() {
+  var browserObject = {};
+  var userAgent = Browser.userAgent.toLowerCase();
+
+  // Check browser type
+  for (var i in _browser_data2.default) {
+    var browserRegExp = new RegExp(_browser_data2.default[i].identifier.toLowerCase());
+    var browserRegExpResult = browserRegExp.exec(userAgent);
+
+    if (browserRegExpResult != null && browserRegExpResult[1]) {
+      browserObject.name = _browser_data2.default[i].name;
+      browserObject.group = _browser_data2.default[i].group;
+
+      // Check version
+      if (_browser_data2.default[i].versionIdentifier) {
+        var versionRegExp = new RegExp(_browser_data2.default[i].versionIdentifier.toLowerCase());
+        var versionRegExpResult = versionRegExp.exec(userAgent);
+
+        if (versionRegExpResult != null && versionRegExpResult[1]) setBrowserVersion(versionRegExpResult[1], browserObject);
+      } else {
+        setBrowserVersion(browserRegExpResult[1], browserObject);
+      }
+      break;
+    }
+  }
+  return browserObject;
+};
+
+// Set browser version
+var setBrowserVersion = function setBrowserVersion(version, browserObject) {
+  var splitVersion = version.split('.', 2);
+  browserObject.fullVersion = version;
+
+  // Major version
+  if (splitVersion[0]) browserObject.majorVersion = parseInt(splitVersion[0]);
+
+  // Minor version
+  if (splitVersion[1]) browserObject.minorVersion = parseInt(splitVersion[1]);
+};
+
+//  Get OS data
+var getOsData = exports.getOsData = function getOsData() {
+  var osObject = {};
+  var userAgent = Browser.userAgent.toLowerCase();
+
+  // Check browser type
+  for (var i in _os_data2.default) {
+    var osRegExp = new RegExp(_os_data2.default[i].identifier.toLowerCase());
+    var osRegExpResult = osRegExp.exec(userAgent);
+
+    if (osRegExpResult != null) {
+      osObject.name = _os_data2.default[i].name;
+      osObject.group = _os_data2.default[i].group;
+
+      // Version defined
+      if (_os_data2.default[i].version) {
+        setOsVersion(_os_data2.default[i].version, _os_data2.default[i].versionSeparator ? _os_data2.default[i].versionSeparator : '.', osObject);
+
+        // Version detected
+      } else if (osRegExpResult[1]) {
+        setOsVersion(osRegExpResult[1], _os_data2.default[i].versionSeparator ? _os_data2.default[i].versionSeparator : '.', osObject);
+
+        // Version identifier
+      } else if (_os_data2.default[i].versionIdentifier) {
+        var versionRegExp = new RegExp(_os_data2.default[i].versionIdentifier.toLowerCase());
+        var versionRegExpResult = versionRegExp.exec(userAgent);
+
+        if (versionRegExpResult != null && versionRegExpResult[1]) setOsVersion(versionRegExpResult[1], _os_data2.default[i].versionSeparator ? _os_data2.default[i].versionSeparator : '.', osObject);
+      }
+      break;
+    }
+  }
+  return osObject;
+};
+
+// Set OS version
+var setOsVersion = function setOsVersion(version, separator, osObject) {
+  var finalSeparator = separator.substr(0, 1) == '[' ? new RegExp(separator, 'g') : separator;
+  var splitVersion = version.split(finalSeparator, 2);
+
+  if (separator != '.') version = version.replace(new RegExp(separator, 'g'), '.');
+
+  osObject.fullVersion = version;
+
+  // Major version
+  if (splitVersion && splitVersion[0]) osObject.majorVersion = parseInt(splitVersion[0]);
+
+  // Minor version
+  if (splitVersion && splitVersion[1]) osObject.minorVersion = parseInt(splitVersion[1]);
+};
+
+// Set viewport size
+var getViewportSize = exports.getViewportSize = function getViewportSize() {
+  var viewportObject = {};
+
+  viewportObject.width = (0, _clapprZepto2.default)(window).width();
+  viewportObject.height = (0, _clapprZepto2.default)(window).height();
+
+  return viewportObject;
+};
+
+// Set viewport orientation
+var setViewportOrientation = function setViewportOrientation() {
+  switch (window.orientation) {
+    case -90:
+    case 90:
+      Browser.viewport.orientation = 'landscape';
+      break;
+    default:
+      Browser.viewport.orientation = 'portrait';
+      break;
+  }
+};
+
+var getDevice = exports.getDevice = function getDevice() {
+  var platformRegExp = Browser.isMobile ? new RegExp(';[^;]+;([^\)]+)') : new RegExp(';([^\)]+)'); // eslint-disable-line no-useless-escape
+  var device = platformRegExp.exec(Browser.userAgent)[1].trim();
+  return device;
+};
+
+var browserInfo = getBrowserInfo(navigator.userAgent);
+
+Browser.isEdge = /edge/i.test(navigator.userAgent);
+Browser.isChrome = /chrome|CriOS/i.test(navigator.userAgent) && !Browser.isEdge;
+Browser.isSafari = /safari/i.test(navigator.userAgent) && !Browser.isChrome && !Browser.isEdge;
+Browser.isFirefox = /firefox/i.test(navigator.userAgent);
+Browser.isLegacyIE = !!window.ActiveXObject;
+Browser.isIE = Browser.isLegacyIE || /trident.*rv:1\d/i.test(navigator.userAgent);
+Browser.isIE11 = /trident.*rv:11/i.test(navigator.userAgent);
+Browser.isChromecast = Browser.isChrome && /CrKey/i.test(navigator.userAgent);
+Browser.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|IEMobile|Mobile Safari|Opera Mini/i.test(navigator.userAgent);
+Browser.isiOS = /iPad|iPhone|iPod/i.test(navigator.userAgent);
+Browser.isAndroid = /Android/i.test(navigator.userAgent);
+Browser.isWindowsPhone = /Windows Phone/i.test(navigator.userAgent);
+Browser.isWin8App = /MSAppHost/i.test(navigator.userAgent);
+Browser.isWiiU = /WiiU/i.test(navigator.userAgent);
+Browser.isPS4 = /PlayStation 4/i.test(navigator.userAgent);
+Browser.hasLocalstorage = hasLocalstorage();
+Browser.hasFlash = hasFlash();
+
+/**
+* @deprecated
+* This parameter currently exists for retrocompatibility reasons.
+* Use Browser.data.name instead.
+*/
+Browser.name = browserInfo.name;
+
+/**
+* @deprecated
+* This parameter currently exists for retrocompatibility reasons.
+* Use Browser.data.fullVersion instead.
+*/
+Browser.version = browserInfo.version;
+
+Browser.userAgent = navigator.userAgent;
+Browser.data = getBrowserData();
+Browser.os = getOsData();
+Browser.viewport = getViewportSize();
+Browser.device = getDevice();
+typeof window.orientation !== 'undefined' && setViewportOrientation();
+
+exports.default = Browser;
+
+/***/ }),
+/* 141 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/* eslint-disable no-useless-escape */
+// The order of the following arrays is important, be careful if you change it.
+
+var BROWSER_DATA = [{
+  name: 'Chromium',
+  group: 'Chrome',
+  identifier: 'Chromium/([0-9\.]*)'
+}, {
+  name: 'Chrome Mobile',
+  group: 'Chrome',
+  identifier: 'Chrome/([0-9\.]*) Mobile',
+  versionIdentifier: 'Chrome/([0-9\.]*)'
+}, {
+  name: 'Chrome',
+  group: 'Chrome',
+  identifier: 'Chrome/([0-9\.]*)'
+}, {
+  name: 'Chrome for iOS',
+  group: 'Chrome',
+  identifier: 'CriOS/([0-9\.]*)'
+}, {
+  name: 'Android Browser',
+  group: 'Chrome',
+  identifier: 'CrMo/([0-9\.]*)'
+}, {
+  name: 'Firefox',
+  group: 'Firefox',
+  identifier: 'Firefox/([0-9\.]*)'
+}, {
+  name: 'Opera Mini',
+  group: 'Opera',
+  identifier: 'Opera Mini/([0-9\.]*)'
+}, {
+  name: 'Opera',
+  group: 'Opera',
+  identifier: 'Opera ([0-9\.]*)'
+}, {
+  name: 'Opera',
+  group: 'Opera',
+  identifier: 'Opera/([0-9\.]*)',
+  versionIdentifier: 'Version/([0-9\.]*)'
+}, {
+  name: 'IEMobile',
+  group: 'Explorer',
+  identifier: 'IEMobile/([0-9\.]*)'
+}, {
+  name: 'Internet Explorer',
+  group: 'Explorer',
+  identifier: 'MSIE ([a-zA-Z0-9\.]*)'
+}, {
+  name: 'Internet Explorer',
+  group: 'Explorer',
+  identifier: 'Trident/([0-9\.]*)',
+  versionIdentifier: 'rv:([0-9\.]*)'
+}, {
+  name: 'Spartan',
+  group: 'Spartan',
+  identifier: 'Edge/([0-9\.]*)',
+  versionIdentifier: 'Edge/([0-9\.]*)'
+}, {
+  name: 'Safari',
+  group: 'Safari',
+  identifier: 'Safari/([0-9\.]*)',
+  versionIdentifier: 'Version/([0-9\.]*)'
+}];
+
+exports.default = BROWSER_DATA;
+module.exports = exports['default'];
+
+/***/ }),
+/* 142 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/* eslint-disable no-useless-escape */
+// The order of the following arrays is important, be careful if you change it.
+
+var OS_DATA = [{
+  name: 'Windows 2000',
+  group: 'Windows',
+  identifier: 'Windows NT 5.0',
+  version: '5.0'
+}, {
+  name: 'Windows XP',
+  group: 'Windows',
+  identifier: 'Windows NT 5.1',
+  version: '5.1'
+}, {
+  name: 'Windows Vista',
+  group: 'Windows',
+  identifier: 'Windows NT 6.0',
+  version: '6.0'
+}, {
+  name: 'Windows 7',
+  group: 'Windows',
+  identifier: 'Windows NT 6.1',
+  version: '7.0'
+}, {
+  name: 'Windows 8',
+  group: 'Windows',
+  identifier: 'Windows NT 6.2',
+  version: '8.0'
+}, {
+  name: 'Windows 8.1',
+  group: 'Windows',
+  identifier: 'Windows NT 6.3',
+  version: '8.1'
+}, {
+  name: 'Windows 10',
+  group: 'Windows',
+  identifier: 'Windows NT 10.0',
+  version: '10.0'
+}, {
+  name: 'Windows Phone',
+  group: 'Windows Phone',
+  identifier: 'Windows Phone ([0-9\.]*)'
+}, {
+  name: 'Windows Phone',
+  group: 'Windows Phone',
+  identifier: 'Windows Phone OS ([0-9\.]*)'
+}, {
+  name: 'Windows',
+  group: 'Windows',
+  identifier: 'Windows'
+}, {
+  name: 'Chrome OS',
+  group: 'Chrome OS',
+  identifier: 'CrOS'
+}, {
+  name: 'Android',
+  group: 'Android',
+  identifier: 'Android',
+  versionIdentifier: 'Android ([a-zA-Z0-9\.-]*)'
+}, {
+  name: 'iPad',
+  group: 'iOS',
+  identifier: 'iPad',
+  versionIdentifier: 'OS ([0-9_]*)',
+  versionSeparator: '[_|\.]'
+}, {
+  name: 'iPod',
+  group: 'iOS',
+  identifier: 'iPod',
+  versionIdentifier: 'OS ([0-9_]*)',
+  versionSeparator: '[_|\.]'
+}, {
+  name: 'iPhone',
+  group: 'iOS',
+  identifier: 'iPhone OS',
+  versionIdentifier: 'OS ([0-9_]*)',
+  versionSeparator: '[_|\.]'
+}, {
+  name: 'Mac OS X High Sierra',
+  group: 'Mac OS',
+  identifier: 'Mac OS X (10([_|\.])13([0-9_\.]*))',
+  versionSeparator: '[_|\.]'
+}, {
+  name: 'Mac OS X Sierra',
+  group: 'Mac OS',
+  identifier: 'Mac OS X (10([_|\.])12([0-9_\.]*))',
+  versionSeparator: '[_|\.]'
+}, {
+  name: 'Mac OS X El Capitan',
+  group: 'Mac OS',
+  identifier: 'Mac OS X (10([_|\.])11([0-9_\.]*))',
+  versionSeparator: '[_|\.]'
+}, {
+  name: 'Mac OS X Yosemite',
+  group: 'Mac OS',
+  identifier: 'Mac OS X (10([_|\.])10([0-9_\.]*))',
+  versionSeparator: '[_|\.]'
+}, {
+  name: 'Mac OS X Mavericks',
+  group: 'Mac OS',
+  identifier: 'Mac OS X (10([_|\.])9([0-9_\.]*))',
+  versionSeparator: '[_|\.]'
+}, {
+  name: 'Mac OS X Mountain Lion',
+  group: 'Mac OS',
+  identifier: 'Mac OS X (10([_|\.])8([0-9_\.]*))',
+  versionSeparator: '[_|\.]'
+}, {
+  name: 'Mac OS X Lion',
+  group: 'Mac OS',
+  identifier: 'Mac OS X (10([_|\.])7([0-9_\.]*))',
+  versionSeparator: '[_|\.]'
+}, {
+  name: 'Mac OS X Snow Leopard',
+  group: 'Mac OS',
+  identifier: 'Mac OS X (10([_|\.])6([0-9_\.]*))',
+  versionSeparator: '[_|\.]'
+}, {
+  name: 'Mac OS X Leopard',
+  group: 'Mac OS',
+  identifier: 'Mac OS X (10([_|\.])5([0-9_\.]*))',
+  versionSeparator: '[_|\.]'
+}, {
+  name: 'Mac OS X Tiger',
+  group: 'Mac OS',
+  identifier: 'Mac OS X (10([_|\.])4([0-9_\.]*))',
+  versionSeparator: '[_|\.]'
+}, {
+  name: 'Mac OS X Panther',
+  group: 'Mac OS',
+  identifier: 'Mac OS X (10([_|\.])3([0-9_\.]*))',
+  versionSeparator: '[_|\.]'
+}, {
+  name: 'Mac OS X Jaguar',
+  group: 'Mac OS',
+  identifier: 'Mac OS X (10([_|\.])2([0-9_\.]*))',
+  versionSeparator: '[_|\.]'
+}, {
+  name: 'Mac OS X Puma',
+  group: 'Mac OS',
+  identifier: 'Mac OS X (10([_|\.])1([0-9_\.]*))',
+  versionSeparator: '[_|\.]'
+}, {
+  name: 'Mac OS X Cheetah',
+  group: 'Mac OS',
+  identifier: 'Mac OS X (10([_|\.])0([0-9_\.]*))',
+  versionSeparator: '[_|\.]'
+}, {
+  name: 'Mac OS',
+  group: 'Mac OS',
+  identifier: 'Mac OS'
+}, {
+  name: 'Ubuntu',
+  group: 'Linux',
+  identifier: 'Ubuntu',
+  versionIdentifier: 'Ubuntu/([0-9\.]*)'
+}, {
+  name: 'Debian',
+  group: 'Linux',
+  identifier: 'Debian'
+}, {
+  name: 'Gentoo',
+  group: 'Linux',
+  identifier: 'Gentoo'
+}, {
+  name: 'Linux',
+  group: 'Linux',
+  identifier: 'Linux'
+}, {
+  name: 'BlackBerry',
+  group: 'BlackBerry',
+  identifier: 'BlackBerry'
+}];
+
+exports.default = OS_DATA;
+module.exports = exports['default'];
+
+/***/ }),
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8772,7 +9217,7 @@ Log.error = function () {
 module.exports = exports['default'];
 
 /***/ }),
-/* 141 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9078,7 +9523,7 @@ exports.default = Kibo;
 module.exports = exports['default'];
 
 /***/ }),
-/* 142 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9088,7 +9533,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _core_factory = __webpack_require__(143);
+var _core_factory = __webpack_require__(146);
 
 var _core_factory2 = _interopRequireDefault(_core_factory);
 
@@ -9098,7 +9543,7 @@ exports.default = _core_factory2.default;
 module.exports = exports['default'];
 
 /***/ }),
-/* 143 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9218,7 +9663,7 @@ exports.default = CoreFactory;
 module.exports = exports['default'];
 
 /***/ }),
-/* 144 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9262,7 +9707,7 @@ var _browser = __webpack_require__(28);
 
 var _browser2 = _interopRequireDefault(_browser);
 
-var _container_factory = __webpack_require__(145);
+var _container_factory = __webpack_require__(148);
 
 var _container_factory2 = _interopRequireDefault(_container_factory);
 
@@ -9290,13 +9735,13 @@ var _styler = __webpack_require__(83);
 
 var _styler2 = _interopRequireDefault(_styler);
 
-var _clapprZepto = __webpack_require__(8);
+var _clapprZepto = __webpack_require__(6);
 
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-__webpack_require__(163);
+__webpack_require__(166);
 
-var _fonts = __webpack_require__(165);
+var _fonts = __webpack_require__(168);
 
 var _fonts2 = _interopRequireDefault(_fonts);
 
@@ -9710,7 +10155,7 @@ exports.default = Core;
 module.exports = exports['default'];
 
 /***/ }),
-/* 145 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9720,7 +10165,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _container_factory = __webpack_require__(146);
+var _container_factory = __webpack_require__(149);
 
 var _container_factory2 = _interopRequireDefault(_container_factory);
 
@@ -9730,7 +10175,7 @@ exports.default = _container_factory2.default;
 module.exports = exports['default'];
 
 /***/ }),
-/* 146 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9772,7 +10217,7 @@ var _container = __webpack_require__(77);
 
 var _container2 = _interopRequireDefault(_container);
 
-var _clapprZepto = __webpack_require__(8);
+var _clapprZepto = __webpack_require__(6);
 
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
@@ -9869,7 +10314,7 @@ exports.default = ContainerFactory;
 module.exports = exports['default'];
 
 /***/ }),
-/* 147 */
+/* 150 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9911,9 +10356,9 @@ var _error_mixin = __webpack_require__(19);
 
 var _error_mixin2 = _interopRequireDefault(_error_mixin);
 
-__webpack_require__(148);
+__webpack_require__(151);
 
-var _clapprZepto = __webpack_require__(8);
+var _clapprZepto = __webpack_require__(6);
 
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
@@ -10448,11 +10893,11 @@ exports.default = Container;
 module.exports = exports['default'];
 
 /***/ }),
-/* 148 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(149);
+var content = __webpack_require__(152);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -10498,10 +10943,10 @@ if(false) {
 }
 
 /***/ }),
-/* 149 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(6)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
@@ -10512,7 +10957,7 @@ exports.push([module.i, ".container[data-container] {\n  position: absolute;\n  
 
 
 /***/ }),
-/* 150 */
+/* 153 */
 /***/ (function(module, exports) {
 
 
@@ -10607,7 +11052,7 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 151 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10617,7 +11062,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _stringify = __webpack_require__(152);
+var _stringify = __webpack_require__(155);
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
@@ -10665,13 +11110,13 @@ var _playback = __webpack_require__(12);
 
 var _playback2 = _interopRequireDefault(_playback);
 
-var _clapprZepto = __webpack_require__(8);
+var _clapprZepto = __webpack_require__(6);
 
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-__webpack_require__(154);
+__webpack_require__(157);
 
-var _mediaControl = __webpack_require__(156);
+var _mediaControl = __webpack_require__(159);
 
 var _mediaControl2 = _interopRequireDefault(_mediaControl);
 
@@ -10683,27 +11128,27 @@ var _pause = __webpack_require__(82);
 
 var _pause2 = _interopRequireDefault(_pause);
 
-var _stop = __webpack_require__(157);
+var _stop = __webpack_require__(160);
 
 var _stop2 = _interopRequireDefault(_stop);
 
-var _volume = __webpack_require__(158);
+var _volume = __webpack_require__(161);
 
 var _volume2 = _interopRequireDefault(_volume);
 
-var _mute = __webpack_require__(159);
+var _mute = __webpack_require__(162);
 
 var _mute2 = _interopRequireDefault(_mute);
 
-var _expand = __webpack_require__(160);
+var _expand = __webpack_require__(163);
 
 var _expand2 = _interopRequireDefault(_expand);
 
-var _shrink = __webpack_require__(161);
+var _shrink = __webpack_require__(164);
 
 var _shrink2 = _interopRequireDefault(_shrink);
 
-var _hd = __webpack_require__(162);
+var _hd = __webpack_require__(165);
 
 var _hd2 = _interopRequireDefault(_hd);
 
@@ -11457,27 +11902,27 @@ module.exports = exports['default'];
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(60)))
 
 /***/ }),
-/* 152 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = { "default": __webpack_require__(153), __esModule: true };
+module.exports = { "default": __webpack_require__(156), __esModule: true };
 
 /***/ }),
-/* 153 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var core  = __webpack_require__(7)
+var core  = __webpack_require__(8)
   , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
 module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
   return $JSON.stringify.apply($JSON, arguments);
 };
 
 /***/ }),
-/* 154 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(155);
+var content = __webpack_require__(158);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -11523,11 +11968,11 @@ if(false) {
 }
 
 /***/ }),
-/* 155 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var escape = __webpack_require__(80);
-exports = module.exports = __webpack_require__(6)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
@@ -11538,53 +11983,53 @@ exports.push([module.i, ".media-control-notransition {\n  transition: none !impo
 
 
 /***/ }),
-/* 156 */
+/* 159 */
 /***/ (function(module, exports) {
 
 module.exports = "<div class=\"media-control-background\" data-background></div>\n<div class=\"media-control-layer\" data-controls>\n  <%  var renderBar = function(name) { %>\n      <div class=\"bar-container\" data-<%= name %>>\n        <div class=\"bar-background\" data-<%= name %>>\n          <div class=\"bar-fill-1\" data-<%= name %>></div>\n          <div class=\"bar-fill-2\" data-<%= name %>></div>\n          <div class=\"bar-hover\" data-<%= name %>></div>\n        </div>\n        <div class=\"bar-scrubber\" data-<%= name %>>\n          <div class=\"bar-scrubber-icon\" data-<%= name %>></div>\n        </div>\n      </div>\n  <%  }; %>\n  <%  var renderSegmentedBar = function(name, segments) {\n      segments = segments || 10; %>\n    <div class=\"bar-container\" data-<%= name %>>\n    <% for (var i = 0; i < segments; i++) { %>\n      <div class=\"segmented-bar-element\" data-<%= name %>></div>\n    <% } %>\n    </div>\n  <% }; %>\n  <% var renderDrawer = function(name, renderContent) { %>\n      <div class=\"drawer-container\" data-<%= name %>>\n        <div class=\"drawer-icon-container\" data-<%= name %>>\n          <div class=\"drawer-icon media-control-icon\" data-<%= name %>></div>\n          <span class=\"drawer-text\" data-<%= name %>></span>\n        </div>\n        <% renderContent(name); %>\n      </div>\n  <% }; %>\n  <% var renderIndicator = function(name) { %>\n      <div class=\"media-control-indicator\" data-<%= name %>></div>\n  <% }; %>\n  <% var renderButton = function(name) { %>\n    <button type=\"button\" class=\"media-control-button media-control-icon\" data-<%= name %> aria-label=\"<%= name %>\"></button>\n  <% }; %>\n  <%  var templates = {\n        bar: renderBar,\n        segmentedBar: renderSegmentedBar,\n      };\n      var render = function(settingsList) {\n        settingsList.forEach(function(setting) {\n          if(setting === \"seekbar\") {\n            renderBar(setting);\n          } else if (setting === \"volume\") {\n            renderDrawer(setting, settings.volumeBarTemplate ? templates[settings.volumeBarTemplate] : function(name) { return renderSegmentedBar(name); });\n          } else if (setting === \"duration\" || setting === \"position\") {\n            renderIndicator(setting);\n          } else {\n            renderButton(setting);\n          }\n        });\n      }; %>\n  <% if (settings.default && settings.default.length) { %>\n  <div class=\"media-control-center-panel\" data-media-control>\n    <% render(settings.default); %>\n  </div>\n  <% } %>\n  <% if (settings.left && settings.left.length) { %>\n  <div class=\"media-control-left-panel\" data-media-control>\n    <% render(settings.left); %>\n  </div>\n  <% } %>\n  <% if (settings.right && settings.right.length) { %>\n  <div class=\"media-control-right-panel\" data-media-control>\n    <% render(settings.right); %>\n  </div>\n  <% } %>\n</div>\n";
 
 /***/ }),
-/* 157 */
+/* 160 */
 /***/ (function(module, exports) {
 
 module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M1.712 1.24h12.6v13.52h-12.6z\"></path></svg>"
 
 /***/ }),
-/* 158 */
+/* 161 */
 /***/ (function(module, exports) {
 
 module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M11.5 11h-.002v1.502L7.798 10H4.5V6h3.297l3.7-2.502V4.5h.003V11zM11 4.49L7.953 6.5H5v3h2.953L11 11.51V4.49z\"></path></svg>"
 
 /***/ }),
-/* 159 */
+/* 162 */
 /***/ (function(module, exports) {
 
 module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M9.75 11.51L6.7 9.5H3.75v-3H6.7L9.75 4.49v.664l.497.498V3.498L6.547 6H3.248v4h3.296l3.7 2.502v-2.154l-.497.5v.662zm3-5.165L12.404 6l-1.655 1.653L9.093 6l-.346.345L10.402 8 8.747 9.654l.346.347 1.655-1.653L12.403 10l.348-.346L11.097 8l1.655-1.655z\"></path></svg>"
 
 /***/ }),
-/* 160 */
+/* 163 */
 /***/ (function(module, exports) {
 
 module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M7.156 8L4 11.156V8.5H3V13h4.5v-1H4.844L8 8.844 7.156 8zM8.5 3v1h2.657L8 7.157 8.846 8 12 4.844V7.5h1V3H8.5z\"></path></svg>"
 
 /***/ }),
-/* 161 */
+/* 164 */
 /***/ (function(module, exports) {
 
 module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M13.5 3.344l-.844-.844L9.5 5.656V3h-1v4.5H13v-1h-2.656L13.5 3.344zM3 9.5h2.656L2.5 12.656l.844.844L6.5 10.344V13h1V8.5H3v1z\"></path></svg>"
 
 /***/ }),
-/* 162 */
+/* 165 */
 /***/ (function(module, exports) {
 
 module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M5.375 7.062H2.637V4.26H.502v7.488h2.135V8.9h2.738v2.848h2.133V4.26H5.375v2.802zm5.97-2.81h-2.84v7.496h2.798c2.65 0 4.195-1.607 4.195-3.77v-.022c0-2.162-1.523-3.704-4.154-3.704zm2.06 3.758c0 1.21-.81 1.896-2.03 1.896h-.83V6.093h.83c1.22 0 2.03.696 2.03 1.896v.02z\"></path></svg>"
 
 /***/ }),
-/* 163 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(164);
+var content = __webpack_require__(167);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -11630,10 +12075,10 @@ if(false) {
 }
 
 /***/ }),
-/* 164 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(6)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
@@ -11644,28 +12089,28 @@ exports.push([module.i, "[data-player] {\n  -webkit-touch-callout: none;\n  -web
 
 
 /***/ }),
-/* 165 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var escape = __webpack_require__(80);
-exports = module.exports = __webpack_require__(6)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
 // module
-exports.push([module.i, "@font-face {\n  font-family: \"Roboto\";\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Roboto\"), local(\"Roboto-Regular\"), url(" + escape(__webpack_require__(166)) + ") format(\"truetype\");\n}\n", ""]);
+exports.push([module.i, "@font-face {\n  font-family: \"Roboto\";\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Roboto\"), local(\"Roboto-Regular\"), url(" + escape(__webpack_require__(169)) + ") format(\"truetype\");\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 166 */
+/* 169 */
 /***/ (function(module, exports) {
 
 module.exports = "<%=baseUrl%>/38861cba61c66739c1452c3a71e39852.ttf";
 
 /***/ }),
-/* 167 */
+/* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11735,7 +12180,7 @@ var _spinner_three_bounce = __webpack_require__(90);
 
 var _spinner_three_bounce2 = _interopRequireDefault(_spinner_three_bounce);
 
-var _stats = __webpack_require__(192);
+var _stats = __webpack_require__(195);
 
 var _stats2 = _interopRequireDefault(_stats);
 
@@ -11747,7 +12192,7 @@ var _poster = __webpack_require__(92);
 
 var _poster2 = _interopRequireDefault(_poster);
 
-var _google_analytics = __webpack_require__(202);
+var _google_analytics = __webpack_require__(205);
 
 var _google_analytics2 = _interopRequireDefault(_google_analytics);
 
@@ -11759,7 +12204,7 @@ var _dvr_controls = __webpack_require__(94);
 
 var _dvr_controls2 = _interopRequireDefault(_dvr_controls);
 
-var _closed_captions = __webpack_require__(209);
+var _closed_captions = __webpack_require__(212);
 
 var _closed_captions2 = _interopRequireDefault(_closed_captions);
 
@@ -11767,23 +12212,23 @@ var _favicon = __webpack_require__(95);
 
 var _favicon2 = _interopRequireDefault(_favicon);
 
-var _seek_time = __webpack_require__(216);
+var _seek_time = __webpack_require__(219);
 
 var _seek_time2 = _interopRequireDefault(_seek_time);
 
-var _sources = __webpack_require__(221);
+var _sources = __webpack_require__(224);
 
 var _sources2 = _interopRequireDefault(_sources);
 
-var _end_video = __webpack_require__(222);
+var _end_video = __webpack_require__(225);
 
 var _end_video2 = _interopRequireDefault(_end_video);
 
-var _strings = __webpack_require__(223);
+var _strings = __webpack_require__(226);
 
 var _strings2 = _interopRequireDefault(_strings);
 
-var _error_screen = __webpack_require__(224);
+var _error_screen = __webpack_require__(227);
 
 var _error_screen2 = _interopRequireDefault(_error_screen);
 
@@ -11926,15 +12371,15 @@ exports.default = Loader;
 module.exports = exports['default'];
 
 /***/ }),
-/* 168 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(70);
-__webpack_require__(169);
-module.exports = __webpack_require__(7).Array.from;
+__webpack_require__(172);
+module.exports = __webpack_require__(8).Array.from;
 
 /***/ }),
-/* 169 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11942,13 +12387,13 @@ module.exports = __webpack_require__(7).Array.from;
 var ctx            = __webpack_require__(43)
   , $export        = __webpack_require__(15)
   , toObject       = __webpack_require__(37)
-  , call           = __webpack_require__(170)
-  , isArrayIter    = __webpack_require__(171)
+  , call           = __webpack_require__(173)
+  , isArrayIter    = __webpack_require__(174)
   , toLength       = __webpack_require__(68)
-  , createProperty = __webpack_require__(172)
-  , getIterFn      = __webpack_require__(173);
+  , createProperty = __webpack_require__(175)
+  , getIterFn      = __webpack_require__(176);
 
-$export($export.S + $export.F * !__webpack_require__(175)(function(iter){ Array.from(iter); }), 'Array', {
+$export($export.S + $export.F * !__webpack_require__(178)(function(iter){ Array.from(iter); }), 'Array', {
   // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
   from: function from(arrayLike/*, mapfn = undefined, thisArg = undefined*/){
     var O       = toObject(arrayLike)
@@ -11978,7 +12423,7 @@ $export($export.S + $export.F * !__webpack_require__(175)(function(iter){ Array.
 
 
 /***/ }),
-/* 170 */
+/* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // call something on iterator step with safe closing on error
@@ -11995,7 +12440,7 @@ module.exports = function(iterator, fn, value, entries){
 };
 
 /***/ }),
-/* 171 */
+/* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // check on default Array iterator
@@ -12008,7 +12453,7 @@ module.exports = function(it){
 };
 
 /***/ }),
-/* 172 */
+/* 175 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12022,20 +12467,20 @@ module.exports = function(object, index, value){
 };
 
 /***/ }),
-/* 173 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var classof   = __webpack_require__(174)
+var classof   = __webpack_require__(177)
   , ITERATOR  = __webpack_require__(11)('iterator')
   , Iterators = __webpack_require__(31);
-module.exports = __webpack_require__(7).getIteratorMethod = function(it){
+module.exports = __webpack_require__(8).getIteratorMethod = function(it){
   if(it != undefined)return it[ITERATOR]
     || it['@@iterator']
     || Iterators[classof(it)];
 };
 
 /***/ }),
-/* 174 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // getting tag from 19.1.3.6 Object.prototype.toString()
@@ -12063,7 +12508,7 @@ module.exports = function(it){
 };
 
 /***/ }),
-/* 175 */
+/* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var ITERATOR     = __webpack_require__(11)('iterator')
@@ -12089,7 +12534,7 @@ module.exports = function(exec, skipClosing){
 };
 
 /***/ }),
-/* 176 */
+/* 179 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12145,7 +12590,7 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _clapprZepto = __webpack_require__(8);
+var _clapprZepto = __webpack_require__(6);
 
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
@@ -12153,11 +12598,11 @@ var _template = __webpack_require__(10);
 
 var _template2 = _interopRequireDefault(_template);
 
-var _tracks = __webpack_require__(177);
+var _tracks = __webpack_require__(180);
 
 var _tracks2 = _interopRequireDefault(_tracks);
 
-__webpack_require__(178);
+__webpack_require__(181);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -12581,7 +13026,7 @@ var HTML5Video = function (_Playback) {
   HTML5Video.prototype.destroy = function destroy() {
     this._destroyed = true;
     this.handleTextTrackChange && this.el.textTracks.removeEventListener('change', this.handleTextTrackChange);
-    this.$el.remove();
+    _Playback.prototype.destroy.call(this);
     this.el.removeAttribute('src');
     this._src = null;
     _utils.DomRecycler.garbage(this.$el);
@@ -12784,17 +13229,17 @@ module.exports = exports['default'];
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(60)))
 
 /***/ }),
-/* 177 */
+/* 180 */
 /***/ (function(module, exports) {
 
 module.exports = "<% for (var i = 0; i < tracks.length; i++) { %>\n  <track data-html5-video-track=\"<%= i %>\" kind=\"<%= tracks[i].kind %>\" label=\"<%= tracks[i].label %>\" srclang=\"<%= tracks[i].lang %>\" src=\"<%= tracks[i].src %>\" />\n<% }; %>\n";
 
 /***/ }),
-/* 178 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(179);
+var content = __webpack_require__(182);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -12840,10 +13285,10 @@ if(false) {
 }
 
 /***/ }),
-/* 179 */
+/* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(6)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
@@ -12854,7 +13299,7 @@ exports.push([module.i, "[data-html5-video] {\n  position: absolute;\n  height: 
 
 
 /***/ }),
-/* 180 */
+/* 183 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12949,7 +13394,7 @@ HTML5Audio.canPlay = function (resourceUrl, mimeType) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 181 */
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12983,7 +13428,7 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-__webpack_require__(182);
+__webpack_require__(185);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -13060,11 +13505,11 @@ HTMLImg.canPlay = function (resource) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 182 */
+/* 185 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(183);
+var content = __webpack_require__(186);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -13110,10 +13555,10 @@ if(false) {
 }
 
 /***/ }),
-/* 183 */
+/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(6)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
@@ -13124,7 +13569,7 @@ exports.push([module.i, "[data-html-img] {\n  max-width: 100%;\n  max-height: 10
 
 
 /***/ }),
-/* 184 */
+/* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13164,11 +13609,11 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _error = __webpack_require__(185);
+var _error = __webpack_require__(188);
 
 var _error2 = _interopRequireDefault(_error);
 
-__webpack_require__(186);
+__webpack_require__(189);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -13286,17 +13731,17 @@ NoOp.canPlay = function (source) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 185 */
+/* 188 */
 /***/ (function(module, exports) {
 
 module.exports = "<canvas data-no-op-canvas></canvas>\n<p data-no-op-msg><%=message%><p>\n";
 
 /***/ }),
-/* 186 */
+/* 189 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(187);
+var content = __webpack_require__(190);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -13342,10 +13787,10 @@ if(false) {
 }
 
 /***/ }),
-/* 187 */
+/* 190 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(6)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
@@ -13356,7 +13801,7 @@ exports.push([module.i, "[data-no-op] {\n  position: absolute;\n  height: 100%;\
 
 
 /***/ }),
-/* 188 */
+/* 191 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13394,11 +13839,11 @@ var _template = __webpack_require__(10);
 
 var _template2 = _interopRequireDefault(_template);
 
-var _spinner = __webpack_require__(189);
+var _spinner = __webpack_require__(192);
 
 var _spinner2 = _interopRequireDefault(_spinner);
 
-__webpack_require__(190);
+__webpack_require__(193);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -13481,17 +13926,17 @@ exports.default = SpinnerThreeBouncePlugin;
 module.exports = exports['default'];
 
 /***/ }),
-/* 189 */
+/* 192 */
 /***/ (function(module, exports) {
 
 module.exports = "<div data-bounce1></div><div data-bounce2></div><div data-bounce3></div>\n";
 
 /***/ }),
-/* 190 */
+/* 193 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(191);
+var content = __webpack_require__(194);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -13537,10 +13982,10 @@ if(false) {
 }
 
 /***/ }),
-/* 191 */
+/* 194 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(6)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
@@ -13551,7 +13996,7 @@ exports.push([module.i, ".spinner-three-bounce[data-spinner] {\n  position: abso
 
 
 /***/ }),
-/* 192 */
+/* 195 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13561,7 +14006,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _stats = __webpack_require__(193);
+var _stats = __webpack_require__(196);
 
 var _stats2 = _interopRequireDefault(_stats);
 
@@ -13571,7 +14016,7 @@ exports.default = _stats2.default;
 module.exports = exports['default'];
 
 /***/ }),
-/* 193 */
+/* 196 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13605,7 +14050,7 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _clapprZepto = __webpack_require__(8);
+var _clapprZepto = __webpack_require__(6);
 
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
@@ -13726,7 +14171,7 @@ exports.default = StatsPlugin;
 module.exports = exports['default'];
 
 /***/ }),
-/* 194 */
+/* 197 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13764,11 +14209,11 @@ var _template = __webpack_require__(10);
 
 var _template2 = _interopRequireDefault(_template);
 
-var _watermark = __webpack_require__(195);
+var _watermark = __webpack_require__(198);
 
 var _watermark2 = _interopRequireDefault(_watermark);
 
-__webpack_require__(196);
+__webpack_require__(199);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -13837,17 +14282,17 @@ exports.default = WaterMarkPlugin;
 module.exports = exports['default'];
 
 /***/ }),
-/* 195 */
+/* 198 */
 /***/ (function(module, exports) {
 
 module.exports = "<div data-watermark data-watermark-<%=position %>>\n<% if(typeof imageLink !== 'undefined') { %>\n<a target=_blank href=\"<%= imageLink %>\">\n<% } %>\n<img src=\"<%= imageUrl %>\">\n<% if(typeof imageLink !== 'undefined') { %>\n</a>\n<% } %>\n</div>\n";
 
 /***/ }),
-/* 196 */
+/* 199 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(197);
+var content = __webpack_require__(200);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -13893,10 +14338,10 @@ if(false) {
 }
 
 /***/ }),
-/* 197 */
+/* 200 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(6)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
@@ -13907,7 +14352,7 @@ exports.push([module.i, "[data-watermark] {\n  position: absolute;\n  min-width:
 
 
 /***/ }),
-/* 198 */
+/* 201 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13953,7 +14398,7 @@ var _error = __webpack_require__(78);
 
 var _error2 = _interopRequireDefault(_error);
 
-var _poster = __webpack_require__(199);
+var _poster = __webpack_require__(202);
 
 var _poster2 = _interopRequireDefault(_poster);
 
@@ -13961,7 +14406,7 @@ var _play = __webpack_require__(62);
 
 var _play2 = _interopRequireDefault(_play);
 
-__webpack_require__(200);
+__webpack_require__(203);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -14034,9 +14479,12 @@ var PosterPlugin = function (_UIContainerPlugin) {
   };
 
   PosterPlugin.prototype.onError = function onError(error) {
-    if (error.level == _error2.default.Levels.FATAL) {
-      this.hasFatalError = true;
-      this.hidePlayButton();
+    this.hasFatalError = error.level === _error2.default.Levels.FATAL;
+
+    if (this.hasFatalError) {
+      this.hasStartedPlaying = false;
+      this.playRequested = false;
+      this.showPlayButton();
     }
   };
 
@@ -14056,7 +14504,7 @@ var PosterPlugin = function (_UIContainerPlugin) {
   };
 
   PosterPlugin.prototype.showPlayButton = function showPlayButton() {
-    if (this.hasFatalError) return;
+    if (this.hasFatalError && !this.options.disableErrorScreen) return;
 
     this.$playButton.show();
     this.$el.addClass('clickable');
@@ -14143,17 +14591,17 @@ module.exports = exports['default'];
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(60)))
 
 /***/ }),
-/* 199 */
+/* 202 */
 /***/ (function(module, exports) {
 
 module.exports = "<div class=\"play-wrapper\" data-poster></div>\n";
 
 /***/ }),
-/* 200 */
+/* 203 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(201);
+var content = __webpack_require__(204);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -14199,10 +14647,10 @@ if(false) {
 }
 
 /***/ }),
-/* 201 */
+/* 204 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(6)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
@@ -14213,7 +14661,7 @@ exports.push([module.i, ".player-poster[data-poster] {\n  display: -webkit-box;\
 
 
 /***/ }),
-/* 202 */
+/* 205 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14223,7 +14671,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _google_analytics = __webpack_require__(203);
+var _google_analytics = __webpack_require__(206);
 
 var _google_analytics2 = _interopRequireDefault(_google_analytics);
 
@@ -14233,7 +14681,7 @@ exports.default = _google_analytics2.default;
 module.exports = exports['default'];
 
 /***/ }),
-/* 203 */
+/* 206 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14414,7 +14862,7 @@ exports.default = GoogleAnalytics;
 module.exports = exports['default'];
 
 /***/ }),
-/* 204 */
+/* 207 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14497,7 +14945,7 @@ exports.default = ClickToPausePlugin;
 module.exports = exports['default'];
 
 /***/ }),
-/* 205 */
+/* 208 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14539,11 +14987,11 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _index = __webpack_require__(206);
+var _index = __webpack_require__(209);
 
 var _index2 = _interopRequireDefault(_index);
 
-__webpack_require__(207);
+__webpack_require__(210);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -14658,17 +15106,17 @@ exports.default = DVRControls;
 module.exports = exports['default'];
 
 /***/ }),
-/* 206 */
+/* 209 */
 /***/ (function(module, exports) {
 
 module.exports = "<div class=\"live-info\"><%= live %></div>\n<button type=\"button\" class=\"live-button\" aria-label=\"<%= backToLive %>\"><%= backToLive %></button>\n";
 
 /***/ }),
-/* 207 */
+/* 210 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(208);
+var content = __webpack_require__(211);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -14714,10 +15162,10 @@ if(false) {
 }
 
 /***/ }),
-/* 208 */
+/* 211 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(6)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
@@ -14728,7 +15176,7 @@ exports.push([module.i, ".dvr-controls[data-dvr-controls] {\n  display: inline-b
 
 
 /***/ }),
-/* 209 */
+/* 212 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14738,7 +15186,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _closed_captions = __webpack_require__(210);
+var _closed_captions = __webpack_require__(213);
 
 var _closed_captions2 = _interopRequireDefault(_closed_captions);
 
@@ -14748,7 +15196,7 @@ exports.default = _closed_captions2.default;
 module.exports = exports['default'];
 
 /***/ }),
-/* 210 */
+/* 213 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14786,15 +15234,15 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _cc = __webpack_require__(211);
+var _cc = __webpack_require__(214);
 
 var _cc2 = _interopRequireDefault(_cc);
 
-var _closed_captions = __webpack_require__(212);
+var _closed_captions = __webpack_require__(215);
 
 var _closed_captions2 = _interopRequireDefault(_closed_captions);
 
-__webpack_require__(213);
+__webpack_require__(216);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -14940,23 +15388,23 @@ exports.default = ClosedCaptions;
 module.exports = exports['default'];
 
 /***/ }),
-/* 211 */
+/* 214 */
 /***/ (function(module, exports) {
 
 module.exports = "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" viewBox=\"0 0 49 41.8\" style=\"enable-background:new 0 0 49 41.8;\" xml:space=\"preserve\"><path d=\"M47.1,0H3.2C1.6,0,0,1.2,0,2.8v31.5C0,35.9,1.6,37,3.2,37h11.9l3.2,1.9l4.7,2.7c0.9,0.5,2-0.1,2-1.1V37h22.1 c1.6,0,1.9-1.1,1.9-2.7V2.8C49,1.2,48.7,0,47.1,0z M7.2,18.6c0-4.8,3.5-9.3,9.9-9.3c4.8,0,7.1,2.7,7.1,2.7l-2.5,4 c0,0-1.7-1.7-4.2-1.7c-2.8,0-4.3,2.1-4.3,4.3c0,2.1,1.5,4.4,4.5,4.4c2.5,0,4.9-2.1,4.9-2.1l2.2,4.2c0,0-2.7,2.9-7.6,2.9 C10.8,27.9,7.2,23.5,7.2,18.6z M36.9,27.9c-6.4,0-9.9-4.4-9.9-9.3c0-4.8,3.5-9.3,9.9-9.3C41.7,9.3,44,12,44,12l-2.5,4 c0,0-1.7-1.7-4.2-1.7c-2.8,0-4.3,2.1-4.3,4.3c0,2.1,1.5,4.4,4.5,4.4c2.5,0,4.9-2.1,4.9-2.1l2.2,4.2C44.5,25,41.9,27.9,36.9,27.9z\"></path></svg>"
 
 /***/ }),
-/* 212 */
+/* 215 */
 /***/ (function(module, exports) {
 
 module.exports = "<button type=\"button\" class=\"cc-button media-control-button media-control-icon\" data-cc-button aria-label=\"<%= ariaLabel %>\"></button>\n<ul>\n  <% if (title) { %>\n  <li data-title><%= title %></li>\n  <% }; %>\n  <li><a href=\"#\" data-cc-select=\"-1\"><%= disabledLabel %></a></li>\n  <% for (var i = 0; i < tracks.length; i++) { %>\n    <li><a href=\"#\" data-cc-select=\"<%= tracks[i].id %>\"><%= tracks[i].label %></a></li>\n  <% }; %>\n</ul>\n";
 
 /***/ }),
-/* 213 */
+/* 216 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(214);
+var content = __webpack_require__(217);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -15002,10 +15450,10 @@ if(false) {
 }
 
 /***/ }),
-/* 214 */
+/* 217 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(6)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
@@ -15016,7 +15464,7 @@ exports.push([module.i, ".cc-controls[data-cc-controls] {\n  float: right;\n  po
 
 
 /***/ }),
-/* 215 */
+/* 218 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15050,7 +15498,7 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _clapprZepto = __webpack_require__(8);
+var _clapprZepto = __webpack_require__(6);
 
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
@@ -15174,7 +15622,7 @@ exports.default = Favicon;
 module.exports = exports['default'];
 
 /***/ }),
-/* 216 */
+/* 219 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15184,7 +15632,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _seek_time = __webpack_require__(217);
+var _seek_time = __webpack_require__(220);
 
 var _seek_time2 = _interopRequireDefault(_seek_time);
 
@@ -15194,7 +15642,7 @@ exports.default = _seek_time2.default;
 module.exports = exports['default'];
 
 /***/ }),
-/* 217 */
+/* 220 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15238,11 +15686,11 @@ var _playback = __webpack_require__(12);
 
 var _playback2 = _interopRequireDefault(_playback);
 
-var _seek_time = __webpack_require__(218);
+var _seek_time = __webpack_require__(221);
 
 var _seek_time2 = _interopRequireDefault(_seek_time);
 
-__webpack_require__(219);
+__webpack_require__(222);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -15438,17 +15886,17 @@ exports.default = SeekTime;
 module.exports = exports['default'];
 
 /***/ }),
-/* 218 */
+/* 221 */
 /***/ (function(module, exports) {
 
 module.exports = "<span data-seek-time></span>\n<span data-duration></span>\n";
 
 /***/ }),
-/* 219 */
+/* 222 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(220);
+var content = __webpack_require__(223);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -15494,10 +15942,10 @@ if(false) {
 }
 
 /***/ }),
-/* 220 */
+/* 223 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(6)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
@@ -15508,7 +15956,7 @@ exports.push([module.i, ".seek-time[data-seek-time] {\n  position: absolute;\n  
 
 
 /***/ }),
-/* 221 */
+/* 224 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15580,7 +16028,7 @@ exports.default = SourcesPlugin;
 module.exports = exports['default'];
 
 /***/ }),
-/* 222 */
+/* 225 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15658,7 +16106,7 @@ exports.default = EndVideo;
 module.exports = exports['default'];
 
 /***/ }),
-/* 223 */
+/* 226 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15686,7 +16134,7 @@ var _inherits3 = _interopRequireDefault(_inherits2);
 
 var _utils = __webpack_require__(5);
 
-var _clapprZepto = __webpack_require__(8);
+var _clapprZepto = __webpack_require__(6);
 
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
@@ -15730,8 +16178,9 @@ var Strings = function (_CorePlugin) {
 
   Strings.prototype.t = function t(key) {
     var lang = this._language();
-    var i18n = lang && this._messages[lang] || this._messages['en'];
-    return i18n[key] || key;
+    var fallbackLang = this._messages['en'];
+    var i18n = lang && this._messages[lang] || fallbackLang;
+    return i18n[key] || fallbackLang[key] || key;
   };
 
   Strings.prototype._language = function _language() {
@@ -15770,9 +16219,11 @@ var Strings = function (_CorePlugin) {
       },
       'fr': {
         'live': 'en direct',
-        'disabled': 'Désactivé',
         'back_to_live': 'retour au direct',
-        'playback_not_supported': 'Votre navigateur ne supporte pas la lecture de cette vidéo. Merci de tenter sur un autre navigateur.'
+        'disabled': 'Désactivé',
+        'playback_not_supported': 'Votre navigateur ne supporte pas la lecture de cette vidéo. Merci de tenter sur un autre navigateur.',
+        'default_error_title': 'Impossible de lire la vidéo.',
+        'default_error_message': 'Un problème est survenu lors du chargement de la vidéo.'
       },
       'tr': {
         'live': 'canlı',
@@ -15804,7 +16255,7 @@ exports.default = Strings;
 module.exports = exports['default'];
 
 /***/ }),
-/* 224 */
+/* 227 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15814,7 +16265,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _error_screen = __webpack_require__(225);
+var _error_screen = __webpack_require__(228);
 
 var _error_screen2 = _interopRequireDefault(_error_screen);
 
@@ -15824,7 +16275,7 @@ exports.default = _error_screen2.default;
 module.exports = exports['default'];
 
 /***/ }),
-/* 225 */
+/* 228 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15838,13 +16289,13 @@ var _classCallCheck2 = __webpack_require__(0);
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-var _createClass2 = __webpack_require__(3);
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
 var _possibleConstructorReturn2 = __webpack_require__(1);
 
 var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _createClass2 = __webpack_require__(3);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
 
 var _inherits2 = __webpack_require__(2);
 
@@ -15866,24 +16317,54 @@ var _error = __webpack_require__(32);
 
 var _error2 = _interopRequireDefault(_error);
 
-var _reload = __webpack_require__(226);
+var _reload = __webpack_require__(229);
 
 var _reload2 = _interopRequireDefault(_reload);
 
-var _error_screen = __webpack_require__(227);
+var _error_screen = __webpack_require__(230);
 
 var _error_screen2 = _interopRequireDefault(_error_screen);
 
-__webpack_require__(228);
+__webpack_require__(231);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var ErrorScreen = function (_UICorePlugin) {
   (0, _inherits3.default)(ErrorScreen, _UICorePlugin);
+  (0, _createClass3.default)(ErrorScreen, [{
+    key: 'name',
+    get: function get() {
+      return 'error_screen';
+    }
+  }, {
+    key: 'template',
+    get: function get() {
+      return (0, _template2.default)(_error_screen2.default);
+    }
+  }, {
+    key: 'container',
+    get: function get() {
+      return this.core.getCurrentContainer();
+    }
+  }, {
+    key: 'attributes',
+    get: function get() {
+      return {
+        'class': 'player-error-screen',
+        'data-error-screen': ''
+      };
+    }
+  }]);
 
-  function ErrorScreen() {
+  function ErrorScreen(core) {
+    var _ret;
+
     (0, _classCallCheck3.default)(this, ErrorScreen);
-    return (0, _possibleConstructorReturn3.default)(this, _UICorePlugin.apply(this, arguments));
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, _UICorePlugin.call(this, core));
+
+    if (_this.options.disableErrorScreen) return _ret = _this.disable(), (0, _possibleConstructorReturn3.default)(_this, _ret);
+    return _this;
   }
 
   ErrorScreen.prototype.bindEvents = function bindEvents() {
@@ -15954,30 +16435,6 @@ var ErrorScreen = function (_UICorePlugin) {
     return this;
   };
 
-  (0, _createClass3.default)(ErrorScreen, [{
-    key: 'name',
-    get: function get() {
-      return 'error_screen';
-    }
-  }, {
-    key: 'template',
-    get: function get() {
-      return (0, _template2.default)(_error_screen2.default);
-    }
-  }, {
-    key: 'container',
-    get: function get() {
-      return this.core.getCurrentContainer();
-    }
-  }, {
-    key: 'attributes',
-    get: function get() {
-      return {
-        'class': 'player-error-screen',
-        'data-error-screen': ''
-      };
-    }
-  }]);
   return ErrorScreen;
 }(_ui_core_plugin2.default);
 
@@ -15985,23 +16442,23 @@ exports.default = ErrorScreen;
 module.exports = exports['default'];
 
 /***/ }),
-/* 226 */
+/* 229 */
 /***/ (function(module, exports) {
 
 module.exports = "<svg fill=\"#FFFFFF\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z\"></path><path d=\"M0 0h24v24H0z\" fill=\"none\"></path></svg>"
 
 /***/ }),
-/* 227 */
+/* 230 */
 /***/ (function(module, exports) {
 
 module.exports = "<div class=\"player-error-screen__content\" data-error-screen>\n  <% if (icon) { %>\n  <div class=\"player-error-screen__icon\" data-error-screen><%= icon %></div>\n  <% } %>\n  <div class=\"player-error-screen__title\" data-error-screen><%= title %></div>\n  <div class=\"player-error-screen__message\" data-error-screen><%= message %></div>\n  <div class=\"player-error-screen__code\" data-error-screen>Error code: <%= code %></div>\n  <div class=\"player-error-screen__reload\" data-error-screen><%= reloadIcon %></div>\n</div>\n";
 
 /***/ }),
-/* 228 */
+/* 231 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(229);
+var content = __webpack_require__(232);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -16047,10 +16504,10 @@ if(false) {
 }
 
 /***/ }),
-/* 229 */
+/* 232 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(6)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
