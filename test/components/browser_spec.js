@@ -1,6 +1,6 @@
 import Browser from '../../src/components/browser'
 
-import { getBrowserInfo } from '../../src/components/browser'
+import { getBrowserData, getBrowserInfo, getDevice, getOsData } from '../../src/components/browser/browser'
 
 describe('Browser', function() {
   it('checks localstorage support', function() {
@@ -27,6 +27,30 @@ describe('Browser', function() {
       const browserInfo = getBrowserInfo(userAgent)
       expect(browserInfo.name).to.be.equal('Chrome')
       expect(browserInfo.version).to.be.equal(43)
+    })
+
+    it('reports correctly operational system data', function() {
+      Browser.userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36'
+      const osData = getOsData()
+      expect(osData.name).to.be.equal('Mac OS X Sierra')
+      expect(osData.majorVersion).to.be.equal(10)
+      expect(osData.minorVersion).to.be.equal(12)
+    })
+
+    it('reports correctly browser data', function() {
+      Browser.userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36'
+      const browserData = getBrowserData()
+      expect(browserData.group).to.be.equal('Chrome')
+      expect(browserData.majorVersion).to.be.equal(66)
+      expect(browserData.minorVersion).to.be.equal(0)
+      expect(browserData.fullVersion).to.be.equal('66.0.3359.139')
+    })
+
+    it('reports correctly device name', function() {
+      Browser.userAgent = 'Mozilla/5.0 (Linux; Android 8.0.0; Pixel 2 XL Build/OPD1.170816.004) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Mobile Safari/537.36'
+      Browser.isMobile = true
+      const device = getDevice()
+      expect(device).to.be.equal('Pixel 2 XL Build/OPD1.170816.004')
     })
   })
 })
