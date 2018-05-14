@@ -11,7 +11,10 @@ const plainHtml5Only = !!process.env.CLAPPR_PLAIN_HTML5_ONLY
 
 let distroFlavor
 
-webpackConfig.entry = path.resolve(__dirname, 'src/main.js')
+webpackConfig.entry = {
+  clappr: path.resolve(__dirname, 'src/main.js'),
+  events: path.resolve(__dirname, 'src/constants/events_constants.js')
+}
 
 if (minimize) {
 
@@ -50,7 +53,7 @@ if (forceInlineDebug) {
 console.log('\n')
 
 const filename =
-  `clappr${ distroFlavor ? '.' + distroFlavor : '' }${ forceInlineDebug ? '.debug' : '' }${ minimize ? '.min' : '' }.js`
+  `[name]${ distroFlavor ? '.' + distroFlavor : '' }${ forceInlineDebug ? '.debug' : '' }${ minimize ? '.min' : '' }.js`
 
 webpackConfig.output = {
   path: path.resolve(__dirname, 'dist'),
