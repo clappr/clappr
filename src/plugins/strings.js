@@ -24,8 +24,9 @@ export default class Strings extends CorePlugin {
    */
   t(key) {
     const lang = this._language()
-    const i18n = lang && this._messages[lang] || this._messages['en']
-    return i18n[key] || key
+    const fallbackLang = this._messages['en']
+    const i18n = lang && this._messages[lang] || fallbackLang
+    return i18n[key] || fallbackLang[key] || key
   }
 
   _language() { return this.core.options.language || getBrowserLanguage() }
