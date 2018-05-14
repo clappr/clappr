@@ -199,7 +199,18 @@ Browser.isPS4 = /PlayStation 4/i.test(navigator.userAgent)
 Browser.hasLocalstorage = hasLocalstorage()
 Browser.hasFlash = hasFlash()
 
+/**
+* @deprecated
+* This parameter currently exists for retrocompatibility reasons.
+* Use Browser.data.name instead.
+*/
 Browser.name = browserInfo.name
+
+/**
+* @deprecated
+* This parameter currently exists for retrocompatibility reasons.
+* Use Browser.data.fullVersion instead.
+*/
 Browser.version = browserInfo.version
 
 Browser.userAgent = navigator.userAgent
