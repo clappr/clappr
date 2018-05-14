@@ -55,6 +55,8 @@ export default class PosterPlugin extends UIContainerPlugin {
   }
 
   onError(error) {
+    if (this.options.disableErrorScreen) return
+
     if (error.level == PlayerError.Levels.FATAL) {
       this.hasFatalError = true
       this.hidePlayButton()
