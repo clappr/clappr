@@ -55,11 +55,12 @@ export default class PosterPlugin extends UIContainerPlugin {
   }
 
   onError(error) {
-    if (this.options.disableErrorScreen) return
+    this.hasFatalError = error.level === PlayerError.Levels.FATAL
 
-    if (error.level == PlayerError.Levels.FATAL) {
-      this.hasFatalError = true
-      this.hidePlayButton()
+    if (this.hasFatalError) {
+      this.hasStartedPlaying = false
+      this.playRequested = false
+      this.showPlayButton()
     }
   }
 
@@ -82,7 +83,7 @@ export default class PosterPlugin extends UIContainerPlugin {
   }
 
   showPlayButton() {
-    if (this.hasFatalError) return
+    if (this.hasFatalError && !this.options.disableErrorScreen) return
 
     this.$playButton.show()
     this.$el.addClass('clickable')
