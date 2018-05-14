@@ -186,6 +186,7 @@ export default class HLS extends HTML5VideoPlayback {
       error.level = PlayerError.Levels.FATAL
       const formattedError = this.createError(error)
       this.trigger(Events.PLAYBACK_ERROR, formattedError)
+      this.stop()
     }
   }
 
@@ -296,6 +297,7 @@ export default class HLS extends HTML5VideoPlayback {
             Log.error('hlsjs: unrecoverable network fatal error.', { evt, data })
             formattedError = this.createError(error)
             this.trigger(Events.PLAYBACK_ERROR, formattedError)
+            this.stop()
             break
           default:
             Log.warn('hlsjs: trying to recover from network error.', { evt, data })
@@ -315,12 +317,14 @@ export default class HLS extends HTML5VideoPlayback {
           Log.error('hlsjs: could not recover from error.', { evt, data })
           formattedError = this.createError(error)
           this.trigger(Events.PLAYBACK_ERROR, formattedError)
+          this.stop()
           break
         }
       } else {
         Log.error('hlsjs: could not recover from error after maximum number of attempts.', { evt, data })
         formattedError = this.createError(error)
         this.trigger(Events.PLAYBACK_ERROR, formattedError)
+        this.stop()
       }
     } else {
       error.level = PlayerError.Levels.WARN
