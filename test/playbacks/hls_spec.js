@@ -86,7 +86,11 @@ describe('HLS playback', () => {
     const promise = new Promise((resolve) => {
       resolveFn = resolve
     })
-    let options = { src: 'http://clappr.io/notfound.m3u8' }
+    let options = {
+      src: 'http://clappr.io/notfound.m3u8',
+      hlsRecoverAttempts: 1,
+    }
+
     const core = new Core({})
     const playback = new HLS(options, null, core.playerError)
     playback.on(Events.PLAYBACK_ERROR, (e) => {
