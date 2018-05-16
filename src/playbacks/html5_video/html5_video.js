@@ -12,6 +12,7 @@ import $ from 'clappr-zepto'
 import template from '../../base/template'
 import tracksHTML from './public/tracks.html'
 import './public/style.scss'
+import Log from '../../plugins/log'
 
 const MIMETYPES = {
   'mp4': ['avc1.42E01E', 'avc1.58A01E', 'avc1.4D401E', 'avc1.64001E', 'mp4v.20.8', 'mp4v.20.240', 'mp4a.40.2'].map(
@@ -145,7 +146,9 @@ export default class HTML5Video extends Playback {
 
   // See Playback.autoPlay()
   autoPlay() {
-    this.canAutoPlay((result, error) => { // eslint-disable-line no-unused-vars
+    this.canAutoPlay((result, error) => {
+      error && Log.warn(`${this.name}: autoplay error.`, { result, error })
+
       // https://github.com/clappr/clappr/issues/1076
       result && process.nextTick(() => !this._destroyed && this.play())
     })
@@ -159,7 +162,7 @@ export default class HTML5Video extends Playback {
     } else {
       // Desktop browser autoplay policy may require user action
       canAutoPlayMedia(cb, {
-        timeout: this.options.autoPlayTimeout || 250,
+        timeout: this.options.autoPlayTimeout || 500,
         inline: this.options.playback.playInline || false,
         muted: this.options.mute || false, // Known issue: mediacontrols may asynchronously mute video
       })
