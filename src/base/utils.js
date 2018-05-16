@@ -6,6 +6,7 @@
 import './polyfills'
 import Browser from '../components/browser'
 import $ from 'clappr-zepto'
+import {VIDEO} from './media'
 
 export function assign(obj, source) {
   if (source) {
@@ -238,6 +239,49 @@ export function removeArrayItem(arr, item) {
 
 }
 
+// https://github.com/video-dev/can-autoplay
+export function canAutoPlayMedia(cb, options) {
+  options = Object.assign({
+    inline: false,
+    muted: false,
+    timeout: 250,
+    type: 'video',
+    source: VIDEO
+  }, options)
+
+  let element = document.createElement(options.type)
+
+  element.muted = options.muted
+  if (options.muted === true) {
+    element.setAttribute('muted', 'muted')
+  }
+
+  if (options.inline === true) {
+    element.setAttribute('playsinline', 'playsinline')
+  }
+
+  element.src = options.source
+
+  let promise = element.play()
+
+  let timeoutId = setTimeout(() => {
+    setResult(false, new Error(`Timeout ${options.timeout} ms has been reached`))
+  }, options.timeout)
+
+  let setResult = (result, error = null) => {
+    clearTimeout(timeoutId)
+    cb(result, error)
+  }
+
+  if (promise !== undefined) {
+    promise
+      .then(() => setResult(true))
+      .catch(err => setResult(false, err))
+  } else {
+    setResult(true)
+  }
+}
+
 // Simple Zepto element factory with video recycle feature.
 const videoStack = []
 
@@ -278,5 +322,6 @@ export default {
   cancelAnimationFrame,
   getBrowserLanguage,
   now,
-  removeArrayItem
+  removeArrayItem,
+  canAutoPlayMedia
 }
