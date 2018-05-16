@@ -6910,7 +6910,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.2.93"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.2.94"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -8807,7 +8807,8 @@ Browser.userAgent = navigator.userAgent;
 Browser.data = getBrowserData();
 Browser.os = getOsData();
 Browser.viewport = getViewportSize();
-Browser.device = getDevice();
+// Temporarily removing device info due to critical error on iOS
+// Browser.device = getDevice()
 typeof window.orientation !== 'undefined' && setViewportOrientation();
 
 exports.default = Browser;
