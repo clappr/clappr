@@ -227,7 +227,7 @@ export default class Playback extends UIObject {
    * @method autoPlay
    */
   autoPlay() {
-    this.canAutoPlay((result, error) => {
+    this.canAutoPlay((result, error) => { // eslint-disable-line no-unused-vars
       result && this.play()
     })
   }
