@@ -59,8 +59,6 @@ class DashShakaPlayback extends HTML5Video {
     this._levels = []
     this._pendingAdaptationEvent = false
     this._isShakaReadyState = false
-
-    this.options.autoPlay && this.play()
   }
 
   play () {
@@ -78,8 +76,8 @@ class DashShakaPlayback extends HTML5Video {
     super.play()
   }
 
-  // skipping setup `setupSrc` on tag video
-  setupSrc () {}
+  // skipping HTML5Video `_setupSrc` (on tag video)
+  _setupSrc () {}
 
   // skipping ready event on video tag in favor of ready on shaka
   _ready () {
