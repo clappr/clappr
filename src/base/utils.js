@@ -6,7 +6,7 @@
 import './polyfills'
 import Browser from '../components/browser'
 import $ from 'clappr-zepto'
-import {VIDEO} from './media'
+import { VIDEO } from './media'
 
 export function assign(obj, source) {
   if (source) {
@@ -252,13 +252,11 @@ export function canAutoPlayMedia(cb, options) {
   let element = document.createElement(options.type)
 
   element.muted = options.muted
-  if (options.muted === true) {
+  if (options.muted === true)
     element.setAttribute('muted', 'muted')
-  }
 
-  if (options.inline === true) {
+  if (options.inline === true)
     element.setAttribute('playsinline', 'playsinline')
-  }
 
   element.src = options.source
 

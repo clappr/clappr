@@ -145,7 +145,7 @@ export default class HTML5Video extends Playback {
 
   // See Playback.autoPlay()
   autoPlay() {
-    this.canAutoPlay((result, error) => {
+    this.canAutoPlay((result, error) => { // eslint-disable-line no-unused-vars
       // https://github.com/clappr/clappr/issues/1076
       result && process.nextTick(() => !this._destroyed && this.play())
     })
