@@ -217,7 +217,8 @@ Browser.userAgent = navigator.userAgent
 Browser.data = getBrowserData()
 Browser.os = getOsData()
 Browser.viewport = getViewportSize()
-Browser.device = getDevice()
+// Temporarily removing device info due to critical error on iOS
+// Browser.device = getDevice()
 typeof window.orientation !== 'undefined' && setViewportOrientation()
 
 export default Browser
