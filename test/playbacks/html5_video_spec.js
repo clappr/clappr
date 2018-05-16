@@ -77,10 +77,14 @@ describe('HTML5Video playback', function() {
   })
 
   it('isPlaying() is true after constructor when autoPlay is true', function(done) {
+    this.timeout(5000)
     const playback = new HTML5Video({ src: 'http://example.com/dash.ogg', autoPlay: true, mute: true })
-    process.nextTick(function() {
-      expect(playback.isPlaying()).to.be.true
-      done()
+
+    playback.on(Events.PLAYBACK_PLAY_INTENT, function() {
+      process.nextTick(function() {
+        expect(playback.isPlaying()).to.be.true
+        done()
+      })
     })
   })
 
