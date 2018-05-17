@@ -88,7 +88,8 @@ describe('HLS playback', () => {
     })
     let options = {
       src: 'http://clappr.io/notfound.m3u8',
-      hlsRecoverAttempts: 1,
+      hlsRecoverAttempts: 0,
+      mute: true
     }
 
     const core = new Core({})
