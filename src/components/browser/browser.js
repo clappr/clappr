@@ -173,9 +173,10 @@ const setViewportOrientation = function() {
   }
 }
 
-export const getDevice = function() {
-  let platformRegExp = Browser.isMobile ? new RegExp(';[^;]+;([^\)]+)') : new RegExp(';([^\)]+)') // eslint-disable-line no-useless-escape
-  let device = platformRegExp.exec(Browser.userAgent)[1].trim()
+export const getDevice = function(ua) {
+  let platformRegExp = /\((iP(?:hone|ad|od))?(?:[^;]*; ){0,2}([^)]+(?=\)))/
+  let matches = platformRegExp.exec(ua)
+  let device = matches && (matches[1] || matches[2]) || ''
   return device
 }
 
@@ -217,8 +218,7 @@ Browser.userAgent = navigator.userAgent
 Browser.data = getBrowserData()
 Browser.os = getOsData()
 Browser.viewport = getViewportSize()
-// Temporarily removing device info due to critical error on iOS
-// Browser.device = getDevice()
+Browser.device = getDevice(Browser.userAgent)
 typeof window.orientation !== 'undefined' && setViewportOrientation()
 
 export default Browser

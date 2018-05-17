@@ -46,11 +46,30 @@ describe('Browser', function() {
       expect(browserData.fullVersion).to.be.equal('66.0.3359.139')
     })
 
-    it('reports correctly device name', function() {
-      Browser.userAgent = 'Mozilla/5.0 (Linux; Android 8.0.0; Pixel 2 XL Build/OPD1.170816.004) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Mobile Safari/537.36'
-      Browser.isMobile = true
-      const device = getDevice()
-      expect(device).to.be.equal('Pixel 2 XL Build/OPD1.170816.004')
+    describe('device', function() {
+      it('reports correctly android devices', function() {
+        const userAgent = 'Mozilla/5.0 (Linux; Android 8.0.0; Pixel 2 XL Build/OPD1.170816.004) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Mobile Safari/537.36'
+        const device = getDevice(userAgent)
+        expect(device).to.be.equal('Pixel 2 XL Build/OPD1.170816.004')
+      })
+
+      it('reports correctly iPhone devices', function () {
+        const userAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1'
+        const device = getDevice(userAgent)
+        expect(device).to.be.equal('iPhone')
+      })
+
+      it('reports full platform string if no separator is found', function () {
+        const userAgent = 'Mozilla/5.0 (CrKey armv7l 1.5.16041) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.0 Safari/537.36'
+        const device = getDevice(userAgent)
+        expect(device).to.be.equal('CrKey armv7l 1.5.16041')
+      })
+
+      it('reports empty string for missing platform detail', function() {
+        const userAgent = 'AppleTV6,2/11.1'
+        const device = getDevice(userAgent)
+        expect(device).to.be.equal('')
+      })
     })
   })
 })
