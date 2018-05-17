@@ -184,8 +184,6 @@ var DashShakaPlayback = function (_HTML5Video) {
     _this._levels = [];
     _this._pendingAdaptationEvent = false;
     _this._isShakaReadyState = false;
-
-    _this.options.autoPlay && _this.play();
     return _this;
   }
 
@@ -206,11 +204,11 @@ var DashShakaPlayback = function (_HTML5Video) {
       _get(DashShakaPlayback.prototype.__proto__ || Object.getPrototypeOf(DashShakaPlayback.prototype), 'play', this).call(this);
     }
 
-    // skipping setup `setupSrc` on tag video
+    // skipping HTML5Video `_setupSrc` (on tag video)
 
   }, {
-    key: 'setupSrc',
-    value: function setupSrc() {}
+    key: '_setupSrc',
+    value: function _setupSrc() {}
 
     // skipping ready event on video tag in favor of ready on shaka
 
