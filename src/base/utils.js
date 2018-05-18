@@ -6,7 +6,7 @@
 import './polyfills'
 import Browser from '../components/browser'
 import $ from 'clappr-zepto'
-import { VIDEO } from './media'
+import Media from './media'
 
 export function assign(obj, source) {
   if (source) {
@@ -246,7 +246,7 @@ export function canAutoPlayMedia(cb, options) {
     muted: false,
     timeout: 250,
     type: 'video',
-    source: VIDEO
+    source: Media.mp4
   }, options)
 
   let element = document.createElement(options.type)
@@ -321,5 +321,6 @@ export default {
   getBrowserLanguage,
   now,
   removeArrayItem,
-  canAutoPlayMedia
+  canAutoPlayMedia,
+  Media
 }
