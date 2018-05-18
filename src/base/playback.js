@@ -224,9 +224,9 @@ export default class Playback extends UIObject {
 
   /**
    * attempt to autoplays the playback.
-   * @method autoPlay
+   * @method attemptAutoPlay
    */
-  autoPlay() {
+  attemptAutoPlay() {
     this.canAutoPlay((result, error) => { // eslint-disable-line no-unused-vars
       result && this.play()
     })
@@ -235,7 +235,7 @@ export default class Playback extends UIObject {
   /**
    * checks if the playback can autoplay.
    * @method canAutoPlay
-   * @param {Function} callback function where first param is boolean and second param is error playback error (if any)
+   * @param {Function} callback function where first param is Boolean and second param is playback Error or null
    */
   canAutoPlay(cb) {
     cb(true, null) // Assume playback can autoplay by default

@@ -141,11 +141,11 @@ export default class HTML5Video extends Playback {
 
     playbackConfig.externalTracks && (this._setupExternalTracks(playbackConfig.externalTracks))
 
-    this.options.autoPlay && this.autoPlay()
+    this.options.autoPlay && this.attemptAutoPlay()
   }
 
-  // See Playback.autoPlay()
-  autoPlay() {
+  // See Playback.attemptAutoPlay()
+  attemptAutoPlay() {
     this.canAutoPlay((result, error) => {
       error && Log.warn(`${this.name}: autoplay error.`, { result, error })
 
