@@ -241,8 +241,8 @@ export default class HTML5Video extends Playback {
   // load() method is called. See Player.consent().
   consent() {
     if (!this.isPlaying()) {
-      this.el.load()
       super.consent()
+      this.el.load()
     }
   }
 
