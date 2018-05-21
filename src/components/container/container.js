@@ -465,6 +465,7 @@ export default class Container extends UIObject {
   configure(options) {
     this._options = $.extend(this._options, options)
     this.updateStyle()
+    this.playback.configure(this.options)
     this.trigger(Events.CONTAINER_OPTIONS_CHANGE)
   }
 
