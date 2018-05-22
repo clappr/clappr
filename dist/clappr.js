@@ -3966,6 +3966,10 @@ var _error_mixin = __webpack_require__(20);
 
 var _error_mixin2 = _interopRequireDefault(_error_mixin);
 
+var _clapprZepto = __webpack_require__(6);
+
+var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -4181,6 +4185,17 @@ var Playback = function (_UIObject) {
 
 
   Playback.prototype.volume = function volume(value) {}; // eslint-disable-line no-unused-vars
+
+  /**
+   * enables to configure the playback after its creation
+   * @method configure
+   * @param {Object} options all the options to change in form of a javascript object
+   */
+
+
+  Playback.prototype.configure = function configure(options) {
+    this._options = _clapprZepto2.default.extend(this._options, options);
+  };
 
   /**
    * destroys the playback, removing it from DOM
@@ -6980,7 +6995,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.2.94"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.2.95"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -8833,9 +8848,10 @@ var setViewportOrientation = function setViewportOrientation() {
   }
 };
 
-var getDevice = exports.getDevice = function getDevice() {
-  var platformRegExp = Browser.isMobile ? new RegExp(';[^;]+;([^\)]+)') : new RegExp(';([^\)]+)'); // eslint-disable-line no-useless-escape
-  var device = platformRegExp.exec(Browser.userAgent)[1].trim();
+var getDevice = exports.getDevice = function getDevice(ua) {
+  var platformRegExp = /\((iP(?:hone|ad|od))?(?:[^;]*; ){0,2}([^)]+(?=\)))/;
+  var matches = platformRegExp.exec(ua);
+  var device = matches && (matches[1] || matches[2]) || '';
   return device;
 };
 
@@ -8877,8 +8893,7 @@ Browser.userAgent = navigator.userAgent;
 Browser.data = getBrowserData();
 Browser.os = getOsData();
 Browser.viewport = getViewportSize();
-// Temporarily removing device info due to critical error on iOS
-// Browser.device = getDevice()
+Browser.device = getDevice(Browser.userAgent);
 typeof window.orientation !== 'undefined' && setViewportOrientation();
 
 exports.default = Browser;
@@ -10939,6 +10954,7 @@ var Container = function (_UIObject) {
   Container.prototype.configure = function configure(options) {
     this._options = _clapprZepto2.default.extend(this._options, options);
     this.updateStyle();
+    this.playback.configure(this.options);
     this.trigger(_events2.default.CONTAINER_OPTIONS_CHANGE);
   };
 
