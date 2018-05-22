@@ -2,6 +2,8 @@ import { extend } from './utils'
 import UIObject from './ui_object'
 import ErrorMixin from './error_mixin'
 
+import $ from 'clappr-zepto'
+
 /**
  * An abstraction to represent a generic playback, it's like an interface to be implemented by subclasses.
  * @class Playback
@@ -202,6 +204,15 @@ export default class Playback extends UIObject {
    * @param {Number} value a number between 0 (`muted`) to 100 (`max`)
    */
   volume(value) {} // eslint-disable-line no-unused-vars
+
+  /**
+   * enables to configure the playback after its creation
+   * @method configure
+   * @param {Object} options all the options to change in form of a javascript object
+   */
+  configure(options) {
+    this._options = $.extend(this._options, options)
+  }
 
   /**
    * destroys the playback, removing it from DOM
