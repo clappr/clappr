@@ -47,6 +47,15 @@ describe('Container', function() {
     assert.ok(this.container.$el.remove.calledOnce)
   })
 
+  it('update playback options when configure', function() {
+    sinon.spy(this.playback, 'configure')
+    const fakeOptions = { foo: 'bar' }
+    this.container.configure(fakeOptions)
+
+    assert.ok(this.playback.configure.called)
+    expect(this.playback.options.foo).to.be.equal(fakeOptions.foo)
+  })
+
   it('listens to playback:progress event', function() {
     sinon.spy(this.container, 'progress')
 
