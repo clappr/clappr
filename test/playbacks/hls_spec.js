@@ -82,6 +82,7 @@ describe('HLS playback', () => {
   })
 
   it('should trigger a playback error if source load failed', function() {
+    this.timeout(5000)
     let resolveFn = undefined
     const promise = new Promise((resolve) => {
       resolveFn = resolve
