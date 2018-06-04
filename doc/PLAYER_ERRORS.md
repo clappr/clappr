@@ -138,6 +138,7 @@ var ErrorPlugin = Clappr.ContainerPlugin.extend({
 });
 
 var player = new Clappr.Player({
+  disableErrorScreen: true, // Disable the internal error screen plugin
   source: 'http://clappr.io/bad_highline.mp4',
   plugins: [ErrorPlugin],
   errorPlugin: {
