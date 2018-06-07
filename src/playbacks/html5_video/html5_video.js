@@ -8,6 +8,7 @@ import Playback from '../../base/playback'
 import Browser from '../../components/browser'
 import PlayerError from '../../components/error'
 import Events from '../../base/events'
+import Log from '../../plugins/log'
 import $ from 'clappr-zepto'
 import template from '../../base/template'
 import tracksHTML from './public/tracks.html'
@@ -387,15 +388,19 @@ export default class HTML5Video extends Playback {
 
   _onError() {
     const { code, message } = this.el.error || UNKNOWN_ERROR
+    const isUnknownError = code === UNKNOWN_ERROR.code
 
     const formattedError = this.createError({
       code,
       description: message,
       raw: this.el.error,
-      level: code === UNKNOWN_ERROR.code ? PlayerError.Levels.WARN : PlayerError.Levels.FATAL
+      level: isUnknownError ? PlayerError.Levels.WARN : PlayerError.Levels.FATAL
     })
 
-    this.trigger(Events.PLAYBACK_ERROR, formattedError)
+    if (isUnknownError)
+      Log.warn(this.name, 'HTML5 unknown error: ', formattedError)
+    else
+      this.trigger(Events.PLAYBACK_ERROR, formattedError)
   }
 
   destroy() {
