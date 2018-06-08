@@ -30,6 +30,7 @@ var r = 3; // Retry attempts
 var player = new Clappr.Player({
   // source: 'http://clappr.io/highline.mp4',
   source: 'http://clappr.io/bad_highline.mp4',
+  disableErrorScreen: true, // Disable the internal error screen plugin
   height: 360,
   width: 640,
   events: {
@@ -41,7 +42,9 @@ var player = new Clappr.Player({
       var t = 10;
       var retry = function() {
         if (t === 0) {
-          player.configure({source: s});
+          var o = player.options;
+          o.source = s;
+          player.configure(o);
           return;
         }
         Clappr.$('#retryCounter').text(t);
@@ -135,6 +138,7 @@ var ErrorPlugin = Clappr.ContainerPlugin.extend({
 });
 
 var player = new Clappr.Player({
+  disableErrorScreen: true, // Disable the internal error screen plugin
   source: 'http://clappr.io/bad_highline.mp4',
   plugins: [ErrorPlugin],
   errorPlugin: {
