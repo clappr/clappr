@@ -19,6 +19,7 @@
 |Voice control| Ready | ? | https://github.com/flavioribeiro/clappr-speech-control-plugin |
 |Dash           | WIP | No | https://github.com/shankardevy/clappr-dash-plugin | |
 |Youtube        | Ready | No | https://github.com/towerz/clappr-youtube-playback |
+|Googel IMA Pre Roll| Ready | Yes | https://github.com/kslimani/clappr-google-ima-html5-preroll |
 |VAST Ad plugin | WIP | No | https://github.com/vix-simplex/clappr-ad-plugin |
 |Dynamic Overlay | Ready | Yes | https://github.com/Lethea/clappr-dynamic-text-overlay |
 |Scroll Text Overlay | Ready | Yes | https://github.com/Lethea/clappr-marquee-overlay |
