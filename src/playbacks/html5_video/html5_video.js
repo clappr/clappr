@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import { isNumber, seekStringToSeconds, DomRecycler } from '../../base/utils'
+import { isNumber, seekStringToSeconds, DomRecycler, canAutoPlayMedia } from '../../base/utils'
 
 import Playback from '../../base/playback'
 import Browser from '../../components/browser'
@@ -13,6 +13,7 @@ import $ from 'clappr-zepto'
 import template from '../../base/template'
 import tracksHTML from './public/tracks.html'
 import './public/style.scss'
+import Log from '../../plugins/log'
 
 const MIMETYPES = {
   'mp4': ['avc1.42E01E', 'avc1.58A01E', 'avc1.4D401E', 'avc1.64001E', 'mp4v.20.8', 'mp4v.20.240', 'mp4a.40.2'].map(
@@ -141,8 +142,32 @@ export default class HTML5Video extends Playback {
 
     playbackConfig.externalTracks && (this._setupExternalTracks(playbackConfig.externalTracks))
 
-    // https://github.com/clappr/clappr/issues/1076
-    this.options.autoPlay && process.nextTick(() => !this._destroyed && this.play())
+    this.options.autoPlay && this.attemptAutoPlay()
+  }
+
+  // See Playback.attemptAutoPlay()
+  attemptAutoPlay() {
+    this.canAutoPlay((result, error) => {
+      error && Log.warn(`${this.name}: autoplay error.`, { result, error })
+
+      // https://github.com/clappr/clappr/issues/1076
+      result && process.nextTick(() => !this._destroyed && this.play())
+    })
+  }
+
+  // See Playback.canAutoPlay()
+  canAutoPlay(cb) {
+    if (Browser.isMobile) {
+      // Mobile browser autoplay require user consent and video recycling feature enabled
+      cb(this.consented && DomRecycler.options.recycleVideo, null)
+    } else {
+      // Desktop browser autoplay policy may require user action
+      canAutoPlayMedia(cb, {
+        timeout: this.options.autoPlayTimeout || 500,
+        inline: this.options.playback.playInline || false,
+        muted: this.options.mute || false, // Known issue: mediacontrols may asynchronously mute video
+      })
+    }
   }
 
   _setupExternalTracks(tracks) {
@@ -216,7 +241,10 @@ export default class HTML5Video extends Playback {
   // On mobile device, HTML5 video element "retains" user action consent if
   // load() method is called. See Player.consent().
   consent() {
-    !this.isPlaying() && this.el.load()
+    if (!this.isPlaying()) {
+      super.consent()
+      this.el.load()
+    }
   }
 
   play() {
