@@ -76,11 +76,34 @@ describe('HTML5Video playback', function() {
     playback.el.dispatchEvent(new Event('seeked'))
   })
 
-  it('isPlaying() is true after constructor when autoPlay is true', function(done) {
-    const playback = new HTML5Video({ src: 'http://example.com/dash.ogg', autoPlay: true, mute: true })
-    process.nextTick(function() {
-      expect(playback.isPlaying()).to.be.true
+  it('can check autoplay availability', function(done) {
+    this.timeout(5000)
+    const playback = new HTML5Video({ src: 'http://example.com/dash.ogg', mute: true })
+
+    playback.canAutoPlay(function(result, error) {
+      expect(result).to.be.true
+      expect(error).to.be.null
       done()
+    })
+  })
+
+  it('can be consented', function() {
+    const playback = new HTML5Video({ src: 'http://example.com/dash.ogg', mute: true })
+
+    expect(playback.consented).to.be.false
+    playback.consent()
+    expect(playback.consented).to.be.true
+  })
+
+  it('isPlaying() is true after constructor when autoPlay is true', function(done) {
+    this.timeout(5000)
+    const playback = new HTML5Video({ src: 'http://example.com/dash.ogg', autoPlay: true, mute: true })
+
+    playback.on(Events.PLAYBACK_PLAY_INTENT, function() {
+      process.nextTick(function() {
+        expect(playback.isPlaying()).to.be.true
+        done()
+      })
     })
   })
 
