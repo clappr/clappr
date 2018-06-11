@@ -223,6 +223,8 @@ export default class Player extends BaseObject {
    * Generic `Playback` component related configuration
    * @param {Boolean} [options.disableErrorScreen]
    * disables the error screen plugin.
+   * @param {Number} [options.autoPlayTimeout]
+   * autoplay check timeout.
    */
 
   constructor(options) {
