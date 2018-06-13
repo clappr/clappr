@@ -308,9 +308,10 @@ export default class Player extends BaseObject {
   }
 
   _registerOptionEventListeners(newEvents = {}, events = {}) {
-    Object.keys(events).forEach((userEvent) => {
+    const hasNewEvents = Object.keys(newEvents).length > 0
+    hasNewEvents && Object.keys(events).forEach((userEvent) => {
       const eventType = this.eventsMapping[userEvent]
-      eventType && this.off(eventType)
+      eventType && this.off(eventType, events[userEvent])
     })
 
     Object.keys(newEvents).forEach((userEvent) => {
