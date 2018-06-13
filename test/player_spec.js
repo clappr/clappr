@@ -151,5 +151,44 @@ describe('Player', function() {
       expect(callbacks.callbackA).to.not.have.been.called
       expect(callbacks.callbackB).to.have.been.calledOnce
     })
+
+    it('does not override events on configure if there are no events', function() {
+      const callbacks = {
+        callbackA: sinon.spy()
+      }
+      this.player.configure({
+        events: {
+          onPause: callbacks.callbackA,
+        }
+      })
+
+      this.player.configure({
+        someOtherOption: true
+      })
+
+      this.player._onPause()
+
+      expect(callbacks.callbackA).to.have.been.calledOnce
+    })
+
+    it('does not interfere with event listeners added through Player.on', function() {
+      const callbacks = {
+        callbackA: sinon.spy(),
+        callbackB: sinon.spy(),
+      }
+
+      this.player.on(Events.PLAYER_PAUSE, callbacks.callbackB)
+
+      this.player.configure({
+        events: {
+          onPause: callbacks.callbackA,
+        }
+      })
+
+      this.player._onPause()
+
+      expect(callbacks.callbackA).to.have.been.calledOnce
+      expect(callbacks.callbackB).to.have.been.calledOnce
+    })
   })
 })
