@@ -279,8 +279,8 @@ export default class HTML5Video extends Playback {
     } else {
       this.$el.attr({ muted: null })
       this.el.muted = false
+      this.el.volume = value / 100
     }
-    this.el.volume = value / 100
   }
 
   /**
