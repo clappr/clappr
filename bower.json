@@ -1,7 +1,7 @@
 {
   "name": "clappr",
   "description": "An extensible media player for the web",
-  "version": "0.2.96",
+  "version": "0.2.97",
   "homepage": "https://github.com/clappr/clappr",
   "authors": [
     "Globo.com"
@@ -30,6 +30,7 @@
     "clappr-zepto": "0.0.7",
     "coveralls": "^3.0.0",
     "css-loader": "^0.28.10",
+    "cz-conventional-changelog": "^2.1.0",
     "directory-named-webpack-plugin": "^2.3.0",
     "eslint": "^4.18.2",
     "file-loader": "^1.1.11",
@@ -77,5 +78,10 @@
     "test",
     "test.js",
     "tmp"
-  ]
+  ],
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }
