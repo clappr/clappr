@@ -9,7 +9,7 @@ Parser.prototype = {
     try {
       var old = player;
       eval(code);
-      old.destroy();
+      old && old.destroy();
       window.player = player;
       this.console.empty();
     } catch(err) {
