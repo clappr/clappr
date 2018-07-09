@@ -73,9 +73,9 @@ In case you're loading a on demand video (mp4), it's possible to define the way 
 The default behavior for the HLS playback is to keep buffering indefinitely, even on VoD. This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks. To change this behavior, add `maxMaxBufferLength: <value>` to embed parameters, where `value` is in seconds.
 
 ```javascript
-    hlsjsConfig: {
-      maxMaxBufferLength: value
-    }
+hlsjsConfig: {
+  maxMaxBufferLength: value
+}
 ```
 
 ##### Playback configuration
