@@ -70,7 +70,13 @@ Add `playbackNotSupportedMessage: 'Please try on a different browser'` to define
 In case you're loading a on demand video (mp4), it's possible to define the way the video will be preloaded according to [preload](http://www.stevesouders.com/blog/2013/04/12/html5-video-preload/) attribute options. Add `preload: <type>` on embed parameters. By default, Clappr will try to download only video metadata (`preload: 'metadata'`).
 
 ##### HLS Buffer Length
-The default behavior for the HLS playback is to keep buffering indefinitely, even on VoD. This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks. To change this behavior, add `maxBufferLength: <value>` to embed parameters, where `value` is in seconds.
+The default behavior for the HLS playback is to keep buffering indefinitely, even on VoD. This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks. To change this behavior, add `maxMaxBufferLength: <value>` to embed parameters, where `value` is in seconds.
+
+```javascript
+    hlsjsConfig: {
+      maxMaxBufferLength: value
+    }
+```
 
 ##### Playback configuration
 The configuration for the playback, it's still only compatible with `html5_video` playback.
