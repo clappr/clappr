@@ -246,10 +246,11 @@ export function canAutoPlayMedia(cb, options) {
     muted: false,
     timeout: 250,
     type: 'video',
-    source: Media.mp4
+    source: Media.mp4,
+    element: null
   }, options)
 
-  let element = document.createElement(options.type)
+  let element = options.element ? options.element : document.createElement(options.type)
 
   element.muted = options.muted
   if (options.muted === true)
