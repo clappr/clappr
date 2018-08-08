@@ -1,5 +1,28 @@
 ## FAQ & Troubleshooting
 
+### How can I disable or override a plugin?
+
+Let's say you want to disable or override a plugin.
+
+#### Disable a plugin
+
+```javascript
+// let's disable the loading animation (the 'spinner' plugin)
+var player = new Clappr.Player({ ... });
+// after attach
+player.getPlugin('spinner').disable();
+```
+
+#### Override a plugin
+
+```javascript
+// let's disable the loading animation (the 'spinner' plugin)
+export default class NoSpinner extends UIContainerPlugin {
+  get name() { return 'spinner' }
+}
+new Clappr.Player({ plugins: [NoSpinner]})
+```
+
 ### How can I use clappr with ReactJS?
 
 https://medium.com/@bikegriffith/using-clappr-with-reactjs-14a338e3451f#.9a36w0dpj
