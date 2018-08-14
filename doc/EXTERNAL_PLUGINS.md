@@ -25,3 +25,8 @@
 |Scroll Text Overlay | Ready | Yes | https://github.com/Lethea/clappr-marquee-overlay |
 |FLV | Ready | Yes | https://github.com/andrefilimono/clappr-flvjs-playback |
 
+## External Integrations
+
+|Integration         |Status|Compatible with latest Clappr|URL|
+|-----------------------|--------|-------------------------------|--------------------------------------------------------|
+|P2P Media Loader| Ready | Yes | https://github.com/Novage/p2p-media-loader |
