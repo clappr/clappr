@@ -25,7 +25,7 @@
 |Scroll Text Overlay | Ready | Yes | https://github.com/Lethea/clappr-marquee-overlay |
 |FLV | Ready | Yes | https://github.com/andrefilimono/clappr-flvjs-playback |
 
-## External Integrarions
+## External Integrations
 
 |Integration         |Status|Compatible with latest Clappr|URL|
 |-----------------------|--------|-------------------------------|--------------------------------------------------------|
