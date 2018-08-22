@@ -18,6 +18,8 @@ You can specify where the player should be attached to using either the `parentI
 ##### Auto Play
 Add `autoPlay: true` if you want the video to automatically play after page load.
 
+By default, Clappr player will do its best to detect if the browser can play video automatically. If you want to disable this behaviour, add `disableCanAutoPlay: true` parameter.
+
 ##### Loop
 Add `loop: true` if you want the video to automatically replay after it ends.
 
