@@ -156,6 +156,9 @@ export default class HTML5Video extends Playback {
 
   // See Playback.canAutoPlay()
   canAutoPlay(cb) {
+    if (this.options.disableCanAutoPlay)
+      cb(true, null)
+
     let opts = {
       timeout: this.options.autoPlayTimeout || 500,
       inline: this.options.playback.playInline || false,
