@@ -170,6 +170,8 @@ you might consider subclassing the base `MediaControl` and using your own custom
 
 If you want to disable media control auto hide, add `hideMediaControl: false` in your embed parameters.
 
+If you want to change the default media control auto hide timeout value, add `hideMediaControlDelay: 2000` in your embed parameters. (delay in milliseconds)
+
 ##### Hide Volume Bar
 
 When embedded with width less than 320, volume bars are hidden. You can force this behavior for all sizes by adding `hideVolumeBar: true`.
