@@ -659,7 +659,7 @@ export default class MediaControl extends UIObject {
   }
 
   render() {
-    const timeout = 1000
+    const timeout = this.options.hideMediaControlDelay || 2000
     this.$el.html(this.template({ settings: this.settings }))
     this.createCachedElements()
     this.$playPauseToggle.addClass('paused')
