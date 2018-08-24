@@ -78,7 +78,8 @@ describe('HTML5Video playback', function() {
 
   it('can check autoplay availability', function(done) {
     this.timeout(5000)
-    const playback = new HTML5Video({ src: 'http://example.com/dash.ogg', mute: true })
+    // FIXME: find a way to set disableCanAutoPlay to true only if Travis run
+    const playback = new HTML5Video({ src: 'http://example.com/dash.ogg', mute: true, disableCanAutoPlay: true })
 
     playback.canAutoPlay(function(result, error) {
       expect(result).to.be.true
@@ -97,7 +98,7 @@ describe('HTML5Video playback', function() {
 
   it('isPlaying() is true after constructor when autoPlay is true', function(done) {
     this.timeout(5000)
-    const playback = new HTML5Video({ src: 'http://example.com/dash.ogg', autoPlay: true, mute: true })
+    const playback = new HTML5Video({ src: 'http://example.com/dash.ogg', autoPlay: true, mute: true, disableCanAutoPlay: true })
 
     playback.on(Events.PLAYBACK_PLAY_INTENT, function() {
       process.nextTick(function() {
