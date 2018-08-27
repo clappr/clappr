@@ -1,7 +1,7 @@
 {
   "name": "clappr",
   "description": "An extensible media player for the web",
-  "version": "0.2.97",
+  "version": "0.2.98",
   "homepage": "https://github.com/clappr/clappr",
   "authors": [
     "Globo.com"
@@ -35,7 +35,7 @@
     "eslint": "^4.18.2",
     "file-loader": "^1.1.11",
     "gulp": "^3.9.1",
-    "hls.js": "^0.9.1",
+    "hls.js": "0.11.0",
     "html-loader": "^0.5.5",
     "istanbul": "^0.4.2",
     "istanbul-instrumenter-loader": "^3.0.0",
