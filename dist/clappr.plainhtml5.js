@@ -1384,10 +1384,11 @@ function canAutoPlayMedia(cb, options) {
     muted: false,
     timeout: 250,
     type: 'video',
-    source: _media2.default.mp4
+    source: _media2.default.mp4,
+    element: null
   }, options);
 
-  var element = document.createElement(options.type);
+  var element = options.element ? options.element : document.createElement(options.type);
 
   element.muted = options.muted;
   if (options.muted === true) element.setAttribute('muted', 'muted');
@@ -7021,7 +7022,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.2.97"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.2.98"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -11973,7 +11974,7 @@ var MediaControl = function (_UIObject) {
   MediaControl.prototype.render = function render() {
     var _this8 = this;
 
-    var timeout = 1000;
+    var timeout = this.options.hideMediaControlDelay || 2000;
     this.$el.html(this.template({ settings: this.settings }));
     this.createCachedElements();
     this.$playPauseToggle.addClass('paused');
@@ -12924,17 +12925,21 @@ var HTML5Video = function (_Playback) {
 
 
   HTML5Video.prototype.canAutoPlay = function canAutoPlay(cb) {
-    if (_browser2.default.isMobile) {
-      // Mobile browser autoplay require user consent and video recycling feature enabled
-      cb(this.consented && _utils.DomRecycler.options.recycleVideo, null);
-    } else {
-      // Desktop browser autoplay policy may require user action
-      (0, _utils.canAutoPlayMedia)(cb, {
-        timeout: this.options.autoPlayTimeout || 500,
-        inline: this.options.playback.playInline || false,
-        muted: this.options.mute || false // Known issue: mediacontrols may asynchronously mute video
-      });
-    }
+    if (this.options.disableCanAutoPlay) cb(true, null);
+
+    var opts = {
+      timeout: this.options.autoPlayTimeout || 500,
+      inline: this.options.playback.playInline || false,
+      muted: this.options.mute || false // Known issue: mediacontrols may asynchronously mute video
+
+
+      // Use current video element if recycling feature enabled with mobile devices
+    };if (_browser2.default.isMobile && _utils.DomRecycler.options.recycleVideo) opts.element = this.el;
+
+    // Desktop browser autoplay policy may require user action
+    // Mobile browser autoplay require user consent and video recycling feature enabled
+    // It may returns a false positive with source-less player consent
+    (0, _utils.canAutoPlayMedia)(cb, opts);
   };
 
   HTML5Video.prototype._setupExternalTracks = function _setupExternalTracks(tracks) {
