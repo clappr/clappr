@@ -156,17 +156,23 @@ export default class HTML5Video extends Playback {
 
   // See Playback.canAutoPlay()
   canAutoPlay(cb) {
-    if (Browser.isMobile) {
-      // Mobile browser autoplay require user consent and video recycling feature enabled
-      cb(this.consented && DomRecycler.options.recycleVideo, null)
-    } else {
-      // Desktop browser autoplay policy may require user action
-      canAutoPlayMedia(cb, {
-        timeout: this.options.autoPlayTimeout || 500,
-        inline: this.options.playback.playInline || false,
-        muted: this.options.mute || false, // Known issue: mediacontrols may asynchronously mute video
-      })
+    if (this.options.disableCanAutoPlay)
+      cb(true, null)
+
+    let opts = {
+      timeout: this.options.autoPlayTimeout || 500,
+      inline: this.options.playback.playInline || false,
+      muted: this.options.mute || false, // Known issue: mediacontrols may asynchronously mute video
     }
+
+    // Use current video element if recycling feature enabled with mobile devices
+    if (Browser.isMobile && DomRecycler.options.recycleVideo)
+      opts.element = this.el
+
+    // Desktop browser autoplay policy may require user action
+    // Mobile browser autoplay require user consent and video recycling feature enabled
+    // It may returns a false positive with source-less player consent
+    canAutoPlayMedia(cb, opts)
   }
 
   _setupExternalTracks(tracks) {
