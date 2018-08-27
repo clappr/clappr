@@ -4095,9 +4095,9 @@ hipchat-notifier@^1.1.0:
     lodash "^4.0.0"
     request "^2.0.0"
 
-hls.js@^0.9.1:
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-0.9.1.tgz#36516d4fac3ab44108e5c127ef0f3e9cd06f6330"
+hls.js@0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-0.11.0.tgz#a205fb61725d9d69bf6258984be3dc2ee829fa9e"
   dependencies:
     string.prototype.endswith "^0.2.0"
     url-toolkit "^2.1.2"
