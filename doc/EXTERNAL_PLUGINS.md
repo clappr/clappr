@@ -23,6 +23,7 @@
 |VAST Ad plugin | WIP | No | https://github.com/vix-simplex/clappr-ad-plugin |
 |Dynamic Overlay | Ready | Yes | https://github.com/Lethea/clappr-dynamic-text-overlay |
 |Scroll Text Overlay | Ready | Yes | https://github.com/Lethea/clappr-marquee-overlay |
+|Playback Speed Controller | Ready | Yes | https://github.com/Lethea/clapper-playback-speed-plugin-extended |
 |FLV | Ready | Yes | https://github.com/andrefilimono/clappr-flvjs-playback |
 
 ## External Integrations
