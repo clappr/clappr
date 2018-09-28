@@ -304,15 +304,17 @@ export default class Core extends UIObject {
   }
 
   toggleFullscreen() {
-    if (!Fullscreen.isFullscreen()) {
-      Fullscreen.requestFullscreen(this.el)
-      if (!Browser.isiOS)
-        this.$el.addClass('fullscreen')
-
-    } else {
+    if (Fullscreen.isFullscreen()) {
       Fullscreen.cancelFullscreen()
       if (!Browser.isiOS)
         this.$el.removeClass('fullscreen nocursor')
+
+    } else {
+      let element = Browser.isiOS ? this.getCurrentContainer().el : this.el
+      Fullscreen.requestFullscreen(element)
+
+      if (!Browser.isiOS)
+        this.$el.addClass('fullscreen')
 
     }
     this.mediaControl.show()
