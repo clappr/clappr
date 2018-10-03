@@ -191,4 +191,30 @@ describe('Player', function() {
       expect(callbacks.callbackB).to.have.been.calledOnce
     })
   })
+
+  describe('when a core event is fired', () => {
+    let onResizeSpy
+
+    beforeEach(() => {
+      onResizeSpy = sinon.spy()
+
+      this.player = new Player({
+        source: '/video.mp4',
+        events: {
+          onResize: onResizeSpy
+        }
+      })
+
+      const element = document.createElement('div')
+      this.player.attachTo(element)
+    })
+
+    describe('on Events.CORE_RESIZE', () => {
+      it('calls onResize callback with width and height', () => {
+        const newSize = { width: '50%', height: '50%' }
+        this.player.core.trigger(Events.CORE_RESIZE, newSize)
+        expect(onResizeSpy).to.have.been.calledWith(newSize)
+      })
+    })
+  })
 })
