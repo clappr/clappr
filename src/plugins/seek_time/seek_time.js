@@ -84,15 +84,15 @@ export default class SeekTime extends UICorePlugin {
   getSeekTime() {
     let seekTime, secondsSinceMidnight, d, e
     if (this.useActualLiveTime) {
-      if (this.actualLiveServerTimeDiff) {
-        d = new Date(new Date().getTime() - this.actualLiveServerTimeDiff)
-        e = new Date(d)
-        secondsSinceMidnight = (e - d.setHours(0,0,0,0)) / 1000
-      } else if (this.firstFragDateTime) {
+      if (this.firstFragDateTime) {
         e = new Date(this.firstFragDateTime)
         d = new Date(this.firstFragDateTime)
         d.setHours(0,0,0,0)
         secondsSinceMidnight = ((e.getTime() - d.getTime()) / 1000) + this.duration
+      } else {
+        d = new Date(new Date().getTime() - this.actualLiveServerTimeDiff)
+        e = new Date(d)
+        secondsSinceMidnight = (e - d.setHours(0,0,0,0)) / 1000
       }
       seekTime = (secondsSinceMidnight - this.duration) + (this.hoverPosition * this.duration)
       if (seekTime < 0)
