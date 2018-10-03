@@ -124,4 +124,16 @@ describe('Core', function() {
       })
     })
   })
+
+  describe('#triggerResize', () => {
+    it('triggers on an event Events.CORE_RESIZE', () => {
+      const newSize = { width: '50%', height: '50%' }
+
+      this.core = new Core({})
+      sinon.spy(this.core, 'trigger')
+      this.core.triggerResize(newSize)
+
+      expect(this.core.trigger).to.have.been.calledWith(Events.CORE_RESIZE, newSize)
+    })
+  })
 })

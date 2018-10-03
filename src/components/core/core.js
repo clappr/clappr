@@ -153,6 +153,7 @@ export default class Core extends UIObject {
     const thereWasChange = this.firstResize || this.oldHeight !== newSize.height || this.oldWidth !== newSize.width
     if (thereWasChange) {
       Mediator.trigger(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, newSize)
+      this.trigger(Events.CORE_RESIZE, newSize)
       this.oldHeight = newSize.height
       this.oldWidth = newSize.width
       this.firstResize = false
