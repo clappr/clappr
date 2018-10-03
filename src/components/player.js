@@ -288,6 +288,7 @@ export default class Player extends BaseObject {
 
     this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this._containerChanged)
     this.listenTo(this.core, Events.CORE_FULLSCREEN, this._onFullscreenChange)
+    this.listenTo(this.core, Events.CORE_RESIZE, this._onResize)
     return this
   }
 
@@ -346,6 +347,10 @@ export default class Player extends BaseObject {
 
   _onSubtitleAvailable() {
     this.trigger(Events.PLAYER_SUBTITLE_AVAILABLE)
+  }
+
+  _onResize(size) {
+    this.trigger(Events.PLAYER_RESIZE, size)
   }
 
   _onPlay() {
