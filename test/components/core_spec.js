@@ -125,7 +125,7 @@ describe('Core', function() {
     })
   })
 
-  describe.only('#enableResizeObserver', () => {
+  describe('#enableResizeObserver', () => {
     beforeEach(() => {
       this.clock = sinon.useFakeTimers()
       this.core = new Core({})
