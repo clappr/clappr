@@ -125,6 +125,33 @@ describe('Core', function() {
     })
   })
 
+  describe.only('#enableResizeObserver', () => {
+    beforeEach(() => {
+      this.clock = sinon.useFakeTimers()
+      this.core = new Core({})
+      sinon.spy(this.core, 'triggerResize')
+    })
+
+    afterEach(() => {
+      this.clock.restore()
+    })
+
+    it('calls #triggerResize every 500 milliseconds', () => {
+      this.core.enableResizeObserver()
+      expect(this.core.triggerResize).not.to.have.been.called
+      this.clock.tick(500)
+      expect(this.core.triggerResize).to.have.been.called
+      this.clock.tick(500)
+      expect(this.core.triggerResize).to.have.been.calledTwice
+    })
+
+    it('calls #triggerResize with core element width and height', () => {
+      this.core.enableResizeObserver()
+      this.clock.tick(500)
+      expect(this.core.triggerResize).to.have.been.calledWith({ height: 0, width: 0 })
+    })
+  })
+
   describe('#triggerResize', () => {
     it('triggers on an event Events.CORE_RESIZE', () => {
       const newSize = { width: '50%', height: '50%' }
@@ -134,6 +161,29 @@ describe('Core', function() {
       this.core.triggerResize(newSize)
 
       expect(this.core.trigger).to.have.been.calledWith(Events.CORE_RESIZE, newSize)
+    })
+  })
+
+  describe('#handleWindowResize', () => {
+    beforeEach(() => {
+      this.core = new Core({})
+      this.core._screenOrientation = 'landscape'
+      sinon.spy(this.core, 'triggerResize')
+    })
+
+    describe('when change the screen orientation', () => {
+      it('calls #triggerResize with core element width and height', () => {
+        this.core._screenOrientation = 'portrait'
+        this.core.handleWindowResize("event")
+        expect(this.core.triggerResize).to.have.been.calledWith({ height: 0, width: 0 })
+      })
+    })
+
+    describe('when screen orientation doesn\'t change', () => {
+      it('doesn\'t calls #triggerResize', () => {
+        this.core.handleWindowResize("event")
+        expect(this.core.triggerResize).not.to.have.been.called
+      })
     })
   })
 })
