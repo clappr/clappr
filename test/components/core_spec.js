@@ -174,14 +174,14 @@ describe('Core', function() {
     describe('when change the screen orientation', () => {
       it('calls #triggerResize with core element width and height', () => {
         this.core._screenOrientation = 'portrait'
-        this.core.handleWindowResize("event")
+        this.core.handleWindowResize('event')
         expect(this.core.triggerResize).to.have.been.calledWith({ height: 0, width: 0 })
       })
     })
 
     describe('when screen orientation doesn\'t change', () => {
       it('doesn\'t calls #triggerResize', () => {
-        this.core.handleWindowResize("event")
+        this.core.handleWindowResize('event')
         expect(this.core.triggerResize).not.to.have.been.called
       })
     })
