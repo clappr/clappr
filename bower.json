@@ -1,7 +1,7 @@
 {
   "name": "clappr",
   "description": "An extensible media player for the web",
-  "version": "0.2.98",
+  "version": "0.2.99",
   "homepage": "https://github.com/clappr/clappr",
   "authors": [
     "Globo.com"
@@ -49,7 +49,7 @@
     "karma-webpack": "^2.0.13",
     "lolex": "^2.3.2",
     "mocha": "^5.0.1",
-    "node-sass": "^4.7.2",
+    "node-sass": "4.9.2",
     "postcss-loader": "^2.1.1",
     "s3": "^4.4.0",
     "sass-loader": "^6.0.6",

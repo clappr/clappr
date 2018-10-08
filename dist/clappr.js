@@ -835,6 +835,13 @@ Events.CORE_READY = 'core:ready';
  */
 Events.CORE_FULLSCREEN = 'core:fullscreen';
 /**
+ * Fired when core updates size
+ *
+ * @event CORE_RESIZE
+ * @param {Object} currentSize an object with the current size
+ */
+Events.CORE_RESIZE = 'core:resize';
+/**
  * Fired when the screen orientation has changed.
  * This event is trigger only for mobile devices.
  *
@@ -7092,7 +7099,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.2.98"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.2.99"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -7505,6 +7512,7 @@ var Player = function (_BaseObject) {
 
     this.listenTo(this.core.mediaControl, _events2.default.MEDIACONTROL_CONTAINERCHANGED, this._containerChanged);
     this.listenTo(this.core, _events2.default.CORE_FULLSCREEN, this._onFullscreenChange);
+    this.listenTo(this.core, _events2.default.CORE_RESIZE, this._onResize);
     return this;
   };
 
@@ -7568,6 +7576,10 @@ var Player = function (_BaseObject) {
 
   Player.prototype._onSubtitleAvailable = function _onSubtitleAvailable() {
     this.trigger(_events2.default.PLAYER_SUBTITLE_AVAILABLE);
+  };
+
+  Player.prototype._onResize = function _onResize(size) {
+    this.trigger(_events2.default.PLAYER_RESIZE, size);
   };
 
   Player.prototype._onPlay = function _onPlay() {
@@ -10096,10 +10108,7 @@ var Core = function (_UIObject) {
     var _this3 = this;
 
     var checkSizeCallback = function checkSizeCallback() {
-      if (_this3.playerInfo.computedSize.width !== _this3.el.clientWidth || _this3.playerInfo.computedSize.height !== _this3.el.clientHeight) {
-        _this3.playerInfo.computedSize = { width: _this3.el.clientWidth, height: _this3.el.clientHeight };
-        _this3.triggerResize(_this3.playerInfo.computedSize);
-      }
+      _this3.triggerResize({ width: _this3.el.clientWidth, height: _this3.el.clientHeight });
     };
     this.resizeObserverInterval = setInterval(checkSizeCallback, 500);
   };
@@ -10108,6 +10117,7 @@ var Core = function (_UIObject) {
     var thereWasChange = this.firstResize || this.oldHeight !== newSize.height || this.oldWidth !== newSize.width;
     if (thereWasChange) {
       _mediator2.default.trigger(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, newSize);
+      this.trigger(_events2.default.CORE_RESIZE, newSize);
       this.oldHeight = newSize.height;
       this.oldWidth = newSize.width;
       this.firstResize = false;
@@ -10187,6 +10197,7 @@ var Core = function (_UIObject) {
     if (this._screenOrientation === orientation) return;
     this._screenOrientation = orientation;
 
+    this.triggerResize({ width: this.el.clientWidth, height: this.el.clientHeight });
     this.trigger(_events2.default.CORE_SCREEN_ORIENTATION_CHANGED, {
       event: event,
       orientation: this._screenOrientation
@@ -10276,12 +10287,14 @@ var Core = function (_UIObject) {
   };
 
   Core.prototype.toggleFullscreen = function toggleFullscreen() {
-    if (!_utils.Fullscreen.isFullscreen()) {
-      _utils.Fullscreen.requestFullscreen(this.el);
-      if (!_browser2.default.isiOS) this.$el.addClass('fullscreen');
-    } else {
+    if (_utils.Fullscreen.isFullscreen()) {
       _utils.Fullscreen.cancelFullscreen();
       if (!_browser2.default.isiOS) this.$el.removeClass('fullscreen nocursor');
+    } else {
+      var element = _browser2.default.isiOS ? this.getCurrentContainer().el : this.el;
+      _utils.Fullscreen.requestFullscreen(element);
+
+      if (!_browser2.default.isiOS) this.$el.addClass('fullscreen');
     }
     this.mediaControl.show();
   };
@@ -10338,7 +10351,7 @@ var Core = function (_UIObject) {
     this.options.width = this.options.width || this.$el.width();
     this.options.height = this.options.height || this.$el.height();
     var size = { width: this.options.width, height: this.options.height };
-    this.playerInfo.previousSize = this.playerInfo.currentSize = this.playerInfo.computedSize = size;
+    this.playerInfo.previousSize = this.playerInfo.currentSize = size;
     this.updateSize();
 
     this.previousSize = { width: this.$el.width(), height: this.$el.height() };
@@ -37322,15 +37335,15 @@ var SeekTime = function (_UICorePlugin) {
         d = void 0,
         e = void 0;
     if (this.useActualLiveTime) {
-      if (this.actualLiveServerTimeDiff) {
-        d = new Date(new Date().getTime() - this.actualLiveServerTimeDiff);
-        e = new Date(d);
-        secondsSinceMidnight = (e - d.setHours(0, 0, 0, 0)) / 1000;
-      } else if (this.firstFragDateTime) {
+      if (this.firstFragDateTime) {
         e = new Date(this.firstFragDateTime);
         d = new Date(this.firstFragDateTime);
         d.setHours(0, 0, 0, 0);
         secondsSinceMidnight = (e.getTime() - d.getTime()) / 1000 + this.duration;
+      } else {
+        d = new Date(new Date().getTime() - this.actualLiveServerTimeDiff);
+        e = new Date(d);
+        secondsSinceMidnight = (e - d.setHours(0, 0, 0, 0)) / 1000;
       }
       seekTime = secondsSinceMidnight - this.duration + this.hoverPosition * this.duration;
       if (seekTime < 0) seekTime += 86400;
