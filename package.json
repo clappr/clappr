@@ -57,7 +57,7 @@
     "karma-webpack": "^2.0.13",
     "lolex": "^2.3.2",
     "mocha": "^5.0.1",
-    "node-sass": "^4.7.2",
+    "node-sass": "4.9.2",
     "postcss-loader": "^2.1.1",
     "s3": "^4.4.0",
     "sass-loader": "^6.0.6",
