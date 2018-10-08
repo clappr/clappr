@@ -320,7 +320,6 @@ export default class Core extends UIObject {
       Fullscreen.cancelFullscreen()
       !Browser.isiOS && this.$el.removeClass('fullscreen nocursor')
     }
-    this.mediaControl.show()
   }
 
   showMediaControl(event) {
