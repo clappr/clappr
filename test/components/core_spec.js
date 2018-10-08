@@ -1,7 +1,8 @@
 import Core from '../../src/components/core'
+import Browser from '../../src/components/browser'
 import Events from '../../src/base/events'
 import { Fullscreen } from '../../src/base/utils'
-import Browser from '../../src/components/browser'
+import MediaControl from '../../src/plugins/media_control'
 
 describe('Core', function() {
   describe('When configure', function() {
@@ -47,12 +48,7 @@ describe('Core', function() {
   describe('#toggleFullscreen', () => {
     beforeEach(() => {
       this.core = new Core({})
-    })
-
-    it('calls this.mediaControl.show()', () => {
-      const spy = sinon.spy(this.core.mediaControl, 'show')
-      this.core.toggleFullscreen()
-      expect(spy).to.have.been.called
+      this.core.plugins.push(new MediaControl(this.core))
     })
 
     describe('when is not in fullscreen', () => {
@@ -90,12 +86,13 @@ describe('Core', function() {
       describe('and is an iOS Browser', () => {
         it('calls Fullscreen.requestFullscreen with currentContainer element', () => {
           sinon.stub(Browser, 'isiOS').value(true)
-          const fakeCurrentContainer = '<div id="fakeCurrentContainer"></div>'
-          this.core.getCurrentContainer = sinon.stub().returns({ el: fakeCurrentContainer })
+          const fakeCurrentContainer = document.createElement('div')
+          fakeCurrentContainer.setAttribute('id', 'fakeCurrentContainer')
+          this.core.activeContainer = { el: fakeCurrentContainer }
 
           this.core.toggleFullscreen()
 
-          expect(fullScreenSpy).to.have.been.calledWith(this.core.getCurrentContainer().el)
+          expect(fullScreenSpy).to.have.been.calledWith(this.core.activeContainer.el)
         })
       })
     })
