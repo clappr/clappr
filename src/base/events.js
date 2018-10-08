@@ -579,6 +579,13 @@ Events.CORE_READY = 'core:ready'
  */
 Events.CORE_FULLSCREEN = 'core:fullscreen'
 /**
+ * Fired when core updates size
+ *
+ * @event CORE_RESIZE
+ * @param {Object} currentSize an object with the current size
+ */
+Events.CORE_RESIZE = 'core:resize'
+/**
  * Fired when the screen orientation has changed.
  * This event is trigger only for mobile devices.
  *

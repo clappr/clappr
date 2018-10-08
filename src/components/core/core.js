@@ -140,11 +140,7 @@ export default class Core extends UIObject {
 
   enableResizeObserver() {
     const checkSizeCallback = () => {
-      if (this.playerInfo.computedSize.width !== this.el.clientWidth ||
-          this.playerInfo.computedSize.height !== this.el.clientHeight) {
-        this.playerInfo.computedSize = { width: this.el.clientWidth, height: this.el.clientHeight }
-        this.triggerResize(this.playerInfo.computedSize)
-      }
+      this.triggerResize({ width: this.el.clientWidth, height: this.el.clientHeight })
     }
     this.resizeObserverInterval = setInterval(checkSizeCallback, 500)
   }
@@ -153,6 +149,7 @@ export default class Core extends UIObject {
     const thereWasChange = this.firstResize || this.oldHeight !== newSize.height || this.oldWidth !== newSize.width
     if (thereWasChange) {
       Mediator.trigger(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, newSize)
+      this.trigger(Events.CORE_RESIZE, newSize)
       this.oldHeight = newSize.height
       this.oldWidth = newSize.width
       this.firstResize = false
@@ -218,6 +215,7 @@ export default class Core extends UIObject {
     if (this._screenOrientation === orientation) return
     this._screenOrientation = orientation
 
+    this.triggerResize({ width: this.el.clientWidth, height: this.el.clientHeight })
     this.trigger(Events.CORE_SCREEN_ORIENTATION_CHANGED, {
       event: event,
       orientation: this._screenOrientation
@@ -372,7 +370,7 @@ export default class Core extends UIObject {
     this.options.width = this.options.width || this.$el.width()
     this.options.height = this.options.height || this.$el.height()
     const size = { width: this.options.width, height: this.options.height }
-    this.playerInfo.previousSize = this.playerInfo.currentSize = this.playerInfo.computedSize = size
+    this.playerInfo.previousSize = this.playerInfo.currentSize = size
     this.updateSize()
 
     this.previousSize = { width: this.$el.width(), height: this.$el.height() }
