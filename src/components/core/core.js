@@ -314,7 +314,7 @@ export default class Core extends UIObject {
 
   toggleFullscreen() {
     if (!Fullscreen.isFullscreen()) {
-      Fullscreen.requestFullscreen(this.el)
+      Fullscreen.requestFullscreen(Browser.isiOS ? this.activeContainer.el : this.el)
       !Browser.isiOS && this.$el.addClass('fullscreen')
     } else {
       Fullscreen.cancelFullscreen()
