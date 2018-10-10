@@ -625,12 +625,12 @@ export default class MediaControl extends UICorePlugin {
     this.buttonsColor && element && $(element).find('svg path').css('fill', this.buttonsColor)
   }
 
-  remove() {
+  destroy() {
     $(document).unbind('mouseup', this.stopDragHandler)
     $(document).unbind('mousemove', this.updateDragHandler)
     this.unbindKeyEvents()
     this.stopListening()
-    super.remove()
+    super.destroy()
   }
 
   /**
