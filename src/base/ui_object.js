@@ -122,10 +122,10 @@ export default class UIObject extends BaseObject {
 
   /**
    * removes the ui component from DOM
-   * @method remove
+   * @method destroy
    * @return {UIObject} itself
    */
-  remove() {
+  destroy() {
     this.$el.remove()
     this.stopListening()
     this.undelegateEvents()
