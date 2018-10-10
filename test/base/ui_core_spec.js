@@ -46,9 +46,9 @@ describe('UI Core Plugin', function() {
 
   it('destroys', () => {
     const plugin = new MyPlugin({})
-    const spy = sinon.spy(plugin, 'remove')
+    const spy = sinon.spy(plugin, 'destroy')
 
-    plugin.remove()
+    plugin.destroy()
 
     expect(spy).to.have.been.calledOnce
   })
