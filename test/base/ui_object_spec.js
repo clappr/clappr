@@ -94,7 +94,7 @@ describe('UIObject', function() {
 
     expect($('#my-0-button').length).to.be.equal(1)
 
-    myButton.remove()
+    myButton.destroy()
 
     expect($('#my-0-button').length).to.be.equal(0)
   })
@@ -114,7 +114,7 @@ describe('UIObject', function() {
     myButton.$el.trigger('click')
     expect(myButton.myId).to.be.equal(1)
 
-    myButton.remove()
+    myButton.destroy()
     myButton.$el.trigger('click')
     myButton.$el.trigger('click')
 
