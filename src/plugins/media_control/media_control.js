@@ -342,6 +342,7 @@ export default class MediaControl extends UICorePlugin {
   toggleFullscreen() {
     this.trigger(Events.MEDIACONTROL_FULLSCREEN, this.name)
     this.container.fullscreen()
+    this.core.toggleFullscreen()
     this.resetUserKeepVisible()
   }
 
