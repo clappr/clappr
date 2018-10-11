@@ -704,6 +704,8 @@ export default class MediaControl extends UICorePlugin {
     this.parseColors()
     this.highDefinitionUpdate(this.isHD)
 
+    this.core.$el.append(this.el)
+
     this.rendered = true
     this.updateVolumeUI()
     this.trigger(Events.MEDIACONTROL_RENDERED)
