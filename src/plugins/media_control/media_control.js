@@ -108,6 +108,8 @@ export default class MediaControl extends UICorePlugin {
 
   bindEvents() {
     this.listenTo(this.core, Events.CORE_ACTIVE_CONTAINER_CHANGED, this.setContainer)
+    this.listenTo(this.core, Events.CORE_MOUSE_MOVE, this.show)
+    this.listenTo(this.core, Events.CORE_MOUSE_LEAVE, () => this.hide(this.options.hideMediaControlDelay))
     this.listenTo(this.core, Events.CORE_FULLSCREEN, this.show)
     this.listenTo(this.core, Events.CORE_OPTIONS_CHANGE, this.configure)
     this.container && this.bindContainerEvents()
