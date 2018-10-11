@@ -324,11 +324,6 @@ export default class Core extends UIObject {
     this.trigger(Events.CORE_MOUSE_MOVE, event)
   }
 
-  onMediaControlShow(showing) {
-    let visibilityEvent = showing ? Events.CONTAINER_MEDIACONTROL_SHOW : Events.CONTAINER_MEDIACONTROL_HIDE
-    this.activeContainer.trigger(visibilityEvent)
-    showing && this.$el.removeClass('nocursor')
-    Fullscreen.isFullscreen() && this.$el.addClass('nocursor')
   onMouseLeave(event) {
     this.trigger(Events.CORE_MOUSE_LEAVE, event)
   }
