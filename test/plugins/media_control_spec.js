@@ -172,11 +172,11 @@ describe('MediaControl', function() {
     expect(this.mediaControl._options.hideMediaControl).to.be.undefined
     expect(this.mediaControl._options.mediacontrol).to.be.undefined
 
-    this.mediaControl.configure({ hideMediaControl: false, mediacontrol: { seekbar: '#E113D3', buttons: '#66B2FF' } })
+    this.core.configure({ hideMediaControl: false, mediacontrol: { seekbar: '#E113D3', buttons: '#66B2FF' } })
     expect(this.mediaControl._options.hideMediaControl).to.be.false
     expect(this.mediaControl._options.mediacontrol).not.to.be.undefined
 
-    this.mediaControl.configure({ hideMediaControl: true })
+    this.core.configure({ hideMediaControl: true })
     expect(this.mediaControl._options.hideMediaControl).to.be.true
   })
 })
