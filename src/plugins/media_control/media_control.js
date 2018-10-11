@@ -72,8 +72,8 @@ export default class MediaControl extends UICorePlugin {
   get volume() { return (this.container && this.container.isReady) ? this.container.volume : this.intendedVolume }
   get muted() { return this.volume === 0 }
 
-  constructor(options) {
-    super(options)
+  constructor(core) {
+    super(core)
     this.persistConfig = this.options.persistConfig
     this.container = options.container
     this.currentPositionValue = null
