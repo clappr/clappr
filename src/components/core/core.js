@@ -341,8 +341,6 @@ export default class Core extends UIObject {
   }
 
   render() {
-    this.mediaControl && this.$el.append(this.mediaControl.render().el)
-
     if (!style)
       style = Styler.getStyleFor(fontStyle, { baseUrl: this.options.baseUrl })
 
