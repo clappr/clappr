@@ -109,6 +109,7 @@ export default class MediaControl extends UICorePlugin {
   bindEvents() {
     this.listenTo(this.core, Events.CORE_ACTIVE_CONTAINER_CHANGED, this.setContainer)
     this.listenTo(this.core, Events.CORE_FULLSCREEN, this.show)
+    this.listenTo(this.core, Events.CORE_OPTIONS_CHANGE, this.configure)
     this.container && this.bindContainerEvents()
   }
 
@@ -638,8 +639,8 @@ export default class MediaControl extends UICorePlugin {
    * @method configure
    * @param {Object} options all the options to change in form of a javascript object
    */
-  configure(options) {
-    this._options = $.extend(this._options, options)
+  configure() {
+    this._options = $.extend(this._options, this.core.options)
     this.trigger(Events.MEDIACONTROL_OPTIONS_CHANGE)
   }
 
