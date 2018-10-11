@@ -263,7 +263,6 @@ export default class Core extends UIObject {
     this.trigger(Events.CORE_CONTAINERS_CREATED)
     this.renderContainers()
     this.activeContainer = containers[0]
-    this.setupMediaControl()
     this.render()
     this.appendToParent()
     return this.containers
@@ -278,14 +277,6 @@ export default class Core extends UIObject {
     this.setupContainer(container)
     this.el.appendChild(container.render().el)
     return container
-  }
-
-  setupMediaControl() {
-    if (this.mediaControl) {
-      this.listenTo(this.mediaControl, Events.MEDIACONTROL_FULLSCREEN, this.toggleFullscreen)
-      this.listenTo(this.mediaControl, Events.MEDIACONTROL_SHOW, this.onMediaControlShow.bind(this, true))
-      this.listenTo(this.mediaControl, Events.MEDIACONTROL_HIDE, this.onMediaControlShow.bind(this, false))
-    }
   }
 
   /**
