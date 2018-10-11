@@ -604,7 +604,20 @@ Events.CORE_RESIZE = 'core:resize'
  * screen orientation (ie: 'landscape' or 'portrait')
  */
 Events.CORE_SCREEN_ORIENTATION_CHANGED = 'core:screen:orientation:changed'
-
+/**
+ * Fired when occurs mouse move event on core element
+ *
+ * @event CORE_MOUSE_MOVE
+ * @param {Object} event a DOM event
+ */
+Events.CORE_MOUSE_MOVE = 'core:mousemove'
+/**
+ * Fired when occurs mouse leave event on core element
+ *
+ * @event CORE_MOUSE_LEAVE
+ * @param {Object} event a DOM event
+ */
+Events.CORE_MOUSE_LEAVE = 'core:mouseleave'
 
 // Container Events
 /**
