@@ -64,6 +64,11 @@ export default class Core extends UIObject {
     return this.getPlugin('strings') || { t: (key) => key }
   }
 
+  /**
+   * @deprecated
+   * This property currently exists for retrocompatibility reasons.
+   * If you want to access the media control instance, use the method getPlugin('media_control').
+   */
   get mediaControl() {
     return this.getPlugin('media_control') || this.dummyMediaControl
   }
