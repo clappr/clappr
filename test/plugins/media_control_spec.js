@@ -139,6 +139,7 @@ describe('MediaControl', function() {
 
     it('option chromeless has value true', function() {
       this.core.options.chromeless = true
+      this.core.activeContainer = this.container
       const mediaControl = new MediaControl(this.core)
       this.core.trigger(Events.CORE_ACTIVE_CONTAINER_CHANGED, this.container)
       expect(mediaControl.$el.hasClass('media-control-hide')).to.be.true
