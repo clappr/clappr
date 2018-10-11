@@ -34,8 +34,8 @@ export default class Core extends UIObject {
   get events() {
     return {
       'webkitfullscreenchange': 'handleFullscreenChange',
-      'mousemove': 'showMediaControl',
-      'mouseleave': 'hideMediaControl'
+      'mousemove': 'onMouseMove',
+      'mouseleave': 'onMouseLeave'
     }
   }
 
@@ -320,12 +320,8 @@ export default class Core extends UIObject {
     }
   }
 
-  showMediaControl(event) {
-    this.mediaControl.show && this.mediaControl.show(event)
-  }
-
-  hideMediaControl() {
-    this.mediaControl.hide && this.mediaControl.hide(this.options.hideMediaControlDelay)
+  onMouseMove(event) {
+    this.trigger(Events.CORE_MOUSE_MOVE, event)
   }
 
   onMediaControlShow(showing) {
@@ -333,6 +329,8 @@ export default class Core extends UIObject {
     this.activeContainer.trigger(visibilityEvent)
     showing && this.$el.removeClass('nocursor')
     Fullscreen.isFullscreen() && this.$el.addClass('nocursor')
+  onMouseLeave(event) {
+    this.trigger(Events.CORE_MOUSE_LEAVE, event)
   }
 
   /**
