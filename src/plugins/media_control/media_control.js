@@ -459,6 +459,7 @@ export default class MediaControl extends UICorePlugin {
       clearTimeout(this.hideId)
       this.$el.show()
       this.trigger(Events.MEDIACONTROL_SHOW, this.name)
+      this.container.trigger(Events.CONTAINER_MEDIACONTROL_SHOW, this.name)
       this.$el.removeClass('media-control-hide')
       this.hideId = setTimeout(() => this.hide(), timeout)
       if (event) {
@@ -466,6 +467,8 @@ export default class MediaControl extends UICorePlugin {
         this.lastMouseY = event.clientY
       }
     }
+    const showing = true
+    this.updateCursorStyle(showing)
   }
 
   hide(delay = 0) {
@@ -482,9 +485,19 @@ export default class MediaControl extends UICorePlugin {
       this.hideId = setTimeout(() => this.hide(), timeout)
     } else {
       this.trigger(Events.MEDIACONTROL_HIDE, this.name)
+      this.container.trigger(Events.CONTAINER_MEDIACONTROL_HIDE, this.name)
       this.$el.addClass('media-control-hide')
       this.hideVolumeBar(0)
+      const showing = false
+      this.updateCursorStyle(showing)
     }
+  }
+
+  updateCursorStyle(showing) {
+    if (showing)
+      this.core.$el.removeClass('nocursor')
+    else if (Fullscreen.isFullscreen())
+      this.core.$el.addClass('nocursor')
   }
 
   settingsUpdate() {
