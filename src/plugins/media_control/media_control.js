@@ -75,7 +75,7 @@ export default class MediaControl extends UICorePlugin {
   constructor(core) {
     super(core)
     this.persistConfig = this.options.persistConfig
-    this.container = options.container
+    this.container = this.core.activeContainer
     this.currentPositionValue = null
     this.currentDurationValue = null
     this.keepVisible = false
