@@ -153,9 +153,34 @@ describe('Core', function() {
   })
 
   describe('#triggerResize', () => {
+    it('sets the properties oldHeight and oldWidth with the new one', () => {
+      const newSize = { width: '50%', height: '50%' }
+      this.core = new Core({})
+
+      expect(this.core.oldHeight).equal(undefined)
+      expect(this.core.oldWidth).equal(undefined)
+
+      sinon.spy(this.core, 'trigger')
+      this.core.triggerResize(newSize)
+
+      expect(this.core.oldHeight).equal('50%')
+      expect(this.core.oldWidth).equal('50%')
+    })
+
+    it('sets the property computedSize with the new one', () => {
+      const newSize = { width: '50%', height: '50%' }
+      this.core = new Core({})
+
+      expect(this.core.computedSize).equal(undefined)
+
+      sinon.spy(this.core, 'trigger')
+      this.core.triggerResize(newSize)
+
+      expect(this.core.playerInfo.computedSize).equal(newSize)
+    })
+
     it('triggers on an event Events.CORE_RESIZE', () => {
       const newSize = { width: '50%', height: '50%' }
-
       this.core = new Core({})
       sinon.spy(this.core, 'trigger')
       this.core.triggerResize(newSize)

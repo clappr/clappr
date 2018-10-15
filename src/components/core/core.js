@@ -148,11 +148,12 @@ export default class Core extends UIObject {
   triggerResize(newSize) {
     const thereWasChange = this.firstResize || this.oldHeight !== newSize.height || this.oldWidth !== newSize.width
     if (thereWasChange) {
-      Mediator.trigger(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, newSize)
-      this.trigger(Events.CORE_RESIZE, newSize)
       this.oldHeight = newSize.height
       this.oldWidth = newSize.width
+      this.playerInfo.computedSize = newSize
       this.firstResize = false
+      Mediator.trigger(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, newSize)
+      this.trigger(Events.CORE_RESIZE, newSize)
     }
   }
 
@@ -370,7 +371,7 @@ export default class Core extends UIObject {
     this.options.width = this.options.width || this.$el.width()
     this.options.height = this.options.height || this.$el.height()
     const size = { width: this.options.width, height: this.options.height }
-    this.playerInfo.previousSize = this.playerInfo.currentSize = size
+    this.playerInfo.previousSize = this.playerInfo.currentSize = this.playerInfo.computedSize = size
     this.updateSize()
 
     this.previousSize = { width: this.$el.width(), height: this.$el.height() }
