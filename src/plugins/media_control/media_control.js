@@ -105,6 +105,13 @@ export default class MediaControl extends UICorePlugin {
     $(document).bind('mouseup', this.stopDragHandler)
     $(document).bind('mousemove', this.updateDragHandler)
   }
+  
+  getExternalInterface() {
+    return {
+      setVolume: this.setVolume,
+      getVolume: () => this.volume,
+    }
+  }
 
   bindEvents() {
     this.listenTo(this.core, Events.CORE_ACTIVE_CONTAINER_CHANGED, this.setContainer)
