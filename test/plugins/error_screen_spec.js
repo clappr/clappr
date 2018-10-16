@@ -17,14 +17,17 @@ describe('ErrorScreen', function() {
   })
 
   describe('on ERROR event', () => {
-    it('calls onError', () => {
+    it('calls onError', (done) => {
       const spy = sinon.spy(this.errorScreen, 'onError')
 
       this.errorScreen.stopListening()
       this.errorScreen.bindEvents()
       this.core.trigger(Events.ERROR, {})
 
-      expect(spy).to.have.been.called
+      process.nextTick(() => {
+        expect(spy).to.have.been.called
+        done()
+      })
     })
 
     describe('when error level is fatal', () => {
