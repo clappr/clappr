@@ -502,26 +502,6 @@ export default class Player extends BaseObject {
   }
 
   /**
-   * Set the volume for the current video (`source`).
-   * @method setVolume
-   * @param {Number} volume should be a number between 0 and 100, 0 being mute and 100 the max volume.
-   * @return {Player} itself
-   */
-  setVolume(volume) {
-    this.core && this.core.mediaControl && this.core.mediaControl.setVolume(volume)
-    return this
-  }
-
-  /**
-   * Get the volume for the current video
-   * @method getVolume
-   * @return {Number} volume should be a number between 0 and 100, 0 being mute and 100 the max volume.
-   */
-  getVolume() {
-    return this.core && this.core.mediaControl ? this.core.mediaControl.volume : 0
-  }
-
-  /**
    * mutes the current video (`source`).
    * @method mute
    * @return {Player} itself
