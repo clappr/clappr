@@ -7099,7 +7099,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.2.99"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.2.100"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -10116,11 +10116,12 @@ var Core = function (_UIObject) {
   Core.prototype.triggerResize = function triggerResize(newSize) {
     var thereWasChange = this.firstResize || this.oldHeight !== newSize.height || this.oldWidth !== newSize.width;
     if (thereWasChange) {
-      _mediator2.default.trigger(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, newSize);
-      this.trigger(_events2.default.CORE_RESIZE, newSize);
       this.oldHeight = newSize.height;
       this.oldWidth = newSize.width;
+      this.playerInfo.computedSize = newSize;
       this.firstResize = false;
+      _mediator2.default.trigger(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, newSize);
+      this.trigger(_events2.default.CORE_RESIZE, newSize);
     }
   };
 
@@ -10351,7 +10352,7 @@ var Core = function (_UIObject) {
     this.options.width = this.options.width || this.$el.width();
     this.options.height = this.options.height || this.$el.height();
     var size = { width: this.options.width, height: this.options.height };
-    this.playerInfo.previousSize = this.playerInfo.currentSize = size;
+    this.playerInfo.previousSize = this.playerInfo.currentSize = this.playerInfo.computedSize = size;
     this.updateSize();
 
     this.previousSize = { width: this.$el.width(), height: this.$el.height() };
