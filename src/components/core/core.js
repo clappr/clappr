@@ -74,7 +74,9 @@ export default class Core extends UIObject {
   }
 
   get dummyMediaControl() {
-    return new UICorePlugin(this)
+    if (this._dummyMediaControl) return
+    this._dummyMediaControl = new UICorePlugin(this)
+    return this._dummyMediaControl
   }
 
   /**
