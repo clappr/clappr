@@ -241,6 +241,7 @@ export function removeArrayItem(arr, item) {
 
 // find an item regardless of its letter case
 export function listContainsIgnoreCase(item, items) {
+  if (item === undefined || items === undefined) return false
   return items.find((itemEach) => item.toLowerCase() === itemEach.toLowerCase()) !== undefined
 }
 

@@ -199,6 +199,24 @@ describe('Utils', function() {
 
       expect(doesItContains).to.be.false
     })
+
+    it('does not find when an item is undefined', function() {
+      const aList = ["audio/aac", "video/mp4"]
+      const anItem = undefined
+
+      const doesItContains = utils.listContainsIgnoreCase(anItem, aList)
+
+      expect(doesItContains).to.be.false
+    })
+
+    it('does not find when the list is undefined', function() {
+      const aList = undefined
+      const anItem = "audio/aac"
+
+      const doesItContains = utils.listContainsIgnoreCase(anItem, aList)
+
+      expect(doesItContains).to.be.false
+    })
   })
 
   describe('Config', function() {
