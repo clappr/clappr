@@ -239,6 +239,11 @@ export function removeArrayItem(arr, item) {
 
 }
 
+// find an item regardless of its letter case
+export function listContainsIgnoreCase(item, items) {
+  return items.find((itemEach) => item.toLowerCase() === itemEach.toLowerCase()) !== undefined
+}
+
 // https://github.com/video-dev/can-autoplay
 export function canAutoPlayMedia(cb, options) {
   options = Object.assign({
