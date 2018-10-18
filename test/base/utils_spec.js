@@ -165,8 +165,8 @@ describe('Utils', function() {
 
   describe('listContainsIgnoreCase', function() {
     it('finds when it contains an item', function() {
-      const aList = ["audio/aac", "video/mp4"]
-      const anItem = "audio/aac"
+      const aList = ['audio/aac', 'video/mp4']
+      const anItem = 'audio/aac'
 
       const doesitcontains = utils.listContainsIgnoreCase(anItem, aList)
 
@@ -174,8 +174,8 @@ describe('Utils', function() {
     })
 
     it('finds when it contains a list of any letter case', function() {
-      const aList = ["AUDIO/aac", "VIDEO/mp4"]
-      const anItem = "audio/aac"
+      const aList = ['AUDIO/aac', 'VIDEO/mp4']
+      const anItem = 'audio/aac'
 
       const doesItContains = utils.listContainsIgnoreCase(anItem, aList)
 
@@ -183,8 +183,8 @@ describe('Utils', function() {
     })
 
     it('finds when it contains an item of any letter case', function() {
-      const aList = ["audio/aac", "video/mp4"]
-      const anItem = "AUDIO/AAC"
+      const aList = ['audio/aac', 'video/mp4']
+      const anItem = 'AUDIO/AAC'
 
       const doesItContains = utils.listContainsIgnoreCase(anItem, aList)
 
@@ -192,8 +192,8 @@ describe('Utils', function() {
     })
 
     it('does not find when an item is not contained', function() {
-      const aList = ["audio/aac", "video/mp4"]
-      const anItem = "application/x-mpegURL"
+      const aList = ['audio/aac', 'video/mp4']
+      const anItem = 'application/x-mpegURL'
 
       const doesItContains = utils.listContainsIgnoreCase(anItem, aList)
 
@@ -201,7 +201,7 @@ describe('Utils', function() {
     })
 
     it('does not find when an item is undefined', function() {
-      const aList = ["audio/aac", "video/mp4"]
+      const aList = ['audio/aac', 'video/mp4']
       const anItem = undefined
 
       const doesItContains = utils.listContainsIgnoreCase(anItem, aList)
@@ -211,7 +211,7 @@ describe('Utils', function() {
 
     it('does not find when the list is undefined', function() {
       const aList = undefined
-      const anItem = "audio/aac"
+      const anItem = 'audio/aac'
 
       const doesItContains = utils.listContainsIgnoreCase(anItem, aList)
 
