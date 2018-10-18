@@ -22,6 +22,11 @@ describe('HLS playback', () => {
     expect(HLS.canPlay('//whatever_no_extension?foobarQuery=1234#somefragment', 'application/x-mpegURL' )).to.be.true
   })
 
+  it('can play regardless of any mime type letter case', function() {
+    expect(HLS.canPlay('/path/list.m3u8', 'APPLICATION/VND.APPLE.MPEGURL' )).to.be.true
+    expect(HLS.canPlay('whatever_no_extension?foobarQuery=1234#somefragment', 'application/x-mpegurl' )).to.be.true
+  })
+
   it('should ensure it does not create an audio tag if audioOnly is not set', function() {
     let options = { src: 'http://clappr.io/video.m3u8' },
       playback = new HLS(options)
