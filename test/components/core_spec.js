@@ -192,13 +192,14 @@ describe('Core', function() {
   describe('#handleWindowResize', () => {
     beforeEach(() => {
       this.core = new Core({})
-      this.core._screenOrientation = 'landscape'
+      this.currentScreenOrientation = window.innerWidth > window.innerHeight ? 'landscape' : 'portrait'
+      this.core._screenOrientation = this.currentScreenOrientation
       sinon.spy(this.core, 'triggerResize')
     })
 
     describe('when change the screen orientation', () => {
       it('calls #triggerResize with core element width and height', () => {
-        this.core._screenOrientation = 'portrait'
+        this.core._screenOrientation = this.currentScreenOrientation == 'landscape' ? 'portrait' : 'landscape'
         this.core.handleWindowResize('event')
         expect(this.core.triggerResize).to.have.been.calledWith({ height: 0, width: 0 })
       })

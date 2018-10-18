@@ -212,7 +212,7 @@ export default class Core extends UIObject {
   }
 
   handleWindowResize(event) {
-    let orientation = ($(window).width() > $(window).height()) ? 'landscape' : 'portrait'
+    const orientation = (window.innerWidth > window.innerHeight) ? 'landscape' : 'portrait'
     if (this._screenOrientation === orientation) return
     this._screenOrientation = orientation
 
