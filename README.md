@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/clappr/clappr.svg?branch=master)](https://travis-ci.org/clappr/clappr)
 [![Coverage Status](https://coveralls.io/repos/clappr/clappr/badge.svg?branch=master&service=github)](https://coveralls.io/github/clappr/clappr?branch=master)
 [![License](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)
-[![Greenkeeper badge](https://badges.greenkeeper.io/clappr/clappr.svg)](https://greenkeeper.io/)
+[![](https://data.jsdelivr.com/v1/package/npm/clappr/badge)](https://www.jsdelivr.com/package/npm/clappr)
 
 <div align=center>
 <img src="https://cloud.githubusercontent.com/assets/244265/6373134/a845eb50-bce7-11e4-80f2-592ba29972ab.png"><br><br>
