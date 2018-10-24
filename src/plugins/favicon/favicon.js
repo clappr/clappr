@@ -31,15 +31,13 @@ export default class Favicon extends CorePlugin {
 
   bindEvents() {
     this.listenTo(this.core, Events.CORE_OPTIONS_CHANGE, this.configure)
-    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
-    if (this.core.mediaControl.container)
-      this.containerChanged()
-
+    this.listenTo(this.core, Events.CORE_ACTIVE_CONTAINER_CHANGED, this.containerChanged)
+    this.core.activeContainer && this.containerChanged()
   }
 
   containerChanged() {
     this._container && this.stopListening(this._container)
-    this._container = this.core.mediaControl.container
+    this._container = this.core.activeContainer
     this.listenTo(this._container, Events.CONTAINER_PLAY, this.setPlayIcon)
     this.listenTo(this._container, Events.CONTAINER_PAUSE, this.setPauseIcon)
     this.listenTo(this._container, Events.CONTAINER_STOP, this.resetIcon)
