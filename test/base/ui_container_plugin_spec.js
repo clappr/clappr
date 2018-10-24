@@ -51,7 +51,7 @@ describe('UI Container Plugin', function() {
 
   it('destroys', () => {
     const plugin = new UIContainerPlugin({})
-    const spy = sinon.spy(plugin, 'remove')
+    const spy = sinon.spy(plugin, 'destroy')
 
     plugin.destroy()
 

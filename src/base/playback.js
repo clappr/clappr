@@ -226,14 +226,6 @@ export default class Playback extends UIObject {
   }
 
   /**
-   * destroys the playback, removing it from DOM
-   * @method destroy
-   */
-  destroy() {
-    this.remove()
-  }
-
-  /**
    * attempt to autoplays the playback.
    * @method attemptAutoPlay
    */
