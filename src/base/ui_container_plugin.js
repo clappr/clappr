@@ -39,9 +39,6 @@ export default class UIContainerPlugin extends UIObject {
 
   bindEvents() {}
 
-  destroy() {
-    this.remove()
-  }
 }
 
 Object.assign(UIContainerPlugin.prototype, ErrorMixin)

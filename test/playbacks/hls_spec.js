@@ -95,12 +95,10 @@ describe('HLS playback', () => {
 
     const core = new Core({})
     const playback = new HLS(options, null, core.playerError)
-    playback.on(Events.PLAYBACK_ERROR, (e) => {
-      resolveFn(e)
-    })
+    playback.on(Events.PLAYBACK_ERROR, (e) => resolveFn(e))
     playback.play()
 
-    return promise.then((e) => {
+    promise.then((e) => {
       expect(e.raw.type).to.be.equal(HLSJS.ErrorTypes.NETWORK_ERROR)
       expect(e.raw.details).to.be.equal(HLSJS.ErrorDetails.MANIFEST_LOAD_ERROR)
     })

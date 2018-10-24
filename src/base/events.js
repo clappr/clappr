@@ -560,6 +560,12 @@ Events.PLAYBACK_SUBTITLE_CHANGED = 'playback:subtitle:changed'
  */
 Events.CORE_CONTAINERS_CREATED = 'core:containers:created'
 /**
+ * Fired when the active container changed
+ *
+ * @event CORE_ACTIVE_CONTAINER_CHANGED
+ */
+Events.CORE_ACTIVE_CONTAINER_CHANGED = 'core:active:container:changed'
+/**
  * Fired when the options were changed for the core
  *
  * @event CORE_OPTIONS_CHANGE
@@ -598,7 +604,20 @@ Events.CORE_RESIZE = 'core:resize'
  * screen orientation (ie: 'landscape' or 'portrait')
  */
 Events.CORE_SCREEN_ORIENTATION_CHANGED = 'core:screen:orientation:changed'
-
+/**
+ * Fired when occurs mouse move event on core element
+ *
+ * @event CORE_MOUSE_MOVE
+ * @param {Object} event a DOM event
+ */
+Events.CORE_MOUSE_MOVE = 'core:mousemove'
+/**
+ * Fired when occurs mouse leave event on core element
+ *
+ * @event CORE_MOUSE_LEAVE
+ * @param {Object} event a DOM event
+ */
+Events.CORE_MOUSE_LEAVE = 'core:mouseleave'
 
 // Container Events
 /**

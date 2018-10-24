@@ -26,7 +26,7 @@ export default class ErrorScreen extends UICorePlugin {
 
   bindEvents() {
     this.listenTo(this.core, Events.ERROR, this.onError)
-    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.onContainerChanged)
+    this.listenTo(this.core, Events.CORE_ACTIVE_CONTAINER_CHANGED, this.onContainerChanged)
   }
 
   bindReload() {

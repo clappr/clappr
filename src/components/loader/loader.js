@@ -23,6 +23,7 @@ import GoogleAnalyticsPlugin from '../../plugins/google_analytics'
 import ClickToPausePlugin from '../../plugins/click_to_pause'
 
 /* Core Plugins */
+import MediaControl from '../../plugins/media_control'
 import DVRControls from '../../plugins/dvr_controls'
 import ClosedCaptions from '../../plugins/closed_captions'
 import Favicon from '../../plugins/favicon'
@@ -79,7 +80,7 @@ export default class Loader extends BaseObject {
     ]
 
     this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
-    this.corePlugins = [DVRControls, ClosedCaptions, Favicon, SeekTime, SourcesPlugin, EndVideo, Strings, ErrorScreen]
+    this.corePlugins = [MediaControl, DVRControls, ClosedCaptions, Favicon, SeekTime, SourcesPlugin, EndVideo, ErrorScreen, Strings]
 
     if (!Array.isArray(externalPlugins))
       this.validateExternalPluginsType(externalPlugins)

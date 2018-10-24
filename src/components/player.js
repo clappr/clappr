@@ -55,7 +55,7 @@ export default class Player extends BaseObject {
    * @type Boolean
    */
   get ended() {
-    return this.core.mediaControl.container.ended
+    return this.core.activeContainer.ended
   }
 
   /**
@@ -66,7 +66,7 @@ export default class Player extends BaseObject {
    * @type Boolean
    */
   get buffering() {
-    return this.core.mediaControl.container.buffering
+    return this.core.activeContainer.buffering
   }
 
   /*
@@ -229,7 +229,16 @@ export default class Player extends BaseObject {
 
   constructor(options) {
     super(options)
-    const defaultOptions = { playerId: uniqueId(''), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl, allowUserInteraction: Browser.isMobile }
+    const playbackDefaultOptions = { recycleVideo : true }
+    const defaultOptions = {
+      playerId: uniqueId(''),
+      persistConfig: true,
+      width: 640,
+      height: 360,
+      baseUrl: baseUrl,
+      allowUserInteraction: Browser.isMobile,
+      playback: playbackDefaultOptions
+    }
     this._options = $.extend(defaultOptions, options)
     this.options.sources = this._normalizeSources(options)
     if (!this.options.chromeless) {
@@ -286,14 +295,14 @@ export default class Player extends BaseObject {
     else
       this._onReady()
 
-    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this._containerChanged)
+    this.listenTo(this.core.activeContainer, Events.CORE_ACTIVE_CONTAINER_CHANGED, this._containerChanged)
     this.listenTo(this.core, Events.CORE_FULLSCREEN, this._onFullscreenChange)
     this.listenTo(this.core, Events.CORE_RESIZE, this._onResize)
     return this
   }
 
   _addContainerEventListeners() {
-    const container = this.core.mediaControl.container
+    const container = this.core.activeContainer
     if (container) {
       this.listenTo(container, Events.CONTAINER_PLAY, this._onPlay)
       this.listenTo(container, Events.CONTAINER_PAUSE, this._onPause)
@@ -445,7 +454,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   play() {
-    this.core.mediaControl.container.play()
+    this.core.activeContainer.play()
     return this
   }
 
@@ -455,7 +464,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   pause() {
-    this.core.mediaControl.container.pause()
+    this.core.activeContainer.pause()
     return this
   }
 
@@ -465,7 +474,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   stop() {
-    this.core.mediaControl.container.stop()
+    this.core.activeContainer.stop()
     return this
   }
 
@@ -477,7 +486,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   seek(time) {
-    this.core.mediaControl.container.seek(time)
+    this.core.activeContainer.seek(time)
     return this
   }
 
@@ -488,30 +497,8 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   seekPercentage(percentage) {
-    this.core.mediaControl.container.seekPercentage(percentage)
+    this.core.activeContainer.seekPercentage(percentage)
     return this
-  }
-
-  /**
-   * Set the volume for the current video (`source`).
-   * @method setVolume
-   * @param {Number} volume should be a number between 0 and 100, 0 being mute and 100 the max volume.
-   * @return {Player} itself
-   */
-  setVolume(volume) {
-    if (this.core && this.core.mediaControl)
-      this.core.mediaControl.setVolume(volume)
-
-    return this
-  }
-
-  /**
-   * Get the volume for the current video
-   * @method getVolume
-   * @return {Number} volume should be a number between 0 and 100, 0 being mute and 100 the max volume.
-   */
-  getVolume() {
-    return this.core && this.core.mediaControl ? this.core.mediaControl.volume : 0
   }
 
   /**
@@ -542,7 +529,7 @@ export default class Player extends BaseObject {
    * @return {Boolean} `true` if the current source is playing, otherwise `false`
    */
   isPlaying() {
-    return this.core.mediaControl.container.isPlaying()
+    return this.core.activeContainer.isPlaying()
   }
 
   /**
@@ -551,7 +538,7 @@ export default class Player extends BaseObject {
    * @return {Boolean}
    */
   isDvrEnabled() {
-    return this.core.mediaControl.container.isDvrEnabled()
+    return this.core.activeContainer.isDvrEnabled()
   }
 
   /**
@@ -560,7 +547,7 @@ export default class Player extends BaseObject {
    * @return {Boolean}
    */
   isDvrInUse() {
-    return this.core.mediaControl.container.isDvrInUse()
+    return this.core.activeContainer.isDvrInUse()
   }
 
   /**
@@ -587,7 +574,7 @@ export default class Player extends BaseObject {
    * ```
    */
   getPlugin(name) {
-    const plugins = this.core.plugins.concat(this.core.mediaControl.container.plugins)
+    const plugins = this.core.plugins.concat(this.core.activeContainer.plugins)
     return plugins.filter(plugin => plugin.name === name)[0]
   }
 
@@ -597,7 +584,7 @@ export default class Player extends BaseObject {
    * @return {Number} current time (in seconds) of the current source
    */
   getCurrentTime() {
-    return this.core.mediaControl.container.getCurrentTime()
+    return this.core.activeContainer.getCurrentTime()
   }
 
   /**
@@ -608,7 +595,7 @@ export default class Player extends BaseObject {
    * @return {Number} time (in seconds) that time "0" represents.
    */
   getStartTimeOffset() {
-    return this.core.mediaControl.container.getStartTimeOffset()
+    return this.core.activeContainer.getStartTimeOffset()
   }
 
   /**
@@ -617,7 +604,7 @@ export default class Player extends BaseObject {
    * @return {Number} duration time (in seconds) of the current source
    */
   getDuration() {
-    return this.core.mediaControl.container.getDuration()
+    return this.core.activeContainer.getDuration()
   }
 }
 
