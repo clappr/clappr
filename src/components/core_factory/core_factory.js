@@ -56,8 +56,10 @@ export default class CoreFactory extends BaseObject {
 
   setupExternalInterface(plugin) {
     const externalFunctions = plugin.getExternalInterface()
-    for (const key in externalFunctions)
+    for (const key in externalFunctions) {
       this.player[key] = externalFunctions[key].bind(plugin)
+      this.core[key] = externalFunctions[key].bind(plugin)
+    }
 
   }
 }
