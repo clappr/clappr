@@ -105,7 +105,7 @@ export default class MediaControl extends UICorePlugin {
     $(document).bind('mouseup', this.stopDragHandler)
     $(document).bind('mousemove', this.updateDragHandler)
   }
-  
+
   getExternalInterface() {
     return {
       setVolume: this.setVolume,
@@ -119,11 +119,11 @@ export default class MediaControl extends UICorePlugin {
     this.listenTo(this.core, Events.CORE_MOUSE_LEAVE, () => this.hide(this.options.hideMediaControlDelay))
     this.listenTo(this.core, Events.CORE_FULLSCREEN, this.show)
     this.listenTo(this.core, Events.CORE_OPTIONS_CHANGE, this.configure)
+    Mediator.on(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
     this.container && this.bindContainerEvents()
   }
 
   bindContainerEvents() {
-    Mediator.on(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
     this.listenTo(this.container, Events.CONTAINER_PLAY, this.changeTogglePlay)
     this.listenTo(this.container, Events.CONTAINER_PAUSE, this.changeTogglePlay)
     this.listenTo(this.container, Events.CONTAINER_STOP, this.changeTogglePlay)
@@ -363,7 +363,7 @@ export default class MediaControl extends UICorePlugin {
     // set the new container to match the volume of the last one
     this.setInitialVolume()
     this.changeTogglePlay()
-    this.bindEvents()
+    this.bindContainerEvents()
     this.settingsUpdate()
     this.container.trigger(Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.container.isDvrInUse())
     this.container.mediaControlDisabled && this.disable()
