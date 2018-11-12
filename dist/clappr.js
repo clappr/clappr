@@ -816,6 +816,12 @@ Events.PLAYBACK_SUBTITLE_CHANGED = 'playback:subtitle:changed';
  */
 Events.CORE_CONTAINERS_CREATED = 'core:containers:created';
 /**
+ * Fired when the active container changed
+ *
+ * @event CORE_ACTIVE_CONTAINER_CHANGED
+ */
+Events.CORE_ACTIVE_CONTAINER_CHANGED = 'core:active:container:changed';
+/**
  * Fired when the options were changed for the core
  *
  * @event CORE_OPTIONS_CHANGE
@@ -854,6 +860,20 @@ Events.CORE_RESIZE = 'core:resize';
  * screen orientation (ie: 'landscape' or 'portrait')
  */
 Events.CORE_SCREEN_ORIENTATION_CHANGED = 'core:screen:orientation:changed';
+/**
+ * Fired when occurs mouse move event on core element
+ *
+ * @event CORE_MOUSE_MOVE
+ * @param {Object} event a DOM event
+ */
+Events.CORE_MOUSE_MOVE = 'core:mousemove';
+/**
+ * Fired when occurs mouse leave event on core element
+ *
+ * @event CORE_MOUSE_LEAVE
+ * @param {Object} event a DOM event
+ */
+Events.CORE_MOUSE_LEAVE = 'core:mouseleave';
 
 // Container Events
 /**
@@ -1135,6 +1155,7 @@ exports.currentScriptUrl = currentScriptUrl;
 exports.getBrowserLanguage = getBrowserLanguage;
 exports.now = now;
 exports.removeArrayItem = removeArrayItem;
+exports.listContainsIgnoreCase = listContainsIgnoreCase;
 exports.canAutoPlayMedia = canAutoPlayMedia;
 
 __webpack_require__(143);
@@ -1382,6 +1403,14 @@ function now() {
 function removeArrayItem(arr, item) {
   var i = arr.indexOf(item);
   if (i >= 0) arr.splice(i, 1);
+}
+
+// find an item regardless of its letter case
+function listContainsIgnoreCase(item, items) {
+  if (item === undefined || items === undefined) return false;
+  return items.find(function (itemEach) {
+    return item.toLowerCase() === itemEach.toLowerCase();
+  }) !== undefined;
 }
 
 // https://github.com/video-dev/can-autoplay
@@ -3408,88 +3437,6 @@ module.exports = Zepto
 
 /***/ }),
 /* 7 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		return this.map(function (item) {
-			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
-				return "@media " + item[2] + "{" + content + "}";
-			} else {
-				return content;
-			}
-		}).join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-function cssWithMappingToString(item, useSourceMap) {
-	var content = item[1] || '';
-	var cssMapping = item[3];
-	if (!cssMapping) {
-		return content;
-	}
-
-	if (useSourceMap && typeof btoa === 'function') {
-		var sourceMapping = toComment(cssMapping);
-		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
-		});
-
-		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-	}
-
-	return [content].join('\n');
-}
-
-// Adapted from convert-source-map (MIT)
-function toComment(sourceMap) {
-	// eslint-disable-next-line no-undef
-	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
-
-	return '/*# ' + data + ' */';
-}
-
-
-/***/ }),
-/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3606,6 +3553,88 @@ tmpl.settings = settings;
 
 exports.default = tmpl;
 module.exports = exports['default'];
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
 
 /***/ }),
 /* 9 */
@@ -4022,7 +4051,7 @@ var _inherits3 = _interopRequireDefault(_inherits2);
 
 var _utils = __webpack_require__(5);
 
-var _ui_object = __webpack_require__(23);
+var _ui_object = __webpack_require__(30);
 
 var _ui_object2 = _interopRequireDefault(_ui_object);
 
@@ -4273,16 +4302,6 @@ var Playback = function (_UIObject) {
 
   Playback.prototype.configure = function configure(options) {
     this._options = _clapprZepto2.default.extend(this._options, options);
-  };
-
-  /**
-   * destroys the playback, removing it from DOM
-   * @method destroy
-   */
-
-
-  Playback.prototype.destroy = function destroy() {
-    this.remove();
   };
 
   /**
@@ -4774,6 +4793,196 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _assign = __webpack_require__(12);
+
+var _assign2 = _interopRequireDefault(_assign);
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__(1);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _createClass2 = __webpack_require__(3);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _inherits2 = __webpack_require__(2);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _utils = __webpack_require__(5);
+
+var _ui_object = __webpack_require__(30);
+
+var _ui_object2 = _interopRequireDefault(_ui_object);
+
+var _error_mixin = __webpack_require__(20);
+
+var _error_mixin2 = _interopRequireDefault(_error_mixin);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var UICorePlugin = function (_UIObject) {
+  (0, _inherits3.default)(UICorePlugin, _UIObject);
+  (0, _createClass3.default)(UICorePlugin, [{
+    key: 'playerError',
+    get: function get() {
+      return this.core.playerError;
+    }
+  }]);
+
+  function UICorePlugin(core) {
+    (0, _classCallCheck3.default)(this, UICorePlugin);
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, _UIObject.call(this, core.options));
+
+    _this.core = core;
+    _this.enabled = true;
+    _this.bindEvents();
+    _this.render();
+    return _this;
+  }
+
+  UICorePlugin.prototype.bindEvents = function bindEvents() {};
+
+  UICorePlugin.prototype.getExternalInterface = function getExternalInterface() {
+    return {};
+  };
+
+  UICorePlugin.prototype.enable = function enable() {
+    if (!this.enabled) {
+      this.bindEvents();
+      this.$el.show();
+      this.enabled = true;
+    }
+  };
+
+  UICorePlugin.prototype.disable = function disable() {
+    this.stopListening();
+    this.$el.hide();
+    this.enabled = false;
+  };
+
+  UICorePlugin.prototype.render = function render() {
+    return this;
+  };
+
+  return UICorePlugin;
+}(_ui_object2.default);
+
+exports.default = UICorePlugin;
+
+
+(0, _assign2.default)(UICorePlugin.prototype, _error_mixin2.default);
+
+UICorePlugin.extend = function (properties) {
+  return (0, _utils.extend)(UICorePlugin, properties);
+};
+
+UICorePlugin.type = 'core';
+module.exports = exports['default'];
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _error = __webpack_require__(79);
+
+var _error2 = _interopRequireDefault(_error);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _error2.default;
+module.exports = exports['default'];
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var dP         = __webpack_require__(18)
+  , createDesc = __webpack_require__(33);
+module.exports = __webpack_require__(21) ? function(object, key, value){
+  return dP.f(object, key, createDesc(1, value));
+} : function(object, key, value){
+  object[key] = value;
+  return object;
+};
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(32);
+module.exports = function(it){
+  if(!isObject(it))throw TypeError(it + ' is not an object!');
+  return it;
+};
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports) {
+
+module.exports = function(exec){
+  try {
+    return !!exec();
+  } catch(e){
+    return true;
+  }
+};
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.14 / 15.2.3.14 Object.keys(O)
+var $keys       = __webpack_require__(67)
+  , enumBugKeys = __webpack_require__(51);
+
+module.exports = Object.keys || function keys(O){
+  return $keys(O, enumBugKeys);
+};
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _log = __webpack_require__(148);
+
+var _log2 = _interopRequireDefault(_log);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _log2.default;
+module.exports = exports['default'];
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _classCallCheck2 = __webpack_require__(0);
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
@@ -4949,12 +5158,12 @@ var UIObject = function (_BaseObject) {
 
   /**
    * removes the ui component from DOM
-   * @method remove
+   * @method destroy
    * @return {UIObject} itself
    */
 
 
-  UIObject.prototype.remove = function remove() {
+  UIObject.prototype.destroy = function destroy() {
     this.$el.remove();
     this.stopListening();
     this.undelegateEvents();
@@ -5041,94 +5250,7 @@ exports.default = UIObject;
 module.exports = exports['default'];
 
 /***/ }),
-/* 24 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _error = __webpack_require__(79);
-
-var _error2 = _interopRequireDefault(_error);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _error2.default;
-module.exports = exports['default'];
-
-/***/ }),
-/* 25 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var dP         = __webpack_require__(18)
-  , createDesc = __webpack_require__(32);
-module.exports = __webpack_require__(21) ? function(object, key, value){
-  return dP.f(object, key, createDesc(1, value));
-} : function(object, key, value){
-  object[key] = value;
-  return object;
-};
-
-/***/ }),
-/* 26 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var isObject = __webpack_require__(31);
-module.exports = function(it){
-  if(!isObject(it))throw TypeError(it + ' is not an object!');
-  return it;
-};
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports) {
-
-module.exports = function(exec){
-  try {
-    return !!exec();
-  } catch(e){
-    return true;
-  }
-};
-
-/***/ }),
-/* 28 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.14 / 15.2.3.14 Object.keys(O)
-var $keys       = __webpack_require__(67)
-  , enumBugKeys = __webpack_require__(51);
-
-module.exports = Object.keys || function keys(O){
-  return $keys(O, enumBugKeys);
-};
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _log = __webpack_require__(148);
-
-var _log2 = _interopRequireDefault(_log);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _log2.default;
-module.exports = exports['default'];
-
-/***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5194,7 +5316,7 @@ Mediator.stopListening = function (obj, name, callback) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
 module.exports = function(it){
@@ -5202,7 +5324,7 @@ module.exports = function(it){
 };
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports) {
 
 module.exports = function(bitmap, value){
@@ -5215,117 +5337,10 @@ module.exports = function(bitmap, value){
 };
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports) {
 
 module.exports = {};
-
-/***/ }),
-/* 34 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _assign = __webpack_require__(12);
-
-var _assign2 = _interopRequireDefault(_assign);
-
-var _classCallCheck2 = __webpack_require__(0);
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _possibleConstructorReturn2 = __webpack_require__(1);
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _createClass2 = __webpack_require__(3);
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _inherits2 = __webpack_require__(2);
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _utils = __webpack_require__(5);
-
-var _ui_object = __webpack_require__(23);
-
-var _ui_object2 = _interopRequireDefault(_ui_object);
-
-var _error_mixin = __webpack_require__(20);
-
-var _error_mixin2 = _interopRequireDefault(_error_mixin);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var UICorePlugin = function (_UIObject) {
-  (0, _inherits3.default)(UICorePlugin, _UIObject);
-  (0, _createClass3.default)(UICorePlugin, [{
-    key: 'playerError',
-    get: function get() {
-      return this.core.playerError;
-    }
-  }]);
-
-  function UICorePlugin(core) {
-    (0, _classCallCheck3.default)(this, UICorePlugin);
-
-    var _this = (0, _possibleConstructorReturn3.default)(this, _UIObject.call(this, core.options));
-
-    _this.core = core;
-    _this.enabled = true;
-    _this.bindEvents();
-    _this.render();
-    return _this;
-  }
-
-  UICorePlugin.prototype.bindEvents = function bindEvents() {};
-
-  UICorePlugin.prototype.getExternalInterface = function getExternalInterface() {
-    return {};
-  };
-
-  UICorePlugin.prototype.enable = function enable() {
-    if (!this.enabled) {
-      this.bindEvents();
-      this.$el.show();
-      this.enabled = true;
-    }
-  };
-
-  UICorePlugin.prototype.disable = function disable() {
-    this.stopListening();
-    this.$el.hide();
-    this.enabled = false;
-  };
-
-  UICorePlugin.prototype.destroy = function destroy() {
-    this.remove();
-  };
-
-  UICorePlugin.prototype.render = function render() {
-    return this;
-  };
-
-  return UICorePlugin;
-}(_ui_object2.default);
-
-exports.default = UICorePlugin;
-
-
-(0, _assign2.default)(UICorePlugin.prototype, _error_mixin2.default);
-
-UICorePlugin.extend = function (properties) {
-  return (0, _utils.extend)(UICorePlugin, properties);
-};
-
-UICorePlugin.type = 'core';
-module.exports = exports['default'];
 
 /***/ }),
 /* 35 */
@@ -5531,7 +5546,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _html5_video = __webpack_require__(183);
+var _html5_video = __webpack_require__(172);
 
 var _html5_video2 = _interopRequireDefault(_html5_video);
 
@@ -5573,7 +5588,7 @@ var _inherits3 = _interopRequireDefault(_inherits2);
 
 var _utils = __webpack_require__(5);
 
-var _ui_object = __webpack_require__(23);
+var _ui_object = __webpack_require__(30);
 
 var _ui_object2 = _interopRequireDefault(_ui_object);
 
@@ -5625,10 +5640,6 @@ var UIContainerPlugin = function (_UIObject) {
   };
 
   UIContainerPlugin.prototype.bindEvents = function bindEvents() {};
-
-  UIContainerPlugin.prototype.destroy = function destroy() {
-    this.remove();
-  };
 
   return UIContainerPlugin;
 }(_ui_object2.default); // Copyright 2014 Globo.com Player authors. All rights reserved.
@@ -5782,7 +5793,7 @@ module.exports = function(fn, that, length){
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.1.1 ToPrimitive(input [, PreferredType])
-var isObject = __webpack_require__(31);
+var isObject = __webpack_require__(32);
 // instead of the ES6 spec version, we didn't implement @@toPrimitive case
 // and the second argument - flag - preferred type is a string
 module.exports = function(it, S){
@@ -5957,7 +5968,7 @@ module.exports = function(name){
 /***/ (function(module, exports, __webpack_require__) {
 
 var pIE            = __webpack_require__(37)
-  , createDesc     = __webpack_require__(32)
+  , createDesc     = __webpack_require__(33)
   , toIObject      = __webpack_require__(19)
   , toPrimitive    = __webpack_require__(45)
   , has            = __webpack_require__(22)
@@ -5995,6 +6006,33 @@ module.exports = exports['default'];
 
 /***/ }),
 /* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _from = __webpack_require__(83);
+
+var _from2 = _interopRequireDefault(_from);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
+
+    return arr2;
+  } else {
+    return (0, _from2.default)(arr);
+  }
+};
+
+/***/ }),
+/* 62 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -6180,40 +6218,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 62 */
-/***/ (function(module, exports) {
-
-module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M1.425.35L14.575 8l-13.15 7.65V.35z\"></path></svg>"
-
-/***/ }),
 /* 63 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _from = __webpack_require__(87);
-
-var _from2 = _interopRequireDefault(_from);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function (arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
-      arr2[i] = arr[i];
-    }
-
-    return arr2;
-  } else {
-    return (0, _from2.default)(arr);
-  }
-};
-
-/***/ }),
-/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6222,8 +6227,14 @@ exports.default = function (arr) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = __webpack_require__(188);
+exports.default = __webpack_require__(177);
 module.exports = exports['default'];
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports) {
+
+module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M1.425.35L14.575 8l-13.15 7.65V.35z\"></path></svg>"
 
 /***/ }),
 /* 65 */
@@ -6237,7 +6248,7 @@ module.exports = !__webpack_require__(21) && !__webpack_require__(27)(function()
 /* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObject = __webpack_require__(31)
+var isObject = __webpack_require__(32)
   , document = __webpack_require__(17).document
   // in old IE typeof document.createElement is 'object'
   , is = isObject(document) && isObject(document.createElement);
@@ -6337,7 +6348,7 @@ var LIBRARY        = __webpack_require__(54)
   , redefine       = __webpack_require__(73)
   , hide           = __webpack_require__(25)
   , has            = __webpack_require__(22)
-  , Iterators      = __webpack_require__(33)
+  , Iterators      = __webpack_require__(34)
   , $iterCreate    = __webpack_require__(113)
   , setToStringTag = __webpack_require__(56)
   , getPrototypeOf = __webpack_require__(116)
@@ -6463,13 +6474,29 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _container = __webpack_require__(155);
+var _clapprZepto = __webpack_require__(6);
 
-var _container2 = _interopRequireDefault(_container);
+var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
+
+var _template = __webpack_require__(7);
+
+var _template2 = _interopRequireDefault(_template);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _container2.default;
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+var Styler = {
+  getStyleFor: function getStyleFor(style) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : { baseUrl: '' };
+
+    return (0, _clapprZepto2.default)('<style class="clappr-style"></style>').html((0, _template2.default)(style.toString())(options));
+  }
+};
+
+exports.default = Styler;
 module.exports = exports['default'];
 
 /***/ }),
@@ -6587,23 +6614,17 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _media_control = __webpack_require__(159);
+var _container = __webpack_require__(155);
 
-var _media_control2 = _interopRequireDefault(_media_control);
+var _container2 = _interopRequireDefault(_container);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _media_control2.default;
+exports.default = _container2.default;
 module.exports = exports['default'];
 
 /***/ }),
 /* 81 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(160), __esModule: true };
-
-/***/ }),
-/* 82 */
 /***/ (function(module, exports) {
 
 module.exports = function escape(url) {
@@ -6625,16 +6646,50 @@ module.exports = function escape(url) {
 
 
 /***/ }),
-/* 83 */
-/***/ (function(module, exports) {
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = "<%=baseUrl%>/a8c874b93b3d848f39a71260c57e3863.cur";
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _loader = __webpack_require__(163);
+
+var _loader2 = _interopRequireDefault(_loader);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _loader2.default;
+module.exports = exports['default'];
+
+/***/ }),
+/* 83 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(164), __esModule: true };
 
 /***/ }),
 /* 84 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M1.712 14.76H6.43V1.24H1.71v13.52zm7.86-13.52v13.52h4.716V1.24H9.573z\"></path></svg>"
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _flash = __webpack_require__(176);
+
+var _flash2 = _interopRequireDefault(_flash);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _flash2.default;
+module.exports = exports['default'];
 
 /***/ }),
 /* 85 */
@@ -6647,29 +6702,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _clapprZepto = __webpack_require__(6);
+var _html5_audio = __webpack_require__(182);
 
-var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
-
-var _template = __webpack_require__(8);
-
-var _template2 = _interopRequireDefault(_template);
+var _html5_audio2 = _interopRequireDefault(_html5_audio);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-var Styler = {
-  getStyleFor: function getStyleFor(style) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : { baseUrl: '' };
-
-    return (0, _clapprZepto2.default)('<style class="clappr-style"></style>').html((0, _template2.default)(style.toString())(options));
-  }
-};
-
-exports.default = Styler;
+exports.default = _html5_audio2.default;
 module.exports = exports['default'];
 
 /***/ }),
@@ -6683,23 +6722,17 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _loader = __webpack_require__(174);
+var _flashls = __webpack_require__(183);
 
-var _loader2 = _interopRequireDefault(_loader);
+var _flashls2 = _interopRequireDefault(_flashls);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _loader2.default;
+exports.default = _flashls2.default;
 module.exports = exports['default'];
 
 /***/ }),
 /* 87 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(175), __esModule: true };
-
-/***/ }),
-/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6709,14 +6742,20 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _flash = __webpack_require__(187);
+var _hls = __webpack_require__(186);
 
-var _flash2 = _interopRequireDefault(_flash);
+var _hls2 = _interopRequireDefault(_hls);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _flash2.default;
+exports.default = _hls2.default;
 module.exports = exports['default'];
+
+/***/ }),
+/* 88 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(187), __esModule: true };
 
 /***/ }),
 /* 89 */
@@ -6729,13 +6768,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _html5_audio = __webpack_require__(193);
+var _html_img = __webpack_require__(189);
 
-var _html5_audio2 = _interopRequireDefault(_html5_audio);
+var _html_img2 = _interopRequireDefault(_html_img);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _html5_audio2.default;
+exports.default = _html_img2.default;
 module.exports = exports['default'];
 
 /***/ }),
@@ -6749,13 +6788,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _flashls = __webpack_require__(194);
+var _no_op = __webpack_require__(192);
 
-var _flashls2 = _interopRequireDefault(_flashls);
+var _no_op2 = _interopRequireDefault(_no_op);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _flashls2.default;
+exports.default = _no_op2.default;
 module.exports = exports['default'];
 
 /***/ }),
@@ -6769,13 +6808,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _hls = __webpack_require__(197);
+var _spinner_three_bounce = __webpack_require__(196);
 
-var _hls2 = _interopRequireDefault(_hls);
+var _spinner_three_bounce2 = _interopRequireDefault(_spinner_three_bounce);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _hls2.default;
+exports.default = _spinner_three_bounce2.default;
 module.exports = exports['default'];
 
 /***/ }),
@@ -6789,13 +6828,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _html_img = __webpack_require__(199);
+var _watermark = __webpack_require__(202);
 
-var _html_img2 = _interopRequireDefault(_html_img);
+var _watermark2 = _interopRequireDefault(_watermark);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _html_img2.default;
+exports.default = _watermark2.default;
 module.exports = exports['default'];
 
 /***/ }),
@@ -6809,13 +6848,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _no_op = __webpack_require__(202);
+var _poster = __webpack_require__(206);
 
-var _no_op2 = _interopRequireDefault(_no_op);
+var _poster2 = _interopRequireDefault(_poster);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _no_op2.default;
+exports.default = _poster2.default;
 module.exports = exports['default'];
 
 /***/ }),
@@ -6829,13 +6868,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _spinner_three_bounce = __webpack_require__(206);
+var _click_to_pause = __webpack_require__(212);
 
-var _spinner_three_bounce2 = _interopRequireDefault(_spinner_three_bounce);
+var _click_to_pause2 = _interopRequireDefault(_click_to_pause);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _spinner_three_bounce2.default;
+exports.default = _click_to_pause2.default;
 module.exports = exports['default'];
 
 /***/ }),
@@ -6849,54 +6888,26 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _watermark = __webpack_require__(212);
+var _media_control = __webpack_require__(213);
 
-var _watermark2 = _interopRequireDefault(_watermark);
+var _media_control2 = _interopRequireDefault(_media_control);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _watermark2.default;
+exports.default = _media_control2.default;
 module.exports = exports['default'];
 
 /***/ }),
 /* 96 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _poster = __webpack_require__(216);
-
-var _poster2 = _interopRequireDefault(_poster);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _poster2.default;
-module.exports = exports['default'];
+module.exports = "<%=baseUrl%>/a8c874b93b3d848f39a71260c57e3863.cur";
 
 /***/ }),
 /* 97 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _click_to_pause = __webpack_require__(222);
-
-var _click_to_pause2 = _interopRequireDefault(_click_to_pause);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _click_to_pause2.default;
-module.exports = exports['default'];
+module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M1.712 14.76H6.43V1.24H1.71v13.52zm7.86-13.52v13.52h4.716V1.24H9.573z\"></path></svg>"
 
 /***/ }),
 /* 98 */
@@ -6973,7 +6984,7 @@ var _core_plugin = __webpack_require__(35);
 
 var _core_plugin2 = _interopRequireDefault(_core_plugin);
 
-var _ui_core_plugin = __webpack_require__(34);
+var _ui_core_plugin = __webpack_require__(23);
 
 var _ui_core_plugin2 = _interopRequireDefault(_ui_core_plugin);
 
@@ -6985,7 +6996,7 @@ var _base_object = __webpack_require__(15);
 
 var _base_object2 = _interopRequireDefault(_base_object);
 
-var _ui_object = __webpack_require__(23);
+var _ui_object = __webpack_require__(30);
 
 var _ui_object2 = _interopRequireDefault(_ui_object);
 
@@ -6993,7 +7004,7 @@ var _browser = __webpack_require__(14);
 
 var _browser2 = _interopRequireDefault(_browser);
 
-var _container = __webpack_require__(78);
+var _container = __webpack_require__(80);
 
 var _container2 = _interopRequireDefault(_container);
 
@@ -7005,39 +7016,35 @@ var _error = __webpack_require__(24);
 
 var _error2 = _interopRequireDefault(_error);
 
-var _loader = __webpack_require__(86);
+var _loader = __webpack_require__(82);
 
 var _loader2 = _interopRequireDefault(_loader);
 
-var _mediator = __webpack_require__(30);
+var _mediator = __webpack_require__(31);
 
 var _mediator2 = _interopRequireDefault(_mediator);
-
-var _media_control = __webpack_require__(80);
-
-var _media_control2 = _interopRequireDefault(_media_control);
 
 var _player_info = __webpack_require__(40);
 
 var _player_info2 = _interopRequireDefault(_player_info);
 
-var _base_flash_playback = __webpack_require__(64);
+var _base_flash_playback = __webpack_require__(63);
 
 var _base_flash_playback2 = _interopRequireDefault(_base_flash_playback);
 
-var _flash = __webpack_require__(88);
+var _flash = __webpack_require__(84);
 
 var _flash2 = _interopRequireDefault(_flash);
 
-var _flashls = __webpack_require__(90);
+var _flashls = __webpack_require__(86);
 
 var _flashls2 = _interopRequireDefault(_flashls);
 
-var _hls = __webpack_require__(91);
+var _hls = __webpack_require__(87);
 
 var _hls2 = _interopRequireDefault(_hls);
 
-var _html5_audio = __webpack_require__(89);
+var _html5_audio = __webpack_require__(85);
 
 var _html5_audio2 = _interopRequireDefault(_html5_audio);
 
@@ -7045,15 +7052,19 @@ var _html5_video = __webpack_require__(41);
 
 var _html5_video2 = _interopRequireDefault(_html5_video);
 
-var _html_img = __webpack_require__(92);
+var _html_img = __webpack_require__(89);
 
 var _html_img2 = _interopRequireDefault(_html_img);
 
-var _no_op = __webpack_require__(93);
+var _no_op = __webpack_require__(90);
 
 var _no_op2 = _interopRequireDefault(_no_op);
 
-var _click_to_pause = __webpack_require__(97);
+var _media_control = __webpack_require__(95);
+
+var _media_control2 = _interopRequireDefault(_media_control);
+
+var _click_to_pause = __webpack_require__(94);
 
 var _click_to_pause2 = _interopRequireDefault(_click_to_pause);
 
@@ -7069,19 +7080,19 @@ var _log = __webpack_require__(29);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _poster = __webpack_require__(96);
+var _poster = __webpack_require__(93);
 
 var _poster2 = _interopRequireDefault(_poster);
 
-var _spinner_three_bounce = __webpack_require__(94);
+var _spinner_three_bounce = __webpack_require__(91);
 
 var _spinner_three_bounce2 = _interopRequireDefault(_spinner_three_bounce);
 
-var _watermark = __webpack_require__(95);
+var _watermark = __webpack_require__(92);
 
 var _watermark2 = _interopRequireDefault(_watermark);
 
-var _styler = __webpack_require__(85);
+var _styler = __webpack_require__(78);
 
 var _styler2 = _interopRequireDefault(_styler);
 
@@ -7089,7 +7100,7 @@ var _vendor = __webpack_require__(60);
 
 var _vendor2 = _interopRequireDefault(_vendor);
 
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
@@ -7099,7 +7110,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.2.100"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.3.0"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -7198,7 +7209,7 @@ var _core_factory = __webpack_require__(150);
 
 var _core_factory2 = _interopRequireDefault(_core_factory);
 
-var _loader = __webpack_require__(86);
+var _loader = __webpack_require__(82);
 
 var _loader2 = _interopRequireDefault(_loader);
 
@@ -7268,7 +7279,7 @@ var Player = function (_BaseObject) {
   }, {
     key: 'ended',
     get: function get() {
-      return this.core.mediaControl.container.ended;
+      return this.core.activeContainer.ended;
     }
 
     /**
@@ -7282,7 +7293,7 @@ var Player = function (_BaseObject) {
   }, {
     key: 'buffering',
     get: function get() {
-      return this.core.mediaControl.container.buffering;
+      return this.core.activeContainer.buffering;
     }
 
     /*
@@ -7456,7 +7467,16 @@ var Player = function (_BaseObject) {
 
     var _this = (0, _possibleConstructorReturn3.default)(this, _BaseObject.call(this, options));
 
-    var defaultOptions = { playerId: (0, _utils.uniqueId)(''), persistConfig: true, width: 640, height: 360, baseUrl: baseUrl, allowUserInteraction: _browser2.default.isMobile };
+    var playbackDefaultOptions = { recycleVideo: true };
+    var defaultOptions = {
+      playerId: (0, _utils.uniqueId)(''),
+      persistConfig: true,
+      width: 640,
+      height: 360,
+      baseUrl: baseUrl,
+      allowUserInteraction: _browser2.default.isMobile,
+      playback: playbackDefaultOptions
+    };
     _this._options = _clapprZepto2.default.extend(defaultOptions, options);
     _this.options.sources = _this._normalizeSources(options);
     if (!_this.options.chromeless) {
@@ -7510,14 +7530,14 @@ var Player = function (_BaseObject) {
   Player.prototype._addEventListeners = function _addEventListeners() {
     if (!this.core.isReady) this.listenToOnce(this.core, _events2.default.CORE_READY, this._onReady);else this._onReady();
 
-    this.listenTo(this.core.mediaControl, _events2.default.MEDIACONTROL_CONTAINERCHANGED, this._containerChanged);
+    this.listenTo(this.core.activeContainer, _events2.default.CORE_ACTIVE_CONTAINER_CHANGED, this._containerChanged);
     this.listenTo(this.core, _events2.default.CORE_FULLSCREEN, this._onFullscreenChange);
     this.listenTo(this.core, _events2.default.CORE_RESIZE, this._onResize);
     return this;
   };
 
   Player.prototype._addContainerEventListeners = function _addContainerEventListeners() {
-    var container = this.core.mediaControl.container;
+    var container = this.core.activeContainer;
     if (container) {
       this.listenTo(container, _events2.default.CONTAINER_PLAY, this._onPlay);
       this.listenTo(container, _events2.default.CONTAINER_PAUSE, this._onPause);
@@ -7683,7 +7703,7 @@ var Player = function (_BaseObject) {
 
 
   Player.prototype.play = function play() {
-    this.core.mediaControl.container.play();
+    this.core.activeContainer.play();
     return this;
   };
 
@@ -7695,7 +7715,7 @@ var Player = function (_BaseObject) {
 
 
   Player.prototype.pause = function pause() {
-    this.core.mediaControl.container.pause();
+    this.core.activeContainer.pause();
     return this;
   };
 
@@ -7707,7 +7727,7 @@ var Player = function (_BaseObject) {
 
 
   Player.prototype.stop = function stop() {
-    this.core.mediaControl.container.stop();
+    this.core.activeContainer.stop();
     return this;
   };
 
@@ -7720,7 +7740,7 @@ var Player = function (_BaseObject) {
 
 
   Player.prototype.seek = function seek(time) {
-    this.core.mediaControl.container.seek(time);
+    this.core.activeContainer.seek(time);
     return this;
   };
 
@@ -7733,33 +7753,8 @@ var Player = function (_BaseObject) {
 
 
   Player.prototype.seekPercentage = function seekPercentage(percentage) {
-    this.core.mediaControl.container.seekPercentage(percentage);
+    this.core.activeContainer.seekPercentage(percentage);
     return this;
-  };
-
-  /**
-   * Set the volume for the current video (`source`).
-   * @method setVolume
-   * @param {Number} volume should be a number between 0 and 100, 0 being mute and 100 the max volume.
-   * @return {Player} itself
-   */
-
-
-  Player.prototype.setVolume = function setVolume(volume) {
-    if (this.core && this.core.mediaControl) this.core.mediaControl.setVolume(volume);
-
-    return this;
-  };
-
-  /**
-   * Get the volume for the current video
-   * @method getVolume
-   * @return {Number} volume should be a number between 0 and 100, 0 being mute and 100 the max volume.
-   */
-
-
-  Player.prototype.getVolume = function getVolume() {
-    return this.core && this.core.mediaControl ? this.core.mediaControl.volume : 0;
   };
 
   /**
@@ -7796,7 +7791,7 @@ var Player = function (_BaseObject) {
 
 
   Player.prototype.isPlaying = function isPlaying() {
-    return this.core.mediaControl.container.isPlaying();
+    return this.core.activeContainer.isPlaying();
   };
 
   /**
@@ -7807,7 +7802,7 @@ var Player = function (_BaseObject) {
 
 
   Player.prototype.isDvrEnabled = function isDvrEnabled() {
-    return this.core.mediaControl.container.isDvrEnabled();
+    return this.core.activeContainer.isDvrEnabled();
   };
 
   /**
@@ -7818,7 +7813,7 @@ var Player = function (_BaseObject) {
 
 
   Player.prototype.isDvrInUse = function isDvrInUse() {
-    return this.core.mediaControl.container.isDvrInUse();
+    return this.core.activeContainer.isDvrInUse();
   };
 
   /**
@@ -7851,7 +7846,7 @@ var Player = function (_BaseObject) {
 
 
   Player.prototype.getPlugin = function getPlugin(name) {
-    var plugins = this.core.plugins.concat(this.core.mediaControl.container.plugins);
+    var plugins = this.core.plugins.concat(this.core.activeContainer.plugins);
     return plugins.filter(function (plugin) {
       return plugin.name === name;
     })[0];
@@ -7865,7 +7860,7 @@ var Player = function (_BaseObject) {
 
 
   Player.prototype.getCurrentTime = function getCurrentTime() {
-    return this.core.mediaControl.container.getCurrentTime();
+    return this.core.activeContainer.getCurrentTime();
   };
 
   /**
@@ -7878,7 +7873,7 @@ var Player = function (_BaseObject) {
 
 
   Player.prototype.getStartTimeOffset = function getStartTimeOffset() {
-    return this.core.mediaControl.container.getStartTimeOffset();
+    return this.core.activeContainer.getStartTimeOffset();
   };
 
   /**
@@ -7889,7 +7884,7 @@ var Player = function (_BaseObject) {
 
 
   Player.prototype.getDuration = function getDuration() {
-    return this.core.mediaControl.container.getDuration();
+    return this.core.activeContainer.getDuration();
   };
 
   return Player;
@@ -8067,7 +8062,7 @@ module.exports = function(TO_STRING){
 "use strict";
 
 var create         = __webpack_require__(55)
-  , descriptor     = __webpack_require__(32)
+  , descriptor     = __webpack_require__(33)
   , setToStringTag = __webpack_require__(56)
   , IteratorPrototype = {};
 
@@ -8128,7 +8123,7 @@ module.exports = Object.getPrototypeOf || function(O){
 __webpack_require__(118);
 var global        = __webpack_require__(17)
   , hide          = __webpack_require__(25)
-  , Iterators     = __webpack_require__(33)
+  , Iterators     = __webpack_require__(34)
   , TO_STRING_TAG = __webpack_require__(13)('toStringTag');
 
 for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList', 'CSSRuleList'], i = 0; i < 5; i++){
@@ -8147,7 +8142,7 @@ for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList'
 
 var addToUnscopables = __webpack_require__(119)
   , step             = __webpack_require__(120)
-  , Iterators        = __webpack_require__(33)
+  , Iterators        = __webpack_require__(34)
   , toIObject        = __webpack_require__(19);
 
 // 22.1.3.4 Array.prototype.entries()
@@ -8235,7 +8230,7 @@ var global         = __webpack_require__(17)
   , anObject       = __webpack_require__(26)
   , toIObject      = __webpack_require__(19)
   , toPrimitive    = __webpack_require__(45)
-  , createDesc     = __webpack_require__(32)
+  , createDesc     = __webpack_require__(33)
   , _create        = __webpack_require__(55)
   , gOPNExt        = __webpack_require__(128)
   , $GOPD          = __webpack_require__(59)
@@ -8455,7 +8450,7 @@ setToStringTag(global.JSON, 'JSON', true);
 /***/ (function(module, exports, __webpack_require__) {
 
 var META     = __webpack_require__(36)('meta')
-  , isObject = __webpack_require__(31)
+  , isObject = __webpack_require__(32)
   , has      = __webpack_require__(22)
   , setDesc  = __webpack_require__(18).f
   , id       = 0;
@@ -8641,7 +8636,7 @@ $export($export.S, 'Object', {setPrototypeOf: __webpack_require__(137).set});
 
 // Works with __proto__ only. Old v8 can't work with null proto objects.
 /* eslint-disable no-proto */
-var isObject = __webpack_require__(31)
+var isObject = __webpack_require__(32)
   , anObject = __webpack_require__(26);
 var check = function(O, proto){
   anObject(O);
@@ -9868,6 +9863,7 @@ var CoreFactory = function (_BaseObject) {
     var externalFunctions = plugin.getExternalInterface();
     for (var key in externalFunctions) {
       this.player[key] = externalFunctions[key].bind(plugin);
+      this.core[key] = externalFunctions[key].bind(plugin);
     }
   };
 
@@ -9910,13 +9906,21 @@ var _inherits3 = _interopRequireDefault(_inherits2);
 
 var _utils = __webpack_require__(5);
 
+var _styler = __webpack_require__(78);
+
+var _styler2 = _interopRequireDefault(_styler);
+
 var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _ui_object = __webpack_require__(23);
+var _ui_object = __webpack_require__(30);
 
 var _ui_object2 = _interopRequireDefault(_ui_object);
+
+var _ui_core_plugin = __webpack_require__(23);
+
+var _ui_core_plugin2 = _interopRequireDefault(_ui_core_plugin);
 
 var _browser = __webpack_require__(14);
 
@@ -9926,11 +9930,7 @@ var _container_factory = __webpack_require__(153);
 
 var _container_factory2 = _interopRequireDefault(_container_factory);
 
-var _media_control = __webpack_require__(80);
-
-var _media_control2 = _interopRequireDefault(_media_control);
-
-var _mediator = __webpack_require__(30);
+var _mediator = __webpack_require__(31);
 
 var _mediator2 = _interopRequireDefault(_mediator);
 
@@ -9946,17 +9946,13 @@ var _error_mixin = __webpack_require__(20);
 
 var _error_mixin2 = _interopRequireDefault(_error_mixin);
 
-var _styler = __webpack_require__(85);
-
-var _styler2 = _interopRequireDefault(_styler);
-
 var _clapprZepto = __webpack_require__(6);
 
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-__webpack_require__(170);
+__webpack_require__(159);
 
-var _fonts = __webpack_require__(172);
+var _fonts = __webpack_require__(161);
 
 var _fonts2 = _interopRequireDefault(_fonts);
 
@@ -9984,8 +9980,8 @@ var Core = function (_UIObject) {
     get: function get() {
       return {
         'webkitfullscreenchange': 'handleFullscreenChange',
-        'mousemove': 'showMediaControl',
-        'mouseleave': 'hideMediaControl'
+        'mousemove': 'onMouseMove',
+        'mouseleave': 'onMouseLeave'
       };
     }
   }, {
@@ -10022,6 +10018,60 @@ var Core = function (_UIObject) {
           return key;
         } };
     }
+
+    /**
+     * @deprecated
+     * This property currently exists for retrocompatibility reasons.
+     * If you want to access the media control instance, use the method getPlugin('media_control').
+     */
+
+  }, {
+    key: 'mediaControl',
+    get: function get() {
+      return this.getPlugin('media_control') || this.dummyMediaControl;
+    }
+  }, {
+    key: 'dummyMediaControl',
+    get: function get() {
+      if (this._dummyMediaControl) return this._dummyMediaControl;
+      this._dummyMediaControl = new _ui_core_plugin2.default(this);
+      return this._dummyMediaControl;
+    }
+
+    /**
+     * gets the active container reference.
+     * @property activeContainer
+     * @type {Object}
+     */
+
+  }, {
+    key: 'activeContainer',
+    get: function get() {
+      return this._activeContainer;
+    }
+
+    /**
+     * sets the active container reference and trigger a event with the new reference.
+     * @property activeContainer
+     * @type {Object}
+     */
+    ,
+    set: function set(container) {
+      this._activeContainer = container;
+      this.trigger(_events2.default.CORE_ACTIVE_CONTAINER_CHANGED, this._activeContainer);
+    }
+
+    /**
+     * gets the active playback reference.
+     * @property activePlayback
+     * @type {Object}
+     */
+
+  }, {
+    key: 'activePlayback',
+    get: function get() {
+      return this.activeContainer && this.activeContainer.playback;
+    }
   }]);
 
   function Core(options) {
@@ -10035,7 +10085,6 @@ var Core = function (_UIObject) {
     _this.firstResize = true;
     _this.plugins = [];
     _this.containers = [];
-    _this.setupMediaControl(null);
     //FIXME fullscreen api sucks
     _this._boundFullscreenHandler = function () {
       return _this.handleFullscreenChange();
@@ -10050,18 +10099,20 @@ var Core = function (_UIObject) {
   }
 
   Core.prototype.configureDomRecycler = function configureDomRecycler() {
-    var recycleVideo = this.options && this.options.playback && this.options.playback.recycleVideo ? true : false;
-    _utils.DomRecycler.configure({
-      recycleVideo: recycleVideo
-    });
+    var recycleVideo = this.options && this.options.playback && this.options.playback.recycleVideo;
+    _utils.DomRecycler.configure({ recycleVideo: recycleVideo });
   };
 
   Core.prototype.createContainers = function createContainers(options) {
-    var _this2 = this;
-
     this.defer = _clapprZepto2.default.Deferred();
     this.defer.promise(this);
     this.containerFactory = new _container_factory2.default(options, options.loader, this.i18n, this.playerError);
+    this.prepareContainers();
+  };
+
+  Core.prototype.prepareContainers = function prepareContainers() {
+    var _this2 = this;
+
     this.containerFactory.createContainers().then(function (containers) {
       return _this2.setupContainers(containers);
     }).then(function (containers) {
@@ -10070,7 +10121,7 @@ var Core = function (_UIObject) {
   };
 
   Core.prototype.updateSize = function updateSize() {
-    if (_utils.Fullscreen.isFullscreen()) this.setFullscreen();else this.setPlayerSize();
+    _utils.Fullscreen.isFullscreen() ? this.setFullscreen() : this.setPlayerSize();
   };
 
   Core.prototype.setFullscreen = function setFullscreen() {
@@ -10126,7 +10177,7 @@ var Core = function (_UIObject) {
   };
 
   Core.prototype.disableResizeObserver = function disableResizeObserver() {
-    if (this.resizeObserverInterval) clearInterval(this.resizeObserverInterval);
+    this.resizeObserverInterval && clearInterval(this.resizeObserverInterval);
   };
 
   Core.prototype.resolveOnContainersReady = function resolveOnContainersReady(containers) {
@@ -10154,21 +10205,14 @@ var Core = function (_UIObject) {
   };
 
   Core.prototype.load = function load(sources, mimeType) {
-    var _this5 = this;
-
     this.options.mimeType = mimeType;
     sources = sources && sources.constructor === Array ? sources : [sources];
     this.options.sources = sources;
     this.containers.forEach(function (container) {
       return container.destroy();
     });
-    this.mediaControl.container = null;
     this.containerFactory.options = _clapprZepto2.default.extend(this.options, { sources: sources });
-    this.containerFactory.createContainers().then(function (containers) {
-      return _this5.setupContainers(containers);
-    }).then(function (containers) {
-      return _this5.resolveOnContainersReady(containers);
-    });
+    this.prepareContainers();
   };
 
   Core.prototype.destroy = function destroy() {
@@ -10180,7 +10224,6 @@ var Core = function (_UIObject) {
       return plugin.destroy();
     });
     this.$el.remove();
-    this.mediaControl.destroy();
     (0, _clapprZepto2.default)(document).unbind('fullscreenchange', this._boundFullscreenHandler);
     (0, _clapprZepto2.default)(document).unbind('MSFullscreenChange', this._boundFullscreenHandler);
     (0, _clapprZepto2.default)(document).unbind('mozfullscreenchange', this._boundFullscreenHandler);
@@ -10190,33 +10233,17 @@ var Core = function (_UIObject) {
   Core.prototype.handleFullscreenChange = function handleFullscreenChange() {
     this.trigger(_events2.default.CORE_FULLSCREEN, _utils.Fullscreen.isFullscreen());
     this.updateSize();
-    this.mediaControl.show();
   };
 
   Core.prototype.handleWindowResize = function handleWindowResize(event) {
-    var orientation = (0, _clapprZepto2.default)(window).width() > (0, _clapprZepto2.default)(window).height() ? 'landscape' : 'portrait';
+    var orientation = window.innerWidth > window.innerHeight ? 'landscape' : 'portrait';
     if (this._screenOrientation === orientation) return;
     this._screenOrientation = orientation;
-
     this.triggerResize({ width: this.el.clientWidth, height: this.el.clientHeight });
     this.trigger(_events2.default.CORE_SCREEN_ORIENTATION_CHANGED, {
       event: event,
       orientation: this._screenOrientation
     });
-  };
-
-  Core.prototype.setMediaControlContainer = function setMediaControlContainer(container) {
-    this.mediaControl.setContainer(container);
-    this.mediaControl.render();
-  };
-
-  Core.prototype.disableMediaControl = function disableMediaControl() {
-    this.mediaControl.disable();
-    this.$el.removeClass('nocursor');
-  };
-
-  Core.prototype.enableMediaControl = function enableMediaControl() {
-    this.mediaControl.enable();
   };
 
   Core.prototype.removeContainer = function removeContainer(container) {
@@ -10235,17 +10262,17 @@ var Core = function (_UIObject) {
     containers.forEach(this.setupContainer.bind(this));
     this.trigger(_events2.default.CORE_CONTAINERS_CREATED);
     this.renderContainers();
-    this.setupMediaControl(this.getCurrentContainer());
+    this.activeContainer = containers[0];
     this.render();
     this.appendToParent();
     return this.containers;
   };
 
   Core.prototype.renderContainers = function renderContainers() {
-    var _this6 = this;
+    var _this5 = this;
 
     this.containers.forEach(function (container) {
-      return _this6.el.appendChild(container.render().el);
+      return _this5.el.appendChild(container.render().el);
     });
   };
 
@@ -10256,62 +10283,48 @@ var Core = function (_UIObject) {
     return container;
   };
 
-  Core.prototype.setupMediaControl = function setupMediaControl(container) {
-    if (this.mediaControl) {
-      this.mediaControl.setContainer(container);
-    } else {
-      this.mediaControl = this.createMediaControl(_clapprZepto2.default.extend({ container: container, focusElement: this.el }, this.options));
-      this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_FULLSCREEN, this.toggleFullscreen);
-      this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_SHOW, this.onMediaControlShow.bind(this, true));
-      this.listenTo(this.mediaControl, _events2.default.MEDIACONTROL_HIDE, this.onMediaControlShow.bind(this, false));
-    }
-  };
+  /**
+   * @deprecated
+   * This method currently exists for retrocompatibility reasons.
+   * If you want the current container reference, use the activeContainer getter.
+   */
 
-  Core.prototype.createMediaControl = function createMediaControl(options) {
-    if (options.mediacontrol && options.mediacontrol.external) return new options.mediacontrol.external(options).render();else return new _media_control2.default(options).render();
-  };
 
   Core.prototype.getCurrentContainer = function getCurrentContainer() {
-    if (!this.mediaControl || !this.mediaControl.container) return this.containers[0];
-
-    return this.mediaControl.container;
+    return this.activeContainer;
   };
 
+  /**
+   * @deprecated
+   * This method currently exists for retrocompatibility reasons.
+   * If you want the current playback reference, use the activePlayback getter.
+   */
+
+
   Core.prototype.getCurrentPlayback = function getCurrentPlayback() {
-    var container = this.getCurrentContainer();
-    return container && container.playback;
+    return this.activePlayback;
   };
 
   Core.prototype.getPlaybackType = function getPlaybackType() {
-    var container = this.getCurrentContainer();
-    return container && container.getPlaybackType();
+    return this.activeContainer && this.activeContainer.getPlaybackType();
   };
 
   Core.prototype.toggleFullscreen = function toggleFullscreen() {
-    if (_utils.Fullscreen.isFullscreen()) {
-      _utils.Fullscreen.cancelFullscreen();
-      if (!_browser2.default.isiOS) this.$el.removeClass('fullscreen nocursor');
+    if (!_utils.Fullscreen.isFullscreen()) {
+      _utils.Fullscreen.requestFullscreen(_browser2.default.isiOS ? this.activeContainer.el : this.el);
+      !_browser2.default.isiOS && this.$el.addClass('fullscreen');
     } else {
-      var element = _browser2.default.isiOS ? this.getCurrentContainer().el : this.el;
-      _utils.Fullscreen.requestFullscreen(element);
-
-      if (!_browser2.default.isiOS) this.$el.addClass('fullscreen');
+      _utils.Fullscreen.cancelFullscreen();
+      !_browser2.default.isiOS && this.$el.removeClass('fullscreen nocursor');
     }
-    this.mediaControl.show();
   };
 
-  Core.prototype.showMediaControl = function showMediaControl(event) {
-    this.mediaControl.show(event);
+  Core.prototype.onMouseMove = function onMouseMove(event) {
+    this.trigger(_events2.default.CORE_MOUSE_MOVE, event);
   };
 
-  Core.prototype.hideMediaControl = function hideMediaControl() {
-    this.mediaControl.hide(this.options.hideMediaControlDelay);
-  };
-
-  Core.prototype.onMediaControlShow = function onMediaControlShow(showing) {
-    this.getCurrentContainer().trigger(showing ? _events2.default.CONTAINER_MEDIACONTROL_SHOW : _events2.default.CONTAINER_MEDIACONTROL_HIDE);
-
-    if (showing) this.$el.removeClass('nocursor');else if (_utils.Fullscreen.isFullscreen()) this.$el.addClass('nocursor');
+  Core.prototype.onMouseLeave = function onMouseLeave(event) {
+    this.trigger(_events2.default.CORE_MOUSE_LEAVE, event);
   };
 
   /**
@@ -10322,19 +10335,18 @@ var Core = function (_UIObject) {
 
 
   Core.prototype.configure = function configure(options) {
-    var _this7 = this;
+    var _this6 = this;
 
     this._options = _clapprZepto2.default.extend(this._options, options);
     this.configureDomRecycler();
-    var sources = options.source || options.sources;
 
-    if (sources) this.load(sources, options.mimeType || this.options.mimeType);
+    var sources = options.source || options.sources;
+    sources && this.load(sources, options.mimeType || this.options.mimeType);
 
     this.trigger(_events2.default.CORE_OPTIONS_CHANGE);
     this.containers.forEach(function (container) {
-      container.configure(_this7.options);
+      return container.configure(_this6.options);
     });
-    this.mediaControl.configure(this.options);
   };
 
   Core.prototype.appendToParent = function appendToParent() {
@@ -10343,8 +10355,6 @@ var Core = function (_UIObject) {
   };
 
   Core.prototype.render = function render() {
-    this.$el.append(this.mediaControl.render().el);
-
     if (!style) style = _styler2.default.getStyleFor(_fonts2.default, { baseUrl: this.options.baseUrl });
 
     (0, _clapprZepto2.default)('head').append(style);
@@ -10430,7 +10440,7 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _container = __webpack_require__(78);
+var _container = __webpack_require__(80);
 
 var _container2 = _interopRequireDefault(_container);
 
@@ -10565,7 +10575,7 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _ui_object = __webpack_require__(23);
+var _ui_object = __webpack_require__(30);
 
 var _ui_object2 = _interopRequireDefault(_ui_object);
 
@@ -11164,7 +11174,7 @@ if(false) {
 /* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(7)(false);
+exports = module.exports = __webpack_require__(8)(false);
 // imports
 
 
@@ -11273,975 +11283,8 @@ module.exports = function (css) {
 /* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _stringify = __webpack_require__(81);
-
-var _stringify2 = _interopRequireDefault(_stringify);
-
-var _classCallCheck2 = __webpack_require__(0);
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _possibleConstructorReturn2 = __webpack_require__(1);
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _createClass2 = __webpack_require__(3);
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _inherits2 = __webpack_require__(2);
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _utils = __webpack_require__(5);
-
-var _vendor = __webpack_require__(60);
-
-var _events = __webpack_require__(4);
-
-var _events2 = _interopRequireDefault(_events);
-
-var _ui_object = __webpack_require__(23);
-
-var _ui_object2 = _interopRequireDefault(_ui_object);
-
-var _browser = __webpack_require__(14);
-
-var _browser2 = _interopRequireDefault(_browser);
-
-var _mediator = __webpack_require__(30);
-
-var _mediator2 = _interopRequireDefault(_mediator);
-
-var _template = __webpack_require__(8);
-
-var _template2 = _interopRequireDefault(_template);
-
-var _playback = __webpack_require__(10);
-
-var _playback2 = _interopRequireDefault(_playback);
-
-var _clapprZepto = __webpack_require__(6);
-
-var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
-
-__webpack_require__(161);
-
-var _mediaControl = __webpack_require__(163);
-
-var _mediaControl2 = _interopRequireDefault(_mediaControl);
-
-var _play = __webpack_require__(62);
-
-var _play2 = _interopRequireDefault(_play);
-
-var _pause = __webpack_require__(84);
-
-var _pause2 = _interopRequireDefault(_pause);
-
-var _stop = __webpack_require__(164);
-
-var _stop2 = _interopRequireDefault(_stop);
-
-var _volume = __webpack_require__(165);
-
-var _volume2 = _interopRequireDefault(_volume);
-
-var _mute = __webpack_require__(166);
-
-var _mute2 = _interopRequireDefault(_mute);
-
-var _expand = __webpack_require__(167);
-
-var _expand2 = _interopRequireDefault(_expand);
-
-var _shrink = __webpack_require__(168);
-
-var _shrink2 = _interopRequireDefault(_shrink);
-
-var _hd = __webpack_require__(169);
-
-var _hd2 = _interopRequireDefault(_hd);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var MediaControl = function (_UIObject) {
-  (0, _inherits3.default)(MediaControl, _UIObject);
-  (0, _createClass3.default)(MediaControl, [{
-    key: 'name',
-    get: function get() {
-      return 'MediaControl';
-    }
-  }, {
-    key: 'disabled',
-    get: function get() {
-      return this.userDisabled || this.container && this.container.getPlaybackType() === _playback2.default.NO_OP;
-    }
-  }, {
-    key: 'attributes',
-    get: function get() {
-      return {
-        'class': 'media-control',
-        'data-media-control': ''
-      };
-    }
-  }, {
-    key: 'events',
-    get: function get() {
-      return {
-        'click [data-play]': 'play',
-        'click [data-pause]': 'pause',
-        'click [data-playpause]': 'togglePlayPause',
-        'click [data-stop]': 'stop',
-        'click [data-playstop]': 'togglePlayStop',
-        'click [data-fullscreen]': 'toggleFullscreen',
-        'click .bar-container[data-seekbar]': 'seek',
-        'click .bar-container[data-volume]': 'onVolumeClick',
-        'click .drawer-icon[data-volume]': 'toggleMute',
-        'mouseenter .drawer-container[data-volume]': 'showVolumeBar',
-        'mouseleave .drawer-container[data-volume]': 'hideVolumeBar',
-        'mousedown .bar-container[data-volume]': 'startVolumeDrag',
-        'mousemove .bar-container[data-volume]': 'mousemoveOnVolumeBar',
-        'mousedown .bar-scrubber[data-seekbar]': 'startSeekDrag',
-        'mousemove .bar-container[data-seekbar]': 'mousemoveOnSeekBar',
-        'mouseleave .bar-container[data-seekbar]': 'mouseleaveOnSeekBar',
-        'mouseenter .media-control-layer[data-controls]': 'setUserKeepVisible',
-        'mouseleave .media-control-layer[data-controls]': 'resetUserKeepVisible'
-      };
-    }
-  }, {
-    key: 'template',
-    get: function get() {
-      return (0, _template2.default)(_mediaControl2.default);
-    }
-  }, {
-    key: 'volume',
-    get: function get() {
-      return this.container && this.container.isReady ? this.container.volume : this.intendedVolume;
-    }
-  }, {
-    key: 'muted',
-    get: function get() {
-      return this.volume === 0;
-    }
-  }]);
-
-  function MediaControl(options) {
-    (0, _classCallCheck3.default)(this, MediaControl);
-
-    var _this = (0, _possibleConstructorReturn3.default)(this, _UIObject.call(this, options));
-
-    _this.persistConfig = _this.options.persistConfig;
-    _this.container = options.container;
-    _this.currentPositionValue = null;
-    _this.currentDurationValue = null;
-    _this.keepVisible = false;
-    _this.fullScreenOnVideoTagSupported = null; // unknown
-    _this.setInitialVolume();
-    _this.addEventListeners();
-    _this.settings = {
-      left: ['play', 'stop', 'pause'],
-      right: ['volume'],
-      default: ['position', 'seekbar', 'duration']
-    };
-    _this.kibo = new _vendor.Kibo(_this.options.focusElement);
-    _this.bindKeyEvents();
-
-    if (_this.container) {
-      if (!_clapprZepto2.default.isEmptyObject(_this.container.settings)) _this.settings = _clapprZepto2.default.extend({}, _this.container.settings);
-    } else {
-      _this.settings = {};
-    }
-
-    _this.userDisabled = false;
-    if (_this.container && _this.container.mediaControlDisabled || _this.options.chromeless) _this.disable();
-
-    _this.stopDragHandler = function (event) {
-      return _this.stopDrag(event);
-    };
-    _this.updateDragHandler = function (event) {
-      return _this.updateDrag(event);
-    };
-    (0, _clapprZepto2.default)(document).bind('mouseup', _this.stopDragHandler);
-    (0, _clapprZepto2.default)(document).bind('mousemove', _this.updateDragHandler);
-    return _this;
-  }
-
-  MediaControl.prototype.addEventListeners = function addEventListeners() {
-    if (this.container) {
-      _mediator2.default.on(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.playerResize, this);
-      this.listenTo(this.container, _events2.default.CONTAINER_PLAY, this.changeTogglePlay);
-      this.listenTo(this.container, _events2.default.CONTAINER_PAUSE, this.changeTogglePlay);
-      this.listenTo(this.container, _events2.default.CONTAINER_STOP, this.changeTogglePlay);
-      this.listenTo(this.container, _events2.default.CONTAINER_DBLCLICK, this.toggleFullscreen);
-      this.listenTo(this.container, _events2.default.CONTAINER_TIMEUPDATE, this.onTimeUpdate);
-      this.listenTo(this.container, _events2.default.CONTAINER_PROGRESS, this.updateProgressBar);
-      this.listenTo(this.container, _events2.default.CONTAINER_SETTINGSUPDATE, this.settingsUpdate);
-      this.listenTo(this.container, _events2.default.CONTAINER_PLAYBACKDVRSTATECHANGED, this.settingsUpdate);
-      this.listenTo(this.container, _events2.default.CONTAINER_HIGHDEFINITIONUPDATE, this.highDefinitionUpdate);
-      this.listenTo(this.container, _events2.default.CONTAINER_MEDIACONTROL_DISABLE, this.disable);
-      this.listenTo(this.container, _events2.default.CONTAINER_MEDIACONTROL_ENABLE, this.enable);
-      this.listenTo(this.container, _events2.default.CONTAINER_ENDED, this.ended);
-      this.listenTo(this.container, _events2.default.CONTAINER_VOLUME, this.onVolumeChanged);
-      this.listenTo(this.container, _events2.default.CONTAINER_OPTIONS_CHANGE, this.setInitialVolume);
-      if (this.container.playback.el.nodeName.toLowerCase() === 'video') {
-        // wait until the metadata has loaded and then check if fullscreen on video tag is supported
-        this.listenToOnce(this.container, _events2.default.CONTAINER_LOADEDMETADATA, this.onLoadedMetadataOnVideoTag);
-      }
-    }
-  };
-
-  MediaControl.prototype.disable = function disable() {
-    this.userDisabled = true;
-    this.hide();
-    this.unbindKeyEvents();
-    this.$el.hide();
-  };
-
-  MediaControl.prototype.enable = function enable() {
-    if (this.options.chromeless) return;
-    this.userDisabled = false;
-    this.bindKeyEvents();
-    this.show();
-  };
-
-  MediaControl.prototype.play = function play() {
-    this.container.play();
-  };
-
-  MediaControl.prototype.pause = function pause() {
-    this.container.pause();
-  };
-
-  MediaControl.prototype.stop = function stop() {
-    this.container.stop();
-  };
-
-  MediaControl.prototype.setInitialVolume = function setInitialVolume() {
-    var initialVolume = this.persistConfig ? _utils.Config.restore('volume') : 100;
-    var options = this.container && this.container.options || this.options;
-    this.setVolume(options.mute ? 0 : initialVolume, true);
-  };
-
-  MediaControl.prototype.onVolumeChanged = function onVolumeChanged() {
-    this.updateVolumeUI();
-  };
-
-  MediaControl.prototype.onLoadedMetadataOnVideoTag = function onLoadedMetadataOnVideoTag() {
-    var video = this.container.playback.el;
-    // video.webkitSupportsFullscreen is deprecated but iOS appears to only use this
-    // see https://github.com/clappr/clappr/issues/1127
-    if (!_utils.Fullscreen.fullscreenEnabled() && video.webkitSupportsFullscreen) {
-      this.fullScreenOnVideoTagSupported = true;
-      this.settingsUpdate();
-    }
-  };
-
-  MediaControl.prototype.updateVolumeUI = function updateVolumeUI() {
-    if (!this.rendered) {
-      // this will be called after a render
-      return;
-    }
-    // update volume bar scrubber/fill on bar mode
-    this.$volumeBarContainer.find('.bar-fill-2').css({});
-    var containerWidth = this.$volumeBarContainer.width();
-    var barWidth = this.$volumeBarBackground.width();
-    var offset = (containerWidth - barWidth) / 2.0;
-    var pos = barWidth * this.volume / 100.0 + offset;
-    this.$volumeBarFill.css({ width: this.volume + '%' });
-    this.$volumeBarScrubber.css({ left: pos });
-
-    // update volume bar segments on segmented bar mode
-    this.$volumeBarContainer.find('.segmented-bar-element').removeClass('fill');
-    var item = Math.ceil(this.volume / 10.0);
-    this.$volumeBarContainer.find('.segmented-bar-element').slice(0, item).addClass('fill');
-    this.$volumeIcon.html('');
-    this.$volumeIcon.removeClass('muted');
-    if (!this.muted) {
-      this.$volumeIcon.append(_volume2.default);
-    } else {
-      this.$volumeIcon.append(_mute2.default);
-      this.$volumeIcon.addClass('muted');
-    }
-    this.applyButtonStyle(this.$volumeIcon);
-  };
-
-  MediaControl.prototype.changeTogglePlay = function changeTogglePlay() {
-    this.$playPauseToggle.html('');
-    this.$playStopToggle.html('');
-    if (this.container && this.container.isPlaying()) {
-      this.$playPauseToggle.append(_pause2.default);
-      this.$playStopToggle.append(_stop2.default);
-      this.trigger(_events2.default.MEDIACONTROL_PLAYING);
-    } else {
-      this.$playPauseToggle.append(_play2.default);
-      this.$playStopToggle.append(_play2.default);
-      this.trigger(_events2.default.MEDIACONTROL_NOTPLAYING);
-      if (_browser2.default.isMobile) this.show();
-    }
-    this.applyButtonStyle(this.$playPauseToggle);
-    this.applyButtonStyle(this.$playStopToggle);
-  };
-
-  MediaControl.prototype.mousemoveOnSeekBar = function mousemoveOnSeekBar(event) {
-    if (this.settings.seekEnabled) {
-      var offsetX = event.pageX - this.$seekBarContainer.offset().left - this.$seekBarHover.width() / 2;
-      this.$seekBarHover.css({ left: offsetX });
-    }
-    this.trigger(_events2.default.MEDIACONTROL_MOUSEMOVE_SEEKBAR, event);
-  };
-
-  MediaControl.prototype.mouseleaveOnSeekBar = function mouseleaveOnSeekBar(event) {
-    this.trigger(_events2.default.MEDIACONTROL_MOUSELEAVE_SEEKBAR, event);
-  };
-
-  MediaControl.prototype.onVolumeClick = function onVolumeClick(event) {
-    this.setVolume(this.getVolumeFromUIEvent(event));
-  };
-
-  MediaControl.prototype.mousemoveOnVolumeBar = function mousemoveOnVolumeBar(event) {
-    if (this.draggingVolumeBar) this.setVolume(this.getVolumeFromUIEvent(event));
-  };
-
-  MediaControl.prototype.playerResize = function playerResize(size) {
-    this.$fullscreenToggle.html('');
-    if (_utils.Fullscreen.isFullscreen()) this.$fullscreenToggle.append(_shrink2.default);else this.$fullscreenToggle.append(_expand2.default);
-
-    this.applyButtonStyle(this.$fullscreenToggle);
-    this.$el.removeClass('w320');
-    if (size.width <= 320 || this.options.hideVolumeBar) this.$el.addClass('w320');
-  };
-
-  MediaControl.prototype.togglePlayPause = function togglePlayPause() {
-    if (this.container.isPlaying()) this.container.pause();else this.container.play();
-
-    return false;
-  };
-
-  MediaControl.prototype.togglePlayStop = function togglePlayStop() {
-    if (this.container.isPlaying()) this.container.stop();else this.container.play();
-  };
-
-  MediaControl.prototype.startSeekDrag = function startSeekDrag(event) {
-    if (!this.settings.seekEnabled) return;
-    this.draggingSeekBar = true;
-    this.$el.addClass('dragging');
-    this.$seekBarLoaded.addClass('media-control-notransition');
-    this.$seekBarPosition.addClass('media-control-notransition');
-    this.$seekBarScrubber.addClass('media-control-notransition');
-    if (event) event.preventDefault();
-  };
-
-  MediaControl.prototype.startVolumeDrag = function startVolumeDrag(event) {
-    this.draggingVolumeBar = true;
-    this.$el.addClass('dragging');
-    if (event) event.preventDefault();
-  };
-
-  MediaControl.prototype.stopDrag = function stopDrag(event) {
-    if (this.draggingSeekBar) this.seek(event);
-
-    this.$el.removeClass('dragging');
-    this.$seekBarLoaded.removeClass('media-control-notransition');
-    this.$seekBarPosition.removeClass('media-control-notransition');
-    this.$seekBarScrubber.removeClass('media-control-notransition dragging');
-    this.draggingSeekBar = false;
-    this.draggingVolumeBar = false;
-  };
-
-  MediaControl.prototype.updateDrag = function updateDrag(event) {
-    if (this.draggingSeekBar) {
-      event.preventDefault();
-      var offsetX = event.pageX - this.$seekBarContainer.offset().left;
-      var pos = offsetX / this.$seekBarContainer.width() * 100;
-      pos = Math.min(100, Math.max(pos, 0));
-      this.setSeekPercentage(pos);
-    } else if (this.draggingVolumeBar) {
-      event.preventDefault();
-      this.setVolume(this.getVolumeFromUIEvent(event));
-    }
-  };
-
-  MediaControl.prototype.getVolumeFromUIEvent = function getVolumeFromUIEvent(event) {
-    var offsetY = event.pageX - this.$volumeBarContainer.offset().left;
-    var volumeFromUI = offsetY / this.$volumeBarContainer.width() * 100;
-    return volumeFromUI;
-  };
-
-  MediaControl.prototype.toggleMute = function toggleMute() {
-    this.setVolume(this.muted ? 100 : 0);
-  };
-
-  MediaControl.prototype.setVolume = function setVolume(value) {
-    var _this2 = this;
-
-    var isInitialVolume = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
-    value = Math.min(100, Math.max(value, 0));
-    // this will hold the intended volume
-    // it may not actually get set to this straight away
-    // if the container is not ready etc
-    this.intendedVolume = value;
-    this.persistConfig && !isInitialVolume && _utils.Config.persist('volume', value);
-    var setWhenContainerReady = function setWhenContainerReady() {
-      if (_this2.container.isReady) {
-        _this2.container.setVolume(value);
-      } else {
-        _this2.listenToOnce(_this2.container, _events2.default.CONTAINER_READY, function () {
-          _this2.container.setVolume(value);
-        });
-      }
-    };
-
-    if (!this.container) {
-      this.listenToOnce(this, _events2.default.MEDIACONTROL_CONTAINERCHANGED, function () {
-        setWhenContainerReady();
-      });
-    } else {
-      setWhenContainerReady();
-    }
-  };
-
-  MediaControl.prototype.toggleFullscreen = function toggleFullscreen() {
-    this.trigger(_events2.default.MEDIACONTROL_FULLSCREEN, this.name);
-    this.container.fullscreen();
-    this.resetUserKeepVisible();
-  };
-
-  MediaControl.prototype.setContainer = function setContainer(container) {
-    if (this.container) {
-      this.stopListening(this.container);
-      this.fullScreenOnVideoTagSupported = null;
-    }
-    _mediator2.default.off(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.playerResize, this);
-    this.container = container;
-    // set the new container to match the volume of the last one
-    this.setVolume(this.intendedVolume, true);
-    this.changeTogglePlay();
-    this.addEventListeners();
-    this.settingsUpdate();
-    this.container.trigger(_events2.default.CONTAINER_PLAYBACKDVRSTATECHANGED, this.container.isDvrInUse());
-    if (this.container.mediaControlDisabled) this.disable();
-
-    this.trigger(_events2.default.MEDIACONTROL_CONTAINERCHANGED);
-  };
-
-  MediaControl.prototype.showVolumeBar = function showVolumeBar() {
-    if (this.hideVolumeId) clearTimeout(this.hideVolumeId);
-
-    this.$volumeBarContainer.removeClass('volume-bar-hide');
-  };
-
-  MediaControl.prototype.hideVolumeBar = function hideVolumeBar() {
-    var _this3 = this;
-
-    var timeout = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 400;
-
-    if (!this.$volumeBarContainer) return;
-    if (this.draggingVolumeBar) {
-      this.hideVolumeId = setTimeout(function () {
-        return _this3.hideVolumeBar();
-      }, timeout);
-    } else {
-      if (this.hideVolumeId) clearTimeout(this.hideVolumeId);
-
-      this.hideVolumeId = setTimeout(function () {
-        return _this3.$volumeBarContainer.addClass('volume-bar-hide');
-      }, timeout);
-    }
-  };
-
-  MediaControl.prototype.ended = function ended() {
-    this.changeTogglePlay();
-  };
-
-  MediaControl.prototype.updateProgressBar = function updateProgressBar(progress) {
-    var loadedStart = progress.start / progress.total * 100;
-    var loadedEnd = progress.current / progress.total * 100;
-    this.$seekBarLoaded.css({ left: loadedStart + '%', width: loadedEnd - loadedStart + '%' });
-  };
-
-  MediaControl.prototype.onTimeUpdate = function onTimeUpdate(timeProgress) {
-    if (this.draggingSeekBar) return;
-    // TODO why should current time ever be negative?
-    var position = timeProgress.current < 0 ? timeProgress.total : timeProgress.current;
-
-    this.currentPositionValue = position;
-    this.currentDurationValue = timeProgress.total;
-    this.renderSeekBar();
-  };
-
-  MediaControl.prototype.renderSeekBar = function renderSeekBar() {
-    if (this.currentPositionValue === null || this.currentDurationValue === null) {
-      // this will be triggered as soon as these beocome available
-      return;
-    }
-
-    // default to 100%
-    this.currentSeekBarPercentage = 100;
-    if (this.container.getPlaybackType() !== _playback2.default.LIVE || this.container.isDvrInUse()) this.currentSeekBarPercentage = this.currentPositionValue / this.currentDurationValue * 100;
-
-    this.setSeekPercentage(this.currentSeekBarPercentage);
-
-    var newPosition = (0, _utils.formatTime)(this.currentPositionValue);
-    var newDuration = (0, _utils.formatTime)(this.currentDurationValue);
-    if (newPosition !== this.displayedPosition) {
-      this.$position.text(newPosition);
-      this.displayedPosition = newPosition;
-    }
-    if (newDuration !== this.displayedDuration) {
-      this.$duration.text(newDuration);
-      this.displayedDuration = newDuration;
-    }
-  };
-
-  MediaControl.prototype.seek = function seek(event) {
-    if (!this.settings.seekEnabled) return;
-    var offsetX = event.pageX - this.$seekBarContainer.offset().left;
-    var pos = offsetX / this.$seekBarContainer.width() * 100;
-    pos = Math.min(100, Math.max(pos, 0));
-    this.container.seekPercentage(pos);
-    this.setSeekPercentage(pos);
-    return false;
-  };
-
-  MediaControl.prototype.setKeepVisible = function setKeepVisible() {
-    this.keepVisible = true;
-  };
-
-  MediaControl.prototype.resetKeepVisible = function resetKeepVisible() {
-    this.keepVisible = false;
-  };
-
-  MediaControl.prototype.setUserKeepVisible = function setUserKeepVisible() {
-    this.userKeepVisible = true;
-  };
-
-  MediaControl.prototype.resetUserKeepVisible = function resetUserKeepVisible() {
-    this.userKeepVisible = false;
-  };
-
-  MediaControl.prototype.isVisible = function isVisible() {
-    return !this.$el.hasClass('media-control-hide');
-  };
-
-  MediaControl.prototype.show = function show(event) {
-    var _this4 = this;
-
-    if (this.disabled) return;
-
-    var timeout = 2000;
-    if (!event || event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY || navigator.userAgent.match(/firefox/i)) {
-      clearTimeout(this.hideId);
-      this.$el.show();
-      this.trigger(_events2.default.MEDIACONTROL_SHOW, this.name);
-      this.$el.removeClass('media-control-hide');
-      this.hideId = setTimeout(function () {
-        return _this4.hide();
-      }, timeout);
-      if (event) {
-        this.lastMouseX = event.clientX;
-        this.lastMouseY = event.clientY;
-      }
-    }
-  };
-
-  MediaControl.prototype.hide = function hide() {
-    var _this5 = this;
-
-    var delay = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-
-    if (!this.isVisible()) return;
-
-    var timeout = delay || 2000;
-    clearTimeout(this.hideId);
-    if (!this.disabled && this.options.hideMediaControl === false) return;
-
-    if (!this.disabled && (delay || this.userKeepVisible || this.keepVisible || this.draggingSeekBar || this.draggingVolumeBar)) {
-      this.hideId = setTimeout(function () {
-        return _this5.hide();
-      }, timeout);
-    } else {
-      this.trigger(_events2.default.MEDIACONTROL_HIDE, this.name);
-      this.$el.addClass('media-control-hide');
-      this.hideVolumeBar(0);
-    }
-  };
-
-  MediaControl.prototype.settingsUpdate = function settingsUpdate() {
-    var newSettings = this.getSettings();
-    if (newSettings && !this.fullScreenOnVideoTagSupported && !_utils.Fullscreen.fullscreenEnabled()) {
-      // remove fullscreen from settings if it is present
-      newSettings.default && (0, _utils.removeArrayItem)(newSettings.default, 'fullscreen');
-      newSettings.left && (0, _utils.removeArrayItem)(newSettings.left, 'fullscreen');
-      newSettings.right && (0, _utils.removeArrayItem)(newSettings.right, 'fullscreen');
-    }
-    var settingsChanged = (0, _stringify2.default)(this.settings) !== (0, _stringify2.default)(newSettings);
-    if (settingsChanged) {
-      this.settings = newSettings;
-      this.render();
-    }
-  };
-
-  MediaControl.prototype.getSettings = function getSettings() {
-    return _clapprZepto2.default.extend(true, {}, this.container.settings);
-  };
-
-  MediaControl.prototype.highDefinitionUpdate = function highDefinitionUpdate(isHD) {
-    this.isHD = isHD;
-    var method = isHD ? 'addClass' : 'removeClass';
-    this.$hdIndicator[method]('enabled');
-  };
-
-  MediaControl.prototype.createCachedElements = function createCachedElements() {
-    var $layer = this.$el.find('.media-control-layer');
-    this.$duration = $layer.find('.media-control-indicator[data-duration]');
-    this.$fullscreenToggle = $layer.find('button.media-control-button[data-fullscreen]');
-    this.$playPauseToggle = $layer.find('button.media-control-button[data-playpause]');
-    this.$playStopToggle = $layer.find('button.media-control-button[data-playstop]');
-    this.$position = $layer.find('.media-control-indicator[data-position]');
-    this.$seekBarContainer = $layer.find('.bar-container[data-seekbar]');
-    this.$seekBarHover = $layer.find('.bar-hover[data-seekbar]');
-    this.$seekBarLoaded = $layer.find('.bar-fill-1[data-seekbar]');
-    this.$seekBarPosition = $layer.find('.bar-fill-2[data-seekbar]');
-    this.$seekBarScrubber = $layer.find('.bar-scrubber[data-seekbar]');
-    this.$volumeBarContainer = $layer.find('.bar-container[data-volume]');
-    this.$volumeContainer = $layer.find('.drawer-container[data-volume]');
-    this.$volumeIcon = $layer.find('.drawer-icon[data-volume]');
-    this.$volumeBarBackground = this.$el.find('.bar-background[data-volume]');
-    this.$volumeBarFill = this.$el.find('.bar-fill-1[data-volume]');
-    this.$volumeBarScrubber = this.$el.find('.bar-scrubber[data-volume]');
-    this.$hdIndicator = this.$el.find('button.media-control-button[data-hd-indicator]');
-    this.resetIndicators();
-    this.initializeIcons();
-  };
-
-  MediaControl.prototype.resetIndicators = function resetIndicators() {
-    this.displayedPosition = this.$position.text();
-    this.displayedDuration = this.$duration.text();
-  };
-
-  MediaControl.prototype.initializeIcons = function initializeIcons() {
-    var $layer = this.$el.find('.media-control-layer');
-    $layer.find('button.media-control-button[data-play]').append(_play2.default);
-    $layer.find('button.media-control-button[data-pause]').append(_pause2.default);
-    $layer.find('button.media-control-button[data-stop]').append(_stop2.default);
-    this.$playPauseToggle.append(_play2.default);
-    this.$playStopToggle.append(_play2.default);
-    this.$volumeIcon.append(_volume2.default);
-    this.$fullscreenToggle.append(_expand2.default);
-    this.$hdIndicator.append(_hd2.default);
-  };
-
-  MediaControl.prototype.setSeekPercentage = function setSeekPercentage(value) {
-    value = Math.max(Math.min(value, 100.0), 0);
-    if (this.displayedSeekBarPercentage === value) {
-      // not changed since last update
-      return;
-    }
-    this.displayedSeekBarPercentage = value;
-
-    this.$seekBarPosition.removeClass('media-control-notransition');
-    this.$seekBarScrubber.removeClass('media-control-notransition');
-    this.$seekBarPosition.css({ width: value + '%' });
-    this.$seekBarScrubber.css({ left: value + '%' });
-  };
-
-  MediaControl.prototype.seekRelative = function seekRelative(delta) {
-    if (!this.settings.seekEnabled) return;
-    var currentTime = this.container.getCurrentTime();
-    var duration = this.container.getDuration();
-    var position = Math.min(Math.max(currentTime + delta, 0), duration);
-    position = Math.min(position * 100 / duration, 100);
-    this.container.seekPercentage(position);
-  };
-
-  MediaControl.prototype.bindKeyAndShow = function bindKeyAndShow(key, cb) {
-    var _this6 = this;
-
-    this.kibo.down(key, function () {
-      _this6.show();
-      return cb();
-    });
-  };
-
-  MediaControl.prototype.bindKeyEvents = function bindKeyEvents() {
-    var _this7 = this;
-
-    if (_browser2.default.isMobile || this.options.disableKeyboardShortcuts) return;
-
-    this.unbindKeyEvents();
-
-    this.bindKeyAndShow('space', function () {
-      return _this7.togglePlayPause();
-    });
-    this.bindKeyAndShow('left', function () {
-      return _this7.seekRelative(-5);
-    });
-    this.bindKeyAndShow('right', function () {
-      return _this7.seekRelative(5);
-    });
-    this.bindKeyAndShow('shift left', function () {
-      return _this7.seekRelative(-10);
-    });
-    this.bindKeyAndShow('shift right', function () {
-      return _this7.seekRelative(10);
-    });
-    this.bindKeyAndShow('shift ctrl left', function () {
-      return _this7.seekRelative(-15);
-    });
-    this.bindKeyAndShow('shift ctrl right', function () {
-      return _this7.seekRelative(15);
-    });
-    var keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
-    keys.forEach(function (i) {
-      _this7.bindKeyAndShow(i, function () {
-        return _this7.settings.seekEnabled && _this7.container.seekPercentage(i * 10);
-      });
-    });
-  };
-
-  MediaControl.prototype.unbindKeyEvents = function unbindKeyEvents() {
-    if (this.kibo) {
-      this.kibo.off('space');
-      this.kibo.off('left');
-      this.kibo.off('right');
-      this.kibo.off('shift left');
-      this.kibo.off('shift right');
-      this.kibo.off('shift ctrl left');
-      this.kibo.off('shift ctrl right');
-      this.kibo.off(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']);
-    }
-  };
-
-  MediaControl.prototype.parseColors = function parseColors() {
-    if (this.options.mediacontrol) {
-      this.buttonsColor = this.options.mediacontrol.buttons;
-      var seekbarColor = this.options.mediacontrol.seekbar;
-      this.$el.find('.bar-fill-2[data-seekbar]').css('background-color', seekbarColor);
-      this.$el.find('.media-control-icon svg path').css('fill', this.buttonsColor);
-      this.$el.find('.segmented-bar-element[data-volume]').css('boxShadow', 'inset 2px 0 0 ' + this.buttonsColor);
-    }
-  };
-
-  MediaControl.prototype.applyButtonStyle = function applyButtonStyle(element) {
-    if (this.buttonsColor && element) (0, _clapprZepto2.default)(element).find('svg path').css('fill', this.buttonsColor);
-  };
-
-  MediaControl.prototype.destroy = function destroy() {
-    this.remove();
-    (0, _clapprZepto2.default)(document).unbind('mouseup', this.stopDragHandler);
-    (0, _clapprZepto2.default)(document).unbind('mousemove', this.updateDragHandler);
-    this.unbindKeyEvents();
-    this.stopListening();
-  };
-
-  /**
-   * enables to configure the media control after its creation
-   * @method configure
-   * @param {Object} options all the options to change in form of a javascript object
-   */
-
-
-  MediaControl.prototype.configure = function configure(options) {
-    this._options = _clapprZepto2.default.extend(this._options, options);
-    this.trigger(_events2.default.MEDIACONTROL_OPTIONS_CHANGE);
-  };
-
-  MediaControl.prototype.render = function render() {
-    var _this8 = this;
-
-    var timeout = this.options.hideMediaControlDelay || 2000;
-    this.$el.html(this.template({ settings: this.settings }));
-    this.createCachedElements();
-    this.$playPauseToggle.addClass('paused');
-    this.$playStopToggle.addClass('stopped');
-
-    this.changeTogglePlay();
-    this.hideId = setTimeout(function () {
-      return _this8.hide();
-    }, timeout);
-    if (this.disabled) this.hide();
-
-    // Video volume cannot be changed with Safari on mobile devices
-    // Display mute/unmute icon only if Safari version >= 10
-    if (_browser2.default.isSafari && _browser2.default.isMobile) {
-      if (_browser2.default.version < 10) this.$volumeContainer.css('display', 'none');else this.$volumeBarContainer.css('display', 'none');
-    }
-
-    this.$seekBarPosition.addClass('media-control-notransition');
-    this.$seekBarScrubber.addClass('media-control-notransition');
-
-    var previousSeekPercentage = 0;
-    if (this.displayedSeekBarPercentage) previousSeekPercentage = this.displayedSeekBarPercentage;
-
-    this.displayedSeekBarPercentage = null;
-    this.setSeekPercentage(previousSeekPercentage);
-
-    process.nextTick(function () {
-      if (!_this8.settings.seekEnabled) _this8.$seekBarContainer.addClass('seek-disabled');
-
-      _this8.playerResize({ width: _this8.options.width, height: _this8.options.height });
-      _this8.hideVolumeBar(0);
-    });
-
-    this.parseColors();
-    this.highDefinitionUpdate(this.isHD);
-
-    this.rendered = true;
-    this.updateVolumeUI();
-    this.trigger(_events2.default.MEDIACONTROL_RENDERED);
-    return this;
-  };
-
-  return MediaControl;
-}(_ui_object2.default); // Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-/**
- * The MediaControl is responsible for displaying the Player controls.
- */
-
-exports.default = MediaControl;
-
-
-MediaControl.extend = function (properties) {
-  return (0, _utils.extend)(MediaControl, properties);
-};
-module.exports = exports['default'];
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(61)))
-
-/***/ }),
-/* 160 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var core  = __webpack_require__(11)
-  , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
-module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
-  return $JSON.stringify.apply($JSON, arguments);
-};
-
-/***/ }),
-/* 161 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var content = __webpack_require__(162);
-
-if(typeof content === 'string') content = [[module.i, content, '']];
-
-var transform;
-var insertInto;
-
-
-
-var options = {"singleton":true,"hmr":true}
-
-options.transform = transform
-options.insertInto = undefined;
-
-var update = __webpack_require__(9)(content, options);
-
-if(content.locals) module.exports = content.locals;
-
-if(false) {
-	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./media-control.scss", function() {
-		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./media-control.scss");
-
-		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-
-		var locals = (function(a, b) {
-			var key, idx = 0;
-
-			for(key in a) {
-				if(!b || a[key] !== b[key]) return false;
-				idx++;
-			}
-
-			for(key in b) idx--;
-
-			return idx === 0;
-		}(content.locals, newContent.locals));
-
-		if(!locals) throw new Error('Aborting CSS HMR due to changed css-modules locals.');
-
-		update(newContent);
-	});
-
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 162 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var escape = __webpack_require__(82);
-exports = module.exports = __webpack_require__(7)(false);
-// imports
-
-
-// module
-exports.push([module.i, ".media-control-notransition {\n  transition: none !important; }\n\n.media-control[data-media-control] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 9999;\n  pointer-events: none; }\n  .media-control[data-media-control].dragging {\n    pointer-events: auto;\n    cursor: -webkit-grabbing !important;\n    cursor: grabbing !important;\n    cursor: url(" + escape(__webpack_require__(83)) + "), move; }\n    .media-control[data-media-control].dragging * {\n      cursor: -webkit-grabbing !important;\n      cursor: grabbing !important;\n      cursor: url(" + escape(__webpack_require__(83)) + "), move; }\n  .media-control[data-media-control] .media-control-background[data-background] {\n    position: absolute;\n    height: 40%;\n    width: 100%;\n    bottom: 0;\n    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    transition: opacity 0.6s ease-out; }\n  .media-control[data-media-control] .media-control-icon {\n    line-height: 0;\n    letter-spacing: 0;\n    speak: none;\n    color: #fff;\n    opacity: 0.5;\n    vertical-align: middle;\n    text-align: left;\n    transition: all 0.1s ease; }\n  .media-control[data-media-control] .media-control-icon:hover {\n    color: white;\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .media-control[data-media-control].media-control-hide .media-control-background[data-background] {\n    opacity: 0; }\n  .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {\n    bottom: -50px; }\n    .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n      opacity: 0; }\n  .media-control[data-media-control] .media-control-layer[data-controls] {\n    position: absolute;\n    bottom: 7px;\n    width: 100%;\n    height: 32px;\n    font-size: 0;\n    vertical-align: middle;\n    pointer-events: auto;\n    transition: bottom 0.4s ease-out; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      left: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {\n      height: 100%;\n      text-align: center;\n      line-height: 32px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {\n      background-color: transparent;\n      border: 0;\n      margin: 0 6px;\n      padding: 0;\n      cursor: pointer;\n      display: inline-block;\n      width: 32px;\n      height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg {\n        width: 100%;\n        height: 22px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg path {\n          fill: white; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {\n        outline: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {\n        background-color: transparent;\n        border: 0;\n        cursor: default;\n        display: none;\n        float: right;\n        height: 100%; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {\n          display: block;\n          opacity: 1.0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {\n            opacity: 1.0;\n            text-shadow: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause] {\n        float: left; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {\n        float: left; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position], .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      display: inline-block;\n      font-size: 10px;\n      color: white;\n      cursor: default;\n      line-height: 32px;\n      position: relative; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {\n      margin: 0 6px 0 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      color: rgba(255, 255, 255, 0.5);\n      margin-right: 6px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {\n        content: \"|\";\n        margin-right: 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {\n      position: absolute;\n      top: -20px;\n      left: 0;\n      display: inline-block;\n      vertical-align: middle;\n      width: 100%;\n      height: 25px;\n      cursor: pointer; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {\n        width: 100%;\n        height: 1px;\n        position: relative;\n        top: 12px;\n        background-color: #666666; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #c2c2c2;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #005aff;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0;\n          position: absolute;\n          top: -3px;\n          width: 5px;\n          height: 7px;\n          background-color: rgba(255, 255, 255, 0.5);\n          transition: opacity 0.1s ease; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n        opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {\n        cursor: default; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n        position: absolute;\n        -webkit-transform: translateX(-50%);\n                transform: translateX(-50%);\n        top: 2px;\n        left: 0;\n        width: 20px;\n        height: 20px;\n        opacity: 1;\n        transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {\n          position: absolute;\n          left: 6px;\n          top: 6px;\n          width: 8px;\n          height: 8px;\n          border-radius: 10px;\n          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n          background-color: white; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {\n      float: right;\n      display: inline-block;\n      height: 32px;\n      cursor: pointer;\n      margin: 0 6px;\n      box-sizing: border-box; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {\n        float: left;\n        bottom: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {\n          background-color: transparent;\n          border: 0;\n          box-sizing: content-box;\n          width: 32px;\n          height: 32px;\n          opacity: 0.5; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {\n            opacity: 0.75; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg {\n            height: 24px;\n            position: relative;\n            top: 3px; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg path {\n              fill: white; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted svg {\n            margin-left: 2px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {\n        float: left;\n        position: relative;\n        overflow: hidden;\n        top: 6px;\n        width: 42px;\n        height: 18px;\n        padding: 3px 0;\n        transition: width .2s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] {\n          height: 1px;\n          position: relative;\n          top: 7px;\n          margin: 0 3px;\n          background-color: #666666; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #c2c2c2;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-2[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #005aff;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-hover[data-volume] {\n            opacity: 0;\n            position: absolute;\n            top: -3px;\n            width: 5px;\n            height: 7px;\n            background-color: rgba(255, 255, 255, 0.5);\n            transition: opacity 0.1s ease; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] {\n          position: absolute;\n          -webkit-transform: translateX(-50%);\n                  transform: translateX(-50%);\n          top: 0px;\n          left: 0;\n          width: 20px;\n          height: 20px;\n          opacity: 1;\n          transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume] {\n            position: absolute;\n            left: 6px;\n            top: 6px;\n            width: 8px;\n            height: 8px;\n            border-radius: 10px;\n            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n            background-color: white; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {\n          float: left;\n          width: 4px;\n          padding-left: 2px;\n          height: 12px;\n          opacity: 0.5;\n          box-shadow: inset 2px 0 0 white;\n          transition: -webkit-transform .2s ease-out;\n          transition: transform .2s ease-out;\n          transition: transform .2s ease-out, -webkit-transform .2s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {\n            box-shadow: inset 2px 0 0 #fff;\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:nth-of-type(1) {\n            padding-left: 0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {\n            -webkit-transform: scaleY(1.5);\n                    transform: scaleY(1.5); }\n  .media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {\n    width: 0;\n    height: 12px;\n    top: 9px;\n    padding: 0; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 163 */
-/***/ (function(module, exports) {
-
-module.exports = "<div class=\"media-control-background\" data-background></div>\n<div class=\"media-control-layer\" data-controls>\n  <%  var renderBar = function(name) { %>\n      <div class=\"bar-container\" data-<%= name %>>\n        <div class=\"bar-background\" data-<%= name %>>\n          <div class=\"bar-fill-1\" data-<%= name %>></div>\n          <div class=\"bar-fill-2\" data-<%= name %>></div>\n          <div class=\"bar-hover\" data-<%= name %>></div>\n        </div>\n        <div class=\"bar-scrubber\" data-<%= name %>>\n          <div class=\"bar-scrubber-icon\" data-<%= name %>></div>\n        </div>\n      </div>\n  <%  }; %>\n  <%  var renderSegmentedBar = function(name, segments) {\n      segments = segments || 10; %>\n    <div class=\"bar-container\" data-<%= name %>>\n    <% for (var i = 0; i < segments; i++) { %>\n      <div class=\"segmented-bar-element\" data-<%= name %>></div>\n    <% } %>\n    </div>\n  <% }; %>\n  <% var renderDrawer = function(name, renderContent) { %>\n      <div class=\"drawer-container\" data-<%= name %>>\n        <div class=\"drawer-icon-container\" data-<%= name %>>\n          <div class=\"drawer-icon media-control-icon\" data-<%= name %>></div>\n          <span class=\"drawer-text\" data-<%= name %>></span>\n        </div>\n        <% renderContent(name); %>\n      </div>\n  <% }; %>\n  <% var renderIndicator = function(name) { %>\n      <div class=\"media-control-indicator\" data-<%= name %>></div>\n  <% }; %>\n  <% var renderButton = function(name) { %>\n    <button type=\"button\" class=\"media-control-button media-control-icon\" data-<%= name %> aria-label=\"<%= name %>\"></button>\n  <% }; %>\n  <%  var templates = {\n        bar: renderBar,\n        segmentedBar: renderSegmentedBar,\n      };\n      var render = function(settingsList) {\n        settingsList.forEach(function(setting) {\n          if(setting === \"seekbar\") {\n            renderBar(setting);\n          } else if (setting === \"volume\") {\n            renderDrawer(setting, settings.volumeBarTemplate ? templates[settings.volumeBarTemplate] : function(name) { return renderSegmentedBar(name); });\n          } else if (setting === \"duration\" || setting === \"position\") {\n            renderIndicator(setting);\n          } else {\n            renderButton(setting);\n          }\n        });\n      }; %>\n  <% if (settings.default && settings.default.length) { %>\n  <div class=\"media-control-center-panel\" data-media-control>\n    <% render(settings.default); %>\n  </div>\n  <% } %>\n  <% if (settings.left && settings.left.length) { %>\n  <div class=\"media-control-left-panel\" data-media-control>\n    <% render(settings.left); %>\n  </div>\n  <% } %>\n  <% if (settings.right && settings.right.length) { %>\n  <div class=\"media-control-right-panel\" data-media-control>\n    <% render(settings.right); %>\n  </div>\n  <% } %>\n</div>\n";
-
-/***/ }),
-/* 164 */
-/***/ (function(module, exports) {
-
-module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M1.712 1.24h12.6v13.52h-12.6z\"></path></svg>"
-
-/***/ }),
-/* 165 */
-/***/ (function(module, exports) {
-
-module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M11.5 11h-.002v1.502L7.798 10H4.5V6h3.297l3.7-2.502V4.5h.003V11zM11 4.49L7.953 6.5H5v3h2.953L11 11.51V4.49z\"></path></svg>"
-
-/***/ }),
-/* 166 */
-/***/ (function(module, exports) {
-
-module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M9.75 11.51L6.7 9.5H3.75v-3H6.7L9.75 4.49v.664l.497.498V3.498L6.547 6H3.248v4h3.296l3.7 2.502v-2.154l-.497.5v.662zm3-5.165L12.404 6l-1.655 1.653L9.093 6l-.346.345L10.402 8 8.747 9.654l.346.347 1.655-1.653L12.403 10l.348-.346L11.097 8l1.655-1.655z\"></path></svg>"
-
-/***/ }),
-/* 167 */
-/***/ (function(module, exports) {
-
-module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M7.156 8L4 11.156V8.5H3V13h4.5v-1H4.844L8 8.844 7.156 8zM8.5 3v1h2.657L8 7.157 8.846 8 12 4.844V7.5h1V3H8.5z\"></path></svg>"
-
-/***/ }),
-/* 168 */
-/***/ (function(module, exports) {
-
-module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M13.5 3.344l-.844-.844L9.5 5.656V3h-1v4.5H13v-1h-2.656L13.5 3.344zM3 9.5h2.656L2.5 12.656l.844.844L6.5 10.344V13h1V8.5H3v1z\"></path></svg>"
-
-/***/ }),
-/* 169 */
-/***/ (function(module, exports) {
-
-module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M5.375 7.062H2.637V4.26H.502v7.488h2.135V8.9h2.738v2.848h2.133V4.26H5.375v2.802zm5.97-2.81h-2.84v7.496h2.798c2.65 0 4.195-1.607 4.195-3.77v-.022c0-2.162-1.523-3.704-4.154-3.704zm2.06 3.758c0 1.21-.81 1.896-2.03 1.896h-.83V6.093h.83c1.22 0 2.03.696 2.03 1.896v.02z\"></path></svg>"
-
-/***/ }),
-/* 170 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var content = __webpack_require__(171);
+var content = __webpack_require__(160);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -12287,10 +11330,10 @@ if(false) {
 }
 
 /***/ }),
-/* 171 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(7)(false);
+exports = module.exports = __webpack_require__(8)(false);
 // imports
 
 
@@ -12301,28 +11344,28 @@ exports.push([module.i, "[data-player] {\n  -webkit-touch-callout: none;\n  -web
 
 
 /***/ }),
-/* 172 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var escape = __webpack_require__(82);
-exports = module.exports = __webpack_require__(7)(false);
+var escape = __webpack_require__(81);
+exports = module.exports = __webpack_require__(8)(false);
 // imports
 
 
 // module
-exports.push([module.i, "@font-face {\n  font-family: \"Roboto\";\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Roboto\"), local(\"Roboto-Regular\"), url(" + escape(__webpack_require__(173)) + ") format(\"truetype\");\n}\n", ""]);
+exports.push([module.i, "@font-face {\n  font-family: \"Roboto\";\n  font-style: normal;\n  font-weight: 400;\n  src: local(\"Roboto\"), local(\"Roboto-Regular\"), url(" + escape(__webpack_require__(162)) + ") format(\"truetype\");\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 173 */
+/* 162 */
 /***/ (function(module, exports) {
 
 module.exports = "<%=baseUrl%>/38861cba61c66739c1452c3a71e39852.ttf";
 
 /***/ }),
-/* 174 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12336,7 +11379,7 @@ var _create = __webpack_require__(76);
 
 var _create2 = _interopRequireDefault(_create);
 
-var _toConsumableArray2 = __webpack_require__(63);
+var _toConsumableArray2 = __webpack_require__(61);
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
@@ -12364,53 +11407,57 @@ var _html5_video = __webpack_require__(41);
 
 var _html5_video2 = _interopRequireDefault(_html5_video);
 
-var _flash = __webpack_require__(88);
+var _flash = __webpack_require__(84);
 
 var _flash2 = _interopRequireDefault(_flash);
 
-var _html5_audio = __webpack_require__(89);
+var _html5_audio = __webpack_require__(85);
 
 var _html5_audio2 = _interopRequireDefault(_html5_audio);
 
-var _flashls = __webpack_require__(90);
+var _flashls = __webpack_require__(86);
 
 var _flashls2 = _interopRequireDefault(_flashls);
 
-var _hls = __webpack_require__(91);
+var _hls = __webpack_require__(87);
 
 var _hls2 = _interopRequireDefault(_hls);
 
-var _html_img = __webpack_require__(92);
+var _html_img = __webpack_require__(89);
 
 var _html_img2 = _interopRequireDefault(_html_img);
 
-var _no_op = __webpack_require__(93);
+var _no_op = __webpack_require__(90);
 
 var _no_op2 = _interopRequireDefault(_no_op);
 
-var _spinner_three_bounce = __webpack_require__(94);
+var _spinner_three_bounce = __webpack_require__(91);
 
 var _spinner_three_bounce2 = _interopRequireDefault(_spinner_three_bounce);
 
-var _stats = __webpack_require__(210);
+var _stats = __webpack_require__(200);
 
 var _stats2 = _interopRequireDefault(_stats);
 
-var _watermark = __webpack_require__(95);
+var _watermark = __webpack_require__(92);
 
 var _watermark2 = _interopRequireDefault(_watermark);
 
-var _poster = __webpack_require__(96);
+var _poster = __webpack_require__(93);
 
 var _poster2 = _interopRequireDefault(_poster);
 
-var _google_analytics = __webpack_require__(220);
+var _google_analytics = __webpack_require__(210);
 
 var _google_analytics2 = _interopRequireDefault(_google_analytics);
 
-var _click_to_pause = __webpack_require__(97);
+var _click_to_pause = __webpack_require__(94);
 
 var _click_to_pause2 = _interopRequireDefault(_click_to_pause);
+
+var _media_control = __webpack_require__(95);
+
+var _media_control2 = _interopRequireDefault(_media_control);
 
 var _dvr_controls = __webpack_require__(98);
 
@@ -12455,10 +11502,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 
 
-/* Core Plugins */
+/* Playback Plugins */
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 
-
-/* Container Plugins */
 var Loader = function (_BaseObject) {
   (0, _inherits3.default)(Loader, _BaseObject);
 
@@ -12492,7 +11540,7 @@ var Loader = function (_BaseObject) {
     _this.playbackPlugins = [].concat((0, _toConsumableArray3.default)(_this.playbackPlugins), [_html_img2.default, _no_op2.default]);
 
     _this.containerPlugins = [_spinner_three_bounce2.default, _watermark2.default, _poster2.default, _stats2.default, _google_analytics2.default, _click_to_pause2.default];
-    _this.corePlugins = [_dvr_controls2.default, _closed_captions2.default, _favicon2.default, _seek_time2.default, _sources2.default, _end_video2.default, _strings2.default, _error_screen2.default];
+    _this.corePlugins = [_media_control2.default, _dvr_controls2.default, _closed_captions2.default, _favicon2.default, _seek_time2.default, _sources2.default, _end_video2.default, _error_screen2.default, _strings2.default];
 
     if (!Array.isArray(externalPlugins)) _this.validateExternalPluginsType(externalPlugins);
 
@@ -12574,24 +11622,25 @@ var Loader = function (_BaseObject) {
   return Loader;
 }(_base_object2.default);
 
-/* Playback Plugins */
-// Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
+/* Core Plugins */
+
+
+/* Container Plugins */
+
 
 exports.default = Loader;
 module.exports = exports['default'];
 
 /***/ }),
-/* 175 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(71);
-__webpack_require__(176);
+__webpack_require__(165);
 module.exports = __webpack_require__(11).Array.from;
 
 /***/ }),
-/* 176 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12599,13 +11648,13 @@ module.exports = __webpack_require__(11).Array.from;
 var ctx            = __webpack_require__(44)
   , $export        = __webpack_require__(16)
   , toObject       = __webpack_require__(38)
-  , call           = __webpack_require__(177)
-  , isArrayIter    = __webpack_require__(178)
+  , call           = __webpack_require__(166)
+  , isArrayIter    = __webpack_require__(167)
   , toLength       = __webpack_require__(69)
-  , createProperty = __webpack_require__(179)
-  , getIterFn      = __webpack_require__(180);
+  , createProperty = __webpack_require__(168)
+  , getIterFn      = __webpack_require__(169);
 
-$export($export.S + $export.F * !__webpack_require__(182)(function(iter){ Array.from(iter); }), 'Array', {
+$export($export.S + $export.F * !__webpack_require__(171)(function(iter){ Array.from(iter); }), 'Array', {
   // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
   from: function from(arrayLike/*, mapfn = undefined, thisArg = undefined*/){
     var O       = toObject(arrayLike)
@@ -12635,7 +11684,7 @@ $export($export.S + $export.F * !__webpack_require__(182)(function(iter){ Array.
 
 
 /***/ }),
-/* 177 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // call something on iterator step with safe closing on error
@@ -12652,11 +11701,11 @@ module.exports = function(iterator, fn, value, entries){
 };
 
 /***/ }),
-/* 178 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // check on default Array iterator
-var Iterators  = __webpack_require__(33)
+var Iterators  = __webpack_require__(34)
   , ITERATOR   = __webpack_require__(13)('iterator')
   , ArrayProto = Array.prototype;
 
@@ -12665,13 +11714,13 @@ module.exports = function(it){
 };
 
 /***/ }),
-/* 179 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var $defineProperty = __webpack_require__(18)
-  , createDesc      = __webpack_require__(32);
+  , createDesc      = __webpack_require__(33);
 
 module.exports = function(object, index, value){
   if(index in object)$defineProperty.f(object, index, createDesc(0, value));
@@ -12679,12 +11728,12 @@ module.exports = function(object, index, value){
 };
 
 /***/ }),
-/* 180 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var classof   = __webpack_require__(181)
+var classof   = __webpack_require__(170)
   , ITERATOR  = __webpack_require__(13)('iterator')
-  , Iterators = __webpack_require__(33);
+  , Iterators = __webpack_require__(34);
 module.exports = __webpack_require__(11).getIteratorMethod = function(it){
   if(it != undefined)return it[ITERATOR]
     || it['@@iterator']
@@ -12692,7 +11741,7 @@ module.exports = __webpack_require__(11).getIteratorMethod = function(it){
 };
 
 /***/ }),
-/* 181 */
+/* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // getting tag from 19.1.3.6 Object.prototype.toString()
@@ -12720,7 +11769,7 @@ module.exports = function(it){
 };
 
 /***/ }),
-/* 182 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var ITERATOR     = __webpack_require__(13)('iterator')
@@ -12746,7 +11795,7 @@ module.exports = function(exec, skipClosing){
 };
 
 /***/ }),
-/* 183 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12756,7 +11805,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _from = __webpack_require__(87);
+var _from = __webpack_require__(83);
 
 var _from2 = _interopRequireDefault(_from);
 
@@ -12776,7 +11825,7 @@ var _inherits2 = __webpack_require__(2);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _toConsumableArray2 = __webpack_require__(63);
+var _toConsumableArray2 = __webpack_require__(61);
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
@@ -12810,15 +11859,15 @@ var _clapprZepto = __webpack_require__(6);
 
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
-var _tracks = __webpack_require__(184);
+var _tracks = __webpack_require__(173);
 
 var _tracks2 = _interopRequireDefault(_tracks);
 
-__webpack_require__(185);
+__webpack_require__(174);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -13482,20 +12531,20 @@ HTML5Video.canPlay = function (resourceUrl, mimeType) {
   return HTML5Video._canPlay('audio', AUDIO_MIMETYPES, resourceUrl, mimeType) || HTML5Video._canPlay('video', MIMETYPES, resourceUrl, mimeType);
 };
 module.exports = exports['default'];
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(61)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(62)))
 
 /***/ }),
-/* 184 */
+/* 173 */
 /***/ (function(module, exports) {
 
 module.exports = "<% for (var i = 0; i < tracks.length; i++) { %>\n  <track data-html5-video-track=\"<%= i %>\" kind=\"<%= tracks[i].kind %>\" label=\"<%= tracks[i].label %>\" srclang=\"<%= tracks[i].lang %>\" src=\"<%= tracks[i].src %>\" />\n<% }; %>\n";
 
 /***/ }),
-/* 185 */
+/* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(186);
+var content = __webpack_require__(175);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -13541,10 +12590,10 @@ if(false) {
 }
 
 /***/ }),
-/* 186 */
+/* 175 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(7)(false);
+exports = module.exports = __webpack_require__(8)(false);
 // imports
 
 
@@ -13555,7 +12604,7 @@ exports.push([module.i, "[data-html5-video] {\n  position: absolute;\n  height: 
 
 
 /***/ }),
-/* 187 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13583,7 +12632,7 @@ var _inherits3 = _interopRequireDefault(_inherits2);
 
 var _utils = __webpack_require__(5);
 
-var _base_flash_playback = __webpack_require__(64);
+var _base_flash_playback = __webpack_require__(63);
 
 var _base_flash_playback2 = _interopRequireDefault(_base_flash_playback);
 
@@ -13591,11 +12640,11 @@ var _browser = __webpack_require__(14);
 
 var _browser2 = _interopRequireDefault(_browser);
 
-var _mediator = __webpack_require__(30);
+var _mediator = __webpack_require__(31);
 
 var _mediator2 = _interopRequireDefault(_mediator);
 
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
@@ -13611,7 +12660,7 @@ var _playback = __webpack_require__(10);
 
 var _playback2 = _interopRequireDefault(_playback);
 
-var _Player = __webpack_require__(192);
+var _Player = __webpack_require__(181);
 
 var _Player2 = _interopRequireDefault(_Player);
 
@@ -13883,7 +12932,7 @@ Flash.canPlay = function (resource) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 188 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13913,7 +12962,7 @@ var _playback = __webpack_require__(10);
 
 var _playback2 = _interopRequireDefault(_playback);
 
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
@@ -13921,11 +12970,11 @@ var _browser = __webpack_require__(14);
 
 var _browser2 = _interopRequireDefault(_browser);
 
-var _flash = __webpack_require__(189);
+var _flash = __webpack_require__(178);
 
 var _flash2 = _interopRequireDefault(_flash);
 
-__webpack_require__(190);
+__webpack_require__(179);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -14011,17 +13060,17 @@ exports.default = BaseFlashPlayback;
 module.exports = exports['default'];
 
 /***/ }),
-/* 189 */
+/* 178 */
 /***/ (function(module, exports) {
 
 module.exports = "<param name=\"movie\" value=\"<%= swfPath %>\">\n<param name=\"quality\" value=\"autohigh\">\n<param name=\"swliveconnect\" value=\"true\">\n<param name=\"allowScriptAccess\" value=\"always\">\n<param name=\"bgcolor\" value=\"#000000\">\n<param name=\"allowFullScreen\" value=\"false\">\n<param name=\"wmode\" value=\"<%= wmode %>\">\n<param name=\"tabindex\" value=\"1\">\n<param name=\"FlashVars\" value=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\">\n<embed\n  name=\"<%= cid %>\"\n  type=\"application/x-shockwave-flash\"\n  disabled=\"disabled\"\n  tabindex=\"-1\"\n  enablecontextmenu=\"false\"\n  allowScriptAccess=\"always\"\n  quality=\"autohigh\"\n  pluginspage=\"http://www.macromedia.com/go/getflashplayer\"\n  wmode=\"<%= wmode %>\"\n  swliveconnect=\"true\"\n  allowfullscreen=\"false\"\n  bgcolor=\"#000000\"\n  FlashVars=\"playbackId=<%= playbackId %>&callback=<%= callbackName %>\"\n  data=\"<%= swfPath %>\"\n  src=\"<%= swfPath %>\"\n  width=\"100%\"\n  height=\"100%\">\n</embed>\n";
 
 /***/ }),
-/* 190 */
+/* 179 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(191);
+var content = __webpack_require__(180);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -14067,10 +13116,10 @@ if(false) {
 }
 
 /***/ }),
-/* 191 */
+/* 180 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(7)(false);
+exports = module.exports = __webpack_require__(8)(false);
 // imports
 
 
@@ -14081,13 +13130,13 @@ exports.push([module.i, ".clappr-flash-playback[data-flash-playback] {\n  displa
 
 
 /***/ }),
-/* 192 */
+/* 181 */
 /***/ (function(module, exports) {
 
 module.exports = "<%=baseUrl%>/4b76590b32dab62bc95c1b7951efae78.swf";
 
 /***/ }),
-/* 193 */
+/* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14182,7 +13231,7 @@ HTML5Audio.canPlay = function (resourceUrl, mimeType) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 194 */
+/* 183 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14208,7 +13257,7 @@ var _inherits2 = __webpack_require__(2);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _base_flash_playback = __webpack_require__(64);
+var _base_flash_playback = __webpack_require__(63);
 
 var _base_flash_playback2 = _interopRequireDefault(_base_flash_playback);
 
@@ -14216,7 +13265,7 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
@@ -14224,7 +13273,7 @@ var _playback = __webpack_require__(10);
 
 var _playback2 = _interopRequireDefault(_playback);
 
-var _mediator = __webpack_require__(30);
+var _mediator = __webpack_require__(31);
 
 var _mediator2 = _interopRequireDefault(_mediator);
 
@@ -14236,11 +13285,11 @@ var _error = __webpack_require__(24);
 
 var _error2 = _interopRequireDefault(_error);
 
-var _flashls_events = __webpack_require__(195);
+var _flashls_events = __webpack_require__(184);
 
 var _flashls_events2 = _interopRequireDefault(_flashls_events);
 
-var _HLSPlayer = __webpack_require__(196);
+var _HLSPlayer = __webpack_require__(185);
 
 var _HLSPlayer2 = _interopRequireDefault(_HLSPlayer);
 
@@ -14992,7 +14041,7 @@ FlasHLS.canPlay = function (resource, mimeType) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 195 */
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15006,7 +14055,7 @@ var _classCallCheck2 = __webpack_require__(0);
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-var _mediator = __webpack_require__(30);
+var _mediator = __webpack_require__(31);
 
 var _mediator2 = _interopRequireDefault(_mediator);
 
@@ -15090,13 +14139,13 @@ exports.default = HLSEvents;
 module.exports = exports['default'];
 
 /***/ }),
-/* 196 */
+/* 185 */
 /***/ (function(module, exports) {
 
 module.exports = "<%=baseUrl%>/8fa12a459188502b9f0d39b8a67d9e6c.swf";
 
 /***/ }),
-/* 197 */
+/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15106,11 +14155,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _toConsumableArray2 = __webpack_require__(63);
+var _toConsumableArray2 = __webpack_require__(61);
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
-var _stringify = __webpack_require__(81);
+var _stringify = __webpack_require__(88);
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
@@ -15134,7 +14183,7 @@ var _html5_video = __webpack_require__(41);
 
 var _html5_video2 = _interopRequireDefault(_html5_video);
 
-var _hls = __webpack_require__(198);
+var _hls = __webpack_require__(188);
 
 var _hls2 = _interopRequireDefault(_hls);
 
@@ -15795,14 +14844,24 @@ exports.default = HLS;
 
 HLS.canPlay = function (resource, mimeType) {
   var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || [];
-  var isHls = resourceParts.length > 1 && resourceParts[1].toLowerCase() === 'm3u8' || mimeType === 'application/x-mpegURL' || mimeType === 'application/vnd.apple.mpegurl';
+  var isHls = resourceParts.length > 1 && resourceParts[1].toLowerCase() === 'm3u8' || (0, _utils.listContainsIgnoreCase)(mimeType, ['application/vnd.apple.mpegurl', 'application/x-mpegURL']);
 
   return !!(_hls2.default.isSupported() && isHls);
 };
 module.exports = exports['default'];
 
 /***/ }),
-/* 198 */
+/* 187 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var core  = __webpack_require__(11)
+  , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
+module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
+  return $JSON.stringify.apply($JSON, arguments);
+};
+
+/***/ }),
+/* 188 */
 /***/ (function(module, exports, __webpack_require__) {
 
 typeof window !== "undefined" &&
@@ -34928,7 +33987,7 @@ if (!String.prototype.endsWith) {
 //# sourceMappingURL=hls.js.map
 
 /***/ }),
-/* 199 */
+/* 189 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34962,7 +34021,7 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-__webpack_require__(200);
+__webpack_require__(190);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -35039,11 +34098,11 @@ HTMLImg.canPlay = function (resource) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 200 */
+/* 190 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(201);
+var content = __webpack_require__(191);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -35089,10 +34148,10 @@ if(false) {
 }
 
 /***/ }),
-/* 201 */
+/* 191 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(7)(false);
+exports = module.exports = __webpack_require__(8)(false);
 // imports
 
 
@@ -35103,7 +34162,7 @@ exports.push([module.i, "[data-html-img] {\n  max-width: 100%;\n  max-height: 10
 
 
 /***/ }),
-/* 202 */
+/* 192 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35135,7 +34194,7 @@ var _playback = __webpack_require__(10);
 
 var _playback2 = _interopRequireDefault(_playback);
 
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
@@ -35143,11 +34202,11 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _error = __webpack_require__(203);
+var _error = __webpack_require__(193);
 
 var _error2 = _interopRequireDefault(_error);
 
-__webpack_require__(204);
+__webpack_require__(194);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -35265,17 +34324,17 @@ NoOp.canPlay = function (source) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 203 */
+/* 193 */
 /***/ (function(module, exports) {
 
 module.exports = "<canvas data-no-op-canvas></canvas>\n<p data-no-op-msg><%=message%><p>\n";
 
 /***/ }),
-/* 204 */
+/* 194 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(205);
+var content = __webpack_require__(195);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -35321,10 +34380,10 @@ if(false) {
 }
 
 /***/ }),
-/* 205 */
+/* 195 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(7)(false);
+exports = module.exports = __webpack_require__(8)(false);
 // imports
 
 
@@ -35335,7 +34394,7 @@ exports.push([module.i, "[data-no-op] {\n  position: absolute;\n  height: 100%;\
 
 
 /***/ }),
-/* 206 */
+/* 196 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35369,15 +34428,15 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
-var _spinner = __webpack_require__(207);
+var _spinner = __webpack_require__(197);
 
 var _spinner2 = _interopRequireDefault(_spinner);
 
-__webpack_require__(208);
+__webpack_require__(198);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -35460,17 +34519,17 @@ exports.default = SpinnerThreeBouncePlugin;
 module.exports = exports['default'];
 
 /***/ }),
-/* 207 */
+/* 197 */
 /***/ (function(module, exports) {
 
 module.exports = "<div data-bounce1></div><div data-bounce2></div><div data-bounce3></div>\n";
 
 /***/ }),
-/* 208 */
+/* 198 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(209);
+var content = __webpack_require__(199);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -35516,10 +34575,10 @@ if(false) {
 }
 
 /***/ }),
-/* 209 */
+/* 199 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(7)(false);
+exports = module.exports = __webpack_require__(8)(false);
 // imports
 
 
@@ -35530,7 +34589,7 @@ exports.push([module.i, ".spinner-three-bounce[data-spinner] {\n  position: abso
 
 
 /***/ }),
-/* 210 */
+/* 200 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35540,7 +34599,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _stats = __webpack_require__(211);
+var _stats = __webpack_require__(201);
 
 var _stats2 = _interopRequireDefault(_stats);
 
@@ -35550,7 +34609,7 @@ exports.default = _stats2.default;
 module.exports = exports['default'];
 
 /***/ }),
-/* 211 */
+/* 201 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35705,7 +34764,7 @@ exports.default = StatsPlugin;
 module.exports = exports['default'];
 
 /***/ }),
-/* 212 */
+/* 202 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35739,15 +34798,15 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
-var _watermark = __webpack_require__(213);
+var _watermark = __webpack_require__(203);
 
 var _watermark2 = _interopRequireDefault(_watermark);
 
-__webpack_require__(214);
+__webpack_require__(204);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -35816,17 +34875,17 @@ exports.default = WaterMarkPlugin;
 module.exports = exports['default'];
 
 /***/ }),
-/* 213 */
+/* 203 */
 /***/ (function(module, exports) {
 
 module.exports = "<div data-watermark data-watermark-<%=position %>>\n<% if(typeof imageLink !== 'undefined') { %>\n<a target=_blank href=\"<%= imageLink %>\">\n<% } %>\n<img src=\"<%= imageUrl %>\">\n<% if(typeof imageLink !== 'undefined') { %>\n</a>\n<% } %>\n</div>\n";
 
 /***/ }),
-/* 214 */
+/* 204 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(215);
+var content = __webpack_require__(205);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -35872,10 +34931,10 @@ if(false) {
 }
 
 /***/ }),
-/* 215 */
+/* 205 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(7)(false);
+exports = module.exports = __webpack_require__(8)(false);
 // imports
 
 
@@ -35886,7 +34945,7 @@ exports.push([module.i, "[data-watermark] {\n  position: absolute;\n  min-width:
 
 
 /***/ }),
-/* 216 */
+/* 206 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35920,7 +34979,7 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
@@ -35932,15 +34991,15 @@ var _error = __webpack_require__(79);
 
 var _error2 = _interopRequireDefault(_error);
 
-var _poster = __webpack_require__(217);
+var _poster = __webpack_require__(207);
 
 var _poster2 = _interopRequireDefault(_poster);
 
-var _play = __webpack_require__(62);
+var _play = __webpack_require__(64);
 
 var _play2 = _interopRequireDefault(_play);
 
-__webpack_require__(218);
+__webpack_require__(208);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -36122,20 +35181,20 @@ var PosterPlugin = function (_UIContainerPlugin) {
 
 exports.default = PosterPlugin;
 module.exports = exports['default'];
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(61)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(62)))
 
 /***/ }),
-/* 217 */
+/* 207 */
 /***/ (function(module, exports) {
 
 module.exports = "<div class=\"play-wrapper\" data-poster></div>\n";
 
 /***/ }),
-/* 218 */
+/* 208 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(219);
+var content = __webpack_require__(209);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -36181,10 +35240,10 @@ if(false) {
 }
 
 /***/ }),
-/* 219 */
+/* 209 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(7)(false);
+exports = module.exports = __webpack_require__(8)(false);
 // imports
 
 
@@ -36195,7 +35254,7 @@ exports.push([module.i, ".player-poster[data-poster] {\n  display: -webkit-box;\
 
 
 /***/ }),
-/* 220 */
+/* 210 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36205,7 +35264,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _google_analytics = __webpack_require__(221);
+var _google_analytics = __webpack_require__(211);
 
 var _google_analytics2 = _interopRequireDefault(_google_analytics);
 
@@ -36215,7 +35274,7 @@ exports.default = _google_analytics2.default;
 module.exports = exports['default'];
 
 /***/ }),
-/* 221 */
+/* 211 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36396,7 +35455,7 @@ exports.default = GoogleAnalytics;
 module.exports = exports['default'];
 
 /***/ }),
-/* 222 */
+/* 212 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36479,6 +35538,992 @@ exports.default = ClickToPausePlugin;
 module.exports = exports['default'];
 
 /***/ }),
+/* 213 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _stringify = __webpack_require__(88);
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
+var _classCallCheck2 = __webpack_require__(0);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__(1);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _createClass2 = __webpack_require__(3);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _inherits2 = __webpack_require__(2);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _utils = __webpack_require__(5);
+
+var _vendor = __webpack_require__(60);
+
+var _events = __webpack_require__(4);
+
+var _events2 = _interopRequireDefault(_events);
+
+var _ui_core_plugin = __webpack_require__(23);
+
+var _ui_core_plugin2 = _interopRequireDefault(_ui_core_plugin);
+
+var _browser = __webpack_require__(14);
+
+var _browser2 = _interopRequireDefault(_browser);
+
+var _mediator = __webpack_require__(31);
+
+var _mediator2 = _interopRequireDefault(_mediator);
+
+var _template = __webpack_require__(7);
+
+var _template2 = _interopRequireDefault(_template);
+
+var _playback = __webpack_require__(10);
+
+var _playback2 = _interopRequireDefault(_playback);
+
+var _clapprZepto = __webpack_require__(6);
+
+var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
+
+__webpack_require__(214);
+
+var _mediaControl = __webpack_require__(216);
+
+var _mediaControl2 = _interopRequireDefault(_mediaControl);
+
+var _play = __webpack_require__(64);
+
+var _play2 = _interopRequireDefault(_play);
+
+var _pause = __webpack_require__(97);
+
+var _pause2 = _interopRequireDefault(_pause);
+
+var _stop = __webpack_require__(217);
+
+var _stop2 = _interopRequireDefault(_stop);
+
+var _volume = __webpack_require__(218);
+
+var _volume2 = _interopRequireDefault(_volume);
+
+var _mute = __webpack_require__(219);
+
+var _mute2 = _interopRequireDefault(_mute);
+
+var _expand = __webpack_require__(220);
+
+var _expand2 = _interopRequireDefault(_expand);
+
+var _shrink = __webpack_require__(221);
+
+var _shrink2 = _interopRequireDefault(_shrink);
+
+var _hd = __webpack_require__(222);
+
+var _hd2 = _interopRequireDefault(_hd);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var MediaControl = function (_UICorePlugin) {
+  (0, _inherits3.default)(MediaControl, _UICorePlugin);
+  (0, _createClass3.default)(MediaControl, [{
+    key: 'name',
+    get: function get() {
+      return 'media_control';
+    }
+  }, {
+    key: 'disabled',
+    get: function get() {
+      var playbackIsNOOP = this.container && this.container.getPlaybackType() === _playback2.default.NO_OP;
+      return this.userDisabled || playbackIsNOOP;
+    }
+  }, {
+    key: 'attributes',
+    get: function get() {
+      return {
+        'class': 'media-control',
+        'data-media-control': ''
+      };
+    }
+  }, {
+    key: 'events',
+    get: function get() {
+      return {
+        'click [data-play]': 'play',
+        'click [data-pause]': 'pause',
+        'click [data-playpause]': 'togglePlayPause',
+        'click [data-stop]': 'stop',
+        'click [data-playstop]': 'togglePlayStop',
+        'click [data-fullscreen]': 'toggleFullscreen',
+        'click .bar-container[data-seekbar]': 'seek',
+        'click .bar-container[data-volume]': 'onVolumeClick',
+        'click .drawer-icon[data-volume]': 'toggleMute',
+        'mouseenter .drawer-container[data-volume]': 'showVolumeBar',
+        'mouseleave .drawer-container[data-volume]': 'hideVolumeBar',
+        'mousedown .bar-container[data-volume]': 'startVolumeDrag',
+        'mousemove .bar-container[data-volume]': 'mousemoveOnVolumeBar',
+        'mousedown .bar-scrubber[data-seekbar]': 'startSeekDrag',
+        'mousemove .bar-container[data-seekbar]': 'mousemoveOnSeekBar',
+        'mouseleave .bar-container[data-seekbar]': 'mouseleaveOnSeekBar',
+        'mouseenter .media-control-layer[data-controls]': 'setUserKeepVisible',
+        'mouseleave .media-control-layer[data-controls]': 'resetUserKeepVisible'
+      };
+    }
+  }, {
+    key: 'template',
+    get: function get() {
+      return (0, _template2.default)(_mediaControl2.default);
+    }
+  }, {
+    key: 'volume',
+    get: function get() {
+      return this.container && this.container.isReady ? this.container.volume : this.intendedVolume;
+    }
+  }, {
+    key: 'muted',
+    get: function get() {
+      return this.volume === 0;
+    }
+  }]);
+
+  function MediaControl(core) {
+    (0, _classCallCheck3.default)(this, MediaControl);
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, _UICorePlugin.call(this, core));
+
+    _this.persistConfig = _this.options.persistConfig;
+    _this.container = _this.core.activeContainer;
+    _this.currentPositionValue = null;
+    _this.currentDurationValue = null;
+    _this.keepVisible = false;
+    _this.fullScreenOnVideoTagSupported = null; // unknown
+    _this.setInitialVolume();
+    _this.settings = {
+      left: ['play', 'stop', 'pause'],
+      right: ['volume'],
+      default: ['position', 'seekbar', 'duration']
+    };
+    _this.kibo = new _vendor.Kibo(_this.options.focusElement);
+    _this.bindKeyEvents();
+
+    if (_this.container) {
+      if (!_clapprZepto2.default.isEmptyObject(_this.container.settings)) _this.settings = _clapprZepto2.default.extend({}, _this.container.settings);
+    } else {
+      _this.settings = {};
+    }
+
+    _this.userDisabled = false;
+    if (_this.container && _this.container.mediaControlDisabled || _this.options.chromeless) _this.disable();
+
+    _this.stopDragHandler = function (event) {
+      return _this.stopDrag(event);
+    };
+    _this.updateDragHandler = function (event) {
+      return _this.updateDrag(event);
+    };
+    (0, _clapprZepto2.default)(document).bind('mouseup', _this.stopDragHandler);
+    (0, _clapprZepto2.default)(document).bind('mousemove', _this.updateDragHandler);
+    return _this;
+  }
+
+  MediaControl.prototype.getExternalInterface = function getExternalInterface() {
+    var _this2 = this;
+
+    return {
+      setVolume: this.setVolume,
+      getVolume: function getVolume() {
+        return _this2.volume;
+      }
+    };
+  };
+
+  MediaControl.prototype.bindEvents = function bindEvents() {
+    var _this3 = this;
+
+    this.listenTo(this.core, _events2.default.CORE_ACTIVE_CONTAINER_CHANGED, this.setContainer);
+    this.listenTo(this.core, _events2.default.CORE_MOUSE_MOVE, this.show);
+    this.listenTo(this.core, _events2.default.CORE_MOUSE_LEAVE, function () {
+      return _this3.hide(_this3.options.hideMediaControlDelay);
+    });
+    this.listenTo(this.core, _events2.default.CORE_FULLSCREEN, this.show);
+    this.listenTo(this.core, _events2.default.CORE_OPTIONS_CHANGE, this.configure);
+    _mediator2.default.on(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.playerResize, this);
+    this.container && this.bindContainerEvents();
+  };
+
+  MediaControl.prototype.bindContainerEvents = function bindContainerEvents() {
+    this.listenTo(this.container, _events2.default.CONTAINER_PLAY, this.changeTogglePlay);
+    this.listenTo(this.container, _events2.default.CONTAINER_PAUSE, this.changeTogglePlay);
+    this.listenTo(this.container, _events2.default.CONTAINER_STOP, this.changeTogglePlay);
+    this.listenTo(this.container, _events2.default.CONTAINER_DBLCLICK, this.toggleFullscreen);
+    this.listenTo(this.container, _events2.default.CONTAINER_TIMEUPDATE, this.onTimeUpdate);
+    this.listenTo(this.container, _events2.default.CONTAINER_PROGRESS, this.updateProgressBar);
+    this.listenTo(this.container, _events2.default.CONTAINER_SETTINGSUPDATE, this.settingsUpdate);
+    this.listenTo(this.container, _events2.default.CONTAINER_PLAYBACKDVRSTATECHANGED, this.settingsUpdate);
+    this.listenTo(this.container, _events2.default.CONTAINER_HIGHDEFINITIONUPDATE, this.highDefinitionUpdate);
+    this.listenTo(this.container, _events2.default.CONTAINER_MEDIACONTROL_DISABLE, this.disable);
+    this.listenTo(this.container, _events2.default.CONTAINER_MEDIACONTROL_ENABLE, this.enable);
+    this.listenTo(this.container, _events2.default.CONTAINER_ENDED, this.ended);
+    this.listenTo(this.container, _events2.default.CONTAINER_VOLUME, this.onVolumeChanged);
+    this.listenTo(this.container, _events2.default.CONTAINER_OPTIONS_CHANGE, this.setInitialVolume);
+    if (this.container.playback.el.nodeName.toLowerCase() === 'video') {
+      // wait until the metadata has loaded and then check if fullscreen on video tag is supported
+      this.listenToOnce(this.container, _events2.default.CONTAINER_LOADEDMETADATA, this.onLoadedMetadataOnVideoTag);
+    }
+  };
+
+  MediaControl.prototype.disable = function disable() {
+    this.userDisabled = true;
+    this.hide();
+    this.unbindKeyEvents();
+    this.$el.hide();
+  };
+
+  MediaControl.prototype.enable = function enable() {
+    if (this.options.chromeless) return;
+    this.userDisabled = false;
+    this.bindKeyEvents();
+    this.show();
+  };
+
+  MediaControl.prototype.play = function play() {
+    this.container.play();
+  };
+
+  MediaControl.prototype.pause = function pause() {
+    this.container.pause();
+  };
+
+  MediaControl.prototype.stop = function stop() {
+    this.container.stop();
+  };
+
+  MediaControl.prototype.setInitialVolume = function setInitialVolume() {
+    var initialVolume = this.persistConfig ? _utils.Config.restore('volume') : 100;
+    var options = this.container && this.container.options || this.options;
+    this.setVolume(options.mute ? 0 : initialVolume, true);
+  };
+
+  MediaControl.prototype.onVolumeChanged = function onVolumeChanged() {
+    this.updateVolumeUI();
+  };
+
+  MediaControl.prototype.onLoadedMetadataOnVideoTag = function onLoadedMetadataOnVideoTag() {
+    var video = this.container.playback.el;
+    // video.webkitSupportsFullscreen is deprecated but iOS appears to only use this
+    // see https://github.com/clappr/clappr/issues/1127
+    if (!_utils.Fullscreen.fullscreenEnabled() && video.webkitSupportsFullscreen) {
+      this.fullScreenOnVideoTagSupported = true;
+      this.settingsUpdate();
+    }
+  };
+
+  MediaControl.prototype.updateVolumeUI = function updateVolumeUI() {
+    // this will be called after a render
+    if (!this.rendered) return;
+
+    // update volume bar scrubber/fill on bar mode
+    this.$volumeBarContainer.find('.bar-fill-2').css({});
+    var containerWidth = this.$volumeBarContainer.width();
+    var barWidth = this.$volumeBarBackground.width();
+    var offset = (containerWidth - barWidth) / 2.0;
+    var pos = barWidth * this.volume / 100.0 + offset;
+    this.$volumeBarFill.css({ width: this.volume + '%' });
+    this.$volumeBarScrubber.css({ left: pos });
+
+    // update volume bar segments on segmented bar mode
+    this.$volumeBarContainer.find('.segmented-bar-element').removeClass('fill');
+    var item = Math.ceil(this.volume / 10.0);
+    this.$volumeBarContainer.find('.segmented-bar-element').slice(0, item).addClass('fill');
+    this.$volumeIcon.html('');
+    this.$volumeIcon.removeClass('muted');
+    if (!this.muted) {
+      this.$volumeIcon.append(_volume2.default);
+    } else {
+      this.$volumeIcon.append(_mute2.default);
+      this.$volumeIcon.addClass('muted');
+    }
+    this.applyButtonStyle(this.$volumeIcon);
+  };
+
+  MediaControl.prototype.changeTogglePlay = function changeTogglePlay() {
+    this.$playPauseToggle.html('');
+    this.$playStopToggle.html('');
+    if (this.container && this.container.isPlaying()) {
+      this.$playPauseToggle.append(_pause2.default);
+      this.$playStopToggle.append(_stop2.default);
+      this.trigger(_events2.default.MEDIACONTROL_PLAYING);
+    } else {
+      this.$playPauseToggle.append(_play2.default);
+      this.$playStopToggle.append(_play2.default);
+      this.trigger(_events2.default.MEDIACONTROL_NOTPLAYING);
+      _browser2.default.isMobile && this.show();
+    }
+    this.applyButtonStyle(this.$playPauseToggle);
+    this.applyButtonStyle(this.$playStopToggle);
+  };
+
+  MediaControl.prototype.mousemoveOnSeekBar = function mousemoveOnSeekBar(event) {
+    if (this.settings.seekEnabled) {
+      var offsetX = event.pageX - this.$seekBarContainer.offset().left - this.$seekBarHover.width() / 2;
+      this.$seekBarHover.css({ left: offsetX });
+    }
+    this.trigger(_events2.default.MEDIACONTROL_MOUSEMOVE_SEEKBAR, event);
+  };
+
+  MediaControl.prototype.mouseleaveOnSeekBar = function mouseleaveOnSeekBar(event) {
+    this.trigger(_events2.default.MEDIACONTROL_MOUSELEAVE_SEEKBAR, event);
+  };
+
+  MediaControl.prototype.onVolumeClick = function onVolumeClick(event) {
+    this.setVolume(this.getVolumeFromUIEvent(event));
+  };
+
+  MediaControl.prototype.mousemoveOnVolumeBar = function mousemoveOnVolumeBar(event) {
+    this.draggingVolumeBar && this.setVolume(this.getVolumeFromUIEvent(event));
+  };
+
+  MediaControl.prototype.playerResize = function playerResize(size) {
+    this.$fullscreenToggle.html('');
+    var icon = _utils.Fullscreen.isFullscreen() ? _shrink2.default : _expand2.default;
+    this.$fullscreenToggle.append(icon);
+    this.applyButtonStyle(this.$fullscreenToggle);
+    this.$el.find('.media-control').length !== 0 && this.$el.removeClass('w320');
+    if (size.width <= 320 || this.options.hideVolumeBar) this.$el.addClass('w320');
+  };
+
+  MediaControl.prototype.togglePlayPause = function togglePlayPause() {
+    this.container.isPlaying() ? this.container.pause() : this.container.play();
+    return false;
+  };
+
+  MediaControl.prototype.togglePlayStop = function togglePlayStop() {
+    this.container.isPlaying() ? this.container.stop() : this.container.play();
+  };
+
+  MediaControl.prototype.startSeekDrag = function startSeekDrag(event) {
+    if (!this.settings.seekEnabled) return;
+    this.draggingSeekBar = true;
+    this.$el.addClass('dragging');
+    this.$seekBarLoaded.addClass('media-control-notransition');
+    this.$seekBarPosition.addClass('media-control-notransition');
+    this.$seekBarScrubber.addClass('media-control-notransition');
+    event && event.preventDefault();
+  };
+
+  MediaControl.prototype.startVolumeDrag = function startVolumeDrag(event) {
+    this.draggingVolumeBar = true;
+    this.$el.addClass('dragging');
+    event && event.preventDefault();
+  };
+
+  MediaControl.prototype.stopDrag = function stopDrag(event) {
+    this.draggingSeekBar && this.seek(event);
+    this.$el.removeClass('dragging');
+    this.$seekBarLoaded.removeClass('media-control-notransition');
+    this.$seekBarPosition.removeClass('media-control-notransition');
+    this.$seekBarScrubber.removeClass('media-control-notransition dragging');
+    this.draggingSeekBar = false;
+    this.draggingVolumeBar = false;
+  };
+
+  MediaControl.prototype.updateDrag = function updateDrag(event) {
+    if (this.draggingSeekBar) {
+      event.preventDefault();
+      var offsetX = event.pageX - this.$seekBarContainer.offset().left;
+      var pos = offsetX / this.$seekBarContainer.width() * 100;
+      pos = Math.min(100, Math.max(pos, 0));
+      this.setSeekPercentage(pos);
+    } else if (this.draggingVolumeBar) {
+      event.preventDefault();
+      this.setVolume(this.getVolumeFromUIEvent(event));
+    }
+  };
+
+  MediaControl.prototype.getVolumeFromUIEvent = function getVolumeFromUIEvent(event) {
+    var offsetY = event.pageX - this.$volumeBarContainer.offset().left;
+    var volumeFromUI = offsetY / this.$volumeBarContainer.width() * 100;
+    return volumeFromUI;
+  };
+
+  MediaControl.prototype.toggleMute = function toggleMute() {
+    this.setVolume(this.muted ? 100 : 0);
+  };
+
+  MediaControl.prototype.setVolume = function setVolume(value) {
+    var _this4 = this;
+
+    var isInitialVolume = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+    value = Math.min(100, Math.max(value, 0));
+    // this will hold the intended volume
+    // it may not actually get set to this straight away
+    // if the container is not ready etc
+    this.intendedVolume = value;
+    this.persistConfig && !isInitialVolume && _utils.Config.persist('volume', value);
+    var setWhenContainerReady = function setWhenContainerReady() {
+      if (_this4.container.isReady) {
+        _this4.container.setVolume(value);
+      } else {
+        _this4.listenToOnce(_this4.container, _events2.default.CONTAINER_READY, function () {
+          _this4.container.setVolume(value);
+        });
+      }
+    };
+
+    if (!this.container) this.listenToOnce(this, _events2.default.MEDIACONTROL_CONTAINERCHANGED, function () {
+      return setWhenContainerReady();
+    });else setWhenContainerReady();
+  };
+
+  MediaControl.prototype.toggleFullscreen = function toggleFullscreen() {
+    this.trigger(_events2.default.MEDIACONTROL_FULLSCREEN, this.name);
+    this.container.fullscreen();
+    this.core.toggleFullscreen();
+    this.resetUserKeepVisible();
+  };
+
+  MediaControl.prototype.setContainer = function setContainer(container) {
+    if (this.container) {
+      this.stopListening(this.container);
+      this.fullScreenOnVideoTagSupported = null;
+    }
+    _mediator2.default.off(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.playerResize, this);
+    this.container = container;
+    // set the new container to match the volume of the last one
+    this.setInitialVolume();
+    this.changeTogglePlay();
+    this.bindContainerEvents();
+    this.settingsUpdate();
+    this.container.trigger(_events2.default.CONTAINER_PLAYBACKDVRSTATECHANGED, this.container.isDvrInUse());
+    this.container.mediaControlDisabled && this.disable();
+    this.trigger(_events2.default.MEDIACONTROL_CONTAINERCHANGED);
+  };
+
+  MediaControl.prototype.showVolumeBar = function showVolumeBar() {
+    this.hideVolumeId && clearTimeout(this.hideVolumeId);
+    this.$volumeBarContainer.removeClass('volume-bar-hide');
+  };
+
+  MediaControl.prototype.hideVolumeBar = function hideVolumeBar() {
+    var _this5 = this;
+
+    var timeout = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 400;
+
+    if (!this.$volumeBarContainer) return;
+    if (this.draggingVolumeBar) {
+      this.hideVolumeId = setTimeout(function () {
+        return _this5.hideVolumeBar();
+      }, timeout);
+    } else {
+      this.hideVolumeId && clearTimeout(this.hideVolumeId);
+      this.hideVolumeId = setTimeout(function () {
+        return _this5.$volumeBarContainer.addClass('volume-bar-hide');
+      }, timeout);
+    }
+  };
+
+  MediaControl.prototype.ended = function ended() {
+    this.changeTogglePlay();
+  };
+
+  MediaControl.prototype.updateProgressBar = function updateProgressBar(progress) {
+    var loadedStart = progress.start / progress.total * 100;
+    var loadedEnd = progress.current / progress.total * 100;
+    this.$seekBarLoaded.css({ left: loadedStart + '%', width: loadedEnd - loadedStart + '%' });
+  };
+
+  MediaControl.prototype.onTimeUpdate = function onTimeUpdate(timeProgress) {
+    if (this.draggingSeekBar) return;
+    // TODO why should current time ever be negative?
+    var position = timeProgress.current < 0 ? timeProgress.total : timeProgress.current;
+
+    this.currentPositionValue = position;
+    this.currentDurationValue = timeProgress.total;
+    this.renderSeekBar();
+  };
+
+  MediaControl.prototype.renderSeekBar = function renderSeekBar() {
+    // this will be triggered as soon as these become available
+    if (this.currentPositionValue === null || this.currentDurationValue === null) return;
+
+    // default to 100%
+    this.currentSeekBarPercentage = 100;
+    if (this.container.getPlaybackType() !== _playback2.default.LIVE || this.container.isDvrInUse()) this.currentSeekBarPercentage = this.currentPositionValue / this.currentDurationValue * 100;
+
+    this.setSeekPercentage(this.currentSeekBarPercentage);
+
+    var newPosition = (0, _utils.formatTime)(this.currentPositionValue);
+    var newDuration = (0, _utils.formatTime)(this.currentDurationValue);
+    if (newPosition !== this.displayedPosition) {
+      this.$position.text(newPosition);
+      this.displayedPosition = newPosition;
+    }
+    if (newDuration !== this.displayedDuration) {
+      this.$duration.text(newDuration);
+      this.displayedDuration = newDuration;
+    }
+  };
+
+  MediaControl.prototype.seek = function seek(event) {
+    if (!this.settings.seekEnabled) return;
+    var offsetX = event.pageX - this.$seekBarContainer.offset().left;
+    var pos = offsetX / this.$seekBarContainer.width() * 100;
+    pos = Math.min(100, Math.max(pos, 0));
+    this.container.seekPercentage(pos);
+    this.setSeekPercentage(pos);
+    return false;
+  };
+
+  MediaControl.prototype.setKeepVisible = function setKeepVisible() {
+    this.keepVisible = true;
+  };
+
+  MediaControl.prototype.resetKeepVisible = function resetKeepVisible() {
+    this.keepVisible = false;
+  };
+
+  MediaControl.prototype.setUserKeepVisible = function setUserKeepVisible() {
+    this.userKeepVisible = true;
+  };
+
+  MediaControl.prototype.resetUserKeepVisible = function resetUserKeepVisible() {
+    this.userKeepVisible = false;
+  };
+
+  MediaControl.prototype.isVisible = function isVisible() {
+    return !this.$el.hasClass('media-control-hide');
+  };
+
+  MediaControl.prototype.show = function show(event) {
+    var _this6 = this;
+
+    if (this.disabled) return;
+
+    var timeout = 2000;
+    var mousePointerMoved = event && event.clientX !== this.lastMouseX && event.clientY !== this.lastMouseY;
+    if (!event || mousePointerMoved || navigator.userAgent.match(/firefox/i)) {
+      clearTimeout(this.hideId);
+      this.$el.show();
+      this.trigger(_events2.default.MEDIACONTROL_SHOW, this.name);
+      this.container.trigger(_events2.default.CONTAINER_MEDIACONTROL_SHOW, this.name);
+      this.$el.removeClass('media-control-hide');
+      this.hideId = setTimeout(function () {
+        return _this6.hide();
+      }, timeout);
+      if (event) {
+        this.lastMouseX = event.clientX;
+        this.lastMouseY = event.clientY;
+      }
+    }
+    var showing = true;
+    this.updateCursorStyle(showing);
+  };
+
+  MediaControl.prototype.hide = function hide() {
+    var _this7 = this;
+
+    var delay = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+
+    if (!this.isVisible()) return;
+
+    var timeout = delay || 2000;
+    clearTimeout(this.hideId);
+    if (!this.disabled && this.options.hideMediaControl === false) return;
+
+    var hasKeepVisibleRequested = this.userKeepVisible || this.keepVisible;
+    var hasDraggingAction = this.draggingSeekBar || this.draggingVolumeBar;
+
+    if (!this.disabled && (delay || hasKeepVisibleRequested || hasDraggingAction)) {
+      this.hideId = setTimeout(function () {
+        return _this7.hide();
+      }, timeout);
+    } else {
+      this.trigger(_events2.default.MEDIACONTROL_HIDE, this.name);
+      this.container.trigger(_events2.default.CONTAINER_MEDIACONTROL_HIDE, this.name);
+      this.$el.addClass('media-control-hide');
+      this.hideVolumeBar(0);
+      var showing = false;
+      this.updateCursorStyle(showing);
+    }
+  };
+
+  MediaControl.prototype.updateCursorStyle = function updateCursorStyle(showing) {
+    if (showing) this.core.$el.removeClass('nocursor');else if (_utils.Fullscreen.isFullscreen()) this.core.$el.addClass('nocursor');
+  };
+
+  MediaControl.prototype.settingsUpdate = function settingsUpdate() {
+    var newSettings = this.getSettings();
+    if (newSettings && !this.fullScreenOnVideoTagSupported && !_utils.Fullscreen.fullscreenEnabled()) {
+      // remove fullscreen from settings if it is present
+      newSettings.default && (0, _utils.removeArrayItem)(newSettings.default, 'fullscreen');
+      newSettings.left && (0, _utils.removeArrayItem)(newSettings.left, 'fullscreen');
+      newSettings.right && (0, _utils.removeArrayItem)(newSettings.right, 'fullscreen');
+    }
+    var settingsChanged = (0, _stringify2.default)(this.settings) !== (0, _stringify2.default)(newSettings);
+    if (settingsChanged) {
+      this.settings = newSettings;
+      this.render();
+    }
+  };
+
+  MediaControl.prototype.getSettings = function getSettings() {
+    return _clapprZepto2.default.extend(true, {}, this.container.settings);
+  };
+
+  MediaControl.prototype.highDefinitionUpdate = function highDefinitionUpdate(isHD) {
+    this.isHD = isHD;
+    var method = isHD ? 'addClass' : 'removeClass';
+    this.$hdIndicator[method]('enabled');
+  };
+
+  MediaControl.prototype.createCachedElements = function createCachedElements() {
+    var $layer = this.$el.find('.media-control-layer');
+    this.$duration = $layer.find('.media-control-indicator[data-duration]');
+    this.$fullscreenToggle = $layer.find('button.media-control-button[data-fullscreen]');
+    this.$playPauseToggle = $layer.find('button.media-control-button[data-playpause]');
+    this.$playStopToggle = $layer.find('button.media-control-button[data-playstop]');
+    this.$position = $layer.find('.media-control-indicator[data-position]');
+    this.$seekBarContainer = $layer.find('.bar-container[data-seekbar]');
+    this.$seekBarHover = $layer.find('.bar-hover[data-seekbar]');
+    this.$seekBarLoaded = $layer.find('.bar-fill-1[data-seekbar]');
+    this.$seekBarPosition = $layer.find('.bar-fill-2[data-seekbar]');
+    this.$seekBarScrubber = $layer.find('.bar-scrubber[data-seekbar]');
+    this.$volumeBarContainer = $layer.find('.bar-container[data-volume]');
+    this.$volumeContainer = $layer.find('.drawer-container[data-volume]');
+    this.$volumeIcon = $layer.find('.drawer-icon[data-volume]');
+    this.$volumeBarBackground = this.$el.find('.bar-background[data-volume]');
+    this.$volumeBarFill = this.$el.find('.bar-fill-1[data-volume]');
+    this.$volumeBarScrubber = this.$el.find('.bar-scrubber[data-volume]');
+    this.$hdIndicator = this.$el.find('button.media-control-button[data-hd-indicator]');
+    this.resetIndicators();
+    this.initializeIcons();
+  };
+
+  MediaControl.prototype.resetIndicators = function resetIndicators() {
+    this.displayedPosition = this.$position.text();
+    this.displayedDuration = this.$duration.text();
+  };
+
+  MediaControl.prototype.initializeIcons = function initializeIcons() {
+    var $layer = this.$el.find('.media-control-layer');
+    $layer.find('button.media-control-button[data-play]').append(_play2.default);
+    $layer.find('button.media-control-button[data-pause]').append(_pause2.default);
+    $layer.find('button.media-control-button[data-stop]').append(_stop2.default);
+    this.$playPauseToggle.append(_play2.default);
+    this.$playStopToggle.append(_play2.default);
+    this.$volumeIcon.append(_volume2.default);
+    this.$fullscreenToggle.append(_expand2.default);
+    this.$hdIndicator.append(_hd2.default);
+  };
+
+  MediaControl.prototype.setSeekPercentage = function setSeekPercentage(value) {
+    value = Math.max(Math.min(value, 100.0), 0);
+    // not changed since last update
+    if (this.displayedSeekBarPercentage === value) return;
+
+    this.displayedSeekBarPercentage = value;
+    this.$seekBarPosition.removeClass('media-control-notransition');
+    this.$seekBarScrubber.removeClass('media-control-notransition');
+    this.$seekBarPosition.css({ width: value + '%' });
+    this.$seekBarScrubber.css({ left: value + '%' });
+  };
+
+  MediaControl.prototype.seekRelative = function seekRelative(delta) {
+    if (!this.settings.seekEnabled) return;
+
+    var currentTime = this.container.getCurrentTime();
+    var duration = this.container.getDuration();
+    var position = Math.min(Math.max(currentTime + delta, 0), duration);
+    position = Math.min(position * 100 / duration, 100);
+    this.container.seekPercentage(position);
+  };
+
+  MediaControl.prototype.bindKeyAndShow = function bindKeyAndShow(key, callback) {
+    var _this8 = this;
+
+    this.kibo.down(key, function () {
+      _this8.show();
+      return callback();
+    });
+  };
+
+  MediaControl.prototype.bindKeyEvents = function bindKeyEvents() {
+    var _this9 = this;
+
+    if (_browser2.default.isMobile || this.options.disableKeyboardShortcuts) return;
+
+    this.unbindKeyEvents();
+    this.kibo = new _vendor.Kibo(this.options.focusElement || this.options.parentElement);
+    this.bindKeyAndShow('space', function () {
+      return _this9.togglePlayPause();
+    });
+    this.bindKeyAndShow('left', function () {
+      return _this9.seekRelative(-5);
+    });
+    this.bindKeyAndShow('right', function () {
+      return _this9.seekRelative(5);
+    });
+    this.bindKeyAndShow('shift left', function () {
+      return _this9.seekRelative(-10);
+    });
+    this.bindKeyAndShow('shift right', function () {
+      return _this9.seekRelative(10);
+    });
+    this.bindKeyAndShow('shift ctrl left', function () {
+      return _this9.seekRelative(-15);
+    });
+    this.bindKeyAndShow('shift ctrl right', function () {
+      return _this9.seekRelative(15);
+    });
+    var keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+    keys.forEach(function (i) {
+      _this9.bindKeyAndShow(i, function () {
+        _this9.settings.seekEnabled && _this9.container.seekPercentage(i * 10);
+      });
+    });
+  };
+
+  MediaControl.prototype.unbindKeyEvents = function unbindKeyEvents() {
+    if (this.kibo) {
+      this.kibo.off('space');
+      this.kibo.off('left');
+      this.kibo.off('right');
+      this.kibo.off('shift left');
+      this.kibo.off('shift right');
+      this.kibo.off('shift ctrl left');
+      this.kibo.off('shift ctrl right');
+      this.kibo.off(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']);
+    }
+  };
+
+  MediaControl.prototype.parseColors = function parseColors() {
+    if (this.options.mediacontrol) {
+      this.buttonsColor = this.options.mediacontrol.buttons;
+      var seekbarColor = this.options.mediacontrol.seekbar;
+      this.$el.find('.bar-fill-2[data-seekbar]').css('background-color', seekbarColor);
+      this.$el.find('.media-control-icon svg path').css('fill', this.buttonsColor);
+      this.$el.find('.segmented-bar-element[data-volume]').css('boxShadow', 'inset 2px 0 0 ' + this.buttonsColor);
+    }
+  };
+
+  MediaControl.prototype.applyButtonStyle = function applyButtonStyle(element) {
+    this.buttonsColor && element && (0, _clapprZepto2.default)(element).find('svg path').css('fill', this.buttonsColor);
+  };
+
+  MediaControl.prototype.destroy = function destroy() {
+    (0, _clapprZepto2.default)(document).unbind('mouseup', this.stopDragHandler);
+    (0, _clapprZepto2.default)(document).unbind('mousemove', this.updateDragHandler);
+    this.unbindKeyEvents();
+    this.stopListening();
+    _UICorePlugin.prototype.destroy.call(this);
+  };
+
+  /**
+   * enables to configure the media control after its creation
+   * @method configure
+   * @param {Object} options all the options to change in form of a javascript object
+   */
+
+
+  MediaControl.prototype.configure = function configure() {
+    this.options.chromeless ? this.disable() : this.enable();
+    this.trigger(_events2.default.MEDIACONTROL_OPTIONS_CHANGE);
+  };
+
+  MediaControl.prototype.render = function render() {
+    var _this10 = this;
+
+    var timeout = this.options.hideMediaControlDelay || 2000;
+    this.settings && this.$el.html(this.template({ settings: this.settings }));
+    this.createCachedElements();
+    this.$playPauseToggle.addClass('paused');
+    this.$playStopToggle.addClass('stopped');
+
+    this.changeTogglePlay();
+
+    if (this.container) {
+      this.hideId = setTimeout(function () {
+        return _this10.hide();
+      }, timeout);
+      this.disabled && this.hide();
+    }
+
+    // Video volume cannot be changed with Safari on mobile devices
+    // Display mute/unmute icon only if Safari version >= 10
+    if (_browser2.default.isSafari && _browser2.default.isMobile) {
+      if (_browser2.default.version < 10) this.$volumeContainer.css('display', 'none');else this.$volumeBarContainer.css('display', 'none');
+    }
+
+    this.$seekBarPosition.addClass('media-control-notransition');
+    this.$seekBarScrubber.addClass('media-control-notransition');
+
+    var previousSeekPercentage = 0;
+    if (this.displayedSeekBarPercentage) previousSeekPercentage = this.displayedSeekBarPercentage;
+
+    this.displayedSeekBarPercentage = null;
+    this.setSeekPercentage(previousSeekPercentage);
+
+    process.nextTick(function () {
+      !_this10.settings.seekEnabled && _this10.$seekBarContainer.addClass('seek-disabled');
+      !_browser2.default.isMobile && !_this10.options.disableKeyboardShortcuts && _this10.bindKeyEvents();
+      _this10.playerResize({ width: _this10.options.width, height: _this10.options.height });
+      _this10.hideVolumeBar(0);
+    });
+
+    this.parseColors();
+    this.highDefinitionUpdate(this.isHD);
+
+    this.core.$el.append(this.el);
+
+    this.rendered = true;
+    this.updateVolumeUI();
+    this.trigger(_events2.default.MEDIACONTROL_RENDERED);
+    return this;
+  };
+
+  return MediaControl;
+}(_ui_core_plugin2.default); // Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+/**
+ * The MediaControl is responsible for displaying the Player controls.
+ */
+
+exports.default = MediaControl;
+
+
+MediaControl.extend = function (properties) {
+  return (0, _utils.extend)(MediaControl, properties);
+};
+module.exports = exports['default'];
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(62)))
+
+/***/ }),
+/* 214 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(215);
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"singleton":true,"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(9)(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {
+	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./media-control.scss", function() {
+		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./media-control.scss");
+
+		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+
+		var locals = (function(a, b) {
+			var key, idx = 0;
+
+			for(key in a) {
+				if(!b || a[key] !== b[key]) return false;
+				idx++;
+			}
+
+			for(key in b) idx--;
+
+			return idx === 0;
+		}(content.locals, newContent.locals));
+
+		if(!locals) throw new Error('Aborting CSS HMR due to changed css-modules locals.');
+
+		update(newContent);
+	});
+
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 215 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var escape = __webpack_require__(81);
+exports = module.exports = __webpack_require__(8)(false);
+// imports
+
+
+// module
+exports.push([module.i, ".media-control-notransition {\n  transition: none !important; }\n\n.media-control[data-media-control] {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  z-index: 9999;\n  pointer-events: none; }\n  .media-control[data-media-control].dragging {\n    pointer-events: auto;\n    cursor: -webkit-grabbing !important;\n    cursor: grabbing !important;\n    cursor: url(" + escape(__webpack_require__(96)) + "), move; }\n    .media-control[data-media-control].dragging * {\n      cursor: -webkit-grabbing !important;\n      cursor: grabbing !important;\n      cursor: url(" + escape(__webpack_require__(96)) + "), move; }\n  .media-control[data-media-control] .media-control-background[data-background] {\n    position: absolute;\n    height: 40%;\n    width: 100%;\n    bottom: 0;\n    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));\n    transition: opacity 0.6s ease-out; }\n  .media-control[data-media-control] .media-control-icon {\n    line-height: 0;\n    letter-spacing: 0;\n    speak: none;\n    color: #fff;\n    opacity: 0.5;\n    vertical-align: middle;\n    text-align: left;\n    transition: all 0.1s ease; }\n  .media-control[data-media-control] .media-control-icon:hover {\n    color: white;\n    opacity: 0.75;\n    text-shadow: rgba(255, 255, 255, 0.8) 0 0 5px; }\n  .media-control[data-media-control].media-control-hide .media-control-background[data-background] {\n    opacity: 0; }\n  .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] {\n    bottom: -50px; }\n    .media-control[data-media-control].media-control-hide .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n      opacity: 0; }\n  .media-control[data-media-control] .media-control-layer[data-controls] {\n    position: absolute;\n    bottom: 7px;\n    width: 100%;\n    height: 32px;\n    font-size: 0;\n    vertical-align: middle;\n    pointer-events: auto;\n    transition: bottom 0.4s ease-out; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-left-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      left: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-center-panel[data-media-control] {\n      height: 100%;\n      text-align: center;\n      line-height: 32px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-right-panel[data-media-control] {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      height: 100%; }\n    .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button {\n      background-color: transparent;\n      border: 0;\n      margin: 0 6px;\n      padding: 0;\n      cursor: pointer;\n      display: inline-block;\n      width: 32px;\n      height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg {\n        width: 100%;\n        height: 22px; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button svg path {\n          fill: white; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button:focus {\n        outline: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-play] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-pause] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-stop] {\n        float: left;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-fullscreen] {\n        float: right;\n        background-color: transparent;\n        border: 0;\n        height: 100%; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator] {\n        background-color: transparent;\n        border: 0;\n        cursor: default;\n        display: none;\n        float: right;\n        height: 100%; }\n        .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled {\n          display: block;\n          opacity: 1.0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-hd-indicator].enabled:hover {\n            opacity: 1.0;\n            text-shadow: none; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playpause] {\n        float: left; }\n      .media-control[data-media-control] .media-control-layer[data-controls] button.media-control-button[data-playstop] {\n        float: left; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position], .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      display: inline-block;\n      font-size: 10px;\n      color: white;\n      cursor: default;\n      line-height: 32px;\n      position: relative; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-position] {\n      margin: 0 6px 0 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration] {\n      color: rgba(255, 255, 255, 0.5);\n      margin-right: 6px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .media-control-indicator[data-duration]:before {\n        content: \"|\";\n        margin-right: 7px; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] {\n      position: absolute;\n      top: -20px;\n      left: 0;\n      display: inline-block;\n      vertical-align: middle;\n      width: 100%;\n      height: 25px;\n      cursor: pointer; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] {\n        width: 100%;\n        height: 1px;\n        position: relative;\n        top: 12px;\n        background-color: #666666; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-1[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #c2c2c2;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-fill-2[data-seekbar] {\n          position: absolute;\n          top: 0;\n          left: 0;\n          width: 0;\n          height: 100%;\n          background-color: #005aff;\n          transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0;\n          position: absolute;\n          top: -3px;\n          width: 5px;\n          height: 7px;\n          background-color: rgba(255, 255, 255, 0.5);\n          transition: opacity 0.1s ease; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar]:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n        opacity: 1; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled {\n        cursor: default; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar].seek-disabled:hover .bar-background[data-seekbar] .bar-hover[data-seekbar] {\n          opacity: 0; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] {\n        position: absolute;\n        -webkit-transform: translateX(-50%);\n                transform: translateX(-50%);\n        top: 2px;\n        left: 0;\n        width: 20px;\n        height: 20px;\n        opacity: 1;\n        transition: all 0.1s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .bar-container[data-seekbar] .bar-scrubber[data-seekbar] .bar-scrubber-icon[data-seekbar] {\n          position: absolute;\n          left: 6px;\n          top: 6px;\n          width: 8px;\n          height: 8px;\n          border-radius: 10px;\n          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n          background-color: white; }\n    .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] {\n      float: right;\n      display: inline-block;\n      height: 32px;\n      cursor: pointer;\n      margin: 0 6px;\n      box-sizing: border-box; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] {\n        float: left;\n        bottom: 0; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] {\n          background-color: transparent;\n          border: 0;\n          box-sizing: content-box;\n          width: 32px;\n          height: 32px;\n          opacity: 0.5; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume]:hover {\n            opacity: 0.75; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg {\n            height: 24px;\n            position: relative;\n            top: 3px; }\n            .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume] svg path {\n              fill: white; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .drawer-icon-container[data-volume] .drawer-icon[data-volume].muted svg {\n            margin-left: 2px; }\n      .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] {\n        float: left;\n        position: relative;\n        overflow: hidden;\n        top: 6px;\n        width: 42px;\n        height: 18px;\n        padding: 3px 0;\n        transition: width .2s ease-out; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] {\n          height: 1px;\n          position: relative;\n          top: 7px;\n          margin: 0 3px;\n          background-color: #666666; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-1[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #c2c2c2;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-fill-2[data-volume] {\n            position: absolute;\n            top: 0;\n            left: 0;\n            width: 0;\n            height: 100%;\n            background-color: #005aff;\n            transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-background[data-volume] .bar-hover[data-volume] {\n            opacity: 0;\n            position: absolute;\n            top: -3px;\n            width: 5px;\n            height: 7px;\n            background-color: rgba(255, 255, 255, 0.5);\n            transition: opacity 0.1s ease; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] {\n          position: absolute;\n          -webkit-transform: translateX(-50%);\n                  transform: translateX(-50%);\n          top: 0px;\n          left: 0;\n          width: 20px;\n          height: 20px;\n          opacity: 1;\n          transition: all 0.1s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .bar-scrubber[data-volume] .bar-scrubber-icon[data-volume] {\n            position: absolute;\n            left: 6px;\n            top: 6px;\n            width: 8px;\n            height: 8px;\n            border-radius: 10px;\n            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);\n            background-color: white; }\n        .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume] {\n          float: left;\n          width: 4px;\n          padding-left: 2px;\n          height: 12px;\n          opacity: 0.5;\n          box-shadow: inset 2px 0 0 white;\n          transition: -webkit-transform .2s ease-out;\n          transition: transform .2s ease-out;\n          transition: transform .2s ease-out, -webkit-transform .2s ease-out; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume].fill {\n            box-shadow: inset 2px 0 0 #fff;\n            opacity: 1; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:nth-of-type(1) {\n            padding-left: 0; }\n          .media-control[data-media-control] .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume] .segmented-bar-element[data-volume]:hover {\n            -webkit-transform: scaleY(1.5);\n                    transform: scaleY(1.5); }\n  .media-control[data-media-control].w320 .media-control-layer[data-controls] .drawer-container[data-volume] .bar-container[data-volume].volume-bar-hide {\n    width: 0;\n    height: 12px;\n    top: 9px;\n    padding: 0; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 216 */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"media-control-background\" data-background></div>\n<div class=\"media-control-layer\" data-controls>\n  <%  var renderBar = function(name) { %>\n      <div class=\"bar-container\" data-<%= name %>>\n        <div class=\"bar-background\" data-<%= name %>>\n          <div class=\"bar-fill-1\" data-<%= name %>></div>\n          <div class=\"bar-fill-2\" data-<%= name %>></div>\n          <div class=\"bar-hover\" data-<%= name %>></div>\n        </div>\n        <div class=\"bar-scrubber\" data-<%= name %>>\n          <div class=\"bar-scrubber-icon\" data-<%= name %>></div>\n        </div>\n      </div>\n  <%  }; %>\n  <%  var renderSegmentedBar = function(name, segments) {\n      segments = segments || 10; %>\n    <div class=\"bar-container\" data-<%= name %>>\n    <% for (var i = 0; i < segments; i++) { %>\n      <div class=\"segmented-bar-element\" data-<%= name %>></div>\n    <% } %>\n    </div>\n  <% }; %>\n  <% var renderDrawer = function(name, renderContent) { %>\n      <div class=\"drawer-container\" data-<%= name %>>\n        <div class=\"drawer-icon-container\" data-<%= name %>>\n          <div class=\"drawer-icon media-control-icon\" data-<%= name %>></div>\n          <span class=\"drawer-text\" data-<%= name %>></span>\n        </div>\n        <% renderContent(name); %>\n      </div>\n  <% }; %>\n  <% var renderIndicator = function(name) { %>\n      <div class=\"media-control-indicator\" data-<%= name %>></div>\n  <% }; %>\n  <% var renderButton = function(name) { %>\n    <button type=\"button\" class=\"media-control-button media-control-icon\" data-<%= name %> aria-label=\"<%= name %>\"></button>\n  <% }; %>\n  <%  var templates = {\n        bar: renderBar,\n        segmentedBar: renderSegmentedBar,\n      };\n      var render = function(settingsList) {\n        settingsList.forEach(function(setting) {\n          if(setting === \"seekbar\") {\n            renderBar(setting);\n          } else if (setting === \"volume\") {\n            renderDrawer(setting, settings.volumeBarTemplate ? templates[settings.volumeBarTemplate] : function(name) { return renderSegmentedBar(name); });\n          } else if (setting === \"duration\" || setting === \"position\") {\n            renderIndicator(setting);\n          } else {\n            renderButton(setting);\n          }\n        });\n      }; %>\n  <% if (settings.default && settings.default.length) { %>\n  <div class=\"media-control-center-panel\" data-media-control>\n    <% render(settings.default); %>\n  </div>\n  <% } %>\n  <% if (settings.left && settings.left.length) { %>\n  <div class=\"media-control-left-panel\" data-media-control>\n    <% render(settings.left); %>\n  </div>\n  <% } %>\n  <% if (settings.right && settings.right.length) { %>\n  <div class=\"media-control-right-panel\" data-media-control>\n    <% render(settings.right); %>\n  </div>\n  <% } %>\n</div>\n";
+
+/***/ }),
+/* 217 */
+/***/ (function(module, exports) {
+
+module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M1.712 1.24h12.6v13.52h-12.6z\"></path></svg>"
+
+/***/ }),
+/* 218 */
+/***/ (function(module, exports) {
+
+module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M11.5 11h-.002v1.502L7.798 10H4.5V6h3.297l3.7-2.502V4.5h.003V11zM11 4.49L7.953 6.5H5v3h2.953L11 11.51V4.49z\"></path></svg>"
+
+/***/ }),
+/* 219 */
+/***/ (function(module, exports) {
+
+module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"#010101\" d=\"M9.75 11.51L6.7 9.5H3.75v-3H6.7L9.75 4.49v.664l.497.498V3.498L6.547 6H3.248v4h3.296l3.7 2.502v-2.154l-.497.5v.662zm3-5.165L12.404 6l-1.655 1.653L9.093 6l-.346.345L10.402 8 8.747 9.654l.346.347 1.655-1.653L12.403 10l.348-.346L11.097 8l1.655-1.655z\"></path></svg>"
+
+/***/ }),
+/* 220 */
+/***/ (function(module, exports) {
+
+module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M7.156 8L4 11.156V8.5H3V13h4.5v-1H4.844L8 8.844 7.156 8zM8.5 3v1h2.657L8 7.157 8.846 8 12 4.844V7.5h1V3H8.5z\"></path></svg>"
+
+/***/ }),
+/* 221 */
+/***/ (function(module, exports) {
+
+module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M13.5 3.344l-.844-.844L9.5 5.656V3h-1v4.5H13v-1h-2.656L13.5 3.344zM3 9.5h2.656L2.5 12.656l.844.844L6.5 10.344V13h1V8.5H3v1z\"></path></svg>"
+
+/***/ }),
+/* 222 */
+/***/ (function(module, exports) {
+
+module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\"><path fill=\"#010101\" d=\"M5.375 7.062H2.637V4.26H.502v7.488h2.135V8.9h2.738v2.848h2.133V4.26H5.375v2.802zm5.97-2.81h-2.84v7.496h2.798c2.65 0 4.195-1.607 4.195-3.77v-.022c0-2.162-1.523-3.704-4.154-3.704zm2.06 3.758c0 1.21-.81 1.896-2.03 1.896h-.83V6.093h.83c1.22 0 2.03.696 2.03 1.896v.02z\"></path></svg>"
+
+/***/ }),
 /* 223 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -36505,11 +36550,11 @@ var _inherits2 = __webpack_require__(2);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _ui_core_plugin = __webpack_require__(34);
+var _ui_core_plugin = __webpack_require__(23);
 
 var _ui_core_plugin2 = _interopRequireDefault(_ui_core_plugin);
 
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
@@ -36699,7 +36744,7 @@ if(false) {
 /* 226 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(7)(false);
+exports = module.exports = __webpack_require__(8)(false);
 // imports
 
 
@@ -36756,11 +36801,11 @@ var _inherits2 = __webpack_require__(2);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _ui_core_plugin = __webpack_require__(34);
+var _ui_core_plugin = __webpack_require__(23);
 
 var _ui_core_plugin2 = _interopRequireDefault(_ui_core_plugin);
 
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
@@ -36825,7 +36870,7 @@ var ClosedCaptions = function (_UICorePlugin) {
   }
 
   ClosedCaptions.prototype.bindEvents = function bindEvents() {
-    this.listenTo(this.core.mediaControl, _events2.default.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged);
+    this.listenTo(this.core, _events2.default.CORE_ACTIVE_CONTAINER_CHANGED, this.containerChanged);
     this.listenTo(this.core.mediaControl, _events2.default.MEDIACONTROL_RENDERED, this.render);
     this.listenTo(this.core.mediaControl, _events2.default.MEDIACONTROL_HIDE, this.hideContextMenu);
     this.container = this.core.getCurrentContainer();
@@ -36987,7 +37032,7 @@ if(false) {
 /* 232 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(7)(false);
+exports = module.exports = __webpack_require__(8)(false);
 // imports
 
 
@@ -37036,11 +37081,11 @@ var _clapprZepto = __webpack_require__(6);
 
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-var _play = __webpack_require__(62);
+var _play = __webpack_require__(64);
 
 var _play2 = _interopRequireDefault(_play);
 
-var _pause = __webpack_require__(84);
+var _pause = __webpack_require__(97);
 
 var _pause2 = _interopRequireDefault(_pause);
 
@@ -37086,13 +37131,13 @@ var Favicon = function (_CorePlugin) {
 
   Favicon.prototype.bindEvents = function bindEvents() {
     this.listenTo(this.core, _events2.default.CORE_OPTIONS_CHANGE, this.configure);
-    this.listenTo(this.core.mediaControl, _events2.default.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged);
-    if (this.core.mediaControl.container) this.containerChanged();
+    this.listenTo(this.core, _events2.default.CORE_ACTIVE_CONTAINER_CHANGED, this.containerChanged);
+    this.core.activeContainer && this.containerChanged();
   };
 
   Favicon.prototype.containerChanged = function containerChanged() {
     this._container && this.stopListening(this._container);
-    this._container = this.core.mediaControl.container;
+    this._container = this.core.activeContainer;
     this.listenTo(this._container, _events2.default.CONTAINER_PLAY, this.setPlayIcon);
     this.listenTo(this._container, _events2.default.CONTAINER_PAUSE, this.setPauseIcon);
     this.listenTo(this._container, _events2.default.CONTAINER_STOP, this.resetIcon);
@@ -37204,11 +37249,11 @@ var _inherits3 = _interopRequireDefault(_inherits2);
 
 var _utils = __webpack_require__(5);
 
-var _ui_core_plugin = __webpack_require__(34);
+var _ui_core_plugin = __webpack_require__(23);
 
 var _ui_core_plugin2 = _interopRequireDefault(_ui_core_plugin);
 
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
@@ -37479,7 +37524,7 @@ if(false) {
 /* 238 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(7)(false);
+exports = module.exports = __webpack_require__(8)(false);
 // imports
 
 
@@ -37609,8 +37654,8 @@ var EndVideo = function (_CorePlugin) {
   }
 
   EndVideo.prototype.bindEvents = function bindEvents() {
-    this.listenTo(this.core.mediaControl, _events2.default.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged);
-    var container = this.core.getCurrentContainer();
+    this.listenTo(this.core, _events2.default.CORE_ACTIVE_CONTAINER_CHANGED, this.containerChanged);
+    var container = this.core.activeContainer;
     if (container) {
       this.listenTo(container, _events2.default.CONTAINER_ENDED, this.ended);
       this.listenTo(container, _events2.default.CONTAINER_STOP, this.ended);
@@ -37839,11 +37884,11 @@ var _events = __webpack_require__(4);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _ui_core_plugin = __webpack_require__(34);
+var _ui_core_plugin = __webpack_require__(23);
 
 var _ui_core_plugin2 = _interopRequireDefault(_ui_core_plugin);
 
-var _template = __webpack_require__(8);
+var _template = __webpack_require__(7);
 
 var _template2 = _interopRequireDefault(_template);
 
@@ -37903,7 +37948,7 @@ var ErrorScreen = function (_UICorePlugin) {
 
   ErrorScreen.prototype.bindEvents = function bindEvents() {
     this.listenTo(this.core, _events2.default.ERROR, this.onError);
-    this.listenTo(this.core.mediaControl, _events2.default.MEDIACONTROL_CONTAINERCHANGED, this.onContainerChanged);
+    this.listenTo(this.core, _events2.default.CORE_ACTIVE_CONTAINER_CHANGED, this.onContainerChanged);
   };
 
   ErrorScreen.prototype.bindReload = function bindReload() {
@@ -38041,7 +38086,7 @@ if(false) {
 /* 247 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(7)(false);
+exports = module.exports = __webpack_require__(8)(false);
 // imports
 
 
