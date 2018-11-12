@@ -663,7 +663,7 @@ export default class MediaControl extends UICorePlugin {
    * @param {Object} options all the options to change in form of a javascript object
    */
   configure() {
-    this._options = $.extend(this._options, this.core.options)
+    this.options.chromeless ? this.disable() : this.enable()
     this.trigger(Events.MEDIACONTROL_OPTIONS_CHANGE)
   }
 
