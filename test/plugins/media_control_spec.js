@@ -15,7 +15,7 @@ describe('MediaControl', function() {
     this.container = new Container({ playback: this.playback })
     this.core = new Core({ playerId: 0 })
     this.mediaControl = new MediaControl(this.core)
-    this.core.trigger(Events.CORE_ACTIVE_CONTAINER_CHANGED, this.container)
+    this.core.activeContainer = this.container
     localStorage.removeItem('clappr.localhost.volume')
   })
 
@@ -23,7 +23,7 @@ describe('MediaControl', function() {
     it('can be built muted', function() {
       const container = new Container({ playback: this.playback, mute: true })
       const mediaControl = new MediaControl(this.core)
-      this.core.trigger(Events.CORE_ACTIVE_CONTAINER_CHANGED, container)
+      this.core.activeContainer = container
       expect(mediaControl.muted).to.be.equal(true)
       expect(mediaControl.volume).to.be.equal(0)
     })
@@ -82,7 +82,7 @@ describe('MediaControl', function() {
 
       Object.assign(this.core.options, { persistConfig: true })
       const mediacontrol = new MediaControl(this.core)
-      this.core.trigger(Events.CORE_ACTIVE_CONTAINER_CHANGED, this.container)
+      this.core.activeContainer = this.container
       mediacontrol.setVolume(78)
 
       expect(Config.restore('volume')).to.be.equal(78)
@@ -94,7 +94,7 @@ describe('MediaControl', function() {
       const container = new Container({ playback: this.playback, mute: true })
       const mediacontrol = new MediaControl(this.core)
 
-      this.core.trigger(Events.CORE_ACTIVE_CONTAINER_CHANGED, container)
+      this.core.activeContainer = container
 
       container.configure({ mute: false })
 
@@ -110,7 +110,7 @@ describe('MediaControl', function() {
 
       new MediaControl(this.core)
 
-      this.core.trigger(Events.CORE_ACTIVE_CONTAINER_CHANGED, container)
+      this.core.activeContainer = container
 
       Config.persist.should.not.have.been.called
     })
@@ -130,7 +130,7 @@ describe('MediaControl', function() {
         return Playback.NO_OP
       }
       const mediaControl = new MediaControl(this.core)
-      this.core.trigger(Events.CORE_ACTIVE_CONTAINER_CHANGED, this.container)
+      this.core.activeContainer = this.container
       mediaControl.render()
       mediaControl.enable()
       expect(mediaControl.$el.hasClass('media-control-hide')).to.be.true
@@ -157,7 +157,7 @@ describe('MediaControl', function() {
       const container = new Container({ playback: this.playback, mute: true })
       const mediaControl = new MyMediaControl(this.core)
 
-      this.core.trigger(Events.CORE_ACTIVE_CONTAINER_CHANGED, container)
+      this.core.activeContainer = container
 
       mediaControl.render()
       expect(mediaControl.muted).to.be.equal(true)
