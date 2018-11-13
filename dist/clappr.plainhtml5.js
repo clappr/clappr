@@ -7040,7 +7040,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.3.0"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.3.1"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -14296,6 +14296,16 @@ var MediaControl = function (_UICorePlugin) {
       return this.userDisabled || playbackIsNOOP;
     }
   }, {
+    key: 'container',
+    get: function get() {
+      return this.core && this.core.activeContainer;
+    }
+  }, {
+    key: 'playback',
+    get: function get() {
+      return this.core && this.core.activePlayback;
+    }
+  }, {
     key: 'attributes',
     get: function get() {
       return {
@@ -14350,7 +14360,6 @@ var MediaControl = function (_UICorePlugin) {
     var _this = (0, _possibleConstructorReturn3.default)(this, _UICorePlugin.call(this, core));
 
     _this.persistConfig = _this.options.persistConfig;
-    _this.container = _this.core.activeContainer;
     _this.currentPositionValue = null;
     _this.currentDurationValue = null;
     _this.keepVisible = false;
@@ -14398,7 +14407,8 @@ var MediaControl = function (_UICorePlugin) {
   MediaControl.prototype.bindEvents = function bindEvents() {
     var _this3 = this;
 
-    this.listenTo(this.core, _events2.default.CORE_ACTIVE_CONTAINER_CHANGED, this.setContainer);
+    this.stopListening();
+    this.listenTo(this.core, _events2.default.CORE_ACTIVE_CONTAINER_CHANGED, this.onActiveContainerChanged);
     this.listenTo(this.core, _events2.default.CORE_MOUSE_MOVE, this.show);
     this.listenTo(this.core, _events2.default.CORE_MOUSE_LEAVE, function () {
       return _this3.hide(_this3.options.hideMediaControlDelay);
@@ -14406,10 +14416,11 @@ var MediaControl = function (_UICorePlugin) {
     this.listenTo(this.core, _events2.default.CORE_FULLSCREEN, this.show);
     this.listenTo(this.core, _events2.default.CORE_OPTIONS_CHANGE, this.configure);
     _mediator2.default.on(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.playerResize, this);
-    this.container && this.bindContainerEvents();
+    this.bindContainerEvents();
   };
 
   MediaControl.prototype.bindContainerEvents = function bindContainerEvents() {
+    if (!this.container) return;
     this.listenTo(this.container, _events2.default.CONTAINER_PLAY, this.changeTogglePlay);
     this.listenTo(this.container, _events2.default.CONTAINER_PAUSE, this.changeTogglePlay);
     this.listenTo(this.container, _events2.default.CONTAINER_STOP, this.changeTogglePlay);
@@ -14445,15 +14456,15 @@ var MediaControl = function (_UICorePlugin) {
   };
 
   MediaControl.prototype.play = function play() {
-    this.container.play();
+    this.container && this.container.play();
   };
 
   MediaControl.prototype.pause = function pause() {
-    this.container.pause();
+    this.container && this.container.pause();
   };
 
   MediaControl.prototype.stop = function stop() {
-    this.container.stop();
+    this.container && this.container.stop();
   };
 
   MediaControl.prototype.setInitialVolume = function setInitialVolume() {
@@ -14467,7 +14478,7 @@ var MediaControl = function (_UICorePlugin) {
   };
 
   MediaControl.prototype.onLoadedMetadataOnVideoTag = function onLoadedMetadataOnVideoTag() {
-    var video = this.container.playback.el;
+    var video = this.playback && this.playback.el;
     // video.webkitSupportsFullscreen is deprecated but iOS appears to only use this
     // see https://github.com/clappr/clappr/issues/1127
     if (!_utils.Fullscreen.fullscreenEnabled() && video.webkitSupportsFullscreen) {
@@ -14620,7 +14631,7 @@ var MediaControl = function (_UICorePlugin) {
     this.intendedVolume = value;
     this.persistConfig && !isInitialVolume && _utils.Config.persist('volume', value);
     var setWhenContainerReady = function setWhenContainerReady() {
-      if (_this4.container.isReady) {
+      if (_this4.container && _this4.container.isReady) {
         _this4.container.setVolume(value);
       } else {
         _this4.listenToOnce(_this4.container, _events2.default.CONTAINER_READY, function () {
@@ -14641,20 +14652,17 @@ var MediaControl = function (_UICorePlugin) {
     this.resetUserKeepVisible();
   };
 
-  MediaControl.prototype.setContainer = function setContainer(container) {
-    if (this.container) {
-      this.stopListening(this.container);
-      this.fullScreenOnVideoTagSupported = null;
-    }
+  MediaControl.prototype.onActiveContainerChanged = function onActiveContainerChanged() {
+    this.fullScreenOnVideoTagSupported = null;
+    this.bindEvents();
     _mediator2.default.off(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.playerResize, this);
-    this.container = container;
     // set the new container to match the volume of the last one
     this.setInitialVolume();
     this.changeTogglePlay();
     this.bindContainerEvents();
     this.settingsUpdate();
-    this.container.trigger(_events2.default.CONTAINER_PLAYBACKDVRSTATECHANGED, this.container.isDvrInUse());
-    this.container.mediaControlDisabled && this.disable();
+    this.container && this.container.trigger(_events2.default.CONTAINER_PLAYBACKDVRSTATECHANGED, this.container.isDvrInUse());
+    this.container && this.container.mediaControlDisabled && this.disable();
     this.trigger(_events2.default.MEDIACONTROL_CONTAINERCHANGED);
   };
 
@@ -14707,7 +14715,7 @@ var MediaControl = function (_UICorePlugin) {
 
     // default to 100%
     this.currentSeekBarPercentage = 100;
-    if (this.container.getPlaybackType() !== _playback2.default.LIVE || this.container.isDvrInUse()) this.currentSeekBarPercentage = this.currentPositionValue / this.currentDurationValue * 100;
+    if (this.container && (this.container.getPlaybackType() !== _playback2.default.LIVE || this.container.isDvrInUse())) this.currentSeekBarPercentage = this.currentPositionValue / this.currentDurationValue * 100;
 
     this.setSeekPercentage(this.currentSeekBarPercentage);
 
@@ -14728,7 +14736,7 @@ var MediaControl = function (_UICorePlugin) {
     var offsetX = event.pageX - this.$seekBarContainer.offset().left;
     var pos = offsetX / this.$seekBarContainer.width() * 100;
     pos = Math.min(100, Math.max(pos, 0));
-    this.container.seekPercentage(pos);
+    this.container && this.container.seekPercentage(pos);
     this.setSeekPercentage(pos);
     return false;
   };
@@ -14764,7 +14772,7 @@ var MediaControl = function (_UICorePlugin) {
       clearTimeout(this.hideId);
       this.$el.show();
       this.trigger(_events2.default.MEDIACONTROL_SHOW, this.name);
-      this.container.trigger(_events2.default.CONTAINER_MEDIACONTROL_SHOW, this.name);
+      this.container && this.container.trigger(_events2.default.CONTAINER_MEDIACONTROL_SHOW, this.name);
       this.$el.removeClass('media-control-hide');
       this.hideId = setTimeout(function () {
         return _this6.hide();
@@ -14798,7 +14806,7 @@ var MediaControl = function (_UICorePlugin) {
       }, timeout);
     } else {
       this.trigger(_events2.default.MEDIACONTROL_HIDE, this.name);
-      this.container.trigger(_events2.default.CONTAINER_MEDIACONTROL_HIDE, this.name);
+      this.container && this.container.trigger(_events2.default.CONTAINER_MEDIACONTROL_HIDE, this.name);
       this.$el.addClass('media-control-hide');
       this.hideVolumeBar(0);
       var showing = false;
@@ -14826,7 +14834,7 @@ var MediaControl = function (_UICorePlugin) {
   };
 
   MediaControl.prototype.getSettings = function getSettings() {
-    return _clapprZepto2.default.extend(true, {}, this.container.settings);
+    return _clapprZepto2.default.extend(true, {}, this.container && this.container.settings);
   };
 
   MediaControl.prototype.highDefinitionUpdate = function highDefinitionUpdate(isHD) {
@@ -14937,7 +14945,7 @@ var MediaControl = function (_UICorePlugin) {
     var keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
     keys.forEach(function (i) {
       _this9.bindKeyAndShow(i, function () {
-        _this9.settings.seekEnabled && _this9.container.seekPercentage(i * 10);
+        _this9.settings.seekEnabled && _this9.container && _this9.container.seekPercentage(i * 10);
       });
     });
   };
