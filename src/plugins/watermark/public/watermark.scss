@@ -1,4 +1,4 @@
-[data-watermark] {
+.clappr-watermark[data-watermark] {
   position: absolute;
   min-width: 70px;
   max-width: 200px;
@@ -7,32 +7,31 @@
   z-index: 10;
 }
 
-[data-watermark] a {
+.clappr-watermark[data-watermark] a {
   outline: none;
   cursor: pointer;
 }
 
-[data-watermark] img {
+.clappr-watermark[data-watermark] img {
   max-width: 100%;
 }
 
-[data-watermark-bottom-left] {
+.clappr-watermark[data-watermark-bottom-left] {
   bottom: 10px;
   left: 10px;
 }
 
-[data-watermark-bottom-right] {
+.clappr-watermark[data-watermark-bottom-right] {
   bottom: 10px;
   right: 42px;
 }
 
-[data-watermark-top-left] {
+.clappr-watermark[data-watermark-top-left] {
   top: 10px;
   left: 10px;
 }
 
-[data-watermark-top-right] {
+.clappr-watermark[data-watermark-top-right] {
   top: 10px;
   right: 37px;
 }
-
