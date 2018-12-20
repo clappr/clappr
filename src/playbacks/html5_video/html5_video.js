@@ -306,7 +306,7 @@ export default class HTML5Video extends Playback {
   }
 
   isMuted() {
-    return !!this.el.volume
+    return !this.el.volume
   }
 
   isPlaying() {
