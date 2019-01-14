@@ -32,11 +32,17 @@ run_tests() {
   yarn test
 }
 
-git_push() {
-  echo 'pushing to github' &&
+make_release_commit() {
   git add package.json bower.json yarn.lock yuidoc.json dist &&
-  git commit -m 'bump to '$1 &&
-  git tag $1 &&
+  git commit -m 'chore(package): bump to '$1 &&
+  git flow release finish $1
+}
+
+git_push() {
+  echo 'pushing to github'
+  git checkout dev
+  git push origin dev
+  git checkout master
   git push origin master --tags
 }
 
@@ -68,7 +74,8 @@ main() {
   fi
   run_tests
   if (("$?" == "0")); then
-    git_push $1 &&
+    make_release_commit $1 &&
+    git_push &&
     npm_publish &&
     send_mail $1 &&
     purge_cdn_cache &&
