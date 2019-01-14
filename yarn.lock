@@ -3584,6 +3584,11 @@ eventemitter3@1.x.x:
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-1.2.0.tgz#1c86991d816ad1e504750e73874224ecf3bec508"
   integrity sha1-HIaZHYFq0eUEdQ5zh0Ik7PO+xQg=
 
+eventemitter3@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-3.1.0.tgz#090b4d6cdbd645ed10bf750d4b5407942d7ba163"
+  integrity sha512-ivIvhpq/Y0uSjcHDcOIccjmYjGLcP09MFGE7ysAwkAvkXfpZlC985pH2/ui64DKazbTW/4kN3yqozUxlXzI6cA==
+
 events@^1.0.0, events@~1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/events/-/events-1.1.1.tgz#9ebdb7635ad099c70dcc4c2a1f5004288e8bd924"
@@ -4701,13 +4706,13 @@ hipchat-notifier@^1.1.0:
     lodash "^4.0.0"
     request "^2.0.0"
 
-hls.js@0.11.0:
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-0.11.0.tgz#a205fb61725d9d69bf6258984be3dc2ee829fa9e"
-  integrity sha512-qlCP7uBaHxF1iiP9xw8RFZ9Es9ZM5micqaMTp8P/2WYhd+CSmMMREH+taAzkQDu7u2nHBBd9yZyKgCjg3O3wSw==
+hls.js@0.12.2:
+  version "0.12.2"
+  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-0.12.2.tgz#64a969a78cc25991ed5de19357b1dc3f178ac23b"
+  integrity sha512-lQBSXggw9OzEuaUllUBoSxPcf7neFgnEiDRfCdCNdIPtUeV7vXZ0OeASx6EWtZTBiqSSPigoOX1Y+AR5dA1Feg==
   dependencies:
-    string.prototype.endswith "^0.2.0"
-    url-toolkit "^2.1.2"
+    eventemitter3 "3.1.0"
+    url-toolkit "^2.1.6"
 
 hmac-drbg@^1.0.0:
   version "1.0.1"
@@ -9702,11 +9707,6 @@ string-width@^2.1.1:
     is-fullwidth-code-point "^2.0.0"
     strip-ansi "^4.0.0"
 
-string.prototype.endswith@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/string.prototype.endswith/-/string.prototype.endswith-0.2.0.tgz#a19c20dee51a98777e9a47e10f09be393b9bba75"
-  integrity sha1-oZwg3uUamHd+mkfhDwm+OTubunU=
-
 string_decoder@^0.10.25, string_decoder@~0.10.x:
   version "0.10.31"
   resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-0.10.31.tgz#62e203bc41766c6c28c9fc84301dab1c5310fa94"
@@ -10372,10 +10372,10 @@ url-parse@^1.1.8:
     querystringify "~1.0.0"
     requires-port "~1.0.0"
 
-url-toolkit@^2.1.2:
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/url-toolkit/-/url-toolkit-2.1.4.tgz#e0dac60e5fdd50b8ac984307699e8b72439b3fd3"
-  integrity sha512-jAzm/85zNFfkW5Do/37GeGC7uGXBMMawToVdcf5SIpc+x9TmZDrRIUuLRPcvDMfqtt3m8VmDrYhCWh4UbsQLyg==
+url-toolkit@^2.1.6:
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/url-toolkit/-/url-toolkit-2.1.6.tgz#6d03246499e519aad224c44044a4ae20544154f2"
+  integrity sha512-UaZ2+50am4HwrV2crR/JAf63Q4VvPYphe63WGeoJxeu8gmOm0qxPt+KsukfakPNrX9aymGNEkkaoICwn+OuvBw==
 
 url@^0.11.0, url@~0.11.0:
   version "0.11.0"
