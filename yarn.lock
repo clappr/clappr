@@ -4706,10 +4706,10 @@ hipchat-notifier@^1.1.0:
     lodash "^4.0.0"
     request "^2.0.0"
 
-hls.js@0.12.1:
-  version "0.12.1"
-  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-0.12.1.tgz#ddacdf3ad00bfe4f2e39672caa79d08f2a2a39b5"
-  integrity sha512-mIKjHGTlI/LU9MrymhyjJWa4Qh2ybbhsZr59oXtFvhX87g4FriywBA+LtiICCSR83zU79s/6gdoNxrjznDNWQQ==
+hls.js@0.12.2:
+  version "0.12.2"
+  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-0.12.2.tgz#64a969a78cc25991ed5de19357b1dc3f178ac23b"
+  integrity sha512-lQBSXggw9OzEuaUllUBoSxPcf7neFgnEiDRfCdCNdIPtUeV7vXZ0OeASx6EWtZTBiqSSPigoOX1Y+AR5dA1Feg==
   dependencies:
     eventemitter3 "3.1.0"
     url-toolkit "^2.1.6"
