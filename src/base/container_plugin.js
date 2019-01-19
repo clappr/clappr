@@ -6,7 +6,7 @@ import ErrorMixin from './error_mixin'
  * The base class for a container plugin
  * @class ContainerPlugin
  * @constructor
- * @extends UIObject
+ * @extends BaseObject
  * @module base
  */
 export default class ContainerPlugin extends BaseObject {
