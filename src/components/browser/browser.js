@@ -58,17 +58,17 @@ export const getBrowserData = function() {
   let userAgent = Browser.userAgent.toLowerCase()
 
   // Check browser type
-  for (let i in BROWSER_DATA) {
-    let browserRegExp = new RegExp(BROWSER_DATA[i].identifier.toLowerCase())
+  for (let browser of BROWSER_DATA) {
+    let browserRegExp = new RegExp(browser.identifier.toLowerCase())
     let browserRegExpResult = browserRegExp.exec(userAgent)
 
     if (browserRegExpResult != null && browserRegExpResult[1]) {
-      browserObject.name = BROWSER_DATA[i].name
-      browserObject.group = BROWSER_DATA[i].group
+      browserObject.name = browser.name
+      browserObject.group = browser.group
 
       // Check version
-      if (BROWSER_DATA[i].versionIdentifier) {
-        let versionRegExp = new RegExp(BROWSER_DATA[i].versionIdentifier.toLowerCase())
+      if (browser.versionIdentifier) {
+        let versionRegExp = new RegExp(browser.versionIdentifier.toLowerCase())
         let versionRegExpResult = versionRegExp.exec(userAgent)
 
         if (versionRegExpResult != null && versionRegExpResult[1])
