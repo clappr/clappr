@@ -58,17 +58,17 @@ export const getBrowserData = function() {
   let userAgent = Browser.userAgent.toLowerCase()
 
   // Check browser type
-  for (let i in BROWSER_DATA) {
-    let browserRegExp = new RegExp(BROWSER_DATA[i].identifier.toLowerCase())
+  for (let browser of BROWSER_DATA) {
+    let browserRegExp = new RegExp(browser.identifier.toLowerCase())
     let browserRegExpResult = browserRegExp.exec(userAgent)
 
     if (browserRegExpResult != null && browserRegExpResult[1]) {
-      browserObject.name = BROWSER_DATA[i].name
-      browserObject.group = BROWSER_DATA[i].group
+      browserObject.name = browser.name
+      browserObject.group = browser.group
 
       // Check version
-      if (BROWSER_DATA[i].versionIdentifier) {
-        let versionRegExp = new RegExp(BROWSER_DATA[i].versionIdentifier.toLowerCase())
+      if (browser.versionIdentifier) {
+        let versionRegExp = new RegExp(browser.versionIdentifier.toLowerCase())
         let versionRegExpResult = versionRegExp.exec(userAgent)
 
         if (versionRegExpResult != null && versionRegExpResult[1])
@@ -101,29 +101,29 @@ export const getOsData = function() {
   let userAgent = Browser.userAgent.toLowerCase()
 
   // Check browser type
-  for (let i in OS_DATA) {
-    let osRegExp = new RegExp(OS_DATA[i].identifier.toLowerCase())
+  for (let os of OS_DATA) {
+    let osRegExp = new RegExp(os.identifier.toLowerCase())
     let osRegExpResult = osRegExp.exec(userAgent)
 
     if (osRegExpResult != null) {
-      osObject.name = OS_DATA[i].name
-      osObject.group = OS_DATA[i].group
+      osObject.name = os.name
+      osObject.group = os.group
 
       // Version defined
-      if (OS_DATA[i].version) {
-        setOsVersion(OS_DATA[i].version, (OS_DATA[i].versionSeparator) ? OS_DATA[i].versionSeparator : '.', osObject)
+      if (os.version) {
+        setOsVersion(os.version, (os.versionSeparator) ? os.versionSeparator : '.', osObject)
 
         // Version detected
       } else if (osRegExpResult[1]) {
-        setOsVersion(osRegExpResult[1], (OS_DATA[i].versionSeparator) ? OS_DATA[i].versionSeparator : '.', osObject)
+        setOsVersion(osRegExpResult[1], (os.versionSeparator) ? os.versionSeparator : '.', osObject)
 
         // Version identifier
-      } else if (OS_DATA[i].versionIdentifier) {
-        let versionRegExp = new RegExp(OS_DATA[i].versionIdentifier.toLowerCase())
+      } else if (os.versionIdentifier) {
+        let versionRegExp = new RegExp(os.versionIdentifier.toLowerCase())
         let versionRegExpResult = versionRegExp.exec(userAgent)
 
         if (versionRegExpResult != null && versionRegExpResult[1])
-          setOsVersion(versionRegExpResult[1], (OS_DATA[i].versionSeparator) ? OS_DATA[i].versionSeparator : '.', osObject)
+          setOsVersion(versionRegExpResult[1], (os.versionSeparator) ? os.versionSeparator : '.', osObject)
 
       }
       break
