@@ -3,7 +3,7 @@
 You can listen to several [events from Clappr](http://clappr.github.io/classes/Events.html).
 
 ```javascript
-// You can either listen some events this way
+// You can either listen to events fired from the player layer this way
 var player = new Clappr.Player({
   events: {
     onReady: function() { ... }, //Fired when the player is ready on startup
@@ -20,4 +20,12 @@ var player = new Clappr.Player({
 })
 // or this way
 player.on(Clappr.Events.PLAYER_PLAY, function() { ... })
+```
+
+If you want to listen for events from other layers, you need to add the bind for the specific scope.
+
+For example, the `CONTAINER_STATE_BUFFERING` event is triggered by the container, so if you want to listen for events from the container layer on your code, here is how:
+
+```javascript
+player.core.activeContainer.on(Clappr.Events.CONTAINER_STATE_BUFFERING, function() { ... })
 ```
