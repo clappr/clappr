@@ -339,7 +339,7 @@ class DashShakaPlayback extends HTML5Video {
     // so that user can rely on stats data when handling event
     this._sendStats()
 
-    if (this._pendingAdaptationEvent_) {
+    if (this._pendingAdaptationEvent) {
       this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
       this._pendingAdaptationEvent = false
     }
