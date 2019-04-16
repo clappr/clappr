@@ -35,7 +35,7 @@ export default class Container extends UIObject {
     return {
       'click': 'clicked',
       'dblclick': 'dblClicked',
-      'doubleTap': 'dblClicked',
+      'touchend': 'dblTap',
       'contextmenu': 'onContextMenu',
       'mouseenter': 'mouseEnter',
       'mouseleave': 'mouseLeave'
@@ -124,6 +124,9 @@ export default class Container extends UIObject {
     this.isReady = false
     this.mediaControlDisabled = false
     this.plugins = [this.playback]
+    this.dblTapTimer = null
+    this.dblTapLast = 0
+    this.dblTapDelay = 500 // FIXME: could be a player option
     this.bindEvents()
   }
 
@@ -339,6 +342,26 @@ export default class Container extends UIObject {
     if (!this.options.chromeless || this.options.allowUserInteraction)
       this.trigger(Events.CONTAINER_DBLCLICK, this, this.name)
 
+  }
+
+  dblTap(evt) {
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
+      // Based on http://jsfiddle.net/brettwp/J4djY/
+      let currentTime = new Date().getTime()
+      let tapLength = currentTime - this.dblTapLast
+      clearTimeout(this.dblTapTimer)
+
+      if (tapLength < this.dblTapDelay && tapLength > 0) {
+        this.trigger(Events.CONTAINER_DBLCLICK, this, this.name)
+        evt.preventDefault()
+      } else {
+        this.dblTapTimer = setTimeout(() => {
+          clearTimeout(this.dblTapTimer)
+        }, this.dblTapDelay)
+      }
+
+      this.dblTapLast = currentTime
+    }
   }
 
   onContextMenu(event) {
