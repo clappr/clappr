@@ -266,4 +266,20 @@ describe('Utils', function() {
       expect(video1[0]).to.be.equal(video2[0])
     })
   })
+
+  describe('DoubleTouchEventHandler', function() {
+    it('handle double event', function() {
+      const delay = 500
+      const handler = new utils.DoubleTouchEventHandler(delay)
+      const spy = sinon.spy()
+      const evt = new Event('touchend')
+
+      handler.handle(evt, spy)
+      expect(spy).to.not.have.been.called
+      setTimeout(() => {
+        handler.handle(evt, spy)
+        expect(spy).to.have.been.calledOnce
+      }, delay/2)
+    })
+  })
 })
