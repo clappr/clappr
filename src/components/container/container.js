@@ -127,6 +127,8 @@ export default class Container extends UIObject {
     this.dblTapTimer = null
     this.dblTapLast = 0
     this.dblTapDelay = 500 // FIXME: could be a player option
+    this.clickTimer = null
+    this.clickDelay = 200  // FIXME: could be a player option
     this.bindEvents()
   }
 
@@ -333,15 +335,25 @@ export default class Container extends UIObject {
   }
 
   clicked() {
-    if (!this.options.chromeless || this.options.allowUserInteraction)
-      this.trigger(Events.CONTAINER_CLICK, this, this.name)
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
+      // The event is delayed because it can be canceled by a double-click event
+      // An example of use is to prevent playback from pausing when switching to full screen
+      this.clickTimer = setTimeout(() => {
+        this.clickTimer && this.trigger(Events.CONTAINER_CLICK, this, this.name)
+      }, this.clickDelay)
+    }
+  }
 
+  cancelClicked() {
+    clearTimeout(this.clickTimer)
+    this.clickTimer = null
   }
 
   dblClicked() {
-    if (!this.options.chromeless || this.options.allowUserInteraction)
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
+      this.cancelClicked()
       this.trigger(Events.CONTAINER_DBLCLICK, this, this.name)
-
+    }
   }
 
   dblTap(evt) {
@@ -352,6 +364,7 @@ export default class Container extends UIObject {
       clearTimeout(this.dblTapTimer)
 
       if (tapLength < this.dblTapDelay && tapLength > 0) {
+        this.cancelClicked()
         this.trigger(Events.CONTAINER_DBLCLICK, this, this.name)
         evt.preventDefault()
       } else {
