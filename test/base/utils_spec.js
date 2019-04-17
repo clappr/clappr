@@ -267,10 +267,10 @@ describe('Utils', function() {
     })
   })
 
-  describe('DoubleTouchEventHandler', function() {
+  describe('DoubleEventHandler', function() {
     it('handle double event', function() {
       const delay = 500
-      const handler = new utils.DoubleTouchEventHandler(delay)
+      const handler = new utils.DoubleEventHandler(delay)
       const spy = sinon.spy()
       const evt = new Event('touchend')
 
