@@ -316,22 +316,16 @@ export class DoubleEventHandler {
   constructor(delay = 500) {
     this.delay = delay
     this.lastTime = 0
-    this.timer = null
   }
 
   handle(event, cb, prevented = true) {
     // Based on http://jsfiddle.net/brettwp/J4djY/
     let currentTime = new Date().getTime()
     let diffTime = currentTime - this.lastTime
-    clearTimeout(this.timer)
 
     if (diffTime < this.delay && diffTime > 0) {
       cb()
       prevented && event.preventDefault()
-    } else {
-      this.timer = setTimeout(() => {
-        clearTimeout(this.timer)
-      }, this.delay)
     }
 
     this.lastTime = currentTime
