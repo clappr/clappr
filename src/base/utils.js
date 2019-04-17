@@ -312,22 +312,22 @@ export class DomRecycler {
 
 DomRecycler.options = { recycleVideo: false }
 
-export class DoubleTouchEventHandler {
+export class DoubleEventHandler {
   constructor(delay = 500) {
     this.delay = delay
     this.lastTime = 0
     this.timer = null
   }
 
-  handle(touchendEvent, cb) {
+  handle(event, cb, prevented = true) {
     // Based on http://jsfiddle.net/brettwp/J4djY/
     let currentTime = new Date().getTime()
-    let tapLength = currentTime - this.lastTime
+    let diffTime = currentTime - this.lastTime
     clearTimeout(this.timer)
 
-    if (tapLength < this.delay && tapLength > 0) {
+    if (diffTime < this.delay && diffTime > 0) {
       cb()
-      touchendEvent.preventDefault()
+      prevented && event.preventDefault()
     } else {
       this.timer = setTimeout(() => {
         clearTimeout(this.timer)
@@ -356,5 +356,5 @@ export default {
   removeArrayItem,
   canAutoPlayMedia,
   Media,
-  DoubleTouchEventHandler
+  DoubleEventHandler
 }

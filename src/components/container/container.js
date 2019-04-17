@@ -9,7 +9,7 @@
 import Events from '../../base/events'
 import UIObject from '../../base/ui_object'
 import ErrorMixin from '../../base/error_mixin'
-import { DoubleTouchEventHandler } from '../../base/utils'
+import { DoubleEventHandler } from '../../base/utils'
 
 import './public/style.scss'
 
@@ -125,7 +125,7 @@ export default class Container extends UIObject {
     this.isReady = false
     this.mediaControlDisabled = false
     this.plugins = [this.playback]
-    this.dblTapHandler = new DoubleTouchEventHandler(500)
+    this.dblTapHandler = new DoubleEventHandler(500)
     this.clickTimer = null
     this.clickDelay = 200  // FIXME: could be a player option
     this.bindEvents()
