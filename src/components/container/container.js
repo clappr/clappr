@@ -9,6 +9,7 @@
 import Events from '../../base/events'
 import UIObject from '../../base/ui_object'
 import ErrorMixin from '../../base/error_mixin'
+import { DoubleEventHandler } from '../../base/utils'
 
 import './public/style.scss'
 
@@ -35,7 +36,7 @@ export default class Container extends UIObject {
     return {
       'click': 'clicked',
       'dblclick': 'dblClicked',
-      'doubleTap': 'dblClicked',
+      'touchend': 'dblTap',
       'contextmenu': 'onContextMenu',
       'mouseenter': 'mouseEnter',
       'mouseleave': 'mouseLeave'
@@ -124,6 +125,9 @@ export default class Container extends UIObject {
     this.isReady = false
     this.mediaControlDisabled = false
     this.plugins = [this.playback]
+    this.dblTapHandler = new DoubleEventHandler(500)
+    this.clickTimer = null
+    this.clickDelay = 200  // FIXME: could be a player option
     this.bindEvents()
   }
 
@@ -330,15 +334,34 @@ export default class Container extends UIObject {
   }
 
   clicked() {
-    if (!this.options.chromeless || this.options.allowUserInteraction)
-      this.trigger(Events.CONTAINER_CLICK, this, this.name)
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
+      // The event is delayed because it can be canceled by a double-click event
+      // An example of use is to prevent playback from pausing when switching to full screen
+      this.clickTimer = setTimeout(() => {
+        this.clickTimer && this.trigger(Events.CONTAINER_CLICK, this, this.name)
+      }, this.clickDelay)
+    }
+  }
 
+  cancelClicked() {
+    clearTimeout(this.clickTimer)
+    this.clickTimer = null
   }
 
   dblClicked() {
-    if (!this.options.chromeless || this.options.allowUserInteraction)
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
+      this.cancelClicked()
       this.trigger(Events.CONTAINER_DBLCLICK, this, this.name)
+    }
+  }
 
+  dblTap(evt) {
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
+      this.dblTapHandler.handle(evt, () => {
+        this.cancelClicked()
+        this.trigger(Events.CONTAINER_DBLCLICK, this, this.name)
+      })
+    }
   }
 
   onContextMenu(event) {
