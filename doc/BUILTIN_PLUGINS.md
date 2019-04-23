@@ -71,20 +71,8 @@ Add `playbackNotSupportedMessage: 'Please try on a different browser'` to define
 ##### Preload
 In case you're loading a on demand video (mp4), it's possible to define the way the video will be preloaded according to [preload](http://www.stevesouders.com/blog/2013/04/12/html5-video-preload/) attribute options. Add `preload: <type>` on embed parameters. By default, Clappr will try to download only video metadata (`preload: 'metadata'`).
 
-##### HLS Buffer Length
-The default behavior for the HLS playback is to keep buffering indefinitely, even on VoD. This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks. To change this behavior, add `maxMaxBufferLength: <value>` to embed parameters, where `value` is in seconds.
-
-```javascript
-hlsjsConfig: {
-  maxMaxBufferLength: value
-}
-```
-
-##### HLS level switch
-The default behavior for the HLS playback is to use [hls.currentLevel](https://github.com/video-dev/hls.js/blob/master/docs/API.md#hlscurrentlevel) to switch current level. To change this behaviour and force HLS playback to use [hls.nextLevel](https://github.com/video-dev/hls.js/blob/master/docs/API.md#hlsnextlevel), add `hlsUseNextLevel: true` to embed parameters. (default value is false)
-
-##### Playback configuration
-The configuration for the playback, it's still only compatible with `html5_video` playback.
+### Playback configuration
+The configuration for the playback, it's still only compatible with `html5_video` playback (and derived).
 
 ```javascript
 {
@@ -98,6 +86,44 @@ The configuration for the playback, it's still only compatible with `html5_video
       {lang: 'en', label: 'English', src: 'http://example.com/en.vtt', kind: 'subtitles'},
       {lang: 'fr', label: 'French', src: 'http://example.com/fr.vtt'} // 'kind' default value is 'subtitles'
     ]
+  }
+}
+```
+#### HLS configuration
+
+All options to configure the HLS playback should be under `playback`. Any specific settings for hls.js should be in the option `hlsjsConfig`:
+
+```javascript
+{
+  playback: {
+    hlsjsConfig: {
+      // hls.js specific options
+    }
+  }
+}
+```
+
+##### HLS level switch
+The default behavior for the HLS playback is to use [hls.currentLevel](https://github.com/video-dev/hls.js/blob/master/docs/API.md#hlscurrentlevel) to switch current level. To change this behaviour and force HLS playback to use [hls.nextLevel](https://github.com/video-dev/hls.js/blob/master/docs/API.md#hlsnextlevel), add `hlsUseNextLevel: true` to embed parameters. (default value is false)
+
+Ex:
+```javascript
+{
+  playback: {
+    hlsUseNextLevel: true
+  }
+}
+```
+
+##### HLS Buffer Length
+The default behavior for the HLS playback is to keep buffering indefinitely, even on VoD. This replicates the behavior for progressive download, which continues buffering when pausing the video, thus making the video available for playback even on slow networks. To change this behavior, add `maxMaxBufferLength: <value>` to embed parameters, where `value` is in seconds.
+
+```javascript
+{
+  playback: {
+    hlsjsConfig: {
+      maxMaxBufferLength: value
+    }
   }
 }
 ```
