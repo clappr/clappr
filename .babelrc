@@ -3,6 +3,7 @@
   "plugins": [
     "add-module-exports",
     ["transform-es2015-classes", {"loose": true}],
+    "transform-object-rest-spread",
     "transform-runtime"
   ]
 }
