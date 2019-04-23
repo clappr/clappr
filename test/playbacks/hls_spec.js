@@ -45,7 +45,7 @@ describe('HLS playback', function() {
     it('should set options.playback as a reference to options if options.playback not set', function() {
       let options = { src: 'http://clappr.io/video.m3u8' },
         hls = new HLS(options)
-      expect(hls.options.playback).to.be.equal(hls.options)
+      expect(hls.options.playback).to.deep.equal(hls.options)
       options = { src: 'http://clappr.io/video.m3u8', playback: { test: true } }
       hls = new HLS(options)
       expect(hls.options.playback.test).to.be.equal(true)

@@ -273,6 +273,7 @@ export default class HTML5Video extends Playback {
     this._stopped = true
     // src will be added again in play()
     this.el.removeAttribute('src')
+    this.el.load() // load with no src to stop loading of the previous source and avoid leaks
     this._stopPlayheadMovingChecks()
     this._handleBufferingEvents()
     this.trigger(Events.PLAYBACK_STOP)
@@ -441,6 +442,7 @@ export default class HTML5Video extends Playback {
     this.handleTextTrackChange && this.el.textTracks.removeEventListener('change', this.handleTextTrackChange)
     super.destroy()
     this.el.removeAttribute('src')
+    this.el.load() // load with no src to stop loading of the previous source and avoid leaks
     this._src = null
     DomRecycler.garbage(this.$el)
   }
