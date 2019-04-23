@@ -32,7 +32,7 @@ export default class HLS extends HTML5VideoPlayback {
   set currentLevel(id) {
     this._currentLevel = id
     this.trigger(Events.PLAYBACK_LEVEL_SWITCH_START)
-    if (this.options.hlsUseNextLevel)
+    if (this.options.playback.hlsUseNextLevel)
       this._hls.nextLevel = this._currentLevel
     else
       this._hls.currentLevel = this._currentLevel
@@ -110,7 +110,7 @@ export default class HLS extends HTML5VideoPlayback {
   constructor(...args) {
     super(...args)
     // backwards compatibility (TODO: remove on 0.3.0)
-    this.options.playback || (this.options.playback = this.options)
+    this.options.playback = { ...this.options, ...this.options.playback }
     this._minDvrSize = typeof (this.options.hlsMinimumDvrSize) === 'undefined' ? 60 : this.options.hlsMinimumDvrSize
     // The size of the start time extrapolation window measured as a multiple of segments.
     // Should be 2 or higher, or 0 to disable. Should only need to be increased above 2 if more than one segment is

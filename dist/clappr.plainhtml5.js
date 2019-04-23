@@ -1115,7 +1115,7 @@ module.exports = exports['default'];
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.DomRecycler = exports.cancelAnimationFrame = exports.requestAnimationFrame = exports.QueryString = exports.Config = exports.Fullscreen = undefined;
+exports.DoubleEventHandler = exports.DomRecycler = exports.cancelAnimationFrame = exports.requestAnimationFrame = exports.QueryString = exports.Config = exports.Fullscreen = undefined;
 
 var _assign = __webpack_require__(11);
 
@@ -1487,6 +1487,33 @@ var DomRecycler = exports.DomRecycler = function () {
 
 DomRecycler.options = { recycleVideo: false };
 
+var DoubleEventHandler = exports.DoubleEventHandler = function () {
+  function DoubleEventHandler() {
+    var delay = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 500;
+    (0, _classCallCheck3.default)(this, DoubleEventHandler);
+
+    this.delay = delay;
+    this.lastTime = 0;
+  }
+
+  DoubleEventHandler.prototype.handle = function handle(event, cb) {
+    var prevented = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+
+    // Based on http://jsfiddle.net/brettwp/J4djY/
+    var currentTime = new Date().getTime();
+    var diffTime = currentTime - this.lastTime;
+
+    if (diffTime < this.delay && diffTime > 0) {
+      cb();
+      prevented && event.preventDefault();
+    }
+
+    this.lastTime = currentTime;
+  };
+
+  return DoubleEventHandler;
+}();
+
 exports.default = {
   Config: Config,
   Fullscreen: Fullscreen,
@@ -1504,7 +1531,8 @@ exports.default = {
   now: now,
   removeArrayItem: removeArrayItem,
   canAutoPlayMedia: canAutoPlayMedia,
-  Media: _media2.default
+  Media: _media2.default,
+  DoubleEventHandler: DoubleEventHandler
 };
 
 /***/ }),
@@ -7071,7 +7099,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.3.3"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.3.4"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -7491,7 +7519,7 @@ var Player = function (_BaseObject) {
   Player.prototype._addEventListeners = function _addEventListeners() {
     if (!this.core.isReady) this.listenToOnce(this.core, _events2.default.CORE_READY, this._onReady);else this._onReady();
 
-    this.listenTo(this.core.activeContainer, _events2.default.CORE_ACTIVE_CONTAINER_CHANGED, this._containerChanged);
+    this.listenTo(this.core, _events2.default.CORE_ACTIVE_CONTAINER_CHANGED, this._containerChanged);
     this.listenTo(this.core, _events2.default.CORE_FULLSCREEN, this._onFullscreenChange);
     this.listenTo(this.core, _events2.default.CORE_RESIZE, this._onResize);
     return this;
@@ -10628,6 +10656,8 @@ var _error_mixin = __webpack_require__(19);
 
 var _error_mixin2 = _interopRequireDefault(_error_mixin);
 
+var _utils = __webpack_require__(5);
+
 __webpack_require__(157);
 
 var _clapprZepto = __webpack_require__(6);
@@ -10644,6 +10674,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @extends UIObject
  * @module base
  */
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+/**
+ * Container is responsible for the video rendering and state
+ */
+
 var Container = function (_UIObject) {
   (0, _inherits3.default)(Container, _UIObject);
   (0, _createClass3.default)(Container, [{
@@ -10669,7 +10707,7 @@ var Container = function (_UIObject) {
       return {
         'click': 'clicked',
         'dblclick': 'dblClicked',
-        'doubleTap': 'dblClicked',
+        'touchend': 'dblTap',
         'contextmenu': 'onContextMenu',
         'mouseenter': 'mouseEnter',
         'mouseleave': 'mouseLeave'
@@ -10783,6 +10821,9 @@ var Container = function (_UIObject) {
     _this.isReady = false;
     _this.mediaControlDisabled = false;
     _this.plugins = [_this.playback];
+    _this.dblTapHandler = new _utils.DoubleEventHandler(500);
+    _this.clickTimer = null;
+    _this.clickDelay = 200; // FIXME: could be a player option
     _this.bindEvents();
     return _this;
   }
@@ -11009,11 +11050,38 @@ var Container = function (_UIObject) {
   };
 
   Container.prototype.clicked = function clicked() {
-    if (!this.options.chromeless || this.options.allowUserInteraction) this.trigger(_events2.default.CONTAINER_CLICK, this, this.name);
+    var _this2 = this;
+
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
+      // The event is delayed because it can be canceled by a double-click event
+      // An example of use is to prevent playback from pausing when switching to full screen
+      this.clickTimer = setTimeout(function () {
+        _this2.clickTimer && _this2.trigger(_events2.default.CONTAINER_CLICK, _this2, _this2.name);
+      }, this.clickDelay);
+    }
+  };
+
+  Container.prototype.cancelClicked = function cancelClicked() {
+    clearTimeout(this.clickTimer);
+    this.clickTimer = null;
   };
 
   Container.prototype.dblClicked = function dblClicked() {
-    if (!this.options.chromeless || this.options.allowUserInteraction) this.trigger(_events2.default.CONTAINER_DBLCLICK, this, this.name);
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
+      this.cancelClicked();
+      this.trigger(_events2.default.CONTAINER_DBLCLICK, this, this.name);
+    }
+  };
+
+  Container.prototype.dblTap = function dblTap(evt) {
+    var _this3 = this;
+
+    if (!this.options.chromeless || this.options.allowUserInteraction) {
+      this.dblTapHandler.handle(evt, function () {
+        _this3.cancelClicked();
+        _this3.trigger(_events2.default.CONTAINER_DBLCLICK, _this3, _this3.name);
+      });
+    }
   };
 
   Container.prototype.onContextMenu = function onContextMenu(event) {
@@ -11151,13 +11219,7 @@ var Container = function (_UIObject) {
   };
 
   return Container;
-}(_ui_object2.default); // Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-/**
- * Container is responsible for the video rendering and state
- */
+}(_ui_object2.default);
 
 exports.default = Container;
 
@@ -11189,8 +11251,8 @@ var update = __webpack_require__(9)(content, options);
 if(content.locals) module.exports = content.locals;
 
 if(false) {
-	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./style.scss", function() {
-		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./style.scss");
+	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./style.scss", function() {
+		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./style.scss");
 
 		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 
@@ -11348,8 +11410,8 @@ var update = __webpack_require__(9)(content, options);
 if(content.locals) module.exports = content.locals;
 
 if(false) {
-	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./style.scss", function() {
-		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./style.scss");
+	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./style.scss", function() {
+		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./style.scss");
 
 		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 
@@ -12167,6 +12229,7 @@ var HTML5Video = function (_Playback) {
     this._stopped = true;
     // src will be added again in play()
     this.el.removeAttribute('src');
+    this.el.load(); // load with no src to stop loading of the previous source and avoid leaks
     this._stopPlayheadMovingChecks();
     this._handleBufferingEvents();
     this.trigger(_events2.default.PLAYBACK_STOP);
@@ -12337,6 +12400,7 @@ var HTML5Video = function (_Playback) {
     this.handleTextTrackChange && this.el.textTracks.removeEventListener('change', this.handleTextTrackChange);
     _Playback.prototype.destroy.call(this);
     this.el.removeAttribute('src');
+    this.el.load(); // load with no src to stop loading of the previous source and avoid leaks
     this._src = null;
     _utils.DomRecycler.garbage(this.$el);
   };
@@ -12567,8 +12631,8 @@ var update = __webpack_require__(9)(content, options);
 if(content.locals) module.exports = content.locals;
 
 if(false) {
-	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./style.scss", function() {
-		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./style.scss");
+	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./style.scss", function() {
+		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./style.scss");
 
 		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 
@@ -12837,8 +12901,8 @@ var update = __webpack_require__(9)(content, options);
 if(content.locals) module.exports = content.locals;
 
 if(false) {
-	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./style.scss", function() {
-		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./style.scss");
+	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./style.scss", function() {
+		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./style.scss");
 
 		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 
@@ -13069,8 +13133,8 @@ var update = __webpack_require__(9)(content, options);
 if(content.locals) module.exports = content.locals;
 
 if(false) {
-	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./style.scss", function() {
-		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./style.scss");
+	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./style.scss", function() {
+		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./style.scss");
 
 		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 
@@ -13264,8 +13328,8 @@ var update = __webpack_require__(9)(content, options);
 if(content.locals) module.exports = content.locals;
 
 if(false) {
-	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./spinner.scss", function() {
-		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./spinner.scss");
+	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./spinner.scss", function() {
+		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./spinner.scss");
 
 		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 
@@ -13620,8 +13684,8 @@ var update = __webpack_require__(9)(content, options);
 if(content.locals) module.exports = content.locals;
 
 if(false) {
-	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./watermark.scss", function() {
-		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./watermark.scss");
+	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./watermark.scss", function() {
+		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./watermark.scss");
 
 		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 
@@ -13929,8 +13993,8 @@ var update = __webpack_require__(9)(content, options);
 if(content.locals) module.exports = content.locals;
 
 if(false) {
-	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./poster.scss", function() {
-		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./poster.scss");
+	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./poster.scss", function() {
+		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./poster.scss");
 
 		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 
@@ -15180,8 +15244,8 @@ var update = __webpack_require__(9)(content, options);
 if(content.locals) module.exports = content.locals;
 
 if(false) {
-	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./media-control.scss", function() {
-		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./media-control.scss");
+	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./media-control.scss", function() {
+		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./media-control.scss");
 
 		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 
@@ -15454,8 +15518,8 @@ var update = __webpack_require__(9)(content, options);
 if(content.locals) module.exports = content.locals;
 
 if(false) {
-	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./dvr_controls.scss", function() {
-		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./dvr_controls.scss");
+	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./dvr_controls.scss", function() {
+		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./dvr_controls.scss");
 
 		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 
@@ -15742,8 +15806,8 @@ var update = __webpack_require__(9)(content, options);
 if(content.locals) module.exports = content.locals;
 
 if(false) {
-	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./closed_captions.scss", function() {
-		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./closed_captions.scss");
+	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./closed_captions.scss", function() {
+		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./closed_captions.scss");
 
 		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 
@@ -16234,8 +16298,8 @@ var update = __webpack_require__(9)(content, options);
 if(content.locals) module.exports = content.locals;
 
 if(false) {
-	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./seek_time.scss", function() {
-		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./seek_time.scss");
+	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./seek_time.scss", function() {
+		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./seek_time.scss");
 
 		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 
@@ -16796,8 +16860,8 @@ var update = __webpack_require__(9)(content, options);
 if(content.locals) module.exports = content.locals;
 
 if(false) {
-	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./error_screen.scss", function() {
-		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr/src/base/scss!./error_screen.scss");
+	module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./error_screen.scss", function() {
+		var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/postcss-loader/lib/index.js!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr/src/base/scss!./error_screen.scss");
 
 		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 
