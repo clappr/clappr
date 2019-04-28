@@ -199,8 +199,10 @@ class DashShakaPlayback extends HTML5Video {
 
     if (showingTrack) {
       this._player.selectTextTrack(showingTrack.track)
+      this._player.setTextTrackVisibility(true)
       this._enableShakaTextTrack(true)
     } else {
+      this._player.setTextTrackVisibility(false)
       this._enableShakaTextTrack(false)
     }
 
