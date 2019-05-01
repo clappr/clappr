@@ -81,6 +81,14 @@ export default class Strings extends CorePlugin {
         'disabled': 'Keelatud',
         'playback_not_supported': 'Teie brauser ei toeta selle video taasesitust. Proovige kasutada muud brauserit.',
       },
+      'ar': {
+        'live': 'مباشر',
+        'back_to_live': 'الرجوع إلى المباشر',
+        'disabled': 'معطّل',
+        'playback_not_supported': 'المتصفح الذي تستخدمه لا يدعم تشغيل هذا الفيديو. الرجاء إستخدام متصفح آخر.',
+        'default_error_title': 'غير قادر الى التشغيل.',
+        'default_error_message': 'حدثت مشكلة أثناء تحميل الفيديو.',
+      },
     }
 
     this._messages = $.extend(true, defaultMessages, this.core.options.strings || {})
@@ -90,5 +98,6 @@ export default class Strings extends CorePlugin {
     this._messages['fr-FR'] = this._messages['fr']
     this._messages['tr-TR'] = this._messages['tr']
     this._messages['et-EE'] = this._messages['et']
+    this._messages['ar-IQ'] = this._messages['ar']
   }
 }
