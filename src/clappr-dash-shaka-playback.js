@@ -166,6 +166,7 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   stop () {
+    this._stopTimeUpdateTimer()
     clearInterval(this.sendStatsId)
     this._stopped = true
 
@@ -202,16 +203,16 @@ class DashShakaPlayback extends HTML5Video {
 
   selectTrack (track) {
     if (track.type === 'text') {
-        this._player.selectTextTrack(track)
+      this._player.selectTextTrack(track)
     } else if (track.type === 'variant') {
-        this._player.selectVariantTrack(track)
-        if (track.mimeType.startsWith('video/')) {
-            // we trigger the adaptation event here
-            // because Shaka doesn't trigger its event on "manual" selection.
-            this._onAdaptation()
-        }
+      this._player.selectVariantTrack(track)
+      if (track.mimeType.startsWith('video/')) {
+        // we trigger the adaptation event here
+        // because Shaka doesn't trigger its event on "manual" selection.
+        this._onAdaptation()
+      }
     } else {
-        throw new Error('Unhandled track type:', track.type);
+      throw new Error('Unhandled track type:', track.type)
     }
   }
 
@@ -340,6 +341,8 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   _onTimeUpdate() {
+    if (!this.shakaPlayerInstance) return
+
     let update = {
       current: this.getCurrentTime(),
       total: this.getDuration(),
