@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin")
 
 var NPM_RUN = process.env.npm_lifecycle_event
 
@@ -26,6 +27,7 @@ const webpackConfig = (config) => {
       host: '0.0.0.0',
       port: 8181
     },
+    mode: config.mode,
     devtool: 'source-maps',
     entry: path.resolve(__dirname, 'src/clappr-dash-shaka-playback.js'),
     externals: config.externals,
@@ -58,7 +60,8 @@ if (NPM_RUN === 'build' || NPM_RUN === 'start') {
   configurations.push(webpackConfig({
     filename: 'dash-shaka-playback.js',
     plugins: [],
-    externals: externals()
+    externals: externals(),
+    mode: 'development'
   }))
 
   // Unminified bundle without shaka-player
@@ -67,7 +70,8 @@ if (NPM_RUN === 'build' || NPM_RUN === 'start') {
   configurations.push(webpackConfig({
     filename: 'dash-shaka-playback.external.js',
     plugins: [],
-    externals: customExt
+    externals: customExt,
+    mode: 'development'
   }))
 }
 
@@ -75,15 +79,15 @@ if (NPM_RUN === 'release') {
   // Minified bundle with shaka-player
   configurations.push(webpackConfig({
     filename: 'dash-shaka-playback.min.js',
-    plugins: [
-      new webpack.optimize.UglifyJsPlugin({
-        compress: {
-          warnings: false
-        },
-        sourceMap: true
-      }),
-    ],
-    externals: externals()
+    optimization: {
+      minimizer: [
+        new UglifyJsPlugin({
+          sourceMap: true
+        }),
+      ]
+    },
+    externals: externals(),
+    mode: 'production'
   }))
 
   // Minified bundle without shaka-player
@@ -91,15 +95,15 @@ if (NPM_RUN === 'release') {
   customExt['shaka-player'] = 'shaka'
   configurations.push(webpackConfig({
     filename: 'dash-shaka-playback.external.min.js',
-    plugins: [
-      new webpack.optimize.UglifyJsPlugin({
-        compress: {
-          warnings: false
-        },
-        sourceMap: true
-      }),
-    ],
-    externals: customExt
+    optimization: {
+      minimizer: [
+        new UglifyJsPlugin({
+          sourceMap: true
+        }),
+      ]
+    },
+    externals: customExt,
+    mode: 'production'
   }))
 }
 
