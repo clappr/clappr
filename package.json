@@ -4,12 +4,10 @@
   "description": "An extensible media player for the web",
   "main": "./dist/clappr.js",
   "scripts": {
-    "bundle-check": "./node_modules/.bin/webpack -p --config './webpack.config.bundle-analyzer.js'",
+    "bundle-check": "ANALYZE_BUNDLE=true ./node_modules/.bin/webpack -p",
     "release": "MINIMIZE=true ./node_modules/.bin/webpack --progress",
-    "release:plainhtml5": "MINIMIZE=true CLAPPR_PLAIN_HTML5_ONLY=true ./node_modules/.bin/webpack --progress",
     "build": "./node_modules/.bin/webpack --progress",
     "build:debug": "CLAPPR_INLINE_DEBUG=true ./node_modules/.bin/webpack --progress",
-    "build:plainhtml5": "CLAPPR_PLAIN_HTML5_ONLY=true ./node_modules/.bin/webpack --progress",
     "watch": "./node_modules/.bin/webpack --progress --watch",
     "test": "./node_modules/.bin/karma start --single-run",
     "test:watch": "./node_modules/.bin/karma start --no-single-run --watch",
@@ -68,10 +66,12 @@
     "svg-inline-loader": "^0.8.0",
     "sync-pkg": "^0.7.2",
     "uglify-js": "^3.3.12",
+    "uglifyjs-webpack-plugin": "^2.1.2",
     "url-loader": "^0.6.2",
-    "webpack": "^3.11.0",
+    "webpack": "^4.31.0",
     "webpack-bundle-analyzer": "^2.11.1",
-    "webpack-dev-server": "^2.11.1",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.3.1",
     "yargs": "^11.0.0"
   },
   "config": {
