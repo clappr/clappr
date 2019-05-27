@@ -38,7 +38,7 @@
     "coveralls": "^3.0.0",
     "css-loader": "^0.28.10",
     "cz-conventional-changelog": "^2.1.0",
-    "directory-named-webpack-plugin": "^2.3.0",
+    "directory-named-webpack-plugin": "^4.0.1",
     "eslint": "^4.18.2",
     "file-loader": "^1.1.11",
     "gulp": "^3.9.1",
