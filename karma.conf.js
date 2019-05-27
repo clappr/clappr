@@ -1,17 +1,21 @@
 /* eslint-disable no-var */
-var path = require('path')
+const path = require('path')
 
-var webpackConfig = require('./webpack-base-config')
+const webpackConfig = require('./webpack.config.base')
 
 // add subject as webpack's postloader
-webpackConfig.module.loaders.push({
-  test: /\.js$/,
-  exclude: /(test|node_modules|bower_components)\//,
-  loader: 'istanbul-instrumenter-loader',
-  enforce: 'post'
+const webpackTestConfig = webpackConfig({
+  rules: [
+    {
+      test: /\.js$/,
+      exclude: /(test|node_modules|bower_components)\//,
+      loader: 'istanbul-instrumenter-loader',
+      enforce: 'post'
+    }
+  ],
 })
 
-webpackConfig.resolve.modules.push(path.resolve(__dirname, 'src'))
+webpackTestConfig.resolve.modules.push(path.resolve(__dirname, 'src'))
 
 module.exports = function(config) {
   config.set({
@@ -61,7 +65,7 @@ module.exports = function(config) {
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: ['progress', 'coverage'],
 
-    webpack: webpackConfig,
+    webpack: webpackTestConfig,
 
     // web server port
     port: 9876,
