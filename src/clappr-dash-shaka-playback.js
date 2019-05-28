@@ -80,6 +80,10 @@ class DashShakaPlayback extends HTML5Video {
     return this.seekRange.start
   }
 
+  get presentationTimeline() {
+    return this.shakaPlayerInstance.getManifest().presentationTimeline
+  }
+
   constructor (...args) {
     super(...args)
     this._levels = []
@@ -87,6 +91,10 @@ class DashShakaPlayback extends HTML5Video {
     this._isShakaReadyState = false
 
     this._minDvrSize = typeof (this.options.shakaMinimumDvrSize) === 'undefined' ? 60 : this.options.shakaMinimumDvrSize
+  }
+
+  getProgramDateTime() {
+    return new Date((this.presentationTimeline.getPresentationStartTime() + this.seekRange.start) * 1000)
   }
 
   _updateDvr(status) {
@@ -346,7 +354,7 @@ class DashShakaPlayback extends HTML5Video {
     let update = {
       current: this.getCurrentTime(),
       total: this.getDuration(),
-      firstFragDateTime: this.shakaPlayerInstance.getManifest().presentationTimeline.getPresentationStartTime()
+      firstFragDateTime: this.getProgramDateTime()
     }
     let isSame = this._lastTimeUpdate && (
       update.current === this._lastTimeUpdate.current &&
