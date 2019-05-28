@@ -447,6 +447,18 @@ class DashShakaPlayback extends HTML5Video {
     })
   }
 
+  _updateSettings() {
+    if (this.getPlaybackType() === 'vod')
+      this.settings.left = ['playpause', 'position', 'duration']
+    else if (this.dvrEnabled)
+      this.settings.left = ['playpause']
+    else
+      this.settings.left = ['playstop']
+
+    this.settings.seekEnabled = this.isSeekEnabled()
+    this.trigger(Events.PLAYBACK_SETTINGSUPDATE)
+  }
+
   _destroy () {
     this._isShakaReadyState = false
     Log.debug('shaka was destroyed')
