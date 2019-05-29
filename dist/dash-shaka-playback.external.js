@@ -7,7 +7,7 @@
 		exports["DashShakaPlayback"] = factory(require("clappr"), require("shaka"));
 	else
 		root["DashShakaPlayback"] = factory(root["Clappr"], root["shaka"]);
-})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__) {
+})(window, function(__WEBPACK_EXTERNAL_MODULE_clappr__, __WEBPACK_EXTERNAL_MODULE_shaka_player__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -46,12 +46,32 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
 /******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
 /******/ 	};
 /******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
@@ -69,12 +89,18 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "dist/";
 /******/
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/clappr-dash-shaka-playback.js");
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ "./src/clappr-dash-shaka-playback.js":
+/*!*******************************************!*\
+  !*** ./src/clappr-dash-shaka-playback.js ***!
+  \*******************************************/
+/*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -88,9 +114,9 @@ var _get = function get(object, property, receiver) { if (object === null) objec
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _clappr = __webpack_require__(1);
+var _clappr = __webpack_require__(/*! clappr */ "clappr");
 
-var _shakaPlayer = __webpack_require__(2);
+var _shakaPlayer = __webpack_require__(/*! shaka-player */ "shaka-player");
 
 var _shakaPlayer2 = _interopRequireDefault(_shakaPlayer);
 
@@ -109,6 +135,16 @@ var DashShakaPlayback = function (_HTML5Video) {
   _inherits(DashShakaPlayback, _HTML5Video);
 
   _createClass(DashShakaPlayback, [{
+    key: 'getDuration',
+    value: function getDuration() {
+      return this._duration;
+    }
+  }, {
+    key: 'getCurrentTime',
+    value: function getCurrentTime() {
+      return this.shakaPlayerInstance.getMediaElement().currentTime - this.seekRange.start;
+    }
+  }, {
     key: 'name',
     get: function get() {
       return 'dash_shaka_playback';
@@ -127,6 +163,11 @@ var DashShakaPlayback = function (_HTML5Video) {
     key: 'levels',
     get: function get() {
       return this._levels;
+    }
+  }, {
+    key: 'seekRange',
+    get: function get() {
+      return this.shakaPlayerInstance.seekRange();
     }
   }, {
     key: 'currentLevel',
@@ -150,6 +191,28 @@ var DashShakaPlayback = function (_HTML5Video) {
     },
     get: function get() {
       return this._currentLevelId || DEFAULT_LEVEL_AUTO;
+    }
+  }, {
+    key: 'dvrEnabled',
+    get: function get() {
+      return this._duration >= this._minDvrSize && this.getPlaybackType() === 'live';
+    }
+  }, {
+    key: '_duration',
+    get: function get() {
+      if (!this.shakaPlayerInstance) return 0;
+
+      return this.seekRange.end - this.seekRange.start;
+    }
+  }, {
+    key: '_startTime',
+    get: function get() {
+      return this.seekRange.start;
+    }
+  }, {
+    key: 'presentationTimeline',
+    get: function get() {
+      return this.shakaPlayerInstance.getManifest().presentationTimeline;
     }
   }], [{
     key: 'canPlay',
@@ -184,10 +247,42 @@ var DashShakaPlayback = function (_HTML5Video) {
     _this._levels = [];
     _this._pendingAdaptationEvent = false;
     _this._isShakaReadyState = false;
+
+    _this._minDvrSize = typeof _this.options.shakaMinimumDvrSize === 'undefined' ? 60 : _this.options.shakaMinimumDvrSize;
     return _this;
   }
 
   _createClass(DashShakaPlayback, [{
+    key: 'getProgramDateTime',
+    value: function getProgramDateTime() {
+      return new Date((this.presentationTimeline.getPresentationStartTime() + this.seekRange.start) * 1000);
+    }
+  }, {
+    key: '_updateDvr',
+    value: function _updateDvr(status) {
+      this.trigger(_clappr.Events.PLAYBACK_DVR, status);
+      this.trigger(_clappr.Events.PLAYBACK_STATS_ADD, { 'dvr': status });
+    }
+  }, {
+    key: 'seek',
+    value: function seek(time) {
+      if (time < 0) {
+        _clappr.Log.warn('Attempt to seek to a negative time. Resetting to live point. Use seekToLivePoint() to seek to the live point.');
+        time = this._duration;
+      }
+      // assume live if time within 3 seconds of end of stream
+      this.dvrEnabled && this._updateDvr(time < this._duration - 3);
+      time += this._startTime;
+      _get(DashShakaPlayback.prototype.__proto__ || Object.getPrototypeOf(DashShakaPlayback.prototype), 'seek', this).call(this, time);
+    }
+  }, {
+    key: 'pause',
+    value: function pause() {
+      _get(DashShakaPlayback.prototype.__proto__ || Object.getPrototypeOf(DashShakaPlayback.prototype), 'pause', this).call(this);
+
+      if (this.dvrEnabled) this._updateDvr(true);
+    }
+  }, {
     key: 'play',
     value: function play() {
       if (!this._player) {
@@ -202,6 +297,21 @@ var DashShakaPlayback = function (_HTML5Video) {
       this._stopped = false;
       this._src = this.el.src;
       _get(DashShakaPlayback.prototype.__proto__ || Object.getPrototypeOf(DashShakaPlayback.prototype), 'play', this).call(this);
+      this._startTimeUpdateTimer();
+    }
+  }, {
+    key: '_startTimeUpdateTimer',
+    value: function _startTimeUpdateTimer() {
+      var _this3 = this;
+
+      this._timeUpdateTimer = setInterval(function () {
+        _this3._onTimeUpdate();
+      }, 100);
+    }
+  }, {
+    key: '_stopTimeUpdateTimer',
+    value: function _stopTimeUpdateTimer() {
+      clearInterval(this._timeUpdateTimer);
     }
 
     // skipping HTML5Video `_setupSrc` (on tag video)
@@ -240,8 +350,9 @@ var DashShakaPlayback = function (_HTML5Video) {
   }, {
     key: 'stop',
     value: function stop() {
-      var _this3 = this;
+      var _this4 = this;
 
+      this._stopTimeUpdateTimer();
       clearInterval(this.sendStatsId);
       this._stopped = true;
 
@@ -249,9 +360,9 @@ var DashShakaPlayback = function (_HTML5Video) {
         this._sendStats();
 
         this._player.unload().then(function () {
-          _get(DashShakaPlayback.prototype.__proto__ || Object.getPrototypeOf(DashShakaPlayback.prototype), 'stop', _this3).call(_this3);
-          _this3._player = null;
-          _this3._isShakaReadyState = false;
+          _get(DashShakaPlayback.prototype.__proto__ || Object.getPrototypeOf(DashShakaPlayback.prototype), 'stop', _this4).call(_this4);
+          _this4._player = null;
+          _this4._isShakaReadyState = false;
         }).catch(function () {
           _clappr.Log.error('shaka could not be unloaded');
         });
@@ -319,15 +430,16 @@ var DashShakaPlayback = function (_HTML5Video) {
   }, {
     key: 'destroy',
     value: function destroy() {
-      var _this4 = this;
+      var _this5 = this;
 
+      this._stopTimeUpdateTimer();
       clearInterval(this.sendStatsId);
 
       if (this._player) {
         this._player.destroy().then(function () {
-          return _this4._destroy();
+          return _this5._destroy();
         }).catch(function () {
-          _this4._destroy();
+          _this5._destroy();
           _clappr.Log.error('shaka could not be destroyed');
         });
       } else {
@@ -339,7 +451,7 @@ var DashShakaPlayback = function (_HTML5Video) {
   }, {
     key: '_setup',
     value: function _setup() {
-      var _this5 = this;
+      var _this6 = this;
 
       this._isShakaReadyState = false;
       this._ccIsSetup = false;
@@ -349,9 +461,9 @@ var DashShakaPlayback = function (_HTML5Video) {
 
       var playerLoaded = this._player.load(this._options.src);
       playerLoaded.then(function () {
-        return _this5._loaded();
+        return _this6._loaded();
       }).catch(function (e) {
-        return _this5._setupError(e);
+        return _this6._setupError(e);
       });
     }
   }, {
@@ -362,6 +474,22 @@ var DashShakaPlayback = function (_HTML5Video) {
       player.addEventListener('adaptation', this._onAdaptation.bind(this));
       player.addEventListener('buffering', this._onBuffering.bind(this));
       return player;
+    }
+  }, {
+    key: '_onTimeUpdate',
+    value: function _onTimeUpdate() {
+      if (!this.shakaPlayerInstance) return;
+
+      var update = {
+        current: this.getCurrentTime(),
+        total: this.getDuration(),
+        firstFragDateTime: this.getProgramDateTime()
+      };
+      var isSame = this._lastTimeUpdate && update.current === this._lastTimeUpdate.current && update.total === this._lastTimeUpdate.total;
+      if (isSame) return;
+
+      this._lastTimeUpdate = update;
+      this.trigger(_clappr.Events.PLAYBACK_TIMEUPDATE, update, this.name);
     }
   }, {
     key: '_onBuffering',
@@ -391,11 +519,11 @@ var DashShakaPlayback = function (_HTML5Video) {
   }, {
     key: '_startToSendStats',
     value: function _startToSendStats() {
-      var _this6 = this;
+      var _this7 = this;
 
       var intervalMs = this._options.shakaSendStatsInterval || SEND_STATS_INTERVAL_MS;
       this.sendStatsId = setInterval(function () {
-        return _this6._sendStats();
+        return _this7._sendStats();
       }, intervalMs);
     }
   }, {
@@ -461,6 +589,14 @@ var DashShakaPlayback = function (_HTML5Video) {
         height: activeVideo.height,
         level: activeVideo.id
       });
+    }
+  }, {
+    key: '_updateSettings',
+    value: function _updateSettings() {
+      if (this.getPlaybackType() === 'vod') this.settings.left = ['playpause', 'position', 'duration'];else if (this.dvrEnabled) this.settings.left = ['playpause'];else this.settings.left = ['playstop'];
+
+      this.settings.seekEnabled = this.isSeekEnabled();
+      this.trigger(_clappr.Events.PLAYBACK_SETTINGSUPDATE);
     }
   }, {
     key: '_destroy',
@@ -547,8 +683,10 @@ var DashShakaPlayback = function (_HTML5Video) {
 
       if (showingTrack) {
         this._player.selectTextTrack(showingTrack.track);
+        this._player.setTextTrackVisibility(true);
         this._enableShakaTextTrack(true);
       } else {
+        this._player.setTextTrackVisibility(false);
         this._enableShakaTextTrack(false);
       }
 
@@ -566,18 +704,29 @@ exports.default = DashShakaPlayback;
 module.exports = exports['default'];
 
 /***/ }),
-/* 1 */
+
+/***/ "clappr":
+/*!******************************************************************************************!*\
+  !*** external {"amd":"clappr","commonjs":"clappr","commonjs2":"clappr","root":"Clappr"} ***!
+  \******************************************************************************************/
+/*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_clappr__;
 
 /***/ }),
-/* 2 */
+
+/***/ "shaka-player":
+/*!************************!*\
+  !*** external "shaka" ***!
+  \************************/
+/*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_shaka_player__;
 
 /***/ })
-/******/ ]);
+
+/******/ });
 });
 //# sourceMappingURL=dash-shaka-playback.external.js.map
