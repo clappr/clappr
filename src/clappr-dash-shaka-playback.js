@@ -137,13 +137,14 @@ class DashShakaPlayback extends HTML5Video {
   }
 
   _startTimeUpdateTimer() {
+    this._stopTimeUpdateTimer()
     this._timeUpdateTimer = setInterval(() => {
       this._onTimeUpdate()
     }, 100)
   }
 
   _stopTimeUpdateTimer() {
-    clearInterval(this._timeUpdateTimer)
+    this._timeUpdateTimer && clearInterval(this._timeUpdateTimer)
   }
 
   // skipping HTML5Video `_setupSrc` (on tag video)
