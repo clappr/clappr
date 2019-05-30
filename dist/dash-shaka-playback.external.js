@@ -304,6 +304,7 @@ var DashShakaPlayback = function (_HTML5Video) {
     value: function _startTimeUpdateTimer() {
       var _this3 = this;
 
+      this._stopTimeUpdateTimer();
       this._timeUpdateTimer = setInterval(function () {
         _this3._onTimeUpdate();
       }, 100);
@@ -311,7 +312,7 @@ var DashShakaPlayback = function (_HTML5Video) {
   }, {
     key: '_stopTimeUpdateTimer',
     value: function _stopTimeUpdateTimer() {
-      clearInterval(this._timeUpdateTimer);
+      this._timeUpdateTimer && clearInterval(this._timeUpdateTimer);
     }
 
     // skipping HTML5Video `_setupSrc` (on tag video)
