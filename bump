@@ -64,6 +64,12 @@ send_mail() {
 }
 
 main() {
+  npm whoami
+  if (("$?" != "0")); then
+    echo "you are not logged into npm"
+    exit 1
+  fi
+  git flow release start $1 &&
   update_dependencies &&
   update_version $1 &&
   update_bower &&
