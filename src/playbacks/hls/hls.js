@@ -199,6 +199,8 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   _startTimeUpdateTimer() {
+    if (this._timeUpdateTimer) return
+
     this._timeUpdateTimer = setInterval(() => {
       this._onDurationChange()
       this._onTimeUpdate()
@@ -206,7 +208,10 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   _stopTimeUpdateTimer() {
+    if (!this._timeUpdateTimer) return
+
     clearInterval(this._timeUpdateTimer)
+    this._timeUpdateTimer = null
   }
 
   getProgramDateTime() {
@@ -400,6 +405,7 @@ export default class HLS extends HTML5VideoPlayback {
   }
 
   stop() {
+    this._stopTimeUpdateTimer()
     if (this._hls) {
       super.stop()
       this._hls.destroy()
