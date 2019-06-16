@@ -160,7 +160,7 @@ export default class Container extends UIObject {
    * @method bindEvents
    */
   bindEvents() {
-    this.listenTo(this.playback, Events.PLAYBACK_PROGRESS, this.progress)
+    this.listenTo(this.playback, Events.PLAYBACK_PROGRESS, this.onProgress)
     this.listenTo(this.playback, Events.PLAYBACK_TIMEUPDATE, this.timeUpdated)
     this.listenTo(this.playback, Events.PLAYBACK_READY, this.ready)
     this.listenTo(this.playback, Events.PLAYBACK_BUFFERING, this.onBuffering)
@@ -287,7 +287,7 @@ export default class Container extends UIObject {
     this.trigger(Events.CONTAINER_TIMEUPDATE, timeProgress, this.name)
   }
 
-  progress(...args) {
+  onProgress(...args) {
     this.trigger(Events.CONTAINER_PROGRESS, ...args, this.name)
   }
 
