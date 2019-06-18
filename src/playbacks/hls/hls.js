@@ -335,10 +335,32 @@ export default class HLS extends HTML5VideoPlayback {
         this.stop()
       }
     } else {
+      // Transforms HLSJS.ErrorDetails.KEY_LOAD_ERROR non-fatal error to
+      // playback fatal error if triggerFatalErrorOnResourceDenied playback
+      // option is set. HLSJS.ErrorTypes.KEY_SYSTEM_ERROR are fatal errors
+      // and therefore already handled.
+      if (this.options.playback
+        && this.options.playback.triggerFatalErrorOnResourceDenied
+        && this._keyIsDenied(data)
+      ) {
+        Log.error('hlsjs: could not load decrypt key.', { evt, data })
+        formattedError = this.createError(error)
+        this.trigger(Events.PLAYBACK_ERROR, formattedError)
+        this.stop()
+        return
+      }
+
       error.level = PlayerError.Levels.WARN
       this.createError(error)
       Log.warn('hlsjs: non-fatal error occurred', { evt, data })
     }
+  }
+
+  _keyIsDenied(data) {
+    return data.type === HLSJS.ErrorTypes.NETWORK_ERROR
+      && data.details === HLSJS.ErrorDetails.KEY_LOAD_ERROR
+      && data.response
+      && data.response.code >= 400
   }
 
   _onTimeUpdate() {
