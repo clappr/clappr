@@ -30386,7 +30386,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.3.5"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.3.6"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -32386,10 +32386,26 @@ var HLS = function (_HTML5VideoPlayback) {
         this.stop();
       }
     } else {
+      // Transforms HLSJS.ErrorDetails.KEY_LOAD_ERROR non-fatal error to
+      // playback fatal error if triggerFatalErrorOnResourceDenied playback
+      // option is set. HLSJS.ErrorTypes.KEY_SYSTEM_ERROR are fatal errors
+      // and therefore already handled.
+      if (this.options.playback.triggerFatalErrorOnResourceDenied && this._keyIsDenied(data)) {
+        _log2.default.error('hlsjs: could not load decrypt key.', { evt: evt, data: data });
+        formattedError = this.createError(error);
+        this.trigger(_events2.default.PLAYBACK_ERROR, formattedError);
+        this.stop();
+        return;
+      }
+
       error.level = _error2.default.Levels.WARN;
       this.createError(error);
       _log2.default.warn('hlsjs: non-fatal error occurred', { evt: evt, data: data });
     }
+  };
+
+  HLS.prototype._keyIsDenied = function _keyIsDenied(data) {
+    return data.type === _hls2.default.ErrorTypes.NETWORK_ERROR && data.details === _hls2.default.ErrorDetails.KEY_LOAD_ERROR && data.response && data.response.code >= 400;
   };
 
   HLS.prototype._onTimeUpdate = function _onTimeUpdate() {

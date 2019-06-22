@@ -82,6 +82,7 @@ The configuration for the playback, it's still only compatible with `html5_video
     playInline: true, // allows inline playback when running on iOS UIWebview
     crossOrigin: 'use-credentials',
     recycleVideo: Clappr.Browser.isMobile, // Recycle <video> element only for mobile. (default is false)
+    triggerFatalErrorOnResourceDenied: true, // Triggers playback fatal error if resource is denied. (default is false)
     externalTracks: [ // Add external <track> (if supported by browser, see also https://www.w3.org/TR/html5/embedded-content-0.html#the-track-element)
       {lang: 'en', label: 'English', src: 'http://example.com/en.vtt', kind: 'subtitles'},
       {lang: 'fr', label: 'French', src: 'http://example.com/fr.vtt'} // 'kind' default value is 'subtitles'
@@ -89,6 +90,9 @@ The configuration for the playback, it's still only compatible with `html5_video
   }
 }
 ```
+
+With HLS.JS playback, if `triggerFatalErrorOnResourceDenied` is set to true, it will triggers a playback fatal error event if decrypt key http response code is greater than or equal to 400. (Default behaviour is to automatically retry key request). This option is used to attempt to reproduce iOS devices behaviour which internally use html5 video playback.
+
 #### HLS configuration
 
 All options to configure the HLS playback should be under `playback`. Any specific settings for hls.js should be in the option `hlsjsConfig`:
