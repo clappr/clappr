@@ -9502,15 +9502,11 @@ var _clapprZepto = __webpack_require__(/*! clappr-zepto */ "./node_modules/clapp
 
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
+var _playback = __webpack_require__(/*! ../../base/playback */ "./src/base/playback.js");
+
+var _playback2 = _interopRequireDefault(_playback);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-/**
- * The ContainerFactory is responsible for manage playback bootstrap and create containers.
- */
 
 var ContainerFactory = function (_BaseObject) {
   (0, _inherits3.default)(ContainerFactory, _BaseObject);
@@ -9568,7 +9564,9 @@ var ContainerFactory = function (_BaseObject) {
       mimeType: mimeType
     });
     var playbackPlugin = this.findPlaybackPlugin(resolvedSource, mimeType);
-    var playback = new playbackPlugin(options, this._i18n, this.playerError);
+
+    // Fallback to empty playback object until we sort out unsupported sources error without NoOp playback
+    var playback = playbackPlugin ? new playbackPlugin(options, this._i18n, this.playerError) : new _playback2.default();
 
     options = _clapprZepto2.default.extend({}, options, { playback: playback });
 
@@ -9589,7 +9587,13 @@ var ContainerFactory = function (_BaseObject) {
   };
 
   return ContainerFactory;
-}(_base_object2.default);
+}(_base_object2.default); // Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+/**
+ * The ContainerFactory is responsible for manage playback bootstrap and create containers.
+ */
 
 exports.default = ContainerFactory;
 module.exports = exports['default'];

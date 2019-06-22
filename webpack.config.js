@@ -5,7 +5,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const webpackConfig = require('./webpack.config.base')
-const packageName = require('./package.json').name
+const packageName = 'clappr-core'
 
 const minimize = !!process.env.MINIMIZE
 const analyzeBundle = !!process.env.ANALYZE_BUNDLE

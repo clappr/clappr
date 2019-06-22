@@ -1,5 +1,5 @@
 {
-  "name": "clappr-core",
+  "name": "@clappr/clappr-core",
   "version": "0.3.6",
   "description": "Core components of the extensible media player for the web",
   "main": "./dist/clappr-core.js",
@@ -18,14 +18,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:clappr/clappr.git"
+    "url": "git@github.com:clappr/clappr-core.git"
   },
   "author": "Globo.com",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/clappr/clappr/issues"
+    "url": "https://github.com/clappr/clappr-core/issues"
   },
-  "homepage": "https://github.com/clappr/clappr",
+  "homepage": "https://github.com/clappr/clappr-core",
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.3",
