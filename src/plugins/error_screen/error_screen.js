@@ -1,7 +1,4 @@
-import Events from '../../base/events'
-import UICorePlugin from '../../base/ui_core_plugin'
-import template from '../../base/template'
-import PlayerError from '../../components/error/'
+import { Events, PlayerError, UICorePlugin, template } from 'clappr'
 
 import reloadIcon from '../../icons/10-reload.svg'
 import templateHtml from './public/error_screen.html'

@@ -1,6 +1,4 @@
-import UICorePlugin from '../../base/ui_core_plugin'
-import template from '../../base/template'
-import Events from '../../base/events'
+import { Events, UICorePlugin, template } from 'clappr'
 import ccIcon from '../../icons/09-cc.svg'
 import ccHTML from './public/closed_captions.html'
 import './public/closed_captions.scss'

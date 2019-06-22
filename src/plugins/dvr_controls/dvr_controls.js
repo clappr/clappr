@@ -1,7 +1,4 @@
-import UICorePlugin from '../../base/ui_core_plugin'
-import template from '../../base/template'
-import Playback from '../../base/playback'
-import Events from '../../base/events'
+import { Events, Playback, UICorePlugin, template } from 'clappr'
 import dvrHTML from './public/index.html'
 import './public/dvr_controls.scss'
 

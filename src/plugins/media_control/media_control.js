@@ -6,17 +6,9 @@
  * The MediaControl is responsible for displaying the Player controls.
  */
 
-import { Config, Fullscreen, formatTime, extend, removeArrayItem } from '../../base/utils'
 import { Kibo } from '../../vendor'
 
-import Events from '../../base/events'
-import UICorePlugin from '../../base/ui_core_plugin'
-import Browser from '../../components/browser'
-import Mediator from '../../components/mediator'
-import template from '../../base/template'
-import Playback from '../../base/playback'
-
-import $ from 'clappr-zepto'
+import { Events, UICorePlugin, Browser, Mediator, Playback, Utils, template, $ } from 'clappr'
 
 import './public/media-control.scss'
 import mediaControlHTML from './public/media-control.html'
@@ -29,6 +21,8 @@ import volumeMuteIcon from '../../icons/05-mute.svg'
 import fullscreenIcon from '../../icons/06-expand.svg'
 import exitFullscreenIcon from '../../icons/07-shrink.svg'
 import hdIcon from '../../icons/08-hd.svg'
+
+const { Config, Fullscreen, formatTime, extend, removeArrayItem } = Utils
 
 export default class MediaControl extends UICorePlugin {
   get name() { return 'media_control' }

@@ -2,11 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import UIContainerPlugin from '../../base/ui_container_plugin'
-import Events from '../../base/events'
-import template from '../../base/template'
-import Playback from '../../base/playback'
-import PlayerError from '../../components/error/error'
+import { Events, Playback, PlayerError, UIContainerPlugin, template } from 'clappr'
+
 import posterHTML from './public/poster.html'
 import playIcon from '../../icons/01-play.svg'
 import './public/poster.scss'

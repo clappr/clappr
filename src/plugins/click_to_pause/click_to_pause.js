@@ -2,9 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import ContainerPlugin from '../../base/container_plugin'
-import Events from '../../base/events'
-import Playback from '../../base/playback'
+import { ContainerPlugin, Events, Playback } from 'clappr'
 
 export default class ClickToPausePlugin extends ContainerPlugin {
   get name() { return 'click_to_pause' }

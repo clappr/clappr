@@ -2,7 +2,8 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <script type="text/javascript" charset="utf-8" src="latest/clappr.js"></script>
+  <script type="text/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/@clappr/core@0.3.6/dist/clappr-core.min.js"></script>
+  <script type="text/javascript" charset="utf-8" src="latest/clappr-plugins.js"></script>
   <script type="text/javascript" charset="utf-8" src="j/main.js"></script>
   <script type="text/javascript" charset="utf-8" src="j/editor/ace.js"></script>
   <link rel="stylesheet" href="stylesheets/bootstrap.min.css" type="text/css" media="screen" charset="utf-8">
@@ -59,11 +60,11 @@
 
 var player = new Clappr.Player({
   source: 'http://clappr.io/highline.mp4',
-  poster: 'http://clappr.io/poster.png', 
-  mute: true, 
-  height: 360, 
-  width: 640 
-}); 
+  poster: 'http://clappr.io/poster.png',
+  mute: true,
+  height: 360,
+  width: 640
+});
 
 player.attachTo(playerElement);
       </div>

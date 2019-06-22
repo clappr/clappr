@@ -1,6 +1,4 @@
-import CorePlugin from '../base/core_plugin'
-
-import Events from '../base/events'
+import { CorePlugin, Events } from 'clappr'
 
 export default class SourcesPlugin extends CorePlugin {
   get name() { return 'sources' }

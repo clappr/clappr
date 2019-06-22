@@ -2,9 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import ContainerPlugin from '../../base/container_plugin'
-import Events from '../../base/events'
-import $ from 'clappr-zepto'
+import { ContainerPlugin, Events, $ } from 'clappr'
 
 export default class StatsPlugin extends ContainerPlugin {
   get name() { return 'stats' }

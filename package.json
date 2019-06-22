@@ -1,8 +1,8 @@
 {
-  "name": "clappr",
+  "name": "@clappr/plugins",
   "version": "0.3.6",
-  "description": "An extensible media player for the web",
-  "main": "./dist/clappr.js",
+  "description": "Main plugins for the Clappr project",
+  "main": "./dist/clappr-plugins.js",
   "scripts": {
     "bundle-check": "ANALYZE_BUNDLE=true ./node_modules/.bin/webpack -p",
     "release": "MINIMIZE=true ./node_modules/.bin/webpack --progress",
@@ -17,15 +17,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:clappr/clappr.git"
+    "url": "git@github.com:clappr/clappr-plugins.git"
   },
   "author": "Globo.com",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/clappr/clappr/issues"
+    "url": "https://github.com/clappr/clappr-plugins/issues"
   },
-  "homepage": "https://github.com/clappr/clappr",
+  "homepage": "https://github.com/clappr/clappr-plugins",
+  "peerDependencies": {
+    "@clappr/core": "^0.3.6"
+  },
   "devDependencies": {
+    "@clappr/core": "^0.3.6",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.3",
     "babel-plugin-add-module-exports": "^0.2.1",
@@ -34,7 +38,6 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
-    "clappr-zepto": "0.0.7",
     "coveralls": "^3.0.0",
     "css-loader": "^0.28.10",
     "cz-conventional-changelog": "^2.1.0",

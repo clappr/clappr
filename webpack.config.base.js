@@ -3,6 +3,15 @@ const webpack = require('webpack')
 
 const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
 
+const externals = {
+  clappr: {
+    amd: 'clappr',
+    commonjs: 'clappr',
+    commonjs2: 'clappr',
+    root: 'Clappr'
+  }
+}
+
 const webpackConfig = (config) => {
   return {
     devServer: {
@@ -18,7 +27,10 @@ const webpackConfig = (config) => {
     devtool: config.devtool || 'source-maps',
     optimization: config.optimization,
     entry: path.resolve(__dirname, 'src/main.js'),
-    externals: config.externals,
+    externals: {
+      ...externals,
+      ...config.externals,
+    },
     module: {
       rules: [
         {
@@ -27,14 +39,21 @@ const webpackConfig = (config) => {
           exclude: [path.resolve(__dirname, './node_modules')]
         },
         {
-          test: /fonts\.css$/,
-          loaders: ['css-loader', 'postcss-loader'],
-          include: path.resolve(__dirname, 'src/components/core/public')
-        },
-        {
-          test: /\.scss$/,
-          loaders: ['style-loader?singleton=true', 'css-loader', 'postcss-loader', 'sass-loader?includePaths[]='
-            + path.resolve(__dirname, './src/base/scss')
+          test: /(fonts)?\.s?css$/,
+          loaders: ['style-loader?singleton=true', 'css-loader', 'postcss-loader',
+            {
+              loader: 'sass-loader',
+              options: {
+                includePaths: [
+                  path.resolve(__dirname, 'src/public'),
+                  path.resolve(__dirname, 'src/public/scss')
+                ]
+              }
+            }
+            //'sass-loader?includePaths[]='
+            // + path.resolve(__dirname, 'src/public')
+            // + '!'
+            // + path.resolve(__dirname, 'src/public/scss')
           ],
           include: path.resolve(__dirname, 'src')
         },
@@ -57,7 +76,7 @@ const webpackConfig = (config) => {
     },
     resolve: {
       alias: {
-        'clappr-zepto': 'clappr-zepto/zepto.js'
+        'clappr': '@clappr/core'
       },
       plugins: [
         new DirectoryNamedWebpackPlugin(true),
@@ -68,13 +87,12 @@ const webpackConfig = (config) => {
       path: path.resolve(__dirname, 'dist'),
       publicPath: 'dist/',
       filename: config.filename,
-      library: 'Clappr',
+      library: 'ClapprPlugins',
       libraryTarget: 'umd'
     },
     plugins: [
       new webpack.DefinePlugin({
         VERSION: JSON.stringify(require('./package.json').version),
-        PLAIN_HTML5_ONLY: JSON.stringify(!!process.env.CLAPPR_PLAIN_HTML5_ONLY)
       }),
       ...(config.plugins || [])
     ],

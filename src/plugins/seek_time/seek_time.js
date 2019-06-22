@@ -2,14 +2,11 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import { formatTime } from '../../base/utils'
-
-import UICorePlugin from '../../base/ui_core_plugin'
-import template from '../../base/template'
-import Events from '../../base/events'
-import Playback from '../../base/playback'
+import { Events, Playback, UICorePlugin, Utils, template } from 'clappr'
 import seekTimeHTML from './public/seek_time.html'
 import './public/seek_time.scss'
+
+const { formatTime } = Utils
 
 export default class SeekTime extends UICorePlugin {
   get name() { return 'seek_time' }

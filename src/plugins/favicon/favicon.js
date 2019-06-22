@@ -1,6 +1,4 @@
-import CorePlugin from '../../base/core_plugin'
-import Events from '../../base/events'
-import $ from 'clappr-zepto'
+import { CorePlugin, Events, $ } from 'clappr'
 
 import playIcon from '../../icons/01-play.svg'
 import pauseIcon from '../../icons/02-pause.svg'
