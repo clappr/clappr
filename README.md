@@ -1,6 +1,6 @@
 [![npm version](https://badge.fury.io/js/clappr.svg)](http://badge.fury.io/js/clappr)
 [![Build Status](https://travis-ci.org/clappr/clappr.svg?branch=master)](https://travis-ci.org/clappr/clappr)
-[![Coverage Status](https://coveralls.io/repos/clappr/clappr/badge.svg?branch=master&service=github)](https://coveralls.io/github/clappr/clappr?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/clappr/clappr-core/badge.svg?branch=master)](https://coveralls.io/github/clappr/clappr-core?branch=master)
 [![License](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)
 [![](https://data.jsdelivr.com/v1/package/npm/clappr/badge)](https://www.jsdelivr.com/package/npm/clappr)
 
