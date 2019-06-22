@@ -1,4 +1,4 @@
-import Log from '../plugins/log'
+import Log from '../components/log'
 import PlayerError from '../components/error'
 
 const ErrorMixin = {

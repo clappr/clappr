@@ -5583,7 +5583,7 @@ var _assign = __webpack_require__(/*! babel-runtime/core-js/object/assign */ "./
 
 var _assign2 = _interopRequireDefault(_assign);
 
-var _log = __webpack_require__(/*! ../plugins/log */ "./src/plugins/log/index.js");
+var _log = __webpack_require__(/*! ../components/log */ "./src/components/log/index.js");
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -5665,7 +5665,7 @@ var _typeof2 = __webpack_require__(/*! babel-runtime/helpers/typeof */ "./node_m
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
-var _log = __webpack_require__(/*! ../plugins/log */ "./src/plugins/log/index.js");
+var _log = __webpack_require__(/*! ../components/log */ "./src/components/log/index.js");
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -10363,7 +10363,7 @@ var _base_object = __webpack_require__(/*! ../../base/base_object */ "./src/base
 
 var _base_object2 = _interopRequireDefault(_base_object);
 
-var _log = __webpack_require__(/*! ../../plugins/log */ "./src/plugins/log/index.js");
+var _log = __webpack_require__(/*! ../log */ "./src/components/log/index.js");
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -10661,6 +10661,174 @@ var Loader = function (_BaseObject) {
 
 
 exports.default = Loader;
+module.exports = exports['default'];
+
+/***/ }),
+
+/***/ "./src/components/log/index.js":
+/*!*************************************!*\
+  !*** ./src/components/log/index.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _log = __webpack_require__(/*! ./log */ "./src/components/log/log.js");
+
+var _log2 = _interopRequireDefault(_log);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _log2.default;
+module.exports = exports['default'];
+
+/***/ }),
+
+/***/ "./src/components/log/log.js":
+/*!***********************************!*\
+  !*** ./src/components/log/log.js ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _vendor = __webpack_require__(/*! ../../vendor */ "./src/vendor/index.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var BOLD = 'font-weight: bold; font-size: 13px;';
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+var INFO = 'color: #006600;' + BOLD;
+var DEBUG = 'color: #0000ff;' + BOLD;
+var WARN = 'color: #ff8000;' + BOLD;
+var ERROR = 'color: #ff0000;' + BOLD;
+
+var LEVEL_DEBUG = 0;
+var LEVEL_INFO = 1;
+var LEVEL_WARN = 2;
+var LEVEL_ERROR = 3;
+var LEVEL_DISABLED = LEVEL_ERROR;
+
+var COLORS = [DEBUG, INFO, WARN, ERROR, ERROR];
+var DESCRIPTIONS = ['debug', 'info', 'warn', 'error', 'disabled'];
+
+var Log = function () {
+  function Log() {
+    var _this = this;
+
+    var level = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : LEVEL_INFO;
+    var offLevel = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : LEVEL_DISABLED;
+    (0, _classCallCheck3.default)(this, Log);
+
+    this.kibo = new _vendor.Kibo();
+    this.kibo.down(['ctrl shift d'], function () {
+      return _this.onOff();
+    });
+    this.BLACKLIST = ['timeupdate', 'playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress'];
+    this.level = level;
+    this.offLevel = offLevel;
+  }
+
+  Log.prototype.debug = function debug(klass) {
+    this.log(klass, LEVEL_DEBUG, Array.prototype.slice.call(arguments, 1));
+  };
+
+  Log.prototype.info = function info(klass) {
+    this.log(klass, LEVEL_INFO, Array.prototype.slice.call(arguments, 1));
+  };
+
+  Log.prototype.warn = function warn(klass) {
+    this.log(klass, LEVEL_WARN, Array.prototype.slice.call(arguments, 1));
+  };
+
+  Log.prototype.error = function error(klass) {
+    this.log(klass, LEVEL_ERROR, Array.prototype.slice.call(arguments, 1));
+  };
+
+  Log.prototype.onOff = function onOff() {
+    if (this.level === this.offLevel) {
+      this.level = this.previousLevel;
+    } else {
+      this.previousLevel = this.level;
+      this.level = this.offLevel;
+    }
+    // handle instances where console.log is unavailable
+    if (window.console && window.console.log) window.console.log('%c[Clappr.Log] set log level to ' + DESCRIPTIONS[this.level], WARN);
+  };
+
+  Log.prototype.level = function level(newLevel) {
+    this.level = newLevel;
+  };
+
+  Log.prototype.log = function log(klass, level, message) {
+    if (this.BLACKLIST.indexOf(message[0]) >= 0) return;
+    if (level < this.level) return;
+
+    if (!message) {
+      message = klass;
+      klass = null;
+    }
+    var color = COLORS[level];
+    var klassDescription = '';
+    if (klass) klassDescription = '[' + klass + ']';
+
+    if (window.console && window.console.log) window.console.log.apply(console, ['%c[' + DESCRIPTIONS[level] + ']' + klassDescription, color].concat(message));
+  };
+
+  return Log;
+}();
+
+exports.default = Log;
+
+
+Log.LEVEL_DEBUG = LEVEL_DEBUG;
+Log.LEVEL_INFO = LEVEL_INFO;
+Log.LEVEL_WARN = LEVEL_WARN;
+Log.LEVEL_ERROR = LEVEL_ERROR;
+
+Log.getInstance = function () {
+  if (this._instance === undefined) {
+    this._instance = new this();
+    this._instance.previousLevel = this._instance.level;
+    this._instance.level = this._instance.offLevel;
+  }
+  return this._instance;
+};
+
+Log.setLevel = function (level) {
+  this.getInstance().level = level;
+};
+
+Log.debug = function () {
+  this.getInstance().debug.apply(this.getInstance(), arguments);
+};
+Log.info = function () {
+  this.getInstance().info.apply(this.getInstance(), arguments);
+};
+Log.warn = function () {
+  this.getInstance().warn.apply(this.getInstance(), arguments);
+};
+Log.error = function () {
+  this.getInstance().error.apply(this.getInstance(), arguments);
+};
 module.exports = exports['default'];
 
 /***/ }),
@@ -11598,6 +11766,10 @@ var _loader = __webpack_require__(/*! ./components/loader */ "./src/components/l
 
 var _loader2 = _interopRequireDefault(_loader);
 
+var _log = __webpack_require__(/*! ./components/log */ "./src/components/log/index.js");
+
+var _log2 = _interopRequireDefault(_log);
+
 var _mediator = __webpack_require__(/*! ./components/mediator */ "./src/components/mediator.js");
 
 var _mediator2 = _interopRequireDefault(_mediator);
@@ -11617,10 +11789,6 @@ var _html5_video2 = _interopRequireDefault(_html5_video);
 var _html_img = __webpack_require__(/*! ./playbacks/html_img */ "./src/playbacks/html_img/index.js");
 
 var _html_img2 = _interopRequireDefault(_html_img);
-
-var _log = __webpack_require__(/*! ./plugins/log */ "./src/plugins/log/index.js");
-
-var _log2 = _interopRequireDefault(_log);
 
 var _styler = __webpack_require__(/*! ./base/styler */ "./src/base/styler.js");
 
@@ -11845,6 +12013,10 @@ var _keys2 = _interopRequireDefault(_keys);
 
 var _utils = __webpack_require__(/*! ../../base/utils */ "./src/base/utils.js");
 
+var _events = __webpack_require__(/*! ../../base/events */ "./src/base/events.js");
+
+var _events2 = _interopRequireDefault(_events);
+
 var _playback = __webpack_require__(/*! ../../base/playback */ "./src/base/playback.js");
 
 var _playback2 = _interopRequireDefault(_playback);
@@ -11853,17 +12025,13 @@ var _browser = __webpack_require__(/*! ../../components/browser */ "./src/compon
 
 var _browser2 = _interopRequireDefault(_browser);
 
+var _log = __webpack_require__(/*! ../../components/log */ "./src/components/log/index.js");
+
+var _log2 = _interopRequireDefault(_log);
+
 var _error = __webpack_require__(/*! ../../components/error */ "./src/components/error/index.js");
 
 var _error2 = _interopRequireDefault(_error);
-
-var _events = __webpack_require__(/*! ../../base/events */ "./src/base/events.js");
-
-var _events2 = _interopRequireDefault(_events);
-
-var _log = __webpack_require__(/*! ../../plugins/log */ "./src/plugins/log/index.js");
-
-var _log2 = _interopRequireDefault(_log);
 
 var _clapprZepto = __webpack_require__(/*! clappr-zepto */ "./node_modules/clappr-zepto/zepto.js");
 
@@ -12781,174 +12949,6 @@ var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/a
 if(content.locals) module.exports = content.locals;
 
 if(false) {}
-
-/***/ }),
-
-/***/ "./src/plugins/log/index.js":
-/*!**********************************!*\
-  !*** ./src/plugins/log/index.js ***!
-  \**********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _log = __webpack_require__(/*! ./log */ "./src/plugins/log/log.js");
-
-var _log2 = _interopRequireDefault(_log);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _log2.default;
-module.exports = exports['default'];
-
-/***/ }),
-
-/***/ "./src/plugins/log/log.js":
-/*!********************************!*\
-  !*** ./src/plugins/log/log.js ***!
-  \********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _vendor = __webpack_require__(/*! ../../vendor */ "./src/vendor/index.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var BOLD = 'font-weight: bold; font-size: 13px;';
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-var INFO = 'color: #006600;' + BOLD;
-var DEBUG = 'color: #0000ff;' + BOLD;
-var WARN = 'color: #ff8000;' + BOLD;
-var ERROR = 'color: #ff0000;' + BOLD;
-
-var LEVEL_DEBUG = 0;
-var LEVEL_INFO = 1;
-var LEVEL_WARN = 2;
-var LEVEL_ERROR = 3;
-var LEVEL_DISABLED = LEVEL_ERROR;
-
-var COLORS = [DEBUG, INFO, WARN, ERROR, ERROR];
-var DESCRIPTIONS = ['debug', 'info', 'warn', 'error', 'disabled'];
-
-var Log = function () {
-  function Log() {
-    var _this = this;
-
-    var level = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : LEVEL_INFO;
-    var offLevel = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : LEVEL_DISABLED;
-    (0, _classCallCheck3.default)(this, Log);
-
-    this.kibo = new _vendor.Kibo();
-    this.kibo.down(['ctrl shift d'], function () {
-      return _this.onOff();
-    });
-    this.BLACKLIST = ['timeupdate', 'playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress'];
-    this.level = level;
-    this.offLevel = offLevel;
-  }
-
-  Log.prototype.debug = function debug(klass) {
-    this.log(klass, LEVEL_DEBUG, Array.prototype.slice.call(arguments, 1));
-  };
-
-  Log.prototype.info = function info(klass) {
-    this.log(klass, LEVEL_INFO, Array.prototype.slice.call(arguments, 1));
-  };
-
-  Log.prototype.warn = function warn(klass) {
-    this.log(klass, LEVEL_WARN, Array.prototype.slice.call(arguments, 1));
-  };
-
-  Log.prototype.error = function error(klass) {
-    this.log(klass, LEVEL_ERROR, Array.prototype.slice.call(arguments, 1));
-  };
-
-  Log.prototype.onOff = function onOff() {
-    if (this.level === this.offLevel) {
-      this.level = this.previousLevel;
-    } else {
-      this.previousLevel = this.level;
-      this.level = this.offLevel;
-    }
-    // handle instances where console.log is unavailable
-    if (window.console && window.console.log) window.console.log('%c[Clappr.Log] set log level to ' + DESCRIPTIONS[this.level], WARN);
-  };
-
-  Log.prototype.level = function level(newLevel) {
-    this.level = newLevel;
-  };
-
-  Log.prototype.log = function log(klass, level, message) {
-    if (this.BLACKLIST.indexOf(message[0]) >= 0) return;
-    if (level < this.level) return;
-
-    if (!message) {
-      message = klass;
-      klass = null;
-    }
-    var color = COLORS[level];
-    var klassDescription = '';
-    if (klass) klassDescription = '[' + klass + ']';
-
-    if (window.console && window.console.log) window.console.log.apply(console, ['%c[' + DESCRIPTIONS[level] + ']' + klassDescription, color].concat(message));
-  };
-
-  return Log;
-}();
-
-exports.default = Log;
-
-
-Log.LEVEL_DEBUG = LEVEL_DEBUG;
-Log.LEVEL_INFO = LEVEL_INFO;
-Log.LEVEL_WARN = LEVEL_WARN;
-Log.LEVEL_ERROR = LEVEL_ERROR;
-
-Log.getInstance = function () {
-  if (this._instance === undefined) {
-    this._instance = new this();
-    this._instance.previousLevel = this._instance.level;
-    this._instance.level = this._instance.offLevel;
-  }
-  return this._instance;
-};
-
-Log.setLevel = function (level) {
-  this.getInstance().level = level;
-};
-
-Log.debug = function () {
-  this.getInstance().debug.apply(this.getInstance(), arguments);
-};
-Log.info = function () {
-  this.getInstance().info.apply(this.getInstance(), arguments);
-};
-Log.warn = function () {
-  this.getInstance().warn.apply(this.getInstance(), arguments);
-};
-Log.error = function () {
-  this.getInstance().error.apply(this.getInstance(), arguments);
-};
-module.exports = exports['default'];
 
 /***/ }),
 

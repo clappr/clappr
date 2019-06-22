@@ -4,11 +4,11 @@
 
 import { isNumber, seekStringToSeconds, DomRecycler, canAutoPlayMedia } from '../../base/utils'
 
+import Events from '../../base/events'
 import Playback from '../../base/playback'
 import Browser from '../../components/browser'
+import Log from '../../components/log'
 import PlayerError from '../../components/error'
-import Events from '../../base/events'
-import Log from '../../plugins/log'
 import $ from 'clappr-zepto'
 import template from '../../base/template'
 import tracksHTML from './public/tracks.html'

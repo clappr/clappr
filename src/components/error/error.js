@@ -1,6 +1,6 @@
 import Events from '../../base/events'
 import BaseObject from '../../base/base_object'
-import Log from '../../plugins/log'
+import Log from '../log'
 
 /**
  * The PlayerError is responsible to receive and propagate errors.
