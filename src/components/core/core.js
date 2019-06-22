@@ -4,7 +4,6 @@
 
 import { isNumber, Fullscreen, DomRecycler } from '../../base/utils'
 
-import Styler from '../../base/styler'
 import Events from '../../base/events'
 import UIObject from '../../base/ui_object'
 import UICorePlugin from '../../base/ui_core_plugin'
@@ -18,9 +17,6 @@ import ErrorMixin from '../../base/error_mixin'
 import $ from 'clappr-zepto'
 
 import './public/style.scss'
-import fontStyle from './public/fonts.css'
-
-let style
 
 /**
  * The Core is responsible to manage Containers, the mediator, MediaControl
@@ -348,11 +344,6 @@ export default class Core extends UIObject {
   }
 
   render() {
-    if (!style)
-      style = Styler.getStyleFor(fontStyle, { baseUrl: this.options.baseUrl })
-
-    $('head').append(style)
-
     this.options.width = this.options.width || this.$el.width()
     this.options.height = this.options.height || this.$el.height()
     const size = { width: this.options.width, height: this.options.height }

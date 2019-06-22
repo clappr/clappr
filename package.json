@@ -1,8 +1,9 @@
 {
-  "name": "clappr",
+  "name": "clappr-core",
   "version": "0.3.6",
-  "description": "An extensible media player for the web",
-  "main": "./dist/clappr.js",
+  "description": "Core components of the extensible media player for the web",
+  "main": "./dist/clappr-core.js",
+  "module": "./src/main.js",
   "scripts": {
     "bundle-check": "ANALYZE_BUNDLE=true ./node_modules/.bin/webpack -p",
     "release": "MINIMIZE=true ./node_modules/.bin/webpack --progress",

@@ -27,27 +27,11 @@ const webpackConfig = (config) => {
           exclude: [path.resolve(__dirname, './node_modules')]
         },
         {
-          test: /fonts\.css$/,
-          loaders: ['css-loader', 'postcss-loader'],
-          include: path.resolve(__dirname, 'src/components/core/public')
-        },
-        {
           test: /\.scss$/,
           loaders: ['style-loader?singleton=true', 'css-loader', 'postcss-loader', 'sass-loader?includePaths[]='
             + path.resolve(__dirname, './src/base/scss')
           ],
           include: path.resolve(__dirname, 'src')
-        },
-        {
-          test: /\.(png|woff|eot|swf|cur|ttf)/,
-          loader: 'url-loader',
-          options: {
-            limit: 1,
-            publicPath: '<%=baseUrl%>/'
-          },
-        },
-        {
-          test: /\.svg/, loader: 'svg-inline-loader'
         },
         {
           test: /\.html/, loader: 'html-loader?minimize=false'
@@ -74,7 +58,6 @@ const webpackConfig = (config) => {
     plugins: [
       new webpack.DefinePlugin({
         VERSION: JSON.stringify(require('./package.json').version),
-        PLAIN_HTML5_ONLY: JSON.stringify(!!process.env.CLAPPR_PLAIN_HTML5_ONLY)
       }),
       ...(config.plugins || [])
     ],

@@ -9,7 +9,6 @@ module.exports = {
         "process": false,
         "ActiveXObject": false,
         "VERSION": false,
-        "PLAIN_HTML5_ONLY": false,
         // Build globals
         "__dirname": false,
         // Test globals
