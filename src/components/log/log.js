@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import { Kibo } from '../../vendor'
-
 const BOLD = 'font-weight: bold; font-size: 13px;'
 const INFO = 'color: #006600;' + BOLD
 const DEBUG = 'color: #0000ff;' + BOLD
@@ -21,8 +19,6 @@ const DESCRIPTIONS = ['debug', 'info', 'warn', 'error', 'disabled']
 
 export default class Log {
   constructor(level = LEVEL_INFO, offLevel = LEVEL_DISABLED) {
-    this.kibo = new Kibo()
-    this.kibo.down(['ctrl shift d'], () => this.onOff())
     this.BLACKLIST = ['timeupdate', 'playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress']
     this.level = level
     this.offLevel = offLevel

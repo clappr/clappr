@@ -24,7 +24,6 @@ import HTML5Audio from './playbacks/html5_audio'
 import HTML5Video from './playbacks/html5_video'
 import HTMLImg from './playbacks/html_img'
 import Styler from './base/styler'
-import Vendor from './vendor'
 import template from './base/template'
 
 import $ from 'clappr-zepto'
@@ -54,7 +53,6 @@ export default {
   HTMLImg,
   Log,
   Styler,
-  Vendor,
   version,
   template,
   $
