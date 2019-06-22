@@ -55,7 +55,7 @@ describe('Player', function() {
     })
 
     it('should trigger error events', function() {
-      const player = new Player({ source: '/video.mp4', persistConfig: false })
+      const player = new Player({ source: 'http://video.mp4', persistConfig: false })
       const element = document.createElement('div')
       const onError = sinon.spy()
       player.on(Events.PLAYER_ERROR, onError)
@@ -199,7 +199,7 @@ describe('Player', function() {
       onResizeSpy = sinon.spy()
 
       this.player = new Player({
-        source: '/video.mp4',
+        source: 'http://video.mp4',
         events: {
           onResize: onResizeSpy
         }
