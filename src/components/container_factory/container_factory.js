@@ -10,6 +10,7 @@ import BaseObject from '../../base/base_object'
 import Events from '../../base/events'
 import Container from '../../components/container'
 import $ from 'clappr-zepto'
+import Playback from '../../base/playback'
 
 export default class ContainerFactory extends BaseObject {
   get options() { return this._options }
@@ -52,7 +53,9 @@ export default class ContainerFactory extends BaseObject {
       mimeType: mimeType
     })
     const playbackPlugin = this.findPlaybackPlugin(resolvedSource, mimeType)
-    const playback = new playbackPlugin(options, this._i18n, this.playerError)
+
+    // Fallback to empty playback object until we sort out unsupported sources error without NoOp playback
+    const playback = playbackPlugin ? new playbackPlugin(options, this._i18n, this.playerError) : new Playback()
 
     options = $.extend({}, options, { playback: playback })
 
