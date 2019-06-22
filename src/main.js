@@ -19,22 +19,10 @@ import PlayerError from './components/error'
 import Loader from './components/loader'
 import Mediator from './components/mediator'
 import PlayerInfo from './components/player_info'
-import BaseFlashPlayback from './playbacks/base_flash_playback'
-import Flash from './playbacks/flash'
-import FlasHLS from './playbacks/flashls'
-import HLS from './playbacks/hls'
 import HTML5Audio from './playbacks/html5_audio'
 import HTML5Video from './playbacks/html5_video'
 import HTMLImg from './playbacks/html_img'
-import NoOp from './playbacks/no_op'
-import MediaControl from './plugins/media_control'
-import ClickToPausePlugin from './plugins/click_to_pause'
-import DVRControls from './plugins/dvr_controls'
-import Favicon from './plugins/favicon'
 import Log from './plugins/log'
-import Poster from './plugins/poster'
-import SpinnerThreeBouncePlugin from './plugins/spinner_three_bounce'
-import WaterMarkPlugin from './plugins/watermark'
 import Styler from './base/styler'
 import Vendor from './vendor'
 import template from './base/template'
@@ -49,7 +37,6 @@ export default {
   Events,
   Browser,
   PlayerInfo,
-  MediaControl,
   ContainerPlugin,
   UIContainerPlugin,
   CorePlugin,
@@ -62,21 +49,10 @@ export default {
   BaseObject,
   UIObject,
   Utils,
-  BaseFlashPlayback,
-  Flash,
-  FlasHLS,
-  HLS,
   HTML5Audio,
   HTML5Video,
   HTMLImg,
-  NoOp,
-  ClickToPausePlugin,
-  DVRControls,
-  Favicon,
   Log,
-  Poster,
-  SpinnerThreeBouncePlugin,
-  WaterMarkPlugin,
   Styler,
   Vendor,
   version,

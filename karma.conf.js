@@ -5,6 +5,7 @@ const webpackConfig = require('./webpack.config.base')
 
 // add subject as webpack's postloader
 const webpackTestConfig = webpackConfig({
+  mode: 'development',
   rules: [
     {
       test: /\.js$/,

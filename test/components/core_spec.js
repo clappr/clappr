@@ -2,7 +2,6 @@ import Core from '../../src/components/core'
 import Browser from '../../src/components/browser'
 import Events from '../../src/base/events'
 import { Fullscreen } from '../../src/base/utils'
-import MediaControl from '../../src/plugins/media_control'
 
 describe('Core', function() {
   describe('When configure', function() {
@@ -48,7 +47,6 @@ describe('Core', function() {
   describe('#toggleFullscreen', () => {
     beforeEach(() => {
       this.core = new Core({})
-      this.core.plugins.push(new MediaControl(this.core))
     })
 
     describe('when is not in fullscreen', () => {
