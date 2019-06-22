@@ -6,7 +6,7 @@ update_dependencies() {
 }
 
 update_version() {
-  current_tag=$(git describe --abbrev=0 --tags) &&
+  current_tag=$(git describe --abbrev=0 --tags master) &&
   echo 'bump from '$current_tag' to '$1 &&
   sed -i ".bkp" "s/\(version\":[ ]*\"\)$current_tag/\1$1/" package.json &&
   sed -i ".bkp" "s/\(version\":[ ]*\"\)$current_tag/\1$1/" yuidoc.json
