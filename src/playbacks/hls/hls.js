@@ -2,17 +2,14 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import HTML5VideoPlayback from '../../playbacks/html5_video'
+import { Events, HTML5Video, Log, Playback, PlayerError, Utils } from 'clappr'
 import HLSJS from 'hls.js'
-import Events from '../../base/events'
-import Playback from '../../base/playback'
-import { now, assign, listContainsIgnoreCase } from '../../base/utils'
-import Log from '../../plugins/log'
-import PlayerError from '../../components/error'
+
+const { now, assign, listContainsIgnoreCase } = Utils
 
 const AUTO = -1
 
-export default class HLS extends HTML5VideoPlayback {
+export default class HLS extends HTML5Video {
   get name() { return 'hls' }
 
   get levels() { return this._levels || [] }

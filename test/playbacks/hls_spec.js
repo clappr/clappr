@@ -1,5 +1,4 @@
-import Events from 'base/events.js'
-import Core from '../../src/components/core'
+import { Core, Events } from 'clappr'
 import HLS from 'playbacks/hls'
 import HLSJS from 'hls.js'
 

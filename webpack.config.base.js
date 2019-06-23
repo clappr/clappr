@@ -57,7 +57,7 @@ const webpackConfig = (config) => {
     },
     resolve: {
       alias: {
-        'clappr-zepto': 'clappr-zepto/zepto.js'
+        'clappr': '@clappr/core'
       },
       plugins: [
         new DirectoryNamedWebpackPlugin(true),

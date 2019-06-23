@@ -6,35 +6,48 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const webpackConfig = require('./webpack.config.base')
-const voidModulePath = path.resolve('./src/base/void')
+
+const packageName = 'hls-playback'
 
 const minimize = !!process.env.MINIMIZE
 const analyzeBundle = !!process.env.ANALYZE_BUNDLE
 const forceInlineDebug = !!process.env.CLAPPR_INLINE_DEBUG
 
+const externals = () => {
+  // By default, only Clappr is defined as external library
+  return {
+    clappr: {
+      amd: 'clappr',
+      commonjs: 'clappr',
+      commonjs2: 'clappr',
+      root: 'Clappr'
+    }
+  }
+}
 
-const plainHtml5Plugins = [
-  new webpack.NormalModuleReplacementPlugin(/playbacks\/flash/, voidModulePath),
-  new webpack.NormalModuleReplacementPlugin(/playbacks\/base_flash_playback/, voidModulePath),
-  new webpack.NormalModuleReplacementPlugin(/playbacks\/flashls/, voidModulePath),
-  new webpack.NormalModuleReplacementPlugin(/playbacks\/hls/, voidModulePath),
-]
+const customExt = externals()
+customExt['hls.js'] = {
+  amd: 'hls.js',
+  commonjs: 'hls.js',
+  commonjs2: 'hls.js',
+  root: 'Hls'
+}
 
 let configurations = []
 
 configurations.push(webpackConfig({
-  filename: 'clappr.js',
-  plugins: analyzeBundle ? [ new BundleAnalyzerPlugin() ] : [],
-  mode: 'development'
+  filename: `${packageName}.js`,
+  plugins: analyzeBundle ? [new BundleAnalyzerPlugin()] : [],
+  mode: 'development',
+  externals: externals(),
 }))
 
-if (!analyzeBundle) {
-  configurations.push(webpackConfig({
-    filename: 'clappr.plainhtml5.js',
-    plugins: plainHtml5Plugins,
-    mode: 'production'
-  }))
-}
+configurations.push(webpackConfig({
+  filename: `${packageName}.external.js`,
+  plugins: analyzeBundle ? [new BundleAnalyzerPlugin()] : [],
+  mode: 'development',
+  externals: customExt,
+}))
 
 const loaderOptions = new webpack.LoaderOptionsPlugin({ minimize, debug: !minimize })
 const uglify = new UglifyJsPlugin({
@@ -52,7 +65,7 @@ if (minimize) {
   console.log('NOTE: Enabled minifying bundle (uglify)')
 
   configurations.push(webpackConfig({
-    filename: 'clappr.min.js',
+    filename: `${packageName}.min.js`,
     plugins: [
       loaderOptions,
     ],
@@ -61,35 +74,45 @@ if (minimize) {
         uglify,
       ],
     },
-    mode: 'production'
+    mode: 'production',
+    externals: externals(),
   }))
 
-
-  console.log('NOTE: Building flavor plainhtml5 with only plain HTML5 playback plugins, but will result in smaller build size')
   configurations.push(webpackConfig({
-    filename: 'clappr.plainhtml5.min.js',
+    filename: `${packageName}.external.min.js`,
     plugins: [
       loaderOptions,
-      ...plainHtml5Plugins,
     ],
     optimization: {
       minimizer: [
         uglify,
       ],
     },
-    mode: 'production'
+    mode: 'production',
+    externals: customExt,
   }))
 }
 
 if (forceInlineDebug) {
   console.log('NOTE: Enabling inline source-maps - this may not be suitable for production usage')
   configurations.push(webpackConfig({
-    filename: 'clappr.debug.min.js',
+    filename: `${packageName}.debug.min.js`,
     devtool: 'inline-source-map',
     plugins: [
       loaderOptions,
     ],
-    mode: 'development'
+    mode: 'development',
+    externals: externals(),
+  }))
+
+  configurations.push(webpackConfig({
+    filename: `${packageName}.external.debug.min.js`,
+    devtool: 'inline-source-map',
+    plugins: [
+      loaderOptions,
+    ],
+    mode: 'development',
+    externals: customExt,
   }))
 }
 
