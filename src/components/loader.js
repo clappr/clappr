@@ -2,16 +2,16 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import BaseObject from '../../base/base_object'
-import PlayerInfo from '../player_info'
+import BaseObject from '../base/base_object'
+import PlayerInfo from './player_info'
 
 /* Playback Plugins */
-import HTML5VideoPlayback from '../../playbacks/html5_video'
-import HTML5AudioPlayback from '../../playbacks/html5_audio'
-import HTMLImgPlayback from '../../playbacks/html_img'
+import HTML5VideoPlayback from '../playbacks/html5_video'
+import HTML5AudioPlayback from '../playbacks/html5_audio'
+import HTMLImgPlayback from '../playbacks/html_img'
 
 /* Core Plugins */
-import Strings from '../../plugins/strings'
+import Strings from '../plugins/strings'
 
 /**
  * It keeps a list of the default plugins (playback, container, core) and it merges external plugins with its internals.
