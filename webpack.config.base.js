@@ -26,32 +26,6 @@ const webpackConfig = (config) => {
           loader: 'babel-loader',
           exclude: [path.resolve(__dirname, './node_modules')]
         },
-        {
-          test: /fonts\.css$/,
-          loaders: ['css-loader', 'postcss-loader'],
-          include: path.resolve(__dirname, 'src/components/core/public')
-        },
-        {
-          test: /\.scss$/,
-          loaders: ['style-loader?singleton=true', 'css-loader', 'postcss-loader', 'sass-loader?includePaths[]='
-            + path.resolve(__dirname, './src/base/scss')
-          ],
-          include: path.resolve(__dirname, 'src')
-        },
-        {
-          test: /\.(png|woff|eot|swf|cur|ttf)/,
-          loader: 'url-loader',
-          options: {
-            limit: 1,
-            publicPath: '<%=baseUrl%>/'
-          },
-        },
-        {
-          test: /\.svg/, loader: 'svg-inline-loader'
-        },
-        {
-          test: /\.html/, loader: 'html-loader?minimize=false'
-        },
         ...(config.rules || [])
       ],
     },
