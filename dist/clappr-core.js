@@ -4488,6 +4488,25 @@ exports.push([module.i, "[data-html-img] {\n  max-width: 100%;\n  max-height: 10
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./src/playbacks/no_op/public/style.scss":
+/*!***************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/postcss-loader/lib!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./src/playbacks/no_op/public/style.scss ***!
+  \***************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "[data-no-op] {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  text-align: center; }\n\n[data-no-op] p[data-no-op-msg] {\n  position: absolute;\n  text-align: center;\n  font-size: 25px;\n  left: 0;\n  right: 0;\n  color: white;\n  padding: 10px;\n  /* center vertically */\n  top: 50%;\n  -webkit-transform: translateY(-50%);\n          transform: translateY(-50%);\n  max-height: 100%;\n  overflow: auto; }\n\n[data-no-op] canvas[data-no-op-canvas] {\n  background-color: #777;\n  height: 100%;\n  width: 100%; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/lib/css-base.js":
 /*!*************************************************!*\
   !*** ./node_modules/css-loader/lib/css-base.js ***!
@@ -5583,11 +5602,11 @@ var _assign = __webpack_require__(/*! babel-runtime/core-js/object/assign */ "./
 
 var _assign2 = _interopRequireDefault(_assign);
 
-var _log = __webpack_require__(/*! ../components/log */ "./src/components/log/index.js");
+var _log = __webpack_require__(/*! ../components/log */ "./src/components/log.js");
 
 var _log2 = _interopRequireDefault(_log);
 
-var _error = __webpack_require__(/*! ../components/error */ "./src/components/error/index.js");
+var _error = __webpack_require__(/*! ../components/error */ "./src/components/error.js");
 
 var _error2 = _interopRequireDefault(_error);
 
@@ -5665,7 +5684,7 @@ var _typeof2 = __webpack_require__(/*! babel-runtime/helpers/typeof */ "./node_m
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
-var _log = __webpack_require__(/*! ../components/log */ "./src/components/log/index.js");
+var _log = __webpack_require__(/*! ../components/log */ "./src/components/log.js");
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -7808,7 +7827,7 @@ exports.canAutoPlayMedia = canAutoPlayMedia;
 
 __webpack_require__(/*! ./polyfills */ "./src/base/polyfills.js");
 
-var _browser = __webpack_require__(/*! ../components/browser */ "./src/components/browser/index.js");
+var _browser = __webpack_require__(/*! ../components/browser */ "./src/components/browser/browser.js");
 
 var _browser2 = _interopRequireDefault(_browser);
 
@@ -8559,31 +8578,6 @@ var BROWSER_DATA = [{
 }];
 
 exports.default = BROWSER_DATA;
-module.exports = exports['default'];
-
-/***/ }),
-
-/***/ "./src/components/browser/index.js":
-/*!*****************************************!*\
-  !*** ./src/components/browser/index.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _browser = __webpack_require__(/*! ./browser */ "./src/components/browser/browser.js");
-
-var _browser2 = _interopRequireDefault(_browser);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _browser2.default;
 module.exports = exports['default'];
 
 /***/ }),
@@ -9399,31 +9393,6 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ "./src/components/container/index.js":
-/*!*******************************************!*\
-  !*** ./src/components/container/index.js ***!
-  \*******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _container = __webpack_require__(/*! ./container */ "./src/components/container/container.js");
-
-var _container2 = _interopRequireDefault(_container);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _container2.default;
-module.exports = exports['default'];
-
-/***/ }),
-
 /***/ "./src/components/container/public/style.scss":
 /*!****************************************************!*\
   !*** ./src/components/container/public/style.scss ***!
@@ -9454,10 +9423,10 @@ if(false) {}
 
 /***/ }),
 
-/***/ "./src/components/container_factory/container_factory.js":
-/*!***************************************************************!*\
-  !*** ./src/components/container_factory/container_factory.js ***!
-  \***************************************************************/
+/***/ "./src/components/container_factory.js":
+/*!*********************************************!*\
+  !*** ./src/components/container_factory.js ***!
+  \*********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9488,15 +9457,15 @@ var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./no
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _base_object = __webpack_require__(/*! ../../base/base_object */ "./src/base/base_object.js");
+var _base_object = __webpack_require__(/*! ../base/base_object */ "./src/base/base_object.js");
 
 var _base_object2 = _interopRequireDefault(_base_object);
 
-var _events = __webpack_require__(/*! ../../base/events */ "./src/base/events.js");
+var _events = __webpack_require__(/*! ../base/events */ "./src/base/events.js");
 
 var _events2 = _interopRequireDefault(_events);
 
-var _container = __webpack_require__(/*! ../../components/container */ "./src/components/container/index.js");
+var _container = __webpack_require__(/*! ./container */ "./src/components/container/container.js");
 
 var _container2 = _interopRequireDefault(_container);
 
@@ -9504,7 +9473,7 @@ var _clapprZepto = __webpack_require__(/*! clappr-zepto */ "./node_modules/clapp
 
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-var _playback = __webpack_require__(/*! ../../base/playback */ "./src/base/playback.js");
+var _playback = __webpack_require__(/*! ../base/playback */ "./src/base/playback.js");
 
 var _playback2 = _interopRequireDefault(_playback);
 
@@ -9602,31 +9571,6 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ "./src/components/container_factory/index.js":
-/*!***************************************************!*\
-  !*** ./src/components/container_factory/index.js ***!
-  \***************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _container_factory = __webpack_require__(/*! ./container_factory */ "./src/components/container_factory/container_factory.js");
-
-var _container_factory2 = _interopRequireDefault(_container_factory);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _container_factory2.default;
-module.exports = exports['default'];
-
-/***/ }),
-
 /***/ "./src/components/core/core.js":
 /*!*************************************!*\
   !*** ./src/components/core/core.js ***!
@@ -9675,11 +9619,11 @@ var _ui_core_plugin = __webpack_require__(/*! ../../base/ui_core_plugin */ "./sr
 
 var _ui_core_plugin2 = _interopRequireDefault(_ui_core_plugin);
 
-var _browser = __webpack_require__(/*! ../../components/browser */ "./src/components/browser/index.js");
+var _browser = __webpack_require__(/*! ../../components/browser */ "./src/components/browser/browser.js");
 
 var _browser2 = _interopRequireDefault(_browser);
 
-var _container_factory = __webpack_require__(/*! ../../components/container_factory */ "./src/components/container_factory/index.js");
+var _container_factory = __webpack_require__(/*! ../../components/container_factory */ "./src/components/container_factory.js");
 
 var _container_factory2 = _interopRequireDefault(_container_factory);
 
@@ -9691,7 +9635,7 @@ var _player_info = __webpack_require__(/*! ../../components/player_info */ "./sr
 
 var _player_info2 = _interopRequireDefault(_player_info);
 
-var _error = __webpack_require__(/*! ../../components/error */ "./src/components/error/index.js");
+var _error = __webpack_require__(/*! ../../components/error */ "./src/components/error.js");
 
 var _error2 = _interopRequireDefault(_error);
 
@@ -10125,31 +10069,6 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ "./src/components/core/index.js":
-/*!**************************************!*\
-  !*** ./src/components/core/index.js ***!
-  \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _core = __webpack_require__(/*! ./core */ "./src/components/core/core.js");
-
-var _core2 = _interopRequireDefault(_core);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _core2.default;
-module.exports = exports['default'];
-
-/***/ }),
-
 /***/ "./src/components/core/public/style.scss":
 /*!***********************************************!*\
   !*** ./src/components/core/public/style.scss ***!
@@ -10180,10 +10099,10 @@ if(false) {}
 
 /***/ }),
 
-/***/ "./src/components/core_factory/core_factory.js":
-/*!*****************************************************!*\
-  !*** ./src/components/core_factory/core_factory.js ***!
-  \*****************************************************/
+/***/ "./src/components/core_factory.js":
+/*!****************************************!*\
+  !*** ./src/components/core_factory.js ***!
+  \****************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10210,11 +10129,11 @@ var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./no
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _base_object = __webpack_require__(/*! ../../base/base_object */ "./src/base/base_object.js");
+var _base_object = __webpack_require__(/*! ../base/base_object */ "./src/base/base_object.js");
 
 var _base_object2 = _interopRequireDefault(_base_object);
 
-var _core = __webpack_require__(/*! ../core */ "./src/components/core/index.js");
+var _core = __webpack_require__(/*! ./core */ "./src/components/core/core.js");
 
 var _core2 = _interopRequireDefault(_core);
 
@@ -10306,35 +10225,10 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ "./src/components/core_factory/index.js":
-/*!**********************************************!*\
-  !*** ./src/components/core_factory/index.js ***!
-  \**********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _core_factory = __webpack_require__(/*! ./core_factory */ "./src/components/core_factory/core_factory.js");
-
-var _core_factory2 = _interopRequireDefault(_core_factory);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _core_factory2.default;
-module.exports = exports['default'];
-
-/***/ }),
-
-/***/ "./src/components/error/error.js":
-/*!***************************************!*\
-  !*** ./src/components/error/error.js ***!
-  \***************************************/
+/***/ "./src/components/error.js":
+/*!*********************************!*\
+  !*** ./src/components/error.js ***!
+  \*********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10361,15 +10255,15 @@ var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./no
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _events = __webpack_require__(/*! ../../base/events */ "./src/base/events.js");
+var _events = __webpack_require__(/*! ../base/events */ "./src/base/events.js");
 
 var _events2 = _interopRequireDefault(_events);
 
-var _base_object = __webpack_require__(/*! ../../base/base_object */ "./src/base/base_object.js");
+var _base_object = __webpack_require__(/*! ../base/base_object */ "./src/base/base_object.js");
 
 var _base_object2 = _interopRequireDefault(_base_object);
 
-var _log = __webpack_require__(/*! ../log */ "./src/components/log/index.js");
+var _log = __webpack_require__(/*! ./log */ "./src/components/log.js");
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -10440,60 +10334,10 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ "./src/components/error/index.js":
-/*!***************************************!*\
-  !*** ./src/components/error/index.js ***!
-  \***************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _error = __webpack_require__(/*! ./error */ "./src/components/error/error.js");
-
-var _error2 = _interopRequireDefault(_error);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _error2.default;
-module.exports = exports['default'];
-
-/***/ }),
-
-/***/ "./src/components/loader/index.js":
-/*!****************************************!*\
-  !*** ./src/components/loader/index.js ***!
-  \****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _loader = __webpack_require__(/*! ./loader */ "./src/components/loader/loader.js");
-
-var _loader2 = _interopRequireDefault(_loader);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _loader2.default;
-module.exports = exports['default'];
-
-/***/ }),
-
-/***/ "./src/components/loader/loader.js":
-/*!*****************************************!*\
-  !*** ./src/components/loader/loader.js ***!
-  \*****************************************/
+/***/ "./src/components/loader.js":
+/*!**********************************!*\
+  !*** ./src/components/loader.js ***!
+  \**********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10520,27 +10364,31 @@ var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./no
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _base_object = __webpack_require__(/*! ../../base/base_object */ "./src/base/base_object.js");
+var _base_object = __webpack_require__(/*! ../base/base_object */ "./src/base/base_object.js");
 
 var _base_object2 = _interopRequireDefault(_base_object);
 
-var _player_info = __webpack_require__(/*! ../player_info */ "./src/components/player_info.js");
+var _player_info = __webpack_require__(/*! ./player_info */ "./src/components/player_info.js");
 
 var _player_info2 = _interopRequireDefault(_player_info);
 
-var _html5_video = __webpack_require__(/*! ../../playbacks/html5_video */ "./src/playbacks/html5_video/index.js");
+var _html5_video = __webpack_require__(/*! ../playbacks/html5_video */ "./src/playbacks/html5_video/html5_video.js");
 
 var _html5_video2 = _interopRequireDefault(_html5_video);
 
-var _html5_audio = __webpack_require__(/*! ../../playbacks/html5_audio */ "./src/playbacks/html5_audio/index.js");
+var _html5_audio = __webpack_require__(/*! ../playbacks/html5_audio */ "./src/playbacks/html5_audio.js");
 
 var _html5_audio2 = _interopRequireDefault(_html5_audio);
 
-var _html_img = __webpack_require__(/*! ../../playbacks/html_img */ "./src/playbacks/html_img/index.js");
+var _html_img = __webpack_require__(/*! ../playbacks/html_img */ "./src/playbacks/html_img/html_img.js");
 
 var _html_img2 = _interopRequireDefault(_html_img);
 
-var _strings = __webpack_require__(/*! ../../plugins/strings */ "./src/plugins/strings.js");
+var _no_op = __webpack_require__(/*! ../playbacks/no_op */ "./src/playbacks/no_op/no_op.js");
+
+var _no_op2 = _interopRequireDefault(_no_op);
+
+var _strings = __webpack_require__(/*! ../plugins/strings */ "./src/plugins/strings.js");
 
 var _strings2 = _interopRequireDefault(_strings);
 
@@ -10553,13 +10401,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @extends BaseObject
  * @module components
  */
-
-
-/* Playback Plugins */
-// Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
 var Loader = function (_BaseObject) {
   (0, _inherits3.default)(Loader, _BaseObject);
 
@@ -10578,7 +10419,7 @@ var Loader = function (_BaseObject) {
 
     _this.playerId = playerId;
 
-    _this.playbackPlugins = [_html5_video2.default, _html5_audio2.default, _html_img2.default];
+    _this.playbackPlugins = [_html5_video2.default, _html5_audio2.default, _html_img2.default, _no_op2.default];
 
     _this.containerPlugins = [];
     _this.corePlugins = [_strings2.default];
@@ -10666,40 +10507,20 @@ var Loader = function (_BaseObject) {
 /* Core Plugins */
 
 
+/* Playback Plugins */
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
 exports.default = Loader;
 module.exports = exports['default'];
 
 /***/ }),
 
-/***/ "./src/components/log/index.js":
-/*!*************************************!*\
-  !*** ./src/components/log/index.js ***!
-  \*************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _log = __webpack_require__(/*! ./log */ "./src/components/log/log.js");
-
-var _log2 = _interopRequireDefault(_log);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _log2.default;
-module.exports = exports['default'];
-
-/***/ }),
-
-/***/ "./src/components/log/log.js":
-/*!***********************************!*\
-  !*** ./src/components/log/log.js ***!
-  \***********************************/
+/***/ "./src/components/log.js":
+/*!*******************************!*\
+  !*** ./src/components/log.js ***!
+  \*******************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10950,15 +10771,15 @@ var _events = __webpack_require__(/*! ../base/events */ "./src/base/events.js");
 
 var _events2 = _interopRequireDefault(_events);
 
-var _browser = __webpack_require__(/*! ./browser */ "./src/components/browser/index.js");
+var _browser = __webpack_require__(/*! ./browser */ "./src/components/browser/browser.js");
 
 var _browser2 = _interopRequireDefault(_browser);
 
-var _core_factory = __webpack_require__(/*! ./core_factory */ "./src/components/core_factory/index.js");
+var _core_factory = __webpack_require__(/*! ./core_factory */ "./src/components/core_factory.js");
 
 var _core_factory2 = _interopRequireDefault(_core_factory);
 
-var _loader = __webpack_require__(/*! ./loader */ "./src/components/loader/index.js");
+var _loader = __webpack_require__(/*! ./loader */ "./src/components/loader.js");
 
 var _loader2 = _interopRequireDefault(_loader);
 
@@ -11744,27 +11565,27 @@ var _ui_object = __webpack_require__(/*! ./base/ui_object */ "./src/base/ui_obje
 
 var _ui_object2 = _interopRequireDefault(_ui_object);
 
-var _browser = __webpack_require__(/*! ./components/browser */ "./src/components/browser/index.js");
+var _browser = __webpack_require__(/*! ./components/browser */ "./src/components/browser/browser.js");
 
 var _browser2 = _interopRequireDefault(_browser);
 
-var _container = __webpack_require__(/*! ./components/container */ "./src/components/container/index.js");
+var _container = __webpack_require__(/*! ./components/container */ "./src/components/container/container.js");
 
 var _container2 = _interopRequireDefault(_container);
 
-var _core = __webpack_require__(/*! ./components/core */ "./src/components/core/index.js");
+var _core = __webpack_require__(/*! ./components/core */ "./src/components/core/core.js");
 
 var _core2 = _interopRequireDefault(_core);
 
-var _error = __webpack_require__(/*! ./components/error */ "./src/components/error/index.js");
+var _error = __webpack_require__(/*! ./components/error */ "./src/components/error.js");
 
 var _error2 = _interopRequireDefault(_error);
 
-var _loader = __webpack_require__(/*! ./components/loader */ "./src/components/loader/index.js");
+var _loader = __webpack_require__(/*! ./components/loader */ "./src/components/loader.js");
 
 var _loader2 = _interopRequireDefault(_loader);
 
-var _log = __webpack_require__(/*! ./components/log */ "./src/components/log/index.js");
+var _log = __webpack_require__(/*! ./components/log */ "./src/components/log.js");
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -11776,15 +11597,15 @@ var _player_info = __webpack_require__(/*! ./components/player_info */ "./src/co
 
 var _player_info2 = _interopRequireDefault(_player_info);
 
-var _html5_audio = __webpack_require__(/*! ./playbacks/html5_audio */ "./src/playbacks/html5_audio/index.js");
+var _html5_audio = __webpack_require__(/*! ./playbacks/html5_audio */ "./src/playbacks/html5_audio.js");
 
 var _html5_audio2 = _interopRequireDefault(_html5_audio);
 
-var _html5_video = __webpack_require__(/*! ./playbacks/html5_video */ "./src/playbacks/html5_video/index.js");
+var _html5_video = __webpack_require__(/*! ./playbacks/html5_video */ "./src/playbacks/html5_video/html5_video.js");
 
 var _html5_video2 = _interopRequireDefault(_html5_video);
 
-var _html_img = __webpack_require__(/*! ./playbacks/html_img */ "./src/playbacks/html_img/index.js");
+var _html_img = __webpack_require__(/*! ./playbacks/html_img */ "./src/playbacks/html_img/html_img.js");
 
 var _html_img2 = _interopRequireDefault(_html_img);
 
@@ -11806,7 +11627,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var version = "0.3.7";
+var version = "0.3.8";
 
 exports.default = {
   Player: _player2.default,
@@ -11839,10 +11660,10 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ "./src/playbacks/html5_audio/html5_audio.js":
-/*!**************************************************!*\
-  !*** ./src/playbacks/html5_audio/html5_audio.js ***!
-  \**************************************************/
+/***/ "./src/playbacks/html5_audio.js":
+/*!**************************************!*\
+  !*** ./src/playbacks/html5_audio.js ***!
+  \**************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -11869,15 +11690,15 @@ var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./no
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _events = __webpack_require__(/*! ../../base/events */ "./src/base/events.js");
+var _events = __webpack_require__(/*! ../base/events */ "./src/base/events.js");
 
 var _events2 = _interopRequireDefault(_events);
 
-var _playback = __webpack_require__(/*! ../../base/playback */ "./src/base/playback.js");
+var _playback = __webpack_require__(/*! ../base/playback */ "./src/base/playback.js");
 
 var _playback2 = _interopRequireDefault(_playback);
 
-var _html5_video = __webpack_require__(/*! ../../playbacks/html5_video */ "./src/playbacks/html5_video/index.js");
+var _html5_video = __webpack_require__(/*! ./html5_video */ "./src/playbacks/html5_video/html5_video.js");
 
 var _html5_video2 = _interopRequireDefault(_html5_video);
 
@@ -11939,31 +11760,6 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ "./src/playbacks/html5_audio/index.js":
-/*!********************************************!*\
-  !*** ./src/playbacks/html5_audio/index.js ***!
-  \********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _html5_audio = __webpack_require__(/*! ./html5_audio */ "./src/playbacks/html5_audio/html5_audio.js");
-
-var _html5_audio2 = _interopRequireDefault(_html5_audio);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _html5_audio2.default;
-module.exports = exports['default'];
-
-/***/ }),
-
 /***/ "./src/playbacks/html5_video/html5_video.js":
 /*!**************************************************!*\
   !*** ./src/playbacks/html5_video/html5_video.js ***!
@@ -12016,15 +11812,15 @@ var _playback = __webpack_require__(/*! ../../base/playback */ "./src/base/playb
 
 var _playback2 = _interopRequireDefault(_playback);
 
-var _browser = __webpack_require__(/*! ../../components/browser */ "./src/components/browser/index.js");
+var _browser = __webpack_require__(/*! ../../components/browser */ "./src/components/browser/browser.js");
 
 var _browser2 = _interopRequireDefault(_browser);
 
-var _log = __webpack_require__(/*! ../../components/log */ "./src/components/log/index.js");
+var _log = __webpack_require__(/*! ../../components/log */ "./src/components/log.js");
 
 var _log2 = _interopRequireDefault(_log);
 
-var _error = __webpack_require__(/*! ../../components/error */ "./src/components/error/index.js");
+var _error = __webpack_require__(/*! ../../components/error */ "./src/components/error.js");
 
 var _error2 = _interopRequireDefault(_error);
 
@@ -12710,31 +12506,6 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ "./src/playbacks/html5_video/index.js":
-/*!********************************************!*\
-  !*** ./src/playbacks/html5_video/index.js ***!
-  \********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _html5_video = __webpack_require__(/*! ./html5_video */ "./src/playbacks/html5_video/html5_video.js");
-
-var _html5_video2 = _interopRequireDefault(_html5_video);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _html5_video2.default;
-module.exports = exports['default'];
-
-/***/ }),
-
 /***/ "./src/playbacks/html5_video/public/style.scss":
 /*!*****************************************************!*\
   !*** ./src/playbacks/html5_video/public/style.scss ***!
@@ -12892,10 +12663,40 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ "./src/playbacks/html_img/index.js":
-/*!*****************************************!*\
-  !*** ./src/playbacks/html_img/index.js ***!
-  \*****************************************/
+/***/ "./src/playbacks/html_img/public/style.scss":
+/*!**************************************************!*\
+  !*** ./src/playbacks/html_img/public/style.scss ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader!../../../../node_modules/postcss-loader/lib!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./style.scss */ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./src/playbacks/html_img/public/style.scss");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"singleton":true,"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./src/playbacks/no_op/no_op.js":
+/*!**************************************!*\
+  !*** ./src/playbacks/no_op/no_op.js ***!
+  \**************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -12906,26 +12707,179 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _html_img = __webpack_require__(/*! ./html_img */ "./src/playbacks/html_img/html_img.js");
+var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
 
-var _html_img2 = _interopRequireDefault(_html_img);
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _utils = __webpack_require__(/*! ../../base/utils */ "./src/base/utils.js");
+
+var _playback = __webpack_require__(/*! ../../base/playback */ "./src/base/playback.js");
+
+var _playback2 = _interopRequireDefault(_playback);
+
+var _template = __webpack_require__(/*! ../../base/template */ "./src/base/template.js");
+
+var _template2 = _interopRequireDefault(_template);
+
+var _events = __webpack_require__(/*! ../../base/events */ "./src/base/events.js");
+
+var _events2 = _interopRequireDefault(_events);
+
+var _error = __webpack_require__(/*! ./public/error.html */ "./src/playbacks/no_op/public/error.html");
+
+var _error2 = _interopRequireDefault(_error);
+
+__webpack_require__(/*! ./public/style.scss */ "./src/playbacks/no_op/public/style.scss");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _html_img2.default;
+var NoOp = function (_Playback) {
+  (0, _inherits3.default)(NoOp, _Playback);
+  (0, _createClass3.default)(NoOp, [{
+    key: 'name',
+    get: function get() {
+      return 'no_op';
+    }
+  }, {
+    key: 'template',
+    get: function get() {
+      return (0, _template2.default)(_error2.default);
+    }
+  }, {
+    key: 'attributes',
+    get: function get() {
+      return { 'data-no-op': '' };
+    }
+  }]);
+
+  function NoOp() {
+    (0, _classCallCheck3.default)(this, NoOp);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, _Playback.call.apply(_Playback, [this].concat(args)));
+
+    _this._noiseFrameNum = -1;
+    return _this;
+  }
+
+  NoOp.prototype.render = function render() {
+    var playbackNotSupported = this.options.playbackNotSupportedMessage || this.i18n.t('playback_not_supported');
+    this.$el.html(this.template({ message: playbackNotSupported }));
+    this.trigger(_events2.default.PLAYBACK_READY, this.name);
+    var showForNoOp = !!(this.options.poster && this.options.poster.showForNoOp);
+    if (this.options.autoPlay || !showForNoOp) this._animate();
+
+    return this;
+  };
+
+  NoOp.prototype._noise = function _noise() {
+    this._noiseFrameNum = (this._noiseFrameNum + 1) % 5;
+    if (this._noiseFrameNum) {
+      // only update noise every 5 frames to save cpu
+      return;
+    }
+
+    var idata = this.context.createImageData(this.context.canvas.width, this.context.canvas.height);
+    var buffer32 = void 0;
+    try {
+      buffer32 = new Uint32Array(idata.data.buffer);
+    } catch (err) {
+      buffer32 = new Uint32Array(this.context.canvas.width * this.context.canvas.height * 4);
+      var data = idata.data;
+      for (var i = 0; i < data.length; i++) {
+        buffer32[i] = data[i];
+      }
+    }
+
+    var len = buffer32.length,
+        m = Math.random() * 6 + 4;
+    var run = 0,
+        color = 0;
+    for (var _i = 0; _i < len;) {
+      if (run < 0) {
+        run = m * Math.random();
+        var p = Math.pow(Math.random(), 0.4);
+        color = 255 * p << 24;
+      }
+      run -= 1;
+      buffer32[_i++] = color;
+    }
+    this.context.putImageData(idata, 0, 0);
+  };
+
+  NoOp.prototype._loop = function _loop() {
+    var _this2 = this;
+
+    if (this._stop) return;
+
+    this._noise();
+    this._animationHandle = (0, _utils.requestAnimationFrame)(function () {
+      return _this2._loop();
+    });
+  };
+
+  NoOp.prototype.destroy = function destroy() {
+    if (this._animationHandle) {
+      (0, _utils.cancelAnimationFrame)(this._animationHandle);
+      this._stop = true;
+    }
+  };
+
+  NoOp.prototype._animate = function _animate() {
+    this.canvas = this.$el.find('canvas[data-no-op-canvas]')[0];
+    this.context = this.canvas.getContext('2d');
+    this._loop();
+  };
+
+  return NoOp;
+}(_playback2.default);
+
+exports.default = NoOp;
+
+
+NoOp.canPlay = function (source) {
+  // eslint-disable-line no-unused-vars
+  return true;
+};
 module.exports = exports['default'];
 
 /***/ }),
 
-/***/ "./src/playbacks/html_img/public/style.scss":
-/*!**************************************************!*\
-  !*** ./src/playbacks/html_img/public/style.scss ***!
-  \**************************************************/
+/***/ "./src/playbacks/no_op/public/error.html":
+/*!***********************************************!*\
+  !*** ./src/playbacks/no_op/public/error.html ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<canvas data-no-op-canvas></canvas>\n<p data-no-op-msg><%=message%><p>\n";
+
+/***/ }),
+
+/***/ "./src/playbacks/no_op/public/style.scss":
+/*!***********************************************!*\
+  !*** ./src/playbacks/no_op/public/style.scss ***!
+  \***********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../../../node_modules/css-loader!../../../../node_modules/postcss-loader/lib!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./style.scss */ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./src/playbacks/html_img/public/style.scss");
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader!../../../../node_modules/postcss-loader/lib!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./style.scss */ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./src/playbacks/no_op/public/style.scss");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
