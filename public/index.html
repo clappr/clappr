@@ -2,7 +2,8 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <script type="text/javascript" charset="utf-8" src="latest/clappr.js"></script>
+  <script type="text/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/@clappr/core@latest/dist/clappr-core.min.js"></script>
+  <script type="text/javascript" charset="utf-8" src="latest/hls-playback.js"></script>
   <script type="text/javascript" charset="utf-8" src="j/main.js"></script>
   <script type="text/javascript" charset="utf-8" src="j/editor/ace.js"></script>
   <link rel="stylesheet" href="stylesheets/bootstrap.min.css" type="text/css" media="screen" charset="utf-8">
@@ -58,12 +59,16 @@
       <div id="editor">var playerElement = document.getElementById("player-wrapper");
 
 var player = new Clappr.Player({
-  source: 'http://clappr.io/highline.mp4',
-  poster: 'http://clappr.io/poster.png', 
-  mute: true, 
-  height: 360, 
-  width: 640 
-}); 
+  source: 'https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8',
+  poster: 'http://clappr.io/poster.png',
+  mute: true,
+  height: 360,
+  width: 640,
+  plugins: [HLSPlayback],
+  playback: {
+    controls: true,
+  },
+});
 
 player.attachTo(playerElement);
       </div>
@@ -103,12 +108,16 @@ player.attachTo(playerElement);
         var playerElement = document.getElementById("player-wrapper");
 
         player = new Clappr.Player({
-          source: urlParams.src || 'http://clappr.io/highline.mp4',
+          source: urlParams.src || 'https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8',
           poster: urlParams.poster || 'http://clappr.io/poster.png',
           mute: true,
           autoPlay: true,
           height: 360,
-          width: 640
+          width: 640,
+          plugins: [HLSPlayback],
+          playback: {
+            controls: true,
+          },
         });
 
         player.attachTo(playerElement);
