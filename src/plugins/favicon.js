@@ -1,7 +1,7 @@
 import { CorePlugin, Events, $ } from 'clappr'
 
-import playIcon from '../../icons/01-play.svg'
-import pauseIcon from '../../icons/02-pause.svg'
+import playIcon from '../icons/01-play.svg'
+import pauseIcon from '../icons/02-pause.svg'
 
 const oldIcon = $('link[rel="shortcut icon"]')
 
