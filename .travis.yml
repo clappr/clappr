@@ -3,9 +3,8 @@ sudo: false
 node_js: "10"
 cache: yarn
 
-before_install:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
+services:
+  - xvfb
 
 addons:
   chrome: "stable"
