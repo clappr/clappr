@@ -1,10 +1,8 @@
-import { Config } from '../../src/base/utils'
-import template from '../../src/base/template'
+import { Container, Core, Events, Playback, Utils, template } from 'clappr'
+
 import MediaControl from '../../src/plugins/media_control'
-import Playback from '../../src/base/playback'
-import Container from '../../src/components/container'
-import Core from '../../src/components/core'
-import Events from '../../src/base/events'
+
+const { Config } = Utils
 
 describe('MediaControl', function() {
   beforeEach(function() {

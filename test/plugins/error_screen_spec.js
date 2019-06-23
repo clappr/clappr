@@ -1,9 +1,6 @@
-import Core from '../../src/components/core'
-import Container from '../../src/components/container'
-import Playback from '../../src/base/playback'
-import ErrorScreen from '../../src/plugins/error_screen'
-import Events from '../../src/base/events'
-import PlayerError from '../../src/components/error/error'
+import { Core, Container, Events, Playback, PlayerError } from 'clappr'
+
+import ErrorScreen from 'plugins/error_screen'
 
 describe('ErrorScreen', function() {
   beforeEach(() => {

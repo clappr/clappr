@@ -1,7 +1,6 @@
-import ClickToPause from '../../src/plugins/click_to_pause'
-import Container from '../../src/components/container'
-import Playback from '../../src/base/playback'
-import Events from '../../src/base/events'
+import { Events, Container, Playback } from 'clappr'
+
+import ClickToPause from 'plugins/click_to_pause'
 
 describe('clickToPause', function() {
   beforeEach(function() {

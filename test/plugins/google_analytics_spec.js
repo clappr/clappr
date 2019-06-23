@@ -1,6 +1,7 @@
 import GoogleAnalytics from 'plugins/google_analytics'
-import Container from 'components/container'
-import FakePlayback from 'base/playback'
+import { Container, Playback } from 'clappr'
+
+const FakePlayback = Playback
 
 describe('GoogleAnalytics', function() {
   describe('constructor without gaAccount', function() {

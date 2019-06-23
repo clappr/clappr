@@ -1,7 +1,8 @@
-import Container from '../../src/components/container'
-import FakePlayback from '../../src/base/playback'
+import { Container, Events, Playback } from 'clappr'
+
 import Stats from '../../src/plugins/stats'
-import Events from '../../src/base/events'
+
+const FakePlayback = Playback
 
 describe('StatsPlugin', function() {
   beforeEach(function() {
