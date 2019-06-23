@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import { Events, HTML5Video, Log, Playback, PlayerError, Utils } from 'clappr'
+import { Events, HTML5Video, Log, Playback, PlayerError, Utils } from '@clappr/core'
 import HLSJS from 'hls.js'
 
 const { now, assign, listContainsIgnoreCase } = Utils

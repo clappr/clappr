@@ -16,9 +16,9 @@ const externals = () => {
   // By default, only Clappr is defined as external library
   return {
     clappr: {
-      amd: 'clappr',
-      commonjs: 'clappr',
-      commonjs2: 'clappr',
+      amd: '@clappr/core',
+      commonjs: '@clappr/core',
+      commonjs2: '@clappr/core',
       root: 'Clappr'
     }
   }

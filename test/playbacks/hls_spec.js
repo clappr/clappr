@@ -1,4 +1,4 @@
-import { Core, Events } from 'clappr'
+import { Core, Events } from '@clappr/core'
 import HLS from 'hls'
 import HLSJS from 'hls.js'
 
