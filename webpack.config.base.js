@@ -17,7 +17,7 @@ const webpackConfig = (config) => {
     mode: config.mode,
     devtool: config.devtool || 'source-maps',
     optimization: config.optimization,
-    entry: path.resolve(__dirname, 'src/main.js'),
+    entry: path.resolve(__dirname, 'src/hls.js'),
     externals: config.externals,
     module: {
       rules: [
