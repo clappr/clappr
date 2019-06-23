@@ -3,15 +3,6 @@ const webpack = require('webpack')
 
 const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin')
 
-const externals = {
-  clappr: {
-    amd: 'clappr',
-    commonjs: 'clappr',
-    commonjs2: 'clappr',
-    root: 'Clappr'
-  }
-}
-
 const webpackConfig = (config) => {
   return {
     devServer: {
@@ -28,7 +19,6 @@ const webpackConfig = (config) => {
     optimization: config.optimization,
     entry: path.resolve(__dirname, 'src/main.js'),
     externals: {
-      ...externals,
       ...config.externals,
     },
     module: {
