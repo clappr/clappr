@@ -65,9 +65,6 @@ const webpackConfig = (config) => {
       ],
     },
     resolve: {
-      alias: {
-        'clappr': '@clappr/core'
-      },
       plugins: [
         new DirectoryNamedWebpackPlugin(true),
       ],

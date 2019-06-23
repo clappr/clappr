@@ -1,4 +1,4 @@
-import { Container, Events, Playback, $ } from 'clappr'
+import { Container, Events, Playback, $ } from '@clappr/core'
 
 import Poster from '../../src/plugins/poster'
 

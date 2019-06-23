@@ -1,5 +1,6 @@
+import { Container, Playback } from '@clappr/core'
+
 import GoogleAnalytics from 'plugins/google_analytics'
-import { Container, Playback } from 'clappr'
 
 const FakePlayback = Playback
 

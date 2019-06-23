@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import { Events, Playback, UICorePlugin, Utils, template } from 'clappr'
+import { Events, Playback, UICorePlugin, Utils, template } from '@clappr/core'
 import seekTimeHTML from './public/seek_time.html'
 import './public/seek_time.scss'
 

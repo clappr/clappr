@@ -1,4 +1,4 @@
-import { CorePlugin, Events, Utils } from 'clappr'
+import { CorePlugin, Events, Utils } from '@clappr/core'
 
 const { Fullscreen } = Utils
 

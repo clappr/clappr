@@ -1,4 +1,4 @@
-import { Events, UICorePlugin, template } from 'clappr'
+import { Events, UICorePlugin, template } from '@clappr/core'
 import ccIcon from '../../icons/09-cc.svg'
 import ccHTML from './public/closed_captions.html'
 import './public/closed_captions.scss'

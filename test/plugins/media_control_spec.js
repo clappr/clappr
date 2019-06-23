@@ -1,4 +1,4 @@
-import { Container, Core, Events, Playback, Utils, template } from 'clappr'
+import { Container, Core, Events, Playback, Utils, template } from '@clappr/core'
 
 import MediaControl from '../../src/plugins/media_control'
 

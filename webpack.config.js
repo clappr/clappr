@@ -13,10 +13,10 @@ const analyzeBundle = !!process.env.ANALYZE_BUNDLE
 const forceInlineDebug = !!process.env.CLAPPR_INLINE_DEBUG
 
 const externals = {
-  clappr: {
-    amd: 'clappr',
-    commonjs: 'clappr',
-    commonjs2: 'clappr',
+  '@clappr/core': {
+    amd: '@clappr/core',
+    commonjs: '@clappr/core',
+    commonjs2: '@clappr/core',
     root: 'Clappr'
   }
 }

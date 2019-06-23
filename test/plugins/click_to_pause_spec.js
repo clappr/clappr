@@ -1,4 +1,4 @@
-import { Events, Container, Playback } from 'clappr'
+import { Events, Container, Playback } from '@clappr/core'
 
 import ClickToPause from 'plugins/click_to_pause'
 

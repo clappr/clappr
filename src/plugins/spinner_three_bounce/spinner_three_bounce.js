@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import { Events, UIContainerPlugin, template } from 'clappr'
+import { Events, UIContainerPlugin, template } from '@clappr/core'
 
 import spinnerHTML from './public/spinner.html'
 import './public/spinner.scss'

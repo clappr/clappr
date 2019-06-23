@@ -8,7 +8,7 @@
 
 import { Kibo } from '../../vendor'
 
-import { Events, UICorePlugin, Browser, Mediator, Playback, Utils, template, $ } from 'clappr'
+import { Events, UICorePlugin, Browser, Mediator, Playback, Utils, template, $ } from '@clappr/core'
 
 import './public/media-control.scss'
 import mediaControlHTML from './public/media-control.html'

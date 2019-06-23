@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import { Events, Playback, PlayerError, UIContainerPlugin, template } from 'clappr'
+import { Events, Playback, PlayerError, UIContainerPlugin, template } from '@clappr/core'
 
 import posterHTML from './public/poster.html'
 import playIcon from '../../icons/01-play.svg'
