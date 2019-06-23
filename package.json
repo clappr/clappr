@@ -1,6 +1,6 @@
 {
   "name": "@clappr/hls-playback",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "HLS Playback based on hls.js",
   "main": "./dist/hls-playback.js",
   "module": "./src/hls.js",
