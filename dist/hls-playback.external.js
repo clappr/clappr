@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define(["clappr", "hls.js"], factory);
 	else if(typeof exports === 'object')
-		exports["Clappr"] = factory(require("clappr"), require("hls.js"));
+		exports["HLSPlayback"] = factory(require("clappr"), require("hls.js"));
 	else
-		root["Clappr"] = factory(root["Clappr"], root["Hls"]);
+		root["HLSPlayback"] = factory(root["Clappr"], root["Hls"]);
 })(window, function(__WEBPACK_EXTERNAL_MODULE_clappr__, __WEBPACK_EXTERNAL_MODULE_hls_js__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -91,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/main.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/hls.js");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -2391,39 +2391,10 @@ for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList'
 
 /***/ }),
 
-/***/ "./src/main.js":
-/*!*********************!*\
-  !*** ./src/main.js ***!
-  \*********************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _hls = __webpack_require__(/*! ./playbacks/hls */ "./src/playbacks/hls/index.js");
-
-var _hls2 = _interopRequireDefault(_hls);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-_hls2.default.version = "0.3.6"; // Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-exports.default = _hls2.default;
-module.exports = exports['default'];
-
-/***/ }),
-
-/***/ "./src/playbacks/hls/hls.js":
-/*!**********************************!*\
-  !*** ./src/playbacks/hls/hls.js ***!
-  \**********************************/
+/***/ "./src/hls.js":
+/*!********************!*\
+  !*** ./src/hls.js ***!
+  \********************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2582,6 +2553,11 @@ var HLS = function (_HTML5Video) {
       return this._extrapolatedWindowNumSegments * this._segmentTargetDuration;
     }
   }], [{
+    key: 'version',
+    get: function get() {
+      return "0.3.6";
+    }
+  }, {
     key: 'HLSJS',
     get: function get() {
       return _hls2.default;
@@ -3140,31 +3116,6 @@ HLS.canPlay = function (resource, mimeType) {
 
   return !!(_hls2.default.isSupported() && isHls);
 };
-module.exports = exports['default'];
-
-/***/ }),
-
-/***/ "./src/playbacks/hls/index.js":
-/*!************************************!*\
-  !*** ./src/playbacks/hls/index.js ***!
-  \************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _hls = __webpack_require__(/*! ./hls */ "./src/playbacks/hls/hls.js");
-
-var _hls2 = _interopRequireDefault(_hls);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _hls2.default;
 module.exports = exports['default'];
 
 /***/ }),
