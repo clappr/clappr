@@ -1,6 +1,6 @@
 {
   "name": "@clappr/plugins",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "Main plugins for the Clappr project",
   "main": "./dist/clappr-plugins.js",
   "scripts": {
@@ -14,6 +14,9 @@
     "lint": "./node_modules/.bin/eslint *.js src/ test/",
     "lint:fix": "npm run lint -- --fix",
     "start": "./node_modules/.bin/webpack-dev-server --host 0.0.0.0 --content-base public/ --output-public-path latest/ --hot"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "repository": {
     "type": "git",

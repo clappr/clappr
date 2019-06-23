@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("clappr"));
+		module.exports = factory(require("@clappr/core"));
 	else if(typeof define === 'function' && define.amd)
-		define(["clappr"], factory);
+		define(["@clappr/core"], factory);
 	else if(typeof exports === 'object')
-		exports["ClapprPlugins"] = factory(require("clappr"));
+		exports["ClapprPlugins"] = factory(require("@clappr/core"));
 	else
 		root["ClapprPlugins"] = factory(root["Clappr"]);
-})(window, function(__WEBPACK_EXTERNAL_MODULE_clappr__) {
+})(window, function(__WEBPACK_EXTERNAL_MODULE__clappr_core__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -2108,6 +2108,25 @@ for (var i = 0; i < DOMIterables.length; i++) {
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?!./src/plugins/closed_captions/public/closed_captions.scss":
+/*!********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/postcss-loader/lib!./node_modules/sass-loader/lib/loader.js??ref--5-3!./src/plugins/closed_captions/public/closed_captions.scss ***!
+  \********************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".cc-controls[data-cc-controls] {\n  float: right;\n  position: relative;\n  display: none; }\n  .cc-controls[data-cc-controls].available {\n    display: block; }\n  .cc-controls[data-cc-controls] .cc-button {\n    padding: 6px !important; }\n    .cc-controls[data-cc-controls] .cc-button.enabled {\n      display: block;\n      opacity: 1.0; }\n      .cc-controls[data-cc-controls] .cc-button.enabled:hover {\n        opacity: 1.0;\n        text-shadow: none; }\n  .cc-controls[data-cc-controls] > ul {\n    list-style-type: none;\n    position: absolute;\n    bottom: 25px;\n    border: 1px solid black;\n    display: none;\n    background-color: #e6e6e6; }\n  .cc-controls[data-cc-controls] li {\n    font-size: 10px; }\n    .cc-controls[data-cc-controls] li[data-title] {\n      background-color: #c3c2c2;\n      padding: 5px; }\n    .cc-controls[data-cc-controls] li a {\n      color: #444;\n      padding: 2px 10px;\n      display: block;\n      text-decoration: none; }\n      .cc-controls[data-cc-controls] li a:hover {\n        background-color: #555;\n        color: white; }\n        .cc-controls[data-cc-controls] li a:hover a {\n          color: white;\n          text-decoration: none; }\n    .cc-controls[data-cc-controls] li.current a {\n      color: #f00; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?!./src/plugins/dvr_controls/public/dvr_controls.scss":
 /*!**************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader!./node_modules/postcss-loader/lib!./node_modules/sass-loader/lib/loader.js??ref--5-3!./src/plugins/dvr_controls/public/dvr_controls.scss ***!
@@ -2179,6 +2198,25 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 // module
 exports.push([module.i, ".player-poster[data-poster] {\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-pack: center;\n      justify-content: center;\n  -ms-flex-align: center;\n      align-items: center;\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  z-index: 998;\n  top: 0;\n  left: 0;\n  background-color: #000;\n  background-size: cover;\n  background-repeat: no-repeat;\n  background-position: 50% 50%; }\n  .player-poster[data-poster].clickable {\n    cursor: pointer; }\n  .player-poster[data-poster]:hover .play-wrapper[data-poster] {\n    opacity: 1; }\n  .player-poster[data-poster] .play-wrapper[data-poster] {\n    width: 100%;\n    height: 25%;\n    margin: 0 auto;\n    opacity: 0.75;\n    transition: opacity 0.1s ease; }\n    .player-poster[data-poster] .play-wrapper[data-poster] svg {\n      height: 100%; }\n      .player-poster[data-poster] .play-wrapper[data-poster] svg path {\n        fill: #fff; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?!./src/plugins/seek_time/public/seek_time.scss":
+/*!********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/postcss-loader/lib!./node_modules/sass-loader/lib/loader.js??ref--5-3!./src/plugins/seek_time/public/seek_time.scss ***!
+  \********************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".seek-time[data-seek-time] {\n  position: absolute;\n  white-space: nowrap;\n  height: 20px;\n  line-height: 20px;\n  font-size: 0;\n  left: -100%;\n  bottom: 55px;\n  background-color: rgba(2, 2, 2, 0.5);\n  z-index: 9999;\n  transition: opacity 0.1s ease; }\n  .seek-time[data-seek-time].hidden[data-seek-time] {\n    opacity: 0; }\n  .seek-time[data-seek-time] [data-seek-time] {\n    display: inline-block;\n    color: white;\n    font-size: 10px;\n    padding-left: 7px;\n    padding-right: 7px;\n    vertical-align: top; }\n  .seek-time[data-seek-time] [data-duration] {\n    display: inline-block;\n    color: rgba(255, 255, 255, 0.5);\n    font-size: 10px;\n    padding-right: 7px;\n    vertical-align: top; }\n    .seek-time[data-seek-time] [data-duration]:before {\n      content: \"|\";\n      margin-right: 7px; }\n", ""]);
 
 // exports
 
@@ -3107,6 +3145,17 @@ module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 16 16\
 
 /***/ }),
 
+/***/ "./src/icons/09-cc.svg":
+/*!*****************************!*\
+  !*** ./src/icons/09-cc.svg ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" viewBox=\"0 0 49 41.8\" style=\"enable-background:new 0 0 49 41.8;\" xml:space=\"preserve\"><path d=\"M47.1,0H3.2C1.6,0,0,1.2,0,2.8v31.5C0,35.9,1.6,37,3.2,37h11.9l3.2,1.9l4.7,2.7c0.9,0.5,2-0.1,2-1.1V37h22.1 c1.6,0,1.9-1.1,1.9-2.7V2.8C49,1.2,48.7,0,47.1,0z M7.2,18.6c0-4.8,3.5-9.3,9.9-9.3c4.8,0,7.1,2.7,7.1,2.7l-2.5,4 c0,0-1.7-1.7-4.2-1.7c-2.8,0-4.3,2.1-4.3,4.3c0,2.1,1.5,4.4,4.5,4.4c2.5,0,4.9-2.1,4.9-2.1l2.2,4.2c0,0-2.7,2.9-7.6,2.9 C10.8,27.9,7.2,23.5,7.2,18.6z M36.9,27.9c-6.4,0-9.9-4.4-9.9-9.3c0-4.8,3.5-9.3,9.9-9.3C41.7,9.3,44,12,44,12l-2.5,4 c0,0-1.7-1.7-4.2-1.7c-2.8,0-4.3,2.1-4.3,4.3c0,2.1,1.5,4.4,4.5,4.4c2.5,0,4.9-2.1,4.9-2.1l2.2,4.2C44.5,25,41.9,27.9,36.9,27.9z\"></path></svg>"
+
+/***/ }),
+
 /***/ "./src/icons/10-reload.svg":
 /*!*********************************!*\
   !*** ./src/icons/10-reload.svg ***!
@@ -3132,17 +3181,21 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _media_control = __webpack_require__(/*! ./plugins/media_control */ "./src/plugins/media_control/media_control.js");
-
-var _media_control2 = _interopRequireDefault(_media_control);
-
 var _click_to_pause = __webpack_require__(/*! ./plugins/click_to_pause */ "./src/plugins/click_to_pause.js");
 
 var _click_to_pause2 = _interopRequireDefault(_click_to_pause);
 
+var _closed_captions = __webpack_require__(/*! ./plugins/closed_captions */ "./src/plugins/closed_captions/closed_captions.js");
+
+var _closed_captions2 = _interopRequireDefault(_closed_captions);
+
 var _dvr_controls = __webpack_require__(/*! ./plugins/dvr_controls */ "./src/plugins/dvr_controls/dvr_controls.js");
 
 var _dvr_controls2 = _interopRequireDefault(_dvr_controls);
+
+var _end_video = __webpack_require__(/*! ./plugins/end_video */ "./src/plugins/end_video.js");
+
+var _end_video2 = _interopRequireDefault(_end_video);
 
 var _error_screen = __webpack_require__(/*! ./plugins/error_screen */ "./src/plugins/error_screen/error_screen.js");
 
@@ -3152,13 +3205,33 @@ var _favicon = __webpack_require__(/*! ./plugins/favicon */ "./src/plugins/favic
 
 var _favicon2 = _interopRequireDefault(_favicon);
 
+var _google_analytics = __webpack_require__(/*! ./plugins/google_analytics */ "./src/plugins/google_analytics.js");
+
+var _google_analytics2 = _interopRequireDefault(_google_analytics);
+
+var _media_control = __webpack_require__(/*! ./plugins/media_control */ "./src/plugins/media_control/media_control.js");
+
+var _media_control2 = _interopRequireDefault(_media_control);
+
 var _poster = __webpack_require__(/*! ./plugins/poster */ "./src/plugins/poster/poster.js");
 
 var _poster2 = _interopRequireDefault(_poster);
 
+var _seek_time = __webpack_require__(/*! ./plugins/seek_time */ "./src/plugins/seek_time/seek_time.js");
+
+var _seek_time2 = _interopRequireDefault(_seek_time);
+
+var _sources = __webpack_require__(/*! ./plugins/sources */ "./src/plugins/sources.js");
+
+var _sources2 = _interopRequireDefault(_sources);
+
 var _spinner_three_bounce = __webpack_require__(/*! ./plugins/spinner_three_bounce */ "./src/plugins/spinner_three_bounce/spinner_three_bounce.js");
 
 var _spinner_three_bounce2 = _interopRequireDefault(_spinner_three_bounce);
+
+var _stats = __webpack_require__(/*! ./plugins/stats */ "./src/plugins/stats.js");
+
+var _stats2 = _interopRequireDefault(_stats);
 
 var _watermark = __webpack_require__(/*! ./plugins/watermark */ "./src/plugins/watermark/watermark.js");
 
@@ -3170,20 +3243,26 @@ var _vendor2 = _interopRequireDefault(_vendor);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.3.6"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.3.7"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
 exports.default = {
   Plugins: {
-    MediaControl: _media_control2.default,
-    ClickToPausePlugin: _click_to_pause2.default,
+    ClickToPause: _click_to_pause2.default,
+    ClosedCaptions: _closed_captions2.default,
     DVRControls: _dvr_controls2.default,
+    EndVideo: _end_video2.default,
     ErrorScreen: _error_screen2.default,
     Favicon: _favicon2.default,
+    GoogleAnalytics: _google_analytics2.default,
+    MediaControl: _media_control2.default,
     Poster: _poster2.default,
-    SpinnerThreeBouncePlugin: _spinner_three_bounce2.default,
-    WaterMarkPlugin: _watermark2.default
+    SeekTime: _seek_time2.default,
+    Sources: _sources2.default,
+    SpinnerThreeBounce: _spinner_three_bounce2.default,
+    Stats: _stats2.default,
+    WaterMark: _watermark2.default
   },
   Vendor: _vendor2.default,
   version: version
@@ -3222,7 +3301,7 @@ var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./no
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _clappr = __webpack_require__(/*! clappr */ "clappr");
+var _core = __webpack_require__(/*! @clappr/core */ "@clappr/core");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3241,18 +3320,18 @@ var ClickToPausePlugin = function (_ContainerPlugin) {
   }
 
   ClickToPausePlugin.prototype.bindEvents = function bindEvents() {
-    this.listenTo(this.container, _clappr.Events.CONTAINER_CLICK, this.click);
-    this.listenTo(this.container, _clappr.Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate);
+    this.listenTo(this.container, _core.Events.CONTAINER_CLICK, this.click);
+    this.listenTo(this.container, _core.Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate);
   };
 
   ClickToPausePlugin.prototype.click = function click() {
-    if (this.container.getPlaybackType() !== _clappr.Playback.LIVE || this.container.isDvrEnabled()) {
+    if (this.container.getPlaybackType() !== _core.Playback.LIVE || this.container.isDvrEnabled()) {
       if (this.container.isPlaying()) this.container.pause();else this.container.play();
     }
   };
 
   ClickToPausePlugin.prototype.settingsUpdate = function settingsUpdate() {
-    var pointerEnabled = this.container.getPlaybackType() !== _clappr.Playback.LIVE || this.container.isDvrEnabled();
+    var pointerEnabled = this.container.getPlaybackType() !== _core.Playback.LIVE || this.container.isDvrEnabled();
     if (pointerEnabled === this.pointerEnabled) return;
 
     var method = pointerEnabled ? 'addClass' : 'removeClass';
@@ -3261,12 +3340,240 @@ var ClickToPausePlugin = function (_ContainerPlugin) {
   };
 
   return ClickToPausePlugin;
-}(_clappr.ContainerPlugin); //Copyright 2014 Globo.com Player authors. All rights reserved.
+}(_core.ContainerPlugin); //Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
 exports.default = ClickToPausePlugin;
 module.exports = exports['default'];
+
+/***/ }),
+
+/***/ "./src/plugins/closed_captions/closed_captions.js":
+/*!********************************************************!*\
+  !*** ./src/plugins/closed_captions/closed_captions.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _core = __webpack_require__(/*! @clappr/core */ "@clappr/core");
+
+var _cc = __webpack_require__(/*! ../../icons/09-cc.svg */ "./src/icons/09-cc.svg");
+
+var _cc2 = _interopRequireDefault(_cc);
+
+var _closed_captions = __webpack_require__(/*! ./public/closed_captions.html */ "./src/plugins/closed_captions/public/closed_captions.html");
+
+var _closed_captions2 = _interopRequireDefault(_closed_captions);
+
+__webpack_require__(/*! ./public/closed_captions.scss */ "./src/plugins/closed_captions/public/closed_captions.scss");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ClosedCaptions = function (_UICorePlugin) {
+  (0, _inherits3.default)(ClosedCaptions, _UICorePlugin);
+  (0, _createClass3.default)(ClosedCaptions, [{
+    key: 'name',
+    get: function get() {
+      return 'closed_captions';
+    }
+  }, {
+    key: 'template',
+    get: function get() {
+      return (0, _core.template)(_closed_captions2.default);
+    }
+  }, {
+    key: 'events',
+    get: function get() {
+      return {
+        'click [data-cc-button]': 'toggleContextMenu',
+        'click [data-cc-select]': 'onTrackSelect'
+      };
+    }
+  }, {
+    key: 'attributes',
+    get: function get() {
+      return {
+        'class': 'cc-controls',
+        'data-cc-controls': ''
+      };
+    }
+  }]);
+
+  function ClosedCaptions(core) {
+    (0, _classCallCheck3.default)(this, ClosedCaptions);
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, _UICorePlugin.call(this, core));
+
+    var config = core.options.closedCaptionsConfig;
+    _this._title = config && config.title ? config.title : null;
+    _this._ariaLabel = config && config.ariaLabel ? config.ariaLabel : 'cc-button';
+    _this._labelCb = config && config.labelCallback && typeof config.labelCallback === 'function' ? config.labelCallback : function (track) {
+      return track.name;
+    };
+    return _this;
+  }
+
+  ClosedCaptions.prototype.bindEvents = function bindEvents() {
+    this.listenTo(this.core, _core.Events.CORE_ACTIVE_CONTAINER_CHANGED, this.containerChanged);
+    this.listenTo(this.core.mediaControl, _core.Events.MEDIACONTROL_RENDERED, this.render);
+    this.listenTo(this.core.mediaControl, _core.Events.MEDIACONTROL_HIDE, this.hideContextMenu);
+    this.container = this.core.getCurrentContainer();
+    if (this.container) {
+      this.listenTo(this.container, _core.Events.CONTAINER_SUBTITLE_AVAILABLE, this.onSubtitleAvailable);
+      this.listenTo(this.container, _core.Events.CONTAINER_SUBTITLE_CHANGED, this.onSubtitleChanged);
+      this.listenTo(this.container, _core.Events.CONTAINER_STOP, this.onContainerStop);
+    }
+  };
+
+  ClosedCaptions.prototype.onContainerStop = function onContainerStop() {
+    this.ccAvailable(false);
+  };
+
+  ClosedCaptions.prototype.containerChanged = function containerChanged() {
+    this.ccAvailable(false);
+    this.stopListening();
+    this.bindEvents();
+  };
+
+  ClosedCaptions.prototype.onSubtitleAvailable = function onSubtitleAvailable() {
+    this.renderCcButton();
+    this.ccAvailable(true);
+  };
+
+  ClosedCaptions.prototype.onSubtitleChanged = function onSubtitleChanged(track) {
+    this.setCurrentContextMenuElement(track.id);
+  };
+
+  ClosedCaptions.prototype.onTrackSelect = function onTrackSelect(event) {
+    var trackId = parseInt(event.target.dataset.ccSelect, 10);
+    this.container.closedCaptionsTrackId = trackId;
+    this.hideContextMenu();
+    event.stopPropagation();
+    return false;
+  };
+
+  ClosedCaptions.prototype.ccAvailable = function ccAvailable(hasCC) {
+    var method = hasCC ? 'addClass' : 'removeClass';
+    this.$el[method]('available');
+  };
+
+  ClosedCaptions.prototype.toggleContextMenu = function toggleContextMenu() {
+    this.$el.find('ul').toggle();
+  };
+
+  ClosedCaptions.prototype.hideContextMenu = function hideContextMenu() {
+    this.$el.find('ul').hide();
+  };
+
+  ClosedCaptions.prototype.contextMenuElement = function contextMenuElement(id) {
+    return this.$el.find('ul a' + (!isNaN(id) ? '[data-cc-select="' + id + '"]' : '')).parent();
+  };
+
+  ClosedCaptions.prototype.setCurrentContextMenuElement = function setCurrentContextMenuElement(trackId) {
+    if (this._trackId !== trackId) {
+      this.contextMenuElement().removeClass('current');
+      this.contextMenuElement(trackId).addClass('current');
+      var method = trackId > -1 ? 'addClass' : 'removeClass';
+      this.$ccButton[method]('enabled');
+      this._trackId = trackId;
+    }
+  };
+
+  ClosedCaptions.prototype.renderCcButton = function renderCcButton() {
+    var tracks = this.container ? this.container.closedCaptionsTracks : [];
+    for (var i = 0; i < tracks.length; i++) {
+      tracks[i].label = this._labelCb(tracks[i]);
+    }this.$el.html(this.template({
+      ariaLabel: this._ariaLabel,
+      disabledLabel: this.core.i18n.t('disabled'),
+      title: this._title,
+      tracks: tracks
+    }));
+
+    this.$ccButton = this.$el.find('button.cc-button[data-cc-button]');
+    this.$ccButton.append(_cc2.default);
+    this.$el.append(this.style);
+  };
+
+  ClosedCaptions.prototype.render = function render() {
+    this.renderCcButton();
+
+    var $fullscreen = this.core.mediaControl.$el.find('button[data-fullscreen]');
+    if ($fullscreen[0]) this.$el.insertAfter($fullscreen);else this.core.mediaControl.$el.find('.media-control-right-panel[data-media-control]').prepend(this.$el);
+
+    return this;
+  };
+
+  return ClosedCaptions;
+}(_core.UICorePlugin);
+
+exports.default = ClosedCaptions;
+module.exports = exports['default'];
+
+/***/ }),
+
+/***/ "./src/plugins/closed_captions/public/closed_captions.html":
+/*!*****************************************************************!*\
+  !*** ./src/plugins/closed_captions/public/closed_captions.html ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<button type=\"button\" class=\"cc-button media-control-button media-control-icon\" data-cc-button aria-label=\"<%= ariaLabel %>\"></button>\n<ul>\n  <% if (title) { %>\n  <li data-title><%= title %></li>\n  <% }; %>\n  <li><a href=\"#\" data-cc-select=\"-1\"><%= disabledLabel %></a></li>\n  <% for (var i = 0; i < tracks.length; i++) { %>\n    <li><a href=\"#\" data-cc-select=\"<%= tracks[i].id %>\"><%= tracks[i].label %></a></li>\n  <% }; %>\n</ul>\n";
+
+/***/ }),
+
+/***/ "./src/plugins/closed_captions/public/closed_captions.scss":
+/*!*****************************************************************!*\
+  !*** ./src/plugins/closed_captions/public/closed_captions.scss ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader!../../../../node_modules/postcss-loader/lib!../../../../node_modules/sass-loader/lib/loader.js??ref--5-3!./closed_captions.scss */ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?!./src/plugins/closed_captions/public/closed_captions.scss");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"singleton":true,"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
 
 /***/ }),
 
@@ -3300,7 +3607,7 @@ var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./no
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _clappr = __webpack_require__(/*! clappr */ "clappr");
+var _core = __webpack_require__(/*! @clappr/core */ "@clappr/core");
 
 var _index = __webpack_require__(/*! ./public/index.html */ "./src/plugins/dvr_controls/public/index.html");
 
@@ -3315,7 +3622,7 @@ var DVRControls = function (_UICorePlugin) {
   (0, _createClass3.default)(DVRControls, [{
     key: 'template',
     get: function get() {
-      return (0, _clappr.template)(_index2.default);
+      return (0, _core.template)(_index2.default);
     }
   }, {
     key: 'name',
@@ -3349,12 +3656,12 @@ var DVRControls = function (_UICorePlugin) {
   }
 
   DVRControls.prototype.bindEvents = function bindEvents() {
-    this.listenTo(this.core.mediaControl, _clappr.Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged);
-    this.listenTo(this.core.mediaControl, _clappr.Events.MEDIACONTROL_RENDERED, this.settingsUpdate);
-    this.listenTo(this.core, _clappr.Events.CORE_OPTIONS_CHANGE, this.render);
+    this.listenTo(this.core.mediaControl, _core.Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged);
+    this.listenTo(this.core.mediaControl, _core.Events.MEDIACONTROL_RENDERED, this.settingsUpdate);
+    this.listenTo(this.core, _core.Events.CORE_OPTIONS_CHANGE, this.render);
     if (this.core.getCurrentContainer()) {
-      this.listenToOnce(this.core.getCurrentContainer(), _clappr.Events.CONTAINER_TIMEUPDATE, this.render);
-      this.listenTo(this.core.getCurrentContainer(), _clappr.Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.dvrChanged);
+      this.listenToOnce(this.core.getCurrentContainer(), _core.Events.CONTAINER_TIMEUPDATE, this.render);
+      this.listenTo(this.core.getCurrentContainer(), _core.Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.dvrChanged);
     }
   };
 
@@ -3364,7 +3671,7 @@ var DVRControls = function (_UICorePlugin) {
   };
 
   DVRControls.prototype.dvrChanged = function dvrChanged(dvrEnabled) {
-    if (this.core.getPlaybackType() !== _clappr.Playback.LIVE) return;
+    if (this.core.getPlaybackType() !== _core.Playback.LIVE) return;
     this.settingsUpdate();
     this.core.mediaControl.$el.addClass('live');
     if (dvrEnabled) {
@@ -3399,7 +3706,7 @@ var DVRControls = function (_UICorePlugin) {
 
   DVRControls.prototype.shouldRender = function shouldRender() {
     var useDvrControls = this.core.options.useDvrControls === undefined || !!this.core.options.useDvrControls;
-    return useDvrControls && this.core.getPlaybackType() === _clappr.Playback.LIVE;
+    return useDvrControls && this.core.getPlaybackType() === _core.Playback.LIVE;
   };
 
   DVRControls.prototype.render = function render() {
@@ -3415,7 +3722,7 @@ var DVRControls = function (_UICorePlugin) {
   };
 
   return DVRControls;
-}(_clappr.UICorePlugin);
+}(_core.UICorePlugin);
 
 exports.default = DVRControls;
 module.exports = exports['default'];
@@ -3463,6 +3770,83 @@ module.exports = "<div class=\"live-info\"><%= live %></div>\n<button type=\"but
 
 /***/ }),
 
+/***/ "./src/plugins/end_video.js":
+/*!**********************************!*\
+  !*** ./src/plugins/end_video.js ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _core = __webpack_require__(/*! @clappr/core */ "@clappr/core");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Fullscreen = _core.Utils.Fullscreen;
+
+var EndVideo = function (_CorePlugin) {
+  (0, _inherits3.default)(EndVideo, _CorePlugin);
+
+  function EndVideo() {
+    (0, _classCallCheck3.default)(this, EndVideo);
+    return (0, _possibleConstructorReturn3.default)(this, _CorePlugin.apply(this, arguments));
+  }
+
+  EndVideo.prototype.bindEvents = function bindEvents() {
+    this.listenTo(this.core, _core.Events.CORE_ACTIVE_CONTAINER_CHANGED, this.containerChanged);
+    var container = this.core.activeContainer;
+    if (container) {
+      this.listenTo(container, _core.Events.CONTAINER_ENDED, this.ended);
+      this.listenTo(container, _core.Events.CONTAINER_STOP, this.ended);
+    }
+  };
+
+  EndVideo.prototype.containerChanged = function containerChanged() {
+    this.stopListening();
+    this.bindEvents();
+  };
+
+  EndVideo.prototype.ended = function ended() {
+    var exitOnEnd = typeof this.core.options.exitFullscreenOnEnd === 'undefined' || this.core.options.exitFullscreenOnEnd;
+    if (exitOnEnd && Fullscreen.isFullscreen()) this.core.toggleFullscreen();
+  };
+
+  (0, _createClass3.default)(EndVideo, [{
+    key: 'name',
+    get: function get() {
+      return 'end_video';
+    }
+  }]);
+  return EndVideo;
+}(_core.CorePlugin);
+
+exports.default = EndVideo;
+module.exports = exports['default'];
+
+/***/ }),
+
 /***/ "./src/plugins/error_screen/error_screen.js":
 /*!**************************************************!*\
   !*** ./src/plugins/error_screen/error_screen.js ***!
@@ -3493,7 +3877,7 @@ var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./no
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _clappr = __webpack_require__(/*! clappr */ "clappr");
+var _core = __webpack_require__(/*! @clappr/core */ "@clappr/core");
 
 var _reload = __webpack_require__(/*! ../../icons/10-reload.svg */ "./src/icons/10-reload.svg");
 
@@ -3517,7 +3901,7 @@ var ErrorScreen = function (_UICorePlugin) {
   }, {
     key: 'template',
     get: function get() {
-      return (0, _clappr.template)(_error_screen2.default);
+      return (0, _core.template)(_error_screen2.default);
     }
   }, {
     key: 'container',
@@ -3546,8 +3930,8 @@ var ErrorScreen = function (_UICorePlugin) {
   }
 
   ErrorScreen.prototype.bindEvents = function bindEvents() {
-    this.listenTo(this.core, _clappr.Events.ERROR, this.onError);
-    this.listenTo(this.core, _clappr.Events.CORE_ACTIVE_CONTAINER_CHANGED, this.onContainerChanged);
+    this.listenTo(this.core, _core.Events.ERROR, this.onError);
+    this.listenTo(this.core, _core.Events.CORE_ACTIVE_CONTAINER_CHANGED, this.onContainerChanged);
   };
 
   ErrorScreen.prototype.bindReload = function bindReload() {
@@ -3558,7 +3942,7 @@ var ErrorScreen = function (_UICorePlugin) {
   ErrorScreen.prototype.reload = function reload() {
     var _this2 = this;
 
-    this.listenToOnce(this.core, _clappr.Events.CORE_READY, function () {
+    this.listenToOnce(this.core, _core.Events.CORE_READY, function () {
       return _this2.container.play();
     });
     this.core.load(this.options.sources, this.options.mimeType);
@@ -3578,7 +3962,7 @@ var ErrorScreen = function (_UICorePlugin) {
   ErrorScreen.prototype.onError = function onError() {
     var err = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-    if (err.level === _clappr.PlayerError.Levels.FATAL) {
+    if (err.level === _core.PlayerError.Levels.FATAL) {
       this.err = err;
       this.container.disableMediaControl();
       this.container.stop();
@@ -3614,7 +3998,7 @@ var ErrorScreen = function (_UICorePlugin) {
   };
 
   return ErrorScreen;
-}(_clappr.UICorePlugin);
+}(_core.UICorePlugin);
 
 exports.default = ErrorScreen;
 module.exports = exports['default'];
@@ -3692,7 +4076,7 @@ var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./no
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _clappr = __webpack_require__(/*! clappr */ "clappr");
+var _core = __webpack_require__(/*! @clappr/core */ "@clappr/core");
 
 var _play = __webpack_require__(/*! ../icons/01-play.svg */ "./src/icons/01-play.svg");
 
@@ -3704,7 +4088,7 @@ var _pause2 = _interopRequireDefault(_pause);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var oldIcon = (0, _clappr.$)('link[rel="shortcut icon"]');
+var oldIcon = (0, _core.$)('link[rel="shortcut icon"]');
 
 var Favicon = function (_CorePlugin) {
   (0, _inherits3.default)(Favicon, _CorePlugin);
@@ -3733,29 +4117,29 @@ var Favicon = function (_CorePlugin) {
   Favicon.prototype.configure = function configure() {
     if (this.core.options.changeFavicon) {
       if (!this.enabled) {
-        this.stopListening(this.core, _clappr.Events.CORE_OPTIONS_CHANGE);
+        this.stopListening(this.core, _core.Events.CORE_OPTIONS_CHANGE);
         this.enable();
       }
     } else if (this.enabled) {
       this.disable();
-      this.listenTo(this.core, _clappr.Events.CORE_OPTIONS_CHANGE, this.configure);
+      this.listenTo(this.core, _core.Events.CORE_OPTIONS_CHANGE, this.configure);
     }
   };
 
   Favicon.prototype.bindEvents = function bindEvents() {
-    this.listenTo(this.core, _clappr.Events.CORE_OPTIONS_CHANGE, this.configure);
-    this.listenTo(this.core, _clappr.Events.CORE_ACTIVE_CONTAINER_CHANGED, this.containerChanged);
+    this.listenTo(this.core, _core.Events.CORE_OPTIONS_CHANGE, this.configure);
+    this.listenTo(this.core, _core.Events.CORE_ACTIVE_CONTAINER_CHANGED, this.containerChanged);
     this.core.activeContainer && this.containerChanged();
   };
 
   Favicon.prototype.containerChanged = function containerChanged() {
     this._container && this.stopListening(this._container);
     this._container = this.core.activeContainer;
-    this.listenTo(this._container, _clappr.Events.CONTAINER_PLAY, this.setPlayIcon);
-    this.listenTo(this._container, _clappr.Events.CONTAINER_PAUSE, this.setPauseIcon);
-    this.listenTo(this._container, _clappr.Events.CONTAINER_STOP, this.resetIcon);
-    this.listenTo(this._container, _clappr.Events.CONTAINER_ENDED, this.resetIcon);
-    this.listenTo(this._container, _clappr.Events.CONTAINER_ERROR, this.resetIcon);
+    this.listenTo(this._container, _core.Events.CONTAINER_PLAY, this.setPlayIcon);
+    this.listenTo(this._container, _core.Events.CONTAINER_PAUSE, this.setPauseIcon);
+    this.listenTo(this._container, _core.Events.CONTAINER_STOP, this.resetIcon);
+    this.listenTo(this._container, _core.Events.CONTAINER_ENDED, this.resetIcon);
+    this.listenTo(this._container, _core.Events.CONTAINER_ERROR, this.resetIcon);
     this.resetIcon();
   };
 
@@ -3770,15 +4154,15 @@ var Favicon = function (_CorePlugin) {
   };
 
   Favicon.prototype.createIcon = function createIcon(svg) {
-    var canvas = (0, _clappr.$)('<canvas/>');
+    var canvas = (0, _core.$)('<canvas/>');
     canvas[0].width = 16;
     canvas[0].height = 16;
     var ctx = canvas[0].getContext('2d');
     ctx.fillStyle = '#000';
-    var d = (0, _clappr.$)(svg).find('path').attr('d');
+    var d = (0, _core.$)(svg).find('path').attr('d');
     var path = new Path2D(d);
     ctx.fill(path);
-    var icon = (0, _clappr.$)('<link rel="shortcut icon" type="image/png"/>');
+    var icon = (0, _core.$)('<link rel="shortcut icon" type="image/png"/>');
     icon.attr('href', canvas[0].toDataURL('image/png'));
     return icon;
   };
@@ -3796,21 +4180,199 @@ var Favicon = function (_CorePlugin) {
   };
 
   Favicon.prototype.resetIcon = function resetIcon() {
-    (0, _clappr.$)('link[rel="shortcut icon"]').remove();
-    (0, _clappr.$)('head').append(this.oldIcon);
+    (0, _core.$)('link[rel="shortcut icon"]').remove();
+    (0, _core.$)('head').append(this.oldIcon);
   };
 
   Favicon.prototype.changeIcon = function changeIcon(icon) {
     if (icon) {
-      (0, _clappr.$)('link[rel="shortcut icon"]').remove();
-      (0, _clappr.$)('head').append(icon);
+      (0, _core.$)('link[rel="shortcut icon"]').remove();
+      (0, _core.$)('head').append(icon);
     }
   };
 
   return Favicon;
-}(_clappr.CorePlugin);
+}(_core.CorePlugin);
 
 exports.default = Favicon;
+module.exports = exports['default'];
+
+/***/ }),
+
+/***/ "./src/plugins/google_analytics.js":
+/*!*****************************************!*\
+  !*** ./src/plugins/google_analytics.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _core = __webpack_require__(/*! @clappr/core */ "@clappr/core");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var GoogleAnalytics = function (_ContainerPlugin) {
+  (0, _inherits3.default)(GoogleAnalytics, _ContainerPlugin);
+  (0, _createClass3.default)(GoogleAnalytics, [{
+    key: 'name',
+    get: function get() {
+      return 'google_analytics';
+    }
+  }]);
+
+  function GoogleAnalytics(container) {
+    (0, _classCallCheck3.default)(this, GoogleAnalytics);
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, _ContainerPlugin.call(this, container));
+
+    if (_this.container.options.gaAccount) {
+      _this.account = _this.container.options.gaAccount;
+      _this.trackerName = _this.container.options.gaTrackerName ? _this.container.options.gaTrackerName + '.' : 'Clappr.';
+      _this.domainName = _this.container.options.gaDomainName;
+      _this.currentHDState = undefined;
+      _this.embedScript();
+    }
+    return _this;
+  }
+
+  GoogleAnalytics.prototype.embedScript = function embedScript() {
+    var _this2 = this;
+
+    if (!window._gat) {
+      var script = document.createElement('script');
+      script.setAttribute('type', 'text/javascript');
+      script.setAttribute('async', 'async');
+      script.setAttribute('src', '//www.google-analytics.com/ga.js');
+      script.onload = function () {
+        return _this2.addEventListeners();
+      };
+      document.body.appendChild(script);
+    } else {
+      this.addEventListeners();
+    }
+  };
+
+  GoogleAnalytics.prototype.addEventListeners = function addEventListeners() {
+    var _this3 = this;
+
+    if (this.container) {
+      this.listenTo(this.container, _core.Events.CONTAINER_READY, this.onReady);
+      this.listenTo(this.container, _core.Events.CONTAINER_PLAY, this.onPlay);
+      this.listenTo(this.container, _core.Events.CONTAINER_STOP, this.onStop);
+      this.listenTo(this.container, _core.Events.CONTAINER_PAUSE, this.onPause);
+      this.listenTo(this.container, _core.Events.CONTAINER_ENDED, this.onEnded);
+      this.listenTo(this.container, _core.Events.CONTAINER_STATE_BUFFERING, this.onBuffering);
+      this.listenTo(this.container, _core.Events.CONTAINER_STATE_BUFFERFULL, this.onBufferFull);
+      this.listenTo(this.container, _core.Events.CONTAINER_ERROR, this.onError);
+      this.listenTo(this.container, _core.Events.CONTAINER_PLAYBACKSTATE, this.onPlaybackChanged);
+      this.listenTo(this.container, _core.Events.CONTAINER_VOLUME, function (event) {
+        return _this3.onVolumeChanged(event);
+      });
+      this.listenTo(this.container, _core.Events.CONTAINER_SEEK, function (event) {
+        return _this3.onSeek(event);
+      });
+      this.listenTo(this.container, _core.Events.CONTAINER_FULL_SCREEN, this.onFullscreen);
+      this.listenTo(this.container, _core.Events.CONTAINER_HIGHDEFINITIONUPDATE, this.onHD);
+      this.listenTo(this.container, _core.Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.onDVR);
+    }
+    _gaq.push([this.trackerName + '_setAccount', this.account]);
+    if (this.domainName) _gaq.push([this.trackerName + '_setDomainName', this.domainName]);
+  };
+
+  GoogleAnalytics.prototype.onReady = function onReady() {
+    this.push(['Video', 'Playback', this.container.playback.name]);
+  };
+
+  GoogleAnalytics.prototype.onPlay = function onPlay() {
+    this.push(['Video', 'Play', this.container.playback.src]);
+  };
+
+  GoogleAnalytics.prototype.onStop = function onStop() {
+    this.push(['Video', 'Stop', this.container.playback.src]);
+  };
+
+  GoogleAnalytics.prototype.onEnded = function onEnded() {
+    this.push(['Video', 'Ended', this.container.playback.src]);
+  };
+
+  GoogleAnalytics.prototype.onBuffering = function onBuffering() {
+    this.push(['Video', 'Buffering', this.container.playback.src]);
+  };
+
+  GoogleAnalytics.prototype.onBufferFull = function onBufferFull() {
+    this.push(['Video', 'Bufferfull', this.container.playback.src]);
+  };
+
+  GoogleAnalytics.prototype.onError = function onError() {
+    this.push(['Video', 'Error', this.container.playback.src]);
+  };
+
+  GoogleAnalytics.prototype.onHD = function onHD(isHD) {
+    var status = isHD ? 'ON' : 'OFF';
+    if (status !== this.currentHDState) {
+      this.currentHDState = status;
+      this.push(['Video', 'HD - ' + status, this.container.playback.src]);
+    }
+  };
+
+  GoogleAnalytics.prototype.onPlaybackChanged = function onPlaybackChanged(playbackState) {
+    if (playbackState.type !== null) this.push(['Video', 'Playback Type - ' + playbackState.type, this.container.playback.src]);
+  };
+
+  GoogleAnalytics.prototype.onDVR = function onDVR(dvrInUse) {
+    var status = dvrInUse ? 'ON' : 'OFF';
+    this.push(['Interaction', 'DVR - ' + status, this.container.playback.src]);
+  };
+
+  GoogleAnalytics.prototype.onPause = function onPause() {
+    this.push(['Video', 'Pause', this.container.playback.src]);
+  };
+
+  GoogleAnalytics.prototype.onSeek = function onSeek() {
+    this.push(['Video', 'Seek', this.container.playback.src]);
+  };
+
+  GoogleAnalytics.prototype.onVolumeChanged = function onVolumeChanged() {
+    this.push(['Interaction', 'Volume', this.container.playback.src]);
+  };
+
+  GoogleAnalytics.prototype.onFullscreen = function onFullscreen() {
+    this.push(['Interaction', 'Fullscreen', this.container.playback.src]);
+  };
+
+  GoogleAnalytics.prototype.push = function push(array) {
+    var res = [this.trackerName + '_trackEvent'].concat(array);
+    _gaq.push(res);
+  };
+
+  return GoogleAnalytics;
+}(_core.ContainerPlugin); // Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+exports.default = GoogleAnalytics;
 module.exports = exports['default'];
 
 /***/ }),
@@ -3851,7 +4413,7 @@ var _inherits3 = _interopRequireDefault(_inherits2);
 
 var _vendor = __webpack_require__(/*! ../../vendor */ "./src/vendor/index.js");
 
-var _clappr = __webpack_require__(/*! clappr */ "clappr");
+var _core = __webpack_require__(/*! @clappr/core */ "@clappr/core");
 
 __webpack_require__(/*! ./public/media-control.scss */ "./src/plugins/media_control/public/media-control.scss");
 
@@ -3901,11 +4463,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * The MediaControl is responsible for displaying the Player controls.
  */
 
-var Config = _clappr.Utils.Config,
-    Fullscreen = _clappr.Utils.Fullscreen,
-    formatTime = _clappr.Utils.formatTime,
-    extend = _clappr.Utils.extend,
-    removeArrayItem = _clappr.Utils.removeArrayItem;
+var Config = _core.Utils.Config,
+    Fullscreen = _core.Utils.Fullscreen,
+    formatTime = _core.Utils.formatTime,
+    extend = _core.Utils.extend,
+    removeArrayItem = _core.Utils.removeArrayItem;
 
 var MediaControl = function (_UICorePlugin) {
   (0, _inherits3.default)(MediaControl, _UICorePlugin);
@@ -3917,7 +4479,7 @@ var MediaControl = function (_UICorePlugin) {
   }, {
     key: 'disabled',
     get: function get() {
-      var playbackIsNOOP = this.container && this.container.getPlaybackType() === _clappr.Playback.NO_OP;
+      var playbackIsNOOP = this.container && this.container.getPlaybackType() === _core.Playback.NO_OP;
       return this.userDisabled || playbackIsNOOP;
     }
   }, {
@@ -3965,7 +4527,7 @@ var MediaControl = function (_UICorePlugin) {
   }, {
     key: 'template',
     get: function get() {
-      return (0, _clappr.template)(_mediaControl2.default);
+      return (0, _core.template)(_mediaControl2.default);
     }
   }, {
     key: 'volume',
@@ -3999,7 +4561,7 @@ var MediaControl = function (_UICorePlugin) {
     _this.bindKeyEvents();
 
     if (_this.container) {
-      if (!_clappr.$.isEmptyObject(_this.container.settings)) _this.settings = _clappr.$.extend({}, _this.container.settings);
+      if (!_core.$.isEmptyObject(_this.container.settings)) _this.settings = _core.$.extend({}, _this.container.settings);
     } else {
       _this.settings = {};
     }
@@ -4013,8 +4575,8 @@ var MediaControl = function (_UICorePlugin) {
     _this.updateDragHandler = function (event) {
       return _this.updateDrag(event);
     };
-    (0, _clappr.$)(document).bind('mouseup', _this.stopDragHandler);
-    (0, _clappr.$)(document).bind('mousemove', _this.updateDragHandler);
+    (0, _core.$)(document).bind('mouseup', _this.stopDragHandler);
+    (0, _core.$)(document).bind('mousemove', _this.updateDragHandler);
     return _this;
   }
 
@@ -4033,36 +4595,36 @@ var MediaControl = function (_UICorePlugin) {
     var _this3 = this;
 
     this.stopListening();
-    this.listenTo(this.core, _clappr.Events.CORE_ACTIVE_CONTAINER_CHANGED, this.onActiveContainerChanged);
-    this.listenTo(this.core, _clappr.Events.CORE_MOUSE_MOVE, this.show);
-    this.listenTo(this.core, _clappr.Events.CORE_MOUSE_LEAVE, function () {
+    this.listenTo(this.core, _core.Events.CORE_ACTIVE_CONTAINER_CHANGED, this.onActiveContainerChanged);
+    this.listenTo(this.core, _core.Events.CORE_MOUSE_MOVE, this.show);
+    this.listenTo(this.core, _core.Events.CORE_MOUSE_LEAVE, function () {
       return _this3.hide(_this3.options.hideMediaControlDelay);
     });
-    this.listenTo(this.core, _clappr.Events.CORE_FULLSCREEN, this.show);
-    this.listenTo(this.core, _clappr.Events.CORE_OPTIONS_CHANGE, this.configure);
-    _clappr.Mediator.on(this.options.playerId + ':' + _clappr.Events.PLAYER_RESIZE, this.playerResize, this);
+    this.listenTo(this.core, _core.Events.CORE_FULLSCREEN, this.show);
+    this.listenTo(this.core, _core.Events.CORE_OPTIONS_CHANGE, this.configure);
+    _core.Mediator.on(this.options.playerId + ':' + _core.Events.PLAYER_RESIZE, this.playerResize, this);
     this.bindContainerEvents();
   };
 
   MediaControl.prototype.bindContainerEvents = function bindContainerEvents() {
     if (!this.container) return;
-    this.listenTo(this.container, _clappr.Events.CONTAINER_PLAY, this.changeTogglePlay);
-    this.listenTo(this.container, _clappr.Events.CONTAINER_PAUSE, this.changeTogglePlay);
-    this.listenTo(this.container, _clappr.Events.CONTAINER_STOP, this.changeTogglePlay);
-    this.listenTo(this.container, _clappr.Events.CONTAINER_DBLCLICK, this.toggleFullscreen);
-    this.listenTo(this.container, _clappr.Events.CONTAINER_TIMEUPDATE, this.onTimeUpdate);
-    this.listenTo(this.container, _clappr.Events.CONTAINER_PROGRESS, this.updateProgressBar);
-    this.listenTo(this.container, _clappr.Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate);
-    this.listenTo(this.container, _clappr.Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.settingsUpdate);
-    this.listenTo(this.container, _clappr.Events.CONTAINER_HIGHDEFINITIONUPDATE, this.highDefinitionUpdate);
-    this.listenTo(this.container, _clappr.Events.CONTAINER_MEDIACONTROL_DISABLE, this.disable);
-    this.listenTo(this.container, _clappr.Events.CONTAINER_MEDIACONTROL_ENABLE, this.enable);
-    this.listenTo(this.container, _clappr.Events.CONTAINER_ENDED, this.ended);
-    this.listenTo(this.container, _clappr.Events.CONTAINER_VOLUME, this.onVolumeChanged);
-    this.listenTo(this.container, _clappr.Events.CONTAINER_OPTIONS_CHANGE, this.setInitialVolume);
+    this.listenTo(this.container, _core.Events.CONTAINER_PLAY, this.changeTogglePlay);
+    this.listenTo(this.container, _core.Events.CONTAINER_PAUSE, this.changeTogglePlay);
+    this.listenTo(this.container, _core.Events.CONTAINER_STOP, this.changeTogglePlay);
+    this.listenTo(this.container, _core.Events.CONTAINER_DBLCLICK, this.toggleFullscreen);
+    this.listenTo(this.container, _core.Events.CONTAINER_TIMEUPDATE, this.onTimeUpdate);
+    this.listenTo(this.container, _core.Events.CONTAINER_PROGRESS, this.updateProgressBar);
+    this.listenTo(this.container, _core.Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate);
+    this.listenTo(this.container, _core.Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.settingsUpdate);
+    this.listenTo(this.container, _core.Events.CONTAINER_HIGHDEFINITIONUPDATE, this.highDefinitionUpdate);
+    this.listenTo(this.container, _core.Events.CONTAINER_MEDIACONTROL_DISABLE, this.disable);
+    this.listenTo(this.container, _core.Events.CONTAINER_MEDIACONTROL_ENABLE, this.enable);
+    this.listenTo(this.container, _core.Events.CONTAINER_ENDED, this.ended);
+    this.listenTo(this.container, _core.Events.CONTAINER_VOLUME, this.onVolumeChanged);
+    this.listenTo(this.container, _core.Events.CONTAINER_OPTIONS_CHANGE, this.setInitialVolume);
     if (this.container.playback.el.nodeName.toLowerCase() === 'video') {
       // wait until the metadata has loaded and then check if fullscreen on video tag is supported
-      this.listenToOnce(this.container, _clappr.Events.CONTAINER_LOADEDMETADATA, this.onLoadedMetadataOnVideoTag);
+      this.listenToOnce(this.container, _core.Events.CONTAINER_LOADEDMETADATA, this.onLoadedMetadataOnVideoTag);
     }
   };
 
@@ -4146,12 +4708,12 @@ var MediaControl = function (_UICorePlugin) {
     if (this.container && this.container.isPlaying()) {
       this.$playPauseToggle.append(_pause2.default);
       this.$playStopToggle.append(_stop2.default);
-      this.trigger(_clappr.Events.MEDIACONTROL_PLAYING);
+      this.trigger(_core.Events.MEDIACONTROL_PLAYING);
     } else {
       this.$playPauseToggle.append(_play2.default);
       this.$playStopToggle.append(_play2.default);
-      this.trigger(_clappr.Events.MEDIACONTROL_NOTPLAYING);
-      _clappr.Browser.isMobile && this.show();
+      this.trigger(_core.Events.MEDIACONTROL_NOTPLAYING);
+      _core.Browser.isMobile && this.show();
     }
     this.applyButtonStyle(this.$playPauseToggle);
     this.applyButtonStyle(this.$playStopToggle);
@@ -4162,11 +4724,11 @@ var MediaControl = function (_UICorePlugin) {
       var offsetX = event.pageX - this.$seekBarContainer.offset().left - this.$seekBarHover.width() / 2;
       this.$seekBarHover.css({ left: offsetX });
     }
-    this.trigger(_clappr.Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR, event);
+    this.trigger(_core.Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR, event);
   };
 
   MediaControl.prototype.mouseleaveOnSeekBar = function mouseleaveOnSeekBar(event) {
-    this.trigger(_clappr.Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR, event);
+    this.trigger(_core.Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR, event);
   };
 
   MediaControl.prototype.onVolumeClick = function onVolumeClick(event) {
@@ -4259,19 +4821,19 @@ var MediaControl = function (_UICorePlugin) {
       if (_this4.container && _this4.container.isReady) {
         _this4.container.setVolume(value);
       } else {
-        _this4.listenToOnce(_this4.container, _clappr.Events.CONTAINER_READY, function () {
+        _this4.listenToOnce(_this4.container, _core.Events.CONTAINER_READY, function () {
           _this4.container.setVolume(value);
         });
       }
     };
 
-    if (!this.container) this.listenToOnce(this, _clappr.Events.MEDIACONTROL_CONTAINERCHANGED, function () {
+    if (!this.container) this.listenToOnce(this, _core.Events.MEDIACONTROL_CONTAINERCHANGED, function () {
       return setWhenContainerReady();
     });else setWhenContainerReady();
   };
 
   MediaControl.prototype.toggleFullscreen = function toggleFullscreen() {
-    this.trigger(_clappr.Events.MEDIACONTROL_FULLSCREEN, this.name);
+    this.trigger(_core.Events.MEDIACONTROL_FULLSCREEN, this.name);
     this.container.fullscreen();
     this.core.toggleFullscreen();
     this.resetUserKeepVisible();
@@ -4280,15 +4842,15 @@ var MediaControl = function (_UICorePlugin) {
   MediaControl.prototype.onActiveContainerChanged = function onActiveContainerChanged() {
     this.fullScreenOnVideoTagSupported = null;
     this.bindEvents();
-    _clappr.Mediator.off(this.options.playerId + ':' + _clappr.Events.PLAYER_RESIZE, this.playerResize, this);
+    _core.Mediator.off(this.options.playerId + ':' + _core.Events.PLAYER_RESIZE, this.playerResize, this);
     // set the new container to match the volume of the last one
     this.setInitialVolume();
     this.changeTogglePlay();
     this.bindContainerEvents();
     this.settingsUpdate();
-    this.container && this.container.trigger(_clappr.Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.container.isDvrInUse());
+    this.container && this.container.trigger(_core.Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.container.isDvrInUse());
     this.container && this.container.mediaControlDisabled && this.disable();
-    this.trigger(_clappr.Events.MEDIACONTROL_CONTAINERCHANGED);
+    this.trigger(_core.Events.MEDIACONTROL_CONTAINERCHANGED);
   };
 
   MediaControl.prototype.showVolumeBar = function showVolumeBar() {
@@ -4340,7 +4902,7 @@ var MediaControl = function (_UICorePlugin) {
 
     // default to 100%
     this.currentSeekBarPercentage = 100;
-    if (this.container && (this.container.getPlaybackType() !== _clappr.Playback.LIVE || this.container.isDvrInUse())) this.currentSeekBarPercentage = this.currentPositionValue / this.currentDurationValue * 100;
+    if (this.container && (this.container.getPlaybackType() !== _core.Playback.LIVE || this.container.isDvrInUse())) this.currentSeekBarPercentage = this.currentPositionValue / this.currentDurationValue * 100;
 
     this.setSeekPercentage(this.currentSeekBarPercentage);
 
@@ -4396,8 +4958,8 @@ var MediaControl = function (_UICorePlugin) {
     if (!event || mousePointerMoved || navigator.userAgent.match(/firefox/i)) {
       clearTimeout(this.hideId);
       this.$el.show();
-      this.trigger(_clappr.Events.MEDIACONTROL_SHOW, this.name);
-      this.container && this.container.trigger(_clappr.Events.CONTAINER_MEDIACONTROL_SHOW, this.name);
+      this.trigger(_core.Events.MEDIACONTROL_SHOW, this.name);
+      this.container && this.container.trigger(_core.Events.CONTAINER_MEDIACONTROL_SHOW, this.name);
       this.$el.removeClass('media-control-hide');
       this.hideId = setTimeout(function () {
         return _this6.hide();
@@ -4430,8 +4992,8 @@ var MediaControl = function (_UICorePlugin) {
         return _this7.hide();
       }, timeout);
     } else {
-      this.trigger(_clappr.Events.MEDIACONTROL_HIDE, this.name);
-      this.container && this.container.trigger(_clappr.Events.CONTAINER_MEDIACONTROL_HIDE, this.name);
+      this.trigger(_core.Events.MEDIACONTROL_HIDE, this.name);
+      this.container && this.container.trigger(_core.Events.CONTAINER_MEDIACONTROL_HIDE, this.name);
       this.$el.addClass('media-control-hide');
       this.hideVolumeBar(0);
       var showing = false;
@@ -4459,7 +5021,7 @@ var MediaControl = function (_UICorePlugin) {
   };
 
   MediaControl.prototype.getSettings = function getSettings() {
-    return _clappr.$.extend(true, {}, this.container && this.container.settings);
+    return _core.$.extend(true, {}, this.container && this.container.settings);
   };
 
   MediaControl.prototype.highDefinitionUpdate = function highDefinitionUpdate(isHD) {
@@ -4542,7 +5104,7 @@ var MediaControl = function (_UICorePlugin) {
   MediaControl.prototype.bindKeyEvents = function bindKeyEvents() {
     var _this9 = this;
 
-    if (_clappr.Browser.isMobile || this.options.disableKeyboardShortcuts) return;
+    if (_core.Browser.isMobile || this.options.disableKeyboardShortcuts) return;
 
     this.unbindKeyEvents();
     this.kibo = new _vendor.Kibo(this.options.focusElement || this.options.parentElement);
@@ -4599,12 +5161,12 @@ var MediaControl = function (_UICorePlugin) {
   };
 
   MediaControl.prototype.applyButtonStyle = function applyButtonStyle(element) {
-    this.buttonsColor && element && (0, _clappr.$)(element).find('svg path').css('fill', this.buttonsColor);
+    this.buttonsColor && element && (0, _core.$)(element).find('svg path').css('fill', this.buttonsColor);
   };
 
   MediaControl.prototype.destroy = function destroy() {
-    (0, _clappr.$)(document).unbind('mouseup', this.stopDragHandler);
-    (0, _clappr.$)(document).unbind('mousemove', this.updateDragHandler);
+    (0, _core.$)(document).unbind('mouseup', this.stopDragHandler);
+    (0, _core.$)(document).unbind('mousemove', this.updateDragHandler);
     this.unbindKeyEvents();
     this.stopListening();
     _UICorePlugin.prototype.destroy.call(this);
@@ -4619,7 +5181,7 @@ var MediaControl = function (_UICorePlugin) {
 
   MediaControl.prototype.configure = function configure() {
     this.options.chromeless ? this.disable() : this.enable();
-    this.trigger(_clappr.Events.MEDIACONTROL_OPTIONS_CHANGE);
+    this.trigger(_core.Events.MEDIACONTROL_OPTIONS_CHANGE);
   };
 
   MediaControl.prototype.render = function render() {
@@ -4642,8 +5204,8 @@ var MediaControl = function (_UICorePlugin) {
 
     // Video volume cannot be changed with Safari on mobile devices
     // Display mute/unmute icon only if Safari version >= 10
-    if (_clappr.Browser.isSafari && _clappr.Browser.isMobile) {
-      if (_clappr.Browser.version < 10) this.$volumeContainer.css('display', 'none');else this.$volumeBarContainer.css('display', 'none');
+    if (_core.Browser.isSafari && _core.Browser.isMobile) {
+      if (_core.Browser.version < 10) this.$volumeContainer.css('display', 'none');else this.$volumeBarContainer.css('display', 'none');
     }
 
     this.$seekBarPosition.addClass('media-control-notransition');
@@ -4657,7 +5219,7 @@ var MediaControl = function (_UICorePlugin) {
 
     process.nextTick(function () {
       !_this10.settings.seekEnabled && _this10.$seekBarContainer.addClass('seek-disabled');
-      !_clappr.Browser.isMobile && !_this10.options.disableKeyboardShortcuts && _this10.bindKeyEvents();
+      !_core.Browser.isMobile && !_this10.options.disableKeyboardShortcuts && _this10.bindKeyEvents();
       _this10.playerResize({ width: _this10.options.width, height: _this10.options.height });
       _this10.hideVolumeBar(0);
     });
@@ -4669,12 +5231,12 @@ var MediaControl = function (_UICorePlugin) {
 
     this.rendered = true;
     this.updateVolumeUI();
-    this.trigger(_clappr.Events.MEDIACONTROL_RENDERED);
+    this.trigger(_core.Events.MEDIACONTROL_RENDERED);
     return this;
   };
 
   return MediaControl;
-}(_clappr.UICorePlugin);
+}(_core.UICorePlugin);
 
 exports.default = MediaControl;
 
@@ -4769,7 +5331,7 @@ var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./no
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _clappr = __webpack_require__(/*! clappr */ "clappr");
+var _core = __webpack_require__(/*! @clappr/core */ "@clappr/core");
 
 var _poster = __webpack_require__(/*! ./public/poster.html */ "./src/plugins/poster/public/poster.html");
 
@@ -4797,13 +5359,13 @@ var PosterPlugin = function (_UIContainerPlugin) {
   }, {
     key: 'template',
     get: function get() {
-      return (0, _clappr.template)(_poster2.default);
+      return (0, _core.template)(_poster2.default);
     }
   }, {
     key: 'shouldRender',
     get: function get() {
       var showForNoOp = !!(this.options.poster && this.options.poster.showForNoOp);
-      return this.container.playback.name !== 'html_img' && (this.container.playback.getPlaybackType() !== _clappr.Playback.NO_OP || showForNoOp);
+      return this.container.playback.name !== 'html_img' && (this.container.playback.getPlaybackType() !== _core.Playback.NO_OP || showForNoOp);
     }
   }, {
     key: 'attributes',
@@ -4842,17 +5404,17 @@ var PosterPlugin = function (_UIContainerPlugin) {
   }
 
   PosterPlugin.prototype.bindEvents = function bindEvents() {
-    this.listenTo(this.container, _clappr.Events.CONTAINER_STOP, this.onStop);
-    this.listenTo(this.container, _clappr.Events.CONTAINER_PLAY, this.onPlay);
-    this.listenTo(this.container, _clappr.Events.CONTAINER_STATE_BUFFERING, this.update);
-    this.listenTo(this.container, _clappr.Events.CONTAINER_STATE_BUFFERFULL, this.update);
-    this.listenTo(this.container, _clappr.Events.CONTAINER_OPTIONS_CHANGE, this.render);
-    this.listenTo(this.container, _clappr.Events.CONTAINER_ERROR, this.onError);
-    this.showOnVideoEnd && this.listenTo(this.container, _clappr.Events.CONTAINER_ENDED, this.onStop);
+    this.listenTo(this.container, _core.Events.CONTAINER_STOP, this.onStop);
+    this.listenTo(this.container, _core.Events.CONTAINER_PLAY, this.onPlay);
+    this.listenTo(this.container, _core.Events.CONTAINER_STATE_BUFFERING, this.update);
+    this.listenTo(this.container, _core.Events.CONTAINER_STATE_BUFFERFULL, this.update);
+    this.listenTo(this.container, _core.Events.CONTAINER_OPTIONS_CHANGE, this.render);
+    this.listenTo(this.container, _core.Events.CONTAINER_ERROR, this.onError);
+    this.showOnVideoEnd && this.listenTo(this.container, _core.Events.CONTAINER_ENDED, this.onStop);
   };
 
   PosterPlugin.prototype.onError = function onError(error) {
-    this.hasFatalError = error.level === _clappr.PlayerError.Levels.FATAL;
+    this.hasFatalError = error.level === _core.PlayerError.Levels.FATAL;
 
     if (this.hasFatalError) {
       this.hasStartedPlaying = false;
@@ -4957,7 +5519,7 @@ var PosterPlugin = function (_UIContainerPlugin) {
   };
 
   return PosterPlugin;
-}(_clappr.UIContainerPlugin);
+}(_core.UIContainerPlugin);
 
 exports.default = PosterPlugin;
 module.exports = exports['default'];
@@ -5003,6 +5565,353 @@ var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/a
 if(content.locals) module.exports = content.locals;
 
 if(false) {}
+
+/***/ }),
+
+/***/ "./src/plugins/seek_time/public/seek_time.html":
+/*!*****************************************************!*\
+  !*** ./src/plugins/seek_time/public/seek_time.html ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<span data-seek-time></span>\n<span data-duration></span>\n";
+
+/***/ }),
+
+/***/ "./src/plugins/seek_time/public/seek_time.scss":
+/*!*****************************************************!*\
+  !*** ./src/plugins/seek_time/public/seek_time.scss ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader!../../../../node_modules/postcss-loader/lib!../../../../node_modules/sass-loader/lib/loader.js??ref--5-3!./seek_time.scss */ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?!./src/plugins/seek_time/public/seek_time.scss");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"singleton":true,"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./src/plugins/seek_time/seek_time.js":
+/*!********************************************!*\
+  !*** ./src/plugins/seek_time/seek_time.js ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _core = __webpack_require__(/*! @clappr/core */ "@clappr/core");
+
+var _seek_time = __webpack_require__(/*! ./public/seek_time.html */ "./src/plugins/seek_time/public/seek_time.html");
+
+var _seek_time2 = _interopRequireDefault(_seek_time);
+
+__webpack_require__(/*! ./public/seek_time.scss */ "./src/plugins/seek_time/public/seek_time.scss");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var formatTime = _core.Utils.formatTime; // Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+var SeekTime = function (_UICorePlugin) {
+  (0, _inherits3.default)(SeekTime, _UICorePlugin);
+  (0, _createClass3.default)(SeekTime, [{
+    key: 'name',
+    get: function get() {
+      return 'seek_time';
+    }
+  }, {
+    key: 'template',
+    get: function get() {
+      return (0, _core.template)(_seek_time2.default);
+    }
+  }, {
+    key: 'attributes',
+    get: function get() {
+      return {
+        'class': 'seek-time',
+        'data-seek-time': ''
+      };
+    }
+  }, {
+    key: 'mediaControl',
+    get: function get() {
+      return this.core.mediaControl;
+    }
+  }, {
+    key: 'mediaControlContainer',
+    get: function get() {
+      return this.mediaControl.container;
+    }
+  }, {
+    key: 'isLiveStreamWithDvr',
+    get: function get() {
+      return this.mediaControlContainer && this.mediaControlContainer.getPlaybackType() === _core.Playback.LIVE && this.mediaControlContainer.isDvrEnabled();
+    }
+  }, {
+    key: 'durationShown',
+    get: function get() {
+      return this.isLiveStreamWithDvr && !this.actualLiveTime;
+    }
+  }, {
+    key: 'useActualLiveTime',
+    get: function get() {
+      return this.actualLiveTime && this.isLiveStreamWithDvr;
+    }
+  }]);
+
+  function SeekTime(core) {
+    (0, _classCallCheck3.default)(this, SeekTime);
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, _UICorePlugin.call(this, core));
+
+    _this.hoveringOverSeekBar = false;
+    _this.hoverPosition = null;
+    _this.duration = null;
+    _this.firstFragDateTime = null;
+    _this.actualLiveTime = !!_this.mediaControl.options.actualLiveTime;
+    if (_this.actualLiveTime) {
+      if (_this.mediaControl.options.actualLiveServerTime) _this.actualLiveServerTimeDiff = new Date().getTime() - new Date(_this.mediaControl.options.actualLiveServerTime).getTime();else _this.actualLiveServerTimeDiff = 0;
+    }
+    return _this;
+  }
+
+  SeekTime.prototype.bindEvents = function bindEvents() {
+    this.listenTo(this.mediaControl, _core.Events.MEDIACONTROL_RENDERED, this.render);
+    this.listenTo(this.mediaControl, _core.Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR, this.showTime);
+    this.listenTo(this.mediaControl, _core.Events.MEDIACONTROL_MOUSELEAVE_SEEKBAR, this.hideTime);
+    this.listenTo(this.mediaControl, _core.Events.MEDIACONTROL_CONTAINERCHANGED, this.onContainerChanged);
+    if (this.mediaControlContainer) {
+      this.listenTo(this.mediaControlContainer, _core.Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.update);
+      this.listenTo(this.mediaControlContainer, _core.Events.CONTAINER_TIMEUPDATE, this.updateDuration);
+    }
+  };
+
+  SeekTime.prototype.onContainerChanged = function onContainerChanged() {
+    this.stopListening();
+    this.bindEvents();
+  };
+
+  SeekTime.prototype.updateDuration = function updateDuration(timeProgress) {
+    this.duration = timeProgress.total;
+    this.firstFragDateTime = timeProgress.firstFragDateTime;
+    this.update();
+  };
+
+  SeekTime.prototype.showTime = function showTime(event) {
+    this.hoveringOverSeekBar = true;
+    this.calculateHoverPosition(event);
+    this.update();
+  };
+
+  SeekTime.prototype.hideTime = function hideTime() {
+    this.hoveringOverSeekBar = false;
+    this.update();
+  };
+
+  SeekTime.prototype.calculateHoverPosition = function calculateHoverPosition(event) {
+    var offset = event.pageX - this.mediaControl.$seekBarContainer.offset().left;
+    // proportion into the seek bar that the mouse is hovered over 0-1
+    this.hoverPosition = Math.min(1, Math.max(offset / this.mediaControl.$seekBarContainer.width(), 0));
+  };
+
+  SeekTime.prototype.getSeekTime = function getSeekTime() {
+    var seekTime = void 0,
+        secondsSinceMidnight = void 0,
+        d = void 0,
+        e = void 0;
+    if (this.useActualLiveTime) {
+      if (this.firstFragDateTime) {
+        e = new Date(this.firstFragDateTime);
+        d = new Date(this.firstFragDateTime);
+        d.setHours(0, 0, 0, 0);
+        secondsSinceMidnight = (e.getTime() - d.getTime()) / 1000 + this.duration;
+      } else {
+        d = new Date(new Date().getTime() - this.actualLiveServerTimeDiff);
+        e = new Date(d);
+        secondsSinceMidnight = (e - d.setHours(0, 0, 0, 0)) / 1000;
+      }
+      seekTime = secondsSinceMidnight - this.duration + this.hoverPosition * this.duration;
+      if (seekTime < 0) seekTime += 86400;
+    } else {
+      seekTime = this.hoverPosition * this.duration;
+    }
+
+    return { seekTime: seekTime, secondsSinceMidnight: secondsSinceMidnight };
+  };
+
+  SeekTime.prototype.update = function update() {
+    if (!this.rendered) {
+      // update() is always called after a render
+      return;
+    }
+    if (!this.shouldBeVisible()) {
+      this.$el.hide();
+      this.$el.css('left', '-100%');
+    } else {
+      var seekTime = this.getSeekTime();
+      var currentSeekTime = formatTime(seekTime.seekTime, this.useActualLiveTime);
+      // only update dom if necessary, ie time actually changed
+      if (currentSeekTime !== this.displayedSeekTime) {
+        this.$seekTimeEl.text(currentSeekTime);
+        this.displayedSeekTime = currentSeekTime;
+      }
+
+      if (this.durationShown) {
+        this.$durationEl.show();
+        var currentDuration = formatTime(this.actualLiveTime ? seekTime.secondsSinceMidnight : this.duration, this.actualLiveTime);
+        if (currentDuration !== this.displayedDuration) {
+          this.$durationEl.text(currentDuration);
+          this.displayedDuration = currentDuration;
+        }
+      } else {
+        this.$durationEl.hide();
+      }
+
+      // the element must be unhidden before its width is requested, otherwise it's width will be reported as 0
+      this.$el.show();
+      var containerWidth = this.mediaControl.$seekBarContainer.width();
+      var elWidth = this.$el.width();
+      var elLeftPos = this.hoverPosition * containerWidth;
+      elLeftPos -= elWidth / 2;
+      elLeftPos = Math.max(0, Math.min(elLeftPos, containerWidth - elWidth));
+      this.$el.css('left', elLeftPos);
+    }
+  };
+
+  SeekTime.prototype.shouldBeVisible = function shouldBeVisible() {
+    return this.mediaControlContainer && this.mediaControlContainer.settings.seekEnabled && this.hoveringOverSeekBar && this.hoverPosition !== null && this.duration !== null;
+  };
+
+  SeekTime.prototype.render = function render() {
+    this.rendered = true;
+    this.displayedDuration = null;
+    this.displayedSeekTime = null;
+    this.$el.html(this.template());
+    this.$el.hide();
+    this.mediaControl.$el.append(this.el);
+    this.$seekTimeEl = this.$el.find('[data-seek-time]');
+    this.$durationEl = this.$el.find('[data-duration]');
+    this.$durationEl.hide();
+    this.update();
+  };
+
+  return SeekTime;
+}(_core.UICorePlugin);
+
+exports.default = SeekTime;
+module.exports = exports['default'];
+
+/***/ }),
+
+/***/ "./src/plugins/sources.js":
+/*!********************************!*\
+  !*** ./src/plugins/sources.js ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _core = __webpack_require__(/*! @clappr/core */ "@clappr/core");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var SourcesPlugin = function (_CorePlugin) {
+  (0, _inherits3.default)(SourcesPlugin, _CorePlugin);
+
+  function SourcesPlugin() {
+    (0, _classCallCheck3.default)(this, SourcesPlugin);
+    return (0, _possibleConstructorReturn3.default)(this, _CorePlugin.apply(this, arguments));
+  }
+
+  SourcesPlugin.prototype.bindEvents = function bindEvents() {
+    this.listenTo(this.core, _core.Events.CORE_CONTAINERS_CREATED, this.onContainersCreated);
+  };
+
+  SourcesPlugin.prototype.onContainersCreated = function onContainersCreated() {
+    var firstValidSource = this.core.containers.filter(function (container) {
+      return container.playback.name !== 'no_op';
+    })[0] || this.core.containers[0];
+    if (firstValidSource) {
+      this.core.containers.forEach(function (container) {
+        if (container !== firstValidSource) container.destroy();
+      });
+    }
+  };
+
+  (0, _createClass3.default)(SourcesPlugin, [{
+    key: 'name',
+    get: function get() {
+      return 'sources';
+    }
+  }]);
+  return SourcesPlugin;
+}(_core.CorePlugin);
+
+exports.default = SourcesPlugin;
+module.exports = exports['default'];
 
 /***/ }),
 
@@ -5077,7 +5986,7 @@ var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./no
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _clappr = __webpack_require__(/*! clappr */ "clappr");
+var _core = __webpack_require__(/*! @clappr/core */ "@clappr/core");
 
 var _spinner = __webpack_require__(/*! ./public/spinner.html */ "./src/plugins/spinner_three_bounce/public/spinner.html");
 
@@ -5109,13 +6018,13 @@ var SpinnerThreeBouncePlugin = function (_UIContainerPlugin) {
 
     var _this = (0, _possibleConstructorReturn3.default)(this, _UIContainerPlugin.call(this, container));
 
-    _this.template = (0, _clappr.template)(_spinner2.default);
+    _this.template = (0, _core.template)(_spinner2.default);
     _this.showTimeout = null;
-    _this.listenTo(_this.container, _clappr.Events.CONTAINER_STATE_BUFFERING, _this.onBuffering);
-    _this.listenTo(_this.container, _clappr.Events.CONTAINER_STATE_BUFFERFULL, _this.onBufferFull);
-    _this.listenTo(_this.container, _clappr.Events.CONTAINER_STOP, _this.onStop);
-    _this.listenTo(_this.container, _clappr.Events.CONTAINER_ENDED, _this.onStop);
-    _this.listenTo(_this.container, _clappr.Events.CONTAINER_ERROR, _this.onStop);
+    _this.listenTo(_this.container, _core.Events.CONTAINER_STATE_BUFFERING, _this.onBuffering);
+    _this.listenTo(_this.container, _core.Events.CONTAINER_STATE_BUFFERFULL, _this.onBufferFull);
+    _this.listenTo(_this.container, _core.Events.CONTAINER_STOP, _this.onStop);
+    _this.listenTo(_this.container, _core.Events.CONTAINER_ENDED, _this.onStop);
+    _this.listenTo(_this.container, _core.Events.CONTAINER_ERROR, _this.onStop);
     _this.render();
     return _this;
   }
@@ -5158,11 +6067,161 @@ var SpinnerThreeBouncePlugin = function (_UIContainerPlugin) {
   };
 
   return SpinnerThreeBouncePlugin;
-}(_clappr.UIContainerPlugin); // Copyright 2014 Globo.com Player authors. All rights reserved.
+}(_core.UIContainerPlugin); // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
 exports.default = SpinnerThreeBouncePlugin;
+module.exports = exports['default'];
+
+/***/ }),
+
+/***/ "./src/plugins/stats.js":
+/*!******************************!*\
+  !*** ./src/plugins/stats.js ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _core = __webpack_require__(/*! @clappr/core */ "@clappr/core");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var StatsPlugin = function (_ContainerPlugin) {
+  (0, _inherits3.default)(StatsPlugin, _ContainerPlugin);
+  (0, _createClass3.default)(StatsPlugin, [{
+    key: 'name',
+    get: function get() {
+      return 'stats';
+    }
+  }]);
+
+  function StatsPlugin(container) {
+    (0, _classCallCheck3.default)(this, StatsPlugin);
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, _ContainerPlugin.call(this, container));
+
+    _this.setInitialAttrs();
+    _this.reportInterval = _this.options.reportInterval || 5000;
+    _this.state = 'IDLE';
+    return _this;
+  }
+
+  StatsPlugin.prototype.bindEvents = function bindEvents() {
+    this.listenTo(this.container.playback, _core.Events.PLAYBACK_PLAY, this.onPlay);
+    this.listenTo(this.container, _core.Events.CONTAINER_STOP, this.onStop);
+    this.listenTo(this.container, _core.Events.CONTAINER_ENDED, this.onStop);
+    this.listenTo(this.container, _core.Events.CONTAINER_DESTROYED, this.onStop);
+    this.listenTo(this.container, _core.Events.CONTAINER_STATE_BUFFERING, this.onBuffering);
+    this.listenTo(this.container, _core.Events.CONTAINER_STATE_BUFFERFULL, this.onBufferFull);
+    this.listenTo(this.container, _core.Events.CONTAINER_STATS_ADD, this.onStatsAdd);
+    this.listenTo(this.container, _core.Events.CONTAINER_BITRATE, this.onStatsAdd);
+    this.listenTo(this.container.playback, _core.Events.PLAYBACK_STATS_ADD, this.onStatsAdd);
+  };
+
+  StatsPlugin.prototype.setInitialAttrs = function setInitialAttrs() {
+    this.firstPlay = true;
+    this.startupTime = 0;
+    this.rebufferingTime = 0;
+    this.watchingTime = 0;
+    this.rebuffers = 0;
+    this.externalMetrics = {};
+  };
+
+  StatsPlugin.prototype.onPlay = function onPlay() {
+    this.state = 'PLAYING';
+    this.watchingTimeInit = Date.now();
+    if (!this.intervalId) this.intervalId = setInterval(this.report.bind(this), this.reportInterval);
+  };
+
+  StatsPlugin.prototype.onStop = function onStop() {
+    clearInterval(this.intervalId);
+    this.report();
+    this.intervalId = undefined;
+    this.state = 'STOPPED';
+  };
+
+  StatsPlugin.prototype.onBuffering = function onBuffering() {
+    if (this.firstPlay) this.startupTimeInit = Date.now();else this.rebufferingTimeInit = Date.now();
+
+    this.state = 'BUFFERING';
+    this.rebuffers++;
+  };
+
+  StatsPlugin.prototype.onBufferFull = function onBufferFull() {
+    if (this.firstPlay && this.startupTimeInit) {
+      this.firstPlay = false;
+      this.startupTime = Date.now() - this.startupTimeInit;
+      this.watchingTimeInit = Date.now();
+    } else if (this.rebufferingTimeInit) {
+      this.rebufferingTime += this.getRebufferingTime();
+    }
+
+    this.rebufferingTimeInit = undefined;
+    this.state = 'PLAYING';
+  };
+
+  StatsPlugin.prototype.getRebufferingTime = function getRebufferingTime() {
+    return Date.now() - this.rebufferingTimeInit;
+  };
+
+  StatsPlugin.prototype.getWatchingTime = function getWatchingTime() {
+    var totalTime = Date.now() - this.watchingTimeInit;
+    return totalTime - this.rebufferingTime;
+  };
+
+  StatsPlugin.prototype.isRebuffering = function isRebuffering() {
+    return !!this.rebufferingTimeInit;
+  };
+
+  StatsPlugin.prototype.onStatsAdd = function onStatsAdd(metric) {
+    _core.$.extend(this.externalMetrics, metric);
+  };
+
+  StatsPlugin.prototype.getStats = function getStats() {
+    var metrics = {
+      startupTime: this.startupTime,
+      rebuffers: this.rebuffers,
+      rebufferingTime: this.isRebuffering() ? this.rebufferingTime + this.getRebufferingTime() : this.rebufferingTime,
+      watchingTime: this.isRebuffering() ? this.getWatchingTime() - this.getRebufferingTime() : this.getWatchingTime()
+    };
+    _core.$.extend(metrics, this.externalMetrics);
+    return metrics;
+  };
+
+  StatsPlugin.prototype.report = function report() {
+    this.container.statsReport(this.getStats());
+  };
+
+  return StatsPlugin;
+}(_core.ContainerPlugin); // Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+exports.default = StatsPlugin;
 module.exports = exports['default'];
 
 /***/ }),
@@ -5238,7 +6297,7 @@ var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./no
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _clappr = __webpack_require__(/*! clappr */ "clappr");
+var _core = __webpack_require__(/*! @clappr/core */ "@clappr/core");
 
 var _watermark = __webpack_require__(/*! ./public/watermark.html */ "./src/plugins/watermark/public/watermark.html");
 
@@ -5258,7 +6317,7 @@ var WaterMarkPlugin = function (_UIContainerPlugin) {
   }, {
     key: 'template',
     get: function get() {
-      return (0, _clappr.template)(_watermark2.default);
+      return (0, _core.template)(_watermark2.default);
     }
   }]);
 
@@ -5272,9 +6331,9 @@ var WaterMarkPlugin = function (_UIContainerPlugin) {
   }
 
   WaterMarkPlugin.prototype.bindEvents = function bindEvents() {
-    this.listenTo(this.container, _clappr.Events.CONTAINER_PLAY, this.onPlay);
-    this.listenTo(this.container, _clappr.Events.CONTAINER_STOP, this.onStop);
-    this.listenTo(this.container, _clappr.Events.CONTAINER_OPTIONS_CHANGE, this.configure);
+    this.listenTo(this.container, _core.Events.CONTAINER_PLAY, this.onPlay);
+    this.listenTo(this.container, _core.Events.CONTAINER_STOP, this.onStop);
+    this.listenTo(this.container, _core.Events.CONTAINER_OPTIONS_CHANGE, this.configure);
   };
 
   WaterMarkPlugin.prototype.configure = function configure() {
@@ -5305,7 +6364,7 @@ var WaterMarkPlugin = function (_UIContainerPlugin) {
   };
 
   return WaterMarkPlugin;
-}(_clappr.UIContainerPlugin); // Copyright 2014 Globo.com Player authors. All rights reserved.
+}(_core.UIContainerPlugin); // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -5650,14 +6709,14 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ "clappr":
-/*!******************************************************************************************!*\
-  !*** external {"amd":"clappr","commonjs":"clappr","commonjs2":"clappr","root":"Clappr"} ***!
-  \******************************************************************************************/
+/***/ "@clappr/core":
+/*!************************************************************************************************************!*\
+  !*** external {"amd":"@clappr/core","commonjs":"@clappr/core","commonjs2":"@clappr/core","root":"Clappr"} ***!
+  \************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_clappr__;
+module.exports = __WEBPACK_EXTERNAL_MODULE__clappr_core__;
 
 /***/ })
 
