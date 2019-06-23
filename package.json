@@ -1,8 +1,9 @@
 {
-  "name": "clappr",
+  "name": "@clappr/hls-playback",
   "version": "0.3.6",
-  "description": "An extensible media player for the web",
-  "main": "./dist/clappr.js",
+  "description": "HLS Playback based on hls.js",
+  "main": "./dist/hls-playback.js",
+  "module": "./src/hls.js",
   "scripts": {
     "bundle-check": "ANALYZE_BUNDLE=true ./node_modules/.bin/webpack -p",
     "release": "MINIMIZE=true ./node_modules/.bin/webpack --progress",
@@ -17,14 +18,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:clappr/clappr.git"
+    "url": "git@github.com:clappr/hls-playback.git"
   },
   "author": "Globo.com",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/clappr/clappr/issues"
+    "url": "https://github.com/clappr/hls-playback/issues"
   },
-  "homepage": "https://github.com/clappr/clappr",
+  "homepage": "https://github.com/clappr/hls-playback",
   "peerDependencies": {
     "@clappr/core": "^0.3.7"
   },
