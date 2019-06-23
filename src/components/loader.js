@@ -9,6 +9,7 @@ import PlayerInfo from './player_info'
 import HTML5VideoPlayback from '../playbacks/html5_video'
 import HTML5AudioPlayback from '../playbacks/html5_audio'
 import HTMLImgPlayback from '../playbacks/html_img'
+import NoOpPlayback from '../playbacks/no_op'
 
 /* Core Plugins */
 import Strings from '../plugins/strings'
@@ -35,6 +36,7 @@ export default class Loader extends BaseObject {
       HTML5VideoPlayback,
       HTML5AudioPlayback,
       HTMLImgPlayback,
+      NoOpPlayback,
     ]
 
     this.containerPlugins = []
