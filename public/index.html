@@ -63,7 +63,8 @@ var player = new Clappr.Player({
   poster: 'http://clappr.io/poster.png',
   mute: true,
   height: 360,
-  width: 640
+  width: 640,
+  plugins: plugins,
 });
 
 player.attachTo(playerElement);
@@ -93,8 +94,12 @@ player.attachTo(playerElement);
 
     var player;
 
+    var plugins;
+
     //editor
     window.onload = function () {
+
+      plugins = Object.values(ClapprPlugins.Plugins)
 
       if (window.location.hash) {
         var editorContent = atob(window.location.hash.substr(1))
@@ -109,7 +114,8 @@ player.attachTo(playerElement);
           mute: true,
           autoPlay: true,
           height: 360,
-          width: 640
+          width: 640,
+          plugins: plugins,
         });
 
         player.attachTo(playerElement);
