@@ -8167,6 +8167,7 @@ exports.default = {
   Fullscreen: Fullscreen,
   QueryString: QueryString,
   DomRecycler: DomRecycler,
+  assign: assign,
   extend: extend,
   formatTime: formatTime,
   seekStringToSeconds: seekStringToSeconds,
@@ -8178,6 +8179,7 @@ exports.default = {
   getBrowserLanguage: getBrowserLanguage,
   now: now,
   removeArrayItem: removeArrayItem,
+  listContainsIgnoreCase: listContainsIgnoreCase,
   canAutoPlayMedia: canAutoPlayMedia,
   Media: _media2.default,
   DoubleEventHandler: DoubleEventHandler
@@ -11804,7 +11806,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var version = "0.3.6";
+var version = "0.3.7";
 
 exports.default = {
   Player: _player2.default,
