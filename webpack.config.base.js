@@ -42,7 +42,7 @@ const webpackConfig = (config) => {
       path: path.resolve(__dirname, 'dist'),
       publicPath: 'dist/',
       filename: config.filename,
-      library: 'Clappr',
+      library: 'HLSPlayback',
       libraryTarget: 'umd'
     },
     plugins: [
