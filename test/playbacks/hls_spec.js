@@ -1,5 +1,5 @@
 import { Core, Events } from 'clappr'
-import HLS from 'playbacks/hls'
+import HLS from 'hls'
 import HLSJS from 'hls.js'
 
 describe('HLS playback', function() {
