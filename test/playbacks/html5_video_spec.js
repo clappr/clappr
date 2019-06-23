@@ -202,7 +202,7 @@ describe('HTML5Video playback', function() {
   })
 
   describe('progress', function() {
-    let start, end, currentTime
+    let start, end, currentTime, playback
     const duration = 300
     const fakeEl = {
       get currentTime() { return currentTime },
@@ -216,13 +216,13 @@ describe('HTML5Video playback', function() {
       end = [30]
 
       this.callback = sinon.spy()
-      this.playback = new HTML5Video(this.options)
-      this.playback.setElement(fakeEl)
-      this.playback.on(Events.PLAYBACK_PROGRESS, this.callback)
+      playback = new HTML5Video(this.options)
+      playback.setElement(fakeEl)
+      playback.on(Events.PLAYBACK_PROGRESS, this.callback)
     })
 
     it('should trigger PLAYBACK_PROGRESS with current buffer position', function() {
-      this.playback._onProgress() // cannot trigger event on fake element (improve later?)
+      playback._onProgress() // cannot trigger event on fake element (improve later?)
       let currentProgess = this.callback.getCall(0).args[0]
 
       expect(currentProgess.start).to.be.equal(start[0])
@@ -235,7 +235,7 @@ describe('HTML5Video playback', function() {
       end = [30, 90, 280]
       currentTime = 75 // this should be located at index 1
 
-      this.playback._onProgress() // cannot trigger event on fake element (improve later?)
+      playback._onProgress() // cannot trigger event on fake element (improve later?)
       let progress = this.callback.getCall(0).args[0]
 
       expect(progress.start).to.be.equal(start[1])
@@ -268,7 +268,7 @@ describe('HTML5Video playback', function() {
       start = [0, 50, 180]
       end = [30, 90, 280]
 
-      this.playback._onProgress() // cannot trigger event on fake element (improve later?)
+      playback._onProgress() // cannot trigger event on fake element (improve later?)
       let buffered = this.callback.getCall(0).args[1]
 
       expect(buffered.length).to.be.equal(start.length)
