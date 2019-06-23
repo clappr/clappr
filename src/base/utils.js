@@ -337,6 +337,7 @@ export default {
   Fullscreen,
   QueryString,
   DomRecycler,
+  assign,
   extend,
   formatTime,
   seekStringToSeconds,
@@ -348,7 +349,8 @@ export default {
   getBrowserLanguage,
   now,
   removeArrayItem,
+  listContainsIgnoreCase,
   canAutoPlayMedia,
   Media,
-  DoubleEventHandler
+  DoubleEventHandler,
 }
