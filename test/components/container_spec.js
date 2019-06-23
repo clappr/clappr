@@ -1,6 +1,6 @@
 import Container from '../../src/components/container'
 import FakePlayback from '../../src/base/playback'
-import HTML5Playback from '../../src/playbacks/html5_video/index'
+import HTML5Playback from '../../src/playbacks/html5_video'
 import Playback from '../../src/base/playback'
 import Events from '../../src/base/events'
 
