@@ -1,8 +1,8 @@
-[![npm version](https://badge.fury.io/js/clappr.svg)](http://badge.fury.io/js/clappr)
-[![Build Status](https://travis-ci.org/clappr/clappr.svg?branch=master)](https://travis-ci.org/clappr/clappr)
+[![npm version](https://badge.fury.io/js/clappr-core.svg)](http://badge.fury.io/js/clappr-core)
+[![Build Status](https://travis-ci.org/clappr/clappr-core.svg?branch=master)](https://travis-ci.org/clappr/clappr-core)
 [![Coverage Status](https://coveralls.io/repos/github/clappr/clappr-core/badge.svg?branch=master)](https://coveralls.io/github/clappr/clappr-core?branch=master)
 [![License](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)
-[![](https://data.jsdelivr.com/v1/package/npm/clappr/badge)](https://www.jsdelivr.com/package/npm/clappr)
+[![](https://data.jsdelivr.com/v1/package/npm/@clappr/core/badge)](https://www.jsdelivr.com/package/npm/@clappr/core)
 
 <div align=center>
 <img src="https://cloud.githubusercontent.com/assets/244265/6373134/a845eb50-bce7-11e4-80f2-592ba29972ab.png"><br><br>
