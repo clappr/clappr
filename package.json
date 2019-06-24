@@ -1,6 +1,6 @@
 {
   "name": "@clappr/core",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "description": "Core components of the extensible media player for the web",
   "main": "./dist/clappr-core.js",
   "module": "./src/main.js",
@@ -20,6 +20,9 @@
     "/dist",
     "/src"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:clappr/clappr-core.git"
