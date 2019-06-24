@@ -1,8 +1,8 @@
-[![npm version](https://badge.fury.io/js/%40clappr%2Fhls-playback.svg)](https://badge.fury.io/js/%40clappr%2Fhls-playback)
-[![Build Status](https://travis-ci.org/clappr/hls-playback.svg?branch=master)](https://travis-ci.org/clappr/hls-playback)
-[![Coverage Status](https://coveralls.io/repos/github/clappr/hls-playback/badge.svg?branch=master)](https://coveralls.io/github/clappr/hls-playback?branch=master)
+[![npm version](https://badge.fury.io/js/%40clappr%2Fhlsjs-playback.svg)](https://badge.fury.io/js/%40clappr%2Fhlsjs-playback)
+[![Build Status](https://travis-ci.org/clappr/hlsjs-playback.svg?branch=master)](https://travis-ci.org/clappr/hlsjs-playback)
+[![Coverage Status](https://coveralls.io/repos/github/clappr/hlsjs-playback/badge.svg?branch=master)](https://coveralls.io/github/clappr/hlsjs-playback?branch=master)
 [![License](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)
-[![](https://data.jsdelivr.com/v1/package/npm/@clappr/hls-playback/badge)](https://www.jsdelivr.com/package/npm/@clappr/hls-playback)
+[![](https://data.jsdelivr.com/v1/package/npm/@clappr/hlsjs-playback/badge)](https://www.jsdelivr.com/package/npm/@clappr/hlsjs-playback)
 
 <div align=center>
 <img src="https://cloud.githubusercontent.com/assets/244265/6373134/a845eb50-bce7-11e4-80f2-592ba29972ab.png"><br><br>

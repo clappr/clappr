@@ -6,7 +6,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const webpackConfig = require('./webpack.config.base')
 
-const packageName = 'hls-playback'
+const packageName = 'hlsjs-playback'
 
 const minimize = !!process.env.MINIMIZE
 const analyzeBundle = !!process.env.ANALYZE_BUNDLE

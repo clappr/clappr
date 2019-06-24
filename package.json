@@ -1,8 +1,8 @@
 {
-  "name": "@clappr/hls-playback",
+  "name": "@clappr/hlsjs-playback",
   "version": "0.3.7",
   "description": "HLS Playback based on hls.js",
-  "main": "./dist/hls-playback.js",
+  "main": "./dist/hlsjs-playback.js",
   "module": "./src/hls.js",
   "scripts": {
     "bundle-check": "ANALYZE_BUNDLE=true ./node_modules/.bin/webpack -p",
@@ -21,14 +21,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:clappr/hls-playback.git"
+    "url": "git@github.com:clappr/hlsjs-playback.git"
   },
   "author": "Globo.com",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/clappr/hls-playback/issues"
+    "url": "https://github.com/clappr/hlsjs-playback/issues"
   },
-  "homepage": "https://github.com/clappr/hls-playback",
+  "homepage": "https://github.com/clappr/hlsjs-playback",
   "peerDependencies": {
     "@clappr/core": "^0.3.7"
   },
