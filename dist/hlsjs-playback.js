@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["HLSPlayback"] = factory();
+		exports["HlsjsPlayback"] = factory();
 	else
-		root["HLSPlayback"] = factory();
+		root["HlsjsPlayback"] = factory();
 })(window, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -33745,9 +33745,9 @@ var now = _core.Utils.now,
 
 var AUTO = -1;
 
-var HLS = function (_HTML5Video) {
-  (0, _inherits3.default)(HLS, _HTML5Video);
-  (0, _createClass3.default)(HLS, [{
+var HlsjsPlayback = function (_HTML5Video) {
+  (0, _inherits3.default)(HlsjsPlayback, _HTML5Video);
+  (0, _createClass3.default)(HlsjsPlayback, [{
     key: 'name',
     get: function get() {
       return 'hls';
@@ -33848,7 +33848,7 @@ var HLS = function (_HTML5Video) {
   }], [{
     key: 'version',
     get: function get() {
-      return "0.3.8";
+      return "0.3.9";
     }
   }, {
     key: 'HLSJS',
@@ -33857,8 +33857,8 @@ var HLS = function (_HTML5Video) {
     }
   }]);
 
-  function HLS() {
-    (0, _classCallCheck3.default)(this, HLS);
+  function HlsjsPlayback() {
+    (0, _classCallCheck3.default)(this, HlsjsPlayback);
 
     for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
@@ -33909,7 +33909,7 @@ var HLS = function (_HTML5Video) {
     return _this;
   }
 
-  HLS.prototype._setup = function _setup() {
+  HlsjsPlayback.prototype._setup = function _setup() {
     var _this2 = this;
 
     this._ccIsSetup = false;
@@ -33942,17 +33942,17 @@ var HLS = function (_HTML5Video) {
     this._hls.attachMedia(this.el);
   };
 
-  HLS.prototype.render = function render() {
+  HlsjsPlayback.prototype.render = function render() {
     this._ready();
     return _HTML5Video.prototype.render.call(this);
   };
 
-  HLS.prototype._ready = function _ready() {
+  HlsjsPlayback.prototype._ready = function _ready() {
     this._isReadyState = true;
     this.trigger(_core.Events.PLAYBACK_READY, this.name);
   };
 
-  HLS.prototype._recover = function _recover(evt, data, error) {
+  HlsjsPlayback.prototype._recover = function _recover(evt, data, error) {
     if (!this._recoveredDecodingError) {
       this._recoveredDecodingError = true;
       this._hls.recoverMediaError();
@@ -33972,11 +33972,11 @@ var HLS = function (_HTML5Video) {
   // override
 
 
-  HLS.prototype._setupSrc = function _setupSrc(srcUrl) {// eslint-disable-line no-unused-vars
+  HlsjsPlayback.prototype._setupSrc = function _setupSrc(srcUrl) {// eslint-disable-line no-unused-vars
     // this playback manages the src on the video element itself
   };
 
-  HLS.prototype._startTimeUpdateTimer = function _startTimeUpdateTimer() {
+  HlsjsPlayback.prototype._startTimeUpdateTimer = function _startTimeUpdateTimer() {
     var _this3 = this;
 
     if (this._timeUpdateTimer) return;
@@ -33987,14 +33987,14 @@ var HLS = function (_HTML5Video) {
     }, 100);
   };
 
-  HLS.prototype._stopTimeUpdateTimer = function _stopTimeUpdateTimer() {
+  HlsjsPlayback.prototype._stopTimeUpdateTimer = function _stopTimeUpdateTimer() {
     if (!this._timeUpdateTimer) return;
 
     clearInterval(this._timeUpdateTimer);
     this._timeUpdateTimer = null;
   };
 
-  HLS.prototype.getProgramDateTime = function getProgramDateTime() {
+  HlsjsPlayback.prototype.getProgramDateTime = function getProgramDateTime() {
     return this._programDateTime;
   };
   // the duration on the video element itself should not be used
@@ -34002,11 +34002,11 @@ var HLS = function (_HTML5Video) {
   // https://github.com/clappr/clappr/issues/668#issuecomment-157036678
 
 
-  HLS.prototype.getDuration = function getDuration() {
+  HlsjsPlayback.prototype.getDuration = function getDuration() {
     return this._duration;
   };
 
-  HLS.prototype.getCurrentTime = function getCurrentTime() {
+  HlsjsPlayback.prototype.getCurrentTime = function getCurrentTime() {
     // e.g. can be < 0 if user pauses near the start
     // eventually they will then be kicked to the end by hlsjs if they run out of buffer
     // before the official start time
@@ -34018,18 +34018,18 @@ var HLS = function (_HTML5Video) {
   // removed from the beginning
 
 
-  HLS.prototype.getStartTimeOffset = function getStartTimeOffset() {
+  HlsjsPlayback.prototype.getStartTimeOffset = function getStartTimeOffset() {
     return this._startTime;
   };
 
-  HLS.prototype.seekPercentage = function seekPercentage(percentage) {
+  HlsjsPlayback.prototype.seekPercentage = function seekPercentage(percentage) {
     var seekTo = this._duration;
     if (percentage > 0) seekTo = this._duration * (percentage / 100);
 
     this.seek(seekTo);
   };
 
-  HLS.prototype.seek = function seek(time) {
+  HlsjsPlayback.prototype.seek = function seek(time) {
     if (time < 0) {
       _core.Log.warn('Attempt to seek to a negative time. Resetting to live point. Use seekToLivePoint() to seek to the live point.');
       time = this.getDuration();
@@ -34040,23 +34040,23 @@ var HLS = function (_HTML5Video) {
     _HTML5Video.prototype.seek.call(this, time);
   };
 
-  HLS.prototype.seekToLivePoint = function seekToLivePoint() {
+  HlsjsPlayback.prototype.seekToLivePoint = function seekToLivePoint() {
     this.seek(this.getDuration());
   };
 
-  HLS.prototype._updateDvr = function _updateDvr(status) {
+  HlsjsPlayback.prototype._updateDvr = function _updateDvr(status) {
     this.trigger(_core.Events.PLAYBACK_DVR, status);
     this.trigger(_core.Events.PLAYBACK_STATS_ADD, { 'dvr': status });
   };
 
-  HLS.prototype._updateSettings = function _updateSettings() {
+  HlsjsPlayback.prototype._updateSettings = function _updateSettings() {
     if (this._playbackType === _core.Playback.VOD) this.settings.left = ['playpause', 'position', 'duration'];else if (this.dvrEnabled) this.settings.left = ['playpause'];else this.settings.left = ['playstop'];
 
     this.settings.seekEnabled = this.isSeekEnabled();
     this.trigger(_core.Events.PLAYBACK_SETTINGSUPDATE);
   };
 
-  HLS.prototype._onHLSJSError = function _onHLSJSError(evt, data) {
+  HlsjsPlayback.prototype._onHLSJSError = function _onHLSJSError(evt, data) {
     var error = {
       code: data.type + '_' + data.details,
       description: this.name + ' error: type: ' + data.type + ', details: ' + data.details,
@@ -34131,11 +34131,11 @@ var HLS = function (_HTML5Video) {
     }
   };
 
-  HLS.prototype._keyIsDenied = function _keyIsDenied(data) {
+  HlsjsPlayback.prototype._keyIsDenied = function _keyIsDenied(data) {
     return data.type === _hls2.default.ErrorTypes.NETWORK_ERROR && data.details === _hls2.default.ErrorDetails.KEY_LOAD_ERROR && data.response && data.response.code >= 400;
   };
 
-  HLS.prototype._onTimeUpdate = function _onTimeUpdate() {
+  HlsjsPlayback.prototype._onTimeUpdate = function _onTimeUpdate() {
     var update = { current: this.getCurrentTime(), total: this.getDuration(), firstFragDateTime: this.getProgramDateTime() };
     var isSame = this._lastTimeUpdate && update.current === this._lastTimeUpdate.current && update.total === this._lastTimeUpdate.total;
     if (isSame) return;
@@ -34144,7 +34144,7 @@ var HLS = function (_HTML5Video) {
     this.trigger(_core.Events.PLAYBACK_TIMEUPDATE, update, this.name);
   };
 
-  HLS.prototype._onDurationChange = function _onDurationChange() {
+  HlsjsPlayback.prototype._onDurationChange = function _onDurationChange() {
     var duration = this.getDuration();
     if (this._lastDuration === duration) return;
 
@@ -34152,7 +34152,7 @@ var HLS = function (_HTML5Video) {
     _HTML5Video.prototype._onDurationChange.call(this);
   };
 
-  HLS.prototype._onProgress = function _onProgress() {
+  HlsjsPlayback.prototype._onProgress = function _onProgress() {
     if (!this.el.buffered.length) return;
 
     var buffered = [];
@@ -34173,21 +34173,21 @@ var HLS = function (_HTML5Video) {
     this.trigger(_core.Events.PLAYBACK_PROGRESS, progress, buffered);
   };
 
-  HLS.prototype.play = function play() {
+  HlsjsPlayback.prototype.play = function play() {
     if (!this._hls) this._setup();
 
     _HTML5Video.prototype.play.call(this);
     this._startTimeUpdateTimer();
   };
 
-  HLS.prototype.pause = function pause() {
+  HlsjsPlayback.prototype.pause = function pause() {
     if (!this._hls) return;
 
     _HTML5Video.prototype.pause.call(this);
     if (this.dvrEnabled) this._updateDvr(true);
   };
 
-  HLS.prototype.stop = function stop() {
+  HlsjsPlayback.prototype.stop = function stop() {
     this._stopTimeUpdateTimer();
     if (this._hls) {
       _HTML5Video.prototype.stop.call(this);
@@ -34196,7 +34196,7 @@ var HLS = function (_HTML5Video) {
     }
   };
 
-  HLS.prototype.destroy = function destroy() {
+  HlsjsPlayback.prototype.destroy = function destroy() {
     this._stopTimeUpdateTimer();
     if (this._hls) {
       this._hls.destroy();
@@ -34205,7 +34205,7 @@ var HLS = function (_HTML5Video) {
     _HTML5Video.prototype.destroy.call(this);
   };
 
-  HLS.prototype._updatePlaybackType = function _updatePlaybackType(evt, data) {
+  HlsjsPlayback.prototype._updatePlaybackType = function _updatePlaybackType(evt, data) {
     this._playbackType = data.details.live ? _core.Playback.LIVE : _core.Playback.VOD;
     this._onLevelUpdated(evt, data);
 
@@ -34213,14 +34213,14 @@ var HLS = function (_HTML5Video) {
     if (this._ccTracksUpdated && this._playbackType === _core.Playback.LIVE && this.hasClosedCaptionsTracks) this._onSubtitleLoaded();
   };
 
-  HLS.prototype._fillLevels = function _fillLevels() {
+  HlsjsPlayback.prototype._fillLevels = function _fillLevels() {
     this._levels = this._hls.levels.map(function (level, index) {
       return { id: index, level: level, label: level.bitrate / 1000 + 'Kbps' };
     });
     this.trigger(_core.Events.PLAYBACK_LEVELS_AVAILABLE, this._levels);
   };
 
-  HLS.prototype._onLevelUpdated = function _onLevelUpdated(evt, data) {
+  HlsjsPlayback.prototype._onLevelUpdated = function _onLevelUpdated(evt, data) {
     this._segmentTargetDuration = data.details.targetduration;
     this._playlistType = data.details.type || null;
 
@@ -34344,11 +34344,11 @@ var HLS = function (_HTML5Video) {
     startTimeChanged && this._onProgress();
   };
 
-  HLS.prototype._onFragmentLoaded = function _onFragmentLoaded(evt, data) {
+  HlsjsPlayback.prototype._onFragmentLoaded = function _onFragmentLoaded(evt, data) {
     this.trigger(_core.Events.PLAYBACK_FRAGMENT_LOADED, data);
   };
 
-  HLS.prototype._onSubtitleLoaded = function _onSubtitleLoaded() {
+  HlsjsPlayback.prototype._onSubtitleLoaded = function _onSubtitleLoaded() {
     // This event may be triggered multiple times
     // Setup CC only once (disable CC by default)
     if (!this._ccIsSetup) {
@@ -34359,7 +34359,7 @@ var HLS = function (_HTML5Video) {
     }
   };
 
-  HLS.prototype._onLevelSwitch = function _onLevelSwitch(evt, data) {
+  HlsjsPlayback.prototype._onLevelSwitch = function _onLevelSwitch(evt, data) {
     if (!this.levels.length) this._fillLevels();
 
     this.trigger(_core.Events.PLAYBACK_LEVEL_SWITCH_END);
@@ -34379,15 +34379,15 @@ var HLS = function (_HTML5Video) {
     }
   };
 
-  HLS.prototype.getPlaybackType = function getPlaybackType() {
+  HlsjsPlayback.prototype.getPlaybackType = function getPlaybackType() {
     return this._playbackType;
   };
 
-  HLS.prototype.isSeekEnabled = function isSeekEnabled() {
+  HlsjsPlayback.prototype.isSeekEnabled = function isSeekEnabled() {
     return this._playbackType === _core.Playback.VOD || this.dvrEnabled;
   };
 
-  (0, _createClass3.default)(HLS, [{
+  (0, _createClass3.default)(HlsjsPlayback, [{
     key: 'dvrEnabled',
     get: function get() {
       // enabled when:
@@ -34397,13 +34397,13 @@ var HLS = function (_HTML5Video) {
       return this._durationExcludesAfterLiveSyncPoint && this._duration >= this._minDvrSize && this.getPlaybackType() === _core.Playback.LIVE;
     }
   }]);
-  return HLS;
+  return HlsjsPlayback;
 }(_core.HTML5Video);
 
-exports.default = HLS;
+exports.default = HlsjsPlayback;
 
 
-HLS.canPlay = function (resource, mimeType) {
+HlsjsPlayback.canPlay = function (resource, mimeType) {
   var resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || [];
   var isHls = resourceParts.length > 1 && resourceParts[1].toLowerCase() === 'm3u8' || listContainsIgnoreCase(mimeType, ['application/vnd.apple.mpegurl', 'application/x-mpegURL']);
 
