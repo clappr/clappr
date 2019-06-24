@@ -81,7 +81,7 @@ The configuration for the playback, it's still only compatible with `html5_video
     controls: true,
     playInline: true, // allows inline playback when running on iOS UIWebview
     crossOrigin: 'use-credentials',
-    recycleVideo: Clappr.Browser.isMobile, // Recycle <video> element only for mobile. (default is false)
+    recycleVideo: Clappr.Browser.isMobile, // Recycle <video> element only for mobile. (default is true)
     triggerFatalErrorOnResourceDenied: true, // Triggers playback fatal error if resource is denied. (default is false)
     externalTracks: [ // Add external <track> (if supported by browser, see also https://www.w3.org/TR/html5/embedded-content-0.html#the-track-element)
       {lang: 'en', label: 'English', src: 'http://example.com/en.vtt', kind: 'subtitles'},
