@@ -16,6 +16,10 @@
     "lint:fix": "npm run lint -- --fix",
     "start": "./node_modules/.bin/webpack-dev-server --host 0.0.0.0 --content-base public/ --output-public-path latest/ --hot"
   },
+  "files": [
+    "/dist",
+    "/src"
+  ],
   "repository": {
     "type": "git",
     "url": "git@github.com:clappr/clappr-core.git"
