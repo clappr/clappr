@@ -11627,7 +11627,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var version = "0.3.10";
+var version = "0.3.11";
 
 exports.default = {
   Player: _player2.default,
