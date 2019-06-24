@@ -4412,10 +4412,10 @@ for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList'
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./src/components/container/public/style.scss":
-/*!********************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader!./node_modules/postcss-loader/lib!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./src/components/container/public/style.scss ***!
-  \********************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr-core/src/base/scss!./src/components/container/public/style.scss":
+/*!***************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/postcss-loader/lib!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr-core/src/base/scss!./src/components/container/public/style.scss ***!
+  \***************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4431,10 +4431,10 @@ exports.push([module.i, ".container[data-container] {\n  position: absolute;\n  
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./src/components/core/public/style.scss":
-/*!***************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader!./node_modules/postcss-loader/lib!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./src/components/core/public/style.scss ***!
-  \***************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr-core/src/base/scss!./src/components/core/public/style.scss":
+/*!**********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/postcss-loader/lib!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr-core/src/base/scss!./src/components/core/public/style.scss ***!
+  \**********************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4450,10 +4450,10 @@ exports.push([module.i, "[data-player] {\n  -webkit-touch-callout: none;\n  -web
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./src/playbacks/html5_video/public/style.scss":
-/*!*********************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader!./node_modules/postcss-loader/lib!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./src/playbacks/html5_video/public/style.scss ***!
-  \*********************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr-core/src/base/scss!./src/playbacks/html5_video/public/style.scss":
+/*!****************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/postcss-loader/lib!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr-core/src/base/scss!./src/playbacks/html5_video/public/style.scss ***!
+  \****************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4469,10 +4469,10 @@ exports.push([module.i, "[data-html5-video] {\n  position: absolute;\n  height: 
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./src/playbacks/html_img/public/style.scss":
-/*!******************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader!./node_modules/postcss-loader/lib!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./src/playbacks/html_img/public/style.scss ***!
-  \******************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr-core/src/base/scss!./src/playbacks/html_img/public/style.scss":
+/*!*************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/postcss-loader/lib!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr-core/src/base/scss!./src/playbacks/html_img/public/style.scss ***!
+  \*************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4488,10 +4488,10 @@ exports.push([module.i, "[data-html-img] {\n  max-width: 100%;\n  max-height: 10
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./src/playbacks/no_op/public/style.scss":
-/*!***************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader!./node_modules/postcss-loader/lib!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./src/playbacks/no_op/public/style.scss ***!
-  \***************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr-core/src/base/scss!./src/playbacks/no_op/public/style.scss":
+/*!**********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/postcss-loader/lib!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr-core/src/base/scss!./src/playbacks/no_op/public/style.scss ***!
+  \**********************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9401,7 +9401,7 @@ module.exports = exports['default'];
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../../../node_modules/css-loader!../../../../node_modules/postcss-loader/lib!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./style.scss */ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./src/components/container/public/style.scss");
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader!../../../../node_modules/postcss-loader/lib!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr-core/src/base/scss!./style.scss */ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr-core/src/base/scss!./src/components/container/public/style.scss");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -10077,7 +10077,7 @@ module.exports = exports['default'];
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../../../node_modules/css-loader!../../../../node_modules/postcss-loader/lib!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./style.scss */ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./src/components/core/public/style.scss");
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader!../../../../node_modules/postcss-loader/lib!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr-core/src/base/scss!./style.scss */ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr-core/src/base/scss!./src/components/core/public/style.scss");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -11627,7 +11627,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var version = "0.3.9";
+var version = "0.3.10";
 
 exports.default = {
   Player: _player2.default,
@@ -12514,7 +12514,7 @@ module.exports = exports['default'];
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../../../node_modules/css-loader!../../../../node_modules/postcss-loader/lib!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./style.scss */ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./src/playbacks/html5_video/public/style.scss");
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader!../../../../node_modules/postcss-loader/lib!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr-core/src/base/scss!./style.scss */ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr-core/src/base/scss!./src/playbacks/html5_video/public/style.scss");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -12671,7 +12671,7 @@ module.exports = exports['default'];
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../../../node_modules/css-loader!../../../../node_modules/postcss-loader/lib!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./style.scss */ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./src/playbacks/html_img/public/style.scss");
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader!../../../../node_modules/postcss-loader/lib!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr-core/src/base/scss!./style.scss */ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr-core/src/base/scss!./src/playbacks/html_img/public/style.scss");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -12879,7 +12879,7 @@ module.exports = "<canvas data-no-op-canvas></canvas>\n<p data-no-op-msg><%=mess
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../../../node_modules/css-loader!../../../../node_modules/postcss-loader/lib!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./style.scss */ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno/workspace/clappr/clappr-core/src/base/scss!./src/playbacks/no_op/public/style.scss");
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader!../../../../node_modules/postcss-loader/lib!../../../../node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr-core/src/base/scss!./style.scss */ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/lib/index.js!./node_modules/sass-loader/lib/loader.js?includePaths[]=/Users/bruno.torres/workspace/clappr/clappr-core/src/base/scss!./src/playbacks/no_op/public/style.scss");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
