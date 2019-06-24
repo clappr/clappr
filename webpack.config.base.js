@@ -39,7 +39,7 @@ const webpackConfig = (config) => {
       path: path.resolve(__dirname, 'dist'),
       publicPath: 'dist/',
       filename: config.filename,
-      library: 'HLSPlayback',
+      library: 'HlsjsPlayback',
       libraryTarget: 'umd'
     },
     plugins: [

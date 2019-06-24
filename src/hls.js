@@ -9,7 +9,7 @@ const { now, assign, listContainsIgnoreCase } = Utils
 
 const AUTO = -1
 
-export default class HLS extends HTML5Video {
+export default class HlsjsPlayback extends HTML5Video {
   static get version() { return VERSION }
 
   get name() { return 'hls' }
@@ -637,7 +637,7 @@ export default class HLS extends HTML5Video {
   }
 }
 
-HLS.canPlay = function(resource, mimeType) {
+HlsjsPlayback.canPlay = function(resource, mimeType) {
   const resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
   const isHls = ((resourceParts.length > 1 && resourceParts[1].toLowerCase() === 'm3u8') || listContainsIgnoreCase(mimeType, ['application/vnd.apple.mpegurl', 'application/x-mpegURL']))
 
