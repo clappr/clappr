@@ -12,10 +12,6 @@ update_version() {
   sed -i ".bkp" "s/\(version\":[ ]*\"\)$current_tag/\1$1/" yuidoc.json
 }
 
-update_bower() {
-  ./node_modules/sync-pkg/bin/sync.js
-}
-
 build() {
   echo 'building clappr.js' &&
   yarn build &&
@@ -29,16 +25,13 @@ run_tests() {
 }
 
 make_release_commit() {
-  git add package.json bower.json yarn.lock yuidoc.json dist &&
+  git add package.json yarn.lock yuidoc.json dist &&
   git commit -m 'chore(package): bump to '$1 &&
-  git flow release finish $1
+  git tag -m "$1" $1
 }
 
 git_push() {
   echo 'pushing to github'
-  git checkout dev
-  git push origin dev
-  git checkout master
   git push origin master --tags
 }
 
@@ -65,10 +58,8 @@ main() {
     echo "you are not logged into npm"
     exit 1
   fi
-  git flow release start $1 &&
   update_dependencies &&
   update_version $1 &&
-  update_bower &&
   build
   if (("$?" != "0")); then
     echo "something failed during dependency update, version update, or build"
@@ -79,7 +70,6 @@ main() {
     make_release_commit $1 &&
     git_push &&
     npm_publish &&
-    send_mail $1 &&
     purge_cdn_cache &&
     exit 0
 
