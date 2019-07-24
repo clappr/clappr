@@ -1,3 +1,3 @@
-java_script:
+eslint:
   enabled: true
-  config_file: .eslintrc.js
+  config_file: .eslintrc
