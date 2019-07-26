@@ -92,12 +92,15 @@ export default class PosterPlugin extends UIContainerPlugin {
   }
 
   clicked() {
-    if (!this.options.chromeless || this.options.allowUserInteraction) {
-      this.playRequested = true
-      this.update()
-      this.container.play()
+    // Let "click_to_pause" plugin handle click event if media has started playing
+    if (! this.hasStartedPlaying) {
+      if (!this.options.chromeless || this.options.allowUserInteraction) {
+        this.playRequested = true
+        this.update()
+        this.container.play()
+      }
+      return false
     }
-    return false
   }
 
   shouldHideOnPlay() {
