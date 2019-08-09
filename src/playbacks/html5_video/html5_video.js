@@ -144,6 +144,11 @@ export default class HTML5Video extends Playback {
     this.options.autoPlay && this.attemptAutoPlay()
   }
 
+  configure(options) {
+    super.configure(options)
+    this.el.loop = !!options.loop
+  }
+
   // See Playback.attemptAutoPlay()
   attemptAutoPlay() {
     this.canAutoPlay((result, error) => {
