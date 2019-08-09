@@ -383,4 +383,19 @@ describe('HTML5Video playback', function() {
       expect(playback.tagName).to.be.equal('video')
     })
   })
+
+  it('can configure loop', function() {
+    const options = $.extend({ loop: true }, this.options)
+    const playback = new HTML5Video(options)
+
+    expect(playback.el.loop).to.be.equal(true)
+
+    playback.configure({ loop: false })
+
+    expect(playback.el.loop).to.be.equal(false)
+
+    playback.configure({ loop: true })
+
+    expect(playback.el.loop).to.be.equal(true)
+  })
 })
