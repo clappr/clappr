@@ -444,7 +444,8 @@ class DashShakaPlayback extends HTML5Video {
       bandwidth: activeVideo.bandwidth,
       width: activeVideo.width,
       height: activeVideo.height,
-      level: activeVideo.id
+      level: activeVideo.id,
+      bitrate: activeVideo.videoBandwidth
     })
   }
 
