@@ -101,10 +101,10 @@ describe('HTML5Video playback', function() {
     const playback = new HTML5Video({ src: 'http://example.com/dash.ogg', autoPlay: true, mute: true, disableCanAutoPlay: true })
 
     playback.on(Events.PLAYBACK_PLAY_INTENT, function() {
-      process.nextTick(function() {
+      setTimeout(function() {
         expect(playback.isPlaying()).to.be.true
         done()
-      })
+      }, 500)
     })
   })
 
