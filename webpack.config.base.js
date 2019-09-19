@@ -74,7 +74,6 @@ const webpackConfig = (config) => {
     plugins: [
       new webpack.DefinePlugin({
         VERSION: JSON.stringify(require('./package.json').version),
-        PLAIN_HTML5_ONLY: JSON.stringify(!!process.env.CLAPPR_PLAIN_HTML5_ONLY)
       }),
       ...(config.plugins || [])
     ],

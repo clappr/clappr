@@ -12,19 +12,21 @@ const minimize = !!process.env.MINIMIZE
 const analyzeBundle = !!process.env.ANALYZE_BUNDLE
 const forceInlineDebug = !!process.env.CLAPPR_INLINE_DEBUG
 
-
 const plainHtml5Plugins = [
   new webpack.NormalModuleReplacementPlugin(/playbacks\/flash/, voidModulePath),
   new webpack.NormalModuleReplacementPlugin(/playbacks\/base_flash_playback/, voidModulePath),
   new webpack.NormalModuleReplacementPlugin(/playbacks\/flashls/, voidModulePath),
   new webpack.NormalModuleReplacementPlugin(/playbacks\/hls/, voidModulePath),
+  new webpack.DefinePlugin({ PLAIN_HTML5_ONLY: true }),
 ]
+
+const defaultDefinitionPlugin = new webpack.DefinePlugin({ PLAIN_HTML5_ONLY: false })
 
 let configurations = []
 
 configurations.push(webpackConfig({
   filename: 'clappr.js',
-  plugins: analyzeBundle ? [ new BundleAnalyzerPlugin() ] : [],
+  plugins: analyzeBundle ? [ new BundleAnalyzerPlugin(), defaultDefinitionPlugin ] : [defaultDefinitionPlugin],
   mode: 'development'
 }))
 
@@ -55,6 +57,7 @@ if (minimize) {
     filename: 'clappr.min.js',
     plugins: [
       loaderOptions,
+      defaultDefinitionPlugin
     ],
     optimization: {
       minimizer: [
@@ -88,6 +91,7 @@ if (forceInlineDebug) {
     devtool: 'inline-source-map',
     plugins: [
       loaderOptions,
+      defaultDefinitionPlugin
     ],
     mode: 'development'
   }))
