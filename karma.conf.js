@@ -1,11 +1,14 @@
 /* eslint-disable no-var */
 const path = require('path')
-
+const webpack = require('webpack')
 const webpackConfig = require('./webpack.config.base')
 
 // add subject as webpack's postloader
 const webpackTestConfig = webpackConfig({
   mode: 'development',
+  plugins: [
+    new webpack.DefinePlugin({ PLAIN_HTML5_ONLY: false })
+  ],
   rules: [
     {
       test: /\.js$/,
