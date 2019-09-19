@@ -1,5 +1,8 @@
 #!/bin/bash
 
+PROJECT_NAME='clappr-plugins'
+CDN_PATH="npm/@clappr/plugins@latest/dist/$PROJECT_NAME.min.js"
+
 update_dependencies() {
   echo 'updating dependencies' &&
   yarn install
@@ -12,14 +15,10 @@ update_version() {
   sed -i ".bkp" "s/\(version\":[ ]*\"\)$current_tag/\1$1/" yuidoc.json
 }
 
-update_bower() {
-  ./node_modules/sync-pkg/bin/sync.js
-}
-
 build() {
-  echo 'building clappr.js' &&
+  echo "building $PROJECT_NAME.js" &&
   yarn build &&
-  echo 'building clappr.min.js' &&
+  echo "building $PROJECT_NAME.min.js" &&
   yarn release
 }
 
@@ -29,16 +28,13 @@ run_tests() {
 }
 
 make_release_commit() {
-  git add package.json bower.json yarn.lock yuidoc.json dist &&
+  git add package.json yarn.lock yuidoc.json dist &&
   git commit -m 'chore(package): bump to '$1 &&
-  git flow release finish $1
+  git tag -m "$1" $1
 }
 
 git_push() {
   echo 'pushing to github'
-  git checkout dev
-  git push origin dev
-  git checkout master
   git push origin master --tags
 }
 
@@ -48,15 +44,7 @@ npm_publish() {
 
 purge_cdn_cache() {
   echo 'purging cdn cache'
-  curl -q http://purge.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js
-}
-
-send_mail() {
-  last_tag=$(git log --tags --no-walk --pretty="format:%d" | sed 2q | sed 's/[()]//g' | sed 's/ tag: //' | sed -n 2p)
-  changelog=$(git log --pretty='%h %s (%an)\n' $last_tag..master)
-  message="Clappr developers bumped a new version: $1\n\nChangelog:\n=========\n$changelog\n\nwith love,\nYour happy butler.\n"
-  echo -e $message | mail -s "$(echo -e "[clappr] new version released: $1\nFrom: Clappr Butler <butler@clappr.io>\n")" videos5@corp.globo.com
-  return 0
+  curl -q "http://purge.jsdelivr.net/$CDN_PATH"
 }
 
 main() {
@@ -65,10 +53,8 @@ main() {
     echo "you are not logged into npm"
     exit 1
   fi
-  git flow release start $1 &&
   update_dependencies &&
   update_version $1 &&
-  update_bower &&
   build
   if (("$?" != "0")); then
     echo "something failed during dependency update, version update, or build"
@@ -79,7 +65,6 @@ main() {
     make_release_commit $1 &&
     git_push &&
     npm_publish &&
-    send_mail $1 &&
     purge_cdn_cache &&
     exit 0
 
