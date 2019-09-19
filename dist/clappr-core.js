@@ -11626,7 +11626,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var version = "0.3.12";
+var version = "0.3.13";
 
 exports.default = {
   Player: _player2.default,
@@ -11999,6 +11999,11 @@ var HTML5Video = function (_Playback) {
     _this.options.autoPlay && _this.attemptAutoPlay();
     return _this;
   }
+
+  HTML5Video.prototype.configure = function configure(options) {
+    _Playback.prototype.configure.call(this, options);
+    this.el.loop = !!options.loop;
+  };
 
   // See Playback.attemptAutoPlay()
 
