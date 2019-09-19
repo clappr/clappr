@@ -28,7 +28,7 @@ run_tests() {
 }
 
 make_release_commit() {
-  git add package.json bower.json yarn.lock yuidoc.json dist &&
+  git add package.json yarn.lock yuidoc.json dist &&
   git commit -m 'chore(package): bump to '$1 &&
   git flow release finish $1
 }
