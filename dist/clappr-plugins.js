@@ -3243,7 +3243,7 @@ var _vendor2 = _interopRequireDefault(_vendor);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.3.9"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.3.10"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -5451,12 +5451,15 @@ var PosterPlugin = function (_UIContainerPlugin) {
   };
 
   PosterPlugin.prototype.clicked = function clicked() {
-    if (!this.options.chromeless || this.options.allowUserInteraction) {
-      this.playRequested = true;
-      this.update();
-      this.container.play();
+    // Let "click_to_pause" plugin handle click event if media has started playing
+    if (!this.hasStartedPlaying) {
+      if (!this.options.chromeless || this.options.allowUserInteraction) {
+        this.playRequested = true;
+        this.update();
+        this.container.play();
+      }
+      return false;
     }
-    return false;
   };
 
   PosterPlugin.prototype.shouldHideOnPlay = function shouldHideOnPlay() {
