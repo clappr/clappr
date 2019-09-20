@@ -1,6 +1,7 @@
 #!/bin/bash
 
 PROJECT_NAME='clappr-core'
+CDN_PATH="npm/@clappr/core@latest/dist/$PROJECT_NAME.min.js"
 
 update_dependencies() {
   echo 'updating dependencies' &&
@@ -43,7 +44,7 @@ npm_publish() {
 
 purge_cdn_cache() {
   echo 'purging cdn cache'
-  curl -q http://purge.jsdelivr.net/npm/@clappr/core@latest/dist/clappr-core.min.js
+  curl -q "http://purge.jsdelivr.net/$CDN_PATH"
 }
 
 main() {
