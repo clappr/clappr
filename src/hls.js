@@ -309,7 +309,6 @@ export default class HlsjsPlayback extends HTML5Video {
           default:
             Log.warn('hlsjs: trying to recover from network error.', { evt, data })
             error.level = PlayerError.Levels.WARN
-            this.createError(error)
             this._hls.startLoad()
             break
           }
@@ -317,7 +316,6 @@ export default class HlsjsPlayback extends HTML5Video {
         case HLSJS.ErrorTypes.MEDIA_ERROR:
           Log.warn('hlsjs: trying to recover from media error.', { evt, data })
           error.level = PlayerError.Levels.WARN
-          this.createError(error)
           this._recover(evt, data, error)
           break
         default:
@@ -347,7 +345,6 @@ export default class HlsjsPlayback extends HTML5Video {
       }
 
       error.level = PlayerError.Levels.WARN
-      this.createError(error)
       Log.warn('hlsjs: non-fatal error occurred', { evt, data })
     }
   }
