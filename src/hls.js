@@ -154,7 +154,7 @@ export default class HlsjsPlayback extends HTML5Video {
     this._ccIsSetup = false
     this._ccTracksUpdated = false
     this._hls = new HLSJS(assign({}, this.options.playback.hlsjsConfig))
-    this._hls.on(HLSJS.Events.MEDIA_ATTACHED, () => this._hls.loadSource(this.options.src))
+    this._hls.once(HLSJS.Events.MEDIA_ATTACHED, () => this._hls.loadSource(this.options.src))
     this._hls.on(HLSJS.Events.LEVEL_LOADED, (evt, data) => this._updatePlaybackType(evt, data))
     this._hls.on(HLSJS.Events.LEVEL_UPDATED, (evt, data) => this._onLevelUpdated(evt, data))
     this._hls.on(HLSJS.Events.LEVEL_SWITCHING, (evt,data) => this._onLevelSwitch(evt, data))
