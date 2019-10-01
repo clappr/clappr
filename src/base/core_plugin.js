@@ -1,4 +1,4 @@
-import { extend } from './utils'
+import { extend } from '../utils'
 import BaseObject from './base_object'
 import ErrorMixin from './error_mixin'
 

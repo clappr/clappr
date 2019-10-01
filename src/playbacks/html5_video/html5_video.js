@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import { isNumber, seekStringToSeconds, DomRecycler, canAutoPlayMedia } from '../../base/utils'
+import { isNumber, seekStringToSeconds, DomRecycler, canAutoPlayMedia } from '../../utils'
 
 import Events from '../../base/events'
 import Playback from '../../base/playback'

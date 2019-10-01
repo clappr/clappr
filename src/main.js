@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 import Player from './components/player'
-import Utils from './base/utils'
+import Utils from './utils'
 import Events from './base/events'
 import Playback from './base/playback'
 import ContainerPlugin from './base/container_plugin'

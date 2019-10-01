@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import { isNumber, Fullscreen, DomRecycler } from '../../base/utils'
+import { isNumber, Fullscreen, DomRecycler } from '../../utils'
 
 import Events from '../../base/events'
 import UIObject from '../../base/ui_object'

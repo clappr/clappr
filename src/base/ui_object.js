@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 import $ from 'clappr-zepto'
-import { uniqueId, DomRecycler } from './utils'
+import { uniqueId, DomRecycler } from '../utils'
 import BaseObject from './base_object'
 
 const delegateEventSplitter = /^(\S+)\s*(.*)$/

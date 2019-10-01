@@ -1,4 +1,4 @@
-import { requestAnimationFrame, cancelAnimationFrame } from '../../base/utils'
+import { requestAnimationFrame, cancelAnimationFrame } from '../../utils'
 import Playback from '../../base/playback'
 import template from '../../base/template'
 import Events from '../../base/events'

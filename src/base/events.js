@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 import Log from '../components/log'
-import { uniqueId } from './utils'
+import { uniqueId } from '../utils'
 
 const slice = Array.prototype.slice
 

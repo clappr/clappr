@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import { uniqueId, currentScriptUrl } from '../base/utils'
+import { uniqueId, currentScriptUrl } from '../utils'
 
 import BaseObject from '../base/base_object'
 import Events from '../base/events'

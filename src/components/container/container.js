@@ -9,7 +9,7 @@
 import Events from '../../base/events'
 import UIObject from '../../base/ui_object'
 import ErrorMixin from '../../base/error_mixin'
-import { DoubleEventHandler } from '../../base/utils'
+import { DoubleEventHandler } from '../../utils'
 
 import './public/style.scss'
 

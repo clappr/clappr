@@ -1,4 +1,4 @@
-import * as utils from '../../src/base/utils'
+import * as utils from '../../src/utils'
 import  $ from 'clappr-zepto'
 
 const pushUrl = function(path) {

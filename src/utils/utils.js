@@ -3,10 +3,10 @@
 // license that can be found in the LICENSE file.
 /*jshint -W079 */
 
-import './polyfills'
+import '../base/polyfills'
+import Media from '../base/media'
 import Browser from '../components/browser'
 import $ from 'clappr-zepto'
-import Media from './media'
 
 export function assign(obj, source) {
   if (source) {
