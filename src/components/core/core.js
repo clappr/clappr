@@ -9,7 +9,6 @@ import UIObject from '../../base/ui_object'
 import UICorePlugin from '../../base/ui_core_plugin'
 import Browser from '../../components/browser'
 import ContainerFactory from '../../components/container_factory'
-import Mediator from '../../components/mediator'
 import PlayerInfo from '../../components/player_info'
 import PlayerError from '../../components/error'
 import ErrorMixin from '../../base/error_mixin'
@@ -19,8 +18,7 @@ import $ from 'clappr-zepto'
 import './public/style.scss'
 
 /**
- * The Core is responsible to manage Containers, the mediator, MediaControl
- * and the player state.
+ * The Core is responsible to manage Containers and the player state.
  * @class Core
  * @constructor
  * @extends UIObject
@@ -186,7 +184,6 @@ export default class Core extends UIObject {
       this.oldWidth = newSize.width
       this.playerInfo.computedSize = newSize
       this.firstResize = false
-      Mediator.trigger(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, newSize)
       this.trigger(Events.CORE_RESIZE, newSize)
     }
   }

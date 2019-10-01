@@ -18,7 +18,6 @@ import Core from './components/core'
 import PlayerError from './components/error'
 import Loader from './components/loader'
 import Log from './components/log'
-import Mediator from './components/mediator'
 import PlayerInfo from './components/player_info'
 import HTML5Audio from './playbacks/html5_audio'
 import HTML5Video from './playbacks/html5_video'
@@ -32,7 +31,6 @@ const version = VERSION
 
 export default {
   Player,
-  Mediator,
   Events,
   Browser,
   PlayerInfo,
