@@ -5,6 +5,14 @@
 import PlayerInfo from './player_info'
 import Log from './log'
 
+const filterPluginsByType = (plugins, type) => {
+  if (!plugins || !type) return {}
+
+  return Object.entries(plugins)
+    .filter(([, value]) => value.type === type)
+    .reduce((obj, [key, value]) => (obj[key] = value, obj), {})
+}
+
 /**
  * It keeps a list of the default plugins (playback, container, core) and it merges external plugins with its internals.
  * @class Loader
@@ -15,8 +23,7 @@ import Log from './log'
 export default (() => {
 
   const registry = {
-    container: {},
-    core: {},
+    plugins: {},
     playbacks: []
   }
 
@@ -27,7 +34,9 @@ export default (() => {
     }
 
     static get registeredPlugins() {
-      const { core, container } = registry
+      const { plugins } = registry
+      const core = filterPluginsByType(plugins, 'core')
+      const container = filterPluginsByType(plugins, 'container')
       return {
         core,
         container,
@@ -36,19 +45,19 @@ export default (() => {
 
     static registerPlugin(pluginEntry) {
       if (!pluginEntry || !pluginEntry.prototype.name) {
-        Log.warn('Loader', 'missing information to register plugin: ${pluginEntry}')
+        Log.warn('Loader', `missing information to register plugin: ${pluginEntry}`)
         return false
       }
 
-      const pluginRegistry = registry[pluginEntry.type]
+      const pluginRegistry = registry.plugins
 
       if (!pluginRegistry) return false
 
-      const previousEntry = pluginRegistry[pluginEntry.name]
+      const previousEntry = pluginRegistry[pluginEntry.prototype.name]
 
-      if (previousEntry) Log.warn('Loader', `overriding plugin entry: ${pluginEntry.name} - ${previousEntry}`)
+      if (previousEntry) Log.warn('Loader', `overriding plugin entry: ${pluginEntry.prototype.name} - ${previousEntry}`)
 
-      pluginRegistry[pluginEntry.name] = pluginEntry
+      pluginRegistry[pluginEntry.prototype.name] = pluginEntry
 
       return true
     }
@@ -81,8 +90,10 @@ export default (() => {
       this.playerId = playerId
 
       this.playbackPlugins = [...registry.playbacks]
-      this.containerPlugins = Object.values(registry.container || {})
-      this.corePlugins = Object.values(registry.core || {})
+
+      const { core, container } = Loader.registeredPlugins
+      this.containerPlugins = Object.values(container)
+      this.corePlugins = Object.values(core)
 
       if (!Array.isArray(externalPlugins))
         this.validateExternalPluginsType(externalPlugins)
