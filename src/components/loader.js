@@ -80,6 +80,33 @@ export default (() => {
       return true
     }
 
+    static unregisterPlugin(name) {
+      if (!name) return false
+
+      const { plugins } = registry
+      const plugin = plugins[name]
+
+      if (!plugin) return false
+
+      delete plugins[name]
+      return true
+    }
+
+    static unregisterPlayback(name) {
+      if (!name) return false
+
+      let { playbacks } = registry
+
+      const index = playbacks.findIndex((entry) => entry.prototype.name === name)
+
+      if (index < 0) return false
+
+      playbacks.splice(index, 1)
+      registry.playbacks = playbacks
+
+      return true
+    }
+
     /**
      * builds the loader
      * @method constructor
