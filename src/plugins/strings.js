@@ -11,6 +11,7 @@ import CorePlugin from '../base/core_plugin'
  */
 export default class Strings extends CorePlugin {
   get name() { return 'strings' }
+  get supportedVersion() { return { min: VERSION } }
 
   constructor(core) {
     super(core)

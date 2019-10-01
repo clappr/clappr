@@ -7,6 +7,7 @@ import './public/style.scss'
 
 export default class NoOp extends Playback {
   get name() { return 'no_op' }
+  get supportedVersion() { return { min: VERSION } }
   get template() { return template(noOpHTML) }
   get attributes() {
     return { 'data-no-op': '' }

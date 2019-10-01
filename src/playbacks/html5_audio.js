@@ -9,6 +9,7 @@ import HTML5Video from './html5_video'
 // TODO: remove this playback and change HTML5Video to HTML5Playback (breaking change, only after 0.3.0)
 export default class HTML5Audio extends HTML5Video {
   get name() { return 'html5_audio' }
+  get supportedVersion() { return { min: VERSION } }
   get tagName() { return 'audio' }
 
   get isAudioOnly() {

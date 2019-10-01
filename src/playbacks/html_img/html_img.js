@@ -8,6 +8,7 @@ import './public/style.scss'
 
 export default class HTMLImg extends Playback {
   get name() { return 'html_img' }
+  get supportedVersion() { return { min: VERSION } }
   get tagName() { return 'img' }
   get attributes() {
     return {
