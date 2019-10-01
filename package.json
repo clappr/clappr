@@ -68,6 +68,7 @@
     "postcss-loader": "^2.1.1",
     "s3": "^4.4.0",
     "sass-loader": "^6.0.6",
+    "semver": "^6.3.0",
     "sinon": "^4.4.2",
     "sinon-chai": "^2.14.0",
     "style-loader": "^0.20.2",
