@@ -22,12 +22,23 @@ import PlayerInfo from './components/player_info'
 import HTML5Audio from './playbacks/html5_audio'
 import HTML5Video from './playbacks/html5_video'
 import HTMLImg from './playbacks/html_img'
+import NoOp from './playbacks/no_op'
 import Styler from './base/styler'
 import template from './base/template'
+import Strings from './plugins/strings'
 
 import $ from 'clappr-zepto'
 
 const version = VERSION
+
+// Built-in Plugins/Playbacks
+
+Loader.registerPlugin(Strings)
+
+Loader.registerPlayback(NoOp)
+Loader.registerPlayback(HTMLImg)
+Loader.registerPlayback(HTML5Audio)
+Loader.registerPlayback(HTML5Video)
 
 export default {
   Player,
