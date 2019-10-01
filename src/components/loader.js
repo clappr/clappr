@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+import SemVer from 'semver'
+
 import PlayerInfo from './player_info'
 import Log from './log'
 
@@ -27,6 +29,8 @@ export default (() => {
     playbacks: []
   }
 
+  const currentVersion = VERSION
+
   return class Loader {
 
     static get registeredPlaybacks() {
@@ -43,11 +47,32 @@ export default (() => {
       }
     }
 
+    static checkVersionSupport(entry) {
+      const { supportedVersion, name } = entry.prototype
+
+      if (!supportedVersion || !supportedVersion.min) {
+        Log.warn('Loader', `missing version information for ${name}`)
+        return false
+      }
+
+      const maxVersion = supportedVersion.max || SemVer.parse(supportedVersion.min).inc('minor')
+      const versionRange = `>=${supportedVersion.min} <${maxVersion}`
+
+      if (!SemVer.satisfies(currentVersion, versionRange)) {
+        Log.warn('Loader', `unsupported plugin (${currentVersion} does not match required range ${versionRange}): ${name}`)
+        return false
+      }
+
+      return true
+    }
+
     static registerPlugin(pluginEntry) {
       if (!pluginEntry || !pluginEntry.prototype.name) {
         Log.warn('Loader', `missing information to register plugin: ${pluginEntry}`)
         return false
       }
+
+      Loader.checkVersionSupport(pluginEntry)
 
       const pluginRegistry = registry.plugins
 
@@ -64,6 +89,8 @@ export default (() => {
 
     static registerPlayback(playbackEntry) {
       if (!playbackEntry || !playbackEntry.prototype.name) return false
+
+      Loader.checkVersionSupport(playbackEntry)
 
       let { playbacks } = registry
 
