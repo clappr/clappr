@@ -11,6 +11,111 @@ describe('Loader', function () {
     loader = new Loader()
   })
 
+  it('starts with an empty plugin registry', function() {
+    expect(Loader.registeredPlugins.core).to.be.empty
+    expect(Loader.registeredPlugins.container).to.be.empty
+  })
+
+  it('starts with an empty playback list', function() {
+    expect(Loader.registeredPlaybacks).to.be.empty
+  })
+
+  describe('registerPlugin', function() {
+    let corePlugin, containerPlugin
+    beforeEach(function() {
+      corePlugin = CorePlugin.extend({ name: 'core-plugin' })
+      containerPlugin = ContainerPlugin.extend({ name: 'container-plugin' })
+    })
+
+    afterEach(function() {
+      Loader.clearPlugins()
+    })
+
+    it('rejects invalid plugin parameter', function() {
+      const registered = Loader.registerPlugin(undefined)
+
+      expect(registered).to.be.false
+      expect(Loader.registeredPlugins.core).to.be.empty
+    })
+
+    it('rejects a plugin without a valid name', function() {
+      const plugin = CorePlugin.extend({ name: '' })
+      const registered = Loader.registerPlugin(plugin)
+
+      expect(registered).to.be.false
+      expect(Loader.registeredPlugins.core).to.be.empty
+    })
+
+    it('adds a plugin to the corresponding scope registry', function() {
+      let registered = Loader.registerPlugin(corePlugin)
+
+      expect(registered).to.be.true
+      expect(Loader.registeredPlugins.container).to.be.empty
+      expect(Loader.registeredPlugins.core).to.not.be.empty
+      expect(Loader.registeredPlugins.core).to.contain(corePlugin)
+
+      registered = Loader.registerPlugin(containerPlugin)
+
+      expect(registered).to.be.true
+      expect(Loader.registeredPlugins.container).to.not.be.empty
+      expect(Loader.registeredPlugins.container).to.contain(containerPlugin)
+    })
+
+    it('overrides a plugin with the same name', function() {
+      const otherPlugin = CorePlugin.extend({ name: 'core-plugin' })
+      Loader.registerPlugin(corePlugin)
+      const registered = Loader.registerPlugin(otherPlugin)
+
+      expect(registered).to.be.true
+      expect(Loader.registeredPlugins.core).to.contain(otherPlugin)
+      expect(Loader.registeredPlugins.core).to.not.contain(corePlugin)
+    })
+  })
+
+  describe('registerPlayback', function() {
+    let playback
+    beforeEach(function() {
+      playback = PlaybackPlugin.extend({ name: 'some-playback' })
+    })
+
+    afterEach(function() {
+      Loader.clearPlaybacks()
+    })
+
+    it('rejects invalid playback parameter', function() {
+      const registered = Loader.registerPlayback(undefined)
+
+      expect(registered).to.be.false
+      expect(Loader.registeredPlaybacks).to.be.empty
+    })
+
+    it('rejects a plugin without a valid name', function() {
+      const invalidPlayback = PlaybackPlugin.extend({ name: '' })
+      const registered = Loader.registerPlayback(invalidPlayback)
+
+      expect(registered).to.be.false
+      expect(Loader.registeredPlaybacks).to.be.empty
+    })
+
+    it('adds a playback to the registry', function() {
+      const registered = Loader.registerPlayback(playback)
+
+      expect(registered).to.be.true
+      expect(Loader.registeredPlaybacks).to.not.be.empty
+      expect(Loader.registeredPlaybacks).to.contain(playback)
+    })
+
+    it('overrides a playback with the same name', function() {
+      const otherPlayback = PlaybackPlugin.extend({ name: 'some-playback' })
+      Loader.registerPlugin(playback)
+      const registered = Loader.registerPlayback(otherPlayback)
+
+      expect(registered).to.be.true
+      expect(Loader.registeredPlaybacks).to.contain(otherPlayback)
+      expect(Loader.registeredPlaybacks).to.not.contain(playback)
+    })
+  })
+
   describe('addExternalPlugins function', function () {
     it('should extend the plugins array with the external ones', function () {
       const playbackPlugin = PlaybackPlugin.extend({ name: 'playbackPlugin' })
