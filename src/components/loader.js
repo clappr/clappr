@@ -134,6 +134,14 @@ export default (() => {
       return true
     }
 
+    static clearPlugins() {
+      registry.plugins = {}
+    }
+
+    static clearPlaybacks() {
+      registry.playbacks = []
+    }
+
     /**
      * builds the loader
      * @method constructor
