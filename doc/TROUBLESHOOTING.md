@@ -18,14 +18,18 @@ player.getPlugin('spinner').disable();
 ```javascript
 // let's disable the loading animation (the 'spinner' plugin)
 export default class NoSpinner extends UIContainerPlugin {
-  get name() { return 'spinner' }
+  get name() {
+    return "spinner";
+  }
 }
-new Clappr.Player({ plugins: [NoSpinner]})
+new Clappr.Player({ plugins: [NoSpinner] });
 ```
 
 ### How can I use clappr with ReactJS?
 
 https://medium.com/@bikegriffith/using-clappr-with-reactjs-14a338e3451f#.9a36w0dpj
+
+Example: https://codepen.io/towerz/pen/zVryom?editors=1111
 
 ### How can I use clappr with ionic/angular?
 
@@ -39,15 +43,16 @@ Add this snipet before you instantiate the player `Clappr.Log.setLevel(0)`
 
 Very often people open issues related to: **stream not working, freezing, glitching, stopping and so on.** You can try the steps bellow, taking notes about the results:
 
-* try to run the same example at [CDN](http://cdn.clappr.io)
-* check the [cors headers at your servers](https://github.com/clappr/clappr/issues/703)
-* try to run it on [hls.js demo page](https://video-dev.github.io/hls.js/demo/)
-* try to run it on [flashls. demo page](http://www.flashls.org/latest/examples/chromeless/)
-* try to run on your page the following source: `http://www.streambox.fr/playlists/x36xhzz/x36xhzz.m3u8`
-* try different browsers/OS's to see if the problems remain
-* try to use a tool to check the health of your stream (both input, ie: RTMP, and segmentation, ie: DASH or HLS): like [`mediainfo`](https://mediaarea.net/MediaInfo) (for instance you could: ` mediainfo http://www.example.com/my.m3u8`, Apple's [`mediastreamvalidator`](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/StreamingMediaGuide/UsingHTTPLiveStreaming/UsingHTTPLiveStreaming.html) too, [`hls-analyzer`](https://github.com/epiclabs-io/hls-analyzer) and etc.
+- try to run the same example at [CDN](http://cdn.clappr.io)
+- check the [cors headers at your servers](https://github.com/clappr/clappr/issues/703)
+- try to run it on [hls.js demo page](https://video-dev.github.io/hls.js/demo/)
+- try to run it on [flashls. demo page](http://www.flashls.org/latest/examples/chromeless/)
+- try to run on your page the following source: `http://www.streambox.fr/playlists/x36xhzz/x36xhzz.m3u8`
+- try different browsers/OS's to see if the problems remain
+- try to use a tool to check the health of your stream (both input, ie: RTMP, and segmentation, ie: DASH or HLS): like [`mediainfo`](https://mediaarea.net/MediaInfo) (for instance you could: `mediainfo http://www.example.com/my.m3u8`, Apple's [`mediastreamvalidator`](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/StreamingMediaGuide/UsingHTTPLiveStreaming/UsingHTTPLiveStreaming.html) too, [`hls-analyzer`](https://github.com/epiclabs-io/hls-analyzer) and etc.
 
 ##### HLS-Analyzer usage example
+
 ```bash
 pip install m3u8
 git clone https://github.com/epiclabs-io/hls-analyzer.git
