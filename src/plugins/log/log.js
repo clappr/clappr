@@ -19,7 +19,34 @@ const LEVEL_DISABLED = LEVEL_ERROR
 const COLORS = [DEBUG, INFO, WARN, ERROR, ERROR]
 const DESCRIPTIONS = ['debug', 'info', 'warn', 'error', 'disabled']
 
+/**
+ * @class Log
+ * @constructor
+ * @module plugins
+ * @example
+ * ### Using the Log
+ *
+ * you can use any of the 5 levels JAVASCRIPT:
+ * ```javascript
+ * // Disable Log
+ * Clappr.Log.setLevel(0);
+ * // Info Log
+ * Clappr.Log.setLevel(1);
+ * // Warn Log
+ * Clappr.Log.setLevel(2);
+ * // Error Log
+ * Clappr.Log.setLevel(3);
+ * // Debug Log
+ * Clappr.Log.setLevel(4);
+ * ```
+ */
 export default class Log {
+
+  /**
+   * @method constructor
+   * @param {Number} level should be an integer with the  value 1, 2, 3, 4.
+   * @param {Number} offLevel should be an integer with the  value 1, 2, 3, 4.
+   */
   constructor(level = LEVEL_INFO, offLevel = LEVEL_DISABLED) {
     this.kibo = new Kibo()
     this.kibo.down(['ctrl shift d'], () => this.onOff())
@@ -72,6 +99,11 @@ Log.LEVEL_INFO = LEVEL_INFO
 Log.LEVEL_WARN = LEVEL_WARN
 Log.LEVEL_ERROR = LEVEL_ERROR
 
+/**
+ * return the instance of the `Log` Class.
+ * @method getInstance
+ * @returns instance of the Log
+ */
 Log.getInstance = function() {
   if (this._instance === undefined) {
     this._instance = new this()
@@ -81,9 +113,30 @@ Log.getInstance = function() {
   return this._instance
 }
 
+/**
+ * Specify a `level` to log.
+ * @method setLevel
+ * @param {Number} level valid level log [0,1,2,3,4].
+ */
 Log.setLevel = function(level) { this.getInstance().level = level }
 
+/**
+ * Set Log for Debug.
+ * @method debug
+ */
 Log.debug = function() { this.getInstance().debug.apply(this.getInstance(), arguments) }
+/**
+ * Set Log for Info.
+ * @method info
+ */
 Log.info = function() { this.getInstance().info.apply(this.getInstance(), arguments) }
+/**
+ * Set Log for Warn.
+ * @method warn
+ */
 Log.warn = function() { this.getInstance().warn.apply(this.getInstance(), arguments) }
+/**
+ * Set Log for Error.
+ * @method error
+ */
 Log.error = function() { this.getInstance().error.apply(this.getInstance(), arguments) }
