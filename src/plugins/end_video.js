@@ -1,6 +1,4 @@
-import { CorePlugin, Events, Utils } from '@clappr/core'
-
-const { Fullscreen } = Utils
+import { CorePlugin, Events } from '@clappr/core'
 
 export default class EndVideo extends CorePlugin {
   get name() { return 'end_video' }
@@ -20,7 +18,7 @@ export default class EndVideo extends CorePlugin {
 
   ended() {
     const exitOnEnd = typeof (this.core.options.exitFullscreenOnEnd) === 'undefined' || this.core.options.exitFullscreenOnEnd
-    if (exitOnEnd && Fullscreen.isFullscreen())
+    if (exitOnEnd && this.core.isFullscreen())
       this.core.toggleFullscreen()
 
   }
