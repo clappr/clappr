@@ -262,7 +262,7 @@ export default class MediaControl extends UICorePlugin {
 
   playerResize(size) {
     this.$fullscreenToggle.html('')
-    let icon = Fullscreen.isFullscreen() ? exitFullscreenIcon : fullscreenIcon
+    let icon = this.core.isFullscreen() ? exitFullscreenIcon : fullscreenIcon
     this.$fullscreenToggle.append(icon)
     this.applyButtonStyle(this.$fullscreenToggle)
     this.$el.find('.media-control').length !== 0 && this.$el.removeClass('w320')
@@ -506,7 +506,7 @@ export default class MediaControl extends UICorePlugin {
   updateCursorStyle(showing) {
     if (showing)
       this.core.$el.removeClass('nocursor')
-    else if (Fullscreen.isFullscreen())
+    else if (this.core.isFullscreen())
       this.core.$el.addClass('nocursor')
   }
 
