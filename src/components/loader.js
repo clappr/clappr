@@ -4,7 +4,6 @@
 
 import SemVer from 'semver'
 
-import PlayerInfo from './player_info'
 import Log from './log'
 
 const filterPluginsByType = (plugins, type) => {
@@ -212,9 +211,6 @@ export default (() => {
 
       if (plugins.core)
         this.corePlugins = this.removeDups(plugins.core.concat(this.corePlugins))
-
-
-      PlayerInfo.getInstance(this.playerId).playbackPlugins = this.playbackPlugins
     }
 
     /**

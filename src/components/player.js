@@ -9,7 +9,6 @@ import Events from '../base/events'
 import Browser from './browser'
 import CoreFactory from './core_factory'
 import Loader from './loader'
-import PlayerInfo from './player_info'
 import ErrorMixin from '../base/error_mixin'
 import $ from 'clappr-zepto'
 
@@ -251,9 +250,6 @@ export default class Player extends BaseObject {
     }
     this._registerOptionEventListeners(this.options.events)
     this._coreFactory = new CoreFactory(this)
-    this.playerInfo = PlayerInfo.getInstance(this.options.playerId)
-    this.playerInfo.currentSize = { width: options.width, height: options.height }
-    this.playerInfo.options = this.options
     if (this.options.parentId)
       this.setParentId(this.options.parentId)
 

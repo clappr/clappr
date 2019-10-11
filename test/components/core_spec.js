@@ -187,7 +187,7 @@ describe('Core', function() {
       sinon.spy(this.core, 'trigger')
       this.core.triggerResize(newSize)
 
-      expect(this.core.playerInfo.computedSize).equal(newSize)
+      expect(this.core.computedSize).equal(newSize)
     })
 
     it('triggers on an event Events.CORE_RESIZE', () => {

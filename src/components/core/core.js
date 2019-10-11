@@ -9,7 +9,6 @@ import UIObject from '../../base/ui_object'
 import UICorePlugin from '../../base/ui_core_plugin'
 import Browser from '../../components/browser'
 import ContainerFactory from '../../components/container_factory'
-import PlayerInfo from '../../components/player_info'
 import PlayerError from '../../components/error'
 import ErrorMixin from '../../base/error_mixin'
 
@@ -105,7 +104,6 @@ export default class Core extends UIObject {
     super(options)
     this.playerError = new PlayerError(options, this)
     this.configureDomRecycler()
-    this.playerInfo = PlayerInfo.getInstance(options.playerId)
     this.firstResize = true
     this.plugins = []
     this.containers = []
@@ -143,16 +141,16 @@ export default class Core extends UIObject {
     if (!Browser.isiOS) {
       this.$el.addClass('fullscreen')
       this.$el.removeAttr('style')
-      this.playerInfo.previousSize = { width: this.options.width, height: this.options.height }
-      this.playerInfo.currentSize = { width: $(window).width(), height: $(window).height() }
+      this.previousSize = { width: this.options.width, height: this.options.height }
+      this.currentSize = { width: $(window).width(), height: $(window).height() }
     }
   }
 
   setPlayerSize() {
     this.$el.removeClass('fullscreen')
-    this.playerInfo.currentSize = this.playerInfo.previousSize
-    this.playerInfo.previousSize = { width: $(window).width(), height: $(window).height() }
-    this.resize(this.playerInfo.currentSize)
+    this.currentSize = this.previousSize
+    this.previousSize = { width: $(window).width(), height: $(window).height() }
+    this.resize(this.currentSize)
   }
 
   resize(options) {
@@ -163,11 +161,11 @@ export default class Core extends UIObject {
       this.el.style.height = `${options.height}px`
       this.el.style.width = `${options.width}px`
     }
-    this.playerInfo.previousSize = { width: this.options.width, height: this.options.height }
+    this.previousSize = { width: this.options.width, height: this.options.height }
     this.options.width = options.width
     this.options.height = options.height
-    this.playerInfo.currentSize = options
-    this.triggerResize(this.playerInfo.currentSize)
+    this.currentSize = options
+    this.triggerResize(this.currentSize)
   }
 
   enableResizeObserver() {
@@ -182,7 +180,7 @@ export default class Core extends UIObject {
     if (thereWasChange) {
       this.oldHeight = newSize.height
       this.oldWidth = newSize.width
-      this.playerInfo.computedSize = newSize
+      this.computedSize = newSize
       this.firstResize = false
       this.trigger(Events.CORE_RESIZE, newSize)
     }
@@ -348,7 +346,7 @@ export default class Core extends UIObject {
     this.options.width = this.options.width || this.$el.width()
     this.options.height = this.options.height || this.$el.height()
     const size = { width: this.options.width, height: this.options.height }
-    this.playerInfo.previousSize = this.playerInfo.currentSize = this.playerInfo.computedSize = size
+    this.previousSize = this.currentSize = this.computedSize = size
     this.updateSize()
 
     this.previousSize = { width: this.$el.width(), height: this.$el.height() }

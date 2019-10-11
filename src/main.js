@@ -18,7 +18,6 @@ import Core from './components/core'
 import PlayerError from './components/error'
 import Loader from './components/loader'
 import Log from './components/log'
-import PlayerInfo from './components/player_info'
 import HTML5Audio from './playbacks/html5_audio'
 import HTML5Video from './playbacks/html5_video'
 import HTMLImg from './playbacks/html_img'
@@ -44,7 +43,6 @@ export default {
   Player,
   Events,
   Browser,
-  PlayerInfo,
   ContainerPlugin,
   UIContainerPlugin,
   CorePlugin,
