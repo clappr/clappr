@@ -338,7 +338,7 @@ export default class Core extends UIObject {
     const sources = options.source || options.sources
     sources && this.load(sources, options.mimeType || this.options.mimeType)
 
-    this.trigger(Events.CORE_OPTIONS_CHANGE)
+    this.trigger(Events.CORE_OPTIONS_CHANGE, options) // Trigger with newly provided options
     this.containers.forEach((container) => container.configure(this.options))
   }
 
