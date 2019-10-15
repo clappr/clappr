@@ -4424,7 +4424,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, ".container[data-container] {\n  position: absolute;\n  background-color: black;\n  height: 100%;\n  width: 100%; }\n  .container[data-container] .chromeless {\n    cursor: default; }\n\n[data-player]:not(.nocursor) .container[data-container]:not(.chromeless).pointer-enabled {\n  cursor: pointer; }\n", ""]);
+exports.push([module.i, ".container[data-container] {\n  position: absolute;\n  background-color: black;\n  height: 100%;\n  width: 100%;\n  max-width: 100%; }\n  .container[data-container] .chromeless {\n    cursor: default; }\n\n[data-player]:not(.nocursor) .container[data-container]:not(.chromeless).pointer-enabled {\n  cursor: pointer; }\n", ""]);
 
 // exports
 
@@ -6303,6 +6303,7 @@ Events.CORE_ACTIVE_CONTAINER_CHANGED = 'core:active:container:changed';
  * Fired when the options were changed for the core
  *
  * @event CORE_OPTIONS_CHANGE
+ * @param {Object} new options provided to configure() method
  */
 Events.CORE_OPTIONS_CHANGE = 'core:options:change';
 /**
@@ -7904,8 +7905,8 @@ function formatTime(time, paddedHours) {
 }
 
 var Fullscreen = exports.Fullscreen = {
-  isFullscreen: function isFullscreen() {
-    return !!(document.webkitFullscreenElement || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement);
+  getFullscreenElement: function getFullscreenElement() {
+    return document.webkitFullscreenElement || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement;
   },
   requestFullscreen: function requestFullscreen(el) {
     if (el.requestFullscreen) el.requestFullscreen();else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();else if (el.mozRequestFullScreen) el.mozRequestFullScreen();else if (el.msRequestFullscreen) el.msRequestFullscreen();else if (el.querySelector && el.querySelector('video') && el.querySelector('video').webkitEnterFullScreen) el.querySelector('video').webkitEnterFullScreen();else if (el.webkitEnterFullScreen) el.webkitEnterFullScreen();
@@ -9811,7 +9812,7 @@ var Core = function (_UIObject) {
   };
 
   Core.prototype.updateSize = function updateSize() {
-    _utils.Fullscreen.isFullscreen() ? this.setFullscreen() : this.setPlayerSize();
+    this.isFullscreen() ? this.setFullscreen() : this.setPlayerSize();
   };
 
   Core.prototype.setFullscreen = function setFullscreen() {
@@ -9921,7 +9922,7 @@ var Core = function (_UIObject) {
   };
 
   Core.prototype.handleFullscreenChange = function handleFullscreenChange() {
-    this.trigger(_events2.default.CORE_FULLSCREEN, _utils.Fullscreen.isFullscreen());
+    this.trigger(_events2.default.CORE_FULLSCREEN, this.isFullscreen());
     this.updateSize();
   };
 
@@ -9999,13 +10000,17 @@ var Core = function (_UIObject) {
     return this.activeContainer && this.activeContainer.getPlaybackType();
   };
 
+  Core.prototype.isFullscreen = function isFullscreen() {
+    return _utils.Fullscreen.getFullscreenElement() === (_browser2.default.isiOS ? this.activeContainer.el : this.el);
+  };
+
   Core.prototype.toggleFullscreen = function toggleFullscreen() {
-    if (!_utils.Fullscreen.isFullscreen()) {
-      _utils.Fullscreen.requestFullscreen(_browser2.default.isiOS ? this.activeContainer.el : this.el);
-      !_browser2.default.isiOS && this.$el.addClass('fullscreen');
-    } else {
+    if (this.isFullscreen()) {
       _utils.Fullscreen.cancelFullscreen();
       !_browser2.default.isiOS && this.$el.removeClass('fullscreen nocursor');
+    } else {
+      _utils.Fullscreen.requestFullscreen(_browser2.default.isiOS ? this.activeContainer.el : this.el);
+      !_browser2.default.isiOS && this.$el.addClass('fullscreen');
     }
   };
 
@@ -10033,7 +10038,7 @@ var Core = function (_UIObject) {
     var sources = options.source || options.sources;
     sources && this.load(sources, options.mimeType || this.options.mimeType);
 
-    this.trigger(_events2.default.CORE_OPTIONS_CHANGE);
+    this.trigger(_events2.default.CORE_OPTIONS_CHANGE, options); // Trigger with newly provided options
     this.containers.forEach(function (container) {
       return container.configure(_this6.options);
     });
@@ -11626,7 +11631,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var version = "0.3.13";
+var version = "0.3.14";
 
 exports.default = {
   Player: _player2.default,
