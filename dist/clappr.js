@@ -4484,7 +4484,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, ".container[data-container] {\n  position: absolute;\n  background-color: black;\n  height: 100%;\n  width: 100%; }\n  .container[data-container] .chromeless {\n    cursor: default; }\n\n[data-player]:not(.nocursor) .container[data-container]:not(.chromeless).pointer-enabled {\n  cursor: pointer; }\n", ""]);
+exports.push([module.i, ".container[data-container] {\n  position: absolute;\n  background-color: black;\n  height: 100%;\n  width: 100%;\n  max-width: 100%; }\n  .container[data-container] .chromeless {\n    cursor: default; }\n\n[data-player]:not(.nocursor) .container[data-container]:not(.chromeless).pointer-enabled {\n  cursor: pointer; }\n", ""]);
 
 // exports
 
@@ -24735,6 +24735,7 @@ Events.CORE_ACTIVE_CONTAINER_CHANGED = 'core:active:container:changed';
  * Fired when the options were changed for the core
  *
  * @event CORE_OPTIONS_CHANGE
+ * @param {Object} new options provided to configure() method
  */
 Events.CORE_OPTIONS_CHANGE = 'core:options:change';
 /**
@@ -26336,8 +26337,8 @@ function formatTime(time, paddedHours) {
 }
 
 var Fullscreen = exports.Fullscreen = {
-  isFullscreen: function isFullscreen() {
-    return !!(document.webkitFullscreenElement || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement);
+  getFullscreenElement: function getFullscreenElement() {
+    return document.webkitFullscreenElement || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement;
   },
   requestFullscreen: function requestFullscreen(el) {
     if (el.requestFullscreen) el.requestFullscreen();else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();else if (el.mozRequestFullScreen) el.mozRequestFullScreen();else if (el.msRequestFullscreen) el.msRequestFullscreen();else if (el.querySelector && el.querySelector('video') && el.querySelector('video').webkitEnterFullScreen) el.querySelector('video').webkitEnterFullScreen();else if (el.webkitEnterFullScreen) el.webkitEnterFullScreen();
@@ -28323,7 +28324,7 @@ var Core = function (_UIObject) {
   };
 
   Core.prototype.updateSize = function updateSize() {
-    _utils.Fullscreen.isFullscreen() ? this.setFullscreen() : this.setPlayerSize();
+    this.isFullscreen() ? this.setFullscreen() : this.setPlayerSize();
   };
 
   Core.prototype.setFullscreen = function setFullscreen() {
@@ -28433,7 +28434,7 @@ var Core = function (_UIObject) {
   };
 
   Core.prototype.handleFullscreenChange = function handleFullscreenChange() {
-    this.trigger(_events2.default.CORE_FULLSCREEN, _utils.Fullscreen.isFullscreen());
+    this.trigger(_events2.default.CORE_FULLSCREEN, this.isFullscreen());
     this.updateSize();
   };
 
@@ -28511,13 +28512,17 @@ var Core = function (_UIObject) {
     return this.activeContainer && this.activeContainer.getPlaybackType();
   };
 
+  Core.prototype.isFullscreen = function isFullscreen() {
+    return _utils.Fullscreen.getFullscreenElement() === (_browser2.default.isiOS ? this.activeContainer.el : this.el);
+  };
+
   Core.prototype.toggleFullscreen = function toggleFullscreen() {
-    if (!_utils.Fullscreen.isFullscreen()) {
-      _utils.Fullscreen.requestFullscreen(_browser2.default.isiOS ? this.activeContainer.el : this.el);
-      !_browser2.default.isiOS && this.$el.addClass('fullscreen');
-    } else {
+    if (this.isFullscreen()) {
       _utils.Fullscreen.cancelFullscreen();
       !_browser2.default.isiOS && this.$el.removeClass('fullscreen nocursor');
+    } else {
+      _utils.Fullscreen.requestFullscreen(_browser2.default.isiOS ? this.activeContainer.el : this.el);
+      !_browser2.default.isiOS && this.$el.addClass('fullscreen');
     }
   };
 
@@ -28545,7 +28550,7 @@ var Core = function (_UIObject) {
     var sources = options.source || options.sources;
     sources && this.load(sources, options.mimeType || this.options.mimeType);
 
-    this.trigger(_events2.default.CORE_OPTIONS_CHANGE);
+    this.trigger(_events2.default.CORE_OPTIONS_CHANGE, options); // Trigger with newly provided options
     this.containers.forEach(function (container) {
       return container.configure(_this6.options);
     });
@@ -30386,7 +30391,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.3.9"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.3.10"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -34703,8 +34708,6 @@ var _core_plugin = __webpack_require__(/*! ../base/core_plugin */ "./src/base/co
 
 var _core_plugin2 = _interopRequireDefault(_core_plugin);
 
-var _utils = __webpack_require__(/*! ../base/utils */ "./src/base/utils.js");
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var EndVideo = function (_CorePlugin) {
@@ -34731,7 +34734,7 @@ var EndVideo = function (_CorePlugin) {
 
   EndVideo.prototype.ended = function ended() {
     var exitOnEnd = typeof this.core.options.exitFullscreenOnEnd === 'undefined' || this.core.options.exitFullscreenOnEnd;
-    if (exitOnEnd && _utils.Fullscreen.isFullscreen()) this.core.toggleFullscreen();
+    if (exitOnEnd && this.core.isFullscreen()) this.core.toggleFullscreen();
   };
 
   (0, _createClass3.default)(EndVideo, [{
@@ -35956,7 +35959,7 @@ var MediaControl = function (_UICorePlugin) {
 
   MediaControl.prototype.playerResize = function playerResize(size) {
     this.$fullscreenToggle.html('');
-    var icon = _utils.Fullscreen.isFullscreen() ? _shrink2.default : _expand2.default;
+    var icon = this.core.isFullscreen() ? _shrink2.default : _expand2.default;
     this.$fullscreenToggle.append(icon);
     this.applyButtonStyle(this.$fullscreenToggle);
     this.$el.find('.media-control').length !== 0 && this.$el.removeClass('w320');
@@ -36217,7 +36220,7 @@ var MediaControl = function (_UICorePlugin) {
   };
 
   MediaControl.prototype.updateCursorStyle = function updateCursorStyle(showing) {
-    if (showing) this.core.$el.removeClass('nocursor');else if (_utils.Fullscreen.isFullscreen()) this.core.$el.addClass('nocursor');
+    if (showing) this.core.$el.removeClass('nocursor');else if (this.core.isFullscreen()) this.core.$el.addClass('nocursor');
   };
 
   MediaControl.prototype.settingsUpdate = function settingsUpdate() {
@@ -36394,8 +36397,10 @@ var MediaControl = function (_UICorePlugin) {
    */
 
 
-  MediaControl.prototype.configure = function configure() {
-    this.options.chromeless ? this.disable() : this.enable();
+  MediaControl.prototype.configure = function configure(options) {
+    // Check if chromeless mode or if configure is called with new source(s)
+    if (this.options.chromeless || options.source || options.sources) this.disable();else this.enable();
+
     this.trigger(_events2.default.MEDIACONTROL_OPTIONS_CHANGE);
   };
 
