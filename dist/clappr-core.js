@@ -118,6 +118,17 @@ module.exports = { "default": __webpack_require__(/*! core-js/library/fn/get-ite
 
 /***/ }),
 
+/***/ "./node_modules/babel-runtime/core-js/is-iterable.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/babel-runtime/core-js/is-iterable.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(/*! core-js/library/fn/is-iterable */ "./node_modules/core-js/library/fn/is-iterable.js"), __esModule: true };
+
+/***/ }),
+
 /***/ "./node_modules/babel-runtime/core-js/object/assign.js":
 /*!*************************************************************!*\
   !*** ./node_modules/babel-runtime/core-js/object/assign.js ***!
@@ -151,6 +162,17 @@ module.exports = { "default": __webpack_require__(/*! core-js/library/fn/object/
 
 /***/ }),
 
+/***/ "./node_modules/babel-runtime/core-js/object/entries.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/babel-runtime/core-js/object/entries.js ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(/*! core-js/library/fn/object/entries */ "./node_modules/core-js/library/fn/object/entries.js"), __esModule: true };
+
+/***/ }),
+
 /***/ "./node_modules/babel-runtime/core-js/object/get-own-property-descriptor.js":
 /*!**********************************************************************************!*\
   !*** ./node_modules/babel-runtime/core-js/object/get-own-property-descriptor.js ***!
@@ -181,6 +203,17 @@ module.exports = { "default": __webpack_require__(/*! core-js/library/fn/object/
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = { "default": __webpack_require__(/*! core-js/library/fn/object/set-prototype-of */ "./node_modules/core-js/library/fn/object/set-prototype-of.js"), __esModule: true };
+
+/***/ }),
+
+/***/ "./node_modules/babel-runtime/core-js/object/values.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/babel-runtime/core-js/object/values.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(/*! core-js/library/fn/object/values */ "./node_modules/core-js/library/fn/object/values.js"), __esModule: true };
 
 /***/ }),
 
@@ -333,6 +366,68 @@ exports.default = function (self, call) {
 
   return call && ((typeof call === "undefined" ? "undefined" : (0, _typeof3.default)(call)) === "object" || typeof call === "function") ? call : self;
 };
+
+/***/ }),
+
+/***/ "./node_modules/babel-runtime/helpers/slicedToArray.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/babel-runtime/helpers/slicedToArray.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _isIterable2 = __webpack_require__(/*! ../core-js/is-iterable */ "./node_modules/babel-runtime/core-js/is-iterable.js");
+
+var _isIterable3 = _interopRequireDefault(_isIterable2);
+
+var _getIterator2 = __webpack_require__(/*! ../core-js/get-iterator */ "./node_modules/babel-runtime/core-js/get-iterator.js");
+
+var _getIterator3 = _interopRequireDefault(_getIterator2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function () {
+  function sliceIterator(arr, i) {
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _e = undefined;
+
+    try {
+      for (var _i = (0, _getIterator3.default)(arr), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"]) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+
+    return _arr;
+  }
+
+  return function (arr, i) {
+    if (Array.isArray(arr)) {
+      return arr;
+    } else if ((0, _isIterable3.default)(Object(arr))) {
+      return sliceIterator(arr, i);
+    } else {
+      throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    }
+  };
+}();
 
 /***/ }),
 
@@ -2359,6 +2454,19 @@ module.exports = __webpack_require__(/*! ../modules/core.get-iterator */ "./node
 
 /***/ }),
 
+/***/ "./node_modules/core-js/library/fn/is-iterable.js":
+/*!********************************************************!*\
+  !*** ./node_modules/core-js/library/fn/is-iterable.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(/*! ../modules/web.dom.iterable */ "./node_modules/core-js/library/modules/web.dom.iterable.js");
+__webpack_require__(/*! ../modules/es6.string.iterator */ "./node_modules/core-js/library/modules/es6.string.iterator.js");
+module.exports = __webpack_require__(/*! ../modules/core.is-iterable */ "./node_modules/core-js/library/modules/core.is-iterable.js");
+
+/***/ }),
+
 /***/ "./node_modules/core-js/library/fn/object/assign.js":
 /*!**********************************************************!*\
   !*** ./node_modules/core-js/library/fn/object/assign.js ***!
@@ -2401,6 +2509,18 @@ module.exports = function defineProperty(it, key, desc){
 
 /***/ }),
 
+/***/ "./node_modules/core-js/library/fn/object/entries.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/core-js/library/fn/object/entries.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(/*! ../../modules/es7.object.entries */ "./node_modules/core-js/library/modules/es7.object.entries.js");
+module.exports = __webpack_require__(/*! ../../modules/_core */ "./node_modules/core-js/library/modules/_core.js").Object.entries;
+
+/***/ }),
+
 /***/ "./node_modules/core-js/library/fn/object/get-own-property-descriptor.js":
 /*!*******************************************************************************!*\
   !*** ./node_modules/core-js/library/fn/object/get-own-property-descriptor.js ***!
@@ -2437,6 +2557,18 @@ module.exports = __webpack_require__(/*! ../../modules/_core */ "./node_modules/
 
 __webpack_require__(/*! ../../modules/es6.object.set-prototype-of */ "./node_modules/core-js/library/modules/es6.object.set-prototype-of.js");
 module.exports = __webpack_require__(/*! ../../modules/_core */ "./node_modules/core-js/library/modules/_core.js").Object.setPrototypeOf;
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/fn/object/values.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/core-js/library/fn/object/values.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(/*! ../../modules/es7.object.values */ "./node_modules/core-js/library/modules/es7.object.values.js");
+module.exports = __webpack_require__(/*! ../../modules/_core */ "./node_modules/core-js/library/modules/_core.js").Object.values;
 
 /***/ }),
 
@@ -3555,6 +3687,32 @@ module.exports = function(KEY, exec){
 
 /***/ }),
 
+/***/ "./node_modules/core-js/library/modules/_object-to-array.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_object-to-array.js ***!
+  \******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var getKeys   = __webpack_require__(/*! ./_object-keys */ "./node_modules/core-js/library/modules/_object-keys.js")
+  , toIObject = __webpack_require__(/*! ./_to-iobject */ "./node_modules/core-js/library/modules/_to-iobject.js")
+  , isEnum    = __webpack_require__(/*! ./_object-pie */ "./node_modules/core-js/library/modules/_object-pie.js").f;
+module.exports = function(isEntries){
+  return function(it){
+    var O      = toIObject(it)
+      , keys   = getKeys(O)
+      , length = keys.length
+      , i      = 0
+      , result = []
+      , key;
+    while(length > i)if(isEnum.call(O, key = keys[i++])){
+      result.push(isEntries ? [key, O[key]] : O[key]);
+    } return result;
+  };
+};
+
+/***/ }),
+
 /***/ "./node_modules/core-js/library/modules/_property-desc.js":
 /*!****************************************************************!*\
   !*** ./node_modules/core-js/library/modules/_property-desc.js ***!
@@ -3893,6 +4051,25 @@ module.exports = __webpack_require__(/*! ./_core */ "./node_modules/core-js/libr
   var iterFn = get(it);
   if(typeof iterFn != 'function')throw TypeError(it + ' is not iterable!');
   return anObject(iterFn.call(it));
+};
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/core.is-iterable.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/core.is-iterable.js ***!
+  \******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var classof   = __webpack_require__(/*! ./_classof */ "./node_modules/core-js/library/modules/_classof.js")
+  , ITERATOR  = __webpack_require__(/*! ./_wks */ "./node_modules/core-js/library/modules/_wks.js")('iterator')
+  , Iterators = __webpack_require__(/*! ./_iterators */ "./node_modules/core-js/library/modules/_iterators.js");
+module.exports = __webpack_require__(/*! ./_core */ "./node_modules/core-js/library/modules/_core.js").isIterable = function(it){
+  var O = Object(it);
+  return O[ITERATOR] !== undefined
+    || '@@iterator' in O
+    || Iterators.hasOwnProperty(classof(O));
 };
 
 /***/ }),
@@ -4367,6 +4544,44 @@ setToStringTag(global.JSON, 'JSON', true);
 
 /***/ }),
 
+/***/ "./node_modules/core-js/library/modules/es7.object.entries.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/es7.object.entries.js ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// https://github.com/tc39/proposal-object-values-entries
+var $export  = __webpack_require__(/*! ./_export */ "./node_modules/core-js/library/modules/_export.js")
+  , $entries = __webpack_require__(/*! ./_object-to-array */ "./node_modules/core-js/library/modules/_object-to-array.js")(true);
+
+$export($export.S, 'Object', {
+  entries: function entries(it){
+    return $entries(it);
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/es7.object.values.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/es7.object.values.js ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// https://github.com/tc39/proposal-object-values-entries
+var $export = __webpack_require__(/*! ./_export */ "./node_modules/core-js/library/modules/_export.js")
+  , $values = __webpack_require__(/*! ./_object-to-array */ "./node_modules/core-js/library/modules/_object-to-array.js")(false);
+
+$export($export.S, 'Object', {
+  values: function values(it){
+    return $values(it);
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/core-js/library/modules/es7.symbol.async-iterator.js":
 /*!***************************************************************************!*\
   !*** ./node_modules/core-js/library/modules/es7.symbol.async-iterator.js ***!
@@ -4782,6 +4997,1614 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
+
+/***/ }),
+
+/***/ "./node_modules/semver/semver.js":
+/*!***************************************!*\
+  !*** ./node_modules/semver/semver.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(process) {exports = module.exports = SemVer
+
+var debug
+/* istanbul ignore next */
+if (typeof process === 'object' &&
+    process.env &&
+    process.env.NODE_DEBUG &&
+    /\bsemver\b/i.test(process.env.NODE_DEBUG)) {
+  debug = function () {
+    var args = Array.prototype.slice.call(arguments, 0)
+    args.unshift('SEMVER')
+    console.log.apply(console, args)
+  }
+} else {
+  debug = function () {}
+}
+
+// Note: this is the semver.org version of the spec that it implements
+// Not necessarily the package version of this code.
+exports.SEMVER_SPEC_VERSION = '2.0.0'
+
+var MAX_LENGTH = 256
+var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER ||
+  /* istanbul ignore next */ 9007199254740991
+
+// Max safe segment length for coercion.
+var MAX_SAFE_COMPONENT_LENGTH = 16
+
+// The actual regexps go on exports.re
+var re = exports.re = []
+var src = exports.src = []
+var t = exports.tokens = {}
+var R = 0
+
+function tok (n) {
+  t[n] = R++
+}
+
+// The following Regular Expressions can be used for tokenizing,
+// validating, and parsing SemVer version strings.
+
+// ## Numeric Identifier
+// A single `0`, or a non-zero digit followed by zero or more digits.
+
+tok('NUMERICIDENTIFIER')
+src[t.NUMERICIDENTIFIER] = '0|[1-9]\\d*'
+tok('NUMERICIDENTIFIERLOOSE')
+src[t.NUMERICIDENTIFIERLOOSE] = '[0-9]+'
+
+// ## Non-numeric Identifier
+// Zero or more digits, followed by a letter or hyphen, and then zero or
+// more letters, digits, or hyphens.
+
+tok('NONNUMERICIDENTIFIER')
+src[t.NONNUMERICIDENTIFIER] = '\\d*[a-zA-Z-][a-zA-Z0-9-]*'
+
+// ## Main Version
+// Three dot-separated numeric identifiers.
+
+tok('MAINVERSION')
+src[t.MAINVERSION] = '(' + src[t.NUMERICIDENTIFIER] + ')\\.' +
+                   '(' + src[t.NUMERICIDENTIFIER] + ')\\.' +
+                   '(' + src[t.NUMERICIDENTIFIER] + ')'
+
+tok('MAINVERSIONLOOSE')
+src[t.MAINVERSIONLOOSE] = '(' + src[t.NUMERICIDENTIFIERLOOSE] + ')\\.' +
+                        '(' + src[t.NUMERICIDENTIFIERLOOSE] + ')\\.' +
+                        '(' + src[t.NUMERICIDENTIFIERLOOSE] + ')'
+
+// ## Pre-release Version Identifier
+// A numeric identifier, or a non-numeric identifier.
+
+tok('PRERELEASEIDENTIFIER')
+src[t.PRERELEASEIDENTIFIER] = '(?:' + src[t.NUMERICIDENTIFIER] +
+                            '|' + src[t.NONNUMERICIDENTIFIER] + ')'
+
+tok('PRERELEASEIDENTIFIERLOOSE')
+src[t.PRERELEASEIDENTIFIERLOOSE] = '(?:' + src[t.NUMERICIDENTIFIERLOOSE] +
+                                 '|' + src[t.NONNUMERICIDENTIFIER] + ')'
+
+// ## Pre-release Version
+// Hyphen, followed by one or more dot-separated pre-release version
+// identifiers.
+
+tok('PRERELEASE')
+src[t.PRERELEASE] = '(?:-(' + src[t.PRERELEASEIDENTIFIER] +
+                  '(?:\\.' + src[t.PRERELEASEIDENTIFIER] + ')*))'
+
+tok('PRERELEASELOOSE')
+src[t.PRERELEASELOOSE] = '(?:-?(' + src[t.PRERELEASEIDENTIFIERLOOSE] +
+                       '(?:\\.' + src[t.PRERELEASEIDENTIFIERLOOSE] + ')*))'
+
+// ## Build Metadata Identifier
+// Any combination of digits, letters, or hyphens.
+
+tok('BUILDIDENTIFIER')
+src[t.BUILDIDENTIFIER] = '[0-9A-Za-z-]+'
+
+// ## Build Metadata
+// Plus sign, followed by one or more period-separated build metadata
+// identifiers.
+
+tok('BUILD')
+src[t.BUILD] = '(?:\\+(' + src[t.BUILDIDENTIFIER] +
+             '(?:\\.' + src[t.BUILDIDENTIFIER] + ')*))'
+
+// ## Full Version String
+// A main version, followed optionally by a pre-release version and
+// build metadata.
+
+// Note that the only major, minor, patch, and pre-release sections of
+// the version string are capturing groups.  The build metadata is not a
+// capturing group, because it should not ever be used in version
+// comparison.
+
+tok('FULL')
+tok('FULLPLAIN')
+src[t.FULLPLAIN] = 'v?' + src[t.MAINVERSION] +
+                  src[t.PRERELEASE] + '?' +
+                  src[t.BUILD] + '?'
+
+src[t.FULL] = '^' + src[t.FULLPLAIN] + '$'
+
+// like full, but allows v1.2.3 and =1.2.3, which people do sometimes.
+// also, 1.0.0alpha1 (prerelease without the hyphen) which is pretty
+// common in the npm registry.
+tok('LOOSEPLAIN')
+src[t.LOOSEPLAIN] = '[v=\\s]*' + src[t.MAINVERSIONLOOSE] +
+                  src[t.PRERELEASELOOSE] + '?' +
+                  src[t.BUILD] + '?'
+
+tok('LOOSE')
+src[t.LOOSE] = '^' + src[t.LOOSEPLAIN] + '$'
+
+tok('GTLT')
+src[t.GTLT] = '((?:<|>)?=?)'
+
+// Something like "2.*" or "1.2.x".
+// Note that "x.x" is a valid xRange identifer, meaning "any version"
+// Only the first item is strictly required.
+tok('XRANGEIDENTIFIERLOOSE')
+src[t.XRANGEIDENTIFIERLOOSE] = src[t.NUMERICIDENTIFIERLOOSE] + '|x|X|\\*'
+tok('XRANGEIDENTIFIER')
+src[t.XRANGEIDENTIFIER] = src[t.NUMERICIDENTIFIER] + '|x|X|\\*'
+
+tok('XRANGEPLAIN')
+src[t.XRANGEPLAIN] = '[v=\\s]*(' + src[t.XRANGEIDENTIFIER] + ')' +
+                   '(?:\\.(' + src[t.XRANGEIDENTIFIER] + ')' +
+                   '(?:\\.(' + src[t.XRANGEIDENTIFIER] + ')' +
+                   '(?:' + src[t.PRERELEASE] + ')?' +
+                   src[t.BUILD] + '?' +
+                   ')?)?'
+
+tok('XRANGEPLAINLOOSE')
+src[t.XRANGEPLAINLOOSE] = '[v=\\s]*(' + src[t.XRANGEIDENTIFIERLOOSE] + ')' +
+                        '(?:\\.(' + src[t.XRANGEIDENTIFIERLOOSE] + ')' +
+                        '(?:\\.(' + src[t.XRANGEIDENTIFIERLOOSE] + ')' +
+                        '(?:' + src[t.PRERELEASELOOSE] + ')?' +
+                        src[t.BUILD] + '?' +
+                        ')?)?'
+
+tok('XRANGE')
+src[t.XRANGE] = '^' + src[t.GTLT] + '\\s*' + src[t.XRANGEPLAIN] + '$'
+tok('XRANGELOOSE')
+src[t.XRANGELOOSE] = '^' + src[t.GTLT] + '\\s*' + src[t.XRANGEPLAINLOOSE] + '$'
+
+// Coercion.
+// Extract anything that could conceivably be a part of a valid semver
+tok('COERCE')
+src[t.COERCE] = '(^|[^\\d])' +
+              '(\\d{1,' + MAX_SAFE_COMPONENT_LENGTH + '})' +
+              '(?:\\.(\\d{1,' + MAX_SAFE_COMPONENT_LENGTH + '}))?' +
+              '(?:\\.(\\d{1,' + MAX_SAFE_COMPONENT_LENGTH + '}))?' +
+              '(?:$|[^\\d])'
+tok('COERCERTL')
+re[t.COERCERTL] = new RegExp(src[t.COERCE], 'g')
+
+// Tilde ranges.
+// Meaning is "reasonably at or greater than"
+tok('LONETILDE')
+src[t.LONETILDE] = '(?:~>?)'
+
+tok('TILDETRIM')
+src[t.TILDETRIM] = '(\\s*)' + src[t.LONETILDE] + '\\s+'
+re[t.TILDETRIM] = new RegExp(src[t.TILDETRIM], 'g')
+var tildeTrimReplace = '$1~'
+
+tok('TILDE')
+src[t.TILDE] = '^' + src[t.LONETILDE] + src[t.XRANGEPLAIN] + '$'
+tok('TILDELOOSE')
+src[t.TILDELOOSE] = '^' + src[t.LONETILDE] + src[t.XRANGEPLAINLOOSE] + '$'
+
+// Caret ranges.
+// Meaning is "at least and backwards compatible with"
+tok('LONECARET')
+src[t.LONECARET] = '(?:\\^)'
+
+tok('CARETTRIM')
+src[t.CARETTRIM] = '(\\s*)' + src[t.LONECARET] + '\\s+'
+re[t.CARETTRIM] = new RegExp(src[t.CARETTRIM], 'g')
+var caretTrimReplace = '$1^'
+
+tok('CARET')
+src[t.CARET] = '^' + src[t.LONECARET] + src[t.XRANGEPLAIN] + '$'
+tok('CARETLOOSE')
+src[t.CARETLOOSE] = '^' + src[t.LONECARET] + src[t.XRANGEPLAINLOOSE] + '$'
+
+// A simple gt/lt/eq thing, or just "" to indicate "any version"
+tok('COMPARATORLOOSE')
+src[t.COMPARATORLOOSE] = '^' + src[t.GTLT] + '\\s*(' + src[t.LOOSEPLAIN] + ')$|^$'
+tok('COMPARATOR')
+src[t.COMPARATOR] = '^' + src[t.GTLT] + '\\s*(' + src[t.FULLPLAIN] + ')$|^$'
+
+// An expression to strip any whitespace between the gtlt and the thing
+// it modifies, so that `> 1.2.3` ==> `>1.2.3`
+tok('COMPARATORTRIM')
+src[t.COMPARATORTRIM] = '(\\s*)' + src[t.GTLT] +
+                      '\\s*(' + src[t.LOOSEPLAIN] + '|' + src[t.XRANGEPLAIN] + ')'
+
+// this one has to use the /g flag
+re[t.COMPARATORTRIM] = new RegExp(src[t.COMPARATORTRIM], 'g')
+var comparatorTrimReplace = '$1$2$3'
+
+// Something like `1.2.3 - 1.2.4`
+// Note that these all use the loose form, because they'll be
+// checked against either the strict or loose comparator form
+// later.
+tok('HYPHENRANGE')
+src[t.HYPHENRANGE] = '^\\s*(' + src[t.XRANGEPLAIN] + ')' +
+                   '\\s+-\\s+' +
+                   '(' + src[t.XRANGEPLAIN] + ')' +
+                   '\\s*$'
+
+tok('HYPHENRANGELOOSE')
+src[t.HYPHENRANGELOOSE] = '^\\s*(' + src[t.XRANGEPLAINLOOSE] + ')' +
+                        '\\s+-\\s+' +
+                        '(' + src[t.XRANGEPLAINLOOSE] + ')' +
+                        '\\s*$'
+
+// Star ranges basically just allow anything at all.
+tok('STAR')
+src[t.STAR] = '(<|>)?=?\\s*\\*'
+
+// Compile to actual regexp objects.
+// All are flag-free, unless they were created above with a flag.
+for (var i = 0; i < R; i++) {
+  debug(i, src[i])
+  if (!re[i]) {
+    re[i] = new RegExp(src[i])
+  }
+}
+
+exports.parse = parse
+function parse (version, options) {
+  if (!options || typeof options !== 'object') {
+    options = {
+      loose: !!options,
+      includePrerelease: false
+    }
+  }
+
+  if (version instanceof SemVer) {
+    return version
+  }
+
+  if (typeof version !== 'string') {
+    return null
+  }
+
+  if (version.length > MAX_LENGTH) {
+    return null
+  }
+
+  var r = options.loose ? re[t.LOOSE] : re[t.FULL]
+  if (!r.test(version)) {
+    return null
+  }
+
+  try {
+    return new SemVer(version, options)
+  } catch (er) {
+    return null
+  }
+}
+
+exports.valid = valid
+function valid (version, options) {
+  var v = parse(version, options)
+  return v ? v.version : null
+}
+
+exports.clean = clean
+function clean (version, options) {
+  var s = parse(version.trim().replace(/^[=v]+/, ''), options)
+  return s ? s.version : null
+}
+
+exports.SemVer = SemVer
+
+function SemVer (version, options) {
+  if (!options || typeof options !== 'object') {
+    options = {
+      loose: !!options,
+      includePrerelease: false
+    }
+  }
+  if (version instanceof SemVer) {
+    if (version.loose === options.loose) {
+      return version
+    } else {
+      version = version.version
+    }
+  } else if (typeof version !== 'string') {
+    throw new TypeError('Invalid Version: ' + version)
+  }
+
+  if (version.length > MAX_LENGTH) {
+    throw new TypeError('version is longer than ' + MAX_LENGTH + ' characters')
+  }
+
+  if (!(this instanceof SemVer)) {
+    return new SemVer(version, options)
+  }
+
+  debug('SemVer', version, options)
+  this.options = options
+  this.loose = !!options.loose
+
+  var m = version.trim().match(options.loose ? re[t.LOOSE] : re[t.FULL])
+
+  if (!m) {
+    throw new TypeError('Invalid Version: ' + version)
+  }
+
+  this.raw = version
+
+  // these are actually numbers
+  this.major = +m[1]
+  this.minor = +m[2]
+  this.patch = +m[3]
+
+  if (this.major > MAX_SAFE_INTEGER || this.major < 0) {
+    throw new TypeError('Invalid major version')
+  }
+
+  if (this.minor > MAX_SAFE_INTEGER || this.minor < 0) {
+    throw new TypeError('Invalid minor version')
+  }
+
+  if (this.patch > MAX_SAFE_INTEGER || this.patch < 0) {
+    throw new TypeError('Invalid patch version')
+  }
+
+  // numberify any prerelease numeric ids
+  if (!m[4]) {
+    this.prerelease = []
+  } else {
+    this.prerelease = m[4].split('.').map(function (id) {
+      if (/^[0-9]+$/.test(id)) {
+        var num = +id
+        if (num >= 0 && num < MAX_SAFE_INTEGER) {
+          return num
+        }
+      }
+      return id
+    })
+  }
+
+  this.build = m[5] ? m[5].split('.') : []
+  this.format()
+}
+
+SemVer.prototype.format = function () {
+  this.version = this.major + '.' + this.minor + '.' + this.patch
+  if (this.prerelease.length) {
+    this.version += '-' + this.prerelease.join('.')
+  }
+  return this.version
+}
+
+SemVer.prototype.toString = function () {
+  return this.version
+}
+
+SemVer.prototype.compare = function (other) {
+  debug('SemVer.compare', this.version, this.options, other)
+  if (!(other instanceof SemVer)) {
+    other = new SemVer(other, this.options)
+  }
+
+  return this.compareMain(other) || this.comparePre(other)
+}
+
+SemVer.prototype.compareMain = function (other) {
+  if (!(other instanceof SemVer)) {
+    other = new SemVer(other, this.options)
+  }
+
+  return compareIdentifiers(this.major, other.major) ||
+         compareIdentifiers(this.minor, other.minor) ||
+         compareIdentifiers(this.patch, other.patch)
+}
+
+SemVer.prototype.comparePre = function (other) {
+  if (!(other instanceof SemVer)) {
+    other = new SemVer(other, this.options)
+  }
+
+  // NOT having a prerelease is > having one
+  if (this.prerelease.length && !other.prerelease.length) {
+    return -1
+  } else if (!this.prerelease.length && other.prerelease.length) {
+    return 1
+  } else if (!this.prerelease.length && !other.prerelease.length) {
+    return 0
+  }
+
+  var i = 0
+  do {
+    var a = this.prerelease[i]
+    var b = other.prerelease[i]
+    debug('prerelease compare', i, a, b)
+    if (a === undefined && b === undefined) {
+      return 0
+    } else if (b === undefined) {
+      return 1
+    } else if (a === undefined) {
+      return -1
+    } else if (a === b) {
+      continue
+    } else {
+      return compareIdentifiers(a, b)
+    }
+  } while (++i)
+}
+
+SemVer.prototype.compareBuild = function (other) {
+  if (!(other instanceof SemVer)) {
+    other = new SemVer(other, this.options)
+  }
+
+  var i = 0
+  do {
+    var a = this.build[i]
+    var b = other.build[i]
+    debug('prerelease compare', i, a, b)
+    if (a === undefined && b === undefined) {
+      return 0
+    } else if (b === undefined) {
+      return 1
+    } else if (a === undefined) {
+      return -1
+    } else if (a === b) {
+      continue
+    } else {
+      return compareIdentifiers(a, b)
+    }
+  } while (++i)
+}
+
+// preminor will bump the version up to the next minor release, and immediately
+// down to pre-release. premajor and prepatch work the same way.
+SemVer.prototype.inc = function (release, identifier) {
+  switch (release) {
+    case 'premajor':
+      this.prerelease.length = 0
+      this.patch = 0
+      this.minor = 0
+      this.major++
+      this.inc('pre', identifier)
+      break
+    case 'preminor':
+      this.prerelease.length = 0
+      this.patch = 0
+      this.minor++
+      this.inc('pre', identifier)
+      break
+    case 'prepatch':
+      // If this is already a prerelease, it will bump to the next version
+      // drop any prereleases that might already exist, since they are not
+      // relevant at this point.
+      this.prerelease.length = 0
+      this.inc('patch', identifier)
+      this.inc('pre', identifier)
+      break
+    // If the input is a non-prerelease version, this acts the same as
+    // prepatch.
+    case 'prerelease':
+      if (this.prerelease.length === 0) {
+        this.inc('patch', identifier)
+      }
+      this.inc('pre', identifier)
+      break
+
+    case 'major':
+      // If this is a pre-major version, bump up to the same major version.
+      // Otherwise increment major.
+      // 1.0.0-5 bumps to 1.0.0
+      // 1.1.0 bumps to 2.0.0
+      if (this.minor !== 0 ||
+          this.patch !== 0 ||
+          this.prerelease.length === 0) {
+        this.major++
+      }
+      this.minor = 0
+      this.patch = 0
+      this.prerelease = []
+      break
+    case 'minor':
+      // If this is a pre-minor version, bump up to the same minor version.
+      // Otherwise increment minor.
+      // 1.2.0-5 bumps to 1.2.0
+      // 1.2.1 bumps to 1.3.0
+      if (this.patch !== 0 || this.prerelease.length === 0) {
+        this.minor++
+      }
+      this.patch = 0
+      this.prerelease = []
+      break
+    case 'patch':
+      // If this is not a pre-release version, it will increment the patch.
+      // If it is a pre-release it will bump up to the same patch version.
+      // 1.2.0-5 patches to 1.2.0
+      // 1.2.0 patches to 1.2.1
+      if (this.prerelease.length === 0) {
+        this.patch++
+      }
+      this.prerelease = []
+      break
+    // This probably shouldn't be used publicly.
+    // 1.0.0 "pre" would become 1.0.0-0 which is the wrong direction.
+    case 'pre':
+      if (this.prerelease.length === 0) {
+        this.prerelease = [0]
+      } else {
+        var i = this.prerelease.length
+        while (--i >= 0) {
+          if (typeof this.prerelease[i] === 'number') {
+            this.prerelease[i]++
+            i = -2
+          }
+        }
+        if (i === -1) {
+          // didn't increment anything
+          this.prerelease.push(0)
+        }
+      }
+      if (identifier) {
+        // 1.2.0-beta.1 bumps to 1.2.0-beta.2,
+        // 1.2.0-beta.fooblz or 1.2.0-beta bumps to 1.2.0-beta.0
+        if (this.prerelease[0] === identifier) {
+          if (isNaN(this.prerelease[1])) {
+            this.prerelease = [identifier, 0]
+          }
+        } else {
+          this.prerelease = [identifier, 0]
+        }
+      }
+      break
+
+    default:
+      throw new Error('invalid increment argument: ' + release)
+  }
+  this.format()
+  this.raw = this.version
+  return this
+}
+
+exports.inc = inc
+function inc (version, release, loose, identifier) {
+  if (typeof (loose) === 'string') {
+    identifier = loose
+    loose = undefined
+  }
+
+  try {
+    return new SemVer(version, loose).inc(release, identifier).version
+  } catch (er) {
+    return null
+  }
+}
+
+exports.diff = diff
+function diff (version1, version2) {
+  if (eq(version1, version2)) {
+    return null
+  } else {
+    var v1 = parse(version1)
+    var v2 = parse(version2)
+    var prefix = ''
+    if (v1.prerelease.length || v2.prerelease.length) {
+      prefix = 'pre'
+      var defaultResult = 'prerelease'
+    }
+    for (var key in v1) {
+      if (key === 'major' || key === 'minor' || key === 'patch') {
+        if (v1[key] !== v2[key]) {
+          return prefix + key
+        }
+      }
+    }
+    return defaultResult // may be undefined
+  }
+}
+
+exports.compareIdentifiers = compareIdentifiers
+
+var numeric = /^[0-9]+$/
+function compareIdentifiers (a, b) {
+  var anum = numeric.test(a)
+  var bnum = numeric.test(b)
+
+  if (anum && bnum) {
+    a = +a
+    b = +b
+  }
+
+  return a === b ? 0
+    : (anum && !bnum) ? -1
+    : (bnum && !anum) ? 1
+    : a < b ? -1
+    : 1
+}
+
+exports.rcompareIdentifiers = rcompareIdentifiers
+function rcompareIdentifiers (a, b) {
+  return compareIdentifiers(b, a)
+}
+
+exports.major = major
+function major (a, loose) {
+  return new SemVer(a, loose).major
+}
+
+exports.minor = minor
+function minor (a, loose) {
+  return new SemVer(a, loose).minor
+}
+
+exports.patch = patch
+function patch (a, loose) {
+  return new SemVer(a, loose).patch
+}
+
+exports.compare = compare
+function compare (a, b, loose) {
+  return new SemVer(a, loose).compare(new SemVer(b, loose))
+}
+
+exports.compareLoose = compareLoose
+function compareLoose (a, b) {
+  return compare(a, b, true)
+}
+
+exports.compareBuild = compareBuild
+function compareBuild (a, b, loose) {
+  var versionA = new SemVer(a, loose)
+  var versionB = new SemVer(b, loose)
+  return versionA.compare(versionB) || versionA.compareBuild(versionB)
+}
+
+exports.rcompare = rcompare
+function rcompare (a, b, loose) {
+  return compare(b, a, loose)
+}
+
+exports.sort = sort
+function sort (list, loose) {
+  return list.sort(function (a, b) {
+    return exports.compareBuild(a, b, loose)
+  })
+}
+
+exports.rsort = rsort
+function rsort (list, loose) {
+  return list.sort(function (a, b) {
+    return exports.compareBuild(b, a, loose)
+  })
+}
+
+exports.gt = gt
+function gt (a, b, loose) {
+  return compare(a, b, loose) > 0
+}
+
+exports.lt = lt
+function lt (a, b, loose) {
+  return compare(a, b, loose) < 0
+}
+
+exports.eq = eq
+function eq (a, b, loose) {
+  return compare(a, b, loose) === 0
+}
+
+exports.neq = neq
+function neq (a, b, loose) {
+  return compare(a, b, loose) !== 0
+}
+
+exports.gte = gte
+function gte (a, b, loose) {
+  return compare(a, b, loose) >= 0
+}
+
+exports.lte = lte
+function lte (a, b, loose) {
+  return compare(a, b, loose) <= 0
+}
+
+exports.cmp = cmp
+function cmp (a, op, b, loose) {
+  switch (op) {
+    case '===':
+      if (typeof a === 'object')
+        a = a.version
+      if (typeof b === 'object')
+        b = b.version
+      return a === b
+
+    case '!==':
+      if (typeof a === 'object')
+        a = a.version
+      if (typeof b === 'object')
+        b = b.version
+      return a !== b
+
+    case '':
+    case '=':
+    case '==':
+      return eq(a, b, loose)
+
+    case '!=':
+      return neq(a, b, loose)
+
+    case '>':
+      return gt(a, b, loose)
+
+    case '>=':
+      return gte(a, b, loose)
+
+    case '<':
+      return lt(a, b, loose)
+
+    case '<=':
+      return lte(a, b, loose)
+
+    default:
+      throw new TypeError('Invalid operator: ' + op)
+  }
+}
+
+exports.Comparator = Comparator
+function Comparator (comp, options) {
+  if (!options || typeof options !== 'object') {
+    options = {
+      loose: !!options,
+      includePrerelease: false
+    }
+  }
+
+  if (comp instanceof Comparator) {
+    if (comp.loose === !!options.loose) {
+      return comp
+    } else {
+      comp = comp.value
+    }
+  }
+
+  if (!(this instanceof Comparator)) {
+    return new Comparator(comp, options)
+  }
+
+  debug('comparator', comp, options)
+  this.options = options
+  this.loose = !!options.loose
+  this.parse(comp)
+
+  if (this.semver === ANY) {
+    this.value = ''
+  } else {
+    this.value = this.operator + this.semver.version
+  }
+
+  debug('comp', this)
+}
+
+var ANY = {}
+Comparator.prototype.parse = function (comp) {
+  var r = this.options.loose ? re[t.COMPARATORLOOSE] : re[t.COMPARATOR]
+  var m = comp.match(r)
+
+  if (!m) {
+    throw new TypeError('Invalid comparator: ' + comp)
+  }
+
+  this.operator = m[1] !== undefined ? m[1] : ''
+  if (this.operator === '=') {
+    this.operator = ''
+  }
+
+  // if it literally is just '>' or '' then allow anything.
+  if (!m[2]) {
+    this.semver = ANY
+  } else {
+    this.semver = new SemVer(m[2], this.options.loose)
+  }
+}
+
+Comparator.prototype.toString = function () {
+  return this.value
+}
+
+Comparator.prototype.test = function (version) {
+  debug('Comparator.test', version, this.options.loose)
+
+  if (this.semver === ANY || version === ANY) {
+    return true
+  }
+
+  if (typeof version === 'string') {
+    try {
+      version = new SemVer(version, this.options)
+    } catch (er) {
+      return false
+    }
+  }
+
+  return cmp(version, this.operator, this.semver, this.options)
+}
+
+Comparator.prototype.intersects = function (comp, options) {
+  if (!(comp instanceof Comparator)) {
+    throw new TypeError('a Comparator is required')
+  }
+
+  if (!options || typeof options !== 'object') {
+    options = {
+      loose: !!options,
+      includePrerelease: false
+    }
+  }
+
+  var rangeTmp
+
+  if (this.operator === '') {
+    if (this.value === '') {
+      return true
+    }
+    rangeTmp = new Range(comp.value, options)
+    return satisfies(this.value, rangeTmp, options)
+  } else if (comp.operator === '') {
+    if (comp.value === '') {
+      return true
+    }
+    rangeTmp = new Range(this.value, options)
+    return satisfies(comp.semver, rangeTmp, options)
+  }
+
+  var sameDirectionIncreasing =
+    (this.operator === '>=' || this.operator === '>') &&
+    (comp.operator === '>=' || comp.operator === '>')
+  var sameDirectionDecreasing =
+    (this.operator === '<=' || this.operator === '<') &&
+    (comp.operator === '<=' || comp.operator === '<')
+  var sameSemVer = this.semver.version === comp.semver.version
+  var differentDirectionsInclusive =
+    (this.operator === '>=' || this.operator === '<=') &&
+    (comp.operator === '>=' || comp.operator === '<=')
+  var oppositeDirectionsLessThan =
+    cmp(this.semver, '<', comp.semver, options) &&
+    ((this.operator === '>=' || this.operator === '>') &&
+    (comp.operator === '<=' || comp.operator === '<'))
+  var oppositeDirectionsGreaterThan =
+    cmp(this.semver, '>', comp.semver, options) &&
+    ((this.operator === '<=' || this.operator === '<') &&
+    (comp.operator === '>=' || comp.operator === '>'))
+
+  return sameDirectionIncreasing || sameDirectionDecreasing ||
+    (sameSemVer && differentDirectionsInclusive) ||
+    oppositeDirectionsLessThan || oppositeDirectionsGreaterThan
+}
+
+exports.Range = Range
+function Range (range, options) {
+  if (!options || typeof options !== 'object') {
+    options = {
+      loose: !!options,
+      includePrerelease: false
+    }
+  }
+
+  if (range instanceof Range) {
+    if (range.loose === !!options.loose &&
+        range.includePrerelease === !!options.includePrerelease) {
+      return range
+    } else {
+      return new Range(range.raw, options)
+    }
+  }
+
+  if (range instanceof Comparator) {
+    return new Range(range.value, options)
+  }
+
+  if (!(this instanceof Range)) {
+    return new Range(range, options)
+  }
+
+  this.options = options
+  this.loose = !!options.loose
+  this.includePrerelease = !!options.includePrerelease
+
+  // First, split based on boolean or ||
+  this.raw = range
+  this.set = range.split(/\s*\|\|\s*/).map(function (range) {
+    return this.parseRange(range.trim())
+  }, this).filter(function (c) {
+    // throw out any that are not relevant for whatever reason
+    return c.length
+  })
+
+  if (!this.set.length) {
+    throw new TypeError('Invalid SemVer Range: ' + range)
+  }
+
+  this.format()
+}
+
+Range.prototype.format = function () {
+  this.range = this.set.map(function (comps) {
+    return comps.join(' ').trim()
+  }).join('||').trim()
+  return this.range
+}
+
+Range.prototype.toString = function () {
+  return this.range
+}
+
+Range.prototype.parseRange = function (range) {
+  var loose = this.options.loose
+  range = range.trim()
+  // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`
+  var hr = loose ? re[t.HYPHENRANGELOOSE] : re[t.HYPHENRANGE]
+  range = range.replace(hr, hyphenReplace)
+  debug('hyphen replace', range)
+  // `> 1.2.3 < 1.2.5` => `>1.2.3 <1.2.5`
+  range = range.replace(re[t.COMPARATORTRIM], comparatorTrimReplace)
+  debug('comparator trim', range, re[t.COMPARATORTRIM])
+
+  // `~ 1.2.3` => `~1.2.3`
+  range = range.replace(re[t.TILDETRIM], tildeTrimReplace)
+
+  // `^ 1.2.3` => `^1.2.3`
+  range = range.replace(re[t.CARETTRIM], caretTrimReplace)
+
+  // normalize spaces
+  range = range.split(/\s+/).join(' ')
+
+  // At this point, the range is completely trimmed and
+  // ready to be split into comparators.
+
+  var compRe = loose ? re[t.COMPARATORLOOSE] : re[t.COMPARATOR]
+  var set = range.split(' ').map(function (comp) {
+    return parseComparator(comp, this.options)
+  }, this).join(' ').split(/\s+/)
+  if (this.options.loose) {
+    // in loose mode, throw out any that are not valid comparators
+    set = set.filter(function (comp) {
+      return !!comp.match(compRe)
+    })
+  }
+  set = set.map(function (comp) {
+    return new Comparator(comp, this.options)
+  }, this)
+
+  return set
+}
+
+Range.prototype.intersects = function (range, options) {
+  if (!(range instanceof Range)) {
+    throw new TypeError('a Range is required')
+  }
+
+  return this.set.some(function (thisComparators) {
+    return (
+      isSatisfiable(thisComparators, options) &&
+      range.set.some(function (rangeComparators) {
+        return (
+          isSatisfiable(rangeComparators, options) &&
+          thisComparators.every(function (thisComparator) {
+            return rangeComparators.every(function (rangeComparator) {
+              return thisComparator.intersects(rangeComparator, options)
+            })
+          })
+        )
+      })
+    )
+  })
+}
+
+// take a set of comparators and determine whether there
+// exists a version which can satisfy it
+function isSatisfiable (comparators, options) {
+  var result = true
+  var remainingComparators = comparators.slice()
+  var testComparator = remainingComparators.pop()
+
+  while (result && remainingComparators.length) {
+    result = remainingComparators.every(function (otherComparator) {
+      return testComparator.intersects(otherComparator, options)
+    })
+
+    testComparator = remainingComparators.pop()
+  }
+
+  return result
+}
+
+// Mostly just for testing and legacy API reasons
+exports.toComparators = toComparators
+function toComparators (range, options) {
+  return new Range(range, options).set.map(function (comp) {
+    return comp.map(function (c) {
+      return c.value
+    }).join(' ').trim().split(' ')
+  })
+}
+
+// comprised of xranges, tildes, stars, and gtlt's at this point.
+// already replaced the hyphen ranges
+// turn into a set of JUST comparators.
+function parseComparator (comp, options) {
+  debug('comp', comp, options)
+  comp = replaceCarets(comp, options)
+  debug('caret', comp)
+  comp = replaceTildes(comp, options)
+  debug('tildes', comp)
+  comp = replaceXRanges(comp, options)
+  debug('xrange', comp)
+  comp = replaceStars(comp, options)
+  debug('stars', comp)
+  return comp
+}
+
+function isX (id) {
+  return !id || id.toLowerCase() === 'x' || id === '*'
+}
+
+// ~, ~> --> * (any, kinda silly)
+// ~2, ~2.x, ~2.x.x, ~>2, ~>2.x ~>2.x.x --> >=2.0.0 <3.0.0
+// ~2.0, ~2.0.x, ~>2.0, ~>2.0.x --> >=2.0.0 <2.1.0
+// ~1.2, ~1.2.x, ~>1.2, ~>1.2.x --> >=1.2.0 <1.3.0
+// ~1.2.3, ~>1.2.3 --> >=1.2.3 <1.3.0
+// ~1.2.0, ~>1.2.0 --> >=1.2.0 <1.3.0
+function replaceTildes (comp, options) {
+  return comp.trim().split(/\s+/).map(function (comp) {
+    return replaceTilde(comp, options)
+  }).join(' ')
+}
+
+function replaceTilde (comp, options) {
+  var r = options.loose ? re[t.TILDELOOSE] : re[t.TILDE]
+  return comp.replace(r, function (_, M, m, p, pr) {
+    debug('tilde', comp, _, M, m, p, pr)
+    var ret
+
+    if (isX(M)) {
+      ret = ''
+    } else if (isX(m)) {
+      ret = '>=' + M + '.0.0 <' + (+M + 1) + '.0.0'
+    } else if (isX(p)) {
+      // ~1.2 == >=1.2.0 <1.3.0
+      ret = '>=' + M + '.' + m + '.0 <' + M + '.' + (+m + 1) + '.0'
+    } else if (pr) {
+      debug('replaceTilde pr', pr)
+      ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
+            ' <' + M + '.' + (+m + 1) + '.0'
+    } else {
+      // ~1.2.3 == >=1.2.3 <1.3.0
+      ret = '>=' + M + '.' + m + '.' + p +
+            ' <' + M + '.' + (+m + 1) + '.0'
+    }
+
+    debug('tilde return', ret)
+    return ret
+  })
+}
+
+// ^ --> * (any, kinda silly)
+// ^2, ^2.x, ^2.x.x --> >=2.0.0 <3.0.0
+// ^2.0, ^2.0.x --> >=2.0.0 <3.0.0
+// ^1.2, ^1.2.x --> >=1.2.0 <2.0.0
+// ^1.2.3 --> >=1.2.3 <2.0.0
+// ^1.2.0 --> >=1.2.0 <2.0.0
+function replaceCarets (comp, options) {
+  return comp.trim().split(/\s+/).map(function (comp) {
+    return replaceCaret(comp, options)
+  }).join(' ')
+}
+
+function replaceCaret (comp, options) {
+  debug('caret', comp, options)
+  var r = options.loose ? re[t.CARETLOOSE] : re[t.CARET]
+  return comp.replace(r, function (_, M, m, p, pr) {
+    debug('caret', comp, _, M, m, p, pr)
+    var ret
+
+    if (isX(M)) {
+      ret = ''
+    } else if (isX(m)) {
+      ret = '>=' + M + '.0.0 <' + (+M + 1) + '.0.0'
+    } else if (isX(p)) {
+      if (M === '0') {
+        ret = '>=' + M + '.' + m + '.0 <' + M + '.' + (+m + 1) + '.0'
+      } else {
+        ret = '>=' + M + '.' + m + '.0 <' + (+M + 1) + '.0.0'
+      }
+    } else if (pr) {
+      debug('replaceCaret pr', pr)
+      if (M === '0') {
+        if (m === '0') {
+          ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
+                ' <' + M + '.' + m + '.' + (+p + 1)
+        } else {
+          ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
+                ' <' + M + '.' + (+m + 1) + '.0'
+        }
+      } else {
+        ret = '>=' + M + '.' + m + '.' + p + '-' + pr +
+              ' <' + (+M + 1) + '.0.0'
+      }
+    } else {
+      debug('no pr')
+      if (M === '0') {
+        if (m === '0') {
+          ret = '>=' + M + '.' + m + '.' + p +
+                ' <' + M + '.' + m + '.' + (+p + 1)
+        } else {
+          ret = '>=' + M + '.' + m + '.' + p +
+                ' <' + M + '.' + (+m + 1) + '.0'
+        }
+      } else {
+        ret = '>=' + M + '.' + m + '.' + p +
+              ' <' + (+M + 1) + '.0.0'
+      }
+    }
+
+    debug('caret return', ret)
+    return ret
+  })
+}
+
+function replaceXRanges (comp, options) {
+  debug('replaceXRanges', comp, options)
+  return comp.split(/\s+/).map(function (comp) {
+    return replaceXRange(comp, options)
+  }).join(' ')
+}
+
+function replaceXRange (comp, options) {
+  comp = comp.trim()
+  var r = options.loose ? re[t.XRANGELOOSE] : re[t.XRANGE]
+  return comp.replace(r, function (ret, gtlt, M, m, p, pr) {
+    debug('xRange', comp, ret, gtlt, M, m, p, pr)
+    var xM = isX(M)
+    var xm = xM || isX(m)
+    var xp = xm || isX(p)
+    var anyX = xp
+
+    if (gtlt === '=' && anyX) {
+      gtlt = ''
+    }
+
+    // if we're including prereleases in the match, then we need
+    // to fix this to -0, the lowest possible prerelease value
+    pr = options.includePrerelease ? '-0' : ''
+
+    if (xM) {
+      if (gtlt === '>' || gtlt === '<') {
+        // nothing is allowed
+        ret = '<0.0.0-0'
+      } else {
+        // nothing is forbidden
+        ret = '*'
+      }
+    } else if (gtlt && anyX) {
+      // we know patch is an x, because we have any x at all.
+      // replace X with 0
+      if (xm) {
+        m = 0
+      }
+      p = 0
+
+      if (gtlt === '>') {
+        // >1 => >=2.0.0
+        // >1.2 => >=1.3.0
+        // >1.2.3 => >= 1.2.4
+        gtlt = '>='
+        if (xm) {
+          M = +M + 1
+          m = 0
+          p = 0
+        } else {
+          m = +m + 1
+          p = 0
+        }
+      } else if (gtlt === '<=') {
+        // <=0.7.x is actually <0.8.0, since any 0.7.x should
+        // pass.  Similarly, <=7.x is actually <8.0.0, etc.
+        gtlt = '<'
+        if (xm) {
+          M = +M + 1
+        } else {
+          m = +m + 1
+        }
+      }
+
+      ret = gtlt + M + '.' + m + '.' + p + pr
+    } else if (xm) {
+      ret = '>=' + M + '.0.0' + pr + ' <' + (+M + 1) + '.0.0' + pr
+    } else if (xp) {
+      ret = '>=' + M + '.' + m + '.0' + pr +
+        ' <' + M + '.' + (+m + 1) + '.0' + pr
+    }
+
+    debug('xRange return', ret)
+
+    return ret
+  })
+}
+
+// Because * is AND-ed with everything else in the comparator,
+// and '' means "any version", just remove the *s entirely.
+function replaceStars (comp, options) {
+  debug('replaceStars', comp, options)
+  // Looseness is ignored here.  star is always as loose as it gets!
+  return comp.trim().replace(re[t.STAR], '')
+}
+
+// This function is passed to string.replace(re[t.HYPHENRANGE])
+// M, m, patch, prerelease, build
+// 1.2 - 3.4.5 => >=1.2.0 <=3.4.5
+// 1.2.3 - 3.4 => >=1.2.0 <3.5.0 Any 3.4.x will do
+// 1.2 - 3.4 => >=1.2.0 <3.5.0
+function hyphenReplace ($0,
+  from, fM, fm, fp, fpr, fb,
+  to, tM, tm, tp, tpr, tb) {
+  if (isX(fM)) {
+    from = ''
+  } else if (isX(fm)) {
+    from = '>=' + fM + '.0.0'
+  } else if (isX(fp)) {
+    from = '>=' + fM + '.' + fm + '.0'
+  } else {
+    from = '>=' + from
+  }
+
+  if (isX(tM)) {
+    to = ''
+  } else if (isX(tm)) {
+    to = '<' + (+tM + 1) + '.0.0'
+  } else if (isX(tp)) {
+    to = '<' + tM + '.' + (+tm + 1) + '.0'
+  } else if (tpr) {
+    to = '<=' + tM + '.' + tm + '.' + tp + '-' + tpr
+  } else {
+    to = '<=' + to
+  }
+
+  return (from + ' ' + to).trim()
+}
+
+// if ANY of the sets match ALL of its comparators, then pass
+Range.prototype.test = function (version) {
+  if (!version) {
+    return false
+  }
+
+  if (typeof version === 'string') {
+    try {
+      version = new SemVer(version, this.options)
+    } catch (er) {
+      return false
+    }
+  }
+
+  for (var i = 0; i < this.set.length; i++) {
+    if (testSet(this.set[i], version, this.options)) {
+      return true
+    }
+  }
+  return false
+}
+
+function testSet (set, version, options) {
+  for (var i = 0; i < set.length; i++) {
+    if (!set[i].test(version)) {
+      return false
+    }
+  }
+
+  if (version.prerelease.length && !options.includePrerelease) {
+    // Find the set of versions that are allowed to have prereleases
+    // For example, ^1.2.3-pr.1 desugars to >=1.2.3-pr.1 <2.0.0
+    // That should allow `1.2.3-pr.2` to pass.
+    // However, `1.2.4-alpha.notready` should NOT be allowed,
+    // even though it's within the range set by the comparators.
+    for (i = 0; i < set.length; i++) {
+      debug(set[i].semver)
+      if (set[i].semver === ANY) {
+        continue
+      }
+
+      if (set[i].semver.prerelease.length > 0) {
+        var allowed = set[i].semver
+        if (allowed.major === version.major &&
+            allowed.minor === version.minor &&
+            allowed.patch === version.patch) {
+          return true
+        }
+      }
+    }
+
+    // Version has a -pre, but it's not one of the ones we like.
+    return false
+  }
+
+  return true
+}
+
+exports.satisfies = satisfies
+function satisfies (version, range, options) {
+  try {
+    range = new Range(range, options)
+  } catch (er) {
+    return false
+  }
+  return range.test(version)
+}
+
+exports.maxSatisfying = maxSatisfying
+function maxSatisfying (versions, range, options) {
+  var max = null
+  var maxSV = null
+  try {
+    var rangeObj = new Range(range, options)
+  } catch (er) {
+    return null
+  }
+  versions.forEach(function (v) {
+    if (rangeObj.test(v)) {
+      // satisfies(v, range, options)
+      if (!max || maxSV.compare(v) === -1) {
+        // compare(max, v, true)
+        max = v
+        maxSV = new SemVer(max, options)
+      }
+    }
+  })
+  return max
+}
+
+exports.minSatisfying = minSatisfying
+function minSatisfying (versions, range, options) {
+  var min = null
+  var minSV = null
+  try {
+    var rangeObj = new Range(range, options)
+  } catch (er) {
+    return null
+  }
+  versions.forEach(function (v) {
+    if (rangeObj.test(v)) {
+      // satisfies(v, range, options)
+      if (!min || minSV.compare(v) === 1) {
+        // compare(min, v, true)
+        min = v
+        minSV = new SemVer(min, options)
+      }
+    }
+  })
+  return min
+}
+
+exports.minVersion = minVersion
+function minVersion (range, loose) {
+  range = new Range(range, loose)
+
+  var minver = new SemVer('0.0.0')
+  if (range.test(minver)) {
+    return minver
+  }
+
+  minver = new SemVer('0.0.0-0')
+  if (range.test(minver)) {
+    return minver
+  }
+
+  minver = null
+  for (var i = 0; i < range.set.length; ++i) {
+    var comparators = range.set[i]
+
+    comparators.forEach(function (comparator) {
+      // Clone to avoid manipulating the comparator's semver object.
+      var compver = new SemVer(comparator.semver.version)
+      switch (comparator.operator) {
+        case '>':
+          if (compver.prerelease.length === 0) {
+            compver.patch++
+          } else {
+            compver.prerelease.push(0)
+          }
+          compver.raw = compver.format()
+          /* fallthrough */
+        case '':
+        case '>=':
+          if (!minver || gt(minver, compver)) {
+            minver = compver
+          }
+          break
+        case '<':
+        case '<=':
+          /* Ignore maximum versions */
+          break
+        /* istanbul ignore next */
+        default:
+          throw new Error('Unexpected operation: ' + comparator.operator)
+      }
+    })
+  }
+
+  if (minver && range.test(minver)) {
+    return minver
+  }
+
+  return null
+}
+
+exports.validRange = validRange
+function validRange (range, options) {
+  try {
+    // Return '*' instead of '' so that truthiness works.
+    // This will throw if it's invalid anyway
+    return new Range(range, options).range || '*'
+  } catch (er) {
+    return null
+  }
+}
+
+// Determine if version is less than all the versions possible in the range
+exports.ltr = ltr
+function ltr (version, range, options) {
+  return outside(version, range, '<', options)
+}
+
+// Determine if version is greater than all the versions possible in the range.
+exports.gtr = gtr
+function gtr (version, range, options) {
+  return outside(version, range, '>', options)
+}
+
+exports.outside = outside
+function outside (version, range, hilo, options) {
+  version = new SemVer(version, options)
+  range = new Range(range, options)
+
+  var gtfn, ltefn, ltfn, comp, ecomp
+  switch (hilo) {
+    case '>':
+      gtfn = gt
+      ltefn = lte
+      ltfn = lt
+      comp = '>'
+      ecomp = '>='
+      break
+    case '<':
+      gtfn = lt
+      ltefn = gte
+      ltfn = gt
+      comp = '<'
+      ecomp = '<='
+      break
+    default:
+      throw new TypeError('Must provide a hilo val of "<" or ">"')
+  }
+
+  // If it satisifes the range it is not outside
+  if (satisfies(version, range, options)) {
+    return false
+  }
+
+  // From now on, variable terms are as if we're in "gtr" mode.
+  // but note that everything is flipped for the "ltr" function.
+
+  for (var i = 0; i < range.set.length; ++i) {
+    var comparators = range.set[i]
+
+    var high = null
+    var low = null
+
+    comparators.forEach(function (comparator) {
+      if (comparator.semver === ANY) {
+        comparator = new Comparator('>=0.0.0')
+      }
+      high = high || comparator
+      low = low || comparator
+      if (gtfn(comparator.semver, high.semver, options)) {
+        high = comparator
+      } else if (ltfn(comparator.semver, low.semver, options)) {
+        low = comparator
+      }
+    })
+
+    // If the edge version comparator has a operator then our version
+    // isn't outside it
+    if (high.operator === comp || high.operator === ecomp) {
+      return false
+    }
+
+    // If the lowest version comparator has an operator and our version
+    // is less than it then it isn't higher than the range
+    if ((!low.operator || low.operator === comp) &&
+        ltefn(version, low.semver)) {
+      return false
+    } else if (low.operator === ecomp && ltfn(version, low.semver)) {
+      return false
+    }
+  }
+  return true
+}
+
+exports.prerelease = prerelease
+function prerelease (version, options) {
+  var parsed = parse(version, options)
+  return (parsed && parsed.prerelease.length) ? parsed.prerelease : null
+}
+
+exports.intersects = intersects
+function intersects (r1, r2, options) {
+  r1 = new Range(r1, options)
+  r2 = new Range(r2, options)
+  return r1.intersects(r2)
+}
+
+exports.coerce = coerce
+function coerce (version, options) {
+  if (version instanceof SemVer) {
+    return version
+  }
+
+  if (typeof version === 'number') {
+    version = String(version)
+  }
+
+  if (typeof version !== 'string') {
+    return null
+  }
+
+  options = options || {}
+
+  var match = null
+  if (!options.rtl) {
+    match = version.match(re[t.COERCE])
+  } else {
+    // Find the right-most coercible string that does not share
+    // a terminus with a more left-ward coercible string.
+    // Eg, '1.2.3.4' wants to coerce '2.3.4', not '3.4' or '4'
+    //
+    // Walk through the string checking with a /g regexp
+    // Manually set the index so as to pick up overlapping matches.
+    // Stop when we get a match that ends at the string end, since no
+    // coercible string can be more right-ward without the same terminus.
+    var next
+    while ((next = re[t.COERCERTL].exec(version)) &&
+      (!match || match.index + match[0].length !== version.length)
+    ) {
+      if (!match ||
+          next.index + next[0].length !== match.index + match[0].length) {
+        match = next
+      }
+      re[t.COERCERTL].lastIndex = next.index + next[1].length + next[2].length
+    }
+    // leave it in a clean state
+    re[t.COERCERTL].lastIndex = -1
+  }
+
+  if (match === null) {
+    return null
+  }
+
+  return parse(match[2] +
+    '.' + (match[3] || '0') +
+    '.' + (match[4] || '0'), options)
+}
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node-libs-browser/node_modules/process/browser.js */ "./node_modules/node-libs-browser/node_modules/process/browser.js")))
 
 /***/ }),
 
@@ -5302,7 +7125,7 @@ var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./no
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _utils = __webpack_require__(/*! ./utils */ "./src/base/utils.js");
+var _utils = __webpack_require__(/*! ../utils */ "./src/utils/utils.js");
 
 var _events = __webpack_require__(/*! ./events */ "./src/base/events.js");
 
@@ -5405,11 +7228,11 @@ var _base_object = __webpack_require__(/*! ./base_object */ "./src/base/base_obj
 
 var _base_object2 = _interopRequireDefault(_base_object);
 
-var _utils = __webpack_require__(/*! ./utils */ "./src/base/utils.js");
-
 var _error_mixin = __webpack_require__(/*! ./error_mixin */ "./src/base/error_mixin.js");
 
 var _error_mixin2 = _interopRequireDefault(_error_mixin);
+
+var _utils = __webpack_require__(/*! ../utils */ "./src/utils/utils.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5511,7 +7334,7 @@ var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./no
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _utils = __webpack_require__(/*! ./utils */ "./src/base/utils.js");
+var _utils = __webpack_require__(/*! ../utils */ "./src/utils/utils.js");
 
 var _base_object = __webpack_require__(/*! ./base_object */ "./src/base/base_object.js");
 
@@ -5688,7 +7511,7 @@ var _log = __webpack_require__(/*! ../components/log */ "./src/components/log.js
 
 var _log2 = _interopRequireDefault(_log);
 
-var _utils = __webpack_require__(/*! ./utils */ "./src/base/utils.js");
+var _utils = __webpack_require__(/*! ../utils */ "./src/utils/utils.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -6642,7 +8465,7 @@ var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./no
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _utils = __webpack_require__(/*! ./utils */ "./src/base/utils.js");
+var _utils = __webpack_require__(/*! ../utils */ "./src/utils/utils.js");
 
 var _ui_object = __webpack_require__(/*! ./ui_object */ "./src/base/ui_object.js");
 
@@ -7306,7 +9129,7 @@ var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./no
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _utils = __webpack_require__(/*! ./utils */ "./src/base/utils.js");
+var _utils = __webpack_require__(/*! ../utils */ "./src/utils/utils.js");
 
 var _ui_object = __webpack_require__(/*! ./ui_object */ "./src/base/ui_object.js");
 
@@ -7414,7 +9237,7 @@ var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./no
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _utils = __webpack_require__(/*! ./utils */ "./src/base/utils.js");
+var _utils = __webpack_require__(/*! ../utils */ "./src/utils/utils.js");
 
 var _ui_object = __webpack_require__(/*! ./ui_object */ "./src/base/ui_object.js");
 
@@ -7522,7 +9345,7 @@ var _clapprZepto = __webpack_require__(/*! clappr-zepto */ "./node_modules/clapp
 
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-var _utils = __webpack_require__(/*! ./utils */ "./src/base/utils.js");
+var _utils = __webpack_require__(/*! ../utils */ "./src/utils/utils.js");
 
 var _base_object = __webpack_require__(/*! ./base_object */ "./src/base/base_object.js");
 
@@ -7767,443 +9590,6 @@ var UIObject = function (_BaseObject) {
 
 exports.default = UIObject;
 module.exports = exports['default'];
-
-/***/ }),
-
-/***/ "./src/base/utils.js":
-/*!***************************!*\
-  !*** ./src/base/utils.js ***!
-  \***************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.DoubleEventHandler = exports.DomRecycler = exports.cancelAnimationFrame = exports.requestAnimationFrame = exports.QueryString = exports.Config = exports.Fullscreen = undefined;
-
-var _assign = __webpack_require__(/*! babel-runtime/core-js/object/assign */ "./node_modules/babel-runtime/core-js/object/assign.js");
-
-var _assign2 = _interopRequireDefault(_assign);
-
-var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _defineProperty = __webpack_require__(/*! babel-runtime/core-js/object/define-property */ "./node_modules/babel-runtime/core-js/object/define-property.js");
-
-var _defineProperty2 = _interopRequireDefault(_defineProperty);
-
-var _getOwnPropertyDescriptor = __webpack_require__(/*! babel-runtime/core-js/object/get-own-property-descriptor */ "./node_modules/babel-runtime/core-js/object/get-own-property-descriptor.js");
-
-var _getOwnPropertyDescriptor2 = _interopRequireDefault(_getOwnPropertyDescriptor);
-
-exports.assign = assign;
-exports.extend = extend;
-exports.formatTime = formatTime;
-exports.seekStringToSeconds = seekStringToSeconds;
-exports.uniqueId = uniqueId;
-exports.isNumber = isNumber;
-exports.currentScriptUrl = currentScriptUrl;
-exports.getBrowserLanguage = getBrowserLanguage;
-exports.now = now;
-exports.removeArrayItem = removeArrayItem;
-exports.listContainsIgnoreCase = listContainsIgnoreCase;
-exports.canAutoPlayMedia = canAutoPlayMedia;
-
-__webpack_require__(/*! ./polyfills */ "./src/base/polyfills.js");
-
-var _browser = __webpack_require__(/*! ../components/browser */ "./src/components/browser/browser.js");
-
-var _browser2 = _interopRequireDefault(_browser);
-
-var _clapprZepto = __webpack_require__(/*! clappr-zepto */ "./node_modules/clappr-zepto/zepto.js");
-
-var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
-
-var _media = __webpack_require__(/*! ./media */ "./src/base/media.js");
-
-var _media2 = _interopRequireDefault(_media);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-/*jshint -W079 */
-
-function assign(obj, source) {
-  if (source) {
-    for (var prop in source) {
-      var propDescriptor = (0, _getOwnPropertyDescriptor2.default)(source, prop);
-      propDescriptor ? (0, _defineProperty2.default)(obj, prop, propDescriptor) : obj[prop] = source[prop];
-    }
-  }
-  return obj;
-}
-
-function extend(parent, properties) {
-  var Surrogate = function (_parent) {
-    (0, _inherits3.default)(Surrogate, _parent);
-
-    function Surrogate() {
-      (0, _classCallCheck3.default)(this, Surrogate);
-
-      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-
-      var _this = (0, _possibleConstructorReturn3.default)(this, _parent.call.apply(_parent, [this].concat(args)));
-
-      if (properties.initialize) properties.initialize.apply(_this, args);
-
-      return _this;
-    }
-
-    return Surrogate;
-  }(parent);
-
-  assign(Surrogate.prototype, properties);
-  return Surrogate;
-}
-
-function formatTime(time, paddedHours) {
-  if (!isFinite(time)) return '--:--';
-
-  time = time * 1000;
-  time = parseInt(time / 1000);
-  var seconds = time % 60;
-  time = parseInt(time / 60);
-  var minutes = time % 60;
-  time = parseInt(time / 60);
-  var hours = time % 24;
-  var days = parseInt(time / 24);
-  var out = '';
-  if (days && days > 0) {
-    out += days + ':';
-    if (hours < 1) out += '00:';
-  }
-  if (hours && hours > 0 || paddedHours) out += ('0' + hours).slice(-2) + ':';
-  out += ('0' + minutes).slice(-2) + ':';
-  out += ('0' + seconds).slice(-2);
-  return out.trim();
-}
-
-var Fullscreen = exports.Fullscreen = {
-  getFullscreenElement: function getFullscreenElement() {
-    return document.webkitFullscreenElement || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement;
-  },
-  requestFullscreen: function requestFullscreen(el) {
-    if (el.requestFullscreen) el.requestFullscreen();else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();else if (el.mozRequestFullScreen) el.mozRequestFullScreen();else if (el.msRequestFullscreen) el.msRequestFullscreen();else if (el.querySelector && el.querySelector('video') && el.querySelector('video').webkitEnterFullScreen) el.querySelector('video').webkitEnterFullScreen();else if (el.webkitEnterFullScreen) el.webkitEnterFullScreen();
-  },
-  cancelFullscreen: function cancelFullscreen() {
-    var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document;
-
-    if (el.exitFullscreen) el.exitFullscreen();else if (el.webkitCancelFullScreen) el.webkitCancelFullScreen();else if (el.webkitExitFullscreen) el.webkitExitFullscreen();else if (el.mozCancelFullScreen) el.mozCancelFullScreen();else if (el.msExitFullscreen) el.msExitFullscreen();
-  },
-  fullscreenEnabled: function fullscreenEnabled() {
-    return !!(document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled || document.msFullscreenEnabled);
-  }
-};
-
-var Config = exports.Config = function () {
-  function Config() {
-    (0, _classCallCheck3.default)(this, Config);
-  }
-
-  Config._defaultConfig = function _defaultConfig() {
-    return {
-      volume: {
-        value: 100,
-        parse: parseInt
-      }
-    };
-  };
-
-  Config._defaultValueFor = function _defaultValueFor(key) {
-    try {
-      return this._defaultConfig()[key].parse(this._defaultConfig()[key].value);
-    } catch (e) {
-      return undefined;
-    }
-  };
-
-  Config._createKeyspace = function _createKeyspace(key) {
-    return 'clappr.' + document.domain + '.' + key;
-  };
-
-  Config.restore = function restore(key) {
-    if (_browser2.default.hasLocalstorage && localStorage[this._createKeyspace(key)]) return this._defaultConfig()[key].parse(localStorage[this._createKeyspace(key)]);
-
-    return this._defaultValueFor(key);
-  };
-
-  Config.persist = function persist(key, value) {
-    if (_browser2.default.hasLocalstorage) {
-      try {
-        localStorage[this._createKeyspace(key)] = value;
-        return true;
-      } catch (e) {
-        return false;
-      }
-    }
-  };
-
-  return Config;
-}();
-
-var QueryString = exports.QueryString = function () {
-  function QueryString() {
-    (0, _classCallCheck3.default)(this, QueryString);
-  }
-
-  QueryString.parse = function parse(paramsString) {
-    var match = void 0;
-    var pl = /\+/g,
-        // Regex for replacing addition symbol with a space
-    search = /([^&=]+)=?([^&]*)/g,
-        decode = function decode(s) {
-      return decodeURIComponent(s.replace(pl, ' '));
-    },
-        params = {};
-    while (match = search.exec(paramsString)) {
-      // eslint-disable-line no-cond-assign
-      params[decode(match[1]).toLowerCase()] = decode(match[2]);
-    }
-    return params;
-  };
-
-  (0, _createClass3.default)(QueryString, null, [{
-    key: 'params',
-    get: function get() {
-      var query = window.location.search.substring(1);
-      if (query !== this.query) {
-        this._urlParams = this.parse(query);
-        this.query = query;
-      }
-      return this._urlParams;
-    }
-  }, {
-    key: 'hashParams',
-    get: function get() {
-      var hash = window.location.hash.substring(1);
-      if (hash !== this.hash) {
-        this._hashParams = this.parse(hash);
-        this.hash = hash;
-      }
-      return this._hashParams;
-    }
-  }]);
-  return QueryString;
-}();
-
-function seekStringToSeconds() {
-  var paramName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 't';
-
-  var seconds = 0;
-  var seekString = QueryString.params[paramName] || QueryString.hashParams[paramName] || '';
-  var parts = seekString.match(/[0-9]+[hms]+/g) || [];
-  if (parts.length > 0) {
-    var factor = { 'h': 3600, 'm': 60, 's': 1 };
-    parts.forEach(function (el) {
-      if (el) {
-        var suffix = el[el.length - 1];
-        var time = parseInt(el.slice(0, el.length - 1), 10);
-        seconds += time * factor[suffix];
-      }
-    });
-  } else if (seekString) {
-    seconds = parseInt(seekString, 10);
-  }
-
-  return seconds;
-}
-
-var idsCounter = {};
-
-function uniqueId(prefix) {
-  idsCounter[prefix] || (idsCounter[prefix] = 0);
-  var id = ++idsCounter[prefix];
-  return prefix + id;
-}
-
-function isNumber(value) {
-  return value - parseFloat(value) + 1 >= 0;
-}
-
-function currentScriptUrl() {
-  var scripts = document.getElementsByTagName('script');
-  return scripts.length ? scripts[scripts.length - 1].src : '';
-}
-
-var requestAnimationFrame = exports.requestAnimationFrame = (window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || function (fn) {
-  window.setTimeout(fn, 1000 / 60);
-}).bind(window);
-
-var cancelAnimationFrame = exports.cancelAnimationFrame = (window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame || window.clearTimeout).bind(window);
-
-function getBrowserLanguage() {
-  return window.navigator && window.navigator.language;
-}
-
-function now() {
-  if (window.performance && window.performance.now) return performance.now();
-
-  return Date.now();
-}
-
-// remove the item from the array if it exists in the array
-function removeArrayItem(arr, item) {
-  var i = arr.indexOf(item);
-  if (i >= 0) arr.splice(i, 1);
-}
-
-// find an item regardless of its letter case
-function listContainsIgnoreCase(item, items) {
-  if (item === undefined || items === undefined) return false;
-  return items.find(function (itemEach) {
-    return item.toLowerCase() === itemEach.toLowerCase();
-  }) !== undefined;
-}
-
-// https://github.com/video-dev/can-autoplay
-function canAutoPlayMedia(cb, options) {
-  options = (0, _assign2.default)({
-    inline: false,
-    muted: false,
-    timeout: 250,
-    type: 'video',
-    source: _media2.default.mp4,
-    element: null
-  }, options);
-
-  var element = options.element ? options.element : document.createElement(options.type);
-
-  element.muted = options.muted;
-  if (options.muted === true) element.setAttribute('muted', 'muted');
-
-  if (options.inline === true) element.setAttribute('playsinline', 'playsinline');
-
-  element.src = options.source;
-
-  var promise = element.play();
-
-  var timeoutId = setTimeout(function () {
-    setResult(false, new Error('Timeout ' + options.timeout + ' ms has been reached'));
-  }, options.timeout);
-
-  var setResult = function setResult(result) {
-    var error = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-
-    clearTimeout(timeoutId);
-    cb(result, error);
-  };
-
-  if (promise !== undefined) {
-    promise.then(function () {
-      return setResult(true);
-    }).catch(function (err) {
-      return setResult(false, err);
-    });
-  } else {
-    setResult(true);
-  }
-}
-
-// Simple Zepto element factory with video recycle feature.
-var videoStack = [];
-
-var DomRecycler = exports.DomRecycler = function () {
-  function DomRecycler() {
-    (0, _classCallCheck3.default)(this, DomRecycler);
-  }
-
-  DomRecycler.configure = function configure(options) {
-    this.options = _clapprZepto2.default.extend(this.options, options);
-  };
-
-  DomRecycler.create = function create(name) {
-    if (this.options.recycleVideo && name === 'video' && videoStack.length > 0) return videoStack.shift();
-
-    return (0, _clapprZepto2.default)('<' + name + '>');
-  };
-
-  DomRecycler.garbage = function garbage($el) {
-    // Expect Zepto collection with single element (does not iterate!)
-    if (!this.options.recycleVideo || $el[0].tagName.toUpperCase() !== 'VIDEO') return;
-    $el.children().remove();
-    videoStack.push($el);
-  };
-
-  return DomRecycler;
-}();
-
-DomRecycler.options = { recycleVideo: false };
-
-var DoubleEventHandler = exports.DoubleEventHandler = function () {
-  function DoubleEventHandler() {
-    var delay = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 500;
-    (0, _classCallCheck3.default)(this, DoubleEventHandler);
-
-    this.delay = delay;
-    this.lastTime = 0;
-  }
-
-  DoubleEventHandler.prototype.handle = function handle(event, cb) {
-    var prevented = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-
-    // Based on http://jsfiddle.net/brettwp/J4djY/
-    var currentTime = new Date().getTime();
-    var diffTime = currentTime - this.lastTime;
-
-    if (diffTime < this.delay && diffTime > 0) {
-      cb();
-      prevented && event.preventDefault();
-    }
-
-    this.lastTime = currentTime;
-  };
-
-  return DoubleEventHandler;
-}();
-
-exports.default = {
-  Config: Config,
-  Fullscreen: Fullscreen,
-  QueryString: QueryString,
-  DomRecycler: DomRecycler,
-  assign: assign,
-  extend: extend,
-  formatTime: formatTime,
-  seekStringToSeconds: seekStringToSeconds,
-  uniqueId: uniqueId,
-  currentScriptUrl: currentScriptUrl,
-  isNumber: isNumber,
-  requestAnimationFrame: requestAnimationFrame,
-  cancelAnimationFrame: cancelAnimationFrame,
-  getBrowserLanguage: getBrowserLanguage,
-  now: now,
-  removeArrayItem: removeArrayItem,
-  listContainsIgnoreCase: listContainsIgnoreCase,
-  canAutoPlayMedia: canAutoPlayMedia,
-  Media: _media2.default,
-  DoubleEventHandler: DoubleEventHandler
-};
 
 /***/ }),
 
@@ -8821,7 +10207,7 @@ var _error_mixin = __webpack_require__(/*! ../../base/error_mixin */ "./src/base
 
 var _error_mixin2 = _interopRequireDefault(_error_mixin);
 
-var _utils = __webpack_require__(/*! ../../base/utils */ "./src/base/utils.js");
+var _utils = __webpack_require__(/*! ../../utils */ "./src/utils/utils.js");
 
 __webpack_require__(/*! ./public/style.scss */ "./src/components/container/public/style.scss");
 
@@ -9606,7 +10992,7 @@ var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./no
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _utils = __webpack_require__(/*! ../../base/utils */ "./src/base/utils.js");
+var _utils = __webpack_require__(/*! ../../utils */ "./src/utils/utils.js");
 
 var _events = __webpack_require__(/*! ../../base/events */ "./src/base/events.js");
 
@@ -9628,14 +11014,6 @@ var _container_factory = __webpack_require__(/*! ../../components/container_fact
 
 var _container_factory2 = _interopRequireDefault(_container_factory);
 
-var _mediator = __webpack_require__(/*! ../../components/mediator */ "./src/components/mediator.js");
-
-var _mediator2 = _interopRequireDefault(_mediator);
-
-var _player_info = __webpack_require__(/*! ../../components/player_info */ "./src/components/player_info.js");
-
-var _player_info2 = _interopRequireDefault(_player_info);
-
 var _error = __webpack_require__(/*! ../../components/error */ "./src/components/error.js");
 
 var _error2 = _interopRequireDefault(_error);
@@ -9653,8 +11031,7 @@ __webpack_require__(/*! ./public/style.scss */ "./src/components/core/public/sty
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * The Core is responsible to manage Containers, the mediator, MediaControl
- * and the player state.
+ * The Core is responsible to manage Containers and the player state.
  * @class Core
  * @constructor
  * @extends UIObject
@@ -9772,7 +11149,6 @@ var Core = function (_UIObject) {
 
     _this.playerError = new _error2.default(options, _this);
     _this.configureDomRecycler();
-    _this.playerInfo = _player_info2.default.getInstance(options.playerId);
     _this.firstResize = true;
     _this.plugins = [];
     _this.containers = [];
@@ -9819,16 +11195,16 @@ var Core = function (_UIObject) {
     if (!_browser2.default.isiOS) {
       this.$el.addClass('fullscreen');
       this.$el.removeAttr('style');
-      this.playerInfo.previousSize = { width: this.options.width, height: this.options.height };
-      this.playerInfo.currentSize = { width: (0, _clapprZepto2.default)(window).width(), height: (0, _clapprZepto2.default)(window).height() };
+      this.previousSize = { width: this.options.width, height: this.options.height };
+      this.currentSize = { width: (0, _clapprZepto2.default)(window).width(), height: (0, _clapprZepto2.default)(window).height() };
     }
   };
 
   Core.prototype.setPlayerSize = function setPlayerSize() {
     this.$el.removeClass('fullscreen');
-    this.playerInfo.currentSize = this.playerInfo.previousSize;
-    this.playerInfo.previousSize = { width: (0, _clapprZepto2.default)(window).width(), height: (0, _clapprZepto2.default)(window).height() };
-    this.resize(this.playerInfo.currentSize);
+    this.currentSize = this.previousSize;
+    this.previousSize = { width: (0, _clapprZepto2.default)(window).width(), height: (0, _clapprZepto2.default)(window).height() };
+    this.resize(this.currentSize);
   };
 
   Core.prototype.resize = function resize(options) {
@@ -9839,11 +11215,11 @@ var Core = function (_UIObject) {
       this.el.style.height = options.height + 'px';
       this.el.style.width = options.width + 'px';
     }
-    this.playerInfo.previousSize = { width: this.options.width, height: this.options.height };
+    this.previousSize = { width: this.options.width, height: this.options.height };
     this.options.width = options.width;
     this.options.height = options.height;
-    this.playerInfo.currentSize = options;
-    this.triggerResize(this.playerInfo.currentSize);
+    this.currentSize = options;
+    this.triggerResize(this.currentSize);
   };
 
   Core.prototype.enableResizeObserver = function enableResizeObserver() {
@@ -9860,9 +11236,8 @@ var Core = function (_UIObject) {
     if (thereWasChange) {
       this.oldHeight = newSize.height;
       this.oldWidth = newSize.width;
-      this.playerInfo.computedSize = newSize;
+      this.computedSize = newSize;
       this.firstResize = false;
-      _mediator2.default.trigger(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, newSize);
       this.trigger(_events2.default.CORE_RESIZE, newSize);
     }
   };
@@ -10053,7 +11428,7 @@ var Core = function (_UIObject) {
     this.options.width = this.options.width || this.$el.width();
     this.options.height = this.options.height || this.$el.height();
     var size = { width: this.options.width, height: this.options.height };
-    this.playerInfo.previousSize = this.playerInfo.currentSize = this.playerInfo.computedSize = size;
+    this.previousSize = this.currentSize = this.computedSize = size;
     this.updateSize();
 
     this.previousSize = { width: this.$el.width(), height: this.$el.height() };
@@ -10356,47 +11731,60 @@ var _create = __webpack_require__(/*! babel-runtime/core-js/object/create */ "./
 
 var _create2 = _interopRequireDefault(_create);
 
+var _values = __webpack_require__(/*! babel-runtime/core-js/object/values */ "./node_modules/babel-runtime/core-js/object/values.js");
+
+var _values2 = _interopRequireDefault(_values);
+
+var _toConsumableArray2 = __webpack_require__(/*! babel-runtime/helpers/toConsumableArray */ "./node_modules/babel-runtime/helpers/toConsumableArray.js");
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
 var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
+var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
 
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
+var _slicedToArray2 = __webpack_require__(/*! babel-runtime/helpers/slicedToArray */ "./node_modules/babel-runtime/helpers/slicedToArray.js");
 
-var _inherits3 = _interopRequireDefault(_inherits2);
+var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 
-var _base_object = __webpack_require__(/*! ../base/base_object */ "./src/base/base_object.js");
+var _entries = __webpack_require__(/*! babel-runtime/core-js/object/entries */ "./node_modules/babel-runtime/core-js/object/entries.js");
 
-var _base_object2 = _interopRequireDefault(_base_object);
+var _entries2 = _interopRequireDefault(_entries);
 
-var _player_info = __webpack_require__(/*! ./player_info */ "./src/components/player_info.js");
+var _semver = __webpack_require__(/*! semver */ "./node_modules/semver/semver.js");
 
-var _player_info2 = _interopRequireDefault(_player_info);
+var _semver2 = _interopRequireDefault(_semver);
 
-var _html5_video = __webpack_require__(/*! ../playbacks/html5_video */ "./src/playbacks/html5_video/html5_video.js");
+var _log = __webpack_require__(/*! ./log */ "./src/components/log.js");
 
-var _html5_video2 = _interopRequireDefault(_html5_video);
-
-var _html5_audio = __webpack_require__(/*! ../playbacks/html5_audio */ "./src/playbacks/html5_audio.js");
-
-var _html5_audio2 = _interopRequireDefault(_html5_audio);
-
-var _html_img = __webpack_require__(/*! ../playbacks/html_img */ "./src/playbacks/html_img/html_img.js");
-
-var _html_img2 = _interopRequireDefault(_html_img);
-
-var _no_op = __webpack_require__(/*! ../playbacks/no_op */ "./src/playbacks/no_op/no_op.js");
-
-var _no_op2 = _interopRequireDefault(_no_op);
-
-var _strings = __webpack_require__(/*! ../plugins/strings */ "./src/plugins/strings.js");
-
-var _strings2 = _interopRequireDefault(_strings);
+var _log2 = _interopRequireDefault(_log);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+var filterPluginsByType = function filterPluginsByType(plugins, type) {
+  if (!plugins || !type) return {};
+
+  return (0, _entries2.default)(plugins).filter(function (_ref) {
+    var _ref2 = (0, _slicedToArray3.default)(_ref, 2),
+        value = _ref2[1];
+
+    return value.type === type;
+  }).reduce(function (obj, _ref3) {
+    var _ref4 = (0, _slicedToArray3.default)(_ref3, 2),
+        key = _ref4[0],
+        value = _ref4[1];
+
+    return obj[key] = value, obj;
+  }, {});
+};
 
 /**
  * It keeps a list of the default plugins (playback, container, core) and it merges external plugins with its internals.
@@ -10405,118 +11793,243 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @extends BaseObject
  * @module components
  */
-var Loader = function (_BaseObject) {
-  (0, _inherits3.default)(Loader, _BaseObject);
 
-  /**
-   * builds the loader
-   * @method constructor
-   * @param {Object} externalPlugins the external plugins
-   * @param {Number} playerId you can embed multiple instances of clappr, therefore this is the unique id of each one.
-   */
-  function Loader() {
-    var externalPlugins = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-    var playerId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-    (0, _classCallCheck3.default)(this, Loader);
+exports.default = function () {
 
-    var _this = (0, _possibleConstructorReturn3.default)(this, _BaseObject.call(this));
-
-    _this.playerId = playerId;
-
-    _this.playbackPlugins = [_html5_video2.default, _html5_audio2.default, _html_img2.default, _no_op2.default];
-
-    _this.containerPlugins = [];
-    _this.corePlugins = [_strings2.default];
-
-    if (!Array.isArray(externalPlugins)) _this.validateExternalPluginsType(externalPlugins);
-
-    _this.addExternalPlugins(externalPlugins);
-    return _this;
-  }
-
-  /**
-   * groups by type the external plugins that were passed through `options.plugins` it they're on a flat array
-   * @method addExternalPlugins
-   * @private
-   * @param {Object} an config object or an array of plugins
-   * @return {Object} plugins the config object with the plugins separated by type
-   */
-
-
-  Loader.prototype.groupPluginsByType = function groupPluginsByType(plugins) {
-    if (Array.isArray(plugins)) {
-      plugins = plugins.reduce(function (memo, plugin) {
-        memo[plugin.type] || (memo[plugin.type] = []);
-        memo[plugin.type].push(plugin);
-        return memo;
-      }, {});
-    }
-    return plugins;
+  var registry = {
+    plugins: {},
+    playbacks: []
   };
 
-  Loader.prototype.removeDups = function removeDups(list) {
-    var groupUp = function groupUp(plugins, plugin) {
-      plugins[plugin.prototype.name] && delete plugins[plugin.prototype.name];
-      plugins[plugin.prototype.name] = plugin;
+  var currentVersion = "0.4.0";
+
+  return function () {
+    Loader.checkVersionSupport = function checkVersionSupport(entry) {
+      var _entry$prototype = entry.prototype,
+          supportedVersion = _entry$prototype.supportedVersion,
+          name = _entry$prototype.name;
+
+
+      if (!supportedVersion || !supportedVersion.min) {
+        _log2.default.warn('Loader', 'missing version information for ' + name);
+        return false;
+      }
+
+      var maxVersion = supportedVersion.max || _semver2.default.parse(supportedVersion.min).inc('minor');
+      var versionRange = '>=' + supportedVersion.min + ' <' + maxVersion;
+
+      if (!_semver2.default.satisfies(currentVersion, versionRange)) {
+        _log2.default.warn('Loader', 'unsupported plugin (' + currentVersion + ' does not match required range ' + versionRange + '): ' + name);
+        return false;
+      }
+
+      return true;
+    };
+
+    Loader.registerPlugin = function registerPlugin(pluginEntry) {
+      if (!pluginEntry || !pluginEntry.prototype.name) {
+        _log2.default.warn('Loader', 'missing information to register plugin: ' + pluginEntry);
+        return false;
+      }
+
+      Loader.checkVersionSupport(pluginEntry);
+
+      var pluginRegistry = registry.plugins;
+
+      if (!pluginRegistry) return false;
+
+      var previousEntry = pluginRegistry[pluginEntry.prototype.name];
+
+      if (previousEntry) _log2.default.warn('Loader', 'overriding plugin entry: ' + pluginEntry.prototype.name + ' - ' + previousEntry);
+
+      pluginRegistry[pluginEntry.prototype.name] = pluginEntry;
+
+      return true;
+    };
+
+    Loader.registerPlayback = function registerPlayback(playbackEntry) {
+      if (!playbackEntry || !playbackEntry.prototype.name) return false;
+
+      Loader.checkVersionSupport(playbackEntry);
+
+      var playbacks = registry.playbacks;
+
+
+      var previousEntryIdx = playbacks.findIndex(function (entry) {
+        return entry.name === playbackEntry.prototype.name;
+      });
+
+      if (previousEntryIdx >= 0) {
+        var previousEntry = playbacks[previousEntryIdx];
+        playbacks.splice(previousEntryIdx, 1);
+        _log2.default.warn('Loader', 'overriding playback entry: ' + previousEntry.name + ' - ' + previousEntry);
+      }
+
+      registry.playbacks = [playbackEntry].concat((0, _toConsumableArray3.default)(playbacks));
+
+      return true;
+    };
+
+    Loader.unregisterPlugin = function unregisterPlugin(name) {
+      if (!name) return false;
+
+      var plugins = registry.plugins;
+
+      var plugin = plugins[name];
+
+      if (!plugin) return false;
+
+      delete plugins[name];
+      return true;
+    };
+
+    Loader.unregisterPlayback = function unregisterPlayback(name) {
+      if (!name) return false;
+
+      var playbacks = registry.playbacks;
+
+
+      var index = playbacks.findIndex(function (entry) {
+        return entry.prototype.name === name;
+      });
+
+      if (index < 0) return false;
+
+      playbacks.splice(index, 1);
+      registry.playbacks = playbacks;
+
+      return true;
+    };
+
+    Loader.clearPlugins = function clearPlugins() {
+      registry.plugins = {};
+    };
+
+    Loader.clearPlaybacks = function clearPlaybacks() {
+      registry.playbacks = [];
+    };
+
+    /**
+     * builds the loader
+     * @method constructor
+     * @param {Object} externalPlugins the external plugins
+     * @param {Number} playerId you can embed multiple instances of clappr, therefore this is the unique id of each one.
+     */
+
+
+    (0, _createClass3.default)(Loader, null, [{
+      key: 'registeredPlaybacks',
+      get: function get() {
+        return [].concat((0, _toConsumableArray3.default)(registry.playbacks));
+      }
+    }, {
+      key: 'registeredPlugins',
+      get: function get() {
+        var plugins = registry.plugins;
+
+        var core = filterPluginsByType(plugins, 'core');
+        var container = filterPluginsByType(plugins, 'container');
+        return {
+          core: core,
+          container: container
+        };
+      }
+    }]);
+
+    function Loader() {
+      var externalPlugins = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      var playerId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+      (0, _classCallCheck3.default)(this, Loader);
+
+      this.playerId = playerId;
+
+      this.playbackPlugins = [].concat((0, _toConsumableArray3.default)(registry.playbacks));
+
+      var _Loader$registeredPlu = Loader.registeredPlugins,
+          core = _Loader$registeredPlu.core,
+          container = _Loader$registeredPlu.container;
+
+      this.containerPlugins = (0, _values2.default)(container);
+      this.corePlugins = (0, _values2.default)(core);
+
+      if (!Array.isArray(externalPlugins)) this.validateExternalPluginsType(externalPlugins);
+
+      this.addExternalPlugins(externalPlugins);
+    }
+
+    /**
+     * groups by type the external plugins that were passed through `options.plugins` it they're on a flat array
+     * @method addExternalPlugins
+     * @private
+     * @param {Object} an config object or an array of plugins
+     * @return {Object} plugins the config object with the plugins separated by type
+     */
+
+
+    Loader.prototype.groupPluginsByType = function groupPluginsByType(plugins) {
+      if (Array.isArray(plugins)) {
+        plugins = plugins.reduce(function (memo, plugin) {
+          memo[plugin.type] || (memo[plugin.type] = []);
+          memo[plugin.type].push(plugin);
+          return memo;
+        }, {});
+      }
       return plugins;
     };
-    var pluginsMap = list.reduceRight(groupUp, (0, _create2.default)(null));
 
-    var plugins = [];
-    for (var key in pluginsMap) {
-      plugins.unshift(pluginsMap[key]);
-    }return plugins;
-  };
+    Loader.prototype.removeDups = function removeDups(list) {
+      var groupUp = function groupUp(plugins, plugin) {
+        plugins[plugin.prototype.name] && delete plugins[plugin.prototype.name];
+        plugins[plugin.prototype.name] = plugin;
+        return plugins;
+      };
+      var pluginsMap = list.reduceRight(groupUp, (0, _create2.default)(null));
 
-  /**
-   * adds all the external plugins that were passed through `options.plugins`
-   * @method addExternalPlugins
-   * @private
-   * @param {Object} plugins the config object with all plugins
-   */
+      var plugins = [];
+      for (var key in pluginsMap) {
+        plugins.unshift(pluginsMap[key]);
+      }return plugins;
+    };
 
-
-  Loader.prototype.addExternalPlugins = function addExternalPlugins(plugins) {
-    plugins = this.groupPluginsByType(plugins);
-    if (plugins.playback) this.playbackPlugins = this.removeDups(plugins.playback.concat(this.playbackPlugins));
-
-    if (plugins.container) this.containerPlugins = this.removeDups(plugins.container.concat(this.containerPlugins));
-
-    if (plugins.core) this.corePlugins = this.removeDups(plugins.core.concat(this.corePlugins));
-
-    _player_info2.default.getInstance(this.playerId).playbackPlugins = this.playbackPlugins;
-  };
-
-  /**
-   * validate if the external plugins that were passed through `options.plugins` are associated to the correct type
-   * @method validateExternalPluginsType
-   * @private
-   * @param {Object} plugins the config object with all plugins
-   */
+    /**
+     * adds all the external plugins that were passed through `options.plugins`
+     * @method addExternalPlugins
+     * @private
+     * @param {Object} plugins the config object with all plugins
+     */
 
 
-  Loader.prototype.validateExternalPluginsType = function validateExternalPluginsType(plugins) {
-    var plugintypes = ['playback', 'container', 'core'];
-    plugintypes.forEach(function (type) {
-      (plugins[type] || []).forEach(function (el) {
-        var errorMessage = 'external ' + el.type + ' plugin on ' + type + ' array';
-        if (el.type !== type) throw new ReferenceError(errorMessage);
+    Loader.prototype.addExternalPlugins = function addExternalPlugins(plugins) {
+      plugins = this.groupPluginsByType(plugins);
+      if (plugins.playback) this.playbackPlugins = this.removeDups(plugins.playback.concat(this.playbackPlugins));
+
+      if (plugins.container) this.containerPlugins = this.removeDups(plugins.container.concat(this.containerPlugins));
+
+      if (plugins.core) this.corePlugins = this.removeDups(plugins.core.concat(this.corePlugins));
+    };
+
+    /**
+     * validate if the external plugins that were passed through `options.plugins` are associated to the correct type
+     * @method validateExternalPluginsType
+     * @private
+     * @param {Object} plugins the config object with all plugins
+     */
+
+
+    Loader.prototype.validateExternalPluginsType = function validateExternalPluginsType(plugins) {
+      var plugintypes = ['playback', 'container', 'core'];
+      plugintypes.forEach(function (type) {
+        (plugins[type] || []).forEach(function (el) {
+          var errorMessage = 'external ' + el.type + ' plugin on ' + type + ' array';
+          if (el.type !== type) throw new ReferenceError(errorMessage);
+        });
       });
-    });
-  };
+    };
 
-  return Loader;
-}(_base_object2.default);
+    return Loader;
+  }();
+}();
 
-/* Core Plugins */
-
-
-/* Playback Plugins */
-// Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-exports.default = Loader;
 module.exports = exports['default'];
 
 /***/ }),
@@ -10628,11 +12141,7 @@ Log.LEVEL_WARN = LEVEL_WARN;
 Log.LEVEL_ERROR = LEVEL_ERROR;
 
 Log.getInstance = function () {
-  if (this._instance === undefined) {
-    this._instance = new this();
-    this._instance.previousLevel = this._instance.level;
-    this._instance.level = this._instance.offLevel;
-  }
+  if (this._instance === undefined) this._instance = new this();
   return this._instance;
 };
 
@@ -10651,77 +12160,6 @@ Log.warn = function () {
 };
 Log.error = function () {
   this.getInstance().error.apply(this.getInstance(), arguments);
-};
-module.exports = exports['default'];
-
-/***/ }),
-
-/***/ "./src/components/mediator.js":
-/*!************************************!*\
-  !*** ./src/components/mediator.js ***!
-  \************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _events = __webpack_require__(/*! ../base/events */ "./src/base/events.js");
-
-var _events2 = _interopRequireDefault(_events);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var events = new _events2.default(); // Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-/**
- * The mediator is a singleton for handling global events.
- */
-
-var Mediator = function Mediator() {
-  (0, _classCallCheck3.default)(this, Mediator);
-};
-
-exports.default = Mediator;
-
-
-Mediator.on = function (name, callback, context) {
-  events.on(name, callback, context);
-  return;
-};
-
-Mediator.once = function (name, callback, context) {
-  events.once(name, callback, context);
-  return;
-};
-
-Mediator.off = function (name, callback, context) {
-  events.off(name, callback, context);
-  return;
-};
-
-Mediator.trigger = function (name) {
-  for (var _len = arguments.length, opts = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    opts[_key - 1] = arguments[_key];
-  }
-
-  events.trigger.apply(events, [name].concat(opts));
-  return;
-};
-
-Mediator.stopListening = function (obj, name, callback) {
-  events.stopListening(obj, name, callback);
-  return;
 };
 module.exports = exports['default'];
 
@@ -10765,7 +12203,7 @@ var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./no
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _utils = __webpack_require__(/*! ../base/utils */ "./src/base/utils.js");
+var _utils = __webpack_require__(/*! ../utils */ "./src/utils/utils.js");
 
 var _base_object = __webpack_require__(/*! ../base/base_object */ "./src/base/base_object.js");
 
@@ -10787,10 +12225,6 @@ var _loader = __webpack_require__(/*! ./loader */ "./src/components/loader.js");
 
 var _loader2 = _interopRequireDefault(_loader);
 
-var _player_info = __webpack_require__(/*! ./player_info */ "./src/components/player_info.js");
-
-var _player_info2 = _interopRequireDefault(_player_info);
-
 var _error_mixin = __webpack_require__(/*! ../base/error_mixin */ "./src/base/error_mixin.js");
 
 var _error_mixin2 = _interopRequireDefault(_error_mixin);
@@ -10800,6 +12234,10 @@ var _clapprZepto = __webpack_require__(/*! clappr-zepto */ "./node_modules/clapp
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 
 var baseUrl = (0, _utils.currentScriptUrl)().replace(/\/[^/]+$/, '');
 
@@ -10827,9 +12265,6 @@ var baseUrl = (0, _utils.currentScriptUrl)().replace(/\/[^/]+$/, '');
  * </body>
  * ```
  */
-// Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
 
 var Player = function (_BaseObject) {
   (0, _inherits3.default)(Player, _BaseObject);
@@ -11063,9 +12498,6 @@ var Player = function (_BaseObject) {
     }
     _this._registerOptionEventListeners(_this.options.events);
     _this._coreFactory = new _core_factory2.default(_this);
-    _this.playerInfo = _player_info2.default.getInstance(_this.options.playerId);
-    _this.playerInfo.currentSize = { width: options.width, height: options.height };
-    _this.playerInfo.options = _this.options;
     if (_this.options.parentId) _this.setParentId(_this.options.parentId);else if (_this.options.parent) _this.attachTo(_this.options.parent);
 
     return _this;
@@ -11472,49 +12904,6 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ "./src/components/player_info.js":
-/*!***************************************!*\
-  !*** ./src/components/player_info.js ***!
-  \***************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-var PlayerInfo = function PlayerInfo() {
-  (0, _classCallCheck3.default)(this, PlayerInfo);
-
-  this.options = {};
-  this.playbackPlugins = [];
-  this.currentSize = { width: 0, height: 0 };
-};
-
-PlayerInfo._players = {};
-
-PlayerInfo.getInstance = function (playerId) {
-  return PlayerInfo._players[playerId] || (PlayerInfo._players[playerId] = new PlayerInfo());
-};
-
-exports.default = PlayerInfo;
-module.exports = exports["default"];
-
-/***/ }),
-
 /***/ "./src/main.js":
 /*!*********************!*\
   !*** ./src/main.js ***!
@@ -11533,7 +12922,7 @@ var _player = __webpack_require__(/*! ./components/player */ "./src/components/p
 
 var _player2 = _interopRequireDefault(_player);
 
-var _utils = __webpack_require__(/*! ./base/utils */ "./src/base/utils.js");
+var _utils = __webpack_require__(/*! ./utils */ "./src/utils/utils.js");
 
 var _utils2 = _interopRequireDefault(_utils);
 
@@ -11593,14 +12982,6 @@ var _log = __webpack_require__(/*! ./components/log */ "./src/components/log.js"
 
 var _log2 = _interopRequireDefault(_log);
 
-var _mediator = __webpack_require__(/*! ./components/mediator */ "./src/components/mediator.js");
-
-var _mediator2 = _interopRequireDefault(_mediator);
-
-var _player_info = __webpack_require__(/*! ./components/player_info */ "./src/components/player_info.js");
-
-var _player_info2 = _interopRequireDefault(_player_info);
-
 var _html5_audio = __webpack_require__(/*! ./playbacks/html5_audio */ "./src/playbacks/html5_audio.js");
 
 var _html5_audio2 = _interopRequireDefault(_html5_audio);
@@ -11613,6 +12994,10 @@ var _html_img = __webpack_require__(/*! ./playbacks/html_img */ "./src/playbacks
 
 var _html_img2 = _interopRequireDefault(_html_img);
 
+var _no_op = __webpack_require__(/*! ./playbacks/no_op */ "./src/playbacks/no_op/no_op.js");
+
+var _no_op2 = _interopRequireDefault(_no_op);
+
 var _styler = __webpack_require__(/*! ./base/styler */ "./src/base/styler.js");
 
 var _styler2 = _interopRequireDefault(_styler);
@@ -11620,6 +13005,10 @@ var _styler2 = _interopRequireDefault(_styler);
 var _template = __webpack_require__(/*! ./base/template */ "./src/base/template.js");
 
 var _template2 = _interopRequireDefault(_template);
+
+var _strings = __webpack_require__(/*! ./plugins/strings */ "./src/plugins/strings.js");
+
+var _strings2 = _interopRequireDefault(_strings);
 
 var _clapprZepto = __webpack_require__(/*! clappr-zepto */ "./node_modules/clappr-zepto/zepto.js");
 
@@ -11631,14 +13020,21 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var version = "0.3.14";
+var version = "0.4.0";
+
+// Built-in Plugins/Playbacks
+
+_loader2.default.registerPlugin(_strings2.default);
+
+_loader2.default.registerPlayback(_no_op2.default);
+_loader2.default.registerPlayback(_html_img2.default);
+_loader2.default.registerPlayback(_html5_audio2.default);
+_loader2.default.registerPlayback(_html5_video2.default);
 
 exports.default = {
   Player: _player2.default,
-  Mediator: _mediator2.default,
   Events: _events2.default,
   Browser: _browser2.default,
-  PlayerInfo: _player_info2.default,
   ContainerPlugin: _container_plugin2.default,
   UIContainerPlugin: _ui_container_plugin2.default,
   CorePlugin: _core_plugin2.default,
@@ -11733,6 +13129,11 @@ var HTML5Audio = function (_HTML5Video) {
       return 'html5_audio';
     }
   }, {
+    key: 'supportedVersion',
+    get: function get() {
+      return { min: "0.4.0" };
+    }
+  }, {
     key: 'tagName',
     get: function get() {
       return 'audio';
@@ -11806,7 +13207,7 @@ var _keys = __webpack_require__(/*! babel-runtime/core-js/object/keys */ "./node
 
 var _keys2 = _interopRequireDefault(_keys);
 
-var _utils = __webpack_require__(/*! ../../base/utils */ "./src/base/utils.js");
+var _utils = __webpack_require__(/*! ../../utils */ "./src/utils/utils.js");
 
 var _events = __webpack_require__(/*! ../../base/events */ "./src/base/events.js");
 
@@ -11882,6 +13283,11 @@ var HTML5Video = function (_Playback) {
     key: 'name',
     get: function get() {
       return 'html5_video';
+    }
+  }, {
+    key: 'supportedVersion',
+    get: function get() {
+      return { min: "0.4.0" };
     }
   }, {
     key: 'tagName',
@@ -12611,6 +14017,11 @@ var HTMLImg = function (_Playback) {
       return 'html_img';
     }
   }, {
+    key: 'supportedVersion',
+    get: function get() {
+      return { min: "0.4.0" };
+    }
+  }, {
     key: 'tagName',
     get: function get() {
       return 'img';
@@ -12732,7 +14143,7 @@ var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./no
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _utils = __webpack_require__(/*! ../../base/utils */ "./src/base/utils.js");
+var _utils = __webpack_require__(/*! ../../utils */ "./src/utils/utils.js");
 
 var _playback = __webpack_require__(/*! ../../base/playback */ "./src/base/playback.js");
 
@@ -12760,6 +14171,11 @@ var NoOp = function (_Playback) {
     key: 'name',
     get: function get() {
       return 'no_op';
+    }
+  }, {
+    key: 'supportedVersion',
+    get: function get() {
+      return { min: "0.4.0" };
     }
   }, {
     key: 'template',
@@ -12940,7 +14356,7 @@ var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./no
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _utils = __webpack_require__(/*! ../base/utils */ "./src/base/utils.js");
+var _utils = __webpack_require__(/*! ../utils */ "./src/utils/utils.js");
 
 var _clapprZepto = __webpack_require__(/*! clappr-zepto */ "./node_modules/clappr-zepto/zepto.js");
 
@@ -12965,6 +14381,11 @@ var Strings = function (_CorePlugin) {
     key: 'name',
     get: function get() {
       return 'strings';
+    }
+  }, {
+    key: 'supportedVersion',
+    get: function get() {
+      return { min: "0.4.0" };
     }
   }]);
 
@@ -13070,6 +14491,443 @@ var Strings = function (_CorePlugin) {
 
 exports.default = Strings;
 module.exports = exports['default'];
+
+/***/ }),
+
+/***/ "./src/utils/utils.js":
+/*!****************************!*\
+  !*** ./src/utils/utils.js ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.DoubleEventHandler = exports.DomRecycler = exports.cancelAnimationFrame = exports.requestAnimationFrame = exports.QueryString = exports.Config = exports.Fullscreen = undefined;
+
+var _assign = __webpack_require__(/*! babel-runtime/core-js/object/assign */ "./node_modules/babel-runtime/core-js/object/assign.js");
+
+var _assign2 = _interopRequireDefault(_assign);
+
+var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _defineProperty = __webpack_require__(/*! babel-runtime/core-js/object/define-property */ "./node_modules/babel-runtime/core-js/object/define-property.js");
+
+var _defineProperty2 = _interopRequireDefault(_defineProperty);
+
+var _getOwnPropertyDescriptor = __webpack_require__(/*! babel-runtime/core-js/object/get-own-property-descriptor */ "./node_modules/babel-runtime/core-js/object/get-own-property-descriptor.js");
+
+var _getOwnPropertyDescriptor2 = _interopRequireDefault(_getOwnPropertyDescriptor);
+
+exports.assign = assign;
+exports.extend = extend;
+exports.formatTime = formatTime;
+exports.seekStringToSeconds = seekStringToSeconds;
+exports.uniqueId = uniqueId;
+exports.isNumber = isNumber;
+exports.currentScriptUrl = currentScriptUrl;
+exports.getBrowserLanguage = getBrowserLanguage;
+exports.now = now;
+exports.removeArrayItem = removeArrayItem;
+exports.listContainsIgnoreCase = listContainsIgnoreCase;
+exports.canAutoPlayMedia = canAutoPlayMedia;
+
+__webpack_require__(/*! ../base/polyfills */ "./src/base/polyfills.js");
+
+var _media = __webpack_require__(/*! ../base/media */ "./src/base/media.js");
+
+var _media2 = _interopRequireDefault(_media);
+
+var _browser = __webpack_require__(/*! ../components/browser */ "./src/components/browser/browser.js");
+
+var _browser2 = _interopRequireDefault(_browser);
+
+var _clapprZepto = __webpack_require__(/*! clappr-zepto */ "./node_modules/clappr-zepto/zepto.js");
+
+var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+/*jshint -W079 */
+
+function assign(obj, source) {
+  if (source) {
+    for (var prop in source) {
+      var propDescriptor = (0, _getOwnPropertyDescriptor2.default)(source, prop);
+      propDescriptor ? (0, _defineProperty2.default)(obj, prop, propDescriptor) : obj[prop] = source[prop];
+    }
+  }
+  return obj;
+}
+
+function extend(parent, properties) {
+  var Surrogate = function (_parent) {
+    (0, _inherits3.default)(Surrogate, _parent);
+
+    function Surrogate() {
+      (0, _classCallCheck3.default)(this, Surrogate);
+
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      var _this = (0, _possibleConstructorReturn3.default)(this, _parent.call.apply(_parent, [this].concat(args)));
+
+      if (properties.initialize) properties.initialize.apply(_this, args);
+
+      return _this;
+    }
+
+    return Surrogate;
+  }(parent);
+
+  assign(Surrogate.prototype, properties);
+  return Surrogate;
+}
+
+function formatTime(time, paddedHours) {
+  if (!isFinite(time)) return '--:--';
+
+  time = time * 1000;
+  time = parseInt(time / 1000);
+  var seconds = time % 60;
+  time = parseInt(time / 60);
+  var minutes = time % 60;
+  time = parseInt(time / 60);
+  var hours = time % 24;
+  var days = parseInt(time / 24);
+  var out = '';
+  if (days && days > 0) {
+    out += days + ':';
+    if (hours < 1) out += '00:';
+  }
+  if (hours && hours > 0 || paddedHours) out += ('0' + hours).slice(-2) + ':';
+  out += ('0' + minutes).slice(-2) + ':';
+  out += ('0' + seconds).slice(-2);
+  return out.trim();
+}
+
+var Fullscreen = exports.Fullscreen = {
+  getFullscreenElement: function getFullscreenElement() {
+    return document.webkitFullscreenElement || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement;
+  },
+  requestFullscreen: function requestFullscreen(el) {
+    if (el.requestFullscreen) el.requestFullscreen();else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();else if (el.mozRequestFullScreen) el.mozRequestFullScreen();else if (el.msRequestFullscreen) el.msRequestFullscreen();else if (el.querySelector && el.querySelector('video') && el.querySelector('video').webkitEnterFullScreen) el.querySelector('video').webkitEnterFullScreen();else if (el.webkitEnterFullScreen) el.webkitEnterFullScreen();
+  },
+  cancelFullscreen: function cancelFullscreen() {
+    var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document;
+
+    if (el.exitFullscreen) el.exitFullscreen();else if (el.webkitCancelFullScreen) el.webkitCancelFullScreen();else if (el.webkitExitFullscreen) el.webkitExitFullscreen();else if (el.mozCancelFullScreen) el.mozCancelFullScreen();else if (el.msExitFullscreen) el.msExitFullscreen();
+  },
+  fullscreenEnabled: function fullscreenEnabled() {
+    return !!(document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled || document.msFullscreenEnabled);
+  }
+};
+
+var Config = exports.Config = function () {
+  function Config() {
+    (0, _classCallCheck3.default)(this, Config);
+  }
+
+  Config._defaultConfig = function _defaultConfig() {
+    return {
+      volume: {
+        value: 100,
+        parse: parseInt
+      }
+    };
+  };
+
+  Config._defaultValueFor = function _defaultValueFor(key) {
+    try {
+      return this._defaultConfig()[key].parse(this._defaultConfig()[key].value);
+    } catch (e) {
+      return undefined;
+    }
+  };
+
+  Config._createKeyspace = function _createKeyspace(key) {
+    return 'clappr.' + document.domain + '.' + key;
+  };
+
+  Config.restore = function restore(key) {
+    if (_browser2.default.hasLocalstorage && localStorage[this._createKeyspace(key)]) return this._defaultConfig()[key].parse(localStorage[this._createKeyspace(key)]);
+
+    return this._defaultValueFor(key);
+  };
+
+  Config.persist = function persist(key, value) {
+    if (_browser2.default.hasLocalstorage) {
+      try {
+        localStorage[this._createKeyspace(key)] = value;
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+  };
+
+  return Config;
+}();
+
+var QueryString = exports.QueryString = function () {
+  function QueryString() {
+    (0, _classCallCheck3.default)(this, QueryString);
+  }
+
+  QueryString.parse = function parse(paramsString) {
+    var match = void 0;
+    var pl = /\+/g,
+        // Regex for replacing addition symbol with a space
+    search = /([^&=]+)=?([^&]*)/g,
+        decode = function decode(s) {
+      return decodeURIComponent(s.replace(pl, ' '));
+    },
+        params = {};
+    while (match = search.exec(paramsString)) {
+      // eslint-disable-line no-cond-assign
+      params[decode(match[1]).toLowerCase()] = decode(match[2]);
+    }
+    return params;
+  };
+
+  (0, _createClass3.default)(QueryString, null, [{
+    key: 'params',
+    get: function get() {
+      var query = window.location.search.substring(1);
+      if (query !== this.query) {
+        this._urlParams = this.parse(query);
+        this.query = query;
+      }
+      return this._urlParams;
+    }
+  }, {
+    key: 'hashParams',
+    get: function get() {
+      var hash = window.location.hash.substring(1);
+      if (hash !== this.hash) {
+        this._hashParams = this.parse(hash);
+        this.hash = hash;
+      }
+      return this._hashParams;
+    }
+  }]);
+  return QueryString;
+}();
+
+function seekStringToSeconds() {
+  var paramName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 't';
+
+  var seconds = 0;
+  var seekString = QueryString.params[paramName] || QueryString.hashParams[paramName] || '';
+  var parts = seekString.match(/[0-9]+[hms]+/g) || [];
+  if (parts.length > 0) {
+    var factor = { 'h': 3600, 'm': 60, 's': 1 };
+    parts.forEach(function (el) {
+      if (el) {
+        var suffix = el[el.length - 1];
+        var time = parseInt(el.slice(0, el.length - 1), 10);
+        seconds += time * factor[suffix];
+      }
+    });
+  } else if (seekString) {
+    seconds = parseInt(seekString, 10);
+  }
+
+  return seconds;
+}
+
+var idsCounter = {};
+
+function uniqueId(prefix) {
+  idsCounter[prefix] || (idsCounter[prefix] = 0);
+  var id = ++idsCounter[prefix];
+  return prefix + id;
+}
+
+function isNumber(value) {
+  return value - parseFloat(value) + 1 >= 0;
+}
+
+function currentScriptUrl() {
+  var scripts = document.getElementsByTagName('script');
+  return scripts.length ? scripts[scripts.length - 1].src : '';
+}
+
+var requestAnimationFrame = exports.requestAnimationFrame = (window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || function (fn) {
+  window.setTimeout(fn, 1000 / 60);
+}).bind(window);
+
+var cancelAnimationFrame = exports.cancelAnimationFrame = (window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame || window.clearTimeout).bind(window);
+
+function getBrowserLanguage() {
+  return window.navigator && window.navigator.language;
+}
+
+function now() {
+  if (window.performance && window.performance.now) return performance.now();
+
+  return Date.now();
+}
+
+// remove the item from the array if it exists in the array
+function removeArrayItem(arr, item) {
+  var i = arr.indexOf(item);
+  if (i >= 0) arr.splice(i, 1);
+}
+
+// find an item regardless of its letter case
+function listContainsIgnoreCase(item, items) {
+  if (item === undefined || items === undefined) return false;
+  return items.find(function (itemEach) {
+    return item.toLowerCase() === itemEach.toLowerCase();
+  }) !== undefined;
+}
+
+// https://github.com/video-dev/can-autoplay
+function canAutoPlayMedia(cb, options) {
+  options = (0, _assign2.default)({
+    inline: false,
+    muted: false,
+    timeout: 250,
+    type: 'video',
+    source: _media2.default.mp4,
+    element: null
+  }, options);
+
+  var element = options.element ? options.element : document.createElement(options.type);
+
+  element.muted = options.muted;
+  if (options.muted === true) element.setAttribute('muted', 'muted');
+
+  if (options.inline === true) element.setAttribute('playsinline', 'playsinline');
+
+  element.src = options.source;
+
+  var promise = element.play();
+
+  var timeoutId = setTimeout(function () {
+    setResult(false, new Error('Timeout ' + options.timeout + ' ms has been reached'));
+  }, options.timeout);
+
+  var setResult = function setResult(result) {
+    var error = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+    clearTimeout(timeoutId);
+    cb(result, error);
+  };
+
+  if (promise !== undefined) {
+    promise.then(function () {
+      return setResult(true);
+    }).catch(function (err) {
+      return setResult(false, err);
+    });
+  } else {
+    setResult(true);
+  }
+}
+
+// Simple Zepto element factory with video recycle feature.
+var videoStack = [];
+
+var DomRecycler = exports.DomRecycler = function () {
+  function DomRecycler() {
+    (0, _classCallCheck3.default)(this, DomRecycler);
+  }
+
+  DomRecycler.configure = function configure(options) {
+    this.options = _clapprZepto2.default.extend(this.options, options);
+  };
+
+  DomRecycler.create = function create(name) {
+    if (this.options.recycleVideo && name === 'video' && videoStack.length > 0) return videoStack.shift();
+
+    return (0, _clapprZepto2.default)('<' + name + '>');
+  };
+
+  DomRecycler.garbage = function garbage($el) {
+    // Expect Zepto collection with single element (does not iterate!)
+    if (!this.options.recycleVideo || $el[0].tagName.toUpperCase() !== 'VIDEO') return;
+    $el.children().remove();
+    videoStack.push($el);
+  };
+
+  return DomRecycler;
+}();
+
+DomRecycler.options = { recycleVideo: false };
+
+var DoubleEventHandler = exports.DoubleEventHandler = function () {
+  function DoubleEventHandler() {
+    var delay = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 500;
+    (0, _classCallCheck3.default)(this, DoubleEventHandler);
+
+    this.delay = delay;
+    this.lastTime = 0;
+  }
+
+  DoubleEventHandler.prototype.handle = function handle(event, cb) {
+    var prevented = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+
+    // Based on http://jsfiddle.net/brettwp/J4djY/
+    var currentTime = new Date().getTime();
+    var diffTime = currentTime - this.lastTime;
+
+    if (diffTime < this.delay && diffTime > 0) {
+      cb();
+      prevented && event.preventDefault();
+    }
+
+    this.lastTime = currentTime;
+  };
+
+  return DoubleEventHandler;
+}();
+
+exports.default = {
+  Config: Config,
+  Fullscreen: Fullscreen,
+  QueryString: QueryString,
+  DomRecycler: DomRecycler,
+  assign: assign,
+  extend: extend,
+  formatTime: formatTime,
+  seekStringToSeconds: seekStringToSeconds,
+  uniqueId: uniqueId,
+  currentScriptUrl: currentScriptUrl,
+  isNumber: isNumber,
+  requestAnimationFrame: requestAnimationFrame,
+  cancelAnimationFrame: cancelAnimationFrame,
+  getBrowserLanguage: getBrowserLanguage,
+  now: now,
+  removeArrayItem: removeArrayItem,
+  listContainsIgnoreCase: listContainsIgnoreCase,
+  canAutoPlayMedia: canAutoPlayMedia,
+  Media: _media2.default,
+  DoubleEventHandler: DoubleEventHandler
+};
 
 /***/ })
 
