@@ -9,6 +9,8 @@
 <img src="https://i.cloudup.com/GSbXxvCsBK.png">
 </div>
 
+**Attention:** release `0.4.0` includes important breaking changes that could prevent plugins from loading or working. Please check for plugin compatibility, and update those accordingly. Check the release notes for more details.
+
 ## Using the Player
 
 Add the following script on your HTML:
@@ -34,10 +36,6 @@ Test it at [cdn.clappr.io.](http://cdn.clappr.io/?src=http://www.streambox.fr/pl
 ## CDN
 
 You can use the latest published version at `https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js`
-
-## Vendors
-
-You can re-use some vendors used internally, for instance you can use `Kibo` through `Clappr.Vendor.Kibo`.
 
 ## Status
 
