@@ -75,7 +75,7 @@ Clappr is under heavy development but production-ready. Feel free to open issues
 
 ## [Supported Formats](doc/SUPPORTED_FORMATS.md)
 
-## [API Documentation](http://clappr.github.io/)
+## [API Documentation](doc/API.md)
 
 ## [How to write a plugin?](https://github.com/clappr/clappr/wiki)
 
