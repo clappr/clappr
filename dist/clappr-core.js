@@ -11801,7 +11801,7 @@ exports.default = function () {
     playbacks: []
   };
 
-  var currentVersion = "0.4.0";
+  var currentVersion = "0.4.1";
 
   return function () {
     Loader.checkVersionSupport = function checkVersionSupport(entry) {
@@ -12001,11 +12001,26 @@ exports.default = function () {
 
     Loader.prototype.addExternalPlugins = function addExternalPlugins(plugins) {
       plugins = this.groupPluginsByType(plugins);
-      if (plugins.playback) this.playbackPlugins = this.removeDups(plugins.playback.concat(this.playbackPlugins));
+      if (plugins.playback) {
+        var playbacks = plugins.playback.filter(function (playback) {
+          return Loader.checkVersionSupport(playback), true;
+        });
+        this.playbackPlugins = this.removeDups(playbacks.concat(this.playbackPlugins));
+      }
 
-      if (plugins.container) this.containerPlugins = this.removeDups(plugins.container.concat(this.containerPlugins));
+      if (plugins.container) {
+        var containerPlugins = plugins.container.filter(function (plugin) {
+          return Loader.checkVersionSupport(plugin), true;
+        });
+        this.containerPlugins = this.removeDups(containerPlugins.concat(this.containerPlugins));
+      }
 
-      if (plugins.core) this.corePlugins = this.removeDups(plugins.core.concat(this.corePlugins));
+      if (plugins.core) {
+        var corePlugins = plugins.core.filter(function (plugin) {
+          return Loader.checkVersionSupport(plugin), true;
+        });
+        this.corePlugins = this.removeDups(corePlugins.concat(this.corePlugins));
+      }
     };
 
     /**
@@ -13020,7 +13035,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var version = "0.4.0";
+var version = "0.4.1";
 
 // Built-in Plugins/Playbacks
 
@@ -13131,7 +13146,7 @@ var HTML5Audio = function (_HTML5Video) {
   }, {
     key: 'supportedVersion',
     get: function get() {
-      return { min: "0.4.0" };
+      return { min: "0.4.1" };
     }
   }, {
     key: 'tagName',
@@ -13287,7 +13302,7 @@ var HTML5Video = function (_Playback) {
   }, {
     key: 'supportedVersion',
     get: function get() {
-      return { min: "0.4.0" };
+      return { min: "0.4.1" };
     }
   }, {
     key: 'tagName',
@@ -14019,7 +14034,7 @@ var HTMLImg = function (_Playback) {
   }, {
     key: 'supportedVersion',
     get: function get() {
-      return { min: "0.4.0" };
+      return { min: "0.4.1" };
     }
   }, {
     key: 'tagName',
@@ -14175,7 +14190,7 @@ var NoOp = function (_Playback) {
   }, {
     key: 'supportedVersion',
     get: function get() {
-      return { min: "0.4.0" };
+      return { min: "0.4.1" };
     }
   }, {
     key: 'template',
@@ -14385,7 +14400,7 @@ var Strings = function (_CorePlugin) {
   }, {
     key: 'supportedVersion',
     get: function get() {
-      return { min: "0.4.0" };
+      return { min: "0.4.1" };
     }
   }]);
 
