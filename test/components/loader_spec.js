@@ -117,7 +117,7 @@ describe('Loader', function () {
   })
 
   describe('addExternalPlugins function', function () {
-    it('should extend the plugins array with the external ones', function () {
+    it('extends the plugins array with the external ones', function () {
       const playbackPlugin = PlaybackPlugin.extend({ name: 'playbackPlugin' })
       playbackPlugin.canPlay = () => true
       const containerPlugin = ContainerPlugin.extend({ name: 'containerPlugin' })
@@ -139,7 +139,7 @@ describe('Loader', function () {
       expect(loader.corePlugins.length).to.be.equal(nativeCorePluginsCount + 1)
     })
 
-    it('should support an array of plugins and group them by type', function () {
+    it('supports an array of plugins and group them by type', function () {
       const playbackPlugin = PlaybackPlugin.extend({ name: 'playbackPlugin' })
       const containerPlugin = ContainerPlugin.extend({ name: 'containerPlugin' })
       const corePlugin = CorePlugin.extend({ name: 'corePlugin' })
@@ -162,7 +162,7 @@ describe('Loader', function () {
         ]
       })
 
-      it('should prioritize external plugins if their names collide', function () {
+      it('prioritizes external plugins if their names collide', function () {
         const spinnerPlugin = ContainerPlugin.extend({ container: {}, name: 'spinner', myprop: 'myvalue' })
 
         expect(loader.containerPlugins.filter((plugin) => {
@@ -176,7 +176,7 @@ describe('Loader', function () {
         expect(firstLoadedPlugin.prototype.myprop).to.be.equal('myvalue')
       })
 
-      it('should allow only a plugin with a given name', function () {
+      it('allows only one plugin with a given name', function () {
         const spinnerPlugin = ContainerPlugin.extend({ container: {}, name: 'spinner' })
 
         expect(loader.containerPlugins.filter((plugin) => {
@@ -189,12 +189,24 @@ describe('Loader', function () {
           return plugin.prototype.name === 'spinner'
         }).length).to.be.equal(1)
       })
+
+      // TODO: this behavior will change from 0.5.x on, preventing plugins from loading
+      it('accepts plugins with missing version information', function() {
+        const SomePlugin = ContainerPlugin.extend({ container: {},  name: 'plugin' })
+        const loader = new Loader()
+
+        loader.addExternalPlugins({ container: [SomePlugin] })
+
+        expect(loader.containerPlugins.filter((plugin) => {
+          return plugin.prototype.name === 'plugin'
+        }).length).to.be.equal(1)
+      })
     })
 
   })
 
   describe('validateExternalPluginsType function', function () {
-    it('should throw an exception if its not core plugin', function () {
+    it('throws an exception if plugin type does not match where it\'s being added', function () {
       expect(function () { loader.validateExternalPluginsType({ core: [PlaybackPlugin] }) }).to.throw('external playback plugin on core array')
       expect(function () { loader.validateExternalPluginsType({ container: [PlaybackPlugin] }) }).to.throw('external playback plugin on container array')
 
