@@ -360,8 +360,8 @@ export default class MediaControl extends UICorePlugin {
 
   onActiveContainerChanged() {
     this.fullScreenOnVideoTagSupported = null
-    this.bindEvents()
     Mediator.off(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
+    this.bindEvents()
     // set the new container to match the volume of the last one
     this.setInitialVolume()
     this.changeTogglePlay()

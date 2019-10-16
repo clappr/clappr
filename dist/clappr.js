@@ -30391,7 +30391,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.3.10"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.3.11"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -36059,8 +36059,8 @@ var MediaControl = function (_UICorePlugin) {
 
   MediaControl.prototype.onActiveContainerChanged = function onActiveContainerChanged() {
     this.fullScreenOnVideoTagSupported = null;
-    this.bindEvents();
     _mediator2.default.off(this.options.playerId + ':' + _events2.default.PLAYER_RESIZE, this.playerResize, this);
+    this.bindEvents();
     // set the new container to match the volume of the last one
     this.setInitialVolume();
     this.changeTogglePlay();
