@@ -203,14 +203,20 @@ export default (() => {
      */
     addExternalPlugins(plugins) {
       plugins = this.groupPluginsByType(plugins)
-      if (plugins.playback)
-        this.playbackPlugins = this.removeDups(plugins.playback.concat(this.playbackPlugins))
+      if (plugins.playback) {
+        const playbacks = plugins.playback.filter((playback) => (Loader.checkVersionSupport(playback), true))
+        this.playbackPlugins = this.removeDups(playbacks.concat(this.playbackPlugins))
+      }
 
-      if (plugins.container)
-        this.containerPlugins = this.removeDups(plugins.container.concat(this.containerPlugins))
+      if (plugins.container) {
+        const containerPlugins = plugins.container.filter((plugin) => (Loader.checkVersionSupport(plugin), true))
+        this.containerPlugins = this.removeDups(containerPlugins.concat(this.containerPlugins))
+      }
 
-      if (plugins.core)
-        this.corePlugins = this.removeDups(plugins.core.concat(this.corePlugins))
+      if (plugins.core) {
+        const corePlugins = plugins.core.filter((plugin) => (Loader.checkVersionSupport(plugin), true))
+        this.corePlugins = this.removeDups(corePlugins.concat(this.corePlugins))
+      }
     }
 
     /**
