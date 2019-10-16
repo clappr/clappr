@@ -9,6 +9,7 @@ module.exports = {
         "process": false,
         "ActiveXObject": false,
         "VERSION": false,
+        "CLAPPR_CORE_VERSION": false,
         // Build globals
         "__dirname": false,
         // Test globals

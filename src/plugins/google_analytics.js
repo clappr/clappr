@@ -6,6 +6,7 @@ import { ContainerPlugin, Events } from '@clappr/core'
 
 export default class GoogleAnalytics extends ContainerPlugin {
   get name() { return 'google_analytics' }
+  get supportedVersion() { return { min: CLAPPR_CORE_VERSION } }
   constructor(container) {
     super(container)
     if (this.container.options.gaAccount) {

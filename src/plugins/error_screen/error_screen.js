@@ -6,6 +6,7 @@ import './public/error_screen.scss'
 
 export default class ErrorScreen extends UICorePlugin {
   get name() { return 'error_screen' }
+  get supportedVersion() { return { min: CLAPPR_CORE_VERSION } }
   get template() { return template(templateHtml) }
   get container() { return this.core.getCurrentContainer() }
   get attributes() {

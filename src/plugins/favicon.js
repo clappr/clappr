@@ -7,6 +7,7 @@ const oldIcon = $('link[rel="shortcut icon"]')
 
 export default class Favicon extends CorePlugin {
   get name() { return 'favicon' }
+  get supportedVersion() { return { min: CLAPPR_CORE_VERSION } }
   get oldIcon() { return oldIcon }
 
   constructor(core) {

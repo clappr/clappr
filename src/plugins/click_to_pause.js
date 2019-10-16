@@ -6,6 +6,7 @@ import { ContainerPlugin, Events, Playback } from '@clappr/core'
 
 export default class ClickToPausePlugin extends ContainerPlugin {
   get name() { return 'click_to_pause' }
+  get supportedVersion() { return { min: CLAPPR_CORE_VERSION } }
 
   constructor(container) {
     super(container)

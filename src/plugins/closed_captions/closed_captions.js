@@ -6,6 +6,8 @@ import './public/closed_captions.scss'
 export default class ClosedCaptions extends UICorePlugin {
   get name() { return 'closed_captions' }
 
+  get supportedVersion() { return { min: CLAPPR_CORE_VERSION } }
+
   get template() { return template(ccHTML) }
 
   get events() {

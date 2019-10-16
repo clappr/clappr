@@ -26,6 +26,7 @@ const { Config, Fullscreen, formatTime, extend, removeArrayItem } = Utils
 
 export default class MediaControl extends UICorePlugin {
   get name() { return 'media_control' }
+  get supportedVersion() { return { min: CLAPPR_CORE_VERSION } }
   get disabled() {
     let playbackIsNOOP = this.container && this.container.getPlaybackType() === Playback.NO_OP
     return this.userDisabled || playbackIsNOOP

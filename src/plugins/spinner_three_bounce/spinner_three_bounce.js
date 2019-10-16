@@ -9,6 +9,7 @@ import './public/spinner.scss'
 
 export default class SpinnerThreeBouncePlugin extends UIContainerPlugin {
   get name() { return 'spinner' }
+  get supportedVersion() { return { min: CLAPPR_CORE_VERSION } }
   get attributes() {
     return {
       'data-spinner':'',

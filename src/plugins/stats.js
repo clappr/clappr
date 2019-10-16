@@ -6,6 +6,7 @@ import { ContainerPlugin, Events, $ } from '@clappr/core'
 
 export default class StatsPlugin extends ContainerPlugin {
   get name() { return 'stats' }
+  get supportedVersion() { return { min: CLAPPR_CORE_VERSION } }
 
   constructor(container) {
     super(container)

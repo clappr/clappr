@@ -5,6 +5,7 @@ import './public/dvr_controls.scss'
 export default class DVRControls extends UICorePlugin {
   get template() { return template(dvrHTML) }
   get name() { return 'dvr_controls' }
+  get supportedVersion() { return { min: CLAPPR_CORE_VERSION } }
   get events() {
     return {
       'click .live-button': 'click'

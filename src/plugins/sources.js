@@ -2,6 +2,7 @@ import { CorePlugin, Events } from '@clappr/core'
 
 export default class SourcesPlugin extends CorePlugin {
   get name() { return 'sources' }
+  get supportedVersion() { return { min: CLAPPR_CORE_VERSION } }
 
   bindEvents() {
     this.listenTo(this.core, Events.CORE_CONTAINERS_CREATED, this.onContainersCreated)

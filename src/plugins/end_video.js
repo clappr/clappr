@@ -2,6 +2,7 @@ import { CorePlugin, Events } from '@clappr/core'
 
 export default class EndVideo extends CorePlugin {
   get name() { return 'end_video' }
+  get supportedVersion() { return { min: CLAPPR_CORE_VERSION } }
   bindEvents() {
     this.listenTo(this.core, Events.CORE_ACTIVE_CONTAINER_CHANGED, this.containerChanged)
     const container = this.core.activeContainer

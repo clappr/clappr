@@ -10,6 +10,7 @@ const { formatTime } = Utils
 
 export default class SeekTime extends UICorePlugin {
   get name() { return 'seek_time' }
+  get supportedVersion() { return { min: CLAPPR_CORE_VERSION } }
   get template() {
     return template(seekTimeHTML)
   }

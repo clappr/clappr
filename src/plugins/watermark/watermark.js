@@ -9,7 +9,7 @@ import './public/watermark.scss'
 
 export default class WaterMarkPlugin extends UIContainerPlugin {
   get name() { return 'watermark' }
-
+  get supportedVersion() { return { min: CLAPPR_CORE_VERSION } }
   get template() { return template(watermarkHTML) }
 
   constructor(container) {

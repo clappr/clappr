@@ -10,6 +10,7 @@ import './public/poster.scss'
 
 export default class PosterPlugin extends UIContainerPlugin {
   get name() { return 'poster' }
+  get supportedVersion() { return { min: CLAPPR_CORE_VERSION } }
   get template() { return template(posterHTML) }
   get shouldRender() {
     const showForNoOp = !!(this.options.poster && this.options.poster.showForNoOp)
