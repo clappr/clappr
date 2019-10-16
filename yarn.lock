@@ -3,9 +3,9 @@
 
 
 "@clappr/core@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@clappr/core/-/core-0.4.0.tgz#ba539b2e28b3ed014f01939b24eda02bc2d06be1"
-  integrity sha512-BfVpTFPjTgIcBYibNuIZEyGEtBGWKqDvq/MpGyhY8Ctlfqb1+aT9H2her9zqVgBJuV6epZNTT2mfRbPT8zg6XQ==
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@clappr/core/-/core-0.4.1.tgz#c728574abd35f9ce34fd867d9dc67f4733a84bf1"
+  integrity sha512-2TnYLIHjYRg29Vwz16khUX3dxy2g677guKBnIk6ukn1xTSZQD4nRl2NC8680p+fpUh0U10skRstjfsmOUHTXxg==
 
 "@sinonjs/commons@^1", "@sinonjs/commons@^1.0.2":
   version "1.4.0"
