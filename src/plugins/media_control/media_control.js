@@ -8,7 +8,7 @@
 
 import { Kibo } from '../../vendor'
 
-import { Events, UICorePlugin, Browser, Mediator, Playback, Utils, template, $ } from '@clappr/core'
+import { Events, UICorePlugin, Browser, Playback, Utils, template, $ } from '@clappr/core'
 
 import './public/media-control.scss'
 import mediaControlHTML from './public/media-control.html'
@@ -117,7 +117,7 @@ export default class MediaControl extends UICorePlugin {
     this.listenTo(this.core, Events.CORE_MOUSE_LEAVE, () => this.hide(this.options.hideMediaControlDelay))
     this.listenTo(this.core, Events.CORE_FULLSCREEN, this.show)
     this.listenTo(this.core, Events.CORE_OPTIONS_CHANGE, this.configure)
-    Mediator.on(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
+    this.listenTo(this.core, Events.CORE_RESIZE, this.playerResize)
     this.bindContainerEvents()
   }
 
@@ -354,7 +354,6 @@ export default class MediaControl extends UICorePlugin {
 
   onActiveContainerChanged() {
     this.fullScreenOnVideoTagSupported = null
-    Mediator.off(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
     this.bindEvents()
     // set the new container to match the volume of the last one
     this.setInitialVolume()
