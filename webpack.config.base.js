@@ -80,6 +80,7 @@ const webpackConfig = (config) => {
     plugins: [
       new webpack.DefinePlugin({
         VERSION: JSON.stringify(require('./package.json').version),
+        CLAPPR_CORE_VERSION: JSON.stringify(require('@clappr/core/package.json').version),
       }),
       ...(config.plugins || [])
     ],
