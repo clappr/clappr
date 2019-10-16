@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@clappr/core@^0.3.14":
-  version "0.3.14"
-  resolved "https://registry.yarnpkg.com/@clappr/core/-/core-0.3.14.tgz#0ee3c1e283a26c3b0c3685c20b50878bc70d23b0"
-  integrity sha512-XfbDKuLXD/FgYIhhvPNzOamVsDm3RZjUsuMs/nWQapILMLYUtvs3CgSlX5B+QQ/1FumpdbaSg0bEgcS2D7s3uA==
+"@clappr/core@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@clappr/core/-/core-0.4.0.tgz#ba539b2e28b3ed014f01939b24eda02bc2d06be1"
+  integrity sha512-BfVpTFPjTgIcBYibNuIZEyGEtBGWKqDvq/MpGyhY8Ctlfqb1+aT9H2her9zqVgBJuV6epZNTT2mfRbPT8zg6XQ==
 
 "@sinonjs/commons@^1", "@sinonjs/commons@^1.0.2":
   version "1.4.0"
