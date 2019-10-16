@@ -3243,7 +3243,7 @@ var _vendor2 = _interopRequireDefault(_vendor);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.3.12"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.4.0"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -3311,6 +3311,11 @@ var ClickToPausePlugin = function (_ContainerPlugin) {
     key: 'name',
     get: function get() {
       return 'click_to_pause';
+    }
+  }, {
+    key: 'supportedVersion',
+    get: function get() {
+      return { min: "0.4.1" };
     }
   }]);
 
@@ -3399,6 +3404,11 @@ var ClosedCaptions = function (_UICorePlugin) {
     key: 'name',
     get: function get() {
       return 'closed_captions';
+    }
+  }, {
+    key: 'supportedVersion',
+    get: function get() {
+      return { min: "0.4.1" };
     }
   }, {
     key: 'template',
@@ -3630,6 +3640,11 @@ var DVRControls = function (_UICorePlugin) {
       return 'dvr_controls';
     }
   }, {
+    key: 'supportedVersion',
+    get: function get() {
+      return { min: "0.4.1" };
+    }
+  }, {
     key: 'events',
     get: function get() {
       return {
@@ -3836,6 +3851,11 @@ var EndVideo = function (_CorePlugin) {
     get: function get() {
       return 'end_video';
     }
+  }, {
+    key: 'supportedVersion',
+    get: function get() {
+      return { min: "0.4.1" };
+    }
   }]);
   return EndVideo;
 }(_core.CorePlugin);
@@ -3895,6 +3915,11 @@ var ErrorScreen = function (_UICorePlugin) {
     key: 'name',
     get: function get() {
       return 'error_screen';
+    }
+  }, {
+    key: 'supportedVersion',
+    get: function get() {
+      return { min: "0.4.1" };
     }
   }, {
     key: 'template',
@@ -4096,6 +4121,11 @@ var Favicon = function (_CorePlugin) {
       return 'favicon';
     }
   }, {
+    key: 'supportedVersion',
+    get: function get() {
+      return { min: "0.4.1" };
+    }
+  }, {
     key: 'oldIcon',
     get: function get() {
       return oldIcon;
@@ -4237,6 +4267,11 @@ var GoogleAnalytics = function (_ContainerPlugin) {
     key: 'name',
     get: function get() {
       return 'google_analytics';
+    }
+  }, {
+    key: 'supportedVersion',
+    get: function get() {
+      return { min: "0.4.1" };
     }
   }]);
 
@@ -4475,6 +4510,11 @@ var MediaControl = function (_UICorePlugin) {
       return 'media_control';
     }
   }, {
+    key: 'supportedVersion',
+    get: function get() {
+      return { min: "0.4.1" };
+    }
+  }, {
     key: 'disabled',
     get: function get() {
       var playbackIsNOOP = this.container && this.container.getPlaybackType() === _core.Playback.NO_OP;
@@ -4600,7 +4640,7 @@ var MediaControl = function (_UICorePlugin) {
     });
     this.listenTo(this.core, _core.Events.CORE_FULLSCREEN, this.show);
     this.listenTo(this.core, _core.Events.CORE_OPTIONS_CHANGE, this.configure);
-    _core.Mediator.on(this.options.playerId + ':' + _core.Events.PLAYER_RESIZE, this.playerResize, this);
+    this.listenTo(this.core, _core.Events.CORE_RESIZE, this.playerResize);
     this.bindContainerEvents();
   };
 
@@ -4839,7 +4879,6 @@ var MediaControl = function (_UICorePlugin) {
 
   MediaControl.prototype.onActiveContainerChanged = function onActiveContainerChanged() {
     this.fullScreenOnVideoTagSupported = null;
-    _core.Mediator.off(this.options.playerId + ':' + _core.Events.PLAYER_RESIZE, this.playerResize, this);
     this.bindEvents();
     // set the new container to match the volume of the last one
     this.setInitialVolume();
@@ -5357,6 +5396,11 @@ var PosterPlugin = function (_UIContainerPlugin) {
       return 'poster';
     }
   }, {
+    key: 'supportedVersion',
+    get: function get() {
+      return { min: "0.4.1" };
+    }
+  }, {
     key: 'template',
     get: function get() {
       return (0, _core.template)(_poster2.default);
@@ -5664,6 +5708,11 @@ var SeekTime = function (_UICorePlugin) {
       return 'seek_time';
     }
   }, {
+    key: 'supportedVersion',
+    get: function get() {
+      return { min: "0.4.1" };
+    }
+  }, {
     key: 'template',
     get: function get() {
       return (0, _core.template)(_seek_time2.default);
@@ -5909,6 +5958,11 @@ var SourcesPlugin = function (_CorePlugin) {
     get: function get() {
       return 'sources';
     }
+  }, {
+    key: 'supportedVersion',
+    get: function get() {
+      return { min: "0.4.1" };
+    }
   }]);
   return SourcesPlugin;
 }(_core.CorePlugin);
@@ -6005,6 +6059,11 @@ var SpinnerThreeBouncePlugin = function (_UIContainerPlugin) {
     key: 'name',
     get: function get() {
       return 'spinner';
+    }
+  }, {
+    key: 'supportedVersion',
+    get: function get() {
+      return { min: "0.4.1" };
     }
   }, {
     key: 'attributes',
@@ -6119,6 +6178,11 @@ var StatsPlugin = function (_ContainerPlugin) {
     key: 'name',
     get: function get() {
       return 'stats';
+    }
+  }, {
+    key: 'supportedVersion',
+    get: function get() {
+      return { min: "0.4.1" };
     }
   }]);
 
@@ -6316,6 +6380,11 @@ var WaterMarkPlugin = function (_UIContainerPlugin) {
     key: 'name',
     get: function get() {
       return 'watermark';
+    }
+  }, {
+    key: 'supportedVersion',
+    get: function get() {
+      return { min: "0.4.1" };
     }
   }, {
     key: 'template',
