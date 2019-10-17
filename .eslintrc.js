@@ -9,7 +9,7 @@ module.exports = {
         "process": false,
         "ActiveXObject": false,
         "VERSION": false,
-        "PLAIN_HTML5_ONLY": false,
+        "CLAPPR_CORE_VERSION": false,
         // Build globals
         "__dirname": false,
         // Test globals

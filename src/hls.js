@@ -14,6 +14,8 @@ export default class HlsjsPlayback extends HTML5Video {
 
   get name() { return 'hls' }
 
+  get supportedVersion() { return { min: CLAPPR_CORE_VERSION } }
+
   get levels() { return this._levels || [] }
 
   get currentLevel() {
