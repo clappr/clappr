@@ -34,10 +34,11 @@
   },
   "homepage": "https://github.com/clappr/hlsjs-playback",
   "peerDependencies": {
-    "@clappr/core": "^0.3.7"
+    "@clappr/core": "^0.3.14",
+    "hls.js": "^0.12.4"
   },
   "devDependencies": {
-    "@clappr/core": "^0.3.7",
+    "@clappr/core": "^0.3.14",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.3",
     "babel-plugin-add-module-exports": "^0.2.1",
