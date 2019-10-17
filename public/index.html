@@ -2,7 +2,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <script type="text/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/@clappr/core@latest/dist/clappr-core.min.js"></script>
+  <script type="text/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/@clappr/core@0.3.14/dist/clappr-core.min.js"></script>
   <script type="text/javascript" charset="utf-8" src="latest/hlsjs-playback.js"></script>
   <script type="text/javascript" charset="utf-8" src="j/main.js"></script>
   <script type="text/javascript" charset="utf-8" src="j/editor/ace.js"></script>
@@ -59,12 +59,12 @@
       <div id="editor">var playerElement = document.getElementById("player-wrapper");
 
 var player = new Clappr.Player({
-  source: 'https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8',
+  source: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
   poster: 'http://clappr.io/poster.png',
   mute: true,
   height: 360,
   width: 640,
-  plugins: [HLSPlayback],
+  plugins: [HlsjsPlayback],
   playback: {
     controls: true,
   },
@@ -108,13 +108,13 @@ player.attachTo(playerElement);
         var playerElement = document.getElementById("player-wrapper");
 
         player = new Clappr.Player({
-          source: urlParams.src || 'https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8',
+          source: urlParams.src || 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
           poster: urlParams.poster || 'http://clappr.io/poster.png',
           mute: true,
           autoPlay: true,
           height: 360,
           width: 640,
-          plugins: [HLSPlayback],
+          plugins: [HlsjsPlayback],
           playback: {
             controls: true,
           },
