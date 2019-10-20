@@ -8,12 +8,18 @@ import templateHtml from './public/error_screen.html'
 import './public/error_screen.scss'
 
 export default class ErrorScreen extends UICorePlugin {
-  get name() { return 'error_screen' }
-  get template() { return template(templateHtml) }
-  get container() { return this.core.getCurrentContainer() }
+  get name() {
+    return 'error_screen'
+  }
+  get template() {
+    return template(templateHtml)
+  }
+  get container() {
+    return this.core.getCurrentContainer()
+  }
   get attributes() {
     return {
-      'class': 'player-error-screen',
+      class: 'player-error-screen',
       'data-error-screen': '',
     }
   }
@@ -26,7 +32,11 @@ export default class ErrorScreen extends UICorePlugin {
 
   bindEvents() {
     this.listenTo(this.core, Events.ERROR, this.onError)
-    this.listenTo(this.core, Events.CORE_ACTIVE_CONTAINER_CHANGED, this.onContainerChanged)
+    this.listenTo(
+      this.core,
+      Events.CORE_ACTIVE_CONTAINER_CHANGED,
+      this.onContainerChanged
+    )
   }
 
   bindReload() {
@@ -71,13 +81,15 @@ export default class ErrorScreen extends UICorePlugin {
   render() {
     if (!this.err) return
 
-    this.$el.html(this.template({
-      title: this.err.UI.title,
-      message: this.err.UI.message,
-      code: this.err.code,
-      icon: this.err.UI.icon || '',
-      reloadIcon,
-    }))
+    this.$el.html(
+      this.template({
+        title: this.err.UI.title,
+        message: this.err.UI.message,
+        code: this.err.code,
+        icon: this.err.UI.icon || '',
+        reloadIcon,
+      })
+    )
 
     this.core.$el.append(this.el)
 

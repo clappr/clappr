@@ -30,16 +30,20 @@ export default class Container extends UIObject {
    * @default Container
    * @return {String} container's name
    */
-  get name() { return 'Container' }
-  get attributes() { return { class: 'container', 'data-container': '' } }
+  get name() {
+    return 'Container'
+  }
+  get attributes() {
+    return { class: 'container', 'data-container': '' }
+  }
   get events() {
     return {
-      'click': 'clicked',
-      'dblclick': 'dblClicked',
-      'touchend': 'dblTap',
-      'contextmenu': 'onContextMenu',
-      'mouseenter': 'mouseEnter',
-      'mouseleave': 'mouseLeave'
+      click: 'clicked',
+      dblclick: 'dblClicked',
+      touchend: 'dblTap',
+      contextmenu: 'onContextMenu',
+      mouseenter: 'mouseEnter',
+      mouseleave: 'mouseLeave',
     }
   }
 
@@ -127,7 +131,7 @@ export default class Container extends UIObject {
     this.plugins = [this.playback]
     this.dblTapHandler = new DoubleEventHandler(500)
     this.clickTimer = null
-    this.clickDelay = 200  // FIXME: could be a player option
+    this.clickDelay = 200 // FIXME: could be a player option
     this.bindEvents()
   }
 
@@ -165,22 +169,58 @@ export default class Container extends UIObject {
     this.listenTo(this.playback, Events.PLAYBACK_READY, this.ready)
     this.listenTo(this.playback, Events.PLAYBACK_BUFFERING, this.onBuffering)
     this.listenTo(this.playback, Events.PLAYBACK_BUFFERFULL, this.bufferfull)
-    this.listenTo(this.playback, Events.PLAYBACK_SETTINGSUPDATE, this.settingsUpdate)
-    this.listenTo(this.playback, Events.PLAYBACK_LOADEDMETADATA, this.loadedMetadata)
-    this.listenTo(this.playback, Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinitionUpdate)
+    this.listenTo(
+      this.playback,
+      Events.PLAYBACK_SETTINGSUPDATE,
+      this.settingsUpdate
+    )
+    this.listenTo(
+      this.playback,
+      Events.PLAYBACK_LOADEDMETADATA,
+      this.loadedMetadata
+    )
+    this.listenTo(
+      this.playback,
+      Events.PLAYBACK_HIGHDEFINITIONUPDATE,
+      this.highDefinitionUpdate
+    )
     this.listenTo(this.playback, Events.PLAYBACK_BITRATE, this.updateBitrate)
-    this.listenTo(this.playback, Events.PLAYBACK_PLAYBACKSTATE, this.playbackStateChanged)
-    this.listenTo(this.playback, Events.PLAYBACK_DVR, this.playbackDvrStateChanged)
-    this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL_DISABLE, this.disableMediaControl)
-    this.listenTo(this.playback, Events.PLAYBACK_MEDIACONTROL_ENABLE, this.enableMediaControl)
+    this.listenTo(
+      this.playback,
+      Events.PLAYBACK_PLAYBACKSTATE,
+      this.playbackStateChanged
+    )
+    this.listenTo(
+      this.playback,
+      Events.PLAYBACK_DVR,
+      this.playbackDvrStateChanged
+    )
+    this.listenTo(
+      this.playback,
+      Events.PLAYBACK_MEDIACONTROL_DISABLE,
+      this.disableMediaControl
+    )
+    this.listenTo(
+      this.playback,
+      Events.PLAYBACK_MEDIACONTROL_ENABLE,
+      this.enableMediaControl
+    )
     this.listenTo(this.playback, Events.PLAYBACK_SEEKED, this.onSeeked)
     this.listenTo(this.playback, Events.PLAYBACK_ENDED, this.onEnded)
     this.listenTo(this.playback, Events.PLAYBACK_PLAY, this.playing)
     this.listenTo(this.playback, Events.PLAYBACK_PAUSE, this.paused)
     this.listenTo(this.playback, Events.PLAYBACK_STOP, this.stopped)
     this.listenTo(this.playback, Events.PLAYBACK_ERROR, this.error)
-    this.listenTo(this.playback, Events.PLAYBACK_SUBTITLE_AVAILABLE, this.subtitleAvailable)
-    this.listenTo(this.playback, Events.PLAYBACK_SUBTITLE_CHANGED, this.subtitleChanged)
+    this.listenTo(
+      this.playback,
+      Events.PLAYBACK_SUBTITLE_AVAILABLE,
+      this.subtitleAvailable
+    )
+    this.listenTo(
+      this.playback,
+      Events.PLAYBACK_SUBTITLE_CHANGED,
+      this.subtitleChanged
+    )
   }
 
   subtitleAvailable() {
@@ -238,7 +278,7 @@ export default class Container extends UIObject {
   destroy() {
     this.trigger(Events.CONTAINER_DESTROYED, this, this.name)
     this.stopListening()
-    this.plugins.forEach((plugin) => plugin.destroy())
+    this.plugins.forEach(plugin => plugin.destroy())
     this.$el.remove()
   }
 
@@ -272,8 +312,7 @@ export default class Container extends UIObject {
   }
 
   error(error) {
-    if (!this.isReady)
-      this.ready()
+    if (!this.isReady) this.ready()
 
     this.trigger(Events.CONTAINER_ERROR, error, this.name)
   }
@@ -367,7 +406,6 @@ export default class Container extends UIObject {
   onContextMenu(event) {
     if (!this.options.chromeless || this.options.allowUserInteraction)
       this.trigger(Events.CONTAINER_CONTEXTMENU, event, this.name)
-
   }
 
   seek(time) {
@@ -436,13 +474,11 @@ export default class Container extends UIObject {
   mouseEnter() {
     if (!this.options.chromeless || this.options.allowUserInteraction)
       this.trigger(Events.CONTAINER_MOUSE_ENTER)
-
   }
 
   mouseLeave() {
     if (!this.options.chromeless || this.options.allowUserInteraction)
       this.trigger(Events.CONTAINER_MOUSE_LEAVE)
-
   }
 
   settingsUpdate() {
@@ -475,9 +511,7 @@ export default class Container extends UIObject {
   updateStyle() {
     if (!this.options.chromeless || this.options.allowUserInteraction)
       this.$el.removeClass('chromeless')
-    else
-      this.$el.addClass('chromeless')
-
+    else this.$el.addClass('chromeless')
   }
 
   /**

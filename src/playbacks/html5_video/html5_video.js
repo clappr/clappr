@@ -2,7 +2,12 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import { isNumber, seekStringToSeconds, DomRecycler, canAutoPlayMedia } from '../../base/utils'
+import {
+  isNumber,
+  seekStringToSeconds,
+  DomRecycler,
+  canAutoPlayMedia,
+} from '../../base/utils'
 
 import Playback from '../../base/playback'
 import Browser from '../../components/browser'
@@ -15,62 +20,90 @@ import tracksHTML from './public/tracks.html'
 import './public/style.scss'
 
 const MIMETYPES = {
-  'mp4': ['avc1.42E01E', 'avc1.58A01E', 'avc1.4D401E', 'avc1.64001E', 'mp4v.20.8', 'mp4v.20.240', 'mp4a.40.2'].map(
-    (codec) => { return 'video/mp4; codecs="' + codec + ', mp4a.40.2"' }),
-  'ogg': ['video/ogg; codecs="theora, vorbis"', 'video/ogg; codecs="dirac"', 'video/ogg; codecs="theora, speex"'],
+  mp4: [
+    'avc1.42E01E',
+    'avc1.58A01E',
+    'avc1.4D401E',
+    'avc1.64001E',
+    'mp4v.20.8',
+    'mp4v.20.240',
+    'mp4a.40.2',
+  ].map(codec => {
+    return 'video/mp4; codecs="' + codec + ', mp4a.40.2"'
+  }),
+  ogg: [
+    'video/ogg; codecs="theora, vorbis"',
+    'video/ogg; codecs="dirac"',
+    'video/ogg; codecs="theora, speex"',
+  ],
   '3gpp': ['video/3gpp; codecs="mp4v.20.8, samr"'],
-  'webm': ['video/webm; codecs="vp8, vorbis"'],
-  'mkv': ['video/x-matroska; codecs="theora, vorbis"'],
-  'm3u8': ['application/x-mpegurl']
+  webm: ['video/webm; codecs="vp8, vorbis"'],
+  mkv: ['video/x-matroska; codecs="theora, vorbis"'],
+  m3u8: ['application/x-mpegurl'],
 }
 MIMETYPES['ogv'] = MIMETYPES['ogg']
 MIMETYPES['3gp'] = MIMETYPES['3gpp']
 
 const AUDIO_MIMETYPES = {
-  'wav': ['audio/wav'],
-  'mp3': ['audio/mp3', 'audio/mpeg;codecs="mp3"'],
-  'aac': ['audio/mp4;codecs="mp4a.40.5"'],
-  'oga': ['audio/ogg']
+  wav: ['audio/wav'],
+  mp3: ['audio/mp3', 'audio/mpeg;codecs="mp3"'],
+  aac: ['audio/mp4;codecs="mp4a.40.5"'],
+  oga: ['audio/ogg'],
 }
 
-const KNOWN_AUDIO_MIMETYPES = Object.keys(AUDIO_MIMETYPES).reduce((acc, k) => [...acc, ...AUDIO_MIMETYPES[k]], [])
+const KNOWN_AUDIO_MIMETYPES = Object.keys(AUDIO_MIMETYPES).reduce(
+  (acc, k) => [...acc, ...AUDIO_MIMETYPES[k]],
+  []
+)
 
 const UNKNOWN_ERROR = { code: 'unknown', message: 'unknown' }
 
 // TODO: rename this Playback to HTML5Playback (breaking change, only after 0.3.0)
 export default class HTML5Video extends Playback {
-  get name() { return 'html5_video' }
-  get tagName() { return this.isAudioOnly ? 'audio' : 'video' }
+  get name() {
+    return 'html5_video'
+  }
+  get tagName() {
+    return this.isAudioOnly ? 'audio' : 'video'
+  }
 
   get isAudioOnly() {
     const resourceUrl = this.options.src
-    let mimeTypes = HTML5Video._mimeTypesForUrl(resourceUrl, AUDIO_MIMETYPES, this.options.mimeType)
-    return this.options.playback && this.options.playback.audioOnly || this.options.audioOnly || KNOWN_AUDIO_MIMETYPES.indexOf(mimeTypes[0]) >= 0
+    let mimeTypes = HTML5Video._mimeTypesForUrl(
+      resourceUrl,
+      AUDIO_MIMETYPES,
+      this.options.mimeType
+    )
+    return (
+      (this.options.playback && this.options.playback.audioOnly) ||
+      this.options.audioOnly ||
+      KNOWN_AUDIO_MIMETYPES.indexOf(mimeTypes[0]) >= 0
+    )
   }
 
   get attributes() {
     return {
-      'data-html5-video': ''
+      'data-html5-video': '',
     }
   }
 
   get events() {
     return {
-      'canplay': '_onCanPlay',
-      'canplaythrough': '_handleBufferingEvents',
-      'durationchange': '_onDurationChange',
-      'ended': '_onEnded',
-      'error': '_onError',
-      'loadeddata': '_onLoadedData',
-      'loadedmetadata': '_onLoadedMetadata',
-      'pause': '_onPause',
-      'playing': '_onPlaying',
-      'progress': '_onProgress',
-      'seeking': '_onSeeking',
-      'seeked': '_onSeeked',
-      'stalled': '_handleBufferingEvents',
-      'timeupdate': '_onTimeUpdate',
-      'waiting': '_onWaiting'
+      canplay: '_onCanPlay',
+      canplaythrough: '_handleBufferingEvents',
+      durationchange: '_onDurationChange',
+      ended: '_onEnded',
+      error: '_onError',
+      loadeddata: '_onLoadedData',
+      loadedmetadata: '_onLoadedMetadata',
+      pause: '_onPause',
+      playing: '_onPlaying',
+      progress: '_onProgress',
+      seeking: '_onSeeking',
+      seeked: '_onSeeked',
+      stalled: '_handleBufferingEvents',
+      timeupdate: '_onTimeUpdate',
+      waiting: '_onWaiting',
     }
   }
 
@@ -106,10 +139,14 @@ export default class HTML5Video extends Playback {
     this._setupSrc(this.options.src)
     // backwards compatibility (TODO: remove on 0.3.0)
     this.options.playback || (this.options.playback = this.options || {})
-    this.options.playback.disableContextMenu = this.options.playback.disableContextMenu || this.options.disableVideoTagContextMenu
+    this.options.playback.disableContextMenu =
+      this.options.playback.disableContextMenu ||
+      this.options.disableVideoTagContextMenu
 
     const playbackConfig = this.options.playback
-    const preload = playbackConfig.preload || (Browser.isSafari ? 'auto' : this.options.preload)
+    const preload =
+      playbackConfig.preload ||
+      (Browser.isSafari ? 'auto' : this.options.preload)
 
     let posterUrl // FIXME: poster plugin should always convert poster to object with expected properties ?
     if (this.options.poster) {
@@ -117,7 +154,6 @@ export default class HTML5Video extends Playback {
         posterUrl = this.options.poster
       else if (typeof this.options.poster.url === 'string')
         posterUrl = this.options.poster.url
-
     }
 
     $.extend(this.el, {
@@ -126,20 +162,24 @@ export default class HTML5Video extends Playback {
       loop: this.options.loop,
       poster: posterUrl,
       preload: preload || 'metadata',
-      controls: (playbackConfig.controls || this.options.useVideoTagDefaultControls) && 'controls',
+      controls:
+        (playbackConfig.controls || this.options.useVideoTagDefaultControls) &&
+        'controls',
       crossOrigin: playbackConfig.crossOrigin,
-      'x-webkit-playsinline': playbackConfig.playInline
+      'x-webkit-playsinline': playbackConfig.playInline,
     })
 
-    playbackConfig.playInline && (this.$el.attr({ playsinline: 'playsinline' }))
-    playbackConfig.crossOrigin && (this.$el.attr({ crossorigin: playbackConfig.crossOrigin }))
+    playbackConfig.playInline && this.$el.attr({ playsinline: 'playsinline' })
+    playbackConfig.crossOrigin &&
+      this.$el.attr({ crossorigin: playbackConfig.crossOrigin })
 
     // TODO should settings be private?
     this.settings = { default: ['seekbar'] }
     this.settings.left = ['playpause', 'position', 'duration']
     this.settings.right = ['fullscreen', 'volume', 'hd-indicator']
 
-    playbackConfig.externalTracks && (this._setupExternalTracks(playbackConfig.externalTracks))
+    playbackConfig.externalTracks &&
+      this._setupExternalTracks(playbackConfig.externalTracks)
 
     this.options.autoPlay && this.attemptAutoPlay()
   }
@@ -161,8 +201,7 @@ export default class HTML5Video extends Playback {
 
   // See Playback.canAutoPlay()
   canAutoPlay(cb) {
-    if (this.options.disableCanAutoPlay)
-      cb(true, null)
+    if (this.options.disableCanAutoPlay) cb(true, null)
 
     let opts = {
       timeout: this.options.autoPlayTimeout || 500,
@@ -198,8 +237,7 @@ export default class HTML5Video extends Playback {
    * @param {String} srcUrl The source URL.
    */
   _setupSrc(srcUrl) {
-    if (this.el.src === srcUrl)
-      return
+    if (this.el.src === srcUrl) return
 
     this._ccIsSetup = false
     this.el.src = srcUrl
@@ -208,12 +246,16 @@ export default class HTML5Video extends Playback {
 
   _onLoadedMetadata(e) {
     this._handleBufferingEvents()
-    this.trigger(Events.PLAYBACK_LOADEDMETADATA, { duration: e.target.duration, data: e })
+    this.trigger(Events.PLAYBACK_LOADEDMETADATA, {
+      duration: e.target.duration,
+      data: e,
+    })
     this._updateSettings()
-    const autoSeekFromUrl = typeof (this._options.autoSeekFromUrl) === 'undefined' || this._options.autoSeekFromUrl
+    const autoSeekFromUrl =
+      typeof this._options.autoSeekFromUrl === 'undefined' ||
+      this._options.autoSeekFromUrl
     if (this.getPlaybackType() !== Playback.LIVE && autoSeekFromUrl)
       this._checkInitialSeek()
-
   }
 
   _onDurationChange() {
@@ -226,10 +268,12 @@ export default class HTML5Video extends Playback {
   _updateSettings() {
     // we can't figure out if hls resource is VoD or not until it is being loaded or duration has changed.
     // that's why we check it again and update media control accordingly.
-    if (this.getPlaybackType() === Playback.VOD || this.getPlaybackType() === Playback.AOD)
+    if (
+      this.getPlaybackType() === Playback.VOD ||
+      this.getPlaybackType() === Playback.AOD
+    )
       this.settings.left = ['playpause', 'position', 'duration']
-    else
-      this.settings.left = ['playstop']
+    else this.settings.left = ['playstop']
 
     this.settings.seekEnabled = this.isSeekEnabled()
     this.trigger(Events.PLAYBACK_SETTINGSUPDATE)
@@ -241,7 +285,9 @@ export default class HTML5Video extends Playback {
 
   getPlaybackType() {
     const onDemandType = this.tagName === 'audio' ? Playback.AOD : Playback.VOD
-    return [0, undefined, Infinity].indexOf(this.el.duration) >= 0 ? Playback.LIVE : onDemandType
+    return [0, undefined, Infinity].indexOf(this.el.duration) >= 0
+      ? Playback.LIVE
+      : onDemandType
   }
 
   isHighDefinitionInUse() {
@@ -264,9 +310,7 @@ export default class HTML5Video extends Playback {
     this._handleBufferingEvents()
     let promise = this.el.play()
     // For more details, see https://developers.google.com/web/updates/2016/03/play-returns-promise
-    if (promise && promise.catch)
-      promise.catch(() => {})
-
+    if (promise && promise.catch) promise.catch(() => {})
   }
 
   pause() {
@@ -324,17 +368,18 @@ export default class HTML5Video extends Playback {
   }
 
   _startPlayheadMovingChecks() {
-    if (this._playheadMovingTimer !== null)
-      return
+    if (this._playheadMovingTimer !== null) return
 
     this._playheadMovingTimeOnCheck = null
     this._determineIfPlayheadMoving()
-    this._playheadMovingTimer = setInterval(this._determineIfPlayheadMoving.bind(this), 500)
+    this._playheadMovingTimer = setInterval(
+      this._determineIfPlayheadMoving.bind(this),
+      500
+    )
   }
 
   _stopPlayheadMovingChecks() {
-    if (this._playheadMovingTimer === null)
-      return
+    if (this._playheadMovingTimer === null) return
 
     clearInterval(this._playheadMovingTimer)
     this._playheadMovingTimer = null
@@ -414,14 +459,16 @@ export default class HTML5Video extends Playback {
   // - loading has started
   _handleBufferingEvents() {
     const playheadShouldBeMoving = !this.el.ended && !this.el.paused
-    const buffering = this._loadStarted && !this.el.ended && !this._stopped && ((playheadShouldBeMoving && !this._playheadMoving) || this.el.readyState < this.el.HAVE_FUTURE_DATA)
+    const buffering =
+      this._loadStarted &&
+      !this.el.ended &&
+      !this._stopped &&
+      ((playheadShouldBeMoving && !this._playheadMoving) ||
+        this.el.readyState < this.el.HAVE_FUTURE_DATA)
     if (this._isBuffering !== buffering) {
       this._isBuffering = buffering
-      if (buffering)
-        this.trigger(Events.PLAYBACK_BUFFERING, this.name)
-      else
-        this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
-
+      if (buffering) this.trigger(Events.PLAYBACK_BUFFERING, this.name)
+      else this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
     }
   }
 
@@ -433,18 +480,23 @@ export default class HTML5Video extends Playback {
       code,
       description: message,
       raw: this.el.error,
-      level: isUnknownError ? PlayerError.Levels.WARN : PlayerError.Levels.FATAL
+      level: isUnknownError
+        ? PlayerError.Levels.WARN
+        : PlayerError.Levels.FATAL,
     })
 
     if (isUnknownError)
       Log.warn(this.name, 'HTML5 unknown error: ', formattedError)
-    else
-      this.trigger(Events.PLAYBACK_ERROR, formattedError)
+    else this.trigger(Events.PLAYBACK_ERROR, formattedError)
   }
 
   destroy() {
     this._destroyed = true
-    this.handleTextTrackChange && this.el.textTracks.removeEventListener('change', this.handleTextTrackChange)
+    this.handleTextTrackChange &&
+      this.el.textTracks.removeEventListener(
+        'change',
+        this.handleTextTrackChange
+      )
     super.destroy()
     this.el.removeAttribute('src')
     this.el.load() // load with no src to stop loading of the previous source and avoid leaks
@@ -463,9 +515,7 @@ export default class HTML5Video extends Playback {
 
   _checkInitialSeek() {
     const seekTime = seekStringToSeconds()
-    if (seekTime !== 0)
-      this.seek(seekTime)
-
+    if (seekTime !== 0) this.seek(seekTime)
   }
 
   getCurrentTime() {
@@ -477,45 +527,65 @@ export default class HTML5Video extends Playback {
   }
 
   _onTimeUpdate() {
-    if (this.getPlaybackType() === Playback.LIVE)
-      this.trigger(Events.PLAYBACK_TIMEUPDATE, { current: 1, total: 1 }, this.name)
-    else
-      this.trigger(Events.PLAYBACK_TIMEUPDATE, { current: this.el.currentTime, total: this.el.duration }, this.name)
-
+    if (this.getPlaybackType() === Playback.LIVE) {
+      this.trigger(
+        Events.PLAYBACK_TIMEUPDATE,
+        { current: 1, total: 1 },
+        this.name
+      )
+    } else {
+      this.trigger(
+        Events.PLAYBACK_TIMEUPDATE,
+        { current: this.el.currentTime, total: this.el.duration },
+        this.name
+      )
+    }
   }
 
   _onProgress() {
-    if (!this.el.buffered.length)
-      return
+    if (!this.el.buffered.length) return
 
     let buffered = []
     let bufferedPos = 0
-    for (let i = 0;  i < this.el.buffered.length; i++) {
-      buffered = [...buffered, { start: this.el.buffered.start(i), end: this.el.buffered.end(i) }]
-      if (this.el.currentTime >= buffered[i].start && this.el.currentTime <= buffered[i].end)
+    for (let i = 0; i < this.el.buffered.length; i++) {
+      buffered = [
+        ...buffered,
+        { start: this.el.buffered.start(i), end: this.el.buffered.end(i) },
+      ]
+      if (
+        this.el.currentTime >= buffered[i].start &&
+        this.el.currentTime <= buffered[i].end
+      )
         bufferedPos = i
-
     }
     const progress = {
       start: buffered[bufferedPos].start,
       current: buffered[bufferedPos].end,
-      total: this.el.duration
+      total: this.el.duration,
     }
     this.trigger(Events.PLAYBACK_PROGRESS, progress, buffered)
   }
 
   _typeFor(src) {
-    let mimeTypes = HTML5Video._mimeTypesForUrl(src, MIMETYPES, this.options.mimeType)
-    if (mimeTypes.length === 0)
-      mimeTypes = HTML5Video._mimeTypesForUrl(src, AUDIO_MIMETYPES, this.options.mimeType)
+    let mimeTypes = HTML5Video._mimeTypesForUrl(
+      src,
+      MIMETYPES,
+      this.options.mimeType
+    )
+    if (mimeTypes.length === 0) {
+      mimeTypes = HTML5Video._mimeTypesForUrl(
+        src,
+        AUDIO_MIMETYPES,
+        this.options.mimeType
+      )
+    }
 
     const mimeType = mimeTypes[0] || ''
     return mimeType.split(';')[0]
   }
 
   _ready() {
-    if (this._isReadyState)
-      return
+    if (this._isReadyState) return
 
     this._isReadyState = true
     this.trigger(Events.PLAYBACK_READY, this.name)
@@ -529,7 +599,10 @@ export default class HTML5Video extends Playback {
         const trackId = this.closedCaptionsTrackId
         this.closedCaptionsTrackId = trackId
         this.handleTextTrackChange = this._handleTextTrackChange.bind(this)
-        this.el.textTracks.addEventListener('change', this.handleTextTrackChange)
+        this.el.textTracks.addEventListener(
+          'change',
+          this.handleTextTrackChange
+        )
       }
       this._ccIsSetup = true
     }
@@ -537,12 +610,14 @@ export default class HTML5Video extends Playback {
 
   _handleTextTrackChange() {
     let tracks = this.closedCaptionsTracks
-    let track = tracks.find(track => track.track.mode === 'showing') || { id: -1 }
+    let track = tracks.find(track => track.track.mode === 'showing') || {
+      id: -1,
+    }
 
     if (this._ccTrackId !== track.id) {
       this._ccTrackId = track.id
       this.trigger(Events.PLAYBACK_SUBTITLE_CHANGED, {
-        id: track.id
+        id: track.id,
       })
     }
   }
@@ -553,12 +628,16 @@ export default class HTML5Video extends Playback {
 
   get closedCaptionsTracks() {
     let id = 0
-    let trackId = () => { return id++ }
+    let trackId = () => {
+      return id++
+    }
     let textTracks = this.el.textTracks ? Array.from(this.el.textTracks) : []
 
     return textTracks
       .filter(track => track.kind === 'subtitles' || track.kind === 'captions')
-      .map(track => { return { id: trackId(), name: track.label, track: track } })
+      .map(track => {
+        return { id: trackId(), name: track.label, track: track }
+      })
   }
 
   get closedCaptionsTrackId() {
@@ -566,9 +645,7 @@ export default class HTML5Video extends Playback {
   }
 
   set closedCaptionsTrackId(trackId) {
-    if (!isNumber(trackId))
-      return
-
+    if (!isNumber(trackId)) return
 
     let tracks = this.closedCaptionsTracks
     let showingTrack
@@ -576,29 +653,28 @@ export default class HTML5Video extends Playback {
     // Note: -1 is for hide all tracks
     if (trackId !== -1) {
       showingTrack = tracks.find(track => track.id === trackId)
-      if (!showingTrack)
-        return // Track id not found
+      if (!showingTrack) return // Track id not found
 
-      if (showingTrack.track.mode === 'showing')
-        return // Track already showing
-
+      if (showingTrack.track.mode === 'showing') return // Track already showing
     }
 
     // Since it is possible to display multiple tracks,
     // ensure that all tracks are hidden.
     tracks
       .filter(track => track.track.mode !== 'hidden')
-      .forEach(track => track.track.mode = 'hidden')
+      .forEach(track => (track.track.mode = 'hidden'))
 
     showingTrack && (showingTrack.track.mode = 'showing')
 
     this._ccTrackId = trackId
     this.trigger(Events.PLAYBACK_SUBTITLE_CHANGED, {
-      id: trackId
+      id: trackId,
     })
   }
 
-  get template() { return template(tracksHTML) }
+  get template() {
+    return template(tracksHTML)
+  }
 
   render() {
     if (this.options.playback.disableContextMenu) {
@@ -608,9 +684,11 @@ export default class HTML5Video extends Playback {
     }
 
     if (this._externalTracks && this._externalTracks.length > 0) {
-      this.$el.html(this.template({
-        tracks: this._externalTracks,
-      }))
+      this.$el.html(
+        this.template({
+          tracks: this._externalTracks,
+        })
+      )
     }
 
     this._ready()
@@ -618,19 +696,39 @@ export default class HTML5Video extends Playback {
   }
 }
 
-HTML5Video._mimeTypesForUrl = function(resourceUrl, mimeTypesByExtension, mimeType) {
+HTML5Video._mimeTypesForUrl = function(
+  resourceUrl,
+  mimeTypesByExtension,
+  mimeType
+) {
   const extension = (resourceUrl.split('?')[0].match(/.*\.(.*)$/) || [])[1]
-  let mimeTypes = mimeType || (extension && mimeTypesByExtension[extension.toLowerCase()]) || []
-  return (mimeTypes.constructor === Array) ? mimeTypes : [mimeTypes]
+  let mimeTypes =
+    mimeType ||
+    (extension && mimeTypesByExtension[extension.toLowerCase()]) ||
+    []
+  return mimeTypes.constructor === Array ? mimeTypes : [mimeTypes]
 }
 
-HTML5Video._canPlay = function(type, mimeTypesByExtension, resourceUrl, mimeType) {
-  let mimeTypes = HTML5Video._mimeTypesForUrl(resourceUrl, mimeTypesByExtension, mimeType)
+HTML5Video._canPlay = function(
+  type,
+  mimeTypesByExtension,
+  resourceUrl,
+  mimeType
+) {
+  let mimeTypes = HTML5Video._mimeTypesForUrl(
+    resourceUrl,
+    mimeTypesByExtension,
+    mimeType
+  )
   const media = document.createElement(type)
-  return !!(mimeTypes.filter(mediaType => !!media.canPlayType(mediaType).replace(/no/, ''))[0])
+  return !!mimeTypes.filter(
+    mediaType => !!media.canPlayType(mediaType).replace(/no/, '')
+  )[0]
 }
 
 HTML5Video.canPlay = function(resourceUrl, mimeType) {
-  return HTML5Video._canPlay('audio', AUDIO_MIMETYPES, resourceUrl, mimeType) ||
-         HTML5Video._canPlay('video', MIMETYPES, resourceUrl, mimeType)
+  return (
+    HTML5Video._canPlay('audio', AUDIO_MIMETYPES, resourceUrl, mimeType) ||
+    HTML5Video._canPlay('video', MIMETYPES, resourceUrl, mimeType)
+  )
 }

@@ -10,7 +10,9 @@ import Log from '../../plugins/log'
  * @module components
  */
 class PlayerError extends BaseObject {
-  get name() { return 'error' }
+  get name() {
+    return 'error'
+  }
 
   /**
    * @property Levels
@@ -24,7 +26,7 @@ class PlayerError extends BaseObject {
     }
   }
 
-  constructor(options={}, core) {
+  constructor(options = {}, core) {
     super(options)
     this.core = core
   }

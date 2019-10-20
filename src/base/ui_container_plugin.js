@@ -14,7 +14,9 @@ import ErrorMixin from './error_mixin'
  * @module base
  */
 export default class UIContainerPlugin extends UIObject {
-  get playerError() { return this.container.playerError }
+  get playerError() {
+    return this.container.playerError
+  }
 
   constructor(container) {
     super(container.options)
@@ -38,7 +40,6 @@ export default class UIContainerPlugin extends UIObject {
   }
 
   bindEvents() {}
-
 }
 
 Object.assign(UIContainerPlugin.prototype, ErrorMixin)

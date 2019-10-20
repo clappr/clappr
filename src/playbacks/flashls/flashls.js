@@ -13,21 +13,24 @@ import HLSEvents from './flashls_events'
 import hlsSwf from './public/HLSPlayer.swf'
 import $ from 'clappr-zepto'
 
-
 const MAX_ATTEMPTS = 60
 const AUTO = -1
 
 export default class FlasHLS extends BaseFlashPlayback {
-  get name() { return 'flashls' }
-  get swfPath() { return template(hlsSwf)({ baseUrl: this._baseUrl }) }
+  get name() {
+    return 'flashls'
+  }
+  get swfPath() {
+    return template(hlsSwf)({ baseUrl: this._baseUrl })
+  }
 
-  get levels() { return this._levels || [] }
+  get levels() {
+    return this._levels || []
+  }
   get currentLevel() {
     if (this._currentLevel === null || this._currentLevel === undefined)
       return AUTO
-    else
-      return this._currentLevel //0 is a valid level ID
-
+    else return this._currentLevel //0 is a valid level ID
   }
   set currentLevel(id) {
     this._currentLevel = id
@@ -67,7 +70,7 @@ export default class FlasHLS extends BaseFlashPlayback {
       left: ['playstop'],
       default: ['seekbar'],
       right: ['fullscreen', 'volume', 'hd-indicator'],
-      seekEnabled: false
+      seekEnabled: false,
     }
     this.settings = $.extend({}, this._defaultSettings)
     this._playbackType = Playback.LIVE
@@ -76,53 +79,137 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   _initHlsParameters(options) {
-    this._autoStartLoad = (options.autoStartLoad === undefined) ? true : options.autoStartLoad
-    this._capLevelToStage = (options.capLevelToStage === undefined) ? false : options.capLevelToStage
-    this._maxLevelCappingMode = (options.maxLevelCappingMode === undefined) ? 'downscale' : options.maxLevelCappingMode
-    this._minBufferLength = (options.minBufferLength === undefined) ? -1 : options.minBufferLength
-    this._minBufferLengthCapping = (options.minBufferLengthCapping === undefined) ? -1 : options.minBufferLengthCapping
-    this._maxBufferLength = (options.maxBufferLength === undefined) ? 120 : options.maxBufferLength
-    this._maxBackBufferLength = (options.maxBackBufferLength === undefined) ? 30 : options.maxBackBufferLength
-    this._lowBufferLength = (options.lowBufferLength === undefined) ? 3 : options.lowBufferLength
-    this._mediaTimePeriod = (options.mediaTimePeriod === undefined) ? 100 : options.mediaTimePeriod
-    this._fpsDroppedMonitoringPeriod = (options.fpsDroppedMonitoringPeriod === undefined) ? 5000 : options.fpsDroppedMonitoringPeriod
-    this._fpsDroppedMonitoringThreshold = (options.fpsDroppedMonitoringThreshold === undefined) ? 0.2 : options.fpsDroppedMonitoringThreshold
-    this._capLevelonFPSDrop = (options.capLevelonFPSDrop === undefined) ? false : options.capLevelonFPSDrop
-    this._smoothAutoSwitchonFPSDrop = (options.smoothAutoSwitchonFPSDrop === undefined) ? this.capLevelonFPSDrop : options.smoothAutoSwitchonFPSDrop
-    this._switchDownOnLevelError = (options.switchDownOnLevelError === undefined) ? true : options.switchDownOnLevelError
-    this._seekMode = (options.seekMode === undefined) ? 'ACCURATE' : options.seekMode
-    this._keyLoadMaxRetry = (options.keyLoadMaxRetry === undefined) ? 3 : options.keyLoadMaxRetry
-    this._keyLoadMaxRetryTimeout = (options.keyLoadMaxRetryTimeout === undefined) ? 64000 : options.keyLoadMaxRetryTimeout
-    this._fragmentLoadMaxRetry = (options.fragmentLoadMaxRetry === undefined) ? 3 : options.fragmentLoadMaxRetry
-    this._fragmentLoadMaxRetryTimeout = (options.fragmentLoadMaxRetryTimeout === undefined) ? 4000 : options.fragmentLoadMaxRetryTimeout
-    this._fragmentLoadSkipAfterMaxRetry = (options.fragmentLoadSkipAfterMaxRetry === undefined) ? true : options.fragmentLoadSkipAfterMaxRetry
-    this._maxSkippedFragments = (options.maxSkippedFragments === undefined) ? 5 : options.maxSkippedFragments
-    this._flushLiveURLCache = (options.flushLiveURLCache === undefined) ? false : options.flushLiveURLCache
-    this._initialLiveManifestSize = (options.initialLiveManifestSize === undefined) ? 1 : options.initialLiveManifestSize
-    this._manifestLoadMaxRetry = (options.manifestLoadMaxRetry === undefined) ? 3 : options.manifestLoadMaxRetry
-    this._manifestLoadMaxRetryTimeout = (options.manifestLoadMaxRetryTimeout === undefined) ? 64000 : options.manifestLoadMaxRetryTimeout
-    this._manifestRedundantLoadmaxRetry = (options.manifestRedundantLoadmaxRetry === undefined) ? 3 : options.manifestRedundantLoadmaxRetry
-    this._startFromBitrate = (options.startFromBitrate === undefined) ? -1 : options.startFromBitrate
-    this._startFromLevel = (options.startFromLevel === undefined) ? -1 : options.startFromLevel
-    this._autoStartMaxDuration = (options.autoStartMaxDuration === undefined) ? -1 : options.autoStartMaxDuration
-    this._seekFromLevel = (options.seekFromLevel === undefined) ? -1 : options.seekFromLevel
-    this._useHardwareVideoDecoder = (options.useHardwareVideoDecoder === undefined) ? false : options.useHardwareVideoDecoder
-    this._hlsLogEnabled = (options.hlsLogEnabled === undefined) ? true : options.hlsLogEnabled
-    this._logDebug = (options.logDebug === undefined) ? false : options.logDebug
-    this._logDebug2 = (options.logDebug2 === undefined) ? false : options.logDebug2
-    this._logWarn = (options.logWarn === undefined) ? true : options.logWarn
-    this._logError = (options.logError === undefined) ? true : options.logError
-    this._hlsMinimumDvrSize = (options.hlsMinimumDvrSize === undefined) ? 60 : options.hlsMinimumDvrSize
+    this._autoStartLoad =
+      options.autoStartLoad === undefined ? true : options.autoStartLoad
+    this._capLevelToStage =
+      options.capLevelToStage === undefined ? false : options.capLevelToStage
+    this._maxLevelCappingMode =
+      options.maxLevelCappingMode === undefined
+        ? 'downscale'
+        : options.maxLevelCappingMode
+    this._minBufferLength =
+      options.minBufferLength === undefined ? -1 : options.minBufferLength
+    this._minBufferLengthCapping =
+      options.minBufferLengthCapping === undefined
+        ? -1
+        : options.minBufferLengthCapping
+    this._maxBufferLength =
+      options.maxBufferLength === undefined ? 120 : options.maxBufferLength
+    this._maxBackBufferLength =
+      options.maxBackBufferLength === undefined
+        ? 30
+        : options.maxBackBufferLength
+    this._lowBufferLength =
+      options.lowBufferLength === undefined ? 3 : options.lowBufferLength
+    this._mediaTimePeriod =
+      options.mediaTimePeriod === undefined ? 100 : options.mediaTimePeriod
+    this._fpsDroppedMonitoringPeriod =
+      options.fpsDroppedMonitoringPeriod === undefined
+        ? 5000
+        : options.fpsDroppedMonitoringPeriod
+    this._fpsDroppedMonitoringThreshold =
+      options.fpsDroppedMonitoringThreshold === undefined
+        ? 0.2
+        : options.fpsDroppedMonitoringThreshold
+    this._capLevelonFPSDrop =
+      options.capLevelonFPSDrop === undefined
+        ? false
+        : options.capLevelonFPSDrop
+    this._smoothAutoSwitchonFPSDrop =
+      options.smoothAutoSwitchonFPSDrop === undefined
+        ? this.capLevelonFPSDrop
+        : options.smoothAutoSwitchonFPSDrop
+    this._switchDownOnLevelError =
+      options.switchDownOnLevelError === undefined
+        ? true
+        : options.switchDownOnLevelError
+    this._seekMode =
+      options.seekMode === undefined ? 'ACCURATE' : options.seekMode
+    this._keyLoadMaxRetry =
+      options.keyLoadMaxRetry === undefined ? 3 : options.keyLoadMaxRetry
+    this._keyLoadMaxRetryTimeout =
+      options.keyLoadMaxRetryTimeout === undefined
+        ? 64000
+        : options.keyLoadMaxRetryTimeout
+    this._fragmentLoadMaxRetry =
+      options.fragmentLoadMaxRetry === undefined
+        ? 3
+        : options.fragmentLoadMaxRetry
+    this._fragmentLoadMaxRetryTimeout =
+      options.fragmentLoadMaxRetryTimeout === undefined
+        ? 4000
+        : options.fragmentLoadMaxRetryTimeout
+    this._fragmentLoadSkipAfterMaxRetry =
+      options.fragmentLoadSkipAfterMaxRetry === undefined
+        ? true
+        : options.fragmentLoadSkipAfterMaxRetry
+    this._maxSkippedFragments =
+      options.maxSkippedFragments === undefined
+        ? 5
+        : options.maxSkippedFragments
+    this._flushLiveURLCache =
+      options.flushLiveURLCache === undefined
+        ? false
+        : options.flushLiveURLCache
+    this._initialLiveManifestSize =
+      options.initialLiveManifestSize === undefined
+        ? 1
+        : options.initialLiveManifestSize
+    this._manifestLoadMaxRetry =
+      options.manifestLoadMaxRetry === undefined
+        ? 3
+        : options.manifestLoadMaxRetry
+    this._manifestLoadMaxRetryTimeout =
+      options.manifestLoadMaxRetryTimeout === undefined
+        ? 64000
+        : options.manifestLoadMaxRetryTimeout
+    this._manifestRedundantLoadmaxRetry =
+      options.manifestRedundantLoadmaxRetry === undefined
+        ? 3
+        : options.manifestRedundantLoadmaxRetry
+    this._startFromBitrate =
+      options.startFromBitrate === undefined ? -1 : options.startFromBitrate
+    this._startFromLevel =
+      options.startFromLevel === undefined ? -1 : options.startFromLevel
+    this._autoStartMaxDuration =
+      options.autoStartMaxDuration === undefined
+        ? -1
+        : options.autoStartMaxDuration
+    this._seekFromLevel =
+      options.seekFromLevel === undefined ? -1 : options.seekFromLevel
+    this._useHardwareVideoDecoder =
+      options.useHardwareVideoDecoder === undefined
+        ? false
+        : options.useHardwareVideoDecoder
+    this._hlsLogEnabled =
+      options.hlsLogEnabled === undefined ? true : options.hlsLogEnabled
+    this._logDebug = options.logDebug === undefined ? false : options.logDebug
+    this._logDebug2 =
+      options.logDebug2 === undefined ? false : options.logDebug2
+    this._logWarn = options.logWarn === undefined ? true : options.logWarn
+    this._logError = options.logError === undefined ? true : options.logError
+    this._hlsMinimumDvrSize =
+      options.hlsMinimumDvrSize === undefined ? 60 : options.hlsMinimumDvrSize
   }
 
   _addListeners() {
     Mediator.on(this.cid + ':flashready', () => this._bootstrap())
-    Mediator.on(this.cid + ':timeupdate', (timeMetrics) => this._updateTime(timeMetrics))
-    Mediator.on(this.cid + ':playbackstate', (state) => this._setPlaybackState(state))
-    Mediator.on(this.cid + ':levelchanged', (level) => this._levelChanged(level))
-    Mediator.on(this.cid + ':error', (code, url, message) => this._flashPlaybackError(code, url, message))
-    Mediator.on(this.cid + ':fragmentloaded',(loadmetrics) => this._onFragmentLoaded(loadmetrics))
-    Mediator.on(this.cid + ':levelendlist', (level) => this._onLevelEndlist(level))
+    Mediator.on(this.cid + ':timeupdate', timeMetrics =>
+      this._updateTime(timeMetrics)
+    )
+    Mediator.on(this.cid + ':playbackstate', state =>
+      this._setPlaybackState(state)
+    )
+    Mediator.on(this.cid + ':levelchanged', level => this._levelChanged(level))
+    Mediator.on(this.cid + ':error', (code, url, message) =>
+      this._flashPlaybackError(code, url, message)
+    )
+    Mediator.on(this.cid + ':fragmentloaded', loadmetrics =>
+      this._onFragmentLoaded(loadmetrics)
+    )
+    Mediator.on(this.cid + ':levelendlist', level =>
+      this._onLevelEndlist(level)
+    )
   }
 
   stopListening() {
@@ -146,8 +233,7 @@ export default class FlasHLS extends BaseFlashPlayback {
       this._currentState = 'IDLE'
       this._setFlashSettings()
       this._updatePlaybackType()
-      if (this._autoPlay || this._shouldPlayOnManifestLoaded)
-        this.play()
+      if (this._autoPlay || this._shouldPlayOnManifestLoaded) this.play()
 
       this.trigger(Events.PLAYBACK_READY, this.name)
     } else {
@@ -176,8 +262,12 @@ export default class FlasHLS extends BaseFlashPlayback {
     this.el.playerSetMaxBackBufferLength(this._maxBackBufferLength)
     this.el.playerSetLowBufferLength(this._lowBufferLength)
     this.el.playerSetMediaTimePeriod(this._mediaTimePeriod)
-    this.el.playerSetFpsDroppedMonitoringPeriod(this._fpsDroppedMonitoringPeriod)
-    this.el.playerSetFpsDroppedMonitoringThreshold(this._fpsDroppedMonitoringThreshold)
+    this.el.playerSetFpsDroppedMonitoringPeriod(
+      this._fpsDroppedMonitoringPeriod
+    )
+    this.el.playerSetFpsDroppedMonitoringThreshold(
+      this._fpsDroppedMonitoringThreshold
+    )
     this.el.playerSetCapLevelonFPSDrop(this._capLevelonFPSDrop)
     this.el.playerSetSmoothAutoSwitchonFPSDrop(this._smoothAutoSwitchonFPSDrop)
     this.el.playerSetSwitchDownOnLevelError(this._switchDownOnLevelError)
@@ -185,14 +275,22 @@ export default class FlasHLS extends BaseFlashPlayback {
     this.el.playerSetKeyLoadMaxRetry(this._keyLoadMaxRetry)
     this.el.playerSetKeyLoadMaxRetryTimeout(this._keyLoadMaxRetryTimeout)
     this.el.playerSetFragmentLoadMaxRetry(this._fragmentLoadMaxRetry)
-    this.el.playerSetFragmentLoadMaxRetryTimeout(this._fragmentLoadMaxRetryTimeout)
-    this.el.playerSetFragmentLoadSkipAfterMaxRetry(this._fragmentLoadSkipAfterMaxRetry)
+    this.el.playerSetFragmentLoadMaxRetryTimeout(
+      this._fragmentLoadMaxRetryTimeout
+    )
+    this.el.playerSetFragmentLoadSkipAfterMaxRetry(
+      this._fragmentLoadSkipAfterMaxRetry
+    )
     this.el.playerSetMaxSkippedFragments(this._maxSkippedFragments)
     this.el.playerSetFlushLiveURLCache(this._flushLiveURLCache)
     this.el.playerSetInitialLiveManifestSize(this._initialLiveManifestSize)
     this.el.playerSetManifestLoadMaxRetry(this._manifestLoadMaxRetry)
-    this.el.playerSetManifestLoadMaxRetryTimeout(this._manifestLoadMaxRetryTimeout)
-    this.el.playerSetManifestRedundantLoadmaxRetry(this._manifestRedundantLoadmaxRetry)
+    this.el.playerSetManifestLoadMaxRetryTimeout(
+      this._manifestLoadMaxRetryTimeout
+    )
+    this.el.playerSetManifestRedundantLoadmaxRetry(
+      this._manifestRedundantLoadmaxRetry
+    )
     this.el.playerSetStartFromBitrate(this._startFromBitrate)
     this.el.playerSetStartFromLevel(this._startFromLevel)
     this.el.playerSetAutoStartMaxDuration(this._autoStartMaxDuration)
@@ -252,12 +350,16 @@ export default class FlasHLS extends BaseFlashPlayback {
 
   setFpsDroppedMonitoringPeriod(fpsDroppedMonitoringPeriod) {
     this._fpsDroppedMonitoringPeriod = fpsDroppedMonitoringPeriod
-    this.el.playerSetFpsDroppedMonitoringPeriod(this._fpsDroppedMonitoringPeriod)
+    this.el.playerSetFpsDroppedMonitoringPeriod(
+      this._fpsDroppedMonitoringPeriod
+    )
   }
 
   setFpsDroppedMonitoringThreshold(fpsDroppedMonitoringThreshold) {
     this._fpsDroppedMonitoringThreshold = fpsDroppedMonitoringThreshold
-    this.el.playerSetFpsDroppedMonitoringThreshold(this._fpsDroppedMonitoringThreshold)
+    this.el.playerSetFpsDroppedMonitoringThreshold(
+      this._fpsDroppedMonitoringThreshold
+    )
   }
 
   setCapLevelonFPSDrop(capLevelonFPSDrop) {
@@ -297,12 +399,16 @@ export default class FlasHLS extends BaseFlashPlayback {
 
   setFragmentLoadMaxRetryTimeout(fragmentLoadMaxRetryTimeout) {
     this._fragmentLoadMaxRetryTimeout = fragmentLoadMaxRetryTimeout
-    this.el.playerSetFragmentLoadMaxRetryTimeout(this._fragmentLoadMaxRetryTimeout)
+    this.el.playerSetFragmentLoadMaxRetryTimeout(
+      this._fragmentLoadMaxRetryTimeout
+    )
   }
 
   setFragmentLoadSkipAfterMaxRetry(fragmentLoadSkipAfterMaxRetry) {
     this._fragmentLoadSkipAfterMaxRetry = fragmentLoadSkipAfterMaxRetry
-    this.el.playerSetFragmentLoadSkipAfterMaxRetry(this._fragmentLoadSkipAfterMaxRetry)
+    this.el.playerSetFragmentLoadSkipAfterMaxRetry(
+      this._fragmentLoadSkipAfterMaxRetry
+    )
   }
 
   setMaxSkippedFragments(maxSkippedFragments) {
@@ -327,12 +433,16 @@ export default class FlasHLS extends BaseFlashPlayback {
 
   setManifestLoadMaxRetryTimeout(manifestLoadMaxRetryTimeout) {
     this._manifestLoadMaxRetryTimeout = manifestLoadMaxRetryTimeout
-    this.el.playerSetManifestLoadMaxRetryTimeout(this._manifestLoadMaxRetryTimeout)
+    this.el.playerSetManifestLoadMaxRetryTimeout(
+      this._manifestLoadMaxRetryTimeout
+    )
   }
 
   setManifestRedundantLoadmaxRetry(manifestRedundantLoadmaxRetry) {
     this._manifestRedundantLoadmaxRetry = manifestRedundantLoadmaxRetry
-    this.el.playerSetManifestRedundantLoadmaxRetry(this._manifestRedundantLoadmaxRetry)
+    this.el.playerSetManifestRedundantLoadmaxRetry(
+      this._manifestRedundantLoadmaxRetry
+    )
   }
 
   setStartFromBitrate(startFromBitrate) {
@@ -388,7 +498,8 @@ export default class FlasHLS extends BaseFlashPlayback {
   _levelChanged(level) {
     const currentLevel = this.el.getLevels()[level]
     if (currentLevel) {
-      this.highDefinition = (currentLevel.height >= 720 || (currentLevel.bitrate / 1000) >= 2000)
+      this.highDefinition =
+        currentLevel.height >= 720 || currentLevel.bitrate / 1000 >= 2000
       this.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE, this.highDefinition)
 
       if (!this._levels || this._levels.length === 0) this._fillLevels()
@@ -398,51 +509,47 @@ export default class FlasHLS extends BaseFlashPlayback {
         width: currentLevel.width,
         bandwidth: currentLevel.bitrate,
         bitrate: currentLevel.bitrate,
-        level: level
+        level: level,
       })
       this.trigger(Events.PLAYBACK_LEVEL_SWITCH_END)
     }
   }
 
   _updateTime(timeMetrics) {
-    if (this._currentState === 'IDLE')
-      return
-
+    if (this._currentState === 'IDLE') return
 
     const duration = this._normalizeDuration(timeMetrics.duration)
     let position = Math.min(Math.max(timeMetrics.position, 0), duration)
     const previousDVRStatus = this._dvrEnabled
-    const livePlayback = (this._playbackType === Playback.LIVE)
-    this._dvrEnabled = (livePlayback && duration > this._hlsMinimumDvrSize)
+    const livePlayback = this._playbackType === Playback.LIVE
+    this._dvrEnabled = livePlayback && duration > this._hlsMinimumDvrSize
 
-    if (duration === 100 || livePlayback === undefined)
-      return
-
+    if (duration === 100 || livePlayback === undefined) return
 
     if (this._dvrEnabled !== previousDVRStatus) {
       this._updateSettings()
       this.trigger(Events.PLAYBACK_SETTINGSUPDATE, this.name)
     }
 
-    if (livePlayback && !this._dvrEnabled)
-      position = duration
+    if (livePlayback && !this._dvrEnabled) position = duration
 
-    this.trigger(Events.PLAYBACK_TIMEUPDATE, { current: position, total: duration }, this.name)
+    this.trigger(
+      Events.PLAYBACK_TIMEUPDATE,
+      { current: position, total: duration },
+      this.name
+    )
   }
 
   play() {
     this.trigger(Events.PLAYBACK_PLAY_INTENT)
-    if (this._currentState === 'PAUSED')
-      this.el.playerResume()
+    if (this._currentState === 'PAUSED') this.el.playerResume()
     else if (!this._srcLoaded && this._currentState !== 'PLAYING')
       this._firstPlay()
-    else
-      this.el.playerPlay()
-
+    else this.el.playerPlay()
   }
 
   getPlaybackType() {
-    return this._playbackType? this._playbackType: null
+    return this._playbackType ? this._playbackType : null
   }
 
   getCurrentTime() {
@@ -474,25 +581,36 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   _setPlaybackState(state) {
-    if (['PLAYING_BUFFERING', 'PAUSED_BUFFERING'].indexOf(state) >= 0)  {
+    if (['PLAYING_BUFFERING', 'PAUSED_BUFFERING'].indexOf(state) >= 0) {
       this._bufferingState = true
       this.trigger(Events.PLAYBACK_BUFFERING, this.name)
       this._updateCurrentState(state)
     } else if (['PLAYING', 'PAUSED'].indexOf(state) >= 0) {
-      if (['PLAYING_BUFFERING', 'PAUSED_BUFFERING', 'IDLE'].indexOf(this._currentState) >= 0) {
+      if (
+        ['PLAYING_BUFFERING', 'PAUSED_BUFFERING', 'IDLE'].indexOf(
+          this._currentState
+        ) >= 0
+      ) {
         this._bufferingState = false
         this.trigger(Events.PLAYBACK_BUFFERFULL, this.name)
       }
       this._updateCurrentState(state)
     } else if (state === 'IDLE') {
       this._srcLoaded = false
-      if (this._loop && ['PLAYING_BUFFERING', 'PLAYING'].indexOf(this._currentState) >= 0) {
+      if (
+        this._loop &&
+        ['PLAYING_BUFFERING', 'PLAYING'].indexOf(this._currentState) >= 0
+      ) {
         this.play()
         this.seek(0)
       } else {
         this._updateCurrentState(state)
         this._hasEnded = true
-        this.trigger(Events.PLAYBACK_TIMEUPDATE, { current: 0, total: this.getDuration() }, this.name)
+        this.trigger(
+          Events.PLAYBACK_TIMEUPDATE,
+          { current: 0, total: this.getDuration() },
+          this.name
+        )
         this.trigger(Events.PLAYBACK_ENDED, this.name)
       }
     }
@@ -500,34 +618,25 @@ export default class FlasHLS extends BaseFlashPlayback {
 
   _updateCurrentState(state) {
     this._currentState = state
-    if (state !== 'IDLE')
-      this._hasEnded = false
+    if (state !== 'IDLE') this._hasEnded = false
 
     this._updatePlaybackType()
-    if (state === 'PLAYING')
-      this.trigger(Events.PLAYBACK_PLAY, this.name)
-    else if (state === 'PAUSED')
-      this.trigger(Events.PLAYBACK_PAUSE, this.name)
-
+    if (state === 'PLAYING') this.trigger(Events.PLAYBACK_PLAY, this.name)
+    else if (state === 'PAUSED') this.trigger(Events.PLAYBACK_PAUSE, this.name)
   }
 
   _updatePlaybackType() {
     this._playbackType = this.el.getType()
     if (this._playbackType) {
       this._playbackType = this._playbackType.toLowerCase()
-      if (this._playbackType === Playback.VOD)
-        this._startReportingProgress()
-      else
-        this._stopReportingProgress()
-
+      if (this._playbackType === Playback.VOD) this._startReportingProgress()
+      else this._stopReportingProgress()
     }
     this.trigger(Events.PLAYBACK_PLAYBACKSTATE, { type: this._playbackType })
   }
 
   _startReportingProgress() {
-    if (!this._reportingProgress)
-      this._reportingProgress = true
-
+    if (!this._reportingProgress) this._reportingProgress = true
   }
 
   _stopReportingProgress() {
@@ -541,7 +650,7 @@ export default class FlasHLS extends BaseFlashPlayback {
       this.trigger(Events.PLAYBACK_PROGRESS, {
         start: this.getCurrentTime(),
         current: buffered,
-        total: this.el.getDuration()
+        total: this.el.getDuration(),
       })
     }
   }
@@ -553,7 +662,9 @@ export default class FlasHLS extends BaseFlashPlayback {
   _firstPlay() {
     this._shouldPlayOnManifestLoaded = true
     if (this.el.playerLoad) {
-      Mediator.once(this.cid + ':manifestloaded', (duration, loadmetrics) => this._manifestLoaded(duration, loadmetrics))
+      Mediator.once(this.cid + ':manifestloaded', (duration, loadmetrics) =>
+        this._manifestLoaded(duration, loadmetrics)
+      )
       this._setFlashSettings() //ensure flushLiveURLCache will work (#327)
       this.el.playerLoad(this._src)
       this._srcLoaded = true
@@ -561,11 +672,13 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   volume(value) {
-    if (this.isReady)
+    if (this.isReady) {
       this.el.playerVolume(value)
-    else
-      this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () => this.volume(value))
-
+    } else {
+      this.listenToOnce(this, Events.PLAYBACK_BUFFERFULL, () =>
+        this.volume(value)
+      )
+    }
   }
 
   pause() {
@@ -573,7 +686,6 @@ export default class FlasHLS extends BaseFlashPlayback {
       this.el.playerPause()
       if (this._playbackType === Playback.LIVE && this._dvrEnabled)
         this._updateDvr(true)
-
     }
   }
 
@@ -581,12 +693,15 @@ export default class FlasHLS extends BaseFlashPlayback {
     this._srcLoaded = false
     this.el.playerStop()
     this.trigger(Events.PLAYBACK_STOP)
-    this.trigger(Events.PLAYBACK_TIMEUPDATE, { current: 0, total: 0 }, this.name)
+    this.trigger(
+      Events.PLAYBACK_TIMEUPDATE,
+      { current: 0, total: 0 },
+      this.name
+    )
   }
 
   isPlaying() {
-    if (this._currentState)
-      return !!(this._currentState.match(/playing/i))
+    if (this._currentState) return !!this._currentState.match(/playing/i)
 
     return false
   }
@@ -610,8 +725,7 @@ export default class FlasHLS extends BaseFlashPlayback {
   seekPercentage(percentage) {
     const duration = this.el.getDuration()
     let time = 0
-    if (percentage > 0)
-      time = duration * percentage / 100
+    if (percentage > 0) time = (duration * percentage) / 100
 
     this.seek(time)
   }
@@ -624,7 +738,11 @@ export default class FlasHLS extends BaseFlashPlayback {
       this._updateDvr(dvrInUse)
     }
     this.el.playerSeek(time)
-    this.trigger(Events.PLAYBACK_TIMEUPDATE, { current: time, total: duration }, this.name)
+    this.trigger(
+      Events.PLAYBACK_TIMEUPDATE,
+      { current: time, total: duration },
+      this.name
+    )
   }
 
   _updateDvr(dvrInUse) {
@@ -633,7 +751,7 @@ export default class FlasHLS extends BaseFlashPlayback {
     if (this._dvrInUse !== previousDvrInUse) {
       this._updateSettings()
       this.trigger(Events.PLAYBACK_DVR, this._dvrInUse)
-      this.trigger(Events.PLAYBACK_STATS_ADD, { 'dvr': this._dvrInUse })
+      this.trigger(Events.PLAYBACK_STATS_ADD, { dvr: this._dvrInUse })
     }
   }
 
@@ -660,7 +778,10 @@ export default class FlasHLS extends BaseFlashPlayback {
     }
 
     this._fillLevels()
-    this.trigger(Events.PLAYBACK_LOADEDMETADATA, { duration: duration, data: loadmetrics })
+    this.trigger(Events.PLAYBACK_LOADEDMETADATA, {
+      duration: duration,
+      data: loadmetrics,
+    })
   }
 
   _fillLevels() {
@@ -668,8 +789,13 @@ export default class FlasHLS extends BaseFlashPlayback {
     const levelsLength = levels.length
     this._levels = []
 
-    for (let index = 0 ; index < levelsLength ; index++)
-      this._levels.push({ id: index, label: `${levels[index].height}p`, level: levels[index] })
+    for (let index = 0; index < levelsLength; index++) {
+      this._levels.push({
+        id: index,
+        label: `${levels[index].height}p`,
+        level: levels[index],
+      })
+    }
 
     this.trigger(Events.PLAYBACK_LEVELS_AVAILABLE, this._levels)
   }
@@ -687,8 +813,9 @@ export default class FlasHLS extends BaseFlashPlayback {
     } else if (this._dvrEnabled) {
       this.settings.left = ['playpause']
       this.settings.seekEnabled = true
-    } else { this.settings.seekEnabled = false }
-
+    } else {
+      this.settings.seekEnabled = false
+    }
   }
 
   get dvrEnabled() {
@@ -696,11 +823,9 @@ export default class FlasHLS extends BaseFlashPlayback {
   }
 
   _createCallbacks() {
-    if (!window.Clappr)
-      window.Clappr = {}
+    if (!window.Clappr) window.Clappr = {}
 
-    if (!window.Clappr.flashlsCallbacks)
-      window.Clappr.flashlsCallbacks = {}
+    if (!window.Clappr.flashlsCallbacks) window.Clappr.flashlsCallbacks = {}
 
     this.flashlsEvents = new HLSEvents(this.cid)
     window.Clappr.flashlsCallbacks[this.cid] = (eventName, args) => {
@@ -717,7 +842,10 @@ export default class FlasHLS extends BaseFlashPlayback {
 
 FlasHLS.canPlay = function(resource, mimeType) {
   const resourceParts = resource.split('?')[0].match(/.*\.(.*)$/) || []
-  return Browser.hasFlash &&
-        ((resourceParts.length > 1 && resourceParts[1].toLowerCase() === 'm3u8') ||
-          mimeType === 'application/x-mpegURL' || mimeType === 'application/vnd.apple.mpegurl')
+  return (
+    Browser.hasFlash &&
+    ((resourceParts.length > 1 && resourceParts[1].toLowerCase() === 'm3u8') ||
+      mimeType === 'application/x-mpegURL' ||
+      mimeType === 'application/vnd.apple.mpegurl')
+  )
 }

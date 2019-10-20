@@ -10,7 +10,9 @@ import ErrorMixin from './error_mixin'
  * @module base
  */
 export default class ContainerPlugin extends BaseObject {
-  get playerError() { return this.container.playerError }
+  get playerError() {
+    return this.container.playerError
+  }
 
   constructor(container) {
     super(container.options)

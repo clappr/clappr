@@ -2,13 +2,17 @@ import UICorePlugin from 'base/ui_core_plugin'
 
 describe('UI Core Plugin', function() {
   class MyPlugin extends UICorePlugin {
-    render() { }
+    render() {}
   }
   it('constructs', () => {
     let callCount = 0
     class MyPlugin extends UICorePlugin {
-      bindEvents() { callCount += 1 }
-      render() { callCount += 1 }
+      bindEvents() {
+        callCount += 1
+      }
+      render() {
+        callCount += 1
+      }
     }
     const plugin = new MyPlugin(42)
 

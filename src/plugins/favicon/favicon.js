@@ -8,8 +8,12 @@ import pauseIcon from '../../icons/02-pause.svg'
 const oldIcon = $('link[rel="shortcut icon"]')
 
 export default class Favicon extends CorePlugin {
-  get name() { return 'favicon' }
-  get oldIcon() { return oldIcon }
+  get name() {
+    return 'favicon'
+  }
+  get oldIcon() {
+    return oldIcon
+  }
 
   constructor(core) {
     super(core)
@@ -31,7 +35,11 @@ export default class Favicon extends CorePlugin {
 
   bindEvents() {
     this.listenTo(this.core, Events.CORE_OPTIONS_CHANGE, this.configure)
-    this.listenTo(this.core, Events.CORE_ACTIVE_CONTAINER_CHANGED, this.containerChanged)
+    this.listenTo(
+      this.core,
+      Events.CORE_ACTIVE_CONTAINER_CHANGED,
+      this.containerChanged
+    )
     this.core.activeContainer && this.containerChanged()
   }
 
@@ -62,7 +70,9 @@ export default class Favicon extends CorePlugin {
     canvas[0].height = 16
     const ctx = canvas[0].getContext('2d')
     ctx.fillStyle = '#000'
-    const d = $(svg).find('path').attr('d')
+    const d = $(svg)
+      .find('path')
+      .attr('d')
     const path = new Path2D(d)
     ctx.fill(path)
     const icon = $('<link rel="shortcut icon" type="image/png"/>')
@@ -71,15 +81,13 @@ export default class Favicon extends CorePlugin {
   }
 
   setPlayIcon() {
-    if (!this.playIcon)
-      this.playIcon = this.createIcon(playIcon)
+    if (!this.playIcon) this.playIcon = this.createIcon(playIcon)
 
     this.changeIcon(this.playIcon)
   }
 
   setPauseIcon() {
-    if (!this.pauseIcon)
-      this.pauseIcon = this.createIcon(pauseIcon)
+    if (!this.pauseIcon) this.pauseIcon = this.createIcon(pauseIcon)
 
     this.changeIcon(this.pauseIcon)
   }

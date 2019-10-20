@@ -7,19 +7,23 @@ import Events from '../../base/events'
 import './public/style.scss'
 
 export default class HTMLImg extends Playback {
-  get name() { return 'html_img' }
-  get tagName() { return 'img' }
+  get name() {
+    return 'html_img'
+  }
+  get tagName() {
+    return 'img'
+  }
   get attributes() {
     return {
-      'data-html-img': ''
+      'data-html-img': '',
     }
   }
 
   get events() {
     return {
-      'load': '_onLoad',
-      'abort': '_onError',
-      'error': '_onError'
+      load: '_onLoad',
+      abort: '_onError',
+      error: '_onError',
     }
   }
 
@@ -42,7 +46,7 @@ export default class HTMLImg extends Playback {
   }
 
   _onError(evt) {
-    const m = (evt.type === 'error') ? 'load error' : 'loading aborted'
+    const m = evt.type === 'error' ? 'load error' : 'loading aborted'
     this.trigger(Events.PLAYBACK_ERROR, { message: m }, this.name)
   }
 }

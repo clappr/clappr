@@ -7,7 +7,9 @@ import Events from '../../base/events'
 import $ from 'clappr-zepto'
 
 export default class StatsPlugin extends ContainerPlugin {
-  get name() { return 'stats' }
+  get name() {
+    return 'stats'
+  }
 
   constructor(container) {
     super(container)
@@ -21,11 +23,23 @@ export default class StatsPlugin extends ContainerPlugin {
     this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
     this.listenTo(this.container, Events.CONTAINER_ENDED, this.onStop)
     this.listenTo(this.container, Events.CONTAINER_DESTROYED, this.onStop)
-    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering)
-    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferFull)
+    this.listenTo(
+      this.container,
+      Events.CONTAINER_STATE_BUFFERING,
+      this.onBuffering
+    )
+    this.listenTo(
+      this.container,
+      Events.CONTAINER_STATE_BUFFERFULL,
+      this.onBufferFull
+    )
     this.listenTo(this.container, Events.CONTAINER_STATS_ADD, this.onStatsAdd)
     this.listenTo(this.container, Events.CONTAINER_BITRATE, this.onStatsAdd)
-    this.listenTo(this.container.playback, Events.PLAYBACK_STATS_ADD, this.onStatsAdd)
+    this.listenTo(
+      this.container.playback,
+      Events.PLAYBACK_STATS_ADD,
+      this.onStatsAdd
+    )
   }
 
   setInitialAttrs() {
@@ -42,7 +56,6 @@ export default class StatsPlugin extends ContainerPlugin {
     this.watchingTimeInit = Date.now()
     if (!this.intervalId)
       this.intervalId = setInterval(this.report.bind(this), this.reportInterval)
-
   }
 
   onStop() {
@@ -53,10 +66,8 @@ export default class StatsPlugin extends ContainerPlugin {
   }
 
   onBuffering() {
-    if (this.firstPlay)
-      this.startupTimeInit = Date.now()
-    else
-      this.rebufferingTimeInit = Date.now()
+    if (this.firstPlay) this.startupTimeInit = Date.now()
+    else this.rebufferingTimeInit = Date.now()
 
     this.state = 'BUFFERING'
     this.rebuffers++
@@ -67,7 +78,9 @@ export default class StatsPlugin extends ContainerPlugin {
       this.firstPlay = false
       this.startupTime = Date.now() - this.startupTimeInit
       this.watchingTimeInit = Date.now()
-    } else if (this.rebufferingTimeInit) { this.rebufferingTime += this.getRebufferingTime() }
+    } else if (this.rebufferingTimeInit) {
+      this.rebufferingTime += this.getRebufferingTime()
+    }
 
     this.rebufferingTimeInit = undefined
     this.state = 'PLAYING'
@@ -78,7 +91,7 @@ export default class StatsPlugin extends ContainerPlugin {
   }
 
   getWatchingTime() {
-    const totalTime = (Date.now() - this.watchingTimeInit)
+    const totalTime = Date.now() - this.watchingTimeInit
     return totalTime - this.rebufferingTime
   }
 
@@ -92,10 +105,14 @@ export default class StatsPlugin extends ContainerPlugin {
 
   getStats() {
     const metrics = {
-      startupTime:     this.startupTime,
-      rebuffers:       this.rebuffers,
-      rebufferingTime: this.isRebuffering()? this.rebufferingTime + this.getRebufferingTime(): this.rebufferingTime,
-      watchingTime:    this.isRebuffering()? this.getWatchingTime() - this.getRebufferingTime(): this.getWatchingTime()
+      startupTime: this.startupTime,
+      rebuffers: this.rebuffers,
+      rebufferingTime: this.isRebuffering()
+        ? this.rebufferingTime + this.getRebufferingTime()
+        : this.rebufferingTime,
+      watchingTime: this.isRebuffering()
+        ? this.getWatchingTime() - this.getRebufferingTime()
+        : this.getWatchingTime(),
     }
     $.extend(metrics, this.externalMetrics)
     return metrics

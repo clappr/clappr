@@ -6,12 +6,16 @@ import ContainerPlugin from '../../base/container_plugin'
 import Events from '../../base/events'
 
 export default class GoogleAnalytics extends ContainerPlugin {
-  get name() { return 'google_analytics' }
+  get name() {
+    return 'google_analytics'
+  }
   constructor(container) {
     super(container)
     if (this.container.options.gaAccount) {
       this.account = this.container.options.gaAccount
-      this.trackerName = (this.container.options.gaTrackerName) ? this.container.options.gaTrackerName + '.' : 'Clappr.'
+      this.trackerName = this.container.options.gaTrackerName
+        ? this.container.options.gaTrackerName + '.'
+        : 'Clappr.'
       this.domainName = this.container.options.gaDomainName
       this.currentHDState = undefined
       this.embedScript()
@@ -26,8 +30,9 @@ export default class GoogleAnalytics extends ContainerPlugin {
       script.setAttribute('src', '//www.google-analytics.com/ga.js')
       script.onload = () => this.addEventListeners()
       document.body.appendChild(script)
-    } else { this.addEventListeners() }
-
+    } else {
+      this.addEventListeners()
+    }
   }
 
   addEventListeners() {
@@ -37,15 +42,43 @@ export default class GoogleAnalytics extends ContainerPlugin {
       this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
       this.listenTo(this.container, Events.CONTAINER_PAUSE, this.onPause)
       this.listenTo(this.container, Events.CONTAINER_ENDED, this.onEnded)
-      this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering)
-      this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferFull)
+      this.listenTo(
+        this.container,
+        Events.CONTAINER_STATE_BUFFERING,
+        this.onBuffering
+      )
+      this.listenTo(
+        this.container,
+        Events.CONTAINER_STATE_BUFFERFULL,
+        this.onBufferFull
+      )
       this.listenTo(this.container, Events.CONTAINER_ERROR, this.onError)
-      this.listenTo(this.container, Events.CONTAINER_PLAYBACKSTATE, this.onPlaybackChanged)
-      this.listenTo(this.container, Events.CONTAINER_VOLUME, (event) => this.onVolumeChanged(event))
-      this.listenTo(this.container, Events.CONTAINER_SEEK, (event) => this.onSeek(event))
-      this.listenTo(this.container, Events.CONTAINER_FULL_SCREEN, this.onFullscreen)
-      this.listenTo(this.container, Events.CONTAINER_HIGHDEFINITIONUPDATE, this.onHD)
-      this.listenTo(this.container, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.onDVR)
+      this.listenTo(
+        this.container,
+        Events.CONTAINER_PLAYBACKSTATE,
+        this.onPlaybackChanged
+      )
+      this.listenTo(this.container, Events.CONTAINER_VOLUME, event =>
+        this.onVolumeChanged(event)
+      )
+      this.listenTo(this.container, Events.CONTAINER_SEEK, event =>
+        this.onSeek(event)
+      )
+      this.listenTo(
+        this.container,
+        Events.CONTAINER_FULL_SCREEN,
+        this.onFullscreen
+      )
+      this.listenTo(
+        this.container,
+        Events.CONTAINER_HIGHDEFINITIONUPDATE,
+        this.onHD
+      )
+      this.listenTo(
+        this.container,
+        Events.CONTAINER_PLAYBACKDVRSTATECHANGED,
+        this.onDVR
+      )
     }
     _gaq.push([this.trackerName + '_setAccount', this.account])
     if (this.domainName)
@@ -81,7 +114,7 @@ export default class GoogleAnalytics extends ContainerPlugin {
   }
 
   onHD(isHD) {
-    const status = isHD ? 'ON': 'OFF'
+    const status = isHD ? 'ON' : 'OFF'
     if (status !== this.currentHDState) {
       this.currentHDState = status
       this.push(['Video', 'HD - ' + status, this.container.playback.src])
@@ -89,13 +122,17 @@ export default class GoogleAnalytics extends ContainerPlugin {
   }
 
   onPlaybackChanged(playbackState) {
-    if (playbackState.type !== null)
-      this.push(['Video', 'Playback Type - ' + playbackState.type, this.container.playback.src])
-
+    if (playbackState.type !== null) {
+      this.push([
+        'Video',
+        'Playback Type - ' + playbackState.type,
+        this.container.playback.src,
+      ])
+    }
   }
 
   onDVR(dvrInUse) {
-    const status = dvrInUse? 'ON': 'OFF'
+    const status = dvrInUse ? 'ON' : 'OFF'
     this.push(['Interaction', 'DVR - ' + status, this.container.playback.src])
   }
 
@@ -115,10 +152,8 @@ export default class GoogleAnalytics extends ContainerPlugin {
     this.push(['Interaction', 'Fullscreen', this.container.playback.src])
   }
 
-
   push(array) {
     const res = [this.trackerName + '_trackEvent'].concat(array)
     _gaq.push(res)
   }
-
 }

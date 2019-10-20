@@ -19,19 +19,25 @@ const hasFlash = function() {
     const fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash')
     return !!fo
   } catch (e) {
-    return !!(navigator.mimeTypes && navigator.mimeTypes['application/x-shockwave-flash'] !== undefined &&
-      navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin)
+    return !!(
+      navigator.mimeTypes &&
+      navigator.mimeTypes['application/x-shockwave-flash'] !== undefined &&
+      navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin
+    )
   }
 }
 
 export const getBrowserInfo = function(ua) {
-  let parts = ua.match(/\b(playstation 4|nx|opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [],
+  let parts =
+      ua.match(
+        /\b(playstation 4|nx|opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i
+      ) || [],
     extra
   if (/trident/i.test(parts[1])) {
     extra = /\brv[ :]+(\d+)/g.exec(ua) || []
     return {
       name: 'IE',
-      version: parseInt(extra[1] || '')
+      version: parseInt(extra[1] || ''),
     }
   } else if (parts[1] === 'Chrome') {
     extra = ua.match(/\bOPR\/(\d+)/)
@@ -39,16 +45,17 @@ export const getBrowserInfo = function(ua) {
 
     extra = ua.match(/\bEdge\/(\d+)/)
     if (extra != null) return { name: 'Edge', version: parseInt(extra[1]) }
-
   } else if (/android/i.test(ua) && (extra = ua.match(/version\/(\d+)/i))) {
     parts.splice(1, 1, 'Android WebView')
     parts.splice(2, 1, extra[1])
   }
-  parts = parts[2] ? [parts[1], parts[2]] : [navigator.appName, navigator.appVersion, '-?']
+  parts = parts[2]
+    ? [parts[1], parts[2]]
+    : [navigator.appName, navigator.appVersion, '-?']
 
   return {
     name: parts[0],
-    version: parseInt(parts[1])
+    version: parseInt(parts[1]),
   }
 }
 
@@ -73,7 +80,6 @@ export const getBrowserData = function() {
 
         if (versionRegExpResult != null && versionRegExpResult[1])
           setBrowserVersion(versionRegExpResult[1], browserObject)
-
       } else {
         setBrowserVersion(browserRegExpResult[1], browserObject)
       }
@@ -111,20 +117,32 @@ export const getOsData = function() {
 
       // Version defined
       if (os.version) {
-        setOsVersion(os.version, (os.versionSeparator) ? os.versionSeparator : '.', osObject)
+        setOsVersion(
+          os.version,
+          os.versionSeparator ? os.versionSeparator : '.',
+          osObject
+        )
 
         // Version detected
       } else if (osRegExpResult[1]) {
-        setOsVersion(osRegExpResult[1], (os.versionSeparator) ? os.versionSeparator : '.', osObject)
+        setOsVersion(
+          osRegExpResult[1],
+          os.versionSeparator ? os.versionSeparator : '.',
+          osObject
+        )
 
         // Version identifier
       } else if (os.versionIdentifier) {
         let versionRegExp = new RegExp(os.versionIdentifier.toLowerCase())
         let versionRegExpResult = versionRegExp.exec(userAgent)
 
-        if (versionRegExpResult != null && versionRegExpResult[1])
-          setOsVersion(versionRegExpResult[1], (os.versionSeparator) ? os.versionSeparator : '.', osObject)
-
+        if (versionRegExpResult != null && versionRegExpResult[1]) {
+          setOsVersion(
+            versionRegExpResult[1],
+            os.versionSeparator ? os.versionSeparator : '.',
+            osObject
+          )
+        }
       }
       break
     }
@@ -134,10 +152,12 @@ export const getOsData = function() {
 
 // Set OS version
 const setOsVersion = function(version, separator, osObject) {
-  let finalSeparator = separator.substr(0, 1) == '[' ? new RegExp(separator, 'g') : separator
+  let finalSeparator =
+    separator.substr(0, 1) == '[' ? new RegExp(separator, 'g') : separator
   const splitVersion = version.split(finalSeparator, 2)
 
-  if (separator != '.') version = version.replace(new RegExp(separator, 'g'), '.')
+  if (separator != '.')
+    version = version.replace(new RegExp(separator, 'g'), '.')
 
   osObject.fullVersion = version
 
@@ -163,20 +183,20 @@ export const getViewportSize = function() {
 // Set viewport orientation
 const setViewportOrientation = function() {
   switch (window.orientation) {
-  case -90:
-  case 90:
-    Browser.viewport.orientation = 'landscape'
-    break
-  default:
-    Browser.viewport.orientation = 'portrait'
-    break
+    case -90:
+    case 90:
+      Browser.viewport.orientation = 'landscape'
+      break
+    default:
+      Browser.viewport.orientation = 'portrait'
+      break
   }
 }
 
 export const getDevice = function(ua) {
   let platformRegExp = /\((iP(?:hone|ad|od))?(?:[^;]*; ){0,2}([^)]+(?=\)))/
   let matches = platformRegExp.exec(ua)
-  let device = matches && (matches[1] || matches[2]) || ''
+  let device = (matches && (matches[1] || matches[2])) || ''
   return device
 }
 
@@ -184,13 +204,17 @@ const browserInfo = getBrowserInfo(navigator.userAgent)
 
 Browser.isEdge = /edge/i.test(navigator.userAgent)
 Browser.isChrome = /chrome|CriOS/i.test(navigator.userAgent) && !Browser.isEdge
-Browser.isSafari = /safari/i.test(navigator.userAgent) && !Browser.isChrome && !Browser.isEdge
+Browser.isSafari =
+  /safari/i.test(navigator.userAgent) && !Browser.isChrome && !Browser.isEdge
 Browser.isFirefox = /firefox/i.test(navigator.userAgent)
-Browser.isLegacyIE = !!(window.ActiveXObject)
-Browser.isIE = Browser.isLegacyIE || /trident.*rv:1\d/i.test(navigator.userAgent)
+Browser.isLegacyIE = !!window.ActiveXObject
+Browser.isIE =
+  Browser.isLegacyIE || /trident.*rv:1\d/i.test(navigator.userAgent)
 Browser.isIE11 = /trident.*rv:11/i.test(navigator.userAgent)
 Browser.isChromecast = Browser.isChrome && /CrKey/i.test(navigator.userAgent)
-Browser.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|IEMobile|Mobile Safari|Opera Mini/i.test(navigator.userAgent)
+Browser.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone|IEMobile|Mobile Safari|Opera Mini/i.test(
+  navigator.userAgent
+)
 Browser.isiOS = /iPad|iPhone|iPod/i.test(navigator.userAgent)
 Browser.isAndroid = /Android/i.test(navigator.userAgent)
 Browser.isWindowsPhone = /Windows Phone/i.test(navigator.userAgent)
@@ -201,17 +225,17 @@ Browser.hasLocalstorage = hasLocalstorage()
 Browser.hasFlash = hasFlash()
 
 /**
-* @deprecated
-* This parameter currently exists for retrocompatibility reasons.
-* Use Browser.data.name instead.
-*/
+ * @deprecated
+ * This parameter currently exists for retrocompatibility reasons.
+ * Use Browser.data.name instead.
+ */
 Browser.name = browserInfo.name
 
 /**
-* @deprecated
-* This parameter currently exists for retrocompatibility reasons.
-* Use Browser.data.fullVersion instead.
-*/
+ * @deprecated
+ * This parameter currently exists for retrocompatibility reasons.
+ * Use Browser.data.fullVersion instead.
+ */
 Browser.version = browserInfo.version
 
 Browser.userAgent = navigator.userAgent

@@ -13,7 +13,11 @@ describe('Flash playback', function() {
 
   beforeEach(function() {
     this.flash = new Flash({})
-    this.flash.el = { getDuration: () => NaN, getPosition: () => 0, playerPlay: () => {} }
+    this.flash.el = {
+      getDuration: () => NaN,
+      getPosition: () => 0,
+      playerPlay: () => {},
+    }
     this.callback = sinon.spy()
   })
 

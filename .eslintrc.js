@@ -24,23 +24,15 @@ module.exports = {
         "sinon": false,
         "xit": false
     },
-    "extends": "eslint:recommended",
+    "extends": ["prettier", "eslint:recommended"],
     "parserOptions": {
         "sourceType": "module",
         "ecmaVersion": 2018,
     },
     "rules": {
-        "indent": [
-            "error",
-            2
-        ],
         "linebreak-style": [
             "error",
             "unix"
-        ],
-        "quotes": [
-            "error",
-            "single"
         ],
         "semi": [
             "error",
@@ -57,5 +49,7 @@ module.exports = {
         // part of Node Style-guide but ignored
         "max-len": 0,
         "max-statements": 0,
-    }
+        "prettier/prettier": "error"
+    },
+   "plugins": ["prettier"]
 };

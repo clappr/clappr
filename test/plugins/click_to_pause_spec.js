@@ -80,9 +80,10 @@ describe('clickToPause', function() {
   })
 
   describe('show cursor pointer when playback is not live and', function() {
-
     it('playback is VOD', function(done) {
-      sinon.stub(this.container, 'getPlaybackType').callsFake(() => Playback.VOD)
+      sinon
+        .stub(this.container, 'getPlaybackType')
+        .callsFake(() => Playback.VOD)
 
       this.container.on(Events.CONTAINER_SETTINGSUPDATE, () => {
         expect(this.container.$el.hasClass('pointer-enabled')).to.be.true
@@ -93,7 +94,9 @@ describe('clickToPause', function() {
     })
 
     it('playback is AOD', function(done) {
-      sinon.stub(this.container, 'getPlaybackType').callsFake(() => Playback.AOD)
+      sinon
+        .stub(this.container, 'getPlaybackType')
+        .callsFake(() => Playback.AOD)
 
       this.container.on(Events.CONTAINER_SETTINGSUPDATE, () => {
         expect(this.container.$el.hasClass('pointer-enabled')).to.be.true
@@ -104,7 +107,9 @@ describe('clickToPause', function() {
     })
 
     it('playback is NO_OP', function(done) {
-      sinon.stub(this.container, 'getPlaybackType').callsFake(() => Playback.NO_OP)
+      sinon
+        .stub(this.container, 'getPlaybackType')
+        .callsFake(() => Playback.NO_OP)
 
       this.container.on(Events.CONTAINER_SETTINGSUPDATE, () => {
         expect(this.container.$el.hasClass('pointer-enabled')).to.be.true
@@ -117,7 +122,9 @@ describe('clickToPause', function() {
 
   describe('on playback live and dvr enabled', function() {
     beforeEach(function(done) {
-      sinon.stub(this.container, 'getPlaybackType').callsFake(() => Playback.LIVE)
+      sinon
+        .stub(this.container, 'getPlaybackType')
+        .callsFake(() => Playback.LIVE)
       sinon.stub(this.container, 'isDvrEnabled').callsFake(() => true)
       sinon.spy(this.container.$el, 'addClass')
       sinon.spy(this.container.$el, 'removeClass')

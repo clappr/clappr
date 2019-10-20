@@ -7,7 +7,9 @@ import Events from '../../base/events'
 import Playback from '../../base/playback'
 
 export default class ClickToPausePlugin extends ContainerPlugin {
-  get name() { return 'click_to_pause' }
+  get name() {
+    return 'click_to_pause'
+  }
 
   constructor(container) {
     super(container)
@@ -15,21 +17,27 @@ export default class ClickToPausePlugin extends ContainerPlugin {
 
   bindEvents() {
     this.listenTo(this.container, Events.CONTAINER_CLICK, this.click)
-    this.listenTo(this.container, Events.CONTAINER_SETTINGSUPDATE, this.settingsUpdate)
+    this.listenTo(
+      this.container,
+      Events.CONTAINER_SETTINGSUPDATE,
+      this.settingsUpdate
+    )
   }
 
   click() {
-    if (this.container.getPlaybackType() !== Playback.LIVE || this.container.isDvrEnabled()) {
-      if (this.container.isPlaying())
-        this.container.pause()
-      else
-        this.container.play()
-
+    if (
+      this.container.getPlaybackType() !== Playback.LIVE ||
+      this.container.isDvrEnabled()
+    ) {
+      if (this.container.isPlaying()) this.container.pause()
+      else this.container.play()
     }
   }
 
   settingsUpdate() {
-    const pointerEnabled = this.container.getPlaybackType() !== Playback.LIVE || this.container.isDvrEnabled()
+    const pointerEnabled =
+      this.container.getPlaybackType() !== Playback.LIVE ||
+      this.container.isDvrEnabled()
     if (pointerEnabled === this.pointerEnabled) return
 
     const method = pointerEnabled ? 'addClass' : 'removeClass'

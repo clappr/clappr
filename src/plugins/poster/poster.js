@@ -12,28 +12,42 @@ import playIcon from '../../icons/01-play.svg'
 import './public/poster.scss'
 
 export default class PosterPlugin extends UIContainerPlugin {
-  get name() { return 'poster' }
-  get template() { return template(posterHTML) }
+  get name() {
+    return 'poster'
+  }
+  get template() {
+    return template(posterHTML)
+  }
   get shouldRender() {
-    const showForNoOp = !!(this.options.poster && this.options.poster.showForNoOp)
-    return this.container.playback.name !== 'html_img' && (this.container.playback.getPlaybackType() !== Playback.NO_OP || showForNoOp)
+    const showForNoOp = !!(
+      this.options.poster && this.options.poster.showForNoOp
+    )
+    return (
+      this.container.playback.name !== 'html_img' &&
+      (this.container.playback.getPlaybackType() !== Playback.NO_OP ||
+        showForNoOp)
+    )
   }
 
   get attributes() {
     return {
-      'class': 'player-poster',
-      'data-poster': ''
+      class: 'player-poster',
+      'data-poster': '',
     }
   }
 
   get events() {
     return {
-      'click': 'clicked'
+      click: 'clicked',
     }
   }
 
   get showOnVideoEnd() {
-    return !this.options.poster || this.options.poster.showOnVideoEnd || this.options.poster.showOnVideoEnd === undefined
+    return (
+      !this.options.poster ||
+      this.options.poster.showOnVideoEnd ||
+      this.options.poster.showOnVideoEnd === undefined
+    )
   }
 
   constructor(container) {
@@ -48,10 +62,15 @@ export default class PosterPlugin extends UIContainerPlugin {
     this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
     this.listenTo(this.container, Events.CONTAINER_PLAY, this.onPlay)
     this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.update)
-    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.update)
+    this.listenTo(
+      this.container,
+      Events.CONTAINER_STATE_BUFFERFULL,
+      this.update
+    )
     this.listenTo(this.container, Events.CONTAINER_OPTIONS_CHANGE, this.render)
     this.listenTo(this.container, Events.CONTAINER_ERROR, this.onError)
-    this.showOnVideoEnd && this.listenTo(this.container, Events.CONTAINER_ENDED, this.onStop)
+    this.showOnVideoEnd &&
+      this.listenTo(this.container, Events.CONTAINER_ENDED, this.onStop)
   }
 
   onError(error) {
@@ -78,8 +97,7 @@ export default class PosterPlugin extends UIContainerPlugin {
   updatePlayButton(show) {
     if (show && (!this.options.chromeless || this.options.allowUserInteraction))
       this.showPlayButton()
-    else
-      this.hidePlayButton()
+    else this.hidePlayButton()
   }
 
   showPlayButton() {
@@ -96,7 +114,7 @@ export default class PosterPlugin extends UIContainerPlugin {
 
   clicked() {
     // Let "click_to_pause" plugin handle click event if media has started playing
-    if (! this.hasStartedPlaying) {
+    if (!this.hasStartedPlaying) {
       if (!this.options.chromeless || this.options.allowUserInteraction) {
         this.playRequested = true
         this.update()
@@ -112,10 +130,12 @@ export default class PosterPlugin extends UIContainerPlugin {
   }
 
   update() {
-    if (!this.shouldRender)
-      return
+    if (!this.shouldRender) return
 
-    let showPlayButton = !this.playRequested  && !this.hasStartedPlaying && !this.container.buffering
+    let showPlayButton =
+      !this.playRequested &&
+      !this.hasStartedPlaying &&
+      !this.container.buffering
     this.updatePlayButton(showPlayButton)
     this.updatePoster()
   }
@@ -132,22 +152,23 @@ export default class PosterPlugin extends UIContainerPlugin {
 
   hidePoster() {
     this.container.enableMediaControl()
-    if (this.shouldHideOnPlay())
-      this.$el.hide()
+    if (this.shouldHideOnPlay()) this.$el.hide()
   }
 
   render() {
-    if (!this.shouldRender)
-      return
+    if (!this.shouldRender) return
 
     this.$el.html(this.template())
 
-    const isRegularPoster = this.options.poster && this.options.poster.custom === undefined
+    const isRegularPoster =
+      this.options.poster && this.options.poster.custom === undefined
 
     if (isRegularPoster) {
       const posterUrl = this.options.poster.url || this.options.poster
       this.$el.css({ 'background-image': 'url(' + posterUrl + ')' })
-    } else if (this.options.poster) { this.$el.css({ 'background': this.options.poster.custom }) }
+    } else if (this.options.poster) {
+      this.$el.css({ background: this.options.poster.custom })
+    }
 
     this.container.$el.append(this.el)
     this.$playWrapper = this.$el.find('.play-wrapper')
@@ -156,9 +177,9 @@ export default class PosterPlugin extends UIContainerPlugin {
     this.$playButton.addClass('poster-icon')
     this.$playButton.attr('data-poster', '')
 
-    let buttonsColor = this.options.mediacontrol && this.options.mediacontrol.buttons
-    if (buttonsColor)
-      this.$el.find('svg path').css('fill', buttonsColor)
+    let buttonsColor =
+      this.options.mediacontrol && this.options.mediacontrol.buttons
+    if (buttonsColor) this.$el.find('svg path').css('fill', buttonsColor)
 
     if (this.options.mediacontrol && this.options.mediacontrol.buttons) {
       buttonsColor = this.options.mediacontrol.buttons

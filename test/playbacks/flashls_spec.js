@@ -6,10 +6,18 @@ describe('HLS playback', function() {
     beforeEach(function() {
       this.callback = sinon.spy()
       this.hls = new FlasHLS({})
-      this.hls.el.getbufferLength = function() { return 0 }
-      this.hls.el.getDuration = function() { return 30 }
-      this.hls.el.getType = function() { return 'live' }
-      this.hls.el.getPosition = function() { return 10 }
+      this.hls.el.getbufferLength = function() {
+        return 0
+      }
+      this.hls.el.getDuration = function() {
+        return 30
+      }
+      this.hls.el.getType = function() {
+        return 'live'
+      }
+      this.hls.el.getPosition = function() {
+        return 10
+      }
     })
 
     it('get current video time', function() {
@@ -34,7 +42,9 @@ describe('HLS playback', function() {
     })
 
     it('should trigger a buffering event regardless of buffer size', function() {
-      this.hls.el.getbufferLength = function() { return 10 }
+      this.hls.el.getbufferLength = function() {
+        return 10
+      }
       this.hls.on(Events.PLAYBACK_BUFFERING, this.callback)
 
       this.hls._setPlaybackState('PLAYING_BUFFERING')

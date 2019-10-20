@@ -10,8 +10,7 @@ import Events from '../base/events'
 
 const events = new Events()
 
-export default class Mediator {
-}
+export default class Mediator {}
 
 Mediator.on = function(name, callback, context) {
   events.on(name, callback, context)

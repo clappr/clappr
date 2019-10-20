@@ -52,7 +52,6 @@ import Playback from './playback'
  */
 
 export default class AdaptivePlayback extends Playback {
-
   /**
    * @returns {Boolean}
    */
@@ -68,35 +67,37 @@ export default class AdaptivePlayback extends Playback {
   /**
    * @returns {Boolean}
    */
-  get isAutoAdaptive() { return false }
+  get isAutoAdaptive() {
+    return false
+  }
 
   /**
    * @returns {VideoQualityLevel[]}
    */
-  get activeVideoQualityLevels() {}
+  get activeVideoQualityLevels() {} // eslint-disable-line getter-return
 
   /**
    * @returns {VideoQualityLevel[]}
    */
-  get videoQualityLevels() {}
+  get videoQualityLevels() {} // eslint-disable-line getter-return
 
   /**
    * @returns {AudioOption[]}
    */
-  get availableAudioOptions() {}
+  get availableAudioOptions() {} // eslint-disable-line getter-return
 
   /**
    * @returns {AudioOption[]}
    */
-  get audioOptions() {}
+  get audioOptions() {} // eslint-disable-line getter-return
 
   /**
    * @returns {ClosedCaptionOption[]}
    */
-  get availableClosedCaptions() {}
+  get availableClosedCaptions() {} // eslint-disable-line getter-return
 
   /**
    * @returns {ClosedCaptionOption[]}
    */
-  get closedCaptions() {}
+  get closedCaptions() {} // eslint-disable-line getter-return
 }

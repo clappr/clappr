@@ -1,14 +1,16 @@
 import * as utils from '../../src/base/utils'
-import  $ from 'clappr-zepto'
+import $ from 'clappr-zepto'
 
 const pushUrl = function(path) {
-  window.history.pushState({},'', path)
+  window.history.pushState({}, '', path)
 }
 
 describe('Utils', function() {
   describe('extend', function() {
     class Base {
-      get name() { return 'base' }
+      get name() {
+        return 'base'
+      }
       constructor(p1, p2) {
         this.prop1 = p1
         this.prop2 = p2
@@ -34,23 +36,27 @@ describe('Utils', function() {
       const Derived = utils.extend(Base, {
         initialize(p1, p2, p3) {
           this.prop3 = p3
-        }
+        },
       })
       const d = new Derived(1, 'some-value', 42)
       expect(d.prop3).to.be.equal(42)
     })
 
-    it ('should support overriding methods', function() {
+    it('should support overriding methods', function() {
       const Derived = utils.extend(Base, {
-        test() { return true }
+        test() {
+          return true
+        },
       })
       const d = new Derived()
       expect(d.test()).to.be.true
     })
 
-    it ('should support overriding read-only properties', function() {
+    it('should support overriding read-only properties', function() {
       const Derived = utils.extend(Base, {
-        get name() { return 'derived' }
+        get name() {
+          return 'derived'
+        },
       })
       const d = new Derived()
       expect(d.name).to.be.equal('derived')
@@ -71,7 +77,6 @@ describe('Utils', function() {
   })
 
   it('should convert querystring seek regex in seconds', function() {
-
     pushUrl('/some/path/?t=1h10m30s')
     expect(utils.seekStringToSeconds()).to.equal(4230)
 
@@ -99,52 +104,82 @@ describe('Utils', function() {
     pushUrl('/some/path/videos-1h/')
     expect(utils.seekStringToSeconds()).to.equal(0)
 
-    pushUrl('/video/business/media/100000003661916/destroying.html?playlistId=1194811622182#t=6000&cview=true')
+    pushUrl(
+      '/video/business/media/100000003661916/destroying.html?playlistId=1194811622182#t=6000&cview=true'
+    )
     expect(utils.seekStringToSeconds()).to.equal(6000)
 
-    pushUrl('/video/business/media/100000003661916/destroying.html?playlistId=1194811622182#t=6000s&cview=true')
+    pushUrl(
+      '/video/business/media/100000003661916/destroying.html?playlistId=1194811622182#t=6000s&cview=true'
+    )
     expect(utils.seekStringToSeconds()).to.equal(6000)
 
-    pushUrl('/video/business/media/100000003661916/destroying.html?playlistId=1194811622182#t=10m10s&cview=true')
+    pushUrl(
+      '/video/business/media/100000003661916/destroying.html?playlistId=1194811622182#t=10m10s&cview=true'
+    )
     expect(utils.seekStringToSeconds()).to.equal(610)
 
-    pushUrl('/video/business/media/100000003661916/destroying.html?playlistId=1194811622182#t=1h20m10s&cview=true')
+    pushUrl(
+      '/video/business/media/100000003661916/destroying.html?playlistId=1194811622182#t=1h20m10s&cview=true'
+    )
     expect(utils.seekStringToSeconds()).to.equal(4810)
 
-    pushUrl('/video/business/media/100000003661916/destroying.html?playlistId=1194811622182#t=6000s')
+    pushUrl(
+      '/video/business/media/100000003661916/destroying.html?playlistId=1194811622182#t=6000s'
+    )
     expect(utils.seekStringToSeconds()).to.equal(6000)
 
-    pushUrl('/video/business/media/100000003661916/destroying.html?playlistId=1194811622182#t=6000')
+    pushUrl(
+      '/video/business/media/100000003661916/destroying.html?playlistId=1194811622182#t=6000'
+    )
     expect(utils.seekStringToSeconds()).to.equal(6000)
 
-    pushUrl('/video/business/media/100000003661916/destroying.html?playlistId=1194811622182&t=5m5s')
+    pushUrl(
+      '/video/business/media/100000003661916/destroying.html?playlistId=1194811622182&t=5m5s'
+    )
     expect(utils.seekStringToSeconds()).to.equal(305)
 
     pushUrl('/video/business/media/100000003661916/destroying.html?t=5m5s')
     expect(utils.seekStringToSeconds()).to.equal(305)
 
-    pushUrl('/video/business/media/100000003661916/destroying.html?playlistId=1194811622182#t=5m5s')
+    pushUrl(
+      '/video/business/media/100000003661916/destroying.html?playlistId=1194811622182#t=5m5s'
+    )
     expect(utils.seekStringToSeconds()).to.equal(305)
 
-    pushUrl('/video/business/media/100000003661916/destroying.html?playlistId=1194811622182&t=1h10m30s')
+    pushUrl(
+      '/video/business/media/100000003661916/destroying.html?playlistId=1194811622182&t=1h10m30s'
+    )
     expect(utils.seekStringToSeconds()).to.equal(4230)
 
-    pushUrl('/video/business/media/100000003661916/destroying.html?playlistId=1194811622182&t=1m')
+    pushUrl(
+      '/video/business/media/100000003661916/destroying.html?playlistId=1194811622182&t=1m'
+    )
     expect(utils.seekStringToSeconds()).to.equal(60)
 
-    pushUrl('/video/business/media/100000003661916/destroying.html?playlistId=1194811622182&t=40s')
+    pushUrl(
+      '/video/business/media/100000003661916/destroying.html?playlistId=1194811622182&t=40s'
+    )
     expect(utils.seekStringToSeconds()).to.equal(40)
 
-    pushUrl('/video/business/media/100000003661916/destroying.html?playlistId=1194811622182&t=40s&more=here')
+    pushUrl(
+      '/video/business/media/100000003661916/destroying.html?playlistId=1194811622182&t=40s&more=here'
+    )
     expect(utils.seekStringToSeconds()).to.equal(40)
 
-    pushUrl('/video/business/media/100000003661916/destroying.html?playlistId=1194811622182&t=30m5s')
+    pushUrl(
+      '/video/business/media/100000003661916/destroying.html?playlistId=1194811622182&t=30m5s'
+    )
     expect(utils.seekStringToSeconds()).to.equal(1805)
 
-    pushUrl('/video/business/media/100000003661916/destroying.html?playlistId=1194811622182&t=5m5s')
+    pushUrl(
+      '/video/business/media/100000003661916/destroying.html?playlistId=1194811622182&t=5m5s'
+    )
     expect(utils.seekStringToSeconds()).to.equal(305)
 
-    pushUrl('/video/business/media/100000003661916/destroying.html?playlistId=1194811622182')
+    pushUrl(
+      '/video/business/media/100000003661916/destroying.html?playlistId=1194811622182'
+    )
     expect(utils.seekStringToSeconds()).to.equal(0)
   })
 
@@ -156,7 +191,7 @@ describe('Utils', function() {
       expect(a.length).to.be.equal(2)
     })
 
-    it('does not remove anything when item doesn\'t exist', function() {
+    it("does not remove anything when item doesn't exist", function() {
       const a = [1, 2, 3]
       utils.removeArrayItem(a, 4)
       expect(a.length).to.be.equal(3)
@@ -279,7 +314,7 @@ describe('Utils', function() {
       setTimeout(() => {
         handler.handle(evt, spy)
         expect(spy).to.have.been.calledOnce
-      }, delay/2)
+      }, delay / 2)
     })
   })
 })

@@ -1,4 +1,3 @@
-
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -23,25 +22,45 @@ export default class Log {
   constructor(level = LEVEL_INFO, offLevel = LEVEL_DISABLED) {
     this.kibo = new Kibo()
     this.kibo.down(['ctrl shift d'], () => this.onOff())
-    this.BLACKLIST = ['timeupdate', 'playback:timeupdate', 'playback:progress', 'container:hover', 'container:timeupdate', 'container:progress']
+    this.BLACKLIST = [
+      'timeupdate',
+      'playback:timeupdate',
+      'playback:progress',
+      'container:hover',
+      'container:timeupdate',
+      'container:progress',
+    ]
     this.level = level
     this.offLevel = offLevel
   }
 
-  debug(klass) { this.log(klass, LEVEL_DEBUG, Array.prototype.slice.call(arguments, 1)) }
-  info(klass) { this.log(klass, LEVEL_INFO, Array.prototype.slice.call(arguments, 1)) }
-  warn(klass) { this.log(klass, LEVEL_WARN, Array.prototype.slice.call(arguments, 1)) }
-  error(klass) { this.log(klass, LEVEL_ERROR, Array.prototype.slice.call(arguments, 1)) }
+  debug(klass) {
+    this.log(klass, LEVEL_DEBUG, Array.prototype.slice.call(arguments, 1))
+  }
+  info(klass) {
+    this.log(klass, LEVEL_INFO, Array.prototype.slice.call(arguments, 1))
+  }
+  warn(klass) {
+    this.log(klass, LEVEL_WARN, Array.prototype.slice.call(arguments, 1))
+  }
+  error(klass) {
+    this.log(klass, LEVEL_ERROR, Array.prototype.slice.call(arguments, 1))
+  }
 
   onOff() {
-    if (this.level === this.offLevel) { this.level = this.previousLevel } else {
+    if (this.level === this.offLevel) {
+      this.level = this.previousLevel
+    } else {
       this.previousLevel = this.level
       this.level = this.offLevel
     }
     // handle instances where console.log is unavailable
-    if (window.console && window.console.log)
-      window.console.log('%c[Clappr.Log] set log level to ' + DESCRIPTIONS[this.level], WARN)
-
+    if (window.console && window.console.log) {
+      window.console.log(
+        '%c[Clappr.Log] set log level to ' + DESCRIPTIONS[this.level],
+        WARN
+      )
+    }
   }
 
   level(newLevel) {
@@ -58,12 +77,16 @@ export default class Log {
     }
     const color = COLORS[level]
     let klassDescription = ''
-    if (klass)
-      klassDescription = '[' + klass + ']'
+    if (klass) klassDescription = '[' + klass + ']'
 
-    if (window.console && window.console.log)
-      window.console.log.apply(console, ['%c[' + DESCRIPTIONS[level] + ']' + klassDescription, color].concat(message))
-
+    if (window.console && window.console.log) {
+      window.console.log.apply(
+        console,
+        ['%c[' + DESCRIPTIONS[level] + ']' + klassDescription, color].concat(
+          message
+        )
+      )
+    }
   }
 }
 
@@ -81,9 +104,19 @@ Log.getInstance = function() {
   return this._instance
 }
 
-Log.setLevel = function(level) { this.getInstance().level = level }
+Log.setLevel = function(level) {
+  this.getInstance().level = level
+}
 
-Log.debug = function() { this.getInstance().debug.apply(this.getInstance(), arguments) }
-Log.info = function() { this.getInstance().info.apply(this.getInstance(), arguments) }
-Log.warn = function() { this.getInstance().warn.apply(this.getInstance(), arguments) }
-Log.error = function() { this.getInstance().error.apply(this.getInstance(), arguments) }
+Log.debug = function() {
+  this.getInstance().debug.apply(this.getInstance(), arguments)
+}
+Log.info = function() {
+  this.getInstance().info.apply(this.getInstance(), arguments)
+}
+Log.warn = function() {
+  this.getInstance().warn.apply(this.getInstance(), arguments)
+}
+Log.error = function() {
+  this.getInstance().error.apply(this.getInstance(), arguments)
+}

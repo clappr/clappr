@@ -81,5 +81,5 @@ export default {
   Vendor,
   version,
   template,
-  $
+  $,
 }

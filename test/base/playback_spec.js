@@ -72,7 +72,11 @@ describe('Playback', function() {
 
       describe('when i18n is defined', () => {
         beforeEach(() => {
-          this.basePlayback = new Playback({}, this.core.i18n, this.core.playerError)
+          this.basePlayback = new Playback(
+            {},
+            this.core.i18n,
+            this.core.playerError
+          )
           this.playerError = this.basePlayback.playerError
         })
 
@@ -87,8 +91,8 @@ describe('Playback', function() {
             code: 'playback:unknown',
             UI: {
               title: 'default_error_title',
-              message: 'default_error_message'
-            }
+              message: 'default_error_message',
+            },
           }
           expect(errorData).to.deep.equal(defaultError)
         })
@@ -101,7 +105,9 @@ describe('Playback', function() {
         const error = { code: '42' }
         const errorData = this.basePlayback.createError(error)
 
-        expect(errorData.code).to.deep.equal(`${this.basePlayback.name}:${error.code}`)
+        expect(errorData.code).to.deep.equal(
+          `${this.basePlayback.name}:${error.code}`
+        )
       })
 
       it('does not overwrite level when it is not equal to default', () => {
@@ -121,17 +127,21 @@ describe('Playback', function() {
 
       describe('when i18n is defined', () => {
         beforeEach(() => {
-          this.basePlayback = new Playback({}, this.core.i18n, this.core.playerError)
+          this.basePlayback = new Playback(
+            {},
+            this.core.i18n,
+            this.core.playerError
+          )
           this.playerError = this.basePlayback.playerError
         })
 
         it('does not overwrite UI when it is defined', () => {
           const UIData = {
             title: 'my_title',
-            message: 'my_message'
+            message: 'my_message',
           }
           const errorData = this.basePlayback.createError({
-            UI: UIData
+            UI: UIData,
           })
           expect(errorData.UI).to.deep.equal(UIData)
         })
@@ -142,7 +152,7 @@ describe('Playback', function() {
           }
           const errorData = this.basePlayback.createError(error)
 
-          expect(errorData.hasOwnProperty('UI')).to.be.false
+          expect(errorData.hasOwnProperty('UI')).to.be.false // eslint-disable-line no-prototype-builtins
         })
       })
     })

@@ -41,7 +41,9 @@ export default class UIObject extends BaseObject {
    * @default div
    * @return {String} tag's name
    */
-  get tagName() { return 'div' }
+  get tagName() {
+    return 'div'
+  }
   /**
    * a literal object mapping element's events to methods
    * @property events
@@ -62,7 +64,9 @@ export default class UIObject extends BaseObject {
    * // when you click on MyButton the method `myClick` will be called
    *```
    */
-  get events() { return {} }
+  get events() {
+    return {}
+  }
   /**
    * a literal object mapping attributes and values to the element
    * element's attribute name and the value the attribute value
@@ -80,7 +84,9 @@ export default class UIObject extends BaseObject {
    * // MyButton.el.className will be 'my-button'
    * ```
    */
-  get attributes() { return {} }
+  get attributes() {
+    return {}
+  }
 
   /**
    * it builds an ui component by:
@@ -158,17 +164,15 @@ export default class UIObject extends BaseObject {
     this.undelegateEvents()
     for (const key in events) {
       let method = events[key]
-      if ((method && method.constructor !== Function)) method = this[events[key]]
+      if (method && method.constructor !== Function) method = this[events[key]]
       if (!method) continue
 
       const match = key.match(delegateEventSplitter)
-      let eventName = match[1], selector = match[2]
+      let eventName = match[1],
+        selector = match[2]
       eventName += '.delegateEvents' + this.cid
-      if (selector === '')
-        this.$el.on(eventName, method.bind(this))
-      else
-        this.$el.on(eventName, selector, method.bind(this))
-
+      if (selector === '') this.$el.on(eventName, method.bind(this))
+      else this.$el.on(eventName, selector, method.bind(this))
     }
     return this
   }
@@ -195,7 +199,8 @@ export default class UIObject extends BaseObject {
       if (this.className) attrs['class'] = this.className
       const $el = DomRecycler.create(this.tagName).attr(attrs)
       this.setElement($el, false)
-    } else { this.setElement(this.el, false) }
-
+    } else {
+      this.setElement(this.el, false)
+    }
   }
 }

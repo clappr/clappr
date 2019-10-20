@@ -8,8 +8,12 @@ import HTML5Video from '../../playbacks/html5_video'
 
 // TODO: remove this playback and change HTML5Video to HTML5Playback (breaking change, only after 0.3.0)
 export default class HTML5Audio extends HTML5Video {
-  get name() { return 'html5_audio' }
-  get tagName() { return 'audio' }
+  get name() {
+    return 'html5_audio'
+  }
+  get tagName() {
+    return 'audio'
+  }
 
   get isAudioOnly() {
     return true
@@ -28,10 +32,10 @@ export default class HTML5Audio extends HTML5Video {
 
 HTML5Audio.canPlay = function(resourceUrl, mimeType) {
   const mimetypes = {
-    'wav': ['audio/wav'],
-    'mp3': ['audio/mp3', 'audio/mpeg;codecs="mp3"'],
-    'aac': ['audio/mp4;codecs="mp4a.40.5"'],
-    'oga': ['audio/ogg']
+    wav: ['audio/wav'],
+    mp3: ['audio/mp3', 'audio/mpeg;codecs="mp3"'],
+    aac: ['audio/mp4;codecs="mp4a.40.5"'],
+    oga: ['audio/ogg'],
   }
   return HTML5Video._canPlay('audio', mimetypes, resourceUrl, mimeType)
 }

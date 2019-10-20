@@ -13,8 +13,9 @@ import Core from '../core'
  * @module components
  */
 export default class CoreFactory extends BaseObject {
-
-  get loader() { return this.player.loader }
+  get loader() {
+    return this.player.loader
+  }
 
   /**
    * it builds the core factory
@@ -46,7 +47,7 @@ export default class CoreFactory extends BaseObject {
    * @return {Core} the core with all plugins
    */
   addCorePlugins() {
-    this.loader.corePlugins.forEach((Plugin) => {
+    this.loader.corePlugins.forEach(Plugin => {
       const plugin = new Plugin(this.core)
       this.core.addPlugin(plugin)
       this.setupExternalInterface(plugin)
@@ -60,6 +61,5 @@ export default class CoreFactory extends BaseObject {
       this.player[key] = externalFunctions[key].bind(plugin)
       this.core[key] = externalFunctions[key].bind(plugin)
     }
-
   }
 }

@@ -53,4 +53,3 @@ export default class HLSEvents {
     Mediator.trigger(`${this.instanceId}:audiotrackchanged`, trackId)
   }
 }
-

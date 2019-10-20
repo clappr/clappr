@@ -12,12 +12,18 @@ describe('HTML5Video playback', function() {
     expect(HTML5Video.canPlay('')).to.be.false
     expect(HTML5Video.canPlay('resource_without_dots')).to.be.false
     expect(HTML5Video.canPlay('http://domain.com/video.ogv')).to.be.true
-    expect(HTML5Video.canPlay('http://domain.com/video.ogv?query_string=here')).to.be.true
+    expect(HTML5Video.canPlay('http://domain.com/video.ogv?query_string=here'))
+      .to.be.true
     expect(HTML5Video.canPlay('/relative/video.ogv')).to.be.true
   })
 
   it('checks if it can play a resource with mime-type', function() {
-    expect(HTML5Video.canPlay('resource_without_dots', 'video/ogg; codecs="theora, vorbis"')).to.be.true
+    expect(
+      HTML5Video.canPlay(
+        'resource_without_dots',
+        'video/ogg; codecs="theora, vorbis"'
+      )
+    ).to.be.true
   })
 
   it('does set a valid src to video element', function() {
@@ -51,13 +57,19 @@ describe('HTML5Video playback', function() {
   it('trigger PLAYBACK_SEEK on media seeking event', function(done) {
     this.timeout(5000)
     const callback = sinon.spy()
-    const playback = new HTML5Video({ src: '/test/fixtures/SampleVideo_360x240_1mb.mp4' })
+    const playback = new HTML5Video({
+      src: '/test/fixtures/SampleVideo_360x240_1mb.mp4',
+    })
 
     playback.on(Events.PLAYBACK_SEEK, callback)
-    playback.on(Events.PLAYBACK_SEEK, () => {
-      callback.should.have.been.calledOnce
-      done()
-    }, this)
+    playback.on(
+      Events.PLAYBACK_SEEK,
+      () => {
+        callback.should.have.been.calledOnce
+        done()
+      },
+      this
+    )
 
     playback.el.dispatchEvent(new Event('seeking'))
   })
@@ -65,13 +77,19 @@ describe('HTML5Video playback', function() {
   it('triggers PLAYBACK_SEEKED on media seeked event', function(done) {
     this.timeout(5000)
     const callback = sinon.spy()
-    const playback = new HTML5Video({ src: '/test/fixtures/SampleVideo_360x240_1mb.mp4' })
+    const playback = new HTML5Video({
+      src: '/test/fixtures/SampleVideo_360x240_1mb.mp4',
+    })
 
     playback.on(Events.PLAYBACK_SEEKED, callback)
-    playback.on(Events.PLAYBACK_SEEKED, () => {
-      callback.should.have.been.calledOnce
-      done()
-    }, this)
+    playback.on(
+      Events.PLAYBACK_SEEKED,
+      () => {
+        callback.should.have.been.calledOnce
+        done()
+      },
+      this
+    )
 
     playback.el.dispatchEvent(new Event('seeked'))
   })
@@ -79,7 +97,11 @@ describe('HTML5Video playback', function() {
   it('can check autoplay availability', function(done) {
     this.timeout(5000)
     // FIXME: find a way to set disableCanAutoPlay to true only if Travis run
-    const playback = new HTML5Video({ src: 'http://example.com/dash.ogg', mute: true, disableCanAutoPlay: true })
+    const playback = new HTML5Video({
+      src: 'http://example.com/dash.ogg',
+      mute: true,
+      disableCanAutoPlay: true,
+    })
 
     playback.canAutoPlay(function(result, error) {
       expect(result).to.be.true
@@ -89,7 +111,10 @@ describe('HTML5Video playback', function() {
   })
 
   it('can be consented', function() {
-    const playback = new HTML5Video({ src: 'http://example.com/dash.ogg', mute: true })
+    const playback = new HTML5Video({
+      src: 'http://example.com/dash.ogg',
+      mute: true,
+    })
 
     expect(playback.consented).to.be.false
     playback.consent()
@@ -98,7 +123,12 @@ describe('HTML5Video playback', function() {
 
   it('isPlaying() is true after constructor when autoPlay is true', function(done) {
     this.timeout(5000)
-    const playback = new HTML5Video({ src: 'http://example.com/dash.ogg', autoPlay: true, mute: true, disableCanAutoPlay: true })
+    const playback = new HTML5Video({
+      src: 'http://example.com/dash.ogg',
+      autoPlay: true,
+      mute: true,
+      disableCanAutoPlay: true,
+    })
 
     playback.on(Events.PLAYBACK_PLAY_INTENT, function() {
       process.nextTick(function() {
@@ -109,7 +139,10 @@ describe('HTML5Video playback', function() {
   })
 
   it('setup crossorigin attribute', function() {
-    const options = $.extend({ playback: { crossOrigin: 'use-credentials' } }, this.options)
+    const options = $.extend(
+      { playback: { crossOrigin: 'use-credentials' } },
+      this.options
+    )
     const playback = new HTML5Video(options)
 
     expect(playback.el.crossOrigin).to.be.equal('use-credentials')
@@ -125,7 +158,10 @@ describe('HTML5Video playback', function() {
   })
 
   it('allows displaying default video tag controls', function() {
-    const options = $.extend({ playback: { controls: 'controls' } }, this.options)
+    const options = $.extend(
+      { playback: { controls: 'controls' } },
+      this.options
+    )
     const playback = new HTML5Video(options)
     expect(playback.el.controls).to.be.true
   })
@@ -146,13 +182,25 @@ describe('HTML5Video playback', function() {
   })
 
   it('setup external tracks', function() {
-    let newTrackUrl = () => { URL.createObjectURL(new Blob([], { type: 'text/vtt' })) }
-    const options = $.extend({ playback: {
-      externalTracks: [
-        { lang: 'en', label: 'English', src: newTrackUrl(), kind: 'subtitles' },
-        { lang: 'fr', label: 'French', src: newTrackUrl() }
-      ]
-    } }, this.options)
+    let newTrackUrl = () => {
+      URL.createObjectURL(new Blob([], { type: 'text/vtt' }))
+    }
+    const options = $.extend(
+      {
+        playback: {
+          externalTracks: [
+            {
+              lang: 'en',
+              label: 'English',
+              src: newTrackUrl(),
+              kind: 'subtitles',
+            },
+            { lang: 'fr', label: 'French', src: newTrackUrl() },
+          ],
+        },
+      },
+      this.options
+    )
     const playback = new HTML5Video(options)
     playback.render()
     const $tracks = playback.$el.find('track[data-html5-video-track]')
@@ -169,13 +217,25 @@ describe('HTML5Video playback', function() {
   })
 
   it('can switch text tracks', function() {
-    let newTrackUrl = () => { URL.createObjectURL(new Blob([], { type: 'text/vtt' })) }
-    const options = $.extend({ playback: {
-      externalTracks: [
-        { lang: 'en', label: 'English', src: newTrackUrl(), kind: 'subtitles' },
-        { lang: 'fr', label: 'French', src: newTrackUrl() }
-      ]
-    } }, this.options)
+    let newTrackUrl = () => {
+      URL.createObjectURL(new Blob([], { type: 'text/vtt' }))
+    }
+    const options = $.extend(
+      {
+        playback: {
+          externalTracks: [
+            {
+              lang: 'en',
+              label: 'English',
+              src: newTrackUrl(),
+              kind: 'subtitles',
+            },
+            { lang: 'fr', label: 'French', src: newTrackUrl() },
+          ],
+        },
+      },
+      this.options
+    )
     const playback = new HTML5Video(options)
     playback.render()
 
@@ -205,9 +265,21 @@ describe('HTML5Video playback', function() {
     let start, end, currentTime
     const duration = 300
     const fakeEl = {
-      get currentTime() { return currentTime },
-      get duration() { return duration },
-      get buffered() { return { start: (i) => start[i], end: (i) => end[i], get length() { return start.length } } }
+      get currentTime() {
+        return currentTime
+      },
+      get duration() {
+        return duration
+      },
+      get buffered() {
+        return {
+          start: i => start[i],
+          end: i => end[i],
+          get length() {
+            return start.length
+          },
+        }
+      },
     }
 
     beforeEach(function() {
@@ -260,7 +332,9 @@ describe('HTML5Video playback', function() {
       playback.on(Events.PLAYBACK_BUFFERING, callback)
       playback.on(Events.PLAYBACK_BUFFERFULL, callback)
 
-      builtInEvents.map(function(event) { playback.el.dispatchEvent(event) })
+      builtInEvents.map(function(event) {
+        playback.el.dispatchEvent(event)
+      })
       callback.should.not.have.been.called
     })
 
@@ -289,19 +363,21 @@ describe('HTML5Video playback', function() {
         src: 'http://example.com/video.m3u8',
         nonPlaybackOption: false,
         playback: {
-          somePlaybackOption: true
-        }
+          somePlaybackOption: true,
+        },
       }
       const html5Video = new HTML5Video(options)
       expect(html5Video.options.playback.somePlaybackOption).to.be.true
-      expect(html5Video.options.playback).not.to.include.keys('nonPlaybackOption')
+      expect(html5Video.options.playback).not.to.include.keys(
+        'nonPlaybackOption'
+      )
     })
 
     it('should use hlsjsConfig from player options as fallback', function() {
       const options = {
         src: 'http://example.com/video.m3u8',
         nonPlaybackOption: false,
-        somePlaybackOption: true
+        somePlaybackOption: true,
       }
       const html5Video = new HTML5Video(options)
       expect(html5Video.options.playback.somePlaybackOption).to.be.true
@@ -313,7 +389,7 @@ describe('HTML5Video playback', function() {
     it('should set src url from options', function() {
       const options = {
         src: 'http://example.com/some_source?query_string=here',
-        mimeType: 'application/x-mpegURL'
+        mimeType: 'application/x-mpegURL',
       }
       const html5Video = new HTML5Video(options)
       html5Video.render()
@@ -322,7 +398,7 @@ describe('HTML5Video playback', function() {
 
     it('should have src attribute removed after stop, and then added after play', function() {
       const options = {
-        src: 'http://example.com/video.mp4'
+        src: 'http://example.com/video.mp4',
       }
       const html5Video = new HTML5Video(options)
       html5Video.render()
@@ -337,7 +413,9 @@ describe('HTML5Video playback', function() {
   describe('audio resources', function() {
     it('should be able to play audio resources', function() {
       expect(HTML5Video.canPlay('http://domain.com/Audio.oga')).to.be.true
-      expect(HTML5Video.canPlay('http://domain.com/Audio.oga?query_string=here')).to.be.true
+      expect(
+        HTML5Video.canPlay('http://domain.com/Audio.oga?query_string=here')
+      ).to.be.true
       expect(HTML5Video.canPlay('/relative/Audio.oga')).to.be.true
       expect(HTML5Video.canPlay('/relative/Audio.wav')).to.be.true
     })
@@ -351,26 +429,35 @@ describe('HTML5Video playback', function() {
     it('should use an audio tag when the audioOnly option is set to true', function() {
       const options = {
         src: 'http://example.com/dash.m3u8',
-        playback: { audioOnly: true }
+        playback: { audioOnly: true },
       }
       const playback = new HTML5Video(options)
       expect(playback.tagName).to.be.equal('audio')
     })
 
     it('should not play video resources on an audio tag if audioOnly flag is not set and a video mime-type is set', function() {
-      const options = { src: 'http://example.com/video.mp4', mimeType: 'video/mp4' }
+      const options = {
+        src: 'http://example.com/video.mp4',
+        mimeType: 'video/mp4',
+      }
       const playback = new HTML5Video(options)
       expect(playback.isAudioOnly).to.be.false
       expect(playback.tagName).to.be.equal('video')
     })
 
     it('should play on audio tag if audioOnly flag is not set and the mime-type specified is audio only', function() {
-      let options = { src: 'http://example.com/audio?some_parameter=value', mimeType: 'audio/ogg' },
+      let options = {
+          src: 'http://example.com/audio?some_parameter=value',
+          mimeType: 'audio/ogg',
+        },
         playback = new HTML5Video(options)
       expect(playback.isAudioOnly).to.be.true
       expect(playback.tagName).to.be.equal('audio')
 
-      options = { src: 'http://example.com/audio?some_parameter=value', mimeType: 'audio/wav' }
+      options = {
+        src: 'http://example.com/audio?some_parameter=value',
+        mimeType: 'audio/wav',
+      }
       playback = new HTML5Video(options)
       expect(playback.isAudioOnly).to.be.true
       expect(playback.tagName).to.be.equal('audio')

@@ -9,9 +9,13 @@ import watermarkHTML from './public/watermark.html'
 import './public/watermark.scss'
 
 export default class WaterMarkPlugin extends UIContainerPlugin {
-  get name() { return 'watermark' }
+  get name() {
+    return 'watermark'
+  }
 
-  get template() { return template(watermarkHTML) }
+  get template() {
+    return template(watermarkHTML)
+  }
 
   constructor(container) {
     super(container)
@@ -21,7 +25,11 @@ export default class WaterMarkPlugin extends UIContainerPlugin {
   bindEvents() {
     this.listenTo(this.container, Events.CONTAINER_PLAY, this.onPlay)
     this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
-    this.listenTo(this.container, Events.CONTAINER_OPTIONS_CHANGE, this.configure)
+    this.listenTo(
+      this.container,
+      Events.CONTAINER_OPTIONS_CHANGE,
+      this.configure
+    )
   }
 
   configure() {
@@ -30,13 +38,13 @@ export default class WaterMarkPlugin extends UIContainerPlugin {
       this.imageUrl = this.options.watermark
       this.imageLink = this.options.watermarkLink
       this.render()
-    } else { this.$el.remove() }
-
+    } else {
+      this.$el.remove()
+    }
   }
 
   onPlay() {
-    if (!this.hidden)
-      this.$el.show()
+    if (!this.hidden) this.$el.show()
   }
 
   onStop() {
@@ -45,7 +53,11 @@ export default class WaterMarkPlugin extends UIContainerPlugin {
 
   render() {
     this.$el.hide()
-    const templateOptions = { position: this.position, imageUrl: this.imageUrl, imageLink: this.imageLink }
+    const templateOptions = {
+      position: this.position,
+      imageUrl: this.imageUrl,
+      imageLink: this.imageLink,
+    }
     this.$el.html(this.template(templateOptions))
     this.container.$el.append(this.$el)
     return this

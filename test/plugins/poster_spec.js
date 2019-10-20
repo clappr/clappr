@@ -72,7 +72,10 @@ describe('Poster', function() {
   })
 
   it('disables handling container:ended event as container:stop', function() {
-    this.container = new Container({ playback: this.playback, poster: { showOnVideoEnd: false } })
+    this.container = new Container({
+      playback: this.playback,
+      poster: { showOnVideoEnd: false },
+    })
     this.poster = new Poster(this.container)
     this.container.addPlugin(this.poster)
     sinon.spy(this.container, 'disableMediaControl')
@@ -91,17 +94,25 @@ describe('Poster', function() {
 
   it('keeps the poster up for audio only sources', function() {
     expect(this.poster.shouldHideOnPlay()).to.equal(true)
-    Object.defineProperty(this.playback, 'isAudioOnly', { get: function () { return true } })
+    Object.defineProperty(this.playback, 'isAudioOnly', {
+      get: function() {
+        return true
+      },
+    })
     expect(this.poster.shouldHideOnPlay()).to.equal(false)
   })
 
   it('renders custom background', function() {
     this.container = new Container({
       playback: this.playback,
-      poster: { custom: 'linear-gradient(rgb(238, 238, 238), rgb(153, 153, 153))' }
+      poster: {
+        custom: 'linear-gradient(rgb(238, 238, 238), rgb(153, 153, 153))',
+      },
     })
     this.poster = new Poster(this.container)
     this.container.addPlugin(this.poster)
-    expect($(this.poster.$el).css('background')).include('linear-gradient(rgb(238, 238, 238), rgb(153, 153, 153))')
+    expect($(this.poster.$el).css('background')).include(
+      'linear-gradient(rgb(238, 238, 238), rgb(153, 153, 153))'
+    )
   })
 })

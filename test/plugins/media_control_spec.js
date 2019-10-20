@@ -37,7 +37,6 @@ describe('MediaControl', function() {
   })
 
   describe('#setVolume', function() {
-
     it('sets the volume', function() {
       sinon.spy(this.container, 'setVolume')
       sinon.spy(this.mediaControl, 'updateVolumeUI')
@@ -88,7 +87,7 @@ describe('MediaControl', function() {
       expect(Config.restore('volume')).to.be.equal(78)
     })
 
-    it('reset volume after configure', function () {
+    it('reset volume after configure', function() {
       Object.assign(this.core.options, { persistConfig: true })
 
       const container = new Container({ playback: this.playback, mute: true })
@@ -101,7 +100,7 @@ describe('MediaControl', function() {
       expect(mediacontrol.volume).to.be.equal(100)
     })
 
-    it('do not persist when is initial volume', function () {
+    it('do not persist when is initial volume', function() {
       Config.persist = sinon.spy()
 
       Object.assign(this.core.options, { persistConfig: true })
@@ -150,8 +149,12 @@ describe('MediaControl', function() {
   describe('custom media control', function() {
     it('can be extend the base mediacontrol with a custom template', function() {
       class MyMediaControl extends MediaControl {
-        get template() { return template('<div>My HTML here</div>') }
-        constructor(options) { super(options) }
+        get template() {
+          return template('<div>My HTML here</div>')
+        }
+        constructor(options) {
+          super(options)
+        }
       }
 
       const container = new Container({ playback: this.playback, mute: true })
@@ -162,9 +165,7 @@ describe('MediaControl', function() {
       mediaControl.render()
       expect(mediaControl.muted).to.be.equal(true)
       expect(mediaControl.volume).to.be.equal(0)
-      expect(mediaControl.$el.html()).to.be.equal(
-        '<div>My HTML here</div>'
-      )
+      expect(mediaControl.$el.html()).to.be.equal('<div>My HTML here</div>')
     })
   })
 
@@ -172,7 +173,10 @@ describe('MediaControl', function() {
     expect(this.mediaControl._options.hideMediaControl).to.be.undefined
     expect(this.mediaControl._options.mediacontrol).to.be.undefined
 
-    this.core.configure({ hideMediaControl: false, mediacontrol: { seekbar: '#E113D3', buttons: '#66B2FF' } })
+    this.core.configure({
+      hideMediaControl: false,
+      mediacontrol: { seekbar: '#E113D3', buttons: '#66B2FF' },
+    })
     expect(this.mediaControl._options.hideMediaControl).to.be.false
     expect(this.mediaControl._options.mediacontrol).not.to.be.undefined
 

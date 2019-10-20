@@ -47,17 +47,17 @@ export default class Loader extends BaseObject {
    * @param {Object} externalPlugins the external plugins
    * @param {Number} playerId you can embed multiple instances of clappr, therefore this is the unique id of each one.
    */
-  constructor(externalPlugins = [], playerId = 0, useOnlyPlainHtml5Plugins = PLAIN_HTML5_ONLY) {
+  constructor(
+    externalPlugins = [],
+    playerId = 0,
+    useOnlyPlainHtml5Plugins = PLAIN_HTML5_ONLY
+  ) {
     super()
     this.playerId = playerId
     this.playbackPlugins = []
 
-    if (!useOnlyPlainHtml5Plugins) {
-      this.playbackPlugins = [
-        ...this.playbackPlugins,
-        HLSVideoPlayback,
-      ]
-    }
+    if (!useOnlyPlainHtml5Plugins)
+      this.playbackPlugins = [...this.playbackPlugins, HLSVideoPlayback]
 
     this.playbackPlugins = [
       ...this.playbackPlugins,
@@ -69,18 +69,31 @@ export default class Loader extends BaseObject {
       this.playbackPlugins = [
         ...this.playbackPlugins,
         FlashVideoPlayback,
-        FlasHLSVideoPlayback
+        FlasHLSVideoPlayback,
       ]
     }
 
-    this.playbackPlugins = [
-      ...this.playbackPlugins,
-      HTMLImgPlayback,
-      NoOp
-    ]
+    this.playbackPlugins = [...this.playbackPlugins, HTMLImgPlayback, NoOp]
 
-    this.containerPlugins = [SpinnerThreeBouncePlugin, WaterMarkPlugin, PosterPlugin, StatsPlugin, GoogleAnalyticsPlugin, ClickToPausePlugin]
-    this.corePlugins = [MediaControl, DVRControls, ClosedCaptions, Favicon, SeekTime, SourcesPlugin, EndVideo, ErrorScreen, Strings]
+    this.containerPlugins = [
+      SpinnerThreeBouncePlugin,
+      WaterMarkPlugin,
+      PosterPlugin,
+      StatsPlugin,
+      GoogleAnalyticsPlugin,
+      ClickToPausePlugin,
+    ]
+    this.corePlugins = [
+      MediaControl,
+      DVRControls,
+      ClosedCaptions,
+      Favicon,
+      SeekTime,
+      SourcesPlugin,
+      EndVideo,
+      ErrorScreen,
+      Strings,
+    ]
 
     if (!Array.isArray(externalPlugins))
       this.validateExternalPluginsType(externalPlugins)
@@ -115,8 +128,7 @@ export default class Loader extends BaseObject {
     const pluginsMap = list.reduceRight(groupUp, Object.create(null))
 
     const plugins = []
-    for (let key in pluginsMap)
-      plugins.unshift(pluginsMap[key])
+    for (let key in pluginsMap) plugins.unshift(pluginsMap[key])
 
     return plugins
   }
@@ -129,15 +141,20 @@ export default class Loader extends BaseObject {
    */
   addExternalPlugins(plugins) {
     plugins = this.groupPluginsByType(plugins)
-    if (plugins.playback)
-      this.playbackPlugins = this.removeDups(plugins.playback.concat(this.playbackPlugins))
+    if (plugins.playback) {
+      this.playbackPlugins = this.removeDups(
+        plugins.playback.concat(this.playbackPlugins)
+      )
+    }
 
-    if (plugins.container)
-      this.containerPlugins = this.removeDups(plugins.container.concat(this.containerPlugins))
+    if (plugins.container) {
+      this.containerPlugins = this.removeDups(
+        plugins.container.concat(this.containerPlugins)
+      )
+    }
 
     if (plugins.core)
       this.corePlugins = this.removeDups(plugins.core.concat(this.corePlugins))
-
 
     PlayerInfo.getInstance(this.playerId).playbackPlugins = this.playbackPlugins
   }
@@ -150,10 +167,12 @@ export default class Loader extends BaseObject {
    */
   validateExternalPluginsType(plugins) {
     const plugintypes = ['playback', 'container', 'core']
-    plugintypes.forEach((type) => {
-      (plugins[type] || []).forEach((el) => {
-        const errorMessage = 'external ' + el.type + ' plugin on ' + type + ' array'
-        if (el.type !== type)  throw new ReferenceError(errorMessage)
+    plugintypes.forEach(type => {
+      const pluginType = plugins[type] || []
+      pluginType.forEach(el => {
+        const errorMessage =
+          'external ' + el.type + ' plugin on ' + type + ' array'
+        if (el.type !== type) throw new ReferenceError(errorMessage)
       })
     })
   }

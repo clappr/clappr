@@ -6,14 +6,14 @@ import MediaControl from '../../src/plugins/media_control'
 
 describe('Core', function() {
   describe('When configure', function() {
-    beforeEach(function () {
+    beforeEach(function() {
       this.core = new Core({})
       this.core.load = sinon.spy()
     })
 
     it('should update option', function() {
       const newOptions = {
-        autoPlay: true
+        autoPlay: true,
       }
       this.core.configure(newOptions)
 
@@ -23,7 +23,7 @@ describe('Core', function() {
     it('should update option and load source', function() {
       const newOptions = {
         source: 'some/path/to/media.mp4',
-        mute: true
+        mute: true,
       }
       this.core.configure(newOptions)
 
@@ -31,12 +31,12 @@ describe('Core', function() {
       expect(this.core.options.mute).to.equal(newOptions.mute)
     })
 
-    it('shoud trigger options change event', function () {
+    it('shoud trigger options change event', function() {
       let callback = sinon.spy()
       this.core.on(Events.CORE_OPTIONS_CHANGE, callback)
 
       const newOptions = {
-        autoPlay: false
+        autoPlay: false,
       }
       this.core.configure(newOptions)
 
@@ -92,13 +92,14 @@ describe('Core', function() {
 
           this.core.toggleFullscreen()
 
-          expect(fullScreenSpy).to.have.been.calledWith(this.core.activeContainer.el)
+          expect(fullScreenSpy).to.have.been.calledWith(
+            this.core.activeContainer.el
+          )
         })
       })
     })
 
     describe('when is in fullscreen', () => {
-
       it('calls Fullscreen.cancelFullscreen', () => {
         const spy = sinon.spy(Fullscreen, 'cancelFullscreen')
         sinon.stub(Browser, 'isiOS').value(false)
@@ -122,7 +123,7 @@ describe('Core', function() {
       })
     })
     describe('Multiple instances', () => {
-      it('shouldn\'t toggle one instance fullscreen state when another one stops', () => {
+      it("shouldn't toggle one instance fullscreen state when another one stops", () => {
         const newInstance = new Core({})
         const fakeContainer1 = document.createElement('div')
         fakeContainer1.setAttribute('id', 'fakeContainer1')
@@ -161,7 +162,10 @@ describe('Core', function() {
     it('calls #triggerResize with core element width and height', () => {
       this.core.enableResizeObserver()
       this.clock.tick(500)
-      expect(this.core.triggerResize).to.have.been.calledWith({ height: 0, width: 0 })
+      expect(this.core.triggerResize).to.have.been.calledWith({
+        height: 0,
+        width: 0,
+      })
     })
   })
 
@@ -198,28 +202,38 @@ describe('Core', function() {
       sinon.spy(this.core, 'trigger')
       this.core.triggerResize(newSize)
 
-      expect(this.core.trigger).to.have.been.calledWith(Events.CORE_RESIZE, newSize)
+      expect(this.core.trigger).to.have.been.calledWith(
+        Events.CORE_RESIZE,
+        newSize
+      )
     })
   })
 
   describe('#handleWindowResize', () => {
     beforeEach(() => {
       this.core = new Core({})
-      this.currentScreenOrientation = window.innerWidth > window.innerHeight ? 'landscape' : 'portrait'
+      this.currentScreenOrientation =
+        window.innerWidth > window.innerHeight ? 'landscape' : 'portrait'
       this.core._screenOrientation = this.currentScreenOrientation
       sinon.spy(this.core, 'triggerResize')
     })
 
     describe('when change the screen orientation', () => {
       it('calls #triggerResize with core element width and height', () => {
-        this.core._screenOrientation = this.currentScreenOrientation == 'landscape' ? 'portrait' : 'landscape'
+        this.core._screenOrientation =
+          this.currentScreenOrientation == 'landscape'
+            ? 'portrait'
+            : 'landscape'
         this.core.handleWindowResize('event')
-        expect(this.core.triggerResize).to.have.been.calledWith({ height: 0, width: 0 })
+        expect(this.core.triggerResize).to.have.been.calledWith({
+          height: 0,
+          width: 0,
+        })
       })
     })
 
-    describe('when screen orientation doesn\'t change', () => {
-      it('doesn\'t calls #triggerResize', () => {
+    describe("when screen orientation doesn't change", () => {
+      it("doesn't calls #triggerResize", () => {
         this.core.handleWindowResize('event')
         expect(this.core.triggerResize).not.to.have.been.called
       })

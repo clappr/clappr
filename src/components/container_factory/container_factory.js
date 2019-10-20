@@ -12,8 +12,12 @@ import Container from '../../components/container'
 import $ from 'clappr-zepto'
 
 export default class ContainerFactory extends BaseObject {
-  get options() { return this._options }
-  set options(options) { this._options = options }
+  get options() {
+    return this._options
+  }
+  set options(options) {
+    this._options = options
+  }
 
   constructor(options, loader, i18n, playerError) {
     super(options)
@@ -23,15 +27,19 @@ export default class ContainerFactory extends BaseObject {
   }
 
   createContainers() {
-    return $.Deferred((promise) => {
-      promise.resolve(this.options.sources.map((source) => {
-        return this.createContainer(source)
-      }))
+    return $.Deferred(promise => {
+      promise.resolve(
+        this.options.sources.map(source => {
+          return this.createContainer(source)
+        })
+      )
     })
   }
 
   findPlaybackPlugin(source, mimeType) {
-    return this.loader.playbackPlugins.filter(p => p.canPlay(source, mimeType))[0]
+    return this.loader.playbackPlugins.filter(p =>
+      p.canPlay(source, mimeType)
+    )[0]
   }
 
   createContainer(source) {
@@ -39,17 +47,17 @@ export default class ContainerFactory extends BaseObject {
       mimeType = this.options.mimeType
     if (typeof source === 'object') {
       resolvedSource = source.source.toString()
-      if (source.mimeType)
-        mimeType = source.mimeType
+      if (source.mimeType) mimeType = source.mimeType
+    } else {
+      resolvedSource = source.toString()
+    }
 
-    } else { resolvedSource = source.toString() }
-
-
-    if (resolvedSource.match(/^\/\//)) resolvedSource = window.location.protocol + resolvedSource
+    if (resolvedSource.match(/^\/\//))
+      resolvedSource = window.location.protocol + resolvedSource
 
     let options = $.extend({}, this.options, {
       src: resolvedSource,
-      mimeType: mimeType
+      mimeType: mimeType,
     })
     const playbackPlugin = this.findPlaybackPlugin(resolvedSource, mimeType)
     const playback = new playbackPlugin(options, this._i18n, this.playerError)
@@ -60,12 +68,14 @@ export default class ContainerFactory extends BaseObject {
     const defer = $.Deferred()
     defer.promise(container)
     this.addContainerPlugins(container)
-    this.listenToOnce(container, Events.CONTAINER_READY, () => defer.resolve(container))
+    this.listenToOnce(container, Events.CONTAINER_READY, () =>
+      defer.resolve(container)
+    )
     return container
   }
 
   addContainerPlugins(container) {
-    this.loader.containerPlugins.forEach((Plugin) => {
+    this.loader.containerPlugins.forEach(Plugin => {
       container.addPlugin(new Plugin(container))
     })
   }

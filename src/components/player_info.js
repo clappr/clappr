@@ -12,8 +12,11 @@ class PlayerInfo {
 
 PlayerInfo._players = {}
 
-PlayerInfo.getInstance = (playerId) => {
-  return PlayerInfo._players[playerId] || (PlayerInfo._players[playerId] = new PlayerInfo())
+PlayerInfo.getInstance = playerId => {
+  return (
+    PlayerInfo._players[playerId] ||
+    (PlayerInfo._players[playerId] = new PlayerInfo())
+  )
 }
 
 export default PlayerInfo

@@ -13,10 +13,10 @@ import $ from 'clappr-zepto'
  */
 export default class Playback extends UIObject {
   /**
-  * Determine if the playback does not contain video/has video but video should be ignored.
-  * @property isAudioOnly
-  * @type Boolean
-  */
+   * Determine if the playback does not contain video/has video but video should be ignored.
+   * @property isAudioOnly
+   * @type Boolean
+   */
   get isAudioOnly() {
     return false
   }
@@ -123,14 +123,18 @@ export default class Playback extends UIObject {
    * @method getStartTimeOffset
    * @return {Number} time (in seconds) that time "0" represents.
    */
-  getStartTimeOffset() { return 0 }
+  getStartTimeOffset() {
+    return 0
+  }
 
   /**
    * gets the duration in seconds
    * @method getDuration
    * @return {Number} duration (in seconds) of the current source
    */
-  getDuration() { return 0 }
+  getDuration() {
+    return 0
+  }
 
   /**
    * checks if the playback is playing.
@@ -230,7 +234,8 @@ export default class Playback extends UIObject {
    * @method attemptAutoPlay
    */
   attemptAutoPlay() {
-    this.canAutoPlay((result, error) => { // eslint-disable-line no-unused-vars
+    /* eslint no-unused-vars: ["error", { "args": "none" }] */
+    this.canAutoPlay((result, error) => {
       result && this.play()
     })
   }
@@ -261,7 +266,8 @@ Playback.extend = function(properties) {
  * @param {String} [mimeType] the given mime type, ex: `'application/vnd.apple.mpegurl'`
  * @return {Boolean} `true` if the playback is playable, otherwise `false`
  */
-Playback.canPlay = (source, mimeType) => { // eslint-disable-line no-unused-vars
+/* eslint no-unused-vars: ["error", { "args": "none" }] */
+Playback.canPlay = (source, mimeType) => {
   return false
 }
 

@@ -36,8 +36,10 @@ describe('External Plugin', function() {
     expect(myPluginInstance.testMethod).to.be.equal(testMethod)
     expect(MyPluginClass.type).to.be.equal('container')
 
-
-    MyPluginClass = Clappr.UICorePlugin.extend({ testMethod: testMethod, render: function() {} })
+    MyPluginClass = Clappr.UICorePlugin.extend({
+      testMethod: testMethod,
+      render: function() {},
+    })
     myPluginInstance = new MyPluginClass(core)
     nativePluginInstance = new Clappr.UICorePlugin(core)
     expect(myPluginInstance.enable).to.be.equal(nativePluginInstance.enable)
@@ -45,7 +47,10 @@ describe('External Plugin', function() {
     expect(myPluginInstance.testMethod).to.be.equal(testMethod)
     expect(MyPluginClass.type).to.be.equal('core')
 
-    MyPluginClass = Clappr.CorePlugin.extend({ testMethod: testMethod, render: function() {} })
+    MyPluginClass = Clappr.CorePlugin.extend({
+      testMethod: testMethod,
+      render: function() {},
+    })
     myPluginInstance = new MyPluginClass(core)
     nativePluginInstance = new Clappr.CorePlugin(core)
     expect(myPluginInstance.enable).to.be.equal(nativePluginInstance.enable)

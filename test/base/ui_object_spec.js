@@ -1,5 +1,5 @@
 import UIObject from '../../src/base/ui_object'
-import  $ from 'clappr-zepto'
+import $ from 'clappr-zepto'
 
 describe('UIObject', function() {
   beforeEach(function() {
@@ -11,7 +11,11 @@ describe('UIObject', function() {
   })
 
   it('can be any tag', function() {
-    class MyButton extends UIObject { get tagName() { return 'button' } }
+    class MyButton extends UIObject {
+      get tagName() {
+        return 'button'
+      }
+    }
     const myButton = new MyButton()
     expect(myButton.tagName).to.be.equal('button')
   })
@@ -38,8 +42,12 @@ describe('UIObject', function() {
 
   it('creates an element with attributes', function() {
     class MyButton extends UIObject {
-      constructor(options) { super(options) }
-      get attributes() { return { class: 'my-button' } }
+      constructor(options) {
+        super(options)
+      }
+      get attributes() {
+        return { class: 'my-button' }
+      }
     }
 
     const myButton = new MyButton()
@@ -53,8 +61,12 @@ describe('UIObject', function() {
         super(options)
         this.myId = 0
       }
-      get events() { return { 'click': 'myClick' } }
-      myClick() { this.myId = 42 }
+      get events() {
+        return { click: 'myClick' }
+      }
+      myClick() {
+        this.myId = 42
+      }
     }
 
     const myButton = new MyButton()
@@ -72,7 +84,9 @@ describe('UIObject', function() {
       constructor(options) {
         super(options)
       }
-      render() { this.$el.append(insideComponent) }
+      render() {
+        this.$el.append(insideComponent)
+      }
     }
 
     const myButton = new MySpecialButton()
@@ -86,7 +100,9 @@ describe('UIObject', function() {
       constructor(options) {
         super(options)
       }
-      get attributes() { return { id: 'my-0-button' } }
+      get attributes() {
+        return { id: 'my-0-button' }
+      }
     }
 
     const myButton = new FullscreenButton()
@@ -105,8 +121,12 @@ describe('UIObject', function() {
         super(options)
         this.myId = 0
       }
-      get events() { return { 'click': 'myClick' } }
-      myClick() { this.myId += 1 }
+      get events() {
+        return { click: 'myClick' }
+      }
+      myClick() {
+        this.myId += 1
+      }
     }
 
     const myButton = new FullscreenButton()

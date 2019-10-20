@@ -6,8 +6,12 @@ import noOpHTML from './public/error.html'
 import './public/style.scss'
 
 export default class NoOp extends Playback {
-  get name() { return 'no_op' }
-  get template() { return template(noOpHTML) }
+  get name() {
+    return 'no_op'
+  }
+  get template() {
+    return template(noOpHTML)
+  }
   get attributes() {
     return { 'data-no-op': '' }
   }
@@ -18,40 +22,46 @@ export default class NoOp extends Playback {
   }
 
   render() {
-    const playbackNotSupported = this.options.playbackNotSupportedMessage || this.i18n.t('playback_not_supported')
+    const playbackNotSupported =
+      this.options.playbackNotSupportedMessage ||
+      this.i18n.t('playback_not_supported')
     this.$el.html(this.template({ message: playbackNotSupported }))
     this.trigger(Events.PLAYBACK_READY, this.name)
-    const showForNoOp = !!(this.options.poster && this.options.poster.showForNoOp)
-    if (this.options.autoPlay || !showForNoOp)
-      this._animate()
+    const showForNoOp = !!(
+      this.options.poster && this.options.poster.showForNoOp
+    )
+    if (this.options.autoPlay || !showForNoOp) this._animate()
 
     return this
   }
 
   _noise() {
-    this._noiseFrameNum = (this._noiseFrameNum+1)%5
+    this._noiseFrameNum = (this._noiseFrameNum + 1) % 5
     if (this._noiseFrameNum) {
       // only update noise every 5 frames to save cpu
       return
     }
 
-    const idata = this.context.createImageData(this.context.canvas.width, this.context.canvas.height)
+    const idata = this.context.createImageData(
+      this.context.canvas.width,
+      this.context.canvas.height
+    )
     let buffer32
     try {
       buffer32 = new Uint32Array(idata.data.buffer)
     } catch (err) {
-      buffer32 = new Uint32Array(this.context.canvas.width * this.context.canvas.height * 4)
-      const data=idata.data
-      for (let i = 0; i < data.length; i++)
-        buffer32[i]=data[i]
-
+      buffer32 = new Uint32Array(
+        this.context.canvas.width * this.context.canvas.height * 4
+      )
+      const data = idata.data
+      for (let i = 0; i < data.length; i++) buffer32[i] = data[i]
     }
 
     const len = buffer32.length,
       m = Math.random() * 6 + 4
     let run = 0,
       color = 0
-    for (let i = 0; i < len;) {
+    for (let i = 0; i < len; ) {
       if (run < 0) {
         run = m * Math.random()
         const p = Math.pow(Math.random(), 0.4)
@@ -64,8 +74,7 @@ export default class NoOp extends Playback {
   }
 
   _loop() {
-    if (this._stop)
-      return
+    if (this._stop) return
 
     this._noise()
     this._animationHandle = requestAnimationFrame(() => this._loop())
@@ -85,6 +94,7 @@ export default class NoOp extends Playback {
   }
 }
 
-NoOp.canPlay = (source) => { // eslint-disable-line no-unused-vars
+/* eslint no-unused-vars: ["error", { "args": "none" }] */
+NoOp.canPlay = source => {
   return true
 }

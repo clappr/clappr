@@ -2,9 +2,11 @@ import Strings from 'plugins/strings'
 
 describe('Strings', function() {
   it('translates', function() {
-    const fakeCore = { options: { } }
+    const fakeCore = { options: {} }
     const strings = new Strings(fakeCore)
-    strings._language = function() { return 'en' }
+    strings._language = function() {
+      return 'en'
+    }
 
     expect(strings.t('live')).to.equal('live')
   })
@@ -35,11 +37,11 @@ describe('Strings', function() {
       options: {
         language: 'en',
         strings: {
-          'en': {
-            'live': 'Company Live'
-          }
-        }
-      }
+          en: {
+            live: 'Company Live',
+          },
+        },
+      },
     }
     const strings = new Strings(fakeCore)
 
@@ -51,11 +53,11 @@ describe('Strings', function() {
       options: {
         language: 'en',
         strings: {
-          'en': {
-            'live': 'Company Live'
-          }
-        }
-      }
+          en: {
+            live: 'Company Live',
+          },
+        },
+      },
     }
     const strings = new Strings(fakeCore)
 
@@ -68,12 +70,12 @@ describe('Strings', function() {
       options: {
         language: 'hu',
         strings: {
-          'hu': {
-            'live': 'Élő',
-            'back_to_live': 'Ugrás élő képre'
-          }
-        }
-      }
+          hu: {
+            live: 'Élő',
+            back_to_live: 'Ugrás élő képre',
+          },
+        },
+      },
     }
     const strings = new Strings(fakeCore)
 

@@ -33,16 +33,16 @@ let style
 export default class Core extends UIObject {
   get events() {
     return {
-      'webkitfullscreenchange': 'handleFullscreenChange',
-      'mousemove': 'onMouseMove',
-      'mouseleave': 'onMouseLeave'
+      webkitfullscreenchange: 'handleFullscreenChange',
+      mousemove: 'onMouseMove',
+      mouseleave: 'onMouseLeave',
     }
   }
 
   get attributes() {
     return {
       'data-player': '',
-      tabindex: 9999
+      tabindex: 9999,
     }
   }
 
@@ -61,7 +61,7 @@ export default class Core extends UIObject {
    * @type {Strings}
    */
   get i18n() {
-    return this.getPlugin('strings') || { t: (key) => key }
+    return this.getPlugin('strings') || { t: key => key }
   }
 
   /**
@@ -120,25 +120,37 @@ export default class Core extends UIObject {
     $(document).bind('fullscreenchange', this._boundFullscreenHandler)
     $(document).bind('MSFullscreenChange', this._boundFullscreenHandler)
     $(document).bind('mozfullscreenchange', this._boundFullscreenHandler)
-    Browser.isMobile && $(window).bind('resize', (o) => { this.handleWindowResize(o) })
+    Browser.isMobile &&
+      $(window).bind('resize', o => {
+        this.handleWindowResize(o)
+      })
   }
 
   configureDomRecycler() {
-    let recycleVideo = this.options && this.options.playback && this.options.playback.recycleVideo
+    let recycleVideo =
+      this.options &&
+      this.options.playback &&
+      this.options.playback.recycleVideo
     DomRecycler.configure({ recycleVideo })
   }
 
   createContainers(options) {
     this.defer = $.Deferred()
     this.defer.promise(this)
-    this.containerFactory = new ContainerFactory(options, options.loader, this.i18n, this.playerError)
+    this.containerFactory = new ContainerFactory(
+      options,
+      options.loader,
+      this.i18n,
+      this.playerError
+    )
     this.prepareContainers()
   }
 
   prepareContainers() {
-    this.containerFactory.createContainers()
-      .then((containers) => this.setupContainers(containers))
-      .then((containers) => this.resolveOnContainersReady(containers))
+    this.containerFactory
+      .createContainers()
+      .then(containers => this.setupContainers(containers))
+      .then(containers => this.resolveOnContainersReady(containers))
   }
 
   updateSize() {
@@ -149,27 +161,39 @@ export default class Core extends UIObject {
     if (!Browser.isiOS) {
       this.$el.addClass('fullscreen')
       this.$el.removeAttr('style')
-      this.playerInfo.previousSize = { width: this.options.width, height: this.options.height }
-      this.playerInfo.currentSize = { width: $(window).width(), height: $(window).height() }
+      this.playerInfo.previousSize = {
+        width: this.options.width,
+        height: this.options.height,
+      }
+      this.playerInfo.currentSize = {
+        width: $(window).width(),
+        height: $(window).height(),
+      }
     }
   }
 
   setPlayerSize() {
     this.$el.removeClass('fullscreen')
     this.playerInfo.currentSize = this.playerInfo.previousSize
-    this.playerInfo.previousSize = { width: $(window).width(), height: $(window).height() }
+    this.playerInfo.previousSize = {
+      width: $(window).width(),
+      height: $(window).height(),
+    }
     this.resize(this.playerInfo.currentSize)
   }
 
   resize(options) {
-    if (!isNumber(options.height) && !isNumber(options.width))  {
+    if (!isNumber(options.height) && !isNumber(options.width)) {
       this.el.style.height = `${options.height}`
       this.el.style.width = `${options.width}`
     } else {
       this.el.style.height = `${options.height}px`
       this.el.style.width = `${options.width}px`
     }
-    this.playerInfo.previousSize = { width: this.options.width, height: this.options.height }
+    this.playerInfo.previousSize = {
+      width: this.options.width,
+      height: this.options.height,
+    }
     this.options.width = options.width
     this.options.height = options.height
     this.playerInfo.currentSize = options
@@ -178,19 +202,28 @@ export default class Core extends UIObject {
 
   enableResizeObserver() {
     const checkSizeCallback = () => {
-      this.triggerResize({ width: this.el.clientWidth, height: this.el.clientHeight })
+      this.triggerResize({
+        width: this.el.clientWidth,
+        height: this.el.clientHeight,
+      })
     }
     this.resizeObserverInterval = setInterval(checkSizeCallback, 500)
   }
 
   triggerResize(newSize) {
-    const thereWasChange = this.firstResize || this.oldHeight !== newSize.height || this.oldWidth !== newSize.width
+    const thereWasChange =
+      this.firstResize ||
+      this.oldHeight !== newSize.height ||
+      this.oldWidth !== newSize.width
     if (thereWasChange) {
       this.oldHeight = newSize.height
       this.oldWidth = newSize.width
       this.playerInfo.computedSize = newSize
       this.firstResize = false
-      Mediator.trigger(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, newSize)
+      Mediator.trigger(
+        `${this.options.playerId}:${Events.PLAYER_RESIZE}`,
+        newSize
+      )
       this.trigger(Events.CORE_RESIZE, newSize)
     }
   }
@@ -223,15 +256,15 @@ export default class Core extends UIObject {
     this.options.mimeType = mimeType
     sources = sources && sources.constructor === Array ? sources : [sources]
     this.options.sources = sources
-    this.containers.forEach((container) => container.destroy())
+    this.containers.forEach(container => container.destroy())
     this.containerFactory.options = $.extend(this.options, { sources })
     this.prepareContainers()
   }
 
   destroy() {
     this.disableResizeObserver()
-    this.containers.forEach((container) => container.destroy())
-    this.plugins.forEach((plugin) => plugin.destroy())
+    this.containers.forEach(container => container.destroy())
+    this.plugins.forEach(plugin => plugin.destroy())
     this.$el.remove()
     $(document).unbind('fullscreenchange', this._boundFullscreenHandler)
     $(document).unbind('MSFullscreenChange', this._boundFullscreenHandler)
@@ -245,19 +278,23 @@ export default class Core extends UIObject {
   }
 
   handleWindowResize(event) {
-    const orientation = (window.innerWidth > window.innerHeight) ? 'landscape' : 'portrait'
+    const orientation =
+      window.innerWidth > window.innerHeight ? 'landscape' : 'portrait'
     if (this._screenOrientation === orientation) return
     this._screenOrientation = orientation
-    this.triggerResize({ width: this.el.clientWidth, height: this.el.clientHeight })
+    this.triggerResize({
+      width: this.el.clientWidth,
+      height: this.el.clientHeight,
+    })
     this.trigger(Events.CORE_SCREEN_ORIENTATION_CHANGED, {
       event: event,
-      orientation: this._screenOrientation
+      orientation: this._screenOrientation,
     })
   }
 
   removeContainer(container) {
     this.stopListening(container)
-    this.containers = this.containers.filter((c) => c !== container)
+    this.containers = this.containers.filter(c => c !== container)
   }
 
   setupContainer(container) {
@@ -276,7 +313,9 @@ export default class Core extends UIObject {
   }
 
   renderContainers() {
-    this.containers.forEach((container) => this.el.appendChild(container.render().el))
+    this.containers.forEach(container =>
+      this.el.appendChild(container.render().el)
+    )
   }
 
   createContainer(source, options) {
@@ -309,7 +348,10 @@ export default class Core extends UIObject {
   }
 
   isFullscreen() {
-    return Fullscreen.getFullscreenElement() === (Browser.isiOS ? this.activeContainer.el : this.el)
+    return (
+      Fullscreen.getFullscreenElement() ===
+      (Browser.isiOS ? this.activeContainer.el : this.el)
+    )
   }
 
   toggleFullscreen() {
@@ -317,7 +359,9 @@ export default class Core extends UIObject {
       Fullscreen.cancelFullscreen()
       !Browser.isiOS && this.$el.removeClass('fullscreen nocursor')
     } else {
-      Fullscreen.requestFullscreen(Browser.isiOS ? this.activeContainer.el : this.el)
+      Fullscreen.requestFullscreen(
+        Browser.isiOS ? this.activeContainer.el : this.el
+      )
       !Browser.isiOS && this.$el.addClass('fullscreen')
     }
   }
@@ -343,7 +387,7 @@ export default class Core extends UIObject {
     sources && this.load(sources, options.mimeType || this.options.mimeType)
 
     this.trigger(Events.CORE_OPTIONS_CHANGE, options) // Trigger with newly provided options
-    this.containers.forEach((container) => container.configure(this.options))
+    this.containers.forEach(container => container.configure(this.options))
   }
 
   appendToParent() {

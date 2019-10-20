@@ -35,7 +35,7 @@ describe('ErrorScreen', function() {
           UI: {
             title: 'tigle',
             message: 'message',
-          }
+          },
         }
         this.playback = new Playback()
         this.container = new Container({ playback: this.playback })
@@ -51,7 +51,10 @@ describe('ErrorScreen', function() {
       })
 
       it('stops media', () => {
-        const containerDisableMediaControlSpy = sinon.spy(this.container, 'disableMediaControl')
+        const containerDisableMediaControlSpy = sinon.spy(
+          this.container,
+          'disableMediaControl'
+        )
 
         this.errorScreen.onError(this.fakeError)
 

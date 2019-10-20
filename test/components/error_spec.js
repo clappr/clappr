@@ -21,14 +21,16 @@ describe('PlayerError', function() {
       sinon.spy(this.core, 'trigger')
       this.playerError.createError(this.errorData)
 
-      assert.ok(this.core.trigger.calledWith(Events.ERROR, {
-        code: 'test_01',
-        description: 'test error',
-        level: PlayerError.Levels.FATAL,
-        origin: 'test',
-        scope: 'it',
-        raw: {},
-      }))
+      assert.ok(
+        this.core.trigger.calledWith(Events.ERROR, {
+          code: 'test_01',
+          description: 'test error',
+          level: PlayerError.Levels.FATAL,
+          origin: 'test',
+          scope: 'it',
+          raw: {},
+        })
+      )
     })
 
     describe('when core is not set', function() {

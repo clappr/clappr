@@ -11,7 +11,7 @@ describe('Container', function() {
   })
 
   it('uses settings from playback', function() {
-    expect(this.container.settings).to.deep.equal((new FakePlayback).settings)
+    expect(this.container.settings).to.deep.equal(new FakePlayback().settings)
   })
 
   it('gets playback type', function() {
@@ -40,7 +40,13 @@ describe('Container', function() {
 
     this.container.destroy()
 
-    assert.ok(this.container.trigger.calledWith(Events.CONTAINER_DESTROYED, this.container, this.container.name))
+    assert.ok(
+      this.container.trigger.calledWith(
+        Events.CONTAINER_DESTROYED,
+        this.container,
+        this.container.name
+      )
+    )
     assert.ok(this.container.stopListening.calledOnce)
     assert.ok(this.playback.destroy.calledOnce)
     assert.ok(fakePlugin.destroy.calledOnce)
@@ -60,9 +66,19 @@ describe('Container', function() {
     sinon.spy(this.container, 'onProgress')
 
     this.container.bindEvents()
-    this.playback.trigger(Events.PLAYBACK_PROGRESS, { start: 0, current: 3000, total: 6000 })
+    this.playback.trigger(Events.PLAYBACK_PROGRESS, {
+      start: 0,
+      current: 3000,
+      total: 6000,
+    })
 
-    assert.ok(this.container.onProgress.calledWith({ start: 0, current: 3000, total: 6000 }))
+    assert.ok(
+      this.container.onProgress.calledWith({
+        start: 0,
+        current: 3000,
+        total: 6000,
+      })
+    )
   })
 
   it('listens to playback:timeupdate event', function() {
@@ -75,7 +91,9 @@ describe('Container', function() {
 
   it('listens to playback:seeked event', function(done) {
     this.timeout(5000)
-    let playback = new HTML5Playback({ src: '/base/test/fixtures/SampleVideo_360x240_1mb.mp4' })
+    let playback = new HTML5Playback({
+      src: '/base/test/fixtures/SampleVideo_360x240_1mb.mp4',
+    })
     let container = new Container({ playback: playback })
     let callback = sinon.spy()
 
@@ -122,9 +140,17 @@ describe('Container', function() {
     sinon.spy(this.container, 'loadedMetadata')
 
     this.container.bindEvents()
-    this.playback.trigger(Events.PLAYBACK_LOADEDMETADATA, { duration: 45, data: { hold: 'on' } })
+    this.playback.trigger(Events.PLAYBACK_LOADEDMETADATA, {
+      duration: 45,
+      data: { hold: 'on' },
+    })
 
-    assert.ok(this.container.loadedMetadata.calledWith({ duration: 45, data: { hold: 'on' } }))
+    assert.ok(
+      this.container.loadedMetadata.calledWith({
+        duration: 45,
+        data: { hold: 'on' },
+      })
+    )
   })
 
   it('listens to playback:highdefinitionupdate event', function() {

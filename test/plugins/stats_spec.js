@@ -12,7 +12,9 @@ describe('StatsPlugin', function() {
     this.clock = sinon.useFakeTimers(Date.now())
   })
 
-  afterEach(function() { this.clock.restore() })
+  afterEach(function() {
+    this.clock.restore()
+  })
 
   it('should calculate startup time', function() {
     this.container.onBuffering()
@@ -112,5 +114,4 @@ describe('StatsPlugin', function() {
       this.container.restore()
     }, 20)
   })
-
 })

@@ -9,11 +9,13 @@ import spinnerHTML from './public/spinner.html'
 import './public/spinner.scss'
 
 export default class SpinnerThreeBouncePlugin extends UIContainerPlugin {
-  get name() { return 'spinner' }
+  get name() {
+    return 'spinner'
+  }
   get attributes() {
     return {
-      'data-spinner':'',
-      'class': 'spinner-three-bounce'
+      'data-spinner': '',
+      class: 'spinner-three-bounce',
     }
   }
 
@@ -21,8 +23,16 @@ export default class SpinnerThreeBouncePlugin extends UIContainerPlugin {
     super(container)
     this.template = template(spinnerHTML)
     this.showTimeout = null
-    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERING, this.onBuffering)
-    this.listenTo(this.container, Events.CONTAINER_STATE_BUFFERFULL, this.onBufferFull)
+    this.listenTo(
+      this.container,
+      Events.CONTAINER_STATE_BUFFERING,
+      this.onBuffering
+    )
+    this.listenTo(
+      this.container,
+      Events.CONTAINER_STATE_BUFFERFULL,
+      this.onBufferFull
+    )
     this.listenTo(this.container, Events.CONTAINER_STOP, this.onStop)
     this.listenTo(this.container, Events.CONTAINER_ENDED, this.onStop)
     this.listenTo(this.container, Events.CONTAINER_ERROR, this.onStop)
@@ -44,7 +54,6 @@ export default class SpinnerThreeBouncePlugin extends UIContainerPlugin {
   show() {
     if (this.showTimeout === null)
       this.showTimeout = setTimeout(() => this.$el.show(), 300)
-
   }
 
   hide() {
@@ -59,8 +68,7 @@ export default class SpinnerThreeBouncePlugin extends UIContainerPlugin {
     this.$el.html(this.template())
     this.container.$el.append(this.$el)
     this.$el.hide()
-    if (this.container.buffering)
-      this.onBuffering()
+    if (this.container.buffering) this.onBuffering()
 
     return this
   }

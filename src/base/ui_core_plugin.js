@@ -3,7 +3,9 @@ import UIObject from './ui_object'
 import ErrorMixin from './error_mixin'
 
 export default class UICorePlugin extends UIObject {
-  get playerError() { return this.core.playerError }
+  get playerError() {
+    return this.core.playerError
+  }
 
   constructor(core) {
     super(core.options)
@@ -15,7 +17,9 @@ export default class UICorePlugin extends UIObject {
 
   bindEvents() {}
 
-  getExternalInterface() { return {} }
+  getExternalInterface() {
+    return {}
+  }
 
   enable() {
     if (!this.enabled) {

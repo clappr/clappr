@@ -40,11 +40,16 @@ const baseUrl = currentScriptUrl().replace(/\/[^/]+$/, '')
  * ```
  */
 export default class Player extends BaseObject {
-
-  set loader(loader) { this._loader = loader }
+  set loader(loader) {
+    this._loader = loader
+  }
   get loader() {
-    if (!this._loader)
-      this._loader = new Loader(this.options.plugins || {}, this.options.playerId)
+    if (!this._loader) {
+      this._loader = new Loader(
+        this.options.plugins || {},
+        this.options.playerId
+      )
+    }
 
     return this._loader
   }
@@ -95,7 +100,7 @@ export default class Player extends BaseObject {
       onError: Events.PLAYER_ERROR,
       onTimeUpdate: Events.PLAYER_TIMEUPDATE,
       onVolumeUpdate: Events.PLAYER_VOLUMEUPDATE,
-      onSubtitleAvailable: Events.PLAYER_SUBTITLE_AVAILABLE
+      onSubtitleAvailable: Events.PLAYER_SUBTITLE_AVAILABLE,
     }
   }
 
@@ -229,7 +234,7 @@ export default class Player extends BaseObject {
 
   constructor(options) {
     super(options)
-    const playbackDefaultOptions = { recycleVideo : true }
+    const playbackDefaultOptions = { recycleVideo: true }
     const defaultOptions = {
       playerId: uniqueId(''),
       persistConfig: true,
@@ -237,7 +242,7 @@ export default class Player extends BaseObject {
       height: 360,
       baseUrl: baseUrl,
       allowUserInteraction: Browser.isMobile,
-      playback: playbackDefaultOptions
+      playback: playbackDefaultOptions,
     }
     this._options = $.extend(defaultOptions, options)
     this.options.sources = this._normalizeSources(options)
@@ -252,14 +257,13 @@ export default class Player extends BaseObject {
     this._registerOptionEventListeners(this.options.events)
     this._coreFactory = new CoreFactory(this)
     this.playerInfo = PlayerInfo.getInstance(this.options.playerId)
-    this.playerInfo.currentSize = { width: options.width, height: options.height }
+    this.playerInfo.currentSize = {
+      width: options.width,
+      height: options.height,
+    }
     this.playerInfo.options = this.options
-    if (this.options.parentId)
-      this.setParentId(this.options.parentId)
-
-    else if (this.options.parent)
-      this.attachTo(this.options.parent)
-
+    if (this.options.parentId) this.setParentId(this.options.parentId)
+    else if (this.options.parent) this.attachTo(this.options.parent)
   }
 
   /**
@@ -270,8 +274,7 @@ export default class Player extends BaseObject {
    */
   setParentId(parentId) {
     const el = document.querySelector(parentId)
-    if (el)
-      this.attachTo(el)
+    if (el) this.attachTo(el)
 
     return this
   }
@@ -292,10 +295,13 @@ export default class Player extends BaseObject {
   _addEventListeners() {
     if (!this.core.isReady)
       this.listenToOnce(this.core, Events.CORE_READY, this._onReady)
-    else
-      this._onReady()
+    else this._onReady()
 
-    this.listenTo(this.core, Events.CORE_ACTIVE_CONTAINER_CHANGED, this._containerChanged)
+    this.listenTo(
+      this.core,
+      Events.CORE_ACTIVE_CONTAINER_CHANGED,
+      this._containerChanged
+    )
     this.listenTo(this.core, Events.CORE_FULLSCREEN, this._onFullscreenChange)
     this.listenTo(this.core, Events.CORE_RESIZE, this._onResize)
     return this
@@ -312,19 +318,24 @@ export default class Player extends BaseObject {
       this.listenTo(container, Events.CONTAINER_ERROR, this._onError)
       this.listenTo(container, Events.CONTAINER_TIMEUPDATE, this._onTimeUpdate)
       this.listenTo(container, Events.CONTAINER_VOLUME, this._onVolumeUpdate)
-      this.listenTo(container, Events.CONTAINER_SUBTITLE_AVAILABLE, this._onSubtitleAvailable)
+      this.listenTo(
+        container,
+        Events.CONTAINER_SUBTITLE_AVAILABLE,
+        this._onSubtitleAvailable
+      )
     }
     return this
   }
 
   _registerOptionEventListeners(newEvents = {}, events = {}) {
     const hasNewEvents = Object.keys(newEvents).length > 0
-    hasNewEvents && Object.keys(events).forEach((userEvent) => {
-      const eventType = this.eventsMapping[userEvent]
-      eventType && this.off(eventType, events[userEvent])
-    })
+    hasNewEvents &&
+      Object.keys(events).forEach(userEvent => {
+        const eventType = this.eventsMapping[userEvent]
+        eventType && this.off(eventType, events[userEvent])
+      })
 
-    Object.keys(newEvents).forEach((userEvent) => {
+    Object.keys(newEvents).forEach(userEvent => {
       const eventType = this.eventsMapping[userEvent]
       if (eventType) {
         let eventFunction = newEvents[userEvent]
@@ -391,8 +402,9 @@ export default class Player extends BaseObject {
   }
 
   _normalizeSources(options) {
-    const sources = options.sources || (options.source !== undefined? [options.source] : [])
-    return sources.length === 0 ? [{ source:'', mimeType:'' }] : sources
+    const sources =
+      options.sources || (options.source !== undefined ? [options.source] : [])
+    return sources.length === 0 ? [{ source: '', mimeType: '' }] : sources
   }
 
   /**
@@ -420,8 +432,7 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   load(sources, mimeType, autoPlay) {
-    if (autoPlay !== undefined)
-      this.configure({ autoPlay: !!autoPlay })
+    if (autoPlay !== undefined) this.configure({ autoPlay: !!autoPlay })
 
     this.core.load(sources, mimeType)
     return this
@@ -478,7 +489,6 @@ export default class Player extends BaseObject {
     return this
   }
 
-
   /**
    * seeks the current video (`source`). For example, `player.seek(120)` will seek to second 120 (2minutes) of the current video.
    * @method seek
@@ -518,7 +528,9 @@ export default class Player extends BaseObject {
    * @return {Player} itself
    */
   unmute() {
-    this.setVolume(typeof this._mutedVolume === 'number' ? this._mutedVolume : 100)
+    this.setVolume(
+      typeof this._mutedVolume === 'number' ? this._mutedVolume : 100
+    )
     this._mutedVolume = null
     return this
   }
