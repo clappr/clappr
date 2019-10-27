@@ -360,8 +360,8 @@ export default class MediaControl extends UICorePlugin {
 
   onActiveContainerChanged() {
     this.fullScreenOnVideoTagSupported = null
-    this.bindEvents()
     Mediator.off(`${this.options.playerId}:${Events.PLAYER_RESIZE}`, this.playerResize, this)
+    this.bindEvents()
     // set the new container to match the volume of the last one
     this.setInitialVolume()
     this.changeTogglePlay()
@@ -664,8 +664,13 @@ export default class MediaControl extends UICorePlugin {
    * @method configure
    * @param {Object} options all the options to change in form of a javascript object
    */
-  configure() {
-    this.options.chromeless ? this.disable() : this.enable()
+  configure(options) {
+    // Check if chromeless mode or if configure is called with new source(s)
+    if (this.options.chromeless || options.source || options.sources)
+      this.disable()
+    else
+      this.enable()
+
     this.trigger(Events.MEDIACONTROL_OPTIONS_CHANGE)
   }
 

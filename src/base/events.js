@@ -569,6 +569,7 @@ Events.CORE_ACTIVE_CONTAINER_CHANGED = 'core:active:container:changed'
  * Fired when the options were changed for the core
  *
  * @event CORE_OPTIONS_CHANGE
+ * @param {Object} new options provided to configure() method
  */
 Events.CORE_OPTIONS_CHANGE = 'core:options:change'
 /**
