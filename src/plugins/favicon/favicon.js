@@ -1,9 +1,7 @@
 import CorePlugin from '../../base/core_plugin'
 import Events from '../../base/events'
 import $ from 'clappr-zepto'
-
-import playIcon from '../../icons/01-play.svg'
-import pauseIcon from '../../icons/02-pause.svg'
+import { SvgIcons } from '../../base/utils'
 
 const oldIcon = $('link[rel="shortcut icon"]')
 
@@ -72,14 +70,14 @@ export default class Favicon extends CorePlugin {
 
   setPlayIcon() {
     if (!this.playIcon)
-      this.playIcon = this.createIcon(playIcon)
+      this.playIcon = this.createIcon(SvgIcons.play)
 
     this.changeIcon(this.playIcon)
   }
 
   setPauseIcon() {
     if (!this.pauseIcon)
-      this.pauseIcon = this.createIcon(pauseIcon)
+      this.pauseIcon = this.createIcon(SvgIcons.pause)
 
     this.changeIcon(this.pauseIcon)
   }

@@ -7,6 +7,7 @@ import './polyfills'
 import Browser from '../components/browser'
 import $ from 'clappr-zepto'
 import Media from './media'
+import Icons from './svg_icons'
 
 export function assign(obj, source) {
   if (source) {
@@ -330,6 +331,8 @@ export class DoubleEventHandler {
   }
 }
 
+export let SvgIcons = Icons
+
 export default {
   Config,
   Fullscreen,
@@ -348,5 +351,6 @@ export default {
   removeArrayItem,
   canAutoPlayMedia,
   Media,
-  DoubleEventHandler
+  DoubleEventHandler,
+  SvgIcons: Icons,
 }
