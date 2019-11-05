@@ -8213,6 +8213,16 @@ Events.CONTAINER_DESTROYED = 'container:destroyed';
  * @event CONTAINER_READY
  */
 Events.CONTAINER_READY = 'container:ready';
+
+/**
+ * Fired when the container was resized.
+ *
+ * Some fullscreen modes won't trigger this resize since they don't affect the container, only the playback contents.
+ *
+ * @event CONTAINER_RESIZE
+ */
+Events.CONTAINER_RESIZE = 'container:resize';
+
 Events.CONTAINER_ERROR = 'container:error';
 /**
  * Fired when the container loaded its metadata
@@ -10492,6 +10502,7 @@ var Container = function (_UIObject) {
 
 
   Container.prototype.destroy = function destroy() {
+    this.disableResizeObserver();
     this.trigger(_events2.default.CONTAINER_DESTROYED, this, this.name);
     this.stopListening();
     this.plugins.forEach(function (plugin) {
@@ -10749,6 +10760,33 @@ var Container = function (_UIObject) {
     if (!this.options.chromeless || this.options.allowUserInteraction) this.$el.removeClass('chromeless');else this.$el.addClass('chromeless');
   };
 
+  Container.prototype.enableResizeObserver = function enableResizeObserver() {
+    var _this4 = this;
+
+    this.disableResizeObserver();
+    this.resizeObserverInterval = setInterval(function () {
+      return _this4.checkResize();
+    }, 500);
+  };
+
+  Container.prototype.disableResizeObserver = function disableResizeObserver() {
+    this.resizeObserverInterval && clearInterval(this.resizeObserverInterval);
+  };
+
+  Container.prototype.checkResize = function checkResize() {
+    var newSize = { width: this.el.clientWidth, height: this.el.clientHeight };
+
+    var _ref = this.currentSize || {},
+        width = _ref.width,
+        height = _ref.height;
+
+    var isResize = height !== newSize.height || width !== newSize.width;
+    if (isResize) {
+      this.currentSize = newSize;
+      this.trigger(_events2.default.CONTAINER_RESIZE, newSize);
+    }
+  };
+
   /**
    * enables to configure the container after its creation
    * @method configure
@@ -10766,6 +10804,7 @@ var Container = function (_UIObject) {
   Container.prototype.render = function render() {
     this.$el.append(this.playback.render().el);
     this.updateStyle();
+    this.enableResizeObserver();
     return this;
   };
 
@@ -11801,7 +11840,7 @@ exports.default = function () {
     playbacks: []
   };
 
-  var currentVersion = "0.4.1";
+  var currentVersion = "0.4.2";
 
   return function () {
     Loader.checkVersionSupport = function checkVersionSupport(entry) {
@@ -13035,7 +13074,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var version = "0.4.1";
+var version = "0.4.2";
 
 // Built-in Plugins/Playbacks
 
@@ -13146,7 +13185,7 @@ var HTML5Audio = function (_HTML5Video) {
   }, {
     key: 'supportedVersion',
     get: function get() {
-      return { min: "0.4.1" };
+      return { min: "0.4.2" };
     }
   }, {
     key: 'tagName',
@@ -13302,7 +13341,7 @@ var HTML5Video = function (_Playback) {
   }, {
     key: 'supportedVersion',
     get: function get() {
-      return { min: "0.4.1" };
+      return { min: "0.4.2" };
     }
   }, {
     key: 'tagName',
@@ -14034,7 +14073,7 @@ var HTMLImg = function (_Playback) {
   }, {
     key: 'supportedVersion',
     get: function get() {
-      return { min: "0.4.1" };
+      return { min: "0.4.2" };
     }
   }, {
     key: 'tagName',
@@ -14190,7 +14229,7 @@ var NoOp = function (_Playback) {
   }, {
     key: 'supportedVersion',
     get: function get() {
-      return { min: "0.4.1" };
+      return { min: "0.4.2" };
     }
   }, {
     key: 'template',
@@ -14400,7 +14439,7 @@ var Strings = function (_CorePlugin) {
   }, {
     key: 'supportedVersion',
     get: function get() {
-      return { min: "0.4.1" };
+      return { min: "0.4.2" };
     }
   }]);
 
