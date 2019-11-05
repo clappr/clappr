@@ -236,6 +236,7 @@ export default class Container extends UIObject {
    * @method destroy
    */
   destroy() {
+    this.disableResizeObserver()
     this.trigger(Events.CONTAINER_DESTROYED, this, this.name)
     this.stopListening()
     this.plugins.forEach((plugin) => plugin.destroy())
@@ -477,7 +478,25 @@ export default class Container extends UIObject {
       this.$el.removeClass('chromeless')
     else
       this.$el.addClass('chromeless')
+  }
 
+  enableResizeObserver() {
+    this.disableResizeObserver()
+    this.resizeObserverInterval = setInterval(() => this.checkResize(), 500)
+  }
+
+  disableResizeObserver() {
+    this.resizeObserverInterval && clearInterval(this.resizeObserverInterval)
+  }
+
+  checkResize() {
+    const newSize = { width: this.el.clientWidth, height: this.el.clientHeight }
+    const { width, height } = this.currentSize || {}
+    const isResize = height !== newSize.height || width !== newSize.width
+    if (isResize) {
+      this.currentSize = newSize
+      this.trigger(Events.CONTAINER_RESIZE, newSize)
+    }
   }
 
   /**
@@ -495,6 +514,7 @@ export default class Container extends UIObject {
   render() {
     this.$el.append(this.playback.render().el)
     this.updateStyle()
+    this.enableResizeObserver()
     return this
   }
 }

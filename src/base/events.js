@@ -656,6 +656,16 @@ Events.CONTAINER_DESTROYED = 'container:destroyed'
  * @event CONTAINER_READY
  */
 Events.CONTAINER_READY = 'container:ready'
+
+/**
+ * Fired when the container was resized.
+ *
+ * Some fullscreen modes won't trigger this resize since they don't affect the container, only the playback contents.
+ *
+ * @event CONTAINER_RESIZE
+ */
+Events.CONTAINER_RESIZE = 'container:resize'
+
 Events.CONTAINER_ERROR = 'container:error'
 /**
  * Fired when the container loaded its metadata

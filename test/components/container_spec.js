@@ -164,4 +164,37 @@ describe('Container', function() {
     this.playback.trigger(Events.PLAYBACK_PLAY)
     assert.ok(this.container.playing.calledOnce)
   })
+
+  describe('#checkResize', function() {
+    this.beforeEach(function() {
+      this.container.el = { clientWidth: 640, clientHeight: 360 }
+    })
+
+    it('sets the current size if it\'s uninitialized', function() {
+      expect(this.container.currentSize).to.be.equal(undefined)
+
+      this.container.checkResize()
+
+      expect(this.container.currentSize).to.eql({ width: 640, height: 360 })
+    })
+
+    it('triggers a CONTAINER_RESIZE event when the size changes', function() {
+      const newSize = { width: 320, height: 240 }
+
+      sinon.spy(this.container, 'trigger')
+      this.container.el = { clientWidth: newSize.width, clientHeight: newSize.height }
+      this.container.checkResize()
+
+      expect(this.container.trigger).to.have.been.calledWith(Events.CONTAINER_RESIZE, newSize)
+    })
+
+    it('doesn\'t trigger CONTAINER_RESIZE if size hasn\'t changed', function() {
+      this.container.checkResize() // this will initialized currentSize AND trigger the first resize
+
+      sinon.spy(this.container, 'trigger')
+      this.container.checkResize()
+
+      expect(this.container.trigger).to.have.a.callCount(0)
+    })
+  })
 })
