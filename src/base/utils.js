@@ -56,10 +56,10 @@ export function formatTime(time, paddedHours) {
 }
 
 export const Fullscreen = {
-  getFullscreenElement: function() {
-    return document.webkitFullscreenElement ||
-      document.webkitIsFullScreen ||
-      document.mozFullScreen ||
+  fullscreenElement: function() {
+    return document.fullscreenElement ||
+      document.webkitFullscreenElement ||
+      document.mozFullScreenElement ||
       document.msFullscreenElement
   },
   requestFullscreen: function(el) {
