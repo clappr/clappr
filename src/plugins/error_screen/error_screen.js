@@ -2,8 +2,7 @@ import Events from '../../base/events'
 import UICorePlugin from '../../base/ui_core_plugin'
 import template from '../../base/template'
 import PlayerError from '../../components/error/'
-
-import reloadIcon from '../../icons/10-reload.svg'
+import { SvgIcons } from '../../base/utils'
 import templateHtml from './public/error_screen.html'
 import './public/error_screen.scss'
 
@@ -76,7 +75,7 @@ export default class ErrorScreen extends UICorePlugin {
       message: this.err.UI.message,
       code: this.err.code,
       icon: this.err.UI.icon || '',
-      reloadIcon,
+      reloadIcon: SvgIcons.reload,
     }))
 
     this.core.$el.append(this.el)

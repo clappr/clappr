@@ -8,27 +8,16 @@
 
 import { Config, Fullscreen, formatTime, extend, removeArrayItem } from '../../base/utils'
 import { Kibo } from '../../vendor'
-
 import Events from '../../base/events'
 import UICorePlugin from '../../base/ui_core_plugin'
 import Browser from '../../components/browser'
 import Mediator from '../../components/mediator'
 import template from '../../base/template'
 import Playback from '../../base/playback'
-
 import $ from 'clappr-zepto'
-
 import './public/media-control.scss'
 import mediaControlHTML from './public/media-control.html'
-
-import playIcon from '../../icons/01-play.svg'
-import pauseIcon from '../../icons/02-pause.svg'
-import stopIcon from '../../icons/03-stop.svg'
-import volumeIcon from '../../icons/04-volume.svg'
-import volumeMuteIcon from '../../icons/05-mute.svg'
-import fullscreenIcon from '../../icons/06-expand.svg'
-import exitFullscreenIcon from '../../icons/07-shrink.svg'
-import hdIcon from '../../icons/08-hd.svg'
+import { SvgIcons } from '../../base/utils'
 
 export default class MediaControl extends UICorePlugin {
   get name() { return 'media_control' }
@@ -215,9 +204,9 @@ export default class MediaControl extends UICorePlugin {
     this.$volumeIcon.html('')
     this.$volumeIcon.removeClass('muted')
     if (!this.muted) {
-      this.$volumeIcon.append(volumeIcon)
+      this.$volumeIcon.append(SvgIcons.volume)
     } else {
-      this.$volumeIcon.append(volumeMuteIcon)
+      this.$volumeIcon.append(SvgIcons.volumeMute)
       this.$volumeIcon.addClass('muted')
     }
     this.applyButtonStyle(this.$volumeIcon)
@@ -227,12 +216,12 @@ export default class MediaControl extends UICorePlugin {
     this.$playPauseToggle.html('')
     this.$playStopToggle.html('')
     if (this.container && this.container.isPlaying()) {
-      this.$playPauseToggle.append(pauseIcon)
-      this.$playStopToggle.append(stopIcon)
+      this.$playPauseToggle.append(SvgIcons.pause)
+      this.$playStopToggle.append(SvgIcons.stop)
       this.trigger(Events.MEDIACONTROL_PLAYING)
     } else {
-      this.$playPauseToggle.append(playIcon)
-      this.$playStopToggle.append(playIcon)
+      this.$playPauseToggle.append(SvgIcons.play)
+      this.$playStopToggle.append(SvgIcons.play)
       this.trigger(Events.MEDIACONTROL_NOTPLAYING)
       Browser.isMobile && this.show()
     }
@@ -262,7 +251,7 @@ export default class MediaControl extends UICorePlugin {
 
   playerResize(size) {
     this.$fullscreenToggle.html('')
-    let icon = this.core.isFullscreen() ? exitFullscreenIcon : fullscreenIcon
+    let icon = this.core.isFullscreen() ? SvgIcons.exitFullscreen : SvgIcons.fullscreen
     this.$fullscreenToggle.append(icon)
     this.applyButtonStyle(this.$fullscreenToggle)
     this.$el.find('.media-control').length !== 0 && this.$el.removeClass('w320')
@@ -565,14 +554,14 @@ export default class MediaControl extends UICorePlugin {
 
   initializeIcons() {
     const $layer = this.$el.find('.media-control-layer')
-    $layer.find('button.media-control-button[data-play]').append(playIcon)
-    $layer.find('button.media-control-button[data-pause]').append(pauseIcon)
-    $layer.find('button.media-control-button[data-stop]').append(stopIcon)
-    this.$playPauseToggle.append(playIcon)
-    this.$playStopToggle.append(playIcon)
-    this.$volumeIcon.append(volumeIcon)
-    this.$fullscreenToggle.append(fullscreenIcon)
-    this.$hdIndicator.append(hdIcon)
+    $layer.find('button.media-control-button[data-play]').append(SvgIcons.play)
+    $layer.find('button.media-control-button[data-pause]').append(SvgIcons.pause)
+    $layer.find('button.media-control-button[data-stop]').append(SvgIcons.stop)
+    this.$playPauseToggle.append(SvgIcons.play)
+    this.$playStopToggle.append(SvgIcons.play)
+    this.$volumeIcon.append(SvgIcons.volume)
+    this.$fullscreenToggle.append(SvgIcons.fullscreen)
+    this.$hdIndicator.append(SvgIcons.hd)
   }
 
   setSeekPercentage(value) {

@@ -1,7 +1,7 @@
 import UICorePlugin from '../../base/ui_core_plugin'
 import template from '../../base/template'
 import Events from '../../base/events'
-import ccIcon from '../../icons/09-cc.svg'
+import { SvgIcons } from '../../base/utils'
 import ccHTML from './public/closed_captions.html'
 import './public/closed_captions.scss'
 
@@ -114,7 +114,7 @@ export default class ClosedCaptions extends UICorePlugin {
     }))
 
     this.$ccButton = this.$el.find('button.cc-button[data-cc-button]')
-    this.$ccButton.append(ccIcon)
+    this.$ccButton.append(SvgIcons.cc)
     this.$el.append(this.style)
   }
 
