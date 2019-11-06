@@ -129,7 +129,7 @@ describe('Core', function() {
         expect(this.core.isFullscreen()).to.equal(false)
         expect(newInstance.isFullscreen()).to.equal(false)
 
-        sinon.stub(Fullscreen, 'getFullscreenElement').returns(fakeContainer1)
+        sinon.stub(Fullscreen, 'fullscreenElement').returns(fakeContainer1)
         expect(this.core.isFullscreen()).to.equal(false)
         expect(newInstance.isFullscreen()).to.equal(true)
       })
