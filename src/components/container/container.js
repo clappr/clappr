@@ -389,9 +389,9 @@ export default class Container extends UIObject {
   }
 
   setVolume(value) {
-    this.volume = parseInt(value, 10)
-    this.trigger(Events.CONTAINER_VOLUME, value, this.name)
-    this.playback.volume(value)
+    this.volume = parseFloat(value)
+    this.trigger(Events.CONTAINER_VOLUME, this.volume, this.name)
+    this.playback.volume(this.volume)
   }
 
   fullscreen() {
