@@ -116,6 +116,30 @@ describe('MediaControl', function() {
     })
   })
 
+  describe('toggleMute', function() {
+    it('sets volume to 0 when muting', function() {
+      this.mediaControl.toggleMute()
+
+      expect(this.mediaControl.volume).to.be.equal(0)
+    })
+
+    it('resets volume back to previous volume when unmuting', function() {
+      this.mediaControl.setVolume(75)
+
+      this.mediaControl.toggleMute()
+      this.mediaControl.toggleMute()
+
+      expect(this.mediaControl.volume).to.be.equal(75)
+    })
+
+    it('resets volume back to 100 if previous unmuted value is not set', function() {
+      this.mediaControl.toggleMute()
+      this.mediaControl.toggleMute()
+
+      expect(this.mediaControl.volume).to.be.equal(100)
+    })
+  })
+
   it('can appear when playback type is not NO_OP', function() {
     const mediaControl = new MediaControl(this.core)
     this.core.trigger(Events.CORE_ACTIVE_CONTAINER_CHANGED, this.container)

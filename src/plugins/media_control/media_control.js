@@ -313,7 +313,14 @@ export default class MediaControl extends UICorePlugin {
   }
 
   toggleMute() {
-    this.setVolume(this.muted ? 100 : 0)
+    if (this.muted) {
+      this.setVolume(this._mutedVolume || 100)
+      this._mutedVolume = null
+      return
+    }
+
+    this._mutedVolume = this.volume
+    this.setVolume(0)
   }
 
   setVolume(value, isInitialVolume = false) {
