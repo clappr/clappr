@@ -309,7 +309,9 @@ export default class Core extends UIObject {
   }
 
   isFullscreen() {
-    return Fullscreen.getFullscreenElement() === (Browser.isiOS ? this.activeContainer.el : this.el)
+    // Ensure current instance is in fullscreen mode by checking fullscreen element
+    const el = Browser.isiOS ? this.activeContainer && this.activeContainer.el || this.el : this.el
+    return Fullscreen.fullscreenElement() === el
   }
 
   toggleFullscreen() {
