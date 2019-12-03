@@ -25580,6 +25580,93 @@ module.exports = exports['default'];
 
 /***/ }),
 
+/***/ "./src/base/svg_icons.js":
+/*!*******************************!*\
+  !*** ./src/base/svg_icons.js ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.volumeMute = exports.volume = exports.stop = exports.reload = exports.play = exports.pause = exports.hd = exports.fullscreen = exports.exitFullscreen = exports.cc = undefined;
+
+var _play = __webpack_require__(/*! ../icons/01-play.svg */ "./src/icons/01-play.svg");
+
+var _play2 = _interopRequireDefault(_play);
+
+var _pause = __webpack_require__(/*! ../icons/02-pause.svg */ "./src/icons/02-pause.svg");
+
+var _pause2 = _interopRequireDefault(_pause);
+
+var _stop = __webpack_require__(/*! ../icons/03-stop.svg */ "./src/icons/03-stop.svg");
+
+var _stop2 = _interopRequireDefault(_stop);
+
+var _volume = __webpack_require__(/*! ../icons/04-volume.svg */ "./src/icons/04-volume.svg");
+
+var _volume2 = _interopRequireDefault(_volume);
+
+var _mute = __webpack_require__(/*! ../icons/05-mute.svg */ "./src/icons/05-mute.svg");
+
+var _mute2 = _interopRequireDefault(_mute);
+
+var _expand = __webpack_require__(/*! ../icons/06-expand.svg */ "./src/icons/06-expand.svg");
+
+var _expand2 = _interopRequireDefault(_expand);
+
+var _shrink = __webpack_require__(/*! ../icons/07-shrink.svg */ "./src/icons/07-shrink.svg");
+
+var _shrink2 = _interopRequireDefault(_shrink);
+
+var _hd = __webpack_require__(/*! ../icons/08-hd.svg */ "./src/icons/08-hd.svg");
+
+var _hd2 = _interopRequireDefault(_hd);
+
+var _cc = __webpack_require__(/*! ../icons/09-cc.svg */ "./src/icons/09-cc.svg");
+
+var _cc2 = _interopRequireDefault(_cc);
+
+var _reload = __webpack_require__(/*! ../icons/10-reload.svg */ "./src/icons/10-reload.svg");
+
+var _reload2 = _interopRequireDefault(_reload);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+var cc = exports.cc = _cc2.default;
+var exitFullscreen = exports.exitFullscreen = _shrink2.default;
+var fullscreen = exports.fullscreen = _expand2.default;
+var hd = exports.hd = _hd2.default;
+var pause = exports.pause = _pause2.default;
+var play = exports.play = _play2.default;
+var reload = exports.reload = _reload2.default;
+var stop = exports.stop = _stop2.default;
+var volume = exports.volume = _volume2.default;
+var volumeMute = exports.volumeMute = _mute2.default;
+
+exports.default = {
+  cc: _cc2.default,
+  exitFullscreen: _shrink2.default,
+  fullscreen: _expand2.default,
+  hd: _hd2.default,
+  pause: _pause2.default,
+  play: _play2.default,
+  reload: _reload2.default,
+  stop: _stop2.default,
+  volume: _volume2.default,
+  volumeMute: _mute2.default
+};
+
+/***/ }),
+
 /***/ "./src/base/template.js":
 /*!******************************!*\
   !*** ./src/base/template.js ***!
@@ -26215,7 +26302,7 @@ module.exports = exports['default'];
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.DoubleEventHandler = exports.DomRecycler = exports.cancelAnimationFrame = exports.requestAnimationFrame = exports.QueryString = exports.Config = exports.Fullscreen = undefined;
+exports.SvgIcons = exports.DoubleEventHandler = exports.DomRecycler = exports.cancelAnimationFrame = exports.requestAnimationFrame = exports.QueryString = exports.Config = exports.Fullscreen = undefined;
 
 var _assign = __webpack_require__(/*! babel-runtime/core-js/object/assign */ "./node_modules/babel-runtime/core-js/object/assign.js");
 
@@ -26272,12 +26359,11 @@ var _media = __webpack_require__(/*! ./media */ "./src/base/media.js");
 
 var _media2 = _interopRequireDefault(_media);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _svg_icons = __webpack_require__(/*! ./svg_icons */ "./src/base/svg_icons.js");
 
-// Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-/*jshint -W079 */
+var _svg_icons2 = _interopRequireDefault(_svg_icons);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function assign(obj, source) {
   if (source) {
@@ -26287,7 +26373,10 @@ function assign(obj, source) {
     }
   }
   return obj;
-}
+} // Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+/*jshint -W079 */
 
 function extend(parent, properties) {
   var Surrogate = function (_parent) {
@@ -26337,8 +26426,8 @@ function formatTime(time, paddedHours) {
 }
 
 var Fullscreen = exports.Fullscreen = {
-  getFullscreenElement: function getFullscreenElement() {
-    return document.webkitFullscreenElement || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement;
+  fullscreenElement: function fullscreenElement() {
+    return document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
   },
   requestFullscreen: function requestFullscreen(el) {
     if (el.requestFullscreen) el.requestFullscreen();else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();else if (el.mozRequestFullScreen) el.mozRequestFullScreen();else if (el.msRequestFullscreen) el.msRequestFullscreen();else if (el.querySelector && el.querySelector('video') && el.querySelector('video').webkitEnterFullScreen) el.querySelector('video').webkitEnterFullScreen();else if (el.webkitEnterFullScreen) el.webkitEnterFullScreen();
@@ -26614,6 +26703,8 @@ var DoubleEventHandler = exports.DoubleEventHandler = function () {
   return DoubleEventHandler;
 }();
 
+var SvgIcons = exports.SvgIcons = _svg_icons2.default;
+
 exports.default = {
   Config: Config,
   Fullscreen: Fullscreen,
@@ -26632,7 +26723,8 @@ exports.default = {
   removeArrayItem: removeArrayItem,
   canAutoPlayMedia: canAutoPlayMedia,
   Media: _media2.default,
-  DoubleEventHandler: DoubleEventHandler
+  DoubleEventHandler: DoubleEventHandler,
+  SvgIcons: _svg_icons2.default
 };
 
 /***/ }),
@@ -27726,9 +27818,9 @@ var Container = function (_UIObject) {
   };
 
   Container.prototype.setVolume = function setVolume(value) {
-    this.volume = parseInt(value, 10);
-    this.trigger(_events2.default.CONTAINER_VOLUME, value, this.name);
-    this.playback.volume(value);
+    this.volume = parseFloat(value);
+    this.trigger(_events2.default.CONTAINER_VOLUME, this.volume, this.name);
+    this.playback.volume(this.volume);
   };
 
   Container.prototype.fullscreen = function fullscreen() {
@@ -28513,7 +28605,9 @@ var Core = function (_UIObject) {
   };
 
   Core.prototype.isFullscreen = function isFullscreen() {
-    return _utils.Fullscreen.getFullscreenElement() === (_browser2.default.isiOS ? this.activeContainer.el : this.el);
+    // Ensure current instance is in fullscreen mode by checking fullscreen element
+    var el = _browser2.default.isiOS ? this.activeContainer && this.activeContainer.el || this.el : this.el;
+    return _utils.Fullscreen.fullscreenElement() === el;
   };
 
   Core.prototype.toggleFullscreen = function toggleFullscreen() {
@@ -30391,7 +30485,7 @@ var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = "0.3.11"; // Copyright 2014 Globo.com Player authors. All rights reserved.
+var version = "0.3.12"; // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -34217,9 +34311,7 @@ var _events = __webpack_require__(/*! ../../base/events */ "./src/base/events.js
 
 var _events2 = _interopRequireDefault(_events);
 
-var _cc = __webpack_require__(/*! ../../icons/09-cc.svg */ "./src/icons/09-cc.svg");
-
-var _cc2 = _interopRequireDefault(_cc);
+var _utils = __webpack_require__(/*! ../../base/utils */ "./src/base/utils.js");
 
 var _closed_captions = __webpack_require__(/*! ./public/closed_captions.html */ "./src/plugins/closed_captions/public/closed_captions.html");
 
@@ -34351,7 +34443,7 @@ var ClosedCaptions = function (_UICorePlugin) {
     }));
 
     this.$ccButton = this.$el.find('button.cc-button[data-cc-button]');
-    this.$ccButton.append(_cc2.default);
+    this.$ccButton.append(_utils.SvgIcons.cc);
     this.$el.append(this.style);
   };
 
@@ -34797,9 +34889,7 @@ var _error = __webpack_require__(/*! ../../components/error/ */ "./src/component
 
 var _error2 = _interopRequireDefault(_error);
 
-var _reload = __webpack_require__(/*! ../../icons/10-reload.svg */ "./src/icons/10-reload.svg");
-
-var _reload2 = _interopRequireDefault(_reload);
+var _utils = __webpack_require__(/*! ../../base/utils */ "./src/base/utils.js");
 
 var _error_screen = __webpack_require__(/*! ./public/error_screen.html */ "./src/plugins/error_screen/public/error_screen.html");
 
@@ -34905,7 +34995,7 @@ var ErrorScreen = function (_UICorePlugin) {
       message: this.err.UI.message,
       code: this.err.code,
       icon: this.err.UI.icon || '',
-      reloadIcon: _reload2.default
+      reloadIcon: _utils.SvgIcons.reload
     }));
 
     this.core.$el.append(this.el);
@@ -35031,13 +35121,7 @@ var _clapprZepto = __webpack_require__(/*! clappr-zepto */ "./node_modules/clapp
 
 var _clapprZepto2 = _interopRequireDefault(_clapprZepto);
 
-var _play = __webpack_require__(/*! ../../icons/01-play.svg */ "./src/icons/01-play.svg");
-
-var _play2 = _interopRequireDefault(_play);
-
-var _pause = __webpack_require__(/*! ../../icons/02-pause.svg */ "./src/icons/02-pause.svg");
-
-var _pause2 = _interopRequireDefault(_pause);
+var _utils = __webpack_require__(/*! ../../base/utils */ "./src/base/utils.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -35121,13 +35205,13 @@ var Favicon = function (_CorePlugin) {
   };
 
   Favicon.prototype.setPlayIcon = function setPlayIcon() {
-    if (!this.playIcon) this.playIcon = this.createIcon(_play2.default);
+    if (!this.playIcon) this.playIcon = this.createIcon(_utils.SvgIcons.play);
 
     this.changeIcon(this.playIcon);
   };
 
   Favicon.prototype.setPauseIcon = function setPauseIcon() {
-    if (!this.pauseIcon) this.pauseIcon = this.createIcon(_pause2.default);
+    if (!this.pauseIcon) this.pauseIcon = this.createIcon(_utils.SvgIcons.pause);
 
     this.changeIcon(this.pauseIcon);
   };
@@ -35653,39 +35737,15 @@ var _mediaControl = __webpack_require__(/*! ./public/media-control.html */ "./sr
 
 var _mediaControl2 = _interopRequireDefault(_mediaControl);
 
-var _play = __webpack_require__(/*! ../../icons/01-play.svg */ "./src/icons/01-play.svg");
-
-var _play2 = _interopRequireDefault(_play);
-
-var _pause = __webpack_require__(/*! ../../icons/02-pause.svg */ "./src/icons/02-pause.svg");
-
-var _pause2 = _interopRequireDefault(_pause);
-
-var _stop = __webpack_require__(/*! ../../icons/03-stop.svg */ "./src/icons/03-stop.svg");
-
-var _stop2 = _interopRequireDefault(_stop);
-
-var _volume = __webpack_require__(/*! ../../icons/04-volume.svg */ "./src/icons/04-volume.svg");
-
-var _volume2 = _interopRequireDefault(_volume);
-
-var _mute = __webpack_require__(/*! ../../icons/05-mute.svg */ "./src/icons/05-mute.svg");
-
-var _mute2 = _interopRequireDefault(_mute);
-
-var _expand = __webpack_require__(/*! ../../icons/06-expand.svg */ "./src/icons/06-expand.svg");
-
-var _expand2 = _interopRequireDefault(_expand);
-
-var _shrink = __webpack_require__(/*! ../../icons/07-shrink.svg */ "./src/icons/07-shrink.svg");
-
-var _shrink2 = _interopRequireDefault(_shrink);
-
-var _hd = __webpack_require__(/*! ../../icons/08-hd.svg */ "./src/icons/08-hd.svg");
-
-var _hd2 = _interopRequireDefault(_hd);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Copyright 2014 Globo.com Player authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+/**
+ * The MediaControl is responsible for displaying the Player controls.
+ */
 
 var MediaControl = function (_UICorePlugin) {
   (0, _inherits3.default)(MediaControl, _UICorePlugin);
@@ -35912,9 +35972,9 @@ var MediaControl = function (_UICorePlugin) {
     this.$volumeIcon.html('');
     this.$volumeIcon.removeClass('muted');
     if (!this.muted) {
-      this.$volumeIcon.append(_volume2.default);
+      this.$volumeIcon.append(_utils.SvgIcons.volume);
     } else {
-      this.$volumeIcon.append(_mute2.default);
+      this.$volumeIcon.append(_utils.SvgIcons.volumeMute);
       this.$volumeIcon.addClass('muted');
     }
     this.applyButtonStyle(this.$volumeIcon);
@@ -35924,12 +35984,12 @@ var MediaControl = function (_UICorePlugin) {
     this.$playPauseToggle.html('');
     this.$playStopToggle.html('');
     if (this.container && this.container.isPlaying()) {
-      this.$playPauseToggle.append(_pause2.default);
-      this.$playStopToggle.append(_stop2.default);
+      this.$playPauseToggle.append(_utils.SvgIcons.pause);
+      this.$playStopToggle.append(_utils.SvgIcons.stop);
       this.trigger(_events2.default.MEDIACONTROL_PLAYING);
     } else {
-      this.$playPauseToggle.append(_play2.default);
-      this.$playStopToggle.append(_play2.default);
+      this.$playPauseToggle.append(_utils.SvgIcons.play);
+      this.$playStopToggle.append(_utils.SvgIcons.play);
       this.trigger(_events2.default.MEDIACONTROL_NOTPLAYING);
       _browser2.default.isMobile && this.show();
     }
@@ -35959,7 +36019,7 @@ var MediaControl = function (_UICorePlugin) {
 
   MediaControl.prototype.playerResize = function playerResize(size) {
     this.$fullscreenToggle.html('');
-    var icon = this.core.isFullscreen() ? _shrink2.default : _expand2.default;
+    var icon = this.core.isFullscreen() ? _utils.SvgIcons.exitFullscreen : _utils.SvgIcons.fullscreen;
     this.$fullscreenToggle.append(icon);
     this.applyButtonStyle(this.$fullscreenToggle);
     this.$el.find('.media-control').length !== 0 && this.$el.removeClass('w320');
@@ -36021,7 +36081,14 @@ var MediaControl = function (_UICorePlugin) {
   };
 
   MediaControl.prototype.toggleMute = function toggleMute() {
-    this.setVolume(this.muted ? 100 : 0);
+    if (this.muted) {
+      this.setVolume(this._mutedVolume || 100);
+      this._mutedVolume = null;
+      return;
+    }
+
+    this._mutedVolume = this.volume;
+    this.setVolume(0);
   };
 
   MediaControl.prototype.setVolume = function setVolume(value) {
@@ -36278,14 +36345,14 @@ var MediaControl = function (_UICorePlugin) {
 
   MediaControl.prototype.initializeIcons = function initializeIcons() {
     var $layer = this.$el.find('.media-control-layer');
-    $layer.find('button.media-control-button[data-play]').append(_play2.default);
-    $layer.find('button.media-control-button[data-pause]').append(_pause2.default);
-    $layer.find('button.media-control-button[data-stop]').append(_stop2.default);
-    this.$playPauseToggle.append(_play2.default);
-    this.$playStopToggle.append(_play2.default);
-    this.$volumeIcon.append(_volume2.default);
-    this.$fullscreenToggle.append(_expand2.default);
-    this.$hdIndicator.append(_hd2.default);
+    $layer.find('button.media-control-button[data-play]').append(_utils.SvgIcons.play);
+    $layer.find('button.media-control-button[data-pause]').append(_utils.SvgIcons.pause);
+    $layer.find('button.media-control-button[data-stop]').append(_utils.SvgIcons.stop);
+    this.$playPauseToggle.append(_utils.SvgIcons.play);
+    this.$playStopToggle.append(_utils.SvgIcons.play);
+    this.$volumeIcon.append(_utils.SvgIcons.volume);
+    this.$fullscreenToggle.append(_utils.SvgIcons.fullscreen);
+    this.$hdIndicator.append(_utils.SvgIcons.hd);
   };
 
   MediaControl.prototype.setSeekPercentage = function setSeekPercentage(value) {
@@ -36456,13 +36523,7 @@ var MediaControl = function (_UICorePlugin) {
   };
 
   return MediaControl;
-}(_ui_core_plugin2.default); // Copyright 2014 Globo.com Player authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-/**
- * The MediaControl is responsible for displaying the Player controls.
- */
+}(_ui_core_plugin2.default);
 
 exports.default = MediaControl;
 
@@ -36606,9 +36667,7 @@ var _poster = __webpack_require__(/*! ./public/poster.html */ "./src/plugins/pos
 
 var _poster2 = _interopRequireDefault(_poster);
 
-var _play = __webpack_require__(/*! ../../icons/01-play.svg */ "./src/icons/01-play.svg");
-
-var _play2 = _interopRequireDefault(_play);
+var _utils = __webpack_require__(/*! ../../base/utils */ "./src/base/utils.js");
 
 __webpack_require__(/*! ./public/poster.scss */ "./src/plugins/poster/public/poster.scss");
 
@@ -36774,7 +36833,7 @@ var PosterPlugin = function (_UIContainerPlugin) {
 
     this.container.$el.append(this.el);
     this.$playWrapper = this.$el.find('.play-wrapper');
-    this.$playWrapper.append(_play2.default);
+    this.$playWrapper.append(_utils.SvgIcons.play);
     this.$playButton = this.$playWrapper.find('svg');
     this.$playButton.addClass('poster-icon');
     this.$playButton.attr('data-poster', '');
