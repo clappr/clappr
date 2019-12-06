@@ -10668,9 +10668,9 @@ var Container = function (_UIObject) {
   };
 
   Container.prototype.setVolume = function setVolume(value) {
-    this.volume = parseInt(value, 10);
-    this.trigger(_events2.default.CONTAINER_VOLUME, value, this.name);
-    this.playback.volume(value);
+    this.volume = parseFloat(value);
+    this.trigger(_events2.default.CONTAINER_VOLUME, this.volume, this.name);
+    this.playback.volume(this.volume);
   };
 
   Container.prototype.fullscreen = function fullscreen() {
@@ -11415,7 +11415,13 @@ var Core = function (_UIObject) {
   };
 
   Core.prototype.isFullscreen = function isFullscreen() {
-    return _utils.Fullscreen.getFullscreenElement() === (_browser2.default.isiOS ? this.activeContainer.el : this.el);
+    // Ensure current instance is in fullscreen mode by checking fullscreen element
+    var fullscreenElement = _utils.Fullscreen.fullscreenElement();
+
+    if (!fullscreenElement) return false;
+
+    var playbackEl = this.activePlayback && this.activePlayback.el;
+    return fullscreenElement === this.el || fullscreenElement === playbackEl;
   };
 
   Core.prototype.toggleFullscreen = function toggleFullscreen() {
@@ -11423,7 +11429,9 @@ var Core = function (_UIObject) {
       _utils.Fullscreen.cancelFullscreen();
       !_browser2.default.isiOS && this.$el.removeClass('fullscreen nocursor');
     } else {
-      _utils.Fullscreen.requestFullscreen(_browser2.default.isiOS ? this.activeContainer.el : this.el);
+      var fullscreenEl = _browser2.default.isiOS ? this.activePlayback && this.activePlayback.el : this.el;
+      if (!fullscreenEl) return;
+      _utils.Fullscreen.requestFullscreen(fullscreenEl);
       !_browser2.default.isiOS && this.$el.addClass('fullscreen');
     }
   };
@@ -11840,7 +11848,7 @@ exports.default = function () {
     playbacks: []
   };
 
-  var currentVersion = "0.4.2";
+  var currentVersion = "0.4.3";
 
   return function () {
     Loader.checkVersionSupport = function checkVersionSupport(entry) {
@@ -13074,7 +13082,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var version = "0.4.2";
+var version = "0.4.3";
 
 // Built-in Plugins/Playbacks
 
@@ -13185,7 +13193,7 @@ var HTML5Audio = function (_HTML5Video) {
   }, {
     key: 'supportedVersion',
     get: function get() {
-      return { min: "0.4.2" };
+      return { min: "0.4.3" };
     }
   }, {
     key: 'tagName',
@@ -13341,7 +13349,7 @@ var HTML5Video = function (_Playback) {
   }, {
     key: 'supportedVersion',
     get: function get() {
-      return { min: "0.4.2" };
+      return { min: "0.4.3" };
     }
   }, {
     key: 'tagName',
@@ -14073,7 +14081,7 @@ var HTMLImg = function (_Playback) {
   }, {
     key: 'supportedVersion',
     get: function get() {
-      return { min: "0.4.2" };
+      return { min: "0.4.3" };
     }
   }, {
     key: 'tagName',
@@ -14229,7 +14237,7 @@ var NoOp = function (_Playback) {
   }, {
     key: 'supportedVersion',
     get: function get() {
-      return { min: "0.4.2" };
+      return { min: "0.4.3" };
     }
   }, {
     key: 'template',
@@ -14439,7 +14447,7 @@ var Strings = function (_CorePlugin) {
   }, {
     key: 'supportedVersion',
     get: function get() {
-      return { min: "0.4.2" };
+      return { min: "0.4.3" };
     }
   }]);
 
@@ -14683,8 +14691,8 @@ function formatTime(time, paddedHours) {
 }
 
 var Fullscreen = exports.Fullscreen = {
-  getFullscreenElement: function getFullscreenElement() {
-    return document.webkitFullscreenElement || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement;
+  fullscreenElement: function fullscreenElement() {
+    return document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
   },
   requestFullscreen: function requestFullscreen(el) {
     if (el.requestFullscreen) el.requestFullscreen();else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();else if (el.mozRequestFullScreen) el.mozRequestFullScreen();else if (el.msRequestFullscreen) el.msRequestFullscreen();else if (el.querySelector && el.querySelector('video') && el.querySelector('video').webkitEnterFullScreen) el.querySelector('video').webkitEnterFullScreen();else if (el.webkitEnterFullScreen) el.webkitEnterFullScreen();
