@@ -98,18 +98,19 @@ describe('Core', function() {
         browserStub.restore()
       })
 
-      it('returns false if there\'s no active container', () => {
-        fullscreenElementStub.returns(undefined)
+      it('returns false if there\'s no active playback', () => {
+        this.core.activeContainer = undefined
 
         expect(this.core.isFullscreen()).to.equal(false)
       })
 
-      it('returns false if the fullscreen element is from the active container', () => {
-        const fakeCurrentContainer = document.createElement('div')
-        fakeCurrentContainer.setAttribute('id', 'fakeCurrentContainer')
-        this.core.activeContainer = { el: fakeCurrentContainer }
+      it('returns true if the fullscreen element is from the active playback', () => {
+        const el = document.createElement('div')
+        el.setAttribute('id', 'fakePlayback')
+        const playback = { el }
+        this.core.activeContainer = { playback }
 
-        fullscreenElementStub.returns(this.core.activeContainer.el)
+        fullscreenElementStub.returns(el)
 
         expect(this.core.isFullscreen()).to.equal(true)
       })
@@ -159,14 +160,15 @@ describe('Core', function() {
           browserStub.restore()
         })
 
-        it('calls Fullscreen.requestFullscreen with currentContainer element', () => {
-          const fakeCurrentContainer = document.createElement('div')
-          fakeCurrentContainer.setAttribute('id', 'fakeCurrentContainer')
-          this.core.activeContainer = { el: fakeCurrentContainer }
+        it('calls Fullscreen.requestFullscreen with activePlayback element', () => {
+          const el = document.createElement('div')
+          el.setAttribute('id', 'fakePlayback')
+          const playback = { el }
+          this.core.activeContainer = { playback }
 
           this.core.toggleFullscreen()
 
-          expect(fullScreenSpy).to.have.been.calledWith(this.core.activeContainer.el)
+          expect(fullScreenSpy).to.have.been.calledWith(el)
         })
       })
     })
