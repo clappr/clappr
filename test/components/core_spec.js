@@ -78,6 +78,15 @@ describe('Core', function() {
       expect(this.core.isFullscreen()).to.equal(true)
     })
 
+    it('returns true if the active fullscreen element is the playback element', () => {
+      const playbackEl = document.createElement('div')
+      this.core.activeContainer = { playback: { el: playbackEl } }
+
+      fullscreenElementStub.returns(playbackEl)
+
+      expect(this.core.isFullscreen()).to.equal(true)
+    })
+
     describe('on iOS', () => {
       let browserStub
 
