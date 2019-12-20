@@ -1,4 +1,4 @@
-import CorePlugin from 'base/core_plugin'
+import CorePlugin from './core_plugin'
 
 describe('Core Plugin', function() {
   describe('#constructor', () => {

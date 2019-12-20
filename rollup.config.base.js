@@ -1,17 +1,17 @@
-import path from 'path'
+const path = require('path')
 
-import alias from '@rollup/plugin-alias'
-import babel from 'rollup-plugin-babel'
-import commonjs from 'rollup-plugin-commonjs'
-import html from 'rollup-plugin-html'
-import namedDirectory from 'rollup-plugin-named-directory'
-import nodeBuiltins from 'rollup-plugin-node-builtins'
-import nodeGlobals from 'rollup-plugin-node-globals'
-import postcss from 'rollup-plugin-postcss'
-import replace from '@rollup/plugin-replace'
-import resolve from '@rollup/plugin-node-resolve'
+const alias = require('@rollup/plugin-alias')
+const babel = require('rollup-plugin-babel')
+const commonjs = require('rollup-plugin-commonjs')
+const html = require('rollup-plugin-html')
+const namedDirectory = require('rollup-plugin-named-directory')
+const nodeBuiltins = require('rollup-plugin-node-builtins')
+const nodeGlobals = require('rollup-plugin-node-globals')
+const postcss = require('rollup-plugin-postcss')
+const replace = require('@rollup/plugin-replace')
+const resolve = require('@rollup/plugin-node-resolve')
 
-import { version } from './package.json'
+const { version } = require('./package.json')
 
 const postcssOptions = {
   use: [
@@ -21,7 +21,7 @@ const postcssOptions = {
   ]
 }
 
-export default {
+const baseConfig = {
   input: 'src/main.js',
   output: [
     {
@@ -50,4 +50,8 @@ export default {
     html(),
     postcss(postcssOptions),
   ],
+}
+
+module.exports = {
+  baseConfig
 }

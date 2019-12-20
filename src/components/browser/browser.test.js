@@ -1,6 +1,6 @@
-import Browser from '../../src/components/browser'
+import Browser from './browser'
 
-import { getBrowserData, getBrowserInfo, getDevice, getOsData } from '../../src/components/browser/browser'
+import { getBrowserData, getBrowserInfo, getDevice, getOsData } from './browser'
 
 describe('Browser', function() {
   it('checks localstorage support', function() {

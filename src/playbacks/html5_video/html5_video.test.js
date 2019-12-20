@@ -1,5 +1,5 @@
-import HTML5Video from 'playbacks/html5_video'
-import Events from 'base/events.js'
+import HTML5Video from './html5_video'
+import Events from '../../base/events.js'
 
 import $ from 'clappr-zepto'
 
@@ -104,7 +104,7 @@ describe('HTML5Video playback', function() {
       setTimeout(function() {
         expect(playback.isPlaying()).to.be.true
         done()
-      }, 500)
+      }, 4000)
     })
   })
 

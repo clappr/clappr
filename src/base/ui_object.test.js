@@ -1,4 +1,4 @@
-import UIObject from '../../src/base/ui_object'
+import UIObject from './ui_object'
 import  $ from 'clappr-zepto'
 
 describe('UIObject', function() {

@@ -1,8 +1,9 @@
-import Container from '../../src/components/container'
-import FakePlayback from '../../src/base/playback'
-import HTML5Playback from '../../src/playbacks/html5_video'
-import Playback from '../../src/base/playback'
-import Events from '../../src/base/events'
+import Container from './container'
+import HTML5Playback from '../../playbacks/html5_video'
+import Playback from '../../base/playback'
+import Events from '../../base/events'
+
+const FakePlayback = Playback
 
 describe('Container', function() {
   beforeEach(function() {

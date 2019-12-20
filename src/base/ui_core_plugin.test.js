@@ -1,4 +1,4 @@
-import UICorePlugin from 'base/ui_core_plugin'
+import UICorePlugin from './ui_core_plugin'
 
 describe('UI Core Plugin', function() {
   class MyPlugin extends UICorePlugin {

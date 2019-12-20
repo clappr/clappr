@@ -1,4 +1,4 @@
-import Clappr from '../../src/main'
+import Clappr from './main'
 
 describe('External Plugin', function() {
   it('should expose extend method for the plugins exposed on Clappr scope', function() {

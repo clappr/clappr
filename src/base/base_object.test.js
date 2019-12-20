@@ -1,4 +1,4 @@
-import BaseObject from 'base/base_object'
+import BaseObject from './base_object'
 
 describe('BaseObject', function() {
   beforeEach(() => {

@@ -1,7 +1,7 @@
-import livereload from 'rollup-plugin-livereload'
-import serve from 'rollup-plugin-serve'
+const livereload = require('rollup-plugin-livereload')
+const serve = require('rollup-plugin-serve')
 
-import baseConfig from './rollup.config.base'
+const { baseConfig } = require('./rollup.config.base')
 
 const serveConfig = {
   contentBase: ['dist', 'public'],
@@ -15,7 +15,7 @@ const plugins = [
   livereload(),
 ]
 
-export default {
+module.exports = {
   ...baseConfig,
   plugins,
 }

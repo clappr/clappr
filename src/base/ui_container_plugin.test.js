@@ -1,4 +1,4 @@
-import UIContainerPlugin from 'base/ui_container_plugin'
+import UIContainerPlugin from './ui_container_plugin'
 
 describe('UI Container Plugin', function() {
   describe('#constructor', () => {

@@ -1,4 +1,4 @@
-import ContainerPlugin from 'base/container_plugin'
+import ContainerPlugin from './container_plugin'
 
 describe('Container Plugin', function() {
   describe('#constructor', () => {

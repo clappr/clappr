@@ -1,4 +1,4 @@
-import Strings from 'plugins/strings'
+import Strings from './strings'
 
 describe('Strings', function() {
   it('translates', function() {

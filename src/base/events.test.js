@@ -1,5 +1,5 @@
-import Events from '../../src/base/events'
-import Log from '../../src/components/log'
+import Events from './events'
+import Log from '../components/log'
 
 describe('Events', function() {
   beforeEach(function() {

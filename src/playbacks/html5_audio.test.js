@@ -1,4 +1,4 @@
-import HTML5Audio from '../../src/playbacks/html5_audio'
+import HTML5Audio from './html5_audio'
 
 describe('HTML5Audio playback', function() {
   it('should check if canPlay resource', function() {

@@ -1,4 +1,4 @@
-import ContainerFactory from '../../src/components/container_factory'
+import ContainerFactory from './container_factory'
 
 import $ from 'clappr-zepto'
 

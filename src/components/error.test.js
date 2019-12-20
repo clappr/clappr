@@ -1,6 +1,6 @@
-import Core from '../../src/components/core'
-import PlayerError from '../../src/components/error'
-import Events from '../../src/base/events'
+import Core from '../components/core'
+import PlayerError from './error'
+import Events from '../base/events'
 
 describe('PlayerError', function() {
   beforeEach(function() {
