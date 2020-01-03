@@ -12,7 +12,9 @@ const serveConfig = {
 const plugins = [
   ...baseConfig.plugins,
   serve(serveConfig),
-  livereload(),
+  livereload({
+    watch: ['dist', 'public']
+  }),
 ]
 
 module.exports = {
