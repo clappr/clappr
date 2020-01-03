@@ -14,6 +14,7 @@ const output = [
       {
         file: 'dist/clappr-core.min.js',
         format: 'umd',
+        exports: 'named',
         name: 'Clappr',
         plugins: [
           terser({
@@ -26,6 +27,7 @@ const output = [
   {
     file: 'dist/clappr-core.esm.js',
     format: 'esm',
+    exports: 'named',
   },
 ]
 

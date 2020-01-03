@@ -28,6 +28,7 @@ const baseConfig = {
       file: 'dist/clappr-core.js',
       format: 'umd',
       name: 'Clappr',
+      exports: 'named',
     },
   ],
   plugins: [
