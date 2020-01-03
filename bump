@@ -16,9 +16,7 @@ update_version() {
 }
 
 build() {
-  echo "building $PROJECT_NAME.js" &&
-  yarn build &&
-  echo "building $PROJECT_NAME.min.js" &&
+  echo "building RELEASE version $1" &&
   yarn release
 }
 
@@ -55,7 +53,7 @@ main() {
   fi
   update_dependencies &&
   update_version $1 &&
-  build
+  build $1
   if (("$?" != "0")); then
     echo "something failed during dependency update, version update, or build"
     exit 1
