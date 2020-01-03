@@ -13,6 +13,7 @@ const resolve = require('@rollup/plugin-node-resolve')
 const svg = require('rollup-plugin-svg')
 
 const { version } = require('./package.json')
+const { version: clapprCoreVersion } = require('@clappr/core/package.json')
 
 const postcssOptions = {
   use: [
@@ -35,6 +36,7 @@ const baseConfig = {
   plugins: [
     replace({
       VERSION: JSON.stringify(version),
+      CLAPPR_CORE_VERSION: JSON.stringify(clapprCoreVersion),
     }),
     commonjs(),
     nodeBuiltins(),
