@@ -39,6 +39,32 @@ Loader.registerPlayback(HTMLImg)
 Loader.registerPlayback(HTML5Audio)
 Loader.registerPlayback(HTML5Video)
 
+export {
+  Player,
+  Events,
+  Browser,
+  ContainerPlugin,
+  UIContainerPlugin,
+  CorePlugin,
+  UICorePlugin,
+  Playback,
+  Container,
+  Core,
+  PlayerError,
+  Loader,
+  BaseObject,
+  UIObject,
+  Utils,
+  HTML5Audio,
+  HTML5Video,
+  HTMLImg,
+  Log,
+  Styler,
+  version,
+  template,
+  $
+}
+
 export default {
   Player,
   Events,
