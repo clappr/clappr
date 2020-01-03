@@ -1,8 +1,8 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-  typeof define === 'function' && define.amd ? define(factory) :
-  (global = global || self, global.Clappr = factory());
-}(this, (function () { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (global = global || self, factory(global.Clappr = {}));
+}(this, (function (exports) { 'use strict';
 
   function _typeof(obj) {
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
@@ -8218,7 +8218,7 @@
       plugins: {},
       playbacks: []
     };
-    var currentVersion = "0.4.4";
+    var currentVersion = "0.4.5";
     return (
       /*#__PURE__*/
       function () {
@@ -9479,7 +9479,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.4"
+          min: "0.4.5"
         };
       }
     }, {
@@ -10222,7 +10222,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.4"
+          min: "0.4.5"
         };
       }
     }, {
@@ -10272,7 +10272,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.4"
+          min: "0.4.5"
         };
       }
     }, {
@@ -10355,7 +10355,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.4"
+          min: "0.4.5"
         };
       }
     }, {
@@ -10513,7 +10513,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.4"
+          min: "0.4.5"
         };
       }
     }]);
@@ -10627,7 +10627,7 @@
   }(CorePlugin);
 
   // Copyright 2014 Globo.com Player authors. All rights reserved.
-  var version$1 = "0.4.4"; // Built-in Plugins/Playbacks
+  var version$1 = "0.4.5"; // Built-in Plugins/Playbacks
 
   Loader.registerPlugin(Strings);
   Loader.registerPlayback(NoOp);
@@ -10660,6 +10660,31 @@
     $: zepto
   };
 
-  return main;
+  exports.$ = zepto;
+  exports.BaseObject = BaseObject;
+  exports.Browser = Browser;
+  exports.Container = Container;
+  exports.ContainerPlugin = ContainerPlugin;
+  exports.Core = Core;
+  exports.CorePlugin = CorePlugin;
+  exports.Events = Events;
+  exports.HTML5Audio = HTML5Audio;
+  exports.HTML5Video = HTML5Video;
+  exports.HTMLImg = HTMLImg;
+  exports.Loader = Loader;
+  exports.Log = Log;
+  exports.Playback = Playback;
+  exports.Player = Player;
+  exports.PlayerError = PlayerError;
+  exports.Styler = Styler;
+  exports.UIContainerPlugin = UIContainerPlugin;
+  exports.UICorePlugin = UICorePlugin;
+  exports.UIObject = UIObject;
+  exports.Utils = Utils;
+  exports.default = main;
+  exports.template = tmpl;
+  exports.version = version$1;
+
+  Object.defineProperty(exports, '__esModule', { value: true });
 
 })));

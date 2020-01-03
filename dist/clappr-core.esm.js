@@ -8212,7 +8212,7 @@ var Loader = (function () {
     plugins: {},
     playbacks: []
   };
-  var currentVersion = "0.4.4";
+  var currentVersion = "0.4.5";
   return (
     /*#__PURE__*/
     function () {
@@ -9473,7 +9473,7 @@ function (_Playback) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.4"
+        min: "0.4.5"
       };
     }
   }, {
@@ -10216,7 +10216,7 @@ function (_HTML5Video) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.4"
+        min: "0.4.5"
       };
     }
   }, {
@@ -10266,7 +10266,7 @@ function (_Playback) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.4"
+        min: "0.4.5"
       };
     }
   }, {
@@ -10349,7 +10349,7 @@ function (_Playback) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.4"
+        min: "0.4.5"
       };
     }
   }, {
@@ -10507,7 +10507,7 @@ function (_CorePlugin) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.4"
+        min: "0.4.5"
       };
     }
   }]);
@@ -10621,7 +10621,7 @@ function (_CorePlugin) {
 }(CorePlugin);
 
 // Copyright 2014 Globo.com Player authors. All rights reserved.
-var version$1 = "0.4.4"; // Built-in Plugins/Playbacks
+var version$1 = "0.4.5"; // Built-in Plugins/Playbacks
 
 Loader.registerPlugin(Strings);
 Loader.registerPlayback(NoOp);
@@ -10655,3 +10655,4 @@ var main = {
 };
 
 export default main;
+export { zepto as $, BaseObject, Browser, Container, ContainerPlugin, Core, CorePlugin, Events, HTML5Audio, HTML5Video, HTMLImg, Loader, Log, Playback, Player, PlayerError, Styler, UIContainerPlugin, UICorePlugin, UIObject, Utils, tmpl as template, version$1 as version };
