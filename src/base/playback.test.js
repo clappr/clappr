@@ -142,7 +142,7 @@ describe('Playback', function() {
           }
           const errorData = this.basePlayback.createError(error)
 
-          expect(errorData.hasOwnProperty('UI')).to.be.false
+          expect(Object.prototype.hasOwnProperty.call(errorData, 'UI')).to.be.false
         })
       })
     })

@@ -1,3 +1,4 @@
+/* eslint-disable getter-return */
 import Playback from './playback'
 
 /**
