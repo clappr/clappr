@@ -1,9 +1,13 @@
 {
-  "presets": ["env"],
+  "presets": [
+    ["@babel/preset-env", { "modules": false }]
+  ],
   "plugins": [
-    "add-module-exports",
-    ["transform-es2015-classes", {"loose": true}],
-    "transform-object-rest-spread",
-    "transform-runtime"
-  ]
+    "@babel/plugin-proposal-object-rest-spread"
+  ],
+  "env": {
+    "test": {
+      "plugins": ["istanbul"]
+    }
+  }
 }
