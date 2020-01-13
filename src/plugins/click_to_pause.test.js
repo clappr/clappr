@@ -1,6 +1,6 @@
 import { Events, Container, Playback } from '@clappr/core'
 
-import ClickToPause from 'plugins/click_to_pause'
+import ClickToPause from './click_to_pause'
 
 describe('clickToPause', function() {
   beforeEach(function() {

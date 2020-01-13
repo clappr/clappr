@@ -1,6 +1,6 @@
 import { Container, Core, Events, Playback, Utils, template } from '@clappr/core'
 
-import MediaControl from '../../src/plugins/media_control'
+import MediaControl from './media_control'
 
 const { Config } = Utils
 

@@ -1,6 +1,6 @@
 import { Container, Events, Playback } from '@clappr/core'
 
-import Stats from '../../src/plugins/stats'
+import Stats from './stats'
 
 const FakePlayback = Playback
 

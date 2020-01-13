@@ -1,6 +1,6 @@
 import { Core, Container, Events, Playback, PlayerError } from '@clappr/core'
 
-import ErrorScreen from 'plugins/error_screen'
+import ErrorScreen from './error_screen'
 
 describe('ErrorScreen', function() {
   beforeEach(() => {

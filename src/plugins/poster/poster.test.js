@@ -1,6 +1,6 @@
 import { Container, Events, Playback, $ } from '@clappr/core'
 
-import Poster from '../../src/plugins/poster'
+import Poster from './poster'
 
 describe('Poster', function() {
   beforeEach(function() {
