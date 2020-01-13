@@ -18,7 +18,9 @@ const { version: clapprCoreVersion } = require('@clappr/core/package.json')
 const postcssOptions = {
   use: [
     ['sass', {
-      includePaths: [path.resolve('src/public/scss')]
+      includePaths: [
+        path.resolve('node_modules/@clappr/core/src/base/scss')
+      ]
     }]
   ]
 }
@@ -56,5 +58,6 @@ const baseConfig = {
 }
 
 module.exports = {
-  baseConfig
+  baseConfig,
+  postcssOptions,
 }

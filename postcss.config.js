@@ -1,5 +1,9 @@
+const autoprefixer = require('autoprefixer')
+const postcssUrl = require('postcss-url')
+
 module.exports = {
   plugins: [
-    require('autoprefixer')
+    autoprefixer,
+    postcssUrl({ url: 'rebase' })
   ]
 }
