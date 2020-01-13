@@ -4,16 +4,15 @@
   "description": "Main plugins for the Clappr project",
   "main": "./dist/clappr-plugins.js",
   "scripts": {
-    "bundle-check": "ANALYZE_BUNDLE=true ./node_modules/.bin/webpack -p",
-    "release": "MINIMIZE=true ./node_modules/.bin/webpack --progress",
-    "build": "./node_modules/.bin/webpack --progress",
-    "build:debug": "CLAPPR_INLINE_DEBUG=true ./node_modules/.bin/webpack --progress",
-    "watch": "./node_modules/.bin/webpack --progress --watch",
-    "test": "./node_modules/.bin/karma start --single-run",
-    "test:watch": "./node_modules/.bin/karma start --no-single-run --watch",
-    "lint": "./node_modules/.bin/eslint *.js src/ test/",
+    "bundle-check": "ANALYZE_BUNDLE=true rollup -c",
+    "release": "MINIMIZE=true rollup -c",
+    "build": "rollup -c",
+    "watch": "rollup -c --watch",
+    "test": "NODE_ENV=test karma start --single-run",
+    "test:watch": "NODE_ENV=test karma start --no-single-run --watch",
+    "lint": "eslint *.js src/ test/",
     "lint:fix": "npm run lint -- --fix",
-    "start": "./node_modules/.bin/webpack-dev-server --host 0.0.0.0 --content-base public/ --output-public-path latest/ --hot"
+    "start": "rollup -c rollup.config.dev.js --watch"
   },
   "files": [
     "/dist",
