@@ -16,8 +16,6 @@ update_version() {
 }
 
 build() {
-  echo "building $PROJECT_NAME.js" &&
-  yarn build &&
   echo "building $PROJECT_NAME.min.js" &&
   yarn release
 }
