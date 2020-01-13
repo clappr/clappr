@@ -1,22 +1,15 @@
-/* eslint-disable no-var */
-const path = require('path')
 
-const webpackConfig = require('./webpack.config.base')
+const { baseConfig } = require('./rollup.config.base')
 
-// add subject as webpack's postloader
-const webpackTestConfig = webpackConfig({
-  mode: 'development',
-  rules: [
-    {
-      test: /\.js$/,
-      exclude: /(test|node_modules|bower_components)\//,
-      loader: 'istanbul-instrumenter-loader',
-      enforce: 'post'
-    }
-  ],
-})
-
-webpackTestConfig.resolve.modules.push(path.resolve(__dirname, 'src'))
+const rollupPreprocessor = {
+  ...baseConfig,
+  external: [],
+  output: {
+    format: 'iife', // Helps prevent naming collisions.
+    name: 'ClapprPlugins', // Required for 'iife' format.
+    sourcemap: 'inline', // Sensible for testing.
+  },
+}
 
 module.exports = function(config) {
   config.set({
@@ -30,6 +23,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      { pattern: 'node_modules/@clappr/core/dist/clappr-core.js', served: true, included: true },
       { pattern: 'src/**/*.test.js', watched: true },
     ],
 
@@ -40,19 +34,24 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'test/**/*.js': ['webpack']
+      'src/**/*.test.js': ['rollup'],
     },
 
+    rollupPreprocessor,
 
     coverageReporter: {
       reporters: [
         { type: 'lcovonly' },
         { type: 'text-summary' }
       ],
-      dir: 'coverage'
+      dir: 'coverage',
+      instrumenterOptions: {
+        istanbul: { noCompact: true }
+      }
     },
+
     plugins: [
-      require('karma-webpack'),
+      require('karma-rollup-preprocessor'),
       require('karma-mocha'),
       'karma-chrome-launcher',
       'karma-firefox-launcher',
@@ -64,8 +63,6 @@ module.exports = function(config) {
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: ['progress', 'coverage'],
-
-    webpack: webpackTestConfig,
 
     // web server port
     port: 9876,
