@@ -21,6 +21,25 @@ import Vendor from './vendor'
 
 const version = VERSION
 
+export {
+  ClickToPause,
+  ClosedCaptions,
+  DVRControls,
+  EndVideo,
+  ErrorScreen,
+  Favicon,
+  GoogleAnalytics,
+  MediaControl,
+  Poster,
+  SeekTime,
+  Sources,
+  SpinnerThreeBounce,
+  Stats,
+  WaterMark,
+  Vendor,
+  version,
+}
+
 export default {
   Plugins: {
     ClickToPause,
