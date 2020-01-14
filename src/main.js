@@ -21,6 +21,23 @@ import Vendor from './vendor'
 
 const version = VERSION
 
+const Plugins = {
+  ClickToPause,
+  ClosedCaptions,
+  DVRControls,
+  EndVideo,
+  ErrorScreen,
+  Favicon,
+  GoogleAnalytics,
+  MediaControl,
+  Poster,
+  SeekTime,
+  Sources,
+  SpinnerThreeBounce,
+  Stats,
+  WaterMark,
+}
+
 export {
   ClickToPause,
   ClosedCaptions,
@@ -37,26 +54,6 @@ export {
   Stats,
   WaterMark,
   Vendor,
-  version,
-}
-
-export default {
-  Plugins: {
-    ClickToPause,
-    ClosedCaptions,
-    DVRControls,
-    EndVideo,
-    ErrorScreen,
-    Favicon,
-    GoogleAnalytics,
-    MediaControl,
-    Poster,
-    SeekTime,
-    Sources,
-    SpinnerThreeBounce,
-    Stats,
-    WaterMark,
-  },
-  Vendor,
+  Plugins,
   version,
 }

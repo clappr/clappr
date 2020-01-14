@@ -2,7 +2,6 @@ const path = require('path')
 
 const babel = require('rollup-plugin-babel')
 const commonjs = require('rollup-plugin-commonjs')
-const externalGlobals = require('rollup-plugin-external-globals')
 const html = require('rollup-plugin-html')
 const namedDirectory = require('rollup-plugin-named-directory')
 const nodeBuiltins = require('rollup-plugin-node-builtins')
@@ -33,6 +32,9 @@ const baseConfig = {
       file: 'dist/clappr-plugins.js',
       format: 'umd',
       name: 'ClapprPlugins',
+      globals: {
+        '@clappr/core': 'Clappr',
+      }
     },
   ],
   plugins: [
@@ -51,9 +53,6 @@ const baseConfig = {
     html(),
     svg(),
     postcss(postcssOptions),
-    externalGlobals({
-      '@clappr/core': 'Clappr',
-    }),
   ],
 }
 
