@@ -3195,7 +3195,7 @@ function (_UIContainerPlugin) {
 }(Clappr.UIContainerPlugin);
 
 // Copyright 2014 Globo.com Player authors. All rights reserved.
-var version = "0.4.1";
+var version = "0.4.2";
 var main = {
   Plugins: {
     ClickToPause: ClickToPausePlugin,
@@ -3218,3 +3218,4 @@ var main = {
 };
 
 export default main;
+export { ClickToPausePlugin as ClickToPause, ClosedCaptions, DVRControls, EndVideo, ErrorScreen, Favicon, GoogleAnalytics, MediaControl, PosterPlugin as Poster, SeekTime, SourcesPlugin as Sources, SpinnerThreeBouncePlugin as SpinnerThreeBounce, StatsPlugin as Stats, Vendor, WaterMarkPlugin as WaterMark, version };

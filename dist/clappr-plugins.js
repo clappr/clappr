@@ -1,8 +1,8 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-  typeof define === 'function' && define.amd ? define(factory) :
-  (global = global || self, global.ClapprPlugins = factory());
-}(this, (function () { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (global = global || self, factory(global.ClapprPlugins = {}));
+}(this, (function (exports) { 'use strict';
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -3201,7 +3201,7 @@
   }(Clappr.UIContainerPlugin);
 
   // Copyright 2014 Globo.com Player authors. All rights reserved.
-  var version = "0.4.1";
+  var version = "0.4.2";
   var main = {
     Plugins: {
       ClickToPause: ClickToPausePlugin,
@@ -3223,6 +3223,24 @@
     version: version
   };
 
-  return main;
+  exports.ClickToPause = ClickToPausePlugin;
+  exports.ClosedCaptions = ClosedCaptions;
+  exports.DVRControls = DVRControls;
+  exports.EndVideo = EndVideo;
+  exports.ErrorScreen = ErrorScreen;
+  exports.Favicon = Favicon;
+  exports.GoogleAnalytics = GoogleAnalytics;
+  exports.MediaControl = MediaControl;
+  exports.Poster = PosterPlugin;
+  exports.SeekTime = SeekTime;
+  exports.Sources = SourcesPlugin;
+  exports.SpinnerThreeBounce = SpinnerThreeBouncePlugin;
+  exports.Stats = StatsPlugin;
+  exports.Vendor = Vendor;
+  exports.WaterMark = WaterMarkPlugin;
+  exports.default = main;
+  exports.version = version;
+
+  Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
