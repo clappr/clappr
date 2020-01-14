@@ -3195,7 +3195,7 @@ function (_UIContainerPlugin) {
 }(Clappr.UIContainerPlugin);
 
 // Copyright 2014 Globo.com Player authors. All rights reserved.
-var version = "0.4.2";
+var version = "0.4.3";
 var main = {
   Plugins: {
     ClickToPause: ClickToPausePlugin,
