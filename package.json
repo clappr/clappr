@@ -13,7 +13,7 @@
     "test:watch": "NODE_ENV=test karma start --no-single-run --watch",
     "lint": "eslint *.js src/",
     "lint:fix": "npm run lint -- --fix",
-    "start": "rollup -c rollup.config.dev.js"
+    "start": "rollup -c rollup.config.dev.js --watch"
   },
   "files": [
     "/dist",
