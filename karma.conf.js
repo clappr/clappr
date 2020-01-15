@@ -1,4 +1,3 @@
-/* eslint-disable no-var */
 const { baseConfig } = require('./rollup.config.base')
 
 const rollupPreprocessor = {
@@ -22,7 +21,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      { pattern: 'src/**/*.test.js', watched: false },
+      { pattern: 'src/**/*.test.js', watched: true },
       { pattern: 'src/__tests__/fixtures/*.mp4', served: true, included: false }
     ],
 
