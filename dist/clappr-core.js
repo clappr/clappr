@@ -5811,14 +5811,15 @@
       }
       /**
        * @deprecated
-       * This property currently exists for retrocompatibility reasons.
-       * If you want to access the media control instance, use the method getPlugin('media_control').
+       * This property currently exists for backward compatibility reasons.
+       * If you need to access the media control instance, use the method getPlugin('media_control').
+       * This approach is still not recommended.
        */
 
     }, {
       key: "mediaControl",
       get: function get() {
-        return this.getPlugin('media_control') || this.dummyMediaControl;
+        return this._mediaControl || (this._mediaControl = this.getPlugin('media_control')) || this.dummyMediaControl;
       }
     }, {
       key: "dummyMediaControl",
@@ -8218,7 +8219,7 @@
       plugins: {},
       playbacks: []
     };
-    var currentVersion = "0.4.5";
+    var currentVersion = "0.4.6";
     return (
       /*#__PURE__*/
       function () {
@@ -9479,7 +9480,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.5"
+          min: "0.4.6"
         };
       }
     }, {
@@ -10222,7 +10223,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.5"
+          min: "0.4.6"
         };
       }
     }, {
@@ -10272,7 +10273,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.5"
+          min: "0.4.6"
         };
       }
     }, {
@@ -10355,7 +10356,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.5"
+          min: "0.4.6"
         };
       }
     }, {
@@ -10513,7 +10514,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.5"
+          min: "0.4.6"
         };
       }
     }]);
@@ -10627,7 +10628,7 @@
   }(CorePlugin);
 
   // Copyright 2014 Globo.com Player authors. All rights reserved.
-  var version$1 = "0.4.5"; // Built-in Plugins/Playbacks
+  var version$1 = "0.4.6"; // Built-in Plugins/Playbacks
 
   Loader.registerPlugin(Strings);
   Loader.registerPlayback(NoOp);
