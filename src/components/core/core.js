@@ -59,11 +59,12 @@ export default class Core extends UIObject {
 
   /**
    * @deprecated
-   * This property currently exists for retrocompatibility reasons.
-   * If you want to access the media control instance, use the method getPlugin('media_control').
+   * This property currently exists for backward compatibility reasons.
+   * If you need to access the media control instance, use the method getPlugin('media_control').
+   * This approach is still not recommended.
    */
   get mediaControl() {
-    return this.getPlugin('media_control') || this.dummyMediaControl
+    return this._mediaControl || (this._mediaControl = this.getPlugin('media_control')) || this.dummyMediaControl
   }
 
   get dummyMediaControl() {
