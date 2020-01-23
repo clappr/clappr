@@ -84,6 +84,11 @@ class DashShakaPlayback extends HTML5Video {
     return this.shakaPlayerInstance.getManifest().presentationTimeline
   }
 
+  get bandwidthEstimate() {
+    if (!this.shakaPlayerInstance) return
+    return this.shakaPlayerInstance.getStats().estimatedBandwidth
+  }
+
   constructor (...args) {
     super(...args)
     this._levels = []
