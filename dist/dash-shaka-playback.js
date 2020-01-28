@@ -855,6 +855,12 @@ var DashShakaPlayback = function (_HTML5Video) {
     get: function get() {
       return this.shakaPlayerInstance.getManifest().presentationTimeline;
     }
+  }, {
+    key: 'bandwidthEstimate',
+    get: function get() {
+      if (!this.shakaPlayerInstance) return;
+      return this.shakaPlayerInstance.getStats().estimatedBandwidth;
+    }
   }], [{
     key: 'canPlay',
     value: function canPlay(resource) {
