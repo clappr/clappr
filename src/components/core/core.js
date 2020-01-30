@@ -170,6 +170,7 @@ export default class Core extends UIObject {
   }
 
   enableResizeObserver() {
+    this.disableResizeObserver()
     const checkSizeCallback = () => {
       this.triggerResize({ width: this.el.clientWidth, height: this.el.clientHeight })
     }
@@ -189,6 +190,7 @@ export default class Core extends UIObject {
 
   disableResizeObserver() {
     this.resizeObserverInterval && clearInterval(this.resizeObserverInterval)
+    this.resizeObserverInterval = null
   }
 
   resolveOnContainersReady(containers) {
