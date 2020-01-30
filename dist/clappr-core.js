@@ -5266,6 +5266,7 @@
       value: function render() {
         this.$el.append(this.playback.render().el);
         this.updateStyle();
+        this.checkResize();
         this.enableResizeObserver();
         return this;
       }
@@ -5973,6 +5974,8 @@
       value: function enableResizeObserver() {
         var _this3 = this;
 
+        this.disableResizeObserver();
+
         var checkSizeCallback = function checkSizeCallback() {
           _this3.triggerResize({
             width: _this3.el.clientWidth,
@@ -5999,6 +6002,7 @@
       key: "disableResizeObserver",
       value: function disableResizeObserver() {
         this.resizeObserverInterval && clearInterval(this.resizeObserverInterval);
+        this.resizeObserverInterval = null;
       }
     }, {
       key: "resolveOnContainersReady",
@@ -6220,10 +6224,6 @@
         };
         this.previousSize = this.currentSize = this.computedSize = size;
         this.updateSize();
-        this.previousSize = {
-          width: this.$el.width(),
-          height: this.$el.height()
-        };
         this.enableResizeObserver();
         return this;
       }
@@ -8219,7 +8219,7 @@
       plugins: {},
       playbacks: []
     };
-    var currentVersion = "0.4.6";
+    var currentVersion = "0.4.7";
     return (
       /*#__PURE__*/
       function () {
@@ -9480,7 +9480,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.6"
+          min: "0.4.7"
         };
       }
     }, {
@@ -10223,7 +10223,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.6"
+          min: "0.4.7"
         };
       }
     }, {
@@ -10273,7 +10273,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.6"
+          min: "0.4.7"
         };
       }
     }, {
@@ -10356,7 +10356,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.6"
+          min: "0.4.7"
         };
       }
     }, {
@@ -10514,7 +10514,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.6"
+          min: "0.4.7"
         };
       }
     }]);
@@ -10628,7 +10628,7 @@
   }(CorePlugin);
 
   // Copyright 2014 Globo.com Player authors. All rights reserved.
-  var version$1 = "0.4.6"; // Built-in Plugins/Playbacks
+  var version$1 = "0.4.7"; // Built-in Plugins/Playbacks
 
   Loader.registerPlugin(Strings);
   Loader.registerPlayback(NoOp);
