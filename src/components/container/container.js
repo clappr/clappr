@@ -514,6 +514,7 @@ export default class Container extends UIObject {
   render() {
     this.$el.append(this.playback.render().el)
     this.updateStyle()
+    this.checkResize()
     this.enableResizeObserver()
     return this
   }
