@@ -357,9 +357,6 @@ export default class Core extends UIObject {
     const size = { width: this.options.width, height: this.options.height }
     this.previousSize = this.currentSize = this.computedSize = size
     this.updateSize()
-
-    this.previousSize = { width: this.$el.width(), height: this.$el.height() }
-
     this.enableResizeObserver()
 
     return this
