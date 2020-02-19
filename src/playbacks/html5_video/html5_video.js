@@ -127,10 +127,12 @@ export default class HTML5Video extends Playback {
       loop: this.options.loop,
       poster: posterUrl,
       preload: preload || 'metadata',
-      controls: (playbackConfig.controls || this.options.useVideoTagDefaultControls) && 'controls',
       crossOrigin: playbackConfig.crossOrigin,
       'x-webkit-playsinline': playbackConfig.playInline
     })
+
+    if (playbackConfig.controls || this.options.useVideoTagDefaultControls)
+      this.$el.attr('controls', '')
 
     playbackConfig.playInline && (this.$el.attr({ playsinline: 'playsinline' }))
     playbackConfig.crossOrigin && (this.$el.attr({ crossorigin: playbackConfig.crossOrigin }))
