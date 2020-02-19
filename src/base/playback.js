@@ -55,15 +55,6 @@ export default class Playback extends UIObject {
   }
 
   /**
-   * Determine if the playback has user consent.
-   * @property consented
-   * @type Boolean
-   */
-  get consented() {
-    return this._consented
-  }
-
-  /**
    * @method constructor
    * @param {Object} options the options object
    * @param {Strings} i18n the internationalization component
@@ -79,9 +70,11 @@ export default class Playback extends UIObject {
   /**
    * Gives user consent to playback (mobile devices).
    * @method consent
+   * @param {Function} callback function called when playback is consented
    */
-  consent() {
-    this._consented = true
+  consent(cb) {
+    if (typeof cb === 'function')
+      cb()
   }
 
   /**
