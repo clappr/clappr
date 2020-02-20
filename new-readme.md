@@ -34,6 +34,12 @@ CLAPPR CORE USAGE GIF
 Features
 :gem: Features
 ---
+* Based on [HTM5 video tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video)
+  * Adding large platforms support and facility to use.
+* Plugin architecture
+  * Add new features without impact other's functionalities.
+* Extensible
+  * Create support to new playbacks or modify existing plugins, just extending them.
 
 :clapper: Usage
 ---
