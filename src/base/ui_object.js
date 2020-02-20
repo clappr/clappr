@@ -193,7 +193,7 @@ export default class UIObject extends BaseObject {
       const attrs = $.extend({}, this.attributes)
       if (this.id) attrs.id = this.id
       if (this.className) attrs['class'] = this.className
-      const $el = DomRecycler.create(this.tagName).attr(attrs)
+      const $el = $(DomRecycler.create(this.tagName)).attr(attrs)
       this.setElement($el, false)
     } else { this.setElement(this.el, false) }
 

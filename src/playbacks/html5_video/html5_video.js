@@ -452,7 +452,7 @@ export default class HTML5Video extends Playback {
     this.el.removeAttribute('src')
     this.el.load() // load with no src to stop loading of the previous source and avoid leaks
     this._src = null
-    DomRecycler.garbage(this.$el)
+    DomRecycler.garbage(this.el)
   }
 
   seek(time) {

@@ -285,7 +285,7 @@ export function canAutoPlayMedia(cb, options) {
   }
 }
 
-// Simple Zepto element factory with video recycle feature.
+// Simple element factory with video recycle feature.
 const videoStack = []
 
 export class DomRecycler {
@@ -297,14 +297,14 @@ export class DomRecycler {
     if (this.options.recycleVideo && name === 'video' && videoStack.length > 0)
       return videoStack.shift()
 
-    return $('<' + name + '>')
+    return document.createElement(name)
   }
 
-  static garbage($el) {
-    // Expect Zepto collection with single element (does not iterate!)
-    if (!this.options.recycleVideo || $el[0].tagName.toUpperCase() !== 'VIDEO') return
-    $el.children().remove()
-    videoStack.push($el)
+  static garbage(el) {
+    if (!this.options.recycleVideo || el.tagName.toUpperCase() !== 'VIDEO') return
+    $(el).children().remove()
+    Object.values(el.attributes).forEach(attr => el.removeAttribute(attr.name))
+    videoStack.push(el)
   }
 }
 
