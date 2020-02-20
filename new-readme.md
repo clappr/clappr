@@ -14,7 +14,7 @@ Clappr is under development but production-ready. Feel free to open issues and s
   <a href="https://github.com/clappr/clappr-core/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-BSD--3--Clause-blue.svg"></a>
 </p>
 
-CLAPPR CORE USAGE GIF
+<video src= "public/clappr-core-demo.mp4" autoplay=true mute=true loop=true></video>
 
 :video_camera: Demo
 ---
@@ -39,7 +39,7 @@ CLAPPR CORE USAGE GIF
 * Plugin architecture
   * Add new features without impact other's functionalities.
 * Extensible
-  * Create support to new playbacks or modify existing plugins, just extending them.
+  * Add support to video formats or modify existing plugins, just extending them.
 
 :clapper: Usage
 ---
