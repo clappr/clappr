@@ -125,9 +125,17 @@ describe('HTML5Video playback', function() {
   })
 
   it('allows displaying default video tag controls', function() {
-    const options = $.extend({ playback: { controls: 'controls' } }, this.options)
-    const playback = new HTML5Video(options)
-    expect(playback.el.controls).to.be.true
+    const options1 = Object.assign({}, this.options)
+    const playback1 = new HTML5Video(options1)
+    expect(playback1.el.hasAttribute('controls')).to.be.false
+
+    const options2 = Object.assign({ playback: { controls: 'controls' } }, this.options)
+    const playback2 = new HTML5Video(options2)
+    expect(playback2.el.hasAttribute('controls')).to.be.true
+
+    const options3 = Object.assign({ playback: { controls: false } }, this.options)
+    const playback3 = new HTML5Video(options3)
+    expect(playback3.el.hasAttribute('controls')).to.be.false
   })
 
   it('mute or unmute video element when volume is changed', function() {
