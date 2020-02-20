@@ -14,8 +14,6 @@ Clappr is under development but production-ready. Feel free to open issues and s
   <a href="https://github.com/clappr/clappr-core/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-BSD--3--Clause-blue.svg"></a>
 </p>
 
-<video src="public/clappr-core-demo.mp4" autoplay=true mute=true loop=true></video>
-
 :video_camera: Demo
 ---
 [Live demo](http://clappr.io/demo/) to test with a possibility to add external plugins.
