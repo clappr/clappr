@@ -127,10 +127,12 @@ export default class HTML5Video extends Playback {
       loop: this.options.loop,
       poster: posterUrl,
       preload: preload || 'metadata',
-      controls: (playbackConfig.controls || this.options.useVideoTagDefaultControls) && 'controls',
       crossOrigin: playbackConfig.crossOrigin,
       'x-webkit-playsinline': playbackConfig.playInline
     })
+
+    if (playbackConfig.controls || this.options.useVideoTagDefaultControls)
+      this.$el.attr('controls', '')
 
     playbackConfig.playInline && (this.$el.attr({ playsinline: 'playsinline' }))
     playbackConfig.crossOrigin && (this.$el.attr({ crossorigin: playbackConfig.crossOrigin }))
@@ -459,7 +461,7 @@ export default class HTML5Video extends Playback {
     this.el.removeAttribute('src')
     this.el.load() // load with no src to stop loading of the previous source and avoid leaks
     this._src = null
-    DomRecycler.garbage(this.$el)
+    DomRecycler.garbage(this.el)
   }
 
   seek(time) {
