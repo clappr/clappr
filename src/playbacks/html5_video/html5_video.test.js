@@ -88,12 +88,15 @@ describe('HTML5Video playback', function() {
     })
   })
 
-  it('can be consented', function() {
-    const playback = new HTML5Video({ src: 'http://example.com/dash.ogg', mute: true })
+  it('can be consented', function(done) {
+    this.timeout(5000)
+    const playback = new HTML5Video({ src: '/test/fixtures/SampleVideo_360x240_1mb.mp4' })
+    const callback = sinon.spy(() => {
+      callback.should.have.been.calledOnce
+      done()
+    })
 
-    expect(playback.consented).to.be.false
-    playback.consent()
-    expect(playback.consented).to.be.true
+    playback.consent(callback)
   })
 
   it('isPlaying() is true after constructor when autoPlay is true', function(done) {

@@ -27,10 +27,12 @@ describe('Playback', function() {
     expect(this.basePlayback.isHighDefinitionInUse()).to.be.equal(false)
   })
 
-  it('can be consented', () => {
-    expect(this.basePlayback.consented).to.be.equal(false)
-    this.basePlayback.consent()
-    expect(this.basePlayback.consented).to.be.equal(true)
+  it('can be consented', (done) => {
+    const callback = sinon.spy(() => {
+      callback.should.have.been.calledOnce
+      done()
+    })
+    this.basePlayback.consent(callback)
   })
 
   it('destroys by removing element from DOM', () => {

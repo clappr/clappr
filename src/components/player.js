@@ -437,11 +437,14 @@ export default class Player extends BaseObject {
   /**
    * Gives user consent to playback. Required by mobile device after a click event before Player.load().
    * @method consent
-   * @return {Player} itself
+   * @param {Function} callback function called when current playback is consented
+   * @example
+   * ```javascript
+   * player.consent(function() { doSomethingNext(); });
+   * ```
    */
-  consent() {
-    this.core.getCurrentPlayback().consent()
-    return this
+  consent(cb) {
+    this.core.getCurrentPlayback().consent(cb)
   }
 
   /**

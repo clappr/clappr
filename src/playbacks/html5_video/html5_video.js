@@ -251,9 +251,18 @@ export default class HTML5Video extends Playback {
 
   // On mobile device, HTML5 video element "retains" user action consent if
   // load() method is called. See Player.consent().
-  consent() {
-    if (!this.isPlaying()) {
-      super.consent()
+  consent(cb) {
+    if (this.isPlaying()) {
+      super.consent(cb)
+    } else {
+      let eventHandler = () => {
+        this.el.removeEventListener('loadedmetadata', eventHandler, false)
+        this.el.removeEventListener('error', eventHandler, false)
+        super.consent(cb)
+      }
+
+      this.el.addEventListener('loadedmetadata', eventHandler, false)
+      this.el.addEventListener('error', eventHandler, false)
       this.el.load()
     }
   }
