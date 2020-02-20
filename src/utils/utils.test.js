@@ -1,5 +1,4 @@
 import * as utils from './utils'
-import  $ from 'clappr-zepto'
 
 const pushUrl = function(path) {
   window.history.pushState({},'', path)
@@ -245,17 +244,16 @@ describe('Utils', function() {
       expect(utils.DomRecycler.options.recycleVideo).to.be.false
     })
 
-    it('create a Zepto collection object', function() {
-      const $el = utils.DomRecycler.create('div')
-      // Zepto collection assertion : https://github.com/madrobby/zepto/issues/349#issuecomment-4985091
-      expect($.zepto.isZ($el)).to.be.true
+    it('create a dom element', function() {
+      const el = utils.DomRecycler.create('div')
+      expect(el.tagName).to.equal('DIV')
     })
 
     it('does not recycle video tag by default', function() {
       const video1 = utils.DomRecycler.create('video')
       utils.DomRecycler.garbage(video1)
       const video2 = utils.DomRecycler.create('video')
-      expect(video1[0]).to.not.be.equal(video2[0])
+      expect(video1).to.not.be.equal(video2)
     })
 
     it('recycle video tag if recycleVideo option is set', function() {
@@ -263,7 +261,7 @@ describe('Utils', function() {
       const video1 = utils.DomRecycler.create('video')
       utils.DomRecycler.garbage(video1)
       const video2 = utils.DomRecycler.create('video')
-      expect(video1[0]).to.be.equal(video2[0])
+      expect(video1).to.be.equal(video2)
     })
   })
 
