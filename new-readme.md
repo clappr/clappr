@@ -32,10 +32,10 @@ CLAPPR CORE USAGE GIF
 * [Sponsor](https://github.com/clappr/clappr-core#sponsor)
 
 Features
+:gem: Features
 ---
 
-
-Usage
+:clapper: Usage
 ---
 ### Via script tag:
 
@@ -92,7 +92,7 @@ resolve: {
 #### Installing for [browserify](http://browserify.org/):
 Browserify will look at the `main` field in `package.json` and use the built version of the project.
 
-API Documentation
+:books: API Documentation
 ---
 Create an instance:
 
@@ -152,10 +152,10 @@ Destroy the current player and removes it from the DOM.
 ### <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.load(source)
 Loads a new source.
 
-Configuration
 ### <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.configure(options)
 Enables to configure a player after its creation.
 
+:hammer_and_wrench: Configuration
 ---
 All parameters listed below shall be added on `Clappr.Player` object instantiation or  via `player.configure`.
 
@@ -379,7 +379,7 @@ Any specific settings for [shaka-player](https://shaka-player-demo.appspot.com/d
 }
 ```
 
-Development
+:computer: Development
 ---
 Enter the project directory and install the dependencies:
 
@@ -401,10 +401,10 @@ Starting a local server:
 
 This command will start an HTTP Server on port 8080, you can check a sample page with Clappr on http://localhost:8080/
 
-Contributors
+:raised_hands: Contributors
 ---
 This project exists thanks to all the people who [contribute](https://github.com/clappr/clappr-core/graphs/contributors).
 
-Sponsor
+:money_with_wings: Sponsor
 ---
 [![image](https://cloud.githubusercontent.com/assets/244265/5900100/ef156258-a54b-11e4-9862-7e5851ed9b81.png)](http://globo.com)
