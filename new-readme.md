@@ -1,5 +1,4 @@
 <h1>
-<!-- <img src="https://cloud.githubusercontent.com/assets/244265/6373134/a845eb50-bce7-11e4-80f2-592ba29972ab.png" width="300"> -->
 Clappr-core
 </h1>
 
@@ -196,11 +195,6 @@ Configure Clappr to play media after the player is attached.
 
 Enable the [video tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video) muted attribute.
 
-<!-- #### disableCanAutoPlay
-> Default Value: `false`
-
-By default, Clappr will do its best to detect if the browser can play video automatically. If you want to disable this behaviour, you can set this option with the value `false`. -->
-
 #### loop
 > Default Value: `false`
 
@@ -287,56 +281,6 @@ player.core.activeContainer.on(Clappr.Events.CONTAINER_STATE_BUFFERING, function
 
 See all Clappr events [here](https://github.com/clappr/clappr-core/blob/master/src/base/events.js#L227).
 
-<!-- parent -->
-<!-- parentSelector -->
-<!-- source -->
-<!-- sources -->
-<!-- height -->
-<!-- width -->
-<!-- autoPlay -->
-<!-- mute -->
-<!-- loop -->
-<!-- language -->
-<!-- mimeType -->
-<!-- playbackNotSupportedMessage -->
-<!-- useCodePrefix -->
-<!-- autoSeekFromUrl -->
-<!-- baseUrl -->
-<!-- plugins -->
-<!-- events -->
-
-<!-- disableCanAutoPlay //deprecated
-autoPlayTimeout // deprecated
-useVideoTagDefaultControls // deprecated
-persistConfig //deprecated
-disableVideoTagcontextMenu //deprecated
-preload // deprecated
-maxBufferLength // deprecated
-maxBufferLength // deprecated
-
-chromeless // plugins options
-
-allowUserInteraction // click to pause plugin
-
-mediacontrol // media control
-hideMediaControl // media control
-hideVolumeBar // media control
-disableKeyboardShortcuts // media control
-exitFullscreenOnEnd // media control
-actualLiveTime // media control
-actualLiveServerTime // media control
-
-poster // poster plugin
-
-gaAccount // ga plugin
-gaAccount // ga plugin
-gaTrackerName // ga plugin
-
-watermark // watermark plugin
-watermarkLink // watermark plugin
-
-disableErrorScreen // error screen plugin -->
-
 ### Playback Configuration
 Clappr has specific set of options for playbacks. The configuration for the playback, it's still only compatible with `html5_video` playback (and derived).
 
@@ -351,17 +295,7 @@ playback: {
   playInline: true,
   externalTracks: [],
   hlsjsConfig: {},
-  shakaConfiguration: {}, // Needs to pass this object to playback object scope
-  // audioOnly: false, //  not document yet
-  // maxBufferLength: , // NOT EXIST
-  // maxBackBufferLength: , // NOT EXIST
-  // minBufferLength: ,  // NOT EXIST
-  // initialBandwidthEstimate: , // NOT EXIST
-  // maxAdaptiveBitrate: , // NOT EXIST
-  // maxAdaptiveVideoDimensions: , // NOT EXIST
-  // enableAutomaticABR: , // NOT EXIST
-  // preferredTextLanguage: 'pt-BR', // shaka playback option
-  // preferredAudioLanguage: 'pt-BR', // shaka playback option
+  shakaConfiguration: {},
 }
 ```
 
