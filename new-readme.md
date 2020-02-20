@@ -45,14 +45,17 @@ Add the following script on your HTML:
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clappr/core@latest/dist/clappr.min.js"></script>
 </head>
 ```
+
 Now, create the player:
 ```html
 <body>
-  <div id="player"></div>
+  <div class="player"></div>
   <script>
+    var playerElement = document.querySelector(".player");
+
     var player = new Clappr.Player({
       source: "http://your.video/here.mp4",
-      parentId: "#player"
+      parent: playerElement,
     });
   </script>
 </body>
@@ -71,13 +74,13 @@ You should specify the base url for where the assets are located using the `base
 	  baseUrl: "http://example.com/assets/clappr"
   });
 ```
-In the above case Clappr will expect all of the [assets (in the dist folder)](https://github.com/clappr/clappr-core/tree/master/dist) to be accessible at "http://example.com/assets/clappr-core".
-You need to arrange for the assets to be located at `baseUrl` during your build process.
+In the above case, Clappr will expect all of the [assets (in the dist folder)](https://github.com/clappr/clappr-core/tree/master/dist) to be accessible at "http://example.com/assets/clappr-core".
+You need to arrange the assets to be located at `baseUrl` during your build process.
 
 #### Installing for [webpack](https://webpack.github.io/):
-By default webpack will look at the `main` field in `package.json` and use the built version of the project. If this is all you want there is nothing else for you to do.
+By default, webpack will look at the `mai`n field in `package.json` and use the built version of the project. If this is all you want, there is nothing else for you to do.
 
-If you would like to build the project yourself into your project during your build process then add the following to your webpack config:
+If you would like to build Clappr yourself into your project during your build process then add the following to your webpack config:
 ```javascript
 resolve: {
     alias: { Clappr: '@clappr/core/src/main.js' },
@@ -87,7 +90,7 @@ resolve: {
 ```
 
 #### Installing for [browserify](http://browserify.org/):
-Browserify will look at the `main` field in `package.json` and use the built verison of the project.
+Browserify will look at the `main` field in `package.json` and use the built version of the project.
 
 API Documentation
 ---
@@ -96,13 +99,12 @@ Create an instance:
 ```javascript
 var player = new Clappr.Player({
   source: "http://your.video/here.mp4",
-  parentId: "#player"
+  parentSelector: ".player"
 });
 ```
 
 ### <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.attachTo(element)
-
-You can use this method to attach the player to a given `element`. You don't need to do this when you specify it during the player instantiation passing the `parentId` param.
+You can use this method to attach the player to a given element. You don't need to do this when specifying it during the player instantiation passing the `parentSelector` param.
 
 ### <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.play()
 
@@ -117,7 +119,10 @@ Pauses the current source.
 Stops the current source.
 
 ### <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.seek(value)
-The `value` should be a number between 0 and 100. For example, `player.seek(50)` will seek to the middle of the current source.
+Seeks the current video (`source`). For example, `player.seek(120)` will seek to second 120 (2 minutes) of the current video.
+
+### <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.seekPercentage(value)
+Seeks the current video (`source`). For example, `player.seek(50)` will seek to the middle of the current video.
 
 ### <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.isPlaying()
 Returns `true` if the current source is playing, otherwise returns `false`.
@@ -127,13 +132,13 @@ Returns the plugin instance. Example:
 ```javascript
 var strings = player.getPlugin('strings');
 ```
-This search the `Core` and `Container` plugins by name, and returns the first one found.
+This method searches the `Core` and `Container` plugins by name and returns the first one found.
 
 ### <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.getCurrentTime()
-Returns the current time(in seconds) of the current source.
+Returns the current time (in seconds) of the current source.
 
 ### <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.getDuration()
-Returns the duration(in seconds) of the current source.
+Returns the duration (in seconds) of the current source.
 
 ### <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.resize(size)
 Resizes the current player canvas. The `size` parameter should be a literal object with `height` and `width`. Example:
@@ -148,15 +153,29 @@ Destroy the current player and removes it from the DOM.
 Loads a new source.
 
 Configuration
+### <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.configure(options)
+Enables to configure a player after its creation.
+
 ---
-All parameters listed below shall be added on `Clappr.Player` object instantiation. Example:
+All parameters listed below shall be added on `Clappr.Player` object instantiation or  via `player.configure`.
+
+Example:
 ```javascript
 var player = new Clappr.Player({
   source: "http://your.video/here.mp4",
   parameter1: "value1",
   parameter2: "value2",
 });
+
+// or
+
+player.configure({
+  parameter3: "value3",
+  parameter4: "value4",
+})
 ```
+
+Note that some options passed via `configure` as not applied instantly. In this case, these options are applied in the next video.
 
 ### Player Configuration
 
@@ -170,10 +189,10 @@ Used to specify where the player should be attached using a class of one DOM ele
 Sets media source URL to play. You can set the media source accordingly to existing playbacks.
 
 #### sources
-Array of sources. Used to play next media source on array if the previous fail.
+An array of sources. Used to play the next media source on array if the previous one was invalid.
 
 #### mimeType
-Sets the media source format used on `source` option. Use if you need to use a media url without extension.
+Sets the media source format used on the `source` option. Use if you need to use a media URL without extension.
 
 #### height
 > Default Value: `360px`
@@ -188,22 +207,23 @@ Sets player width. You can set using px (`500px`) or percentage (`100%`).
 #### autoPlay
 > Default Value: `false`
 
-Configure Clappr to play media after the player is attached.
+Configure Clappr to play media after the player is ready to play.
 
 #### mute
 > Default Value: `false`
 
-Enable the [video tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video) muted attribute.
+Set volume to zero enabling the [video tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video) muted attribute.
 
 #### loop
 > Default Value: `false`
 
-Enable the [video tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video) loop attribute.
+Restart video after the video ends enabling the [video tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video) loop attribute.
+
 
 #### language
 > Default Value: `en-US`
 
-Sets one of current laguanges supported on Clappr. You can check all supported languages on [Strings plugin](https://github.com/clappr/clappr-core/blob/master/src/plugins/strings.js#L35-93).
+Sets one of the current languages supported on Clappr. You can check all supported languages on the [Strings plugin](https://github.com/clappr/clappr-core/blob/master/src/plugins/strings.js#L35-93).
 
 If you want to provide your translations, create a PR by editing the [Strings plugin](https://github.com/clappr/clappr-core/blob/master/src/plugins/strings.js).
 
@@ -215,25 +235,25 @@ Define a custom message to be displayed when a playback is not supported.
 #### useCodePrefix
 > Default value: `true`
 
-Clappr has pattern to create the `code` attribute on `error` object using the name of the component where an error occurs with the original error code.
+Clappr has a pattern to create the `code` attribute on the `error` object using the name of the component where an error occurs with the original error code.
 
 Example: `hls:networkError_manifestLoadError (component_name:error_code)`
 
-You can disable this pattern to just use the original error code setting this option with the value `false`.
+You can disable this pattern. Just use the original error code setting this option with the value `false`.
 
 #### autoSeekFromUrl
 > Default value: `true`
 
-By default if the URL contains a time then the media will seek to this point.
+By default, if the URL contains a time then the media will seek to this point.
 
 Example: `example.com?t=100` would start the media at 100 seconds.
 
 You can disable this behavior setting this options with the value `false`.
 
 #### plugins
-Array used to pass external plugins instances to Clappr.
+An array used to pass external plugins instances to Clappr. You can pass plugins of any category in this array.
 
-You can pass plugins of any category in this array. Example:
+Example:
 
 ```html
 // Playback
@@ -250,9 +270,8 @@ You can pass plugins of any category in this array. Example:
 ```
 
 #### events
-Object to add callbacks on mapped events.
+Object to add callbacks on mapped events. The current list of mapped events is:
 
-The current list of mapped events is:
 ```javascript
 {
   events: {
@@ -282,7 +301,7 @@ player.core.activeContainer.on(Clappr.Events.CONTAINER_STATE_BUFFERING, function
 See all Clappr events [here](https://github.com/clappr/clappr-core/blob/master/src/base/events.js#L227).
 
 ### Playback Configuration
-Clappr has specific set of options for playbacks. The configuration for the playback, it's still only compatible with `html5_video` playback (and derived).
+Clappr has a specific set of options for playbacks. The configuration for the playback, it's still only compatible with `html5_video` playback (and derived playbacks).
 
 Above, the description of each one:
 
@@ -302,14 +321,14 @@ playback: {
 #### preload
 > Default value: `metadata`
 
-In case you're loading a on demand video (`mp4`), it's possible to define the way the video will be preloaded according to preload attribute options.
+In case you're loading an on-demand video (`mp4`), it's possible to define the way the video will be preloaded according to preload attribute options.
 
-See more about video tag preload attribute [here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video).
+See more about the video tag preload attribute [here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video).
 
 #### disableContextMenu
 > Default value: `false`
 
-disable possibility to active context menu.
+Disable possibility to activate the context menu.
 
 #### controls
 > Default value: `true`
@@ -319,9 +338,9 @@ Use to enable or disable the [video tag](https://developer.mozilla.org/en-US/doc
 #### crossOrigin
 > Default value: `use-credentials`
 
-Use to set one of possible values supported on video tag.
+Use to set one of the possible values supported on video tag.
 
-See more about video tag crossOrigin attribute [here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video).
+See more about the video tag crossOrigin attribute [here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video).
 
 #### playInline
 > Default value: `true`
@@ -329,9 +348,9 @@ See more about video tag crossOrigin attribute [here](https://developer.mozilla.
 Enable or Disable the [video tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video) playInline attribute.
 
 #### externalTracks
-Array of tracks. Each track must have the attributes `src`, `lang` and `label`. The attribute `kind` on track object is optional because of the default value `subtitles`.
+An array of tracks. Each track must have the attributes `src`, `lang` and `label`. The attribute `kind` on track object is optional because of the default value `subtitles`.
 
-See more about tracks on video tag element [here](https://developer.mozilla.org/en-US/docs/Web/Guide/Audio_and_video_delivery/Adding_captions_and_subtitles_to_HTML5_video).
+See more about tracks on the video tag element [here](https://developer.mozilla.org/en-US/docs/Web/Guide/Audio_and_video_delivery/Adding_captions_and_subtitles_to_HTML5_video).
 
 
 #### hlsjsConfig
@@ -380,7 +399,7 @@ Starting a local server:
 
 `yarn start`
 
-This command will start a HTTP Server on port 8080, you can check a sample page with Clappr on http://localhost:8080/
+This command will start an HTTP Server on port 8080, you can check a sample page with Clappr on http://localhost:8080/
 
 Contributors
 ---
