@@ -22,16 +22,16 @@ CLAPPR CORE USAGE GIF
 
 :triangular_flag_on_post: Table of Contents
 -----
-* [Demo](https://github.com/clappr/clappr-core#demo)
-* [Features](https://github.com/clappr/clappr-core#features)
-* [Usage](https://github.com/clappr/clappr-core#Usage)
-* [API Documentation](https://github.com/clappr/clappr-core#api-documentation)
-* [Configuration](https://github.com/clappr/clappr-core#configuration)
-* [Development](https://github.com/clappr/clappr-core#development)
-* [Contributors](https://github.com/clappr/clappr-core#contributors)
-* [Sponsor](https://github.com/clappr/clappr-core#sponsor)
+* [Demo](https://github.com/clappr/clappr-core#video_camera-demo)
+* [Table of Contents](https://github.com/clappr/clappr-core#triangular_flag_on_post-table-of-contents)
+* [Features](https://github.com/clappr/clappr-core#gem-features)
+* [Usage](https://github.com/clappr/clappr-core#clapper-Usage)
+* [API Documentation](https://github.com/clappr/clappr-core#books-api-documentation)
+* [Configuration](https://github.com/clappr/clappr-core#hammer_and_wrench-configuration)
+* [Development](https://github.com/clappr/clappr-core#computer-development)
+* [Contributors](https://github.com/clappr/clappr-core#raised_hands-contributors)
+* [Sponsor](https://github.com/clappr/clappr-core#money_with_wings-sponsor)
 
-Features
 :gem: Features
 ---
 * Based on [HTM5 video tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video)
