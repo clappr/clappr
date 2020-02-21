@@ -2964,7 +2964,7 @@ function canAutoPlayMedia(cb, options) {
   } else {
     setResult(true);
   }
-} // Simple Zepto element factory with video recycle feature.
+} // Simple element factory with video recycle feature.
 
 var videoStack = [];
 var DomRecycler =
@@ -2983,15 +2983,17 @@ function () {
     key: "create",
     value: function create(name) {
       if (this.options.recycleVideo && name === 'video' && videoStack.length > 0) return videoStack.shift();
-      return zepto('<' + name + '>');
+      return document.createElement(name);
     }
   }, {
     key: "garbage",
-    value: function garbage($el) {
-      // Expect Zepto collection with single element (does not iterate!)
-      if (!this.options.recycleVideo || $el[0].tagName.toUpperCase() !== 'VIDEO') return;
-      $el.children().remove();
-      videoStack.push($el);
+    value: function garbage(el) {
+      if (!this.options.recycleVideo || el.tagName.toUpperCase() !== 'VIDEO') return;
+      zepto(el).children().remove();
+      Object.values(el.attributes).forEach(function (attr) {
+        return el.removeAttribute(attr.name);
+      });
+      videoStack.push(el);
     }
   }]);
 
@@ -4420,7 +4422,7 @@ function (_BaseObject) {
         var attrs = zepto.extend({}, this.attributes);
         if (this.id) attrs.id = this.id;
         if (this.className) attrs['class'] = this.className;
-        var $el = DomRecycler.create(this.tagName).attr(attrs);
+        var $el = zepto(DomRecycler.create(this.tagName)).attr(attrs);
         this.setElement($el, false);
       } else {
         this.setElement(this.el, false);
@@ -5335,17 +5337,6 @@ function (_UIObject) {
       return false;
     }
     /**
-     * Determine if the playback has user consent.
-     * @property consented
-     * @type Boolean
-     */
-
-  }, {
-    key: "consented",
-    get: function get() {
-      return this._consented;
-    }
-    /**
      * @method constructor
      * @param {Object} options the options object
      * @param {Strings} i18n the internationalization component
@@ -5368,13 +5359,14 @@ function (_UIObject) {
   /**
    * Gives user consent to playback (mobile devices).
    * @method consent
+   * @param {Function} callback function called when playback is consented
    */
 
 
   _createClass(Playback, [{
     key: "consent",
-    value: function consent() {
-      this._consented = true;
+    value: function consent(cb) {
+      if (typeof cb === 'function') cb();
     }
     /**
      * plays the playback.
@@ -5491,6 +5483,22 @@ function (_UIObject) {
     value: function isHighDefinitionInUse() {
       return false;
     }
+    /**
+     * mutes the playback
+     * @method mute
+     */
+
+  }, {
+    key: "mute",
+    value: function mute() {}
+    /**
+     * restores the playback volume
+     * @method unmute
+     */
+
+  }, {
+    key: "unmute",
+    value: function unmute() {}
     /**
      * sets the volume for the playback
      * @method volume
@@ -8213,7 +8221,7 @@ var Loader = (function () {
     plugins: {},
     playbacks: []
   };
-  var currentVersion = "0.4.7";
+  var currentVersion = "0.4.8";
   return (
     /*#__PURE__*/
     function () {
@@ -8926,14 +8934,17 @@ function (_BaseObject) {
     /**
      * Gives user consent to playback. Required by mobile device after a click event before Player.load().
      * @method consent
-     * @return {Player} itself
+     * @param {Function} callback function called when current playback is consented
+     * @example
+     * ```javascript
+     * player.consent(function() { doSomethingNext(); });
+     * ```
      */
 
   }, {
     key: "consent",
-    value: function consent() {
-      this.core.getCurrentPlayback().consent();
-      return this;
+    value: function consent(cb) {
+      this.core.getCurrentPlayback().consent(cb);
     }
     /**
      * plays the current video (`source`).
@@ -9006,8 +9017,7 @@ function (_BaseObject) {
   }, {
     key: "mute",
     value: function mute() {
-      this._mutedVolume = this.getVolume();
-      this.setVolume(0);
+      this.core.activePlayback.mute();
       return this;
     }
     /**
@@ -9019,8 +9029,7 @@ function (_BaseObject) {
   }, {
     key: "unmute",
     value: function unmute() {
-      this.setVolume(typeof this._mutedVolume === 'number' ? this._mutedVolume : 100);
-      this._mutedVolume = null;
+      this.core.activePlayback.unmute();
       return this;
     }
     /**
@@ -9474,7 +9483,7 @@ function (_Playback) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.7"
+        min: "0.4.8"
       };
     }
   }, {
@@ -9584,10 +9593,10 @@ function (_Playback) {
       loop: _this.options.loop,
       poster: posterUrl,
       preload: preload || 'metadata',
-      controls: (playbackConfig.controls || _this.options.useVideoTagDefaultControls) && 'controls',
       crossOrigin: playbackConfig.crossOrigin,
       'x-webkit-playsinline': playbackConfig.playInline
     });
+    if (playbackConfig.controls || _this.options.useVideoTagDefaultControls) _this.$el.attr('controls', '');
     playbackConfig.playInline && _this.$el.attr({
       playsinline: 'playsinline'
     });
@@ -9729,10 +9738,22 @@ function (_Playback) {
 
   }, {
     key: "consent",
-    value: function consent() {
-      if (!this.isPlaying()) {
-        _get(_getPrototypeOf(HTML5Video.prototype), "consent", this).call(this);
+    value: function consent(cb) {
+      var _this3 = this;
 
+      if (this.isPlaying()) {
+        _get(_getPrototypeOf(HTML5Video.prototype), "consent", this).call(this, cb);
+      } else {
+        var eventHandler = function eventHandler() {
+          _this3.el.removeEventListener('loadedmetadata', eventHandler, false);
+
+          _this3.el.removeEventListener('error', eventHandler, false);
+
+          _get(_getPrototypeOf(HTML5Video.prototype), "consent", _this3).call(_this3, cb);
+        };
+
+        this.el.addEventListener('loadedmetadata', eventHandler, false);
+        this.el.addEventListener('error', eventHandler, false);
         this.el.load();
       }
     }
@@ -9964,7 +9985,7 @@ function (_Playback) {
       this.el.load(); // load with no src to stop loading of the previous source and avoid leaks
 
       this._src = null;
-      DomRecycler.garbage(this.$el);
+      DomRecycler.garbage(this.el);
     }
   }, {
     key: "seek",
@@ -10217,7 +10238,7 @@ function (_HTML5Video) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.7"
+        min: "0.4.8"
       };
     }
   }, {
@@ -10267,7 +10288,7 @@ function (_Playback) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.7"
+        min: "0.4.8"
       };
     }
   }, {
@@ -10350,7 +10371,7 @@ function (_Playback) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.7"
+        min: "0.4.8"
       };
     }
   }, {
@@ -10508,7 +10529,7 @@ function (_CorePlugin) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: "0.4.7"
+        min: "0.4.8"
       };
     }
   }]);
@@ -10622,7 +10643,7 @@ function (_CorePlugin) {
 }(CorePlugin);
 
 // Copyright 2014 Globo.com Player authors. All rights reserved.
-var version$1 = "0.4.7"; // Built-in Plugins/Playbacks
+var version$1 = "0.4.8"; // Built-in Plugins/Playbacks
 
 Loader.registerPlugin(Strings);
 Loader.registerPlayback(NoOp);
