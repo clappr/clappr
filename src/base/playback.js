@@ -203,6 +203,18 @@ export default class Playback extends UIObject {
   }
 
   /**
+   * mutes the playback
+   * @method mute
+   */
+  mute() {}
+
+  /**
+   * restores the playback volume
+   * @method unmute
+   */
+  unmute() {}
+
+  /**
    * sets the volume for the playback
    * @method volume
    * @param {Number} value a number between 0 (`muted`) to 100 (`max`)
