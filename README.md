@@ -122,6 +122,12 @@ Pauses the current source.
 ### <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.stop()
 Stops the current source.
 
+### <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.mute()
+Mutes the current source.
+
+### <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.unmute()
+Unmutes the current source.
+
 ### <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.seek(value)
 Seeks the current video (`source`). For example, `player.seek(120)` will seek to second 120 (2 minutes) of the current video.
 
