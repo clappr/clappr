@@ -204,6 +204,56 @@ An array of sources. Used to play the next media source on array if the previous
 #### mimeType
 Sets the media source format used on the `source` option. Use if you need to use a media URL without extension.
 
+#### events
+Object to add callbacks on mapped events. The current list of mapped events is:
+
+```javascript
+{
+  events: {
+    onReady: function() { ... },//Fired when the player is ready on startup
+    onResize: function() { ... },//Fired when player resizes
+    onPlay: function() { ... },//Fired when player starts to play
+    onPause: function() { ... },//Fired when player pauses
+    onStop: function() { ... },//Fired when player stops
+    onEnded: function() { ... },//Fired when player ends the video
+    onSeek: function() { ... },//Fired when player seeks the video
+    onError: function() { ... },//Fired when player receives an error
+    onTimeUpdate: function() { ... },//Fired when the time is updated on player
+    onVolumeUpdate: function() { ... },//Fired when player updates its volume
+    onSubtitleAvailable: function() { ... },//Fired when subtitles is available
+  }
+}
+```
+
+If you want to listen for events from other layers, **you need to add the bind for the specific scope**.
+
+For example, the `CONTAINER_STATE_BUFFERING` event is triggered by the `container`, so if you want to listen for events from the container layer on your code, you can bind events like the example below:
+
+```javascript
+player.core.activeContainer.on(Clappr.Events.CONTAINER_STATE_BUFFERING, function() { ... })
+```
+
+See all existing events on Clappr [here](https://github.com/clappr/clappr-core/blob/master/src/base/events.js#L227).
+
+#### plugins
+An array used to pass external plugins instances to Clappr. You can pass plugins of any category in this array.
+
+Example:
+
+```html
+// Playback
+<script src='https://cdn.jsdelivr.net/npm/@clappr/hlsjs-playback@latest/dist/hlsjs-playback.min.js'></script>
+
+// Container
+<script src='https://cdn.jsdelivr.net/npm/@clappr/stats-plugin@latest/dist/clappr-stats.min.js'></script>
+```
+
+```javascript
+{
+  plugins: [ClapprStats, HlsjsPlayback]
+}
+```
+
 #### height
 > Default Value: `360px`
 
@@ -259,56 +309,6 @@ By default, if the URL contains a time then the media will seek to this point.
 Example: `example.com?t=100` would start the media at 100 seconds.
 
 You can disable this behavior setting this option with the value `false`.
-
-#### plugins
-An array used to pass external plugins instances to Clappr. You can pass plugins of any category in this array.
-
-Example:
-
-```html
-// Playback
-<script src='https://cdn.jsdelivr.net/npm/@clappr/hlsjs-playback@latest/dist/hlsjs-playback.min.js'></script>
-
-// Container
-<script src='https://cdn.jsdelivr.net/npm/@clappr/stats-plugin@latest/dist/clappr-stats.min.js'></script>
-```
-
-```javascript
-{
-  plugins: [ClapprStats, HlsjsPlayback]
-}
-```
-
-#### events
-Object to add callbacks on mapped events. The current list of mapped events is:
-
-```javascript
-{
-  events: {
-    onReady: function() { ... }, //Fired when the player is ready on startup
-    onResize: function() { ... },//Fired when player resizes
-    onPlay: function() { ... },//Fired when player starts to play
-    onPause: function() { ... },//Fired when player pauses
-    onStop: function() { ... },//Fired when player stops
-    onEnded: function() { ... },//Fired when player ends the video
-    onSeek: function() { ... },//Fired when player seeks the video
-    onError: function() { ... },//Fired when player receives an error
-    onTimeUpdate: function() { ... },//Fired when the time is updated on player
-    onVolumeUpdate: function() { ... },//Fired when player updates its volume
-    onSubtitleAvailable: function() { ... },//Fired when subtitles is available
-  }
-}
-```
-
-If you want to listen for events from other layers, you need to add the bind for the specific scope.
-
-For example, the `CONTAINER_STATE_BUFFERING` event is triggered by the `container`, so if you want to listen for events from the container layer on your code, you can bind events like the example below:
-
-```javascript
-player.core.activeContainer.on(Clappr.Events.CONTAINER_STATE_BUFFERING, function() { ... })
-```
-
-See all existing events on Clappr [here](https://github.com/clappr/clappr-core/blob/master/src/base/events.js#L227).
 
 ### Playback Configuration
 Clappr has a specific set of options for playbacks. The configuration for the playback, it's still only compatible with `html5_video` playback (and derived playbacks).
