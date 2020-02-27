@@ -32,7 +32,7 @@ Clappr is under development but production-ready. Feel free to open issues and s
 
 :gem: Features
 ---
-* Based on [HTM5 video tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video)
+* Based on the [HTM5 video tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video)
   * Adding large platforms support and facility to use.
 * Plugin architecture
   * Add new features without impact other's functionalities.
@@ -71,7 +71,7 @@ The project is on npm at https://www.npmjs.com/package/@clappr/core
 
 `yarn install @clappr/core --save-dev`
 
-You should specify the base url for where the assets are located using the `baseUrl` option:
+You should specify the base URL for where the assets are located using the `baseUrl` option:
 ```javascript
   var player = new Clappr.Player({
   	source: "http://your.video/here.mp4",
@@ -240,7 +240,7 @@ If you want to provide your translations, create a PR by editing the [Strings pl
 #### playbackNotSupportedMessage
 > Default Value: The `playback_not_supported` string on [Strings Plugin](https://github.com/clappr/clappr-core/blob/master/src/plugins/strings.js)
 
-Define a custom message to be displayed when a playback is not supported.
+Define a custom message to be displayed when playback is not supported.
 
 #### useCodePrefix
 > Default value: `true`
@@ -258,7 +258,7 @@ By default, if the URL contains a time then the media will seek to this point.
 
 Example: `example.com?t=100` would start the media at 100 seconds.
 
-You can disable this behavior setting this options with the value `false`.
+You can disable this behavior setting this option with the value `false`.
 
 #### plugins
 An array used to pass external plugins instances to Clappr. You can pass plugins of any category in this array.
@@ -302,18 +302,18 @@ Object to add callbacks on mapped events. The current list of mapped events is:
 
 If you want to listen for events from other layers, you need to add the bind for the specific scope.
 
-For example, the `CONTAINER_STATE_BUFFERING` event is triggered by the `container`, so if you want to listen for events from the container layer on your code, here is how:
+For example, the `CONTAINER_STATE_BUFFERING` event is triggered by the `container`, so if you want to listen for events from the container layer on your code, you can bind events like the example below:
 
 ```javascript
 player.core.activeContainer.on(Clappr.Events.CONTAINER_STATE_BUFFERING, function() { ... })
 ```
 
-See all Clappr events [here](https://github.com/clappr/clappr-core/blob/master/src/base/events.js#L227).
+See all existing events on Clappr [here](https://github.com/clappr/clappr-core/blob/master/src/base/events.js#L227).
 
 ### Playback Configuration
 Clappr has a specific set of options for playbacks. The configuration for the playback, it's still only compatible with `html5_video` playback (and derived playbacks).
 
-Above, the description of each one:
+Below, the description of each one:
 
 ```javascript
 playback: {
@@ -343,19 +343,19 @@ Disable possibility to activate the context menu.
 #### controls
 > Default value: `true`
 
-Use to enable or disable the [video tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video) controls property.
+Use to enable or disable the [HTML5 video tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video) controls.
 
 #### crossOrigin
 > Default value: `use-credentials`
 
-Use to set one of the possible values supported on video tag.
+Use to set one of the possible values supported on the HTML5 video tag.
 
 See more about the video tag crossOrigin attribute [here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video).
 
 #### playInline
 > Default value: `true`
 
-Enable or Disable the [video tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video) playInline attribute.
+Enable or Disable the [HTML5 video tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video) playInline attribute.
 
 #### externalTracks
 An array of tracks. Each track must have the attributes `src`, `lang` and `label`. The attribute `kind` on track object is optional because of the default value `subtitles`.
