@@ -6,33 +6,11 @@
   <script type="text/javascript" charset="utf-8" src="clappr-plugins.js"></script>
   <script type="text/javascript" charset="utf-8" src="j/main.js"></script>
   <script type="text/javascript" charset="utf-8" src="j/editor/ace.js"></script>
+  <script type="text/javascript" charset="utf-8" src="j/add-external.js"></script>
   <link rel="stylesheet" href="stylesheets/bootstrap.min.css" type="text/css" media="screen" charset="utf-8">
   <link rel="stylesheet" href="stylesheets/bootstrap-theme.min.css" type="text/css" media="screen" charset="utf-8">
   <link rel="stylesheet" href="stylesheets/style.css" type="text/css" media="screen" charset="utf-8">
   <link rel="shortcut icon" type="image/png" href="i/favico.png">
-  <script>
-    window.clappr = window.clappr || {}
-    window.clappr.externals = []
-
-    function addExternal() {
-      var url = document.getElementById('js-link')
-      window.clappr.externals.push(url.value)
-      addTag(url.value)
-      url.value = ''
-    }
-
-    function addTag(url) {
-      var colors = ["aliceblue", "antiquewhite", "azure", "black", "blue", "brown", "yellow", "teal"]
-      var color = colors[Math.floor(Math.random() * colors.length)]
-      var span = document.createElement('span')
-
-      span.style.backgroundColor = color
-      span.className = "external-js"
-      span.innerText = url.split(/\//).pop().split(/\./)[0]
-
-      document.getElementById('external-js-panel').appendChild(span)
-    }
-  </script>
 </head>
 
 <body>
@@ -74,94 +52,8 @@ player.attachTo(playerElement);
     </div>
   </section>
   <footer class="footer"></footer>
-  <script>
-    var urlParams;
-    (function () {
-      Clappr.Log.setLevel(Clappr.Log.LEVEL_WARN)
-      window.onpopstate = function () {
-        var match,
-          pl = /\+/g,  // Regex for replacing addition symbol with a space
-          search = /([^&=]+)=?([^&]*)/g,
-          decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
-          query = window.location.search.substring(1);
-
-        urlParams = {};
-        while (match = search.exec(query))
-          urlParams[decode(match[1])] = decode(match[2]);
-      }
-      window.onpopstate();
-    })();
-
-    var player;
-
-    var plugins;
-
-    //editor
-    window.onload = function () {
-
-      plugins = Object.values(ClapprPlugins.Plugins)
-
-      if (window.location.hash) {
-        var editorContent = atob(window.location.hash.substr(1))
-        document.getElementById("editor").innerHTML = editorContent
-        setTimeout(run, 0)
-      } else {
-        var playerElement = document.getElementById("player-wrapper");
-
-        player = new Clappr.Player({
-          source: urlParams.src || 'http://clappr.io/highline.mp4',
-          poster: urlParams.poster || 'http://clappr.io/poster.png',
-          mute: true,
-          autoPlay: true,
-          height: 360,
-          width: 640,
-          plugins: plugins,
-        });
-
-        player.attachTo(playerElement);
-      }
-
-      var editor = ace.edit("editor");
-      var session = editor.getSession();
-
-      editor.setTheme("ace/theme/katzenmilch");
-      session.setMode("ace/mode/javascript");
-      session.setTabSize(2);
-      session.setUseSoftTabs(true);
-
-      var parser = new Parser($('#output'));
-      var load = function (fn) {
-        if (window.clappr.externals.length > 0) {
-          var lastScript = window.clappr.externals.length
-          window.clappr.externals.forEach(function (url, index) {
-            var script = document.createElement('script')
-
-            script.setAttribute("type", "text/javascript")
-            script.setAttribute("src", url)
-            if (index === (lastScript - 1)) {
-              script.onload = fn
-            }
-            script.onerror = function (e) { alert('we cant load ' + url + ': e' + e) }
-
-            document.body.appendChild(script)
-          })
-        } else {
-          fn()
-        }
-      }
-
-      $('.run').click(function () {
-        run()
-      });
-
-      function run() {
-        var code = ace.edit('editor').getSession().getValue();
-        var b64EncodedCode = btoa(code)
-        window.location.hash = b64EncodedCode
-        load(function () { parser.parse(code) })
-      }
-    }
-  </script>
+  <script type="text/javascript" charset="utf-8" src="j/clappr-config.js"></script>
+  <script type="text/javascript" charset="utf-8" src="j/main.js"></script>
 </body>
 
 </html>
