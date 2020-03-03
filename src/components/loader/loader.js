@@ -4,7 +4,7 @@
 
 import SemVer from 'semver'
 
-import Log from './log'
+import Log from '../log'
 
 const filterPluginsByType = (plugins, type) => {
   if (!plugins || !type) return {}

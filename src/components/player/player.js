@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import { uniqueId, currentScriptUrl } from '../utils'
+import { uniqueId, currentScriptUrl } from '../../utils'
 
-import BaseObject from '../base/base_object'
-import Events from '../base/events'
-import Browser from './browser'
-import CoreFactory from './core_factory'
-import Loader from './loader'
-import ErrorMixin from '../base/error_mixin'
+import BaseObject from '../../base/base_object'
+import Events from '../../base/events'
+import Browser from '../browser'
+import CoreFactory from '../core_factory'
+import Loader from '../loader'
+import ErrorMixin from '../../base/error_mixin'
 import $ from 'clappr-zepto'
 
 const baseUrl = currentScriptUrl().replace(/\/[^/]+$/, '')

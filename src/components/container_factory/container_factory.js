@@ -6,11 +6,11 @@
  * The ContainerFactory is responsible for manage playback bootstrap and create containers.
  */
 
-import BaseObject from '../base/base_object'
-import Events from '../base/events'
-import Container from './container'
+import BaseObject from '../../base/base_object'
+import Events from '../../base/events'
+import Container from '../container'
 import $ from 'clappr-zepto'
-import Playback from '../base/playback'
+import Playback from '../../base/playback'
 
 export default class ContainerFactory extends BaseObject {
   get options() { return this._options }

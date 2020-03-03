@@ -1,6 +1,6 @@
-import { extend } from '../utils'
-import UIObject from './ui_object'
-import ErrorMixin from './error_mixin'
+import { extend } from '../../utils'
+import UIObject from '../ui_object'
+import ErrorMixin from '../error_mixin'
 
 import $ from 'clappr-zepto'
 

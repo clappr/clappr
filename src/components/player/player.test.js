@@ -1,5 +1,5 @@
-import Player from './components/player'
-import Events from './base/events'
+import Player from '../player'
+import Events from '../../base/events'
 
 describe('Player', function() {
   describe('constructor', function() {

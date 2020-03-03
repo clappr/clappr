@@ -1,9 +1,9 @@
 import Loader from './loader'
 
-import PlaybackPlugin from '../base/playback'
-import CorePlugin from '../base/core_plugin'
-import ContainerPlugin from '../base/container_plugin'
-import UIContainerPlugin from '../base/ui_container_plugin'
+import PlaybackPlugin from '../../base/playback'
+import CorePlugin from '../../base/core_plugin'
+import ContainerPlugin from '../../base/container_plugin'
+import UIContainerPlugin from '../../base/ui_container_plugin'
 
 describe('Loader', function () {
   let loader

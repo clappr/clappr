@@ -1,6 +1,6 @@
 import Playback from './playback'
-import Core from '../components/core'
-import PlayerError from '../components/error'
+import Core from '../../components/core'
+import PlayerError from '../../components/error'
 
 describe('Playback', function() {
   beforeEach(() => {
