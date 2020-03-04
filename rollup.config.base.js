@@ -2,7 +2,7 @@ const path = require('path')
 
 const alias = require('@rollup/plugin-alias')
 const babel = require('rollup-plugin-babel')
-const commonjs = require('rollup-plugin-commonjs')
+const commonjs = require('@rollup/plugin-commonjs')
 const html = require('rollup-plugin-html')
 const namedDirectory = require('rollup-plugin-named-directory')
 const nodeBuiltins = require('rollup-plugin-node-builtins')
