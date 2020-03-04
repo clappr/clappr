@@ -87,13 +87,13 @@ a:hover {
   text-align: left;
   width: 680px;
   margin: 0;
-  padding: 40px 20px 0 20px;
+  padding: 15px 20px 0 20px;
   border: 0;
 }
 
 #editor {
   border: 1px solid #c0c0EE;
-  min-height: 360px;
+  min-height: 230px;
 }
 
 #console {
