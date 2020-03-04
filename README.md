@@ -103,12 +103,12 @@ Create an instance:
 ```javascript
 var player = new Clappr.Player({
   source: "http://your.video/here.mp4",
-  parentSelector: ".player"
+  parentId: "#player"
 });
 ```
 
 ### <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.attachTo(element)
-You can use this method to attach the player to a given element. You don't need to do this when specifying it during the player instantiation passing the `parentSelector` param.
+You can use this method to attach the player to a given element. You don't need to do this when specifying it during the player instantiation passing the `parentId` param.
 
 ### <img src="https://cldup.com/V4mJE_EtiV-3000x3000.png"> player.play()
 
@@ -192,8 +192,12 @@ Note that some options passed via `configure` as not applied instantly. In this 
 #### parent
 Used to specify where the player should be attached using the DOM element.
 
-#### parentSelector
-Used to specify where the player should be attached using a class of one DOM element.
+#### parentId
+Used to specify where the player should be attached using a id of one DOM element.
+
+<!-- add this on the version 0.0.5 -->
+<!-- #### parentSelector
+Used to specify where the player should be attached using a class of one DOM element. -->
 
 #### source
 Sets media source URL to play. You can set the media source accordingly to existing playbacks.
