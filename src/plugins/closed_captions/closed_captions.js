@@ -35,10 +35,22 @@ export default class ClosedCaptions extends UICorePlugin {
   }
 
   bindEvents() {
-    this.listenTo(this.core, Events.CORE_ACTIVE_CONTAINER_CHANGED, this.containerChanged)
-    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_RENDERED, this.render)
-    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_HIDE, this.hideContextMenu)
-    this.container = this.core.getCurrentContainer()
+    this.bindCoreEvents()
+    this.bindContainerEvents()
+  }
+
+  bindCoreEvents() {
+    if (this.core.mediaControl.settings) {
+      this.listenTo(this.core, Events.CORE_ACTIVE_CONTAINER_CHANGED, this.containerChanged)
+      this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_RENDERED, this.render)
+      this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_HIDE, this.hideContextMenu)
+    } else {
+      setTimeout(() => this.bindCoreEvents(), 100)
+    }
+  }
+
+  bindContainerEvents() {
+    this.container = this.core.activeContainer
     if (this.container) {
       this.listenTo(this.container, Events.CONTAINER_SUBTITLE_AVAILABLE, this.onSubtitleAvailable)
       this.listenTo(this.container, Events.CONTAINER_SUBTITLE_CHANGED, this.onSubtitleChanged)
