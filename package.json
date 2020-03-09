@@ -2,7 +2,7 @@
   "name": "clappr",
   "version": "0.3.13",
   "description": "An extensible media player for the web",
-  "main": "./dist/clappr.js",
+  "main": "dist/clappr.js",
   "scripts": {
     "build": "rollup --config",
     "bundle-check": "ANALYZE_BUNDLE=true rollup --config",
@@ -10,7 +10,7 @@
     "lint": "eslint *.js src/",
     "lint:fix": "npm run lint -- --fix",
     "release": "MINIMIZE=true rollup --config",
-    "start": "rollup --config rollup.config.dev.js --watch",
+    "start": "DEV=true rollup --config --watch",
     "test": "echo 'No tests configured. This project is only for bundling the player components.'",
     "watch": "rollup --config --watch"
   },
@@ -45,17 +45,16 @@
     "eslint": "^4.18.2",
     "hls.js": "^0.13.2",
     "rollup": "^2.0.0",
-    "rollup-plugin-analyzer": "^3.2.2",
     "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-filesize": "^6.2.1",
     "rollup-plugin-html": "^0.2.1",
     "rollup-plugin-livereload": "^1.0.4",
-    "rollup-plugin-named-directory": "^1.0.0",
-    "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-postcss": "^2.2.0",
     "rollup-plugin-serve": "^1.0.1",
+    "rollup-plugin-sizes": "^1.0.1",
     "rollup-plugin-svg": "^2.0.0",
-    "rollup-plugin-terser": "^5.2.0"
+    "rollup-plugin-terser": "^5.2.0",
+    "rollup-plugin-visualizer": "^3.3.1"
   },
   "config": {
     "commitizen": {
