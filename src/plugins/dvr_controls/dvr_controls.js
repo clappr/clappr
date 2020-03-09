@@ -24,12 +24,24 @@ export default class DVRControls extends UICorePlugin {
   }
 
   bindEvents() {
-    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
-    this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_RENDERED, this.settingsUpdate)
-    this.listenTo(this.core, Events.CORE_OPTIONS_CHANGE, this.render)
-    if (this.core.getCurrentContainer()) {
-      this.listenToOnce(this.core.getCurrentContainer(), Events.CONTAINER_TIMEUPDATE, this.render)
-      this.listenTo(this.core.getCurrentContainer(), Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.dvrChanged)
+    this.bindCoreEvents()
+    this.bindContainerEvents()
+  }
+
+  bindCoreEvents() {
+    if (this.core.mediaControl.settings) {
+      this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_CONTAINERCHANGED, this.containerChanged)
+      this.listenTo(this.core.mediaControl, Events.MEDIACONTROL_RENDERED, this.settingsUpdate)
+      this.listenTo(this.core, Events.CORE_OPTIONS_CHANGE, this.render)
+    } else {
+      setTimeout(() => this.bindCoreEvents(), 100)
+    }
+  }
+
+  bindContainerEvents() {
+    if (this.core.activeContainer) {
+      this.listenToOnce(this.core.activeContainer, Events.CONTAINER_TIMEUPDATE, this.render)
+      this.listenTo(this.core.activeContainer, Events.CONTAINER_PLAYBACKDVRSTATECHANGED, this.dvrChanged)
     }
   }
 
