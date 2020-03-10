@@ -25,7 +25,7 @@ run_tests() {
 }
 
 make_release_commit() {
-  git add package.json yarn.lock yuidoc.json dist &&
+  git add package.json yarn.lock dist &&
   git commit -m 'chore(package): bump to '$1 &&
   git tag -m "$1" $1
 }
