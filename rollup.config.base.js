@@ -29,6 +29,7 @@ const baseConfig = {
       format: 'umd',
       name: 'Clappr',
       exports: 'named',
+      sourcemap: true,
     },
   ],
   plugins: [

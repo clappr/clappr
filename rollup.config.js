@@ -16,6 +16,7 @@ const output = [
         format: 'umd',
         exports: 'named',
         name: 'Clappr',
+        sourcemap: true,
         plugins: [
           terser({
             include: [/^.+\.min\.js$/],
