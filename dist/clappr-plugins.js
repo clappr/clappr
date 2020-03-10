@@ -115,7 +115,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.8"
+          min: "0.4.9"
         };
       }
     }]);
@@ -199,7 +199,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.8"
+          min: "0.4.9"
         };
       }
     }, {
@@ -390,7 +390,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.8"
+          min: "0.4.9"
         };
       }
     }, {
@@ -563,7 +563,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.8"
+          min: "0.4.9"
         };
       }
     }]);
@@ -590,7 +590,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.8"
+          min: "0.4.9"
         };
       }
     }, {
@@ -719,7 +719,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.8"
+          min: "0.4.9"
         };
       }
     }, {
@@ -846,7 +846,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.8"
+          min: "0.4.9"
         };
       }
     }]);
@@ -1545,7 +1545,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.8"
+          min: "0.4.9"
         };
       }
     }, {
@@ -2414,7 +2414,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.8"
+          min: "0.4.9"
         };
       }
     }, {
@@ -2624,7 +2624,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.8"
+          min: "0.4.9"
         };
       }
     }, {
@@ -2826,50 +2826,6 @@
     return SeekTime;
   }(core.UICorePlugin);
 
-  var SourcesPlugin = /*#__PURE__*/function (_CorePlugin) {
-    _inherits(SourcesPlugin, _CorePlugin);
-
-    function SourcesPlugin() {
-      _classCallCheck(this, SourcesPlugin);
-
-      return _possibleConstructorReturn(this, _getPrototypeOf(SourcesPlugin).apply(this, arguments));
-    }
-
-    _createClass(SourcesPlugin, [{
-      key: "bindEvents",
-      value: function bindEvents() {
-        this.listenTo(this.core, core.Events.CORE_CONTAINERS_CREATED, this.onContainersCreated);
-      }
-    }, {
-      key: "onContainersCreated",
-      value: function onContainersCreated() {
-        var firstValidSource = this.core.containers.filter(function (container) {
-          return container.playback.name !== 'no_op';
-        })[0] || this.core.containers[0];
-
-        if (firstValidSource) {
-          this.core.containers.forEach(function (container) {
-            if (container !== firstValidSource) container.destroy();
-          });
-        }
-      }
-    }, {
-      key: "name",
-      get: function get() {
-        return 'sources';
-      }
-    }, {
-      key: "supportedVersion",
-      get: function get() {
-        return {
-          min: "0.4.8"
-        };
-      }
-    }]);
-
-    return SourcesPlugin;
-  }(core.CorePlugin);
-
   var spinnerHTML = "<div data-bounce1></div><div data-bounce2></div><div data-bounce3></div>\n";
 
   var css$6 = ".spinner-three-bounce[data-spinner] {\n  position: absolute;\n  margin: 0 auto;\n  width: 70px;\n  text-align: center;\n  z-index: 999;\n  left: 0;\n  right: 0;\n  margin-left: auto;\n  margin-right: auto;\n  /* center vertically */\n  top: 50%;\n  transform: translateY(-50%); }\n  .spinner-three-bounce[data-spinner] > div {\n    width: 18px;\n    height: 18px;\n    background-color: #FFFFFF;\n    border-radius: 100%;\n    display: inline-block;\n    -webkit-animation: bouncedelay 1.4s infinite ease-in-out;\n            animation: bouncedelay 1.4s infinite ease-in-out;\n    /* Prevent first frame from flickering when animation starts */\n    -webkit-animation-fill-mode: both;\n            animation-fill-mode: both; }\n  .spinner-three-bounce[data-spinner] [data-bounce1] {\n    -webkit-animation-delay: -0.32s;\n            animation-delay: -0.32s; }\n  .spinner-three-bounce[data-spinner] [data-bounce2] {\n    -webkit-animation-delay: -0.16s;\n            animation-delay: -0.16s; }\n\n@-webkit-keyframes bouncedelay {\n  0%, 80%, 100% {\n    transform: scale(0); }\n  40% {\n    transform: scale(1); } }\n\n@keyframes bouncedelay {\n  0%, 80%, 100% {\n    transform: scale(0); }\n  40% {\n    transform: scale(1); } }\n";
@@ -2887,7 +2843,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.8"
+          min: "0.4.9"
         };
       }
     }, {
@@ -2984,7 +2940,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.8"
+          min: "0.4.9"
         };
       }
     }]);
@@ -3122,7 +3078,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: "0.4.8"
+          min: "0.4.9"
         };
       }
     }, {
@@ -3193,7 +3149,7 @@
   }(core.UIContainerPlugin);
 
   // Copyright 2014 Globo.com Player authors. All rights reserved.
-  var version = "0.4.6";
+  var version = "0.4.7";
   var Plugins = {
     ClickToPause: ClickToPausePlugin,
     ClosedCaptions: ClosedCaptions,
@@ -3205,7 +3161,6 @@
     MediaControl: MediaControl,
     Poster: PosterPlugin,
     SeekTime: SeekTime,
-    Sources: SourcesPlugin,
     SpinnerThreeBounce: SpinnerThreeBouncePlugin,
     Stats: StatsPlugin,
     WaterMark: WaterMarkPlugin
@@ -3222,7 +3177,6 @@
   exports.Plugins = Plugins;
   exports.Poster = PosterPlugin;
   exports.SeekTime = SeekTime;
-  exports.Sources = SourcesPlugin;
   exports.SpinnerThreeBounce = SpinnerThreeBouncePlugin;
   exports.Stats = StatsPlugin;
   exports.Vendor = index;
