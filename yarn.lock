@@ -717,20 +717,20 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@clappr/core@^0.4.8":
-  version "0.4.8"
-  resolved "https://registry.yarnpkg.com/@clappr/core/-/core-0.4.8.tgz#5c89e7712f119d3f34a6a426225549b9703eef31"
-  integrity sha512-ftchNEWgrtHmbsvZrkjcHn5273MD99epPaG3p9Qjcbt8A64rjbVLRi/1w/heXyxv0dfgoxTZzKuVi9Ml4YLv2g==
+"@clappr/core@^0.4.9":
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/@clappr/core/-/core-0.4.9.tgz#d4b0d5304553ec39fa4cdd029d5e1ec2f829c3b1"
+  integrity sha512-WN6dBNKburl5EuQ5pxVgKFnMuSLGELDe7ccXxM2pkwiAeIQjRPxT8lfU9M0+XYtP/sAuyDgmOvJ/d+1THM/FAg==
 
 "@clappr/hlsjs-playback@^0.4.0":
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@clappr/hlsjs-playback/-/hlsjs-playback-0.4.0.tgz#42cb6b1187ca3edd5b428714011e646f2292b7d7"
   integrity sha512-zeJkkAyEHlxUjKy4SY3JCZGEf68m3fIwv/KXrFw7pXjGUALZxdhG5fNk78aWlcRLB78vuXiA1qmjXcjVZFUmBQ==
 
-"@clappr/plugins@^0.4.5":
-  version "0.4.5"
-  resolved "https://registry.yarnpkg.com/@clappr/plugins/-/plugins-0.4.5.tgz#c9d81808cd25f8b9fe15352636222371c0a02f8e"
-  integrity sha512-Wufec+vAPkzF+QwUZm9RdEPeJGkXOHoK6GV98HQRzYr+mb3YI+k7WptqU1KQmINGv9tySQuEdi9aeg5+Pplq2Q==
+"@clappr/plugins@^0.4.7":
+  version "0.4.7"
+  resolved "https://registry.yarnpkg.com/@clappr/plugins/-/plugins-0.4.7.tgz#4a83cb457f16976aa8164e5b4ed7d206629551a3"
+  integrity sha512-wipTH0vW0ow64MOWkJBSvfwF+A4nuT4BGI4wlAzqNb1SEy4nzEgVzpLik2L+lmSVv+zErRqxrRfb+dp+Dv0zmQ==
 
 "@rollup/plugin-commonjs@^11.0.2":
   version "11.0.2"
