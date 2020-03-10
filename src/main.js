@@ -25,6 +25,7 @@ import NoOp from './playbacks/no_op'
 import Styler from './base/styler'
 import template from './base/template'
 import Strings from './plugins/strings'
+import SourcesPlugin from './plugins/sources'
 
 import $ from 'clappr-zepto'
 
@@ -33,6 +34,7 @@ const version = VERSION
 // Built-in Plugins/Playbacks
 
 Loader.registerPlugin(Strings)
+Loader.registerPlugin(SourcesPlugin)
 
 Loader.registerPlayback(NoOp)
 Loader.registerPlayback(HTMLImg)
