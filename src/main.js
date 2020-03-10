@@ -12,7 +12,6 @@ import GoogleAnalytics from './plugins/google_analytics'
 import MediaControl from './plugins/media_control'
 import Poster from './plugins/poster'
 import SeekTime from './plugins/seek_time'
-import Sources from './plugins/sources'
 import SpinnerThreeBounce from './plugins/spinner_three_bounce'
 import Stats from './plugins/stats'
 import WaterMark from './plugins/watermark'
@@ -32,7 +31,6 @@ const Plugins = {
   MediaControl,
   Poster,
   SeekTime,
-  Sources,
   SpinnerThreeBounce,
   Stats,
   WaterMark,
@@ -49,7 +47,6 @@ export {
   MediaControl,
   Poster,
   SeekTime,
-  Sources,
   SpinnerThreeBounce,
   Stats,
   WaterMark,

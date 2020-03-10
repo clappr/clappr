@@ -710,10 +710,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@clappr/core@^0.4.5":
-  version "0.4.8"
-  resolved "https://registry.yarnpkg.com/@clappr/core/-/core-0.4.8.tgz#5c89e7712f119d3f34a6a426225549b9703eef31"
-  integrity sha512-ftchNEWgrtHmbsvZrkjcHn5273MD99epPaG3p9Qjcbt8A64rjbVLRi/1w/heXyxv0dfgoxTZzKuVi9Ml4YLv2g==
+"@clappr/core@^0.4.9":
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/@clappr/core/-/core-0.4.9.tgz#d4b0d5304553ec39fa4cdd029d5e1ec2f829c3b1"
+  integrity sha512-WN6dBNKburl5EuQ5pxVgKFnMuSLGELDe7ccXxM2pkwiAeIQjRPxT8lfU9M0+XYtP/sAuyDgmOvJ/d+1THM/FAg==
 
 "@commitlint/execute-rule@^8.3.4":
   version "8.3.4"
