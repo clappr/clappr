@@ -70,7 +70,6 @@
     "rollup-plugin-postcss": "^2.1.1",
     "rollup-plugin-serve": "^1.0.1",
     "rollup-plugin-terser": "^5.2.0",
-    "semver": "^7.1.0",
     "sinon": "^9.0.0",
     "sinon-chai": "^3.5.0"
   },

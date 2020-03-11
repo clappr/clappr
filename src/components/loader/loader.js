@@ -1,9 +1,7 @@
 // Copyright 2014 Globo.com Player authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
-
-import SemVer from 'semver'
-
+import Version from '../../utils/version'
 import Log from '../log'
 
 const filterPluginsByType = (plugins, type) => {
@@ -54,11 +52,11 @@ export default (() => {
         return false
       }
 
-      const maxVersion = supportedVersion.max || SemVer.parse(supportedVersion.min).inc('minor')
-      const versionRange = `>=${supportedVersion.min} <${maxVersion}`
+      const maxVersion = supportedVersion.max ? Version.parse(supportedVersion.max) : Version.parse(supportedVersion.min).inc('minor')
+      const minVersion = Version.parse(supportedVersion.min)
 
-      if (!SemVer.satisfies(currentVersion, versionRange)) {
-        Log.warn('Loader', `unsupported plugin (${currentVersion} does not match required range ${versionRange}): ${name}`)
+      if (!Version.parse(currentVersion).satisfies(minVersion, maxVersion)) {
+        Log.warn('Loader', `unsupported plugin ${name}: Clappr version ${currentVersion} does not match required range [${minVersion},${maxVersion})`)
         return false
       }
 
