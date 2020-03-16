@@ -1,9 +1,9 @@
-const VERSION_REGEX = /(?<major>\d+)(\.(?<minor>\d+)?(\.(?<patch>\d+))?)?/
+const VERSION_REGEX = /(\d+)(?:\.(\d+))?(?:\.(\d+))?/
 
 export default class Version {
   static parse(str = '') {
-    const { groups } = str.match(VERSION_REGEX) || {}
-    const { major, minor, patch } = groups || {}
+    const matches = str.match(VERSION_REGEX) || []
+    const [,major, minor, patch] = matches
     if (typeof(major) === 'undefined') return null
 
     return new Version(major, minor, patch)
