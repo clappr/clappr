@@ -2528,6 +2528,7 @@
           if (!this.options.chromeless || this.options.allowUserInteraction) {
             this.playRequested = true;
             this.update();
+            this.container.playback && this.container.playback.consent();
             this.container.play();
           }
 
@@ -3149,7 +3150,7 @@
   }(core.UIContainerPlugin);
 
   // Copyright 2014 Globo.com Player authors. All rights reserved.
-  var version = "0.4.7";
+  var version = "0.4.8";
   var Plugins = {
     ClickToPause: ClickToPausePlugin,
     ClosedCaptions: ClosedCaptions,
