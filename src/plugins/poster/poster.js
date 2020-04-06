@@ -98,6 +98,7 @@ export default class PosterPlugin extends UIContainerPlugin {
       if (!this.options.chromeless || this.options.allowUserInteraction) {
         this.playRequested = true
         this.update()
+        this.container.playback && this.container.playback.consent()
         this.container.play()
       }
       return false
