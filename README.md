@@ -22,6 +22,22 @@ All Clappr projects are written in `*.js` using latest features of [ECMAScript](
 
 Clappr is under development but production-ready. Feel free to open issues and send pull requests.
 
+:triangular_flag_on_post: Table of Contents
+-----
+* [Features](https://github.com/clappr/clappr#)
+* [Table of Contents](https://github.com/clappr/clappr#triangular_flag_on_post-table-of-contents)
+* [Usage](https://github.com/clappr/clappr#clapper-Usage)
+* [Demo](https://github.com/clappr/clappr#video_camera-demo)
+* [API Documentation](https://github.com/clappr/clappr#books-api-documentation)
+* [Configuration](https://github.com/clappr/clappr#hammer_and_wrench-configuration)
+* [Built-in Plugins](https://github.com/clappr/clappr#electric_plug-built-in-plugins)
+* [Third party plugins/integrations](https://github.com/clappr/clappr#handshake-third-party-pluginsintegrations)
+* [Supported Formats](https://github.com/clappr/clappr#film_strip-supported-formats)
+* [FAQ & Troubleshooting](https://github.com/clappr/clappr#interrobang-faq--troubleshooting)
+* [Companies using Clappr](https://github.com/clappr/clappr#rocket-companies-using-clappr)
+* [Contributors](https://github.com/clappr/clappr#raised_hands-contributors)
+* [Sponsor](https://github.com/clappr/clappr#star2-sponsor)
+
 :clapper: Usage
 ---
 ### Via script tag:
@@ -115,7 +131,7 @@ PS4 Browser    | ✔ | ✔ | ✘ |  ? | ![rtmp](http://flv.io/external3.png) | !
 
 ![rtmp](http://flv.io/external3.png) means that the support is made by an external plugin.
 
-FAQ & Troubleshooting
+:interrobang: FAQ & Troubleshooting
 ---
 ### How to write a plugin?
 See the [wiki](https://github.com/clappr/clappr/wiki) for more info.
