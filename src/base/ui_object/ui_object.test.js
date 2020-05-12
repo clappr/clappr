@@ -2,41 +2,40 @@ import UIObject from './ui_object'
 import  $ from 'clappr-zepto'
 
 describe('UIObject', function() {
-  beforeEach(function() {
-    this.uiObject = new UIObject()
+  test('is a div tag by default', function() {
+    const uiObject = new UIObject()
+    expect(uiObject.tagName).toEqual('div')
   })
 
-  it('is a div tag by default', function() {
-    expect(this.uiObject.tagName).to.be.equal('div')
-  })
-
-  it('can be any tag', function() {
+  test('can be any tag', function() {
     class MyButton extends UIObject { get tagName() { return 'button' } }
     const myButton = new MyButton()
-    expect(myButton.tagName).to.be.equal('button')
+    expect(myButton.tagName).toEqual('button')
   })
 
-  it('has an unique id', function() {
+  test('has an unique id', function() {
     const uiObjectA = new UIObject()
     const uiObjectB = new UIObject()
-    expect(uiObjectA.cid).to.be.not.equal(uiObjectB.cid)
+    expect(uiObjectA.cid).not.toEqual(uiObjectB.cid)
   })
 
-  it('creates element for a given ui component', function() {
+  test('creates element for a given ui component', function() {
+    const uiObject = new UIObject()
     const component = $('<div></div>')
-    expect(this.uiObject.el).to.be.not.equal(component[0])
-    expect(this.uiObject.$el).to.be.not.equal(component)
+    expect(uiObject.el).toEqual(component[0])
+    expect(uiObject.$el).toEqual(component)
   })
 
-  it('can set element', function() {
+  test('can set element', function() {
+    const uiObject = new UIObject()
     const element = $('<section></section>')
-    this.uiObject.setElement(element)
+    uiObject.setElement(element)
 
-    expect(this.uiObject.el).to.be.equal(element[0])
-    expect(this.uiObject.$el).to.be.equal(element)
+    expect(uiObject.el).toEqual(element[0])
+    expect(uiObject.$el).toEqual(element)
   })
 
-  it('creates an element with attributes', function() {
+  test('creates an element with attributes', function() {
     class MyButton extends UIObject {
       constructor(options) { super(options) }
       get attributes() { return { class: 'my-button' } }
@@ -44,10 +43,10 @@ describe('UIObject', function() {
 
     const myButton = new MyButton()
 
-    expect(myButton.el.className).to.be.equal('my-button')
+    expect(myButton.el.className).toEqual('my-button')
   })
 
-  it('binds events of an element to methods', function() {
+  test('binds events of an element to methods', function() {
     class MyButton extends UIObject {
       constructor(options) {
         super(options)
@@ -59,14 +58,14 @@ describe('UIObject', function() {
 
     const myButton = new MyButton()
 
-    expect(myButton.myId).to.be.equal(0)
+    expect(myButton.myId).toEqual(0)
 
     myButton.$el.trigger('click')
 
-    expect(myButton.myId).to.be.equal(42)
+    expect(myButton.myId).toEqual(42)
   })
 
-  it('selects elements within the component', function() {
+  test('selects elements within the component', function() {
     const insideComponent = $('<p id="special-id">here</p>')[0]
     class MySpecialButton extends UIObject {
       constructor(options) {
@@ -78,10 +77,10 @@ describe('UIObject', function() {
     const myButton = new MySpecialButton()
     myButton.render()
 
-    expect(myButton.$('#special-id')[0]).to.be.equal(insideComponent)
+    expect(myButton.$('#special-id')[0]).toEqual(insideComponent)
   })
 
-  it('removes it from DOM', function() {
+  test('removes it from DOM', function() {
     class FullscreenButton extends UIObject {
       constructor(options) {
         super(options)
@@ -92,14 +91,14 @@ describe('UIObject', function() {
     const myButton = new FullscreenButton()
     $(document.body).append(myButton.$el)
 
-    expect($('#my-0-button').length).to.be.equal(1)
+    expect($('#my-0-button').length).toEqual(1)
 
     myButton.destroy()
 
-    expect($('#my-0-button').length).to.be.equal(0)
+    expect($('#my-0-button').length).toEqual(0)
   })
 
-  it('stops listening', function() {
+  test('stops listening', function() {
     class FullscreenButton extends UIObject {
       constructor(options) {
         super(options)
@@ -112,12 +111,12 @@ describe('UIObject', function() {
     const myButton = new FullscreenButton()
 
     myButton.$el.trigger('click')
-    expect(myButton.myId).to.be.equal(1)
+    expect(myButton.myId).toEqual(1)
 
     myButton.destroy()
     myButton.$el.trigger('click')
     myButton.$el.trigger('click')
 
-    expect(myButton.myId).to.be.equal(1)
+    expect(myButton.myId).toEqual(1)
   })
 })

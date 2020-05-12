@@ -2,13 +2,13 @@ import UIContainerPlugin from './ui_container_plugin'
 
 describe('UI Container Plugin', function() {
   describe('#constructor', () => {
-    it('enables', function() {
+    test('enables', function() {
       const plugin = new UIContainerPlugin({})
 
-      expect(plugin.enabled).to.be.true
+      expect(plugin.enabled).toBeTruthy()
     })
 
-    it('binds all events', () => {
+    test('binds all events', () => {
       let bind = false
       const Plugin = class MyPlugin extends UIContainerPlugin {
         bindEvents() {
@@ -18,43 +18,43 @@ describe('UI Container Plugin', function() {
 
       new Plugin({})
 
-      expect(bind).to.be.true
+      expect(bind).toBeTruthy()
     })
   })
 
-  it('enables', () => {
+  test('enables', () => {
     const plugin = new UIContainerPlugin({})
-    const spy = sinon.spy(plugin, 'bindEvents')
-    const show = sinon.spy()
+    const spy = jest.spyOn(plugin, 'bindEvents')
+    const show = jest.fn()
     plugin.$el = { show: show }
     plugin.enabled = false
 
     plugin.enable()
 
-    expect(spy).to.have.been.calledOnce
-    expect(show).to.have.been.calledOnce
-    expect(plugin.enabled).to.be.true
+    expect(spy).toHaveBeenCalledTimes(1)
+    expect(show).toHaveBeenCalledTimes(1)
+    expect(plugin.enabled).toBeTruthy()
   })
 
-  it('disables', () => {
+  test('disables', () => {
     const plugin = new UIContainerPlugin({})
-    const spy = sinon.spy(plugin, 'stopListening')
-    const hide = sinon.spy()
+    const spy = jest.spyOn(plugin, 'stopListening')
+    const hide = jest.fn()
     plugin.$el = { hide: hide }
 
     plugin.disable()
 
-    expect(spy).to.have.been.calledOnce
-    expect(hide).to.have.been.calledOnce
-    expect(plugin.enabled).to.be.false
+    expect(spy).toHaveBeenCalledTimes(1)
+    expect(hide).toHaveBeenCalledTimes(1)
+    expect(plugin.enabled).toBeFalsy()
   })
 
-  it('destroys', () => {
+  test('destroys', () => {
     const plugin = new UIContainerPlugin({})
-    const spy = sinon.spy(plugin, 'destroy')
+    const spy = jest.spyOn(plugin, 'destroy')
 
     plugin.destroy()
 
-    expect(spy).to.have.been.calledOnce
+    expect(spy).toHaveBeenCalledTimes(1)
   })
 })

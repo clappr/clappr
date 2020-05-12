@@ -4,7 +4,7 @@ describe('UI Core Plugin', function() {
   class MyPlugin extends UICorePlugin {
     render() { }
   }
-  it('constructs', () => {
+  test('constructs', () => {
     let callCount = 0
     class MyPlugin extends UICorePlugin {
       bindEvents() { callCount += 1 }
@@ -12,44 +12,44 @@ describe('UI Core Plugin', function() {
     }
     const plugin = new MyPlugin(42)
 
-    expect(plugin.core).to.be.equals(42)
-    expect(plugin.enabled).to.be.true
-    expect(callCount).to.be.equals(2)
+    expect(plugin.core).toEqual(42)
+    expect(plugin.enabled).toBeTruthy()
+    expect(callCount).toEqual(2)
   })
 
-  it('enables', () => {
+  test('enables', () => {
     const plugin = new MyPlugin({})
-    const spy = sinon.spy(plugin, 'bindEvents')
-    const show = sinon.spy()
+    const spy = jest.spyOn(plugin, 'bindEvents')
+    const show = jest.fn()
     plugin.$el = { show: show }
     plugin.enabled = false
 
     plugin.enable()
 
-    expect(spy).to.have.been.calledOnce
-    expect(show).to.have.been.calledOnce
-    expect(plugin.enabled).to.be.true
+    expect(spy).toHaveBeenCalledTimes(1)
+    expect(show).toHaveBeenCalledTimes(1)
+    expect(plugin.enabled).toBeTruthy()
   })
 
-  it('disables', () => {
+  test('disables', () => {
     const plugin = new MyPlugin({})
-    const spy = sinon.spy(plugin, 'stopListening')
-    const hide = sinon.spy()
+    const spy = jest.spyOn(plugin, 'stopListening')
+    const hide = jest.fn()
     plugin.$el = { hide: hide }
 
     plugin.disable()
 
-    expect(spy).to.have.been.calledOnce
-    expect(hide).to.have.been.calledOnce
-    expect(plugin.enabled).to.be.false
+    expect(spy).toHaveBeenCalledTimes(1)
+    expect(hide).toHaveBeenCalledTimes(1)
+    expect(plugin.enabled).toBeFalsy()
   })
 
-  it('destroys', () => {
+  test('destroys', () => {
     const plugin = new MyPlugin({})
-    const spy = sinon.spy(plugin, 'destroy')
+    const spy = jest.spyOn(plugin, 'destroy')
 
     plugin.destroy()
 
-    expect(spy).to.have.been.calledOnce
+    expect(spy).toHaveBeenCalledTimes(1)
   })
 })

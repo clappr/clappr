@@ -2,13 +2,13 @@ import ContainerPlugin from './container_plugin'
 
 describe('Container Plugin', function() {
   describe('#constructor', () => {
-    it('enables', function() {
+    test('enables', function() {
       const plugin = new ContainerPlugin({})
 
-      expect(plugin.enabled).to.be.true
+      expect(plugin.enabled).toBeTruthy()
     })
 
-    it('binds all events', () => {
+    test('binds all events', () => {
       let bind = false
       const Plugin = class MyPlugin extends ContainerPlugin {
         bindEvents() {
@@ -18,54 +18,54 @@ describe('Container Plugin', function() {
 
       new Plugin({})
 
-      expect(bind).to.be.true
+      expect(bind).toBeTruthy()
     })
   })
 
-  it('disables', () => {
+  test('disables', () => {
     const plugin = new ContainerPlugin({})
 
     plugin.disable()
 
-    expect(plugin.enabled).to.be.false
+    expect(plugin.enabled).toBeFalsy()
   })
 
-  it('stops listening when disable an enabled plugin', () => {
+  test('stops listening when disable an enabled plugin', () => {
     const plugin = new ContainerPlugin({})
-    const spy = sinon.spy(plugin, 'stopListening')
+    const spy = jest.spyOn(plugin, 'stopListening')
 
     plugin.disable()
 
-    expect(spy).to.have.been.calledOnce
+    expect(spy).toHaveBeenCalledTimes(1)
   })
 
-  it('doesnt stops listening when disable a disabled plugin', () => {
+  test('doesnt stops listening when disable a disabled plugin', () => {
     const plugin = new ContainerPlugin({})
-    const spy = sinon.spy(plugin, 'stopListening')
+    const spy = jest.spyOn(plugin, 'stopListening')
 
     plugin.enabled = false
     plugin.disable()
 
-    expect(spy).to.not.have.been.called
+    expect(spy).not.toHaveBeenCalled()
   })
 
-  it('stops listening when destroyed', () => {
+  test('stops listening when destroyed', () => {
     const plugin = new ContainerPlugin({})
-    const spy = sinon.spy(plugin, 'stopListening')
+    const spy = jest.spyOn(plugin, 'stopListening')
 
     plugin.destroy()
 
-    expect(spy).to.have.been.calledOnce
+    expect(spy).toHaveBeenCalledTimes(1)
   })
 
-  it('binds events once', () => {
+  test('binds events once', () => {
     const plugin = new ContainerPlugin({})
-    const spy = sinon.spy(plugin, 'bindEvents')
+    const spy = jest.spyOn(plugin, 'bindEvents')
 
     plugin.enable()
     plugin.enable()
     plugin.enable()
 
-    expect(spy).to.not.have.been.called
+    expect(spy).not.toHaveBeenCalled()
   })
 })

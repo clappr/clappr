@@ -4,34 +4,34 @@ import Events from '../../base/events'
 import { Fullscreen } from '../../utils'
 
 describe('Core', function() {
-  describe('When configure', function() {
-    beforeEach(function () {
+  describe('When configure', () => {
+    beforeEach(() => {
       this.core = new Core({})
-      this.core.load = sinon.spy()
+      this.core.load = jest.fn()
     })
 
-    it('should update option', function() {
+    test('should update option', () => {
       const newOptions = {
         autoPlay: true
       }
       this.core.configure(newOptions)
 
-      expect(this.core.options.autoPlay).to.equal(newOptions.autoPlay)
+      expect(this.core.options.autoPlay).toEqual(newOptions.autoPlay)
     })
 
-    it('should update option and load source', function() {
+    test('should update option and load source', () => {
       const newOptions = {
         source: 'some/path/to/media.mp4',
         mute: true
       }
       this.core.configure(newOptions)
 
-      assert.ok(this.core.load.called)
-      expect(this.core.options.mute).to.equal(newOptions.mute)
+      expect(this.core.load).toHaveBeenCalled()
+      expect(this.core.options.mute).toEqual(newOptions.mute)
     })
 
-    it('shoud trigger options change event', function () {
-      let callback = sinon.spy()
+    test('shoud trigger options change event', () => {
+      let callback = jest.fn()
       this.core.on(Events.CORE_OPTIONS_CHANGE, callback)
 
       const newOptions = {
@@ -39,80 +39,66 @@ describe('Core', function() {
       }
       this.core.configure(newOptions)
 
-      assert.ok(callback.called)
-      expect(this.core.options.autoPlay).to.equal(newOptions.autoPlay)
+      expect(callback).toHaveBeenCalled()
+      expect(this.core.options.autoPlay).toEqual(newOptions.autoPlay)
     })
   })
 
   describe('#isFullscreen', () => {
-    let fullscreenElementStub
-
     beforeEach(() => {
-      fullscreenElementStub = sinon.stub(Fullscreen, 'fullscreenElement')
       const el = document.createElement('div')
       el.setAttribute('id', 'fakeCoreElement')
       this.core = new Core({})
       this.core.el = el
     })
 
-    afterEach(() => {
-      fullscreenElementStub.restore()
+    test('returns false when there\'s no active fullscreen element', () => {
+      jest.spyOn(Fullscreen, 'fullscreenElement').mockReturnValue(undefined)
+
+      expect(this.core.isFullscreen()).toEqual(false)
     })
 
-    it('returns false when there\'s no active fullscreen element', () => {
-      fullscreenElementStub.returns(undefined)
-
-      expect(this.core.isFullscreen()).to.equal(false)
-    })
-
-    it('returns false when the active fullscreen element is not the core element', () => {
+    test('returns false when the active fullscreen element is not the core element', () => {
       const el = document.createElement('div')
-      fullscreenElementStub.returns(el)
+      jest.spyOn(Fullscreen, 'fullscreenElement').mockReturnValue(el)
 
-      expect(this.core.isFullscreen()).to.equal(false)
+      expect(this.core.isFullscreen()).toEqual(false)
     })
 
-    it('returns true if the active fullscreen element is the core element', () => {
-      fullscreenElementStub.returns(this.core.el)
+    test('returns true if the active fullscreen element is the core element', () => {
+      jest.spyOn(Fullscreen, 'fullscreenElement').mockReturnValue(this.core.el)
 
-      expect(this.core.isFullscreen()).to.equal(true)
+      expect(this.core.isFullscreen()).toEqual(true)
     })
 
-    it('returns true if the active fullscreen element is the playback element', () => {
+    test('returns true if the active fullscreen element is the playback element', () => {
       const playbackEl = document.createElement('div')
       this.core.activeContainer = { playback: { el: playbackEl } }
 
-      fullscreenElementStub.returns(playbackEl)
+      jest.spyOn(Fullscreen, 'fullscreenElement').mockReturnValue(playbackEl)
 
-      expect(this.core.isFullscreen()).to.equal(true)
+      expect(this.core.isFullscreen()).toEqual(true)
     })
 
     describe('on iOS', () => {
-      let browserStub
+      beforeEach(() => { Browser.isiOS = true })
+      afterEach(() => { Browser.isiOS = /iPad|iPhone|iPod/i.test(navigator.userAgent) })
 
-      beforeEach(() => {
-        browserStub = sinon.stub(Browser, 'isiOS').value(true)
-      })
-
-      afterEach(() => {
-        browserStub.restore()
-      })
-
-      it('returns false if there\'s no active playback', () => {
+      test('returns false if there\'s no active playback', () => {
         this.core.activeContainer = undefined
 
-        expect(this.core.isFullscreen()).to.equal(false)
+        expect(this.core.isFullscreen()).toEqual(false)
       })
 
-      it('returns true if the fullscreen element is from the active playback', () => {
+      test('returns true if the fullscreen element is from the active playback', () => {
         const el = document.createElement('div')
         el.setAttribute('id', 'fakePlayback')
         const playback = { el }
         this.core.activeContainer = { playback }
 
-        fullscreenElementStub.returns(el)
+        jest.spyOn(Fullscreen, 'fullscreenElement').mockReturnValue(el)
 
-        expect(this.core.isFullscreen()).to.equal(true)
+        expect(this.core.isFullscreen()).toEqual(true)
       })
     })
   })
@@ -123,44 +109,32 @@ describe('Core', function() {
     })
 
     describe('when is not in fullscreen', () => {
-      let fullScreenSpy
-
-      beforeEach(() => {
-        fullScreenSpy = sinon.spy(Fullscreen, 'requestFullscreen')
-      })
-
-      afterEach(() => {
-        fullScreenSpy.restore()
-      })
+      beforeEach(() => { jest.spyOn(Fullscreen, 'requestFullscreen') })
 
       describe('and is not an iOS Browser', () => {
-        it('calls Fullscreen.requestFullscreen with core element', () => {
+        test('calls Fullscreen.requestFullscreen with core element', () => {
           this.core.toggleFullscreen()
-          expect(fullScreenSpy).to.have.been.calledWith(this.core.el)
+
+          expect(Fullscreen.requestFullscreen).toHaveBeenCalledWith(this.core.el)
         })
 
-        it('adds a class "fullscreen" to core element', () => {
-          const spy = sinon.spy(this.core.$el, 'addClass')
-          sinon.stub(this.core, 'isFullscreen').returns(false)
+        test('adds a class "fullscreen" to core element', () => {
+          jest.spyOn(this.core.$el, 'addClass')
+          jest.spyOn(this.core, 'isFullscreen').mockReturnValue(false)
 
-          expect(spy).not.to.have.been.called
+          expect(this.core.$el.addClass).not.toHaveBeenCalled()
 
           this.core.toggleFullscreen()
-          expect(spy).to.have.been.calledWith('fullscreen')
+
+          expect(this.core.$el.addClass).toHaveBeenCalledWith('fullscreen')
         })
       })
 
       describe('and is an iOS Browser', () => {
-        let browserStub
-        beforeEach(() => {
-          browserStub = sinon.stub(Browser, 'isiOS').value(true)
-        })
+        beforeEach(() => { Browser.isiOS = true })
+        afterEach(() => { Browser.isiOS = /iPad|iPhone|iPod/i.test(navigator.userAgent) })
 
-        afterEach(() => {
-          browserStub.restore()
-        })
-
-        it('calls Fullscreen.requestFullscreen with activePlayback element', () => {
+        test('calls Fullscreen.requestFullscreen with activePlayback element', () => {
           const el = document.createElement('div')
           el.setAttribute('id', 'fakePlayback')
           const playback = { el }
@@ -168,122 +142,119 @@ describe('Core', function() {
 
           this.core.toggleFullscreen()
 
-          expect(fullScreenSpy).to.have.been.calledWith(el)
+          expect(Fullscreen.requestFullscreen).toHaveBeenCalledWith(el)
         })
       })
     })
 
     describe('when is in fullscreen', () => {
-      it('calls Fullscreen.cancelFullscreen', () => {
-        const spy = sinon.spy(Fullscreen, 'cancelFullscreen')
-        sinon.stub(Browser, 'isiOS').value(false)
-        sinon.stub(this.core, 'isFullscreen').returns(true)
+      beforeEach(() => {
+        Browser.isiOS = true
+        jest.spyOn(this.core, 'isFullscreen').mockReturnValue(true)
+      })
+      afterEach(() => { Browser.isiOS = /iPad|iPhone|iPod/i.test(navigator.userAgent) })
+
+      test('calls Fullscreen.cancelFullscreen', () => {
+        jest.spyOn(Fullscreen, 'cancelFullscreen')
 
         this.core.toggleFullscreen()
-        expect(spy).to.have.been.called
+        expect(Fullscreen.cancelFullscreen).toHaveBeenCalled()
       })
 
       describe('Browser.isiOS', () => {
-        it('removes "fullscreen nocursor" classes from core element', () => {
-          sinon.stub(Browser, 'isiOS').value(false)
-          sinon.stub(this.core, 'isFullscreen').returns(true)
-          const spy = sinon.spy(this.core.$el, 'removeClass')
-          expect(spy).not.to.have.been.called
+        beforeEach(() => { Browser.isiOS = false })
+        afterEach(() => { Browser.isiOS = /iPad|iPhone|iPod/i.test(navigator.userAgent) })
+
+        test('removes "fullscreen nocursor" classes from core element', () => {
+          jest.spyOn(this.core.$el, 'removeClass')
+          expect(this.core.$el.removeClass).not.toHaveBeenCalled()
 
           this.core.toggleFullscreen()
 
-          expect(spy).to.have.been.calledWith('fullscreen nocursor')
+          expect(this.core.$el.removeClass).toHaveBeenCalledWith('fullscreen nocursor')
         })
       })
     })
+
     describe('Multiple instances', () => {
-      let fullscreenElementStub
-
-      beforeEach(() => {
-        fullscreenElementStub = sinon.stub(Fullscreen, 'fullscreenElement')
-      })
-
-      afterEach(() => {
-        fullscreenElementStub.restore()
-      })
-
-      it('shouldn\'t toggle one instance fullscreen state when another one stops', () => {
+      test('shouldn\'t toggle one instance fullscreen state when another one stops', () => {
         const newInstance = new Core({})
         const fakeContainer1 = document.createElement('div')
         fakeContainer1.setAttribute('id', 'fakeContainer1')
         newInstance.el = fakeContainer1
 
-        expect(this.core.isFullscreen()).to.equal(false)
-        expect(newInstance.isFullscreen()).to.equal(false)
+        expect(this.core.isFullscreen()).toEqual(false)
+        expect(newInstance.isFullscreen()).toEqual(false)
 
-        fullscreenElementStub.returns(fakeContainer1)
-        expect(this.core.isFullscreen()).to.equal(false)
-        expect(newInstance.isFullscreen()).to.equal(true)
+        jest.spyOn(Fullscreen, 'fullscreenElement').mockReturnValue(fakeContainer1)
+
+        expect(this.core.isFullscreen()).toEqual(false)
+        expect(newInstance.isFullscreen()).toEqual(true)
       })
     })
   })
 
   describe('#enableResizeObserver', () => {
     beforeEach(() => {
-      this.clock = sinon.useFakeTimers()
       this.core = new Core({})
-      sinon.spy(this.core, 'triggerResize')
+      jest.spyOn(this.core, 'triggerResize')
     })
 
-    afterEach(() => {
-      this.clock.restore()
-    })
-
-    it('calls #triggerResize every 500 milliseconds', () => {
+    test('calls #triggerResize every 500 milliseconds', () => {
       this.core.enableResizeObserver()
-      expect(this.core.triggerResize).not.to.have.been.called
-      this.clock.tick(500)
-      expect(this.core.triggerResize).to.have.been.called
-      this.clock.tick(500)
-      expect(this.core.triggerResize).to.have.been.calledTwice
+
+      expect(this.core.triggerResize).not.toHaveBeenCalled()
+
+      setTimeout(() => {
+        expect(this.core.triggerResize).toHaveBeenCalledTimes(1)
+
+        setTimeout(() => {
+          expect(this.core.triggerResize).toHaveBeenCalledTimes(2)
+        },500)
+      }, 500)
     })
 
-    it('calls #triggerResize with core element width and height', () => {
+    test('calls #triggerResize with core element width and height', () => {
       this.core.enableResizeObserver()
-      this.clock.tick(500)
-      expect(this.core.triggerResize).to.have.been.calledWith({ height: 0, width: 0 })
+
+      setTimeout(() => {
+        expect(this.core.triggerResize).toHaveBeenCalledWith({ height: 0, width: 0 })
+      }, 500)
     })
   })
 
   describe('#triggerResize', () => {
-    it('sets the properties oldHeight and oldWidth with the new one', () => {
+    test('sets the properties oldHeight and oldWidth with the new one', () => {
       const newSize = { width: '50%', height: '50%' }
       this.core = new Core({})
 
-      expect(this.core.oldHeight).equal(undefined)
-      expect(this.core.oldWidth).equal(undefined)
+      expect(this.core.oldHeight).toEqual(undefined)
+      expect(this.core.oldWidth).toEqual(undefined)
 
-      sinon.spy(this.core, 'trigger')
       this.core.triggerResize(newSize)
 
-      expect(this.core.oldHeight).equal('50%')
-      expect(this.core.oldWidth).equal('50%')
+      expect(this.core.oldHeight).toEqual('50%')
+      expect(this.core.oldWidth).toEqual('50%')
     })
 
-    it('sets the property computedSize with the new one', () => {
+    test('sets the property computedSize with the new one', () => {
       const newSize = { width: '50%', height: '50%' }
       this.core = new Core({})
 
-      expect(this.core.computedSize).equal(undefined)
+      expect(this.core.computedSize).toEqual(undefined)
 
-      sinon.spy(this.core, 'trigger')
       this.core.triggerResize(newSize)
 
-      expect(this.core.computedSize).equal(newSize)
+      expect(this.core.computedSize).toEqual(newSize)
     })
 
-    it('triggers on an event Events.CORE_RESIZE', () => {
+    test('triggers on an event Events.CORE_RESIZE', () => {
       const newSize = { width: '50%', height: '50%' }
       this.core = new Core({})
-      sinon.spy(this.core, 'trigger')
+      jest.spyOn(this.core, 'trigger')
       this.core.triggerResize(newSize)
 
-      expect(this.core.trigger).to.have.been.calledWith(Events.CORE_RESIZE, newSize)
+      expect(this.core.trigger).toHaveBeenCalledWith(Events.CORE_RESIZE, newSize)
     })
   })
 
@@ -292,21 +263,21 @@ describe('Core', function() {
       this.core = new Core({})
       this.currentScreenOrientation = window.innerWidth > window.innerHeight ? 'landscape' : 'portrait'
       this.core._screenOrientation = this.currentScreenOrientation
-      sinon.spy(this.core, 'triggerResize')
+      jest.spyOn(this.core, 'triggerResize')
     })
 
     describe('when change the screen orientation', () => {
-      it('calls #triggerResize with core element width and height', () => {
+      test('calls #triggerResize with core element width and height', () => {
         this.core._screenOrientation = this.currentScreenOrientation == 'landscape' ? 'portrait' : 'landscape'
         this.core.handleWindowResize('event')
-        expect(this.core.triggerResize).to.have.been.calledWith({ height: 0, width: 0 })
+        expect(this.core.triggerResize).toHaveBeenCalledWith({ height: 0, width: 0 })
       })
     })
 
     describe('when screen orientation doesn\'t change', () => {
-      it('doesn\'t calls #triggerResize', () => {
+      test('doesn\'t calls #triggerResize', () => {
         this.core.handleWindowResize('event')
-        expect(this.core.triggerResize).not.to.have.been.called
+        expect(this.core.triggerResize).not.toHaveBeenCalled()
       })
     })
   })

@@ -3,7 +3,7 @@ import ContainerFactory from './container_factory'
 import $ from 'clappr-zepto'
 
 describe('ContainerFactory', function() {
-  beforeEach(function() {
+  beforeEach(() => {
     this.options = {
       source: 'http://some.url/for/video.mp4',
       autoPlay: false
@@ -14,16 +14,16 @@ describe('ContainerFactory', function() {
     this.containerFactory = new ContainerFactory(this.options, this.loader, this.i18n)
   })
 
-  it('finds playback based on source', function() {
+  test('finds playback based on source', () => {
     const playback = this.containerFactory.findPlaybackPlugin('video.mp4')
-    assert.equal(this.playback, playback)
+    expect(this.playback).toEqual(playback)
   })
 
-  it('allows overriding options', function() {
-    expect(this.containerFactory.options.source).to.be.equal(this.options.source)
-    expect(this.containerFactory.options.autoPlay).to.be.equal(this.options.autoPlay)
+  test('allows overriding options', () => {
+    expect(this.containerFactory.options.source).toEqual(this.options.source)
+    expect(this.containerFactory.options.autoPlay).toEqual(this.options.autoPlay)
     const newSource = 'http://some.url/for/video.m3u8'
     this.containerFactory.options = $.extend({}, this.options, { source: newSource })
-    expect(this.containerFactory.options.source).to.be.equal(newSource)
+    expect(this.containerFactory.options.source).toEqual(newSource)
   })
 })

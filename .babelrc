@@ -2,12 +2,10 @@
   "presets": [
     ["@babel/preset-env", { "modules": false }]
   ],
-  "plugins": [
-    "@babel/plugin-proposal-object-rest-spread"
-  ],
+  "plugins": ["@babel/plugin-proposal-object-rest-spread"],
   "env": {
     "test": {
-      "plugins": ["istanbul"]
+      "presets": [["@babel/preset-env"]]
     }
   }
 }

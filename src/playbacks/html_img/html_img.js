@@ -2,13 +2,14 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+import pkg from '../../../package.json'
 import Playback from '../../base/playback'
 import Events from '../../base/events'
 import './public/style.scss'
 
 export default class HTMLImg extends Playback {
   get name() { return 'html_img' }
-  get supportedVersion() { return { min: VERSION } }
+  get supportedVersion() { return { min: pkg.version } }
   get tagName() { return 'img' }
   get attributes() {
     return {

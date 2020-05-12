@@ -1,6 +1,7 @@
 import { getBrowserLanguage } from '../../utils'
 import $ from 'clappr-zepto'
 import CorePlugin from '../../base/core_plugin'
+import pkg from '../../../package.json'
 
 /**
  * The internationalization (i18n) plugin
@@ -11,7 +12,7 @@ import CorePlugin from '../../base/core_plugin'
  */
 export default class Strings extends CorePlugin {
   get name() { return 'strings' }
-  get supportedVersion() { return { min: VERSION } }
+  get supportedVersion() { return { min: pkg.version } }
 
   constructor(core) {
     super(core)

@@ -1,9 +1,10 @@
 import CorePlugin from '../base/core_plugin'
 import Events from '../base/events'
+import pkg from '../../package.json'
 
 export default class SourcesPlugin extends CorePlugin {
   get name() { return 'sources' }
-  get supportedVersion() { return { min: VERSION } }
+  get supportedVersion() { return { min: pkg.version } }
 
   bindEvents() {
     this.listenTo(this.core, Events.CORE_CONTAINERS_CREATED, this.onContainersCreated)

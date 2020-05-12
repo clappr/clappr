@@ -4,6 +4,7 @@
 
 import { isNumber, seekStringToSeconds, DomRecycler, canAutoPlayMedia } from '../../utils'
 
+import pkg from '../../../package.json'
 import Events from '../../base/events'
 import Playback from '../../base/playback'
 import Browser from '../../components/browser'
@@ -40,7 +41,7 @@ const UNKNOWN_ERROR = { code: 'unknown', message: 'unknown' }
 // TODO: rename this Playback to HTML5Playback (breaking change, only after 0.3.0)
 export default class HTML5Video extends Playback {
   get name() { return 'html5_video' }
-  get supportedVersion() { return { min: VERSION } }
+  get supportedVersion() { return { min: pkg.version } }
   get tagName() { return this.isAudioOnly ? 'audio' : 'video' }
 
   get isAudioOnly() {

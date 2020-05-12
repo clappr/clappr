@@ -1,13 +1,10 @@
 import BaseObject from './base_object'
 
 describe('BaseObject', function() {
-  beforeEach(() => {
-    this.baseObject = new BaseObject()
-    this.baseObject2 = new BaseObject()
-  })
-
-  it('has unique id', () => {
-    expect(this.baseObject.uniqueId).to.be.equal('o1')
-    expect(this.baseObject2.uniqueId).to.be.equal('o2')
+  test('has unique id', () => {
+    const baseObject = new BaseObject()
+    const baseObject2 = new BaseObject()
+    expect(baseObject.uniqueId).toEqual('o1')
+    expect(baseObject2.uniqueId).toEqual('o2')
   })
 })
