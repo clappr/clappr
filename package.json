@@ -5,12 +5,16 @@
   "main": "./dist/clappr-core.js",
   "module": "./dist/clappr-core.esm.js",
   "scripts": {
+    "bundle-check": "ANALYZE_BUNDLE=true rollup --config",
+    "release": "MINIMIZE=true rollup --config",
+    "build": "rollup --config",
+    "watch": "rollup --config --watch",
     "test": "jest /src --coverage",
     "test:debug": "node --inspect node_modules/.bin/jest src/ --runInBand",
     "test:watch": "NODE_ENV=test karma start --no-single-run --watch",
     "lint": "eslint *.js src/",
     "lint:fix": "npm run lint -- --fix",
-    "start": "rollup -c rollup.config.dev.js -w",
+    "start": "DEV=true rollup --config --watch",
     "commitzen": "git-cz"
   },
   "files": [
