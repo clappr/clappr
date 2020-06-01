@@ -12,13 +12,13 @@
 
 Clappr is an extensible media player for the web. Your architecture is projected primarily into plugins, adding low accoupling by design to the project and the possibility to add infinitely features easily.
 
-CLappr uses by default the [HTMLVideoElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement) which guarantee support to many platforms. You have the possibility to extends the default HTML5 playback or the playback interface to create one new media support just like a plugin!
+Clappr uses by default the [HTMLVideoElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement) which guarantees support to many platforms. You have the possibility to extends the default HTML5 playback or the playback interface to create one new media support just like a plugin!
 
-Clappr is decomposed in two other projects: [@clappr/core](https://github.com/clappr/clappr-core) and [@clappr/plugins](https://github.com/clappr/clappr-plugins).
+Clappr is a composition of two other projects: [@clappr/core](https://github.com/clappr/clappr-core) and [@clappr/plugins](https://github.com/clappr/clappr-plugins).
 
-The `@clappr/core` contains the basic functionalities from Clappr (plugin architecture, class abstractions, public interfaces, events handlers and etc) and the `@clappr/plugins` are where the plugins maintained by the Clappr team lives. More info about those projects into the your repositories.
+The `@clappr/core` contains the basic functionalities from Clappr (plugin architecture, class abstractions, public interfaces, events handlers and etc) and the `@clappr/plugins` are the repository where the plugins maintained by the Clappr team lives. More info about those projects into your repositories.
 
-All Clappr projects are written in `*.js` using latest features of [ECMAScript](http://www.ecma-international.org/ecma-262/).
+All Clappr projects are written in `*.js` using the latest features of [ECMAScript](http://www.ecma-international.org/ecma-262/).
 
 Clappr is under development but production-ready. Feel free to open issues and send pull requests.
 
@@ -60,11 +60,11 @@ Now, create the player:
 
 :video_camera: Demo
 ---
-[Live demo](http://clappr.io/demo/) to test with a possibility to add external plugins.
+[Live demo](http://clappr.io/demo/) to test, with a possibility to add external plugins.
 
 :books: API Documentation
 ---
-You can check the actual API doc on exposed via `@clappr/core` [here](https://github.com/clappr/clappr-core#books-api-documentation).
+You can check the current API doc via `@clappr/core` [here](https://github.com/clappr/clappr-core#books-api-documentation).
 
 :hammer_and_wrench: Configuration
 ---
@@ -166,7 +166,7 @@ https://github.com/clappr/clappr/issues/933#issuecomment-228540381
 Add this snipet before you instantiate the player `Clappr.Log.setLevel(0)`
 
 ### Common steps to verify issues
-Very often people open issues related to: **stream not working, freezing, glitching, stopping and so on.** You can try the steps bellow, taking notes about the results:
+Very often people open issues related to stream **not working, freezing, glitching, stopping, and so on**. You can try the steps below, taking notes about the results:
 
 * try to run the same example at [CDN](http://cdn.clappr.io)
 * check the [cors headers at your servers](https://github.com/clappr/clappr/issues/703)
@@ -349,7 +349,7 @@ https://github.com/clappr/clappr/issues/522
 
 :raised_hands: Contributors
 ---
-This project exists thanks to all the people who [contribute](https://github.com/clappr/clappr-core/graphs/contributors).
+This project exists thanks to all the people who [contribute](https://github.com/clappr/clappr/graphs/contributors).
 
 :star2: Sponsor
 ---
