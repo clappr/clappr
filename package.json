@@ -5,18 +5,17 @@
   "main": "./dist/hlsjs-playback.js",
   "module": "./dist/hlsjs-playback.esm.js",
   "scripts": {
-    "build:debug": "CLAPPR_INLINE_DEBUG=true ./node_modules/.bin/webpack --progress",
+    "start": "SERVE=true rollup --config --watch",
+    "start:with-reload": "SERVE=true RELOAD=true rollup --config --watch",
+    "build": "rollup --config",
+    "watch": "rollup --config --watch",
+    "bundle-check": "ANALYZE_BUNDLE=true rollup --config",
+    "release": "MINIMIZE=true rollup --config",
     "test": "jest ./src",
     "test:debug": "node --inspect node_modules/.bin/jest ./src --runInBand",
     "test:watch": "jest ./src --watch",
-    "lint": "./node_modules/.bin/eslint *.js src/ test/",
-    "lint:fix": "npm run lint -- --fix",
-    "start": "SERVE=true rollup --config --watch",
-    "start:with-reload": "SERVE=true RELOAD=true rollup --config --watch",
-    "bundle-check": "ANALYZE_BUNDLE=true rollup --config",
-    "release": "MINIMIZE=true rollup --config",
-    "build": "rollup --config",
-    "watch": "rollup --config --watch"
+    "lint": "eslint *.js ./src",
+    "lint:fix": "yarn lint -- --fix"
   },
   "files": [
     "/dist",
