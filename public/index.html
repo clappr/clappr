@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <script type="text/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/@clappr/core@latest/dist/clappr-core.min.js"></script>
-  <script type="text/javascript" charset="utf-8" src="latest/hlsjs-playback.js"></script>
+  <script type="text/javascript" charset="utf-8" src="hlsjs-playback.js"></script>
   <script type="text/javascript" charset="utf-8" src="j/main.js"></script>
   <script type="text/javascript" charset="utf-8" src="j/editor/ace.js"></script>
   <link rel="stylesheet" href="stylesheets/bootstrap.min.css" type="text/css" media="screen" charset="utf-8">
@@ -64,7 +64,7 @@ var player = new Clappr.Player({
   mute: true,
   height: 360,
   width: 640,
-  plugins: [HlsjsPlayback],
+  plugins: [HlsjsPlayback.default],
   playback: {
     controls: true,
   },
@@ -114,7 +114,7 @@ player.attachTo(playerElement);
           autoPlay: true,
           height: 360,
           width: 640,
-          plugins: [HlsjsPlayback],
+          plugins: [HlsjsPlayback.default],
           playback: {
             controls: true,
           },
