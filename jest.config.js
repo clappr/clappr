@@ -1,4 +1,9 @@
+const pkg = require('./package.json')
+
 module.exports = {
+  "globals": {
+    "VERSION": pkg.version
+  },
   "verbose": true,
   "resolver": "jest-directory-named-resolver",
   "transform": {
