@@ -483,6 +483,10 @@ export default class HTML5Video extends Playback {
   }
 
   seek(time) {
+    if (time < 0) {
+      Log.warn('Attempt to seek to a negative time. Resetting to live point. Use seekToLivePoint() to seek to the live point.')
+      time = this.getDuration()
+    }
     this.el.currentTime = time
   }
 

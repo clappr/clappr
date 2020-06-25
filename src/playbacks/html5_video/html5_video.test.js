@@ -550,4 +550,15 @@ describe('HTML5Video playback', function() {
 
     expect(html5Video.dvrEnabled).toEqual(true)
   })
+
+  describe('seek', () => {
+    test('use duration when occurs seek with negative values', () => {
+      const html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
+      jest.spyOn(html5Video, 'getDuration').mockReturnValue(5000)
+      html5Video.seek(-1)
+
+      expect(html5Video.el.currentTime).toEqual(5000)
+    })
+
+  })
 })
