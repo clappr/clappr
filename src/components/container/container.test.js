@@ -6,196 +6,199 @@ import Events from '../../base/events'
 const FakePlayback = Playback
 
 describe('Container', function() {
-  beforeEach(function() {
+  beforeEach(() => {
     this.playback = new FakePlayback()
     this.container = new Container({ playback: this.playback })
   })
 
-  it('uses settings from playback', function() {
-    expect(this.container.settings).to.deep.equal((new FakePlayback).settings)
+  test('uses settings from playback', () => {
+    expect(this.container.settings).toEqual((new FakePlayback).settings)
   })
 
-  it('gets playback type', function() {
-    expect(this.container.getPlaybackType()).to.equal(Playback.NO_OP)
+  test('gets playback type', () => {
+    expect(this.container.getPlaybackType()).toEqual(Playback.NO_OP)
   })
 
-  it('treats the playback as a plugin', function() {
-    expect(this.container.plugins[0]).to.equal(this.playback)
+  test('treats the playback as a plugin', () => {
+    expect(this.container.plugins[0]).toEqual(this.playback)
   })
 
-  it('gets a plugin by name', function() {
+  test('gets a plugin by name', () => {
     const plugin = { name: 'fake' }
     this.container.addPlugin(plugin)
-    assert.equal(plugin, this.container.getPlugin('fake'))
+    expect( this.container.getPlugin('fake')).toEqual(plugin)
   })
 
-  it('destroys all the plugins', function() {
-    const fakePlugin = { destroy: function() {} }
+  test('destroys all the plugins', () => {
+    const fakePlugin = { destroy: () => {} }
 
-    sinon.spy(this.playback, 'destroy')
-    sinon.spy(fakePlugin, 'destroy')
-    sinon.spy(this.container, 'stopListening')
-    sinon.spy(this.container, 'trigger')
-    sinon.spy(this.container.$el, 'remove')
+    jest.spyOn(this.playback, 'destroy')
+    jest.spyOn(fakePlugin, 'destroy')
+    jest.spyOn(this.container, 'stopListening')
+    jest.spyOn(this.container, 'trigger')
+    jest.spyOn(this.container.$el, 'remove')
     this.container.addPlugin(fakePlugin)
 
     this.container.destroy()
 
-    assert.ok(this.container.trigger.calledWith(Events.CONTAINER_DESTROYED, this.container, this.container.name))
-    assert.ok(this.container.stopListening.calledOnce)
-    assert.ok(this.playback.destroy.calledOnce)
-    assert.ok(fakePlugin.destroy.calledOnce)
-    assert.ok(this.container.$el.remove.calledOnce)
+    expect(this.container.trigger).toHaveBeenCalledWith(Events.CONTAINER_DESTROYED, this.container, this.container.name)
+    expect(this.container.stopListening).toHaveBeenCalledTimes(1)
+    expect(this.playback.destroy).toHaveBeenCalledTimes(1)
+    expect(fakePlugin.destroy).toHaveBeenCalledTimes(1)
+    expect(this.container.$el.remove).toHaveBeenCalledTimes(1)
   })
 
-  it('update playback options when configure', function() {
-    sinon.spy(this.playback, 'configure')
+  test('update playback options when configure', () => {
+    jest.spyOn(this.playback, 'configure')
     const fakeOptions = { foo: 'bar' }
     this.container.configure(fakeOptions)
 
-    assert.ok(this.playback.configure.called)
-    expect(this.playback.options.foo).to.be.equal(fakeOptions.foo)
+    expect(this.playback.configure).toHaveBeenCalled()
+    expect(this.playback.options.foo).toEqual(fakeOptions.foo)
   })
 
-  it('listens to playback:progress event', function() {
-    sinon.spy(this.container, 'onProgress')
+  test('listens to playback:progress event', () => {
+    jest.spyOn(this.container, 'onProgress')
 
     this.container.bindEvents()
     this.playback.trigger(Events.PLAYBACK_PROGRESS, { start: 0, current: 3000, total: 6000 })
 
-    assert.ok(this.container.onProgress.calledWith({ start: 0, current: 3000, total: 6000 }))
+    expect(this.container.onProgress).toHaveBeenCalledWith({ start: 0, current: 3000, total: 6000 })
   })
 
-  it('listens to playback:timeupdate event', function() {
-    sinon.spy(this.container, 'timeUpdated')
+  test('listens to playback:timeupdate event', () => {
+    jest.spyOn(this.container, 'timeUpdated')
     this.container.bindEvents()
     this.playback.trigger(Events.PLAYBACK_TIMEUPDATE, { current: 2, total: 40 })
 
-    assert.ok(this.container.timeUpdated.calledWith({ current: 2, total: 40 }))
+    expect(this.container.timeUpdated).toHaveBeenCalledWith({ current: 2, total: 40 })
   })
 
-  it('listens to playback:seeked event', function(done) {
-    this.timeout(5000)
+  test('listens to playback:seeked event', (done) => {
     let playback = new HTML5Playback({ src: '/base/test/fixtures/SampleVideo_360x240_1mb.mp4' })
     let container = new Container({ playback: playback })
-    let callback = sinon.spy()
+    let callback = jest.fn()
 
     container.bindEvents()
     container.on(Events.CONTAINER_SEEKED, callback)
     container.on(Events.CONTAINER_SEEKED, () => {
-      assert.ok(callback.called)
+      expect(callback).toHaveBeenCalled()
       done()
     })
 
     playback.el.dispatchEvent(new Event('seeked'))
   })
 
-  it('listens to playback:ready event', function() {
-    sinon.spy(this.container, 'ready')
+  test('listens to playback:ready event', () => {
+    jest.spyOn(this.container, 'ready')
     this.container.bindEvents()
     this.playback.trigger(Events.PLAYBACK_READY)
-    assert.ok(this.container.isReady)
-    assert.ok(this.container.ready.calledOnce)
+    expect(this.container.isReady).toBeTruthy()
+    expect(this.container.ready).toHaveBeenCalledTimes(1)
   })
 
-  it('listens to playback:buffering event', function() {
-    sinon.spy(this.container, 'onBuffering')
+  test('listens to playback:buffering event', () => {
+    jest.spyOn(this.container, 'onBuffering')
     this.container.bindEvents()
     this.playback.trigger(Events.PLAYBACK_BUFFERING)
-    assert.ok(this.container.onBuffering.calledOnce)
+    expect(this.container.onBuffering).toHaveBeenCalledTimes(1)
   })
 
-  it('listens to playback:bufferfull event', function() {
-    sinon.spy(this.container, 'bufferfull')
+  test('listens to playback:bufferfull event', () => {
+    jest.spyOn(this.container, 'bufferfull')
     this.container.bindEvents()
     this.playback.trigger(Events.PLAYBACK_BUFFERFULL)
-    assert.ok(this.container.bufferfull.calledOnce)
+    expect(this.container.bufferfull).toHaveBeenCalledTimes(1)
   })
 
-  it('listens to playback:settingsupdate event', function() {
-    sinon.spy(this.container, 'settingsUpdate')
+  test('listens to playback:settingsupdate event', () => {
+    jest.spyOn(this.container, 'settingsUpdate')
     this.container.bindEvents()
     this.playback.trigger(Events.PLAYBACK_SETTINGSUPDATE)
-    assert.ok(this.container.settingsUpdate.calledOnce)
+    expect(this.container.settingsUpdate).toHaveBeenCalledTimes(1)
   })
 
-  it('listens to playback:loadedmetadata event', function() {
-    sinon.spy(this.container, 'loadedMetadata')
+  test('listens to playback:loadedmetadata event', () => {
+    jest.spyOn(this.container, 'loadedMetadata')
 
     this.container.bindEvents()
     this.playback.trigger(Events.PLAYBACK_LOADEDMETADATA, { duration: 45, data: { hold: 'on' } })
 
-    assert.ok(this.container.loadedMetadata.calledWith({ duration: 45, data: { hold: 'on' } }))
+    expect(this.container.loadedMetadata).toHaveBeenCalledWith({ duration: 45, data: { hold: 'on' } })
   })
 
-  it('listens to playback:highdefinitionupdate event', function() {
+  test('listens to playback:highdefinitionupdate event', () => {
     const isHD = true
-    sinon.spy(this.container, 'highDefinitionUpdate')
+    jest.spyOn(this.container, 'highDefinitionUpdate')
 
     this.container.bindEvents()
     this.playback.trigger(Events.PLAYBACK_HIGHDEFINITIONUPDATE, isHD)
 
-    assert.ok(this.container.highDefinitionUpdate.calledWith(true))
+    expect(this.container.highDefinitionUpdate).toHaveBeenCalledWith(true)
   })
 
-  it('listens to playback:mediacontrol:disable event', function() {
-    sinon.spy(this.container, 'disableMediaControl')
+  test('listens to playback:mediacontrol:disable event', () => {
+    jest.spyOn(this.container, 'disableMediaControl')
     this.container.bindEvents()
     this.playback.trigger(Events.PLAYBACK_MEDIACONTROL_DISABLE)
-    assert.ok(this.container.disableMediaControl.calledOnce)
+
+    expect(this.container.disableMediaControl).toHaveBeenCalledTimes(1)
   })
 
-  it('listens to playback:mediacontrol:enable event', function() {
-    sinon.spy(this.container, 'enableMediaControl')
+  test('listens to playback:mediacontrol:enable event', () => {
+    jest.spyOn(this.container, 'enableMediaControl')
     this.container.bindEvents()
     this.playback.trigger(Events.PLAYBACK_MEDIACONTROL_ENABLE)
-    assert.ok(this.container.enableMediaControl.calledOnce)
+
+    expect(this.container.enableMediaControl).toHaveBeenCalledTimes(1)
   })
 
-  it('listens to playback:ended event', function() {
-    sinon.spy(this.container, 'onEnded')
+  test('listens to playback:ended event', () => {
+    jest.spyOn(this.container, 'onEnded')
     this.container.bindEvents()
     this.playback.trigger(Events.PLAYBACK_ENDED)
-    assert.ok(this.container.onEnded.calledOnce)
+
+    expect(this.container.onEnded).toHaveBeenCalledTimes(1)
   })
 
-  it('listens to playback:play event', function() {
-    sinon.spy(this.container, 'playing')
+  test('listens to playback:play event', () => {
+    jest.spyOn(this.container, 'playing')
     this.container.bindEvents()
     this.playback.trigger(Events.PLAYBACK_PLAY)
-    assert.ok(this.container.playing.calledOnce)
+
+    expect(this.container.playing).toHaveBeenCalledTimes(1)
   })
 
-  describe('#checkResize', function() {
-    this.beforeEach(function() {
+  describe('#checkResize', () => {
+    beforeEach(() => {
       this.container.el = { clientWidth: 640, clientHeight: 360 }
     })
 
-    it('sets the current size if it\'s uninitialized', function() {
-      expect(this.container.currentSize).to.be.equal(undefined)
+    test('sets the current size if it\'s uninitialized', () => {
+      expect(this.container.currentSize).toBeUndefined()
 
       this.container.checkResize()
 
-      expect(this.container.currentSize).to.eql({ width: 640, height: 360 })
+      expect(this.container.currentSize).toEqual({ width: 640, height: 360 })
     })
 
-    it('triggers a CONTAINER_RESIZE event when the size changes', function() {
+    test('triggers a CONTAINER_RESIZE event when the size changes', () => {
       const newSize = { width: 320, height: 240 }
 
-      sinon.spy(this.container, 'trigger')
+      jest.spyOn(this.container, 'trigger')
       this.container.el = { clientWidth: newSize.width, clientHeight: newSize.height }
       this.container.checkResize()
 
-      expect(this.container.trigger).to.have.been.calledWith(Events.CONTAINER_RESIZE, newSize)
+      expect(this.container.trigger).toHaveBeenCalledWith(Events.CONTAINER_RESIZE, newSize)
     })
 
-    it('doesn\'t trigger CONTAINER_RESIZE if size hasn\'t changed', function() {
+    test('doesn\'t trigger CONTAINER_RESIZE if size hasn\'t changed', () => {
       this.container.checkResize() // this will initialized currentSize AND trigger the first resize
 
-      sinon.spy(this.container, 'trigger')
+      jest.spyOn(this.container, 'trigger')
       this.container.checkResize()
 
-      expect(this.container.trigger).to.have.a.callCount(0)
+      expect(this.container.trigger).not.toHaveBeenCalled()
     })
   })
 })

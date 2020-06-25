@@ -1,3 +1,5 @@
+
+(function(l, r) { if (l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (window.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.head.appendChild(r) })(window.document);
 function _typeof(obj) {
   "@babel/helpers - typeof";
 
@@ -6463,6 +6465,124 @@ var Version = /*#__PURE__*/function () {
   return Version;
 }();
 
+var name = "@clappr/core";
+var version = "0.4.11";
+var description = "Core components of the extensible media player for the web";
+var main = "./dist/clappr-core.js";
+var module = "./dist/clappr-core.esm.js";
+var scripts = {
+	"bundle-check": "ANALYZE_BUNDLE=true rollup --config",
+	release: "MINIMIZE=true rollup --config",
+	build: "rollup --config",
+	watch: "rollup --config --watch",
+	test: "jest /src --coverage",
+	"test:debug": "node --inspect node_modules/.bin/jest src/ --runInBand",
+	"test:watch": "NODE_ENV=test karma start --no-single-run --watch",
+	lint: "eslint *.js src/",
+	"lint:fix": "npm run lint -- --fix",
+	start: "DEV=true rollup --config --watch",
+	commitzen: "git-cz"
+};
+var files = [
+	"/dist",
+	"/src"
+];
+var publishConfig = {
+	access: "public"
+};
+var repository = {
+	type: "git",
+	url: "git@github.com:clappr/clappr-core.git"
+};
+var author = "Globo.com";
+var license = "BSD-3-Clause";
+var bugs = {
+	url: "https://github.com/clappr/clappr-core/issues"
+};
+var homepage = "https://github.com/clappr/clappr-core";
+var devDependencies = {
+	"@babel/core": "^7.8.6",
+	"@babel/plugin-proposal-object-rest-spread": "^7.8.3",
+	"@babel/preset-env": "^7.8.6",
+	"@rollup/plugin-alias": "^3.0.1",
+	"@rollup/plugin-commonjs": "^11.0.2",
+	"@rollup/plugin-json": "^4.0.3",
+	"@rollup/plugin-node-resolve": "^7.1.1",
+	"@rollup/plugin-replace": "^2.3.1",
+	autoprefixer: "^9.7.4",
+	"babel-jest": "^25.1.0",
+	"clappr-zepto": "0.0.7",
+	coveralls: "^3.0.9",
+	"cz-conventional-changelog": "^3.1.0",
+	eslint: "^6.8.0",
+	"html-loader": "^0.5.5",
+	jest: "^25.1.0",
+	"jest-directory-named-resolver": "^0.3.0",
+	"node-sass": "^4.13.1",
+	rollup: "^1.32.0",
+	"rollup-plugin-babel": "^4.3.3",
+	"rollup-plugin-filesize": "^6.2.1",
+	"rollup-plugin-html": "^0.2.1",
+	"rollup-plugin-livereload": "^1.0.4",
+	"rollup-plugin-named-directory": "^1.0.0",
+	"rollup-plugin-node-builtins": "^2.1.2",
+	"rollup-plugin-node-globals": "^1.4.0",
+	"rollup-plugin-postcss": "^2.1.1",
+	"rollup-plugin-serve": "^1.0.1",
+	"rollup-plugin-sizes": "^1.0.1",
+	"rollup-plugin-terser": "^5.2.0",
+	"rollup-plugin-visualizer": "^3.3.1"
+};
+var config = {
+	commitizen: {
+		path: "./node_modules/cz-conventional-changelog"
+	}
+};
+var nyc = {
+	exclude: [
+		"**/*.test.js",
+		"**/*.spec.js",
+		"node_modules"
+	]
+};
+var jest = {
+	verbose: true,
+	resolver: "jest-directory-named-resolver",
+	transform: {
+		"^.+\\.js$": "babel-jest",
+		"^.+\\.html$": "<rootDir>/src/__mocks__/htmlMock.js"
+	},
+	moduleNameMapper: {
+		"^@/(.*)$": "<rootDir>/src/$1",
+		"^clappr-zepto$": "clappr-zepto/zepto.js",
+		"\\.(scss)$": "<rootDir>/src/__mocks__/styleMock.js"
+	},
+	collectCoverageFrom: [
+		"src/*.js",
+		"src/**/*.js",
+		"src/**/**/*.js"
+	]
+};
+var pkg = {
+	name: name,
+	version: version,
+	description: description,
+	main: main,
+	module: module,
+	scripts: scripts,
+	files: files,
+	publishConfig: publishConfig,
+	repository: repository,
+	author: author,
+	license: license,
+	bugs: bugs,
+	homepage: homepage,
+	devDependencies: devDependencies,
+	config: config,
+	nyc: nyc,
+	jest: jest
+};
+
 var filterPluginsByType = function filterPluginsByType(plugins, type) {
   if (!plugins || !type) return {};
   return Object.entries(plugins).filter(function (_ref) {
@@ -6492,7 +6612,7 @@ var Loader = (function () {
     plugins: {},
     playbacks: []
   };
-  var currentVersion = "0.4.11";
+  var currentVersion = pkg.version;
   return (/*#__PURE__*/function () {
       _createClass(Loader, null, [{
         key: "checkVersionSupport",
@@ -9086,7 +9206,7 @@ var SourcesPlugin = /*#__PURE__*/function (_CorePlugin) {
 }(CorePlugin);
 
 // Copyright 2014 Globo.com Player authors. All rights reserved.
-var version = "0.4.11"; // Built-in Plugins/Playbacks
+var version$1 = pkg.version; // Built-in Plugins/Playbacks
 
 Loader.registerPlugin(Strings);
 Loader.registerPlugin(SourcesPlugin);
@@ -9094,7 +9214,7 @@ Loader.registerPlayback(NoOp);
 Loader.registerPlayback(HTMLImg);
 Loader.registerPlayback(HTML5Audio);
 Loader.registerPlayback(HTML5Video);
-var main = {
+var main$1 = {
   Player: Player,
   Events: Events,
   Browser: Browser,
@@ -9115,10 +9235,10 @@ var main = {
   HTMLImg: HTMLImg,
   Log: Log,
   Styler: Styler,
-  version: version,
+  version: version$1,
   template: tmpl,
   $: zepto
 };
 
-export default main;
-export { zepto as $, BaseObject, Browser, Container, ContainerPlugin, Core, CorePlugin, Events, HTML5Audio, HTML5Video, HTMLImg, Loader, Log, Playback, Player, PlayerError, Styler, UIContainerPlugin, UICorePlugin, UIObject, Utils, tmpl as template, version };
+export default main$1;
+export { zepto as $, BaseObject, Browser, Container, ContainerPlugin, Core, CorePlugin, Events, HTML5Audio, HTML5Video, HTMLImg, Loader, Log, Playback, Player, PlayerError, Styler, UIContainerPlugin, UICorePlugin, UIObject, Utils, tmpl as template, version$1 as version };

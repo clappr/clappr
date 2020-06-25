@@ -2,9 +2,9 @@ import Player from '../player'
 import Events from '../../base/events'
 
 describe('Player', function() {
-  describe('constructor', function() {
+  describe('constructor', () => {
 
-    it('has unique sequential id', function() {
+    test('has unique sequential id', () => {
       const player1 = new Player({ source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest' })
       const player2 = new Player({ source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest' })
       const player3 = new Player({ source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest' })
@@ -13,83 +13,80 @@ describe('Player', function() {
       const p2Id = parseInt(player2.options.playerId)
       const p3Id = parseInt(player3.options.playerId)
 
-      expect(p2Id).to.be.above(p1Id)
-      expect(p3Id).to.be.above(p2Id)
+      expect(p2Id).toBeGreaterThan(p1Id)
+      expect(p3Id).toBeGreaterThan(p2Id)
     })
 
-    it('uses the baseUrl passed from initialization', function() {
+    test('uses the baseUrl passed from initialization', () => {
       const player = new Player({ source: '/playlist.m3u8', baseUrl: 'http://cdn.clappr.io/latest' })
-      expect(player.options.baseUrl).to.be.equal('http://cdn.clappr.io/latest')
+      expect(player.options.baseUrl).toEqual('http://cdn.clappr.io/latest')
     })
 
-    it('persists config by default', function() {
+    test('persists config by default', () => {
       const player = new Player({ source: '/playlist.m3u8' })
-      expect(player.options.persistConfig).to.be.equal(true)
+      expect(player.options.persistConfig).toEqual(true)
     })
 
-    it('can set persists config', function() {
+    test('can set persists config', () => {
       const player = new Player({ source: '/playlist.m3u8', persistConfig: false })
-      expect(player.options.persistConfig).to.be.equal(false)
+      expect(player.options.persistConfig).toEqual(false)
     })
 
-    it('gets plugins by name', function() {
+    test('gets plugins by name', () => {
       const player = new Player({ source: '/playlist.m3u8', persistConfig: false })
       const plugin = { name: 'fake' }
       player.core = { plugins: [plugin], activeContainer: { plugins: [] } }
-      assert.equal(plugin, player.getPlugin('fake'))
+      expect(plugin).toEqual(player.getPlugin('fake'))
     })
 
-    it('should normalize sources', function() {
+    test('should normalize sources', () => {
       const player = new Player({ source: '/playlist.m3u8', persistConfig: false })
       let normalizedSources = player._normalizeSources({ sources: ['http://test.mp4'] })
-      expect(normalizedSources).to.have.length(1)
-      expect(normalizedSources[0]).to.be.equal('http://test.mp4')
+      expect(normalizedSources.length).toEqual(1)
+      expect(normalizedSources[0]).toEqual('http://test.mp4')
 
       normalizedSources = player._normalizeSources({ source: 'http://test.mp4' })
-      expect(normalizedSources).to.have.length(1)
-      expect(normalizedSources[0]).to.be.equal('http://test.mp4')
+      expect(normalizedSources.length).toEqual(1)
+      expect(normalizedSources[0]).toEqual('http://test.mp4')
 
       normalizedSources = player._normalizeSources({ sources: [] })
-      expect(normalizedSources).to.have.length(1)
-      expect(JSON.stringify(normalizedSources[0])).to.be.equal(JSON.stringify({ source: '', mimeType: '' }))
+      expect(normalizedSources.length).toEqual(1)
+      expect(JSON.stringify(normalizedSources[0])).toEqual(JSON.stringify({ source: '', mimeType: '' }))
     })
 
-    it('should trigger error events', function() {
+    test('should trigger error events', () => {
       const player = new Player({ source: 'http://video.mp4', persistConfig: false })
       const element = document.createElement('div')
-      const onError = sinon.spy()
+      const onError = jest.fn()
       player.on(Events.PLAYER_ERROR, onError)
       player.attachTo(element)
-      // some playbacks don't have an error() method. e.g flash
-      if (player.core.getCurrentContainer().playback.error) {
-        player.core.getCurrentContainer().playback.error()
-        expect(onError).called.once
-      }
+      player.trigger(Events.PLAYER_ERROR)
+      expect(onError).toHaveBeenCalledTimes(1)
     })
   })
 
-  describe('register options event listeners', function () {
-    beforeEach(function () {
+  describe('register options event listeners', () => {
+    beforeEach(() => {
       this.player = new Player({ source: '/video.mp4' })
       const element = document.createElement('div')
       this.player.attachTo(element)
-      sinon.spy(this.player, '_registerOptionEventListeners')
+      jest.spyOn(this.player, '_registerOptionEventListeners')
     })
 
-    it('should register on configure', function () {
+    test('should register on configure', () => {
       this.player.configure({
         events: {
           onPlay: () => {}
         }
       })
 
-      expect(this.player._registerOptionEventListeners).to.have.been.calledOnce
+      expect(this.player._registerOptionEventListeners).toHaveBeenCalledTimes(1)
     })
 
-    it('should call only last registered callback', function () {
+    test('should call only last registered callback', () => {
       const callbacks = {
-        callbackA: sinon.spy(),
-        callbackB: sinon.spy(),
+        callbackA: jest.fn(),
+        callbackB: jest.fn(),
       }
       this.player.configure({
         events: {
@@ -105,13 +102,13 @@ describe('Player', function() {
 
       this.player._onPlay()
 
-      expect(callbacks.callbackA).to.not.have.been.called
-      expect(callbacks.callbackB).to.have.been.calledOnce
+      expect(callbacks.callbackA).not.toHaveBeenCalled()
+      expect(callbacks.callbackB).toHaveBeenCalledTimes(1)
     })
 
-    it('should add a new event callback', function () {
+    test('should add a new event callback', () => {
       const callbacks = {
-        callbackC: sinon.spy()
+        callbackC: jest.fn()
       }
       this.player.configure({
         events: {}
@@ -125,13 +122,13 @@ describe('Player', function() {
 
       this.player._onPause()
 
-      expect(callbacks.callbackC).to.have.been.calledOnce
+      expect(callbacks.callbackC).toHaveBeenCalledTimes(1)
     })
 
-    it('should remove previous event callbacks', function () {
+    test('should remove previous event callbacks', () => {
       const callbacks = {
-        callbackA: sinon.spy(),
-        callbackB: sinon.spy()
+        callbackA: jest.fn(),
+        callbackB: jest.fn()
       }
       this.player.configure({
         events: {
@@ -148,13 +145,13 @@ describe('Player', function() {
       this.player._onPlay()
       this.player._onPause()
 
-      expect(callbacks.callbackA).to.not.have.been.called
-      expect(callbacks.callbackB).to.have.been.calledOnce
+      expect(callbacks.callbackA).not.toHaveBeenCalled()
+      expect(callbacks.callbackB).toHaveBeenCalledTimes(1)
     })
 
-    it('does not override events on configure if there are no events', function() {
+    test('does not override events on configure if there are no events', () => {
       const callbacks = {
-        callbackA: sinon.spy()
+        callbackA: jest.fn()
       }
       this.player.configure({
         events: {
@@ -168,13 +165,13 @@ describe('Player', function() {
 
       this.player._onPause()
 
-      expect(callbacks.callbackA).to.have.been.calledOnce
+      expect(callbacks.callbackA).toHaveBeenCalledTimes(1)
     })
 
-    it('does not interfere with event listeners added through Player.on', function() {
+    test('does not interfere with event listeners added through Player.on', () => {
       const callbacks = {
-        callbackA: sinon.spy(),
-        callbackB: sinon.spy(),
+        callbackA: jest.fn(),
+        callbackB: jest.fn(),
       }
 
       this.player.on(Events.PLAYER_PAUSE, callbacks.callbackB)
@@ -187,8 +184,8 @@ describe('Player', function() {
 
       this.player._onPause()
 
-      expect(callbacks.callbackA).to.have.been.calledOnce
-      expect(callbacks.callbackB).to.have.been.calledOnce
+      expect(callbacks.callbackA).toHaveBeenCalledTimes(1)
+      expect(callbacks.callbackB).toHaveBeenCalledTimes(1)
     })
   })
 
@@ -196,7 +193,7 @@ describe('Player', function() {
     let onResizeSpy
 
     beforeEach(() => {
-      onResizeSpy = sinon.spy()
+      onResizeSpy = jest.fn()
 
       this.player = new Player({
         source: 'http://video.mp4',
@@ -210,10 +207,10 @@ describe('Player', function() {
     })
 
     describe('on Events.CORE_RESIZE', () => {
-      it('calls onResize callback with width and height', () => {
+      test('calls onResize callback with width and height', () => {
         const newSize = { width: '50%', height: '50%' }
         this.player.core.trigger(Events.CORE_RESIZE, newSize)
-        expect(onResizeSpy).to.have.been.calledWith(newSize)
+        expect(onResizeSpy).toHaveBeenCalledWith(newSize)
       })
     })
   })

@@ -6,28 +6,28 @@ describe('Strings', function() {
     const strings = new Strings(fakeCore)
     strings._language = function() { return 'en' }
 
-    expect(strings.t('live')).to.equal('live')
+    expect(strings.t('live')).toEqual('live')
   })
 
   it('fallbacks to English language', function() {
     const fakeCore = { options: { language: '404' } }
     const strings = new Strings(fakeCore)
 
-    expect(strings.t('live')).to.equal('live')
+    expect(strings.t('live')).toEqual('live')
   })
 
   it('shows key when it does not find the translation', function() {
     const fakeCore = { options: {} }
     const strings = new Strings(fakeCore)
 
-    expect(strings.t('Example')).to.equal('Example')
+    expect(strings.t('Example')).toEqual('Example')
   })
 
   it('translates based on user language', function() {
     const fakeCore = { options: { language: 'es' } }
     const strings = new Strings(fakeCore)
 
-    expect(strings.t('live')).to.equal('vivo')
+    expect(strings.t('live')).toEqual('vivo')
   })
 
   it('translates based on user options', function() {
@@ -43,7 +43,7 @@ describe('Strings', function() {
     }
     const strings = new Strings(fakeCore)
 
-    expect(strings.t('live')).to.equal('Company Live')
+    expect(strings.t('live')).toEqual('Company Live')
   })
 
   it('merges user translations with default translations', function() {
@@ -59,8 +59,8 @@ describe('Strings', function() {
     }
     const strings = new Strings(fakeCore)
 
-    expect(strings.t('back_to_live')).to.equal('back to live')
-    expect(strings.t('live')).to.equal('Company Live')
+    expect(strings.t('back_to_live')).toEqual('back to live')
+    expect(strings.t('live')).toEqual('Company Live')
   })
 
   it('merges user translations with a language not existing in default translations', function() {
@@ -77,7 +77,7 @@ describe('Strings', function() {
     }
     const strings = new Strings(fakeCore)
 
-    expect(strings.t('back_to_live')).to.equal('Ugrás élő képre')
-    expect(strings.t('live')).to.equal('Élő')
+    expect(strings.t('back_to_live')).toEqual('Ugrás élő képre')
+    expect(strings.t('live')).toEqual('Élő')
   })
 })

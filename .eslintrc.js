@@ -21,7 +21,11 @@ module.exports = {
         "expect": false,
         "it": false,
         "sinon": false,
-        "xit": false
+        "xit": false,
+        "jest": false,
+        "test": false,
+        "module": false,
+        "require": false,
     },
     "extends": "eslint:recommended",
     "parserOptions": {

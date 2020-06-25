@@ -26,10 +26,11 @@ import Styler from './base/styler'
 import template from './base/template'
 import Strings from './plugins/strings'
 import SourcesPlugin from './plugins/sources'
+import pkg from '../package.json'
 
 import $ from 'clappr-zepto'
 
-const version = VERSION
+const version = pkg.version
 
 // Built-in Plugins/Playbacks
 
