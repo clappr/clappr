@@ -1,3 +1,5 @@
+
+(function(l, r) { if (l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (window.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.head.appendChild(r) })(window.document);
 function _typeof(obj) {
   "@babel/helpers - typeof";
 
@@ -8008,7 +8010,7 @@ var HTML5Video = /*#__PURE__*/function (_Playback) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: pkg.version
+        min: "0.4.11"
       };
     }
   }, {
@@ -8761,7 +8763,7 @@ var HTML5Audio = /*#__PURE__*/function (_HTML5Video) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: pkg.version
+        min: "0.4.11"
       };
     }
   }, {
@@ -8809,7 +8811,7 @@ var HTMLImg = /*#__PURE__*/function (_Playback) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: pkg.version
+        min: "0.4.11"
       };
     }
   }, {
@@ -8890,7 +8892,7 @@ var NoOp = /*#__PURE__*/function (_Playback) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: pkg.version
+        min: "0.4.11"
       };
     }
   }, {
@@ -9046,7 +9048,7 @@ var Strings = /*#__PURE__*/function (_CorePlugin) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: pkg.version
+        min: "0.4.11"
       };
     }
   }]);
@@ -9195,7 +9197,7 @@ var SourcesPlugin = /*#__PURE__*/function (_CorePlugin) {
     key: "supportedVersion",
     get: function get() {
       return {
-        min: pkg.version
+        min: "0.4.11"
       };
     }
   }]);

@@ -1,3 +1,5 @@
+
+(function(l, r) { if (l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (window.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.head.appendChild(r) })(window.document);
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -8014,7 +8016,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: pkg.version
+          min: "0.4.11"
         };
       }
     }, {
@@ -8767,7 +8769,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: pkg.version
+          min: "0.4.11"
         };
       }
     }, {
@@ -8815,7 +8817,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: pkg.version
+          min: "0.4.11"
         };
       }
     }, {
@@ -8896,7 +8898,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: pkg.version
+          min: "0.4.11"
         };
       }
     }, {
@@ -9052,7 +9054,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: pkg.version
+          min: "0.4.11"
         };
       }
     }]);
@@ -9201,7 +9203,7 @@
       key: "supportedVersion",
       get: function get() {
         return {
-          min: pkg.version
+          min: "0.4.11"
         };
       }
     }]);

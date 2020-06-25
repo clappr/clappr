@@ -4,11 +4,10 @@ import template from '../../base/template'
 import Events from '../../base/events'
 import noOpHTML from './public/error.html'
 import './public/style.scss'
-import pkg from '../../../package.json'
 
 export default class NoOp extends Playback {
   get name() { return 'no_op' }
-  get supportedVersion() { return { min: pkg.version } }
+  get supportedVersion() { return { min: VERSION } }
   get template() { return template(noOpHTML) }
   get attributes() {
     return { 'data-no-op': '' }
