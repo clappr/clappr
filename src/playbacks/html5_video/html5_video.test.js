@@ -560,5 +560,29 @@ describe('HTML5Video playback', function() {
       expect(html5Video.el.currentTime).toEqual(5000)
     })
 
+    test('always use a margin for video currentTime to check DVR status', () => {
+      const start = [0]
+      const end = [100]
+
+      const html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
+      jest.spyOn(html5Video, 'getPlaybackType').mockReturnValue('live')
+      jest.spyOn(html5Video, '_updateDvr')
+      html5Video.setElement({
+        get seekable() {
+          return {
+            start: (i) => start[i],
+            end: (i) => end[i],
+            get length() { return start.length }
+          }
+        }
+      })
+      html5Video.seek(html5Video.el.seekable.end(0))
+
+      expect(html5Video._updateDvr).toHaveBeenCalledWith(false)
+
+      html5Video.seek(96)
+
+      expect(html5Video._updateDvr).toHaveBeenCalledWith(true)
+    })
   })
 })

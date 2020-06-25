@@ -487,6 +487,10 @@ export default class HTML5Video extends Playback {
       Log.warn('Attempt to seek to a negative time. Resetting to live point. Use seekToLivePoint() to seek to the live point.')
       time = this.getDuration()
     }
+    // assume live if time within 3 seconds of end of stream
+    this.dvrEnabled && this._updateDvr(time < this.getDuration()-3)
+    time += this.el.seekable.start(0)
+
     this.el.currentTime = time
   }
 
