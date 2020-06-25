@@ -538,4 +538,16 @@ describe('HTML5Video playback', function() {
     expect(callback1).toHaveBeenCalledWith(DVR_STATUS)
     expect(callback2).toHaveBeenCalledWith({ dvr: DVR_STATUS })
   })
+
+  test('dvrEnabled getter return current DVR status', () => {
+    const html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
+    jest.spyOn(html5Video, 'dvrEnabled', 'get')
+
+    expect(html5Video.dvrEnabled).toEqual(false)
+
+    jest.spyOn(html5Video, 'getDuration').mockReturnValue(5000)
+    jest.spyOn(html5Video, 'getPlaybackType').mockReturnValue('live')
+
+    expect(html5Video.dvrEnabled).toEqual(true)
+  })
 })

@@ -95,6 +95,10 @@ export default class HTML5Video extends Playback {
     return this._isBuffering
   }
 
+  get dvrEnabled() {
+    return this.getDuration() >= this._minDvrSize && this.isLive
+  }
+
   get hasMinimumDVRConfig() {
     return this.options.playback && this.options.playback.minimumDvrSize && typeof (this.options.playback.minimumDvrSize) !== 'undefined'
   }
