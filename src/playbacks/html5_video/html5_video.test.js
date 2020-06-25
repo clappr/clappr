@@ -523,4 +523,19 @@ describe('HTML5Video playback', function() {
       expect(callback).toHaveBeenCalledWith({ current: undefined, total: 50 }, 'html5_video')
     })
   })
+
+  test('_updateDvr triggers DVR events with current status', () => {
+    const DVR_STATUS = 'enabled'
+    const callback1 = jest.fn()
+    const callback2 = jest.fn()
+    const html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
+
+    html5Video.on(Events.PLAYBACK_DVR, callback1)
+    html5Video.on(Events.PLAYBACK_STATS_ADD, callback2)
+
+    html5Video._updateDvr(DVR_STATUS)
+
+    expect(callback1).toHaveBeenCalledWith(DVR_STATUS)
+    expect(callback2).toHaveBeenCalledWith({ dvr: DVR_STATUS })
+  })
 })

@@ -469,6 +469,11 @@ export default class HTML5Video extends Playback {
     DomRecycler.garbage(this.el)
   }
 
+  _updateDvr(status) {
+    this.trigger(Events.PLAYBACK_DVR, status)
+    this.trigger(Events.PLAYBACK_STATS_ADD, { 'dvr': status })
+  }
+
   seek(time) {
     this.el.currentTime = time
   }
