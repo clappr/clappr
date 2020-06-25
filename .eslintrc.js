@@ -24,6 +24,8 @@ module.exports = {
         "xit": false,
         "jest": false,
         "test": false,
+        "module": false,
+        "require": false,
     },
     "extends": "eslint:recommended",
     "parserOptions": {
