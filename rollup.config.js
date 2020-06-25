@@ -1,4 +1,3 @@
-import path from 'path'
 import alias from '@rollup/plugin-alias'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
@@ -25,7 +24,7 @@ const minimize = !!process.env.MINIMIZE
 const postcssOptions = {
   use: [
     ['sass', {
-      includePaths: [path.resolve('src/base/scss')]
+      includePaths: ['src/base/scss']
     }]
   ]
 }
