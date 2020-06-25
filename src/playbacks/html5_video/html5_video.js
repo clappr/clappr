@@ -95,6 +95,10 @@ export default class HTML5Video extends Playback {
     return this._isBuffering
   }
 
+  get hasMinimumDVRConfig() {
+    return this.options.playback && this.options.playback.minimumDvrSize && typeof (this.options.playback.minimumDvrSize) !== 'undefined'
+  }
+
   constructor(...args) {
     super(...args)
     this._destroyed = false
@@ -108,6 +112,7 @@ export default class HTML5Video extends Playback {
     // backwards compatibility (TODO: remove on 0.3.0)
     this.options.playback || (this.options.playback = this.options || {})
     this.options.playback.disableContextMenu = this.options.playback.disableContextMenu || this.options.disableVideoTagContextMenu
+    this._minDvrSize = this.hasMinimumDVRConfig ? this.options.playback.minimumDvrSize : 60
 
     const playbackConfig = this.options.playback
     const preload = playbackConfig.preload || (Browser.isSafari ? 'auto' : this.options.preload)

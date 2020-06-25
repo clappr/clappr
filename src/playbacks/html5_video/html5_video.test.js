@@ -315,6 +315,17 @@ describe('HTML5Video playback', function() {
       expect(html5Video.options.playback.somePlaybackOption).toBeTruthy()
       expect(html5Video.options.playback.nonPlaybackOption).toBeFalsy()
     })
+
+    it('respect minimumDvrSize precedence over _minDvrSize default value', () => {
+      const options = { src: 'http://example.com/video.m3u8' }
+      let html5Video = new HTML5Video(options)
+
+      expect(html5Video._minDvrSize).toEqual(60)
+
+      html5Video = new HTML5Video({ ...options, playback: { minimumDvrSize: 10 } })
+
+      expect(html5Video._minDvrSize).toEqual(10)
+    })
   })
 
   describe('video element', () => {
