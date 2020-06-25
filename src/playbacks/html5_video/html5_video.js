@@ -296,6 +296,7 @@ export default class HTML5Video extends Playback {
 
   pause() {
     this.el.pause()
+    this.dvrEnabled && this._updateDvr(true)
   }
 
   stop() {
