@@ -485,6 +485,13 @@ export default class HTML5Video extends Playback {
   }
 
   getDuration() {
+    if (this.isLive) {
+      try {
+        return this.el.seekable.end(0) - this.el.seekable.start(0)
+      } catch (e) {
+        setTimeout(() => this._updateSettings(), 1000)
+      }
+    }
     return this.el.duration
   }
 

@@ -412,4 +412,58 @@ describe('HTML5Video playback', function() {
 
     expect(playback.el.loop).toEqual(true)
   })
+
+  describe('getDuration', () => {
+    test('return distinct duration references for different playback types', () => {
+      let start = [0]
+      let end = [30]
+      let html5Video = new HTML5Video({ src: 'http://example.com/video.mp4' })
+      html5Video.setElement({
+        get duration() { return 10 },
+        get seekable() { return { start: (i) => start[i], end: (i) => end[i], get length() { return start.length } } }
+      })
+      jest.spyOn(html5Video, 'getDuration')
+
+      html5Video.getDuration()
+      expect(html5Video.getDuration).toHaveReturnedWith(10)
+
+
+      html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
+      html5Video.setElement({
+        get duration() { return 10 },
+        get seekable() { return { start: (i) => start[i], end: (i) => end[i], get length() { return start.length } } }
+      })
+      jest.spyOn(html5Video, 'getDuration')
+      jest.spyOn(html5Video, 'getPlaybackType').mockReturnValue('live')
+
+      html5Video.getDuration()
+      expect(html5Video.getDuration).toHaveReturnedWith(30)
+    })
+
+    test('retry to get duration for live medias when occurs transient unavailability', () => {
+      jest.useFakeTimers()
+      let start = []
+      let end = []
+      let html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
+      html5Video.setElement({ get seekable() { return undefined } })
+
+      jest.spyOn(html5Video, 'getDuration')
+      jest.spyOn(html5Video, 'getPlaybackType').mockReturnValue('live')
+      jest.spyOn(html5Video, '_updateSettings')
+
+      html5Video.getDuration()
+      start = [0]
+      end = [20]
+      html5Video.setElement({
+        get duration() { return 10 },
+        get seekable() { return { start: (i) => start[i], end: (i) => end[i], get length() { return start.length } } }
+      })
+
+      jest.advanceTimersByTime(1000)
+      expect(html5Video._updateSettings).toHaveBeenCalled()
+      jest.clearAllTimers()
+
+      expect(html5Video.getDuration).toHaveReturnedWith(20)
+    })
+  })
 })
