@@ -466,4 +466,50 @@ describe('HTML5Video playback', function() {
       expect(html5Video.getDuration).toHaveReturnedWith(20)
     })
   })
+
+  describe('_onTimeUpdate', () => {
+    test('return el.duration for VoD on PLAYBACK_TIMEUPDATE event', () => {
+      const callback = jest.fn()
+      const html5Video = new HTML5Video({ src: 'http://example.com/video.mp4' })
+      html5Video.setElement({
+        get duration() { return 10 },
+        get seekable() {
+          return {
+            start: (i) => start[i],
+            end: (i) => end[i],
+            get length() { return start.length }
+          }
+        }
+      })
+      html5Video.on(Events.PLAYBACK_TIMEUPDATE, callback)
+      html5Video._onTimeUpdate()
+
+      expect(callback).toHaveBeenCalledWith({ current: undefined, total: 10 }, 'html5_video')
+    })
+
+    test('return getDuration() for Live on PLAYBACK_TIMEUPDATE event', () => {
+      let start = [0]
+      let end = [50]
+      const callback = jest.fn()
+      const html5Video = new HTML5Video({ src: 'http://example.com/video.m3u8' })
+
+      html5Video.setElement({
+        get duration() { return 10 },
+        get seekable() {
+          return {
+            start: (i) => start[i],
+            end: (i) => end[i],
+            get length() { return start.length }
+          }
+        }
+      })
+
+      jest.spyOn(html5Video, 'getPlaybackType').mockReturnValue('live')
+
+      html5Video.on(Events.PLAYBACK_TIMEUPDATE, callback)
+      html5Video._onTimeUpdate()
+
+      expect(callback).toHaveBeenCalledWith({ current: undefined, total: 50 }, 'html5_video')
+    })
+  })
 })

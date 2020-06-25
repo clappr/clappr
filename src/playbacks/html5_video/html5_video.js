@@ -496,11 +496,8 @@ export default class HTML5Video extends Playback {
   }
 
   _onTimeUpdate() {
-    if (this.getPlaybackType() === Playback.LIVE)
-      this.trigger(Events.PLAYBACK_TIMEUPDATE, { current: 1, total: 1 }, this.name)
-    else
-      this.trigger(Events.PLAYBACK_TIMEUPDATE, { current: this.el.currentTime, total: this.el.duration }, this.name)
-
+    const duration = this.isLive ? this.getDuration() : this.el.duration
+    this.trigger(Events.PLAYBACK_TIMEUPDATE, { current: this.el.currentTime, total: duration }, this.name)
   }
 
   _onProgress() {
