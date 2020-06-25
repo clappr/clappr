@@ -484,6 +484,7 @@ describe('HTML5Video playback', function() {
       const html5Video = new HTML5Video({ src: 'http://example.com/video.mp4' })
       html5Video.setElement({
         get duration() { return 10 },
+        /* eslint-disable */
         get seekable() {
           return {
             start: (i) => start[i],
@@ -491,6 +492,7 @@ describe('HTML5Video playback', function() {
             get length() { return start.length }
           }
         }
+        /* eslint-disable */
       })
       html5Video.on(Events.PLAYBACK_TIMEUPDATE, callback)
       html5Video._onTimeUpdate()
