@@ -64,19 +64,5 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  },
-  "jest": {
-    "verbose": true,
-    "globals": {
-      "CLAPPR_CORE_VERSION": true
-    },
-    "transform": {
-      "^.+\\.js$": "babel-jest"
-    },
-    "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/src/$1",
-      "^clappr$": "<rootDir>/node_modules/@clappr/core/dist/clappr-core.js",
-      "^clappr-zepto$": "clappr-zepto/zepto.js"
-    }
   }
 }
