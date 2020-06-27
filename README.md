@@ -3,7 +3,7 @@
 A [Clappr](https://github.com/clappr/clappr) playback to play HTTP Live Streaming (HLS) based on the [hls.js](https://github.com/video-dev/hls.js).
 
 <p>
-  <a href="https://www.npmjs.com/package/@clappr/hlsjs-playback"><img src="https://badge.fury.io/js/%40clappr%2Fplugins.svg"></a>
+  <a href="https://www.npmjs.com/package/@clappr/hlsjs-playback"><img src="https://badge.fury.io/js/%40clappr%2Fhlsjs-playback.svg"></a>
   <a href="https://bundlephobia.com/result?p=@clappr/hlsjs-playback@latest"><img src="https://img.shields.io/bundlephobia/min/@clappr/hlsjs-playback"></a>
   <a href="https://travis-ci.org/clappr/hlsjs-playback"><img src="https://travis-ci.org/clappr/hlsjs-playback.svg?branch=master"></a>
   <a href="https://coveralls.io/github/clappr/hlsjs-playback?branch=master"><img src="https://coveralls.io/repos/github/clappr/hlsjs-playback/badge.svg?branch=master"></a>
