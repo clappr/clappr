@@ -10,8 +10,6 @@ const { now, assign, listContainsIgnoreCase } = Utils
 const AUTO = -1
 
 export default class HlsjsPlayback extends HTML5Video {
-  static get version() { return VERSION }
-
   get name() { return 'hls' }
 
   get supportedVersion() { return { min: CLAPPR_CORE_VERSION } }
