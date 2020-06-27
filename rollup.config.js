@@ -41,7 +41,6 @@ const mainBundle = {
   external: ['@clappr/core'],
   input: 'src/hls.js',
   output: {
-    exports: 'named',
     name: 'HlsjsPlayback',
     file: pkg.main,
     format: 'umd',
@@ -54,7 +53,6 @@ const mainBundleWithoutHLS = {
   external: ['@clappr/core', 'hls.js'],
   input: 'src/hls.js',
   output: {
-    exports: 'named',
     name: 'HlsjsPlayback',
     file: 'dist/hlsjs-playback.external.js',
     format: 'umd',
@@ -66,7 +64,6 @@ const mainBundleWithoutHLS = {
 const mainBundleMinified = {
   input: 'src/hls.js',
   output: {
-    exports: 'named',
     name: 'HlsjsPlayback',
     file: 'dist/hlsjs-playback.min.js',
     format: 'iife',
@@ -80,7 +77,6 @@ const mainBundleWithoutHLSMinified = {
   external: ['@clappr/core', 'hls.js'],
   input: 'src/hls.js',
   output: {
-    exports: 'named',
     name: 'HlsjsPlayback',
     file: 'dist/hlsjs-playback.external.min.js',
     globals: { '@clappr/core': 'Clappr', 'hls.js': 'Hls' },
@@ -95,7 +91,6 @@ const moduleBundle = {
   external: ['@clappr/core'],
   input: 'src/hls.js',
   output: {
-    exports: 'named',
     name: 'HlsjsPlayback',
     file: pkg.module,
     format: 'esm',
