@@ -12334,11 +12334,7 @@
     WaterMark: WaterMarkPlugin
   };
 
-<<<<<<< HEAD
-  var version$2 = "0.3.13";
-=======
-  var version$1 = "0.3.12";
->>>>>>> chore(package): use  latest @clappr/hlsjs-playback (0.4.1)
+  var version$1 = "0.3.13";
 
   for (var _i = 0, _Object$values = Object.values(Plugins); _i < _Object$values.length; _i++) {
     var plugin = _Object$values[_i];

@@ -12334,11 +12334,7 @@
     WaterMark: WaterMarkPlugin
   };
 
-<<<<<<< HEAD
-  var version$2 = "0.3.13";
-=======
-  var version$1 = "0.3.12";
->>>>>>> chore(package): use  latest @clappr/hlsjs-playback (0.4.1)
+  var version$1 = "0.3.13";
 
   for (var _i = 0, _Object$values = Object.values(Plugins); _i < _Object$values.length; _i++) {
     var plugin = _Object$values[_i];
@@ -33637,25 +33633,10 @@
 
   var HLSJS = /*@__PURE__*/unwrapExports(hls);
 
-<<<<<<< HEAD
-  // Copyright 2014 Globo.com Player authors. All rights reserved.
-
-  const { now: now$1, assign: assign$1, listContainsIgnoreCase: listContainsIgnoreCase$1 } = Utils;
-
-  const AUTO = -1;
-
-  class HlsjsPlayback extends HTML5Video {
-    static get version() { return "0.3.13" }
-
-    get name() { return 'hls' }
-
-    get supportedVersion() { return { min: "0.4.8" } }
-=======
   var now$1 = Utils.now,
       assign$1 = Utils.assign,
       listContainsIgnoreCase$1 = Utils.listContainsIgnoreCase;
   var AUTO = -1;
->>>>>>> chore(package): use  latest @clappr/hlsjs-playback (0.4.1)
 
   var HlsjsPlayback = /*#__PURE__*/function (_HTML5Video) {
     _inherits$2(HlsjsPlayback, _HTML5Video);
