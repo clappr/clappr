@@ -46,7 +46,7 @@ Clappr is under development but production-ready. Feel free to open issues and s
 Add the following script on your HTML:
 ```html
 <head>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clappr/player@latest/dist/clappr.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.min.js"></script>
 </head>
 ```
 Now, create the player:
