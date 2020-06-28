@@ -717,10 +717,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@clappr/core@^0.4.9":
-  version "0.4.9"
-  resolved "https://registry.yarnpkg.com/@clappr/core/-/core-0.4.9.tgz#d4b0d5304553ec39fa4cdd029d5e1ec2f829c3b1"
-  integrity sha512-WN6dBNKburl5EuQ5pxVgKFnMuSLGELDe7ccXxM2pkwiAeIQjRPxT8lfU9M0+XYtP/sAuyDgmOvJ/d+1THM/FAg==
+"@clappr/core@^0.4.11":
+  version "0.4.11"
+  resolved "https://registry.yarnpkg.com/@clappr/core/-/core-0.4.11.tgz#720543833d64c34d611c515f0243f47c7960dab1"
+  integrity sha512-b9LxiYQs+H/61FM2mRXFkxvxL9sHV+cGNKIJGI77ZVZCYH1o0ZvmFbcOgAJbHkeJUPwMFq4FMPWCC8ZX57VhVw==
 
 "@clappr/hlsjs-playback@^0.4.0":
   version "0.4.0"
