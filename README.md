@@ -1,3 +1,5 @@
+<h2 align=center><b>Huge changes in the latest version. See <a href=https://github.com/clappr/clappr/releases/tag/0.4.0>0.4.0 version changelog</a> for more information</b></h2>
+
 <p align=center>
   <a href="https://badge.fury.io/js/%40clappr%2Fplayer"><img src="https://badge.fury.io/js/%40clappr%2Fplayer.svg"></a>
   <a href="https://bundlephobia.com/result?p=@clappr/player@latest"><img src="https://img.shields.io/bundlephobia/min/@clappr/player"></a>
